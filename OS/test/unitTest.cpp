@@ -220,47 +220,76 @@ int main(int argC, char* argV[])
 	double check;
 	
 	
-	bool INSTALLATION_TEST; // minimal functionality test
-	bool THOROUGH;  // multiple problems for some solvers
-	bool COMPONENT_DEBUG;  // program logic, especially parser testing
+	bool BASIC_TESTS;  // minimal functionality tests
+	bool SOLVER_TESTS; // at least one problem for each solver
+	bool THOROUGH;     // multiple problems for some solvers
+	bool PARSER_TESTS; // test parser logic
+	bool OTHER_TESTS;  // other input formats, automatic differentiation, etc.
 	
-	INSTALLATION_TEST = true;
-	THOROUGH = false;
-	COMPONENT_DEBUG = false;
 	//set level of testing
-	
       
+	std::string testConfig = "install";
+	int testLevel = 1;
 	if( argC > 2){
 		std::cout << "Too Many Input Parameters" << std::endl;
 		return 1;
 	}
-	int testLevel = 0;
 	if(argC == 2){
-
-		testLevel = atoi(argV[ 1]);
-		std::cout << "testLevel = " <<  testLevel << std::endl;
-		switch (testLevel){
-		case 1:
-			COMPONENT_DEBUG = true;
-			std::cout << "turn on Component Debug "  << std::endl;
-			break;
-		case 2:
-            THOROUGH = true;
-			std::cout << "turn on Thorough"  << std::endl;
-			break;
-		case 3:
-			COMPONENT_DEBUG = true;
-			THOROUGH = true; 
-			std::cout << "turn on Component Debug AND Thorough"  << std::endl;
-			break;
-		case 4:
-			COMPONENT_DEBUG = true;
-			INSTALLATION_TEST = false; 
-			std::cout << "turn on ONLY Component Debug"  << std::endl;
-			break;
-		}
-	
+		testConfig = argV[ 1];
+		std::cout << "test configuration = \'" <<  testConfig << "\'"<< std::endl;
 	}
+
+
+	if (testConfig == "install") testLevel = 1;
+	if (testConfig == "parser" ) testLevel = 2;
+	if (testConfig == "solver" ) testLevel = 3;
+	if (testConfig == "nightlyBuild") testLevel = 4;
+	if (testConfig == "NB") testLevel = 4;
+	if (testConfig == "nb") testLevel = 4;
+	if (testConfig == "release") testLevel = 4;
+
+	switch (testLevel){
+	case 1:
+		BASIC_TESTS  = true;  
+		SOLVER_TESTS = true; 
+		THOROUGH     = false;     
+		PARSER_TESTS = false; 
+		OTHER_TESTS  = false;  
+		break;
+	case 2:
+		BASIC_TESTS  = false;  
+		SOLVER_TESTS = false; 
+		THOROUGH     = false;     
+		PARSER_TESTS = true; 
+		OTHER_TESTS  = false;  
+		break;
+	case 3:
+		BASIC_TESTS  = false;  
+		SOLVER_TESTS = true; 
+		THOROUGH     = true;     
+		PARSER_TESTS = false; 
+		OTHER_TESTS  = false;  
+		break;
+	case 4:
+		BASIC_TESTS  = true;  
+		SOLVER_TESTS = true; 
+		THOROUGH     = true;     
+		PARSER_TESTS = true; 
+		OTHER_TESTS  = true;  
+		break;
+	}
+	
+	if (BASIC_TESTS) std::cout << "Perform basic tests" << std::endl;
+	if (SOLVER_TESTS) {
+		if (THOROUGH)
+			std::cout << "Perform thorough solver tests" << std::endl;
+		else
+			std::cout << "Perform simple solver tests" << std::endl;
+	}
+	if (PARSER_TESTS) std::cout << "Perform parser tests" << std::endl;
+	if (OTHER_TESTS) std::cout << "Perform other tests" << std::endl;
+	std::cout << std::endl << std::endl;
+
 	// end level of testing	
 	
 	//return 0;
@@ -299,7 +328,7 @@ int main(int argC, char* argV[])
 	// 
 //	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
 
-if(INSTALLATION_TEST == true){
+if(BASIC_TESTS == true){
 
 	//first make sure we can read files
 	try{
@@ -459,6 +488,9 @@ if(INSTALLATION_TEST == true){
 		cout << "Conclusion: FAILURE" << endl;
 		return 1;
 	}	
+} // end of if (BASIC_TESTS)
+
+if (SOLVER_TESTS){
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincLinearByRow.osil" << endl << endl;
 		ok = true; 
@@ -626,6 +658,196 @@ if( THOROUGH == true){
 		solver = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 }	// end of if(THOROUGH)
+
+#ifdef COIN_HAS_SYMPHONY
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": SYMPHONY solver on p0033.osil" << endl << endl;
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_sym.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+		solver->sSolverName = "symphony";
+		solver->osil = osil;
+		solver->osinstance = NULL; 
+		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "build the solver instance for COIN - SYMPHONY" << endl;
+		solver->buildSolverInstance();
+//		cout << "call the COIN - SYMPHONY Solver for p0033" << endl;
+		solver->solve();
+		cout << "Here is the COIN SYMPHONY solver solution for p0033" << endl;
+		cout << solver->osrl << endl;
+		check = 3089;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with SYMPHONY on p0033.osil");
+		delete solver;
+		solver = NULL;
+		delete osolreader;
+		osolreader = NULL;	
+		unitTestResult << "Solved problem p0033.osil with SYMPHONY" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the SYMPHONY Solver:"  + eclass.errormsg << endl;
+	}	
+#endif
+	
+
+
+#ifdef COIN_HAS_DYLP
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": DyLP solver on parincLinear.osil" << endl << endl;
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "parincLinear_dylp.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osilreader = new OSiLReader(); 
+		solver = new CoinSolver();
+		solver->sSolverName = "dylp";
+		solver->osol = osol;   
+		solver->osinstance = osilreader->readOSiL( osil);
+		cout << "call the COIN - DyLP solver for parincLinear" << endl;
+		solver->buildSolverInstance();
+		solver->solve();
+		cout << "Here is the COIN - DyLP solver solution for parincLinear" << endl;
+		cout << solver->osrl << endl;
+		check = 7668;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with DyLP on parincLinear.osil");
+		delete solver;
+		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;	
+		unitTestResult << "Solved problem parincLinear.osil with DyLP" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the DyLP Solver:"  + eclass.errormsg << endl;
+	}	
+#endif
+	
+
+#ifdef COIN_HAS_VOL
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Vol solver on volumeTest.osil" << endl << endl;
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "volumeTest.osil";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "volumeTest_vol.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+		solver->sSolverName = "vol";
+		solver->osil = osil;
+		solver->osinstance = NULL; 
+		solver->osoption = osolreader->readOSoL( osol);
+		cout << "call the COIN - Vol solver for volumeTest" << endl;
+		solver->buildSolverInstance();
+		solver->solve();
+		cout << "Here is the COIN - Vol solver solution for parincLinear" << endl;
+		cout << solver->osrl << endl;
+		check = 7;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with Vol on volumeTest.osil");
+		delete solver;
+		solver = NULL;
+		delete osolreader;
+		osolreader = NULL;	
+		unitTestResult << "Solved problem volumeTest.osil with Vol" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Vol Solver:"  + eclass.errormsg << endl;
+	}	
+#endif
+	
+#ifdef COIN_HAS_GLPK
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_glpk.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+		solver->sSolverName = "glpk";
+		solver->osinstance = osilreader->readOSiL( osil);
+		solver->osoption   = osolreader->readOSoL( osol);
+		cout << "call the GLPK Solver for p0033" << endl;
+		solver->buildSolverInstance();
+		solver->solve();
+		cout << "Here is the GLPK solver solution for p0033" << endl;
+		cout << solver->osrl << endl;
+		check = 3089;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with GLPK on p0033.osil");
+		delete solver;
+		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;	
+		delete osolreader;
+		osolreader = NULL;	
+		unitTestResult << "Solved problem p0033.osil with GLPK" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Glpk Solver:"  + eclass.errormsg << endl;
+	}	
+#endif
+	
+
+
+#ifdef COIN_HAS_CPX
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Cplex solver on p0033.osil" << endl << endl;
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cpx.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		solver = new CoinSolver();
+		solver->sSolverName = "cplex";
+		solver->osil = osil;
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		cout << "call the CPLEX Solver for p0033" << endl;
+		solver->buildSolverInstance();
+		solver->solve();
+		cout << "Here is the CPLEX solver solution for p0033" << endl;
+		cout << solver->osrl << endl;
+		check = 3089;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if(ok == false) throw ErrorClass(" Fail unit test with CPLEX on p0033.osil");
+		delete solver;
+		solver = NULL;
+		unitTestResult << "Solved problem p0033.osil with CPLEX" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		cout << "OSrL =  " <<  solver->osrl <<  endl;
+		cout << endl << endl << endl;
+		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg << endl;
+	}	
+#endif
+	
 
 
 #ifdef COIN_HAS_IPOPT
@@ -1004,45 +1226,6 @@ if(THOROUGH == true){
 	}
 #endif // end of #ifdef COIN_HAS_IPOPT
 
-
-#ifdef COIN_HAS_SYMPHONY
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": SYMPHONY solver on p0033.osil" << endl << endl;
-		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_sym.osol";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
-		solver->sSolverName = "symphony";
-		solver->osil = osil;
-		solver->osinstance = NULL; 
-		solver->osoption   = osolreader->readOSoL( osol);
-		cout << "build the solver instance for COIN - SYMPHONY" << endl;
-		solver->buildSolverInstance();
-//		cout << "call the COIN - SYMPHONY Solver for p0033" << endl;
-		solver->solve();
-		cout << "Here is the COIN SYMPHONY solver solution for p0033" << endl;
-		cout << solver->osrl << endl;
-		check = 3089;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with SYMPHONY on p0033.osil");
-		delete solver;
-		solver = NULL;
-		delete osolreader;
-		osolreader = NULL;	
-		unitTestResult << "Solved problem p0033.osil with SYMPHONY" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the SYMPHONY Solver:"  + eclass.errormsg << endl;
-	}	
-#endif
-	
 
 #ifdef COIN_HAS_BONMIN
 	try{
@@ -1527,156 +1710,6 @@ if( THOROUGH == true){
 
 #endif // end of #if 0
 
-
-#ifdef COIN_HAS_DYLP
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": DyLP solver on parincLinear.osil" << endl << endl;
-		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "parincLinear_dylp.osol";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		solver = new CoinSolver();
-		solver->sSolverName = "dylp";
-		solver->osol = osol;   
-		solver->osinstance = osilreader->readOSiL( osil);
-		cout << "call the COIN - DyLP solver for parincLinear" << endl;
-		solver->buildSolverInstance();
-		solver->solve();
-		cout << "Here is the COIN - DyLP solver solution for parincLinear" << endl;
-		cout << solver->osrl << endl;
-		check = 7668;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with DyLP on parincLinear.osil");
-		delete solver;
-		solver = NULL;
-		delete osilreader;
-		osilreader = NULL;	
-		unitTestResult << "Solved problem parincLinear.osil with DyLP" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
-		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the DyLP Solver:"  + eclass.errormsg << endl;
-	}	
-#endif
-	
-
-#ifdef COIN_HAS_VOL
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": Vol solver on volumeTest.osil" << endl << endl;
-		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "volumeTest.osil";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "volumeTest_vol.osol";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
-		solver->sSolverName = "vol";
-		solver->osil = osil;
-		solver->osinstance = NULL; 
-		solver->osoption = osolreader->readOSoL( osol);
-		cout << "call the COIN - Vol solver for volumeTest" << endl;
-		solver->buildSolverInstance();
-		solver->solve();
-		cout << "Here is the COIN - Vol solver solution for parincLinear" << endl;
-		cout << solver->osrl << endl;
-		check = 7;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Vol on volumeTest.osil");
-		delete solver;
-		solver = NULL;
-		delete osolreader;
-		osolreader = NULL;	
-		unitTestResult << "Solved problem volumeTest.osil with Vol" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
-		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Vol Solver:"  + eclass.errormsg << endl;
-	}	
-#endif
-	
-#ifdef COIN_HAS_GLPK
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
-		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_glpk.osol";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
-		solver->sSolverName = "glpk";
-		solver->osinstance = osilreader->readOSiL( osil);
-		solver->osoption   = osolreader->readOSoL( osol);
-		cout << "call the GLPK Solver for p0033" << endl;
-		solver->buildSolverInstance();
-		solver->solve();
-		cout << "Here is the GLPK solver solution for p0033" << endl;
-		cout << solver->osrl << endl;
-		check = 3089;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with GLPK on p0033.osil");
-		delete solver;
-		solver = NULL;
-		delete osilreader;
-		osilreader = NULL;	
-		delete osolreader;
-		osolreader = NULL;	
-		unitTestResult << "Solved problem p0033.osil with GLPK" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
-		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Glpk Solver:"  + eclass.errormsg << endl;
-	}	
-#endif
-	
-
-
-#ifdef COIN_HAS_CPX
-	try{
-		cout << endl << "TEST " << ++nOfTest << ": Cplex solver on p0033.osil" << endl << endl;
-		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cpx.osol";
-		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver = new CoinSolver();
-		solver->sSolverName = "cplex";
-		solver->osil = osil;
-		solver->osol = osol;  
-		solver->osinstance = NULL; 
-		cout << "call the CPLEX Solver for p0033" << endl;
-		solver->buildSolverInstance();
-		solver->solve();
-		cout << "Here is the CPLEX solver solution for p0033" << endl;
-		cout << solver->osrl << endl;
-		check = 3089;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with CPLEX on p0033.osil");
-		delete solver;
-		solver = NULL;
-		unitTestResult << "Solved problem p0033.osil with CPLEX" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
-		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the Cplex Solver:"  + eclass.errormsg << endl;
-	}	
-#endif
-	
 	
 #ifdef COIN_HAS_LINDO
 	try{
@@ -1801,11 +1834,12 @@ if( THOROUGH == true){
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the LINDO Solver:"  + eclass.errormsg << endl << endl;
 	}
 #endif
-// end solving using the osil file
+} // end of if(SOLVER_TESTS)
 
 
 
 // now solve with an OSInstance created from an MPS file
+if (OTHER_TESTS){
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver using MPS file" << endl << endl;
 		ok = true;
@@ -1923,11 +1957,7 @@ if( THOROUGH == true){
 		unitTestResultFailure   << "Sorry Unit Test Failed Testing Use of Base 64" << endl;
 
 	}  
-}      //INSTALLATION_TEST
 
-
-if (COMPONENT_DEBUG == true)
-{
 
 	// now test postfix and prefix routines
 	try{
@@ -2119,8 +2149,11 @@ if (COMPONENT_DEBUG == true)
 		cout << endl << endl << endl;
 		unitTestResultFailure << eclass.errormsg << endl;
 	}
+} //end of if (OTHER_TESTS)
+
 	//
-	// Now just test the OSiL parser
+	// Now test the parsers --- OSiL parser first
+if (PARSER_TESTS){
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ":  OSiL parser" << endl << endl;
 		clock_t start, finish;
@@ -3217,7 +3250,7 @@ if (COMPONENT_DEBUG == true)
 		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 	}
 
-}       // COMPONENT_DEBUG
+}       // PARSER_TESTS
 
 	delete fileUtil;
 	fileUtil = NULL;
