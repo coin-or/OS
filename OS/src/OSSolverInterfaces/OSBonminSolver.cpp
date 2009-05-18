@@ -644,12 +644,6 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 						if(optionsVector[ i]->category == "cbc" ){
 							std::cout << "SETTING INTEGER CBC OPTION" << std::endl;
 							bonminSetup.options()->SetIntegerValue("milp_solver."+optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ));
-							int optNum;
-							optNum = -27;
-							std::string prefix;
-							bonminSetup.options()->GetEnumValue("milp_solver", optNum,  bonminSetup.prefix() );
-							std::cout << "optNum =  " << optNum << std::endl;
-							std::cout << "PREFIX  =  " << bonminSetup.prefix() << std::endl;
 						}
 						else{
 							bonminSetup.options()->SetIntegerValue("bonmin."+optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() )  );	
