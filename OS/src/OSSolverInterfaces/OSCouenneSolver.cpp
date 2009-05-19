@@ -284,7 +284,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 				
 	}
 
-	if (sm) delete sm;
+	//if (sm) delete sm;
 
 
 	//couenne->AuxSet() = new std::set <exprAux *, compExpr>;
