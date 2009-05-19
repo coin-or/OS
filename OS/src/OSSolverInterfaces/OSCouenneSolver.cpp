@@ -184,7 +184,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		//just worry about linear coefficients
 	
 		expression *body = NULL;
-		
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Couenne NEEDS AN OBJECTIVE FUNCTION");
 		SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
 		
 		int nterms = sv->number;
