@@ -504,28 +504,44 @@ void solve(){
 					}
 					else{
 						if( osoptions->solverName.find( "cplex") != std::string::npos){
+							bool bCplexIsPresent = false;
+							#ifdef COIN_HAS_CPX
+							bCplexIsPresent = true;
 							solverType = new CoinSolver();
 							solverType->sSolverName = "cplex";
+							#endif
+							if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
 						}
 						else{
 							if( osoptions->solverName.find( "glpk") != std::string::npos){
+								bool bGlpkIsPresent = false;
+								#ifdef COIN_HAS_GLPK
+								bGlpkIsPresent = true;
 								solverType = new CoinSolver();
 								solverType->sSolverName = "glpk";
+								#endif
+								if(bGlpkIsPresent == false) throw ErrorClass( "the GLPK solver requested is not present");
 							}
 							else{
 								if( osoptions->solverName.find( "dylp") != std::string::npos){
-									bool bDYlPIsPresent  = false;
+									bool bDyLPIsPresent  = false;
 									#ifdef COIN_HAS_DYLP
+									bDyLPIsPresent  = true;
 									solverType = new CoinSolver();
 									solverType->sSolverName = "dylp";
-									bDYlPIsPresent = true;
+									bDyLPIsPresent = true;
 									#endif
-									if(bDYlPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
+									if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
 								}
 								else{
 									if( osoptions->solverName.find( "symphony") != std::string::npos){
+										bool bSymphonyIsPresent  = false;
+										#ifdef COIN_HAS_SYMPHONY
+										bSymphonyIsPresent  = true;
 										solverType = new CoinSolver();
 										solverType->sSolverName = "symphony";
+										#endif
+										if(bSymphonyIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
 									}
 									else{
 										if( osoptions->solverName.find( "knitro") != std::string::npos){
@@ -540,8 +556,13 @@ void solve(){
 										}
 										else{ 
 											if( osoptions->solverName.find( "vol") != std::string::npos){
+												bool bVolIsPresent = false;
+												#ifdef COIN_HAS_VOL
+												bVolIsPresent = true;
 												solverType = new CoinSolver();
 												solverType->sSolverName = "vol";
+												#endif
+												if(bVolIsPresent == false) throw ErrorClass( "the Vol solver requested is not present");		
 											}
 											else{
 												if(osoptions->solverName.find( "bonmin") != std::string::npos){
@@ -551,6 +572,7 @@ void solve(){
 													bBonminIsPresent = true;
 													solverType = new BonminSolver();	
 													#endif												
+													if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");		
 												}
 												else{
 													if(osoptions->solverName.find( "couenne") != std::string::npos){
@@ -560,6 +582,7 @@ void solve(){
 														bCouenneIsPresent = true;
 														solverType = new CouenneSolver();	
 														#endif												
+														if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");		
 													}
 													else{ //cbc is the default
 														solverType = new CoinSolver();
