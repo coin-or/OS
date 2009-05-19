@@ -293,17 +293,11 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
 	try{
 	
-		double os_obj_value;
-		os_obj_value = 0.0;
-		 os_obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
-		 std::cout << "new_x = " << new_x << std::endl;
-		 std::cout << "n = " << n   << std::endl;
-		 for(int i = 0; i < n; i++){
-		 	std::cout << x[ i] << std::endl;
-		 }
+
+		 obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
 		//if( CoinIsnan( (double)obj_value) ) return false;
-		obj_value = os_obj_value;
-		if( CoinIsnan( os_obj_value ) )return false;
+
+		if( CoinIsnan( obj_value ) )return false;
 
 	}
 	catch(const ErrorClass& eclass){
