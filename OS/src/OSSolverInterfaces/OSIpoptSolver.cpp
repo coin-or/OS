@@ -620,7 +620,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			case INVALID_NUMBER_DETECTED:
-				solutionDescription = "INVALID_NUMcatBER_DETECTED[IPOPT]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
+				solutionDescription = "INVALID_NUMBER_DETECTED[IPOPT]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			case INTERNAL_ERROR:
