@@ -21,9 +21,8 @@
 #include "OSBonminSolver.h"
 #include "OSDataStructures.h"
 #include "OSParameters.h" 
-#include "OSCommonUtil.h"
 #include "OSMathUtil.h"
-
+#include "CoinFinite.hpp"
 #include "BonOsiTMINLPInterface.hpp"
 
 
@@ -381,7 +380,7 @@ bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_val
 		bonminErrorMsg = eclass.errormsg;
 		throw;  
 	}
-	if( CommonUtil::ISOSNAN( (double)obj_value) ) return false;
+	if( CoinIsnan( (double)obj_value) ) return false;
   	return true;
 }
 
@@ -412,7 +411,7 @@ bool BonminProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number
  		double *conVals = osinstance->calculateAllConstraintFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 );
  		int i;
  		for(i = 0; i < m; i++){
- 			if( CommonUtil::ISOSNAN( (double)conVals[ i] ) ) return false;
+ 			if( CoinIsnan( (double)conVals[ i] ) ) return false;
  			g[i] = conVals[ i]  ;	
  		} 
 		return true;

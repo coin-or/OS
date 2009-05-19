@@ -53,7 +53,11 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces`	\
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers`	
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers`	\
+	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` 
+	
 	
 	
 if COIN_HAS_ASL

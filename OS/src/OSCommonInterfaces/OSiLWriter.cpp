@@ -17,9 +17,9 @@
 #include "OSiLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h" 
-#include "OSCommonUtil.h"
 #include "OSBase64.h"
 #include "OSMathUtil.h"
+#include "CoinFinite.hpp"
 
 #include <sstream>  
 
@@ -101,7 +101,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						outStr <<  "\"";
 					}
 					/* we no longer do init
-					if(CommonUtil::ISOSNAN(m_OSInstance->instanceData->variables->var[i]->init) == false){
+					if(CoinIsnan(m_OSInstance->instanceData->variables->var[i]->init) == false){
 						outStr << " init=\"" ;
 						outStr << os_dtoa_format(m_OSInstance->instanceData->variables->var[i]->init) ;
 						outStr <<  "\"";

@@ -49,7 +49,7 @@ class CommonUtil{
    	 * @param number is a double number that is input 
    	 * @return true if the number is an OS NAN. 
    	 */	
-	static bool ISOSNAN( double number);
+	//static bool ISOSNAN( double number);
 
 };//class CommonUtil
 #endif
