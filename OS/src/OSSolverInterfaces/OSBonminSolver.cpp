@@ -32,7 +32,6 @@ using std::cout;
 using std::endl; 
 using std::ostringstream;
 
-
 BonminSolver::BonminSolver() {
 	osrlwriter = new OSrLWriter();
 	osresult = new OSResult();	
@@ -163,12 +162,12 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	n = osinstance->getVariableNumber();
 	// number of constraints
 	m = osinstance->getConstraintNumber();
+	#ifdef DEBUG
 	cout << "Bonmin number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
 	cout << "Bonmin number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+	#endif
 	try{
-		cout << "Call Initialize for Alg Diff" << std::endl;
 		osinstance->initForAlgDiff( ); 
-		cout << "Return from Initialize for Alg Diff" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		bonminErrorMsg = eclass.errormsg;
@@ -180,7 +179,7 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	SparseJacobianMatrix *sparseJacobian = NULL;
 	try{
 		sparseJacobian = osinstance->getJacobianSparsityPattern();
-		cout << "Get sparse Jacobian pattern" << std::endl;
+		//cout << "Get sparse Jacobian pattern" << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		bonminErrorMsg = eclass.errormsg;
@@ -188,7 +187,9 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	}
 	//std::cout << "Done calling sparse jacobian" << std::endl;
 	nnz_jac_g = sparseJacobian->valueSize;
+	#ifdef DEBUG
 	cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
+	#endif
 	// nonzeros in upper hessian
 	
 	if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) {
@@ -201,7 +202,9 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 		//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
 		nnz_h_lag = sparseHessian->hessDimension;
 	}
+	#ifdef DEBUG
 	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
+	#endif
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
   
@@ -223,8 +226,10 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	for(i = 0; i < n; i++){
 		x_l[ i] = mdVarLB[ i];
 		x_u[ i] = mdVarUB[ i];
+		#ifdef DEBUG
 		cout << "x_l !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_l[i] << endl;
 		cout << "x_u !!!!!!!!!!!!!!!!!!!!!!!!!!!" << x_u[i] << endl;
+		#endif
 	}
 	// Bonmin interprets any number greater than nlp_upper_bound_inf as
 	// infinity. The default value of nlp_upper_bound_inf and nlp_lower_bound_inf
@@ -239,8 +244,10 @@ bool  BonminProblem::get_bounds_info(Index n, Number* x_l, Number* x_u,
 	for(int i = 0; i < m; i++){
 		g_l[ i] = mdConLB[ i];
 		g_u[ i] = mdConUB[ i];
+		#ifdef DEBUG
 		cout << "lower !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_l[i] << endl;
 		cout << "upper !!!!!!!!!!!!!!!!!!!!!!!!!!!" << g_u[i] << endl;
+		#endif
 	}  
   	return true;
 }//get_bounds_info
@@ -328,8 +335,8 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 				initialed[initVarVector[k]->idx] = true;
 			}
 		}
-		catch(const ErrorClass& eclass)
-		{	cout << "Error in BonminProblem::get_starting_point (OSBonminSolver.cpp)";
+		catch(const ErrorClass& eclass){
+			cout << "Error in BonminProblem::get_starting_point (OSBonminSolver.cpp)";
 			cout << endl << endl << endl;
 		}	
 	}  //  end if (m1 > 0)		
@@ -362,7 +369,9 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 							x[k] = osinstance->instanceData->variables->var[k]->ub;
 	}
  	for(i = 0; i < n1; i++){
+		#ifdef DEBUG
  		std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
+		#endif
  	}
  
 
@@ -548,7 +557,9 @@ void BonminProblem::finalize_solution(TMINLP::SolverReturn status_,
 {
 	
 	status = status_;
+	#ifdef DEBUG
 	std::cout << "FINALIZE OBJ SOLUTION VALUE = " << obj_value << std::endl;
+	#endif
 
 }
 
@@ -681,9 +692,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 //void BonminSolver::solve() throw (ErrorClass) {
 void BonminSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
-	std::cout << "set Solver Options for Gus" << std::endl;
 	if( this->bSetSolverOptions == false) setSolverOptions();
-	std::cout << "done setting set Solver Options for Gus" << std::endl;
 
 	try{
 		double start = CoinCpuTime();

@@ -1435,16 +1435,15 @@ if (THOROUGH == true){
 
 		tmp_writer = new OSrLWriter();
 		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
-		delete tmp_writer;
-		tmp_writer = NULL;
-
-                check = -17.07106795327683;
+		check = -17.07106795327683;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1.osil");
 
 		delete solver;
 		solver = NULL;
+		delete tmp_writer;
+		tmp_writer = NULL;
 		unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	
 	
@@ -1650,50 +1649,46 @@ if( THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		
 
-/*		
-		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on HS071_feas.osil" << endl << endl;
+		
+		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on wayneQuadratic.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
 		ok = true; 
-		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_feas.osil";
-//		osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_feas_Couenne.osol";
+		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "wayneQuadratic_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
-//		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osol = "";
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		solver = new CouenneSolver();
 		solver->osil = osil;
 		solver->osol = osol; 
-//		solver->osinstance = osilreader->readOSiL( osil);
-//		solver->osoption   = osolreader->readOSoL( osol);
-		cout << "call the COIN - Couenne Solver for HS071_feas.osil" << endl;
+		cout << "call the COIN - Couenne Solver for wayneQuadratic.osil" << endl;
 		solver->buildSolverInstance();
 	
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
 	
-		cout << "Here is the Couenne solver solution for HS071_feas" << endl;
+		cout << "Here is the Couenne solver solution for wayneQuadratic" << endl;
 
 //		OSrLWriter *tmp_writer;
 		tmp_writer = new OSrLWriter();
 		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
 		delete tmp_writer;
 		tmp_writer = NULL;
-
 		cout << solver->osrl << endl << endl;
-//		check = -1.70711;
-//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on HS071_feas.osil");
+		
+		string::size_type pos;
+		pos = solver->osrl.find( "OTHER[COUENNE]");
+		if(pos == std::string::npos)  throw ErrorClass(" Error with wayneQuadratic running on Couenne");
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem HS071_feas with Couenne" << std::endl;
+		unitTestResult << "Solved problem wayneQuadratic with Couenne" << std::endl;
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-*/		
+		
 
 } //end of if (THOROUGH)
 

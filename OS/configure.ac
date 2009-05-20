@@ -723,6 +723,7 @@ AC_COIN_VPATH_LINK(data/osolFiles/rosenbrockmod_lindo.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/volumeTest_vol.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin1.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin2.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Couenne.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_lindo.osol)
 
 ##

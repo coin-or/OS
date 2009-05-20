@@ -1797,13 +1797,17 @@ int  OSOption::getNumberOfConstraints()
  * get the number of variables that have initial values (in <optimization> element)
  */
 int OSOption::getNumberOfInitVarValues()
-{	cout << "step through getNumberOfInitVarValues" << endl;
+{	
+	//cout << "step through getNumberOfInitVarValues" << endl;
 	if (this->optimization != NULL) 
-	{	cout << "optimization is not NULL" << endl;
+	{	
+		//cout << "optimization is not NULL" << endl;
 		if (this->optimization->variables != NULL) 
-		{	cout << "variables is not NULL" << endl;
+		{	
+			//cout << "variables is not NULL" << endl;
 			if (this->optimization->variables->initialVariableValues != NULL) 
-			{	cout << "initialVariableValues is not NULL: ";
+			{	
+				//cout << "initialVariableValues is not NULL: ";
 				cout << this->optimization->variables->initialVariableValues->numberOfVar << endl;
 				return this->optimization->variables->initialVariableValues->numberOfVar;
 			}

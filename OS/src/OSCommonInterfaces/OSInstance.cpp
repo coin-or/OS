@@ -2470,10 +2470,10 @@ bool OSInstance::addQTermsToExressionTree(){
 	OSnLNodePlus* nlNodePlus;
 	OSExpressionTree* expTree;
 	getQuadraticTerms();	
-	std::cout << "PROCESSING QUADRATIC TERMS" << std::endl;
+	//std::cout << "PROCESSING QUADRATIC TERMS" << std::endl;
 	for(i = 0; i < numQTerms; i++){
 		idx = m_quadraticTerms->rowIndexes[ i];
-		std::cout << "PROCESSING QTERM  = "  << i <<std::endl;
+		//std::cout << "PROCESSING QTERM  = "  << i <<std::endl;
 		// see if row idx is in the expression tree
 		if( m_mapExpressionTreesMod.find( idx) != m_mapExpressionTreesMod.end() ) {
 			// row idx is in the expression tree
@@ -2489,7 +2489,9 @@ bool OSInstance::addQTermsToExressionTree(){
 				// add to map
 				k = (*expTree->mapVarIdx).size();
 				(*expTree->mapVarIdx)[ nlNodeVariableOne->idx] =  k + 1;
+				#ifdef DEBUG
 				std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableOne->idx << std::endl;
+				#endif
 			}
 			nlNodeVariableOne->coef = m_quadraticTerms->coefficients[ i];
 			nlNodeVariableTwo = new OSnLNodeVariable();
@@ -2500,7 +2502,9 @@ bool OSInstance::addQTermsToExressionTree(){
 				// add to map
 				k = (*expTree->mapVarIdx).size();
 				(*expTree->mapVarIdx)[ nlNodeVariableTwo->idx] =  k + 1;
+				#ifdef DEBUG
 				std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableTwo->idx << std::endl;
+				#endif
 			}
 			nlNodeVariableTwo->coef = 1.;
 			// now multiply the two new variable nodes together
@@ -2548,8 +2552,10 @@ bool OSInstance::addQTermsToExressionTree(){
 				m_iConstraintNumberNonlinear++;
 				m_bProcessExpressionTrees = true;
 			}
+			#ifdef DEBUG
 			std::cout << "NUMBER OF EXPRESSION TREES = "  << m_mapExpressionTreesMod.size() <<std::endl;
 			std::cout << "NUMBER OF NONLINEAR OBJECTIVES = "  << getNumberOfNonlinearObjectives() <<std::endl;
+			#endif
 		} 
 		// if there were no nonlinear terms make this the expression tree
 		if(m_iNonlinearExpressionNumber <= 0) m_mapExpressionTrees = m_mapExpressionTreesMod;
