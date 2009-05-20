@@ -204,6 +204,7 @@ OS/data/osolFiles/sendWithJobID.osol -text
 OS/data/osolFiles/volumeTest_vol.osol -text
 OS/data/osolFiles/wayneQuadratic_Bonmin1.osol -text
 OS/data/osolFiles/wayneQuadratic_Bonmin2.osol -text
+OS/data/osolFiles/wayneQuadratic_Couenne.osol -text
 OS/data/osolFiles/wayneQuadratic_lindo.osol -text
 OS/data/osplFiles/knock.ospl -text
 OS/data/osrlFiles/errorExample.osrl -text
