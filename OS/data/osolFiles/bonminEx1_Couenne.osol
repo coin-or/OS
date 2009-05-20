@@ -13,7 +13,7 @@
 			</initialVariableValues>
 		</variables>	
 		<solverOptions numberOfSolverOptions="5">	
-			<solverOption name="node_limit" solver="couenne" type="integer" value="0" category="bonmin"/>
+			<solverOption name="node_limit" solver="couenne" type="integer" value="1000" category="bonmin"/>
 			<solverOption name="bb_log_level" solver="couenne" type="integer" value="3" category="bonmin"/>
 			<solverOption name="nlp_log_level" solver="couenne" type="integer" value="2" category="bonmin"/>
 			<solverOption name="display_stats" solver="couenne" type="string" value="yes"/>
