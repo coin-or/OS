@@ -97,14 +97,29 @@
 #define OS_NEAR_EQUAL 1e-2
 
 #ifdef NAN 
-	#define OSNAN NAN
+#define OSNAN NAN
 #elif defined NaN
-	#define OSNAN NaN
+#define OSNAN NaN
 #elif defined nan
-	#define OSNAN nan
+#define OSNAN nan
 #else	
-	#define OSNAN -883849830
+#if defined (_MSC_VER)
+#define OSNAN _Nan._Double
 #endif
+#endif
+
+// copy from CoinUtils	-- CoinFinite.hpp
+inline bool ISOSNAN( double number){
+#ifdef MY_C_ISNAN
+	if(MY_C_ISNAN( number) == true){
+		return true;
+	}
+	else return(number == OSNAN);
+#else
+	return (number == OSNAN);
+#endif
+}
+
 
 #ifdef DBL_MAX
 	#define OSDBL_MAX DBL_MAX
@@ -117,13 +132,13 @@
 
 
 #ifdef INT_MAX
-	#define OSINT_MAX INT_MAX
+#define OSINT_MAX INT_MAX
 #else
-	#define OSINT_MAX 2147483647
+#define OSINT_MAX 2147483647
 #endif
 
 #ifndef XSLT_LOCATION
-	#define XSLT_LOCATION  OSSRCDIR;
+#define XSLT_LOCATION  OSSRCDIR;
 #endif
 
 #endif

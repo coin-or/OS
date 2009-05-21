@@ -40,27 +40,18 @@ inline bool CoinIsnan(double val)
 */
 
 
-	
-//bool CommonUtil::ISOSNAN( double number){
-// copy from CoinUtils	-- CoinFinite.hpp
-//#ifdef MY_C_ISNAN
-//	if(MY_C_ISNAN( number) == true){
-//		return true;
-//	}
-//	else return(number == OSNAN);
-//#else
-	//#ifdef NAN 
-	//	return isnan( number);
-	//#elif defined NaN
-	//	return isnan( number);
-	//#elif defined nan
-	//	return isnan( number);
-	//#else
-	//	return (number == OSNAN);
-	//#endif
-//	return (number == OSNAN);
-//#endif
-//}
-
+/*	
+bool ISOSNAN( double number){
+ copy from CoinUtils	-- CoinFinite.hpp
+#ifdef MY_C_ISNAN
+	if(MY_C_ISNAN( number) == true){
+		return true;
+	}
+	else return(number == OSNAN);
+#else
+	return (number == OSNAN);
+#endif
+}
+*/
 
 
