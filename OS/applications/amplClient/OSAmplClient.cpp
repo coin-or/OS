@@ -55,6 +55,9 @@
 #ifdef COIN_HAS_BONMIN    
 #include "OSBonminSolver.h"
 #endif 
+#ifdef COIN_HAS_COUENNE    
+#include "OSCouenneSolver.h"
+#endif
 #include "OSFileUtil.h"
 #include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
@@ -289,14 +292,30 @@ int main(int argc, char **argv)
 												if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");												
 											}
 											else{
-												throw ErrorClass( "a supported solver has not been selected");
+												if( strstr(amplclient_options, "couenne") != NULL){
+													bool bCouenneIsPresent = false;
+													#ifdef COIN_HAS_COUENNE
+													bCouenneIsPresent = true;
+													sSolverName = "couenne";
+													solver_option = getenv("couenne_options");
+													if( solver_option != NULL) cout << "HERE ARE THE Couenne SOLVER OPTIONS " <<   solver_option << endl;
+													if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
+														solverType = new CouenneSolver();
+														solverType->sSolverName = "counenne";
+													}
+													#endif
+														if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");	
+												}
+												else{
+													throw ErrorClass( "a supported solver has not been selected");
+												}
 											}
 										}
 									}	
 								} 
 							}
 						}
-					}
+					} 
 				}
 			}
 		}
@@ -304,6 +323,11 @@ int main(int argc, char **argv)
 		if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)  ){
 			solverType->osol = osol;
 			std::cout << osol << std::endl;
+			OSiLWriter osilwriter;
+			std::cout << "WRITE THE INSTANCE" << std::endl;
+			std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+			std::cout << "DONE WRITE THE INSTANCE" << std::endl;
+
 			solverType->osinstance = osinstance;
 			solverType->buildSolverInstance();
 			solverType->solve();
@@ -330,6 +354,7 @@ int main(int argc, char **argv)
 			osilwriter = new OSiLWriter();
 			std::string  osil = osilwriter->writeOSiL( osinstance);
 			////
+		
 			agent_address = strstr(solver_option, "service");
 			agent_address += 7;
 			URL = strtok( agent_address, delims );

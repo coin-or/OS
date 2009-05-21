@@ -1027,7 +1027,7 @@ OSnLNodeSqrt::OSnLNodeSqrt()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "sqrt";
+	snodeName = "squareRoot";
 	inodeInt = 2006;
 	inodeType = 1;
 }//end OSnLNodeSqrt

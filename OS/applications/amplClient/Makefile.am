@@ -32,20 +32,18 @@ OSAmplClient_LDADD =  \
 	
 	
 	  
-	
 if COIN_HAS_COUENNE
    OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
 if COIN_HAS_ASL
-OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-#OSAmplClient_LDADD +=$(BONMINOBJDIR)/src/Interfaces/Ampl/libbonamplinterface.la
-#OSAmplClient_LDADD +=  $(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la
-#OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la
+   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif
 endif
 
 if COIN_HAS_BONMIN
-OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
+   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
+
 
 
 if COIN_HAS_IPOPT
@@ -230,7 +228,23 @@ if COIN_HAS_ASL
 endif
 
 
-
+if COIN_HAS_COUENNE
+  AM_CPPFLAGS += \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/bound_tightening` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/branch` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/convex` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/disjunctive` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/expression` \
+        -I`$(CYGPATH_W) $(COUENNESRCDIR)/src/expression/operators` \
+        -I`$(CYGPATH_W) $(COUENNESRCDIR)/src/expression/simplify` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/main` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/problem` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/readnl` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/standardize` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/util` \
+	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src` \
+	-I`$(CYGPATH_W) $(COUENNEOBJDIR)/inc`
+endif
 
 
 # This line is necessary to allow VPATH compilation with MS compilers
