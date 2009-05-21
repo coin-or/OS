@@ -294,9 +294,9 @@ bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_valu
 	
 
 		 obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
-		//if( ISOSNAN( (double)obj_value) ) return false;
+		//if( CoinIsnan( (double)obj_value) ) return false;
 
-		if( ISOSNAN( obj_value ) )return false;
+		if( CoinIsnan( obj_value ) )return false;
 
 	}
 	catch(const ErrorClass& eclass){
@@ -334,7 +334,7 @@ bool IpoptProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number*
  		double *conVals = osinstance->calculateAllConstraintFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 );
  		int i;
  		for(i = 0; i < m; i++){
- 			if( ISOSNAN( (double)conVals[ i] ) ) return false;
+ 			if( CoinIsnan( (double)conVals[ i] ) ) return false;
  			g[i] = conVals[ i]  ;	
  		} 
 		return true;

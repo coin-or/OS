@@ -24,7 +24,7 @@
 #include "OSParameters.h"
 #include "OSErrorClass.h"
 #include "CoinFinite.hpp"
-#include <iostream>
+#include <iostream> 
 #include <sstream>
 #include <limits>
 #include <cstdio>
@@ -5653,7 +5653,7 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
 
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (!ISOSNAN(value[i]))
+	{	if (!CoinIsnan(value[i]))
 			if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
 				return false;
 	}
@@ -5798,7 +5798,7 @@ bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, double *
 	}
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (!ISOSNAN(value[i]))
+	{	if (!CoinIsnan(value[i]))
 			if (!this->optimization->variables->integerVariableBranchingWeights->addVar(i, value[i]))
 				return false;
 	}
@@ -5898,7 +5898,7 @@ bool OSOption::setInitObjValuesDense(int numberOfObj, double *value)
 	}
 	int i;
 	for (i = 0; i < numberOfObj; i++)
-	{	if (!ISOSNAN(value[i]))
+	{	if (!CoinIsnan(value[i]))
 			if (!this->optimization->objectives->initialObjectiveValues->addObj(-1-i, value[i]))
 				return false;
 	}
@@ -6017,7 +6017,7 @@ bool OSOption::setInitConValuesDense(int numberOfCon, double *value)
 	}
 	int i;
 	for (i = 0; i < numberOfCon; i++)
-	{	if (!ISOSNAN(value[i]))
+	{	if (!CoinIsnan(value[i]))
 			if (!this->optimization->constraints->initialConstraintValues->addCon(i, value[i]))
 				return false;
 	}

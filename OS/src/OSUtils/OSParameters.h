@@ -27,7 +27,6 @@
 
 #include "OSConfig.h"
 
-	
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -96,29 +95,26 @@
  */
 #define OS_NEAR_EQUAL 1e-2
 
+inline double nanKludge(){
+	double zero = 0.0;
+	return 0.0/zero;
+}
+
 #ifdef NAN 
 #define OSNAN NAN
 #elif defined NaN
 #define OSNAN NaN
 #elif defined nan
 #define OSNAN nan
-#else	
-#if defined (_MSC_VER)
+#elif defined (_MSC_VER)
+#include <ymath.h>
 #define OSNAN _Nan._Double
-#endif
+#else
+#define OSNAN nanKludge() // wow, what a last resort, I don't like this!
 #endif
 
-// copy from CoinUtils	-- CoinFinite.hpp
-inline bool ISOSNAN( double number){
-#ifdef MY_C_ISNAN
-	if(MY_C_ISNAN( number) == true){
-		return true;
-	}
-	else return(number == OSNAN);
-#else
-	return (number == OSNAN);
-#endif
-}
+
+
 
 
 #ifdef DBL_MAX

@@ -13,7 +13,7 @@
  * 
  */ 
  
-#include <cppad/cppad.hpp> 
+//#include <cppad/cppad.hpp> 
 #include "OSConfig.h"
 #include "OSCoinSolver.h"
 #include "OSIpoptSolver.h"
@@ -32,13 +32,20 @@
 #include "OSCommonUtil.h"
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
+#include "CoinFinite.hpp"
 
 #include<iostream> 
 using std::cout;   
 using std::endl;
 
+double nanKludge(){
+	double zero = 0.0;
+	return 0.0/zero;
+}
+//#define myNaN _Nan._Double;
+
 //int main(int argC, char* argV[]){
-int main( ){
+bool main( ){
 	/** some AMPL insanity -- the fileUtil must be built in order to avoid
 	 * an ASL error - on the Mac only
 	 */
@@ -48,6 +55,16 @@ int main( ){
 	std::cout << "Hello World" << std::endl;
 	delete fileUtil;
 	fileUtil = NULL;
+	double zero = 0;
 
+	double value = _Nan._Double;
+	std::cout << CoinIsnan( value) << std::endl;
+	std::cout << "True == " << true << std::endl;
+	std::cout << "False == " << false << std::endl;
+	std::cout << CoinIsnan( nanKludge()) << std::endl;
+
+
+
+	return true;
 }// end main
 
