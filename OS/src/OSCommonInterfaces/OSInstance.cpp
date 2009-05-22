@@ -3717,7 +3717,7 @@ bool OSInstance::initForAlgDiff(){
 	initializeNonLinearStructures( );
 	initObjGradients();
 	getAllNonlinearVariablesIndexMap( );
-	if(m_bSparseJacobianCalculated  == false) getJacobianSparsityPattern();
+	//if(m_bSparseJacobianCalculated  == false) getJacobianSparsityPattern();
 	//see if we need to retape 
 	//loop over expression tree and see if one requires it
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
@@ -3736,7 +3736,7 @@ bool OSInstance::initForAlgDiff(){
 		m_vdRangeUnitVec.push_back( 0.0 );
 	}
 	m_binitForAlgDiff = true;
-	m_bSparseJacobianCalculated = true;
+	//m_bSparseJacobianCalculated = true;
 	//m_bProcessExpressionTrees = true;
 	return true;
 }//end initForAlgDiff

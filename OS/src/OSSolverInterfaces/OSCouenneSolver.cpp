@@ -239,15 +239,15 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 			row_nonz = 0;
 			if( sm)
 				row_nonz = sm->starts[ i +1] - sm->starts[ i];
-			exprGroup::lincoeff con_lin( 0);
+			exprGroup::lincoeff con_lin( row_nonz);
 			
 
 			if ( row_nonz  > 0){  // test for nonzeros in row i
 				
 				for (j = 0; j  <  row_nonz;  ++j){
 
-					//con_lin[j].first = couenne->Var( sm->indexes[ kount] );
-					//con_lin[j].second = sm->values[ kount];
+					con_lin[j].first = couenne->Var( sm->indexes[ kount] );
+					con_lin[j].second = sm->values[ kount];
 					kount++;
 
 				}
