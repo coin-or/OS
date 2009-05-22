@@ -142,6 +142,9 @@ public:
 	Bab bb;
 	
 	TMINLP::SolverReturn status;
+	
+	
+
 
 	
 
