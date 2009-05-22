@@ -59,9 +59,9 @@ you should get x1 = 540, x2 = 252
 #include "r_opn.hd" /* for N_OPS */
 #include "opcode.hd"
 
-#define R_OPS ((ASL_fg*)asl)->I.r_ops_
+#define R_OPS  ((ASL_fg*)asl)->I.r_ops_
 #define OBJ_DE ((ASL_fg*)asl)->I.obj_de_
-#define VAR_E  ((ASL_fg *) asl) -> I.var_e_
+#define VAR_E  ((ASL_fg*)asl)->I.var_e_
 #define CON_DE ((ASL_fg*)asl)->I.con_de_
 
 efunc *r_ops_int[N_OPS];
@@ -76,6 +76,7 @@ using std::endl;
 #include <stdint.h>
 #endif
    
+#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	
 	//Initialize the AMPL library
@@ -579,29 +580,34 @@ bool OSnl2osil::createOSInstance(){
 	//
 	//
 	// now create the objective function
+	// in the nl file, this is stored in dense form; convert to sparse.
 	//	
 	double objWeight = 1.0;
 	//	char	*objtype;	/* object type array: 0 == min, 1 == max */
 	std::string objName="";
 	SparseVector* objectiveCoefficients = NULL;
-	objectiveCoefficients = new SparseVector( n_var);
-	for(i = 0; i < n_var; i++){
-		objectiveCoefficients->indexes[i] = i;
-	} 
+
 	osinstance->setObjectiveNumber( n_obj) ;
 	for(i = 0; i < n_obj; i++){
-		for(j = 0; j < n_var; j++){
-			objectiveCoefficients->values[j] = 0;
-		}
+		int n_obj_coef = 0;
 		for(og = Ograd[i]; og; og = og->next){
-			objectiveCoefficients->values[og->varno] = og->coef;
+			if (og->coef != 0) n_obj_coef++;
+		}
+		objectiveCoefficients = new SparseVector( n_obj_coef);
+		int i_obj_coef = -1;
+		for(og = Ograd[i]; og; og = og->next){
+			if (og->coef != 0) {
+				i_obj_coef++;
+				objectiveCoefficients->values[i_obj_coef] = og->coef;
+				objectiveCoefficients->indexes[i_obj_coef] = og->varno;
+			}
 		}
 		osinstance->addObjective(-n_obj + i, objName, 
 		(objtype[i] == 1)?"max":"min", 
 		objconst( i),  objWeight, objectiveCoefficients) ;
+		delete objectiveCoefficients; // delete the temporary sparse vector
+		objectiveCoefficients = NULL;
 	}
-	//delete objectiveCoefficients; // delete the temporary sparse vector
-	//objectiveCoefficients = NULL;
 	//
 	// now fill in row information
 	//
@@ -677,8 +683,8 @@ bool OSnl2osil::createOSInstance(){
 		
 
 	}
-	delete objectiveCoefficients;
-	objectiveCoefficients = NULL;
+//	delete objectiveCoefficients;
+//	objectiveCoefficients = NULL;
 	//
 	// end loop of nonlinear rows
 	//  
