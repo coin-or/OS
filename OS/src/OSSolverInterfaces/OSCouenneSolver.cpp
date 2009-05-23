@@ -191,24 +191,37 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
 		
 		int nterms = sv->number;
+		int nterms_actual = 0;
 		
-		exprGroup::lincoeff lin( nterms);
+		//make sure we don't put a zero in
 		
 		
+		
+		for(i = 0; i < nterms; i++){
+			if( sv->values[ i]  > 0 || sv->values[ i]  < 0){
+				nterms_actual++;
+			}
+		}
+		exprGroup::lincoeff lin( nterms_actual);
 		for ( i = 0; i < nterms; ++i){
-	
-			lin[i].first = couenne->Var( sv->indexes[ i] );
-			lin[i].second = sv->values[ i];
-
+			if( sv->values[ i]  > 0 || sv->values[ i]  < 0){
+				lin[i].first = couenne->Var( sv->indexes[ i] );
+				lin[i].second = sv->values[ i];
+				std::cout << "ADDING AN OBJECTIVE FUNCTION COEFFICIENT " << std::endl;
+			}
+			
 		}
 		
-		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree(-1);
-		if (exptree) {
+		std::cout << "CONSTANT TERM =  " << osinstance->getObjectiveConstants()[0] << std::endl;
+		
+		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
+		if (exptree != NULL) {
 			expression** nl = new expression*[1];
 			nl[0] = createCouenneExpression(exptree->m_treeRoot);
 			body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, nl,1);
 		} else {
-			body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);			
+			body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);		
+			std::cout << "THERE WERE NO NONLINEAR TERMS IN THE OBJECTIVE FUNCTION "  << std::endl;	
 		}
 	
 		if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
@@ -230,29 +243,35 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		int nconss = osinstance->getConstraintNumber();		
 		int row_nonz = 0;
 		int kount = 0;
-		
+		int row_nonz_actual = 0;
 		double *rowlb = osinstance->getConstraintLowerBounds();
 		double *rowub = osinstance->getConstraintUpperBounds();
 		
 		for (i = 0; i < nconss; ++i) {
-		std::cout << "WE ARE PROCESSING ROW " << i << std::endl;
+		//std::cout << "WE ARE PROCESSING ROW " << i << std::endl;
 			row_nonz = 0;
-			if( sm)
-				row_nonz = sm->starts[ i +1] - sm->starts[ i];
-			exprGroup::lincoeff con_lin( row_nonz);
+			if( sm) row_nonz = sm->starts[ i +1] - sm->starts[ i];
 			
-
-			if ( row_nonz  > 0){  // test for nonzeros in row i
-				
-				for (j = 0; j  <  row_nonz;  ++j){
-
-					con_lin[j].first = couenne->Var( sm->indexes[ kount] );
-					con_lin[j].second = sm->values[ kount];
-					kount++;
-
+			
+			// a bit of a kludge -- count the actual nonzeros
+			row_nonz_actual = 0;
+			for(j = 0; j < row_nonz; j++){
+				if( sm->values[ sm->starts[ i]  + j] > 0 || sm->values[ sm->starts[ i]  + j] < 0){
+					row_nonz_actual++;
 				}
 			}
-	
+			
+			exprGroup::lincoeff con_lin( row_nonz_actual);
+			if ( row_nonz_actual  > 0){  // test for nonzeros in row i
+				
+				for (j = 0; j  <  row_nonz;  ++j){
+					if(sm->values[ kount] > 0 || sm->values[ kount] < 0){
+						con_lin[j].first = couenne->Var( sm->indexes[ kount] );
+						con_lin[j].second = sm->values[ kount];
+					}
+					kount++;
+				}
+			}
 			expression *con_body = NULL;
 			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree(i);
 			
@@ -265,7 +284,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 				postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( i);
 				n  = postfixVec.size();
 				for (ij = 0 ; ij < n; ij++){
-					std::cout << postfixVec[ij]->snodeName << std::endl;
+					//std::cout << postfixVec[ij]->snodeName << std::endl;
 				}
 				postfixVec.clear();
 			}
@@ -316,25 +335,26 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 
 
 expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
-	std::cout << "NODE NUMBER =  " << node->inodeInt  << std::endl;
+	//std::cout << "NODE NUMBER =  " << node->inodeInt  << std::endl;
+	int i;
   switch (node->inodeInt) {
      case OS_PLUS :
     	 return new exprSum(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
      case OS_SUM :
-		std::cout << "I AM INSIDE A SUM NODE  "   << std::endl;
-		std::cout << "I HAVE THE FOLLOWING NUMBER OF CHILDREN  " <<   node->inumberOfChildren << std::endl;
+		//std::cout << "I AM INSIDE A SUM NODE  "   << std::endl;
+		//std::cout << "I HAVE THE FOLLOWING NUMBER OF CHILDREN  " <<   node->inumberOfChildren << std::endl;
     	 //switch ( node->inumberOfChildren==0 ) { // Stefan's coding
 		 switch ( node->inumberOfChildren ) {  //kipp modification
     		 case 0:
-					std::cout << "I IN SUM CASE 0  "   << std::endl;
+					//std::cout << "I IN SUM CASE 0  "   << std::endl;
     			 return new exprConst(0.);
     		 case 1:
-				std::cout << "I IN SUM CASE 1  "   << std::endl;
+				//std::cout << "I IN SUM CASE 1  "   << std::endl;
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
-				std::cout << "I IN SUM CASE DEFAULT  "   << std::endl;
+				//std::cout << "I IN SUM CASE DEFAULT  "   << std::endl;
     			 expression** sumargs = new expression*[node->inumberOfChildren];
-           for(int i=0;  i<  node->inumberOfChildren;  i++)
+           for(i = 0;  i<  node->inumberOfChildren;  i++)
           	 sumargs[i] = createCouenneExpression(node->m_mChildren[i]);
 			//expression* base = new exprSum(args, node->inumberOfChildren);  //Stefan
            //delete[] args;  //delete Stefan's code -- causes a seg fault
