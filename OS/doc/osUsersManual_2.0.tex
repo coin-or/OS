@@ -6929,7 +6929,30 @@ Once you know it it's really logical.
 From Ted Ralphs 
 
 
-You shouldn't need to do all this manually. Compilers pretty much alldefine their own symbols automatically to allow you to detect whenthey are being used and I believe the autotools or our own m4 scriptsdefine symbols to detect the OS. All did for the unistd.h problem inother places (this reference was added by a developer who was unawareof the proper fix) was add this:#if !defined (_MSC_VER)#include <unistd.h>            /* this defines sleep() */#endifThat symbol is automatically defined when cl is the compiler. I'm notsure of all the symbols off the top of my head, but __DARWIN isdefined is OS X, for example, and __MNO_CYGWIN is defined if a MINGWcompiler is used. Here's another line from one of my header files:#if !defined (_MSC_VER) && !defined (__DARWIN) && !defined (__MNO_CYGWIN)#include <sys/resource.h>#endifIn general, almost anything you want to detect should already have asymbol automatically defined, as it's doubtfl you are the first towant this functionality  :) . So I think you can delete all that fancystuff from your configure.ac and just use the built-in symbols  :) 
+You shouldn't need to do all this manually. Compilers pretty much all
+define their own symbols automatically to allow you to detect when
+they are being used and I believe the autotools or our own m4 scripts
+define symbols to detect the OS. All did for the unistd.h problem in
+other places (this reference was added by a developer who was unaware
+of the proper fix) was add this:
+
+#if !defined (_MSC_VER)
+#include <unistd.h>            /* this defines sleep() */
+#endif
+
+That symbol is automatically defined when cl is the compiler. I'm not
+sure of all the symbols off the top of my head, but __DARWIN is
+defined is OS X, for example, and __MNO_CYGWIN is defined if a MINGW
+compiler is used. Here's another line from one of my header files:
+
+#if !defined (_MSC_VER) && !defined (__DARWIN) && !defined (__MNO_CYGWIN)
+#include <sys/resource.h>
+#endif
+
+In general, almost anything you want to detect should already have a
+symbol automatically defined, as it's doubtfl you are the first to
+want this functionality  :) . So I think you can delete all that fancy
+stuff from your configure.ac and just use the built-in symbols  :) 
 
 %%%%%%%%%%%%%
 
@@ -6983,7 +7006,10 @@ object, therefore you can set all options through the CouenneSetup
 object. I hope Pierre can confirm or further clarify on that -- he 
 wrote most of the BonCouenne*.?pp code.
 
+%%%%%%%%%%%%%%%%%
+Using the gnu debugger
 
+When I want to debug a program p, then I do$ gdb pand in gdb I say "run".For example:$ gdb unitTestGNU gdb 6.6.50.20070726-cvsCopyright (C) 2007 Free Software Foundation, Inc.GDB is free software, covered by the GNU General Public License, and you arewelcome to change it and/or distribute copies of it under certainconditions.Type "show copying" to see the conditions.There is absolutely no warranty for GDB.  Type "show warranty" for details.This GDB was configured as "i586-suse-linux"...break Using host libthread_db library "/lib/libthread_db.so.1".(gdb) break unitTest.cpp:263Breakpoint 1 at 0x804e037: file../../../GAMSlinks-trunk/OS/test/unitTest.cpp, line 263.(gdb) runStarting program: /home/stefan/work/coin/GAMSlinks-debug/OS/test/unitTest[Thread debugging using libthread_db enabled][New Thread 0xb7bdbb70 (LWP 16655)]START UNIT TEST[Switching to Thread 0xb7bdbb70 (LWP 16655)]Breakpoint 1, main (argC=1, argV=0xbff15f04) at../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263263             int nOfTest = 0;(gdb) bt#0  main (argC=1, argV=0xbff15f04) at../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263
 
 
 

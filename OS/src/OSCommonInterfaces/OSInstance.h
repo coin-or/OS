@@ -1718,7 +1718,23 @@ public:
 	 * @return a vector of pointers to OSnLNodes in prefix, if rowIdx
 	 * does not index a row with a nonlinear term throw an exception
 	 */
-	std::vector<OSnLNode*> getNonlinearExpressionTreeInPrefix( int rowIdx);  
+	std::vector<OSnLNode*> getNonlinearExpressionTreeInPrefix( int rowIdx); 
+	
+	/**
+	 * Get the infix representation for a given row index.  
+	 * 
+	 * @return a string representation of the tree, if rowIdx
+	 * does not index a row with a nonlinear term throw an exception
+	 */
+	std::string getNonlinearExpressionTreeInInfix( int rowIdx);  
+	
+	
+	/**
+	 * Print the infix representation of the problem.  
+	 * 
+	 * @return a string with the infix representation
+	 */
+	std::string printModel( ); 
 	
 	/**
 	 * Get the prefix tokens for a given row index for the modified

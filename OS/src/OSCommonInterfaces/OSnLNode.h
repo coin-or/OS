@@ -84,7 +84,7 @@ public:
 	std::string snodeName;
 	
 	/**  numberOfChildren is the number of OSnLNode child elements*/
-	int inumberOfChildren;	
+	unsigned int inumberOfChildren;	
 
 	/**  ssymbolInt is the unique integer assigned to the OSnLNode*/	
 	int inodeInt;
@@ -1293,7 +1293,7 @@ class OSnLNodeVariable : public OSnLNode{
 public:
 
 	/** coef is an option coefficient on the variable, the
-	 * default value is 1.o
+	 * default value is 1.0
 	 */
 	double coef;
 	

@@ -243,7 +243,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		int nconss = osinstance->getConstraintNumber();		
 		int row_nonz = 0;
 		int kount = 0;
-		int row_nonz_actual = 0;
+		//int row_nonz_actual = 0;
 		double *rowlb = osinstance->getConstraintLowerBounds();
 		double *rowub = osinstance->getConstraintUpperBounds();
 		
@@ -254,44 +254,27 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 			
 			
 			// a bit of a kludge -- count the actual nonzeros
-			row_nonz_actual = 0;
-			for(j = 0; j < row_nonz; j++){
-				if( sm->values[ sm->starts[ i]  + j] > 0 || sm->values[ sm->starts[ i]  + j] < 0){
-					row_nonz_actual++;
-				}
-			}
+			//row_nonz_actual = 0;
+			//for(j = 0; j < row_nonz; j++){
+			//	if( sm->values[ sm->starts[ i]  + j] > 0 || sm->values[ sm->starts[ i]  + j] < 0){
+			//		row_nonz_actual++;
+			//	}
+			//}
 			
-			exprGroup::lincoeff con_lin( row_nonz_actual);
-			if ( row_nonz_actual  > 0){  // test for nonzeros in row i
+			exprGroup::lincoeff con_lin( row_nonz);
+			//if ( row_nonz_actual  > 0){  // test for nonzeros in row i
 				
 				for (j = 0; j  <  row_nonz;  ++j){
-					if(sm->values[ kount] > 0 || sm->values[ kount] < 0){
+					//if(sm->values[ kount] > 0 || sm->values[ kount] < 0){
 						con_lin[j].first = couenne->Var( sm->indexes[ kount] );
 						con_lin[j].second = sm->values[ kount];
-					}
+					//}
 					kount++;
 				}
-			}
+			//}
+			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( i);
 			expression *con_body = NULL;
-			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree(i);
-			
-			
-			///
-			unsigned int ij;
-			unsigned int n;
-			std::vector<OSnLNode*> postfixVec;
-			if(exptree != NULL) {
-				postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( i);
-				n  = postfixVec.size();
-				for (ij = 0 ; ij < n; ij++){
-					//std::cout << postfixVec[ij]->snodeName << std::endl;
-				}
-				postfixVec.clear();
-			}
-			///
-			
-			
-			if (exptree) {
+			if (exptree != NULL) {
 				expression** nl = new expression*[1];
 				nl[0] = createCouenneExpression(exptree->m_treeRoot);
 				con_body = new exprGroup(0., con_lin, nl, 1);

@@ -27,6 +27,7 @@
 //#define DEBUG
  
 using namespace std;
+using std::ostringstream; 
 
 
 OSInstance::OSInstance(): 
@@ -1554,6 +1555,7 @@ OSExpressionTree* OSInstance::getNonlinearExpressionTreeMod(int rowIdx){
 
 
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowIdx){
+	//if( m_binitForAlgDiff == false) this->initForAlgDiff();
 	if( m_bProcessExpressionTrees == false ) getAllNonlinearExpressionTrees();
 	std::vector<OSnLNode*> postfixVec;
 	try{
@@ -1573,7 +1575,216 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowI
 }//getNonlinearExpressionTreeInPostfix
 
 
+
+
+std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
+	//if( m_binitForAlgDiff == false) this->initForAlgDiff();
+	if( m_bProcessExpressionTrees == false ) getAllNonlinearExpressionTrees();
+	std::string resultString;
+	resultString = "";
+	unsigned int i;
+	unsigned int n;
+	ostringstream outStr;
+	std::vector<OSnLNode*> postfixVec;
+	std::vector<OSnLNode*> operatorVec;
+	std::vector<std::string> tmpVec;
+	int rowIdx = rowIdx_;
+	OSnLNode *nlnode = NULL ;
+	OSnLNodeNumber *nlnodeNum = NULL;
+	OSnLNodeVariable *nlnodeVar = NULL;
+	std::string tmp1 = "";
+	std::string tmp2 = "";
+	
+	try{
+		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()){
+			//get the nodes and separate into operators and operands, for now
+			//only the number and variable nodes are operator nodes
+			OSExpressionTree* exptree = this->getNonlinearExpressionTree( rowIdx);
+			if(exptree != NULL) {
+				
+				postfixVec = this->getNonlinearExpressionTreeInPostfix( rowIdx);
+				n  = postfixVec.size();
+				//put vector in reverse order
+				for (i = 0 ; i < n; i++){
+					nlnode =  postfixVec[ n - 1 - i];
+					operatorVec.push_back( nlnode);
+					std::cout << postfixVec[ i]->snodeName << std::endl;
+				}
+				
+				#if 0
+				std::cout << std::endl << std::endl << std::endl << std::endl;
+				n = operatorVec.size();
+				for(i = 0; i < n; i++){
+					std::cout  << operatorVec[ i]->snodeName  << std::endl;
+				}
+				
+				#endif
+				n = operatorVec.size();
+				for(i = 0; i < n; i++){
+					nlnode = operatorVec.back();
+					std::cout << "EVALUATING NODE: " << nlnode->snodeName << std::endl;
+					switch (nlnode->inodeInt) {
+						case OS_NUMBER:
+							nlnodeNum = (OSnLNodeNumber*)nlnode;
+							tmpVec.push_back( os_dtoa_format(nlnodeNum->value) );
+							break;
+						case OS_VARIABLE:
+							outStr.str("");
+							// handle a variable
+							nlnodeVar = (OSnLNodeVariable*)nlnode;
+							// see if the coefficient is specified
+							if( (nlnodeVar->coef > 1.0) ||  (nlnodeVar->coef < 1.0) ){
+								outStr << "(";
+								outStr <<  os_dtoa_format(nlnodeVar->coef);
+								outStr << "*x_";
+								outStr << nlnodeVar->idx;
+								outStr << ")";
+								tmpVec.push_back(outStr.str() );
+								std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
+							}else{
+								outStr << "x_";
+								outStr << nlnodeVar->idx;
+								tmpVec.push_back(outStr.str() );
+								std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
+							}
+							break;
+						case OS_PLUS :
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpVec.back();
+							tmpVec.pop_back();
+							tmp2 = tmpVec.back();
+							tmpVec.pop_back();
+							tmpVec.push_back("(" + tmp2 +  " + "  + tmp1 + ")");
+							break;
+							
+						case OS_SUM :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						case OS_MINUS :
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpVec.back();
+							tmpVec.pop_back();
+							tmp2 = tmpVec.back();
+							tmpVec.pop_back();
+							tmpVec.push_back("(" + tmp2 +  " - "  + tmp1 + ")");
+							break;						
+						
+						case OS_NEGATE :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						case OS_TIMES :
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpVec.back();
+							tmpVec.pop_back();
+							tmp2 = tmpVec.back();
+							tmpVec.pop_back();
+							tmpVec.push_back("(" + tmp2 +  "*"  + tmp1 + ")");
+							break;
+						
+						case OS_DIVIDE :
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpVec.back();
+							tmpVec.pop_back();
+							tmp2 = tmpVec.back();
+							tmpVec.pop_back();
+							tmpVec.push_back("(" + tmp2 +  " / "  + tmp1 + ")");
+							break;
+
+						case OS_POWER :
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpVec.back();
+							tmpVec.pop_back();
+							tmp2 = tmpVec.back();
+							tmpVec.pop_back();
+							tmpVec.push_back("(" + tmp2 +  " ^ "  + tmp1 + ")");
+							break;
+							
+						case OS_ABS :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+						
+						case OS_SQUARE :
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpVec.back();
+							tmpVec.pop_back();
+							tmpVec.push_back( "("+ tmp1  + ")^2");
+							break;
+							
+						case OS_SQRT :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+						
+						case OS_LN :
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpVec.back();
+							tmpVec.pop_back();
+							tmpVec.push_back( "ln( "+ tmp1  + ")");
+							break;
+							
+						case OS_EXP :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						case OS_SIN :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						case OS_COS :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						case OS_MIN :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						case OS_MAX :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						case OS_PRODUCT :
+							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							break;
+							
+						default:
+							 throw  ErrorClass("operator " + nlnode->snodeName + " not supported");
+						break;
+				  }
+					operatorVec.pop_back();
+				}
+				postfixVec.clear();
+				if(tmpVec.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree");
+				resultString = tmpVec[ 0];
+				std::cout << resultString << std::endl;
+				tmpVec.clear();
+				
+				return resultString;
+
+			}
+			else{
+				throw ErrorClass("Error in getNonlinearExpressionTreeInInfix, there is no expression tree for this index");
+			}
+			
+		}  
+		else{
+			throw ErrorClass("Error in getNonlinearExpressionTreeInInfix, rowIdx not valid");
+		}
+		return resultString;	
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( eclass.errormsg);
+	} 
+}//getNonlinearExpressionTreeInInfix
+
+std::string OSInstance::printModel( ){
+	std::string resultString = "";
+	return resultString;
+} 
+
+
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPostfix( int rowIdx){
+	//if( m_binitForAlgDiff == false) this->initForAlgDiff();
 	if( m_bProcessExpressionTreesMod == false ) getAllNonlinearExpressionTreesMod();
 	std::vector<OSnLNode*> postfixVec;
 	try{
@@ -1594,6 +1805,7 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPostfix( int r
 
 
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPrefix( int rowIdx){
+	//if( m_binitForAlgDiff == false) this->initForAlgDiff();
 	if( m_bProcessExpressionTrees == false ) getAllNonlinearExpressionTrees();
 	std::vector<OSnLNode*> prefixVec;
 	try{
@@ -1613,6 +1825,7 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPrefix( int rowId
 }//getNonlinearExpressionTreeInPrefix
 
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int rowIdx){
+	//if( m_binitForAlgDiff == false) this->initForAlgDiff();
 	if( m_bProcessExpressionTreesMod == false ) getAllNonlinearExpressionTreesMod();
 	std::vector<OSnLNode*> prefixVec;
 	try{
@@ -1632,6 +1845,7 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPrefix( int ro
 }//getNonlinearExpressionTreeInPrefix
 
 std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees(){
+	//if( m_binitForAlgDiff == false) this->initForAlgDiff();
 	if(m_bProcessExpressionTrees == true) return m_mapExpressionTrees;
 	std::map<int, int> foundIdx;
 	std::map<int, int>::iterator pos;

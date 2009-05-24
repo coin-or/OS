@@ -38,14 +38,10 @@
 using std::cout;   
 using std::endl;
 
-double nanKludge(){
-	double zero = 0.0;
-	return 0.0/zero;
-}
-//#define myNaN _Nan._Double;
 
-//int main(int argC, char* argV[]){
-bool main( ){
+
+
+int main(int argC, char* argV[]){
 	/** some AMPL insanity -- the fileUtil must be built in order to avoid
 	 * an ASL error - on the Mac only
 	 */
@@ -53,18 +49,29 @@ bool main( ){
 	fileUtil = new FileUtil();
 	cout << "Start Building the Model" << endl;
 	std::cout << "Hello World" << std::endl;
+
+	std::string osilFileName =   "../../data/osilFiles/rosenbrockmod.osil";
+	std::cout << "Try to read a sample file" << std::endl;
+	std::cout << "The file is: " ;
+	std::cout <<  osilFileName << std::endl;
+	std::string osil = fileUtil->getFileAsString( osilFileName.c_str() );
+	OSiLReader *osilreader = NULL;
+	osilreader = new OSiLReader(); 
+	OSInstance *osinstance;
+	osinstance = osilreader->readOSiL( osil);	
+	osinstance->initForAlgDiff( );
+	unsigned int i;
+	//OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
+	try{
+		osinstance->getNonlinearExpressionTreeInInfix( -1);
+	}
+	catch(const ErrorClass& eclass){
+		std::cout <<  eclass.errormsg << std::endl;
+	} 	
+
+
 	delete fileUtil;
 	fileUtil = NULL;
-	double zero = 0;
-
-	double value = _Nan._Double;
-	std::cout << CoinIsnan( value) << std::endl;
-	std::cout << "True == " << true << std::endl;
-	std::cout << "False == " << false << std::endl;
-	std::cout << CoinIsnan( nanKludge()) << std::endl;
-
-
-
-	return true;
+	return 0;
 }// end main
 
