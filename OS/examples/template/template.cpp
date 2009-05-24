@@ -59,11 +59,16 @@ int main(int argC, char* argV[]){
 	osilreader = new OSiLReader(); 
 	OSInstance *osinstance;
 	osinstance = osilreader->readOSiL( osil);	
-	osinstance->initForAlgDiff( );
+	std::string theModel;
+	
+	
+	//osinstance->initForAlgDiff( );
 	unsigned int i;
 	//OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
 	try{
-		osinstance->getNonlinearExpressionTreeInInfix( -1);
+		//osinstance->getNonlinearExpressionTreeInInfix( -1);
+		theModel = osinstance->printModel( );
+		std::cout << theModel << std::endl;
 	}
 	catch(const ErrorClass& eclass){
 		std::cout <<  eclass.errormsg << std::endl;

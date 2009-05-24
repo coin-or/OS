@@ -1608,7 +1608,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 				for (i = 0 ; i < n; i++){
 					nlnode =  postfixVec[ n - 1 - i];
 					operatorVec.push_back( nlnode);
-					std::cout << postfixVec[ i]->snodeName << std::endl;
+					//std::cout << postfixVec[ i]->snodeName << std::endl;
 				}
 				
 				#if 0
@@ -1622,7 +1622,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 				n = operatorVec.size();
 				for(i = 0; i < n; i++){
 					nlnode = operatorVec.back();
-					std::cout << "EVALUATING NODE: " << nlnode->snodeName << std::endl;
+					//std::cout << "EVALUATING NODE: " << nlnode->snodeName << std::endl;
 					switch (nlnode->inodeInt) {
 						case OS_NUMBER:
 							nlnodeNum = (OSnLNodeNumber*)nlnode;
@@ -1640,12 +1640,12 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 								outStr << nlnodeVar->idx;
 								outStr << ")";
 								tmpVec.push_back(outStr.str() );
-								std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
+								//std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
 							}else{
 								outStr << "x_";
 								outStr << nlnodeVar->idx;
 								tmpVec.push_back(outStr.str() );
-								std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
+								//std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
 							}
 							break;
 						case OS_PLUS :
@@ -1779,6 +1779,42 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 
 std::string OSInstance::printModel( ){
 	std::string resultString = "";
+	ostringstream outStr;
+	outStr << "";
+	//loop over the consraints first;
+	int numCon;
+	int i;
+	int j;
+	int row_nonz;
+	row_nonz = 0;
+	numCon = this->getConstraintNumber();
+	//get the Amatrix in row format;
+	SparseMatrix* sm =  this->getLinearConstraintCoefficientsInRowMajor();
+	if( sm != NULL){
+		sm->isColumnMajor = false;
+	}
+	// initialize all of the necessary nonlinear stuff
+	//std::cout << "NUMBER OF CONSTRAINTS = " << std::endl;
+	this->initForAlgDiff( );
+	outStr << "Constraints:" << std::endl;		
+	for(i = 0; i < numCon; i++){
+		if( sm != NULL) row_nonz = sm->starts[ i + 1] - sm->starts[ i];
+		for(j = 0; j < row_nonz; j++){
+			outStr << os_dtoa_format( sm->values[ sm->starts[ i]  + j] );
+			outStr << "*";
+			outStr << "x_";
+			outStr << sm->indexes[ sm->starts[ i]  + j];
+			if( j < row_nonz - 1) outStr << " + ";
+		}
+		
+		if( this->getNonlinearExpressionTree( i) != NULL){
+			outStr << " + (" ;
+			outStr << getNonlinearExpressionTreeInInfix( i);
+			outStr << ")";
+		}
+		outStr << std::endl;	
+	}
+	resultString = outStr.str();
 	return resultString;
 } 
 
