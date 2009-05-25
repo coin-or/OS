@@ -1575,7 +1575,7 @@ std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeInPostfix( int rowI
 
 
 std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
-	//if( m_binitForAlgDiff == false) this->initForAlgDiff();
+	if( m_binitForAlgDiff == false) this->initForAlgDiff();
 	if( m_bProcessExpressionTrees == false ) getAllNonlinearExpressionTrees();
 	std::string resultString;
 	resultString = "";
@@ -1584,16 +1584,18 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 	unsigned int n;
 	ostringstream outStr;
 	std::vector<OSnLNode*> postfixVec;
-	std::vector<OSnLNode*> operatorVec;
+	std::stack<OSnLNode*> opStack;
 	std::stack<std::string> tmpStack;
 	int rowIdx = rowIdx_;
 	OSnLNode *nlnode = NULL ;
 	OSnLNodeNumber *nlnodeNum = NULL;
 	OSnLNodeVariable *nlnodeVar = NULL;
 	OSnLNodeSum *nlnodeSum = NULL;
+	OSnLNodeProduct *nlnodeProduct = NULL;
 	std::string tmp1 = "";
 	std::string tmp2 = "";
 	std::vector<std::string> sumVec;
+	std::vector<std::string> productVec;
 	
 	try{
 		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()){
@@ -1607,22 +1609,22 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 				//put vector in reverse order
 				for (i = 0 ; i < n; i++){
 					nlnode =  postfixVec[ n - 1 - i];
-					operatorVec.push_back( nlnode);
+					opStack.push( nlnode);
 					//std::cout << postfixVec[ i]->snodeName << std::endl;
 				}
 				
 				#if 0
 				std::cout << std::endl << std::endl << std::endl << std::endl;
-				n = operatorVec.size();
+				n = opStack.size();
 				for(i = 0; i < n; i++){
-					std::cout  << operatorVec[ i]->snodeName  << std::endl;
+					std::cout  << opStack.top()->snodeName  << std::endl;
 				}
 				
 				#endif
-				n = operatorVec.size();
+				n = opStack.size();
 				for(i = 0; i < n; i++){
 					//std::cout << "NUMBER OF NODES LEFT =  " << operatorVec.size() << std::endl;
-					nlnode = operatorVec.back();
+					nlnode = opStack.top();
 					//std::cout << "EVALUATING NODE: " << nlnode->snodeName << std::endl;
 					switch (nlnode->inodeInt) {
 						case OS_NUMBER:
@@ -1720,7 +1722,10 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_ABS :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "abs( "+ tmp1  + ")");
 							break;
 						
 						case OS_SQUARE :
@@ -1731,7 +1736,10 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_SQRT :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "sqrt( "+ tmp1  + ")");
 							break;
 						
 						case OS_LN :
@@ -1742,15 +1750,24 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_EXP :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "exp( "+ tmp1  + ")");
 							break;
 							
 						case OS_SIN :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "sin( "+ tmp1  + ")");
 							break;
 							
 						case OS_COS :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "cos( "+ tmp1  + ")");
 							break;
 							
 						case OS_MIN :
@@ -1762,14 +1779,31 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_PRODUCT :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							//std::cout << "INSIDE Product NODE " << std::endl;
+							nlnodeProduct = (OSnLNodeProduct*)nlnode;
+							outStr.str("");
+							for(j = 0; j < nlnodeProduct->inumberOfChildren; j++){
+								productVec.push_back( tmpStack.top() );
+								tmpStack.pop();
+								//std::cout << "sumVec.back() " << sumVec.back() << std::endl;
+							}
+							outStr << "(";
+							for(j = 0; j < nlnodeProduct->inumberOfChildren; j++){
+								outStr << productVec.back();
+								if (j < nlnodeProduct->inumberOfChildren - 1) outStr << " * ";
+								productVec.pop_back();
+							}
+							outStr << ")";
+							tmpStack.push( outStr.str() );
+							//std::cout << outStr.str() << std::endl;
 							break;
 							
 						default:
 							 throw  ErrorClass("operator " + nlnode->snodeName + " not supported");
 						break;
 				  }
-					operatorVec.pop_back();
+					opStack.pop();
 				}
 				postfixVec.clear();
 				if(tmpStack.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree");
