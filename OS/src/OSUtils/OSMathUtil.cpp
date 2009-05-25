@@ -135,7 +135,14 @@ std::string os_dtoa_format(double  x){
 			if(strLength == 1){
 				// put in all of the characters from charResult
 				outStr << charResult[ 0];
-				for(k = strLength; k < decimalPointPos; k++) outStr <<  "0";
+				if(decimalPointPos <= 5){ //hey for than 5 zeros go for e notataion
+					for(k = strLength; k < decimalPointPos; k++) outStr <<  "0";
+				}else{
+					outStr <<  ".";
+					for(k = 1; k < strLength; k++) outStr << charResult[ k];
+					outStr <<  "e";
+					outStr <<  decimalPointPos -  1;
+				}
 			}else{
 				outStr << charResult[ 0];
 				outStr <<  ".";

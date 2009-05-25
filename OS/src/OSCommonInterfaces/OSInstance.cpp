@@ -3336,19 +3336,22 @@ bool OSInstance::getSparseJacobianFromColumnMajor( ){
 					// variable i is appears in the expression tree for row index[ j]
 					// add the coefficient corresponding to variable i in row index[ j] to the expression tree	
 					// define a new OSnLVariable and OSnLnodePlus 
-					expTree = m_mapExpressionTreesMod[ index[j]  ];
-					nlNodeVariable = new OSnLNodeVariable();
-					nlNodeVariable->coef = value[ j];
-					nlNodeVariable->idx = i;
-					nlNodePlus = new OSnLNodePlus();
-					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
-					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
-					//expTree = new OSExpressionTree();
-					expTree->m_treeRoot = nlNodePlus ;
-					//expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
-					//m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
-					//std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
-					//std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+					// don't add a zero
+					if( value[j] > 0 || value[j] < 0){
+						expTree = m_mapExpressionTreesMod[ index[j]  ];
+						nlNodeVariable = new OSnLNodeVariable();
+						nlNodeVariable->coef = value[ j];
+						nlNodeVariable->idx = i;
+						nlNodePlus = new OSnLNodePlus();
+						nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot;
+						nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
+						//expTree = new OSExpressionTree();
+						expTree->m_treeRoot = nlNodePlus ;
+						//expTree->mapVarIdx = m_mapExpressionTreesMod[ index[ j]]->mapVarIdx;
+						//m_mapExpressionTreesMod[ index[ j] ]  = expTree;	
+						//std::cout << m_mapExpressionTreesMod[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;	
+						//std::cout << m_mapExpressionTrees[ index[ j] ]->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+					}
 				}
 				else{ 
 					m_miJacStart[ index[j] + 1] ++;
@@ -3482,17 +3485,19 @@ bool OSInstance::getSparseJacobianFromRowMajor( ){
 					// variable index[ j] appears in the expression tree for row i
 					// add the coefficient corresponding to variable index[j] in row i to the expression tree	
 					// define a new OSnLVariable and OSnLnodePlus 
-					nlNodeVariable = new OSnLNodeVariable();
-					nlNodeVariable->coef = value[ j];
-					nlNodeVariable->idx = index[ j];
-					nlNodePlus = new OSnLNodePlus();
-					nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ i ]->m_treeRoot;
-					nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
-					//expTree = new OSExpressionTree();
-					//expTree->m_treeRoot = nlNodePlus ;
-					//expTree->mapVarIdx = m_mapExpressionTreesMod[ i]->mapVarIdx;
-					//m_mapExpressionTreesMod[ i ]  = expTree;	
-					m_mapExpressionTreesMod[ i ]->m_treeRoot = nlNodePlus;
+					if(value[ j] > 0 || value[j] < 0){
+						nlNodeVariable = new OSnLNodeVariable();
+						nlNodeVariable->coef = value[ j];
+						nlNodeVariable->idx = index[ j];
+						nlNodePlus = new OSnLNodePlus();
+						nlNodePlus->m_mChildren[ 0] = m_mapExpressionTreesMod[ i ]->m_treeRoot;
+						nlNodePlus->m_mChildren[ 1] = nlNodeVariable;
+						//expTree = new OSExpressionTree();
+						//expTree->m_treeRoot = nlNodePlus ;
+						//expTree->mapVarIdx = m_mapExpressionTreesMod[ i]->mapVarIdx;
+						//m_mapExpressionTreesMod[ i ]  = expTree;	
+						m_mapExpressionTreesMod[ i ]->m_treeRoot = nlNodePlus;
+					}
 				}
 				else{ 
 					//the partial derivative of variable j in row i is constant

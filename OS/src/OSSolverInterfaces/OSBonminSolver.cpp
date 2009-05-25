@@ -603,7 +603,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		                                 "A longer comment can be put here");
 		  
 		 // Here we can change the default value of some Bonmin or Ipopt option
-		//bonminSetup.options()->SetNumericValue("bonmin.time_limit", 1000); //changes bonmin's time limit
+		bonminSetup.options()->SetNumericValue("bonmin.time_limit", 1000); //changes bonmin's time limit
 		//bonminSetup.options()->SetStringValue("mu_oracle","loqo");
 	
 		//Here we read several option files
@@ -611,7 +611,7 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		//bonminSetup.readOptionsFile();// This reads the default file "bonmin.opt"
 		  
 		// Options can also be set by using a string with a format similar to the bonmin.opt file
-		//bonminSetup.readOptionsString("bonmin.algorithm B-BB\n");
+		bonminSetup.readOptionsString("bonmin.algorithm B-BB\n");
 		  
 		// Now we can obtain the value of the new option
 		int printSolution;
