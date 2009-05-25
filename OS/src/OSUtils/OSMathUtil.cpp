@@ -120,11 +120,6 @@ std::string os_dtoa_format(double  x){
     if( sign == 1) outStr << "-";
     strLength = strlen( charResult);
 	
-	std::cout << "STIRNG LENGTH " << strLength << std::endl;
-	std::cout << "DECIMAL POINT POSITIONS " << decimalPointPos << std::endl;
-	std::cout << "DAVID INPUT " ;
-	for(k = 0; k < strLength; k++) std::cout << charResult[ k];
-	std::cout << std::endl;
 	
     // return charResult if we have nan or infinity  -- if so, return orginal string
     if(decimalPointPos == 9999){

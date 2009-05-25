@@ -61,8 +61,9 @@ int main(int argC, char* argV[]){
 	osinstance = osilreader->readOSiL( osil);	
 	std::string theModel;
 	
-	double x = .00900;
+	double x = 100000000000001.;
 	std::cout  << os_dtoa_format(x) << std::endl;
+	return 0;
 
 	
 	//osinstance->initForAlgDiff( );
