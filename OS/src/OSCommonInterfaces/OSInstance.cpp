@@ -21,6 +21,8 @@
 #include "OSCommonUtil.h"
 #include "OSErrorClass.h"
 #include "OSParameters.h"
+
+#include<stack>
 #include<iostream>  
 #include<sstream>
 
@@ -1583,7 +1585,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 	ostringstream outStr;
 	std::vector<OSnLNode*> postfixVec;
 	std::vector<OSnLNode*> operatorVec;
-	std::vector<std::string> tmpVec;
+	std::stack<std::string> tmpStack;
 	int rowIdx = rowIdx_;
 	OSnLNode *nlnode = NULL ;
 	OSnLNodeNumber *nlnodeNum = NULL;
@@ -1625,7 +1627,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 					switch (nlnode->inodeInt) {
 						case OS_NUMBER:
 							nlnodeNum = (OSnLNodeNumber*)nlnode;
-							tmpVec.push_back( os_dtoa_format(nlnodeNum->value) );
+							tmpStack.push( os_dtoa_format(nlnodeNum->value) );
 							break;
 						case OS_VARIABLE:
 							outStr.str("");
@@ -1638,33 +1640,33 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 								outStr << "*x_";
 								outStr << nlnodeVar->idx;
 								outStr << ")";
-								tmpVec.push_back(outStr.str() );
+								tmpStack.push(outStr.str() );
 								//std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
 							}else{
 								outStr << "x_";
 								outStr << nlnodeVar->idx;
-								tmpVec.push_back(outStr.str() );
+								tmpStack.push(outStr.str() );
 								//std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
 							}
 							break;
 						case OS_PLUS :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
-							tmp1 = tmpVec.back();
-							tmpVec.pop_back();
-							tmp2 = tmpVec.back();
-							tmpVec.pop_back();
-							tmpVec.push_back("(" + tmp2 +  " + "  + tmp1 + ")");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmp2 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push("(" + tmp2 +  " + "  + tmp1 + ")");
 							break;
 							
 						case OS_SUM :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
 							//std::cout << "INSIDE SUM NODE " << std::endl;
 							nlnodeSum = (OSnLNodeSum*)nlnode;
 							outStr.str("");
 							for(j = 0; j < nlnodeSum->inumberOfChildren; j++){
-								sumVec.push_back( tmpVec.back() );
+								sumVec.push_back( tmpStack.top() );
+								tmpStack.pop();
 								//std::cout << "sumVec.back() " << sumVec.back() << std::endl;
-								tmpVec.pop_back();
 							}
 							outStr << "(";
 							for(j = 0; j < nlnodeSum->inumberOfChildren; j++){
@@ -1673,17 +1675,17 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 								sumVec.pop_back();
 							}
 							outStr << ")";
-							tmpVec.push_back( outStr.str() );
+							tmpStack.push( outStr.str() );
 							//std::cout << outStr.str() << std::endl;
 							break;
 							
 						case OS_MINUS :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
-							tmp1 = tmpVec.back();
-							tmpVec.pop_back();
-							tmp2 = tmpVec.back();
-							tmpVec.pop_back();
-							tmpVec.push_back("(" + tmp2 +  " - "  + tmp1 + ")");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmp2 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push("(" + tmp2 +  " - "  + tmp1 + ")");
 							break;						
 						
 						case OS_NEGATE :
@@ -1691,30 +1693,30 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_TIMES :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
-							tmp1 = tmpVec.back();
-							tmpVec.pop_back();
-							tmp2 = tmpVec.back();
-							tmpVec.pop_back();
-							tmpVec.push_back("(" + tmp2 +  "*"  + tmp1 + ")");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmp2 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push("(" + tmp2 +  "*"  + tmp1 + ")");
 							break;
 						
 						case OS_DIVIDE :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
-							tmp1 = tmpVec.back();
-							tmpVec.pop_back();
-							tmp2 = tmpVec.back();
-							tmpVec.pop_back();
-							tmpVec.push_back("(" + tmp2 +  " / "  + tmp1 + ")");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmp2 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push("(" + tmp2 +  " / "  + tmp1 + ")");
 							break;
 
 						case OS_POWER :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
-							tmp1 = tmpVec.back();
-							tmpVec.pop_back();
-							tmp2 = tmpVec.back();
-							tmpVec.pop_back();
-							tmpVec.push_back("(" + tmp2 +  " ^ "  + tmp1 + ")");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmp2 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push("(" + tmp2 +  " ^ "  + tmp1 + ")");
 							break;
 							
 						case OS_ABS :
@@ -1722,10 +1724,10 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 						
 						case OS_SQUARE :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
-							tmp1 = tmpVec.back();
-							tmpVec.pop_back();
-							tmpVec.push_back( "("+ tmp1  + ")^2");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "("+ tmp1  + ")^2");
 							break;
 							
 						case OS_SQRT :
@@ -1733,10 +1735,10 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 						
 						case OS_LN :
-							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
-							tmp1 = tmpVec.back();
-							tmpVec.pop_back();
-							tmpVec.push_back( "ln( "+ tmp1  + ")");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "ln( "+ tmp1  + ")");
 							break;
 							
 						case OS_EXP :
@@ -1770,16 +1772,17 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 					operatorVec.pop_back();
 				}
 				postfixVec.clear();
-				if(tmpVec.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree");
-				resultString = tmpVec[ 0];
+				if(tmpStack.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree");
+				resultString = tmpStack.top();
 				//std::cout << resultString << std::endl;
-				tmpVec.clear();
+				tmpStack.pop();
 				
 				return resultString;
 
 			}
 			else{
-				throw ErrorClass("Error in getNonlinearExpressionTreeInInfix, there is no expression tree for this index");
+				//throw ErrorClass("Error in getNonlinearExpressionTreeInInfix, there is no expression tree for this index");
+				return "";
 			}
 			
 		}  
