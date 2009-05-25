@@ -1721,8 +1721,9 @@ public:
 	std::vector<OSnLNode*> getNonlinearExpressionTreeInPrefix( int rowIdx); 
 	
 	/**
-	 * Get the infix representation for a given row index.  
-	 * 
+	 * Get the infix representation for a given row (or objective function) index.  
+	 
+	 * @param rowIdx is the index of the row we want to express in infix.
 	 * @return a string representation of the tree, if rowIdx
 	 * does not index a row with a nonlinear term throw an exception
 	 */
@@ -1731,10 +1732,19 @@ public:
 	
 	/**
 	 * Print the infix representation of the problem.  
-	 * 
 	 * @return a string with the infix representation
 	 */
 	std::string printModel( ); 
+	
+	
+	/**
+	 * Print the infix representation of the row (which could be an
+	 * an objective function row) indexed by rowIdx.  
+	 *
+	 * @param rowIdx is the index of the row we want to express in infix.
+	 * @return a string with the infix representation
+	 */
+	std::string printModel( int rowIdx); 
 	
 	/**
 	 * Get the prefix tokens for a given row index for the modified

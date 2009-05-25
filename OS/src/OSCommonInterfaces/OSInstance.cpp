@@ -1100,11 +1100,6 @@ bool OSInstance::processObjectives() {
 			m_bProcessObjectives = true;
 		}
 
-		
-		//for(i = 0; i < n; i++){
-		//	m_mObjectiveCoefficients[i] = new SparseVector();
-		//	m_mObjectiveCoefficients[i]->number = instanceData->objectives->obj[ j]->numberOfObjCoef;
-		//}
 		for(i = 0; i < n; i++){
 			if((instanceData->objectives->obj[i]->maxOrMin.compare("max") != 0) && (instanceData->objectives->obj[i]->maxOrMin.compare("min") != 0 )) throw ErrorClass("wrong objective maxOrMin");
 			m_msMaxOrMins[i] = instanceData->objectives->obj[i]->maxOrMin;
@@ -1583,6 +1578,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 	std::string resultString;
 	resultString = "";
 	unsigned int i;
+	unsigned int j;
 	unsigned int n;
 	ostringstream outStr;
 	std::vector<OSnLNode*> postfixVec;
@@ -1592,8 +1588,10 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 	OSnLNode *nlnode = NULL ;
 	OSnLNodeNumber *nlnodeNum = NULL;
 	OSnLNodeVariable *nlnodeVar = NULL;
+	OSnLNodeSum *nlnodeSum = NULL;
 	std::string tmp1 = "";
 	std::string tmp2 = "";
+	std::vector<std::string> sumVec;
 	
 	try{
 		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()){
@@ -1621,6 +1619,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 				#endif
 				n = operatorVec.size();
 				for(i = 0; i < n; i++){
+					//std::cout << "NUMBER OF NODES LEFT =  " << operatorVec.size() << std::endl;
 					nlnode = operatorVec.back();
 					//std::cout << "EVALUATING NODE: " << nlnode->snodeName << std::endl;
 					switch (nlnode->inodeInt) {
@@ -1658,7 +1657,24 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_SUM :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpVec.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							//std::cout << "INSIDE SUM NODE " << std::endl;
+							nlnodeSum = (OSnLNodeSum*)nlnode;
+							outStr.str("");
+							for(j = 0; j < nlnodeSum->inumberOfChildren; j++){
+								sumVec.push_back( tmpVec.back() );
+								//std::cout << "sumVec.back() " << sumVec.back() << std::endl;
+								tmpVec.pop_back();
+							}
+							outStr << "(";
+							for(j = 0; j < nlnodeSum->inumberOfChildren; j++){
+								outStr << sumVec.back();
+								if (j < nlnodeSum->inumberOfChildren - 1) outStr << " + ";
+								sumVec.pop_back();
+							}
+							outStr << ")";
+							tmpVec.push_back( outStr.str() );
+							//std::cout << outStr.str() << std::endl;
 							break;
 							
 						case OS_MINUS :
@@ -1756,7 +1772,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 				postfixVec.clear();
 				if(tmpVec.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree");
 				resultString = tmpVec[ 0];
-				std::cout << resultString << std::endl;
+				//std::cout << resultString << std::endl;
 				tmpVec.clear();
 				
 				return resultString;
@@ -1781,42 +1797,105 @@ std::string OSInstance::printModel( ){
 	std::string resultString = "";
 	ostringstream outStr;
 	outStr << "";
-	//loop over the consraints first;
 	int numCon;
+	int numObj;
+	int numVar;
 	int i;
-	int j;
-	int row_nonz;
-	row_nonz = 0;
 	numCon = this->getConstraintNumber();
-	//get the Amatrix in row format;
-	SparseMatrix* sm =  this->getLinearConstraintCoefficientsInRowMajor();
-	if( sm != NULL){
-		sm->isColumnMajor = false;
-	}
-	// initialize all of the necessary nonlinear stuff
-	//std::cout << "NUMBER OF CONSTRAINTS = " << std::endl;
+	numObj = this->getObjectiveNumber();
+	numVar = this->getVariableNumber();
 	this->initForAlgDiff( );
+	outStr << std::endl;
+	outStr << "Objectives:" << std::endl;		
+	for(i = 0; i < numObj; i++){
+		outStr << this->printModel( i - numObj);
+	}	
+	outStr << std::endl;
 	outStr << "Constraints:" << std::endl;		
 	for(i = 0; i < numCon; i++){
-		if( sm != NULL) row_nonz = sm->starts[ i + 1] - sm->starts[ i];
-		for(j = 0; j < row_nonz; j++){
-			outStr << os_dtoa_format( sm->values[ sm->starts[ i]  + j] );
-			outStr << "*";
-			outStr << "x_";
-			outStr << sm->indexes[ sm->starts[ i]  + j];
-			if( j < row_nonz - 1) outStr << " + ";
+		outStr << this->printModel( i);
+	}
+	
+	outStr << std::endl;
+	outStr << "Variables:" << std::endl;
+	if(m_bProcessVariables != true ) this->processVariables();
+	for(i = 0; i < numVar; i++){
+		outStr << "x_";
+		outStr << i;
+		outStr << " Type = " ;
+		outStr <<  m_mcVariableTypes[i];
+		outStr << "  Lower Bound =  ";
+		outStr << os_dtoa_format( m_mdVariableLowerBounds[i])  ;
+		outStr << "  Upper Bound =  ";
+		outStr << os_dtoa_format( m_mdVariableUpperBounds[i])  ;
+		outStr << std::endl;
+	}	
+	
+	
+	return outStr.str() ;
+}//printModel( )
+
+
+std::string OSInstance::printModel(int rowIdx ){
+	std::string resultString = "";
+	ostringstream outStr;
+	outStr << "";
+	//loop over the consraints first;
+	int j;
+	int row_nonz = 0;
+	int obj_nonz = 0;
+	//get the Amatrix in row format;
+	if(m_linearConstraintCoefficientsInRowMajor == NULL) 
+		m_linearConstraintCoefficientsInRowMajor = this->getLinearConstraintCoefficientsInRowMajor();;
+	
+	// initialize all of the necessary nonlinear stuff
+	this->initForAlgDiff( );	
+	
+	if( rowIdx >= 0){
+		if( m_bProcessConstraints != true ) this->processConstraints() ;
+		if( m_mdConstraintLowerBounds[ rowIdx] >  -OSDBL_MAX){
+			outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
+			outStr << " <= ";
 		}
 		
-		if( this->getNonlinearExpressionTree( i) != NULL){
-			outStr << " + (" ;
-			outStr << getNonlinearExpressionTreeInInfix( i);
-			outStr << ")";
+		row_nonz = m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx + 1] - m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx];
+		for(j = 0; j < row_nonz; j++){
+			outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
+			outStr << "*";
+			outStr << "x_";
+			outStr << m_linearConstraintCoefficientsInRowMajor->indexes[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j];
+			if( j < row_nonz - 1) outStr << " + ";
 		}
-		outStr << std::endl;	
+	}else{// process an objective function
+		if(m_bProcessObjectives != true ) this->processObjectives() ;
+		int obj_idx =  -rowIdx - 1;
+		obj_nonz = m_miNumberOfObjCoef[ obj_idx];
+		for(j = 0; j < obj_nonz; j++){
+			outStr << os_dtoa_format( m_mObjectiveCoefficients[obj_idx]->values[j] );
+			outStr << "*";
+			outStr << "x_";
+			outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
+			if( j < obj_nonz - 1) outStr << " + ";		
+		}
 	}
+	if( this->getNonlinearExpressionTree( rowIdx) != NULL){
+		if( (row_nonz > 0)  || (obj_nonz > 0) ) outStr << " + " ;
+		outStr << getNonlinearExpressionTreeInInfix( rowIdx);
+		//outStr << ")";
+	}
+	
+	
+	if( rowIdx >= 0){
+		if( m_bProcessConstraints != true ) this->processConstraints() ;
+		if( m_mdConstraintUpperBounds[ rowIdx] <  OSDBL_MAX){
+			outStr << " <= ";
+			outStr << os_dtoa_format( m_mdConstraintUpperBounds[ rowIdx] ); 
+		}
+	}
+	outStr << std::endl;	
 	resultString = outStr.str();
 	return resultString;
-} 
+}//printModel( rowIdx )
 
 
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPostfix( int rowIdx){

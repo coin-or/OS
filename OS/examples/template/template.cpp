@@ -50,7 +50,7 @@ int main(int argC, char* argV[]){
 	cout << "Start Building the Model" << endl;
 	std::cout << "Hello World" << std::endl;
 
-	std::string osilFileName =   "../../data/osilFiles/rosenbrockmod.osil";
+	std::string osilFileName =   "../../data/osilFiles/rbrockerror.osil";
 	std::cout << "Try to read a sample file" << std::endl;
 	std::cout << "The file is: " ;
 	std::cout <<  osilFileName << std::endl;
@@ -61,10 +61,9 @@ int main(int argC, char* argV[]){
 	osinstance = osilreader->readOSiL( osil);	
 	std::string theModel;
 	
-	
 	//osinstance->initForAlgDiff( );
-	unsigned int i;
-	//OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
+	//OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( 0);
+	//std::cout << osinstance->printModel( 0) << std::endl;
 	try{
 		//osinstance->getNonlinearExpressionTreeInInfix( -1);
 		theModel = osinstance->printModel( );
