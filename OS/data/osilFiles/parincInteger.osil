@@ -47,8 +47,8 @@
 				<el>1.</el>				
 				<el>.1</el>
 				<el>1.0</el>
-				<el>0.8333</el>
-				<el>0.6667</el>
+				<el>0.833333333</el>
+				<el>0.66666667</el>
 				<el>0.25</el>
 			</value>
 		</linearConstraintCoefficients>

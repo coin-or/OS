@@ -29,7 +29,6 @@
 #include "CglMixedIntegerRounding2.hpp"
 #include "CglKnapsackCover.hpp"
 #include "CglFlowCover.hpp"
-#include "CbcModel.hpp"
 #include "CbcBranchActual.hpp" //for CbcSOS
 
 #include "OsiClpSolverInterface.hpp"
@@ -690,11 +689,12 @@ void CoinSolver::solve() throw (ErrorClass) {
 				}
 				
 				
-				// create a solver 
-				OsiSolverInterface *solver = model.solver();
-				cpuTime = CoinCpuTime() - start;
 
-				writeResult( solver);
+				cpuTime = CoinCpuTime() - start;
+				
+				// create a solver 
+				OsiSolverInterface *solver = model.solver();			
+				writeResult( &model, solver);
 			}
 			else{ // use other solvers
 				//if an LP just do initial solve
@@ -805,56 +805,22 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	double *y = NULL;
 	double *z = NULL;
 	int *idx = NULL;
-	int i = 0;
 	std::string *rcost = NULL;
+	x = new double[osinstance->getVariableNumber() ];
+	y = new double[osinstance->getConstraintNumber() ];
+	idx = new int[ osinstance->getVariableNumber() ];
+	z = new double[1];
+	rcost = new std::string[ osinstance->getVariableNumber()];
+	int numberOfVar =  osinstance->getVariableNumber();
 	int solIdx = 0;
-	int n, m;
+	int i = 0;
+	int numberOfOtherVariableResults = 1;
+	int otherIdx = 0;
 	std::string description = "";
 	osresult->setGeneralStatusType("normal");
 	osresult->setTime(cpuTime);
 	if (solver->isProvenOptimal() == true){
-		osresult->setSolutionStatus(solIdx, "optimal", description);
-		/* Retrieve the solution */
-		x = new double[osinstance->getVariableNumber() ];
-		y = new double[osinstance->getConstraintNumber() ];
-		idx = new int[ osinstance->getVariableNumber() ];
-		z = new double[1];
-		n = osinstance->getVariableNumber();
-		m = osinstance->getConstraintNumber();
-		rcost = new std::string[ osinstance->getVariableNumber()];
-		//
-		*(z + 0)  =  solver->getObjValue();
-		osresult->setObjectiveValuesDense(solIdx, z); 
-		for(i=0; i < osinstance->getVariableNumber(); i++){
-			*(x + i) = solver->getColSolution()[i];
-			*(idx + i) = i;
-			
-		}
-		osresult->setPrimalVariableValuesDense(solIdx, x); 
-		// Symphony does not get dual prices
-		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
-			for(i=0; i <  osinstance->getConstraintNumber(); i++){
-				*(y + i) = solver->getRowPrice()[ i];
-			}
-			osresult->setDualVariableValuesDense(solIdx, y); 
-		}
-		//
-		//
-		// now put the reduced costs into the osrl
-		// Symphony does not get reduced costs
-		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
-			int numberOfOtherVariableResults = 1;
-			int otherIdx = 0;
-			// first set the number of Other Variable Results
-			osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
-			ostringstream outStr;
-			int numberOfVar =  osinstance->getVariableNumber();
-			for(i=0; i < numberOfVar; i++){
-				rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
-			}
-			osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
-			// end of setting reduced costs
-		}					
+		osresult->setSolutionStatus(solIdx, "optimal", description);					
 	}
 	else{ 
 		if(solver->isProvenPrimalInfeasible() == true) 
@@ -864,6 +830,34 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
 			else
 				osresult->setSolutionStatus(solIdx, "other", description);
+	}
+	
+	/* Retrieve the solution */
+	//
+	*(z + 0)  =  solver->getObjValue();
+	osresult->setObjectiveValuesDense(solIdx, z); 
+	for(i=0; i < osinstance->getVariableNumber(); i++){
+		*(x + i) = solver->getColSolution()[i];
+		*(idx + i) = i;
+	}
+	osresult->setPrimalVariableValuesDense(solIdx, x); 
+	// Symphony does not get dual prices
+	if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
+		for(i=0; i <  osinstance->getConstraintNumber(); i++){
+			*(y + i) = solver->getRowPrice()[ i];
+		}
+		osresult->setDualVariableValuesDense(solIdx, y); 
+	}
+	// now put the reduced costs into the osrl
+	// Symphony does not get reduced costs
+	if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
+		// first set the number of Other Variable Results
+		osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
+		for(i=0; i < numberOfVar; i++){
+			rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
+		}
+		osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
+		// end of setting reduced costs
 	}
 	osrl = osrlwriter->writeOSrL( osresult);
 	if(osinstance->getVariableNumber() > 0) delete[] x;
@@ -878,5 +872,91 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		delete[] idx;
 		idx = NULL;
 	}
-}
+}//writeResult(OsiSolverInterface)
+
+
+void CoinSolver::writeResult(CbcModel *model, OsiSolverInterface *solver){
+	double *x = NULL;
+	double *y = NULL;
+	double *z = NULL;
+	int *idx = NULL;
+	std::string *rcost = NULL;
+	x = new double[osinstance->getVariableNumber() ];
+	y = new double[osinstance->getConstraintNumber() ];
+	idx = new int[ osinstance->getVariableNumber() ];
+	z = new double[1];
+	rcost = new std::string[ osinstance->getVariableNumber()];
+
+	int numberOfOtherVariableResults = 1;
+	int otherIdx = 0;	
+	int numberOfVar =  osinstance->getVariableNumber();
+	int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
+	int i = 0;
+	int solIdx = 0;
+	std::string description = "";
+	osresult->setGeneralStatusType("normal");
+	osresult->setTime(cpuTime);
+	
+	if (model->isProvenOptimal() == true || (numOfIntVars == 0 && solver->isProvenOptimal() == true ) ){
+		osresult->setSolutionStatus(solIdx, "optimal", description);			
+	}
+	else{ 
+		if(model->isProvenInfeasible() == true) 
+			osresult->setSolutionStatus(solIdx, "infeasible", description);
+		else
+			if(model->isProvenDualInfeasible() == true) 
+				osresult->setSolutionStatus(solIdx, "other", "dual infeasible");
+			else
+				if(model->isContinuousUnbounded() == true) 
+					osresult->setSolutionStatus(solIdx, "other", "lp relaxation unbounded");
+				else
+					if(model->isNodeLimitReached() == true) 
+						osresult->setSolutionStatus(solIdx, "other", "node limit reached");
+					else
+						if(model->isSecondsLimitReached() == true) 
+							osresult->setSolutionStatus(solIdx, "other", "seconds limit reached");
+						else
+							if(model->isSolutionLimitReached() == true) 
+								osresult->setSolutionStatus(solIdx, "other", "solution limit reached");
+							else
+								osresult->setSolutionStatus(solIdx, "other","unknown");
+	}
+	
+	/* Retrieve the solution -- of course it may not be optimal */
+	if(numOfIntVars > 0) *(z + 0)  =  model->getObjValue();
+		else  *(z + 0)  =  solver->getObjValue();
+	osresult->setObjectiveValuesDense(solIdx, z); 
+	for(i=0; i < osinstance->getVariableNumber(); i++){
+		*(x + i) = model->getColSolution()[i];
+		*(idx + i) = i;
+	}
+	osresult->setPrimalVariableValuesDense(solIdx, x); 
+	for(i=0; i <  osinstance->getConstraintNumber(); i++){
+		*(y + i) = model->getRowPrice()[ i];
+	}
+	osresult->setDualVariableValuesDense(solIdx, y); 
+	// now put the reduced costs into the osrl
+	// first set the number of Other Variable Results
+	osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
+	for(i=0; i < numberOfVar; i++){
+		rcost[ i] = os_dtoa_format( model->getReducedCost()[ i]);
+	}
+	osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
+	// end of setting reduced costs	
+	osrl = osrlwriter->writeOSrL( osresult);
+	//garbage collection
+	if(osinstance->getVariableNumber() > 0) delete[] x;
+	x = NULL;
+	if(osinstance->getConstraintNumber()) delete[] y;
+	y = NULL;
+	delete[] z;	
+	z = NULL;
+	if(osinstance->getVariableNumber() > 0){
+		delete[] rcost;
+		rcost = NULL;
+		delete[] idx;
+		idx = NULL;
+	}
+}//writeResult( CbcModel)
+
 

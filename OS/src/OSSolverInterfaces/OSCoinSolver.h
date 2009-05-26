@@ -22,6 +22,7 @@
 #include "OSErrorClass.h"
 #include "OSiLReader.h"
 #include "OSoLReader.h"
+#include "CbcModel.hpp"
 
 #include <string>
 
@@ -107,6 +108,9 @@ public:
 
 
 	void writeResult(OsiSolverInterface *solver);
+	
+	
+	void writeResult(CbcModel *model, OsiSolverInterface *solver);
 
 
 

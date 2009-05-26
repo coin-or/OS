@@ -607,16 +607,22 @@ if( THOROUGH == true){
 		solver->osil = osil;
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
-		solver->osol = "";  
+		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		solver->osoption   = NULL;
 		cout << "call the COIN - Cbc Solver for p0201" << endl;
 		solver->solve();
 		cout << "Here is the COIN Cbc solver solution for p0201" << endl;
+		std::cout << solver->osrl << std::endl;
 		check = 7615;
+		// we put a node limit in, so we should not find 7615
+		// check that the node limit was foound
+		string::size_type pos;
+		pos = solver->osrl.find( "node limit");
+		if(pos == std::string::npos)  throw ErrorClass(" Error with p0201 on Cbc");
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0201.osil");
+		//ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		//if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0201.osil");
 		delete solver;
 		solver = NULL;
 		delete osilreader;

@@ -6,28 +6,13 @@
 	<job>
 	</job>	
 	<optimization>
-		<solverOptions numberOfSolverOptions="16">
-			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"/>
-			<solverOption name="print_level" solver="ipopt" type="integer" value="5"/>
-			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/>
-			<solverOption name="pivot" solver="clp" category="tol:model" value="1.e-5"/>
-			<solverOption name="mu_strategy" solver="ipopt" type="string" value="adaptive"/>
-			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"/>
-			<solverOption name="check_derivatives_for_naninf" solver="ipopt" type="string" value="yes"/>
-			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"/>
-
-			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="model"  type="integer" value="0"/>
-			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"/>
-
-
-			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"/>
-			<solverOption name="OsiHintIgnore" solver="osi" type="OsiHintStrength"   />
+		<solverOptions numberOfSolverOptions="2">
 
 		
-			<solverOption name="maxN" solver="cbc" value="100" />
-			<solverOption name="cuts" solver="cbc" value="on" />
-			<solverOption name="solve" solver="cbc"  />
-			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
+			<solverOption name="maxN" solver="cbc" value="5" />
+			<solverOption name="cuts" solver="cbc" value="off" />
+		
+			
 
 		</solverOptions>
 	</optimization>
