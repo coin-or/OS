@@ -53,7 +53,7 @@ public class The3MinuteSolver extends DefaultSolver{
 		OSrLWriter osrlWriter = new OSrLWriter();
 		osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 		osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
-		osrlWriter.setResultTime(new GregorianCalendar());
+		osrlWriter.setResultTimeStamp(new GregorianCalendar());
 
 		//change starts
 		String sSolverPath = OSParameter.CODE_HOME + "solver/OSSolverService";

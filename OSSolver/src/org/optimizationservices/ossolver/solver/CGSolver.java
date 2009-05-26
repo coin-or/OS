@@ -53,14 +53,14 @@ public class CGSolver extends DefaultSolver{
 		OSrLWriter osrlWriter = new OSrLWriter();
 		osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 		osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
-		osrlWriter.setResultTime(new GregorianCalendar());
+		osrlWriter.setResultTimeStamp(new GregorianCalendar());
 
 		OSsLReader osslReader = new OSsLReader(OSParameter.VALIDATE);
 		boolean bRead = osslReader.readString(super.osil);
 		if(!bRead){
 			osrlWriter.setGeneralStatusType("error");
 			osrlWriter.setGeneralStatusDescription("OSsL input is not valid");
-			osrlWriter.setResultTime(new GregorianCalendar());
+			osrlWriter.setResultTimeStamp(new GregorianCalendar());
 			super.osrl = osrlWriter.writeToString();
 			return;
 		}
@@ -116,7 +116,7 @@ public class CGSolver extends DefaultSolver{
 				}
 				br.close();	
 				osrlWriter.setGeneralStatusType("success");
-				osrlWriter.addOtherResult("processOutput", sProcessOutput, "standard output from launched process");
+				osrlWriter.addOtherGeneralResult("processOutput", sProcessOutput, "standard output from launched process");
 				super.osrl = osrlWriter.writeToString();
 			}
 			catch(Exception e){
@@ -140,7 +140,7 @@ public class CGSolver extends DefaultSolver{
 				if(!IOUtil.existsFileOrDir(sJobName)){
 					osrlWriter.setGeneralStatusType("error");
 					osrlWriter.setGeneralStatusDescription("SAS job input file: " + sJobName + " does not exist");
-					osrlWriter.setResultTime(new GregorianCalendar());
+					osrlWriter.setResultTimeStamp(new GregorianCalendar());
 					super.osrl = osrlWriter.writeToString();
 					return;
 				}
@@ -204,10 +204,10 @@ public class CGSolver extends DefaultSolver{
 				br.close();	
 				
 				osrlWriter.setGeneralStatusType("success");
-				osrlWriter.addOtherResult("processOutput", sProcessOutput, "standard output from launched process");
+				osrlWriter.addOtherGeneralResult("processOutput", sProcessOutput, "standard output from launched process");
 
-				osrlWriter.addOtherResult("logFile", IOUtil.readStringFromFile(OSParameter.TEMP_FILE_FOLDER + sJobID + ".log"), "SAS log file");
-				osrlWriter.addOtherResult("lstFile", IOUtil.readStringFromFile(OSParameter.TEMP_FILE_FOLDER + sJobID + ".lst"), "SAS output/print file");
+				osrlWriter.addOtherGeneralResult("logFile", IOUtil.readStringFromFile(OSParameter.TEMP_FILE_FOLDER + sJobID + ".log"), "SAS log file");
+				osrlWriter.addOtherGeneralResult("lstFile", IOUtil.readStringFromFile(OSParameter.TEMP_FILE_FOLDER + sJobID + ".lst"), "SAS output/print file");
 				
 				super.osrl = osrlWriter.writeToString();
 				
