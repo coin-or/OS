@@ -1584,18 +1584,24 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 	unsigned int n;
 	ostringstream outStr;
 	std::vector<OSnLNode*> postfixVec;
-	std::stack<OSnLNode*> opStack;
-	std::stack<std::string> tmpStack;
 	int rowIdx = rowIdx_;
 	OSnLNode *nlnode = NULL ;
 	OSnLNodeNumber *nlnodeNum = NULL;
 	OSnLNodeVariable *nlnodeVar = NULL;
 	OSnLNodeSum *nlnodeSum = NULL;
 	OSnLNodeProduct *nlnodeProduct = NULL;
+	OSnLNodeMin *nlnodeMin = NULL;
+	OSnLNodeMax *nlnodeMax = NULL;
 	std::string tmp1 = "";
 	std::string tmp2 = "";
-	std::vector<std::string> sumVec;
-	std::vector<std::string> productVec;
+	std::string tmp3 = "";
+	std::stack<OSnLNode*> opStack;
+	std::stack<std::string> tmpStack;
+	std::stack<std::string> sumStack;
+	std::stack<std::string> productStack;
+	std::stack<std::string> minStack;
+	std::stack<std::string> maxStack;
+	
 	
 	try{
 		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()){
@@ -1652,7 +1658,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							}
 							break;
 						case OS_PLUS :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing plus operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmp2 = tmpStack.top();
@@ -1661,20 +1667,19 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_SUM :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sum operater");
 							//std::cout << "INSIDE SUM NODE " << std::endl;
 							nlnodeSum = (OSnLNodeSum*)nlnode;
 							outStr.str("");
 							for(j = 0; j < nlnodeSum->inumberOfChildren; j++){
-								sumVec.push_back( tmpStack.top() );
+								sumStack.push( tmpStack.top() );
 								tmpStack.pop();
-								//std::cout << "sumVec.back() " << sumVec.back() << std::endl;
 							}
 							outStr << "(";
 							for(j = 0; j < nlnodeSum->inumberOfChildren; j++){
-								outStr << sumVec.back();
+								outStr << sumStack.top();
 								if (j < nlnodeSum->inumberOfChildren - 1) outStr << " + ";
-								sumVec.pop_back();
+								sumStack.pop();
 							}
 							outStr << ")";
 							tmpStack.push( outStr.str() );
@@ -1682,7 +1687,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_MINUS :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing minus operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmp2 = tmpStack.top();
@@ -1691,11 +1696,14 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;						
 						
 						case OS_NEGATE :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing negate operater");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "-( "+ tmp1  + ")");
 							break;
 							
 						case OS_TIMES :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing times operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmp2 = tmpStack.top();
@@ -1704,7 +1712,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 						
 						case OS_DIVIDE :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing divide operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmp2 = tmpStack.top();
@@ -1713,7 +1721,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 
 						case OS_POWER :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing power operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmp2 = tmpStack.top();
@@ -1722,77 +1730,119 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						case OS_ABS :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing abs operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmpStack.push( "abs( "+ tmp1  + ")");
 							break;
 						
 						case OS_SQUARE :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing square operater ");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmpStack.push( "("+ tmp1  + ")^2");
 							break;
 							
 						case OS_SQRT :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sqrt operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmpStack.push( "sqrt( "+ tmp1  + ")");
 							break;
 						
 						case OS_LN :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing ln operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmpStack.push( "ln( "+ tmp1  + ")");
 							break;
 							
 						case OS_EXP :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing exp operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmpStack.push( "exp( "+ tmp1  + ")");
 							break;
 							
 						case OS_SIN :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sin operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmpStack.push( "sin( "+ tmp1  + ")");
 							break;
 							
 						case OS_COS :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing cos operater ");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
 							tmpStack.push( "cos( "+ tmp1  + ")");
 							break;
 							
 						case OS_MIN :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing min operater");
+							//std::cout << "INSIDE Min NODE " << std::endl;
+							nlnodeMin = (OSnLNodeMin*)nlnode;
+							outStr.str("");
+							for(j = 0; j < nlnodeMin->inumberOfChildren; j++){
+								minStack.push( tmpStack.top() );
+								tmpStack.pop();
+							}
+							outStr << "min(";
+							for(j = 0; j < nlnodeMin->inumberOfChildren; j++){
+								outStr << minStack.top();
+								if (j < nlnodeMin->inumberOfChildren - 1) outStr << " , ";
+								minStack.pop();
+							}
+							outStr << ")";
+							tmpStack.push( outStr.str() );
 							break;
 							
 						case OS_MAX :
-							throw  ErrorClass("Operator " + nlnode->snodeName + " is temporarily out of order");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing max operater");
+							//std::cout << "INSIDE Max NODE " << std::endl;
+							nlnodeMax = (OSnLNodeMax*)nlnode;
+							outStr.str("");
+							for(j = 0; j < nlnodeMax->inumberOfChildren; j++){
+								maxStack.push( tmpStack.top() );
+								tmpStack.pop();
+							}
+							outStr << "max(";
+							for(j = 0; j < nlnodeMax->inumberOfChildren; j++){
+								outStr << maxStack.top();
+								if (j < nlnodeMax->inumberOfChildren - 1) outStr << " , ";
+								maxStack.pop();
+							}
+							outStr << ")";
+							tmpStack.push( outStr.str() );
+							break;
+							
+						case OS_IF :
+						
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing if operater ");
+							if(nlnode->inumberOfChildren != 3)throw  ErrorClass("The if node must have three children");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmp2 = tmpStack.top();
+							tmpStack.pop();
+							tmp3 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "if(" + tmp3 + "," + tmp2 + "," + tmp1 +")" );
 							break;
 							
 						case OS_PRODUCT :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree");
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing product operater");
 							//std::cout << "INSIDE Product NODE " << std::endl;
 							nlnodeProduct = (OSnLNodeProduct*)nlnode;
 							outStr.str("");
 							for(j = 0; j < nlnodeProduct->inumberOfChildren; j++){
-								productVec.push_back( tmpStack.top() );
+								productStack.push( tmpStack.top() );
 								tmpStack.pop();
-								//std::cout << "sumVec.back() " << sumVec.back() << std::endl;
 							}
 							outStr << "(";
 							for(j = 0; j < nlnodeProduct->inumberOfChildren; j++){
-								outStr << productVec.back();
+								outStr << productStack.top();
 								if (j < nlnodeProduct->inumberOfChildren - 1) outStr << " * ";
-								productVec.pop_back();
+								productStack.pop();
 							}
 							outStr << ")";
 							tmpStack.push( outStr.str() );
@@ -1806,7 +1856,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 					opStack.pop();
 				}
 				postfixVec.clear();
-				if(tmpStack.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree");
+				if(tmpStack.size() != 1) throw ErrorClass( "There is an error in the OSExpression Tree -- stack size should be 1 at end");
 				resultString = tmpStack.top();
 				//std::cout << resultString << std::endl;
 				tmpStack.pop();

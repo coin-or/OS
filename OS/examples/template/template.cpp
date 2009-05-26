@@ -63,7 +63,7 @@ int main(int argC, char* argV[]){
 	
 	double x = 100000000000001.;
 	std::cout  << os_dtoa_format(x) << std::endl;
-	return 0;
+
 
 	
 	//osinstance->initForAlgDiff( );

@@ -25,7 +25,7 @@
  *           s.t.     x0           + x1       <= 4; <br />
  *                    x0 * x1      + x1       <= 6; <br />
  *                    x0 * x1                    <= 0; <br />
- *                    max(x0 , x1 + 1)           >= 0; <br />
+ *                    max(x1 + 1, x0)           >= 0; <br />
  *                    if(x1, 1, x1)              <= 0; <br />
  *                    (x1 * 2 * x1  -  x1) * x0  <= 0; <br />
  *                    -100  <=  x0  <=  100 <br />
@@ -111,7 +111,7 @@ int  main(){
 		indexes[ 1] = 0;
 		indexes[ 2] = 1;
 		starts[ 0] = 0;
-		starts[ 1] = 2;
+		starts[ 1] = 1;
 		starts[ 2] = 3; 
 		osinstance->setLinearConstraintCoefficients(3, true, values, 0, 2, 
 			indexes, 0, 2, starts, 0, 2);	
@@ -305,12 +305,14 @@ int  main(){
 		//
 		//
 		// 
-		cout << "End Building the Model" << endl; 
+		cout << "End Building the Model: Here is What you built" << endl; 
 		// Write out the model
 		OSiLWriter *osilwriter;
 		osilwriter = new OSiLWriter();
 		cout << osilwriter->writeOSiL( osinstance);
+		std::cout << osinstance->printModel( ) << std::endl;
 		// done writing the model
+		
 		cout << "Done writing the Model" << endl;
 		delete osinstance;
 		osinstance = NULL;
