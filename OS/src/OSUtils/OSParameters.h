@@ -95,6 +95,8 @@
  */
 #define OS_NEAR_EQUAL 1e-2
 
+#define OS_EPS 1e-12
+
 inline double nanKludge(){
 	double zero = 0.0;
 	return 0.0/zero;

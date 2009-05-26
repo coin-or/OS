@@ -59,6 +59,17 @@ you should get x1 = 540, x2 = 252
 #include "r_opn.hd" /* for N_OPS */
 #include "opcode.hd"
 
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_CMATH_H
+#  include <cmath.h>
+# endif
+#endif
+
+
+
 #define R_OPS  ((ASL_fg*)asl)->I.r_ops_
 #define OBJ_DE ((ASL_fg*)asl)->I.obj_de_
 #define VAR_E  ((ASL_fg*)asl)->I.var_e_
@@ -76,7 +87,7 @@ using std::endl;
 #include <stdint.h>
 #endif
    
-#define AMPLDEBUG
+//#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	
 	//Initialize the AMPL library
@@ -596,15 +607,15 @@ bool OSnl2osil::createOSInstance(){
 		objectiveCoefficients = new SparseVector( n_obj_coef);
 		int i_obj_coef = -1;
 		for(og = Ograd[i]; og; og = og->next){
-			if (og->coef != 0) {
+			if (fabs(og->coef) > OS_EPS) {
 				i_obj_coef++;
 				objectiveCoefficients->values[i_obj_coef] = og->coef;
 				objectiveCoefficients->indexes[i_obj_coef] = og->varno;
 			}
 		}
 		osinstance->addObjective(-n_obj + i, objName, 
-		(objtype[i] == 1)?"max":"min", 
-		objconst( i),  objWeight, objectiveCoefficients) ;
+			(objtype[i] == 1)?"max":"min", 
+			objconst( i),  objWeight, objectiveCoefficients) ;
 		delete objectiveCoefficients; // delete the temporary sparse vector
 		objectiveCoefficients = NULL;
 	}
@@ -621,8 +632,68 @@ bool OSnl2osil::createOSInstance(){
 		LUrhs[2*i] > -OSDBL_MAX ? LUrhs[2*i] : -OSDBL_MAX, 
 		LUrhs[2*i+1] < OSDBL_MAX ? LUrhs[2*i+1] : OSDBL_MAX, 
 		constant);
-	}	
-	int valuesBegin = 0;
+	}
+	//
+	// Now the A-matrix
+	//
+	int colStart, colEnd, nCoefSqueezed;
+	nCoefSqueezed = 0;
+
+#ifdef AMPLDEBUG
+	cout << "A-matrix elements: ";
+	for (i = 0; i < A_colstarts[ n_var]; i++)
+		cout << A_vals[i] << " ";
+	cout << endl;
+	cout << "A-matrix rowinfo: ";
+	for (i = 0; i < A_colstarts[ n_var]; i++)
+		cout << A_rownos[i] << " ";
+	cout << endl;
+	cout << "A-matrix colstart: ";
+	for (i = 0; i <= n_var; i++)
+		cout << A_colstarts[i] << " ";
+	cout << endl;
+#endif
+
+	colEnd = 0;
+	for (i = 0; i < n_var; i++)
+	{
+		colStart = colEnd;
+		colEnd   = A_colstarts[i+1];
+		cout << "col " << i << " from " << colStart << " to " << colEnd - 1 << endl;
+		for (j = colStart; j < colEnd; j++)
+		{
+			if (fabs(A_vals[ j]) > OS_EPS)
+			{	A_vals[ j-nCoefSqueezed] = A_vals[ j];
+				A_rownos[ j-nCoefSqueezed] = A_rownos[j];
+			}
+			else {cout << "squeeze out element " << j << endl; nCoefSqueezed++;}
+		}
+		A_colstarts[i+1] = A_colstarts[i+1] - nCoefSqueezed;
+	}
+
+#ifdef AMPLDEBUG
+	cout << "A-matrix elements: ";
+	for (i = 0; i < A_colstarts[ n_var]; i++)
+		cout << A_vals[i] << " ";
+	cout << endl;
+	cout << "A-matrix rowinfo: ";
+	for (i = 0; i < A_colstarts[ n_var]; i++)
+		cout << A_rownos[i] << " ";
+	cout << endl;
+	cout << "A-matrix colstart: ";
+	for (i = 0; i <= n_var; i++)
+		cout << A_colstarts[i] << " ";
+	cout << endl;
+	cout << "A-matrix nonzeroes: " << A_colstarts[ n_var] - 1 << "; nsqueezed: " << nCoefSqueezed << endl;
+#endif
+
+	if(A_colstarts[ n_var] > 0){
+		osinstance->setLinearConstraintCoefficients(nzc,  true, 
+			A_vals,   0,  A_colstarts[n_var] - 1, 
+			A_rownos, 0,  A_colstarts[n_var] - 1, 
+			A_colstarts,  0,  n_var);
+	}
+/*	int valuesBegin = 0;
 	int valuesEnd = A_colstarts[ n_var] - 1;
 	int startsBegin = 0;
 	int indexesBegin = 0;
@@ -641,7 +712,7 @@ bool OSnl2osil::createOSInstance(){
 			A_rownos,  indexesBegin,  indexesEnd,   			
 			A_colstarts,  startsBegin,  n_var);
 	}
-		
+*/		
 		
 	// Kipp: can AMPL identify QPs???
 	//osinstance->setQuadraticTerms(numberOfQPTerms, VarOneIdx, VarTwoIdx, Coeff, begin, end);

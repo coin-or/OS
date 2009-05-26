@@ -247,6 +247,7 @@ int main(int argC, char* argV[])
 	if (testConfig == "solvers") testLevel = 3;
 	if (testConfig == "release") testLevel = 4;
 	if (testConfig == "nightlyBuild") testLevel = 4;
+	if (testConfig == "all") testLevel = 4;
 	if (testConfig == "NB") testLevel = 4;
 	if (testConfig == "nb") testLevel = 4;
 
@@ -1887,6 +1888,11 @@ if (OTHER_TESTS){
 		nl2osil = new OSnl2osil( nlFileName); 
 		nl2osil->createOSInstance() ;
 		solver->osinstance = nl2osil->osinstance;	
+
+		OSiLWriter tmp_osil_writer;
+		tmp_osil_writer.m_bWhiteSpace = true;
+		std::cout << tmp_osil_writer.writeOSiL( solver->osinstance) << std::endl;
+
 		osol = "";  //<osol></osol>";
 		solver->osol = osol;
 		cout << "call Cbc Solve" << endl;

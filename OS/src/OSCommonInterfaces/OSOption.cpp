@@ -14,7 +14,7 @@
  * 
  */
 
-//#define DEBUG
+#define DEBUG
 
 #ifdef  DEBUG
 #define DEBUG_OSOPTION
@@ -2469,6 +2469,8 @@ double* OSOption::getInitVarValuesDense()
 						else
 							throw ErrorClass("Variable index out of range");
 					}
+					cout << "Initial variables: (OSNAN = " << OSNAN << ")" << endl;
+					for (i = 0; i < numberOfVariables; i++) cout << m_mdInitVarValuesDense[i] << endl;
 					return m_mdInitVarValuesDense;
 				}
 			}
@@ -5653,7 +5655,8 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
 
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if (!CoinIsnan(value[i]))
+	{	cout << OSNAN << "   " << value[i] << "  " << CoinIsnan(value[i]) << endl;
+		if (!CoinIsnan(value[i]))
 			if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
 				return false;
 	}
