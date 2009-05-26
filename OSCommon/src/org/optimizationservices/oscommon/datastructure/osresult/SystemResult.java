@@ -21,12 +21,12 @@ public class SystemResult{
 	
 	public DiskSpace availableDiskSpace = new DiskSpace();
 	
-	public MemorySize availableMemorySize = new MemorySize();
+	public MemorySize availableMemory = new MemorySize();
 	
 	public CPUSpeed availableCPUSpeed = new CPUSpeed();
 	
-	public int availableCPUNumber = 1;
+	public CPUNumber availableCPUNumber = new CPUNumber();
 	
-	public OtherResults otherOptions = null;
+	public OtherResults otherResults = null;
 	
 }//class SystemResult

@@ -6,15 +6,17 @@
 package org.optimizationservices.oscommon.localinterface;
 
 import java.util.GregorianCalendar;
-import java.util.Hashtable;
 
-import org.optimizationservices.oscommon.datastructure.osprocess.JobStatistics;
-import org.optimizationservices.oscommon.datastructure.osprocess.Jobs;
-import org.optimizationservices.oscommon.datastructure.osprocess.ProcessStatistics;
+import org.optimizationservices.oscommon.datastructure.osresult.CPUNumber;
+import org.optimizationservices.oscommon.datastructure.osresult.CPUSpeed;
 import org.optimizationservices.oscommon.datastructure.osresult.ConstraintSolution;
+import org.optimizationservices.oscommon.datastructure.osresult.DiskSpace;
 import org.optimizationservices.oscommon.datastructure.osresult.DualVarValue;
 import org.optimizationservices.oscommon.datastructure.osresult.DualVariableValues;
+import org.optimizationservices.oscommon.datastructure.osresult.GeneralResult;
 import org.optimizationservices.oscommon.datastructure.osresult.GeneralStatus;
+import org.optimizationservices.oscommon.datastructure.osresult.JobResult;
+import org.optimizationservices.oscommon.datastructure.osresult.MemorySize;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjValue;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjectiveSolution;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjectiveValues;
@@ -24,11 +26,13 @@ import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolu
 import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionSubstatus;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult;
-import org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult;
-import org.optimizationservices.oscommon.datastructure.osresult.OtherResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherResults;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult;
-import org.optimizationservices.oscommon.datastructure.osresult.ResultData;
-import org.optimizationservices.oscommon.datastructure.osresult.ResultHeader;
+import org.optimizationservices.oscommon.datastructure.osresult.ServiceResult;
+import org.optimizationservices.oscommon.datastructure.osresult.SolutionResults;
+import org.optimizationservices.oscommon.datastructure.osresult.SystemResult;
+import org.optimizationservices.oscommon.datastructure.osresult.TimingInformation;
 import org.optimizationservices.oscommon.datastructure.osresult.VarStringValue;
 import org.optimizationservices.oscommon.datastructure.osresult.VarValue;
 import org.optimizationservices.oscommon.datastructure.osresult.VariableSolution;
@@ -54,15 +58,30 @@ import org.optimizationservices.oscommon.representationparser.OSrLWriter;
 public class OSResult {
 	
 	/**
-	 * resultHeader holds the first child of the OSResult specified by the OSiL Schema. 
+	 * general holds the general result specified by the OSrL Schema. 
 	 */
-	public ResultHeader resultHeader = new ResultHeader();
+	public GeneralResult general = new GeneralResult();
 
 	/**
-	 * resultData holds the second child of the OSResult specified by the OSiL Schema. 
+	 * system holds the system result specified by the OSrL Schema. 
 	 */
-	public ResultData resultData = new ResultData();	
-	
+	public SystemResult system = new SystemResult();
+
+	/**
+	 * service holds the service result specified by the OSrL Schema. 
+	 */
+	public ServiceResult service = new ServiceResult();
+
+
+	/**
+	 * job holds the job result specified by the OSrL Schema. 
+	 */
+	public JobResult job = new JobResult();
+
+	/**
+	 * optimization holds the optimization result specified by the OSrL Schema. 
+	 */
+	public OptimizationResult optimization = new OptimizationResult();	
 	/**
 	 * m_iVariableNumber holds the variable number. 
 	 */
@@ -131,104 +150,392 @@ public class OSResult {
 	 * @return the general status. 
 	 */
 	public GeneralStatus getGeneralStatus(){
-		return resultHeader.generalStatus;
+		return general.generalStatus;
 	}//getGeneralStatus
 	
    	/**
+	 * Set the general status
+	 * 
+	 * @param status holds the general status.
+	 * @return whether the general status is set successfully. 
+	 */
+	public boolean setGeneralStatus(GeneralStatus status){
+		general.generalStatus = status;
+		return true;
+	}//setGeneralStatus
+
+	/**
 	 * Get the general status type, which can be: 
 	 * success, error, warning. 
 	 * 
 	 * @return the general status type, null if none. 
 	 */
 	public String getGeneralStatusType(){
-		if(resultHeader.generalStatus == null) return null;
-		return resultHeader.generalStatus.type;
+		if(general.generalStatus == null) return null;
+		return general.generalStatus.type;
 	}//getGeneralStatusType
 
    	/**
+	 * Set the general status type, which can be: 
+	 * success, error, warning. 
+	 * 
+	 * @param type holds the general status type
+	 * @return whether the general status type is set successfully or not. 
+	 */
+	public boolean setGeneralStatusType(String type){
+		if(general.generalStatus == null) general.generalStatus = new GeneralStatus();
+		general.generalStatus.type = type;
+		return true;
+	}//setGeneralStatusType
+
+	/**
 	 * Get the general status description. 
 	 * 
 	 * @return the general status description, null or empty string if none. 
 	 */
 	public String getGeneralStatusDescription(){
-		if(resultHeader.generalStatus == null) return null;
-		return resultHeader.generalStatus.description;
+		if(general.generalStatus == null) return null;
+		return general.generalStatus.description;
 	}//getGeneralStatusDescription
 
-   	/**
-	 * Get service name.
+	/**
+	 * Set the general status description. 
 	 * 
-	 * @return the service name. 
+	 * @param description holds the general status description.
+	 * @return whether the general status description is set successfully or not. 
 	 */
-	public String getServiceName(){
-		return resultHeader.serviceName;
-	}//getServiceName
-	
-  	/**
-	 * Get service uri.
-	 * 
-	 * @return the service uri. 
-	 */
-	public String getServiceURI(){
-		return resultHeader.serviceURI;
-	}//getServiceURI
-	
-  	/**
-	 * Get instance name.
-	 * 
-	 * @return the instance name. 
-	 */
-	public String getInstanceName(){
-		return resultHeader.instanceName;
-	}//getInstanceName
-	
-  	/**
-	 * Get the job id.
-	 * 
-	 * @return the job id. 
-	 */
-	public String getJobID(){
-		return resultHeader.jobID;
-	}//getJobID
-	
- 	/**
-	 * Get time of the result.
-	 * 
-	 * @return the time of the result.
-	 */
-	public GregorianCalendar getResultTime(){
-		return resultHeader.time;
-	}//getResultTime
-	
-   	/**
+	public boolean setGeneralStatusDescription(String description){
+		if(general.generalStatus == null) general.generalStatus = new GeneralStatus();
+		general.generalStatus.description = description;
+		return true;
+	}//setGeneralStatusDescription
+
+	/**
 	 * Get the general message. 
 	 * 
 	 * @return the general message. 
 	 */
 	public String getGeneralMessage(){
-		return resultHeader.message;
+		return general.message;
 	}//getGeneralMessage
+
+   	/**
+	 * Set the general message. 
+	 * 
+	 * @param message holds the general message. 
+	 * @return whether process message is set successfully. 
+	 */
+	public boolean setGeneralMessage(String message){
+		general.message = message;
+		return true;
+	}//setGeneralMessage
+
+	/**
+	 * Get service name.
+	 * 
+	 * @return the service name. 
+	 */
+	public String getServiceName(){
+		return general.serviceName;
+	}//getServiceName
+	
+  	/**
+	 * Set service name.
+	 * 
+	 * @param serviceName holds the name of the service. 
+	 * @return whether the service name is set successfully. 
+	 */
+	public boolean setServiceName(String serviceName){
+		general.serviceName = serviceName;
+		return true;
+	}//setServiceName
+
+	/**
+	 * Get service uri.
+	 * 
+	 * @return the service uri. 
+	 */
+	public String getServiceURI(){
+		return general.serviceURI;
+	}//getServiceURI
+	
+  	/**
+	 * Set service uri.
+	 * 
+	 * @param serviceURI holds the uri of the service. 
+	 * @return whether the service uri is set successfully. 
+	 */
+	public boolean setServiceURI(String serviceURI){
+		general.serviceURI = serviceURI;
+		return true;
+	}//setServiceURI
+
+	/**
+	 * Get instance name.
+	 * 
+	 * @return the instance name. 
+	 */
+	public String getInstanceName(){
+		return general.instanceName;
+	}//getInstanceName
+	
+  	/**
+	 * Set instance name.
+	 * 
+	 * @param instanceName holds the name of the instance. 
+	 * @return whether the instance name is set successfully. 
+	 */
+	public boolean setInstanceName(String instanceName){
+		general.instanceName = instanceName;
+		return true;
+	}//setInstanceName
+
+	/**
+	 * Get the job id.
+	 * 
+	 * @return the job id. 
+	 */
+	public String getJobID(){
+		return general.jobID;
+	}//getJobID
+	
+ 	/**
+	 * Set job id.
+	 * 
+	 * @param jobID holds the job id. 
+	 * @return whether the job id is set successfully. 
+	 */
+	public boolean setJobID(String jobID){
+		general.jobID = jobID;
+		return true;
+	}//setJobID
+
+	/**
+	 * Get the solver invoked.
+	 * 
+	 * @return the solverInvoked. 
+	 */
+	public String getSolverInvoked(){
+		return general.solverInvoked;
+	}//getSolverInvoked
+	
+ 	/**
+	 * Set solver invoked.
+	 * 
+	 * @param solverInvoked holds the solver invoked. 
+	 * @return whether the solverInvoked is set successfully. 
+	 */
+	public boolean setSolverInvoked(String solverInvoked){
+		general.solverInvoked = solverInvoked;
+		return true;
+	}//setSolverInvoked
+
+	/**
+	 * Get time stamp of the result.
+	 * 
+	 * @return the time stamp of the result.
+	 */
+	public GregorianCalendar getResultTimeStamp(){
+		return general.timeStamp;
+	}//getResultTimeStamp
+	
 	
 	/**
-	 * Get the process statistics. 
+	 * Set time  stamp of the result.
 	 * 
-	 * @return the process statistics. 
+	 * @param timeStamp holds the time of the result.
+	 * @return whether result time stamp is set successfully. 
 	 */
-	public ProcessStatistics getProcessStatistics(){
-		return resultData.statistics;
-	}//getProcessStatistics
+	public boolean setResultTimeStamp(GregorianCalendar timeStamp){
+		general.timeStamp = timeStamp;
+		return true;
+	}//setResultTimeStamp
+
+	/**
+	 * get the number of other <general> results
+	 * 
+	 * @return the number of other <general> results
+	 */
+	public int  getNumberOfOtherGeneralResults(){
+		if(general.otherResults == null) return 0;
+		else return general.otherResults.numberOfOtherResults;
+	}//getNumberOfOtherGeneralResults
+
+	/**
+	 * Set the number of other general results. 
+	 * 
+	 * @param numberOfOtherGeneralResults holds the number of other general results
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherGeneralResults(int numberOfOtherGeneralResults){
+		if(numberOfOtherGeneralResults < 0) return false;
+		if(general.otherResults == null) general.otherResults = new OtherResults();
+		general.otherResults.numberOfOtherResults = numberOfOtherGeneralResults;
+		return true;
+	}//setNumberOfOtherGeneralResults
+
+	/**
+	 * get other <general> results
+	 * 
+	 * @return other <general> results
+	 */
+	public OtherResults  getOtherGeneralResults(){
+		return general.otherResults;
+	}//getOtherGeneralResults
+
+	/**
+	 * Set the other general results. 
+	 * 
+	 * @param otherGeneralResults holds the other general results
+	 * @return whether the other general results is set successfully or not. 
+	 */
+	public boolean setOtherGeneralResults(OtherResults otherGeneralResults){
+		general.otherResults = otherGeneralResults;
+		return true;
+	}//setOtherGeneralResults
+
+	/**
+	 * Get the system information.
+	 * 
+	 * @return the system information. 
+	 */
+	public String getSystemInformation(){
+		return system.systemInformation;
+	}//getSystemInformation
+	
+ 	/**
+	 * Set system information.
+	 * 
+	 * @param systemInformation. holds the system information.. 
+	 * @return whether the systemInformation is set successfully. 
+	 */
+	public boolean setSystemInformation(String systemInformation){
+		system.systemInformation = systemInformation;
+		return true;
+	}//setSystemInformation
+
+	/**
+	 * Get the system available disk space. 
+	 * 
+	 * @return the available system disk space 
+	 */
+	public DiskSpace getAvailableDiskSpace(){
+		return system.availableDiskSpace;
+	}//getAvailableDiskSpace
+
+	/**
+	 * Set the system available disk space.
+	 * 
+	 * @param diskSpace holds the  available disk space value, unit and description. 
+	 * @return whether the available disk space is set successfully.
+	 */
+	public boolean setAvailableDiskSpace(DiskSpace diskSpace){
+		system.availableDiskSpace = diskSpace;
+		return true;
+	}//setAvailableDiskSpace
+
+	/**
+	 * Get the system available memory. 
+	 * 
+	 * @return the available system memory. 
+	 */
+	public MemorySize getAvailableMemory(){
+		return system.availableMemory;
+	}//getAvailableMemory
+
+	/**
+	 * Set the system available memory.
+	 * 
+	 * @param availableMemory holds the  available memory value, unit, and description. 
+	 * @return whether the available memory is set successfully.
+	 */
+	public boolean setAvailableMemory(MemorySize availableMemory){
+		system.availableMemory = availableMemory;
+		return true;
+	}//setAvailableMemory
 	
 	/**
-	 * Get the statistics of all the jobs. 
+	 * Get the system available CPU Speed. 
 	 * 
-	 * @return the statistics of all the jobs, which is an array of jobStatistics with 
-	 * each member corresponding to one job; null if none. 
+	 * @return the available system CPU Speed. 
 	 */
-	public JobStatistics[] getJobStatistics(){
-		if(resultData.statistics == null) return null;
-		if(resultData.statistics.jobs == null) return null;
-		return resultData.statistics.jobs.job;
-	}//getJobStatistics
+	public CPUSpeed getAvailableCPUSpeed(){
+		return system.availableCPUSpeed;
+	}//getAvailableCPUSpeed
+
+	/**
+	 * Set the system available CPU Speed.
+	 * 
+	 * @param availableCPUSpeed holds the  available CPU Speed value, unit and description. 
+	 * @return whether the available CPU Speed is set successfully.
+	 */
+	public boolean setAvailableCPUSpeed(CPUSpeed availableCPUSpeed){
+		system.availableCPUSpeed = availableCPUSpeed;
+		return true;
+	}//setAvailableCPUSpeed
+
+	/**
+	 * Get the system available CPU Number. 
+	 * 
+	 * @return the available system CPU number, -1.0 if none. 
+	 */
+	public CPUNumber getAvailableCPUNumber(){
+		return system.availableCPUNumber;
+	}//getAvailableCPUNumber
+
+	/**
+	 * Set the system available CPU Number.
+	 * 
+	 * @param availableCPUNumber holds the  available CPU Number value and description. 
+	 * @return whether the available CPU Number is set successfully.
+	 */
+	public boolean setAvailableCPUNumber(CPUNumber availableCPUNumber){
+		system.availableCPUNumber = availableCPUNumber;
+		return true;
+	}//setAvailableCPUNumber
+
+	/**
+	 * get other <system> results
+	 * 
+	 * @return other <system> results
+	 */
+	public OtherResults  getOtherSystemResults(){
+		return system.otherResults;
+	}//getOtherSystemResults
+
+	/**
+	 * Set the other system results. 
+	 * 
+	 * @param otherSystemResults holds the other system results
+	 * @return whether the other system results is set successfully or not. 
+	 */
+	public boolean setOtherSystemResults(OtherResults otherSystemResults){
+		system.otherResults = otherSystemResults;
+		return true;
+	}//setOtherSystemResults
+	
+	/**
+	 * get the number of other <system> results
+	 * 
+	 * @return the number of other <system> results
+	 */
+	public int  getNumberOfOtherSystemResults(){
+		if(system.otherResults == null) return 0;
+		else return system.otherResults.numberOfOtherResults;
+	}//getNumberOfOtherSystemResults
+
+	/**
+	 * Set the number of other system results. 
+	 * 
+	 * @param numberOfOtherSystemResults holds the number of other system results
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherSystemResults(int numberOfOtherSystemResults){
+		if(numberOfOtherSystemResults < 0) return false;
+		if(system.otherResults == null) system.otherResults = new OtherResults();
+		system.otherResults.numberOfOtherResults = numberOfOtherSystemResults;
+		return true;
+	}//setNumberOfOtherSystemResults
 	
 	/**
 	 * Get the current state, , which can be:
@@ -237,152 +544,414 @@ public class OSResult {
 	 * @return the current status, "noResponse" if none.
 	 */
 	public String getCurrentState(){
-		if(resultData.statistics == null) return "noResponse";
-		return resultData.statistics.currentState;
+		return service.currentState;
 	}//getCurrentState
-	
+		
 	/**
-	 * Get the available disk space (in bytes). 
-	 * @return the available disk space, Double.NaN if none. 
+	 * Set the current state. 
+	 * @param currentState holds the current state, which can be:
+	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting" or "noResponse".
+	 * @return whether the current state is set successfully.
 	 */
-	public double getAvailableDiskSpace(){
-		if(resultData.statistics == null) return Double.NaN;
-		return resultData.statistics.availableDiskSpace;
-	}//getAvailableDiskSpace
-	
-	/**
-	 * Get the available memory (in bytes). 
-	 * @return the available memory, Double.NaN if none. 
-	 */
-	public double getAvailableMemory(){
-		if(resultData.statistics == null) return Double.NaN;
-		return resultData.statistics.availableMemory;
-	}//getAvailableMemory
-	
-	
+	public boolean setCurrentState(String currentState){
+		if(!currentState.equals("busy") && 
+		   !currentState.equals("busyButAccepting") &&
+		   !currentState.equals("idle") &&
+		   !currentState.equals("idleButNotAccepting") &&
+		   !currentState.equals("noResponse")) return false;		 
+		service.currentState = currentState;
+		return true;
+	}//setCurrentState
+
 	/**
 	 * Get the current job count. 
 	 * @return the current job count, -1 if none. 
 	 */
 	public int getCurrentJobCount(){
-		if(resultData.statistics == null) return -1;
-		return resultData.statistics.currentJobCount;
+		return service.currentJobCount;
 	}//getCurrentJobCount
 	
-	
+	/**
+	 * Set the current job count. 
+	 * @param currentJobCount holds the current job count. 
+	 * @return whether the current job count is set successfully.
+	 */
+	public boolean setCurrentJobCount(int currentJobCount){
+		service.currentJobCount = currentJobCount;
+		return true;
+	}//setCurrentJobCount
+
 	/**
 	 * Get the total jobs received so far. 
 	 * @return the total jobs received so far, -1 if none. 
 	 */
 	public int getTotalJobsSoFar(){
-		if(resultData.statistics == null) return -1;
-		return resultData.statistics.totalJobsSoFar;
+		return service.totalJobsSoFar;
 	}//getTotalJobsSoFar
 	
 	
 	/**
-	 * Get the time last job ended. 
-	 * @return the time last job ended. If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 * Set the total jobs received so far. 
+	 * @param totalJobsSoFar holds the total jobs received so far. 
+	 * @return whether the total jobs so far is set successfully.
 	 */
-	public GregorianCalendar getTimeLastJobEnded(){
-		if(resultData.statistics == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		return resultData.statistics.timeLastJobEnded;
-	}//getTimeLastJobEnded
-	
-	/**
-	 * Get the time last job took (in seconds). 
-	 * @return the the time last job took, Double.NaN if none. 
-	 */
-	public double getTimeLastJobTook(){
-		if(resultData.statistics == null) return Double.NaN;
-		return resultData.statistics.timeLastJobTook;
-	}//getTimeLastJobTook
+	public boolean setTotalJobsSoFar(int totalJobsSoFar){
+		service.totalJobsSoFar = totalJobsSoFar;
+		return true;
+	}//setTotalJobsSoFar
 	
 	/**
 	 * Get the time the service started. 
 	 * @return the time last job ended. If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
 	 */
 	public GregorianCalendar getTimeServiceStarted(){
-		if(resultData.statistics == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		return resultData.statistics.timeServiceStarted;
+		return service.timeServiceStarted;
 	}//getTimeServiceStarted
-	
+
+	/**
+	 * Set the time the service started. 
+	 * @param timeServiceStarted holds the time the service started. 
+	 * @return whether the time the service started is set successfully.
+	 */
+	public boolean setTimeServiceStarted(GregorianCalendar timeServiceStarted){
+		service.timeServiceStarted = timeServiceStarted;
+		return true;
+	}//setTimeServiceStarted
 	
 	/**
 	 * Get the service utilization ([0, 1]). 
-	 * @return the the time last job took, Double.NaN if none. 
+	 * @return the time last job took, Double.NaN if none. 
 	 */
 	public double getServiceUtilization(){
-		if(resultData.statistics == null) return Double.NaN;
-		return resultData.statistics.serviceUtilization;
+		return service.serviceUtilization;
 	}//getServiceUtilization
-	
-	
-	/**
-	 * get a string array of names of other results. 
-	 * 
-	 * @return a string array of names of other results, null if no other results.  
-	 */
-	public String[] getOtherResultNames(){
-		if(resultData.other == null) return null;
-		int n = resultData.other.length;
-		if(n <= 0) return null;
-		String[] otherResultNames = new String[n];
-		for(int i = 0; i < n; i++){
-			otherResultNames[i] = resultData.other[i].name;
-		}
-		return otherResultNames;
-	}//getOtherResultNames
-	
-	/**
-	 * get a hashmap of other result descriptions. 
-	 * The keys of the hashmap are the result names, and 
-	 * the values of the hashmap are the result descriptions.  
-	 * 
-	 * @return a hashmap of other result descriptions, null if no other results. 
-	 */
-	public Hashtable<String, String>  getOtherResultDescriptions(){
-		if(resultData.other == null) return null;
-		int n = resultData.other.length;
-		if(n <= 0) return null;
-		Hashtable<String, String> otherResultDescriptions = new Hashtable<String, String>();
-		for(int i = 0; i < n; i++){
-			otherResultDescriptions.put(resultData.other[i].name, resultData.other[i].description);
-		}
-		return otherResultDescriptions;
-	}//getOtherResultDescriptions
 
 	/**
-	 * get a hashmap of other result values. 
-	 * The keys of the hashmap are the result names, and 
-	 * the values of the hashmap are the result values.  
-	 * 
-	 * @return a hashmap of other result values, null if no other results. 
+	 * Set the service utilization. 
+	 * @param serviceUtilization holds the service utilization ([0, 1]). 
+	 * @return whether the time last job took is set successfully.
 	 */
-	public Hashtable<String, String>  getOtherResultValues(){
-		if(resultData.other == null) return null;
-		int n = resultData.other.length;
-		if(n <= 0) return null;
-		Hashtable<String, String> otherResultValues = new Hashtable<String, String>();
-		for(int i = 0; i < n; i++){
-			otherResultValues.put(resultData.other[i].name, resultData.other[i].value);
-		}
-		return otherResultValues;
-	}//getOtherResultValues
+	public boolean setServiceUtilization(double serviceUtilization){
+		service.serviceUtilization = serviceUtilization;
+		return true;
+	}//setServiceUtilization
+	
+	/**
+	 * get the number of other <service> results
+	 * 
+	 * @return the number of other <service> results
+	 */
+	public int  getNumberOfOtherServiceResults(){
+		if(service.otherResults == null) return 0;
+		else return service.otherResults.numberOfOtherResults;
+	}//getNumberOfOtherServiceResults
 
+	/**
+	 * Set the number of other service results. 
+	 * 
+	 * @param numberOfOtherServiceResults holds the number of other service results
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherServiceResults(int numberOfOtherServiceResults){
+		if(numberOfOtherServiceResults < 0) return false;
+		if(service.otherResults == null) service.otherResults = new OtherResults();
+		service.otherResults.numberOfOtherResults = numberOfOtherServiceResults;
+		return true;
+	}//setNumberOfOtherServiceResults
+	
+	/**
+	 * get other <service> results
+	 * 
+	 * @return other <service> results
+	 */
+	public OtherResults  getOtherServiceResults(){
+		return service.otherResults;
+	}//getOtherServiceResults
+
+	/**
+	 * Set the other service results. 
+	 * 
+	 * @param otherServiceResults holds the other service results
+	 * @return whether the other service results is set successfully or not. 
+	 */
+	public boolean setOtherServiceResults(OtherResults otherServiceResults){
+		service.otherResults = otherServiceResults;
+		return true;
+	}//setOtherServiceResults
+
+	/**
+	 * Get the job status, , which can be:
+	 * "waiting", "running", "killed", "finished" and "unknown".
+	 * 
+	 * @return the current status, "unknown" if none.
+	 */
+	public String getJobStatus(){
+		return job.status;
+	}//getCurrentState
+		
+	/**
+	 * Set the job status. 
+	 * @param jobStatus holds the current state, which can be:
+	 * "waiting", "running", "killed", "finished" and "unknown".
+	 * @return whether the current state is set successfully.
+	 */
+	public boolean setJobStatus(String jobStatus){
+		if(!jobStatus.equals("waiting") && 
+		   !jobStatus.equals("running") &&
+		   !jobStatus.equals("killed") &&
+		   !jobStatus.equals("finished") &&
+		   !jobStatus.equals("unknown")) return false;		 
+		job.status = jobStatus;
+		return true;
+	}//setJobStatus
+
+	/**
+	 * Get the submit time. 
+	 * @return the submit time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getJobSubmitTime(){
+		return job.submitTime;
+	}//getJobSubmitTime
+	
+	/**
+	 * Set the submit time. 
+	 * @param submitTime holds the job submit time. 
+	 * @return whether the submit time is set successfully.
+	 */
+	public boolean setJobSubmitTime(GregorianCalendar submitTime){
+		job.submitTime = submitTime;
+		return true;
+	}//setJobSubmitTime
+
+	/**
+	 * Get the scheduled start time. 
+	 * @return the scheduled start time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getScheduledStartTime(){
+		return job.scheduledStartTime;
+	}//getScheduledStartTime
+	
+	/**
+	 * Set the scheduled start time. 
+	 * @param scheduledStartTime holds the job scheduled start time. 
+	 * @return whether the scheduled start time is set successfully.
+	 */
+	public boolean setScheduledStartTime(GregorianCalendar scheduledStartTime){
+		job.scheduledStartTime = scheduledStartTime;
+		return true;
+	}//setScheduledStartTime
+
+	/**
+	 * Get the actual start time. 
+	 * @return the actual start time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getActualStartTime(){
+		return job.actualStartTime;
+	}//getActualStartTime
+	
+	/**
+	 * Set the actual start time. 
+	 * @param actualStartTime holds the job actual start time. 
+	 * @return whether the actual start time is set successfully.
+	 */
+	public boolean setActualStartTime(GregorianCalendar actualStartTime){
+		job.actualStartTime = actualStartTime;
+		return true;
+	}//setActualStartTime
+
+	/**
+	 * Get the job timing information. 
+	 * @return the job timing information. 
+	 */
+	public TimingInformation getTimeInformation(){
+		return job.timingInformation;
+	}//getTimeInformation
+	
+	/**
+	 * Set the timingInformation. 
+	 * @param timingInformation holds the timing information. 
+	 * @return whether the timingInformation is set successfully.
+	 */
+	public boolean setTimingInformation(TimingInformation timingInformation){
+		job.timingInformation = timingInformation;
+		return true;
+	}//setTimingInformation
+
+	/**
+	 * Get the end time. 
+	 * @return the end time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getEndTime(){
+		return job.endTime;
+	}//getEndTime
+
+	/**
+	 * Set the end time. 
+	 * @param endTime holds the end time. 
+	 * @return whether the endTime is set successfully.
+	 */
+	public boolean setEndTime(GregorianCalendar endTime){
+		job.endTime = endTime;
+		return true;
+	}//setEndTime
+
+	/**
+	 * Get the system used CPU Speed value, unit and description. 
+	 * 
+	 * @return the used system CPU Speed. 
+	 */
+	public CPUSpeed getUsedCPUSpeed(){
+		return job.usedCPUSpeed;
+	}//getUsedCPUSpeed
+
+	/**
+	 * Set the job used CPU Speed.
+	 * 
+	 * @param usedCPUSpeed holds the used CPU Speed. 
+	 * @return whether the used CPU Speed is set successfully.
+	 */
+	public boolean setUsedCPUSpeed(CPUSpeed usedCPUSpeed){
+		job.usedCPUSpeed = usedCPUSpeed;
+		return true;
+	}//setUsedCPUSpeed
+
+
+	/**
+	 * Get the job used CPU Number value and description. 
+	 * 
+	 * @return the used job CPU number. 
+	 */
+	public CPUNumber getUsedCPUNumber(){
+		return job.usedCPUNumber;
+	}//getUsedCPUNumber
+
+	/**
+	 * Set the job used CPU Number.
+	 * 
+	 * @param usedCPUNumber holds the  used CPU Number value and description. 
+	 * @return whether the used CPU Number is set successfully.
+	 */
+	public boolean setUsedCPUNumber(CPUNumber usedCPUNumber){
+		job.usedCPUNumber = usedCPUNumber;
+		return true;
+	}//setUsedCPUNumber
+
+	/**
+	 * Get the job available disk space value, unit and description. 
+	 * 
+	 * @return the available job disk space. 
+	 */
+	public DiskSpace getUsedDiskSpace(){
+		return job.usedDiskSpace;
+	}//getUsedDiskSpace
+
+	/**
+	 * Set the job used disk space.
+	 * 
+	 * @param usedDiskSpace holds the  used disk space value, unit and description. 
+	 * @return whether the used disk space is set successfully.
+	 */
+	public boolean setUsedDiskSpace(DiskSpace usedDiskSpace){
+		job.usedDiskSpace = usedDiskSpace;
+		return true;
+	}//setUsedDiskSpace
+
+	/**
+	 * Get the job used memory value, unit and description. 
+	 * 
+	 * @return the used job memory. 
+	 */
+	public MemorySize getUsedMemory(){
+		return job.usedMemory;
+	}//getUsedMemory
+
+	/**
+	 * Set the job used memory.
+	 * 
+	 * @param usedMemory holds the  used memory value, unit and description. 
+	 * @return whether the used memory is set successfully.
+	 */
+	public boolean setUsedMemory(MemorySize usedMemory){
+		job.usedMemory = usedMemory;
+		return true;
+	}//setUsedMemory
+
+
+	/**
+	 * get the number of other <service> results
+	 * 
+	 * @return the number of other <job> results
+	 */
+	public int  getNumberOfOtherJobResults(){
+		if(job.otherResults == null) return 0;
+		else return job.otherResults.numberOfOtherResults;
+	}//getNumberOfOtherJobResults
+
+	/**
+	 * Set the number of other job results. 
+	 * 
+	 * @param numberOfOtherJobResults holds the number of other job results
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherJobResults(int numberOfOtherJobResults){
+		if(numberOfOtherJobResults < 0) return false;
+		if(job.otherResults == null) job.otherResults = new OtherResults();
+		job.otherResults.numberOfOtherResults = numberOfOtherJobResults;
+		return true;
+	}//setNumberOfOtherJobResults
+	
+	/**
+	 * get other <job> results
+	 * 
+	 * @return other <job> results
+	 */
+	public OtherResults  getOtherJobResults(){
+		return job.otherResults;
+	}//getOtherJobResults
+
+	/**
+	 * Set the other job results. 
+	 * 
+	 * @param otherJobResults holds the other job results
+	 * @return whether the other job results is set successfully or not. 
+	 */
+	public boolean setOtherJobResults(OtherResults otherJobResults){
+		job.otherResults = otherJobResults;
+		return true;
+	}//setOtherJobResults
+
+	
 	/**
 	 * Get variable number. 
 	 * 
 	 * @return variable number, -1 if no information. 
 	 */
 	public int getVariableNumber(){
-		if(resultData.optimization == null){
+		if(optimization == null){
 			m_iVariableNumber = -1;
 			return -1;
 		}
-		m_iVariableNumber = resultData.optimization.numberOfVariables;
+		m_iVariableNumber = optimization.numberOfVariables;
 		return m_iVariableNumber;
 	}//getVariableNumber
+
+	
+	/**
+	 * Set the variable number. 
+	 * 
+	 * @param variableNumber holds the number of variables
+	 * @return whether the variable number is set successfully or not. 
+	 */
+	public boolean setVariableNumber(int variableNumber){
+		if(variableNumber <= 0){
+			m_iVariableNumber = -1;
+			return true;
+		}
+		if(optimization == null) optimization = new OptimizationResult();
+		optimization.numberOfVariables = variableNumber;
+		m_iVariableNumber = variableNumber;
+		return true;
+	}//setVariableNumber
 
 	/**
 	 * Get objective number. 
@@ -390,28 +959,101 @@ public class OSResult {
 	 * @return objective number, -1 if no information. 
 	 */
 	public int getObjectiveNumber(){
-			if(resultData.optimization == null){
+			if(optimization == null){
 				m_iObjectiveNumber = -1;
 				return -1;
 			}
-			m_iObjectiveNumber = resultData.optimization.numberOfObjectives;
+			m_iObjectiveNumber = optimization.numberOfObjectives;
 			return m_iObjectiveNumber;
 	}//getObjectiveNumber
 	
+	/**
+	 * Set the objective number. 
+	 * 
+	 * @param objectiveNumber holds the number of objectives
+	 * @return whether the objective number is set successfully or not. 
+	 */
+	public boolean setObjectiveNumber(int objectiveNumber){
+		if(objectiveNumber < 0){
+			m_iObjectiveNumber = -1;
+			return true;
+		}
+		if(optimization == null) optimization = new OptimizationResult();
+		optimization.numberOfObjectives = objectiveNumber;
+		m_iObjectiveNumber = objectiveNumber;
+		return true;
+	}//setObjectiveNumber
+
 	/**
 	 * Get constraint number. 
 	 * 
 	 * @return constraint number, -1 if no information. 
 	 */
 	public int getConstraintNumber(){
-			if(resultData.optimization == null){
+			if(optimization == null){
 				m_iConstraintNumber = -1;
 				return -1;
 			}
-			m_iConstraintNumber = resultData.optimization.numberOfConstraints;
+			m_iConstraintNumber = optimization.numberOfConstraints;
 			return m_iConstraintNumber;
 	}//getConstraintNumber
 
+
+	/**
+	 * Set the constraint number. 
+	 * 
+	 * @param constraintNumber holds the number of constraints
+	 * @return whether the constraint number is set successfully or not. 
+	 */
+	public boolean setConstraintNumber(int constraintNumber){
+		if(constraintNumber < 0){
+			m_iConstraintNumber = -1;
+			return true;
+		}
+		if(optimization == null) optimization = new OptimizationResult();
+		optimization.numberOfConstraints = constraintNumber;
+		m_iConstraintNumber = constraintNumber;
+		return true;
+	}//setConstraintNumber
+
+	/**
+	 * get the number of solutions. 
+	 * 
+	 * @return the number of solutions, 0 if none.  
+	 */
+	public int getSolutionNumber(){
+		if(m_iSolutionNumber == -1){
+			if(optimization == null) return -1;
+			m_iSolutionNumber = optimization.numberOfSolutions;
+		}
+		return m_iSolutionNumber;
+	}//getSolutionNumber
+
+	/**
+	 * set the number of solutions. This method must be called before setting other optimization solution 
+	 * related results.  
+	 * Before this method is called, the setVariableNumber(int), setObjectiveNumber(int), setConstraintNumber(int) methods 
+	 * have to be called first. 
+	 * 
+	 * @param solutionNumber holds the number of solutions to set. 
+	 * @return whether the solution number is set successfully.   
+	 * @see #setVariableNumber(int)
+	 * @see #setObjectiveNumber(int)
+	 * @see #setConstraintNumber(int)
+	 */
+	public boolean setSolutionNumber(int solutionNumber){
+		if(getVariableNumber() <= 0) return true;
+		if(getObjectiveNumber() < 0) return true;
+		if(getConstraintNumber() < 0) return true;
+		if(solutionNumber < 0) return true; 
+		optimization.numberOfSolutions = solutionNumber;
+		if(solutionNumber == 0) return true;
+		optimization.solution = new OptimizationSolution[solutionNumber];
+		for(int i = 0; i < solutionNumber; i++){
+			optimization.solution[i] = new OptimizationSolution();
+		}
+		return true;
+	}//setSolutionNumber
 
 	/**
 	 * Get one solution of optimal primal variable values. 
@@ -420,27 +1062,26 @@ public class OSResult {
 	 * @return a double dense array of the optimal values, null if no optimal value. 
 	 */
 	public double[] getOptimalPrimalVariableValues(int objIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		double[] mdValues = null;
 		for(int i = 0; i < iSolutions; i++){
-			if(resultData.optimization.solution[i] == null) continue;
-			if(resultData.optimization.solution[i].objectiveIdx != objIdx) continue;
-			if(resultData.optimization.solution[i].variables == null) continue;
-			if(resultData.optimization.solution[i].variables.values == null) continue;
-			if((resultData.optimization.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
-				    resultData.optimization.solution[i].status.type.equals("globallyOptimal")){				
-				VarValue[] var = resultData.optimization.solution[i].variables.values.var; 
+			if(optimization.solution[i] == null) continue;
+			if(optimization.solution[i].targetObjectiveIdx != objIdx) continue;
+			if(optimization.solution[i].variables == null) continue;
+			if(optimization.solution[i].variables.values == null) continue;
+			if((optimization.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
+				    optimization.solution[i].status.type.equals("globallyOptimal")){				
+				VarValue[] var = optimization.solution[i].variables.values.var; 
 				int iVars = (var==null)?0:var.length;
 				mdValues = new double[iNumberOfVariables];
 				for(int j = 0; j < iVars; j++){
 					mdValues[var[j].idx] = var[j].value;
 				}
 			}	
-			if(resultData.optimization.solution[i].status.type.equals("globallyOptimal")){
+			if(optimization.solution[i].status.type.equals("globallyOptimal")){
 				return mdValues;
 			}
 		}
@@ -454,27 +1095,26 @@ public class OSResult {
 	 * @return a string dense array of the optimal string values, null if no optimal value. 
 	 */
 	public String[] getOptimalPrimalVariableStringValues(int objIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		String[] msValues = null;
 		for(int i = 0; i < iSolutions; i++){
-			if(resultData.optimization.solution[i] == null) continue;
-			if(resultData.optimization.solution[i].objectiveIdx != objIdx) continue;
-			if(resultData.optimization.solution[i].variables == null) continue;
-			if(resultData.optimization.solution[i].variables.valuesString == null) continue;
-			if((resultData.optimization.solution[i].status.type.endsWith("ptimal") && msValues == null)||
-			    resultData.optimization.solution[i].status.type.equals("globallyOptimal")){
-				VarStringValue[] var = resultData.optimization.solution[i].variables.valuesString.var; 
+			if(optimization.solution[i] == null) continue;
+			if(optimization.solution[i].targetObjectiveIdx != objIdx) continue;
+			if(optimization.solution[i].variables == null) continue;
+			if(optimization.solution[i].variables.valuesString == null) continue;
+			if((optimization.solution[i].status.type.endsWith("ptimal") && msValues == null)||
+			    optimization.solution[i].status.type.equals("globallyOptimal")){
+				VarStringValue[] var = optimization.solution[i].variables.valuesString.var; 
 				int iVars = (var==null)?0:var.length;
 				msValues = new String[iNumberOfVariables];
 				for(int j = 0; j < iVars; j++){
 					msValues[var[j].idx] = var[j].value;
 				}
 			}	
-			if(resultData.optimization.solution[i].status.type.equals("globallyOptimal")){
+			if(optimization.solution[i].status.type.equals("globallyOptimal")){
 				return msValues;
 			}
 		}
@@ -488,45 +1128,31 @@ public class OSResult {
 	 * @return a double dense array of the optimal dual values, null if no optimal value. 
 	 */
 	public double[] getOptimalDualVariableValues(int objIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfConstraints = this.getConstraintNumber();
 		if(iNumberOfConstraints <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		double[] mdValues = null;
 		for(int i = 0; i < iSolutions; i++){
-			if(resultData.optimization.solution[i] == null) continue;
-			if(resultData.optimization.solution[i].objectiveIdx != objIdx) continue;
-			if(resultData.optimization.solution[i].constraints == null) continue;
-			if(resultData.optimization.solution[i].constraints.dualValues == null) continue;
-			if((resultData.optimization.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
-				    resultData.optimization.solution[i].status.type.equals("globallyOptimal")){				
-				DualVarValue[] con = resultData.optimization.solution[i].constraints.dualValues.con; 
+			if(optimization.solution[i] == null) continue;
+			if(optimization.solution[i].targetObjectiveIdx != objIdx) continue;
+			if(optimization.solution[i].constraints == null) continue;
+			if(optimization.solution[i].constraints.dualValues == null) continue;
+			if((optimization.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
+				    optimization.solution[i].status.type.equals("globallyOptimal")){				
+				DualVarValue[] con = optimization.solution[i].constraints.dualValues.con; 
 				int iCons = (con==null)?0:con.length;
 				mdValues = new double[iNumberOfConstraints];
 				for(int j = 0; j < iCons; j++){
 					mdValues[con[j].idx] = con[j].value;
 				}
 			}	
-			if(resultData.optimization.solution[i].status.type.equals("globallyOptimal")){
+			if(optimization.solution[i].status.type.equals("globallyOptimal")){
 				return mdValues;
 			}
 		}
 		return mdValues;		
 	}//getOptimalDualVariableValues
-	
-	/**
-	 * get the number of solutions. 
-	 * 
-	 * @return the number of solutions, 0 if none.  
-	 */
-	public int getSolutionNumber(){
-		if(m_iSolutionNumber == -1){
-			if(resultData.optimization == null) return -1;
-			m_iSolutionNumber = resultData.optimization.numberOfSolutions;
-		}
-		return m_iSolutionNumber;
-	}//getSolutionNumber
 	
 	/**
 	 * Get the [i]th optimization solution, where i equals the given solution index.
@@ -535,11 +1161,11 @@ public class OSResult {
 	 * @return the optimization solution that corresponds to solIdx, null if none. 
 	 */
 	public OptimizationSolution getSolution(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  resultData.optimization.solution.length) return null;
-		return resultData.optimization.solution[solIdx];
+		if(optimization == null) return null;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
+		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		return optimization.solution[solIdx];
 	}//getSolution
 	
 	
@@ -552,12 +1178,11 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus
 	 */
 	public OptimizationSolutionStatus getSolutionStatus( int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  resultData.optimization.solution.length) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		return resultData.optimization.solution[solIdx].status;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
+		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		return optimization.solution[solIdx].status;
 	}//getSolutionStatus
 	
 	/**
@@ -570,13 +1195,12 @@ public class OSResult {
 	 * @return the optimization solution status type that corresponds to solIdx, null or empty string if none.
 	 */
 	public String getSolutionStatusType(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  resultData.optimization.solution.length) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].status == null) return null;
-		return resultData.optimization.solution[solIdx].status.type;		
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
+		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].status == null) return null;
+		return optimization.solution[solIdx].status.type;		
 	}//getSolutionStatusType
 	
 	/**
@@ -586,13 +1210,12 @@ public class OSResult {
 	 * @return the optimization solution status description that corresponds to solIdx, null or empty string if none.
 	 */
 	public String getSolutionStatusDescription(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  resultData.optimization.solution.length) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].status == null) return null;
-		return resultData.optimization.solution[solIdx].status.description;				
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
+		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].status == null) return null;
+		return optimization.solution[solIdx].status.description;				
 	}//getSolutionStatusDescription
 	
 	/**
@@ -603,13 +1226,12 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionSubstatus;
 	 */
 	public OptimizationSolutionSubstatus[] getSolutionSubStatuses(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  resultData.optimization.solution.length) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].status == null) return null;
-		return resultData.optimization.solution[solIdx].status.substatus;				
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
+		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].status == null) return null;
+		return optimization.solution[solIdx].status.substatus;				
 	}//getSolutionSubStatuses
 
 	/**
@@ -619,12 +1241,11 @@ public class OSResult {
 	 * @return the optimization solution message that corresponds to solIdx, null or empty if none.
 	 */
 	public String getSolutionMessage(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  resultData.optimization.solution.length) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		return resultData.optimization.solution[solIdx].message;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
+		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		return optimization.solution[solIdx].message;
 	}//getSolutionMessage
 	
 	/**
@@ -636,12 +1257,11 @@ public class OSResult {
 	 * All the objective indexes are negative starting from -1 downward. 
 	 */
 	public int getSolutionObjectiveIndex(int solIdx){
-		if(resultData.optimization == null) return 0;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  resultData.optimization.solution.length) return 0;
-		if(resultData.optimization.solution[solIdx] == null) return 0;
-		return resultData.optimization.solution[solIdx].objectiveIdx;		
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
+		   solIdx < 0 || solIdx >=  optimization.solution.length) return 0;
+		if(optimization.solution[solIdx] == null) return 0;
+		return optimization.solution[solIdx].targetObjectiveIdx;		
 	}//getSolutionObjectiveIndex
 	
 	/**
@@ -651,16 +1271,15 @@ public class OSResult {
 	 * @return a double dense array of variable values, null if no variable values. 
 	 */
 	public double[] getVariableValues(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].variables == null) return null;
-		if(resultData.optimization.solution[solIdx].variables.values == null) return null;
-		VarValue[] var = resultData.optimization.solution[solIdx].variables.values.var; 
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		if(optimization.solution[solIdx].variables.values == null) return null;
+		VarValue[] var = optimization.solution[solIdx].variables.values.var; 
 		int iVars = (var==null)?0:var.length;
 		double[] mdValues = new double[iNumberOfVariables];
 		for(int i = 0; i < iVars; i++){
@@ -679,16 +1298,15 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.VariableValues
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.VarValue
 	 */
-	public VariableValues getSparseVariableValues(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+	public VariableValues getSparseVariableValues(int solIdx){ 
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].variables == null) return null;
-		return resultData.optimization.solution[solIdx].variables.values;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		return optimization.solution[solIdx].variables.values;
 	}//getSparseVariableValues
 	
 	/**
@@ -698,16 +1316,15 @@ public class OSResult {
 	 * @return a string dense array of variable values, null if no variable values. 
 	 */
 	public double[] getVariableStringValues(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].variables == null) return null;
-		if(resultData.optimization.solution[solIdx].variables.values == null) return null;
-		VarValue[] var = resultData.optimization.solution[solIdx].variables.values.var; 
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		if(optimization.solution[solIdx].variables.values == null) return null;
+		VarValue[] var = optimization.solution[solIdx].variables.values.var; 
 		int iVars = (var==null)?0:var.length;
 		double[] mdValues = new double[iNumberOfVariables];
 		for(int i = 0; i < iVars; i++){
@@ -729,15 +1346,14 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 */
 	public OtherVariableResult[] getOtherVariableResults(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].variables == null) return null;
-		return resultData.optimization.solution[solIdx].variables.other;	
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		return optimization.solution[solIdx].variables.other;	
 	}//getOtherVariableResults
 	
 	/**
@@ -751,16 +1367,15 @@ public class OSResult {
 	 * values all get a Double.NaN value, meaning that they are not calculated.   
 	 */
 	public double[] getObjectiveValues(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfObjectives = this.getObjectiveNumber();
 		if(iNumberOfObjectives <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].objectives == null) return null;
-		if(resultData.optimization.solution[solIdx].objectives.values == null) return null;
-		ObjValue[] obj = resultData.optimization.solution[solIdx].objectives.values.obj; 
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].objectives == null) return null;
+		if(optimization.solution[solIdx].objectives.values == null) return null;
+		ObjValue[] obj = optimization.solution[solIdx].objectives.values.obj; 
 		int iObjs = (obj==null)?0:obj.length;
 		double[] mdValues = new double[iNumberOfObjectives];
 		for(int i = 0; i < iNumberOfObjectives; i++){
@@ -786,15 +1401,14 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
 	 */
 	public OtherObjectiveResult[] getOtherObjectiveResults(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfObjectives = this.getObjectiveNumber();
 		if(iNumberOfObjectives <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].objectives == null) return null;
-		return resultData.optimization.solution[solIdx].objectives.other;	
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].objectives == null) return null;
+		return optimization.solution[solIdx].objectives.other;	
 	}//getOtherObjectiveResults
 	
 	
@@ -805,16 +1419,15 @@ public class OSResult {
 	 * @return a double dense array of the dual variable values, null if none. 
 	 */
 	public double[] getDualVariableValues(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfConstraints = this.getConstraintNumber();
 		if(iNumberOfConstraints <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].constraints == null) return null;
-		if(resultData.optimization.solution[solIdx].constraints.dualValues == null) return null;
-		DualVarValue[] con = resultData.optimization.solution[solIdx].constraints.dualValues.con; 
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].constraints == null) return null;
+		if(optimization.solution[solIdx].constraints.dualValues == null) return null;
+		DualVarValue[] con = optimization.solution[solIdx].constraints.dualValues.con; 
 		int iCons = (con==null)?0:con.length;
 		double[] mdValues = new double[iNumberOfConstraints];
 		for(int j = 0; j < iCons; j++){
@@ -836,15 +1449,14 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.DualVarValue
 	 */
 	public DualVariableValues getSparseDualVariableValues(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfConstraints = this.getConstraintNumber();
 		if(iNumberOfConstraints <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].constraints == null) return null;
-		return resultData.optimization.solution[solIdx].constraints.dualValues;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].constraints == null) return null;
+		return optimization.solution[solIdx].constraints.dualValues;
 	}//getSparseDualVariableValues
 		
 	/**
@@ -860,15 +1472,14 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
 	 */
 	public OtherConstraintResult[] getOtherConstraintResults(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfConstraints = this.getConstraintNumber();
 		if(iNumberOfConstraints <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		if(resultData.optimization.solution[solIdx].constraints == null) return null;
-		return resultData.optimization.solution[solIdx].constraints.other;	
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].constraints == null) return null;
+		return optimization.solution[solIdx].constraints.other;	
 	}//getOtherConstraintResults
 
 	/**
@@ -882,14 +1493,14 @@ public class OSResult {
 	 * value (string).   
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
 	 */
-	public OtherOptimizationResult[] getOtherOptimizationResults(int solIdx){
-		if(resultData.optimization == null) return null;
-		if(resultData.optimization.solution == null || resultData.optimization.solution.length <= 0) return null;
-		int iSolutions = resultData.optimization.solution.length;
+	public OtherSolutionResult[] getOtherOptimizationSolutionResults(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iSolutions = optimization.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(resultData.optimization.solution[solIdx] == null) return null;
-		return resultData.optimization.solution[solIdx].other;	
-	}//getOtherOptimizationResults
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].otherSolutionResults == null) return null;	
+		return optimization.solution[solIdx].otherSolutionResults.otherSolutionResult;	
+	}//getOtherOptimizationSolutionResults
 
 
 	/**
@@ -899,358 +1510,9 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.localinterface.OSAnalysis
 	 */
 	public OSAnalysis getOSAnalysis(){
-		if(resultData.optimization == null) return null;
-		return resultData.optimization.osal;
+		return optimization.osal;
 	}//getOSAnalysis
-	
-
-   	/**
-	 * Set service name.
-	 * 
-	 * @param serviceName holds the name of the service. 
-	 * @return whether the service name is set successfully. 
-	 */
-	public boolean setServiceName(String serviceName){
-		resultHeader.serviceName = serviceName;
-		return true;
-	}//setServiceName
-	
-   	/**
-	 * Set service uri.
-	 * 
-	 * @param serviceURI holds the uri of the service. 
-	 * @return whether the service uri is set successfully. 
-	 */
-	public boolean setServiceURI(String serviceURI){
-		resultHeader.serviceURI = serviceURI;
-		return true;
-	}//setServiceURI
-	
-   	/**
-	 * Set instance name.
-	 * 
-	 * @param instanceName holds the name of the instance. 
-	 * @return whether the instance name is set successfully. 
-	 */
-	public boolean setInstanceName(String instanceName){
-		resultHeader.instanceName = instanceName;
-		return true;
-	}//setInstanceName
-	
-   	/**
-	 * Set job id.
-	 * 
-	 * @param jobID holds the job id. 
-	 * @return whether the job id is set successfully. 
-	 */
-	public boolean setJobID(String jobID){
-		resultHeader.jobID = jobID;
-		return true;
-	}//setJobID
-	
-   	/**
-	 * Set time of the result.
-	 * 
-	 * @param time holds the time of the result.
-	 * @return whether result time is set successfully. 
-	 */
-	public boolean setResultTime(GregorianCalendar time){
-		resultHeader.time = time;
-		return true;
-	}//setResultTime
-	
-   	/**
-	 * Set the general message. 
-	 * 
-	 * @param message holds the general message. 
-	 * @return whether process message is set successfully. 
-	 */
-	public boolean setGeneralMessage(String message){
-		resultHeader.message = message;
-		return true;
-	}//setGeneralMessage
-	
-   	/**
-	 * Set the general status
-	 * 
-	 * @param status holds the general status.
-	 * @return whether the general status is set successfully. 
-	 */
-	public boolean setGeneralStatus(GeneralStatus status){
-		resultHeader.generalStatus = status;
-		return true;
-	}//setGeneralStatus
-	
-   	/**
-	 * Set the general status type, which can be: 
-	 * success, error, warning. 
-	 * 
-	 * @param type holds the general status type
-	 * @return whether the general status type is set successfully or not. 
-	 */
-	public boolean setGeneralStatusType(String type){
-		if(resultHeader.generalStatus == null) resultHeader.generalStatus = new GeneralStatus();
-		resultHeader.generalStatus.type = type;
-		return true;
-	}//setGeneralStatusType
-
-   	/**
-	 * Set the general status description. 
-	 * 
-	 * @param description holds the general status description.
-	 * @return whether the general status description is set successfully or not. 
-	 */
-	public boolean setGeneralStatusDescription(String description){
-		if(resultHeader.generalStatus == null) resultHeader.generalStatus = new GeneralStatus();
-		resultHeader.generalStatus.description = description;
-		return true;
-	}//setGeneralStatusDescription
-	
-	/**
-	 * Set the process statistics. 
-	 * 
-	 * @param processStatistics holds the process statistics. 
-	 * @return whether the process statistics is set successfully. 
-	 */
-	public boolean setProcessStatistics(ProcessStatistics processStatistics){
-		resultData.statistics = processStatistics;
-		return true;
-	}//setprocessStatistics
-	
-	/**
-	 * Set the statistics of all jobs. 
-	 * 
-	 * @param jobStatistics holds an array of jobStatistics with 
-	 * each member corresponding to one job. 
-	 * @return whether the job statistics are set successfully. 
-	 */
-	public boolean setJobStatistics(JobStatistics[] jobStatistics){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		if(resultData.statistics.jobs == null) resultData.statistics.jobs = new Jobs();
-		resultData.statistics.jobs.job = jobStatistics;
-		return true;
-	}//setJobStatistics
-	
-
-	/**
-	 * Set the current state. 
-	 * @param currentState holds the current state, which can be:
-	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting" or "noResponse".
-	 * @return whether the current state is set successfully.
-	 */
-	public boolean setCurrentState(String currentState){
-		if(!currentState.equals("busy") && 
-		   !currentState.equals("busyButAccepting") &&
-		   !currentState.equals("idle") &&
-		   !currentState.equals("idleButNotAccepting") &&
-		   !currentState.equals("noResponse")) return false;		 
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.currentState = currentState;
-		return true;
-	}//setCurrentState
-	
-
-	/**
-	 * Set the available disk space. 
-	 * @param availableDiskSpace holds the available disk space (in bytes). 
-	 * @return whether the available disk space is set successfully.
-	 */
-	public boolean setAvailableDiskSpace(double availableDiskSpace){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.availableDiskSpace = availableDiskSpace;
-		return true;
-	}//setAvailableDiskSpace
-	
-	/**
-	 * Set the available memory (in bytes). 
-	 * @param availableMemory holds the available memory. 
-	 * @return whether the available memory is set successfully.
-	 */
-	public boolean setAvailableMemory(double availableMemory){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.availableMemory = availableMemory;
-		return true;
-	}//setAvailableMemory
-	
-	
-	/**
-	 * Set the current job count. 
-	 * @param currentJobCount holds the current job count. 
-	 * @return whether the current job count is set successfully.
-	 */
-	public boolean setCurrentJobCount(int currentJobCount){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.currentJobCount = currentJobCount;
-		return true;
-	}//setCurrentJobCount
-	
-	/**
-	 * Set the total jobs received so far. 
-	 * @param totalJobsSoFar holds the total jobs received so far. 
-	 * @return whether the total jobs so far is set successfully.
-	 */
-	public boolean setTotalJobsSoFar(int totalJobsSoFar){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.totalJobsSoFar = totalJobsSoFar;
-		return true;
-	}//setTotalJobsSoFar
-	
-	/**
-	 * Set the time last job ended. 
-	 * @param timeLastJobEnded holds the time last job ended. 
-	 * @return whether the time last job ended is set successfully.
-	 */
-	public boolean setTimeLastJobEnded(GregorianCalendar timeLastJobEnded){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.timeLastJobEnded = timeLastJobEnded;
-		return true;
-	}//setTimeLastJobEnded
-	
-	/**
-	 * Set the time last job took. 
-	 * @param timeLastJobTook holds the time last job took (in seconds). 
-	 * @return whether the time last job took is set successfully.
-	 */
-	public boolean setTimeLastJobTook(double timeLastJobTook){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.timeLastJobTook = timeLastJobTook;
-		return true;
-	}//setTimeLastJobTook
-	
-	/**
-	 * Set the time the service started. 
-	 * @param timeServiceStarted holds the time the service started. 
-	 * @return whether the time the service started is set successfully.
-	 */
-	public boolean setTimeServiceStarted(GregorianCalendar timeServiceStarted){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.timeServiceStarted = timeServiceStarted;
-		return true;
-	}//setTimeServiceStarted
-	
-	/**
-	 * Set the service utilization. 
-	 * @param serviceUtilization holds the service utilization ([0, 1]). 
-	 * @return whether the time last job took is set successfully.
-	 */
-	public boolean setServiceUtilization(double serviceUtilization){
-		if(resultData.statistics == null) resultData.statistics = new ProcessStatistics();
-		resultData.statistics.serviceUtilization = serviceUtilization;
-		return true;
-	}//setServiceUtilization
-	
-	/**
-	 * set other results, with their names (required), descriptions (optional) and values (optional). 
-	 * 
-	 * @param names holds the names of the other results; it is required.  
-	 * @param descriptions holds the descriptions of the other results; null if none. 
-	 * @param values holds the values of the other results; null if none. 
-	 * @return whether the other anlysis information is set successfully. 
-	 */
-	public boolean setOtherResults(String[] names, String[] descriptions, String[] values){
-		if(names == null) return false;
-		if(descriptions != null && descriptions.length != names.length) return false;
-		if(values != null && values.length != names.length) return false;
-		int n = names.length;
-		resultData.other = new OtherResult[n];
-		for(int i = 0; i < n; i++){
-			resultData.other[i] = new OtherResult();
-		}
-		for(int i = 0; i < n; i++){
-			resultData.other[i].name = names[i];
-		}
-		if(descriptions != null){
-			for(int i = 0; i < n; i++){
-				resultData.other[i].description = descriptions[i];
-			}	
-		}
-		if(values != null){
-			for(int i = 0; i < n; i++){
-				resultData.other[i].value = values[i];
-			}	
-		}
-		return true;
-	}//setOtherResults
-	
-	/**
-	 * Set the variable number. 
-	 * 
-	 * @param variableNumber holds the number of variables
-	 * @return whether the variable number is set successfully or not. 
-	 */
-	public boolean setVariableNumber(int variableNumber){
-		if(variableNumber <= 0){
-			m_iVariableNumber = -1;
-			return true;
-		}
-		if(resultData.optimization == null) resultData.optimization = new OptimizationResult();
-		resultData.optimization.numberOfVariables = variableNumber;
-		m_iVariableNumber = variableNumber;
-		return true;
-	}//setVariableNumber
-
-	/**
-	 * Set the objective number. 
-	 * 
-	 * @param objectiveNumber holds the number of objectives
-	 * @return whether the objective number is set successfully or not. 
-	 */
-	public boolean setObjectiveNumber(int objectiveNumber){
-		if(objectiveNumber < 0){
-			m_iObjectiveNumber = -1;
-			return true;
-		}
-		if(resultData.optimization == null) resultData.optimization = new OptimizationResult();
-		resultData.optimization.numberOfObjectives = objectiveNumber;
-		m_iObjectiveNumber = objectiveNumber;
-		return true;
-	}//setObjectiveNumber
-
-	/**
-	 * Set the constraint number. 
-	 * 
-	 * @param constraintNumber holds the number of constraints
-	 * @return whether the constraint number is set successfully or not. 
-	 */
-	public boolean setConstraintNumber(int constraintNumber){
-		if(constraintNumber < 0){
-			m_iConstraintNumber = -1;
-			return true;
-		}
-		if(resultData.optimization == null) resultData.optimization = new OptimizationResult();
-		resultData.optimization.numberOfConstraints = constraintNumber;
-		m_iConstraintNumber = constraintNumber;
-		return true;
-	}//setConstraintNumber
-
-	
-	/**
-	 * set the number of solutions. This method must be called before setting other optimization solution 
-	 * related results.  
-	 * Before this method is called, the setVariableNumber(int), setObjectiveNumber(int), setConstraintNumber(int) methods 
-	 * have to be called first. 
-	 * 
-	 * @param solutionNumber holds the number of solutions to set. 
-	 * @return whether the solution number is set successfully.   
-	 * @see #setVariableNumber(int)
-	 * @see #setObjectiveNumber(int)
-	 * @see #setConstraintNumber(int)
-	 */
-	public boolean setSolutionNumber(int solutionNumber){
-		if(getVariableNumber() <= 0) return true;
-		if(getObjectiveNumber() < 0) return true;
-		if(getConstraintNumber() < 0) return true;
-		if(solutionNumber < 0) return true; 
-		if(resultData.optimization == null) resultData.optimization = new OptimizationResult();
-		resultData.optimization.numberOfSolutions = solutionNumber;
-		if(solutionNumber == 0) return true;
-		resultData.optimization.solution = new OptimizationSolution[solutionNumber];
-		for(int i = 0; i < solutionNumber; i++){
-			resultData.optimization.solution[i] = new OptimizationSolution();
-		}
-		return true;
-	}//setSolutionNumber
-	
+		
 	/**
 	 * Set the [i]th optimization solution, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1264,11 +1526,11 @@ public class OSResult {
 	public boolean setSolution(int solIdx, OptimizationSolution solution){
 		int nSols = this.getSolutionNumber();
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		resultData.optimization.solution[solIdx] = solution;
+		optimization.solution[solIdx] = solution;
 		return true;
 	}//setSolution	
 	
@@ -1286,16 +1548,16 @@ public class OSResult {
 	 */
 	public boolean setSolutionStatus(int solIdx, OptimizationSolutionStatus status){
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		resultData.optimization.solution[solIdx].status = status;
+		optimization.solution[solIdx].status = status;
 		return true;
 	}//setSolutionStatus
 	
@@ -1319,16 +1581,16 @@ public class OSResult {
 	 */
 	public boolean setSolutionStatus(int solIdx, String type, String description, OptimizationSolutionSubstatus[] subStatuses){
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		resultData.optimization.solution[solIdx].status = new OptimizationSolutionStatus();
+		optimization.solution[solIdx].status = new OptimizationSolutionStatus();
 		if(!type.equals("unbounded") && 
 		   !type.equals("globallyOptimal") && 
 		   !type.equals("locallyOptimal") && 
@@ -1340,9 +1602,9 @@ public class OSResult {
 		   !type.equals("unsure") && 
 		   !type.equals("error") && 
 		   !type.equals("other")) return false;
-		resultData.optimization.solution[solIdx].status.type = type;
-		resultData.optimization.solution[solIdx].status.description = description;
-		resultData.optimization.solution[solIdx].status.substatus = subStatuses;
+		optimization.solution[solIdx].status.type = type;
+		optimization.solution[solIdx].status.description = description;
+		optimization.solution[solIdx].status.substatus = subStatuses;
 		return true;
 	}//setSolutionStatus
 	
@@ -1358,16 +1620,16 @@ public class OSResult {
 	 */
 	public boolean setSolutionMessage(int solIdx, String solutionMessage){
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		resultData.optimization.solution[solIdx].message = solutionMessage;
+		optimization.solution[solIdx].message = solutionMessage;
 		return true;
 	}//setSolutionMessage	
 	
@@ -1385,17 +1647,17 @@ public class OSResult {
 	 */
 	public boolean setSolutionObjectiveIndex(int solIdx, int objectiveIdx){
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
 		if(objectiveIdx >= 0) return false;
-		resultData.optimization.solution[solIdx].objectiveIdx = objectiveIdx;
+		optimization.solution[solIdx].targetObjectiveIdx = objectiveIdx;
 		return true;		
 	}//setSolutionObjectiveIndex
 	
@@ -1413,31 +1675,31 @@ public class OSResult {
 		if(iNumberOfVariables <= 0) return false;
 		if(x != null && x.length != iNumberOfVariables) return false;
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		if(resultData.optimization.solution[solIdx].variables == null){
-			resultData.optimization.solution[solIdx].variables = new VariableSolution();
+		if(optimization.solution[solIdx].variables == null){
+			optimization.solution[solIdx].variables = new VariableSolution();
 		}
-		if(resultData.optimization.solution[solIdx].variables.values == null){
-			resultData.optimization.solution[solIdx].variables.values = new VariableValues();
+		if(optimization.solution[solIdx].variables.values == null){
+			optimization.solution[solIdx].variables.values = new VariableValues();
 		}
 		if(x == null){
-			resultData.optimization.solution[solIdx].variables.values.var = null;
+			optimization.solution[solIdx].variables.values.var = null;
 			return true;
 		}
 		int iVars = 0;
 		for(int i = 0; i < x.length; i++){
 			if(x[i] != 0) iVars++;
 		}
-		resultData.optimization.solution[solIdx].variables.values.var = new VarValue[iVars];
-		VarValue[] var = resultData.optimization.solution[solIdx].variables.values.var;
+		optimization.solution[solIdx].variables.values.var = new VarValue[iVars];
+		VarValue[] var = optimization.solution[solIdx].variables.values.var;
 		for(int i = 0; i < iVars; i++) var[i] = new VarValue();
 		int j = 0;
 		for(int i = 0; i < x.length; i++){
@@ -1465,23 +1727,23 @@ public class OSResult {
 		if(iNumberOfVariables <= 0) return false;
 		if(x != null && x.length != iNumberOfVariables) return false;
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		if(resultData.optimization.solution[solIdx].variables == null){
-			resultData.optimization.solution[solIdx].variables = new VariableSolution();
+		if(optimization.solution[solIdx].variables == null){
+			optimization.solution[solIdx].variables = new VariableSolution();
 		}
-		if(resultData.optimization.solution[solIdx].variables.valuesString == null){
-			resultData.optimization.solution[solIdx].variables.valuesString = new VariableStringValues();
+		if(optimization.solution[solIdx].variables.valuesString == null){
+			optimization.solution[solIdx].variables.valuesString = new VariableStringValues();
 		}
-		resultData.optimization.solution[solIdx].variables.valuesString.var = new VarStringValue[iNumberOfVariables];
-		VarStringValue[] var = resultData.optimization.solution[solIdx].variables.valuesString.var;
+		optimization.solution[solIdx].variables.valuesString.var = new VarStringValue[iNumberOfVariables];
+		VarStringValue[] var = optimization.solution[solIdx].variables.valuesString.var;
 		for(int i = 0; i < iNumberOfVariables; i++) var[i] = new VarStringValue();
 		for(int i = 0; i < iNumberOfVariables; i++){
 			var[i].idx = i;
@@ -1509,19 +1771,19 @@ public class OSResult {
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return false;
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		if(resultData.optimization.solution[solIdx].variables == null){
-			resultData.optimization.solution[solIdx].variables = new VariableSolution();
+		if(optimization.solution[solIdx].variables == null){
+			optimization.solution[solIdx].variables = new VariableSolution();
 		}
-		resultData.optimization.solution[solIdx].variables.other = otherVariableResults;
+		optimization.solution[solIdx].variables.other = otherVariableResults;
 		return true;		
 	}//setOtherVariableResults
 	
@@ -1546,27 +1808,27 @@ public class OSResult {
 		if(objectiveValues == null) return false;
 		if(objectiveValues.length != iNumberOfObjectives) return false;
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		if(resultData.optimization.solution[solIdx].objectives == null){
-			resultData.optimization.solution[solIdx].objectives = new ObjectiveSolution();
+		if(optimization.solution[solIdx].objectives == null){
+			optimization.solution[solIdx].objectives = new ObjectiveSolution();
 		}
-		if(resultData.optimization.solution[solIdx].objectives.values == null){
-			resultData.optimization.solution[solIdx].objectives.values = new ObjectiveValues();
+		if(optimization.solution[solIdx].objectives.values == null){
+			optimization.solution[solIdx].objectives.values = new ObjectiveValues();
 		}
 		int iObjs = 0;
 		for(int i = 0; i < objectiveValues.length; i++){
 			if(!Double.isNaN(objectiveValues[i])) iObjs++;
 		}
-		resultData.optimization.solution[solIdx].objectives.values.obj = new ObjValue[iObjs];
-		ObjValue[] obj = resultData.optimization.solution[solIdx].objectives.values.obj;
+		optimization.solution[solIdx].objectives.values.obj = new ObjValue[iObjs];
+		ObjValue[] obj = optimization.solution[solIdx].objectives.values.obj;
 		for(int i = 0; i < iObjs; i++) obj[i] = new ObjValue();
 		int j = 0;
 		for(int i = 0; i < objectiveValues.length; i++){
@@ -1598,19 +1860,19 @@ public class OSResult {
 		int iNumberOfObjectives = this.getObjectiveNumber();
 		if(iNumberOfObjectives <= 0) return false;
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		if(resultData.optimization.solution[solIdx].objectives == null){
-			resultData.optimization.solution[solIdx].objectives = new ObjectiveSolution();
+		if(optimization.solution[solIdx].objectives == null){
+			optimization.solution[solIdx].objectives = new ObjectiveSolution();
 		}
-		resultData.optimization.solution[solIdx].objectives.other = otherObjectiveResults;
+		optimization.solution[solIdx].objectives.other = otherObjectiveResults;
 		return true;		
 	}//setOtherObjectiveResults
 	
@@ -1629,31 +1891,31 @@ public class OSResult {
 		if(iNumberOfConstraints == 0) return true;
 		if(values != null && values.length != iNumberOfConstraints) return false;
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		if(resultData.optimization.solution[solIdx].constraints == null){
-			resultData.optimization.solution[solIdx].constraints = new ConstraintSolution();
+		if(optimization.solution[solIdx].constraints == null){
+			optimization.solution[solIdx].constraints = new ConstraintSolution();
 		}
-		if(resultData.optimization.solution[solIdx].constraints.dualValues == null){
-			resultData.optimization.solution[solIdx].constraints.dualValues = new DualVariableValues();
+		if(optimization.solution[solIdx].constraints.dualValues == null){
+			optimization.solution[solIdx].constraints.dualValues = new DualVariableValues();
 		}		
 		if(values == null){
-			resultData.optimization.solution[solIdx].constraints.dualValues.con = null;
+			optimization.solution[solIdx].constraints.dualValues.con = null;
 			return true;
 		}
 		int iCons = 0;
 		for(int i = 0; i < values.length; i++){
 			if(values[i] != 0) iCons++;
 		}
-		resultData.optimization.solution[solIdx].constraints.dualValues.con = new DualVarValue[iCons];
-		DualVarValue[] con = resultData.optimization.solution[solIdx].constraints.dualValues.con;
+		optimization.solution[solIdx].constraints.dualValues.con = new DualVarValue[iCons];
+		DualVarValue[] con = optimization.solution[solIdx].constraints.dualValues.con;
 		for(int i = 0; i < iCons; i++) con[i] = new DualVarValue();
 		int j = 0;
 		for(int i = 0; i < values.length; i++){
@@ -1684,19 +1946,19 @@ public class OSResult {
 		int iNumberOfConstraints = this.getConstraintNumber();
 		if(iNumberOfConstraints <= 0) return false;
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		if(resultData.optimization.solution[solIdx].constraints == null){
-			resultData.optimization.solution[solIdx].constraints = new ConstraintSolution();
+		if(optimization.solution[solIdx].constraints == null){
+			optimization.solution[solIdx].constraints = new ConstraintSolution();
 		}
-		resultData.optimization.solution[solIdx].constraints.other = otherConstraintResults;
+		optimization.solution[solIdx].constraints.other = otherConstraintResults;
 		return true;		
 	}//setOtherConstraintResults
 
@@ -1712,20 +1974,23 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setOtherOptimizationResults(int solIdx, OtherOptimizationResult[] otherOptimizationResults){
+	public boolean setOtherOptimizationSolutionResults(int solIdx, OtherSolutionResult[] otherOptimizationSolutionResults){
 		int nSols = this.getSolutionNumber();
-		if(resultData.optimization == null) return false;
+		if(optimization == null) return false;
 		if(nSols <= 0) return false;
-		if(resultData.optimization == null) return false;
-		if(resultData.optimization.solution == null || 
-		   resultData.optimization.solution.length <= 0 || 
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+		   optimization.solution.length <= 0 || 
 		   solIdx < 0 || solIdx >=  nSols) return false;
-		if(resultData.optimization.solution[solIdx] == null){
-			resultData.optimization.solution[solIdx] = new OptimizationSolution();
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
 		}
-		resultData.optimization.solution[solIdx].other = otherOptimizationResults;
+		if(optimization.solution[solIdx].otherSolutionResults == null){
+			optimization.solution[solIdx].otherSolutionResults = new SolutionResults();
+		}
+		optimization.solution[solIdx].otherSolutionResults.otherSolutionResult = otherOptimizationSolutionResults;
 		return true;		
-	}//setOtherOptimizationResults
+	}//setOtherOptimizationSolutionResults
 
 	/**
 	 * Set the optimization analysis. 
@@ -1735,8 +2000,8 @@ public class OSResult {
 	 * @see org.optimizationservices.oscommon.localinterface.OSAnalysis
 	 */	
 	public boolean setOSAnalysis(OSAnalysis osAnalysis){
-		if(resultData.optimization == null) resultData.optimization = new OptimizationResult();
-		resultData.optimization.osal = osAnalysis;
+		if(optimization == null) optimization = new OptimizationResult();
+		optimization.osal = osAnalysis;
 		return false;
 	}//setOSAnalysis
 	

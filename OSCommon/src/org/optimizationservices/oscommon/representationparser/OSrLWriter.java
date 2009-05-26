@@ -9,10 +9,13 @@ import java.util.Vector;
 
 import org.optimizationservices.oscommon.datastructure.osgeneral.JobDependencies;
 import org.optimizationservices.oscommon.datastructure.osprocess.JobStatistics;
-import org.optimizationservices.oscommon.datastructure.osprocess.ProcessStatistics;
+import org.optimizationservices.oscommon.datastructure.osresult.CPUNumber;
+import org.optimizationservices.oscommon.datastructure.osresult.CPUSpeed;
+import org.optimizationservices.oscommon.datastructure.osresult.DiskSpace;
 import org.optimizationservices.oscommon.datastructure.osresult.DualVarValue;
 import org.optimizationservices.oscommon.datastructure.osresult.GeneralStatus;
 import org.optimizationservices.oscommon.datastructure.osresult.GeneralSubstatus;
+import org.optimizationservices.oscommon.datastructure.osresult.MemorySize;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjValue;
 import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolution;
 import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus;
@@ -21,7 +24,7 @@ import org.optimizationservices.oscommon.datastructure.osresult.OtherConResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult;
-import org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult;
 import org.optimizationservices.oscommon.datastructure.osresult.VarStringValue;
@@ -44,42 +47,32 @@ import org.w3c.dom.ProcessingInstruction;
  * @since OS 1.0
  */
 public class OSrLWriter extends OSgLWriter{
-	
+
 	/**
 	 * m_eOSrL holds the OSrL root element.
 	 */
 	protected Element m_eOSrL = null;
-	
-	/**
-	 * m_eResultHeader holds the 1st child element resultHeader of root element OSrL.
-	 */
-	protected Element m_eResultHeader = null;
-	
-	/**
-	 * m_eResultData holds the 2nd child element analyisisData of root element OSrL.
-	 */
-	protected Element m_eResultData = null;
-	
+
 	/**
 	 * m_iVariableNumber holds the variable number. 
 	 */
 	private int m_iVariableNumber = -1;
-	
+
 	/**
 	 * m_iObjectiveNumber holds the objective number. 
 	 */
 	private int m_iObjectiveNumber = -1;
-	
+
 	/**
 	 * m_iConstraintNumber holds the constraint number. 
 	 */
 	private int m_iConstraintNumber = -1;
-	
+
 	/**
 	 * m_iSolutionNumber holds the solution number. 
 	 */
 	private int m_iSolutionNumber = -1;
-	
+
 	/**
 	 * constructor. 
 	 *
@@ -88,13 +81,13 @@ public class OSrLWriter extends OSgLWriter{
 		m_document = XMLUtil.createNewDocument();		
 		if(OSParameter.XSLT_LOCATION != null && OSParameter.XSLT_LOCATION.length() > 0){
 			ProcessingInstruction xsltPI = m_document.createProcessingInstruction("xml-stylesheet",
-	           "type=\"text/xsl\" href = \"" + OSParameter.XSLT_LOCATION + "OSrL.xslt\"");
+					"type=\"text/xsl\" href = \"" + OSParameter.XSLT_LOCATION + "OSrL.xslt\"");
 			m_document.appendChild(xsltPI);     
 		}
-		m_eOSrL = createOSrLRoot();
+		m_eOSrL = XMLUtil.createOSxLRootElement(m_document, "osrl");		
 		m_document.appendChild(m_eOSrL);
 	}//constructor
-	
+
 	/**
 	 * set the OSResult, a standard os result interface. 
 	 * @param osResult holds the standard os result interface. 
@@ -102,70 +95,53 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setOSResult(OSResult osResult) throws Exception{
 		if(!setGeneralStatus(osResult.getGeneralStatus())){ 
-   			throw new Exception("setGeneralStatus Unsuccessful");
+			throw new Exception("setGeneralStatus Unsuccessful");
 		}
 		if(!setServiceURI(osResult.getServiceURI())){ 
-   			throw new Exception("setServiceURI Unsuccessful");
+			throw new Exception("setServiceURI Unsuccessful");
 		}
 		if(!setServiceName(osResult.getServiceName())){ 
-   			throw new Exception("setServiceName Unsuccessful");
+			throw new Exception("setServiceName Unsuccessful");
 		}
 		if(!setInstanceName(osResult.getInstanceName())){ 
-   			throw new Exception("setInstanceName Unsuccessful");
+			throw new Exception("setInstanceName Unsuccessful");
 		}
 		if(!setJobID(osResult.getJobID())){ 
-   			throw new Exception("setJobID Unsuccessful");
+			throw new Exception("setJobID Unsuccessful");
 		}
-		if(!setResultTime(osResult.getResultTime())){ 
-   			throw new Exception("setResultTime Unsuccessful");
+		if(!setResultTimeStamp(osResult.getResultTimeStamp())){ 
+			throw new Exception("setResultTime Unsuccessful");
 		}
 		if(!setGeneralMessage(osResult.getGeneralMessage())){ 
-   			throw new Exception("setGeneralMessage Unsuccessful");
-		}
-		if(!setProcessStatistics(osResult.getProcessStatistics())){ 
-   			throw new Exception("setProcessStatistics Unsuccessful");
-		}
-		if(osResult.resultData.other != null && osResult.resultData.other.length > 0){
-			int n = osResult.resultData.other.length;
-			String[] msNames = new String[n];
-			String[] msValues = new String[n];
-			String[] msDescriptions = new String[n];
-			for(int i = 0; i < n; i++){
-				msNames[i] = osResult.resultData.other[i].name;
-				msValues[i] = osResult.resultData.other[i].value;
-				msDescriptions[i] = osResult.resultData.other[i].description;
-			}
-			if(!setOtherResults(msNames, msValues, msDescriptions)){
-				throw new Exception("setOtherResults Unsuccessful");
-			}			
+			throw new Exception("setGeneralMessage Unsuccessful");
 		}
 		int iSolutionNumber = osResult.getSolutionNumber();
 		if(iSolutionNumber >= 0){
 			if(!setVariableNumber(osResult.getVariableNumber())){ 
-	   			throw new Exception("setVariableNumber Unsuccessful");
+				throw new Exception("setVariableNumber Unsuccessful");
 			}
 			if(!setObjectiveNumber(osResult.getObjectiveNumber())){ 
-	   			throw new Exception("setObjectiveNumber Unsuccessful");
+				throw new Exception("setObjectiveNumber Unsuccessful");
 			}
 			if(!setConstraintNumber(osResult.getConstraintNumber())){ 
-	   			throw new Exception("setConstraintNumber Unsuccessful");
+				throw new Exception("setConstraintNumber Unsuccessful");
 			}		
 			if(!setSolutionNumber(osResult.getSolutionNumber())){ 
-	   			throw new Exception("setVariableAnalysis Unsuccessful");
+				throw new Exception("setVariableAnalysis Unsuccessful");
 			}
 			for(int i = 0; i < iSolutionNumber; i++){
 				if(!setSolution(i, osResult.getSolution(i))){ 
-		   			throw new Exception("setSolution Unsuccessful");
+					throw new Exception("setSolution Unsuccessful");
 				}
 			}
 			if(!setOSAnalysis(osResult.getOSAnalysis())){ 
-	   			throw new Exception("setOSAnalysis Unsuccessful");
+				throw new Exception("setOSAnalysis Unsuccessful");
 			}			
 		}
-   		return true;
+		return true;
 	}//setOSResult
-	
-   	/**
+
+	/**
 	 * Set the general status
 	 * 
 	 * @param status holds the general status.
@@ -173,13 +149,21 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setGeneralStatus(GeneralStatus status){
 		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
 			if(status != null){
-				Element eStatus = (Element)XMLUtil.findChildNode(m_eResultHeader, "generalStatus");
+				Element eStatus = (Element)XMLUtil.findChildNode(eGeneral, "generalStatus");
 				if(eStatus != null){
-					m_eResultHeader.removeChild(eStatus);
+					eGeneral.removeChild(eStatus);
 				}
 				eStatus = m_document.createElement("generalStatus");
 				if(status.type != null && status.type.length() > 0){
+					if(!status.type.equals("normal") && !status.type.equals("warning") && !status.type.equals("error")){
+						return false;
+					}
 					eStatus.setAttribute("type", status.type);					
 				}
 				else{
@@ -190,6 +174,8 @@ public class OSrLWriter extends OSgLWriter{
 				}
 				if(status.substatus != null && status.substatus.length > 0){
 					int iSubstatus = status.substatus.length;
+					eStatus.setAttribute("numberOfSubstatuses", iSubstatus+"");
+
 					for(int i = 0; i < iSubstatus; i++){
 						Element eSubstatus =  m_document.createElement("substatus");
 						if(status.substatus[i].name != null && status.substatus[i].name.length() > 0){
@@ -204,10 +190,13 @@ public class OSrLWriter extends OSgLWriter{
 						eStatus.appendChild(eSubstatus);
 					}					
 				}
-				m_eResultHeader.insertBefore(eStatus, m_eResultHeader.getFirstChild());
+				else{
+					eStatus.setAttribute("numberOfSubstatuses", "0");
+				}
+				eGeneral.insertBefore(eStatus, eGeneral.getFirstChild());
 			}
 			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "generalStatus");
+				XMLUtil.removeChildrenByName(eGeneral, "generalStatus");
 			}
 		}
 		catch(Exception e){
@@ -216,8 +205,8 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setGeneralStatus
-	
-   	/**
+
+	/**
 	 * Set the general status type, which can be: 
 	 * success, error, warning. 
 	 * 
@@ -226,17 +215,22 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setGeneralStatusType(String type){
 		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
 			if(type != null && type.length() > 0){
 				if(!type.equals("success") && !type.equals("warning") && !type.equals("error")) return false;
-				Element eStatus = (Element)XMLUtil.findChildNode(m_eResultHeader, "generalStatus");
+				Element eStatus = (Element)XMLUtil.findChildNode(eGeneral, "generalStatus");
 				if(eStatus == null){
 					eStatus = m_document.createElement("generalStatus");
-					m_eResultHeader.insertBefore(eStatus, m_eResultHeader.getFirstChild());
+					eGeneral.insertBefore(eStatus, eGeneral.getFirstChild());
 				}
 				eStatus.setAttribute("type", type);					
 			}
 			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "generalStatus");
+				XMLUtil.removeChildrenByName(eGeneral, "generalStatus");
 			}
 		}
 		catch(Exception e){
@@ -246,7 +240,7 @@ public class OSrLWriter extends OSgLWriter{
 		return true;
 	}//setGeneralStatusType
 
-   	/**
+	/**
 	 * Set the general status description. 
 	 * 
 	 * @param description holds the general status description.
@@ -254,11 +248,16 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setGeneralStatusDescription(String description){
 		try{
-			Element eStatus = (Element)XMLUtil.findChildNode(m_eResultHeader, "generalStatus");
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
+			Element eStatus = (Element)XMLUtil.findChildNode(eGeneral, "generalStatus");
 			if(eStatus == null){
-					eStatus = m_document.createElement("generalStatus");
-					m_eResultHeader.insertBefore(eStatus, m_eResultHeader.getFirstChild());
-				}
+				eStatus = m_document.createElement("generalStatus");
+				eGeneral.insertBefore(eStatus, eGeneral.getFirstChild());
+			}
 			if(description != null && description.length() > 0){
 				eStatus.setAttribute("description", description);					
 			}
@@ -272,198 +271,8 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setGeneralStatusDescription
-	
-   	/**
-	 * Set service uri.
-	 * 
-	 * @param serviceURI holds the uri of the service. 
-	 * @return whether the service uri is set successfully. 
-	 */
-	public boolean setServiceURI(String serviceURI){
-		try{
-			Node nodeRef = null;
-			if(serviceURI != null && serviceURI.length() > 0){
-				Element eServiceURI = (Element)XMLUtil.findChildNode(m_eResultHeader, "serviceURI");
-				if(eServiceURI == null){
-					eServiceURI = m_document.createElement("serviceURI");					
-					eServiceURI.appendChild(m_document.createTextNode(serviceURI));
-					nodeRef = XMLUtil.findChildNode(m_eResultHeader, "serviceName");
-					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(m_eResultHeader, "instanceName");
-						if(nodeRef == null){
-							nodeRef = XMLUtil.findChildNode(m_eResultHeader, "jobID");
-							if(nodeRef == null){
-								nodeRef = XMLUtil.findChildNode(m_eResultHeader, "time");
-								if(nodeRef == null){
-									nodeRef = XMLUtil.findChildNode(m_eResultHeader, "message");
-								}
-							}
-						}
-					}
-					m_eResultHeader.insertBefore(eServiceURI, nodeRef);
-				}
-				else{
-					XMLUtil.setElementValue(eServiceURI, serviceURI);
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "serviceURI");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}//setServiceURI
-	
-  	/**
-	 * Set service name.
-	 * 
-	 * @param serviceName holds the name of the service. 
-	 * @return whether the service name is set successfully. 
-	 */
-	public boolean setServiceName(String serviceName){
-		try{
-			Node nodeRef = null;
-			if(serviceName != null && serviceName.length() > 0){
-				Element eServiceName = (Element)XMLUtil.findChildNode(m_eResultHeader, "serviceName");
-				if(eServiceName == null){
-					eServiceName = m_document.createElement("serviceName");					
-					eServiceName.appendChild(m_document.createTextNode(serviceName));
-					nodeRef = XMLUtil.findChildNode(m_eResultHeader, "instanceName");
-					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(m_eResultHeader, "jobID");
-						if(nodeRef == null){
-							nodeRef = XMLUtil.findChildNode(m_eResultHeader, "time");
-							if(nodeRef == null){
-								nodeRef = XMLUtil.findChildNode(m_eResultHeader, "message");
-							}
-						}
-					}
-					m_eResultHeader.insertBefore(eServiceName, nodeRef);
-				}
-				else{
-					XMLUtil.setElementValue(eServiceName, serviceName);
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "serviceName");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}//setServiceName
-	
-   	/**
-	 * Set instance name.
-	 * 
-	 * @param instanceName holds the name of the instance. 
-	 * @return whether the instance name is set successfully. 
-	 */
-	public boolean setInstanceName(String instanceName){
-		try{
-			Node nodeRef = null;
-			if(instanceName != null && instanceName.length() > 0){
-				Element eInstanceName = (Element)XMLUtil.findChildNode(m_eResultHeader, "instanceName");
-				if(eInstanceName == null){
-					eInstanceName = m_document.createElement("instanceName");					
-					eInstanceName.appendChild(m_document.createTextNode(instanceName));
-					nodeRef = XMLUtil.findChildNode(m_eResultHeader, "jobID");
-					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(m_eResultHeader, "time");
-						if(nodeRef == null){
-							nodeRef = XMLUtil.findChildNode(m_eResultHeader, "message");
-						}
-					}
-					m_eResultHeader.insertBefore(eInstanceName, nodeRef);
-				}
-				else{
-					XMLUtil.setElementValue(eInstanceName, instanceName);
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "instanceName");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}//setInstanceName
-	
-   	/**
-	 * Set job id.
-	 * 
-	 * @param jobID holds the job id. 
-	 * @return whether the job id is set successfully. 
-	 */
-	public boolean setJobID(String jobID){
-		try{
-			Node nodeRef = null;
-			if(jobID != null && jobID.length() > 0){
-				Element eJobID = (Element)XMLUtil.findChildNode(m_eResultHeader, "jobID");
-				if(eJobID == null){
-					eJobID = m_document.createElement("jobID");					
-					eJobID.appendChild(m_document.createTextNode(jobID));
-					nodeRef = XMLUtil.findChildNode(m_eResultHeader, "time");
-					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(m_eResultHeader, "message");
-					}
-					m_eResultHeader.insertBefore(eJobID, nodeRef);
-				}
-				else{
-					XMLUtil.setElementValue(eJobID, jobID);
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "jobID");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}//setJobID
-	
-   	/**
-	 * Set time of the result.
-	 * 
-	 * @param time holds the time of the result.
-	 * @return whether result time is set successfully. 
-	 */
-	public boolean setResultTime(GregorianCalendar time){
-		try{
-			Node nodeRef = null;
-			if(time != null && time.get(GregorianCalendar.YEAR) > 1970){
-				Element eTime = (Element)XMLUtil.findChildNode(m_eResultHeader, "time");
-				if(eTime == null){
-					eTime = m_document.createElement("time");					
-					eTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(time)));
-					nodeRef = XMLUtil.findChildNode(m_eResultHeader, "message");
-					m_eResultHeader.insertBefore(eTime, nodeRef);
-				}
-				else{
-					XMLUtil.setElementValue(eTime, XMLUtil.createXSDateTime(time));
-				}
-			}
-			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "time");
-			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}//setResultTime
-	
-   	/**
+
+	/**
 	 * Set the general message. 
 	 * 
 	 * @param message holds the general message. 
@@ -471,20 +280,24 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setGeneralMessage(String message){
 		try{
-			Node nodeRef = null;
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
 			if(message != null && message.length() > 0){
-				Element eMessage = (Element)XMLUtil.findChildNode(m_eResultHeader, "message");
+				Element eMessage = (Element)XMLUtil.findChildNode(eGeneral, "message");
 				if(eMessage == null){
 					eMessage = m_document.createElement("message");					
 					eMessage.appendChild(m_document.createTextNode(message));
-					m_eResultHeader.insertBefore(eMessage, nodeRef);
+					eGeneral.appendChild(eMessage);
 				}
 				else{
 					XMLUtil.setElementValue(eMessage, message);
 				}
 			}
 			else{
-				XMLUtil.removeChildrenByName(m_eResultHeader, "message");
+				XMLUtil.removeChildrenByName(eGeneral, "message");
 			}
 		}
 		catch(Exception e){
@@ -494,141 +307,686 @@ public class OSrLWriter extends OSgLWriter{
 		return true;
 	}//setGeneralMessage
 
-	
+
 	/**
-	 * Set the process statistics. 
+	 * Set service uri.
 	 * 
-	 * @param processStatistics holds the process statistics. 
-	 * @return whether the process statistics is set successfully. 
+	 * @param serviceURI holds the uri of the service. 
+	 * @return whether the service uri is set successfully. 
 	 */
-	public boolean setProcessStatistics(ProcessStatistics processStatistics){
-		if(processStatistics == null){
-			XMLUtil.removeChildrenByName(m_eResultData, "statistics");
-			return true;
-		}
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics != null){
-			XMLUtil.removeChildrenByName(m_eResultData, "statistics");
-		}
-		eStatistics = m_document.createElement("statistics");
-		m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		if(processStatistics.currentState != null && processStatistics.currentState.length() > 0){
-			Element eCurrentState = m_document.createElement("currentState");
-			eCurrentState.appendChild(m_document.createTextNode(processStatistics.currentState));	
-			eStatistics.appendChild(eCurrentState);
-		}
-		if(processStatistics.availableDiskSpace > 0){
-			Element eAvailableDiskSpace = m_document.createElement("availableDiskSpace");
-			if(Double.isInfinite(processStatistics.availableDiskSpace)){
-				eAvailableDiskSpace.appendChild(m_document.createTextNode("INF"));	
+	public boolean setServiceURI(String serviceURI){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
 			}
-			else{
-				eAvailableDiskSpace.appendChild(m_document.createTextNode(processStatistics.availableDiskSpace + ""));	
-			}
-			eStatistics.appendChild(eAvailableDiskSpace);
-		}
-		if(processStatistics.availableMemory > 0){
-			Element eAvailableMemory = m_document.createElement("availableMemory");
-			if(Double.isInfinite(processStatistics.availableMemory)){
-				eAvailableMemory.appendChild(m_document.createTextNode("INF"));	
-			}
-			else{
-				eAvailableMemory.appendChild(m_document.createTextNode(processStatistics.availableMemory + ""));	
-			}
-			eStatistics.appendChild(eAvailableMemory);
-		}
-		if(processStatistics.currentJobCount >= 0){
-			Element eCurrentJobCount = m_document.createElement("currentJobCount");
-			eCurrentJobCount.appendChild(m_document.createTextNode(processStatistics.currentJobCount + ""));	
-			eStatistics.appendChild(eCurrentJobCount);
-		}
-		if(processStatistics.totalJobsSoFar >= 0){
-			Element eTotalJobsSoFar = m_document.createElement("totalJobsSoFar");
-			eTotalJobsSoFar.appendChild(m_document.createTextNode(processStatistics.totalJobsSoFar + ""));	
-			eStatistics.appendChild(eTotalJobsSoFar);
-		}
-		if(processStatistics.timeLastJobEnded !=  null){
-			Element eTimeLastJobEnded = m_document.createElement("timeLastJobEnded");
-			eTimeLastJobEnded.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(processStatistics.timeLastJobEnded)));	
-			eStatistics.appendChild(eTimeLastJobEnded);
-		}
-		if(processStatistics.timeLastJobTook >= 0){
-			Element eTimeLastJobTook = m_document.createElement("timeLastJobTook");
-			if(Double.isInfinite(processStatistics.timeLastJobTook)){
-				eTimeLastJobTook.appendChild(m_document.createTextNode("INF"));	
-			}
-			else{
-				eTimeLastJobTook.appendChild(m_document.createTextNode(processStatistics.timeLastJobTook + ""));	
-			}
-			eStatistics.appendChild(eTimeLastJobTook);
-		}
-		if(processStatistics.timeServiceStarted !=  null){
-			Element eTimeServiceStarted = m_document.createElement("timeServiceStarted");
-			eTimeServiceStarted.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(processStatistics.timeServiceStarted)));	
-			eStatistics.appendChild(eTimeServiceStarted);
-		}
-		
-		if(processStatistics.jobs != null && processStatistics.jobs.job != null && processStatistics.jobs.job.length > 0){
-			Element eJobs = m_document.createElement("jobs");
-			int iJobs = processStatistics.jobs.job.length;
-			for(int i = 0; i < iJobs; i++){
-				if(processStatistics.jobs.job[i] != null){
-					Element eJob = m_document.createElement("job");
-					JobStatistics job = processStatistics.jobs.job[i];
-					if(job.jobID != null && job.jobID.length() > 0){
-						eJob.setAttribute("jobID", job.jobID);
-					}
-					else{
-						return false;
-					}
-					if(job.state != null && job.state.length() > 0 && !job.state.equals("unknown")){
-						Element eState = m_document.createElement("state");
-						eState.appendChild(m_document.createTextNode(job.state));	
-						eJob.appendChild(eState);
-					}
-					if(job.startTime != null && job.startTime.get(GregorianCalendar.YEAR) > 1970){
-						Element eStartTime = m_document.createElement("startTime");
-						eStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(job.startTime)));	
-						eJob.appendChild(eStartTime);
-					}
-					if(job.endTime != null && job.endTime.get(GregorianCalendar.YEAR) > 1970){
-						Element eEndTime = m_document.createElement("endTime");
-						eEndTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(job.endTime)));	
-						eJob.appendChild(eEndTime);
-					}
-					if(job.duration >= 0){
-						Element eDuration = m_document.createElement("duration");
-						if(Double.isInfinite(job.duration)){
-							eDuration.appendChild(m_document.createTextNode("INF"));	
-						}
-						else{
-							eDuration.appendChild(m_document.createTextNode(job.duration + ""));	
-						}
-						eJob.appendChild(eDuration);
-					}
-					if(job.scheduledStartTime != null && job.scheduledStartTime.get(GregorianCalendar.YEAR) > 1970){
-						Element eScheduledStartTime = m_document.createElement("scheduledStartTime");
-						eScheduledStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(job.scheduledStartTime)));	
-						eJob.appendChild(eScheduledStartTime);
-					}
-					if(job.dependencies != null && job.dependencies.jobID != null && job.dependencies.jobID.length > 0){
-						Element eDependencies = m_document.createElement("dependencies");
-						int iJobIDs = processStatistics.jobs.job[i].dependencies.jobID.length;
-						for(int j = 0; j < iJobIDs; j++){
-							Element eJobID = m_document.createElement("jobID");
-							eJobID.appendChild(m_document.createTextNode(job.dependencies.jobID[j]));	
-							eDependencies.appendChild(eJobID);
-						}						
-						eJob.appendChild(eDependencies);
-					}
-					eJobs.appendChild(eJob);
+			if(serviceURI != null && serviceURI.length() > 0){
+				Element eServiceURI = (Element)XMLUtil.findChildNode(eGeneral, "serviceURI");
+				if(eServiceURI == null){
+					eServiceURI = m_document.createElement("serviceURI");					
+					eServiceURI.appendChild(m_document.createTextNode(serviceURI));
+					eGeneral.appendChild(eServiceURI);
+				}
+				else{
+					XMLUtil.setElementValue(eServiceURI, serviceURI);
 				}
 			}
-			eStatistics.appendChild(eJobs);
+			else{
+				XMLUtil.removeChildrenByName(eGeneral, "serviceURI");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		return true;
-	}//setprocessStatistics
-		
+	}//setServiceURI
+
+	/**
+	 * Set service name.
+	 * 
+	 * @param serviceName holds the name of the service. 
+	 * @return whether the service name is set successfully. 
+	 */
+	public boolean setServiceName(String serviceName){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
+			if(serviceName != null && serviceName.length() > 0){
+				Element eServiceName = (Element)XMLUtil.findChildNode(eGeneral, "serviceName");
+				if(eServiceName == null){
+					eServiceName = m_document.createElement("serviceName");					
+					eServiceName.appendChild(m_document.createTextNode(serviceName));
+					eGeneral.appendChild(eServiceName);
+				}
+				else{
+					XMLUtil.setElementValue(eServiceName, serviceName);
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eGeneral, "serviceName");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setServiceName
+
+	/**
+	 * Set instance name.
+	 * 
+	 * @param instanceName holds the name of the instance. 
+	 * @return whether the instance name is set successfully. 
+	 */
+	public boolean setInstanceName(String instanceName){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
+			if(instanceName != null && instanceName.length() > 0){
+				Element eInstanceName = (Element)XMLUtil.findChildNode(eGeneral, "instanceName");
+				if(eInstanceName == null){
+					eInstanceName = m_document.createElement("instanceName");					
+					eInstanceName.appendChild(m_document.createTextNode(instanceName));
+					eGeneral.appendChild(eInstanceName);
+				}
+				else{
+					XMLUtil.setElementValue(eInstanceName, instanceName);
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eGeneral, "instanceName");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setInstanceName
+
+	/**
+	 * Set job id.
+	 * 
+	 * @param jobID holds the job id. 
+	 * @return whether the job id is set successfully. 
+	 */
+	public boolean setJobID(String jobID){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
+			if(jobID != null && jobID.length() > 0){
+				Element eJobID = (Element)XMLUtil.findChildNode(eGeneral, "jobID");
+				if(eJobID == null){
+					eJobID = m_document.createElement("jobID");					
+					eJobID.appendChild(m_document.createTextNode(jobID));
+					eGeneral.appendChild(eJobID);
+				}
+				else{
+					XMLUtil.setElementValue(eJobID, jobID);
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eGeneral, "jobID");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setJobID
+
+	/**
+	 * Set solver invoked.
+	 * 
+	 * @param solverInvoked holds the solver invoked. 
+	 * @return whether the solverInvoked is set successfully. 
+	 */
+	public boolean setSolverInvoked(String solverInvoked){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
+			if(solverInvoked != null && solverInvoked.length() > 0){
+				Element eSolverInvoked = (Element)XMLUtil.findChildNode(eGeneral, "solverInvoked");
+				if(eSolverInvoked == null){
+					eSolverInvoked = m_document.createElement("solverInvoked");					
+					eSolverInvoked.appendChild(m_document.createTextNode(solverInvoked));
+					eGeneral.appendChild(eSolverInvoked);
+				}
+				else{
+					XMLUtil.setElementValue(eSolverInvoked, solverInvoked);
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eGeneral, "solverInvoked");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setSolverInvoked
+
+	/**
+	 * Set time  stamp of the result.
+	 * 
+	 * @param timeStamp holds the time of the result.
+	 * @return whether result time stamp is set successfully. 
+	 */
+	public boolean setResultTimeStamp(GregorianCalendar timeStamp){
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
+			if(timeStamp != null && timeStamp.get(GregorianCalendar.YEAR) > 1970){
+				Element eTimeStamp = (Element)XMLUtil.findChildNode(eGeneral, "timeStamp");
+				if(eTimeStamp == null){
+					eTimeStamp = m_document.createElement("timeStamp");					
+					eTimeStamp.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(timeStamp)));
+					eGeneral.appendChild(eTimeStamp);
+				}
+				else{
+					XMLUtil.setElementValue(eTimeStamp, XMLUtil.createXSDateTime(timeStamp));
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eGeneral, "timeStamp");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setResultTimeStamp
+
+
+	/**
+	 * Set the number of other general results. 
+	 * 
+	 * @param numberOfOtherGeneralResults holds the number of other general results
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherGeneralResults(int numberOfOtherGeneralResults){
+		if(numberOfOtherGeneralResults < 0){
+			return true;
+		}
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+		if(eGeneral == null){
+			eGeneral = m_document.createElement("general");
+			m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+		}
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eGeneral, "otherResults");
+		if(eOtherResults == null){
+			eOtherResults = m_document.createElement("otherResults");	
+			eGeneral.appendChild(eOtherResults);				
+		}
+		try{
+			eOtherResults.setAttribute("numberOfOtherResults", numberOfOtherGeneralResults+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherGeneralResults
+
+	/**
+	 * Set the other general results. 
+	 * 
+	 * @param names holds the names of the other results. It is required. 
+	 * @param values holds the values of the other results, empty string "" or null if no value for an result.
+	 * @param descriptions holds the descriptions of the other results, empty string "" or null if no value for an result, null for
+	 * the entire array if none of the results have descriptions.
+	 * @return whether the other results element construction is successful.
+	 */
+	public boolean setOtherGeneralResults(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(values == null) return false;
+		if(names.length != values.length) return false;
+		if(descriptions != null && names.length != descriptions.length) return false;
+		for(int i = 0; i < names.length; i++){
+			addOtherGeneralResult(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherGeneralResults
+
+	/**
+	 * Add an other general result element. 
+	 * 
+	 * @param name holds the name of the other result element. It is required.
+	 * @param value holds the value of the other result element, empty string "" or null if none. 
+	 * @param description holds the description of the other result element, empty string "" or null if none. 
+	 * @return whether the other result element is added successfully.
+	 */
+	public boolean addOtherGeneralResult(String name, String value, String description){
+		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+			if(eGeneral == null){
+				eGeneral = m_document.createElement("general");
+				m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+			}
+			Element eOtherResults = (Element)XMLUtil.findChildNode(eGeneral, "otherResults");
+			if(eOtherResults == null){
+				eOtherResults = m_document.createElement("otherResults");	
+				eGeneral.appendChild(eOtherResults);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOtherResults, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eOtherResults.removeChild(eOther);
+						iNls--;
+						break;
+					}
+				}
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
+				eOtherResults.appendChild(eOther);
+
+				eOtherResults.setAttribute("numberOfOtherResults", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherGeneralResult
+
+	/**
+	 * Set system information.
+	 * 
+	 * @param systemInformation. holds the system information.. 
+	 * @return whether the systemInformation is set successfully. 
+	 */
+	public boolean setSystemInformation(String systemInformation){
+		Node nodeRef = null;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+				}		
+			}
+			if(systemInformation != null && systemInformation.length() >= 0){
+				Element eAvailableDiskSpace = (Element)XMLUtil.findChildNode(eSystem, "systemInformation");
+				if(eAvailableDiskSpace == null){
+					eAvailableDiskSpace = m_document.createElement("systemInformation");	
+					eAvailableDiskSpace.appendChild(m_document.createTextNode(systemInformation));
+					eSystem.appendChild(eAvailableDiskSpace);				
+				}
+				else{
+					XMLUtil.setElementValue(eAvailableDiskSpace, systemInformation);
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eSystem, "systemInformation");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setSystemInformation
+
+	/**
+	 * Set the system available disk space.
+	 * 
+	 * @param diskSpace holds the  available disk space value, unit and description. 
+	 * @return whether the available disk space is set successfully.
+	 */
+	public boolean setAvailableDiskSpace(DiskSpace availableDiskSpace){
+		Node nodeRef = null;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+				}		
+			}
+			if(availableDiskSpace != null){
+				String sValue = "";
+				if(Double.isInfinite(availableDiskSpace.value) && availableDiskSpace.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(availableDiskSpace.value) && availableDiskSpace.value > 0) sValue = "INF";
+				else sValue = availableDiskSpace.value+"";
+
+				XMLUtil.removeChildrenByName(eSystem, "availableDiskSpace");
+				Element eAvailableDiskSpace = (Element)XMLUtil.findChildNode(eSystem, "availableDiskSpace");
+				eAvailableDiskSpace = m_document.createElement("availableDiskSpace");	
+				eAvailableDiskSpace.appendChild(m_document.createTextNode(sValue));
+				eAvailableDiskSpace.setAttribute("unit", availableDiskSpace.unit);
+				eAvailableDiskSpace.removeAttribute("description");
+				if(availableDiskSpace.description != null && availableDiskSpace.description.length() > 0){
+					eAvailableDiskSpace.setAttribute("description", availableDiskSpace.description);
+				}
+				eSystem.appendChild(eAvailableDiskSpace);				
+				XMLUtil.setElementValue(eAvailableDiskSpace, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eSystem, "availableDiskSpace");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setAvailableDiskSpace
+
+	/**
+	 * Set the system available memory.
+	 * 
+	 * @param availableMemory holds the  available memory value, unit and description. 
+	 * @return whether the available memory is set successfully.
+	 */
+	public boolean setAvailableMemory(MemorySize availableMemory){
+		Node nodeRef = null;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+				}		
+			}
+			if(availableMemory != null){
+				String sValue = "";
+				if(Double.isInfinite(availableMemory.value) && availableMemory.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(availableMemory.value) && availableMemory.value > 0) sValue = "INF";
+				else sValue = availableMemory.value+"";
+
+				XMLUtil.removeChildrenByName(eSystem, "availableMemory");
+				Element eAvailableMemory = (Element)XMLUtil.findChildNode(eSystem, "availableMemory");
+				eAvailableMemory = m_document.createElement("availableMemory");	
+				eAvailableMemory.appendChild(m_document.createTextNode(sValue));
+				eAvailableMemory.setAttribute("unit", availableMemory.unit);
+				eAvailableMemory.removeAttribute("description");
+				if(availableMemory.description != null && availableMemory.description.length() > 0){
+					eAvailableMemory.setAttribute("description", availableMemory.description);
+				}
+				eSystem.appendChild(eAvailableMemory);				
+				XMLUtil.setElementValue(eAvailableMemory, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eSystem, "availableMemory");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setAvailableMemory
+
+	/**
+	 * Set the system available CPU Speed.
+	 * 
+	 * @param availableCPUSpeed holds the  available CPU Speed value, unit and description. 
+	 * @return whether the available CPU Speed is set successfully.
+	 */
+	public boolean setAvailableCPUSpeed(CPUSpeed availableCPUSpeed){
+		Node nodeRef = null;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+				}		
+			}
+			if(availableCPUSpeed != null){
+				String sValue = "";
+				if(Double.isInfinite(availableCPUSpeed.value) && availableCPUSpeed.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(availableCPUSpeed.value) && availableCPUSpeed.value > 0) sValue = "INF";
+				else sValue = availableCPUSpeed.value+"";
+
+				XMLUtil.removeChildrenByName(eSystem, "availableCPUSpeed");
+				Element eAvailableCPUSpeed = (Element)XMLUtil.findChildNode(eSystem, "availableCPUSpeed");
+				eAvailableCPUSpeed = m_document.createElement("availableCPUSpeed");	
+				eAvailableCPUSpeed.appendChild(m_document.createTextNode(sValue));
+				eAvailableCPUSpeed.setAttribute("unit", availableCPUSpeed.unit);
+				eAvailableCPUSpeed.removeAttribute("description");
+				if(availableCPUSpeed.description != null && availableCPUSpeed.description.length() > 0){
+					eAvailableCPUSpeed.setAttribute("description", availableCPUSpeed.description);
+				}
+				eSystem.appendChild(eAvailableCPUSpeed);				
+				XMLUtil.setElementValue(eAvailableCPUSpeed, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eSystem, "availableCPUSpeed");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setAvailableCPUSpeed
+
+	/**
+	 * Set the system available CPU Number.
+	 * 
+	 * @param availableCPUNumber holds the  available CPU Number value and description. 
+	 * @return whether the available CPU Number is set successfully.
+	 */
+	public boolean setAvailableCPUNumber(CPUNumber availableCPUNumber){
+		Node nodeRef = null;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+				}		
+			}
+			if(availableCPUNumber != null){
+				String sValue = "";
+				if(Double.isInfinite(availableCPUNumber.value) && availableCPUNumber.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(availableCPUNumber.value) && availableCPUNumber.value > 0) sValue = "INF";
+				else sValue = availableCPUNumber.value+"";
+
+				XMLUtil.removeChildrenByName(eSystem, "availableCPUNumber");
+				Element eAvailableCPUNumber = (Element)XMLUtil.findChildNode(eSystem, "availableCPUNumber");
+				eAvailableCPUNumber = m_document.createElement("availableCPUNumber");	
+				eAvailableCPUNumber.appendChild(m_document.createTextNode(sValue));
+				eAvailableCPUNumber.removeAttribute("description");
+				if(availableCPUNumber.description != null && availableCPUNumber.description.length() > 0){
+					eAvailableCPUNumber.setAttribute("description", availableCPUNumber.description);
+				}
+				eSystem.appendChild(eAvailableCPUNumber);				
+				XMLUtil.setElementValue(eAvailableCPUNumber, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eSystem, "availableCPUNumber");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;		
+	}//setAvailableCPUNumber
+
+
+	/**
+	 * Set the number of other system results. 
+	 * 
+	 * @param numberOfOtherSystemResults holds the number of other system results
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherSystemResults(int numberOfOtherSystemResults){
+		Node nodeRef = null;
+		if(numberOfOtherSystemResults < 0){
+			return true;
+		}
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+		if(eSystem == null){
+			eSystem = m_document.createElement("system");
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+			if(nodeRef != null){
+				m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+			}
+			else{
+				m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+			}		
+		}		
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eSystem, "otherResults");
+		if(eOtherResults == null){
+			eOtherResults = m_document.createElement("otherResults");	
+			eSystem.appendChild(eOtherResults);				
+		}
+		try{
+			eOtherResults.setAttribute("numberOfOtherResults", numberOfOtherSystemResults+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherSystemResults
+
+	/**
+	 * Set the other system results. 
+	 * 
+	 * @param names holds the names of the other results. It is required. 
+	 * @param values holds the values of the other results, empty string "" or null if no value for an result.
+	 * @param descriptions holds the descriptions of the other results, empty string "" or null if no value for an result, null for
+	 * the entire array if none of the results have descriptions.
+	 * @return whether the other results element construction is successful.
+	 */
+	public boolean setOtherSystemResults(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(values == null) return false;
+		if(names.length != values.length) return false;
+		if(descriptions != null && names.length != descriptions.length) return false;
+		for(int i = 0; i < names.length; i++){
+			addOtherSystemResult(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherSystemResults
+
+	/**
+	 * Add an other system result element. 
+	 * 
+	 * @param name holds the name of the other result element. It is required.
+	 * @param value holds the value of the other result element, empty string "" or null if none. 
+	 * @param description holds the description of the other result element, empty string "" or null if none. 
+	 * @return whether the other result element is added successfully.
+	 */
+	public boolean addOtherSystemResult(String name, String value, String description){
+		Node nodeRef = null;
+		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+			if(eSystem == null){
+				eSystem = m_document.createElement("system");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+				}		
+			}		
+			Element eOtherResults = (Element)XMLUtil.findChildNode(eSystem, "otherResults");
+			if(eOtherResults == null){
+				eOtherResults = m_document.createElement("otherResults");	
+				eSystem.appendChild(eOtherResults);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOtherResults, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eOtherResults.removeChild(eOther);
+						iNls--;
+						break;
+					}
+				}
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
+				eOtherResults.appendChild(eOther);
+
+				eOtherResults.setAttribute("numberOfOtherResults", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherSystemResult
+
 	/**
 	 * Set the current state. 
 	 * @param currentState holds the current state, which can be:
@@ -636,399 +994,1142 @@ public class OSrLWriter extends OSgLWriter{
 	 * @return whether the current state is set successfully.
 	 */
 	public boolean setCurrentState(String currentState){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(currentState != null && currentState.length() > 0){
-			if(!currentState.equals("busy") && 
-			   !currentState.equals("busyButAccepting") &&
-			   !currentState.equals("idle") &&
-			   !currentState.equals("idleButNotAccepting") &&
-			   !currentState.equals("noResponse")) return false;		 
-			Element eCurrentState = (Element)XMLUtil.findChildNode(eStatistics, "currentState");
-			if(eCurrentState == null){
-				eCurrentState = m_document.createElement("currentState");					
-				eCurrentState.appendChild(m_document.createTextNode(currentState));					
-				eStatistics.appendChild(eCurrentState);
+		Node nodeRef = null;
+		try{
+			Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+			if(eService == null){
+				eService = m_document.createElement("service");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+			if(currentState != null && currentState.length() > 0){
+				if(!currentState.equals("busy") && 
+						!currentState.equals("busyButAccepting") &&
+						!currentState.equals("idle") &&
+						!currentState.equals("idleButNotAccepting") &&
+						!currentState.equals("noResponse")) return false;
+				Element eCurrentState = (Element)XMLUtil.findChildNode(eService, "currentState");
+				if(eCurrentState == null){
+					eCurrentState = m_document.createElement("currentState");	
+					eCurrentState.appendChild(m_document.createTextNode(currentState));
+					eService.appendChild(eCurrentState);				
+				}
+				else{
+					XMLUtil.setElementValue(eCurrentState, currentState);
+				}
 			}
 			else{
-				XMLUtil.setElementValue(eCurrentState, currentState);
+				XMLUtil.removeChildrenByName(eService, "currentState");
 			}
 		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "currentState");
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}//setCurrentState
-	
 
-	/**
-	 * Set the available disk space. 
-	 * @param availableDiskSpace holds the available disk space (in bytes). 
-	 * @return whether the available disk space is set successfully.
-	 */
-	public boolean setAvailableDiskSpace(double availableDiskSpace){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(!Double.isNaN(availableDiskSpace) && availableDiskSpace >= 0){
-			Element eAvailableDiskSpace = (Element)XMLUtil.findChildNode(eStatistics, "availableDiskSpace");
-			if(eAvailableDiskSpace == null){
-				eAvailableDiskSpace = m_document.createElement("availableDiskSpace");			
-				if(Double.isInfinite(availableDiskSpace)){
-					eAvailableDiskSpace.appendChild(m_document.createTextNode("INF"));
-				}
-				else{
-					eAvailableDiskSpace.appendChild(m_document.createTextNode(availableDiskSpace + ""));
-				}
-				eStatistics.appendChild(eAvailableDiskSpace);
-			}
-			else{
-				XMLUtil.setElementValue(eAvailableDiskSpace, Double.isInfinite(availableDiskSpace)?"INF":(availableDiskSpace+""));
-			}
-		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "availableDiskSpace");
-		}
-		return true;
-	}//setAvailableDiskSpace
-	
-	/**
-	 * Set the available memory (in bytes). 
-	 * @param availableMemory holds the available memory. 
-	 * @return whether the available memory is set successfully.
-	 */
-	public boolean setAvailableMemory(double availableMemory){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(!Double.isNaN(availableMemory) && availableMemory >= 0){
-			Element eAvailableMemory = (Element)XMLUtil.findChildNode(eStatistics, "availableMemory");
-			if(eAvailableMemory == null){
-				eAvailableMemory = m_document.createElement("availableMemory");			
-				if(Double.isInfinite(availableMemory)){
-					eAvailableMemory.appendChild(m_document.createTextNode("INF"));
-				}
-				else{
-					eAvailableMemory.appendChild(m_document.createTextNode(availableMemory + ""));
-				}
-				eStatistics.appendChild(eAvailableMemory);
-			}
-			else{
-				XMLUtil.setElementValue(eAvailableMemory, Double.isInfinite(availableMemory)?"INF":(availableMemory+""));
-			}
-		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "availableMemory");
-		}
-		return true;
-	}//setAvailableMemory
-	
-	
 	/**
 	 * Set the current job count. 
 	 * @param currentJobCount holds the current job count. 
 	 * @return whether the current job count is set successfully.
 	 */
 	public boolean setCurrentJobCount(int currentJobCount){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(currentJobCount >= 0){
-			Element eCurrentJobCount = (Element)XMLUtil.findChildNode(eStatistics, "currentJobCount");
-			if(eCurrentJobCount == null){
-				eCurrentJobCount = m_document.createElement("currentJobCount");			
-				eCurrentJobCount.appendChild(m_document.createTextNode(currentJobCount + ""));
-				eStatistics.appendChild(eCurrentJobCount);
+		Node nodeRef = null;
+		try{
+			Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+			if(eService == null){
+				eService = m_document.createElement("service");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+			if(currentJobCount >= 0){
+				Element eCurrentJobCount = (Element)XMLUtil.findChildNode(eService, "currentJobCount");
+				if(eCurrentJobCount == null){
+					eCurrentJobCount = m_document.createElement("currentJobCount");	
+					eCurrentJobCount.appendChild(m_document.createTextNode(currentJobCount+""));
+					eService.appendChild(eCurrentJobCount);				
+				}
+				else{
+					XMLUtil.setElementValue(eCurrentJobCount, currentJobCount+"");
+				}
 			}
 			else{
-				XMLUtil.setElementValue(eCurrentJobCount, currentJobCount+"");
+				XMLUtil.removeChildrenByName(eService, "currentJobCount");
 			}
 		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "currentJobCount");
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}//setCurrentJobCount
-	
+
 	/**
 	 * Set the total jobs received so far. 
 	 * @param totalJobsSoFar holds the total jobs received so far. 
 	 * @return whether the total jobs so far is set successfully.
 	 */
 	public boolean setTotalJobsSoFar(int totalJobsSoFar){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(totalJobsSoFar >= 0){
-			Element eTotalJobsSoFar = (Element)XMLUtil.findChildNode(eStatistics, "totalJobsSoFar");
-			if(eTotalJobsSoFar == null){
-				eTotalJobsSoFar = m_document.createElement("totalJobsSoFar");			
-				eTotalJobsSoFar.appendChild(m_document.createTextNode(totalJobsSoFar + ""));
-				eStatistics.appendChild(eTotalJobsSoFar);
+		Node nodeRef = null;
+		try{
+			Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+			if(eService == null){
+				eService = m_document.createElement("service");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+			if(totalJobsSoFar >= 0){
+				Element eTotalJobsSoFar = (Element)XMLUtil.findChildNode(eService, "totalJobsSoFar");
+				if(eTotalJobsSoFar == null){
+					eTotalJobsSoFar = m_document.createElement("totalJobsSoFar");	
+					eTotalJobsSoFar.appendChild(m_document.createTextNode(totalJobsSoFar+""));
+					eService.appendChild(eTotalJobsSoFar);				
+				}
+				else{
+					XMLUtil.setElementValue(eTotalJobsSoFar, totalJobsSoFar+"");
+				}
 			}
 			else{
-				XMLUtil.setElementValue(eTotalJobsSoFar, totalJobsSoFar+"");
+				XMLUtil.removeChildrenByName(eService, "totalJobsSoFar");
 			}
 		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "totalJobsSoFar");
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}//setTotalJobsSoFar
-	
-	/**
-	 * Set the time last job ended. 
-	 * @param timeLastJobEnded holds the time last job ended. 
-	 * @return whether the time last job ended is set successfully.
-	 */
-	public boolean setTimeLastJobEnded(GregorianCalendar timeLastJobEnded){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(timeLastJobEnded != null){
-			Element eTimeLastJobEnded = (Element)XMLUtil.findChildNode(eStatistics, "timeLastJobEnded");
-			if(eTimeLastJobEnded == null){
-				eTimeLastJobEnded = m_document.createElement("timeLastJobEnded");			
-				eTimeLastJobEnded.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(timeLastJobEnded)));
-				eStatistics.appendChild(eTimeLastJobEnded);
-			}
-			else{
-				XMLUtil.setElementValue(eTimeLastJobEnded, XMLUtil.createXSDateTime(timeLastJobEnded));
-			}
-		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "timeLastJobEnded");
-		}
-		return true;
-	}//setTimeLastJobEnded
-	
-	/**
-	 * Set the time last job took. 
-	 * @param timeLastJobTook holds the time last job took (in seconds). 
-	 * @return whether the time last job took is set successfully.
-	 */
-	public boolean setTimeLastJobTook(double timeLastJobTook){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(!Double.isNaN(timeLastJobTook) && timeLastJobTook >= 0){
-			Element eTimeLastJobTook = (Element)XMLUtil.findChildNode(eStatistics, "timeLastJobTook");
-			if(eTimeLastJobTook == null){
-				eTimeLastJobTook = m_document.createElement("timeLastJobTook");			
-				if(Double.isInfinite(timeLastJobTook)){
-					eTimeLastJobTook.appendChild(m_document.createTextNode("INF"));
-				}
-				else{
-					eTimeLastJobTook.appendChild(m_document.createTextNode(timeLastJobTook + ""));
-				}
-				eStatistics.appendChild(eTimeLastJobTook);
-			}
-			else{
-				XMLUtil.setElementValue(eTimeLastJobTook, Double.isInfinite(timeLastJobTook)?"INF":(timeLastJobTook+""));
-			}
-		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "timeLastJobTook");
-		}
-		return true;
-	}//setTimeLastJobTook
-	
+
 	/**
 	 * Set the time the service started. 
 	 * @param timeServiceStarted holds the time the service started. 
 	 * @return whether the time the service started is set successfully.
 	 */
 	public boolean setTimeServiceStarted(GregorianCalendar timeServiceStarted){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(timeServiceStarted != null){
-			Element eTimeServiceStarted = (Element)XMLUtil.findChildNode(eStatistics, "timeServiceStarted");
-			if(eTimeServiceStarted == null){
-				eTimeServiceStarted = m_document.createElement("timeServiceStarted");			
-				eTimeServiceStarted.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(timeServiceStarted)));
-				eStatistics.appendChild(eTimeServiceStarted);
+		Node nodeRef = null;
+		try{
+			Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+			if(eService == null){
+				eService = m_document.createElement("service");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+			if(timeServiceStarted != null && timeServiceStarted.get(GregorianCalendar.YEAR) > 1970){
+				Element eTtimeServiceStarted = (Element)XMLUtil.findChildNode(eService, "timeServiceStarted");
+				if(eTtimeServiceStarted == null){
+					eTtimeServiceStarted = m_document.createElement("timeServiceStarted");	
+					eTtimeServiceStarted.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(timeServiceStarted)));
+					eService.appendChild(eTtimeServiceStarted);				
+				}
+				else{
+					XMLUtil.setElementValue(eTtimeServiceStarted, XMLUtil.createXSDateTime(timeServiceStarted));
+				}
 			}
 			else{
-				XMLUtil.setElementValue(eTimeServiceStarted, XMLUtil.createXSDateTime(timeServiceStarted));
+				XMLUtil.removeChildrenByName(eService, "timeServiceStarted");
 			}
 		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "timeServiceStarted");
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}//setTimeServiceStarted
-	
+
 	/**
 	 * Set the service utilization. 
 	 * @param serviceUtilization holds the service utilization ([0, 1]). 
 	 * @return whether the time last job took is set successfully.
 	 */
 	public boolean setServiceUtilization(double serviceUtilization){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
-		}
-		if(!Double.isNaN(serviceUtilization) && serviceUtilization >= 0){
-			Element eServiceUtilization = (Element)XMLUtil.findChildNode(eStatistics, "serviceUtilization");
-			if(eServiceUtilization == null){
-				eServiceUtilization = m_document.createElement("serviceUtilization");			
-				eServiceUtilization.appendChild(m_document.createTextNode(serviceUtilization + ""));
-				eStatistics.appendChild(eServiceUtilization);
+		Node nodeRef = null;
+		try{
+			Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+			if(eService == null){
+				eService = m_document.createElement("service");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+			if(serviceUtilization >= 0){
+				Element eServiceUtilization = (Element)XMLUtil.findChildNode(eService, "serviceUtilization");
+				if(eServiceUtilization == null){
+					eServiceUtilization = m_document.createElement("serviceUtilization");	
+					eServiceUtilization.appendChild(m_document.createTextNode(serviceUtilization+""));
+					eService.appendChild(eServiceUtilization);				
+				}
+				else{
+					XMLUtil.setElementValue(eServiceUtilization, serviceUtilization+"");
+				}
 			}
 			else{
-				XMLUtil.setElementValue(eServiceUtilization, serviceUtilization+"");
+				XMLUtil.removeChildrenByName(eService, "serviceUtilization");
 			}
 		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "serviceUtilization");
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}//setServiceUtilization
-	
+
 	/**
-	 * Set the statistics of all jobs. 
+	 * Set the number of other service results. 
 	 * 
-	 * @param jobStatistics holds an array of jobStatistics with 
-	 * each member corresponding to one job. 
-	 * @return whether the job statistics are set successfully. 
+	 * @param numberOfOtherServiceResults holds the number of other service results
+	 * @return whether the number is set successfully or not. 
 	 */
-	public boolean setJobStatistics(JobStatistics[] jobStatistics){
-		Element eStatistics = (Element)XMLUtil.findChildNode(m_eResultData, "statistics");
-		if(eStatistics == null){
-			eStatistics = m_document.createElement("statistics");
-			m_eResultData.insertBefore(eStatistics, m_eResultData.getFirstChild());
+	public boolean setNumberOfOtherServiceResults(int numberOfOtherServiceResults){
+		Node nodeRef = null;
+		if(numberOfOtherServiceResults < 0){
+			return true;
 		}
-		if(jobStatistics != null && jobStatistics.length > 0){
-			Element eJobs = (Element)XMLUtil.findChildNode(eStatistics, "jobs");
-			if(eJobs == null){
-				XMLUtil.removeChildrenByName(eStatistics, "jobs");
+		Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+		if(eService == null){
+			eService = m_document.createElement("service");
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+			if(nodeRef != null){
+				m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
 			}
-			eJobs = m_document.createElement("jobs");
-			eStatistics.appendChild(eJobs);
-			int iJobs = jobStatistics.length;
-			for(int i = 0; i < iJobs; i++){
-				if(jobStatistics[i] != null){
-					Element eJob = m_document.createElement("job");
-					if(jobStatistics[i].jobID != null && jobStatistics[i].jobID.length() > 0){
-						eJob.setAttribute("jobID", jobStatistics[i].jobID);
-					}
-					else{
-						return false;
-					}					
-					if(jobStatistics[i].state != null && jobStatistics[i].state.length() > 0 && !jobStatistics[i].state.equals("unknown")){
-						Element eState = m_document.createElement("state");
-						eState.appendChild(m_document.createTextNode(jobStatistics[i].state));	
-						eJob.appendChild(eState);
-					}
-					if(jobStatistics[i].startTime != null && jobStatistics[i].startTime.get(GregorianCalendar.YEAR) > 1970){
-						Element eStartTime = m_document.createElement("startTime");
-						eStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(jobStatistics[i].startTime)));	
-						eJob.appendChild(eStartTime);
-					}
-					if(jobStatistics[i].endTime != null && jobStatistics[i].endTime.get(GregorianCalendar.YEAR) > 1970){
-						Element eEndTime = m_document.createElement("endTime");
-						eEndTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(jobStatistics[i].endTime)));	
-						eJob.appendChild(eEndTime);
-					}
-					if(jobStatistics[i].duration >= 0){
-						Element eDuration = m_document.createElement("duration");
-						if(Double.isInfinite(jobStatistics[i].duration)){
-							eDuration.appendChild(m_document.createTextNode("INF"));	
-						}
-						else{
-							eDuration.appendChild(m_document.createTextNode(jobStatistics[i].duration + ""));	
-						}
-						eJob.appendChild(eDuration);
-					}
-					if(jobStatistics[i].scheduledStartTime != null && jobStatistics[i].scheduledStartTime.get(GregorianCalendar.YEAR) > 1970){
-						Element eScheduledStartTime = m_document.createElement("scheduledStartTime");
-						eScheduledStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(jobStatistics[i].scheduledStartTime)));	
-						eJob.appendChild(eScheduledStartTime);
-					}
-					if(jobStatistics[i].dependencies != null && jobStatistics[i].dependencies.jobID != null && jobStatistics[i].dependencies.jobID.length > 0){
-						Element eDependencies = m_document.createElement("dependencies");
-						int iJobIDs = jobStatistics[i].dependencies.jobID.length;
-						for(int j = 0; j < iJobIDs; j++){
-							Element eJobID = m_document.createElement("jobID");
-							eJobID.appendChild(m_document.createTextNode(jobStatistics[i].dependencies.jobID[j]));	
-							eDependencies.appendChild(eJobID);
-						}						
-						eJob.appendChild(eDependencies);
-					}
-					eJobs.appendChild(eJob);
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
 				}
-			}
+				else{
+					m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+				}		
+			}		
+		}		
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eService, "otherResults");
+		if(eOtherResults == null){
+			eOtherResults = m_document.createElement("otherResults");	
+			eService.appendChild(eOtherResults);				
 		}
-		else{
-			XMLUtil.removeChildrenByName(eStatistics, "jobs");
+		try{
+			eOtherResults.setAttribute("numberOfOtherResults", numberOfOtherServiceResults+"");
 		}
-		return true;
-	}//setJobStatistics
-	
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;	
+	}//setNumberOfOtherServiceResults
+
 	/**
-	 * Set all the otherResult related elements. 
+	 * Set the other service results. 
 	 * 
-	 * @param names holds the names of all the other result information. It is required.
-	 * @param values holds the values of all the other result information, empty String "" if no value for one otherResult element.
-	 * @param descriptions holds the descriptions of all the other result information, empty String "" if no value for one otherResult, null for
-	 * the entire array if none of the otherResult elements have descriptions.
-	 * @return whether the otherResult elements are set successfully.
+	 * @param names holds the names of the other results. It is required. 
+	 * @param values holds the values of the other results, empty string "" or null if no value for an result.
+	 * @param descriptions holds the descriptions of the other results, empty string "" or null if no value for an result, null for
+	 * the entire array if none of the results have descriptions.
+	 * @return whether the other results element construction is successful.
 	 */
-	public boolean setOtherResults(String[] names, String[] values, String[] descriptions){
+	public boolean setOtherServiceResults(String[] names, String[] values, String[] descriptions){
 		if(names == null) return false;
 		if(values == null) return false;
 		if(names.length != values.length) return false;
 		if(descriptions != null && names.length != descriptions.length) return false;
 		for(int i = 0; i < names.length; i++){
-			addOtherResult(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+			addOtherServiceResult(names[i], values[i], (descriptions==null)?"":descriptions[i]);
 		}
 		return true;
-	}//setOtherResults
-	
+	}//setOtherServiceResults
+
 	/**
-	 * Add an otherResult element. 
+	 * Add an other service result element. 
 	 * 
-	 * @param name holds the name of the otherResult element. It is required.
-	 * @param value holds the value of the otherResult element, empty String "" if none. 
-	 * @param description  holds the description of the otherResult element, empty String "" if none.
-	 * @return whether the otherResult element is added successfully.
+	 * @param name holds the name of the other result element. It is required.
+	 * @param value holds the value of the other result element, empty string "" or null if none. 
+	 * @param description holds the description of the other result element, empty string "" or null if none. 
+	 * @return whether the other result element is added successfully.
 	 */
-	public boolean addOtherResult(String name, String value, String description){
-		if(name == null) return false;
-		Vector<Element> vElements = XMLUtil.getChildElementsByTagName(m_eResultData, "other");
-		Element eOtherResult;
-		int iNls = vElements==null?0:vElements.size();
-		for(int i = 0; i < iNls; i++){
-			eOtherResult = (Element)vElements.elementAt(i);
-			if(eOtherResult.getAttribute("name").equals(name)){
-				m_eResultData.removeChild(eOtherResult);
-				break;
+	public boolean addOtherServiceResult(String name, String value, String description){
+		Node nodeRef = null;
+		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+			if(eService == null){
+				eService = m_document.createElement("service");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}			
+			Element eOtherResults = (Element)XMLUtil.findChildNode(eService, "otherResults");
+			if(eOtherResults == null){
+				eOtherResults = m_document.createElement("otherResults");	
+				eService.appendChild(eOtherResults);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOtherResults, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eOtherResults.removeChild(eOther);
+						iNls--;
+						break;
+					}
+				}
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
+				eOtherResults.appendChild(eOther);
+
+				eOtherResults.setAttribute("numberOfOtherResults", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
 			}
 		}
-		eOtherResult = createOther(name, value, description);
-		m_eResultData.appendChild(eOtherResult);
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 		return true;
-	}//addOtherResult
-	
+	}//addOtherServiceResult
+
+	/**
+	 * Set the job status. 
+	 * @param jobStatus holds the current state, which can be:
+	 * "waiting", "running", "killed", "finished" and "unknown".
+	 * @return whether the current state is set successfully.
+	 */
+	public boolean setJobStatus(String jobStatus){
+		if(jobStatus != null && jobStatus.length() > 0 && 
+				!jobStatus.equals("waiting") && 
+				!jobStatus.equals("running") &&
+				!jobStatus.equals("killed") &&
+				!jobStatus.equals("finished") &&
+				!jobStatus.equals("unknown")) return false;
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(jobStatus != null && jobStatus.length() > 0){
+				Element eStatus = (Element)XMLUtil.findChildNode(eJob, "status");
+				if(eStatus == null){
+					eStatus = m_document.createElement("status");	
+					eStatus.appendChild(m_document.createTextNode(jobStatus));
+					eJob.appendChild(eStatus);				
+				}
+				else{
+					XMLUtil.setElementValue(eStatus, jobStatus);
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "status");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setJobStatus
+
+	/**
+	 * Set the submit time. 
+	 * @param submitTime holds the job submit time. 
+	 * @return whether the submit time is set successfully.
+	 */
+	public boolean setJobSubmitTime(GregorianCalendar submitTime){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(submitTime != null && submitTime.get(GregorianCalendar.YEAR) > 1970){
+				Element eSubmitTime = (Element)XMLUtil.findChildNode(eJob, "submitTime");
+				if(eSubmitTime == null){
+					eSubmitTime = m_document.createElement("submitTime");	
+					eSubmitTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(submitTime)));
+					eJob.appendChild(eSubmitTime);				
+				}
+				else{
+					XMLUtil.setElementValue(eSubmitTime, XMLUtil.createXSDateTime(submitTime));
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "submitTime");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setJobSubmitTime
+
+	/**
+	 * Set the scheduled start time. 
+	 * @param scheduledStartTime holds the job scheduled start time. 
+	 * @return whether the scheduled start time is set successfully.
+	 */
+	public boolean setScheduledStartTime(GregorianCalendar scheduledStartTime){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(scheduledStartTime != null && scheduledStartTime.get(GregorianCalendar.YEAR) > 1970){
+				Element eScheduledStartTime = (Element)XMLUtil.findChildNode(eJob, "scheduledStartTime");
+				if(eScheduledStartTime == null){
+					eScheduledStartTime = m_document.createElement("scheduledStartTime");	
+					eScheduledStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(scheduledStartTime)));
+					eJob.appendChild(eScheduledStartTime);				
+				}
+				else{
+					XMLUtil.setElementValue(eScheduledStartTime, XMLUtil.createXSDateTime(scheduledStartTime));
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "scheduledStartTime");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setScheduledStartTime
+
+	/**
+	 * Set the actual start time. 
+	 * @param actualStartTime holds the job actual start time. 
+	 * @return whether the actual start time is set successfully.
+	 */
+	public boolean setActualStartTime(GregorianCalendar actualStartTime){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(actualStartTime != null && actualStartTime.get(GregorianCalendar.YEAR) > 1970){
+				Element eActualStartTime = (Element)XMLUtil.findChildNode(eJob, "actualStartTime");
+				if(eActualStartTime == null){
+					eActualStartTime = m_document.createElement("actualStartTime");	
+					eActualStartTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(actualStartTime)));
+					eJob.appendChild(eActualStartTime);				
+				}
+				else{
+					XMLUtil.setElementValue(eActualStartTime, XMLUtil.createXSDateTime(actualStartTime));
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "actualStartTime");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setActualStartTime
+
+	/**
+	 * Set the end time. 
+	 * @param endTime holds the end time. 
+	 * @return whether the endTime is set successfully.
+	 */
+	public boolean setEndTime(GregorianCalendar endTime){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(endTime != null && endTime.get(GregorianCalendar.YEAR) > 1970){
+				Element eEndTime = (Element)XMLUtil.findChildNode(eJob, "endTime");
+				if(eEndTime == null){
+					eEndTime = m_document.createElement("endTime");	
+					eEndTime.appendChild(m_document.createTextNode(XMLUtil.createXSDateTime(endTime)));
+					eJob.appendChild(eEndTime);				
+				}
+				else{
+					XMLUtil.setElementValue(eEndTime, XMLUtil.createXSDateTime(endTime));
+				}
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "endTime");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setEndTime
+
+
+	/**
+	 * set timing information
+	 * @param types: cpuTime, elapsedTime,other
+	 * @param categories: total, input, preprocessing, optimization, postprocessing, output, other
+	 * @param units: tick, millisecond, second, minute, hour, day, week, month, year
+	 * @param descriptions
+	 * @return
+	 */
+	public boolean setTimingInformation(String[] types, String[] categories,String[] units, String[] descriptions, double[] values){
+		int n = values==null?0:values.length;
+
+		if(types != null && types.length != n) return false;
+		if(categories != null && categories.length != n) return false;
+		if(units != null && units.length != n) return false;
+		if(descriptions != null && descriptions.length != n) return false;
+
+		for(int i = 0; i < types.length; i++){
+			addJobTiming((types==null)?"elapsedTime":types[i], 
+					(categories==null)?"total":categories[i], 
+							(units==null)?"second":units[i], 
+									(descriptions==null)?"":units[i], 
+											values[i]  );
+		}
+		return true;
+	}//setTimingInformation
+
+	/**
+	 * add timing information
+	 * @param type: cpuTime, elapsedTime,other
+	 * @param category: total, input, preprocessing, optimization, postprocessing, output, other
+	 * @param unit: tick, millisecond, second, minute, hour, day, week, month, year
+	 * @param description
+	 * @return whether the timing information is set successfully
+	 */
+	public boolean addJobTiming(String type, String category, String unit, String description, double value){
+		Node nodeRef = null;
+		if(value < 0) return false;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			Element eTimingInformation = (Element)XMLUtil.findChildNode(eJob, "timingInformation");
+			if(eTimingInformation == null){
+				eTimingInformation = m_document.createElement("timingInformation");	
+				eJob.appendChild(eTimingInformation);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eTimingInformation, "time");
+				Element eTime;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eTime = (Element)vElements.elementAt(i);
+					if(eTime.getAttribute("type").equals(type) && eTime.getAttribute("category").equals(category)){
+						eTimingInformation.removeChild(eTime);
+						iNls--;
+						break;
+					}
+				}
+				eTime = m_document.createElement("time");
+				eTime.setAttribute("type", type);
+				eTime.setAttribute("category", category);
+				eTime.setAttribute("unit", unit);
+				if(description != null && description.length() > 0){
+					eTime.setAttribute("description", description);
+				}
+				eTime.setAttribute("value", value+"");
+				eTimingInformation.appendChild(eTime);
+
+				eTimingInformation.setAttribute("numberOfTimes", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addJobTiming
+
+
+	/**
+	 * Set the job used CPU Speed.
+	 * 
+	 * @param usedCPUSpeed holds the used CPU Speed. 
+	 * @return whether the used CPU Speed is set successfully.
+	 */
+	public boolean setUsedCPUSpeed(CPUSpeed usedCPUSpeed){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(usedCPUSpeed != null){
+				String sValue = "";
+				if(Double.isInfinite(usedCPUSpeed.value) && usedCPUSpeed.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(usedCPUSpeed.value) && usedCPUSpeed.value > 0) sValue = "INF";
+				else sValue = usedCPUSpeed.value+"";
+
+				XMLUtil.removeChildrenByName(eJob, "usedCPUSpeed");
+				Element eUsedCPUSpeed = (Element)XMLUtil.findChildNode(eJob, "usedCPUSpeed");
+				eUsedCPUSpeed = m_document.createElement("usedCPUSpeed");	
+				eUsedCPUSpeed.appendChild(m_document.createTextNode(sValue));
+				eUsedCPUSpeed.setAttribute("unit", usedCPUSpeed.unit);
+				eUsedCPUSpeed.removeAttribute("description");
+				if(usedCPUSpeed.description != null && usedCPUSpeed.description.length() > 0){
+					eUsedCPUSpeed.setAttribute("description", usedCPUSpeed.description);
+				}
+				eJob.appendChild(eUsedCPUSpeed);				
+				XMLUtil.setElementValue(eUsedCPUSpeed, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "usedCPUSpeed");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setUsedCPUSpeed
+
+
+	/**
+	 * Set the job used CPU Number.
+	 * 
+	 * @param usedCPUNumber holds the  used CPU Number value and description. 
+	 * @return whether the used CPU Number is set successfully.
+	 */
+	public boolean setUsedCPUNumber(CPUNumber usedCPUNumber){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(usedCPUNumber != null){
+				String sValue = "";
+				if(Double.isInfinite(usedCPUNumber.value) && usedCPUNumber.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(usedCPUNumber.value) && usedCPUNumber.value > 0) sValue = "INF";
+				else sValue = usedCPUNumber.value+"";
+
+				XMLUtil.removeChildrenByName(eJob, "usedCPUNumber");
+				Element eUsedCPUNumber = (Element)XMLUtil.findChildNode(eJob, "usedCPUNumber");
+				eUsedCPUNumber = m_document.createElement("usedCPUNumber");	
+				eUsedCPUNumber.appendChild(m_document.createTextNode(sValue));
+				eUsedCPUNumber.removeAttribute("description");
+				if(usedCPUNumber.description != null && usedCPUNumber.description.length() > 0){
+					eUsedCPUNumber.setAttribute("description", usedCPUNumber.description);
+				}
+				eJob.appendChild(eUsedCPUNumber);				
+				XMLUtil.setElementValue(eUsedCPUNumber, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "usedCPUNumber");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setUsedCPUNumber
+
+	/**
+	 * Set the job used disk space.
+	 * 
+	 * @param usedDiskSpace holds the  used disk space value, unit and description. 
+	 * @return whether the used disk space is set successfully.
+	 */
+	public boolean setUsedDiskSpace(DiskSpace usedDiskSpace){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(usedDiskSpace != null){
+				String sValue = "";
+				if(Double.isInfinite(usedDiskSpace.value) && usedDiskSpace.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(usedDiskSpace.value) && usedDiskSpace.value > 0) sValue = "INF";
+				else sValue = usedDiskSpace.value+"";
+
+				XMLUtil.removeChildrenByName(eJob, "usedDiskSpace");
+				Element eUsedDiskSpace = (Element)XMLUtil.findChildNode(eJob, "usedDiskSpace");
+				eUsedDiskSpace = m_document.createElement("usedDiskSpace");	
+				eUsedDiskSpace.appendChild(m_document.createTextNode(sValue));
+				eUsedDiskSpace.setAttribute("unit", usedDiskSpace.unit);
+				eUsedDiskSpace.removeAttribute("description");
+				if(usedDiskSpace.description != null && usedDiskSpace.description.length() > 0){
+					eUsedDiskSpace.setAttribute("description", usedDiskSpace.description);
+				}
+				eJob.appendChild(eUsedDiskSpace);				
+				XMLUtil.setElementValue(eUsedDiskSpace, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "usedDiskSpace");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setUsedDiskSpace
+
+	/**
+	 * Set the job used memory.
+	 * 
+	 * @param usedMemory holds the  used memory value, unit and description. 
+	 * @return whether the used memory is set successfully.
+	 */
+	public boolean setUsedMemory(MemorySize usedMemory){
+		Node nodeRef = null;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			if(usedMemory != null){
+				String sValue = "";
+				if(Double.isInfinite(usedMemory.value) && usedMemory.value < 0) sValue = "-INF";
+				else if(Double.isInfinite(usedMemory.value) && usedMemory.value > 0) sValue = "INF";
+				else sValue = usedMemory.value+"";
+
+				XMLUtil.removeChildrenByName(eJob, "usedMemory");
+				Element eUsedMemory = (Element)XMLUtil.findChildNode(eJob, "usedMemory");
+				eUsedMemory = m_document.createElement("usedMemory");	
+				eUsedMemory.appendChild(m_document.createTextNode(sValue));
+				eUsedMemory.setAttribute("unit", usedMemory.unit);
+				eUsedMemory.removeAttribute("description");
+				if(usedMemory.description != null && usedMemory.description.length() > 0){
+					eUsedMemory.setAttribute("description", usedMemory.description);
+				}
+				eJob.appendChild(eUsedMemory);				
+				XMLUtil.setElementValue(eUsedMemory, sValue);
+			}
+			else{
+				XMLUtil.removeChildrenByName(eJob, "usedMemory");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setUsedMemory
+
+	/**
+	 * Set the number of other job results. 
+	 * 
+	 * @param numberOfOtherJobResults holds the number of other job results
+	 * @return whether the number is set successfully or not. 
+	 */
+	public boolean setNumberOfOtherJobResults(int numberOfOtherJobResults){
+		Node nodeRef = null;
+		if(numberOfOtherJobResults < 0){
+			return true;
+		}
+		Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+		if(eJob == null){
+			eJob = m_document.createElement("job");
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+			if(nodeRef != null){
+				m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+		}
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eJob, "otherResults");
+		if(eOtherResults == null){
+			eOtherResults = m_document.createElement("otherResults");	
+			eJob.appendChild(eOtherResults);				
+		}
+		try{
+			eOtherResults.setAttribute("numberOfOtherResults", numberOfOtherJobResults+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setNumberOfOtherJobResults
+
+
+	/**
+	 * Set the other job results. 
+	 * 
+	 * @param names holds the names of the other results. It is required. 
+	 * @param values holds the values of the other results, empty string "" or null if no value for an result.
+	 * @param descriptions holds the descriptions of the other results, empty string "" or null if no value for an result, null for
+	 * the entire array if none of the results have descriptions.
+	 * @return whether the other results element construction is successful.
+	 */
+	public boolean setOtherJobResults(String[] names, String[] values, String[] descriptions){
+		if(names == null) return false;
+		if(values == null) return false;
+		if(names.length != values.length) return false;
+		if(descriptions != null && names.length != descriptions.length) return false;
+		for(int i = 0; i < names.length; i++){
+			addOtherJobResult(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherJobResults
+
+	/**
+	 * Add an other job result element. 
+	 * 
+	 * @param name holds the name of the other result element. It is required.
+	 * @param value holds the value of the other result element, empty string "" or null if none. 
+	 * @param description holds the description of the other result element, empty string "" or null if none. 
+	 * @return whether the other result element is added successfully.
+	 */
+	public boolean addOtherJobResult(String name, String value, String description){
+		Node nodeRef = null;
+		if(name == null || name.trim().length() <= 0) return false;
+		try{
+			Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+			if(eJob == null){
+				eJob = m_document.createElement("job");
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+						if(nodeRef != null){
+							m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+						}
+						else{
+							m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+						}		
+					}		
+				}
+			}
+			Element eOtherResults = (Element)XMLUtil.findChildNode(eJob, "otherResults");
+			if(eOtherResults == null){
+				eOtherResults = m_document.createElement("otherResults");	
+				eJob.appendChild(eOtherResults);				
+			}
+			try{
+				Vector<Element> vElements = XMLUtil.getChildElementsByTagName(eOtherResults, "other");
+				Element eOther;
+				int iNls = vElements==null?0:vElements.size();
+				for(int i = 0; i < iNls; i++){
+					eOther = (Element)vElements.elementAt(i);
+					if(eOther.getAttribute("name").equals(name)){
+						eOtherResults.removeChild(eOther);
+						iNls--;
+						break;
+					}
+				}
+				eOther = m_document.createElement("other");
+				eOther.setAttribute("name", name);
+				if(value != null && value.length() > 0){
+					eOther.setAttribute("value", value);
+				}
+				if(description != null && description.length() > 0){
+					eOther.setAttribute("description", description);
+				}
+				eOtherResults.appendChild(eOther);
+
+				eOtherResults.setAttribute("numberOfOtherResults", (iNls+1)+"");
+
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//addOtherJobResult
+
 	/**
 	 * Set the variable number. 
 	 * 
@@ -1040,15 +2141,15 @@ public class OSrLWriter extends OSgLWriter{
 		if(variableNumber <= 0){
 			return false;
 		}
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eResultData, "statistics");			
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
 			if(nodeRef != null){
-				m_eResultData.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
 			}
 			else{
-				m_eResultData.insertBefore(eOptimization, m_eResultData.getFirstChild());
+				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
 			}					
 		}		
 		m_iVariableNumber = variableNumber;
@@ -1073,15 +2174,15 @@ public class OSrLWriter extends OSgLWriter{
 		if(objectiveNumber < 0){
 			return false;
 		}
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eResultData, "statistics");			
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
 			if(nodeRef != null){
-				m_eResultData.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
 			}
 			else{
-				m_eResultData.insertBefore(eOptimization, m_eResultData.getFirstChild());
+				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
 			}					
 		}		
 		m_iObjectiveNumber = objectiveNumber;
@@ -1106,15 +2207,15 @@ public class OSrLWriter extends OSgLWriter{
 		if(constraintNumber < 0){
 			return false;
 		}
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eResultData, "statistics");			
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
 			if(nodeRef != null){
-				m_eResultData.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
 			}
 			else{
-				m_eResultData.insertBefore(eOptimization, m_eResultData.getFirstChild());
+				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
 			}					
 		}		
 		m_iConstraintNumber = constraintNumber;
@@ -1128,7 +2229,7 @@ public class OSrLWriter extends OSgLWriter{
 		return true;
 	}//setConstraintNumber
 
-	
+
 	/**
 	 * set the number of solutions. This method must be called before setting other optimization solution 
 	 * related results.  
@@ -1146,15 +2247,15 @@ public class OSrLWriter extends OSgLWriter{
 		if(solutionNumber < 0){
 			return false;
 		}
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eResultData, "statistics");			
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
 			if(nodeRef != null){
-				m_eResultData.insertBefore(eOptimization, nodeRef.getNextSibling());			
+				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
 			}
 			else{
-				m_eResultData.insertBefore(eOptimization, m_eResultData.getFirstChild());
+				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
 			}					
 		}		
 		m_iSolutionNumber = solutionNumber;
@@ -1174,7 +2275,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setSolutionNumber
-	
+
 	/**
 	 * Set the [i]th optimization solution, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1188,7 +2289,7 @@ public class OSrLWriter extends OSgLWriter{
 	public boolean setSolution(int solIdx, OptimizationSolution solution){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
 		boolean bSetSolution = true;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1198,7 +2299,7 @@ public class OSrLWriter extends OSgLWriter{
 		eStatus.setAttribute("type", "other");
 		eSolution.appendChild(eStatus);
 
-		bSetSolution = setSolutionObjectiveIndex(solIdx, solution.objectiveIdx);
+		bSetSolution = setSolutionObjectiveIndex(solIdx, solution.targetObjectiveIdx);
 		if(!bSetSolution) return false;
 		bSetSolution = setSolutionStatus(solIdx, solution.status);
 		if(!bSetSolution) return false;
@@ -1268,13 +2369,13 @@ public class OSrLWriter extends OSgLWriter{
 				if(!bSetSolution) return false;	
 			}
 		}
-		if(solution.other != null){
-			bSetSolution = setOtherOptimizationResults(solIdx, solution.other);
+		if(solution.otherSolutionResults != null && solution.otherSolutionResults.otherSolutionResult != null){
+			bSetSolution = setOtherOptimizationSolutionResults(solIdx, solution.otherSolutionResults.otherSolutionResult);
 			if(!bSetSolution) return false;	
 		}
 		return bSetSolution;
 	}//setSolution	
-	
+
 	/**
 	 * Set the [i]th optimization solution status, where i equals the given solution index.   
 	 * The solution status includes the status type, optional descriptions and possibly substatuses. 
@@ -1289,7 +2390,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setSolutionStatus(int solIdx, OptimizationSolutionStatus status){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1317,8 +2418,8 @@ public class OSrLWriter extends OSgLWriter{
 					int iSubstatus = status.substatus.length;
 					for(int i = 0; i < iSubstatus; i++){
 						Element eSubstatus =  m_document.createElement("substatus");
-						if(status.substatus[i].name != null && status.substatus[i].name.length() > 0){
-							eSubstatus.setAttribute("name", status.substatus[i].name);
+						if(status.substatus[i].type != null && status.substatus[i].type.length() > 0){
+							eSubstatus.setAttribute("type", status.substatus[i].type);
 						}						
 						if(status.substatus[i].description != null && status.substatus[i].description.length() > 0){
 							eSubstatus.setAttribute("description", status.substatus[i].description);
@@ -1342,7 +2443,7 @@ public class OSrLWriter extends OSgLWriter{
 		return true;
 
 	}//setSolutionStatus
-	
+
 	/**
 	 * Set the [i]th optimization solution status, where i equals the given solution index.   
 	 * The solution status includes the status type, optional descriptions and possibly substatuses. 
@@ -1363,7 +2464,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setSolutionStatus(int solIdx, String type, String description, OptimizationSolutionSubstatus[] subStatuses){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1389,8 +2490,8 @@ public class OSrLWriter extends OSgLWriter{
 					int iSubstatus = subStatuses.length;
 					for(int i = 0; i < iSubstatus; i++){
 						Element eSubstatus =  m_document.createElement("substatus");
-						if(subStatuses[i].name != null && subStatuses[i].name.length() > 0){
-							eSubstatus.setAttribute("name", subStatuses[i].name);
+						if(subStatuses[i].type != null && subStatuses[i].type.length() > 0){
+							eSubstatus.setAttribute("type", subStatuses[i].type);
 						}						
 						if(subStatuses[i].description != null && subStatuses[i].description.length() > 0){
 							eSubstatus.setAttribute("description", subStatuses[i].description);
@@ -1413,7 +2514,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setSolutionStatus
-	
+
 	/**
 	 * Set the [i]th optimization solution message, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1426,7 +2527,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setSolutionMessage(int solIdx, String solutionMessage){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1454,7 +2555,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setSolutionMessage	
-	
+
 	/**
 	 * Set the [i]th optimization solution's objective index, where i equals the given solution index.   
 	 * The first objective's index should be -1, the second -2, and so on.  
@@ -1469,7 +2570,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setSolutionObjectiveIndex(int solIdx, int objectiveIdx){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1486,7 +2587,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setSolutionObjectiveIndex
-	
+
 	/**
 	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1498,7 +2599,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setPrimalVariableValues(int solIdx, double[] x){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1544,7 +2645,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setPrimalVariableValues
-	
+
 	/**
 	 * Set the [i]th optimization solution's primal variable string values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1556,7 +2657,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setPrimalVariableStringValues(int solIdx, String[] x){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1602,7 +2703,7 @@ public class OSrLWriter extends OSgLWriter{
 		return true;
 	}//setPrimalVariableStringValues
 
-		
+
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
 	 * where i equals the given solution index.   
@@ -1619,7 +2720,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setOtherVariableResults(int solIdx, OtherVariableResult[] otherVariableResults){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1678,7 +2779,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setOtherVariableResults
-	
+
 	/**
 	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
 	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
@@ -1695,7 +2796,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setObjectiveValues(int solIdx, double[] objectiveValues){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1739,7 +2840,7 @@ public class OSrLWriter extends OSgLWriter{
 		return true;
 	}//setObjectiveValues
 
-	
+
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)objective-related results, 
 	 * where i equals the given solution index.   
@@ -1757,7 +2858,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setOtherObjectiveResults(int solIdx, OtherObjectiveResult[] otherObjectiveResults){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1813,7 +2914,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setOtherObjectiveResults
-	
+
 
 	/**
 	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
@@ -1826,7 +2927,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setDualVariableValues(int solIdx, double[] values){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1881,8 +2982,8 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return true;
 	}//setDualVariableValues
-	
-		
+
+
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)constraint-related results, 
 	 * where i equals the given solution index.   
@@ -1899,7 +3000,7 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public boolean setOtherConstraintResults(int solIdx, OtherConstraintResult[] otherConstraintResults){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
@@ -1958,50 +3059,65 @@ public class OSrLWriter extends OSgLWriter{
 	 * where i equals the given solution index.  These other results are usually on the general optimization, 
 	 * not specifically on the variables, objective, or constraints.  
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param otherOptimizationResults holds an array of other optimization results in OtherOptimizationResult[] array data structure, null if none. 
+	 * @param ohterSolverOuput holds an array of other optimization results in OtherOptimizationResult[] array data structure, null if none. 
 	 * Each other optimization result contains the name (required), an optional description (string) and an optional
 	 * value (string).  
 	 * @return whether the other optimization results are set successfully or not. 
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setOtherOptimizationResults(int solIdx, OtherOptimizationResult[] otherOptimizationResults){
+	public boolean setOtherOptimizationSolutionResults(int solIdx, OtherSolutionResult[] otherSolutionResults){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(solIdx >= vSolutions.size()) return false;
 		Element eSolution = (Element)vSolutions.elementAt(solIdx);
 		if(eSolution == null){
 			eSolution = m_document.createElement("solution");
+			eOptimization.appendChild(eSolution);
 		}
-		try{
-			XMLUtil.removeChildrenByName(eSolution, "other");
-			int iOthers = otherOptimizationResults==null?0:otherOptimizationResults.length;
-			if(iOthers == 0) return true;
-			for(int i = 0; i < iOthers; i++){
-				Element eOther = m_document.createElement("other");
-				if(otherOptimizationResults[i].name == null || otherOptimizationResults[i].name.length() <= 0){
-					return false;
+		if(otherSolutionResults == null || otherSolutionResults.length <= 0){
+			XMLUtil.removeChildrenByName(eSolution, "otherSolutionResults");			
+		}
+		else{
+			try{
+				XMLUtil.removeChildrenByName(eSolution, "otherSolutionResults");
+				Element eOtherSolutionResults =  m_document.createElement("otherSolutionResults");
+				eSolution.appendChild(eOtherSolutionResults);
+				int iOthers = otherSolutionResults==null?0:otherSolutionResults.length;
+				eOtherSolutionResults.setAttribute("numberOfSolutionResults", iOthers+"");
+				if(iOthers == 0) return true;
+				for(int i = 0; i < iOthers; i++){
+					Element eOtherSolutionResult = m_document.createElement("otherSolutionResult");
+					if(otherSolutionResults[i].name == null || otherSolutionResults[i].name.length() <= 0){
+						return false;
+					}
+					else{
+						eOtherSolutionResult.setAttribute("name", otherSolutionResults[i].name);
+					}
+					if(otherSolutionResults[i].type != null && otherSolutionResults[i].type.length() > 0){
+						eOtherSolutionResult.setAttribute("type", otherSolutionResults[i].type);					
+					}
+					if(otherSolutionResults[i].category != null && otherSolutionResults[i].category.length() > 0){
+						eOtherSolutionResult.setAttribute("category", otherSolutionResults[i].category);					
+					}
+					if(otherSolutionResults[i].description != null && otherSolutionResults[i].description.length() > 0){
+						eOtherSolutionResult.setAttribute("description", otherSolutionResults[i].description);					
+					}
+					if(otherSolutionResults[i].value != null && otherSolutionResults[i].value.length() > 0){
+						eOtherSolutionResult.appendChild(m_document.createTextNode(otherSolutionResults[i].value));
+					}
+					eOtherSolutionResults.appendChild(eOtherSolutionResult);
 				}
-				else{
-					eOther.setAttribute("name", otherOptimizationResults[i].name);
-				}
-				if(otherOptimizationResults[i].description != null && otherOptimizationResults[i].description.length() > 0){
-					eOther.setAttribute("description", otherOptimizationResults[i].description);					
-				}
-				if(otherOptimizationResults[i].value != null && otherOptimizationResults[i].value.length() > 0){
-					eOther.appendChild(m_document.createTextNode(otherOptimizationResults[i].value));
-				}
-				eSolution.appendChild(eOther);
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
 			}
 		}
-		catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
 		return true;
-	}//setOtherOptimizationResults
+	}//setOtherOptimizationSolutionResults
 
 	/**
 	 * Set the optimization analysis. 
@@ -2014,9 +3130,9 @@ public class OSrLWriter extends OSgLWriter{
 	 */	
 	public boolean setOSAnalysis(OSAnalysis osAnalysis){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
-		Element eOptimization = (Element)XMLUtil.findChildNode(m_eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
-		
+
 		XMLUtil.removeChildrenByName(eOptimization, "osal");
 		if(osAnalysis == null) return true;
 		OSaLWriter osalWriter = new OSaLWriter();
@@ -2031,25 +3147,7 @@ public class OSrLWriter extends OSgLWriter{
 		eOptimization.appendChild(eOSaL);
 		return true;
 	}//setOSAnalysis
-	
-	/**
-	 * Create the OSrL root element and its most basic required structure.
-	 * 
-	 * @return the OSrL element.
-	 */
-	protected Element createOSrLRoot(){
-		Element eOSrL = XMLUtil.createOSxLRootElement(m_document, "osrl");
-		m_eResultHeader = m_document.createElement("resultHeader");
-		eOSrL.appendChild(m_eResultHeader);
-		Element eGeneralStatus = m_document.createElement("generalStatus");
-		eGeneralStatus.setAttribute("type", "success");
-		m_eResultHeader.appendChild(eGeneralStatus);
-		m_eResultData = m_document.createElement("resultData");
-		eOSrL.appendChild(m_eResultData);
-		return eOSrL;
-	}//createOSrLRoot
-	
-	
+
 	/**
 	 * Create the otherResult element and its most basic required structure.
 	 * @param name the name of the otherResult element. 
@@ -2066,7 +3164,7 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		return eOtherResult;
 	}//createOtherResult
-	
+
 	/**
 	 * main for test purposes.
 	 *
@@ -2080,7 +3178,7 @@ public class OSrLWriter extends OSgLWriter{
 		String sAnalysisFileName = OSParameter.CODE_HOME + "OSRepository/test/osal/osal.osal";
 
 		GeneralStatus status = new GeneralStatus();
-		status.type= "success";
+		status.type= "normal";
 		status.description = "my status description";
 		GeneralSubstatus[] substatuses = new GeneralSubstatus[2];
 		substatuses[0] = new GeneralSubstatus();
@@ -2099,16 +3197,17 @@ public class OSrLWriter extends OSgLWriter{
 		if(!osrlWriter.setServiceName("my service name")) System.out.println("service name");
 		if(!osrlWriter.setServiceURI("my service uri")) System.out.println("uri");
 		if(!osrlWriter.setJobID("my job ID")) System.out.println("job ID");
-		if(!osrlWriter.setResultTime(new GregorianCalendar())) System.out.println("time!");
+		if(!osrlWriter.setSolverInvoked("my solver invoked")) System.out.println("solver invoked");
+		if(!osrlWriter.setResultTimeStamp(new GregorianCalendar())) System.out.println("time!");
 
-		
+/*
 		if(!osrlWriter.setCurrentState("busy")) System.out.println("setCurrentState!");
-		if(!osrlWriter.setAvailableDiskSpace(1.2)) System.out.println("setAvailableDiskSpace!");
-		if(!osrlWriter.setAvailableMemory(3.4)) System.out.println("setAvailableMemory!");
+//		if(!osrlWriter.setAvailableDiskSpace(1.2)) System.out.println("setAvailableDiskSpace!");
+//		if(!osrlWriter.setAvailableMemory(3.4)) System.out.println("setAvailableMemory!");
 		if(!osrlWriter.setCurrentJobCount(0)) System.out.println("setCurrentJobCount!");
 		if(!osrlWriter.setTotalJobsSoFar(100)) System.out.println("setTotalJobsSoFar!");
-		if(!osrlWriter.setTimeLastJobEnded(new GregorianCalendar(2006, 1, 31, 15, 3, 4))) System.out.println("setTimeLastJobEnded!");
-		if(!osrlWriter.setTimeLastJobTook(200.4)) System.out.println("setTimeLastJobTook!");
+//		if(!osrlWriter.setTimeLastJobEnded(new GregorianCalendar(2006, 1, 31, 15, 3, 4))) System.out.println("setTimeLastJobEnded!");
+//		if(!osrlWriter.setTimeLastJobTook(200.4)) System.out.println("setTimeLastJobTook!");
 		if(!osrlWriter.setTimeServiceStarted(new GregorianCalendar(2003, 1, 31, 15, 3, 4))) System.out.println("setTimeServiceStarted!");
 		if(!osrlWriter.setServiceUtilization(1.3)) System.out.println("setServiceUtilization!");
 		JobStatistics[] jobstatistics = new JobStatistics[2];
@@ -2126,26 +3225,26 @@ public class OSrLWriter extends OSgLWriter{
 		dependencies.jobID[0] = "333";
 		dependencies.jobID[1] = "aaa";
 		jobstatistics[0].dependencies = dependencies;	
-		if(!osrlWriter.setJobStatistics(jobstatistics)) System.out.println("setJobStatistics!");
-//		ProcessStatistics processStatistics = new ProcessStatistics();
-//		processStatistics.jobs = new Jobs();
-//		processStatistics.jobs.job = jobstatistics;
-//		if(!osrlWriter.setProcessStatistics(processStatistics)) System.out.println("setJobStatistics!");
+//		if(!osrlWriter.setJobStatistics(jobstatistics)) System.out.println("setJobStatistics!");
+		//		ProcessStatistics processStatistics = new ProcessStatistics();
+		//		processStatistics.jobs = new Jobs();
+		//		processStatistics.jobs.job = jobstatistics;
+		//		if(!osrlWriter.setProcessStatistics(processStatistics)) System.out.println("setJobStatistics!");
 
-		
+
 		String[] msOtherResultNames = {"other name 0", "other name 1"};
 		String[] msOtherResultValues = {"other value 0", "other value 1"};
-		if(!osrlWriter.setOtherResults(msOtherResultNames, msOtherResultValues, null)) System.out.println("set other!");
-	
-		if(!osrlWriter.addOtherResult("other name 2", "other value 2", null)) System.out.println("add other!");
-		if(!osrlWriter.addOtherResult("other name 3", "other value 3", "other description 3")) System.out.println("add other!");
+//		if(!osrlWriter.setOtherResults(msOtherResultNames, msOtherResultValues, null)) System.out.println("set other!");
 
-		
+//		if(!osrlWriter.addOtherResult("other name 2", "other value 2", null)) System.out.println("add other!");
+//		if(!osrlWriter.addOtherResult("other name 3", "other value 3", "other description 3")) System.out.println("add other!");
+
+
 		osrlWriter.setVariableNumber(3);
 		osrlWriter.setObjectiveNumber(2);
 		osrlWriter.setConstraintNumber(4);
 		osrlWriter.setSolutionNumber(3);
-		
+
 		if(!osrlWriter.setSolutionStatus(0, "optimal", "solved", null)) System.out.println("setSolutionStatus");
 		if(!osrlWriter.setSolutionStatus(1, "infeasible", "solved", null)) System.out.println("setSolutionStatus");
 		if(!osrlWriter.setSolutionStatus(2, "globallyOptimal", "solved", null)) System.out.println("setSolutionStatus");
@@ -2166,7 +3265,7 @@ public class OSrLWriter extends OSgLWriter{
 		String[] msValues3 = {"c", "d", "e"};
 		if(!osrlWriter.setPrimalVariableStringValues(2, msValues3)) System.out.println("setPrimalVariableStringValues");
 
-		
+
 		double[] mdValues1 = {1, 2, 3};
 		if(!osrlWriter.setPrimalVariableValues(0, mdValues1)) System.out.println("setPrimalVariableValues");
 		double[] mdValues2 = {2, 3, 4};
@@ -2180,7 +3279,7 @@ public class OSrLWriter extends OSgLWriter{
 		if(!osrlWriter.setObjectiveValues(1, mdValues22)) System.out.println("setObjectiveValues");
 		double[] mdValues33 = {3, 4};
 		if(!osrlWriter.setObjectiveValues(2, mdValues33)) System.out.println("setObjectiveValues");
-		
+
 		double[] mdValues77 = {4, 2, 3, 4};
 		if(!osrlWriter.setDualVariableValues(0, mdValues77)) System.out.println("setDualVariableValues");
 		double[] mdValues88 = {5, 3, 4, 5};
@@ -2241,8 +3340,8 @@ public class OSrLWriter extends OSgLWriter{
 		if(!osrlWriter.setOtherConstraintResults(0, conOT1)) System.out.println("setOtherConstraintResults");
 		if(!osrlWriter.setOtherConstraintResults(1, conOT1)) System.out.println("setOtherConstraintResults");
 		if(!osrlWriter.setOtherConstraintResults(2, conOT1)) System.out.println("setOtherConstraintResults");
-		
-		
+
+
 		OtherObjectiveResult[] objOT1 = new OtherObjectiveResult[2];
 		objOT1[0] = new OtherObjectiveResult();	
 		objOT1[0].obj = new OtherObjResult[2];
@@ -2269,20 +3368,20 @@ public class OSrLWriter extends OSgLWriter{
 		if(!osrlWriter.setOtherObjectiveResults(0, objOT1)) System.out.println("setOtherObjectiveResults");
 		if(!osrlWriter.setOtherObjectiveResults(1, objOT1)) System.out.println("setOtherObjectiveResults");
 		if(!osrlWriter.setOtherObjectiveResults(2, objOT1)) System.out.println("setOtherObjectiveResults");
-		
-		OtherOptimizationResult[] otherOpt = new OtherOptimizationResult[2];
-		otherOpt[0] = new OtherOptimizationResult();
-		otherOpt[0].name = "othetOpt0 name";
-		otherOpt[0].value = "othetOpt0 value";
-		otherOpt[0].description = "othetOpt0 description";
-		otherOpt[1] = new OtherOptimizationResult();
-		otherOpt[1].name = "othetOpt1 name";
-		otherOpt[1].value = "othetOpt1 value";
-		otherOpt[1].description = "othetOpt1 description";
-		if(!osrlWriter.setOtherOptimizationResults(0, otherOpt)) System.out.println("setOtherOptimizationResults");
-		if(!osrlWriter.setOtherOptimizationResults(1, otherOpt)) System.out.println("setOtherOptimizationResults");
-		if(!osrlWriter.setOtherOptimizationResults(0, otherOpt)) System.out.println("setOtherOptimizationResults");
-		
+
+//		OtherOptimizationResult[] otherOpt = new OtherOptimizationResult[2];
+//		otherOpt[0] = new OtherOptimizationResult();
+//		otherOpt[0].name = "othetOpt0 name";
+//		otherOpt[0].value = "othetOpt0 value";
+//		otherOpt[0].description = "othetOpt0 description";
+//		otherOpt[1] = new OtherOptimizationResult();
+//		otherOpt[1].name = "othetOpt1 name";
+//		otherOpt[1].value = "othetOpt1 value";
+//		otherOpt[1].description = "othetOpt1 description";
+//		if(!osrlWriter.setOtherOptimizationResults(0, otherOpt)) System.out.println("setOtherOptimizationResults");
+//		if(!osrlWriter.setOtherOptimizationResults(1, otherOpt)) System.out.println("setOtherOptimizationResults");
+//		if(!osrlWriter.setOtherOptimizationResults(0, otherOpt)) System.out.println("setOtherOptimizationResults");
+
 		OSaLReader osalReader = new OSaLReader(false);
 		if(!osalReader.readFile(sAnalysisFileName)) System.out.println("reading");
 		OSAnalysis osAnalysis = null;
@@ -2294,9 +3393,9 @@ public class OSrLWriter extends OSgLWriter{
 		}
 		if(!osrlWriter.setOSAnalysis(osAnalysis)) System.out.println("setOSAnalysis");
 
-		
+
 		///////////////////////
-		
+
 		OSrLReader osrlReader = new OSrLReader(false);
 		if(!osrlReader.readFile(sFileName)) System.out.println("reading");
 		OSResult osResult = null;
@@ -2308,8 +3407,9 @@ public class OSrLWriter extends OSgLWriter{
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		*/
 		///////////////////////
 		System.out.println(osrlWriter.writeToString());
 	}//main
-	
+
 }//class OSrLWriter

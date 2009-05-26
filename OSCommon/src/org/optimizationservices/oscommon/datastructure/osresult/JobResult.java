@@ -33,12 +33,12 @@ public class JobResult{
 	
 	public CPUSpeed usedCPUSpeed = new CPUSpeed();
 	
-	public int usedCPUNumber = -1;
+	public CPUNumber usedCPUNumber = new CPUNumber();
 	
 	public DiskSpace usedDiskSpace = new DiskSpace();
 	
 	public MemorySize usedMemory = new MemorySize();
 	
-	public OtherResults otherOptions = null;
+	public OtherResults otherResults = null;
 	
 }//class JobResult

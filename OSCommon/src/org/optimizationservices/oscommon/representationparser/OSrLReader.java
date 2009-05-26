@@ -4,21 +4,19 @@
  * Copyright (c) 2004
  */
 package org.optimizationservices.oscommon.representationparser;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Vector;
 
-import org.optimizationservices.oscommon.datastructure.osgeneral.JobDependencies;
-import org.optimizationservices.oscommon.datastructure.osprocess.JobStatistics;
-import org.optimizationservices.oscommon.datastructure.osprocess.Jobs;
-import org.optimizationservices.oscommon.datastructure.osprocess.ProcessStatistics;
+import org.optimizationservices.oscommon.datastructure.osresult.CPUNumber;
+import org.optimizationservices.oscommon.datastructure.osresult.CPUSpeed;
 import org.optimizationservices.oscommon.datastructure.osresult.ConstraintSolution;
+import org.optimizationservices.oscommon.datastructure.osresult.DiskSpace;
 import org.optimizationservices.oscommon.datastructure.osresult.DualVarValue;
 import org.optimizationservices.oscommon.datastructure.osresult.DualVariableValues;
 import org.optimizationservices.oscommon.datastructure.osresult.GeneralStatus;
 import org.optimizationservices.oscommon.datastructure.osresult.GeneralSubstatus;
+import org.optimizationservices.oscommon.datastructure.osresult.MemorySize;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjValue;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjectiveSolution;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjectiveValues;
@@ -30,9 +28,13 @@ import org.optimizationservices.oscommon.datastructure.osresult.OtherConResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult;
-import org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult;
+import org.optimizationservices.oscommon.datastructure.osresult.SolutionResults;
+import org.optimizationservices.oscommon.datastructure.osresult.Time;
+import org.optimizationservices.oscommon.datastructure.osresult.TimingInformation;
 import org.optimizationservices.oscommon.datastructure.osresult.VarStringValue;
 import org.optimizationservices.oscommon.datastructure.osresult.VarValue;
 import org.optimizationservices.oscommon.datastructure.osresult.VariableSolution;
@@ -64,17 +66,17 @@ public class OSrLReader extends OSgLReader{
 	 * storing Optimization Services result. 
 	 */
 	protected OSResult m_osResult = null;
-	
+
 	/**
 	 * m_iVariableNumber holds the variable number. 
 	 */
 	private int m_iVariableNumber = -1;
-	
+
 	/**
 	 * m_iObjectiveNumber holds the objective number. 
 	 */
 	private int m_iObjectiveNumber = -1;
-	
+
 	/**
 	 * m_iConstraintNumber holds the constraint number. 
 	 */
@@ -84,22 +86,22 @@ public class OSrLReader extends OSgLReader{
 	 * m_iSolutionNumber holds the solution number. 
 	 */
 	private int m_iSolutionNumber = -1;
-	
+
 	/**
 	 * m_bProcessOptimizationResult holds whether the optimization result has been processed or not. 
 	 */
 	private boolean m_bProcessOptimizationResult = false;
-	
+
 	/**
 	 * m_optimizationResult holds the optimization result in the result data. 
 	 */
 	private OptimizationResult m_optimizationResult = null;
-	
+
 	/**
 	 * m_otherResultHashMap holds a hash map of other result information.
 	 */
 	protected HashMap<String, String>	m_otherResultHashMap = null;
-	
+
 	/**
 	 * m_otherResultDescriptionHashMap holds a hash map of other result descriptions.
 	 */
@@ -113,14 +115,14 @@ public class OSrLReader extends OSgLReader{
 	public OSrLReader(boolean validate){
 		m_bXsdValidate = validate;
 	}//constructor
-	
+
 	/**
 	 * Default	constructor. 
 	 *
 	 */
 	public OSrLReader(){
 	}//constructor
-	
+
 	/**
 	 * get the standard OSResult, a local interface for 
 	 * storing Optimization Services result.
@@ -128,7 +130,7 @@ public class OSrLReader extends OSgLReader{
 	 * @return the OSResult. 
 	 * @throws Exception if there are errors getting the OSResult. 
 	 */
-   	public OSResult getOSResult() throws Exception{
+	public OSResult getOSResult() throws Exception{
 		if(m_osResult != null){
 			return m_osResult;
 		}
@@ -138,27 +140,25 @@ public class OSrLReader extends OSgLReader{
 		if(!m_osResult.setServiceName(getServiceName())) throw new Exception("setServiceName Unsuccessful");
 		if(!m_osResult.setInstanceName(getInstanceName())) throw new Exception("setInstanceName Unsuccessful");
 		if(!m_osResult.setJobID(getJobID())) throw new Exception("setJobID Unsuccessful");
-		if(!m_osResult.setResultTime(getResultTime())) throw new Exception("setResultTime Unsuccessful");
+		if(!m_osResult.setResultTimeStamp(getResultTimeStamp())) throw new Exception("setResultTime Unsuccessful");
 		if(!m_osResult.setGeneralMessage(getGeneralMessage())) throw new Exception("setGeneralMessage Unsuccessful");
 		if(!m_osResult.setVariableNumber(getVariableNumber())) throw new Exception("setVariableNumber Unsuccessful");
 		if(!m_osResult.setObjectiveNumber(getObjectiveNumber())) throw new Exception("setObjectiveNumber Unsuccessful");
 		if(!m_osResult.setConstraintNumber(getConstraintNumber())) throw new Exception("setConstraintNumber Unsuccessful");
 		if(!m_osResult.setSolutionNumber(getSolutionNumber())) throw new Exception("setSolutionNumber Unsuccessful");
-		if(!m_osResult.setProcessStatistics(getProcessStatistics())) throw new Exception("setProcessStatistics Unsuccessful");
 		processOptimizationResult();
-		m_osResult.resultData.optimization = m_optimizationResult;
-		if(!m_osResult.setOtherResults(getOtherResultNames(), getOtherResultDescriptions(), getOtherResultValues())) throw new Exception("setOtherResults Unsuccessful");
+		m_osResult.optimization = m_optimizationResult;
 		return m_osResult;
-   	}//getOSResult
-   		
-   	/**
+	}//getOSResult
+
+	/**
 	 * Get the general status.
 	 * 
 	 * @return the general status. 
 	 */
 	public GeneralStatus getGeneralStatus(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		Element eGeneralStatus = (Element)XMLUtil.findChildNode(eResultHeader, "generalStatus");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		Element eGeneralStatus = (Element)XMLUtil.findChildNode(eGeneral, "generalStatus");
 		if(eGeneralStatus == null) return null;
 		GeneralStatus status = new GeneralStatus();
 		String sStatusType = eGeneralStatus.getAttribute("type");
@@ -194,384 +194,336 @@ public class OSrLReader extends OSgLReader{
 		}
 		return status;
 	}//getGeneralStatus
-	
-   	/**
+
+	/**
 	 * Get the general status type, which can be: 
 	 * success, error, warning. 
 	 * 
 	 * @return the general status type, null if none. 
 	 */
 	public String getGeneralStatusType(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		Element eGeneralStatus = (Element)XMLUtil.findChildNode(eResultHeader, "generalStatus");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		Element eGeneralStatus = (Element)XMLUtil.findChildNode(eGeneral, "generalStatus");
 		if(eGeneralStatus == null) return null;
 		String sStatusType = eGeneralStatus.getAttribute("type");
 		return sStatusType;
 	}//getGeneralStatusType
 
-   	/**
+	/**
 	 * Get the general status description. 
 	 * 
 	 * @return the general status description, null or empty string if none. 
 	 */
 	public String getGeneralStatusDescription(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		Element eGeneralStatus = (Element)XMLUtil.findChildNode(eResultHeader, "generalStatus");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		Element eGeneralStatus = (Element)XMLUtil.findChildNode(eGeneral, "generalStatus");
 		if(eGeneralStatus == null) return null;
 		String sStatusDescription = eGeneralStatus.getAttribute("description");
 		return sStatusDescription;
 	}//getGeneralStatusDescription
 
-  	/**
+	/**
 	 * Get service uri.
 	 * 
 	 * @return the service uri. 
 	 */
 	public String getServiceURI(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		String sServiceURI = XMLUtil.getElementValueByName(eResultHeader, "serviceURI");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		String sServiceURI = XMLUtil.getElementValueByName(eGeneral, "serviceURI");
 		if(sServiceURI == null) sServiceURI = "";
 		return sServiceURI;	
 	}//getServiceURI
-	
-   	/**
+
+	/**
 	 * Get service name.
 	 * 
 	 * @return the service name. 
 	 */
 	public String getServiceName(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		String sServiceName = XMLUtil.getElementValueByName(eResultHeader, "serviceName");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		String sServiceName = XMLUtil.getElementValueByName(eGeneral, "serviceName");
 		if(sServiceName == null) sServiceName = "";
 		return sServiceName;
 	}//getServiceName
-	
-  	/**
+
+	/**
 	 * Get instance name.
 	 * 
 	 * @return the instance name. 
 	 */
 	public String getInstanceName(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		String sInstanceName = XMLUtil.getElementValueByName(eResultHeader, "instanceName");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		String sInstanceName = XMLUtil.getElementValueByName(eGeneral, "instanceName");
 		if(sInstanceName == null) sInstanceName = "";
 		return sInstanceName;
 	}//getInstanceName
-	
-  	/**
+
+	/**
 	 * Get the job id.
 	 * 
 	 * @return the job id. 
 	 */
 	public String getJobID(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		String sJobID = XMLUtil.getElementValueByName(eResultHeader, "jobID");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		String sJobID = XMLUtil.getElementValueByName(eGeneral, "jobID");
 		if(sJobID == null) sJobID = "";
 		return sJobID;	
 	}//getJobID
-	
- 	/**
+
+	/**
 	 * Get time of the result.
 	 * 
 	 * @return the time of the result.
 	 */
-	public GregorianCalendar getResultTime(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		String sTime = XMLUtil.getElementValueByName(eResultHeader, "time");
+	public GregorianCalendar getResultTimeStamp(){
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		String sTime = XMLUtil.getElementValueByName(eGeneral, "time");
 		if(sTime == null) return null;
 		GregorianCalendar time = XMLUtil.createNativeDateTime(sTime);
 		return time;
 	}//getResultTime
-	
-   	/**
+
+	/**
 	 * Get the general message. 
 	 * 
 	 * @return the general message. 
 	 */
 	public String getGeneralMessage(){
-		Element eResultHeader = (Element)XMLUtil.findChildNode(m_eRoot, "resultHeader");
-		String sMessage = XMLUtil.getElementValueByName(eResultHeader, "message");
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		String sMessage = XMLUtil.getElementValueByName(eGeneral, "message");
 		if(sMessage == null) sMessage = "";
 		return sMessage;	
 	}//getGeneralMessage
-	
+
 	/**
-	 * Get the process statistics. 
+	 * Get the solver invoked.
 	 * 
-	 * @return the process statistics. 
+	 * @return the solverInvoked. 
 	 */
-	public ProcessStatistics getProcessStatistics(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return null;
-		ProcessStatistics processStatistics = new ProcessStatistics();
-		String sValue = "";
-		int iValue;
-		double dValue;
-		sValue =  XMLUtil.getElementValueByName(eStatistics, "currentState");
-		if(sValue != null && sValue.length() > 0){
-			processStatistics.currentState = sValue;
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "availableDiskSpace");
-			if(sValue != null && sValue.length() > 0){
-				if(sValue.equals("INF")) {
-					processStatistics.availableDiskSpace = Double.POSITIVE_INFINITY;
-				}
-				else{
-					dValue = Double.parseDouble(sValue);
-					processStatistics.availableDiskSpace = dValue;
-				}
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.availableDiskSpace = Double.NaN;
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "availableMemory");
-			if(sValue != null && sValue.length() > 0){
-				if(sValue.equals("INF")) {
-					processStatistics.availableMemory = Double.POSITIVE_INFINITY;
-				}
-				else{
-					dValue = Double.parseDouble(sValue);
-					processStatistics.availableMemory = dValue;
-				}
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.availableMemory = Double.NaN;
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "currentJobCount");
-			if(sValue != null && sValue.length() > 0){
-				iValue = Integer.parseInt(sValue);
-				processStatistics.currentJobCount = iValue;
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.currentJobCount = -1;
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "totalJobsSoFar");
-			if(sValue != null && sValue.length() > 0){
-				iValue = Integer.parseInt(sValue);
-				processStatistics.totalJobsSoFar = iValue;
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.totalJobsSoFar = -1;
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "timeLastJobEnded");
-			if(sValue != null && sValue.length() > 0){
-				processStatistics.timeLastJobEnded = XMLUtil.createNativeDateTime(sValue);
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.timeLastJobEnded = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "timeLastJobTook");
-			if(sValue != null && sValue.length() > 0){
-				if(sValue.equals("INF")) {
-					processStatistics.timeLastJobTook = Double.POSITIVE_INFINITY;
-				}
-				else{
-					dValue = Double.parseDouble(sValue);
-					processStatistics.timeLastJobTook = dValue;
-				}
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.timeLastJobTook = Double.NaN;
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "timeServiceStarted");
-			if(sValue != null && sValue.length() > 0){
-				processStatistics.timeServiceStarted = XMLUtil.createNativeDateTime(sValue);
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.timeServiceStarted = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		}
-		try {
-			sValue =  XMLUtil.getElementValueByName(eStatistics, "serviceUtilization");
-			if(sValue != null && sValue.length() > 0){
-				if(sValue.equals("INF")) {
-					processStatistics.serviceUtilization = Double.POSITIVE_INFINITY;
-				}
-				else{
-					dValue = Double.parseDouble(sValue);
-					processStatistics.serviceUtilization = dValue;
-				}
-			}
-		} 
-		catch (Exception e) {
-			processStatistics.serviceUtilization = Double.NaN;
-		}
-		Element eJobs = (Element)XMLUtil.findChildNode(eStatistics, "jobs");
-		if(eJobs == null) return processStatistics;
-		NodeList jobList = eJobs.getElementsByTagName("job");
-		if(jobList == null || jobList.getLength() <= 0) return processStatistics;
-		processStatistics.jobs = new Jobs();
-		int iJobs = jobList.getLength();
-		processStatistics.jobs.job = new JobStatistics[iJobs];
-		for(int i = 0; i < iJobs; i++){
-			processStatistics.jobs.job[i] = new JobStatistics();
-			Element eJob = (Element)jobList.item(i);
-			sValue =  eJob.getAttribute("jobID");
-			if(sValue != null && sValue.length() > 0){
-				processStatistics.jobs.job[i].jobID = sValue;
-			}
-			sValue =  XMLUtil.getElementValueByName(eJob, "state");
-			if(sValue != null && sValue.length() > 0){
-				processStatistics.jobs.job[i].state = sValue;
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "startTime");
-				if(sValue != null && sValue.length() > 0){
-					processStatistics.jobs.job[i].startTime = XMLUtil.createNativeDateTime(sValue);
-				}
-			} 
-			catch (Exception e) {
-				processStatistics.jobs.job[i].startTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "endTime");
-				if(sValue != null && sValue.length() > 0){
-					processStatistics.jobs.job[i].endTime = XMLUtil.createNativeDateTime(sValue);
-				}
-			} 
-			catch (Exception e) {
-				processStatistics.jobs.job[i].endTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "duration");
-				if(sValue != null && sValue.length() > 0){
-					if(sValue.equals("INF")) {
-						processStatistics.jobs.job[i].duration = Double.POSITIVE_INFINITY;
-					}
-					else{
-						dValue = Double.parseDouble(sValue);
-						processStatistics.jobs.job[i].duration = dValue;
-					}
-				}
-			} 
-			catch (Exception e) {
-				processStatistics.jobs.job[i].duration = Double.NaN;
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "scheduledStartTime");
-				if(sValue != null && sValue.length() > 0){
-					processStatistics.jobs.job[i].scheduledStartTime = XMLUtil.createNativeDateTime(sValue);
-				}
-			} 
-			catch (Exception e) {
-				processStatistics.jobs.job[i].scheduledStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			}
-			Element eDependencies = (Element)XMLUtil.findChildNode(eJob, "dependencies");
-			if(eDependencies == null) continue;
-			NodeList jobIDList = eDependencies.getElementsByTagName("jobID");
-			if(jobIDList == null || jobIDList.getLength() <= 0) continue;
-			int iJobIDs = jobIDList.getLength();
-			processStatistics.jobs.job[i].dependencies = new JobDependencies();
-			processStatistics.jobs.job[i].dependencies.jobID = new String[iJobIDs];
-			for(int j = 0; j < iJobIDs; j++){
-				Element eJobID = (Element)jobIDList.item(j);
-				processStatistics.jobs.job[i].dependencies.jobID[j] =  XMLUtil.getElementValue(eJobID);
-			}
-		}
-		return processStatistics;
-	}//getProcessStatistics
-	
+	public String getSolverInvoked(){
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		String sSolverInvoked = XMLUtil.getElementValueByName(eGeneral, "solverInvoked");
+		if(sSolverInvoked == null) sSolverInvoked = "";
+		return sSolverInvoked;	
+	}//getSolverInvoked
+
+
 	/**
-	 * Get the statistics of all the jobs. 
+	 * get the number of other <general> results
 	 * 
-	 * @return the statistics of all the jobs, which is an array of jobStatistics with 
-	 * each member corresponding to one job; null if none. 
+	 * @return the number of other <general> results
 	 */
-	public JobStatistics[] getJobStatistics(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return null;
-		Element eJobs = (Element)XMLUtil.findChildNode(eStatistics, "jobs");
-		if(eJobs == null) return null;
-		NodeList jobList = eJobs.getElementsByTagName("job");
-		if(jobList == null || jobList.getLength() <= 0) return null;
-		Jobs jobs = new Jobs();
-		int iJobs = jobList.getLength();
-		jobs.job = new JobStatistics[iJobs];
-		String sValue = "";
-		double dValue;
-		for(int i = 0; i < iJobs; i++){
-			jobs.job[i] = new JobStatistics();
-			Element eJob = (Element)jobList.item(i);
-			sValue =  eJob.getAttribute("jobID");
-			if(sValue != null && sValue.length() > 0){
-				jobs.job[i].jobID = sValue;
-			}
-			sValue =  XMLUtil.getElementValueByName(eJob, "state");
-			if(sValue != null && sValue.length() > 0){
-				jobs.job[i].state = sValue;
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "startTime");
-				if(sValue != null && sValue.length() > 0){
-					jobs.job[i].startTime = XMLUtil.createNativeDateTime(sValue);
-				}
-			} 
-			catch (Exception e) {
-				jobs.job[i].startTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "endTime");
-				if(sValue != null && sValue.length() > 0){
-					jobs.job[i].endTime = XMLUtil.createNativeDateTime(sValue);
-				}
-			} 
-			catch (Exception e) {
-				jobs.job[i].endTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "duration");
-				if(sValue != null && sValue.length() > 0){
-					if(sValue.equals("INF")) {
-						jobs.job[i].duration = Double.POSITIVE_INFINITY;
-					}
-					else{
-						dValue = Double.parseDouble(sValue);
-						jobs.job[i].duration = dValue;
-					}
-				}
-			} 
-			catch (Exception e) {
-				jobs.job[i].duration = Double.NaN;
-			}
-			try {
-				sValue =  XMLUtil.getElementValueByName(eJob, "scheduledStartTime");
-				if(sValue != null && sValue.length() > 0){
-					jobs.job[i].scheduledStartTime = XMLUtil.createNativeDateTime(sValue);
-				}
-			} 
-			catch (Exception e) {
-				jobs.job[i].scheduledStartTime = new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			}
-			Element eDependencies = (Element)XMLUtil.findChildNode(eJob, "dependencies");
-			if(eDependencies == null) continue;
-			NodeList jobIDList = eDependencies.getElementsByTagName("jobID");
-			if(jobIDList == null || jobIDList.getLength() <= 0) continue;
-			int iJobIDs = jobIDList.getLength();
-			jobs.job[i].dependencies = new JobDependencies();
-			jobs.job[i].dependencies.jobID = new String[iJobIDs];
-			for(int j = 0; j < iJobIDs; j++){
-				Element eJobID = (Element)jobIDList.item(j);
-				jobs.job[i].dependencies.jobID[j] =  XMLUtil.getElementValue(eJobID);
-			}
+	public int  getNumberOfOtherGeneralResults(){	
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		if(eGeneral == null) return 0;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eGeneral, "otherResults");
+		if(eOtherResults == null) return 0;
+		String sNumberOfOtherResults = eOtherResults.getAttribute("numberOfOtherResults");
+		if(sNumberOfOtherResults == null || sNumberOfOtherResults.length() <= 0) return 0;
+		try{
+			int iNumberOfOtherResults = Integer.parseInt(sNumberOfOtherResults);
+			return iNumberOfOtherResults;
 		}
-		return jobs.job;
-	}//getJobStatistics
-   	
+		catch(Exception e){
+			return 0;
+		}	
+	}//getNumberOfOtherGeneralResults
+
+	/**
+	 * get the array of other <general> results
+	 * 
+	 * @return the array of other <general> results
+	 */
+	public OtherResult[] getOtherGeneralResults(){	
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
+		if(eGeneral == null) return null;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eGeneral, "otherResults");
+		if(eOtherResults == null) return null;
+		NodeList others = eOtherResults.getElementsByTagName("other");
+		if(others == null || others.getLength() <= 0) return null;
+		int iOthers = others.getLength();
+		OtherResult[] mOthers = new OtherResult[iOthers];
+		for(int i = 0; i < iOthers; i++){
+			Element eOther = (Element)others.item(i);
+			mOthers[i] =new OtherResult();
+			String sName = eOther.getAttribute("name"); 				
+			String sValue = eOther.getAttribute("value");
+			String sDescription = eOther.getAttribute("description");	
+			mOthers[i].name = sName==null?"":sName;
+			mOthers[i].value = sValue==null?"":sValue;
+			mOthers[i].description = sDescription==null?"":sDescription;
+		}
+		return mOthers;
+	}//getOtherGeneralResults
+
+	/**
+	 * Get the system information.
+	 * 
+	 * @return the system information. 
+	 */
+	public String getSystemInformation(){
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		String sSystemInformation = XMLUtil.getElementValueByName(eSystem, "systemInformation");
+		if(sSystemInformation == null) sSystemInformation = "";
+		return sSystemInformation;	
+	}//getSystemInformation
+
+	/**
+	 * Get the system available disk space. 
+	 * 
+	 * @return the available system disk space 
+	 */
+	public DiskSpace getAvailableDiskSpace(){
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		if(eSystem == null) return null;
+		Element eAvailableDiskSpace = (Element)XMLUtil.findChildNode(eSystem, "availableDiskSpace");
+		if(eAvailableDiskSpace == null) return null;
+		String sAvailableDiskSpace = XMLUtil.getElementValue(eAvailableDiskSpace);
+		if(sAvailableDiskSpace == null || sAvailableDiskSpace.length() <= 0) return null;
+		DiskSpace diskSpace = new DiskSpace();
+		try{
+			if(sAvailableDiskSpace.equals("INF")) diskSpace.value = Double.POSITIVE_INFINITY;
+			if(sAvailableDiskSpace.equals("-INF")) diskSpace.value = Double.NEGATIVE_INFINITY;
+			if(sAvailableDiskSpace.equals("NaN") || sAvailableDiskSpace.equals("-NaN")) diskSpace.value = Double.NaN;			
+			double dAvailableDiskSpace = Double.parseDouble(sAvailableDiskSpace);
+			diskSpace.value = dAvailableDiskSpace;
+			diskSpace.unit = eAvailableDiskSpace.getAttribute("unit");
+			diskSpace.description = eAvailableDiskSpace.getAttribute("description");
+			return diskSpace;
+		}
+		catch(Exception e){
+			return null;
+		}
+	}//getAvailableDiskSpace
+
+	/**
+	 * Get the system available memory. 
+	 * 
+	 * @return the available system memory 
+	 */
+	public MemorySize getAvailableMemory(){
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		if(eSystem == null) return null;
+		Element eAvailableMemory = (Element)XMLUtil.findChildNode(eSystem, "availableMemory");
+		if(eAvailableMemory == null) return null;
+		String sAvailableMemory = XMLUtil.getElementValue(eAvailableMemory);
+		if(sAvailableMemory == null || sAvailableMemory.length() <= 0) return null;
+		MemorySize memory = new MemorySize();
+		try{
+			if(sAvailableMemory.equals("INF")) memory.value = Double.POSITIVE_INFINITY;
+			if(sAvailableMemory.equals("-INF")) memory.value = Double.NEGATIVE_INFINITY;
+			if(sAvailableMemory.equals("NaN") || sAvailableMemory.equals("-NaN")) memory.value = Double.NaN;			
+			double dAvailableMemory = Double.parseDouble(sAvailableMemory);
+			memory.value = dAvailableMemory;
+			memory.unit = eAvailableMemory.getAttribute("unit");
+			memory.description = eAvailableMemory.getAttribute("description");
+			return memory;
+		}
+		catch(Exception e){
+			return null;
+		}
+	}//getAvailableMemory
+
+	/**
+	 * Get the system available CPU speed. 
+	 * 
+	 * @return the available system CPU speed 
+	 */
+	public CPUSpeed getAvailableCPUSpeed(){
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		if(eSystem == null) return null;
+		Element eAvailableCPUSpeed = (Element)XMLUtil.findChildNode(eSystem, "availableCPUSpeed");
+		if(eAvailableCPUSpeed == null) return null;
+		String sAvailableCPUSpeed = XMLUtil.getElementValue(eAvailableCPUSpeed);
+		if(sAvailableCPUSpeed == null || sAvailableCPUSpeed.length() <= 0) return null;
+		CPUSpeed cpuSpeed = new CPUSpeed();
+		try{
+			if(sAvailableCPUSpeed.equals("INF")) cpuSpeed.value = Double.POSITIVE_INFINITY;
+			if(sAvailableCPUSpeed.equals("-INF")) cpuSpeed.value = Double.NEGATIVE_INFINITY;
+			if(sAvailableCPUSpeed.equals("NaN") || sAvailableCPUSpeed.equals("-NaN")) cpuSpeed.value = Double.NaN;			
+			double dAvailableCPUSpeed = Double.parseDouble(sAvailableCPUSpeed);
+			cpuSpeed.value = dAvailableCPUSpeed;
+			cpuSpeed.unit = eAvailableCPUSpeed.getAttribute("unit");
+			cpuSpeed.description = eAvailableCPUSpeed.getAttribute("description");
+			return cpuSpeed;
+		}
+		catch(Exception e){
+			return null;
+		}
+	}//getAvailableCPUSpeed
+
+	/**
+	 * Get the system available CPU number. 
+	 * 
+	 * @return the available system CPU number 
+	 */
+	public CPUNumber getAvailableCPUNumber(){
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		if(eSystem == null) return null;
+		Element eAvailableCPUNumber = (Element)XMLUtil.findChildNode(eSystem, "availableCPUNumber");
+		if(eAvailableCPUNumber == null) return null;
+		String sAvailableCPUNumber = XMLUtil.getElementValue(eAvailableCPUNumber);
+		if(sAvailableCPUNumber == null || sAvailableCPUNumber.length() <= 0) return null;
+		CPUNumber cpuNumber = new CPUNumber();
+		try{
+			int iAvailableCPUNumber = Integer.parseInt(sAvailableCPUNumber);
+			cpuNumber.value = iAvailableCPUNumber;
+			cpuNumber.description = eAvailableCPUNumber.getAttribute("description");
+			return cpuNumber;
+		}
+		catch(Exception e){
+			return null;
+		}
+	}//getAvailableCPUNumber
+
+	/**
+	 * get the number of other <system> results
+	 * 
+	 * @return the number of other <system> results
+	 */
+	public int  getNumberOfOtherSystemResults(){	
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		if(eSystem == null) return 0;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eSystem, "otherResults");
+		if(eOtherResults == null) return 0;
+		String sNumberOfOtherResults = eOtherResults.getAttribute("numberOfOtherResults");
+		if(sNumberOfOtherResults == null || sNumberOfOtherResults.length() <= 0) return 0;
+		try{
+			int iNumberOfOtherResults = Integer.parseInt(sNumberOfOtherResults);
+			return iNumberOfOtherResults;
+		}
+		catch(Exception e){
+			return 0;
+		}	
+	}//getNumberOfOtherSystemResults
+
+	/**
+	 * get the array of other <system> results
+	 * 
+	 * @return the array of other <system> results
+	 */
+	public OtherResult[] getOtherSystemResults(){	
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		if(eSystem == null) return null;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eSystem, "otherResults");
+		if(eOtherResults == null) return null;
+		NodeList others = eOtherResults.getElementsByTagName("other");
+		if(others == null || others.getLength() <= 0) return null;
+		int iOthers = others.getLength();
+		OtherResult[] mOthers = new OtherResult[iOthers];
+		for(int i = 0; i < iOthers; i++){
+			Element eOther = (Element)others.item(i);
+			mOthers[i] =new OtherResult();
+			String sName = eOther.getAttribute("name"); 				
+			String sValue = eOther.getAttribute("value");
+			String sDescription = eOther.getAttribute("description");	
+			mOthers[i].name = sName==null?"":sName;
+			mOthers[i].value = sValue==null?"":sValue;
+			mOthers[i].description = sDescription==null?"":sDescription;
+		}
+		return mOthers;
+	}//getOtherSystemResults
+
 	/**
 	 * Get the current state, , which can be:
 	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting" and "noResponse".
@@ -579,339 +531,413 @@ public class OSrLReader extends OSgLReader{
 	 * @return the current status, "noResponse" if none.
 	 */
 	public String getCurrentState(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return "noResponse";
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "currentState");
-		if(sValue == null || sValue.length() <= 0){
-			return "noResponse";
-		}
-		return sValue;
+		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
+		if(eService == null) return "noResponse";
+		String sStatus = XMLUtil.getElementValueByName(eService, "currentState");
+		if(sStatus == null || sStatus.length() <= 0) return "noResponse";
+		return sStatus;
 	}//getCurrentState
-	
-	/**
-	 * Get the available disk space (in bytes). 
-	 * @return the available disk space, Double.NaN if none. 
-	 */
-	public double getAvailableDiskSpace(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return Double.NaN;
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "availableDiskSpace");
-		Double dValue;
-		if(sValue == null || sValue.length() <= 0){
-			return Double.NaN;
-		}		
-		try {
-			if(sValue.equals("INF")) {
-				dValue = Double.POSITIVE_INFINITY;
-			}
-			else{
-				dValue = Double.parseDouble(sValue);
-			}
-		}
-		catch (Exception e) {
-			dValue = Double.NaN;
-		}
-		return dValue;
-	}//getAvailableDiskSpace
-	
-	/**
-	 * Get the available memory (in bytes). 
-	 * @return the available memory, Double.NaN if none. 
-	 */
-	public double getAvailableMemory(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return Double.NaN;
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "availableMemory");
-		Double dValue;
-		if(sValue == null || sValue.length() <= 0){
-			return Double.NaN;
-		}		
-		try {
-			if(sValue.equals("INF")) {
-				dValue = Double.POSITIVE_INFINITY;
-			}
-			else{
-				dValue = Double.parseDouble(sValue);
-			}
-		}
-		catch (Exception e) {
-			dValue = Double.NaN;
-		}
-		return dValue;
-	}//getAvailableMemory
-	
-	
+
 	/**
 	 * Get the current job count. 
 	 * @return the current job count, -1 if none. 
 	 */
 	public int getCurrentJobCount(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return -1;
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "currentJobCount");
-		int iValue;
-		if(sValue == null || sValue.length() <= 0){
-			return -1;
-		}		
+		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
+		if(eService == null) return -1;
+		String sCurrentJobCount = XMLUtil.getElementValueByName(eService, "currentJobCount");
+		if(sCurrentJobCount == null || sCurrentJobCount.length() <= 0) return -1;
 		try {
-			iValue = Integer.parseInt(sValue);
-		}
+			return Integer.parseInt(sCurrentJobCount);
+		} 
 		catch (Exception e) {
-			iValue = -1;
+			return -1;
 		}
-		return iValue;
 	}//getCurrentJobCount
-	
-	
+
 	/**
 	 * Get the total jobs received so far. 
 	 * @return the total jobs received so far, -1 if none. 
 	 */
 	public int getTotalJobsSoFar(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return -1;
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "totalJobsSoFar");
-		int iValue;
-		if(sValue == null || sValue.length() <= 0){
+		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
+		if(eService == null) return -1;
+		String sTotalJobsSoFar = XMLUtil.getElementValueByName(eService, "currentJobCount");
+		if(sTotalJobsSoFar == null || sTotalJobsSoFar.length() <= 0) return -1;
+		try {
+			return Integer.parseInt(sTotalJobsSoFar);
+		} 
+		catch (Exception e) {
 			return -1;
-		}		
-		try {
-			iValue = Integer.parseInt(sValue);
 		}
-		catch (Exception e) {
-			iValue = -1;
-		}
-		return iValue;
 	}//getTotalJobsSoFar
-	
-	
-	/**
-	 * Get the time last job ended. 
-	 * @return the time last job ended. If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
-	 */
-	public GregorianCalendar getTimeLastJobEnded(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "timeLastJobEnded");
-		if(sValue == null || sValue.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		try{
-			GregorianCalendar time = XMLUtil.createNativeDateTime(sValue);
-			if(time == null)  return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			return time;
-		}
-		catch(Exception e){
-			return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		}
-	}//getTimeLastJobEnded
-	
-	/**
-	 * Get the time last job took (in seconds). 
-	 * @return the the time last job took, Double.NaN if none. 
-	 */
-	public double getTimeLastJobTook(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return Double.NaN;
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "timeLastJobTook");
-		Double dValue;
-		if(sValue == null || sValue.length() <= 0){
-			return Double.NaN;
-		}		
-		try {
-			if(sValue.equals("INF")) {
-				dValue = Double.POSITIVE_INFINITY;
-			}
-			else{
-				dValue = Double.parseDouble(sValue);
-			}
-		}
-		catch (Exception e) {
-			dValue = Double.NaN;
-		}
-		return dValue;
-	}//getTimeLastJobTook
-	
+
+
 	/**
 	 * Get the time the service started. 
 	 * @return the time last job ended. If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
 	 */
 	public GregorianCalendar getTimeServiceStarted(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "timeServiceStarted");
-		if(sValue == null || sValue.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
+		if(eService == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		String sTimeServiceStarted = XMLUtil.getElementValueByName(eService, "timeServiceStarted");
+		if(sTimeServiceStarted == null || sTimeServiceStarted.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 		try{
-			GregorianCalendar time = XMLUtil.createNativeDateTime(sValue);
-			if(time == null)  return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
-			return time;
+			GregorianCalendar timeServiceStarted = XMLUtil.createNativeDateTime(sTimeServiceStarted);
+			return timeServiceStarted;
 		}
 		catch(Exception e){
 			return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
 		}
 	}//getTimeServiceStarted
-	
-	
+
 	/**
 	 * Get the service utilization ([0, 1]). 
-	 * @return the the time last job took, Double.NaN if none. 
+	 * @return the time last job took, Double.NaN if none. 
 	 */
 	public double getServiceUtilization(){
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eStatistics = (Element)XMLUtil.findChildNode(eResultData, "statistics");
-		if(eStatistics == null) return Double.NaN;
-		String sValue =  XMLUtil.getElementValueByName(eStatistics, "serviceUtilization");
-		Double dValue;
-		if(sValue == null || sValue.length() <= 0){
-			return Double.NaN;
-		}		
+		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
+		if(eService == null) return -1;
+		String sServiceUtilization = XMLUtil.getElementValueByName(eService, "serviceUtilization");
+		if(sServiceUtilization == null || sServiceUtilization.length() <= 0) return Double.NaN;
 		try {
-			if(sValue.equals("INF")) {
-				dValue = Double.POSITIVE_INFINITY;
-			}
-			else{
-				dValue = Double.parseDouble(sValue);
-			}
-		}
+			return Double.parseDouble(sServiceUtilization);
+		} 
 		catch (Exception e) {
-			dValue = Double.NaN;
+			return Double.NaN;
 		}
-		return dValue;
 	}//getServiceUtilization
 
-   	
 	/**
-	 * Get the hash map of other result information. 
+	 * get the number of other <service> results
 	 * 
-	 * @return the hash map of other result information.
+	 * @return the number of other <service> results
 	 */
-	public HashMap<String, String> getOtherResults(){
-		if(m_otherResultHashMap != null) return m_otherResultHashMap;
-		m_otherResultHashMap = new HashMap<String, String>();
-		m_otherResultDescriptionHashMap = new HashMap<String, String>();
-		
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Vector<Element> vElements	= XMLUtil.getChildElementsByTagName(eResultData, "other"); 
-		int iNls	= vElements==null?0:vElements.size();
-		for(int i = 0; i < iNls; i++){
-			Element eOtherResult = (Element)(vElements.elementAt(i));
-			NamedNodeMap	attributes =  eOtherResult.getAttributes();
-			int n =attributes.getLength();
-			String sName = "";
-			String sDescription = "";
-			String sValue = XMLUtil.getElementValue(eOtherResult);
-			for (int j = 0; j < n; j++){
-				Node	attr = attributes.item(j);
-				String sAttributeName  = attr.getNodeName();
-				String sAttributeValue = attr.getNodeValue();
-				if (sAttributeName.equals("name")){
-					sName = sAttributeValue;
-				}
-				else if (sAttributeName.equals("description")){
-					sDescription = sAttributeValue;
-				}
+	public int  getNumberOfOtherServiceResults(){
+		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
+		if(eService == null) return 0;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eService, "otherResults");
+		if(eOtherResults == null) return 0;
+		String sNumberOfOtherResults = eOtherResults.getAttribute("numberOfOtherResults");
+		if(sNumberOfOtherResults == null || sNumberOfOtherResults.length() <= 0) return 0;
+		try{
+			int iNumberOfOtherResults = Integer.parseInt(sNumberOfOtherResults);
+			return iNumberOfOtherResults;
+		}
+		catch(Exception e){
+			return 0;
+		}	
+	}//getNumberOfOtherServiceResults
+
+	/**
+	 * get other <service> results
+	 * 
+	 * @return other <service> results
+	 */
+	public OtherResult[]  getOtherServiceResults(){
+		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
+		if(eService == null) return null;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eService, "otherResults");
+		if(eOtherResults == null) return null;
+		NodeList others = eOtherResults.getElementsByTagName("other");
+		if(others == null || others.getLength() <= 0) return null;
+		int iOthers = others.getLength();
+		OtherResult[] mOthers = new OtherResult[iOthers];
+		for(int i = 0; i < iOthers; i++){
+			Element eOther = (Element)others.item(i);
+			mOthers[i] =new OtherResult();
+			String sName = eOther.getAttribute("name"); 				
+			String sValue = eOther.getAttribute("value");
+			String sDescription = eOther.getAttribute("description");	
+			mOthers[i].name = sName==null?"":sName;
+			mOthers[i].value = sValue==null?"":sValue;
+			mOthers[i].description = sDescription==null?"":sDescription;
+		}
+		return mOthers;	
+	}//getOtherServiceResults
+
+	/**
+	 * Get the job status, , which can be:
+	 * "waiting", "running", "killed", "finished" and "unknown".
+	 * 
+	 * @return the current status, "unknown" if none.
+	 */
+	public String getJobStatus(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return "unknown";
+		String sStatus = XMLUtil.getElementValueByName(eJob, "status");
+		if(sStatus == null || sStatus.length() <= 0) return "unknown";
+		return sStatus;
+	}//getCurrentState
+
+
+	/**
+	 * Get the submit time. 
+	 * @return the submit time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getJobSubmitTime(){
+		Element eJobSubmitTime = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJobSubmitTime == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		String sJobSubmitTime = XMLUtil.getElementValueByName(eJobSubmitTime, "submitTime");
+		if(sJobSubmitTime == null || sJobSubmitTime.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		try{
+			GregorianCalendar jobSubmitTime = XMLUtil.createNativeDateTime(sJobSubmitTime);
+			return jobSubmitTime;
+		}
+		catch(Exception e){
+			return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		}
+	}//getJobSubmitTime
+
+	/**
+	 * Get the scheduled start time. 
+	 * @return the scheduled start time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getScheduledStartTime(){
+		Element eJobScheduledStartTime = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJobScheduledStartTime == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		String sJobScheduledStartTime = XMLUtil.getElementValueByName(eJobScheduledStartTime, "scheduledStartTime");
+		if(sJobScheduledStartTime == null || sJobScheduledStartTime.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		try{
+			GregorianCalendar jobScheduledStartTime = XMLUtil.createNativeDateTime(sJobScheduledStartTime);
+			return jobScheduledStartTime;
+		}
+		catch(Exception e){
+			return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		}
+	}//getScheduledStartTime
+
+	/**
+	 * Get the actual start time. 
+	 * @return the actual start time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getActualStartTime(){
+		Element eJobActualStartTime = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJobActualStartTime == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		String sJobActualStartTime = XMLUtil.getElementValueByName(eJobActualStartTime, "actualStartTime");
+		if(sJobActualStartTime == null || sJobActualStartTime.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		try{
+			GregorianCalendar jobActualStartTime = XMLUtil.createNativeDateTime(sJobActualStartTime);
+			return jobActualStartTime;
+		}
+		catch(Exception e){
+			return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		}
+	}//getActualStartTime
+
+
+	/**
+	 * Get the end time. 
+	 * @return the end time If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
+	 */
+	public GregorianCalendar getEndTime(){
+		Element eJobEndTime = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJobEndTime == null) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		String sJobEndTime = XMLUtil.getElementValueByName(eJobEndTime, "endTime");
+		if(sJobEndTime == null || sJobEndTime.length() <= 0) return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		try{
+			GregorianCalendar jobEndTime = XMLUtil.createNativeDateTime(sJobEndTime);
+			return jobEndTime;
+		}
+		catch(Exception e){
+			return new GregorianCalendar(1970, 0, 1, 0, 0, 0);
+		}
+	}//getEndTime
+
+
+	/**
+	 * Get the job timing information. 
+	 * @return the job timing information. 
+	 */
+	public TimingInformation getTimeInformation(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return null;
+		Element eTimingInformation = (Element)XMLUtil.findChildNode(eJob, "timingInformation");
+		if(eTimingInformation == null) return null;
+		NodeList times = eTimingInformation.getElementsByTagName("time");
+		if(times == null || times.getLength() <= 0) return null;
+		int iTimes = times.getLength();
+		TimingInformation timingInformation = new TimingInformation();
+		timingInformation.time = new Time[iTimes];
+		for(int i = 0; i < iTimes; i++){
+			Element eTime = (Element)times.item(i);
+			timingInformation.time[i] =new Time();
+			String sType = eTime.getAttribute("type"); 				
+			String sCategory = eTime.getAttribute("category"); 				
+			String sUnit = eTime.getAttribute("unit"); 				
+			String sDescription = eTime.getAttribute("description");	
+			String sValue = eTime.getAttribute("value");
+			timingInformation.time[i].type = sType==null?"":sType;
+			timingInformation.time[i].category = sCategory==null?"":sCategory;
+			timingInformation.time[i].unit = sUnit==null?"":sUnit;
+			timingInformation.time[i].description = sDescription==null?"":sDescription;
+			try {
+				timingInformation.time[i].value = Double.parseDouble(sValue);
+			} 
+			catch (Exception e) {
+				timingInformation.time[i].value = Double.NaN;
 			}
-			m_otherResultHashMap.put(sName, sValue);
-			m_otherResultDescriptionHashMap.put(sName, sDescription);
 		}
-		return m_otherResultHashMap;
-	}//getOtherResults
-	
-	
+		return timingInformation;
+	}//getTimeInformation
+
 	/**
-	 * Get the number of other result information.  
-	 * @return the number of other result information. 
-	 */
-	public int getOtherResultNumber(){
-		getOtherResults();
-		return m_otherResultHashMap.size();
-	}//getOtherResultNumber
-	
-	/**
-	 * Get the String value from the other info hash map. 
+	 * Get the system used CPU Speed value, unit and description. 
 	 * 
-	 * @param name holds the name of the other info to get. 
-	 * @return String value from the other info hash map, null if none.
+	 * @return the used system CPU Speed. 
 	 */
-	public String getOtherResultValueByName(String name){
-		getOtherResults();
-		if(m_otherResultHashMap.containsKey(name)){
-			return (String)m_otherResultHashMap.get(name);
+	public CPUSpeed getUsedCPUSpeed(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return null;
+		Element eUsedCPUSpeed = (Element)XMLUtil.findChildNode(eJob, "usedCPUSpeed");
+		if(eUsedCPUSpeed == null) return null;
+		String sUsedCPUSpeed = XMLUtil.getElementValue(eUsedCPUSpeed);
+		if(sUsedCPUSpeed == null || sUsedCPUSpeed.length() <= 0) return null;
+		CPUSpeed cpuSpeed = new CPUSpeed();
+		try{
+			if(sUsedCPUSpeed.equals("INF")) cpuSpeed.value = Double.POSITIVE_INFINITY;
+			if(sUsedCPUSpeed.equals("-INF")) cpuSpeed.value = Double.NEGATIVE_INFINITY;
+			if(sUsedCPUSpeed.equals("NaN") || sUsedCPUSpeed.equals("-NaN")) cpuSpeed.value = Double.NaN;			
+			double dUsedCPUSpeed = Double.parseDouble(sUsedCPUSpeed);
+			cpuSpeed.value = dUsedCPUSpeed;
+			cpuSpeed.unit = eUsedCPUSpeed.getAttribute("unit");
+			cpuSpeed.description = eUsedCPUSpeed.getAttribute("description");
+			return cpuSpeed;
 		}
-		else{ 
+		catch(Exception e){
 			return null;
 		}
-	}//getOtherResultValueByName
-	
+	}//getUsedCPUSpeed
+
+
 	/**
-	 * Get the String value from the other info hash map. 
+	 * Get the job used CPU Number value and description. 
 	 * 
-	 * @param name holds the name of the other info to get. 
-	 * @return String value from the other info hash map, null if none. 
+	 * @return the used job CPU number. 
 	 */
-	public String getOtherResultDescriptionByName(String name){
-		getOtherResults();
-		if(m_otherResultDescriptionHashMap.containsKey(name)){
-			return (String)m_otherResultDescriptionHashMap.get(name);
+	public CPUNumber getUsedCPUNumber(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return null;
+		Element eUsedCPUNumber = (Element)XMLUtil.findChildNode(eJob, "usedCPUNumber");
+		if(eUsedCPUNumber == null) return null;
+		String sUsedCPUNumber = XMLUtil.getElementValue(eUsedCPUNumber);
+		if(sUsedCPUNumber == null || sUsedCPUNumber.length() <= 0) return null;
+		CPUNumber cpuNumber = new CPUNumber();
+		try{
+			int iUsedCPUNumber = Integer.parseInt(sUsedCPUNumber);
+			cpuNumber.value = iUsedCPUNumber;
+			cpuNumber.description = eUsedCPUNumber.getAttribute("description");
+			return cpuNumber;
 		}
-		else{ 
+		catch(Exception e){
 			return null;
 		}
-	}//getOtherResultDescriptionByName
-	
+	}//getUsedCPUNumber
+
 	/**
-	 * Get the names of all other result information. 
+	 * Get the job available disk space value, unit and description. 
 	 * 
-	 * @return the names of all other result information. 
+	 * @return the available job disk space. 
 	 */
-	public String[] getOtherResultNames(){
-		getOtherResults();	
-		Set nameSet = m_otherResultHashMap.keySet();
-		Object[] moName = nameSet.toArray();
-		String[] msName = new String[nameSet.size()];
-		for (int i = 0; i < nameSet.size(); i++) {
-			msName[i] = (String)moName[i];
+	public DiskSpace getUsedDiskSpace(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return null;
+		Element eUsedDiskSpace = (Element)XMLUtil.findChildNode(eJob, "usedDiskSpace");
+		if(eUsedDiskSpace == null) return null;
+		String sUsedDiskSpace = XMLUtil.getElementValue(eUsedDiskSpace);
+		if(sUsedDiskSpace == null || sUsedDiskSpace.length() <= 0) return null;
+		DiskSpace diskSpace = new DiskSpace();
+		try{
+			if(sUsedDiskSpace.equals("INF")) diskSpace.value = Double.POSITIVE_INFINITY;
+			if(sUsedDiskSpace.equals("-INF")) diskSpace.value = Double.NEGATIVE_INFINITY;
+			if(sUsedDiskSpace.equals("NaN") || sUsedDiskSpace.equals("-NaN")) diskSpace.value = Double.NaN;			
+			double dUsedDiskSpace = Double.parseDouble(sUsedDiskSpace);
+			diskSpace.value = dUsedDiskSpace;
+			diskSpace.unit = eUsedDiskSpace.getAttribute("unit");
+			diskSpace.description = eUsedDiskSpace.getAttribute("description");
+			return diskSpace;
 		}
-		return msName;	
-	}//getOtherResultNames
-	
-	/**
-	 * Get the values of all other result information. 
-	 * @return the values of all other result information.
-	 */
-	public String[] getOtherResultValues(){
-		getOtherResults();		
-		Collection valueCollection = m_otherResultHashMap.values();
-		Object[] moValue = valueCollection.toArray();
-		String[] msValue = new String[valueCollection.size()];
-		for (int i = 0; i < valueCollection.size(); i++) {
-			msValue[i] = moValue[i].toString();
+		catch(Exception e){
+			return null;
 		}
-		return msValue;		
-	}//getOtherResultValues
-	
+	}//getUsedDiskSpace
+
 	/**
-	 * Get the descriptions of all other result information. 
+	 * Get the job used memory value, unit and description. 
 	 * 
-	 * @return the descriptions of all other result information.
+	 * @return the used job memory. 
 	 */
-	public String[] getOtherResultDescriptions(){
-		getOtherResults();			
-		Collection valueCollection = m_otherResultDescriptionHashMap.values();
-		Object[] moValue = valueCollection.toArray();
-		String[] msDescription = new String[valueCollection.size()];
-		for (int i = 0; i < valueCollection.size(); i++) {
-			msDescription[i] = moValue[i].toString();
+	public MemorySize getUsedMemory(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return null;
+		Element eUsedMemory = (Element)XMLUtil.findChildNode(eJob, "usedMemory");
+		if(eUsedMemory == null) return null;
+		String sUsedMemory = XMLUtil.getElementValue(eUsedMemory);
+		if(sUsedMemory == null || sUsedMemory.length() <= 0) return null;
+		MemorySize memory = new MemorySize();
+		try{
+			if(sUsedMemory.equals("INF")) memory.value = Double.POSITIVE_INFINITY;
+			if(sUsedMemory.equals("-INF")) memory.value = Double.NEGATIVE_INFINITY;
+			if(sUsedMemory.equals("NaN") || sUsedMemory.equals("-NaN")) memory.value = Double.NaN;			
+			double dUsedMemory = Double.parseDouble(sUsedMemory);
+			memory.value = dUsedMemory;
+			memory.unit = eUsedMemory.getAttribute("unit");
+			memory.description = eUsedMemory.getAttribute("description");
+			return memory;
 		}
-		return msDescription;		
-	}//getOtherResultDescriptions
-	
+		catch(Exception e){
+			return null;
+		}
+	}//getUsedMemory
+
+	/**
+	 * get the number of other <service> results
+	 * 
+	 * @return the number of other <job> results
+	 */
+	public int  getNumberOfOtherJobResults(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return 0;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eJob, "otherResults");
+		if(eOtherResults == null) return 0;
+		String sNumberOfOtherResults = eOtherResults.getAttribute("numberOfOtherResults");
+		if(sNumberOfOtherResults == null || sNumberOfOtherResults.length() <= 0) return 0;
+		try{
+			int iNumberOfOtherResults = Integer.parseInt(sNumberOfOtherResults);
+			return iNumberOfOtherResults;
+		}
+		catch(Exception e){
+			return 0;
+		}	
+	}//getNumberOfOtherJobResults
+
+	/**
+	 * get other <job> results
+	 * 
+	 * @return other <job> results
+	 */
+	public OtherResult[]  getOtherJobResults(){
+		Element eJob = (Element)XMLUtil.findChildNode(m_eRoot, "job");
+		if(eJob == null) return null;
+		Element eOtherResults = (Element)XMLUtil.findChildNode(eJob, "otherResults");
+		if(eOtherResults == null) return null;
+		NodeList others = eOtherResults.getElementsByTagName("other");
+		if(others == null || others.getLength() <= 0) return null;
+		int iOthers = others.getLength();
+		OtherResult[] mOthers = new OtherResult[iOthers];
+		for(int i = 0; i < iOthers; i++){
+			Element eOther = (Element)others.item(i);
+			mOthers[i] =new OtherResult();
+			String sName = eOther.getAttribute("name"); 				
+			String sValue = eOther.getAttribute("value");
+			String sDescription = eOther.getAttribute("description");	
+			mOthers[i].name = sName==null?"":sName;
+			mOthers[i].value = sValue==null?"":sValue;
+			mOthers[i].description = sDescription==null?"":sDescription;
+		}
+		return mOthers;
+	}//getOtherJobResults
+
 	/**
 	 * Get variable number. 
 	 * 
@@ -919,8 +945,7 @@ public class OSrLReader extends OSgLReader{
 	 */
 	public int getVariableNumber(){
 		if(m_iVariableNumber == -1){
-			Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-			Element eOptimization = (Element)XMLUtil.findChildNode(eResultData, "optimization");
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 			if(eOptimization == null) return -1;
 			String sNumber =  eOptimization.getAttribute("numberOfVariables");
 			m_iVariableNumber = Integer.parseInt(sNumber);
@@ -935,15 +960,14 @@ public class OSrLReader extends OSgLReader{
 	 */
 	public int getObjectiveNumber(){
 		if(m_iObjectiveNumber == -1){
-			Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-			Element eOptimization = (Element)XMLUtil.findChildNode(eResultData, "optimization");
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 			if(eOptimization == null) return -1;
 			String sNumber =  eOptimization.getAttribute("numberOfObjectives");
 			m_iObjectiveNumber = Integer.parseInt(sNumber);
 		}
 		return m_iObjectiveNumber;
 	}//getObjectiveNumber
-	
+
 	/**
 	 * Get constraint number. 
 	 * 
@@ -951,8 +975,7 @@ public class OSrLReader extends OSgLReader{
 	 */
 	public int getConstraintNumber(){
 		if(m_iConstraintNumber == -1){
-			Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-			Element eOptimization = (Element)XMLUtil.findChildNode(eResultData, "optimization");
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 			if(eOptimization == null) return -1;
 			String sNumber =  eOptimization.getAttribute("numberOfConstraints");
 			m_iConstraintNumber = Integer.parseInt(sNumber);
@@ -967,15 +990,14 @@ public class OSrLReader extends OSgLReader{
 	 */
 	public int getSolutionNumber(){
 		if(m_iSolutionNumber == -1){
-			Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-			Element eOptimization = (Element)XMLUtil.findChildNode(eResultData, "optimization");
+			Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 			if(eOptimization == null) return -1;
 			String sNumber =  eOptimization.getAttribute("numberOfSolutions");
 			m_iSolutionNumber = Integer.parseInt(sNumber);
 		}
 		return m_iSolutionNumber;
 	}//getSolutionNumber
-	
+
 	/**
 	 * process the optimization result
 	 * 
@@ -985,8 +1007,7 @@ public class OSrLReader extends OSgLReader{
 		if(m_bProcessOptimizationResult){
 			return true;
 		}
-		Element eResultData = (Element)XMLUtil.findChildNode(m_eRoot, "resultData");
-		Element eOptimization = (Element)XMLUtil.findChildNode(eResultData, "optimization");
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
 		if(eOptimization == null){
 			m_bProcessOptimizationResult = true;
 			return true;
@@ -1000,7 +1021,7 @@ public class OSrLReader extends OSgLReader{
 		String sObjectiveNumber =  eOptimization.getAttribute("numberOfObjectives");
 		m_iObjectiveNumber = Integer.parseInt(sObjectiveNumber);
 		m_optimizationResult.numberOfObjectives = m_iObjectiveNumber;
-		
+
 		String sConstraintNumber =  eOptimization.getAttribute("numberOfConstraints");
 		m_iConstraintNumber = Integer.parseInt(sConstraintNumber);
 		m_optimizationResult.numberOfConstraints = m_iConstraintNumber;
@@ -1008,7 +1029,7 @@ public class OSrLReader extends OSgLReader{
 		String sSolutionNumber =  eOptimization.getAttribute("numberOfSolutions");
 		m_iSolutionNumber = Integer.parseInt(sSolutionNumber);
 		m_optimizationResult.numberOfSolutions = m_iSolutionNumber;
-				
+
 		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
 		if(vSolutions != null || vSolutions.size() > 0){
 			int iSolutions = vSolutions.size();
@@ -1022,9 +1043,9 @@ public class OSrLReader extends OSgLReader{
 				OptimizationSolution solution = m_optimizationResult.solution[i];
 				String sObjectiveIdx = eSolution.getAttribute("objectiveIdx");
 				if(sObjectiveIdx != null && sObjectiveIdx.length() > 0){
-					solution.objectiveIdx = Integer.parseInt(sObjectiveIdx);
+					solution.targetObjectiveIdx = Integer.parseInt(sObjectiveIdx);
 				}//solution objectiveIdx
-				
+
 				Element eStatus = (Element)XMLUtil.findChildNode(eSolution, "status");
 				if(eStatus != null){
 					solution.status = new OptimizationSolutionStatus();
@@ -1041,7 +1062,7 @@ public class OSrLReader extends OSgLReader{
 							Element eSubstatus = (Element)(nodeList.item(j));
 							NamedNodeMap attributes =  eSubstatus.getAttributes();
 							int n =attributes.getLength();
-							String sSubstatusName = "";
+							String sSubstatusType = "";
 							String sSubstatusDescription = "";
 							String sSubstatusValue = XMLUtil.getElementValue(eSubstatus);
 							solution.status.substatus[j].value = sSubstatusValue;
@@ -1050,8 +1071,8 @@ public class OSrLReader extends OSgLReader{
 								String sLocalName = attr.getNodeName();
 								String sValue = attr.getNodeValue();
 								if (sLocalName.equals("name")){
-									sSubstatusName = sValue;
-									solution.status.substatus[j].name = sSubstatusName;
+									sSubstatusType = sValue;
+									solution.status.substatus[j].type = sSubstatusType;
 								}
 								else if (sLocalName.equals("description")){
 									sSubstatusDescription = sValue;
@@ -1061,12 +1082,12 @@ public class OSrLReader extends OSgLReader{
 						}
 					}					
 				}//solution status 
-				
+
 				Element eMessage = (Element)XMLUtil.findChildNode(eSolution, "message");
 				if(eMessage != null){
 					solution.message = XMLUtil.getElementValue(eMessage);					
 				}//solution message
-				
+
 				Element eVariables = (Element)XMLUtil.findChildNode(eSolution, "variables");
 				if(eVariables != null){
 					solution.variables = new VariableSolution();			
@@ -1153,7 +1174,7 @@ public class OSrLReader extends OSgLReader{
 						}
 					}
 				}//solution variables
-				
+
 				Element eObjectives = (Element)XMLUtil.findChildNode(eSolution, "objectives");
 				if(eObjectives != null){
 					solution.objectives = new ObjectiveSolution();
@@ -1223,7 +1244,7 @@ public class OSrLReader extends OSgLReader{
 						}
 					}
 				}//solution objectives
-				
+
 				Element eConstraints = (Element)XMLUtil.findChildNode(eSolution, "constraints");
 				if(eConstraints != null){
 					solution.constraints = new ConstraintSolution();
@@ -1293,21 +1314,27 @@ public class OSrLReader extends OSgLReader{
 						}
 					}
 				}//solution constraints
-				
-				Vector<Element> vOtherOptimizationResults = XMLUtil.getChildElementsByTagName(eSolution, "other");
-				if(vOtherOptimizationResults != null && vOtherOptimizationResults.size() > 0){
-					int iOthers = vOtherOptimizationResults.size();
-					solution.other = new OtherOptimizationResult[iOthers];
-					for(int j = 0; j < iOthers; j++){
-						Element eOther = (Element)vOtherOptimizationResults.elementAt(j);						
-						solution.other[j] = new OtherOptimizationResult();
-						solution.other[j].name = eOther.getAttribute("name");
-						solution.other[j].value = XMLUtil.getElementValue(eOther);
-						solution.other[j].description = eOther.getAttribute("description");
-					}//for each other result
-				}//solution other results
+
+				Element eOtherSolutionResults = (Element)XMLUtil.findChildNode(eSolution, "otherSolutionResults");
+				if(eOtherSolutionResults != null){
+					solution.otherSolutionResults = new SolutionResults();
+					Vector<Element> vOtherOptimizationSolutionResults = XMLUtil.getChildElementsByTagName(eOtherSolutionResults, "otherSolutionResult");
+					if(vOtherOptimizationSolutionResults != null && vOtherOptimizationSolutionResults.size() > 0){
+						int iOthers = vOtherOptimizationSolutionResults.size();
+						solution.otherSolutionResults.otherSolutionResult = new OtherSolutionResult[iOthers];
+						for(int j = 0; j < iOthers; j++){
+							Element eOther = (Element)vOtherOptimizationSolutionResults.elementAt(j);						
+							solution.otherSolutionResults.otherSolutionResult[j] = new OtherSolutionResult();
+							solution.otherSolutionResults.otherSolutionResult[j].name = eOther.getAttribute("name");
+							solution.otherSolutionResults.otherSolutionResult[j].category = eOther.getAttribute("category");
+							solution.otherSolutionResults.otherSolutionResult[j].type = eOther.getAttribute("type");
+							solution.otherSolutionResults.otherSolutionResult[j].description = eOther.getAttribute("description");
+							solution.otherSolutionResults.otherSolutionResult[j].value = XMLUtil.getElementValue(eOther);
+						}//for each other result
+					}//solution other results
+				}
 			}//for each solution	
-			
+
 			Element eOSaL = (Element)XMLUtil.findChildNode(eOptimization, "osal");
 			if(eOSaL != null){
 				OSaLReader osalReader = new OSaLReader(OSParameter.VALIDATE);
@@ -1326,7 +1353,7 @@ public class OSrLReader extends OSgLReader{
 		m_bProcessOptimizationResult = true;
 		return true;
 	}//processOptimizationResult
-	
+
 	/**
 	 * Get one solution of optimal primal variable values. 
 	 * 
@@ -1343,11 +1370,11 @@ public class OSrLReader extends OSgLReader{
 		double[] mdValues = null;
 		for(int i = 0; i < iSolutions; i++){
 			if(m_optimizationResult.solution[i] == null) continue;
-			if(m_optimizationResult.solution[i].objectiveIdx != objIdx) continue;
+			if(m_optimizationResult.solution[i].targetObjectiveIdx != objIdx) continue;
 			if(m_optimizationResult.solution[i].variables == null) continue;
 			if(m_optimizationResult.solution[i].variables.values == null) continue;
 			if((m_optimizationResult.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
-				    m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){				
+					m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){				
 				VarValue[] var = m_optimizationResult.solution[i].variables.values.var; 
 				int iVars = (var==null)?0:var.length;
 				mdValues = new double[iNumberOfVariables];
@@ -1378,11 +1405,11 @@ public class OSrLReader extends OSgLReader{
 		String[] msValues = null;
 		for(int i = 0; i < iSolutions; i++){
 			if(m_optimizationResult.solution[i] == null) continue;
-			if(m_optimizationResult.solution[i].objectiveIdx != objIdx) continue;
+			if(m_optimizationResult.solution[i].targetObjectiveIdx != objIdx) continue;
 			if(m_optimizationResult.solution[i].variables == null) continue;
 			if(m_optimizationResult.solution[i].variables.valuesString == null) continue;
 			if((m_optimizationResult.solution[i].status.type.endsWith("ptimal") && msValues == null)||
-			    m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){
+					m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){
 				VarStringValue[] var = m_optimizationResult.solution[i].variables.valuesString.var; 
 				int iVars = (var==null)?0:var.length;
 				msValues = new String[iNumberOfVariables];
@@ -1396,7 +1423,7 @@ public class OSrLReader extends OSgLReader{
 		}
 		return msValues;		
 	}//getOptimalPrimalVariableStringValues
-	
+
 	/**
 	 * Get one solution of optimal dual variable values. 
 	 * 
@@ -1413,11 +1440,11 @@ public class OSrLReader extends OSgLReader{
 		double[] mdValues = null;
 		for(int i = 0; i < iSolutions; i++){
 			if(m_optimizationResult.solution[i] == null) continue;
-			if(m_optimizationResult.solution[i].objectiveIdx != objIdx) continue;
+			if(m_optimizationResult.solution[i].targetObjectiveIdx != objIdx) continue;
 			if(m_optimizationResult.solution[i].constraints == null) continue;
 			if(m_optimizationResult.solution[i].constraints.dualValues == null) continue;
 			if((m_optimizationResult.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
-				    m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){				
+					m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){				
 				DualVarValue[] con = m_optimizationResult.solution[i].constraints.dualValues.con; 
 				int iCons = (con==null)?0:con.length;
 				mdValues = new double[iNumberOfConstraints];
@@ -1433,7 +1460,7 @@ public class OSrLReader extends OSgLReader{
 		}
 		return mdValues;		
 	}//getOptimalDualVariableValues
-	
+
 	/**
 	 * Get the [i]th optimization solution, where i equals the given solution index.
 	 *    
@@ -1444,12 +1471,12 @@ public class OSrLReader extends OSgLReader{
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || 
-		   m_optimizationResult.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
 		return m_optimizationResult.solution[solIdx];
 	}//getSolution
-	
-	
+
+
 	/**
 	 * Get the [i]th optimization solution status, where i equals the given solution index.   
 	 * The solution status includes the status type, optional descriptions and possibly substatuses.
@@ -1462,12 +1489,12 @@ public class OSrLReader extends OSgLReader{
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || 
-		   m_optimizationResult.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
 		if(m_optimizationResult.solution[solIdx] == null) return null;
 		return m_optimizationResult.solution[solIdx].status;
 	}//getSolutionStatus
-	
+
 	/**
 	 * Get the [i]th optimization solution status type, where i equals the given solution index.   
 	 * The solution status type can be: 
@@ -1481,13 +1508,13 @@ public class OSrLReader extends OSgLReader{
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || 
-		   m_optimizationResult.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
 		if(m_optimizationResult.solution[solIdx] == null) return null;
 		if(m_optimizationResult.solution[solIdx].status == null) return null;
 		return m_optimizationResult.solution[solIdx].status.type;
 	}//getSolutionStatusType
-	
+
 	/**
 	 * Get the [i]th optimization solution status description, where i equals the given solution index.   
 	 * 
@@ -1498,13 +1525,13 @@ public class OSrLReader extends OSgLReader{
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || 
-		   m_optimizationResult.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
 		if(m_optimizationResult.solution[solIdx] == null) return null;
 		if(m_optimizationResult.solution[solIdx].status == null) return null;
 		return m_optimizationResult.solution[solIdx].status.description;	
 	}//getSolutionStatusDescription
-	
+
 	/**
 	 * Get the [i]th optimization solution subStatuses, where i equals the given solution index.   
 	 * 
@@ -1516,8 +1543,8 @@ public class OSrLReader extends OSgLReader{
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || 
-		   m_optimizationResult.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
 		if(m_optimizationResult.solution[solIdx] == null) return null;
 		if(m_optimizationResult.solution[solIdx].status == null) return null;
 		return m_optimizationResult.solution[solIdx].status.substatus;
@@ -1533,12 +1560,12 @@ public class OSrLReader extends OSgLReader{
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || 
-		   m_optimizationResult.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return null;
 		if(m_optimizationResult.solution[solIdx] == null) return null;
 		return m_optimizationResult.solution[solIdx].message;
 	}//getSolutionMessage
-	
+
 	/**
 	 * Get the [i]th optimization solution's objective index, where i equals the given solution index. 
 	 * The first objective's index should be -1, the second -2, and so on.  
@@ -1551,12 +1578,12 @@ public class OSrLReader extends OSgLReader{
 		processOptimizationResult();
 		if(m_optimizationResult == null) return 0;
 		if(m_optimizationResult.solution == null || 
-		   m_optimizationResult.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return 0;
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return 0;
 		if(m_optimizationResult.solution[solIdx] == null) return 0;
-		return m_optimizationResult.solution[solIdx].objectiveIdx;		
+		return m_optimizationResult.solution[solIdx].targetObjectiveIdx;		
 	}//getSolutionObjectiveIndex
-	
+
 	/**
 	 * Get the [i]th optimization solution's variable values, where i equals the given solution index. 
 	 *  
@@ -1582,7 +1609,7 @@ public class OSrLReader extends OSgLReader{
 		}
 		return mdValues;	
 	}//getVariableValues
-	
+
 	/**
 	 * Get the [i]th optimization solution's variable values in a sparse data structure, where i equals the given solution index. 
 	 * The sparse data stucture is of the VariableValues data structure. VariableValues holds var[], an array of VarValues. 
@@ -1605,7 +1632,7 @@ public class OSrLReader extends OSgLReader{
 		if(m_optimizationResult.solution[solIdx].variables == null) return null;
 		return m_optimizationResult.solution[solIdx].variables.values;
 	}//getSparseVariableValues
-	
+
 	/**
 	 * Get the [i]th optimization solution's variable string values, where i equals the given solution index. 
 	 * 
@@ -1631,7 +1658,7 @@ public class OSrLReader extends OSgLReader{
 		}
 		return msValues;	
 	}//getVariableStringValues
-	
+
 	/**
 	 * Get the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
 	 * where i equals the given solution index. 
@@ -1656,7 +1683,7 @@ public class OSrLReader extends OSgLReader{
 		if(m_optimizationResult.solution[solIdx].variables == null) return null;
 		return m_optimizationResult.solution[solIdx].variables.other;
 	}//getOtherVariableResults
-	
+
 	/**
 	 * Get the [i]th optimization solution's objective values, where i equals the given solution index. 
 	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
@@ -1689,8 +1716,8 @@ public class OSrLReader extends OSgLReader{
 		}
 		return mdValues;
 	}//getObjectiveValues
-	
-	
+
+
 	/**
 	 * Get the [i]th optimization solution's other (non-standard/solver specific)objective-related results, 
 	 * where i equals the given solution index. 
@@ -1715,8 +1742,8 @@ public class OSrLReader extends OSgLReader{
 		if(m_optimizationResult.solution[solIdx].objectives == null) return null;
 		return m_optimizationResult.solution[solIdx].objectives.other;
 	}//getOtherObjectiveResults
-	
-	
+
+
 	/**
 	 * Get the [i]th optimization solution's dual variable values, where i equals the given solution index. 
 	 * 
@@ -1744,7 +1771,7 @@ public class OSrLReader extends OSgLReader{
 		}
 		return mdValues;
 	}//getDualVariableValues
-		
+
 	/**
 	 * Get the [i]th optimization solution's other (non-standard/solver specific)constraint-related results, 
 	 * where i equals the given solution index. 
@@ -1780,14 +1807,15 @@ public class OSrLReader extends OSgLReader{
 	 * value (string).   
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
 	 */
-	public OtherOptimizationResult[] getOtherOptimizationResults(int solIdx){
+	public OtherSolutionResult[] getOtherOptimizationSolutionResults(int solIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
 		int iSolutions = m_optimizationResult.solution.length;
 		if(solIdx < 0 || solIdx >= iSolutions) return null;
 		if(m_optimizationResult.solution[solIdx] == null) return null;
-		return m_optimizationResult.solution[solIdx].other;	
+		if(m_optimizationResult.solution[solIdx].otherSolutionResults == null) return null;
+		return m_optimizationResult.solution[solIdx].otherSolutionResults.otherSolutionResult;	
 	}//getOtherOptimizationResults
 
 
@@ -1813,7 +1841,7 @@ public class OSrLReader extends OSgLReader{
 		OSrLReader osrlReader = new OSrLReader(false);
 		System.out.println(IOUtil.readStringFromFile(OSParameter.CODE_HOME + "OSRepository/test/osrl/osrl.osrl"));
 		System.out.println(osrlReader.readFile(OSParameter.CODE_HOME + "OSRepository/test/osrl/osrl.osrl"));
-		
+
 		System.out.println(osrlReader.getGeneralMessage());
 		System.out.println(osrlReader.getJobID());
 		GeneralStatus status = osrlReader.getGeneralStatus();
@@ -1825,58 +1853,58 @@ public class OSrLReader extends OSgLReader{
 			System.out.println(status.substatus[i].description);
 			System.out.println(status.substatus[i].value);			
 		}
-		System.out.println(XMLUtil.createXSDateTime(osrlReader.getResultTime()));
+		System.out.println(XMLUtil.createXSDateTime(osrlReader.getResultTimeStamp()));
 		System.out.println(osrlReader.getInstanceName());
 		System.out.println(osrlReader.getServiceName());
 		System.out.println(osrlReader.getServiceURI());
 
-		
-		System.out.println(osrlReader.getOtherResultNumber());
-		String sValue = osrlReader.getOtherResultValueByName("ad");
-		if(sValue == null) System.out.println("null");
-		else System.out.println(sValue);
-		String sDescription = osrlReader.getOtherResultDescriptionByName("a");
-		System.out.println(sDescription);
-		for(int i=0;i<osrlReader.getOtherResultNumber();i++){
-			System.out.println(osrlReader.getOtherResultNames()[i]);
-			System.out.println(osrlReader.getOtherResultValues()[i]);
-			System.out.println(osrlReader.getOtherResultDescriptions()[i]);
-		}
-		
+
+//		System.out.println(osrlReader.getOtherResultNumber());
+//		String sValue = osrlReader.getOtherResultValueByName("ad");
+//		if(sValue == null) System.out.println("null");
+//		else System.out.println(sValue);
+//		String sDescription = osrlReader.getOtherResultDescriptionByName("a");
+//		System.out.println(sDescription);
+//		for(int i=0;i<osrlReader.getOtherResultNumber();i++){
+//			System.out.println(osrlReader.getOtherResultNames()[i]);
+//			System.out.println(osrlReader.getOtherResultValues()[i]);
+//			System.out.println(osrlReader.getOtherResultDescriptions()[i]);
+//		}
+
 		System.out.println("get process stat");
 		System.out.println(osrlReader.getCurrentState());
 		System.out.println(osrlReader.getAvailableDiskSpace());
 		System.out.println(osrlReader.getAvailableMemory());
 		System.out.println(osrlReader.getCurrentJobCount());
 		System.out.println(osrlReader.getTotalJobsSoFar());
-		System.out.println(XMLUtil.createXSDateTime(osrlReader.getTimeLastJobEnded()));
-		System.out.println(XMLUtil.createXSDateTime(osrlReader.getTimeServiceStarted()));
-		System.out.println(osrlReader.getTimeLastJobTook());
-		System.out.println(osrlReader.getServiceUtilization());
-		ProcessStatistics processStatistics = osrlReader.getProcessStatistics();
-		System.out.println(processStatistics.currentState);
-		System.out.println(processStatistics.availableDiskSpace);
-		System.out.println(processStatistics.availableMemory);
-		System.out.println(processStatistics.currentJobCount);
-		System.out.println(processStatistics.totalJobsSoFar);
-		System.out.println(XMLUtil.createXSDateTime(processStatistics.timeLastJobEnded));
-		System.out.println(XMLUtil.createXSDateTime(processStatistics.timeServiceStarted));
-		System.out.println(processStatistics.timeLastJobTook);
-		System.out.println(processStatistics.serviceUtilization);
-		Jobs jobs = processStatistics.jobs;
-		if(jobs != null){
-			JobStatistics[] mJobStatistics = jobs.job;
-			int iJobStatistics = mJobStatistics==null?0:mJobStatistics.length; 
-			if(iJobStatistics > 0){
-				System.out.println(iJobStatistics);
-				System.out.println(mJobStatistics[0].jobID);
-				System.out.println(mJobStatistics[0].duration);
-				if(mJobStatistics[0].dependencies != null)
-				System.out.println(mJobStatistics[0].dependencies.jobID[0]);
-			}
-		}
-		
-		
+//		System.out.println(XMLUtil.createXSDateTime(osrlReader.getTimeLastJobEnded()));
+//		System.out.println(XMLUtil.createXSDateTime(osrlReader.getTimeServiceStarted()));
+//		System.out.println(osrlReader.getTimeLastJobTook());
+//		System.out.println(osrlReader.getServiceUtilization());
+//		ProcessStatistics processStatistics = osrlReader.getProcessStatistics();
+//		System.out.println(processStatistics.currentState);
+//		System.out.println(processStatistics.availableDiskSpace);
+//		System.out.println(processStatistics.availableMemory);
+//		System.out.println(processStatistics.currentJobCount);
+//		System.out.println(processStatistics.totalJobsSoFar);
+//		System.out.println(XMLUtil.createXSDateTime(processStatistics.timeLastJobEnded));
+//		System.out.println(XMLUtil.createXSDateTime(processStatistics.timeServiceStarted));
+//		System.out.println(processStatistics.timeLastJobTook);
+//		System.out.println(processStatistics.serviceUtilization);
+//		Jobs jobs = processStatistics.jobs;
+//		if(jobs != null){
+//			JobStatistics[] mJobStatistics = jobs.job;
+//			int iJobStatistics = mJobStatistics==null?0:mJobStatistics.length; 
+//			if(iJobStatistics > 0){
+//				System.out.println(iJobStatistics);
+//				System.out.println(mJobStatistics[0].jobID);
+//				System.out.println(mJobStatistics[0].duration);
+//				if(mJobStatistics[0].dependencies != null)
+//					System.out.println(mJobStatistics[0].dependencies.jobID[0]);
+//			}
+//		}
+
+
 		System.out.println(osrlReader.getVariableNumber());	
 		System.out.println(osrlReader.getObjectiveNumber());
 		System.out.println(osrlReader.getConstraintNumber());
@@ -1924,8 +1952,8 @@ public class OSrLReader extends OSgLReader{
 				System.out.println(otherCon[0].con[0].idx);
 				System.out.println(otherCon[0].con[0].value);
 			}
-			
-			OtherOptimizationResult[] otherOPT = osrlReader.getOtherOptimizationResults(i);
+
+			OtherSolutionResult[] otherOPT = osrlReader.getOtherOptimizationSolutionResults(i);
 			if(otherOPT != null){
 				System.out.println(otherOPT.length);
 				System.out.println(otherOPT[0].name);
@@ -1934,14 +1962,14 @@ public class OSrLReader extends OSgLReader{
 			}
 		}
 		System.out.println(osrlReader.getOSAnalysis().getJobID());
-		
+
 		double[] mdValues2 = osrlReader.getOptimalPrimalVariableValues(-1);
 		if(mdValues2 == null) System.out.println("no optimal variable values");
 		else{
 			for(int i = 0; i < mdValues2.length; i++){
 				System.out.println(mdValues2[i]);
 			}
-			
+
 		}
 		String[] msValues2 = osrlReader.getOptimalPrimalVariableStringValues(-1);
 		if(msValues2 == null) System.out.println("no optimal variable string values");
@@ -1949,7 +1977,7 @@ public class OSrLReader extends OSgLReader{
 			for(int i = 0; i < msValues2.length; i++){
 				System.out.println(msValues2[i]);
 			}
-			
+
 		}
 		mdValues2 = osrlReader.getOptimalDualVariableValues(-1);
 		if(mdValues2 == null) System.out.println("no optimal dual variable values");
@@ -1957,9 +1985,9 @@ public class OSrLReader extends OSgLReader{
 			for(int i = 0; i < mdValues2.length; i++){
 				System.out.println(mdValues2[i]);
 			}
-			
+
 		}
 		//osrlReader.writeToStandardOutput();
 	}//main
-	
+
 }//class OSrLReader

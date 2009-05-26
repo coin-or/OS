@@ -29,6 +29,6 @@ public class ServiceResult{
 	
 	public double serviceUtilization = -1.0;
 	
-	public OtherResults otherOptions = null;
+	public OtherResults otherResults = null;
 	
 }//class ServiceResult

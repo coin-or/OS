@@ -1,5 +1,5 @@
 /**
- * @(#)MinCPUSpeed 2.0 11/01/2008
+ * @(#)MinCPUNumber 2.0 11/01/2008
  *
  * Copyright (c) 2008
  */
@@ -15,12 +15,9 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 * @version 2.0, 11/01/2008
 * @since OS 2.0
 */
-public class CPUSpeed{
-	
-	public String unit = "hertz";
-	
-	public double value = -1.0;
+public class CPUNumber{
+		
+	public int value = 1;
 	
 	public String description = "";
-
-}//class MinCPUSpeed
+}//class MinCPUNumber

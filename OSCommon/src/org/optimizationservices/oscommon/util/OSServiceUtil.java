@@ -1665,7 +1665,7 @@ public class OSServiceUtil{// implements OShL{
 		m_osrlWriter = new OSrLWriter();
 		m_osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 		m_osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
-		m_osrlWriter.setResultTime(new GregorianCalendar());
+		m_osrlWriter.setResultTimeStamp(new GregorianCalendar());
 
 		//read osol
 		if(osol != null && osol.length() > 0){
@@ -1835,7 +1835,7 @@ public class OSServiceUtil{// implements OShL{
 						boolean bRead = osrlReader.readString(sResult);
 						if(!bRead) throw new Exception("Invalid OSrL result");
 						String sStatus = osrlReader.getGeneralStatusType();
-						if(sStatus == null || !sStatus.equals("success")){
+						if(sStatus == null || !sStatus.equals("normal")){
 							bWriteResult = true;
 						}
 						else{
@@ -2004,7 +2004,7 @@ public class OSServiceUtil{// implements OShL{
 						boolean bRead = osrlReader.readString(sResult);
 						if(!bRead) throw new Exception("Invalid OSrL result");
 						String sStatus = osrlReader.getGeneralStatusType();
-						if(sStatus == null || !sStatus.equals("success")){
+						if(sStatus == null || !sStatus.equals("normal")){
 							bWriteResult = true;
 						}
 						else{
@@ -2022,7 +2022,7 @@ public class OSServiceUtil{// implements OShL{
 				m_osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 				m_osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
 				m_osrlWriter.setJobID(m_sJobID);
-				m_osrlWriter.setResultTime(new GregorianCalendar());
+				m_osrlWriter.setResultTimeStamp(new GregorianCalendar());
 				m_osrlWriter.setGeneralStatusType("error");
 				m_osrlWriter.setGeneralStatusDescription(e.getMessage());
 				m_osrlWriter.setGeneralMessage(IOUtil.exceptionStackToString(e));
@@ -2061,7 +2061,7 @@ public class OSServiceUtil{// implements OShL{
 		m_osrlWriter = new OSrLWriter();
 		m_osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 		m_osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
-		m_osrlWriter.setResultTime(new GregorianCalendar());
+		m_osrlWriter.setResultTimeStamp(new GregorianCalendar());
 
 		//read osol
 		if(osol == null || osol.length() <= 0){
@@ -2143,7 +2143,7 @@ public class OSServiceUtil{// implements OShL{
 								if(!bRead) throw new Exception("Invalid OSrL result");
 								bWarning = false;
 								String sStatus = osrlReader.getGeneralStatusType();
-								if(sStatus != null && (sStatus.equals("success") || sStatus.equals("error"))){
+								if(sStatus != null && (sStatus.equals("normal") || sStatus.equals("error"))){
 									String sResultFile = OSParameter.TEMP_FILE_FOLDER+m_sJobID+".osrl";
 									boolean	bWrite = IOUtil.writeStringToFile(sOSrL, sResultFile);				
 									if(!bWrite){
@@ -3651,7 +3651,7 @@ public class OSServiceUtil{// implements OShL{
 					boolean bRead = osrlReader.readFile(m_sResultFile);
 					if(bRead){
 						String sStatus = osrlReader.getGeneralStatusType();
-						if(sStatus != null && (sStatus.equals("success") || sStatus.equals("error"))){
+						if(sStatus != null && (sStatus.equals("normal") || sStatus.equals("error"))){
 							m_sOSrL = IOUtil.readStringFromFile(m_sResultFile);
 							if(m_sOSrL == null){
 								m_sOSrL = "";
@@ -3686,7 +3686,7 @@ public class OSServiceUtil{// implements OShL{
 					boolean bRead = osrlReader.readString(m_sOSrL);
 					if(!bRead) throw new Exception("Invalid OSrL result");
 					String sStatus = osrlReader.getGeneralStatusType();
-					if(sStatus != null && (sStatus.equals("success") || sStatus.equals("error"))){
+					if(sStatus != null && (sStatus.equals("normal") || sStatus.equals("error"))){
 						boolean bWrite = IOUtil.writeStringToFile(m_sOSrL, m_sResultFile);
 						if(!bWrite){
 							IOUtil.log("result file " + m_sResultFile + " not written successfully", null);
@@ -5083,7 +5083,7 @@ public class OSServiceUtil{// implements OShL{
 							m_osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 							m_osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
 							m_osrlWriter.setJobID(m_sJobID);
-							m_osrlWriter.setResultTime(new GregorianCalendar());
+							m_osrlWriter.setResultTimeStamp(new GregorianCalendar());
 							m_sOSrL = m_osrlWriter.writeToString();
 						}
 
@@ -5096,7 +5096,7 @@ public class OSServiceUtil{// implements OShL{
 						m_osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 						m_osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
 						m_osrlWriter.setJobID(m_sJobID);
-						m_osrlWriter.setResultTime(new GregorianCalendar());
+						m_osrlWriter.setResultTimeStamp(new GregorianCalendar());
 						m_osrlWriter.setGeneralMessage(IOUtil.exceptionStackToString(e));
 						m_sOSrL = m_osrlWriter.writeToString();
 						String sResultFile = OSParameter.TEMP_FILE_FOLDER+m_sJobID+".osrl";
@@ -5341,7 +5341,7 @@ public class OSServiceUtil{// implements OShL{
 						m_osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 						m_osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
 						m_osrlWriter.setJobID(m_sJobID);
-						m_osrlWriter.setResultTime(new GregorianCalendar());
+						m_osrlWriter.setResultTimeStamp(new GregorianCalendar());
 						m_sOSrL = m_osrlWriter.writeToString();
 					}
 					//postprocess

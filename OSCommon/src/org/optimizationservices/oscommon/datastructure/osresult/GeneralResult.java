@@ -35,6 +35,6 @@ public class GeneralResult{
 
 	public GregorianCalendar timeStamp = null;
 	
-	public OtherResults otherOptions = null;
+	public OtherResults otherResults = null;
 	
 }//class GeneralGeneral

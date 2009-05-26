@@ -21,4 +21,6 @@ public class MemorySize{
 	
 	public double value = -1.0;
 	
+	public String description = "";
+
 }//class MinMemorySize

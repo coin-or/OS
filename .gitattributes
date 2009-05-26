@@ -992,9 +992,9 @@ OSCommon/src/org/optimizationservices/oscommon/datastructure/osquery/OtherQuery.
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osquery/StandardQuery.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osregistry/ServiceEntry.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osrepository/RepositoryInstance.java -text
-OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult.zip -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/BasStatus.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/BasisStatus.java -text
+OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/CPUNumber.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/CPUSpeed.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/ConstraintSolution.java -text
 OSCommon/src/org/optimizationservices/oscommon/datastructure/osresult/DiskSpace.java -text

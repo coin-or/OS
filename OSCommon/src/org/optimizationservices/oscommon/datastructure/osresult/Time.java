@@ -25,5 +25,7 @@ public class Time{
 	public String unit = "second";
 
 	public String description = "";
+	
+	public double value = Double.NaN;
 
 }//class Time
