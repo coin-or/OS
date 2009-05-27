@@ -23,7 +23,7 @@ data parinc.dat;
 option solver nl2osil;
 option nl2osil_oopt g; 
 option nl2osil_solver lindo; 
-sovle;
+solve;
 
 Alternatively, if you want to name the file and not use the AMPL randomly 
 generate file name, do the following:
@@ -87,7 +87,7 @@ using std::endl;
 #include <stdint.h>
 #endif
    
-//#define AMPLDEBUG
+#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	
 	//Initialize the AMPL library
@@ -684,7 +684,7 @@ bool OSnl2osil::createOSInstance(){
 	for (i = 0; i <= n_var; i++)
 		cout << A_colstarts[i] << " ";
 	cout << endl;
-	cout << "A-matrix nonzeroes: " << A_colstarts[ n_var] - 1 << "; nsqueezed: " << nCoefSqueezed << endl;
+	cout << "A-matrix nonzeroes: " << A_colstarts[ n_var] << "; nsqueezed: " << nCoefSqueezed << endl;
 #endif
 
 	if(A_colstarts[ n_var] > 0){
@@ -759,11 +759,13 @@ bool OSnl2osil::createOSInstance(){
 	//
 	// end loop of nonlinear rows
 	//  
-	/*
+#ifdef AMPLDEBUG
 	OSiLWriter osilwriter;
 	std::cout << "WRITE THE INSTANCE" << std::endl;
+	osilwriter.m_bWhiteSpace = true;
 	std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 	std::cout << "DONE WRITE THE INSTANCE" << std::endl;
-	*/
+#endif
+
 	return true;
 }

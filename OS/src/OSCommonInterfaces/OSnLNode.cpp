@@ -14,9 +14,11 @@
  * 
  */
 //#define DEBUGOSNLNODE
+
 #include "OSnLNode.h"
 #include "OSErrorClass.h"
 #include "OSParameters.h"
+#include "OSMathUtil.h"
 
 #include<string>
 
@@ -364,6 +366,9 @@ std::string OSnLNode::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
 	outStr << snodeName;
+#ifdef DEBUGOSNLNODE
+	cout << "nonlinear node " << snodeName << endl;
+#endif
 	if(inumberOfChildren > 0) {
 		outStr << ">";
 	}
@@ -1403,7 +1408,7 @@ std::string OSnLNodeNumber::getNonlinearExpressionInXML(){
 	outStr << "<" ;
 	outStr << snodeName;
 		outStr << "  value=\"";
-		outStr << value ;
+		outStr << os_dtoa_format(value); 
 		outStr << "\"";
 		outStr << " type=\"";
 		outStr << type ;
@@ -1692,7 +1697,7 @@ std::string OSnLNodeVariable::getNonlinearExpressionInXML(){
 		outStr << idx ;
 		outStr << "\"";
 		outStr << "  coef=\"";
-		outStr << coef ;
+		outStr << os_dtoa_format(coef);
 		outStr << "\"";
 	if(inumberOfChildren > 0) {
 		outStr << ">";

@@ -370,7 +370,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					outStr << "\"";
 					if(m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->coef != 0){
 						outStr << "  coef=\"";
-						outStr << m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->coef;
+						outStr << os_dtoa_format(m_OSInstance->instanceData->quadraticCoefficients->qTerm[i]->coef);
 						outStr << "\"";
 					}
 					outStr << "/>" ;
