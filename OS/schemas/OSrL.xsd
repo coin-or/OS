@@ -798,7 +798,6 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
 				<xs:attribute name="category" type="xs:string" use="optional"/>
-				<xs:attribute name="type" type="xs:string" use="optional"/>
 				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
