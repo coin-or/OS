@@ -2668,8 +2668,9 @@ bool OSInstance::setConstraints(int number, string* names, double* lowerBounds, 
 bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor, 
 		double* values, int valuesBegin, int valuesEnd, 
 		int* indexes, int indexesBegin, int indexesEnd,   			
-		int* starts, int startsBegin, int startsEnd){
-		if(numberOfValues < 0) return false;
+		int* starts, int startsBegin, int startsEnd)
+{
+	if(numberOfValues < 0) return false;
 	if(instanceData->linearConstraintCoefficients == NULL) instanceData->linearConstraintCoefficients = new LinearConstraintCoefficients() ;
 	if(numberOfValues == 0) return true;
 	if((values == 0 ) ||

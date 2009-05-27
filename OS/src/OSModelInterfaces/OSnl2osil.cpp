@@ -688,7 +688,7 @@ bool OSnl2osil::createOSInstance(){
 #endif
 
 	if(A_colstarts[ n_var] > 0){
-		osinstance->setLinearConstraintCoefficients(nzc,  true, 
+		osinstance->setLinearConstraintCoefficients(A_colstarts[ n_var],  true, 
 			A_vals,   0,  A_colstarts[n_var] - 1, 
 			A_rownos, 0,  A_colstarts[n_var] - 1, 
 			A_colstarts,  0,  n_var);
