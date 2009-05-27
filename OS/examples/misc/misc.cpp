@@ -44,7 +44,9 @@
 using std::cout;   
 using std::endl;
 
-
+/** this is demo code -- illustrate things
+ * that I may wish to use
+ */
 
 
 int main(int argC, char* argV[]){
@@ -106,31 +108,10 @@ int main(int argC, char* argV[]){
 	outStr << " World" ;
 	outStr << std::endl;
 	std::cout << outStr.str() << std::endl;
-	outStr.str("");
+	outStr.str(""); // here is where we empty the buffer
 	outStr << "New" << std::endl;
 	std::cout << outStr.str() << std::endl;
 	
-	return 0;
-
-
-	double x = 100000000000001.;
-	std::cout  << os_dtoa_format(x) ;
-
-
-	
-	//osinstance->initForAlgDiff( );
-	//OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( 0);
-	std::cout << osinstance->getNonlinearExpressionTreeInInfix( 0) << std::endl;
-	std::cout << osinstance->printModel( 0) << std::endl;
-	try{
-		//osinstance->getNonlinearExpressionTreeInInfix( -1);
-		theModel = osinstance->printModel( );
-		std::cout << theModel << std::endl;
-	}
-	catch(const ErrorClass& eclass){
-		std::cout <<  eclass.errormsg << std::endl;
-	} 	
-
 
 	delete fileUtil;
 	fileUtil = NULL;
