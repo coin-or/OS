@@ -80,7 +80,7 @@ class IpoptProblem : public TNLP{
 public:
 	
 	/** the IpoptProblemclass constructor */
-	IpoptProblem(OSInstance *osinstance_ , OSOption *osoption_, OSResult *osresult_);
+	IpoptProblem(OSInstance *osinstance_ , OSOption *osoption_, OSResult *osresult_, std::string *ipoptErrorMsg_);
 	
 	/** the IpoptProblem class destructor */
 	virtual ~IpoptProblem();
@@ -91,6 +91,8 @@ public:
 	OSOption *osoption;
 
 	OSResult *osresult;
+	
+	std::string *ipoptErrorMsg;
 	
 	/** IPOpt specific methods for defining the nlp problem */
 	virtual bool get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
@@ -171,7 +173,8 @@ private:
 	IpoptProblem& operator=(const IpoptProblem&);
   //@}
 	
-	std::string ipoptErrorMsg;
+	
+
 	
 };
 
@@ -261,7 +264,7 @@ private:
 	//IpoptSolver& operator=(const IpoptSolver&);
 	//@}
 	//std::string ipoptErrorMsg;
-	std::string ipoptErrorMsg;
+	std::string *ipoptErrorMsg;
 };
 
 

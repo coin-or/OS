@@ -36,7 +36,7 @@ IpoptSolver::IpoptSolver() {
 	osresult = new OSResult();
 	m_osilreader = NULL;
 	m_osolreader = NULL;
-	ipoptErrorMsg = "";
+	ipoptErrorMsg = new std::string("");
 } 
 
 IpoptSolver::~IpoptSolver() {
@@ -53,6 +53,7 @@ IpoptSolver::~IpoptSolver() {
 	osrlwriter = NULL;
 	//delete osinstance;
 	//osinstance = NULL;
+	delete ipoptErrorMsg;
 	#ifdef DEBUG
 	cout << "leaving IpoptSolver destructor" << endl;
 	#endif
@@ -62,74 +63,82 @@ IpoptSolver::~IpoptSolver() {
 bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                              Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
-	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");     
-	if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables()) > 0 )  
-		throw ErrorClass("Ipopt does not solve integer programs -- please try Bonmin or Couenne");
-	// number of variables
-	n = osinstance->getVariableNumber();
-	// number of constraints
-	m = osinstance->getConstraintNumber();
-#ifdef DEBUG
-	cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
-	cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
-#endif
 	try{
-		osinstance->initForAlgDiff( );
-	}
-	catch(const ErrorClass& eclass){
-#ifdef DEBUG
-		cout << "error in OSIpoptSolver, line 78:\n" << eclass.errormsg << endl;
-#endif
-		ipoptErrorMsg = eclass.errormsg;
-		throw;  
-	}	
-	// use the OS Expression tree for function evaluations instead of CppAD
-	osinstance->bUseExpTreeForFunEval = true;
-	//std::cout << "Call sparse jacobian" << std::endl;
-	SparseJacobianMatrix *sparseJacobian = NULL;
-	try{
-		sparseJacobian = osinstance->getJacobianSparsityPattern();
-	}
-	catch(const ErrorClass& eclass){
-#ifdef DEBUG
-		cout << "error in OSIpoptSolver, line 91:\n" << eclass.errormsg << endl;
-#endif
-		ipoptErrorMsg = eclass.errormsg;
-		throw;  
-	}
-	//std::cout << "Done calling sparse jacobian" << std::endl;
-	nnz_jac_g = sparseJacobian->valueSize;
-#ifdef DEBUG
-	cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
-#endif
-	// nonzeros in upper hessian
-	
-	if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) {
-#ifdef DEBUG
-		cout << "This is a linear program"  << endl;
-#endif
-		nnz_h_lag = 0;
-	}
-	else{
-		//std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
-		SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
-		//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
-		nnz_h_lag = sparseHessian->hessDimension;
-	}
-#ifdef DEBUG
-	cout << "print nnz_h_lag (OSIpoptSolver.cpp)" << endl;	
-	cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
-	cout << "set index_style (OSIpoptSolver.cpp)" << endl;	
-#endif
-	// use the C style indexing (0-based)
-	index_style = TNLP::C_STYLE;
-#ifdef DEBUG
-	cout << "return from get_nlp_info (OSIpoptSolver.cpp)" << nnz_h_lag << endl;	
-#endif
-  
-  /////
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");     
+		if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables()) > 0 )  
+			throw ErrorClass("Ipopt does not solve integer programs -- please try Bonmin or Couenne");
+		// number of variables
+		n = osinstance->getVariableNumber();
+		// number of constraints
+		m = osinstance->getConstraintNumber();
+	#ifdef DEBUG
+		cout << "number variables  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << n << endl;
+		cout << "number constraints  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << m << endl;
+	#endif
+		try{
+			osinstance->initForAlgDiff( );
+		}
+		catch(const ErrorClass& eclass){
+	#ifdef DEBUG
+			cout << "error in OSIpoptSolver, line 78:\n" << eclass.errormsg << endl;
+	#endif
+			*ipoptErrorMsg = eclass.errormsg;
+			throw;  
+		}	
+		// use the OS Expression tree for function evaluations instead of CppAD
+		osinstance->bUseExpTreeForFunEval = true;
+		//std::cout << "Call sparse jacobian" << std::endl;
+		SparseJacobianMatrix *sparseJacobian = NULL;
+		try{
+			sparseJacobian = osinstance->getJacobianSparsityPattern();
+		}
+		catch(const ErrorClass& eclass){
+	#ifdef DEBUG
+			cout << "error in OSIpoptSolver, line 91:\n" << eclass.errormsg << endl;
+	#endif
+			*ipoptErrorMsg = eclass.errormsg;
+			throw;  
+		}
+		//std::cout << "Done calling sparse jacobian" << std::endl;
+		nnz_jac_g = sparseJacobian->valueSize;
+	#ifdef DEBUG
+		cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
+	#endif
+		// nonzeros in upper hessian
+		
+		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) {
+	#ifdef DEBUG
+			cout << "This is a linear program"  << endl;
+	#endif
+			nnz_h_lag = 0;
+		}
+		else{
+			//std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
+			SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
+			//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
+			nnz_h_lag = sparseHessian->hessDimension;
+		}
+	#ifdef DEBUG
+		cout << "print nnz_h_lag (OSIpoptSolver.cpp)" << endl;	
+		cout << "nnz_h_lag  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_h_lag << endl;	
+		cout << "set index_style (OSIpoptSolver.cpp)" << endl;	
+	#endif
+		// use the C style indexing (0-based)
+		index_style = TNLP::C_STYLE;
+	#ifdef DEBUG
+		cout << "return from get_nlp_info (OSIpoptSolver.cpp)" << nnz_h_lag << endl;	
+	#endif
+	  
+	  /////
 
-  return true;
+	  return true;
+	}
+	catch(const ErrorClass& eclass){
+
+		*ipoptErrorMsg = eclass.errormsg;
+		throw;  
+	}
+	
 }//get_nlp_info
 
 
@@ -303,7 +312,7 @@ bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_valu
 	}
 	catch(const ErrorClass& eclass){
 
-		ipoptErrorMsg = eclass.errormsg;
+		*ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
 	
@@ -321,7 +330,7 @@ bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gra
 #ifdef DEBUG
 		cout << "error in OSIpoptSolver, line 314:\n" << eclass.errormsg << endl;
 #endif
-		ipoptErrorMsg = eclass.errormsg;
+		*ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
   	for(i = 0; i < n; i++){
@@ -345,7 +354,7 @@ bool IpoptProblem::eval_g(Index n, const Number* x, bool new_x, Index m, Number*
 #ifdef DEBUG
 		cout << "error in OSIpoptSolver, line 338:\n" << eclass.errormsg << endl;
 #endif
-		ipoptErrorMsg = eclass.errormsg;
+		*ipoptErrorMsg = eclass.errormsg;
 		throw;  
 	}
 }//eval_g
@@ -369,7 +378,7 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 #ifdef DEBUG
 		cout << "error in OSIpoptSolver, line 362:\n" << eclass.errormsg << endl;
 #endif
-			ipoptErrorMsg =  eclass.errormsg; 
+			*ipoptErrorMsg =  eclass.errormsg; 
 			throw; 
 		}
 		int i = 0;
@@ -393,7 +402,7 @@ bool IpoptProblem::eval_jac_g(Index n, const Number* x, bool new_x,
 #ifdef DEBUG
 		cout << "error in OSIpoptSolver, line 386:\n" << eclass.errormsg << endl;
 #endif
-			ipoptErrorMsg = eclass.errormsg;
+			*ipoptErrorMsg = eclass.errormsg;
 			throw;  
 		}
 		//osinstance->getIterateResults( (double*)x, 0.0, NULL, -1, new_x,  1);
@@ -425,7 +434,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 		}
 		catch(const ErrorClass& eclass){
 
-			ipoptErrorMsg = eclass.errormsg;
+			*ipoptErrorMsg = eclass.errormsg;
 			throw;  
 		}
 		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
@@ -449,7 +458,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 #ifdef DEBUG
 		cout << "error in OSIpoptSolver, line 444:\n" << eclass.errormsg << endl;
 #endif
-			ipoptErrorMsg = eclass.errormsg;
+			*ipoptErrorMsg = eclass.errormsg;
 			delete[]  objMultipliers;
 			throw;  
 		}
@@ -723,7 +732,7 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass) {
 			osinstance = m_osilreader->readOSiL( osil);
 		}
 		// Create a new instance of your nlp 
-		nlp = new IpoptProblem( osinstance, osoption, osresult);
+		nlp = new IpoptProblem( osinstance, osoption, osresult, ipoptErrorMsg);
 		app = new IpoptApplication();
 		this->bCallbuildSolverInstance = true;
 	}
@@ -777,7 +786,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		std::cout << "Finish writing the osrl" << std::endl;
 		//if (status != Solve_Succeeded) {
 		if (status < -2) {
-			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + ipoptErrorMsg);
+			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + *ipoptErrorMsg);
 		}	
 	}
 	catch(const ErrorClass& eclass){
@@ -853,10 +862,11 @@ void IpoptSolver::dataEchoCheck(){
 } // end dataEchoCheck
 
 
-IpoptProblem::IpoptProblem(OSInstance *osinstance_,  OSOption *osoption_, OSResult *osresult_) {
+IpoptProblem::IpoptProblem(OSInstance *osinstance_,  OSOption *osoption_, OSResult *osresult_, std::string* ipoptErrorMsg_) {
 	osinstance = osinstance_;
 	osoption = osoption_;
 	osresult = osresult_;
+	ipoptErrorMsg = ipoptErrorMsg_;
 }
 
 IpoptProblem::~IpoptProblem() {
