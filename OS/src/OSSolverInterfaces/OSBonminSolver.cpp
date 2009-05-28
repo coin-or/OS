@@ -343,6 +343,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 
 	double default_initval;
 	default_initval = 1.7171;
+	
 
 	for(k = 0; k < n1; k++)
 	{
@@ -603,8 +604,18 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		                                 "A longer comment can be put here");
 		  
 		 // Here we can change the default value of some Bonmin or Ipopt option
-		bonminSetup.options()->SetNumericValue("bonmin.time_limit", 1000); //changes bonmin's time limit
+		bonminSetup.options()->SetNumericValue("bonmin.time_limit", 5000); //changes bonmin's time limit
+		//bonminSetup.options()->SetIntegerValue("bonmin.num_resolve_at_node", 3); 
+		//bonminSetup.options()->SetIntegerValue("bonmin.num_resolve_at_root", 3); 
+		//bonminSetup.options()->SetIntegerValue("bonmin.num_retry_unsolved_random_point", 30); 
+		//bonminSetup.options()->SetIntegerValue("print_level", 12); 
+		//bonminSetup.options()->SetIntegerValue("bonmin.bb_log_level", 4); 
+		//bonminSetup.options()->SetStringValue("bonmin.nlp_failure_behavior", "fathom");
+		//bonminSetup.options()->SetNumericValue("bonmin.allowable_gap", -1);
+		//bonminSetup.options()->SetNumericValue("bonmin.allowable_fraction_gap", -.1);
+		//bonminSetup.options()->SetNumericValue("bonmin.cutoff_decr", -1);
 		//bonminSetup.options()->SetStringValue("mu_oracle","loqo");
+	
 	
 		//Here we read several option files
 		//bonminSetup.readOptionsFile("Mybonmin.opt");

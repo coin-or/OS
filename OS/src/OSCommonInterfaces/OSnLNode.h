@@ -54,6 +54,7 @@ using std::vector;
 	OS_COS = 3002,
 	OS_MIN = 4010,
 	OS_MAX = 4011,
+	OS_ERF = 4625,
 	OS_NUMBER = 5001,
 	OS_PI = 5003,
 	OS_E = 5004,
@@ -1023,6 +1024,53 @@ public:
 
 
 };//end OSnLNodeAbs
+
+
+/*! \class OSnLNodeErf
+ *  \brief The OSnLNodeErf Class.
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
+ * 
+ * \remarks
+ * The in-memory representation of the OSnL element <ln>
+ * 
+ */
+class OSnLNodeErf : public OSnLNode{  
+public:
+	/**
+	 * default constructor.
+	 */
+	OSnLNodeErf();
+
+	/**
+	 * default destructor.
+	 */	
+	~OSnLNodeErf();
+	
+	/*! \fn double OSnLNodeErf::double(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a double.
+	 */	
+	virtual double calculateFunction( double *x);
+	
+	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a point to a new OSnLNode of the proper type.
+	 */	
+	virtual OSnLNode *cloneOSnLNode() ;
+		 
+	/*! \fn double OSnLNodeLn::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD) 
+	 *  \brief The implementation of the virtual functions. 
+	 *  \return a ADdouble.
+	 */	
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD);
+	
+};//end OSnLNodeErf
+
+
+
 
 /*! \class OSnLNodeIf
  *  \brief The OSnLNodeIf Class.

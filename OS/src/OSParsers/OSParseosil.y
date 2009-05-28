@@ -201,7 +201,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 %token EXPSTART EXPEND NEGATESTART NEGATEEND IFSTART IFEND
 %token SQUARESTART SQUAREEND COSSTART COSEND SINSTART SINEND
 %token GREATERTHAN 
-%token VARIABLESTART VARIABLEEND ABSSTART ABSEND MAXSTART MAXEND
+%token VARIABLESTART VARIABLEEND ABSSTART ABSEND ERFSTART ERFEND  MAXSTART MAXEND
 %token ALLDIFFSTART ALLDIFFEND MINSTART MINEND ESTART EEND PISTART PIEND
 
 %token TIMEDOMAINSTART TIMEDOMAINEND
@@ -357,6 +357,7 @@ nlnode: number
 		| exp
 		| if
 		| abs
+		| erf
 		| max
 		| min
 		| E
@@ -506,6 +507,14 @@ abs: ABSSTART {
 	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
 } nlnode ABSEND {
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
+};
+
+
+erf: ERFSTART {
+	parserData->nlNodePoint = new OSnLNodeErf();
+	parserData->nlNodeVec.push_back( parserData->nlNodePoint);
+} nlnode ERFEND {
+//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
 

@@ -1637,6 +1637,15 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							nlnodeNum = (OSnLNodeNumber*)nlnode;
 							tmpStack.push( os_dtoa_format(nlnodeNum->value) );
 							break;
+							
+						case OS_PI:
+							tmpStack.push( "PI" );
+							break;
+							
+						case OS_E:
+							tmpStack.push( "E" );
+							break;
+							
 						case OS_VARIABLE:
 							outStr.str("");
 							// handle a variable
@@ -1657,6 +1666,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 								//std::cout << "WE JUST PUSHED " << outStr.str() << std::endl;
 							}
 							break;
+							
 						case OS_PLUS :
 							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing plus operater");
 							tmp1 = tmpStack.top();
@@ -1735,6 +1745,14 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							tmpStack.pop();
 							tmpStack.push( "abs( "+ tmp1  + ")");
 							break;
+							
+						case OS_ERF :
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing erf operater");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "erf( "+ tmp1  + ")");
+							break;
+
 						
 						case OS_SQUARE :
 							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing square operater ");
@@ -1742,14 +1760,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							tmpStack.pop();
 							tmpStack.push( "("+ tmp1  + ")^2");
 							break;
-							
-						case OS_SQRT :
-							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sqrt operater");
-							tmp1 = tmpStack.top();
-							tmpStack.pop();
-							tmpStack.push( "sqrt( "+ tmp1  + ")");
-							break;
-						
+													
 						case OS_LN :
 							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing ln operater");
 							tmp1 = tmpStack.top();

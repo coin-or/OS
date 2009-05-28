@@ -2043,7 +2043,8 @@ if (OTHER_TESTS){
 		osilwriter = new OSiLWriter();
 //		cout << "Read testOperators.osil...";
 		osinstance = osilreader->readOSiL( osil);
-//		cout << "Done" << endl;
+		
+		cout << "Done" << endl;
 		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
 		std::vector<OSnLNode*> postfixVec;
 		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();

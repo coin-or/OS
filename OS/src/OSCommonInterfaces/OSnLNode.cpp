@@ -66,7 +66,7 @@ using std::endl;
 //	"chiSquareDist", "chiSquareCum", "chiSquareInv", "fDist", "fCum", "fInv", "logisticDist", "logisticCum", "logisticInv",
 //	"logLogisticDist", "logLogisticCum", "logLogisticInv", "logarithmicDist", "logarithmicCum", "logarithmicInv",
 //	"paretoDist", "paretoCum", "paretoDist", "rayleighDist", "rayleighCum", "rayleighInv", "pertDist", "pertCum", "pertDist",
-//	"triangularDist", "triangularCum", "triangularInv", "unitNormalLinearLoss",
+//	"triangularDist", "triangularCum", "triangularInv", "unitNormalLinearLoss", erf
 //	/*5--*/"number", "identifier", "PI", "E", "INF", "EPS", "TRUE", "FALSE", "EULERGAMMA", "NAN",
 //	/*6--*/"variable", "objective", "constraint", "parameter",
 //	/*7--*/"if", "lt", "leq", "gt", "geq", "eq", "neq", "and", "or", "xor", "implies", "not",
@@ -102,7 +102,7 @@ using std::endl;
 //	4541, 4542, 4543, 4551, 4552, 4553, 4561, 4562, 4563,
 //	4571, 4572, 4573, 4581, 4582, 4583,
 //	4591, 4592, 4593, 4601, 4602, 4603, 4611, 4612, 4613,
-//	4621, 4622, 4623, 4624,
+//	4621, 4622, 4623, 4624,4625
 //	/*5--*/5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010,
 //	/*6--*/6001, 6002, 6003, 6004,
 //	/*7--*/7001, 7002, 7003, 7004, 7005, 7006, 7007, 7008, 7009, 7010, 7011, 7012,
@@ -1292,6 +1292,60 @@ OSnLNode* OSnLNodeAbs::cloneOSnLNode(){
 }//end OSnLNodeAbs::cloneOSnLNode
 //
 //
+
+
+
+
+//
+// OSnLNodeErf Methods	
+OSnLNodeErf::OSnLNodeErf()
+{
+	inumberOfChildren = 1;
+	m_mChildren = new OSnLNode*[1];
+	m_mChildren[ 0] = NULL;
+	snodeName = "erf";
+	inodeInt = 4625;
+	inodeType = 1;
+}//end OSnLNodeErf
+
+ 
+OSnLNodeErf::~OSnLNodeErf(){
+	#ifdef DEBUGOSNLNODE
+	cout << "inside OSnLNodeErf destructor" << endl;
+	#endif
+	for(int i = 0; i < inumberOfChildren; i++){
+		delete m_mChildren[ i];
+		m_mChildren[i] = NULL;
+	}
+	//m_mChildren = NULL;
+	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
+}//end ~OSnLNodeErf
+
+double OSnLNodeErf::calculateFunction(double *x){
+	m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
+	return m_dFunctionValue;
+}// end OSnLNodeErf::calculate
+
+
+ADdouble OSnLNodeErf::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+	const double a = (993./880.);
+	const double b =  (89./880.); 
+
+	//tanh( (a + b * x * x) * x );
+	//m_ADTape = CppAD::erf( m_mChildren[0]->constructADTape( ADIdx, XAD) );
+	m_ADTape = tanh( (a + b * m_mChildren[0]->constructADTape( ADIdx, XAD) * m_mChildren[0]->constructADTape( ADIdx, XAD)) * m_mChildren[0]->constructADTape( ADIdx, XAD) );
+
+	return m_ADTape;
+}// end OSnLNodeErf::constructADTape
+
+OSnLNode* OSnLNodeErf::cloneOSnLNode(){
+	OSnLNode *nlNodePoint;
+	nlNodePoint = new OSnLNodeErf();
+	return  nlNodePoint;
+}//end OSnLNodeErf::cloneOSnLNode
+//
+//
+
 
 
 //
