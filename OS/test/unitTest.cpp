@@ -1091,7 +1091,8 @@ if(THOROUGH == true){
 		ipoptSolver = NULL;	
 		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
+		//this is integer, skip it
+		/*
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on nonconvex.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -1139,7 +1140,7 @@ if(THOROUGH == true){
 		delete osolreader;
 		osolreader = NULL;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
+		*/
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockorig.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
 		osilreader = new OSiLReader(); 
@@ -1171,6 +1172,7 @@ if(THOROUGH == true){
 		tmp_writer = NULL;
 
 		cout << solver->osrl << endl << endl;
+	
 
 //		check = -1.70711;
 //		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);

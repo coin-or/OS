@@ -62,7 +62,9 @@ IpoptSolver::~IpoptSolver() {
 bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                              Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
-	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");                 	
+	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");     
+	if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables()) > 0 )  
+		throw ErrorClass("Ipopt does not solve integer programs -- please try Bonmin or Couenne");
 	// number of variables
 	n = osinstance->getVariableNumber();
 	// number of constraints

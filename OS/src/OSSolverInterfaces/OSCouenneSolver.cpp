@@ -778,7 +778,7 @@ void CouenneSolver::writeResult(){
 			break;
 			
 			default:
-				solutionDescription = "OTHER[COUENNE]: other unknown solution status from Bonmin solver";
+				solutionDescription = "OTHER[COUENNE]: other unknown solution status from Couenne solver";
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}//switch end	
 		osresult->setGeneralStatusType("normal");
