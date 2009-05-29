@@ -155,7 +155,7 @@ using std::endl;
 using std::ostringstream;
 using std::string;
 
-
+//#define DEBUG_CL_INTERFACE
 
 #define MAXCHARS 5000 
 
@@ -245,25 +245,37 @@ int main(int argC, const char* argV[])
 			strcat(osss, space);
 			i++;
 		}
+#ifdef DEBUG_CL_INTERFACE
 		cout << "Input String = "  << osss << endl;
+#endif
 		ossslex_init( &scanner);
 		//std::cout << "Call Text Extra" << std::endl;
 		setyyextra( osoptions, scanner);
 		//std::cout << "Call scan string " << std::endl;
 		osss_scan_string( osss, scanner); 
+#ifdef DEBUG_CL_INTERFACE
 		std::cout << "call ossslex" << std::endl;
+#endif
 		ossslex( scanner);
 		ossslex_destroy( scanner);
+#ifdef DEBUG_CL_INTERFACE
 		std::cout << "done with call to ossslex" << std::endl;
+#endif
 		// if there is a config file, get those options
 		if(osoptions->configFile != ""){
 			ossslex_init( &scanner);
 			configFileName = osoptions->configFile;
+#ifdef DEBUG_CL_INTERFACE
 			cout << "configFileName = " << configFileName << endl;
+#endif
 			std::string osolfileOptions = fileUtil->getFileAsString( configFileName.c_str() );
+#ifdef DEBUG_CL_INTERFACE
 			std::cout << "Call Text Extra" << std::endl;
+#endif
 			setyyextra( osoptions, scanner);
+#ifdef DEBUG_CL_INTERFACE
 			std::cout << "Done with call Text Extra" << std::endl;
+#endif
 			osss_scan_string( osolfileOptions.c_str() , scanner);
 			ossslex(scanner );	
 			ossslex_destroy( scanner);
@@ -304,6 +316,8 @@ int main(int argC, const char* argV[])
 			inputFileUtil  = NULL;
 			return 1;
 		} 
+
+#ifdef DEBUG_CL_INTERFACE
 		cout << "HERE ARE THE OPTION VALUES:" << endl;
 		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
 		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
@@ -315,6 +329,7 @@ int main(int argC, const char* argV[])
 		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
 		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
+#endif
 		// get the data from the files
 		fileUtil = new FileUtil();
 		try{	
@@ -325,6 +340,7 @@ int main(int argC, const char* argV[])
 				
 				
 			}
+#ifdef DEBUG_CL_INTERFACE
 			if(osoptions->serviceLocation != ""){
 				 cout << "Service Location = " << osoptions->serviceLocation << endl;
 			}
@@ -334,6 +350,8 @@ int main(int argC, const char* argV[])
 				//	cout << "Service Location = " << osoptions->serviceLocation << endl;
 				//}
 			}
+#endif
+
 			if(osoptions->osilFile != ""){
 				//this takes precedence over what is in the OSoL file
 				 osoptions->osil = fileUtil->getFileAsString( (osoptions->osilFile).c_str()   );
@@ -345,7 +363,7 @@ int main(int argC, const char* argV[])
 			}
 			// see if there is a solver specified
 			if(osoptions->solverName != ""){ 
-				cout << "Solver Name = " << osoptions->solverName << endl;
+//				cout << "Solver Name = " << osoptions->solverName << endl;
 			}
 			else{
 				if(osoptions->osol != ""){
@@ -452,10 +470,13 @@ void solve(){
 				}
 			}
 			std::cout  << std::endl;
+#ifdef DEBUG_CL_INTERFACE
 			if(osoptions->osol.length() > 0){
 				std::cout << "HERE IS THE OSoL FILE" << std::endl;
 				std::cout << osoptions->osol << std::endl << std::endl;
 			}
+#endif
+
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
@@ -598,11 +619,15 @@ void solve(){
 					}
 				}
 			}
+#ifdef DEBUG_CL_INTERFACE
 			std::cout << "CALL SOLVE" << std::endl;
+#endif
 			solverType->osol = osoptions->osol;
 			if(osoptions->osil != ""){
 				osilreader = new OSiLReader();
+#ifdef DEBUG_CL_INTERFACE
 				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
+#endif
 				solverType->osinstance = osilreader->readOSiL( osoptions->osil );
 				// set solver options if there is an OSoL file  kippster
 				if(osoptions->osol != ""){
@@ -624,7 +649,9 @@ void solve(){
 				//we better have an nl file present or mps file or osol file
 				if(osoptions->nlFile != ""){
 					#ifdef COIN_HAS_ASL
+#ifdef DEBUG_CL_INTERFACE
 						std::cout << "CREATING AN OSINSTANCE FROM AN NL FILE" << std::endl;
+#endif
 						OSnl2osil *nl2osil = new OSnl2osil( osoptions->nlFile); 
 						nl2osil->createOSInstance() ;
 						solverType->osinstance = nl2osil->osinstance;
@@ -638,7 +665,9 @@ void solve(){
 				}
 				else{
 					if(osoptions->mpsFile != ""){
+#ifdef DEBUG_CL_INTERFACE
 						std::cout << "CREATING AN OSINSTANCE FROM AN MPS FILE" << std::endl;
+#endif
 						OSmps2osil *mps2osil = new OSmps2osil( osoptions->mpsFile);
 						mps2osil->createOSInstance() ;
 						solverType->osinstance = mps2osil->osinstance;
@@ -809,7 +838,9 @@ void send(){
 				jobID =  osagent->getJobID( sOSoL) ;
 				// insert the jobID into the default osol
 				iStringpos = sOSoL.find("</general");
+#ifdef DEBUG_CL_INTERFACE
 				cout << "startel ==  " << iStringpos << endl;
+#endif
 				if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
 			}
 			else{
@@ -827,8 +858,10 @@ void send(){
 			}
 			cout << sOSoL << endl;
 			bSend = osagent->send(osoptions->osil, sOSoL);
+#ifdef DEBUG_CL_INTERFACE
 			if(bSend == true) cout << "send is true" << endl;
 			else cout << "send is false" << endl;
+#endif
 			delete  osagent;
 		}
 		else{
@@ -865,7 +898,9 @@ void retrieve(){
 	try{
 		if(osoptions->serviceLocation != ""){
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
+#ifdef DEBUG_CL_INTERFACE
 			std::cout << "HERE ARE THE OSOL OPTIONS " <<  osoptions->osol << std::endl;
+#endif
 			osrl = osagent->retrieve( osoptions->osol);
 			if(osoptions->osrlFile != "") {
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl); 
@@ -1082,15 +1117,15 @@ std::string setSolverName( std::string osol, std::string solverName){
 	OSoLReader *osolreader = NULL;
 	osolreader = new OSoLReader();
 	osoption = osolreader->readOSoL( osol);
-	std::cout <<  "invoke getSolverToInvoke" << std::endl;
+//	std::cout <<  "invoke getSolverToInvoke" << std::endl;
 	osoption->setSolverToInvoke( solverName);
-	std::cout <<  "Solver Name =  " << solverName << std::endl;
-	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
+//	std::cout <<  "Solver Name =  " << solverName << std::endl;
+//	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
 	OSoLWriter *osolwriter = NULL;
 	osolwriter = new OSoLWriter();
 	std::string newOSoL = osolwriter->writeOSoL( osoption);
-	std::cout << "NEW OSOL" << std::endl;
-	std::cout << newOSoL << std::endl;
+//	std::cout << "NEW OSOL" << std::endl;
+//	std::cout << newOSoL << std::endl;
 //	delete osoption;
 	delete osolreader;
 	delete osolwriter;

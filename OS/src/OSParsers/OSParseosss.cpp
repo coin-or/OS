@@ -645,7 +645,7 @@ using std::endl;
 using std::ostringstream;
 
   
-#define PARSERDEBUG
+//#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -1020,7 +1020,7 @@ case 2:
 YY_RULE_SETUP
 #line 120 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	printf("Found option:  %s\n", yytext);  
+	//printf("Found option:  %s\n", yytext);  
 	//char *ch = strdup(yytext);
 	char *ch = yytext;
 	// move past -config
@@ -1035,7 +1035,7 @@ case 3:
 YY_RULE_SETUP
 #line 133 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	printf("Found option:  %s\n", yytext);  
+//	printf("Found option:  %s\n", yytext);  
 	yyextra->invokeHelp = true;
 	//printf("gsgersdf= %d\n", gster);
 }
@@ -1044,7 +1044,7 @@ case 4:
 YY_RULE_SETUP
 #line 139 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	printf("Found option:  %s\n", yytext); 
+//	printf("Found option:  %s\n", yytext); 
 	yyextra->invokeHelp = true;
 	//printf("gsgersdf= %d\n", gster); 
 	
@@ -1054,7 +1054,7 @@ case 5:
 YY_RULE_SETUP
 #line 146 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	printf("Found option:  %s\n", yytext);  
+//	printf("Found option:  %s\n", yytext);  
 	yyextra->writeVersion = true;
 	//printf("gsgersdf= %d\n", gster);
 }
@@ -1063,7 +1063,7 @@ case 6:
 YY_RULE_SETUP
 #line 152 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	printf("Found option:  %s\n", yytext); 
+//	printf("Found option:  %s\n", yytext); 
 	yyextra->writeVersion = true;
 	//printf("gsgersdf= %d\n", gster); 
 	
@@ -1075,7 +1075,7 @@ YY_RULE_SETUP
 #line 161 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osilFile == ""){
-		printf("Found option:  %s\n", yytext);  
+//		printf("Found option:  %s\n", yytext);  
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -osil
@@ -1092,7 +1092,7 @@ YY_RULE_SETUP
 #line 174 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osrlFile == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -osrl
@@ -1109,7 +1109,7 @@ YY_RULE_SETUP
 #line 187 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->insListFile == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -insList
@@ -1126,7 +1126,7 @@ YY_RULE_SETUP
 #line 200 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osolFile == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -osol
@@ -1143,7 +1143,7 @@ YY_RULE_SETUP
 #line 215 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osplInputFile == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -osplInput
@@ -1160,7 +1160,7 @@ YY_RULE_SETUP
 #line 228 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osplOutputFile == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -osplInput
@@ -1177,7 +1177,7 @@ YY_RULE_SETUP
 #line 241 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->serviceMethod == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -serviceMethod
@@ -1194,7 +1194,7 @@ YY_RULE_SETUP
 #line 254 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->serviceLocation == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//yyextra->serviceLocation = strdup(yytext);
 		yyextra->serviceLocation =  yytext;
 		//char *ch = strdup(yytext);
@@ -1213,7 +1213,7 @@ YY_RULE_SETUP
 #line 269 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->mpsFile == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -mps
@@ -1230,7 +1230,7 @@ YY_RULE_SETUP
 #line 282 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->nlFile == ""){
-		printf("Found option:  %s\n", yytext);
+//		printf("Found option:  %s\n", yytext);
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -nl
@@ -1247,7 +1247,7 @@ YY_RULE_SETUP
 #line 295 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->solverName == ""){
-		printf("Found option:  %s\n", yytext); 
+//		printf("Found option:  %s\n", yytext); 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -solver
@@ -1264,7 +1264,7 @@ YY_RULE_SETUP
 #line 308 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->browser == ""){
-		printf("Found option:  %s\n", yytext);  
+//		printf("Found option:  %s\n", yytext);  
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
 		// move past -browser

@@ -4641,9 +4641,9 @@ bool OSInstance::createOSADFun(std::vector<double> vdX){
 			}
 		}	
 		//create the function and stop recording
-		std::cout << "create the function and stop recording"  << std::endl;
+//		std::cout << "create the function and stop recording"  << std::endl;
 		Fad = new CppAD::ADFun<double>(vdaX, m_vFG);
-		std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
+//		std::cout << "range space dimension =  " << m_vFG.size() << std::endl;
 		// no forward sweeps done yet
 		m_iHighestTaylorCoeffOrder = -1;
 		m_bOSADFunIsCreated = true;
@@ -4736,7 +4736,7 @@ int  OSInstance::getADSparsityHessian(){
 		std::vector<bool> e( m);
 		//Vector s(m);
 		for(i = 0; i < m; i++) e[i] = true;
-		std::cout << "Computing Sparse Hessian" << std::endl;
+//		std::cout << "Computing Sparse Hessian" << std::endl;
 		//m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
 #ifdef COIN_HAS_CPPAD
 		m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);

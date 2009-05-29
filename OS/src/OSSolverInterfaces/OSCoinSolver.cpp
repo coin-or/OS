@@ -671,11 +671,13 @@ void CoinSolver::solve() throw (ErrorClass) {
 					cbc_argv[ 3] = cstr;
 								
 				}
-				std::cout << "CALLING THE CBC SOLVER CBCMAIN1()" << std::endl;
 				int i;
+/*
+				std::cout << "CALLING THE CBC SOLVER CBCMAIN1()" << std::endl;
 				for(i = 0; i < num_cbc_argv; i++){
 					std::cout << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
 				}
+*/
 				CbcMain1( num_cbc_argv, cbc_argv, model);	
 				//do the garbage collection on cbc_argv
 				for(i = 0; i < num_cbc_argv; i++){

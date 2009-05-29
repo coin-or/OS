@@ -230,8 +230,7 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 		{
 			double initval;
 			for(k = 0; k < m1; k++)
-			{	cout << "process component " << k << " -- index " << initVarVector[k]->idx << endl;
-				i = initVarVector[k]->idx;
+			{	i = initVarVector[k]->idx;
 				if (initVarVector[k]->idx > n1)
 					throw ErrorClass ("Illegal index value in variable initialization");
 
@@ -265,8 +264,7 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 	default_initval = 1.7171;
 
 	for(k = 0; k < n1; k++)
-	{	cout << "verify component " << k << endl;
-		if (!initialed[k])
+	{	if (!initialed[k])
 			if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
 				if (osinstance->instanceData->variables->var[k]->lb <= default_initval)
 					x[k] = default_initval;
@@ -289,10 +287,11 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 							x[k] = osinstance->instanceData->variables->var[k]->ub;
 	}
 
+#ifdef DEBUG
  	for(i = 0; i < n1; i++){
  		std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
  	}
- 
+#endif
 
 	delete[] initialed;
 
@@ -437,7 +436,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 			*ipoptErrorMsg = eclass.errormsg;
 			throw;  
 		}
-		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
+//		cout << "got structure of HESSIAN !!!!!!!!!!!!!!!!!!!!!!!!!! "  << endl;
 		for(i = 0; i < nele_hess; i++){
 			iRow[i] = *(sparseHessian->hessColIdx + i);
 			jCol[i] = *(sparseHessian->hessRowIdx + i);
@@ -686,24 +685,24 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		}
 
 		if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 ){
-			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
+//			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
 			optionsVector = osoption->getSolverOptions( "ipopt");
 			char *pEnd;
 			int i;
 			int num_ipopt_options = optionsVector.size();
 			for(i = 0; i < num_ipopt_options; i++){
-				std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
+//				std::cout << "ipopt solver option  "  << optionsVector[ i]->name << std::endl;
 				if(optionsVector[ i]->type == "numeric" ){
-					std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+//					std::cout << "FOUND A NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
 					app->Options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
 				}
 				else if(optionsVector[ i]->type == "integer" ){
-					std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
+//					std::cout << "FOUND AN INTEGER OPTION  "  << atoi( optionsVector[ i]->value.c_str() ) << std::endl;
 					app->Options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
 				}
 				else if(optionsVector[ i]->type == "string" ){
-					std::cout << "FOUND A STRING OPTION  "  <<  optionsVector[ i]->value.c_str() << std::endl;
+//					std::cout << "FOUND A STRING OPTION  "  <<  optionsVector[ i]->value.c_str() << std::endl;
 					app->Options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value);
 				}
 			}	
@@ -774,16 +773,16 @@ void IpoptSolver::solve() throw (ErrorClass) {
   			app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
   		}
 		// Intialize the IpoptApplication and process the options
-		std::cout << "Call Ipopt Initialize" << std::endl;
+//		std::cout << "Call Ipopt Initialize" << std::endl;
 		app->Initialize();
-		std::cout << "Finished Ipopt Initialize" << std::endl;
+//		std::cout << "Finished Ipopt Initialize" << std::endl;
 		//nlp->osinstance = this->osinstance;
 		// Ask Ipopt to solve the problem
-		std::cout << "Call Ipopt Optimize" << std::endl;
+//		std::cout << "Call Ipopt Optimize" << std::endl;
 		ApplicationReturnStatus status = app->OptimizeTNLP( nlp);
-		std::cout << "Finish Ipopt Optimize" << std::endl;
+//		std::cout << "Finish Ipopt Optimize" << std::endl;
 		osrl = osrlwriter->writeOSrL( osresult);
-		std::cout << "Finish writing the osrl" << std::endl;
+//		std::cout << "Finish writing the osrl" << std::endl;
 		//if (status != Solve_Succeeded) {
 		if (status < -2) {
 			throw ErrorClass("Ipopt FAILED TO SOLVE THE PROBLEM: " + *ipoptErrorMsg);

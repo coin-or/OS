@@ -87,7 +87,7 @@ using std::endl;
 #include <stdint.h>
 #endif
    
-#define AMPLDEBUG
+//#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	
 	//Initialize the AMPL library
@@ -765,6 +765,9 @@ bool OSnl2osil::createOSInstance(){
 	osilwriter.m_bWhiteSpace = true;
 	std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 	std::cout << "DONE WRITE THE INSTANCE" << std::endl;
+
+	std::cout << osinstance->printModel() << std::endl;
+
 #endif
 
 	return true;

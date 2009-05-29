@@ -181,7 +181,7 @@
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="2"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src;..\..\..\..\CppAd;..\..\..\..\CppAd\local;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers;..\..\..\..\BuildTools\headers"
+				AdditionalIncludeDirectories="..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src;..\..\..\..\CppAd;..\..\..\..\CppAd\local;..\..\..\..\ThirdParty\ASL;..\..\..\..\ThirdParty\ASL\solvers;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="0"

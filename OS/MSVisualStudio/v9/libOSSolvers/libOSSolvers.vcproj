@@ -247,6 +247,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\OSSolverInterfaces\OSBonminSolver.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\OSSolverInterfaces\OSCoinSolver.cpp"
 				>
 			</File>
