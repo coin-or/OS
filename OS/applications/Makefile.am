@@ -9,7 +9,7 @@
 AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS =
-  SUBDIRS += fileUpload
+#  SUBDIRS += fileUpload
 if COIN_HAS_ASL
   SUBDIRS += amplClient
 endif
