@@ -5689,7 +5689,17 @@ uploaded file that is saved on the server, so that you can put it in the corresp
 
 
 
+\section{Wish List for Release 2.1}\label{section:wishlist} 
 
+\begin{itemize}
+\item Implement a Gurobi solver interface.
+
+\item Implement the {\tt mult} and {\tt inc} features in OSiL.
+
+\item Implement the SOS feature in OSiL
+
+\item Implement a switch so that the solver output is put into OSrL output. This output should go into a {\tt solutionResult} element in {\tt otherSolutionResults.}
+\end{itemize}
 
 
 
@@ -5854,6 +5864,8 @@ uploaded file that is saved on the server, so that you can put it in the corresp
 </osil>
 \end{verbatim}
 \index{OSiL|)}
+
+
 
 
 \addcontentsline{toc}{section}{Bibliography}
@@ -7009,7 +7021,38 @@ wrote most of the BonCouenne*.?pp code.
 %%%%%%%%%%%%%%%%%
 Using the gnu debugger
 
-When I want to debug a program p, then I do$ gdb pand in gdb I say "run".For example:$ gdb unitTestGNU gdb 6.6.50.20070726-cvsCopyright (C) 2007 Free Software Foundation, Inc.GDB is free software, covered by the GNU General Public License, and you arewelcome to change it and/or distribute copies of it under certainconditions.Type "show copying" to see the conditions.There is absolutely no warranty for GDB.  Type "show warranty" for details.This GDB was configured as "i586-suse-linux"...break Using host libthread_db library "/lib/libthread_db.so.1".(gdb) break unitTest.cpp:263Breakpoint 1 at 0x804e037: file../../../GAMSlinks-trunk/OS/test/unitTest.cpp, line 263.(gdb) runStarting program: /home/stefan/work/coin/GAMSlinks-debug/OS/test/unitTest[Thread debugging using libthread_db enabled][New Thread 0xb7bdbb70 (LWP 16655)]START UNIT TEST[Switching to Thread 0xb7bdbb70 (LWP 16655)]Breakpoint 1, main (argC=1, argV=0xbff15f04) at../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263263             int nOfTest = 0;(gdb) bt#0  main (argC=1, argV=0xbff15f04) at../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263
+When I want to debug a program p, then I do
+$ gdb p
+and in gdb I say "run".
+
+For example:
+
+$ gdb unitTest
+GNU gdb 6.6.50.20070726-cvs
+Copyright (C) 2007 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain
+conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i586-suse-linux"...
+break Using host libthread_db library "/lib/libthread_db.so.1".
+(gdb) break unitTest.cpp:263
+Breakpoint 1 at 0x804e037: file
+../../../GAMSlinks-trunk/OS/test/unitTest.cpp, line 263.
+(gdb) run
+Starting program: /home/stefan/work/coin/GAMSlinks-debug/OS/test/unitTest
+[Thread debugging using libthread_db enabled]
+[New Thread 0xb7bdbb70 (LWP 16655)]
+START UNIT TEST
+[Switching to Thread 0xb7bdbb70 (LWP 16655)]
+
+Breakpoint 1, main (argC=1, argV=0xbff15f04) at
+../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263
+263             int nOfTest = 0;
+(gdb) bt
+#0  main (argC=1, argV=0xbff15f04) at
+../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263
 
 
 

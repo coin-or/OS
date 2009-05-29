@@ -56,7 +56,7 @@ int main(int argC, char* argV[]){
 	cout << "Start Building the Model" << endl;
 	std::cout << "Hello World" << std::endl;
 
-	std::string osilFileName =   "../../data/osilFiles/rosenbrockmod.osil";
+	std::string osilFileName =   "../../data/osilFiles/muer.osil";
 	std::cout << "Try to read a sample file" << std::endl;
 	std::cout << "The file is: " ;
 	std::cout <<  osilFileName << std::endl;
@@ -66,6 +66,17 @@ int main(int argC, char* argV[]){
 	OSInstance *osinstance;
 	osinstance = osilreader->readOSiL( osil);	
 	std::string theModel;
+	
+	
+	const double a = (993./880.);
+	const double b = (89./880.); 
+	 
+	double x = 1.5;
+	
+	std::cout << std::tanh( (a + b * x * x) * x ) << std::endl;
+	std::cout << erf( x) << std::endl;
+	
+	
 
 
 	#if 0
@@ -88,7 +99,7 @@ int main(int argC, char* argV[]){
 	fileUtil->writeFileFromString("kipp.txt", solverOutput.str() );
 	#endif
 	
-	#if  1
+	#if  0
 	//WRITE COUT TO A STRING -- this C++ stuff -- it will NOT write stdout, e.g. printf()
 	ostringstream solverOutput;
 	std::streambuf* save_buffer = cout.rdbuf(solverOutput.rdbuf()); //turn off cout
@@ -110,11 +121,9 @@ int main(int argC, char* argV[]){
 	outStr << "New" << std::endl;
 	std::cout << outStr.str() << std::endl;
 	
-	return 0;
 
 
-	double x = 100000000000001.;
-	std::cout  << os_dtoa_format(x) ;
+
 
 
 	
