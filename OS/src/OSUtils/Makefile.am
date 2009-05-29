@@ -20,8 +20,6 @@ noinst_LTLIBRARIES = libOSUtils.la
 libOSUtils_la_SOURCES = \
 		OSBase64.cpp \
 		OSBase64.h \
-		OSCommonUtil.cpp \
-		OSCommonUtil.h \
 		OSErrorClass.cpp \
 		OSErrorClass.h \
 		OSFileUtil.cpp \
@@ -63,7 +61,6 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
 	OSBase64.h \
-	OSCommonUtil.h \
 	OSErrorClass.h \
 	OSFileUtil.h \
 	OSMathUtil.h \

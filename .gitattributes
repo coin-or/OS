@@ -77,7 +77,6 @@ OS/applications/amplClient/nltrans.dat -text
 OS/applications/amplClient/nltrans.mod -text
 OS/applications/amplClient/nltrans.nl -text
 OS/applications/amplClient/testfile.nl -text
-OS/applications/fileUpload/Makefile.am -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
 OS/applications/fileUpload/OSFileUpload.java -text
@@ -464,8 +463,6 @@ OS/src/OSUtils/Makefile.am -text
 OS/src/OSUtils/Makefile.in -text
 OS/src/OSUtils/OSBase64.cpp -text
 OS/src/OSUtils/OSBase64.h -text
-OS/src/OSUtils/OSCommonUtil.cpp -text
-OS/src/OSUtils/OSCommonUtil.h -text
 OS/src/OSUtils/OSDataStructures.cpp -text
 OS/src/OSUtils/OSDataStructures.h -text
 OS/src/OSUtils/OSErrorClass.cpp -text

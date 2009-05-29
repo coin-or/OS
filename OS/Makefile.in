@@ -67,6 +67,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/CoinAllExamples/instanceGenerator/Makefile.in \
 	$(top_srcdir)/CoinAllExamples/osTestCode/Makefile.in \
 	$(top_srcdir)/CoinAllExamples/template/Makefile.in \
+	$(top_srcdir)/applications/fileUpload/Makefile.in \
 	$(top_srcdir)/configure \
 	$(top_srcdir)/examples/CppAD/Makefile.in \
 	$(top_srcdir)/examples/addCuts/Makefile.in \
@@ -101,7 +102,8 @@ CONFIG_CLEAN_FILES = examples/instanceGenerator/Makefile \
 	CoinAllExamples/osTestCode/Makefile \
 	CoinAllExamples/addCuts/Makefile \
 	CoinAllExamples/template/Makefile \
-	CoinAllExamples/CppAD/Makefile os_addlibs.txt
+	CoinAllExamples/CppAD/Makefile \
+	applications/fileUpload/Makefile os_addlibs.txt
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -494,6 +496,8 @@ CoinAllExamples/template/Makefile: $(top_builddir)/config.status $(top_srcdir)/C
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 CoinAllExamples/CppAD/Makefile: $(top_builddir)/config.status $(top_srcdir)/CoinAllExamples/CppAD/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+applications/fileUpload/Makefile: $(top_builddir)/config.status $(top_srcdir)/applications/fileUpload/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 os_addlibs.txt: $(top_builddir)/config.status $(srcdir)/os_addlibs.txt.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
@@ -642,7 +646,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/CoinAllExamples/CppAD $(distdir)/CoinAllExamples/addCuts $(distdir)/CoinAllExamples/instanceGenerator $(distdir)/CoinAllExamples/osTestCode $(distdir)/CoinAllExamples/template $(distdir)/examples/CppAD $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/branchCutPrice $(distdir)/examples/instanceGenerator $(distdir)/examples/osModificationDemo $(distdir)/examples/osOptionDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/osResultDemo $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/CoinAllExamples/CppAD $(distdir)/CoinAllExamples/addCuts $(distdir)/CoinAllExamples/instanceGenerator $(distdir)/CoinAllExamples/osTestCode $(distdir)/CoinAllExamples/template $(distdir)/applications/fileUpload $(distdir)/examples/CppAD $(distdir)/examples/addCuts $(distdir)/examples/algorithmicDiff $(distdir)/examples/branchCutPrice $(distdir)/examples/instanceGenerator $(distdir)/examples/osModificationDemo $(distdir)/examples/osOptionDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/osResultDemo $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
