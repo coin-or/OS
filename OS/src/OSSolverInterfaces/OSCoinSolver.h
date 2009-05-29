@@ -109,8 +109,8 @@ public:
 
 	void writeResult(OsiSolverInterface *solver);
 	
-	
-	void writeResult(CbcModel *model, OsiSolverInterface *solver);
+	// use this for when we solve with Cbc --AND-- have integer variables
+	void writeResult(CbcModel *model);
 
 
 

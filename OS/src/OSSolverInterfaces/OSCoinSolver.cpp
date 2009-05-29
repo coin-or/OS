@@ -695,8 +695,12 @@ void CoinSolver::solve() throw (ErrorClass) {
 				cpuTime = CoinCpuTime() - start;
 				
 				// create a solver 
-				OsiSolverInterface *solver = model.solver();			
-				writeResult( &model, solver);
+				OsiSolverInterface *solver = model.solver();
+				if(osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){			
+					writeResult( &model);
+				}else{
+					writeResult( solver);
+				}
 			}
 			else{ // use other solvers
 				//if an LP just do initial solve
@@ -826,12 +830,24 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	}
 	else{ 
 		if(solver->isProvenPrimalInfeasible() == true) 
-			osresult->setSolutionStatus(solIdx, "infeasible", description);
+			osresult->setSolutionStatus(solIdx, "infeasible", "we are primal infeasible");
 		else
 			if(solver->isProvenDualInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "dualinfeasible", description);
+				osresult->setSolutionStatus(solIdx, "infeasible", "we are dual infeasible");
 			else
-				osresult->setSolutionStatus(solIdx, "other", description);
+				if(solver->isPrimalObjectiveLimitReached() == true) 
+					osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
+				else
+					if(solver->isDualObjectiveLimitReached() == true) 
+						osresult->setSolutionStatus(solIdx, "other", "dual objective limit reached");
+					else
+						if(solver->isIterationLimitReached() == true) 
+							osresult->setSolutionStatus(solIdx, "other", "iteration limit reached");
+						else
+							if(solver->isAbandoned() == true) 
+								osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
+							else
+								osresult->setSolutionStatus(solIdx, "other", description);
 	}
 	
 	/* Retrieve the solution */
@@ -877,7 +893,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 }//writeResult(OsiSolverInterface)
 
 
-void CoinSolver::writeResult(CbcModel *model, OsiSolverInterface *solver){
+void CoinSolver::writeResult(CbcModel *model){
 	double *x = NULL;
 	double *y = NULL;
 	double *z = NULL;
@@ -899,18 +915,18 @@ void CoinSolver::writeResult(CbcModel *model, OsiSolverInterface *solver){
 	osresult->setGeneralStatusType("normal");
 	osresult->setTime(cpuTime);
 	
-	if (model->isProvenOptimal() == true || (numOfIntVars == 0 && solver->isProvenOptimal() == true ) ){
+	if (model->isProvenOptimal() == true  ){
 		osresult->setSolutionStatus(solIdx, "optimal", description);			
 	}
 	else{ 
 		if(model->isProvenInfeasible() == true) 
-			osresult->setSolutionStatus(solIdx, "infeasible", description);
+			osresult->setSolutionStatus(solIdx, "infeasible", "the integer program is infeasile");
 		else
 			if(model->isProvenDualInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "other", "dual infeasible");
+				osresult->setSolutionStatus(solIdx, "infeasible", "the continuous relaxation is dual infeasible");
 			else
 				if(model->isContinuousUnbounded() == true) 
-					osresult->setSolutionStatus(solIdx, "other", "lp relaxation unbounded");
+					osresult->setSolutionStatus(solIdx, "other", "the continuous relaxation is unbounded");
 				else
 					if(model->isNodeLimitReached() == true) 
 						osresult->setSolutionStatus(solIdx, "other", "node limit reached");
@@ -921,12 +937,14 @@ void CoinSolver::writeResult(CbcModel *model, OsiSolverInterface *solver){
 							if(model->isSolutionLimitReached() == true) 
 								osresult->setSolutionStatus(solIdx, "other", "solution limit reached");
 							else
-								osresult->setSolutionStatus(solIdx, "other","unknown");
+								if(model->isAbandoned() == true) 
+									osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
+								else
+									osresult->setSolutionStatus(solIdx, "other","unknown");
 	}
 	
 	/* Retrieve the solution -- of course it may not be optimal */
 	if(numOfIntVars > 0) *(z + 0)  =  model->getObjValue();
-		else  *(z + 0)  =  solver->getObjValue();
 	osresult->setObjectiveValuesDense(solIdx, z); 
 	for(i=0; i < osinstance->getVariableNumber(); i++){
 		*(x + i) = model->getColSolution()[i];
