@@ -829,10 +829,10 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	}
 	else{ 
 		if(solver->isProvenPrimalInfeasible() == true) 
-			osresult->setSolutionStatus(solIdx, "infeasible", "we are primal infeasible");
+			osresult->setSolutionStatus(solIdx, "infeasible", "the problem is primal infeasible");
 		else
 			if(solver->isProvenDualInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "infeasible", "we are dual infeasible");
+				osresult->setSolutionStatus(solIdx, "dual infeasible", "dual infeasible --- could be unbounded");
 			else
 				if(solver->isPrimalObjectiveLimitReached() == true) 
 					osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
@@ -919,7 +919,7 @@ void CoinSolver::writeResult(CbcModel *model){
 	}
 	else{ 
 		if(model->isProvenInfeasible() == true) 
-			osresult->setSolutionStatus(solIdx, "infeasible", "the integer program is infeasile");
+			osresult->setSolutionStatus(solIdx, "infeasible", "the integer program is infeasible");
 		else
 			if(model->isProvenDualInfeasible() == true) 
 				osresult->setSolutionStatus(solIdx, "infeasible", "the continuous relaxation is dual infeasible");
@@ -931,7 +931,7 @@ void CoinSolver::writeResult(CbcModel *model){
 						osresult->setSolutionStatus(solIdx, "other", "node limit reached");
 					else
 						if(model->isSecondsLimitReached() == true) 
-							osresult->setSolutionStatus(solIdx, "other", "seconds limit reached");
+							osresult->setSolutionStatus(solIdx, "other", "time limit reached");
 						else
 							if(model->isSolutionLimitReached() == true) 
 								osresult->setSolutionStatus(solIdx, "other", "solution limit reached");
