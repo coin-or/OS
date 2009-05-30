@@ -63,7 +63,7 @@
 #include "OSInstance.h"
 
 
-
+//#define PARSERDEBUG
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);

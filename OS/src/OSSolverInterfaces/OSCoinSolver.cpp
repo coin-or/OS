@@ -186,10 +186,26 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			}
 
 			if(solverIsDefined == false) throw ErrorClass("a supported solver was not defined");
-			if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver Needs Constraints");
+
+			// first check the various solvers and see if they are of the proper problem type
+			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+				|| (osinstance->getNumberOfQuadraticTerms() > 0) ){
+				throw ErrorClass( "This COIN-OR Solver is not configured for nonlinear programming");
+			}
+			// throw an exception if we have a solver that cannot do integer programming
+			if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
+				if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do integer programming");
+				if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do integer programming");
+				if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do integer programming");
+				if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do integer programming");
+			}
+			// check other trivial solver limitations
+			if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver cannot handle unconstrained problems");
 			if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
 			if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver needs an objective function");
+			if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver can only handle numeric variables");
 			if(osinstance->getLinearConstraintCoefficientNumber() <= 0) throw ErrorClass("Coin solver needs linear constraints");
+
 			if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
 			osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
 				osinstance->getVariableUpperBounds(),  
@@ -197,7 +213,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 				osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds()
 			);
 			//dataEchoCheck();	
-			if(osinstance->getObjectiveNumber() == 0) throw ErrorClass("there is no objective function");
+//			if(osinstance->getObjectiveNumber() == 0) throw ErrorClass("there is no objective function");
 			if( osinstance->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
 			else osiSolver->setObjSense(-1.0);
 			// set the integer variables
@@ -238,7 +254,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	  
 
 	// the osi maps
-	// the OsiHintParamameter Map
+	// the OsiHintParameter Map
 	std::map<std::string, OsiHintParam> hintParamMap;
 	hintParamMap["OsiDoPresolveInInitial"] = OsiDoPresolveInInitial;
 	hintParamMap["OsiDoDualInInitial"] = OsiDoDualInInitial;
@@ -593,20 +609,6 @@ void CoinSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	if( this->bSetSolverOptions == false) setSolverOptions();
 	
-	// first check the various solvers and see if they are of the proper problem type
-	if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
-		// throw an exception if we have a solver that cannot do integer programming
-		if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do integer programming");
-		if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do integer programming");
-		if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do integer programming");
-		if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do integer programming");
-	}
-	if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-		|| (osinstance->getNumberOfQuadraticTerms() > 0) ){
-		throw ErrorClass( "This COIN-OR Solver is not configured for nonlinear programming");
-	}
-	// if we are throw an exception if the problem is nonlinear
-
 	// resultHeader information
 	if(osresult->setServiceName("Solved with Coin Solver: " + sSolverName) != true)
 		throw ErrorClass("OSResult error: setServiceName");
@@ -832,7 +834,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			osresult->setSolutionStatus(solIdx, "infeasible", "the problem is primal infeasible");
 		else
 			if(solver->isProvenDualInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "dual infeasible", "dual infeasible --- could be unbounded");
+				osresult->setSolutionStatus(solIdx, "unbounded", "the problem is unbounded");
 			else
 				if(solver->isPrimalObjectiveLimitReached() == true) 
 					osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");

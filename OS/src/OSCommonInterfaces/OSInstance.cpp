@@ -43,6 +43,7 @@ OSInstance::OSInstance():
 	m_iVariableNumber(-1),
 	m_iNumberOfIntegerVariables( 0),
 	m_iNumberOfBinaryVariables( 0),
+	m_iNumberOfStringVariables( 0),
 	m_iNumberOfQuadraticRowIndexes( 0),
 	m_bQuadraticRowIndexesProcessed( false),
 	m_miQuadRowIndexes( NULL),
@@ -1011,11 +1012,13 @@ bool OSInstance::processVariables() {
 		}
 		m_iNumberOfBinaryVariables = 0;
 		m_iNumberOfIntegerVariables = 0;
+		m_iNumberOfStringVariables = 0;
 		for(i = 0; i < n; i++){
 			if(vartype.find(instanceData->variables->var[i]->type) == string::npos) throw ErrorClass("wrong variable type");
 			m_mcVariableTypes[i] = instanceData->variables->var[i]->type;
 			if(m_mcVariableTypes[i] == 'B') m_iNumberOfBinaryVariables++;
 			if(m_mcVariableTypes[i] == 'I') m_iNumberOfIntegerVariables++;
+			if(m_mcVariableTypes[i] == 'S') m_iNumberOfStringVariables++;
 			m_mdVariableLowerBounds[i] = instanceData->variables->var[i]->lb;
 			m_mdVariableUpperBounds[i] = instanceData->variables->var[i]->ub;
 		}
@@ -1060,6 +1063,11 @@ int OSInstance::getNumberOfBinaryVariables() {
 	processVariables();
 	return m_iNumberOfBinaryVariables;
 }//getNumberOfBinaryVariables
+
+int OSInstance::getNumberOfStringVariables() {
+	processVariables();
+	return m_iNumberOfStringVariables;
+}//getNumberOfStringVariables
 
 double* OSInstance::getVariableLowerBounds() {
 	processVariables();

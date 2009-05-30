@@ -810,6 +810,11 @@ private:
 	int m_iNumberOfBinaryVariables;
 	
 	/**
+	 * m_iNumberOfStringVariables holds the number of integer variables. 
+	 */
+	int m_iNumberOfStringVariables;
+	
+	/**
 	 * m_iNumberOfQuadraticRowIndexes holds the number of distinct rows and objectives with quadratic terms. 
 	 */
 	int m_iNumberOfQuadraticRowIndexes;
@@ -1474,6 +1479,12 @@ public:
 	 * @return an integer which is the number of B variables. 
 	 */
 	int getNumberOfBinaryVariables();
+	
+	/**
+	 * getNumberOfStringVariables
+	 * @return an integer which is the number of S variables. 
+	 */
+	int getNumberOfStringVariables();
 	
 	/**
 	 * Get variable lower bounds. 
