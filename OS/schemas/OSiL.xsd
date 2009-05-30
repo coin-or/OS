@@ -388,7 +388,7 @@
 			</xs:element>
 			<xs:element name="adjacentVariableSets" type="SOSAdjacentVariableSets" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Only needed if order > 2</xs:documentation>
+					<xs:documentation>Only needed if type > 2.      All nonzero variables belong to the same adjacency set.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
