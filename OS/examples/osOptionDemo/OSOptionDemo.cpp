@@ -57,6 +57,7 @@ int main( ){
 		dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
 		
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
@@ -73,7 +74,23 @@ int main( ){
 		osoption->setNumberOfVariables( osinstance->getVariableNumber() ) ;
 		osoption->setNumberOfObjectives( 1);
 		osoption->setNumberOfConstraints( osinstance->getConstraintNumber());
-		osoption->setAnotherSolverOption("log","10","cbc","","integer","");
+		//set the solver -- use cbc -- it will call clp for pure linear and no integer
+		osoption->setSolverToInvoke( "cbc");
+		// the signature for setting solver options
+		/**
+			bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+			std::string category, std::string type, std::string description);
+		 */
+		osoption->setAnotherSolverOption("primalS","","cbc","","string","");
+		//in primal simplex set the pivot choice -- use steepest edge
+		//osoption->setAnotherSolverOption("primalpivot","steepest","cbc","","string","");
+		// set directly through Cbc
+		//osoption->setAnotherSolverOption("log","10","cbc","","integer","");
+		// set through Osi
+		osoption->setAnotherSolverOption("OsiHintTry","","osi","","OsiHintStrength","");
+		osoption->setAnotherSolverOption("OsiDoReducePrint","false","osi","","OsiHintParam","");
+		
+		
 		OSoLWriter *osolwriter;
 		osolwriter = new OSoLWriter();
 		std::cout << osolwriter-> writeOSoL( osoption);

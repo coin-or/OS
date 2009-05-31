@@ -176,6 +176,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 								}
 								else{
 									// default solver is CBC
+									sSolverName = "cbc";
 									solverIsDefined = true;
 									osiSolver = new OsiClpSolverInterface();
 								}
@@ -306,7 +307,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	 * 
 	 * */
 	OsiHintStrength hintStrength = OsiHintTry; //don't want too much output
-	osiSolver->setHintParam(OsiDoReducePrint, true, hintStrength);
+	osiSolver->setHintParam(OsiDoReducePrint, false, hintStrength);
 	osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
 	/* 
 	 * end default settings 
@@ -388,14 +389,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			
 			// treat Cbc separately to take advantage of CbcMain1()
 			
-			
-
-
-
-			//if(optionsVector.size() > 0) optionsVector.clear();
-			
 			if( sSolverName.find( "cbc") != std::string::npos) {	
-				// get Cbc options		
+				// get Cbc options	
+				if(optionsVector.size() > 0) optionsVector.clear();	
 				optionsVector = osoption->getSolverOptions( "cbc");
 				int num_cbc_options = optionsVector.size();	
 				char *cstr;
@@ -441,28 +437,20 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			// also need to treat SYMPHONY differently
 			
 			
-			// set some OSI options
+			// treat symphony differently
 	#ifdef COIN_HAS_SYMPHONY
-			//if(optionsVector.size() > 0) optionsVector.clear();
-			if( !optionsVector.empty() ) optionsVector.clear();	
+			if(optionsVector.size() > 0) optionsVector.clear();
+			//if( !optionsVector.empty() ) optionsVector.clear();	
 			//first the number of processors -- applies only to SYMPHONY
 			if( sSolverName.find( "symphony") != std::string::npos) {
 				OsiSymSolverInterface * si =
 				dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
-				
 				optionsVector = osoption->getSolverOptions( "symphony");
 				int num_sym_options = optionsVector.size();
-				
-				
 				for(i = 0; i < num_sym_options; i++){
 					std::cout << "symphony solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "symphony solver value  "  << optionsVector[ i]->value << std::endl;
-					if( optionsVector[ i]->name  ==  "max_active_nodes"){
-						si->setSymParam("max_active_nodes",   optionsVector[ i]->value);
-					}
-					else{
-						//ignore for now
-					}	
+					si->setSymParam(optionsVector[ i]->name,   optionsVector[ i]->value);
 				}				
 			}
 	#endif	   //symphony end		
@@ -498,8 +486,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 #endif
 
 				double initval;
-				for(k = 0; k < m; k++)
-				{	cout << "process component " << k << " -- index " << initVarVector[k]->idx << endl;
+				for(k = 0; k < m; k++){
 					i = initVarVector[k]->idx;
 					if (initVarVector[k]->idx > n)
 						throw ErrorClass ("Illegal index value in variable initialization");
@@ -527,8 +514,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				double default_initval;
 				default_initval = 0.0;
 
-				for(k = 0; k < n; k++)
-				{	cout << "verify component " << k << endl;
+				for(k = 0; k < n; k++){
 					if (!initialed[k])
 						if (osinstance->instanceData->variables->var[k]->ub == OSDBL_MAX)
 							if (osinstance->instanceData->variables->var[k]->lb <= default_initval)

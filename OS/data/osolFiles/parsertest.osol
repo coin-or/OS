@@ -84,10 +84,9 @@
 	</job>	
         <optimization numberOfObjectives="1" numberOfConstraints="4" numberOfVariables="10">
 		<variables numberOfOtherVariableOptions="2">
-			<initialVariableValues numberOfVar="3">
-					<var idx="0" value="1"/>
-					<var value="4.742999643577776" idx="1"/>
-					<var idx="3" value="1.379408293215363"/>
+			<initialVariableValues numberOfVar="2">
+					<var idx="0" value="0"/>
+					<var value="0" idx="1"/>
 			</initialVariableValues>
 			<initialVariableValuesString numberOfVar="1">
 				<var idx="1" value="blue"></var>
@@ -149,13 +148,13 @@
 
 
 			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"/>
-			<solverOption name="OsiHintIgnore" solver="osi" type="OsiHintStrength"   />
+			<solverOption name="OsiHintTry" solver="osi" type="OsiHintStrength"   />
 
 		
 			<solverOption name="maxN" solver="cbc" value="100" />
 			<solverOption name="cuts" solver="cbc" value="off" />
-			<solverOption name="solve" solver="cbc"  />
-			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
+			<solverOption name="log" solver="cbc"  value="0"/>
+			<solverOption name="verbosity" solver="symphony"  value="-2" />
 
 		</solverOptions>
 	</optimization>
