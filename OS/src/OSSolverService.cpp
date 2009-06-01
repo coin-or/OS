@@ -1073,17 +1073,23 @@ string getInstanceLocation( std::string osol){
 }//getInstanceLocation
 
 std::string getSolverName( std::string osol){
+#ifdef DEBUG_CL_INTERFACE
 	std::cout << "inside getSolverName" << std::endl;
 	std::cout <<  osol << std::endl;
 	std::cout << "done with osol" << std::endl;
+#endif
 	OSOption *osoption = NULL;
 	OSoLReader *osolreader = NULL;
 	osolreader = new OSoLReader();
 
 	osoption = osolreader->readOSoL( osol);
+#ifdef DEBUG_CL_INTERFACE
 	std::cout <<  "invoke getSolverToInvoke" << std::endl;
+#endif
 	std::string optionstring = osoption->getSolverToInvoke();
+#ifdef DEBUG_CL_INTERFACE
 	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
+#endif
 //	delete osoption;
 	delete osolreader;
 	return optionstring;
@@ -1112,7 +1118,9 @@ std::string getSolverName( std::string osol){
 
 
 std::string setSolverName( std::string osol, std::string solverName){
+#ifdef DEBUG_CL_INTERFACE
 	std::cout << "inside setSolverName" << std::endl;
+#endif
 	OSOption *osoption = NULL;
 	OSoLReader *osolreader = NULL;
 	osolreader = new OSoLReader();

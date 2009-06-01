@@ -1320,7 +1320,7 @@ std::string  OSOption::getSolverToInvoke()
 		return this->general->solverToInvoke;
 
 	return "";
-}//getSolverName
+}//getSolverToInvoke
 
 /**
  * get the license information (in <general> element)
