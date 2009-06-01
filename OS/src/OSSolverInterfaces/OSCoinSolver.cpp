@@ -306,6 +306,17 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	OsiHintStrength hintStrength = OsiHintTry; //don't want too much output
 	osiSolver->setHintParam(OsiDoReducePrint, true, hintStrength);
 	osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
+	
+	
+	// treat symphony differently
+#ifdef COIN_HAS_SYMPHONY
+	if( sSolverName.find( "symphony") != std::string::npos) {
+		OsiSymSolverInterface * si =
+		dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
+		//set default verbosity to -2
+		si->setSymParam("verbosity",   -2);					
+	}
+#endif	   //symphony end	
 	/* 
 	 * end default settings 
 	 * 
@@ -432,9 +443,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			}//end of cbc if
 			
 			// also need to treat SYMPHONY differently
-			
-			
-			// treat symphony differently
+	
+	// treat symphony differently
 	#ifdef COIN_HAS_SYMPHONY
 			if(optionsVector.size() > 0) optionsVector.clear();
 			//if( !optionsVector.empty() ) optionsVector.clear();	
@@ -450,8 +460,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					si->setSymParam(optionsVector[ i]->name,   optionsVector[ i]->value);
 				}				
 			}
-	#endif	   //symphony end		
-			
+	#endif	   //symphony end			
 			
 			//now set initial values
 			int n,m,k;
