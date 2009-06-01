@@ -33,13 +33,19 @@
 #include "OSCommonUtil.h"
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
-
-
 #include "CoinError.hpp"
 #include "CoinHelperFunctions.hpp"
 #include<iostream> 
+
+
+#ifdef COIN_HAS_COUENNE    
+#include "OSCouenneSolver.h"
+#endif
+using std::string;
 using std::cout;   
 using std::endl;
+
+void getOSResult(std::string osrl);
 
 //int main(int argC, char* argV[]){
 int main( ){
@@ -51,61 +57,43 @@ int main( ){
 
 
 		const char dirsep =  CoinFindDirSeparator();
+		std::string osil;
 		// Set directory containing mps data files.
 		std::string dataDir;
 		std::string osilFileName;
 		dataDir = dirsep == '/' ? "../../data/" : "..\\..\\data\\";
+		/// declare a generic solver
 		
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
-		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
-		std::cout << "Try to read a sample file" << std::endl;
-		std::cout << "The file is: " ;
-		std::cout <<  osilFileName << std::endl;
-		std::string osil = fileUtil->getFileAsString( osilFileName.c_str() );
-		//now create some options
+		DefaultSolver *solver  = NULL;
 		OSiLReader *osilreader = NULL;
+		OSInstance *osinstance = NULL;
+		OSoLWriter *osolwriter = NULL;
+		OSOption* osoption = NULL;
+		
+		/******************** Start Clp Example *************************/
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
 		osilreader = new OSiLReader(); 
-		OSInstance *osinstance;
 		osinstance = osilreader->readOSiL( osil);
-		
-		
-		OSOption* osoption = new OSOption();
-
-		osoption->setNumberOfVariables( osinstance->getVariableNumber() ) ;
-		osoption->setNumberOfObjectives( 1);
-		osoption->setNumberOfConstraints( osinstance->getConstraintNumber());
-		//set the solver -- use cbc -- it will call clp for pure linear and no integer
-		osoption->setSolverToInvoke( "cbc");
-		// the signature for setting solver options
-		/**
-			bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
-			std::string category, std::string type, std::string description);
+		osoption = new OSOption();
+		/** 
+		 *  here is the format for setting options:
+		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 *	std::string category, std::string type, std::string description);
 		 */
-		osoption->setAnotherSolverOption("primalS","","cbc","","string","");
-		//in primal simplex set the pivot choice -- use steepest edge
-		//osoption->setAnotherSolverOption("primalpivot","steepest","cbc","","string","");
-		// set directly through Cbc
-		//osoption->setAnotherSolverOption("log","10","cbc","","integer","");
-		// set through Osi
 		osoption->setAnotherSolverOption("OsiHintTry","","osi","","OsiHintStrength","");
 		osoption->setAnotherSolverOption("OsiDoReducePrint","false","osi","","OsiHintParam","");
-		
-		
-		OSoLWriter *osolwriter;
 		osolwriter = new OSoLWriter();
 		std::cout << osolwriter-> writeOSoL( osoption);
-		
-
-		
-		CoinSolver *solver = new CoinSolver();
+		solver = new CoinSolver();
 		solver->osinstance = osinstance;
-		solver->sSolverName ="cbc"; 
+		solver->sSolverName ="clp"; 
 		solver->osoption = osoption;
 		solver->buildSolverInstance();		
 		solver->solve();
 		std::cout << solver->osrl << std::endl;
-
 		
+		//do garbage collection
 		delete osilreader;
 		osilreader = NULL;
 		delete solver;
@@ -114,9 +102,144 @@ int main( ){
 		osoption = NULL;
 		delete osolwriter;
 		osolwriter = NULL;
+		//finish garbage collection
+		
+		/******************** End Clp Example *************************/
+		
+		
+		/******************** Start Cbc Example *************************/
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
+		osilreader = new OSiLReader(); 
+		
+		osinstance = osilreader->readOSiL( osil);
+		 osoption = new OSOption();
+		/** 
+		 *  here is the format for setting options:
+		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 *	std::string category, std::string type, std::string description);
+		 */
+		osoption->setAnotherSolverOption("primalS","","cbc","","string","");
+		//in primal simplex set the pivot choice -- use steepest edge
+		osoption->setAnotherSolverOption("primalpivot","steepest","cbc","","string","");
+		osoption->setAnotherSolverOption("log","10","cbc","","integer","");
+		osolwriter = new OSoLWriter();
+		std::cout << osolwriter-> writeOSoL( osoption);
+		solver = new CoinSolver();
+		solver->osinstance = osinstance;
+		solver->sSolverName ="cbc"; 
+		solver->osoption = osoption;
+		solver->buildSolverInstance();		
+		solver->solve();
+		std::cout << solver->osrl << std::endl;
+		
+		// start garbage collection
+		delete osilreader;
+		osilreader = NULL;
+		delete solver;
+		solver = NULL;
+		delete osoption;
+		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
+		// finish garbage collection
+		
+		/******************** End Cbc Example *************************/
+		
+		
+		/******************** Start SYMPHONY Example *************************/
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
+		osilreader = new OSiLReader(); 
+		
+		osinstance = osilreader->readOSiL( osil);
+		 osoption = new OSOption();
+		/** 
+		 *  here is the format for setting options:
+		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 *	std::string category, std::string type, std::string description);
+		 */
+		 
+		//turn off SYMPHONY output
+		osoption->setAnotherSolverOption("verbosity","0","symphony","","","");
+		osolwriter = new OSoLWriter();
+		std::cout << osolwriter-> writeOSoL( osoption);
+		solver = new CoinSolver();
+		solver->osinstance = osinstance;
+		solver->sSolverName ="symphony"; 
+		solver->osoption = osoption;
+		solver->buildSolverInstance();		
+		solver->solve();
+		//std::cout << solver->osrl << std::endl;
+		
+		// start garbage collection
+		delete osilreader;
+		osilreader = NULL;
+		delete solver;
+		solver = NULL;
+		delete osoption;
+		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
+		// finish garbage collection
+		
+		/******************** End SYMPHONY Example *************************/
+		
+#ifdef COIN_HAS_COUENNE		
+		/******************** Start Couenne Example *************************/
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "wayneQuadratic.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
+		osilreader = new OSiLReader(); 
+		
+		osinstance = osilreader->readOSiL( osil);
+		 osoption = new OSOption();
+		/** 
+		 *  here is the format for setting options:
+		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 *	std::string category, std::string type, std::string description);
+		 */
+		 
+		// set Bonmin options through Couenne 
+		// set a limit of 50000 nodes -- this is on Cbc
+		osoption->setAnotherSolverOption("node_limit","50000","couenne","bonmin","integer","");
+		// control some Bonmin output
+		osoption->setAnotherSolverOption("bb_log_level","3","couenne","bonmin","integer","");
+		osoption->setAnotherSolverOption("nlp_log_level","2","couenne","bonmin","integer","");
+		//solve 3 times at each node and get best solution
+		osoption->setAnotherSolverOption("num_resolve_at_node","3","couenne","bonmin","integer","");
+		//solve 5 times at root node and get best solution
+		osoption->setAnotherSolverOption("num_resolve_at_root","5","couenne","bonmin","integer","");
+
+		
+		// set Ipopt options through Couenne
+		osoption->setAnotherSolverOption("max_iter","100","couenne","ipopt","integer","");
+		
+		// set a Couenne time limit option
+		osoption->setAnotherSolverOption("time_limit",".1","couenne","","numeric","");
+		osolwriter = new OSoLWriter();
+		std::cout << osolwriter-> writeOSoL( osoption);
+		solver = new CouenneSolver();
+		solver->osinstance = osinstance;
+		solver->osoption = osoption;
+		solver->buildSolverInstance();		
+		solver->solve();
+		//std::cout << solver->osrl << std::endl;
+		getOSResult( solver->osrl);
+		// start garbage collection
+		delete osilreader;
+		osilreader = NULL;
+		delete solver;
+		solver = NULL;
+		delete osoption;
+		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
+		// finish garbage collection
+		
+		/******************** End Couenne Example *************************/
+#endif		
 		delete fileUtil;
-		fileUtil = NULL;
-		cout << "Done with garbage collection" << endl;
+		fileUtil = NULL;	
 		return 0;
 		//
 	}
@@ -126,3 +249,40 @@ int main( ){
 		return 0;
 	} 
 }// end main
+
+void getOSResult(std::string osrl){
+//see the example OSResultDemo for a more detailed example
+	std::cout << std::endl << std::endl << std::endl;
+	OSrLReader *osrlreader = NULL;
+	OSResult *osresult = NULL;
+	osrlreader = new OSrLReader();
+	osresult  = osrlreader->readOSrL( osrl);
+	
+	//now use the OSResult API -- first make sure we got an optimal solution
+	//get the status
+	std::string solStatus;
+	double optSolValue;
+	// the argument is the solution index
+	solStatus = osresult->getSolutionStatusType( 0 );
+	// if solStatus is optimal get the optimal solution value
+	if( solStatus.find("ptimal") != string::npos ){
+	//first index is objIdx, second is solution index
+		optSolValue = osresult->getOptimalObjValue( -1, 0);
+		std::cout << "OPTIMAL SOLUTION VALUE  " <<  optSolValue << std::endl;
+	}else{
+		std::cout << "NO OPTIMAL SOLUTION FOUND " << std::endl;
+	}
+	
+	int i;
+	int vecSize;
+	// now get the primal solution
+	std::vector<IndexValuePair*> primalValPair;
+	primalValPair = osresult->getOptimalPrimalVariableValues( 0);
+	vecSize = primalValPair.size();
+	for(i = 0; i < vecSize; i++){
+		std::cout << "index = " <<  primalValPair[ i]->idx ;
+		std::cout << "    value = " <<  primalValPair[ i]->value << std::endl;
+	}
+	delete osrlreader;
+}// get OSResult
+

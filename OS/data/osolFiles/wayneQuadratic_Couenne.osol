@@ -17,7 +17,7 @@
 			<solverOption name="bb_log_level" solver="couenne" type="integer" value="3" category="bonmin"/>
 			<solverOption name="nlp_log_level" solver="couenne" type="integer" value="2" category="bonmin"/>
 			<solverOption name="display_stats" solver="couenne" type="string" value="yes"/>
-			<solverOption name="couenne_check" solver="couenne" type="numeric" value="-77777"  />
+			<solverOption name="couenne_check" solver="couenne" type="numeric" value="5000"  />
 			<solverOption name="max_iter" solver="couenne" type="integer" value="2000" category="ipopt"/>		
 		</solverOptions>
 	</optimization>
