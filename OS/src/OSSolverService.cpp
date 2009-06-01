@@ -701,7 +701,17 @@ void solve(){
 	}//end try
 	catch(const ErrorClass& eclass){
 		if(osoptions->osrlFile != ""){
-			fileUtil->writeFileFromString(osoptions->osrlFile, eclass.errormsg);
+		
+			OSResult *osresult = NULL;
+			OSrLWriter *osrlwriter = NULL;
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage( eclass.errormsg);
+			osresult->setGeneralStatusType( "error");
+			std::string osrl = osrlwriter->writeOSrL( osresult);
+			delete osresult;
+			delete osrlwriter;
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 			if(osoptions->browser != ""){
 				std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
 				const char *ch = &str[ 0];
