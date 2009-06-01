@@ -131,10 +131,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			}
 			finish = clock();
 			duration = (double) (finish - start) / CLOCKS_PER_SEC;
-			cout << "Parsing took (seconds): "<< duration << endl;
 			// get the type of solver requested from OSoL string
 			bool solverIsDefined = false;
-			std::cout << "SOLVER NAME =  " << sSolverName << std::endl;
 			if( sSolverName.find("clp") != std::string::npos){
 				solverIsDefined = true;
 				osiSolver = new OsiClpSolverInterface();
@@ -240,7 +238,6 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			bCallbuildSolverInstance = true;
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << "THERE IS AN ERROR" << std::endl;
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
@@ -307,7 +304,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	 * 
 	 * */
 	OsiHintStrength hintStrength = OsiHintTry; //don't want too much output
-	osiSolver->setHintParam(OsiDoReducePrint, false, hintStrength);
+	osiSolver->setHintParam(OsiDoReducePrint, true, hintStrength);
 	osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
 	/* 
 	 * end default settings 
