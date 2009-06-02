@@ -812,10 +812,9 @@ AC_CONFIG_FILES([Makefile
           examples/addCuts/Makefile
           examples/osModificationDemo/Makefile
           examples/osRemoteTest/Makefile
- 	  examples/osOptionDemo/Makefile
+ 	  examples/osSolverDemo/Makefile
  	  examples/osResultDemo/Makefile
           examples/template/Makefile
-          examples/CppAD/Makefile
           examples/branchCutPrice/Makefile
           CoinAllExamples/instanceGenerator/Makefile
           CoinAllExamples/osTestCode/Makefile

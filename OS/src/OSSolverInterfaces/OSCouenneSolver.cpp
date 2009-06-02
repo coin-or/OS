@@ -133,7 +133,7 @@ CouenneSolver::~CouenneSolver() {
 void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 	// Much of the following is taken from Stefan Vigerske
 	try{
-		
+		this->bCallbuildSolverInstance = true;
 		// do some initialization
 		
 		int i, j;
@@ -527,7 +527,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	const int infeasible = 1;
 	//double time_start = CoinCpuTime();
 	try{
-		
+		if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 		if(this->bSetSolverOptions == false) setSolverOptions() ;
 		//couenne->print();
 		

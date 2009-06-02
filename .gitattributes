@@ -242,10 +242,6 @@ OS/doc/osUsersManual_2.0.ind -text
 OS/doc/osUsersManual_2.0.tex -text
 OS/doc/osusersmanual_2.0.pdf -text
 OS/doc/usersManualAdditions.txt -text
-OS/examples/CppAD/Makefile.in -text
-OS/examples/CppAD/dc08.cpp -text
-OS/examples/CppAD/ipopt_cppad_nlp.cpp -text
-OS/examples/CppAD/ipopt_cppad_nlp.hpp -text
 OS/examples/Excel/OSWebServiceGUI.xlsm -text
 OS/examples/Excel/clsOSInstance.cls -text
 OS/examples/Excel/clsws_OSSolverServiceServic.cls -text
@@ -279,8 +275,6 @@ OS/examples/matlab/OSMatlabSolver.cpp -text
 OS/examples/misc/misc.cpp -text
 OS/examples/osModificationDemo/Makefile.in -text
 OS/examples/osModificationDemo/OSModificationDemo.cpp -text
-OS/examples/osOptionDemo/Makefile.in -text
-OS/examples/osOptionDemo/OSOptionDemo.cpp -text
 OS/examples/osRemoteTest/Makefile.in -text
 OS/examples/osRemoteTest/OSRemoteTest.cpp -text
 OS/examples/osResultDemo/Makefile.in -text

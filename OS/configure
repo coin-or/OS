@@ -30777,7 +30777,7 @@ fi
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-                                                                                                                                                                                                                                                                                        ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile examples/instanceGenerator/Makefile examples/algorithmicDiff/Makefile examples/addCuts/Makefile examples/osModificationDemo/Makefile examples/osRemoteTest/Makefile examples/osOptionDemo/Makefile examples/osResultDemo/Makefile examples/template/Makefile examples/CppAD/Makefile examples/branchCutPrice/Makefile CoinAllExamples/instanceGenerator/Makefile CoinAllExamples/osTestCode/Makefile CoinAllExamples/addCuts/Makefile CoinAllExamples/template/Makefile CoinAllExamples/CppAD/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile os_addlibs.txt"
+                                                                                                                                                                                                                                                                              ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile examples/instanceGenerator/Makefile examples/algorithmicDiff/Makefile examples/addCuts/Makefile examples/osModificationDemo/Makefile examples/osRemoteTest/Makefile examples/osSolverDemo/Makefile examples/osResultDemo/Makefile examples/template/Makefile examples/branchCutPrice/Makefile CoinAllExamples/instanceGenerator/Makefile CoinAllExamples/osTestCode/Makefile CoinAllExamples/addCuts/Makefile CoinAllExamples/template/Makefile CoinAllExamples/CppAD/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile os_addlibs.txt"
 
 
 
@@ -31602,10 +31602,9 @@ do
   "examples/addCuts/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/addCuts/Makefile" ;;
   "examples/osModificationDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osModificationDemo/Makefile" ;;
   "examples/osRemoteTest/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osRemoteTest/Makefile" ;;
-  "examples/osOptionDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osOptionDemo/Makefile" ;;
+  "examples/osSolverDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osSolverDemo/Makefile" ;;
   "examples/osResultDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osResultDemo/Makefile" ;;
   "examples/template/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/template/Makefile" ;;
-  "examples/CppAD/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/CppAD/Makefile" ;;
   "examples/branchCutPrice/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/branchCutPrice/Makefile" ;;
   "CoinAllExamples/instanceGenerator/Makefile" ) CONFIG_FILES="$CONFIG_FILES CoinAllExamples/instanceGenerator/Makefile" ;;
   "CoinAllExamples/osTestCode/Makefile" ) CONFIG_FILES="$CONFIG_FILES CoinAllExamples/osTestCode/Makefile" ;;
