@@ -99,7 +99,7 @@
 	</xs:complexType>
 	<xs:complexType name="SystemResult">
 		<xs:all>
-			<xs:element name="systemInformation" type="xs:string" default="0.0" minOccurs="0">
+			<xs:element name="systemInformation" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
@@ -283,13 +283,9 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="name" type="xs:string" use="required"/>
-				<xs:attribute name="value" type="xs:string" use="optional"/>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralStatus">
 		<xs:annotation>
@@ -672,19 +668,21 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:simpleType name="BasStatusEnum">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="unknown"/>
+			<xs:enumeration value="basic"/>
+			<xs:enumeration value="atLower"/>
+			<xs:enumeration value="atUpper"/>
+			<xs:enumeration value="superBasic"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="BasStatus">
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="unknown"/>
-					<xs:enumeration value="basic"/>
-					<xs:enumeration value="atLower"/>
-					<xs:enumeration value="atUpper"/>
-					<xs:enumeration value="superbasic"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:simpleContent>
+			<xs:extension base="BasStatusEnum">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OtherVarResult">
 		<xs:annotation>
@@ -778,7 +776,6 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
 				<xs:attribute name="category" type="xs:string" use="optional"/>
-				<xs:attribute name="type" type="xs:string" use="optional"/>
 				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
@@ -797,7 +794,6 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="name" type="xs:string" use="required"/>
 				<xs:attribute name="category" type="xs:string" use="optional"/>
-				<xs:attribute name="type" type="xs:string" use="optional"/>
 				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
