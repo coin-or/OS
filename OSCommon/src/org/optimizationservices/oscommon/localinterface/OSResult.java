@@ -6,6 +6,7 @@
 package org.optimizationservices.oscommon.localinterface;
 
 import java.util.GregorianCalendar;
+import java.util.Vector;
 
 import org.optimizationservices.oscommon.datastructure.osresult.CPUNumber;
 import org.optimizationservices.oscommon.datastructure.osresult.CPUSpeed;
@@ -26,11 +27,14 @@ import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolu
 import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionSubstatus;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherResults;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherSolverOutput;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult;
 import org.optimizationservices.oscommon.datastructure.osresult.ServiceResult;
 import org.optimizationservices.oscommon.datastructure.osresult.SolutionResults;
+import org.optimizationservices.oscommon.datastructure.osresult.SolverOutput;
 import org.optimizationservices.oscommon.datastructure.osresult.SystemResult;
 import org.optimizationservices.oscommon.datastructure.osresult.TimingInformation;
 import org.optimizationservices.oscommon.datastructure.osresult.VarStringValue;
@@ -40,23 +44,26 @@ import org.optimizationservices.oscommon.datastructure.osresult.VariableStringVa
 import org.optimizationservices.oscommon.datastructure.osresult.VariableValues;
 import org.optimizationservices.oscommon.representationparser.OSrLReader;
 import org.optimizationservices.oscommon.representationparser.OSrLWriter;
+import org.optimizationservices.oscommon.util.XMLUtil;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
-*
-* <P>The <code>OSResult</code> class is a local interface for storing Optimization Services
-* problem result. Its design follows the Optimization Services result Language (OSrL). 
-* All the data structures in this class are standards specified in OSrL. 
-* Developers can add service-specific results by extending this class.  
-*
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2005
-* @see org.optimizationservices.oscommon.localinterface.OSInstance
-* @see org.optimizationservices.oscommon.localinterface.OSAnalysis
-* @see org.optimizationservices.oscommon.localinterface.OSOption
-* @since OS 1.0
-*/
+ *
+ * <P>The <code>OSResult</code> class is a local interface for storing Optimization Services
+ * problem result. Its design follows the Optimization Services result Language (OSrL). 
+ * All the data structures in this class are standards specified in OSrL. 
+ * Developers can add service-specific results by extending this class.  
+ *
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2005
+ * @see org.optimizationservices.oscommon.localinterface.OSInstance
+ * @see org.optimizationservices.oscommon.localinterface.OSAnalysis
+ * @see org.optimizationservices.oscommon.localinterface.OSOption
+ * @since OS 1.0
+ */
 public class OSResult {
-	
+
 	/**
 	 * general holds the general result specified by the OSrL Schema. 
 	 */
@@ -86,17 +93,17 @@ public class OSResult {
 	 * m_iVariableNumber holds the variable number. 
 	 */
 	private int m_iVariableNumber = -1;
-	
+
 	/**
 	 * m_iObjectiveNumber holds the objective number. 
 	 */
 	private int m_iObjectiveNumber = -1;
-	
+
 	/**
 	 * m_iConstraintNumber holds the constraint number. 
 	 */
 	private int m_iConstraintNumber = -1;
-	
+
 	/**
 	 * m_iSolutionNumber holds the solution number. 
 	 */
@@ -108,7 +115,7 @@ public class OSResult {
 	 */
 	public OSResult(){
 	}//constructor
-	
+
 	/**
 	 * read an OSrL instance and return and OSResult object.  
 	 * 
@@ -119,8 +126,8 @@ public class OSResult {
 	 * @return the OSResult object constructed from the OSrL String.  
 	 * @throws Exception if there are errors in reading the string or setting the OSResult. 
 	 */
-   	public OSResult readOSrL(String osrl, boolean isFile, boolean validate) throws Exception{
-   		OSrLReader osrlReader = new OSrLReader(validate);
+	public OSResult readOSrL(String osrl, boolean isFile, boolean validate) throws Exception{
+		OSrLReader osrlReader = new OSrLReader(validate);
 		boolean bRead = false;
 		if(isFile){
 			bRead = osrlReader.readFile(osrl);
@@ -130,21 +137,21 @@ public class OSResult {
 		}
 		if(!bRead) throw new Exception("OSrL string not valid");
 		return osrlReader.getOSResult();
-   	}//readOSrL
-   	
-   	/**
-   	 * write the OSResult to an osrl xml string. 
-   	 * 
-   	 * @return the osrl xml string. 
+	}//readOSrL
+
+	/**
+	 * write the OSResult to an osrl xml string. 
+	 * 
+	 * @return the osrl xml string. 
 	 * @throws Exception if there are errors in writing the osrl string. 
-   	 */
-   	public String writeOSrL() throws Exception{
+	 */
+	public String writeOSrL() throws Exception{
 		OSrLWriter osrlWriter = new OSrLWriter();
 		osrlWriter.setOSResult(this);
 		return osrlWriter.writeToString();
-   	}//writeOSrL
-   	
-   	/**
+	}//writeOSrL
+
+	/**
 	 * Get the general status.
 	 * 
 	 * @return the general status. 
@@ -152,8 +159,8 @@ public class OSResult {
 	public GeneralStatus getGeneralStatus(){
 		return general.generalStatus;
 	}//getGeneralStatus
-	
-   	/**
+
+	/**
 	 * Set the general status
 	 * 
 	 * @param status holds the general status.
@@ -175,7 +182,7 @@ public class OSResult {
 		return general.generalStatus.type;
 	}//getGeneralStatusType
 
-   	/**
+	/**
 	 * Set the general status type, which can be: 
 	 * success, error, warning. 
 	 * 
@@ -219,7 +226,7 @@ public class OSResult {
 		return general.message;
 	}//getGeneralMessage
 
-   	/**
+	/**
 	 * Set the general message. 
 	 * 
 	 * @param message holds the general message. 
@@ -238,8 +245,8 @@ public class OSResult {
 	public String getServiceName(){
 		return general.serviceName;
 	}//getServiceName
-	
-  	/**
+
+	/**
 	 * Set service name.
 	 * 
 	 * @param serviceName holds the name of the service. 
@@ -258,8 +265,8 @@ public class OSResult {
 	public String getServiceURI(){
 		return general.serviceURI;
 	}//getServiceURI
-	
-  	/**
+
+	/**
 	 * Set service uri.
 	 * 
 	 * @param serviceURI holds the uri of the service. 
@@ -278,8 +285,8 @@ public class OSResult {
 	public String getInstanceName(){
 		return general.instanceName;
 	}//getInstanceName
-	
-  	/**
+
+	/**
 	 * Set instance name.
 	 * 
 	 * @param instanceName holds the name of the instance. 
@@ -298,8 +305,8 @@ public class OSResult {
 	public String getJobID(){
 		return general.jobID;
 	}//getJobID
-	
- 	/**
+
+	/**
 	 * Set job id.
 	 * 
 	 * @param jobID holds the job id. 
@@ -318,8 +325,8 @@ public class OSResult {
 	public String getSolverInvoked(){
 		return general.solverInvoked;
 	}//getSolverInvoked
-	
- 	/**
+
+	/**
 	 * Set solver invoked.
 	 * 
 	 * @param solverInvoked holds the solver invoked. 
@@ -338,8 +345,8 @@ public class OSResult {
 	public GregorianCalendar getResultTimeStamp(){
 		return general.timeStamp;
 	}//getResultTimeStamp
-	
-	
+
+
 	/**
 	 * Set time  stamp of the result.
 	 * 
@@ -395,6 +402,21 @@ public class OSResult {
 	}//setOtherGeneralResults
 
 	/**
+	 * Set the other general results. 
+	 * 
+	 * @param otherGeneralResults holds the other general results in the structure of OtherResult
+	 * @return whether the other general results is set successfully or not. 
+	 */
+	public boolean setOtherGeneralResults(OtherResult[] otherGeneralResults){
+		if(general.otherResults == null){
+			general.otherResults = new OtherResults();
+		}
+		general.otherResults.numberOfOtherResults = otherGeneralResults==null?0:otherGeneralResults.length;
+		general.otherResults.other = otherGeneralResults;
+		return true;
+	}//setOtherGeneralResults
+
+	/**
 	 * Get the system information.
 	 * 
 	 * @return the system information. 
@@ -402,8 +424,8 @@ public class OSResult {
 	public String getSystemInformation(){
 		return system.systemInformation;
 	}//getSystemInformation
-	
- 	/**
+
+	/**
 	 * Set system information.
 	 * 
 	 * @param systemInformation. holds the system information.. 
@@ -453,7 +475,7 @@ public class OSResult {
 		system.availableMemory = availableMemory;
 		return true;
 	}//setAvailableMemory
-	
+
 	/**
 	 * Get the system available CPU Speed. 
 	 * 
@@ -513,7 +535,7 @@ public class OSResult {
 		system.otherResults = otherSystemResults;
 		return true;
 	}//setOtherSystemResults
-	
+
 	/**
 	 * get the number of other <system> results
 	 * 
@@ -536,7 +558,22 @@ public class OSResult {
 		system.otherResults.numberOfOtherResults = numberOfOtherSystemResults;
 		return true;
 	}//setNumberOfOtherSystemResults
-	
+
+	/**
+	 * Set the other system results. 
+	 * 
+	 * @param otherSystemResults holds the other system results in the structure of OtherResult
+	 * @return whether the other system results is set successfully or not. 
+	 */
+	public boolean setOtherSystemResults(OtherResult[] otherSystemResults){
+		if(system.otherResults == null){
+			system.otherResults = new OtherResults();
+		}
+		system.otherResults.numberOfOtherResults = otherSystemResults==null?0:otherSystemResults.length;
+		system.otherResults.other = otherSystemResults;
+		return true;
+	}//setOtherSystemResults
+
 	/**
 	 * Get the current state, , which can be:
 	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting" and "noResponse".
@@ -546,7 +583,7 @@ public class OSResult {
 	public String getCurrentState(){
 		return service.currentState;
 	}//getCurrentState
-		
+
 	/**
 	 * Set the current state. 
 	 * @param currentState holds the current state, which can be:
@@ -555,10 +592,10 @@ public class OSResult {
 	 */
 	public boolean setCurrentState(String currentState){
 		if(!currentState.equals("busy") && 
-		   !currentState.equals("busyButAccepting") &&
-		   !currentState.equals("idle") &&
-		   !currentState.equals("idleButNotAccepting") &&
-		   !currentState.equals("noResponse")) return false;		 
+				!currentState.equals("busyButAccepting") &&
+				!currentState.equals("idle") &&
+				!currentState.equals("idleButNotAccepting") &&
+				!currentState.equals("noResponse")) return false;		 
 		service.currentState = currentState;
 		return true;
 	}//setCurrentState
@@ -570,7 +607,7 @@ public class OSResult {
 	public int getCurrentJobCount(){
 		return service.currentJobCount;
 	}//getCurrentJobCount
-	
+
 	/**
 	 * Set the current job count. 
 	 * @param currentJobCount holds the current job count. 
@@ -588,8 +625,8 @@ public class OSResult {
 	public int getTotalJobsSoFar(){
 		return service.totalJobsSoFar;
 	}//getTotalJobsSoFar
-	
-	
+
+
 	/**
 	 * Set the total jobs received so far. 
 	 * @param totalJobsSoFar holds the total jobs received so far. 
@@ -599,7 +636,7 @@ public class OSResult {
 		service.totalJobsSoFar = totalJobsSoFar;
 		return true;
 	}//setTotalJobsSoFar
-	
+
 	/**
 	 * Get the time the service started. 
 	 * @return the time last job ended. If none, it returns unix creation time: GregorianCalendar(1970, 0, 1, 0, 0, 0). 
@@ -617,7 +654,7 @@ public class OSResult {
 		service.timeServiceStarted = timeServiceStarted;
 		return true;
 	}//setTimeServiceStarted
-	
+
 	/**
 	 * Get the service utilization ([0, 1]). 
 	 * @return the time last job took, Double.NaN if none. 
@@ -635,7 +672,7 @@ public class OSResult {
 		service.serviceUtilization = serviceUtilization;
 		return true;
 	}//setServiceUtilization
-	
+
 	/**
 	 * get the number of other <service> results
 	 * 
@@ -658,7 +695,7 @@ public class OSResult {
 		service.otherResults.numberOfOtherResults = numberOfOtherServiceResults;
 		return true;
 	}//setNumberOfOtherServiceResults
-	
+
 	/**
 	 * get other <service> results
 	 * 
@@ -680,6 +717,21 @@ public class OSResult {
 	}//setOtherServiceResults
 
 	/**
+	 * Set the other service results. 
+	 * 
+	 * @param otherServiceResults holds the other service results in the structure of OtherResult
+	 * @return whether the other service results is set successfully or not. 
+	 */
+	public boolean setOtherServiceResults(OtherResult[] otherServiceResults){
+		if(service.otherResults == null){
+			service.otherResults = new OtherResults();
+		}
+		service.otherResults.numberOfOtherResults = otherServiceResults==null?0:otherServiceResults.length;
+		service.otherResults.other = otherServiceResults;
+		return true;
+	}//setOtherServiceResults
+
+	/**
 	 * Get the job status, , which can be:
 	 * "waiting", "running", "killed", "finished" and "unknown".
 	 * 
@@ -688,7 +740,7 @@ public class OSResult {
 	public String getJobStatus(){
 		return job.status;
 	}//getCurrentState
-		
+
 	/**
 	 * Set the job status. 
 	 * @param jobStatus holds the current state, which can be:
@@ -697,10 +749,10 @@ public class OSResult {
 	 */
 	public boolean setJobStatus(String jobStatus){
 		if(!jobStatus.equals("waiting") && 
-		   !jobStatus.equals("running") &&
-		   !jobStatus.equals("killed") &&
-		   !jobStatus.equals("finished") &&
-		   !jobStatus.equals("unknown")) return false;		 
+				!jobStatus.equals("running") &&
+				!jobStatus.equals("killed") &&
+				!jobStatus.equals("finished") &&
+				!jobStatus.equals("unknown")) return false;		 
 		job.status = jobStatus;
 		return true;
 	}//setJobStatus
@@ -712,7 +764,7 @@ public class OSResult {
 	public GregorianCalendar getJobSubmitTime(){
 		return job.submitTime;
 	}//getJobSubmitTime
-	
+
 	/**
 	 * Set the submit time. 
 	 * @param submitTime holds the job submit time. 
@@ -730,7 +782,7 @@ public class OSResult {
 	public GregorianCalendar getScheduledStartTime(){
 		return job.scheduledStartTime;
 	}//getScheduledStartTime
-	
+
 	/**
 	 * Set the scheduled start time. 
 	 * @param scheduledStartTime holds the job scheduled start time. 
@@ -748,7 +800,7 @@ public class OSResult {
 	public GregorianCalendar getActualStartTime(){
 		return job.actualStartTime;
 	}//getActualStartTime
-	
+
 	/**
 	 * Set the actual start time. 
 	 * @param actualStartTime holds the job actual start time. 
@@ -766,7 +818,7 @@ public class OSResult {
 	public TimingInformation getTimeInformation(){
 		return job.timingInformation;
 	}//getTimeInformation
-	
+
 	/**
 	 * Set the timingInformation. 
 	 * @param timingInformation holds the timing information. 
@@ -899,7 +951,7 @@ public class OSResult {
 		job.otherResults.numberOfOtherResults = numberOfOtherJobResults;
 		return true;
 	}//setNumberOfOtherJobResults
-	
+
 	/**
 	 * get other <job> results
 	 * 
@@ -920,6 +972,20 @@ public class OSResult {
 		return true;
 	}//setOtherJobResults
 
+	/**
+	 * Set the other job results. 
+	 * 
+	 * @param otherJobResults holds the other job results in the structure of OtherResult
+	 * @return whether the other job results is set successfully or not. 
+	 */
+	public boolean setOtherJobResults(OtherResult[] otherJobResults){
+		if(job.otherResults == null){
+			job.otherResults = new OtherResults();
+		}
+		job.otherResults.numberOfOtherResults = otherJobResults==null?0:otherJobResults.length;
+		job.otherResults.other = otherJobResults;
+		return true;
+	}//setOtherJobResults
 	
 	/**
 	 * Get variable number. 
@@ -935,7 +1001,7 @@ public class OSResult {
 		return m_iVariableNumber;
 	}//getVariableNumber
 
-	
+
 	/**
 	 * Set the variable number. 
 	 * 
@@ -959,14 +1025,14 @@ public class OSResult {
 	 * @return objective number, -1 if no information. 
 	 */
 	public int getObjectiveNumber(){
-			if(optimization == null){
-				m_iObjectiveNumber = -1;
-				return -1;
-			}
-			m_iObjectiveNumber = optimization.numberOfObjectives;
-			return m_iObjectiveNumber;
+		if(optimization == null){
+			m_iObjectiveNumber = -1;
+			return -1;
+		}
+		m_iObjectiveNumber = optimization.numberOfObjectives;
+		return m_iObjectiveNumber;
 	}//getObjectiveNumber
-	
+
 	/**
 	 * Set the objective number. 
 	 * 
@@ -990,12 +1056,12 @@ public class OSResult {
 	 * @return constraint number, -1 if no information. 
 	 */
 	public int getConstraintNumber(){
-			if(optimization == null){
-				m_iConstraintNumber = -1;
-				return -1;
-			}
-			m_iConstraintNumber = optimization.numberOfConstraints;
-			return m_iConstraintNumber;
+		if(optimization == null){
+			m_iConstraintNumber = -1;
+			return -1;
+		}
+		m_iConstraintNumber = optimization.numberOfConstraints;
+		return m_iConstraintNumber;
 	}//getConstraintNumber
 
 
@@ -1061,7 +1127,7 @@ public class OSResult {
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
 	 * @return a double dense array of the optimal values, null if no optimal value. 
 	 */
-	public double[] getOptimalPrimalVariableValues(int objIdx){
+	public double[] getOptimalVariableValuesDense(int objIdx){
 		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
@@ -1073,7 +1139,7 @@ public class OSResult {
 			if(optimization.solution[i].variables == null) continue;
 			if(optimization.solution[i].variables.values == null) continue;
 			if((optimization.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
-				    optimization.solution[i].status.type.equals("globallyOptimal")){				
+					optimization.solution[i].status.type.equals("globallyOptimal")){				
 				VarValue[] var = optimization.solution[i].variables.values.var; 
 				int iVars = (var==null)?0:var.length;
 				mdValues = new double[iNumberOfVariables];
@@ -1086,7 +1152,35 @@ public class OSResult {
 			}
 		}
 		return mdValues;		
-	}//getOptimalPrimalVariableValues
+	}//getOptimalVariableValuesDense
+
+	/**
+	 * Get one solution of optimal primal variable values. 
+	 * 
+	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @return sparse structure of the optimal values, null if no optimal value. 
+	 */
+	public VariableValues getOptimalVariableValuesSparse(int objIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		VariableValues variableValues = null;
+		for(int i = 0; i < iSolutions; i++){
+			if(optimization.solution[i] == null) continue;
+			if(optimization.solution[i].targetObjectiveIdx != objIdx) continue;
+			if(optimization.solution[i].variables == null) continue;
+			if(optimization.solution[i].variables.values == null) continue;
+			if((optimization.solution[i].status.type.endsWith("ptimal") && variableValues == null)||
+					optimization.solution[i].status.type.equals("globallyOptimal")){				
+				variableValues = optimization.solution[i].variables.values; 
+			}	
+			if(optimization.solution[i].status.type.equals("globallyOptimal")){
+				return variableValues;
+			}
+		}
+		return variableValues;		
+	}//getOptimalVariableValuesSparse
 
 	/**
 	 * Get one solution of optimal primal variable string values.
@@ -1094,7 +1188,7 @@ public class OSResult {
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
 	 * @return a string dense array of the optimal string values, null if no optimal value. 
 	 */
-	public String[] getOptimalPrimalVariableStringValues(int objIdx){
+	public String[] getOptimalVariableStringValues(int objIdx){
 		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return null;
@@ -1106,7 +1200,7 @@ public class OSResult {
 			if(optimization.solution[i].variables == null) continue;
 			if(optimization.solution[i].variables.valuesString == null) continue;
 			if((optimization.solution[i].status.type.endsWith("ptimal") && msValues == null)||
-			    optimization.solution[i].status.type.equals("globallyOptimal")){
+					optimization.solution[i].status.type.equals("globallyOptimal")){
 				VarStringValue[] var = optimization.solution[i].variables.valuesString.var; 
 				int iVars = (var==null)?0:var.length;
 				msValues = new String[iNumberOfVariables];
@@ -1119,15 +1213,15 @@ public class OSResult {
 			}
 		}
 		return msValues;		
-	}//getOptimalPrimalVariableStringValues
-	
+	}//getOptimalVariableStringValues
+
 	/**
-	 * Get one solution of optimal dual variable values. 
-	 * 
-	 * @param objIdx holds the objective index the optimal value corresponds to. 
-	 * @return a double dense array of the optimal dual values, null if no optimal value. 
+	 * Get one solution of optimal dual variable values.
+	 *
+	 * @param objIdx holds the objective index the optimal value corresponds to.
+	 * @return a double dense array of the optimal dual values, null if no optimal value.
 	 */
-	public double[] getOptimalDualVariableValues(int objIdx){
+	public double[] getOptimalDualVariableValuesDense(int objIdx){
 		if(optimization.solution == null || optimization.solution.length <= 0) return null;
 		int iNumberOfConstraints = this.getConstraintNumber();
 		if(iNumberOfConstraints <= 0) return null;
@@ -1139,21 +1233,49 @@ public class OSResult {
 			if(optimization.solution[i].constraints == null) continue;
 			if(optimization.solution[i].constraints.dualValues == null) continue;
 			if((optimization.solution[i].status.type.endsWith("ptimal") && mdValues == null)||
-				    optimization.solution[i].status.type.equals("globallyOptimal")){				
-				DualVarValue[] con = optimization.solution[i].constraints.dualValues.con; 
+					optimization.solution[i].status.type.equals("globallyOptimal")){                           
+				DualVarValue[] con = optimization.solution[i].constraints.dualValues.con;
 				int iCons = (con==null)?0:con.length;
 				mdValues = new double[iNumberOfConstraints];
 				for(int j = 0; j < iCons; j++){
 					mdValues[con[j].idx] = con[j].value;
 				}
-			}	
+			}       
 			if(optimization.solution[i].status.type.equals("globallyOptimal")){
 				return mdValues;
 			}
 		}
-		return mdValues;		
-	}//getOptimalDualVariableValues
-	
+		return mdValues;               
+	}//getOptimalDualVariableValuesDense
+
+	/**
+	 * Get one solution of optimal dual variable values. 
+	 * 
+	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @return a double dense array of the optimal dual values, null if no optimal value. 
+	 */
+	public DualVariableValues getOptimalDualVariableValuesSparse(int objIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfConstraints = this.getConstraintNumber();
+		if(iNumberOfConstraints <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		DualVariableValues dualVariableValues = null;
+		for(int i = 0; i < iSolutions; i++){
+			if(optimization.solution[i] == null) continue;
+			if(optimization.solution[i].targetObjectiveIdx != objIdx) continue;
+			if(optimization.solution[i].constraints == null) continue;
+			if(optimization.solution[i].constraints.dualValues == null) continue;
+			if((optimization.solution[i].status.type.endsWith("ptimal") && dualVariableValues == null)||
+					optimization.solution[i].status.type.equals("globallyOptimal")){				
+				dualVariableValues = optimization.solution[i].constraints.dualValues; 
+			}	
+			if(optimization.solution[i].status.type.equals("globallyOptimal")){
+				return dualVariableValues;
+			}
+		}
+		return dualVariableValues;		
+	}//getOptimalDualVariableValuesSparse
+
 	/**
 	 * Get the [i]th optimization solution, where i equals the given solution index.
 	 *    
@@ -1163,356 +1285,11 @@ public class OSResult {
 	public OptimizationSolution getSolution(int solIdx){
 		if(optimization == null) return null;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return null;
 		return optimization.solution[solIdx];
 	}//getSolution
-	
-	
-	/**
-	 * Get the [i]th optimization solution status, where i equals the given solution index.   
-	 * The solution status includes the status type, optional descriptions and possibly substatuses.
-	 *  
-	 * @param solIdx holds the solution index to get the solution status. 
-	 * @return the optimization solution status that corresponds to solIdx, null if none.
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus
-	 */
-	public OptimizationSolutionStatus getSolutionStatus( int solIdx){
-		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		return optimization.solution[solIdx].status;
-	}//getSolutionStatus
-	
-	/**
-	 * Get the [i]th optimization solution status type, where i equals the given solution index.   
-	 * The solution status type can be: 
-	 * unbounded, globallyOptimal, locallyOptimal, optimal, bestSoFar, feasible, infeasible, 
-	 * stoppedByLimit, unsure, error, other 
-	 * 
-	 * @param solIdx holds the solution index to get the solution status type. 
-	 * @return the optimization solution status type that corresponds to solIdx, null or empty string if none.
-	 */
-	public String getSolutionStatusType(int solIdx){
-		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].status == null) return null;
-		return optimization.solution[solIdx].status.type;		
-	}//getSolutionStatusType
-	
-	/**
-	 * Get the [i]th optimization solution status description, where i equals the given solution index.   
-	 * 
-	 * @param solIdx holds the solution index to get the solution status description. 
-	 * @return the optimization solution status description that corresponds to solIdx, null or empty string if none.
-	 */
-	public String getSolutionStatusDescription(int solIdx){
-		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].status == null) return null;
-		return optimization.solution[solIdx].status.description;				
-	}//getSolutionStatusDescription
-	
-	/**
-	 * Get the [i]th optimization solution subStatuses, where i equals the given solution index.   
-	 * 
-	 * @param solIdx holds the solution index to get the solution substatuses. 
-	 * @return an array optimization solution subStatuses that corresponds to solIdx, null or empty string if none.
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionSubstatus;
-	 */
-	public OptimizationSolutionSubstatus[] getSolutionSubStatuses(int solIdx){
-		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].status == null) return null;
-		return optimization.solution[solIdx].status.substatus;				
-	}//getSolutionSubStatuses
 
-	/**
-	 * Get the [i]th optimization solution message, where i equals the given solution index.  
-	 * 
-	 * @param solIdx holds the solution index to get the solution message. 
-	 * @return the optimization solution message that corresponds to solIdx, null or empty if none.
-	 */
-	public String getSolutionMessage(int solIdx){
-		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  optimization.solution.length) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		return optimization.solution[solIdx].message;
-	}//getSolutionMessage
-	
-	/**
-	 * Get the [i]th optimization solution's objective index, where i equals the given solution index. 
-	 * The first objective's index should be -1, the second -2, and so on.  
-	 * 
-	 * @param solIdx holds the solution index to get the variable string values. 
-	 * @return the optimization objective index that corresponds to solIdx, 0 if none.
-	 * All the objective indexes are negative starting from -1 downward. 
-	 */
-	public int getSolutionObjectiveIndex(int solIdx){
-		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  optimization.solution.length) return 0;
-		if(optimization.solution[solIdx] == null) return 0;
-		return optimization.solution[solIdx].targetObjectiveIdx;		
-	}//getSolutionObjectiveIndex
-	
-	/**
-	 * Get the [i]th optimization solution's variable values, where i equals the given solution index. 
-	 *  
-	 * @param solIdx holds the solution index to get the variable values. 
-	 * @return a double dense array of variable values, null if no variable values. 
-	 */
-	public double[] getVariableValues(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfVariables = this.getVariableNumber();
-		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].variables == null) return null;
-		if(optimization.solution[solIdx].variables.values == null) return null;
-		VarValue[] var = optimization.solution[solIdx].variables.values.var; 
-		int iVars = (var==null)?0:var.length;
-		double[] mdValues = new double[iNumberOfVariables];
-		for(int i = 0; i < iVars; i++){
-			mdValues[var[i].idx] = var[i].value;
-		}
-		return mdValues;		
-	}//getVariableValues
-	
-	/**
-	 * Get the [i]th optimization solution's variable values in a sparse data structure, where i equals the given solution index. 
-	 * The sparse data stucture is of the VariableValues data structure. VariableValues holds var[], an array of VarValues. 
-	 * Each var member contains an idx and a value. If var[] is null, all the variable values are 0. 
-	 * 
-	 * @param solIdx holds the solution index to get the sparse variable values. 
-	 * @return a sparse variable value data structure in VaribleValues, null if no variable values. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.VariableValues
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.VarValue
-	 */
-	public VariableValues getSparseVariableValues(int solIdx){ 
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfVariables = this.getVariableNumber();
-		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].variables == null) return null;
-		return optimization.solution[solIdx].variables.values;
-	}//getSparseVariableValues
-	
-	/**
-	 * Get the [i]th optimization solution's variable string values, where i equals the given solution index. 
-	 * 
-	 * @param solIdx holds the solution index to get the variable string values. 
-	 * @return a string dense array of variable values, null if no variable values. 
-	 */
-	public double[] getVariableStringValues(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfVariables = this.getVariableNumber();
-		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].variables == null) return null;
-		if(optimization.solution[solIdx].variables.values == null) return null;
-		VarValue[] var = optimization.solution[solIdx].variables.values.var; 
-		int iVars = (var==null)?0:var.length;
-		double[] mdValues = new double[iNumberOfVariables];
-		for(int i = 0; i < iVars; i++){
-			mdValues[var[i].idx] = var[i].value;
-		}
-		return mdValues;		
-	}//getVariableStringValues
-		
-	/**
-	 * Get the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
-	 * where i equals the given solution index. 
-	 *  
-	 * @param solIdx holds the solution index to get the other variable results. 
-	 * @return an array of other variable results in OtherVariableResult[] array data structure, null if none. 
-	 * Each other variable result contains the name (required), an optional description (string) and an optional
-	 * value (string). Each other variable result can also optionally contain an array OtherVarResult for each variable. 
-	 * The OtherVarResult contains a variable idx (required), and an optional string value.  
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
-	 */
-	public OtherVariableResult[] getOtherVariableResults(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfVariables = this.getVariableNumber();
-		if(iNumberOfVariables <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].variables == null) return null;
-		return optimization.solution[solIdx].variables.other;	
-	}//getOtherVariableResults
-	
-	/**
-	 * Get the [i]th optimization solution's objective values, where i equals the given solution index. 
-	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
-	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
-	 * values are (optionally) calculated. 
-	 * @param solIdx holds the solution index to get the objective values. 
-	 * @return a double dense array of objective values, null if null if no objective values. 
-	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
-	 * values all get a Double.NaN value, meaning that they are not calculated.   
-	 */
-	public double[] getObjectiveValues(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfObjectives = this.getObjectiveNumber();
-		if(iNumberOfObjectives <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].objectives == null) return null;
-		if(optimization.solution[solIdx].objectives.values == null) return null;
-		ObjValue[] obj = optimization.solution[solIdx].objectives.values.obj; 
-		int iObjs = (obj==null)?0:obj.length;
-		double[] mdValues = new double[iNumberOfObjectives];
-		for(int i = 0; i < iNumberOfObjectives; i++){
-			mdValues[i] = Double.NaN;
-		}
-		for(int i = 0; i < iObjs; i++){
-			mdValues[Math.abs(obj[i].idx)-1] = obj[i].value;
-		}
-		return mdValues;		
-	}//getObjectiveValues
-	
-	
-	/**
-	 * Get the [i]th optimization solution's other (non-standard/solver specific)objective-related results, 
-	 * where i equals the given solution index. 
-	 *  
-	 * @param solIdx holds the solution index to get the other objective results. 
-	 * @return an array of other objective results in OtherObjectiveResult[] array data structure, null if none. 
-	 * Each other objective result contains the name (required), an optional description (string) and an optional
-	 * value (string). Each other objective result can also optionally contain an array OtherObjResult for each objective. 
-	 * The OtherObjResult contains an objective idx (required) and an optional string value.  
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
-	 */
-	public OtherObjectiveResult[] getOtherObjectiveResults(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfObjectives = this.getObjectiveNumber();
-		if(iNumberOfObjectives <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].objectives == null) return null;
-		return optimization.solution[solIdx].objectives.other;	
-	}//getOtherObjectiveResults
-	
-	
-	/**
-	 * Get the [i]th optimization solution's dual variable values, where i equals the given solution index. 
-	 * 
-	 * @param solIdx holds the solution index to get the dual variable values. 
-	 * @return a double dense array of the dual variable values, null if none. 
-	 */
-	public double[] getDualVariableValues(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfConstraints = this.getConstraintNumber();
-		if(iNumberOfConstraints <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].constraints == null) return null;
-		if(optimization.solution[solIdx].constraints.dualValues == null) return null;
-		DualVarValue[] con = optimization.solution[solIdx].constraints.dualValues.con; 
-		int iCons = (con==null)?0:con.length;
-		double[] mdValues = new double[iNumberOfConstraints];
-		for(int j = 0; j < iCons; j++){
-			if(!Double.isNaN(con[j].value)){
-				mdValues[con[j].idx] = con[j].value;
-			}
-		}
-		return mdValues;				
-	}//getDualVariableValues
-		
-	/**
-	 * Get the [i]th optimization solution's dual variable values in a sparse data structure, where i equals the given solution index. 
-	 * The sparse data stucture is of the DualVariableValues data structure. DualVariableValues holds con[], an array of DualVarValues. 
-	 * Each con member contains a constraint idx and a dual value. If con[] is null, all the dual variable values are 0. 
-	 * 
-	 * @param solIdx holds the solution index to get the sparse dual variable values. 
-	 * @return a sparse variable value data structure in DualVaribleValues, null if no dual variable values. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.DualVariableValues
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.DualVarValue
-	 */
-	public DualVariableValues getSparseDualVariableValues(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfConstraints = this.getConstraintNumber();
-		if(iNumberOfConstraints <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].constraints == null) return null;
-		return optimization.solution[solIdx].constraints.dualValues;
-	}//getSparseDualVariableValues
-		
-	/**
-	 * Get the [i]th optimization solution's other (non-standard/solver specific)constraint-related results, 
-	 * where i equals the given solution index. 
-	 *  
-	 * @param solIdx holds the solution index to get the other constraint results. 
-	 * @return an array of other constraint results in OtherConstraintResult[] array data structure, null if none. 
-	 * Each other constraint result contains the name (required), an optional description (string) and an optional
-	 * value (string). Each other constraint result can also optionally contain an array OtherConResult for each constraint. 
-	 * The OtherConResult contains a constraint idx (required) and an optional string value.  
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
-	 */
-	public OtherConstraintResult[] getOtherConstraintResults(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iNumberOfConstraints = this.getConstraintNumber();
-		if(iNumberOfConstraints <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].constraints == null) return null;
-		return optimization.solution[solIdx].constraints.other;	
-	}//getOtherConstraintResults
-
-	/**
-	 * Get the [i]th optimization solution's other (non-standard/solver specific)optimization-related results, 
-	 * where i equals the given solution index. These other results are usually on the general optimization, 
-	 * not specifically on the variables, objective, or constraints. 
-	 *  
-	 * @param solIdx holds the solution index to get the other optimization results. 
-	 * @return an array of other optimization results in OtherOptimizationResult[] array data structure, null if none. 
-	 * Each other optimization result contains the name (required), an optional description (string) and an optional
-	 * value (string).   
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
-	 */
-	public OtherSolutionResult[] getOtherOptimizationSolutionResults(int solIdx){
-		if(optimization.solution == null || optimization.solution.length <= 0) return null;
-		int iSolutions = optimization.solution.length;
-		if(solIdx < 0 || solIdx >= iSolutions) return null;
-		if(optimization.solution[solIdx] == null) return null;
-		if(optimization.solution[solIdx].otherSolutionResults == null) return null;	
-		return optimization.solution[solIdx].otherSolutionResults.otherSolutionResult;	
-	}//getOtherOptimizationSolutionResults
-
-
-	/**
-	 * Get the optimization analysis in the standard OSAnalysis data structure. 
-	 * 
-	 * @return the optimization analysis in the standard OSAnalysis data structure, null if none.
-	 * @see org.optimizationservices.oscommon.localinterface.OSAnalysis
-	 */
-	public OSAnalysis getOSAnalysis(){
-		return optimization.osal;
-	}//getOSAnalysis
-		
 	/**
 	 * Set the [i]th optimization solution, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1528,12 +1305,28 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		optimization.solution[solIdx] = solution;
 		return true;
 	}//setSolution	
-	
+
+	/**
+	 * Get the [i]th optimization solution status, where i equals the given solution index.   
+	 * The solution status includes the status type, optional descriptions and possibly substatuses.
+	 *  
+	 * @param solIdx holds the solution index to get the solution status. 
+	 * @return the optimization solution status that corresponds to solIdx, null if none.
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus
+	 */
+	public OptimizationSolutionStatus getSolutionStatus( int solIdx){
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		return optimization.solution[solIdx].status;
+	}//getSolutionStatus
+
 	/**
 	 * Set the [i]th optimization solution status, where i equals the given solution index.   
 	 * The solution status includes the status type, optional descriptions and possibly substatuses. 
@@ -1552,15 +1345,64 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
 		optimization.solution[solIdx].status = status;
 		return true;
 	}//setSolutionStatus
-	
+
+	/**
+	 * Get the [i]th optimization solution status type, where i equals the given solution index.   
+	 * The solution status type can be: 
+	 * unbounded, globallyOptimal, locallyOptimal, optimal, bestSoFar, feasible, infeasible, 
+	 * stoppedByLimit, unsure, error, other 
+	 * 
+	 * @param solIdx holds the solution index to get the solution status type. 
+	 * @return the optimization solution status type that corresponds to solIdx, null or empty string if none.
+	 */
+	public String getSolutionStatusType(int solIdx){
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].status == null) return null;
+		return optimization.solution[solIdx].status.type;		
+	}//getSolutionStatusType
+
+	/**
+	 * Get the [i]th optimization solution subStatuses, where i equals the given solution index.   
+	 * 
+	 * @param solIdx holds the solution index to get the solution substatuses. 
+	 * @return an array optimization solution subStatuses that corresponds to solIdx, null or empty string if none.
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionSubstatus;
+	 */
+	public OptimizationSolutionSubstatus[] getSolutionSubStatuses(int solIdx){
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].status == null) return null;
+		return optimization.solution[solIdx].status.substatus;				
+	}//getSolutionSubStatuses
+
+	/**
+	 * Get the [i]th optimization solution status description, where i equals the given solution index.   
+	 * 
+	 * @param solIdx holds the solution index to get the solution status description. 
+	 * @return the optimization solution status description that corresponds to solIdx, null or empty string if none.
+	 */
+	public String getSolutionStatusDescription(int solIdx){
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].status == null) return null;
+		return optimization.solution[solIdx].status.description;				
+	}//getSolutionStatusDescription
+
 	/**
 	 * Set the [i]th optimization solution status, where i equals the given solution index.   
 	 * The solution status includes the status type, optional descriptions and possibly substatuses. 
@@ -1585,29 +1427,43 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
 		optimization.solution[solIdx].status = new OptimizationSolutionStatus();
 		if(!type.equals("unbounded") && 
-		   !type.equals("globallyOptimal") && 
-		   !type.equals("locallyOptimal") && 
-		   !type.equals("optimal") && 
-		   !type.equals("bestSoFar") && 
-		   !type.equals("feasible") && 
-		   !type.equals("infeasible") && 
-		   !type.equals("stoppedByLimit") && 
-		   !type.equals("unsure") && 
-		   !type.equals("error") && 
-		   !type.equals("other")) return false;
+				!type.equals("globallyOptimal") && 
+				!type.equals("locallyOptimal") && 
+				!type.equals("optimal") && 
+				!type.equals("bestSoFar") && 
+				!type.equals("feasible") && 
+				!type.equals("infeasible") && 
+				!type.equals("stoppedByLimit") && 
+				!type.equals("unsure") && 
+				!type.equals("error") && 
+				!type.equals("other")) return false;
 		optimization.solution[solIdx].status.type = type;
 		optimization.solution[solIdx].status.description = description;
 		optimization.solution[solIdx].status.substatus = subStatuses;
 		return true;
 	}//setSolutionStatus
-	
+
+	/**
+	 * Get the [i]th optimization solution message, where i equals the given solution index.  
+	 * 
+	 * @param solIdx holds the solution index to get the solution message. 
+	 * @return the optimization solution message that corresponds to solIdx, null or empty if none.
+	 */
+	public String getSolutionMessage(int solIdx){
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		return optimization.solution[solIdx].message;
+	}//getSolutionMessage
+
 	/**
 	 * Set the [i]th optimization solution message, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1624,15 +1480,31 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
 		optimization.solution[solIdx].message = solutionMessage;
 		return true;
 	}//setSolutionMessage	
-	
+
+	/**
+	 * Get the [i]th optimization solution's objective index, where i equals the given solution index. 
+	 * The first objective's index should be -1, the second -2, and so on.  
+	 * 
+	 * @param solIdx holds the solution index to get the variable string values. 
+	 * @return the optimization objective index that corresponds to solIdx, 0 if none.
+	 * All the objective indexes are negative starting from -1 downward. 
+	 */
+	public int getSolutionTargetObjectiveIndex(int solIdx){
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return 0;
+		if(optimization.solution[solIdx] == null) return 0;
+		return optimization.solution[solIdx].targetObjectiveIdx;		
+	}//getSolutionTargetObjectiveIndex
+
 	/**
 	 * Set the [i]th optimization solution's objective index, where i equals the given solution index.   
 	 * The first objective's index should be -1, the second -2, and so on.  
@@ -1645,22 +1517,87 @@ public class OSResult {
 	 * @return whether the optimization objective index is set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setSolutionObjectiveIndex(int solIdx, int objectiveIdx){
+	public boolean setSolutionTargetObjectiveIndex(int solIdx, int objectiveIdx){
 		int nSols = this.getSolutionNumber();
 		if(optimization == null) return false;
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
 		if(objectiveIdx >= 0) return false;
 		optimization.solution[solIdx].targetObjectiveIdx = objectiveIdx;
 		return true;		
-	}//setSolutionObjectiveIndex
-	
+	}//setSolutionTargetObjectiveIndex
+
+	/**
+	 * Get whether the [i]th optimization solution's is 	 
+	 * computed on weighted objectives.  
+	 * @param solIdx holds the solution index to get wehther it is weighted objective. 
+	 * @return whether the [i]th optimization solution's is computed on weighted objectives. 
+	 */
+	public boolean getSolutionWeightedObjectives(int solIdx){
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  optimization.solution.length) return false;
+		if(optimization.solution[solIdx] == null) return false;
+		return optimization.solution[solIdx].weightedObjectives;		
+	}//getSolutionTargetObjectiveIndex
+
+	/**
+	 * Set the [i]th optimization solution's weighted objectives flag, where i equals the given solution index.   
+	 * If the solution is solved against the weighted objectives as specified by the weights in the corresponding OSiL, 
+	 * the weightedObjectives should be set to true.
+	 * 
+	 * @param solIdx holds the solution index to set the weightedObjectives flag.
+	 * @param weightedObjectives holds whether the solution is solved against the weighted objectives  
+	 * 
+	 * @return whether the weightedObjectives is set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setSolutionWeightedObjectives(int solIdx, boolean weightedObjectives){
+		int nSols = this.getSolutionNumber();
+		if(optimization == null) return false;
+		if(nSols <= 0) return false;
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
+		}
+		optimization.solution[solIdx].weightedObjectives = weightedObjectives;
+		if(weightedObjectives) optimization.solution[solIdx].targetObjectiveIdx = 0;
+		return true;		
+	}//setSolutionTargetObjectiveIndex
+
+	/**
+	 * Get the [i]th optimization solution's variable values, where i equals the given solution index. 
+	 *  
+	 * @param solIdx holds the solution index to get the variable values. 
+	 * @return a double dense array of variable values, null if no variable values. 
+	 */
+	public double[] getVariableValuesDense(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		if(optimization.solution[solIdx].variables.values == null) return null;
+		VarValue[] var = optimization.solution[solIdx].variables.values.var; 
+		int iVars = (var==null)?0:var.length;
+		double[] mdValues = new double[iNumberOfVariables];
+		for(int i = 0; i < iVars; i++){
+			mdValues[var[i].idx] = var[i].value;
+		}
+		return mdValues;		
+	}//getVariableValuesDense
+
 	/**
 	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1670,7 +1607,7 @@ public class OSResult {
 	 * @return whether primal variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setPrimalVariableValues(int solIdx, double[] x){
+	public boolean setVariableValuesDense(int solIdx, double[] x){
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return false;
 		if(x != null && x.length != iNumberOfVariables) return false;
@@ -1679,8 +1616,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1710,8 +1647,82 @@ public class OSResult {
 			}
 		}
 		return true;
-	}//setPrimalVariableValues
-	
+	}//setVariableValuesDense
+
+	/**
+	 * Get the [i]th optimization solution's variable values in a sparse data structure, where i equals the given solution index. 
+	 * The sparse data stucture is of the VariableValues data structure. VariableValues holds var[], an array of VarValues. 
+	 * Each var member contains an idx and a value. If var[] is null, all the variable values are 0. 
+	 * 
+	 * @param solIdx holds the solution index to get the sparse variable values. 
+	 * @return a sparse variable value data structure in VaribleValues, null if no variable values. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.VariableValues
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.VarValue
+	 */
+	public VariableValues getVariableValuesSparse(int solIdx){ 
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		return optimization.solution[solIdx].variables.values;
+	}//getVariableValuesSparse
+
+	/**
+	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param variableValues holds a sparse structure of variable values to set; it could be null if all variables are 0.
+	 * 
+	 * @return whether primal variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setVariableValuesSparse(int solIdx, VariableValues variableValues){
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return false;
+		int nSols = this.getSolutionNumber();
+		if(optimization == null) return false;
+		if(nSols <= 0) return false;
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
+		}
+		if(optimization.solution[solIdx].variables == null){
+			optimization.solution[solIdx].variables = new VariableSolution();
+		}
+		optimization.solution[solIdx].variables.values = variableValues;
+		return true;
+	}//setVariableValuesSparse
+
+	/**
+	 * Get the [i]th optimization solution's variable string values, where i equals the given solution index. 
+	 * 
+	 * @param solIdx holds the solution index to get the variable string values. 
+	 * @return a string dense array of variable values, null if no variable values. 
+	 */
+	public double[] getVariableStringValues(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		if(optimization.solution[solIdx].variables.values == null) return null;
+		VarValue[] var = optimization.solution[solIdx].variables.values.var; 
+		int iVars = (var==null)?0:var.length;
+		double[] mdValues = new double[iNumberOfVariables];
+		for(int i = 0; i < iVars; i++){
+			mdValues[var[i].idx] = var[i].value;
+		}
+		return mdValues;		
+	}//getVariableStringValues
+
 	/**
 	 * Set the [i]th optimization solution's primal variable string values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1721,7 +1732,7 @@ public class OSResult {
 	 * @return whether primal variable string values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setPrimalVariableStringValues(int solIdx, String[] x){
+	public boolean setVariableStringValues(int solIdx, String[] x){
 		if(x == null) return false;
 		int iNumberOfVariables = this.getVariableNumber();
 		if(iNumberOfVariables <= 0) return false;
@@ -1731,8 +1742,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1750,9 +1761,31 @@ public class OSResult {
 			var[i].value = x[i];
 		}
 		return true;
-	}//setPrimalVariableStringValues
+	}//setVariableStringValues
 
-		
+	/**
+	 * Get the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
+	 * where i equals the given solution index. 
+	 *  
+	 * @param solIdx holds the solution index to get the other variable results. 
+	 * @return an array of other variable results in OtherVariableResult[] array data structure, null if none. 
+	 * Each other variable result contains the name (required), an optional description (string) and an optional
+	 * value (string). Each other variable result can also optionally contain an array OtherVarResult for each variable. 
+	 * The OtherVarResult contains a variable idx (required), and an optional string value.  
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 */
+	public OtherVariableResult[] getOtherVariableResults(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].variables == null) return null;
+		return optimization.solution[solIdx].variables.other;	
+	}//getOtherVariableResults
+
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
 	 * where i equals the given solution index.   
@@ -1775,8 +1808,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1786,7 +1819,39 @@ public class OSResult {
 		optimization.solution[solIdx].variables.other = otherVariableResults;
 		return true;		
 	}//setOtherVariableResults
-	
+
+	/**
+	 * Get the [i]th optimization solution's objective values, where i equals the given solution index. 
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * @param solIdx holds the solution index to get the objective values. 
+	 * @return a double dense array of objective values, null if null if no objective values. 
+	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
+	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 */
+	public double[] getObjectiveValuesDense(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfObjectives = this.getObjectiveNumber();
+		if(iNumberOfObjectives <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].objectives == null) return null;
+		if(optimization.solution[solIdx].objectives.values == null) return null;
+		ObjValue[] obj = optimization.solution[solIdx].objectives.values.obj; 
+		int iObjs = (obj==null)?0:obj.length;
+		double[] mdValues = new double[iNumberOfObjectives];
+		for(int i = 0; i < iNumberOfObjectives; i++){
+			mdValues[i] = Double.NaN;
+		}
+		for(int i = 0; i < iObjs; i++){
+			mdValues[Math.abs(obj[i].idx)-1] = obj[i].value;
+		}
+		return mdValues;		
+	}//getObjectiveValuesDense
+
+
 	/**
 	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
 	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
@@ -1801,7 +1866,7 @@ public class OSResult {
 	 * @return whether objective values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setObjectiveValues(int solIdx, double[] objectiveValues){
+	public boolean setObjectiveValuesDense(int solIdx, double[] objectiveValues){
 		int iNumberOfObjectives = this.getObjectiveNumber();
 		if(iNumberOfObjectives < 0) return false;
 		if(iNumberOfObjectives == 0) return true;
@@ -1812,8 +1877,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1839,8 +1904,89 @@ public class OSResult {
 			}
 		}
 		return true;
-	}//setObjectiveValues
+	}//setObjectiveValuesDense
+
+	/**
+	 * Get the [i]th optimization solution's objective values, where i equals the given solution index. 
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * @param solIdx holds the solution index to get the objective values. 
+	 * @return a sparse structure of objective values, null if null if no objective values. 
+	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
+	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 */
+	public ObjectiveValues getObjectiveValuesSparse(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfObjectives = this.getObjectiveNumber();
+		if(iNumberOfObjectives <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].objectives == null) return null;
+		return optimization.solution[solIdx].objectives.values;
+	}//getObjectiveValuesSparse
+
+	/**
+	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param objectiveValues holds a double dense array of objective values to set.
+	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
+	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 * 
+	 * @return whether objective values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setObjectiveValuesSparse(int solIdx, ObjectiveValues objectiveValues){
+		int iNumberOfObjectives = this.getObjectiveNumber();
+		if(iNumberOfObjectives < 0) return false;
+		if(iNumberOfObjectives == 0) return true;
+		if(objectiveValues == null) return false;
+		int nSols = this.getSolutionNumber();
+		if(optimization == null) return false;
+		if(nSols <= 0) return false;
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
+		}
+		if(optimization.solution[solIdx].objectives == null){
+			optimization.solution[solIdx].objectives = new ObjectiveSolution();
+		}
+		optimization.solution[solIdx].objectives.values = objectiveValues;
+		return true;
+	}//setObjectiveValuesSparse
 	
+	/**
+	 * Get the [i]th optimization solution's other (non-standard/solver specific)objective-related results, 
+	 * where i equals the given solution index. 
+	 *  
+	 * @param solIdx holds the solution index to get the other objective results. 
+	 * @return an array of other objective results in OtherObjectiveResult[] array data structure, null if none. 
+	 * Each other objective result contains the name (required), an optional description (string) and an optional
+	 * value (string). Each other objective result can also optionally contain an array OtherObjResult for each objective. 
+	 * The OtherObjResult contains an objective idx (required) and an optional string value.  
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 */
+	public OtherObjectiveResult[] getOtherObjectiveResults(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfObjectives = this.getObjectiveNumber();
+		if(iNumberOfObjectives <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].objectives == null) return null;
+		return optimization.solution[solIdx].objectives.other;	
+	}//getOtherObjectiveResults
+
+
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)objective-related results, 
 	 * where i equals the given solution index.   
@@ -1864,8 +2010,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1875,7 +2021,33 @@ public class OSResult {
 		optimization.solution[solIdx].objectives.other = otherObjectiveResults;
 		return true;		
 	}//setOtherObjectiveResults
-	
+
+	/**
+	 * Get the [i]th optimization solution's dual variable values, where i equals the given solution index. 
+	 * 
+	 * @param solIdx holds the solution index to get the dual variable values. 
+	 * @return a double dense array of the dual variable values, null if none. 
+	 */
+	public double[] getDualVariableValuesDense(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfConstraints = this.getConstraintNumber();
+		if(iNumberOfConstraints <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].constraints == null) return null;
+		if(optimization.solution[solIdx].constraints.dualValues == null) return null;
+		DualVarValue[] con = optimization.solution[solIdx].constraints.dualValues.con; 
+		int iCons = (con==null)?0:con.length;
+		double[] mdValues = new double[iNumberOfConstraints];
+		for(int j = 0; j < iCons; j++){
+			if(!Double.isNaN(con[j].value)){
+				mdValues[con[j].idx] = con[j].value;
+			}
+		}
+		return mdValues;				
+	}//getDualVariableValuesDense
+
 	/**
 	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -1885,7 +2057,7 @@ public class OSResult {
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setDualVariableValues(int solIdx, double[] values){
+	public boolean setDualVariableValuesDense(int solIdx, double[] values){
 		int iNumberOfConstraints = this.getConstraintNumber();
 		if(iNumberOfConstraints < 0) return false;
 		if(iNumberOfConstraints == 0) return true;
@@ -1895,8 +2067,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1926,8 +2098,82 @@ public class OSResult {
 			}
 		}
 		return true;	
-	}//setDualVariableValues
-			
+	}//setDualVariableValuesDense
+
+	/**
+	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the dual variable values. 
+	 * @param values holds sparse structure of variable dual values to set; it could be null if all values are 0.
+	 * 
+	 * @return whether dual variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setDualVariableValuesSparse(int solIdx, DualVariableValues values){
+		int iNumberOfConstraints = this.getConstraintNumber();
+		if(iNumberOfConstraints < 0) return false;
+		if(iNumberOfConstraints == 0) return true;
+		int nSols = this.getSolutionNumber();
+		if(optimization == null) return false;
+		if(nSols <= 0) return false;
+		if(optimization == null) return false;
+		if(optimization.solution == null || 
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
+		if(optimization.solution[solIdx] == null){
+			optimization.solution[solIdx] = new OptimizationSolution();
+		}
+		if(optimization.solution[solIdx].constraints == null){
+			optimization.solution[solIdx].constraints = new ConstraintSolution();
+		}
+		optimization.solution[solIdx].constraints.dualValues= values;
+		return true;	
+	}//setDualVariableValuesDense
+	
+	/**
+	 * Get the [i]th optimization solution's dual variable values in a sparse data structure, where i equals the given solution index. 
+	 * The sparse data stucture is of the DualVariableValues data structure. DualVariableValues holds con[], an array of DualVarValues. 
+	 * Each con member contains a constraint idx and a dual value. If con[] is null, all the dual variable values are 0. 
+	 * 
+	 * @param solIdx holds the solution index to get the sparse dual variable values. 
+	 * @return a sparse variable value data structure in DualVaribleValues, null if no dual variable values. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.DualVariableValues
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.DualVarValue
+	 */
+	public DualVariableValues getDualVariableValuesSparse(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfConstraints = this.getConstraintNumber();
+		if(iNumberOfConstraints <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].constraints == null) return null;
+		return optimization.solution[solIdx].constraints.dualValues;
+	}//getDualVariableValuesSparse
+
+	/**
+	 * Get the [i]th optimization solution's other (non-standard/solver specific)constraint-related results, 
+	 * where i equals the given solution index. 
+	 *  
+	 * @param solIdx holds the solution index to get the other constraint results. 
+	 * @return an array of other constraint results in OtherConstraintResult[] array data structure, null if none. 
+	 * Each other constraint result contains the name (required), an optional description (string) and an optional
+	 * value (string). Each other constraint result can also optionally contain an array OtherConResult for each constraint. 
+	 * The OtherConResult contains a constraint idx (required) and an optional string value.  
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 */
+	public OtherConstraintResult[] getOtherConstraintResults(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iNumberOfConstraints = this.getConstraintNumber();
+		if(iNumberOfConstraints <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].constraints == null) return null;
+		return optimization.solution[solIdx].constraints.other;	
+	}//getOtherConstraintResults
+
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)constraint-related results, 
 	 * where i equals the given solution index.   
@@ -1950,8 +2196,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1961,6 +2207,27 @@ public class OSResult {
 		optimization.solution[solIdx].constraints.other = otherConstraintResults;
 		return true;		
 	}//setOtherConstraintResults
+
+	/**
+	 * Get the [i]th optimization solution's other (non-standard/solver specific)optimization-related results, 
+	 * where i equals the given solution index. These other results are usually on the general optimization, 
+	 * not specifically on the variables, objective, or constraints. 
+	 *  
+	 * @param solIdx holds the solution index to get the other optimization results. 
+	 * @return an array of other optimization results in OtherOptimizationResult[] array data structure, null if none. 
+	 * Each other optimization result contains the name (required), an optional description (string) and an optional
+	 * value (string).   
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
+	 */
+	public OtherSolutionResult[] getOtherOptimizationSolutionResults(int solIdx){
+		if(optimization.solution == null || optimization.solution.length <= 0) return null;
+		int iSolutions = optimization.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(optimization.solution[solIdx] == null) return null;
+		if(optimization.solution[solIdx].otherSolutionResults == null) return null;	
+		return optimization.solution[solIdx].otherSolutionResults.otherSolutionResult;	
+	}//getOtherOptimizationSolutionResults
+
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)optimization-related results, 
@@ -1980,8 +2247,8 @@ public class OSResult {
 		if(nSols <= 0) return false;
 		if(optimization == null) return false;
 		if(optimization.solution == null || 
-		   optimization.solution.length <= 0 || 
-		   solIdx < 0 || solIdx >=  nSols) return false;
+				optimization.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  nSols) return false;
 		if(optimization.solution[solIdx] == null){
 			optimization.solution[solIdx] = new OptimizationSolution();
 		}
@@ -1991,6 +2258,58 @@ public class OSResult {
 		optimization.solution[solIdx].otherSolutionResults.otherSolutionResult = otherOptimizationSolutionResults;
 		return true;		
 	}//setOtherOptimizationSolutionResults
+
+	/**
+	 * Get number of other optimization related solver output not specific to any solution. 
+	 * @return the number of other solver output. 
+	 */
+	public int  getNumberOfOtherOptimizationSolverOuput(){
+		if(optimization.otherSolverOutput == null) return 0;
+		else return optimization.otherSolverOutput.numberOfOutputs;
+
+	}//getNumberOfOtherOptimizationSolverOuput
+	
+	/**
+	 * Get other optimization related solver output not specific to any solution. 
+	 * @return an array of other solver output. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.SolverOutput
+	 */
+	public SolverOutput[] getOtherOptimizationSolverOuput(){
+		if(optimization == null) return null;
+		if(optimization.otherSolverOutput ==  null) return null;
+		return optimization.otherSolverOutput.output;
+	
+	}//getOtherOptimizationSolverOuput
+	
+	/**
+	 * Set other optimization related solver output not specific to any solution. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param ohterSolverOuput holds an array of other optimization related solver output in OtherSolverOutput[] array data structure, null if none. 
+	 * Each other optimization solver output contains the name (required), an optional category an optional description (string) and an optional
+	 * value (string).  
+	 * @return whether the other optimization solver output are set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherSolverOutput
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setOtherOptimizationSolverOuput(SolverOutput[] otherSolverOutput){
+		if(optimization.otherSolverOutput == null){
+			optimization.otherSolverOutput = new OtherSolverOutput();
+		}
+		optimization.otherSolverOutput.numberOfOutputs = otherSolverOutput==null?0:otherSolverOutput.length;
+		optimization.otherSolverOutput.output = otherSolverOutput;
+		return true;
+	}//setOtherOptimizationSolverOuput
+	
+
+	/**
+	 * Get the optimization analysis in the standard OSAnalysis data structure. 
+	 * 
+	 * @return the optimization analysis in the standard OSAnalysis data structure, null if none.
+	 * @see org.optimizationservices.oscommon.localinterface.OSAnalysis
+	 */
+	public OSAnalysis getOSAnalysis(){
+		return optimization.osal;
+	}//getOSAnalysis
 
 	/**
 	 * Set the optimization analysis. 
@@ -2004,7 +2323,7 @@ public class OSResult {
 		optimization.osal = osAnalysis;
 		return false;
 	}//setOSAnalysis
-	
+
 
 	/**
 	 * main for test purposes.
@@ -2014,6 +2333,6 @@ public class OSResult {
 	 * @param argv command line arguments.
 	 */
 	public static void main(String[] args){
-		
+
 	}//main
 }//class OSResult

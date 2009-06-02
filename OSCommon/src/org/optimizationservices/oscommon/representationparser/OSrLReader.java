@@ -8,6 +8,8 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Vector;
 
+import org.optimizationservices.oscommon.datastructure.osresult.BasStatus;
+import org.optimizationservices.oscommon.datastructure.osresult.BasisStatus;
 import org.optimizationservices.oscommon.datastructure.osresult.CPUNumber;
 import org.optimizationservices.oscommon.datastructure.osresult.CPUSpeed;
 import org.optimizationservices.oscommon.datastructure.osresult.ConstraintSolution;
@@ -30,9 +32,11 @@ import org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherSolverOutput;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult;
 import org.optimizationservices.oscommon.datastructure.osresult.SolutionResults;
+import org.optimizationservices.oscommon.datastructure.osresult.SolverOutput;
 import org.optimizationservices.oscommon.datastructure.osresult.Time;
 import org.optimizationservices.oscommon.datastructure.osresult.TimingInformation;
 import org.optimizationservices.oscommon.datastructure.osresult.VarStringValue;
@@ -136,12 +140,42 @@ public class OSrLReader extends OSgLReader{
 		}
 		m_osResult = new OSResult();
 		if(!m_osResult.setGeneralStatus(getGeneralStatus())) throw new Exception("setGeneralStatus Unsuccessful");
+		if(!m_osResult.setGeneralMessage(getGeneralMessage()))throw new Exception("setGeneralMessage Unsuccessful");
 		if(!m_osResult.setServiceURI(getServiceURI())) throw new Exception("setServiceURI Unsuccessful");
 		if(!m_osResult.setServiceName(getServiceName())) throw new Exception("setServiceName Unsuccessful");
 		if(!m_osResult.setInstanceName(getInstanceName())) throw new Exception("setInstanceName Unsuccessful");
 		if(!m_osResult.setJobID(getJobID())) throw new Exception("setJobID Unsuccessful");
+		if(!m_osResult.setSolverInvoked(getSolverInvoked())) throw new Exception("setSolverInvoked Unsuccessful");
 		if(!m_osResult.setResultTimeStamp(getResultTimeStamp())) throw new Exception("setResultTime Unsuccessful");
 		if(!m_osResult.setGeneralMessage(getGeneralMessage())) throw new Exception("setGeneralMessage Unsuccessful");
+		if(!m_osResult.setOtherGeneralResults(getOtherGeneralResults()))throw new Exception("setGeneralMessage Unsuccessful");
+
+		if(!m_osResult.setSystemInformation(getSystemInformation()))throw new Exception("setSystemInformation Unsuccessful");
+		if(!m_osResult.setAvailableDiskSpace(getAvailableDiskSpace()))throw new Exception("setAvailableDiskSpace Unsuccessful");
+		if(!m_osResult.setAvailableMemory(getAvailableMemory())) throw new Exception("setAvailableMemory Unsuccessful");
+		if(!m_osResult.setAvailableCPUSpeed(getAvailableCPUSpeed())) throw new Exception("setAvailableCPUSpeed Unsuccessful");
+		if(!m_osResult.setAvailableCPUNumber(getAvailableCPUNumber())) throw new Exception("setAvailableCPUNumber Unsuccessful");
+		if(!m_osResult.setOtherSystemResults(getOtherSystemResults())) throw new Exception("setOtherSystemResults Unsuccessful");
+
+		if(!m_osResult.setCurrentJobCount(getCurrentJobCount()))throw new Exception("setCurrentJobCount Unsuccessful");
+		if(!m_osResult.setCurrentState(getCurrentState())) throw new Exception("setCurrentState Unsuccessful");
+		if(!m_osResult.setTotalJobsSoFar(getTotalJobsSoFar())) throw new Exception("setTotalJobsSoFar Unsuccessful");
+		if(!m_osResult.setTimeServiceStarted(getTimeServiceStarted())) throw new Exception("setTimeServiceStarted Unsuccessful");
+		if(!m_osResult.setServiceUtilization(getServiceUtilization())) throw new Exception("setServiceUtilization Unsuccessful");
+		if(!m_osResult.setOtherServiceResults(getOtherServiceResults())) throw new Exception("setOtherServiceResults Unsuccessful");
+
+		if(!m_osResult.setJobStatus(getJobStatus())) throw new Exception("setJobStatus Unsuccessful");
+		if(!m_osResult.setJobSubmitTime(getJobSubmitTime())) throw new Exception("setJobSubmitTime Unsuccessful");
+		if(!m_osResult.setScheduledStartTime(getScheduledStartTime())) throw new Exception("setScheduledStartTime Unsuccessful");
+		if(!m_osResult.setActualStartTime(getActualStartTime())) throw new Exception("setActualStartTime Unsuccessful");
+		if(!m_osResult.setEndTime(getEndTime())) throw new Exception("setEndTime Unsuccessful");
+		if(!m_osResult.setTimingInformation(getTimeInformation())) throw new Exception("setTimingInformation Unsuccessful");
+		if(!m_osResult.setUsedDiskSpace(getUsedDiskSpace())) throw new Exception("setUsedDiskSpace Unsuccessful");
+		if(!m_osResult.setUsedMemory(getUsedMemory())) throw new Exception("setUsedMemory Unsuccessful");
+		if(!m_osResult.setUsedCPUSpeed(getUsedCPUSpeed())) throw new Exception("setUsedCPUSpeed Unsuccessful");
+		if(!m_osResult.setUsedCPUNumber(getUsedCPUNumber())) throw new Exception("setUsedCPUNumber Unsuccessful");
+		if(!m_osResult.setOtherJobResults(getOtherJobResults())) throw new Exception("setOtherJobResults Unsuccessful");
+
 		if(!m_osResult.setVariableNumber(getVariableNumber())) throw new Exception("setVariableNumber Unsuccessful");
 		if(!m_osResult.setObjectiveNumber(getObjectiveNumber())) throw new Exception("setObjectiveNumber Unsuccessful");
 		if(!m_osResult.setConstraintNumber(getConstraintNumber())) throw new Exception("setConstraintNumber Unsuccessful");
@@ -167,6 +201,7 @@ public class OSrLReader extends OSgLReader{
 		status.description = sStatusDescription;
 		NodeList nodeList = eGeneralStatus.getElementsByTagName("substatus");
 		int iChildren = nodeList.getLength();
+		status.numberOfSubstatuses = iChildren;
 		if(iChildren <= 0) return status;
 		status.substatus = new GeneralSubstatus[iChildren];
 		for(int i = 0; i < iChildren; i++){
@@ -277,11 +312,11 @@ public class OSrLReader extends OSgLReader{
 	 */
 	public GregorianCalendar getResultTimeStamp(){
 		Element eGeneral = (Element)XMLUtil.findChildNode(m_eRoot, "general");
-		String sTime = XMLUtil.getElementValueByName(eGeneral, "time");
-		if(sTime == null) return null;
-		GregorianCalendar time = XMLUtil.createNativeDateTime(sTime);
+		String sTimeStamp = XMLUtil.getElementValueByName(eGeneral, "timeStamp");
+		if(sTimeStamp == null) return null;
+		GregorianCalendar time = XMLUtil.createNativeDateTime(sTimeStamp);
 		return time;
-	}//getResultTime
+	}//getResultTimeStamp
 
 	/**
 	 * Get the general message. 
@@ -562,7 +597,7 @@ public class OSrLReader extends OSgLReader{
 	public int getTotalJobsSoFar(){
 		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
 		if(eService == null) return -1;
-		String sTotalJobsSoFar = XMLUtil.getElementValueByName(eService, "currentJobCount");
+		String sTotalJobsSoFar = XMLUtil.getElementValueByName(eService, "totalJobsSoFar");
 		if(sTotalJobsSoFar == null || sTotalJobsSoFar.length() <= 0) return -1;
 		try {
 			return Integer.parseInt(sTotalJobsSoFar);
@@ -758,6 +793,7 @@ public class OSrLReader extends OSgLReader{
 		if(times == null || times.getLength() <= 0) return null;
 		int iTimes = times.getLength();
 		TimingInformation timingInformation = new TimingInformation();
+		timingInformation.numberOfTimes = iTimes;
 		timingInformation.time = new Time[iTimes];
 		for(int i = 0; i < iTimes; i++){
 			Element eTime = (Element)times.item(i);
@@ -766,7 +802,7 @@ public class OSrLReader extends OSgLReader{
 			String sCategory = eTime.getAttribute("category"); 				
 			String sUnit = eTime.getAttribute("unit"); 				
 			String sDescription = eTime.getAttribute("description");	
-			String sValue = eTime.getAttribute("value");
+			String sValue = XMLUtil.getElementValue(eTime);
 			timingInformation.time[i].type = sType==null?"":sType;
 			timingInformation.time[i].category = sCategory==null?"":sCategory;
 			timingInformation.time[i].unit = sUnit==null?"":sUnit;
@@ -891,7 +927,7 @@ public class OSrLReader extends OSgLReader{
 	}//getUsedMemory
 
 	/**
-	 * get the number of other <service> results
+	 * get the number of other <job> results
 	 * 
 	 * @return the number of other <job> results
 	 */
@@ -1041,10 +1077,14 @@ public class OSrLReader extends OSgLReader{
 				}
 				m_optimizationResult.solution[i] = new OptimizationSolution();
 				OptimizationSolution solution = m_optimizationResult.solution[i];
-				String sObjectiveIdx = eSolution.getAttribute("objectiveIdx");
-				if(sObjectiveIdx != null && sObjectiveIdx.length() > 0){
-					solution.targetObjectiveIdx = Integer.parseInt(sObjectiveIdx);
-				}//solution objectiveIdx
+				String sTargetObjectiveIdx = eSolution.getAttribute("targetObjectiveIdx");
+				if(sTargetObjectiveIdx != null && sTargetObjectiveIdx.length() > 0){
+					solution.targetObjectiveIdx = Integer.parseInt(sTargetObjectiveIdx);
+				}//solution targetObjectiveIdx
+				String sWeightedObjectives = eSolution.getAttribute("weightedObjectives");
+				if(sWeightedObjectives != null && sWeightedObjectives.length() > 0){
+					solution.weightedObjectives = sWeightedObjectives.equals("true")?true:false;
+				}//solution weightedObjectives
 
 				Element eStatus = (Element)XMLUtil.findChildNode(eSolution, "status");
 				if(eStatus != null){
@@ -1055,6 +1095,7 @@ public class OSrLReader extends OSgLReader{
 					solution.status.description = sStatusDescription;
 					NodeList nodeList = eStatus.getElementsByTagName("substatus");
 					int iChildren = nodeList.getLength();
+					solution.status.numberOfSubstatuses = iChildren;
 					if(iChildren > 0){
 						solution.status.substatus = new OptimizationSolutionSubstatus[iChildren];
 						for(int j = 0; j < iChildren; j++){
@@ -1070,7 +1111,7 @@ public class OSrLReader extends OSgLReader{
 								Node attr = attributes.item(k);
 								String sLocalName = attr.getNodeName();
 								String sValue = attr.getNodeValue();
-								if (sLocalName.equals("name")){
+								if (sLocalName.equals("type")){
 									sSubstatusType = sValue;
 									solution.status.substatus[j].type = sSubstatusType;
 								}
@@ -1098,6 +1139,7 @@ public class OSrLReader extends OSgLReader{
 						NodeList vars = eValues.getElementsByTagName("var");
 						if(vars != null && vars.getLength() > 0){
 							int iVars = vars.getLength();
+							solution.variables.values.numberOfVar = iVars;
 							solution.variables.values.var = new VarValue[iVars];
 							for(int j = 0; j < iVars; j++){
 								solution.variables.values.var[j] = new VarValue();
@@ -1132,6 +1174,7 @@ public class OSrLReader extends OSgLReader{
 						NodeList vars = eValuesString.getElementsByTagName("var");
 						if(vars != null && vars.getLength() > 0){
 							int iVars = vars.getLength();
+							solution.variables.valuesString.numberOfVar = iVars;
 							solution.variables.valuesString.var = new VarStringValue[iVars];
 							for(int j = 0; j < iVars; j++){
 								solution.variables.valuesString.var[j] = new VarStringValue();
@@ -1142,17 +1185,37 @@ public class OSrLReader extends OSgLReader{
 							}
 						}
 					}	
+					//variable basisStatus
+					Element eBasisStatus = (Element)XMLUtil.findChildNode(eVariables, "basisStatus");
+					if(eBasisStatus != null){
+						solution.variables.basisStatus = new BasisStatus(); 
+						NodeList vars = eBasisStatus.getElementsByTagName("var");
+						if(vars != null && vars.getLength() > 0){
+							int iVars = vars.getLength();
+							solution.variables.basisStatus.numberOfVar = iVars;
+							solution.variables.basisStatus.var = new BasStatus[iVars];
+							for(int j = 0; j < iVars; j++){
+								solution.variables.basisStatus.var[j] = new BasStatus();
+								int iIndex = Integer.parseInt(((Element)vars.item(j)).getAttribute("idx"));
+								solution.variables.basisStatus.var[j].idx = iIndex;
+								String sStatus = XMLUtil.getElementValue((Element)vars.item(j));
+								solution.variables.basisStatus.var[j].value = sStatus;
+							}
+						}
+					}						
 					//variable other
 					Vector<Element> vOther = XMLUtil.getChildElementsByTagName(eVariables, "other");
 					if(vOther != null && vOther.size() > 0){
 						int iOther = vOther.size();
 						solution.variables.other = new OtherVariableResult[iOther];
+						solution.variables.numberOfOtherVariableResults = iOther;
 						for(int j = 0; j < iOther; j++){
 							Element eOther = (Element)vOther.elementAt(j);
 							solution.variables.other[j] = new OtherVariableResult(); 
 							NodeList vars = eOther.getElementsByTagName("var");
 							if(vars != null && vars.getLength() > 0){
 								int iVars = vars.getLength();
+								solution.variables.other[j].numberOfVar = iVars;
 								solution.variables.other[j].var = new OtherVarResult[iVars];
 								solution.variables.other[j].name = eOther.getAttribute("name");
 								solution.variables.other[j].value = eOther.getAttribute("value");
@@ -1185,6 +1248,7 @@ public class OSrLReader extends OSgLReader{
 						NodeList objs = eValues.getElementsByTagName("obj");
 						if(objs != null && objs.getLength() > 0){
 							int iObjs = objs.getLength();
+							solution.objectives.values.numberOfObj = iObjs;
 							solution.objectives.values.obj = new ObjValue[iObjs];
 							for(int j = 0; j < iObjs; j++){
 								solution.objectives.values.obj[j] = new ObjValue();
@@ -1217,12 +1281,14 @@ public class OSrLReader extends OSgLReader{
 					if(vOther != null && vOther.size() > 0){
 						int iOther = vOther.size();
 						solution.objectives.other = new OtherObjectiveResult[iOther];
+						solution.objectives.numberOfOtherVariableResults = iOther;
 						for(int j = 0; j < iOther; j++){
 							Element eOther = (Element)vOther.elementAt(j);
 							solution.objectives.other[j] = new OtherObjectiveResult(); 
 							NodeList objs = eOther.getElementsByTagName("obj");
 							if(objs != null && objs.getLength() > 0){
 								int iObjs = objs.getLength();
+								solution.objectives.other[j].numberOfObj = iObjs;
 								solution.objectives.other[j].obj = new OtherObjResult[iObjs];
 								solution.objectives.other[j].name = eOther.getAttribute("name");
 								solution.objectives.other[j].value = eOther.getAttribute("value");
@@ -1254,9 +1320,10 @@ public class OSrLReader extends OSgLReader{
 						solution.constraints.dualValues = new DualVariableValues(); 
 						NodeList cons = eDualValues.getElementsByTagName("con");
 						if(cons != null && cons.getLength() > 0){
-							int icons = cons.getLength();
-							solution.constraints.dualValues.con = new DualVarValue[icons];
-							for(int j = 0; j < icons; j++){
+							int iCons = cons.getLength();
+							solution.constraints.dualValues.numberOfCon = iCons;
+							solution.constraints.dualValues.con = new DualVarValue[iCons];
+							for(int j = 0; j < iCons; j++){
 								solution.constraints.dualValues.con[j] = new DualVarValue();
 								try{
 									int iIndex = Integer.parseInt(((Element)cons.item(j)).getAttribute("idx"));
@@ -1287,17 +1354,19 @@ public class OSrLReader extends OSgLReader{
 					if(vOther != null && vOther.size() > 0){
 						int iOther = vOther.size();
 						solution.constraints.other = new OtherConstraintResult[iOther];
+						solution.constraints.numberOfOtherConstraintResults = iOther;
 						for(int j = 0; j < iOther; j++){
 							Element eOther = (Element)vOther.elementAt(j);
 							solution.constraints.other[j] = new OtherConstraintResult(); 
 							NodeList cons = eOther.getElementsByTagName("con");
 							if(cons != null && cons.getLength() > 0){
-								int icons = cons.getLength();
-								solution.constraints.other[j].con = new OtherConResult[icons];
+								int iCons = cons.getLength();
+								solution.constraints.other[j].numberOfCon = iCons;
+								solution.constraints.other[j].con = new OtherConResult[iCons];
 								solution.constraints.other[j].name = eOther.getAttribute("name");
 								solution.constraints.other[j].value = eOther.getAttribute("value");
 								solution.constraints.other[j].description = eOther.getAttribute("description");
-								for(int k = 0; k < icons; k++){
+								for(int k = 0; k < iCons; k++){
 									solution.constraints.other[j].con[k] = new OtherConResult();
 									try{
 										int iIndex = Integer.parseInt(((Element)cons.item(k)).getAttribute("idx"));
@@ -1322,18 +1391,37 @@ public class OSrLReader extends OSgLReader{
 					if(vOtherOptimizationSolutionResults != null && vOtherOptimizationSolutionResults.size() > 0){
 						int iOthers = vOtherOptimizationSolutionResults.size();
 						solution.otherSolutionResults.otherSolutionResult = new OtherSolutionResult[iOthers];
+						solution.otherSolutionResults.numberOfSolutionResults = iOthers;
 						for(int j = 0; j < iOthers; j++){
 							Element eOther = (Element)vOtherOptimizationSolutionResults.elementAt(j);						
 							solution.otherSolutionResults.otherSolutionResult[j] = new OtherSolutionResult();
 							solution.otherSolutionResults.otherSolutionResult[j].name = eOther.getAttribute("name");
 							solution.otherSolutionResults.otherSolutionResult[j].category = eOther.getAttribute("category");
-							solution.otherSolutionResults.otherSolutionResult[j].type = eOther.getAttribute("type");
 							solution.otherSolutionResults.otherSolutionResult[j].description = eOther.getAttribute("description");
 							solution.otherSolutionResults.otherSolutionResult[j].value = XMLUtil.getElementValue(eOther);
 						}//for each other result
 					}//solution other results
 				}
 			}//for each solution	
+
+			Element eOtherSolverOutput = (Element)XMLUtil.findChildNode(eOptimization, "otherSolverOutput");
+			if(eOtherSolverOutput != null){
+				m_optimizationResult.otherSolverOutput = new OtherSolverOutput();
+				Vector<Element> vOtherSolverOutput = XMLUtil.getChildElementsByTagName(eOtherSolverOutput, "output");
+				if(vOtherSolverOutput != null && vOtherSolverOutput.size() > 0){
+					int iOutput = vOtherSolverOutput.size();
+					m_optimizationResult.otherSolverOutput.output = new SolverOutput[iOutput];
+					m_optimizationResult.otherSolverOutput.numberOfOutputs = iOutput;
+					for(int i = 0; i < iOutput; i++){
+						Element eOutput = (Element)vOtherSolverOutput.elementAt(i);						
+						m_optimizationResult.otherSolverOutput.output[i] = new SolverOutput();
+						m_optimizationResult.otherSolverOutput.output[i].name = eOutput.getAttribute("name");
+						m_optimizationResult.otherSolverOutput.output[i].category = eOutput.getAttribute("category");
+						m_optimizationResult.otherSolverOutput.output[i].description = eOutput.getAttribute("description");
+						m_optimizationResult.otherSolverOutput.output[i].value = XMLUtil.getElementValue(eOutput);
+					}//for each output
+				}
+			}
 
 			Element eOSaL = (Element)XMLUtil.findChildNode(eOptimization, "osal");
 			if(eOSaL != null){
@@ -1360,7 +1448,7 @@ public class OSrLReader extends OSgLReader{
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
 	 * @return a double dense array of the optimal values, null if no optimal value. 
 	 */
-	public double[] getOptimalPrimalVariableValues(int objIdx){
+	public double[] getOptimalVariableValuesDense(int objIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
@@ -1387,7 +1475,37 @@ public class OSrLReader extends OSgLReader{
 			}
 		}
 		return mdValues;
-	}//getOptimalPrimalVariableValues
+	}//getOptimalVariableValuesDense
+
+	/**
+	 * Get one solution of optimal primal variable values. 
+	 * 
+	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @return a sparse structure of the optimal values, null if no optimal value. 
+	 */
+	public VariableValues getOptimalVariableValuesSparse(int objIdx){
+		processOptimizationResult();
+		if(m_optimizationResult == null) return null;
+		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = m_optimizationResult.solution.length;
+		VariableValues variableValues = null;
+		for(int i = 0; i < iSolutions; i++){
+			if(m_optimizationResult.solution[i] == null) continue;
+			if(m_optimizationResult.solution[i].targetObjectiveIdx != objIdx) continue;
+			if(m_optimizationResult.solution[i].variables == null) continue;
+			if(m_optimizationResult.solution[i].variables.values == null) continue;
+			if((m_optimizationResult.solution[i].status.type.endsWith("ptimal") && variableValues == null)||
+					m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){				
+				variableValues = m_optimizationResult.solution[i].variables.values;
+			}	
+			if(m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){
+				return variableValues;
+			}
+		}
+		return variableValues;
+	}//getOptimalVariableValuesSparse
 
 	/**
 	 * Get one solution of optimal primal variable string values.
@@ -1395,7 +1513,7 @@ public class OSrLReader extends OSgLReader{
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
 	 * @return a string dense array of the optimal string values, null if no optimal value. 
 	 */
-	public String[] getOptimalPrimalVariableStringValues(int objIdx){
+	public String[] getOptimalVariableStringValues(int objIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
@@ -1422,7 +1540,7 @@ public class OSrLReader extends OSgLReader{
 			}
 		}
 		return msValues;		
-	}//getOptimalPrimalVariableStringValues
+	}//getOptimalVariableStringValues
 
 	/**
 	 * Get one solution of optimal dual variable values. 
@@ -1430,7 +1548,7 @@ public class OSrLReader extends OSgLReader{
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
 	 * @return a double dense array of the optimal dual values, null if no optimal value. 
 	 */
-	public double[] getOptimalDualVariableValues(int objIdx){
+	public double[] getOptimalDualVariableValuesDense(int objIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
@@ -1459,7 +1577,37 @@ public class OSrLReader extends OSgLReader{
 			}
 		}
 		return mdValues;		
-	}//getOptimalDualVariableValues
+	}//getOptimalDualVariableValuesDense
+
+	/**
+	 * Get one solution of optimal dual variable values. 
+	 * 
+	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @return a sparse structure of the optimal dual values, null if no optimal value. 
+	 */
+	public DualVariableValues getOptimalDualVariableValuesSparse(int objIdx){
+		processOptimizationResult();
+		if(m_optimizationResult == null) return null;
+		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
+		int iNumberOfConstraints = this.getConstraintNumber();
+		if(iNumberOfConstraints <= 0) return null;
+		int iSolutions = m_optimizationResult.solution.length;
+		DualVariableValues dualVariableValues = null;
+		for(int i = 0; i < iSolutions; i++){
+			if(m_optimizationResult.solution[i] == null) continue;
+			if(m_optimizationResult.solution[i].targetObjectiveIdx != objIdx) continue;
+			if(m_optimizationResult.solution[i].constraints == null) continue;
+			if(m_optimizationResult.solution[i].constraints.dualValues == null) continue;
+			if((m_optimizationResult.solution[i].status.type.endsWith("ptimal") && dualVariableValues == null)||
+					m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){	
+				dualVariableValues = m_optimizationResult.solution[i].constraints.dualValues;
+			}	
+			if(m_optimizationResult.solution[i].status.type.equals("globallyOptimal")){
+				return dualVariableValues;
+			}
+		}
+		return dualVariableValues;		
+	}//getOptimalDualVariableValuesSparse
 
 	/**
 	 * Get the [i]th optimization solution, where i equals the given solution index.
@@ -1567,14 +1715,14 @@ public class OSrLReader extends OSgLReader{
 	}//getSolutionMessage
 
 	/**
-	 * Get the [i]th optimization solution's objective index, where i equals the given solution index. 
+	 * Get the [i]th optimization solution's target objective index, where i equals the given solution index. 
 	 * The first objective's index should be -1, the second -2, and so on.  
 	 * 
 	 * @param solIdx holds the solution index to get the variable string values. 
 	 * @return the optimization objective index that corresponds to solIdx, 0 if none.
 	 * All the objective indexes are negative starting from -1 downward. 
 	 */
-	public int getSolutionObjectiveIndex(int solIdx){
+	public int getSolutionTargetObjectiveIndex(int solIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return 0;
 		if(m_optimizationResult.solution == null || 
@@ -1582,7 +1730,23 @@ public class OSrLReader extends OSgLReader{
 				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return 0;
 		if(m_optimizationResult.solution[solIdx] == null) return 0;
 		return m_optimizationResult.solution[solIdx].targetObjectiveIdx;		
-	}//getSolutionObjectiveIndex
+	}//getSolutionTargetObjectiveIndex
+
+	/**
+	 * Get whether the [i]th optimization solution's is 	 
+	 * computed on weighted objectives.  
+	 * @param solIdx holds the solution index to get wehther it is weighted objective. 
+	 * @return whether the [i]th optimization solution's is computed on weighted objectives. 
+	 */
+	public boolean getSolutionWeightedObjectives(int solIdx){
+		processOptimizationResult();
+		if(m_optimizationResult == null) return false;
+		if(m_optimizationResult.solution == null || 
+				m_optimizationResult.solution.length <= 0 || 
+				solIdx < 0 || solIdx >=  m_optimizationResult.solution.length) return false;
+		if(m_optimizationResult.solution[solIdx] == null) return false;
+		return m_optimizationResult.solution[solIdx].weightedObjectives;		
+	}//getSolutionTargetObjectiveIndex
 
 	/**
 	 * Get the [i]th optimization solution's variable values, where i equals the given solution index. 
@@ -1590,7 +1754,7 @@ public class OSrLReader extends OSgLReader{
 	 * @param solIdx holds the solution index to get the variable values. 
 	 * @return a double dense array of variable values, null if no variable values. 
 	 */
-	public double[] getVariableValues(int solIdx){
+	public double[] getVariableValuesDense(int solIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
@@ -1608,7 +1772,26 @@ public class OSrLReader extends OSgLReader{
 			mdValues[var[i].idx] = var[i].value;
 		}
 		return mdValues;	
-	}//getVariableValues
+	}//getVariableValuesDense
+
+	/**
+	 * Get the [i]th optimization solution's variable values, where i equals the given solution index. 
+	 *  
+	 * @param solIdx holds the solution index to get the variable values. 
+	 * @return a double dense array of variable values, null if no variable values. 
+	 */
+	public VariableValues getVariableValuesSparse(int solIdx){
+		processOptimizationResult();
+		if(m_optimizationResult == null) return null;
+		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = m_optimizationResult.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(m_optimizationResult.solution[solIdx] == null) return null;
+		if(m_optimizationResult.solution[solIdx].variables == null) return null;
+		return m_optimizationResult.solution[solIdx].variables.values;
+	}//getVariableValuesSparse
 
 	/**
 	 * Get the [i]th optimization solution's variable values in a sparse data structure, where i equals the given solution index. 
@@ -1660,6 +1843,32 @@ public class OSrLReader extends OSgLReader{
 	}//getVariableStringValues
 
 	/**
+	 * Get the [i]th optimization solution's variable basis statuses, where i equals the given solution index. 
+	 * 
+	 * @param solIdx holds the solution index to get the variable basis statuses. 
+	 * @return a string dense array of basis statuses, null if no variable values. 
+	 */
+	public String[] getVariableBasisStatuses(int solIdx){
+		processOptimizationResult();
+		if(m_optimizationResult == null) return null;
+		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
+		int iNumberOfVariables = this.getVariableNumber();
+		if(iNumberOfVariables <= 0) return null;
+		int iSolutions = m_optimizationResult.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(m_optimizationResult.solution[solIdx] == null) return null;
+		if(m_optimizationResult.solution[solIdx].variables == null) return null;
+		if(m_optimizationResult.solution[solIdx].variables.basisStatus == null) return null;
+		BasStatus[] var = m_optimizationResult.solution[solIdx].variables.basisStatus.var; 
+		int iVars = (var==null)?0:var.length;
+		String[] msStatuses = new String[iNumberOfVariables];
+		for(int i = 0; i < iVars; i++){
+			msStatuses[var[i].idx] = var[i].value;
+		}
+		return msStatuses;	
+	}//getVariableBasisStatuses
+
+	/**
 	 * Get the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
 	 * where i equals the given solution index. 
 	 *  
@@ -1694,7 +1903,7 @@ public class OSrLReader extends OSgLReader{
 	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
 	 * values all get a Double.NaN value, meaning that they are not calculated.   
 	 */
-	public double[] getObjectiveValues(int solIdx){
+	public double[] getObjectiveValuesDense(int solIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
@@ -1715,8 +1924,28 @@ public class OSrLReader extends OSgLReader{
 			mdValues[Math.abs(obj[i].idx)-1] = obj[i].value;
 		}
 		return mdValues;
-	}//getObjectiveValues
+	}//getObjectiveValuesDense
 
+	/**
+	 * Get the [i]th optimization solution's objective values, where i equals the given solution index. 
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * @param solIdx holds the solution index to get the objective values. 
+	 * @return a sparse structure of objective values, null if null if no objective values. 
+	 */
+	public ObjectiveValues getObjectiveValuesSparse(int solIdx){
+		processOptimizationResult();
+		if(m_optimizationResult == null) return null;
+		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
+		int iNumberOfObjectives = this.getObjectiveNumber();
+		if(iNumberOfObjectives <= 0) return null;
+		int iSolutions = m_optimizationResult.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(m_optimizationResult.solution[solIdx] == null) return null;
+		if(m_optimizationResult.solution[solIdx].objectives == null) return null;
+		return m_optimizationResult.solution[solIdx].objectives.values;
+	}//getObjectiveValuesSparse
 
 	/**
 	 * Get the [i]th optimization solution's other (non-standard/solver specific)objective-related results, 
@@ -1750,7 +1979,7 @@ public class OSrLReader extends OSgLReader{
 	 * @param solIdx holds the solution index to get the dual variable values. 
 	 * @return a double dense array of the dual variable values, null if none. 
 	 */
-	public double[] getDualVariableValues(int solIdx){
+	public double[] getDualVariableValuesDense(int solIdx){
 		processOptimizationResult();
 		if(m_optimizationResult == null) return null;
 		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
@@ -1770,7 +1999,26 @@ public class OSrLReader extends OSgLReader{
 			}
 		}
 		return mdValues;
-	}//getDualVariableValues
+	}//getDualVariableValuesDense
+
+	/**
+	 * Get the [i]th optimization solution's dual variable values, where i equals the given solution index. 
+	 * 
+	 * @param solIdx holds the solution index to get the dual variable values. 
+	 * @return a sparse structure of the dual variable values, null if none. 
+	 */
+	public DualVariableValues getDualVariableValuesSparse(int solIdx){
+		processOptimizationResult();
+		if(m_optimizationResult == null) return null;
+		if(m_optimizationResult.solution == null || m_optimizationResult.solution.length <= 0) return null;
+		int iNumberOfConstraints = this.getConstraintNumber();
+		if(iNumberOfConstraints <= 0) return null;
+		int iSolutions = m_optimizationResult.solution.length;
+		if(solIdx < 0 || solIdx >= iSolutions) return null;
+		if(m_optimizationResult.solution[solIdx] == null) return null;
+		if(m_optimizationResult.solution[solIdx].constraints == null) return null;
+		return m_optimizationResult.solution[solIdx].constraints.dualValues;
+	}//getDualVariableValuesSparse
 
 	/**
 	 * Get the [i]th optimization solution's other (non-standard/solver specific)constraint-related results, 
@@ -1805,7 +2053,7 @@ public class OSrLReader extends OSgLReader{
 	 * @return an array of other optimization results in OtherOptimizationResult[] array data structure, null if none. 
 	 * Each other optimization result contains the name (required), an optional description (string) and an optional
 	 * value (string).   
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult
 	 */
 	public OtherSolutionResult[] getOtherOptimizationSolutionResults(int solIdx){
 		processOptimizationResult();
@@ -1818,6 +2066,54 @@ public class OSrLReader extends OSgLReader{
 		return m_optimizationResult.solution[solIdx].otherSolutionResults.otherSolutionResult;	
 	}//getOtherOptimizationResults
 
+	/**
+	 * Get number of other optimization related solver output not specific to any solution. 
+	 * @return the number of other solver output. 
+	 */
+	public int  getNumberOfOtherOptimizationSolverOuput(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return 0;
+		Element eOtherSolverOutput = (Element)XMLUtil.findChildNode(eOptimization, "otherSolverOutput");
+		if(eOtherSolverOutput == null) return 0;
+		String sNumberOfOtherSolverOutput = eOtherSolverOutput.getAttribute("numberOfOutputs");
+		if(sNumberOfOtherSolverOutput == null || sNumberOfOtherSolverOutput.length() <= 0) return 0;
+		try{
+			int iNumberOfOtherResults = Integer.parseInt(sNumberOfOtherSolverOutput);
+			return iNumberOfOtherResults;
+		}
+		catch(Exception e){
+			return 0;
+		}	
+	}//getNumberOfOtherOptimizationSolverOuput
+
+	/**
+	 * Get other optimization related solver output not specific to any solution. 
+	 * @return an array of other solver output. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.SolverOutput
+	 */
+	public SolverOutput[] getOtherOptimizationSolverOuput(){
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eRoot, "optimization");
+		if(eOptimization == null) return null;
+		Element eOtherSolverOutput = (Element)XMLUtil.findChildNode(eOptimization, "otherSolverOutput");
+		if(eOtherSolverOutput == null) return null;
+		NodeList outputs = eOtherSolverOutput.getElementsByTagName("output");
+		if(outputs == null || outputs.getLength() <= 0) return null;
+		int iOutputs = outputs.getLength();
+		SolverOutput[] mOutputs = new SolverOutput[iOutputs];
+		for(int i = 0; i < iOutputs; i++){
+			Element eOther = (Element)outputs.item(i);
+			mOutputs[i] =new SolverOutput();
+			String sName = eOther.getAttribute("name"); 				
+			String sCategory = eOther.getAttribute("category"); 				
+			String sDescription = eOther.getAttribute("description");
+			String sValue = XMLUtil.getElementValue(eOther);
+			mOutputs[i].name = sName==null?"":sName;
+			mOutputs[i].category = sCategory==null?"":sCategory;
+			mOutputs[i].value = sValue==null?"":sValue;
+			mOutputs[i].description = sDescription==null?"":sDescription;
+		}
+		return mOutputs;		
+	}//getOtherOptimizationSolverOuput
 
 	/**
 	 * Get the optimization analysis in the standard OSAnalysis data structure. 
@@ -1839,12 +2135,13 @@ public class OSrLReader extends OSgLReader{
 	 */
 	public static void main(String[] argv){
 		OSrLReader osrlReader = new OSrLReader(false);
-		System.out.println(IOUtil.readStringFromFile(OSParameter.CODE_HOME + "OSRepository/test/osrl/osrl.osrl"));
-		System.out.println(osrlReader.readFile(OSParameter.CODE_HOME + "OSRepository/test/osrl/osrl.osrl"));
+		//System.out.println(IOUtil.readStringFromFile("/code/OSRepository/test/osrl/osrl.osrl"));
+		System.out.println(osrlReader.readFile("/code/OSRepository/test/osrl/osrl.osrl"));
 
 		System.out.println(osrlReader.getGeneralMessage());
 		System.out.println(osrlReader.getJobID());
 		GeneralStatus status = osrlReader.getGeneralStatus();
+		System.out.println(status.numberOfSubstatuses);
 		System.out.println(status.type);
 		System.out.println(status.description);
 		int iSubstatus = status.substatus==null?0:status.substatus.length;
@@ -1853,99 +2150,173 @@ public class OSrLReader extends OSgLReader{
 			System.out.println(status.substatus[i].description);
 			System.out.println(status.substatus[i].value);			
 		}
+		System.out.println(osrlReader.getSolverInvoked());
 		System.out.println(XMLUtil.createXSDateTime(osrlReader.getResultTimeStamp()));
 		System.out.println(osrlReader.getInstanceName());
 		System.out.println(osrlReader.getServiceName());
 		System.out.println(osrlReader.getServiceURI());
 
 
-//		System.out.println(osrlReader.getOtherResultNumber());
-//		String sValue = osrlReader.getOtherResultValueByName("ad");
-//		if(sValue == null) System.out.println("null");
-//		else System.out.println(sValue);
-//		String sDescription = osrlReader.getOtherResultDescriptionByName("a");
-//		System.out.println(sDescription);
-//		for(int i=0;i<osrlReader.getOtherResultNumber();i++){
-//			System.out.println(osrlReader.getOtherResultNames()[i]);
-//			System.out.println(osrlReader.getOtherResultValues()[i]);
-//			System.out.println(osrlReader.getOtherResultDescriptions()[i]);
-//		}
+		OtherResult[] otherGeneralResult = osrlReader.getOtherGeneralResults();
+		int iGeneralOthers = osrlReader.getNumberOfOtherGeneralResults();
+		for(int i=0;i<iGeneralOthers;i++){
+			System.out.println(otherGeneralResult[i].name);
+			System.out.println(otherGeneralResult[i].value);
+			System.out.println(otherGeneralResult[i].description);
+		}
 
-		System.out.println("get process stat");
+		System.out.println(osrlReader.getSystemInformation());
+		DiskSpace diskSpace = osrlReader.getAvailableDiskSpace();
+		System.out.println(diskSpace.value + " " + diskSpace.unit+":"+diskSpace.description);
+		MemorySize memorySize = osrlReader.getAvailableMemory();
+		System.out.println(memorySize.value + " " + memorySize.unit+":"+memorySize.description);
+		CPUSpeed cpuSpeed = osrlReader.getAvailableCPUSpeed();
+		System.out.println(cpuSpeed.value + " " + cpuSpeed.unit+":"+cpuSpeed.description);
+		CPUNumber cpuNumber = osrlReader.getAvailableCPUNumber();
+		System.out.println(cpuNumber.value + " " + ":"+cpuNumber.description);
+
+		OtherResult[] otherSystemResult = osrlReader.getOtherSystemResults();
+		int iSystemOthers = osrlReader.getNumberOfOtherSystemResults();
+		for(int i=0;i<iSystemOthers;i++){
+			System.out.println(otherSystemResult[i].name);
+			System.out.println(otherSystemResult[i].value);
+			System.out.println(otherSystemResult[i].description);
+		}
+
+
 		System.out.println(osrlReader.getCurrentState());
-		System.out.println(osrlReader.getAvailableDiskSpace());
-		System.out.println(osrlReader.getAvailableMemory());
 		System.out.println(osrlReader.getCurrentJobCount());
 		System.out.println(osrlReader.getTotalJobsSoFar());
-//		System.out.println(XMLUtil.createXSDateTime(osrlReader.getTimeLastJobEnded()));
-//		System.out.println(XMLUtil.createXSDateTime(osrlReader.getTimeServiceStarted()));
-//		System.out.println(osrlReader.getTimeLastJobTook());
-//		System.out.println(osrlReader.getServiceUtilization());
-//		ProcessStatistics processStatistics = osrlReader.getProcessStatistics();
-//		System.out.println(processStatistics.currentState);
-//		System.out.println(processStatistics.availableDiskSpace);
-//		System.out.println(processStatistics.availableMemory);
-//		System.out.println(processStatistics.currentJobCount);
-//		System.out.println(processStatistics.totalJobsSoFar);
-//		System.out.println(XMLUtil.createXSDateTime(processStatistics.timeLastJobEnded));
-//		System.out.println(XMLUtil.createXSDateTime(processStatistics.timeServiceStarted));
-//		System.out.println(processStatistics.timeLastJobTook);
-//		System.out.println(processStatistics.serviceUtilization);
-//		Jobs jobs = processStatistics.jobs;
-//		if(jobs != null){
-//			JobStatistics[] mJobStatistics = jobs.job;
-//			int iJobStatistics = mJobStatistics==null?0:mJobStatistics.length; 
-//			if(iJobStatistics > 0){
-//				System.out.println(iJobStatistics);
-//				System.out.println(mJobStatistics[0].jobID);
-//				System.out.println(mJobStatistics[0].duration);
-//				if(mJobStatistics[0].dependencies != null)
-//					System.out.println(mJobStatistics[0].dependencies.jobID[0]);
-//			}
-//		}
+		System.out.println(XMLUtil.createXSDateTime(osrlReader.getTimeServiceStarted()));
+		System.out.println(osrlReader.getServiceUtilization());
 
+		OtherResult[] otherServiceResult = osrlReader.getOtherServiceResults();
+		int iServiceOthers = osrlReader.getNumberOfOtherServiceResults();
+		for(int i=0;i<iServiceOthers;i++){
+			System.out.println(otherServiceResult[i].name);
+			System.out.println(otherServiceResult[i].value);
+			System.out.println(otherServiceResult[i].description);
+		}
+
+		System.out.println(osrlReader.getJobStatus());
+		System.out.println(XMLUtil.createXSDateTime(osrlReader.getJobSubmitTime()));
+		System.out.println(XMLUtil.createXSDateTime(osrlReader.getScheduledStartTime()));
+		System.out.println(XMLUtil.createXSDateTime(osrlReader.getActualStartTime()));
+		System.out.println(XMLUtil.createXSDateTime(osrlReader.getEndTime()));
+
+
+		DiskSpace usedDiskSpace = osrlReader.getUsedDiskSpace();
+		System.out.println(usedDiskSpace.value + " " + usedDiskSpace.unit+":"+usedDiskSpace.description);
+		MemorySize usedMemorySize = osrlReader.getUsedMemory();
+		System.out.println(usedMemorySize.value + " " + usedMemorySize.unit+":"+usedMemorySize.description);
+		CPUSpeed usedCPUSpeed = osrlReader.getUsedCPUSpeed();
+		System.out.println(usedCPUSpeed.value + " " + usedCPUSpeed.unit+":"+usedCPUSpeed.description);
+		CPUNumber usedCPUNumber = osrlReader.getUsedCPUNumber();
+		System.out.println(usedCPUNumber.value + " " + ":"+usedCPUNumber.description);
+
+		TimingInformation timingInformation = osrlReader.getTimeInformation();
+		for(int i=0;i<timingInformation.numberOfTimes;i++){
+			System.out.println(timingInformation.time[i].type);
+			System.out.println(timingInformation.time[i].category);
+			System.out.println(timingInformation.time[i].unit);
+			System.out.println(timingInformation.time[i].value);
+			System.out.println(timingInformation.time[i].description);
+		}
+
+		OtherResult[] otherJobResult = osrlReader.getOtherJobResults();
+		int iJobOthers = osrlReader.getNumberOfOtherJobResults();
+		for(int i=0;i<iJobOthers;i++){
+			System.out.println(otherJobResult[i].name);
+			System.out.println(otherJobResult[i].value);
+			System.out.println(otherJobResult[i].description);
+		}
 
 		System.out.println(osrlReader.getVariableNumber());	
 		System.out.println(osrlReader.getObjectiveNumber());
 		System.out.println(osrlReader.getConstraintNumber());
 		System.out.println(osrlReader.getSolutionNumber());
-		for(int i = 0; i < osrlReader.getSolutionNumber(); i++){
+
+		SolverOutput[] solverOutput = osrlReader.getOtherOptimizationSolverOuput();
+		int iSolverOutput = osrlReader.getNumberOfOtherOptimizationSolverOuput();
+		for(int i=0;i<iSolverOutput;i++){
+			System.out.println(solverOutput[i].name);
+			System.out.println(solverOutput[i].category);
+			System.out.println(solverOutput[i].value);
+			System.out.println(solverOutput[i].description);
+		}
+
+
+		double[] mdVariableValues = osrlReader.getOptimalVariableValuesDense(-1);
+		int iVariableValues = mdVariableValues==null?0:mdVariableValues.length;
+		System.out.println(iVariableValues);
+		for(int i = 0; i < iVariableValues; i++){
+			System.out.println(mdVariableValues[i]);
+		}
+		VariableValues variableValues = osrlReader.getOptimalVariableValuesSparse(-1);
+		for(int i = 0; i < variableValues.numberOfVar; i++){
+			System.out.println(variableValues.var[i].idx + ":::" + variableValues.var[i].value);
+		}
+		String[] msVariableValuesString = osrlReader.getOptimalVariableStringValues(-1);
+		int iVariableValuesString = msVariableValuesString==null?0:msVariableValuesString.length;
+		System.out.println(iVariableValuesString);
+		for(int i = 0; i < iVariableValuesString; i++){
+			System.out.println(msVariableValuesString[i]);
+		}
+		double[] mdDualVariableValues = osrlReader.getOptimalDualVariableValuesDense(-1);
+		int iDualVariableValues = mdDualVariableValues==null?0:mdDualVariableValues.length;
+		System.out.println(iDualVariableValues);
+		for(int i = 0; i < iDualVariableValues; i++){
+			System.out.println(mdDualVariableValues[i]);
+		}
+		DualVariableValues dalVariableValues = osrlReader.getOptimalDualVariableValuesSparse(-1);
+		for(int i = 0; i < dalVariableValues.numberOfCon; i++){
+			System.out.println(dalVariableValues.con[i].idx + ":::" + dalVariableValues.con[i].value);
+		}
+
+		OptimizationSolution solution = osrlReader.getSolution(2);
+		System.out.println(solution.message);
+		for(int i = 0; i < 3 /*osrlReader.getSolutionNumber()*/; i++){
 			System.out.println("************solution: " + i);
 			System.out.println(osrlReader.getSolutionStatusType(i));			
 			System.out.println(osrlReader.getSolutionStatusDescription(i));			
-			System.out.println(osrlReader.getSolutionObjectiveIndex(i));			
+			System.out.println(osrlReader.getSolutionTargetObjectiveIndex(i));			
+			System.out.println(osrlReader.getSolutionWeightedObjectives(i));			
 			System.out.println(osrlReader.getSolutionMessage(i));	
 			OptimizationSolutionSubstatus[] substatus = osrlReader.getSolutionSubStatuses(i);
 			System.out.println("sub # " + (substatus==null?0:substatus.length));
 			OptimizationSolutionStatus optStatus = osrlReader.getSolutionStatus(i);
 			System.out.println(optStatus.type);
-			System.out.println(osrlReader.getVariableValues(i)[0]);
+			System.out.println(osrlReader.getVariableValuesDense(i)[0]);
 			System.out.println(osrlReader.getVariableStringValues(i)[0]);
+			System.out.println(osrlReader.getVariableBasisStatuses(i)[0]);
 			OtherVariableResult[] otherVar = osrlReader.getOtherVariableResults(i);
 			if(otherVar != null){
 				System.out.println(otherVar.length);
+				System.out.println(otherVar[0].numberOfVar);
 				System.out.println(otherVar[0].name);
 				System.out.println(otherVar[0].value);
 				System.out.println(otherVar[0].description);
 				System.out.println(otherVar[0].var[0].idx);
 				System.out.println(otherVar[0].var[0].value);
 			}
-			System.out.println(osrlReader.getObjectiveValues(i)[0]);
+			System.out.println(osrlReader.getObjectiveValuesDense(i)[0]);
 			OtherObjectiveResult[] otherObj = osrlReader.getOtherObjectiveResults(i);
 			if(otherObj != null){
 				System.out.println(otherObj.length);
+				System.out.println(otherObj[0].numberOfObj);
 				System.out.println(otherObj[0].name);
 				System.out.println(otherObj[0].value);
 				System.out.println(otherObj[0].description);
 				System.out.println(otherObj[0].obj[0].idx);
 				System.out.println(otherObj[0].obj[0].value);
 			}
-			double[] mdValues = osrlReader.getDualVariableValues(i);
+			double[] mdValues = osrlReader.getDualVariableValuesDense(i);
 			System.out.println(mdValues==null?"null":mdValues[0]+"");
 
 			OtherConstraintResult[] otherCon = osrlReader.getOtherConstraintResults(i);
 			if(otherCon != null){
 				System.out.println(otherCon.length);
+				System.out.println(otherCon[0].numberOfCon);
 				System.out.println(otherCon[0].name);
 				System.out.println(otherCon[0].value);
 				System.out.println(otherCon[0].description);
@@ -1957,13 +2328,15 @@ public class OSrLReader extends OSgLReader{
 			if(otherOPT != null){
 				System.out.println(otherOPT.length);
 				System.out.println(otherOPT[0].name);
+				System.out.println(otherOPT[0].category);
 				System.out.println(otherOPT[0].description);
 				System.out.println(otherOPT[0].value);
 			}
 		}
+
 		System.out.println(osrlReader.getOSAnalysis().getJobID());
 
-		double[] mdValues2 = osrlReader.getOptimalPrimalVariableValues(-1);
+		double[] mdValues2 = osrlReader.getOptimalVariableValuesDense(-1);
 		if(mdValues2 == null) System.out.println("no optimal variable values");
 		else{
 			for(int i = 0; i < mdValues2.length; i++){
@@ -1971,15 +2344,7 @@ public class OSrLReader extends OSgLReader{
 			}
 
 		}
-		String[] msValues2 = osrlReader.getOptimalPrimalVariableStringValues(-1);
-		if(msValues2 == null) System.out.println("no optimal variable string values");
-		else{
-			for(int i = 0; i < msValues2.length; i++){
-				System.out.println(msValues2[i]);
-			}
-
-		}
-		mdValues2 = osrlReader.getOptimalDualVariableValues(-1);
+		mdValues2 = osrlReader.getOptimalDualVariableValuesDense(-1);
 		if(mdValues2 == null) System.out.println("no optimal dual variable values");
 		else{
 			for(int i = 0; i < mdValues2.length; i++){
@@ -1987,7 +2352,7 @@ public class OSrLReader extends OSgLReader{
 			}
 
 		}
-		//osrlReader.writeToStandardOutput();
+		osrlReader.writeToStandardOutput();
 	}//main
 
 }//class OSrLReader

@@ -23,8 +23,6 @@ public class SolverOutput{
 
 	public String description = "";
 
-	public String type = "";
-
 	public String value = "";
 	
 }//class SolverOutput

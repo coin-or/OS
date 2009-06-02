@@ -18,7 +18,7 @@ public class BasStatus {
 	
 	public int idx = -1;
 	
-	public double value = 0;
+	public String value = "unknown";
 	
 }//BasStatus
 

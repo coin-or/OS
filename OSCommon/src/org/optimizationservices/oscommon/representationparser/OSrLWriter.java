@@ -7,16 +7,17 @@ package org.optimizationservices.oscommon.representationparser;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import org.optimizationservices.oscommon.datastructure.osgeneral.JobDependencies;
-import org.optimizationservices.oscommon.datastructure.osprocess.JobStatistics;
+import org.optimizationservices.oscommon.datastructure.osresult.BasStatus;
 import org.optimizationservices.oscommon.datastructure.osresult.CPUNumber;
 import org.optimizationservices.oscommon.datastructure.osresult.CPUSpeed;
 import org.optimizationservices.oscommon.datastructure.osresult.DiskSpace;
 import org.optimizationservices.oscommon.datastructure.osresult.DualVarValue;
+import org.optimizationservices.oscommon.datastructure.osresult.DualVariableValues;
 import org.optimizationservices.oscommon.datastructure.osresult.GeneralStatus;
 import org.optimizationservices.oscommon.datastructure.osresult.GeneralSubstatus;
 import org.optimizationservices.oscommon.datastructure.osresult.MemorySize;
 import org.optimizationservices.oscommon.datastructure.osresult.ObjValue;
+import org.optimizationservices.oscommon.datastructure.osresult.ObjectiveValues;
 import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolution;
 import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus;
 import org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionSubstatus;
@@ -24,11 +25,15 @@ import org.optimizationservices.oscommon.datastructure.osresult.OtherConResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult;
+import org.optimizationservices.oscommon.datastructure.osresult.OtherResults;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult;
 import org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult;
+import org.optimizationservices.oscommon.datastructure.osresult.SolverOutput;
+import org.optimizationservices.oscommon.datastructure.osresult.TimingInformation;
 import org.optimizationservices.oscommon.datastructure.osresult.VarStringValue;
 import org.optimizationservices.oscommon.datastructure.osresult.VarValue;
+import org.optimizationservices.oscommon.datastructure.osresult.VariableValues;
 import org.optimizationservices.oscommon.localinterface.OSAnalysis;
 import org.optimizationservices.oscommon.localinterface.OSResult;
 import org.optimizationservices.oscommon.util.OSParameter;
@@ -97,6 +102,9 @@ public class OSrLWriter extends OSgLWriter{
 		if(!setGeneralStatus(osResult.getGeneralStatus())){ 
 			throw new Exception("setGeneralStatus Unsuccessful");
 		}
+		if(!setGeneralMessage(osResult.getGeneralMessage())){ 
+			throw new Exception("setGeneralMessage Unsuccessful");
+		}
 		if(!setServiceURI(osResult.getServiceURI())){ 
 			throw new Exception("setServiceURI Unsuccessful");
 		}
@@ -109,12 +117,88 @@ public class OSrLWriter extends OSgLWriter{
 		if(!setJobID(osResult.getJobID())){ 
 			throw new Exception("setJobID Unsuccessful");
 		}
+		if(!setSolverInvoked(osResult.getSolverInvoked())){ 
+			throw new Exception("setSolverInvoked Unsuccessful");
+		}
 		if(!setResultTimeStamp(osResult.getResultTimeStamp())){ 
-			throw new Exception("setResultTime Unsuccessful");
+			throw new Exception("setResultTimeStamp Unsuccessful");
 		}
-		if(!setGeneralMessage(osResult.getGeneralMessage())){ 
-			throw new Exception("setGeneralMessage Unsuccessful");
+		if(!setOtherGeneralResults(osResult.getOtherGeneralResults())){
+			throw new Exception("setOtherGeneralResults");			
 		}
+
+		if(!setSystemInformation(osResult.getSystemInformation())){
+			throw new Exception("setSystemInformation");	
+		}
+		if(!setAvailableDiskSpace(osResult.getAvailableDiskSpace())){
+			throw new Exception("setAvailableDiskSpace");	
+		}
+		if(!setAvailableMemory(osResult.getAvailableMemory())){
+			throw new Exception("setAvailableMemory");	
+		}
+		if(!setAvailableCPUSpeed(osResult.getAvailableCPUSpeed())){
+			throw new Exception("setAvailableCPUSpeed");	
+		}
+		if(!setAvailableCPUNumber(osResult.getAvailableCPUNumber())){
+			throw new Exception("setAvailableCPUNumber");	
+		}
+		if(!setOtherSystemResults(osResult.getOtherSystemResults())){
+			throw new Exception("setOtherSystemResults");			
+		}
+
+		if(!setCurrentState(osResult.getCurrentState())){
+			throw new Exception("setCurrentState");	
+		}
+		if(!setCurrentJobCount(osResult.getCurrentJobCount())){
+			throw new Exception("setCurrentJobCount");	
+		}
+		if(!setTotalJobsSoFar(osResult.getTotalJobsSoFar())){
+			throw new Exception("setCurrentJobCount");	
+		}
+		if(!setTimeServiceStarted(osResult.getTimeServiceStarted())){
+			throw new Exception("setTimeServiceStarted");	
+		}
+		if(!setServiceUtilization(osResult.getServiceUtilization())){
+			throw new Exception("setServiceUtilization");	
+		}
+		if(!setOtherServiceResults(osResult.getOtherServiceResults())){
+			throw new Exception("setOtherServiceResults");			
+		}
+
+		if(!setJobStatus(osResult.getJobStatus())){
+			throw new Exception("setJobStatus");		
+		}
+		if(!setJobSubmitTime(osResult.getJobSubmitTime())){
+			throw new Exception("setJobSubmitTime");	
+		}
+		if(!setScheduledStartTime(osResult.getScheduledStartTime())){
+			throw new Exception("setScheduledStartTime");
+		}
+		if(!setActualStartTime(osResult.getActualStartTime())){
+			throw new Exception("setActualStartTime");
+		}
+		if(!setEndTime(osResult.getEndTime())){
+			throw new Exception("setEndTime");
+		}
+		if(!setTimingInformation(osResult.getTimeInformation())){
+			throw new Exception("setTimingInformation");			
+		}
+		if(!setUsedDiskSpace(osResult.getUsedDiskSpace())){
+			throw new Exception("setUsedDiskSpace");		
+		}
+		if(!setUsedMemory(osResult.getUsedMemory())){
+			throw new Exception("setUsedMemory");	
+		}
+		if(!setUsedCPUSpeed(osResult.getUsedCPUSpeed())){
+			throw new Exception("setUsedCPUSpeed");	
+		}
+		if(!setUsedCPUNumber(osResult.getUsedCPUNumber())){
+			throw new Exception("setUsedCPUNumber");	
+		}
+		if(!setOtherJobResults(osResult.getOtherJobResults())){
+			throw new Exception("setOtherJobResults");			
+		}
+
 		int iSolutionNumber = osResult.getSolutionNumber();
 		if(iSolutionNumber >= 0){
 			if(!setVariableNumber(osResult.getVariableNumber())){ 
@@ -133,6 +217,9 @@ public class OSrLWriter extends OSgLWriter{
 				if(!setSolution(i, osResult.getSolution(i))){ 
 					throw new Exception("setSolution Unsuccessful");
 				}
+			}
+			if(!setOtherOptimizationSolverOuput(osResult.getOtherOptimizationSolverOuput())){
+				throw new Exception("setOtherOptimizationSolverOuput");
 			}
 			if(!setOSAnalysis(osResult.getOSAnalysis())){ 
 				throw new Exception("setOSAnalysis Unsuccessful");
@@ -570,6 +657,30 @@ public class OSrLWriter extends OSgLWriter{
 	}//setOtherGeneralResults
 
 	/**
+	 * Set the other general results. 
+	 * 
+	 * @param otherGeneralResults holds the other general results
+	 * @return whether the other results element construction is successful.
+	 */
+	public boolean setOtherGeneralResults(OtherResults otherGeneralResults){
+		Element eGeneral = (Element)XMLUtil.findChildNode(m_eOSrL, "general");
+		if(eGeneral == null){
+			eGeneral = m_document.createElement("general");
+			m_eOSrL.insertBefore(eGeneral, m_eOSrL.getFirstChild());
+		}
+		if(otherGeneralResults == null || otherGeneralResults.numberOfOtherResults <= 0 || otherGeneralResults.other == null){
+			XMLUtil.removeChildrenByName(eGeneral, "otherResults");
+			return true;
+		}
+		if(otherGeneralResults.other.length != otherGeneralResults.numberOfOtherResults) return false;
+		for(int i = 0; i < otherGeneralResults.numberOfOtherResults; i++){
+			addOtherGeneralResult(otherGeneralResults.other[i].name, 
+					otherGeneralResults.other[i].value, otherGeneralResults.other[i].description);
+		}
+		return true;
+	}//setOtherGeneralResults
+
+	/**
 	 * Add an other general result element. 
 	 * 
 	 * @param name holds the name of the other result element. It is required.
@@ -918,6 +1029,37 @@ public class OSrLWriter extends OSgLWriter{
 		if(descriptions != null && names.length != descriptions.length) return false;
 		for(int i = 0; i < names.length; i++){
 			addOtherSystemResult(names[i], values[i], (descriptions==null)?"":descriptions[i]);
+		}
+		return true;
+	}//setOtherSystemResults
+
+	/**
+	 * Set the other system results. 
+	 * 
+	 * @param otherSystemResults holds the other system results
+	 * @return whether the other results element construction is successful.
+	 */
+	public boolean setOtherSystemResults(OtherResults otherSystemResults){
+		Node nodeRef = null;
+		Element eSystem = (Element)XMLUtil.findChildNode(m_eOSrL, "system");
+		if(eSystem == null){
+			eSystem = m_document.createElement("system");
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+			if(nodeRef != null){
+				m_eOSrL.insertBefore(eSystem, nodeRef.getNextSibling());			
+			}
+			else{
+				m_eOSrL.insertBefore(eSystem, m_eOSrL.getFirstChild());
+			}		
+		}
+		if(otherSystemResults == null || otherSystemResults.numberOfOtherResults <= 0 || otherSystemResults.other == null){
+			XMLUtil.removeChildrenByName(eSystem, "otherResults");
+			return true;
+		}
+		if(otherSystemResults.other.length != otherSystemResults.numberOfOtherResults) return false;
+		for(int i = 0; i < otherSystemResults.numberOfOtherResults; i++){
+			addOtherSystemResult(otherSystemResults.other[i].name, 
+					otherSystemResults.other[i].value, otherSystemResults.other[i].description);
 		}
 		return true;
 	}//setOtherSystemResults
@@ -1292,6 +1434,43 @@ public class OSrLWriter extends OSgLWriter{
 	}//setOtherServiceResults
 
 	/**
+	 * Set the other service results. 
+	 * 
+	 * @param otherServiceResults holds the other service results
+	 * @return whether the other results element construction is successful.
+	 */
+	public boolean setOtherServiceResults(OtherResults otherServiceResults){
+		Node nodeRef = null;
+		Element eService = (Element)XMLUtil.findChildNode(m_eOSrL, "service");
+		if(eService == null){
+			eService = m_document.createElement("service");
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+			if(nodeRef != null){
+				m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eService, nodeRef.getNextSibling());			
+				}
+				else{
+					m_eOSrL.insertBefore(eService, m_eOSrL.getFirstChild());
+				}		
+			}		
+		}
+		if(otherServiceResults == null || otherServiceResults.numberOfOtherResults <= 0 || otherServiceResults.other == null){
+			XMLUtil.removeChildrenByName(eService, "otherResults");
+			return true;
+		}
+		if(otherServiceResults.other.length != otherServiceResults.numberOfOtherResults) return false;
+		for(int i = 0; i < otherServiceResults.numberOfOtherResults; i++){
+			addOtherServiceResult(otherServiceResults.other[i].name, 
+					otherServiceResults.other[i].value, otherServiceResults.other[i].description);
+		}
+		return true;
+	}//setOtherServiceResults
+
+	/**
 	 * Add an other service result element. 
 	 * 
 	 * @param name holds the name of the other result element. It is required.
@@ -1652,11 +1831,55 @@ public class OSrLWriter extends OSgLWriter{
 		if(descriptions != null && descriptions.length != n) return false;
 
 		for(int i = 0; i < types.length; i++){
-			addJobTiming((types==null)?"elapsedTime":types[i], 
+			addTimingInformation((types==null)?"elapsedTime":types[i], 
 					(categories==null)?"total":categories[i], 
 							(units==null)?"second":units[i], 
 									(descriptions==null)?"":units[i], 
 											values[i]  );
+		}
+		return true;
+	}//setTimingInformation
+
+	/**
+	 * set timing information
+	 * 
+	 * @param timingInformation holds the job timing information
+	 * @return whether the timing information element construction is successful.
+	 */
+	public boolean setTimingInformation(TimingInformation timingInformation){
+		Node nodeRef = null;
+		Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+		if(eJob == null){
+			eJob = m_document.createElement("job");
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+			if(nodeRef != null){
+				m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+		}
+		if(timingInformation == null || timingInformation.numberOfTimes <= 0 || timingInformation.time == null){
+			XMLUtil.removeChildrenByName(eJob, "timingInformation");
+			return true;
+		}
+		if(timingInformation.time.length != timingInformation.numberOfTimes) return false;
+		for(int i = 0; i < timingInformation.numberOfTimes; i++){
+			addTimingInformation(timingInformation.time[i].type, timingInformation.time[i].category,
+					timingInformation.time[i].unit, timingInformation.time[i].description, 
+					timingInformation.time[i].value);
 		}
 		return true;
 	}//setTimingInformation
@@ -1669,7 +1892,7 @@ public class OSrLWriter extends OSgLWriter{
 	 * @param description
 	 * @return whether the timing information is set successfully
 	 */
-	public boolean addJobTiming(String type, String category, String unit, String description, double value){
+	public boolean addTimingInformation(String type, String category, String unit, String description, double value){
 		Node nodeRef = null;
 		if(value < 0) return false;
 		try{
@@ -1720,7 +1943,7 @@ public class OSrLWriter extends OSgLWriter{
 				if(description != null && description.length() > 0){
 					eTime.setAttribute("description", description);
 				}
-				eTime.setAttribute("value", value+"");
+				XMLUtil.setElementValue(eTime, value+"");
 				eTimingInformation.appendChild(eTime);
 
 				eTimingInformation.setAttribute("numberOfTimes", (iNls+1)+"");
@@ -2054,6 +2277,49 @@ public class OSrLWriter extends OSgLWriter{
 	}//setOtherJobResults
 
 	/**
+	 * Set the other job results. 
+	 * 
+	 * @param otherJobResults holds the other job results
+	 * @return whether the other results element construction is successful.
+	 */
+	public boolean setOtherJobResults(OtherResults otherJobResults){
+		Node nodeRef = null;
+		Element eJob = (Element)XMLUtil.findChildNode(m_eOSrL, "job");
+		if(eJob == null){
+			eJob = m_document.createElement("job");
+			nodeRef = XMLUtil.findChildNode(m_eOSrL, "service");
+			if(nodeRef != null){
+				m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+			}
+			else{
+				nodeRef = XMLUtil.findChildNode(m_eOSrL, "system");
+				if(nodeRef != null){
+					m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+				}
+				else{
+					nodeRef = XMLUtil.findChildNode(m_eOSrL, "general");
+					if(nodeRef != null){
+						m_eOSrL.insertBefore(eJob, nodeRef.getNextSibling());			
+					}
+					else{
+						m_eOSrL.insertBefore(eJob, m_eOSrL.getFirstChild());
+					}		
+				}		
+			}
+		}
+		if(otherJobResults == null || otherJobResults.numberOfOtherResults <= 0 || otherJobResults.other == null){
+			XMLUtil.removeChildrenByName(eJob, "otherResults");
+			return true;
+		}
+		if(otherJobResults.other.length != otherJobResults.numberOfOtherResults) return false;
+		for(int i = 0; i < otherJobResults.numberOfOtherResults; i++){
+			addOtherJobResult(otherJobResults.other[i].name, 
+					otherJobResults.other[i].value, otherJobResults.other[i].description);
+		}
+		return true;
+	}//setOtherJobResults
+
+	/**
 	 * Add an other job result element. 
 	 * 
 	 * @param name holds the name of the other result element. It is required.
@@ -2144,13 +2410,7 @@ public class OSrLWriter extends OSgLWriter{
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
-			if(nodeRef != null){
-				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
-			}
-			else{
-				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
-			}					
+			m_eOSrL.appendChild(eOptimization);
 		}		
 		m_iVariableNumber = variableNumber;
 		try{
@@ -2177,13 +2437,7 @@ public class OSrLWriter extends OSgLWriter{
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
-			if(nodeRef != null){
-				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
-			}
-			else{
-				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
-			}					
+			m_eOSrL.appendChild(eOptimization);
 		}		
 		m_iObjectiveNumber = objectiveNumber;
 		try{
@@ -2210,13 +2464,7 @@ public class OSrLWriter extends OSgLWriter{
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
-			if(nodeRef != null){
-				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
-			}
-			else{
-				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
-			}					
+			m_eOSrL.appendChild(eOptimization);
 		}		
 		m_iConstraintNumber = constraintNumber;
 		try{
@@ -2250,13 +2498,7 @@ public class OSrLWriter extends OSgLWriter{
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null){
 			eOptimization = m_document.createElement("optimization");
-			nodeRef = XMLUtil.findChildNode(m_eOSrL, "statistics");			
-			if(nodeRef != null){
-				m_eOSrL.insertBefore(eOptimization, nodeRef.getNextSibling());			
-			}
-			else{
-				m_eOSrL.insertBefore(eOptimization, m_eOSrL.getFirstChild());
-			}					
+			m_eOSrL.appendChild(eOptimization);
 		}		
 		m_iSolutionNumber = solutionNumber;
 		try{
@@ -2299,7 +2541,9 @@ public class OSrLWriter extends OSgLWriter{
 		eStatus.setAttribute("type", "other");
 		eSolution.appendChild(eStatus);
 
-		bSetSolution = setSolutionObjectiveIndex(solIdx, solution.targetObjectiveIdx);
+		bSetSolution = setSolutionTargetObjectiveIndex(solIdx, solution.targetObjectiveIdx);
+		if(!bSetSolution) return false;
+		bSetSolution = setSolutionWeightedObjectives(solIdx, solution.weightedObjectives);
 		if(!bSetSolution) return false;
 		bSetSolution = setSolutionStatus(solIdx, solution.status);
 		if(!bSetSolution) return false;
@@ -2314,7 +2558,7 @@ public class OSrLWriter extends OSgLWriter{
 				for(int i = 0; i < iVars; i++){
 					mdValues[var[i].idx] = var[i].value;
 				}
-				bSetSolution = setPrimalVariableValues(solIdx, mdValues);
+				bSetSolution = setVariableValuesDense(solIdx, mdValues);
 				if(!bSetSolution) return false;	
 			}		
 			if(solution.variables.valuesString != null){
@@ -2324,7 +2568,17 @@ public class OSrLWriter extends OSgLWriter{
 				for(int i = 0; i < iVars; i++){
 					msValues[var[i].idx] = var[i].value;
 				}
-				bSetSolution = setPrimalVariableStringValues(solIdx, msValues);
+				bSetSolution = setVariableStringValues(solIdx, msValues);
+				if(!bSetSolution) return false;	
+			}		
+			if(solution.variables.basisStatus != null){
+				String[] msStatuses = new String[m_iVariableNumber];
+				BasStatus[] var = solution.variables.basisStatus.var;
+				int iVars = var==null?0:var.length;
+				for(int i = 0; i < iVars; i++){
+					msStatuses[var[i].idx] = var[i].value;
+				}
+				bSetSolution = setVariableBasisStatuses(solIdx, msStatuses);
 				if(!bSetSolution) return false;	
 			}		
 			if(solution.variables.other!= null){
@@ -2344,7 +2598,7 @@ public class OSrLWriter extends OSgLWriter{
 				for(int i = 0; i < iObjs; i++){
 					mdValues[Math.abs(obj[i].idx)-1] = obj[i].value;
 				}
-				bSetSolution = setObjectiveValues(solIdx, mdValues);
+				bSetSolution = setObjectiveValuesDense(solIdx, mdValues);
 				if(!bSetSolution) return false;	
 			}	
 			if(solution.objectives.other!= null){
@@ -2361,7 +2615,7 @@ public class OSrLWriter extends OSgLWriter{
 				for(int i = 0; i < iCons; i++){
 					mdValues[con[i].idx] = con[i].value;
 				}
-				bSetSolution = setDualVariableValues(solIdx, mdValues);
+				bSetSolution = setDualVariableValuesDense(solIdx, mdValues);
 				if(!bSetSolution) return false;	
 			}	
 			if(solution.constraints.other != null){
@@ -2416,6 +2670,7 @@ public class OSrLWriter extends OSgLWriter{
 				}
 				if(status.substatus != null && status.substatus.length > 0){
 					int iSubstatus = status.substatus.length;
+					eStatus.setAttribute("numberOfSubstatuses", iSubstatus+"");
 					for(int i = 0; i < iSubstatus; i++){
 						Element eSubstatus =  m_document.createElement("substatus");
 						if(status.substatus[i].type != null && status.substatus[i].type.length() > 0){
@@ -2562,13 +2817,13 @@ public class OSrLWriter extends OSgLWriter{
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * 
 	 * @param solIdx holds the solution index to set the objective index.
-	 * @param objectiveIdx holds the objective index to set.  
+	 * @param targetObjectiveIdx holds the objective index to set.  
 	 * All the objective indexes are negative starting from -1 downward. 
 	 * 
 	 * @return whether the optimization objective index is set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setSolutionObjectiveIndex(int solIdx, int objectiveIdx){
+	public boolean setSolutionTargetObjectiveIndex(int solIdx, int targetObjectiveIdx){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
@@ -2579,14 +2834,49 @@ public class OSrLWriter extends OSgLWriter{
 			eSolution = m_document.createElement("solution");
 		}
 		try{
-			eSolution.setAttribute("objectiveIdx", objectiveIdx+"");
+			eSolution.setAttribute("targetObjectiveIdx", targetObjectiveIdx+"");
+			eSolution.removeAttribute("weightedObjectives");
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		return true;
-	}//setSolutionObjectiveIndex
+	}//setSolutionTargetObjectiveIndex
+
+	/**
+	 * Set the [i]th optimization solution's weighted objectives flag, where i equals the given solution index.   
+	 * If the solution is solved against the weighted objectives as specified by the weights in the corresponding OSiL, 
+	 * the weightedObjectives should be set to true.
+	 * 
+	 * @param solIdx holds the solution index to set the weightedObjectives flag.
+	 * @param weightedObjectives holds whether the solution is solved against the weighted objectives  
+	 * 
+	 * @return whether the weightedObjectives is set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setSolutionWeightedObjectives(int solIdx, boolean weightedObjectives){
+		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
+		if(eOptimization == null) return false;
+		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
+		if(solIdx >= vSolutions.size()) return false;
+		Element eSolution = (Element)vSolutions.elementAt(solIdx);
+		if(eSolution == null){
+			eSolution = m_document.createElement("solution");
+		}
+		try{
+			if(weightedObjectives){
+				eSolution.setAttribute("weightedObjectives", weightedObjectives?"true":"false");
+				eSolution.removeAttribute("targetObjectiveIdx");
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setSolutionTargetObjectiveIndex
 
 	/**
 	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
@@ -2597,7 +2887,7 @@ public class OSrLWriter extends OSgLWriter{
 	 * @return whether primal variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setPrimalVariableValues(int solIdx, double[] x){
+	public boolean setVariableValuesDense(int solIdx, double[] x){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
@@ -2616,10 +2906,14 @@ public class OSrLWriter extends OSgLWriter{
 				if(nodeRef == null){
 					nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
 					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(eSolution, "other");
+						nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
 					}
 				}
 				eSolution.insertBefore(eVariables, nodeRef);
+			}
+			if(x == null){
+				XMLUtil.removeChildrenByName(eVariables, "values");
+				return true;
 			}
 			Element eValues = (Element)XMLUtil.findChildNode(eVariables, "values");
 			if(eValues == null){
@@ -2628,23 +2922,101 @@ public class OSrLWriter extends OSgLWriter{
 			}
 			XMLUtil.removeAllChildren(eValues);
 			int iVars = x==null?0:x.length;
+			eValues.setAttribute("numberOfVar", iVars+"");
 			if(iVars == 0) return true;
 			if(iVars != m_iVariableNumber) return false;
+			int iCount = 0;
 			for(int i = 0; i < iVars; i++){
 				if(x[i] != 0){
+					iCount++;
 					Element eVar = m_document.createElement("var");	
 					eVar.setAttribute("idx", i+"");
-					eVar.appendChild(m_document.createTextNode(x[i]+""));
+					String sValue = "";
+					if(Double.isInfinite(x[i]) && x[i] < 0) sValue = "-INF";
+					else if(Double.isInfinite(x[i]) && x[i] > 0) sValue = "INF";
+					else sValue = x[i]+"";
+					eVar.appendChild(m_document.createTextNode(sValue));
 					eValues.appendChild(eVar);				
 				}
 			}
+			eValues.setAttribute("numberOfVar", iCount+"");
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		return true;
-	}//setPrimalVariableValues
+	}//setVariableValuesDense
+
+	/**
+	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param variableValues holds a sparse structure of variable values to set; it could be null if all variables are 0.
+	 * 
+	 * @return whether primal variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setVariableValuesSparse(int solIdx, VariableValues variableValues){
+		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
+		if(eOptimization == null) return false;
+		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
+		if(solIdx >= vSolutions.size()) return false;
+		Element eSolution = (Element)vSolutions.elementAt(solIdx);
+		if(eSolution == null){
+			eSolution = m_document.createElement("solution");
+		}
+		Node nodeRef = null;
+		try{
+			Element eVariables = (Element)XMLUtil.findChildNode(eSolution, "variables");
+			if(eVariables == null){
+				eVariables = m_document.createElement("variables");	
+				nodeRef = XMLUtil.findChildNode(eSolution, "objectives");
+				if(nodeRef == null){
+					nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
+					if(nodeRef == null){
+						nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
+					}
+				}
+				eSolution.insertBefore(eVariables, nodeRef);
+			}
+			if(variableValues == null){
+				XMLUtil.removeChildrenByName(eVariables, "values");
+				return true;
+			}
+			Element eValues = (Element)XMLUtil.findChildNode(eVariables, "values");
+			if(eValues == null){
+				eValues = m_document.createElement("values");	
+				eVariables.insertBefore(eValues, eVariables.getFirstChild());									
+			}
+			XMLUtil.removeAllChildren(eValues);
+			int iVars = variableValues==null?0:variableValues.numberOfVar;
+			eValues.setAttribute("numberOfVar", iVars+"");
+			if(iVars == 0) return true;
+			if(iVars != m_iVariableNumber) return false;
+			int iCount = 0;
+			for(int i = 0; i < iVars; i++){
+				if(variableValues.var[i].value != 0){
+					iCount++;
+					Element eVar = m_document.createElement("var");	
+					eVar.setAttribute("idx", variableValues.var[i].idx+"");
+					String sValue = "";
+					if(Double.isInfinite(variableValues.var[i].value) && variableValues.var[i].value < 0) sValue = "-INF";
+					else if(Double.isInfinite(variableValues.var[i].value) && variableValues.var[i].value > 0) sValue = "INF";
+					else sValue = variableValues.var[i].value+"";
+					eVar.appendChild(m_document.createTextNode(sValue));
+					eValues.appendChild(eVar);				
+				}
+			}
+			eValues.setAttribute("numberOfVar", iCount+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setVariableValuesSparse
 
 	/**
 	 * Set the [i]th optimization solution's primal variable string values, where i equals the given solution index.   
@@ -2655,7 +3027,7 @@ public class OSrLWriter extends OSgLWriter{
 	 * @return whether primal variable string values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setPrimalVariableStringValues(int solIdx, String[] x){
+	public boolean setVariableStringValues(int solIdx, String[] x){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
@@ -2674,19 +3046,27 @@ public class OSrLWriter extends OSgLWriter{
 				if(nodeRef == null){
 					nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
 					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(eSolution, "other");
+						nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
 					}
 				}
 				eSolution.insertBefore(eVariables, nodeRef);
 			}
+			if(x == null){
+				XMLUtil.removeChildrenByName(eVariables, "valuesString");
+				return true;
+			}
 			Element eValuesString = (Element)XMLUtil.findChildNode(eVariables, "valuesString");
 			if(eValuesString == null){
 				eValuesString = m_document.createElement("valuesString");
-				nodeRef = XMLUtil.findChildNode(eVariables, "other");
+				nodeRef = XMLUtil.findChildNode(eVariables, "basisStatus");
+				if(nodeRef == null){
+					nodeRef = XMLUtil.findChildNode(eVariables, "other");
+				}
 				eVariables.insertBefore(eValuesString, nodeRef);
 			}
 			XMLUtil.removeAllChildren(eValuesString);
 			int iVars = x==null?0:x.length;
+			eValuesString.setAttribute("numberOfVar", iVars+"");
 			if(iVars == 0) return true;
 			if(iVars != m_iVariableNumber) return false;
 			for(int i = 0; i < iVars; i++){
@@ -2701,8 +3081,69 @@ public class OSrLWriter extends OSgLWriter{
 			return false;
 		}
 		return true;
-	}//setPrimalVariableStringValues
+	}//setVariableStringValues
 
+	/**
+	 * Set the [i]th optimization solution's primal variable basis status, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable string values. 
+	 * @param x holds a dense string array of variable basis statuses to set: unknown, basic, atLower, atUpper, superBasic
+	 * 
+	 * @return whether primal variable basis statuses are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setVariableBasisStatuses(int solIdx, String[] x){
+		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
+		if(eOptimization == null) return false;
+		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
+		if(solIdx >= vSolutions.size()) return false;
+		Element eSolution = (Element)vSolutions.elementAt(solIdx);
+		if(eSolution == null){
+			eSolution = m_document.createElement("solution");
+		}
+		Node nodeRef = null;
+		try{
+			Element eVariables = (Element)XMLUtil.findChildNode(eSolution, "variables");
+			if(eVariables == null){
+				eVariables = m_document.createElement("variables");	
+				nodeRef = XMLUtil.findChildNode(eSolution, "objectives");
+				if(nodeRef == null){
+					nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
+					if(nodeRef == null){
+						nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
+					}
+				}
+				eSolution.insertBefore(eVariables, nodeRef);
+			}
+			if(x == null){
+				XMLUtil.removeChildrenByName(eVariables, "basisStatus");
+				return true;
+			}
+			Element eBasisStatus = (Element)XMLUtil.findChildNode(eVariables, "basisStatus");
+			if(eBasisStatus == null){
+				eBasisStatus = m_document.createElement("basisStatus");
+				nodeRef = XMLUtil.findChildNode(eVariables, "other");
+				eVariables.insertBefore(eBasisStatus, nodeRef);
+			}
+			XMLUtil.removeAllChildren(eBasisStatus);
+			int iVars = x==null?0:x.length;
+			eBasisStatus.setAttribute("numberOfVar", iVars+"");
+			if(iVars == 0) return true;
+			if(iVars != m_iVariableNumber) return false;
+			for(int i = 0; i < iVars; i++){
+				Element eVar = m_document.createElement("var");	
+				eVar.setAttribute("idx", i+"");
+				eVar.appendChild(m_document.createTextNode(x[i]));
+				eBasisStatus.appendChild(eVar);				
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setVariableBasisStatuses
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
@@ -2737,13 +3178,14 @@ public class OSrLWriter extends OSgLWriter{
 				if(nodeRef == null){
 					nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
 					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(eSolution, "other");
+						nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
 					}
 				}
 				eSolution.insertBefore(eVariables, nodeRef);
 			}
 			XMLUtil.removeChildrenByName(eVariables, "other");
 			int iOthers = otherVariableResults==null?0:otherVariableResults.length;
+			eVariables.setAttribute("numberOfOtherVariableResults", iOthers+"");
 			if(iOthers == 0) return true;
 			for(int i = 0; i < iOthers; i++){
 				Element eOther = m_document.createElement("other");
@@ -2757,9 +3199,10 @@ public class OSrLWriter extends OSgLWriter{
 					eOther.setAttribute("description", otherVariableResults[i].description);					
 				}
 				if(otherVariableResults[i].value != null && otherVariableResults[i].value.length() > 0){
-					eOther.appendChild(m_document.createTextNode(otherVariableResults[i].value));
+					eOther.setAttribute("value", otherVariableResults[i].value);		
 				}
 				int iVars = (otherVariableResults[i]==null || otherVariableResults[i].var == null)?0:otherVariableResults[i].var.length;
+				eOther.setAttribute("numberOfVar", iVars+"");
 				if(iVars > 0){
 					for(int j = 0; j < iVars; j++){
 						Element eVar = m_document.createElement("var");	
@@ -2794,7 +3237,7 @@ public class OSrLWriter extends OSgLWriter{
 	 * @return whether objective values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setObjectiveValues(int solIdx, double[] objectiveValues){
+	public boolean setObjectiveValuesDense(int solIdx, double[] objectiveValues){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
@@ -2811,9 +3254,13 @@ public class OSrLWriter extends OSgLWriter{
 				eObjectives = m_document.createElement("objectives");	
 				nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
 				if(nodeRef == null){
-					nodeRef = XMLUtil.findChildNode(eSolution, "other");
+					nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
 				}
 				eSolution.insertBefore(eObjectives, nodeRef);
+			}
+			if(objectiveValues == null){
+				XMLUtil.removeChildrenByName(eObjectives, "values");
+				return true;
 			}
 			Element eValues = (Element)XMLUtil.findChildNode(eObjectives, "values");
 			if(eValues == null){
@@ -2822,24 +3269,103 @@ public class OSrLWriter extends OSgLWriter{
 			}
 			XMLUtil.removeAllChildren(eValues);
 			int iObjs = objectiveValues==null?0:objectiveValues.length;
+			eValues.setAttribute("numberOfObj", iObjs+"");
 			if(iObjs == 0) return true;
 			if(iObjs != m_iObjectiveNumber) return false;
+			int iCount = 0;
 			for(int i = 0; i < iObjs; i++){
 				if(!Double.isNaN(objectiveValues[i])){
+					iCount++;
 					Element eObj = m_document.createElement("obj");	
 					eObj.setAttribute("idx", (-i-1)+"");
-					eObj.appendChild(m_document.createTextNode(objectiveValues[i]+""));
+					String sValue = "";
+					if(Double.isInfinite(objectiveValues[i]) && objectiveValues[i] < 0) sValue = "-INF";
+					else if(Double.isInfinite(objectiveValues[i]) && objectiveValues[i] > 0) sValue = "INF";
+					else sValue = objectiveValues[i]+"";
+					eObj.appendChild(m_document.createTextNode(sValue));
 					eValues.appendChild(eObj);				
 				}
 			}
+			eValues.setAttribute("numberOfObj", iCount+"");
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		return true;
-	}//setObjectiveValues
+	}//setObjectiveValuesDense
 
+	/**
+	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param objectiveValues holds a sparse structure of objective values to set.
+	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
+	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 * 
+	 * @return whether objective values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setObjectiveValuesSparse(int solIdx, ObjectiveValues objectiveValues){
+		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
+		if(eOptimization == null) return false;
+		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
+		if(solIdx >= vSolutions.size()) return false;
+		Element eSolution = (Element)vSolutions.elementAt(solIdx);
+		if(eSolution == null){
+			eSolution = m_document.createElement("solution");
+		}
+		Node nodeRef = null;
+		try{
+			Element eObjectives = (Element)XMLUtil.findChildNode(eSolution, "objectives");
+			if(eObjectives == null){
+				eObjectives = m_document.createElement("objectives");	
+				nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
+				if(nodeRef == null){
+					nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
+				}
+				eSolution.insertBefore(eObjectives, nodeRef);
+			}
+			if(objectiveValues == null){
+				XMLUtil.removeChildrenByName(eObjectives, "values");
+				return true;
+			}
+			Element eValues = (Element)XMLUtil.findChildNode(eObjectives, "values");
+			if(eValues == null){
+				eValues = m_document.createElement("values");	
+				eObjectives.insertBefore(eValues, eObjectives.getFirstChild());									
+			}
+			XMLUtil.removeAllChildren(eValues);
+			int iObjs = objectiveValues==null?0:objectiveValues.numberOfObj;
+			eValues.setAttribute("numberOfObj", iObjs+"");
+			if(iObjs == 0) return true;
+			if(iObjs != m_iObjectiveNumber) return false;
+			int iCount = 0;
+			for(int i = 0; i < iObjs; i++){
+				if(!Double.isNaN(objectiveValues.obj[i].value)){
+					iCount++;
+					Element eObj = m_document.createElement("obj");	
+					eObj.setAttribute("idx", objectiveValues.obj[i].idx+"");
+					String sValue = "";
+					if(Double.isInfinite(objectiveValues.obj[i].value) && objectiveValues.obj[i].value < 0) sValue = "-INF";
+					else if(Double.isInfinite(objectiveValues.obj[i].value) && objectiveValues.obj[i].value > 0) sValue = "INF";
+					else sValue = objectiveValues.obj[i].value+"";
+					eObj.appendChild(m_document.createTextNode(sValue));
+					eValues.appendChild(eObj);				
+				}
+			}
+			eValues.setAttribute("numberOfObj", iCount+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setObjectiveValuesSparse
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)objective-related results, 
@@ -2873,12 +3399,13 @@ public class OSrLWriter extends OSgLWriter{
 				eObjectives = m_document.createElement("objectives");	
 				nodeRef = XMLUtil.findChildNode(eSolution, "constraints");
 				if(nodeRef == null){
-					nodeRef = XMLUtil.findChildNode(eSolution, "other");
+					nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
 				}
 				eSolution.insertBefore(eObjectives, nodeRef);
 			}
 			XMLUtil.removeChildrenByName(eObjectives, "other");
 			int iOthers = otherObjectiveResults==null?0:otherObjectiveResults.length;
+			eObjectives.setAttribute("numberOfOtherObjectiveResults", iOthers+"");
 			if(iOthers == 0) return true;
 			for(int i = 0; i < iOthers; i++){
 				Element eOther = m_document.createElement("other");
@@ -2892,9 +3419,10 @@ public class OSrLWriter extends OSgLWriter{
 					eOther.setAttribute("description", otherObjectiveResults[i].description);					
 				}
 				if(otherObjectiveResults[i].value != null && otherObjectiveResults[i].value.length() > 0){
-					eOther.appendChild(m_document.createTextNode(otherObjectiveResults[i].value));
+					eOther.setAttribute("value", otherObjectiveResults[i].value);
 				}
 				int iObjs = (otherObjectiveResults[i]==null || otherObjectiveResults[i].obj == null)?0:otherObjectiveResults[i].obj.length;
+				eOther.setAttribute("numberOfObj", iObjs+"");
 				if(iObjs > 0){
 					for(int j = 0; j < iObjs; j++){
 						Element eObj = m_document.createElement("obj");	
@@ -2920,12 +3448,12 @@ public class OSrLWriter extends OSgLWriter{
 	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the dual variable values. 
-	 * @param values holds a double dense array of variable dual values to set; it could be null if all values are 0.
+	 * @param dualVariableValues holds a double dense array of variable dual values to set; it could be null if all values are 0.
 	 * 
 	 * @return whether dual variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	public boolean setDualVariableValues(int solIdx, double[] values){
+	public boolean setDualVariableValuesDense(int solIdx, double[] dualVariableValues){
 		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
 		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
 		if(eOptimization == null) return false;
@@ -2940,49 +3468,113 @@ public class OSrLWriter extends OSgLWriter{
 			Element eConstraints = (Element)XMLUtil.findChildNode(eSolution, "constraints");
 			if(eConstraints == null){
 				eConstraints = m_document.createElement("constraints");	
-				nodeRef = XMLUtil.findChildNode(eSolution, "other");
+				nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
 				eSolution.insertBefore(eConstraints, nodeRef);
+			}
+			if(dualVariableValues == null){
+				XMLUtil.removeChildrenByName(eConstraints, "dualValues");
+				return true;
 			}
 			Element eDualValues = (Element)XMLUtil.findChildNode(eConstraints, "dualValues");
 			if(eDualValues == null){
 				eDualValues = m_document.createElement("dualValues");	
-				nodeRef = XMLUtil.findChildNode(eConstraints, "slacks");
-				if(nodeRef == null){
-					nodeRef = XMLUtil.findChildNode(eConstraints, "allowableIncreases");
-					if(nodeRef == null){
-						nodeRef = XMLUtil.findChildNode(eConstraints, "allowableDecreases");
-						if(nodeRef == null){
-							nodeRef = XMLUtil.findChildNode(eConstraints, "ovFunctions");
-							if(nodeRef == null){
-								nodeRef = XMLUtil.findChildNode(eConstraints, "other");
-							}
-						}
-
-					}
-				}
+				nodeRef = XMLUtil.findChildNode(eConstraints, "other");
 				eConstraints.insertBefore(eDualValues, nodeRef);
 			}
 			XMLUtil.removeAllChildren(eDualValues);
 			int iCons;
-			iCons = values == null?0:values.length;
+			iCons = dualVariableValues == null?0:dualVariableValues.length;
+			eDualValues.setAttribute("numberOfCon", iCons+"");
 			if(iCons == 0) return true;
 			if(iCons != m_iConstraintNumber) return false;
+			int iCount = 0;
 			for(int i = 0; i < iCons; i++){
-				Element eCon = m_document.createElement("con");	
-				eCon.setAttribute("idx", i+"");
-				if(values[i] != 0){
-					eCon.appendChild(m_document.createTextNode(values[i]+""));
+				if(dualVariableValues[i] != 0){
+					iCount++;
+					Element eCon = m_document.createElement("con");	
+					eCon.setAttribute("idx", i+"");
+					String sValue = "";
+					if(Double.isInfinite(dualVariableValues[i]) && dualVariableValues[i] < 0) sValue = "-INF";
+					else if(Double.isInfinite(dualVariableValues[i]) && dualVariableValues[i] > 0) sValue = "INF";
+					else sValue = dualVariableValues[i]+"";
+					eCon.appendChild(m_document.createTextNode(sValue));
+					eDualValues.appendChild(eCon);				
 				}
-				eDualValues.appendChild(eCon);				
 			}
+			eDualValues.setAttribute("numberOfCon", iCount+"");
 		}
 		catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 		return true;
-	}//setDualVariableValues
+	}//setDualVariableValuesDense
 
+	/**
+	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the dual variable values. 
+	 * @param dualVariableValues holds a sparse structure of variable dual values to set; it could be null if all values are 0.
+	 * 
+	 * @return whether dual variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setDualVariableValuesSparse(int solIdx, DualVariableValues dualVariableValues){
+		if(m_iVariableNumber == -1 || m_iObjectiveNumber == -1 || m_iConstraintNumber == -1 || m_iSolutionNumber == -1) return false;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
+		if(eOptimization == null) return false;
+		Vector<Element> vSolutions= XMLUtil.getChildElementsByTagName(eOptimization, "solution");
+		if(solIdx >= vSolutions.size()) return false;
+		Element eSolution = (Element)vSolutions.elementAt(solIdx);
+		if(eSolution == null){
+			eSolution = m_document.createElement("solution");
+		}
+		Node nodeRef = null;
+		try{
+			Element eConstraints = (Element)XMLUtil.findChildNode(eSolution, "constraints");
+			if(eConstraints == null){
+				eConstraints = m_document.createElement("constraints");	
+				nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
+				eSolution.insertBefore(eConstraints, nodeRef);
+			}
+			if(dualVariableValues == null){
+				XMLUtil.removeChildrenByName(eConstraints, "dualValues");
+				return true;
+			}
+			Element eDualValues = (Element)XMLUtil.findChildNode(eConstraints, "dualValues");
+			if(eDualValues == null){
+				eDualValues = m_document.createElement("dualValues");	
+				nodeRef = XMLUtil.findChildNode(eConstraints, "other");
+				eConstraints.insertBefore(eDualValues, nodeRef);
+			}
+			XMLUtil.removeAllChildren(eDualValues);
+			int iCons;
+			iCons = dualVariableValues == null?0:dualVariableValues.numberOfCon;
+			eDualValues.setAttribute("numberOfCon", iCons+"");
+			if(iCons == 0) return true;
+			if(iCons != m_iConstraintNumber) return false;
+			int iCount = 0;
+			for(int i = 0; i < iCons; i++){
+				if(dualVariableValues.con[i].value != 0){
+					iCount++;
+					Element eCon = m_document.createElement("con");	
+					eCon.setAttribute("idx", dualVariableValues.con[i].idx+"");
+					String sValue = "";
+					if(Double.isInfinite(dualVariableValues.con[i].value) && dualVariableValues.con[i].value < 0) sValue = "-INF";
+					else if(Double.isInfinite(dualVariableValues.con[i].value) && dualVariableValues.con[i].value > 0) sValue = "INF";
+					else sValue = dualVariableValues.con[i].value+"";
+					eCon.appendChild(m_document.createTextNode(sValue));
+					eDualValues.appendChild(eCon);				
+				}
+			}
+			eDualValues.setAttribute("numberOfCon", iCount+"");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}//setDualVariableValuesSparse
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)constraint-related results, 
@@ -3013,11 +3605,12 @@ public class OSrLWriter extends OSgLWriter{
 			Element eConstraints = (Element)XMLUtil.findChildNode(eSolution, "constraints");
 			if(eConstraints == null){
 				eConstraints = m_document.createElement("constraints");	
-				nodeRef = XMLUtil.findChildNode(eSolution, "other");
+				nodeRef = XMLUtil.findChildNode(eSolution, "otherSolutionResults");
 				eSolution.insertBefore(eConstraints, nodeRef);
 			}
 			XMLUtil.removeChildrenByName(eConstraints, "other");
 			int iOthers = otherConstraintResults==null?0:otherConstraintResults.length;
+			eConstraints.setAttribute("numberOfOtherConstraintResults", iOthers+"");
 			if(iOthers == 0) return true;
 			for(int i = 0; i < iOthers; i++){
 				Element eOther = m_document.createElement("other");
@@ -3031,9 +3624,10 @@ public class OSrLWriter extends OSgLWriter{
 					eOther.setAttribute("description", otherConstraintResults[i].description);					
 				}
 				if(otherConstraintResults[i].value != null && otherConstraintResults[i].value.length() > 0){
-					eOther.appendChild(m_document.createTextNode(otherConstraintResults[i].value));
+					eOther.setAttribute("value", otherConstraintResults[i].value);		
 				}
 				int iCons = (otherConstraintResults[i]==null || otherConstraintResults[i].con == null)?0:otherConstraintResults[i].con.length;
+				eOther.setAttribute("numberOfCon", iCons+"");
 				if(iCons > 0){
 					for(int j = 0; j < iCons; j++){
 						Element eCon = m_document.createElement("con");	
@@ -3059,11 +3653,11 @@ public class OSrLWriter extends OSgLWriter{
 	 * where i equals the given solution index.  These other results are usually on the general optimization, 
 	 * not specifically on the variables, objective, or constraints.  
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param ohterSolverOuput holds an array of other optimization results in OtherOptimizationResult[] array data structure, null if none. 
-	 * Each other optimization result contains the name (required), an optional description (string) and an optional
+	 * @param otherSolutionResults holds an array of other optimization solution results in OtherSolutionResult[] array data structure, null if none. 
+	 * Each other optimization solution result contains the name (required), an optional category, an optional description (string) and an optional
 	 * value (string).  
-	 * @return whether the other optimization results are set successfully or not. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherOptimizationResult
+	 * @return whether the other optimization solution results are set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult
 	 * @see #setSolutionNumber(int)
 	 */
 	public boolean setOtherOptimizationSolutionResults(int solIdx, OtherSolutionResult[] otherSolutionResults){
@@ -3096,9 +3690,6 @@ public class OSrLWriter extends OSgLWriter{
 					else{
 						eOtherSolutionResult.setAttribute("name", otherSolutionResults[i].name);
 					}
-					if(otherSolutionResults[i].type != null && otherSolutionResults[i].type.length() > 0){
-						eOtherSolutionResult.setAttribute("type", otherSolutionResults[i].type);					
-					}
 					if(otherSolutionResults[i].category != null && otherSolutionResults[i].category.length() > 0){
 						eOtherSolutionResult.setAttribute("category", otherSolutionResults[i].category);					
 					}
@@ -3119,6 +3710,61 @@ public class OSrLWriter extends OSgLWriter{
 		return true;
 	}//setOtherOptimizationSolutionResults
 
+	/**
+	 * Set other optimization related solver output not specific to any solution. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param ohterSolverOuput holds an array of other optimization related solver output in OtherSolverOutput[] array data structure, null if none. 
+	 * Each other optimization solver output contains the name (required), an optional category an optional description (string) and an optional
+	 * value (string).  
+	 * @return whether the other optimization solver output are set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherSolverOutput
+	 * @see #setSolutionNumber(int)
+	 */
+	public boolean setOtherOptimizationSolverOuput(SolverOutput[] otherSolverOutput){
+		if(m_iSolutionNumber == -1) return false;
+		Element eOptimization = (Element)XMLUtil.findChildNode(m_eOSrL, "optimization");
+		if(eOptimization == null) return false;
+		if(otherSolverOutput == null || otherSolverOutput.length <= 0){
+			XMLUtil.removeChildrenByName(eOptimization, "otherSolverOutput");			
+		}
+		else{
+			try{
+				Element eOtherSolverOutput = (Element)XMLUtil.findChildNode(eOptimization, "otherSolverOutput");
+				if(eOtherSolverOutput == null){
+					eOtherSolverOutput = m_document.createElement("otherSolverOutput");	
+					Node nodeRef = XMLUtil.findChildNode(eOptimization, "osal");
+					eOptimization.insertBefore(eOtherSolverOutput, nodeRef);
+				}
+				int iOthers = otherSolverOutput==null?0:otherSolverOutput.length;
+				eOtherSolverOutput.setAttribute("numberOfOutputs", iOthers+"");
+				if(iOthers == 0) return true;
+				for(int i = 0; i < iOthers; i++){
+					Element eOutput = m_document.createElement("output");
+					if(otherSolverOutput[i].name == null || otherSolverOutput[i].name.length() <= 0){
+						return false;
+					}
+					else{
+						eOutput.setAttribute("name", otherSolverOutput[i].name);
+					}
+					if(otherSolverOutput[i].category != null && otherSolverOutput[i].category.length() > 0){
+						eOutput.setAttribute("category", otherSolverOutput[i].category);					
+					}
+					if(otherSolverOutput[i].description != null && otherSolverOutput[i].description.length() > 0){
+						eOutput.setAttribute("description", otherSolverOutput[i].description);					
+					}
+					if(otherSolverOutput[i].value != null && otherSolverOutput[i].value.length() > 0){
+						eOutput.appendChild(m_document.createTextNode(otherSolverOutput[i].value));
+					}
+					eOtherSolverOutput.appendChild(eOutput);
+				}
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
+	}//setOtherOptimizationSolverOuput
 	/**
 	 * Set the optimization analysis. 
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -3149,23 +3795,6 @@ public class OSrLWriter extends OSgLWriter{
 	}//setOSAnalysis
 
 	/**
-	 * Create the otherResult element and its most basic required structure.
-	 * @param name the name of the otherResult element. 
-	 * @param value the value of the otherResult element, empty String "" if no value. 
-	 * @param description holds the description of the otherResult element, empty String "" if none.
-	 * @return the otherResult element.
-	 */
-	protected Element createOther(String name, String value, String description){
-		Element eOtherResult = m_document.createElement("other");
-		eOtherResult.setAttribute("name", name);
-		eOtherResult.setAttribute("description", (description==null)?"":description);
-		if(value != null && value.length() > 0){
-			eOtherResult.appendChild(m_document.createTextNode(value));
-		}
-		return eOtherResult;
-	}//createOtherResult
-
-	/**
 	 * main for test purposes.
 	 *
 	 * </p>
@@ -3174,8 +3803,38 @@ public class OSrLWriter extends OSgLWriter{
 	 */
 	public static void main(String[] argv){
 		OSrLWriter osrlWriter = new OSrLWriter();
-		String sFileName = OSParameter.CODE_HOME + "OSRepository/test/osrl/osrl.osrl";
-		String sAnalysisFileName = OSParameter.CODE_HOME + "OSRepository/test/osal/osal.osal";
+		String sFileName = "/code/OSRepository/test/osrl/osrl.osrl";
+		String sAnalysisFileName = "/code/OSRepository/test/osal/osal.osal";
+		
+		String[] msNames={"n1", "n2"};
+		String[] msValues={"v1", "v2"};
+		String[] msDescriptions={"d1", "d2"};
+
+		DiskSpace diskSpace = new DiskSpace();
+		diskSpace.unit = "byte";
+		diskSpace.value = 3.2;
+		diskSpace.description = "diskspace desc";
+
+		MemorySize memory = new MemorySize();
+		memory.unit = "megabyte";
+		memory.value = 3.3;
+		memory.description = "memory size";
+
+		CPUNumber cpuNumber = new CPUNumber();
+		cpuNumber.value = 2;
+		cpuNumber.description = "cpuNumber";
+
+		CPUSpeed cpuSpeed = new CPUSpeed();
+		cpuSpeed.unit = "kilohertz";		
+		cpuSpeed.value = 4.4;
+		cpuSpeed.description = "cpudesc";
+		if(!osrlWriter.setAvailableDiskSpace(diskSpace)) System.out.println("setAvailableDiskSpace!");
+		if(!osrlWriter.setAvailableMemory(memory)) System.out.println("setAvailableMemory!");
+		if(!osrlWriter.setAvailableCPUNumber(cpuNumber)) System.out.println("setAvailableCPUNumber");
+		if(!osrlWriter.setAvailableCPUSpeed(cpuSpeed)) System.out.println("setAvailableCPUSpeed");
+		if(!osrlWriter.setSystemInformation("systemInformation")) System.out.println("setSystemInformation");
+		if(!osrlWriter.setOtherSystemResults(msNames, msValues, msDescriptions)) System.out.println("other system results");;
+
 
 		GeneralStatus status = new GeneralStatus();
 		status.type= "normal";
@@ -3199,45 +3858,32 @@ public class OSrLWriter extends OSgLWriter{
 		if(!osrlWriter.setJobID("my job ID")) System.out.println("job ID");
 		if(!osrlWriter.setSolverInvoked("my solver invoked")) System.out.println("solver invoked");
 		if(!osrlWriter.setResultTimeStamp(new GregorianCalendar())) System.out.println("time!");
+		if(!osrlWriter.setOtherGeneralResults(msNames, msValues, msDescriptions)) System.out.println("other general results");;
 
-/*
+
 		if(!osrlWriter.setCurrentState("busy")) System.out.println("setCurrentState!");
-//		if(!osrlWriter.setAvailableDiskSpace(1.2)) System.out.println("setAvailableDiskSpace!");
-//		if(!osrlWriter.setAvailableMemory(3.4)) System.out.println("setAvailableMemory!");
-		if(!osrlWriter.setCurrentJobCount(0)) System.out.println("setCurrentJobCount!");
-		if(!osrlWriter.setTotalJobsSoFar(100)) System.out.println("setTotalJobsSoFar!");
-//		if(!osrlWriter.setTimeLastJobEnded(new GregorianCalendar(2006, 1, 31, 15, 3, 4))) System.out.println("setTimeLastJobEnded!");
-//		if(!osrlWriter.setTimeLastJobTook(200.4)) System.out.println("setTimeLastJobTook!");
-		if(!osrlWriter.setTimeServiceStarted(new GregorianCalendar(2003, 1, 31, 15, 3, 4))) System.out.println("setTimeServiceStarted!");
-		if(!osrlWriter.setServiceUtilization(1.3)) System.out.println("setServiceUtilization!");
-		JobStatistics[] jobstatistics = new JobStatistics[2];
-		jobstatistics[0] = new JobStatistics();
-		jobstatistics[1] = new JobStatistics();
-		jobstatistics[0].jobID = "job0000";
-		jobstatistics[1].jobID = "job1111";
-		jobstatistics[0].duration = 2.3;
-		jobstatistics[0].startTime = new GregorianCalendar(2006, 1, 3);
-		jobstatistics[0].endTime = new GregorianCalendar(2006, 1, 4);
-		jobstatistics[0].scheduledStartTime = new GregorianCalendar(2006, 1, 3);
-		jobstatistics[0].state = "running";
-		JobDependencies dependencies = new JobDependencies();
-		dependencies.jobID = new String[2];
-		dependencies.jobID[0] = "333";
-		dependencies.jobID[1] = "aaa";
-		jobstatistics[0].dependencies = dependencies;	
-//		if(!osrlWriter.setJobStatistics(jobstatistics)) System.out.println("setJobStatistics!");
-		//		ProcessStatistics processStatistics = new ProcessStatistics();
-		//		processStatistics.jobs = new Jobs();
-		//		processStatistics.jobs.job = jobstatistics;
-		//		if(!osrlWriter.setProcessStatistics(processStatistics)) System.out.println("setJobStatistics!");
+		if(!osrlWriter.setCurrentJobCount(3)) System.out.println("setCurrentJobCount!");
+		if(!osrlWriter.setTotalJobsSoFar(4)) System.out.println("setTotalJobsSoFar");
+		if(!osrlWriter.setTimeServiceStarted(new GregorianCalendar())) System.out.println("setTimeServiceStarted");
+		if(!osrlWriter.setServiceUtilization(0.2)) System.out.println("setServiceUtilization!");
+		if(!osrlWriter.setOtherServiceResults(msNames, msValues, msDescriptions)) System.out.println("other service results");;
 
+		if(!osrlWriter.setJobStatus("waiting")) System.out.println("setJobStatus!");
+		if(!osrlWriter.setJobSubmitTime(new GregorianCalendar())) System.out.println("setJobSubmitTime!");
+		if(!osrlWriter.setScheduledStartTime(new GregorianCalendar())) System.out.println("setScheduledStartTime!");
+		if(!osrlWriter.setActualStartTime(new GregorianCalendar())) System.out.println("setActualStartTime!");
+		if(!osrlWriter.setEndTime(new GregorianCalendar())) System.out.println("setEndTime!");
 
-		String[] msOtherResultNames = {"other name 0", "other name 1"};
-		String[] msOtherResultValues = {"other value 0", "other value 1"};
-//		if(!osrlWriter.setOtherResults(msOtherResultNames, msOtherResultValues, null)) System.out.println("set other!");
+		String[] msTimingTypes = {"cpuTime", "cpuTime"};
+		String[] msTimingCategories = {"optimization", "input"};
+		String[] msTimingUnits = {"second", "second"};
+		String[] msTimingDescriptions = {"d1", "d2"};
+		double[] mdTimingValues = {1.1, 2.2};
+		if(!osrlWriter.setTimingInformation(msTimingTypes, msTimingCategories, msTimingUnits, msTimingDescriptions, mdTimingValues)) System.out.println("setTimingInformation!");
+		if(!osrlWriter.addTimingInformation("cpuTime", "total", "second", "d3", 3.3)) System.out.println("addTimingInformation!");
 
-//		if(!osrlWriter.addOtherResult("other name 2", "other value 2", null)) System.out.println("add other!");
-//		if(!osrlWriter.addOtherResult("other name 3", "other value 3", "other description 3")) System.out.println("add other!");
+		if(!osrlWriter.setOtherJobResults(msNames, msValues, msDescriptions)) System.out.println("other service results");;
+
 
 
 		osrlWriter.setVariableNumber(3);
@@ -3245,8 +3891,15 @@ public class OSrLWriter extends OSgLWriter{
 		osrlWriter.setConstraintNumber(4);
 		osrlWriter.setSolutionNumber(3);
 
+		OptimizationSolutionSubstatus substatus = new OptimizationSolutionSubstatus();
+		substatus.description = "sub desc";
+		substatus.type = "stoppedByBounds";
+		substatus.value = "abc";
+		OptimizationSolutionSubstatus[] mSubstatus = new OptimizationSolutionSubstatus[1];
+		mSubstatus[0] = substatus;
+
 		if(!osrlWriter.setSolutionStatus(0, "optimal", "solved", null)) System.out.println("setSolutionStatus");
-		if(!osrlWriter.setSolutionStatus(1, "infeasible", "solved", null)) System.out.println("setSolutionStatus");
+		if(!osrlWriter.setSolutionStatus(1, "infeasible", "solved", mSubstatus)) System.out.println("setSolutionStatus");
 		if(!osrlWriter.setSolutionStatus(2, "globallyOptimal", "solved", null)) System.out.println("setSolutionStatus");
 
 		if(!osrlWriter.setSolutionMessage(0, "sol0 message")) System.out.println("setSolutionMessage");
@@ -3254,65 +3907,69 @@ public class OSrLWriter extends OSgLWriter{
 		if(!osrlWriter.setSolutionMessage(2, "sol2 message")) System.out.println("setSolutionMessage");
 
 
-		if(!osrlWriter.setSolutionObjectiveIndex(0, -1)) System.out.println("setSolutionObjectiveIndex");
-		if(!osrlWriter.setSolutionObjectiveIndex(1, -1)) System.out.println("setSolutionObjectiveIndex");
-		if(!osrlWriter.setSolutionObjectiveIndex(2, -1)) System.out.println("setSolutionObjectiveIndex");
+		if(!osrlWriter.setSolutionTargetObjectiveIndex(0, -1)) System.out.println("setSolutionObjectiveIndex");
+		if(!osrlWriter.setSolutionTargetObjectiveIndex(1, -1)) System.out.println("setSolutionObjectiveIndex");
+		if(!osrlWriter.setSolutionTargetObjectiveIndex(2, -1)) System.out.println("setSolutionObjectiveIndex");
 
-		String[] msValues1 = {"a", "b", "c"};
-		if(!osrlWriter.setPrimalVariableStringValues(0, msValues1)) System.out.println("setPrimalVariableStringValues");
-		String[] msValues2 = {"b", "c", "d"};
-		if(!osrlWriter.setPrimalVariableStringValues(1, msValues2)) System.out.println("setPrimalVariableStringValues");
-		String[] msValues3 = {"c", "d", "e"};
-		if(!osrlWriter.setPrimalVariableStringValues(2, msValues3)) System.out.println("setPrimalVariableStringValues");
+		if(!osrlWriter.setSolutionTargetObjectiveIndex(0, -1)) System.out.println("setSolutionObjectiveIndex");
+		if(!osrlWriter.setSolutionWeightedObjectives(0, true)) System.out.println("setSolutionObjectiveIndex");
 
+		OtherObjectiveResult[] objOT1 = new OtherObjectiveResult[2];
+		objOT1[0] = new OtherObjectiveResult();	
+		objOT1[0].obj = new OtherObjResult[2];
+		objOT1[0].obj[0] = new OtherObjResult();
+		objOT1[0].name = "objOT1 name";
+		objOT1[0].description = "objOT1 description";
+		objOT1[0].value = "objOT1 value";		
+		objOT1[0].obj[0].idx = -1;
+		objOT1[0].obj[0].value = "a";
+		objOT1[0].obj[1] = new OtherObjResult();
+		objOT1[0].obj[1].idx = -2;
+		objOT1[0].obj[1].value = "b";
+		objOT1[1] = new OtherObjectiveResult();	
+		objOT1[1].name = "objOT2 name";
+		objOT1[1].description = "objOT2 description";
+		objOT1[1].value = "objOT2 value";		
+		objOT1[1].obj = new OtherObjResult[2];
+		objOT1[1].obj[0] = new OtherObjResult();
+		objOT1[1].obj[0].idx = -1;
+		objOT1[1].obj[0].value = "a";
+		objOT1[1].obj[1] = new OtherObjResult();
+		objOT1[1].obj[1].idx = -2;
+		objOT1[1].obj[1].value = "b";
+		if(!osrlWriter.setOtherObjectiveResults(0, objOT1)) System.out.println("setOtherObjectiveResults");
+		if(!osrlWriter.setOtherObjectiveResults(1, objOT1)) System.out.println("setOtherObjectiveResults");
+		if(!osrlWriter.setOtherObjectiveResults(2, objOT1)) System.out.println("setOtherObjectiveResults");
 
-		double[] mdValues1 = {1, 2, 3};
-		if(!osrlWriter.setPrimalVariableValues(0, mdValues1)) System.out.println("setPrimalVariableValues");
-		double[] mdValues2 = {2, 3, 4};
-		if(!osrlWriter.setPrimalVariableValues(1, mdValues2)) System.out.println("setPrimalVariableValues");
-		double[] mdValues3 = {3, 4, 5};
-		if(!osrlWriter.setPrimalVariableValues(2, mdValues3)) System.out.println("setPrimalVariableValues");
+		double[] mdValues11 = {1, Double.NaN};
+		//if(!osrlWriter.setObjectiveValuesDense(0, mdValues11)) System.out.println("setObjectiveValuesDense");
+		ObjectiveValues objectiveValues = new ObjectiveValues();
+		objectiveValues.numberOfObj = 2;
+		ObjValue[] mObjValues = new ObjValue[2];
+		mObjValues[0] = new ObjValue(); mObjValues[0].idx = -1;mObjValues[0].value = Double.NaN;
+		mObjValues[1] = new ObjValue(); mObjValues[1].idx = -2;mObjValues[1].value = 4.4;		
+		objectiveValues.obj = mObjValues; 
+		if(!osrlWriter.setObjectiveValuesSparse(0, objectiveValues)) System.out.println("setObjectiveValuesSparse");
 
-		double[] mdValues11 = {1, 2};
-		if(!osrlWriter.setObjectiveValues(0, mdValues11)) System.out.println("setObjectiveValues");
 		double[] mdValues22 = {2, 3};
-		if(!osrlWriter.setObjectiveValues(1, mdValues22)) System.out.println("setObjectiveValues");
+		if(!osrlWriter.setObjectiveValuesDense(1, mdValues22)) System.out.println("setObjectiveValuesDense");
 		double[] mdValues33 = {3, 4};
-		if(!osrlWriter.setObjectiveValues(2, mdValues33)) System.out.println("setObjectiveValues");
+		if(!osrlWriter.setObjectiveValuesDense(2, mdValues33)) System.out.println("setObjectiveValuesDense");
 
 		double[] mdValues77 = {4, 2, 3, 4};
-		if(!osrlWriter.setDualVariableValues(0, mdValues77)) System.out.println("setDualVariableValues");
+		//if(!osrlWriter.setDualVariableValuesDense(0, mdValues77)) System.out.println("setDualVariableValuesDense");
+		DualVariableValues dualVariableValues = new DualVariableValues();
+		dualVariableValues.numberOfCon = 4;
+		dualVariableValues.con = new DualVarValue[4];
+		dualVariableValues.con[0] = new DualVarValue(); dualVariableValues.con[0].idx = 0; dualVariableValues.con[0].value = 11.00;
+		dualVariableValues.con[1] = new DualVarValue(); dualVariableValues.con[1].idx = 1; dualVariableValues.con[1].value = 11.11;
+		dualVariableValues.con[2] = new DualVarValue(); dualVariableValues.con[2].idx = 2; dualVariableValues.con[2].value = 11.22;
+		dualVariableValues.con[3] = new DualVarValue(); dualVariableValues.con[3].idx = 3; dualVariableValues.con[3].value = 0;
+		if(!osrlWriter.setDualVariableValuesSparse(0, dualVariableValues)) System.out.println("setDualVariableValuesSparse");
 		double[] mdValues88 = {5, 3, 4, 5};
-		if(!osrlWriter.setDualVariableValues(1, mdValues88)) System.out.println("setDualVariableValues");
+		if(!osrlWriter.setDualVariableValuesDense(1, mdValues88)) System.out.println("setDualVariableValuesDense");
 		double[] mdValues99 = {6, 4, 5, 6};
-		if(!osrlWriter.setDualVariableValues(2, mdValues99)) System.out.println("setDualVariableValues");
-
-		OtherVariableResult[] varOT1 = new OtherVariableResult[2];
-		varOT1[0] = new OtherVariableResult();	
-		varOT1[0].var = new OtherVarResult[2];
-		varOT1[0].var[0] = new OtherVarResult();
-		varOT1[0].name = "varOT1 name";
-		varOT1[0].description = "varOT1 description";
-		varOT1[0].value = "varOT1 value";		
-		varOT1[0].var[0].idx = 0;
-		varOT1[0].var[0].value = "a";
-		varOT1[0].var[1] = new OtherVarResult();
-		varOT1[0].var[1].idx = 1;
-		varOT1[0].var[1].value = "b";
-		varOT1[1] = new OtherVariableResult();	
-		varOT1[1].name = "varOT2 name";
-		varOT1[1].description = "varOT2 description";
-		varOT1[1].value = "varOT2 value";		
-		varOT1[1].var = new OtherVarResult[2];
-		varOT1[1].var[0] = new OtherVarResult();
-		varOT1[1].var[0].idx = 0;
-		varOT1[1].var[0].value = "a";
-		varOT1[1].var[1] = new OtherVarResult();
-		varOT1[1].var[1].idx = 1;
-		varOT1[1].var[1].value = "b";
-		if(!osrlWriter.setOtherVariableResults(0, varOT1)) System.out.println("setOtherVariableResults");
-		if(!osrlWriter.setOtherVariableResults(1, varOT1)) System.out.println("setOtherVariableResults");
-		if(!osrlWriter.setOtherVariableResults(2, varOT1)) System.out.println("setOtherVariableResults");
+		if(!osrlWriter.setDualVariableValuesDense(2, mdValues99)) System.out.println("setDualVariableValuesDense");
 
 		OtherConstraintResult[] conOT1 = new OtherConstraintResult[2];
 		conOT1[0] = new OtherConstraintResult();	
@@ -3342,45 +3999,76 @@ public class OSrLWriter extends OSgLWriter{
 		if(!osrlWriter.setOtherConstraintResults(2, conOT1)) System.out.println("setOtherConstraintResults");
 
 
-		OtherObjectiveResult[] objOT1 = new OtherObjectiveResult[2];
-		objOT1[0] = new OtherObjectiveResult();	
-		objOT1[0].obj = new OtherObjResult[2];
-		objOT1[0].obj[0] = new OtherObjResult();
-		objOT1[0].name = "objOT1 name";
-		objOT1[0].description = "objOT1 description";
-		objOT1[0].value = "objOT1 value";		
-		objOT1[0].obj[0].idx = -1;
-		objOT1[0].obj[0].value = "a";
-		objOT1[0].obj[1] = new OtherObjResult();
-		objOT1[0].obj[1].idx = -2;
-		objOT1[0].obj[1].value = "b";
-		objOT1[1] = new OtherObjectiveResult();	
-		objOT1[1].name = "objOT2 name";
-		objOT1[1].description = "objOT2 description";
-		objOT1[1].value = "objOT2 value";		
-		objOT1[1].obj = new OtherObjResult[2];
-		objOT1[1].obj[0] = new OtherObjResult();
-		objOT1[1].obj[0].idx = -1;
-		objOT1[1].obj[0].value = "a";
-		objOT1[1].obj[1] = new OtherObjResult();
-		objOT1[1].obj[1].idx = -2;
-		objOT1[1].obj[1].value = "b";
-		if(!osrlWriter.setOtherObjectiveResults(0, objOT1)) System.out.println("setOtherObjectiveResults");
-		if(!osrlWriter.setOtherObjectiveResults(1, objOT1)) System.out.println("setOtherObjectiveResults");
-		if(!osrlWriter.setOtherObjectiveResults(2, objOT1)) System.out.println("setOtherObjectiveResults");
+		String[] msValues1 = {"a", "b", "c"};
+		if(!osrlWriter.setVariableStringValues(0, msValues1)) System.out.println("setVariableStringValues");
+		String[] msValues2 = {"b", "c", "d"};
+		if(!osrlWriter.setVariableStringValues(1, msValues2)) System.out.println("setVariableStringValues");
+		String[] msValues3 = {"c", "d", "e"};
+		if(!osrlWriter.setVariableStringValues(2, msValues3)) System.out.println("setVariableStringValues");
 
-//		OtherOptimizationResult[] otherOpt = new OtherOptimizationResult[2];
-//		otherOpt[0] = new OtherOptimizationResult();
-//		otherOpt[0].name = "othetOpt0 name";
-//		otherOpt[0].value = "othetOpt0 value";
-//		otherOpt[0].description = "othetOpt0 description";
-//		otherOpt[1] = new OtherOptimizationResult();
-//		otherOpt[1].name = "othetOpt1 name";
-//		otherOpt[1].value = "othetOpt1 value";
-//		otherOpt[1].description = "othetOpt1 description";
-//		if(!osrlWriter.setOtherOptimizationResults(0, otherOpt)) System.out.println("setOtherOptimizationResults");
-//		if(!osrlWriter.setOtherOptimizationResults(1, otherOpt)) System.out.println("setOtherOptimizationResults");
-//		if(!osrlWriter.setOtherOptimizationResults(0, otherOpt)) System.out.println("setOtherOptimizationResults");
+
+		double[] mdValues1 = {1, 2, 3};
+		//if(!osrlWriter.setVariableValuesDense(0, mdValues1)) System.out.println("setVariableValuesDense");
+		VariableValues variableValues = new VariableValues();
+		variableValues.numberOfVar = 3;
+		variableValues.var = new VarValue[3];
+		variableValues.var[0] = new VarValue(); variableValues.var[0].idx = 0; variableValues.var[0].value = 111.00;
+		variableValues.var[1] = new VarValue(); variableValues.var[1].idx = 0; variableValues.var[1].value = 111.11;
+		variableValues.var[2] = new VarValue(); variableValues.var[2].idx = 0; variableValues.var[2].value = 0;
+		if(!osrlWriter.setVariableValuesSparse(0, variableValues)) System.out.println("setVariableValuesSparse");
+		double[] mdValues2 = {2, 3, 4};
+		if(!osrlWriter.setVariableValuesDense(1, mdValues2)) System.out.println("setVariableValuesDense");
+		double[] mdValues3 = {3, 4, 5};
+		if(!osrlWriter.setVariableValuesDense(2, mdValues3)) System.out.println("setVariableValuesDense");
+
+		String[] msBasisStatus1 = {"unknown", "basic", "atLower"};
+		if(!osrlWriter.setVariableBasisStatuses(0, msBasisStatus1)) System.out.println("setVariableBasisStatuses");
+		String[] msBasisStatus2 = {"basic", "atLower", "atUpper"};
+		if(!osrlWriter.setVariableBasisStatuses(1, msBasisStatus2)) System.out.println("setVariableBasisStatuses");
+		String[] msBasisStatus3 = {"atLower", "atUpper", "superBasic"};
+		if(!osrlWriter.setVariableBasisStatuses(2, msBasisStatus3)) System.out.println("setVariableBasisStatuses");
+
+
+		OtherVariableResult[] varOT1 = new OtherVariableResult[2];
+		varOT1[0] = new OtherVariableResult();	
+		varOT1[0].var = new OtherVarResult[2];
+		varOT1[0].var[0] = new OtherVarResult();
+		varOT1[0].name = "varOT1 name";
+		varOT1[0].description = "varOT1 description";
+		varOT1[0].value = "varOT1 value";		
+		varOT1[0].var[0].idx = 0;
+		varOT1[0].var[0].value = "a";
+		varOT1[0].var[1] = new OtherVarResult();
+		varOT1[0].var[1].idx = 1;
+		varOT1[0].var[1].value = "b";
+		varOT1[1] = new OtherVariableResult();	
+		varOT1[1].name = "varOT2 name";
+		varOT1[1].description = "varOT2 description";
+		varOT1[1].value = "varOT2 value";		
+		varOT1[1].var = new OtherVarResult[2];
+		varOT1[1].var[0] = new OtherVarResult();
+		varOT1[1].var[0].idx = 0;
+		varOT1[1].var[0].value = "a";
+		varOT1[1].var[1] = new OtherVarResult();
+		varOT1[1].var[1].idx = 1;
+		varOT1[1].var[1].value = "b";
+		if(!osrlWriter.setOtherVariableResults(0, varOT1)) System.out.println("setOtherVariableResults");
+		if(!osrlWriter.setOtherVariableResults(1, varOT1)) System.out.println("setOtherVariableResults");
+		if(!osrlWriter.setOtherVariableResults(2, varOT1)) System.out.println("setOtherVariableResults");
+
+
+		SolverOutput[] otherSolverOutput = new SolverOutput[2];
+		otherSolverOutput[0] = new SolverOutput();
+		otherSolverOutput[0].name = "othetOpt0 name";
+		otherSolverOutput[0].category = "othetOpt0 cat";
+		otherSolverOutput[0].value = "othetOpt0 value";
+		otherSolverOutput[0].description = "othetOpt0 description";
+		otherSolverOutput[1] = new SolverOutput();
+		otherSolverOutput[1].name = "othetOpt1 name";
+		otherSolverOutput[1].category = "othetOpt1 cat";
+		otherSolverOutput[1].value = "othetOpt1 value";
+		otherSolverOutput[1].description = "othetOpt1 description";
+		if(!osrlWriter.setOtherOptimizationSolverOuput(otherSolverOutput)) System.out.println("setOtherOptimizationSolverOuput");
 
 		OSaLReader osalReader = new OSaLReader(false);
 		if(!osalReader.readFile(sAnalysisFileName)) System.out.println("reading");
@@ -3407,7 +4095,7 @@ public class OSrLWriter extends OSgLWriter{
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		*/
+
 		///////////////////////
 		System.out.println(osrlWriter.writeToString());
 	}//main
