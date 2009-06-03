@@ -82,6 +82,7 @@ OS/applications/fileUpload/OSFileUpload.cpp -text
 OS/applications/fileUpload/OSFileUpload.java -text
 OS/configure -text
 OS/configure.ac -text
+OS/data/OSSolverTests.xls -text
 OS/data/amplFiles/bonminEx1.mod -text
 OS/data/amplFiles/bonminEx1.nl -text
 OS/data/amplFiles/hs71.mod -text
