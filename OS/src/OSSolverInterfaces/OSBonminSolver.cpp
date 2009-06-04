@@ -384,7 +384,12 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 // returns the value of the objective function
 bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
 	try{
-		obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
+		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+			obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];	
+  		}else{// we have a max
+			obj_value  = -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
+		}
+		
 	}
 	catch(const ErrorClass& eclass){
 		bonminErrorMsg = eclass.errormsg;
@@ -408,7 +413,11 @@ bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* gr
 		throw;  
 	}
   	for(i = 0; i < n; i++){
-  		grad_f[ i]  = objGrad[ i];
+		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+			grad_f[ i]  = objGrad[ i];
+		}else{
+			grad_f[ i]  = -objGrad[ i];
+		}
   		//std::cout << grad_f[ i]  << std::endl;
   	}
 //std::cout << "DONE WITH Calculate Objective function gradient " << std::endl;
@@ -737,24 +746,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		
 
 		// see if we have a linear program
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
-		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) 
-			//app->Options()->SetStringValue("hessian_approximation", "limited-memory");
-		// if it is a max problem call scaling and set to -1
-		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
-  			//app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
-  		}
-
-		std::cout << "Finish Bonmin Optimize" << std::endl;
-		//std::cout << "Finish writing the osrl" << std::endl;
-		//std::cout << osrl << std::endl;
-		//OSrLReader *osrlreader;
-		//osrlreader = new OSrLReader();
-		//OSResult *osresult2 = osrlreader->readOSrL( osrl);
-		//*osresult = *osresult2;
-		//delete osrlreader;
-		//osrlreader = NULL;
-		
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");	
 	    std::cout << "STATUS =  " << tminlp->status << std::endl;
 	    status = tminlp->status;
 	    writeResult();
