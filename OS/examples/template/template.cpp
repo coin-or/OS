@@ -56,7 +56,7 @@ int main(int argC, char* argV[]){
 	cout << "Start Building the Model" << endl;
 	std::cout << "Hello World" << std::endl;
 
-	std::string osilFileName =   "../../data/osilFiles/muer.osil";
+	std::string osilFileName =   "../../data/osilFiles/muer2.osil";
 	std::cout << "Try to read a sample file" << std::endl;
 	std::cout << "The file is: " ;
 	std::cout <<  osilFileName << std::endl;
@@ -67,70 +67,13 @@ int main(int argC, char* argV[]){
 	osinstance = osilreader->readOSiL( osil);	
 	std::string theModel;
 	
-	
-	const double a = (993./880.);
-	const double b = (89./880.); 
-	 
-	double x = 1.5;
-	
-	std::cout << std::tanh( (a + b * x * x) * x ) << std::endl;
-	std::cout << erf( x) << std::endl;
-	
-	
-
-
-	#if 0
-	//WRITE STDOUT  TO A FILE -- C LEVEL stuff
-	//http://bytes.com/groups/cpp/133393-usage-rdbuf
-	ostringstream solverOutput;
-	FILE * pFile;
-	FILE * pFile2;
-	pFile2 = freopen("os.log", "w", stdout);
-	//if (pFile==NULL) throw ErrorClass ("Error opening file for stdout");
-	std::cout << "LINE 1 OUTPUT "  << std::endl;  //cout will get diverted
-	printf("LINE 2 OUTPUT \n"); // printf will get diverted
-	fclose( pFile2);
-	pFile = fopen("os.log", "r");
-	char c;
-   	while (!feof( stdout)) {
-		c = fgetc (stdout);
-		if(c !=-1) solverOutput << c;
-      }
-	fileUtil->writeFileFromString("kipp.txt", solverOutput.str() );
-	#endif
-	
-	#if  0
-	//WRITE COUT TO A STRING -- this C++ stuff -- it will NOT write stdout, e.g. printf()
-	ostringstream solverOutput;
-	std::streambuf* save_buffer = cout.rdbuf(solverOutput.rdbuf()); //turn off cout
-	std::cout << "LINE 1 OUTPUT " << std::endl ;  //this should get diverted
-	printf("LINE 2 OUTPUT \n") ; //this will not get diverted
-	cout.rdbuf(save_buffer); // turn cout back on
-	std::cout << "LINE 3 OUTPUT " << std::endl;
-	// now the string
-	std::cout << solverOutput.str() << std::endl;
-	#endif  
-	
-	//DEMO -- how to empty the string buffer
-	ostringstream outStr;
-	outStr << "Hello";
-	outStr << " World" ;
-	outStr << std::endl;
-	std::cout << outStr.str() << std::endl;
-	outStr.str("");
-	outStr << "New" << std::endl;
-	std::cout << outStr.str() << std::endl;
-	
-
-
-
 
 
 	
 	//osinstance->initForAlgDiff( );
 	//OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( 0);
-	std::cout << osinstance->getNonlinearExpressionTreeInInfix( 0) << std::endl;
-	std::cout << osinstance->printModel( 0) << std::endl;
+	//std::cout << osinstance->getNonlinearExpressionTreeInInfix( 0) << std::endl;
+	//std::cout << osinstance->printModel( 0) << std::endl;
 	try{
 		//osinstance->getNonlinearExpressionTreeInInfix( -1);
 		theModel = osinstance->printModel( );

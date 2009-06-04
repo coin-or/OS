@@ -1796,6 +1796,13 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							tmpStack.push( "cos( "+ tmp1  + ")");
 							break;
 							
+						case OS_SQRT :
+							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing cos operater ");
+							tmp1 = tmpStack.top();
+							tmpStack.pop();
+							tmpStack.push( "sqrt( "+ tmp1  + ")");
+							break;
+							
 						case OS_MIN :
 							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing min operater");
 							//std::cout << "INSIDE Min NODE " << std::endl;
@@ -1949,9 +1956,7 @@ std::string OSInstance::printModel(int rowIdx ){
 	int j;
 	int row_nonz = 0;
 	int obj_nonz = 0;
-	//get the Amatrix in row format;
-	if(m_linearConstraintCoefficientsInRowMajor == NULL) 
-		m_linearConstraintCoefficientsInRowMajor = this->getLinearConstraintCoefficientsInRowMajor();;
+
 	
 	// initialize all of the necessary nonlinear stuff
 	this->initForAlgDiff( );	
@@ -1962,14 +1967,18 @@ std::string OSInstance::printModel(int rowIdx ){
 			outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
 			outStr << " <= ";
 		}
-		
-		row_nonz = m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx + 1] - m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx];
-		for(j = 0; j < row_nonz; j++){
-			outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
-			outStr << "*";
-			outStr << "x_";
-			outStr << m_linearConstraintCoefficientsInRowMajor->indexes[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j];
-			if( j < row_nonz - 1) outStr << " + ";
+		//
+		if(this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+			if(m_linearConstraintCoefficientsInRowMajor == NULL) 
+				m_linearConstraintCoefficientsInRowMajor = this->getLinearConstraintCoefficientsInRowMajor();
+			row_nonz = m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx + 1] - m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx];
+			for(j = 0; j < row_nonz; j++){
+				outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
+				outStr << "*";
+				outStr << "x_";
+				outStr << m_linearConstraintCoefficientsInRowMajor->indexes[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j];
+				if( j < row_nonz - 1) outStr << " + ";
+			}
 		}
 	}else{// process an objective function
 		if(m_bProcessObjectives != true ) this->processObjectives() ;
