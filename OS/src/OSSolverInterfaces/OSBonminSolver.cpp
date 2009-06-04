@@ -715,6 +715,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 	if( this->bSetSolverOptions == false) setSolverOptions();
 
 	try{
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
 		double start = CoinCpuTime();
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
@@ -743,10 +744,6 @@ void BonminSolver::solve() throw (ErrorClass) {
 			     <<std::endl
 			     <<E.message()<<std::endl;
 		  }
-		
-
-		// see if we have a linear program
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");	
 	    std::cout << "STATUS =  " << tminlp->status << std::endl;
 	    status = tminlp->status;
 	    writeResult();
@@ -801,7 +798,12 @@ void BonminSolver::writeResult(){
 				std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+					*(z + 0)  =  bb.bestObj();	
+				}else{// we have a max
+					*(z + 0)  =  -bb.bestObj();
+				}
+				
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.bestSolution()[i];
@@ -817,7 +819,11 @@ void BonminSolver::writeResult(){
 				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+					*(z + 0)  =  bb.bestObj();	
+				}else{// we have a max
+					*(z + 0)  =  -bb.bestObj();
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
@@ -831,7 +837,11 @@ void BonminSolver::writeResult(){
 				std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
 				/* Retrieve the solution */
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+					*(z + 0)  =  bb.bestObj();	
+				}else{// we have a max
+					*(z + 0)  =  -bb.bestObj();
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
@@ -845,7 +855,11 @@ void BonminSolver::writeResult(){
 				std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
 				/* Retrieve the solution */
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+					*(z + 0)  =  bb.bestObj();	
+				}else{// we have a max
+					*(z + 0)  = - bb.bestObj();
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];

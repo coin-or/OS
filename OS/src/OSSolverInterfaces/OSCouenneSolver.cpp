@@ -205,8 +205,13 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		for ( i = 0; i < nterms; ++i){
 			if( sv->values[ i]  > 0 || sv->values[ i]  < 0){
 				lin[i].first = couenne->Var( sv->indexes[ i] );
-				lin[i].second = sv->values[ i];
-				std::cout << "ADDING AN OBJECTIVE FUNCTION COEFFICIENT " << std::endl;
+				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+					lin[i].second = sv->values[ i];
+				}else{
+					lin[i].second = -sv->values[ i];
+					
+				}
+				
 			}
 			
 		}
@@ -216,20 +221,22 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
 		if (exptree != NULL) {
 			expression** nl = new expression*[1];
-			nl[0] = createCouenneExpression(exptree->m_treeRoot);
+			if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+				nl[0] = createCouenneExpression( exptree->m_treeRoot );
+			}else{
+				nl[ 0] = new exprOpp(createCouenneExpression( exptree->m_treeRoot) );
+				
+			}
+			
 			body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, nl,1);
 		} else {
 			body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);		
 			std::cout << "THERE WERE NO NONLINEAR TERMS IN THE OBJECTIVE FUNCTION "  << std::endl;	
 		}
 	
-		if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
-			couenne->addObjective(body, "min");
-		}
-		else{
-			throw ErrorClass( "Problem must be minimimization and not maximization");
-		} 
 		
+		couenne->addObjective(body, "min");
+
 		// get the constraints in row format
 		
 		SparseMatrix* sm =  osinstance->getLinearConstraintCoefficientsInRowMajor();
@@ -688,7 +695,11 @@ void CouenneSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+					*(z + 0)  =  bb.bestObj();
+				}else{
+					*(z + 0)  =  -bb.bestObj();
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.bestSolution()[i];
@@ -704,7 +715,11 @@ void CouenneSolver::writeResult(){
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+					*(z + 0)  =  bb.bestObj();
+				}else{
+					*(z + 0)  =  -bb.bestObj();
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
@@ -718,7 +733,11 @@ void CouenneSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+					*(z + 0)  =  bb.bestObj();
+				}else{
+					*(z + 0)  =  -bb.bestObj();
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
@@ -732,7 +751,11 @@ void CouenneSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
 				/* Retrieve the solution */
 				//
-				*(z + 0)  =  bb.bestObj();
+				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+					*(z + 0)  =  bb.bestObj();
+				}else{
+					*(z + 0)  =  -bb.bestObj();
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
