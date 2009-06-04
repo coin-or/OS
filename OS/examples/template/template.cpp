@@ -56,7 +56,7 @@ int main(int argC, char* argV[]){
 	cout << "Start Building the Model" << endl;
 	std::cout << "Hello World" << std::endl;
 
-	std::string osilFileName =   "../../data/osilFiles/muer2.osil";
+	std::string osilFileName =   "../../data/osilFiles/HS071_NLP.osil";
 	std::cout << "Try to read a sample file" << std::endl;
 	std::cout << "The file is: " ;
 	std::cout <<  osilFileName << std::endl;

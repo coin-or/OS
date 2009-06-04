@@ -190,20 +190,20 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
 		
 		int nterms = sv->number;
-		int nterms_actual = 0;
+		//int nterms_actual = 0;
 		
 		//make sure we don't put a zero in
 		
 		
 		
-		for(i = 0; i < nterms; i++){
-			if( sv->values[ i]  > 0 || sv->values[ i]  < 0){
-				nterms_actual++;
-			}
-		}
-		exprGroup::lincoeff lin( nterms_actual);
+		//for(i = 0; i < nterms; i++){
+		//	if( sv->values[ i]  > 0 || sv->values[ i]  < 0){
+		//		nterms_actual++;
+		//	}
+		//}
+		//exprGroup::lincoeff lin( nterms_actual);
+		exprGroup::lincoeff lin( nterms);
 		for ( i = 0; i < nterms; ++i){
-			if( sv->values[ i]  > 0 || sv->values[ i]  < 0){
 				lin[i].first = couenne->Var( sv->indexes[ i] );
 				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
 					lin[i].second = sv->values[ i];
@@ -211,12 +211,9 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 					lin[i].second = -sv->values[ i];
 					
 				}
-				
-			}
-			
 		}
 		
-		std::cout << "CONSTANT TERM =  " << osinstance->getObjectiveConstants()[0] << std::endl;
+		//std::cout << "CONSTANT TERM =  " << osinstance->getObjectiveConstants()[0] << std::endl;
 		
 		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
 		if (exptree != NULL) {
