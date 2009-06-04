@@ -190,18 +190,6 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
 		
 		int nterms = sv->number;
-		//int nterms_actual = 0;
-		
-		//make sure we don't put a zero in
-		
-		
-		
-		//for(i = 0; i < nterms; i++){
-		//	if( sv->values[ i]  > 0 || sv->values[ i]  < 0){
-		//		nterms_actual++;
-		//	}
-		//}
-		//exprGroup::lincoeff lin( nterms_actual);
 		exprGroup::lincoeff lin( nterms);
 		for ( i = 0; i < nterms; ++i){
 				lin[i].first = couenne->Var( sv->indexes[ i] );
@@ -212,9 +200,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 					
 				}
 		}
-		
-		//std::cout << "CONSTANT TERM =  " << osinstance->getObjectiveConstants()[0] << std::endl;
-		
+				
 		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
 		if (exptree != NULL) {
 			expression** nl = new expression*[1];
