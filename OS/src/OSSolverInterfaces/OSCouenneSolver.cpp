@@ -516,9 +516,10 @@ void CouenneSolver::solve() throw (ErrorClass) {
 #define PRINTED_PRECISION 1e-5
 	const int infeasible = 1;
 	//double time_start = CoinCpuTime();
+	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+	if(this->bSetSolverOptions == false) setSolverOptions() ;
 	try{
-		if( this->bCallbuildSolverInstance == false) buildSolverInstance();
-		if(this->bSetSolverOptions == false) setSolverOptions() ;
+
 		//couenne->print();
 		
 		char **argv = NULL;

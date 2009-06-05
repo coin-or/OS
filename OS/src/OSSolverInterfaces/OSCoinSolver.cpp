@@ -592,14 +592,20 @@ bool CoinSolver::setCoinPackedMatrix(){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
+		throw ErrorClass( osrl) ;
 	}
 } // end setCoinPackedMatrix
 
 void CoinSolver::solve() throw (ErrorClass) {
-	// make sure the solver instance exists
-	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
-	if( this->bSetSolverOptions == false) setSolverOptions();
+	try{
+		// make sure the solver instance exists
+		if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+		//set the options
+		if( this->bSetSolverOptions == false) setSolverOptions();
+	}
+	catch(const ErrorClass& eclass){
+		throw ErrorClass( osrl) ;
+	}
 	
 	// resultHeader information
 	if(osresult->setServiceName("Solved with Coin Solver: " + sSolverName) != true)
@@ -722,7 +728,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
+		throw ErrorClass( osrl) ;
 	}
 } // end solve
 
@@ -753,7 +759,7 @@ std::string CoinSolver::getCoinSolverType(std::string lcl_osol){
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
-		throw ;
+		throw ErrorClass( osrl) ;
 	}
 } // end getCoinSolverType
 

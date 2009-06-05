@@ -628,7 +628,9 @@ void solve(){
 #ifdef DEBUG_CL_INTERFACE
 				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
 #endif
-				solverType->osinstance = osilreader->readOSiL( osoptions->osil );
+				solverType->osinstance = NULL;
+				solverType->osil = osoptions->osil;
+				//solverType->osinstance = osilreader->readOSiL( osoptions->osil );
 				// set solver options if there is an OSoL file  kippster
 				if(osoptions->osol != ""){
 					osolreader = new OSoLReader();
