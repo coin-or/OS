@@ -702,16 +702,16 @@ void solve(){
 	catch(const ErrorClass& eclass){
 		if(osoptions->osrlFile != ""){
 		
-			OSResult *osresult = NULL;
-			OSrLWriter *osrlwriter = NULL;
-			osrlwriter = new OSrLWriter();
-			osresult = new OSResult();
-			osresult->setGeneralMessage( eclass.errormsg);
-			osresult->setGeneralStatusType( "error");
-			std::string osrl = osrlwriter->writeOSrL( osresult);
-			delete osresult;
-			delete osrlwriter;
-			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			//OSResult *osresult = NULL;
+			//OSrLWriter *osrlwriter = NULL;
+			//osrlwriter = new OSrLWriter();
+			//osresult = new OSResult();
+			//osresult->setGeneralMessage( eclass.errormsg);
+			//osresult->setGeneralStatusType( "error");
+			//std::string osrl = osrlwriter->writeOSrL( osresult);
+			//delete osresult;
+			//delete osrlwriter;
+			fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
 			if(osoptions->browser != ""){
 				std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
 				const char *ch = &str[ 0];
@@ -719,16 +719,16 @@ void solve(){
 			}
 		}
 		else{
-			OSResult *osresult = NULL;
-			OSrLWriter *osrlwriter = NULL;
-			osrlwriter = new OSrLWriter();
-			osresult = new OSResult();
-			osresult->setGeneralMessage( eclass.errormsg);
-			osresult->setGeneralStatusType( "error");
-			std::string osrl = osrlwriter->writeOSrL( osresult);
-			std::cout << osrl << std::endl;
-			delete osresult;
-			delete osrlwriter;
+			//OSResult *osresult = NULL;
+			//OSrLWriter *osrlwriter = NULL;
+			//osrlwriter = new OSrLWriter();
+			//osresult = new OSResult();
+			//osresult->setGeneralMessage( eclass.errormsg);
+			//osresult->setGeneralStatusType( "error");
+			//std::string osrl = osrlwriter->writeOSrL( osresult);
+			std::cout <<  eclass.errormsg << std::endl;
+			//delete osresult;
+			//delete osrlwriter;
 		}
 	}	
 	if(osilreader != NULL) delete osilreader;

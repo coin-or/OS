@@ -711,10 +711,10 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 
 //void BonminSolver::solve() throw (ErrorClass) {
 void BonminSolver::solve() throw (ErrorClass) {
-	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
-	if( this->bSetSolverOptions == false) setSolverOptions();
-
+		if( this->bCallbuildSolverInstance == false) buildSolverInstance();
+		if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
+
 		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
 		double start = CoinCpuTime();
 		//OSiLWriter osilwriter;
