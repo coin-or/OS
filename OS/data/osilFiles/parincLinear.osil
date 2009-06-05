@@ -4,8 +4,8 @@
    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<name>Par Inc. </name>
-		<source>Anderson, Sweeney, and Williams</source>
-		<description> A production scheduling problem </description>
+		<source>Anderson, Sweeney, Williams, Camm and Martin</source>
+		<description> A linear production scheduling problem: optimal solution is x0 = 540 and x1 = 252 for optimal objective function value of 7668. </description>
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
