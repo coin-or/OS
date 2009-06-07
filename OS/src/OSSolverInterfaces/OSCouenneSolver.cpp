@@ -541,6 +541,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci = new CouenneInterface();
  		const std::string  prefix="bonmin.";
 
+
 		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
 		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
 				couenneSetup.options(),//GetRawPtr( options), 

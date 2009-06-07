@@ -799,9 +799,12 @@ void BonminSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
 				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
-					*(z + 0)  =  bb.bestObj();	
+					//*(z + 0)  =  bb.bestObj();	
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
 				}else{// we have a max
-					*(z + 0)  =  -bb.bestObj();
+					//*(z + 0)  =  -bb.bestObj();
+					*(z + 0)  =  -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+
 				}
 				
 				osresult->setObjectiveValuesDense(solIdx, z); 
@@ -820,9 +823,12 @@ void BonminSolver::writeResult(){
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
 				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
-					*(z + 0)  =  bb.bestObj();	
+					//*(z + 0)  =  bb.bestObj();	
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
 				}else{// we have a max
-					*(z + 0)  =  -bb.bestObj();
+					//*(z + 0)  =  -bb.bestObj();
+					*(z + 0)  =  -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+
 				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
@@ -838,9 +844,12 @@ void BonminSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
 				/* Retrieve the solution */
 				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
-					*(z + 0)  =  bb.bestObj();	
+					//*(z + 0)  =  bb.bestObj();	
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
 				}else{// we have a max
-					*(z + 0)  =  -bb.bestObj();
+					//*(z + 0)  =  -bb.bestObj();
+					*(z + 0)  =  -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+
 				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
@@ -856,9 +865,12 @@ void BonminSolver::writeResult(){
 				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
 				/* Retrieve the solution */
 				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
-					*(z + 0)  =  bb.bestObj();	
+					//*(z + 0)  =  bb.bestObj();	
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
 				}else{// we have a max
-					*(z + 0)  = - bb.bestObj();
+					//*(z + 0)  =  -bb.bestObj();
+					*(z + 0)  =  -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+
 				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
