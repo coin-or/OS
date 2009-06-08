@@ -16,7 +16,7 @@ ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/
 ThirdParty/Mumps https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/trunk
 DyLP           https://projects.coin-or.org/svn/DyLP/trunk/DyLP
 Ipopt          https://projects.coin-or.org/svn/Ipopt/releases/3.6.1/Ipopt
-cppad         https://projects.coin-or.org/svn/CppAD/trunk
+cppad         https://projects.coin-or.org/svn/CppAD/releases/20090303.0
 Bonmin         https://projects.coin-or.org/svn/Bonmin/trunk/Bonmin 
 Couenne https://projects.coin-or.org/svn/Couenne/trunk/Couenne
 
