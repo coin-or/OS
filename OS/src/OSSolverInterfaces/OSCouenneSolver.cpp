@@ -541,18 +541,17 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci = new CouenneInterface();
  		const std::string  prefix="bonmin.";
 
-
 		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
 		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
 				couenneSetup.options(),//GetRawPtr( options), 
 				couenneSetup.journalist(),//GetRawPtr(jnlst),  
-				prefix, GetRawPtr( tminlp) );	
+				 GetRawPtr( tminlp) );	
 	      	
 		std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
  		app_ = new Bonmin::IpoptSolver(couenneSetup.roptions(),//GetRawPtr(roptions),  
 					       couenneSetup.options(),//GetRawPtr( options), 					       
-					       couenneSetup.journalist(),//GetRawPtr(jnlst),  
-					       prefix); 		
+					       couenneSetup.journalist()//GetRawPtr(jnlst),  
+					       ); 		
  	
 	      	
 		std::cout << "INITIALIZE COUENNE MODEL" << std::endl;

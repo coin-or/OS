@@ -9,8 +9,8 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x" lb="-10" ub="10" type="I"/>
-			<var name="y" lb="-10" ub="10" type="I"/>
+			<var name="x" lb="-10" ub="10" type="C"/>
+			<var name="y" lb="-10" ub="10" type="C"/>
 		</variables>
 		<objectives numberOfObjectives="1">
 			<obj maxOrMin="min" numberOfObjCoef="0"> </obj>
@@ -31,7 +31,7 @@
 			<value>
 				<el>1.0</el>
 				<el>1.0</el>
-			</value>
+			</value> 
 		</linearConstraintCoefficients>
 		<nonlinearExpressions numberOfNonlinearExpressions="1">
 			<nl idx="-1">
