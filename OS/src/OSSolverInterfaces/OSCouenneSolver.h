@@ -32,6 +32,9 @@
 #include "OSResult.h"
 #include "OSOption.h"
 
+
+//#include "BonIpoptSolver.hpp"
+
 //Couenne stuff
 //#include "CouenneProblem.hpp"
 class CouenneProblem;
@@ -137,6 +140,8 @@ public:
 	SmartPtr<BonminProblem> tminlp;
 	
 	Ipopt::SmartPtr<TNLPSolver> app_ ;
+	
+	//SmartPtr<Bonmin::IpoptSolver> app_ ;
 	
 	// this is a Bonmin BonCbc object;
 	Bab bb;

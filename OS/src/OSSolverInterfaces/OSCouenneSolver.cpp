@@ -56,15 +56,13 @@
 //Bonmin stuff
 
 #include "BonOsiTMINLPInterface.hpp"
-
-
-
+#include "BonIpoptSolver.hpp"
 
 
 #include "CoinTime.hpp"
 #include "BonminConfig.h"
 #include "BonCouenneInterface.hpp"
-#include "BonIpoptSolver.hpp"
+
 
 #include "BonCouenneSetup.hpp"
 

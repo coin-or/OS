@@ -1,3 +1,4 @@
+//$Id$
 /** @file OSSolverService.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
@@ -91,7 +92,6 @@
 
 
 using std::ostringstream;
-
 
 
 #ifdef COIN_HAS_KNITRO    
@@ -419,6 +419,7 @@ int main(int argC, const char* argV[])
 }
 
 void solve(){
+using namespace  Ipopt;
 	std::string osrl = "";
 	OSiLReader *osilreader = NULL; 
 	OSoLReader *osolreader = NULL;
