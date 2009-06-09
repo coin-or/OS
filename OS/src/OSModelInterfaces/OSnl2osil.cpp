@@ -660,14 +660,16 @@ bool OSnl2osil::createOSInstance(){
 	{
 		colStart = colEnd;
 		colEnd   = A_colstarts[i+1];
-		cout << "col " << i << " from " << colStart << " to " << colEnd - 1 << endl;
+		//cout << "col " << i << " from " << colStart << " to " << colEnd - 1 << endl;
 		for (j = colStart; j < colEnd; j++)
 		{
 			if (fabs(A_vals[ j]) > OS_EPS)
 			{	A_vals[ j-nCoefSqueezed] = A_vals[ j];
 				A_rownos[ j-nCoefSqueezed] = A_rownos[j];
 			}
-			else {cout << "squeeze out element " << j << endl; nCoefSqueezed++;}
+			else {
+			//cout << "squeeze out element " << j << endl; nCoefSqueezed++;
+			}
 		}
 		A_colstarts[i+1] = A_colstarts[i+1] - nCoefSqueezed;
 	}
