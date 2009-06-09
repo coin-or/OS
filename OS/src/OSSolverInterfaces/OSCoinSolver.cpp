@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file CoinSolver.cpp
  * 
  * \brief This file defines the CoinSolver class.

@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file IpoptSolver.cpp
  * 
  * \brief This file defines the IpoptSolver class.

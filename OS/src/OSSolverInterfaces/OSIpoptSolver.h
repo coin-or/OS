@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file IpoptSolver.h
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 

@@ -1,3 +1,4 @@
+/* $Id$ */
 #ifndef OS_var_hpp
 #define OS_var_hpp
 

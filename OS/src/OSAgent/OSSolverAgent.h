@@ -1,3 +1,4 @@
+/* $Id$ */
 /** \file OSSolverAgent.h
  * 
  *

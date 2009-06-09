@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file osssparservariables.h
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 

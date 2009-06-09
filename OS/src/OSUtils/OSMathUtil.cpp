@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file MathUtil.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 

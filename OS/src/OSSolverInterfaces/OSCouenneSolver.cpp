@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file CouenneSolver.cpp
  * 
  * \brief This file defines the Couenne Solver class.

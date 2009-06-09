@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file Base64.h
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 

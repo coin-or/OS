@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file LindoSolver.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 

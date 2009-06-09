@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file OSCouenneSolver.h
  * 
  * @author  Jun Ma, Gus Gassmann, Kipp Martin, 

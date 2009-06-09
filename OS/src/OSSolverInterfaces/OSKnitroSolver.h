@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file KnitroSolver.h
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 

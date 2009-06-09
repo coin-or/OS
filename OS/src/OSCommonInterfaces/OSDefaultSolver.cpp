@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file DefaultSolver.cpp
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 

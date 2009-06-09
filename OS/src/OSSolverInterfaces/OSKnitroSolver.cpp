@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file KnitroSolver.cpp
  * 
  * \brief This file defines the KnitroSolver class.

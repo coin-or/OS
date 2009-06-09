@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file parseosol.y
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,

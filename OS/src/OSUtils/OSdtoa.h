@@ -1,3 +1,4 @@
+/* $Id$ */
 /** @file MathUtil.h
  * 
  * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
