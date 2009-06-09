@@ -31,7 +31,6 @@
 #include "OSErrorClass.h"
 #include "OSmps2osil.h"   
 #include "OSBase64.h"
-#include "OSCommonUtil.h"
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
 #include "CoinError.hpp"
@@ -275,7 +274,7 @@ int main( ){
 		// finish garbage collection
 		
 		/******************** End SYMPHONY Example *************************/
-		
+#if 1	
 #ifdef COIN_HAS_COUENNE		
 		/******************** Start Couenne Example *************************/
 		
@@ -364,11 +363,14 @@ int main( ){
 		osoption = NULL;
 		delete osolwriter;
 		osolwriter = NULL;
+		delete nl2osil;
+		nl2osil = NULL;
 		// finish garbage collection
 		
 		/******************** End Couenne Example *************************/
 		
-#endif		
+#endif	
+#endif //end #if 0/1	
 
 		
 		delete fileUtil;

@@ -32,7 +32,6 @@
 #include "OSErrorClass.h"
 #include "OSmps2osil.h"   
 #include "OSBase64.h"
-#include "OSCommonUtil.h"
 #include "OSErrorClass.h"
 #include "CglGomory.hpp"
 #include "CglSimpleRounding.hpp"
@@ -70,13 +69,13 @@ int main( ){
 		cout << "Done writing the Model" << endl;
 		// now solve the model
 		CoinSolver *solver  = NULL;
-		solver = new CoinSolver();
-		solver->sSolverName ="clp"; 
+		solver = new CoinSolver();  
+		solver->sSolverName ="cbc"; 
 		solver->osinstance = osinstance;
 		solver->buildSolverInstance();
 		solver->osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
-		solver->osiSolver->initialSolve();
-		cout << "Here is the initial objective value "  << solver->osiSolver->getObjValue()  << endl;
+		//solver->osiSolver->initialSolve();
+		//cout << "Here is the initial objective value "  << solver->osiSolver->getObjValue()  << endl;
 		CglKnapsackCover cover;
 	    CglSimpleRounding round;  
 		CglGomory gomory;

@@ -223,11 +223,6 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		
 		SparseMatrix* sm =  osinstance->getLinearConstraintCoefficientsInRowMajor();
 		
-		if( sm){
-			sm->isColumnMajor = false;
-			// sm->bDeleteArrays = true;
-		}		
-		
 		int nconss = osinstance->getConstraintNumber();		
 		int row_nonz = 0;
 		int kount = 0;
@@ -541,6 +536,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
  		const std::string  prefix="bonmin.";
 
 		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
+		
 		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
 				couenneSetup.options(),//GetRawPtr( options), 
 				couenneSetup.journalist(),//GetRawPtr(jnlst),  
@@ -557,6 +553,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci->setModel( GetRawPtr( tminlp) );
 		std::cout << "INITIALIZE COUENNE SOLVER" << std::endl;
 		ci->setSolver( GetRawPtr( app_) );
+		// initialize causes lots of memory leaks
 		std::cout << "INITIALIZE COUENNE " << std::endl;
 		couenneSetup.InitializeCouenne(argv, couenne, ci);
 		std::cout << " CALL bb ( couenneSetup) " << std::endl;

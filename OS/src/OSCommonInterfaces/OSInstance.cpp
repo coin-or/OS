@@ -219,8 +219,11 @@ OSInstance::~OSInstance(){
 	
 	
 	
-	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
-	if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
+	//if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == true) delete m_linearConstraintCoefficientsInColumnMajor;
+	//if(m_bProcessLinearConstraintCoefficients == true && m_bColumnMajor == false) delete m_linearConstraintCoefficientsInRowMajor;
+	
+	if( m_linearConstraintCoefficientsInColumnMajor != NULL) delete m_linearConstraintCoefficientsInColumnMajor;
+	if (m_linearConstraintCoefficientsInRowMajor != NULL ) delete m_linearConstraintCoefficientsInRowMajor;
 	
 	
 	if( (m_binitForAlgDiff == true)  ){	
@@ -1944,7 +1947,14 @@ std::string OSInstance::printModel( ){
 		outStr << std::endl;
 	}	
 	
+	// if model was originaly in column matrix form we need to delete the new
+	// matrix stored by row
 	
+	//if( this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+	//	if(m_bColumnMajor == true){// we now have a duplication
+	//		delete m_linearConstraintCoefficientsInRowMajor;
+	//	}
+	//}
 	return outStr.str() ;
 }//printModel( )
 
