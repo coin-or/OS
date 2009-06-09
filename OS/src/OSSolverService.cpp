@@ -419,7 +419,6 @@ int main(int argC, const char* argV[])
 }
 
 void solve(){
-using namespace  Ipopt;
 	std::string osrl = "";
 	OSiLReader *osilreader = NULL; 
 	OSoLReader *osolreader = NULL;

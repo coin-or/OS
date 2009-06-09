@@ -29,7 +29,7 @@
 using std::cout; 
 using std::endl; 
 using std::ostringstream;
-using namespace Ipopt;
+//using namespace Ipopt;
 
 
 IpoptSolver::IpoptSolver() {
