@@ -19,7 +19,10 @@
 
 		<nonlinearExpressions numberOfNonlinearExpressions="1">
 			<nl idx="-1">
+
 				<plus> 
+
+<negate>
 					<power>
 						<minus>
 							<number type="real" value="1.0 "/>
@@ -27,13 +30,17 @@
 						</minus>
 						<number type="real"  value="2.0"/>
 					</power>
+</negate>
+
 					<times>
 						<number type="real" value="100"/>
 						<power>
 							<minus>
 								<variable coef="1.0" idx="1"/>
 								<power>
+
 									<variable  coef="1.0" idx="0"/>
+
 									<number type="real" value="2.0"/>    
 								</power>
 							</minus>
@@ -41,6 +48,7 @@
 						</power>
 					</times>
 				</plus>
+
 			</nl   >
 		</nonlinearExpressions>
 

@@ -116,10 +116,10 @@ CouenneSolver::~CouenneSolver() {
 		cout << "finish delete of couenne problem" << endl;
 	}
 	if(con_body != NULL){
-		//delete con_body;
+		delete con_body;
 	}
 	if(obj_body != NULL){
-		//delete obj_body;
+		delete obj_body;
 	}
 	if(m_osilreader != NULL) {
 		cout << "start delete of osinstance" << endl;
@@ -529,25 +529,32 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
 		
-		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
-				couenneSetup.options(),//GetRawPtr( options), 
-				couenneSetup.journalist(),//GetRawPtr(jnlst),  
-				 GetRawPtr( tminlp) );	
+		//ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
+		//		couenneSetup.options(),//GetRawPtr( options), 
+		//		couenneSetup.journalist(),//GetRawPtr(jnlst),  
+		//		 GetRawPtr( tminlp) );	
 	      	
 		std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
  		app_ = new Bonmin::IpoptSolver(couenneSetup.roptions(),//GetRawPtr(roptions),  
 					       couenneSetup.options(),//GetRawPtr( options), 					       
 					       couenneSetup.journalist()//GetRawPtr(jnlst),  
 					       ); 		
- 	
+						   
+						   
 	      	
 		std::cout << "INITIALIZE COUENNE MODEL" << std::endl;
 		ci->setModel( GetRawPtr( tminlp) );
 		std::cout << "INITIALIZE COUENNE SOLVER" << std::endl;
 		ci->setSolver( GetRawPtr( app_) );
 		// initialize causes lots of memory leaks
+		
+		
 		std::cout << "INITIALIZE COUENNE " << std::endl;
 		couenneSetup.InitializeCouenne(argv, couenne, ci);
+ 		
+		
+		
+
 		std::cout << " CALL bb ( couenneSetup) " << std::endl;
    		bb ( couenneSetup); // do branch and bound
    		std::cout << " END bb ( couenneSetup) " << std::endl;
@@ -578,12 +585,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
     std::cout << "STATUS =  " << tminlp->status << std::endl;
     status = tminlp->status;
     writeResult();
-    //osrl = osrlwriter->writeOSrL( osresult); 
-    	// temporarily delete
-		//delete ci;
-		//ci = NULL;
-		//delete couenne;
-		//couenne = NULL;
+	//if(ci  != NULL)  delete ci;
 	} //end try
 	
 	catch(const ErrorClass& eclass){

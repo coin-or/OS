@@ -808,19 +808,13 @@ AC_CONFIG_FILES([Makefile
           src/OSParsers/Makefile
           test/Makefile
           examples/instanceGenerator/Makefile
-          examples/algorithmicDiff/Makefile
-          examples/addCuts/Makefile
+          examples/cglCuts/Makefile
           examples/osModificationDemo/Makefile
           examples/osRemoteTest/Makefile
- 	  examples/osSolverDemo/Makefile
- 	  examples/osResultDemo/Makefile
+		 examples/osSolverDemo/Makefile
+		 examples/osResultDemo/Makefile
           examples/template/Makefile
           examples/branchCutPrice/Makefile
-          CoinAllExamples/instanceGenerator/Makefile
-          CoinAllExamples/osTestCode/Makefile
-          CoinAllExamples/addCuts/Makefile
-          CoinAllExamples/template/Makefile
-          CoinAllExamples/CppAD/Makefile
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
