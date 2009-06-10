@@ -247,8 +247,6 @@ OS/examples/Excel/OSWebServiceGUI.xlsm -text
 OS/examples/Excel/clsOSInstance.cls -text
 OS/examples/Excel/clsws_OSSolverServiceServic.cls -text
 OS/examples/Excel/parIncVBA.xlsm -text
-OS/examples/addCuts/Makefile.in -text
-OS/examples/addCuts/OSAddCuts.cpp -text
 OS/examples/algorithmicDiff/Makefile.in -text
 OS/examples/algorithmicDiff/OSAlgorithmicDiffTest.cpp -text
 OS/examples/branchCutPrice/AUTHORS -text
@@ -270,6 +268,8 @@ OS/examples/branchCutPrice/include/OS_packer.hpp -text
 OS/examples/branchCutPrice/include/OS_tm.hpp -text
 OS/examples/branchCutPrice/include/OS_user_data.hpp -text
 OS/examples/branchCutPrice/include/OS_var.hpp -text
+OS/examples/cglCuts/Makefile.in -text
+OS/examples/cglCuts/OSCglCuts.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/matlab/OSMatlabSolver.cpp -text
