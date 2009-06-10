@@ -149,7 +149,8 @@ public:
 	
 	TMINLP::SolverReturn status;
 	
-	
+	expression *con_body;	
+	expression *obj_body;
 
 
 	
