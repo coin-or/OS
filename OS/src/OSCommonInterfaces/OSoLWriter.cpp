@@ -380,9 +380,12 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
  */
 	if (m_OSOption->optimization != NULL)
 	{	outStr << "<optimization";
-		outStr << " numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
-		outStr << " numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
-		outStr << " numberOfConstraints=\"" << m_OSOption->optimization->numberOfConstraints << "\" ";
+		if (m_OSOption->optimization->numberOfVariables >= 0)
+			outStr << " numberOfVariables=\"" << m_OSOption->optimization->numberOfVariables << "\" ";
+		if (m_OSOption->optimization->numberOfObjectives >= 0)
+			outStr << " numberOfObjectives=\"" << m_OSOption->optimization->numberOfObjectives << "\" ";
+		if (m_OSOption->optimization->numberOfConstraints >= 0)
+			outStr << " numberOfConstraints=\"" << m_OSOption->optimization->numberOfConstraints << "\" ";
 		outStr << ">" << endl;
 		if (m_OSOption->optimization->variables != NULL)
 		{	outStr << "<variables";

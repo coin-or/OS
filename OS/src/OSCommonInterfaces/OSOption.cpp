@@ -1121,18 +1121,16 @@ SolverOptions::~SolverOptions()
 		{	delete solverOption[i];
 			solverOption[i] = NULL;
 		}
-		cout << "loop completed" << endl;
 		delete[] solverOption;
 		solverOption = NULL;
-		cout << "SolverOptions destructor completed" << endl;
 	}
 }//end SolverOptions destructor
 
 
 OptimizationOption::OptimizationOption(): 
-	numberOfVariables (0),
-	numberOfObjectives (1),
-	numberOfConstraints (0)
+	numberOfVariables (-1),
+	numberOfObjectives (-1),
+	numberOfConstraints (-1)
 {    
 	#ifdef DEBUG_OSOPTION
 	cout << "Inside OptimizationOption Constructor" << endl;
@@ -1809,7 +1807,7 @@ int OSOption::getNumberOfInitVarValues()
 			if (this->optimization->variables->initialVariableValues != NULL) 
 			{	
 				//cout << "initialVariableValues is not NULL: ";
-				cout << this->optimization->variables->initialVariableValues->numberOfVar << endl;
+				//cout << this->optimization->variables->initialVariableValues->numberOfVar << endl;
 				return this->optimization->variables->initialVariableValues->numberOfVar;
 			}
 		}
@@ -2470,8 +2468,6 @@ double* OSOption::getInitVarValuesDense()
 						else
 							throw ErrorClass("Variable index out of range");
 					}
-					cout << "Initial variables: (OSNAN = " << OSNAN << ")" << endl;
-					for (i = 0; i < numberOfVariables; i++) cout << m_mdInitVarValuesDense[i] << endl;
 					return m_mdInitVarValuesDense;
 				}
 			}
@@ -5656,7 +5652,7 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
 
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	cout << OSNAN << "   " << value[i] << "  " << CoinIsnan(value[i]) << endl;
+	{	//cout << OSNAN << "   " << value[i] << "  " << CoinIsnan(value[i]) << endl;
 		if (!CoinIsnan(value[i]))
 			if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
 				return false;
@@ -7517,7 +7513,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 			}
 			int i;
 			for (i = 0; i < numberOfVar; i++)
-			{	cout << "var[" << i << "] of " << numberOfVar << endl;
+			{	//cout << "var[" << i << "] of " << numberOfVar << endl;
 				if (!this->var[i]->IsEqual(that->var[i]))
 					return false;
 			}

@@ -1643,8 +1643,8 @@ initvarvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ($3 >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ($3 >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->idx = $3;
@@ -1704,8 +1704,8 @@ initvarstrvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ($3 >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ($3 >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->idx = $3;
@@ -1760,8 +1760,8 @@ initbasvarvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ($3 >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ($3 >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialBasisStatus->var[parserData->numberOfBasVar]->idx = $3;
@@ -1816,8 +1816,8 @@ intweightidxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ($3 >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ($3 >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->idx = $3;
@@ -1940,8 +1940,8 @@ sosweightvaridxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ($3 >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ($3 >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->idx = $3;
@@ -2093,8 +2093,8 @@ othervaroptionidx: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ($3 >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ($3 >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->idx = $3;
@@ -2184,8 +2184,8 @@ initobjvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 >= 0)
 		osolerror (NULL, osoption, parserData, "objective index must be negative");
-	if (parserData->numberOfObjectivesPresent)
-	{	if (-$3 > parserData->numberOfObjectives)
+	if (osoption->optimization->numberOfObjectives >= 0)
+	{	if (-$3 > osoption->optimization->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
 	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->idx = $3;
@@ -2247,8 +2247,8 @@ initobjboundidxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 >= 0)
 		osolerror (NULL, osoption, parserData, "objective index must be negative");
-	if (parserData->numberOfObjectivesPresent)
-	{	if (-$3 > parserData->numberOfObjectives)
+	if (osoption->optimization->numberOfObjectives >= 0)
+	{	if (-$3 > osoption->optimization->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
 	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->idx = $3;
@@ -2515,8 +2515,8 @@ initconvalueidxatt: IDXATT QUOTE INTEGER QUOTE
 	parserData->idxAttributePresent = true;
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
-	if (parserData->numberOfConstraintsPresent)
-	{	if ($3 > parserData->numberOfConstraints)
+	if (osoption->optimization->numberOfConstraints >= 0)
+	{	if ($3 > osoption->optimization->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
 	};
 	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->idx = $3;
@@ -2746,7 +2746,7 @@ otherconoptionidx: IDXATT QUOTE INTEGER QUOTE
 	if ($3 < 0)
 		osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
 	if (parserData->numberOfConstraintsPresent)
-	{	if ($3 >= parserData->numberOfConstraints)
+	{	if ($3 > parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
 	};
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = $3;
