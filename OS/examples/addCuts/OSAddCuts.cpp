@@ -74,8 +74,9 @@ int main( ){
 		solver->osinstance = osinstance;
 		solver->buildSolverInstance();
 		solver->osiSolver->setHintParam(OsiDoReducePrint, true, OsiHintTry);
-		//solver->osiSolver->initialSolve();
-		//cout << "Here is the initial objective value "  << solver->osiSolver->getObjValue()  << endl;
+		solver->osiSolver->initialSolve();
+		cout << "Here is the initial objective value "  << solver->osiSolver->getObjValue()  << endl;
+		
 		CglKnapsackCover cover;
 	    CglSimpleRounding round;  
 		CglGomory gomory;

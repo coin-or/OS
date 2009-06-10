@@ -1,6 +1,6 @@
 /** @file fileUpload.cpp
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
