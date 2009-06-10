@@ -19,7 +19,7 @@
 		<jobID>X12345-6789</jobID>
 	</general>
 	<system>
-		<minDiskSpace unit="megabyte">0</minDiskSpace>
+		<minDiskSpace unit="megabyte"> 0 </minDiskSpace>
 		<minMemorySize>1.0</minMemorySize>
 		<minCPUNumber>0</minCPUNumber>
 		<otherOptions numberOfOtherOptions="1">
@@ -84,9 +84,10 @@
 	</job>	
         <optimization numberOfObjectives="1" numberOfConstraints="4" numberOfVariables="10">
 		<variables numberOfOtherVariableOptions="2">
-			<initialVariableValues numberOfVar="2">
-					<var idx="0" value="0"/>
-					<var value="0" idx="1"/>
+			<initialVariableValues numberOfVar="3">
+					<var idx="0" value="1"/>
+					<var value="4.742999643577776e-2" idx="1"/>
+					<var idx="3" value="1.379408293215363"/>
 			</initialVariableValues>
 			<initialVariableValuesString numberOfVar="1">
 				<var idx="1" value="blue"></var>

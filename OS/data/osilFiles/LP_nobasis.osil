@@ -11,7 +11,7 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0"  lb="-INF"  />
+			<var name="x0" lb="-INF"  />
 			<var name="x1" lb="-INF"  />
 		</variables>
 		<objectives numberOfObjectives="1">
@@ -34,7 +34,7 @@
 				<el>0</el>
 			</rowIdx>
 			<value>
-				<el>1.</el>				
+				<el>1.0</el>				
 				<el>1.0</el>
 			</value>
 		</linearConstraintCoefficients>

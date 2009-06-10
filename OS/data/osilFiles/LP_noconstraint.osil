@@ -8,8 +8,8 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0"  lb="0" ub="10" />
-			<var name="x1" lb="0"  ub="10" />
+			<var name="x0" lb="0" ub="10" />
+			<var name="x1" lb="0" ub="10" />
 		</variables>
 		<objectives numberOfObjectives="1">
 			<obj maxOrMin="max"  numberOfObjCoef="2">
