@@ -116,10 +116,10 @@ CouenneSolver::~CouenneSolver() {
 		cout << "finish delete of couenne problem" << endl;
 	}
 	if(con_body != NULL){
-		delete con_body;
+		//delete con_body;
 	}
 	if(obj_body != NULL){
-		delete obj_body;
+		//delete obj_body;
 	}
 	if(m_osilreader != NULL) {
 		cout << "start delete of osinstance" << endl;
@@ -529,10 +529,10 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
 		
-		//ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
-		//		couenneSetup.options(),//GetRawPtr( options), 
-		//		couenneSetup.journalist(),//GetRawPtr(jnlst),  
-		//		 GetRawPtr( tminlp) );	
+		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
+				couenneSetup.options(),//GetRawPtr( options), 
+				couenneSetup.journalist(),//GetRawPtr(jnlst),  
+				 GetRawPtr( tminlp) );	
 	      	
 		std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
  		app_ = new Bonmin::IpoptSolver(couenneSetup.roptions(),//GetRawPtr(roptions),  
