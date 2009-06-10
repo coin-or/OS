@@ -633,6 +633,10 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		  
 		// Options can also be set by using a string with a format similar to the bonmin.opt file
 		bonminSetup.readOptionsString("bonmin.algorithm B-BB\n");
+		
+				//turn off a lot of output -- this can be overridden by using OSOptions
+		bonminSetup.options()->SetIntegerValue("bonmin.bb_log_level", 0 );
+		bonminSetup.options()->SetIntegerValue("bonmin.nlp_log_level", 0 );
 		  
 		// Now we can obtain the value of the new option
 		int printSolution;
@@ -722,7 +726,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
 		double duration = CoinCpuTime() - start;
-		cout << "Parsing took (seconds): "<< duration << endl;
+		//cout << "Parsing took (seconds): "<< duration << endl;
 
 		  try {
 			  bonminSetup.initialize( GetRawPtr(tminlp) );
@@ -745,7 +749,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 			     <<std::endl
 			     <<E.message()<<std::endl;
 		  }
-	    std::cout << "STATUS =  " << tminlp->status << std::endl;
+	   // std::cout << "STATUS =  " << tminlp->status << std::endl;
 	    status = tminlp->status;
 	    writeResult();
 
@@ -796,7 +800,7 @@ void BonminSolver::writeResult(){
 		switch( status){
 			case SUCCESS:
 				solutionDescription = "SUCCESS[BONMIN]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
 				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
@@ -818,7 +822,7 @@ void BonminSolver::writeResult(){
 			
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[BONMIN]: Maximum number of iterations exceeded.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
@@ -841,7 +845,7 @@ void BonminSolver::writeResult(){
 			
 			case STOP_AT_TINY_STEP:
 				solutionDescription = "STOP_AT_TINY_STEP[BONMIN]: Algorithm proceeds with very little progress.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
 				/* Retrieve the solution */
 				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
@@ -862,7 +866,7 @@ void BonminSolver::writeResult(){
 			
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[BONMIN]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
 				/* Retrieve the solution */
 				if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
@@ -883,49 +887,49 @@ void BonminSolver::writeResult(){
 			
 			case LOCAL_INFEASIBILITY:
 				solutionDescription = "LOCAL_INFEASIBILITY[BONMIN]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
 			break;
 			
 			case USER_REQUESTED_STOP:
 				solutionDescription = "USER_REQUESTED_STOP[BONMIN]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			
 			case DIVERGING_ITERATES:
 				solutionDescription = "DIVERGING_ITERATES[BONMIN]: It seems that the iterates diverge.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
 			break;
 			
 			case RESTORATION_FAILURE:
 				solutionDescription = "RESTORATION_FAILURE[BONMIN]: Restoration phase failed, algorithm doesn't know how to proceed.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			
 			case ERROR_IN_STEP_COMPUTATION:
 				solutionDescription = "ERROR_IN_STEP_COMPUTATION[BONMIN]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			
 			case INVALID_NUMBER_DETECTED:
 				solutionDescription = "INVALID_NUMcatBER_DETECTED[BONMIN]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			
 			case INTERNAL_ERROR:
 				solutionDescription = "INTERNAL_ERROR[BONMIN]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			
 			default:
 				solutionDescription = "OTHER[BONMIN]: other unknown solution status from Bonmin solver";
-				std::cout << solutionDescription << std::endl;
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 		}//switch end	
 		osresult->setGeneralStatusType("normal");
