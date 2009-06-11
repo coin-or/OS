@@ -561,9 +561,10 @@ if (SOLVER_TESTS){
 		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
-		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cbc.osol";
+		//osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cbc.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		//osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
 		solver = new CoinSolver();
@@ -575,12 +576,12 @@ if (SOLVER_TESTS){
 		cout << "call the COIN - Cbc Solver for p0033" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the COIN Cbc solver solution for p0033" << endl;
+		//cout << "Here is the COIN Cbc solver solution for p0033" << endl;
 		//cout << solver->osrl << endl;
 		check = 3089;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033.osil");
+		if (ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033.osil");
 		delete solver;
 		solver = NULL;
 		delete osilreader;
@@ -596,6 +597,46 @@ if (SOLVER_TESTS){
 
 if( THOROUGH == true){
 	// now test p0201.osil
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033.osil - node limit set" << endl << endl;
+		//std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
+		ok = true;
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
+		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cbc.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc";
+		solver->osil = osil;
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		solver->osoption   = NULL;
+		cout << "call the COIN - Cbc Solver for p0033" << endl;
+		solver->buildSolverInstance();
+		solver->solve();
+		//cout << "Here is the COIN Cbc solver solution for p0033" << endl;
+		//cout << solver->osrl << endl;
+		if( solver->osrl.find("node limit reached") != std::string::npos)
+			ok = true;
+		else
+			ok = false;
+		if (ok == false) throw ErrorClass(" Fail unit test with Cbc node limit on p0033.osil");
+		delete solver;
+		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		unitTestResult << "Solved problem p0033.osil with Cbc node limit" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
+	}
+
+
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0201.osil" << endl << endl;
 		ok = true;
@@ -1372,9 +1413,9 @@ if (THOROUGH == true){
 
 #if 0  // for some reason this gives a segfault --- HIG: investigate 
 
-		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockinteger.osil" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorigInt.osil" << endl << endl;
 		ok = true;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockinteger.osil";
+		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorigInt.osil";
 //		osolFileName = dataDir  + "osolFiles" + dirsep + "wayneQuadratic_Bonmin2.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 //		osol = fileUtil->getFileAsString( osolFileName.c_str());
@@ -1394,7 +1435,7 @@ if (THOROUGH == true){
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		std::cout << "check " << getObjVal( solver->osrl) << " against " << check << std::endl;
 		std::cout << "CALL NEAR_EQUAL" << std::endl;
-		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on rosenbrockinteger.osil");
+		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on rosenbrockorigInt.osil");
 		delete solver;
 		solver = NULL;
 		delete osilreader;
