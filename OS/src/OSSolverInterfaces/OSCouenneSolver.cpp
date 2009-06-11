@@ -148,6 +148,9 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		this->bCallbuildSolverInstance = true;
 		// do some initialization
 		
+		
+
+		
 		int i, j;
 		
 		if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
@@ -155,6 +158,8 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 			m_osilreader = new OSiLReader();
 			osinstance = m_osilreader->readOSiL( osil);
 		}	
+		
+
 		
 		//osinstance->initializeNonLinearStructures( );
 		osinstance->initForAlgDiff( );
@@ -551,15 +556,20 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		
 		std::cout << "INITIALIZE COUENNE " << std::endl;
 		couenneSetup.InitializeCouenne(argv, couenne, ci);
- 		
 		
 		
+		
+				
+		std::cout << std::endl << std::endl;
+		
+		std::cout << osinstance->printModel() << std::endl;
+	
 
 		std::cout << " CALL bb ( couenneSetup) " << std::endl;
    		bb ( couenneSetup); // do branch and bound
    		std::cout << " END bb ( couenneSetup) " << std::endl;
 
-
+		couenne->print();
     std::cout.precision (10);
 
     CouenneCutGenerator *cg = NULL;
@@ -571,7 +581,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
     double global_opt;
     couenneSetup.options () -> GetNumericValue ("couenne_check", global_opt, "couenne.");
-	std::cout << "Couenne Global Optimum Check Value = " << global_opt  << std::endl; 
+	//std::cout << "Couenne Global Optimum Check Value = " << global_opt  << std::endl; 
     //std::cout << "GET BEST POSSIBLE OBJ VALUE =  " << bb.model (). getBestPossibleObjValue ()  << std::endl;
     std::cout << "NUMBER OF NODES  =  " << bb.numNodes()  << std::endl;
     //std::cout << "BEST POSSIBLE OBJ VALUE =  " << bb.bestObj()  << std::endl;

@@ -1720,7 +1720,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing negate operater");
 							tmp1 = tmpStack.top();
 							tmpStack.pop();
-							tmpStack.push( "-( "+ tmp1  + ")");
+							tmpStack.push( "-"+ tmp1 );
 							break;
 							
 						case OS_TIMES :
@@ -1967,7 +1967,8 @@ std::string OSInstance::printModel(int rowIdx ){
 	int j;
 	int row_nonz = 0;
 	int obj_nonz = 0;
-
+	int varIdx = 0;
+	bool addedLinearTerm = false;
 	
 	// initialize all of the necessary nonlinear stuff
 	this->initForAlgDiff( );	
@@ -1983,12 +1984,19 @@ std::string OSInstance::printModel(int rowIdx ){
 			if(m_linearConstraintCoefficientsInRowMajor == NULL) 
 				m_linearConstraintCoefficientsInRowMajor = this->getLinearConstraintCoefficientsInRowMajor();
 			row_nonz = m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx + 1] - m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx];
+			
 			for(j = 0; j < row_nonz; j++){
-				outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
-				outStr << "*";
-				outStr << "x_";
-				outStr << m_linearConstraintCoefficientsInRowMajor->indexes[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j];
-				if( j < row_nonz - 1) outStr << " + ";
+				varIdx =  m_linearConstraintCoefficientsInRowMajor->indexes[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j];
+				
+				if(m_bSparseJacobianCalculated == false  ||  (m_mapExpressionTreesMod.find( rowIdx) == m_mapExpressionTreesMod.end() ) ||
+					( (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).find( varIdx) == (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).end()) ){					
+					outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
+					outStr << "*";
+					outStr << "x_";
+					outStr << varIdx;
+					if( j < row_nonz - 1) outStr << " + ";
+					addedLinearTerm = true;
+				}
 			}
 		}
 	}else{// process an objective function
@@ -2004,7 +2012,7 @@ std::string OSInstance::printModel(int rowIdx ){
 		}
 	}
 	if( this->getNonlinearExpressionTree( rowIdx) != NULL){
-		if( (row_nonz > 0)  || (obj_nonz > 0) ) outStr << " + " ;
+		if( (addedLinearTerm == true)  || (obj_nonz > 0) ) outStr << " + " ;
 		outStr << getNonlinearExpressionTreeInInfix( rowIdx);
 		//outStr << ")";
 	}
