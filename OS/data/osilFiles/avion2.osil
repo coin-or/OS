@@ -57,56 +57,7 @@
             <var name="_svar[49]" lb="1" ub="2"/>
         </variables>
         <objectives numberOfObjectives="1">
-            <obj maxOrMin="min" numberOfObjCoef="49">
-                <coef idx="0">0</coef>
-                <coef idx="1">0</coef>
-                <coef idx="2">0</coef>
-                <coef idx="3">0</coef>
-                <coef idx="4">0</coef>
-                <coef idx="5">0</coef>
-                <coef idx="6">0</coef>
-                <coef idx="7">0</coef>
-                <coef idx="8">0</coef>
-                <coef idx="9">0</coef>
-                <coef idx="10">0</coef>
-                <coef idx="11">0</coef>
-                <coef idx="12">0</coef>
-                <coef idx="13">0</coef>
-                <coef idx="14">0</coef>
-                <coef idx="15">0</coef>
-                <coef idx="16">0</coef>
-                <coef idx="17">0</coef>
-                <coef idx="18">0</coef>
-                <coef idx="19">0</coef>
-                <coef idx="20">0</coef>
-                <coef idx="21">0</coef>
-                <coef idx="22">0</coef>
-                <coef idx="23">0</coef>
-                <coef idx="24">0</coef>
-                <coef idx="25">0</coef>
-                <coef idx="26">0</coef>
-                <coef idx="27">0</coef>
-                <coef idx="28">0</coef>
-                <coef idx="29">0</coef>
-                <coef idx="30">0</coef>
-                <coef idx="31">0</coef>
-                <coef idx="32">0</coef>
-                <coef idx="33">0</coef>
-                <coef idx="34">0</coef>
-                <coef idx="35">0</coef>
-                <coef idx="36">0</coef>
-                <coef idx="37">0</coef>
-                <coef idx="38">0</coef>
-                <coef idx="39">0</coef>
-                <coef idx="40">0</coef>
-                <coef idx="41">0</coef>
-                <coef idx="42">0</coef>
-                <coef idx="43">0</coef>
-                <coef idx="44">0</coef>
-                <coef idx="45">0</coef>
-                <coef idx="46">0</coef>
-                <coef idx="47">0</coef>
-                <coef idx="48">0</coef>
+            <obj maxOrMin="min" numberOfObjCoef="0">
             </obj>
         </objectives>
         <constraints numberOfConstraints="15">

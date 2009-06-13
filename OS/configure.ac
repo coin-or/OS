@@ -770,6 +770,14 @@ AC_COIN_VPATH_LINK(data/amplFiles/hs71.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.dat)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/LP_infeasible.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/LP_infeasible.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/IP_infeasible.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/IP_infeasible.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.nl)
 ##
 ## mps test files
 ##

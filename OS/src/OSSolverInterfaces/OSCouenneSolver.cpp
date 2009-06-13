@@ -111,9 +111,9 @@ CouenneSolver::~CouenneSolver() {
 	#endif
 
 	if(couenne != NULL){
-		cout << "start delete of couenne problem" << endl;
+		//cout << "start delete of couenne problem" << endl;
 		///delete couenne;
-		cout << "finish delete of couenne problem" << endl;
+		//cout << "finish delete of couenne problem" << endl;
 	}
 	if(con_body != NULL){
 		//delete con_body;
@@ -122,9 +122,9 @@ CouenneSolver::~CouenneSolver() {
 		//delete obj_body;
 	}
 	if(m_osilreader != NULL) {
-		cout << "start delete of osinstance" << endl;
+		//cout << "start delete of osinstance" << endl;
 		delete m_osilreader;
-		cout << "end delete of osinstance" << endl;
+		//cout << "end delete of osinstance" << endl;
 	}
 	m_osilreader = NULL;
 	if(m_osolreader != NULL) delete m_osolreader;
@@ -138,7 +138,7 @@ CouenneSolver::~CouenneSolver() {
 	#ifdef DEBUG
 	cout << "leaving CouenneSolver destructor" << endl;
 	#endif
-	cout << "leaving CouenneSolver destructor" << endl;
+
 }
 
 
@@ -530,7 +530,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		CouenneInterface *ci = NULL;
 		
 		ci = new CouenneInterface();
- 		const std::string  prefix="bonmin.";
+ 		//const std::string  prefix="bonmin.";
 
 		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
 		
@@ -553,13 +553,36 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci->setSolver( GetRawPtr( app_) );
 		// initialize causes lots of memory leaks
 		
-		
+	
 		std::cout << "INITIALIZE COUENNE " << std::endl;
-		couenneSetup.InitializeCouenne(argv, couenne, ci);
-		
-		
-		
-				
+		bool setupInit = false;
+		setupInit = couenneSetup.InitializeCouenne(argv, couenne, ci);
+		if(setupInit == false){
+			std::string solutionDescription = "";
+			std::string message = "Couenne solver finishes to the end.";
+			int solIdx = 0;
+			if(osresult->setServiceName( "Couenne solver service") != true)
+				throw ErrorClass("OSResult error: setServiceName");
+			if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+				throw ErrorClass("OSResult error: setInstanceName");
+			if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+				throw ErrorClass("OSResult error: setVariableNumer");
+			if(osresult->setObjectiveNumber( 1) != true)
+				throw ErrorClass("OSResult error: setObjectiveNumber");
+			if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+				throw ErrorClass("OSResult error: setConstraintNumber");
+			if(osresult->setSolutionNumber(  1) != true)
+				throw ErrorClass("OSResult error: setSolutionNumer");		
+			if(osresult->setGeneralMessage( message) != true)
+				throw ErrorClass("OSResult error: setGeneralMessage");
+			solutionDescription = "COUENNE INITIALIZE PROBLEM: There was a problem with Couenne Initialize -- the problem could be infeasible";
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+			osresult->setGeneralStatusType("normal");
+			osrl = osrlwriter->writeOSrL( osresult);		
+			return;
+
+		}
+
 		std::cout << std::endl << std::endl;
 		
 		std::cout << osinstance->printModel() << std::endl;

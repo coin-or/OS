@@ -153,8 +153,6 @@ public:
 	expression *obj_body;
 
 
-	
-
 private:
 	OSrLWriter  *osrlwriter;
 	

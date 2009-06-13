@@ -1924,6 +1924,12 @@ std::string OSInstance::printModel( ){
 	outStr << std::endl;
 	outStr << "Objectives:" << std::endl;		
 	for(i = 0; i < numObj; i++){
+		if( this->getObjectiveMaxOrMins()[0] == "min"){
+			outStr << "min ";
+		}
+		else{
+			outStr << "max ";
+		}
 		outStr << this->printModel( i - numObj);
 	}	
 	outStr << std::endl;

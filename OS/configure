@@ -30721,6 +30721,46 @@ if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/parinc.nl"
 fi
 
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/volumeTest.mod"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/volumeTest.nl"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/LP_infeasible.mod"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/LP_infeasible.nl"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/IP_infeasible.mod"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/IP_infeasible.nl"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/LP_unbounded.mod"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/LP_unbounded.nl"
+fi
+
 ##
 ## mps test files
 ##
