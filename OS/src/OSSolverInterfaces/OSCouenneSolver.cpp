@@ -430,8 +430,8 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 		bSetSolverOptions = true;
 		couenneSetup.initializeOptionsAndJournalist();
 		//turn off a lot of output -- this can be overridden by using OSOptions
-		//couenneSetup.options()->SetIntegerValue("bonmin.bb_log_level", 0 );
-		//couenneSetup.options()->SetIntegerValue("bonmin.nlp_log_level", 0 );
+		couenneSetup.options()->SetIntegerValue("bonmin.bb_log_level", 0 );
+		couenneSetup.options()->SetIntegerValue("bonmin.nlp_log_level", 0 );
 		if(osoption == NULL && osol.length() > 0)
 		{
 			m_osolreader = new OSoLReader();

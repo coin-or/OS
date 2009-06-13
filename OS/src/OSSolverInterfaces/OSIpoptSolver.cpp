@@ -672,16 +672,16 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
 		/* set the default options */		
 		this->bSetSolverOptions = true;
-		/*
+		
 		app->Options()->SetNumericValue("tol", 1e-9);
 		app->Options()->SetIntegerValue("print_level", 0);
 		app->Options()->SetIntegerValue("max_iter", 20000);
 
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
-		*/
+	
 		/* end of the default options */
-		app->Options()->SetStringValue("mu_strategy", "adaptive");
+	
 		
 		if(osoption == NULL && osol.length() > 0)
 		{
