@@ -83,6 +83,12 @@ OS/applications/fileUpload/OSFileUpload.java -text
 OS/configure -text
 OS/configure.ac -text
 OS/data/OSSolverTests.xls -text
+OS/data/amplFiles/IP_infeasible.mod -text
+OS/data/amplFiles/IP_infeasible.nl -text
+OS/data/amplFiles/LP_infeasible.mod -text
+OS/data/amplFiles/LP_infeasible.nl -text
+OS/data/amplFiles/LP_unbounded.mod -text
+OS/data/amplFiles/LP_unbounded.nl -text
 OS/data/amplFiles/bonminEx1.mod -text
 OS/data/amplFiles/bonminEx1.nl -text
 OS/data/amplFiles/hs71.mod -text
@@ -92,6 +98,8 @@ OS/data/amplFiles/parinc.mod -text
 OS/data/amplFiles/parinc.nl -text
 OS/data/amplFiles/rbrockmod.mod -text
 OS/data/amplFiles/testAmpl.run -text
+OS/data/amplFiles/volumeTest.mod -text
+OS/data/amplFiles/volumeTest.nl -text
 OS/data/configFiles/kill.config -text
 OS/data/configFiles/testLocal.config -text
 OS/data/configFiles/testLocalMPS.config -text
