@@ -670,17 +670,24 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
-		/* set the default options */		
+		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
 		this->bSetSolverOptions = true;
-		
-		app->Options()->SetNumericValue("tol", 1e-9);
-		app->Options()->SetIntegerValue("print_level", 0);
+		/* set the default options */	
+		//app->Options()->SetNumericValue("tol", 1e-9);
+		//app->Options()->SetIntegerValue("print_level", 0);
 		app->Options()->SetIntegerValue("max_iter", 20000);
-
+		app->Options()->SetNumericValue("bound_relax_factor", 0, true, true);
+		app->Options()->SetStringValue("mu_strategy", "adaptive", true, true);
 		app->Options()->SetStringValue("output_file", "ipopt.out");
 		app->Options()->SetStringValue("check_derivatives_for_naninf", "yes");
-	
-		/* end of the default options */
+		// hessian constant for an LP
+		if( (osinstance-> getNumberOfNonlinearExpressions() <= 0) && (osinstance->getNumberOfQuadraticTerms() <= 0) ){
+			app->Options()->SetStringValue("hessian_constant", "yes", true, true);
+		}
+		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
+  			app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
+  		}
+		/* end of the default options, now get options from OSoL */
 	
 		
 		if(osoption == NULL && osol.length() > 0)
@@ -771,12 +778,6 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		/***************now the ipopt invokation*********************/
 		// see if we have a linear program
 		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
-		if( (osinstance->getNumberOfNonlinearExpressions() == 0) && (osinstance->getNumberOfQuadraticTerms() == 0) ) 
-			app->Options()->SetStringValue("hessian_approximation", "limited-memory");
-		// if it is a max problem call scaling and set to -1
-		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
-  			app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
-  		}
 		// Intialize the IpoptApplication and process the options
 //		std::cout << "Call Ipopt Initialize" << std::endl;
 		app->Initialize();
