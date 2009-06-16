@@ -185,7 +185,6 @@ void OS_tm::initialize_core(BCP_vec<BCP_var_core*>& vars,
 	//do the garbage collection
 	delete core_matrix;
 
-
 }//end initialize_core
 
 /**************************************************************************/
