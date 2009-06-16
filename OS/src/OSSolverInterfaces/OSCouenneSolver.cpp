@@ -557,6 +557,9 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		std::cout << "INITIALIZE COUENNE " << std::endl;
 		bool setupInit = false;
 		setupInit = couenneSetup.InitializeCouenne(argv, couenne, ci);
+		//std::cout << "ci -> isProvenOptimal ()" << ci -> isProvenOptimal ()<< std::endl;
+		
+
 		if(setupInit == false){
 			std::string solutionDescription = "";
 			std::string message = "Couenne solver finishes to the end.";
@@ -584,15 +587,45 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		}
 
 		std::cout << std::endl << std::endl;
+	// see if we have an unbounded solution
+	// if we are not infeasible and not unbounded and have no integer variables we are probably unbounded	
+	if(( ci->isProvenPrimalInfeasible() == false) && (ci -> isProvenOptimal () == false) 
+		&& (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() <= 0) ){
+		std::string solutionDescription = "";
+		std::string message = "Success";
+		int solIdx = 0;
+		if(osresult->setServiceName( "Couenne solver service") != true)
+			throw ErrorClass("OSResult error: setServiceName");
+		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+			throw ErrorClass("OSResult error: setInstanceName");
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setObjectiveNumber( 1) != true)
+			throw ErrorClass("OSResult error: setObjectiveNumber");
+		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+			throw ErrorClass("OSResult error: setConstraintNumber");
+		if(osresult->setSolutionNumber(  1) != true)
+			throw ErrorClass("OSResult error: setSolutionNumer");		
+		if(osresult->setGeneralMessage( message) != true)
+			throw ErrorClass("OSResult error: setGeneralMessage");
+		solutionDescription = "The problem is most likely unbounded";
+			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+		osresult->setGeneralStatusType("normal");
+		osrl = osrlwriter->writeOSrL( osresult);		
+		return;
+	}
+
 		
-		std::cout << osinstance->printModel() << std::endl;
+		//std::cout << osinstance->printModel() << std::endl;
 	
 
-		std::cout << " CALL bb ( couenneSetup) " << std::endl;
+	std::cout << " CALL bb ( couenneSetup) " << std::endl;
    		bb ( couenneSetup); // do branch and bound
-   		std::cout << " END bb ( couenneSetup) " << std::endl;
+	std::cout << " END bb ( couenneSetup) " << std::endl;
+	
+	
 
-		couenne->print();
+
     std::cout.precision (10);
 
     CouenneCutGenerator *cg = NULL;
@@ -612,10 +645,10 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	couenneSetup.options () -> GetNumericValue ("time_limit", timeLimit, "couenne.");
 	//std::cout << "TIME LIMIT  =  "  <<  timeLimit  << std::endl;
     // note model is a CbcModel, bb is a BonCbc object
+	
+	
 
     // now put information in OSResult object
-    
-    std::cout << "STATUS =  " << tminlp->status << std::endl;
     status = tminlp->status;
     writeResult();
 	//if(ci  != NULL)  delete ci;

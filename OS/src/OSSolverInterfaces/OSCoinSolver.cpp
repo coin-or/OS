@@ -315,7 +315,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 		OsiSymSolverInterface * si =
 		dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
 		//set default verbosity to -2
-		si->setSymParam("verbosity",   -2);					
+		si->setSymParam("verbosity",   -2);	
 	}
 #endif	   //symphony end	
 	/* 
@@ -807,6 +807,7 @@ void CoinSolver::dataEchoCheck(){
 
 
 void CoinSolver::writeResult(OsiSolverInterface *solver){
+	std::cout << "HERE IS GAIL " << std::endl;
 	double *x = NULL;
 	double *y = NULL;
 	double *z = NULL;

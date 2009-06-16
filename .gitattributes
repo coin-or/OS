@@ -119,7 +119,7 @@ OS/data/configFiles/testlocalosol.config -text
 OS/data/configFiles/testmps.config -text
 OS/data/configFiles/testnl.config -text
 OS/data/gamsFiles/IP_infeasible.gms -text
-OS/data/gamsFiles/LP_unbounded.gms -text
+OS/data/gamsFiles/LP_unbounded.gms -text svneol=unset#unset
 OS/data/gamsFiles/os.opt -text
 OS/data/gamsFiles/rbrockmod.gms -text
 OS/data/gamsFiles/rbrockorig.gms -text
