@@ -635,8 +635,8 @@ void BonminSolver::setSolverOptions() throw (ErrorClass) {
 		bonminSetup.readOptionsString("bonmin.algorithm B-BB\n");
 		
 				//turn off a lot of output -- this can be overridden by using OSOptions
-		bonminSetup.options()->SetIntegerValue("bonmin.bb_log_level", 0 );
-		bonminSetup.options()->SetIntegerValue("bonmin.nlp_log_level", 0 );
+		//bonminSetup.options()->SetIntegerValue("bonmin.bb_log_level", 0 );
+		//bonminSetup.options()->SetIntegerValue("bonmin.nlp_log_level", 0 );
 		  
 		// Now we can obtain the value of the new option
 		int printSolution;
