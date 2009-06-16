@@ -56,7 +56,7 @@ BonminSolver::~BonminSolver() {
 		if(osresult != NULL ){
 			delete osresult;
 			osresult = NULL;
-			cout << "DELETING OS RESULT" << endl;
+			//cout << "DELETING OS RESULT" << endl;
 		}
 	#ifdef DEBUG
 	cout << "leaving BonminSolver destructor" << endl;
@@ -769,6 +769,31 @@ void BonminSolver::solve() throw (ErrorClass) {
 		if(osresult->setGeneralMessage( message) != true)
 			throw ErrorClass("OSResult error: setGeneralMessage");
 		solutionDescription = "The problem is unbounded";
+			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+		osresult->setGeneralStatusType("normal");
+		osrl = osrlwriter->writeOSrL( osresult);		
+		return;
+	}
+	
+	if(( bb.model().isProvenInfeasible() == true)  ){
+		std::string solutionDescription = "";
+		std::string message = "Success";
+		int solIdx = 0;
+		if(osresult->setServiceName( "Bonin solver service") != true)
+			throw ErrorClass("OSResult error: setServiceName");
+		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
+			throw ErrorClass("OSResult error: setInstanceName");
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
+			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setObjectiveNumber( 1) != true)
+			throw ErrorClass("OSResult error: setObjectiveNumber");
+		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
+			throw ErrorClass("OSResult error: setConstraintNumber");
+		if(osresult->setSolutionNumber(  1) != true)
+			throw ErrorClass("OSResult error: setSolutionNumer");		
+		if(osresult->setGeneralMessage( message) != true)
+			throw ErrorClass("OSResult error: setGeneralMessage");
+		solutionDescription = "The problem is infeasible";
 			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 		osresult->setGeneralStatusType("normal");
 		osrl = osrlwriter->writeOSrL( osresult);		
