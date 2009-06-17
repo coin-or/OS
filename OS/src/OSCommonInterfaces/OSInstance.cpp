@@ -2027,7 +2027,7 @@ std::string OSInstance::printModel(int rowIdx ){
 	if( rowIdx >= 0){
 		if( m_bProcessConstraints != true ) this->processConstraints() ;
 		if( m_mdConstraintUpperBounds[ rowIdx] <  OSDBL_MAX){
-			if(m_mdConstraintLowerBounds[ rowIdx] > m_mdConstraintUpperBounds[ rowIdx]){
+			if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx]){
 				outStr << " <= ";
 			 }else{
 				outStr << " = ";
