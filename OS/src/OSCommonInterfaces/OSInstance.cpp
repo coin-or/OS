@@ -1982,8 +1982,10 @@ std::string OSInstance::printModel(int rowIdx ){
 	if( rowIdx >= 0){
 		if( m_bProcessConstraints != true ) this->processConstraints() ;
 		if( m_mdConstraintLowerBounds[ rowIdx] >  -OSDBL_MAX){
-			outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
-			if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx])  outStr << " <= ";
+			if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx]){
+				outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
+				outStr << " <= ";
+			}
 		}
 		//
 		if(this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
