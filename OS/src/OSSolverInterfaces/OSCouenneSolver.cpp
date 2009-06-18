@@ -588,7 +588,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 
 		std::cout << std::endl << std::endl;
 	// see if we have an unbounded solution
-	// if we are not infeasible and not unbounded and have no integer variables we are probably unbounded	
+	// if we are not infeasible and not optimal and have no integer variables we are probably unbounded	
 	if(( ci->isProvenPrimalInfeasible() == false) && (ci -> isProvenOptimal () == false) 
 		&& (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() <= 0) ){
 		std::string solutionDescription = "";
