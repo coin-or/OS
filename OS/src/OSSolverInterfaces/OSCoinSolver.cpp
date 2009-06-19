@@ -31,6 +31,8 @@
 #include "CglKnapsackCover.hpp"
 #include "CglFlowCover.hpp"
 #include "CbcBranchActual.hpp" //for CbcSOS
+#include "CoinMessageHandler.hpp"
+#include "CoinMessage.hpp"
 
 #include "OsiClpSolverInterface.hpp"
 
@@ -634,9 +636,32 @@ void CoinSolver::solve() throw (ErrorClass) {
 			//if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
 			// just use simple branch and bound for anything but cbc
 				CbcModel model(  *osiSolver);
-				CbcMain0(  model);		
-
+				CoinMessages coinMessages;
+				int numberOfMessages;
+				CoinOneMessage currentMessage;
+				CoinMessageHandler * generalMessageHandler;
+				CoinOneMessage **coinOneMessage;
+				CoinOneMessage *oneMessage;
 				
+				
+				CbcMain0(  model);	
+				/*
+				coinMessages = model.messages();
+				numberOfMessages = coinMessages.numberMessages_;
+				for(int i = 0; i < numberOfMessages - 1; i++){
+					oneMessage = coinMessages.message_[ i] ;
+				//	std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
+				}
+			
+				generalMessageHandler = model.messageHandler();
+				currentMessage = generalMessageHandler->currentMessage();
+				std::cout << "GAIL HONDA =  "  << currentMessage.message() << std::endl;
+				std::cout << "HIGHEST NUMBER =  "  << generalMessageHandler->highestNumber() << std::endl;
+				std::cout << "CURRENT SOURCE =  "  << generalMessageHandler->currentSource() << std::endl;
+				std::cout << "MESSAGE BUFFER =  "  << generalMessageHandler->messageBuffer() << std::endl;
+				*/
+				
+				//CoinMessages generalMessages = model.getModelPtr()->messages();				
 				// make sure we define cbc_argv if not done already when reading options
 				if(num_cbc_argv <= 0){
 					char *cstr;
@@ -652,7 +677,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					
 					
 					// the log option -- by default minimal printing
-					cbc_option = "-log=0";
+					cbc_option = "-log=100";
 					cstr = new char [cbc_option.size() + 1];
 					strcpy (cstr, cbc_option.c_str());
 					cbc_argv[ 1] = cstr;
@@ -678,7 +703,25 @@ void CoinSolver::solve() throw (ErrorClass) {
 					std::cout << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
 				}
 */
+				std::cout << "CALL CbcMain1  "   << std::endl;
 				CbcMain1( num_cbc_argv, cbc_argv, model);	
+				/*
+				coinMessages = model.messages();
+				numberOfMessages = coinMessages.numberMessages_;
+				for(int i = 0; i < 5; i++){
+					oneMessage = coinMessages.message_[ i] ;
+					std::cout << "ONE MESSAGE = " << oneMessage->message() << std::endl;
+				}
+				numberOfMessages = coinMessages.numberMessages_;
+				generalMessageHandler = model.messageHandler();
+				currentMessage = generalMessageHandler->currentMessage();
+				std::cout << "GAIL HONDA =  "  << currentMessage.message() << std::endl;
+				std::cout << "HIGHEST NUMBER =  "  << generalMessageHandler->highestNumber() << std::endl;
+				std::cout << "CURRENT SOURCE =  "  << generalMessageHandler->currentSource() << std::endl;
+				std::cout << "MESSAGE BUFFER =  "  << generalMessageHandler->messageBuffer() << std::endl;
+				std::cout << "NUMBER OF STRING FIELDS  =  "  << generalMessageHandler->numberStringFields() << std::endl;
+				exit( 1);
+				*/
 				//do the garbage collection on cbc_argv
 				for(i = 0; i < num_cbc_argv; i++){
 					delete[]  cbc_argv[ i];	
@@ -807,7 +850,6 @@ void CoinSolver::dataEchoCheck(){
 
 
 void CoinSolver::writeResult(OsiSolverInterface *solver){
-	std::cout << "HERE IS GAIL " << std::endl;
 	double *x = NULL;
 	double *y = NULL;
 	double *z = NULL;
