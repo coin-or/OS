@@ -780,6 +780,8 @@ AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.nl)
 ##
 ##
 ## GAMS test files
