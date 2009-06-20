@@ -60,9 +60,9 @@ OS/MSVisualStudioOSExamples/instanceGenerator/instanceGenerator.vcproj -text
 OS/MSVisualStudioOSExamples/notes.txt -text
 OS/MSVisualStudioOSExamples/osExamples.sln -text
 OS/MSVisualStudioOSExamples/osModificationDemo/osModificationDemo.vcproj -text
-OS/MSVisualStudioOSExamples/osOptionDemo/osOptionDemo.vcproj -text
 OS/MSVisualStudioOSExamples/osRemoteTest/osRemoteTest.vcproj -text
 OS/MSVisualStudioOSExamples/osResultDemo/osResultDemo.vcproj -text
+OS/MSVisualStudioOSExamples/osSolverDemo/osSolverDemo.vcproj -text
 OS/MSVisualStudioOSExamples/template/template.vcproj -text
 OS/Makefile.am -text
 OS/Makefile.in -text
