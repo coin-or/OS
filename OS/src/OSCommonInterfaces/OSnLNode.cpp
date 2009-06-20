@@ -175,7 +175,7 @@ OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNod
 	while(kount <= nlNodeVec.size() - 1){
 		int numkids = nlNodeVec[kount]->inumberOfChildren;
 		if(numkids  > 0){
-			for(int i = numkids - 1; i >= 0;  i--){
+			for(unsigned int i = numkids - 1; i >= 0;  i--){
 				nlNodeVec[kount]->m_mChildren[i] = stackVec.back()	;
 				stackVec.pop_back();
 			}
@@ -194,7 +194,7 @@ std::vector<OSnLNode*> OSnLNode::getPostfixFromExpressionTree( ){
 
 std::vector<OSnLNode*> OSnLNode::postOrderOSnLNodeTraversal( std::vector<OSnLNode*> *postfixVector){
 	if(inumberOfChildren > 0){
-		int i;
+		unsigned int i;
 		for(i = 0; i < inumberOfChildren; i++) 
 			m_mChildren[i]->postOrderOSnLNodeTraversal( postfixVector);
 	}
@@ -228,7 +228,7 @@ std::vector<OSnLNode*> OSnLNode::getPrefixFromExpressionTree(){
 std::vector<OSnLNode*> OSnLNode::preOrderOSnLNodeTraversal( std::vector<OSnLNode*> *prefixVector){
 	(*prefixVector).push_back( this);
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++)
+		for(unsigned int i = 0; i < inumberOfChildren; i++)
 			m_mChildren[i]->preOrderOSnLNodeTraversal( prefixVector);
 	}
 	return *prefixVector;
@@ -377,7 +377,7 @@ std::string OSnLNode::getNonlinearExpressionInXML(){
 		outStr << "/>";
 	}
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			outStr << m_mChildren[i]->getNonlinearExpressionInXML();
 		}
 	}
@@ -393,7 +393,7 @@ std::string OSnLNode::getNonlinearExpressionInXML(){
 
 
 void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx){
-	int i;
+	unsigned int i;
 	if(inodeInt != OS_VARIABLE){
 		for(i = 0; i < inumberOfChildren; i++){
 			m_mChildren[ i]->getVariableIndexMap( varIdx);
@@ -417,7 +417,7 @@ OSnLNodePlus::~OSnLNodePlus(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodePlus destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		if( m_mChildren[ i] != NULL) delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -459,7 +459,7 @@ OSnLNodeSum::~OSnLNodeSum(){
 	cout << "inside OSnLNodeSum destructor" << endl;
 	#endif
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			delete m_mChildren[ i];
 			m_mChildren[i] = NULL;
 		}
@@ -470,7 +470,7 @@ OSnLNodeSum::~OSnLNodeSum(){
 
 double OSnLNodeSum::calculateFunction(double *x){
 	m_dFunctionValue = 0.0;  
-	int i;
+	unsigned int i;
 	for(i = 0; i < inumberOfChildren; i++){
 		m_dFunctionValue = m_dFunctionValue + m_mChildren[i]->calculateFunction(x);
 	}
@@ -480,7 +480,7 @@ double OSnLNodeSum::calculateFunction(double *x){
 
 ADdouble OSnLNodeSum::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
 	m_ADTape = 0.0;
-	int i;
+	unsigned int i;
 	for(i = 0; i < inumberOfChildren; i++){
 			m_ADTape = m_ADTape + m_mChildren[i]->constructADTape( ADIdx, XAD);
 	}
@@ -512,7 +512,7 @@ OSnLNodeAllDiff::~OSnLNodeAllDiff(){
 	cout << "inside OSnLNodeAllDiff destructor" << endl;
 	#endif
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			delete m_mChildren[ i];
 			m_mChildren[i] = NULL;
 		}
@@ -525,7 +525,7 @@ OSnLNodeAllDiff::~OSnLNodeAllDiff(){
 double OSnLNodeAllDiff::calculateFunction(double *x){
 	m_dFunctionValue = 1;
 	// return a false if not all all different
-	int i, k;
+	unsigned int i, k;
 	if(inumberOfChildren > 1){
 		for(i = 0; i < inumberOfChildren - 1; i++){
 			for(k = i + 1; k < inumberOfChildren; k++){
@@ -574,7 +574,7 @@ OSnLNodeMax::~OSnLNodeMax(){
 	cout << "inside OSnLNodeMax destructor" << endl;
 	#endif
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			delete m_mChildren[ i];
 			m_mChildren[i] = NULL;
 		}
@@ -586,7 +586,7 @@ OSnLNodeMax::~OSnLNodeMax(){
 double OSnLNodeMax::calculateFunction(double *x){
 	m_dFunctionValue = m_mChildren[0]->calculateFunction(x);
 	if(inumberOfChildren > 1){
-		for(int i = 1; i < inumberOfChildren; i++){
+		for(unsigned int i = 1; i < inumberOfChildren; i++){
 			if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue){
 				m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
 			}
@@ -632,7 +632,7 @@ OSnLNodeMin::~OSnLNodeMin(){
 	cout << "inside OSnLNodeMin destructor" << endl;
 	#endif
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			delete m_mChildren[ i];
 			m_mChildren[i] = NULL;
 		}
@@ -644,7 +644,7 @@ OSnLNodeMin::~OSnLNodeMin(){
 double OSnLNodeMin::calculateFunction(double *x){
 	m_dFunctionValue = m_mChildren[0]->calculateFunction(x);
 	if(inumberOfChildren > 1){
-		for(int i = 1; i < inumberOfChildren; i++){
+		for(unsigned int i = 1; i < inumberOfChildren; i++){
 			if(m_mChildren[i]->calculateFunction(x) < m_dFunctionValue){
 				m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
 			}
@@ -693,7 +693,7 @@ OSnLNodeMinus::~OSnLNodeMinus(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeMinus destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -721,7 +721,7 @@ OSnLNode* OSnLNodeMinus::cloneOSnLNode(){
 //
 //
 
-
+ 
 //
 //
 // OSnLNodeNegate Methods	
@@ -740,7 +740,7 @@ OSnLNodeNegate::~OSnLNodeNegate(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeNegate destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -784,7 +784,7 @@ OSnLNodeTimes::~OSnLNodeTimes(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeTimes destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -828,7 +828,7 @@ OSnLNodeDivide::~OSnLNodeDivide(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeDivide destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -874,7 +874,7 @@ OSnLNodePower::~OSnLNodePower(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodePower destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -941,7 +941,7 @@ OSnLNodeProduct::~OSnLNodeProduct(){
 	cout << "inside OSnLNodeProduct destructor" << endl;
 	#endif
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			delete m_mChildren[ i];
 			m_mChildren[i] = NULL;
 		}
@@ -953,7 +953,7 @@ OSnLNodeProduct::~OSnLNodeProduct(){
 double OSnLNodeProduct::calculateFunction(double *x){
 	// kipp throw error if operation not defined
 	m_dFunctionValue = 1.0;
-	int i;
+	unsigned int i;
 	for(i = 0; i < inumberOfChildren; i++){
 		m_dFunctionValue = m_dFunctionValue*m_mChildren[i]->calculateFunction(x);
 	}
@@ -963,7 +963,7 @@ double OSnLNodeProduct::calculateFunction(double *x){
 
 ADdouble OSnLNodeProduct::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
 	m_ADTape = 1.0;
-	int i;
+	unsigned int i;
 	for(i = 0; i < inumberOfChildren; i++){
 		m_ADTape = m_ADTape*m_mChildren[i]->constructADTape( ADIdx, XAD);
 	}
@@ -997,7 +997,7 @@ OSnLNodeLn::~OSnLNodeLn(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeLn destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1043,7 +1043,7 @@ OSnLNodeSqrt::~OSnLNodeSqrt(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeSqrt destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1088,7 +1088,7 @@ OSnLNodeSquare::~OSnLNodeSquare(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeSquare destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1131,7 +1131,7 @@ OSnLNodeSin::~OSnLNodeSin(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeSin destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1175,7 +1175,7 @@ OSnLNodeCos::~OSnLNodeCos(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeCos destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1221,7 +1221,7 @@ OSnLNodeExp::~OSnLNodeExp(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeExp destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1267,7 +1267,7 @@ OSnLNodeAbs::~OSnLNodeAbs(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeAbs destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1314,7 +1314,7 @@ OSnLNodeErf::~OSnLNodeErf(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeErf destructor" << endl;
 	#endif
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1368,7 +1368,7 @@ OSnLNodeIf::~OSnLNodeIf(){
 	#ifdef DEBUGOSNLNODE
 	cout << "inside OSnLNodeIf destructor" << endl;
 	#endif 
-	for(int i = 0; i < inumberOfChildren; i++){
+	for(unsigned int i = 0; i < inumberOfChildren; i++){
 		delete m_mChildren[ i];
 		m_mChildren[i] = NULL;
 	}
@@ -1702,7 +1702,7 @@ OSnLNodeVariable::~OSnLNodeVariable(){
 	cout << "number kids = " <<  inumberOfChildren << endl;
 	#endif
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			delete m_mChildren[ i];
 			m_mChildren[i] = NULL;
 		}
@@ -1761,7 +1761,7 @@ std::string OSnLNodeVariable::getNonlinearExpressionInXML(){
 		outStr << "/>";
 	}
 	if(inumberOfChildren > 0){
-		for(int i = 0; i < inumberOfChildren; i++){
+		for(unsigned int i = 0; i < inumberOfChildren; i++){
 			outStr << m_mChildren[i]->getNonlinearExpressionInXML();
 		}
 	}

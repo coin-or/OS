@@ -86,7 +86,7 @@ public:
 	std::string snodeName;
 	
 	/**  numberOfChildren is the number of OSnLNode child elements*/
-	int inumberOfChildren;	
+	unsigned int inumberOfChildren;	
 
 	/**  ssymbolInt is the unique integer assigned to the OSnLNode*/	
 	int inodeInt;

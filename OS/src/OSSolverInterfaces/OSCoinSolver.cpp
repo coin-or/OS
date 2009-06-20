@@ -636,12 +636,12 @@ void CoinSolver::solve() throw (ErrorClass) {
 			//if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){
 			// just use simple branch and bound for anything but cbc
 				CbcModel model(  *osiSolver);
-				CoinMessages coinMessages;
-				int numberOfMessages;
-				CoinOneMessage currentMessage;
-				CoinMessageHandler * generalMessageHandler;
-				CoinOneMessage **coinOneMessage;
-				CoinOneMessage *oneMessage;
+				//CoinMessages coinMessages;
+				//int numberOfMessages;
+				//CoinOneMessage currentMessage;
+				//CoinMessageHandler * generalMessageHandler;
+				//CoinOneMessage **coinOneMessage;
+				//CoinOneMessage *oneMessage;
 				
 				
 				CbcMain0(  model);	
@@ -677,7 +677,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					
 					
 					// the log option -- by default minimal printing
-					cbc_option = "-log=100";
+					cbc_option = "-log=0";
 					cstr = new char [cbc_option.size() + 1];
 					strcpy (cstr, cbc_option.c_str());
 					cbc_argv[ 1] = cstr;

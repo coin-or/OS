@@ -1618,6 +1618,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 		if( m_mapExpressionTrees.find( rowIdx) != m_mapExpressionTrees.end()){
 			//get the nodes and separate into operators and operands, for now
 			//only the number and variable nodes are operator nodes
+			
 			OSExpressionTree* exptree = this->getNonlinearExpressionTree( rowIdx);
 			if(exptree != NULL) {
 				
@@ -1986,7 +1987,7 @@ std::string OSInstance::printModel(int rowIdx ){
 				outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
 				outStr << " <= ";
 			}
-		}
+		} 
 		//
 		if(this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
 			if(m_linearConstraintCoefficientsInRowMajor == NULL) 
