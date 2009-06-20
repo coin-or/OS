@@ -17,6 +17,6 @@ ThirdParty/Mumps https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/re
 DyLP           https://projects.coin-or.org/svn/DyLP/releases/1.5.0/DyLP
 Ipopt          https://projects.coin-or.org/svn/Ipopt/releases/3.6.1/Ipopt
 cppad         https://projects.coin-or.org/svn/CppAD/releases/20090303.0
-Bonmin         https://projects.coin-or.org/svn/Bonmin/releases/1.0.3/Bonmin 
+Bonmin         https://projects.coin-or.org/svn/Bonmin/stable/1.0/Bonmin 
 Couenne https://projects.coin-or.org/svn/Couenne/trunk/Couenne
 
