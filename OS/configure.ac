@@ -652,18 +652,15 @@ AC_COIN_VPATH_LINK(data/osilFiles/gamstrnsport.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_feas.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLPMod.osil)
-
 AC_COIN_VPATH_LINK(data/osilFiles/IP_infeasible.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/IP_noconstraint.osil)
-
-
+AC_COIN_VPATH_LINK(data/osilFiles/IP_unbounded.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/lindoapiaddins.osil)
-
 AC_COIN_VPATH_LINK(data/osilFiles/LP_nobasis.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/LP_noconstraint.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/LP_infeasible.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/LP_unbounded.osil)
-
+AC_COIN_VPATH_LINK(data/osilFiles/muer.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/nonconvex.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/parincInteger.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/parincLinear.osil)
@@ -767,6 +764,9 @@ AC_COIN_VPATH_LINK(data/amplFiles/bonminEx1.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/bonminEx1.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/hs71.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/muer.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/muerdata10.dat)
+AC_COIN_VPATH_LINK(data/amplFiles/muer.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.dat)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.nl)
@@ -778,10 +778,23 @@ AC_COIN_VPATH_LINK(data/amplFiles/IP_infeasible.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/IP_infeasible.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/LP_unbounded.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.nl)
+##
+##
+## GAMS test files
+AC_COIN_VPATH_LINK(data/gamsFiles/parincLinear.gms)
+AC_COIN_VPATH_LINK(data/gamsFiles/rbrockmod.gms)
+AC_COIN_VPATH_LINK(data/gamsFiles/rbrockorig.gms)
+AC_COIN_VPATH_LINK(data/gamsFiles/trnsport.gms)
+AC_COIN_VPATH_LINK(data/gamsFiles/IP_infeasible.gms)
+AC_COIN_VPATH_LINK(data/gamsFiles/IP_unbounded.gms)
+AC_COIN_VPATH_LINK(data/gamsFiles/LP_unbounded.gms)
 ##
 ## mps test files
 ##
 AC_COIN_VPATH_LINK(data/mpsFiles/parinc.mps)
+AC_COIN_VPATH_LINK(data/mpsFiles/IP_unbounded.mps)
 ##
 ## MATLAB test files
 ##

@@ -30216,7 +30216,6 @@ if test $coin_vpath_config = yes; then
 fi
 
 
-
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/IP_infeasible.osil"
 fi
@@ -30227,12 +30226,14 @@ if test $coin_vpath_config = yes; then
 fi
 
 
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/IP_unbounded.osil"
+fi
 
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/lindoapiaddins.osil"
 fi
-
 
 
 if test $coin_vpath_config = yes; then
@@ -30254,6 +30255,10 @@ if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/LP_unbounded.osil"
 fi
 
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/muer.osil"
+fi
 
 
 if test $coin_vpath_config = yes; then
@@ -30708,6 +30713,21 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/muer.nl"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/muerdata10.dat"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/muer.nl"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/parinc.mod"
 fi
 
@@ -30761,12 +30781,65 @@ if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/LP_unbounded.nl"
 fi
 
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/IP_unbounded.mod"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/IP_unbounded.nl"
+fi
+
+##
+##
+## GAMS test files
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/gamsFiles/parincLinear.gms"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/gamsFiles/rbrockmod.gms"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/gamsFiles/rbrockorig.gms"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/gamsFiles/trnsport.gms"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/gamsFiles/IP_infeasible.gms"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/gamsFiles/IP_unbounded.gms"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/gamsFiles/LP_unbounded.gms"
+fi
+
 ##
 ## mps test files
 ##
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/mpsFiles/parinc.mps"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/mpsFiles/IP_unbounded.mps"
 fi
 
 ##
