@@ -4757,6 +4757,9 @@ osinstance->bAMatrixModified = true;
 
 At this point, if the user desires to modify an {\bf OSInstance} object that contains nonlinear terms, the only safe strategy is to delete to the object and build a new object that contains the modifications. 
 
+\subsection{Printing a Model for Debugging}\label{section:printModel}
+
+
 
 \section{Code samples to illustrate the OS Project}\label{section:examples}
 
@@ -4940,13 +4943,12 @@ in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
 
 
-\subsection{OSOptionDemo: Building an In-Memory {\tt OSOption} Object}\label{section:exampleOSOptionDemo}
+\subsection{OSSolverDemo: Building In-Memory Solver and Option Objects}\label{section:exampleOSSolverDemo}
 
-The code in the  example file {\tt OSOptionDemo.cpp} in the folder {\tt osOptionDemo}  illustrates  how to build an in-memory {\tt OSOption} object. In this example we set the {\tt log} option (which controls the amount of output) for the {\tt Cbc} solver.
+The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers Clp, Cbc, SYMPHONY, and Couenne.
 
 
-
-\subsection{OSAddCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
+\subsection{OSCglCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
 In this example, we show how to add cuts to tighten an LP using {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
 
