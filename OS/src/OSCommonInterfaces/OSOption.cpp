@@ -2480,6 +2480,48 @@ double* OSOption::getInitVarValuesDense()
 }//getInitVarValuesDense
 
 /**
+ * get the list of initial variable values in dense form
+ * @param numberOfVariables is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for variables that are not initialed
+ */
+double* OSOption::getInitVarValuesDense(int numberOfVariables)
+{	try
+	{	if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->initialVariableValues != NULL) 
+				{	int i,j,k;
+					int num_var;
+					num_var = this->getNumberOfInitVarValues();
+
+					if (m_mdInitVarValuesDense != NULL)
+						delete [] m_mdInitVarValuesDense;
+					m_mdInitVarValuesDense = new double[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesDense[k] = OSNAN;
+
+					for (i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)						
+							m_mdInitVarValuesDense[j] 
+							  = this->optimization->variables->initialVariableValues->var[i]->value;						
+						else
+							throw ErrorClass("Variable index out of range");
+					}
+					return m_mdInitVarValuesDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitVarValuesDense
+
+/**
  * get the list of initial values for string-valued variables in sparse form
  * @return a list of index/value pairs
  */
@@ -2544,6 +2586,48 @@ std::string *OSOption::getInitVarValuesStringDense()
 }//getInitVarValuesStringDense
 
 /**
+ * get the list of initial values for string-valued variables in dense form
+ * @param numberOfVariables is the dimension of the array
+ * @return an array of value strings
+ * @note return the empty string "" for variables that are not initialed
+ */
+std::string *OSOption::getInitVarValuesStringDense(int numberOfVariables)
+{	try
+	{	if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->initialVariableValuesString != NULL) 
+				{	int i,j,k;
+					int num_var;
+					num_var = this->getNumberOfInitVarValuesString();
+
+					if (m_mdInitVarValuesStringDense != NULL)
+						delete [] m_mdInitVarValuesStringDense;
+					m_mdInitVarValuesStringDense = new std::string[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesStringDense[k] = "";
+		
+					for (i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->initialVariableValuesString->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)
+							m_mdInitVarValuesStringDense[j] 
+							  = this->optimization->variables->initialVariableValuesString->var[i]->value;
+						else
+							throw ErrorClass("Variable index out of range");
+					}
+					return m_mdInitVarValuesStringDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitVarValuesStringDense
+
+/**
  * get the list of initial basic and nonbasic variables in sparse form
  * @return a list of index/value pairs
  */
@@ -2574,6 +2658,49 @@ std::string *OSOption::getInitBasisStatusDense()
 	{	int numberOfVariables;
 		numberOfVariables = this->getNumberOfVariables();
 		if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->initialBasisStatus != NULL) 
+				{	int i,j,k;
+					int num_var;
+					num_var = this->getNumberOfInitialBasisVariables();
+
+					if (m_mdInitBasisStatusDense != NULL)
+						delete [] m_mdInitBasisStatusDense;
+					m_mdInitBasisStatusDense = new std::string[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdInitBasisStatusDense[k] = "";
+		
+					for (i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->initialBasisStatus->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)
+							m_mdInitBasisStatusDense[j] 
+							  = this->optimization->variables->initialBasisStatus->var[i]->value;
+						else
+							throw ErrorClass("Variable index out of range");
+					}
+					return m_mdInitBasisStatusDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitBasisStatusDense
+
+
+/**
+ * get the list of initial basic and nonbasic variables in dense form
+ * @param numberOfVariables is the dimension of the array
+ * @return an array of value strings
+ * @note return the empty string "" for variables that are not initialed
+ */
+std::string *OSOption::getInitBasisStatusDense(int numberOfVariables)
+{	try
+	{	if (numberOfVariables < 0)
 			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
 
 		if (this->optimization != NULL) 
@@ -2672,6 +2799,48 @@ double* OSOption::getIntegerVariableBranchingWeightsDense()
 	return NULL;
 }//getIntegerVariableBranchingWeightsDense
 
+
+/**
+ * get a list of branching weights for integer variables in dense form
+ * @param numberOfVariables is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for variables that are not initialed
+ */
+double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
+{	try
+	{	if (numberOfVariables < 0)
+			throw ErrorClass("\"numberOfVariables\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->variables != NULL) 
+			{	if (this->optimization->variables->integerVariableBranchingWeights != NULL) 
+				{	int i,j,k;
+					int num_var;
+					num_var = this->getNumberOfIntegerVariableBranchingWeights();
+
+					if (m_mdIntegerVariableBranchingWeightsDense != NULL)
+						delete [] m_mdIntegerVariableBranchingWeightsDense;
+					m_mdIntegerVariableBranchingWeightsDense = new double[numberOfVariables];
+					for (k = 0; k < numberOfVariables; k++) m_mdIntegerVariableBranchingWeightsDense[k] = OSNAN;
+
+					for (i = 0; i < num_var; i++)
+					{	j = this->optimization->variables->integerVariableBranchingWeights->var[i]->idx;
+						if (j >= 0 && j < numberOfVariables)						
+							m_mdIntegerVariableBranchingWeightsDense[j] 
+							  = this->optimization->variables->integerVariableBranchingWeights->var[i]->value;						
+						else
+							throw ErrorClass("Variable index out of range");
+					}
+					return m_mdIntegerVariableBranchingWeightsDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getIntegerVariableBranchingWeightsDense
 
 /**
  * get a list of branching weights for SOS variables in sparse form
@@ -2803,6 +2972,48 @@ double* OSOption::getInitObjValuesDense()
 
 
 /**
+ * get the list of initial objective values in dense form
+ * @param numberOfObjectives is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for objectives that are not initialed
+ */
+double* OSOption::getInitObjValuesDense(int numberOfObjectives)
+{	try
+	{	if (numberOfObjectives < 0)
+			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->objectives != NULL) 
+			{	if (this->optimization->objectives->initialObjectiveValues != NULL) 
+				{	int i,j,k;
+					int num_obj;
+					num_obj = this->getNumberOfInitObjValues();
+
+					if (m_mdInitObjValuesDense != NULL)
+						delete [] m_mdInitObjValuesDense;
+					m_mdInitObjValuesDense = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjValuesDense[k] = OSNAN;
+	
+					for (i = 0; i < num_obj; i++)
+					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
+						if (j < 0 && -j <= numberOfObjectives)						
+							m_mdInitObjValuesDense[-1-j] 
+							  = this->optimization->objectives->initialObjectiveValues->obj[i]->value;						
+						else
+							throw ErrorClass("Objective index out of range");
+					}
+					return m_mdInitObjValuesDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitObjValuesDense
+
+/**
  * get the list of initial objective bounds in sparse form
  * @return a list of index/value/value triples
  */
@@ -2867,6 +3078,48 @@ double* OSOption::getInitObjLowerBoundsDense()
 }//getInitObjLowerBoundsDense
 
 /**
+ * get the list of initial objective lower bounds in dense form
+ * @param numberOfObjectives is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for objectives that are not initialed
+ */
+double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
+{	try
+	{	if (numberOfObjectives < 0)
+			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->objectives != NULL) 
+			{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
+				{	int i,j,k;
+					int num_obj;
+					num_obj = this->getNumberOfInitObjBounds();
+
+					if (m_mdInitObjLowerBoundsDense != NULL)
+						delete [] m_mdInitObjLowerBoundsDense;
+					m_mdInitObjLowerBoundsDense = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjLowerBoundsDense[k] = OSNAN;
+
+					for (i = 0; i < num_obj; i++)
+					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
+						if (j < 0 && -j <= numberOfObjectives)						
+							m_mdInitObjLowerBoundsDense[-1-j] 
+							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue;
+						else
+							throw ErrorClass("Objective index out of range");
+					}
+					return m_mdInitObjLowerBoundsDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitObjLowerBoundsDense
+
+/**
  * get the list of initial objective upper bounds in dense form
  * @return an array of values
  * @note return OSNAN for objectives that are not initialed
@@ -2876,6 +3129,48 @@ double* OSOption::getInitObjUpperBoundsDense()
 	{	int numberOfObjectives;
 		numberOfObjectives = this->getNumberOfObjectives();
 		if (numberOfObjectives < 0)
+			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->objectives != NULL) 
+			{	if (this->optimization->objectives->initialObjectiveBounds != NULL) 
+				{	int i,j,k;
+					int num_obj;
+					num_obj = this->getNumberOfInitObjBounds();
+
+					if (m_mdInitObjUpperBoundsDense != NULL)
+						delete [] m_mdInitObjUpperBoundsDense;
+					m_mdInitObjUpperBoundsDense = new double[numberOfObjectives];
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjUpperBoundsDense[k] = OSNAN;
+					
+					for (i = 0; i < num_obj; i++)
+					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
+						if (j < 0 && -j <= numberOfObjectives)						
+							m_mdInitObjUpperBoundsDense[-1-j] 
+							  = this->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue;
+						else
+							throw ErrorClass("Objective index out of range");
+					}
+					return m_mdInitObjUpperBoundsDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitObjUpperBoundsDense
+
+/**
+ * get the list of initial objective upper bounds in dense form
+ * @param numberOfObjectives is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for objectives that are not initialed
+ */
+double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
+{	try
+	{	if (numberOfObjectives < 0)
 			throw ErrorClass("\"numberOfObjectives\" must be present to use dense methods");		
 
 		if (this->optimization != NULL) 
@@ -3015,6 +3310,48 @@ double* OSOption::getInitConValuesDense()
 	return NULL;
 }//getInitConValuesDense
 
+/**
+ * get the list of initial constraint values in dense form
+ * @param numberOfConstraints is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for constraints that are not initialed
+ */
+double* OSOption::getInitConValuesDense(int numberOfConstraints)
+{	try
+	{	if (numberOfConstraints < 0)
+			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->constraints != NULL) 
+			{	if (this->optimization->constraints->initialConstraintValues != NULL) 
+				{	int i,j,k;
+					int num_con;
+					num_con = this->getNumberOfInitConValues();
+
+					if (m_mdInitConValuesDense != NULL)
+						delete [] m_mdInitConValuesDense;
+					m_mdInitConValuesDense = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitConValuesDense[k] = OSNAN;
+
+					for (i = 0; i < num_con; i++)
+					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
+						if (j >= 0 && j < numberOfConstraints)						
+							m_mdInitConValuesDense[j] 
+							  = this->optimization->constraints->initialConstraintValues->con[i]->value;						
+						else
+							throw ErrorClass("Constraint index out of range");
+					}
+				return m_mdInitConValuesDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitConValuesDense
+
 
 /**
  * get the list of initial dual variables in sparse form
@@ -3081,6 +3418,48 @@ double* OSOption::getInitDualVarLowerBoundsDense()
 }//getInitDualVarLowerBoundsDense
 
 /**
+ * get the list of initial dual variables associated with the lower bounds in dense form
+ * @param numberOfConstraints is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for dual variables that are not initialed
+ */
+double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
+{	try
+	{	if (numberOfConstraints < 0)
+			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->constraints != NULL) 
+			{	if (this->optimization->constraints->initialDualValues != NULL) 
+				{	int i,j,k;
+					int num_con;
+					num_con = this->getNumberOfInitDualVarValues();
+
+					if (m_mdInitDualVarLowerBoundsDense != NULL)
+						delete [] m_mdInitDualVarLowerBoundsDense;
+					m_mdInitDualVarLowerBoundsDense = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitDualVarLowerBoundsDense[k] = 0.0;
+
+					for (i = 0; i < num_con; i++)
+					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
+						if (j >= 0 && j < numberOfConstraints)						
+							m_mdInitDualVarLowerBoundsDense[j] 
+							  = this->optimization->constraints->initialDualValues->con[i]->lbDualValue;						
+						else
+							throw ErrorClass("Constraint index out of range");
+					}
+					return m_mdInitDualVarLowerBoundsDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitDualVarLowerBoundsDense
+
+/**
  * get the list of initial dual variables associated with the upper bounds in dense form
  * @return an array of values
  * @note return OSNAN for dual variables that are not initialed
@@ -3090,6 +3469,49 @@ double* OSOption::getInitDualVarUpperBoundsDense()
 	{	int numberOfConstraints;
 		numberOfConstraints = this->getNumberOfConstraints();
 		if (numberOfConstraints < 0)
+			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
+
+		if (this->optimization != NULL) 
+		{	if (this->optimization->constraints != NULL) 
+			{	if (this->optimization->constraints->initialDualValues != NULL) 
+				{	int i,j,k;
+					int num_con;
+					num_con = this->getNumberOfInitDualVarValues();
+					numberOfConstraints = this->getNumberOfConstraints();
+
+					if (m_mdInitDualVarUpperBoundsDense != NULL)
+						delete [] m_mdInitDualVarUpperBoundsDense;
+					m_mdInitDualVarUpperBoundsDense = new double[numberOfConstraints];
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitDualVarUpperBoundsDense[k] = 0.0;
+
+					for (i = 0; i < num_con; i++)
+					{	j = this->optimization->constraints->initialDualValues->con[i]->idx;
+						if (j >= 0 && j < numberOfConstraints)						
+							m_mdInitDualVarUpperBoundsDense[j] 
+							  = this->optimization->constraints->initialDualValues->con[i]->ubDualValue;	
+						else
+							throw ErrorClass("Constraint index out of range");
+					}
+					return m_mdInitDualVarUpperBoundsDense;
+				}
+			}
+		}					
+	}
+	catch(const ErrorClass& eclass)
+	{	throw ErrorClass(eclass.errormsg);
+	}
+	return NULL;
+}//getInitDualVarUpperBoundsDense
+
+/**
+ * get the list of initial dual variables associated with the upper bounds in dense form
+ * @param numberOfConstraints is the dimension of the array
+ * @return an array of values
+ * @note return OSNAN for dual variables that are not initialed
+ */
+double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
+{	try
+	{	if (numberOfConstraints < 0)
 			throw ErrorClass("\"numberOfConstraints\" must be present to use dense methods");		
 
 		if (this->optimization != NULL) 

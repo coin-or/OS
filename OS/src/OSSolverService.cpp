@@ -656,6 +656,11 @@ void solve(){
 #endif
 						OSnl2osil *nl2osil = new OSnl2osil( osoptions->nlFile); 
 						nl2osil->createOSInstance() ;
+#ifdef DEBUG_CL_INTERFACE
+						OSiLWriter osilwriter;
+						std::cout << "OSiL file created from .nl:" << std::endl;
+						std::cout << osilwriter.writeOSiL(nl2osil->osinstance) << std::endl;
+#endif
 						solverType->osinstance = nl2osil->osinstance;
 						solverType->buildSolverInstance();
 						solverType->solve();
@@ -672,6 +677,12 @@ void solve(){
 #endif
 						OSmps2osil *mps2osil = new OSmps2osil( osoptions->mpsFile);
 						mps2osil->createOSInstance() ;
+#ifdef DEBUG_CL_INTERFACE
+						OSiLWriter osilwriter;
+						std::cout << "OSiL file created from MPS:" << std::endl;
+						std::cout << osilwriter.writeOSiL(mps2osil->osinstance) << std::endl;
+#endif
+
 						solverType->osinstance = mps2osil->osinstance;
 						solverType->buildSolverInstance();
 						solverType->solve();

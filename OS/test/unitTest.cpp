@@ -395,7 +395,9 @@ if(BASIC_TESTS == true){
 		// write the instance to a string
 		OSInstance *osinstance1 = mps2osil->osinstance;
 		std::string sOSiL = osilwriter.writeOSiL( osinstance1  );
-		//cout << sOSiL << endl;
+#ifdef DEBUG
+		cout << sOSiL << endl;
+#endif
 		///fileUtil->writeFileFromString("p0201.osil", sOSiL);
 		// now create a second object
 		osilreader = new OSiLReader();
@@ -415,8 +417,10 @@ if(BASIC_TESTS == true){
 			//std::cout << theDiff << std::endl;
 		}
 		std::cout << "MAXIMUM DIFF = " << theMax << std::endl;
-		std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
-		if(theMax > 0) unitTestResult << "WARNING:  you do not have lossless IO" << std::endl;
+		if(theMax > 0) 
+		{	std::cout << "MAXIMUM DIFF INDEX  = " << theIndex << std::endl;
+			unitTestResult << "WARNING:  you do not have lossless IO" << std::endl;
+		}
 		else 
 		{	unitTestResult << "Passed lossless IO test" << std::endl;
 			cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -522,31 +526,53 @@ if (SOLVER_TESTS){
 		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
 		//solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the COIN clp solver solution for parincLinearByRow" << endl;
-		cout << solver->osrl << endl;
 		check = 7668;
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "COIN clp solver solution for parincLinearByRow checks." << endl;		
+		}
+		else
+		{	cout << "COIN clp solver solution for parincLinearByRow in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinearByRow.osil");
 		// parse the osrl file
 		osrlreader =  new OSrLReader();
+#ifdef DEBUG
 		cout << "First osrl file\n" << solver->osrl << endl;
+#endif
 		osrlreader->readOSrL( solver->osrl);
+#ifdef DEBUG
 		cout << "read successfully" << endl;
+#endif
 		delete osilreader;
+#ifdef DEBUG
 		cout << "osilreader successfully deleted" << endl;
+#endif
 		osilreader = NULL;	
 		delete osolreader;
+#ifdef DEBUG
 		cout << "osolreader successfully deleted" << endl;
+#endif
 		osolreader = NULL;	
 		delete solver;
+#ifdef DEBUG
 		cout << "solver successfully deleted" << endl;
+#endif
 		solver = NULL;
 		delete osilwriter;
+#ifdef DEBUG
 		cout << "osilwriter successfully deleted" << endl;
+#endif
 		osilwriter = NULL;
 		delete osrlreader;
+#ifdef DEBUG
 		cout << "osrlreader successfully deleted" << endl;
+#endif
 		osrlreader = NULL;
 		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -576,11 +602,19 @@ if (SOLVER_TESTS){
 		cout << "call the COIN - Cbc Solver for p0033" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		//cout << "Here is the COIN Cbc solver solution for p0033" << endl;
-		//cout << solver->osrl << endl;
 		check = 3089;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Coin cbc solution for p0033 checks" << endl;
+		}
+		else
+		{	cout << "Coin cbc solution for p0033 in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if (ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033.osil");
 		delete solver;
 		solver = NULL;
@@ -622,7 +656,7 @@ if( THOROUGH == true){
 			ok = true;
 		else
 			ok = false;
-		if (ok == false) throw ErrorClass(" Fail unit test with Cbc node limit on p0033.osil");
+		if (ok == false) throw ErrorClass(" node limit option on p0033.osil not processed properly");
 		delete solver;
 		solver = NULL;
 		delete osilreader;
@@ -658,7 +692,7 @@ if( THOROUGH == true){
 		std::cout << solver->osrl << std::endl;
 		check = 7615;
 		// we put a node limit in, so we should not find 7615
-		// check that the node limit was foound
+		// check that the node limit was found
 		string::size_type pos;
 		pos = solver->osrl.find( "node limit");
 		if(pos == std::string::npos)  throw ErrorClass(" Error with p0201 on Cbc");
@@ -694,10 +728,19 @@ if( THOROUGH == true){
 		cout << "call the COIN - Cbc Solver for parincInteger" << endl;
 //		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the Cbc solver solution for parincInteger" << endl;
 		check = 7668;
-		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "COIN cbc solver solution for parincInteger checks." << endl;
+		}
+		else
+		{	cout << "COIN cbc solver solution for parincInteger in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincInteger.osil");
 		unitTestResult << "Solved problem parincInteger.osil with Cbc" << std::endl;
 		delete osilreader;
@@ -727,11 +770,20 @@ if( THOROUGH == true){
 		solver->buildSolverInstance();
 //		cout << "call the COIN - SYMPHONY Solver for p0033" << endl;
 		solver->solve();
-		cout << "Here is the COIN SYMPHONY solver solution for p0033" << endl;
-		cout << solver->osrl << endl;
 		check = 3089;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "COIN SYMPHONY solver solution for p0033 checks." << endl;
+		}
+		else
+		{	cout << "COIN SYMPHONY solver solution for p0033 in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with SYMPHONY on p0033.osil");
 		delete solver;
 		solver = NULL;
@@ -741,8 +793,6 @@ if( THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the SYMPHONY Solver:"  + eclass.errormsg << endl;
 	}	
 #endif
@@ -765,11 +815,20 @@ if( THOROUGH == true){
 		cout << "call the COIN - DyLP solver for parincLinear" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the COIN - DyLP solver solution for parincLinear" << endl;
-		cout << solver->osrl << endl;
 		check = 7668;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "COIN DyLP solver solution for parincLinear checks." << endl;
+		}
+		else
+		{	cout << "COIN DyLP solver solution for parincLinear in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with DyLP on parincLinear.osil");
 		delete solver;
 		solver = NULL;
@@ -803,11 +862,20 @@ if( THOROUGH == true){
 		cout << "call the COIN - Vol solver for volumeTest" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the COIN - Vol solver solution for parincLinear" << endl;
-		cout << solver->osrl << endl;
 		check = 7;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "COIN Vol solver solution for parincLinear checks." << endl;
+		}
+		else
+		{	cout << "COIN Vol solver solution for parincLinear in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Vol on volumeTest.osil");
 		delete solver;
 		solver = NULL;
@@ -840,11 +908,20 @@ if( THOROUGH == true){
 		cout << "call the GLPK Solver for p0033" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the GLPK solver solution for p0033" << endl;
-		cout << solver->osrl << endl;
 		check = 3089;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "GLPK solver solution for p0033 checks." << endl;
+		}
+		else
+		{	cout << "GLPK solver solution for p0033 in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with GLPK on p0033.osil");
 		delete solver;
 		solver = NULL;
@@ -880,11 +957,20 @@ if( THOROUGH == true){
 		cout << "call the CPLEX Solver for p0033" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the CPLEX solver solution for p0033" << endl;
-		cout << solver->osrl << endl;
 		check = 3089;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "CPLEX solver solution for p0033 checks." << endl;
+		}
+		else
+		{	cout << "CPLEX solver solution for p0033 in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with CPLEX on p0033.osil");
 		delete solver;
 		solver = NULL;
@@ -924,10 +1010,20 @@ if( THOROUGH == true){
 		cout << "call the IPOPT Solver" << endl;	
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution for avion2" << endl;
 		check = 9.46801e+07;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "IPOPT solver solution for avion2 checks." << endl;
+		}
+		else
+		{	cout << "IPOPT solver solution for avion2 in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on avion2.osil");
 		delete osilreader;
 		osilreader = NULL;
@@ -962,6 +1058,17 @@ if(THOROUGH == true){
 		check = 17.014;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "IPOPT solver solution for HS071_NLP checks." << endl;
+		}
+		else
+		{	cout << "IPOPT solver solution for HS071_NLP in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
@@ -992,6 +1099,17 @@ if(THOROUGH == true){
 		check = 6.7279;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "Ipopt solver solution for rosenbrockmod checks." << endl;
+		}
+		else
+		{	cout << "Ipopt solver solution for rosenbrockmod in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
 		if(ok == false) 
 			throw ErrorClass(" Fail unit test with Ipopt on rosenbrockmod.osil");
 		delete osilreader;
@@ -1022,10 +1140,20 @@ if(THOROUGH == true){
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution for parincQuadratic" << endl;
 		check = 49920.5;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "IPOPT solver solution for parincQuadratic checks." << endl;
+		}
+		else
+		{	cout << "IPOPT solver solution for parincQuadratic in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincQuadradic.osil");
 		delete osilreader;
 		osilreader = NULL;	
@@ -1054,10 +1182,20 @@ if(THOROUGH == true){
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution for parincLinear" << endl;
 		check = 7668;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "IPOPT solver solution for parincLinear checks." << endl;
+		}
+		else
+		{	cout << "IPOPT solver solution for parincLinear in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear.osil");
 		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;
 		delete osilreader;
@@ -1086,10 +1224,20 @@ if(THOROUGH == true){
 		cout << "call the IPOPT Solver" << endl;
 		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution for callBackTest" << endl;
 		check = 1.00045e+06;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "IPOPT solver solution for callBackTest checks." << endl;
+		}
+		else
+		{	cout << "IPOPT solver solution for callBackTest in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on callBackTest.osil");
 		unitTestResult << "Solved problem callBackTest.osil with Ipopt" << std::endl;	
 		delete osilreader;
@@ -1119,10 +1267,20 @@ if(THOROUGH == true){
 		cout << "call the IPOPT Solver" << endl;
 //		ipoptSolver->buildSolverInstance();
 		ipoptSolver->solve();
-		cout << "Here is the IPOPT solver solution for callBackTestRowMajor" << endl;
 		check = 1.00045e+06;
 		//ok &= NearEqual(getObjVal( ipoptSolver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( ipoptSolver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "IPOPT solver solution for callBackTestRowMajor checks." << endl;
+		}
+		else
+		{	cout << "IPOPT solver solution for callBackTestRowMajor in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on callBackTestRowMajor.osil");
 		delete osilreader;
 		osilreader = NULL;	
@@ -1203,22 +1361,20 @@ if(THOROUGH == true){
 	
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
-	
-		cout << "Here is the Ipopt solver solution for rosenbrockorig" << endl;
-
-//		OSrLWriter *tmp_writer;
-		tmp_writer = new OSrLWriter();
-		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
-		delete tmp_writer;
-		tmp_writer = NULL;
-
-		cout << solver->osrl << endl << endl;
-	
-
-//		check = -1.70711;
-//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-//		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrockorig.osil");
+		check = 0;
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Ipopt solver solution for rosenbrockorig checks." << endl;
+		}
+		else
+		{	cout << "Ipopt solver solution for rosenbrockorig in error:" << endl;
+			cout << solver->osrl << endl;
+		}
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on rosenbrockorig.osil");
 
 		delete solver;
 		solver = NULL;
@@ -1247,16 +1403,19 @@ if(THOROUGH == true){
 			solver->osol = osol; 
 //			solver->osinstance = osilreader->readOSiL( osil);
 //			solver->osoption   = osolreader->readOSoL( osol);
-			cout << "call the COIN - Ipopt Solver for HS071_feas.osil" << endl;
 			solver->buildSolverInstance();
 	
-			std::cout << " CALL SOLVE " << std::endl;
+			cout << "call the COIN - Ipopt Solver for HS071_feas.osil" << endl;
 			solver->solve();
 		}
 		catch(const ErrorClass& eclass)
 		{
 			ok = (solver->osresult->getGeneralMessage() == "Ipopt NEEDS AN OBJECTIVE FUNCTION");
-			if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_feas.osil");
+			if(ok == false) 
+			{	cout << "Ipopt solver returns:" << endl;
+				cout << solver->osrl << endl;
+				throw ErrorClass(" Fail unit test with Ipopt on HS071_feas.osil");
+			}
 		}
 	
 		cout << "Received error message from Ipopt: \"Ipopt NEEDS AN OBJECTIVE FUNCTION\"" << endl;
@@ -1298,11 +1457,20 @@ if(THOROUGH == true){
 		cout << "call the COIN - Bonmin Solver for bonminEx1" << endl;
 //		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the Bonmin solver solution for bonminEx1" << endl;
-		cout << solver->osrl << endl;
-                check = -17.07106795327683;
+		check = -17.07106795327683;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Bonmin solver solution for bonminEx1 checks." << endl;
+		}
+		else
+		{	cout << "Bonmin solver solution for bonminEx1 in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
 		delete solver;
 		solver = NULL;
@@ -1328,13 +1496,20 @@ if (THOROUGH == true){
 		solver->buildSolverInstance();
 		// Do this one with two different osol files!!!
 		solver->solve();
-		cout << "Here is the Bonmin solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 2.925;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Bonmin solver solution for wayneQuadratic checks." << endl;
+		}
+		else
+		{	cout << "Bonmin solver solution for wayneQuadratic in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on wayneQuadratic.osil");
 		delete solver;
 		solver = NULL;
@@ -1359,13 +1534,20 @@ if (THOROUGH == true){
 		solver->buildSolverInstance();
 		// Do this one with two different osol files!!!
 		solver->solve();
-		cout << "Here is the Bonmin solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 2.925;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Bonmin solver solution for wayneQuadratic checks." << endl;
+		}
+		else
+		{	cout << "Bonmin solver solution for wayneQuadratic in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on wayneQuadratic.osil");
 		delete solver;
 		solver = NULL;
@@ -1378,7 +1560,7 @@ if (THOROUGH == true){
 
 
 
-
+#if 0   // this does not work with the current version of Bonmin due to uninitialed variables
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorig.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
@@ -1391,16 +1573,25 @@ if (THOROUGH == true){
 		solver->osol = "";
 		solver->osinstance = osilreader->readOSiL( osil);
 //		solver->osoption   = osolreader->readOSoL( osol);
-		cout << "call the Bonmin Solver for rosenbrockorig" << endl;
+		cout << "build solver instance" << endl;
 		solver->buildSolverInstance();
+		cout << "call the Bonmin Solver for rosenbrockorig" << endl;
 		solver->solve();
-		cout << "Here is the Bonmin solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 0;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
+		cout << "Verify solution" <<endl;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Bonmin solver solution for rosenbrockorig checks." << endl;
+		}
+		else
+		{	cout << "Bonmin solver solution for rosenbrockorig in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on rosenbrockorig.osil");
 		delete solver;
 		solver = NULL;
@@ -1410,8 +1601,6 @@ if (THOROUGH == true){
 		osolreader = NULL;	
 		unitTestResult << "Solved problem rosenbrockorig.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-
-#if 0  // for some reason this gives a segfault --- HIG: investigate 
 
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorigInt.osil" << endl << endl;
 		ok = true;
@@ -1428,13 +1617,19 @@ if (THOROUGH == true){
 		cout << "call the Bonmin Solver for rosenbrockinteger" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the Bonmin solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 0;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		std::cout << "check " << getObjVal( solver->osrl) << " against " << check << std::endl;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Bonmin solver solution for rosenbrockorigInt checks." << endl;
+		}
+		else
+		{	cout << "Bonmin solver solution for rosenbrockorigInt in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on rosenbrockorigInt.osil");
 		delete solver;
 		solver = NULL;
@@ -1442,20 +1637,19 @@ if (THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem rosenbrockinteger.osil with Bonmin" << std::endl;
+		unitTestResult << "Solved problem rosenbrockorigInt.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif // ---- end of #if 0 above
 
 }   // end of if( THOROUGH )
 	}
 	catch(const ErrorClass& eclass){
-		cout << "OSrL =  " <<  solver->osrl <<  endl;
-		cout << endl << endl << endl;
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
 	}	
 #endif   // end of #ifdef COIN_HAS_BONMIN
 
-#if 1    // disable Couenne solver for now
+
+
 #ifdef COIN_HAS_COUENNE
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
@@ -1481,19 +1675,24 @@ if (THOROUGH == true){
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
 	
-		cout << "Here is the Couenne solver solution for bonminEx1" << endl;
-
-		tmp_writer = new OSrLWriter();
-		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
 		check = -17.07106795327683;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Couenne solver solution for bonminEx1 checks." << endl;
+		}
+		else
+		{	cout << "Couenne solver solution for bonminEx1 in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1.osil");
 
 		delete solver;
 		solver = NULL;
-		delete tmp_writer;
-		tmp_writer = NULL;
 		unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	
 	
@@ -1526,20 +1725,21 @@ if( THOROUGH == true){
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
 	
-		cout << "Here is the Couenne solver solution for bonminEx1_Nonlinear.osil" << endl;
-
-//		OSrLWriter *tmp_writer;
-		tmp_writer = new OSrLWriter();
-		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
-		delete tmp_writer;
-		tmp_writer = NULL;
-
-		cout << solver->osrl << endl << endl;
-
-//              check = -17.0711;
-//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1_Nonlinear.osil");
+		check = -1.707107;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Couenne solver solution for bonminEx1_Nonlinear checks." << endl;
+		}
+		else
+		{	cout << "Couenne solver solution for bonminEx1_Nonlinear in error:" << endl;
+			cout << solver->osrl << endl;
+		}
+		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on bonminEx1_Nonlinear.osil");
 
 		delete solver;
 		solver = NULL;
@@ -1575,20 +1775,21 @@ if( THOROUGH == true){
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
 	
-		cout << "Here is the Couenne solver solution for nonconvex.osil" << endl;
-
-//		OSrLWriter *tmp_writer;
-		tmp_writer = new OSrLWriter();
-		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
-		delete tmp_writer;
-		tmp_writer = NULL;
-
-		cout << solver->osrl << endl << endl;
-
-//		check = -1.70711;
-//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on nonconvex.osil");
+		check = -6.551133;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Couenne solver solution for nonconvex.osil checks." << endl;
+		}
+		else
+		{	cout << "Couenne solver solution for nonconvex.osil in error:" << endl;
+			cout << solver->osrl << endl;
+		}
+		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on nonconvex.osil");
 
 		delete solver;
 		solver = NULL;
@@ -1623,20 +1824,21 @@ if( THOROUGH == true){
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
 	
-		cout << "Here is the Couenne solver solution for rosenbrockorig" << endl;
-
-//		OSrLWriter *tmp_writer;
-		tmp_writer = new OSrLWriter();
-		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
-		delete tmp_writer;
-		tmp_writer = NULL;
-
-		cout << solver->osrl << endl << endl;
-
-//		check = -1.70711;
-//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on rosenbrockorig.osil");
+		check = 0;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Couenne solver solution for rosenbrockorig checks." << endl;
+		}
+		else
+		{	cout << "Couenne solver solution for rosenbrockorig in error:" << endl;
+			cout << solver->osrl << endl;
+		}
+		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on rosenbrockorig.osil");
 
 		delete solver;
 		solver = NULL;
@@ -1672,20 +1874,22 @@ if( THOROUGH == true){
 	
 		std::cout << " CALL SOLVE " << std::endl;
 		solver->solve();
-	
-		cout << "Here is the Couenne solver solution for wayneQuadratic" << endl;
 
-//		OSrLWriter *tmp_writer;
-		tmp_writer = new OSrLWriter();
-		solver->osrl = tmp_writer->writeOSrL( solver->osresult);
-		cout << solver->osrl << endl << endl;
-		delete tmp_writer;
-		tmp_writer = NULL;
-
-//		check = -1.70711;
-//		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
-//		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-//		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on rosenbrockinteger.osil");
+		check = 2.925;
+		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Couenne solver solution for wayneQuadratic checks." << endl;
+		}
+		else
+		{	cout << "Couenne solver solution for wayneQuadratic in error:" << endl;
+			cout << solver->osrl << endl;
+		}
+		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on rosenbrockinteger.osil");
 
 		delete solver;
 		solver = NULL;
@@ -1725,11 +1929,19 @@ if( THOROUGH == true){
 		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
 		delete tmp_writer;
 		tmp_writer = NULL;
-		cout << solver->osrl << endl << endl;
 		
 		string::size_type pos;
 		pos = solver->osrl.find( "OTHER[COUENNE]");
-		if(pos == std::string::npos)  throw ErrorClass(" Error with wayneQuadratic running on Couenne");
+		if(pos == std::string::npos)  
+		{	cout << solver->osrl << endl << endl;
+			throw ErrorClass(" Error with wayneQuadratic running on Couenne");
+		}
+#ifdef DEBUG
+		else
+		{
+			cout << solver->osrl << endl << endl;
+		}
+#endif
 		delete solver;
 		solver = NULL;
 		unitTestResult << "Solved problem wayneQuadratic with Couenne" << std::endl;
@@ -1751,7 +1963,7 @@ if( THOROUGH == true){
 	}	
 #endif // end of #ifdef COIN_HAS_COUENNE
 
-#endif // end of #if 0
+//#endif // end of #if 0
 
 	
 #ifdef COIN_HAS_LINDO
@@ -1770,11 +1982,20 @@ if( THOROUGH == true){
 		cout << "call the LINDO Solver" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the LINDO solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 99;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "LINDO solver solution for lindoapiaddins checks." << endl;
+		}
+		else
+		{	cout << "LINDO solver solution for lindoapiaddins in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on lindoapiaddins.osil");
 		solver->osinstance = NULL;
 		delete solver;
@@ -1798,11 +2019,20 @@ if( THOROUGH == true){
 		cout << "call the LINDO Solver" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the LINDO solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 6.7279;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "LINDO solver solution for rosenbrockmod checks." << endl;
+		}
+		else
+		{	cout << "LINDO solver solution for rosenbrockmod in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on rosenbrockmod.osil");
 		solver->osinstance = NULL;
 		delete solver;
@@ -1825,11 +2055,20 @@ if( THOROUGH == true){
 		cout << "call the LINDO Solver" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the LINDO solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 49920.5;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "LINDO solver solution for parincQuadratic checks." << endl;
+		}
+		else
+		{	cout << "LINDO solver solution for parincQuadratic in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on parincQuadratic.osil");
 		delete solver;
 		solver = NULL;
@@ -1854,13 +2093,20 @@ if( THOROUGH == true){
 		cout << "call the LINDO Solver" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the LINDO solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 2.925;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		std::cout << "CALL NEAR_EQUAL" << std::endl;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "LINDO solver solution for wayneQuadratic checks." << endl;
+		}
+		else
+		{	cout << "LINDO solver solution for wayneQuadratic in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on wayneQuadratic.osil");
 		delete solver;
 		solver = NULL;
@@ -1899,11 +2145,20 @@ if (OTHER_TESTS){
 		cout << "call COIN Solve" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the COIN solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = -7668;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "COIN solver solution for parinc.mps checks." << endl;
+		}
+		else
+		{	cout << "COIN solver solution for parinc.mps in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with COIN Solver on MPS test problem parincLinear.mps");
 		delete solver;
 		solver = NULL;
@@ -1941,11 +2196,20 @@ if (OTHER_TESTS){
 		cout << "call Cbc Solve" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
-		cout << "Here is the Cbc solver solution" << endl;
-		cout << solver->osrl << endl;
 		check = 7668;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "COIN cbc solver solution for parinc.nl checks." << endl;
+		}
+		else
+		{	cout << "COIN cbc solver solution for parinc.nl in error:" << endl;
+			cout << solver->osrl << endl;
+		}
 		if(ok == false) throw ErrorClass(" Fail unit test with OSnl2osil on problem parinc.nl");
 		solver->osinstance = NULL;
 		delete solver;
@@ -1983,12 +2247,20 @@ if (OTHER_TESTS){
 		solver->buildSolverInstance();
 		solver->solve();
 		cout << endl << endl;
-		cout << "COIN solution of a OSiL string in b64 format" << endl;
-		cout << solver->osrl;
 		check = -7668;
 		//ok &= NearEqual(getObjVal( solver->osrl) , check,  1e-1 , 1e-1);
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
-		if(ok == false) throw ErrorClass(" Fail unit test with COIN Cbc cSolver on b64 test problem parincLinear.mps");
+		if (ok)
+		{	cout << "COIN solution of a OSiL string in b64 format." << endl;
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif			
+		}
+		else
+		{	cout << "COIN solution of a OSiL string in b64 format:" << endl;
+			cout << solver->osrl << endl;
+		}
+		if(ok == false) throw ErrorClass(" Fail unit test with COIN Cbc Solver on b64 test problem parincLinear.mps");
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;

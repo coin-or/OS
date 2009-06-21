@@ -2960,6 +2960,16 @@ public:
 	double* getInitVarValuesDense();
 
 	/**
+	 * Get the initial values associated with the variables in dense form
+	 * <p>
+	 * 
+	 * @param numberOfVariables holds the dimension of the vector
+	 * @return a vector of double that 
+	 * holds initial values (or OSNAN) for all of the variables
+	 */
+	double* getInitVarValuesDense(int numberOfVariables);
+
+	/**
 	 * Get the initial value strings associated with the variables in sparse form
 	 * <p>
 	 * 
@@ -2976,6 +2986,16 @@ public:
 	 * holds initial value strings (or "") for all of the variables
 	 */
 	std::string *getInitVarValuesStringDense();
+
+	/**
+	 * Get the initial value strings associated with the variables in dense form
+	 * <p>
+	 * 
+	 * @param numberOfVariables holds the dimension of the vector
+	 * @return a vector of strings that 
+	 * holds initial value strings (or "") for all of the variables
+	 */
+	std::string *getInitVarValuesStringDense(int numberOfVariables);
 
 	/**
 	 * Get the initial basis status in sparse form
@@ -2995,6 +3015,16 @@ public:
 	 */
 	std::string *getInitBasisStatusDense();
 
+	/**
+	 * Get the initial basis status in dense form
+	 * <p>
+	 * 
+	 * @param numberOfVariables holds the dimension of the vector
+	 * @return a vector of strings that 
+	 * holds initial basis status (or "unknown") for all of the variables
+	 */
+	std::string *getInitBasisStatusDense(int numberOfVariables);
+
 
 	/**
 	 * Get the integer branching weights in sparse form
@@ -3013,6 +3043,16 @@ public:
 	 * holds branching weights (or OSNAN) for all the variables
 	 */
 	double* getIntegerVariableBranchingWeightsDense();
+
+	/**
+	 * Get the integer branching weights in dense form
+	 * <p>
+	 * 
+	 * @param numberOfVariables holds the dimension of the vector
+	 * @return a vector of double that 
+	 * holds branching weights (or OSNAN) for all the variables
+	 */
+	double* getIntegerVariableBranchingWeightsDense(int numberOfVariables);
 
 	/**
 	 * Get the SOS branching weights in sparse form
@@ -3060,6 +3100,16 @@ public:
 	double *getInitObjValuesDense();
 
 	/**
+	 * Get the initial values associated with the objectives in dense form
+	 * <p>
+	 * 
+	 * @param numberOfObjectives holds the dimension of the vector
+	 * @return a vector of double that 
+	 * hold initial values (or OSNAN) for all of the objectives
+	 */
+	double *getInitObjValuesDense(int numberOfObjectives);
+
+	/**
 	 * Get the initial bounds associated with the objectives in sparse form
 	 * <p>
 	 * 
@@ -3078,6 +3128,16 @@ public:
 	double *getInitObjLowerBoundsDense();
 
 	/**
+	 * Get the initial lower bounds associated with the objectives in dense form
+	 * <p>
+	 * 
+	 * @param numberOfObjectives holds the dimension of the vector
+	 * @return a vector of double that 
+	 * hold initial lower bounds (or OSNAN) for all of the objectives
+	 */
+	double *getInitObjLowerBoundsDense(int numberOfObjectives);
+
+	/**
 	 * Get the initial upper bounds associated with the objectives in dense form
 	 * <p>
 	 * 
@@ -3085,6 +3145,16 @@ public:
 	 * hold initial upper bounds (or OSNAN) for all of the objectives
 	 */
 	double *getInitObjUpperBoundsDense();
+
+	/**
+	 * Get the initial upper bounds associated with the objectives in dense form
+	 * <p>
+	 * 
+	 * @param numberOfObjectives holds the dimension of the vector
+	 * @return a vector of double that 
+	 * hold initial upper bounds (or OSNAN) for all of the objectives
+	 */
+	double *getInitObjUpperBoundsDense(int numberOfObjectives);
 
 	/**
 	 * Get the array of other objective options
@@ -3122,6 +3192,16 @@ public:
 	double *getInitConValuesDense();
 
 	/**
+	 * Get the initial values associated with the constraints in dense form
+	 * <p>
+	 * 
+	 * @param numberOfConstraints holds the dimension of the vector
+	 * @return a vector of double that 
+	 * hold initial values for all of the constraints
+	 */
+	double *getInitConValuesDense(int numberOfConstraints);
+
+	/**
 	 * Get the initial bounds associated with the dual variables in sparse form
 	 * <p>
 	 * 
@@ -3139,6 +3219,16 @@ public:
 	 */
 	double *getInitDualVarLowerBoundsDense();
 
+	/**
+	 * Get the initial dual variables associated with the lower bounds in dense form
+	 * <p>
+	 * 
+	 * @param numberOfConstraints holds the dimension of the vector
+	 * @return a vector of double that 
+	 * hold initial lower bounds for all of the dual variables
+	 */
+	double *getInitDualVarLowerBoundsDense(int numberOfConstraints);
+
 
 	/**
 	 * Get the initial dual variables associated with the upper bounds in dense form
@@ -3148,6 +3238,16 @@ public:
 	 * hold initial upper bounds for all of the dual variables
 	 */
 	double *getInitDualVarUpperBoundsDense();
+
+	/**
+	 * Get the initial dual variables associated with the upper bounds in dense form
+	 * <p>
+	 * 
+	 * @param numberOfConstraints holds the dimension of the vector
+	 * @return a vector of double that 
+	 * hold initial upper bounds for all of the dual variables
+	 */
+	double *getInitDualVarUpperBoundsDense(int numberOfConstraints);
 
 	/**
 	 * Get the array of other constraint options

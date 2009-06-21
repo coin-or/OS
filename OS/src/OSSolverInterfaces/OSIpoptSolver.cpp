@@ -196,7 +196,6 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 	//now set initial values
 #ifdef DEBUG
   	cout << "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-	cout << "Is osoption = NULL? " << (osoption == NULL) << endl;
 #endif
 	int k;
 	if (osoption != NULL)

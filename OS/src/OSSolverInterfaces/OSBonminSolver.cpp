@@ -16,6 +16,9 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
+
+//#define DEBUG
+
 #include <iostream>
 
 
@@ -209,8 +212,6 @@ bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 	// use the C style indexing (0-based)
 	index_style = TNLP::C_STYLE;
   
-  /////
-
   return true;
 }//get_nlp_info
 
@@ -274,7 +275,6 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 	//now set initial values
 #ifdef DEBUG
   	cout << "get number of initial values !!!!!!!!!!!!!!!!!!!!!!!!!! " << endl;
-	cout << "Is osoption = NULL? " << (osoption == NULL) << endl;
 #endif
 	int k;
 	if (osoption != NULL)
@@ -726,13 +726,11 @@ void BonminSolver::solve() throw (ErrorClass) {
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
 		double duration = CoinCpuTime() - start;
-		//cout << "Parsing took (seconds): "<< duration << endl;
 
 		  try {
 			  bonminSetup.initialize( GetRawPtr(tminlp) );
 		    // bb is a Bonmin BonCbc object;;
 		    bb(  bonminSetup);  //process parameter file using Ipopt and do branch and bound using Cbc
-
 
 		  }
 		  catch(TNLPSolver::UnsolvedError *E) {
