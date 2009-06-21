@@ -171,11 +171,11 @@ OSnLNode::~OSnLNode(){
 
 OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec){
 	std::vector<OSnLNode*> stackVec ;
-	unsigned int kount =  0;
+	int kount =  0;
 	while(kount <= nlNodeVec.size() - 1){
 		int numkids = nlNodeVec[kount]->inumberOfChildren;
 		if(numkids  > 0){
-			for(unsigned int i = numkids - 1; i >= 0;  i--){
+			for(int i = numkids - 1; i >= 0;  i--){
 				nlNodeVec[kount]->m_mChildren[i] = stackVec.back()	;
 				stackVec.pop_back();
 			}

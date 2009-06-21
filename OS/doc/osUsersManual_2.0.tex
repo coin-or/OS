@@ -4759,6 +4759,34 @@ At this point, if the user desires to modify an {\bf OSInstance} object that con
 
 \subsection{Printing a Model for Debugging}\label{section:printModel}
 
+The OSiL representation for the test problem {\tt rosenbrockmod.osil} is given in Appendix \ref{section:rosenbrockXML}.  Many users will not find the OSiL representation useful for model debugging purposes.  For users that wish to see a model in a standard infix representation we provide a method {\tt printModel()}.  Assume that we have an {\tt osintance} object in the {\tt OSInstance} class that represents the model of interest.  The call
+\begin{verbatim}
+osintance->printModel( -1)
+\end{verbatim}
+will result in printing the objective function (the first) indexed by -1.  In order to print constraint $k$ use
+\begin{verbatim}
+osintance->printModel( k)
+\end{verbatim}
+In order to print the entire model use
+\begin{verbatim}
+osintance->printModel( )
+\end{verbatim}
+
+ 
+Below we see the result of {\tt osintance->printModel( )} for the {\tt rosenbrockmod.osil} problem.
+\begin{verbatim}
+Objectives:
+min 9*x_1 + (((1 - x_0) ^ 2) + (100*((x_1 - (x_0 ^ 2)) ^ 2)))
+
+Constraints:
+(((((10.5*x_0)*x_0) + ((11.7*x_1)*x_1)) + ((3*x_0)*x_1)) + x_0) <= 25  
+10 <= ((ln( (x_0*x_1)) + (7.5*x_0)) + (5.25*x_1))
+
+Variables:
+x_0 Type = C  Lower Bound =  0  Upper Bound =  1.7976931348623157e308
+x_1 Type = C  Lower Bound =  0  Upper Bound =  1.7976931348623157e308
+\end{verbatim}
+ 
 
 
 \section{Code samples to illustrate the OS Project}\label{section:examples}
@@ -4945,14 +4973,113 @@ in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
 \subsection{OSSolverDemo: Building In-Memory Solver and Option Objects}\label{section:exampleOSSolverDemo}
 
-The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers Clp, Cbc, SYMPHONY, and Couenne.
+The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers {\tt Clp}, {\tt Cbc}, {\tt SYMPHONY}, {\tt Ipopt},  and {\tt Couenne}.   Each solver class inherits from a virtual {\tt OSDefaultSolver} class. Each solver class has the string data members
+
+\begin{itemize}
+\item {\bf osil --} this string conforms to the OSiL standard and holds the model instance
+
+\item {\bf osol --} this string conforms to the OSoL standard and holds an instance with the solver options (if there are any), this string can be empty
+
+\item {\bf osrl --} this string conforms to the OSrL standard and holds the solution instance, each solver interface produces an osrl string
+\end{itemize}
+
+Corresponding to each string there is an in-memory object data member.
+
+\begin{itemize}
+\item {\bf osinstance --}  an in-memory {\tt OSInstance} object and  various parts of the model instance are accessible through get() and set() methods.
+
+
+\item {\bf osoption --} an in-memory {\tt OSOption} object and  solver options can be accessed or set using get() and set() methods.
+
+
+\item {\bf osresult --}  an in-memory OSResult object and  various parts of the model solution  are accessible through get() and set() methods
+\end{itemize}
+
+
+For each solver we detail five steps:
+
+\begin{itemize}
+\item[Step 1:]  Read a model instance from a file  and create the corresponding {\tt OSInstance} object.
+
+\item[Step 2:]  Create an {\tt OSOption} object and set options appropriate for the given solver. 
+
+\item[Step 3:] Create the solver object. In the OS project there is {\it virtual} solver that is declared by
+
+\begin{verbatim}
+DefaultSolver *solver  = NULL;
+\end{verbatim}
+
+Then to declare a specific, for example, an {\tt Ipopt} solver, simply write
+
+\begin{verbatim}
+solver = new IpoptSolver();
+\end{verbatim}
+
+The syntax is the same regardless of solver. 
+
+\item[Step 4:] Import the {\tt OSOption} and {\tt OSInstance} into the solver and solve the model. This process is identical regardless of which solver is used. The syntax is:
+
+\begin{verbatim}
+solver->osinstance = osinstance;
+solver->osoption = osoption;	
+solver->solve();
+\end{verbatim}
+
+\item[Step 5:] After optimizing the instance, the solver writes the result to a string named {\tt osrl} which is a string representing the solution instance in the {\tt OSrL} XML standard.  This string is accessed by
+
+\begin{verbatim}
+solver->osrl
+\end{verbatim}
+
+
+In the code {\tt OSCoinSolver.cpp} we have written a method,  
+
+\begin{verbatim}
+void getOSResult(std::string osrl)
+\end{verbatim}
+
+that takes the {\tt osrl} string and creates an {\tt OSResult} object.   We then use the {\tt OSResult} API methods 
+
+\begin{verbatim}
+double getOptimalObjValue(int objIdx, int solIdx);
+std::vector<IndexValuePair*>  getOptimalPrimalVariableValues(int solIdx);
+\end{verbatim}
+to get and write out the optimal objective function value, and optimal primal values.  See also Section \ref{section:exampleOSResultDemo}.
+
+\end{itemize}
+
+We now highlight some of the features illustrated by each of the solver examples.
+
+\begin{itemize}
+\item {\bf Clp --}
+
+\item {\bf Cbc --}
+
+\item {\bf SYMPHONY --}
+
+\item {\bf Ipopt --}
+
+Mention initialize
+
+Mention using osinstance of osil
+
+
+\item {\bf Couenne --}
+\end{itemize}
+
+
+ 
+
+\subsection{OSDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
+
+Kipp -- still to do
 
 
 \subsection{OSCglCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
 In this example, we show how to add cuts to tighten an LP using {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
 
-\subsection{OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
+\subsection{ \, OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
 
 This example illustrates the API for the six service methods described in Section~\ref{section:servicemethods}.
 The file {\tt osRemoteTest.cpp} in folder {\tt osRemoteTest} first builds a small linear
@@ -4961,7 +5088,7 @@ The asynchronous mode is also tested by submitting the problem to a remote solve
 checking the status and either retrieving the answer or killing the process if it has not
 yet finished.
 
-
+\subsection{ \,template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} directory.  This is an empty example  that comes with a {\\t Makefile}  that links to all of the necessary header files and libraries.  The user can write his or her own code her. 
 
 \section{The OS Algorithmic Differentiation Implementation}\label{section:ad}
 

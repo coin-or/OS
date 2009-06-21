@@ -43,12 +43,13 @@
 #include "OSnl2osil.h"
 #endif
 
-
 #ifdef COIN_HAS_COUENNE    
 #include "OSCouenneSolver.h"
 #endif
 
-
+#ifdef COIN_HAS_IPOPT    
+#include "OSIpoptSolver.h"
+#endif
 
 
 using std::string;
@@ -80,6 +81,10 @@ int main( ){
 		OSInstance *osinstance = NULL;
 		OSoLWriter *osolwriter = NULL;
 		OSOption* osoption = NULL;
+		
+		// set initial/starting values of 0 for the variables
+		double* xinitial = NULL;
+		int numVar;
 		
 		/******************** Start Clp Example *************************/
 		std::cout << std::endl << std::endl;
@@ -273,7 +278,84 @@ int main( ){
 		osolwriter = NULL;
 		// finish garbage collection
 		
-		/******************** End SYMPHONY Example *************************/
+		
+		
+		
+#ifdef COIN_HAS_IPOPT		
+		/******************** Start Ipopt Example *************************/
+		
+		std::cout << std::endl << std::endl;
+		std::cout << "IPOPT EXAMPLE" << std::endl;
+		
+		/******************** STEP 1 ************************
+		* Get an instance in OSiL  format, and create an OSiL string
+		*/
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
+		//get an osil string
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
+
+		/******************** STEP 2 ************************
+		* Create an OSOption object and give the solver options
+		*/			
+		osoption = new OSOption();
+		/** 
+		 *  here is the format for setting options:
+		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 *	std::string category, std::string type, std::string description);
+		 */
+		 
+		// set iteration limit
+		osoption->setAnotherSolverOption("max_iter","100","ipopt","","integer","");
+		osoption->setAnotherSolverOption("output_file","ipopt_out.txt","ipopt","","string","");
+		
+		
+		// set initial/starting values of 0 for the variables
+		numVar = 2; //rosenbrock mod has two variables 
+		xinitial = new double[numVar];
+		for(i = 0; i < numVar; i++){
+			xinitial[ i] = 1.0;
+		}
+		osoption->setInitVarValuesDense(numVar, xinitial);
+		osolwriter = new OSoLWriter();
+		std::cout << osolwriter-> writeOSoL( osoption);
+		
+		/******************** STEP 3 ************************
+		* Create the solver object
+		*/			
+		solver = new IpoptSolver();
+		
+		
+		/******************** STEP 4 ************************
+		* Give the solver the instance and options and solve
+		*/	
+		solver->osil = osil;
+		solver->osoption = osoption;	
+		solver->solve();
+		
+		
+		/******************** STEP 5 ************************
+		* Create a result object and get the optimal objective
+		* and primal variable values
+		*/	
+		getOSResult( solver->osrl);
+		
+		// start garbage collection
+		delete[] xinitial;
+		xinitial = NULL;
+		delete solver;
+		solver = NULL;
+		delete osoption;
+		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
+		// finish garbage collection
+		
+		/******************** End Ipopt Example *************************/
+		
+#endif //end of  COIN_HAS_IPOPT	
+		
+		
+	
 #if 1	
 #ifdef COIN_HAS_COUENNE		
 		/******************** Start Couenne Example *************************/
@@ -319,9 +401,7 @@ int main( ){
 		// set a Couenne time limit option -- this seems to have no effect
 		osoption->setAnotherSolverOption("time_limit","100","couenne","","numeric","");
 		
-		// set initial/starting values of 0 for the variables
-		double* xinitial;
-		int numVar;
+
 		numVar =osinstance->getVariableNumber();
 		xinitial = new double[numVar];
 		for(i = 0; i < numVar; i++){
@@ -351,7 +431,7 @@ int main( ){
 		*/	
 		getOSResult( solver->osrl);
 		
-		
+
 		// start garbage collection
 		delete[] xinitial;
 		xinitial = NULL;
@@ -369,7 +449,7 @@ int main( ){
 		
 		/******************** End Couenne Example *************************/
 		
-#endif	
+#endif //end of  COIN_HAS_COUENNE			
 #endif //end #if 0/1	
 
 		
