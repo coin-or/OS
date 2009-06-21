@@ -260,6 +260,8 @@ OS/doc/osUsersManual_2.0.ind -text
 OS/doc/osUsersManual_2.0.pdf -text
 OS/doc/osUsersManual_2.0.tex -text
 OS/doc/usersManualAdditions.txt -text
+OS/doc/visualstudio.pdf -text
+OS/doc/visualstudio.tex -text
 OS/examples/Excel/OSWebServiceGUI.xlsm -text
 OS/examples/Excel/clsOSInstance.cls -text
 OS/examples/Excel/clsws_OSSolverServiceServic.cls -text
