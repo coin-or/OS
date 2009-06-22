@@ -1560,7 +1560,7 @@ if (THOROUGH == true){
 
 
 
-#if 0   // this does not work with the current version of Bonmin due to uninitialed variables
+#if 1   // this does not work with the current version of Bonmin due to uninitialed variables
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorig.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
