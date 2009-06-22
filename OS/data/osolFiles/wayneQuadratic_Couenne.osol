@@ -10,8 +10,8 @@
 			<initialVariableValues numberOfVar="2">
 					<var idx="2" value="5."/>
 					<var idx="1" value="5."/>
-			</initialVariableValues>
-		</variables>	
+		</initialVariableValues>
+		</variables>
 		<solverOptions numberOfSolverOptions="6">	
 			<solverOption name="node_limit" solver="couenne" type="integer" value="0" category="bonmin"/>
 			<solverOption name="bb_log_level" solver="couenne" type="integer" value="3" category="bonmin"/>

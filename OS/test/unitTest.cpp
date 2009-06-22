@@ -1931,7 +1931,7 @@ if( THOROUGH == true){
 		tmp_writer = NULL;
 		
 		string::size_type pos;
-		pos = solver->osrl.find( "OTHER[COUENNE]");
+		pos = solver->osrl.find( "LIMIT_EXCEEDED[COUENNE]");
 		if(pos == std::string::npos)  
 		{	cout << solver->osrl << endl << endl;
 			throw ErrorClass(" Error with wayneQuadratic running on Couenne");

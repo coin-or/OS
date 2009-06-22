@@ -299,7 +299,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 
 expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
 	//std::cout << "NODE NUMBER =  " << node->inodeInt  << std::endl;
-	int i;
+	unsigned int i;
 	switch (node->inodeInt) {
 		case OS_PLUS :
 			return new exprSum(createCouenneExpression(node->m_mChildren[0]), createCouenneExpression(node->m_mChildren[1]));
@@ -350,7 +350,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
 				expression** args = new expression*[node->inumberOfChildren];
-				for(int i=0;i<node->inumberOfChildren;i++)
+				for( i = 0; i < node->inumberOfChildren;i++)
 					args[i] = createCouenneExpression(node->m_mChildren[i]);
 				expression* base = new exprMul(args, node->inumberOfChildren);
            //delete[] args;
@@ -378,7 +378,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
     			 expression** args = new expression*[node->inumberOfChildren];
-           for(int i=0;i<node->inumberOfChildren;i++)
+           for( i = 0; i <node->inumberOfChildren;i++)
           	 args[i] = createCouenneExpression(node->m_mChildren[i]);
            expression* base = new exprMin(args, node->inumberOfChildren);
            //delete[] args;
@@ -392,7 +392,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
     			 return createCouenneExpression(node->m_mChildren[0]);
     		 default:
     			 expression** args = new expression*[node->inumberOfChildren];
-           for(int i=0;i<node->inumberOfChildren;i++)
+           for(i = 0; i < node->inumberOfChildren;i++)
           	 args[i] = createCouenneExpression(node->m_mChildren[i]);
            expression* base = new exprMax(args, node->inumberOfChildren);
            //delete[] args;
@@ -608,7 +608,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 			throw ErrorClass("OSResult error: setSolutionNumer");		
 		if(osresult->setGeneralMessage( message) != true)
 			throw ErrorClass("OSResult error: setGeneralMessage");
-		solutionDescription = "The problem is most likely unbounded";
+		solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: The continuous relaxation is unbounded, the MINLP may or may not be unbounded.";
 			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 		osresult->setGeneralStatusType("normal");
 		osrl = osrlwriter->writeOSrL( osresult);		
@@ -729,28 +729,35 @@ void CouenneSolver::writeResult(){
 			throw ErrorClass("OSResult error: setGeneralMessage");
 	
 		switch( status){
-			case SUCCESS:
+			case  TMINLP::SUCCESS:
 				solutionDescription = "SUCCESS[COUENNE]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
-				//
 				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+				// okay if equal to 9999000000000 we are probably unbounded
+				if(fabs(*(z + 0)) == 9.999e+12){
+					solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: Continuous relaxation is unbounded, the MINLP may or may not be unbounded.";
+					//std::cout << solutionDescription << std::endl;
+					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+					break;
+				}
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.bestSolution()[i];
 					//std::cout <<  *(x + i)  << std::endl;
 				}
-				osresult->setPrimalVariableValuesDense(solIdx, x); 
+				osresult->setPrimalVariableValuesDense(solIdx, x);
 			break;
 			
-			case MAXITER_EXCEEDED:
-				solutionDescription = "MAXITER_EXCEEDED[COUENNE]: Maximum number of iterations exceeded.";
+			case TMINLP::LIMIT_EXCEEDED:
+				solutionDescription = "LIMIT_EXCEEDED[COUENNE]: A resource limit was exceeded, we provide the current solution.";
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
-				//
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.model().getColSolution()), true)[ 0];
 				osresult->setObjectiveValuesDense(solIdx, z); 
 				for(i=0; i < osinstance->getVariableNumber(); i++){
 					*(x + i) = bb.model().getColSolution()[i];
@@ -759,67 +766,25 @@ void CouenneSolver::writeResult(){
 				osresult->setPrimalVariableValuesDense(solIdx, x); 
 			break;
 			
-			case STOP_AT_TINY_STEP:
-				solutionDescription = "STOP_AT_TINY_STEP[COUENNE]: Algorithm proceeds with very little progress.";
-				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);	
-				/* Retrieve the solution */
-				//
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
-				}
-				osresult->setPrimalVariableValuesDense(solIdx, x); 
+			case TMINLP::MINLP_ERROR:
+				solutionDescription = "MINLP_ERROR [COUENNE]: Algorithm stopped with unspecified error.";
+				//std::cout << solutionDescription << std::endl;
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+
 			break;
 			
-			case STOP_AT_ACCEPTABLE_POINT:
-				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[COUENNE]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
-				osresult->setSolutionStatus(solIdx,  "BonminAccetable", solutionDescription);
-				/* Retrieve the solution */
-				//
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
-				}
-				osresult->setPrimalVariableValuesDense(solIdx, x); 
+			case TMINLP::CONTINUOUS_UNBOUNDED:
+				solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: The continuous relaxation is unbounded, the MINLP may or may not be unbounded.";
+				//std::cout << solutionDescription << std::endl;
+				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+
 			break;
 			
-			case LOCAL_INFEASIBILITY:
-				solutionDescription = "LOCAL_INFEASIBILITY[COUENNE]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
+		
+			case TMINLP::INFEASIBLE:
+				solutionDescription = "INFEASIBLE [COUENNE]: Problem may be infeasible.";
+				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
-			break;
-			
-			case USER_REQUESTED_STOP:
-				solutionDescription = "USER_REQUESTED_STOP[COUENNE]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			
-			case DIVERGING_ITERATES:
-				solutionDescription = "DIVERGING_ITERATES[COUENNE]: It seems that the iterates diverge.";
-				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
-			break;
-			
-			case RESTORATION_FAILURE:
-				solutionDescription = "RESTORATION_FAILURE[COUENNE]: Restoration phase failed, algorithm doesn't know how to proceed.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			
-			case ERROR_IN_STEP_COMPUTATION:
-				solutionDescription = "ERROR_IN_STEP_COMPUTATION[COUENNE]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			
-			case INVALID_NUMBER_DETECTED:
-				solutionDescription = "INVALID_NUMcatBER_DETECTED[COUENNE]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
-			break;
-			
-			case INTERNAL_ERROR:
-				solutionDescription = "INTERNAL_ERROR[COUENNE]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
-				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
 			break;
 			
 			default:
