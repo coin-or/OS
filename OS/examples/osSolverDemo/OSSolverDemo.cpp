@@ -43,6 +43,10 @@
 #include "OSnl2osil.h"
 #endif
 
+#ifdef COIN_HAS_Bonmin   
+#include "OSBonminSolver.h"
+#endif
+
 #ifdef COIN_HAS_COUENNE    
 #include "OSCouenneSolver.h"
 #endif
@@ -179,7 +183,7 @@ int main( ){
 		// tell Cbc to use the primal simplex algorithm
 		osoption->setAnotherSolverOption("primalS","","cbc","","string","");
 		//in primal simplex set the pivot choice -- use steepest edge
-		osoption->setAnotherSolverOption("primalpivot","steepest","cbc","","string","");
+		osoption->setAnotherSolverOption("primalpivot","dantzig","cbc","","string","");
 		//set a high-level of log reporting
 		osoption->setAnotherSolverOption("log","10","cbc","","integer","");
 		osolwriter = new OSoLWriter();
@@ -278,7 +282,7 @@ int main( ){
 		osolwriter = NULL;
 		// finish garbage collection
 		
-		
+/******************** End SYMPHONY Example *************************/		
 		
 		
 #ifdef COIN_HAS_IPOPT		
@@ -353,6 +357,75 @@ int main( ){
 		/******************** End Ipopt Example *************************/
 		
 #endif //end of  COIN_HAS_IPOPT	
+
+
+#ifdef COIN_HAS_BONMIN	
+		/******************** Start Bonmin Example *************************/
+		
+		std::cout << std::endl << std::endl;
+		std::cout << "BONMIN EXAMPLE" << std::endl;
+		
+		/******************** STEP 1 ************************
+		* Get an instance in OSiL  format, and create an OSInstance object
+		*/
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "wayneQuadratic.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
+		osilreader = new OSiLReader(); 
+		osinstance = osilreader->readOSiL( osil);
+
+		/******************** STEP 2 ************************
+		* Create an OSOption object and give the solver options
+		*/			
+		osoption = new OSOption();
+		/** 
+		 *  here is the format for setting options:
+		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 *	std::string category, std::string type, std::string description);
+		 */
+		 
+		// we are going to limit thenumber of nodes and terminate early
+		// set a limit of 0 nodes 
+		osoption->setAnotherSolverOption("node_limit","0","bonmin","","integer","");
+
+		
+		osolwriter = new OSoLWriter();
+		std::cout << osolwriter-> writeOSoL( osoption);
+		
+		/******************** STEP 3 ************************
+		* Create the solver object
+		*/			
+		solver = new BonminSolver();
+		
+		
+		/******************** STEP 4 ************************
+		* Give the solver the instance and options and solve
+		*/	
+		solver->osinstance = osinstance;
+		solver->osoption = osoption;	
+		solver->solve();
+		
+		
+		/******************** STEP 5 ************************
+		* Create a result object and get the optimal objective
+		* and primal variable values
+		*/	
+		getOSResult( solver->osrl);
+
+		// start garbage collection
+		delete osilreader;
+		osilreader = NULL;
+		delete solver;
+		solver = NULL;
+		delete osoption;
+		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
+		// finish garbage collection
+		
+		/******************** End Bonmin Example *************************/
+		
+#endif //end of  COIN_HAS_BONMIN
+
 		
 		
 	
@@ -431,7 +504,6 @@ int main( ){
 		*/	
 		getOSResult( solver->osrl);
 		
-
 		// start garbage collection
 		delete[] xinitial;
 		xinitial = NULL;
@@ -502,6 +574,10 @@ void getOSResult(std::string osrl){
 			std::cout << "    value = " <<  primalValPair[ i]->value << std::endl;
 		}
 	}
+	// write a description of the solution status
+	
+	
+	std::cout << osresult->getSolutionStatusDescription( 0)<< std::endl;
 	delete osrlreader;
 }// get OSResult
 

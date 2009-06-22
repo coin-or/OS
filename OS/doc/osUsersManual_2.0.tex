@@ -4973,7 +4973,7 @@ in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
 \subsection{OSSolverDemo: Building In-Memory Solver and Option Objects}\label{section:exampleOSSolverDemo}
 
-The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers {\tt Clp}, {\tt Cbc}, {\tt SYMPHONY}, {\tt Ipopt},  and {\tt Couenne}.   Each solver class inherits from a virtual {\tt OSDefaultSolver} class. Each solver class has the string data members
+The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers {\tt Clp}, {\tt Cbc}, {\tt SYMPHONY}, {\tt Ipopt},   {\tt Bonmin}, and {\tt Couenne}.   Each solver class inherits from a virtual {\tt OSDefaultSolver} class. Each solver class has the string data members
 
 \begin{itemize}
 \item {\bf osil --} this string conforms to the OSiL standard and holds the model instance
@@ -4999,9 +4999,31 @@ Corresponding to each string there is an in-memory object data member.
 For each solver we detail five steps:
 
 \begin{itemize}
-\item[Step 1:]  Read a model instance from a file  and create the corresponding {\tt OSInstance} object.
+\item[Step 1:]  Read a model instance from a file  and create the corresponding {\tt OSInstance} object.  For four of the solvers we read a file with the model instance in OSiL format. For the Clp example we read an MPS file and convert to OSiL. For the Couenne example we read an AMPL nl file and convert to OSiL.
 
-\item[Step 2:]  Create an {\tt OSOption} object and set options appropriate for the given solver. 
+\item[Step 2:]  Create an {\tt OSOption} object and set options appropriate for the given solver.   This is done by defining
+
+\begin{verbatim}
+OSOption* osoption = NULL;
+osoption = new OSOption();
+\end{verbatim}
+
+A key method in the {\tt OSOption} interface is {\tt setAnotherSolverOption()}.  This method takes the following arguments in order.
+
+\begin{itemize}
+\item[] {\bf std::string name} -- the option name
+\item[] {\bf std::string value}  -- the value of the option
+\item[] {\bf std::string solver} -- the name of the solver to which the option applies
+\item[] {\bf std::string category} -- options may fall into categories. For example, consider the  Couenne solver.  This solver is also linked to the Ipopt and Bonmin solvers and  it is possible to set options for these solvers through the Couenne API. So in order to set an Ipopt option you would set the {\tt solver} argument to {\tt couenne} and set the {\tt category} option to {\tt ipopt}.
+
+\item[] {\bf std::string type} -- many solvers require knowledge of the data type, so you can set the type to {\tt double}, {\tt integer}, {\tt boolean} or {\tt string.}
+
+
+\item[] {\bf std::string  description} -- this is optional and is used to provide any detail or additional information about the option.
+\end{itemize}
+
+
+
 
 \item[Step 3:] Create the solver object. In the OS project there is {\it virtual} solver that is declared by
 
@@ -5051,17 +5073,60 @@ to get and write out the optimal objective function value, and optimal primal va
 We now highlight some of the features illustrated by each of the solver examples.
 
 \begin{itemize}
-\item {\bf Clp --}
+\item {\bf Clp --}  In this example we read in a problem instance in mps format.  The class {\tt OSmps2osil}  has a method {\tt mps2osil} that is used to convert the mps instance contained in a file into an in-memory {\tt OSInstance} object. This example also illustrates how to set options using the Osi interface. In particular we turn on intermediate output which is turned off by default in the Coin Solver Interface. 
 
-\item {\bf Cbc --}
+\item {\bf Cbc --}  In this example we read a problem instance that is the OSiL format and create an in-memory {\tt OSInstance} object.  We then create an {\tt OSOption} object.  This is quite trivial.  A  plain-text XML file conforming to the OSiL schema is read into a string {\tt osil} which is then converted into the in-memory {\tt OSInstance} object by
 
-\item {\bf SYMPHONY --}
+\begin{verbatim}
+OSiLReader *osilreader = NULL;
+OSInstance *osinstance = NULL;
+osilreader = new OSiLReader(); 
+osinstance = osilreader->readOSiL( osil);
+\end{verbatim}
 
-\item {\bf Ipopt --}
 
-Mention initialize
+ We set the linear programming algorithm to be the primal simplex method and then set the option on the pivot selection to be Dantzig rule.  Finally, we set the print level to be 10.
 
-Mention using osinstance of osil
+\item {\bf SYMPHONY --}   In this example we also read a problem instance that is the OSiL format and create an in-memory {\tt OSInstance} object.  We then create an {\tt OSOption} object and illustrate setting the {\tt verbosity} option.
+
+\item {\bf Ipopt --}   In this example we also read a problem instance that is the OSiL format.  However, in this case we do  not create an {\tt OSInstance} object. We read the OSiL file into a string {\tt osil}.  We then feed the {\tt osil} string directly into the Ipopt solver by
+\begin{verbatim}
+solver->osil = osil;
+\end{verbatim} 
+The user always has the option of providing the OSiL to the solver as either a string or in-memory object.
+
+Next we create an {\tt OSOption} object. For Ipopt, we illustrate setting the maximum iteration limit and also provide the name of the output file. In addition, the OSOption object can hold initial solution values. We illustrate how to initialize all of the variable to 1.0.
+
+\begin{verbatim}
+numVar = 2; //rosenbrock mod has two variables 
+xinitial = new double[numVar];
+for(i = 0; i < numVar; i++){
+    xinitial[ i] = 1.0;
+}
+osoption->setInitVarValuesDense(numVar, xinitial);
+\end{verbatim}
+
+
+
+\item {\bf Bonmin --}  In this example we read a problem instance that is the OSiL format and create an in-memory {\tt OSInstance} object just as was done in the Cbc and SYMPHONY examples.   We then create an {\tt OSOption} object.  In setting the  {\tt OSOption} object we intentionally set an option that will cause the Bonmin solver to terminate early.  In particular we set the {\tt node\_limit} to zero. 
+
+\begin{verbatim}
+osoption->setAnotherSolverOption("node_limit","0","bonmin","","integer","");
+\end{verbatim}
+
+This results in early termination of the algorithm. The {\tt OSResult} class API has a method
+\begin{verbatim}
+std::string getSolutionStatusDescription(int solIdx);
+\end{verbatim}
+
+For this example, invoking
+\begin{verbatim}
+osresult->getSolutionStatusDescription( 0)
+\end{verbatim}
+gives the result:
+\begin{verbatim}
+LIMIT_EXCEEDED[BONMIN]: A resource limit was exceeded, we provide the current solution.
+\end{verbatim}
 
 
 \item {\bf Couenne --}
@@ -5070,7 +5135,7 @@ Mention using osinstance of osil
 
  
 
-\subsection{OSDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
+\subsection{OSDemoResult: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
 
 Kipp -- still to do
 
