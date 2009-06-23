@@ -4969,6 +4969,10 @@ which is critical, otherwise changes made to the OSInstance object will not be f
 This example also illustrates calling a COIN-OR solver,
 in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
+\vskip 8pt
+
+{\bf Important:} the ability to modify a problem instance is extremely limited in Release 2.0 of OS. A better API for problem modification will come with a later release of OS.
+
 
 
 \subsection{OSSolverDemo: Building In-Memory Solver and Option Objects}\label{section:exampleOSSolverDemo}
@@ -5016,13 +5020,17 @@ A key method in the {\tt OSOption} interface is {\tt setAnotherSolverOption()}. 
 \item[] {\bf std::string solver} -- the name of the solver to which the option applies
 \item[] {\bf std::string category} -- options may fall into categories. For example, consider the  Couenne solver.  This solver is also linked to the Ipopt and Bonmin solvers and  it is possible to set options for these solvers through the Couenne API. So in order to set an Ipopt option you would set the {\tt solver} argument to {\tt couenne} and set the {\tt category} option to {\tt ipopt}.
 
-\item[] {\bf std::string type} -- many solvers require knowledge of the data type, so you can set the type to {\tt double}, {\tt integer}, {\tt boolean} or {\tt string.}
+\item[] {\bf std::string type} -- many solvers require knowledge of the data type, so you can set the type to {\tt double}, {\tt integer}, {\tt boolean} or {\tt string}, depending on the solver requirements. 
 
 
 \item[] {\bf std::string  description} -- this is optional and is used to provide any detail or additional information about the option.
 \end{itemize}
 
+For excellent document that details solver options for Bonmin, Cbc, and Ipopt  we recommend 
 
+\begin{center}
+\url{http://www.coin-or.org/GAMSlinks/gamscoin.pdf}
+\end{center}
 
 
 \item[Step 3:] Create the solver object. In the OS project there is {\it virtual} solver that is declared by
@@ -5031,6 +5039,12 @@ A key method in the {\tt OSOption} interface is {\tt setAnotherSolverOption()}. 
 DefaultSolver *solver  = NULL;
 \end{verbatim}
 
+The Cbc, Clp, and SYMPHONY solvers are all invoked by creating a {\tt CoinSolver().} For example, the following is used to invoke Cbc.
+
+\begin{verbatim}
+solver = new CoinSolver();
+solver->sSolverName ="cbc";
+\end{verbatim}
 Then to declare a specific, for example, an {\tt Ipopt} solver, simply write
 
 \begin{verbatim}
@@ -5129,9 +5143,28 @@ LIMIT_EXCEEDED[BONMIN]: A resource limit was exceeded, we provide the current so
 \end{verbatim}
 
 
-\item {\bf Couenne --}
+\item {\bf Couenne --}   In this example we read in a problem instance in AMPL nl format.  The class {\tt OSnl2osil}  has a method {\tt nl2osil} that is used to convert the nl instance contained in a file into an in-memory {\tt OSInstance} object. This is done as follows:
+
+\begin{verbatim}
+// convert to the OS native format
+OSnl2osil *nl2osil = NULL;
+nl2osil = new OSnl2osil( nlFileName);
+// create the first in-memory OSInstance
+nl2osil->createOSInstance() ;
+osinstance =  nl2osil->osinstance;
+\end{verbatim}
 \end{itemize}
 
+The part of the example also illustrates setting options in one solver from another. Couenne uses Bonmin which uses Ipopt.  So for example,
+
+\begin{verbatim}
+osoption->setAnotherSolverOption("max_iter","100","couenne","ipopt","integer","");
+\end{verbatim}
+identifies the solver as {\tt couenne} but the category of value of {\tt ipopt}  tells the solver interface to set the iteration limit on the Ipopt algorithm that is solving the continuous relaxation of the problem.  Likewise, the setting
+\begin{verbatim}
+osoption->setAnotherSolverOption("num_resolve_at_node","3","couenne","bonmin","integer","");
+\end{verbatim}
+identifies the solver as {\tt couenne} but the category of value of {\tt bonmin}  tells the solver interface to tell the Bonmin solver to try three starting points at each node. 
 
  
 
