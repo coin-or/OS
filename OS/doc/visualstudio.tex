@@ -235,6 +235,27 @@ This is for Windows users that want to run COIN-OR solvers directly from a file 
 
 \section{Calling COIN-OR Solvers with Model Instances}
 
+In the {\tt bin} directory, the user will find the following solvers (see the project link for more information on the solvers):
+\begin{itemize}
+\item {\bf bonmin.exe} -- a solver for mixed-integer nonlinear programs-- see \url{https://projects.coin-or.org/Bonmin}
+
+\item {\bf cbc.exe} --  a solver for mixed-integer linear programs --  see \url{https://projects.coin-or.org/Cbc}
+
+\item {\bf clp.exe} -- a solver for linear programs  -- see \url{https://projects.coin-or.org/Clp}
+
+\item {\bf couenne.exe} -- a global optimizer for mixed-integer nonlinear programs  -- see \url{https://projects.coin-or.org/Couenne}
+
+\item {\bf ipopt.exe} -- an optimizer for continuous nonlinear programs -- see \url{https://projects.coin-or.org/Ipopt}
+
+\item {\bf symphony.exe} -- a solver for mixed-integer linear programs -- see \url{https://projects.coin-or.org/SYMPHONY}
+\end{itemize}
+
+See the project pages for a more detail on each of the solvers and which optimization instance format they take.
+
+For the convenience of the user, the bin directory also contains the {\bf OSSolverService.exe}.  This executable is linked to libraries for all of the above solvers, and can be used in lieu of any of them. One advantage of using the {\it OSSolverService.exe}  is its flexibility. You can call any of the above solvers with an instance in MPS, nl, or OSiL format.   In addition, the {\bf OSSolverService.exe} returns the solver solution in the OSrL XML format which is easily parsed. 
+
+See also for calling remote solvers. 
+
 \section{Calling COIN-OR  Solvers using a Modeling Language}
 
 Mention GAMSlinks
