@@ -221,8 +221,8 @@ This is for Windows users that want to run COIN-OR solvers directly from a file 
 
 \newpage
 \tableofcontents
-\listoffigures
-\listoftables
+%\listoffigures
+%\listoftables
 \hyphenation{com-plex-Type}
 \hyphenation{GAMS-links}
 
@@ -253,6 +253,254 @@ In the {\tt bin} directory, the user will find the following solvers (see the pr
 See the project pages for a more detail on each of the solvers and which optimization instance format they take.
 
 For the convenience of the user, the bin directory also contains the {\bf OSSolverService.exe}.  This executable is linked to libraries for all of the above solvers, and can be used in lieu of any of them. One advantage of using the {\it OSSolverService.exe}  is its flexibility. You can call any of the above solvers with an instance in MPS, nl, or OSiL format.   In addition, the {\bf OSSolverService.exe} returns the solver solution in the OSrL XML format which is easily parsed. 
+
+
+{\bf Solve a  linear program:}  using the  {\tt OSSolverService} .  At the command line,  connect ({\bf cd}) to the bin directory and execute the following:
+
+
+\vfill
+\begin{center}
+To solve  a problem in OSiL XML format
+\end{center}
+\vfill
+
+{\small
+\begin{verbatim}
+OSSolverService -osil ../../data/osilFiles/parincLinear.osil
+\end{verbatim}
+
+\vfill
+\begin{center}
+To solve a problem in AMPL nl format
+\end{center}
+\vfill
+
+\begin{verbatim}
+OSSolverService -nl ../../data/amplFiles/parinc.nl
+\end{verbatim}
+
+\vfill
+\begin{center}
+To solve a problem in MPS format
+\end{center}
+\vfill
+
+\begin{verbatim}
+OSSolverService -mps ../../data/mpsFiles/parinc.mps
+\end{verbatim}
+}%end small
+
+
+
+The result is printed in XML format:
+
+
+\includegraphics[scale=0.38]{./figures/xmlResult.png}
+
+
+
+
+More detail -- variables values 
+
+\vfill
+\begin{verbatim}
+<values>
+    <var idx="0">539.9842493109073</var>
+    <var idx="1">252.01102548236486</var>
+</values>\end{verbatim}
+
+\vfill
+
+The objective function value
+
+\vfill
+
+\begin{verbatim}
+<objectives>
+<values>
+<obj idx="-1">7667.941722450357</obj>
+</values>
+</objectives>
+\end{verbatim}
+
+
+
+You can also print the result to a file.  
+
+\vfill
+
+Use the osrl option
+\vfill
+
+{\small
+\begin{verbatim}
+OSSolverService -osil ../../data/osilFiles/parincLinear.osil 
+    -osrl result.xml
+\end{verbatim}
+}
+
+\vfill
+You can display the result in a browser using XSLT.
+
+\vfill
+
+Copy {\bf data/stylesheets} into the root of the CoinAll distribution. 
+
+\vfill
+Open in your browser
+
+
+
+
+
+
+To solve a {\bf linear program} set the solver options to:
+
+\begin{itemize}
+\vfill \item clp
+
+\vfill \item dylp
+\end{itemize}
+
+
+To solve a {\bf mixed-integer linear program} set the solver options to:
+
+\begin{itemize}
+\vfill \item cbc
+
+\vfill \item symphony
+\end{itemize}
+
+
+To solve a {\bf continuous nonlinear program} set the solver options to:
+
+\begin{itemize}
+\vfill \item ipopt
+\end{itemize}
+
+
+To solve a {\bf mixed-integer nonlinear program} set the solver options to:
+
+\begin{itemize}
+\vfill \item bonmin
+\end{itemize}
+
+
+Solving a {\bf linear integer} program:
+
+
+
+\vfill
+
+{\small
+\begin{verbatim}
+OSSolverService -osil ../../data/osilFiles/p0033.osil 
+      -solver cbc
+\end{verbatim}
+}
+
+\vfill
+
+Solving a {\bf nonlinear} optimization problem
+
+{\small
+\begin{verbatim}
+OSSolverService -osil ../../data/osilFiles/rosenbrockmod.osil 
+      -solver ipopt
+\end{verbatim}
+}
+
+\vfill
+
+Solving a {\bf mixed-integer nonlinear} optimization problem
+
+{\small
+\begin{verbatim}
+OSSolverService -osil ../../data/osilFiles/bonminEx1.osil 
+      -solver bonmin
+\end{verbatim}
+}
+
+
+
+It is possible to build the OSSolverService to work with other solvers but they are not included due to licensing issues.
+
+
+\begin{itemize}
+
+\vfill \item Glpk 
+
+\vfill \item Cplex 
+
+\vfill \item LINDO
+
+\end{itemize}
+
+
+
+
+Continually writing out command line options a pain. Use a {\tt configuration} file instead.
+Do something like:
+
+\vfill
+
+OSSolverService -config  ../../data/configFiles/testLocal.config
+
+\vfill
+where the file {\tt testLocal.config} is
+
+\vfill
+
+\begin{verbatim}
+-osil ../../data/osilFiles/parincLinear.osil
+-solver cbc
+\end{verbatim}
+
+\vfill
+{\bf Note:} the only option that is required is the location of an instance file
+
+
+
+Finally -- you can call solvers remotely.
+
+\vfill
+
+Specify a {\bf service  location} of the remote solver service.
+\vfill
+
+\begin{verbatim}
+OSSolverService -osil ../data/osilFiles/parincLinear.osil
+  -serviceLocation 
+     http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
+\end{verbatim}
+
+
+
+
+
+
+
+
+
+
+
+To get help
+
+\vfill
+\begin{verbatim}
+OSSolverService -h     
+\end{verbatim}
+
+ --OR--    
+ 
+\begin{verbatim} 
+OSSolverService --help
+\end{verbatim}
+
+
+
+
+
 
 See also for calling remote solvers. 
 
