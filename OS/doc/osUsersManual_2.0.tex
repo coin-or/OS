@@ -5101,7 +5101,7 @@ solver->osoption = osoption;
 solver->solve();
 \end{verbatim}
 
-\item[Step 5:] After optimizing the instance, the solver writes the result to a string 
+\item[Step 5:] After optimizing the instance,  each of the OS solver interfaces uses the underlying solver API to get the solution result and write the result to a string 
 named {\tt osrl} which is a string representing the solution instance in the {\tt OSrL} XML standard.  
 This string is accessed by
 
@@ -5110,14 +5110,14 @@ solver->osrl
 \end{verbatim}
 
 
-In the code {\tt OSCoinSolver.cpp} we have written a method,  
+In the example code {\tt OSSolverDemo.cpp} we have written a method,  
 
 \begin{verbatim}
 void getOSResult(std::string osrl)
 \end{verbatim}
 
 that takes the {\tt osrl} string and creates an {\tt OSResult} object.   
-We then use the {\tt OSResult} API methods 
+We then illustrate several of the {\tt OSResult} API methods 
 
 \begin{verbatim}
 double getOptimalObjValue(int objIdx, int solIdx);
