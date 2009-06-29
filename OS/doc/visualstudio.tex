@@ -110,11 +110,13 @@
 \maketitle
 
 \begin{abstract}
-This document describes a special binary distribution of executables, libraries and code 
-connected to the COIN-OR Optimization Services (OS) project. It is intended for users of 
-Microsoft Windows. We detail the use of these binaries with several examples and give code snippets
-for further insight. We also explain how the examples can be built in Microsoft Visual Studio 
-using {\tt .vcproj} that are provided as part of the distribution.
+This document describes a special binary distribution of executables, libraries and code connected 
+to the COIN-OR Optimization Services (OS) project. It is intended for users of Microsoft Windows who
+want to use COIN-OR solvers to solve optimization problems without the need to compile any code or 
+want to write applications using Visual Studio projects that link to COIN-OR solver libraries.  
+We detail the use of these binaries with several examples and give code snippets for further insight. 
+We also explain how the examples can be built in Microsoft Visual Studio 
+using {\tt .vcproj} files that are provided as part of the distribution.
 
 \end{abstract}
 
@@ -303,9 +305,9 @@ instance representation in the OSiL\index{OSiL} format.
 
 In the following discussion we assume that the AMPL executable {\tt ampl.exe}, the {\tt OSAmplClient}, 
 and the test problem {\tt hs71.mod} are all in the same directory.  
-It is also assumed that {\tt .}~(the current directory) is in the search path.
+%It is also assumed that {\tt .}~(the current directory) is in the search path.
 
-The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt data/amplClient} directory.
+The  problem instance {\tt hs71.mod} is an AMPL model file included in the {\tt data/amplClient} directory.
 To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then
 execute the following commands. In this case we are testing  {\tt Ipopt} as the
 local server.
@@ -322,7 +324,11 @@ option OSAmplClient_options "solver ipopt";
 solve;
 \end{verbatim}
 This will invoke {\tt Ipopt} locally and the result in OSrL format will be displayed on the screen.
+In addition, the values of the optimal solution, objective, dual variables, etc. are returned to
+AMPL, so that they can be displayed and manipulated like solutions from any other AMPL solver.
 
+Remote solution is also possible. For details, the user is directed to the OS User's Manual
+(\url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf}).
 
 
 \section{Using Visual Studio to Build Applications}\label{section:visualstudio} 
