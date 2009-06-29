@@ -110,8 +110,34 @@
 \maketitle
 
 \begin{abstract}
-This binary distribution is specifically designed for Microsoft Windows users who: 1) want to use COIN-OR solvers to solve optimization problems but do not want to compile any code; or 2) want to write applications using Visual Studio projects that link to COIN-OR solver libraries.  This download is plug-and-play, complete with pre-configured Visual Studio project files -- {\it it is not necessary} to build any COIN-OR projects from source code.  This document contains the following information. In Section \ref{section:distribution} we detail the various components contained in this distribution.  Section \ref{section:callingsolvers}  we show how to call and use the optimization solvers contained in this distribution.  In Section \ref{section:modellanguage} we describe how to call the COIN-OR solvers in this distribution using the AMPL modeling language. In Section \ref{section:visualstudio} we describe the Visual Studio project files.  Finally, in Section \ref{section:examples} we detail nine examples (for which there are Visual Studio project files) that illustrate how to use the COIN-OR libraries provided in this distribution.  Libraries from the following COIN-OR projects are in this distribution.
-\vskip 12pt
+This document describes a special binary distribution of executables, libraries and code 
+connected to the COIN-OR Optimization Services (OS) project. It is intended for users of 
+Microsoft Windows. We detail the use of these binaries with several examples and give code snippets
+for further insight. We also explain how the examples can be built in Microsoft Visual Studio 
+using {\tt .vcproj} that are provided as part of the distribution.
+
+\end{abstract}
+
+
+\newpage
+
+
+\section{Overview}\label{section:overview}
+This binary distribution is specifically designed for Microsoft Windows users who: 
+1) want to use COIN-OR solvers to solve optimization problems but do not want to compile any code; 
+or 2) want to write applications using Visual Studio projects that link to COIN-OR solver libraries.  
+This download is plug-and-play, complete with pre-configured Visual Studio project 
+files -- {\it it is not necessary} to build any COIN-OR projects from source code.  
+This document contains the following information. In Section~\ref{section:distribution} we
+detail the various components contained in this distribution. In Section~\ref{section:callingsolvers}  
+we show how to call and use the optimization solvers contained in this distribution.  
+In Section \ref{section:modellanguage} we describe how to call the COIN-OR solvers 
+in this distribution using the AMPL modeling language. In Section~\ref{section:visualstudio} 
+we describe the Visual Studio project files.  Finally, in Section~\ref{section:examples} 
+we detail nine examples (for which there are Visual Studio project files) that illustrate 
+how to use the COIN-OR libraries provided in this distribution.  Libraries from the following 
+COIN-OR projects are contained in this distribution.
+
 
 \begin{itemize}
 \item[] {\bf Bcp (\url{https://projects.coin-or.org/Bcp}) }
@@ -127,16 +153,10 @@ This binary distribution is specifically designed for Microsoft Windows users wh
 \end{itemize}
 
 
-
-\end{abstract}
-
-
-\newpage
-
-
-
-
 \section{The Binary Distribution}\label{section:distribution}
+
+When properly installed, the material in this distribution is arranged into a number of folders
+in hierarchical fashion. The top level of this hierarchy consists of the following folders.
 
 \begin{itemize}
 \item {\bf bin --} this directory contains  solver executables. Using the solver executables is explained in Section \ref{section:callingsolvers},
@@ -175,9 +195,19 @@ The following solvers are contained in the {\bf bin} directory:
 \item {\bf symphony.exe} -- a solver for mixed-integer linear programs -- see \url{https://projects.coin-or.org/SYMPHONY}
 \end{itemize}
 
-See the respective project pages referenced above for  more detail on each of the solvers and which optimization instance formats they take.  For the convenience of the user, the bin directory also contains the {\bf OSSolverService.exe}.  This executable is linked to libraries for all of the  solvers that are in the {\bf bin} directory, and can be used in lieu of any of them. One advantage of using the {\bf OSSolverService.exe}  is its flexibility. You can call any of the above solvers with an instance in MPS, nl, or OSiL format.   In addition, the {\bf OSSolverService.exe} returns the solver solution in the OSrL XML format which is easily parsed.  We now illustrate several calls to the {\bf OSSolverService.exe.}   At the command line,  connect {\bf cd} to the {\bf   bin} directory and execute the following in order to solve an instance (in this case a linear program) in OSiL format:
-
-
+See the respective project pages referenced above for  more detail on each of the solvers 
+and which optimization instance formats they take.  For the convenience of the user, 
+the bin directory also contains the {\bf OSSolverService.exe}.  This executable is linked 
+to libraries for all of the  solvers that are in the {\bf bin} directory, and can be used 
+in lieu of any of them. One advantage of using the {\bf OSSolverService.exe}  is its flexibility. 
+Using this executable gives the user access to any of the above solvers with an instance 
+in MPS, nl, or OSiL format. In addition, the {\bf OSSolverService.exe} returns the solver 
+solution in the OSrL XML format which is easily parsed.  We now illustrate several calls 
+to the {\bf OSSolverService.exe.}   
+%At the command line,  connect {\bf cd} to the {\bf   bin} directory and
+Open a command window and change into the {\bf bin} directory. Then
+execute the following in order to solve an instance (in this case a linear program) 
+in OSiL format:
 
 
 \begin{verbatim}
@@ -190,14 +220,15 @@ The following illustrates solving an instance in AMPL {\bf nl} format:
 OSSolverService -nl ../../data/amplFiles/parinc.nl
 \end{verbatim}
 
-Likewise, to solver a problem in {\bf mps} format:
+Likewise, to solve a problem in {\bf mps} format:
 
 \begin{verbatim}
 OSSolverService -mps ../../data/mpsFiles/parinc.mps
 \end{verbatim}
 
 
-The result is printed to standard out in XML format. For example, the values of the primal variables are expressed as:
+The result is printed to standard output in OSrL format. For example, the values of the primal 
+variables are expressed as:
 
 \begin{verbatim}
 <values numberOfVar="2">
@@ -222,7 +253,9 @@ OSSolverService -osil ../../data/osilFiles/parincLinear.osil
 }
 
 
-A call to {\bf OSSolverService.exe} uses the {\bf Cbc} solver as a default. In order to specify which solver you want, use  the {\bf solver} option to specify the solver. For example, to solve a model instance with {\bf SYMPHONY} type
+A call to {\bf OSSolverService.exe} uses the {\bf Cbc} solver as a default. In order to specify 
+another solver, use  the {\bf solver} option to specify the solver you want. For example, 
+to solve a model instance with {\bf SYMPHONY} type
 
 {\small
 \begin{verbatim}
@@ -230,14 +263,17 @@ OSSolverService -osil ../../data/osilFiles/p0033.osil
       -solver symphony
 \end{verbatim}
 }
-To solve a model with {\bf Bonmin} type
+To solve a nonlinear model with {\bf Bonmin} type
 {\small
 \begin{verbatim}
 OSSolverService -osil ../../data/osilFiles/bonminEx1.osil 
       -solver bonmin
 \end{verbatim}
 }
-The name of the solver should always be given in all lower case.  It is possible to build the OSSolverService to work with other solvers but they are not included due to licensing issues.
+The name of the solver should always be given in all lower case.  It is possible to build the 
+OSSolverService to work with solvers other than the ones listed in Section~\ref{section:callingsolvers},
+but they are not included due to licensing issues. Specifically, OSSolverServices has also been linked
+to these solvers:
 
 
 \begin{itemize}
@@ -255,13 +291,19 @@ For more detail on using the {\bf OSSolverService.exe} see the documentation for
 
 \section{Calling COIN-OR  Solvers using a Modeling Language}\label{section:modellanguage}
 
-It is also possible to call all of these solvers directly from AMPL. In this discussion we assume the user has already obtained and installed AMPL.  In the {\bf bin} directory there is an executable, {\bf OSAmplClient} that is linked to all of the COIN-OR solvers in this distribution.   The {\tt OSAmplClient} acts like an AMPL ``solver''. The {\tt OSAmplClient} is linked with the
-OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the
-{\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} class to convert the AMPL generated nl file\index{AMPL nl format}
-(which represents the problem instance) into the corresponding instance representation in the OSiL\index{OSiL} format.
+It is also possible to call all of these solvers directly from the modeling language AMPL 
+(see {\tt http://www.ampl.com}.  In this discussion we assume the user has already obtained and 
+installed AMPL.  In the {\bf bin} directory there is an executable, {\bf OSAmplClient} 
+that is linked to all of the COIN-OR solvers in this distribution.   The {\tt OSAmplClient} acts 
+like an AMPL ``solver''. The {\tt OSAmplClient} is linked with the OS library and can be used 
+to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the
+{\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} class to convert the AMPL generated nl 
+file\index{AMPL nl format} (which represents the problem instance) into the corresponding 
+instance representation in the OSiL\index{OSiL} format.
 
-In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained
-from {\tt www.ampl.com}, the {\tt OSAmplClient}, and the test problem {\tt hs71.mod} are all in the same directory.  It is also assumed that {\tt .}~(the current directory) is in the search path.
+In the following discussion we assume that the AMPL executable {\tt ampl.exe}, the {\tt OSAmplClient}, 
+and the test problem {\tt hs71.mod} are all in the same directory.  
+It is also assumed that {\tt .}~(the current directory) is in the search path.
 
 The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt data/amplClient} directory.
 To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then
@@ -283,16 +325,24 @@ This will invoke {\tt Ipopt} locally and the result in OSrL format will be displ
 
 
 
-\section{Using Visual Studio to Build Applications}\label{section:visualstudio} This directory contains nine Visual Studio project files.  Each of these project files is linked to all of the COIN-OR libraries in {\bf lib} and the path to the {\bf include} directory with of the necessary header files is listed in the Visual Studio {\tt Additional Include Directories}. Eight of examples illustrate various aspects of COIN-OR projects.  These are described in more detail in Section \ref{section:examples}. The ninth project,  {\bf  template.vcproj}, is  a plug-and-play project and the user can use this project file to build his or here own application based on the pre-compiled   libraries.  Finally, the Visual Studio solution file {\bf osExamplesSolution} contains each of these projects. 
+\section{Using Visual Studio to Build Applications}\label{section:visualstudio} 
+In this section we describe the directory MSVisualStudioOSExamples. 
+This directory contains nine Visual Studio project files.  Each of these project files is linked 
+to all of the COIN-OR libraries in {\bf lib} and the path to the {\bf include} directory with 
+the necessary header files is listed in the Visual Studio {\tt Additional Include Directories}. 
+Eight of examples illustrate various aspects of COIN-OR projects.  These are described in more detail in Section \ref{section:examples}. The ninth project,  {\bf  template.vcproj}, is  a plug-and-play project and the user can use this project file to build his or here own application based on the pre-compiled   libraries.  Finally, the Visual Studio solution file {\bf osExamplesSolution} contains each of these projects. 
 
 \section{Example Projects}\label{section:examples}
 
-We provide eight examples that demonstrate how to use various aspects of the COIN-OR  software.  Many users will find the {\bf OSSolverDemo} to be the most useful in that this describes how to write code to hook with the various solvers.  See Section \ref{section:exampleOSSolverDemo}.  There is also an empty or template example for users to put in their own code. 
+We provide eight examples that demonstrate how to use various aspects of the COIN-OR  software.  
+Many users will find the {\bf OSSolverDemo} to be the most useful in that this describes 
+how to write code to hook with the various solvers.  See Section \ref{section:exampleOSSolverDemo}.  
+There is also an empty example {\bf Template} for users to put in their own code. 
 
 \subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
 
 \index{Algorithmic differentiation|(}
-In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt OSAlgorithmicDiffTest.cpp}. This code
+In the {\tt OS/examples/algorithmicDiff} folder is the test code {\tt OSAlgorithmicDiffTest.cpp}. This code
 illustrates the key methods in the {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} API that are used for
 algorithmic differentiation.   
 
@@ -325,17 +375,31 @@ osinstance->addVariable(1, "x1", 0, 1, 'B', OSNAN, "");
 \end{verbatim}
 There is also a method {\tt setVariables} for adding more than one variable simultaneously.  The objective function(s) and constraints are added through similar calls.
 
-Nonlinear terms are also easily added.  The following code illustrates how to add a nonlinear term
-$x_{0}*x_{1}$ in the {\tt <nonlinearExpressions>} section of  OSiL. This term is part of constraint~1
-and is the second of six constraints contained in the instance.
+Nonlinear terms are also added in a straightforward if slightly cumbersome manner.   
+The following code illustrates how to add a nonlinear term $x_{0}*x_{1}$ in the 
+{\tt <nonlinearExpressions>} section of  OSiL. This term is part of constraint~1
+and is the second of six constraints contained in the instance. 
+
+First we set up storage for all six expressions, as follows.
+
 \begin{verbatim}
 osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = 6;
 osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ 6 ];
+\end{verbatim}
+
+The next code snippet shows how to initial the second of the six expressions.
+
+\begin{verbatim}
 osinstance->instanceData->nonlinearExpressions->nl[ 1] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->idx = 1;
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree =
 new OSExpressionTree();
-// create a variable nl node for x0
+\end{verbatim}
+
+Next we build the expression in postfix notation, that is, in the form $(x_0, x_1, *)$.
+
+\begin{verbatim}
+// create a variable nl node for x0 an dput into temporary storage
 nlNodeVariablePoint = new OSnLNodeVariable();
 nlNodeVariablePoint->idx=0;
 nlNodeVec.push_back( nlNodeVariablePoint);
@@ -346,8 +410,7 @@ nlNodeVec.push_back( nlNodeVariablePoint);
 // create the nl node for *
 nlNodePoint = new OSnLNodeTimes();
 nlNodeVec.push_back( nlNodePoint);
-// the vectors are in postfix format
-// now the expression tree
+// now move the temporaray storage into the expression tree
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree->m_treeRoot =
 nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 \end{verbatim}
@@ -436,7 +499,7 @@ takes the following arguments in order.
 \item[] {\bf std::string category} -- options may fall into categories. For example, consider the  
 Couenne solver.  This solver is also linked to the Ipopt and Bonmin solvers and  it is possible 
 to set options for these solvers through the Couenne API. In order to set an Ipopt option 
-you would set the {\tt solver} argument to {\tt couenne} and set the {\tt category} option 
+you would set the {\tt solver} argument to {\tt couenne} and set the {\tt category} argument 
 to {\tt ipopt}.
 
 \item[] {\bf std::string type} -- many solvers require knowledge of the data type, so you can set 
@@ -474,8 +537,8 @@ solver->sSolverName ="cbc";
 \end{verbatim}
 
 %Then to declare a specific, for example, an {\tt Ipopt} solver, simply write
-Other solvers, particularly Ipopt, Bonmin and Couenne are implemented separately. So to declare,
-for example, an Ipopt solver, one should write
+Other solvers, particularly the nonlinear solvers Ipopt, Bonmin and Couenne are implemented separately. 
+So to declare, for example, an Ipopt solver, one should write
 
 \begin{verbatim}
 solver = new IpoptSolver();
@@ -497,14 +560,14 @@ named {\tt osrl} which is a string representing the solution instance in the {\t
 This string is accessed by
 
 \begin{verbatim}
-solver->osrl
+solver->osrl;
 \end{verbatim}
 
 
 In the example code {\tt OSSolverDemo.cpp} we have written a method,  
 
 \begin{verbatim}
-void getOSResult(std::string osrl)
+void getOSResult(std::string osrl);
 \end{verbatim}
 
 that takes the {\tt osrl} string and creates an {\tt OSResult} object.   
@@ -615,18 +678,18 @@ Couenne uses Bonmin which uses Ipopt.  So for example,
 \begin{verbatim}
 osoption->setAnotherSolverOption("max_iter","100","couenne","ipopt","integer","");
 \end{verbatim}
-identifies the solver as {\tt couenne}, but the category of value of {\tt ipopt}  tells the solver 
+identifies the solver as {\tt couenne}, but the category value of {\tt "ipopt"}  tells the solver 
 interface to set the iteration limit on the Ipopt algorithm that is solving the continuous relaxation 
 of the problem.  Likewise, the setting
 \begin{verbatim}
 osoption->setAnotherSolverOption("num_resolve_at_node","3","couenne","bonmin","integer","");
 \end{verbatim}
-identifies the solver as {\tt couenne}, but the category of value of {\tt bonmin}  tells the solver 
+identifies the solver as {\tt couenne}, but the category value of {\tt "bonmin"}  tells the solver 
 interface to tell the Bonmin solver to try three starting points at each node. 
 
  
 
-\subsection{OSDemoResult: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
+\subsection{OSResultDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
 
 The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\it OSiL} and {\tt OSoL} protocol, this protocol has an associated in-memory {\tt OSResult} class with corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the {\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the {\tt OSrLReader} class and create and {\tt OSResult} object. We then use the {\tt OSResult} API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
 
@@ -644,7 +707,10 @@ The asynchronous mode is also tested by submitting the problem to a remote solve
 checking the status and either retrieving the answer or killing the process if it has not
 yet finished.
 
-\subsection{Template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} directory.  This is linked to all of the COIN-OR libraries in {\bf lib} but is an empty example .  The user can write his or her own code here and build an application based on the COIN-OR projects. 
+\subsection{Template}\label{section:exampleTemplate} 
+The code {\tt template.cpp} is in the {\tt template} directory.  This is linked to all of the 
+COIN-OR libraries in {\bf lib} but is an empty example.  The user can write his or her own code 
+here and build an application based on the COIN-OR projects. 
 
 
 

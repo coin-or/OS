@@ -4928,8 +4928,8 @@ addVariable(int index, string name, double lowerBound, double upperBound, char t
 \end{verbatim}
 Then the calls for these two variables are
 \begin{verbatim}
-osinstance->addVariable(0, "x0", -100, 100, 'C', OSNAN, "");
-osinstance->addVariable(1, "x1", 0, 1, 'B', OSNAN, "");
+osinstance->addVariable(0, "x0", -100, 100, 'C');
+osinstance->addVariable(1, "x1", 0, 1, 'B');
 \end{verbatim}
 There is also a method {\tt setVariables} for adding more than one variable simultaneously.  The objective function(s) and constraints are added through similar calls.
 
