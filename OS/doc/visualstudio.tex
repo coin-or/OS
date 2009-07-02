@@ -19,6 +19,7 @@
 \newcommand{\figurepath}{./figures}
 \newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
 \newcommand{\figfiletype}{pdf}
+\newcommand{\usersmanual}{\url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf}}
 
 %Brad Bell Macros
 
@@ -109,6 +110,7 @@
 \author{Horand Gassmann, Jun Ma,  and  Kipp Martin}
 \maketitle
 
+\iffalse
 \begin{abstract}
 This document describes a special binary distribution of executables, libraries and code connected 
 to the COIN-OR Optimization Services (OS) project. It is intended for users of Microsoft Windows who
@@ -120,9 +122,8 @@ using {\tt .vcproj} files that are provided as part of the distribution.
 
 \end{abstract}
 
-
 \newpage
-
+\fi
 
 \section{Overview}\label{section:overview}
 This binary distribution is specifically designed for Microsoft Windows users who: 
@@ -165,7 +166,10 @@ in hierarchical fashion. The top level of this hierarchy consists of the followi
 
 \item {\bf data --} problem instances in OSiL, nl, and MPS format,
 
-\item {\bf doc --} the directory containing this documentation, for more thorough documentation see  \url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf},
+\item {\bf doc --} the directory containing this documentation, for more thorough documentation
+%see \url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf},
+see \usersmanual,
+
 
 \item {\bf examples --} this directory contains source code illustrating how to build applications that use COIN-OR software, 
 
@@ -179,6 +183,7 @@ in hierarchical fashion. The top level of this hierarchy consists of the followi
 
 \item {\bf share --}  this directory contains author and license information for each of the  COIN-OR projects that are part of this binary download
 \end{itemize}
+\end{document}
 
 \section{Calling COIN-OR Solvers with Model Instances}\label{section:callingsolvers}
 
@@ -196,6 +201,7 @@ The following solvers are contained in the {\bf bin} directory:
 
 \item {\bf symphony.exe} -- a solver for mixed-integer linear programs -- see \url{https://projects.coin-or.org/SYMPHONY}
 \end{itemize}
+\end{document}
 
 See the respective project pages referenced above for  more detail on each of the solvers 
 and which optimization instance formats they take.  For the convenience of the user, 
@@ -227,6 +233,7 @@ Likewise, to solve a problem in {\bf mps} format:
 \begin{verbatim}
 OSSolverService -mps ../../data/mpsFiles/parinc.mps
 \end{verbatim}
+\end{document}
 
 
 The result is printed to standard output in OSrL format. For example, the values of the primal 
@@ -253,6 +260,7 @@ OSSolverService -osil ../../data/osilFiles/parincLinear.osil
     -osrl result.xml
 \end{verbatim}
 }
+\end{document}
 
 
 A call to {\bf OSSolverService.exe} uses the {\bf Cbc} solver as a default. In order to specify 
@@ -289,7 +297,8 @@ to these solvers:
 \end{itemize}
 
 
-For more detail on using the {\bf OSSolverService.exe} see the documentation for the OS project \url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf}.
+For more detail on using the {\bf OSSolverService.exe} see the documentation for the OS project 
+\url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf}.
 
 \section{Calling COIN-OR  Solvers using a Modeling Language}\label{section:modellanguage}
 
@@ -333,10 +342,25 @@ Remote solution is also possible. For details, the user is directed to the OS Us
 
 \section{Using Visual Studio to Build Applications}\label{section:visualstudio} 
 In this section we describe the directory MSVisualStudioOSExamples. 
-This directory contains nine Visual Studio project files.  Each of these project files is linked 
-to all of the COIN-OR libraries in {\bf lib} and the path to the {\bf include} directory with 
-the necessary header files is listed in the Visual Studio {\tt Additional Include Directories}. 
-Eight of examples illustrate various aspects of COIN-OR projects.  These are described in more detail in Section \ref{section:examples}. The ninth project,  {\bf  template.vcproj}, is  a plug-and-play project and the user can use this project file to build his or here own application based on the pre-compiled   libraries.  Finally, the Visual Studio solution file {\bf osExamplesSolution} contains each of these projects. 
+This directory contains nine Visual Studio project files, each in a separate folder.  
+Each of these project files is linked to all of the COIN-OR libraries in the {\bf lib} directory
+and the necessary header files in the {\bf include} directory. The Visual Studio solution file 
+{\bf osExamplesSolution.sln} contains each of these projects. Building these examples (for instance
+after making modifications to the code) is therefore very easy: Find the solution file in the
+Windows Explorer and double-click on it. This opens up Visual Studio 2008. 
+(If you do not have Visual Studio 2008 available, see the OS user's manual 
+(\url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf})
+for information on how to download a free copy of Visual Studio.) 
+Once inside Visual Studio, push F7 or select Build Solution from the Build menu.
+When the examples are successfully built, the executables will be stored into the folders that
+contain the project files. For example, {\bf OSSolverDemoTest.exe} will be found in the folder
+{bf MSVisualStudioExamples\OSSolverDemoTest}.
+ 
+The examples are described in more detail in Section \ref{section:examples}. Eight of the examples 
+illustrate various aspects of COIN-OR projects.   The ninth project,  {\bf  template.vcproj}, 
+is  a plug-and-play project. The user can use this project file to build his or her own 
+application based on the pre-compiled libraries.  Obviously the code in the other projects can be used
+as a guide to using the OS API.
 
 \section{Example Projects}\label{section:examples}
 
@@ -610,7 +634,14 @@ osinstance = osilreader->readOSiL( osil);
 
 
  We set the linear programming algorithm to be the primal simplex method and then set the option 
-on the pivot selection to be Dantzig rule.  Finally, we set the print level to be 10.
+on the pivot selection to be stepest edge.  Finally, we set the print level to be 10.
+
+\begin{verbatim}
+osoption->setAnotherSolverOption("primalS","","cbc","","string","");
+osoption->setAnotherSolverOption("primalpivot","steepest","cbc","","string","");
+osoption->setAnotherSolverOption("log","10","cbc","","integer","");
+\end{verbatim}
+
 
 \item {\bf SYMPHONY --}   In this example we also read a problem instance that is in OSiL format and 
 create an in-memory {\tt OSInstance} object.  We then create an {\tt OSOption} object and 
