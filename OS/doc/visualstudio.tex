@@ -19,7 +19,6 @@
 \newcommand{\figurepath}{./figures}
 \newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
 \newcommand{\figfiletype}{pdf}
-\newcommand{\usersmanual}{\url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf}}
 
 %Brad Bell Macros
 
@@ -167,8 +166,7 @@ in hierarchical fashion. The top level of this hierarchy consists of the followi
 \item {\bf data --} problem instances in OSiL, nl, and MPS format,
 
 \item {\bf doc --} the directory containing this documentation, for more thorough documentation
-%see \url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf},
-see \usersmanual,
+see \url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf},
 
 
 \item {\bf examples --} this directory contains source code illustrating how to build applications that use COIN-OR software, 
@@ -183,7 +181,6 @@ see \usersmanual,
 
 \item {\bf share --}  this directory contains author and license information for each of the  COIN-OR projects that are part of this binary download
 \end{itemize}
-\end{document}
 
 \section{Calling COIN-OR Solvers with Model Instances}\label{section:callingsolvers}
 
@@ -201,7 +198,6 @@ The following solvers are contained in the {\bf bin} directory:
 
 \item {\bf symphony.exe} -- a solver for mixed-integer linear programs -- see \url{https://projects.coin-or.org/SYMPHONY}
 \end{itemize}
-\end{document}
 
 See the respective project pages referenced above for  more detail on each of the solvers 
 and which optimization instance formats they take.  For the convenience of the user, 
@@ -233,7 +229,6 @@ Likewise, to solve a problem in {\bf mps} format:
 \begin{verbatim}
 OSSolverService -mps ../../data/mpsFiles/parinc.mps
 \end{verbatim}
-\end{document}
 
 
 The result is printed to standard output in OSrL format. For example, the values of the primal 
@@ -260,7 +255,6 @@ OSSolverService -osil ../../data/osilFiles/parincLinear.osil
     -osrl result.xml
 \end{verbatim}
 }
-\end{document}
 
 
 A call to {\bf OSSolverService.exe} uses the {\bf Cbc} solver as a default. In order to specify 
