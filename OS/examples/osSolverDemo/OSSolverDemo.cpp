@@ -183,7 +183,7 @@ int main( ){
 		// tell Cbc to use the primal simplex algorithm
 		osoption->setAnotherSolverOption("primalS","","cbc","","string","");
 		//in primal simplex set the pivot choice -- use steepest edge
-		osoption->setAnotherSolverOption("primalpivot","dantzig","cbc","","string","");
+		osoption->setAnotherSolverOption("primalpivot","steepest","cbc","","string","");
 		//set a high-level of log reporting
 		osoption->setAnotherSolverOption("log","10","cbc","","integer","");
 		osolwriter = new OSoLWriter();
