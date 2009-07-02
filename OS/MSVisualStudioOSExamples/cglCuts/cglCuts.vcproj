@@ -67,7 +67,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="libOS.lib libOsiCbc.lib libOsiClp.lib libCgl.lib libSym.lib libVol.lib libDylp.lib libCoinUtils.lib libClp.lib libCbc.lib libOsi.lib libOsiSym.lib libOsiVol.lib libOsiDylp.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\lib"
+				AdditionalLibraryDirectories="..\..\lib;..\..\lib\ifort;..\..\lib\ASL"
 				GenerateManifest="false"
 				IgnoreAllDefaultLibraries="false"
 				IgnoreDefaultLibraryNames=""
