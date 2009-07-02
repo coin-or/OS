@@ -64,12 +64,12 @@
 \newcommand{\Sa}{8pt}
 \newcommand{\Sb}{0pt}
 
-\renewcommand{\_}{{\char"5F}}
+%\renewcommand{\_}{{\char"5F}}
 \renewcommand{\{}{{\char"7B}}
 \renewcommand{\}}{{\char"7D}}
 \renewcommand{\^}{{\char"0D}}
 
-\let\accute= \'
+\let\acute= \'
 \renewcommand{\'}{{\char"0D}}
 
 \newcommand{\bfit}{\bfseries\itshape}
@@ -161,7 +161,8 @@ When properly installed, the material in this distribution is arranged into a nu
 in hierarchical fashion. The top level of this hierarchy consists of the following folders.
 
 \begin{itemize}
-\item {\bf bin --} this directory contains  solver executables. Using the solver executables is explained in Section \ref{section:callingsolvers},
+\item {\bf bin --} this directory contains  solver executables. Using the solver executables is 
+explained in Section \ref{section:callingsolvers},
 
 \item {\bf data --} problem instances in OSiL, nl, and MPS format,
 
@@ -169,17 +170,22 @@ in hierarchical fashion. The top level of this hierarchy consists of the followi
 see \url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf},
 
 
-\item {\bf examples --} this directory contains source code illustrating how to build applications that use COIN-OR software, 
+\item {\bf examples --} this directory contains source code illustrating how to build applications 
+that use COIN-OR software, 
 
-\item {\bf include -- } this directory contains the necessary header files if a user wishes to build applications linking to the COIN-OR libraries supplied in the {\bf lib} directory,
+\item {\bf include -- } this directory contains the necessary header files if a user wishes 
+to build applications linking to the COIN-OR libraries supplied in the {\bf lib} directory,
 
-\item {\bf lib --} this directory contains the solver libraries, the Visual Studio project files are linked to these libraries,
+\item {\bf lib --} this directory contains the solver libraries, the Visual Studio project files 
+are linked to these libraries,
 
 
-\item {\bf MSVisualStudioOSExamples -- } this directory contains Visual Studio  project files for each of the examples given  in Section \ref{section:examples}.
+\item {\bf MSVisualStudioOSExamples -- } this directory contains Visual Studio  project files for 
+each of the examples given  in Section \ref{section:examples}.
 
 
-\item {\bf share --}  this directory contains author and license information for each of the  COIN-OR projects that are part of this binary download
+\item {\bf share --}  this directory contains author and license information for each of the  
+COIN-OR projects that are part of this binary download
 \end{itemize}
 
 \section{Calling COIN-OR Solvers with Model Instances}\label{section:callingsolvers}
@@ -346,8 +352,11 @@ Windows Explorer and double-click on it. This opens up Visual Studio 2008.
 (\url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf})
 for information on how to download a free copy of Visual Studio.) 
 Once inside Visual Studio, push F7 or select Build Solution from the Build menu.
+To keep things simple, and in order not to have to supply multiple versions of all the libraries,
+the solution file contains only a single configuration, Release.
 When the examples are successfully built, the executables will be stored into the folders that
-contain the project files. For example, {\bf OSSolverDemoTest.exe} will be found in the folder {\bf MSVisualStudioExamples$\backslash$OSSolverDemoTest}.
+contain the project files. For example, {\bf OSSolverDemoTest.exe} will be found in the folder 
+{\bf MSVisualStudioExamples$\backslash$OSSolverDemoTest}.
  
 The examples are described in more detail in Section \ref{section:examples}. Eight of the examples 
 illustrate various aspects of COIN-OR projects.   The ninth project,  {\bf  template.vcproj}, 
@@ -444,7 +453,12 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 \subsection{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
 
-This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  This project offers the user with the ability to have control over each node in the branch and process. This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 2) a user-defined cut, and 3) a user-defined variable. 
+This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  
+This project offers the user with the ability to have control over each node in the branch and process. 
+This makes it possible to add user-defined cuts and/or user-defined variables. 
+At each node in the tree, a call is made to the method {\tt process\_lp\_result()}. 
+In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 2) a user-defined cut, 
+and 3) a user-defined variable. 
 
 
 \subsection{OSModDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
@@ -468,7 +482,12 @@ in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
 \subsection{OSSolverDemo: Building In-Memory Solver and Option Objects}\label{section:exampleOSSolverDemo}
 
-The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers {\tt Clp}, {\tt Cbc}, {\tt SYMPHONY}, {\tt Ipopt},   {\tt Bonmin}, and {\tt Couenne}.   Each solver class inherits from a virtual {\tt OSDefaultSolver} class. Each solver class has the string data members
+The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  
+illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. 
+In this example we  illustrate building a solver interface and corresponding {\tt OSOption} 
+object for the solvers {\tt Clp}, {\tt Cbc}, {\tt SYMPHONY}, {\tt Ipopt},   {\tt Bonmin}, 
+and {\tt Couenne}.   Each solver class inherits from a virtual {\tt OSDefaultSolver} class. 
+Each solver class has the string data members
 
 \begin{itemize}
 \item {\bf osil --} this string conforms to the OSiL standard and holds the model instance.
@@ -600,7 +619,8 @@ We then illustrate several of the {\tt OSResult} API methods
 double getOptimalObjValue(int objIdx, int solIdx);
 std::vector<IndexValuePair*>  getOptimalPrimalVariableValues(int solIdx);
 \end{verbatim}
-to get and write out the optimal objective function value, and optimal primal values.  See also Section \ref{section:exampleOSResultDemo}.
+to get and write out the optimal objective function value, and optimal primal values.  
+See also Section \ref{section:exampleOSResultDemo}.
 
 \end{itemize}
 
@@ -721,16 +741,25 @@ interface to tell the Bonmin solver to try three starting points at each node.
 
 \subsection{OSResultDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
 
-The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\it OSiL} and {\tt OSoL} protocol, this protocol has an associated in-memory {\tt OSResult} class with corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the {\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the {\tt OSrLReader} class and create and {\tt OSResult} object. We then use the {\tt OSResult} API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
+The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\it OSiL} and 
+{\tt OSoL} protocol, this protocol has an associated in-memory {\tt OSResult} class with 
+corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} 
+in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the 
+{\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the 
+{\tt OSrLReader} class and create and {\tt OSResult} object. We then use the {\tt OSResult} 
+API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
 
 
 \subsection{OSCglCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
-In this example, we show how to add cuts to tighten an LP using COIN-OR  {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
+In this example, we show how to add cuts to tighten an LP using COIN-OR  
+{\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
 
-\subsection{ \, OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
+\subsection{OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
 
-This example illustrates the API for the six service methods described in Section~\ref{section:servicemethods}.
+This example illustrates the API for the six service methods that implement the remote solver service.
+These methods are described in the user's manual
+(see \url{http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf}).
 The file {\tt osRemoteTest.cpp} in folder {\tt osRemoteTest} first builds a small linear
 example, solves it remotely in synchronous mode and displays the solution.
 The asynchronous mode is also tested by submitting the problem to a remote solver,
