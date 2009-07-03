@@ -117,10 +117,17 @@ CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CDEFS = @CDEFS@
 CFLAGS = @CFLAGS@
+COINUTILSDOCDIR = @COINUTILSDOCDIR@
+COINUTILSOBJDIR = @COINUTILSOBJDIR@
+COINUTILSSRCDIR = @COINUTILSSRCDIR@
 COIN_BUILD_GLPK_FALSE = @COIN_BUILD_GLPK_FALSE@
 COIN_BUILD_GLPK_TRUE = @COIN_BUILD_GLPK_TRUE@
 COIN_HAS_ASL_FALSE = @COIN_HAS_ASL_FALSE@
 COIN_HAS_ASL_TRUE = @COIN_HAS_ASL_TRUE@
+COIN_HAS_COINUTILS_FALSE = @COIN_HAS_COINUTILS_FALSE@
+COIN_HAS_COINUTILS_TRUE = @COIN_HAS_COINUTILS_TRUE@
+COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
+COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
 COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
 COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
 COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
@@ -132,6 +139,9 @@ COIN_HAS_LINDO_TRUE = @COIN_HAS_LINDO_TRUE@
 COIN_HAS_OS_FALSE = @COIN_HAS_OS_FALSE@
 COIN_HAS_OS_TRUE = @COIN_HAS_OS_TRUE@
 CPP = @CPP@
+CPPADDOCDIR = @CPPADDOCDIR@
+CPPADOBJDIR = @CPPADOBJDIR@
+CPPADSRCDIR = @CPPADSRCDIR@
 CPPFLAGS = @CPPFLAGS@
 CPXINCDIR = @CPXINCDIR@
 CPXLIB = @CPXLIB@
@@ -240,6 +250,7 @@ build_alias = @build_alias@
 build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
+coinutilslib = @coinutilslib@
 datadir = @datadir@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
@@ -745,12 +756,13 @@ uninstall-info: uninstall-info-recursive
 ########################################################################
 
 run_parsers:
-	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/parseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/parseosrl.y
-	flex -Posrl  -o${abs_source_dir}/src/OSParsers/parseosrl.cpp ${abs_source_dir}/src/OSParsers/parseosrl.l
-	$(YACC) -ldv -p osil  -o ${abs_source_dir}/src/OSParsers/parseosil.tab.cpp ${abs_source_dir}/src/OSParsers/parseosil.y
-	flex -Posil -o${abs_source_dir}/src/OSParsers/parseosil.cpp ${abs_source_dir}/src/OSParsers/parseosil.l
-	flex -Posol -o${abs_source_dir}/src/OSParsers/parseosol.cpp ${abs_source_dir}/src/OSParsers/parseosol.l
-	flex -Posss -o${abs_source_dir}/src/OSParsers/parseosss.cpp ${abs_source_dir}/src/OSParsers/parseosss.l
+	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.y
+	flex -Posrl  -o${abs_source_dir}/src/OSParsers/OSParseosrl.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.l
+	$(YACC) -ldv -p osil  -o ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.y
+	flex -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.l
+	$(YACC) -ldv -p osol  -o ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.y
+	flex -Posol -o${abs_source_dir}/src/OSParsers/OSParseosol.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.l
+	flex -Posss -o${abs_source_dir}/src/OSParsers/OSParseosss.cpp ${abs_source_dir}/src/OSParsers/OSParseosss.l
 	make
 
 install-exec-local: install-doc

@@ -29,7 +29,8 @@ ADDINCFLAGS =  -I${prefix}/include
 # prefix/include
 SRCDIR = @srcdir@
 VPATH = @srcdir@
-prefix = @prefix@
+#prefix = @prefix@
+prefix = ../../..
 #
 #
 ##########################################################################
@@ -71,7 +72,7 @@ LIBS = @oscommonlib@   @ADDLIBS@
 
 #
 #ADD ALL THE LIBS
-
+LIBS += @coinutilslib@
  
 #DONE ADDING LIBS
 

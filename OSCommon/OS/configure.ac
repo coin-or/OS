@@ -85,7 +85,8 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 
 AC_COIN_HAS_PROJECT(OS)
-#AC_COIN_HAS_PROJECT(cppad)
+AC_COIN_HAS_PROJECT(cppad)
+AC_COIN_HAS_PROJECT(CoinUtils)
 
 
 
@@ -374,6 +375,19 @@ case $CXX in
     oscommonlib="-L\$(INSTALLIBDIR) -lOSCommon";;
 esac
 AC_SUBST(oscommonlib)
+
+if test $coin_has_coinutils != unavailable &&
+   test $coin_has_coinutils != skipping; then
+  case $CXX in
+    cl*)
+       coinutilslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCoinUtils.lib';;
+     *)
+       coinutilslib="-L\$(INSTALLIBDIR) -lCoinUtils";;
+  esac
+  AC_SUBST(coinutilslib) 
+  else
+    AC_MSG_ERROR([cannot find CoinTuils which is necessary to build OS])   
+fi
 
 
 ##############################################################################

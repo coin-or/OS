@@ -81,7 +81,7 @@ int  main(){
 		
 #endif
 		
-#if 1
+#if 0
 		OSResult *osresult = NULL;
 		std::string osrlFileName;
 		std::string osrl;
@@ -124,7 +124,7 @@ int  main(){
 		
 		delete fileUtil;
 		
-		return 0;
+		//return 0;
 
 
 		OSInstance *osinstance;
