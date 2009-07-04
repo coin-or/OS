@@ -446,7 +446,7 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 			int num_bonmin_options = optionsVector.size();
 			for(i = 0; i < num_bonmin_options; i++){
 				if(optionsVector[ i]->type == "numeric" ){
-					std::cout << "FOUND A  NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+					//std::cout << "FOUND A  NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
 					if(optionsVector[ i]->category == "ipopt"){
 						couenneSetup.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );	
 					}else{
@@ -459,7 +459,7 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 					}
 				}  
 				else if(optionsVector[ i]->type == "integer" ){
-					std::cout << "FOUND AN INTEGER OPTION  "  <<optionsVector[ i]->name << std::endl;
+					//std::cout << "FOUND AN INTEGER OPTION  "  <<optionsVector[ i]->name << std::endl;
 					if(optionsVector[ i]->category == "ipopt"){
 						couenneSetup.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );	
 					}else{
@@ -472,7 +472,7 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 					}					
 				}
 				else if(optionsVector[ i]->type == "string" ){
-					std::cout << "FOUND A STRING OPTION  "  <<optionsVector[ i]->name << std::endl;
+					//std::cout << "FOUND A STRING OPTION  "  <<optionsVector[ i]->name << std::endl;
 					if(optionsVector[ i]->category == "ipopt"){
 						couenneSetup.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value );	
 					}else{
@@ -532,14 +532,14 @@ void CouenneSolver::solve() throw (ErrorClass) {
 		ci = new CouenneInterface();
  		//const std::string  prefix="bonmin.";
 
-		std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
+		//std::cout << "INITIALIZE COUENNE INTERFACE" << std::endl;
 		
 		ci->initialize (couenneSetup.roptions(),//GetRawPtr(roptions),  
 				couenneSetup.options(),//GetRawPtr( options), 
 				couenneSetup.journalist(),//GetRawPtr(jnlst),  
 				 GetRawPtr( tminlp) );	
 	      	
-		std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
+		//std::cout << "INITIALIZE IPOPT SOLVER " << std::endl;
  		app_ = new Bonmin::IpoptSolver(couenneSetup.roptions(),//GetRawPtr(roptions),  
 					       couenneSetup.options(),//GetRawPtr( options), 					       
 					       couenneSetup.journalist()//GetRawPtr(jnlst),  
@@ -547,14 +547,14 @@ void CouenneSolver::solve() throw (ErrorClass) {
 						   
 						   
 	      	
-		std::cout << "INITIALIZE COUENNE MODEL" << std::endl;
+		//std::cout << "INITIALIZE COUENNE MODEL" << std::endl;
 		ci->setModel( GetRawPtr( tminlp) );
-		std::cout << "INITIALIZE COUENNE SOLVER" << std::endl;
+		//std::cout << "INITIALIZE COUENNE SOLVER" << std::endl;
 		ci->setSolver( GetRawPtr( app_) );
 		// initialize causes lots of memory leaks
 		
 	
-		std::cout << "INITIALIZE COUENNE " << std::endl;
+		//std::cout << "INITIALIZE COUENNE " << std::endl;
 		bool setupInit = false;
 		setupInit = couenneSetup.InitializeCouenne(argv, couenne, ci);
 		//std::cout << "ci -> isProvenOptimal ()" << ci -> isProvenOptimal ()<< std::endl;
@@ -619,9 +619,9 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	//std::cout << osinstance->printModel() << std::endl;
 	
 
-	std::cout << " CALL bb ( couenneSetup) " << std::endl;
+	//std::cout << " CALL bb ( couenneSetup) " << std::endl;
    		bb ( couenneSetup); // do branch and bound
-	std::cout << " END bb ( couenneSetup) " << std::endl;
+	//std::cout << " END bb ( couenneSetup) " << std::endl;
 	
 	
 
@@ -639,7 +639,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
     couenneSetup.options () -> GetNumericValue ("couenne_check", global_opt, "couenne.");
 	//std::cout << "Couenne Global Optimum Check Value = " << global_opt  << std::endl; 
     //std::cout << "GET BEST POSSIBLE OBJ VALUE =  " << bb.model (). getBestPossibleObjValue ()  << std::endl;
-    std::cout << "NUMBER OF NODES  =  " << bb.numNodes()  << std::endl;
+   // std::cout << "NUMBER OF NODES  =  " << bb.numNodes()  << std::endl;
     //std::cout << "BEST POSSIBLE OBJ VALUE =  " << bb.bestObj()  << std::endl;
 	double timeLimit = 0;
 	couenneSetup.options () -> GetNumericValue ("time_limit", timeLimit, "couenne.");

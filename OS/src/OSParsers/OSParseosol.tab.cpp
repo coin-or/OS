@@ -4596,8 +4596,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ((yyvsp[(3) - (4)].ival) >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialVariableValues->var[parserData->numberOfVar]->idx = (yyvsp[(3) - (4)].ival);
@@ -4654,8 +4654,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ((yyvsp[(3) - (4)].ival) >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialVariableValuesString->var[parserData->numberOfVarStr]->idx = (yyvsp[(3) - (4)].ival);
@@ -4707,8 +4707,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ((yyvsp[(3) - (4)].ival) >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->initialBasisStatus->var[parserData->numberOfBasVar]->idx = (yyvsp[(3) - (4)].ival);
@@ -4760,8 +4760,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ((yyvsp[(3) - (4)].ival) >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->integerVariableBranchingWeights->var[parserData->numberOfIntWt]->idx = (yyvsp[(3) - (4)].ival);
@@ -4880,8 +4880,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ((yyvsp[(3) - (4)].ival) >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->sosVariableBranchingWeights->sos[parserData->numberOfSOS]->var[parserData->numberOfSOSVar]->idx = (yyvsp[(3) - (4)].ival);
@@ -5023,8 +5023,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "variable index must be nonnegative");
-	if (parserData->numberOfVariablesPresent)
-	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfVariables)
+	if (osoption->optimization->numberOfVariables >= 0)
+	{	if ((yyvsp[(3) - (4)].ival) >= osoption->optimization->numberOfVariables)
 			osolerror (NULL, osoption, parserData, "variable index exceeds upper limit");
 	};
 	osoption->optimization->variables->other[parserData->numberOfOtherVariableOptions]->var[parserData->numberOfVar]->idx = (yyvsp[(3) - (4)].ival);
@@ -5111,8 +5111,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) >= 0)
 		osolerror (NULL, osoption, parserData, "objective index must be negative");
-	if (parserData->numberOfObjectivesPresent)
-	{	if (-(yyvsp[(3) - (4)].ival) > parserData->numberOfObjectives)
+	if (osoption->optimization->numberOfObjectives >= 0)
+	{	if (-(yyvsp[(3) - (4)].ival) > osoption->optimization->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
 	osoption->optimization->objectives->initialObjectiveValues->obj[parserData->numberOfObjValues]->idx = (yyvsp[(3) - (4)].ival);
@@ -5170,8 +5170,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) >= 0)
 		osolerror (NULL, osoption, parserData, "objective index must be negative");
-	if (parserData->numberOfObjectivesPresent)
-	{	if (-(yyvsp[(3) - (4)].ival) > parserData->numberOfObjectives)
+	if (osoption->optimization->numberOfObjectives >= 0)
+	{	if (-(yyvsp[(3) - (4)].ival) > osoption->optimization->numberOfObjectives)
 			osolerror (NULL, osoption, parserData, "objective index out of range");
 	};
 	osoption->optimization->objectives->initialObjectiveBounds->obj[parserData->numberOfObjBounds]->idx = (yyvsp[(3) - (4)].ival);
@@ -5415,8 +5415,8 @@ yyreduce:
 	parserData->idxAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
-	if (parserData->numberOfConstraintsPresent)
-	{	if ((yyvsp[(3) - (4)].ival) > parserData->numberOfConstraints)
+	if (osoption->optimization->numberOfConstraints >= 0)
+	{	if ((yyvsp[(3) - (4)].ival) > osoption->optimization->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index out of range");
 	};
 	osoption->optimization->constraints->initialConstraintValues->con[parserData->numberOfCon]->idx = (yyvsp[(3) - (4)].ival);
@@ -5632,7 +5632,7 @@ yyreduce:
 	if ((yyvsp[(3) - (4)].ival) < 0)
 		osolerror (NULL, osoption, parserData, "constraint index must be nonnegative");
 	if (parserData->numberOfConstraintsPresent)
-	{	if ((yyvsp[(3) - (4)].ival) >= parserData->numberOfConstraints)
+	{	if ((yyvsp[(3) - (4)].ival) > parserData->numberOfConstraints)
 			osolerror (NULL, osoption, parserData, "constraint index exceeds upper limit");
 	};
 	osoption->optimization->constraints->other[parserData->numberOfOtherConstraintOptions]->con[parserData->numberOfCon]->idx = (yyvsp[(3) - (4)].ival);

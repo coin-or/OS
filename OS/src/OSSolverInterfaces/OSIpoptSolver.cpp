@@ -772,7 +772,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
-		cout << "Parsing took (seconds): " << duration << endl; 
+		//cout << "Parsing took (seconds): " << duration << endl; 
 		//dataEchoCheck();
 		/***************now the ipopt invokation*********************/
 		// see if we have a linear program

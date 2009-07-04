@@ -703,7 +703,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					std::cout << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
 				}
 */
-				std::cout << "CALL CbcMain1  "   << std::endl;
+				
 				CbcMain1( num_cbc_argv, cbc_argv, model);	
 				/*
 				coinMessages = model.messages();
