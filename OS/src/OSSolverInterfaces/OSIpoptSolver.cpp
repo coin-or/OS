@@ -262,7 +262,7 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 
 	double default_initval;
 	default_initval = 1.7171;
-	default_initval = 0;
+	//default_initval = 0;
 
 	for(k = 0; k < n1; k++)
 	{	if (!initialed[k])
