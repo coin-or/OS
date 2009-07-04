@@ -4,7 +4,7 @@
 	</general>
 	<job>
 	</job>	
-	<optimization numberOfVariables="2">
+	<optimization numberOfVariables="8">
 		<variables numberOfOtherVariableOptions="0">
 			<initialVariableValues numberOfVar="8">
 					<var idx="0" value="0.25"/>
