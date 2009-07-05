@@ -171,7 +171,7 @@ OSnLNode::~OSnLNode(){
 
 OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec){
 	std::vector<OSnLNode*> stackVec ;
-	int kount =  0;
+	unsigned int kount =  0;
 	while(kount <= nlNodeVec.size() - 1){
 		int numkids = nlNodeVec[kount]->inumberOfChildren;
 		if(numkids  > 0){
