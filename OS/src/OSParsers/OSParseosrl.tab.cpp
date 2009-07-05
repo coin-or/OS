@@ -724,11 +724,11 @@ static const yytype_uint16 yyrline[] =
      268,   270,   271,   272,   273,   275,   276,   280,   286,   287,
      298,   299,   309,   316,   317,   319,   322,   327,   333,   337,
      338,   340,   359,   368,   371,   373,   373,   373,   373,   375,
-     382,   385,   391,   397,   403,   412,   413,   415,   432,   433,
-     434,   436,   441,   442,   451,   455,   456,   458,   464,   472,
-     475,   477,   476,   494,   500,   501,   503,   510,   518,   520,
-     524,   525,   527,   528,   530,   531,   533,   541,   543,   544,
-     545,   546,   548,   549
+     384,   387,   393,   399,   405,   414,   415,   417,   434,   435,
+     436,   438,   443,   444,   453,   457,   458,   460,   466,   474,
+     477,   479,   478,   496,   502,   503,   505,   512,   520,   522,
+     526,   527,   529,   530,   532,   533,   535,   543,   545,   546,
+     547,   548,   550,   551
 };
 #endif
 
@@ -2126,7 +2126,7 @@ yyreduce:
   case 102:
 
     {
-	osresult->setNumberOfPrimalVariableValues(parserData->solutionIdx, (yyvsp[(3) - (4)].ival));
+	//osresult->setNumberOfPrimalVariableValues(parserData->solutionIdx, $3);
 	parserData->numberOfVar = (yyvsp[(3) - (4)].ival);
 	}
     break;
@@ -2177,8 +2177,8 @@ yyreduce:
 
     {  // parserData->numberOfOtherVariableResults++;
 		parserData->otherVarStruct = new OtherVariableResultStruct(); 
-		parserData->otherVarStruct->otherVarText  = new std::string[parserData->numberOfVariables];	 
-		parserData->otherVarStruct->otherVarIndex = new int[parserData->numberOfVariables];	 
+		//parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
+		//parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	 
 		parserData->kounter = 0;
 	}
     break;
@@ -2194,7 +2194,9 @@ yyreduce:
 
     {
 	parserData->otherVarStruct->numberOfVar = (yyvsp[(3) - (4)].ival);
- 	/*osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;*/
+	parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
+	parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	
+ 	//osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;
 }
     break;
 
@@ -2248,7 +2250,7 @@ parserData->errorText = NULL;
 //if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar)
 if (parserData->kounter == osresult->getAnOtherVariableResultNumberOfVar(parserData->solutionIdx, parserData->iOther))
     osrlerror(NULL, NULL, parserData, "too many variables"); 
-if (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) 
+if (parserData->numberOfVariables > 0 && (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) ) 
     osrlerror(NULL, NULL, parserData, "index must be greater than 0 and less than the number of variables");
    
 

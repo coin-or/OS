@@ -1144,8 +1144,8 @@ bool OSResult::setPrimalVariableValuesDense(int solIdx, double *x){
 
 
 bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVariableResults){
-	int iNumberOfVariables = this->getVariableNumber();
-	if(iNumberOfVariables <= 0) return false;
+	//int iNumberOfVariables = this->getVariableNumber();
+	//if(iNumberOfVariables <= 0) return false;
 	int nSols = this->getSolutionNumber();
 	if(nSols <= 0) return false;
 	if(optimization == NULL) return false;

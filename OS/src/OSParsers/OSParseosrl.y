@@ -308,7 +308,7 @@ numberOfOtherVariableResults:
 
 numberOfVarATT: NUMBEROFVARATT quote INTEGER quote 
 	{
-	osresult->setNumberOfPrimalVariableValues(parserData->solutionIdx, $3);
+	//osresult->setNumberOfPrimalVariableValues(parserData->solutionIdx, $3);
 	parserData->numberOfVar = $3;
 	}
 ; 
@@ -359,8 +359,8 @@ otherVariableResult: otherVariableStart otherVariableATTlist GREATERTHAN otherva
 otherVariableStart: OTHERSTART 
 	{  // parserData->numberOfOtherVariableResults++;
 		parserData->otherVarStruct = new OtherVariableResultStruct(); 
-		parserData->otherVarStruct->otherVarText  = new std::string[parserData->numberOfVariables];	 
-		parserData->otherVarStruct->otherVarIndex = new int[parserData->numberOfVariables];	 
+		//parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
+		//parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	 
 		parserData->kounter = 0;
 	}; 
 
@@ -375,7 +375,9 @@ othervariableATT: numberOfOtherVarATT | otherVarValueATT | otherVarNameATT | oth
 numberOfOtherVarATT: NUMBEROFVARATT quote INTEGER quote 
 {
 	parserData->otherVarStruct->numberOfVar = $3;
- 	/*osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;*/
+	parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
+	parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	
+ 	//osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;
 }; 
 
 otherVarValueATT: 
@@ -421,7 +423,7 @@ parserData->errorText = NULL;
 //if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar)
 if (parserData->kounter == osresult->getAnOtherVariableResultNumberOfVar(parserData->solutionIdx, parserData->iOther))
     osrlerror(NULL, NULL, parserData, "too many variables"); 
-if (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) 
+if (parserData->numberOfVariables > 0 && (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) ) 
     osrlerror(NULL, NULL, parserData, "index must be greater than 0 and less than the number of variables");
    
 
