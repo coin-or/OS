@@ -1,6 +1,6 @@
 BuildTools     https://projects.coin-or.org/svn/BuildTools/trunk
-OS/src/OSCommonInterfaces     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSCommonInterfaces
-OS/src/OSParsers     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSParsers
-OS/src/OSUtils     https://projects.coin-or.org/svn/OS/trunk/OS/src/OSUtils
-CoinUtils https://projects.coin-or.org/svn/CoinUtils/releases/2.5.0/CoinUtils
+OS/src/OSCommonInterfaces     https://projects.coin-or.org/svn/OS/stable/2.0/OS/src/OSCommonInterfaces
+OS/src/OSParsers     https://projects.coin-or.org/svn/OS/stable/2.0//OS/src/OSParsers
+OS/src/OSUtils     https://projects.coin-or.org/svn/OS/stable/2.0/OS/src/OSUtils
+CoinUtils https://projects.coin-or.org/svn/CoinUtils/stable/2.5/CoinUtils
 cppad https://projects.coin-or.org/svn/CppAD/releases/20090303.0
