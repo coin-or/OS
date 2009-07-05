@@ -3245,12 +3245,16 @@ if (PARSER_TESTS){
 #endif
 
 		int nvar, nobj, ncon;
-		nvar = osoption->getOptionInt("numberOfVariables");
-		ok = osoption2->setNumberOfVariables(nvar) && ok;
-		nobj = osoption->getOptionInt("numberOfObjectives");
-		ok = osoption2->setNumberOfObjectives(nobj) && ok;
-		ncon = osoption->getOptionInt("numberOfConstraints");
-		ok = osoption2->setNumberOfConstraints(ncon) && ok;
+		//nvar = osoption->getOptionInt("numberOfVariables");
+		//ok = osoption2->setNumberOfVariables(nvar) && ok;
+		//nobj = osoption->getOptionInt("numberOfObjectives");
+		//ok = osoption2->setNumberOfObjectives(nobj) && ok;
+		//ncon = osoption->getOptionInt("numberOfConstraints");
+		//ok = osoption2->setNumberOfConstraints(ncon) && ok;
+		// eliminate references to numberOfVariables
+		nvar = 10; 
+		nobj = 1; 
+		ncon = 4; 
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set problem dimensions");
@@ -3258,7 +3262,7 @@ if (PARSER_TESTS){
  
 // for the variables, objectives and constraints use a mixture of dense and sparse methods
 		double* IVV;
-		IVV = osoption->getInitVarValuesDense();
+		IVV = osoption->getInitVarValuesDense(nvar);
 		ok = osoption2->setInitVarValuesDense(nvar, IVV) && ok;
 #ifdef DEBUG
 		if (!ok)
@@ -3275,7 +3279,7 @@ if (PARSER_TESTS){
 #endif
 
 		std::string*  IBS;
-		IBS = osoption->getInitBasisStatusDense();
+		IBS = osoption->getInitBasisStatusDense(nvar);
 		ok = osoption2->setInitBasisStatusDense(nvar, IBS) && ok;		
 #ifdef DEBUG
 		if (!ok)
@@ -3283,7 +3287,7 @@ if (PARSER_TESTS){
 #endif
 
 		double* IVBW;
-		IVBW = osoption->getIntegerVariableBranchingWeightsDense();
+		IVBW = osoption->getIntegerVariableBranchingWeightsDense(nvar);
 		ok = osoption2->setIntegerVariableBranchingWeightsDense(nvar, IVBW) && ok;		
 #ifdef DEBUG
 		if (!ok)
@@ -3309,7 +3313,7 @@ if (PARSER_TESTS){
 #endif
 
 		double* IOV;
-		IOV = osoption->getInitObjValuesDense();
+		IOV = osoption->getInitObjValuesDense(nobj);
 		ok = osoption2->setInitObjValuesDense(nobj, IOV) && ok;		
 #ifdef DEBUG
 		if (!ok)
@@ -3336,7 +3340,7 @@ if (PARSER_TESTS){
 
 		
 		double* ICV;
-		ICV = osoption->getInitConValuesDense();
+		ICV = osoption->getInitConValuesDense(ncon);
 		ok = osoption2->setInitConValuesDense(ncon, ICV) && ok;		
 #ifdef DEBUG
 		if (!ok)

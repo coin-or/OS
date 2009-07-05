@@ -15,7 +15,7 @@
 			<other description="q" name="four"/>
 		</otherOptions>
 	</service>
-        <optimization numberOfObjectives="1" numberOfConstraints="4" numberOfVariables="10">
+        <optimization>
 		<variables numberOfOtherVariableOptions="0">
 			<initialVariableValues numberOfVar="3">
 					<var idx="0" value="1"/>
