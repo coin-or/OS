@@ -453,7 +453,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
 		try{
-			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, (double*)lambda ,  new_x, 2);
+			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, const_cast<double*>(lambda) ,  new_x, 2);
 		delete[]  objMultipliers;
 		}
 		catch(const ErrorClass& eclass){

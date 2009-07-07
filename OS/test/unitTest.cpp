@@ -274,6 +274,7 @@ int main(int argC, char* argV[])
 		OTHER_TESTS  = false;  
 		break;
 	case 4:
+	default:
 		BASIC_TESTS  = true;  
 		SOLVER_TESTS = true; 
 		THOROUGH     = true;     
