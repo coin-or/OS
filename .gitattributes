@@ -96,6 +96,7 @@ OS/data/amplFiles/bonminEx1.nl -text
 OS/data/amplFiles/hs71.mod -text
 OS/data/amplFiles/hs71.nl -text
 OS/data/amplFiles/muer.mod -text
+OS/data/amplFiles/muer.nl -text
 OS/data/amplFiles/muerdata10.dat -text
 OS/data/amplFiles/parinc.dat -text
 OS/data/amplFiles/parinc.mod -text
@@ -143,6 +144,7 @@ OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/HS071_feas.osil -text
 OS/data/osilFiles/IP_infeasible.osil -text
 OS/data/osilFiles/IP_noconstraint.osil -text
+OS/data/osilFiles/IP_unbounded.osil -text
 OS/data/osilFiles/LINDO-SOS2.osil -text
 OS/data/osilFiles/LP_infeasible.osil -text
 OS/data/osilFiles/LP_nobasis.osil -text

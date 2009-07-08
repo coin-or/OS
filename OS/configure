@@ -30225,7 +30225,11 @@ if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/IP_noconstraint.osil"
 fi
 
-#AC_COIN_VPATH_LINK(data/osilFiles/IP_unbounded.osil)
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/IP_unbounded.osil"
+fi
+
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/lindoapiaddins.osil"
@@ -30717,7 +30721,11 @@ if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/muerdata10.dat"
 fi
 
-#AC_COIN_VPATH_LINK(data/amplFiles/muer.nl)
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/muer.nl"
+fi
+
 
 if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/amplFiles/parinc.mod"
