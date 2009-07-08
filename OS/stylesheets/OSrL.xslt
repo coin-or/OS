@@ -13,7 +13,7 @@
                 
                 <h2>General Status:</h2>
                 <p>
-                    <xsl:for-each select="/os:osrl/os:resultHeader/os:generalStatus">
+                    <xsl:for-each select="/os:osrl/os:general/os:generalStatus">
                         <b> <xsl:value-of select="@type"/> </b>
                     </xsl:for-each>
                 </p>
@@ -27,14 +27,14 @@
                 
                 <h2>Solver Used</h2>
                 <p>
-                    <xsl:for-each select="/os:osrl/os:resultHeader/os:serviceName">
+                    <xsl:for-each select="/os:osrl/os:general/os:serviceName">
                         <b> <xsl:value-of select="text()"/> </b>
                     </xsl:for-each>
                 </p>
 
                 <h2>Objective Function Value</h2>
                 <p>
-                    <xsl:for-each select="/os:osrl/os:resultData/os:optimization/os:solution/os:objectives/os:values/os:obj">
+                    <xsl:for-each select="/os:osrl/os:optimization/os:solution/os:objectives/os:values/os:obj">
                        <b> <xsl:value-of select="text()"/> </b>
                     </xsl:for-each>
                 </p>
@@ -50,7 +50,7 @@
                         </td>
                     </tr>
                     <xsl:for-each
-                        select="/os:osrl/os:resultData/os:optimization/os:solution/os:variables/os:values/os:var">
+                        select="/os:osrl/os:optimization/os:solution/os:variables/os:values/os:var">
                         <tr>
                             <td>
                                 <xsl:value-of select="@idx"/>
@@ -75,7 +75,7 @@
                         </td>
                     </tr>
                     <xsl:for-each
-                        select="/os:osrl/os:resultData/os:optimization/os:solution/os:constraints/os:dualValues/os:con">
+                        select="/os:osrl/os:optimization/os:solution/os:constraints/os:dualValues/os:con">
                         <tr>
                             <td>
                                 <xsl:value-of select="@idx"/>

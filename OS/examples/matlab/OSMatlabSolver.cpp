@@ -11,6 +11,9 @@
 //#include "OSParameters.h"
 #include "OSMatlabSolver.h"
 
+#ifdef COIN_HAS_ASL
+#include "OSnl2osil.h"
+#endif
 
 
 /* If you are using a compiler that equates NaN to be zero, you must
