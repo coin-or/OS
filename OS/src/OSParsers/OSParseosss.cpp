@@ -793,8 +793,6 @@ extern int ossswrap (yyscan_t yyscanner );
 #endif
 #endif
 
-    static void yyunput (int c,char *buf_ptr  ,yyscan_t yyscanner);
-    
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int ,yyscan_t yyscanner);
 #endif
@@ -920,7 +918,7 @@ YY_DECL
 #line 115 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
 
 
-#line 924 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.cpp"
+#line 922 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -1285,7 +1283,6 @@ case 19:
 YY_RULE_SETUP
 #line 322 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
 {
-	if(5 > 6)unput(' '); // a kludge just to use unput and get rid of the warning
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "ecountered a spurious character in the lexer" << endl;
@@ -1299,10 +1296,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 334 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
+#line 333 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
 ECHO;
 	YY_BREAK
-#line 1306 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.cpp"
+#line 1303 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1632,48 +1629,6 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	yy_is_jam = (yy_current_state == 183);
 
 	return yy_is_jam ? 0 : yy_current_state;
-}
-
-    static void yyunput (int c, register char * yy_bp , yyscan_t yyscanner)
-{
-	register char *yy_cp;
-    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-
-    yy_cp = yyg->yy_c_buf_p;
-
-	/* undo effects of setting up yytext */
-	*yy_cp = yyg->yy_hold_char;
-
-	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-		{ /* need to shift things up to make room */
-		/* +2 for EOB chars. */
-		register int number_to_move = yyg->yy_n_chars + 2;
-		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
-					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
-		register char *source =
-				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
-
-		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
-			*--dest = *--source;
-
-		yy_cp += (int) (dest - source);
-		yy_bp += (int) (dest - source);
-		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
-			yyg->yy_n_chars = YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
-
-		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-			YY_FATAL_ERROR( "flex scanner push-back overflow" );
-		}
-
-	*--yy_cp = (char) c;
-
-    if ( c == '\n' ){
-        --yylineno;
-    }
-
-	yyg->yytext_ptr = yy_bp;
-	yyg->yy_hold_char = *yy_cp;
-	yyg->yy_c_buf_p = yy_cp;
 }
 
 #ifndef YY_NO_INPUT
@@ -2468,7 +2423,7 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 334 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
+#line 333 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
 
 
 
