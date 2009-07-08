@@ -19,8 +19,6 @@ noinst_LTLIBRARIES = libOSModelInterfaces.la
 
 # List all source files for this library, including headers
 libOSModelInterfaces_la_SOURCES = \
-	OSMatlab.cpp \
-	OSMatlab.h \
 	OSmps2osil.cpp \
     OSmps2osil.h 
 
@@ -36,73 +34,17 @@ libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
-	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src` \
-	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent`  \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces`  \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces`	\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils`  \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers`
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
+	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
 
 
 
 
 
-if COIN_HAS_CPX
-  AM_CPPFLAGS += \
-   -I`$(CYGPATH_W) $(CPXINCDIR)` \
-   -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-endif
-
-
-if COIN_HAS_GLPK
-  AM_CPPFLAGS += \
-     -I`$(CYGPATH_W) $(GLPKINCDIR)` \
-     -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-endif
-
-if COIN_HAS_DYLP
-  AM_CPPFLAGS += \
-    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
-    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
-    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
-endif
-
-
-if COIN_HAS_SYMPHONY
-  AM_CPPFLAGS += \
-    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
-   -I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
-endif
-
-if COIN_HAS_VOL
-  AM_CPPFLAGS += \
-    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
-   -I`$(CYGPATH_W) $(VOLOBJDIR)/include` \
-    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
-endif
-
-
-if COIN_HAS_LINDO
-  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
-endif
-
-if COIN_HAS_KNITRO
-  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-endif
 
 
 if COIN_HAS_ASL
@@ -111,13 +53,9 @@ if COIN_HAS_ASL
 endif
 
 
-
-if COIN_HAS_IPOPT
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
-	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
-	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
-	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
+if COIN_HAS_CPPAD
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(CPPADSRCDIR)` 
+  AM_CPPFLAGS += $(CPPAD_CPPFLAGS) 
 endif
 
 
@@ -135,7 +73,6 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
 	 OSmps2osil.h \
-	 OSMatlab.h \
 	 OSnl2osil.h
 
 

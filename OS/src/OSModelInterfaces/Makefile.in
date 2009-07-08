@@ -46,42 +46,11 @@ host_triplet = @host@
 @COIN_HAS_ASL_TRUE@am__append_1 = OSnl2osil.cpp \
 @COIN_HAS_ASL_TRUE@	 OSnl2osil.h
 
-@COIN_HAS_CPX_TRUE@am__append_2 = \
-@COIN_HAS_CPX_TRUE@   -I`$(CYGPATH_W) $(CPXINCDIR)` \
-@COIN_HAS_CPX_TRUE@   -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-
-@COIN_HAS_GLPK_TRUE@am__append_3 = \
-@COIN_HAS_GLPK_TRUE@     -I`$(CYGPATH_W) $(GLPKINCDIR)` \
-@COIN_HAS_GLPK_TRUE@     -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-
-@COIN_HAS_DYLP_TRUE@am__append_4 = \
-@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
-@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
-@COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
-@COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
-
-@COIN_HAS_SYMPHONY_TRUE@am__append_5 = \
-@COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
-@COIN_HAS_SYMPHONY_TRUE@   -I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include` \
-@COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
-
-@COIN_HAS_VOL_TRUE@am__append_6 = \
-@COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
-@COIN_HAS_VOL_TRUE@   -I`$(CYGPATH_W) $(VOLOBJDIR)/include` \
-@COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
-@COIN_HAS_VOL_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
-
-@COIN_HAS_LINDO_TRUE@am__append_7 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_KNITRO_TRUE@am__append_8 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-@COIN_HAS_ASL_TRUE@am__append_9 = -I`$(CYGPATH_W) \
+@COIN_HAS_ASL_TRUE@am__append_2 = -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
-@COIN_HAS_IPOPT_TRUE@am__append_10 = \
-@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
-@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
-@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
-@COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-
+@COIN_HAS_CPPAD_TRUE@am__append_3 = -I`$(CYGPATH_W) $(CPPADSRCDIR)` \
+@COIN_HAS_CPPAD_TRUE@	$(CPPAD_CPPFLAGS)
 subdir = src/OSModelInterfaces
 DIST_COMMON = $(includecoin_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -95,11 +64,10 @@ CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSModelInterfaces_la_LIBADD =
-am__libOSModelInterfaces_la_SOURCES_DIST = OSMatlab.cpp OSMatlab.h \
-	OSmps2osil.cpp OSmps2osil.h OSnl2osil.cpp OSnl2osil.h
+am__libOSModelInterfaces_la_SOURCES_DIST = OSmps2osil.cpp OSmps2osil.h \
+	OSnl2osil.cpp OSnl2osil.h
 @COIN_HAS_ASL_TRUE@am__objects_1 = OSnl2osil.lo
-am_libOSModelInterfaces_la_OBJECTS = OSMatlab.lo OSmps2osil.lo \
-	$(am__objects_1)
+am_libOSModelInterfaces_la_OBJECTS = OSmps2osil.lo $(am__objects_1)
 libOSModelInterfaces_la_OBJECTS =  \
 	$(am_libOSModelInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -403,8 +371,8 @@ noinst_LTLIBRARIES = libOSModelInterfaces.la
 #lib_LTLIBRARIES = libOSModelInterfaces.la
 
 # List all source files for this library, including headers
-libOSModelInterfaces_la_SOURCES = OSMatlab.cpp OSMatlab.h \
-	OSmps2osil.cpp OSmps2osil.h $(am__append_1)
+libOSModelInterfaces_la_SOURCES = OSmps2osil.cpp OSmps2osil.h \
+	$(am__append_1)
 
 # This is for libtool (on Windows)
 libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -412,22 +380,12 @@ libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
-	$(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
-	$(COINUTILSOBJDIR)/inc` -I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(CBCOBJDIR)/inc` -I`$(CYGPATH_W) \
-	$(CLPSRCDIR)/src` -I`$(CYGPATH_W) $(CLPOBJDIR)/inc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src` -I`$(CYGPATH_W) \
-	$(OSIOBJDIR)/inc` -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src` -I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSParsers` $(am__append_2) $(am__append_3) \
-	$(am__append_4) $(am__append_5) $(am__append_6) \
-	$(am__append_7) $(am__append_8) $(am__append_9) \
-	$(am__append_10)
+	$(OSSRCDIR)/src/OSParsers` -I`$(CYGPATH_W) \
+	$(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
+	$(COINUTILSOBJDIR)/inc` $(am__append_2) $(am__append_3)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -443,7 +401,6 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
 	 OSmps2osil.h \
-	 OSMatlab.h \
 	 OSnl2osil.h
 
 all: all-am
@@ -497,7 +454,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSMatlab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSmps2osil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnl2osil.Plo@am__quote@
 

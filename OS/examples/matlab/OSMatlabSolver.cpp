@@ -9,7 +9,7 @@
 // OS includes
 #include "OSDataStructures.h"
 //#include "OSParameters.h"
-#include "OSMatlab.h"
+#include "OSMatlabSolver.h"
 
 
 
