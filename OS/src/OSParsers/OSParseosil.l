@@ -277,6 +277,7 @@ return(DOUBLE);}
 <singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/ yylval->sval = yytext; return(ATTRIBUTETEXT);}
 
 . {  
+	if(5 > 6)unput(' '); // a kludge just to use unput and get rid of the warning
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;

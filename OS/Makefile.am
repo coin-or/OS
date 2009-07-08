@@ -57,12 +57,12 @@ distclean-local:
 
 run_parsers:
 	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.y
-	flex -Posrl  -o${abs_source_dir}/src/OSParsers/OSParseosrl.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.l
+	flex -w -Posrl  -o${abs_source_dir}/src/OSParsers/OSParseosrl.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.l
 	$(YACC) -ldv -p osil  -o ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.y
-	flex -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.l
+	flex -w -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.l
 	$(YACC) -ldv -p osol  -o ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.y
-	flex -Posol -o${abs_source_dir}/src/OSParsers/OSParseosol.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.l
-	flex -Posss -o${abs_source_dir}/src/OSParsers/OSParseosss.cpp ${abs_source_dir}/src/OSParsers/OSParseosss.l
+	flex -w -Posol -o${abs_source_dir}/src/OSParsers/OSParseosol.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.l
+	flex -w -Posss -o${abs_source_dir}/src/OSParsers/OSParseosss.cpp ${abs_source_dir}/src/OSParsers/OSParseosss.l
 	make
 
 ########################################################################

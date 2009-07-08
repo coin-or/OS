@@ -2236,6 +2236,7 @@ case 115:
 YY_RULE_SETUP
 #line 279 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
 {  
+	if(5 > 6)unput(' '); // a kludge just to use unput and get rid of the warning
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;
@@ -2249,10 +2250,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 291 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
+#line 292 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
 ECHO;
 	YY_BREAK
-#line 2256 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
+#line 2257 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(doublequoteattributetext):
 case YY_STATE_EOF(singlequoteattributetext):
@@ -3449,7 +3450,7 @@ void osilfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 291 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
+#line 292 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
 
 
 

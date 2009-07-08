@@ -107,7 +107,7 @@ public:
 
 	/** There could be more than one time measurement;
 	 *  numberOfTimes stores the number of them */
-	int numberOfTimes;
+	unsigned int numberOfTimes;
 
 	/** Provide temporary storage for attribute values associated with an OtherVarResult */
 	std::string tmpOtherValue;
@@ -153,7 +153,7 @@ public:
 	int iOther;
 
 	/** a temporary counter to count second-level objects */
-	int ivar;
+	unsigned int ivar;
 
 	/** a temporary variable to hold an integer index value */
 	int idx;
@@ -170,7 +170,7 @@ public:
 	int numberOfOtherVariableResults;
 	
 	/** and index on which solution we have found */
-	int solutionIdx;
+	unsigned int solutionIdx;
 
 	/** set statusTypePresent to true if there is
 	 * a status attribute parsed

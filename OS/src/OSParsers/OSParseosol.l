@@ -336,6 +336,7 @@ return(DOUBLE);}
 
 
 .|\n {  
+	if(5 > 6)unput(' '); // a kludge just to use unput and get rid of the warning
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;

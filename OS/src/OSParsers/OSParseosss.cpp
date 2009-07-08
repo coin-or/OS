@@ -1285,6 +1285,7 @@ case 19:
 YY_RULE_SETUP
 #line 322 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
 {
+	if(5 > 6)unput(' '); // a kludge just to use unput and get rid of the warning
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "ecountered a spurious character in the lexer" << endl;
@@ -1298,10 +1299,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 333 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
+#line 334 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
 ECHO;
 	YY_BREAK
-#line 1305 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.cpp"
+#line 1306 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2467,7 +2468,7 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 333 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
+#line 334 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosss.l"
 
 
 
