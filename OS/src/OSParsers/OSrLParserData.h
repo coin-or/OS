@@ -119,32 +119,32 @@ public:
 	void* scanner;
 	
 	/** number of result solutions */
-	int numberOfSolutions;
+	unsigned int numberOfSolutions;
 	
 	/** total number of variables in the model instance */
-	int numberOfVariables;
+	unsigned int numberOfVariables;
 	
 	/** total number of constraints in the model instance */
-	int numberOfConstraints;
+	unsigned int numberOfConstraints;
 	
 	/** total number of Objectives in the model instance */
-	int numberOfObjectives;
+	unsigned int numberOfObjectives;
 	
 	
 	/** number of variables in the a solution instance,
 	 * may change from solution to solution
 	 */
-	int numberOfVar;
+	unsigned int numberOfVar;
 	
 	/** number of constraints in the a solution instance,
 	 * may change from solution to solution
 	 */
-	int numberOfCon;
+	unsigned int numberOfCon;
 	
 	/** number of Objectives in the a solution instance 
 	 * may change from solution to solution
 	 */
-	int numberOfObj;
+	unsigned int numberOfObj;
 	
 	/** a temporary counter to count variables, number of attributes, etc. */
 	int kounter;
