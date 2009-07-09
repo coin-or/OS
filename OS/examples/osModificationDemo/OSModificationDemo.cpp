@@ -186,6 +186,13 @@ int main( ){
 		// change objective function coefficient a second time
 		osinstance->bObjectivesModified = true;
 		osinstance->instanceData->objectives->obj[0]->coef[0]->value = 0;	
+		// make the upper bound of the second variable 500
+		// first print out the current value -- should be "infinity"
+		std::cout << "Variable upper bound = "<< osinstance->instanceData->variables->var[1]->ub << std::endl;
+		// now change it to 500;
+		osinstance->bVariablesModified = true;
+		osinstance->instanceData->variables->var[1]->ub = 500;
+		std::cout << "Variable upper bound = "<< osinstance->instanceData->variables->var[1]->ub << std::endl;
 		solver = new CoinSolver();
 		solver->osinstance = osinstance;
 		solver->sSolverName ="clp"; 	
@@ -194,7 +201,6 @@ int main( ){
 		std::cout << solver->osrl << std::endl;		
 		std::cout << "Obj value =  " << solver->osresult->optimization->solution[0]->objectives->values->obj[0]->value << endl; 
 		std::cout << "Obj value =  " << solver->osresult->getOptimalObjValue( -1, 0) << endl;  // use a get		
-		
 		delete osinstance;
 		osinstance = NULL;
 		delete osilwriter;
