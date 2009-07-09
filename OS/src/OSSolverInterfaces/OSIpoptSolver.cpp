@@ -675,7 +675,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		this->bSetSolverOptions = true;
 		/* set the default options */	
 		//app->Options()->SetNumericValue("tol", 1e-9);
-		app->Options()->SetIntegerValue("print_level", 3);
+		app->Options()->SetIntegerValue("print_level", 0);
 		app->Options()->SetIntegerValue("max_iter", 20000);
 		app->Options()->SetNumericValue("bound_relax_factor", 0, true, true);
 		app->Options()->SetStringValue("mu_strategy", "adaptive", true, true);

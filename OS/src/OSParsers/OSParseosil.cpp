@@ -54,7 +54,6 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -84,6 +83,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -158,7 +159,15 @@ typedef void* yyscan_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k.
+ * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
+ * Ditto for the __ia64__ case accordingly.
+ */
+#define YY_BUF_SIZE 32768
+#else
 #define YY_BUF_SIZE 16384
+#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -1184,7 +1193,7 @@ using std::ostringstream;
 
 #line 108 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
 #define YY_EXTRA_TYPE OSiLParserData*
-#line 1188 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
+#line 1197 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
 
 #define INITIAL 0
 #define doublequoteattributetext 1
@@ -1326,7 +1335,12 @@ static int input (yyscan_t yyscanner );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k */
+#define YY_READ_BUF_SIZE 16384
+#else
 #define YY_READ_BUF_SIZE 8192
+#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -1334,7 +1348,7 @@ static int input (yyscan_t yyscanner );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( yytext, yyleng, 1, yyout )
+#define ECHO do { if (fwrite( yytext, yyleng, 1, yyout )) {} } while (0)
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -1345,7 +1359,7 @@ static int input (yyscan_t yyscanner );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -1433,7 +1447,7 @@ YY_DECL
 #line 119 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
 
  
-#line 1437 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
+#line 1451 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
 
     yylval = yylval_param;
 
@@ -2243,7 +2257,7 @@ YY_RULE_SETUP
 #line 292 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.l"
 ECHO;
 	YY_BREAK
-#line 2247 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
+#line 2261 "/Users/kmartin/coin/bsp/OS/src/OSParsers/OSParseosil.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(doublequoteattributetext):
 case YY_STATE_EOF(singlequoteattributetext):
@@ -2991,8 +3005,8 @@ YY_BUFFER_STATE osil_scan_string (yyconst char * yystr , yyscan_t yyscanner)
 
 /** Setup the input buffer state to scan the given bytes. The next call to osillex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * @param yyscanner The scanner object.
  * @return the newly allocated buffer state object.
  */
