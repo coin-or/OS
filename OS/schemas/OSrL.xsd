@@ -109,7 +109,7 @@
 	</xs:complexType>
 	<xs:complexType name="OptimizationResult">
 		<xs:annotation>
-			<xs:documentation>numberOfVariables, numberOfObjectives and numberOfConstraints, if present, are the numbers in the original optimization instance and should match those in the corresponding OSiL.</xs:documentation>
+			<xs:documentation>numberOfVariables, numberOfObjectives and numberOfConstraints are the numbers in the original optimization instance and should match those in the corresponding OSiL. Use -1 if not applicable or necessary in appropriate scenarios.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="solution" type="OptimizationSolution" minOccurs="0" maxOccurs="unbounded"/>
@@ -121,20 +121,35 @@
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolutions" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="optional">
+		<xs:attribute name="numberOfVariables" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="-1"/>
+				</xs:restriction>
+			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="numberOfObjectives" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of objectives in the original optimization instance</xs:documentation>
 			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="-1"/>
+				</xs:restriction>
+			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional">
+		<xs:attribute name="numberOfConstraints" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of constraints in the original optimization instance</xs:documentation>
 			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:int">
+					<xs:minInclusive value="-1"/>
+				</xs:restriction>
+			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherResults">
