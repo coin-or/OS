@@ -322,7 +322,7 @@ typedef union YYSTYPE
 	int ival;
 	char* sval;
 }
-/* Line 193 of yacc.c.  */
+/* Line 187 of yacc.c.  */
 
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -780,7 +780,7 @@ static const char *const yytname[] =
   "othervarstart", "objectives", "numberOfObjATT", "obj", "anotherobj",
   "anOBJIDXATT", "constraints", "@2", "numberOfConATT", "con",
   "anothercon", "aCONIDXATT", "anIDXATT", "otherObjectives",
-  "otherConstraints", "otherSolution", "solutionEnd", "quote",
+  "otherConstraints", "otherSolutionResults", "solutionEnd", "quote",
   "xmlWhiteSpaceChar", "xmlWhiteSpace", 0
 };
 #endif

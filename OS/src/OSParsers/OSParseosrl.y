@@ -243,7 +243,7 @@ solution:
 | solution anothersolution;  
 
 
-anothersolution: SOLUTIONSTART {parserData->numberOfVar = 0;  parserData->numberOfCon = 0;  parserData->numberOfObj = 0;} targetObjectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolution
+anothersolution: SOLUTIONSTART {parserData->numberOfVar = 0;  parserData->numberOfCon = 0;  parserData->numberOfObj = 0;} targetObjectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolutionResults
    {
    if (parserData->solutionIdx == parserData->numberOfSolutions) 
         osrlerror(NULL, NULL, NULL, "too many solutions"); 
@@ -529,7 +529,7 @@ otherObjectives:
 otherConstraints:
 | DUMMY;
 
-otherSolution: solutionEnd 
+otherSolutionResults: solutionEnd 
 | DUMMY solutionEnd;
     
 solutionEnd: SOLUTIONEND  {
