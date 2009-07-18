@@ -1154,6 +1154,14 @@ public:
 	 */
 	std::string value;
 
+	/** the number of records contained in this otherSolutionResult
+	 */
+	int numberOfRecords;
+
+	/** an array of records (string-valued)
+	 */
+	std::string *record;
+
 	/**
 	 *
 	 * Default constructor. 
