@@ -2,12 +2,12 @@
 /** @file parseosrl.y
  * 
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 02/04/2009
+ * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -105,6 +105,11 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token NUMBEROFTIMESATT
 %token NUMBEROFSOLUTIONSATT NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
 %token NUMBEROFOTHERVARIABLERESULTSATT NUMBEROFOTHEROBJECTIVERESULTSATT NUMBEROFOTHERCONSTRAINTRESULTSATT
+%token NUMBEROFOTHERSOLUTIONRESULTSATT NUMBEROFRECORDSATT 
+%token OTHERSOLUTIONRESULTSSTART OTHERSOLUTIONRESULTSEND
+%token OTHERSOLUTIONRESULTSTART  OTHERSOLUTIONRESULTEND
+%token RECORDSTART RECORDEND
+
 
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT TARGETOBJECTIVEIDXATT IDXATT 
 %token TYPEATT EMPTYTYPEATT DESCRIPTIONATT EMPTYDESCRIPTIONATT NAMEATT EMPTYNAMEATT 
@@ -243,14 +248,11 @@ solution:
 | solution anothersolution;  
 
 
-anothersolution: SOLUTIONSTART {parserData->numberOfVar = 0;  parserData->numberOfCon = 0;  parserData->numberOfObj = 0;} targetObjectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolutionResults
+anothersolution: SOLUTIONSTART {parserData->numberOfVar = 0;  parserData->numberOfCon = 0;  parserData->numberOfObj = 0;} targetObjectiveIDXATT GREATERTHAN status message variables objectives  constraints  otherSolutionResults solutionEnd
    {
    if (parserData->solutionIdx == parserData->numberOfSolutions) 
         osrlerror(NULL, NULL, NULL, "too many solutions"); 
     parserData->solutionIdx++;
-    
-
-    
    };
 
 targetObjectiveIDXATT: 
@@ -490,6 +492,7 @@ constraints:
 		osresult->setDualVariableValuesSparse(parserData->solutionIdx, parserData->dualVals);
 		osresult->optimization->solution[ parserData->solutionIdx]->constraints->dualValues->numberOfCon = parserData->numberOfCon;
 	}
+
  };
  
  
@@ -529,9 +532,101 @@ otherObjectives:
 otherConstraints:
 | DUMMY;
 
-otherSolutionResults: solutionEnd 
-| DUMMY solutionEnd;
+otherSolutionResults: 
+| OTHERSOLUTIONRESULTSSTART numberOfOtherSolutionResults GREATERTHAN otherSolutionResultList OTHERSOLUTIONRESULTSEND;
+
+
+numberOfOtherSolutionResults:   NUMBEROFOTHERSOLUTIONRESULTSATT  QUOTE INTEGER QUOTE {	 int temp = $3;
+/*
+if (temp < 0) osrlerror(NULL, NULL, NULL, "number of other solution results cannot be negative");
+	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults != NULL
+		osrlerror(NULL, NULL, NULL, "otherSolutionResults previously allocated");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults = new OtherSolutionResults();	
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionresult = $3;
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult = new OtherSolutionResult*[$3];
+	if ($3 > 0)
+	   for(int i = 0; i < $3; i++) 	
+			osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[i] = new OtherSolutionResult();
+*/
+};
     
+otherSolutionResultList: 
+ |  otherSolutionResultList anotherSolutionResult;
+
+anotherSolutionResult: OTHERSOLUTIONRESULTSTART anotherSolutionResultAttList GREATERTHAN recordList  OTHERSOLUTIONRESULTEND;
+
+anotherSolutionResultAttList: 
+    | anotherSolutionResultAttList anotherSolAtt;
+
+anotherSolAtt:  numberOfRecords | anotherSolutionResultNameATT | anotherSolutionResultCategoryATT | anotherSolutionDescriptionATT;
+
+
+
+
+numberOfRecords: NUMBEROFRECORDSATT QUOTE INTEGER QUOTE 
+{	
+int temp = $3;
+/*
+if ($3 < 0) osrlerror(NULL, NULL, NULL, "number of records cannot be negative");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->numberOfRecords = $3;
+	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->record != NULL);
+		osrlerror(NULL, NULL, NULL, "record array was previously allocated");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->record = new std::string[$3];
+	parserData->kounter = 0;
+*/
+};
+
+anotherSolutionResultNameATT: 
+  EMPTYNAMEATT 
+{ 
+	parserData->tmpOtherName=""; 
+	parserData->otherNamePresent = true; 
+/*	parserData->otherVarStruct->name = "";*/
+};
+  | NAMEATT ATTRIBUTETEXT quote
+{
+/*
+	parserData->tmpOtherName=$2; parserData->otherNamePresent = true;
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->name = $2;
+	free($2);
+*/
+};
+
+anotherSolutionResultCategoryATT:
+CATEGORYATT ATTRIBUTETEXT QUOTE {
+/*
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->category = $2;
+free($2);
+*/}
+   | EMPTYCATEGORYATT ;
+ 
+anotherSolutionDescriptionATT:
+DESCRIPTIONATT ATTRIBUTETEXT QUOTE {
+/*
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->description = $2;
+free($2);
+*/}
+   | EMPTYDESCRIPTIONATT ;
+
+recordList: | 
+recordList anotherSolutionRecord;
+
+anotherSolutionRecord: RECORDSTART recordContent
+{
+/*
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
+parserData->kounter++;
+if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionresult[parserData->iOther]->numberOfRecords)
+	osrlerror(NULL, NULL, NULL, "too many records specified");
+*/
+};
+
+recordContent: emptyRecord {/*parserData->recordContent = "";*/}
+    |          ELEMENTTEXT {/*parserData->recordContent = $1; free($1);*/} RECORDEND;
+
+emptyRecord: ENDOFELEMENT | GREATERTHAN RECORDEND;
+
+
 solutionEnd: SOLUTIONEND  {
 
 	//
@@ -624,4 +719,3 @@ void osrl_empty_vectors( OSrLParserData* parserData){
   	}
   	parserData->primalVals.clear();
 }//end osrl_empty_vectors
-

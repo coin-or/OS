@@ -51,6 +51,11 @@
 					<con idx="1">-.7662938652578929</con>
 				</dualValues>
 			</constraints>
+					<otherSolutionResults  numberOfOtherSolutionResults="4">
+						<otherSolutionResult name="requestResults" description="the request results"  numberOfRecords="1">
+							<record>Hi Gus</record>
+						</otherSolutionResult>
+					</otherSolutionResults>
 		</solution>
 		<solution targetObjectiveIdx="-2">
 			<status type="locallyOptimal" description="SUCCESS[IPOPT]: Algorithm terminated normally at a 	locally optimal point, satisfying the convergence tolerances."/>
