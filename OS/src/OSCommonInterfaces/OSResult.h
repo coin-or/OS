@@ -3,11 +3,11 @@
  * 
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 11/03/2008
+ * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -1146,13 +1146,13 @@ public:
 	/** the name of the result the user is defining */
 	std::string name;
 	
-	/** a brief description of the type of result */
-	std::string description;
-
-	/** this element allows a specific value associated with this
+	/** this element allows a specific category to be associated with this
 	    particular type of result
 	 */
-	std::string value;
+	std::string category;
+
+	/** a brief description of the type of result */
+	std::string description;
 
 	/** the number of records contained in this otherSolutionResult
 	 */
