@@ -592,7 +592,8 @@ OtherSolutionResult::OtherSolutionResult():
 	name( ""),
 	category (""),
 	description (""),
-	numberOfRecords (0)
+	numberOfRecords (0),
+	record( NULL)
 { 
 	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherSolutionResult Constructor" << endl;
@@ -613,7 +614,9 @@ OtherSolutionResult::~OtherSolutionResult(){
 
 
 OtherSolutionResults::OtherSolutionResults():
-	numberOfOtherSolutionResults( 0)
+	numberOfOtherSolutionResults( 0),
+	otherSolutionResult( NULL)
+	
 { 
 	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherSolutionResults Constructor" << endl;
@@ -642,7 +645,8 @@ OptimizationSolution::OptimizationSolution():
 	message( ""),
 	variables( NULL),
 	objectives( NULL),
-	constraints( NULL)
+	constraints( NULL),
+	otherSolutionResults( NULL)
 	//other(NULL)
 { 
 	#ifdef DEBUG_RESULT
@@ -671,6 +675,10 @@ OptimizationSolution::~OptimizationSolution(){
 	if(status != NULL){
 		delete status;
 		status = NULL;
+	}
+	if(otherSolutionResults != NULL){
+		delete otherSolutionResults;
+		otherSolutionResults = NULL;
 	}
 }// end OptimizationSolution destructor 
  
