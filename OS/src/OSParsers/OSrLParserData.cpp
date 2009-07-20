@@ -33,6 +33,7 @@
 	tmpOtherValue(""),
 	tmpOtherName(""),
 	tmpOtherDescription(""),
+	recordContent(""),
 	numberOfSolutions(0),
 	numberOfVariables(0),
 	numberOfConstraints(0),
