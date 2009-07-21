@@ -18,7 +18,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include "OSMatlab.h"
+#include "OSMatlabSolver.h"
 
   
 

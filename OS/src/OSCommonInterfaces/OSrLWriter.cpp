@@ -3,11 +3,11 @@
  * 
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -388,12 +388,40 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					} // end of if on other constraints
 					outStr << "</constraints>" << endl;
 				}
+#ifdef DEBUG
+	cout << "output <otherSolutionResults>" << endl;
+#endif
+			if (m_OSResult->optimization->solution[i]->otherSolutionResults != NULL)
+					if (m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults > 0){
+						outStr << "<otherSolutionResults numberOfOtherSolutionResults=\"";
+						outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults;
+						outStr << "\">" << std::endl;
+						for(int k = 0; k < m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults; k++){
+							outStr << "<otherSolutionResult";
+							outStr << " name=\"";
+							outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->name;
+							outStr << "\"";
+							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category != "")
+								outStr << " category=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category << "\"";
+							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description != "")
+								outStr << " description=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description << "\"";
+							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords > 0)
+								outStr << " numberOfRecords=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords << "\"";
+							outStr << ">" << std::endl;
+							for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords; j++){
+								outStr << "<record>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->record[j] << "</record>" << std::endl;
+							}
+							outStr << "</otherSolutionResult>" << std::endl;
+						}
+						outStr << "</otherSolutionResults>" << std::endl;
+					}
+ 
 				outStr << "</solution>" << endl;
 			}
 		} // end the solution for loop
 		outStr << "</optimization>" << endl;
 	} // end if (optimization != NULL)
-#ifdef DEBUG
+#ifdef DEBUG 
 	cout << "done" << endl;
 #endif
 	outStr << "</osrl>" << endl ;

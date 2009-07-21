@@ -2,13 +2,13 @@
 /** @file OSResult.cpp
  * 
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -484,6 +484,25 @@ DualVariableValues::~DualVariableValues(){
 
 
 
+OptimizationSolutionStatus::OptimizationSolutionStatus():
+	type(""),
+	description("")
+	//substatus( NULL),
+{ 
+	#ifdef DEBUG_RESULT
+	cout << "Inside the OptimizationSolutionStatus Constructor" << endl;
+	#endif
+}//end OptimizationSolutionStatus constructor
+
+
+OptimizationSolutionStatus::~OptimizationSolutionStatus(){
+	#ifdef DEBUG_RESULT  
+	cout << "Inside the OptimzationSolutionStatus Destructor" << endl;
+	#endif
+}// end OptimizationSolutionStatus destructor 
+
+
+
 VariableSolution::VariableSolution():
 	numberOfOtherVariableResults( 0),
 	values( NULL),
@@ -569,24 +588,56 @@ ConstraintSolution::~ConstraintSolution(){
 	other = NULL; 
 }// end ConstraintSolution destructor
 
-
-
-OptimizationSolutionStatus::OptimizationSolutionStatus():
-	type(""),
-	description("")
-	//substatus( NULL),
+OtherSolutionResult::OtherSolutionResult():
+	name( ""),
+	category (""),
+	description (""),
+	numberOfRecords (0),
+	record( NULL)
 { 
 	#ifdef DEBUG_RESULT
-	cout << "Inside the OptimizationSolutionStatus Constructor" << endl;
+	cout << "Inside the OtherSolutionResult Constructor" << endl;
 	#endif
-}//end OptimizationSolutionStatus constructor
+	record = NULL;
+}//end OtherSolutionResult constructor
 
 
-OptimizationSolutionStatus::~OptimizationSolutionStatus(){
+OtherSolutionResult::~OtherSolutionResult(){
 	#ifdef DEBUG_RESULT  
-	cout << "Inside the OptimzationSolutionStatus Destructor" << endl;
+	cout << "Inside the OtherSolutionResult Destructor" << endl;
 	#endif
-}// end OptimizationSolutionStatus destructor 
+	if (record != NULL) 
+	{	delete[] record;
+		record = NULL;
+	}
+}// end OtherSolutionResult destructor
+
+
+OtherSolutionResults::OtherSolutionResults():
+	numberOfOtherSolutionResults( 0),
+	otherSolutionResult( NULL)
+	
+{ 
+	#ifdef DEBUG_RESULT
+	cout << "Inside the OtherSolutionResults Constructor" << endl;
+	#endif
+	otherSolutionResult = NULL;
+}//end OtherSolutionResults constructor
+
+
+OtherSolutionResults::~OtherSolutionResults(){
+	#ifdef DEBUG_RESULT  
+	cout << "Inside the OtherSolutionResults Destructor" << endl;
+	#endif
+	if(numberOfOtherSolutionResults > 0 && otherSolutionResult != NULL){
+		for(int i = 0; i < numberOfOtherSolutionResults; i++){
+			delete otherSolutionResult[i];
+			otherSolutionResult[i] = NULL;
+		}
+	}
+	delete[] otherSolutionResult;
+	otherSolutionResult = NULL; 
+}// end OtherSolutionResults destructor
 
 
 OptimizationSolution::OptimizationSolution():
@@ -594,7 +645,8 @@ OptimizationSolution::OptimizationSolution():
 	message( ""),
 	variables( NULL),
 	objectives( NULL),
-	constraints( NULL)
+	constraints( NULL),
+	otherSolutionResults( NULL)
 	//other(NULL)
 { 
 	#ifdef DEBUG_RESULT
@@ -623,6 +675,10 @@ OptimizationSolution::~OptimizationSolution(){
 	if(status != NULL){
 		delete status;
 		status = NULL;
+	}
+	if(otherSolutionResults != NULL){
+		delete otherSolutionResults;
+		otherSolutionResults = NULL;
 	}
 }// end OptimizationSolution destructor 
  

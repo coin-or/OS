@@ -107,44 +107,47 @@ public:
 
 	/** There could be more than one time measurement;
 	 *  numberOfTimes stores the number of them */
-	int numberOfTimes;
+	unsigned int numberOfTimes;
 
 	/** Provide temporary storage for attribute values associated with an OtherVarResult */
 	std::string tmpOtherValue;
 	std::string tmpOtherName;
 	std::string tmpOtherDescription;
 
+	/** Provide temporary storage for a single <record> contained in an OtherSolutionResult */
+	std::string recordContent;
+
 	/** scanner is used to store data in a reentrant lexer 
 	 *  we use this to pass an OSrLParserData object to the parser*/
 	void* scanner;
 	
 	/** number of result solutions */
-	int numberOfSolutions;
+	unsigned int numberOfSolutions;
 	
 	/** total number of variables in the model instance */
-	int numberOfVariables;
+	unsigned int numberOfVariables;
 	
 	/** total number of constraints in the model instance */
-	int numberOfConstraints;
+	unsigned int numberOfConstraints;
 	
 	/** total number of Objectives in the model instance */
-	int numberOfObjectives;
+	unsigned int numberOfObjectives;
 	
 	
 	/** number of variables in the a solution instance,
 	 * may change from solution to solution
 	 */
-	int numberOfVar;
+	unsigned int numberOfVar;
 	
 	/** number of constraints in the a solution instance,
 	 * may change from solution to solution
 	 */
-	int numberOfCon;
+	unsigned int numberOfCon;
 	
 	/** number of Objectives in the a solution instance 
 	 * may change from solution to solution
 	 */
-	int numberOfObj;
+	unsigned int numberOfObj;
 	
 	/** a temporary counter to count variables, number of attributes, etc. */
 	int kounter;
@@ -153,7 +156,7 @@ public:
 	int iOther;
 
 	/** a temporary counter to count second-level objects */
-	int ivar;
+	unsigned int ivar;
 
 	/** a temporary variable to hold an integer index value */
 	int idx;
@@ -170,7 +173,7 @@ public:
 	int numberOfOtherVariableResults;
 	
 	/** and index on which solution we have found */
-	int solutionIdx;
+	unsigned int solutionIdx;
 
 	/** set statusTypePresent to true if there is
 	 * a status attribute parsed

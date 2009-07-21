@@ -46,13 +46,18 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 	
 	
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
   AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+endif
+
+
+if COIN_HAS_CPPAD
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(CPPADSRCDIR)` 
+  AM_CPPFLAGS += $(CPPAD_CPPFLAGS) 
 endif
 
 #if USE_DTOA

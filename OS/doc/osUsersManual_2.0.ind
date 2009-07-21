@@ -1,20 +1,20 @@
 \begin{theindex}
 
-  \item Algorithmic differentiation, 7, 77--78, 83--84
-  \item AMPL, 6, 7, 31, 56
-  \item AMPL nl format, 1, 6, 7, 38, 44, 56, 69
-  \item AMPL Solver Library (ASL), 16, 17, 19, 23, 25, 27
-  \item Apache Axis, 6, 41
-  \item Apache Tomcat, 1, 6--8, 12, 41, 53--56, 93
+  \item Algorithmic differentiation, 7, 75--76, 81--82
+  \item AMPL, 6, 7, 29, 54
+  \item AMPL nl format, 1, 6, 7, 36, 42, 54, 67
+  \item AMPL Solver Library (ASL), 16, 19, 23, 25
+  \item Apache Axis, 6, 39
+  \item Apache Tomcat, 1, 6--8, 12, 39, 51--54, 91
   \item ASL, \see{AMPL Solver Library (ASL)}{1}
 
   \indexspace
 
-  \item {\it Bell, Bradley M.}, 83
-  \item {\tt bison}, 10, 21, 70
-  \item Blas, 9, 13, 22, 25
+  \item {\it Bell, Bradley M.}, 81
+  \item {\tt bison}, 10, 21, 68
+  \item Blas, 9, 13, 22
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
-  \item Bug reporting, 29
+  \item Bug reporting, 27
   \item {\tt BuildTools}, \see{COIN-OR projects, {\tt BuildTools}}{1}
 
   \indexspace
@@ -26,39 +26,35 @@
   \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
   \item COIN-OR, 1, 12
   \item COIN-OR projects
-    \subitem {\tt Bonmin}, 13, 17, 19, 22--25, 30
-    \subitem {\tt BuildTools}, 30
-    \subitem {\tt Cbc}, 13, 14, 25, 31, 38, 40
-    \subitem {\tt Cgl}, 13, 25, 31, 82
-    \subitem {\tt Clp}, 13, 14, 25, 31, 39, 40, 78
-    \subitem {\tt CoinUtils}, 13, 25, 31, 69
-    \subitem {\tt Couenne}, 19, 22--25, 31
-    \subitem {\tt CppAD}, 6, 7, 13, 25, 31, 83--84
-    \subitem {\tt DyLP}, 25, 31
-    \subitem {\tt Ipopt}, 9, 13, 14, 17, 19, 22--25, 27, 31, 40, 44, 
-		56--57, 71, 72, 89
-    \subitem {\tt Osi}, 13, 25, 31, 38
-    \subitem {\tt SYMPHONY}, 14, 25, 31
-    \subitem {\tt Vol}, 25, 31
-  \item {\tt COIN\_HAS\_XXXXX}, 26
-  \item {\tt COIN\_SKIP\_PROJECTS}, 13, 15, 19, 22, 26
+    \subitem {\tt Bonmin}, 13, 19, 22--24, 28
+    \subitem {\tt BuildTools}, 28
+    \subitem {\tt Cbc}, 13, 14, 24, 29, 36, 38
+    \subitem {\tt Cgl}, 13, 24, 29, 80
+    \subitem {\tt Clp}, 13, 14, 24, 29, 37, 38, 76
+    \subitem {\tt CoinUtils}, 13, 24, 29, 67
+    \subitem {\tt Couenne}, 19, 22--24, 29
+    \subitem {\tt CppAD}, 6, 7, 13, 24, 29, 81--82
+    \subitem {\tt DyLP}, 24, 29
+    \subitem {\tt Ipopt}, 9, 13, 14, 19, 22--24, 29, 38, 42, 54--55, 
+		69, 70, 87
+    \subitem {\tt Osi}, 13, 24, 29, 36
+    \subitem {\tt SYMPHONY}, 14, 24, 29
+    \subitem {\tt Vol}, 24, 29
+  \item {\tt COIN\_HAS\_XXXXX}, 24--25
+  \item {\tt COIN\_SKIP\_PROJECTS}, 13, 15, 19, 22, 24
   \item {\tt CoinUtils}, \see{COIN-OR projects, {\tt CoinUtils}}{1}
   \item Common Public License (CPL), 7, 23
-  \item Configuration Manager, 
-		\see{Microsoft Visual Studio, Configuration Manager}{1}
-  \item configure, 22--27
+  \item configure, 22--25
     \subitem cache file, 13
     \subitem scripts, 8
   \item {\tt configure}, 13, 14
   \item {\tt Couenne}, \see{COIN-OR projects, {\tt Couenne}}{1}
-  \item {\tt cplex}, 7, 28, 38
+  \item {\tt cplex}, 7, 26, 36
   \item {\tt CppAD}, \see{COIN-OR projects, {\tt CppAD}}{1}
-  \item Cygwin, 18--20, 30
+  \item Cygwin, 18--20, 28
 
   \indexspace
 
-  \item Debug configuration, 
-		\see{Microsoft Visual Studio, {\tt Debug} configuration}{1}
   \item debug version, MSYS, 21--22
   \item Downloading
     \subitem binaries, 7
@@ -67,28 +63,28 @@
       \subsubitem Windows, 12
     \subitem tarball, 12
     \subitem zip file, 12
-  \item Doxygen, 10, 29, 63
+  \item Doxygen, 10, 27, 61
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
 
-  \item {\tt f2c}, 9, 20, 23--25
+  \item {\tt f2c}, 9, 19, 23
   \item file naming conventions, 8, 17
-  \item {\tt flex}, 10, 21, 70
-  \item Fortran, 9, 13, 19, 22, 23, 26
+  \item {\tt flex}, 10, 21, 68
+  \item Fortran, 9, 13, 19, 22--24
 
   \indexspace
 
-  \item GAMS, 56
-  \item GAMSlinks, 57--58
+  \item GAMS, 54
+  \item GAMSlinks, 55--56
   \item gcc, 9
-  \item {\tt getJobID}, 38, 40, 46, 49
-  \item {\tt GLPK}, 7, 28, 38
-  \item {\it Griewank, A.}, 83
+  \item {\tt getJobID}, 36, 38, 44, 47
+  \item {\tt GLPK}, 7, 25, 36
+  \item {\it Griewank, A.}, 81
 
   \indexspace
 
-  \item Harwell Subroutine Library (HSL), 9, 19, 23, 25
+  \item Harwell Subroutine Library (HSL), 9, 19, 23
   \item HSL, \see{Harwell Subroutine Library (HSL)}{1}
 
   \indexspace
@@ -98,36 +94,30 @@
   \indexspace
 
   \item Java, 1, 8, 12
-  \item {\tt JobID}, 44--47, 49, 50
+  \item {\tt JobID}, 42--45, 47, 48
 
   \indexspace
 
-  \item {\tt kill}, 38, 40, 48--50
-  \item {\tt knock}, 38, 40, 45, 47--49
+  \item {\tt kill}, 36, 38, 46--48
+  \item {\tt knock}, 36, 38, 43, 45--47
 
   \indexspace
 
-  \item Lapack, 9, 25
+  \item Lapack, 9
   \item {\tt LibOS}, 14
   \item {\tt libOS.vcproj}, 16
-  \item {\tt libOSnl2OSiL}, 16
-  \item LINDO, 7, 13, 28, 38, 40, 71, 72
-  \item linker errors, 27
-  \item Linux, 30
+  \item LINDO, 7, 13, 26, 36, 38, 69, 70
+  \item Linux, 28
 
   \indexspace
 
-  \item Mac OS X, 30
-  \item MATLAB, 7, 28, 58--63
-  \item Microsoft Visual Studio, 8, 27, 28, 33
-    \subitem {\tt Debug} configuration, 17
-    \subitem {\tt Release-Plus} configuration, 17, 25, 27
-    \subitem {\tt Release} configuration, 17
-    \subitem Configuration Manager, 16, 25
+  \item Mac OS X, 28
+  \item MATLAB, 7, 26, 56--61
+  \item Microsoft Visual Studio, 8, 25, 31
   \item Microsoft Windows, 12, 13
-  \item MinGW, 9, 20, 30
-  \item MPS format, 1, 6, 7, 38, 69
-  \item MSYS, 9, 20--21, 30
+  \item MinGW, 9, 20, 28
+  \item MPS format, 1, 6, 7, 36, 67
+  \item MSYS, 9, 20--21, 28
   \item Mumps, 9, 13, 23
 
   \indexspace
@@ -140,83 +130,79 @@
   \item OS
     \subitem source code, 8, 9, 16
     \subitem stable release, 6, 8
-    \subitem trunk version, 22, 51, 53
+    \subitem trunk version, 22, 49, 51
     \subitem unit test, 13
   \item OS project
     \subitem root directory, 10
-  \item {\tt OS.sln}, 16, 17, 27, 76
-  \item {\tt OSAgent}, 6, 63, 93
-  \item {\tt OSAmplClient}, 6, 8, 16, 25, 27, 31, 56--57, 69
+  \item {\tt OS.sln}, 16, 74
+  \item {\tt OSAgent}, 6, 61, 91
+  \item {\tt OSAmplClient}, 6, 8, 25, 29, 54--55, 67
   \item {\tt OSCommon}, 7, 12
-  \item {\tt OSExpressionTree}, 65
-  \item {\tt OSFileUpload}, 93--94
+  \item {\tt OSExpressionTree}, 63
+  \item {\tt OSFileUpload}, 91--92
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 6--8, 33--35, 37, 38, 40, 42, 44, 49, 56, 64, 65, 
-		69--71, 93, 95--98
-  \item {\tt OSInstance}, 6, 64--69, 72, 77, 86
-  \item {\tt OSLibrary}, 40, 63--72
-  \item {\tt OSmps2osil}, 58, 69
-  \item OSnL, 37
-  \item {\tt OSnl2osil}, 27, 56, 58, 69
-  \item OSoL, 6, 8, 37--38, 40, 42, 44--46, 49, 50
-  \item {\tt OSOption}, 68
-  \item OSpL, 37, 47--48, 50
-  \item {\tt OSResult}, 69
-  \item OSrL, 6, 8, 35--36, 39, 40, 49, 50, 57, 69
-  \item {\tt OSSolverAgent}, 63
-  \item {\tt OSSolverService}, 1, 6, 8, 13--15, 25, 31, 38--50
-  \item {\tt OSSolverService.jws}, 41
+  \item OSiL, 1, 6--8, 31--33, 35, 36, 38, 40, 42, 47, 54, 62, 63, 
+		67--69, 91, 93--96
+  \item {\tt OSInstance}, 6, 62--67, 70, 75, 84
+  \item {\tt OSLibrary}, 38, 61--70
+  \item {\tt OSmps2osil}, 56, 67
+  \item OSnL, 35
+  \item {\tt OSnl2osil}, 25, 54, 56, 67
+  \item OSoL, 6, 8, 35--36, 38, 40, 42--44, 47, 48
+  \item {\tt OSOption}, 66
+  \item OSpL, 35, 45--46, 48
+  \item {\tt OSResult}, 67
+  \item OSrL, 6, 8, 33--34, 37, 38, 47, 48, 55, 67
+  \item {\tt OSSolverAgent}, 61
+  \item {\tt OSSolverService}, 1, 6, 8, 13--15, 29, 36--48
+  \item {\tt OSSolverService.jws}, 39
   \item {\tt OSSolverService.vcproj}, 16
   \item {\tt OSTest.vcproj}, 16
 
   \indexspace
 
-  \item {\tt parincLinear.osil}, 39
+  \item {\tt parincLinear.osil}, 37
   \item {\tt \$PATH}, 9, 19
 
   \indexspace
 
-  \item Release configuration, 
-		\see{Microsoft Visual Studio, {\tt Release} configuration}{1}
-  \item Release-plus configuration, 
-		\see{Microsoft Visual Studio, {\tt Release-plus} configuration}{1}
-  \item {\tt remoteSolve1.osol}, 42--43
-  \item {\tt retrieve}, 38, 40, 46, 50
-  \item {\it Rosenbrock, H.H.}, 33
+  \item {\tt remoteSolve1.osol}, 40--41
+  \item {\tt retrieve}, 36, 38, 44, 48
+  \item {\it Rosenbrock, H.H.}, 31
 
   \indexspace
 
-  \item {\tt send}, 38, 40, 43--47, 93
-  \item {\tt serviceLocation}, 40
-  \item SOAP protocol, 6, 8, 42, 44, 93
-  \item {\tt solve}, 38, 40--43, 49, 93
+  \item {\tt send}, 36, 38, 41--45, 91
+  \item {\tt serviceLocation}, 38
+  \item SOAP protocol, 6, 8, 40, 42, 91
+  \item {\tt solve}, 36, 38--41, 47, 91
   \item Subversion, 9
   \item SVN, 10, 12, 16
   \item {\tt SYMPHONY}, \see{COIN-OR projects, {\tt SYMPHONY}}{1}
 
   \indexspace
 
-  \item {\tt testlocal.config}, 40
-  \item {\tt testremote.config}, 42
-  \item Third-party software, 16, 17, 23, 25--26
+  \item {\tt testlocal.config}, 38
+  \item {\tt testremote.config}, 40
+  \item Third-party software, 16, 23--25
   \item TortoiseSVN, 12, 16, 20
-  \item Trac system, 1, 6, 29
+  \item Trac system, 1, 6, 27
 
   \indexspace
 
-  \item {\tt unitTest}, 13, 16, 25, 31
-  \item Unix, 9, 10, 13, 27, 30
+  \item {\tt unitTest}, 13, 16, 29
+  \item Unix, 9, 10, 13, 25, 28
 
   \indexspace
 
   \item {\tt Vol}, \see{COIN-OR projects, {\tt Vol}}{1}
-  \item VPATH, 21--22, 26, 58, 76
+  \item VPATH, 21--22, 25, 56, 74
 
   \indexspace
 
   \item {\tt wget}, 9, 16, 20
   \item Windows Platform SDK, 16, 18, 20
-  \item {\tt WSUtil}, 63
+  \item {\tt WSUtil}, 61
 
   \indexspace
 

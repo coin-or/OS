@@ -293,7 +293,8 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
  		std::cout << "INITIAL VALUE !!!!!!!!!!!!!!!!!!!!  " << x[ i] << std::endl;
  	}
 #endif
-
+	//make sure objvalue is initialized
+	osinstance->calculateAllObjectiveFunctionValues( x, true);
 	delete[] initialed;
 
   	return true;
@@ -303,10 +304,11 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
 	try{
 	
-
-		 obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
+		//the following is a kludge for ipopt, new_x does not seem to get initilized if there are no constraints.
+		//if(osinstance->getConstraintNumber() <= 0) new_x = true;
+		if(new_x == false) obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), false)[ 0];
+			else obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, true, 0 )[ 0];
 		//if( CoinIsnan( (double)obj_value) ) return false;
-
 		if( CoinIsnan( obj_value ) )return false;
 
 	}
@@ -451,7 +453,7 @@ bool IpoptProblem::eval_h(Index n, const Number* x, bool new_x,
 		double* objMultipliers = new double[1];
 		objMultipliers[0] = obj_factor;
 		try{
-			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, (double*)lambda ,  new_x, 2);
+			sparseHessian = osinstance->calculateLagrangianHessian( const_cast<double*>(x), objMultipliers, const_cast<double*>(lambda) ,  new_x, 2);
 		delete[]  objMultipliers;
 		}
 		catch(const ErrorClass& eclass){

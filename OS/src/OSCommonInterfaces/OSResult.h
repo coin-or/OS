@@ -3,11 +3,11 @@
  * 
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 11/03/2008
+ * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -1129,10 +1129,10 @@ public:
 
 
 
-/*! \class OtherOptimizationResult
- *  \brief The OtherOptimizationResult  Class.
+/*! \class OtherSolutionResult
+ *  \brief The OtherSolutionResult  Class.
  * 
- * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -1140,31 +1140,78 @@ public:
  * A class that allows the solver to report an
  * arbitrary result associated with the solution. 
  */
-class OtherOptimizationResult {
+class OtherSolutionResult {
 public:
 
 	/** the name of the result the user is defining */
 	std::string name;
 	
+	/** this element allows a specific category to be associated with this
+	    particular type of result
+	 */
+	std::string category;
+
 	/** a brief description of the type of result */
 	std::string description;
 
-	/** this element allows a specific value associated with this
-	    particular type of result
+	/** the number of records contained in this otherSolutionResult
 	 */
-	std::string value;
+	int numberOfRecords;
+
+	/** an array of records (string-valued)
+	 */
+	std::string *record;
 
 	/**
 	 *
 	 * Default constructor. 
 	 */
-	OtherOptimizationResult();
+	OtherSolutionResult();
 	
 	/**
 	 *
 	 * Class destructor. 
 	 */
-	~OtherOptimizationResult();
+	~OtherSolutionResult();
+	
+};//OtherOptimizationResult
+
+
+
+
+/*! \class OtherSolutionResults
+ *  \brief The OtherSolutionResults  Class.
+ * 
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that allows the solver to report an
+ * arbitrary result associated with the solution. 
+ */
+class OtherSolutionResults {
+public:
+
+	/** the number of elements in the pointer of OtherSolutionResult objects */
+	int numberOfOtherSolutionResults;
+	
+	/** otherSolutionResult is a pointer to an array of OtherSolutionResult
+	 * objects
+	 */
+	OtherSolutionResult **otherSolutionResult;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	OtherSolutionResults();
+	
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~OtherSolutionResults();
 	
 };//OtherOptimizationResult
 
@@ -1174,7 +1221,7 @@ public:
 /*! \class OptimizationSolution
  *  \brief The OptimizationSolution Class.
  * 
- * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
@@ -1216,10 +1263,10 @@ public:
 	 */
 	ConstraintSolution *constraints;
 	
-	/** other is a pointer to an array of OtherOptimizationResult
-	 *  objects associated with this optimization solution
+	/** otherSolutionResults is a pointer to an OtherSolutionResults
+    * object that is associated with this optimization solution
 	 */
-	std::vector<OtherOptimizationResult*> other;
+	OtherSolutionResults *otherSolutionResults;
 
 	/**
 	 *

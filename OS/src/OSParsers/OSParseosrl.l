@@ -1,13 +1,13 @@
 /* $Id$ */
 /** @file parseosrl.l
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 2.0, 02/04/2009
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -146,6 +146,8 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfOtherVariableResults{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
 ({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
 ({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
+({xmlwhitespace}+numberOfOtherSolutionResults{equality}) {  YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
+({xmlwhitespace}+numberOfRecords{equality}) {  YY_PRINT;  return(NUMBEROFRECORDSATT);}
 ({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
 ({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
@@ -246,9 +248,17 @@ return(DOUBLE);}
 {xmlwhitespace}*\<constraints {YY_PRINT; return(CONSTRAINTSSTART);}
 {xmlwhitespace}*\<\/constraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONSTRAINTSEND);}
 
-
 {xmlwhitespace}*\<other {YY_PRINT; return(OTHERSTART);}
 {xmlwhitespace}*\<\/other{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHEREND);}
+
+{xmlwhitespace}*\<otherSolutionResults {YY_PRINT; return(OTHERSOLUTIONRESULTSSTART);}
+{xmlwhitespace}*\<\/otherSolutionResults{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHERSOLUTIONRESULTSEND);}
+
+{xmlwhitespace}*\<otherSolutionResult {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
+{xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
+
+{xmlwhitespace}*\<record{xmlwhitespace}*\> { YY_PRINT; return(RECORDSTART);}
+{xmlwhitespace}*\<\/record{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RECORDEND);}
 
 (\<serviceURI{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICEURISTARTANDEND);}
 (\<serviceName{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
@@ -256,7 +266,6 @@ return(DOUBLE);}
 (\<jobID{xmlwhitespace}*\/>) {YY_PRINT;  return(JOBIDSTARTANDEND);}
 (\<time{xmlwhitespace}*\/>) {YY_PRINT;  return(TIMESTARTANDEND);}
 (\<message{xmlwhitespace}*\/>) {YY_PRINT;  return(MESSAGESTARTANDEND);}
-
 
 
 

@@ -140,18 +140,19 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSSolverInterfaces_la_LIBADD =
 am__libOSSolverInterfaces_la_SOURCES_DIST = OSCoinSolver.cpp \
-	OSCoinSolver.h OSLindoSolver.cpp OSLindoSolver.h \
-	OSIpoptSolver.cpp OSIpoptSolver.h OSBonminSolver.cpp \
-	OSBonminSolver.h OSCouenneSolver.cpp OSCouenneSolver.h \
-	OSKnitroSolver.cpp OSKnitroSolver.h
+	OSCoinSolver.h OSMatlabSolver.cpp OSMatlabSolver.h \
+	OSLindoSolver.cpp OSLindoSolver.h OSIpoptSolver.cpp \
+	OSIpoptSolver.h OSBonminSolver.cpp OSBonminSolver.h \
+	OSCouenneSolver.cpp OSCouenneSolver.h OSKnitroSolver.cpp \
+	OSKnitroSolver.h
 @COIN_HAS_LINDO_TRUE@am__objects_1 = OSLindoSolver.lo
 @COIN_HAS_IPOPT_TRUE@am__objects_2 = OSIpoptSolver.lo
 @COIN_HAS_BONMIN_TRUE@am__objects_3 = OSBonminSolver.lo
 @COIN_HAS_COUENNE_TRUE@am__objects_4 = OSCouenneSolver.lo
 @COIN_HAS_KNITRO_TRUE@am__objects_5 = OSKnitroSolver.lo
-am_libOSSolverInterfaces_la_OBJECTS = OSCoinSolver.lo $(am__objects_1) \
-	$(am__objects_2) $(am__objects_3) $(am__objects_4) \
-	$(am__objects_5)
+am_libOSSolverInterfaces_la_OBJECTS = OSCoinSolver.lo \
+	OSMatlabSolver.lo $(am__objects_1) $(am__objects_2) \
+	$(am__objects_3) $(am__objects_4) $(am__objects_5)
 libOSSolverInterfaces_la_OBJECTS =  \
 	$(am_libOSSolverInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -175,8 +176,8 @@ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 SOURCES = $(libOSSolverInterfaces_la_SOURCES)
 DIST_SOURCES = $(am__libOSSolverInterfaces_la_SOURCES_DIST)
 am__includecoin_HEADERS_DIST = ../../inc/config_os.h OSCoinSolver.h \
-	OSLindoSolver.h OSKnitroSolver.h OSIpoptSolver.h \
-	OSBonminSolver.h OSCouenneSolver.h
+	OSMatlabSolver.h OSLindoSolver.h OSKnitroSolver.h \
+	OSIpoptSolver.h OSBonminSolver.h OSCouenneSolver.h
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -458,8 +459,9 @@ noinst_LTLIBRARIES = libOSSolverInterfaces.la
 
 # List all source files for this library, including headers
 libOSSolverInterfaces_la_SOURCES = OSCoinSolver.cpp OSCoinSolver.h \
-	$(am__append_1) $(am__append_2) $(am__append_3) \
-	$(am__append_4) $(am__append_5)
+	OSMatlabSolver.cpp OSMatlabSolver.h $(am__append_1) \
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5)
 
 # This is for libtool (on Windows)
 libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -493,11 +495,11 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src` -I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` $(am__append_6) \
-	$(am__append_7) $(am__append_8) $(am__append_9) \
-	$(am__append_10) $(am__append_11) $(am__append_12) \
-	$(am__append_13) $(am__append_14) $(am__append_15) \
-	$(am__append_16)
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSAgent` $(am__append_6) $(am__append_7) \
+	$(am__append_8) $(am__append_9) $(am__append_10) \
+	$(am__append_11) $(am__append_12) $(am__append_13) \
+	$(am__append_14) $(am__append_15) $(am__append_16)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -511,8 +513,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = ../../inc/config_os.h OSCoinSolver.h \
-	$(am__append_17) $(am__append_18) $(am__append_19) \
-	$(am__append_20) $(am__append_21)
+	OSMatlabSolver.h $(am__append_17) $(am__append_18) \
+	$(am__append_19) $(am__append_20) $(am__append_21)
 all: all-am
 
 .SUFFIXES:
@@ -570,6 +572,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSIpoptSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSKnitroSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSLindoSolver.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSMatlabSolver.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
