@@ -51,9 +51,12 @@
 					<con idx="1">-.7662938652578929</con>
 				</dualValues>
 			</constraints>
-					<otherSolutionResults  numberOfOtherSolutionResults="1">
-						<otherSolutionResult name="requestResults" description="the request results"  numberOfRecords="1">
+					<otherSolutionResults  numberOfOtherSolutionResults="2">
+						<otherSolutionResult name="requestResults1" description="the request results"  numberOfRecords="1">
 							<record>Hi Gus</record>
+						</otherSolutionResult>
+						<otherSolutionResult name="requestResults2" description="the request results"  numberOfRecords="1">
+							<record>Bye Gus</record>
 						</otherSolutionResult>
 					</otherSolutionResults>
 		</solution>

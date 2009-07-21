@@ -57,7 +57,7 @@
 #include "OSResult.h"
 
 
-#define PARSERDEBUG
+//#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -255,7 +255,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/otherSolutionResults{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHERSOLUTIONRESULTSEND);}
 
 {xmlwhitespace}*\<otherSolutionResult {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
-{xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHERSOLUTIONRESULTEND);}
+{xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
 
 {xmlwhitespace}*\<record{xmlwhitespace}*\> { YY_PRINT; return(RECORDSTART);}
 {xmlwhitespace}*\<\/record{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RECORDEND);}

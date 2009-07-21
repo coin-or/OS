@@ -2556,7 +2556,7 @@ case 106:
 /* rule 106 can match eol */
 YY_RULE_SETUP
 #line 258 "/home/kmartin/coin/bsp/OS/src/OSParsers/OSParseosrl.l"
-{YY_PRINT; return(OTHERSOLUTIONRESULTEND);}
+{YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
 	YY_BREAK
 case 107:
 /* rule 107 can match eol */
