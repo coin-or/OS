@@ -19,7 +19,9 @@ noinst_LTLIBRARIES = libOSSolverInterfaces.la
 # List all source files for this library, including headers
 libOSSolverInterfaces_la_SOURCES = \
 	OSCoinSolver.cpp \
-	OSCoinSolver.h  
+	OSCoinSolver.h  \
+	OSMatlabSolver.cpp \
+	OSMatlabSolver.h 
 
 
 if COIN_HAS_LINDO
@@ -92,7 +94,8 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` 
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent`  
 	
 	
 if COIN_HAS_ASL
@@ -202,7 +205,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
-	OSCoinSolver.h 
+	OSCoinSolver.h \
+	OSMatlabSolver.h
 
 if COIN_HAS_LINDO
 includecoin_HEADERS += OSLindoSolver.h

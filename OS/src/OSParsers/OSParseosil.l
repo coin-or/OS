@@ -87,6 +87,7 @@ using std::endl;
 using std::ostringstream;
 %}
 
+%option nounput
 %option reentrant
 %option bison-bridge
 %option bison-locations

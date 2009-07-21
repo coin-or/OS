@@ -377,7 +377,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 		#endif
  	}
  
-
+	osinstance->calculateAllObjectiveFunctionValues( x, true);
 	delete[] initialed;
   	return true;
 }//get_starting_point
@@ -385,6 +385,7 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 
 // returns the value of the objective function
 bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
+	
 	try{
 		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
 			obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];	

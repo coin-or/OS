@@ -3150,6 +3150,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double *objL
 double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool new_x){	
 	try{
 		m_iHighestOrderEvaluated = -1;
+		
 		if( new_x == false) return m_mdObjectiveFunctionValues;
 		int idx, numObjectives;
 		numObjectives = getObjectiveNumber();

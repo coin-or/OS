@@ -80,6 +80,7 @@ using std::ostringstream;
 
 %}
 
+%option nounput
 %option prefix="osol"
 %option noyywrap
 %option reentrant
@@ -336,6 +337,7 @@ return(DOUBLE);}
 
 
 .|\n {  
+
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;

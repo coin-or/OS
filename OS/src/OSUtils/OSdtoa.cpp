@@ -1497,9 +1497,9 @@ static CONST double tinytens[] = { 1e-16, 1e-32 };
  static int
 match
 #ifdef KR_headers
-	(sp, t) char **sp, *t;
+        (sp, t) char **sp; CONST char *t;
 #else
-	(CONST char **sp, char *t)
+	(CONST char **sp, CONST char *t)
 #endif
 {
 	int c, d;
@@ -2457,7 +2457,7 @@ os_strtod
 	Bfree(delta);
  ret:
 	if (se)
-		*se = (char *)s;
+		*se = const_cast<char*>(s);
 	return sign ? -dval(rv) : dval(rv);
 	}
 
@@ -2608,9 +2608,9 @@ rv_alloc(int i)
 
  static char *
 #ifdef KR_headers
-nrv_alloc(s, rve, n) char *s, **rve; int n;
+ nrv_alloc(s, rve, n) CONST char *s; char **rve; int n;
 #else
-nrv_alloc(char *s, char **rve, int n)
+nrv_alloc(CONST char *s, char **rve, int n)
 #endif
 {
 	char *rv, *t;

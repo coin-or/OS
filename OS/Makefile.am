@@ -35,7 +35,7 @@ endif
 # Here we need include all files that are not mentioned in other Makefiles
 
 EXTRA_DIST =
-
+ 
 
 ########################################################################
 #                           Extra Targets                              #
@@ -57,12 +57,12 @@ distclean-local:
 
 run_parsers:
 	$(YACC) -ldv -p osrl -o ${abs_source_dir}/src/OSParsers/OSParseosrl.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.y
-	flex -Posrl  -o${abs_source_dir}/src/OSParsers/OSParseosrl.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.l
+	flex  -Posrl  -o${abs_source_dir}/src/OSParsers/OSParseosrl.cpp ${abs_source_dir}/src/OSParsers/OSParseosrl.l
 	$(YACC) -ldv -p osil  -o ${abs_source_dir}/src/OSParsers/OSParseosil.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.y
-	flex -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.l
+	flex  -Posil -o${abs_source_dir}/src/OSParsers/OSParseosil.cpp ${abs_source_dir}/src/OSParsers/OSParseosil.l
 	$(YACC) -ldv -p osol  -o ${abs_source_dir}/src/OSParsers/OSParseosol.tab.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.y
-	flex -Posol -o${abs_source_dir}/src/OSParsers/OSParseosol.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.l
-	flex -Posss -o${abs_source_dir}/src/OSParsers/OSParseosss.cpp ${abs_source_dir}/src/OSParsers/OSParseosss.l
+	flex  -Posol -o${abs_source_dir}/src/OSParsers/OSParseosol.cpp ${abs_source_dir}/src/OSParsers/OSParseosol.l
+	flex  -Posss -o${abs_source_dir}/src/OSParsers/OSParseosss.cpp ${abs_source_dir}/src/OSParsers/OSParseosss.l
 	make
 
 ########################################################################
@@ -73,10 +73,10 @@ addlibsfile = os_addlibs.txt
 addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
 
 install-exec-local: install-doc
-	$(install_sh_DATA) $(addlibsfile) $(addlibsdir)/$(addlibsfile)
+	$(install_sh_DATA) $(addlibsfile) $(DESTDIR)$(addlibsdir)/$(addlibsfile)
 
 uninstall-local: uninstall-doc
-	rm -f $(addlibsdir)/$(addlibsfile)
+	rm -f $(DESTDIR)$(addlibsdir)/$(addlibsfile)
 
 
 

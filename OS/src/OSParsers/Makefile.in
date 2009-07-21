@@ -46,6 +46,8 @@ host_triplet = @host@
 @COIN_HAS_ASL_TRUE@am__append_1 = -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
+@COIN_HAS_CPPAD_TRUE@am__append_2 = -I`$(CYGPATH_W) $(CPPADSRCDIR)` \
+@COIN_HAS_CPPAD_TRUE@	$(CPPAD_CPPFLAGS)
 subdir = src/OSParsers
 DIST_COMMON = $(includecoin_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -392,8 +394,8 @@ libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
-	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1)
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
+	$(am__append_2)
 
 #if USE_DTOA
 #AM_CPPFLAGS += -DUSE_DTOA=1

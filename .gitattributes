@@ -96,6 +96,7 @@ OS/data/amplFiles/bonminEx1.nl -text
 OS/data/amplFiles/hs71.mod -text
 OS/data/amplFiles/hs71.nl -text
 OS/data/amplFiles/muer.mod -text
+OS/data/amplFiles/muer.nl -text
 OS/data/amplFiles/muerdata10.dat -text
 OS/data/amplFiles/parinc.dat -text
 OS/data/amplFiles/parinc.mod -text
@@ -143,6 +144,7 @@ OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/HS071_feas.osil -text
 OS/data/osilFiles/IP_infeasible.osil -text
 OS/data/osilFiles/IP_noconstraint.osil -text
+OS/data/osilFiles/IP_unbounded.osil -text
 OS/data/osilFiles/LINDO-SOS2.osil -text
 OS/data/osilFiles/LP_infeasible.osil -text
 OS/data/osilFiles/LP_nobasis.osil -text
@@ -428,8 +430,6 @@ OS/src/OSCommonInterfaces/OSrLWriter.h -text
 OS/src/OSConfig.h -text
 OS/src/OSModelInterfaces/Makefile.am -text
 OS/src/OSModelInterfaces/Makefile.in -text
-OS/src/OSModelInterfaces/OSMatlab.cpp -text
-OS/src/OSModelInterfaces/OSMatlab.h -text
 OS/src/OSModelInterfaces/OSmps2osil.cpp -text
 OS/src/OSModelInterfaces/OSmps2osil.h -text
 OS/src/OSModelInterfaces/OSnl2osil.cpp -text

@@ -409,10 +409,10 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
         if (varnode->coef == 0.)
        		return new exprConst(0.);
         if (varnode->coef == 1.)
-       		return couenne->Variables()[varnode->idx]->clone(couenne->domain());
+       		return new exprClone(couenne->Variables()[varnode->idx]);
         if (varnode->coef == -1.)
-       		return new exprOpp(couenne->Variables()[varnode->idx]->clone(couenne->domain()));
-     		return new exprMul(new exprConst(varnode->coef), couenne->Variables()[varnode->idx]->clone(couenne->domain()));
+       		return new exprOpp(new exprClone(couenne->Variables()[varnode->idx]));
+     		return new exprMul(new exprConst(varnode->coef), new exprClone(couenne->Variables()[varnode->idx]));
      }
      default:
         cout << node->snodeName << " NOT IMPLEMENTED!!" << endl;

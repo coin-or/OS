@@ -196,16 +196,16 @@
 \index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
 \index{Cgl@{\tt Cgl}|see{COIN-OR projects, {\tt Cgl}}}
 \index{Clp@{\tt Clp}|see{COIN-OR projects, {\tt Clp}}}
-\index{Configuration Manager|see{Microsoft Visual Studio, Configuration Manager}}
+%\index{Configuration Manager|see{Microsoft Visual Studio, Configuration Manager}}
 \index{Couenne@{\tt Couenne}|see{COIN-OR projects, {\tt Couenne}}}
 \index{CppAD@{\tt CppAD}|see{COIN-OR projects, {\tt CppAD}}}
 \index{CoinUtils@{\tt CoinUtils}|see{COIN-OR projects, {\tt CoinUtils}}}
-\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
+%\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
 \index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
 \index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
 \index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
-\index{Release configuration|see{Microsoft Visual Studio, {\tt Release} configuration}}
-\index{Release-plus configuration|see{Microsoft Visual Studio, {\tt Release-plus} configuration}}
+%\index{Release configuration|see{Microsoft Visual Studio, {\tt Release} configuration}}
+%\index{Release-plus configuration|see{Microsoft Visual Studio, {\tt Release-plus} configuration}}
 \index{SYMPHONY@{\tt SYMPHONY}|see{COIN-OR projects, {\tt SYMPHONY}}}
 \index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
 
@@ -1007,18 +1007,18 @@ They are also contained in the tarballs (see Section~\ref{section:getTarBalls}).
 
 Open the solution file or the individual project files (for instance by double-clicking
 on them in Windows Explorer)  and select Build from the menu bar.
-If you have ASL\index{AMPL Solver Library (ASL)} (see Section~\ref{section:ASL}) downloaded,
-you can also build the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient})
-by modifying the Configuration Manager\index{Microsoft Visual Studio!Configuration Manager} and selecting the
-two projects {\tt libOSnl2OSiL}\index{libOSnl2OSiL@{\tt libOSnl2OSiL}}
-and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}},
-which by default are not included in the build.
+%If you have ASL\index{AMPL Solver Library (ASL)} (see Section~\ref{section:ASL}) downloaded,
+%you can also build the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient})
+%by modifying the Configuration Manager\index{Microsoft Visual Studio!Configuration Manager} and selecting the
+%two projects {\tt libOSnl2OSiL}\index{libOSnl2OSiL@{\tt libOSnl2OSiL}}
+%and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}},
+%which by default are not included in the build.
 
 \item{} Run the {\tt unitTest}\index{unitTest@{\tt unitTest}}. Connect to the directory {\tt COIN-OR/OS/test} and run 
 either the release or debug version of the {\tt unitTest} executable.
 \end{enumerate}
 
-\ifipopt
+\iffalse %\ifipopt
 %The solution file for version~7 provides two configurations, {\tt Debug} and {\tt Release}.
 %The former includes debug information, but both are configured without Ipopt
 %(see section~\ref{section:ipopt}) or any of the third-party software described in
@@ -1030,7 +1030,7 @@ both of which are configured without {\tt Ipopt}, as well as
 {\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration},
 which can be used to add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
 {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
-(see section~\ref{section:ASL}). In order to build this section successfully,
+(see section~\ref{section:ASL}). In order to build this configuration successfully,
 the user must first download and process additional third-party software\index{Third-party software} as explained in 
 sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
 \fi
@@ -1570,6 +1570,13 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 \ifipopt
 \subsubsection{Ipopt and Microsoft Visual Studio} \label{section:ipopt-msvs}
 
+We regret that at present we cannot distribute a solution file
+that can detect and reliably process the necessary third-party software to
+build Ipopt. Users who need Ipopt on a Windows system are advised to download
+the binary build as documented in section~\ref{section:obtainingbinaries}.
+
+
+\iffalse %------------------------------------------------------------------------
 Users of Microsoft Visual Studio without access to a unix-like environment (Cygwin, MinGW or MSYS)
 will have to prepare the third-party code after downloading. Since some of this code is written in Fortran,
 you also need to obtain the {\tt f2c}\index{f2c@{\tt f2c}|(} Fortran to C translator. The steps are as follows.
@@ -1689,8 +1696,8 @@ and all the utility programs in sections \ref{section:fileupload}
 and~\ref{section:examples} are included in the build, as well.
 \end{enumerate}
 
-
-\fi
+\fi     %------------------------------------ end of \iffalse
+\fi     % end of \ifipopt
 
 
 \subsection{Other Third-Party Software} \label{section:otherthirdparty}
@@ -1789,6 +1796,11 @@ The {\tt ASL} folder is in the {\tt ThirdParty} folder
 which is in the distribution root folder. Locate and execute the {\tt get.ASL} script.  Do this prior to running
 the {\tt configure} script\index{configure}. The {\tt configure} script will then build the correct ASL library.
 
+Microsoft  Visual Studio\index{Microsoft Visual Studio} users should note that {\tt OSAmplClient} is distributed 
+as part of the binary distribution. For reasons explained in section~\ref{section:ipopt-msvs} it is currently
+not possible to distribute a solution file to let users build their own executable.
+
+\iffalse %-----------------------------------------------------------------------------
 Microsoft  Visual Studio\index{Microsoft Visual Studio} users will have to build the ASL library separately and
 then link it with the OS library in the OS project file.  The necessary source files are at
 
@@ -1858,6 +1870,7 @@ Activate these projects in the Configuration Manager\index{Microsoft Visual Stud
 (available from the Build menu), then select Build.
 %If you want to add other third-party software or include debug information, you may have to modify
 %(or copy) this configuration and tailor it to your needs.
+\fi
 \fi
 \index{AMPL Solver Library (ASL)|)}
 
@@ -5982,6 +5995,7 @@ uploaded file that is saved on the server, so that you can put it in the corresp
 \index{OSFileUpload@{\tt OSFileUpload}|)}
 
 
+\iffalse %------------------------------------------------------
 
 \section{Wish List for Release 2.1}\label{section:wishlist} 
 
@@ -5999,6 +6013,7 @@ uploaded file that is saved on the server, so that you can put it in the corresp
 \item Implement the Bcp solver
 \end{itemize}
 
+\fi %--------------------------------------------------
 
 
 \section{Appendix -- Sample OSiL files}\label{section:appendix}
