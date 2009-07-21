@@ -535,16 +535,20 @@ otherSolutionResults:
 | OTHERSOLUTIONRESULTSSTART numberOfOtherSolutionResults GREATERTHAN otherSolutionResultList OTHERSOLUTIONRESULTSEND;
 
 numberOfOtherSolutionResults: NUMBEROFOTHERSOLUTIONRESULTSATT QUOTE INTEGER  
-{/*	if ($3 < 0) osrlerror(NULL, NULL, NULL, "number of other solution results cannot be negative");
+{	
+	int temp;
+	temp = $3;
+	if (temp < 0) osrlerror(NULL, NULL, NULL, "number of other solution results cannot be negative");
 	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults != NULL)
 		osrlerror(NULL, NULL, NULL, "otherSolutionResults previously allocated");
 	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults = new OtherSolutionResults();	
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults = $3;
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult = new OtherSolutionResult*[$3];
-	if ($3 > 0)
-	   for(int i = 0; i < $3; i++) 	
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults = temp;
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult = new OtherSolutionResult*[ temp];
+	if (temp > 0)
+		for(int i = 0; i < temp; i++) 	
 			osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[i] = new OtherSolutionResult();
-*/} QUOTE;
+parserData->iOther = 0; // kipp change
+} QUOTE;
     
 otherSolutionResultList: 
 
@@ -558,38 +562,41 @@ anotherSolutionResultAttList:
 anotherSolutionResultAtt: numberOfRecords | anotherSolutionResultNameATT | anotherSolutionResultCategoryATT | anotherSolutionDescriptionATT;
 
 numberOfRecords: NUMBEROFRECORDSATT QUOTE INTEGER QUOTE 
-{/*	if ($3 < 0) osrlerror(NULL, NULL, NULL, "number of records cannot be negative");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords = $3;
+{	
+int temp;
+temp = $3;
+if (temp < 0) osrlerror(NULL, NULL, NULL, "number of records cannot be negative");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords = temp;
 	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record != NULL)
 		osrlerror(NULL, NULL, NULL, "record array was previously allocated");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record = new std::string[$3];
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record = new std::string[temp];
 	parserData->kounter = 0;
-*/};
+};
 
 anotherSolutionResultNameATT: 
   EMPTYNAMEATT 
 { 
 	parserData->tmpOtherName=""; 
 	parserData->otherNamePresent = true; 
-/*	parserData->otherVarStruct->name = "";*/
+	parserData->otherVarStruct->name = "";
 };
   | NAMEATT ATTRIBUTETEXT quote
 {
 	parserData->tmpOtherName=$2; parserData->otherNamePresent = true;
-/*	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = $2;
-*/	free($2);
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = $2;
+	free($2);
 };
 
 anotherSolutionResultCategoryATT:
 CATEGORYATT ATTRIBUTETEXT QUOTE {
-/*osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->category = $2;
-*/free($2);}
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->category = $2;
+free($2);}
    | EMPTYCATEGORYATT ;
  
 anotherSolutionDescriptionATT:
 DESCRIPTIONATT ATTRIBUTETEXT QUOTE {
-/*osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->description = $2;
-*/free($2);}
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->description = $2;
+free($2);}
    | EMPTYDESCRIPTIONATT ;
 
 recordList: 
@@ -597,14 +604,20 @@ recordList:
 
 anotherSolutionRecord: RECORDSTART recordContent
 {
-/*osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
+std::cout << "RECORD CONTENT = " << osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter];
 parserData->kounter++;
+
+std::cout << "parserData->kounter"    << parserData->kounter << std::endl;
+std::cout << "parserData->iOther"    << parserData->iOther << std::endl;
+std::cout << "LONG ONE"    << osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords << std::endl;
+
 if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords)
 	osrlerror(NULL, NULL, NULL, "too many records specified");
-*/};
+};
 
-recordContent: emptyRecord {/*parserData->recordContent = "";*/}
-    |    ELEMENTTEXT {/*parserData->recordContent = $2; free($2);*/} RECORDEND;
+recordContent: emptyRecord {parserData->recordContent = "";}
+    |    ELEMENTTEXT {parserData->recordContent = $1; free($1);} RECORDEND;
 
 emptyRecord: ENDOFELEMENT | GREATERTHAN RECORDEND;
 

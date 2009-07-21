@@ -754,10 +754,10 @@ static const yytype_uint16 yyrline[] =
      386,   389,   395,   401,   407,   416,   417,   419,   436,   437,
      438,   440,   445,   446,   455,   459,   460,   462,   468,   476,
      479,   481,   480,   498,   504,   505,   507,   514,   522,   524,
-     528,   529,   531,   532,   534,   535,   538,   537,   549,   551,
-     553,   555,   556,   558,   558,   558,   558,   560,   570,   576,
-     584,   587,   590,   593,   595,   596,   598,   606,   607,   607,
-     609,   609,   612,   620,   622,   623,   624,   625,   627,   628
+     528,   529,   531,   532,   534,   535,   538,   537,   553,   555,
+     557,   559,   560,   562,   562,   562,   562,   564,   577,   583,
+     591,   594,   597,   600,   602,   603,   605,   619,   620,   620,
+     622,   622,   625,   633,   635,   636,   637,   638,   640,   641
 };
 #endif
 
@@ -2453,27 +2453,34 @@ parserData->kounter++;
 
   case 156:
 
-    {/*	if ($3 < 0) osrlerror(NULL, NULL, NULL, "number of other solution results cannot be negative");
+    {	
+	int temp;
+	temp = (yyvsp[(3) - (3)].ival);
+	if (temp < 0) osrlerror(NULL, NULL, NULL, "number of other solution results cannot be negative");
 	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults != NULL)
 		osrlerror(NULL, NULL, NULL, "otherSolutionResults previously allocated");
 	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults = new OtherSolutionResults();	
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults = $3;
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult = new OtherSolutionResult*[$3];
-	if ($3 > 0)
-	   for(int i = 0; i < $3; i++) 	
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults = temp;
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult = new OtherSolutionResult*[ temp];
+	if (temp > 0)
+		for(int i = 0; i < temp; i++) 	
 			osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[i] = new OtherSolutionResult();
-*/}
+parserData->iOther = 0; // kipp change
+}
     break;
 
   case 167:
 
-    {/*	if ($3 < 0) osrlerror(NULL, NULL, NULL, "number of records cannot be negative");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords = $3;
+    {	
+int temp;
+temp = (yyvsp[(3) - (4)].ival);
+if (temp < 0) osrlerror(NULL, NULL, NULL, "number of records cannot be negative");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords = temp;
 	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record != NULL)
 		osrlerror(NULL, NULL, NULL, "record array was previously allocated");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record = new std::string[$3];
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record = new std::string[temp];
 	parserData->kounter = 0;
-*/}
+}
     break;
 
   case 168:
@@ -2481,7 +2488,7 @@ parserData->kounter++;
     { 
 	parserData->tmpOtherName=""; 
 	parserData->otherNamePresent = true; 
-/*	parserData->otherVarStruct->name = "";*/
+	parserData->otherVarStruct->name = "";
 }
     break;
 
@@ -2489,43 +2496,49 @@ parserData->kounter++;
 
     {
 	parserData->tmpOtherName=(yyvsp[(2) - (3)].sval); parserData->otherNamePresent = true;
-/*	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = $2;
-*/	free((yyvsp[(2) - (3)].sval));
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = (yyvsp[(2) - (3)].sval);
+	free((yyvsp[(2) - (3)].sval));
 }
     break;
 
   case 170:
 
     {
-/*osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->category = $2;
-*/free((yyvsp[(2) - (3)].sval));}
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->category = (yyvsp[(2) - (3)].sval);
+free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 172:
 
     {
-/*osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->description = $2;
-*/free((yyvsp[(2) - (3)].sval));}
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->description = (yyvsp[(2) - (3)].sval);
+free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 176:
 
     {
-/*osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
+std::cout << "RECORD CONTENT = " << osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter];
 parserData->kounter++;
+
+std::cout << "parserData->kounter"    << parserData->kounter << std::endl;
+std::cout << "parserData->iOther"    << parserData->iOther << std::endl;
+std::cout << "LONG ONE"    << osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords << std::endl;
+
 if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords)
 	osrlerror(NULL, NULL, NULL, "too many records specified");
-*/}
+}
     break;
 
   case 177:
 
-    {/*parserData->recordContent = "";*/}
+    {parserData->recordContent = "";}
     break;
 
   case 178:
 
-    {/*parserData->recordContent = $2; free($2);*/}
+    {parserData->recordContent = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));}
     break;
 
   case 182:
