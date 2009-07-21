@@ -391,11 +391,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 #ifdef DEBUG
 	cout << "output <otherSolutionResults>" << endl;
 #endif
-/*				if (m_OSResult->optimization->solution[i]->otherSolutionResults != NULL)
+			if (m_OSResult->optimization->solution[i]->otherSolutionResults != NULL)
 					if (m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults > 0){
 						outStr << "<otherSolutionResults numberOfOtherSolutionResults=\"";
 						outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults;
-						outStr << "\">";
+						outStr << "\">" << std::endl;
 						for(int k = 0; k < m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults; k++){
 							outStr << "<otherSolutionResult";
 							outStr << " name=\"";
@@ -407,15 +407,15 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << " description=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description << "\"";
 							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords > 0)
 								outStr << " numberOfRecords=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords << "\"";
-							outStr << ">";
+							outStr << ">" << std::endl;
 							for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords; j++){
-								outStr << "<record>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->record[j] << "</record>";
+								outStr << "<record>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->record[j] << "</record>" << std::endl;
 							}
-							outStr << "</otherSolutionResult>";
+							outStr << "</otherSolutionResult>" << std::endl;
 						}
-						outStr << "</otherSolutionResults>";
+						outStr << "</otherSolutionResults>" << std::endl;
 					}
- */
+ 
 				outStr << "</solution>" << endl;
 			}
 		} // end the solution for loop
