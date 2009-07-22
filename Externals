@@ -15,7 +15,7 @@ ThirdParty/HSL https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/releas
 ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/releases/1.0.19
 ThirdParty/Mumps https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.1.8
 DyLP           https://projects.coin-or.org/svn/DyLP/releases/1.5.0/DyLP
-Ipopt          https://projects.coin-or.org/svn/Ipopt/stable/3.6/Ipopt
+Ipopt          https://projects.coin-or.org/svn/Ipopt/stable/BSP/Ipopt
 cppad         https://projects.coin-or.org/svn/CppAD/releases/20090303.0
 Bonmin         https://projects.coin-or.org/svn/Bonmin/releases/1.1.0/Bonmin 
 Couenne https://projects.coin-or.org/svn/Couenne/releases/0.2.1/Couenne
