@@ -83,6 +83,15 @@
 					<con idx="1">-.7662938652578929</con>
 				</dualValues>
 			</constraints>
+			<otherSolutionResults numberOfOtherSolutionResults="1"> 
+				<otherSolutionResult name="requestResults" description="the request results" numberOfRecords="5"> 
+					<record>777 Liberty,Surgical,AM,M,1,Storz,1</record> 
+					<record>777,Liberty,Surgical,AM,T,1,Storz,1</record> 
+					<record>778,Liberty,Surgical,AM,M,1,Dummy,1</record> 
+					<record>778,Liberty,Surgical,AM,T,1,Dummy,1</record> 
+					<record>812,Liberty,Surgical,AM,M,1,Stryker,1</record>
+				</otherSolutionResult> 
+			</otherSolutionResults>
 		</solution>
 	</optimization>
 </osrl>
