@@ -57,7 +57,7 @@
 #include "OSResult.h"
 
 
-//#define PARSERDEBUG
+#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -92,6 +92,7 @@ using std::ostringstream;
 %x singlequoteattributetext
 %x startelement
 %x elementtext
+%x recordtext
 %x comment
 %x xmldeclaration
 
@@ -257,7 +258,7 @@ return(DOUBLE);}
 {xmlwhitespace}*\<otherSolutionResult {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
 {xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
 
-{xmlwhitespace}*\<record{xmlwhitespace}*\> { YY_PRINT; return(RECORDSTART);}
+{xmlwhitespace}*\<record{xmlwhitespace}*\> { YY_PRINT; BEGIN recordtext; return(RECORDSTART);}
 {xmlwhitespace}*\<\/record{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RECORDEND);}
 
 (\<serviceURI{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICEURISTARTANDEND);}
@@ -270,6 +271,7 @@ return(DOUBLE);}
 
 
 [a-zA-Z0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
+<recordtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (RECORDTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |

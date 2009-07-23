@@ -74,6 +74,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token <sval> ATTRIBUTETEXT
 %token <sval> ELEMENTTEXT
+%token <sval> RECORDTEXT
 %token <ival> INTEGER
 %token <dval> DOUBLE
 
@@ -554,9 +555,7 @@ numberOfOtherSolutionResults: NUMBEROFOTHERSOLUTIONRESULTSATT QUOTE INTEGER
 parserData->iOther = 0; // this will index the number of otherSolutionResult objects
 } QUOTE;
     
-otherSolutionResultList: 
-
- | otherSolutionResultList anotherSolutionResult;
+otherSolutionResultList:  | otherSolutionResultList anotherSolutionResult;
 
 anotherSolutionResult: OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList GREATERTHAN recordList OTHERSOLUTIONRESULTEND
 {
@@ -626,14 +625,14 @@ anotherSolutionRecord: RECORDSTART recordContent
 {
 
 if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords)
-	osrlerror(NULL, NULL, parserData, "numberOfRecords attribute less than the number of record elements");
+	osrlerror(NULL, NULL, parserData, "number of <record> elements exceeds numberOfRecords specified");
 
 osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
 parserData->kounter++;
 };
 
 recordContent: emptyRecord {parserData->recordContent = "";}
-    |    ELEMENTTEXT {parserData->recordContent = $1; free($1);} RECORDEND;
+    |    RECORDTEXT {parserData->recordContent = $1; free($1);} RECORDEND;
 
 emptyRecord: ENDOFELEMENT | GREATERTHAN RECORDEND;
 
