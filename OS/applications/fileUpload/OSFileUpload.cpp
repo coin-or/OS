@@ -79,7 +79,7 @@ int main(int argC, char* argV[])
 		//
 		//throw ErrorClass( "please go in and put in a valid server URL and recompile \n  see line 81" );
 		// put in a valid URL below
-		osagent = new OSSolverAgent("http://gsbkip.chicagogsb.edu/os/servlet/OSFileUpload");
+		osagent = new OSSolverAgent("http://*****/os/servlet/OSFileUpload");
 		// put in a valid URL above
 		//
 		//
