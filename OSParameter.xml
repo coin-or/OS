@@ -80,11 +80,15 @@
 	<param name="SCHEDULER_WITH_REGISTRY" description="whether the scheduler service locally sits with the registry service in the same web application">true</param>
 	<!--Mail site related parameters-->
 	<param name="SMTP_SERVER" description="the smtp server address to send the email (change!)">gsbims.chicagogsb.edu</param>
+	<param name="SMTP_USER" description="the smtp user to send the email (change!)">kipp.martin@chicagogsb.edu</param>
+	<param name="SMTP_PASSWORD" description="the smtp password to send the email (change!)"/>
 	<param name="FROM_EMAIL" description="the from email address to send the email (change!)">kipp.martin@chicagogsb.edu</param>
-	<param name="FROM_PASSWORD" description="the from email address to send the email (change!)"/>
 	<param name="TO_EMAIL" description="the to email address to send the email (change!)"/>
+	<param name="CC_EMAIL" description="the to email address to CC the email"/>
+	<param name="BCC_EMAIL" description="the to email address to BCC the email"/>
 	<param name="MAIL_SUBJECT" description="the email subject">OS SERVICE NOTIFICATION!!!</param>
 	<param name="MAIL_MESSAGE" description="the email message body">Please check the service.</param>
+	<param name="MAIL_ATTACHED_FILES" description="a comma separated string of the file names"/>
 	<!--Security related parameters-->
 	<param name="REQUIRE_USER_NAME" description="whether the service needs user name to be submitted">false</param>
 	<param name="REQUIRE_PASSWORD" description="whether the service needs a password for each user">false</param>
