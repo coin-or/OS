@@ -1273,7 +1273,7 @@ public class OSServiceUtil{// implements OShL{
 			String sMessage1 = "Your job " + m_sJobID + " has completed on " + (OSParameter.SERVICE_URI);
 			try {
 				if(m_sContactTransportType.equals("smtp") && (m_sContactAddress != null && m_sContactAddress.length() > 0)){
-					MailUtil.sendInThread(OSParameter.FROM_EMAIL, m_sContactAddress, null, null, "notifyJobCompletion", sMessage1, null);						
+					new MailUtil().sendInThread(OSParameter.FROM_EMAIL, m_sContactAddress, null, null, "notifyJobCompletion", sMessage1, null);						
 				}
 				if(m_sContactTransportType.equals("osp") || (m_sServiceTypeInOSoL != null && m_sServiceTypeInOSoL.equals("scheduler"))){
 					m_osplWriter = new OSpLWriter();
@@ -2724,7 +2724,7 @@ public class OSServiceUtil{// implements OShL{
 								String sMessage = "Your job " + m_sJobID + " has completed on " + (OSParameter.SERVICE_URI);
 								try {
 									if(sContactTransportType.equals("smtp")){
-										MailUtil.sendInThread(OSParameter.FROM_EMAIL, sContactAddress, null, null, "notifyJobCompletion", sMessage, null);
+										new MailUtil().sendInThread(OSParameter.FROM_EMAIL, sContactAddress, null, null, "notifyJobCompletion", sMessage, null);
 									}
 									if(sContactTransportType.equals("osp")){
 										m_osplWriter = new OSpLWriter();
@@ -5465,7 +5465,7 @@ public class OSServiceUtil{// implements OShL{
 			if(m_dAvailableDiskSpace <= OSParameter.MINIMUM_DISKSPACE_TRIGGER ){
 				if(!m_bSendEmailOnLowDiskSpace){
 					String sMessage = "System warning: service (" + (OSParameter.SERVICE_URI) +") is running low on disk space (" + m_dAvailableDiskSpace + ")";
-					MailUtil.sendInThread(OSParameter.FROM_EMAIL, OSParameter.TO_EMAIL, null, null, "System Warning: low disk space", sMessage, null);
+					new MailUtil().sendInThread(OSParameter.FROM_EMAIL, OSParameter.TO_EMAIL, null, null, "System Warning: low disk space", sMessage, null);
 					m_bSendEmailOnLowDiskSpace = true;
 				}
 			}
@@ -5567,7 +5567,7 @@ public class OSServiceUtil{// implements OShL{
 			if(sMessage == null || sMessage.length() <= 0){
 				sMessage = "Not able to retrieve process info of the service [" + OSParameter.SERVICE_URI + "]"; 
 			}
-			MailUtil.sendInThread(OSParameter.FROM_EMAIL, OSParameter.TO_EMAIL, null, null, sSubject, sMessage, null );					
+			new MailUtil().sendInThread(OSParameter.FROM_EMAIL, OSParameter.TO_EMAIL, null, null, sSubject, sMessage, null );					
 
 		}//run
 	}//class ServiceTask3

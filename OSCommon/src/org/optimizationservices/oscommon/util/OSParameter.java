@@ -478,9 +478,24 @@ public final class OSParameter{
 	public static String FROM_EMAIL = "optservorg@optimizationservices.org"; 
 
 	/**
-	 * FROM_PASSWORD holds the from email address to send the email. 
+	 * SMTP_USER holds the smtp user to send the email. 
 	 */
-	public static String FROM_PASSWORD = "";
+	public static String SMTP_USER = ""; 
+
+	/**
+	 * SMTP_PASSWORD holds the smtp server password to send the email. 
+	 */
+	public static String SMTP_PASSWORD = "";
+
+	/**
+	 * CC_EMAIL holds the to email address to cc the email. 
+	 */
+	public static String CC_EMAIL = "";
+
+	/**
+	 * BCC_EMAIL holds the to email address to bcc the email. 
+	 */
+	public static String BCC_EMAIL = "";
 
 	/**
 	 * TO_EMAIL holds the to email address to send the email. 
@@ -496,6 +511,12 @@ public final class OSParameter{
 	 * MAIL_MESSAGE holds the email message body.  
 	 */
 	public static String MAIL_MESSAGE ="Please check the service.";
+
+	/**
+	 * MAIL_ATTACHED_FILES  holds an array of the file names (w/ full paths) to be attached; 
+	 * no file attached if null. Use comma (,), semicolon (;) or space to delimit if multiple file names. 
+	 */
+	public static String MAIL_ATTACHED_FILES ="";
 
 	/*---------------------------------------------
 	Security related parameters
@@ -1471,20 +1492,32 @@ public final class OSParameter{
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SMTP_SERVER");
 		if(sValue != null && sValue.length() > 0) SMTP_SERVER = sValue;
 
+		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SMTP_USER");
+		if(sValue != null && sValue.length() > 0) SMTP_USER = sValue;
+
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("FROM_EMAIL");
 		if(sValue != null && sValue.length() > 0) FROM_EMAIL = sValue;
 
-		if(bRead) sValue = osParameterReader.getOSParameterValueByName("FROM_PASSWORD");
-		if(sValue != null && sValue.length() > 0) FROM_PASSWORD = sValue;
+		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SMTP_PASSWORD");
+		if(sValue != null && sValue.length() > 0) SMTP_PASSWORD = sValue;
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("TO_EMAIL");
 		if(sValue != null && sValue.length() > 0) TO_EMAIL = sValue;
+
+		sValue = osParameterReader.getOSParameterValueByName("CC_EMAIL");
+		if(sValue != null && sValue.length() > 0) CC_EMAIL = sValue;
+
+		sValue = osParameterReader.getOSParameterValueByName("BCC_EMAIL");
+		if(sValue != null && sValue.length() > 0) BCC_EMAIL = sValue;
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("MAIL_SUBJECT");
 		if(sValue != null && sValue.length() > 0) MAIL_SUBJECT = sValue;
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("MAIL_MESSAGE");
 		if(sValue != null && sValue.length() > 0) MAIL_MESSAGE = sValue;
+
+		sValue = osParameterReader.getOSParameterValueByName("MAIL_ATTACHED_FILES");
+		if(sValue != null && sValue.length() > 0) MAIL_ATTACHED_FILES = sValue;
 
 
 		/*---------------------------------------------

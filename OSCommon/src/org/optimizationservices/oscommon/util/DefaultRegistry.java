@@ -531,7 +531,7 @@ public class DefaultRegistry {
 			String sRegsitrationMessage = "\r\n" + osel + "\n\r\n\r" + osolRegister + "\r\n"; 
 			IOUtil.log(sRegsitrationMessage, OSParameter.REGISTRY_REGISTRATION_FILE);
 			String sSubject = "new OSRegistry registration";
-			MailUtil.sendInThread(OSParameter.FROM_EMAIL, OSParameter.TO_EMAIL, null, null, sSubject, sRegsitrationMessage, null);
+			new MailUtil().sendInThread(OSParameter.FROM_EMAIL, OSParameter.TO_EMAIL, null, null, sSubject, sRegsitrationMessage, null);
 			m_osplWriter = new OSpLWriter();
 			m_osplWriter.setResponseStatus("success");
 			m_osplWriter.setResponseDescription("The registration has been received  [registry]");
@@ -1605,20 +1605,20 @@ public class DefaultRegistry {
 						if(osplReader.getCurrentState().equals("idleButNotAccepting")){
 							String sError = "solver " + solverAgent.solverAddress + "is not accepting jobs";
 							IOUtil.log(sError, OSParameter.REGISTRY_LOG_FILE);
-							MailUtil.sendInThread(OSParameter.FROM_EMAIL, null, null, null, OSParameter.MAIL_SUBJECT, sError, null );					
+							new MailUtil().sendInThread(OSParameter.FROM_EMAIL, null, null, null, OSParameter.MAIL_SUBJECT, sError, null );					
 						}
 					} 
 					catch (Exception e){
 						String sError = "unable to get service statistics from " + solverAgent.solverAddress;
 						IOUtil.log(sError, OSParameter.REGISTRY_LOG_FILE);
-						MailUtil.sendInThread(OSParameter.FROM_EMAIL, null, null, null, OSParameter.MAIL_SUBJECT, sError, null );					
+						new MailUtil().sendInThread(OSParameter.FROM_EMAIL, null, null, null, OSParameter.MAIL_SUBJECT, sError, null );					
 					}     
 				}
 				catch(Exception e){
 				}
 			}
-			MailUtil.sendInThread(OSParameter.FROM_EMAIL, null, null, null, "REGISTRY_SUMMARY_REPORT", "", OSParameter.REGISTRY_SUMMARY_REPORT );					
-			MailUtil.sendInThread(OSParameter.FROM_EMAIL, null, null, null, "REGISTRY_DETAILED_REPORT", "", OSParameter.REGISTRY_DETAILED_REPORT );					
+			new MailUtil().sendInThread(OSParameter.FROM_EMAIL, null, null, null, "REGISTRY_SUMMARY_REPORT", "", OSParameter.REGISTRY_SUMMARY_REPORT );					
+			new MailUtil().sendInThread(OSParameter.FROM_EMAIL, null, null, null, "REGISTRY_DETAILED_REPORT", "", OSParameter.REGISTRY_DETAILED_REPORT );					
 
         }//run
     }//class ServiceTask3
