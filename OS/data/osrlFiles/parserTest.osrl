@@ -78,7 +78,7 @@
 					<obj idx="-2">3.14</obj>
 				</values>
 			</objectives>
-			<constraints>
+			<constraints> 
 				<dualValues numberOfCon="1">
 					<con idx="1">-.7662938652578929</con>
 				</dualValues>
