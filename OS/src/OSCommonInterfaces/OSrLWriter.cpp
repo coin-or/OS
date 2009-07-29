@@ -405,11 +405,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << " category=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category << "\"";
 							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description != "")
 								outStr << " description=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description << "\"";
-							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords > 0)
-								outStr << " numberOfRecords=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords << "\"";
+							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems > 0)
+								outStr << " numberOfItems=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems << "\"";
 							outStr << ">" << std::endl;
-							for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfRecords; j++){
-								outStr << "<record>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->record[j] << "</record>" << std::endl;
+							for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; j++){
+								outStr << "<item>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->item[j] << "</item>" << std::endl;
 							}
 							outStr << "</otherSolutionResult>" << std::endl;
 						}

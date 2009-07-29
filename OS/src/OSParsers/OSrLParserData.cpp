@@ -33,7 +33,7 @@
 	tmpOtherValue(""),
 	tmpOtherName(""),
 	tmpOtherDescription(""),
-	recordContent(""),
+	itemContent(""),
 	numberOfSolutions(0),
 	numberOfVariables(0),
 	numberOfConstraints(0),

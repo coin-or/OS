@@ -592,13 +592,13 @@ OtherSolutionResult::OtherSolutionResult():
 	name( ""),
 	category (""),
 	description (""),
-	numberOfRecords (0),
-	record( NULL)
+	numberOfItems (0),
+	item( NULL)
 { 
 	#ifdef DEBUG_RESULT
 	cout << "Inside the OtherSolutionResult Constructor" << endl;
 	#endif
-	record = NULL;
+	item = NULL;
 }//end OtherSolutionResult constructor
 
 
@@ -606,9 +606,9 @@ OtherSolutionResult::~OtherSolutionResult(){
 	#ifdef DEBUG_RESULT  
 	cout << "Inside the OtherSolutionResult Destructor" << endl;
 	#endif
-	if (record != NULL) 
-	{	delete[] record;
-		record = NULL;
+	if (item != NULL) 
+	{	delete[] item;
+		item = NULL;
 	}
 }// end OtherSolutionResult destructor
 

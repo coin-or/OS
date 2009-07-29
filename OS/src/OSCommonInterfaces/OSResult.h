@@ -1154,13 +1154,13 @@ public:
 	/** a brief description of the type of result */
 	std::string description;
 
-	/** the number of records contained in this otherSolutionResult
+	/** the number of items contained in this otherSolutionResult
 	 */
-	int numberOfRecords;
+	int numberOfItems;
 
-	/** an array of records (string-valued)
+	/** an array of items (string-valued)
 	 */
-	std::string *record;
+	std::string *item;
 
 	/**
 	 *

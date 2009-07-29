@@ -72,9 +72,8 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 #define scanner parserData->scanner
 %}
 
-%token <sval> ATTRIBUTETEXT
-%token <sval> ELEMENTTEXT
-%token <sval> RECORDTEXT
+%token <sval> ATTRIBUTETEXT%token <sval> ELEMENTTEXT
+%token <sval> ITEMTEXT
 %token <ival> INTEGER
 %token <dval> DOUBLE
 
@@ -106,10 +105,10 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token NUMBEROFTIMESATT
 %token NUMBEROFSOLUTIONSATT NUMBEROFVARIABLESATT NUMBEROFCONSTRAINTSATT NUMBEROFOBJECTIVESATT
 %token NUMBEROFOTHERVARIABLERESULTSATT NUMBEROFOTHEROBJECTIVERESULTSATT NUMBEROFOTHERCONSTRAINTRESULTSATT
-%token NUMBEROFOTHERSOLUTIONRESULTSATT NUMBEROFRECORDSATT 
+%token NUMBEROFOTHERSOLUTIONRESULTSATT NUMBEROFITEMSATT 
 %token OTHERSOLUTIONRESULTSSTART OTHERSOLUTIONRESULTSEND
 %token OTHERSOLUTIONRESULTSTART  OTHERSOLUTIONRESULTEND
-%token RECORDSTART RECORDEND
+%token ITEMSTART ITEMEND
 
 
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT TARGETOBJECTIVEIDXATT IDXATT 
@@ -557,10 +556,10 @@ parserData->iOther = 0; // this will index the number of otherSolutionResult obj
     
 otherSolutionResultList:  | otherSolutionResultList anotherSolutionResult;
 
-anotherSolutionResult: OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList GREATERTHAN recordList OTHERSOLUTIONRESULTEND
+anotherSolutionResult: OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList GREATERTHAN itemList OTHERSOLUTIONRESULTEND
 {
-if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords)
-	osrlerror(NULL, NULL, parserData, "fewer record elements present than given in numberOfRecords attribute");
+if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
+	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
 
 parserData->iOther++;
 
@@ -572,24 +571,24 @@ anotherSolutionResultAttList:
 	osrlerror(NULL, NULL, parserData, "more OtherSolutionResult elements present than in  numberOfOtherSolutionResults attribute");
 } anotherSolutionResultAtt ;
 
-anotherSolutionResultAtt: numberOfRecords | anotherSolutionResultNameATT | anotherSolutionResultCategoryATT | anotherSolutionDescriptionATT;
+anotherSolutionResultAtt: numberOfItems | anotherSolutionResultNameATT | anotherSolutionResultCategoryATT | anotherSolutionDescriptionATT;
 
-numberOfRecords: NUMBEROFRECORDSATT QUOTE INTEGER QUOTE 
+numberOfItems: NUMBEROFITEMSATT QUOTE INTEGER QUOTE 
 {	
 
 int temp;
 temp = $3;
-if (temp < 0) osrlerror(NULL, NULL, parserData, "number of records cannot be negative");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords = temp;
+if (temp < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems = temp;
 
 
 
 
 
-	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record != NULL)
-		osrlerror(NULL, NULL, parserData, "record array was previously allocated");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record = new std::string[temp];
-	parserData->kounter = 0; //this will count the number of records in an otherSolutionResult object
+	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item != NULL)
+		osrlerror(NULL, NULL, parserData, "item array was previously allocated");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item = new std::string[temp];
+	parserData->kounter = 0; //this will count the number of items in an otherSolutionResult object
 };
 
 anotherSolutionResultNameATT: 
@@ -618,23 +617,23 @@ osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults-
 free($2);}
    | EMPTYDESCRIPTIONATT ;
 
-recordList: 
-  | recordList anotherSolutionRecord;
+itemList: 
+  | itemList anotherSolutionItem;
 
-anotherSolutionRecord: RECORDSTART recordContent
+anotherSolutionItem: ITEMSTART itemContent
 {
 
-if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords)
-	osrlerror(NULL, NULL, parserData, "number of <record> elements exceeds numberOfRecords specified");
+if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
+	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
 
-osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
 parserData->kounter++;
 };
 
-recordContent: emptyRecord {parserData->recordContent = "";}
-    |    RECORDTEXT {parserData->recordContent = $1; free($1);} RECORDEND;
+itemContent: emptyItem {parserData->itemContent = "";}
+    |    ITEMTEXT {parserData->itemContent = $1; free($1);} ITEMEND;
 
-emptyRecord: ENDOFELEMENT | GREATERTHAN RECORDEND;
+emptyItem: ENDOFELEMENT | GREATERTHAN ITEMEND;
 
 
 solutionEnd: SOLUTIONEND  {

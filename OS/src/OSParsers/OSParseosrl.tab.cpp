@@ -76,7 +76,7 @@
    enum yytokentype {
      ATTRIBUTETEXT = 258,
      ELEMENTTEXT = 259,
-     RECORDTEXT = 260,
+     ITEMTEXT = 260,
      INTEGER = 261,
      DOUBLE = 262,
      QUOTE = 263,
@@ -150,13 +150,13 @@
      NUMBEROFOTHEROBJECTIVERESULTSATT = 331,
      NUMBEROFOTHERCONSTRAINTRESULTSATT = 332,
      NUMBEROFOTHERSOLUTIONRESULTSATT = 333,
-     NUMBEROFRECORDSATT = 334,
+     NUMBEROFITEMSATT = 334,
      OTHERSOLUTIONRESULTSSTART = 335,
      OTHERSOLUTIONRESULTSEND = 336,
      OTHERSOLUTIONRESULTSTART = 337,
      OTHERSOLUTIONRESULTEND = 338,
-     RECORDSTART = 339,
-     RECORDEND = 340,
+     ITEMSTART = 339,
+     ITEMEND = 340,
      NUMBEROFVARATT = 341,
      NUMBEROFOBJATT = 342,
      NUMBEROFCONATT = 343,
@@ -180,7 +180,7 @@
 /* Tokens.  */
 #define ATTRIBUTETEXT 258
 #define ELEMENTTEXT 259
-#define RECORDTEXT 260
+#define ITEMTEXT 260
 #define INTEGER 261
 #define DOUBLE 262
 #define QUOTE 263
@@ -254,13 +254,13 @@
 #define NUMBEROFOTHEROBJECTIVERESULTSATT 331
 #define NUMBEROFOTHERCONSTRAINTRESULTSATT 332
 #define NUMBEROFOTHERSOLUTIONRESULTSATT 333
-#define NUMBEROFRECORDSATT 334
+#define NUMBEROFITEMSATT 334
 #define OTHERSOLUTIONRESULTSSTART 335
 #define OTHERSOLUTIONRESULTSEND 336
 #define OTHERSOLUTIONRESULTSTART 337
 #define OTHERSOLUTIONRESULTEND 338
-#define RECORDSTART 339
-#define RECORDEND 340
+#define ITEMSTART 339
+#define ITEMEND 340
 #define NUMBEROFVARATT 341
 #define NUMBEROFOBJATT 342
 #define NUMBEROFCONATT 343
@@ -340,7 +340,7 @@ typedef union YYSTYPE
 	int ival;
 	char* sval;
 }
-/* Line 193 of yacc.c.  */
+/* Line 187 of yacc.c.  */
 
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -771,7 +771,7 @@ static const yytype_uint16 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "ATTRIBUTETEXT", "ELEMENTTEXT",
-  "RECORDTEXT", "INTEGER", "DOUBLE", "QUOTE", "TWOQUOTES", "GREATERTHAN",
+  "ITEMTEXT", "INTEGER", "DOUBLE", "QUOTE", "TWOQUOTES", "GREATERTHAN",
   "ENDOFELEMENT", "OSRLSTART", "OSRLSTARTEMPTY", "OSRLATTRIBUTETEXT",
   "OSRLEND", "GENERALSTART", "GENERALEND", "SYSTEMSTART", "SYSTEMEND",
   "SERVICESTART", "SERVICEEND", "JOBSTART", "JOBEND",
@@ -791,10 +791,10 @@ static const char *const yytname[] =
   "NUMBEROFVARIABLESATT", "NUMBEROFCONSTRAINTSATT",
   "NUMBEROFOBJECTIVESATT", "NUMBEROFOTHERVARIABLERESULTSATT",
   "NUMBEROFOTHEROBJECTIVERESULTSATT", "NUMBEROFOTHERCONSTRAINTRESULTSATT",
-  "NUMBEROFOTHERSOLUTIONRESULTSATT", "NUMBEROFRECORDSATT",
+  "NUMBEROFOTHERSOLUTIONRESULTSATT", "NUMBEROFITEMSATT",
   "OTHERSOLUTIONRESULTSSTART", "OTHERSOLUTIONRESULTSEND",
-  "OTHERSOLUTIONRESULTSTART", "OTHERSOLUTIONRESULTEND", "RECORDSTART",
-  "RECORDEND", "NUMBEROFVARATT", "NUMBEROFOBJATT", "NUMBEROFCONATT",
+  "OTHERSOLUTIONRESULTSTART", "OTHERSOLUTIONRESULTEND", "ITEMSTART",
+  "ITEMEND", "NUMBEROFVARATT", "NUMBEROFOBJATT", "NUMBEROFCONATT",
   "TARGETOBJECTIVEIDXATT", "IDXATT", "TYPEATT", "EMPTYTYPEATT",
   "DESCRIPTIONATT", "EMPTYDESCRIPTIONATT", "NAMEATT", "EMPTYNAMEATT",
   "CATEGORYATT", "EMPTYCATEGORYATT", "UNITATT", "EMPTYUNITATT", "VALUEATT",
@@ -820,10 +820,10 @@ static const char *const yytname[] =
   "otherConstraints", "otherSolutionResults",
   "numberOfOtherSolutionResults", "@3", "otherSolutionResultList",
   "anotherSolutionResult", "anotherSolutionResultAttList", "@4",
-  "anotherSolutionResultAtt", "numberOfRecords",
+  "anotherSolutionResultAtt", "numberOfItems",
   "anotherSolutionResultNameATT", "anotherSolutionResultCategoryATT",
-  "anotherSolutionDescriptionATT", "recordList", "anotherSolutionRecord",
-  "recordContent", "@5", "emptyRecord", "solutionEnd", "quote",
+  "anotherSolutionDescriptionATT", "itemList", "anotherSolutionItem",
+  "itemContent", "@5", "emptyItem", "solutionEnd", "quote",
   "xmlWhiteSpaceChar", "xmlWhiteSpace", 0
 };
 #endif
@@ -2487,8 +2487,8 @@ parserData->iOther = 0; // this will index the number of otherSolutionResult obj
   case 160:
 
     {
-if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords)
-	osrlerror(NULL, NULL, parserData, "fewer record elements present than given in numberOfRecords attribute");
+if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
+	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
 
 parserData->iOther++;
 
@@ -2509,17 +2509,17 @@ parserData->iOther++;
 
 int temp;
 temp = (yyvsp[(3) - (4)].ival);
-if (temp < 0) osrlerror(NULL, NULL, parserData, "number of records cannot be negative");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords = temp;
+if (temp < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems = temp;
 
 
 
 
 
-	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record != NULL)
-		osrlerror(NULL, NULL, parserData, "record array was previously allocated");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record = new std::string[temp];
-	parserData->kounter = 0; //this will count the number of records in an otherSolutionResult object
+	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item != NULL)
+		osrlerror(NULL, NULL, parserData, "item array was previously allocated");
+	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item = new std::string[temp];
+	parserData->kounter = 0; //this will count the number of items in an otherSolutionResult object
 }
     break;
 
@@ -2559,22 +2559,22 @@ free((yyvsp[(2) - (3)].sval));}
 
     {
 
-if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfRecords)
-	osrlerror(NULL, NULL, parserData, "number of <record> elements exceeds numberOfRecords specified");
+if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
+	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
 
-osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->record[parserData->kounter] = parserData->recordContent;
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
 parserData->kounter++;
 }
     break;
 
   case 178:
 
-    {parserData->recordContent = "";}
+    {parserData->itemContent = "";}
     break;
 
   case 179:
 
-    {parserData->recordContent = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));}
+    {parserData->itemContent = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));}
     break;
 
   case 183:

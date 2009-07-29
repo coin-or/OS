@@ -52,11 +52,11 @@
 				</dualValues>
 			</constraints>
 					<otherSolutionResults  numberOfOtherSolutionResults="2">
-						<otherSolutionResult name="requestResults1" description="the request results"  numberOfRecords="1">
-							<record>Hi Gus</record>
+						<otherSolutionResult name="requestResults1" description="the request results"  numberOfItems="1">
+							<item>Hi Gus</item>
 						</otherSolutionResult>
-						<otherSolutionResult name="requestResults2" description="the request results"  numberOfRecords="1">
-							<record>Bye Gus</record>
+						<otherSolutionResult name="requestResults2" description="the request results"  numberOfItems="1">
+							<item>Bye Gus</item>
 						</otherSolutionResult>
 					</otherSolutionResults>
 		</solution>
@@ -84,12 +84,12 @@
 				</dualValues>
 			</constraints>
 			<otherSolutionResults numberOfOtherSolutionResults="1"> 
-				<otherSolutionResult name="requestResults" description="the request results" numberOfRecords="5"> 
-					<record>777 Liberty,Surgical,AM,M,1,Storz,1</record> 
-					<record>777,Liberty,Surgical,AM,T,1,Storz,1</record> 
-					<record>778,Liberty,Surgical,AM,M,1,Dummy,1</record> 
-					<record>778,Liberty,Surgical,AM,T,1,Dummy,1</record> 
-					<record>812,Liberty,Surgical,AM,M,1,Stryker,1</record>
+				<otherSolutionResult name="requestResults" description="the request results" numberOfItems="5"> 
+					<item>777 Liberty,Surgical,AM,M,1,Storz,1</item> 
+					<item>777,Liberty,Surgical,AM,T,1,Storz,1</item> 
+					<item>778,Liberty,Surgical,AM,M,1,Dummy,1</item> 
+					<item>778,Liberty,Surgical,AM,T,1,Dummy,1</item> 
+					<item>812,Liberty,Surgical,AM,M,1,Stryker,1</item>
 				</otherSolutionResult> 
 			</otherSolutionResults>
 		</solution>

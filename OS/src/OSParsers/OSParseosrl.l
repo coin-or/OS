@@ -92,7 +92,7 @@ using std::ostringstream;
 %x singlequoteattributetext
 %x startelement
 %x elementtext
-%x recordtext
+%x itemtext
 %x comment
 %x xmldeclaration
 
@@ -148,7 +148,7 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
 ({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
 ({xmlwhitespace}+numberOfOtherSolutionResults{equality}) {  YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
-({xmlwhitespace}+numberOfRecords{equality}) {  YY_PRINT;  return(NUMBEROFRECORDSATT);}
+({xmlwhitespace}+numberOfItems{equality}) {  YY_PRINT;  return(NUMBEROFITEMSATT);}
 ({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
 ({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
@@ -258,8 +258,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<otherSolutionResult {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
 {xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
 
-{xmlwhitespace}*\<record{xmlwhitespace}*\> { YY_PRINT; BEGIN recordtext; return(RECORDSTART);}
-{xmlwhitespace}*\<\/record{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(RECORDEND);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\> { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
+{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ITEMEND);}
 
 (\<serviceURI{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICEURISTARTANDEND);}
 (\<serviceName{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
@@ -271,7 +271,7 @@ return(DOUBLE);}
 
 
 [a-zA-Z0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
-<recordtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (RECORDTEXT); }
+<itemtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 
 "<!--" BEGIN comment;
  <comment>. |

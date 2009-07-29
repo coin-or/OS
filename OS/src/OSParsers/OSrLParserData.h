@@ -115,7 +115,7 @@ public:
 	std::string tmpOtherDescription;
 
 	/** Provide temporary storage for a single <record> contained in an OtherSolutionResult */
-	std::string recordContent;
+	std::string itemContent;
 
 	/** scanner is used to store data in a reentrant lexer 
 	 *  we use this to pass an OSrLParserData object to the parser*/
