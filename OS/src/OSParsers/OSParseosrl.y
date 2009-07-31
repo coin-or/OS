@@ -108,7 +108,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token NUMBEROFOTHERSOLUTIONRESULTSATT NUMBEROFITEMSATT 
 %token OTHERSOLUTIONRESULTSSTART OTHERSOLUTIONRESULTSEND
 %token OTHERSOLUTIONRESULTSTART  OTHERSOLUTIONRESULTEND
-%token ITEMSTART ITEMEND
+%token ITEMSTART ITEMEND ITEMSTARTANDEND ITEMEMPTY
 
 
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT TARGETOBJECTIVEIDXATT IDXATT 
@@ -620,9 +620,24 @@ free($2);}
 itemList: 
   | itemList anotherSolutionItem;
 
-anotherSolutionItem: ITEMSTART itemContent
+anotherSolutionItem: ITEMSTARTANDEND
 {
-
+if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
+	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
+parserData->itemContent = "";
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
+parserData->kounter++;
+}
+| ITEMEMPTY 
+{
+if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
+	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
+parserData->itemContent = "";
+osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
+parserData->kounter++;
+}
+| ITEMSTART  itemContent
+{
 if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
 	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
 
@@ -630,10 +645,9 @@ osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults-
 parserData->kounter++;
 };
 
-itemContent: emptyItem {parserData->itemContent = "";}
-    |    ITEMTEXT {parserData->itemContent = $1; free($1);} ITEMEND;
+itemContent: ITEMTEXT {parserData->itemContent = $1; free($1);} ITEMEND;
 
-emptyItem: ENDOFELEMENT | GREATERTHAN ITEMEND;
+
 
 
 solutionEnd: SOLUTIONEND  {

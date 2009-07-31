@@ -57,7 +57,7 @@
 #include "OSResult.h"
 
 
-#define PARSERDEBUG
+//#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -118,7 +118,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 
 {quote} {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 {twoquotes} {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
-({xmlwhitespace}*{greater_than}{xmlwhitespace}*) {YY_PRINT;     return(GREATERTHAN);}
+({xmlwhitespace}*{greater_than}{xmlwhitespace}*) { YY_PRINT;     return(GREATERTHAN);}
 ({xmlwhitespace}*{aninteger}{xmlwhitespace}*)  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
 ({xmlwhitespace}*{adouble}{xmlwhitespace}*) {YY_PRINT; 
@@ -258,9 +258,10 @@ return(DOUBLE);}
 {xmlwhitespace}*\<otherSolutionResult {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
 {xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
 
+{xmlwhitespace}*\<item{xmlwhitespace}*\>\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(ITEMEMPTY);}
 {xmlwhitespace}*\<item{xmlwhitespace}*\> { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
-{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ITEMEND);}
-
+{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; return(ITEMEND);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(ITEMSTARTANDEND);}
 (\<serviceURI{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICEURISTARTANDEND);}
 (\<serviceName{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
 (\<instanceName{xmlwhitespace}*\/>) {YY_PRINT;  return(INSTANCENAMESTARTANDEND);}
