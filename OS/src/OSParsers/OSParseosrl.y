@@ -636,18 +636,15 @@ parserData->itemContent = "";
 osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
 parserData->kounter++;
 }
-| ITEMSTART  itemContent
+| ITEMSTART  
 {
 if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
 	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
 
 osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
 parserData->kounter++;
-};
-
-itemContent: ITEMTEXT {parserData->itemContent = $1; free($1);} ITEMEND;
-
-
+}
+ITEMTEXT {parserData->itemContent = $3; free($3);} ITEMEND;
 
 
 solutionEnd: SOLUTIONEND  {
