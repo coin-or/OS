@@ -139,6 +139,8 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname){
 	    }
 //	    fputc( '\n', ft);
 	    fclose ( ft);
+		 delete[] cstr;
+	    cstr = NULL;
 		return true;
 	}
 	catch(const ErrorClass& eclass){
@@ -164,6 +166,8 @@ bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
 	    }
 //	    fputc( '\n', ft);
 	    fclose ( ft);
+		 delete[] cstr;
+	    cstr = NULL;
 		return true;
 	}
 	catch(const ErrorClass& eclass){
