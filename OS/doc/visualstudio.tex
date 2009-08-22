@@ -311,7 +311,57 @@ For more detail on using the {\tt OSSolverService.exe} see the documentation for
 
 \section{Calling COIN-OR  Solvers using a Modeling Language}\label{section:modellanguage}
 
-It is also possible to call all of these solvers directly from the modeling language AMPL 
+
+\subsection{Using GAMS}
+
+This section is based on the assumption that the user has installed GAMS (22.9 or above) on his or her machine.   In the {\tt bin}  directory there is a file {\tt gmsos\_.zip}. Copy this file into your GAMS folder. Then run {\tt gamsinst} and select {\tt OS}  as the default solver whenever it is listed as a solver.   You can now solve  a wide variety of  problems either locally or remotely through Optimization Services. In the discussion that follows we assume that folder where GAMS is installed is in the PATH command.
+
+
+In  the folder {\tt data/gamsFiles} directory are several test problems in GAMS model format.  Connect to this folder and execute the following command.
+
+\begin{verbatim}
+gams rbrockmod
+\end{verbatim}
+
+It is also possible to read an OS options file, generate the instance OSiL file, and write the solution  OSrL file.
+This is done by giving GAMS an options file. One such file, {\tt os.opt}, is illustrated below. The {\bf os.opt} file is:
+
+\begin{verbatim}
+writeosil osil.xml
+writeosrl osrl.xml
+readosol ../osolFiles/rosenbrockmod_ipopt.osol
+solver ipopt
+\end{verbatim}
+
+%The numbering system for the GAMS option files works as follows:
+GAMS options files follow specific naming conventions as set out below:
+
+\begin{verbatim}
+optfile=1 corresponds to <solver>.opt
+optfile=2 corresponds to <solver>.op2
+...
+optfile=99 corresponds to <solver>.op99
+\end{verbatim}
+
+For example, in order to solve the Rosenbrock test problem using the  options file  {\tt os.opt}
+execute the command
+
+\begin{verbatim}
+gams rbrock nlp os optfile=1
+\end{verbatim}
+
+
+It is also possible to have GAMS call a remote solver. If you have installed a remote solver service, then in the options file specify the option
+
+\begin{verbatim}
+service   serviceaddress
+\end{verbatim}
+
+
+
+\subsection{Using AMPL}
+
+This section is based on the assumption that the user has installed  AMPL  on his or her machine.   It is also possible to call all of these solvers directly from the modeling language AMPL 
 (see {\tt http://www.ampl.com}.  In this discussion we assume the user has already obtained and 
 installed AMPL.  In the {\bf bin} directory there is an executable, {\tt OSAmplClient.exe} 
 that is linked to all of the COIN-OR solvers in this distribution.   The {\tt OSAmplClient} acts 

@@ -1,5 +1,4 @@
 writeosil osil.xml
 writeosrl osrl.xml
-service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
-solver couenne
-
+readosol ../osolFiles/rosenbrockmod_ipopt.osol
+solver ipopt
