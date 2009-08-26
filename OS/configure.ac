@@ -110,6 +110,19 @@ AC_COIN_HAS_PROJECT(Ipopt)
 AC_COIN_HAS_PROJECT(Couenne)
 AC_COIN_HAS_PROJECT(Bonmin)
 AC_COIN_HAS_PROJECT(cppad)
+AC_COIN_HAS_PROJECT(GamsUtils)
+
+####################################
+# GAMS system and GAMS I/O LIBRARY #
+####################################
+
+AC_COIN_HAVE_GAMS
+if test $coin_has_gamsio != no ; then
+  AC_COIN_USE_GAMS
+else
+  AC_DEFINE(COIN_HAS_GAMSIO, [0])
+  AM_CONDITIONAL(COIN_HAS_GAMSIO, [test 0 = 1])
+fi
 
 
 

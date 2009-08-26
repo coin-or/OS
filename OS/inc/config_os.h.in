@@ -33,6 +33,12 @@
 /* Define to 1 if the DyLP package is used */
 #undef COIN_HAS_DYLP
 
+/* If defined, the GAMS I/O Library is available. */
+#undef COIN_HAS_GAMSIO
+
+/* Define to 1 if the GamsUtils package is used */
+#undef COIN_HAS_GAMSUTILS
+
 /* Define to 1 if Glpk package is available */
 #undef COIN_HAS_GLPK
 

@@ -3,7 +3,7 @@ Data/Sample  https://projects.coin-or.org/svn/Data/releases/1.0.7/Sample
 CoinUtils  https://projects.coin-or.org/svn/CoinUtils/releases/2.5.0/CoinUtils
 Cbc  https://projects.coin-or.org/svn/Cbc/releases/2.3.0/Cbc 
 Cgl  https://projects.coin-or.org/svn/Cgl/releases/0.54.0/Cgl
-Clp  https://projects.coin-or.org/svn/Clp/releases/1.10.0/Clp
+Clp  https://projects.coin-or.org/svn/Clp/releases/1.10.1/Clp
 Osi  https://projects.coin-or.org/svn/Osi/releases/0.100.0/Osi
 Vol  https://projects.coin-or.org/svn/Vol/releases/1.1.7/Vol
 SYMPHONY  https://projects.coin-or.org/svn/SYMPHONY/releases/5.2.0/SYMPHONY
@@ -20,3 +20,6 @@ cppad  https://projects.coin-or.org/svn/CppAD/releases/20090303.0
 Bonmin  https://projects.coin-or.org/svn/Bonmin/releases/1.1.0/Bonmin
 Couenne  https://projects.coin-or.org/svn/Couenne/releases/0.2.1/Couenne 
 
+ThirdParty/GAMSIO  https://projects.coin-or.org/svn/GAMSlinks/trunk/ThirdParty/GAMSIO
+GamsUtils https://projects.coin-or.org/svn/GAMSlinks/branches/GamsUtils/GamsUtils
+GamsUtils/src/GamsUtils https://projects.coin-or.org/svn/GAMSlinks/trunk/GAMSlinks/src/GamsUtils

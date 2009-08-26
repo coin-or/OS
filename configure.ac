@@ -48,6 +48,7 @@ AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
 AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[configure.ac])
 AC_COIN_THIRDPARTY_SUBDIRS([Glpk],[ThirdParty/Glpk],[glpk/src/glplpx01.c])
 AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])
+AC_COIN_THIRDPARTY_SUBDIRS([GAMSIO],[ThirdParty/GAMSIO],[get.GAMSIO])
 
 #############################################################################
 #                  Check which subprojects are there                        #
@@ -67,6 +68,7 @@ AC_COIN_MAIN_SUBDIRS(cppad)
 AC_COIN_MAIN_SUBDIRS(Bonmin)
 AC_COIN_MAIN_SUBDIRS(Couenne)
 AC_COIN_MAIN_SUBDIRS(Bcp)
+AC_COIN_MAIN_SUBDIRS(GamsUtils)
 AC_COIN_MAIN_SUBDIRS(OS)
 
 
