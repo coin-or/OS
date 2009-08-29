@@ -25063,6 +25063,11 @@ esac
 
 
 
+
+cat >>confdefs.h <<_ACEOF
+#define GAMSIO_PATH "$gamsio_srcdir"
+_ACEOF
+
 else
   cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_GAMSIO 0

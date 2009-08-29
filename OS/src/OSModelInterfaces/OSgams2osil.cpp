@@ -54,7 +54,7 @@ bool Gams2OSiL::initGMO(const char* datfile) {
 	}
   
 	// setup GAMS output channels
-	if ((rc = gmoOpenGms(gmo))) {
+	if ((rc = gmoOpenGms( gmo))) {
 		fprintf(stderr, "Could not open GAMS environment. Rc = %d\n", rc);
 		gmoFree(&gmo);
 		return false;

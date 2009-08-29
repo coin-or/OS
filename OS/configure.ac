@@ -119,6 +119,7 @@ AC_COIN_HAS_PROJECT(GamsUtils)
 AC_COIN_HAVE_GAMS
 if test $coin_has_gamsio != no ; then
   AC_COIN_USE_GAMS
+  AC_DEFINE_UNQUOTED([GAMSIO_PATH],["$gamsio_srcdir"],[The path of the GAMS I/O libraries])
 else
   AC_DEFINE(COIN_HAS_GAMSIO, [0])
   AM_CONDITIONAL(COIN_HAS_GAMSIO, [test 0 = 1])

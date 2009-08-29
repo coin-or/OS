@@ -164,7 +164,10 @@
 #endif 
 
 
-
+#ifdef COIN_HAS_GAMSIO    
+#include "gmomcc.h"
+#include "OSgams2osil.hpp"
+#endif 
 
 #ifdef HAVE_CTIME
 # include <ctime>
@@ -2173,6 +2176,52 @@ if (OTHER_TESTS){
 		cout << endl << endl << endl;
 		unitTestResultFailure  <<"Sorry Unit Test Failed Testing the MPS converter:"  + eclass.errormsg << endl;
 	}
+	
+	
+// test reading a GAMS file
+
+#if  0
+#ifdef COIN_HAS_GAMSIO
+	std::cout  << "Working with GAMSIO " << std::endl;
+	gmoHandle_t gmo;
+	char msg[256];
+	int rc;
+
+	// initialize GMO:
+	// first try path where GAMS I/O libraries were during compilation (the gmo library there should be the correct version)
+	// if that fails, try using some global search path, so it should take the one from the gams installation (hope it is update enough) 
+	if (!gmoCreateD(&gmo, GAMSIO_PATH, msg, sizeof(msg))) {
+		if (!gmoCreate(&gmo, msg, sizeof(msg))) {
+			fprintf(stderr, "%s\n",msg);
+			return EXIT_FAILURE;
+		}
+	}
+	
+	std::string gmsControlFile = "/Users/kmartin/Documents/files/coursework/qa751/testProblems/parinc/225a/gamscntr.dat";
+	// load control file
+	if ((rc = gmoLoadInfoGms(gmo, gmsControlFile.c_str() ))) {
+		fprintf(stderr, "Could not load control file: %s Rc = %d\n", gmsControlFile.c_str(), rc);
+		gmoFree( &gmo);
+		return EXIT_FAILURE;
+	}
+  	
+	if ((rc = gmoLoadDataGms(gmo))) {
+		gmoLogStat(gmo, "Could not load model data.");
+		gmoCloseGms(gmo);
+		gmoFree(&gmo);
+		return EXIT_FAILURE;
+	}
+  	
+	Gams2OSiL *gams2osil;
+	gams2osil = new Gams2OSiL( NULL, NULL);
+	gams2osil->initGMO(gmsControlFile.c_str() );
+	std::cout  << gams2osil->createOSInstance() << std::endl;
+	
+	std::cout  << "Done Working with GAMSIO " << std::endl;
+	std::cout << gams2osil->osinstance->printModel() << std::endl;
+	exit( 1);
+#endif
+#endif
 
 // now solve with an OSInstance created from an AMPL nl file
 	try{

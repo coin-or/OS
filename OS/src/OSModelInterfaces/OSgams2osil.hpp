@@ -26,8 +26,9 @@ private:
 
 	OSnLNode* parseGamsInstructions(int codelen, int* opcodes, int* fields, int constantlen, double* constants);
 
-	OSInstance *osinstance;
+
 public:
+	OSInstance *osinstance;
 
 	Gams2OSiL(struct gmoRec* gmo_, struct dctRec* dict_);
 
