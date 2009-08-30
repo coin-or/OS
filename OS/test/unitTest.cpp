@@ -2181,7 +2181,7 @@ if (OTHER_TESTS){
 	
 // test reading a GAMS file
 
-#if  1
+#if  0
 #ifdef COIN_HAS_GAMSIO
 	std::cout  << "Working with GAMSIO " << std::endl;
 	gmoHandle_t gmo;
