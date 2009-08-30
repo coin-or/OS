@@ -288,7 +288,22 @@ browserState (on|off)
 		ch+=3;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->nlFile = str;
+		yyextra->nlFile = str; 
+	} 
+}
+
+
+
+(-dat{xmlwhitespace}+{optionValue}) {
+	if(yyextra->gamsControlFile == ""){
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past -dat
+		ch+=4;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		yyextra->gamsControlFile = str;
 	} 
 }
 

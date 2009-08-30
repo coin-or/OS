@@ -209,6 +209,15 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
+	
+if COIN_HAS_GAMSUTILS
+if COIN_HAS_GAMSIO
+  AM_CPPFLAGS += $(GAMSIO_CPPFLAGS)
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src`
+  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src/GamsUtils`
+endif
+endif
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic

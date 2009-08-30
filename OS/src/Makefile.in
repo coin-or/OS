@@ -79,40 +79,47 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_GLPK_TRUE@am__append_25 =  \
 @COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
 @COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
-@COIN_HAS_DYLP_TRUE@am__append_26 = \
+@COIN_HAS_GAMSIO_TRUE@@COIN_HAS_GAMSUTILS_TRUE@am__append_26 = $(GAMSIO_CPPFLAGS) \
+@COIN_HAS_GAMSIO_TRUE@@COIN_HAS_GAMSUTILS_TRUE@	-I`$(CYGPATH_W) \
+@COIN_HAS_GAMSIO_TRUE@@COIN_HAS_GAMSUTILS_TRUE@	$(GAMSUTILSOBJDIR)/inc` \
+@COIN_HAS_GAMSIO_TRUE@@COIN_HAS_GAMSUTILS_TRUE@	-I`$(CYGPATH_W) \
+@COIN_HAS_GAMSIO_TRUE@@COIN_HAS_GAMSUTILS_TRUE@	$(GAMSUTILSSRCDIR)/src` \
+@COIN_HAS_GAMSIO_TRUE@@COIN_HAS_GAMSUTILS_TRUE@	-I`$(CYGPATH_W) \
+@COIN_HAS_GAMSIO_TRUE@@COIN_HAS_GAMSUTILS_TRUE@	$(GAMSUTILSSRCDIR)/src/GamsUtils`
+@COIN_HAS_DYLP_TRUE@am__append_27 = \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 @COIN_HAS_DYLP_TRUE@    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 @COIN_HAS_DYLP_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
 
-@COIN_HAS_SYMPHONY_TRUE@am__append_27 = \
+@COIN_HAS_SYMPHONY_TRUE@am__append_28 = \
 @COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 @COIN_HAS_SYMPHONY_TRUE@    -I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include` \
 @COIN_HAS_SYMPHONY_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
 
-@COIN_HAS_VOL_TRUE@am__append_28 = \
+@COIN_HAS_VOL_TRUE@am__append_29 = \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
 @COIN_HAS_VOL_TRUE@ -I`$(CYGPATH_W) $(VOLOBJDIR)/include` \
 @COIN_HAS_VOL_TRUE@    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 @COIN_HAS_VOL_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
 
-@COIN_HAS_CPX_TRUE@am__append_29 = \
+@COIN_HAS_CPX_TRUE@am__append_30 = \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 @COIN_HAS_CPX_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
 
-@COIN_HAS_GLPK_TRUE@am__append_30 = \
+@COIN_HAS_GLPK_TRUE@am__append_31 = \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 @COIN_HAS_GLPK_TRUE@	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
 
-@COIN_HAS_LINDO_TRUE@am__append_31 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
-@COIN_HAS_LINDO_TRUE@am__append_32 = $(LINDOLIB)
-@COIN_HAS_IPOPT_TRUE@am__append_33 = \
+@COIN_HAS_LINDO_TRUE@am__append_32 = -I`$(CYGPATH_W) $(LINDOINCDIR)` 
+@COIN_HAS_LINDO_TRUE@am__append_33 = $(LINDOLIB)
+@COIN_HAS_IPOPT_TRUE@am__append_34 = \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Interfaces` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 @COIN_HAS_IPOPT_TRUE@	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
 
-@COIN_HAS_BONMIN_TRUE@am__append_34 = \
+@COIN_HAS_BONMIN_TRUE@am__append_35 = \
 @COIN_HAS_BONMIN_TRUE@	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
 @COIN_HAS_BONMIN_TRUE@	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces/Ampl` \
 @COIN_HAS_BONMIN_TRUE@	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces/Ipopt` \
@@ -125,7 +132,7 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_BONMIN_TRUE@	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 @COIN_HAS_BONMIN_TRUE@	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
 
-@COIN_HAS_COUENNE_TRUE@am__append_35 = \
+@COIN_HAS_COUENNE_TRUE@am__append_36 = \
 @COIN_HAS_COUENNE_TRUE@	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/bound_tightening` \
 @COIN_HAS_COUENNE_TRUE@	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/branch` \
 @COIN_HAS_COUENNE_TRUE@	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/convex` \
@@ -139,13 +146,13 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src` \
 @COIN_HAS_COUENNE_TRUE@	-I`$(CYGPATH_W) $(COUENNEOBJDIR)/inc`
 
-@COIN_HAS_KNITRO_TRUE@am__append_36 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
-@COIN_HAS_KNITRO_TRUE@am__append_37 = $(KNITROLIB)
-@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_38 = -multiply_defined suppress
-@COIN_HAS_ASL_TRUE@am__append_39 = -I`$(CYGPATH_W) \
+@COIN_HAS_KNITRO_TRUE@am__append_37 = -I`$(CYGPATH_W) $(KNITROINCDIR)` 
+@COIN_HAS_KNITRO_TRUE@am__append_38 = $(KNITROLIB)
+@COIN_HAS_KNITRO_TRUE@@USEMULTIPLYDEFINED_TRUE@am__append_39 = -multiply_defined suppress
+@COIN_HAS_ASL_TRUE@am__append_40 = -I`$(CYGPATH_W) \
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
-@COIN_HAS_ASL_TRUE@am__append_40 = $(ASLLIB) 
+@COIN_HAS_ASL_TRUE@am__append_41 = $(ASLLIB) 
 subdir = src
 DIST_COMMON = $(includecoin_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -606,8 +613,8 @@ LDADD = libOS.la $(am__append_2) $(am__append_3) $(am__append_4) \
 	$(am__append_15) $(CGLOBJDIR)/src/libCgl.la \
 	$(OSIOBJDIR)/src/libOsi.la $(CLPOBJDIR)/src/libClp.la \
 	$(am__append_18) $(am__append_21) $(am__append_24) \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__append_32) \
-	$(am__append_37) $(am__append_40)
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__append_33) \
+	$(am__append_38) $(am__append_41)
 ALLLDADD = $(LDADD)
 OSSolverService_DEPENDENCIES = libOS.la $(am__append_8) \
 	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__append_10) \
@@ -642,14 +649,14 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
 	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_26) \
 	$(am__append_27) $(am__append_28) $(am__append_29) \
-	$(am__append_30) $(am__append_31) $(am__append_33) \
+	$(am__append_30) $(am__append_31) $(am__append_32) \
 	$(am__append_34) $(am__append_35) $(am__append_36) \
-	$(am__append_39)
+	$(am__append_37) $(am__append_40)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-OSSolverService_LDFLAGS = -rpath $(libdir) $(am__append_38)
+OSSolverService_LDFLAGS = -rpath $(libdir) $(am__append_39)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

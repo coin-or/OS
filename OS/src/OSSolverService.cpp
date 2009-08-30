@@ -121,7 +121,12 @@ using std::ostringstream;
 #include "OSnl2osil.h"
 #endif
 
-
+#ifdef COIN_HAS_GAMSUTILS
+#ifdef COIN_HAS_GAMSIO
+#include "gmomcc.h"
+#include "OSgams2osil.hpp"
+#endif
+#endif
 
 //#ifdef COIN_HAS_IPOPT  
 //#include "OSIpoptSolver.h"
@@ -155,7 +160,7 @@ using std::endl;
 using std::ostringstream;
 using std::string;
 
-//#define DEBUG_CL_INTERFACE
+#define DEBUG_CL_INTERFACE
 
 #define MAXCHARS 5000 
 
@@ -185,6 +190,7 @@ void knock();
 // additional methods
 void getOSiLFromNl(); 
 void getOSiLFromMps();
+void getOSiLFromGams();
 std::string getServiceURI( std::string osol);
 std::string getInstanceLocation( std::string osol);
 std::string getSolverName( std::string osol);
@@ -226,6 +232,7 @@ int main(int argC, const char* argV[])
 	osoptions->osplOutputFile = ""; 
 	osoptions->mpsFile = ""; 
 	osoptions->nlFile = ""; 
+	osoptions->gamsControlFile = "";
 	osoptions->solverName = ""; 
 	osoptions->browser = ""; 
 	osoptions->invokeHelp = false;
@@ -328,6 +335,7 @@ int main(int argC, const char* argV[])
 		if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
 		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
+		if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
 		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
 #endif
 		// get the data from the files
@@ -348,7 +356,7 @@ int main(int argC, const char* argV[])
 			else{// we were not given an osil file
 				// make sure we don't have a service URI in the file or are using mps or nl
 				// if we have nl or mps assume a local solve
-					if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") ) 
+					if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->gamsControlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") ) 
 						osoptions->osil = fileUtil->getFileAsString( getInstanceLocation( osoptions->osol).c_str()  );
 			}
 			// see if there is a solver specified
@@ -429,9 +437,14 @@ void solve(){
 					if(osoptions->mpsFile != ""){
 						getOSiLFromMps();
 					}
-					else{// need an osol file with an instanceLocation specified
-						if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-							throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
+					else{
+						if(osoptions->gamsControlFile != ""){
+							getOSiLFromGams();
+					}
+						else{// need an osol file with an instanceLocation specified
+							if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
+								throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
+							}
 						}
 					}
 				}
@@ -680,9 +693,27 @@ void solve(){
 						
 						delete mps2osil;
 					}
-					else{// need an osol file with an instanceLocation specified
-						if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-							throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
+					else{
+						if(osoptions->gamsControlFile != ""){
+						
+						#ifdef COIN_HAS_GAMSIO
+						std::cout << "GAMS Control file =  " << osoptions->gamsControlFile << std::endl;
+						OSgams2osil *gams2osil = new OSgams2osil( osoptions->gamsControlFile); 
+						gams2osil->createOSInstance() ;
+						solverType->osinstance = gams2osil->osinstance;
+						solverType->buildSolverInstance();
+						solverType->solve();
+						osrl = solverType->osrl;
+						delete gams2osil;
+					#else
+						throw ErrorClass("a Gams Control specified locally but GAMSIP not present");
+					#endif
+							
+						}
+						else{// need an osol file with an instanceLocation specified
+							if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
+								throw ErrorClass("solve called and no osil, osol with osil specified, dat, nl, or mps file given");
+							}
 						}
 					}
 				}
@@ -1019,6 +1050,33 @@ void getOSiLFromNl(){
 		throw ErrorClass( eclass.errormsg) ;
 	}	
 }//getOSiLFromNl
+
+
+
+void getOSiLFromGams(){
+	try{
+		#ifdef COIN_HAS_GAMSIO  
+		OSgams2osil *gams2osil = NULL;
+		gams2osil = new OSgams2osil( osoptions->gamsControlFile);
+		gams2osil->createOSInstance() ;
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		std::string osil;
+		osil = osilwriter->writeOSiL(  gams2osil->osinstance) ;
+		osoptions->osil = osil;
+		delete gams2osil;
+		gams2osil = NULL;
+		delete osilwriter;
+		osilwriter = NULL; 	
+		#else
+		throw ErrorClass("trying to convert Gams control file to osil without GAMSIO or GAMSUTILS configured");
+		#endif
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << eclass.errormsg <<  std::endl;
+		throw ErrorClass( eclass.errormsg) ;
+	}	
+}//getOSiLFromGams
 
 
 void getOSiLFromMps(){

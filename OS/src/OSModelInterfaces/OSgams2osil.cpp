@@ -49,10 +49,18 @@ bool OSgams2osil::initGMO(const char* datfile) {
 	char msg[1024];
 	int rc;
 	
-	if (!gmoCreate(&gmo, msg, sizeof(msg))) {
-  		fprintf(stderr, "%s\n",msg);
-  		return false;
-  	}
+	//if (!gmoCreate(&gmo, msg, sizeof(msg))) {
+  //		fprintf(stderr, "%s\n",msg);
+  //		return false;
+  //	}
+	
+	
+	if (!gmoCreateD(&gmo, GAMSIO_PATH, msg, sizeof(msg))) {
+		if (!gmoCreate(&gmo, msg, sizeof(msg))) {
+			fprintf(stderr, "%s\n",msg);
+			return false;
+		}
+	}
 	
 	gmoIdentSet(gmo, "OS link object");
 

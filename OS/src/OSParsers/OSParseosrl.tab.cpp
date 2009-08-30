@@ -344,7 +344,7 @@ typedef union YYSTYPE
 	int ival;
 	char* sval;
 }
-/* Line 187 of yacc.c.  */
+/* Line 193 of yacc.c.  */
 
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

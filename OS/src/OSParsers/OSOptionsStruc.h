@@ -123,6 +123,10 @@ struct osOptionsStruc{
 	/** the name of the nlFile that holds an instance in AMPL nl format */
 	std::string nlFile;  
 	
+	
+	/** the name of the .dat that holds the GAMS control file */
+	std::string gamsControlFile;  
+	
 	/** the name of the solver to be invoked, 
 	 * e.g -solver Ipopt
 	 */
