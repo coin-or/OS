@@ -6,11 +6,12 @@
 //
 // Author: Stefan Vigerske
 
-#ifndef GAMS2OSIL_HPP_
-#define GAMS2OSIL_HPP_
+#ifndef OSGAMS2OSIL_HPP_
+#define OSGAMS2OSIL_HPP_
 
 #include "GAMSlinksConfig.h"
 #include "GamsDictionary.hpp"
+#include<string>
 
 class OSInstance;
 class OSnLNode;
@@ -19,7 +20,7 @@ struct gmoRec;
 
 /** Creating a OSInstance from a GAMS model given as GAMS Modeling Object (GMO).
  */
-class Gams2OSiL {
+class OSgams2osil {
 private:
 	struct gmoRec* gmo;
 	GamsDictionary dict;	
@@ -30,9 +31,13 @@ private:
 public:
 	OSInstance *osinstance;
 
-	Gams2OSiL(struct gmoRec* gmo_, struct dctRec* dict_);
+	OSgams2osil(struct gmoRec* gmo_, struct dctRec* dict_);
+	
+	OSgams2osil();
+	
+	OSgams2osil( std::string gamsControlFile);
 
-	~Gams2OSiL();
+	~OSgams2osil();
 
 	bool initGMO(const char* datfile);
 	

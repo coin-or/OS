@@ -16,13 +16,23 @@
 
 #include <sstream>
 
-Gams2OSiL::Gams2OSiL(gmoHandle_t gmo_, struct dctRec* dict_)
+OSgams2osil::OSgams2osil(gmoHandle_t gmo_, struct dctRec* dict_)
 : gmo(gmo_), dict(gmo_, dict_), osinstance(NULL)
 { assert(gmo == NULL);  //do better latter
   assert(dict_ == NULL);
 }
 
-Gams2OSiL::~Gams2OSiL() {
+
+OSgams2osil::OSgams2osil()  : gmo(NULL), dict(NULL, NULL), osinstance(NULL)
+{ 
+}
+
+OSgams2osil::OSgams2osil( std::string gamsControlFile)  : gmo(NULL), dict(NULL, NULL), osinstance(NULL)
+{ 
+	this->initGMO( gamsControlFile.c_str() ) ;
+}
+
+OSgams2osil::~OSgams2osil() {
 	delete osinstance;
 	
 	//close output channels
@@ -33,7 +43,7 @@ Gams2OSiL::~Gams2OSiL() {
 	gmoLibraryUnload();
 }
 
-bool Gams2OSiL::initGMO(const char* datfile) {
+bool OSgams2osil::initGMO(const char* datfile) {
 	assert(gmo == NULL);
 	
 	char msg[1024];
@@ -74,17 +84,17 @@ bool Gams2OSiL::initGMO(const char* datfile) {
 	gmoIndexBaseSet(gmo, 0);
 
 	dict.setGMO(gmo);
-	dict.readDictionary();
+	//dict.readDictionary();
 
 	return true;
 }
 
-bool Gams2OSiL::createOSInstance() {
+bool OSgams2osil::createOSInstance() {
 	osinstance = new OSInstance();
 	int i, j;
 	char buffer[255];
 
-	dict.readDictionary(); // try reading dictionary if available and not done already
+	//dict.readDictionary(); // try reading dictionary if available and not done already
 
 	// unfortunately, we do not know the model name
 	osinstance->setInstanceDescription("Generated from GAMS GMO problem");
@@ -306,13 +316,13 @@ bool Gams2OSiL::createOSInstance() {
 	return true;
 }
 
-OSInstance* Gams2OSiL::takeOverOSInstance() {
+OSInstance* OSgams2osil::takeOverOSInstance() {
 	OSInstance* osinst = osinstance;
 	osinstance = NULL;
 	return osinst;
 }
 
-OSnLNode* Gams2OSiL::parseGamsInstructions(int codelen, int* opcodes, int* fields, int constantlen, double* constants) {
+OSnLNode* OSgams2osil::parseGamsInstructions(int codelen, int* opcodes, int* fields, int constantlen, double* constants) {
 	std::vector<OSnLNode*> nlNodeVec;
 	
 	const bool debugoutput = false;

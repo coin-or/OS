@@ -2212,13 +2212,11 @@ if (OTHER_TESTS){
 		return EXIT_FAILURE;
 	}
   	
-	Gams2OSiL *gams2osil;
-	gams2osil = new Gams2OSiL( NULL, NULL);
-	gams2osil->initGMO(gmsControlFile.c_str() );
-	std::cout  << gams2osil->createOSInstance() << std::endl;
-	
-	std::cout  << "Done Working with GAMSIO " << std::endl;
+	OSgams2osil *gams2osil;
+	gams2osil = new OSgams2osil( gmsControlFile);
+	gams2osil->createOSInstance();
 	std::cout << gams2osil->osinstance->printModel() << std::endl;
+	std::cout  << "Done Working with GAMSIO " << std::endl;
 	exit( 1);
 #endif
 #endif
