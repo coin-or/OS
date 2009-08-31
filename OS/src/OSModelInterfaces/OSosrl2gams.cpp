@@ -23,26 +23,27 @@
 #endif
 
 #include "gmomcc.h"
+#include "gevmcc.h"
 
 OSrL2Gams::OSrL2Gams(gmoHandle_t gmo_)
-: gmo(gmo_)
+: gmo(gmo_), gev(gmo_ ? (gevHandle_t)gmoEnvironment(gmo_) : NULL)
 { }
 
 void OSrL2Gams::writeSolution(OSResult& osresult) {
 	if (osresult.general == NULL) {
 		gmoModelStatSet(gmo, ModelStat_ErrorNoSolution);
 		gmoSolveStatSet(gmo, SolveStat_SolverErr);
-		gmoLogStat(gmo, "Error: OS result does not have header.");
+		gevLogStat(gev, "Error: OS result does not have header.");
 		return;
 	} else if (osresult.getGeneralStatusType() == "error") {
 		gmoModelStatSet(gmo, ModelStat_ErrorNoSolution);
 		gmoSolveStatSet(gmo, SolveStat_SolverErr);
-		gmoLogStatPChar(gmo, "Error: OS result reports error: ");
-		gmoLogStat(gmo, osresult.getGeneralMessage().c_str());
+		gevLogStatPChar(gev, "Error: OS result reports error: ");
+		gevLogStat(gev, osresult.getGeneralMessage().c_str());
 		return;
 	} else if (osresult.getGeneralStatusType() == "warning") {
-		gmoLogStatPChar(gmo, "Warning: OS result reports warning: ");
-		gmoLogStat(gmo, osresult.getGeneralMessage().c_str());
+		gevLogStatPChar(gev, "Warning: OS result reports warning: ");
+		gevLogStat(gev, osresult.getGeneralMessage().c_str());
 	}
 
 	gmoSolveStatSet(gmo, SolveStat_Normal);
@@ -77,13 +78,13 @@ void OSrL2Gams::writeSolution(OSResult& osresult) {
 	}
 
 	if (osresult.getVariableNumber() != gmoN(gmo)) {
-		gmoLogStat(gmo, "Error: Number of variables in OS result does not match with gams model.");
+		gevLogStat(gev, "Error: Number of variables in OS result does not match with gams model.");
 		gmoModelStatSet(gmo, ModelStat_ErrorNoSolution);
 		gmoSolveStatSet(gmo, SolveStat_SystemErr);
 		return;
 	}
 	if (osresult.getConstraintNumber() != gmoM(gmo)) {
-		gmoLogStat(gmo, "Error: Number of constraints in OS result does not match with gams model.");
+		gevLogStat(gev, "Error: Number of constraints in OS result does not match with gams model.");
 		gmoModelStatSet(gmo, ModelStat_ErrorNoSolution);
 		gmoSolveStatSet(gmo, SolveStat_SystemErr);
 		return;
@@ -146,8 +147,8 @@ void OSrL2Gams::writeSolution(std::string& osrl) {
 	try {
 		osresult = osrl_reader.readOSrL(osrl);
 	} catch(const ErrorClass& error) {
-		gmoLogStat(gmo, "Error parsing the OS result string:");
-		gmoLogStat(gmo, error.errormsg.c_str());
+		gevLogStat(gev, "Error parsing the OS result string:");
+		gevLogStat(gev, error.errormsg.c_str());
 		gmoModelStatSet(gmo, ModelStat_ErrorNoSolution);
 		gmoSolveStatSet(gmo, SolveStat_SystemErr);
 		return;

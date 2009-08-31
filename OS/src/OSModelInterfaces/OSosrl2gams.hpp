@@ -13,12 +13,14 @@
 
 class OSResult;
 struct gmoRec;
+struct gevRec;
 
 /** Reads an optimization result and stores result and solution in a Gams Modeling Object.
  */
 class OSrL2Gams {
 private:
 	struct gmoRec* gmo;
+	struct gevRec* gev;
 
 public:
 	/** Constructor.

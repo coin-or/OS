@@ -308,7 +308,6 @@ OS/examples/osSolverDemo/OSSolverDemo.cpp -text
 OS/examples/template/Makefile.in -text
 OS/examples/template/template.cpp -text
 OS/inc/config_os.h.in -text
-OS/m4/ac_coin_gams.m4 -text
 OS/m4/ac_coin_socket_libs.m4 -text
 OS/os_addlibs.txt.in -text
 OS/schemas/1.0/OSParameter.xsd -text

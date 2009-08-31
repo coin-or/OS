@@ -164,10 +164,7 @@
 #endif 
 
 #ifdef COIN_HAS_GAMSUTILS
-#ifdef COIN_HAS_GAMSIO    
-#include "gmomcc.h"
 #include "OSgams2osil.hpp"
-#endif 
 #endif
 
 #ifdef HAVE_CTIME
@@ -2182,23 +2179,10 @@ if (OTHER_TESTS){
 // test reading a GAMS file
 
 #if  0
-#ifdef COIN_HAS_GAMSIO
+#ifdef COIN_HAS_GAMSUTILS
 	std::cout  << "Working with GAMSIO " << std::endl;
-	gmoHandle_t gmo;
 	char msg[256];
 	int rc;
-
-	// initialize GMO:
-	// first try path where GAMS I/O libraries were during compilation (the gmo library there should be the correct version)
-	// if that fails, try using some global search path, so it should take the one from the gams installation (hope it is update enough) 
-	/*
-	if (!gmoCreateD(&gmo, GAMSIO_PATH, msg, sizeof(msg))) {
-		if (!gmoCreate(&gmo, msg, sizeof(msg))) {
-			fprintf(stderr, "%s\n",msg);
-			return EXIT_FAILURE;
-		}
-	}
-	*/
 	
 	std::string gmsControlFile = "/Users/kmartin/Documents/files/coursework/qa751/testProblems/parinc/225a/gamscntr.dat";
 

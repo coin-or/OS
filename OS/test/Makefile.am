@@ -130,15 +130,6 @@ AM_CPPFLAGS =  \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` 
 
-if COIN_HAS_GAMSUTILS
-if COIN_HAS_GAMSIO
-  AM_CPPFLAGS += $(GAMSIO_CPPFLAGS)
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src`
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src/GamsUtils`
-endif
-endif
-
 # Here we add additional libraries
 # Kipp add the others here
 LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`

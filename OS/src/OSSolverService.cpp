@@ -122,10 +122,7 @@ using std::ostringstream;
 #endif
 
 #ifdef COIN_HAS_GAMSUTILS
-#ifdef COIN_HAS_GAMSIO
-#include "gmomcc.h"
 #include "OSgams2osil.hpp"
-#endif
 #endif
 
 //#ifdef COIN_HAS_IPOPT  
@@ -696,7 +693,7 @@ void solve(){
 					else{
 						if(osoptions->gamsControlFile != ""){
 						
-						#ifdef COIN_HAS_GAMSIO
+						#ifdef COIN_HAS_GAMSUTILS
 						std::cout << "GAMS Control file =  " << osoptions->gamsControlFile << std::endl;
 						OSgams2osil *gams2osil = new OSgams2osil( osoptions->gamsControlFile); 
 						gams2osil->createOSInstance() ;
@@ -1069,7 +1066,7 @@ void getOSiLFromGams(){
 		delete osilwriter;
 		osilwriter = NULL; 	
 		#else
-		throw ErrorClass("trying to convert Gams control file to osil without GAMSIO or GAMSUTILS configured");
+		throw ErrorClass("trying to convert Gams control file to osil without GAMSUTILS configured");
 		#endif
 	}
 	catch(const ErrorClass& eclass){

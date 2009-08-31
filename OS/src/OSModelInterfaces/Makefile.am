@@ -32,11 +32,9 @@ endif
 
 # should be another if
 if COIN_HAS_GAMSUTILS
-if COIN_HAS_GAMSIO
 libOSModelInterfaces_la_SOURCES +=  OSgams2osil.cpp OSosrl2gams.cpp
 libOSModelInterfaces_la_LIBADD  += $(GAMSUTILSOBJDIR)/src/GamsUtils/libGamsUtils.la
 libOSModelInterfaces_la_DEPENDENCIES  += $(GAMSUTILSOBJDIR)/src/GamsUtils/libGamsUtils.la
-endif
 endif
 
 # This is for libtool (on Windows)
@@ -65,12 +63,9 @@ if COIN_HAS_ASL
 endif
 
 if COIN_HAS_GAMSUTILS
-if COIN_HAS_GAMSIO
-  AM_CPPFLAGS += $(GAMSIO_CPPFLAGS)
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src`
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src/GamsUtils`
-endif
 endif
 
 if COIN_HAS_CPPAD

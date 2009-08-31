@@ -7,44 +7,44 @@
 // Author: Stefan Vigerske
 
 #include "OSgams2osil.hpp"
+#include "GAMSlinksConfig.h"
 #include "GamsNLinstr.h"
 
 #include "OSInstance.h"
 #include "CoinHelperFunctions.hpp"
 
 #include "gmomcc.h"
+#include "gevmcc.h"
 
 #include <sstream>
 
-OSgams2osil::OSgams2osil(gmoHandle_t gmo_, struct dctRec* dict_)
-: gmo(gmo_), dict(gmo_, dict_), osinstance(NULL)
-{ assert(gmo == NULL);  //do better latter
-  assert(dict_ == NULL);
+OSgams2osil::OSgams2osil(gmoHandle_t gmo_)
+: gev(gmo_ ? (gevHandle_t)gmoEnvironment(gmo_) : NULL), gmo(gmo_), osinstance(NULL)
+{
+	assert(gev_ == NULL); // TODO better
+	assert(gmo_ == NULL); // TODO better
 }
 
-
-OSgams2osil::OSgams2osil()  : gmo(NULL), dict(NULL, NULL), osinstance(NULL)
+OSgams2osil::OSgams2osil(std::string gamsControlFile) 
+: gev(NULL), gmo(NULL), osinstance(NULL)
 { 
-}
-
-OSgams2osil::OSgams2osil( std::string gamsControlFile)  : gmo(NULL), dict(NULL, NULL), osinstance(NULL)
-{ 
-	this->initGMO( gamsControlFile.c_str() ) ;
+	initGMO( gamsControlFile.c_str() ) ;
 }
 
 OSgams2osil::~OSgams2osil() {
 	delete osinstance;
 	
 	//close output channels
-	gmoCloseGms(gmo);
-	//free gmo handle
+//	gmoCloseGms(gmo);
 	gmoFree(&gmo);
-	//unload gmo library
+	gevFree(&gev);
 	gmoLibraryUnload();
+	gevLibraryUnload();
 }
 
 bool OSgams2osil::initGMO(const char* datfile) {
 	assert(gmo == NULL);
+	assert(gev == NULL);
 	
 	char msg[1024];
 	int rc;
@@ -55,33 +55,48 @@ bool OSgams2osil::initGMO(const char* datfile) {
   //	}
 	
 	
-	if (!gmoCreateD(&gmo, GAMSIO_PATH, msg, sizeof(msg))) {
+//	if (!gmoCreateD(&gmo, GAMSIO_PATH, msg, sizeof(msg))) {
 		if (!gmoCreate(&gmo, msg, sizeof(msg))) {
 			fprintf(stderr, "%s\n",msg);
 			return false;
 		}
+//	}
+	
+	if (!gevCreate(&gev, msg, sizeof(msg))) {
+		fprintf(stderr, "%s\n",msg);
+		return EXIT_FAILURE;
 	}
+
 	
 	gmoIdentSet(gmo, "OS link object");
 
 	// load control file
-	if ((rc = gmoLoadInfoGms(gmo, datfile))) {
-		fprintf(stderr, "Could not load control file: %s Rc = %d\n", datfile, rc);
-		gmoFree(&gmo);
-		return false;
-	}
-  
-	// setup GAMS output channels
-	if ((rc = gmoOpenGms( gmo))) {
-		fprintf(stderr, "Could not open GAMS environment. Rc = %d\n", rc);
-		gmoFree(&gmo);
-		return false;
-	}
+  if ((rc = gevInitEnvironmentLegacy(gev, datfile))) {
+  	fprintf(stderr, "Could not init gams environment: %s Rc = %d\n", datfile, rc);
+    gmoFree(&gmo);
+    gevFree(&gev);
+  	return false;
+  }
 
-	if ((rc = gmoLoadDataGms(gmo))) {
-		gmoLogStat(gmo, "Could not load model data.");
-		gmoCloseGms(gmo);
+  if ((rc = gmoRegisterEnvironment(gmo, gev, msg))) {
+  	gevLogStat(gev, "Could not register environment.");
+  	gmoFree(&gmo);
+  	gevFree(&gev);
+  	return false;
+  }
+
+	// setup GAMS output channels
+//	if ((rc = gmoOpenGms( gmo))) {
+//		fprintf(stderr, "Could not open GAMS environment. Rc = %d\n", rc);
+//		gmoFree(&gmo);
+//		return false;
+//	}
+
+	if ((rc = gmoLoadDataLegacy(gmo, msg))) {
+		gevLogStat(gev, "Could not load model data.");
+//		gmoCloseGms(gmo);
 		gmoFree(&gmo);
+		gevFree(&gev);
 		return false;
 	}
 	
@@ -91,21 +106,19 @@ bool OSgams2osil::initGMO(const char* datfile) {
 	gmoObjStyleSet(gmo, ObjType_Fun);
 	gmoIndexBaseSet(gmo, 0);
 
-	dict.setGMO(gmo);
-	//dict.readDictionary();
-
 	return true;
 }
 
 bool OSgams2osil::createOSInstance() {
+	assert(gmo != NULL);
+	assert(gev != NULL);
+	
 	osinstance = new OSInstance();
 	int i, j;
 	char buffer[255];
 
-	//dict.readDictionary(); // try reading dictionary if available and not done already
-
 	// unfortunately, we do not know the model name
-	osinstance->setInstanceDescription("Generated from GAMS GMO problem");
+	osinstance->setInstanceDescription("Generated from GAMS modeling object");
 	osinstance->setVariableNumber(gmoN(gmo));
 	
 	char*        vartypes = new char[gmoN(gmo)];
@@ -123,16 +136,12 @@ bool OSgams2osil::createOSInstance() {
 				break;
 			default : {
 				// TODO: how to represent semicontinuous var. and SOS in OSiL ? 
-				gmoLogStat(gmo, "Error: Unsupported variable type.");
+				gevLogStat(gev, "Error: Unsupported variable type.");
 				return false;
 			}
 		}
-		if (dict.haveNames() && dict.getColName(i, buffer, 256)) {
-			varnames[i] = buffer;
-		} else {
-			std::stringstream strstr; strstr << "x" << i << std::ends;
-			varnames[i] = strstr.str();
-		}
+		gmoGetVarNameOne(gmo, i, buffer);
+		varnames[i] = buffer;
 	}
 	
 	double* varlow = new double[gmoN(gmo)];
@@ -176,9 +185,9 @@ bool OSgams2osil::createOSInstance() {
 		delete[] nlflag;
 		delete[] dummy;
 
-		std::string objname;
-		if (dict.haveNames() && dict.getObjName(buffer, 256))
-			objname = buffer;
+		std::string objname = "objective"; //TODO
+//		if (dict.haveNames() && dict.getObjName(buffer, 256))
+//			objname = buffer;
 //		std::cout << "gmo obj con: " << gmoObjConst(gmo) << std::endl;
 		if (!osinstance->addObjective(-1, objname, gmoSense(gmo) == Obj_Min ? "min" : "max", gmoObjConst(gmo), 1., objectiveCoefficients)) {
 			delete objectiveCoefficients;
@@ -208,16 +217,12 @@ bool OSgams2osil::createOSInstance() {
 				ub =  OSDBL_MAX;
 				break;
 			default:
-				gmoLogStat(gmo, "Error: Unknown row type. Exiting ...");
+				gevLogStat(gev, "Error: Unknown row type. Exiting ...");
 				return false;
 		}
 		std::string conname;
-		if (dict.haveNames() && dict.getRowName(i, buffer, 255)) {
-			conname = buffer;
-		} else {
-			std::stringstream strstr; strstr << "e" << i << std::ends;
-			conname = strstr.str();
-		}
+		gmoGetEquNameOne(gmo, i, buffer);
+		conname = buffer;
 		if (!osinstance->addConstraint(i, conname, lb, ub, 0.))
 			return false;
 	}

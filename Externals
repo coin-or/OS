@@ -20,6 +20,5 @@ cppad  https://projects.coin-or.org/svn/CppAD/releases/20090303.0
 Bonmin  https://projects.coin-or.org/svn/Bonmin/releases/1.1.0/Bonmin
 Couenne  https://projects.coin-or.org/svn/Couenne/releases/0.2.1/Couenne 
 
-ThirdParty/GAMSIO  https://projects.coin-or.org/svn/GAMSlinks/trunk/ThirdParty/GAMSIO
 GamsUtils https://projects.coin-or.org/svn/GAMSlinks/branches/GamsUtils/GamsUtils
 GamsUtils/src/GamsUtils https://projects.coin-or.org/svn/GAMSlinks/trunk/GAMSlinks/src/GamsUtils
