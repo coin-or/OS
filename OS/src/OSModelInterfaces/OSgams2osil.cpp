@@ -21,7 +21,7 @@
 OSgams2osil::OSgams2osil(gmoHandle_t gmo_)
 : gev(gmo_ ? (gevHandle_t)gmoEnvironment(gmo_) : NULL), gmo(gmo_), osinstance(NULL)
 {
-	assert(gev_ == NULL); // TODO better
+	//assert(gev_ == NULL); // TODO better
 	assert(gmo_ == NULL); // TODO better
 }
 
