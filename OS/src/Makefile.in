@@ -52,9 +52,8 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 #    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 
 #      LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
-@COIN_HAS_IPOPT_TRUE@am__append_5 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
-@COIN_HAS_IPOPT_TRUE@        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
-
+@COIN_HAS_IPOPT_TRUE@am__append_5 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la 
+#        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
 @COIN_HAS_IPOPT_TRUE@am__append_6 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 @COIN_HAS_SYMPHONY_TRUE@am__append_7 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 @COIN_HAS_SYMPHONY_TRUE@am__append_8 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
@@ -183,8 +182,7 @@ OSSolverService_OBJECTS = $(am_OSSolverService_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
 @COIN_HAS_ASL_TRUE@@COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 @COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
-@COIN_HAS_IPOPT_TRUE@	$(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 @COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_5 =  \
 @COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_6 =  \
