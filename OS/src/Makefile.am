@@ -81,7 +81,11 @@ LDADD +=  \
 OSSolverService_DEPENDENCIES += libOS.la
 
 if COIN_HAS_COUENNE
-   LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
+   LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la 
+if COIN_HAS_ASL
+   LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+endif
+   LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 if COIN_HAS_ASL
    LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif

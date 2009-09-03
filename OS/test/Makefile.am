@@ -27,7 +27,11 @@ unitTest_LDADD =  \
 	
 	
 if COIN_HAS_COUENNE
-   unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
+   unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+if COIN_HAS_ASL
+   unitTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+endif
+   unitTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 if COIN_HAS_ASL
    unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif
