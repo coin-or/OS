@@ -293,6 +293,7 @@ void  OS_lp::cuts_to_rows(const BCP_vec<BCP_var*>& vars, // on what to expand
   // Required function when indexed or algorithmic cuts are used.
   // Describes how to get a row of the matrix from the representation of the
   // cut.
+	return ;
 	std::cout << "Execute cuts_to_rows" << std::endl;
 	const int cutnum = cuts.size();
 	for (int i=0; i<cutnum; ++i) {
@@ -316,6 +317,7 @@ void OS_lp::vars_to_cols(const BCP_vec<BCP_cut*>& cuts,
 {
 
 	std::cout << "EXECUTE vars_to_cols  **************" << std::endl;
+	return ;
     static const CoinPackedVector emptyVector(false);
     const int numvars = vars.size();
     int i;
@@ -353,7 +355,6 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	
 
 #if 0
-	
 	{/// Cgl cut addition scope
 
 		OsiClpSolverInterface* my_lp_solver;
@@ -454,13 +455,12 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	    	rcut->setUb( cutrhs);
 	    	rcut->setRow( cut_nz, cutind, cutcoef);
 	    	OS_cut* cut = new OS_cut( *rcut);
-	    	algo_cuts.push_back( cut);
+	    	new_cuts.push_back( cut);
 	    	std::cout  <<  "WE ARE ADDING A CUT!!!!!!!!   "   << std::endl;
 	    }  
 		delete rcut;
 		delete[] cutind;
 		delete[] cutcoef;
-		generated_cuts = (algo_cuts.size() > 0);
 	}// end user cut generation scope
 	
 #endif	
@@ -499,7 +499,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 		}
 		
 		delete[] val;
-	    delete[] ind;
+	   delete[] ind;
 	
 		
 	    generated_vars = (algo_vars.size() > 0);
@@ -519,35 +519,17 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
     	return;
     }
     
-    int i;
-    // add the cuts
-    
-	if (generated_cuts) {
-	    new_cuts.append( algo_cuts);
-	    
-	    // now convert the generated cuts into rows
-	    
-	    int cutnum = algo_cuts.size();
-	  
-	    for (i = 0; i < cutnum; ++i) {
-	        
-	        
-	        const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(algo_cuts[i]);
-	       
-	        if (bcut) {
-	        	new_rows.push_back(new BCP_row(bcut->row(), bcut->lb(), bcut->ub()));
-	        	//delete algo_cuts[ i];
-	        }
-	        else{
-	        	throw BCP_fatal_error("Unknown cut type in cuts_to_rows.\n");
-	        }
-	    }
-	    
-	    
-	    //delete algo_cuts[0];
-	    algo_cuts.clear();  
+	int i;
+	// now convert the generated cuts into rows
+	int cutnum = new_cuts.size();
+	for (i = 0; i < cutnum; ++i) {
+		const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(new_cuts[i]);
+	   if (bcut) {
+	   	new_rows.push_back(new BCP_row(bcut->row(), bcut->lb(), bcut->ub()));
+	 	}else{
+	   	throw BCP_fatal_error("Unknown cut type in cuts_to_rows.\n");
+	   }
 	}
-    
     // add the vars
     
     
