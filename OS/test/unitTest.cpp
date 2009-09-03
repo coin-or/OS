@@ -2181,10 +2181,8 @@ if (OTHER_TESTS){
 #if  0
 #ifdef COIN_HAS_GAMSUTILS
 	std::cout  << "Working with GAMSIO " << std::endl;
-	char msg[256];
-	int rc;
-	
-	std::string gmsControlFile = "/Users/kmartin/Documents/files/coursework/qa751/testProblems/parinc/225a/gamscntr.dat";
+
+	std::string gmsControlFile = "/home/kmartin/bin/gams/23.2/225a/gamscntr.dat";
 
   	
 	OSgams2osil *gams2osil;
