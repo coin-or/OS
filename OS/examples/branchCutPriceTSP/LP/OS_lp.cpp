@@ -190,21 +190,10 @@ BCP_branching_decision OS_lp::select_branching_candidates(const BCP_lp_result& l
 	  //                            method returns the branching object candidates 
 	  //                            in one of the arguments	
 
-
-   // unsigned int vecSize = vars.size();
-  //  unsigned int vecIter;
- //  for(vecIter = 0; vecIter < vecSize; vecIter++){
-  //      std::cout << vars[ vecIter]->obj() << std::endl;
-   // } 
     
 	std::cout << "INSIDE BRANCHING DECISION: TESTING VARIABLE TYPES " << std::endl;
 	std::cout << "SIZE OF CUTS  =  " <<  cuts.size()  << std::endl;
 	std::cout << "SIZE OF LOCAL CUTS POOL  =  " << local_cut_pool.size()   << std::endl;
-
-
-//	locs = os_prob->locs;
-//	routes = os_prob->routes;
-//	hubloc = os_prob->hubloc;
 
 	// Don't branch if cutting planes have been generated
 	if( local_cut_pool.size() > 0 ) {
