@@ -43,7 +43,9 @@ class OS_lp : public BCP_lp_user {
   /// Hold the value of EPSILON of class OS_prob
   double EPS;          
 
-
+  /// Hold pointers on generated algorithmic cuts
+  BCP_vec<BCP_cut*> algo_cuts;    
+  
   /// Hold pointers on generated variables
   BCP_vec<BCP_var*> algo_vars;   
   
@@ -243,19 +245,9 @@ public:
   		      BCP_vec<BCP_row*>& new_rows,
   		      BCP_vec<BCP_var*>& new_vars,
   		      BCP_vec<BCP_col*>& new_cols);
-			  
-
-
-
-    virtual void
-    purge_slack_pool(const BCP_vec<BCP_cut*>& slack_pool,
-		     BCP_vec<int>& to_be_purged);
 
 
 
 };
-
-
-
 
 #endif

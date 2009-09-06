@@ -73,7 +73,7 @@ void OS_lp::initialize_new_search_tree_node(const BCP_vec<BCP_var*>& vars,
   // The node LP is not yet solved.
 
 {
-  //in_strong = 0;
+  in_strong = 0;
   
   	//BCP_lp_param.hpp for a list of parameters
   	//lets get a parameter -- should be true by default
@@ -93,16 +93,11 @@ void OS_lp::initialize_new_search_tree_node(const BCP_vec<BCP_var*>& vars,
   	
 
   	//set another way
-	//keep all constraints
-	this->getLpProblemPointer()->par.set_entry(BCP_lp_par::IneffectiveConstraints, 0);
   	// number of cuts to keep in the pool
-	this->getLpProblemPointer()->par.set_entry(BCP_lp_par::IneffectiveBeforeDelete, 10000); 
+	//this->getLpProblemPointer()->par.set_entry(BCP_lp_par::IneffectiveBeforeDelete, 10000); 
   	
   	// turn off strong branching
-  	this->getLpProblemPointer()->par.set_entry(BCP_lp_par::MaxPresolveIter, -1);
-	
-
-	
+  	//this->getLpProblemPointer()->par.set_entry(BCP_lp_par::MaxPresolveIter, -1);
   	
 
 #ifdef USER_DATA
@@ -298,7 +293,6 @@ void  OS_lp::cuts_to_rows(const BCP_vec<BCP_var*>& vars, // on what to expand
   // Required function when indexed or algorithmic cuts are used.
   // Describes how to get a row of the matrix from the representation of the
   // cut.
-	return ;
 	std::cout << "Execute cuts_to_rows" << std::endl;
 	const int cutnum = cuts.size();
 	for (int i=0; i<cutnum; ++i) {
@@ -322,7 +316,6 @@ void OS_lp::vars_to_cols(const BCP_vec<BCP_cut*>& cuts,
 {
 
 	std::cout << "EXECUTE vars_to_cols  **************" << std::endl;
-	return ;
     static const CoinPackedVector emptyVector(false);
     const int numvars = vars.size();
     int i;
@@ -360,6 +353,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	
 
 #if 1
+	
 	{/// Cgl cut addition scope
 
 		OsiClpSolverInterface* my_lp_solver;
@@ -460,12 +454,13 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 	    	rcut->setUb( cutrhs);
 	    	rcut->setRow( cut_nz, cutind, cutcoef);
 	    	OS_cut* cut = new OS_cut( *rcut);
-	    	new_cuts.push_back( cut);
+	    	algo_cuts.push_back( cut);
 	    	std::cout  <<  "WE ARE ADDING A CUT!!!!!!!!   "   << std::endl;
 	    }  
 		delete rcut;
 		delete[] cutind;
 		delete[] cutcoef;
+		generated_cuts = (algo_cuts.size() > 0);
 	}// end user cut generation scope
 	
 #endif	
@@ -504,7 +499,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 		}
 		
 		delete[] val;
-	   delete[] ind;
+	    delete[] ind;
 	
 		
 	    generated_vars = (algo_vars.size() > 0);
@@ -524,17 +519,35 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
     	return;
     }
     
-	int i;
-	// now convert the generated cuts into rows
-	int cutnum = new_cuts.size();
-	for (i = 0; i < cutnum; ++i) {
-		const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(new_cuts[i]);
-	   if (bcut) {
-	   	new_rows.push_back(new BCP_row(bcut->row(), bcut->lb(), bcut->ub()));
-	 	}else{
-	   	throw BCP_fatal_error("Unknown cut type in cuts_to_rows.\n");
-	   }
+    int i;
+    // add the cuts
+    
+	if (generated_cuts) {
+	    new_cuts.append( algo_cuts);
+	    
+	    // now convert the generated cuts into rows
+	    
+	    int cutnum = algo_cuts.size();
+	  
+	    for (i = 0; i < cutnum; ++i) {
+	        
+	        
+	        const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(algo_cuts[i]);
+	       
+	        if (bcut) {
+	        	new_rows.push_back(new BCP_row(bcut->row(), bcut->lb(), bcut->ub()));
+	        	//delete algo_cuts[ i];
+	        }
+	        else{
+	        	throw BCP_fatal_error("Unknown cut type in cuts_to_rows.\n");
+	        }
+	    }
+	    
+	    
+	    //delete algo_cuts[0];
+	    algo_cuts.clear();  
 	}
+    
     // add the vars
     
     
@@ -583,9 +596,9 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
  				 const BCP_vec<BCP_cut*>& cuts,
  				 const bool final_lp_solution){
 		
-		
-		//BCP_lp_user::display_lp_solution( lpres, vars, cuts,
-		// 				  final_lp_solution);
+	
+		BCP_lp_user::display_lp_solution( lpres, vars, cuts,
+		 				  final_lp_solution);
 		return;
 	
 		bool relSol = false;
@@ -606,18 +619,4 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 }
 
 
-void    OS_lp::purge_slack_pool(const BCP_vec<BCP_cut*>& slack_pool,
-		     BCP_vec<int>& to_be_purged){
-			 
-			 
-	// see value of 
-  	std::cout  << "Ineffective before delete =  " <<  	BCP_lp_user::get_param(BCP_lp_par::IneffectiveBeforeDelete)  << std::endl;
-  	
-  	//set another way
-  	// number of cuts to keep in the pool
-	this->getLpProblemPointer()->par.set_entry(BCP_lp_par::IneffectiveBeforeDelete, 10000); 
-	
-	
-	std::cout << "USER VERSION OF purge_slack_pool() CALLED " << std::endl;
-}
 

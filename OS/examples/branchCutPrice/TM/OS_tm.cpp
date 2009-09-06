@@ -35,7 +35,6 @@
 #include "OS_tm.hpp"
 #include "OS_user_data.hpp"
 #include "OS.hpp"
-#include "OS_cut.hpp"
 
 #include "BCP_math.hpp"
 
@@ -201,13 +200,7 @@ void  OS_tm::create_root(BCP_vec<BCP_var*>& added_vars,
 /*************************************************************************/
 void  OS_tm::display_feasible_solution(const BCP_solution *soln) {
 	
-	BCP_tm_prob * p = this-> getTmProblemPointer();
-	int numcuts =  p->cuts_local.size();
-	// get information on last cut to illustrate how to get this kind of data
-	//const OsiRowCut* rowcut = NULL;
-	//Coin::SmartPtr<OS_cut> rowcut;
-	//rowcut = dynamic_cast<const OS_cut*>(p->cuts_local.end() );
-	//rowcut = p->cuts_local.end() ;
+	//kipp:  -- later write the OSiL file from here
 	std::cout << "Default BCP display of the feasible solution: ***************" << std::endl << std::endl;
 	BCP_tm_user::display_feasible_solution(  soln);
 	
