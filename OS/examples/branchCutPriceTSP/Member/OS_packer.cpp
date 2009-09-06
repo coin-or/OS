@@ -1,4 +1,3 @@
-/* $Id$ */
 // Last edit: 5/20/07
 //
 // Name:     OS_packer.cpp

@@ -1,4 +1,3 @@
-/* $Id$ */
 // Last edit: 5/5/04
 //
 // Name:     OS_user_data.cpp

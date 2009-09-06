@@ -1,4 +1,3 @@
-/* $Id$ */
 // Last edit: 12/26/05
 //
 // Name:     OS_tm.cpp
@@ -49,13 +48,8 @@ BCP_tm_user*  OS_init::tm_init(BCP_tm_prob& p,
 
   OS_tm* tm = new OS_tm;
 
-  if(argnum > 1) {
-	  //std::cout << "ARGNUM = " << argnum << std::endl;
-    tm->readInput( arglist[1]);
-  }
-  else {
-    tm->readInput(NULL);
-  }
+ tm->readInput(NULL);
+
   return tm;
 }
 

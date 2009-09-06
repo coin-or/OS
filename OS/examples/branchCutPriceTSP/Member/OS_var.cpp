@@ -1,4 +1,3 @@
-/* $Id$ */
 #include "OS_var.hpp"
 
 

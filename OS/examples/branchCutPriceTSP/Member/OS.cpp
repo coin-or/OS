@@ -1,4 +1,3 @@
-/* $Id$ */
 // Copyright (C) 2003, International Business Machines
 // Corporation and others.  All Rights Reserved.
 
@@ -9,8 +8,20 @@
 OS_prob::OS_prob() :
 	EPSILON(1e-8),
 	osinstance( NULL),
-	osilreader( NULL)
- {}
+	osilreader( NULL),
+  
+	ttlcuts(0),
+	conscount(0),
+	initialcons(0),
+
+	haveBranched( false)
+	
+	
+
+	
+ {
+addtxtstr << "";
+}
 
 /****************************************************************************/
 OS_prob::~OS_prob()
