@@ -291,6 +291,8 @@ OS/examples/branchCutPrice/include/OS_packer.hpp -text
 OS/examples/branchCutPrice/include/OS_tm.hpp -text
 OS/examples/branchCutPrice/include/OS_user_data.hpp -text
 OS/examples/branchCutPrice/include/OS_var.hpp -text
+OS/examples/branchCutPriceTSP/AUTHORS -text
+OS/examples/branchCutPriceTSP/LICENSE -text
 OS/examples/cglCuts/Makefile.in -text
 OS/examples/cglCuts/OSCglCuts.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text

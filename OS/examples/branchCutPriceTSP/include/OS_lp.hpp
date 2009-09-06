@@ -43,7 +43,9 @@ class OS_lp : public BCP_lp_user {
   /// Hold the value of EPSILON of class OS_prob
   double EPS;          
 
-
+  /// Hold pointers on generated algorithmic cuts
+  BCP_vec<BCP_cut*> algo_cuts;    
+  
   /// Hold pointers on generated variables
   BCP_vec<BCP_var*> algo_vars;   
   
