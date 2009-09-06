@@ -199,7 +199,8 @@ BCP_branching_decision OS_lp::select_branching_candidates(const BCP_lp_result& l
     
 	std::cout << "INSIDE BRANCHING DECISION: TESTING VARIABLE TYPES " << std::endl;
 	std::cout << "SIZE OF CUTS  =  " <<  cuts.size()  << std::endl;
-	std::cout << "SIZE OF LOCAL CUTS POOL  =  " << local_cut_pool.size()   << std::endl;
+	std::cout << "SIZE OF LOCAL CUTS POOL  =  " << local_cut_pool.size()   << std::endl;
+
 
 //	locs = os_prob->locs;
 //	routes = os_prob->routes;
@@ -337,71 +338,9 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
    }
 	new_cuts.clear();
 	new_rows.clear();
-
-	int i, k,ii,jj,rt;
-	int cutsize = cuts.size();
-	int packedvecsize;
-	long int icons;
-	icons = os_prob->initialcons;
-	os_prob->initialcons = cuts.size();
-
-	//std::cout << "NO OF LOCS = " << locs << std::endl;
-	//std::cout << "CUT SIZE = " << cutsize << std::endl;
-	CoinPackedVector pacvec;
-	//for(i = 0; i < cutsize;  i++){
-
-	//std::cout << "os_prob->initialcons = " << os_prob->initialcons << "icons = " << icons << " SUBTRACT " << os_prob->initialcons - icons << "\n" <<std::endl;
-
-	for(i = 0; i <= (os_prob->initialcons - icons);  i++){
-			const OsiRowCut* rowcut = dynamic_cast<const OS_cut*>(cuts[icons+i]);
-			
-		if( rowcut ){
-			pacvec = rowcut->row();
-			//std::cout  << "cut upper bound =   " << rowcut->ub() << "\n" <<std::endl;
-			//std::cout  << "cut lower bound =   " << rowcut->lb() << "\n" <<std::endl;
-			//get vector size
-			packedvecsize = pacvec.getNumElements();
-			/*for(k = 0; k < packedvecsize; k++){
-					std::cout << "index = "  << pacvec.getIndices()[ k] << "value  = "  << pacvec.getElements()[ k]<< " \n"<<std::endl;
-					
-			}*/
-			os_prob->addtxtstr<< "ConsA"<<icons+1+i<<".. ";
-			for ( rt =0; rt<routes;rt++){
-				for ( ii = 0; ii<locs;ii++){
-					for (jj=0; jj< locs; jj++){
-						if ( ii!=jj){
-							if( ii<jj){
-								for(k = 0; k < packedvecsize; k++){
-									if (routes*locs + (locs-1)*routes*ii + rt + routes* (jj-1)== pacvec.getIndices()[ k]){
-										os_prob->addtxtstr<<"X('"<< ii+1<<"',"<<"'"<<jj+1<<"',"<<"'"<<rt+1<<"' )" << "+";
-									}
-								}
-							}else{
-								 for(k = 0; k < packedvecsize; k++){
-									if (routes*locs + (locs-1)*routes*ii + rt + routes*jj == pacvec.getIndices()[ k] ){
-										os_prob->addtxtstr<<"X('"<<ii+1<<"',"<<"'"<<jj+1<<"',"<<"'"<<rt+1<<"' )" << "+";
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			string dummystr;  
-			dummystr = os_prob->addtxtstr.str();
-			dummystr = dummystr.substr(0,os_prob->addtxtstr.str().length()-1);
-			os_prob->addtxtstr.str(os_prob->addtxtstr.str().substr()) ;
-			os_prob->addtxtstr<<dummystr;
-			os_prob->addtxtstr<< "=l="<<rowcut->ub()<<"; \n";
-		}else{
-			//std::cout  << "NOT AOK =   "  << std::endl;
-		
-		}
-	
-
-	}
-	
-	if((os_prob->haveBranched == false || isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == 		  true) ) createcutsforbearcat(lpres,  new_cuts);  // call the tour-breaking cut procedure
+	int i;
+	if((os_prob->haveBranched == false || isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == true) ) 
+		createcutsforbearcat(lpres,  new_cuts);  // call the tour-breaking cut procedure
     //int cutnum = algo_cuts.size();
 	createCglCuts(lpres,  new_cuts);
 	int cutnum = new_cuts.size();
@@ -415,9 +354,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
     			new_rows, new_vars, new_cols);    	
     	return;
     }
-    
-	
-	cout<< " new_cuts() size" << new_cuts.size() << "\n";
+	cout<< " new_cuts() size" << new_cuts.size() << std::endl;
 	for (i = 0; i < cutnum; ++i) {
 		const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(new_cuts[i]);
 	   if (bcut) {
@@ -453,7 +390,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 									  BCP_vec<BCP_cut*>& new_cuts){
 						  
 //os_prob->addtxtstr << " INSIDE CUT ADDITION SCOPE \n";
-		int i,j,ii,jj,zz;
+		int i,j,ii,jj;
 		//int num_vars = vars.size();
 		const double *x = lpres.x();
 		
@@ -465,7 +402,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 		
 		int LocInRt; // total number of locs included in each route
 		map<int, int> SubProbLocs;// mapping master space to sub space
-		int rt,rt1;
+		int rt;
 		
 
 				
@@ -540,7 +477,8 @@ for(rt=0; rt < routes; rt++)// ROUTE LOOP starts
 		
 		osinstance->setLinearConstraintCoefficients(4*(LocInRt-1)*LocInRt,false,values,0,(4*(LocInRt-1)*LocInRt)-1,
 					indexes,0,(4*(LocInRt-1)*LocInRt)-1,starts,0,2*(LocInRt-1)*LocInRt);
-		
+		
+
 		//os_prob->addtxtstr<< " \n";
 		
 

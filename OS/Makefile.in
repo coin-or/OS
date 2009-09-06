@@ -65,6 +65,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/applications/fileUpload/Makefile.in \
 	$(top_srcdir)/configure \
 	$(top_srcdir)/examples/branchCutPrice/Makefile.in \
+	$(top_srcdir)/examples/branchCutPriceTSP/Makefile.in \
 	$(top_srcdir)/examples/cglCuts/Makefile.in \
 	$(top_srcdir)/examples/instanceGenerator/Makefile.in \
 	$(top_srcdir)/examples/osModificationDemo/Makefile.in \
@@ -90,6 +91,7 @@ CONFIG_CLEAN_FILES = examples/instanceGenerator/Makefile \
 	examples/osRemoteTest/Makefile examples/osSolverDemo/Makefile \
 	examples/osResultDemo/Makefile examples/template/Makefile \
 	examples/branchCutPrice/Makefile \
+	examples/branchCutPriceTSP/Makefile \
 	applications/fileUpload/Makefile os_addlibs.txt
 SOURCES =
 DIST_SOURCES =
@@ -475,6 +477,8 @@ examples/template/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/branchCutPrice/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/branchCutPrice/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+examples/branchCutPriceTSP/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/branchCutPriceTSP/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 applications/fileUpload/Makefile: $(top_builddir)/config.status $(top_srcdir)/applications/fileUpload/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 os_addlibs.txt: $(top_builddir)/config.status $(srcdir)/os_addlibs.txt.in
@@ -625,7 +629,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/applications/fileUpload $(distdir)/examples/branchCutPrice $(distdir)/examples/cglCuts $(distdir)/examples/instanceGenerator $(distdir)/examples/osModificationDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/osResultDemo $(distdir)/examples/osSolverDemo $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/applications/fileUpload $(distdir)/examples/branchCutPrice $(distdir)/examples/branchCutPriceTSP $(distdir)/examples/cglCuts $(distdir)/examples/instanceGenerator $(distdir)/examples/osModificationDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/osResultDemo $(distdir)/examples/osSolverDemo $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

@@ -671,7 +671,8 @@ AC_COIN_VPATH_LINK(data/osilFiles/p0201.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockmod.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockorig.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockorigInt.osil)
-AC_COIN_VPATH_LINK(data/osilFiles/testOperators.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/test24locR1.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/test48locR1.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/volumeTest.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/wayneQuadratic.osil)
 ##
@@ -834,10 +835,11 @@ AC_CONFIG_FILES([Makefile
           examples/cglCuts/Makefile
           examples/osModificationDemo/Makefile
           examples/osRemoteTest/Makefile
-		 examples/osSolverDemo/Makefile
-		 examples/osResultDemo/Makefile
+          examples/osSolverDemo/Makefile
+	  examples/osResultDemo/Makefile
           examples/template/Makefile
           examples/branchCutPrice/Makefile
+ 	examples/branchCutPriceTSP/Makefile
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
