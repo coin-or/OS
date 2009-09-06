@@ -294,6 +294,14 @@ OS/examples/branchCutPrice/include/OS_var.hpp -text
 OS/examples/branchCutPriceTSP/AUTHORS -text
 OS/examples/branchCutPriceTSP/LICENSE -text
 OS/examples/branchCutPriceTSP/LP/OS_lp.cpp -text
+OS/examples/branchCutPriceTSP/include/OS.hpp -text
+OS/examples/branchCutPriceTSP/include/OS_cut.hpp -text
+OS/examples/branchCutPriceTSP/include/OS_init.hpp -text
+OS/examples/branchCutPriceTSP/include/OS_lp.hpp -text
+OS/examples/branchCutPriceTSP/include/OS_packer.hpp -text
+OS/examples/branchCutPriceTSP/include/OS_tm.hpp -text
+OS/examples/branchCutPriceTSP/include/OS_user_data.hpp -text
+OS/examples/branchCutPriceTSP/include/OS_var.hpp -text
 OS/examples/cglCuts/Makefile.in -text
 OS/examples/cglCuts/OSCglCuts.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text
