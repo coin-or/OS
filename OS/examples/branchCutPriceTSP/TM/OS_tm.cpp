@@ -1,4 +1,3 @@
-/* $Id$ */
 // Last edit: 1/6/07
 //
 // Name:     OS_tm.cpp
@@ -35,11 +34,12 @@
 #include "OS_tm.hpp"
 #include "OS_user_data.hpp"
 #include "OS.hpp"
-#include "OS_cut.hpp"
 
 #include "BCP_math.hpp"
 
 using namespace std;
+
+
 
 /*************************************************************************/
 
@@ -78,9 +78,13 @@ void OS_tm::readInput(const char* filename){
 	
 	try{
 		// get the parincLinear problem
+		os_prob.locs = 48;
+		os_prob.routes = 1;
+	    os_prob.hubloc = 3; //do not change this variable 
+						
 		std::string osilFileName;
-		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
-		osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "test48locR1.osil";
+		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "p0033.osil";
 		std::cout << "Try to read a sample file" << std::endl;
 		std::cout << "The file is: " << osilFileName << std::endl <<std::endl ;
 		std::string osil = fileUtil->getFileAsString( osilFileName.c_str() );
@@ -88,6 +92,7 @@ void OS_tm::readInput(const char* filename){
 		//osil = fileUtil->getFileAsString( osilFileName);
 		os_prob.osilreader = new OSiLReader();
 		os_prob.osinstance = os_prob.osilreader->readOSiL( osil);
+		os_prob.initialcons = os_prob.osinstance->getConstraintNumber();
 		delete fileUtil;
 	}// end the try
 
@@ -186,6 +191,7 @@ void OS_tm::initialize_core(BCP_vec<BCP_var_core*>& vars,
 	//do the garbage collection
 	delete core_matrix;
 
+
 }//end initialize_core
 
 /**************************************************************************/
@@ -201,17 +207,104 @@ void  OS_tm::create_root(BCP_vec<BCP_var*>& added_vars,
 /*************************************************************************/
 void  OS_tm::display_feasible_solution(const BCP_solution *soln) {
 	
-	BCP_tm_prob * p = this-> getTmProblemPointer();
-	int numcuts =  p->cuts_local.size();
-	// get information on last cut to illustrate how to get this kind of data
-	//const OsiRowCut* rowcut = NULL;
-	//Coin::SmartPtr<OS_cut> rowcut;
-	//rowcut = dynamic_cast<const OS_cut*>(p->cuts_local.end() );
-	//rowcut = p->cuts_local.end() ;
+	//kipp:  -- later write the OSiL file from here
 	std::cout << "Default BCP display of the feasible solution: ***************" << std::endl << std::endl;
-	BCP_tm_user::display_feasible_solution(  soln);
+	BCP_tm_user::display_feasible_solution(soln);
+	int ii,jj,varidx,zz,yy;
+	double objval;
+	int rt;
+	const BCP_solution_generic* gensoln = dynamic_cast<const BCP_solution_generic*>(soln);
+
+	FileUtil *fileUtil = NULL; 
+	fileUtil = new FileUtil();
+	std::string finaltxt;
+	//ostringstream os_prob.os_prob.addtxtstr;
+	int locs;
+	int routes;
+	locs = os_prob.locs;
+	routes = os_prob.routes;
+
+	double objcf,objvalue;
+
+
+
+for ( rt =0; rt<routes;rt++)
+	  {os_prob.addtxtstr << "  FINAL assignments of " << rt+1 << " route" << "\n";
+	    for ( zz = 0; zz < gensoln->_vars.size(); zz ++)
+		    { varidx = gensoln->_vars[zz]->bcpind();
+		  for ( ii = 0; ii<locs;ii++)
+				{
+				  for (jj=0; jj< locs; jj++)
+					{
+						if ( ii!=jj)
+							{
+							  if( ii<jj)
+								{     if( (routes*locs + (locs-1)*routes*ii + rt + routes* (jj-1)) == varidx )
+											os_prob.addtxtstr << ii+1 << " " << jj+1 << "   " << gensoln->_values[ii] << "  " << gensoln->_values[jj] << "\n"; ;
+								}
+							  else
+							    {	if( (routes*locs + (locs-1)*routes*ii + rt + routes*jj) == varidx )
+											os_prob.addtxtstr << ii+1 << " " << jj+1 << "   " << gensoln->_values[ii] << "  " << gensoln->_values[jj] << "\n"; ;
+								}
+						     }
+					}
+		        }
+			}
+	   }
+
+	os_prob.addtxtstr << "\n";
+	objval = gensoln->objective_value();
+	os_prob.addtxtstr << "actual gensoln->_vars[zz]->bcpind() " << objval << "\n";
+	for ( zz = 0; zz < gensoln->_vars.size(); zz ++)
+		{   varidx = gensoln->_vars[zz]->bcpind();
+			os_prob.addtxtstr << " " << varidx ;}
+	os_prob.addtxtstr << "\n";
+	os_prob.addtxtstr << "actual gensoln->values[zz] " << objval << "\n";
+	for ( zz = 0; zz < gensoln->_vars.size(); zz ++)
+		{   os_prob.addtxtstr << " " << gensoln->_values[zz] ;}
+
+
+	os_prob.addtxtstr << "obj.function value = " << objval << "\n";
 	
-}
+	os_prob.addtxtstr << "OBJ COEFFCIENTS" << "\n";
+	for ( zz = 0; zz < gensoln->_vars.size(); zz ++)	
+		os_prob.addtxtstr << "  " << os_prob.osinstance->getDenseObjectiveCoefficients()[0][gensoln->_vars[zz]->bcpind()];
+		
+	objvalue =0;
+	for ( zz = 0; zz < gensoln->_vars.size(); zz ++)	
+		{	objcf = gensoln->_values[zz]*os_prob.osinstance->getDenseObjectiveCoefficients()[0][gensoln->_vars[zz]->bcpind()];
+			objvalue = objvalue + objcf;}
+
+	os_prob.addtxtstr <<" \n";
+	os_prob.addtxtstr << "CALCULATED OBJECTIVE FUNCTION VALUE = " << objvalue << "\n";
+	os_prob.addtxtstr << " TOTAL CUTS " << os_prob.ttlcuts << "\n";
+
+	/*for ( ii=0; ii < os_prob.conscount; ii++)
+			os_prob.addtxtstr<< "ConsA"<<ii<<",";
+	os_prob.addtxtstr <<" \n";
+	for ( ii=0; ii < os_prob.conscount; ii++)
+			os_prob.addtxtstr<< "ConsA"<<ii<<"\n";*/
+
+	long int corecons = os_prob.osinstance->getConstraintNumber(); 
+
+	for ( ii=0; ii < os_prob.initialcons-corecons ; ii++)
+			os_prob.addtxtstr<< "ConsA"<<corecons+ii+1<<",";
+	os_prob.addtxtstr <<" \n";
+
+	for ( ii=0; ii < os_prob.initialcons-corecons; ii++)
+			os_prob.addtxtstr<< "ConsA"<<corecons+ii+1<<"\n";
+	
+	
+	finaltxt = os_prob.addtxtstr.str();
+	fileUtil->writeFileFromString("test.txt", finaltxt);
+	
+	
+	
+	delete fileUtil;
+	fileUtil = NULL;
+
+	}
+
 
 
 /*************************************************************************/
@@ -227,4 +320,5 @@ OS_tm::OS_tm(){
 OS_tm::~OS_tm(){
 	std::cout << "Inside OS_tm destructor" << std::endl;
 	delete os_prob.osilreader;
+	
 }
