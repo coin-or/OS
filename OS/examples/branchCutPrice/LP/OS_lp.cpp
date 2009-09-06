@@ -34,7 +34,7 @@ void
 OS_lp::unpack_module_data(BCP_buffer& buf)
 {
   buf.unpack( os_prob);
-  EPS = os_prob->EPSILON;
+  EPS = os_prob->EPSILON; 
   /**
    * we also have access to the osinstance object that was created in OS_tm
    * the OS_tm tree manager sent us a pointer to this -- the osinstance is
