@@ -263,6 +263,7 @@ void  OS_lp::cuts_to_rows(const BCP_vec<BCP_var*>& vars, // on what to expand
   // Required function when indexed or algorithmic cuts are used.
   // Describes how to get a row of the matrix from the representation of the
   // cut.
+
 	std::cout << "Execute cuts_to_rows" << std::endl;
 	const int cutnum = cuts.size();
 	for (int i=0; i<cutnum; ++i) {
@@ -322,20 +323,19 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
       getLpProblemPointer()->lp_solver->isDualObjectiveLimitReached() ||
       getLpProblemPointer()->lp_solver->isIterationLimitReached() )  {
       true_lower_bound = old_lower_bound;
+		// seems like should be true but that leads to errors
 		getLpProblemPointer()->user_has_lp_result_processing = false;
 		return;
    }
 	new_cuts.clear();
 	new_rows.clear();
 	int i;
-	if((os_prob->haveBranched == false || isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == true) ) 
-		createcutsforbearcat(lpres,  new_cuts);  // call the tour-breaking cut procedure
-    //int cutnum = algo_cuts.size();
-	createCglCuts(lpres,  new_cuts);
+	if((os_prob->haveBranched == false || isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == true) ) createcutsforbearcat(lpres,  new_cuts);  // call the tour-breaking cut procedure
+
+	//createCglCuts(lpres,  new_cuts);
 	int cutnum = new_cuts.size();
 	std::cout << "NUMBER CUTS GENERATED = " << os_prob->ttlcuts << std::endl;
 	os_prob->ttlcuts = os_prob->ttlcuts + cutnum;	
-	// if no cuts or vars were found  call the old method   
     if(  cutnum == 0 ){
 		//true_lower_bound =  old_lower_bound;
     	BCP_lp_user::process_lp_result(lpres, vars, cuts, 
