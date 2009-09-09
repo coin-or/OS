@@ -265,6 +265,8 @@ void  OS_lp::cuts_to_rows(const BCP_vec<BCP_var*>& vars, // on what to expand
   // cut.
 
 	std::cout << "Execute cuts_to_rows" << std::endl;
+	std::cout << "CUTS SIZE = " << cuts.size() << std::endl;
+	std::cout << "ROWS SIZE = " << rows.size() << std::endl;
 	const int cutnum = cuts.size();
 	for (int i=0; i<cutnum; ++i) {
 		const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(cuts[i]);
@@ -317,6 +319,8 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 		      BCP_vec<BCP_row*>& new_rows,
 		      BCP_vec<BCP_var*>& new_vars,
 		      BCP_vec<BCP_col*>& new_cols){
+	new_cuts.clear();
+	new_rows.clear();
 	// only process if LP relaxation is optimal
 	if(getLpProblemPointer()->lp_solver->isAbandoned() ||
     	getLpProblemPointer()->lp_solver->isProvenPrimalInfeasible() ||
@@ -325,13 +329,20 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
       true_lower_bound = old_lower_bound;
 		// seems like should be true but that leads to errors
 		getLpProblemPointer()->user_has_lp_result_processing = false;
+		std::cout << "TERMINATING IN PROCESSS LP RESULT WITHOUT CHECKING FOR CUTS" << std::endl;
 		return;
    }
-	new_cuts.clear();
-	new_rows.clear();
-	int i;
-	if((os_prob->haveBranched == false || isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == true) ) createcutsforbearcat(lpres,  new_cuts);  // call the tour-breaking cut procedure
 
+	int i;
+	/*
+	if((os_prob->haveBranched == false || isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == true) ) createcutsforbearcat(lpres,  new_cuts);  // call the tour-breaking cut procedure
+*/
+
+	double tol1 = 0.01;
+	double tol2 = 0.01;
+
+	if((os_prob->haveBranched == false || isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == true) ) createcutsforbearcat(lpres,  new_cuts, tol1, tol2, os_prob->haveBranched);  // call the tour-breaking cut procedure
+	//createcutsforbearcat(lpres,  new_cuts,  tol1, tol2, os_prob->haveBranched);
 	//createCglCuts(lpres,  new_cuts);
 	int cutnum = new_cuts.size();
 	std::cout << "NUMBER CUTS GENERATED = " << os_prob->ttlcuts << std::endl;
@@ -343,11 +354,33 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
     			new_rows, new_vars, new_cols);    	
     	return;
     }
+
+	CoinPackedVector pv;
+	int *pvIndexes = NULL;
+	double *pvElements = NULL;
+	int numElem;
+	double lb;
+	double ub;
+
 	cout<< " new_cuts() size" << new_cuts.size() << std::endl;
+
+	
+
+	int k;
 	for (i = 0; i < cutnum; ++i) {
 		const OsiRowCut* bcut = dynamic_cast<const OS_cut*>(new_cuts[i]);
 	   if (bcut) {
-	   	new_rows.push_back(new BCP_row(bcut->row(), bcut->lb(), bcut->ub()));
+			numElem = bcut->row().getNumElements();
+			pvIndexes = new int[ numElem];
+			pvElements = new double[ numElem];
+			for(k = 0; k < numElem; k++){
+				pvIndexes[ k] = bcut->row().getIndices()[ k];
+				pvElements[ k] = bcut->row().getElements()[ k];
+			}
+			lb = bcut->lb();
+			ub = bcut->ub();
+	   	//new_rows.push_back(new BCP_row(bcut->row(), bcut->lb(), bcut->ub()));
+			new_rows.push_back(new BCP_row(CoinPackedVector(numElem, pvIndexes, pvElements), lb, ub));
 	 		}else{
 	   		throw BCP_fatal_error("Unknown cut type in cuts_to_rows.\n");
 	    }
@@ -376,7 +409,7 @@ void OS_lp::process_lp_result(const BCP_lp_result& lpres,
 
 /************************************************************************************************/
 	void  OS_lp::createcutsforbearcat(const BCP_lp_result& lpres,
-									  BCP_vec<BCP_cut*>& new_cuts){
+									  BCP_vec<BCP_cut*>& new_cuts, double tol1, double tol2, bool isInt){
 						  
 //os_prob->addtxtstr << " INSIDE CUT ADDITION SCOPE \n";
 		int i,j,ii,jj;
@@ -578,7 +611,9 @@ for(rt=0; rt < routes; rt++)// ROUTE LOOP starts
 			solStatus = osresult->getSolutionStatusType(0); // the argument is the solution index
 			optSolValue = osresult->getOptimalObjValue( -1, 0); //first index is objIdx, second is solution index
 			//os_prob->addtxtstr<< "optSolValue = " << optSolValue << "\n";
-			if ( optSolValue > 0.01) // if the opt.sol > 0 STARTS
+			double tol = tol1;
+			if (isInt == true) tol = tol2;
+			if ( optSolValue > tol) // if the opt.sol > 0 STARTS
 			       {// now get the primal solution
 				    //os_prob->addtxtstr<< " ADDING CUTS \n";
 					int vecSize;

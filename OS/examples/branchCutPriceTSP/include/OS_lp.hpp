@@ -244,7 +244,7 @@ public:
   		      BCP_vec<BCP_var*>& new_vars,
   		      BCP_vec<BCP_col*>& new_cols);
 	
-   void createcutsforbearcat(const BCP_lp_result& lpres,BCP_vec<BCP_cut*>& new_cuts);
+   void createcutsforbearcat(const BCP_lp_result& lpres,BCP_vec<BCP_cut*>& new_cuts, double tol1, double tol2, bool isInt);
 
 	void createCglCuts(const BCP_lp_result& lpres,BCP_vec<BCP_cut*>& new_cuts);
 						  
