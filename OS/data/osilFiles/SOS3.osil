@@ -3,11 +3,11 @@
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<source>
-			J.A. Tomlin, "A suggested extension of special ordered sets to non-separable non-convex programming problems", in: P. Hansen (ed.) Studies on Graphs and Discrete programing, North-Holland (1981) 359-370.
+			J.A. Tomlin, "A suggested extension of special ordered sets to non-separable non-convex programming problems", in: P. Hansen (ed.) Studies on Graphs and Discrete Programming, North-Holland (1981) 359-370.
 		</source>
 		<description>
-			Two-dimensional maximization problem of a non-convex function interpolated on 3x3 grid.
-			This problem uses special ordered sets.
+			Two-dimensional maximization problem of a non-convex function interpolated on 3x3 grid. This problem uses special ordered sets of type 3. 
+			The grid is subdivided into triangular simplices; the nonzero variables must correspond to vertices of one of the simplices.
 		</description>
 	</instanceHeader>
 	<instanceData>
@@ -118,7 +118,7 @@
 			<el>1</el>
 		</value>
 		</linearConstraintCoefficients>
-		<specialOrderedSets numberOSpecialOrderedSets="1">
+		<specialOrderedSets numberOfSOS="1">
 			<sos numberOfVar="9" type="3" convexityRow="2">
 				<var idx="2"></var>
 				<var idx="3"></var>

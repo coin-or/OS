@@ -136,7 +136,7 @@
 				<el>-4</el>
 			</value>
 		</linearConstraintCoefficients>
-		<specialOrderedSets numberOSpecialOrderedSets="4">
+		<specialOrderedSets numberOfSOS="4">
 			<sos numberOfVar="4" type="1" convexityRow="0">
 				<var idx="0"></var>				
 				<var idx="1"></var>

@@ -140,7 +140,7 @@ as have the expressions f(x) = sum{b_i lambda_i}, g(x) = sum{d_i mu_i}.
 				<el>-1</el>
 			</value>
 		</linearConstraintCoefficients>
-		<specialOrderedSets numberOSpecialOrderedSets="2">
+		<specialOrderedSets numberOfSOS="2">
 			<sos numberOfVar="6" type="2" convexityRow="1">
 				<var idx="0"></var>
 				<var idx="1"></var>
