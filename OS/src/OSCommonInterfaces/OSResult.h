@@ -350,7 +350,7 @@ class OptimizationSolutionSubstatus {
 public:
 	
 	/** the name of the solution substatus */
-	std::string namee;
+	std::string name;
 	
 	/** a description of the solution substatus */
 	std::string description;
