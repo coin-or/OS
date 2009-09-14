@@ -81,7 +81,11 @@ LDADD +=  \
 OSSolverService_DEPENDENCIES += libOS.la
 
 if COIN_HAS_COUENNE
-   LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
+   LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la 
+if COIN_HAS_ASL
+   LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+endif
+   LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 if COIN_HAS_ASL
    LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif
@@ -97,8 +101,8 @@ if COIN_HAS_IPOPT
 if COIN_HAS_ASL
 #      LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
 endif
-  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
-        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
+  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la 
+#        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
   ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 
