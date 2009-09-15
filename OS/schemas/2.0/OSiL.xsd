@@ -1,97 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
-<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
-	<xs:element name="osil" type="OSiL">
-		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
-		</xs:annotation>
-	</xs:element>
-	<!--OSiL: since version 1.0.0 -->
+	<xs:element name="osil" type="OSiL"/>
+	<!--OSiL: since version 1.0 -->
 	<xs:complexType name="OSiL">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="instanceHeader" type="InstanceHeader">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="instanceData" type="InstanceData">
-				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="instanceData" type="InstanceData"/>
 		</xs:sequence>
 	</xs:complexType>
-	<!--InstanceHeader: since version 1.0.0 -->
+	<!--InstanceHeader: since version 1.0 -->
 	<xs:complexType name="InstanceHeader">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="name" type="xs:string" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="source" type="xs:string" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="description" type="xs:string" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="source" type="xs:string" minOccurs="0"/>
+			<xs:element name="description" type="xs:string" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
-	<!--InstanceData: since version 1.0.0 -->
+	<!--InstanceData: since version 1.0 -->
 	<xs:complexType name="InstanceData">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="variables" type="Variables" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="objectives" type="Objectives" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="constraints" type="Constraints" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="linearConstraintCoefficients" type="LinearConstraintCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
+					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
@@ -156,10 +134,10 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<!--Variables: since version 1.0.0 -->
+	<!--Variables: since version 1.0 -->
 	<xs:complexType name="Variables">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -167,7 +145,7 @@
 			</xs:annotation>
 			<xs:element name="var" type="Variable" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -175,7 +153,7 @@
 	</xs:complexType>
 	<xs:complexType name="Variable">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="type" use="optional" default="C">
@@ -192,10 +170,10 @@
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
-	<!--Objectives: since version 1.0.0 -->
+	<!--Objectives: since version 1.0 -->
 	<xs:complexType name="Objectives">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -203,7 +181,7 @@
 			</xs:annotation>
 			<xs:element name="obj" type="Objective" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -211,7 +189,7 @@
 	</xs:complexType>
 	<xs:complexType name="Objective">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -235,7 +213,7 @@
 	</xs:complexType>
 	<xs:complexType name="ObjCoef">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
@@ -243,10 +221,10 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<!--Constraints: since version 1.0.0 -->
+	<!--Constraints: since version 1.0 -->
 	<xs:complexType name="Constraints">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -254,7 +232,7 @@
 			</xs:annotation>
 			<xs:element name="con" type="Constraint" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -262,7 +240,7 @@
 	</xs:complexType>
 	<xs:complexType name="Constraint">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
@@ -270,10 +248,10 @@
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 	</xs:complexType>
-	<!--LinearConstraintCoefficients: since version 1.0.0 -->
+	<!--LinearConstraintCoefficients: since version 1.0 -->
 	<xs:complexType name="LinearConstraintCoefficients">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
@@ -281,33 +259,33 @@
 			</xs:annotation>
 			<xs:element name="start" type="IntVector">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:choice>
 				<xs:element name="rowIdx" type="IntVector">
 					<xs:annotation>
-						<xs:documentation>since version 1.0.0</xs:documentation>
+						<xs:documentation>since version 1.0</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 				<xs:element name="colIdx" type="IntVector">
 					<xs:annotation>
-						<xs:documentation>since version 1.0.0</xs:documentation>
+						<xs:documentation>since version 1.0</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 			</xs:choice>
 			<xs:element name="value" type="DoubleVector">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<!--QuadraticCoefficients; since version 1.0.0 -->
+	<!--QuadraticCoefficients; since version 1.0 -->
 	<xs:complexType name="QuadraticCoefficients">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -315,7 +293,7 @@
 			</xs:annotation>
 			<xs:element name="qTerm" type="QuadraticTerm" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -323,17 +301,17 @@
 	</xs:complexType>
 	<xs:complexType name="QuadraticTerm">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 		<xs:attribute name="idxOne" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="idxTwo" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 	</xs:complexType>
-	<!--NonlinearExpressions: since version 1.0.0 -->
+	<!--NonlinearExpressions: since version 1.0 -->
 	<xs:complexType name="NonlinearExpressions">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
@@ -341,7 +319,7 @@
 			</xs:annotation>
 			<xs:element name="nl" type="Nl" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
-					<xs:documentation>since version 1.0.0</xs:documentation>
+					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -349,7 +327,7 @@
 	</xs:complexType>
 	<xs:complexType name="Nl">
 		<xs:annotation>
-			<xs:documentation>since version 1.0.0</xs:documentation>
+			<xs:documentation>since version 1.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
@@ -366,13 +344,9 @@
 				<xs:documentation>Number of child elements must match numberOfSpecialOrderedSets
 				</xs:documentation>
 			</xs:annotation>
-			<xs:element name="sos" type="SOS" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>proposal</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="sos" type="SOS" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOSpecialOrderedSets" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSOS" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOS">
 		<xs:annotation>
