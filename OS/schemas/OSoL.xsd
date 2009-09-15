@@ -1,25 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
-<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
 <xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<!--OSoL.xsd: version 2.0.0 (The entire schema)-->
+	<!--OSoL.xsd: version 2.0 (The entire schema)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osol" type="OSoL">
 		<xs:annotation>
-			<xs:documentation>version 2.0.0</xs:documentation>
+			<xs:documentation>version 2.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSoL">
 		<xs:annotation>
-			<xs:documentation>version 2.0.0, all descendant elements included</xs:documentation>
+			<xs:documentation>version 2.0, all descendant elements included</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="general" type="GeneralOption" minOccurs="0"/>
-			<xs:element name="system" type="SystemOption" minOccurs="0"/>
-			<xs:element name="service" type="ServiceOption" minOccurs="0"/>
-			<xs:element name="job" type="JobOption" minOccurs="0"/>
-			<xs:element name="optimization" type="OptimizationOption" minOccurs="0"/>
+			<xs:element name="general" type="GeneralOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="system" type="SystemOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="service" type="ServiceOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="job" type="JobOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="optimization" type="OptimizationOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="GeneralOption">

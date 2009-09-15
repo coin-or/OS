@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
-<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<!--OSrL.xsd: version 2.0.0 (The entire schema except for osrl->optimization->osal)-->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--OSrL.xsd: version 2.0 (The entire schema except for osrl->optimization->osal)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
 	<xs:element name="osrl" type="OSrL">
 		<xs:annotation>
-			<xs:documentation>version 2.0.0</xs:documentation>
+			<xs:documentation>version 2.0</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:complexType name="OSrL">
 		<xs:annotation>
-			<xs:documentation>version 2.0.0, all descendant elements included except for osrl->optimization->osal</xs:documentation>
+			<xs:documentation>version 2.0, all descendant elements included except for osrl->optimization->osal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="general" type="GeneralResult" minOccurs="0"/>
-			<xs:element name="system" type="SystemResult" minOccurs="0"/>
-			<xs:element name="service" type="ServiceResult" minOccurs="0">
+			<xs:element name="general" type="GeneralResult" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Note: this is mainly the output from the OS service.</xs:documentation>
+					<xs:documentation>since version 2.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="job" type="JobResult" minOccurs="0"/>
+			<xs:element name="system" type="SystemResult" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="service" type="ServiceResult" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0. Note: this is mainly the output from the OS service.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="job" type="JobResult" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="optimization" type="OptimizationResult" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>Note: this is mainly the output from the solver.</xs:documentation>
+					<xs:documentation>since version 2.0, except for the osal child element, which is under proposal. Note: this is mainly the output from the solver. </xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
@@ -112,8 +122,16 @@
 			<xs:documentation>numberOfVariables, numberOfObjectives and numberOfConstraints are the numbers in the original optimization instance and should match those in the corresponding OSiL. Use -1 if not applicable or necessary in appropriate scenarios.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="solution" type="OptimizationSolution" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="otherSolverOutput" type="OtherSolverOutput" minOccurs="0"/>
+			<xs:element name="solution" type="OptimizationSolution" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="otherSolverOutput" type="OtherSolverOutput" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="osal" type="OSaL" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
