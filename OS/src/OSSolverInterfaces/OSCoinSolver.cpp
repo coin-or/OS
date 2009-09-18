@@ -252,7 +252,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 
 void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
-	  
+	std::cout << "build solver options" << std::endl;
 
 	// the osi maps
 	// the OsiHintParameter Map
@@ -563,7 +563,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			}  //  end if (m > 0)		
 		}// end of osoption if	
 		
-		
+		std::cout << "solver options set" << std::endl;	
 	}//end of try 
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
@@ -620,6 +620,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 	//if(osresult->setGeneralMessage( osresultdata->message) != true)
 	//	throw ErrorClass("OSResult error: setGeneralMessage");
 	// set basic problem parameters
+
 	if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
 		throw ErrorClass("OSResult error: setVariableNumer");
 	if(osresult->setObjectiveNumber( 1) != true)
@@ -628,6 +629,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 		throw ErrorClass("OSResult error: setConstraintNumber");
 	if(osresult->setSolutionNumber(  1) != true)
 		throw ErrorClass("OSResult error: setSolutionNumer");	
+
 	//
 	try{
 		double start = CoinCpuTime();
@@ -643,8 +645,8 @@ void CoinSolver::solve() throw (ErrorClass) {
 				//CoinOneMessage **coinOneMessage;
 				//CoinOneMessage *oneMessage;
 				
-				
 				CbcMain0(  model);	
+
 				/*
 				coinMessages = model.messages();
 				numberOfMessages = coinMessages.numberMessages_;
@@ -754,7 +756,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 					osiSolver->initialSolve();
 				}
 				cpuTime = CoinCpuTime() - start;
-			
+
 				writeResult( osiSolver);
 			}
 			
@@ -854,6 +856,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	double *y = NULL;
 	double *z = NULL;
 	int *idx = NULL;
+
 	std::string *rcost = NULL;
 	x = new double[osinstance->getVariableNumber() ];
 	y = new double[osinstance->getConstraintNumber() ];
@@ -896,6 +899,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	/* Retrieve the solution */
 	//
 	*(z + 0)  =  solver->getObjValue();
+
 	osresult->setObjectiveValuesDense(solIdx, z); 
 	for(i=0; i < osinstance->getVariableNumber(); i++){
 		*(x + i) = solver->getColSolution()[i];

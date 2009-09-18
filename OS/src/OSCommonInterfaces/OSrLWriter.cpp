@@ -258,16 +258,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << "\"" ;
 								}
 								outStr <<  ">" << endl;
-								if(m_OSResult->optimization->solution[i]->variables->other[k]->var.size() > 0){
+								if(m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar > 0){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar; j++){
-										if(m_OSResult->optimization->solution[i]->variables->other[k]->var.size() > 0){
-											outStr << "<var";
-											outStr << " idx=\"";
-											outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->idx ;
-											outStr <<  "\">";
-											outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->value;
-											outStr << "</var>" << endl;
-										}
+										outStr << "<var";
+										outStr << " idx=\"";
+										outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->idx ;
+										outStr <<  "\">";
+										outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->value;
+										outStr << "</var>" << endl;
 									}
 								}
 								outStr << "</other>" << endl;
@@ -316,16 +314,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->description;
 								outStr << "\"" ;
 								outStr <<  ">" << endl;
-								if(m_OSResult->optimization->solution[i]->objectives->other[k]->obj.size() > 0){
+								if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj > 0){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj; j++){
-										if(m_OSResult->optimization->solution[i]->objectives->other[k]->obj.size() > 0){
-											outStr << "<obj";
-											outStr << " idx=\"";
-											outStr << j ;
-											outStr <<  "\">";
-											outStr <<   m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->value;
-											outStr << "</obj>" << endl;
-										}
+										outStr << "<obj";
+										outStr << " idx=\"";
+										outStr << j ;
+										outStr <<  "\">";
+										outStr <<   m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->value;
+										outStr << "</obj>" << endl;
 									}
 								}
 								outStr << "</other>" << endl;
@@ -370,16 +366,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->description;
 								outStr << "\"" ;
 								outStr <<  ">" << endl;
-								if(m_OSResult->optimization->solution[i]->constraints->other[k]->con.size() > 0){
+								if(m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon; j++){
-										if(m_OSResult->optimization->solution[i]->constraints->other[k]->con.size() > 0){
-											outStr << "<con";
-											outStr << " idx=\"";
-											outStr << j ;
-											outStr <<  "\">";
-											outStr <<  m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->value;
-											outStr << "</con>" << endl;
-										}
+										outStr << "<con";
+										outStr << " idx=\"";
+										outStr << j ;
+										outStr <<  "\">";
+										outStr <<  m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->value;
+										outStr << "</con>" << endl;
 									}
 								}
 								outStr << "</other>" << endl;

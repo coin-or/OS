@@ -109,19 +109,25 @@ void OSrL2Gams::writeSolution(OSResult& osresult) {
 //		it!=sol->constraints->values->con.end(); ++it)
 //			rowLev[(*it)->idx]=(*it)->value;
 	if (sol->constraints && sol->constraints->dualValues) // set row dual values, if available
-		for (std::vector<DualVarValue*>::iterator it(sol->constraints->dualValues->con.begin());
-		it!=sol->constraints->dualValues->con.end(); ++it)
-			rowMarg[(*it)->idx]=(*it)->value; // what are it->lbValue and it->ubValue ?
+//		for (std::vector<DualVarValue*>::iterator it(sol->constraints->dualValues->con.begin());
+//		it!=sol->constraints->dualValues->con.end(); ++it)
+//			rowMarg[(*it)->idx]=(*it)->value; // what are it->lbValue and it->ubValue ?
+		for (int i=0; i < sol->constraints->dualValues->numberOfCon; i++)
+			rowMarg[sol->constraints->dualValues->con[i]->idx] = sol->constraints->dualValues->con[i]->value;
 	if (sol->variables && sol->variables->values) // set var values, if available
-		for (std::vector<VarValue*>::const_iterator it(sol->variables->values->var.begin());
-		it!=sol->variables->values->var.end(); ++it)
-			colLev[(*it)->idx]=(*it)->value;
+//		for (std::vector<VarValue*>::const_iterator it(sol->variables->values->var.begin());
+//		it!=sol->variables->values->var.end(); ++it)
+//			colLev[(*it)->idx]=(*it)->value;
+		for (int i=0; i < sol->variables->values->numberOfVar; i++)
+			colLev[sol->variables->values->var[i]->idx] = sol->variables->values->var[i]->value;
 	if (sol->variables)
 		for (int i=0; i<sol->variables->numberOfOtherVariableResults; ++i) {
 			if (sol->variables->other[i]->name=="reduced costs") {
-				for (std::vector<OtherVarResult*>::const_iterator it(sol->variables->other[i]->var.begin());
-				it!=sol->variables->other[i]->var.end(); ++it)
-					colMarg[(*it)->idx]=atof((*it)->value.c_str());
+//				for (std::vector<OtherVarResult*>::const_iterator it(sol->variables->other[i]->var.begin());
+//				it!=sol->variables->other[i]->var.end(); ++it)
+//					colMarg[(*it)->idx]=atof((*it)->value.c_str());
+				for (int j=0; j < sol->variables->other[i]->numberOfVar; j++)
+					colLev[sol->variables->other[i]->var[j]->idx] = atof(sol->variables->other[i]->var[j]->value.c_str());
 				break;
 			}
 		}

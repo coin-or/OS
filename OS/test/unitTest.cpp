@@ -347,7 +347,7 @@ if(BASIC_TESTS == true){
 		osilreader = new OSiLReader(); 
 		//OSInstance *osinstance = osilreader->readOSiL( osil);
 		//osinstance->initForAlgDiff();
-		unitTestResult << "Reading files successfully" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Reading files successfully" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
@@ -424,7 +424,7 @@ if(BASIC_TESTS == true){
 			unitTestResult << "WARNING:  you do not have lossless IO" << std::endl;
 		}
 		else 
-		{	unitTestResult << "Passed lossless IO test" << std::endl;
+		{	unitTestResult << "TEST " << nOfTest << ": Passed lossless IO test" << std::endl;
 			cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		}
 		delete mps2osil;
@@ -527,7 +527,9 @@ if (SOLVER_TESTS){
 		solver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the COIN - clp Solver for parincLinearbyRow" << endl;
 		//solver->buildSolverInstance();
+		std::cout << "call solver" << std::endl;
 		solver->solve();
+		std::cout << "returned from solver" << std::endl;
 		check = 7668;
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if (ok)
@@ -576,7 +578,7 @@ if (SOLVER_TESTS){
 		cout << "osrlreader successfully deleted" << endl;
 #endif
 		osrlreader = NULL;
-		unitTestResult << "Solved problem parincLinearByRow.osil with Clp" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -624,7 +626,7 @@ if (SOLVER_TESTS){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
-		unitTestResult << "Solved problem p0033.osil with Cbc" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -665,7 +667,7 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
-		unitTestResult << "Solved problem p0033.osil with Cbc node limit" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Cbc node limit" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -707,7 +709,7 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
-		unitTestResult << "Solved problem p0201.osil with Cbc" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem p0201.osil with Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -744,13 +746,13 @@ if( THOROUGH == true){
 			cout << solver->osrl << endl;
 		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Cbc on parincInteger.osil");
-		unitTestResult << "Solved problem parincInteger.osil with Cbc" << std::endl;
 		delete osilreader;
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
 		delete solver;
 		solver = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem parincInteger.osil with Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 }	// end of if(THOROUGH)
 
@@ -791,7 +793,7 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem p0033.osil with SYMPHONY" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with SYMPHONY" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -836,7 +838,7 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osilreader;
 		osilreader = NULL;	
-		unitTestResult << "Solved problem parincLinear.osil with DyLP" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with DyLP" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -883,7 +885,7 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem volumeTest.osil with Vol" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem volumeTest.osil with Vol" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -931,7 +933,7 @@ if( THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem p0033.osil with GLPK" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with GLPK" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -976,7 +978,7 @@ if( THOROUGH == true){
 		if(ok == false) throw ErrorClass(" Fail unit test with CPLEX on p0033.osil");
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem p0033.osil with CPLEX" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with CPLEX" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -1033,7 +1035,7 @@ if( THOROUGH == true){
 		osolreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		unitTestResult << "Solved problem avion2.osil with Ipopt" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem avion2.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
 
@@ -1078,7 +1080,7 @@ if(THOROUGH == true){
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP.osil");
-		unitTestResult << "Solved problem HS071.osil with Ipopt" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem HS071.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockmod.osil" << endl << endl;
@@ -1118,9 +1120,9 @@ if(THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
-		unitTestResult << "Solved problem rosenbrockmod.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockmod.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		//return 0;
 
@@ -1161,9 +1163,9 @@ if(THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem parincQuadratic.osil with Ipopt" << std::endl;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincLinear.osil" << endl << endl;
@@ -1199,13 +1201,13 @@ if(THOROUGH == true){
 			cout << ipoptSolver->osrl << endl;
 		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on parincLinear.osil");
-		unitTestResult << "Solved problem parincLinear.osil with Ipopt" << std::endl;
 		delete osilreader;
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on callBackTest.osil" << endl << endl;
@@ -1241,13 +1243,13 @@ if(THOROUGH == true){
 			cout << ipoptSolver->osrl << endl;
 		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on callBackTest.osil");
-		unitTestResult << "Solved problem callBackTest.osil with Ipopt" << std::endl;	
 		delete osilreader;
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem callBackTest.osil with Ipopt" << std::endl;	
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on callBackTestRowMajor.osil" << endl << endl;
@@ -1290,8 +1292,9 @@ if(THOROUGH == true){
 		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;	
-		unitTestResult << "Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
 		//this is integer, skip it
 		/*
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on nonconvex.osil" << endl << endl;
@@ -1333,13 +1336,11 @@ if(THOROUGH == true){
 	
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem nonconvex.osil with Ipopt" << std::endl;
-	
-	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem nonconvex.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		*/
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockorig.osil" << endl << endl;
@@ -1380,13 +1381,13 @@ if(THOROUGH == true){
 
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem rosenbrockorig.osil with Ipopt" << std::endl;
 	
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
@@ -1421,7 +1422,6 @@ if(THOROUGH == true){
 		}
 	
 		cout << "Received error message from Ipopt: \"Ipopt NEEDS AN OBJECTIVE FUNCTION\"" << endl;
-		unitTestResult << "Correctly diagnosed problem HS071_feas with Ipopt" << std::endl;
 	
 		delete solver;
 		solver = NULL;
@@ -1430,6 +1430,7 @@ if(THOROUGH == true){
 		delete osolreader;
 		osolreader = NULL;
 
+		unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed problem HS071_feas with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 } // end of if( THOROUGH)
@@ -1476,11 +1477,11 @@ if(THOROUGH == true){
 		if(ok == false) throw ErrorClass(" Fail unit test with Bonmin on bonminEx1.osil");
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem bonminEx1.osil with Bonmin" << std::endl;
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 if (THOROUGH == true){
@@ -1517,7 +1518,7 @@ if (THOROUGH == true){
 		solver = NULL;
 		delete osilreader;
 		osilreader = NULL;
-		unitTestResult << "Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on wayneQuadratic.osil" << endl << endl;
@@ -1557,7 +1558,7 @@ if (THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
@@ -1601,7 +1602,7 @@ if (THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem rosenbrockorig.osil with Bonmin" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorigInt.osil" << endl << endl;
@@ -1639,7 +1640,7 @@ if (THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem rosenbrockorigInt.osil with Bonmin" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorigInt.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif // ---- end of #if 0 above
 
@@ -1695,13 +1696,13 @@ if (THOROUGH == true){
 
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem bonminEx1.osil with Couenne" << std::endl;
 	
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1.osil with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 if( THOROUGH == true){
@@ -1744,13 +1745,13 @@ if( THOROUGH == true){
 
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem bonminEx1_Nonlinear with Couenne" << std::endl;
 	
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1_Nonlinear with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
@@ -1793,13 +1794,13 @@ if( THOROUGH == true){
 
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem nonconvex.osil with Couenne" << std::endl;
 	
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem nonconvex.osil with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on rosenbrockorig.osil" << endl << endl;
@@ -1841,13 +1842,13 @@ if( THOROUGH == true){
 
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem rosenbrockorig.osil with Couenne" << std::endl;
 	
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
@@ -1893,13 +1894,13 @@ if( THOROUGH == true){
 
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem wayneQuadratic.osil with Couenne" << std::endl;
 	
 	
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		
 
@@ -1944,11 +1945,11 @@ if( THOROUGH == true){
 #endif
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem wayneQuadratic with Couenne" << std::endl;
 		delete osilreader;
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		
 
@@ -2002,7 +2003,7 @@ if( THOROUGH == true){
 		solver = NULL;
 		osilreader = NULL;	
 		delete osolreader;
-		unitTestResult << "Solved problem lindoapiaddins.osil with Lindo" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem lindoapiaddins.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 #ifdef THOUROUGH
@@ -2037,7 +2038,7 @@ if( THOROUGH == true){
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
-		unitTestResult << "Solved problem rosenbrockmod.osil with Lindo" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockmod.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		// now solve a pure quadratic
@@ -2074,7 +2075,7 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osolreader;
 		osolreader = NULL;	
-		unitTestResult << "Solved problem parincQuadratic.osil with Lindo" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 		// now solve a quadratic binary problem
@@ -2112,7 +2113,7 @@ if( THOROUGH == true){
 		solver = NULL;
 		osilreader = NULL;	
 		delete osolreader;
-		unitTestResult << "Solved problem wayneQuadratic.osil with Lindo" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		*/
 #endif		
@@ -2166,7 +2167,7 @@ if (OTHER_TESTS){
 		mps2osil = NULL;
 //		cout << endl;
 //		cout << "DONE WITH MPS TESTING" << endl;
-		unitTestResult << "Test the MPS -> OSiL converter on parinc.mps using Cbc" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Test the MPS -> OSiL converter on parinc.mps using Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -2237,7 +2238,7 @@ if (OTHER_TESTS){
 		cout << "call delete nl2osil" << endl;
 		delete nl2osil;
 		nl2osil = NULL;	
-		unitTestResult << "Test the AMPL nl -> OSiL converter on parinc.nl using Cbc" << std::endl; 
+		unitTestResult << "TEST " << nOfTest << ": Test the AMPL nl -> OSiL converter on parinc.nl using Cbc" << std::endl; 
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
 	}	
@@ -2286,7 +2287,7 @@ if (OTHER_TESTS){
 		solver = NULL;
 		delete mps2osil;
 		mps2osil = NULL;
-		unitTestResult << "Test a problem written in b64 and then converted to OSInstance" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Test a problem written in b64 and then converted to OSInstance" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
@@ -2354,7 +2355,7 @@ if (OTHER_TESTS){
 		delete osilreader;
 		osilreader = NULL;
 		osinstance = NULL;		
-		unitTestResult << "Successful test of prefix and postfix conversion routines" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Successful test of prefix and postfix conversion routines" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		
 	}
@@ -2408,7 +2409,7 @@ if (OTHER_TESTS){
 		osilwriter = NULL;
 		osinstance = NULL;
 		//create an osinstance
-		unitTestResult << "Successful test of nonlinear operators using file testOperators.osil" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Successful test of nonlinear operators using file testOperators.osil" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -2480,10 +2481,10 @@ if (OTHER_TESTS){
 		//ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
 		ok = ( fabs(0. - sh->hessValues[2] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		unitTestResult << "Successful test of AD gradient and Hessian calculations" << std::endl;
 		delete[] x;
 		delete osilreader;
 		osilreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Successful test of AD gradient and Hessian calculations" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
@@ -2525,7 +2526,7 @@ if (PARSER_TESTS){
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
-		unitTestResult << "Successful test of OSiL parser on problem parincLinear.osil" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem parincLinear.osil" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
@@ -2568,7 +2569,7 @@ if (PARSER_TESTS){
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
-		unitTestResult << "Successful test of OSiL parser on problem finplan1.osil" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem finplan1.osil" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
@@ -2827,7 +2828,7 @@ if (PARSER_TESTS){
 		delete [] VI;
 		VI = NULL;
 		delete osilreader;
-		unitTestResult << "Successful test of osinstance get() and set() methods" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Successful test of osinstance get() and set() methods" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	catch(const ErrorClass& eclass){
@@ -2868,6 +2869,7 @@ if (PARSER_TESTS){
 		cout << "TEST PARSING AN OSoL FILE" << endl;
 		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
+		cout << osolFileName << endl;
 		start = clock();
 		std::string osol = fileUtil->getFileAsString( osolFileName.c_str() );
 		finish = clock();
@@ -3430,6 +3432,9 @@ if (PARSER_TESTS){
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		unitTestResult << 
+		     "TEST " << nOfTest << ": Successful test of OSoL parser on file parsertest.osol" 
+		      << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
@@ -3488,9 +3493,7 @@ if (PARSER_TESTS){
 		osolreader = NULL;
 
 
-		unitTestResult << 
-		     "Successful test of OSoL parser on file parsertest.osol" 
-		      << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Successful test of OSoL parser" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
 
@@ -3581,7 +3584,7 @@ if (PARSER_TESTS){
 		osrlreader = NULL;
 */
 		unitTestResult << 
-		     "Successful test of OSrL parser on problems parincLinear.osrl and errorExample.osrl" 
+		     "TEST " << nOfTest << ": Successful test of OSrL parser on problems parincLinear.osrl and errorExample.osrl" 
 		      << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	

@@ -17,11 +17,11 @@
 
 #ifndef OSRESULT_H
 #define OSRESULT_H
-//#define DEBUG
 #include <string>
 #include <vector>
 #include "OSDataStructures.h"
 
+//#define DEBUG
 
 /*! \class GeneralSubstatus
  *  \brief The GeneralSubstatus  Class.
@@ -83,7 +83,7 @@ public:
 	std::string description;
 	
 	/** the array of substatuses */
-	std::vector<GeneralSubstatus*> substatus;
+	GeneralSubstatus **substatus;
 
 	/**
 	 *
@@ -99,6 +99,78 @@ public:
 };//GeneralStatus
 
 
+/*! \class OtherResult
+ *  \brief The OtherResult Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/09/2009
+ * @since OS 2.0
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSrL schema.  
+ */
+class OtherResult {
+
+public:
+ 
+	/** the name of the other result */
+	std::string name;
+
+	/** the value of the other result */
+	std::string value;
+
+	/** the description of the other result */	
+	std::string description;
+	
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	OtherResult();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~OtherResult();
+		
+};//OtherResult
+
+
+/*! \class OtherResults
+ *  \brief The OtherResults  Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSrL schema.  
+ */
+class OtherResults {
+
+public:
+ 
+	/** the number of other results */
+	int numberOfOtherResults;
+
+	/** the array of other results */
+	OtherResult** other;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	OtherResults();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~OtherResults();
+		
+};//OtherResults
+
 /*! \class GeneralResult
  *  \brief The GeneralResult  Class.
  * 
@@ -113,35 +185,46 @@ public:
 class GeneralResult{
 public:
 
-	/** a pointer to the GeneralStatus class */
+	/** a pointer to the GeneralStatus class 
+	 */
 	GeneralStatus *generalStatus;
 	
+	/** any general message associated with the optimization
+	 */
+	std::string message;
+	
 	/** the serviceURI is the URI of the solver service
-	 * that did the optimiation 
+	 *  that did the optimization 
 	 */
 	std::string serviceURI;
 	
-	/** the serviceName is the name of the sovler service
-	 * that did the optimization
+	/** the serviceName is the name of the solver service
+	 *  that did the optimization
 	 */
 	std::string serviceName;
 	
-	/** the name of the instance that was solved */
+	/** the name of the instance that was solved 
+	 */
 	std::string instanceName;
 	
 	/** the jobID is the ID associated with the solution
-	 * of this instance
+	 *  of this instance
 	 */
 	std::string jobID;
 	
-	/** the time when solution was complete 
-	 * kippster -- verify this
+	/** the name of the solver used
 	 */
-	std::string time;
+	std::string solverInvoked;
 	
-	/** any general message associated with the optimization */
-	std::string message;
-	
+	/** a time stamp associated with the process
+	 */
+	std::string timeStamp;
+		
+	/** a pointer to the OtherResults class
+	 */
+	OtherResults *otherResults;
+
+
 	/**
 	 *
 	 * Default constructor. 
@@ -153,6 +236,156 @@ public:
 	 */
 	~GeneralResult();
 };//class GeneralResult
+
+
+/*! \class DiskSpace
+ *  \brief The DiskSpace Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSrL schema.  
+ */
+class DiskSpace {
+
+public:
+ 
+	/** the unit in which disk space is measured */
+	std::string unit;
+
+	/** a descriptive string to further describe the disk space */
+	std::string description;
+
+	/** the number of disk space units */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	DiskSpace();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~DiskSpace();
+		
+};//DiskSpace
+
+
+/*! \class MemorySize
+ *  \brief The MemorySize Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSrL schema.  
+ */
+class MemorySize {
+
+public:
+ 
+	/** the unit in which memory size is measured */
+	std::string unit;
+
+	/** a descriptive string to further describe the memory */
+	std::string description;
+
+	/** the number of memory units */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	MemorySize();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~MemorySize();
+		
+};//MemorySize
+
+
+/*! \class CPUSpeed
+ *  \brief The CPUSpeed Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSrL schema.  
+ */
+class CPUSpeed {
+
+public:
+ 
+	/** the unit in which CPU speed is measured */
+	std::string unit;
+
+	/** a descriptive string to further describe the CPU */
+	std::string description;
+
+	/** the number of CPU speed units */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	CPUSpeed();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~CPUSpeed();
+		
+};//CPUSpeed
+
+
+
+/*! \class CPUNumber
+ *  \brief The CPUNumber Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSrL schema.  
+ */
+class CPUNumber {
+
+public:
+ 
+	/** a descriptive string to further describe the CPU */
+	std::string description;
+
+	/** the number of CPUs available and/or used */
+	int number;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	CPUNumber();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~CPUNumber();
+		
+};//CPUNumber
 
 
 /*! \class SystemResult
@@ -168,7 +401,30 @@ public:
  */
 class SystemResult{
 public:
-	
+		
+	/** a string containing some basic system information */
+	std::string systemInformation;
+
+	/** a pointer to the DiskSpace class
+	 */
+	DiskSpace *availableDiskSpace;
+
+	/** a pointer to the MemorySize class
+	 */
+	MemorySize *availableMemory;
+
+	/** a pointer to the CPUSpeed class
+	 */
+	CPUSpeed *availableCPUSpeed;
+
+	/** a pointer to the CPUNumber class
+	 */
+	CPUNumber *availableCPUNumber;
+
+	/** a pointer to the OtherResults class
+	 */
+	OtherResults *otherResults;
+
 	/**
 	 *
 	 * Default constructor. 
@@ -196,6 +452,25 @@ public:
 class ServiceResult{
 public:
 	
+	/** a string describing the current state of the service */
+	std::string currentState;
+	
+	/** the number of jobs currently running */
+	int currentJobCount;
+	
+	/** total jobs processed so far */
+	int totalJobsSoFar;
+	
+	/** the time when the service was started */
+	std::string timeServiceStarted;
+
+	/** service utilization */
+	double serviceUtilization;
+
+	/** a pointer to the OtherResults class
+	 */
+	OtherResults *otherResults;
+
 	/**
 	 *
 	 * Default constructor. 
@@ -224,31 +499,26 @@ class Time{
 public:
 
 	/** 
-	 *
 	 * The type of timer used (cpuTime/elapsedTime/other)
 	 */
 	std::string type;
 
 	/** 
-	 *
 	 * The category of time (total/input/preprocessing/optimization/postprocessing/output/other)
 	 */
 	std::string category;
 
 	/** 
-	 *
 	 * The unit of time (tick/millisecond/second/minute/hour/day/week/month/year)
 	 */
 	std::string unit;
 
 	/** 
-	 *
 	 * Further description on the timer used
 	 */
 	std::string description;
 
 	/**
-	 *
 	 * The time measurement
 	 */
 	double value;
@@ -280,17 +550,17 @@ public:
 class TimingInformation{
 public:
 
-	/** 
-	 *
-	 * An array of time measurements
-	 */
-	Time** time;
-
 	/**
 	 *
 	 * The number of elements in the time array
 	 */
 	int numberOfTimes;
+
+	/** 
+	 *
+	 * An array of time measurements
+	 */
+	Time** time;
 
 	/**
 	 *
@@ -319,7 +589,44 @@ public:
 class JobResult{
 public:
 	
+	/** job status */
+	std::string status;
+
+	/** time the job was submitted */
+	std::string submitTime;
+
+	/** the time when the job was supposed to start */
+	std::string scheduledStartTime;
+
+	/** the time when the job actually started */
+	std::string actualStartTime;
+
+	/** the time when the job finished */
+	std::string endTime;
+
+	/** a pointer to the TimingInformation class */
 	TimingInformation* timingInformation;
+
+	/** a pointer to the CPUSpeed class
+	 */
+	CPUSpeed *usedCPUSpeed;
+
+	/** a pointer to the CPUNumber class
+	 */
+	CPUNumber *usedCPUNumber;
+
+	/** a pointer to the DiskSpace class
+	 */
+	DiskSpace *usedDiskSpace;
+
+	/** a pointer to the MemorySize class
+	 */
+	MemorySize *usedMemory;
+
+	/** a pointer to the OtherResults class
+	 */
+	OtherResults *otherResults;
+
 	/**
 	 *
 	 * Default constructor. 
@@ -349,8 +656,8 @@ public:
 class OptimizationSolutionSubstatus {
 public:
 	
-	/** the name of the solution substatus */
-	std::string name;
+	/** the type of the solution substatus */
+	std::string type;
 	
 	/** a description of the solution substatus */
 	std::string description;
@@ -393,7 +700,7 @@ public:
 	std::string description;
 	
 	/** a pointer to an array of substatus objects */
-	std::vector<OptimizationSolutionSubstatus*> substatus;
+	OptimizationSolutionSubstatus** substatus;
 
 	/**
 	 * Default constructor. 
@@ -464,7 +771,7 @@ public:
 	/** a vector of VarValue objects, there will be one
 	 * for each variable in the solution
 	 */
-	std::vector<VarValue*> var;
+	VarValue** var;
 
 	
 	/**
@@ -482,8 +789,8 @@ public:
 };// class VariableValues
 
 
-/*! \class VarStringValue
- *  \brief VarStringValue  Class.
+/*! \class VarValueString
+ *  \brief VarValueString  Class.
  * 
  * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
@@ -493,7 +800,7 @@ public:
  * A class that is used to provide the value and index
  * associated with the string-valued variables in the solution.  
  */
-class VarStringValue{
+class VarValueString{
 public:
 
 	/** idx is the index on variable in the solution */
@@ -508,19 +815,19 @@ public:
 	 *
 	 * Default constructor. 
 	 */
-	VarStringValue();
+	VarValueString();
 
 	/**
 	 *
 	 * Class destructor. 
 	 */
-	~VarStringValue();
+	~VarValueString();
 
-};// class VarStringValue
+};// class VarValueString
 
 
-/*! \class VariableStringValues
- *  \brief The VariableStringValues Class.
+/*! \class VariableValuesString
+ *  \brief The VariableValuesString Class.
  * 
  * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
@@ -529,33 +836,107 @@ public:
  * \remarks
  * A class that contains values for all the string-valued variables
  */	
-class VariableStringValues{
+class VariableValuesString{
 public:
 
-	/** the number of variable values that are in the solution
+	/** the number of string-valued variable values that are in the solution
 	 */
 	int numberOfVar;
 
-	/** a vector of VarValue objects, there will be one
+	/** a vector of VarValueString objects, there will be one
 	 * for each variable in the solution
 	 */
-	std::vector<VarStringValue*> var;
+	VarValueString** var;
 
 	
 	/**
 	 *
 	 * Default constructor. 
 	 */
-	VariableStringValues();
+	VariableValuesString();
 	
 	/**
 	 *
 	 * Class destructor. 
 	 */
-	~VariableStringValues();
+	~VariableValuesString();
 
-};// class VariableStringValues
+};// class VariableValuesString
 
+
+/*! \class BasStatus
+ *  \brief BasStatus Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that is used to provide the basis status and index
+ * associated with (part of) the optimal solution.  
+ */
+class BasStatus{
+public:
+
+	/** idx is the index of the variable in the solution */
+	int idx;
+	
+	/* value is the value of the variable indexed by idx
+	 * in the solution
+	 */	
+	std::string value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	BasStatus();
+
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~BasStatus();
+
+};// class BasStatus
+
+
+/*! \class BasisStatus
+ *  \brief The BasisStatus Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that contains values for all the string-valued variables
+ */	
+class BasisStatus{
+public:
+
+	/** the number of string-valued variable values that are in the solution
+	 */
+	int numberOfVar;
+
+	/** a vector of VarValueString objects, there will be one
+	 * for each variable in the solution
+	 */
+	BasStatus** var;
+
+	
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	BasisStatus();
+	
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~BasisStatus();
+
+};// class BasisStatus
 
 /*! \class OtherVarResult
  *  \brief OtherVarResult Class.
@@ -574,10 +955,10 @@ public:
 	int idx;
 	
 	/** value holds a general value for a variable,
-	 * for example, rather than the value of a variable
-	 * we may wish to store the variable name associated
-	 * with the vairable with index idx, hence we want
-	 * a string here and not a double
+	 *  for example, rather than the value of a variable
+	 *  we may wish to store the variable name associated
+	 *  with the variable with index idx, hence we want
+	 *  a string here and not a double
 	 */
 	std::string value;
 	
@@ -630,7 +1011,7 @@ public:
 	 * give for each variable the index and value for 
 	 * this user defined variable result
 	 */
-	std::vector<OtherVarResult*> var;
+	OtherVarResult** var;
 
 	/**
 	 *
@@ -662,16 +1043,18 @@ class VariableSolution{
 public:
 
 	/** the number of types of variable results other
-	 * than the value of the variable
+	 *  than the value of the variable
 	 */
 	int numberOfOtherVariableResults;
 
-	/** a pointer to an array of VariableValues objects */
+	/** a pointer to a VariableValues object */
 	VariableValues *values;
 	
-	/** a pointer to an array of VariableStringValues objects */
-	VariableStringValues *valuesString;
+	/** a pointer to a VariableValuesString object */
+	VariableValuesString *valuesString;
 	
+	/** a pointer to a BasisStatus object */
+	BasisStatus *basisStatus;
 
 	/** a pointer to an array of other pointer objects for 
 	 * variables
@@ -747,7 +1130,7 @@ public:
 	 * give an index and objective function value for
 	 * each objective function.
 	 */
-	std::vector<ObjValue*> obj;
+	ObjValue** obj;
 	
 	/**
 	 *
@@ -783,7 +1166,7 @@ public:
 	
 	
 	/** value is a value associated with an objective function
-	 * indexed by idx
+	 *  indexed by idx
 	 */
 	std::string value;
 	
@@ -800,8 +1183,6 @@ public:
 	~OtherObjResult();
 	
 };//OtherObjResult
-
-
 
 
 /*! \class OtherObjectiveResult
@@ -823,15 +1204,14 @@ public:
 	 */
 	int numberOfObj;
 
+	/** the name of the result the user is defining */
+	std::string name;
+	
 	/** this element allows a specific value associated with this
 	    particular type of result
 	 */
 	std::string value;
 
-
-	/** the name of the result the user is defining */
-	std::string name;
-	
 	/** a brief description of the type of result */
 	std::string description;
 
@@ -839,7 +1219,7 @@ public:
 	 * give for each objective function the index and 
 	 * value for this user defined objective function result
 	 */	
-	std::vector<OtherObjResult*> obj;
+	OtherObjResult** obj;
 	
 	/**
 	 *
@@ -930,7 +1310,7 @@ public:
 	//double ubValue;
 	
 	/** value of dual variable on
-	 * the constraint indexed by idx if the constraint
+	 * the constraint indexed by idx 
 	 */
 	double value;
 	
@@ -971,7 +1351,7 @@ public:
 	 * give an index and dual variable value for
 	 * each constraint function.
 	 */
-	std::vector<DualVarValue*> con;
+	DualVarValue** con;
 	
 	/**
 	 *
@@ -1027,9 +1407,6 @@ public:
 };//OtherConResult
 
 
-
-
-
 /*! \class OtherConstraintResult
  *  \brief The OtherConstraintResult  Class.
  * 
@@ -1049,13 +1426,13 @@ public:
 	 */
 	int numberOfCon;
 
+	/** the name of the result the user is defining */
+	std::string name;
+
 	/** this element allows a specific value associated with this
 	    particular type of result
 	 */
 	std::string value;
-
-	/** the name of the result the user is defining */
-	std::string name;
 	
 	/** a brief description of the type of result */
 	std::string description;
@@ -1065,7 +1442,7 @@ public:
 	 * give for each constraint the index and 
 	 * value for this user defined objective function result
 	 */	
-	std::vector<OtherConResult*> con;
+	OtherConResult** con;
 
 	/**
 	 *
@@ -1080,8 +1457,6 @@ public:
 	~OtherConstraintResult();
 	
 };//OtherConstraintResult
-
-	
 
 
 /*! \class ConstraintSolution
@@ -1174,7 +1549,7 @@ public:
 	 */
 	~OtherSolutionResult();
 	
-};//OtherOptimizationResult
+};//OtherSolutionResult
 
 
 
@@ -1213,10 +1588,9 @@ public:
 	 */
 	~OtherSolutionResults();
 	
-};//OtherOptimizationResult
+};//OtherSolutionResults
 
 	
-
 
 /*! \class OptimizationSolution
  *  \brief The OptimizationSolution Class.
@@ -1237,8 +1611,8 @@ public:
 	 */
 	int targetObjectiveIdx;
 
-	/** the number of other results associated with this solution */
-	int numberOfOtherResults;
+	/** a marker to track whether the objectives are weighted */
+	bool weightedObjectives;
 
 	/** status is a pointer to an OptimizationSolutionStatus
 	 *  object associated with this optimization solution
@@ -1283,6 +1657,93 @@ public:
 };// class OptimizationSolution
 
 
+/*! \class SolverOutput
+ *  \brief The SolverOutput  Class.
+ * 
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that allows the solver to report an
+ * arbitrary result associated with the solution. 
+ */
+class SolverOutput {
+public:
+
+	/** the name of the result the user is defining */
+	std::string name;
+	
+	/** this element allows a specific category to be associated with this
+	    particular type of result
+	 */
+	std::string category;
+
+	/** a brief description of the type of result */
+	std::string description;
+
+	/** the number of items contained in this otherSolutionResult
+	 */
+	int numberOfItems;
+
+	/** an array of items (string-valued)
+	 */
+	std::string *item;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	SolverOutput();
+	
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~SolverOutput();
+	
+};//SolverOutput
+
+
+
+/*! \class OtherSolverOutput
+ *  \brief The OtherSolverOutput Class.
+ * 
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that allows the solver to report an
+ * arbitrary result associated with the solution. 
+ */
+class OtherSolverOutput {
+public:
+
+	/** the number of elements in the pointer of SolverOutput objects 
+	 */
+	int numberOfSolverOutputs;
+	
+	/** solverOutput is a pointer to an array of SolverOutput objects
+	 */
+	SolverOutput **solverOutput;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	OtherSolverOutput();
+	
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~OtherSolverOutput();
+	
+};//OtherSolverOutput
+
+
+
 /*! \class OptimizationResult
  *  \brief The OptimizationResult Class.
  * 
@@ -1297,6 +1758,11 @@ public:
 class OptimizationResult{
 public:
 	
+	/** numberOfSolutions is the number of objective functions
+	 * reported.
+	 */	
+	int numberOfSolutions;
+
 	/** numberOfVariables is the number of variables reported 
 	 * in the solution.
 	 */
@@ -1312,15 +1778,15 @@ public:
 	 */
     int numberOfConstraints;
 
-	/** numberOfSolubitons is the number of objective functions
-	 * reported.
-	 */	
-	int numberOfSolutions;
-
 	/** solution is an array of pointers to OptimizationSolution
 	 * objects
 	 */
 	OptimizationSolution **solution;
+
+	/** otherSolverOutput is a pointer to an OtherSolverOutput
+	 *  object
+	 */
+	OtherSolverOutput *otherSolverOutput;
 	
 	/**
 	 *
@@ -1421,9 +1887,9 @@ public:
 	double *m_mdDualValues;
 	
 	
-	std::vector<IndexValuePair*> primalVals;
+	std::vector<IndexValuePair*>  primalVals;
 	
-	std::vector<IndexValuePair*> dualVals;
+	std::vector<IndexValuePair*>  dualVals;
 	
 	
 
@@ -1508,7 +1974,7 @@ public:
 	 * @param solIdx holds the solution index the optimal solution corresponds to. 
 	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
 	 */
-	std::vector<IndexValuePair*>  getOptimalPrimalVariableValues(int solIdx);
+	std::vector<IndexValuePair*> getOptimalPrimalVariableValues(int solIdx);
 	
 	/**
 	 * Get one solution of optimal objective values. 
@@ -1525,7 +1991,7 @@ public:
 	 * @param solIdx holds the solution index the optimal solution corresponds to. 
 	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
 	 */	
-	std::vector<IndexValuePair*>   getOptimalDualVariableValues(int solIdx);
+	std::vector<IndexValuePair*> getOptimalDualVariableValues(int solIdx);
 	
 	//Solution getSolution(int solIdx);
 
