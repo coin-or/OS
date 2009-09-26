@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -4570,6 +4570,42 @@
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixNthLargestEigenValue">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixNthLargestEigenValue" type="OSnLNodeMatrixNthLargestEigenValue" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixLargestEigenValue">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence minOccurs="2" maxOccurs="2">
+					<xs:element ref="OSnLMNode"/>
+					<xs:element ref="OSnLNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixLargestEigenValue" type="OSnLNodeMatrixLargestEigenValue" substitutionGroup="OSnLNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>	
 	<xs:complexType name="OSnLNodeMatrixNorm">
 		<xs:annotation>
 			<xs:documentation>experiment. </xs:documentation>
@@ -4725,6 +4761,24 @@
 			<xs:documentation>experiment. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixCholeskyDecomposition">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixCholeskyDecomposition" type="OSnLNodeMatrixCholeskyDecomposition" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>experiment. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	
 	<!--Special or Other Nodes: since version 1.0.0 -->
 	<xs:complexType name="OSnLNodeQuadratic">
 		<xs:annotation>
