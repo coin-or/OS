@@ -57,7 +57,8 @@
 #include "OSResult.h"
 
 
-//#define PARSERDEBUG
+#define PARSERDEBUG
+
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);
 #else     
@@ -139,22 +140,38 @@ return(DOUBLE);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
-({xmlwhitespace}+numberOfTimes{equality}) {YY_PRINT; return(NUMBEROFTIMESATT);}
-({xmlwhitespace}+numberOfSolutions{equality}) {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
-({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
-({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
-({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
-({xmlwhitespace}+numberOfOtherVariableResults{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
-({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
-({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
-({xmlwhitespace}+numberOfOtherSolutionResults{equality}) {  YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
-({xmlwhitespace}+numberOfItems{equality}) {  YY_PRINT;  return(NUMBEROFITEMSATT);}
-({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
-({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
+ /* numerical attributes */
+
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
-({xmlwhitespace}+idx{equality}{quote}{xmlwhitespace}*) {YY_PRINT; return(IDXATT);}
+({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
+({xmlwhitespace}+numberOfItems{equality}) {  YY_PRINT;  return(NUMBEROFITEMSATT);}
+({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
+({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
+({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
+({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
+({xmlwhitespace}+numberOfOtherResults{equality}) {YY_PRINT; return(NUMBEROFOTHERRESULTSATT);}
+({xmlwhitespace}+numberOfOtherSolutionResults{equality}) {  YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
+({xmlwhitespace}+numberOfOtherVariableResults{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
+({xmlwhitespace}+numberOfSolutions{equality}) {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
+({xmlwhitespace}+numberOfSolverOutputs{equality}) {YY_PRINT; return(NUMBEROFSOLVEROUTPUTSATT);}
+({xmlwhitespace}+numberOfSubstatuses{equality}) {YY_PRINT; return(NUMBEROFSUBSTATUSESATT);}
+({xmlwhitespace}+numberOfTimes{equality}) {YY_PRINT; return(NUMBEROFTIMESATT);}
+({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
+({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
+
+({xmlwhitespace}+idx{equality}) {YY_PRINT; return(IDXATT);}
 ({xmlwhitespace}+targetObjectiveIdx{equality}) {YY_PRINT;  return(TARGETOBJECTIVEIDXATT);}
 
+ /* attributes returning strings */
+
+({xmlwhitespace}+category{equality}\"\") {YY_PRINT; return(EMPTYCATEGORYATT);}
+({xmlwhitespace}+category{equality}\'\') {YY_PRINT; return(EMPTYCATEGORYATT);}
+({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+category{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+description{equality}\"\") {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
+({xmlwhitespace}+description{equality}\'\') {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
+({xmlwhitespace}+description{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
+({xmlwhitespace}+description{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
 ({xmlwhitespace}+name{equality}\"\") {YY_PRINT; return(EMPTYNAMEATT);}
 ({xmlwhitespace}+name{equality}\'\') {YY_PRINT; return(EMPTYNAMEATT);}
 ({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
@@ -163,10 +180,6 @@ return(DOUBLE);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 ({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
-({xmlwhitespace}+category{equality}\"\") {YY_PRINT; return(EMPTYCATEGORYATT);}
-({xmlwhitespace}+category{equality}\'\') {YY_PRINT; return(EMPTYCATEGORYATT);}
-({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
-({xmlwhitespace}+category{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
 ({xmlwhitespace}+unit{equality}\"\") {YY_PRINT; return(EMPTYUNITATT);}
 ({xmlwhitespace}+unit{equality}\'\') {YY_PRINT; return(EMPTYUNITATT);}
 ({xmlwhitespace}+unit{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
@@ -175,103 +188,147 @@ return(DOUBLE);}
 ({xmlwhitespace}+value{equality}\'\') {YY_PRINT; return(EMPTYVALUEATT);}
 ({xmlwhitespace}+value{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
 ({xmlwhitespace}+value{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
-({xmlwhitespace}+description{equality}\"\") {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
-({xmlwhitespace}+description{equality}\'\') {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
-({xmlwhitespace}+description{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
-({xmlwhitespace}+description{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
+({xmlwhitespace}+weightedObjectives{equality}\"\") {YY_PRINT; return(EMPTYWEIGHTEDOBJECTIVESATT);}
+({xmlwhitespace}+weightedObjectives{equality}\'\') {YY_PRINT; return(EMPTYWEIGHTEDOBJECTIVESATT);}
+({xmlwhitespace}+weightedObjectives{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(WEIGHTEDOBJECTIVESATT);}
+({xmlwhitespace}+weightedObjectives{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(WEIGHTEDOBJECTIVESATT);}
 
+ /* top level elements */
 
 {xmlwhitespace}*\<osrl{xmlwhitespace}*\> {return(OSRLSTARTEMPTY);}
 {xmlwhitespace}*\<osrl{xmlwhitespace}+ {YY_PRINT; BEGIN osrlattributetext;  return(OSRLSTART);}
 {xmlwhitespace}*\<\/osrl{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSRLEND);}
-{xmlwhitespace}*\<general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTART);}
+
+{xmlwhitespace}*\<general{xmlwhitespace}* {YY_PRINT; return(GENERALSTART);}
 {xmlwhitespace}*\<\/general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALEND);}
-{xmlwhitespace}*\<system{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SYSTEMSTART);}
+
+{xmlwhitespace}*\<system{xmlwhitespace}* {YY_PRINT; return(SYSTEMSTART);}
 {xmlwhitespace}*\<\/system{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SYSTEMEND);}
-{xmlwhitespace}*\<service{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SERVICESTART);}
+
+{xmlwhitespace}*\<service{xmlwhitespace}* {YY_PRINT; return(SERVICESTART);}
 {xmlwhitespace}*\<\/service{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SERVICEEND);}
-{xmlwhitespace}*\<job{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(JOBSTART);}
-{xmlwhitespace}*\<\/job{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBEND);}
 
-{xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURISTART);}
-{xmlwhitespace}*\<serviceURI{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(SERVICEURISTART);}
-{xmlwhitespace}*\<\/serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURIEND);}
-{xmlwhitespace}*\<serviceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICENAMESTART);}
-{xmlwhitespace}*\<serviceName{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(SERVICENAMESTART);}
-{xmlwhitespace}*\<\/serviceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICENAMEEND);}
-{xmlwhitespace}*\<instanceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INSTANCENAMESTART);}
-{xmlwhitespace}*\<instanceName{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(INSTANCENAMESTART);}
-{xmlwhitespace}*\<\/instanceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INSTANCENAMEEND);}
-{xmlwhitespace}*\<jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDSTART);}
-{xmlwhitespace}*\<jobID{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(JOBIDSTART);}
-{xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
-
-{xmlwhitespace}*\<timingInformation {YY_PRINT; return(TIMINGINFORMATIONSTART);}
-{xmlwhitespace}*\<\/timingInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMINGINFORMATIONEND);}
-
-{xmlwhitespace}*\<time {YY_PRINT;  return(TIMESTART);}
-{xmlwhitespace}*\<\/time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMEEND);}
-
-{xmlwhitespace}*\<message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGESTART);}
-{xmlwhitespace}*\<message{xmlwhitespace}*\>\< {YY_PRINT; unput('<'); return(MESSAGESTART);}
-{xmlwhitespace}*\<\/message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGEEND);}
-
-{xmlwhitespace}*\<generalStatus {YY_PRINT; return(GENERALSTATUSSTART);}
-{xmlwhitespace}*\<\/generalStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTATUSEND);}
+{xmlwhitespace}*\<job{xmlwhitespace}* {YY_PRINT; return(JOBSTART);}
+{xmlwhitespace}*\<\/job{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(JOBEND);}
 
 {xmlwhitespace}*\<optimization {YY_PRINT; return(OPTIMIZATIONSTART);}
 {xmlwhitespace}*\<\/optimization{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OPTIMIZATIONEND);}
 
-{xmlwhitespace}*\<solution {YY_PRINT; return(SOLUTIONSTART);}
-{xmlwhitespace}*\<\/solution{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SOLUTIONEND);}
 
-{xmlwhitespace}*\<status {YY_PRINT; return(STATUSSTART);}
-{xmlwhitespace}*\<\/status{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(STATUSEND);}
+ /* The <item> element is treated specially because it may legitimately contain special characters */
 
-{xmlwhitespace}*\<values {YY_PRINT; return(VALUESSTART);}
-{xmlwhitespace}*\<\/values{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VALUESEND);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(ITEMEMPTY);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
+{xmlwhitespace}*\<\/item{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(ITEMEND);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(ITEMSTARTANDEND);}
 
+ /* Remaining elements, sorted alpabetically. */
+ 
+{xmlwhitespace}*\<actualStartTime {YY_PRINT;  return(ACTUALSTARTTIMESTART);}
+{xmlwhitespace}*\<\/actualStartTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ACTUALSTARTTIMEEND);}
+{xmlwhitespace}*\<availableCPUNumber {YY_PRINT;  return(AVAILABLECPUNUMBERSTART);}
+{xmlwhitespace}*\<\/availableCPUNumber{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(AVAILABLECPUNUMBEREND);}
+{xmlwhitespace}*\<availableCPUSpeed {YY_PRINT;  return(AVAILABLECPUSPEEDSTART);}
+{xmlwhitespace}*\<\/availableCPUSpeed{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(AVAILABLECPUSPEEDEND);}
+{xmlwhitespace}*\<availableDiskSpace {YY_PRINT;  return(AVAILABLEDISKSPACESTART);}
+{xmlwhitespace}*\<\/availableDiskSpace{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(AVAILABLEDISKSPACEEND);}
+{xmlwhitespace}*\<availableMemory {YY_PRINT;  return(AVAILABLEMEMORYSTART);}
+{xmlwhitespace}*\<\/availableMemory{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(AVAILABLEMEMORYEND);}
+{xmlwhitespace}*\<basisStatus {YY_PRINT;  return(BASISSTATUSSTART);}
+{xmlwhitespace}*\<\/basisStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASISSTATUSEND);}
+{xmlwhitespace}*\<basStatus {YY_PRINT;  return(BASSTATUSSTART);}
+{xmlwhitespace}*\<\/basStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASSTATUSEND);}
+{xmlwhitespace}*\<con {YY_PRINT; return(CONSTART);}
+{xmlwhitespace}*\<\/con{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONEND);}
+{xmlwhitespace}*\<constraints {YY_PRINT; return(CONSTRAINTSSTART);}
+{xmlwhitespace}*\<\/constraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONSTRAINTSEND);}
+{xmlwhitespace}*\<currentJobCount {YY_PRINT;  return(CURRENTJOBCOUNTSTART);}
+{xmlwhitespace}*\<\/currentJobCount{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CURRENTJOBCOUNTEND);}
+{xmlwhitespace}*\<currentState {YY_PRINT;  return(CURRENTSTATESTART);}
+{xmlwhitespace}*\<\/currentState{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CURRENTSTATEEND);}
 {xmlwhitespace}*\<dualValues {YY_PRINT; return(DUALVALUESSTART);}
 {xmlwhitespace}*\<\/dualValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(DUALVALUESEND);}
-
+{xmlwhitespace}*\<endTime {YY_PRINT;  return(ENDTIMESTART);}
+{xmlwhitespace}*\<\/endTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ENDTIMEEND);}
+{xmlwhitespace}*\<generalStatus {YY_PRINT; return(GENERALSTATUSSTART);}
+{xmlwhitespace}*\<\/generalStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTATUSEND);}
+{xmlwhitespace}*\<instanceName {YY_PRINT;  return(INSTANCENAMESTART);}
+{xmlwhitespace}*\<\/instanceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INSTANCENAMEEND);}
+{xmlwhitespace}*\<jobID {YY_PRINT;  return(JOBIDSTART);}
+{xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
+{xmlwhitespace}*\<message {YY_PRINT;  return(MESSAGESTART);}
+{xmlwhitespace}*\<\/message{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(MESSAGEEND);}
+{xmlwhitespace}*\<obj {YY_PRINT; return(OBJSTART);}
+{xmlwhitespace}*\<\/obj{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OBJEND);}
+{xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}
+{xmlwhitespace}*\<\/objectives{xmlwhitespace}*\>{xmlwhitespace}*  {YY_PRINT; return(OBJECTIVESEND);}
+{xmlwhitespace}*\<optimizationSolutionStatus {YY_PRINT;  return(OPTIMIZATIONSOLUTIONSTATUSSTART);}
+{xmlwhitespace}*\<\/optimizationSolutionStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OPTIMIZATIONSOLUTIONSTATUSEND);}
+{xmlwhitespace}*\<optimizationSolutionSubstatus {YY_PRINT;  return(OPTIMIZATIONSOLUTIONSUBSTATUSSTART);}	   
+{xmlwhitespace}*\<\/optimizationSolutionSubstatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OPTIMIZATIONSOLUTIONSUBSTATUSEND);}
+{xmlwhitespace}*\<other {YY_PRINT; return(OTHERSTART);}
+{xmlwhitespace}*\<\/other{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHEREND);}
+{xmlwhitespace}*\<otherResults {YY_PRINT;  return(OTHERRESULTSSTART);}
+{xmlwhitespace}*\<\/otherResults{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERRESULTSEND);}
+{xmlwhitespace}*\<otherSolutionResult {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
+{xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
+{xmlwhitespace}*\<otherSolutionResults {YY_PRINT; return(OTHERSOLUTIONRESULTSSTART);}
+{xmlwhitespace}*\<\/otherSolutionResults{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHERSOLUTIONRESULTSEND);}
+{xmlwhitespace}*\<otherSolverOutput {YY_PRINT;  return(OTHERSOLVEROUTPUTSTART);}
+{xmlwhitespace}*\<\/otherSolverOutput{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLVEROUTPUTEND);}
+{xmlwhitespace}*\<scheduledStartTime {YY_PRINT;  return(SCHEDULEDSTARTTIMESTART);}
+{xmlwhitespace}*\<\/scheduledStartTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SCHEDULEDSTARTTIMEEND);}
+{xmlwhitespace}*\<serviceName {YY_PRINT;  return(SERVICENAMESTART);}
+{xmlwhitespace}*\<\/serviceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICENAMEEND);}
+{xmlwhitespace}*\<serviceURI {YY_PRINT;  return(SERVICEURISTART);}
+{xmlwhitespace}*\<\/serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEURIEND);}
+{xmlwhitespace}*\<serviceUtilization {YY_PRINT;  return(SERVICEUTILIZATIONSTART);}
+{xmlwhitespace}*\<\/serviceUtilization{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SERVICEUTILIZATIONEND);}
+{xmlwhitespace}*\<solution {YY_PRINT; return(SOLUTIONSTART);}
+{xmlwhitespace}*\<\/solution{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SOLUTIONEND);}
+{xmlwhitespace}*\<solverInvoked {YY_PRINT;  return(SOLVERINVOKEDSTART);}
+{xmlwhitespace}*\<\/solverInvoked{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SOLVERINVOKEDEND);}
+{xmlwhitespace}*\<solverOutput {YY_PRINT;  return(SOLVEROUTPUTSTART);}
+{xmlwhitespace}*\<\/solverOutput{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SOLVEROUTPUTEND);}
+{xmlwhitespace}*\<status {YY_PRINT; return(STATUSSTART);}
+{xmlwhitespace}*\<\/status{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(STATUSEND);}
+{xmlwhitespace}*\<submitTime {YY_PRINT;  return(SUBMITTIMESTART);}
+{xmlwhitespace}*\<\/submitTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SUBMITTIMEEND);}
+{xmlwhitespace}*\<substatus {YY_PRINT;  return(SUBSTATUSSTART);}
+{xmlwhitespace}*\<\/substatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SUBSTATUSEND);}
+{xmlwhitespace}*\<systemInformation {YY_PRINT;  return(SYSTEMINFORMATIONSTART);}
+{xmlwhitespace}*\<\/systemInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SYSTEMINFORMATIONEND);}
+{xmlwhitespace}*\<time {YY_PRINT;  return(TIMESTART);}
+{xmlwhitespace}*\<\/time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMEEND);}
+{xmlwhitespace}*\<timeServiceStarted {YY_PRINT;  return(TIMESERVICESTARTEDSTART);}
+{xmlwhitespace}*\<\/timeServiceStarted{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMESERVICESTARTEDEND);}
+{xmlwhitespace}*\<timestamp {YY_PRINT;  return(TIMESTAMPSTART);}
+{xmlwhitespace}*\<\/timestamp{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMESTAMPEND);}
+{xmlwhitespace}*\<timingInformation {YY_PRINT; return(TIMINGINFORMATIONSTART);}
+{xmlwhitespace}*\<\/timingInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMINGINFORMATIONEND);}
+{xmlwhitespace}*\<totalJobsSoFar {YY_PRINT;  return(TOTALJOBSSOFARSTART);}
+{xmlwhitespace}*\<\/totalJobsSoFar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TOTALJOBSSOFAREND);}
+{xmlwhitespace}*\<usedCPUNumber {YY_PRINT;  return(USEDCPUNUMBERSTART);}
+{xmlwhitespace}*\<\/usedCPUNumber{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(USEDCPUNUMBEREND);}
+{xmlwhitespace}*\<usedCPUSpeed {YY_PRINT;  return(USEDCPUSPEEDSTART);}
+{xmlwhitespace}*\<\/usedCPUSpeed{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(USEDCPUSPEEDEND);} 
+{xmlwhitespace}*\<usedDiskSpace {YY_PRINT;  return(USEDDISKSPACESTART);}
+{xmlwhitespace}*\<\/usedDiskSpace{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(USEDDISKSPACEEND);}
+{xmlwhitespace}*\<usedMemory {YY_PRINT;  return(USEDMEMORYSTART);}
+{xmlwhitespace}*\<\/usedMemory{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(USEDMEMORYEND);}
+{xmlwhitespace}*\<values {YY_PRINT; return(VALUESSTART);}
+{xmlwhitespace}*\<\/values{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VALUESEND);}
+{xmlwhitespace}*\<valuesString {YY_PRINT;  return(VALUESSTRINGSTART);}
+{xmlwhitespace}*\<\/valuesString{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(VALUESSTRINGEND);}
 {xmlwhitespace}*\<var {YY_PRINT; return(VARSTART);}
 {xmlwhitespace}*\<\/var{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VAREND);}
 {xmlwhitespace}*\<variables {YY_PRINT; return(VARIABLESSTART);}
 {xmlwhitespace}*\<\/variables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIABLESEND);}
 
-{xmlwhitespace}*\<obj {YY_PRINT; return(OBJSTART);}
-{xmlwhitespace}*\<\/obj{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OBJEND);}
-{xmlwhitespace}*\<objectives {YY_PRINT; return(OBJECTIVESSTART);}
-{xmlwhitespace}*\<\/objectives{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OBJECTIVESEND);}
 
-{xmlwhitespace}*\<con {YY_PRINT; return(CONSTART);}
-{xmlwhitespace}*\<\/con{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONEND);}
-{xmlwhitespace}*\<constraints {YY_PRINT; return(CONSTRAINTSSTART);}
-{xmlwhitespace}*\<\/constraints{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(CONSTRAINTSEND);}
+ /* environments and comments */
 
-{xmlwhitespace}*\<other {YY_PRINT; return(OTHERSTART);}
-{xmlwhitespace}*\<\/other{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHEREND);}
-
-{xmlwhitespace}*\<otherSolutionResults {YY_PRINT; return(OTHERSOLUTIONRESULTSSTART);}
-{xmlwhitespace}*\<\/otherSolutionResults{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHERSOLUTIONRESULTSEND);}
-
-{xmlwhitespace}*\<otherSolutionResult {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
-{xmlwhitespace}*\<\/otherSolutionResult{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
-
-{xmlwhitespace}*\<item{xmlwhitespace}*\>\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(ITEMEMPTY);}
-{xmlwhitespace}*\<item{xmlwhitespace}*\> { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
-{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; return(ITEMEND);}
-{xmlwhitespace}*\<item{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(ITEMSTARTANDEND);}
-(\<serviceURI{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICEURISTARTANDEND);}
-(\<serviceName{xmlwhitespace}*\/>) {YY_PRINT;  return(SERVICENAMESTARTANDEND);}
-(\<instanceName{xmlwhitespace}*\/>) {YY_PRINT;  return(INSTANCENAMESTARTANDEND);}
-(\<jobID{xmlwhitespace}*\/>) {YY_PRINT;  return(JOBIDSTARTANDEND);}
-(\<time{xmlwhitespace}*\/>) {YY_PRINT;  return(TIMESTARTANDEND);}
-(\<message{xmlwhitespace}*\/>) {YY_PRINT;  return(MESSAGESTARTANDEND);}
-
-
-
-[a-zA-Z0-9.:_*#$@ \n]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$@ \n\/]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 <itemtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 
 "<!--" BEGIN comment;
@@ -289,6 +346,7 @@ return(DOUBLE);}
 <singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 <osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSRLATTRIBUTETEXT);}
 
+ /* error trap */
 
 .|\n { 
 	std::string error;

@@ -43,6 +43,9 @@ public:
 
 	/** the description of the substatus */	
 	std::string description;
+
+	/** the value of the substatus */	
+	std::string value;
 	
 	/**
 	 *

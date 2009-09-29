@@ -133,7 +133,6 @@ public:
 	/** total number of Objectives in the model instance */
 	unsigned int numberOfObjectives;
 	
-	
 	/** number of variables in the a solution instance,
 	 * may change from solution to solution
 	 */
@@ -149,6 +148,9 @@ public:
 	 */
 	unsigned int numberOfObj;
 	
+	/** a temporary variable to hold the number of entries in a list */
+	int numberOf;
+
 	/** a temporary counter to count variables, number of attributes, etc. */
 	int kounter;
 
@@ -163,6 +165,9 @@ public:
 
 	/** a temporary variable to hold an integer or double value */
 	double tempVal;
+	
+	/** a temporary variable to hold a string */
+	std::string tempStr;
 	
 	/** a temporary variable to hold an output stream value */
 	std::ostringstream outStr;
@@ -180,10 +185,12 @@ public:
 	 */
 	bool statusTypePresent;
 	
-	/** set generalStatusTypePresent to true if there is
-	 * a general status attribute parsed
+	/** set generalStatus...Present to true if the corresponding
+	 *  general status attribute parsed
 	 */	
 	bool generalStatusTypePresent;
+	bool generalStatusDescriptionPresent;
+	bool generalStatusNumberOfPresent;
 	
 	/** set otherNamePresent to true if there is
 	 * a name attribute in anotherVarResult

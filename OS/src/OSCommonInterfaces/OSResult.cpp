@@ -27,7 +27,7 @@
 #include<iostream>
 #include<sstream>
 
-#define DEBUG_RESULT
+//#define DEBUG_RESULT
 
 using namespace std;
 
@@ -38,7 +38,8 @@ using namespace std;
 
 GeneralSubstatus::GeneralSubstatus():
 	name( ""),
-	description( "")
+	description( ""),
+	value("")
 {    
 	#ifdef DEBUG_RESULT
 	cout << "Inside the GeneralSubstatus Constructor" << endl;
@@ -1387,6 +1388,15 @@ bool OSResult::setGeneralStatusType(string type){
 	return true;
 }//setGeneralStatusType
 
+
+bool OSResult::setGeneralStatusDescription(string description){
+	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
+	general->generalStatus->description = description;
+	return true;
+}//setGeneralStatusDescription
+
+
+
 bool OSResult::addTimingInformation(std::string type, std::string category,
 									std::string unit, std::string description, double value)
 {	int nt; int i;
@@ -1416,16 +1426,11 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 }//addTimingInformation
 
 
-bool OSResult::setGeneralStatusDescription(string description){
-	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
-	general->generalStatus->description = description;
-	return true;
-}//setGeneralStatusDescription
-
-
 
 bool OSResult::setServiceName(string serviceName){
+	std::cout << "in setServiceName" << std::endl;
 	general->serviceName = serviceName;
+	std::cout << "Leaving setServiceName:" << general->serviceName << std::endl;
 	return true;
 }//setServiceName
 
