@@ -302,7 +302,7 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="Matriices">
+	<xs:complexType name="Matrices">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -333,7 +333,7 @@
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="symetric" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="symmetric" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
