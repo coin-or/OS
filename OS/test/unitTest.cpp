@@ -2496,6 +2496,8 @@ if (OTHER_TESTS){
 	//
 	// Now test the parsers --- OSiL parser first
 if (PARSER_TESTS){
+
+//#if 0   //!!!  OSrL parser development
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ":  OSiL parser" << endl << endl;
 		clock_t start, finish;
@@ -3508,7 +3510,7 @@ if (PARSER_TESTS){
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 	}
 
-
+//#endif //!!!  OSrL parser development
 
 	//
 	// Now just test the OSrL parser

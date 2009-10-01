@@ -264,8 +264,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/objectives{xmlwhitespace}*\>{xmlwhitespace}*  {YY_PRINT; return(OBJECTIVESEND);}
 {xmlwhitespace}*\<optimizationSolutionStatus {YY_PRINT;  return(OPTIMIZATIONSOLUTIONSTATUSSTART);}
 {xmlwhitespace}*\<\/optimizationSolutionStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OPTIMIZATIONSOLUTIONSTATUSEND);}
-{xmlwhitespace}*\<optimizationSolutionSubstatus {YY_PRINT;  return(OPTIMIZATIONSOLUTIONSUBSTATUSSTART);}	   
-{xmlwhitespace}*\<\/optimizationSolutionSubstatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OPTIMIZATIONSOLUTIONSUBSTATUSEND);}
 {xmlwhitespace}*\<other {YY_PRINT; return(OTHERSTART);}
 {xmlwhitespace}*\<\/other{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OTHEREND);}
 {xmlwhitespace}*\<otherResults {YY_PRINT;  return(OTHERRESULTSSTART);}
@@ -302,8 +300,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/time{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMEEND);}
 {xmlwhitespace}*\<timeServiceStarted {YY_PRINT;  return(TIMESERVICESTARTEDSTART);}
 {xmlwhitespace}*\<\/timeServiceStarted{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMESERVICESTARTEDEND);}
-{xmlwhitespace}*\<timestamp {YY_PRINT;  return(TIMESTAMPSTART);}
-{xmlwhitespace}*\<\/timestamp{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMESTAMPEND);}
+{xmlwhitespace}*\<timeStamp {YY_PRINT;  return(TIMESTAMPSTART);}
+{xmlwhitespace}*\<\/timeStamp{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMESTAMPEND);}
 {xmlwhitespace}*\<timingInformation {YY_PRINT; return(TIMINGINFORMATIONSTART);}
 {xmlwhitespace}*\<\/timingInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMINGINFORMATIONEND);}
 {xmlwhitespace}*\<totalJobsSoFar {YY_PRINT;  return(TOTALJOBSSOFARSTART);}
@@ -328,7 +326,7 @@ return(DOUBLE);}
 
  /* environments and comments */
 
-[a-zA-Z0-9.:_*#$@ \n\/]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$@ \n\/\-]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 <itemtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 
 "<!--" BEGIN comment;
