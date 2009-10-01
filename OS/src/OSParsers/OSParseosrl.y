@@ -163,8 +163,8 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 osrldoc: osrlstart generalElement systemElement serviceElement jobElement optimizationElement OSRLEND;
 
-osrlstart: OSRLSTART  GREATERTHAN  
-         | OSRLSTART OSRLATTRIBUTETEXT GREATERTHAN ;
+osrlstart: OSRLSTART GREATERTHAN  
+         | OSRLSTART OSRLATTRIBUTETEXT GREATERTHAN;
 
 generalElement: | GENERALSTART ENDOFELEMENT
                 | GENERALSTART GREATERTHAN generalContent GENERALEND; 
@@ -177,23 +177,24 @@ generalChild: generalStatus | generalMessage | serviceURI | serviceName |
 generalStatus: 
    GENERALSTATUSSTART generalStatusAttList generalStatusContent;
 
-generalStatusAttList: | generalStatusAttList generalStatusATT;
+generalStatusAttList: generalStatusATT | generalStatusAttList generalStatusATT;
 
-generalStatusATT: generalStatusTypeATT 
-{   if (parserData->generalStatusTypePresent ) 
-        osrlerror(NULL, NULL, parserData, "only one type attribute allowed for generalStatus element");
-    parserData->generalStatusTypePresent = true;
-    osresult->setGeneralStatusType(parserData->tempStr); 
-}
-| generalStatusDescriptionATT 
-{   if (parserData->generalStatusDescriptionPresent ) 
-        osrlerror(NULL, NULL, parserData, "only one description attribute allowed for generalStatus element");
-    parserData->generalStatusDescriptionPresent = true;
-    osresult->setGeneralStatusDescription(parserData->tempStr);
-}
-| generalStatusNumberOfATT
-{ std::cout << "parsed numberOfGeneralSubstatuses" << std::endl;
-};
+generalStatusATT: 
+    generalStatusTypeATT 
+	{   if (parserData->generalStatusTypePresent ) 
+		    osrlerror(NULL, NULL, parserData, "only one type attribute allowed for generalStatus element");
+	    parserData->generalStatusTypePresent = true;
+		osresult->setGeneralStatusType(parserData->tempStr); 
+	}
+  | generalStatusDescriptionATT 
+	{   if (parserData->generalStatusDescriptionPresent ) 
+		    osrlerror(NULL, NULL, parserData, "only one description attribute allowed for generalStatus element");
+	    parserData->generalStatusDescriptionPresent = true;
+		osresult->setGeneralStatusDescription(parserData->tempStr);
+	}
+  | generalStatusNumberOfATT
+	{ std::cout << "parsed numberOfGeneralSubstatuses" << std::endl;
+	};
 
 generalStatusTypeATT: TYPEATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}   
     |            EMPTYTYPEATT                     { parserData->tempStr = "";          };
@@ -250,13 +251,10 @@ generalMessage:
 | MESSAGESTART GREATERTHAN MESSAGEEND 
 | MESSAGESTART ENDOFELEMENT;
 
-
 serviceURI: 
   SERVICEURISTART GREATERTHAN ELEMENTTEXT SERVICEURIEND {osresult->setServiceURI( $3); free($3); parserData->errorText = NULL;}
 | SERVICEURISTART GREATERTHAN SERVICEURIEND 
 | SERVICEURISTART ENDOFELEMENT;
-
-
 
 serviceName: 
   SERVICENAMESTART GREATERTHAN ELEMENTTEXT SERVICENAMEEND {osresult->setServiceName($3);  free($3);   parserData->errorText = NULL;}
@@ -685,23 +683,65 @@ targetObjectiveIdxATT: TARGETOBJECTIVEIDXATT quote INTEGER quote
   	osresult->setSolutionTargetObjectiveIdx(parserData->solutionIdx, $3);
  };
 
-weightedObjectivesATT: WEIGHTEDOBJECTIVESATT quote ATTRIBUTETEXT quote
-{ parserData->tempStr = $3; };
+weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
+{ parserData->tempStr = $2; };
 
 solutionBody: GREATERTHAN solutionStatus solutionMessage
           variables objectives  constraints  otherSolutionResults solutionEnd;
 
-solutionStatus: STATUSSTART anotherSolutionStatusATT GREATERTHAN  STATUSEND {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, parserData, "a type attribute required for status element");  osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);}
-| STATUSSTART anotherSolutionStatusATT ENDOFELEMENT {if(parserData->statusTypePresent == false) osrlerror(NULL, NULL, parserData, "a type attribute required for status element"); parserData->statusTypePresent = false; osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);};
+solutionStatus: STATUSSTART solutionStatusAttList solutionStatusContent;
+
+solutionStatusAttList: solutionStatusATT
+	| solutionStatusAttList solutionStatusATT;
+
+solutionStatusATT: TYPEATT ATTRIBUTETEXT quote  {parserData->statusType = $2; parserData->statusTypePresent = true; free($2);}  
+ |            EMPTYTYPEATT                      {parserData->statusType = ""; parserData->statusTypePresent = true;}  
+ |          DESCRIPTIONATT ATTRIBUTETEXT quote  {parserData->statusDescription = $2;  free($2);}  
+ |     EMPTYDESCRIPTIONATT                      {parserData->statusDescription = "";}  
+ |  NUMBEROFSUBSTATUSESATT QUOTE INTEGER QUOTE  {};
+
+solutionStatusContent: 
+    solutionStatusEmpty 
+    {	if(parserData->statusTypePresent == false) 
+			osrlerror(NULL, NULL, parserData, "a type attribute required for status element"); 
+		parserData->statusTypePresent = false; 
+		osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);
+	}
+  | solutionStatusBody
+	{	if(parserData->statusTypePresent == false) 
+			osrlerror(NULL, NULL, parserData, "a type attribute required for status element");
+		osresult->setSolutionStatus(parserData->solutionIdx, parserData->statusType, parserData->statusDescription);
+	};
+
+solutionStatusEmpty: GREATERTHAN STATUSEND | ENDOFELEMENT; 
+
+solutionStatusBody: GREATERTHAN solutionSubstatusSEQ STATUSEND;
+
+solutionSubstatusSEQ: solutionSubstatus | solutionSubstatusSEQ solutionSubstatus;
+
+solutionSubstatus: SUBSTATUSSTART solutionSubstatusAttList restOfSolutionSubstatus;
+
+solutionSubstatusAttList: | solutionSubstatusAttList solutionSubstatusATT;
+ 
+solutionSubstatusATT: solutionSubstatusTypeATT | solutionSubstatusDescriptionATT;
+
+solutionSubstatusTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
+{ std::cout << "parsed <solutionSubstatus type=" << std::endl;
+}; 
+
+solutionSubstatusDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT QUOTE 
+{ std::cout << "parsed solutionSubstatus description=" << std::endl;
+}; 
+
+restOfSolutionSubstatus: solutionSubstatusEmpty | solutionSubstatusContent;
+
+solutionSubstatusEmpty: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
+
+solutionSubstatusContent: GREATERTHAN ELEMENTTEXT SUBSTATUSEND
+{ std::cout << "parsed </solutionSubstatus>" << std::endl;
+/* !!!put substatus text */ };
 
 
-anotherSolutionStatusATT: solutionStatusATT
-	| anotherSolutionStatusATT solutionStatusATT;
-
-solutionStatusATT:     TYPEATT ATTRIBUTETEXT quote  {parserData->statusType = $2; parserData->statusTypePresent = true; free($2);}  
- |        EMPTYTYPEATT                      {parserData->statusType = ""; parserData->statusTypePresent = true;}  
- |      DESCRIPTIONATT ATTRIBUTETEXT quote  {parserData->statusDescription = $2;  free($2);}  
- | EMPTYDESCRIPTIONATT                      {parserData->statusDescription = "";}  ;
 
 solutionMessage:
 | MESSAGESTART ELEMENTTEXT MESSAGEEND 
@@ -788,20 +828,14 @@ numberOfVarStringATT: NUMBEROFVARATT quote INTEGER quote
 
 varValueStringList : | varValueStringList varValueString;
 
-varValueString: VARSTART varStrIdxATT GREATERTHAN varStr VAREND; 
+varValueString: VARSTART varStrIdxATT GREATERTHAN ELEMENTTEXT VAREND
+{/*parserData->tempVal = $1;  
+ 	parserData->primalValPair->value = $1;
+	parserData->primalVals.push_back( parserData->primalValPair);  */
+}; 
 
 varStrIdxATT: IDXATT quote INTEGER quote { /*parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = $2;*/};
   
-varStr: 
-   INTEGER {/*parserData->tempVal = $1;  
- 	parserData->primalValPair->value = $1;
-	parserData->primalVals.push_back( parserData->primalValPair);  */
-   }
-   
-  | DOUBLE {/*parserData->tempVal = $1; 
- 	parserData->primalValPair->value = $1;
-	parserData->primalVals.push_back( parserData->primalValPair); */
-  };
   
 
 basisStatus: | BASISSTATUSSTART numberOfBasisVarATT GREATERTHAN basisVarList BASISSTATUSEND

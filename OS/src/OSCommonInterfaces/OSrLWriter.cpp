@@ -92,14 +92,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	if(m_OSResult->general != NULL){
 		outStr << "<general>" << endl;
 		if(m_OSResult->general->generalStatus != NULL){
-			outStr << "<generalStatus "    ;
+			outStr << "<generalStatus"    ;
 			if(m_OSResult->general->generalStatus->type.length() > 0){
-				outStr << "type=\"";
+				outStr << " type=\"";
 				outStr << m_OSResult->general->generalStatus->type ;
 				outStr << "\"";
 			}
 			if(m_OSResult->general->generalStatus->description.length() > 0){
-				outStr << "type=\"";
+				outStr << " description=\"";
 				outStr << m_OSResult->general->generalStatus->description ;
 				outStr << "\"";
 			}
