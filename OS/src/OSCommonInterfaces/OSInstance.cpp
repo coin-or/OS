@@ -2015,8 +2015,12 @@ std::string OSInstance::printModel(int rowIdx ){
 		for(j = 0; j < obj_nonz; j++){
 			outStr << os_dtoa_format( m_mObjectiveCoefficients[obj_idx]->values[j] );
 			outStr << "*";
-			outStr << "x_";
-			outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
+			if( this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0){
+				outStr << this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name;
+			}else{
+				outStr << "x_";
+				outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
+			}
 			if( j < obj_nonz - 1) outStr << " + ";		
 		}
 	}
