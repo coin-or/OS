@@ -38,8 +38,7 @@ using namespace std;
 
 GeneralSubstatus::GeneralSubstatus():
 	name( ""),
-	description( ""),
-	value("")
+	description( "")
 {    
 	#ifdef DEBUG_RESULT
 	cout << "Inside the GeneralSubstatus Constructor" << endl;
@@ -587,7 +586,7 @@ OtherVarResult::~OtherVarResult(){
 
 
 OtherVariableResult::OtherVariableResult():
-	numberOfVar(-1),
+	numberOfVar(0),    //(-1),
 	value(""),
 	name(""),
 	description(""),

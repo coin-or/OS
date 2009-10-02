@@ -44,9 +44,6 @@ public:
 	/** the description of the substatus */	
 	std::string description;
 
-	/** the value of the substatus */	
-	std::string value;
-	
 	/**
 	 *
 	 * Default constructor. 
@@ -664,8 +661,7 @@ public:
 	
 	/** a description of the solution substatus */
 	std::string description;
-	
-	
+		
 	/**
 	 * Default constructor. 
 	 */

@@ -224,7 +224,7 @@ generalStatusBody: GREATERTHAN generalSubstatusSEQ GENERALSTATUSEND
 
 generalSubstatusSEQ: generalSubstatus | generalSubstatusSEQ generalSubstatus;
 
-generalSubstatus: SUBSTATUSSTART generalSubstatusAttList restOfGeneralSubstatus;
+generalSubstatus: SUBSTATUSSTART generalSubstatusAttList generalSubstatusEnd;
 
 generalSubstatusAttList: | generalSubstatusAttList generalSubstatusATT;
  
@@ -236,15 +236,14 @@ generalSubstatusNameATT: NAMEATT ATTRIBUTETEXT QUOTE
 
 generalSubstatusDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT QUOTE 
 { std::cout << "parsed generalSubstatus description=" << std::endl;
-}; 
+}
+| EMPTYDESCRIPTIONATT
+{ std::cout << "parsed generalSubstatus description=" << std::endl;
+}
+; 
 
-restOfGeneralSubstatus: generalSubstatusEmpty | generalSubstatusContent;
+generalSubstatusEnd: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
 
-generalSubstatusEmpty: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
-
-generalSubstatusContent: GREATERTHAN ELEMENTTEXT SUBSTATUSEND
-{ std::cout << "parsed </generalSubstatus>" << std::endl;
-/* !!!put substatus text */ };
 
 generalMessage: 
   MESSAGESTART GREATERTHAN ELEMENTTEXT MESSAGEEND {osresult->setGeneralMessage( $3);  free($3);  parserData->errorText = NULL;}
@@ -299,22 +298,29 @@ generalOtherAttList: | generalOtherAttList generalOtherAtt;
 
 generalOtherAtt: generalOtherNameATT | generalOtherValueATT | generalOtherDescriptionATT;
 
-generalOtherNameATT: NAMEATT ATTRIBUTETEXT quote; 
+generalOtherNameATT: NAMEATT ATTRIBUTETEXT quote
+| EMPTYNAMEATT; 
 
-generalOtherValueATT: VALUEATT ATTRIBUTETEXT quote; 
+generalOtherValueATT: VALUEATT ATTRIBUTETEXT quote
+|EMPTYVALUEATT; 
 
-generalOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote; 
+generalOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+| EMPTYDESCRIPTIONATT; 
 
 generalOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 
 
 systemElement: | SYSTEMSTART ENDOFELEMENT
-               | SYSTEMSTART GREATERTHAN systemInformation availableDiskSpace availableMemory
-                 availableCPUSpeed availableCPUNumber systemOtherResults SYSTEMEND; 
+               | SYSTEMSTART GREATERTHAN systemContent SYSTEMEND; 
+               
+systemContent: | systemContent systemChild; 
+
+systemChild: systemInformation | availableDiskSpace | availableMemory |
+             availableCPUSpeed | availableCPUNumber | systemOtherResults; 
 
 systemInformation:
-| SYSTEMINFORMATIONSTART GREATERTHAN ELEMENTTEXT SYSTEMINFORMATIONEND {}
+  SYSTEMINFORMATIONSTART GREATERTHAN ELEMENTTEXT SYSTEMINFORMATIONEND {}
 | SYSTEMINFORMATIONSTART GREATERTHAN SYSTEMINFORMATIONEND 
 | SYSTEMINFORMATIONSTART ENDOFELEMENT;
 
@@ -327,7 +333,8 @@ availableDiskSpaceAtt: availableDiskSpaceUnitATT | availableDiskSpaceDescription
 
 availableDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote{};
 
-availableDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+availableDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 availableDiskSpaceValue:
      INTEGER
@@ -342,7 +349,8 @@ availableMemoryAtt: availableMemoryUnitATT | availableMemoryDescriptionATT;
 
 availableMemoryUnitATT: UNITATT ATTRIBUTETEXT quote{};
 
-availableMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+availableMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 availableMemoryValue:
      INTEGER
@@ -357,7 +365,8 @@ availableCPUSpeedAtt: availableCPUSpeedUnitATT | availableCPUSpeedDescriptionATT
 
 availableCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote{};
 
-availableCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+availableCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 availableCPUSpeedValue:
      INTEGER
@@ -369,14 +378,15 @@ availableCPUNumber: AVAILABLECPUNUMBERSTART availableCPUNumberAttList GREATERTHA
 
 availableCPUNumberAttList: | availableCPUNumberAttList availableCPUNumberDescriptionATT;
 
-availableCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+availableCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 availableCPUNumberValue:
      INTEGER
    | DOUBLE;
 
 
-systemOtherResults: | OTHERRESULTSSTART systemOtherResultsAttList systemOtherResultsBody;
+systemOtherResults: OTHERRESULTSSTART systemOtherResultsAttList systemOtherResultsBody;
 
 systemOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote {std::cout << "!!!store numberOfOtherSystemResults" << std::endl;} ;
 
@@ -396,45 +406,51 @@ systemOtherAtt: systemOtherNameATT | systemOtherValueATT | systemOtherDescriptio
 
 systemOtherNameATT: NAMEATT ATTRIBUTETEXT quote; 
 
-systemOtherValueATT: VALUEATT ATTRIBUTETEXT quote; 
+systemOtherValueATT: VALUEATT ATTRIBUTETEXT quote
+| EMPTYVALUEATT; 
 
-systemOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote; 
+systemOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+| EMPTYDESCRIPTIONATT; 
 
 systemOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 
 
 serviceElement: | SERVICESTART ENDOFELEMENT
-                | SERVICESTART GREATERTHAN currrentState currentJobCount totalJobsSoFar
-                  timeServiceStarted serviceUtilization serviceOtherResults SERVICEEND ;
+                | SERVICESTART GREATERTHAN serviceContent SERVICEEND;
+                
+serviceContent: | serviceContent serviceChild;
+        
+serviceChild: currentState | currentJobCount | totalJobsSoFar |
+              timeServiceStarted | serviceUtilization | serviceOtherResults;
 
-currrentState:
-| CURRENTSTATESTART GREATERTHAN ELEMENTTEXT CURRENTSTATEEND {}
+currentState:
+  CURRENTSTATESTART GREATERTHAN ELEMENTTEXT CURRENTSTATEEND {}
 | CURRENTSTATESTART GREATERTHAN CURRENTSTATEEND 
 | CURRENTSTATESTART ENDOFELEMENT;
 
 currentJobCount:
-| CURRENTJOBCOUNTSTART GREATERTHAN INTEGER CURRENTJOBCOUNTEND {}
+  CURRENTJOBCOUNTSTART GREATERTHAN INTEGER CURRENTJOBCOUNTEND {}
 | CURRENTJOBCOUNTSTART GREATERTHAN CURRENTJOBCOUNTEND 
 | CURRENTJOBCOUNTSTART ENDOFELEMENT;
 
 totalJobsSoFar:
-| TOTALJOBSSOFARSTART GREATERTHAN INTEGER TOTALJOBSSOFAREND {}
+  TOTALJOBSSOFARSTART GREATERTHAN INTEGER TOTALJOBSSOFAREND {}
 | TOTALJOBSSOFARSTART GREATERTHAN TOTALJOBSSOFAREND 
 | TOTALJOBSSOFARSTART ENDOFELEMENT;
 
 timeServiceStarted:
-| TIMESERVICESTARTEDSTART GREATERTHAN ELEMENTTEXT TIMESERVICESTARTEDEND {}
+  TIMESERVICESTARTEDSTART GREATERTHAN ELEMENTTEXT TIMESERVICESTARTEDEND {}
 | TIMESERVICESTARTEDSTART GREATERTHAN TIMESERVICESTARTEDEND 
 | TIMESERVICESTARTEDSTART ENDOFELEMENT;
 
 serviceUtilization:
-| SERVICEUTILIZATIONSTART GREATERTHAN aNumber SERVICEUTILIZATIONEND {}
+  SERVICEUTILIZATIONSTART GREATERTHAN aNumber SERVICEUTILIZATIONEND {}
 | SERVICEUTILIZATIONSTART GREATERTHAN SERVICEUTILIZATIONEND 
 | SERVICEUTILIZATIONSTART ENDOFELEMENT;
 
 
-serviceOtherResults: | OTHERRESULTSSTART serviceOtherResultsAttList serviceOtherResultsBody;
+serviceOtherResults:  OTHERRESULTSSTART serviceOtherResultsAttList serviceOtherResultsBody;
 
 serviceOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote {std::cout << "!!!store numberOfOtherserviceResults" << std::endl;} ;
 
@@ -454,17 +470,19 @@ serviceOtherAtt: serviceOtherNameATT | serviceOtherValueATT | serviceOtherDescri
 
 serviceOtherNameATT: NAMEATT ATTRIBUTETEXT quote; 
 
-serviceOtherValueATT: VALUEATT ATTRIBUTETEXT quote; 
+serviceOtherValueATT: VALUEATT ATTRIBUTETEXT quote
+| EMPTYVALUEATT; 
 
-serviceOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote; 
+serviceOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+| EMPTYDESCRIPTIONATT; 
 
 serviceOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 
 jobElement: | JOBSTART ENDOFELEMENT
-            | JOBSTART GREATERTHAN jobChildren JOBEND;
+            | JOBSTART GREATERTHAN jobContent JOBEND;
             
-jobChildren: | jobChildren jobChild;
+jobContent: | jobContent jobChild;
 
 jobChild: status | submitTime | scheduledStartTime | actualStartTime | endTime | 
           timingInformation | usedCPUSpeed | usedCPUNumber | usedDiskSpace | usedMemory | jobOtherResults;
@@ -557,7 +575,8 @@ usedCPUSpeedAtt: usedCPUSpeedUnitATT | usedCPUSpeedDescriptionATT;
 
 usedCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote{};
 
-usedCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+usedCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 usedCPUSpeedValue:
      INTEGER
@@ -569,7 +588,8 @@ usedCPUNumber: USEDCPUNUMBERSTART usedCPUNumberAttList GREATERTHAN usedCPUNumber
 
 usedCPUNumberAttList: | usedCPUNumberAttList usedCPUNumberDescriptionATT;
 
-usedCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+usedCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 usedCPUNumberValue:
      INTEGER
@@ -585,7 +605,8 @@ usedDiskSpaceAtt: usedDiskSpaceUnitATT | usedDiskSpaceDescriptionATT;
 
 usedDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote{};
 
-usedDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+usedDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 usedDiskSpaceValue:
      INTEGER
@@ -600,7 +621,8 @@ usedMemoryAtt: usedMemoryUnitATT | usedMemoryDescriptionATT;
 
 usedMemoryUnitATT: UNITATT ATTRIBUTETEXT quote{};
 
-usedMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{};
+usedMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+| EMPTYDESCRIPTIONATT;
 
 usedMemoryValue:
      INTEGER
@@ -628,9 +650,11 @@ jobOtherAtt: jobOtherNameATT | jobOtherValueATT | jobOtherDescriptionATT;
 
 jobOtherNameATT: NAMEATT ATTRIBUTETEXT quote; 
 
-jobOtherValueATT: VALUEATT ATTRIBUTETEXT quote; 
+jobOtherValueATT: VALUEATT ATTRIBUTETEXT quote
+| EMPTYVALUEATT; 
 
-jobOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote; 
+jobOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+| EMPTYDESCRIPTIONATT; 
 
 jobOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
@@ -719,7 +743,7 @@ solutionStatusBody: GREATERTHAN solutionSubstatusSEQ STATUSEND;
 
 solutionSubstatusSEQ: solutionSubstatus | solutionSubstatusSEQ solutionSubstatus;
 
-solutionSubstatus: SUBSTATUSSTART solutionSubstatusAttList restOfSolutionSubstatus;
+solutionSubstatus: SUBSTATUSSTART solutionSubstatusAttList solutionSubstatusEnd;
 
 solutionSubstatusAttList: | solutionSubstatusAttList solutionSubstatusATT;
  
@@ -730,29 +754,22 @@ solutionSubstatusTypeATT: TYPEATT ATTRIBUTETEXT QUOTE
 }; 
 
 solutionSubstatusDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT QUOTE 
-{ std::cout << "parsed solutionSubstatus description=" << std::endl;
-}; 
+| EMPTYDESCRIPTIONATT; 
 
-restOfSolutionSubstatus: solutionSubstatusEmpty | solutionSubstatusContent;
-
-solutionSubstatusEmpty: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
-
-solutionSubstatusContent: GREATERTHAN ELEMENTTEXT SUBSTATUSEND
-{ std::cout << "parsed </solutionSubstatus>" << std::endl;
-/* !!!put substatus text */ };
+solutionSubstatusEnd: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
 
 
 
 solutionMessage:
-| MESSAGESTART ELEMENTTEXT MESSAGEEND 
-	{/*osresult->optimization->solution[parserData->solutionIdx]->message = $2; */
-		osresult->setSolutionMessage(parserData->solutionIdx, $2); free($2);
+| MESSAGESTART GREATERTHAN ELEMENTTEXT MESSAGEEND 
+	{/*osresult->optimization->solution[parserData->solutionIdx]->message = $3; */
+		osresult->setSolutionMessage(parserData->solutionIdx, $3); free($3);
 	}
-| MESSAGESTART MESSAGEEND
+| MESSAGESTART GREATERTHAN MESSAGEEND
 	{/*osresult->optimization->solution[parserData->solutionIdx]->message = "";*/
 		osresult->setSolutionMessage(parserData->solutionIdx, "");
 	}
-;
+| MESSAGESTART ENDOFELEMENT;
 
 variables:
 | VARIABLESSTART numberOfOtherVariableResults variablesBody;
@@ -774,7 +791,8 @@ variablesEmpty: ENDOFELEMENT;
 
 variablesContent: GREATERTHAN variableValues variableValuesString basisStatus otherVariablesSEQ VARIABLESEND;
 
-variableValues: | VALUESSTART numberOfVarATT GREATERTHAN varValueList VALUESEND
+variableValues: 
+| VALUESSTART numberOfVarATT GREATERTHAN varValueList VALUESEND
   {
   	if(parserData->primalVals.size() !=  parserData->numberOfVar){
   		osrlerror(NULL, NULL, parserData, "numberOfVar not consistent with the number of primal values");
@@ -782,7 +800,17 @@ variableValues: | VALUESSTART numberOfVarATT GREATERTHAN varValueList VALUESEND
  		osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
 		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
  	}
-  };
+  }
+| VALUESSTART numberOfVarATT ENDOFELEMENT
+  {
+  	if(parserData->numberOfVar != 0){
+  		osrlerror(NULL, NULL, parserData, "numberOfVar not consistent with the number of primal values");
+  	} else{
+ 		osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
+		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
+ 	}
+  }
+;
 
 numberOfVarATT: NUMBEROFVARATT quote INTEGER quote 
 	{
@@ -817,7 +845,8 @@ variableValuesString:
               osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
 		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
      }
- */  };
+ */  }
+   | VALUESSTRINGSTART numberOfVarStringATT ENDOFELEMENT;
 
 numberOfVarStringATT: NUMBEROFVARATT quote INTEGER quote 
 	{
@@ -832,7 +861,9 @@ varValueString: VARSTART varStrIdxATT GREATERTHAN ELEMENTTEXT VAREND
 {/*parserData->tempVal = $1;  
  	parserData->primalValPair->value = $1;
 	parserData->primalVals.push_back( parserData->primalValPair);  */
-}; 
+}
+| VARSTART varStrIdxATT GREATERTHAN VAREND
+| VARSTART varStrIdxATT ENDOFELEMENT; 
 
 varStrIdxATT: IDXATT quote INTEGER quote { /*parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = $2;*/};
   
@@ -846,7 +877,8 @@ basisStatus: | BASISSTATUSSTART numberOfBasisVarATT GREATERTHAN basisVarList BAS
               osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
 		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
       }
- */  };
+ */  }
+  | BASISSTATUSSTART numberOfBasisVarATT ENDOFELEMENT;
 
 numberOfBasisVarATT : NUMBEROFVARATT quote INTEGER quote 
 	{
@@ -866,12 +898,25 @@ basisVarIdxATT : IDXATT quote INTEGER quote { /*parserData->primalValPair = new 
 
 otherVariablesSEQ: | otherVariablesSEQ otherVariableResult;
 
-otherVariableResult: otherVariableStart otherVariableAttList 
-	{	if(parserData->otherNamePresent == false) 
+otherVariableResult: otherVariableStart otherVariableAttributes
+	{/*	if(parserData->otherNamePresent == false) 
 			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
 		parserData->ivar = 0;
-	}  
-otherVariableResultContent;
+	*/}  
+otherVariableResultContent
+	{ 	 
+		parserData->otherVarVec.push_back( parserData->otherVarStruct); 
+		parserData->numberOfOtherVariableResults++; 
+		parserData->otherNamePresent = false;	
+		osresult->setAnOtherVariableResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
+			parserData->otherVarStruct->value, parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex,
+			parserData->otherVarStruct->otherVarText, parserData->otherVarStruct->numberOfVar );
+		parserData->iOther++;  
+		parserData->tmpOtherName = "";
+		parserData->tmpOtherValue = "";
+		parserData->tmpOtherDescription = "";			
+	}
+;
 
 otherVariableStart: OTHERSTART 
 	{  // parserData->numberOfOtherVariableResults++;
@@ -881,16 +926,23 @@ otherVariableStart: OTHERSTART
 		parserData->kounter = 0;
 	}; 
 
+otherVariableAttributes: otherVariableAttList 
+	{	if(parserData->otherNamePresent == false) 
+			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
+		parserData->ivar = 0;
+	};
+	  
 otherVariableAttList: | otherVariableAttList otherVariableATT;
 
 otherVariableATT: numberOfOtherVarATT | otherVarValueATT | otherVarNameATT | otherVarDescriptionATT;
   
 numberOfOtherVarATT: NUMBEROFVARATT quote INTEGER quote 
-{
+{	
 	parserData->otherVarStruct->numberOfVar = $3;
+	std::cout << "This \<other\> element has " << parserData->otherVarStruct->numberOfVar << " \<var\>" << std::endl;
 	parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
 	parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	
- 	//osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;
+ 	osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;
 }; 
 
 otherVarValueATT: 
@@ -919,39 +971,27 @@ otherVarDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
 {
 parserData->tmpOtherDescription=$2; parserData->otherVarStruct->description = $2;  free($2);
   /*osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = $2;*/
-};
+}
+| EMPTYDESCRIPTIONATT;
 
 otherVariableResultContent: ENDOFELEMENT	
-| GREATERTHAN otherVarList OTHEREND
-	{ 	 
-		parserData->otherVarVec.push_back( parserData->otherVarStruct); 
-		parserData->numberOfOtherVariableResults++; 
-		parserData->otherNamePresent = false;	
-		osresult->setAnOtherVariableResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
-			parserData->otherVarStruct->value, parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex,
-			parserData->otherVarStruct->otherVarText, parserData->otherVarStruct->numberOfVar );
-		parserData->iOther++;  
-		parserData->tmpOtherName = "";
-		parserData->tmpOtherValue = "";
-		parserData->tmpOtherDescription = "";			
-	};
-
-
+| GREATERTHAN otherVarList OTHEREND;
 
 otherVarList: | otherVarList otherVar;
 
-otherVar: otherVarStart otherVarIdxATT GREATERTHAN ElementValue VAREND {  
+otherVar: otherVarStart otherVarIdxATT otherVarContent {  
 parserData->otherVarStruct->otherVarText[parserData->kounter] =  parserData->outStr.str();
 //reset the buffer;
 parserData->outStr.str("");
 parserData->otherVarStruct->otherVarIndex[parserData->kounter] =  parserData->ivar;
 parserData->errorText = NULL;
 //if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar)
+std::cout << "parserData->kounter = " << parserData->kounter << std::endl;
 if (parserData->kounter == osresult->getAnOtherVariableResultNumberOfVar(parserData->solutionIdx, parserData->iOther))
     osrlerror(NULL, NULL, parserData, "too many variables"); 
 if (parserData->numberOfVariables > 0 && (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) ) 
 	osrlerror(NULL, NULL, parserData, "index must be greater than 0 and less than the number of variables");
-parserData->kounter++;
+//parserData->kounter++;
 };
 
 otherVarStart: VARSTART 
@@ -961,6 +1001,7 @@ otherVarStart: VARSTART
 
 otherVarIdxATT: IDXATT quote INTEGER quote {};
 
+otherVarContent: GREATERTHAN ElementValue VAREND | GREATERTHAN VAREND | ENDOFELEMENT;
 
 
 objectives:
@@ -983,7 +1024,8 @@ objectivesEmpty: ENDOFELEMENT;
 
 objectivesContent: GREATERTHAN objectiveValues otherObjectivesSEQ OBJECTIVESEND;
 
-objectiveValues: | VALUESSTART numberOfObjATT GREATERTHAN objValueList VALUESEND
+objectiveValues:
+| VALUESSTART numberOfObjATT GREATERTHAN objValueList VALUESEND
 {
 	if(parserData->numberOfObj != parserData->objVals.size()){
 		osrlerror(NULL, NULL, parserData, "numberOfObj not consistent with the number of objective values");	
@@ -991,7 +1033,8 @@ objectiveValues: | VALUESSTART numberOfObjATT GREATERTHAN objValueList VALUESEND
 
 		osresult->setObjectiveValuesSparse(parserData->solutionIdx, parserData->objVals);
 	}
-};
+}
+| VALUESSTART numberOfObjATT ENDOFELEMENT;
 
 numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote{
 			parserData->numberOfObj = $3;
@@ -1066,7 +1109,8 @@ otherObjDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
 {
 //parserData->tmpOtherDescription=$2; parserData->otherObjStruct->description = $2;  free($2);
   /*osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->description = $2;*/
-};
+}
+| EMPTYDESCRIPTIONATT;
 
 
 otherObjectiveResultContent: ENDOFELEMENT
@@ -1094,7 +1138,7 @@ otherObjectiveResultContent: ENDOFELEMENT
 
 otherObjList: | otherObjList otherObj ;
 
-otherObj: otherObjStart otherObjIdxATT  GREATERTHAN ElementValue OBJEND {  
+otherObj: otherObjStart otherObjIdxATT  otherObjContent {  
 //parserData->otherObjStruct->otherObjText[parserData->kounter] =  parserData->outStr.str();
 //reset the buffer;
 //parserData->outStr.str("");
@@ -1115,6 +1159,9 @@ otherObjStart: OBJSTART
 	}; 
 
 otherObjIdxATT: IDXATT quote INTEGER quote {};
+
+otherObjContent: GREATERTHAN ElementValue OBJEND | GREATERTHAN OBJEND | ENDOFELEMENT;
+
 
 
 constraints:
@@ -1138,16 +1185,18 @@ constraintsEmpty: ENDOFELEMENT;
 constraintsContent: GREATERTHAN dualValues otherConstraintsSEQ CONSTRAINTSEND;
 
 
-dualValues: | DUALVALUESSTART numberOfConATT GREATERTHAN dualValueList DUALVALUESEND
-   {
+dualValues: 
+| DUALVALUESSTART numberOfConATT GREATERTHAN dualValueList DUALVALUESEND
+   {/*
 	if(parserData->numberOfCon != parserData->dualVals.size()){
 		osrlerror(NULL, NULL, parserData, "numberOfCon not consistent with the number of dual values");	
 	}else{
 
 		osresult->setDualVariableValuesSparse(parserData->solutionIdx, parserData->dualVals);
 		osresult->optimization->solution[ parserData->solutionIdx]->constraints->dualValues->numberOfCon = parserData->numberOfCon;
-	}
- };
+	}*/
+ }
+ | DUALVALUESSTART numberOfConATT ENDOFELEMENT;
  
 numberOfConATT: NUMBEROFCONATT quote INTEGER quote
 {
@@ -1210,7 +1259,8 @@ otherConDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
 {
 //parserData->tmpOtherDescription=$2; parserData->otherConStruct->description = $2;  free($2);
   /*osresult->optimization->solution[parserData->solutionIdx]->constraints->other[parserData->iOther]->description = $2;*/
-};
+}
+| EMPTYDESCRIPTIONATT;
 
 otherConstraintResultContent: ENDOFELEMENT	
 | GREATERTHAN otherConList OTHEREND;
@@ -1218,7 +1268,7 @@ otherConstraintResultContent: ENDOFELEMENT
 
 otherConList: | otherConList otherCon;
 
-otherCon: otherConStart otherConIdxATT  GREATERTHAN ElementValue CONEND {  
+otherCon: otherConStart otherConIdxATT  otherConContent {  
 //parserData->otherConStruct->otherConText[parserData->kounter] =  parserData->outStr.str();
 //reset the buffer;
 //parserData->outStr.str("");
@@ -1241,10 +1291,17 @@ otherConStart: CONSTART
 
 otherConIdxATT: IDXATT quote INTEGER quote {};
 
+otherConContent: GREATERTHAN ElementValue CONEND | GREATERTHAN CONEND | ENDOFELEMENT;
+
 
 
 otherSolutionResults: 
 | OTHERSOLUTIONRESULTSSTART numberOfOtherSolutionResults GREATERTHAN otherSolutionResultList OTHERSOLUTIONRESULTSEND
+{
+	if(parserData->iOther < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults)
+		osrlerror(NULL, NULL, parserData, "fewer OtherSolutionResult elements present than stated in  numberOfOtherSolutionResults attribute");
+}
+| OTHERSOLUTIONRESULTSSTART numberOfOtherSolutionResults ENDOFELEMENT
 {
 	if(parserData->iOther < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults)
 		osrlerror(NULL, NULL, parserData, "fewer OtherSolutionResult elements present than stated in  numberOfOtherSolutionResults attribute");
@@ -1268,13 +1325,22 @@ parserData->iOther = 0; // this will index the number of otherSolutionResult obj
     
 otherSolutionResultList:  | otherSolutionResultList anotherSolutionResult;
 
-anotherSolutionResult: OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList GREATERTHAN anotherSolutionItemList OTHERSOLUTIONRESULTEND
+anotherSolutionResult: 
+OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList GREATERTHAN anotherSolutionItemList OTHERSOLUTIONRESULTEND
 {
 if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
 	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
 
 parserData->iOther++;
-};
+}
+| OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList ENDOFELEMENT
+{
+if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
+	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
+
+parserData->iOther++;
+}
+;
 
 anotherSolutionResultAttList: 
    | anotherSolutionResultAttList {if(parserData->iOther >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults)
@@ -1363,13 +1429,15 @@ otherSolverOutputBody: ENDOFELEMENT | GREATERTHAN solverOutputSEQ OTHERSOLVEROUT
 
 solverOutputSEQ: | solverOutputSEQ solverOutput;
 
-solverOutput: SOLVEROUTPUTSTART solverOutputAttList GREATERTHAN solverOutputItemList SOLVEROUTPUTEND
+solverOutput: 
+SOLVEROUTPUTSTART solverOutputAttList GREATERTHAN solverOutputItemList SOLVEROUTPUTEND
 {
 /*	if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
 	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
 	parserData->iOther++;
 */
-};
+}
+| SOLVEROUTPUTSTART solverOutputAttList ENDOFELEMENT;
 
 solverOutputAttList: 
    | solverOutputAttList 

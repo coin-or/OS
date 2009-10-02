@@ -2,7 +2,7 @@
 <osrl xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd" >
 	<general>
 		<generalStatus type="normal" numberOfSubstatuses="1" description="some rag about what this does">
-			<substatus name="other" description="some rag about what this does">none</substatus>
+			<substatus name="other" description="some rag about what this does"></substatus>
 		</generalStatus>
 		<serviceURI>http://ispc12.dal.ca</serviceURI>
 		<serviceName>Ipopt solver service</serviceName>
@@ -18,10 +18,10 @@
 	</general>
 	<system>
 		<systemInformation  >Microsoft Windows XP    </systemInformation>
-		<availableDiskSpace unit="gigabyte">51.0</availableDiskSpace>
-		<availableMemory unit="megabyte">896</availableMemory>
-		<availableCPUSpeed unit="gigahertz">3.2</availableCPUSpeed>
-		<availableCPUNumber>1</availableCPUNumber>
+		<availableDiskSpace unit="gigabyte" description="Space left on the C: drive">51.0</availableDiskSpace>
+		<availableMemory unit="megabyte" description="Where's the Gb?">896</availableMemory>
+		<availableCPUSpeed unit="gigahertz" description="but it overheats...">3.2</availableCPUSpeed>
+		<availableCPUNumber description="single-processor machine">1</availableCPUNumber>
 		<otherResults numberOfOtherResults="1">
 			<other description="The revision of OS as of 28 Sep 2009" name="OS" value="trunk - revision 2935"></other>
 		</otherResults>
@@ -42,10 +42,10 @@
 		<scheduledStartTime>2009-09-29T16:00:00-04:00</scheduledStartTime>
 		<actualStartTime>2009-09-29T16:00:03-04:00</actualStartTime>
 		<endTime>2009-09-29T16:00:04-04:00</endTime>
-		<usedCPUSpeed unit="gigahertz">2.8</usedCPUSpeed>
-		<usedMemory unit="megabyte">0.001</usedMemory>
-		<usedDiskSpace unit="kilobyte">2.3</usedDiskSpace>
-		<usedCPUNumber>1</usedCPUNumber>
+		<usedCPUSpeed unit="gigahertz" description="unaccounted overhead">2.8</usedCPUSpeed>
+		<usedMemory unit="megabyte" description="toy problem...">0.001</usedMemory>
+		<usedDiskSpace unit="kilobyte" description="temporary storage">2.3</usedDiskSpace>
+		<usedCPUNumber description="single-processor machine">1</usedCPUNumber>
 		<timingInformation numberOfTimes="3">
 			<time category="input" unit="second" description="time to read the input data" type="cpuTime">0.01</time>
 			<time category="optimization">3.51</time>
@@ -60,6 +60,7 @@
 			<status type="locallyOptimal" description="SUCCESS[IPOPT]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances." numberOfSubstatuses="1">
 				<substatus type="other" description="just for testing"></substatus>
 			</status>
+			<message>Hello world</message>
 			<variables numberOfOtherVariableResults="3" >
 				<values numberOfVar="2">
 					<var idx="0" >
