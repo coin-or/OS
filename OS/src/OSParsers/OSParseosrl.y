@@ -939,7 +939,7 @@ otherVariableATT: numberOfOtherVarATT | otherVarValueATT | otherVarNameATT | oth
 numberOfOtherVarATT: NUMBEROFVARATT quote INTEGER quote 
 {	
 	parserData->otherVarStruct->numberOfVar = $3;
-	std::cout << "This \<other\> element has " << parserData->otherVarStruct->numberOfVar << " \<var\>" << std::endl;
+	//std::cout << "This \<other\> element has " << parserData->otherVarStruct->numberOfVar << " \<var\>" << std::endl;
 	parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
 	parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	
  	osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;

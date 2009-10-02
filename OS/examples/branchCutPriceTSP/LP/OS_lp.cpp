@@ -203,6 +203,7 @@ BCP_branching_decision OS_lp::select_branching_candidates(const BCP_lp_result& l
 
   	}else{
 		os_prob->haveBranched = true;
+		if  ( isIntSolution(lpres.x(),  vars,  BCP_lp_user::get_param(BCP_lp_par::IntegerTolerance)) == true) return BCP_DoNotBranch_Fathomed;
 		return BCP_lp_user::select_branching_candidates( lpres,
       	vars, cuts, local_var_pool, local_cut_pool,
          cands, force_branch);

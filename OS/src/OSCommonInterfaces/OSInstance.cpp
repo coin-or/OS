@@ -2001,8 +2001,15 @@ std::string OSInstance::printModel(int rowIdx ){
 					( (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).find( varIdx) == (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).end()) ){					
 					outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
 					outStr << "*";
+
+				if( this->instanceData->variables->var[  varIdx ]->name.size() > 0){
+					outStr << this->instanceData->variables->var[  varIdx ]->name;
+				}else{
 					outStr << "x_";
 					outStr << varIdx;
+				}
+
+
 					if( j < row_nonz - 1) outStr << " + ";
 					addedLinearTerm = true;
 				}
