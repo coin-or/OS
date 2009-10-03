@@ -1642,7 +1642,7 @@ if (THOROUGH == true){
 		osolreader = NULL;	
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorigInt.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-#endif // ---- end of #if 0 above
+//#endif // ---- end of #if 0: OSrL parser development
 
 }   // end of if( THOROUGH )
 	}
@@ -1964,7 +1964,6 @@ if( THOROUGH == true){
 	}	
 #endif // end of #ifdef COIN_HAS_COUENNE
 
-//#endif // end of #if 0
 
 	
 #ifdef COIN_HAS_LINDO
@@ -3510,7 +3509,7 @@ if (PARSER_TESTS){
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 	}
 
-//#endif //!!!  OSrL parser development
+#endif //!!!  OSrL parser development
 
 	//
 	// Now just test the OSrL parser
@@ -3534,8 +3533,9 @@ if (PARSER_TESTS){
 		cout << "TEST PARSING AN OSrL FILE" << endl;
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
 //		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parincLinear.osrl"; 
-		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
+//		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
 //		osrlFileName = dataDir  + "osrlFiles" + dirsep + "ipoptResult.osrl"; 
+		osrlFileName = "\\datafiles\\research\\os\\os-trunk-work\\os\\data\\osrlfiles\\parsertest.osrl";
 		start = clock();
 		std::string osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();

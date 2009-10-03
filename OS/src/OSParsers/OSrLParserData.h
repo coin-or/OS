@@ -177,7 +177,7 @@ public:
 	 */	
 	int numberOfOtherVariableResults;
 	
-	/** and index on which solution we have found */
+	/** an index of which solution we have found */
 	unsigned int solutionIdx;
 
 	/** set statusTypePresent to true if there is
@@ -191,6 +191,25 @@ public:
 	bool generalStatusTypePresent;
 	bool generalStatusDescriptionPresent;
 	bool generalStatusNumberOfPresent;
+	
+	/** set generalSubstatus...Present to true if the corresponding
+	 *  generalStatus substatus attribute parsed
+	 */	
+	bool generalSubstatusNamePresent;
+	bool generalSubstatusDescriptionPresent;
+
+	/** set general...Present to true if the corresponding 
+	 *  element (child of the <general> element) has been parsed
+	 */
+	bool generalStatusPresent; 
+	bool generalMessagePresent; 
+	bool generalServiceURIPresent; 
+	bool generalServiceNamePresent; 
+	bool generalInstanceNamePresent; 
+	bool generalJobIDPresent; 
+	bool generalSolverInvokedPresent; 
+	bool generalTimeStampPresent; 
+	bool generalOtherPresent; 
 	
 	/** set otherNamePresent to true if there is
 	 * a name attribute in anotherVarResult

@@ -2099,13 +2099,39 @@ public:
 	bool setGeneralStatusType(std::string type);	
 	
    	/**
+	 * Set the number of substatus elements 
+	 *  
+	 * @param num holds the number of substatuses (a nonegative integer)
+	 * @return whether the number of substatuses is set successfully or not. 
+	 */
+	bool setGeneralStatusNumberOf(int num);
+
+	/**
 	 * Set the general status description. 
 	 * 
 	 * @param description holds the general status description.
 	 * @return whether the general status description is set successfully or not. 
 	 */
 	bool setGeneralStatusDescription(std::string description);
+
+	/**
+	 * Set the general substatus name
+	 * 
+	 * @param name holds the general substatus name
+	 * @param idx holds the index of the substatus in the array
+	 * @return whether the general substatus name is set successfully or not. 
+	 */
+	bool setGeneralSubstatusName(int idx, std::string name);	
 	
+	/**
+	 * Set the general substatus description. 
+	 * 
+	 * @param description holds the general substatus description.
+	 * @param idx holds the index of the substatus in the array
+	 * @return whether the general status description is set successfully or not. 
+	 */
+	bool setGeneralSubstatusDescription(int idx, std::string description);
+
    	/**
 	 * Set the general message. 
 	 * 

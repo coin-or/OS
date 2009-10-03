@@ -171,11 +171,68 @@ generalElement: | GENERALSTART ENDOFELEMENT
 
 generalContent: | generalContent generalChild;
 
-generalChild: generalStatus | generalMessage | serviceURI | serviceName | 
-              instanceName | jobID | solverInvoked | timeStamp | generalOtherResults;
+generalChild: 
+	generalStatus
+	{	if (parserData->generalStatusPresent)
+			osrlerror(NULL, NULL, parserData, "only one generalStatus element allowed");
+		parserData->generalStatusPresent = true;
+	}
+  | generalMessage
+	{	if (parserData->generalMessagePresent)
+			osrlerror(NULL, NULL, parserData, "only one message element allowed");
+		parserData->generalMessagePresent = true;
+	}
+  | serviceURI 
+	{	if (parserData->generalServiceURIPresent)
+			osrlerror(NULL, NULL, parserData, "only one serviceURI element allowed");
+		parserData->generalServiceURIPresent = true;
+	}
+  | serviceName 
+	{	if (parserData->generalServiceNamePresent)
+			osrlerror(NULL, NULL, parserData, "only one serviceName element allowed");
+		parserData->generalServiceNamePresent = true;
+	}
+  | instanceName 
+	{	if (parserData->generalInstanceNamePresent)
+			osrlerror(NULL, NULL, parserData, "only one instanceName element allowed");
+		parserData->generalInstanceNamePresent = true;
+	}
+  | jobID 
+	{	if (parserData->generalJobIDPresent)
+			osrlerror(NULL, NULL, parserData, "only one jobID element allowed");
+		parserData->generalJobIDPresent = true;
+	}
+  | solverInvoked 
+	{	if (parserData->generalSolverInvokedPresent)
+			osrlerror(NULL, NULL, parserData, "only one solverInvoked element allowed");
+		parserData->generalSolverInvokedPresent = true;
+	}
+  | timeStamp 
+	{	if (parserData->generalTimeStampPresent)
+			osrlerror(NULL, NULL, parserData, "only one timeStamp element allowed");
+		parserData->generalTimeStampPresent = true;
+	}
+  | generalOtherResults
+	{	if (parserData->generalOtherPresent)
+			osrlerror(NULL, NULL, parserData, "only one general other element allowed");
+		parserData->generalOtherPresent = true;
+	}
+  ;
               
 generalStatus: 
-   GENERALSTATUSSTART generalStatusAttList generalStatusContent;
+   generalStatusStart generalStatusAttributes generalStatusContent;
+
+generalStatusStart: GENERALSTATUSSTART
+	{	parserData->generalStatusTypePresent = false;
+		parserData->generalStatusDescriptionPresent = false;
+		parserData->generalStatusNumberOfPresent = false;
+	};
+
+generalStatusAttributes: generalStatusAttList
+	{	if (!parserData->generalStatusTypePresent)
+			osrlerror(NULL, NULL, parserData, "type attribute must be present for generalStatus element");
+		parserData->kounter = 0;
+	};
 
 generalStatusAttList: generalStatusATT | generalStatusAttList generalStatusATT;
 
@@ -206,11 +263,9 @@ generalStatusNumberOfATT: NUMBEROFSUBSTATUSESATT QUOTE INTEGER QUOTE
 {   if (parserData->generalStatusNumberOfPresent ) 
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed for generalStatus element");
     parserData->generalStatusNumberOfPresent = true;
-/*    osresult->setGeneralStatusNumberOf(parserData->tempStr);  */
-/* !!!allocate substatus array */
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of general substatuses cannot be negative");
+    osresult->setGeneralStatusNumberOf($3);
 	parserData->numberOf = $3;
-	parserData->kounter = 0;
 };
 
 
@@ -219,26 +274,54 @@ generalStatusContent: generalStatusEmpty | generalStatusBody;
 generalStatusEmpty: GREATERTHAN GENERALSTATUSEND | ENDOFELEMENT; 
 
 generalStatusBody: GREATERTHAN generalSubstatusSEQ GENERALSTATUSEND
-{ std::cout << "parsed </generalStatus" << std::endl;
+{std::cout << "parserData->kounter = " << parserData->kounter << std::endl;
+std::cout << "parserData->numberOf = " << parserData->numberOf << std::endl;
+	if (parserData->kounter != parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "fewer <substatus> elements than specified");
 };
 
 generalSubstatusSEQ: generalSubstatus | generalSubstatusSEQ generalSubstatus;
 
-generalSubstatus: SUBSTATUSSTART generalSubstatusAttList generalSubstatusEnd;
+generalSubstatus: generalSubstatusStart generalSubstatusAttList generalSubstatusEnd
+{	if (!parserData->generalSubstatusNamePresent)
+		osrlerror (NULL, NULL, parserData, "<substatus> must have name attribute");
+	parserData->generalSubstatusNamePresent = false;
+	parserData->generalSubstatusDescriptionPresent = false;
+	parserData->kounter++;
+};	
 
+generalSubstatusStart: SUBSTATUSSTART
+{std::cout << "parserData->kounter = " << parserData->kounter << std::endl;
+std::cout << "parserData->numberOf = " << parserData->numberOf << std::endl;
+	if (parserData->kounter >= parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "more <substatus> elements than specified");
+};
+		
 generalSubstatusAttList: | generalSubstatusAttList generalSubstatusATT;
  
-generalSubstatusATT: generalSubstatusNameATT | generalSubstatusDescriptionATT;
+generalSubstatusATT: generalSubstatusNameATT | generalSubstatusDescriptionATT
+{	if (parserData->generalSubstatusDescriptionPresent)
+		osrlerror(NULL, NULL, parserData, "description attribute multiply specified specified");
+	parserData->generalSubstatusDescriptionPresent = true;
+	osresult->setGeneralSubstatusDescription(parserData->kounter-1,parserData->tempStr);
+}; 
 
 generalSubstatusNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
-{ std::cout << "parsed <generalSubstatus name=" << std::endl;
+{	std::cout << "read \'name=\'" << std::endl;
+	if (parserData->generalSubstatusNamePresent)
+		osrlerror(NULL, NULL, parserData, "name attribute multiply specified specified");
+	parserData->generalSubstatusNamePresent = true;
+	std::cout << "setGeneralSubstatusName" << std::endl; 
+	osresult->setGeneralSubstatusName(parserData->kounter-1,$2);
+	std::cout << "Done setGeneralSubstatusName" << std::endl; 
+	
 }; 
 
 generalSubstatusDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT QUOTE 
-{ std::cout << "parsed generalSubstatus description=" << std::endl;
+{	parserData->tempStr = $2;
 }
 | EMPTYDESCRIPTIONATT
-{ std::cout << "parsed generalSubstatus description=" << std::endl;
+{	parserData->tempStr = "";
 }
 ; 
 
@@ -939,7 +1022,11 @@ otherVariableATT: numberOfOtherVarATT | otherVarValueATT | otherVarNameATT | oth
 numberOfOtherVarATT: NUMBEROFVARATT quote INTEGER quote 
 {	
 	parserData->otherVarStruct->numberOfVar = $3;
+<<<<<<< .mine
+	std::cout << "This <other> element has " << parserData->otherVarStruct->numberOfVar << " <var>" << std::endl;
+=======
 	//std::cout << "This \<other\> element has " << parserData->otherVarStruct->numberOfVar << " \<var\>" << std::endl;
+>>>>>>> .r2944
 	parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
 	parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	
  	osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;

@@ -1387,10 +1387,38 @@ bool OSResult::setGeneralStatusType(string type){
 	return true;
 }//setGeneralStatusType
 
-
 bool OSResult::setGeneralStatusDescription(string description){
 	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->description = description;
+	return true;
+}//setGeneralStatusDescription
+
+bool OSResult::setGeneralStatusNumberOf(int num){
+	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
+	general->generalStatus->numberOfSubstatuses = num;
+	if (general->generalStatus->substatus != NULL)
+	{	throw ErrorClass("Attempting to reallocate substatus array. Potential loss of data.");
+		return false;
+	}
+	if (num > 0)
+	{	general->generalStatus->substatus = new GeneralSubstatus*[num];
+		for(int i = 0; i < num; i++) 	
+			general->generalStatus->substatus[i] = new GeneralSubstatus();
+	}
+	return true;
+}//setGeneralStatusNumberOf
+
+bool OSResult::setGeneralSubstatusName(int idx, string name){
+	if (general->generalStatus == NULL) return false;
+	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
+	general->generalStatus->substatus[idx]->name = name;
+	return true;
+}//setGeneralStatusType
+
+bool OSResult::setGeneralSubstatusDescription(int idx, string description){
+	if (general->generalStatus == NULL) return false;
+	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
+	general->generalStatus->substatus[idx]->description = description;
 	return true;
 }//setGeneralStatusDescription
 
