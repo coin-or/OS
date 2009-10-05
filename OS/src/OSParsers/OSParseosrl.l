@@ -57,7 +57,7 @@
 #include "OSResult.h"
 
 
-#define PARSERDEBUG
+//#define PARSERDEBUG
 
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("%s", yytext);

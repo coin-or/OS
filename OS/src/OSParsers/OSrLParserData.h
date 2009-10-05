@@ -198,6 +198,13 @@ public:
 	bool generalSubstatusNamePresent;
 	bool generalSubstatusDescriptionPresent;
 
+	/** set generalOtherResult...Present to true if the corresponding
+	 *  attribute has been parsed for the current <other> element
+	 */	
+	bool generalOtherResultNamePresent;
+	bool generalOtherResultValuePresent;
+	bool generalOtherResultDescriptionPresent;
+
 	/** set general...Present to true if the corresponding 
 	 *  element (child of the <general> element) has been parsed
 	 */

@@ -2104,7 +2104,7 @@ public:
 	 * @param num holds the number of substatuses (a nonegative integer)
 	 * @return whether the number of substatuses is set successfully or not. 
 	 */
-	bool setGeneralStatusNumberOf(int num);
+	bool setNumberOfGeneralSubstatuses(int num);
 
 	/**
 	 * Set the general status description. 
@@ -2173,13 +2173,64 @@ public:
 	bool setJobID(std::string jobID);
 		
    	/**
+	 * Set solver invoked.
+	 * 
+	 * @param solverInvoked holds the solver invoked. 
+	 * @return whether the solver invoked is set successfully. 
+	 */
+	bool setSolverInvoked(std::string solverInvoked);
+	
+   	/**
+	 * Set time stamp.
+	 * 
+	 * @param time holds the time stamp. 
+	 * @return whether the time stamp is set successfully. 
+	 */
+	bool setTimeStamp(std::string timeStamp);
+
+	/**
+	 * Set number of other general results.
+	 * 
+	 * @param num holds the number of other general results. 
+	 * @return whether the number was set successfully. 
+	 */
+	bool setNumberOfOtherGeneralResults(int num);
+
+	/**
+	 * Set the general otherResult name
+	 * 
+	 * @param name holds the general otherResult name
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the general otherResult name is set successfully or not. 
+	 */
+	bool setGeneralOtherResultName(int idx, std::string name);	
+	
+	/**
+	 * Set the general otherResult value
+	 * 
+	 * @param name holds the general otherResult value
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the general otherResult value is set successfully or not. 
+	 */
+	bool setGeneralOtherResultValue(int idx, std::string value);	
+	
+	/**
+	 * Set the general otherResult description
+	 * 
+	 * @param name holds the general otherResult description
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the general otherResult description is set successfully or not. 
+	 */
+	bool setGeneralOtherResultDescription(int idx, std::string description);	
+	
+   	/**
 	 * Set time.
 	 * 
 	 * @param time holds the time. 
 	 * @return whether the time is set successfully. 
 	 */
-	bool setTime(double time);
-		
+	bool OSResult::setTime(double time);
+
    	/**
 	 * Add timing information.
 	 * 

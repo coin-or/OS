@@ -241,6 +241,10 @@ generalStatusATT:
 	{   if (parserData->generalStatusTypePresent ) 
 		    osrlerror(NULL, NULL, parserData, "only one type attribute allowed for generalStatus element");
 	    parserData->generalStatusTypePresent = true;
+	    if ((parserData->tempStr != "error"  ) &&
+	        (parserData->tempStr != "warning") && 
+	        (parserData->tempStr != "normal"))
+			osrlerror(NULL, NULL, parserData, "general status type does not matched any legal value");
 		osresult->setGeneralStatusType(parserData->tempStr); 
 	}
   | generalStatusDescriptionATT 
@@ -264,21 +268,25 @@ generalStatusNumberOfATT: NUMBEROFSUBSTATUSESATT QUOTE INTEGER QUOTE
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed for generalStatus element");
     parserData->generalStatusNumberOfPresent = true;
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of general substatuses cannot be negative");
-    osresult->setGeneralStatusNumberOf($3);
+    osresult->setNumberOfGeneralSubstatuses($3);
 	parserData->numberOf = $3;
 };
 
 
-generalStatusContent: generalStatusEmpty | generalStatusBody;
+generalStatusContent: 
+	generalStatusEmpty 
+	{	if (parserData->numberOf > 0)
+			osrlerror(NULL, NULL, parserData, "fewer <substatus> elements than specified");
+	}
+  | generalStatusBody
+	{	if (parserData->kounter != parserData->numberOf)
+			osrlerror(NULL, NULL, parserData, "fewer <substatus> elements than specified");
+	}
+;
 
 generalStatusEmpty: GREATERTHAN GENERALSTATUSEND | ENDOFELEMENT; 
 
-generalStatusBody: GREATERTHAN generalSubstatusSEQ GENERALSTATUSEND
-{std::cout << "parserData->kounter = " << parserData->kounter << std::endl;
-std::cout << "parserData->numberOf = " << parserData->numberOf << std::endl;
-	if (parserData->kounter != parserData->numberOf)
-		osrlerror(NULL, NULL, parserData, "fewer <substatus> elements than specified");
-};
+generalStatusBody: GREATERTHAN generalSubstatusSEQ GENERALSTATUSEND;
 
 generalSubstatusSEQ: generalSubstatus | generalSubstatusSEQ generalSubstatus;
 
@@ -291,9 +299,7 @@ generalSubstatus: generalSubstatusStart generalSubstatusAttList generalSubstatus
 };	
 
 generalSubstatusStart: SUBSTATUSSTART
-{std::cout << "parserData->kounter = " << parserData->kounter << std::endl;
-std::cout << "parserData->numberOf = " << parserData->numberOf << std::endl;
-	if (parserData->kounter >= parserData->numberOf)
+{	if (parserData->kounter >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, "more <substatus> elements than specified");
 };
 		
@@ -301,15 +307,14 @@ generalSubstatusAttList: | generalSubstatusAttList generalSubstatusATT;
  
 generalSubstatusATT: generalSubstatusNameATT | generalSubstatusDescriptionATT
 {	if (parserData->generalSubstatusDescriptionPresent)
-		osrlerror(NULL, NULL, parserData, "description attribute multiply specified specified");
+		osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
 	parserData->generalSubstatusDescriptionPresent = true;
 	osresult->setGeneralSubstatusDescription(parserData->kounter-1,parserData->tempStr);
 }; 
 
 generalSubstatusNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
-{	std::cout << "read \'name=\'" << std::endl;
-	if (parserData->generalSubstatusNamePresent)
-		osrlerror(NULL, NULL, parserData, "name attribute multiply specified specified");
+{	if (parserData->generalSubstatusNamePresent)
+		osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
 	parserData->generalSubstatusNamePresent = true;
 	std::cout << "setGeneralSubstatusName" << std::endl; 
 	osresult->setGeneralSubstatusName(parserData->kounter-1,$2);
@@ -354,35 +359,82 @@ jobID:
 | JOBIDSTART ENDOFELEMENT;
 
 solverInvoked: 
-  SOLVERINVOKEDSTART GREATERTHAN ELEMENTTEXT SOLVERINVOKEDEND {std::cout << "!!!store solver invoked" << std::endl;}
+  SOLVERINVOKEDSTART GREATERTHAN ELEMENTTEXT SOLVERINVOKEDEND 
+  {osresult->setSolverInvoked( $3); free($3);  parserData->errorText = NULL;}
 | SOLVERINVOKEDSTART GREATERTHAN SOLVERINVOKEDEND 
 | SOLVERINVOKEDSTART ENDOFELEMENT;
 
 timeStamp: 
-  TIMESTAMPSTART GREATERTHAN ELEMENTTEXT TIMESTAMPEND {std::cout << "!!!store time stamp" << std::endl;}
+  TIMESTAMPSTART GREATERTHAN ELEMENTTEXT TIMESTAMPEND 
+  {osresult->setTimeStamp( $3); free($3);  parserData->errorText = NULL;}
 | TIMESTAMPSTART GREATERTHAN TIMESTAMPEND 
 | TIMESTAMPSTART ENDOFELEMENT;
 
-generalOtherResults: OTHERRESULTSSTART generalOtherResultsAttList generalOtherResultsBody;
+generalOtherResults: generalOtherResultsStart generalOtherResultsAttList generalOtherResultsContent;
 
-generalOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote {std::cout << "!!!store numberOfOtherGeneralResults" << std::endl;} ;
+generalOtherResultsStart: OTHERRESULTSSTART;
 
-generalOtherResultsBody: generalOtherResultsEmpty | generalOtherResultsContent;
+generalOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote 
+{	osresult->setNumberOfOtherGeneralResults($3);
+	parserData->numberOf = $3;
+	parserData->kounter = 0;
+};
+
+generalOtherResultsContent: 
+	generalOtherResultsEmpty
+	{	if (parserData->numberOf > 0)
+			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
+	}
+  | generalOtherResultsBody
+	{	if (parserData->kounter != parserData->numberOf)
+			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
+	}
+;
 
 generalOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-generalOtherResultsContent: GREATERTHAN generalOtherResultList OTHERRESULTSEND;
+generalOtherResultsBody: GREATERTHAN generalOtherResultSEQ OTHERRESULTSEND;
 
-generalOtherResultList: generalOtherResult | generalOtherResultList generalOtherResult; 
+generalOtherResultSEQ: generalOtherResult | generalOtherResultSEQ generalOtherResult; 
 
-generalOtherResult: OTHERSTART generalOtherAttList generalOtherEnd;
+generalOtherResult: generalOtherResultStart generalOtherAttList generalOtherEnd
+{	if (!parserData->generalOtherResultNamePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->generalOtherResultNamePresent = false;
+	parserData->generalOtherResultValuePresent = false;
+	parserData->generalOtherResultDescriptionPresent = false;
+	parserData->kounter++;
+};	
+
+generalOtherResultStart: OTHERSTART
+{	if (parserData->kounter >= parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
+};
 
 generalOtherAttList: | generalOtherAttList generalOtherAtt;
 
-generalOtherAtt: generalOtherNameATT | generalOtherValueATT | generalOtherDescriptionATT;
+generalOtherAtt: 
+	generalOtherNameATT
+	{	if (parserData->generalOtherResultNamePresent)
+			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
+		parserData->generalOtherResultNamePresent = true;
+		osresult->setGeneralOtherResultName(parserData->kounter-1,parserData->tempStr);
+	}
+  | generalOtherValueATT
+	{	if (parserData->generalOtherResultValuePresent)
+			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
+		parserData->generalOtherResultValuePresent = true;
+		osresult->setGeneralOtherResultValue(parserData->kounter-1,parserData->tempStr);
+	}
+  | generalOtherDescriptionATT
+	{	if (parserData->generalOtherResultDescriptionPresent)
+			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
+		parserData->generalOtherResultDescriptionPresent = true;
+		osresult->setGeneralOtherResultDescription(parserData->kounter-1,parserData->tempStr);
+	}
+;
 
-generalOtherNameATT: NAMEATT ATTRIBUTETEXT quote
-| EMPTYNAMEATT; 
+generalOtherNameATT: NAMEATT ATTRIBUTETEXT quote;
 
 generalOtherValueATT: VALUEATT ATTRIBUTETEXT quote
 |EMPTYVALUEATT; 

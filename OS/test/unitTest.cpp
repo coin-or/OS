@@ -102,7 +102,7 @@
  * We test the get() and set() methods for osinstance.
  */ 
 
-#define DEBUG       
+//#define DEBUG       
 
 #include <cppad/cppad.hpp> 
 //#include "CoinUtilsConfig.h"
@@ -547,7 +547,8 @@ if (SOLVER_TESTS){
 		// parse the osrl file
 		osrlreader =  new OSrLReader();
 #ifdef DEBUG
-		cout << "First osrl file\n" << solver->osrl << endl;
+		cout << "\nThe osrl file:\n" << solver->osrl << endl;
+		cout << "Start parsing the file" << endl;
 #endif
 		osrlreader->readOSrL( solver->osrl);
 #ifdef DEBUG
@@ -576,7 +577,7 @@ if (SOLVER_TESTS){
 		delete osrlreader;
 #ifdef DEBUG
 		cout << "osrlreader successfully deleted" << endl;
-#endif
+#endif		
 		osrlreader = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -1642,7 +1643,7 @@ if (THOROUGH == true){
 		osolreader = NULL;	
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorigInt.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-//#endif // ---- end of #if 0: OSrL parser development
+//#endif // ---- end of #if 1
 
 }   // end of if( THOROUGH )
 	}
@@ -3509,7 +3510,7 @@ if (PARSER_TESTS){
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 	}
 
-#endif //!!!  OSrL parser development
+#endif //!!!  end of #if 0: OSrL parser development
 
 	//
 	// Now just test the OSrL parser
@@ -3532,10 +3533,8 @@ if (PARSER_TESTS){
 		//osresult = new OSResult(); 
 		cout << "TEST PARSING AN OSrL FILE" << endl;
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-//		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parincLinear.osrl"; 
-//		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
-//		osrlFileName = dataDir  + "osrlFiles" + dirsep + "ipoptResult.osrl"; 
-		osrlFileName = "\\datafiles\\research\\os\\os-trunk-work\\os\\data\\osrlfiles\\parsertest.osrl";
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
+//		osrlFileName = "\\datafiles\\research\\os\\os-trunk-work\\os\\data\\osrlfiles\\parsertest.osrl";
 		start = clock();
 		std::string osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();
@@ -3586,7 +3585,7 @@ if (PARSER_TESTS){
 		osrlreader = NULL;
 */
 		unitTestResult << 
-		     "TEST " << nOfTest << ": Successful test of OSrL parser on problems parincLinear.osrl and errorExample.osrl" 
+		     "TEST " << nOfTest << ": Successful test of OSrL parser on file parserTest.osrl" 
 		      << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	

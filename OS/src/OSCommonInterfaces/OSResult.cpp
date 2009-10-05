@@ -1393,7 +1393,7 @@ bool OSResult::setGeneralStatusDescription(string description){
 	return true;
 }//setGeneralStatusDescription
 
-bool OSResult::setGeneralStatusNumberOf(int num){
+bool OSResult::setNumberOfGeneralSubstatuses(int num){
 	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->numberOfSubstatuses = num;
 	if (general->generalStatus->substatus != NULL)
@@ -1406,23 +1406,96 @@ bool OSResult::setGeneralStatusNumberOf(int num){
 			general->generalStatus->substatus[i] = new GeneralSubstatus();
 	}
 	return true;
-}//setGeneralStatusNumberOf
+}//setNumberOfGeneralSubstatuses
 
 bool OSResult::setGeneralSubstatusName(int idx, string name){
 	if (general->generalStatus == NULL) return false;
 	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
 	general->generalStatus->substatus[idx]->name = name;
 	return true;
-}//setGeneralStatusType
+}//setGeneralSubstatusName
 
 bool OSResult::setGeneralSubstatusDescription(int idx, string description){
 	if (general->generalStatus == NULL) return false;
 	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
 	general->generalStatus->substatus[idx]->description = description;
 	return true;
-}//setGeneralStatusDescription
+}//setGeneralSubstatusDescription
+
+bool OSResult::setServiceName(string serviceName){
+	std::cout << "in setServiceName" << std::endl;
+	general->serviceName = serviceName;
+	std::cout << "Leaving setServiceName:" << general->serviceName << std::endl;
+	return true;
+}//setServiceName
+
+bool OSResult::setServiceURI(string serviceURI){
+	general->serviceURI = serviceURI;
+	return true;
+}//setServiceURI
+
+bool OSResult::setInstanceName(string instanceName){
+	general->instanceName = instanceName;
+	return true;
+}//setInstanceName
+
+bool OSResult::setJobID(string jobID){
+	general->jobID = jobID;
+	return true;
+}//setJobID
+
+bool OSResult::setSolverInvoked(string solverInvoked){
+	general->solverInvoked = solverInvoked;
+	return true;
+}//setSolverInvoked
+		
+bool OSResult::setTimeStamp(string timeStamp){
+	general->timeStamp = timeStamp;
+	return true;
+}//setTimeStamp
+
+bool OSResult::setNumberOfOtherGeneralResults(int num){
+	if(general->otherResults == NULL) general->otherResults = new OtherResults();
+	general->otherResults->numberOfOtherResults = num;
+	if (general->otherResults->other != NULL)
+	{	throw ErrorClass("Attempting to reallocate other general results array. Potential loss of data.");
+		return false;
+	}
+	if (num > 0)
+	{	general->otherResults->other = new OtherResult*[num];
+		for(int i = 0; i < num; i++) 	
+			general->otherResults->other[i] = new OtherResult();
+	}
+	return true;
+}//setNumberOfOtherGeneralResults
 
 
+bool OSResult::setGeneralOtherResultName(int idx, string name){
+	if (general->otherResults == NULL) return false;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) return false;
+	general->otherResults->other[idx]->name = name;
+	return true;
+}//setGeneralOtherResultName
+
+bool OSResult::setGeneralOtherResultValue(int idx, string value){
+	if (general->otherResults == NULL) return false;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) return false;
+	general->otherResults->other[idx]->value = value;
+	return true;
+}//setGeneralOtherResultValue
+
+bool OSResult::setGeneralOtherResultDescription(int idx, string description){
+	if (general->otherResults == NULL) return false;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) return false;
+	general->otherResults->other[idx]->description = description;
+	return true;
+}//setGeneralOtherResultDescription
+
+
+bool OSResult::setTime(double time){
+//	general->time = os_dtoa_format( time);
+    return addTimingInformation("elapsedTime", "total", "second", "", time);
+}//setTime
 
 bool OSResult::addTimingInformation(std::string type, std::string category,
 									std::string unit, std::string description, double value)
@@ -1452,34 +1525,6 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 	return true;
 }//addTimingInformation
 
-
-
-bool OSResult::setServiceName(string serviceName){
-	std::cout << "in setServiceName" << std::endl;
-	general->serviceName = serviceName;
-	std::cout << "Leaving setServiceName:" << general->serviceName << std::endl;
-	return true;
-}//setServiceName
-
-bool OSResult::setServiceURI(string serviceURI){
-	general->serviceURI = serviceURI;
-	return true;
-}//setServiceURI
-
-bool OSResult::setInstanceName(string instanceName){
-	general->instanceName = instanceName;
-	return true;
-}//setInstanceName
-
-bool OSResult::setJobID(string jobID){
-	general->jobID = jobID;
-	return true;
-}//setJobID
-
-bool OSResult::setTime(double time){
-//	general->time = os_dtoa_format( time);
-    return addTimingInformation("elapsedTime", "total", "second", "", time);
-}//setTime
 
 bool OSResult::setTimeNumber(int timeNumber)
 {	if (job == NULL) job = new JobResult();
