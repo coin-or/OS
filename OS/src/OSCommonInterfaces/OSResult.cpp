@@ -1472,21 +1472,30 @@ bool OSResult::setNumberOfOtherGeneralResults(int num){
 
 bool OSResult::setGeneralOtherResultName(int idx, string name){
 	if (general->otherResults == NULL) return false;
-	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) return false;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
+		return false;
+	}
 	general->otherResults->other[idx]->name = name;
 	return true;
 }//setGeneralOtherResultName
 
 bool OSResult::setGeneralOtherResultValue(int idx, string value){
 	if (general->otherResults == NULL) return false;
-	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) return false;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
+		return false;
+	}
 	general->otherResults->other[idx]->value = value;
 	return true;
 }//setGeneralOtherResultValue
 
 bool OSResult::setGeneralOtherResultDescription(int idx, string description){
 	if (general->otherResults == NULL) return false;
-	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) return false;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
+		return false;
+	}
 	general->otherResults->other[idx]->description = description;
 	return true;
 }//setGeneralOtherResultDescription

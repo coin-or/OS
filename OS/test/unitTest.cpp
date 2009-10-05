@@ -102,7 +102,8 @@
  * We test the get() and set() methods for osinstance.
  */ 
 
-//#define DEBUG       
+//#define DEBUG
+//#define GUS_DEBUG
 
 #include <cppad/cppad.hpp> 
 //#include "CoinUtilsConfig.h"
@@ -327,6 +328,9 @@ int main(int argC, char* argV[])
   	// Set directory containing mps data files.
   	std::string dataDir;
     dataDir = dirsep == '/' ? "../data/" : "..\\data\\";
+#ifdef GUS_DEBUG
+	dataDir = "C:\\datafiles\\research\\OS\\OS-trunk-work\\OS\\data\\";
+#endif
 	nlFileName =  dataDir  + "amplFiles" + dirsep + "parinc.nl";
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 	fileUtil = new FileUtil();
@@ -1562,9 +1566,7 @@ if (THOROUGH == true){
 		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 
-
-
-#if 1   // this does not work with the current version of Bonmin due to uninitialed variables
+//#if 1   // this does not work with the current version of Bonmin due to uninitialed variables
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorig.osil" << endl << endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
@@ -3510,7 +3512,7 @@ if (PARSER_TESTS){
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 	}
 
-#endif //!!!  end of #if 0: OSrL parser development
+//#endif //!!!  end of #if 0: OSrL parser development
 
 	//
 	// Now just test the OSrL parser
@@ -3616,6 +3618,9 @@ if (PARSER_TESTS){
 		cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
 		cout << unitTestResult.str() << endl << endl;
 		cout << "All tests completed successfully" <<  endl <<  endl;
+#ifdef GUS_DEBUG
+		cout << "Make sure to #undef GUS_DEBUG before committing!!!" <<  endl <<  endl;
+#endif
 		return 0;
 	}
 }//end main

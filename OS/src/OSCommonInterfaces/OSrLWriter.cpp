@@ -92,7 +92,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	if(m_OSResult->general != NULL){
 		outStr << "<general>" << endl;
 		if(m_OSResult->general->generalStatus != NULL){
-			outStr << "<generalStatus"    ;
+			outStr << "<generalStatus";
 			if(m_OSResult->general->generalStatus->type.length() > 0){
 				outStr << " type=\"";
 				outStr << m_OSResult->general->generalStatus->type ;
@@ -103,13 +103,33 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << m_OSResult->general->generalStatus->description ;
 				outStr << "\"";
 			}
-			outStr << "/>" << endl;
+			outStr << " numberOfSubstatuses=\"";
+			outStr << m_OSResult->general->generalStatus->numberOfSubstatuses;
+			outStr << "\"";
+			outStr << ">" << endl;
+			for (int i=0; i < m_OSResult->general->generalStatus->numberOfSubstatuses; i++)
+			{	outStr << "<substatus";
+				if (m_OSResult->general->generalStatus->substatus[i]->name.length() > 0)
+				{	outStr << " name=\"";
+					outStr << m_OSResult->general->generalStatus->substatus[i]->name ;
+					outStr << "\"";
+				}
+				if (m_OSResult->general->generalStatus->substatus[i]->description.length() > 0)
+				{	outStr << " description=\"";
+					outStr << m_OSResult->general->generalStatus->substatus[i]->description ;
+					outStr << "\"";
+				}
+				outStr << "/>" << endl;
+			}
+			outStr << "</generalStatus>";
 		}		
-		
+
+		if(m_OSResult->general->message.length() > 0){
+			outStr << "<message>" + m_OSResult->general->message  + "</message>" << endl;
+		}
 		if(m_OSResult->general->serviceURI.length() > 0){
 			outStr << "<serviceURI>" + m_OSResult->general->serviceURI + "</serviceURI>"  << endl;
 		}
-
 		if(m_OSResult->general->serviceName.length() > 0){
 			outStr << "<serviceName>" + m_OSResult->general->serviceName + "</serviceName>"  << endl;
 		}
@@ -119,8 +139,39 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		if(m_OSResult->general->jobID.length() > 0){
 			outStr << "<jobID>" + m_OSResult->general->jobID  + "</jobID>" << endl;
 		}
-		if(m_OSResult->general->message.length() > 0){
-			outStr << "<message>" + m_OSResult->general->message  + "</message>" << endl;
+		if(m_OSResult->general->solverInvoked.length() > 0){
+			outStr << "<solverInvoked>" + m_OSResult->general->solverInvoked  + "</solverInvoked>" << endl;
+		}
+		if(m_OSResult->general->timeStamp.length() > 0){
+			outStr << "<timeStamp>" + m_OSResult->general->timeStamp  + "</timeStamp>" << endl;
+		}
+
+		if(m_OSResult->general->otherResults != NULL)
+		{	if(m_OSResult->general->otherResults->numberOfOtherResults > 0)
+			{	outStr << "<otherResults numberOfOtherResults=\"";
+				outStr << m_OSResult->general->otherResults->numberOfOtherResults;
+				outStr << "\">";
+				for (int i=0; i < m_OSResult->general->otherResults->numberOfOtherResults; i++)
+				{	outStr << "<other";
+					if (m_OSResult->general->otherResults->other[i]->name.length() > 0)
+					{	outStr << " name=\"";
+						outStr << m_OSResult->general->otherResults->other[i]->name;
+						outStr << "\"";
+					}
+					if (m_OSResult->general->otherResults->other[i]->value.length() > 0)
+					{	outStr << " value=\"";
+						outStr << m_OSResult->general->otherResults->other[i]->value;
+						outStr << "\"";
+					}
+					if (m_OSResult->general->otherResults->other[i]->description.length() > 0)
+					{	outStr << " description=\"";
+						outStr << m_OSResult->general->otherResults->other[i]->description;
+						outStr << "\"";
+					}
+					outStr << " />";
+				}
+				outStr << "</otherResults>";
+			}
 		}
 		outStr << "</general>" << endl;
 	}

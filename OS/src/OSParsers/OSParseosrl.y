@@ -309,7 +309,7 @@ generalSubstatusATT: generalSubstatusNameATT | generalSubstatusDescriptionATT
 {	if (parserData->generalSubstatusDescriptionPresent)
 		osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
 	parserData->generalSubstatusDescriptionPresent = true;
-	osresult->setGeneralSubstatusDescription(parserData->kounter-1,parserData->tempStr);
+	osresult->setGeneralSubstatusDescription(parserData->kounter,parserData->tempStr);
 }; 
 
 generalSubstatusNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
@@ -317,7 +317,7 @@ generalSubstatusNameATT: NAMEATT ATTRIBUTETEXT QUOTE
 		osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
 	parserData->generalSubstatusNamePresent = true;
 	std::cout << "setGeneralSubstatusName" << std::endl; 
-	osresult->setGeneralSubstatusName(parserData->kounter-1,$2);
+	osresult->setGeneralSubstatusName(parserData->kounter,$2);
 	std::cout << "Done setGeneralSubstatusName" << std::endl; 
 	
 }; 
@@ -370,7 +370,10 @@ timeStamp:
 | TIMESTAMPSTART GREATERTHAN TIMESTAMPEND 
 | TIMESTAMPSTART ENDOFELEMENT;
 
-generalOtherResults: generalOtherResultsStart generalOtherResultsAttList generalOtherResultsContent;
+generalOtherResults: generalOtherResultsStart generalOtherResultsAttList generalOtherResultsContent
+	{	if (parserData->kounter < parserData->numberOf - 1)
+			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
+	};
 
 generalOtherResultsStart: OTHERRESULTSSTART;
 
@@ -380,16 +383,7 @@ generalOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote
 	parserData->kounter = 0;
 };
 
-generalOtherResultsContent: 
-	generalOtherResultsEmpty
-	{	if (parserData->numberOf > 0)
-			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
-	}
-  | generalOtherResultsBody
-	{	if (parserData->kounter != parserData->numberOf)
-			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
-	}
-;
+generalOtherResultsContent: generalOtherResultsEmpty | generalOtherResultsBody;
 
 generalOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
@@ -418,29 +412,29 @@ generalOtherAtt:
 	{	if (parserData->generalOtherResultNamePresent)
 			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
 		parserData->generalOtherResultNamePresent = true;
-		osresult->setGeneralOtherResultName(parserData->kounter-1,parserData->tempStr);
+		osresult->setGeneralOtherResultName(parserData->kounter,parserData->tempStr);
 	}
   | generalOtherValueATT
 	{	if (parserData->generalOtherResultValuePresent)
 			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
 		parserData->generalOtherResultValuePresent = true;
-		osresult->setGeneralOtherResultValue(parserData->kounter-1,parserData->tempStr);
+		osresult->setGeneralOtherResultValue(parserData->kounter,parserData->tempStr);
 	}
   | generalOtherDescriptionATT
 	{	if (parserData->generalOtherResultDescriptionPresent)
 			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
 		parserData->generalOtherResultDescriptionPresent = true;
-		osresult->setGeneralOtherResultDescription(parserData->kounter-1,parserData->tempStr);
+		osresult->setGeneralOtherResultDescription(parserData->kounter,parserData->tempStr);
 	}
 ;
 
-generalOtherNameATT: NAMEATT ATTRIBUTETEXT quote;
+generalOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);};
 
-generalOtherValueATT: VALUEATT ATTRIBUTETEXT quote
-|EMPTYVALUEATT; 
+generalOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+|EMPTYVALUEATT {parserData->tempStr = ""}; 
 
-generalOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-| EMPTYDESCRIPTIONATT; 
+generalOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+| EMPTYDESCRIPTIONATT {parserData->tempStr = ""}; 
 
 generalOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 

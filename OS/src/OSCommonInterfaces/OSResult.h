@@ -2229,7 +2229,7 @@ public:
 	 * @param time holds the time. 
 	 * @return whether the time is set successfully. 
 	 */
-	bool OSResult::setTime(double time);
+	bool setTime(double time);
 
    	/**
 	 * Add timing information.
