@@ -1061,7 +1061,8 @@ OptimizationResult::OptimizationResult():
 	numberOfObjectives( -1),
 	numberOfConstraints(-1),
 	numberOfSolutions( -1),
-	solution(NULL)
+	solution(NULL),
+	otherSolverOutput(NULL)
 { 
 	#ifdef DEBUG_RESULT
 	cout << "Inside the OptimizationResult Constructor" << endl;

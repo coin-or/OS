@@ -175,21 +175,185 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}
 		outStr << "</general>" << endl;
 	}
+
+
 #ifdef DEBUG
 	cout << "output <system>" << endl;
 #endif
 	if(m_OSResult->system != NULL){
+		outStr << "<system>" << endl;
+		if(m_OSResult->system->systemInformation.length() > 0){
+			outStr << "<systemInformation>" + m_OSResult->system->systemInformation  + "</systemInformation>" << endl;
+		}
+
+		if(m_OSResult->system->availableDiskSpace != NULL){
+			outStr << "<availableDiskSpace";
+			if(m_OSResult->system->availableDiskSpace->unit.length() > 0){
+				outStr << " unit=\"";
+				outStr << m_OSResult->system->availableDiskSpace->unit ;
+				outStr << "\"";
+			}
+			if(m_OSResult->system->availableDiskSpace->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->system->availableDiskSpace->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->system->availableDiskSpace->value ;
+			outStr << "</availableDiskSpace>";
+		}		
+
+		if(m_OSResult->system->availableMemory != NULL){
+			outStr << "<availableMemory";
+			if(m_OSResult->system->availableMemory->unit.length() > 0){
+				outStr << " unit=\"";
+				outStr << m_OSResult->system->availableMemory->unit ;
+				outStr << "\"";
+			}
+			if(m_OSResult->system->availableMemory->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->system->availableMemory->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->system->availableMemory->value ;
+			outStr << "</availableMemory>";
+		}		
+
+		if(m_OSResult->system->availableCPUSpeed != NULL){
+			outStr << "<availableCPUSpeed";
+			if(m_OSResult->system->availableCPUSpeed->unit.length() > 0){
+				outStr << " unit=\"";
+				outStr << m_OSResult->system->availableCPUSpeed->unit ;
+				outStr << "\"";
+			}
+			if(m_OSResult->system->availableCPUSpeed->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->system->availableCPUSpeed->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->system->availableCPUSpeed->value ;
+			outStr << "</availableCPUSpeed>";
+		}		
+
+		if(m_OSResult->system->availableCPUNumber != NULL){
+			outStr << "<availableCPUNumber";
+			if(m_OSResult->system->availableCPUNumber->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->system->availableCPUNumber->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->system->availableCPUNumber->number ;
+			outStr << "</availableCPUNumber>";
+		}		
+
+		if(m_OSResult->system->otherResults != NULL)
+		{	if(m_OSResult->system->otherResults->numberOfOtherResults > 0)
+			{	outStr << "<otherResults numberOfOtherResults=\"";
+				outStr << m_OSResult->system->otherResults->numberOfOtherResults;
+				outStr << "\">";
+				for (int i=0; i < m_OSResult->system->otherResults->numberOfOtherResults; i++)
+				{	outStr << "<other";
+					if (m_OSResult->system->otherResults->other[i]->name.length() > 0)
+					{	outStr << " name=\"";
+						outStr << m_OSResult->system->otherResults->other[i]->name;
+						outStr << "\"";
+					}
+					if (m_OSResult->system->otherResults->other[i]->value.length() > 0)
+					{	outStr << " value=\"";
+						outStr << m_OSResult->system->otherResults->other[i]->value;
+						outStr << "\"";
+					}
+					if (m_OSResult->system->otherResults->other[i]->description.length() > 0)
+					{	outStr << " description=\"";
+						outStr << m_OSResult->system->otherResults->other[i]->description;
+						outStr << "\"";
+					}
+					outStr << " />";
+				}
+				outStr << "</otherResults>";
+			}
+		}
+		outStr << "</system>" << endl;
 	}
+
+
 #ifdef DEBUG
 	cout << "output <service>" << endl;
 #endif
 	if(m_OSResult->service != NULL){
+		outStr << "<service>" << endl;
+		if(m_OSResult->service->currentState.length() > 0){
+			outStr << "<currentState>" << m_OSResult->service->currentState << "</currentState>" << endl;
+		}
+		if(m_OSResult->service->currentJobCount >= 0){
+			outStr << "<currentJobCount>" << m_OSResult->service->currentJobCount << "</currentJobCount>" << endl;
+		}
+		if(m_OSResult->service->totalJobsSoFar >= 0){
+			outStr << "<totalJobsSoFar>" << m_OSResult->service->totalJobsSoFar << "</totalJobsSoFar>" << endl;
+		}
+		if(m_OSResult->service->timeServiceStarted.length() > 0){
+			outStr << "<timeServiceStarted>" << m_OSResult->service->timeServiceStarted << "</timeServiceStarted>" << endl;
+		}
+		if(m_OSResult->service->serviceUtilization >= 0){
+			outStr << "<serviceUtilization>" << m_OSResult->service->serviceUtilization << "</serviceUtilization>" << endl;
+		}
+
+		if(m_OSResult->service->otherResults != NULL)
+		{	if(m_OSResult->service->otherResults->numberOfOtherResults > 0)
+			{	outStr << "<otherResults numberOfOtherResults=\"";
+				outStr << m_OSResult->service->otherResults->numberOfOtherResults;
+				outStr << "\">";
+				for (int i=0; i < m_OSResult->service->otherResults->numberOfOtherResults; i++)
+				{	outStr << "<other";
+					if (m_OSResult->service->otherResults->other[i]->name.length() > 0)
+					{	outStr << " name=\"";
+						outStr << m_OSResult->service->otherResults->other[i]->name;
+						outStr << "\"";
+					}
+					if (m_OSResult->service->otherResults->other[i]->value.length() > 0)
+					{	outStr << " value=\"";
+						outStr << m_OSResult->service->otherResults->other[i]->value;
+						outStr << "\"";
+					}
+					if (m_OSResult->service->otherResults->other[i]->description.length() > 0)
+					{	outStr << " description=\"";
+						outStr << m_OSResult->service->otherResults->other[i]->description;
+						outStr << "\"";
+					}
+					outStr << " />";
+				}
+				outStr << "</otherResults>";
+			}
+		}
+		outStr << "</service>" << endl;
 	}
+
+
 #ifdef DEBUG
 	cout << "output <job>" << endl;
 #endif
 	if(m_OSResult->job != NULL){
 		outStr << "<job>" << endl;
+
+		if(m_OSResult->job->status.length() > 0){
+			outStr << "<status>" + m_OSResult->job->status  + "</status>" << endl;
+		}
+		if(m_OSResult->job->submitTime.length() > 0){
+			outStr << "<submitTime>" + m_OSResult->job->submitTime  + "</submitTime>" << endl;
+		}
+		if(m_OSResult->job->scheduledStartTime.length() > 0){
+			outStr << "<scheduledStartTime>" + m_OSResult->job->scheduledStartTime  + "</scheduledStartTime>" << endl;
+		}
+		if(m_OSResult->job->actualStartTime.length() > 0){
+			outStr << "<actualStartTime>" + m_OSResult->job->actualStartTime  + "</actualStartTime>" << endl;
+		}
+		if(m_OSResult->job->endTime.length() > 0){
+			outStr << "<endTime>" + m_OSResult->job->endTime  + "</endTime>" << endl;
+		}
+
 		if (m_OSResult->job->timingInformation != NULL)
 			if (m_OSResult->job->timingInformation->numberOfTimes > 0)
 			{	outStr << "<timingInformation numberOfTimes=\"";
@@ -210,8 +374,101 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				}
 				outStr << "</timingInformation>" << endl;
 			}
+
+		if(m_OSResult->job->usedDiskSpace != NULL){
+			outStr << "<usedDiskSpace";
+			if(m_OSResult->job->usedDiskSpace->unit.length() > 0){
+				outStr << " unit=\"";
+				outStr << m_OSResult->job->usedDiskSpace->unit ;
+				outStr << "\"";
+			}
+			if(m_OSResult->job->usedDiskSpace->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->job->usedDiskSpace->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->job->usedDiskSpace->value ;
+			outStr << "</usedDiskSpace>";
+		}		
+
+		if(m_OSResult->job->usedMemory != NULL){
+			outStr << "<usedMemory";
+			if(m_OSResult->job->usedMemory->unit.length() > 0){
+				outStr << " unit=\"";
+				outStr << m_OSResult->job->usedMemory->unit ;
+				outStr << "\"";
+			}
+			if(m_OSResult->job->usedMemory->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->job->usedMemory->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->job->usedMemory->value ;
+			outStr << "</usedMemory>";
+		}		
+
+		if(m_OSResult->job->usedCPUSpeed != NULL){
+			outStr << "<usedCPUSpeed";
+			if(m_OSResult->job->usedCPUSpeed->unit.length() > 0){
+				outStr << " unit=\"";
+				outStr << m_OSResult->job->usedCPUSpeed->unit ;
+				outStr << "\"";
+			}
+			if(m_OSResult->job->usedCPUSpeed->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->job->usedCPUSpeed->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->job->usedCPUSpeed->value ;
+			outStr << "</usedCPUSpeed>";
+		}		
+
+		if(m_OSResult->job->usedCPUNumber != NULL){
+			outStr << "<usedCPUNumber";
+			if(m_OSResult->job->usedCPUNumber->description.length() > 0){
+				outStr << " description=\"";
+				outStr << m_OSResult->job->usedCPUNumber->description ;
+				outStr << "\"";
+			}
+			outStr << ">";
+			outStr << m_OSResult->job->usedCPUNumber->number ;
+			outStr << "</usedCPUNumber>";
+		}		
+
+		if(m_OSResult->job->otherResults != NULL)
+		{	if(m_OSResult->job->otherResults->numberOfOtherResults > 0)
+			{	outStr << "<otherResults numberOfOtherResults=\"";
+				outStr << m_OSResult->job->otherResults->numberOfOtherResults;
+				outStr << "\">";
+				for (int i=0; i < m_OSResult->job->otherResults->numberOfOtherResults; i++)
+				{	outStr << "<other";
+					if (m_OSResult->job->otherResults->other[i]->name.length() > 0)
+					{	outStr << " name=\"";
+						outStr << m_OSResult->job->otherResults->other[i]->name;
+						outStr << "\"";
+					}
+					if (m_OSResult->job->otherResults->other[i]->value.length() > 0)
+					{	outStr << " value=\"";
+						outStr << m_OSResult->job->otherResults->other[i]->value;
+						outStr << "\"";
+					}
+					if (m_OSResult->job->otherResults->other[i]->description.length() > 0)
+					{	outStr << " description=\"";
+						outStr << m_OSResult->job->otherResults->other[i]->description;
+						outStr << "\"";
+					}
+					outStr << " />";
+				}
+				outStr << "</otherResults>";
+			}
+		}
 		outStr << "</job>" << endl;
 	}
+
+
 #ifdef DEBUG
 	cout << "output <optimization>" << endl;
 #endif
@@ -237,9 +494,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << " targetObjectiveIdx=\"";
 				outStr << m_OSResult->optimization->solution[i]->targetObjectiveIdx ;
 				outStr << "\"" ;
+				if (m_OSResult->optimization->solution[i]->weightedObjectives)
+					outStr << " weightedObjectives=\"true\"";
 				outStr << ">" << endl;
 				if(m_OSResult->optimization->solution[i]->status != NULL){
 					outStr << "<status";
+					outStr << " numberOfSubstatuses=\"";
+					outStr << m_OSResult->optimization->solution[i]->status->numberOfSubstatuses ;
+					outStr <<  "\"";
 					if(m_OSResult->optimization->solution[i]->status->type.length() > 0){
 						outStr << " type=\"";
 						outStr << m_OSResult->optimization->solution[i]->status->type;
@@ -250,7 +512,23 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						outStr <<  m_OSResult->optimization->solution[i]->status->description;
 						outStr << "\"" ;
 					}
-					outStr << "/>" << endl;
+					outStr << ">" << endl;
+
+					for (int j=0; j < m_OSResult->optimization->solution[i]->status->numberOfSubstatuses; j++)
+					{	outStr << "<substatus";
+						if(m_OSResult->optimization->solution[i]->status->substatus[j]->type.length() > 0){
+							outStr << " type=\"";
+							outStr << m_OSResult->optimization->solution[i]->status->substatus[j]->type;
+							outStr <<  "\"";
+						}
+						if(m_OSResult->optimization->solution[i]->status->substatus[j]->description.length() > 0){
+							outStr << " description=\"";
+							outStr <<  m_OSResult->optimization->solution[i]->status->substatus[j]->description;
+							outStr << "\"" ;
+						}
+						outStr << "/>" << endl;
+					}
+					outStr << "</status>" << endl;
 				}
 				if(m_OSResult->optimization->solution[i]->message != ""){
 					outStr << "<message>" << endl;
@@ -279,6 +557,44 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						}
 						outStr << "</values>" << endl;
 					}
+
+					if(m_OSResult->optimization->solution[i]->variables->valuesString != NULL){
+#ifdef DEBUG
+	cout << "output <variables> <valuesString>" << endl;
+#endif
+						outStr << "<valuesString numberOfVar=\"" << m_OSResult->optimization->solution[i]->variables->valuesString->numberOfVar << "\">" << endl;
+						for(j = 0; j < m_OSResult->optimization->solution[i]->variables->valuesString->numberOfVar; j++){
+							if(m_OSResult->optimization->solution[i]->variables->valuesString->var[j] != NULL){
+								outStr << "<var";
+								outStr << " idx=\"";
+								outStr << j ;
+								outStr <<  "\">";
+								outStr <<  m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->value;
+								outStr << "</var>" << endl;
+							}
+						}
+						outStr << "</valuesString>" << endl;
+					}
+
+					if(m_OSResult->optimization->solution[i]->variables->basisStatus != NULL){
+#ifdef DEBUG
+	cout << "output <variables> <basisStatus>" << endl;
+#endif
+						outStr << "<basisStatus numberOfVar=\"" << m_OSResult->optimization->solution[i]->variables->basisStatus->numberOfVar << "\">" << endl;
+						for(j = 0; j < m_OSResult->optimization->solution[i]->variables->basisStatus->numberOfVar; j++){
+							if(m_OSResult->optimization->solution[i]->variables->basisStatus->var[j] != NULL){
+								outStr << "<var";
+								outStr << " idx=\"";
+								outStr << j;
+								outStr << "\">";
+								outStr << m_OSResult->optimization->solution[i]->variables->basisStatus->var[j]->value;
+								outStr << "</var>" << endl;
+							}
+						}
+						outStr << "</values>" << endl;
+					}
+
+
 #ifdef DEBUG
 	cout << "output <variables> <other>" << endl;
 #endif
@@ -433,6 +749,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					} // end of if on other constraints
 					outStr << "</constraints>" << endl;
 				}
+
+
 #ifdef DEBUG
 	cout << "output <otherSolutionResults>" << endl;
 #endif
@@ -460,16 +778,45 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						}
 						outStr << "</otherSolutionResults>" << std::endl;
 					}
- 
 				outStr << "</solution>" << endl;
 			}
 		} // end the solution for loop
+
+
+#ifdef DEBUG
+	cout << "output <otherSolverOutput>" << endl;
+#endif
+		if (m_OSResult->optimization->otherSolverOutput != NULL)
+			if (m_OSResult->optimization->otherSolverOutput->numberOfSolverOutputs > 0){
+				outStr << "<otherSolverOutput numberOfSolverOutputs=\"";
+				outStr << m_OSResult->optimization->otherSolverOutput->numberOfSolverOutputs;
+				outStr << "\">" << std::endl;
+				for(int k = 0; k < m_OSResult->optimization->otherSolverOutput->numberOfSolverOutputs; k++){
+					outStr << "<solverOutput";
+					outStr << " name=\"";
+					outStr << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->name;
+					outStr << "\"";
+					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->category != "")
+						outStr << " category=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->category << "\"";
+					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->description != "")
+						outStr << " description=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->description << "\"";
+					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems > 0)
+						outStr << " numberOfItems=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems << "\"";
+					outStr << ">" << std::endl;
+					for(int j = 0; j < m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems; j++){
+						outStr << "<item>" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->item[j] << "</item>" << std::endl;
+					}
+					outStr << "</solverOutput>" << std::endl;
+				}
+				outStr << "</otherSolverOutput>" << std::endl;
+			}
+
 		outStr << "</optimization>" << endl;
 	} // end if (optimization != NULL)
+	outStr << "</osrl>" << endl ;
 #ifdef DEBUG 
 	cout << "done" << endl;
 #endif
-	outStr << "</osrl>" << endl ;
 	return outStr.str();
 }// end writeOSrL
 
