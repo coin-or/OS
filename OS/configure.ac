@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.0stable],[coin-os@list.coin-or.org])
+AC_INIT([OS],[2.0.1],[coin-os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -41,7 +41,7 @@ AC_PREFIX_DEFAULT([`pwd`])
 AC_CANONICAL_BUILD
 
 # Initialise ADDLIBS and FADDLIBS
-AC_COIN_PROJECTDIR_INIT
+AC_COIN_PROJECTDIR_INIT(8:1:0)
 
 LIBS_without_ADDLIBS="$LIBS"
   
