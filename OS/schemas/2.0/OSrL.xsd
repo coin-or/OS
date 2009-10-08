@@ -178,7 +178,13 @@
 		<xs:attribute name="numberOfOtherResults" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherResult">
-		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -199,12 +205,14 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralSubstatus">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="name" type="xs:string" use="required"/>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="DiskSpace">
 		<xs:simpleContent>
@@ -387,20 +395,16 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationSolutionSubstatus">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="type" use="required">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="stoppedByLimit"/>
-							<xs:enumeration value="stoppedByBounds"/>
-							<xs:enumeration value="other"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
+		<xs:attribute name="type" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="stoppedByLimit"/>
+					<xs:enumeration value="stoppedByBounds"/>
+					<xs:enumeration value="other"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveSolution">
 		<xs:sequence>
@@ -434,7 +438,13 @@
 			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -513,8 +523,14 @@
 			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintSolution">
@@ -549,7 +565,13 @@
 			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
@@ -563,10 +585,16 @@
 		<xs:sequence>
 			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OtherSolutionResults">
 		<xs:sequence>
@@ -578,9 +606,15 @@
 		<xs:sequence>
 			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:minLength value="1"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
-		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 </xs:schema>
