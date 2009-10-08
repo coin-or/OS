@@ -27,7 +27,7 @@
 #include<iostream>
 #include<sstream>
 
-//#define DEBUG_RESULT
+#define DEBUG_RESULT
 
 using namespace std;
 
@@ -212,7 +212,7 @@ CPUSpeed::~CPUSpeed()
 
 CPUNumber::CPUNumber():
 	description( ""),
-	number( 1)
+	value( 1)
 {
 	#ifdef DEBUG_RESULT
 	cout << "Inside the CPUNumber Constructor" << endl;
@@ -1423,10 +1423,15 @@ bool OSResult::setGeneralSubstatusDescription(int idx, string description){
 	return true;
 }//setGeneralSubstatusDescription
 
+bool OSResult::setGeneralMessage(string message){
+	general->message = message;
+	std::cout << "Leaving setGeneralMessage:" << general->message << "." << std::endl;
+	return true;
+}//setGeneralMessage
+
 bool OSResult::setServiceName(string serviceName){
-	std::cout << "in setServiceName" << std::endl;
 	general->serviceName = serviceName;
-	std::cout << "Leaving setServiceName:" << general->serviceName << std::endl;
+	std::cout << "Leaving setServiceName:" << general->serviceName << "." << std::endl;
 	return true;
 }//setServiceName
 
@@ -1501,6 +1506,126 @@ bool OSResult::setGeneralOtherResultDescription(int idx, string description){
 	return true;
 }//setGeneralOtherResultDescription
 
+bool OSResult::setSystemInformation(string systemInformation){
+	system->systemInformation = systemInformation;
+	std::cout << "Leaving setSystemInformation:" << system->systemInformation << "." << std::endl;
+	return true;
+}//setServiceName
+
+bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
+{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+	system->availableDiskSpace->unit = unit;
+	return true;
+}//setAvailableDiskSpaceUnit
+
+bool OSResult::setAvailableDiskSpaceDescription(std::string description)
+{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+	system->availableDiskSpace->description = description;
+	return true;
+}//setAvailableDiskSpaceDescription
+
+bool OSResult::setAvailableDiskSpaceValue(double value)
+{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+	system->availableDiskSpace->value = value;
+	return true;
+}//setAvailableDiskSpaceValue
+
+bool OSResult::setAvailableMemoryUnit(std::string unit)
+{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+	system->availableMemory->unit = unit;
+	return true;
+}//setAvailableMemoryUnit
+
+bool OSResult::setAvailableMemoryDescription(std::string description)
+{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+	system->availableMemory->description = description;
+	return true;
+}//setAvailableMemoryDescription
+
+bool OSResult::setAvailableMemoryValue(double value)
+{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+	system->availableMemory->value = value;
+	return true;
+}//setAvailableMemoryValue
+
+bool OSResult::setAvailableCPUSpeedUnit(std::string unit)
+{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+	system->availableCPUSpeed->unit = unit;
+	return true;
+}//setAvailableCPUSpeedUnit
+
+bool OSResult::setAvailableCPUSpeedDescription(std::string description)
+{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+	system->availableCPUSpeed->description = description;
+	return true;
+}//setAvailableCPUSpeedDescription
+
+bool OSResult::setAvailableCPUSpeedValue(double value)
+{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+	system->availableCPUSpeed->value = value;
+	return true;
+}//setAvailableCPUSpeedValue
+
+bool OSResult::setAvailableCPUNumberDescription(std::string description)
+{	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
+	system->availableCPUNumber->description = description;
+	return true;
+}//setAvailableCPUNumberDescription
+
+bool OSResult::setAvailableCPUNumberValue(double value)
+{	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
+	system->availableCPUNumber->value = value;
+	return true;
+}//setAvailableCPUNumberValue
+
+
+bool OSResult::setNumberOfOtherSystemResults(int num){
+	if(system->otherResults == NULL) system->otherResults = new OtherResults();
+	system->otherResults->numberOfOtherResults = num;
+	if (system->otherResults->other != NULL)
+	{	throw ErrorClass("Attempting to reallocate other system results array. Potential loss of data.");
+		return false;
+	}
+	if (num > 0)
+	{	system->otherResults->other = new OtherResult*[num];
+		for(int i = 0; i < num; i++) 	
+			system->otherResults->other[i] = new OtherResult();
+	}
+	return true;
+}//setNumberOfOtherSystemResults
+
+
+bool OSResult::setSystemOtherResultName(int idx, string name){
+	if (system->otherResults == NULL) return false;
+	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
+		return false;
+	}
+	system->otherResults->other[idx]->name = name;
+	return true;
+}//setSystemOtherResultName
+
+bool OSResult::setSystemOtherResultValue(int idx, string value){
+	if (system->otherResults == NULL) return false;
+	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
+		return false;
+	}
+	system->otherResults->other[idx]->value = value;
+	return true;
+}//setSystemOtherResultValue
+
+bool OSResult::setSystemOtherResultDescription(int idx, string description){
+	if (system->otherResults == NULL) return false;
+	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
+		return false;
+	}
+	system->otherResults->other[idx]->description = description;
+	return true;
+}//setSystemOtherResultDescription
+
+
 
 bool OSResult::setTime(double time){
 //	general->time = os_dtoa_format( time);
@@ -1543,11 +1668,6 @@ bool OSResult::setTimeNumber(int timeNumber)
 	job->timingInformation->numberOfTimes = timeNumber;
 	return true;
 }//setTimeNumber
-
-bool OSResult::setGeneralMessage(string message){
-	general->message = message;
-	return true;
-}//setGeneralMessage
 
 bool OSResult::setVariableNumber(int variableNumber){
 	if(variableNumber <= 0){

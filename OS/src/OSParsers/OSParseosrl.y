@@ -213,9 +213,9 @@ generalChild:
 		parserData->generalTimeStampPresent = true;
 	}
   | generalOtherResults
-	{	if (parserData->generalOtherPresent)
-			osrlerror(NULL, NULL, parserData, "only one general other element allowed");
-		parserData->generalOtherPresent = true;
+	{	if (parserData->generalOtherResultsPresent)
+			osrlerror(NULL, NULL, parserData, "only one general other results element allowed");
+		parserData->generalOtherResultsPresent = true;
 	}
   ;
               
@@ -445,101 +445,205 @@ systemElement: | SYSTEMSTART ENDOFELEMENT
                
 systemContent: | systemContent systemChild; 
 
-systemChild: systemInformation | availableDiskSpace | availableMemory |
-             availableCPUSpeed | availableCPUNumber | systemOtherResults; 
+systemChild: 
+	systemInformation 
+	{	if (parserData->systemInformationPresent)
+			osrlerror(NULL, NULL, parserData, "only one systemInformation element allowed");
+		parserData->systemInformationPresent = true;
+	}
+  | availableDiskSpace 
+  | availableMemory 
+  | availableCPUSpeed
+  | availableCPUNumber 
+  | systemOtherResults
+	{	if (parserData->systemOtherResultsPresent)
+			osrlerror(NULL, NULL, parserData, "only one system other results element allowed");
+		parserData->systemOtherResultsPresent = true;
+	}
+  ; 
 
 systemInformation:
-  SYSTEMINFORMATIONSTART GREATERTHAN ELEMENTTEXT SYSTEMINFORMATIONEND {}
+  SYSTEMINFORMATIONSTART GREATERTHAN ELEMENTTEXT SYSTEMINFORMATIONEND  {osresult->setSystemInformation( $3); free($3);  parserData->errorText = NULL;}
 | SYSTEMINFORMATIONSTART GREATERTHAN SYSTEMINFORMATIONEND 
 | SYSTEMINFORMATIONSTART ENDOFELEMENT;
 
-availableDiskSpace: AVAILABLEDISKSPACESTART availableDiskSpaceAttList GREATERTHAN availableDiskSpaceValue 
+availableDiskSpace: availableDiskSpaceStart availableDiskSpaceAttList GREATERTHAN availableDiskSpaceValue 
                     AVAILABLEDISKSPACEEND;
+
+availableDiskSpaceStart: AVAILABLEDISKSPACESTART
+	{	if (parserData->systemAvailableDiskSpacePresent)
+			osrlerror(NULL, NULL, parserData, "only one availableDiskSpace element allowed");
+		parserData->systemAvailableDiskSpacePresent = true;		
+	};
 
 availableDiskSpaceAttList: | availableDiskSpaceAttList availableDiskSpaceAtt;
 
 availableDiskSpaceAtt: availableDiskSpaceUnitATT | availableDiskSpaceDescriptionATT;
 
-availableDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote{};
+availableDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote 
+{	parserData->tempStr = $2; free ($2);
+	if (parserData->tempStr != "petabyte" && parserData->tempStr != "terabyte" 
+	&& parserData->tempStr != "gigabyte" && 
+		parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
+		osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
+	osresult->setAvailableDiskSpaceUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
+};
 
-availableDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+availableDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setAvailableDiskSpaceDescription( $2); free($2);  parserData->errorText = NULL;}
 | EMPTYDESCRIPTIONATT;
 
 availableDiskSpaceValue:
-     INTEGER
-   | DOUBLE;
+     INTEGER {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;};
 
-availableMemory: AVAILABLEMEMORYSTART availableMemoryAttList GREATERTHAN availableMemoryValue 
+availableMemory: availableMemoryStart availableMemoryAttList GREATERTHAN availableMemoryValue 
                  AVAILABLEMEMORYEND;
+
+availableMemoryStart: AVAILABLEMEMORYSTART
+	{	if (parserData->systemAvailableMemoryPresent)
+			osrlerror(NULL, NULL, parserData, "only one availableMemory element allowed");
+		parserData->systemAvailableMemoryPresent = true;
+	};
 
 availableMemoryAttList: | availableMemoryAttList availableMemoryAtt;
 
 availableMemoryAtt: availableMemoryUnitATT | availableMemoryDescriptionATT;
 
-availableMemoryUnitATT: UNITATT ATTRIBUTETEXT quote{};
+availableMemoryUnitATT: UNITATT ATTRIBUTETEXT quote
+{	parserData->tempStr = $2; free ($2);
+	if (parserData->tempStr != "terabyte" && parserData->tempStr != "gigabyte" && 
+		parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
+		osrlerror(NULL, NULL, parserData, "availableMemory unit not recognized");
+	osresult->setAvailableMemoryUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
+};
 
-availableMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+availableMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setAvailableMemoryDescription( $2); free($2);  parserData->errorText = NULL;}
 | EMPTYDESCRIPTIONATT;
 
 availableMemoryValue:
-     INTEGER
-   | DOUBLE;
+     INTEGER {osresult->setAvailableMemoryValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {osresult->setAvailableMemoryValue( $1);  parserData->errorText = NULL;};
 
-availableCPUSpeed: AVAILABLECPUSPEEDSTART availableCPUSpeedAttList GREATERTHAN availableCPUSpeedValue 
+availableCPUSpeed: availableCPUSpeedStart availableCPUSpeedAttList GREATERTHAN availableCPUSpeedValue 
                    AVAILABLECPUSPEEDEND;
+
+availableCPUSpeedStart: AVAILABLECPUSPEEDSTART
+	{	if (parserData->systemAvailableCPUSpeedPresent)
+			osrlerror(NULL, NULL, parserData, "only one availableCPUSpeed element allowed");
+		parserData->systemAvailableCPUSpeedPresent = true;
+	};
 
 availableCPUSpeedAttList: | availableCPUSpeedAttList availableCPUSpeedAtt;
 
 availableCPUSpeedAtt: availableCPUSpeedUnitATT | availableCPUSpeedDescriptionATT;
 
-availableCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote{};
+availableCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote
+{	parserData->tempStr = $2; free ($2);
+	if (parserData->tempStr != "terahertz" && parserData->tempStr != "gigahertz" && 
+		parserData->tempStr != "megahertz" && parserData->tempStr != "kilohertz" && 
+		parserData->tempStr != "hertz"     && parserData->tempStr != "petaflops" && 
+		parserData->tempStr != "teraflops" && parserData->tempStr != "gigaflops" && 
+		parserData->tempStr != "megaflops" && parserData->tempStr != "kiloflops" && 
+		parserData->tempStr != "flops" )
+		osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
+	osresult->setAvailableCPUSpeedUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
+};
 
-availableCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+availableCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setAvailableCPUSpeedDescription( $2); free($2);  parserData->errorText = NULL;}
 | EMPTYDESCRIPTIONATT;
 
 availableCPUSpeedValue:
-     INTEGER
-   | DOUBLE;
+     INTEGER {osresult->setAvailableCPUSpeedValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {osresult->setAvailableCPUSpeedValue( $1);  parserData->errorText = NULL;};
 
 
-availableCPUNumber: AVAILABLECPUNUMBERSTART availableCPUNumberAttList GREATERTHAN availableCPUNumberValue 
+availableCPUNumber: availableCPUNumberStart availableCPUNumberAttList GREATERTHAN availableCPUNumberValue 
                     AVAILABLECPUNUMBEREND;
 
-availableCPUNumberAttList: | availableCPUNumberAttList availableCPUNumberDescriptionATT;
+availableCPUNumberStart: AVAILABLECPUNUMBERSTART
+	{	if (parserData->systemAvailableCPUNumberPresent)
+			osrlerror(NULL, NULL, parserData, "only one availableCPUNumber element allowed");
+		parserData->systemAvailableCPUNumberPresent = true;
+	};
 
-availableCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+availableCPUNumberAttList: | availableCPUNumberDescriptionATT;
+
+availableCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setAvailableCPUNumberDescription( $2); free($2);  parserData->errorText = NULL;}
 | EMPTYDESCRIPTIONATT;
 
 availableCPUNumberValue:
-     INTEGER
-   | DOUBLE;
+     INTEGER {osresult->setAvailableCPUNumberValue( $1);  parserData->errorText = NULL;};
 
 
-systemOtherResults: OTHERRESULTSSTART systemOtherResultsAttList systemOtherResultsBody;
+systemOtherResults: systemOtherResultsStart systemOtherResultsAttList systemOtherResultsContent
+	{	if (parserData->kounter < parserData->numberOf - 1)
+			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
+	};
 
-systemOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote {std::cout << "!!!store numberOfOtherSystemResults" << std::endl;} ;
+systemOtherResultsStart: OTHERRESULTSSTART;
 
-systemOtherResultsBody: systemOtherResultsEmpty | systemOtherResultsContent;
+systemOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote
+{	osresult->setNumberOfOtherSystemResults($3);
+	parserData->numberOf = $3;
+	parserData->kounter = 0;
+};
+
+systemOtherResultsContent: systemOtherResultsEmpty | systemOtherResultsBody;
 
 systemOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-systemOtherResultsContent: GREATERTHAN systemOtherResultList OTHERRESULTSEND;
+systemOtherResultsBody: GREATERTHAN systemOtherResultSEQ OTHERRESULTSEND;
 
-systemOtherResultList: systemOtherResult | systemOtherResultList systemOtherResult; 
+systemOtherResultSEQ: systemOtherResult | systemOtherResultSEQ systemOtherResult; 
 
-systemOtherResult: OTHERSTART systemOtherAttList systemOtherEnd;
+systemOtherResult: systemOtherResultStart systemOtherAttList systemOtherEnd
+{	if (!parserData->systemOtherResultNamePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->systemOtherResultNamePresent = false;
+	parserData->systemOtherResultValuePresent = false;
+	parserData->systemOtherResultDescriptionPresent = false;
+	parserData->kounter++;
+};	
+
+systemOtherResultStart: OTHERSTART
+{	if (parserData->kounter >= parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
+};
 
 systemOtherAttList: | systemOtherAttList systemOtherAtt;
 
-systemOtherAtt: systemOtherNameATT | systemOtherValueATT | systemOtherDescriptionATT;
+systemOtherAtt:
+	systemOtherNameATT
+	{	if (parserData->systemOtherResultNamePresent)
+			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
+		parserData->systemOtherResultNamePresent = true;
+		osresult->setSystemOtherResultName(parserData->kounter,parserData->tempStr);
+	}
+  | systemOtherValueATT
+	{	if (parserData->systemOtherResultValuePresent)
+			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
+		parserData->systemOtherResultValuePresent = true;
+		osresult->setSystemOtherResultValue(parserData->kounter,parserData->tempStr);
+	}
+  | systemOtherDescriptionATT
+	{	if (parserData->systemOtherResultDescriptionPresent)
+			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
+		parserData->systemOtherResultDescriptionPresent = true;
+		osresult->setSystemOtherResultDescription(parserData->kounter,parserData->tempStr);
+	}
+;
 
-systemOtherNameATT: NAMEATT ATTRIBUTETEXT quote; 
+systemOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}; 
 
-systemOtherValueATT: VALUEATT ATTRIBUTETEXT quote
-| EMPTYVALUEATT; 
+systemOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+| EMPTYVALUEATT {parserData->tempStr = ""}; 
 
-systemOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-| EMPTYDESCRIPTIONATT; 
+systemOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+| EMPTYDESCRIPTIONATT {parserData->tempStr = ""};
 
 systemOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 

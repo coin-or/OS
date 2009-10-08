@@ -16,7 +16,7 @@
  */
  
  
-//#define DEBUG
+#define DEBUG
 
 
 
@@ -121,7 +121,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				}
 				outStr << "/>" << endl;
 			}
-			outStr << "</generalStatus>";
+			outStr << "</generalStatus>" << endl;
 		}		
 
 		if(m_OSResult->general->message.length() > 0){
@@ -150,7 +150,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		{	if(m_OSResult->general->otherResults->numberOfOtherResults > 0)
 			{	outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->general->otherResults->numberOfOtherResults;
-				outStr << "\">";
+				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->general->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->general->otherResults->other[i]->name.length() > 0)
@@ -168,9 +168,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						outStr << m_OSResult->general->otherResults->other[i]->description;
 						outStr << "\"";
 					}
-					outStr << " />";
+					outStr << " />" << endl;
 				}
-				outStr << "</otherResults>";
+				outStr << "</otherResults>" << endl;;
 			}
 		}
 		outStr << "</general>" << endl;
@@ -245,7 +245,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->system->availableCPUNumber->number ;
+			outStr << m_OSResult->system->availableCPUNumber->value;
 			outStr << "</availableCPUNumber>";
 		}		
 
@@ -418,7 +418,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			if(m_OSResult->job->usedCPUSpeed->description.length() > 0){
 				outStr << " description=\"";
-				outStr << m_OSResult->job->usedCPUSpeed->description ;
+				outStr << m_OSResult->job->usedCPUSpeed->description;
 				outStr << "\"";
 			}
 			outStr << ">";
@@ -430,11 +430,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			outStr << "<usedCPUNumber";
 			if(m_OSResult->job->usedCPUNumber->description.length() > 0){
 				outStr << " description=\"";
-				outStr << m_OSResult->job->usedCPUNumber->description ;
+				outStr << m_OSResult->job->usedCPUNumber->description;
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->job->usedCPUNumber->number ;
+			outStr << m_OSResult->job->usedCPUNumber->value;
 			outStr << "</usedCPUNumber>";
 		}		
 

@@ -122,31 +122,31 @@ public:
 	void* scanner;
 	
 	/** number of result solutions */
-	unsigned int numberOfSolutions;
+	int numberOfSolutions;
 	
 	/** total number of variables in the model instance */
-	unsigned int numberOfVariables;
+	int numberOfVariables;
 	
 	/** total number of constraints in the model instance */
-	unsigned int numberOfConstraints;
+	int numberOfConstraints;
 	
 	/** total number of Objectives in the model instance */
-	unsigned int numberOfObjectives;
+	int numberOfObjectives;
 	
 	/** number of variables in the a solution instance,
 	 * may change from solution to solution
 	 */
-	unsigned int numberOfVar;
+	int numberOfVar;
 	
 	/** number of constraints in the a solution instance,
 	 * may change from solution to solution
 	 */
-	unsigned int numberOfCon;
+	int numberOfCon;
 	
 	/** number of Objectives in the a solution instance 
 	 * may change from solution to solution
 	 */
-	unsigned int numberOfObj;
+	int numberOfObj;
 	
 	/** a temporary variable to hold the number of entries in a list */
 	int numberOf;
@@ -198,13 +198,6 @@ public:
 	bool generalSubstatusNamePresent;
 	bool generalSubstatusDescriptionPresent;
 
-	/** set generalOtherResult...Present to true if the corresponding
-	 *  attribute has been parsed for the current <other> element
-	 */	
-	bool generalOtherResultNamePresent;
-	bool generalOtherResultValuePresent;
-	bool generalOtherResultDescriptionPresent;
-
 	/** set general...Present to true if the corresponding 
 	 *  element (child of the <general> element) has been parsed
 	 */
@@ -216,8 +209,32 @@ public:
 	bool generalJobIDPresent; 
 	bool generalSolverInvokedPresent; 
 	bool generalTimeStampPresent; 
-	bool generalOtherPresent; 
-	
+	bool generalOtherResultsPresent; 
+
+	/** set generalOtherResult...Present to true if the corresponding
+	 *  attribute has been parsed for the current <other> child in the <general> element
+	 */	
+	bool generalOtherResultNamePresent;
+	bool generalOtherResultValuePresent;
+	bool generalOtherResultDescriptionPresent;
+
+	/** set system...Present to true if the corresponding 
+	 *  element (child of the <system> element) has been parsed
+	 */
+	bool systemInformationPresent; 
+	bool systemAvailableDiskSpacePresent; 
+	bool systemAvailableMemoryPresent; 
+	bool systemAvailableCPUSpeedPresent; 
+	bool systemAvailableCPUNumberPresent; 
+	bool systemOtherResultsPresent;
+
+	/** set systemOtherResult...Present to true if the corresponding
+	 *  attribute has been parsed for the current <other> child in the <system> element
+	 */	
+	bool systemOtherResultNamePresent;
+	bool systemOtherResultValuePresent;
+	bool systemOtherResultDescriptionPresent;
+
 	/** set otherNamePresent to true if there is
 	 * a name attribute in anotherVarResult
 	 */	

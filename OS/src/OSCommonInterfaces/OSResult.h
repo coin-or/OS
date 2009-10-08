@@ -372,7 +372,7 @@ public:
 	std::string description;
 
 	/** the number of CPUs available and/or used */
-	int number;
+	int value;
 
 	/**
 	 *
@@ -2222,8 +2222,140 @@ public:
 	 * @return whether the general otherResult description is set successfully or not. 
 	 */
 	bool setGeneralOtherResultDescription(int idx, std::string description);	
+
+	/**
+	 * Set the system information
+	 * 
+	 * @param systemInformation holds the system information
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setSystemInformation(std::string systemInformation);
+
+	/**
+	 * Set the unit in which available disk space is measured
+	 * 
+	 * @param unit holds unit (byte, kilobyte, megabtye, gigabyte, terabyte, petabyte)
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableDiskSpaceUnit(std::string unit);
+
+	/**
+	 * Set the description of available disk space
+	 * 
+	 * @param description holds further information about available disk space
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableDiskSpaceDescription(std::string description);
+
+	/**
+	 * Set the amount of available disk space
+	 * 
+	 * @param value holds the number of disk space units
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableDiskSpaceValue(double value);
+
+	/**
+	 * Set the unit in which available memory is measured
+	 * 
+	 * @param unit holds unit (byte, kilobyte, megabtye, gigabyte, terabyte)
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableMemoryUnit(std::string unit);
+
+	/**
+	 * Set the description of available memory
+	 * 
+	 * @param description holds further information about available memory
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableMemoryDescription(std::string description);
+
+	/**
+	 * Set the amount of available memory
+	 * 
+	 * @param value holds the number of memory units
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableMemoryValue(double value);
+
+	/**
+	 * Set the unit in which available CPU speed is measured
+	 * 
+	 * @param unit holds unit 
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableCPUSpeedUnit(std::string unit);
+
+	/**
+	 * Set the description of available CPU speed
+	 * 
+	 * @param description holds further information about the CPU speed
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableCPUSpeedDescription(std::string description);
+
+	/**
+	 * Set the available CPU speed
+	 * 
+	 * @param value holds the available CPU speed
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableCPUSpeedValue(double value);
+
+	/**
+	 * Set the description of available number of CPUs
+	 * 
+	 * @param description is used to impart further info about the CPUs
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableCPUNumberDescription(std::string description);
+
+	/**
+	 * Set the available  number of CPUs
+	 * 
+	 * @param value holds the available number of CPUs
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setAvailableCPUNumberValue(double value);
+
+	/**
+	 * Set number of other system results.
+	 * 
+	 * @param num holds the number of other system results. 
+	 * @return whether the number was set successfully. 
+	 */
+	bool setNumberOfOtherSystemResults(int num);
+
+	/**
+	 * Set the system otherResult name
+	 * 
+	 * @param name holds the system otherResult name
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the system otherResult name is set successfully or not. 
+	 */
+	bool setSystemOtherResultName(int idx, std::string name);	
 	
-   	/**
+	/**
+	 * Set the system otherResult value
+	 * 
+	 * @param name holds the system otherResult value
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the system otherResult value is set successfully or not. 
+	 */
+	bool setSystemOtherResultValue(int idx, std::string value);	
+	
+	/**
+	 * Set the system otherResult description
+	 * 
+	 * @param name holds the system otherResult description
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the system otherResult description is set successfully or not. 
+	 */
+	bool setSystemOtherResultDescription(int idx, std::string description);	
+
+	
+	/**
 	 * Set time.
 	 * 
 	 * @param time holds the time. 
