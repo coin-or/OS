@@ -263,10 +263,10 @@ public:
 	bool actualStartTimePresent;
 	bool jobEndTimePresent;
 	bool jobTimingInformationPresent;
-	bool jobUsedCPUSpeedPresent;
-	bool jobUsedCPUNumberPresent;
 	bool jobUsedDiskSpacePresent;
 	bool jobUsedMemoryPresent;
+	bool jobUsedCPUSpeedPresent;
+	bool jobUsedCPUNumberPresent;
 	bool jobOtherResultsPresent;
 
 	/** set jobOtherResult...Present to true if the corresponding

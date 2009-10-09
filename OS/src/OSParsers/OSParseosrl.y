@@ -468,7 +468,7 @@ systemInformation:
 | SYSTEMINFORMATIONSTART ENDOFELEMENT;
 
 availableDiskSpace: availableDiskSpaceStart availableDiskSpaceAttList GREATERTHAN availableDiskSpaceValue 
- {std::cout << "Matched availableDiskSpaceValue" << std::endl;}       AVAILABLEDISKSPACEEND;
+                    AVAILABLEDISKSPACEEND;
 
 availableDiskSpaceStart: AVAILABLEDISKSPACESTART
 	{	if (parserData->systemAvailableDiskSpacePresent)
@@ -482,9 +482,9 @@ availableDiskSpaceAtt: availableDiskSpaceUnitATT | availableDiskSpaceDescription
 
 availableDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote 
 {	parserData->tempStr = $2; free ($2);
-	if (parserData->tempStr != "petabyte" && parserData->tempStr != "terabyte" 
-	&& parserData->tempStr != "gigabyte" && 
-		parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
+	if (parserData->tempStr != "petabyte" && parserData->tempStr != "terabyte" &&
+	    parserData->tempStr != "gigabyte" && parserData->tempStr != "megabyte" && 
+	    parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
 		osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
 	osresult->setAvailableDiskSpaceUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
 };
@@ -494,8 +494,8 @@ availableDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
 | EMPTYDESCRIPTIONATT;
 
 availableDiskSpaceValue:
-     INTEGER {std::cout << std::endl << "matched available disk space: INTEGER" << std::endl; osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;}
-   | DOUBLE  {std::cout << std::endl << "matched available disk space: DOUBLE"  << std::endl; osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;};
+     INTEGER {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;};
 
 availableMemory: availableMemoryStart availableMemoryAttList GREATERTHAN availableMemoryValue 
                  AVAILABLEMEMORYEND;
@@ -819,26 +819,10 @@ jobChild:
 			osrlerror(NULL, NULL, parserData, "only one timingInformation element allowed");
 		parserData->jobTimingInformationPresent = true;
 	}
-  | usedCPUSpeed 
-	{	if (parserData->jobUsedCPUSpeedPresent)
-			osrlerror(NULL, NULL, parserData, "only one usedCPUSpeed element allowed");
-		parserData->jobUsedCPUSpeedPresent = true;
-	}
-  | usedCPUNumber 
-	{	if (parserData->jobUsedCPUNumberPresent)
-			osrlerror(NULL, NULL, parserData, "only one usedCPUNumber element allowed");
-		parserData->jobUsedCPUNumberPresent = true;
-	}
   | usedDiskSpace 
-	{	if (parserData->jobUsedDiskSpacePresent)
-			osrlerror(NULL, NULL, parserData, "only one usedDiskSpace element allowed");
-		parserData->jobUsedDiskSpacePresent = true;
-	}
   | usedMemory 
-	{	if (parserData->jobUsedMemoryPresent)
-			osrlerror(NULL, NULL, parserData, "only one usedMemory element allowed");
-		parserData->jobUsedMemoryPresent = true;
-	}
+  | usedCPUSpeed 
+  | usedCPUNumber 
   | jobOtherResults
 	{	if (parserData->jobOtherResultsPresent)
 			osrlerror(NULL, NULL, parserData, "only one job other results element allowed");
@@ -924,95 +908,188 @@ timeValue:
 | INTEGER { parserData->timeValue = $1; };
 
 
-usedCPUSpeed: USEDCPUSPEEDSTART usedCPUSpeedAttList GREATERTHAN usedCPUSpeedValue 
-              USEDCPUSPEEDEND;
-
-usedCPUSpeedAttList: | usedCPUSpeedAttList usedCPUSpeedAtt;
-
-usedCPUSpeedAtt: usedCPUSpeedUnitATT | usedCPUSpeedDescriptionATT;
-
-usedCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote{};
-
-usedCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
-| EMPTYDESCRIPTIONATT;
-
-usedCPUSpeedValue:
-     INTEGER
-   | DOUBLE;
-
-
-usedCPUNumber: USEDCPUNUMBERSTART usedCPUNumberAttList GREATERTHAN usedCPUNumberValue 
-               USEDCPUNUMBEREND;
-
-usedCPUNumberAttList: | usedCPUNumberAttList usedCPUNumberDescriptionATT;
-
-usedCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
-| EMPTYDESCRIPTIONATT;
-
-usedCPUNumberValue:
-     INTEGER
-   | DOUBLE;
-
-
-usedDiskSpace: USEDDISKSPACESTART usedDiskSpaceAttList GREATERTHAN usedDiskSpaceValue 
+usedDiskSpace: usedDiskSpaceStart usedDiskSpaceAttList GREATERTHAN usedDiskSpaceValue 
                USEDDISKSPACEEND;
+
+usedDiskSpaceStart: USEDDISKSPACESTART
+	{	if (parserData->jobUsedDiskSpacePresent)
+			osrlerror(NULL, NULL, parserData, "only one usedDiskSpace element allowed");
+		parserData->jobUsedDiskSpacePresent = true;		
+	};
 
 usedDiskSpaceAttList: | usedDiskSpaceAttList usedDiskSpaceAtt;
 
 usedDiskSpaceAtt: usedDiskSpaceUnitATT | usedDiskSpaceDescriptionATT;
 
-usedDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote{};
+usedDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote
+{	parserData->tempStr = $2; free ($2);
+	if (parserData->tempStr != "petabyte" && parserData->tempStr != "terabyte" &&
+	    parserData->tempStr != "gigabyte" && parserData->tempStr != "megabyte" && 
+	    parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
+		osrlerror(NULL, NULL, parserData, "usedDiskSpace unit not recognized");
+	osresult->setUsedDiskSpaceUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
+};
 
-usedDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+
+usedDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setUsedDiskSpaceDescription( $2); free($2);  parserData->errorText = NULL;}
 | EMPTYDESCRIPTIONATT;
 
 usedDiskSpaceValue:
-     INTEGER
-   | DOUBLE;
+     INTEGER {osresult->setUsedDiskSpaceValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {osresult->setUsedDiskSpaceValue( $1);  parserData->errorText = NULL;};
 
-usedMemory: USEDMEMORYSTART usedMemoryAttList GREATERTHAN usedMemoryValue 
+usedMemory: usedMemoryStart usedMemoryAttList GREATERTHAN usedMemoryValue 
             USEDMEMORYEND;
+
+usedMemoryStart: USEDMEMORYSTART
+	{	if (parserData->jobUsedMemoryPresent)
+			osrlerror(NULL, NULL, parserData, "only one usedMemory element allowed");
+		parserData->jobUsedMemoryPresent = true;
+	};
 
 usedMemoryAttList: | usedMemoryAttList usedMemoryAtt;
 
 usedMemoryAtt: usedMemoryUnitATT | usedMemoryDescriptionATT;
 
-usedMemoryUnitATT: UNITATT ATTRIBUTETEXT quote{};
+usedMemoryUnitATT: UNITATT ATTRIBUTETEXT quote
+{	parserData->tempStr = $2; free ($2);
+	if (parserData->tempStr != "terabyte" && parserData->tempStr != "gigabyte" && 
+		parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
+		osrlerror(NULL, NULL, parserData, "usedMemory unit not recognized");
+	osresult->setUsedMemoryUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
+};
 
-usedMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote{}
+usedMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setUsedMemoryDescription( $2); free($2);  parserData->errorText = NULL;}
 | EMPTYDESCRIPTIONATT;
 
 usedMemoryValue:
-     INTEGER
-   | DOUBLE;
+     INTEGER {osresult->setUsedMemoryValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {osresult->setUsedMemoryValue( $1);  parserData->errorText = NULL;};
+
+
+usedCPUSpeed: usedCPUSpeedStart usedCPUSpeedAttList GREATERTHAN usedCPUSpeedValue 
+              USEDCPUSPEEDEND;
+              
+usedCPUSpeedStart: USEDCPUSPEEDSTART
+	{	if (parserData->jobUsedCPUSpeedPresent)
+			osrlerror(NULL, NULL, parserData, "only one usedCPUSpeed element allowed");
+		parserData->jobUsedCPUSpeedPresent = true;
+	};
+              
+
+usedCPUSpeedAttList: | usedCPUSpeedAttList usedCPUSpeedAtt;
+
+usedCPUSpeedAtt: usedCPUSpeedUnitATT | usedCPUSpeedDescriptionATT;
+
+usedCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote
+{	parserData->tempStr = $2; free ($2);
+	if (parserData->tempStr != "terahertz" && parserData->tempStr != "gigahertz" && 
+		parserData->tempStr != "megahertz" && parserData->tempStr != "kilohertz" && 
+		parserData->tempStr != "hertz"     && parserData->tempStr != "petaflops" && 
+		parserData->tempStr != "teraflops" && parserData->tempStr != "gigaflops" && 
+		parserData->tempStr != "megaflops" && parserData->tempStr != "kiloflops" && 
+		parserData->tempStr != "flops" )
+		osrlerror(NULL, NULL, parserData, "usedCPUSpeed unit not recognized");
+	osresult->setUsedCPUSpeedUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
+};
+
+usedCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setUsedCPUSpeedDescription( $2); free($2);  parserData->errorText = NULL;}
+| EMPTYDESCRIPTIONATT;
+
+usedCPUSpeedValue:
+     INTEGER {osresult->setUsedCPUSpeedValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {osresult->setUsedCPUSpeedValue( $1);  parserData->errorText = NULL;};
+
+
+usedCPUNumber: usedCPUNumberStart usedCPUNumberAttList GREATERTHAN usedCPUNumberValue 
+               USEDCPUNUMBEREND;
+               
+usedCPUNumberStart: USEDCPUNUMBERSTART               
+	{	if (parserData->jobUsedCPUNumberPresent)
+			osrlerror(NULL, NULL, parserData, "only one usedCPUNumber element allowed");
+		parserData->jobUsedCPUNumberPresent = true;
+	};
+               
+
+usedCPUNumberAttList: | usedCPUNumberAttList usedCPUNumberDescriptionATT;
+
+usedCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	{	osresult->setUsedCPUNumberDescription( $2); free($2);  parserData->errorText = NULL;}
+| EMPTYDESCRIPTIONATT;
+
+usedCPUNumberValue:
+     INTEGER {osresult->setUsedCPUNumberValue( $1);  parserData->errorText = NULL;};
 
 
 
-jobOtherResults: OTHERRESULTSSTART jobOtherResultsAttList jobOtherResultsBody;
+jobOtherResults: jobOtherResultsStart jobOtherResultsAttList jobOtherResultsContent
+	{	if (parserData->kounter < parserData->numberOf - 1)
+			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
+	};
 
-jobOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote {std::cout << "!!!store numberOfOtherjobResults" << std::endl;} ;
+jobOtherResultsStart: OTHERRESULTSSTART;
 
-jobOtherResultsBody: jobOtherResultsEmpty | jobOtherResultsContent;
+jobOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote 
+{	osresult->setNumberOfOtherJobResults($3);
+	parserData->numberOf = $3;
+	parserData->kounter = 0;
+};
+
+jobOtherResultsContent: jobOtherResultsEmpty | jobOtherResultsBody;
 
 jobOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-jobOtherResultsContent: GREATERTHAN jobOtherResultList OTHERRESULTSEND;
+jobOtherResultsBody: GREATERTHAN jobOtherResultSEQ OTHERRESULTSEND;
 
-jobOtherResultList: jobOtherResult | jobOtherResultList jobOtherResult; 
+jobOtherResultSEQ: jobOtherResult | jobOtherResultSEQ jobOtherResult; 
 
-jobOtherResult: OTHERSTART jobOtherAttList jobOtherEnd;
+jobOtherResult: jobOtherResultStart jobOtherAttList jobOtherEnd
+{	if (!parserData->jobOtherResultNamePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->jobOtherResultNamePresent = false;
+	parserData->jobOtherResultValuePresent = false;
+	parserData->jobOtherResultDescriptionPresent = false;
+	parserData->kounter++;
+};	
+
+jobOtherResultStart: OTHERSTART
+{	if (parserData->kounter >= parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
+};
 
 jobOtherAttList: | jobOtherAttList jobOtherAtt;
 
-jobOtherAtt: jobOtherNameATT | jobOtherValueATT | jobOtherDescriptionATT;
+jobOtherAtt: 
+	jobOtherNameATT 
+ 	{	if (parserData->jobOtherResultNamePresent)
+			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
+		parserData->jobOtherResultNamePresent = true;
+		osresult->setJobOtherResultName(parserData->kounter,parserData->tempStr);
+	}
+ | jobOtherValueATT 
+	{	if (parserData->jobOtherResultValuePresent)
+			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
+		parserData->jobOtherResultValuePresent = true;
+		osresult->setJobOtherResultValue(parserData->kounter,parserData->tempStr);
+	}
+ | jobOtherDescriptionATT
+	{	if (parserData->jobOtherResultDescriptionPresent)
+			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
+		parserData->jobOtherResultDescriptionPresent = true;
+		osresult->setJobOtherResultDescription(parserData->kounter,parserData->tempStr);
+	}
+;
 
-jobOtherNameATT: NAMEATT ATTRIBUTETEXT quote; 
+jobOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}; 
 
-jobOtherValueATT: VALUEATT ATTRIBUTETEXT quote
-| EMPTYVALUEATT; 
+jobOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+| EMPTYVALUEATT {parserData->tempStr = ""}; 
 
-jobOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-| EMPTYDESCRIPTIONATT; 
+jobOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+| EMPTYDESCRIPTIONATT {parserData->tempStr = ""};
 
 jobOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 

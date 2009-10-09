@@ -1718,8 +1718,6 @@ bool OSResult::setJobEndTime(std::string endTime){
 	return true;
 }//setJobEndTime
 
-
-
 bool OSResult::setTime(double time){
 //	general->time = os_dtoa_format( time);
     return addTimingInformation("elapsedTime", "total", "second", "", time);
@@ -1761,6 +1759,121 @@ bool OSResult::setTimeNumber(int timeNumber)
 	job->timingInformation->numberOfTimes = timeNumber;
 	return true;
 }//setTimeNumber
+
+bool OSResult::setUsedDiskSpaceUnit(std::string unit)
+{	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+	job->usedDiskSpace->unit = unit;
+	return true;
+}//setUsedDiskSpaceUnit
+
+bool OSResult::setUsedDiskSpaceDescription(std::string description)
+{	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+	job->usedDiskSpace->description = description;
+	return true;
+}//setUsedDiskSpaceDescription
+
+bool OSResult::setUsedDiskSpaceValue(double value)
+{	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+	job->usedDiskSpace->value = value;
+	return true;
+}//setUsedDiskSpaceValue
+
+bool OSResult::setUsedMemoryUnit(std::string unit)
+{	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+	job->usedMemory->unit = unit;
+	return true;
+}//setUsedMemoryUnit
+
+bool OSResult::setUsedMemoryDescription(std::string description)
+{	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+	job->usedMemory->description = description;
+	return true;
+}//setUsedMemoryDescription
+
+bool OSResult::setUsedMemoryValue(double value)
+{	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+	job->usedMemory->value = value;
+	return true;
+}//setUsedMemoryValue
+
+bool OSResult::setUsedCPUSpeedUnit(std::string unit)
+{	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+	job->usedCPUSpeed->unit = unit;
+	return true;
+}//setUsedCPUSpeedUnit
+
+bool OSResult::setUsedCPUSpeedDescription(std::string description)
+{	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+	job->usedCPUSpeed->description = description;
+	return true;
+}//setUsedCPUSpeedDescription
+
+bool OSResult::setUsedCPUSpeedValue(double value)
+{	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+	job->usedCPUSpeed->value = value;
+	return true;
+}//setUsedCPUSpeedValue
+
+bool OSResult::setUsedCPUNumberDescription(std::string description)
+{	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
+	job->usedCPUNumber->description = description;
+	return true;
+}//setUsedCPUNumberDescription
+
+bool OSResult::setUsedCPUNumberValue(double value)
+{	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
+	job->usedCPUNumber->value = value;
+	return true;
+}//setUsedCPUNumberValue
+
+bool OSResult::setNumberOfOtherJobResults(int num){
+	if(job->otherResults == NULL) job->otherResults = new OtherResults();
+	job->otherResults->numberOfOtherResults = num;
+	if (job->otherResults->other != NULL)
+	{	throw ErrorClass("Attempting to reallocate other job results array. Potential loss of data.");
+		return false;
+	}
+	if (num > 0)
+	{	job->otherResults->other = new OtherResult*[num];
+		for(int i = 0; i < num; i++) 	
+			job->otherResults->other[i] = new OtherResult();
+	}
+	return true;
+}//setNumberOfOtherJobResults
+
+
+bool OSResult::setJobOtherResultName(int idx, string name){
+	if (job->otherResults == NULL) return false;
+	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
+		return false;
+	}
+	job->otherResults->other[idx]->name = name;
+	return true;
+}//setJobOtherResultName
+
+bool OSResult::setJobOtherResultValue(int idx, string value){
+	if (job->otherResults == NULL) return false;
+	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
+		return false;
+	}
+	job->otherResults->other[idx]->value = value;
+	return true;
+}//setJobOtherResultValue
+
+bool OSResult::setJobOtherResultDescription(int idx, string description){
+	if (job->otherResults == NULL) return false;
+	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
+		return false;
+	}
+	job->otherResults->other[idx]->description = description;
+	return true;
+}//setJobOtherResultDescription
+
+
+
 
 bool OSResult::setVariableNumber(int variableNumber){
 	if(variableNumber <= 0){

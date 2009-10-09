@@ -2500,7 +2500,131 @@ public:
 	 * @return whether the time number is set successfully or not. 
 	 */
 	bool setTimeNumber(int timeNumber);
+
+	/**
+	 * Set the unit in which used disk space is measured
+	 * 
+	 * @param unit holds unit (byte, kilobyte, megabtye, gigabyte, terabyte, petabyte)
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedDiskSpaceUnit(std::string unit);
+
+	/**
+	 * Set the description of used disk space
+	 * 
+	 * @param description holds further information about used disk space
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedDiskSpaceDescription(std::string description);
+
+	/**
+	 * Set the amount of used disk space
+	 * 
+	 * @param value holds the number of disk space units
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedDiskSpaceValue(double value);
+
+	/**
+	 * Set the unit in which used memory is measured
+	 * 
+	 * @param unit holds unit (byte, kilobyte, megabtye, gigabyte, terabyte)
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedMemoryUnit(std::string unit);
+
+	/**
+	 * Set the description of used memory
+	 * 
+	 * @param description holds further information about used memory
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedMemoryDescription(std::string description);
+
+	/**
+	 * Set the amount of used memory
+	 * 
+	 * @param value holds the number of memory units
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedMemoryValue(double value);
+
+	/**
+	 * Set the unit in which used CPU speed is measured
+	 * 
+	 * @param unit holds unit 
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedCPUSpeedUnit(std::string unit);
+
+	/**
+	 * Set the description of used CPU speed
+	 * 
+	 * @param description holds further information about the CPU speed
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedCPUSpeedDescription(std::string description);
+
+	/**
+	 * Set the used CPU speed
+	 * 
+	 * @param value holds the used CPU speed
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedCPUSpeedValue(double value);
+
+	/**
+	 * Set the description of used number of CPUs
+	 * 
+	 * @param description is used to impart further info about the CPUs
+	 * @return whether the system information was set successfully or not. 
+	 */
+	bool setUsedCPUNumberDescription(std::string description);
+
+	/**
+	 * Set the used number of CPUs
+	 * 
+	 * @param value holds the used number of CPUs
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setUsedCPUNumberValue(double value);
+
+	/**
+	 * Set number of other job results.
+	 * 
+	 * @param num holds the number of other job results. 
+	 * @return whether the number was set successfully. 
+	 */
+	bool setNumberOfOtherJobResults(int num);
+
+	/**
+	 * Set the job otherResult name
+	 * 
+	 * @param name holds the job otherResult name
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the job otherResult name is set successfully or not. 
+	 */
+	bool setJobOtherResultName(int idx, std::string name);	
 	
+	/**
+	 * Set the job otherResult value
+	 * 
+	 * @param name holds the job otherResult value
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the job otherResult value is set successfully or not. 
+	 */
+	bool setJobOtherResultValue(int idx, std::string value);	
+	
+	/**
+	 * Set the job otherResult description
+	 * 
+	 * @param name holds the job otherResult description
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the job otherResult description is set successfully or not. 
+	 */
+	bool setJobOtherResultDescription(int idx, std::string description);	
+
+
 	/**
 	 * Set the variable number. 
 	 * 
