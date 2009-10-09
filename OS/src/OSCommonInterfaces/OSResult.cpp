@@ -27,7 +27,7 @@
 #include<iostream>
 #include<sstream>
 
-#define DEBUG_RESULT
+//#define DEBUG_RESULT
 
 using namespace std;
 
@@ -1508,7 +1508,6 @@ bool OSResult::setGeneralOtherResultDescription(int idx, string description){
 
 bool OSResult::setSystemInformation(string systemInformation){
 	system->systemInformation = systemInformation;
-	std::cout << "Leaving setSystemInformation:" << system->systemInformation << "." << std::endl;
 	return true;
 }//setServiceName
 
@@ -1578,7 +1577,6 @@ bool OSResult::setAvailableCPUNumberValue(double value)
 	return true;
 }//setAvailableCPUNumberValue
 
-
 bool OSResult::setNumberOfOtherSystemResults(int num){
 	if(system->otherResults == NULL) system->otherResults = new OtherResults();
 	system->otherResults->numberOfOtherResults = num;
@@ -1624,6 +1622,101 @@ bool OSResult::setSystemOtherResultDescription(int idx, string description){
 	system->otherResults->other[idx]->description = description;
 	return true;
 }//setSystemOtherResultDescription
+
+bool OSResult::setCurrentState(std::string currentState){
+	service->currentState = currentState;
+	return true;
+}//setCurrentState
+
+bool OSResult::setCurrentJobCount(int jobCount){
+	service->currentJobCount = jobCount;
+	return true;
+}//setCurrentJobCount
+
+bool OSResult::setTotalJobsSoFar(int number){
+	service->totalJobsSoFar = number;
+	return true;
+}//setTotalJobsSoFar
+
+bool OSResult::setTimeServiceStarted(std::string startTime){
+	service->timeServiceStarted = startTime;
+	return true;
+}//setTimeServiceStarted
+
+bool OSResult::setServiceUtilization(double value){
+	service->serviceUtilization = value;
+	return true;
+}//setServiceUtilization
+
+bool OSResult::setNumberOfOtherServiceResults(int num){
+	if(service->otherResults == NULL) service->otherResults = new OtherResults();
+	service->otherResults->numberOfOtherResults = num;
+	if (service->otherResults->other != NULL)
+	{	throw ErrorClass("Attempting to reallocate other service results array. Potential loss of data.");
+		return false;
+	}
+	if (num > 0)
+	{	service->otherResults->other = new OtherResult*[num];
+		for(int i = 0; i < num; i++) 	
+			service->otherResults->other[i] = new OtherResult();
+	}
+	return true;
+}//setNumberOfOtherServiceResults
+
+bool OSResult::setServiceOtherResultName(int idx, string name){
+	if (service->otherResults == NULL) return false;
+	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
+		return false;
+	}
+	service->otherResults->other[idx]->name = name;
+	return true;
+}//setServiceOtherResultName
+
+bool OSResult::setServiceOtherResultValue(int idx, string value){
+	if (service->otherResults == NULL) return false;
+	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
+		return false;
+	}
+	service->otherResults->other[idx]->value = value;
+	return true;
+}//setServiceOtherResultValue
+
+bool OSResult::setServiceOtherResultDescription(int idx, string description){
+	if (service->otherResults == NULL) return false;
+	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
+	{	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
+		return false;
+	}
+	service->otherResults->other[idx]->description = description;
+	return true;
+}//setServiceOtherResultDescription
+
+bool OSResult::setJobStatus(std::string status){
+	job->status = status;
+	return true;
+}//setJobStatus
+	
+bool OSResult::setJobSubmitTime(std::string submitTime){
+	job->submitTime = submitTime;
+	return true;
+}//setJobSubmitTime
+	
+bool OSResult::setScheduledStartTime(std::string scheduledStartTime){
+	job->scheduledStartTime = scheduledStartTime;
+	return true;
+}//setScheduledStartTime
+	
+bool OSResult::setActualStartTime(std::string actualStartTime){
+	job->actualStartTime = actualStartTime;
+	return true;
+}//setActualStartTime
+	
+bool OSResult::setJobEndTime(std::string endTime){
+	job->endTime = endTime;
+	return true;
+}//setJobEndTime
 
 
 

@@ -16,7 +16,7 @@
  */
  
  
-#define DEBUG
+//#define DEBUG
 
 
 
@@ -200,7 +200,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->system->availableDiskSpace->value ;
-			outStr << "</availableDiskSpace>";
+			outStr << "</availableDiskSpace>" << endl;
 		}		
 
 		if(m_OSResult->system->availableMemory != NULL){
@@ -217,7 +217,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->system->availableMemory->value ;
-			outStr << "</availableMemory>";
+			outStr << "</availableMemory>" << endl;
 		}		
 
 		if(m_OSResult->system->availableCPUSpeed != NULL){
@@ -234,7 +234,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->system->availableCPUSpeed->value ;
-			outStr << "</availableCPUSpeed>";
+			outStr << "</availableCPUSpeed>" << endl;
 		}		
 
 		if(m_OSResult->system->availableCPUNumber != NULL){
@@ -246,14 +246,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->system->availableCPUNumber->value;
-			outStr << "</availableCPUNumber>";
+			outStr << "</availableCPUNumber>" << endl;
 		}		
 
 		if(m_OSResult->system->otherResults != NULL)
 		{	if(m_OSResult->system->otherResults->numberOfOtherResults > 0)
 			{	outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->system->otherResults->numberOfOtherResults;
-				outStr << "\">";
+				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->system->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->system->otherResults->other[i]->name.length() > 0)
@@ -271,9 +271,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						outStr << m_OSResult->system->otherResults->other[i]->description;
 						outStr << "\"";
 					}
-					outStr << " />";
+					outStr << " />" << endl;
 				}
-				outStr << "</otherResults>";
+				outStr << "</otherResults>" << endl;
 			}
 		}
 		outStr << "</system>" << endl;
@@ -305,7 +305,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		{	if(m_OSResult->service->otherResults->numberOfOtherResults > 0)
 			{	outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->service->otherResults->numberOfOtherResults;
-				outStr << "\">";
+				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->service->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->service->otherResults->other[i]->name.length() > 0)
@@ -323,9 +323,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						outStr << m_OSResult->service->otherResults->other[i]->description;
 						outStr << "\"";
 					}
-					outStr << " />";
+					outStr << " />" << endl;
 				}
-				outStr << "</otherResults>";
+				outStr << "</otherResults>" << endl;
 			}
 		}
 		outStr << "</service>" << endl;
@@ -389,7 +389,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->job->usedDiskSpace->value ;
-			outStr << "</usedDiskSpace>";
+			outStr << "</usedDiskSpace>" << endl;
 		}		
 
 		if(m_OSResult->job->usedMemory != NULL){
@@ -406,7 +406,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->job->usedMemory->value ;
-			outStr << "</usedMemory>";
+			outStr << "</usedMemory>" << endl;
 		}		
 
 		if(m_OSResult->job->usedCPUSpeed != NULL){
@@ -423,7 +423,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->job->usedCPUSpeed->value ;
-			outStr << "</usedCPUSpeed>";
+			outStr << "</usedCPUSpeed>" << endl;
 		}		
 
 		if(m_OSResult->job->usedCPUNumber != NULL){
@@ -435,14 +435,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << ">";
 			outStr << m_OSResult->job->usedCPUNumber->value;
-			outStr << "</usedCPUNumber>";
+			outStr << "</usedCPUNumber>" << endl;
 		}		
 
 		if(m_OSResult->job->otherResults != NULL)
 		{	if(m_OSResult->job->otherResults->numberOfOtherResults > 0)
 			{	outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->job->otherResults->numberOfOtherResults;
-				outStr << "\">";
+				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->job->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->job->otherResults->other[i]->name.length() > 0)
@@ -460,9 +460,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						outStr << m_OSResult->job->otherResults->other[i]->description;
 						outStr << "\"";
 					}
-					outStr << " />";
+					outStr << " />" << endl;
 				}
-				outStr << "</otherResults>";
+				outStr << "</otherResults>"  << endl;
 			}
 		}
 		outStr << "</job>" << endl;

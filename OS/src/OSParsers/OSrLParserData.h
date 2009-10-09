@@ -235,6 +235,47 @@ public:
 	bool systemOtherResultValuePresent;
 	bool systemOtherResultDescriptionPresent;
 
+	/** set service...Present to true if the corresponding 
+	 *  element (child of the <service> element) has been parsed
+	 */
+	bool serviceCurrentStatePresent;
+	bool serviceCurrentJobCountPresent;
+	bool serviceTotalJobsSoFarPresent;
+	bool timeServiceStartedPresent;
+	bool serviceUtilizationPresent;
+	bool serviceOtherResultsPresent;
+
+	/** set serviceOtherResult...Present to true if the corresponding
+	 *  attribute has been parsed for the current <other> child in the <service> element
+	 */	
+	bool serviceOtherResultNamePresent;
+	bool serviceOtherResultValuePresent;
+	bool serviceOtherResultDescriptionPresent;
+
+
+
+	/** set job...Present to true if the corresponding 
+	 *  element (child of the <job> element) has been parsed
+	 */
+	bool jobStatusPresent;
+	bool jobSubmitTimePresent;
+	bool scheduledStartTimePresent;
+	bool actualStartTimePresent;
+	bool jobEndTimePresent;
+	bool jobTimingInformationPresent;
+	bool jobUsedCPUSpeedPresent;
+	bool jobUsedCPUNumberPresent;
+	bool jobUsedDiskSpacePresent;
+	bool jobUsedMemoryPresent;
+	bool jobOtherResultsPresent;
+
+	/** set jobOtherResult...Present to true if the corresponding
+	 *  attribute has been parsed for the current <other> child in the <job> element
+	 */	
+	bool jobOtherResultNamePresent;
+	bool jobOtherResultValuePresent;
+	bool jobOtherResultDescriptionPresent;
+
 	/** set otherNamePresent to true if there is
 	 * a name attribute in anotherVarResult
 	 */	

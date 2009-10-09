@@ -468,7 +468,7 @@ systemInformation:
 | SYSTEMINFORMATIONSTART ENDOFELEMENT;
 
 availableDiskSpace: availableDiskSpaceStart availableDiskSpaceAttList GREATERTHAN availableDiskSpaceValue 
-                    AVAILABLEDISKSPACEEND;
+ {std::cout << "Matched availableDiskSpaceValue" << std::endl;}       AVAILABLEDISKSPACEEND;
 
 availableDiskSpaceStart: AVAILABLEDISKSPACESTART
 	{	if (parserData->systemAvailableDiskSpacePresent)
@@ -494,8 +494,8 @@ availableDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
 | EMPTYDESCRIPTIONATT;
 
 availableDiskSpaceValue:
-     INTEGER {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;}
-   | DOUBLE  {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;};
+     INTEGER {std::cout << std::endl << "matched available disk space: INTEGER" << std::endl; osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;}
+   | DOUBLE  {std::cout << std::endl << "matched available disk space: DOUBLE"  << std::endl; osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;};
 
 availableMemory: availableMemoryStart availableMemoryAttList GREATERTHAN availableMemoryValue 
                  AVAILABLEMEMORYEND;
@@ -654,60 +654,131 @@ serviceElement: | SERVICESTART ENDOFELEMENT
                 
 serviceContent: | serviceContent serviceChild;
         
-serviceChild: currentState | currentJobCount | totalJobsSoFar |
-              timeServiceStarted | serviceUtilization | serviceOtherResults;
+serviceChild: 
+	currentState 
+	{	if (parserData->serviceCurrentStatePresent)
+			osrlerror(NULL, NULL, parserData, "only one currentState element allowed");
+		parserData->serviceCurrentStatePresent = true;
+	}
+  | currentJobCount 
+	{	if (parserData->serviceCurrentJobCountPresent)
+			osrlerror(NULL, NULL, parserData, "only one currentJobCount element allowed");
+		parserData->serviceCurrentJobCountPresent = true;
+	}
+  | totalJobsSoFar 
+	{	if (parserData->serviceTotalJobsSoFarPresent)
+			osrlerror(NULL, NULL, parserData, "only one totalJobsSoFar element allowed");
+		parserData->serviceTotalJobsSoFarPresent = true;
+	}
+  | timeServiceStarted 
+	{	if (parserData->timeServiceStartedPresent)
+			osrlerror(NULL, NULL, parserData, "only one timeServiceStarted element allowed");
+		parserData->timeServiceStartedPresent = true;
+	}
+  | serviceUtilization 
+	{	if (parserData->serviceUtilizationPresent)
+			osrlerror(NULL, NULL, parserData, "only one serviceUtilization element allowed");
+		parserData->serviceUtilizationPresent = true;
+	}
+  | serviceOtherResults
+	{	if (parserData->serviceOtherResultsPresent)
+			osrlerror(NULL, NULL, parserData, "only one service other results element allowed");
+		parserData->serviceOtherResultsPresent = true;
+	}
+;
 
 currentState:
-  CURRENTSTATESTART GREATERTHAN ELEMENTTEXT CURRENTSTATEEND {}
+  CURRENTSTATESTART GREATERTHAN ELEMENTTEXT CURRENTSTATEEND {osresult->setCurrentState( $3);  free($3);  parserData->errorText = NULL;}
 | CURRENTSTATESTART GREATERTHAN CURRENTSTATEEND 
 | CURRENTSTATESTART ENDOFELEMENT;
 
 currentJobCount:
-  CURRENTJOBCOUNTSTART GREATERTHAN INTEGER CURRENTJOBCOUNTEND {}
+  CURRENTJOBCOUNTSTART GREATERTHAN INTEGER CURRENTJOBCOUNTEND {osresult->setCurrentJobCount( $3); /* free($3); */  parserData->errorText = NULL;}
 | CURRENTJOBCOUNTSTART GREATERTHAN CURRENTJOBCOUNTEND 
 | CURRENTJOBCOUNTSTART ENDOFELEMENT;
 
 totalJobsSoFar:
-  TOTALJOBSSOFARSTART GREATERTHAN INTEGER TOTALJOBSSOFAREND {}
+  TOTALJOBSSOFARSTART GREATERTHAN INTEGER TOTALJOBSSOFAREND {osresult->setTotalJobsSoFar( $3); /* free($3); */  parserData->errorText = NULL;}
 | TOTALJOBSSOFARSTART GREATERTHAN TOTALJOBSSOFAREND 
 | TOTALJOBSSOFARSTART ENDOFELEMENT;
 
 timeServiceStarted:
-  TIMESERVICESTARTEDSTART GREATERTHAN ELEMENTTEXT TIMESERVICESTARTEDEND {}
+  TIMESERVICESTARTEDSTART GREATERTHAN ELEMENTTEXT TIMESERVICESTARTEDEND {osresult->setTimeServiceStarted( $3);  free($3);  parserData->errorText = NULL;}
 | TIMESERVICESTARTEDSTART GREATERTHAN TIMESERVICESTARTEDEND 
 | TIMESERVICESTARTEDSTART ENDOFELEMENT;
 
 serviceUtilization:
-  SERVICEUTILIZATIONSTART GREATERTHAN aNumber SERVICEUTILIZATIONEND {}
+  SERVICEUTILIZATIONSTART GREATERTHAN aNumber SERVICEUTILIZATIONEND {osresult->setServiceUtilization( parserData->tempVal);  parserData->errorText = NULL;}
 | SERVICEUTILIZATIONSTART GREATERTHAN SERVICEUTILIZATIONEND 
 | SERVICEUTILIZATIONSTART ENDOFELEMENT;
 
 
-serviceOtherResults:  OTHERRESULTSSTART serviceOtherResultsAttList serviceOtherResultsBody;
+serviceOtherResults: serviceOtherResultsStart serviceOtherResultsAttList serviceOtherResultsContent
+	{	if (parserData->kounter < parserData->numberOf - 1)
+			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
+	};
 
-serviceOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote {std::cout << "!!!store numberOfOtherserviceResults" << std::endl;} ;
+serviceOtherResultsStart: OTHERRESULTSSTART;
 
-serviceOtherResultsBody: serviceOtherResultsEmpty | serviceOtherResultsContent;
+serviceOtherResultsAttList: NUMBEROFOTHERRESULTSATT quote INTEGER quote
+{	osresult->setNumberOfOtherServiceResults($3);
+	parserData->numberOf = $3;
+	parserData->kounter = 0;
+};
+
+serviceOtherResultsContent: serviceOtherResultsEmpty | serviceOtherResultsBody;
 
 serviceOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-serviceOtherResultsContent: GREATERTHAN serviceOtherResultList OTHERRESULTSEND;
+serviceOtherResultsBody: GREATERTHAN serviceOtherResultSEQ OTHERRESULTSEND;
 
-serviceOtherResultList: serviceOtherResult | serviceOtherResultList serviceOtherResult; 
+serviceOtherResultSEQ: serviceOtherResult | serviceOtherResultSEQ serviceOtherResult; 
 
-serviceOtherResult: OTHERSTART serviceOtherAttList serviceOtherEnd;
+serviceOtherResult: serviceOtherResultStart serviceOtherAttList serviceOtherEnd
+{	if (!parserData->serviceOtherResultNamePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->serviceOtherResultNamePresent = false;
+	parserData->serviceOtherResultValuePresent = false;
+	parserData->serviceOtherResultDescriptionPresent = false;
+	parserData->kounter++;
+};
+
+serviceOtherResultStart: OTHERSTART
+{	if (parserData->kounter >= parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
+};
 
 serviceOtherAttList: | serviceOtherAttList serviceOtherAtt;
 
-serviceOtherAtt: serviceOtherNameATT | serviceOtherValueATT | serviceOtherDescriptionATT;
+serviceOtherAtt: 
+	serviceOtherNameATT 
+	{	if (parserData->serviceOtherResultNamePresent)
+			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
+		parserData->serviceOtherResultNamePresent = true;
+		osresult->setServiceOtherResultName(parserData->kounter,parserData->tempStr);
+	}
+  | serviceOtherValueATT 
+	{	if (parserData->serviceOtherResultValuePresent)
+			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
+		parserData->serviceOtherResultValuePresent = true;
+		osresult->setServiceOtherResultValue(parserData->kounter,parserData->tempStr);
+	}
+  | serviceOtherDescriptionATT
+	{	if (parserData->serviceOtherResultDescriptionPresent)
+			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
+		parserData->serviceOtherResultDescriptionPresent = true;
+		osresult->setServiceOtherResultDescription(parserData->kounter,parserData->tempStr);
+	}
+;
+  
 
-serviceOtherNameATT: NAMEATT ATTRIBUTETEXT quote; 
+serviceOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}; 
 
-serviceOtherValueATT: VALUEATT ATTRIBUTETEXT quote
-| EMPTYVALUEATT; 
+serviceOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+| EMPTYVALUEATT {parserData->tempStr = ""}; 
 
-serviceOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-| EMPTYDESCRIPTIONATT; 
+serviceOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+| EMPTYDESCRIPTIONATT {parserData->tempStr = "";}; 
 
 serviceOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
@@ -717,31 +788,85 @@ jobElement: | JOBSTART ENDOFELEMENT
             
 jobContent: | jobContent jobChild;
 
-jobChild: status | submitTime | scheduledStartTime | actualStartTime | endTime | 
-          timingInformation | usedCPUSpeed | usedCPUNumber | usedDiskSpace | usedMemory | jobOtherResults;
-
+jobChild: 
+	status 
+	{	if (parserData->jobStatusPresent)
+			osrlerror(NULL, NULL, parserData, "only one job status element allowed");
+		parserData->jobStatusPresent = true;
+	}
+  | submitTime 
+	{	if (parserData->jobSubmitTimePresent)
+			osrlerror(NULL, NULL, parserData, "only one submitTime element allowed");
+		parserData->jobSubmitTimePresent = true;
+	}
+  | scheduledStartTime 
+	{	if (parserData->scheduledStartTimePresent)
+			osrlerror(NULL, NULL, parserData, "only one scheduledStartTime element allowed");
+		parserData->scheduledStartTimePresent = true;
+	}
+  | actualStartTime 
+	{	if (parserData->actualStartTimePresent)
+			osrlerror(NULL, NULL, parserData, "only one actualStartTime element allowed");
+		parserData->actualStartTimePresent = true;
+	}
+  | endTime 
+	{	if (parserData->jobEndTimePresent)
+			osrlerror(NULL, NULL, parserData, "only one job endTime element allowed");
+		parserData->jobEndTimePresent = true;
+	}
+  | timingInformation 
+	{	if (parserData->jobTimingInformationPresent)
+			osrlerror(NULL, NULL, parserData, "only one timingInformation element allowed");
+		parserData->jobTimingInformationPresent = true;
+	}
+  | usedCPUSpeed 
+	{	if (parserData->jobUsedCPUSpeedPresent)
+			osrlerror(NULL, NULL, parserData, "only one usedCPUSpeed element allowed");
+		parserData->jobUsedCPUSpeedPresent = true;
+	}
+  | usedCPUNumber 
+	{	if (parserData->jobUsedCPUNumberPresent)
+			osrlerror(NULL, NULL, parserData, "only one usedCPUNumber element allowed");
+		parserData->jobUsedCPUNumberPresent = true;
+	}
+  | usedDiskSpace 
+	{	if (parserData->jobUsedDiskSpacePresent)
+			osrlerror(NULL, NULL, parserData, "only one usedDiskSpace element allowed");
+		parserData->jobUsedDiskSpacePresent = true;
+	}
+  | usedMemory 
+	{	if (parserData->jobUsedMemoryPresent)
+			osrlerror(NULL, NULL, parserData, "only one usedMemory element allowed");
+		parserData->jobUsedMemoryPresent = true;
+	}
+  | jobOtherResults
+	{	if (parserData->jobOtherResultsPresent)
+			osrlerror(NULL, NULL, parserData, "only one job other results element allowed");
+		parserData->jobOtherResultsPresent = true;
+	}
+;
 status:
-  STATUSSTART GREATERTHAN ELEMENTTEXT STATUSEND {}
+  STATUSSTART GREATERTHAN ELEMENTTEXT STATUSEND {osresult->setJobStatus( $3); free($3);  parserData->errorText = NULL;}
 | STATUSSTART GREATERTHAN STATUSEND 
 | STATUSSTART ENDOFELEMENT;
 
 submitTime:
-  SUBMITTIMESTART GREATERTHAN ELEMENTTEXT SUBMITTIMEEND {}
+  SUBMITTIMESTART GREATERTHAN ELEMENTTEXT SUBMITTIMEEND {osresult->setJobSubmitTime( $3); free($3);  parserData->errorText = NULL;}
 | SUBMITTIMESTART GREATERTHAN SUBMITTIMEEND 
 | SUBMITTIMESTART ENDOFELEMENT;
 
 scheduledStartTime:
-  SCHEDULEDSTARTTIMESTART GREATERTHAN ELEMENTTEXT SCHEDULEDSTARTTIMEEND {}
+  SCHEDULEDSTARTTIMESTART GREATERTHAN ELEMENTTEXT SCHEDULEDSTARTTIMEEND {osresult->setScheduledStartTime( $3); free($3);  parserData->errorText = NULL;}
 | SCHEDULEDSTARTTIMESTART GREATERTHAN SCHEDULEDSTARTTIMEEND 
 | SCHEDULEDSTARTTIMESTART ENDOFELEMENT;
 
 actualStartTime:
-  ACTUALSTARTTIMESTART GREATERTHAN ELEMENTTEXT ACTUALSTARTTIMEEND {}
+  ACTUALSTARTTIMESTART GREATERTHAN ELEMENTTEXT ACTUALSTARTTIMEEND  {osresult->setActualStartTime( $3); free($3);  parserData->errorText = NULL;}
 | ACTUALSTARTTIMESTART GREATERTHAN ACTUALSTARTTIMEEND 
 | ACTUALSTARTTIMESTART ENDOFELEMENT;
 
 endTime:
-  ENDTIMESTART GREATERTHAN ELEMENTTEXT ENDTIMEEND {}
+  ENDTIMESTART GREATERTHAN ELEMENTTEXT ENDTIMEEND  {osresult->setJobEndTime( $3); free($3);  parserData->errorText = NULL;}
 | ENDTIMESTART GREATERTHAN ENDTIMEEND 
 | ENDTIMESTART ENDOFELEMENT;
 
@@ -765,13 +890,13 @@ timeAttList: | timeAttList timeAtt;
 timeAtt: timeType | timeCategory | timeUnit | timeDescription;
 
 timeType: TYPEATT ATTRIBUTETEXT QUOTE {parserData->timeType = $2;  free($2);}
-   | EMPTYTYPEATT ;
+   | EMPTYTYPEATT;
 
 timeCategory: CATEGORYATT ATTRIBUTETEXT QUOTE {parserData->timeCategory = $2;  free($2);}
-   | EMPTYCATEGORYATT ;
+   | EMPTYCATEGORYATT;
 
 timeUnit: UNITATT ATTRIBUTETEXT QUOTE {parserData->timeUnit = $2;   free($2);}
-   | EMPTYUNITATT ;
+   | EMPTYUNITATT;
 
 timeDescription: DESCRIPTIONATT ATTRIBUTETEXT QUOTE {parserData->timeDescription = $2;  free($2);}
    | EMPTYDESCRIPTIONATT;

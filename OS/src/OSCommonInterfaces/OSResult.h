@@ -2312,7 +2312,7 @@ public:
 	bool setAvailableCPUNumberDescription(std::string description);
 
 	/**
-	 * Set the available  number of CPUs
+	 * Set the available number of CPUs
 	 * 
 	 * @param value holds the available number of CPUs
 	 * @return whether the system information was set successfully or not. 
@@ -2354,7 +2354,124 @@ public:
 	 */
 	bool setSystemOtherResultDescription(int idx, std::string description);	
 
+	/**
+	 * Set the current state of the service
+	 * 
+	 * @param currentState holds the current state
+	 * @return whether the service information was set successfully or not. 
+	 */
+	bool setCurrentState(std::string currentState);
+
+	/**
+	 * Set the current job count
+	 * 
+	 * @param jobCount holds the current job count
+	 * @return whether the service information was set successfully or not. 
+	 */
+	bool setCurrentJobCount(int jobCount);
+
+	/**
+	 * Set the total number of jobs so far
+	 * 
+	 * @param number holds the total number of jobs
+	 * @return whether the service information was set successfully or not. 
+	 */
+	bool setTotalJobsSoFar(int number);
+
+	/**
+	 * Set the time the service was started
+	 * 
+	 * @param startTime holds the starting time
+	 * @return whether the service information was set successfully or not. 
+	 */
+	bool setTimeServiceStarted(std::string startTime);
+
+	/**
+	 * Set the service utilitzation
+	 * 
+	 * @param value holds the service utilitzation
+	 * @return whether the service information was set successfully or not. 
+	 */
+	bool setServiceUtilization(double value);
+
+
+	/**
+	 * Set number of other service results.
+	 * 
+	 * @param num holds the number of other service results. 
+	 * @return whether the number was set successfully. 
+	 */
+	bool setNumberOfOtherServiceResults(int num);
+
+	/**
+	 * Set the service otherResult name
+	 * 
+	 * @param name holds the service otherResult name
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the service otherResult name is set successfully or not. 
+	 */
+	bool setServiceOtherResultName(int idx, std::string name);	
 	
+	/**
+	 * Set the service otherResult value
+	 * 
+	 * @param name holds the service otherResult value
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the service otherResult value is set successfully or not. 
+	 */
+	bool setServiceOtherResultValue(int idx, std::string value);	
+	
+	/**
+	 * Set the service otherResult description
+	 * 
+	 * @param name holds the service otherResult description
+	 * @param idx holds the index of the otherResult in the array
+	 * @return whether the service otherResult description is set successfully or not. 
+	 */
+	bool setServiceOtherResultDescription(int idx, std::string description);	
+
+	
+	/**
+	 * Set the job status
+	 * 
+	 * @param status holds the job status
+	 * @return whether the job status was set successfully or not. 
+	 */
+	bool setJobStatus(std::string status);
+	
+	/**
+	 * Set the time when the job was submitted
+	 * 
+	 * @param submitTime holds the time when the job was submitted
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setJobSubmitTime(std::string submitTime);
+	
+	/**
+	 * Set the job's scheduled start time
+	 * 
+	 * @param scheduledStartTime holds the scheduled start time
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setScheduledStartTime(std::string scheduledStartTime);
+	
+	/**
+	 * Set the job's actual start time
+	 * 
+	 * @param actualStartTime holds the actual start time
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setActualStartTime(std::string actualStartTime);
+	
+	/**
+	 * Set the time when the job finished
+	 * 
+	 * @param endTime holds the time when the job finished
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setJobEndTime(std::string endTime);
+
+
 	/**
 	 * Set time.
 	 * 
