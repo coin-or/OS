@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: version 2.0 (The entire schema except for osrl->optimization->osal)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
@@ -111,10 +111,10 @@
 			<xs:element name="actualStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="endTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="timingInformation" type="TimingInformation" minOccurs="0"/>
-			<xs:element name="usedCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
-			<xs:element name="usedCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="usedDiskSpace" type="DiskSpace" default="0.0" minOccurs="0"/>
 			<xs:element name="usedMemory" type="MemorySize" default="0.0" minOccurs="0"/>
+			<xs:element name="usedCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
+			<xs:element name="usedCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="otherResults" type="OtherResults" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
