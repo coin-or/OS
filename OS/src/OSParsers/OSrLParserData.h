@@ -179,11 +179,6 @@ public:
 	
 	/** an index of which solution we have found */
 	unsigned int solutionIdx;
-
-	/** set statusTypePresent to true if there is
-	 * a status attribute parsed
-	 */
-	bool statusTypePresent;
 	
 	/** set generalStatus...Present to true if the corresponding
 	 *  general status attribute parsed
@@ -252,8 +247,6 @@ public:
 	bool serviceOtherResultValuePresent;
 	bool serviceOtherResultDescriptionPresent;
 
-
-
 	/** set job...Present to true if the corresponding 
 	 *  element (child of the <job> element) has been parsed
 	 */
@@ -275,6 +268,32 @@ public:
 	bool jobOtherResultNamePresent;
 	bool jobOtherResultValuePresent;
 	bool jobOtherResultDescriptionPresent;
+
+	/** These variables track which of the attributes in the <optimization>
+	 *  element have been set
+	 */
+	bool numberOfSolutionsPresent;
+	bool numberOfVariablesPresent;
+	bool numberOfObjectivesPresent;
+	bool numberOfConstraintsPresent;
+
+	bool targetObjectiveIdxPresent;
+	bool weightedObjectivesPresent;
+
+	/** set solutionStatus...Present to true if the corresponding
+	 *  solution status attribute parsed
+	 */	
+	bool solutionStatusTypePresent;
+	bool solutionStatusDescriptionPresent;
+	bool solutionStatusNumberOfPresent;
+	
+	/** set solutionSubstatus...Present to true if the corresponding
+	 *  solutionStatus substatus attribute parsed
+	 */	
+	bool solutionSubstatusTypePresent;
+	bool solutionSubstatusDescriptionPresent;
+
+	bool numberOfVarPresent;
 
 	/** set otherNamePresent to true if there is
 	 * a name attribute in anotherVarResult

@@ -513,7 +513,6 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						outStr << "\"" ;
 					}
 					outStr << ">" << endl;
-
 					for (int j=0; j < m_OSResult->optimization->solution[i]->status->numberOfSubstatuses; j++)
 					{	outStr << "<substatus";
 						if(m_OSResult->optimization->solution[i]->status->substatus[j]->type.length() > 0){

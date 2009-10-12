@@ -2677,6 +2677,54 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setSolutionStatus(int solIdx, std::string type, std::string description);
+			
+   	/**
+	 * Set the [i]th optimization solution status type
+	 * 
+	 * @param solIdx holds the solution index whose status to set.
+	 * @param type holds the solution status type
+	 * @return whether the solution status type is set successfully or not. 
+	 */
+	bool setSolutionStatusType(int solIdx, std::string type);	
+	
+   	/**
+	 * Set the [i]th optimization solution's number of substatus elements 
+	 *  
+	 * @param solIdx holds the solution index whose status to set.
+	 * @param num holds the number of substatuses (a nonegative integer)
+	 * @return whether the number of substatuses is set successfully or not. 
+	 */
+	bool setNumberOfSolutionSubstatuses(int solIdx, int num);
+
+	/**
+	 * Set the [i]th optimization solution status description. 
+	 * 
+	 * @param solIdx holds the solution index whose status to set.
+	 * @param description holds the solution status description.
+	 * @return whether the solution status description is set successfully or not. 
+	 */
+	bool setSolutionStatusDescription(int solIdx, std::string description);
+
+	/**
+	 * Set the solution substatus type
+	 * 
+	 * @param solIdx holds the solution index whose status to set.
+	 * @param substatusIdx holds the index of the substatus in the array
+	 * @param type holds the general substatus type
+	 * @return whether the general substatus type is set successfully or not. 
+	 */
+	bool setSolutionSubstatusType(int solIdx, int substatusIdx, std::string type);	
+	
+	/**
+	 * Set the solution substatus description. 
+	 * 
+	 * @param solIdx holds the solution index whose status to set.
+	 * @param substatusIdx holds the index of the substatus in the array
+	 * @param description holds the general substatus description.
+	 * @return whether the solution status description is set successfully or not. 
+	 */
+	bool setSolutionSubstatusDescription(int solIdx, int substatusIdx, std::string description);
+
 
 	/**
 	 * Set the [i]th optimization solution's objective index, where i equals the given solution index.   
@@ -2692,6 +2740,17 @@ public:
 	 */
 	bool setSolutionTargetObjectiveIdx(int solIdx, int objectiveIdx);
 	
+	/**
+	 * Record whether the [i]th optimization solution uses weighted objectives, 
+	 * where i equals the given solution index.   
+	 * 
+	 * @param solIdx holds the solution index to set the objective index.
+	 * @param weightedObjectives holds the value "true" or "false".  
+	 * 
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setSolutionWeightedObjectives(int solIdx, std::string weightedObjectives);
+
 	/**
 	 * Set the [i]th optimization solution's message, where i equals the given solution index.   
 	 * The first objective's index should be -1, the second -2, and so on.  
@@ -2732,12 +2791,36 @@ public:
 	 * Set the [i]th optimization solution's primal variable values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the primal variable values. 
-	 * @param x holds the a double dense array of variable values to set; it could be null if all variables are 0.
+	 * @param x holds a double dense array of variable values to set; it could be null if all variables are 0.
 	 * 
 	 * @return whether primal variable values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setPrimalVariableValuesDense(int solIdx, double *x);
+
+	/**
+	 * Set the number of primal variables to be given a value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param numberOfVar holds the number of primal variables that are to be set
+	 * 
+	 * @return whether primal variable values was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfVarValues(int solIdx, int numberOfVar);
+
+	/**
+	 * Set a primal variable value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param number holds the location within the sparse array var that is to be used
+	 * @param idx holds the index of the primal variable that is to be set
+	 * @param val holds the variable value to set.
+	 * 
+	 * @return whether primal variable value was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setVarValue(int solIdx, int number, int idx, double val);
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 

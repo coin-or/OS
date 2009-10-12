@@ -699,12 +699,13 @@ void CoinSolver::solve() throw (ErrorClass) {
 								
 				}
 				int i;
-/*
+
+#ifdef DEBUG
 				std::cout << "CALLING THE CBC SOLVER CBCMAIN1()" << std::endl;
 				for(i = 0; i < num_cbc_argv; i++){
 					std::cout << "Cbc Option: "  << cbc_argv[ i]   <<  std::endl;
 				}
-*/
+#endif
 				
 				CbcMain1( num_cbc_argv, cbc_argv, model);	
 				/*

@@ -1354,7 +1354,7 @@ double OSResult::getOptimalObjValue(int objIdx, int solIdx)
 {
 	try{
 		if(this->optimization == NULL || this->optimization->solution == NULL)   
-		throw ErrorClass("No optimization or solution object defined");  
+			throw ErrorClass("No optimization or solution object defined");  
 		int iSolutions = this->getSolutionNumber();  
 		for(int i = 0; i < iSolutions; i++){  
 			if(i != solIdx) continue;  
@@ -1383,7 +1383,7 @@ bool OSResult::setGeneralStatus(GeneralStatus *status){
 }//setGeneralStatus
 
 bool OSResult::setGeneralStatusType(string type){
-	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
+	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->type = type;
 	return true;
 }//setGeneralStatusType
@@ -1395,12 +1395,12 @@ bool OSResult::setGeneralStatusDescription(string description){
 }//setGeneralStatusDescription
 
 bool OSResult::setNumberOfGeneralSubstatuses(int num){
-	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
-	general->generalStatus->numberOfSubstatuses = num;
-	if (general->generalStatus->substatus != NULL)
+//	if(general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
+	if (general->generalStatus->numberOfSubstatuses > 0)
 	{	throw ErrorClass("Attempting to reallocate substatus array. Potential loss of data.");
 		return false;
 	}
+	general->generalStatus->numberOfSubstatuses = num;
 	if (num > 0)
 	{	general->generalStatus->substatus = new GeneralSubstatus*[num];
 		for(int i = 0; i < num; i++) 	
@@ -1753,7 +1753,10 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 
 
 bool OSResult::setTimeNumber(int timeNumber)
-{	if (job == NULL) job = new JobResult();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
     if (timeNumber <= 0) return false;
 	job->timingInformation->numberOfTimes = timeNumber;
@@ -1761,72 +1764,120 @@ bool OSResult::setTimeNumber(int timeNumber)
 }//setTimeNumber
 
 bool OSResult::setUsedDiskSpaceUnit(std::string unit)
-{	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
 	job->usedDiskSpace->unit = unit;
 	return true;
 }//setUsedDiskSpaceUnit
 
 bool OSResult::setUsedDiskSpaceDescription(std::string description)
-{	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
 	job->usedDiskSpace->description = description;
 	return true;
 }//setUsedDiskSpaceDescription
 
 bool OSResult::setUsedDiskSpaceValue(double value)
-{	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
 	job->usedDiskSpace->value = value;
 	return true;
 }//setUsedDiskSpaceValue
 
 bool OSResult::setUsedMemoryUnit(std::string unit)
-{	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
 	job->usedMemory->unit = unit;
 	return true;
 }//setUsedMemoryUnit
 
 bool OSResult::setUsedMemoryDescription(std::string description)
-{	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
 	job->usedMemory->description = description;
 	return true;
 }//setUsedMemoryDescription
 
 bool OSResult::setUsedMemoryValue(double value)
-{	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
 	job->usedMemory->value = value;
 	return true;
 }//setUsedMemoryValue
 
 bool OSResult::setUsedCPUSpeedUnit(std::string unit)
-{	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->unit = unit;
 	return true;
 }//setUsedCPUSpeedUnit
 
 bool OSResult::setUsedCPUSpeedDescription(std::string description)
-{	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->description = description;
 	return true;
 }//setUsedCPUSpeedDescription
 
 bool OSResult::setUsedCPUSpeedValue(double value)
-{	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->value = value;
 	return true;
 }//setUsedCPUSpeedValue
 
 bool OSResult::setUsedCPUNumberDescription(std::string description)
-{	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->description = description;
 	return true;
 }//setUsedCPUNumberDescription
 
 bool OSResult::setUsedCPUNumberValue(double value)
-{	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
+{	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->value = value;
 	return true;
 }//setUsedCPUNumberValue
 
 bool OSResult::setNumberOfOtherJobResults(int num){
+	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
 	if(job->otherResults == NULL) job->otherResults = new OtherResults();
 	job->otherResults->numberOfOtherResults = num;
 	if (job->otherResults->other != NULL)
@@ -1843,6 +1894,10 @@ bool OSResult::setNumberOfOtherJobResults(int num){
 
 
 bool OSResult::setJobOtherResultName(int idx, string name){
+	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 	{	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
@@ -1853,6 +1908,10 @@ bool OSResult::setJobOtherResultName(int idx, string name){
 }//setJobOtherResultName
 
 bool OSResult::setJobOtherResultValue(int idx, string value){
+	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 	{	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
@@ -1863,6 +1922,10 @@ bool OSResult::setJobOtherResultValue(int idx, string value){
 }//setJobOtherResultValue
 
 bool OSResult::setJobOtherResultDescription(int idx, string description){
+	if (job == NULL) 
+	{	throw ErrorClass("job instance was never defined");
+		return false;
+	}
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 	{	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
@@ -1935,6 +1998,89 @@ bool OSResult::setSolutionStatus(int solIdx, string type, string description){
 	return true;
 }//setSolutionStatus
 
+
+bool OSResult::setSolutionStatusType(int solIdx, std::string type){	
+ 	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->status == NULL){
+		optimization->solution[solIdx]->status = new OptimizationSolutionStatus();
+	}
+	// Kipp later when we finalize on type come back and require that the type be correct
+	optimization->solution[solIdx]->status->type = type;
+	return true;
+}//setSolutionStatusType
+
+bool OSResult::setSolutionStatusDescription(int solIdx, std::string description){
+ 	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->status == NULL){
+		optimization->solution[solIdx]->status = new OptimizationSolutionStatus();
+	}
+	optimization->solution[solIdx]->status->description = description;
+	return true;
+}//setSolutionStatusDescription
+
+
+bool OSResult::setNumberOfSolutionSubstatuses(int solIdx, int num){
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if(optimization->solution[solIdx]->status == NULL){
+		optimization->solution[solIdx]->status = new OptimizationSolutionStatus();
+	}
+	optimization->solution[solIdx]->status->numberOfSubstatuses = num;
+	optimization->solution[solIdx]->status->substatus = new OptimizationSolutionSubstatus*[num];
+	for(int i = 0; i < num; i++){
+		optimization->solution[solIdx]->status->substatus[i] = new OptimizationSolutionSubstatus();
+	}
+	return true;
+}//setNumberOfSolutionSubstatuses
+
+
+bool OSResult::setSolutionSubstatusType(int solIdx, int substatusIdx, std::string type){
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL) return false;
+	if(optimization->solution[solIdx]->status == NULL) return false;
+	int nSubs = optimization->solution[solIdx]->status->numberOfSubstatuses;
+	if (substatusIdx < 0 || substatusIdx >= nSubs) return false;
+	optimization->solution[solIdx]->status->substatus[substatusIdx]->type = type;
+	return true;
+}//setSolutionSubstatusType
+	
+bool OSResult::setSolutionSubstatusDescription(int solIdx, int substatusIdx, std::string description){
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL) return false;
+	if(optimization->solution[solIdx]->status == NULL) return false;
+	int nSubs = optimization->solution[solIdx]->status->numberOfSubstatuses;
+	if (substatusIdx < 0 || substatusIdx >= nSubs) return false;
+	optimization->solution[solIdx]->status->substatus[substatusIdx]->description = description;
+	return true;
+}//setSolutionSubstatusDescription
+
+
 bool OSResult::setSolutionTargetObjectiveIdx(int solIdx, int objectiveIdx){
 	int nSols = this->getSolutionNumber();
 	if(optimization == NULL) return false;
@@ -1949,6 +2095,23 @@ bool OSResult::setSolutionTargetObjectiveIdx(int solIdx, int objectiveIdx){
 	optimization->solution[solIdx]->targetObjectiveIdx = objectiveIdx;
 	return true;		
 }//setSolutionTargetObjectiveIdx
+
+bool OSResult::setSolutionWeightedObjectives(int solIdx, std::string weightedObjectives){
+	int nSols = this->getSolutionNumber();
+	if (optimization == NULL) return false;
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL)
+		optimization->solution[solIdx] = new OptimizationSolution();
+	if (weightedObjectives == "true")
+		optimization->solution[solIdx]->weightedObjectives = true;
+	else
+		optimization->solution[solIdx]->weightedObjectives = false;
+	return true;		
+}//setSolutionWeightedObjectives
+
 
 
 bool OSResult::setSolutionMessage(int solIdx, std::string msg){
@@ -2053,6 +2216,73 @@ bool OSResult::setPrimalVariableValuesDense(int solIdx, double *x){
 	}
 	return true;
 }//setPrimalVariableValuesDense
+
+bool OSResult::setNumberOfVarValues(int solIdx, int numberOfVar){
+	if (optimization == NULL || optimization->solution == NULL)
+	{	throw ErrorClass("No optimization or solution object defined");  
+		return false;
+	}
+	int nSols = optimization->numberOfSolutions;
+	if (solIdx < 0 || solIdx >=  nSols)
+	{	throw ErrorClass("Trying to use a solution that was not previously declared");  
+		return false;
+	}
+	if (optimization->solution[solIdx] == NULL)
+		optimization->solution[solIdx] = new OptimizationSolution();	
+	if (optimization->solution[solIdx]->variables == NULL)
+		optimization->solution[solIdx]->variables = new VariableSolution();
+	if (optimization->solution[solIdx]->variables->values == NULL)
+		optimization->solution[solIdx]->variables->values = new VariableValues();
+	if (optimization->solution[solIdx]->variables->values->numberOfVar > 0)
+	{	throw ErrorClass("Trying to redefine var`array. Potential loss of data.");
+		return false;
+	}
+	if (numberOfVar < 0)
+	{	throw ErrorClass("Size of var`array cannot be negative.");
+		return false;
+	}
+	optimization->solution[solIdx]->variables->values->numberOfVar = numberOfVar;
+	optimization->solution[solIdx]->variables->values->var = new VarValue*[numberOfVar];
+	for(int i = 0; i < numberOfVar; i++)
+		optimization->solution[solIdx]->variables->values->var[i] = new VarValue();
+	return true;
+}//setNumberOfVarValues
+
+bool OSResult::setVarValue(int solIdx, int number, int idx, double val){
+	if (optimization == NULL || optimization->solution == NULL)
+	{	throw ErrorClass("No optimization or solution object defined");  
+		return false;
+	}
+	int nSols = optimization->numberOfSolutions;
+	if (solIdx < 0 || solIdx >=  nSols)
+	{	throw ErrorClass("Trying to use a solution that was not previously declared");  
+		return false;
+	}
+	if (optimization->solution[solIdx] == NULL)
+	{	throw ErrorClass("Solution object not previously defined");  
+		return false;
+	}
+	if (optimization->solution[solIdx]->variables == NULL)
+	{	throw ErrorClass("variables object not previously defined");  
+		return false;
+	}
+	if (optimization->solution[solIdx]->variables->values == NULL)
+	{	throw ErrorClass("values object not previously defined");  
+		return false;
+	}
+	int nVar = 	optimization->solution[solIdx]->variables->values->numberOfVar;
+	if (number < 0 || number >= nVar)
+	{	throw ErrorClass("Trying to set value outside of var array boundaries");
+		return false;
+	}
+	if (idx < 0)
+	{	throw ErrorClass("Variable index cannot be negative.");
+		return false;
+	}
+	optimization->solution[solIdx]->variables->values->var[number]->idx   = idx;
+	optimization->solution[solIdx]->variables->values->var[number]->value = val;
+	return true;
+}//setVarValue
 
 
 bool OSResult::setNumberOfOtherVariableResults(int solIdx, int numberOfOtherVariableResults){
