@@ -1124,15 +1124,15 @@ static const yytype_uint16 yyrline[] =
     1989,  1991,  1994,  2002,  2006,  2012,  2012,  2014,  2016,  2016,
     2018,  2024,  2030,  2033,  2034,  2037,  2037,  2039,  2048,  2050,
     2062,  2062,  2065,  2066,  2073,  2080,  2088,  2097,  2098,  2101,
-    2102,  2105,  2106,  2108,  2109,  2111,  2111,  2113,  2118,  2120,
-    2126,  2130,  2131,  2135,  2136,  2141,  2148,  2147,  2163,  2163,
-    2166,  2173,  2182,  2183,  2183,  2187,  2187,  2187,  2187,  2189,
-    2202,  2208,  2216,  2219,  2222,  2225,  2227,  2228,  2231,  2236,
-    2243,  2243,  2246,  2245,  2251,  2261,  2261,  2263,  2265,  2265,
-    2267,  2267,  2270,  2277,  2279,  2281,  2280,  2285,  2285,  2285,
-    2285,  2287,  2302,  2309,  2318,  2324,  2327,  2333,  2335,  2336,
-    2338,  2343,  2349,  2349,  2352,  2351,  2357,  2358,  2360,  2363,
-    2364,  2365,  2369,  2370,  2371,  2372,  2374,  2375
+    2102,  2105,  2106,  2108,  2109,  2112,  2112,  2114,  2119,  2121,
+    2127,  2131,  2132,  2136,  2137,  2142,  2149,  2148,  2164,  2164,
+    2167,  2174,  2183,  2184,  2184,  2188,  2188,  2188,  2188,  2190,
+    2203,  2209,  2217,  2220,  2223,  2226,  2228,  2229,  2232,  2237,
+    2244,  2244,  2247,  2246,  2252,  2262,  2262,  2264,  2266,  2266,
+    2268,  2268,  2271,  2278,  2280,  2282,  2281,  2286,  2286,  2286,
+    2286,  2288,  2303,  2310,  2319,  2325,  2328,  2334,  2336,  2337,
+    2339,  2344,  2350,  2350,  2353,  2352,  2358,  2359,  2361,  2364,
+    2365,  2366,  2370,  2371,  2372,  2373,  2375,  2376
 };
 #endif
 
@@ -4881,21 +4881,21 @@ yyreduce:
   case 537:
 
     {	
- 	osresult->setOtherVariableResultsVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, (yyvsp[(3) - (4)].ival));
+ 	osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, (yyvsp[(3) - (4)].ival));
 ;}
     break;
 
   case 538:
 
     {	
-	 	osresult->setOtherVariableResultsVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	 	osresult->setOtherVariableResultVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	;}
     break;
 
   case 544:
 
     {	parserData->numberOfOtherObjectiveResults = (yyvsp[(3) - (4)].ival);
-//        osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, $3);
+        osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, (yyvsp[(3) - (4)].ival));
 		parserData->iOther = 0;
 	;}
     break;
@@ -4908,7 +4908,7 @@ yyreduce:
   case 551:
 
     {	parserData->numberOfObj = (yyvsp[(3) - (4)].ival);
-//	osresult->setNumberOfObjValues(parserData->solutionIdx, parserData->numberOfVar);
+	osresult->setNumberOfObjValues(parserData->solutionIdx, parserData->numberOfVar);
 	parserData->kounter = 0;
 ;}
     break;
@@ -4929,8 +4929,8 @@ yyreduce:
 
   case 559:
 
-    {//	osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
-//						  parserData->idx,         parserData->tempVal);
+    {	osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
+						  parserData->idx,         parserData->tempVal);
 	parserData->kounter++;
 ;}
     break;
@@ -4988,7 +4988,7 @@ yyreduce:
 	if (parserData->valueAttributePresent)
 		osrlerror(NULL, NULL, parserData, "value attribute previously set");
 	parserData->valueAttributePresent = true; 
- //	osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   ;}
     break;
 
@@ -4998,7 +4998,7 @@ yyreduce:
 	if (parserData->nameAttributePresent)
 		osrlerror(NULL, NULL, parserData, "name attribute previously set");
 	parserData->nameAttributePresent = true; 
-// 	osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   ;}
     break;
 
@@ -5008,7 +5008,7 @@ yyreduce:
 	if (parserData->descriptionAttributePresent)
 		osrlerror(NULL, NULL, parserData, "description attribute previously set");
 	parserData->descriptionAttributePresent = true; 
-// 	osresult->setOtherObjectiveResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherObjectiveResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   ;}
     break;
 
@@ -5018,7 +5018,7 @@ yyreduce:
 		osrlerror(NULL, NULL, parserData, "numberOfObj attribute previously set");
 	parserData->numberAttributePresent = true;
 	parserData->numberOfObj = (yyvsp[(3) - (4)].ival);
-// 	osresult->setOtherVariableResultNumberOfObj(parserData->solutionIdx, parserData->iOther, $3);
+ 	osresult->setOtherObjectiveResultNumberOfObj(parserData->solutionIdx, parserData->iOther, (yyvsp[(3) - (4)].ival));
 ;}
     break;
 
@@ -5062,21 +5062,21 @@ yyreduce:
   case 588:
 
     {	
-// 	osresult->setOtherObjectiveResultsObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
+ 	osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, (yyvsp[(3) - (4)].ival));
 ;}
     break;
 
   case 589:
 
     {	
-//	 	osresult->setOtherObjectiveResultsObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	 	osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	;}
     break;
 
   case 595:
 
-    {	parserData->numberOfOtherVariableResults = (yyvsp[(3) - (4)].ival);
-//		osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, $3);
+    {	parserData->numberOfOtherConstraintResults = (yyvsp[(3) - (4)].ival);
+		osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, (yyvsp[(3) - (4)].ival));
 		parserData->iOther = 0;
 	;}
     break;
@@ -5090,7 +5090,7 @@ yyreduce:
 
     {
 	parserData->numberOfCon = (yyvsp[(3) - (4)].ival);
-//	osresult->setNumberOfConValues(parserData->solutionIdx, parserData->numberOfVar);
+	osresult->setNumberOfDualValues(parserData->solutionIdx, parserData->numberOfCon);
 	parserData->kounter = 0;
 ;}
     break;
@@ -5111,8 +5111,8 @@ yyreduce:
 
   case 610:
 
-    {//	osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
-//						  parserData->idx,         parserData->tempVal);
+    {	osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
+						   parserData->idx,         parserData->tempVal);
 	parserData->kounter++;
 ;}
     break;
@@ -5170,7 +5170,7 @@ yyreduce:
 	if (parserData->valueAttributePresent)
 		osrlerror(NULL, NULL, parserData, "value attribute previously set");
 	parserData->valueAttributePresent = true; 
-// 	osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   ;}
     break;
 
@@ -5180,7 +5180,7 @@ yyreduce:
 	if (parserData->nameAttributePresent)
 		osrlerror(NULL, NULL, parserData, "name attribute previously set");
 	parserData->nameAttributePresent = true; 
-// 	osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   ;}
     break;
 
@@ -5190,7 +5190,7 @@ yyreduce:
 	if (parserData->descriptionAttributePresent)
 		osrlerror(NULL, NULL, parserData, "description attribute previously set");
 	parserData->descriptionAttributePresent = true; 
-// 	osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   ;}
     break;
 
@@ -5200,7 +5200,7 @@ yyreduce:
 		osrlerror(NULL, NULL, parserData, "numberOfCon attribute previously set");
 	parserData->numberAttributePresent = true;
 	parserData->numberOfCon = (yyvsp[(3) - (4)].ival);
-// 	osresult->setOtherConstraintResultNumberOfVar(parserData->solutionIdx, parserData->iOther, $3);
+ 	osresult->setOtherConstraintResultNumberOfCon(parserData->solutionIdx, parserData->iOther, (yyvsp[(3) - (4)].ival));
 ;}
     break;
 
@@ -5244,14 +5244,14 @@ yyreduce:
   case 639:
 
     {	
-// 	osresult->setOtherConstraintResultsConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
+ 	osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, (yyvsp[(3) - (4)].ival));
 ;}
     break;
 
   case 640:
 
     {	
-//	 	osresult->setOtherConstraintResultsCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	 	osresult->setOtherConstraintResultCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	;}
     break;
 

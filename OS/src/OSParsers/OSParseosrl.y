@@ -1798,13 +1798,13 @@ otherVarStart: VARSTART;
 
 otherVarIdxATT: IDXATT quote INTEGER quote 
 {	
- 	osresult->setOtherVariableResultsVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
+ 	osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
 otherVarContent: 
 	GREATERTHAN ElementValue VAREND 
 	{	
-	 	osresult->setOtherVariableResultsVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	 	osresult->setOtherVariableResultVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	}
   | GREATERTHAN VAREND 
   | ENDOFELEMENT;
@@ -1816,7 +1816,7 @@ objectives:
 numberOfOtherObjectiveResults:
   | NUMBEROFOTHEROBJECTIVERESULTSATT quote INTEGER quote 
 	{	parserData->numberOfOtherObjectiveResults = $3;
-//        osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, $3);
+        osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, $3);
 		parserData->iOther = 0;
 	};
 
@@ -1831,7 +1831,7 @@ objectiveValuesStart: VALUESSTART
 
 numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote
 {	parserData->numberOfObj = $3;
-//	osresult->setNumberOfObjValues(parserData->solutionIdx, parserData->numberOfVar);
+	osresult->setNumberOfObjValues(parserData->solutionIdx, parserData->numberOfVar);
 	parserData->kounter = 0;
 }; 
 
@@ -1854,8 +1854,8 @@ objectiveValuesBody:  GREATERTHAN objValueSEQ VALUESEND;
 objValueSEQ: objValue | objValueSEQ objValue;
 
 objValue: objValueStart objIdxATT GREATERTHAN objVal OBJEND
-{//	osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
-//						  parserData->idx,         parserData->tempVal);
+{	osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
+						  parserData->idx,         parserData->tempVal);
 	parserData->kounter++;
 }; 
 
@@ -1908,21 +1908,21 @@ otherObjectiveResultATT:
 	if (parserData->valueAttributePresent)
 		osrlerror(NULL, NULL, parserData, "value attribute previously set");
 	parserData->valueAttributePresent = true; 
- //	osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   }
   | otherObjectiveResultNameATT 
   {	
 	if (parserData->nameAttributePresent)
 		osrlerror(NULL, NULL, parserData, "name attribute previously set");
 	parserData->nameAttributePresent = true; 
-// 	osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   }
   | otherObjectiveResultDescriptionATT
   {	
 	if (parserData->descriptionAttributePresent)
 		osrlerror(NULL, NULL, parserData, "description attribute previously set");
 	parserData->descriptionAttributePresent = true; 
-// 	osresult->setOtherObjectiveResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherObjectiveResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   };
   
 numberOfOtherObjectiveResultsATT: NUMBEROFOBJATT quote INTEGER quote 
@@ -1930,7 +1930,7 @@ numberOfOtherObjectiveResultsATT: NUMBEROFOBJATT quote INTEGER quote
 		osrlerror(NULL, NULL, parserData, "numberOfObj attribute previously set");
 	parserData->numberAttributePresent = true;
 	parserData->numberOfObj = $3;
-// 	osresult->setOtherVariableResultNumberOfObj(parserData->solutionIdx, parserData->iOther, $3);
+ 	osresult->setOtherObjectiveResultNumberOfObj(parserData->solutionIdx, parserData->iOther, $3);
 }; 
 
 otherObjectiveResultValueATT: 
@@ -1959,13 +1959,13 @@ otherObjStart: OBJSTART;
 
 otherObjIdxATT: IDXATT quote INTEGER quote 
 {	
-// 	osresult->setOtherObjectiveResultsObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
+ 	osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
 otherObjContent: 
 	GREATERTHAN ElementValue OBJEND 
 	{	
-//	 	osresult->setOtherObjectiveResultsObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	 	osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	}
   | GREATERTHAN OBJEND 
   | ENDOFELEMENT;
@@ -1977,8 +1977,8 @@ constraints:
 
 numberOfOtherConstraintResults:
   | NUMBEROFOTHERCONSTRAINTRESULTSATT quote INTEGER quote 
-	{	parserData->numberOfOtherVariableResults = $3;
-//		osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, $3);
+	{	parserData->numberOfOtherConstraintResults = $3;
+		osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, $3);
 		parserData->iOther = 0;
 	};
 
@@ -1994,7 +1994,7 @@ dualValuesStart: DUALVALUESSTART
 numberOfConATT: NUMBEROFCONATT quote INTEGER quote
 {
 	parserData->numberOfCon = $3;
-//	osresult->setNumberOfConValues(parserData->solutionIdx, parserData->numberOfVar);
+	osresult->setNumberOfDualValues(parserData->solutionIdx, parserData->numberOfCon);
 	parserData->kounter = 0;
 };
 
@@ -2016,8 +2016,8 @@ dualValuesBody:  GREATERTHAN dualValueSEQ DUALVALUESEND;
 dualValueSEQ: dualValue | dualValueSEQ dualValue;
 
 dualValue: dualValueStart conIdxATT GREATERTHAN dualVal CONEND 
-{//	osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
-//						  parserData->idx,         parserData->tempVal);
+{	osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
+						   parserData->idx,         parserData->tempVal);
 	parserData->kounter++;
 }; 
 
@@ -2068,21 +2068,21 @@ otherConstraintResultATT:
 	if (parserData->valueAttributePresent)
 		osrlerror(NULL, NULL, parserData, "value attribute previously set");
 	parserData->valueAttributePresent = true; 
-// 	osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   }
   | otherConstraintResultNameATT 
   {	
 	if (parserData->nameAttributePresent)
 		osrlerror(NULL, NULL, parserData, "name attribute previously set");
 	parserData->nameAttributePresent = true; 
-// 	osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   }
   | otherConstraintResultDescriptionATT
   {	
 	if (parserData->descriptionAttributePresent)
 		osrlerror(NULL, NULL, parserData, "description attribute previously set");
 	parserData->descriptionAttributePresent = true; 
-// 	osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+ 	osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   };
   
 numberOfOtherConstraintResultATT: NUMBEROFCONATT quote INTEGER quote
@@ -2090,7 +2090,7 @@ numberOfOtherConstraintResultATT: NUMBEROFCONATT quote INTEGER quote
 		osrlerror(NULL, NULL, parserData, "numberOfCon attribute previously set");
 	parserData->numberAttributePresent = true;
 	parserData->numberOfCon = $3;
-// 	osresult->setOtherConstraintResultNumberOfVar(parserData->solutionIdx, parserData->iOther, $3);
+ 	osresult->setOtherConstraintResultNumberOfCon(parserData->solutionIdx, parserData->iOther, $3);
 }; 
 
 otherConstraintResultValueATT: 
@@ -2120,13 +2120,13 @@ otherConStart: CONSTART;
 
 otherConIdxATT: IDXATT quote INTEGER quote
 {	
-// 	osresult->setOtherConstraintResultsConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
+ 	osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
 otherConContent: 
 	GREATERTHAN ElementValue VAREND 
 	{	
-//	 	osresult->setOtherConstraintResultsCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	 	osresult->setOtherConstraintResultCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	}
   | GREATERTHAN VAREND 
   | ENDOFELEMENT;

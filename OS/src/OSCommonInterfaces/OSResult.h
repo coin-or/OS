@@ -2970,6 +2970,21 @@ public:
 	bool setOtherVariableResultValue(int solIdx, int otherIdx, std::string value);
 
 	/**
+	 * Set the description of another (non-standard/solver specific) variable-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param description holds the name of the other element
+	 *
+	 * @return whether the other variable result's description was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherVariableResultDescription(int solIdx, int otherIdx, std::string description);
+
+	/**
 	 * Set the index of another (non-standard/solver specific) variable-related result, 
 	 * for the [i]th solution, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
@@ -2983,7 +2998,7 @@ public:
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
- 	bool setOtherVariableResultsVarIdx(int solIdx, int otherIdx, int varIdx, int idx);
+ 	bool setOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx, int idx);
 
 	/**
 	 * Set the value of another (non-standard/solver specific) variable-related result, 
@@ -2999,31 +3014,283 @@ public:
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setOtherVariableResultsVar(int solIdx, int otherIdx, int varIdx, std::string value);
-
+	bool setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, std::string value);
 
 	/**
-	 * Set the description of another (non-standard/solver specific) variable-related result, 
+	 * Set the [i]th optimization solution's other (non-standard/solver specific) objective-related results, 
+	 * where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * This method then allocates the memory for the new OtherObjectiveResult objects
+	 * @param solIdx is the solution index 
+	 * @param numberOfOtherObjectiveResult holds the number of OtherObjectiveResult objects
+	 * Each other objective result contains the name (required), an optional description (std::string) and an optional
+	 * value (std::string). Each other objective result can also optionally contain an array OtherObjResult for each objective. 
+	 * The OtherObjResult contains an objective idx (required) and an optional std::string value.   
+	 * 
+	 * @return whether the other objective results are set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfOtherObjectiveResults(int solIdx, int numberOfOtherObjectiveResults);
+
+	/**
+	 * Set the number of objectives to be given a value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param numberOfObj holds the number of objectives that are to be set
+	 * 
+	 * @return whether the information was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfObjValues(int solIdx, int numberOfObj);
+
+	/**
+	 * Set an objective value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param number holds the location within the sparse array obj that is to be used
+	 * @param idx holds the index of the objective that is to be set
+	 * @param val holds the objective value to set.
+	 * 
+	 * @return whether primal variable value was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setObjValue(int solIdx, int number, int idx, double val);
+
+	/**
+	 * Set the number of <obj> children of another (non-standard/solver specific) 
+	 * objective-related result, for the [i]th solution.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherObjectiveResult object
+	 * @param numberOfObj holds the number of <obj> children
+	 *
+	 * @return whether the other objective result's name was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx, int numberOfObj);
+
+	/**
+	 * Set the name of another (non-standard/solver specific) objective-related result, 
 	 * for the [i]th solution, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index  
-	 * @param otherIdx holds the index of the OtherVariableResult object
-	 * @param description holds the name of the other element
+	 * @param otherIdx holds the index of the OtherObjectiveResult object
+	 * @param name holds the name of the other element
 	 *
-	 * @return whether the other variable result's description was set successfully or not. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @return whether the other objective result's name was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setOtherVariableResultDescription(int solIdx, int otherIdx, std::string description);
+	bool setOtherObjectiveResultName(int solIdx, int otherIdx, std::string name);
+
+	/**
+	 * Set the value of another (non-standard/solver specific) objective-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherObjectiveResult object
+	 * @param value holds the name of the other element
+	 *
+	 * @return whether the other objective result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherObjectiveResultValue(int solIdx, int otherIdx, std::string value);
+
+	/**
+	 * Set the description of another (non-standard/solver specific) objective-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherObjectiveResult object
+	 * @param description holds the name of the other element
+	 *
+	 * @return whether the other objective result's description was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherObjectiveResultDescription(int solIdx, int otherIdx, std::string description);
+
+	/**
+	 * Set the index of another (non-standard/solver specific) objective-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherObjectiveResult object
+	 * @param objIdx holds the index of the location to which the information is stored
+	 * @param idx holds the index of the objective to which the information belongs
+	 *
+	 * @return whether the other variable result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 * @see #setSolutionNumber(int)
+	 */
+ 	bool setOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx, int idx);
+
+	/**
+	 * Set the value of another (non-standard/solver specific) objective-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherObjectiveResult object
+	 * @param objIdx holds the index of the location to which the information is stored
+	 * @param value holds the value of the objective to which the information belongs
+	 *
+	 * @return whether the other objective result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx, std::string value);
+
+	/**
+	 * Set the [i]th optimization solution's other (non-standard/solver specific) constraint-related results, 
+	 * where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * This method then allocates the memory for the new OtherConstraintResult objects
+	 * @param solIdx is the solution index 
+	 * @param numberOfOtherConstraintResults holds the number of OtherConstraintResult objects
+	 * Each other objective result contains the name (required), an optional description (std::string) and an optional
+	 * value (std::string). Each other constraint result can also optionally contain an array OtherConResult for each constraint. 
+	 * The OtherConResult contains a constraint idx (required) and an optional std::string value.   
+	 * 
+	 * @return whether the other objective results are set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfOtherConstraintResults(int solIdx, int numberOfOtherConstraintResults);
+
+	/**
+	 * Set the number of constraints to be given a value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param numberOfCon holds the number of constraint that are to be set
+	 * 
+	 * @return whether the information was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfDualValues(int solIdx, int numberOfCon);
+
+	/**
+	 * Set a dual value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param number holds the location within the sparse array con that is to be used
+	 * @param idx holds the index of the constraint that is to be set
+	 * @param val holds the constraint value to set.
+	 * 
+	 * @return whether dual variable value was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setDualValue(int solIdx, int number, int idx, double val);
+
+	/**
+	 * Set the number of <con> children of another (non-standard/solver specific) 
+	 * constraint-related result, for the [i]th solution.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherConstraintResult object
+	 * @param numberOfCon holds the number of <con> children
+	 *
+	 * @return whether the other constraint result's name was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherConstraintResultNumberOfCon(int solIdx, int otherIdx, int numberOfCon);
+
+	/**
+	 * Set the name of another (non-standard/solver specific) constraint-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherConstraintResult object
+	 * @param name holds the name of the other element
+	 *
+	 * @return whether the other constraint result's name was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherConstraintResultName(int solIdx, int otherIdx, std::string name);
+
+	/**
+	 * Set the value of another (non-standard/solver specific) constraint-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherConstraintResult object
+	 * @param value holds the name of the other element
+	 *
+	 * @return whether the other constraint result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherConstraintResultValue(int solIdx, int otherIdx, std::string value);
+
+	/**
+	 * Set the description of another (non-standard/solver specific) constraint-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherConstraintResult object
+	 * @param description holds the name of the other element
+	 *
+	 * @return whether the other constraint result's description was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherConstraintResultDescription(int solIdx, int otherIdx, std::string description);
+
+	/**
+	 * Set the index of another (non-standard/solver specific) constraint-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherConstraintResult object
+	 * @param conIdx holds the index of the location to which the information is stored
+	 * @param idx holds the index of the onstraint to which the information belongs
+	 *
+	 * @return whether the other variable result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+ 	bool setOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx, int idx);
+
+	/**
+	 * Set the value of another (non-standard/solver specific) constraint-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherConstraintResult object
+	 * @param conIdx holds the index of the location to which the information is stored
+	 * @param value holds the value of the constraint to which the information belongs
+	 *
+	 * @return whether the other constraint result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx, std::string value);
 
 /**
 	 * Set the [i]th optimization solution's number of objective values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param solIdx holds the solution index to set the constraint values. 
 	 * @param n holds the number of elements in the array x
 	 * 
-	 * @return whether objective values are set successfully or not. 
+	 * @return whether objctive values are set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setNumberOfObjectiveValues(int solIdx, int n);
@@ -3037,7 +3304,7 @@ public:
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the objective values. 
 	 * @param x holds a vector of type IndexValuePair; the idx component holds the index of the objective; 
-	 * the value component holds its value. The vector could be null if all ojectives are 0.
+	 * the value component holds its value. The vector could be null if all objectives are 0.
 	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
 	 * values all get a Double.NaN value, meaning that they are not calculated.   
 	 * 

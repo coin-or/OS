@@ -2574,7 +2574,7 @@ bool OSResult::setOtherVariableResultDescription(int solIdx, int otherIdx, std::
 	return true;
 }//setOtherVariableResultDescription
 
-bool OSResult::setOtherVariableResultsVarIdx(int solIdx, int otherIdx, int varIdx, int idx){
+bool OSResult::setOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx, int idx){
 	int nSols = this->getSolutionNumber();
 	if(nSols <= 0) return false;
 	if(optimization == NULL) return false;
@@ -2586,9 +2586,9 @@ bool OSResult::setOtherVariableResultsVarIdx(int solIdx, int otherIdx, int varId
 	if(optimization->solution[solIdx]->variables->other[otherIdx]->var == NULL) return false;
 	optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->idx = idx;
 	return true;		
-}//setOtherVariableResultsVarIdx
+}//setOtherVariableResultVarIdx
 
-bool OSResult::setOtherVariableResultsVar(int solIdx, int otherIdx, int varIdx, std::string value){
+bool OSResult::setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, std::string value){
 	int nSols = this->getSolutionNumber();
 	if(nSols <= 0) return false;
 	if(optimization == NULL) return false;
@@ -2600,8 +2600,81 @@ bool OSResult::setOtherVariableResultsVar(int solIdx, int otherIdx, int varIdx, 
 	if(optimization->solution[solIdx]->variables->other[otherIdx]->var == NULL) return false;
 	optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->value = value;
 	return true;		
-}//setOtherVariableResultsVar
+}//setOtherVariableResultVar
 
+//----------------------------
+bool OSResult::setNumberOfOtherObjectiveResults(int solIdx, int numberOfOtherObjectiveResults){
+	return true;
+}//setNumberOfOtherObjectiveResults
+
+bool OSResult::setNumberOfObjValues(int solIdx, int numberOfObj){
+	return true;
+}//setNumberOfObjValues
+
+bool OSResult::setObjValue(int solIdx, int number, int idx, double val){
+	return true;
+}//setObjValue
+
+bool OSResult::setOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx, int numberOfObj){
+	return true;
+}//setOtherObjectiveResultNumberOfObj
+
+bool OSResult::setOtherObjectiveResultName(int solIdx, int otherIdx, std::string name){
+	return true;
+}//setOtherObjectiveResultName
+
+bool OSResult::setOtherObjectiveResultValue(int solIdx, int otherIdx, std::string value){
+	return true;
+}//setOtherObjectiveResultValue
+
+bool OSResult::setOtherObjectiveResultDescription(int solIdx, int otherIdx, std::string description){
+	return true;
+}//setOtherObjectiveResultDescription
+
+bool OSResult::setOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx, int idx){
+	return true;
+}//setOtherObjectiveResultObjIdx
+
+bool OSResult::setOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx, std::string value){
+	return true;
+}//setOtherObjectiveResultVar
+
+bool OSResult::setNumberOfOtherConstraintResults(int solIdx, int numberOfOtherConstraintResults){
+	return true;
+}//setNumberOfOtherConstraintResults
+
+bool OSResult::setNumberOfDualValues(int solIdx, int numberOfCon){
+	return true;
+}//setNumberOfConValues
+
+bool OSResult::setDualValue(int solIdx, int number, int idx, double val){
+	return true;
+}//setConValue
+
+bool OSResult::setOtherConstraintResultNumberOfCon(int solIdx, int otherIdx, int numberOfCon){
+	return true;
+}//setOtherConstraintResultNumberOfCon
+
+bool OSResult::setOtherConstraintResultName(int solIdx, int otherIdx, std::string name){
+	return true;
+}//setOtherConstraintResultName
+
+bool OSResult::setOtherConstraintResultValue(int solIdx, int otherIdx, std::string value){
+	return true;
+}//setOtherConstraintResultValue
+
+bool OSResult::setOtherConstraintResultDescription(int solIdx, int otherIdx, std::string description){
+	return true;
+}//setOtherConstraintResultDescription
+
+bool OSResult::setOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx, int idx){
+	return true;
+}//setOtherConstraintResultConIdx
+
+bool OSResult::setOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx, std::string value){
+	return true;
+}//setOtherConstraintResultCon
+//================================
 
 bool OSResult::setNumberOfObjectiveValues(int solIdx, int numberOfObj){
 	int nSols = this->getSolutionNumber();
