@@ -179,19 +179,26 @@ public:
 	
 	/** an index of which solution we have found */
 	unsigned int solutionIdx;
-	
-	/** set generalStatus...Present to true if the corresponding
-	 *  general status attribute parsed
-	 */	
-	bool generalStatusTypePresent;
-	bool generalStatusDescriptionPresent;
-	bool generalStatusNumberOfPresent;
-	
-	/** set generalSubstatus...Present to true if the corresponding
-	 *  generalStatus substatus attribute parsed
-	 */	
-	bool generalSubstatusNamePresent;
-	bool generalSubstatusDescriptionPresent;
+
+	/** a number of boolean vriables to track which of the attributes
+	 *  have been found in the present list. Attributes have standardized names,
+	 *  and the information about their presence or absence is immaterial once
+	 *  the list has been completely processed, so the boolean variables can be
+	 *  reused in the same way the names can be reused.
+	 */
+	bool numberAttributePresent;
+	bool idxAttributePresent;
+	bool categoryAttributePresent;
+	bool descriptionAttributePresent;
+	bool nameAttributePresent;
+	bool typeAttributePresent;
+	bool unitAttributePresent;
+	bool valueAttributePresent;
+	bool weightedObjAttributePresent;
+ 
+	bool nVarPresent;
+	bool nObjPresent;
+	bool nConPresent;
 
 	/** set general...Present to true if the corresponding 
 	 *  element (child of the <general> element) has been parsed
@@ -206,13 +213,6 @@ public:
 	bool generalTimeStampPresent; 
 	bool generalOtherResultsPresent; 
 
-	/** set generalOtherResult...Present to true if the corresponding
-	 *  attribute has been parsed for the current <other> child in the <general> element
-	 */	
-	bool generalOtherResultNamePresent;
-	bool generalOtherResultValuePresent;
-	bool generalOtherResultDescriptionPresent;
-
 	/** set system...Present to true if the corresponding 
 	 *  element (child of the <system> element) has been parsed
 	 */
@@ -223,13 +223,6 @@ public:
 	bool systemAvailableCPUNumberPresent; 
 	bool systemOtherResultsPresent;
 
-	/** set systemOtherResult...Present to true if the corresponding
-	 *  attribute has been parsed for the current <other> child in the <system> element
-	 */	
-	bool systemOtherResultNamePresent;
-	bool systemOtherResultValuePresent;
-	bool systemOtherResultDescriptionPresent;
-
 	/** set service...Present to true if the corresponding 
 	 *  element (child of the <service> element) has been parsed
 	 */
@@ -239,13 +232,6 @@ public:
 	bool timeServiceStartedPresent;
 	bool serviceUtilizationPresent;
 	bool serviceOtherResultsPresent;
-
-	/** set serviceOtherResult...Present to true if the corresponding
-	 *  attribute has been parsed for the current <other> child in the <service> element
-	 */	
-	bool serviceOtherResultNamePresent;
-	bool serviceOtherResultValuePresent;
-	bool serviceOtherResultDescriptionPresent;
 
 	/** set job...Present to true if the corresponding 
 	 *  element (child of the <job> element) has been parsed
@@ -262,44 +248,6 @@ public:
 	bool jobUsedCPUNumberPresent;
 	bool jobOtherResultsPresent;
 
-	/** set jobOtherResult...Present to true if the corresponding
-	 *  attribute has been parsed for the current <other> child in the <job> element
-	 */	
-	bool jobOtherResultNamePresent;
-	bool jobOtherResultValuePresent;
-	bool jobOtherResultDescriptionPresent;
-
-	/** These variables track which of the attributes in the <optimization>
-	 *  element have been set
-	 */
-	bool numberOfSolutionsPresent;
-	bool numberOfVariablesPresent;
-	bool numberOfObjectivesPresent;
-	bool numberOfConstraintsPresent;
-
-	bool targetObjectiveIdxPresent;
-	bool weightedObjectivesPresent;
-
-	/** set solutionStatus...Present to true if the corresponding
-	 *  solution status attribute parsed
-	 */	
-	bool solutionStatusTypePresent;
-	bool solutionStatusDescriptionPresent;
-	bool solutionStatusNumberOfPresent;
-	
-	/** set solutionSubstatus...Present to true if the corresponding
-	 *  solutionStatus substatus attribute parsed
-	 */	
-	bool solutionSubstatusTypePresent;
-	bool solutionSubstatusDescriptionPresent;
-
-	bool numberOfVarPresent;
-
-	/** set otherNamePresent to true if there is
-	 * a name attribute in anotherVarResult
-	 */	
-	bool otherNamePresent;
-	
 	
 	/**  for each solution we will build a vector of index-value
 	 * pairs of primal values */

@@ -548,7 +548,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							if(m_OSResult->optimization->solution[i]->variables->values->var[j] != NULL){
 								outStr << "<var";
 								outStr << " idx=\"";
-								outStr << j ;
+								outStr << m_OSResult->optimization->solution[i]->variables->values->var[j]->idx;
 								outStr <<  "\">";
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->variables->values->var[j]->value );
 								outStr << "</var>" << endl;
@@ -566,7 +566,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							if(m_OSResult->optimization->solution[i]->variables->valuesString->var[j] != NULL){
 								outStr << "<var";
 								outStr << " idx=\"";
-								outStr << j ;
+								outStr << m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->idx;
 								outStr <<  "\">";
 								outStr <<  m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->value;
 								outStr << "</var>" << endl;
@@ -584,13 +584,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							if(m_OSResult->optimization->solution[i]->variables->basisStatus->var[j] != NULL){
 								outStr << "<var";
 								outStr << " idx=\"";
-								outStr << j;
+								outStr << m_OSResult->optimization->solution[i]->variables->basisStatus->var[j]->idx;
 								outStr << "\">";
 								outStr << m_OSResult->optimization->solution[i]->variables->basisStatus->var[j]->value;
 								outStr << "</var>" << endl;
 							}
 						}
-						outStr << "</values>" << endl;
+						outStr << "</basisStatus>" << endl;
 					}
 
 
@@ -710,7 +710,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							if(m_OSResult->optimization->solution[i]->constraints->dualValues->con[j] != NULL){
 								outStr << "<con";
 								outStr << " idx=\"";
-								outStr <<  j ;
+								outStr <<  m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->idx;
 								outStr <<  "\">";
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->value);
 								outStr << "</con>" << endl;
@@ -736,7 +736,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon; j++){
 										outStr << "<con";
 										outStr << " idx=\"";
-										outStr << j ;
+										outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->idx;
 										outStr <<  "\">";
 										outStr <<  m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->value;
 										outStr << "</con>" << endl;

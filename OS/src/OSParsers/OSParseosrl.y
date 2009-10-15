@@ -191,16 +191,15 @@ generalStatusStart: GENERALSTATUSSTART
 		if (osresult->general->generalStatus != NULL) 
 			osrlerror(NULL, NULL, parserData, "generalStatus previously allocated");
 		osresult->general->generalStatus = new GeneralStatus();
-		std::cout << "allocated generalStatus" << std::endl;
 		parserData->generalStatusPresent = true;
-		parserData->generalStatusTypePresent = false;
-		parserData->generalStatusDescriptionPresent = false;
-		parserData->generalStatusNumberOfPresent = false;
 	};
 
 generalStatusAttributes: generalStatusAttList
-	{	if (!parserData->generalStatusTypePresent)
+	{	if (!parserData->typeAttributePresent)
 			osrlerror(NULL, NULL, parserData, "type attribute must be present for generalStatus element");
+		parserData->typeAttributePresent = false;
+		parserData->descriptionAttributePresent = false;
+		parserData->numberAttributePresent = false;
 		parserData->kounter = 0;
 	};
 
@@ -208,9 +207,9 @@ generalStatusAttList: generalStatusATT | generalStatusAttList generalStatusATT;
 
 generalStatusATT: 
     generalStatusTypeATT 
-	{   if (parserData->generalStatusTypePresent ) 
+	{   if (parserData->typeAttributePresent ) 
 		    osrlerror(NULL, NULL, parserData, "only one type attribute allowed for generalStatus element");
-	    parserData->generalStatusTypePresent = true;
+	    parserData->typeAttributePresent = true;
 	    if ((parserData->tempStr != "error"  ) &&
 	        (parserData->tempStr != "warning") && 
 	        (parserData->tempStr != "normal"))
@@ -218,9 +217,9 @@ generalStatusATT:
 		osresult->setGeneralStatusType(parserData->tempStr); 
 	}
   | generalStatusDescriptionATT 
-	{   if (parserData->generalStatusDescriptionPresent ) 
+	{   if (parserData->descriptionAttributePresent ) 
 		    osrlerror(NULL, NULL, parserData, "only one description attribute allowed for generalStatus element");
-	    parserData->generalStatusDescriptionPresent = true;
+	    parserData->descriptionAttributePresent = true;
 		osresult->setGeneralStatusDescription(parserData->tempStr);
 	}
   | generalStatusNumberOfATT;
@@ -232,14 +231,13 @@ generalStatusDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->te
     |                   EMPTYDESCRIPTIONATT                     { parserData->tempStr = "";          };
 
 generalStatusNumberOfATT: NUMBEROFSUBSTATUSESATT QUOTE INTEGER QUOTE 
-{   if (parserData->generalStatusNumberOfPresent ) 
+{   if (parserData->numberAttributePresent ) 
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed for generalStatus element");
-    parserData->generalStatusNumberOfPresent = true;
+    parserData->numberAttributePresent = true;
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of general substatuses cannot be negative");
     osresult->setNumberOfGeneralSubstatuses($3);
 	parserData->numberOf = $3;
 };
-
 
 generalStatusContent: 
 	generalStatusEmpty 
@@ -258,12 +256,8 @@ generalStatusBody: GREATERTHAN generalSubstatusSEQ GENERALSTATUSEND;
 
 generalSubstatusSEQ: generalSubstatus | generalSubstatusSEQ generalSubstatus;
 
-generalSubstatus: generalSubstatusStart generalSubstatusAttList generalSubstatusEnd
-{	if (!parserData->generalSubstatusNamePresent)
-		osrlerror (NULL, NULL, parserData, "<substatus> must have name attribute");
-	parserData->generalSubstatusNamePresent = false;
-	parserData->generalSubstatusDescriptionPresent = false;
-	parserData->kounter++;
+generalSubstatus: generalSubstatusStart generalSubstatusAttributes generalSubstatusEnd
+{	parserData->kounter++;
 };	
 
 generalSubstatusStart: SUBSTATUSSTART
@@ -271,30 +265,32 @@ generalSubstatusStart: SUBSTATUSSTART
 		osrlerror(NULL, NULL, parserData, "more <substatus> elements than specified");
 };
 		
+generalSubstatusAttributes: generalSubstatusAttList		
+{	if (!parserData->nameAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<substatus> must have name attribute");
+	parserData->nameAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
+};	
+
 generalSubstatusAttList: | generalSubstatusAttList generalSubstatusATT;
  
 generalSubstatusATT: generalSubstatusNameATT | generalSubstatusDescriptionATT
-{	if (parserData->generalSubstatusDescriptionPresent)
+{	if (parserData->descriptionAttributePresent)
 		osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
-	parserData->generalSubstatusDescriptionPresent = true;
+	parserData->descriptionAttributePresent = true;
 	osresult->setGeneralSubstatusDescription(parserData->kounter,parserData->tempStr);
 }; 
 
 generalSubstatusNameATT: NAMEATT ATTRIBUTETEXT QUOTE 
-{	if (parserData->generalSubstatusNamePresent)
+{	if (parserData->nameAttributePresent)
 		osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
-	parserData->generalSubstatusNamePresent = true;
+	parserData->nameAttributePresent = true;
 	osresult->setGeneralSubstatusName(parserData->kounter,$2);
-	
 }; 
 
-generalSubstatusDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT QUOTE 
-{	parserData->tempStr = $2;
-}
-| EMPTYDESCRIPTIONATT
-{	parserData->tempStr = "";
-}
-; 
+generalSubstatusDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT QUOTE { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          }; 
 
 generalSubstatusEnd: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
 
@@ -415,23 +411,20 @@ generalOtherResultsContent:
 	generalOtherResultsEmpty 
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <other> element");
-	}  | generalOtherResultsBody
+	}  
+  | generalOtherResultsBody
 	{	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
 	};
+	
 generalOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
 generalOtherResultsBody: GREATERTHAN generalOtherResultSEQ OTHERRESULTSEND;
 
 generalOtherResultSEQ: generalOtherResult | generalOtherResultSEQ generalOtherResult; 
 
-generalOtherResult: generalOtherResultStart generalOtherAttList generalOtherEnd
-{	if (!parserData->generalOtherResultNamePresent)
-		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
-	parserData->generalOtherResultNamePresent = false;
-	parserData->generalOtherResultValuePresent = false;
-	parserData->generalOtherResultDescriptionPresent = false;
-	parserData->kounter++;
+generalOtherResult: generalOtherResultStart generalOtherAttributes generalOtherEnd
+{	parserData->kounter++;
 };	
 
 generalOtherResultStart: OTHERSTART
@@ -439,36 +432,46 @@ generalOtherResultStart: OTHERSTART
 		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
 };
 
+generalOtherAttributes: generalOtherAttList
+{	if (!parserData->nameAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->nameAttributePresent = false;
+	parserData->valueAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
+};	
+
 generalOtherAttList: | generalOtherAttList generalOtherAtt;
 
 generalOtherAtt: 
 	generalOtherNameATT
-	{	if (parserData->generalOtherResultNamePresent)
+	{	if (parserData->nameAttributePresent)
 			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
-		parserData->generalOtherResultNamePresent = true;
+		parserData->nameAttributePresent = true;
 		osresult->setGeneralOtherResultName(parserData->kounter,parserData->tempStr);
 	}
   | generalOtherValueATT
-	{	if (parserData->generalOtherResultValuePresent)
+	{	if (parserData->valueAttributePresent)
 			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
-		parserData->generalOtherResultValuePresent = true;
+		parserData->valueAttributePresent = true;
 		osresult->setGeneralOtherResultValue(parserData->kounter,parserData->tempStr);
 	}
   | generalOtherDescriptionATT
-	{	if (parserData->generalOtherResultDescriptionPresent)
+	{	if (parserData->descriptionAttributePresent)
 			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
-		parserData->generalOtherResultDescriptionPresent = true;
+		parserData->descriptionAttributePresent = true;
 		osresult->setGeneralOtherResultDescription(parserData->kounter,parserData->tempStr);
 	}
 ;
 
 generalOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);};
 
-generalOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-|EMPTYVALUEATT {parserData->tempStr = ""}; 
+generalOtherValueATT: 
+	VALUEATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYVALUEATT                { parserData->tempStr = "";          }; 
 
-generalOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-| EMPTYDESCRIPTIONATT {parserData->tempStr = ""}; 
+generalOtherDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          }; 
 
 generalOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
@@ -502,37 +505,56 @@ systemInformationContent:
   | GREATERTHAN SYSTEMINFORMATIONEND 
   | ENDOFELEMENT;
 
-availableDiskSpace: availableDiskSpaceStart availableDiskSpaceAttList GREATERTHAN availableDiskSpaceValue 
+availableDiskSpace: availableDiskSpaceStart availableDiskSpaceAttributes GREATERTHAN availableDiskSpaceValue 
                     AVAILABLEDISKSPACEEND;
 
 availableDiskSpaceStart: AVAILABLEDISKSPACESTART
 	{	if (parserData->systemAvailableDiskSpacePresent)
 			osrlerror(NULL, NULL, parserData, "only one availableDiskSpace element allowed");
-		parserData->systemAvailableDiskSpacePresent = true;		
+		parserData->systemAvailableDiskSpacePresent = true;	
+	};
+
+availableDiskSpaceAttributes: availableDiskSpaceAttList
+	{	parserData->unitAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;	
 	};
 
 availableDiskSpaceAttList: | availableDiskSpaceAttList availableDiskSpaceAtt;
 
-availableDiskSpaceAtt: availableDiskSpaceUnitATT | availableDiskSpaceDescriptionATT;
+availableDiskSpaceAtt: 
+	availableDiskSpaceUnitATT 
+	{	if (parserData->unitAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <availableDiskSpace>");
+		parserData->unitAttributePresent = true;		
+		osresult->setAvailableDiskSpaceUnit( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
+  | availableDiskSpaceDescriptionATT
+	{	if (parserData->descriptionAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <availableDiskSpace>");
+		parserData->descriptionAttributePresent = true;		
+		osresult->setAvailableDiskSpaceDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
 availableDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote 
-{	parserData->tempStr = $2; free ($2);
-	if (parserData->tempStr != "petabyte" && parserData->tempStr != "terabyte" &&
-	    parserData->tempStr != "gigabyte" && parserData->tempStr != "megabyte" && 
-	    parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
-		osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
-	osresult->setAvailableDiskSpaceUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
-};
+	{	parserData->tempStr = $2; free ($2);
+		if (parserData->tempStr != "exabyte"  && parserData->tempStr != "petabyte" && 
+			parserData->tempStr != "terabyte" && parserData->tempStr != "gigabyte" &&
+			parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && 
+			parserData->tempStr != "byte")
+			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
+	};
 
-availableDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setAvailableDiskSpaceDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+availableDiskSpaceDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 availableDiskSpaceValue:
      INTEGER {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;}
    | DOUBLE  {osresult->setAvailableDiskSpaceValue( $1);  parserData->errorText = NULL;};
 
-availableMemory: availableMemoryStart availableMemoryAttList GREATERTHAN availableMemoryValue 
+availableMemory: availableMemoryStart availableMemoryAttributes GREATERTHAN availableMemoryValue 
                  AVAILABLEMEMORYEND;
 
 availableMemoryStart: AVAILABLEMEMORYSTART
@@ -541,27 +563,45 @@ availableMemoryStart: AVAILABLEMEMORYSTART
 		parserData->systemAvailableMemoryPresent = true;
 	};
 
+availableMemoryAttributes: availableMemoryAttList
+	{	parserData->unitAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;
+	};
+
 availableMemoryAttList: | availableMemoryAttList availableMemoryAtt;
 
-availableMemoryAtt: availableMemoryUnitATT | availableMemoryDescriptionATT;
+availableMemoryAtt: 
+	availableMemoryUnitATT 
+	{	if (parserData->unitAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <availableMemory>");
+		parserData->unitAttributePresent = true;		
+		osresult->setAvailableMemoryUnit( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
+  | availableMemoryDescriptionATT
+	{	if (parserData->descriptionAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <availableMemory>");
+		parserData->descriptionAttributePresent = true;		
+		osresult->setAvailableMemoryDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
 availableMemoryUnitATT: UNITATT ATTRIBUTETEXT quote
-{	parserData->tempStr = $2; free ($2);
-	if (parserData->tempStr != "terabyte" && parserData->tempStr != "gigabyte" && 
-		parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
-		osrlerror(NULL, NULL, parserData, "availableMemory unit not recognized");
-	osresult->setAvailableMemoryUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
+	{	parserData->tempStr = $2; free ($2);
+		if (parserData->tempStr != "terabyte" && parserData->tempStr != "gigabyte" && 
+			parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
+			osrlerror(NULL, NULL, parserData, "availableMemory unit not recognized");
 };
 
-availableMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setAvailableMemoryDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+availableMemoryDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 availableMemoryValue:
      INTEGER {osresult->setAvailableMemoryValue( $1);  parserData->errorText = NULL;}
    | DOUBLE  {osresult->setAvailableMemoryValue( $1);  parserData->errorText = NULL;};
 
-availableCPUSpeed: availableCPUSpeedStart availableCPUSpeedAttList GREATERTHAN availableCPUSpeedValue 
+availableCPUSpeed: availableCPUSpeedStart availableCPUSpeedAttributes GREATERTHAN availableCPUSpeedValue 
                    AVAILABLECPUSPEEDEND;
 
 availableCPUSpeedStart: AVAILABLECPUSPEEDSTART
@@ -570,9 +610,28 @@ availableCPUSpeedStart: AVAILABLECPUSPEEDSTART
 		parserData->systemAvailableCPUSpeedPresent = true;
 	};
 
+availableCPUSpeedAttributes: availableCPUSpeedAttList
+	{	parserData->unitAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;
+	};
+
 availableCPUSpeedAttList: | availableCPUSpeedAttList availableCPUSpeedAtt;
 
-availableCPUSpeedAtt: availableCPUSpeedUnitATT | availableCPUSpeedDescriptionATT;
+availableCPUSpeedAtt: 
+	availableCPUSpeedUnitATT 
+	{	if (parserData->unitAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <availableCPUSpeed>");
+		parserData->unitAttributePresent = true;		
+		osresult->setAvailableCPUSpeedUnit( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
+  | availableCPUSpeedDescriptionATT
+	{	if (parserData->descriptionAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <availableMemory>");
+		parserData->descriptionAttributePresent = true;		
+		osresult->setAvailableCPUSpeedDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
 availableCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote
 {	parserData->tempStr = $2; free ($2);
@@ -583,12 +642,11 @@ availableCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote
 		parserData->tempStr != "megaflops" && parserData->tempStr != "kiloflops" && 
 		parserData->tempStr != "flops" )
 		osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
-	osresult->setAvailableCPUSpeedUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
 };
 
-availableCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setAvailableCPUSpeedDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+availableCPUSpeedDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 availableCPUSpeedValue:
      INTEGER {osresult->setAvailableCPUSpeedValue( $1);  parserData->errorText = NULL;}
@@ -604,11 +662,15 @@ availableCPUNumberStart: AVAILABLECPUNUMBERSTART
 		parserData->systemAvailableCPUNumberPresent = true;
 	};
 
-availableCPUNumberAttList: | availableCPUNumberDescriptionATT;
+availableCPUNumberAttList: 
+  | availableCPUNumberDescriptionATT
+	{	osresult->setAvailableCPUSpeedDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
-availableCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setAvailableCPUNumberDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+availableCPUNumberDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 availableCPUNumberValue:
      INTEGER {osresult->setAvailableCPUNumberValue( $1);  parserData->errorText = NULL;};
@@ -644,13 +706,8 @@ systemOtherResultsBody: GREATERTHAN systemOtherResultSEQ OTHERRESULTSEND;
 
 systemOtherResultSEQ: systemOtherResult | systemOtherResultSEQ systemOtherResult; 
 
-systemOtherResult: systemOtherResultStart systemOtherAttList systemOtherEnd
-{	if (!parserData->systemOtherResultNamePresent)
-		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
-	parserData->systemOtherResultNamePresent = false;
-	parserData->systemOtherResultValuePresent = false;
-	parserData->systemOtherResultDescriptionPresent = false;
-	parserData->kounter++;
+systemOtherResult: systemOtherResultStart systemOtherAttributes systemOtherEnd
+{	parserData->kounter++;
 };	
 
 systemOtherResultStart: OTHERSTART
@@ -658,37 +715,47 @@ systemOtherResultStart: OTHERSTART
 		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
 };
 
+systemOtherAttributes: systemOtherAttList
+{	if (!parserData->nameAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->nameAttributePresent = false;
+	parserData->valueAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
+};
+	
 systemOtherAttList: | systemOtherAttList systemOtherAtt;
 
 systemOtherAtt:
 	systemOtherNameATT
-	{	if (parserData->systemOtherResultNamePresent)
+	{	if (parserData->nameAttributePresent)
 			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
-		parserData->systemOtherResultNamePresent = true;
+		parserData->nameAttributePresent = true;
 		osresult->setSystemOtherResultName(parserData->kounter,parserData->tempStr);
 	}
   | systemOtherValueATT
-	{	if (parserData->systemOtherResultValuePresent)
+	{	if (parserData->valueAttributePresent)
 			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
-		parserData->systemOtherResultValuePresent = true;
+		parserData->valueAttributePresent = true;
 		osresult->setSystemOtherResultValue(parserData->kounter,parserData->tempStr);
 	}
   | systemOtherDescriptionATT
-	{	if (parserData->systemOtherResultDescriptionPresent)
+	{	if (parserData->descriptionAttributePresent)
 			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
-		parserData->systemOtherResultDescriptionPresent = true;
+		parserData->descriptionAttributePresent = true;
 		osresult->setSystemOtherResultDescription(parserData->kounter,parserData->tempStr);
 	}
 ;
 
 systemOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}; 
 
-systemOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-| EMPTYVALUEATT {parserData->tempStr = ""}; 
+systemOtherValueATT: 
+	VALUEATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYVALUEATT                { parserData->tempStr = "";          }; 
 
-systemOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-| EMPTYDESCRIPTIONATT {parserData->tempStr = ""};
-
+systemOtherDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
+  
 systemOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 
@@ -808,13 +875,8 @@ serviceOtherResultsBody: GREATERTHAN serviceOtherResultSEQ OTHERRESULTSEND;
 
 serviceOtherResultSEQ: serviceOtherResult | serviceOtherResultSEQ serviceOtherResult; 
 
-serviceOtherResult: serviceOtherResultStart serviceOtherAttList serviceOtherEnd
-{	if (!parserData->serviceOtherResultNamePresent)
-		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
-	parserData->serviceOtherResultNamePresent = false;
-	parserData->serviceOtherResultValuePresent = false;
-	parserData->serviceOtherResultDescriptionPresent = false;
-	parserData->kounter++;
+serviceOtherResult: serviceOtherResultStart serviceOtherAttributes serviceOtherEnd
+{	parserData->kounter++;
 };
 
 serviceOtherResultStart: OTHERSTART
@@ -822,36 +884,46 @@ serviceOtherResultStart: OTHERSTART
 		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
 };
 
+serviceOtherAttributes: serviceOtherAttList
+{	if (!parserData->nameAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->nameAttributePresent = false;
+	parserData->valueAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
+};
+	
 serviceOtherAttList: | serviceOtherAttList serviceOtherAtt;
 
 serviceOtherAtt: 
 	serviceOtherNameATT 
-	{	if (parserData->serviceOtherResultNamePresent)
+	{	if (parserData->nameAttributePresent)
 			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
-		parserData->serviceOtherResultNamePresent = true;
+		parserData->nameAttributePresent = true;
 		osresult->setServiceOtherResultName(parserData->kounter,parserData->tempStr);
 	}
   | serviceOtherValueATT 
-	{	if (parserData->serviceOtherResultValuePresent)
+	{	if (parserData->valueAttributePresent)
 			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
-		parserData->serviceOtherResultValuePresent = true;
+		parserData->valueAttributePresent = true;
 		osresult->setServiceOtherResultValue(parserData->kounter,parserData->tempStr);
 	}
   | serviceOtherDescriptionATT
-	{	if (parserData->serviceOtherResultDescriptionPresent)
+	{	if (parserData->descriptionAttributePresent)
 			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
-		parserData->serviceOtherResultDescriptionPresent = true;
+		parserData->descriptionAttributePresent = true;
 		osresult->setServiceOtherResultDescription(parserData->kounter,parserData->tempStr);
 	}
 ;
   
 serviceOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}; 
 
-serviceOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-| EMPTYVALUEATT {parserData->tempStr = ""}; 
+serviceOtherValueATT: 
+	VALUEATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYVALUEATT                { parserData->tempStr = "";          }; 
 
-serviceOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-| EMPTYDESCRIPTIONATT {parserData->tempStr = "";}; 
+serviceOtherDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 serviceOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
@@ -967,7 +1039,22 @@ time: TIMESTART timeAttList restOfTimeElement;
 
 timeAttList: | timeAttList timeAtt;
 
-timeAtt: timeType | timeCategory | timeUnit | timeDescription;
+timeAtt: 
+	timeUnit 
+	{	if (parserData->timeUnit != "tick"        &&
+			parserData->timeUnit != "millisecond" &&
+			parserData->timeUnit != "second"      &&
+			parserData->timeUnit != "minute"      &&
+			parserData->timeUnit != "hour"        &&
+			parserData->timeUnit != "day"         &&
+			parserData->timeUnit != "week"        &&
+			parserData->timeUnit != "month"       &&
+			parserData->timeUnit != "year"   )     
+			osrlerror(NULL, NULL, parserData, "time unit not recognized");
+	};
+  | timeType 
+  | timeCategory 
+  | timeDescription;
 
 timeType: TYPEATT ATTRIBUTETEXT QUOTE {parserData->timeType = $2;  free($2);}
    | EMPTYTYPEATT;
@@ -1004,7 +1091,7 @@ timeValue:
 | INTEGER { parserData->timeValue = $1; };
 
 
-usedDiskSpace: usedDiskSpaceStart usedDiskSpaceAttList GREATERTHAN usedDiskSpaceValue 
+usedDiskSpace: usedDiskSpaceStart usedDiskSpaceAttributes GREATERTHAN usedDiskSpaceValue 
                USEDDISKSPACEEND;
 
 usedDiskSpaceStart: USEDDISKSPACESTART
@@ -1012,10 +1099,29 @@ usedDiskSpaceStart: USEDDISKSPACESTART
 			osrlerror(NULL, NULL, parserData, "only one usedDiskSpace element allowed");
 		parserData->jobUsedDiskSpacePresent = true;		
 	};
+	
+usedDiskSpaceAttributes: usedDiskSpaceAttList
+	{	parserData->unitAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;
+	};
 
 usedDiskSpaceAttList: | usedDiskSpaceAttList usedDiskSpaceAtt;
 
-usedDiskSpaceAtt: usedDiskSpaceUnitATT | usedDiskSpaceDescriptionATT;
+usedDiskSpaceAtt: 
+	usedDiskSpaceUnitATT 
+	{	if (parserData->unitAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <usedDiskSpace>");
+		parserData->unitAttributePresent = true;		
+		osresult->setUsedDiskSpaceUnit( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
+  | usedDiskSpaceDescriptionATT
+	{	if (parserData->descriptionAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <usedDiskSpace>");
+		parserData->descriptionAttributePresent = true;		
+		osresult->setUsedDiskSpaceDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
 usedDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote
 {	parserData->tempStr = $2; free ($2);
@@ -1023,19 +1129,17 @@ usedDiskSpaceUnitATT: UNITATT ATTRIBUTETEXT quote
 	    parserData->tempStr != "gigabyte" && parserData->tempStr != "megabyte" && 
 	    parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
 		osrlerror(NULL, NULL, parserData, "usedDiskSpace unit not recognized");
-	osresult->setUsedDiskSpaceUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
 };
 
-
-usedDiskSpaceDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setUsedDiskSpaceDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+usedDiskSpaceDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 usedDiskSpaceValue:
      INTEGER {osresult->setUsedDiskSpaceValue( $1);  parserData->errorText = NULL;}
    | DOUBLE  {osresult->setUsedDiskSpaceValue( $1);  parserData->errorText = NULL;};
 
-usedMemory: usedMemoryStart usedMemoryAttList GREATERTHAN usedMemoryValue 
+usedMemory: usedMemoryStart usedMemoryAttributes GREATERTHAN usedMemoryValue 
             USEDMEMORYEND;
 
 usedMemoryStart: USEDMEMORYSTART
@@ -1043,29 +1147,47 @@ usedMemoryStart: USEDMEMORYSTART
 			osrlerror(NULL, NULL, parserData, "only one usedMemory element allowed");
 		parserData->jobUsedMemoryPresent = true;
 	};
-
+	
+usedMemoryAttributes: usedMemoryAttList
+	{	parserData->unitAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;
+	};
+			
 usedMemoryAttList: | usedMemoryAttList usedMemoryAtt;
 
-usedMemoryAtt: usedMemoryUnitATT | usedMemoryDescriptionATT;
+usedMemoryAtt: 
+	usedMemoryUnitATT 
+	{	if (parserData->unitAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <usedMemory>");
+		parserData->unitAttributePresent = true;		
+		osresult->setUsedMemoryUnit( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
+  | usedMemoryDescriptionATT
+	{	if (parserData->descriptionAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <usedMemory>");
+		parserData->descriptionAttributePresent = true;		
+		osresult->setUsedMemoryDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
 usedMemoryUnitATT: UNITATT ATTRIBUTETEXT quote
 {	parserData->tempStr = $2; free ($2);
 	if (parserData->tempStr != "terabyte" && parserData->tempStr != "gigabyte" && 
 		parserData->tempStr != "megabyte" && parserData->tempStr != "kilobyte" && parserData->tempStr != "byte")
 		osrlerror(NULL, NULL, parserData, "usedMemory unit not recognized");
-	osresult->setUsedMemoryUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
 };
 
-usedMemoryDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setUsedMemoryDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+usedMemoryDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 usedMemoryValue:
      INTEGER {osresult->setUsedMemoryValue( $1);  parserData->errorText = NULL;}
    | DOUBLE  {osresult->setUsedMemoryValue( $1);  parserData->errorText = NULL;};
 
 
-usedCPUSpeed: usedCPUSpeedStart usedCPUSpeedAttList GREATERTHAN usedCPUSpeedValue 
+usedCPUSpeed: usedCPUSpeedStart usedCPUSpeedAttributes GREATERTHAN usedCPUSpeedValue 
               USEDCPUSPEEDEND;
               
 usedCPUSpeedStart: USEDCPUSPEEDSTART
@@ -1074,10 +1196,28 @@ usedCPUSpeedStart: USEDCPUSPEEDSTART
 		parserData->jobUsedCPUSpeedPresent = true;
 	};
               
-
+usedCPUSpeedAttributes: usedCPUSpeedAttList
+	{	parserData->unitAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;	
+	};
+	
 usedCPUSpeedAttList: | usedCPUSpeedAttList usedCPUSpeedAtt;
 
-usedCPUSpeedAtt: usedCPUSpeedUnitATT | usedCPUSpeedDescriptionATT;
+usedCPUSpeedAtt: 
+	usedCPUSpeedUnitATT 
+	{	if (parserData->unitAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <usedCPUSpeed>");
+		parserData->unitAttributePresent = true;		
+		osresult->setUsedCPUSpeedUnit( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
+  | usedCPUSpeedDescriptionATT
+	{	if (parserData->descriptionAttributePresent)
+			osrlerror(NULL, NULL, parserData, "only one unit attribute allowed in <usedCPUSpeed>");
+		parserData->descriptionAttributePresent = true;		
+		osresult->setUsedCPUSpeedDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
 usedCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote
 {	parserData->tempStr = $2; free ($2);
@@ -1088,12 +1228,11 @@ usedCPUSpeedUnitATT: UNITATT ATTRIBUTETEXT quote
 		parserData->tempStr != "megaflops" && parserData->tempStr != "kiloflops" && 
 		parserData->tempStr != "flops" )
 		osrlerror(NULL, NULL, parserData, "usedCPUSpeed unit not recognized");
-	osresult->setUsedCPUSpeedUnit( parserData->tempStr);/* free($2); */ parserData->errorText = NULL;
 };
 
-usedCPUSpeedDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setUsedCPUSpeedDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+usedCPUSpeedDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 usedCPUSpeedValue:
      INTEGER {osresult->setUsedCPUSpeedValue( $1);  parserData->errorText = NULL;}
@@ -1110,11 +1249,15 @@ usedCPUNumberStart: USEDCPUNUMBERSTART
 	};
                
 
-usedCPUNumberAttList: | usedCPUNumberAttList usedCPUNumberDescriptionATT;
+usedCPUNumberAttList: 
+  | usedCPUNumberDescriptionATT
+	{	osresult->setUsedCPUSpeedDescription( parserData->tempStr); 
+		parserData->errorText = NULL;
+	};
 
-usedCPUNumberDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-	{	osresult->setUsedCPUNumberDescription( $2); free($2);  parserData->errorText = NULL;}
-| EMPTYDESCRIPTIONATT;
+usedCPUNumberDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";          };
 
 usedCPUNumberValue:
      INTEGER {osresult->setUsedCPUNumberValue( $1);  parserData->errorText = NULL;};
@@ -1151,13 +1294,8 @@ jobOtherResultsBody: GREATERTHAN jobOtherResultSEQ OTHERRESULTSEND;
 
 jobOtherResultSEQ: jobOtherResult | jobOtherResultSEQ jobOtherResult; 
 
-jobOtherResult: jobOtherResultStart jobOtherAttList jobOtherEnd
-{	if (!parserData->jobOtherResultNamePresent)
-		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
-	parserData->jobOtherResultNamePresent = false;
-	parserData->jobOtherResultValuePresent = false;
-	parserData->jobOtherResultDescriptionPresent = false;
-	parserData->kounter++;
+jobOtherResult: jobOtherResultStart jobOtherAttributes jobOtherEnd
+{	parserData->kounter++;
 };	
 
 jobOtherResultStart: OTHERSTART
@@ -1165,41 +1303,63 @@ jobOtherResultStart: OTHERSTART
 		osrlerror(NULL, NULL, parserData, "more <other> elements than specified");
 };
 
+jobOtherAttributes: jobOtherAttList
+{	if (!parserData->nameAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<other> must have name attribute");
+	parserData->nameAttributePresent = false;
+	parserData->valueAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
+};
+
 jobOtherAttList: | jobOtherAttList jobOtherAtt;
 
 jobOtherAtt: 
 	jobOtherNameATT 
- 	{	if (parserData->jobOtherResultNamePresent)
+ 	{	if (parserData->nameAttributePresent)
 			osrlerror(NULL, NULL, parserData, "name attribute multiply specified");
-		parserData->jobOtherResultNamePresent = true;
+		parserData->nameAttributePresent = true;
 		osresult->setJobOtherResultName(parserData->kounter,parserData->tempStr);
 	}
  | jobOtherValueATT 
-	{	if (parserData->jobOtherResultValuePresent)
+	{	if (parserData->valueAttributePresent)
 			osrlerror(NULL, NULL, parserData, "value attribute multiply specified");
-		parserData->jobOtherResultValuePresent = true;
+		parserData->valueAttributePresent = true;
 		osresult->setJobOtherResultValue(parserData->kounter,parserData->tempStr);
 	}
  | jobOtherDescriptionATT
-	{	if (parserData->jobOtherResultDescriptionPresent)
+	{	if (parserData->descriptionAttributePresent)
 			osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
-		parserData->jobOtherResultDescriptionPresent = true;
+		parserData->descriptionAttributePresent = true;
 		osresult->setJobOtherResultDescription(parserData->kounter,parserData->tempStr);
 	}
 ;
 
 jobOtherNameATT: NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}; 
 
-jobOtherValueATT: VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-| EMPTYVALUEATT {parserData->tempStr = ""}; 
+jobOtherValueATT: 
+	VALUEATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2); }
+  | EMPTYVALUEATT                { parserData->tempStr = "";           }; 
 
-jobOtherDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
-| EMPTYDESCRIPTIONATT {parserData->tempStr = ""};
+jobOtherDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->tempStr = $2; free($2); }
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = "";           };
 
 jobOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 
-optimizationElement: | OPTIMIZATIONSTART optimizationAttList optimizationBody;
+optimizationElement: | OptimizationStart optimizationAttributes optimizationContent;
+
+OptimizationStart: OPTIMIZATIONSTART;
+
+optimizationAttributes: optimizationAttList
+{	if (!parserData->numberAttributePresent)
+		osrlerror (NULL, NULL, parserData, "numberOfSolutions was never set");
+	parserData->numberAttributePresent = false;
+	parserData->nVarPresent = false;
+	parserData->nObjPresent = false;
+	parserData->nConPresent = false;
+	parserData->solutionIdx = 0;
+};	
 
 optimizationAttList: | optimizationAttList optimizationATT; 
 
@@ -1211,44 +1371,46 @@ optimizationATT:
   ;
 
 optimizationNumberOfSolutionsATT: NUMBEROFSOLUTIONSATT quote INTEGER  
-{	if (parserData->numberOfSolutionsPresent)
+{	if (parserData->numberAttributePresent)
 		osrlerror(NULL, NULL, parserData, "numberOfSolutions attribute previously set");
-	parserData->numberOfSolutionsPresent = true;
+	parserData->numberAttributePresent = true;
 	parserData->numberOfSolutions = $3; 
 	osresult->setSolutionNumber($3);
 };	
 
 optimizationNumberOfVariablesATT: NUMBEROFVARIABLESATT quote INTEGER  
-{	if (parserData->numberOfVariablesPresent)
+{	if (parserData->nVarPresent)
 		osrlerror(NULL, NULL, parserData, "numberOfVariables attribute previously set");
-	parserData->numberOfVariablesPresent = true;	
+	parserData->nVarPresent = true;	
 	parserData->numberOfVariables = $3; 
 	osresult->setVariableNumber($3);
 };
 
 optimizationNumberOfConstraintsATT: NUMBEROFCONSTRAINTSATT quote INTEGER  
-{	if (parserData->numberOfConstraintsPresent)
+{	if (parserData->nConPresent)
 		osrlerror(NULL, NULL, parserData, "numberOfConstraints attribute previously set");
-	parserData->numberOfConstraintsPresent = true;		
+	parserData->nConPresent = true;		
 	parserData->numberOfConstraints = $3; 
 	osresult->setConstraintNumber($3);
 };
 
 optimizationNumberOfObjectivesATT: NUMBEROFOBJECTIVESATT quote INTEGER  
-{	if (parserData->numberOfObjectivesPresent)
+{	if (parserData->nObjPresent)
 		osrlerror(NULL, NULL, parserData, "numberOfObjectives attribute previously set");
-	parserData->numberOfObjectivesPresent = true;
+	parserData->nObjPresent = true;
 	parserData->numberOfObjectives = $3; 
 	osresult->setObjectiveNumber($3);
 };
 	
-optimizationBody: GREATERTHAN optimizationContent OPTIMIZATIONEND | ENDOFELEMENT;
+optimizationContent: optimizationEmpty | optimizationBody;
 
-optimizationContent: solutionList otherSolverOutput;
+optimizationEmpty: GREATERTHAN OPTIMIZATIONEND | ENDOFELEMENT;
 
-solutionList: | solutionList solution;  
+optimizationBody: GREATERTHAN solutionSEQ otherSolverOutput OPTIMIZATIONEND;
 
-solution: solutionStart solutionAttList solutionBody
+solutionSEQ: solution | solutionSEQ solution;  
+
+solution: solutionStart solutionAttributes solutionBody
    {
    if (parserData->solutionIdx == parserData->numberOfSolutions) 
         osrlerror(NULL, NULL, parserData, "too many solutions"); 
@@ -1259,8 +1421,11 @@ solutionStart: SOLUTIONSTART
 {   parserData->numberOfVar = 0;
     parserData->numberOfCon = 0;
     parserData->numberOfObj = 0;
-	parserData->targetObjectiveIdxPresent = false;
-	parserData->weightedObjectivesPresent = false;
+};
+
+solutionAttributes: solutionAttList
+{	parserData->idxAttributePresent = false;
+	parserData->weightedObjAttributePresent = false;
 };
 
 solutionAttList: | solutionAttList solutionATT;
@@ -1268,17 +1433,17 @@ solutionAttList: | solutionAttList solutionATT;
 solutionATT: targetObjectiveIdxATT | weightedObjectivesATT;
 
 targetObjectiveIdxATT: TARGETOBJECTIVEIDXATT quote INTEGER quote
-{	if (parserData->targetObjectiveIdxPresent)
+{	if (parserData->idxAttributePresent)
 		osrlerror(NULL, NULL, parserData, "target objective idx previously set");
-	parserData->targetObjectiveIdxPresent = true;
+	parserData->idxAttributePresent = true;
 	if($3 >= 0) osrlerror(NULL, NULL, parserData, "target objective index must be negative");
   	osresult->setSolutionTargetObjectiveIdx(parserData->solutionIdx, $3);
  };
 
 weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
-{	if (parserData->weightedObjectivesPresent)
+{	if (parserData->weightedObjAttributePresent)
 		osrlerror(NULL, NULL, parserData, "target objective idx previously set");
-	parserData->weightedObjectivesPresent = true;
+	parserData->weightedObjAttributePresent = true;
 	parserData->tempStr = $2;
   	osresult->setSolutionWeightedObjectives(parserData->solutionIdx, parserData->tempStr);
 };
@@ -1289,15 +1454,14 @@ solutionBody: GREATERTHAN solutionStatus solutionMessage
 solutionStatus: solutionStatusStart solutionStatusAttributes solutionStatusContent;
 
 solutionStatusStart: STATUSSTART
-	{	parserData->solutionStatusTypePresent = false;
-		parserData->solutionStatusDescriptionPresent = false;
-		parserData->solutionStatusNumberOfPresent = false;
-		parserData->numberOf = 0;
-	};
+	{ parserData->numberOf = 0; };
 
 solutionStatusAttributes: solutionStatusAttList
-	{	if (!parserData->solutionStatusTypePresent)
+	{	if (!parserData->typeAttributePresent)
 			osrlerror(NULL, NULL, parserData, "type attribute must be present for solution status element");
+		parserData->typeAttributePresent = false;
+		parserData->descriptionAttributePresent = false;
+		parserData->numberAttributePresent = false;
 		parserData->kounter = 0;
 	};
 
@@ -1305,9 +1469,9 @@ solutionStatusAttList: solutionStatusATT | solutionStatusAttList solutionStatusA
 
 solutionStatusATT: 
 	solutionStatusTypeATT
-	{   if (parserData->solutionStatusTypePresent ) 
+	{   if (parserData->typeAttributePresent ) 
 		    osrlerror(NULL, NULL, parserData, "only one type attribute allowed for solution status element");
-	    parserData->solutionStatusTypePresent = true;
+	    parserData->typeAttributePresent = true;
 	    if ((parserData->tempStr != "unbounded"     ) && (parserData->tempStr != "globallyOptimal") && 
 	        (parserData->tempStr != "locallyOptimal") && (parserData->tempStr != "optimal") && 
 	        (parserData->tempStr != "bestSoFar"     ) && (parserData->tempStr != "feasible") && 
@@ -1317,9 +1481,9 @@ solutionStatusATT:
 		osresult->setSolutionStatusType(parserData->solutionIdx, parserData->tempStr); 
 	}
   | solutionStatusDescriptionATT
-	{   if (parserData->solutionStatusDescriptionPresent ) 
+	{   if (parserData->descriptionAttributePresent ) 
 		    osrlerror(NULL, NULL, parserData, "only one description attribute allowed for solution status element");
-	    parserData->solutionStatusDescriptionPresent = true;
+	    parserData->descriptionAttributePresent = true;
 		osresult->setSolutionStatusDescription(parserData->solutionIdx, parserData->tempStr);
 	}
   | solutionStatusNumberOfATT;	
@@ -1331,9 +1495,9 @@ solutionStatusDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote { parserData->t
     |                    EMPTYDESCRIPTIONATT                     { parserData->tempStr = "";          };
 
 solutionStatusNumberOfATT: NUMBEROFSUBSTATUSESATT QUOTE INTEGER QUOTE 
-{   if (parserData->solutionStatusNumberOfPresent ) 
+{   if (parserData->numberAttributePresent ) 
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed for solution status element");
-    parserData->solutionStatusNumberOfPresent = true;
+    parserData->numberAttributePresent = true;
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of solution substatuses cannot be negative");
     osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, $3);
 	parserData->numberOf = $3;
@@ -1356,41 +1520,40 @@ solutionStatusBody:  GREATERTHAN solutionSubstatusSEQ STATUSEND;
 
 solutionSubstatusSEQ: solutionSubstatus | solutionSubstatusSEQ solutionSubstatus;
 
-solutionSubstatus: solutionSubstatusStart solutionSubstatusAttList solutionSubstatusEnd
-{	if (!parserData->solutionSubstatusTypePresent)
-		osrlerror (NULL, NULL, parserData, "<substatus> must have type attribute");
-	parserData->generalSubstatusNamePresent = false;
-	parserData->generalSubstatusDescriptionPresent = false;
-	parserData->kounter++;
-};	
-
+solutionSubstatus: solutionSubstatusStart solutionSubstatusAttributes solutionSubstatusEnd
+{	parserData->kounter++; };	
 
 solutionSubstatusStart: SUBSTATUSSTART 
 {	if (parserData->kounter >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, "more <substatus> elements than specified");
 };
 
+solutionSubstatusAttributes: solutionSubstatusAttList
+{	if (!parserData->typeAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<substatus> must have type attribute");
+	parserData->typeAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
+};	
+
 solutionSubstatusAttList: | solutionSubstatusAttList solutionSubstatusATT;
  
 solutionSubstatusATT: solutionSubstatusTypeATT | solutionSubstatusDescriptionATT
-{	if (parserData->solutionSubstatusDescriptionPresent)
+{	if (parserData->descriptionAttributePresent)
 		osrlerror(NULL, NULL, parserData, "description attribute multiply specified");
-	parserData->solutionSubstatusDescriptionPresent = true;
+	parserData->descriptionAttributePresent = true;
 	osresult->setSolutionSubstatusDescription(parserData->solutionIdx, parserData->kounter,parserData->tempStr);
 }; 
 
 solutionSubstatusTypeATT: TYPEATT ATTRIBUTETEXT QUOTE 
-{	if (parserData->solutionSubstatusTypePresent)
+{	if (parserData->typeAttributePresent)
 		osrlerror(NULL, NULL, parserData, "type attribute multiply specified");
-	parserData->solutionSubstatusTypePresent = true;
+	parserData->typeAttributePresent = true;
 	osresult->setSolutionSubstatusType(parserData->solutionIdx, parserData->kounter,$2);	
 }; 
 
 solutionSubstatusDescriptionATT: 
-	DESCRIPTIONATT ATTRIBUTETEXT QUOTE 
-	{	parserData->tempStr = $2; }
-  | EMPTYDESCRIPTIONATT
-	{	parserData->tempStr = ""; }; 
+	DESCRIPTIONATT ATTRIBUTETEXT QUOTE { parserData->tempStr = $2; }
+  | EMPTYDESCRIPTIONATT                { parserData->tempStr = ""; }; 
 
 solutionSubstatusEnd: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
 
@@ -1403,35 +1566,28 @@ solutionMessage:
 | MESSAGESTART ENDOFELEMENT;
 
 variables:
-| VARIABLESSTART numberOfOtherVariableResults variablesBody;
+| VARIABLESSTART numberOfOtherVariableResults variablesContent;
 
 numberOfOtherVariableResults:
   | NUMBEROFOTHERVARIABLERESULTSATT quote INTEGER quote 
-	{  
+	{	parserData->numberOfOtherVariableResults = $3;
 		osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, $3);
 		parserData->iOther = 0;
-		parserData->tmpOtherValue = "";
-		parserData->tmpOtherName = "";
-		parserData->tmpOtherDescription = "";
 	};
 
-variablesBody: variablesEmpty | variablesContent;
+variablesContent: ENDOFELEMENT | variablesBody;
 
-variablesEmpty: ENDOFELEMENT;
-
-variablesContent: GREATERTHAN variableValues variableValuesString basisStatus otherVariablesSEQ VARIABLESEND;
+variablesBody: GREATERTHAN variableValues variableValuesString basisStatus otherVariableResultsSEQ VARIABLESEND;
 
 variableValues: | variableValuesStart numberOfVarATT variableValuesContent;
 
 variableValuesStart: VALUESSTART
-{	parserData->numberOfVarPresent = false; };
+{	parserData->numberAttributePresent = false; };
 
 numberOfVarATT: NUMBEROFVARATT quote INTEGER quote 
 {	parserData->numberOfVar = $3; 
-	parserData->kounter = 0;
-	std::cout << "number of var: " << parserData->numberOfVar;
-	std::cout << "; kounter = " << parserData->kounter << std::endl;
 	osresult->setNumberOfVarValues(parserData->solutionIdx, parserData->numberOfVar);
+	parserData->kounter = 0;
 }; 
 
 variableValuesContent: 
@@ -1455,13 +1611,10 @@ varValue: varValueStart  varIdxATT GREATERTHAN varVal VAREND
 {	osresult->setVarValue(parserData->solutionIdx, parserData->kounter, 
 						  parserData->idx,         parserData->tempVal);
 	parserData->kounter++;
-	std::cout << "; kounter = " << parserData->kounter << std::endl;
 }; 
 
 varValueStart: VARSTART
 {	
-	std::cout << "number of var: " << parserData->numberOfVar;
-	std::cout << "; kounter = " << parserData->kounter << std::endl;
 	if (parserData->kounter >= parserData->numberOfVar)
 		osrlerror(NULL, NULL, parserData, "more <var> elements than specified");
 };
@@ -1473,81 +1626,102 @@ varVal:
   | DOUBLE  {parserData->tempVal = $1; };
   
 
-variableValuesString: 
-  | VALUESSTRINGSTART numberOfVarStringATT GREATERTHAN varValueStringList VALUESSTRINGEND
-  {
-/*  	if(parserData->primalVals.size() !=  parserData->numberOfVar){
-  		osrlerror(NULL, NULL, parserData, "numberOfVar not consistent with the number of primal values");
-      } else{
-              osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
-		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
-     }
- */  }
-   | VALUESSTRINGSTART numberOfVarStringATT ENDOFELEMENT;
+variableValuesString: | variableValuesStringStart numberOfVarStringATT variableValuesStringContent;
+
+variableValuesStringStart: VALUESSTRINGSTART 
+{	parserData->numberAttributePresent = false; };
 
 numberOfVarStringATT: NUMBEROFVARATT quote INTEGER quote 
-	{
-	//osresult->setNumberOfPrimalVariableValues(parserData->solutionIdx, $3);
-	parserData->numberOfVar = $3;
+{	parserData->numberOfVar = $3;
+	parserData->kounter = 0;
+	osresult->setNumberOfVarValuesString(parserData->solutionIdx, parserData->numberOfVar);
+}; 
+
+variableValuesStringContent: 
+	variableValuesStringEmpty 
+	{	if (parserData->numberOfVar > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <var> element");
 	}
-; 
+  | variableValuesStringBody
+	{	if (parserData->kounter != parserData->numberOfVar)
+			osrlerror(NULL, NULL, parserData, "fewer <var> elements than specified");
+	}
+  ;
 
-varValueStringList : | varValueStringList varValueString;
+variableValuesStringEmpty: GREATERTHAN VALUESSTRINGEND | ENDOFELEMENT; 
 
-varValueString: VARSTART varStrIdxATT GREATERTHAN ELEMENTTEXT VAREND
-{/*parserData->tempVal = $1;  
- 	parserData->primalValPair->value = $1;
-	parserData->primalVals.push_back( parserData->primalValPair);  */
-}
-| VARSTART varStrIdxATT GREATERTHAN VAREND
-| VARSTART varStrIdxATT ENDOFELEMENT; 
+variableValuesStringBody: GREATERTHAN varValueStringSEQ VALUESSTRINGEND;
 
-varStrIdxATT: IDXATT quote INTEGER quote { /*parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = $2;*/};
+varValueStringSEQ: varValueString | varValueStringSEQ varValueString;
+
+varValueString: varValueStringStart varStrIdxATT GREATERTHAN ELEMENTTEXT VAREND
+{	osresult->setVarValueString(parserData->solutionIdx, parserData->kounter, 
+					 			parserData->idx,         $4);
+	parserData->kounter++;
+}; 
+
+varValueStringStart: VARSTART 
+{	
+	if (parserData->kounter >= parserData->numberOfVar)
+		osrlerror(NULL, NULL, parserData, "more <var> elements than specified");
+};
+
+varStrIdxATT: IDXATT quote INTEGER quote { parserData->idx = $3; };
   
   
 
-basisStatus: | BASISSTATUSSTART numberOfBasisVarATT GREATERTHAN basisVarList BASISSTATUSEND
-  {
-/*  	if(parserData->primalVals.size() !=  parserData->numberOfVar){
-  		osrlerror(NULL, NULL, parserData, "numberOfVar not consistent with the number of primal values");
-      } else{
-              osresult->setPrimalVariableValuesSparse(parserData->solutionIdx, parserData->primalVals); 
-		osresult->optimization->solution[ parserData->solutionIdx]->variables->values->numberOfVar = parserData->numberOfVar;
-      }
- */  }
-  | BASISSTATUSSTART numberOfBasisVarATT ENDOFELEMENT;
+basisStatus: | basisStatusStart numberOfBasisVarATT basisStatusContent;
+
+basisStatusStart: BASISSTATUSSTART 
+{	parserData->nVarPresent = false; };
 
 numberOfBasisVarATT : NUMBEROFVARATT quote INTEGER quote 
-	{
-	//osresult->setNumberOfPrimalVariableValues(parserData->solutionIdx, $3);
-	parserData->numberOfVar = $3;
+{	parserData->numberOfVar = $3;
+	parserData->kounter = 0;
+	osresult->setNumberOfBasisVar(parserData->solutionIdx, parserData->numberOfVar);
+}; 
+
+basisStatusContent:
+	basisStatusEmpty
+	{	if (parserData->numberOfVar > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <var> element");
 	}
-; 
+  | basisStatusBody
+	{	if (parserData->kounter != parserData->numberOfVar)
+			osrlerror(NULL, NULL, parserData, "fewer <var> elements than specified");
+	}
+  ;
 
-basisVarList : | basisVarList basisVar;
+basisStatusEmpty: GREATERTHAN BASISSTATUSEND | ENDOFELEMENT;
 
-basisVar: VARSTART basisVarIdxATT GREATERTHAN ELEMENTTEXT VAREND; 
+basisStatusBody: GREATERTHAN basisVarSEQ BASISSTATUSEND;
 
-basisVarIdxATT : IDXATT quote INTEGER quote { /*parserData->primalValPair = new IndexValuePair();   parserData->primalValPair->idx = $2;*/};
+basisVarSEQ : basisVar | basisVarSEQ basisVar;
+
+basisVar: basisVarStart basisVarIdxATT GREATERTHAN ELEMENTTEXT VAREND
+{	osresult->setBasisVar(parserData->solutionIdx, parserData->kounter, 
+					 			parserData->idx,         $4);
+	parserData->kounter++;
+}; 
+
+basisVarStart: VARSTART
+{	
+	if (parserData->kounter >= parserData->numberOfVar)
+		osrlerror(NULL, NULL, parserData, "more <var> elements than specified");
+};
+
+basisVarIdxATT : IDXATT quote INTEGER quote { parserData->idx = $3; };
   
-  
-  
 
-otherVariablesSEQ: | otherVariablesSEQ otherVariableResult;
+otherVariableResultsSEQ: | otherVariableResultsSEQ otherVariableResult;
 
-otherVariableResult: otherVariableStart otherVariableAttributes
-	{/*	if(parserData->otherNamePresent == false) 
-			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
-		parserData->ivar = 0;
-	*/}  
-otherVariableResultContent
+otherVariableResult: otherVariableResultStart otherVariableResultAttributes otherVariableResultContent
 	{ 	 
-		parserData->otherVarVec.push_back( parserData->otherVarStruct); 
-		parserData->numberOfOtherVariableResults++; 
-		parserData->otherNamePresent = false;	
-		osresult->setAnOtherVariableResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
-			parserData->otherVarStruct->value, parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex,
-			parserData->otherVarStruct->otherVarText, parserData->otherVarStruct->numberOfVar );
+//		parserData->otherVarVec.push_back( parserData->otherVarStruct); 
+//		parserData->numberOfOtherVariableResults++; 
+//		osresult->setAnOtherVariableResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
+//			parserData->otherVarStruct->value, parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex,
+//			parserData->otherVarStruct->otherVarText, parserData->otherVarStruct->numberOfVar );
 		parserData->iOther++;  
 		parserData->tmpOtherName = "";
 		parserData->tmpOtherValue = "";
@@ -1555,92 +1729,93 @@ otherVariableResultContent
 	}
 ;
 
-otherVariableStart: OTHERSTART 
+otherVariableResultStart: OTHERSTART 
 	{  // parserData->numberOfOtherVariableResults++;
-		parserData->otherVarStruct = new OtherVariableResultStruct(); 
+//		parserData->otherVarStruct = new OtherVariableResultStruct(); 
 		//parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
 		//parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	 
-		parserData->kounter = 0;
 	}; 
 
-otherVariableAttributes: otherVariableAttList 
-	{	if(parserData->otherNamePresent == false) 
+otherVariableResultAttributes: otherVariableResultAttList 
+	{	if(!parserData->nameAttributePresent) 
 			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
-		parserData->ivar = 0;
+		if(!parserData->numberAttributePresent) 
+			osrlerror(NULL, NULL, parserData, "other element requires numberOfVar attribute"); 
+		parserData->nameAttributePresent = false;	
+		parserData->numberAttributePresent = false;	
+		parserData->valueAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;	
+		parserData->kounter = 0;
 	};
 	  
-otherVariableAttList: | otherVariableAttList otherVariableATT;
+otherVariableResultAttList: | otherVariableResultAttList otherVariableResultATT;
 
-otherVariableATT: numberOfOtherVarATT | otherVarValueATT | otherVarNameATT | otherVarDescriptionATT;
+otherVariableResultATT: 
+	numberOfOtherVariableResultsATT 
+  | otherVariableResultValueATT
+  {	if (parserData->valueAttributePresent)
+		osrlerror(NULL, NULL, parserData, "value attribute previously set");
+	parserData->valueAttributePresent = true; 
+ 	osresult->setOtherVariableResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  }
+  | otherVariableResultNameATT 
+  {	
+	if (parserData->nameAttributePresent)
+		osrlerror(NULL, NULL, parserData, "name attribute previously set");
+	parserData->nameAttributePresent = true; 
+ 	osresult->setOtherVariableResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  }
+  | otherVariableResultDescriptionATT
+  {	if (parserData->descriptionAttributePresent)
+		osrlerror(NULL, NULL, parserData, "description attribute previously set");
+	parserData->descriptionAttributePresent = true; 
+ 	osresult->setOtherVariableResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  };
   
-numberOfOtherVarATT: NUMBEROFVARATT quote INTEGER quote 
-{	
-	parserData->otherVarStruct->numberOfVar = $3;
-
-//std::cout << "This \<other\> element has " << parserData->otherVarStruct->numberOfVar << " \<var\>" << std::endl;
-
-	parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
-	parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	
- 	osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar = $3;
+numberOfOtherVariableResultsATT: NUMBEROFVARATT quote INTEGER quote 
+{	if (parserData->numberAttributePresent)
+		osrlerror(NULL, NULL, parserData, "numberOfVar attribute previously set");
+	parserData->numberAttributePresent = true;
+	parserData->numberOfVar = $3;
+ 	osresult->setOtherVariableResultNumberOfVar(parserData->solutionIdx, parserData->iOther, $3);
 }; 
 
-otherVarValueATT: 
-  EMPTYVALUEATT {parserData->tmpOtherValue=""; parserData->otherVarStruct->value = "";  
-/*  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value = "";*/
-}
-  |    VALUEATT ATTRIBUTETEXT quote {parserData->tmpOtherValue=$2; parserData->otherVarStruct->value = $2;  
-/*  osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->value = $2; */
-  free($2);}
-;
+otherVariableResultValueATT: 
+	VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYVALUEATT                {parserData->tempStr = "";          };
 
-otherVarNameATT: 
-  EMPTYNAMEATT 
-{ 
-	parserData->tmpOtherName=""; 
-	parserData->otherNamePresent = true; 
-	parserData->otherVarStruct->name = "";
-};
-  | NAMEATT ATTRIBUTETEXT quote
-{
-parserData->tmpOtherName=$2; parserData->otherNamePresent = true; parserData->otherVarStruct->name = $2;  free($2);
- /* osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->name = $2;*/
-};
+otherVariableResultNameATT: 
+	NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYNAMEATT                {parserData->tempStr = "";          };
 
-otherVarDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-{
-parserData->tmpOtherDescription=$2; parserData->otherVarStruct->description = $2;  free($2);
-  /*osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->description = $2;*/
-}
-| EMPTYDESCRIPTIONATT;
+otherVariableResultDescriptionATT:
+	DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                {parserData->tempStr = "";          };
 
 otherVariableResultContent: ENDOFELEMENT	
 | GREATERTHAN otherVarList OTHEREND;
 
 otherVarList: | otherVarList otherVar;
 
-otherVar: otherVarStart otherVarIdxATT otherVarContent {  
-parserData->otherVarStruct->otherVarText[parserData->kounter] =  parserData->outStr.str();
-//reset the buffer;
-parserData->outStr.str("");
-parserData->otherVarStruct->otherVarIndex[parserData->kounter] =  parserData->ivar;
-parserData->errorText = NULL;
-//if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->variables->other[parserData->iOther]->numberOfVar)
-std::cout << "parserData->kounter = " << parserData->kounter << std::endl;
-if (parserData->kounter == osresult->getAnOtherVariableResultNumberOfVar(parserData->solutionIdx, parserData->iOther))
-    osrlerror(NULL, NULL, parserData, "too many variables"); 
-if (parserData->numberOfVariables > 0 && (parserData->ivar < 0 || parserData->ivar > parserData->numberOfVariables - 1) ) 
-	osrlerror(NULL, NULL, parserData, "index must be greater than 0 and less than the number of variables");
-//parserData->kounter++;
+otherVar: otherVarStart otherVarIdxATT otherVarContent 
+{ 
+	parserData->kounter++;
 };
 
-otherVarStart: VARSTART 
-	{//	if(parserData->otherVarStruct->numberOfVar <= 0) 
-	//		osrlerror(NULL, NULL,  parserData, "must specify the number of variables") ;
-	}; 
+otherVarStart: VARSTART; 
 
-otherVarIdxATT: IDXATT quote INTEGER quote {};
+otherVarIdxATT: IDXATT quote INTEGER quote 
+{
+ 	osresult->setOtherVariableResultsVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
+};
 
-otherVarContent: GREATERTHAN ElementValue VAREND | GREATERTHAN VAREND | ENDOFELEMENT;
+otherVarContent: 
+	GREATERTHAN ElementValue VAREND 
+	{
+	 	osresult->setOtherVariableResultsVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	}
+  | GREATERTHAN VAREND 
+  | ENDOFELEMENT;
 
 
 objectives:
@@ -1735,12 +1910,12 @@ otherObjNameATT:
   EMPTYNAMEATT 
 { 
 //	parserData->tmpOtherName=""; 
-//	parserData->otherNamePresent = true; 
+//	parserData->nameAttributePresent = true; 
 //	parserData->otherObjStruct->name = "";
 };
   | NAMEATT ATTRIBUTETEXT quote
 {
-//parserData->tmpOtherName=$2; parserData->otherNamePresent = true; parserData->otherObjStruct->name = $2;  free($2);
+//parserData->tmpOtherName=$2; parserData->nameAttributePresent = true; parserData->otherObjStruct->name = $2;  free($2);
  /* osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->name = $2;*/
 };
 
@@ -1756,14 +1931,12 @@ otherObjectiveResultContent: ENDOFELEMENT
 | GREATERTHAN otherObjList OTHEREND
 	{ 	 		
 /*
-	{	if(parserData->otherNamePresent == false) 
+		if(parserData->nameAttributePresent == false) 
 			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
-	}  
-
-*/
-/*        parserData->otherObjVec.push_back( parserData->otherObjStruct); 
+	  
+        parserData->otherObjVec.push_back( parserData->otherObjStruct); 
         parserData->numberOfOtherObjectiveResults++; 
-		parserData->otherNamePresent = false;	
+		parserData->nameAttributePresent = false;	
         osresult->setAnOtherObjectiveResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherObjStruct->name,
 		parserData->otherObjStruct->value, parserData->otherObjStruct->description, parserData->otherObjStruct->otherObjIndex,
 		parserData->otherObjStruct->otherObjText, parserData->otherObjStruct->numberOfObj );							
@@ -1885,12 +2058,12 @@ otherConNameATT:
   EMPTYNAMEATT 
 { 
 //	parserData->tmpOtherName=""; 
-//	parserData->otherNamePresent = true; 
+//	parserData->nameAttributePresent = true; 
 //	parserData->otherConStruct->name = "";
 };
   | NAMEATT ATTRIBUTETEXT quote
 {
-//parserData->tmpOtherName=$2; parserData->otherNamePresent = true; parserData->otherConStruct->name = $2;  free($2);
+//parserData->tmpOtherName=$2; parserData->nameAttributePresent = true; parserData->otherConStruct->name = $2;  free($2);
  /* osresult->optimization->solution[parserData->solutionIdx]->constraints->other[parserData->iOther]->name = $2;*/
 };
 
@@ -2003,13 +2176,13 @@ if (temp < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negat
 anotherSolutionResultNameATT: 
   EMPTYNAMEATT 
 { 
-	parserData->tmpOtherName=""; 
-	parserData->otherNamePresent = true; 
-	parserData->otherVarStruct->name = "";
+//	parserData->tmpOtherName=""; 
+//	parserData->nameAttributePresent = true;
+//	parserData->otherVarStruct->name = "";
 };
   | NAMEATT ATTRIBUTETEXT quote
 {
-	parserData->tmpOtherName=$2; parserData->otherNamePresent = true;
+	parserData->tmpOtherName=$2; //parserData->nameAttributePresent = true;
 	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = $2;
 	free($2);
 };
@@ -2054,7 +2227,7 @@ solutionEnd: SOLUTIONEND  {
 
 	//
     //delete the old vectors
-	osrl_empty_vectors( parserData);
+//	osrl_empty_vectors( parserData);
     
 };
 
@@ -2104,13 +2277,13 @@ solverOutputNameATT:
   EMPTYNAMEATT 
 { 
 /*	parserData->tmpOtherName=""; 
-	parserData->otherNamePresent = true; 
+	parserData->nameAttributePresent = true; 
 	parserData->otherVarStruct->name = "";
 */
 };
   | NAMEATT ATTRIBUTETEXT QUOTE
 {
-/*	parserData->tmpOtherName=$2; parserData->otherNamePresent = true;
+/*	parserData->tmpOtherName=$2; parserData->nameAttributePresent = true;
 	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = $2;
 	free($2);
 */
@@ -2162,9 +2335,9 @@ aNumber:
 quote: xmlWhiteSpace QUOTE;
 
 ElementValue: 
-    ELEMENTTEXT  { parserData->outStr << $1;    free($1); }
-  | INTEGER      { parserData->outStr << $1;  /*free($1);*/ }
-  | DOUBLE       { parserData->outStr << $1;  /*free($1);*/ };
+    ELEMENTTEXT  { parserData->tempStr = $1;    free($1); }
+  | INTEGER      { parserData->tempStr = $1;  /*free($1);*/ }
+  | DOUBLE       { parserData->tempStr = $1;  /*free($1);*/ };
   
 
 

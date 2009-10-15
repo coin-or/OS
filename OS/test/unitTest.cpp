@@ -3404,12 +3404,10 @@ if (PARSER_TESTS){
 		if (!ok)
 			throw ErrorClass(" OSOption get() and  set() methods do not work correctly");
 
-		cout << endl << "delete osoption2" << endl;
 		delete osoption2;
 		osoption2 = NULL;
-		cout << "osoption2 deleted" << endl << endl;
 
-		cout << "Write the content to a new file" <<endl;		
+		cout << "Write the content to a new file" << endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
 		cout << endl << "Here is tmpOSoL:" <<endl;
 		cout << endl << endl << tmpOSoL << endl;

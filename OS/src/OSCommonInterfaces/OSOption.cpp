@@ -1797,17 +1797,12 @@ int  OSOption::getNumberOfConstraints()
  */
 int OSOption::getNumberOfInitVarValues()
 {	
-	//cout << "step through getNumberOfInitVarValues" << endl;
 	if (this->optimization != NULL) 
 	{	
-		//cout << "optimization is not NULL" << endl;
 		if (this->optimization->variables != NULL) 
 		{	
-			//cout << "variables is not NULL" << endl;
 			if (this->optimization->variables->initialVariableValues != NULL) 
 			{	
-				//cout << "initialVariableValues is not NULL: ";
-				//cout << this->optimization->variables->initialVariableValues->numberOfVar << endl;
 				return this->optimization->variables->initialVariableValues->numberOfVar;
 			}
 		}
@@ -2691,7 +2686,6 @@ std::string *OSOption::getInitBasisStatusDense()
 	return NULL;
 }//getInitBasisStatusDense
 
-
 /**
  * get the list of initial basic and nonbasic variables in dense form
  * @param numberOfVariables is the dimension of the array
@@ -2798,7 +2792,6 @@ double* OSOption::getIntegerVariableBranchingWeightsDense()
 	}
 	return NULL;
 }//getIntegerVariableBranchingWeightsDense
-
 
 /**
  * get a list of branching weights for integer variables in dense form
@@ -2969,7 +2962,6 @@ double* OSOption::getInitObjValuesDense()
 	}
 	return NULL;
 }//getInitObjValuesDense
-
 
 /**
  * get the list of initial objective values in dense form
@@ -3352,7 +3344,6 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints)
 	return NULL;
 }//getInitConValuesDense
 
-
 /**
  * get the list of initial dual variables in sparse form
  * @return a list of index/value/value triples
@@ -3705,13 +3696,11 @@ bool OtherOptions::addOther(std::string name, std::string value, std::string des
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
 }//addOther
-
 
 /**
  * A function to set an array of <jobID> elements
@@ -3772,7 +3761,6 @@ bool JobDependencies::addJobID(std::string jobID)
 		this->numberOfJobIDs = ++nopt;
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -3839,13 +3827,11 @@ bool DirectoriesAndFiles::addPath(std::string path)
 		this->numberOfPaths = ++nopt;
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
 }//addPath
-
 
 /**
  *
@@ -3879,7 +3865,6 @@ bool PathPairs::setPathPair(int numberOfPathPairs, PathPair **pathPair)
 		return false;
 	}
 }//setPathPair
-
 
 /**
  *
@@ -3919,7 +3904,6 @@ bool PathPairs::addPathPair(std::string fromPath, std::string toPath, bool makeC
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4059,7 +4043,6 @@ bool InitVariableValues::addVar(int idx, double value)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4133,7 +4116,6 @@ bool InitVariableValuesString::addVar(int idx, std::string value)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4210,7 +4192,6 @@ bool InitialBasisStatus::addVar(int idx, std::string value)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4284,7 +4265,6 @@ bool IntegerVariableBranchingWeights::addVar(int idx, double value)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4358,13 +4338,11 @@ bool SOSWeights::addVar(int idx, double value)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
 }//addVar
-
 
 /**
  *
@@ -4454,7 +4432,6 @@ bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, in
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4492,7 +4469,6 @@ bool OtherVariableOption::setVar(int numberOfVar, OtherVarOption **var)
 		return false;
 	}
 }//setVar
-
 
 /**
  *
@@ -4532,7 +4508,6 @@ bool OtherVariableOption::addVar(int idx, std::string value, std::string lbValue
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4637,7 +4612,6 @@ bool VariableOption::addOther(OtherVariableOption *other)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4711,7 +4685,6 @@ bool InitObjectiveValues::addObj(int idx, double value)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4751,7 +4724,6 @@ bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj)
 	}
 }//setObj
 
-
 /**
  *
  * A function to add a <obj> element
@@ -4788,7 +4760,6 @@ bool InitObjectiveBounds::addObj(int idx, double lbValue, double ubValue)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4866,7 +4837,6 @@ bool OtherObjectiveOption::addObj(int idx, std::string value, std::string lbValu
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -4971,7 +4941,6 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -5045,7 +5014,6 @@ bool InitConstraintValues::addCon(int idx, double value)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -5121,7 +5089,6 @@ bool InitDualVariableValues::addCon(int idx, double lbDualValue, double ubDualVa
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -5199,7 +5166,6 @@ bool OtherConstraintOption::addCon(int idx, std::string value, std::string lbVal
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -5305,7 +5271,6 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
@@ -5388,16 +5353,12 @@ bool SolverOptions::addSolverOption(std::string name, std::string value, std::st
 
 		return true;
 	}
-
 	catch(const ErrorClass& eclass)
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
 }//addSolverOption
 
-
-
-	
 	
 /** 
  *  set() options in the <general> element
@@ -5689,7 +5650,6 @@ bool OSOption::setServiceType( std::string serviceType)
 		return false;
 	}
 }//setServiceType
-
 
 bool OSOption::setOtherServiceOptions(int numberOfOptions, OtherOption** other)
 {	if (this->service == NULL) 
@@ -6074,7 +6034,7 @@ bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
 
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	//cout << OSNAN << "   " << value[i] << "  " << CoinIsnan(value[i]) << endl;
+	{	
 		if (!CoinIsnan(value[i]))
 			if (!this->optimization->variables->initialVariableValues->addVar(i, value[i]))
 				return false;
@@ -7881,7 +7841,7 @@ bool SOSVariableBranchingWeights::IsEqual(SOSVariableBranchingWeights *that)
 			}
 			int i;
 			for (i = 0; i < numberOfSOS; i++)
-			{	cout << "SOS " << i << " of " << numberOfSOS << endl;
+			{	
 				if (!this->sos[i]->IsEqual(that->sos[i]))
 					return false;
 			}

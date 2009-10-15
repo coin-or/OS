@@ -2804,7 +2804,7 @@ public:
 	 * @param solIdx holds the solution index to set the primal variable values. 
 	 * @param numberOfVar holds the number of primal variables that are to be set
 	 * 
-	 * @return whether primal variable values was set successfully or not. 
+	 * @return whether the information was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setNumberOfVarValues(int solIdx, int numberOfVar);
@@ -2821,6 +2821,54 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setVarValue(int solIdx, int number, int idx, double val);
+
+	/**
+	 * Set the number of string-valued primal variables to be given a value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param numberOfVar holds the number of primal variables that are to be set
+	 * 
+	 * @return whether the information was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfVarValuesString(int solIdx, int numberOfVar);
+
+	/**
+	 * Set a string-valued primal variable value.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param number holds the location within the sparse array var that is to be used
+	 * @param idx holds the index of the primal variable that is to be set
+	 * @param str holds the variable value to set.
+	 * 
+	 * @return whether primal variable value was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setVarValueString(int solIdx, int number, int idx, std::string str);
+
+	/**
+	 * Set the number of variables in the basis that are to be given a status.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param numberOfVar holds the number of primal variables that are to be set
+	 * 
+	 * @return whether the information was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfBasisVar(int solIdx, int numberOfVar);
+
+	/**
+	 * Set the basis status of a primal variable.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param number holds the location within the sparse array var that is to be used
+	 * @param idx holds the index of the primal variable that is to be set
+	 * @param str holds the variable value to set.
+	 * 
+	 * @return whether primal variable value was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setBasisVar(int solIdx, int number, int idx, std::string str);
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
@@ -2877,6 +2925,99 @@ public:
 	bool setAnOtherVariableResultDense(int solIdx, int otherIdx, std::string name, std::string value, std::string description, std::string *s);
 	
 	/**
+	 * Set the number of <var> children of another (non-standard/solver specific) 
+	 * variable-related result, for the [i]th solution.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param numberOfVar holds the number of <var> children
+	 *
+	 * @return whether the other variable result's name was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherVariableResultNumberOfVar(int solIdx, int otherIdx, int numberOfVar);
+
+	/**
+	 * Set the name of another (non-standard/solver specific) variable-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param name holds the name of the other element
+	 *
+	 * @return whether the other variable result's name was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherVariableResultName(int solIdx, int otherIdx, std::string name);
+
+	/**
+	 * Set the value of another (non-standard/solver specific) variable-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param value holds the name of the other element
+	 *
+	 * @return whether the other variable result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherVariableResultValue(int solIdx, int otherIdx, std::string value);
+
+	/**
+	 * Set the index of another (non-standard/solver specific) variable-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param varIdx holds the index of the location to which the information is stored
+	 * @param idx holds the index of the variable to which the information belongs
+	 *
+	 * @return whether the other variable result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+ 	bool setOtherVariableResultsVarIdx(int solIdx, int otherIdx, int varIdx, int idx);
+
+	/**
+	 * Set the value of another (non-standard/solver specific) variable-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param varIdx holds the index of the location to which the information is stored
+	 * @param value holds the value of the variable to which the information belongs
+	 *
+	 * @return whether the other variable result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherVariableResultsVar(int solIdx, int otherIdx, int varIdx, std::string value);
+
+
+	/**
+	 * Set the description of another (non-standard/solver specific) variable-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param description holds the name of the other element
+	 *
+	 * @return whether the other variable result's description was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherVariableResultDescription(int solIdx, int otherIdx, std::string description);
+
+/**
 	 * Set the [i]th optimization solution's number of objective values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the objective values. 
