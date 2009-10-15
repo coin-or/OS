@@ -1717,11 +1717,6 @@ otherVariableResultsSEQ: | otherVariableResultsSEQ otherVariableResult;
 
 otherVariableResult: otherVariableResultStart otherVariableResultAttributes otherVariableResultContent
 	{ 	 
-//		parserData->otherVarVec.push_back( parserData->otherVarStruct); 
-//		parserData->numberOfOtherVariableResults++; 
-//		osresult->setAnOtherVariableResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherVarStruct->name,
-//			parserData->otherVarStruct->value, parserData->otherVarStruct->description, parserData->otherVarStruct->otherVarIndex,
-//			parserData->otherVarStruct->otherVarText, parserData->otherVarStruct->numberOfVar );
 		parserData->iOther++;  
 		parserData->tmpOtherName = "";
 		parserData->tmpOtherValue = "";
@@ -1729,12 +1724,7 @@ otherVariableResult: otherVariableResultStart otherVariableResultAttributes othe
 	}
 ;
 
-otherVariableResultStart: OTHERSTART 
-	{  // parserData->numberOfOtherVariableResults++;
-//		parserData->otherVarStruct = new OtherVariableResultStruct(); 
-		//parserData->otherVarStruct->otherVarText  = new std::string[ parserData->otherVarStruct->numberOfVar];	 
-		//parserData->otherVarStruct->otherVarIndex = new int[  parserData->otherVarStruct->numberOfVar];	 
-	}; 
+otherVariableResultStart: OTHERSTART; 
 
 otherVariableResultAttributes: otherVariableResultAttList 
 	{	if(!parserData->nameAttributePresent) 
@@ -1753,7 +1743,8 @@ otherVariableResultAttList: | otherVariableResultAttList otherVariableResultATT;
 otherVariableResultATT: 
 	numberOfOtherVariableResultsATT 
   | otherVariableResultValueATT
-  {	if (parserData->valueAttributePresent)
+  {	
+	if (parserData->valueAttributePresent)
 		osrlerror(NULL, NULL, parserData, "value attribute previously set");
 	parserData->valueAttributePresent = true; 
  	osresult->setOtherVariableResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
@@ -1766,7 +1757,8 @@ otherVariableResultATT:
  	osresult->setOtherVariableResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
   }
   | otherVariableResultDescriptionATT
-  {	if (parserData->descriptionAttributePresent)
+  {	
+	if (parserData->descriptionAttributePresent)
 		osrlerror(NULL, NULL, parserData, "description attribute previously set");
 	parserData->descriptionAttributePresent = true; 
  	osresult->setOtherVariableResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
@@ -1798,20 +1790,20 @@ otherVariableResultContent: ENDOFELEMENT
 otherVarList: | otherVarList otherVar;
 
 otherVar: otherVarStart otherVarIdxATT otherVarContent 
-{ 
+{ 	
 	parserData->kounter++;
 };
 
 otherVarStart: VARSTART; 
 
 otherVarIdxATT: IDXATT quote INTEGER quote 
-{
+{	
  	osresult->setOtherVariableResultsVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
 otherVarContent: 
 	GREATERTHAN ElementValue VAREND 
-	{
+	{	
 	 	osresult->setOtherVariableResultsVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	}
   | GREATERTHAN VAREND 
@@ -1819,260 +1811,299 @@ otherVarContent:
 
 
 objectives:
-| OBJECTIVESSTART numberOfOtherObjectiveResults objectivesBody;
+| OBJECTIVESSTART numberOfOtherObjectiveResults objectivesContent;
 
 numberOfOtherObjectiveResults:
-| NUMBEROFOTHEROBJECTIVERESULTSATT quote INTEGER quote 
-	{  
-/*        osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, $3);
-	 parserData->iOther = 0;
-	 parserData->tmpOtherValue = "";
-	 parserData->tmpOtherName = "";
-	 parserData->tmpOtherDescription = "";
-  */      }
-;
+  | NUMBEROFOTHEROBJECTIVERESULTSATT quote INTEGER quote 
+	{	parserData->numberOfOtherObjectiveResults = $3;
+//        osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, $3);
+		parserData->iOther = 0;
+	};
 
-objectivesBody: objectivesEmpty | objectivesContent;
+objectivesContent: ENDOFELEMENT | objectivesBody;
 
-objectivesEmpty: ENDOFELEMENT;
+objectivesBody: GREATERTHAN objectiveValues otherObjectiveResultsSEQ OBJECTIVESEND;
 
-objectivesContent: GREATERTHAN objectiveValues otherObjectivesSEQ OBJECTIVESEND;
+objectiveValues: | objectiveValuesStart numberOfObjATT objectiveValuesContent;
 
-objectiveValues:
-| VALUESSTART numberOfObjATT GREATERTHAN objValueList VALUESEND
-{
-	if(parserData->numberOfObj != parserData->objVals.size()){
-		osrlerror(NULL, NULL, parserData, "numberOfObj not consistent with the number of objective values");	
-	}else{
+objectiveValuesStart: VALUESSTART
+{	parserData->numberAttributePresent = false; };
 
-		osresult->setObjectiveValuesSparse(parserData->solutionIdx, parserData->objVals);
-	}
-}
-| VALUESSTART numberOfObjATT ENDOFELEMENT;
-
-numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote{
-			parserData->numberOfObj = $3;
-} ;
-
-objValueList: | objValueList objValue;
-
-objValue: OBJSTART objIdxATT GREATERTHAN objVal OBJEND;
-
-objIdxATT: IDXATT quote INTEGER quote { parserData->objValPair = new IndexValuePair();   parserData->objValPair->idx = $3;   };
-
-objVal:
-   INTEGER {parserData->tempVal = $1;  
-        parserData->objValPair->value = $1;                  
-	parserData->objVals.push_back( parserData->objValPair);
-}
- | DOUBLE {parserData->tempVal = $1;  
-        parserData->objValPair->value = $1;
-	parserData->objVals.push_back( parserData->objValPair);
-  };
-
-
-otherObjectivesSEQ: | otherObjectivesSEQ otherObjectiveResult;
-
-otherObjectiveResult: otherObjectiveStart otherObjectiveAttList otherObjectiveResultContent;
-
-
-otherObjectiveStart: OTHERSTART 
-	{  // parserData->numberOfOtherObjectiveResults++;
-		//parserData->otherObjStruct = new OtherObjectiveResultStruct(); 
-		//parserData->otherObjStruct->otherObjText  = new std::string[ parserData->otherObjStruct->numberOfObj];	 
-		//parserData->otherObjStruct->otherObjIndex = new int[  parserData->otherObjStruct->numberOfObj];	 
-		parserData->kounter = 0;
-	}; 
-
-otherObjectiveAttList: 
-        | otherObjectiveAttList otherObjectiveATT;
-
-otherObjectiveATT: numberOfOtherObjATT | otherObjValueATT | otherObjNameATT | otherObjDescriptionATT;
-  
-numberOfOtherObjATT: NUMBEROFOBJATT quote INTEGER quote 
-{
-	//parserData->otherObjStruct->numberOfObj = $3;
-	//parserData->otherObjStruct->otherObjText  = new std::string[ parserData->otherObjStruct->numberOfObj];	 
-	//parserData->otherObjStruct->otherObjIndex = new int[  parserData->otherObjStruct->numberOfObj];	
- 	//osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->numberOfObj = $3;
+numberOfObjATT: NUMBEROFOBJATT quote INTEGER quote
+{	parserData->numberOfObj = $3;
+//	osresult->setNumberOfObjValues(parserData->solutionIdx, parserData->numberOfVar);
+	parserData->kounter = 0;
 }; 
 
-otherObjValueATT: 
-  EMPTYVALUEATT {//parserData->tmpOtherValue=""; parserData->otherObjStruct->value = "";  
-/*  osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->value = "";*/
-}
-  |    VALUEATT ATTRIBUTETEXT quote {//parserData->tmpOtherValue=$2; parserData->otherObjStruct->value = $2;  
-/*  osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->value = $2; */
-  free($2);}
-;
+objectiveValuesContent: 
+	objectiveValuesEmpty 
+	{	if (parserData->numberOfObj > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <obj> element");
+	}
+  | objectiveValuesBody
+	{	if (parserData->kounter != parserData->numberOfObj)
+			osrlerror(NULL, NULL, parserData, "fewer <obj> elements than specified");
+	}
+  ;
+ 
+objectiveValuesEmpty: GREATERTHAN VALUESEND | ENDOFELEMENT; 
 
-otherObjNameATT: 
-  EMPTYNAMEATT 
-{ 
-//	parserData->tmpOtherName=""; 
-//	parserData->nameAttributePresent = true; 
-//	parserData->otherObjStruct->name = "";
+objectiveValuesBody:  GREATERTHAN objValueSEQ VALUESEND;
+
+
+objValueSEQ: objValue | objValueSEQ objValue;
+
+objValue: objValueStart objIdxATT GREATERTHAN objVal OBJEND
+{//	osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
+//						  parserData->idx,         parserData->tempVal);
+	parserData->kounter++;
+}; 
+
+objValueStart: OBJSTART
+{	
+	if (parserData->kounter >= parserData->numberOfObj)
+		osrlerror(NULL, NULL, parserData, "more <obj> elements than specified");
 };
-  | NAMEATT ATTRIBUTETEXT quote
-{
-//parserData->tmpOtherName=$2; parserData->nameAttributePresent = true; parserData->otherObjStruct->name = $2;  free($2);
- /* osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->name = $2;*/
-};
 
-otherObjDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-{
-//parserData->tmpOtherDescription=$2; parserData->otherObjStruct->description = $2;  free($2);
-  /*osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->description = $2;*/
-}
-| EMPTYDESCRIPTIONATT;
+objIdxATT: IDXATT quote INTEGER quote { parserData->idx = $3; };
+
+objVal:
+   INTEGER {parserData->tempVal = $1; }
+ | DOUBLE  {parserData->tempVal = $1; };
 
 
-otherObjectiveResultContent: ENDOFELEMENT
-| GREATERTHAN otherObjList OTHEREND
-	{ 	 		
-/*
-		if(parserData->nameAttributePresent == false) 
-			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
-	  
-        parserData->otherObjVec.push_back( parserData->otherObjStruct); 
-        parserData->numberOfOtherObjectiveResults++; 
-		parserData->nameAttributePresent = false;	
-        osresult->setAnOtherObjectiveResultSparse(parserData->solutionIdx, parserData->iOther,  parserData->otherObjStruct->name,
-		parserData->otherObjStruct->value, parserData->otherObjStruct->description, parserData->otherObjStruct->otherObjIndex,
-		parserData->otherObjStruct->otherObjText, parserData->otherObjStruct->numberOfObj );							
+
+otherObjectiveResultsSEQ: | otherObjectiveResultsSEQ otherObjectiveResult;
+
+otherObjectiveResult: otherObjectiveResultStart otherObjectiveResultAttributes otherObjectiveResultContent
+	{ 	 
 		parserData->iOther++;  
 		parserData->tmpOtherName = "";
 		parserData->tmpOtherValue = "";
 		parserData->tmpOtherDescription = "";			
-*/				
+	}
+;
+
+otherObjectiveResultStart: OTHERSTART; 
+
+otherObjectiveResultAttributes: otherObjectiveResultAttList
+	{	if(!parserData->nameAttributePresent) 
+			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
+		if(!parserData->numberAttributePresent) 
+			osrlerror(NULL, NULL, parserData, "other element requires numberOfVar attribute"); 
+		parserData->nameAttributePresent = false;	
+		parserData->numberAttributePresent = false;	
+		parserData->valueAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;	
+		parserData->kounter = 0;
 	};
 
 
+otherObjectiveResultAttList: | otherObjectiveResultAttList otherObjectiveResultATT;
+
+otherObjectiveResultATT: 
+	numberOfOtherObjectiveResultsATT 
+  | otherObjectiveResultValueATT 
+  {	
+	if (parserData->valueAttributePresent)
+		osrlerror(NULL, NULL, parserData, "value attribute previously set");
+	parserData->valueAttributePresent = true; 
+ //	osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  }
+  | otherObjectiveResultNameATT 
+  {	
+	if (parserData->nameAttributePresent)
+		osrlerror(NULL, NULL, parserData, "name attribute previously set");
+	parserData->nameAttributePresent = true; 
+// 	osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  }
+  | otherObjectiveResultDescriptionATT
+  {	
+	if (parserData->descriptionAttributePresent)
+		osrlerror(NULL, NULL, parserData, "description attribute previously set");
+	parserData->descriptionAttributePresent = true; 
+// 	osresult->setOtherObjectiveResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  };
+  
+numberOfOtherObjectiveResultsATT: NUMBEROFOBJATT quote INTEGER quote 
+{	if (parserData->numberAttributePresent)
+		osrlerror(NULL, NULL, parserData, "numberOfObj attribute previously set");
+	parserData->numberAttributePresent = true;
+	parserData->numberOfObj = $3;
+// 	osresult->setOtherVariableResultNumberOfObj(parserData->solutionIdx, parserData->iOther, $3);
+}; 
+
+otherObjectiveResultValueATT: 
+	VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYVALUEATT                {parserData->tempStr = "";          };
+
+otherObjectiveResultNameATT: 
+	NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYNAMEATT                {parserData->tempStr = "";          };
+
+otherObjectiveResultDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
+	DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                {parserData->tempStr = "";          };
+
+otherObjectiveResultContent: ENDOFELEMENT
+| GREATERTHAN otherObjList OTHEREND;
+
 otherObjList: | otherObjList otherObj ;
 
-otherObj: otherObjStart otherObjIdxATT  otherObjContent {  
-//parserData->otherObjStruct->otherObjText[parserData->kounter] =  parserData->outStr.str();
-//reset the buffer;
-//parserData->outStr.str("");
-//parserData->otherObjStruct->otherObjIndex[parserData->kounter] =  parserData->iobj;
-//parserData->errorText = NULL;
-//if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->objectives->other[parserData->iOther]->numberOfObj)
-/*if (parserData->kounter == osresult->getAnOtherObjectiveResultNumberOfObj(parserData->solutionIdx, parserData->iOther))
-    osrlerror(NULL, NULL, parserData, "too many objectives"); 
-    osrlerror(NULL, NULL, parserData, "index must be greater than 0 and less than the number of objectives");
-*/
-parserData->kounter++;
+otherObj: otherObjStart otherObjIdxATT  otherObjContent 
+{  
+	parserData->kounter++;
 };
 
-  
-otherObjStart: OBJSTART 
-	{//	if(parserData->otherObjStruct->numberOfObj <= 0) 
-	//		osrlerror(NULL, NULL,  parserData, "must specify the number of objectives") ;
-	}; 
+otherObjStart: OBJSTART; 
 
-otherObjIdxATT: IDXATT quote INTEGER quote {};
+otherObjIdxATT: IDXATT quote INTEGER quote 
+{	
+// 	osresult->setOtherObjectiveResultsObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
+};
 
-otherObjContent: GREATERTHAN ElementValue OBJEND | GREATERTHAN OBJEND | ENDOFELEMENT;
+otherObjContent: 
+	GREATERTHAN ElementValue OBJEND 
+	{	
+//	 	osresult->setOtherObjectiveResultsObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	}
+  | GREATERTHAN OBJEND 
+  | ENDOFELEMENT;
 
 
 
 constraints:
-| CONSTRAINTSSTART numberOfOtherConstraintResults constraintsBody;
+| CONSTRAINTSSTART numberOfOtherConstraintResults constraintsContent;
 
 numberOfOtherConstraintResults:
-| NUMBEROFOTHERCONSTRAINTRESULTSATT quote INTEGER quote 
-	{  
-/*        osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, $3);
-	 parserData->iOther = 0;
-	 parserData->tmpOtherValue = "";
-	 parserData->tmpOtherName = "";
-	 parserData->tmpOtherDescription = "";
-  */      }
-;
+  | NUMBEROFOTHERCONSTRAINTRESULTSATT quote INTEGER quote 
+	{	parserData->numberOfOtherVariableResults = $3;
+//		osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, $3);
+		parserData->iOther = 0;
+	};
 
-constraintsBody: constraintsEmpty | constraintsContent;
+constraintsContent: ENDOFELEMENT | constraintsBody;
 
-constraintsEmpty: ENDOFELEMENT;
+constraintsBody: GREATERTHAN dualValues otherConstraintResultsSEQ CONSTRAINTSEND;
 
-constraintsContent: GREATERTHAN dualValues otherConstraintsSEQ CONSTRAINTSEND;
+dualValues: | dualValuesStart numberOfConATT dualValuesContent;
 
+dualValuesStart: DUALVALUESSTART
+{	parserData->numberAttributePresent = false; };
 
-dualValues: 
-| DUALVALUESSTART numberOfConATT GREATERTHAN dualValueList DUALVALUESEND
-   {/*
-	if(parserData->numberOfCon != parserData->dualVals.size()){
-		osrlerror(NULL, NULL, parserData, "numberOfCon not consistent with the number of dual values");	
-	}else{
-
-		osresult->setDualVariableValuesSparse(parserData->solutionIdx, parserData->dualVals);
-		osresult->optimization->solution[ parserData->solutionIdx]->constraints->dualValues->numberOfCon = parserData->numberOfCon;
-	}*/
- }
- | DUALVALUESSTART numberOfConATT ENDOFELEMENT;
- 
 numberOfConATT: NUMBEROFCONATT quote INTEGER quote
 {
 	parserData->numberOfCon = $3;
+//	osresult->setNumberOfConValues(parserData->solutionIdx, parserData->numberOfVar);
+	parserData->kounter = 0;
 };
 
-dualValueList : | dualValueList dualValue;
-
-dualValue: CONSTART conIdxATT GREATERTHAN dualVal CONEND; 
-
-conIdxATT : IDXATT quote INTEGER quote { parserData->dualValPair = new IndexValuePair();   parserData->dualValPair->idx = $3;};
-
-
-dualVal: DOUBLE { 	
-        parserData->dualValPair->value = $1;
-	parserData->dualVals.push_back( parserData->dualValPair); 		
+dualValuesContent:
+	dualValuesEmpty 
+	{	if (parserData->numberOfCon > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <con> element");
 	}
-|  INTEGER  { 	
-        parserData->dualValPair->value = $1;
-	parserData->dualVals.push_back( parserData->dualValPair); 	
-	} ;
+  | dualValuesBody
+	{	if (parserData->kounter != parserData->numberOfCon)
+			osrlerror(NULL, NULL, parserData, "fewer <con> elements than specified");
+	}
+  ;
+
+dualValuesEmpty: GREATERTHAN VALUESEND | ENDOFELEMENT; 
+
+dualValuesBody:  GREATERTHAN dualValueSEQ DUALVALUESEND;
+
+dualValueSEQ: dualValue | dualValueSEQ dualValue;
+
+dualValue: dualValueStart conIdxATT GREATERTHAN dualVal CONEND 
+{//	osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
+//						  parserData->idx,         parserData->tempVal);
+	parserData->kounter++;
+}; 
+
+dualValueStart: CONSTART
+{	
+	if (parserData->kounter >= parserData->numberOfCon)
+		osrlerror(NULL, NULL, parserData, "more <con> elements than specified");
+};
+
+conIdxATT: IDXATT quote INTEGER quote { parserData->idx = $3; };
+
+dualVal: 
+	INTEGER {parserData->tempVal = $1; }
+  | DOUBLE  {parserData->tempVal = $1; };
 
                          
-otherConstraintsSEQ: | otherConstraintsSEQ otherConstraintResult;
+otherConstraintResultsSEQ: | otherConstraintResultsSEQ otherConstraintResult;
 
-otherConstraintResult: otherConstraintStart otherConstraintAttList 
-    otherConstraintResultContent;
-
-otherConstraintStart: OTHERSTART;
-
-otherConstraintAttList: | otherConstraintAttList otherConstraintATT;
-
-otherConstraintATT: numberOfOtherConATT | otherConValueATT | otherConNameATT | otherConDescriptionATT;
-  
-numberOfOtherConATT: NUMBEROFCONATT quote INTEGER quote;
-
-otherConValueATT: 
-  EMPTYVALUEATT {//parserData->tmpOtherValue=""; parserData->otherConStruct->value = "";  
-/*  osresult->optimization->solution[parserData->solutionIdx]->constraints->other[parserData->iOther]->value = "";*/
-}
-  |    VALUEATT ATTRIBUTETEXT quote {//parserData->tmpOtherValue=$2; parserData->otherConStruct->value = $2;  
-/*  osresult->optimization->solution[parserData->solutionIdx]->constraints->other[parserData->iOther]->value = $2; */
-  free($2);}
+otherConstraintResult: otherConstraintResultStart otherConstraintResultAttributes otherConstraintResultContent
+	{ 	 
+		parserData->iOther++;  
+		parserData->tmpOtherName = "";
+		parserData->tmpOtherValue = "";
+		parserData->tmpOtherDescription = "";			
+	}
 ;
 
-otherConNameATT: 
-  EMPTYNAMEATT 
-{ 
-//	parserData->tmpOtherName=""; 
-//	parserData->nameAttributePresent = true; 
-//	parserData->otherConStruct->name = "";
-};
-  | NAMEATT ATTRIBUTETEXT quote
-{
-//parserData->tmpOtherName=$2; parserData->nameAttributePresent = true; parserData->otherConStruct->name = $2;  free($2);
- /* osresult->optimization->solution[parserData->solutionIdx]->constraints->other[parserData->iOther]->name = $2;*/
-};
+otherConstraintResultStart: OTHERSTART;
 
-otherConDescriptionATT: DESCRIPTIONATT ATTRIBUTETEXT quote
-{
-//parserData->tmpOtherDescription=$2; parserData->otherConStruct->description = $2;  free($2);
-  /*osresult->optimization->solution[parserData->solutionIdx]->constraints->other[parserData->iOther]->description = $2;*/
-}
-| EMPTYDESCRIPTIONATT;
+otherConstraintResultAttributes: otherConstraintResultAttList
+	{	if(!parserData->nameAttributePresent) 
+			osrlerror(NULL, NULL, parserData, "other element requires name attribute"); 
+		if(!parserData->numberAttributePresent) 
+			osrlerror(NULL, NULL, parserData, "other element requires numberOfCon attribute"); 
+		parserData->nameAttributePresent = false;	
+		parserData->numberAttributePresent = false;	
+		parserData->valueAttributePresent = false;	
+		parserData->descriptionAttributePresent = false;	
+		parserData->kounter = 0;
+	};
+
+otherConstraintResultAttList: | otherConstraintResultAttList otherConstraintResultATT;
+
+otherConstraintResultATT: 
+	numberOfOtherConstraintResultATT 
+  | otherConstraintResultValueATT 
+  {	
+	if (parserData->valueAttributePresent)
+		osrlerror(NULL, NULL, parserData, "value attribute previously set");
+	parserData->valueAttributePresent = true; 
+// 	osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  }
+  | otherConstraintResultNameATT 
+  {	
+	if (parserData->nameAttributePresent)
+		osrlerror(NULL, NULL, parserData, "name attribute previously set");
+	parserData->nameAttributePresent = true; 
+// 	osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  }
+  | otherConstraintResultDescriptionATT
+  {	
+	if (parserData->descriptionAttributePresent)
+		osrlerror(NULL, NULL, parserData, "description attribute previously set");
+	parserData->descriptionAttributePresent = true; 
+// 	osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, parserData->tempStr);
+  };
+  
+numberOfOtherConstraintResultATT: NUMBEROFCONATT quote INTEGER quote
+{	if (parserData->numberAttributePresent)
+		osrlerror(NULL, NULL, parserData, "numberOfCon attribute previously set");
+	parserData->numberAttributePresent = true;
+	parserData->numberOfCon = $3;
+// 	osresult->setOtherConstraintResultNumberOfVar(parserData->solutionIdx, parserData->iOther, $3);
+}; 
+
+otherConstraintResultValueATT: 
+	VALUEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYVALUEATT                {parserData->tempStr = "";          };
+
+otherConstraintResultNameATT: 
+	NAMEATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYNAMEATT                {parserData->tempStr = "";          };
+
+otherConstraintResultDescriptionATT: 
+	DESCRIPTIONATT ATTRIBUTETEXT quote {parserData->tempStr = $2; free($2);}
+  | EMPTYDESCRIPTIONATT                {parserData->tempStr = "";          };
 
 otherConstraintResultContent: ENDOFELEMENT	
 | GREATERTHAN otherConList OTHEREND;
@@ -2080,30 +2111,25 @@ otherConstraintResultContent: ENDOFELEMENT
 
 otherConList: | otherConList otherCon;
 
-otherCon: otherConStart otherConIdxATT  otherConContent {  
-//parserData->otherConStruct->otherConText[parserData->kounter] =  parserData->outStr.str();
-//reset the buffer;
-//parserData->outStr.str("");
-//parserData->otherConStruct->otherConIndex[parserData->kounter] =  parserData->icon;
-//parserData->errorText = NULL;
-//if (parserData->kounter == osresult->optimization->solution[parserData->solutionIdx]->constraints->other[parserData->iOther]->numberOfCon)
-/*if (parserData->kounter == osresult->getAnOtherConstraintResultNumberOfCon(parserData->solutionIdx, parserData->iOther))
-    osrlerror(NULL, NULL, parserData, "too many constraints"); 
-if (parserData->numberOfConstraints > 0 && (parserData->icon < 0 || parserData->icon > parserData->numberOfConstraints - 1) ) 
-    osrlerror(NULL, NULL, parserData, "index must be greater than 0 and less than the number of constraints");
-*/
-parserData->kounter++;
+otherCon: otherConStart otherConIdxATT  otherConContent 
+{ 	
+	parserData->kounter++;
+};
+  
+otherConStart: CONSTART;
+
+otherConIdxATT: IDXATT quote INTEGER quote
+{	
+// 	osresult->setOtherConstraintResultsConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
-  
-otherConStart: CONSTART 
-	{//	if(parserData->otherConStruct->numberOfCon <= 0) 
-	//		osrlerror(NULL, NULL,  parserData, "must specify the number of constraints") ;
-	}; 
-
-otherConIdxATT: IDXATT quote INTEGER quote {};
-
-otherConContent: GREATERTHAN ElementValue CONEND | GREATERTHAN CONEND | ENDOFELEMENT;
+otherConContent: 
+	GREATERTHAN ElementValue VAREND 
+	{	
+//	 	osresult->setOtherConstraintResultsCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	}
+  | GREATERTHAN VAREND 
+  | ENDOFELEMENT;
 
 
 
@@ -2335,9 +2361,9 @@ aNumber:
 quote: xmlWhiteSpace QUOTE;
 
 ElementValue: 
-    ELEMENTTEXT  { parserData->tempStr = $1;    free($1); }
-  | INTEGER      { parserData->tempStr = $1;  /*free($1);*/ }
-  | DOUBLE       { parserData->tempStr = $1;  /*free($1);*/ };
+    ELEMENTTEXT  { parserData->tempStr = $1;       free($1); }
+  | INTEGER      { parserData->tempStr = os_dtoa_format($1); }
+  | DOUBLE       { parserData->tempStr = os_dtoa_format($1); };
   
 
 

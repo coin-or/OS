@@ -177,6 +177,16 @@ public:
 	 */	
 	int numberOfOtherVariableResults;
 	
+	/** the number of types of objective results other
+	 * than the value of the objective
+	 */	
+	int numberOfOtherObjectiveResults;
+	
+	/** the number of types of constraint results other
+	 * than the value of the constraint
+	 */	
+	int numberOfOtherConstraintResults;
+	
 	/** an index of which solution we have found */
 	unsigned int solutionIdx;
 

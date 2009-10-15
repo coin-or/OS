@@ -2501,21 +2501,23 @@ bool OSResult::setAnOtherVariableResultDense(int solIdx, int otherIdx, string na
 
 bool OSResult::setOtherVariableResultNumberOfVar(int solIdx, int otherIdx, int numberOfVar){
 	int iNumberOfVariables = numberOfVar;
-	if(iNumberOfVariables <= -1) return false;
+	if (iNumberOfVariables <= -1) return false;
 	int nSols = this->getSolutionNumber();
-	if(optimization == NULL) return false;
-	if(nSols <= 0) return false;
-	if(optimization == NULL) return false;
-	if(optimization->solution == NULL || 
+	if (optimization == NULL) return false;
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
 	   solIdx < 0 || solIdx >=  nSols) return false;
-	if(optimization->solution[solIdx] == NULL) return false;
-	if(optimization->solution[solIdx]->variables == NULL)return false;
-	if(optimization->solution[solIdx]->variables->other == NULL) return false;
-	if(optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
-	if(optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL)
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->variables == NULL)return false;
+	if (optimization->solution[solIdx]->variables->other == NULL) return false;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL)
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var = new OtherVarResult*[numberOfVar];
 	for(int i = 0; i < numberOfVar; i++)
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i] = new OtherVarResult();
+	optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
+	return true;
 }//setOtherVariableResultNumberOfVar
 
 bool OSResult::setOtherVariableResultName(int solIdx, int otherIdx, std::string name){

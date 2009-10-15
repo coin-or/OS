@@ -47,6 +47,8 @@
 	tempStr(""),
 	outStr(""),
 	numberOfOtherVariableResults( 0),
+	numberOfOtherObjectiveResults( 0),
+	numberOfOtherConstraintResults( 0),
 	solutionIdx( 0),
 	numberAttributePresent( false),
 	idxAttributePresent( false),
