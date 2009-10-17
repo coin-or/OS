@@ -294,7 +294,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		if(m_OSResult->service->totalJobsSoFar >= 0){
 			outStr << "<totalJobsSoFar>" << m_OSResult->service->totalJobsSoFar << "</totalJobsSoFar>" << endl;
 		}
-		if(m_OSResult->service->timeServiceStarted.length() > 0){
+		if(m_OSResult->service->timeServiceStarted.length() > 0 && m_OSResult->service->timeServiceStarted != "1970-01-01T00:00:00-00:00"){
 			outStr << "<timeServiceStarted>" << m_OSResult->service->timeServiceStarted << "</timeServiceStarted>" << endl;
 		}
 		if(m_OSResult->service->serviceUtilization >= 0){
@@ -341,16 +341,16 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		if(m_OSResult->job->status.length() > 0){
 			outStr << "<status>" + m_OSResult->job->status  + "</status>" << endl;
 		}
-		if(m_OSResult->job->submitTime.length() > 0){
+		if(m_OSResult->job->submitTime.length() > 0 && m_OSResult->job->submitTime != "1970-01-01T00:00:00-00:00"){
 			outStr << "<submitTime>" + m_OSResult->job->submitTime  + "</submitTime>" << endl;
 		}
-		if(m_OSResult->job->scheduledStartTime.length() > 0){
+		if(m_OSResult->job->scheduledStartTime.length() > 0 && m_OSResult->job->scheduledStartTime != "1970-01-01T00:00:00-00:00"){
 			outStr << "<scheduledStartTime>" + m_OSResult->job->scheduledStartTime  + "</scheduledStartTime>" << endl;
 		}
-		if(m_OSResult->job->actualStartTime.length() > 0){
+		if(m_OSResult->job->actualStartTime.length() > 0 && m_OSResult->job->actualStartTime != "1970-01-01T00:00:00-00:00"){
 			outStr << "<actualStartTime>" + m_OSResult->job->actualStartTime  + "</actualStartTime>" << endl;
 		}
-		if(m_OSResult->job->endTime.length() > 0){
+		if(m_OSResult->job->endTime.length() > 0 && m_OSResult->job->endTime != "1970-01-01T00:00:00-00:00"){
 			outStr << "<endTime>" + m_OSResult->job->endTime  + "</endTime>" << endl;
 		}
 
@@ -600,7 +600,6 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					if(m_OSResult->optimization->solution[i]->variables->other != NULL){
 						if(m_OSResult->optimization->solution[i]->variables->numberOfOtherVariableResults > 0){
 							for(int k = 0; k < m_OSResult->optimization->solution[i]->variables->numberOfOtherVariableResults; k++){
-
 								outStr << "<other" ;
 								outStr << " numberOfVar=\"";
 								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar;
@@ -673,18 +672,33 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						if(m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults > 0){
 							for(int k = 0; k < m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults; k++){
 								outStr << "<other" ;
-								outStr << " name=\"";\
-								outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->name;
+								outStr << " numberOfObj=\"";
+								outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj;
 								outStr << "\"" ;
-								outStr << " description=\"";
-								outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->description;
-								outStr << "\"" ;
+								if (m_OSResult->optimization->solution[i]->objectives->other[k]->name != "")
+								{
+									outStr << " name=\"";\
+									outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->name;
+									outStr << "\"" ;
+								};
+								if (m_OSResult->optimization->solution[i]->objectives->other[k]->value != "")
+								{
+									outStr << " value=\"";\
+									outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->value;
+									outStr << "\"" ;
+								};
+								if (m_OSResult->optimization->solution[i]->objectives->other[k]->description != "")
+								{
+									outStr << " description=\"";
+									outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->description;
+									outStr << "\"" ;
+								};
 								outStr <<  ">" << endl;
 								if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj > 0){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj; j++){
 										outStr << "<obj";
 										outStr << " idx=\"";
-										outStr << j ;
+										outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->idx;
 										outStr <<  "\">";
 										outStr <<   m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->value;
 										outStr << "</obj>" << endl;
@@ -725,12 +739,27 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						if(m_OSResult->optimization->solution[i]->constraints->numberOfOtherConstraintResults > 0){
 							for(int k = 0; k < m_OSResult->optimization->solution[i]->constraints->numberOfOtherConstraintResults; k++){
 								outStr << "<other" ;
-								outStr << " name=\"";\
-								outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->name;
+								outStr << " numberOfCon=\"";
+								outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon;
 								outStr << "\"" ;
-								outStr << " description=\"";
-								outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->description;
-								outStr << "\"" ;
+								if (m_OSResult->optimization->solution[i]->constraints->other[k]->name != "")
+								{
+									outStr << " name=\"";\
+									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->name;
+									outStr << "\"" ;
+								};
+								if (m_OSResult->optimization->solution[i]->constraints->other[k]->value != "")
+								{
+									outStr << " value=\"";\
+									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->value;
+									outStr << "\"" ;
+								};
+								if (m_OSResult->optimization->solution[i]->constraints->other[k]->description != "")
+								{
+									outStr << " description=\"";
+									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->description;
+									outStr << "\"" ;
+								};
 								outStr <<  ">" << endl;
 								if(m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon; j++){
