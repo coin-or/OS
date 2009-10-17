@@ -205,7 +205,20 @@ public:
 	bool unitAttributePresent;
 	bool valueAttributePresent;
 	bool weightedObjAttributePresent;
- 
+
+	/** many attributes, particularly those that return strings, are used 
+	 *  multiple times, and the parser uses generic constructs for them.
+	 *  These temporary variables are used to hold the values returned by the parser.
+	 **/
+
+	std::string categoryAttribute;
+	std::string descriptionAttribute;
+	std::string nameAttribute;
+	std::string typeAttribute;
+	std::string unitAttribute;
+	std::string valueAttribute;
+
+
 	bool nVarPresent;
 	bool nObjPresent;
 	bool nConPresent;

@@ -241,6 +241,9 @@ int main(int argC, char* argV[])
 		std::cout << "test configuration = \'" <<  testConfig << "\'"<< std::endl;
 	}
 
+#ifdef GUS_DEBUG
+	testConfig = "parser";
+#endif
 
 	if (testConfig == "install") testLevel = 1;
 	if (testConfig == "parser" ) testLevel = 2;
