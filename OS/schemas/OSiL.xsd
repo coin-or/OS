@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
 <xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
@@ -66,6 +65,11 @@
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
@@ -340,6 +344,165 @@
 		</xs:sequence>
 		<xs:attribute name="idx" type="xs:int" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="MatrixProgramming">
+		<xs:annotation>
+			<xs:documentation>experiment</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="variables" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="matrixVar" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:double" use="optional"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="name" type="xs:string" use="optional"/>
+								<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
+								<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
+								<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
+								<xs:attribute name="varIdxStart" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="varIdxEnd" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="positiveSemidefinite" type="xs:boolean" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfMatrixVariables" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="objectives" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="obj" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="coefMatrix" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="required"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="numberOfObjCoefMatrix" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="objIdx" type="xs:negativeInteger" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="constraints" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="matrixCon" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:double" use="optional"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="name" type="xs:string" use="optional"/>
+								<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
+								<xs:attribute name="conIdxStart" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="conIdxEnd" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="constantMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="lbMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="ubMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfMatrixConstraints" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="leftLinearConstraintCoefficientMatrices" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="start" type="IntVector"/>
+						<xs:choice>
+							<xs:element name="rowIdx" type="IntVector"/>
+							<xs:element name="colIdx" type="IntVector"/>
+						</xs:choice>
+						<xs:element name="MatrixID">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+									<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfValueMatrices" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="rightLinearConstraintCoefficientMatrices" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="start" type="IntVector"/>
+						<xs:choice>
+							<xs:element name="rowIdx" type="IntVector"/>
+							<xs:element name="colIdx" type="IntVector"/>
+						</xs:choice>
+						<xs:element name="MatrixID">
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+									<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfValueMatrices" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="quadraticCoefficientMatrices" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="qMatrixTerm" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="matrixVarIdxOne" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="matrixVarIdxTwo" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
+								<xs:attribute name="coefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfQuadraticMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="nonlinearMatrixExpressions" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="matrixNL" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element ref="OSnLMNode"/>
+								</xs:sequence>
+								<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required"/>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:attribute name="numberOfMatrixNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<!--SOS: experiment -->
 	<xs:complexType name="SpecialOrderedSets">
 		<xs:annotation>
@@ -562,7 +725,8 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="varMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
 			</xs:extension>
