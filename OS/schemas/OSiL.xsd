@@ -479,7 +479,8 @@
 								<xs:attribute name="matrixVarIdxOne" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="matrixVarIdxTwo" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-								<xs:attribute name="coefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="leftCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="rightCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
