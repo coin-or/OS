@@ -728,7 +728,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="varMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
 			</xs:extension>
