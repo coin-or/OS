@@ -100,6 +100,8 @@
 	jobUsedCPUSpeedPresent( false),
 	jobUsedCPUNumberPresent( false),
 	jobOtherResultsPresent( false),
+	numberOfItemsPresent( false),
+	numberOfItems(0),
 	otherVarStruct( NULL),
 	errorText(NULL)
  {

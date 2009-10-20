@@ -2464,7 +2464,6 @@ bool OSResult::setAnOtherVariableResultSparse(int solIdx, int otherIdx, string n
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i] = new OtherVarResult();
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = idx[i];
 		optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
-		
 	}
 	return true;
 }//setAnOtherVariableResultSparse
@@ -2982,6 +2981,155 @@ bool OSResult::setOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx,
 	optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->value = value;
 	return true;
 }//setOtherConstraintResultCon
+
+bool OSResult::setNumberOfOtherSolutionResults(int solIdx, int numberOfOtherSolutionResults){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+	    solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL){
+		optimization->solution[solIdx]->otherSolutionResults = new OtherSolutionResults();
+	}
+	optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults =  numberOfOtherSolutionResults;
+	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult = new OtherSolutionResult*[ numberOfOtherSolutionResults];
+	for(int i = 0; i < numberOfOtherSolutionResults; i++){
+		optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[ i]  = new OtherSolutionResult();
+	}
+	return true;
+}//setNumberOfOtherSolutionResults
+
+bool OSResult::setOtherSolutionResultName(int solIdx, int otherIdx, std::string name){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+	    solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
+	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->name = name;
+	return true;
+};//setOtherSolutionResultName
+
+bool OSResult::setOtherSolutionResultCategory(int solIdx, int otherIdx, std::string category){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+	    solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
+	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->category = category;
+	return true;
+};//setOtherSolutionResultCategory
+
+
+bool OSResult::setOtherSolutionResultDescription(int solIdx, int otherIdx, std::string description){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+	    solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
+	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->description = description;
+	return true;
+};//setOtherSolutionResultDescription
+
+
+bool OSResult::setOtherSolutionResultNumberOfItems(int solIdx, int otherIdx, int numberOfItems){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+	    solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) 
+		optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] = new OtherSolutionResult();
+	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->numberOfItems = numberOfItems;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item == NULL)
+		optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item = new std::string[numberOfItems];
+	return true;
+};//setOtherSolutionResultNumberOfItems
+
+bool OSResult::setOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx, std::string item){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+	    solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item == NULL) return false;
+	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item[itemIdx] = item;
+	return true;
+};//setOtherSolutionResultItem
+
+bool OSResult::setNumberOfSolverOutputs(int numberOfSolverOutputs){
+	if (optimization == NULL) return false;
+	if (optimization->otherSolverOutput == NULL){
+		optimization->otherSolverOutput = new OtherSolverOutput();
+	}
+	optimization->otherSolverOutput->numberOfSolverOutputs =  numberOfSolverOutputs;
+	optimization->otherSolverOutput->solverOutput = new SolverOutput*[ numberOfSolverOutputs];
+	for(int i = 0; i < numberOfSolverOutputs; i++){
+		optimization->otherSolverOutput->solverOutput[ i]  = new SolverOutput();
+	}
+	return true;
+}//setNumberOfSolverOutputs
+
+bool OSResult::setSolverOutputName(int otherIdx, std::string name){
+	if (optimization == NULL) return false;
+	if (optimization->otherSolverOutput == NULL) return false;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return false;
+	optimization->otherSolverOutput->solverOutput[otherIdx]->name = name;
+	return true;
+}//setSolverOutputName
+
+bool OSResult::setSolverOutputCategory(int otherIdx, std::string category){
+	if (optimization == NULL) return false;
+	if (optimization->otherSolverOutput == NULL) return false;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return false;
+	optimization->otherSolverOutput->solverOutput[otherIdx]->category = category;
+	return true;
+}//setSolverOutputCategory
+
+bool OSResult::setSolverOutputDescription(int otherIdx, std::string description){
+	if (optimization == NULL) return false;
+	if (optimization->otherSolverOutput == NULL) return false;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return false;
+	optimization->otherSolverOutput->solverOutput[otherIdx]->description = description;
+	return true;
+}//setSolverOutputDescription
+
+bool OSResult::setSolverOutputNumberOfItems(int otherIdx, int numberOfItems){
+	if (optimization == NULL) return false;
+	if (optimization->otherSolverOutput == NULL) return false;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) 
+		optimization->otherSolverOutput->solverOutput[otherIdx] = new SolverOutput();
+	optimization->otherSolverOutput->solverOutput[otherIdx]->numberOfItems = numberOfItems;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx]->item == NULL)
+		optimization->otherSolverOutput->solverOutput[otherIdx]->item = new std::string[numberOfItems];
+	return true;
+}//setSolverOutputNumberOfItems
+
+bool OSResult::setSolverOutputItem(int otherIdx, int itemIdx, std::string item){
+	if (optimization == NULL) return false;
+	if (optimization->otherSolverOutput == NULL) return false;
+	if (optimization->otherSolverOutput->solverOutput == NULL) return false;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return false;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx]->item == NULL) return false;
+	optimization->otherSolverOutput->solverOutput[otherIdx]->item[itemIdx] = item;
+	return true;
+}//setSolverOutputItem
 
 bool OSResult::setNumberOfObjectiveValues(int solIdx, int numberOfObj){
 	int nSols = this->getSolutionNumber();

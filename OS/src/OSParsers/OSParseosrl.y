@@ -252,7 +252,7 @@ generalSubstatus: generalSubstatusStart generalSubstatusAttributes generalSubsta
 
 generalSubstatusStart: SUBSTATUSSTART
 {	if (parserData->kounter >= parserData->numberOf)
-		osrlerror(NULL, NULL, parserData, "more <substatus> elements than specified");
+		osrlerror( NULL, NULL, parserData, "more <substatus> elements than specified");
 	parserData->nameAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
 };
@@ -268,7 +268,7 @@ generalSubstatusATT:
 	nameAttribute 
 	{	
 		osresult->setGeneralSubstatusName(parserData->kounter, parserData->nameAttribute);
-	}; 
+	} 
   | descriptionAttribute
 	{	
 		osresult->setGeneralSubstatusDescription(parserData->kounter, parserData->descriptionAttribute);
@@ -606,7 +606,7 @@ availableCPUNumberStart: AVAILABLECPUNUMBERSTART
 
 availableCPUNumberAttributes: 
   | descriptionAttribute
-	{	osresult->setAvailableCPUSpeedDescription( parserData->descriptionAttribute); 
+	{	osresult->setAvailableCPUNumberDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	};
 
@@ -960,7 +960,7 @@ timingInformationStart: TIMINGINFORMATIONSTART
 timingInformationAttributes: NUMBEROFTIMESATT QUOTE INTEGER QUOTE 
 {	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of time measurements cannot be negative");
 	parserData->numberOfTimes = $3;
-//	parserData->ivar = 0;
+	parserData->ivar = 0;
 };
 
 timingInformationContent: 
@@ -988,6 +988,10 @@ timeStart: TIMESTART
 	parserData->typeAttributePresent = false;
 	parserData->categoryAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
+	parserData->unitAttribute = "";
+	parserData->typeAttribute = "";
+	parserData->categoryAttribute = "";
+	parserData->descriptionAttribute = "";
 };
 
 timeAttributes: | timeAttributes timeAtt;
@@ -1032,9 +1036,9 @@ timeBody:  GREATERTHAN timeValue TIMEEND
 {	osresult->addTimingInformation(parserData->typeAttribute, parserData->categoryAttribute,
 		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue);       
 	parserData->ivar++;
-	parserData->timeType = "elapsedTime";
-	parserData->timeCategory = "total";
-	parserData->timeUnit = "second";
+	parserData->timeType = "";
+	parserData->timeCategory = "";
+	parserData->timeUnit = "";
 	parserData->timeDescription = "";      
 }; 
 
@@ -1178,7 +1182,7 @@ usedCPUNumberStart: USEDCPUNUMBERSTART
 
 usedCPUNumberAttributes: 
   | descriptionAttribute
-	{	osresult->setUsedCPUSpeedDescription( parserData->descriptionAttribute); 
+	{	osresult->setUsedCPUNumberDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	};
 
@@ -1553,6 +1557,7 @@ numberOfVarStringATT: NUMBEROFVARATT quote INTEGER quote
 {
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of <var> cannot be negative");
 	parserData->numberOfVar = $3;
+	osresult->setNumberOfVarValuesString(parserData->solutionIdx, parserData->numberOfVar);
 	parserData->kounter = 0;
 }; 
 
@@ -1574,7 +1579,8 @@ variableValuesStringBody: GREATERTHAN varValueStringArray VALUESSTRINGEND;
 varValueStringArray: varValueString | varValueStringArray varValueString;
 
 varValueString: varValueStringStart varStrIdxATT GREATERTHAN ELEMENTTEXT VAREND
-{	osresult->setVarValueString(parserData->solutionIdx, parserData->kounter, 
+{
+	osresult->setVarValueString(parserData->solutionIdx, parserData->kounter, 
 					 			parserData->idx,         $4);
 	parserData->kounter++;
 }; 
@@ -2015,222 +2021,250 @@ otherConContent:
 
 
 
-otherSolutionResults: 
-| OTHERSOLUTIONRESULTSSTART numberOfOtherSolutionResults GREATERTHAN otherSolutionResultList OTHERSOLUTIONRESULTSEND
+otherSolutionResults: | otherSolutionResultsStart numberOfOtherSolutionResults otherSolutionResultsContent;
+
+otherSolutionResultsStart: OTHERSOLUTIONRESULTSSTART
 {
-	if(parserData->iOther < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults)
-		osrlerror(NULL, NULL, parserData, "fewer OtherSolutionResult elements present than stated in  numberOfOtherSolutionResults attribute");
-}
-| OTHERSOLUTIONRESULTSSTART numberOfOtherSolutionResults ENDOFELEMENT
-{
-	if(parserData->iOther < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults)
-		osrlerror(NULL, NULL, parserData, "fewer OtherSolutionResult elements present than stated in  numberOfOtherSolutionResults attribute");
+	parserData->numberOf = 0; 
 };
 
-numberOfOtherSolutionResults: NUMBEROFOTHERSOLUTIONRESULTSATT QUOTE INTEGER  
+numberOfOtherSolutionResults: NUMBEROFOTHERSOLUTIONRESULTSATT quote INTEGER quote 
 {	
-	int temp;
-	temp = $3;
-	if (temp < 0) osrlerror(NULL, NULL, parserData, "number of other solution results cannot be negative");
-	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults != NULL)
-		osrlerror(NULL, NULL, parserData, "otherSolutionResults previously allocated");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults = new OtherSolutionResults();	
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults = temp;
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult = new OtherSolutionResult*[ temp];
-	if (temp > 0)
-		for(int i = 0; i < temp; i++) 	
-			osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[i] = new OtherSolutionResult();
-parserData->iOther = 0; // this will index the number of otherSolutionResult objects
-} QUOTE;
-    
-otherSolutionResultList:  | otherSolutionResultList anotherSolutionResult;
+	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of other solution results cannot be negative");
+    osresult->setNumberOfOtherSolutionResults(parserData->solutionIdx, $3);
+	parserData->numberOf = $3;
+	parserData->iOther = 0; 
+};
 
-anotherSolutionResult: 
-OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList GREATERTHAN anotherSolutionItemList OTHERSOLUTIONRESULTEND
-{
-if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
-	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
+otherSolutionResultsContent:
+	otherSolutionResultsEmpty 
+	{	if (parserData->numberOf > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <otherSolutionResult> element");
+	}
+  | otherSolutionResultsBody
+	{	if (parserData->iOther != parserData->numberOf)
+			osrlerror(NULL, NULL, parserData, "fewer <otherSolutionResult> elements than specified");
+	};
 
-parserData->iOther++;
-}
-| OTHERSOLUTIONRESULTSTART  anotherSolutionResultAttList ENDOFELEMENT
-{
-if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
-	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
+otherSolutionResultsEmpty: GREATERTHAN OTHERSOLUTIONRESULTSEND | ENDOFELEMENT;
 
-parserData->iOther++;
-}
-;
+otherSolutionResultsBody: GREATERTHAN otherSolutionResultArray OTHERSOLUTIONRESULTSEND; 
 
-anotherSolutionResultAttList: 
-   | anotherSolutionResultAttList {if(parserData->iOther >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults)
-	osrlerror(NULL, NULL, parserData, "more OtherSolutionResult elements present than in  numberOfOtherSolutionResults attribute");
-} anotherSolutionResultAtt ;
+otherSolutionResultArray: otherSolutionResult | otherSolutionResultArray otherSolutionResult;
 
-anotherSolutionResultAtt: numberOfOtherSolutionResultItems | anotherSolutionResultNameATT | anotherSolutionResultCategoryATT | anotherSolutionDescriptionATT;
+otherSolutionResult: otherSolutionResultStart otherSolutionResultAttributes otherSolutionResultContent
+{	parserData->iOther++;
+};	
 
-numberOfOtherSolutionResultItems: NUMBEROFITEMSATT QUOTE INTEGER QUOTE 
+otherSolutionResultStart: OTHERSOLUTIONRESULTSTART  
+{	if (parserData->iOther >= parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "more <otherSolutionResult> elements than specified");
+	parserData->numberOfItemsPresent = false; 
+	parserData->nameAttributePresent = false;
+	parserData->categoryAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
+};
+
+otherSolutionResultAttributes: otherSolutionResultAttList 
+{	if (!parserData->nameAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<otherSolutionResult> element must have name attribute");
+	if (!parserData->numberOfItemsPresent)
+		osrlerror (NULL, NULL, parserData, "<otherSolutionResult> element must have numberOfItems attribute");
+};	
+
+otherSolutionResultAttList: | otherSolutionResultAttList otherSolutionResultAtt;
+
+otherSolutionResultAtt: 
+	nameAttribute 
+	{	
+		osresult->setOtherSolutionResultName(parserData->solutionIdx, parserData->iOther,
+											 parserData->nameAttribute);
+	} 
+  | categoryAttribute 
+	{	
+		osresult->setOtherSolutionResultCategory(parserData->solutionIdx, parserData->iOther,
+												 parserData->categoryAttribute);
+	} 
+  | descriptionAttribute
+	{	
+		osresult->setOtherSolutionResultDescription(parserData->solutionIdx, parserData->iOther,
+											 parserData->descriptionAttribute);
+	}
+  | numberOfOtherSolutionResultItems;
+  
+numberOfOtherSolutionResultItems : NUMBEROFITEMSATT QUOTE INTEGER QUOTE 
 {	
-int temp;
-temp = $3;
-if (temp < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems = temp;
-	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item != NULL)
-		osrlerror(NULL, NULL, parserData, "item array was previously allocated");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item = new std::string[temp];
-	parserData->kounter = 0; //this will count the number of items in an otherSolutionResult object
+	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
+	parserData->numberOfItemsPresent = true;
+	parserData->numberOfItems = $3;
+	osresult->setOtherSolutionResultNumberOfItems(parserData->solutionIdx, parserData->iOther,
+												  parserData->numberOfItems);
+	parserData->kounter = 0;
 };
 
-anotherSolutionResultNameATT: 
-  EMPTYNAMEATT 
-{ 
-//	parserData->tmpOtherName=""; 
-//	parserData->nameAttributePresent = true;
-//	parserData->otherVarStruct->name = "";
-};
-  | NAMEATT ATTRIBUTETEXT quote
-{
-	parserData->tmpOtherName=$2; //parserData->nameAttributePresent = true;
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = $2;
-	free($2);
-};
+otherSolutionResultContent:
+	otherSolutionResultEmpty
+	{	if (parserData->numberOfItems > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <item> element");
+	}
+  | otherSolutionResultBody
+	{	if (parserData->kounter != parserData->numberOfItems)
+			osrlerror(NULL, NULL, parserData, "fewer <item> elements than specified");
+	};
 
-anotherSolutionResultCategoryATT:
-CATEGORYATT ATTRIBUTETEXT QUOTE {
-osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->category = $2;
-free($2);}
-   | EMPTYCATEGORYATT ;
- 
-anotherSolutionDescriptionATT:
-DESCRIPTIONATT ATTRIBUTETEXT QUOTE {
-osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->description = $2;
-free($2);}
-   | EMPTYDESCRIPTIONATT ;
+otherSolutionResultEmpty: GREATERTHAN OTHERSOLUTIONRESULTEND | ENDOFELEMENT; 
 
-anotherSolutionItemList: 
-  | anotherSolutionItemList anotherSolutionItem {parserData->kounter++;};
+otherSolutionResultBody:  GREATERTHAN otherSolutionResultItemArray OTHERSOLUTIONRESULTEND;
 
-anotherSolutionItem:  
-    otherSolutionItemEmpty   
-{
-if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
-	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
-}
-|   otherSolutionItemContent
-{
-if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
-	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
-};
+otherSolutionResultItemArray: otherSolutionResultItem | otherSolutionResultItemArray otherSolutionResultItem;
+
+otherSolutionResultItem: otherSolutionResultItemContent
+{	parserData->kounter++;
+};	
+
+otherSolutionResultItemContent: 
+	otherSolutionResultItemEmpty
+{	if (parserData->kounter >= parserData->numberOfItems)
+		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
+}	
+  | otherSolutionResultItemBody; 
 
 
-otherSolutionItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
+otherSolutionResultItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
 
-otherSolutionItemContent: ITEMSTART ITEMTEXT 
-{	parserData->itemContent = $2; free($2);
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
+otherSolutionResultItemBody: ITEMSTART ITEMTEXT 
+{	if (parserData->kounter >= parserData->numberOfItems)
+		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
+	parserData->itemContent = $2; free($2);
+	osresult->setOtherSolutionResultItem(parserData->solutionIdx, parserData->iOther, 
+										 parserData->kounter, parserData->itemContent);
 }
 ITEMEND;
 
 
-otherSolverOutput: | OTHERSOLVEROUTPUTSTART numberOfSolverOutputsATT otherSolverOutputBody;
 
-numberOfSolverOutputsATT: NUMBEROFSOLVEROUTPUTSATT quote INTEGER quote;
 
-otherSolverOutputBody: ENDOFELEMENT | GREATERTHAN solverOutputArray OTHERSOLVEROUTPUTEND;
+otherSolverOutput: | otherSolverOutputStart numberOfSolverOutputsATT otherSolverOutputContent;
 
-solverOutputArray: | solverOutputArray solverOutput;
-
-solverOutput: 
-SOLVEROUTPUTSTART solverOutputAttList GREATERTHAN solverOutputItemList SOLVEROUTPUTEND
+otherSolverOutputStart: OTHERSOLVEROUTPUTSTART
 {
-/*	if (parserData->kounter < osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
-	osrlerror(NULL, NULL, parserData, "fewer item elements present than given in numberOfItems attribute");
-	parserData->iOther++;
-*/
-}
-| SOLVEROUTPUTSTART solverOutputAttList ENDOFELEMENT;
+	parserData->numberOf = 0; 
+};
 
-solverOutputAttList: 
-   | solverOutputAttList 
-{/*	if(parserData->iOther >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->numberOfOtherSolutionResults)
-	osrlerror(NULL, NULL, parserData, "more OtherSolutionResult elements present than in  numberOfOtherSolutionResults attribute");
-*/} solverOutputAtt ;
-
-solverOutputAtt: numberOfSolverOutputItems | solverOutputNameATT | solverOutputCategoryATT | solverOutputDescriptionATT;
-
-numberOfSolverOutputItems: NUMBEROFITEMSATT QUOTE INTEGER QUOTE 
+numberOfSolverOutputsATT: NUMBEROFSOLVEROUTPUTSATT quote INTEGER quote
 {	
-/* 
-int temp;
-temp = $3;
-if (temp < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems = temp;
-	if (osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item != NULL)
-		osrlerror(NULL, NULL, parserData, "item array was previously allocated");
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item = new std::string[temp];
-	parserData->kounter = 0; //this will count the number of items in an otherSolutionResult object
-*/
+	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of other solver outputs cannot be negative");
+    osresult->setNumberOfSolverOutputs($3);
+	parserData->numberOf = $3;
+	parserData->iOther = 0; 
 };
 
-solverOutputNameATT: 
-  EMPTYNAMEATT 
-{ 
-/*	parserData->tmpOtherName=""; 
-	parserData->nameAttributePresent = true; 
-	parserData->otherVarStruct->name = "";
-*/
+otherSolverOutputContent: 
+	otherSolverOutputEmpty 
+	{	if (parserData->numberOf > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <solverOutput> element");
+	}
+  | otherSolverOutputBody
+	{	if (parserData->iOther != parserData->numberOf)
+			osrlerror(NULL, NULL, parserData, "fewer <solverOutput> elements than specified");
+	};
+
+otherSolverOutputEmpty: GREATERTHAN OTHERSOLVEROUTPUTEND | ENDOFELEMENT;
+
+otherSolverOutputBody:  GREATERTHAN solverOutputArray OTHERSOLVEROUTPUTEND;
+
+solverOutputArray: solverOutput | solverOutputArray solverOutput;
+
+solverOutput: solverOutputStart solverOutputAttributes solverOutputContent
+{	parserData->iOther++;
+};	
+
+solverOutputStart: SOLVEROUTPUTSTART
+{	if (parserData->iOther >= parserData->numberOf)
+		osrlerror(NULL, NULL, parserData, "more <solverOutput> elements than specified");
+	parserData->numberOfItemsPresent = false; 
+	parserData->nameAttributePresent = false;
+	parserData->categoryAttributePresent = false;
+	parserData->descriptionAttributePresent = false;
 };
-  | NAMEATT ATTRIBUTETEXT QUOTE
-{
-/*	parserData->tmpOtherName=$2; parserData->nameAttributePresent = true;
-	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->name = $2;
-	free($2);
-*/
+
+solverOutputAttributes: solverOutputAttList
+{	if (!parserData->nameAttributePresent)
+		osrlerror (NULL, NULL, parserData, "<solverOutput> element must have name attribute");
+	if (!parserData->numberOfItemsPresent)
+		osrlerror (NULL, NULL, parserData, "<solverOutput> element must have numberOfItems attribute");
+};	
+
+solverOutputAttList: | solverOutputAttList solverOutputAtt;
+
+solverOutputAtt: 
+	numberOfSolverOutputItems 
+  | nameAttribute
+	{	
+		osresult->setSolverOutputName(parserData->iOther, parserData->nameAttribute);
+	} 
+  | categoryAttribute
+	{	
+		osresult->setSolverOutputCategory(parserData->iOther, parserData->categoryAttribute);
+	} 
+  | descriptionAttribute
+	{	
+		osresult->setSolverOutputDescription(parserData->iOther, parserData->descriptionAttribute);
+	} 
+  ;
+
+numberOfSolverOutputItems: NUMBEROFITEMSATT QUOTE INTEGER QUOTE
+{	
+	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
+	parserData->numberOfItemsPresent = true;
+	parserData->numberOfItems = $3;
+	osresult->setSolverOutputNumberOfItems(parserData->iOther, parserData->numberOfItems);
+	parserData->kounter = 0;
 };
 
-solverOutputCategoryATT: 
-CATEGORYATT ATTRIBUTETEXT QUOTE 
-{
-/*	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->category = $2;
-	free($2);
- */
-}
-   | EMPTYCATEGORYATT ;
- 
-solverOutputDescriptionATT:
-DESCRIPTIONATT ATTRIBUTETEXT QUOTE 
-{
-/*	osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->description = $2;
-	free($2);
- */
-}
-   | EMPTYDESCRIPTIONATT ;
+solverOutputContent: 
+	solverOutputEmpty 
+	{	if (parserData->numberOfItems > 0)
+			osrlerror(NULL, NULL, parserData, "expected at least one <item> element");
+	}
+  | solverOutputBody
+	{	if (parserData->kounter != parserData->numberOfItems)
+			osrlerror(NULL, NULL, parserData, "fewer <item> elements than specified");
+	};
 
-solverOutputItemList: 
-  | solverOutputItemList solverOutputItem;
+solverOutputEmpty: GREATERTHAN SOLVEROUTPUTEND | ENDOFELEMENT;
 
-solverOutputItem: solverOutputItemEmpty 
-{
-/* if (parserData->kounter >= osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->numberOfItems)
-	osrlerror(NULL, NULL, parserData, "number of <item> elements exceeds numberOfItems specified");
-*/}
-| solverOutputItemContent
-{
-/* osresult->optimization->solution[parserData->solutionIdx]->otherSolutionResults->otherSolutionResult[parserData->iOther]->item[parserData->kounter] = parserData->itemContent;
-parserData->kounter++;
-*/};
+solverOutputBody:  GREATERTHAN solverOutputItemArray SOLVEROUTPUTEND;
 
+solverOutputItemArray: solverOutputItem | solverOutputItemArray solverOutputItem;
+
+solverOutputItem: solverOutputItemContent 
+{	parserData->kounter++;
+};	
+
+solverOutputItemContent:
+	solverOutputItemEmpty
+{	if (parserData->kounter >= parserData->numberOfItems)
+		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
+}	
+  | solverOutputItemBody; 
+	
 solverOutputItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
 
-solverOutputItemContent: ITEMSTART ITEMTEXT 
- {/*parserData->itemContent = $2; free($2);*/}
+solverOutputItemBody: ITEMSTART ITEMTEXT 
+{	if (parserData->kounter >= parserData->numberOfItems)
+		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
+	parserData->itemContent = $2; free($2);
+	osresult->setSolverOutputItem(parserData->iOther, parserData->kounter, parserData->itemContent);
+}
 ITEMEND;
+
 
 categoryAttribute: categoryAttributeIdentifier categoryAttributeValue;
 
 	categoryAttributeIdentifier: CATEGORYATT
 		{   if (parserData->categoryAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, "only one category attribute allowed for generalStatus element");
+				osrlerror(NULL, NULL, parserData, "only one category attribute allowed for this element");
 			parserData->categoryAttributePresent = true;
 		};
 	
@@ -2242,7 +2276,7 @@ descriptionAttribute: descriptionAttributeIdentifier descriptionAttributeValue;
 
 	descriptionAttributeIdentifier: DESCRIPTIONATT
 		{   if (parserData->descriptionAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, "only one description attribute allowed for generalStatus element");
+				osrlerror(NULL, NULL, parserData, "only one description attribute allowed for this element");
 			parserData->descriptionAttributePresent = true;
 		};
 	
@@ -2254,7 +2288,7 @@ nameAttribute: nameAttributeIdentifier nameAttributeValue;
 
 	nameAttributeIdentifier: NAMEATT
 		{   if (parserData->nameAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, "only one name attribute allowed for generalStatus element");
+				osrlerror(NULL, NULL, parserData, "only one name attribute allowed for this element");
 			parserData->nameAttributePresent = true;
 		};
 	
@@ -2266,7 +2300,7 @@ typeAttribute: typeAttributeIdentifier typeAttributeValue;
 
 	typeAttributeIdentifier: TYPEATT
 		{   if (parserData->typeAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, "only one type attribute allowed for generalStatus element");
+				osrlerror(NULL, NULL, parserData, "only one type attribute allowed for this element");
 			parserData->typeAttributePresent = true;
 		};
 	
@@ -2278,7 +2312,7 @@ unitAttribute: unitAttributeIdentifier unitAttributeValue;
 
 	unitAttributeIdentifier: UNITATT
 		{   if (parserData->unitAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, "only one unit attribute allowed for generalStatus element");
+				osrlerror(NULL, NULL, parserData, "only one unit attribute allowed for this element");
 			parserData->unitAttributePresent = true;
 		};
 	
@@ -2290,7 +2324,7 @@ valueAttribute: valueAttributeIdentifier valueAttributeValue;
 
 	valueAttributeIdentifier: VALUEATT
 		{   if (parserData->valueAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, "only one value attribute allowed for generalStatus element");
+				osrlerror(NULL, NULL, parserData, "only one value attribute allowed for this element");
 			parserData->valueAttributePresent = true;
 		};
 	

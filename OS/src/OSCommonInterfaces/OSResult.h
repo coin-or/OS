@@ -3284,7 +3284,139 @@ public:
 	 */
 	bool setOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx, std::string value);
 
-/**
+	/**
+	 * Set the [i]th optimization solution's other (non-standard/solver specific) solution-related results, 
+	 * where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * This method then allocates the memory for the new OtherSolutionResult objects
+	 * @param solIdx is the solution index 
+	 * @param numberOfOtherSolutionResults holds the number of OtherSolutionResult objects
+	 * Each other objective result contains the name (required), an optional 
+	 * description (std::string) and an optional category (std::string). 
+	 * Each other solution result can also optionally contain an array Item for each result. 
+	 * The Item content is string-valued.   
+	 * 
+	 * @return whether the other objective results are set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherSolutionResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.Item
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfOtherSolutionResults(int solIdx, int numberOfOtherSolutionResults);
+
+	/**
+	 * Set the name associated with the [j]th other solution result of solution [i].
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param otherIdx holds the index of the otherSolutionResult
+	 * @param name holds the name of the otherSolutionResult
+	 *
+	 * @return whether the other solution result was set successfully or not. 
+	 */
+	bool setOtherSolutionResultName(int solIdx, int otherIdx, std::string name);
+
+	/**
+	 * Set the category associated with the [j]th other solution result of solution [i].
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param otherIdx holds the index of the otherSolutionResult
+	 * @param category holds the category of the otherSolutionResult
+	 *
+	 * @return whether the other solution result was set successfully or not. 
+	 */
+	bool setOtherSolutionResultCategory(int solIdx, int otherIdx, std::string category);
+
+	/**
+	 * Set the description associated with the [j]th other solution result of solution [i].
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param otherIdx holds the index of the otherSolutionResult
+	 * @param category holds the description of the otherSolutionResult
+	 *
+	 * @return whether the other solution result was set successfully or not. 
+	 */
+	bool setOtherSolutionResultDescription(int solIdx, int otherIdx, std::string description);
+
+	/**
+	 * Set the number of items associated with the [j]th other solution result of solution [i].
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param otherIdx holds the index of the otherSolutionResult
+	 * @param numberOfItems holds the number of items
+	 *
+	 * @return whether the other solution result was set successfully or not. 
+	 */
+	bool setOtherSolutionResultNumberOfItems(int solIdx, int otherIdx, int numberOfItems);
+
+	/**
+	 * Set one item associated with the [j]th other solution result of solution [i].
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param otherIdx holds the index of the otherSolutionResult
+	 * @param itemIdx holds the index of the item
+	 * @param item holds the value of the item
+	 *
+	 * @return whether the other solution result item was set successfully or not. 
+	 */
+	bool setOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx, std::string item);
+
+	/**
+	 * Set the number of other solver outputs
+	 * @param numberOfOtherSolverOutputs holds the number of SolverOutput objects
+	 * Each solver output can also optionally contain an array Item for each result. 
+	 * The Item content is string-valued.   
+	 * 
+	 * @return whether the results were set successfully or not. 
+	 */
+	bool setNumberOfSolverOutputs(int numberOfSolverOutputs);
+
+	/**
+	 * Set the name associated with the [j]th solver output.
+	 * @param otherIdx holds the index of the solverOutput object
+	 * @param name holds the name of the solver output
+	 *
+	 * @return whether the solver output was set successfully or not. 
+	 */
+	bool setSolverOutputName(int otherIdx, std::string name);
+
+	/**
+	 * Set the category associated with the [j]th solver output.
+	 * @param otherIdx holds the index of the solverOutput object
+	 * @param name holds the category of the solver output
+	 *
+	 * @return whether the solver output was set successfully or not. 
+	 */
+	bool setSolverOutputCategory(int otherIdx, std::string category);
+
+	/**
+	 * Set the description associated with the [j]th solver output.
+	 * @param otherIdx holds the index of the solverOutput object
+	 * @param name holds the description of the solver output
+	 *
+	 * @return whether the solver output was set successfully or not. 
+	 */
+	bool setSolverOutputDescription(int otherIdx, std::string description);
+
+	/**
+	 * Set the number of items associated with the [j]th solver output.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param otherIdx holds the index of the solverOutput object
+	 * @param numberOfItems holds the number of items
+	 *
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setSolverOutputNumberOfItems(int otherIdx, int numberOfItems);
+
+	/**
+	 * Set one item associated with the [j]th solver output.
+	 * @param otherIdx holds the index of the otherSolutionResult
+	 * @param itemIdx holds the index of the item
+	 * @param item holds the value of the item
+	 *
+	 * @return whether the information was set successfully or not. 
+	 */
+	bool setSolverOutputItem(int otherIdx, int itemIdx, std::string item);
+
+	/**
 	 * Set the [i]th optimization solution's number of objective values, where i equals the given solution index.   
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the constraint values. 

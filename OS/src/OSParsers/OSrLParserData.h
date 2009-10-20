@@ -271,6 +271,9 @@ public:
 	bool jobUsedCPUNumberPresent;
 	bool jobOtherResultsPresent;
 
+	bool numberOfItemsPresent;
+	int  numberOfItems;
+
 	
 	/**  for each solution we will build a vector of index-value
 	 * pairs of primal values */
