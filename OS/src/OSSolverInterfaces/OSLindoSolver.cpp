@@ -118,7 +118,7 @@ LindoSolver::~LindoSolver() {
 	//delete[] m_mdVarLB ;
 	//delete[] m_mdVarUB ;
 	delete[] m_mmcVarName ;
-	//delete[] m_mcVarType;
+
 	m_mdConLB = NULL;
 	m_mdConUB = NULL;
 	m_msVarName = NULL;
@@ -353,13 +353,7 @@ bool LindoSolver::addSlackVars(){
 bool LindoSolver::processVariables(){
 	int i;
 	try{
-		m_mcVarType = new char[ osinstance->getVariableNumber()];
-		for(i = 0; i <  osinstance->getVariableNumber() ; i++){
-			//m_mcVarType[ i] =	osinstance->getVariableTypes()[ i];
-			m_mcVarType[ i] = 'C';
-			//if(	osinstance->getVariableTypes()[ i] == 'B') m_mcVarType[ i] = 'B';
-			if(	osinstance->getVariableTypes()[ i] == 'I') m_mcVarType[ i] = 'I';
-		}		
+		m_mcVarType = osinstance->getVariableTypes();	
 		m_mdVarLB = osinstance->getVariableLowerBounds();
 		m_mdVarUB  = osinstance->getVariableUpperBounds();
 		m_mmcVarName = new char*[ osinstance->getVariableNumber()];
@@ -369,15 +363,11 @@ bool LindoSolver::processVariables(){
 			//m_mmcVarName[i] = p;
 			m_mmcVarName[i] = &osinstance->getVariableNames()[  i][0];
 		}
-		
+		//fix for Stefan
 		for(i = 0; i <  osinstance->getVariableNumber() ; i++){
-			//m_mcVarType[ i] =	osinstance->getVariableTypes()[ i];
-			m_mcVarType[ i] = 'C';
 			if(	osinstance->getVariableTypes()[ i] == 'B'){
-				m_mcVarType[ i] = 'I';
 				m_mdVarUB[ i] = 1.0;
 			}
-			if(	osinstance->getVariableTypes()[ i] == 'I') m_mcVarType[ i] = 'I';
 		}
 		
 		return true;
