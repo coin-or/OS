@@ -1057,10 +1057,10 @@ OtherSolverOutput::~OtherSolverOutput(){
 
 
 OptimizationResult::OptimizationResult():
+	numberOfSolutions( -1),
 	numberOfVariables( -1),
 	numberOfObjectives( -1),
 	numberOfConstraints(-1),
-	numberOfSolutions( -1),
 	solution(NULL),
 	otherSolverOutput(NULL)
 { 
