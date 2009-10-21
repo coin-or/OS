@@ -1569,7 +1569,7 @@ bool OSResult::setAvailableCPUNumberDescription(std::string description)
 	return true;
 }//setAvailableCPUNumberDescription
 
-bool OSResult::setAvailableCPUNumberValue(double value)
+bool OSResult::setAvailableCPUNumberValue(int value)
 {	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
 	system->availableCPUNumber->value = value;
 	return true;
@@ -1861,7 +1861,7 @@ bool OSResult::setUsedCPUNumberDescription(std::string description)
 	return true;
 }//setUsedCPUNumberDescription
 
-bool OSResult::setUsedCPUNumberValue(double value)
+bool OSResult::setUsedCPUNumberValue(int value)
 {	if (job == NULL) 
 	{//	throw ErrorClass("job instance was never defined");
 		return false;
@@ -3013,7 +3013,7 @@ bool OSResult::setOtherSolutionResultName(int solIdx, int otherIdx, std::string 
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
 	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->name = name;
 	return true;
-};//setOtherSolutionResultName
+}//setOtherSolutionResultName
 
 bool OSResult::setOtherSolutionResultCategory(int solIdx, int otherIdx, std::string category){
 	int nSols = this->getSolutionNumber();
@@ -3026,7 +3026,7 @@ bool OSResult::setOtherSolutionResultCategory(int solIdx, int otherIdx, std::str
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
 	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->category = category;
 	return true;
-};//setOtherSolutionResultCategory
+}//setOtherSolutionResultCategory
 
 
 bool OSResult::setOtherSolutionResultDescription(int solIdx, int otherIdx, std::string description){
@@ -3040,7 +3040,7 @@ bool OSResult::setOtherSolutionResultDescription(int solIdx, int otherIdx, std::
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return false;
 	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->description = description;
 	return true;
-};//setOtherSolutionResultDescription
+}//setOtherSolutionResultDescription
 
 
 bool OSResult::setOtherSolutionResultNumberOfItems(int solIdx, int otherIdx, int numberOfItems){
@@ -3057,7 +3057,7 @@ bool OSResult::setOtherSolutionResultNumberOfItems(int solIdx, int otherIdx, int
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item == NULL)
 		optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item = new std::string[numberOfItems];
 	return true;
-};//setOtherSolutionResultNumberOfItems
+}//setOtherSolutionResultNumberOfItems
 
 bool OSResult::setOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx, std::string item){
 	int nSols = this->getSolutionNumber();
@@ -3071,7 +3071,7 @@ bool OSResult::setOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx,
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item == NULL) return false;
 	optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item[itemIdx] = item;
 	return true;
-};//setOtherSolutionResultItem
+}//setOtherSolutionResultItem
 
 bool OSResult::setNumberOfSolverOutputs(int numberOfSolverOutputs){
 	if (optimization == NULL) return false;

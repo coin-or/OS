@@ -2317,7 +2317,7 @@ public:
 	 * @param value holds the available number of CPUs
 	 * @return whether the system information was set successfully or not. 
 	 */
-	bool setAvailableCPUNumberValue(double value);
+	bool setAvailableCPUNumberValue(int value);
 
 	/**
 	 * Set number of other system results.
@@ -2587,7 +2587,7 @@ public:
 	 * @param value holds the used number of CPUs
 	 * @return whether the information was set successfully or not. 
 	 */
-	bool setUsedCPUNumberValue(double value);
+	bool setUsedCPUNumberValue(int value);
 
 	/**
 	 * Set number of other job results.

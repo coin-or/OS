@@ -2132,14 +2132,14 @@ otherSolutionResultItemContent:
 
 otherSolutionResultItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
 
-otherSolutionResultItemBody: ITEMSTART ITEMTEXT 
+otherSolutionResultItemBody: ITEMSTART ITEMTEXT ITEMEND
 {	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
 	parserData->itemContent = $2; free($2);
 	osresult->setOtherSolutionResultItem(parserData->solutionIdx, parserData->iOther, 
 										 parserData->kounter, parserData->itemContent);
 }
-ITEMEND;
+;
 
 
 
@@ -2251,13 +2251,13 @@ solverOutputItemContent:
 	
 solverOutputItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
 
-solverOutputItemBody: ITEMSTART ITEMTEXT 
+solverOutputItemBody: ITEMSTART ITEMTEXT ITEMEND
 {	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
 	parserData->itemContent = $2; free($2);
 	osresult->setSolverOutputItem(parserData->iOther, parserData->kounter, parserData->itemContent);
 }
-ITEMEND;
+;
 
 
 categoryAttribute: categoryAttributeIdentifier categoryAttributeValue;
