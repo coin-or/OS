@@ -362,6 +362,13 @@ bool LindoSolver::processVariables(){
 			//m_mmcVarName[i] = p;
 			m_mmcVarName[i] = &osinstance->getVariableNames()[  i][0];
 		}
+		
+		//fix for Stefan
+		for(i = 0; i <  osinstance->getVariableNumber() ; i++){
+			if(	osinstance->getVariableTypes()[ i] == 'B'){
+				m_mdVarUB[ i] = 1.0;
+			}
+		}
 		return true;
 	} 
 	catch(const ErrorClass& eclass){
