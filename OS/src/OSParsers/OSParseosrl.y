@@ -285,11 +285,12 @@ generalMessageStart: MESSAGESTART
 		parserData->generalMessagePresent = true;
 	};
 
-generalMessageContent:
-	GREATERTHAN ELEMENTTEXT MESSAGEEND 
-		{osresult->setGeneralMessage($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN MESSAGEEND 
-  | ENDOFELEMENT;
+generalMessageContent: generalMessageEmpty | generalMessageBody;
+
+generalMessageEmpty: GREATERTHAN MESSAGEEND | ENDOFELEMENT;
+
+generalMessageBody:  GREATERTHAN ELEMENTTEXT MESSAGEEND 
+		{osresult->setGeneralMessage($2); free($2); parserData->errorText = NULL;};
 
 serviceURI: serviceURIStart serviceURIContent;
 
@@ -299,11 +300,12 @@ serviceURIStart: SERVICEURISTART
 		parserData->generalServiceURIPresent = true;
 	};
 
-serviceURIContent: 
-	GREATERTHAN ELEMENTTEXT SERVICEURIEND 
-		{osresult->setServiceURI($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN SERVICEURIEND 
-  | ENDOFELEMENT;
+serviceURIContent: serviceURIEmpty | serviceURIBody;
+
+serviceURIEmpty: GREATERTHAN SERVICEURIEND | ENDOFELEMENT;
+
+serviceURIBody: GREATERTHAN ELEMENTTEXT SERVICEURIEND 
+		{osresult->setServiceURI($2); free($2); parserData->errorText = NULL;};
 
 serviceName: serviceNameStart serviceNameContent;
 
@@ -313,11 +315,12 @@ serviceNameStart: SERVICENAMESTART
 		parserData->generalServiceNamePresent = true;
 	};
 
-serviceNameContent: 
-	GREATERTHAN ELEMENTTEXT SERVICENAMEEND 
-		{osresult->setServiceName($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN SERVICENAMEEND 
-  | ENDOFELEMENT;
+serviceNameContent: serviceNameEmpty | serviceNameBody;
+
+serviceNameEmpty: GREATERTHAN SERVICENAMEEND | ENDOFELEMENT;
+
+serviceNameBody: GREATERTHAN ELEMENTTEXT SERVICENAMEEND 
+		{osresult->setServiceName($2); free($2); parserData->errorText = NULL;};
 
 instanceName: instanceNameStart instanceNameContent;
 
@@ -327,11 +330,12 @@ instanceNameStart:  INSTANCENAMESTART
 		parserData->generalInstanceNamePresent = true;
 	};
 
-instanceNameContent:
-	GREATERTHAN ELEMENTTEXT INSTANCENAMEEND 
-		{osresult->setInstanceName($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN INSTANCENAMEEND 
-  | ENDOFELEMENT;
+instanceNameContent: instanceNameEmpty | instanceNameBody;
+
+instanceNameEmpty: GREATERTHAN INSTANCENAMEEND | ENDOFELEMENT;
+
+instanceNameBody: GREATERTHAN ELEMENTTEXT INSTANCENAMEEND 
+		{osresult->setInstanceName($2); free($2); parserData->errorText = NULL;};
 
 jobID: jobIDStart jobIDContent;
 
@@ -341,11 +345,12 @@ jobIDStart: JOBIDSTART
 		parserData->generalJobIDPresent = true;
 	};
 	
-jobIDContent:
-	GREATERTHAN ELEMENTTEXT JOBIDEND 
-		{osresult->setJobID($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN JOBIDEND 
-  | ENDOFELEMENT;
+jobIDContent: jobIDEmpty | jobIDBody;
+
+jobIDEmpty: GREATERTHAN JOBIDEND | ENDOFELEMENT;
+
+jobIDBody: GREATERTHAN ELEMENTTEXT JOBIDEND 
+		{osresult->setJobID($2); free($2); parserData->errorText = NULL;};
 
 solverInvoked: solverInvokedStart solverInvokedContent;
 
@@ -355,11 +360,12 @@ solverInvokedStart: SOLVERINVOKEDSTART
 		parserData->generalSolverInvokedPresent = true;
 	};
 
-solverInvokedContent: 
-	GREATERTHAN ELEMENTTEXT SOLVERINVOKEDEND 
-		{osresult->setSolverInvoked($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN SOLVERINVOKEDEND 
-  | ENDOFELEMENT;
+solverInvokedContent: solverInvokedEmpty | solverInvokedBody;
+
+solverInvokedEmpty: GREATERTHAN SOLVERINVOKEDEND | ENDOFELEMENT;
+
+solverInvokedBody: GREATERTHAN ELEMENTTEXT SOLVERINVOKEDEND 
+		{osresult->setSolverInvoked($2); free($2); parserData->errorText = NULL;};
 
 timeStamp: timeStampStart timeStampContent;
   
@@ -369,11 +375,12 @@ timeStampStart: TIMESTAMPSTART
 		parserData->generalTimeStampPresent = true;
 	};
 
-timeStampContent: 
-	GREATERTHAN ELEMENTTEXT TIMESTAMPEND 
-		{osresult->setTimeStamp($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN TIMESTAMPEND 
-  | ENDOFELEMENT;
+timeStampContent: timeStampEmpty | timeStampBody;
+
+timeStampEmpty: GREATERTHAN TIMESTAMPEND | ENDOFELEMENT;
+
+timeStampBody: GREATERTHAN ELEMENTTEXT TIMESTAMPEND 
+		{osresult->setTimeStamp($2); free($2); parserData->errorText = NULL;};
 
 generalOtherResults: generalOtherResultsStart generalOtherResultsAttributes generalOtherResultsContent;
 
@@ -468,11 +475,12 @@ systemInformationStart:	SYSTEMINFORMATIONSTART
 		parserData->systemInformationPresent = true;
 	};
 	
-systemInformationContent:
-	GREATERTHAN ELEMENTTEXT SYSTEMINFORMATIONEND  
-		{osresult->setSystemInformation($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN SYSTEMINFORMATIONEND 
-  | ENDOFELEMENT;
+systemInformationContent: systemInformationEmpty | systemInformationBody;
+
+systemInformationEmpty: GREATERTHAN SYSTEMINFORMATIONEND | ENDOFELEMENT;
+
+systemInformationBody: GREATERTHAN ELEMENTTEXT SYSTEMINFORMATIONEND  
+		{osresult->setSystemInformation($2); free($2); parserData->errorText = NULL;};
 
 availableDiskSpace: availableDiskSpaceStart availableDiskSpaceAttributes availableDiskSpaceContent;
 
@@ -709,8 +717,11 @@ currentStateStart: CURRENTSTATESTART
 		parserData->serviceCurrentStatePresent = true;
 	};
 
-currentStateContent: 
-	GREATERTHAN ELEMENTTEXT CURRENTSTATEEND 
+currentStateContent: currentStateEmpty | currentStateBody;
+
+currentStateEmpty: GREATERTHAN CURRENTSTATEEND | ENDOFELEMENT;
+
+currentStateBody: GREATERTHAN ELEMENTTEXT CURRENTSTATEEND 
 	{	parserData->tempStr = $2;
 		if (parserData->tempStr != "busy"                &&
 			parserData->tempStr != "busyButAccepting"    &&
@@ -720,9 +731,7 @@ currentStateContent:
 			osrlerror(NULL, NULL, parserData, "current system state not recognized");
 		osresult->setCurrentState(parserData->tempStr); 
 		parserData->errorText = NULL;
-	}
-  | GREATERTHAN CURRENTSTATEEND 
-  | ENDOFELEMENT;
+	};
 
 currentJobCount: currentJobCountStart currentJobCountContent;
 
@@ -732,11 +741,12 @@ currentJobCountStart: CURRENTJOBCOUNTSTART
 		parserData->serviceCurrentJobCountPresent = true;
 	};
 
-currentJobCountContent: 
-	GREATERTHAN INTEGER CURRENTJOBCOUNTEND 
-		{osresult->setCurrentJobCount($2); /* free($2); */  parserData->errorText = NULL;}
-  | GREATERTHAN CURRENTJOBCOUNTEND 
-  | ENDOFELEMENT;
+currentJobCountContent: currentJobCountEmpty | currentJobCountBody;
+
+currentJobCountEmpty: GREATERTHAN CURRENTJOBCOUNTEND | ENDOFELEMENT;
+
+currentJobCountBody: GREATERTHAN INTEGER CURRENTJOBCOUNTEND 
+		{osresult->setCurrentJobCount($2); /* free($2); */  parserData->errorText = NULL;};
 
 totalJobsSoFar: totalJobsSoFarStart totalJobsSoFarContent;
 
@@ -746,11 +756,12 @@ totalJobsSoFarStart: TOTALJOBSSOFARSTART
 		parserData->serviceTotalJobsSoFarPresent = true;
 	};
 
-totalJobsSoFarContent:
-	GREATERTHAN INTEGER TOTALJOBSSOFAREND 
-		{osresult->setTotalJobsSoFar($2); /* free($2); */  parserData->errorText = NULL;}
-  | GREATERTHAN TOTALJOBSSOFAREND 
-  | ENDOFELEMENT;
+totalJobsSoFarContent: totalJobsSoFarEmpty | totalJobsSoFarBody;
+
+totalJobsSoFarEmpty: GREATERTHAN TOTALJOBSSOFAREND | ENDOFELEMENT;
+
+totalJobsSoFarBody: GREATERTHAN INTEGER TOTALJOBSSOFAREND 
+		{osresult->setTotalJobsSoFar($2); parserData->errorText = NULL;};
 
 timeServiceStarted: timeServiceStartedStart timeServiceStartedContent;
 
@@ -760,11 +771,12 @@ timeServiceStartedStart: TIMESERVICESTARTEDSTART
 		parserData->timeServiceStartedPresent = true;
 	};
 
-timeServiceStartedContent:
-	GREATERTHAN ELEMENTTEXT TIMESERVICESTARTEDEND 
-		{osresult->setTimeServiceStarted($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN TIMESERVICESTARTEDEND 
-  | ENDOFELEMENT;
+timeServiceStartedContent: timeServiceStartedEmpty | timeServiceStartedBody;
+
+timeServiceStartedEmpty: GREATERTHAN TIMESERVICESTARTEDEND | ENDOFELEMENT;
+
+timeServiceStartedBody: GREATERTHAN ELEMENTTEXT TIMESERVICESTARTEDEND 
+		{osresult->setTimeServiceStarted($2); free($2); parserData->errorText = NULL;};
 
 serviceUtilization: serviceUtilizationStart serviceUtilizationContent;
 
@@ -774,12 +786,12 @@ serviceUtilizationStart: SERVICEUTILIZATIONSTART
 		parserData->serviceUtilizationPresent = true;
 	};
 
-serviceUtilizationContent:
-	GREATERTHAN aNumber SERVICEUTILIZATIONEND 
-		{osresult->setServiceUtilization( parserData->tempVal);  parserData->errorText = NULL;}
-  | GREATERTHAN SERVICEUTILIZATIONEND 
-  | ENDOFELEMENT;
+serviceUtilizationContent: serviceUtilizationEmpty | serviceUtilizationBody;
 
+serviceUtilizationEmpty: GREATERTHAN SERVICEUTILIZATIONEND | ENDOFELEMENT;
+
+serviceUtilizationBody: GREATERTHAN aNumber SERVICEUTILIZATIONEND 
+		{osresult->setServiceUtilization( parserData->tempVal);  parserData->errorText = NULL;};
 
 serviceOtherResults: serviceOtherResultsStart serviceOtherResultsAttributes serviceOtherResultsContent;
 
@@ -878,8 +890,11 @@ jobStatusStart: STATUSSTART
 		parserData->jobStatusPresent = true;
 	};
 
-jobStatusContent:
-	GREATERTHAN ELEMENTTEXT STATUSEND 
+jobStatusContent: jobStatusEmpty | jobStatusBody;
+
+jobStatusEmpty: GREATERTHAN STATUSEND | ENDOFELEMENT;
+
+jobStatusBody: GREATERTHAN ELEMENTTEXT STATUSEND 
 	{	parserData->tempStr = $2; free($2);
 		if (parserData->tempStr != "waiting"  &&
 			parserData->tempStr != "running"  &&
@@ -889,9 +904,7 @@ jobStatusContent:
 			osrlerror (NULL, NULL, parserData, "status of this job not recognized");
 		osresult->setJobStatus(parserData->tempStr);  
 		parserData->errorText = NULL;
-	}
-  | GREATERTHAN STATUSEND 
-  | ENDOFELEMENT;
+	};
 
 submitTime: submitTimeStart submitTimeContent;
 
@@ -901,11 +914,12 @@ submitTimeStart: SUBMITTIMESTART
 		parserData->jobSubmitTimePresent = true;
 	};
 
-submitTimeContent:
-	GREATERTHAN ELEMENTTEXT SUBMITTIMEEND 
-		{osresult->setJobSubmitTime($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN SUBMITTIMEEND 
-  | ENDOFELEMENT;
+submitTimeContent: submitTimeEmpty | submitTimeBody;
+
+submitTimeEmpty: GREATERTHAN SUBMITTIMEEND | ENDOFELEMENT;
+
+submitTimeBody: GREATERTHAN ELEMENTTEXT SUBMITTIMEEND 
+		{osresult->setJobSubmitTime($2); free($2); parserData->errorText = NULL;};
 
 scheduledStartTime: scheduledStartTimeStart scheduledStartTimeContent;
 
@@ -915,11 +929,12 @@ scheduledStartTimeStart: SCHEDULEDSTARTTIMESTART
 		parserData->scheduledStartTimePresent = true;
 	};
 
-scheduledStartTimeContent:
-	GREATERTHAN ELEMENTTEXT SCHEDULEDSTARTTIMEEND 
-		{osresult->setScheduledStartTime($2); free($2); parserData->errorText = NULL;}
-  | GREATERTHAN SCHEDULEDSTARTTIMEEND 
-  | ENDOFELEMENT;
+scheduledStartTimeContent: scheduledStartTimeEmpty | scheduledStartTimeBody;
+
+scheduledStartTimeEmpty: GREATERTHAN SCHEDULEDSTARTTIMEEND | ENDOFELEMENT;
+
+scheduledStartTimeBody: GREATERTHAN ELEMENTTEXT SCHEDULEDSTARTTIMEEND 
+		{osresult->setScheduledStartTime($2); free($2); parserData->errorText = NULL;};
 
 actualStartTime: actualStartTimeStart actualStartTimeContent;
 
@@ -929,11 +944,12 @@ actualStartTimeStart: ACTUALSTARTTIMESTART
 		parserData->actualStartTimePresent = true;
 	};
 
-actualStartTimeContent:
-	GREATERTHAN ELEMENTTEXT ACTUALSTARTTIMEEND  
-		{osresult->setActualStartTime($2); free($2);  parserData->errorText = NULL;}
-  | GREATERTHAN ACTUALSTARTTIMEEND 
-  | ENDOFELEMENT;
+actualStartTimeContent: actualStartTimeEmpty | actualStartTimeBody;
+
+actualStartTimeEmpty: GREATERTHAN ACTUALSTARTTIMEEND | ENDOFELEMENT;
+
+actualStartTimeBody: GREATERTHAN ELEMENTTEXT ACTUALSTARTTIMEEND  
+		{osresult->setActualStartTime($2); free($2);  parserData->errorText = NULL;};
 
 endTime: endTimeStart endTimeContent;
 
@@ -943,11 +959,12 @@ endTimeStart: ENDTIMESTART
 		parserData->jobEndTimePresent = true;
 	};
 
-endTimeContent:
-	GREATERTHAN ELEMENTTEXT ENDTIMEEND  
-		{osresult->setJobEndTime($2); free($2);  parserData->errorText = NULL;}
-  | GREATERTHAN ENDTIMEEND 
-  | ENDOFELEMENT;
+endTimeContent: endTimeEmpty | endTimeBody;
+
+endTimeEmpty: GREATERTHAN ENDTIMEEND | ENDOFELEMENT;
+
+endTimeBody: GREATERTHAN ELEMENTTEXT ENDTIMEEND  
+		{osresult->setJobEndTime($2); free($2);  parserData->errorText = NULL;};
 
 timingInformation: timingInformationStart timingInformationAttributes timingInformationContent;
 
@@ -1030,7 +1047,7 @@ timeAtt:
 
 timeContent: timeEmpty | timeBody;
 
-timeEmpty: GREATERTHAN TIMEEND  |  ENDOFELEMENT;
+timeEmpty: GREATERTHAN TIMEEND | ENDOFELEMENT;
 
 timeBody:  GREATERTHAN timeValue TIMEEND
 {	osresult->addTimingInformation(parserData->typeAttribute, parserData->categoryAttribute,
@@ -1475,13 +1492,18 @@ solutionSubstatusATT:
 solutionSubstatusEnd: GREATERTHAN SUBSTATUSEND | ENDOFELEMENT; 
 
 
-solutionMessage:
-| MESSAGESTART GREATERTHAN ELEMENTTEXT MESSAGEEND 
-	{	osresult->setSolutionMessage(parserData->solutionIdx, $3); free($3);
-	}
-| MESSAGESTART GREATERTHAN MESSAGEEND
-| MESSAGESTART ENDOFELEMENT;
+solutionMessage: | solutionMessageStart solutionMessageContent;
 
+solutionMessageStart: MESSAGESTART;
+
+solutionMessageContent: solutionMessageEmpty | solutionMessageBody;
+
+solutionMessageEmpty: GREATERTHAN MESSAGEEND | ENDOFELEMENT;
+
+solutionMessageBody: GREATERTHAN ELEMENTTEXT MESSAGEEND 
+	{	osresult->setSolutionMessage(parserData->solutionIdx, $2); free($2);
+		parserData->errorText = NULL;
+	};
 
 variables: | variablesStart numberOfOtherVariableResults variablesContent;
 
@@ -1497,7 +1519,9 @@ numberOfOtherVariableResults:
 		parserData->iOther = 0;
 	};
 
-variablesContent: ENDOFELEMENT | variablesBody;
+variablesContent: variablesEmpty | variablesBody;
+
+variablesEmpty: ENDOFELEMENT;
 
 variablesBody: GREATERTHAN variableValues variableValuesString basisStatus otherVariableResultsArray VARIABLESEND;
 
@@ -1698,10 +1722,13 @@ numberOfOtherVariableResultsATT: NUMBEROFVARATT quote INTEGER quote
 	parserData->kounter = 0;
 }; 
 
-otherVariableResultContent: ENDOFELEMENT	
-| GREATERTHAN otherVarList OTHEREND;
+otherVariableResultContent: otherVariableResultEmpty | otherVariableResultBody;
 
-otherVarList: | otherVarList otherVar;
+otherVariableResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT;
+
+otherVariableResultBody:  GREATERTHAN otherVarList OTHEREND;
+
+otherVarList: otherVar | otherVarList otherVar;
 
 otherVar: otherVarStart otherVarIdxATT otherVarContent 
 { 	
@@ -1715,14 +1742,14 @@ otherVarIdxATT: IDXATT quote INTEGER quote
  	osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
-otherVarContent: 
-	GREATERTHAN ElementValue VAREND 
+otherVarContent: otherVarEmpty | otherVarBody;
+
+otherVarEmpty: GREATERTHAN VAREND | ENDOFELEMENT;
+
+otherVarBody: GREATERTHAN ElementValue VAREND 
 	{	
 	 	osresult->setOtherVariableResultVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
-	}
-  | GREATERTHAN VAREND 
-  | ENDOFELEMENT;
-
+	};
 
 objectives: | objectivesStart numberOfOtherObjectiveResults objectivesContent;
 
@@ -1739,7 +1766,9 @@ numberOfOtherObjectiveResults:
 		parserData->iOther = 0;
 	};
 
-objectivesContent: ENDOFELEMENT | objectivesBody;
+objectivesContent: objectivesEmpty | objectivesBody;
+
+objectivesEmpty: ENDOFELEMENT;
 
 objectivesBody: GREATERTHAN objectiveValues otherObjectiveResultsArray OBJECTIVESEND;
 
@@ -1848,10 +1877,13 @@ numberOfOtherObjectiveResultsATT: NUMBEROFOBJATT quote INTEGER quote
 	parserData->kounter = 0;
 }; 
 
-otherObjectiveResultContent: ENDOFELEMENT
-| GREATERTHAN otherObjList OTHEREND;
+otherObjectiveResultContent: otherObjectiveResultEmpty | otherObjectiveResultBody;
 
-otherObjList: | otherObjList otherObj ;
+otherObjectiveResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT;
+
+otherObjectiveResultBody:  GREATERTHAN otherObjList OTHEREND;
+
+otherObjList: otherObj | otherObjList otherObj;
 
 otherObj: otherObjStart otherObjIdxATT  otherObjContent 
 {  
@@ -1864,13 +1896,13 @@ otherObjIdxATT: IDXATT quote INTEGER quote
 {	osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
-otherObjContent: 
-	GREATERTHAN ElementValue OBJEND 
-	{	osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
-	}
-  | GREATERTHAN OBJEND 
-  | ENDOFELEMENT;
+otherObjContent: otherObjEmpty | otherObjBody;
 
+otherObjEmpty: GREATERTHAN OBJEND | ENDOFELEMENT;
+
+otherObjBody: GREATERTHAN ElementValue OBJEND 
+	{	osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
+	};
 
 
 constraints: | constraintsStart numberOfOtherConstraintResults constraintsContent;
@@ -1887,7 +1919,9 @@ numberOfOtherConstraintResults:
 		parserData->iOther = 0;
 	};
 
-constraintsContent: ENDOFELEMENT | constraintsBody;
+constraintsContent: constraintsEmpty | constraintsBody;
+
+constraintsEmpty: ENDOFELEMENT;
 
 constraintsBody: GREATERTHAN dualValues otherConstraintResultsArray CONSTRAINTSEND;
 
@@ -1993,11 +2027,13 @@ numberOfOtherConstraintResultATT: NUMBEROFCONATT quote INTEGER quote
 	parserData->kounter = 0;
 }; 
 
-otherConstraintResultContent: ENDOFELEMENT	
-| GREATERTHAN otherConList OTHEREND;
+otherConstraintResultContent: otherConstraintResultEmpty | otherConstraintResultBody;
 
+otherConstraintResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT	
 
-otherConList: | otherConList otherCon;
+otherConstraintResultBody:  GREATERTHAN otherConList OTHEREND;
+
+otherConList: otherCon | otherConList otherCon;
 
 otherCon: otherConStart otherConIdxATT  otherConContent 
 { 	
@@ -2011,14 +2047,14 @@ otherConIdxATT: IDXATT quote INTEGER quote
  	osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
-otherConContent: 
-	GREATERTHAN ElementValue CONEND 
+otherConContent: otherConEmpty | otherConBody;
+
+otherConEmpty: GREATERTHAN CONEND | ENDOFELEMENT;
+
+otherConBody: GREATERTHAN ElementValue CONEND 
 	{	
 	 	osresult->setOtherConstraintResultCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
-	}
-  | GREATERTHAN CONEND 
-  | ENDOFELEMENT;
-
+	};
 
 
 otherSolutionResults: | otherSolutionResultsStart numberOfOtherSolutionResults otherSolutionResultsContent;

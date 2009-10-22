@@ -20,7 +20,6 @@
 
 
 
-
 #include "OSrLWriter.h"
 #include "OSResult.h"
 
@@ -28,9 +27,7 @@
 #include "OSParameters.h" 
 #include "OSMathUtil.h"
 
-  
-
-
+ 
 #include <sstream>   
 #include <iostream>  
 

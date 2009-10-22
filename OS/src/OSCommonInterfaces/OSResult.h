@@ -607,14 +607,6 @@ public:
 	/** a pointer to the TimingInformation class */
 	TimingInformation* timingInformation;
 
-	/** a pointer to the CPUSpeed class
-	 */
-	CPUSpeed *usedCPUSpeed;
-
-	/** a pointer to the CPUNumber class
-	 */
-	CPUNumber *usedCPUNumber;
-
 	/** a pointer to the DiskSpace class
 	 */
 	DiskSpace *usedDiskSpace;
@@ -622,6 +614,14 @@ public:
 	/** a pointer to the MemorySize class
 	 */
 	MemorySize *usedMemory;
+
+	/** a pointer to the CPUSpeed class
+	 */
+	CPUSpeed *usedCPUSpeed;
+
+	/** a pointer to the CPUNumber class
+	 */
+	CPUNumber *usedCPUNumber;
 
 	/** a pointer to the OtherResults class
 	 */
@@ -3046,6 +3046,51 @@ public:
 	bool setNumberOfObjValues(int solIdx, int numberOfObj);
 
 	/**
+	 * Set the [i]th optimization solution's number of objective values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param n holds the number of elements in the array x
+	 * 
+	 * @return whether objctive values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfObjectiveValues(int solIdx, int n);
+
+	
+	/**
+	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param x holds a vector of type IndexValuePair; the idx component holds the index of the objective; 
+	 * the value component holds its value. The vector could be null if all objectives are 0.
+	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
+	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 * 
+	 * @return whether objective values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setObjectiveValuesSparse(int solIdx, std::vector<IndexValuePair*> x);
+	
+	/**
+	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
+	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
+	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
+	 * values are (optionally) calculated. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the objective values. 
+	 * @param objectiveValues holds the double sparse array of objective values to set.
+	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
+	 * values all get a Double.NaN value, meaning that they are not calculated.   
+	 * 
+	 * @return whether objective values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setObjectiveValuesDense(int solIdx, double *objectiveValues);
+
+	/**
 	 * Set an objective value.
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index to set the objective values. 
@@ -3178,6 +3223,55 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setNumberOfDualValues(int solIdx, int numberOfCon);
+
+
+	/**
+	 * Set the [i]th optimization solution's number of dual variable values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the dual variable values. 
+	 * @param n holds the number of elements in the array x
+	 * 
+	 * @return whether dual variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfDualVariableValues(int solIdx, int n);
+		
+
+	/**
+	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the dual variable values. 
+	 * @param x holds a vector of type IndexValuePair; the idx component holds the index of the constraint; 
+	 * the value component holds its value. The vector could be null if all dual variables are 0.
+	 * 
+	 * @return whether dual variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */	
+	bool setDualVariableValuesSparse(int solIdx, std::vector<IndexValuePair*> x);
+
+
+	/**
+	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the dual variable values. 
+	 * @param y holds a double dense array of variable dual values; it could be NULL if all values are 0.
+	 * @return whether dual variable values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */	
+	bool setDualVariableValuesDense(int solIdx, double *y);
+	
+	/**
+	 * Set the [i]th optimization solution's constraint values, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the constraint values. 
+	 * @param constraintValues holds the a double dense array of constraint values to set; it could be null if all constraint values are 0.
+	 * 
+	 * @return whether constraint values are set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setConstraintValuesDense(int solIdx, double *constraintValues);
+
+
 
 	/**
 	 * Set a dual value.
@@ -3415,98 +3509,6 @@ public:
 	 * @return whether the information was set successfully or not. 
 	 */
 	bool setSolverOutputItem(int otherIdx, int itemIdx, std::string item);
-
-	/**
-	 * Set the [i]th optimization solution's number of objective values, where i equals the given solution index.   
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the constraint values. 
-	 * @param n holds the number of elements in the array x
-	 * 
-	 * @return whether objctive values are set successfully or not. 
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setNumberOfObjectiveValues(int solIdx, int n);
-
-	
-	/**
-	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
-	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
-	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
-	 * values are (optionally) calculated. 
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the objective values. 
-	 * @param x holds a vector of type IndexValuePair; the idx component holds the index of the objective; 
-	 * the value component holds its value. The vector could be null if all objectives are 0.
-	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
-	 * values all get a Double.NaN value, meaning that they are not calculated.   
-	 * 
-	 * @return whether objective values are set successfully or not. 
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setObjectiveValuesSparse(int solIdx, std::vector<IndexValuePair*> x);
-	
-	/**
-	 * Set the [i]th optimization solution's objective values, where i equals the given solution index.   
-	 * Usually one of the objective is what the solution was solved for (or based on). Its index should be indicated 
-	 * in the solution's objectiveIdx attribute. Based on this objective's solution, the rest of the objective 
-	 * values are (optionally) calculated. 
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the objective values. 
-	 * @param objectiveValues holds the double sparse array of objective values to set.
-	 * Possibly only the objective that the solution is based on has the value, and the rest of the objective
-	 * values all get a Double.NaN value, meaning that they are not calculated.   
-	 * 
-	 * @return whether objective values are set successfully or not. 
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setObjectiveValuesDense(int solIdx, double *objectiveValues);
-
-	/**
-	 * Set the [i]th optimization solution's number of dual variable values, where i equals the given solution index.   
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the dual variable values. 
-	 * @param n holds the number of elements in the array x
-	 * 
-	 * @return whether dual variable values are set successfully or not. 
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setNumberOfDualVariableValues(int solIdx, int n);
-		
-
-	/**
-	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the dual variable values. 
-	 * @param x holds a vector of type IndexValuePair; the idx component holds the index of the constraint; 
-	 * the value component holds its value. The vector could be null if all dual variables are 0.
-	 * 
-	 * @return whether dual variable values are set successfully or not. 
-	 * @see #setSolutionNumber(int)
-	 */	
-	bool setDualVariableValuesSparse(int solIdx, std::vector<IndexValuePair*> x);
-
-
-	/**
-	 * Set the [i]th optimization solution's dual variable values, where i equals the given solution index. 
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the dual variable values. 
-	 * @param y holds a double dense array of variable dual values; it could be NULL if all values are 0.
-	 * @return whether dual variable values are set successfully or not. 
-	 * @see #setSolutionNumber(int)
-	 */	
-	bool setDualVariableValuesDense(int solIdx, double *y);
-	
-	/**
-	 * Set the [i]th optimization solution's constraint values, where i equals the given solution index.   
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index to set the constraint values. 
-	 * @param constraintValues holds the a double dense array of constraint values to set; it could be null if all constraint values are 0.
-	 * 
-	 * @return whether constraint values are set successfully or not. 
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setConstraintValuesDense(int solIdx, double *constraintValues);
-
 
 
 };
