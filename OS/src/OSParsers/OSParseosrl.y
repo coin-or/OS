@@ -159,15 +159,30 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %%
 
 
-osrldoc: osrlstart generalElement systemElement serviceElement jobElement optimizationElement OSRLEND;
+osrldoc: osrlStart osrlAttributes osrlContent;
 
-osrlstart: OSRLSTART GREATERTHAN  
-         | OSRLSTART OSRLATTRIBUTETEXT GREATERTHAN;
+osrlStart: OSRLSTART; 
 
-generalElement: | GENERALSTART ENDOFELEMENT
-                | GENERALSTART GREATERTHAN generalContent GENERALEND; 
+osrlAttributes: | OSRLATTRIBUTETEXT;
 
-generalContent: | generalContent generalChild;
+osrlContent: GREATERTHAN osrlBody OSRLEND; 
+
+osrlBody: generalElement systemElement serviceElement jobElement optimizationElement;
+
+
+generalElement: | generalElementStart generalElementContent;
+
+generalElementStart: GENERALSTART;
+
+generalElementContent: generalElementEmpty | generalElementFilled;
+
+generalElementEmpty:  ENDOFELEMENT;
+
+generalElementFilled: GREATERTHAN generalElementBody GENERALEND; 
+
+generalElementBody: generalElementList;
+
+generalElementList: | generalElementList generalChild;
 
 generalChild: 
 	generalStatus
@@ -1679,10 +1694,12 @@ otherVariableResult: otherVariableResultStart otherVariableResultAttributes othe
 
 otherVariableResultStart: OTHERSTART
 {
-		parserData->nameAttributePresent = false;	
-		parserData->numberAttributePresent = false;	
-		parserData->valueAttributePresent = false;	
-		parserData->descriptionAttributePresent = false;	
+	if (parserData->iOther >= parserData->numberOfOtherVariableResults)
+		osrlerror(NULL, NULL, parserData, "more <otherVariableResults> than specified");
+	parserData->nameAttributePresent = false;	
+	parserData->numberAttributePresent = false;	
+	parserData->valueAttributePresent = false;	
+	parserData->descriptionAttributePresent = false;	
 }; 
 
 otherVariableResultAttributes: otherVariableResultAttList 
@@ -1754,7 +1771,9 @@ otherVarBody: GREATERTHAN ElementValue VAREND
 objectives: | objectivesStart numberOfOtherObjectiveResults objectivesContent;
 
 objectivesStart: OBJECTIVESSTART
-{	parserData->numberOfOtherObjectiveResults = 0; };
+{	parserData->numberOfOtherObjectiveResults = 0; 
+	parserData->iOther = 0;
+};
 
 
 numberOfOtherObjectiveResults:
@@ -1832,12 +1851,14 @@ otherObjectiveResult: otherObjectiveResultStart otherObjectiveResultAttributes o
 ;
 
 otherObjectiveResultStart: OTHERSTART
-	{
-		parserData->nameAttributePresent = false;	
-		parserData->numberAttributePresent = false;	
-		parserData->valueAttributePresent = false;	
-		parserData->descriptionAttributePresent = false;	
-	}; 
+{
+	if (parserData->iOther >= parserData->numberOfOtherObjectiveResults)
+		osrlerror(NULL, NULL, parserData, "more <otherObjectiveResults> than specified");
+	parserData->nameAttributePresent = false;	
+	parserData->numberAttributePresent = false;	
+	parserData->valueAttributePresent = false;	
+	parserData->descriptionAttributePresent = false;	
+}; 
 
 otherObjectiveResultAttributes: otherObjectiveResultAttList
 	{	if(!parserData->nameAttributePresent) 
@@ -1908,7 +1929,9 @@ otherObjBody: GREATERTHAN ElementValue OBJEND
 constraints: | constraintsStart numberOfOtherConstraintResults constraintsContent;
 
 constraintsStart: CONSTRAINTSSTART
-{		parserData->numberOfOtherObjectiveResults = 0; };
+{	parserData->numberOfOtherObjectiveResults = 0; 
+	parserData->iOther = 0;
+};
 
 numberOfOtherConstraintResults:
   | NUMBEROFOTHERCONSTRAINTRESULTSATT quote INTEGER quote 
@@ -1984,10 +2007,12 @@ otherConstraintResult: otherConstraintResultStart otherConstraintResultAttribute
 
 otherConstraintResultStart: OTHERSTART
 {
-		parserData->nameAttributePresent = false;	
-		parserData->numberAttributePresent = false;	
-		parserData->valueAttributePresent = false;	
-		parserData->descriptionAttributePresent = false;	
+	if (parserData->iOther >= parserData->numberOfOtherConstraintResults)
+		osrlerror(NULL, NULL, parserData, "more <otherConstraintResults> than specified");
+	parserData->nameAttributePresent = false;	
+	parserData->numberAttributePresent = false;	
+	parserData->valueAttributePresent = false;	
+	parserData->descriptionAttributePresent = false;	
 }; 
 
 otherConstraintResultAttributes: otherConstraintResultAttList

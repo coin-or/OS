@@ -3536,8 +3536,8 @@ if (PARSER_TESTS){
 		//osresult = new OSResult(); 
 		cout << "TEST PARSING AN OSrL FILE" << endl;
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
-//		osrlFileName = "\\datafiles\\research\\os\\os-trunk-work\\os\\data\\osrlfiles\\parsertest.osrl";
+//		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "rosenbrock.osrl"; 
 		start = clock();
 		std::string osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();
