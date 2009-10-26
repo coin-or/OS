@@ -104,7 +104,7 @@ using std::ostringstream;
 %}  
 
 xmlwhitespace ([ \t\n\r])
-equality ([ \t\n\r])*=([ \t\n]\r)*
+equality ([ \t\n\r])*=([ \t\n\r])*
 quote (\"|\') 
 twoquotes (\"\"|\'\')
 greater_than (>)
@@ -144,13 +144,13 @@ return(DOUBLE);}
 
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
 ({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
-({xmlwhitespace}+numberOfItems{equality}) {  YY_PRINT;  return(NUMBEROFITEMSATT);}
+({xmlwhitespace}+numberOfItems{equality}) {YY_PRINT;  return(NUMBEROFITEMSATT);}
 ({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
 ({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 ({xmlwhitespace}+numberOfOtherConstraintResults{equality}) {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
 ({xmlwhitespace}+numberOfOtherObjectiveResults{equality}) {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
 ({xmlwhitespace}+numberOfOtherResults{equality}) {YY_PRINT; return(NUMBEROFOTHERRESULTSATT);}
-({xmlwhitespace}+numberOfOtherSolutionResults{equality}) {  YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
+({xmlwhitespace}+numberOfOtherSolutionResults{equality}) {YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
 ({xmlwhitespace}+numberOfOtherVariableResults{equality}) {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
 ({xmlwhitespace}+numberOfSolutions{equality}) {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
 ({xmlwhitespace}+numberOfSolverOutputs{equality}) {YY_PRINT; return(NUMBEROFSOLVEROUTPUTSATT);}
@@ -162,7 +162,7 @@ return(DOUBLE);}
 ({xmlwhitespace}+idx{equality}) {YY_PRINT; return(IDXATT);}
 ({xmlwhitespace}+targetObjectiveIdx{equality}) {YY_PRINT;  return(TARGETOBJECTIVEIDXATT);}
 
- /* attributes returning strings */
+ /* attributes returning strings (that are potentially empty)*/
 
 ({xmlwhitespace}+category{equality}\"\") {YY_PRINT; return(EMPTYCATEGORYATT);}
 ({xmlwhitespace}+category{equality}\'\') {YY_PRINT; return(EMPTYCATEGORYATT);}

@@ -64,7 +64,7 @@ this fails in Mac OS X
 
 %{
 
-void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg ) ;
+void osrlerror(YYLTYPE* type, OSResult *osresult,  OSrLParserData *parserData ,const char* errormsg );
 int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
  
 #define scanner parserData->scanner
@@ -174,15 +174,15 @@ generalElement: | generalElementStart generalElementContent;
 
 generalElementStart: GENERALSTART;
 
-generalElementContent: generalElementEmpty | generalElementFilled;
+generalElementContent: generalElementEmpty | generalElementLaden;
 
-generalElementEmpty:  ENDOFELEMENT;
+generalElementEmpty: GREATERTHAN GENERALEND | ENDOFELEMENT;
 
-generalElementFilled: GREATERTHAN generalElementBody GENERALEND; 
+generalElementLaden: GREATERTHAN generalElementBody GENERALEND; 
 
 generalElementBody: generalElementList;
 
-generalElementList: | generalElementList generalChild;
+generalElementList: generalChild | generalElementList generalChild;
 
 generalChild: 
 	generalStatus
@@ -235,7 +235,7 @@ generalStatusATT:
   | generalStatusNumberOfATT;
 
 
-generalStatusNumberOfATT: NUMBEROFSUBSTATUSESATT QUOTE INTEGER QUOTE 
+generalStatusNumberOfATT: NUMBEROFSUBSTATUSESATT quote INTEGER quote 
 {   if (parserData->numberAttributePresent ) 
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed for generalStatus element");
     parserData->numberAttributePresent = true;
@@ -250,14 +250,16 @@ generalStatusContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <substatus> element");
 	}
-  | generalStatusBody
+  | generalStatusLaden
 	{	if (parserData->kounter != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, "fewer <substatus> elements than specified");
 	};
 
-generalStatusEmpty: GREATERTHAN GENERALSTATUSEND | ENDOFELEMENT; 
+generalStatusEmpty:  GREATERTHAN GENERALSTATUSEND | ENDOFELEMENT; 
 
-generalStatusBody:  GREATERTHAN generalSubstatusArray GENERALSTATUSEND;
+generalStatusLaden: GREATERTHAN generalStatusBody GENERALSTATUSEND;
+
+generalStatusBody:   generalSubstatusArray;
 
 generalSubstatusArray: generalSubstatus | generalSubstatusArray generalSubstatus;
 
@@ -300,12 +302,14 @@ generalMessageStart: MESSAGESTART
 		parserData->generalMessagePresent = true;
 	};
 
-generalMessageContent: generalMessageEmpty | generalMessageBody;
+generalMessageContent: generalMessageEmpty | generalMessageLaden;
 
-generalMessageEmpty: GREATERTHAN MESSAGEEND | ENDOFELEMENT;
+generalMessageEmpty:  GREATERTHAN MESSAGEEND | ENDOFELEMENT;
 
-generalMessageBody:  GREATERTHAN ELEMENTTEXT MESSAGEEND 
-		{osresult->setGeneralMessage($2); free($2); parserData->errorText = NULL;};
+generalMessageLaden: GREATERTHAN generalMessageBody MESSAGEEND;
+
+generalMessageBody:   ELEMENTTEXT  
+		{osresult->setGeneralMessage($1); free($1); parserData->errorText = NULL;};
 
 serviceURI: serviceURIStart serviceURIContent;
 
@@ -315,12 +319,14 @@ serviceURIStart: SERVICEURISTART
 		parserData->generalServiceURIPresent = true;
 	};
 
-serviceURIContent: serviceURIEmpty | serviceURIBody;
+serviceURIContent: serviceURIEmpty | serviceURILaden;
 
-serviceURIEmpty: GREATERTHAN SERVICEURIEND | ENDOFELEMENT;
+serviceURIEmpty:  GREATERTHAN SERVICEURIEND | ENDOFELEMENT;
 
-serviceURIBody: GREATERTHAN ELEMENTTEXT SERVICEURIEND 
-		{osresult->setServiceURI($2); free($2); parserData->errorText = NULL;};
+serviceURILaden: GREATERTHAN serviceURIBody SERVICEURIEND;
+
+serviceURIBody:   ELEMENTTEXT  
+		{osresult->setServiceURI($1); free($1); parserData->errorText = NULL;};
 
 serviceName: serviceNameStart serviceNameContent;
 
@@ -330,12 +336,14 @@ serviceNameStart: SERVICENAMESTART
 		parserData->generalServiceNamePresent = true;
 	};
 
-serviceNameContent: serviceNameEmpty | serviceNameBody;
+serviceNameContent: serviceNameEmpty | serviceNameLaden;
 
-serviceNameEmpty: GREATERTHAN SERVICENAMEEND | ENDOFELEMENT;
+serviceNameEmpty:  GREATERTHAN SERVICENAMEEND | ENDOFELEMENT;
 
-serviceNameBody: GREATERTHAN ELEMENTTEXT SERVICENAMEEND 
-		{osresult->setServiceName($2); free($2); parserData->errorText = NULL;};
+serviceNameLaden: GREATERTHAN serviceNameBody SERVICENAMEEND;
+
+serviceNameBody:  ELEMENTTEXT  
+		{osresult->setServiceName($1); free($1); parserData->errorText = NULL;};
 
 instanceName: instanceNameStart instanceNameContent;
 
@@ -345,12 +353,14 @@ instanceNameStart:  INSTANCENAMESTART
 		parserData->generalInstanceNamePresent = true;
 	};
 
-instanceNameContent: instanceNameEmpty | instanceNameBody;
+instanceNameContent: instanceNameEmpty | instanceNameLaden;
 
-instanceNameEmpty: GREATERTHAN INSTANCENAMEEND | ENDOFELEMENT;
+instanceNameEmpty:  GREATERTHAN INSTANCENAMEEND | ENDOFELEMENT;
 
-instanceNameBody: GREATERTHAN ELEMENTTEXT INSTANCENAMEEND 
-		{osresult->setInstanceName($2); free($2); parserData->errorText = NULL;};
+instanceNameLaden: GREATERTHAN instanceNameBody INSTANCENAMEEND;
+
+instanceNameBody:  ELEMENTTEXT  
+		{osresult->setInstanceName($1); free($1); parserData->errorText = NULL;};
 
 jobID: jobIDStart jobIDContent;
 
@@ -360,12 +370,14 @@ jobIDStart: JOBIDSTART
 		parserData->generalJobIDPresent = true;
 	};
 	
-jobIDContent: jobIDEmpty | jobIDBody;
+jobIDContent: jobIDEmpty | jobIDLaden;
 
 jobIDEmpty: GREATERTHAN JOBIDEND | ENDOFELEMENT;
 
-jobIDBody: GREATERTHAN ELEMENTTEXT JOBIDEND 
-		{osresult->setJobID($2); free($2); parserData->errorText = NULL;};
+jobIDLaden: GREATERTHAN jobIDBody JOBIDEND;
+
+jobIDBody:  ELEMENTTEXT  
+		{osresult->setJobID($1); free($1); parserData->errorText = NULL;};
 
 solverInvoked: solverInvokedStart solverInvokedContent;
 
@@ -375,12 +387,14 @@ solverInvokedStart: SOLVERINVOKEDSTART
 		parserData->generalSolverInvokedPresent = true;
 	};
 
-solverInvokedContent: solverInvokedEmpty | solverInvokedBody;
+solverInvokedContent: solverInvokedEmpty | solverInvokedLaden;
 
 solverInvokedEmpty: GREATERTHAN SOLVERINVOKEDEND | ENDOFELEMENT;
 
-solverInvokedBody: GREATERTHAN ELEMENTTEXT SOLVERINVOKEDEND 
-		{osresult->setSolverInvoked($2); free($2); parserData->errorText = NULL;};
+solverInvokedLaden: GREATERTHAN solverInvokedBody SOLVERINVOKEDEND;
+
+solverInvokedBody:  ELEMENTTEXT  
+		{osresult->setSolverInvoked($1); free($1); parserData->errorText = NULL;};
 
 timeStamp: timeStampStart timeStampContent;
   
@@ -390,12 +404,14 @@ timeStampStart: TIMESTAMPSTART
 		parserData->generalTimeStampPresent = true;
 	};
 
-timeStampContent: timeStampEmpty | timeStampBody;
+timeStampContent: timeStampEmpty | timeStampLaden;
 
 timeStampEmpty: GREATERTHAN TIMESTAMPEND | ENDOFELEMENT;
 
-timeStampBody: GREATERTHAN ELEMENTTEXT TIMESTAMPEND 
-		{osresult->setTimeStamp($2); free($2); parserData->errorText = NULL;};
+timeStampLaden: GREATERTHAN timeStampBody TIMESTAMPEND;
+
+timeStampBody:  ELEMENTTEXT  
+		{osresult->setTimeStamp($1); free($1); parserData->errorText = NULL;};
 
 generalOtherResults: generalOtherResultsStart generalOtherResultsAttributes generalOtherResultsContent;
 
@@ -418,14 +434,16 @@ generalOtherResultsContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <other> element");
 	}  
-  | generalOtherResultsBody
+  | generalOtherResultsLaden
 	{	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
 	};
 	
 generalOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-generalOtherResultsBody:  GREATERTHAN generalOtherResultArray OTHERRESULTSEND;
+generalOtherResultsLaden: GREATERTHAN generalOtherResultsBody OTHERRESULTSEND;
+
+generalOtherResultsBody:   generalOtherResultArray;
 
 generalOtherResultArray: generalOtherResult | generalOtherResultArray generalOtherResult; 
 
@@ -468,10 +486,19 @@ generalOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 
 
-systemElement: | SYSTEMSTART ENDOFELEMENT
-               | SYSTEMSTART GREATERTHAN systemContent SYSTEMEND; 
+systemElement: | systemElementStart systemElementContent;
+
+systemElementStart: SYSTEMSTART;
+
+systemElementContent: systemElementEmpty | systemElementLaden;
+
+systemElementEmpty: GREATERTHAN SYSTEMEND | ENDOFELEMENT;
+
+systemElementLaden: GREATERTHAN systemElementBody SYSTEMEND; 
+          
+systemElementBody: systemElementList;
                
-systemContent: | systemContent systemChild; 
+systemElementList: systemChild | systemElementList systemChild; 
 
 systemChild: 
 	systemInformation 
@@ -490,12 +517,14 @@ systemInformationStart:	SYSTEMINFORMATIONSTART
 		parserData->systemInformationPresent = true;
 	};
 	
-systemInformationContent: systemInformationEmpty | systemInformationBody;
+systemInformationContent: systemInformationEmpty | systemInformationLaden;
 
 systemInformationEmpty: GREATERTHAN SYSTEMINFORMATIONEND | ENDOFELEMENT;
 
-systemInformationBody: GREATERTHAN ELEMENTTEXT SYSTEMINFORMATIONEND  
-		{osresult->setSystemInformation($2); free($2); parserData->errorText = NULL;};
+systemInformationLaden: GREATERTHAN systemInformationBody SYSTEMINFORMATIONEND;
+
+systemInformationBody:  ELEMENTTEXT   
+		{osresult->setSystemInformation($1); free($1); parserData->errorText = NULL;};
 
 availableDiskSpace: availableDiskSpaceStart availableDiskSpaceAttributes availableDiskSpaceContent;
 
@@ -660,14 +689,16 @@ systemOtherResultsContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <other> element");
 	}
-  | systemOtherResultsBody
+  | systemOtherResultsLaden
 	{	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
 	};
 
 systemOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-systemOtherResultsBody:  GREATERTHAN systemOtherResultArray OTHERRESULTSEND;
+systemOtherResultsLaden: GREATERTHAN systemOtherResultsBody OTHERRESULTSEND;
+
+systemOtherResultsBody:   systemOtherResultArray;
 
 systemOtherResultArray: systemOtherResult | systemOtherResultArray systemOtherResult; 
 
@@ -732,12 +763,14 @@ currentStateStart: CURRENTSTATESTART
 		parserData->serviceCurrentStatePresent = true;
 	};
 
-currentStateContent: currentStateEmpty | currentStateBody;
+currentStateContent: currentStateEmpty | currentStateLaden;
 
 currentStateEmpty: GREATERTHAN CURRENTSTATEEND | ENDOFELEMENT;
 
-currentStateBody: GREATERTHAN ELEMENTTEXT CURRENTSTATEEND 
-	{	parserData->tempStr = $2;
+currentStateLaden: GREATERTHAN currentStateBody CURRENTSTATEEND;
+
+currentStateBody:  ELEMENTTEXT  
+	{	parserData->tempStr = $1;
 		if (parserData->tempStr != "busy"                &&
 			parserData->tempStr != "busyButAccepting"    &&
 			parserData->tempStr != "idle"                &&
@@ -756,12 +789,14 @@ currentJobCountStart: CURRENTJOBCOUNTSTART
 		parserData->serviceCurrentJobCountPresent = true;
 	};
 
-currentJobCountContent: currentJobCountEmpty | currentJobCountBody;
+currentJobCountContent: currentJobCountEmpty | currentJobCountLaden;
 
 currentJobCountEmpty: GREATERTHAN CURRENTJOBCOUNTEND | ENDOFELEMENT;
 
-currentJobCountBody: GREATERTHAN INTEGER CURRENTJOBCOUNTEND 
-		{osresult->setCurrentJobCount($2); /* free($2); */  parserData->errorText = NULL;};
+currentJobCountLaden: GREATERTHAN currentJobCountBody CURRENTJOBCOUNTEND;
+
+currentJobCountBody:  INTEGER  
+	{ osresult->setCurrentJobCount($1); parserData->errorText = NULL; };
 
 totalJobsSoFar: totalJobsSoFarStart totalJobsSoFarContent;
 
@@ -771,12 +806,14 @@ totalJobsSoFarStart: TOTALJOBSSOFARSTART
 		parserData->serviceTotalJobsSoFarPresent = true;
 	};
 
-totalJobsSoFarContent: totalJobsSoFarEmpty | totalJobsSoFarBody;
+totalJobsSoFarContent: totalJobsSoFarEmpty | totalJobsSoFarLaden;
 
 totalJobsSoFarEmpty: GREATERTHAN TOTALJOBSSOFAREND | ENDOFELEMENT;
 
-totalJobsSoFarBody: GREATERTHAN INTEGER TOTALJOBSSOFAREND 
-		{osresult->setTotalJobsSoFar($2); parserData->errorText = NULL;};
+totalJobsSoFarLaden: GREATERTHAN totalJobsSoFarBody TOTALJOBSSOFAREND;
+
+totalJobsSoFarBody:  INTEGER  
+	{ osresult->setTotalJobsSoFar($1); parserData->errorText = NULL; };
 
 timeServiceStarted: timeServiceStartedStart timeServiceStartedContent;
 
@@ -786,12 +823,14 @@ timeServiceStartedStart: TIMESERVICESTARTEDSTART
 		parserData->timeServiceStartedPresent = true;
 	};
 
-timeServiceStartedContent: timeServiceStartedEmpty | timeServiceStartedBody;
+timeServiceStartedContent: timeServiceStartedEmpty | timeServiceStartedLaden;
 
 timeServiceStartedEmpty: GREATERTHAN TIMESERVICESTARTEDEND | ENDOFELEMENT;
 
-timeServiceStartedBody: GREATERTHAN ELEMENTTEXT TIMESERVICESTARTEDEND 
-		{osresult->setTimeServiceStarted($2); free($2); parserData->errorText = NULL;};
+timeServiceStartedLaden: GREATERTHAN timeServiceStartedBody TIMESERVICESTARTEDEND;
+
+timeServiceStartedBody:  ELEMENTTEXT  
+		{osresult->setTimeServiceStarted($1); free($1); parserData->errorText = NULL;};
 
 serviceUtilization: serviceUtilizationStart serviceUtilizationContent;
 
@@ -801,11 +840,13 @@ serviceUtilizationStart: SERVICEUTILIZATIONSTART
 		parserData->serviceUtilizationPresent = true;
 	};
 
-serviceUtilizationContent: serviceUtilizationEmpty | serviceUtilizationBody;
+serviceUtilizationContent: serviceUtilizationEmpty | serviceUtilizationLaden;
 
 serviceUtilizationEmpty: GREATERTHAN SERVICEUTILIZATIONEND | ENDOFELEMENT;
 
-serviceUtilizationBody: GREATERTHAN aNumber SERVICEUTILIZATIONEND 
+serviceUtilizationLaden: GREATERTHAN serviceUtilizationBody SERVICEUTILIZATIONEND;
+
+serviceUtilizationBody:  aNumber  
 		{osresult->setServiceUtilization( parserData->tempVal);  parserData->errorText = NULL;};
 
 serviceOtherResults: serviceOtherResultsStart serviceOtherResultsAttributes serviceOtherResultsContent;
@@ -829,14 +870,16 @@ serviceOtherResultsContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <other> element");
 	}
-  | serviceOtherResultsBody
+  | serviceOtherResultsLaden
 	{	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
 	};
 
 serviceOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-serviceOtherResultsBody:  GREATERTHAN serviceOtherResultArray OTHERRESULTSEND;
+serviceOtherResultsLaden: GREATERTHAN serviceOtherResultsBody OTHERRESULTSEND
+
+serviceOtherResultsBody:   serviceOtherResultArray;
 
 serviceOtherResultArray: serviceOtherResult | serviceOtherResultArray serviceOtherResult; 
 
@@ -905,12 +948,14 @@ jobStatusStart: STATUSSTART
 		parserData->jobStatusPresent = true;
 	};
 
-jobStatusContent: jobStatusEmpty | jobStatusBody;
+jobStatusContent: jobStatusEmpty | jobStatusLaden;
 
 jobStatusEmpty: GREATERTHAN STATUSEND | ENDOFELEMENT;
 
-jobStatusBody: GREATERTHAN ELEMENTTEXT STATUSEND 
-	{	parserData->tempStr = $2; free($2);
+jobStatusLaden: GREATERTHAN jobStatusBody STATUSEND;
+
+jobStatusBody:  ELEMENTTEXT  
+	{	parserData->tempStr = $1; free($1);
 		if (parserData->tempStr != "waiting"  &&
 			parserData->tempStr != "running"  &&
 			parserData->tempStr != "killed"   &&
@@ -929,12 +974,14 @@ submitTimeStart: SUBMITTIMESTART
 		parserData->jobSubmitTimePresent = true;
 	};
 
-submitTimeContent: submitTimeEmpty | submitTimeBody;
+submitTimeContent: submitTimeEmpty | submitTimeLaden;
 
 submitTimeEmpty: GREATERTHAN SUBMITTIMEEND | ENDOFELEMENT;
 
-submitTimeBody: GREATERTHAN ELEMENTTEXT SUBMITTIMEEND 
-		{osresult->setJobSubmitTime($2); free($2); parserData->errorText = NULL;};
+submitTimeLaden: GREATERTHAN submitTimeBody SUBMITTIMEEND
+
+submitTimeBody:  ELEMENTTEXT  
+		{osresult->setJobSubmitTime($1); free($1); parserData->errorText = NULL;};
 
 scheduledStartTime: scheduledStartTimeStart scheduledStartTimeContent;
 
@@ -944,12 +991,14 @@ scheduledStartTimeStart: SCHEDULEDSTARTTIMESTART
 		parserData->scheduledStartTimePresent = true;
 	};
 
-scheduledStartTimeContent: scheduledStartTimeEmpty | scheduledStartTimeBody;
+scheduledStartTimeContent: scheduledStartTimeEmpty | scheduledStartTimeLaden;
 
 scheduledStartTimeEmpty: GREATERTHAN SCHEDULEDSTARTTIMEEND | ENDOFELEMENT;
 
-scheduledStartTimeBody: GREATERTHAN ELEMENTTEXT SCHEDULEDSTARTTIMEEND 
-		{osresult->setScheduledStartTime($2); free($2); parserData->errorText = NULL;};
+scheduledStartTimeLaden: GREATERTHAN scheduledStartTimeBody SCHEDULEDSTARTTIMEEND;
+
+scheduledStartTimeBody:  ELEMENTTEXT  
+		{osresult->setScheduledStartTime($1); free($1); parserData->errorText = NULL;};
 
 actualStartTime: actualStartTimeStart actualStartTimeContent;
 
@@ -959,12 +1008,14 @@ actualStartTimeStart: ACTUALSTARTTIMESTART
 		parserData->actualStartTimePresent = true;
 	};
 
-actualStartTimeContent: actualStartTimeEmpty | actualStartTimeBody;
+actualStartTimeContent: actualStartTimeEmpty | actualStartTimeLaden;
 
 actualStartTimeEmpty: GREATERTHAN ACTUALSTARTTIMEEND | ENDOFELEMENT;
 
-actualStartTimeBody: GREATERTHAN ELEMENTTEXT ACTUALSTARTTIMEEND  
-		{osresult->setActualStartTime($2); free($2);  parserData->errorText = NULL;};
+actualStartTimeLaden: GREATERTHAN actualStartTimeBody ACTUALSTARTTIMEEND;
+
+actualStartTimeBody:  ELEMENTTEXT   
+		{osresult->setActualStartTime($1); free($1);  parserData->errorText = NULL;};
 
 endTime: endTimeStart endTimeContent;
 
@@ -974,12 +1025,14 @@ endTimeStart: ENDTIMESTART
 		parserData->jobEndTimePresent = true;
 	};
 
-endTimeContent: endTimeEmpty | endTimeBody;
+endTimeContent: endTimeEmpty | endTimeLaden;
 
 endTimeEmpty: GREATERTHAN ENDTIMEEND | ENDOFELEMENT;
 
-endTimeBody: GREATERTHAN ELEMENTTEXT ENDTIMEEND  
-		{osresult->setJobEndTime($2); free($2);  parserData->errorText = NULL;};
+endTimeLaden: GREATERTHAN endTimeBody ENDTIMEEND;
+
+endTimeBody:  ELEMENTTEXT   
+		{osresult->setJobEndTime($1); free($1);  parserData->errorText = NULL;};
 
 timingInformation: timingInformationStart timingInformationAttributes timingInformationContent;
 
@@ -989,7 +1042,7 @@ timingInformationStart: TIMINGINFORMATIONSTART
 		parserData->jobTimingInformationPresent = true;
 	};
 
-timingInformationAttributes: NUMBEROFTIMESATT QUOTE INTEGER QUOTE 
+timingInformationAttributes: NUMBEROFTIMESATT quote INTEGER quote 
 {	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of time measurements cannot be negative");
 	parserData->numberOfTimes = $3;
 	parserData->ivar = 0;
@@ -1000,14 +1053,16 @@ timingInformationContent:
 	{	if (parserData->numberOfTimes > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <time> element");
 	}
-  | timingInformationBody
+  | timingInformationLaden
 	{	if (parserData->ivar != parserData->numberOfTimes)
 			osrlerror(NULL, NULL, parserData, "fewer <time> elements than specified");
 	};
 
 timingInformationEmpty: GREATERTHAN TIMINGINFORMATIONEND | ENDOFELEMENT;   
 
-timingInformationBody:  GREATERTHAN timeArray TIMINGINFORMATIONEND;
+timingInformationLaden: GREATERTHAN timingInformationBody TIMINGINFORMATIONEND;
+
+timingInformationBody:   timeArray;
 
 timeArray: time | timeArray time;
 
@@ -1060,11 +1115,13 @@ timeAtt:
   | descriptionAttribute;
 
 
-timeContent: timeEmpty | timeBody;
+timeContent: timeEmpty | timeLaden;
 
 timeEmpty: GREATERTHAN TIMEEND | ENDOFELEMENT;
 
-timeBody:  GREATERTHAN timeValue TIMEEND
+timeLaden: GREATERTHAN timeBody TIMEEND;
+
+timeBody:   timeValue 
 {	osresult->addTimingInformation(parserData->typeAttribute, parserData->categoryAttribute,
 		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue);       
 	parserData->ivar++;
@@ -1246,14 +1303,16 @@ jobOtherResultsContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <other> element");
 	}
-  | jobOtherResultsBody
+  | jobOtherResultsLaden
 	{	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, "fewer <other> elements than specified");
 	};
 
 jobOtherResultsEmpty: GREATERTHAN OTHERRESULTSEND | ENDOFELEMENT;
 
-jobOtherResultsBody:  GREATERTHAN jobOtherResultArray OTHERRESULTSEND;
+jobOtherResultsLaden: GREATERTHAN jobOtherResultsBody OTHERRESULTSEND;
+
+jobOtherResultsBody:   jobOtherResultArray;
 
 jobOtherResultArray: jobOtherResult | jobOtherResultArray jobOtherResult; 
 
@@ -1357,14 +1416,16 @@ optimizationContent:
 	{	if (parserData->numberOfSolutions > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <solution> element");
 	}
-  | optimizationBody
+  | optimizationLaden
 	{	if (parserData->solutionIdx != parserData->numberOfSolutions)
 			osrlerror(NULL, NULL, parserData, "fewer <solution> elements than specified");
 	};
 
 optimizationEmpty: GREATERTHAN OPTIMIZATIONEND | ENDOFELEMENT;
 
-optimizationBody: GREATERTHAN solutionArray otherSolverOutput OPTIMIZATIONEND;
+optimizationLaden: GREATERTHAN optimizationBody OPTIMIZATIONEND;
+
+optimizationBody:  solutionArray otherSolverOutput;
 
 solutionArray: solution | solutionArray solution;  
 
@@ -1444,7 +1505,7 @@ solutionStatusATT:
 	}
   | solutionStatusNumberOfATT;	
 
-solutionStatusNumberOfATT: NUMBEROFSUBSTATUSESATT QUOTE INTEGER QUOTE 
+solutionStatusNumberOfATT: NUMBEROFSUBSTATUSESATT quote INTEGER quote 
 {   if (parserData->numberAttributePresent ) 
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed for solution status element");
     parserData->numberAttributePresent = true;
@@ -1459,7 +1520,7 @@ solutionStatusContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <substatus> element");
 	}
-  | solutionStatusBody
+  | solutionStatusLaden
 	{	if (parserData->kounter != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, "fewer <substatus> elements than specified");
 	}
@@ -1467,7 +1528,9 @@ solutionStatusContent:
 
 solutionStatusEmpty: GREATERTHAN STATUSEND | ENDOFELEMENT; 
 
-solutionStatusBody:  GREATERTHAN solutionSubstatusArray STATUSEND;
+solutionStatusLaden: GREATERTHAN solutionStatusBody STATUSEND;
+
+solutionStatusBody:   solutionSubstatusArray;
 
 solutionSubstatusArray: solutionSubstatus | solutionSubstatusArray solutionSubstatus;
 
@@ -1511,12 +1574,14 @@ solutionMessage: | solutionMessageStart solutionMessageContent;
 
 solutionMessageStart: MESSAGESTART;
 
-solutionMessageContent: solutionMessageEmpty | solutionMessageBody;
+solutionMessageContent: solutionMessageEmpty | solutionMessageLaden;
 
 solutionMessageEmpty: GREATERTHAN MESSAGEEND | ENDOFELEMENT;
 
-solutionMessageBody: GREATERTHAN ELEMENTTEXT MESSAGEEND 
-	{	osresult->setSolutionMessage(parserData->solutionIdx, $2); free($2);
+solutionMessageLaden: GREATERTHAN solutionMessageBody MESSAGEEND;
+
+solutionMessageBody:  ELEMENTTEXT  
+	{	osresult->setSolutionMessage(parserData->solutionIdx, $1); free($1);
 		parserData->errorText = NULL;
 	};
 
@@ -1534,11 +1599,13 @@ numberOfOtherVariableResults:
 		parserData->iOther = 0;
 	};
 
-variablesContent: variablesEmpty | variablesBody;
+variablesContent: variablesEmpty | variablesLaden;
 
 variablesEmpty: ENDOFELEMENT;
 
-variablesBody: GREATERTHAN variableValues variableValuesString basisStatus otherVariableResultsArray VARIABLESEND;
+variablesLaden: GREATERTHAN variablesBody VARIABLESEND;
+
+variablesBody:  variableValues variableValuesString basisStatus otherVariableResultsArray;
 
 variableValues: | variableValuesStart numberOfVarATT variableValuesContent;
 
@@ -1557,19 +1624,20 @@ variableValuesContent:
 	{	if (parserData->numberOfVar > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <var> element");
 	}
-  | variableValuesBody
+  | variableValuesLaden
 	{	if (parserData->kounter != parserData->numberOfVar)
 			osrlerror(NULL, NULL, parserData, "fewer <var> elements than specified");
-	}
-  ;
+	};
  
 variableValuesEmpty: GREATERTHAN VALUESEND | ENDOFELEMENT; 
 
-variableValuesBody:  GREATERTHAN varValueArray VALUESEND;
+variableValuesLaden: GREATERTHAN variableValuesBody VALUESEND;
+
+variableValuesBody:   varValueArray;
 
 varValueArray: varValue | varValueArray varValue;
 
-varValue: varValueStart  varIdxATT GREATERTHAN varVal VAREND
+varValue: varValueStart  varIdxATT varValueContent
 {	osresult->setVarValue(parserData->solutionIdx, parserData->kounter, 
 						  parserData->idx,         parserData->tempVal);
 	parserData->kounter++;
@@ -1582,6 +1650,8 @@ varValueStart: VARSTART
 };
 
 varIdxATT: IDXATT quote INTEGER quote {	parserData->idx = $3; };
+
+varValueContent: GREATERTHAN varVal VAREND;
   
 varVal: 
 	INTEGER {parserData->tempVal = $1; }
@@ -1605,22 +1675,23 @@ variableValuesStringContent:
 	{	if (parserData->numberOfVar > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <var> element");
 	}
-  | variableValuesStringBody
+  | variableValuesStringLaden
 	{	if (parserData->kounter != parserData->numberOfVar)
 			osrlerror(NULL, NULL, parserData, "fewer <var> elements than specified");
-	}
-  ;
+	};
 
 variableValuesStringEmpty: GREATERTHAN VALUESSTRINGEND | ENDOFELEMENT; 
 
-variableValuesStringBody: GREATERTHAN varValueStringArray VALUESSTRINGEND;
+variableValuesStringLaden: GREATERTHAN variableValuesStringBody VALUESSTRINGEND;
+
+variableValuesStringBody:  varValueStringArray;
 
 varValueStringArray: varValueString | varValueStringArray varValueString;
 
-varValueString: varValueStringStart varStrIdxATT GREATERTHAN ELEMENTTEXT VAREND
+varValueString: varValueStringStart varStrIdxATT varValueStringContent
 {
 	osresult->setVarValueString(parserData->solutionIdx, parserData->kounter, 
-					 			parserData->idx,         $4);
+					 			parserData->idx,         parserData->tempStr);
 	parserData->kounter++;
 }; 
 
@@ -1632,6 +1703,16 @@ varValueStringStart: VARSTART
 
 varStrIdxATT: IDXATT quote INTEGER quote { parserData->idx = $3; };
   
+varValueStringContent: 
+	varValueStringEmpty {parserData->tempStr = "";};
+  | varValueStringLaden; 
+  
+varValueStringEmpty: GREATERTHAN VAREND | ENDOFELEMENT;
+
+varValueStringLaden: GREATERTHAN varValueStringBody VAREND;
+
+varValueStringBody: ELEMENTTEXT 
+	{parserData->tempStr = $1; free($1);};
   
 basisStatus: | basisStatusStart numberOfBasisVarATT basisStatusContent;
 
@@ -1650,20 +1731,31 @@ basisStatusContent:
 	{	if (parserData->numberOfVar > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <var> element");
 	}
-  | basisStatusBody
+  | basisStatusLaden
 	{	if (parserData->kounter != parserData->numberOfVar)
 			osrlerror(NULL, NULL, parserData, "fewer <var> elements than specified");
-	}
-  ;
+	};
 
 basisStatusEmpty: GREATERTHAN BASISSTATUSEND | ENDOFELEMENT;
 
-basisStatusBody: GREATERTHAN basisVarArray BASISSTATUSEND;
+basisStatusLaden: GREATERTHAN basisStatusBody BASISSTATUSEND;
+
+basisStatusBody:  basisVarArray;
 
 basisVarArray : basisVar | basisVarArray basisVar;
 
-basisVar: basisVarStart basisVarIdxATT GREATERTHAN ELEMENTTEXT VAREND
-{	parserData->tempStr = $4;
+basisVar: basisVarStart basisVarIdxATT basisVarContent; 
+
+basisVarStart: VARSTART
+{	
+	if (parserData->kounter >= parserData->numberOfVar)
+		osrlerror(NULL, NULL, parserData, "more <var> elements than specified");
+};
+
+basisVarIdxATT : IDXATT quote INTEGER quote { parserData->idx = $3; };
+  
+basisVarContent: GREATERTHAN ELEMENTTEXT VAREND
+{	parserData->tempStr = $2;
 	if (parserData->tempStr != "unknown"  &&
 		parserData->tempStr != "basic"    &&
 		parserData->tempStr != "atLower"  &&
@@ -1675,22 +1767,12 @@ basisVar: basisVarStart basisVarIdxATT GREATERTHAN ELEMENTTEXT VAREND
 	parserData->kounter++;
 }; 
 
-basisVarStart: VARSTART
-{	
-	if (parserData->kounter >= parserData->numberOfVar)
-		osrlerror(NULL, NULL, parserData, "more <var> elements than specified");
-};
-
-basisVarIdxATT : IDXATT quote INTEGER quote { parserData->idx = $3; };
-  
-
 otherVariableResultsArray: | otherVariableResultsArray otherVariableResult;
 
 otherVariableResult: otherVariableResultStart otherVariableResultAttributes otherVariableResultContent
 	{ 	 
-		parserData->iOther++;  
-	}
-;
+		parserData->iOther++;
+	};
 
 otherVariableResultStart: OTHERSTART
 {
@@ -1739,11 +1821,13 @@ numberOfOtherVariableResultsATT: NUMBEROFVARATT quote INTEGER quote
 	parserData->kounter = 0;
 }; 
 
-otherVariableResultContent: otherVariableResultEmpty | otherVariableResultBody;
+otherVariableResultContent: otherVariableResultEmpty | otherVariableResultLaden;
 
 otherVariableResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
-otherVariableResultBody:  GREATERTHAN otherVarList OTHEREND;
+otherVariableResultLaden: GREATERTHAN otherVariableResultBody OTHEREND;
+
+otherVariableResultBody:  otherVarList;
 
 otherVarList: otherVar | otherVarList otherVar;
 
@@ -1759,11 +1843,13 @@ otherVarIdxATT: IDXATT quote INTEGER quote
  	osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
-otherVarContent: otherVarEmpty | otherVarBody;
+otherVarContent: otherVarEmpty | otherVarLaden;
 
 otherVarEmpty: GREATERTHAN VAREND | ENDOFELEMENT;
 
-otherVarBody: GREATERTHAN ElementValue VAREND 
+otherVarLaden: GREATERTHAN otherVarBody VAREND;
+
+otherVarBody:  ElementValue  
 	{	
 	 	osresult->setOtherVariableResultVar(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	};
@@ -1785,11 +1871,13 @@ numberOfOtherObjectiveResults:
 		parserData->iOther = 0;
 	};
 
-objectivesContent: objectivesEmpty | objectivesBody;
+objectivesContent: objectivesEmpty | objectivesLaden;
 
 objectivesEmpty: ENDOFELEMENT;
 
-objectivesBody: GREATERTHAN objectiveValues otherObjectiveResultsArray OBJECTIVESEND;
+objectivesLaden: GREATERTHAN objectivesBody OBJECTIVESEND;
+
+objectivesBody:  objectiveValues otherObjectiveResultsArray;
 
 objectiveValues: | objectiveValuesStart numberOfObjATT objectiveValuesContent;
 
@@ -1808,20 +1896,21 @@ objectiveValuesContent:
 	{	if (parserData->numberOfObj > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <obj> element");
 	}
-  | objectiveValuesBody
+  | objectiveValuesLaden
 	{	if (parserData->kounter != parserData->numberOfObj)
 			osrlerror(NULL, NULL, parserData, "fewer <obj> elements than specified");
-	}
-  ;
+	};
  
 objectiveValuesEmpty: GREATERTHAN VALUESEND | ENDOFELEMENT; 
 
-objectiveValuesBody:  GREATERTHAN objValueArray VALUESEND;
+objectiveValuesLaden: GREATERTHAN objectiveValuesBody VALUESEND;
+
+objectiveValuesBody:   objValueArray;
 
 
 objValueArray: objValue | objValueArray objValue;
 
-objValue: objValueStart objIdxATT GREATERTHAN objVal OBJEND
+objValue: objValueStart objIdxATT objValueContent
 {	osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
 						  parserData->idx,         parserData->tempVal);
 	parserData->kounter++;
@@ -1835,6 +1924,8 @@ objValueStart: OBJSTART
 };
 
 objIdxATT: | IDXATT quote INTEGER quote { parserData->idx = $3; };
+
+objValueContent: GREATERTHAN objVal OBJEND;
 
 objVal:
    INTEGER {parserData->tempVal = $1; }
@@ -1898,11 +1989,13 @@ numberOfOtherObjectiveResultsATT: NUMBEROFOBJATT quote INTEGER quote
 	parserData->kounter = 0;
 }; 
 
-otherObjectiveResultContent: otherObjectiveResultEmpty | otherObjectiveResultBody;
+otherObjectiveResultContent: otherObjectiveResultEmpty | otherObjectiveResultLaden;
 
 otherObjectiveResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
-otherObjectiveResultBody:  GREATERTHAN otherObjList OTHEREND;
+otherObjectiveResultLaden: GREATERTHAN otherObjectiveResultBody OTHEREND;
+
+otherObjectiveResultBody:   otherObjList;
 
 otherObjList: otherObj | otherObjList otherObj;
 
@@ -1917,11 +2010,13 @@ otherObjIdxATT: IDXATT quote INTEGER quote
 {	osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
-otherObjContent: otherObjEmpty | otherObjBody;
+otherObjContent: otherObjEmpty | otherObjLaden;
 
 otherObjEmpty: GREATERTHAN OBJEND | ENDOFELEMENT;
 
-otherObjBody: GREATERTHAN ElementValue OBJEND 
+otherObjLaden: GREATERTHAN otherObjBody OBJEND
+
+otherObjBody:  ElementValue  
 	{	osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	};
 
@@ -1942,11 +2037,13 @@ numberOfOtherConstraintResults:
 		parserData->iOther = 0;
 	};
 
-constraintsContent: constraintsEmpty | constraintsBody;
+constraintsContent: constraintsEmpty | constraintsLaden;
 
 constraintsEmpty: ENDOFELEMENT;
 
-constraintsBody: GREATERTHAN dualValues otherConstraintResultsArray CONSTRAINTSEND;
+constraintsLaden: GREATERTHAN constraintsBody CONSTRAINTSEND;
+
+constraintsBody:  dualValues otherConstraintResultsArray;
 
 dualValues: | dualValuesStart numberOfConATT dualValuesContent;
 
@@ -1966,15 +2063,16 @@ dualValuesContent:
 	{	if (parserData->numberOfCon > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <con> element");
 	}
-  | dualValuesBody
+  | dualValuesLaden
 	{	if (parserData->kounter != parserData->numberOfCon)
 			osrlerror(NULL, NULL, parserData, "fewer <con> elements than specified");
-	}
-  ;
+	};
 
-dualValuesEmpty: GREATERTHAN VALUESEND | ENDOFELEMENT; 
+dualValuesEmpty: GREATERTHAN DUALVALUESEND | ENDOFELEMENT; 
 
-dualValuesBody:  GREATERTHAN dualValueArray DUALVALUESEND;
+dualValuesLaden: GREATERTHAN dualValuesBody DUALVALUESEND;
+
+dualValuesBody:  dualValueArray;
 
 dualValueArray: dualValue | dualValueArray dualValue;
 
@@ -2052,11 +2150,13 @@ numberOfOtherConstraintResultATT: NUMBEROFCONATT quote INTEGER quote
 	parserData->kounter = 0;
 }; 
 
-otherConstraintResultContent: otherConstraintResultEmpty | otherConstraintResultBody;
+otherConstraintResultContent: otherConstraintResultEmpty | otherConstraintResultLaden;
 
 otherConstraintResultEmpty: GREATERTHAN OTHEREND | ENDOFELEMENT	
 
-otherConstraintResultBody:  GREATERTHAN otherConList OTHEREND;
+otherConstraintResultLaden: GREATERTHAN otherConstraintResultBody OTHEREND;
+
+otherConstraintResultBody:   otherConList;
 
 otherConList: otherCon | otherConList otherCon;
 
@@ -2072,11 +2172,13 @@ otherConIdxATT: IDXATT quote INTEGER quote
  	osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3);
 };
 
-otherConContent: otherConEmpty | otherConBody;
+otherConContent: otherConEmpty | otherConLaden;
 
 otherConEmpty: GREATERTHAN CONEND | ENDOFELEMENT;
 
-otherConBody: GREATERTHAN ElementValue CONEND 
+otherConLaden: GREATERTHAN otherConBody CONEND;
+
+otherConBody:  ElementValue  
 	{	
 	 	osresult->setOtherConstraintResultCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr);
 	};
@@ -2102,14 +2204,16 @@ otherSolutionResultsContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <otherSolutionResult> element");
 	}
-  | otherSolutionResultsBody
+  | otherSolutionResultsLaden
 	{	if (parserData->iOther != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, "fewer <otherSolutionResult> elements than specified");
 	};
 
 otherSolutionResultsEmpty: GREATERTHAN OTHERSOLUTIONRESULTSEND | ENDOFELEMENT;
 
-otherSolutionResultsBody: GREATERTHAN otherSolutionResultArray OTHERSOLUTIONRESULTSEND; 
+otherSolutionResultsLaden: GREATERTHAN otherSolutionResultsBody OTHERSOLUTIONRESULTSEND;
+
+otherSolutionResultsBody:  otherSolutionResultArray; 
 
 otherSolutionResultArray: otherSolutionResult | otherSolutionResultArray otherSolutionResult;
 
@@ -2153,7 +2257,7 @@ otherSolutionResultAtt:
 	}
   | numberOfOtherSolutionResultItems;
   
-numberOfOtherSolutionResultItems : NUMBEROFITEMSATT QUOTE INTEGER QUOTE 
+numberOfOtherSolutionResultItems: NUMBEROFITEMSATT quote INTEGER quote 
 {	
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
 	parserData->numberOfItemsPresent = true;
@@ -2168,14 +2272,16 @@ otherSolutionResultContent:
 	{	if (parserData->numberOfItems > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <item> element");
 	}
-  | otherSolutionResultBody
+  | otherSolutionResultLaden
 	{	if (parserData->kounter != parserData->numberOfItems)
 			osrlerror(NULL, NULL, parserData, "fewer <item> elements than specified");
 	};
 
 otherSolutionResultEmpty: GREATERTHAN OTHERSOLUTIONRESULTEND | ENDOFELEMENT; 
 
-otherSolutionResultBody:  GREATERTHAN otherSolutionResultItemArray OTHERSOLUTIONRESULTEND;
+otherSolutionResultLaden: GREATERTHAN otherSolutionResultBody OTHERSOLUTIONRESULTEND;
+
+otherSolutionResultBody:   otherSolutionResultItemArray;
 
 otherSolutionResultItemArray: otherSolutionResultItem | otherSolutionResultItemArray otherSolutionResultItem;
 
@@ -2188,21 +2294,19 @@ otherSolutionResultItemContent:
 {	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
 }	
-  | otherSolutionResultItemBody; 
-
+  | otherSolutionResultItemLaden; 
 
 otherSolutionResultItemEmpty: ITEMSTARTANDEND | ITEMEMPTY;
 
-otherSolutionResultItemBody: ITEMSTART ITEMTEXT ITEMEND
+otherSolutionResultItemLaden: ITEMSTART otherSolutionResultItemBody ITEMEND;
+
+otherSolutionResultItemBody:  ITEMTEXT 
 {	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, "more <item> elements than specified");
-	parserData->itemContent = $2; free($2);
+	parserData->itemContent = $1; free($1);
 	osresult->setOtherSolutionResultItem(parserData->solutionIdx, parserData->iOther, 
 										 parserData->kounter, parserData->itemContent);
-}
-;
-
-
+};
 
 
 otherSolverOutput: | otherSolverOutputStart numberOfSolverOutputsATT otherSolverOutputContent;
@@ -2225,14 +2329,16 @@ otherSolverOutputContent:
 	{	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <solverOutput> element");
 	}
-  | otherSolverOutputBody
+  | otherSolverOutputLaden
 	{	if (parserData->iOther != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, "fewer <solverOutput> elements than specified");
 	};
 
 otherSolverOutputEmpty: GREATERTHAN OTHERSOLVEROUTPUTEND | ENDOFELEMENT;
 
-otherSolverOutputBody:  GREATERTHAN solverOutputArray OTHERSOLVEROUTPUTEND;
+otherSolverOutputLaden: GREATERTHAN otherSolverOutputBody OTHERSOLVEROUTPUTEND;
+
+otherSolverOutputBody:   solverOutputArray;
 
 solverOutputArray: solverOutput | solverOutputArray solverOutput;
 
@@ -2271,10 +2377,9 @@ solverOutputAtt:
   | descriptionAttribute
 	{	
 		osresult->setSolverOutputDescription(parserData->iOther, parserData->descriptionAttribute);
-	} 
-  ;
+	};
 
-numberOfSolverOutputItems: NUMBEROFITEMSATT QUOTE INTEGER QUOTE
+numberOfSolverOutputItems: NUMBEROFITEMSATT quote INTEGER quote
 {	
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of items cannot be negative");
 	parserData->numberOfItemsPresent = true;
@@ -2288,14 +2393,16 @@ solverOutputContent:
 	{	if (parserData->numberOfItems > 0)
 			osrlerror(NULL, NULL, parserData, "expected at least one <item> element");
 	}
-  | solverOutputBody
+  | solverOutputLaden
 	{	if (parserData->kounter != parserData->numberOfItems)
 			osrlerror(NULL, NULL, parserData, "fewer <item> elements than specified");
 	};
 
 solverOutputEmpty: GREATERTHAN SOLVEROUTPUTEND | ENDOFELEMENT;
 
-solverOutputBody:  GREATERTHAN solverOutputItemArray SOLVEROUTPUTEND;
+solverOutputLaden: GREATERTHAN solverOutputBody SOLVEROUTPUTEND;
+
+solverOutputBody:  solverOutputItemArray;
 
 solverOutputItemArray: solverOutputItem | solverOutputItemArray solverOutputItem;
 
@@ -2321,99 +2428,109 @@ solverOutputItemBody: ITEMSTART ITEMTEXT ITEMEND
 ;
 
 
-categoryAttribute: categoryAttributeIdentifier categoryAttributeValue;
-
-	categoryAttributeIdentifier: CATEGORYATT
+categoryAttribute: categoryAtt
 		{   if (parserData->categoryAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, "only one category attribute allowed for this element");
 			parserData->categoryAttributePresent = true;
 		};
-	
-	categoryAttributeValue:	
-		ATTRIBUTETEXT quote { parserData->categoryAttribute = $1; free($1);}   
-		|             quote { parserData->categoryAttribute = "";          };
 
-descriptionAttribute: descriptionAttributeIdentifier descriptionAttributeValue;
+categoryAtt: categoryAttEmpty | categoryAttContent;
 
-	descriptionAttributeIdentifier: DESCRIPTIONATT
+categoryAttEmpty: EMPTYCATEGORYATT
+{ parserData->categoryAttribute = ""; };
+
+categoryAttContent: CATEGORYATT ATTRIBUTETEXT quote 
+{ parserData->categoryAttribute = $2; free($2); };
+
+descriptionAttribute: descriptionAtt
 		{   if (parserData->descriptionAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, "only one description attribute allowed for this element");
 			parserData->descriptionAttributePresent = true;
 		};
-	
-	descriptionAttributeValue:	
-		ATTRIBUTETEXT quote { parserData->descriptionAttribute = $1; free($1);}   
-		|             quote { parserData->descriptionAttribute = "";          };
 
-nameAttribute: nameAttributeIdentifier nameAttributeValue;
+descriptionAtt: descriptionAttEmpty | descriptionAttContent;
 
-	nameAttributeIdentifier: NAMEATT
+descriptionAttEmpty: EMPTYDESCRIPTIONATT
+{ parserData->descriptionAttribute = ""; };
+
+descriptionAttContent: DESCRIPTIONATT ATTRIBUTETEXT quote 
+{ parserData->descriptionAttribute = $2; free($2);};
+
+
+nameAttribute: nameAtt
 		{   if (parserData->nameAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, "only one name attribute allowed for this element");
 			parserData->nameAttributePresent = true;
 		};
-	
-	nameAttributeValue:	
-		ATTRIBUTETEXT quote { parserData->nameAttribute = $1; free($1);}   
-		|             quote { parserData->nameAttribute = "";          };
 
-typeAttribute: typeAttributeIdentifier typeAttributeValue;
+nameAtt: nameAttEmpty | nameAttContent;
 
-	typeAttributeIdentifier: TYPEATT
+nameAttEmpty: EMPTYNAMEATT
+{ parserData->nameAttribute = ""; };
+
+nameAttContent: NAMEATT ATTRIBUTETEXT quote 
+{ parserData->nameAttribute = $2; free($2);};
+
+typeAttribute: typeAtt
 		{   if (parserData->typeAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, "only one type attribute allowed for this element");
 			parserData->typeAttributePresent = true;
 		};
-	
-	typeAttributeValue:	
-		ATTRIBUTETEXT quote { parserData->typeAttribute = $1; free($1);}   
-		|             quote { parserData->typeAttribute = "";          };
 
-unitAttribute: unitAttributeIdentifier unitAttributeValue;
+typeAtt: typeAttEmpty | typeAttContent;
 
-	unitAttributeIdentifier: UNITATT
+typeAttEmpty: EMPTYTYPEATT
+{ parserData->typeAttribute = ""; };
+
+typeAttContent: TYPEATT ATTRIBUTETEXT quote 
+{ parserData->typeAttribute = $2; free($2);};
+
+unitAttribute: unitAtt
 		{   if (parserData->unitAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, "only one unit attribute allowed for this element");
 			parserData->unitAttributePresent = true;
 		};
-	
-	unitAttributeValue:	
-		ATTRIBUTETEXT quote { parserData->unitAttribute = $1; free($1);}   
-		|             quote { parserData->unitAttribute = "";          };
+		
+unitAtt: unitAttEmpty | unitAttContent;
 
-valueAttribute: valueAttributeIdentifier valueAttributeValue;
+unitAttEmpty: EMPTYUNITATT
+{ parserData->unitAttribute = ""; };
 
-	valueAttributeIdentifier: VALUEATT
+unitAttContent: UNITATT ATTRIBUTETEXT quote 
+{ parserData->unitAttribute = $2; free($2);};
+
+valueAttribute: valueAtt
 		{   if (parserData->valueAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, "only one value attribute allowed for this element");
 			parserData->valueAttributePresent = true;
 		};
-	
-	valueAttributeValue:	
-		ATTRIBUTETEXT quote { parserData->valueAttribute = $1; free($1);}   
-		|             quote { parserData->valueAttribute = "";          };
+
+valueAtt: valueAttEmpty | valueAttContent;
+
+valueAttEmpty: EMPTYVALUEATT
+{ parserData->valueAttribute = ""; };
+
+valueAttContent: VALUEATT ATTRIBUTETEXT quote 
+{ parserData->valueAttribute = $2; free($2);};
 
 
 aNumber:
-	INTEGER   {parserData->tempVal = $1;}
-	| DOUBLE  {parserData->tempVal = $1;};
-
-quote: xmlWhiteSpace QUOTE;
+	INTEGER {parserData->tempVal = $1;}
+  | DOUBLE  {parserData->tempVal = $1;};
 
 ElementValue: 
     ELEMENTTEXT  { parserData->tempStr = $1;       free($1); }
   | INTEGER      { parserData->tempStr = os_dtoa_format($1); }
   | DOUBLE       { parserData->tempStr = os_dtoa_format($1); };
   
+quote: xmlWhiteSpace QUOTE;
 
+xmlWhiteSpace:  | xmlWhiteSpace xmlWhiteSpaceChar;
 
 xmlWhiteSpaceChar: ' ' 
 				| '\t'
 				| '\r'
-				| '\n' ;
-				
-xmlWhiteSpace: 
-			| xmlWhiteSpace xmlWhiteSpaceChar ;
+				| '\n';
 			
 
 %%
