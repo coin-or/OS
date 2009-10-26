@@ -356,7 +356,7 @@
 						<xs:element name="matrixVar" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
+									<xs:element name="varIdx" minOccurs="0" maxOccurs="unbounded">
 										<xs:complexType>
 											<xs:simpleContent>
 												<xs:extension base="xs:nonNegativeInteger">
@@ -374,6 +374,8 @@
 								<xs:attribute name="varIdxStart" type="xs:nonNegativeInteger"/>
 								<xs:attribute name="varIdxEnd" type="xs:nonNegativeInteger"/>
 								<xs:attribute name="positiveSemidefinite" type="xs:boolean" use="optional"/>
+								<xs:attribute name="lbMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="ubMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -406,7 +408,7 @@
 						<xs:element name="matrixCon" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
+									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
 										<xs:complexType>
 											<xs:simpleContent>
 												<xs:extension base="xs:nonNegativeInteger">
@@ -438,10 +440,19 @@
 							<xs:element name="rowIdx" type="IntVector"/>
 							<xs:element name="colIdx" type="IntVector"/>
 						</xs:choice>
-						<xs:element name="MatrixID">
+						<xs:element name="matrixID">
 							<xs:complexType>
 								<xs:choice>
-									<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+									<xs:element name="el" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
 									<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 								</xs:choice>
 							</xs:complexType>
@@ -480,6 +491,7 @@
 								<xs:attribute name="matrixVarIdxTwo" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
 								<xs:attribute name="leftCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="middleCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="rightCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 							</xs:complexType>
 						</xs:element>
