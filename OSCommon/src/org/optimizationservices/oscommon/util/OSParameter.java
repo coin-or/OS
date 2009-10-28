@@ -1477,7 +1477,7 @@ public final class OSParameter{
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_REGISTRY_SITE");
 		if(sValue != null && sValue.length() > 0) OS_REGISTRY_SITE = sValue;
-		else OS_REGISTRY_SITE = OS_SERVICE_SITE + "/osregistry/OSRegistryService.jws"; 
+		//else OS_REGISTRY_SITE = OS_SERVICE_SITE + "/osregistry/OSRegistryService.jws"; 
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SCHEDULER_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SCHEDULER_SITE = sValue;
