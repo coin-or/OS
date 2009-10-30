@@ -3530,16 +3530,17 @@ if (PARSER_TESTS){
 		std::string tmpOSrL;
 		clock_t start, finish;
 		double duration;
+		std::string osrl;
+		OSResult *osresult = NULL;
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
-		OSResult *osresult = NULL;
 		//osresult = new OSResult(); 
 		cout << "TEST PARSING AN OSrL FILE" << endl;
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
 //		osrlFileName = dataDir  + "osrlFiles" + dirsep + "rosenbrockmod.osrl"; 
 		start = clock();
-		std::string osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
@@ -3563,13 +3564,13 @@ if (PARSER_TESTS){
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
-/*
+
 		// now a second example
 		cout << endl << "TEST PARSING ANOTHER OSrL FILE" << endl;
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
-		//errorExample.osrl -- check to see if we read an error message correct;
+		//errorExample.osrl -- check to see if we read an error message correctly;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "errorExample.osrl"; 
 		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();
@@ -3586,7 +3587,215 @@ if (PARSER_TESTS){
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
-*/
+
+		// ... and another
+		cout << endl << "parserTest1.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest1.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest2.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest2.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest3.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest3.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest4.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest4.osrl"; 
+		start = clock();
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest5.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest5.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest6.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest6.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest7.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest7.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest8.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest8.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
+		// ... and another
+		cout << endl << "parserTest9.osrl" << endl;
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		//errorExample.osrl -- check to see if we read an error message correctly;
+		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest9.osrl"; 
+		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+		finish = clock();
+		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		cout << "Reading the file into a string took (seconds): "<< duration << endl;
+		cout << "PARSE THE OSRL STRING INTO AN OSRESULT OBJECT" << endl;
+		osresult = osrlreader->readOSrL( osrl);
+		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		delete osrlreader;
+		osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( tmpOSrL);
+		delete osrlwriter;
+		osrlwriter = NULL;
+		delete osrlreader;
+		osrlreader = NULL;
+
 		unitTestResult << 
 		     "TEST " << nOfTest << ": Successful test of OSrL parser on file parserTest.osrl" 
 		      << std::endl;

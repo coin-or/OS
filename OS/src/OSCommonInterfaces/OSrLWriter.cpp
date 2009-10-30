@@ -789,12 +789,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							outStr << " name=\"";
 							outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->name;
 							outStr << "\"";
+							outStr << " numberOfItems=\"";
+							outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; 
+							outStr << "\"";
 							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category != "")
 								outStr << " category=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category << "\"";
 							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description != "")
 								outStr << " description=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description << "\"";
-							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems > 0)
-								outStr << " numberOfItems=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems << "\"";
 							outStr << ">" << std::endl;
 							for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; j++){
 								outStr << "<item>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->item[j] << "</item>" << std::endl;
@@ -821,12 +822,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					outStr << " name=\"";
 					outStr << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->name;
 					outStr << "\"";
+					outStr << " numberOfItems=\"";
+					outStr << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems;
+					outStr << "\"";
 					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->category != "")
 						outStr << " category=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->category << "\"";
 					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->description != "")
 						outStr << " description=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->description << "\"";
-					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems > 0)
-						outStr << " numberOfItems=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems << "\"";
 					outStr << ">" << std::endl;
 					for(int j = 0; j < m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems; j++){
 						outStr << "<item>" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->item[j] << "</item>" << std::endl;
