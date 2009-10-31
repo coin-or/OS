@@ -64,6 +64,8 @@
 #include "OShL.h"
 #include "OSErrorClass.h"
 #include "CoinError.hpp"
+#include  "OSOption.h"
+#include  "OSoLReader.h"
 #include <sstream>
 
 #ifdef HAVE_CSTRING
@@ -78,13 +80,17 @@
 
 #include "CoinError.hpp"
 #include "CoinHelperFunctions.hpp"
+
+
+#include <iostream>
 //AMPL includes must be last.
 #include <asl.h>
 using std::cerr;
 using std::cout;
 using std::endl;
+using std::ostringstream;
 
-
+void getAmplClientOptions(char *options, std::string *solverName, std::string *optionFile);
 int main(int argc, char **argv)
 {
 	WindowsErrorPopupBlocker();
@@ -131,6 +137,7 @@ int main(int argc, char **argv)
 	OSResult *osresult = NULL;
 	std::string osrl = "";
 	std::string sSolverName = "";
+	std::string solverOptions = "";
 	// note that default solver is coin and default subSolver is Cbc
 	std::string osol = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"></osol>";
 	
@@ -138,10 +145,17 @@ int main(int argc, char **argv)
 	char *num_processors = NULL;
 	char *URL = NULL;
 	char delims[] = " ";
+
+	
 	
 	// get the solver set by AMPL
 	amplclient_options = getenv("OSAmplClient_options");
 	if( amplclient_options != NULL) cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
+	getAmplClientOptions(amplclient_options, &sSolverName, &solverOptions);
+	
+	std::cout << " solver Name = " << sSolverName << std::endl;
+	std::cout << " solver Options = " << solverOptions << std::endl;
+	exit( 1);
 	try{
 		if(amplclient_options == NULL ) throw ErrorClass( "a local solver was not specified in AMPL option");
 		else{
@@ -480,3 +494,96 @@ int main(int argc, char **argv)
 	ASL_free(&asl);
 	return 0; 
 } // end main
+
+
+void getAmplClientOptions(char *amplclient_options, std::string *solverName, std::string *solverOptions){
+
+	
+	std::string amplOptions = "";
+	std::ostringstream outStr; 
+	std::string::size_type  pos1;
+	std::string::size_type  pos2;
+	std::string osolFileName = "";
+	FileUtil *fileUtil = NULL;
+
+	size_t i = 0;
+	size_t n = strlen( amplclient_options);
+	try{
+		while( i < n){
+			std::cout << amplclient_options[ i] << std::endl;
+			if( amplclient_options[ i]  == ' '){
+				outStr << ',';
+				i++;
+				while( amplclient_options[ i] == ' '  ){
+					i++;
+				}
+			}
+			else{
+				outStr << amplclient_options[ i];
+				i++;
+			}
+
+		}
+		//end with a comma
+		outStr << ',';
+		amplOptions = outStr.str();
+		std::cout << "HERE ARE THE AMPLCLIENT OPTIONS STRING " <<  amplOptions << endl;
+		
+		// see if a solver has been specified
+		pos1 = amplOptions.find( "solver");
+		if(pos1 != std::string::npos){
+			//we have a solver specified
+			pos1 += 6;
+			//std::cout << "position 1 = " << pos1 << std::endl;
+			// we are at at the comma after solver
+			pos2 = amplOptions.find( ",", pos1 + 1);
+			//std::cout << "position 2 = " << pos2 << std::endl;
+			if(pos2 != std::string::npos){
+				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
+				*solverName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
+				
+			}
+		}
+		
+		
+		// see if an option file has been specified
+		pos1 = amplOptions.find( "optionFile");
+		if(pos1 != std::string::npos){
+			//we have a option file specified  specified
+			pos1 += 10;
+			//std::cout << "position 1 = " << pos1 << std::endl;
+			// we are at at the comma after optionfile
+			pos2 = amplOptions.find( ",", pos1 + 1);
+			//std::cout << "position 2 = " << pos2 << std::endl;
+			if(pos2 != std::string::npos){
+				//std::cout << "optionFile Name = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
+				osolFileName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
+			}
+		}
+		
+		//now go ahead and read the OSoL file if specified
+		
+		if( osolFileName.size() > 0 ){
+			fileUtil = new FileUtil();
+			*solverOptions  = fileUtil->getFileAsString( osolFileName.c_str());
+			delete fileUtil;
+			
+		}
+		
+		// if a solver is specified it overrides what is in the osoptions file, otherwise,
+		// see if we can get it from the solver option file
+		if( ((*solverName).size() == 0) && ((*solverOptions).size() > 0) ){
+		
+			OSOption *osoption = NULL;
+			OSoLReader *osolreader = NULL;
+			osolreader = new OSoLReader();
+			osoption = osolreader->readOSoL( *solverOptions);
+			*solverName = osoption->getSolverToInvoke();
+		}
+		
+	}//end try
+	catch(const ErrorClass& eclass){
+		cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
+		throw ErrorClass( eclass.errormsg) ;
+	}	
+}//getAmplClientOptions
