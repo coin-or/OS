@@ -9,7 +9,9 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0"  lb="0"  type="C" />
+			<var name 
+
+="x0"  lb="0"  type="C" />
 			<var name="x1" lb="0" type="C" />
 		</variables>
 		<objectives numberOfObjectives="1">

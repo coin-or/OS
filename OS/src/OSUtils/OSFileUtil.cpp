@@ -34,12 +34,14 @@ FileUtil::~FileUtil(){
 std::string FileUtil::getFileAsString( const char* fname){
 	try{
 		std::ostringstream outStr;
+		std::ostringstream fileName;
+		fileName << fname << std::endl;
 		std::string soutString;
 		char ch;
 		//std::cout << "Inside FileUtil:getFileAsString and calling inFile " << fname << std::endl;
 		std::ifstream inFile( fname);
 		if( !inFile){
-			throw ErrorClass(" Could not read the given file");
+			throw ErrorClass(" Could not read the given file: " + fileName.str());
 		}
 		//std::cout << "Inside FileUtil:getFileAsString, file read put into ostringstream" << std::endl;
 		//while((ch = inFile.get() ) != EOF){
@@ -53,7 +55,7 @@ std::string FileUtil::getFileAsString( const char* fname){
 		}
 		
 		if( !inFile.eof() ){
-			throw ErrorClass(" There was a problem reading the file");
+			throw ErrorClass(" There was a problem reading the file: " + fileName.str() );
 		}
 		//std::cout << std::endl;
 		//std::cout << "Inside FileUtil:getFileAsString, convert to a string" << std::endl;
@@ -70,6 +72,9 @@ std::string FileUtil::getFileAsString( const char* fname){
 
 char* FileUtil::getFileAsChar(const  char* fname){
 	try{
+	
+		std::ostringstream fileName;
+		fileName << fname << std::endl;
 		std::filebuf *pbuf;
 		long bufsize = 0;
 		char *xml;
@@ -78,7 +83,7 @@ char* FileUtil::getFileAsChar(const  char* fname){
 		std::cout << fname << std::endl;
 		inFile.open( fname);
 		if(!inFile){
-			throw ErrorClass(" Could not read the given file");
+			throw ErrorClass(" Could not read the given file: " + fileName.str() );
 		}
 		// get the input file stream into the buffer
 		pbuf = inFile.rdbuf();
@@ -96,7 +101,7 @@ char* FileUtil::getFileAsChar(const  char* fname){
 		}
 		
 		if( !inFile.eof() ){
-			throw ErrorClass(" There was a problem reading the file");
+			throw ErrorClass(" There was a problem reading the file: " + fileName.str());
 		}
 		//while((ch = inFile.get()) != EOF ){
 		//	xml[ bufsize] = ch;
@@ -124,11 +129,13 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname){
 	//outFile.close();
 	//return true;
 	
+	std::ostringstream fileName;
+	fileName << fname << std::endl;
 	FILE *ft ;
 	try{
 		ft = fopen ( fname, "w") ;
 	    if ( ft == NULL ) {
-	    	throw ErrorClass(" There was a problem opening the file");
+	    	throw ErrorClass(" There was a problem opening the file: " + fileName.str());
 	    }
 		char *cstr;
 		cstr = new char [sname.size() + 1];
@@ -150,12 +157,14 @@ bool FileUtil::writeFileFromString(char* fname, std::string sname){
 
 
 bool FileUtil::writeFileFromString(std::string  fname, std::string sname){
-	
+
+	std::ostringstream fileName;
+	fileName << fname << std::endl;	
 	FILE *ft ;
 	try{
 		ft = fopen ( fname.c_str(), "w") ;
 	    if ( ft == NULL ) {
-	    	throw ErrorClass(" There was a problem opening the file");
+	    	throw ErrorClass(" There was a problem opening the file: " + fileName.str());
 	    }
 		char *cstr;
 		cstr = new char [sname.size() + 1];
