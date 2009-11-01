@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
 		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceURI);
 	}else{
-		std::cout << "Cbc is the default solver and will be used " <<    endl;
+		std::cout << "Cbc IS THE DEFAULT SOLVER AND WILL BE USED " <<    endl;
 		sSolverName = "cbc";
 		cout << "THERE WERE NO OPTIONS SPECIFIED " <<   endl;
 	}
