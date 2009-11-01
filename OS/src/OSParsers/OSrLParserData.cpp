@@ -44,6 +44,7 @@
 	ivar(0),
 	idx(0),
 	tempVal(0.0),
+	tempInt(0),
 	tempStr(""),
 	outStr(""),
 	numberOfOtherVariableResults( 0),

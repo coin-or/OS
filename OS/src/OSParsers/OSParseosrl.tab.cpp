@@ -3208,9 +3208,9 @@ yydebug = 1;
 
   case 35:
 
-    {   if (osresult->setNumberOfGeneralSubstatuses(parserData->tempVal) == false)
+    {   if (osresult->setNumberOfGeneralSubstatuses(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "Attempting to reallocate substatus array. Potential loss of data.");
-		parserData->numberOf = parserData->tempVal;
+		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
 	;}
     break;
@@ -3369,10 +3369,10 @@ yydebug = 1;
   case 111:
 
     {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other general results cannot be negative");
-	if (osresult->setNumberOfOtherGeneralResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other general results cannot be negative");
+	if (osresult->setNumberOfOtherGeneralResults(parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "Attempting to reallocate other general results array. Potential loss of data.");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 ;}
     break;
@@ -3608,10 +3608,10 @@ yydebug = 1;
   case 190:
 
     {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other system results cannot be negative");
-	if (osresult->setNumberOfOtherSystemResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other system results cannot be negative");
+	if (osresult->setNumberOfOtherSystemResults(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setNumberOfOtherSystemResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 ;}
     break;
@@ -3767,10 +3767,10 @@ yydebug = 1;
   case 262:
 
     {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other service results cannot be negative");
-	if (osresult->setNumberOfOtherServiceResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other service results cannot be negative");
+	if (osresult->setNumberOfOtherServiceResults(parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherServiceResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 ;}
     break;
@@ -3922,8 +3922,8 @@ yydebug = 1;
 
   case 339:
 
-    {	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of time measurements cannot be negative");
-	parserData->numberOfTimes = parserData->tempVal;
+    {	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of time measurements cannot be negative");
+	parserData->numberOfTimes = parserData->tempInt;
 	parserData->ivar = 0;
 ;}
     break;
@@ -4171,10 +4171,10 @@ yydebug = 1;
   case 399:
 
     {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other job results cannot be negative");
-	if (osresult->setNumberOfOtherJobResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other job results cannot be negative");
+	if (osresult->setNumberOfOtherJobResults(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setNumberOfOtherJobResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 ;}
     break;
@@ -4260,8 +4260,8 @@ yydebug = 1;
   case 424:
 
     {
-		parserData->numberOfSolutions = parserData->tempVal; 
-		if (osresult->setSolutionNumber(parserData->tempVal) == false)
+		parserData->numberOfSolutions = parserData->tempInt; 
+		if (osresult->setSolutionNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionNumber failed");
 		parserData->solutionIdx = 0;
 	;}
@@ -4270,8 +4270,8 @@ yydebug = 1;
   case 425:
 
     {	
-		parserData->numberOfVariables = parserData->tempVal; 
-		if (osresult->setVariableNumber(parserData->tempVal) == false)
+		parserData->numberOfVariables = parserData->tempInt; 
+		if (osresult->setVariableNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setVariableNumber failed");
 	;}
     break;
@@ -4279,8 +4279,8 @@ yydebug = 1;
   case 426:
 
     {
-		parserData->numberOfConstraints = parserData->tempVal; 
-		if (osresult->setConstraintNumber(parserData->tempVal) == false)
+		parserData->numberOfConstraints = parserData->tempInt; 
+		if (osresult->setConstraintNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setConstraintNumber failed");
 	;}
     break;
@@ -4288,8 +4288,8 @@ yydebug = 1;
   case 427:
 
     {	
-		parserData->numberOfObjectives = parserData->tempVal; 
-		if (osresult->setObjectiveNumber(parserData->tempVal) == false)
+		parserData->numberOfObjectives = parserData->tempInt; 
+		if (osresult->setObjectiveNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setObjectiveNumber failed");
 	;}
     break;
@@ -4392,9 +4392,9 @@ yydebug = 1;
 
   case 453:
 
-    {	if (osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, parserData->tempVal) == false)
+    {	if (osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setNumberOfSolutionSubstatuses failed");
-		parserData->numberOf = parserData->tempVal;
+		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
 	;}
     break;
@@ -4472,9 +4472,9 @@ yydebug = 1;
 
     {	
 	if (osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, 
-												  parserData->tempVal) == false)
+												  parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherVariableResults failed");
-	parserData->numberOfOtherVariableResults = parserData->tempVal;
+	parserData->numberOfOtherVariableResults = parserData->tempInt;
 	parserData->iOther = 0;
 ;}
     break;
@@ -4746,9 +4746,9 @@ yydebug = 1;
   case 577:
 
     {
-	parserData->numberOfOtherObjectiveResults = parserData->tempVal;
+	parserData->numberOfOtherObjectiveResults = parserData->tempInt;
     if (osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, 
-												   parserData->tempVal) == false)
+												   parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherObjectiveResults failed");
 	parserData->iOther = 0;
 ;}
@@ -4911,8 +4911,8 @@ yydebug = 1;
   case 634:
 
     {
-	parserData->numberOfOtherConstraintResults = parserData->tempVal;
-	if (osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, parserData->tempVal) == false)
+	parserData->numberOfOtherConstraintResults = parserData->tempInt;
+	if (osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherConstraintResults failed");
 	parserData->iOther = 0;
 ;}
@@ -5079,9 +5079,9 @@ yydebug = 1;
   case 688:
 
     {	
-    if (osresult->setNumberOfOtherSolutionResults(parserData->solutionIdx, parserData->tempVal) == false)
+    if (osresult->setNumberOfOtherSolutionResults(parserData->solutionIdx, parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherSolutionResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->iOther = 0; 
 ;}
     break;
@@ -5215,9 +5215,9 @@ yydebug = 1;
   case 724:
 
     {	
-    if (osresult->setNumberOfSolverOutputs(parserData->tempVal) == false)
+    if (osresult->setNumberOfSolverOutputs(parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfSolverOutputs failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->iOther = 0; 
 ;}
     break;
@@ -5447,7 +5447,7 @@ yydebug = 1;
   case 786:
 
     {
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 
@@ -5457,7 +5457,7 @@ yydebug = 1;
 		osrlerror(NULL, NULL, parserData, "numberOfSolutions attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of solutions cannot be negative");
 	parserData->numberAttributePresent = true;
-	parserData->tempVal = (yyvsp[(3) - (4)].ival); 
+	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 ;}
     break;
 
@@ -5467,7 +5467,7 @@ yydebug = 1;
 		osrlerror(NULL, NULL, parserData, "numberOfVariables attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of variables cannot be negative");
 	parserData->nVarPresent = true;	
-	parserData->tempVal = (yyvsp[(3) - (4)].ival); 
+	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 ;}
     break;
 
@@ -5477,7 +5477,7 @@ yydebug = 1;
 		osrlerror(NULL, NULL, parserData, "numberOfConstraints attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of constraints cannot be negative");
 	parserData->nConPresent = true;		
-	parserData->tempVal = (yyvsp[(3) - (4)].ival); 
+	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 ;}
     break;
 
@@ -5487,7 +5487,7 @@ yydebug = 1;
 		osrlerror(NULL, NULL, parserData, "numberOfObjectives attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of objectives cannot be negative");
 	parserData->nObjPresent = true;
-	parserData->tempVal = (yyvsp[(3) - (4)].ival); 
+	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
 ;}
     break;
 
@@ -5495,7 +5495,7 @@ yydebug = 1;
 
     {	
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of other variable results cannot be negative");
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 
@@ -5503,7 +5503,7 @@ yydebug = 1;
 
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of other objective results cannot be negative");
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 
@@ -5511,7 +5511,7 @@ yydebug = 1;
 
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of other constraint results cannot be negative");
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 
@@ -5519,7 +5519,7 @@ yydebug = 1;
 
     {	
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of other solution results cannot be negative");
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 
@@ -5550,7 +5550,7 @@ yydebug = 1;
   case 798:
 
     {
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 
@@ -5569,7 +5569,7 @@ yydebug = 1;
 
     {	
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of other solver outputs cannot be negative");
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 
@@ -5579,7 +5579,7 @@ yydebug = 1;
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed");
     parserData->numberAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, "number of <substatus> elements cannot be negative");
-	parserData->tempVal = (yyvsp[(3) - (4)].ival);
+	parserData->tempInt = (yyvsp[(3) - (4)].ival);
 ;}
     break;
 

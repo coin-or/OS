@@ -166,6 +166,9 @@ public:
 	/** a temporary variable to hold an integer or double value */
 	double tempVal;
 	
+	/** a temporary variable to hold an integer value */
+	int tempInt;
+	
 	/** a temporary variable to hold a string */
 	std::string tempStr;
 	

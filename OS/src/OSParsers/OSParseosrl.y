@@ -243,9 +243,9 @@ generalStatusATT:
 		osresult->setGeneralStatusDescription(parserData->descriptionAttribute);
 	}
   | numberOfSubstatusesAttribute
-	{   if (osresult->setNumberOfGeneralSubstatuses(parserData->tempVal) == false)
+	{   if (osresult->setNumberOfGeneralSubstatuses(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "Attempting to reallocate substatus array. Potential loss of data.");
-		parserData->numberOf = parserData->tempVal;
+		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
 	};
 
@@ -429,10 +429,10 @@ generalOtherResultsStart: OTHERRESULTSSTART
 
 generalOtherResultsAttributes: numberOfOtherResultsAttribute 
 {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other general results cannot be negative");
-	if (osresult->setNumberOfOtherGeneralResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other general results cannot be negative");
+	if (osresult->setNumberOfOtherGeneralResults(parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "Attempting to reallocate other general results array. Potential loss of data.");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 };
 
@@ -693,10 +693,10 @@ systemOtherResultsStart: OTHERRESULTSSTART
 
 systemOtherResultsAttributes: numberOfOtherResultsAttribute
 {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other system results cannot be negative");
-	if (osresult->setNumberOfOtherSystemResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other system results cannot be negative");
+	if (osresult->setNumberOfOtherSystemResults(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setNumberOfOtherSystemResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 };
 
@@ -881,10 +881,10 @@ serviceOtherResultsStart: OTHERRESULTSSTART
 
 serviceOtherResultsAttributes: numberOfOtherResultsAttribute
 {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other service results cannot be negative");
-	if (osresult->setNumberOfOtherServiceResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other service results cannot be negative");
+	if (osresult->setNumberOfOtherServiceResults(parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherServiceResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 };
 
@@ -1070,8 +1070,8 @@ timingInformationStart: TIMINGINFORMATIONSTART
 	};
 
 timingInformationAttributes: numberOfTimesAttribute 
-{	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of time measurements cannot be negative");
-	parserData->numberOfTimes = parserData->tempVal;
+{	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of time measurements cannot be negative");
+	parserData->numberOfTimes = parserData->tempInt;
 	parserData->ivar = 0;
 };
 
@@ -1322,10 +1322,10 @@ jobOtherResultsStart: OTHERRESULTSSTART
 
 jobOtherResultsAttributes: numberOfOtherResultsAttribute 
 {
-	if (parserData->tempVal < 0) osrlerror(NULL, NULL, parserData, "number of other job results cannot be negative");
-	if (osresult->setNumberOfOtherJobResults(parserData->tempVal) == false)
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of other job results cannot be negative");
+	if (osresult->setNumberOfOtherJobResults(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setNumberOfOtherJobResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
 };
 
@@ -1407,27 +1407,27 @@ optimizationAttList: | optimizationAttList optimizationATT;
 optimizationATT: 
 	numberOfSolutionsAttribute 
 	{
-		parserData->numberOfSolutions = parserData->tempVal; 
-		if (osresult->setSolutionNumber(parserData->tempVal) == false)
+		parserData->numberOfSolutions = parserData->tempInt; 
+		if (osresult->setSolutionNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionNumber failed");
 		parserData->solutionIdx = 0;
 	}
   | numberOfVariablesAttribute 
 	{	
-		parserData->numberOfVariables = parserData->tempVal; 
-		if (osresult->setVariableNumber(parserData->tempVal) == false)
+		parserData->numberOfVariables = parserData->tempInt; 
+		if (osresult->setVariableNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setVariableNumber failed");
 	}             
   | numberOfConstraintsAttribute 
 	{
-		parserData->numberOfConstraints = parserData->tempVal; 
-		if (osresult->setConstraintNumber(parserData->tempVal) == false)
+		parserData->numberOfConstraints = parserData->tempInt; 
+		if (osresult->setConstraintNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setConstraintNumber failed");
 	} 
   | numberOfObjectivesAttribute 
 	{	
-		parserData->numberOfObjectives = parserData->tempVal; 
-		if (osresult->setObjectiveNumber(parserData->tempVal) == false)
+		parserData->numberOfObjectives = parserData->tempInt; 
+		if (osresult->setObjectiveNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setObjectiveNumber failed");
 	};
 	
@@ -1528,9 +1528,9 @@ solutionStatusATT:
 			osrlerror(NULL, NULL, parserData, "setSolutionStatusDescription failed");
 	}
   | numberOfSubstatusesAttribute
-	{	if (osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, parserData->tempVal) == false)
+	{	if (osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, "setNumberOfSolutionSubstatuses failed");
-		parserData->numberOf = parserData->tempVal;
+		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
 	};
 	
@@ -1615,9 +1615,9 @@ variablesStart: VARIABLESSTART
 numberOfOtherVariableResults: | numberOfOtherVariableResultsAttribute
 {	
 	if (osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, 
-												  parserData->tempVal) == false)
+												  parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherVariableResults failed");
-	parserData->numberOfOtherVariableResults = parserData->tempVal;
+	parserData->numberOfOtherVariableResults = parserData->tempInt;
 	parserData->iOther = 0;
 };
 
@@ -1893,9 +1893,9 @@ objectivesStart: OBJECTIVESSTART
 
 numberOfOtherObjectiveResults: | numberOfOtherObjectiveResultsAttribute
 {
-	parserData->numberOfOtherObjectiveResults = parserData->tempVal;
+	parserData->numberOfOtherObjectiveResults = parserData->tempInt;
     if (osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, 
-												   parserData->tempVal) == false)
+												   parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherObjectiveResults failed");
 	parserData->iOther = 0;
 };
@@ -2065,8 +2065,8 @@ constraintsStart: CONSTRAINTSSTART
 
 numberOfOtherConstraintResults: | numberOfOtherConstraintResultsAttribute
 {
-	parserData->numberOfOtherConstraintResults = parserData->tempVal;
-	if (osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, parserData->tempVal) == false)
+	parserData->numberOfOtherConstraintResults = parserData->tempInt;
+	if (osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherConstraintResults failed");
 	parserData->iOther = 0;
 };
@@ -2231,9 +2231,9 @@ otherSolutionResultsStart: OTHERSOLUTIONRESULTSSTART
 
 numberOfOtherSolutionResults: numberOfOtherSolutionResultsAttribute
 {	
-    if (osresult->setNumberOfOtherSolutionResults(parserData->solutionIdx, parserData->tempVal) == false)
+    if (osresult->setNumberOfOtherSolutionResults(parserData->solutionIdx, parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfOtherSolutionResults failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->iOther = 0; 
 };
 
@@ -2360,9 +2360,9 @@ otherSolverOutputStart: OTHERSOLVEROUTPUTSTART
 
 numberOfSolverOutputsATT: numberOfSolverOutputsAttribute
 {	
-    if (osresult->setNumberOfSolverOutputs(parserData->tempVal) == false)
+    if (osresult->setNumberOfSolverOutputs(parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, "setNumberOfSolverOutputs failed");
-	parserData->numberOf = parserData->tempVal;
+	parserData->numberOf = parserData->tempInt;
 	parserData->iOther = 0; 
 };
 
@@ -2561,7 +2561,7 @@ valueAttContent: VALUEATT ATTRIBUTETEXT quote
 
 numberOfOtherResultsAttribute: NUMBEROFOTHERRESULTSATT quote INTEGER quote
 {
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 
 numberOfSolutionsAttribute: NUMBEROFSOLUTIONSATT quote INTEGER quote 
@@ -2569,7 +2569,7 @@ numberOfSolutionsAttribute: NUMBEROFSOLUTIONSATT quote INTEGER quote
 		osrlerror(NULL, NULL, parserData, "numberOfSolutions attribute previously set");
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of solutions cannot be negative");
 	parserData->numberAttributePresent = true;
-	parserData->tempVal = $3; 
+	parserData->tempInt = $3; 
 };	
 
 numberOfVariablesAttribute: NUMBEROFVARIABLESATT quote INTEGER quote 
@@ -2577,7 +2577,7 @@ numberOfVariablesAttribute: NUMBEROFVARIABLESATT quote INTEGER quote
 		osrlerror(NULL, NULL, parserData, "numberOfVariables attribute previously set");
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of variables cannot be negative");
 	parserData->nVarPresent = true;	
-	parserData->tempVal = $3; 
+	parserData->tempInt = $3; 
 };
 
 numberOfConstraintsAttribute: NUMBEROFCONSTRAINTSATT quote INTEGER quote 
@@ -2585,7 +2585,7 @@ numberOfConstraintsAttribute: NUMBEROFCONSTRAINTSATT quote INTEGER quote
 		osrlerror(NULL, NULL, parserData, "numberOfConstraints attribute previously set");
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of constraints cannot be negative");
 	parserData->nConPresent = true;		
-	parserData->tempVal = $3; 
+	parserData->tempInt = $3; 
 };
 
 numberOfObjectivesAttribute: NUMBEROFOBJECTIVESATT quote INTEGER quote 
@@ -2593,31 +2593,31 @@ numberOfObjectivesAttribute: NUMBEROFOBJECTIVESATT quote INTEGER quote
 		osrlerror(NULL, NULL, parserData, "numberOfObjectives attribute previously set");
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of objectives cannot be negative");
 	parserData->nObjPresent = true;
-	parserData->tempVal = $3; 
+	parserData->tempInt = $3; 
 };
 
 numberOfOtherVariableResultsAttribute: NUMBEROFOTHERVARIABLERESULTSATT quote INTEGER quote 
 {	
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of other variable results cannot be negative");
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 
 numberOfOtherObjectiveResultsAttribute: NUMBEROFOTHEROBJECTIVERESULTSATT quote INTEGER quote 
 {
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of other objective results cannot be negative");
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 
 numberOfOtherConstraintResultsAttribute: NUMBEROFOTHERCONSTRAINTRESULTSATT quote INTEGER quote 
 {
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of other constraint results cannot be negative");
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 
 numberOfOtherSolutionResultsAttribute: NUMBEROFOTHERSOLUTIONRESULTSATT quote INTEGER quote 
 {	
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of other solution results cannot be negative");
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 	
 numberOfVarAttribute: NUMBEROFVARATT quote INTEGER quote 
@@ -2640,7 +2640,7 @@ numberOfConAttribute: NUMBEROFCONATT quote INTEGER quote
 
 numberOfTimesAttribute: NUMBEROFTIMESATT quote INTEGER quote
 {
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 
 numberOfItemsAttribute: NUMBEROFITEMSATT quote INTEGER quote 
@@ -2655,7 +2655,7 @@ numberOfItemsAttribute: NUMBEROFITEMSATT quote INTEGER quote
 numberOfSolverOutputsAttribute: NUMBEROFSOLVEROUTPUTSATT quote INTEGER quote
 {	
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of other solver outputs cannot be negative");
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 
 numberOfSubstatusesAttribute: NUMBEROFSUBSTATUSESATT quote INTEGER quote 
@@ -2663,7 +2663,7 @@ numberOfSubstatusesAttribute: NUMBEROFSUBSTATUSESATT quote INTEGER quote
         osrlerror(NULL, NULL, parserData, "only one numberOfSubstatuses attribute allowed");
     parserData->numberAttributePresent = true;
 	if ($3 < 0) osrlerror(NULL, NULL, parserData, "number of <substatus> elements cannot be negative");
-	parserData->tempVal = $3;
+	parserData->tempInt = $3;
 };
 
 aNumber:
