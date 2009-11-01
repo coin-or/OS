@@ -74,13 +74,13 @@ string OSSolverAgent::solve(string osil, string osol){
 	// desoapify the result -- i.e. replace &lt; with <  etc.
 	//std::cout << "CALL DESOAP WITH THE FOLLOWING " << std::endl;
 	//std::cout << solveResult << std::endl;
-	solveResult = WSUtil::deSOAPify( solveResult);
+	solveResult = WSUtil::getOSxL(solveResult, "solve");
+	//std::cout << "RETURN THE OSRL " << std::endl;
+	//std::cout << sOSrL << std::endl;
+	sOSrL = WSUtil::deSOAPify( solveResult);
 	// strip out the OSxL that we want from the SOAP envelope
 	//std::cout << "DONE WITH DESOAP " << std::endl;
 	//std::cout << solveResult << std::endl;
-	sOSrL = WSUtil::getOSxL(solveResult, "solve");
-	//std::cout << "RETURN THE OSRL " << std::endl;
-	//std::cout << sOSrL << std::endl;
 	return sOSrL;
 }//end solve
 
@@ -116,10 +116,10 @@ bool OSSolverAgent::send(string osil, string osol){
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
 	sendResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
-	// desoapify the result -- i.e. replace &lt; with <  etc.
-	sendResult = WSUtil::deSOAPify( sendResult);
 	// strip out the OSxL that we want from the SOAP envelope
 	sendResult = WSUtil::getOSxL(sendResult, "send");
+	// desoapify the result -- i.e. replace &lt; with <  etc.
+	sendResult = WSUtil::deSOAPify( sendResult);
 	if( sendResult.find("true") != string::npos ) return true;
 	else return false;
 }//end send
@@ -142,10 +142,11 @@ string OSSolverAgent::getJobID(string osol){
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
 	getJobIDResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
-	// desoapify the result -- i.e. replace &lt; with <  etc.
-	getJobIDResult = WSUtil::deSOAPify( getJobIDResult);
 	// strip out the OSxL that we want from the SOAP envelope
-	sjobID =  WSUtil::getOSxL(getJobIDResult, "getJobID");
+	getJobIDResult =  WSUtil::getOSxL(getJobIDResult, "getJobID");
+	// desoapify the result -- i.e. replace &lt; with <  etc.
+	sjobID = WSUtil::deSOAPify( getJobIDResult);
+
 	return sjobID;
 }//end getJobID
 
@@ -167,10 +168,10 @@ string OSSolverAgent::retrieve(string osol){
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
 	retrieveResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
-	// desoapify the result -- i.e. replace &lt; with <  etc.
-	retrieveResult = WSUtil::deSOAPify( retrieveResult);
 	// strip out the OSxL that we want from the SOAP envelope
-	sOSrL =  WSUtil::getOSxL(retrieveResult, "retrieve");
+	retrieveResult =  WSUtil::getOSxL(retrieveResult, "retrieve");
+	// desoapify the result -- i.e. replace &lt; with <  etc.
+	sOSrL = WSUtil::deSOAPify( retrieveResult);
 	return sOSrL;	
 }//end retrieve
 
@@ -192,10 +193,10 @@ string OSSolverAgent::kill(string osol){
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
 	killResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
-	// desoapify the result -- i.e. replace &lt; with <  etc.
-	killResult = WSUtil::deSOAPify( killResult);
 	// strip out the OSxL that we want from the SOAP envelope
-	sOSpL =  WSUtil::getOSxL( killResult, "kill");
+	 killResult =  WSUtil::getOSxL( killResult, "kill");
+	// desoapify the result -- i.e. replace &lt; with <  etc.
+	sOSpL = WSUtil::deSOAPify( killResult);
 	return sOSpL;
 }//end kill
 
@@ -218,9 +219,10 @@ string OSSolverAgent::knock(string ospl, string osol){
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
 	knockResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
-	// desoapify the result -- i.e. replace &lt; with <  etc.
-	knockResult = WSUtil::deSOAPify( knockResult);
+
 	// strip out the OSxL that we want from the SOAP envelope
-	sOSpL = WSUtil::getOSxL( knockResult, "knock");
+	knockResult = WSUtil::getOSxL( knockResult, "knock");
+	// desoapify the result -- i.e. replace &lt; with <  etc.
+	sOSpL = WSUtil::deSOAPify( knockResult);
 	return sOSpL;
 }//end knock

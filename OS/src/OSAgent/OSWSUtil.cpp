@@ -15,7 +15,7 @@
  * 
  */ 
 
-//#define DEBUG 
+#define DEBUG 
 #include "OSConfig.h"
 #ifdef WIN_
 	#ifndef _SYS_UNISTD_H
@@ -330,14 +330,14 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 	/*  get the string that starts with <osxl
 	 * inside the soap envelope
 	 */
-	string start = "";
-	string end = "";
+	//string start = "";
+	//string end = "";
 	string result = "";
-	start = "<" + serviceMethod + "Return";
-	end = "</"+serviceMethod + "Return";
+	//start = "<" + serviceMethod + "Return";
+	//end = "</"+serviceMethod + "Return";
 	// strip off the return header information 
 	// find start of XML information
-	string::size_type startxml = soapstring.find(start , 1);
+	string::size_type startxml = soapstring.find(serviceMethod+"Return" , 1);
 	if (startxml == string::npos){
 		return result;	
 	}    
@@ -345,7 +345,9 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 		startxml = soapstring.find(">", startxml + 1);
 		if(startxml == string::npos) return result;
 		// find the end of the string
-		string::size_type endxml = soapstring.find(end , startxml);
+		string::size_type endxml = soapstring.find( "</", startxml);
+		// now go back for the </
+		
 		if(endxml == string::npos){
 			return result;
 		}
