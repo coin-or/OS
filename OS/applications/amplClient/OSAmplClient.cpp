@@ -149,14 +149,20 @@ int main(int argc, char **argv)
 	
 	// get the solver set by AMPL
 	amplclient_options = getenv("OSAmplClient_options");
-	if( amplclient_options != NULL) cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
-	getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceURI);
+	if( amplclient_options != NULL){
+		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
+		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceURI);
+	}else{
+		std::cout << "Cbc is the default solver and will be used " <<    endl;
+		sSolverName = "cbc";
+		cout << "THERE WERE NO OPTIONS SPECIFIED " <<   endl;
+	}
 	
 	//std::cout << " solver Name = " << sSolverName << std::endl;
 	std::cout << " solver Options = " << osol << std::endl;
 	
 	try{
-		if(amplclient_options == NULL ) throw ErrorClass( "a local solver was not specified in AMPL option");
+		if( (amplclient_options == NULL)  && (sSolverName.size() == 0) ) throw ErrorClass( "a local solver was not specified in AMPL option");
 		else{
 			if( sSolverName == "lindo") {
 				// we are requesting the Lindo solver
