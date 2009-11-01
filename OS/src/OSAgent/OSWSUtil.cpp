@@ -15,7 +15,7 @@
  * 
  */ 
 
-#define DEBUG 
+//#define DEBUG 
 #include "OSConfig.h"
 #ifdef WIN_
 	#ifndef _SYS_UNISTD_H
