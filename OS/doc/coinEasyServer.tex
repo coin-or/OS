@@ -1,0 +1,368 @@
+\documentclass[11pt]{article}
+\usepackage{graphics,graphicx}
+%\usepackage[dvips]{graphics,graphicx}
+\DeclareGraphicsExtensions{.ps,.jpg,.eps,.pdf,.png}
+\usepackage{boxedminipage,amsmath,amsfonts}
+\usepackage{url}
+%\usepackage{secdot}
+%\usepackage{natbib}
+\usepackage{verbatim}
+%\usepackage{moreverb}
+\usepackage{enumerate}
+\usepackage{makeidx}
+\bibliographystyle{plain}
+\makeindex
+
+
+%%%%%
+% some other macros
+\newcommand{\figurepath}{./figures}
+\newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
+\newcommand{\figfiletype}{pdf}
+
+%Brad Bell Macros
+
+% Latex macros defined for all the CppAD documentation:
+\newcommand{\T}{ {\rm T} }
+\newcommand{\R}{ {\bf R} }
+\newcommand{\C}{ {\bf C} }
+\newcommand{\D}[2]{ \frac{\partial #1}{\partial #2} }
+\newcommand{\DD}[3]{ \frac{\partial^2 #1}{\partial #2 \partial #3} }
+\newcommand{\Dpow}[2]{ \frac{\partial^{#1}}{\partial  {#2}^{#1}} }
+\newcommand{\dpow}[2]{ \frac{ {\rm d}^{#1}}{{\rm d}\, {#2}^{#1}} }
+
+% Define the hangref environment used for the References list:
+\newenvironment{hangref}
+  {\begin{list}{}{\setlength{\itemsep}{4pt}
+  \setlength{\parsep}{0pt}\setlength{\leftmargin}{+\parindent}
+  \setlength{\itemindent}{-\parindent}}}{\end{list}}
+
+% Set the page margins to 1 inch all around:
+\marginparwidth 0pt\marginparsep 0pt \topskip 0pt\headsep
+0pt\headheight 0pt \oddsidemargin 0pt\evensidemargin 0pt
+\textwidth 6.5in \topmargin 0pt\textheight 9.0in
+\newtheorem{theorem}{Theorem}
+
+
+%%%%Added by Leo%%%%
+\newcounter{Fig}
+\renewcommand{\theFig}{\arabic{Fig}}
+\newcommand{\Fig}[2]{\refstepcounter{Fig} \label{#1}
+                     {\small\bf Figure \theFig.} {\small\sl #2 \par}}
+
+\setcounter{topnumber}{3}
+\renewcommand{\topfraction}{.9}
+\setcounter{bottomnumber}{3}
+\renewcommand{\bottomfraction}{.9}
+\setcounter{totalnumber}{4}
+\renewcommand{\textfraction}{.1}
+\setlength{\floatsep}{.25in}
+\setlength{\intextsep}{.25in}
+
+\setlength{\fboxrule}{2\fboxrule} \setlength{\fboxsep}{3\fboxsep}
+
+\newcommand{\Sa}{8pt}
+\newcommand{\Sb}{0pt}
+
+%\renewcommand{\_}{{\char"5F}}
+\renewcommand{\{}{{\char"7B}}
+\renewcommand{\}}{{\char"7D}}
+\renewcommand{\^}{{\char"0D}}
+
+\let\acute= \'
+\renewcommand{\'}{{\char"0D}}
+
+\newcommand{\bfit}{\bfseries\itshape}
+
+\newlength{\extopskip} \newlength{\exbottomskip}
+\setlength{\exbottomskip}{1\baselineskip}
+\addtolength{\exbottomskip}{-5.0pt}
+\setlength{\extopskip}{1\exbottomskip}
+\addtolength{\extopskip}{-1\parskip}
+
+\newenvironment{Example}{\vspace{1\extopskip}\noindent\hspace*{2em}
+                         \frenchspacing\small
+                         \tt\begin{tabular}{@{}l@{}}}{
+                         \end{tabular}\\[1\exbottomskip]}
+
+\newcommand{\Titem}{\item[$\triangleright$]}
+\newcommand{\Ditem}{\item[$\diamond$]}
+
+\newenvironment{Itemize}{\begin{quote}\normalsize
+   \baselineskip 20pt plus .3pt minus .1pt \begin{itemize}}
+   {\end{itemize}\end{quote}}
+   % Set path to folder containing figures
+\newcommand{\FigureFolder}{figures}
+
+\newif\ifknitro \knitrofalse    % change to \knitrotrue once we get knitro connected again
+\newif\ifipopt  \ipopttrue      % change to \ipopttrue  once we get the build problems sorted out
+
+
+
+
+
+\begin{document}
+
+
+\title{Using the COIN-OR Server}
+\vskip 2in
+\author{Your CoinEasy Team}
+\maketitle
+
+
+\newpage
+
+\section{Overview}\label{section:overview}
+
+
+This document is part of the {\bf CoinEasy} project. See \url{projects.coin-or.org/CoinEasy}. In this document we describe the options available to users of COIN-OR who are interested in solving optimization problems but do now wish to compile source and build any of the COIN-OR projects. In particular, we show how the user can send optimization problems to the a COIN-OR server and get results back.
+
+The COIN-OR server, \url{webdss.ise.ufl.edu},  is ... describe properties of the machine.  It allows the user to access the following COIN-OR optimization solvers:
+
+\begin{itemize}
+\item {\bf Bonmin} -- a solver for mixed-integer nonlinear optimization
+
+\item {\bf Cbc} -- a solver for mixed-integer linear programs
+
+\item {\bf Clp} -- a linear programming solver
+
+ \item  {\bf Couenne} -- a solver for mixed-integer nonlinear optimization problems and is capable of global optiomization
+
+ \item {\bf DyLP} -- a linear programming solver
+
+ \item {\bf Ipopt} -- an interior point nonlinear optimization solver
+
+ \item {\bf SYMPHONY} -- mixed integer linear solver that can be executed in either parallel (distributed or shared memory) or sequential modes
+
+ \item {\bf Vol} -- a linear programming solver
+\end{itemize}
+
+All of these solvers on the COIN-OR server may be accessed through either the GAMS or AMPL modeling languages.   In Section \ref{section:gams} we describe how to use the solvers using the GAMS modeling language. In Section \ref{section:ampl} we describe how to call the solvers using the AMPL modeling language.  In Section \ref{section:ossolverservice} we describe how to call the solvers using {\bf OSSolverService}.  The {\bf OSSolverService}  can be used independently of a modeling language.   It can send optimization instances to the solvers in MPS, OSiL (a new XML based representation standard), AMPL nl, and GAM dat formats. A nice feature of the OSSolverService is that it can be used in asynchronous mode for large problems.  This is described in Section \ref{section:async}. We show how to obtain a job id from the server, send a job to the server, check the server to see if the job is done, retrieve the job if it is done, and kill the job if it is taking too long. For sophisticated users we describe how to actually build applications that use the COIN-OR server in Section  \ref{section:applications}.  Finally we   describe how to download the necessary client software in Section \ref{section:binary}.    This software consists of executable programs for various platforms, the user is not required to compile code. 
+
+\section{Calling the COIN-OR  Server using a Modeling Language}\label{section:modellanguage}
+
+
+\subsection{Using GAMS}\label{section:gams}
+
+This section is based on the assumption that the user has installed GAMS (22.9 or above) on his or her machine.   In the {\tt bin}  directory there is a file {\tt gmsos\_.zip}. Copy this file into your GAMS folder. Then run {\tt gamsinst} and select {\tt OS}  as the default solver whenever it is listed as a solver.   You can now solve  a wide variety of  problems either locally or remotely through Optimization Services. In the discussion that follows we assume that folder where GAMS is installed is in the PATH command.
+
+
+In  the folder {\tt data/gamsFiles} directory are several test problems in GAMS model format.  Connect to this folder and execute the following command.
+
+\begin{verbatim}
+gams rbrockmod
+\end{verbatim}
+
+It is also possible to read an OS options file, generate the instance OSiL file, and write the solution  OSrL file.
+This is done by giving GAMS an options file. One such file, {\tt os.opt}, is illustrated below. The {\bf os.opt} file is:
+
+\begin{verbatim}
+writeosil osil.xml
+writeosrl osrl.xml
+readosol ../osolFiles/rosenbrockmod_ipopt.osol
+solver ipopt
+\end{verbatim}
+
+%The numbering system for the GAMS option files works as follows:
+GAMS options files follow specific naming conventions as set out below:
+
+\begin{verbatim}
+optfile=1 corresponds to <solver>.opt
+optfile=2 corresponds to <solver>.op2
+...
+optfile=99 corresponds to <solver>.op99
+\end{verbatim}
+
+For example, in order to solve the Rosenbrock test problem using the  options file  {\tt os.opt}
+execute the command
+
+\begin{verbatim}
+gams rbrock nlp os optfile=1
+\end{verbatim}
+
+
+It is also possible to have GAMS call a remote solver. If you have installed a remote solver service, then in the options file specify the option
+
+\begin{verbatim}
+service   serviceaddress
+\end{verbatim}
+
+
+
+\subsection{Using AMPL}\label{section:ampl}
+
+This section is based on the assumption that the user has installed  AMPL  on his or her machine.   It is possible to call all of the COIN-OR solvers listed in Section \ref{section:overview} directly from the  AMPL 
+(see {\tt http://www.ampl.com}) modeling language.  In this discussion we assume the user has already obtained and 
+installed AMPL.  In  the download described in Section \ref{section:binary} there is an executable, {\tt OSAmplClient.exe}  that is linked to all of the COIN-OR solvers  listed in Section \ref{section:overview}.   From the  perspective of AMPL, the   {\tt OSAmplClient} acts 
+like an AMPL ``solver''.    The {\tt OSAmplClient}   can be used 
+to solve problems either locally or remotely.   
+In the following discussion we assume that the AMPL executable {\tt ampl.exe}, the {\tt OSAmplClient},  and the test problem {\tt  parIncEx.mod} are all in the same directory.  
+
+
+The  problem instance {\tt parIncEx.mod} is an AMPL model file included in distribution  \ref{section:binary}.  To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then open the {\tt parIncEx.mod} file inside AMPL.
+
+\begin{verbatim}
+# take in sample LP problem
+# assume the problem is in the AMPL directory
+model parIncEx.mod;
+\end{verbatim}
+
+The next step is to tell AMPL that the solver it is going to use is OSAmplClient. Do this by issuing the following command inside AMPL.
+
+\begin{verbatim}
+# tell AMPL that the solver is OSAmplClient
+option solver OSAmplClient;
+\end{verbatim}
+
+It is not necessary to provide the  OSAmplclient solver with any options. You can just issue the solve command in AMPL as illustrated below.  
+
+\begin{verbatim}
+# solve the problem
+solve;
+\end{verbatim}
+
+If no options are specified, then the default solver Cbc is invoked and the problem is solved on the local (client) machine.  Next, assume that you have a large problem you want solve on the remote solver. It is necessary to specify the location of the server solver as an option to OSAmplClient. This is done as follows.
+ 
+{\tiny 
+\begin{verbatim}
+# now tell OSAmplClient to use the remote solver
+option OSAmplClient_options "serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+\end{verbatim}
+}
+
+This will send the problem to the solver server at location {\bf webdss.ise.ufl.edu}.  It is also easy to specify a solver other than the default solver. For example, in order to specify the SYMPHONY solver use the {\bf solver} option of OSAmplclient.   Invoking  SYMPHONY on the remote server is done as follows.
+
+
+{\tiny 
+\begin{verbatim}
+# now tell OSAmplClient to use the remote solver
+option OSAmplClient_options "solver symphony serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+\end{verbatim}
+}
+Always specify the name of the solver entirely in lower case.  Finally, the user may wish to pass options to a solver. This is done by providing an options file. A sample options file, {\bf symphony.osol} is provided with this distribution.  The sequence of options including the name of the options file is given below.
+
+{\tiny
+\begin{verbatim}
+model parIncEx.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "solver symphony optionFile symphony.osol  serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+solve;
+\end{verbatim}
+}
+
+
+%This will invoke Ipopt locally and the result in OSrL format will be displayed on the screen.
+%In addition, the values of the optimal solution, objective, dual variables, etc. are returned to
+%AMPL, so that they can be displayed and manipulated like solutions from any other AMPL solver.
+
+
+
+Different solvers have different options, and we recommend that the user look at the documentation for the solver of interest in order to see which options are available. 
+
+
+It is also possible to specify the name of the solver and the server location in the options file. Indeed, if you examine the file {\bf symphony.osol} you will see that there is an XML tag {\tt <solverToInvoke>} and that the solver given is {\bf symphony}. There is also an XML tag {\tt <serviceURI>} that can be used to specify the location of the server.  For the option file {\bf symphony.osol} executing 
+
+
+{\tiny
+\begin{verbatim}
+option OSAmplClient_options "solver symphony optionFile symphony.osol  serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+\end{verbatim}
+}
+\noindent has exactly the same effect as
+
+\begin{verbatim}
+option OSAmplClient_options "optionFile symphony.osol";
+\end{verbatim}
+It is possible to override the solver option and the server location given in the option file. For example, 
+\begin{verbatim}
+option OSAmplClient_options "optionFile symphony.osol solver bonmin";
+\end{verbatim}
+will invoke the {\bf bonmin} solver rather than symphony. 
+
+
+
+
+
+
+
+\vskip 12pt
+
+{\bf AMPL SUMMARY:}
+
+\begin{enumerate}
+\item tell  AMPL to use the OSAmplClient as the solver:
+
+\begin{verbatim}
+option solver OSAmplClient;
+\end{verbatim}
+
+\item specify options to the OSAmplclient solver by using the AMPL command {\bf OSAmplClient\_options}
+
+\item there are three possible options to specify:
+
+\begin{itemize}
+
+\item the name of the solver using the  {\bf solver} option
+
+\item the location of the remote server using   the {\bf serviceURI} option
+
+\item the location of the option file using  the {\bf optionFile} option
+
+\end{itemize}
+
+\item the {\bf solver} and {\bf service URI} options can be specified in the options file using the {\tt <solverToInvoke>} and {\tt <serviceURI>}  XML tags, respectively. 
+
+
+\item specifying the {\bf solver} or {\bf serviceURI} directly through {\bf OSAmplClient\_options} will override the settings in the options file
+
+\item if no options are specified using {\bf OSAmplClient\_options}, then the {\bf Cbc} solver will be invoked locally by {\bf OSAmplClient}
+
+\item  the options given to {\bf OSAmplClient\_options}  can be given in any order
+
+
+
+\end{enumerate}
+
+
+\section{Calling COIN-OR  Solvers Using OSSolverService}\label{section:ossolverservice}
+
+Make sure to illustrate using an MPS file and an nl file. 
+
+
+
+\section{More Sophisticated Methods}\label{section:sophisticated}
+
+Explain that using the modeling languages involve a synchronous call. Explain that we might want to submit jobs asynchronously. In doing so we need a job id, need to be knock the server to see if the job is done, and then retrieve the results. 
+
+\subsection{Making Asynchronous Calls}\label{section:async}
+
+\subsection{Writing Applications to Call  the COIN-OR Server}\label{section:applications}
+
+
+\section{Get the Client Software}\label{section:binary}
+
+Describe the binary and how to obtain.
+
+This distribution contains:
+
+\begin{itemize}
+
+\item OSAmplClient
+
+\item OSSolverService
+
+\item gmsos\_.zip (to be put in the GAMS directory if you use GAMS)
+
+\item parIncEx.mod an AMPL test problem
+
+\item rbrock.gms a GAMS  test problem
+
+\item symphony.osol -- a sample options file
+
+
+
+
+
+\end{itemize}
+
+\end{document}
