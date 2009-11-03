@@ -1566,23 +1566,20 @@ optimizationattlist: | optimizationattlist optimizationatt;
 optimizationatt: optimizationnvar | optimizationncon | optimizationnobj;
 
 optimizationnvar: NUMBEROFVARIABLESATT QUOTE INTEGER QUOTE
-{/*	if ($3 < 0)
-		osolerror( NULL, osoption, parserData, "Number of variables cannot be negative");
-  */
+{	if ($3 < -1)
+		osolerror( NULL, osoption, parserData, "Illegal number of variables specified");  
 	osoption->optimization->numberOfVariables = $3;
 };
 
 optimizationncon: NUMBEROFCONSTRAINTSATT QUOTE INTEGER QUOTE
-{/*	if ($3 < 0)
-		osolerror( NULL, osoption, parserData, "Number of constraints cannot be negative");
-  */
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Illegal number of constraints specified");
 	osoption->optimization->numberOfConstraints = $3;
 };
 
 optimizationnobj: NUMBEROFOBJECTIVESATT QUOTE INTEGER QUOTE
-{/*	if ($3 < 0)
-		osolerror( NULL, osoption, parserData, "Number of objectives cannot be negative");
-  */
+{	if ($3 < 0)
+		osolerror( NULL, osoption, parserData, "Illegal number of objectives specified");
 	osoption->optimization->numberOfObjectives = $3;
 };
 
