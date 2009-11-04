@@ -115,9 +115,7 @@
 \section{Overview}\label{section:overview}
 
 
-This document is part of the {\bf CoinEasy} project. See \url{projects.coin-or.org/CoinEasy}. In this document we describe the options available to users of COIN-OR who are interested in solving optimization problems but do now wish to compile source and build any of the COIN-OR projects. In particular, we show how the user can send optimization problems to the a COIN-OR server and get results back.
-
-The COIN-OR server, \url{webdss.ise.ufl.edu},  is ... describe properties of the machine.  It allows the user to access the following COIN-OR optimization solvers:
+This document is part of the {\bf CoinEasy} project. See \url{projects.coin-or.org/CoinEasy}. In this document we describe the options available to users of COIN-OR who are interested in solving optimization problems but do now wish to compile source code and build any of the COIN-OR projects. In particular, we show how the user can send optimization problems to a COIN-OR server and get results back.  The COIN-OR server, \url{webdss.ise.ufl.edu},   is 2x Intel(R) Xeon(TM) CPU 3.06GHz 512MiB L2 1024MiB L3, 2GiB DRAM,4x73GiB scsi disk 2xGigE machine.   It allows the user to access the following COIN-OR optimization solvers:
 
 \begin{itemize}
 \item {\bf Bonmin} -- a solver for mixed-integer nonlinear optimization
@@ -144,27 +142,42 @@ All of these solvers on the COIN-OR server may be accessed through either the GA
 
 \subsection{Using GAMS}\label{section:gams}
 
-This section is based on the assumption that the user has installed GAMS (22.9 or above) on his or her machine.   In the {\tt bin}  directory there is a file {\tt gmsos\_.zip}. Copy this file into your GAMS folder. Then run {\tt gamsinst} and select {\tt OS}  as the default solver whenever it is listed as a solver.   You can now solve  a wide variety of  problems either locally or remotely through Optimization Services. In the discussion that follows we assume that folder where GAMS is installed is in the PATH command.
+This section is based on the assumption that the user has installed GAMS (22.9 or above) on his or her machine.   In the  the distribution described in Section \ref{section:binary}  there is a file {\tt gmsos\_.zip}. Copy this file into your GAMS folder. Then run {\tt gamsinst} and select {\tt OS}  as the default solver whenever it is listed as a solver.   You can now solve  a wide variety of  problems either locally or remotely through Optimization Services. In the discussion that follows we assume that folder where GAMS is installed is in the PATH command.
 
 
-In  the folder {\tt data/gamsFiles} directory are several test problems in GAMS model format.  Connect to this folder and execute the following command.
+The distribution described in Section \ref{section:binary} contains a test problem, {\tt p0033.gams}, which is a linear integer program. To solve this problem type
 
 \begin{verbatim}
-gams rbrockmod
+gams p0033.gams
 \end{verbatim}
 
-It is also possible to read an OS options file, generate the instance OSiL file, and write the solution  OSrL file.
-This is done by giving GAMS an options file. One such file, {\tt os.opt}, is illustrated below. The {\bf os.opt} file is:
+This results in the test problem being solved on the local machine using the COIN-OR solver Cbc.  In order to invoke the COIN-OR solver server it is necessary to provide GAMS with an option file.  A key point to understand is that {\it in order to pass options to the solver on the server, the GAMS option file must contain the name of a solver option file that is passed to the server.}  For example, in order to pass options to the solvers on the COIN-OR solver server create a GAMS option file {\bf os.opt}. This option file should contain two options as follows:
 
+\begin{verbatim}
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+readosol solveroptions.osol
+\end{verbatim}
+
+Invoking the command
+
+\begin{verbatim}
+gams p0033.gams optfile 1
+\end{verbatim}
+will result in GAMS generating a problem instance and sending to the server at the location {\tt webdss.ise.ufl.edu}.  GAMS will also pass to the remote server the options specified in the file {\bf  solveroptions.osol.}
+
+The file {\bf solveroptions.osol} is contained in the distribution described in Section \ref{section:binary}. This file contains three solver options; two for Cbc, and one for SYMPHONY.  In addition there is an XML tag {\tt <solverToInvoke>}. This tag is used to tell the remote solver service which solver to invoke. The remote solver service will invoke Cbc by default. Hence it is important to set the value of this tag if a solve other than Cbc is desired. 
+
+It is also possible to  generate the instance OSiL file, and write a solution  OSrL file. If the file {\bf os.opt} contained the following four options then
 \begin{verbatim}
 writeosil osil.xml
 writeosrl osrl.xml
-readosol ../osolFiles/rosenbrockmod_ipopt.osol
-solver ipopt
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+readosol solveroptions.osol
 \end{verbatim}
+the model instance would be written to {\tt osil.xml}, the solution result would be written to {\tt osrl.xml},  and the option file {\tt  solveroptions.osol} would be sent to the server at {\tt webdss.ise.ufl.edu}.
 
 %The numbering system for the GAMS option files works as follows:
-GAMS options files follow specific naming conventions as set out below:
+It is possible to define multiple GAMS options files following the  specific naming conventions as set out below:
 
 \begin{verbatim}
 optfile=1 corresponds to <solver>.opt
@@ -173,21 +186,74 @@ optfile=2 corresponds to <solver>.op2
 optfile=99 corresponds to <solver>.op99
 \end{verbatim}
 
-For example, in order to solve the Rosenbrock test problem using the  options file  {\tt os.opt}
+For example, in order to solve the p0033.gams  test problem using the  options file  {\tt os.opt}
 execute the command
 
 \begin{verbatim}
 gams rbrock nlp os optfile=1
 \end{verbatim}
 
+\noindent {\bf IMPORTANT:} unlike the {\bf OSAmplClient} described in Section \ref{section:ampl}  the GAMS add-on does not parse the {\bf solveroptions.osol} file, it simply passes it onto the solver either locally or on the server.
+\vskip 10pt
 
-It is also possible to have GAMS call a remote solver. If you have installed a remote solver service, then in the options file specify the option
+
+{\bf GAMS SUMMARY:}
+
+\begin{enumerate}
+
+\item[1.]   Put {\bf gmsos\_.zip} in the GAMS directory, execute  {\tt gamsinst} and select {\tt OS}  as the default solver whenever it is listed as a solver.
+
+\item[2.]   If no options are given, then the model will be solved locally and Clp will be used for linear programs, Cbc for integer linear programs, Ipopt for continuous nonlinear programs, and Bonmin for nonlinear integer.
+
+\item[3.] In order to control behavior (for example, whether a local or remote solver is used) an options an option file, {\bf os.opt}, must be used as follows
 
 \begin{verbatim}
-service   serviceaddress
+gams p0033.gms optfile=1
+\end{verbatim}
+
+\item[4.]  The {\bf os.opt} file is used to specify {\it five potential options}:
+
+
+\begin{itemize}
+\item {\bf service:} using the COIN-OR solver server, this is done by giving the option
+
+\begin{verbatim}
+service  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 \end{verbatim}
 
 
+\item  {\bf readosol:} whether or not to send the solver an option file, this is done by giving the option
+\begin{verbatim}
+readosol  solveroptions.osol
+\end{verbatim}
+
+
+\item   {\bf solver:} if a local solve is being done,  a specific solver is specified by the option
+\begin{verbatim}
+solver solver_name
+\end{verbatim}
+
+When the COIN-OR solver service is being used, the only way to specify the solver to use is through the {\tt <solverToInvoke>} tag.
+
+
+\item  {\bf writeosrl:}  the solution result can be put into an XML file by specifying the option
+
+\begin{verbatim}
+writeosrl  osrl_file_name
+\end{verbatim}
+
+
+
+\item    {\bf writeosil:}   the optimization instance  can be put into an XML file by specifying the option
+
+\begin{verbatim}
+writeosil  osil_file_name
+\end{verbatim}
+\end{itemize}
+
+
+
+\end{enumerate}
 
 \subsection{Using AMPL}\label{section:ampl}
 
@@ -239,13 +305,13 @@ This will send the problem to the solver server at location {\bf webdss.ise.ufl.
 option OSAmplClient_options "solver symphony serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 \end{verbatim}
 }
-Always specify the name of the solver entirely in lower case.  Finally, the user may wish to pass options to a solver. This is done by providing an options file. A sample options file, {\bf symphony.osol} is provided with this distribution.  The sequence of options including the name of the options file is given below.
+Always specify the name of the solver entirely in lower case.  Finally, the user may wish to pass options to a solver. This is done by providing an options file. A sample options file, {\bf solveroptions.osol} is provided with this distribution.  The sequence of options including the name of the options file is given below.
 
 {\tiny
 \begin{verbatim}
 model parIncEx.mod;
 option solver OSAmplClient;
-option OSAmplClient_options "solver symphony optionFile symphony.osol  serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+option OSAmplClient_options "solver symphony optionFile solveroptions.osol  serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
 }
@@ -260,22 +326,22 @@ solve;
 Different solvers have different options, and we recommend that the user look at the documentation for the solver of interest in order to see which options are available. 
 
 
-It is also possible to specify the name of the solver and the server location in the options file. Indeed, if you examine the file {\bf symphony.osol} you will see that there is an XML tag {\tt <solverToInvoke>} and that the solver given is {\bf symphony}. There is also an XML tag {\tt <serviceURI>} that can be used to specify the location of the server.  For the option file {\bf symphony.osol} executing 
+It is also possible to specify the name of the solver and the server location in the options file. Indeed, if you examine the file {\bf solveroptions.osol} you will see that there is an XML tag {\tt <solverToInvoke>} and that the solver given is {\bf symphony}. There is also an XML tag {\tt <serviceURI>} that can be used to specify the location of the server.  For the option file {\bf solveroptions.osol} executing 
 
 
 {\tiny
 \begin{verbatim}
-option OSAmplClient_options "solver symphony optionFile symphony.osol  serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+option OSAmplClient_options "solver symphony optionFile solveroptions.osol  serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 \end{verbatim}
 }
 \noindent has exactly the same effect as
 
 \begin{verbatim}
-option OSAmplClient_options "optionFile symphony.osol";
+option OSAmplClient_options "optionFile solveroptions.osol";
 \end{verbatim}
 It is possible to override the solver option and the server location given in the option file. For example, 
 \begin{verbatim}
-option OSAmplClient_options "optionFile symphony.osol solver bonmin";
+option OSAmplClient_options "optionFile solveroptions.osol solver bonmin";
 \end{verbatim}
 will invoke the {\bf bonmin} solver rather than symphony. 
 
@@ -355,9 +421,9 @@ This distribution contains:
 
 \item parIncEx.mod an AMPL test problem
 
-\item rbrock.gms a GAMS  test problem
+\item p0033.gms a GAMS  test problem
 
-\item symphony.osol -- a sample options file
+\item solveroptions.osol -- a sample options file
 
 
 
@@ -368,4 +434,65 @@ This distribution contains:
 \end{document}
 
 
- If you want to try the server I have placed the WAR at http://webdss.ise.ufl.edu/public/OSServer.war You must have the following policy's to have it run. On debian this is in /etc/tomcat6/policy.d/50localgrant codeBase "file:${catalina.base}/webapps/OSServer/WEB-INF/-"{   permission java.lang.RuntimePermission "createClassLoader";   permission java.lang.RuntimePermission "getClassLoader";   permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote";   permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote.*";   permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.*";   permission java.util.PropertyPermission "java.*", "read";   permission java.util.PropertyPermission "org.apache.commons.discovery.log.level", "read";   permission java.util.PropertyPermission "org.apache.axis.EngineConfigurationFactory", "read";   permission java.util.PropertyPermission "org.apache.coyote.*", "read";   permission java.util.PropertyPermission "axis.*", "read";   permission java.util.PropertyPermission "user.*", "read";   permission java.util.PropertyPermission "transport.*", "read";   permission java.util.PropertyPermission "use-servlet-security", "read"; }; grant codeBase "file:${catalina.base}/webapps/OSServer/WEB-INF/-"{   permission java.io.FilePermission "${catalina.base}/webapps/OSServer/WEB-INF/code/-", "read,write";   permission java.io.FilePermission "${catalina.base}/webapps/OSServer/WEB-INF/code/solver/*", "read,execute"; }; If you wish to build it from source the eclipse projects are at http://webdss.ise.ufl.edu/public/OSServer.zip http://webdss.ise.ufl.edu/public/Tools.zip You must have some libraries installed locally in /usr/share/java in ubuntu I do a sudo apt-get install --yes zip unzip ; \ sudo apt-get install --yes openjdk-6-jdk openjdk-6-jre-headless tomcat6 tomcat6-user ; \ sudo apt-get install --yes libcommons-fileupload-java libcommons-logging-java \   libcommons-io-java libcommons-discovery-java \   libsaxon-java libaxis-java liblog4j1.2-java libsaxonb-java You must also create a tomcat server for eclipse to use, this is done by cd workspace install -d Servers TOMCAT=Servers/tomcat6 tomcat6-instance-create $TOMCAT ln -s /usr/share/tomcat6/bin/bootstrap.jar $TOMCAT/bincat /etc/tomcat6/policy.d/* > $TOMCAT/conf/catalina.policy ln -s /usr/share/tomcat6/lib $TOMCAT you must then go to Eclipse and run File > New > Other > "Server" > Tomcat v6.0 Server > select local tomcat6 for server to add the new server local server, then add the "Server" tab and start the server.
+
+
+
+ If you want to try the server I have placed the WAR at
+
+ http://webdss.ise.ufl.edu/public/OSServer.war
+
+ You must have the following policy's to have it run.
+ On debian this is in /etc/tomcat6/policy.d/50local
+
+grant codeBase "file:${catalina.base}/webapps/OSServer/WEB-INF/-"{
+   permission java.lang.RuntimePermission "createClassLoader";
+   permission java.lang.RuntimePermission "getClassLoader";
+   permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote";
+   permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote.*";
+   permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.*";
+   permission java.util.PropertyPermission "java.*", "read";
+   permission java.util.PropertyPermission "org.apache.commons.discovery.log.level", "read";
+   permission java.util.PropertyPermission "org.apache.axis.EngineConfigurationFactory", "read";
+   permission java.util.PropertyPermission "org.apache.coyote.*", "read";
+   permission java.util.PropertyPermission "axis.*", "read";
+   permission java.util.PropertyPermission "user.*", "read";
+   permission java.util.PropertyPermission "transport.*", "read";
+   permission java.util.PropertyPermission "use-servlet-security", "read";
+ };
+
+ grant codeBase "file:${catalina.base}/webapps/OSServer/WEB-INF/-"{
+   permission java.io.FilePermission "${catalina.base}/webapps/OSServer/WEB-INF/code/-", "read,write";
+   permission java.io.FilePermission "${catalina.base}/webapps/OSServer/WEB-INF/code/solver/*", "read,execute";
+ };
+
+
+ If you wish to build it from source the eclipse projects are at
+
+ http://webdss.ise.ufl.edu/public/OSServer.zip
+ http://webdss.ise.ufl.edu/public/Tools.zip
+
+ You must have some libraries installed locally in /usr/share/java
+
+ in ubuntu I do a
+ sudo apt-get install --yes zip unzip ; \
+ sudo apt-get install --yes openjdk-6-jdk openjdk-6-jre-headless tomcat6 tomcat6-user ; \
+ sudo apt-get install --yes libcommons-fileupload-java libcommons-logging-java \
+   libcommons-io-java libcommons-discovery-java \   libsaxon-java libaxis-java liblog4j1.2-java libsaxonb-java
+
+ You must also create a tomcat server for eclipse to use, this is done by
+
+ cd workspace
+ install -d Servers
+ TOMCAT=Servers/tomcat6
+ tomcat6-instance-create $TOMCAT
+ ln -s /usr/share/tomcat6/bin/bootstrap.jar $TOMCAT/bin
+cat /etc/tomcat6/policy.d/* > $TOMCAT/conf/catalina.policy
+ ln -s /usr/share/tomcat6/lib $TOMCAT
+
+ you must then go to Eclipse and run File > New > Other > "Server" > Tomcat v6.0 Server > select local tomcat6 for server
+
+ to add the new server local server, then add the "Server" tab and start the server.
+
+
+
+
