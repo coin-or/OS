@@ -32,7 +32,7 @@
 		<totalJobsSoFar >17</totalJobsSoFar>
 		<timeServiceStarted >1970-01-01T00:00:00Z</timeServiceStarted>
 		<serviceUtilization>0.80</serviceUtilization>
-		<otherResults numberOfOtherResults="1" >
+		<otherResults numberOfOtherResults="1"  >
 			<other name="other" description="just there to test parser" value="none"></other>
 		</otherResults>
 	</service>
@@ -63,7 +63,7 @@
 			<message>Hello world</message>
 			<variables numberOfOtherVariableResults="3" >
 				<values numberOfVar="2">
-					<var idx="0" >
+					<var idx="0"  >
 						.8724300006558884
 					</var >
 					<var idx="1" >
@@ -96,7 +96,7 @@
 					<obj idx="-1">6.727903962147923</obj>
 					<obj idx="-2">3.14</obj>
 				</values>
-				<other numberOfObj="1" name="test">
+				<other numberOfObj="1" name="test" value="NIL" description="Just testing all possibilities">
 					<obj idx="-1" >zero</obj>
 				</other>
 			</objectives>
@@ -108,7 +108,7 @@
 				<other numberOfCon="0" name="conTest" description="just a test for the constraints section" value="no commercial"></other>
 			</constraints>
 			<otherSolutionResults  numberOfOtherSolutionResults="2" >
-				<otherSolutionResult name="requestResults1" description="the request results"  numberOfItems="1">
+				<otherSolutionResult name="requestResults1" description="the request results"  numberOfItems="1" category="testing:local">
 					<item>Hi Gus</item>
 				</otherSolutionResult>
 				<otherSolutionResult name="requestResults2" description="the request results"  numberOfItems="1">
