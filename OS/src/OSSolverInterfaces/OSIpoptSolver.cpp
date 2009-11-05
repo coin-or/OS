@@ -517,7 +517,12 @@ void IpoptProblem::finalize_solution(SolverReturn status,
   	int solIdx = 0;
   	int numberOfOtherVariableResults;
   	int otherIdx;
+	int numCon = osinstance->getConstraintNumber();
 	ostringstream outStr;
+	
+	
+	//make sure the sign on the dual values is correct
+	double *dualValue = NULL;
 	
 	std::string *rcost = NULL;
 	int* idx = NULL;
@@ -554,21 +559,33 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				solutionDescription = "SUCCESS[IPOPT]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
 				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
+				dualValue = new double[ numCon];
+				for (Index i=0; i < numCon; i++) {
+					dualValue[ i] = -lambda[ i];
+				}
+				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>(lambda)); 
+				osresult->setDualVariableValuesDense(solIdx, dualValue); 
 				mdObjValues[0] = obj_value;
 				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 				
 				
 				// set other
 				
-				numberOfOtherVariableResults = 2;
+				numberOfOtherVariableResults = 1;
 				osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
 				
 			
 				rcost = new std::string[ osinstance->getVariableNumber()];
 				idx = new int[ osinstance->getVariableNumber()];
-				
-
+				for (Index i = 0; i < n; i++) {
+				    rcost[ i] =  os_dtoa_format( z_L[i] - z_U[i]); 
+					idx[ i] = i;
+				}
+				otherIdx = 0;
+				osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", 
+				    idx, rcost, osinstance->getVariableNumber());	
+				//set dual values on variable upper and lower bounds
+				/*
 				for (Index i = 0; i < n; i++) {
 				    rcost[ i] =  os_dtoa_format( z_L[i]); 
 					idx[ i] = i;
@@ -582,9 +599,10 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				 }
 				otherIdx = 1;
 				osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "varU", "", "Lagrange Multiplier on the Variable Upper Bound", idx,  rcost, osinstance->getVariableNumber() );
-				
+				*/
 				delete[] rcost;
 				delete[] idx;
+				delete dualValue;
 				
 				// done with other
 				
