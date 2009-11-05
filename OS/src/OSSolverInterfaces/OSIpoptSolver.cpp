@@ -602,7 +602,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				*/
 				delete[] rcost;
 				delete[] idx;
-				delete dualValue;
+				delete[] dualValue;
 				
 				// done with other
 				
