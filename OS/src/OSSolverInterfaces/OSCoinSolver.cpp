@@ -590,13 +590,14 @@ bool CoinSolver::setCoinPackedMatrix(){
 			columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
 			0,   0, maxGap ); 
 		}else {
+			int start = 0;
 			m_CoinPackedMatrix = new CoinPackedMatrix(
 			columnMajor, //Column or Row Major
 			columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
 			columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
 			osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
 			columnMajor? NULL : NULL, //Pointer to matrix nonzeroes
-			columnMajor? NULL : NULL, //Pointer to start of minor dimension indexes -- change to allow for row storage
+			&start, //Pointer to start of minor dimension indexes -- change to allow for row storage
 			columnMajor? NULL : NULL, //Pointers to start of columns.
 			0,   0, maxGap ); 			
 		}
