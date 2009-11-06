@@ -206,7 +206,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
 			//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver:" + sSolverName + " needs an objective function");
 			//if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver:" + sSolverName + " can only handle numeric variables");
-			if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony") throw ErrorClass("Coin solver:" + sSolverName +   " needs linear constraints");
+			if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony") throw ErrorClass("Coin solver:" + sSolverName +   " needs a positive number of variables");
 
 			if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
 			osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
@@ -253,7 +253,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
 	std::cout << "build solver options" << std::endl;
-
+	this->bSetSolverOptions = true;
 	// the osi maps
 	// the OsiHintParameter Map
 	std::map<std::string, OsiHintParam> hintParamMap;
@@ -308,7 +308,10 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	 * */
 	OsiHintStrength hintStrength = OsiHintTry; //don't want too much output
 	osiSolver->setHintParam(OsiDoReducePrint, true, hintStrength);
-	osiSolver->setDblParam(OsiObjOffset, osinstance->getObjectiveConstants()[0]);
+	// it looks like the COIN-OR default is to subtract off the constant rather than add it.
+	// this seems true regardless of max or min
+	osiSolver->setDblParam(OsiObjOffset, -osinstance->getObjectiveConstants()[0]);
+	
 	
 	
 	// treat symphony differently
@@ -337,7 +340,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
 			//std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			if( osoption->getNumberOfSolverOptions() <= 0) return;
-			this->bSetSolverOptions = true;
+			//this->bSetSolverOptions = true;
 			std::vector<SolverOption*> optionsVector;
 			//get the osi options
 			optionsVector = osoption->getSolverOptions( "osi");

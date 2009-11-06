@@ -487,15 +487,13 @@ bool IpoptProblem::get_scaling_parameters(Number& obj_scaling,
 }//get_scaling_parameters
 
 void IpoptProblem::finalize_solution(SolverReturn status,
-                               Index n, const Number* x, const Number* z_L, const Number* z_U,
-                                  Index m, const Number* g, const Number* lambda,
-                                  Number obj_value,
-                                   const IpoptData* ip_data,
-                                   IpoptCalculatedQuantities* ip_cq)
-{
+	Index n, const Number* x, const Number* z_L, const Number* z_U,
+	Index m, const Number* g, const Number* lambda, Number obj_value,
+	const IpoptData* ip_data, IpoptCalculatedQuantities* ip_cq){
 	  // here is where we would store the solution to variables, or write to a file, etc
 	  // so we could use the solution.
 	  // For this example, we write the solution to the console
+	obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), true)[ 0];
 	OSrLWriter *osrlwriter ;
 	osrlwriter = new OSrLWriter();
 #ifdef DEBUG
@@ -512,7 +510,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 	    printf("z_U[%d] = %e\n", i, z_U[i]);
 	  }
 #endif
-	  printf("\nObjective value f(x*) = %e\n", obj_value);
+	printf("\nObjective value f(x*) = %e\n", obj_value  );
 	  
   	int solIdx = 0;
   	int numberOfOtherVariableResults;
@@ -565,7 +563,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				}
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>(lambda)); 
 				osresult->setDualVariableValuesDense(solIdx, dualValue); 
-				mdObjValues[0] = obj_value;
+				mdObjValues[0] = obj_value ;
 				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 				
 				
@@ -613,7 +611,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
 				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
-				mdObjValues[0] = obj_value;
+				mdObjValues[0] = obj_value ;
 				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 			break;
 			case STOP_AT_TINY_STEP:
@@ -621,7 +619,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>( x)); 
 				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
-				mdObjValues[0] = obj_value;
+				mdObjValues[0] = obj_value ;
 				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
@@ -629,7 +627,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				osresult->setSolutionStatus(solIdx,  "IpoptAccetable", solutionDescription);
 				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
 				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
-				mdObjValues[0] = obj_value;
+				mdObjValues[0] = obj_value ;
 				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 			break;
 			case LOCAL_INFEASIBILITY:
