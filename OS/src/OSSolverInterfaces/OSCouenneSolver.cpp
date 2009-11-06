@@ -168,37 +168,38 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		//couenne = new CouenneProblem(NULL, NULL, jnlst);
 		couenne = new CouenneProblem(NULL, NULL, NULL);
 		int n_allvars = osinstance->getVariableNumber();
-		if( n_allvars <= 0 )throw ErrorClass("Couenne solver Needs Variables");
+		if( n_allvars < 0 )throw ErrorClass("Couenne solver Cannot have a negatiave number of Variables");
 		#ifdef DEBUG
 		std::cout << "NUMBER OF VARIABLES = " <<  n_allvars <<  std::endl;
 		#endif
-	
-		// create room for problem's variables and bounds
-		CouNumber *x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
-		CouNumber	*lb = NULL, *ub = NULL;
-	
-		// now get variable upper and lower bounds
-		ub = osinstance->getVariableUpperBounds();
-		lb = osinstance->getVariableLowerBounds();
+		if(n_allvars > 0){
+			// create room for problem's variables and bounds
+			CouNumber *x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
+			CouNumber	*lb = NULL, *ub = NULL;
 		
-		//declare the variable types
-		char *varType;
-		varType = osinstance->getVariableTypes();
-		for (i = 0; i < n_allvars; ++i) {
-			if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
-				couenne->addVariable(true, couenne->domain() );
-			}
-			else{
-				
-				couenne->addVariable(false, couenne->domain() );
-				
-			}
+			// now get variable upper and lower bounds
+			ub = osinstance->getVariableUpperBounds();
+			lb = osinstance->getVariableLowerBounds();
+			
+			//declare the variable types
+			char *varType;
+			varType = osinstance->getVariableTypes();
+			for (i = 0; i < n_allvars; ++i) {
+				if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
+					couenne->addVariable(true, couenne->domain() );
+				}
+				else{
+					
+					couenne->addVariable(false, couenne->domain() );
+					
+				}
 
-			x_[i] = 0.;     //HIG: This sets initial values?
+				x_[i] = 0.;     //HIG: This sets initial values?
+			}
+			
+			couenne->domain()->push(n_allvars, x_, lb, ub);
+			free(x_);
 		}
-		
-		couenne->domain()->push(n_allvars, x_, lb, ub);
-  		free(x_);
 	
 		// now for the objective function -- assume just one for now
 		//just worry about linear coefficients
@@ -578,7 +579,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 				throw ErrorClass("OSResult error: setSolutionNumer");		
 			if(osresult->setGeneralMessage( message) != true)
 				throw ErrorClass("OSResult error: setGeneralMessage");
-			solutionDescription = "COUENNE INITIALIZE PROBLEM: There was a problem with Couenne Initialize -- the problem could be infeasible";
+			solutionDescription = "COUENNE INITIALIZE PROBLEM: \n There was a problem with Couenne Initialize: \n the problem could be infeasible \n there may be zero decision variables";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 			osresult->setGeneralStatusType("normal");
 			osrl = osrlwriter->writeOSrL( osresult);		

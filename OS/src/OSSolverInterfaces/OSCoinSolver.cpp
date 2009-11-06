@@ -202,11 +202,11 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 				if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do integer programming");
 			}
 			// check other trivial solver limitations
-			if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver cannot handle unconstrained problems");
-			if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
-			if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver needs an objective function");
-			if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver can only handle numeric variables");
-			if(osinstance->getLinearConstraintCoefficientNumber() <= 0) throw ErrorClass("Coin solver needs linear constraints");
+			if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver:" + sSolverName +" cannot handle unconstrained problems");
+			//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
+			if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver:" + sSolverName + " needs an objective function");
+			if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver:" + sSolverName + " can only handle numeric variables");
+			if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony") throw ErrorClass("Coin solver:" + sSolverName +   " needs linear constraints");
 
 			if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
 			osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(), 
@@ -579,7 +579,8 @@ bool CoinSolver::setCoinPackedMatrix(){
 	bool columnMajor = osinstance->getLinearConstraintCoefficientMajor();
 	try{
 		int maxGap = 0;
-		m_CoinPackedMatrix = new CoinPackedMatrix(
+		if(osinstance->getVariableNumber() > 0){
+			m_CoinPackedMatrix = new CoinPackedMatrix(
 			columnMajor, //Column or Row Major
 			columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
 			columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
@@ -588,6 +589,18 @@ bool CoinSolver::setCoinPackedMatrix(){
 			columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes : osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
 			columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
 			0,   0, maxGap ); 
+		}else {
+			m_CoinPackedMatrix = new CoinPackedMatrix(
+			columnMajor, //Column or Row Major
+			columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
+			columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
+			osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
+			columnMajor? NULL : NULL, //Pointer to matrix nonzeroes
+			columnMajor? NULL : NULL, //Pointer to start of minor dimension indexes -- change to allow for row storage
+			columnMajor? NULL : NULL, //Pointers to start of columns.
+			0,   0, maxGap ); 			
+		}
+
 
 		return true;
 	}
@@ -878,23 +891,29 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	else{ 
 		if(solver->isProvenPrimalInfeasible() == true) 
 			osresult->setSolutionStatus(solIdx, "infeasible", "the problem is primal infeasible");
-		else
+		else{
 			if(solver->isProvenDualInfeasible() == true) 
 				osresult->setSolutionStatus(solIdx, "unbounded", "the problem is unbounded");
-			else
+			else{
 				if(solver->isPrimalObjectiveLimitReached() == true) 
 					osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
-				else
+				else{
 					if(solver->isDualObjectiveLimitReached() == true) 
 						osresult->setSolutionStatus(solIdx, "other", "dual objective limit reached");
-					else
+					else{
 						if(solver->isIterationLimitReached() == true) 
 							osresult->setSolutionStatus(solIdx, "other", "iteration limit reached");
-						else
+						else{
 							if(solver->isAbandoned() == true) 
 								osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
+								if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 							else
 								osresult->setSolutionStatus(solIdx, "other", description);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	/* Retrieve the solution */
@@ -969,26 +988,32 @@ void CoinSolver::writeResult(CbcModel *model){
 	else{ 
 		if(model->isProvenInfeasible() == true) 
 			osresult->setSolutionStatus(solIdx, "infeasible", "the integer program is infeasible");
-		else
+		else{
 			if(model->isProvenDualInfeasible() == true) 
 				osresult->setSolutionStatus(solIdx, "infeasible", "the continuous relaxation is dual infeasible");
-			else
+			else{
 				if(model->isContinuousUnbounded() == true) 
 					osresult->setSolutionStatus(solIdx, "other", "the continuous relaxation is unbounded");
-				else
+				else{
 					if(model->isNodeLimitReached() == true) 
 						osresult->setSolutionStatus(solIdx, "other", "node limit reached");
-					else
+					else{
 						if(model->isSecondsLimitReached() == true) 
 							osresult->setSolutionStatus(solIdx, "other", "time limit reached");
-						else
+						else{
 							if(model->isSolutionLimitReached() == true) 
 								osresult->setSolutionStatus(solIdx, "other", "solution limit reached");
-							else
+							else{
 								if(model->isAbandoned() == true) 
 									osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
 								else
 									osresult->setSolutionStatus(solIdx, "other","unknown");
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	/* Retrieve the solution -- of course it may not be optimal */

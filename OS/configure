@@ -30345,6 +30345,11 @@ fi
 
 
 if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincLinearZeroVar.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/parincQuadratic.osil"
 fi
 

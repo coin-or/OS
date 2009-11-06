@@ -726,7 +726,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		//double start = CoinCpuTime();
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
-		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
+		//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
 		//double duration = CoinCpuTime() - start;
 
 		  try {
@@ -754,12 +754,13 @@ void BonminSolver::solve() throw (ErrorClass) {
 		std::string solutionDescription = "";
 		std::string message = "Success";
 		int solIdx = 0;
+
 		if(osresult->setServiceName( "Bonin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 			throw ErrorClass("OSResult error: setInstanceName");
-		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
-			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()  ) != true)
+			throw ErrorClass("OSResult error: setVariableNumber");
 		if(osresult->setObjectiveNumber( 1) != true)
 			throw ErrorClass("OSResult error: setObjectiveNumber");
 		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
@@ -771,6 +772,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		solutionDescription = "The problem is unbounded";
 			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 		osresult->setGeneralStatusType("normal");
+		if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 		osrl = osrlwriter->writeOSrL( osresult);		
 		return;
 	}
@@ -780,6 +782,8 @@ void BonminSolver::solve() throw (ErrorClass) {
 		std::string solutionDescription = "";
 		std::string message = "Success";
 		int solIdx = 0;
+		
+
 		if(osresult->setServiceName( "Bonin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
@@ -791,12 +795,13 @@ void BonminSolver::solve() throw (ErrorClass) {
 		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
 			throw ErrorClass("OSResult error: setConstraintNumber");
 		if(osresult->setSolutionNumber(  1) != true)
-			throw ErrorClass("OSResult error: setSolutionNumer");		
+			throw ErrorClass("OSResult error: setSolutionNumber");		
 		if(osresult->setGeneralMessage( message) != true)
 			throw ErrorClass("OSResult error: setGeneralMessage");
 		solutionDescription = "The problem is infeasible";
 			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 		osresult->setGeneralStatusType("normal");
+		if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 		osrl = osrlwriter->writeOSrL( osresult);		
 		return;
 	}
@@ -822,6 +827,7 @@ void BonminSolver::writeResult(){
 	int solIdx = 0;
 	std::string solutionDescription = "";
 	std::string message = "Bonmin solver finishes to the end.";
+	if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(0, "Warning: this problem has zero decision variables!");
 	
 	
 	try{

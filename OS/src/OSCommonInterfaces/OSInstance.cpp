@@ -12,7 +12,7 @@
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
- * Please see the accompanying LICENSE file in root directory for terms.
+ * Please see the accompanying LICENSE file in root directory for terms.osinstance->getVariableNumber()
  *
  *
  */
@@ -147,7 +147,7 @@ OSInstance::~OSInstance(){
 	std::map<int, OSExpressionTree*>::iterator posMapExpTree;
 	// delete  the temporary arrays
 	
-	if(m_bProcessVariables == true){
+	if(this->instanceData->variables->numberOfVariables > 0 && m_bProcessVariables == true){
 		delete[] m_msVariableNames;
 		m_msVariableNames = NULL;
 		delete[] m_mcVariableTypes;
@@ -989,7 +989,7 @@ bool OSInstance::processVariables() {
 	int i = 0;
 	int n = instanceData->variables->numberOfVariables;
 	try{
-		if(instanceData->variables->var == NULL) throw ErrorClass("no variables defined");
+		//if(instanceData->variables->var == NULL) throw ErrorClass("no variables defined");
 		/*
 			m_mdVariableInitialValues = new double[n];
 			for(i = 0; i < n; i++){
@@ -1007,28 +1007,31 @@ bool OSInstance::processVariables() {
 		}
 		*/
 		
-		if(m_bProcessVariables != true ){
-			m_mcVariableTypes = new char[n];
-			m_mdVariableLowerBounds = new double[n];
-			m_mdVariableUpperBounds = new double[n];
-			m_msVariableNames = new string[n];
-			m_bProcessVariables = true;
-		}
 		m_iNumberOfBinaryVariables = 0;
 		m_iNumberOfIntegerVariables = 0;
 		m_iNumberOfStringVariables = 0;
-		for(i = 0; i < n; i++){
-			if(vartype.find(instanceData->variables->var[i]->type) == string::npos) throw ErrorClass("wrong variable type");
-			m_mcVariableTypes[i] = instanceData->variables->var[i]->type;
-			if(m_mcVariableTypes[i] == 'B') m_iNumberOfBinaryVariables++;
-			if(m_mcVariableTypes[i] == 'I') m_iNumberOfIntegerVariables++;
-			if(m_mcVariableTypes[i] == 'S') m_iNumberOfStringVariables++;
-			m_mdVariableLowerBounds[i] = instanceData->variables->var[i]->lb;
-			m_mdVariableUpperBounds[i] = instanceData->variables->var[i]->ub;
+		if(n > 0){
+			if(m_bProcessVariables != true ){
+				m_mcVariableTypes = new char[n];
+				m_mdVariableLowerBounds = new double[n];
+				m_mdVariableUpperBounds = new double[n];
+				m_msVariableNames = new string[n];
+				m_bProcessVariables = true;
+			}
+
+			for(i = 0; i < n; i++){
+				if(vartype.find(instanceData->variables->var[i]->type) == string::npos) throw ErrorClass("wrong variable type");
+				m_mcVariableTypes[i] = instanceData->variables->var[i]->type;
+				if(m_mcVariableTypes[i] == 'B') m_iNumberOfBinaryVariables++;
+				if(m_mcVariableTypes[i] == 'I') m_iNumberOfIntegerVariables++;
+				if(m_mcVariableTypes[i] == 'S') m_iNumberOfStringVariables++;
+				m_mdVariableLowerBounds[i] = instanceData->variables->var[i]->lb;
+				m_mdVariableUpperBounds[i] = instanceData->variables->var[i]->ub;
+			}
+			if(instanceData->variables->var[0]->name.length() > 0 || instanceData->variables->var[n-1]->name.length() > 0){
+				for(i = 0; i < n; i++) m_msVariableNames[i] = instanceData->variables->var[i]->name;
+			} 
 		}
-		if(instanceData->variables->var[0]->name.length() > 0 || instanceData->variables->var[n-1]->name.length() > 0){
-			for(i = 0; i < n; i++) m_msVariableNames[i] = instanceData->variables->var[i]->name;
-		} 
 		return true;
 	} //end try
 	catch(const ErrorClass& eclass){
@@ -1346,6 +1349,7 @@ bool OSInstance::getLinearConstraintCoefficientMajor() {
 
 SparseMatrix* OSInstance::getLinearConstraintCoefficientsInColumnMajor() {
 	processLinearConstraintCoefficients();
+	if(getVariableNumber() ==  0) return NULL;
 	if(m_linearConstraintCoefficientsInColumnMajor != NULL) return m_linearConstraintCoefficientsInColumnMajor;
 	if(!m_bColumnMajor){
 		if(m_linearConstraintCoefficientsInRowMajor == NULL) return NULL;
@@ -2002,7 +2006,7 @@ std::string OSInstance::printModel(int rowIdx ){
 					outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
 					outStr << "*";
 
-				if( this->instanceData->variables->var[  varIdx ]->name.size() > 0){
+				if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  varIdx ]->name.size() > 0){
 					outStr << this->instanceData->variables->var[  varIdx ]->name;
 				}else{
 					outStr << "x_";
@@ -2022,7 +2026,7 @@ std::string OSInstance::printModel(int rowIdx ){
 		for(j = 0; j < obj_nonz; j++){
 			outStr << os_dtoa_format( m_mObjectiveCoefficients[obj_idx]->values[j] );
 			outStr << "*";
-			if( this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0){
+			if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0){
 				outStr << this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name;
 			}else{
 				outStr << "x_";
@@ -2496,14 +2500,14 @@ bool OSInstance::setInstanceName(string name){
 
 bool OSInstance::setVariableNumber(int number){
 	// this method assume osinstance->instanceData->variables is not null
-	if(number <= 0) return false;
+	if(number < 0) return false;
 	//if(instanceData->variables->numberOfVariables != -1  && instanceData->variables->numberOfVariables != number){
 	//	delete[] instanceData->variables->var;
 	//	instanceData->variables->var = NULL;
 	//} 
 	if(instanceData->variables == NULL) instanceData->variables = new Variables();
 	instanceData->variables->numberOfVariables = number;
-	if(instanceData->variables->var == NULL){
+	if(instanceData->variables->var == NULL && number > 0){
 		instanceData->variables->var = new Variable*[number];
 	}
 	return true;

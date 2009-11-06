@@ -526,6 +526,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					}
 					outStr << "</status>" << endl;
 				}
+				
 				if(m_OSResult->optimization->solution[i]->message != ""){
 					outStr << "<message>" << endl;
 					outStr << m_OSResult->optimization->solution[i]->message  << endl;

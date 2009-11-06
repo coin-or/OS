@@ -635,34 +635,42 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case LOCAL_INFEASIBILITY:
 				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
 				osresult->setSolutionStatus(solIdx,  "infeasible", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 			break;
 			case USER_REQUESTED_STOP:
 				solutionDescription = "USER_REQUESTED_STOP[IPOPT]: The user call-back function  intermediate_callback returned false, i.e., the user code requested a premature termination of the optimization.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 			break;
 			case DIVERGING_ITERATES:
 				solutionDescription = "DIVERGING_ITERATES[IPOPT]: It seems that the iterates diverge.";
 				osresult->setSolutionStatus(solIdx,  "unbounded", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 			break;
 			case RESTORATION_FAILURE:
 				solutionDescription = "RESTORATION_FAILURE[IPOPT]: Restoration phase failed, algorithm doesn't know how to proceed.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 			break;
 			case ERROR_IN_STEP_COMPUTATION:
 				solutionDescription = "ERROR_IN_STEP_COMPUTATION[IPOPT]: An unrecoverable error occurred while IPOPT tried to compute the search direction.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 			break;
 			case INVALID_NUMBER_DETECTED:
 				solutionDescription = "INVALID_NUMBER_DETECTED[IPOPT]: Algorithm received an invalid number (such as NaN or Inf) from the NLP; see also option check_derivatives_for_naninf.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 			break;
 			case INTERNAL_ERROR:
 				solutionDescription = "INTERNAL_ERROR[IPOPT]: An unknown internal error occurred. Please contact the IPOPT authors through the mailing list.";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 			break;
 			default:
 				solutionDescription = "OTHER[IPOPT]: other unknown solution status from Ipopt solver";
 				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
+				if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 		}
 		osresult->setGeneralStatusType("normal");
 		delete osrlwriter;
@@ -789,7 +797,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		start = clock();
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
-		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
+		//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		//cout << "Parsing took (seconds): " << duration << endl; 

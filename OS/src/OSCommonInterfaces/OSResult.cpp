@@ -1925,7 +1925,7 @@ bool OSResult::setJobOtherResultDescription(int idx, string description){
 
 
 bool OSResult::setVariableNumber(int variableNumber){
-	if(variableNumber <= 0){
+	if(variableNumber < 0){
 		return false;
 	}
 	if(optimization == NULL) optimization = new OptimizationResult();

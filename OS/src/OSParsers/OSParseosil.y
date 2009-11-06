@@ -1319,208 +1319,240 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	ch++;
 	numberOfVariables = atoimod1( osillineno, attText, attTextEnd);
 	delete [] attText;
-	if(numberOfVariables <= 0) {
-		osilerror_wrapper( ch,osillineno,"there must be at least one variable"); return false;
+	if(numberOfVariables <  0) {
+		osilerror_wrapper( ch,osillineno,"there must be a nonnegative number of variables"); return false;
 	}
 	osinstance->instanceData->variables->numberOfVariables = numberOfVariables;
-	osinstance->instanceData->variables->var = new Variable*[ numberOfVariables];
-	for(i = 0; i < numberOfVariables; i++){
-		osinstance->instanceData->variables->var[ i] = new Variable();
-	} 
+	if(numberOfVariables > 0){
+		osinstance->instanceData->variables->var = new Variable*[ numberOfVariables];
+		for(i = 0; i < numberOfVariables; i++){
+			osinstance->instanceData->variables->var[ i] = new Variable();
+		} 
+	}
 	// get rid of white space after the numberOfVariables element
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ )                     
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;                    
 	// since there must be at least one variable,  this element must end with > 
-	// better have an > sign or not valid
-	if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"variables element does not have a proper closing >"); return false;}
-	ch++;
-	// get rid of white space
-	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-	// now loop over the var elements, there must be at least one var element
-	*p = ch;                                            
-	while(*startVar++  == *ch) ch++;
-	if( (ch - *p) ==  4) foundVar = true;
-		else {  osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
-	startVar -= 5;
-	while(foundVar){
-		varlbattON  = false;
-		varubattON = false ;
-		vartypeattON  = false;
-		varnameattON = false ;
-		//varinitattON = false ; 
-		//varinitStringattON = false ;
-		varmultattON = false;
-		foundVar = false;
-		// assume we are pointing to the first character after the r in <var
-		// it should be whitespace
-		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-		while(*ch != '/' && *ch != '>'){
-			switch (*ch) {
-			case 'n':
-				*p = ch;
-				while(*name++  == *ch) ch++;
-				if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"error in variables name attribute"); return false;}
-				name -= 5;
-				if(varnameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable name attributes"); return false;}
-				varnameattON = true;
-				GETATTRIBUTETEXT;
-				osinstance->instanceData->variables->var[varcount]->name=attText;
-				delete [] attText;
-				//printf("ATTRIBUTE = %s\n", attText);
-				break;
-				/*
-			case 'i':
-				*p = ch;
-				while(*initString++  == *ch) ch++;
-				// if i < 4 there is an error
-				// if i = 4 we matched init
-				// if i = 10 we matched initString
-				if( ( (ch - *p) != 4)  && ( (ch - *p) != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
-				if((ch - *p) == 4){
-					if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable init attributes"); return false;}
-					varinitattON = true;
+	if(numberOfVariables > 0){
+		// better have an > sign or not valid
+		if(*ch != '>' ) {  osilerror_wrapper( ch,osillineno,"variables element does not have a proper closing >"); return false;}
+		ch++;
+		// get rid of white space
+		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
+		// now loop over the var element when there we numberOfVariables is strictly positive
+		*p = ch;
+		while(*startVar++  == *ch) ch++;
+		if( (ch - *p) ==  4) foundVar = true;
+			else {  osilerror_wrapper( ch,osillineno,"there must be at least one <var> element"); return false;}
+		startVar -= 5;
+		while(foundVar){
+			varlbattON  = false;
+			varubattON = false ;
+			vartypeattON  = false;
+			varnameattON = false ;
+			//varinitattON = false ; 
+			//varinitStringattON = false ;
+			varmultattON = false;
+			foundVar = false;
+			// assume we are pointing to the first character after the r in <var
+			// it should be whitespace
+			for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+			while(*ch != '/' && *ch != '>'){
+				switch (*ch) {
+				case 'n':
+					*p = ch;
+					while(*name++  == *ch) ch++;
+					if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"error in variables name attribute"); return false;}
+					name -= 5;
+					if(varnameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable name attributes"); return false;}
+					varnameattON = true;
 					GETATTRIBUTETEXT;
-					//printf("ATTRIBUTE = %s\n", attText);
-					osinstance->instanceData->variables->var[varcount]->init=atofmod1( osillineno,attText, attTextEnd);
+					osinstance->instanceData->variables->var[varcount]->name=attText;
 					delete [] attText;
-					initString -= 5;
-				}
-				else{
-					if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable initString attributes"); return false;}
-					varinitStringattON = true;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+					/*
+				case 'i':
+					*p = ch;
+					while(*initString++  == *ch) ch++;
+					// if i < 4 there is an error
+					// if i = 4 we matched init
+					// if i = 10 we matched initString
+					if( ( (ch - *p) != 4)  && ( (ch - *p) != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
+					if((ch - *p) == 4){
+						if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable init attributes"); return false;}
+						varinitattON = true;
+						GETATTRIBUTETEXT;
+						//printf("ATTRIBUTE = %s\n", attText);
+						osinstance->instanceData->variables->var[varcount]->init=atofmod1( osillineno,attText, attTextEnd);
+						delete [] attText;
+						initString -= 5;
+					}
+					else{
+						if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable initString attributes"); return false;}
+						varinitStringattON = true;
+						GETATTRIBUTETEXT;
+						//printf("ATTRIBUTE = %s\n", attText);
+						osinstance->instanceData->variables->var[varcount]->initString=attText;
+						delete [] attText;
+						initString -= 11;
+					}
+					break;
+					*/
+				case 't':
+					*p = ch;
+					while(*type++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables type attribute"); return false;}
+					type -= 5;
+					if(vartypeattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable type attributes"); return false;}
+					vartypeattON = true;
 					GETATTRIBUTETEXT;
-					//printf("ATTRIBUTE = %s\n", attText);
-					osinstance->instanceData->variables->var[varcount]->initString=attText;
+					if( strchr("CBIS", attText[0]) == NULL ) {  osilerror_wrapper( ch,osillineno,"variable type not C,B,I, or S"); return false;}
+					osinstance->instanceData->variables->var[varcount]->type = attText[0];
+					if (strchr("B",    attText[0]) != NULL) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
 					delete [] attText;
-					initString -= 11;
+					break;
+				case 'l':
+					ch++;
+					if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables lower bound attribute"); return false;}
+					if(varlbattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable lb attributes"); return false;}
+					varlbattON = true;
+					GETATTRIBUTETEXT;
+					osinstance->instanceData->variables->var[varcount]->lb = atofmod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case 'u':
+					ch++;
+					if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables upper bound attribute"); return false;}
+					if(varubattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable ub attributes"); return false;}
+					varubattON = true;
+					GETATTRIBUTETEXT;
+					osinstance->instanceData->variables->var[varcount]->ub = atofmod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case 'm':
+					*p = ch;
+					while(*mult++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables mult attribute"); return false;}
+					mult -= 5;
+					if(varmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable mult attributes"); return false;}
+					varmultattON = true;
+					GETATTRIBUTETEXT;
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case ' ':
+					break;
+				case '\n':
+					(*osillineno)++;
+					break;
+				case '\t':
+					break;
+				case '\r':
+					break;
+				default:
+					{  osilerror_wrapper( ch,osillineno,"invalid attribute character"); return false;}
+					break;
 				}
-				break;
-				*/
-			case 't':
-				*p = ch;
-				while(*type++  == *ch) ch++;
-				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables type attribute"); return false;}
-				type -= 5;
-				if(vartypeattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable type attributes"); return false;}
-				vartypeattON = true;
-				GETATTRIBUTETEXT;
-				if( strchr("CBIS", attText[0]) == NULL ) {  osilerror_wrapper( ch,osillineno,"variable type not C,B,I, or S"); return false;}
-				osinstance->instanceData->variables->var[varcount]->type = attText[0];
-				if (strchr("B",    attText[0]) != NULL) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
-				delete [] attText;
-				break;
-			case 'l':
 				ch++;
-				if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables lower bound attribute"); return false;}
-				if(varlbattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable lb attributes"); return false;}
-				varlbattON = true;
-				GETATTRIBUTETEXT;
-				osinstance->instanceData->variables->var[varcount]->lb = atofmod1( osillineno,attText, attTextEnd);
-				delete [] attText;
-				//printf("ATTRIBUTE = %s\n", attText);
-				break;
-			case 'u':
+			}
+			//
+			// assume all the attributes have been processed
+			// must have either /> or > and then whitespace and </var whitespace>
+			if( *ch != '/' && *ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
+			if(*ch == '/'){
 				ch++;
-				if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables upper bound attribute"); return false;}
-				if(varubattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable ub attributes"); return false;}
-				varubattON = true;
-				GETATTRIBUTETEXT;
-				osinstance->instanceData->variables->var[varcount]->ub = atofmod1( osillineno,attText, attTextEnd);
-				delete [] attText;
-				//printf("ATTRIBUTE = %s\n", attText);
-				break;
-			case 'm':
+				if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
+				// get rid of whitespace
+				ch++;
+				for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+				// either have another <var> element or foundVar = false;
 				*p = ch;
-				while(*mult++  == *ch) ch++;
-				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables mult attribute"); return false;}
-				mult -= 5;
-				if(varmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable mult attributes"); return false;}
-				varmultattON = true;
-				GETATTRIBUTETEXT;
-				delete [] attText;
-				//printf("ATTRIBUTE = %s\n", attText);
-				break;
-			case ' ':
-				break;
-			case '\n':
-				(*osillineno)++;
-				break;
-			case '\t':
-				break;
-			case '\r':
-				break;
-			default:
-				{  osilerror_wrapper( ch,osillineno,"invalid attribute character"); return false;}
-				break;
+				while(*startVar++  == *ch) ch++;
+				if( (ch - *p) == 4) {
+					foundVar = true;
+					startVar -= 5;
+				}
+				else {
+					foundVar = false;
+					ch = *p;
+				}
 			}
-			ch++;
-		}
-		//
-		// assume all the attributes have been processed
-		// must have either /> or > and then whitespace and </var whitespace>
-		if( *ch != '/' && *ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
-		if(*ch == '/'){
-			ch++;
-			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"incorrect end of <var> element"); return false;}
-			// get rid of whitespace
-			ch++;
-			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-			// either have another <var> element or foundVar = false;
-			*p = ch;
-			while(*startVar++  == *ch) ch++;
-			if( (ch - *p) == 4) {
-				foundVar = true;
-				startVar -= 5;
+			else{
+				// the buf_index is the > at the end of the var element 
+				// double check to make sure it really is a >
+				if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <var> element"); return false;}
+				// look for </var
+				// fist get rid of white space
+				ch++;
+				for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+				// we should be at </var or there is an error
+				*p = ch;
+				while(*endVar++  == *ch) ch++;
+				endVar -= 6;
+				if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</var> element missing"); return false;}
+				// burn off the whitespace
+				for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+				// better have an > to end </var
+				if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</var> element missing >"); return false;}
+				// look for a new <var> element
+				// get rid of whitespace
+				ch++;
+				for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+				// either have another <var> element or foundVar = false;
+				*p = ch;
+				while(*startVar++  == *ch) ch++;
+				if( (ch - *p) == 4) {
+					foundVar = true;
+					startVar -= 5;
+				}
+				else {
+					foundVar = false;
+					ch = *p;
+				}
 			}
-			else {
-				foundVar = false;
-				ch = *p;
-			}
+			if( (varcount == numberOfVariables - 1) && (foundVar == true) ) {   osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
+			varcount++;
+		}// end while(foundVar)
+		if(varcount < numberOfVariables) {  osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   return false;}
+		// get the </variables> tag
+		*p = ch;
+		while(*endVariables++  == *ch) ch++;
+		if( (ch - *p) != 11) {   osilerror_wrapper( ch,osillineno,"cannot find </varialbes> tag"); return false;}
+		for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
+		// better have >
+		if(*ch != '>') {   osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}
+		ch++;
+	}else {//end if(numberOfVarialbe > 0)
+		// error if the number is negative
+		if(numberOfVariables < 0) {  osilerror_wrapper( ch,osillineno,"cannot have a negative number of variables"); return false;}
+		// if we are here we have numberOfConstraints = 0
+		// must close with /> or </constraints>
+		// get rid of white space
+		for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+		if( *ch == '/'){
+			// better have a >
+			ch++;
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed constraints tag"); return false;}
+			ch++;
 		}
 		else{
-			// the buf_index is the > at the end of the var element 
-			// double check to make sure it really is a >
-			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <var> element"); return false;}
-			// look for </var
-			// fist get rid of white space
+			// if we are here we must have an '>' and then  </constraints> tag
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed varialbes tag"); return false;}
 			ch++;
+			// burn white space
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-			// we should be at </var or there is an error
 			*p = ch;
-			while(*endVar++  == *ch) ch++;
-			endVar -= 6;
-			if( (ch - *p) != 5) {  osilerror_wrapper( ch,osillineno,"</var> element missing"); return false;}
-			// burn off the whitespace
-			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-			// better have an > to end </var
-			if(*ch++ != '>') {  osilerror_wrapper( ch,osillineno,"</var> element missing >"); return false;}
-			// look for a new <var> element
-			// get rid of whitespace
+			while( *endVariables++  == *ch) ch++;
+			if( (ch - *p) != 11) {  osilerror_wrapper( ch,osillineno, "cannot find </variables> tag"); return false; }
+			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
+			// better have >
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}	
 			ch++;
-			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
-			// either have another <var> element or foundVar = false;
-			*p = ch;
-			while(*startVar++  == *ch) ch++;
-			if( (ch - *p) == 4) {
-				foundVar = true;
-				startVar -= 5;
-			}
-			else {
-				foundVar = false;
-				ch = *p;
-			}
 		}
-		if( (varcount == numberOfVariables - 1) && (foundVar == true) ) {   osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
-		varcount++;
+
 	}
-	if(varcount < numberOfVariables) {  osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   return false;}
-	// get the </variables> tag
-	*p = ch;
-	while(*endVariables++  == *ch) ch++;
-	if( (ch - *p) != 11) {   osilerror_wrapper( ch,osillineno,"cannot find </varialbes> tag"); return false;}
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
-	// better have >
-	if(*ch != '>') {   osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}
-	ch++;
 	finish = clock();
 	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
 	//printf("TIME TO PARSE VARIABLES = %f\n", duration);
@@ -1642,6 +1674,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
 						osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef=atoimod1( osillineno,attText, attTextEnd);
+						if(osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef > 0 && osinstance->instanceData->variables->numberOfVariables == 0){  osilerror_wrapper( ch,osillineno,"we have zero variables, but have objective function coefficients"); return false;}
 						osinstance->instanceData->objectives->obj[objcount]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
 						for(int i = 0; i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef; i++)osinstance->instanceData->objectives->obj[objcount]->coef[i] = new ObjCoef();
 						delete [] attText;
@@ -2114,6 +2147,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 	GETATTRIBUTETEXT;
 	ch++;
 	numberOfValues = atoimod1( osillineno, attText, attTextEnd);
+	if(numberOfValues > 0 && osinstance->instanceData->variables->numberOfVariables == 0){  osilerror_wrapper( ch,osillineno,"we have zero variables, but A matrix coefficients"); return false;}
 	delete [] attText;
 	if(numberOfValues <= 0) {  osilerror_wrapper( ch,osillineno,"the number of nonlinear nozeros must be positive"); return false;}
 	osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
