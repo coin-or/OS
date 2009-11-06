@@ -597,8 +597,8 @@ bool CoinSolver::setCoinPackedMatrix(){
 			columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
 			osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
 			columnMajor? NULL : NULL, //Pointer to matrix nonzeroes
-			&start, //Pointer to start of minor dimension indexes -- change to allow for row storage
-			columnMajor? NULL : NULL, //Pointers to start of columns.
+			columnMajor? NULL : NULL, //Pointer to start of minor dimension indexes -- change to allow for row storage
+			&start, //Pointers to start of columns.
 			0,   0, maxGap ); 			
 		}
 
@@ -929,6 +929,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	osresult->setPrimalVariableValuesDense(solIdx, x); 
 	// Symphony does not get dual prices
 	if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
+		assert(solver->getNumRows() >= osinstance->getConstraintNumber());
+		assert(solver->getRowPrice() != NULL);
 		for(i=0; i <  osinstance->getConstraintNumber(); i++){
 			*(y + i) = solver->getRowPrice()[ i];
 		}
