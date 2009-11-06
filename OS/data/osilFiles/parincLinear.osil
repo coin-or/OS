@@ -14,7 +14,7 @@
 		</variables>
 		<objectives numberOfObjectives="1">
 			<obj name = "Par, Inc. Objective Function" 
-				maxOrMin="max"  numberOfObjCoef="2" constant="1.5">
+				maxOrMin="max"  numberOfObjCoef="2" >
 				<coef idx="0">10</coef>
 				<coef idx="1">9</coef>
 			</obj>
