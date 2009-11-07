@@ -30,7 +30,7 @@ using std::cout;
 using std::endl; 
 using std::ostringstream;
 //using namespace Ipopt;
-
+ 
 
 IpoptSolver::IpoptSolver() {
 	osrlwriter = new OSrLWriter();
@@ -65,7 +65,7 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                              Index& nnz_h_lag, IndexStyleEnum& index_style)
 {
 	try{
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");     
+		//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");     
 		if( (osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables()) > 0 )  
 			throw ErrorClass("Ipopt does not solve integer programs -- please try Bonmin or Couenne");
 		// number of variables
@@ -303,13 +303,14 @@ bool IpoptProblem::get_starting_point(Index n, bool init_x, Number* x,
 // returns the value of the objective function
 bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
 	try{
-	
-		//the following is a kludge for ipopt, new_x does not seem to get initilized if there are no constraints.
-		//if(osinstance->getConstraintNumber() <= 0) new_x = true;
-		if(new_x == false) obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), false)[ 0];
-			else obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, true, 0 )[ 0];
-		//if( CoinIsnan( (double)obj_value) ) return false;
-		if( CoinIsnan( obj_value ) )return false;
+		if(osinstance->getObjectiveNumber() > 0){
+			//the following is a kludge for ipopt, new_x does not seem to get initilized if there are no constraints.
+			//if(osinstance->getConstraintNumber() <= 0) new_x = true;
+			if(new_x == false) obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), false)[ 0];
+				else obj_value = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, true, 0 )[ 0];
+			//if( CoinIsnan( (double)obj_value) ) return false;
+			if( CoinIsnan( obj_value ) )return false;
+		}
 
 	}
 	catch(const ErrorClass& eclass){
@@ -323,21 +324,23 @@ bool IpoptProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_valu
 
 bool IpoptProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
- 	double *objGrad;
-	try{
-  		//objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
-  		objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
+ 	double *objGrad = NULL;
+	if(osinstance->getObjectiveNumber() > 0){
+		try{
+			//objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
+			objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
+		}
+		catch(const ErrorClass& eclass){
+	#ifdef DEBUG
+			cout << "error in OSIpoptSolver, line 314:\n" << eclass.errormsg << endl;
+	#endif
+			*ipoptErrorMsg = eclass.errormsg;
+			throw;  
+		}
+		for(i = 0; i < n; i++){
+			grad_f[ i]  = objGrad[ i];
+		}
 	}
-   	catch(const ErrorClass& eclass){
-#ifdef DEBUG
-		cout << "error in OSIpoptSolver, line 314:\n" << eclass.errormsg << endl;
-#endif
-		*ipoptErrorMsg = eclass.errormsg;
-		throw;  
-	}
-  	for(i = 0; i < n; i++){
-  		grad_f[ i]  = objGrad[ i];
-  	}
   	return true;
 }//eval_grad_f
 
@@ -564,7 +567,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>(lambda)); 
 				osresult->setDualVariableValuesDense(solIdx, dualValue); 
 				mdObjValues[0] = obj_value ;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
+				if(osinstance->getObjectiveNumber() > 0)osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
 				
 				
 				// set other
@@ -695,7 +698,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
 void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 	try{
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
+		//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
 		this->bSetSolverOptions = true;
 		/* set the default options */	
 		//app->Options()->SetNumericValue("tol", 1e-9);
@@ -709,9 +712,11 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		if( (osinstance-> getNumberOfNonlinearExpressions() <= 0) && (osinstance->getNumberOfQuadraticTerms() <= 0) ){
 			app->Options()->SetStringValue("hessian_constant", "yes", true, true);
 		}
-		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
-  			app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
-  		}
+		if(osinstance->getObjectiveNumber() > 0){
+			if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") != 0){
+				app->Options()->SetStringValue("nlp_scaling_method", "user-scaling");
+			}
+		}
 		/* end of the default options, now get options from OSoL */
 	
 		
@@ -802,7 +807,7 @@ void IpoptSolver::solve() throw (ErrorClass) {
 		//dataEchoCheck();
 		/***************now the ipopt invokation*********************/
 		// see if we have a linear program
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
+		//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
 		// Intialize the IpoptApplication and process the options
 //		std::cout << "Call Ipopt Initialize" << std::endl;
 		app->Initialize();

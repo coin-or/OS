@@ -674,7 +674,6 @@ void CoinSolver::solve() throw (ErrorClass) {
 			
 				generalMessageHandler = model.messageHandler();
 				currentMessage = generalMessageHandler->currentMessage();
-				std::cout << "GAIL HONDA =  "  << currentMessage.message() << std::endl;
 				std::cout << "HIGHEST NUMBER =  "  << generalMessageHandler->highestNumber() << std::endl;
 				std::cout << "CURRENT SOURCE =  "  << generalMessageHandler->currentSource() << std::endl;
 				std::cout << "MESSAGE BUFFER =  "  << generalMessageHandler->messageBuffer() << std::endl;
@@ -735,7 +734,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				numberOfMessages = coinMessages.numberMessages_;
 				generalMessageHandler = model.messageHandler();
 				currentMessage = generalMessageHandler->currentMessage();
-				std::cout << "GAIL HONDA =  "  << currentMessage.message() << std::endl;
+				
 				std::cout << "HIGHEST NUMBER =  "  << generalMessageHandler->highestNumber() << std::endl;
 				std::cout << "CURRENT SOURCE =  "  << generalMessageHandler->currentSource() << std::endl;
 				std::cout << "MESSAGE BUFFER =  "  << generalMessageHandler->messageBuffer() << std::endl;
