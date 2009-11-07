@@ -1178,7 +1178,7 @@ double** OSInstance::getDenseObjectiveCoefficients() {
 	//m_bGetDenseObjectives = true;
 	int i, j, numobjcoef;
 	SparseVector *sparsevec;
-	std::cout << "NUMBER OF OBJECTIVES =  " << instanceData->objectives->numberOfObjectives << std::endl;
+	//std::cout << "NUMBER OF OBJECTIVES =  " << instanceData->objectives->numberOfObjectives << std::endl;
 	if(instanceData->objectives->numberOfObjectives == 0) return NULL;
 	if(instanceData->objectives->obj == NULL || instanceData->objectives->numberOfObjectives == 0) return m_mmdDenseObjectiveCoefficients;
 	int m = instanceData->objectives->numberOfObjectives;
@@ -4251,6 +4251,10 @@ bool OSInstance::initObjGradients(){
 	m = getObjectiveNumber();
 	n = getVariableNumber();
 	getDenseObjectiveCoefficients();
+	if(m <= 0){
+		m_mmdObjGradient = NULL;
+		return true;
+	}
 	m_mmdObjGradient = new double*[m];
 	for(i = 0; i < m; i++){
 		m_mmdObjGradient[i] = new double[n];
