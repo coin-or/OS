@@ -527,7 +527,7 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if defined YYENABLE_NLS && YYENABLE_NLS
+# if YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -857,29 +857,29 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   227,   227,   233,   234,   239,   246,   247,   249,   249,
-     261,   262,   265,   266,   270,   273,   276,   279,   285,   292,
-     299,   301,   305,   308,   309,   313,   319,   321,   320,   328,
-     343,   344,   345,   346,   347,   348,   349,   350,   351,   352,
-     353,   354,   355,   356,   357,   358,   359,   360,   361,   362,
-     363,   364,   365,   366,   369,   369,   374,   374,   379,   379,
-     384,   384,   389,   389,   394,   394,   399,   399,   409,   410,
-     415,   415,   427,   428,   431,   431,   442,   443,   445,   445,
-     456,   457,   460,   460,   470,   471,   474,   474,   479,   479,
-     484,   484,   489,   489,   494,   494,   501,   501,   506,   506,
-     514,   514,   522,   522,   529,   529,   532,   533,   535,   535,
-     538,   539,   541,   541,   546,   547,   549,   550,   552,   554,
-     556,   560,   560,   564,   564,   568,   571,   575,   575,   580,
-     581,   581,   585,   587,   588,   590,   592,   596,   599,   603,
-     611,   611,   613,   615,   616,   617,   618,   620,   621,   623,
-     674,   676,   690,   691,   693,   693,   717,   718,   721,   722,
-     724,   726,   727,   731,   732,   734,   735,   737,   753,   761,
-     768,   773,   774,   776,   777,   779,   779,   782,   791,   792,
-     794,   795,   799,   800,   802,   803,   805,   821,   829,   836,
-     841,   842,   844,   845,   847,   847,   850,   859,   860,   862,
-     872,   876,   877,   879,   880,   882,   898,   906,   913,   918,
-     919,   921,   922,   924,   924,   927,   936,   937,   942,   942,
-     950,   951,   953,   954,   956,   960,   965,   969
+       0,   227,   227,   232,   233,   238,   245,   246,   248,   248,
+     260,   261,   264,   265,   269,   272,   275,   278,   284,   291,
+     298,   300,   304,   307,   308,   312,   318,   320,   319,   327,
+     342,   343,   344,   345,   346,   347,   348,   349,   350,   351,
+     352,   353,   354,   355,   356,   357,   358,   359,   360,   361,
+     362,   363,   364,   365,   368,   368,   373,   373,   378,   378,
+     383,   383,   388,   388,   393,   393,   398,   398,   408,   409,
+     414,   414,   426,   427,   430,   430,   441,   442,   444,   444,
+     455,   456,   459,   459,   469,   470,   473,   473,   478,   478,
+     483,   483,   488,   488,   493,   493,   500,   500,   505,   505,
+     513,   513,   521,   521,   528,   528,   531,   532,   534,   534,
+     537,   538,   540,   540,   545,   546,   548,   549,   551,   553,
+     555,   559,   559,   563,   563,   567,   570,   574,   574,   579,
+     580,   580,   584,   586,   587,   589,   591,   595,   598,   602,
+     610,   610,   612,   614,   615,   616,   617,   619,   620,   622,
+     673,   675,   689,   690,   692,   692,   716,   717,   720,   721,
+     723,   725,   726,   730,   731,   733,   734,   736,   752,   760,
+     767,   772,   773,   775,   776,   778,   778,   781,   790,   791,
+     793,   794,   798,   799,   801,   802,   804,   820,   828,   835,
+     840,   841,   843,   844,   846,   846,   849,   858,   859,   861,
+     871,   875,   876,   878,   879,   881,   897,   905,   912,   917,
+     918,   920,   921,   923,   923,   926,   935,   936,   941,   941,
+     949,   950,   952,   953,   955,   959,   964,   968
 };
 #endif
 
@@ -1367,7 +1367,7 @@ while (YYID (0))
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+# if YYLTYPE_IS_TRIVIAL
 #  define YY_LOCATION_PRINT(File, Loc)			\
      fprintf (File, "%d.%d-%d.%d",			\
 	      (Loc).first_line, (Loc).first_column,	\
@@ -1954,7 +1954,7 @@ YYLTYPE yylloc;
   yyssp = yyss;
   yyvsp = yyvs;
   yylsp = yyls;
-#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+#if YYLTYPE_IS_TRIVIAL
   /* Initialize the default location before parsing starts.  */
   yylloc.first_line   = yylloc.last_line   = 1;
   yylloc.first_column = yylloc.last_column = 0;
@@ -3390,6 +3390,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 		if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceHeader> element"); return false;}
 		// there is no instanceHeader data
 		pchar++;
+		*p = pchar;
 		return true;
 	}
 	else{
@@ -3586,20 +3587,36 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 	while(*startInstanceData++  == *pchar) pchar++;
 	if( (pchar - *p) != 13) {  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); return false;}	
 	// now burn whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 	// pchar must point to '>' or there is an error
-	if(*pchar != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); return false;}	
+	if(*pchar == '>'){
 	pchar++;
 	// we are now pointing to the first char after <instanceData>
 	// burn any whitespace
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 	// we should be pointing to the '<' char in <variables>
 	*p = pchar;
+	std::cout << "GAIL 0" << std::endl;
 	if( parseVariables( p, osinstance, osillineno) != true) {throw ErrorClass("error in parse variables");}
+	std::cout << "GAIL 1" << std::endl;
+
 	if( parseObjectives( p, osinstance, osillineno) != true)  throw ErrorClass("error in parse objectives");
+
+	std::cout << "GAIL 2" << std::endl;
 	if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parse Constraints");
 	if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parse ConstraintCoefficients");
-	
-	//
+	std::cout << "GAIL 3" << std::endl;
+
+	}else{
+	std::cout << "START OF GAIL" << std::endl;
+	std::cout << *p << std::endl;
+	std::cout << "END OF GAIL" << std::endl;
+		//osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); 
+		return true;
+	}
+	//for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+	// we should be pointing to the '<' char in <variables>
+	//*p = pchar;	
 	return true;
 }// end parseInstanceData
 
@@ -3636,10 +3653,13 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	bool varmultattON = false;
 	bool foundVar = false;
 	//
-	// start parsing
+	// start parsing -- okay not to have variables 
+	// burn white space
+	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	*p = ch;
 	while(*startVariables++  == *ch) ch++;
 	if( (ch - *p) != 10) {  osilerror_wrapper( ch,osillineno,"incorrect <variables tag>"); return false;}
+	//if( (ch - *p) != 10) {   return true;}
 	// find numberOfVariables attribute
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;

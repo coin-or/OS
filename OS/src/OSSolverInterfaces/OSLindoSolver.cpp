@@ -165,7 +165,7 @@ void LindoSolver::buildSolverInstance() throw (ErrorClass) {
 			std::cout << "HERE I AM 2 !!!!!!!!!!!!!!!!!!!" << std::endl;
 		}		
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
-		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Lindo requires decision variables");
+		if(osinstance->getVariableNumber() <  0)throw ErrorClass("Cannot have a negative number of decision variables");
 		std::cout << "Start process variables !!!!!!!!!" << std::endl;
 		if( !processVariables() ) throw ErrorClass("failed processing variables");
 		std::cout << "Finish process variables!!!!!!" << std::endl;

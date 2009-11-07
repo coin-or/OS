@@ -205,36 +205,39 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		//just worry about linear coefficients
 
 		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Couenne NEEDS AN OBJECTIVE FUNCTION");
-		SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
 		
-		int nterms = sv->number;
-		exprGroup::lincoeff lin( nterms);
-		for ( i = 0; i < nterms; ++i){
-				lin[i].first = couenne->Var( sv->indexes[ i] );
+		
+		//if(n_allvars > 0){
+			SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
+			int nterms = sv->number;
+			exprGroup::lincoeff lin( nterms);
+			for ( i = 0; i < nterms; ++i){
+					lin[i].first = couenne->Var( sv->indexes[ i] );
+					if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+						lin[i].second = sv->values[ i];
+					}else{
+						lin[i].second = -sv->values[ i];
+						
+					}
+			}
+
+				
+			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
+			if (exptree != NULL) {
+				expression** nl = new expression*[1];
 				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
-					lin[i].second = sv->values[ i];
+					nl[0] = createCouenneExpression( exptree->m_treeRoot );
 				}else{
-					lin[i].second = -sv->values[ i];
+					nl[ 0] = new exprOpp(createCouenneExpression( exptree->m_treeRoot) );
 					
 				}
-		}
-				
-		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
-		if (exptree != NULL) {
-			expression** nl = new expression*[1];
-			if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
-				nl[0] = createCouenneExpression( exptree->m_treeRoot );
-			}else{
-				nl[ 0] = new exprOpp(createCouenneExpression( exptree->m_treeRoot) );
-				
+				obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, nl, 1);
+			} else {
+				obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);		
+				//std::cout << "THERE WERE NO NONLINEAR TERMS IN THE OBJECTIVE FUNCTION "  << std::endl;	
 			}
-			obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, nl, 1);
-		} else {
-			obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);		
-			//std::cout << "THERE WERE NO NONLINEAR TERMS IN THE OBJECTIVE FUNCTION "  << std::endl;	
-		}
 	
-		
+		//}		
 		couenne->addObjective(obj_body, "min");
 
 		// get the constraints in row format
@@ -242,6 +245,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		SparseMatrix* sm =  osinstance->getLinearConstraintCoefficientsInRowMajor();
 		
 		int nconss = osinstance->getConstraintNumber();		
+		
 		int row_nonz = 0;
 		int kount = 0;
 		//int row_nonz_actual = 0;

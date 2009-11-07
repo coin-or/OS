@@ -1178,6 +1178,8 @@ double** OSInstance::getDenseObjectiveCoefficients() {
 	//m_bGetDenseObjectives = true;
 	int i, j, numobjcoef;
 	SparseVector *sparsevec;
+	std::cout << "NUMBER OF OBJECTIVES =  " << instanceData->objectives->numberOfObjectives << std::endl;
+	if(instanceData->objectives->numberOfObjectives == 0) return NULL;
 	if(instanceData->objectives->obj == NULL || instanceData->objectives->numberOfObjectives == 0) return m_mmdDenseObjectiveCoefficients;
 	int m = instanceData->objectives->numberOfObjectives;
 	int n = instanceData->variables->numberOfVariables;
@@ -1219,39 +1221,41 @@ bool OSInstance::processConstraints() {
 	if(instanceData == NULL || instanceData->constraints == NULL || instanceData->constraints->con == NULL || instanceData->constraints->numberOfConstraints == 0) return true;
 	int n = instanceData->constraints->numberOfConstraints;
 	try{
-		if(m_bProcessConstraints != true){
-			m_mdConstraintLowerBounds = new double[n];
-			m_mdConstraintUpperBounds = new double[n];
-			m_mdConstraintConstants = new double[n];
-			m_mcConstraintTypes = new char[n];
-			m_msConstraintNames = new string[n];
-			m_bProcessConstraints = true;
-		}
-		for(i = 0; i < n; i++){
-			m_mdConstraintLowerBounds[i] = instanceData->constraints->con[i]->lb;
-			m_mdConstraintUpperBounds[i] = instanceData->constraints->con[i]->ub;
-			m_mdConstraintConstants[i] = instanceData->constraints->con[i]->constant;
-			if(m_mdConstraintLowerBounds[i] == OSDBL_MAX || m_mdConstraintUpperBounds[i] == -OSDBL_MAX) {
-				throw ErrorClass( outStr.str() );
+		if(n > 0){
+			if(m_bProcessConstraints != true){
+				m_mdConstraintLowerBounds = new double[n];
+				m_mdConstraintUpperBounds = new double[n];
+				m_mdConstraintConstants = new double[n];
+				m_mcConstraintTypes = new char[n];
+				m_msConstraintNames = new string[n];
+				m_bProcessConstraints = true;
 			}
-			else if(m_mdConstraintLowerBounds[i] > m_mdConstraintUpperBounds[i]) {
-				outStr << "Constraint  " ;
-				outStr << i;
-				outStr << " is infeasible";
-				throw ErrorClass( outStr.str());
+			for(i = 0; i < n; i++){
+				m_mdConstraintLowerBounds[i] = instanceData->constraints->con[i]->lb;
+				m_mdConstraintUpperBounds[i] = instanceData->constraints->con[i]->ub;
+				m_mdConstraintConstants[i] = instanceData->constraints->con[i]->constant;
+				if(m_mdConstraintLowerBounds[i] == OSDBL_MAX || m_mdConstraintUpperBounds[i] == -OSDBL_MAX) {
+					throw ErrorClass( outStr.str() );
+				}
+				else if(m_mdConstraintLowerBounds[i] > m_mdConstraintUpperBounds[i]) {
+					outStr << "Constraint  " ;
+					outStr << i;
+					outStr << " is infeasible";
+					throw ErrorClass( outStr.str());
+				}
+				else if(m_mdConstraintLowerBounds[i] == -OSDBL_MAX && m_mdConstraintUpperBounds[i] == OSDBL_MAX)
+					m_mcConstraintTypes[i] = 'U';
+				else if(m_mdConstraintLowerBounds[i] == m_mdConstraintUpperBounds[i]) 
+					m_mcConstraintTypes[i] = 'E';
+				else if(m_mdConstraintLowerBounds[i] == -OSDBL_MAX)
+					m_mcConstraintTypes[i] = 'L';
+				else if(m_mdConstraintUpperBounds[i] == OSDBL_MAX)
+					m_mcConstraintTypes[i] = 'G';
+				else m_mcConstraintTypes[i] = 'R';
 			}
-			else if(m_mdConstraintLowerBounds[i] == -OSDBL_MAX && m_mdConstraintUpperBounds[i] == OSDBL_MAX)
-				m_mcConstraintTypes[i] = 'U';
-			else if(m_mdConstraintLowerBounds[i] == m_mdConstraintUpperBounds[i]) 
-				m_mcConstraintTypes[i] = 'E';
-			else if(m_mdConstraintLowerBounds[i] == -OSDBL_MAX)
-				m_mcConstraintTypes[i] = 'L';
-			else if(m_mdConstraintUpperBounds[i] == OSDBL_MAX)
-				m_mcConstraintTypes[i] = 'G';
-			else m_mcConstraintTypes[i] = 'R';
-		}
-		if(instanceData->constraints->con[0]->name.length() > 0 || instanceData->constraints->con[n-1]->name.length() > 0){
-			for(i = 0; i < n; i++) m_msConstraintNames[i] = instanceData->constraints->con[i]->name;
+			if(instanceData->constraints->con[0]->name.length() > 0 || instanceData->constraints->con[n-1]->name.length() > 0){
+				for(i = 0; i < n; i++) m_msConstraintNames[i] = instanceData->constraints->con[i]->name;
+			}
 		}
 		return true;
 	}
@@ -2916,6 +2920,7 @@ bool OSInstance::initializeNonLinearStructures( ){
 }
 
 SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( ){
+	//if(this->getVariableNumber() == 0 || this->getConstraintNumber() == 0) return NULL;
 	// if already called return the sparse Jacobian
 	// it is important that this method NOT get called twice -- if
 	// there are linear terms in <linearConstraintCoefficients> that

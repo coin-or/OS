@@ -204,7 +204,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			// check other trivial solver limitations
 			//if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver:" + sSolverName +" cannot handle unconstrained problems");
 			//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
-			//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver:" + sSolverName + " needs an objective function");
+			if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver:" + sSolverName + " needs an objective function");
 			//if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver:" + sSolverName + " can only handle numeric variables");
 			if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony") throw ErrorClass("Coin solver:" + sSolverName +   " needs a positive number of variables");
 
