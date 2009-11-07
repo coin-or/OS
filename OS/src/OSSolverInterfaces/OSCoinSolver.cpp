@@ -176,8 +176,10 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 									#endif
 								}
 								else{
-									// default solver is CBC
-									sSolverName = "cbc";
+									// default solver is Clp in continuous case, 
+									// Cbc for an integer program
+									if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0) sSolverName = "cbc";
+										else sSolverName = "clp";
 									solverIsDefined = true;
 									osiSolver = new OsiClpSolverInterface();
 								}
@@ -875,11 +877,11 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	int *idx = NULL;
 
 	std::string *rcost = NULL;
-	x = new double[osinstance->getVariableNumber() ];
-	y = new double[osinstance->getConstraintNumber() ];
-	idx = new int[ osinstance->getVariableNumber() ];
+	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
+	if( osinstance->getConstraintNumber() > 0 ) y = new double[osinstance->getConstraintNumber() ];
+	if( osinstance->getVariableNumber() > 0 ) idx = new int[ osinstance->getVariableNumber() ];
 	z = new double[1];
-	rcost = new std::string[ osinstance->getVariableNumber()];
+	if( osinstance->getVariableNumber() > 0 ) rcost = new std::string[ osinstance->getVariableNumber()];
 	int numberOfVar =  osinstance->getVariableNumber();
 	int solIdx = 0;
 	int i = 0;
@@ -952,7 +954,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	osrl = osrlwriter->writeOSrL( osresult);
 	if(osinstance->getVariableNumber() > 0) delete[] x;
 	x = NULL;
-	if(osinstance->getConstraintNumber()) delete[] y;
+	if(osinstance->getConstraintNumber() > 0) delete[] y;
 	y = NULL;
 	delete[] z;	
 	z = NULL;
@@ -971,11 +973,11 @@ void CoinSolver::writeResult(CbcModel *model){
 	double *z = NULL;
 	int *idx = NULL;
 	std::string *rcost = NULL;
-	x = new double[osinstance->getVariableNumber() ];
-	y = new double[osinstance->getConstraintNumber() ];
-	idx = new int[ osinstance->getVariableNumber() ];
+	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
+	if( osinstance->getConstraintNumber() > 0 ) y = new double[osinstance->getConstraintNumber() ];
+	if( osinstance->getVariableNumber() > 0 ) idx = new int[ osinstance->getVariableNumber() ];
 	z = new double[1];
-	rcost = new std::string[ osinstance->getVariableNumber()];
+	if( osinstance->getVariableNumber() > 0 ) rcost = new std::string[ osinstance->getVariableNumber()];
 
 	int numberOfOtherVariableResults = 1;
 	int otherIdx = 0;	
@@ -1045,7 +1047,7 @@ void CoinSolver::writeResult(CbcModel *model){
 	//garbage collection
 	if(osinstance->getVariableNumber() > 0) delete[] x;
 	x = NULL;
-	if(osinstance->getConstraintNumber()) delete[] y;
+	if(osinstance->getConstraintNumber() > 0) delete[] y;
 	y = NULL;
 	delete[] z;	
 	z = NULL;
