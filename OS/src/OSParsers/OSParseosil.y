@@ -1269,8 +1269,6 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 		if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parse Constraints");
 		if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parse ConstraintCoefficients");
 	}else{
-		std::cout << "GAIL HONDA" << std::endl;
-		std::cout << *p << std::endl;
 		//osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); 
 		return true;
 	}
