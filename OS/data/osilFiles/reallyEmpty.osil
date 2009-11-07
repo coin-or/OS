@@ -3,18 +3,6 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
-		<name>Par Inc. Empty </name>
-		<source>Anderson, Sweeney, Williams, Camm and Martin</source>
-		<description> Optimal solution value should be 1 </description>
 	</instanceHeader>
-	<instanceData>
-		<variables numberOfVariables="0">
-
-	</variables>
-		<objectives numberOfObjectives="1">
-			<obj name = "Par, Inc. Objective Function" 
-                          maxOrMin="max"  numberOfObjCoef="0" constant="1">
-			</obj>
-		</objectives>
-	</instanceData>
+	<instanceData/>
 </osil>

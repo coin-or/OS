@@ -190,7 +190,7 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-%token OSILEND INSTANCEDATAEND 
+%token OSILEND INSTANCEDATAEND INSTANCEDATASTARTEND
 %token VALUEATT NUMBEROFNONLINEAREXPRESSIONS
 %token IDXONEATT IDXTWOATT COEFATT IDATT 
 %token TIMESSTART TIMESEND NUMBERSTART  NUMBEREND
@@ -224,10 +224,11 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients nonlinearExpressions timeDomain INSTANCEDATAEND  OSILEND;
+osildoc: quadraticcoefficients nonlinearExpressions timeDomain theInstanceEnd  OSILEND;
 
 
-
+theInstanceEnd:  INSTANCEDATASTARTEND
+	| INSTANCEDATAEND ;
 
 quadraticcoefficients: 
 	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND 
@@ -1257,27 +1258,19 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 	// pchar must point to '>' or there is an error
 	if(*pchar == '>'){
-	pchar++;
-	// we are now pointing to the first char after <instanceData>
-	// burn any whitespace
-	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
-	// we should be pointing to the '<' char in <variables>
-	*p = pchar;
-	std::cout << "GAIL 0" << std::endl;
-	if( parseVariables( p, osinstance, osillineno) != true) {throw ErrorClass("error in parse variables");}
-	std::cout << "GAIL 1" << std::endl;
-
-	if( parseObjectives( p, osinstance, osillineno) != true)  throw ErrorClass("error in parse objectives");
-
-	std::cout << "GAIL 2" << std::endl;
-	if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parse Constraints");
-	if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parse ConstraintCoefficients");
-	std::cout << "GAIL 3" << std::endl;
-
+		pchar++;
+		// we are now pointing to the first char after <instanceData>
+		// burn any whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+		// we should be pointing to the '<' char in <variables>
+		*p = pchar;
+		if( parseVariables( p, osinstance, osillineno) != true) {throw ErrorClass("error in parse variables");}
+		if( parseObjectives( p, osinstance, osillineno) != true)  throw ErrorClass("error in parse objectives");
+		if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parse Constraints");
+		if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parse ConstraintCoefficients");
 	}else{
-	std::cout << "START OF GAIL" << std::endl;
-	std::cout << *p << std::endl;
-	std::cout << "END OF GAIL" << std::endl;
+		std::cout << "GAIL HONDA" << std::endl;
+		std::cout << *p << std::endl;
 		//osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); 
 		return true;
 	}
@@ -1325,8 +1318,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	*p = ch;
 	while(*startVariables++  == *ch) ch++;
-	if( (ch - *p) != 10) {  osilerror_wrapper( ch,osillineno,"incorrect <variables tag>"); return false;}
-	//if( (ch - *p) != 10) {   return true;}
+	//if( (ch - *p) != 10) {  osilerror_wrapper( ch,osillineno,"incorrect <variables tag>"); return false;}
+	if( (ch - *p) != 10) {   return true;}
 	// find numberOfVariables attribute
 	// eat the white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
