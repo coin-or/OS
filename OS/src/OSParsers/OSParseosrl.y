@@ -789,7 +789,7 @@ currentStateEmpty: GREATERTHAN CURRENTSTATEEND | ENDOFELEMENT;
 currentStateLaden: GREATERTHAN currentStateBody CURRENTSTATEEND;
 
 currentStateBody:  ELEMENTTEXT  
-	{	parserData->tempStr = $1;
+        {       parserData->tempStr = $1; free($1);
 		if (parserData->tempStr != "busy"                &&
 			parserData->tempStr != "busyButAccepting"    &&
 			parserData->tempStr != "idle"                &&
@@ -1603,7 +1603,8 @@ solutionMessageEmpty: GREATERTHAN MESSAGEEND | ENDOFELEMENT;
 solutionMessageLaden: GREATERTHAN solutionMessageBody MESSAGEEND;
 
 solutionMessageBody:  ELEMENTTEXT  
-	{	osresult->setSolutionMessage(parserData->solutionIdx, $1); free($1);
+	{	osresult->setSolutionMessage(parserData->solutionIdx, $1);
+                free($1);
 		parserData->errorText = NULL;
 	};
 
@@ -1776,7 +1777,7 @@ basisVarStart: VARSTART
 basisVarIdxATT : IDXATT quote INTEGER quote { parserData->idx = $3; };
   
 basisVarContent: GREATERTHAN ELEMENTTEXT VAREND
-{	parserData->tempStr = $2;
+{       parserData->tempStr = $2; free($2);
 	if (parserData->tempStr != "unknown"  &&
 		parserData->tempStr != "basic"    &&
 		parserData->tempStr != "atLower"  &&
