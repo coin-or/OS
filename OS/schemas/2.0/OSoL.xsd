@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: version 2.0 (The entire schema)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osol" type="OSoL">
@@ -251,7 +252,7 @@
 	</xs:complexType>
 	<xs:complexType name="OptimizationOption">
 		<xs:annotation>
-			<xs:documentation>numberOfVariables, numberOfObjectives and numberOfConstraints are the numbers in the original optimization instance and should match those in the corresponding OSiL. Use -1 if not applicable or necessary in appropriate scenarios.</xs:documentation>
+			<xs:documentation>numberOfVariables, numberOfObjectives and numberOfConstraints are the numbers in the original optimization instance and should match those in the corresponding OSiL file. The default value -1 can be used if no dense methods are called in the API.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="variables" type="VariableOption" minOccurs="0"/>
@@ -265,9 +266,9 @@
 			<xs:element name="constraints" type="ConstraintOption" minOccurs="0"/>
 			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" use="required">
+		<xs:attribute name="numberOfVariables">
 			<xs:annotation>
-				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+				<xs:documentation>Required if dense methods are used for initial values, etc.</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:int">
@@ -275,9 +276,9 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjectives" use="required">
+		<xs:attribute name="numberOfObjectives">
 			<xs:annotation>
-				<xs:documentation>If present, must match number of objectives in the original optimization instance</xs:documentation>
+				<xs:documentation>Required if dense methods are used for initial objective values and bounds</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:int">
@@ -285,9 +286,9 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfConstraints" use="required">
+		<xs:attribute name="numberOfConstraints">
 			<xs:annotation>
-				<xs:documentation>If present, must match number of constraints in the original optimization instance</xs:documentation>
+				<xs:documentation>Required if dense methods are used for initial dual values, etc.</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:int">
