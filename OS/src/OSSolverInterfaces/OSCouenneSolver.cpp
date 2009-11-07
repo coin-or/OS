@@ -711,7 +711,7 @@ void CouenneSolver::writeResult(){
 	
 	
 	try{
-		x = new double[osinstance->getVariableNumber() ];
+		if(osinstance->getVariableNumber()  > 0) x = new double[osinstance->getVariableNumber() ];
 		z = new double[1];		
 		// resultHeader information
 		if(osresult->setServiceName( "Couenne solver service") != true)
@@ -737,22 +737,31 @@ void CouenneSolver::writeResult(){
 			case  TMINLP::SUCCESS:
 				solutionDescription = "SUCCESS[COUENNE]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
 				//std::cout << solutionDescription << std::endl;
-				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
-				/* Retrieve the solution */
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
-				// okay if equal to 9999000000000 we are probably unbounded
-				if(fabs(*(z + 0)) == 9.999e+12){
-					solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: Continuous relaxation is unbounded, the MINLP may or may not be unbounded.";
-					//std::cout << solutionDescription << std::endl;
-					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
-					break;
+				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+
+				if(osinstance->getObjectiveNumber() > 0){		
+					/* Retrieve the solution */
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+					// okay if equal to 9999000000000 we are probably unbounded
+					if(fabs(*(z + 0)) == 9.999e+12){
+						solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: Continuous relaxation is unbounded, the MINLP may or may not be 		unbounded.";
+						//std::cout << solutionDescription << std::endl;
+						osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+						break;
+					}
+					osresult->setObjectiveValuesDense(solIdx, z); 
 				}
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.bestSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
+
+
+				if(osinstance->getVariableNumber() > 0){
+					for(i=0; i < osinstance->getVariableNumber(); i++){
+						*(x + i) = bb.bestSolution()[i];
+						//std::cout <<  *(x + i)  << std::endl;
+					}
+					osresult->setPrimalVariableValuesDense(solIdx, x);
 				}
-				osresult->setPrimalVariableValuesDense(solIdx, x);
+
+
 			break;
 			
 			case TMINLP::LIMIT_EXCEEDED:
@@ -762,13 +771,18 @@ void CouenneSolver::writeResult(){
 				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.model().getColSolution()), true)[ 0];
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
+				if(osinstance->getObjectiveNumber() > 0){	
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.model().getColSolution()), true)[ 0];
+					osresult->setObjectiveValuesDense(solIdx, z); 
 				}
-				osresult->setPrimalVariableValuesDense(solIdx, x); 
+
+				if(osinstance->getVariableNumber() > 0){
+					for(i=0; i < osinstance->getVariableNumber(); i++){
+						*(x + i) = bb.model().getColSolution()[i];
+						//std::cout <<  *(x + i)  << std::endl;
+					}
+					osresult->setPrimalVariableValuesDense(solIdx, x); 
+				}
 			break;
 			
 			case TMINLP::MINLP_ERROR:
@@ -798,7 +812,7 @@ void CouenneSolver::writeResult(){
 		}//switch end	
 		osresult->setGeneralStatusType("normal");
 		osrl = osrlwriter->writeOSrL( osresult);
-		delete[] x;
+		if(osinstance->getVariableNumber()  > 0) delete[] x;
 		x = NULL;
 		delete[] z;	
 		z = NULL;
