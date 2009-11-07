@@ -54,6 +54,12 @@ public:
 	 * Class destructor. 
 	 */
 	~GeneralSubstatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(GeneralSubstatus *that);
 		
 };//GeneralSubstatus
 
@@ -95,6 +101,12 @@ public:
 	 * Class destructor. 
 	 */
 	~GeneralStatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(GeneralStatus *that);
 		
 };//GeneralStatus
 
@@ -133,6 +145,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherResult *that);
 		
 };//OtherResult
 
@@ -168,6 +186,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherResults();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherResults *that);
 		
 };//OtherResults
 
@@ -235,6 +259,12 @@ public:
 	 * Class destructor. 
 	 */
 	~GeneralResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(GeneralResult *that);
 };//class GeneralResult
 
 
@@ -272,6 +302,12 @@ public:
 	 * Class destructor. 
 	 */
 	~DiskSpace();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(DiskSpace *that);
 		
 };//DiskSpace
 
@@ -310,6 +346,12 @@ public:
 	 * Class destructor. 
 	 */
 	~MemorySize();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(MemorySize *that);
 		
 };//MemorySize
 
@@ -348,6 +390,12 @@ public:
 	 * Class destructor. 
 	 */
 	~CPUSpeed();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(CPUSpeed *that);
 		
 };//CPUSpeed
 
@@ -384,6 +432,12 @@ public:
 	 * Class destructor. 
 	 */
 	~CPUNumber();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(CPUNumber *that);
 		
 };//CPUNumber
 
@@ -435,6 +489,12 @@ public:
 	 * Class destructor. 
 	 */
 	~SystemResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(SystemResult *that);
 };//class SystemResult
 
 
@@ -481,6 +541,12 @@ public:
 	 * Class destructor. 
 	 */
 	~ServiceResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ServiceResult *that);
 };//class ServiceResult
 
 
@@ -533,6 +599,12 @@ public:
 	 * Class destructor. 
 	 */
 	~Time();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(Time *that);
 };//class Time
 
 
@@ -572,6 +644,12 @@ public:
 	 * Class destructor. 
 	 */
 	~TimingInformation();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(TimingInformation *that);
 };//class TimingInformation
 
 
@@ -637,6 +715,12 @@ public:
 	 * Class destructor. 
 	 */
 	~JobResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(JobResult *that);
 };//class JobResult
 
 
@@ -671,6 +755,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OptimizationSolutionSubstatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OptimizationSolutionSubstatus *that);
 		
 };//OptimizationSolutionSubstatus
 
@@ -710,6 +800,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OptimizationSolutionStatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OptimizationSolutionStatus *that);
 		
 };//OptimizationSolutionStatus
 
@@ -746,6 +842,12 @@ public:
 	 * Class destructor. 
 	 */
 	~VarValue();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(VarValue *that);
 
 };// class VarValue
 
@@ -785,6 +887,12 @@ public:
 	 */
 	~VariableValues();
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(VariableValues *that);
+
 };// class VariableValues
 
 
@@ -821,6 +929,12 @@ public:
 	 * Class destructor. 
 	 */
 	~VarValueString();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(VarValueString *that);
 
 };// class VarValueString
 
@@ -860,6 +974,12 @@ public:
 	 */
 	~VariableValuesString();
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(VariableValuesString *that);
+
 };// class VariableValuesString
 
 
@@ -896,6 +1016,12 @@ public:
 	 * Class destructor. 
 	 */
 	~BasStatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(BasStatus *that);
 
 };// class BasStatus
 
@@ -935,6 +1061,12 @@ public:
 	 */
 	~BasisStatus();
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(BasisStatus *that);
+
 };// class BasisStatus
 
 /*! \class OtherVarResult
@@ -971,6 +1103,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherVarResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherVarResult *that);
 	
 };//OtherVarResult
 
@@ -1023,6 +1161,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherVariableResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherVariableResult *that);
 	
 };//OtherVariableResult
 
@@ -1072,6 +1216,12 @@ public:
 	 */
 	~VariableSolution();
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(VariableSolution *that);
+
 };// class VariableSolution
 
 
@@ -1106,6 +1256,12 @@ public:
 	 * Class destructor. 
 	 */
 	~ObjValue();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ObjValue *that);
 };//ObjValue
 
 /*! \class ObjectiveValues
@@ -1142,6 +1298,12 @@ public:
 	 * Class destructor. 
 	 */
 	~ObjectiveValues();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ObjectiveValues *that);
 	
 };//ObjectiveValues
 
@@ -1180,6 +1342,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherObjResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherObjResult *that);
 	
 };//OtherObjResult
 
@@ -1231,6 +1399,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherObjectiveResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherObjectiveResult *that);
 	
 };//OtherObjectiveResult
 
@@ -1274,6 +1448,12 @@ public:
 	 * Class destructor. 
 	 */
 	~ObjectiveSolution();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ObjectiveSolution *that);
 
 };//ObjectiveSolution
 
@@ -1324,6 +1504,12 @@ public:
 	 * Class destructor. 
 	 */
 	~DualVarValue();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(DualVarValue *that);
 	
 };//DualVarValue
 
@@ -1363,6 +1549,12 @@ public:
 	 * Class destructor. 
 	 */
 	~DualVariableValues();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(DualVariableValues *that);
 	
 };//DualVariableValues
 
@@ -1402,6 +1594,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherConResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherConResult *that);
 	
 };//OtherConResult
 
@@ -1454,6 +1652,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherConstraintResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherConstraintResult *that);
 	
 };//OtherConstraintResult
 
@@ -1497,6 +1701,12 @@ public:
 	 * Class destructor. 
 	 */
 	~ConstraintSolution();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(ConstraintSolution *that);
 	
 };//ConstraintSolution
 
@@ -1547,6 +1757,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherSolutionResult();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherSolutionResult *that);
 	
 };//OtherSolutionResult
 
@@ -1586,6 +1802,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherSolutionResults();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherSolutionResults *that);
 	
 };//OtherSolutionResults
 
@@ -1653,6 +1875,12 @@ public:
 	 */
 	~OptimizationSolution();
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OptimizationSolution *that);
+
 };// class OptimizationSolution
 
 
@@ -1700,6 +1928,12 @@ public:
 	 * Class destructor. 
 	 */
 	~SolverOutput();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(SolverOutput *that);
 	
 };//SolverOutput
 
@@ -1738,6 +1972,12 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherSolverOutput();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OtherSolverOutput *that);
 	
 };//OtherSolverOutput
 
@@ -1799,6 +2039,12 @@ public:
 	 */
 	~OptimizationResult();
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OptimizationResult *that);
+
 };// class OptimizationResult
 
 
@@ -1853,6 +2099,7 @@ public:
 	 * Class destructor. 
 	 */
 	~OSResult();
+
 public:	
 	
 	/**
@@ -1890,6 +2137,14 @@ public:
 	
 	std::vector<IndexValuePair*>  dualVals;
 	
+
+public:
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(OSResult *that);
+
 	
 
 

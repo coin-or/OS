@@ -51,6 +51,7 @@ public:
 	 * Class destructor. 
 	 */
 	~InstanceLocationOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -88,7 +89,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~ContactOption();		
+	~ContactOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -130,6 +132,7 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -168,6 +171,7 @@ public:
 	 * Class destructor. 
 	 */
 	~OtherOptions();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -249,6 +253,7 @@ public:
 	 * Class destructor. 
 	 */
 	~GeneralOption();		
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -287,6 +292,7 @@ public:
 	 * Class destructor. 
 	 */
 	~MinDiskSpace();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -325,6 +331,7 @@ public:
 	 * Class destructor. 
 	 */
 	~MinMemorySize();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -363,6 +370,7 @@ public:
 	 * Class destructor. 
 	 */
 	~MinCPUSpeed();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -410,6 +418,7 @@ public:
 	 * Class destructor. 
 	 */
 	~SystemOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -448,6 +457,7 @@ public:
 	 * Class destructor. 
 	 */
 	~ServiceOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -487,6 +497,7 @@ public:
 	 * Class destructor. 
 	 */
 	~MaxTime();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -525,6 +536,7 @@ public:
 	 * Class destructor. 
 	 */
 	~JobDependencies();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -576,6 +588,7 @@ public:
 	 * Class destructor. 
 	 */
 	~DirectoriesAndFiles();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -631,6 +644,7 @@ public:
 	 * Class destructor. 
 	 */
 	~PathPair();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -669,6 +683,7 @@ public:
 	 * Class destructor. 
 	 */
 	~PathPairs();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -722,6 +737,7 @@ public:
 	 * Class destructor. 
 	 */
 	~Processes();		
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -812,6 +828,7 @@ public:
 	 * Class destructor. 
 	 */
 	~JobOption();	
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -849,7 +866,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitVarValue();		
+	~InitVarValue();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -888,6 +906,7 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVariableValues();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -939,7 +958,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitVarValueString();		
+	~InitVarValueString();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -978,6 +998,7 @@ public:
 	 * Class destructor. 
 	 */
 	~InitVariableValuesString();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1029,6 +1050,7 @@ public:
 	 * Class destructor. 
 	 */
 	~InitBasStatus();		
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1067,6 +1089,7 @@ public:
 	 * Class destructor. 
 	 */
 	~InitialBasisStatus();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1118,6 +1141,7 @@ public:
 	 * Class destructor. 
 	 */
 	~BranchingWeight();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1157,6 +1181,7 @@ public:
 	 * Class destructor. 
 	 */
 	~IntegerVariableBranchingWeights();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1214,6 +1239,7 @@ public:
 	 * Class destructor. 
 	 */
 	~SOSWeights();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1266,6 +1292,7 @@ public:
 	 * Class destructor. 
 	 */
 	~SOSVariableBranchingWeights();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1325,7 +1352,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OtherVarOption();		
+	~OtherVarOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1381,7 +1409,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OtherVariableOption();		
+	~OtherVariableOption();	
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1450,7 +1479,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~VariableOption();		
+	~VariableOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1501,7 +1531,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitObjValue();		
+	~InitObjValue();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1539,7 +1570,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitObjectiveValues();		
+	~InitObjectiveValues();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1594,7 +1626,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitObjBound();		
+	~InitObjBound();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1632,7 +1665,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitObjectiveBounds();		
+	~InitObjectiveBounds();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1691,7 +1725,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OtherObjOption();		
+	~OtherObjOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1747,7 +1782,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OtherObjectiveOption();		
+	~OtherObjectiveOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1807,7 +1843,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~ObjectiveOption();		
+	~ObjectiveOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1858,7 +1895,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitConValue();		
+	~InitConValue();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1896,7 +1934,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitConstraintValues();		
+	~InitConstraintValues();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1951,7 +1990,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitDualVarValue();		
+	~InitDualVarValue();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -1989,7 +2029,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~InitDualVariableValues();		
+	~InitDualVariableValues();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -2048,7 +2089,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OtherConOption();		
+	~OtherConOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -2104,7 +2146,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OtherConstraintOption();		
+	~OtherConstraintOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -2164,7 +2207,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~ConstraintOption();		
+	~ConstraintOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -2227,7 +2271,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~SolverOption();		
+	~SolverOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -2265,12 +2310,14 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~SolverOptions();		
+	~SolverOptions();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SolverOptions *that);
+
 	/**
 	 *
 	 * A function to set an array of solver options
@@ -2278,6 +2325,7 @@ public:
 	 * @param solverOption: the array of solver options that are to be set
 	 */
 	bool setSolverOptions(int numberOfOptions, SolverOption **solverOption);
+
 	/**
 	 *
 	 * A function to add a solver option
@@ -2336,7 +2384,8 @@ public:
 	 *
 	 * Class destructor. 
 	 */
-	~OptimizationOption();	
+	~OptimizationOption();
+
 	/**
 	 *
 	 * A function to check for the equality of two objects
@@ -2445,6 +2494,7 @@ private:
 	 *  upper bound of the constraints in dense form
 	 */
 	double* m_mdInitDualVarUpperBoundsDense;
+
 public:
 	/**
 	 *

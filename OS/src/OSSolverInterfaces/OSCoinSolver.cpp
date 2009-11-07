@@ -599,8 +599,8 @@ bool CoinSolver::setCoinPackedMatrix(){
 			columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
 			columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
 			osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
-			columnMajor? NULL : NULL, //Pointer to matrix nonzeroes
-			columnMajor? NULL : NULL, //Pointer to start of minor dimension indexes -- change to allow for row storage
+			NULL, //Pointer to matrix nonzeroes
+			NULL, //Pointer to start of minor dimension indexes -- change to allow for row storage
 			&start, //Pointers to start of columns.
 			0,   0, maxGap ); 			
 		}
