@@ -192,6 +192,7 @@ std::string getServiceURI( std::string osol);
 std::string getInstanceLocation( std::string osol);
 std::string getSolverName( std::string osol);
 std::string setSolverName( std::string osol, std::string solverName);
+void buildSolver(std::string solverName, std::string osol, OSInstance *osinstance,  DefaultSolver *solverType);
 
 //options structure
 // this is the only global variable but 
@@ -223,7 +224,7 @@ int main(int argC, const char* argV[])
 	osoptions->osrl = ""; 
 	osoptions->insListFile = ""; 
 	osoptions->insList = ""; 
-	osoptions->serviceLocation = ""; 
+	osoptions->serviceLocation = "";
 	osoptions->serviceMethod = ""; 
 	osoptions->osplInputFile = ""; 
 	osoptions->osplOutputFile = ""; 
@@ -490,12 +491,19 @@ void solve(){
 			else cout << osrl << endl;
 			delete osagent;
 			osagent = NULL;
-		}
-		else{
-			// solve locally
+			
+
+			
+			
+			
+			
+			
+			
+		} else{// solve locally
 			if(osoptions->solverName == "" ){
-				string sSolverName = "cbc";
-				osoptions->solverName = sSolverName;
+				//string sSolverName = "cbc";
+				//osoptions->solverName = sSolverName;
+				osoptions->solverName = "cbc";
 			}
 			if( osoptions->solverName.find( "ipopt") != std::string::npos) {
 				// we are requesting the Ipopt solver
@@ -728,8 +736,10 @@ void solve(){
 				}
 			}
 			else cout << osrl << endl;
-		}
+		}//end of local solve
+		
 	}//end try
+	
 	catch(const ErrorClass& eclass){
 		if(osoptions->osrlFile != ""){
 		
@@ -761,7 +771,9 @@ void solve(){
 			//delete osresult;
 			//delete osrlwriter;
 		}
-	}	
+	}//end catch
+	
+	
 	if(osilreader != NULL) delete osilreader;
 	if(osolreader != NULL) delete osolreader;
 	if(solverType != NULL) delete solverType;
@@ -1328,5 +1340,165 @@ std::string get_version(){
 
 
 
+void buildSolver(std::string solverName, std::string osol, OSInstance *osinstance,  DefaultSolver *solverType){
+	
+	try{
+		if (solverName == "") {// must determine the default solver
+			if(osinstance == NULL) throw ErrorClass("there was a NULL instance sent to buildSolver");
+			//see if we have an integer program 
+			if(osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){//we have an integer program
+				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+				   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and integer
+					solverName = "bonmin";
+				}else{//we are linear integer 
+					solverName = "cbc";
+				}
+			}else{// we have a continuous problem
+				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+				   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and continuous
+					solverName = "ipopt";
+				}else{//we have linear program 
+					solverName = "clp";
+				}
+			}
+		}//end of if on solverName
+		
+		//now build the solver through its constructor
+		
 
+		if( solverName.find( "ipopt") != std::string::npos) {
+			// we are requesting the Ipopt solver
+			bool bIpoptIsPresent = false;
+#ifdef COIN_HAS_IPOPT
+			bIpoptIsPresent = true;
+			solverType = new IpoptSolver();	
+#endif
+			if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
+		}
+		else{
+			if( solverName.find( "lindo") != std::string::npos) {
+				// we are requesting the Lindo solver
+				bool bLindoIsPresent = false;
+#ifdef COIN_HAS_LINDO
+				bLindoIsPresent = true;
+				std::cout << "calling the LINDO Solver " << std::endl;
+				solverType = new LindoSolver();
+				std::cout << "DONE calling the LINDO Solver " << std::endl;
+#endif
+				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
+			}
+			else{ 
+				if( solverName.find( "clp") != std::string::npos){
+					solverType = new CoinSolver();
+					solverType->sSolverName = "clp";
+				}
+				else{
+					if( solverName.find( "cplex") != std::string::npos){
+						bool bCplexIsPresent = false;
+#ifdef COIN_HAS_CPX
+						bCplexIsPresent = true;
+						solverType = new CoinSolver();
+						solverType->sSolverName = "cplex";
+#endif
+						if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
+					}
+					else{
+						if( solverName.find( "glpk") != std::string::npos){
+							bool bGlpkIsPresent = false;
+#ifdef COIN_HAS_GLPK
+							bGlpkIsPresent = true;
+							solverType = new CoinSolver();
+							solverType->sSolverName = "glpk";
+#endif
+							if(bGlpkIsPresent == false) throw ErrorClass( "the GLPK solver requested is not present");
+						}
+						else{
+							if( solverName.find( "dylp") != std::string::npos){
+								bool bDyLPIsPresent  = false;
+#ifdef COIN_HAS_DYLP
+								bDyLPIsPresent  = true;
+								solverType = new CoinSolver();
+								solverType->sSolverName = "dylp";
+								bDyLPIsPresent = true;
+#endif
+								if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
+							}
+							else{
+								if( solverName.find( "symphony") != std::string::npos){
+									bool bSymphonyIsPresent  = false;
+#ifdef COIN_HAS_SYMPHONY
+									bSymphonyIsPresent  = true;
+									solverType = new CoinSolver();
+									solverType->sSolverName = "symphony";
+#endif
+									if(bSymphonyIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
+								}
+								else{
+									if( solverName.find( "knitro") != std::string::npos){
+										bool bKnitroIsPresent = false;
+#ifdef COIN_HAS_KNITRO
+										bKnitroIsPresent = true;
+										std::cout << "calling the KNITRO Solver " << std::endl;
+										solverType = new KnitroSolver();
+										std::cout << "DONE calling the KNITRO Solver " << std::endl;
+#endif
+										if(bKnitroIsPresent == false) throw ErrorClass( "the Knitro solver requested is not present");		
+									}
+									else{ 
+										if( solverName.find( "vol") != std::string::npos){
+											bool bVolIsPresent = false;
+#ifdef COIN_HAS_VOL
+											bVolIsPresent = true;
+											solverType = new CoinSolver();
+											solverType->sSolverName = "vol";
+#endif
+											if(bVolIsPresent == false) throw ErrorClass( "the Vol solver requested is not present");		
+										}
+										else{
+											if( solverName.find( "bonmin") != std::string::npos){
+												// we are requesting the Bonmin solver
+												bool bBonminIsPresent = false;
+#ifdef COIN_HAS_BONMIN
+												bBonminIsPresent = true;
+												solverType = new BonminSolver();	
+#endif												
+												if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");		
+											}
+											else{
+												if( solverName.find( "couenne") != std::string::npos){
+													// we are requesting the Couenne solver
+													bool bCouenneIsPresent = false;
+#ifdef COIN_HAS_COUENNE
+													bCouenneIsPresent = true;
+													solverType = new CouenneSolver();	
+#endif												
+													if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");		
+												}
+												else{ //cbc is the default
+													solverType = new CoinSolver();
+													solverType->sSolverName = "cbc";
+												}
+											}
+										}
+									}									
+								}
+							}
+						}
+					}
+				}
+			}
+		}		
+		
+
+		solverType->osinstance = osinstance;
+		solverType->osol = osol;
+		
+		
+	}
+	catch(const ErrorClass& eclass){
+		throw eclass;
+	}
+		
+	
+}//buildSolver
 
