@@ -1287,6 +1287,7 @@ double* OSInstance::getConstraintUpperBounds() {
 }//getConstraintUpperBounds
 
 int OSInstance::getLinearConstraintCoefficientNumber(){
+	if(this->getVariableNumber() <= 0 || this->getConstraintNumber() <= 0) return 0;
 	if(m_iLinearConstraintCoefficientNumber == -1){
 		m_iLinearConstraintCoefficientNumber = instanceData->linearConstraintCoefficients->numberOfValues;
 	}
@@ -1294,6 +1295,7 @@ int OSInstance::getLinearConstraintCoefficientNumber(){
 }//getLinearConstraintCoefficientNumber
 
 bool OSInstance::processLinearConstraintCoefficients() {
+	
 	if(m_bProcessLinearConstraintCoefficients == true && bAMatrixModified == false) return true;
 	//m_bProcessLinearConstraintCoefficients = true;
 	try{
