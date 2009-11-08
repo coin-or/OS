@@ -31,9 +31,9 @@
  * 
  * x2 = 4.743
  * 
- * now if you wanted to call a remote OS solver do something like: 
+ * now if, instesd you wanteded to call a remote OS solver do something like: 
+ * option OSAmplClient_options "solver ipopt serviceURI mysolverservice"
  * 
- *option ipopt_options "http://128.135.130.17:8080/os/OSSolverService.jws"; 
  * 
  */
 
@@ -152,13 +152,27 @@ int main(int argc, char **argv)
 	if( amplclient_options != NULL){
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
 		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceURI);
-	}else{
-		std::cout << "Cbc IS THE DEFAULT SOLVER AND WILL BE USED " <<    endl;
-		sSolverName = "cbc";
-		cout << "THERE WERE NO OPTIONS SPECIFIED " <<   endl;
+	}
+	if(sSolverName.size() == 0){
+		std::cout << "DETERMINE THE DEFAULT SOLVER " <<    endl;
+		if(osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){//we have an integer program
+			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+			   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and integer
+				sSolverName = "bonmin";
+			}else{//we are linear integer 
+				sSolverName = "cbc";
+			}
+		}else{// we have a continuous problem
+			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+			   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and continuous
+				sSolverName = "ipopt";
+			}else{//we have linear program 
+				sSolverName = "clp";
+			}
+		}
 	}
 	
-	//std::cout << " solver Name = " << sSolverName << std::endl;
+	std::cout << " solver Name = " << sSolverName << std::endl;
 	std::cout << " solver Options = " << osol << std::endl;
 	
 	try{
@@ -556,9 +570,7 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 			osoption->setSolverToInvoke( *solverName );
 			*solverOptions = osolwriter->writeOSoL(  osoption);
 		}
-		// make if nothing specified make cbc the default
-		//if( (*solverName).size() == 0) throw ErrorClass("a solver must be specified");
-		if( (*solverName).size() == 0) *solverName = "cbc";
+
 		
 		// see if a serviceURI has been specified
 		pos1 = amplOptions.find( "serviceURI");
