@@ -159,6 +159,7 @@ using std::string;
 
 #define DEBUG_CL_INTERFACE
 
+
 #define MAXCHARS 5000 
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
@@ -192,7 +193,7 @@ std::string getServiceURI( std::string osol);
 std::string getInstanceLocation( std::string osol);
 std::string getSolverName( std::string osol);
 std::string setSolverName( std::string osol, std::string solverName);
-void buildSolver(std::string solverName, std::string osol, OSInstance *osinstance,  DefaultSolver *solverType);
+std::string buildSolver(std::string solverName, std::string osol, OSInstance *osinstance);
 
 //options structure
 // this is the only global variable but 
@@ -417,9 +418,14 @@ int main(int argC, const char* argV[])
 void solve(){
 	std::string osrl = "";
 	OSiLReader *osilreader = NULL; 
-	OSoLReader *osolreader = NULL;
+	OSmps2osil *mps2osil = NULL;
+	#ifdef COIN_HAS_ASL
+	OSnl2osil *nl2osil = NULL;
+	#endif
+	#ifdef COIN_HAS_GAMSUTILS
+	OSgams2osil *gams2osil = NULL;					
+	#endif 
 	OSSolverAgent* osagent = NULL;
-	DefaultSolver *solverType  = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	try{
@@ -470,14 +476,6 @@ void solve(){
 							+ osoptions->solverName  + "</solverToInvoke></general>");
 				}
 			}
-			std::cout  << std::endl;
-#ifdef DEBUG_CL_INTERFACE
-			if(osoptions->osol.length() > 0){
-				std::cout << "HERE IS THE OSoL FILE" << std::endl;
-				std::cout << osoptions->osol << std::endl << std::endl;
-			}
-#endif
-
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
@@ -492,232 +490,41 @@ void solve(){
 			delete osagent;
 			osagent = NULL;
 			
-
-			
-			
-			
-			
-			
-			
 		} else{// solve locally
-			if(osoptions->solverName == "" ){
-				//string sSolverName = "cbc";
-				//osoptions->solverName = sSolverName;
-				osoptions->solverName = "cbc";
-			}
-			if( osoptions->solverName.find( "ipopt") != std::string::npos) {
-				// we are requesting the Ipopt solver
-				bool bIpoptIsPresent = false;
-				#ifdef COIN_HAS_IPOPT
-				bIpoptIsPresent = true;
-				solverType = new IpoptSolver();	
-				#endif
-				if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
-			}
-			else{
-				if( osoptions->solverName.find( "lindo") != std::string::npos) {
-					// we are requesting the Lindo solver
-					bool bLindoIsPresent = false;
-					#ifdef COIN_HAS_LINDO
-					bLindoIsPresent = true;
-					std::cout << "calling the LINDO Solver " << std::endl;
-					solverType = new LindoSolver();
-					std::cout << "DONE calling the LINDO Solver " << std::endl;
-					#endif
-					if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
-				}
-				else{ 
-					if( osoptions->solverName.find( "clp") != std::string::npos){
-						solverType = new CoinSolver();
-						solverType->sSolverName = "clp";
-					}
-					else{
-						if( osoptions->solverName.find( "cplex") != std::string::npos){
-							bool bCplexIsPresent = false;
-							#ifdef COIN_HAS_CPX
-							bCplexIsPresent = true;
-							solverType = new CoinSolver();
-							solverType->sSolverName = "cplex";
-							#endif
-							if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
-						}
-						else{
-							if( osoptions->solverName.find( "glpk") != std::string::npos){
-								bool bGlpkIsPresent = false;
-								#ifdef COIN_HAS_GLPK
-								bGlpkIsPresent = true;
-								solverType = new CoinSolver();
-								solverType->sSolverName = "glpk";
-								#endif
-								if(bGlpkIsPresent == false) throw ErrorClass( "the GLPK solver requested is not present");
-							}
-							else{
-								if( osoptions->solverName.find( "dylp") != std::string::npos){
-									bool bDyLPIsPresent  = false;
-									#ifdef COIN_HAS_DYLP
-									bDyLPIsPresent  = true;
-									solverType = new CoinSolver();
-									solverType->sSolverName = "dylp";
-									bDyLPIsPresent = true;
-									#endif
-									if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
-								}
-								else{
-									if( osoptions->solverName.find( "symphony") != std::string::npos){
-										bool bSymphonyIsPresent  = false;
-										#ifdef COIN_HAS_SYMPHONY
-										bSymphonyIsPresent  = true;
-										solverType = new CoinSolver();
-										solverType->sSolverName = "symphony";
-										#endif
-										if(bSymphonyIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
-									}
-									else{
-										if( osoptions->solverName.find( "knitro") != std::string::npos){
-											bool bKnitroIsPresent = false;
-											#ifdef COIN_HAS_KNITRO
-											bKnitroIsPresent = true;
-											std::cout << "calling the KNITRO Solver " << std::endl;
-											solverType = new KnitroSolver();
-											std::cout << "DONE calling the KNITRO Solver " << std::endl;
-											#endif
-											if(bKnitroIsPresent == false) throw ErrorClass( "the Knitro solver requested is not present");		
-										}
-										else{ 
-											if( osoptions->solverName.find( "vol") != std::string::npos){
-												bool bVolIsPresent = false;
-												#ifdef COIN_HAS_VOL
-												bVolIsPresent = true;
-												solverType = new CoinSolver();
-												solverType->sSolverName = "vol";
-												#endif
-												if(bVolIsPresent == false) throw ErrorClass( "the Vol solver requested is not present");		
-											}
-											else{
-												if(osoptions->solverName.find( "bonmin") != std::string::npos){
-													// we are requesting the Bonmin solver
-													bool bBonminIsPresent = false;
-													#ifdef COIN_HAS_BONMIN
-													bBonminIsPresent = true;
-													solverType = new BonminSolver();	
-													#endif												
-													if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");		
-												}
-												else{
-													if(osoptions->solverName.find( "couenne") != std::string::npos){
-														// we are requesting the Couenne solver
-														bool bCouenneIsPresent = false;
-														#ifdef COIN_HAS_COUENNE
-														bCouenneIsPresent = true;
-														solverType = new CouenneSolver();	
-														#endif												
-														if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");		
-													}
-													else{ //cbc is the default
-														solverType = new CoinSolver();
-														solverType->sSolverName = "cbc";
-													}
-												}
-											}
-										}									
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-#ifdef DEBUG_CL_INTERFACE
-			std::cout << "CALL SOLVE" << std::endl;
-#endif
-			solverType->osol = osoptions->osol;
 			if(osoptions->osil != ""){
 				osilreader = new OSiLReader();
-#ifdef DEBUG_CL_INTERFACE
-				std::cout << "CREATING AN OSINSTANCE FROM AN OSIL FILE" << std::endl;
-#endif
-				solverType->osinstance = NULL;
-				solverType->osil = osoptions->osil;
-				//solverType->osinstance = osilreader->readOSiL( osoptions->osil );
-				// set solver options if there is an OSoL file  kippster
-				if(osoptions->osol != ""){
-					osolreader = new OSoLReader();
-					solverType->osoption = osolreader->readOSoL( osoptions->osol);
-					solverType->buildSolverInstance();
-					solverType->setSolverOptions();
-					solverType->solve();
-					osrl = solverType->osrl;
-				}
-				else{
-					solverType->buildSolverInstance();
-					solverType->setSolverOptions();
-					solverType->solve();
-					osrl = solverType->osrl;
-				}
+				osrl = buildSolver(osoptions->solverName, osoptions->osol, osilreader->readOSiL( osoptions->osil));
 			}
 			else{
 				//we better have an nl file present or mps file or osol file
 				if(osoptions->nlFile != ""){
 					#ifdef COIN_HAS_ASL
-#ifdef DEBUG_CL_INTERFACE
-						std::cout << "CREATING AN OSINSTANCE FROM AN NL FILE" << std::endl;
-#endif
-						OSnl2osil *nl2osil = new OSnl2osil( osoptions->nlFile); 
-						nl2osil->createOSInstance() ;
-#ifdef DEBUG_CL_INTERFACE
-						OSiLWriter osilwriter;
-						std::cout << "OSiL file created from .nl:" << std::endl;
-						std::cout << osilwriter.writeOSiL(nl2osil->osinstance) << std::endl;
-#endif
-						solverType->osinstance = nl2osil->osinstance;
-						solverType->buildSolverInstance();
-						solverType->solve();
-						osrl = solverType->osrl;
-						delete nl2osil;
+					nl2osil = new OSnl2osil( osoptions->nlFile); 
+					nl2osil->createOSInstance() ;
+					osrl = buildSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
 					#else
 						throw ErrorClass("nlFile specified locally but ASL not present");
 					#endif
 				}
 				else{
 					if(osoptions->mpsFile != ""){
-#ifdef DEBUG_CL_INTERFACE
-						std::cout << "CREATING AN OSINSTANCE FROM AN MPS FILE" << std::endl;
-#endif
-						OSmps2osil *mps2osil = new OSmps2osil( osoptions->mpsFile);
+						mps2osil = new OSmps2osil( osoptions->mpsFile);
 						mps2osil->createOSInstance() ;
-#ifdef DEBUG_CL_INTERFACE
-						OSiLWriter osilwriter;
-						std::cout << "OSiL file created from MPS:" << std::endl;
-						std::cout << osilwriter.writeOSiL(mps2osil->osinstance) << std::endl;
-#endif
-
-						solverType->osinstance = mps2osil->osinstance;
-						solverType->buildSolverInstance();
-						solverType->solve();
-						osrl = solverType->osrl;
-						
-						delete mps2osil;
+						osrl = buildSolver(osoptions->solverName, osoptions->osol, mps2osil->osinstance);
 					}
 					else{
 						if(osoptions->gamsControlFile != ""){
-						
 						#ifdef COIN_HAS_GAMSUTILS
-						std::cout << "GAMS Control file =  " << osoptions->gamsControlFile << std::endl;
-						OSgams2osil *gams2osil = new OSgams2osil( osoptions->gamsControlFile); 
-						gams2osil->createOSInstance() ;
-						solverType->osinstance = gams2osil->osinstance;
-						solverType->buildSolverInstance();
-						solverType->solve();
-						osrl = solverType->osrl;
-						delete gams2osil;
-					#else
+						gams2osil =	new OSgams2osil( osoptions->gamsControlFile); 
+						osrl = buildSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
+						#else
 						throw ErrorClass("a Gams Control specified locally but GAMSIP not present");
-					#endif
+						#endif
 							
 						}
 						else{// need an osol file with an instanceLocation specified
 							if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-								throw ErrorClass("solve called and no osil, osol with osil specified, dat, nl, or mps file given");
+								throw ErrorClass("solve called and no osil, osol with osil specified, GAMS dat, AMPL nl, or mps file given");
 							}
 						}
 					}
@@ -773,12 +580,21 @@ void solve(){
 		}
 	}//end catch
 	
-	
+	//garbage collection
 	if(osilreader != NULL) delete osilreader;
-	if(osolreader != NULL) delete osolreader;
-	if(solverType != NULL) delete solverType;
+	osilreader = NULL;
+	if(mps2osil != NULL) delete mps2osil;
+	mps2osil = NULL;
+	#ifdef COIN_HAS_ASL
+	if(nl2osil != NULL)  delete nl2osil;
+	nl2osil = NULL;
+	#endif
+	#ifdef COIN_HAS_GAMSUTILS
+	if(gams2osil != NULL)  delete gams2osil;
+	gams2osil = NULL;
+	#endif 
 	delete fileUtil;
-	fileUtil = NULL;
+	fileUtil  = NULL;
 }//end solve
 
 void getJobID(){
@@ -1340,8 +1156,9 @@ std::string get_version(){
 
 
 
-void buildSolver(std::string solverName, std::string osol, OSInstance *osinstance,  DefaultSolver *solverType){
-	
+std::string  buildSolver(std::string solverName, std::string osol, OSInstance *osinstance){
+	DefaultSolver *solverType  = NULL;
+	std::cout << "SOLVER NAME = " << solverName << std::endl;
 	try{
 		if (solverName == "") {// must determine the default solver
 			if(osinstance == NULL) throw ErrorClass("there was a NULL instance sent to buildSolver");
@@ -1365,6 +1182,7 @@ void buildSolver(std::string solverName, std::string osol, OSInstance *osinstanc
 		
 		//now build the solver through its constructor
 		
+		std::cout << "SOLVER NAME =  " << solverName << std::endl;
 
 		if( solverName.find( "ipopt") != std::string::npos) {
 			// we are requesting the Ipopt solver
@@ -1389,7 +1207,9 @@ void buildSolver(std::string solverName, std::string osol, OSInstance *osinstanc
 			}
 			else{ 
 				if( solverName.find( "clp") != std::string::npos){
+					std::cout << "NEWING SOLVER TYPE " << std::endl;
 					solverType = new CoinSolver();
+					std::cout << "END NEWING SOLVER TYPE " << std::endl;
 					solverType->sSolverName = "clp";
 				}
 				else{
@@ -1489,11 +1309,17 @@ void buildSolver(std::string solverName, std::string osol, OSInstance *osinstanc
 			}
 		}		
 		
-
+		std::cout << "SET SOLVER INSTANCE " << std::endl;
 		solverType->osinstance = osinstance;
 		solverType->osol = osol;
-		
-		
+		solverType->buildSolverInstance();
+		solverType->setSolverOptions();
+		solverType->solve()	;
+		std::string resultString = solverType->osrl ;
+		if(solverType != NULL) delete solverType;
+		solverType = NULL;
+		return  resultString ;
+
 	}
 	catch(const ErrorClass& eclass){
 		throw eclass;
