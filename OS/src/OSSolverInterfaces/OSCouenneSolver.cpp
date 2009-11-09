@@ -168,72 +168,76 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		//couenne = new CouenneProblem(NULL, NULL, jnlst);
 		couenne = new CouenneProblem(NULL, NULL, NULL);
 		int n_allvars = osinstance->getVariableNumber();
-		if( n_allvars <= 0 )throw ErrorClass("Couenne solver Needs Variables");
+		if( n_allvars < 0 )throw ErrorClass("Couenne solver Cannot have a negatiave number of Variables");
 		#ifdef DEBUG
 		std::cout << "NUMBER OF VARIABLES = " <<  n_allvars <<  std::endl;
 		#endif
-	
-		// create room for problem's variables and bounds
-		CouNumber *x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
-		CouNumber	*lb = NULL, *ub = NULL;
-	
-		// now get variable upper and lower bounds
-		ub = osinstance->getVariableUpperBounds();
-		lb = osinstance->getVariableLowerBounds();
+		if(n_allvars > 0){
+			// create room for problem's variables and bounds
+			CouNumber *x_ = (CouNumber *) malloc ((n_allvars) * sizeof (CouNumber));
+			CouNumber	*lb = NULL, *ub = NULL;
 		
-		//declare the variable types
-		char *varType;
-		varType = osinstance->getVariableTypes();
-		for (i = 0; i < n_allvars; ++i) {
-			if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
-				couenne->addVariable(true, couenne->domain() );
-			}
-			else{
-				
-				couenne->addVariable(false, couenne->domain() );
-				
-			}
+			// now get variable upper and lower bounds
+			ub = osinstance->getVariableUpperBounds();
+			lb = osinstance->getVariableLowerBounds();
+			
+			//declare the variable types
+			char *varType;
+			varType = osinstance->getVariableTypes();
+			for (i = 0; i < n_allvars; ++i) {
+				if( (varType[i] == 'B') || (varType[i]) == 'I' ) {
+					couenne->addVariable(true, couenne->domain() );
+				}
+				else{
+					
+					couenne->addVariable(false, couenne->domain() );
+					
+				}
 
-			x_[i] = 0.;     //HIG: This sets initial values?
+				x_[i] = 0.;     //HIG: This sets initial values?
+			}
+			
+			couenne->domain()->push(n_allvars, x_, lb, ub);
+			free(x_);
 		}
-		
-		couenne->domain()->push(n_allvars, x_, lb, ub);
-  		free(x_);
 	
 		// now for the objective function -- assume just one for now
 		//just worry about linear coefficients
 
 		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Couenne NEEDS AN OBJECTIVE FUNCTION");
-		SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
 		
-		int nterms = sv->number;
-		exprGroup::lincoeff lin( nterms);
-		for ( i = 0; i < nterms; ++i){
-				lin[i].first = couenne->Var( sv->indexes[ i] );
+		
+		//if(n_allvars > 0){
+			SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];
+			int nterms = sv->number;
+			exprGroup::lincoeff lin( nterms);
+			for ( i = 0; i < nterms; ++i){
+					lin[i].first = couenne->Var( sv->indexes[ i] );
+					if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
+						lin[i].second = sv->values[ i];
+					}else{
+						lin[i].second = -sv->values[ i];
+						
+					}
+			}
+
+				
+			OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
+			if (exptree != NULL) {
+				expression** nl = new expression*[1];
 				if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
-					lin[i].second = sv->values[ i];
+					nl[0] = createCouenneExpression( exptree->m_treeRoot );
 				}else{
-					lin[i].second = -sv->values[ i];
+					nl[ 0] = new exprOpp(createCouenneExpression( exptree->m_treeRoot) );
 					
 				}
-		}
-				
-		OSExpressionTree* exptree = osinstance->getNonlinearExpressionTree( -1);
-		if (exptree != NULL) {
-			expression** nl = new expression*[1];
-			if( osinstance->getObjectiveMaxOrMins()[0] == "min"){
-				nl[0] = createCouenneExpression( exptree->m_treeRoot );
-			}else{
-				nl[ 0] = new exprOpp(createCouenneExpression( exptree->m_treeRoot) );
-				
+				obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, nl, 1);
+			} else {
+				obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);		
+				//std::cout << "THERE WERE NO NONLINEAR TERMS IN THE OBJECTIVE FUNCTION "  << std::endl;	
 			}
-			obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, nl, 1);
-		} else {
-			obj_body = new exprGroup(osinstance->getObjectiveConstants()[0], lin, NULL, 0);		
-			//std::cout << "THERE WERE NO NONLINEAR TERMS IN THE OBJECTIVE FUNCTION "  << std::endl;	
-		}
 	
-		
+		//}		
 		couenne->addObjective(obj_body, "min");
 
 		// get the constraints in row format
@@ -241,6 +245,7 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass) {
 		SparseMatrix* sm =  osinstance->getLinearConstraintCoefficientsInRowMajor();
 		
 		int nconss = osinstance->getConstraintNumber();		
+		
 		int row_nonz = 0;
 		int kount = 0;
 		//int row_nonz_actual = 0;
@@ -578,7 +583,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 				throw ErrorClass("OSResult error: setSolutionNumer");		
 			if(osresult->setGeneralMessage( message) != true)
 				throw ErrorClass("OSResult error: setGeneralMessage");
-			solutionDescription = "COUENNE INITIALIZE PROBLEM: There was a problem with Couenne Initialize -- the problem could be infeasible";
+			solutionDescription = "COUENNE INITIALIZE PROBLEM: \n There was a problem with Couenne Initialize: \n the problem could be infeasible \n there may be zero decision variables";
 				osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 			osresult->setGeneralStatusType("normal");
 			osrl = osrlwriter->writeOSrL( osresult);		
@@ -706,7 +711,7 @@ void CouenneSolver::writeResult(){
 	
 	
 	try{
-		x = new double[osinstance->getVariableNumber() ];
+		if(osinstance->getVariableNumber()  > 0) x = new double[osinstance->getVariableNumber() ];
 		z = new double[1];		
 		// resultHeader information
 		if(osresult->setServiceName( "Couenne solver service") != true)
@@ -732,22 +737,31 @@ void CouenneSolver::writeResult(){
 			case  TMINLP::SUCCESS:
 				solutionDescription = "SUCCESS[COUENNE]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances.";
 				//std::cout << solutionDescription << std::endl;
-				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
-				/* Retrieve the solution */
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
-				// okay if equal to 9999000000000 we are probably unbounded
-				if(fabs(*(z + 0)) == 9.999e+12){
-					solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: Continuous relaxation is unbounded, the MINLP may or may not be unbounded.";
-					//std::cout << solutionDescription << std::endl;
-					osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
-					break;
+				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);
+
+				if(osinstance->getObjectiveNumber() > 0){		
+					/* Retrieve the solution */
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+					// okay if equal to 9999000000000 we are probably unbounded
+					if(fabs(*(z + 0)) == 9.999e+12){
+						solutionDescription = "CONTINUOUS_UNBOUNDED [COUENNE]: Continuous relaxation is unbounded, the MINLP may or may not be 		unbounded.";
+						//std::cout << solutionDescription << std::endl;
+						osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
+						break;
+					}
+					osresult->setObjectiveValuesDense(solIdx, z); 
 				}
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.bestSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
+
+
+				if(osinstance->getVariableNumber() > 0){
+					for(i=0; i < osinstance->getVariableNumber(); i++){
+						*(x + i) = bb.bestSolution()[i];
+						//std::cout <<  *(x + i)  << std::endl;
+					}
+					osresult->setPrimalVariableValuesDense(solIdx, x);
 				}
-				osresult->setPrimalVariableValuesDense(solIdx, x);
+
+
 			break;
 			
 			case TMINLP::LIMIT_EXCEEDED:
@@ -757,13 +771,18 @@ void CouenneSolver::writeResult(){
 				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.model().getColSolution()), true)[ 0];
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
+				if(osinstance->getObjectiveNumber() > 0){	
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.model().getColSolution()), true)[ 0];
+					osresult->setObjectiveValuesDense(solIdx, z); 
 				}
-				osresult->setPrimalVariableValuesDense(solIdx, x); 
+
+				if(osinstance->getVariableNumber() > 0){
+					for(i=0; i < osinstance->getVariableNumber(); i++){
+						*(x + i) = bb.model().getColSolution()[i];
+						//std::cout <<  *(x + i)  << std::endl;
+					}
+					osresult->setPrimalVariableValuesDense(solIdx, x); 
+				}
 			break;
 			
 			case TMINLP::MINLP_ERROR:
@@ -793,7 +812,7 @@ void CouenneSolver::writeResult(){
 		}//switch end	
 		osresult->setGeneralStatusType("normal");
 		osrl = osrlwriter->writeOSrL( osresult);
-		delete[] x;
+		if(osinstance->getVariableNumber()  > 0) delete[] x;
 		x = NULL;
 		delete[] z;	
 		z = NULL;

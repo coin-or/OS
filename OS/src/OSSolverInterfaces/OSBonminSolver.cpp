@@ -162,7 +162,7 @@ bool BonminProblem::get_constraints_linearity(Index m, Ipopt::TNLP::LinearityTyp
 bool BonminProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
                              Index& nnz_h_lag, TNLP::IndexStyleEnum& index_style)
 {
-	if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");                 	
+	//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");                 	
 	// number of variables
 	n = osinstance->getVariableNumber();
 	// number of constraints
@@ -387,12 +387,13 @@ bool BonminProblem::get_starting_point(Index n, bool init_x, Number* x,
 bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_value){
 	
 	try{
-		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
-			obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];	
-  		}else{// we have a max
-			obj_value  = -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
+		if(osinstance->getObjectiveNumber() > 0){
+			if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+				obj_value  = osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];	
+  			}else{// we have a max
+				obj_value  = -osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(x), NULL, NULL, new_x, 0 )[ 0];
+			}
 		}
-		
 	}
 	catch(const ErrorClass& eclass){
 		bonminErrorMsg = eclass.errormsg;
@@ -404,25 +405,28 @@ bool BonminProblem::eval_f(Index n, const Number* x, bool new_x, Number& obj_val
 
 bool BonminProblem::eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f){
  	int i;
- 	double *objGrad;
-	try{
-  		//objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
-		//std::cout << "Calculate Objective function gradient " << std::endl;
-		// we assume we are doing the objective function indexed by -1
-  		objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
-	}
-   	catch(const ErrorClass& eclass){
-		bonminErrorMsg = eclass.errormsg;
-		throw;  
-	}
-  	for(i = 0; i < n; i++){
-		if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
-			grad_f[ i]  = objGrad[ i];
-		}else{
-			grad_f[ i]  = -objGrad[ i];
+ 	double *objGrad = NULL;
+	if(osinstance->getObjectiveNumber() > 0){
+		try{
+  			//objGrad = osinstance->calculateAllObjectiveFunctionGradients( const_cast<double*>(x), NULL, NULL,  new_x, 1)[ 0];
+			//std::cout << "Calculate Objective function gradient " << std::endl;
+			// we assume we are doing the objective function indexed by -1
+  			objGrad = osinstance->calculateObjectiveFunctionGradient( const_cast<double*>(x), NULL, NULL, -1,  new_x, 1);
 		}
-  		//std::cout << grad_f[ i]  << std::endl;
-  	}
+   	catch(const ErrorClass& eclass){
+			bonminErrorMsg = eclass.errormsg;
+			throw;  
+		}
+
+  		for(i = 0; i < n; i++){
+			if( osinstance->instanceData->objectives->obj[ 0]->maxOrMin.compare("min") == 0){
+				grad_f[ i]  = objGrad[ i];
+			}else{
+				grad_f[ i]  = -objGrad[ i];
+			}
+  			//std::cout << grad_f[ i]  << std::endl;
+  		}
+	}
 //std::cout << "DONE WITH Calculate Objective function gradient " << std::endl;
   	return true;
 }//eval_grad_f
@@ -722,11 +726,11 @@ void BonminSolver::solve() throw (ErrorClass) {
 		if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
 
-		if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
+		//if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Bonmin NEEDS AN OBJECTIVE FUNCTION");
 		//double start = CoinCpuTime();
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
-		if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
+		//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Bonmin requires decision variables");
 		//double duration = CoinCpuTime() - start;
 
 		  try {
@@ -754,12 +758,13 @@ void BonminSolver::solve() throw (ErrorClass) {
 		std::string solutionDescription = "";
 		std::string message = "Success";
 		int solIdx = 0;
+
 		if(osresult->setServiceName( "Bonin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 			throw ErrorClass("OSResult error: setInstanceName");
-		if(osresult->setVariableNumber( osinstance->getVariableNumber()) != true)
-			throw ErrorClass("OSResult error: setVariableNumer");
+		if(osresult->setVariableNumber( osinstance->getVariableNumber()  ) != true)
+			throw ErrorClass("OSResult error: setVariableNumber");
 		if(osresult->setObjectiveNumber( 1) != true)
 			throw ErrorClass("OSResult error: setObjectiveNumber");
 		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
@@ -771,6 +776,7 @@ void BonminSolver::solve() throw (ErrorClass) {
 		solutionDescription = "The problem is unbounded";
 			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 		osresult->setGeneralStatusType("normal");
+		if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 		osrl = osrlwriter->writeOSrL( osresult);		
 		return;
 	}
@@ -780,6 +786,8 @@ void BonminSolver::solve() throw (ErrorClass) {
 		std::string solutionDescription = "";
 		std::string message = "Success";
 		int solIdx = 0;
+		
+
 		if(osresult->setServiceName( "Bonin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
@@ -791,12 +799,13 @@ void BonminSolver::solve() throw (ErrorClass) {
 		if(osresult->setConstraintNumber( osinstance->getConstraintNumber()) != true)
 			throw ErrorClass("OSResult error: setConstraintNumber");
 		if(osresult->setSolutionNumber(  1) != true)
-			throw ErrorClass("OSResult error: setSolutionNumer");		
+			throw ErrorClass("OSResult error: setSolutionNumber");		
 		if(osresult->setGeneralMessage( message) != true)
 			throw ErrorClass("OSResult error: setGeneralMessage");
 		solutionDescription = "The problem is infeasible";
 			osresult->setSolutionStatus(solIdx,  "error", solutionDescription);	
 		osresult->setGeneralStatusType("normal");
+		if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 		osrl = osrlwriter->writeOSrL( osresult);		
 		return;
 	}
@@ -822,10 +831,11 @@ void BonminSolver::writeResult(){
 	int solIdx = 0;
 	std::string solutionDescription = "";
 	std::string message = "Bonmin solver finishes to the end.";
+	if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(0, "Warning: this problem has zero decision variables!");
 	
 	
 	try{
-		x = new double[osinstance->getVariableNumber() ];
+		if(osinstance->getVariableNumber()  > 0) x = new double[osinstance->getVariableNumber() ];
 		z = new double[1];		
 		// resultHeader information
 		if(osresult->setServiceName( "Bonmin solver service") != true)
@@ -853,13 +863,17 @@ void BonminSolver::writeResult(){
 				//std::cout << solutionDescription << std::endl;
 				osresult->setSolutionStatus(solIdx,  "locallyOptimal", solutionDescription);		
 				/* Retrieve the solution */
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.bestSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
+				if(osinstance->getObjectiveNumber() > 0){
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+					osresult->setObjectiveValuesDense(solIdx, z); 
 				}
-				osresult->setPrimalVariableValuesDense(solIdx, x);
+				if( osinstance->getVariableNumber() > 0){
+					for(i=0; i < osinstance->getVariableNumber(); i++){
+						*(x + i) = bb.bestSolution()[i];
+						//std::cout <<  *(x + i)  << std::endl;
+					}
+					osresult->setPrimalVariableValuesDense(solIdx, x);
+				}
 			break;
 			
 			case TMINLP::LIMIT_EXCEEDED:
@@ -869,13 +883,17 @@ void BonminSolver::writeResult(){
 				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
-				*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.model().getColSolution()), true)[ 0];
-				osresult->setObjectiveValuesDense(solIdx, z); 
-				for(i=0; i < osinstance->getVariableNumber(); i++){
-					*(x + i) = bb.model().getColSolution()[i];
-					//std::cout <<  *(x + i)  << std::endl;
+				if(osinstance->getObjectiveNumber() > 0){
+					*(z + 0)  =  osinstance->calculateAllObjectiveFunctionValues( const_cast<double*>(bb.bestSolution()), true)[ 0];
+					osresult->setObjectiveValuesDense(solIdx, z); 
 				}
-				osresult->setPrimalVariableValuesDense(solIdx, x); 
+				if( osinstance->getVariableNumber() > 0){
+					for(i=0; i < osinstance->getVariableNumber(); i++){
+						*(x + i) = bb.bestSolution()[i];
+						//std::cout <<  *(x + i)  << std::endl;
+					}
+					osresult->setPrimalVariableValuesDense(solIdx, x);
+				}
 			break;
 			
 			case TMINLP::MINLP_ERROR:
@@ -907,7 +925,7 @@ void BonminSolver::writeResult(){
 		}//switch end	
 		osresult->setGeneralStatusType("normal");
 		osrl = osrlwriter->writeOSrL( osresult);
-		delete[] x;
+		if(osinstance->getVariableNumber() > 0 ) delete[] x;
 		x = NULL;
 		delete[] z;	
 		z = NULL;
@@ -915,7 +933,7 @@ void BonminSolver::writeResult(){
 	
 	
 	catch(const ErrorClass& eclass){
-		delete[] x;
+		if(osinstance->getVariableNumber()  > 0) delete[] x;
 		x = NULL;
 		delete[] z;	
 		z = NULL;

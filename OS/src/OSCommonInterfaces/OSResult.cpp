@@ -1026,7 +1026,7 @@ bool OSResult::setGeneralMessage(string message){
 }//setGeneralMessage
 
 bool OSResult::setVariableNumber(int variableNumber){
-	if(variableNumber <= 0){
+	if(variableNumber < 0){
 		return false;
 	}
 	if(optimization == NULL) optimization = new OptimizationResult();
