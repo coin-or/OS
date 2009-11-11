@@ -443,6 +443,7 @@ void solve(){
 					}
 					else{
 						if(osoptions->gamsControlFile != ""){
+							
 							getOSiLFromGams();
 					}
 						else{// need an osol file with an instanceLocation specified
@@ -516,6 +517,7 @@ void solve(){
 						if(osoptions->gamsControlFile != ""){
 						#ifdef COIN_HAS_GAMSUTILS
 						gams2osil =	new OSgams2osil( osoptions->gamsControlFile); 
+						gams2osil->createOSInstance();
 						osrl = buildSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
 						#else
 						throw ErrorClass("a Gams Control specified locally but GAMSIP not present");
