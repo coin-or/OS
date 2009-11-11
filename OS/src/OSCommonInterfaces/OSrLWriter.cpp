@@ -100,9 +100,12 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << m_OSResult->general->generalStatus->description ;
 				outStr << "\"";
 			}
-			outStr << " numberOfSubstatuses=\"";
-			outStr << m_OSResult->general->generalStatus->numberOfSubstatuses;
-			outStr << "\"";
+			if (m_OSResult->general->generalStatus->numberOfSubstatuses > 0)
+			{
+				outStr << " numberOfSubstatuses=\"";
+				outStr << m_OSResult->general->generalStatus->numberOfSubstatuses;
+				outStr << "\"";
+			}
 			outStr << ">" << endl;
 			for (int i=0; i < m_OSResult->general->generalStatus->numberOfSubstatuses; i++)
 			{	outStr << "<substatus";
@@ -496,9 +499,12 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << ">" << endl;
 				if(m_OSResult->optimization->solution[i]->status != NULL){
 					outStr << "<status";
-					outStr << " numberOfSubstatuses=\"";
-					outStr << m_OSResult->optimization->solution[i]->status->numberOfSubstatuses ;
-					outStr <<  "\"";
+					if (m_OSResult->optimization->solution[i]->status->numberOfSubstatuses > 0)
+					{
+						outStr << " numberOfSubstatuses=\"";
+						outStr << m_OSResult->optimization->solution[i]->status->numberOfSubstatuses ;
+						outStr <<  "\"";
+					}
 					if(m_OSResult->optimization->solution[i]->status->type.length() > 0){
 						outStr << " type=\"";
 						outStr << m_OSResult->optimization->solution[i]->status->type;
