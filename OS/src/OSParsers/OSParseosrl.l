@@ -87,7 +87,7 @@ using std::ostringstream;
 %option bison-bridge
 %option bison-locations
 %option yylineno   
-
+%option nounput
 %x osrlattributetext
 %x doublequoteattributetext
 %x singlequoteattributetext

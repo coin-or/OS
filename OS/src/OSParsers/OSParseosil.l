@@ -15,14 +15,10 @@
  */
 %{
 
-
+#include <iostream>
 #include "OSDataStructures.h"
 #include "OSMathUtil.h"
 #include "OSConfig.h"
-
-#include <iostream>
-
-
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -56,9 +52,6 @@
 
 #include <sstream>  
 #include "OSiLParserData.h"
-
-
-
 #include "OSErrorClass.h"
 #include "OSParseosil.tab.hpp"
 #include "OSInstance.h"
@@ -73,7 +66,6 @@
 #endif
 
 
-
 #ifdef WIN_
   #define YY_NO_UNISTD_H
   #include <io.h>
@@ -82,24 +74,24 @@
      #include<sys/unistd.h>
   #endif
 #endif
+
 using std::cout;
 using std::endl;
 using std::ostringstream;
+
 %}
 
-%option nounput
+%option prefix="osil"
+%option noyywrap
 %option reentrant
 %option bison-bridge
 %option bison-locations
-
-
-%option prefix="osil"
 %option yylineno
-%option noyywrap
+%option nounput
+%x osilattributetext
 %x doublequoteattributetext
 %x singlequoteattributetext
 %x startelement
-%x osilattributetext
 %x elementtext
 %x comment
 %x xmldeclaration
@@ -118,7 +110,7 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 
 %% 
  
-{xmlwhitespace}
+{xmlwhitespace}*
 
  /* General patterns matched in more than one element */
 
