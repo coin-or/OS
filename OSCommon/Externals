@@ -3,4 +3,4 @@ OS/src/OSCommonInterfaces     https://projects.coin-or.org/svn/OS/stable/2.0/OS/
 OS/src/OSParsers     https://projects.coin-or.org/svn/OS/stable/2.0//OS/src/OSParsers
 OS/src/OSUtils     https://projects.coin-or.org/svn/OS/stable/2.0/OS/src/OSUtils
 CoinUtils https://projects.coin-or.org/svn/CoinUtils/stable/2.5/CoinUtils
-cppad https://projects.coin-or.org/svn/CppAD/releases/20090303.0
+cppad https://projects.coin-or.org/svn/CppAD/releases/20090303.1
