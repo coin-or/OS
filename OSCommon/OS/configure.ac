@@ -84,6 +84,7 @@ AC_CHECK_SIZEOF( long)
 #                              COIN components                              #
 #############################################################################
 
+AC_COIN_HAS_PROJECT(CoinUtils)
 AC_COIN_HAS_PROJECT(OS)
 AC_COIN_HAS_PROJECT(cppad)
 AC_COIN_HAS_PROJECT(CoinUtils)
