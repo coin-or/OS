@@ -1072,6 +1072,16 @@ std::string get_help(){
 	helpMsg << "the result will be printed to standard out.  " << endl;
 	
 	helpMsg << endl;
+	
+	helpMsg << "-osplInput xxx.ospl  this is the name of an input file in the OS Process" << endl;
+	helpMsg <<  " Language (OSpL), this is used as input  to the knock method." << endl;
+	
+	helpMsg << endl;
+
+	helpMsg << "-osplOutput xxx.ospl this is the name of an output file in the  OS Process" << endl;
+	helpMsg <<  "Language (OSpL), this the output string from the knock and kill methods." << endl;
+	
+	helpMsg << endl;
 
 	helpMsg << "-serviceLocation url is the URL of the solver service.  " << endl;
 	helpMsg << "This is not required, and if not specified it is assumed that   " << endl;
@@ -1080,7 +1090,7 @@ std::string get_help(){
 	helpMsg << endl;
 
 	helpMsg << "-serviceMethod  methodName this is the method on the solver service to be invoked.  " << endl; 
-	helpMsg << "The options are  solve,  send,  kill,  knock,  getJobID, and t retrieve.   " << endl;
+	helpMsg << "The options are  solve,  send,  kill,  knock,  getJobID, and retrieve.   " << endl;
 	helpMsg << "This option is not required, and the default value is  solve.  " << endl;
 	
 	helpMsg << endl;
@@ -1134,7 +1144,7 @@ std::string get_help(){
 	helpMsg << "override the values of the options in the configure file by putting them in   " << endl;
 	helpMsg << "at the command line. " << endl << endl;
 	
-	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_1.1.pdf" << endl;
+	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf" << endl;
 	helpMsg << "for more detail on how to use the OS project. " << endl;
 	
 	helpMsg << endl;
