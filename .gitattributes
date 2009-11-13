@@ -124,6 +124,15 @@ OS/data/configFiles/testlocalclp.config -text
 OS/data/configFiles/testlocalosol.config -text
 OS/data/configFiles/testmps.config -text
 OS/data/configFiles/testnl.config -text
+OS/data/gamsFiles/225a/gamscntr.dat -text
+OS/data/gamsFiles/225a/gamsdict.dat -text
+OS/data/gamsFiles/225a/gamsmatr.dat -text
+OS/data/gamsFiles/225a/gamsnext.sh -text
+OS/data/gamsFiles/225a/gamssolu.dat -text
+OS/data/gamsFiles/225a/gamsstat.dat -text
+OS/data/gamsFiles/225a/gamswrk0.dat -text
+OS/data/gamsFiles/225a/gdxdict.dat -text
+OS/data/gamsFiles/225a/gmsprmun.dat -text
 OS/data/gamsFiles/IP_infeasible.gms -text
 OS/data/gamsFiles/IP_unbounded.gms -text
 OS/data/gamsFiles/LP_primaldualinfeasible.gms -text
