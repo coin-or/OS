@@ -177,149 +177,112 @@ int main(int argc, char **argv)
 	
 	try{
 		if( (amplclient_options == NULL)  && (sSolverName.size() == 0) ) throw ErrorClass( "a local solver was not specified in AMPL option");
-		else{// don't do this if we have 
-			if( sSolverName == "lindo") {
-				// we are requesting the Lindo solver
-				bool bLindoIsPresent = false;
-				#ifdef COIN_HAS_LINDO
-				bLindoIsPresent = true;
-				//solver_option = getenv("lindo_options");
-				//if(( solver_option == NULL) ||  strstr(solver_option, "service") == NULL)  solverType = new LindoSolver();
-				if( serviceLocation.size() == 0 ){
+		else{// don't do this if we have specify a remote location
+			if(serviceLocation.size() == 0 ){
+				if( sSolverName == "lindo") {
+					// we are requesting the Lindo solver
+					bool bLindoIsPresent = false;
+					#ifdef COIN_HAS_LINDO
+					bLindoIsPresent = true;
 					solverType = new LindoSolver();
 					solverType->sSolverName = "lindo";
+					#endif
+					if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
 				}
-				#endif
-				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
-			}
-			else{ 
-				if( sSolverName == "clp" ){
-					if( solver_option != NULL) cout << "HERE ARE THE Clp SOLVER OPTIONS " <<   solver_option << endl;
-					//solver_option = getenv("clp_options");
-					//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-					if( serviceLocation.size() == 0 ){
+				else{ 
+					if( sSolverName == "clp" ){
+						if( solver_option != NULL) cout << "HERE ARE THE Clp SOLVER OPTIONS " <<   solver_option << endl;
 						solverType = new CoinSolver();
 						solverType->sSolverName = "clp";
 					}
-				}
-				else{
-					if( sSolverName == "cbc"){
-						//solver_option = getenv("cbc_options");
-						//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)){
-						if( serviceLocation.size() == 0 ){
+					else{
+						if( sSolverName == "cbc"){
+
 							solverType = new CoinSolver();
 							solverType->sSolverName = "cbc";
 						}
-					}
-					else{
-						if( sSolverName == "cplex"){
-							bool bCplexIsPresent = false;
-							#ifdef COIN_HAS_CPX
-								bCplexIsPresent = true;
-								//solver_option = getenv("cplex_options");
-								//if(  ( solver_option == NULL) ||  (strstr(solver_option, "service") == NULL)){
-								if( serviceLocation.size() == 0 ){
+						else{
+							if( sSolverName == "cplex"){
+								bool bCplexIsPresent = false;
+								#ifdef COIN_HAS_CPX
+									bCplexIsPresent = true;
 									solverType = new CoinSolver();
 									solverType->sSolverName = "cplex";
-								}
-							#endif
-								if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
-						}
-						else{
-							if( sSolverName == "glpk"){
-								bool bGlpkIsPresent = false;
-								#ifdef COIN_HAS_GLPK
-									bGlpkIsPresent = true;
-									solverType = new CoinSolver();
-									//solver_option = getenv("glpk_options");
-									//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)){
-									if( serviceLocation.size() == 0 ){
-										solverType = new CoinSolver();
-										solverType->sSolverName = "glpk";
-									}
 								#endif
-								if(bGlpkIsPresent == false) throw ErrorClass( "the Glpk solver requested is not present");
+									if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
 							}
 							else{
-								if( sSolverName == "ipopt"){
-									bool bIpoptIsPresent = false;
-									#ifdef COIN_HAS_IPOPT
-										bIpoptIsPresent = true;
-										//solver_option = getenv("ipopt_options");
-										//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-										if( serviceLocation.size() == 0 ){
-											solverType = new IpoptSolver();
-											solverType->sSolverName = "ipopt";
-										}
+								if( sSolverName == "glpk"){
+									bool bGlpkIsPresent = false;
+									#ifdef COIN_HAS_GLPK
+										bGlpkIsPresent = true;
+										solverType = new CoinSolver();
+										solverType = new CoinSolver();
+										solverType->sSolverName = "glpk";
 									#endif
-									if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
+									if(bGlpkIsPresent == false) throw ErrorClass( "the Glpk solver requested is not present");
 								}
 								else{
-									if( sSolverName == "symphony" ){
-										bool bSymIsPresent = false;
-										#ifdef COIN_HAS_SYMPHONY
-											bSymIsPresent = true; 
-											//solver_option = getenv("symphony_options");
-											//if(  ( solver_option == NULL) ||  (strstr(solver_option, "service") == NULL)){
-											if( serviceLocation.size() == 0 ){
-												solverType = new CoinSolver();
-												solverType->sSolverName = "symphony";
-											}
+									if( sSolverName == "ipopt"){
+										bool bIpoptIsPresent = false;
+										#ifdef COIN_HAS_IPOPT
+											bIpoptIsPresent = true;
+											solverType = new IpoptSolver();
+											solverType->sSolverName = "ipopt";
 										#endif
-										if(bSymIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
+										if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
 									}
 									else{
-										if( sSolverName == "dylp"){
-											bool bDyLPIsPresent = false;
-											#ifdef COIN_HAS_DYLP
-												bDyLPIsPresent = true;
-												//solver_option = getenv("dylp_options");
-												//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-												if( serviceLocation.size() == 0 ){
+										if( sSolverName == "symphony" ){
+											bool bSymIsPresent = false;
+											#ifdef COIN_HAS_SYMPHONY
+												bSymIsPresent = true; 
+												solverType = new CoinSolver();
+												solverType->sSolverName = "symphony";
+											#endif
+											if(bSymIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
+										}
+										else{
+											if( sSolverName == "dylp"){
+												bool bDyLPIsPresent = false;
+												#ifdef COIN_HAS_DYLP
+													bDyLPIsPresent = true;
 													solverType = new CoinSolver();
 													solverType->sSolverName = "dylp";
-												}
-											#endif
-											if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
-										}						
-										else{
-											if( sSolverName == "bonmin" ){
-												bool bBonminIsPresent = false;
-												#ifdef COIN_HAS_BONMIN
-													bBonminIsPresent = true;
-													//solver_option = getenv("bonmin_options");
-													//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-													if( serviceLocation.size() == 0 ){
+												#endif
+												if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
+											}						
+											else{
+												if( sSolverName == "bonmin" ){
+													bool bBonminIsPresent = false;
+													#ifdef COIN_HAS_BONMIN
+														bBonminIsPresent = true;
 														solverType = new BonminSolver();
 														solverType->sSolverName = "bonmin";
-													}
-												#endif
-												if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");												
-											}
-											else{
-												if( sSolverName == "couenne"){
-													bool bCouenneIsPresent = false;
-													#ifdef COIN_HAS_COUENNE
-													bCouenneIsPresent = true;
-													//solver_option = getenv("couenne_options");
-													//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-													if( serviceLocation.size() == 0 ){
-														solverType = new CouenneSolver();
-														solverType->sSolverName = "counenne";
-													}
 													#endif
-														if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");	
+													if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");												
 												}
 												else{
-													throw ErrorClass( "a supported solver has not been selected");
+													if( sSolverName == "couenne"){
+														bool bCouenneIsPresent = false;
+														#ifdef COIN_HAS_COUENNE
+															bCouenneIsPresent = true;
+															solverType = new CouenneSolver();
+															solverType->sSolverName = "counenne";
+														#endif
+														if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");	
+													}
+													else{
+														throw ErrorClass( "a supported solver has not been selected");
+													}
 												}
 											}
-										}
-									}	
-								} 
+										}	
+									} 
+								}
 							}
-						}
-					} 
+						} 
+					}
 				}
 			}
 		}
