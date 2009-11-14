@@ -32,7 +32,7 @@
  * x2 = 4.743
  * 
  * now if, instesd you wanteded to call a remote OS solver do something like: 
- * option OSAmplClient_options "solver ipopt serviceURI mysolverservice"
+ * option OSAmplClient_options "solver ipopt serviceLocation mysolverservice"
  * 
  * 
  */
@@ -93,7 +93,7 @@ using std::endl;
 using std::ostringstream;
 
 void getAmplClientOptions(char *options, std::string *solverName, 
-std::string *optionFile, std::string *serviceURI);
+std::string *optionFile, std::string *serviceLocation);
 int main(int argc, char **argv)
 {
 	WindowsErrorPopupBlocker();
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 	std::string osrl = "";
 	std::string sSolverName = "";
 	std::string osol = "";
-	std::string serviceURI = "";
+	std::string serviceLocation = "";
 	//char *URL = NULL;
 	//char delims[] = " ";
 
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 	amplclient_options = getenv("OSAmplClient_options");
 	if( amplclient_options != NULL){
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
-		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceURI);
+		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceLocation);
 	}
 	if(sSolverName.size() == 0){
 		std::cout << "DETERMINE THE DEFAULT SOLVER " <<    endl;
@@ -177,33 +177,36 @@ int main(int argc, char **argv)
 	
 	try{
 		if( (amplclient_options == NULL)  && (sSolverName.size() == 0) ) throw ErrorClass( "a local solver was not specified in AMPL option");
-		else{
+		else{// don't do this if we have 
 			if( sSolverName == "lindo") {
 				// we are requesting the Lindo solver
 				bool bLindoIsPresent = false;
 				#ifdef COIN_HAS_LINDO
 				bLindoIsPresent = true;
-				solver_option = getenv("lindo_options");
+				//solver_option = getenv("lindo_options");
 				//if(( solver_option == NULL) ||  strstr(solver_option, "service") == NULL)  solverType = new LindoSolver();
-				if( serviceURI.size() == 0 ){
+				if( serviceLocation.size() == 0 ){
+					solverType = new LindoSolver();
+					solverType->sSolverName = "lindo";
+				}
 				#endif
 				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
 			}
 			else{ 
 				if( sSolverName == "clp" ){
 					if( solver_option != NULL) cout << "HERE ARE THE Clp SOLVER OPTIONS " <<   solver_option << endl;
-					solver_option = getenv("clp_options");
+					//solver_option = getenv("clp_options");
 					//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-					if( serviceURI.size() == 0 ){
+					if( serviceLocation.size() == 0 ){
 						solverType = new CoinSolver();
 						solverType->sSolverName = "clp";
 					}
 				}
 				else{
 					if( sSolverName == "cbc"){
-						solver_option = getenv("cbc_options");
+						//solver_option = getenv("cbc_options");
 						//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)){
-						if( serviceURI.size() == 0 ){
+						if( serviceLocation.size() == 0 ){
 							solverType = new CoinSolver();
 							solverType->sSolverName = "cbc";
 						}
@@ -213,9 +216,9 @@ int main(int argc, char **argv)
 							bool bCplexIsPresent = false;
 							#ifdef COIN_HAS_CPX
 								bCplexIsPresent = true;
-								solver_option = getenv("cplex_options");
+								//solver_option = getenv("cplex_options");
 								//if(  ( solver_option == NULL) ||  (strstr(solver_option, "service") == NULL)){
-								if( serviceURI.size() == 0 ){
+								if( serviceLocation.size() == 0 ){
 									solverType = new CoinSolver();
 									solverType->sSolverName = "cplex";
 								}
@@ -228,9 +231,9 @@ int main(int argc, char **argv)
 								#ifdef COIN_HAS_GLPK
 									bGlpkIsPresent = true;
 									solverType = new CoinSolver();
-									solver_option = getenv("glpk_options");
+									//solver_option = getenv("glpk_options");
 									//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)){
-									if( serviceURI.size() == 0 ){
+									if( serviceLocation.size() == 0 ){
 										solverType = new CoinSolver();
 										solverType->sSolverName = "glpk";
 									}
@@ -242,9 +245,9 @@ int main(int argc, char **argv)
 									bool bIpoptIsPresent = false;
 									#ifdef COIN_HAS_IPOPT
 										bIpoptIsPresent = true;
-										solver_option = getenv("ipopt_options");
+										//solver_option = getenv("ipopt_options");
 										//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-										if( serviceURI.size() == 0 ){
+										if( serviceLocation.size() == 0 ){
 											solverType = new IpoptSolver();
 											solverType->sSolverName = "ipopt";
 										}
@@ -256,9 +259,9 @@ int main(int argc, char **argv)
 										bool bSymIsPresent = false;
 										#ifdef COIN_HAS_SYMPHONY
 											bSymIsPresent = true; 
-											solver_option = getenv("symphony_options");
+											//solver_option = getenv("symphony_options");
 											//if(  ( solver_option == NULL) ||  (strstr(solver_option, "service") == NULL)){
-											if( serviceURI.size() == 0 ){
+											if( serviceLocation.size() == 0 ){
 												solverType = new CoinSolver();
 												solverType->sSolverName = "symphony";
 											}
@@ -270,9 +273,9 @@ int main(int argc, char **argv)
 											bool bDyLPIsPresent = false;
 											#ifdef COIN_HAS_DYLP
 												bDyLPIsPresent = true;
-												solver_option = getenv("dylp_options");
+												//solver_option = getenv("dylp_options");
 												//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-												if( serviceURI.size() == 0 ){
+												if( serviceLocation.size() == 0 ){
 													solverType = new CoinSolver();
 													solverType->sSolverName = "dylp";
 												}
@@ -284,9 +287,9 @@ int main(int argc, char **argv)
 												bool bBonminIsPresent = false;
 												#ifdef COIN_HAS_BONMIN
 													bBonminIsPresent = true;
-													solver_option = getenv("bonmin_options");
+													//solver_option = getenv("bonmin_options");
 													//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-													if( serviceURI.size() == 0 ){
+													if( serviceLocation.size() == 0 ){
 														solverType = new BonminSolver();
 														solverType->sSolverName = "bonmin";
 													}
@@ -298,9 +301,9 @@ int main(int argc, char **argv)
 													bool bCouenneIsPresent = false;
 													#ifdef COIN_HAS_COUENNE
 													bCouenneIsPresent = true;
-													solver_option = getenv("couenne_options");
+													//solver_option = getenv("couenne_options");
 													//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL) ){
-													if( serviceURI.size() == 0 ){
+													if( serviceLocation.size() == 0 ){
 														solverType = new CouenneSolver();
 														solverType->sSolverName = "counenne";
 													}
@@ -322,7 +325,7 @@ int main(int argc, char **argv)
 		}
 		// do a local solve
 		//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)  ){
-		if( serviceURI.size() == 0 ){
+		if( serviceLocation.size() == 0 ){
 			solverType->osol = osol;
 			//std::cout << osol << std::endl;
 			OSiLWriter osilwriter;
@@ -350,7 +353,7 @@ int main(int argc, char **argv)
 	}
 	try{
 		// do the following for a remote solve
-		if( serviceURI.size()  > 0){
+		if( serviceLocation.size()  > 0){
 			OSSolverAgent* osagent = NULL;
 			OSiLWriter *osilwriter = NULL;
 			osilwriter = new OSiLWriter();
@@ -363,8 +366,8 @@ int main(int argc, char **argv)
 			//std::string sURL = URL;
 			///
 			// we should be pointing to the start of the address
-			osagent = new OSSolverAgent( serviceURI);
-			cout << "Place remote synchronous call: " + serviceURI << endl << endl << endl;
+			osagent = new OSSolverAgent( serviceLocation);
+			cout << "Place remote synchronous call: " + serviceLocation << endl << endl << endl;
 			//cout << osol << endl;
 			osrl = osagent->solve(osil, osol);
 			if (osrl.size() == 0) throw ErrorClass("Nothing was returned from the server, please check service address");
@@ -479,7 +482,7 @@ int main(int argc, char **argv)
 
 
 void getAmplClientOptions(char *amplclient_options, std::string *solverName, 
-	std::string *solverOptions, std::string *serviceURI){
+	std::string *solverOptions, std::string *serviceLocation){
 
 	
 	std::string amplOptions = "";
@@ -572,26 +575,26 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 		}
 
 		
-		// see if a serviceURI has been specified
-		pos1 = amplOptions.find( "serviceURI");
+		// see if a serviceLocation has been specified
+		pos1 = amplOptions.find( "serviceLocation");
 		if(pos1 != std::string::npos){
-			//we have a serviceURI specified
-			pos1 += 10;
+			//we have a serviceLocation specified
+			pos1 += 15;
 			//std::cout << "position 1 = " << pos1 << std::endl;
 			// we are at at the comma after solver
 			pos2 = amplOptions.find( ",", pos1 + 1);
 			//std::cout << "position 2 = " << pos2 << std::endl;
 			if(pos2 != std::string::npos){
 				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
-				*serviceURI = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
+				*serviceLocation = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
 				
 			}
 		}
 		
-		// if a serviceURI is specified it overrides what is in the osoptions file, otherwise,
+		// if a serviceLocation is specified it overrides what is in the osoptions file, otherwise,
 		// see if we can get it from the solver option file
-		if( (*serviceURI).size() == 0 ){
-			*serviceURI = osoption->getServiceURI();
+		if( (*serviceLocation).size() == 0 ){
+			*serviceLocation = osoption->getServiceURI();
 		}		
 
 		delete osolreader;
