@@ -1084,6 +1084,10 @@ OptimizationResult::~OptimizationResult(){
 		}
 		delete[] solution;
 		solution = NULL; 
+		if( otherSolverOutput != NULL){
+			delete otherSolverOutput;
+			otherSolverOutput = NULL;
+		}
 	}
 }// end OptimizationResult destructor 
  
