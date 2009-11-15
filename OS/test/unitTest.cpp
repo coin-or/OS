@@ -3523,7 +3523,7 @@ if (PARSER_TESTS){
  */
 	OSResult *osresult1 = new OSResult();
 	OSResult *osresult2 = new OSResult();
-	OSResult *osresult3 = new OSResult();
+	OSResult *osresult3 = NULL;
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": OSrL tools" << endl << endl;
 		ok = true;
@@ -5162,7 +5162,7 @@ if (PARSER_TESTS){
 		if (osrlreader != NULL) delete osrlreader;
 		if (osresult1  != NULL) delete osresult1;
 		if (osresult2  != NULL) delete osresult2;
-//		if (osresult3  != NULL) delete osresult3;
+		if (osresult3  != NULL) delete osresult3;
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
