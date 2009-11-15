@@ -789,7 +789,7 @@ currentStateEmpty: GREATERTHAN CURRENTSTATEEND | ENDOFELEMENT;
 currentStateLaden: GREATERTHAN currentStateBody CURRENTSTATEEND;
 
 currentStateBody:  ELEMENTTEXT  
-        {       parserData->tempStr = $1; free($1);
+    {   parserData->tempStr = $1; free($1);
 		if (parserData->tempStr != "busy"                &&
 			parserData->tempStr != "busyButAccepting"    &&
 			parserData->tempStr != "idle"                &&
@@ -1071,6 +1071,8 @@ timingInformationStart: TIMINGINFORMATIONSTART
 
 timingInformationAttributes: numberOfTimesAttribute 
 {	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, "number of time measurements cannot be negative");
+	if (osresult->setNumberOfTimes(parserData->tempInt) == false)
+			osrlerror(NULL, NULL, parserData, "setNumberOfTimes failed");
 	parserData->numberOfTimes = parserData->tempInt;
 	parserData->ivar = 0;
 };
@@ -1149,7 +1151,7 @@ timeEmpty: GREATERTHAN TIMEEND | ENDOFELEMENT;
 timeLaden: GREATERTHAN timeBody TIMEEND;
 
 timeBody:   timeValue 
-{	osresult->addTimingInformation(parserData->typeAttribute, parserData->categoryAttribute,
+{	osresult->setTimingInformation(parserData->ivar, parserData->typeAttribute, parserData->categoryAttribute,
 		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue);       
 	parserData->ivar++;
 	parserData->timeType = "";
@@ -1479,10 +1481,16 @@ weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
 		osrlerror(NULL, NULL, parserData, "target objective idx previously set");
 	parserData->weightedObjAttributePresent = true;
 	parserData->tempStr = $2;
-	if (parserData->tempStr != "true" && parserData->tempStr != "false")
+	if (parserData->tempStr == "true")
+	{  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
+			osrlerror(NULL, NULL, parserData, "setSolutionWeightedObjectives failed");
+	}
+	else if (parserData->tempStr == "false")
+	{  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, false) == false)
+			osrlerror(NULL, NULL, parserData, "setSolutionWeightedObjectives failed");
+	}
+	else
 		osrlerror(NULL, NULL, parserData, "weightedobjectives must be true or false");
-  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, parserData->tempStr) == false)
-		osrlerror(NULL, NULL, parserData, "setSolutionWeightedObjectives failed");
 };
 
 solutionContent: GREATERTHAN solutionStatus solutionMessage
@@ -1603,8 +1611,9 @@ solutionMessageEmpty: GREATERTHAN MESSAGEEND | ENDOFELEMENT;
 solutionMessageLaden: GREATERTHAN solutionMessageBody MESSAGEEND;
 
 solutionMessageBody:  ELEMENTTEXT  
-	{	osresult->setSolutionMessage(parserData->solutionIdx, $1);
-                free($1);
+	{	parserData->tempStr = $1;
+        free($1);
+		osresult->setSolutionMessage(parserData->solutionIdx, parserData->tempStr);
 		parserData->errorText = NULL;
 	};
 
@@ -1777,7 +1786,7 @@ basisVarStart: VARSTART
 basisVarIdxATT : IDXATT quote INTEGER quote { parserData->idx = $3; };
   
 basisVarContent: GREATERTHAN ELEMENTTEXT VAREND
-{       parserData->tempStr = $2; free($2);
+{   parserData->tempStr = $2; free($2);
 	if (parserData->tempStr != "unknown"  &&
 		parserData->tempStr != "basic"    &&
 		parserData->tempStr != "atLower"  &&

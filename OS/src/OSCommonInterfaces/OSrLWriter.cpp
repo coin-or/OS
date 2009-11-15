@@ -534,8 +534,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				}
 				
 				if(m_OSResult->optimization->solution[i]->message != ""){
-					outStr << "<message>" << endl;
-					outStr << m_OSResult->optimization->solution[i]->message  << endl;
+					outStr << "<message>";
+					outStr << m_OSResult->optimization->solution[i]->message;
 					outStr << "</message>" << endl;
 				}
 				if(m_OSResult->optimization->solution[i]->variables != NULL){

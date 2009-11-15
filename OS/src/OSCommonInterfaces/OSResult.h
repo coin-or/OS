@@ -2747,6 +2747,29 @@ public:
 	 */
 	bool addTimingInformation(std::string type, std::string category,
 							  std::string unit, std::string description, double value);
+
+   	/**
+	 * Set timing information.
+	 * 
+	 * @param idx holds the index within the time array of the item to be set
+	 * @param type holds the timer type (cpuTime/elapsedTime/other). 
+	 * @param category holds the timer category (total/input/preprocessing, etc.)
+	 * @param unit holds the timer unit (tick/milliscond/second/minute/etc.) 
+	 * @param description holds further information about the timer. 
+
+	 * @param value holds the time measurement. 
+	 * @return whether the time is set successfully. 
+	 */
+	bool setTimingInformation(int idx, std::string type, std::string category, 
+							  std::string unit, std::string description, double value);
+
+	/**
+	 * Set the number of time measurements and initial the time array
+	 * 
+	 * @param numberOfTimes holds the number of measurements
+	 * @return whether the function completed successfully or not. 
+	 */
+	bool setNumberOfTimes(int numberOfTimes);
 	
 	/**
 	 * Set the number of time measurements. 
@@ -3004,7 +3027,7 @@ public:
 	 * 
 	 * @return whether the information was set successfully or not. 
 	 */
-	bool setSolutionWeightedObjectives(int solIdx, std::string weightedObjectives);
+	bool setSolutionWeightedObjectives(int solIdx, bool weightedObjectives);
 
 	/**
 	 * Set the [i]th optimization solution's message, where i equals the given solution index.   

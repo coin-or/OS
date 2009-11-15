@@ -27,7 +27,7 @@
 #include<iostream>
 #include<sstream>
 
-//#define DEBUG_RESULT
+//#define DEBUG_OSRESULT
 
 using namespace std;
 
@@ -40,13 +40,13 @@ GeneralSubstatus::GeneralSubstatus():
 	name( ""),
 	description( "")
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the GeneralSubstatus Constructor" << endl;
 	#endif
 }// end GeneralSubstatus constructor  
 
 GeneralSubstatus::~GeneralSubstatus(){
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the GeneralSubstatus Destructor" << endl;
 	#endif
 }//end GeneralSubstatus destructor
@@ -58,13 +58,13 @@ GeneralStatus::GeneralStatus():
 	description( ""),
 	substatus (NULL)
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the GeneralStatus Constructor" << endl;
 	#endif
 }// end GeneralStatus constructor  
 
 GeneralStatus::~GeneralStatus(){
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the GeneralStatus Destructor" << endl;
 	#endif
 	if (substatus != NULL)
@@ -84,14 +84,14 @@ OtherResult::OtherResult():
 	value( ""),
 	description( "")
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherResult Constructor" << endl;
 	#endif
 }// end OtherResult constructor
 
 OtherResult::~OtherResult()
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherResult Destructor" << endl;
 	#endif
 }// end OtherResult destructor
@@ -101,14 +101,14 @@ OtherResults::OtherResults():
 	numberOfOtherResults( 0),
 	other( NULL)
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherResults Constructor" << endl;
 	#endif
 }// end OtherResults constructor
 
 OtherResults::~OtherResults()
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherResults Destructor" << endl;
 	#endif
 	if (other != NULL)
@@ -134,14 +134,14 @@ GeneralResult::GeneralResult():
 	timeStamp(""),
 	otherResults(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the GeneralResult Constructor" << endl;
 	#endif
 }//end GeneralResult constructor
 
 
 GeneralResult::~GeneralResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "GeneralResult Destructor Called" << endl;
 	#endif
 	if (generalStatus != NULL)
@@ -160,14 +160,14 @@ DiskSpace::DiskSpace():
 	description( ""),
 	value( 0.0)
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the DiskSpace Constructor" << endl;
 	#endif
 }// end DiskSpace constructor
 
 DiskSpace::~DiskSpace()
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the DiskSpace Destructor" << endl;
 	#endif
 }// end DiskSpace destructor
@@ -179,14 +179,14 @@ MemorySize::MemorySize():
 	description( ""),
 	value( 0.0)
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the MemorySize Constructor" << endl;
 	#endif
 }// end MemorySize constructor
 
 MemorySize::~MemorySize()
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the MemorySize Destructor" << endl;
 	#endif
 }// end MemorySize destructor
@@ -197,14 +197,14 @@ CPUSpeed::CPUSpeed():
 	description( ""),
 	value( 0.0)
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the CPUSpeed Constructor" << endl;
 	#endif
 }// end CPUSpeed constructor
 
 CPUSpeed::~CPUSpeed()
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the CPUSpeed Destructor" << endl;
 	#endif
 }// end CPUSpeed destructor
@@ -214,14 +214,14 @@ CPUNumber::CPUNumber():
 	description( ""),
 	value( 1)
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the CPUNumber Constructor" << endl;
 	#endif
 }// end CPUNumber constructor
 
 CPUNumber::~CPUNumber()
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the CPUNumber Destructor" << endl;
 	#endif
 }// end CPUNumber destructor
@@ -235,14 +235,14 @@ SystemResult::SystemResult():
 	availableCPUNumber(NULL),
 	otherResults(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the SystemResult Constructor" << endl;
 	#endif
 }//end SystemResult constructor
 
 
 SystemResult::~SystemResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "SystemResult Destructor Called" << endl;
 	#endif
 	if (availableDiskSpace != NULL)
@@ -276,14 +276,14 @@ ServiceResult::ServiceResult():
 	serviceUtilization(-1.0),
 	otherResults(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the ServiceResult Constructor" << endl;
 	#endif
 }//end ServiceResult constructor
 
 
 ServiceResult::~ServiceResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "ServiceResult Destructor Called" << endl;
 	#endif
 	if (otherResults != NULL)
@@ -300,14 +300,14 @@ Time::Time():
 	description(""),
 	value(0.0)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the Time Constructor" << endl;
 	#endif
 }//end Time constructor
 
 
 Time::~Time(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the Time Destructor" << endl;
 	#endif
 
@@ -318,14 +318,14 @@ TimingInformation::TimingInformation():
 	numberOfTimes(0),
 	time(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the TimingInformation Constructor" << endl;
 	#endif
 }//end TimingInformation constructor
 
 
 TimingInformation::~TimingInformation(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the TimingInformation Destructor" << endl;
 	#endif
 	if (time != NULL)
@@ -352,7 +352,7 @@ JobResult::JobResult():
 	usedCPUNumber(NULL),
 	otherResults(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the JobResult Constructor" << endl;
 	#endif
 	timingInformation = NULL;
@@ -360,7 +360,7 @@ JobResult::JobResult():
 
 
 JobResult::~JobResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the JobResult Destructor" << endl;
 	#endif
 	if (timingInformation != NULL)
@@ -394,14 +394,14 @@ OptimizationSolutionSubstatus::OptimizationSolutionSubstatus():
 	type(""),
 	description("")
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OptimizationSolutionSubstatus Constructor" << endl;
 	#endif
 }//end OptimizationSolutionSubstatus constructor
 
 
 OptimizationSolutionSubstatus::~OptimizationSolutionSubstatus(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OptimizationSolutionSubstatus Destructor" << endl;
 	#endif
 }// end OptimizationSolutionSubstatus destructor
@@ -413,14 +413,14 @@ OptimizationSolutionStatus::OptimizationSolutionStatus():
 	description(""),
 	substatus(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OptimizationSolutionStatus Constructor" << endl;
 	#endif
 }//end OptimizationSolutionStatus constructor
 
 
 OptimizationSolutionStatus::~OptimizationSolutionStatus(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OptimizationSolutionStatus Destructor" << endl;
 	#endif
 	if (substatus != NULL)
@@ -439,14 +439,14 @@ VarValue::VarValue():
 	idx( -1),
 	value( 0)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the VarValue Constructor" << endl;
 	#endif
 }//end VarValue constructor
 
 
 VarValue::~VarValue(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the VarValue Destructor" << endl;
 	#endif
 }// end VarValue destructor 
@@ -457,14 +457,14 @@ VariableValues::VariableValues():
 	numberOfVar(0),
 	var(NULL) 
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the VariableValues Constructor" << endl;
 	#endif
 }//end VariableValues constructor
 
 
 VariableValues::~VariableValues(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the VariableValues Destructor" << endl;
 	#endif
 	if(var != NULL)
@@ -483,14 +483,14 @@ VarValueString::VarValueString():
 	idx( -1),
 	value( "")
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the VarValueString Constructor" << endl;
 	#endif
 }//end VarValueString constructor
 
 
 VarValueString::~VarValueString(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the VarValueString Destructor" << endl;
 	#endif
 }// end VarValueString destructor 
@@ -501,14 +501,14 @@ VariableValuesString::VariableValuesString():
 	numberOfVar(0),
 	var(NULL) 
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the VariableValuesString Constructor" << endl;
 	#endif
 }//end VariableValuesString constructor
 
 
 VariableValuesString::~VariableValuesString(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the VariableValuesString Destructor" << endl;
 	#endif
 	if(var != NULL)
@@ -527,14 +527,14 @@ BasStatus::BasStatus():
 	idx( -1),
 	value( "")
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the BasStatus Constructor" << endl;
 	#endif
 }//end BasStatus constructor
 
 
 BasStatus::~BasStatus(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the BasStatus Destructor" << endl;
 	#endif
 }// end BasStatus destructor 
@@ -545,14 +545,14 @@ BasisStatus::BasisStatus():
 	numberOfVar(0),
 	var(NULL) 
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the BasisStatus Constructor" << endl;
 	#endif
 }//end BasisStatus constructor
 
 
 BasisStatus::~BasisStatus(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the BasisStatus Destructor" << endl;
 	#endif
 	if(var != NULL)
@@ -571,14 +571,14 @@ OtherVarResult::OtherVarResult():
 	idx( -1),
 	value( "")
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherVarResult Constructor" << endl;
 	#endif
 }//end OtherVarResult constructor
 
 
 OtherVarResult::~OtherVarResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherVarResult Destructor" << endl;
 	#endif
 }// end OtherVarResult destructor 
@@ -592,7 +592,7 @@ OtherVariableResult::OtherVariableResult():
 	description(""),
 	var(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherVariableResult Constructor" << endl;
 	#endif
 
@@ -600,7 +600,7 @@ OtherVariableResult::OtherVariableResult():
 
 
 OtherVariableResult::~OtherVariableResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherVariableResult Destructor" << endl;
 	#endif
 	if (var != NULL)
@@ -611,7 +611,7 @@ OtherVariableResult::~OtherVariableResult(){
 		delete[] var;
 		var = NULL;
 	}
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherVariableResult Destructor - Done" << endl;
 	#endif
 }// end OtherVariableResult destructor 
@@ -624,14 +624,14 @@ VariableSolution::VariableSolution():
 	basisStatus(NULL),
 	other( NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the VariableSolution Constructor" << endl;
 	#endif
 }//end VariableSolution constructor
 
 
 VariableSolution::~VariableSolution(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the VariableSolution Destructor" << endl;
 	#endif
 	if (values != NULL)
@@ -663,13 +663,13 @@ ObjValue::ObjValue():
 	value(0.0)
 //	value( OSNAN)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the ObjValue Constructor" << endl;
 	#endif
 }//end ObjValue constructor
 
 ObjValue::~ObjValue(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the ObjValue Destructor" << endl;
 	#endif
 }// end ObjValue destructor 
@@ -680,7 +680,7 @@ ObjectiveValues::ObjectiveValues():
 	numberOfObj(0),
 	obj(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the ObjectiveValues Constructor" << endl;
 	#endif
 
@@ -688,7 +688,7 @@ ObjectiveValues::ObjectiveValues():
 
 
 ObjectiveValues::~ObjectiveValues(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the ObjectiveValues Destructor" << endl;
 	#endif
 	if((obj != NULL) && (numberOfObj > 0) ){
@@ -703,37 +703,37 @@ ObjectiveValues::~ObjectiveValues(){
 
 
 OtherObjResult::OtherObjResult():
-	idx( -1),
+	idx(-1),
 	value( "")
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherObjResult Constructor" << endl;
 	#endif
 }//end OtherObjResult constructor
 
 
 OtherObjResult::~OtherObjResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherObjResult Destructor" << endl;
 	#endif
 }//end OtherObjResult destructor
 
 
 OtherObjectiveResult::OtherObjectiveResult():
-	numberOfObj(1),
+	numberOfObj(0),
 	name(""),
 	value(""),
 	description(""),
 	obj(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherObjectiveResult Constructor" << endl;
 	#endif
 }//end OtherObjectiveResult constructor
 
 
 OtherObjectiveResult::~OtherObjectiveResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherObjectiveResult Destructor" << endl;
 	#endif
 	if(obj != NULL) {
@@ -753,14 +753,14 @@ ObjectiveSolution::ObjectiveSolution():
 	other( NULL)
 
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the ObjectiveSolution Constructor" << endl;
 	#endif
 }//end ObjectiveSolution constructor
 
 
 ObjectiveSolution::~ObjectiveSolution(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the ObjectiveSolution Destructor" << endl;
 	#endif
 	if (values != NULL)
@@ -784,14 +784,14 @@ DualVarValue::DualVarValue():
 	//ubValue( 0),
 	value( 0)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the DualVarValue Constructor" << endl;
 	#endif
 }//end DualVarValue constructor
 
 
 DualVarValue::~DualVarValue(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the DualVarValue Destructor" << endl;
 	#endif
 }// end DualVarValue destructor
@@ -801,7 +801,7 @@ DualVariableValues::DualVariableValues():
 	numberOfCon(0),
 	con(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the DualVariableValues Constructor" << endl;
 	#endif
 
@@ -809,7 +809,7 @@ DualVariableValues::DualVariableValues():
 
 
 DualVariableValues::~DualVariableValues(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the DualVariableValues Destructor" << endl;
 	#endif
 	if (con != NULL){
@@ -827,14 +827,14 @@ OtherConResult::OtherConResult():
 	idx( -1),
 	value( "")
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherConResult Constructor" << endl;
 	#endif
 }//end OtherConResult constructor
 
 
 OtherConResult::~OtherConResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherConResult Destructor" << endl;
 	#endif
 }//end OtherConResult destructor
@@ -848,14 +848,14 @@ OtherConstraintResult::OtherConstraintResult():
 	description(""),
 	con(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherConstraintResult Constructor" << endl;
 	#endif
 }//end OtherConstraintResult constructor
 
 
 OtherConstraintResult::~OtherConstraintResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherConstraintResult Destructor" << endl;
 	#endif
 	if (con != NULL){
@@ -875,14 +875,14 @@ ConstraintSolution::ConstraintSolution():
 	dualValues( NULL),
 	other( NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the ConstraintSolution Constructor" << endl;
 	#endif
 }//end ConstraintSolution constructor
 
 
 ConstraintSolution::~ConstraintSolution(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the ConstraintSolution Destructor" << endl;
 	#endif
 	if (dualValues != NULL)
@@ -908,14 +908,14 @@ OtherSolutionResult::OtherSolutionResult():
 	numberOfItems (0),
 	item( NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherSolutionResult Constructor" << endl;
 	#endif
 }//end OtherSolutionResult constructor
 
 
 OtherSolutionResult::~OtherSolutionResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherSolutionResult Destructor" << endl;
 	#endif
 	if (item != NULL) 
@@ -934,14 +934,14 @@ OtherSolutionResults::OtherSolutionResults():
 	numberOfOtherSolutionResults( 0),
 	otherSolutionResult( NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherSolutionResults Constructor" << endl;
 	#endif
 }//end OtherSolutionResults constructor
 
 
 OtherSolutionResults::~OtherSolutionResults(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherSolutionResults Destructor" << endl;
 	#endif
 	if(numberOfOtherSolutionResults > 0 && otherSolutionResult != NULL){
@@ -967,14 +967,14 @@ OptimizationSolution::OptimizationSolution():
 	otherSolutionResults( NULL)
 	//other(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OptimizationSolution Constructor" << endl;
 	#endif
 }//end OptimizationSolution constructor
 
 
 OptimizationSolution::~OptimizationSolution(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OptimzationSolution Destructor" << endl;
 	#endif
 	if(status != NULL){
@@ -1007,14 +1007,14 @@ SolverOutput::SolverOutput():
 	numberOfItems (0),
 	item( NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the SolverOutput Constructor" << endl;
 	#endif
 }//end SolverOutput constructor
 
 
 SolverOutput::~SolverOutput(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the SolverOutput Destructor" << endl;
 	#endif
 	if (item != NULL) 
@@ -1033,7 +1033,7 @@ OtherSolverOutput::OtherSolverOutput():
 	numberOfSolverOutputs(0),
 	solverOutput(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherSolverOutput Constructor" << endl;
 	#endif
 
@@ -1041,7 +1041,7 @@ OtherSolverOutput::OtherSolverOutput():
 
 
 OtherSolverOutput::~OtherSolverOutput(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherSolverOutput Destructor" << endl;
 	#endif
 	if (solverOutput != NULL){
@@ -1064,21 +1064,21 @@ OptimizationResult::OptimizationResult():
 	solution(NULL),
 	otherSolverOutput(NULL)
 { 
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OptimizationResult Constructor" << endl;
 	#endif
 }//end OptimizationResult constructor
 
 
 OptimizationResult::~OptimizationResult(){
-	#ifdef DEBUG_RESULT  
+	#ifdef DEBUG_OSRESULT  
 	cout << "OptimizationResult Destructor Called" << endl;
 	#endif
 	if( solution != NULL){
 		for(int i = 0; i < this->numberOfSolutions; i++){
 			delete solution[i];
 			solution[i] = NULL;
-			#ifdef DEBUG_RESULT  
+			#ifdef DEBUG_OSRESULT  
 			cout << "Deleting Solution: " << i << endl;
 			#endif
 		}
@@ -1097,7 +1097,7 @@ OSResult::OSResult():
 	m_mdDualValues( NULL)
 
 {
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OSResult Constructor" << endl;
 	#endif
 	this->general = new GeneralResult();
@@ -1108,7 +1108,7 @@ OSResult::OSResult():
 }// end OSResult constructor  
 
 OSResult::~OSResult(){
-	#ifdef DEBUG_RESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "OSResult Destructor Called" << endl;
 	#endif
 	// delete the children of OSResult
@@ -1384,6 +1384,10 @@ bool OSResult::setGeneralStatus(GeneralStatus *status){
 }//setGeneralStatus
 
 bool OSResult::setGeneralStatusType(string type){
+    if ((type != "error"  ) &&
+        (type != "warning") && 
+        (type != "normal"))
+		return false;
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->type = type;
 	return true;
@@ -1685,6 +1689,12 @@ bool OSResult::setServiceOtherResultDescription(int idx, string description){
 }//setServiceOtherResultDescription
 
 bool OSResult::setJobStatus(std::string status){
+	if (status != "waiting"  &&
+		status != "running"  &&
+		status != "killed"   &&
+		status != "finished" &&
+		status != "unknown"     )
+		return false;
 	job->status = status;
 	return true;
 }//setJobStatus
@@ -1742,6 +1752,40 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 	return true;
 }//addTimingInformation
 
+
+bool OSResult::setTimingInformation(int idx, std::string type, std::string category,
+									std::string unit, std::string description, double value)
+{	int nt; int i;
+	if (job == NULL) return false;
+	if (job->timingInformation == NULL) return false;
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return false;
+
+	job->timingInformation->time[idx]->type = type;
+	job->timingInformation->time[idx]->category = category;
+	job->timingInformation->time[idx]->unit = unit;
+	job->timingInformation->time[idx]->description = description;
+	job->timingInformation->time[idx]->value = value;
+
+	return true;
+}//setTimingInformation
+
+
+bool OSResult::setNumberOfTimes(int numberOfTimes)
+{	if (job == NULL) 
+	{//	throw ErrorClass("job instance was never defined");
+		return false;
+	}
+	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
+	if (numberOfTimes <= 0) return false;
+	job->timingInformation->numberOfTimes = numberOfTimes;
+	if (numberOfTimes > 0)
+	{	job->timingInformation->time = new Time*[numberOfTimes];
+		for(int i = 0; i < numberOfTimes; i++) 	
+			job->timingInformation->time[i] = new Time();
+	}
+	return true;
+}//setTimeNumber
 
 bool OSResult::setTimeNumber(int timeNumber)
 {	if (job == NULL) 
@@ -2082,7 +2126,7 @@ bool OSResult::setSolutionTargetObjectiveIdx(int solIdx, int objectiveIdx){
 	return true;		
 }//setSolutionTargetObjectiveIdx
 
-bool OSResult::setSolutionWeightedObjectives(int solIdx, std::string weightedObjectives){
+bool OSResult::setSolutionWeightedObjectives(int solIdx, bool weightedObjectives){
 	int nSols = this->getSolutionNumber();
 	if (optimization == NULL) return false;
 	if (nSols <= 0) return false;
@@ -2091,10 +2135,7 @@ bool OSResult::setSolutionWeightedObjectives(int solIdx, std::string weightedObj
 		solIdx < 0 || solIdx >=  nSols) return false;
 	if (optimization->solution[solIdx] == NULL)
 		optimization->solution[solIdx] = new OptimizationSolution();
-	if (weightedObjectives == "true")
-		optimization->solution[solIdx]->weightedObjectives = true;
-	else
-		optimization->solution[solIdx]->weightedObjectives = false;
+	optimization->solution[solIdx]->weightedObjectives = weightedObjectives;
 	return true;		
 }//setSolutionWeightedObjectives
 
@@ -2782,7 +2823,9 @@ bool OSResult::setOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx, int 
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx]->obj == NULL)
 		optimization->solution[solIdx]->objectives->other[ otherIdx]->obj = new OtherObjResult*[numberOfObj];
 	for(int i = 0; i < numberOfObj; i++)
+	{
 		optimization->solution[solIdx]->objectives->other[ otherIdx]->obj[i] = new OtherObjResult();
+	}
 	optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj = numberOfObj;
 	return true;
 }//setOtherObjectiveResultNumberOfObj
@@ -3576,7 +3619,6 @@ bool OtherResults::IsEqual(OtherResults *that)
 		else	
 		{
 			if (this->numberOfOtherResults != that->numberOfOtherResults)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfOtherResults: " << this->numberOfOtherResults << " vs. " << that->numberOfOtherResults << endl;
@@ -3931,7 +3973,7 @@ bool JobResult::IsEqual(JobResult *that)
 		}
 		else	
 		{
-			if (this->status             != that->status               ||
+			if (this->status             != that->status             ||
 				this->submitTime         != that->submitTime         ||
 				this->scheduledStartTime != that->scheduledStartTime ||
 				this->actualStartTime    != that->actualStartTime    ||
@@ -3993,7 +4035,6 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 		else	
 		{
 			if (this->numberOfTimes != that->numberOfTimes)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfTimes: " << this->numberOfTimes << " vs. " << that->numberOfTimes << endl;
@@ -4136,14 +4177,26 @@ bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 		}
 		else	
 		{
-			if (this->targetObjectiveIdx != that->targetObjectiveIdx || 
-				this->weightedObjectives != that->weightedObjectives || 
-				this->message            != that->message  ) 
+			if (this->targetObjectiveIdx != that->targetObjectiveIdx)
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "targetObjectiveIdx: " << this->targetObjectiveIdx << " vs. " << that->targetObjectiveIdx << endl;
+#endif	
+				return false;
+			}
+
+			if (this->weightedObjectives != that->weightedObjectives)
+			{
+#ifdef DEBUG_OSRESULT
 				cout << "weightedObjectives: " << this->weightedObjectives << " vs. " << that->weightedObjectives << endl;
-				cout << "message:            " << this->message            << " vs. " << that->message            << endl;
+#endif	
+				return false;
+			}
+
+			if (this->message != that->message) 
+			{
+#ifdef DEBUG_OSRESULT
+				cout << "message: \'" << this->message << "\' vs. \'" << that->message << "\'" << endl;
 #endif	
 				return false;
 			}
@@ -4202,7 +4255,6 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 			}
 
 			if (this->numberOfSubstatuses != that->numberOfSubstatuses)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
@@ -4290,7 +4342,6 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 		else	
 		{
 			if (this->numberOfOtherVariableResults != that->numberOfOtherVariableResults)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfOtherVariableResults: " << this->numberOfOtherVariableResults << " vs. " << that->numberOfOtherVariableResults << endl;
@@ -4342,7 +4393,6 @@ bool VariableValues::IsEqual(VariableValues *that)
 		else	
 		{
 			if (this->numberOfVar != that->numberOfVar)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
@@ -4430,7 +4480,6 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 		else	
 		{
 			if (this->numberOfVar != that->numberOfVar)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
@@ -4518,7 +4567,6 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 		else	
 		{
 			if (this->numberOfVar != that->numberOfVar)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
@@ -4618,7 +4666,6 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 			}
 
 			if (this->numberOfVar != that->numberOfVar)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
@@ -4706,7 +4753,6 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 		else	
 		{
 			if (this->numberOfOtherObjectiveResults != that->numberOfOtherObjectiveResults)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfOtherObjectiveResults: " << this->numberOfOtherObjectiveResults << " vs. " << that->numberOfOtherObjectiveResults << endl;
@@ -4755,7 +4801,6 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 		else	
 		{
 			if (this->numberOfObj != that->numberOfObj)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
@@ -4855,7 +4900,6 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 			}
 
 			if (this->numberOfObj != that->numberOfObj)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
@@ -4943,7 +4987,6 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 		else	
 		{
 			if (this->numberOfOtherConstraintResults != that->numberOfOtherConstraintResults)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfOtherConstraintResults: " << this->numberOfOtherConstraintResults << " vs. " << that->numberOfOtherConstraintResults << endl;
@@ -4992,7 +5035,6 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 		else	
 		{
 			if (this->numberOfCon != that->numberOfCon)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
@@ -5090,7 +5132,6 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 			}
 
 			if (this->numberOfCon != that->numberOfCon)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
@@ -5178,7 +5219,6 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 		else	
 		{
 			if (this->numberOfOtherSolutionResults != that->numberOfOtherSolutionResults)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfOtherSolutionResults: " << this->numberOfOtherSolutionResults << " vs. " << that->numberOfOtherSolutionResults << endl;
@@ -5236,7 +5276,6 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 			}
 
 			if (this->numberOfItems != that->numberOfItems)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
@@ -5287,7 +5326,6 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 		else	
 		{
 			if (this->numberOfSolverOutputs != that->numberOfSolverOutputs)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfSolverOutputs: " << this->numberOfSolverOutputs << " vs. " << that->numberOfSolverOutputs << endl;
@@ -5345,7 +5383,6 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 			}
 
 			if (this->numberOfItems != that->numberOfItems)
-				return false;
 			{
 #ifdef DEBUG_OSRESULT
 				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;

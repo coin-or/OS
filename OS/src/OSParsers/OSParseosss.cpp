@@ -1,6 +1,6 @@
-#line 2 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.cpp"
+#line 2 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
-#line 4 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.cpp"
+#line 4 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -9,7 +9,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 33
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -31,7 +31,7 @@
 
 /* C99 systems have <inttypes.h>. Non-C99 systems may or may not. */
 
-#if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
+#if __STDC_VERSION__ >= 199901L
 
 /* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
  * if you want the limit (max/min) macros for int types. 
@@ -54,6 +54,7 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
+#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -84,8 +85,6 @@ typedef unsigned int flex_uint32_t;
 #define UINT32_MAX             (4294967295U)
 #endif
 
-#endif /* ! C99 */
-
 #endif /* ! FLEXINT_H */
 
 #ifdef __cplusplus
@@ -95,12 +94,11 @@ typedef unsigned int flex_uint32_t;
 
 #else	/* ! __cplusplus */
 
-/* C99 requires __STDC__ to be defined as 1. */
-#if defined (__STDC__)
+#if __STDC__
 
 #define YY_USE_CONST
 
-#endif	/* defined (__STDC__) */
+#endif	/* __STDC__ */
 #endif	/* ! __cplusplus */
 
 #ifdef YY_USE_CONST
@@ -136,6 +134,8 @@ typedef void* yyscan_t;
 #define yycolumn (YY_CURRENT_BUFFER_LVALUE->yy_bs_column)
 #define yy_flex_debug yyg->yy_flex_debug_r
 
+int ossslex_init (yyscan_t* scanner);
+
 /* Enter a start condition.  This macro really ought to take a parameter,
  * but we do it the disgusting crufty way forced on us by the ()-less
  * definition of BEGIN.
@@ -159,15 +159,7 @@ typedef void* yyscan_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k.
- * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
- * Ditto for the __ia64__ case accordingly.
- */
-#define YY_BUF_SIZE 32768
-#else
 #define YY_BUF_SIZE 16384
-#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -214,9 +206,14 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 
 #define unput(c) yyunput( c, yyg->yytext_ptr , yyscanner )
 
+/* The following is because we cannot portably get our hands on size_t
+ * (without autoconf's help, which isn't available because we want
+ * flex-generated scanners to compile on their own).
+ */
+
 #ifndef YY_TYPEDEF_YY_SIZE_T
 #define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
+typedef unsigned int yy_size_t;
 #endif
 
 #ifndef YY_STRUCT_YY_BUFFER_STATE
@@ -603,7 +600,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[22] =
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 1 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 /* $Id$ */
 /** @file parseosssl.l
  * 
@@ -619,7 +616,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[22] =
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#line 18 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 18 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 
 #include <iostream>
@@ -703,7 +700,7 @@ void setyyextra( osOptionsStruc *osoptions, void* scanner);
 */
 
 
-#line 707 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.cpp"
+#line 704 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
 #define INITIAL 0
 
@@ -754,10 +751,6 @@ struct yyguts_t
     }; /* end struct yyguts_t */
 
 static int yy_init_globals (yyscan_t yyscanner );
-
-int ossslex_init (yyscan_t* scanner);
-
-int ossslex_init_extra (YY_EXTRA_TYPE user_defined,yyscan_t* scanner);
 
 /* Accessor methods to globals.
    These are made visible to non-reentrant scanners for convenience. */
@@ -820,12 +813,7 @@ static int input (yyscan_t yyscanner );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
-#ifdef __ia64__
-/* On IA-64, the buffer size is 16k, not 8k */
-#define YY_READ_BUF_SIZE 16384
-#else
 #define YY_READ_BUF_SIZE 8192
-#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -833,7 +821,7 @@ static int input (yyscan_t yyscanner );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO do { if (fwrite( yytext, yyleng, 1, yyout )) {} } while (0)
+#define ECHO (void) fwrite( yytext, yyleng, 1, yyout )
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -927,10 +915,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 114 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 114 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 
-#line 934 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.cpp"
+#line 922 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -1028,13 +1016,13 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 116 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 116 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 120 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 120 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	//char *ch = strdup(yytext);
@@ -1049,7 +1037,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 133 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 133 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	yyextra->invokeHelp = true;
@@ -1058,7 +1046,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 139 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 139 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT
 	yyextra->invokeHelp = true;
@@ -1068,7 +1056,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 146 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 146 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	yyextra->writeVersion = true;
@@ -1077,7 +1065,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 152 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 152 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT 
 	yyextra->writeVersion = true;
@@ -1088,7 +1076,7 @@ YY_RULE_SETUP
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 161 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 161 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osilFile == ""){
 		YY_PRINT  
@@ -1105,7 +1093,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 174 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 174 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osrlFile == ""){
 		YY_PRINT 
@@ -1122,7 +1110,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 187 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 187 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->insListFile == ""){
 		YY_PRINT
@@ -1139,7 +1127,7 @@ YY_RULE_SETUP
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 200 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 200 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osolFile == ""){
 		YY_PRINT 
@@ -1156,7 +1144,7 @@ YY_RULE_SETUP
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 215 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 215 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osplInputFile == ""){
 		YY_PRINT 
@@ -1173,7 +1161,7 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 228 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 228 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->osplOutputFile == ""){
 		YY_PRINT 
@@ -1190,7 +1178,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 241 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 241 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->serviceMethod == ""){
 		YY_PRINT
@@ -1207,7 +1195,7 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 254 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 254 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->serviceLocation == ""){
 		YY_PRINT 
@@ -1226,7 +1214,7 @@ YY_RULE_SETUP
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 269 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 269 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->mpsFile == ""){
 		YY_PRINT 
@@ -1243,7 +1231,7 @@ YY_RULE_SETUP
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 282 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 282 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->nlFile == ""){
 		YY_PRINT
@@ -1260,7 +1248,7 @@ YY_RULE_SETUP
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 297 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 297 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->gamsControlFile == ""){
 		YY_PRINT
@@ -1277,7 +1265,7 @@ YY_RULE_SETUP
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 310 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 310 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->solverName == ""){
 		YY_PRINT 
@@ -1294,7 +1282,7 @@ YY_RULE_SETUP
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 323 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 323 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	if(yyextra->browser == ""){
 		YY_PRINT  
@@ -1310,7 +1298,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 336 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 336 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	std::string error;
 	std::ostringstream outStr;
@@ -1325,10 +1313,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 347 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 347 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 ECHO;
 	YY_BREAK
-#line 1332 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.cpp"
+#line 1320 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1560,7 +1548,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			yyg->yy_n_chars, (size_t) num_to_read );
+			yyg->yy_n_chars, num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
 		}
@@ -1583,14 +1571,6 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
-
-	if ((yy_size_t) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
-		/* Extend the array by 50%, plus the number we really need. */
-		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
-		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) osssrealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size ,yyscanner );
-		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
-			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
-	}
 
 	yyg->yy_n_chars += number_to_move;
 	YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[yyg->yy_n_chars] = YY_END_OF_BUFFER_CHAR;
@@ -1989,9 +1969,7 @@ static void osssensure_buffer_stack (yyscan_t yyscanner)
 		yyg->yy_buffer_stack = (struct yy_buffer_state**)osssalloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								, yyscanner);
-		if ( ! yyg->yy_buffer_stack )
-			YY_FATAL_ERROR( "out of dynamic memory in osssensure_buffer_stack()" );
-								  
+		
 		memset(yyg->yy_buffer_stack, 0, num_to_alloc * sizeof(struct yy_buffer_state*));
 				
 		yyg->yy_buffer_stack_max = num_to_alloc;
@@ -2009,8 +1987,6 @@ static void osssensure_buffer_stack (yyscan_t yyscanner)
 								(yyg->yy_buffer_stack,
 								num_to_alloc * sizeof(struct yy_buffer_state*)
 								, yyscanner);
-		if ( ! yyg->yy_buffer_stack )
-			YY_FATAL_ERROR( "out of dynamic memory in osssensure_buffer_stack()" );
 
 		/* zero only the new slots.*/
 		memset(yyg->yy_buffer_stack + yyg->yy_buffer_stack_max, 0, grow_size * sizeof(struct yy_buffer_state*));
@@ -2055,7 +2031,7 @@ YY_BUFFER_STATE osss_scan_buffer  (char * base, yy_size_t  size , yyscan_t yysca
 
 /** Setup the input buffer state to scan a string. The next call to ossslex() will
  * scan from a @e copy of @a str.
- * @param yystr a NUL-terminated string to scan
+ * @param str a NUL-terminated string to scan
  * @param yyscanner The scanner object.
  * @return the newly allocated buffer state object.
  * @note If you want to scan bytes that may contain NUL values, then use
@@ -2069,8 +2045,8 @@ YY_BUFFER_STATE osss_scan_string (yyconst char * yystr , yyscan_t yyscanner)
 
 /** Setup the input buffer state to scan the given bytes. The next call to ossslex() will
  * scan from a @e copy of @a bytes.
- * @param yybytes the byte buffer to scan
- * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
+ * @param bytes the byte buffer to scan
+ * @param len the number of bytes in the buffer pointed to by @a bytes.
  * @param yyscanner The scanner object.
  * @return the newly allocated buffer state object.
  */
@@ -2305,42 +2281,6 @@ int ossslex_init(yyscan_t* ptr_yy_globals)
     return yy_init_globals ( *ptr_yy_globals );
 }
 
-/* ossslex_init_extra has the same functionality as ossslex_init, but follows the
- * convention of taking the scanner as the last argument. Note however, that
- * this is a *pointer* to a scanner, as it will be allocated by this call (and
- * is the reason, too, why this function also must handle its own declaration).
- * The user defined value in the first argument will be available to osssalloc in
- * the yyextra field.
- */
-
-int ossslex_init_extra(YY_EXTRA_TYPE yy_user_defined,yyscan_t* ptr_yy_globals )
-
-{
-    struct yyguts_t dummy_yyguts;
-
-    osssset_extra (yy_user_defined, &dummy_yyguts);
-
-    if (ptr_yy_globals == NULL){
-        errno = EINVAL;
-        return 1;
-    }
-	
-    *ptr_yy_globals = (yyscan_t) osssalloc ( sizeof( struct yyguts_t ), &dummy_yyguts );
-	
-    if (*ptr_yy_globals == NULL){
-        errno = ENOMEM;
-        return 1;
-    }
-    
-    /* By setting to 0xAA, we expose bugs in
-    yy_init_globals. Leave at 0x00 for releases. */
-    memset(*ptr_yy_globals,0x00,sizeof(struct yyguts_t));
-    
-    osssset_extra (yy_user_defined, *ptr_yy_globals);
-    
-    return yy_init_globals ( *ptr_yy_globals );
-}
-
 static int yy_init_globals (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
@@ -2452,7 +2392,7 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 347 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
+#line 347 "/c/datafiles/research/os/os-trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 
 

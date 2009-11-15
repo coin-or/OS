@@ -107,7 +107,7 @@ public:
 
 	/** There could be more than one time measurement;
 	 *  numberOfTimes stores the number of them */
-	unsigned int numberOfTimes;
+	int numberOfTimes;
 
 	/** Provide temporary storage for attribute values associated with an OtherVarResult */
 	std::string tmpOtherValue;
@@ -122,7 +122,7 @@ public:
 	void* scanner;
 	
 	/** number of result solutions */
-	int numberOfSolutions;
+	unsigned int numberOfSolutions;
 	
 	/** total number of variables in the model instance */
 	int numberOfVariables;
@@ -158,7 +158,7 @@ public:
 	int iOther;
 
 	/** a temporary counter to count second-level objects */
-	unsigned int ivar;
+	int ivar;
 
 	/** a temporary variable to hold an integer index value */
 	int idx;
