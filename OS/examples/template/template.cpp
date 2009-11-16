@@ -65,6 +65,19 @@ int main(int argC, char* argV[]){
 
 	// template -- add your code here -- //
 	std::cout << "Hello World" << std::endl;
+
+
+
+
+
+
+
+
+
+
+
+
+#if 1
 	int nOfTest;
 	bool ok;
 	nOfTest = 0;
@@ -1739,7 +1752,7 @@ int main(int argC, char* argV[]){
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test of OSrL tools" << endl;
 	}
-
+#endif
 	return 0;
 }// end main
 
