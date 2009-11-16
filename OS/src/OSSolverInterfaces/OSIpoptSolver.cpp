@@ -4,12 +4,12 @@
  * \brief This file defines the IpoptSolver class.
  * \detail Read an OSInstance object and convert to Ipopt data structures
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -527,7 +527,11 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 	double *dualValue = NULL;
 	std::string *rcost = NULL;
 	int* idx = NULL;
-	double* mdObjValues = new double[1];
+	double*  mdObjValues;
+	if(osinstance->getObjectiveNumber() > 0){
+		mdObjValues = new double[1];
+	}
+
 	std::string message = "Ipopt solver finishes to the end.";
 	std::string solutionDescription = "";	
 
@@ -618,26 +622,32 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case MAXITER_EXCEEDED:
 				solutionDescription = "MAXITER_EXCEEDED[IPOPT]: Maximum number of iterations exceeded.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
-				mdObjValues[0] = obj_value ;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
+				if(x != NULL) osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
+				if(lambda != NULL) osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
+				if(osinstance->getObjectiveNumber() > 0){
+					mdObjValues[0] = obj_value ;
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
+				}
 			break;
 			case STOP_AT_TINY_STEP:
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
-				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>( x)); 
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
-				mdObjValues[0] = obj_value ;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
+				if(x != NULL) osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>( x)); 
+				if(lambda != NULL)  osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));
+				if(osinstance->getObjectiveNumber() > 0){ 
+					mdObjValues[0] = obj_value ;
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
+				}
 			break;
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "IpoptAccetable", solutionDescription);
-				osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
-				osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda)); 
-				mdObjValues[0] = obj_value ;
-				osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
+				if(lambda != NULL)  osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));
+				if(x != NULL)osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
+				if(osinstance->getObjectiveNumber() > 0){ 
+					mdObjValues[0] = obj_value ;
+					osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
+				}
 			break;
 			case LOCAL_INFEASIBILITY:
 				solutionDescription = "LOCAL_INFEASIBILITY[IPOPT]: Algorithm converged to a point of local infeasibility. Problem may be infeasible.";
@@ -681,7 +691,9 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		}
 		osresult->setGeneralStatusType("normal");
 		delete osrlwriter;
-		delete[] mdObjValues;
+		if(osinstance->getObjectiveNumber() > 0){
+			delete[] mdObjValues;
+		}
 		osrlwriter = NULL;
 
 	}
@@ -695,7 +707,9 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		delete osrlwriter;
 		osrlwriter = NULL;
 		throw ErrorClass(  osrl) ;
-		delete[] mdObjValues;
+		if(osinstance->getObjectiveNumber() > 0){
+			delete[] mdObjValues;
+		}
 		mdObjValues = NULL;
 	}
 //////////
