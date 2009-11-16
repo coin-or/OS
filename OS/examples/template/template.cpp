@@ -48,6 +48,11 @@
 #include "CoinHelperFunctions.hpp"
 
 
+#ifdef COIN_HAS_IPOPT    
+#include "OSIpoptSolver.h"
+#endif 
+
+
 #include<iostream> 
 #include <ostream>
 #include <sstream>
@@ -67,17 +72,38 @@ int main(int argC, char* argV[]){
 	std::cout << "Hello World" << std::endl;
 
 
+	IpoptSolver *solver  = NULL;
+	FileUtil *fileUtil = NULL; 
+	fileUtil = new FileUtil();
+	OSiLReader *osilreader = NULL;
+	osilreader = new OSiLReader(); 
+	//osolreader = new OSoLReader(); 
+
+	std::string osilFileName = "../../data/osilFiles/HS071_feas.osil";
+	//std::string osilFileName = "../../data/osilFiles/HS071_NLP.osil";
+//	osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_.osol";
+	std::string osil = fileUtil->getFileAsString( osilFileName.c_str());
+
+//	osol = fileUtil->getFileAsString( osolFileName.c_str());
+	std::string osol = "";
+	solver = new IpoptSolver();
+	solver->sSolverName = "ipopt";
+	solver->osil = osil;
+	solver->osol = osol; 
+	solver->osinstance = osilreader->readOSiL( osil);
+//	solver->osoption   = osolreader->readOSoL( osol);
+	solver->buildSolverInstance();
+	cout << "call the COIN - Ipopt Solver for HS071_feas.osil" << endl;
+	solver->solve();
+	std::cout << solver->osrl << std::endl;
+	delete solver;
+	solver = NULL;
+	delete fileUtil;
+	delete osilreader;
 
 
 
-
-
-
-
-
-
-
-#if 1
+#if 0
 	int nOfTest;
 	bool ok;
 	nOfTest = 0;
