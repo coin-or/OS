@@ -1,12 +1,12 @@
 /* $Id$ */
 /** @file parseosrl.l
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
+ * Copyright (C) 2005-2009, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -340,7 +340,7 @@ return(DOUBLE);}
   <xmldeclaration>"?>" BEGIN 0;
 
 
-<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /* yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 <singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 <osrlattributetext>([^>])* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSRLATTRIBUTETEXT);}
 

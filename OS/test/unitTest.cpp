@@ -1400,8 +1400,8 @@ if(THOROUGH == true){
 
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
 		try {
-			osilreader = new OSiLReader(); 
-			osolreader = new OSoLReader(); 
+			//osilreader = new OSiLReader(); 
+			//osolreader = new OSoLReader(); 
 			ok = true; 
 			osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_feas.osil";
 //			osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_feas_Ipopt.osol";
@@ -1433,9 +1433,9 @@ if(THOROUGH == true){
 	
 		delete solver;
 		solver = NULL;
-		delete osilreader;
+		//delete osilreader;
 		osilreader = NULL;
-		delete osolreader;
+		//delete osolreader;
 		osolreader = NULL;
 
 		unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed problem HS071_feas with Ipopt" << std::endl;
@@ -5162,7 +5162,6 @@ if (PARSER_TESTS){
 		if (osrlreader != NULL) delete osrlreader;
 		if (osresult1  != NULL) delete osresult1;
 		if (osresult2  != NULL) delete osresult2;
-		if (osresult3  != NULL) delete osresult3;
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -5174,7 +5173,6 @@ if (PARSER_TESTS){
 		if (osrlreader != NULL) delete osrlreader;
 		if (osresult1  != NULL) delete osresult1;
 		if (osresult2  != NULL) delete osresult2;
-		if (osresult3  != NULL) delete osresult3;
 		// " Problem with the test reading OSoL data";
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test of OSrL tools" << endl;

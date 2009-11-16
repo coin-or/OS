@@ -1721,7 +1721,7 @@ int main(int argC, char* argV[]){
 		if (osresult1  != NULL) delete osresult1;
 	std::cout << "GAIL IS DELETING RESULT 1" << std::endl;
 		if (osresult2  != NULL) delete osresult2;
-		if (osresult3  != NULL) delete osresult3;
+		//if (osresult3  != NULL) delete osresult3;
 		//delete osrlreader;
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;

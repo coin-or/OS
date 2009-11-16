@@ -1,12 +1,12 @@
 /* $Id$ */
 /** @file parseosrl.y
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 2.0, 19/07/2009
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
+ * Copyright (C) 2005-2009, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -1481,6 +1481,7 @@ weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
 		osrlerror(NULL, NULL, parserData, "target objective idx previously set");
 	parserData->weightedObjAttributePresent = true;
 	parserData->tempStr = $2;
+	free($2);
 	if (parserData->tempStr == "true")
 	{  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionWeightedObjectives failed");
