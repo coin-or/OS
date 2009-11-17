@@ -16,7 +16,7 @@ package org.optimizationservices.oscommon.datastructure.osresult;
 */
 public class OtherObjResult {
 
-	public int idx = 0;
+	public int idx = -1;
 	
 	public String value = "";
 	
