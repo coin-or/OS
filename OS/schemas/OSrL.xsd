@@ -71,7 +71,7 @@
 	</xs:complexType>
 	<xs:complexType name="ServiceResult">
 		<xs:all>
-			<xs:element name="currentState" default="noResponse" minOccurs="0">
+			<xs:element name="currentState" default="unknown" minOccurs="0">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
 						<xs:enumeration value="busy"/>
@@ -79,6 +79,7 @@
 						<xs:enumeration value="idle"/>
 						<xs:enumeration value="idleButNotAccepting"/>
 						<xs:enumeration value="noResponse"/>
+						<xs:enumeration value="unknown"/>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
