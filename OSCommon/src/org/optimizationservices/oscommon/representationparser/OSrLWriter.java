@@ -1132,7 +1132,7 @@ public class OSrLWriter extends OSgLWriter{
 	/**
 	 * Set the current state. 
 	 * @param currentState holds the current state, which can be:
-	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting" or "noResponse".
+	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting", "noResponse" or "unknown" (default).
 	 * @return whether the current state is set successfully.
 	 */
 	public boolean setCurrentState(String currentState){
@@ -1160,7 +1160,8 @@ public class OSrLWriter extends OSgLWriter{
 						!currentState.equals("busyButAccepting") &&
 						!currentState.equals("idle") &&
 						!currentState.equals("idleButNotAccepting") &&
-						!currentState.equals("noResponse")) return false;
+						!currentState.equals("noResponse") &&
+						!currentState.equals("unknown")) return false;
 				Element eCurrentState = (Element)XMLUtil.findChildNode(eService, "currentState");
 				if(eCurrentState == null){
 					eCurrentState = m_document.createElement("currentState");	

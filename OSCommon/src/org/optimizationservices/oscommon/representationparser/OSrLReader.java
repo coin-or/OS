@@ -561,15 +561,15 @@ public class OSrLReader extends OSgLReader{
 
 	/**
 	 * Get the current state, , which can be:
-	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting" and "noResponse".
+	 * "busy", "busyButAccepting", "idle", "idleButNotAccepting" "noResponse" and "unknown".
 	 * 
-	 * @return the current status, "noResponse" if none.
+	 * @return the current status, "unknown" if none.
 	 */
 	public String getCurrentState(){
 		Element eService = (Element)XMLUtil.findChildNode(m_eRoot, "service");
-		if(eService == null) return "noResponse";
+		if(eService == null) return "unknown";
 		String sStatus = XMLUtil.getElementValueByName(eService, "currentState");
-		if(sStatus == null || sStatus.length() <= 0) return "noResponse";
+		if(sStatus == null || sStatus.length() <= 0) return "unknown";
 		return sStatus;
 	}//getCurrentState
 

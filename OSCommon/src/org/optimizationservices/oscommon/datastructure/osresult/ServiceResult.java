@@ -19,7 +19,7 @@ import java.util.GregorianCalendar;
 */
 public class ServiceResult{
 	
-	public String currentState = "";
+	public String currentState = "unknown";
 	
 	public int currentJobCount = -1;
 	
