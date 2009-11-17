@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
 <xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
@@ -430,7 +431,7 @@
 	<xs:complexType name="OtherObjResult">
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="required"/>
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
