@@ -340,7 +340,7 @@ TimingInformation::~TimingInformation(){
 }// end TimingInformation destructor
 
 JobResult::JobResult():
-	status("finished"),
+	status("unknown"),
 	submitTime("1970-01-01T00:00:00-00:00"),
 	scheduledStartTime("1970-01-01T00:00:00-00:00"),
 	actualStartTime("1970-01-01T00:00:00-00:00"),
@@ -1515,7 +1515,16 @@ bool OSResult::setSystemInformation(string systemInformation){
 }//setServiceName
 
 bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
-{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+{
+	if (system == NULL) return false;
+	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+	if (unit != "exabyte"  && 
+		unit != "petabyte" && 
+		unit != "terabyte" && 
+		unit != "gigabyte" &&
+		unit != "megabyte" && 
+		unit != "kilobyte" && 
+		unit != "byte"       )  return false;
 	system->availableDiskSpace->unit = unit;
 	return true;
 }//setAvailableDiskSpaceUnit
@@ -1533,7 +1542,16 @@ bool OSResult::setAvailableDiskSpaceValue(double value)
 }//setAvailableDiskSpaceValue
 
 bool OSResult::setAvailableMemoryUnit(std::string unit)
-{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+{
+	if (system == NULL) return false;
+	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+	if (unit != "exabyte"  && 
+		unit != "petabyte" && 
+		unit != "terabyte" && 
+		unit != "gigabyte" &&
+		unit != "megabyte" && 
+		unit != "kilobyte" && 
+		unit != "byte"       )  return false;
 	system->availableMemory->unit = unit;
 	return true;
 }//setAvailableMemoryUnit
@@ -1551,7 +1569,20 @@ bool OSResult::setAvailableMemoryValue(double value)
 }//setAvailableMemoryValue
 
 bool OSResult::setAvailableCPUSpeedUnit(std::string unit)
-{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+{
+	if (system == NULL) return false;
+	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+	if (unit != "terahertz" && 
+		unit != "gigahertz" && 
+		unit != "megahertz" && 
+		unit != "kilohertz" && 
+		unit != "hertz"     && 
+		unit != "petaflops" && 
+		unit != "teraflops" && 
+		unit != "gigaflops" && 
+		unit != "megaflops" && 
+		unit != "kiloflops" && 
+		unit != "flops"      ) return false;
 	system->availableCPUSpeed->unit = unit;
 	return true;
 }//setAvailableCPUSpeedUnit
@@ -1625,6 +1656,12 @@ bool OSResult::setSystemOtherResultDescription(int idx, string description){
 }//setSystemOtherResultDescription
 
 bool OSResult::setCurrentState(std::string currentState){
+	if (currentState != "busy"                &&
+		currentState != "busyButAccepting"    &&
+		currentState != "idle"                &&
+		currentState != "idleButNotAccepting" &&
+		currentState != "noResponse"           )
+		return false;
 	service->currentState = currentState;
 	return true;
 }//setCurrentState
@@ -1765,6 +1802,29 @@ bool OSResult::setTimingInformation(int idx, std::string type, std::string categ
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
 		return false;
 
+	if (unit != "tick"        &&
+		unit != "millisecond" &&
+		unit != "second"      &&
+		unit != "minute"      &&
+		unit != "hour"        &&
+		unit != "day"         &&
+		unit != "week"        &&
+		unit != "month"       &&
+		unit != "year"          ) return false;
+
+	if (type != "cpuTime"     &&
+		type != "elapsedTime" &&
+ 		type != "other"         ) return false;
+		
+	
+	if (category != "total"          &&
+		category != "input"          &&
+		category != "preprocessing"  &&
+		category != "optimization"   &&
+		category != "postprocessing" &&
+		category != "output"         &&
+ 		category != "other"            ) return false;
+
 	job->timingInformation->time[idx]->type = type;
 	job->timingInformation->time[idx]->category = category;
 	job->timingInformation->time[idx]->unit = unit;
@@ -1808,6 +1868,13 @@ bool OSResult::setUsedDiskSpaceUnit(std::string unit)
 		return false;
 	}
 	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+	if (unit != "exabyte"  && 
+		unit != "petabyte" && 
+		unit != "terabyte" && 
+		unit != "gigabyte" &&
+		unit != "megabyte" && 
+		unit != "kilobyte" && 
+		unit != "byte"       )  return false;
 	job->usedDiskSpace->unit = unit;
 	return true;
 }//setUsedDiskSpaceUnit
@@ -1838,6 +1905,13 @@ bool OSResult::setUsedMemoryUnit(std::string unit)
 		return false;
 	}
 	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+	if (unit != "exabyte"  && 
+		unit != "petabyte" && 
+		unit != "terabyte" && 
+		unit != "gigabyte" &&
+		unit != "megabyte" && 
+		unit != "kilobyte" && 
+		unit != "byte"       )  return false;
 	job->usedMemory->unit = unit;
 	return true;
 }//setUsedMemoryUnit
@@ -1868,6 +1942,17 @@ bool OSResult::setUsedCPUSpeedUnit(std::string unit)
 		return false;
 	}
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+	if (unit != "terahertz" && 
+		unit != "gigahertz" && 
+		unit != "megahertz" && 
+		unit != "kilohertz" && 
+		unit != "hertz"     && 
+		unit != "petaflops" && 
+		unit != "teraflops" && 
+		unit != "gigaflops" && 
+		unit != "megaflops" && 
+		unit != "kiloflops" && 
+		unit != "flops"      ) return false;
 	job->usedCPUSpeed->unit = unit;
 	return true;
 }//setUsedCPUSpeedUnit
@@ -2026,7 +2111,16 @@ bool OSResult::setSolutionStatus(int solIdx, string type, string description){
 	if(optimization->solution[solIdx]->status == NULL){
 		optimization->solution[solIdx]->status = new OptimizationSolutionStatus();
 	}
-	// Kipp later when we finalize on type come back and require that the type be correct
+	if (type != "unbounded"       && 
+		type != "globallyOptimal" && 
+	    type != "locallyOptimal"  &&
+	    type != "optimal"         && 
+	    type != "bestSoFar"       &&
+	    type != "feasible"        && 
+	    type != "infeasible"      &&
+	    type != "unsure"          && 
+	    type != "error"           &&
+	    type != "other"             ) return false;
 	optimization->solution[solIdx]->status->type = type;
 	optimization->solution[solIdx]->status->description = description;
 	return true;
@@ -2044,7 +2138,16 @@ bool OSResult::setSolutionStatusType(int solIdx, std::string type){
 	if(optimization->solution[solIdx]->status == NULL){
 		optimization->solution[solIdx]->status = new OptimizationSolutionStatus();
 	}
-	// Kipp later when we finalize on type come back and require that the type be correct
+	if (type != "unbounded"       && 
+		type != "globallyOptimal" && 
+	    type != "locallyOptimal"  &&
+	    type != "optimal"         && 
+	    type != "bestSoFar"       &&
+	    type != "feasible"        && 
+	    type != "infeasible"      &&
+	    type != "unsure"          && 
+	    type != "error"           &&
+	    type != "other"             ) return false;
 	optimization->solution[solIdx]->status->type = type;
 	return true;
 }//setSolutionStatusType
@@ -2098,6 +2201,9 @@ bool OSResult::setSolutionSubstatusType(int solIdx, int substatusIdx, std::strin
 	if(optimization->solution[solIdx]->status == NULL) return false;
 	int nSubs = optimization->solution[solIdx]->status->numberOfSubstatuses;
 	if (substatusIdx < 0 || substatusIdx >= nSubs) return false;
+	if (type != "stoppedByLimit"  &&
+		type != "stoppedByBounds" &&
+		type != "other"             ) return false;
 	optimization->solution[solIdx]->status->substatus[substatusIdx]->type = type;
 	return true;
 }//setSolutionSubstatusType
@@ -2156,8 +2262,6 @@ bool OSResult::setSolutionMessage(int solIdx, std::string msg){
 	optimization->solution[solIdx]->message = msg;
 	return true;		
 }//setSolutionMessage
-
-
 
 bool OSResult::setNumberOfPrimalVariableValues(int solIdx, int numberOfVar){
 	int nSols = this->getSolutionNumber();
@@ -2435,6 +2539,11 @@ bool OSResult::setBasisVar(int solIdx, int number, int idx, std::string str){
 	{//	throw ErrorClass("Variable index cannot be negative.");
 		return false;
 	}
+	if (str != "unknown"  &&
+		str != "basic"    &&
+		str != "atLower"  &&
+		str != "atUpper"  &&
+		str != "superBasic" ) return false;
 	optimization->solution[solIdx]->variables->basisStatus->var[number]->idx   = idx;
 	optimization->solution[solIdx]->variables->basisStatus->var[number]->value = str;
 	return true;

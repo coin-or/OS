@@ -338,7 +338,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	if(m_OSResult->job != NULL){
 		outStr << "<job>" << endl;
 
-		if(m_OSResult->job->status.length() > 0){
+		if(m_OSResult->job->status.length() > 0 && m_OSResult->job->status != "unknown"){
 			outStr << "<status>" + m_OSResult->job->status  + "</status>" << endl;
 		}
 		if(m_OSResult->job->submitTime.length() > 0 && m_OSResult->job->submitTime != "1970-01-01T00:00:00-00:00"){
@@ -730,6 +730,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << " idx=\"";
 								outStr <<  m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->idx;
 								outStr <<  "\">";
+std::cout << "dual value: \"" << m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->value << "\"" << std::endl;
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->value);
 								outStr << "</con>" << endl;
 							}

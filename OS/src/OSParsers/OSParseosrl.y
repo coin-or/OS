@@ -7,7 +7,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2009, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Dalhousie University, Northwestern University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -1480,8 +1480,7 @@ weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
 {	if (parserData->weightedObjAttributePresent)
 		osrlerror(NULL, NULL, parserData, "target objective idx previously set");
 	parserData->weightedObjAttributePresent = true;
-	parserData->tempStr = $2;
-	free($2);
+	parserData->tempStr = $2; free($2);
 	if (parserData->tempStr == "true")
 	{  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionWeightedObjectives failed");
