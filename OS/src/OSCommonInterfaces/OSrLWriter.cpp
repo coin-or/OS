@@ -285,7 +285,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 #endif
 	if(m_OSResult->service != NULL){
 		outStr << "<service>" << endl;
-		if(m_OSResult->service->currentState.length() > 0){
+		if(m_OSResult->service->currentState.length() > 0 && m_OSResult->service->currentState != "unknown"){
 			outStr << "<currentState>" << m_OSResult->service->currentState << "</currentState>" << endl;
 		}
 		if(m_OSResult->service->currentJobCount >= 0){
