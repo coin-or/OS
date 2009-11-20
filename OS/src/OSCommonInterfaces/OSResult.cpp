@@ -269,7 +269,7 @@ SystemResult::~SystemResult(){
 
 
 ServiceResult::ServiceResult():
-	currentState("noResponse"),
+	currentState("unknown"),
 	currentJobCount(-1),
 	totalJobsSoFar(-1),
 	timeServiceStarted("1970-01-01T00:00:00-00:00"),
@@ -340,7 +340,7 @@ TimingInformation::~TimingInformation(){
 }// end TimingInformation destructor
 
 JobResult::JobResult():
-	status("unknown"),
+	status("finished"),
 	submitTime("1970-01-01T00:00:00-00:00"),
 	scheduledStartTime("1970-01-01T00:00:00-00:00"),
 	actualStartTime("1970-01-01T00:00:00-00:00"),

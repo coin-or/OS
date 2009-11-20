@@ -69,6 +69,10 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
     // always go with '/' -- it is a hypertext reference
     xsltDir = "../stylesheets/";
 	int i, j;
+	bool generalTagPrinted;
+	bool systemTagPrinted;
+	bool serviceTagPrinted;
+	bool jobTagPrinted;
 #ifdef DEBUG
 	cout << "in OSrLWriter" << endl;
 #endif
@@ -83,12 +87,18 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << OS_SCHEMA_VERSION;
 	outStr << "/OSrL.xsd\" >" ;
 	outStr << endl;
+
 #ifdef DEBUG
 	cout << "output <general>" << endl;
 #endif
 	if(m_OSResult->general != NULL){
-		outStr << "<general>" << endl;
+		generalTagPrinted = false;
 		if(m_OSResult->general->generalStatus != NULL){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<generalStatus";
 			if(m_OSResult->general->generalStatus->type.length() > 0){
 				outStr << " type=\"";
@@ -125,30 +135,71 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}		
 
 		if(m_OSResult->general->message.length() > 0){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<message>" + m_OSResult->general->message  + "</message>" << endl;
 		}
 		if(m_OSResult->general->serviceURI.length() > 0){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<serviceURI>" + m_OSResult->general->serviceURI + "</serviceURI>"  << endl;
 		}
 		if(m_OSResult->general->serviceName.length() > 0){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<serviceName>" + m_OSResult->general->serviceName + "</serviceName>"  << endl;
 		}
 		if(m_OSResult->general->instanceName.length() > 0){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<instanceName>" + m_OSResult->general->instanceName  + "</instanceName>" << endl;
 		}
 		if(m_OSResult->general->jobID.length() > 0){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<jobID>" + m_OSResult->general->jobID  + "</jobID>" << endl;
 		}
 		if(m_OSResult->general->solverInvoked.length() > 0){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<solverInvoked>" + m_OSResult->general->solverInvoked  + "</solverInvoked>" << endl;
 		}
 		if(m_OSResult->general->timeStamp.length() > 0){
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<timeStamp>" + m_OSResult->general->timeStamp  + "</timeStamp>" << endl;
 		}
 
 		if(m_OSResult->general->otherResults != NULL)
 		{	if(m_OSResult->general->otherResults->numberOfOtherResults > 0)
-			{	outStr << "<otherResults numberOfOtherResults=\"";
+			{	
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+				outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->general->otherResults->numberOfOtherResults;
 				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->general->otherResults->numberOfOtherResults; i++)
@@ -173,7 +224,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "</otherResults>" << endl;;
 			}
 		}
-		outStr << "</general>" << endl;
+		if (generalTagPrinted == true)
+			outStr << "</general>" << endl;
 	}
 
 
@@ -181,12 +233,22 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	cout << "output <system>" << endl;
 #endif
 	if(m_OSResult->system != NULL){
-		outStr << "<system>" << endl;
+		systemTagPrinted = false;
 		if(m_OSResult->system->systemInformation.length() > 0){
+			if (systemTagPrinted == false)
+			{	
+				outStr << "<system>" << endl;
+				systemTagPrinted = true;
+			}
 			outStr << "<systemInformation>" + m_OSResult->system->systemInformation  + "</systemInformation>" << endl;
 		}
 
 		if(m_OSResult->system->availableDiskSpace != NULL){
+			if (systemTagPrinted == false)
+			{	
+				outStr << "<system>" << endl;
+				systemTagPrinted = true;
+			}
 			outStr << "<availableDiskSpace";
 			if(m_OSResult->system->availableDiskSpace->unit.length() > 0){
 				outStr << " unit=\"";
@@ -204,6 +266,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}		
 
 		if(m_OSResult->system->availableMemory != NULL){
+			if (systemTagPrinted == false)
+			{	
+				outStr << "<system>" << endl;
+				systemTagPrinted = true;
+			}
 			outStr << "<availableMemory";
 			if(m_OSResult->system->availableMemory->unit.length() > 0){
 				outStr << " unit=\"";
@@ -221,6 +288,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}		
 
 		if(m_OSResult->system->availableCPUSpeed != NULL){
+			if (systemTagPrinted == false)
+			{	
+				outStr << "<system>" << endl;
+				systemTagPrinted = true;
+			}
 			outStr << "<availableCPUSpeed";
 			if(m_OSResult->system->availableCPUSpeed->unit.length() > 0){
 				outStr << " unit=\"";
@@ -238,6 +310,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}		
 
 		if(m_OSResult->system->availableCPUNumber != NULL){
+			if (systemTagPrinted == false)
+			{	
+				outStr << "<system>" << endl;
+				systemTagPrinted = true;
+			}
 			outStr << "<availableCPUNumber";
 			if(m_OSResult->system->availableCPUNumber->description.length() > 0){
 				outStr << " description=\"";
@@ -251,7 +328,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 
 		if(m_OSResult->system->otherResults != NULL)
 		{	if(m_OSResult->system->otherResults->numberOfOtherResults > 0)
-			{	outStr << "<otherResults numberOfOtherResults=\"";
+			{	
+				if (systemTagPrinted == false)
+				{	
+					outStr << "<system>" << endl;
+					systemTagPrinted = true;
+				}
+				outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->system->otherResults->numberOfOtherResults;
 				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->system->otherResults->numberOfOtherResults; i++)
@@ -276,7 +359,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "</otherResults>" << endl;
 			}
 		}
-		outStr << "</system>" << endl;
+		if (systemTagPrinted == true)
+			outStr << "</system>" << endl;
 	}
 
 
@@ -284,26 +368,57 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	cout << "output <service>" << endl;
 #endif
 	if(m_OSResult->service != NULL){
-		outStr << "<service>" << endl;
+		serviceTagPrinted = false;
 		if(m_OSResult->service->currentState.length() > 0 && m_OSResult->service->currentState != "unknown"){
+			if (serviceTagPrinted == false)
+			{	
+				outStr << "<service>" << endl;
+				serviceTagPrinted = true;
+			}
 			outStr << "<currentState>" << m_OSResult->service->currentState << "</currentState>" << endl;
 		}
 		if(m_OSResult->service->currentJobCount >= 0){
+			if (serviceTagPrinted == false)
+			{	
+				outStr << "<service>" << endl;
+				serviceTagPrinted = true;
+			}
 			outStr << "<currentJobCount>" << m_OSResult->service->currentJobCount << "</currentJobCount>" << endl;
 		}
 		if(m_OSResult->service->totalJobsSoFar >= 0){
+			if (serviceTagPrinted == false)
+			{	
+				outStr << "<service>" << endl;
+				serviceTagPrinted = true;
+			}
 			outStr << "<totalJobsSoFar>" << m_OSResult->service->totalJobsSoFar << "</totalJobsSoFar>" << endl;
 		}
 		if(m_OSResult->service->timeServiceStarted.length() > 0 && m_OSResult->service->timeServiceStarted != "1970-01-01T00:00:00-00:00"){
+			if (serviceTagPrinted == false)
+			{	
+				outStr << "<service>" << endl;
+				serviceTagPrinted = true;
+			}
 			outStr << "<timeServiceStarted>" << m_OSResult->service->timeServiceStarted << "</timeServiceStarted>" << endl;
 		}
 		if(m_OSResult->service->serviceUtilization >= 0){
+			if (serviceTagPrinted == false)
+			{	
+				outStr << "<service>" << endl;
+				serviceTagPrinted = true;
+			}
 			outStr << "<serviceUtilization>" << m_OSResult->service->serviceUtilization << "</serviceUtilization>" << endl;
 		}
 
 		if(m_OSResult->service->otherResults != NULL)
 		{	if(m_OSResult->service->otherResults->numberOfOtherResults > 0)
-			{	outStr << "<otherResults numberOfOtherResults=\"";
+			{	
+				if (serviceTagPrinted == false)
+				{	
+					outStr << "<service>" << endl;
+					serviceTagPrinted = true;
+				}
+				outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->service->otherResults->numberOfOtherResults;
 				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->service->otherResults->numberOfOtherResults; i++)
@@ -328,7 +443,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "</otherResults>" << endl;
 			}
 		}
-		outStr << "</service>" << endl;
+		if (serviceTagPrinted == true)
+			outStr << "</service>" << endl;
 	}
 
 
@@ -336,27 +452,58 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	cout << "output <job>" << endl;
 #endif
 	if(m_OSResult->job != NULL){
-		outStr << "<job>" << endl;
+		jobTagPrinted = false;
 
-		if(m_OSResult->job->status.length() > 0 && m_OSResult->job->status != "unknown"){
+		if(m_OSResult->job->status.length() > 0 && m_OSResult->job->status != "finished"){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<status>" + m_OSResult->job->status  + "</status>" << endl;
 		}
 		if(m_OSResult->job->submitTime.length() > 0 && m_OSResult->job->submitTime != "1970-01-01T00:00:00-00:00"){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<submitTime>" + m_OSResult->job->submitTime  + "</submitTime>" << endl;
 		}
 		if(m_OSResult->job->scheduledStartTime.length() > 0 && m_OSResult->job->scheduledStartTime != "1970-01-01T00:00:00-00:00"){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<scheduledStartTime>" + m_OSResult->job->scheduledStartTime  + "</scheduledStartTime>" << endl;
 		}
 		if(m_OSResult->job->actualStartTime.length() > 0 && m_OSResult->job->actualStartTime != "1970-01-01T00:00:00-00:00"){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<actualStartTime>" + m_OSResult->job->actualStartTime  + "</actualStartTime>" << endl;
 		}
 		if(m_OSResult->job->endTime.length() > 0 && m_OSResult->job->endTime != "1970-01-01T00:00:00-00:00"){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<endTime>" + m_OSResult->job->endTime  + "</endTime>" << endl;
 		}
 
 		if (m_OSResult->job->timingInformation != NULL)
 			if (m_OSResult->job->timingInformation->numberOfTimes > 0)
-			{	outStr << "<timingInformation numberOfTimes=\"";
+			{	
+				if (jobTagPrinted == false)
+				{	
+					outStr << "<job>" << endl;
+					jobTagPrinted = true;
+				}
+				outStr << "<timingInformation numberOfTimes=\"";
 				outStr << m_OSResult->job->timingInformation->numberOfTimes << "\">" << endl;
 				for (i=0; i<m_OSResult->job->timingInformation->numberOfTimes; i++)
 				{	outStr << "<time ";
@@ -376,6 +523,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 
 		if(m_OSResult->job->usedDiskSpace != NULL){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<usedDiskSpace";
 			if(m_OSResult->job->usedDiskSpace->unit.length() > 0){
 				outStr << " unit=\"";
@@ -393,6 +545,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}		
 
 		if(m_OSResult->job->usedMemory != NULL){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<usedMemory";
 			if(m_OSResult->job->usedMemory->unit.length() > 0){
 				outStr << " unit=\"";
@@ -410,6 +567,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}		
 
 		if(m_OSResult->job->usedCPUSpeed != NULL){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<usedCPUSpeed";
 			if(m_OSResult->job->usedCPUSpeed->unit.length() > 0){
 				outStr << " unit=\"";
@@ -427,6 +589,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}		
 
 		if(m_OSResult->job->usedCPUNumber != NULL){
+			if (jobTagPrinted == false)
+			{	
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
+			}
 			outStr << "<usedCPUNumber";
 			if(m_OSResult->job->usedCPUNumber->description.length() > 0){
 				outStr << " description=\"";
@@ -440,7 +607,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 
 		if(m_OSResult->job->otherResults != NULL)
 		{	if(m_OSResult->job->otherResults->numberOfOtherResults > 0)
-			{	outStr << "<otherResults numberOfOtherResults=\"";
+			{	
+				if (jobTagPrinted == false)
+				{	
+					outStr << "<job>" << endl;
+					jobTagPrinted = true;
+				}
+				outStr << "<otherResults numberOfOtherResults=\"";
 				outStr << m_OSResult->job->otherResults->numberOfOtherResults;
 				outStr << "\">" << endl;
 				for (int i=0; i < m_OSResult->job->otherResults->numberOfOtherResults; i++)
@@ -465,7 +638,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "</otherResults>"  << endl;
 			}
 		}
-		outStr << "</job>" << endl;
+		if (jobTagPrinted == true)
+			outStr << "</job>" << endl;
 	}
 
 
