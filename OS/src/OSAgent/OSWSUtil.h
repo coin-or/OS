@@ -76,10 +76,11 @@ public:
 	 *
    	 * <p>
    	 * @param theXmlString is the string to modify to out in the SOAP envelop
+	 * @param useCDATA is true if just encase the XML in a CDATA statement
    	 * @return the XML string that goes into the SOAP envelop.
 	 * </p> 
    	 */
-	static std::string SOAPify( std::string theXmlString);
+	static std::string SOAPify( std::string theXmlString, bool useCDATA);
 
    	/**
    	 * take the XML from a SOAP envelop and
@@ -87,10 +88,11 @@ public:
 	 *
    	 * <p>
    	 * @param theXmlString is the string from the SAOP envelop to modify
+	 * @param useCDATA is true if just encase the XML in a CDATA statement
    	 * @return the resulting XML string.
 	 * </p> 
    	 */
-	static std::string deSOAPify( std::string theXmlString);
+	static std::string deSOAPify( std::string theXmlString, bool useCDATA);
 	
    	/**
    	 * create the SOAP message that is send to the solver Web Service

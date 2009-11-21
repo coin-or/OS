@@ -227,7 +227,7 @@ std::string WSUtil::createFormDataUpload(std::string solverAddress, std::string 
 }// end createFromDataUpload
 
 
-string WSUtil::SOAPify(string inputstring){
+string WSUtil::SOAPify(std::string inputstring, bool useCDATA){
 	/* replace all occurances of "<" with "&lt;"  all 
 	occurances of ">" with "&gt;" and all occurances of " or ' with &quote;
 	*/
@@ -237,69 +237,85 @@ string WSUtil::SOAPify(string inputstring){
 	ostringstream body;
 	int i = 0;
 	int loopsize = inputstring.length();
-	while (i < loopsize){
-		switch( inputstring[i]){
-			case '<':
-				body << "&lt;";
-				break;
-			case '>':
-				body << "&gt;";
-				break;
-			case '\"':
-				body << "&quot;";
-				break;
-			case '\'':
-				body << "&quot;";
-				break;
-			default:
-			body << inputstring[i];
-		}
-		i++;
+	if(useCDATA == true){
+		body << "<![CDATA[";
+		body << inputstring;
+		body << "]]>";
+	}else{
+		while (i < loopsize){
+			switch( inputstring[i]){
+				case '<':
+					body << "&lt;";
+					break;
+				case '>':
+					body << "&gt;";
+					break;
+				case '\"':
+					body << "&quot;";
+					break;
+				case '\'':
+					body << "&quot;";
+					break;
+				default:
+				body << inputstring[i];
+			}
+			i++;
+		}//end while
 	}
 	return body.str();
 }
 
-string WSUtil::deSOAPify(string inputstring){
+string WSUtil::deSOAPify(std::string inputstring, bool useCDATA){
 	/* replace all occurances of "&lt;" with "<"  all 
 	occurances of "&gt;" with ">" and all occurances of "&quote;" with "
 	*/
 	ostringstream body;
 	int i = 0;
 	int loopsize = inputstring.length();
-	while (i < loopsize){
-		//i = inputstring.find('&', i);
-		//if (i == string::npos)  return ostringstream.str();
-		if(inputstring[i] == '&'){
-			switch (inputstring[i+1]) {
-			case 'l':
-				if (inputstring[i + 2] == 't' && inputstring[i + 3] == ';') {
-					body << "<";
-				}
-				i = i + 4;
-				break;
-			case 'g':
-				if (inputstring[i + 2] == 't' && inputstring[i + 3] == ';') {
-					body << ">";
-				}
-				i = i + 4;
-				break;
-			case 'q':
-				if (inputstring[i + 2] == 'u' && inputstring[i + 3] == 'o' && inputstring[i + 4] == 't' && inputstring[i + 5] == ';') {
-					body << "\"";
-				}
-				i = i + 6;
-				break;
-			default:
+	if(useCDATA == true){
+		
+		string::size_type pos1 = inputstring.find( "<![CDATA[" );	
+		string::size_type pos2 = inputstring.find( "]]>" );
+		body << inputstring.substr( pos1 + 1, pos2 - pos1 - 1);
+		
+		//kipp -- put in error checking
+	
+	}else{
+		while (i < loopsize){
+			//i = inputstring.find('&', i);
+			//if (i == string::npos)  return ostringstream.str();
+			if(inputstring[i] == '&'){
+				switch (inputstring[i+1]) {
+				case 'l':
+					if (inputstring[i + 2] == 't' && inputstring[i + 3] == ';') {
+						body << "<";
+					}
+					i = i + 4;
+					break;
+				case 'g':
+					if (inputstring[i + 2] == 't' && inputstring[i + 3] == ';') {
+						body << ">";
+					}
+					i = i + 4;
+					break;
+				case 'q':
+					if (inputstring[i + 2] == 'u' && inputstring[i + 3] == 'o' && inputstring[i + 4] == 't' && inputstring[i + 5] == ';') {
+						body << "\"";
+					}
+					i = i + 6;
+					break;
+				default:
+					body << inputstring[i];
+					i++;
+					break;
+				} //end switch
+			} // end if'&"
+			else{
 				body << inputstring[i];
 				i++;
-				break;
-			} //end switch
-		} // end if'&"
-		else{
-			body << inputstring[i];
-			i++;
-		}
-	}// end while
+			}
+		}// end while
+	}
 	return body.str();
 }
 

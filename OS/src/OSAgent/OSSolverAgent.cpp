@@ -55,14 +55,15 @@ string OSSolverAgent::solve(string osil, string osol){
 	string sOSrL ; 
 	string theSOAP; 
 	string solveResult;
+	bool useCDATA = true;
 	// CreateSOAPMessage inputs
 	int numInputs = 2;
 	string smethod = "solve";
 	string msInputs[2];
 	// package up the inputs
 	// first run them through SAOPify, e.g. replace < with &lt; etc.
-	msInputs[0] = WSUtil::SOAPify( osil) ;
-	msInputs[1] = WSUtil::SOAPify( osol) ;
+	msInputs[0] = WSUtil::SOAPify( osil, useCDATA) ;
+	msInputs[1] = WSUtil::SOAPify( osol, useCDATA) ;
 	string msInputNames[2] = {"osil", "osol"};
 	string sSoapAction = "OSSolverService#solve";
 	// create the soap
@@ -77,7 +78,8 @@ string OSSolverAgent::solve(string osil, string osol){
 	solveResult = WSUtil::getOSxL(solveResult, "solve");
 	//std::cout << "RETURN THE OSRL " << std::endl;
 	//std::cout << sOSrL << std::endl;
-	sOSrL = WSUtil::deSOAPify( solveResult);
+	useCDATA = false;
+	sOSrL = WSUtil::deSOAPify( solveResult, useCDATA);
 	// strip out the OSxL that we want from the SOAP envelope
 	//std::cout << "DONE WITH DESOAP " << std::endl;
 	//std::cout << solveResult << std::endl;
@@ -101,14 +103,15 @@ string OSSolverAgent::fileUpload( string osilFileName, string theOSiLFile){
 bool OSSolverAgent::send(string osil, string osol){
 	string theSOAP;
 	string sendResult;
+	bool useCDATA = true;
 	// CreateSOAPMessage inputs
 	int numInputs = 2;
 	string smethod = "send";
 	string msInputs[2];
 	// package up the inputs
 	// first run them through SAOPify, e.g. replace < with &lt; etc.
-	msInputs[0] = WSUtil::SOAPify( osil) ;
-	msInputs[1] = WSUtil::SOAPify( osol) ;
+	msInputs[0] = WSUtil::SOAPify( osil, useCDATA) ;
+	msInputs[1] = WSUtil::SOAPify( osol, useCDATA) ;
 	string msInputNames[2] = {"osil", "osol"};
 	string sSoapAction = "OSSolverService#send";
 	// create the soap
@@ -119,7 +122,8 @@ bool OSSolverAgent::send(string osil, string osol){
 	// strip out the OSxL that we want from the SOAP envelope
 	sendResult = WSUtil::getOSxL(sendResult, "send");
 	// desoapify the result -- i.e. replace &lt; with <  etc.
-	sendResult = WSUtil::deSOAPify( sendResult);
+	useCDATA = false;
+	sendResult = WSUtil::deSOAPify( sendResult, useCDATA);
 	if( sendResult.find("true") != string::npos ) return true;
 	else return false;
 }//end send
@@ -128,13 +132,14 @@ string OSSolverAgent::getJobID(string osol){
 	string sjobID = "";
 	string getJobIDResult; 
 	string theSOAP;
+	bool useCDATA = true;
 	// CreateSOAPMessage inputs
 	int numInputs = 1;
 	string smethod = "getJobID";
 	string msInputs[1];
 	// package up the inputs
 	// first run them through SAOPify, e.g. replace < with &lt; etc.
-	msInputs[0] = WSUtil::SOAPify( osol) ;
+	msInputs[0] = WSUtil::SOAPify( osol, useCDATA) ;
 	string msInputNames[1] = {"osol"};
 	string sSoapAction = "OSSolverService#getJobID";
 	// create the soap
@@ -145,7 +150,8 @@ string OSSolverAgent::getJobID(string osol){
 	// strip out the OSxL that we want from the SOAP envelope
 	getJobIDResult =  WSUtil::getOSxL(getJobIDResult, "getJobID");
 	// desoapify the result -- i.e. replace &lt; with <  etc.
-	sjobID = WSUtil::deSOAPify( getJobIDResult);
+	useCDATA = false;
+	sjobID = WSUtil::deSOAPify( getJobIDResult, useCDATA);
 
 	return sjobID;
 }//end getJobID
@@ -154,13 +160,14 @@ string OSSolverAgent::retrieve(string osol){
 	string sOSrL;
 	string retrieveResult; 
 	string theSOAP;
+	bool useCDATA = true;
 	// CreateSOAPMessage inputs
 	int numInputs = 1;
 	string smethod = "retrieve";
 	string msInputs[1];
 	// package up the inputs
 	// first run them through SAOPify, e.g. replace < with &lt; etc.
-	msInputs[0] = WSUtil::SOAPify( osol) ;
+	msInputs[0] = WSUtil::SOAPify( osol, useCDATA) ;
 	string msInputNames[1] = {"osol"};
 	string sSoapAction = "OSSolverService#retrieve";
 	// create the soap
@@ -171,7 +178,8 @@ string OSSolverAgent::retrieve(string osol){
 	// strip out the OSxL that we want from the SOAP envelope
 	retrieveResult =  WSUtil::getOSxL(retrieveResult, "retrieve");
 	// desoapify the result -- i.e. replace &lt; with <  etc.
-	sOSrL = WSUtil::deSOAPify( retrieveResult);
+	useCDATA = false;
+	sOSrL = WSUtil::deSOAPify( retrieveResult, useCDATA);
 	return sOSrL;	
 }//end retrieve
 
@@ -179,13 +187,14 @@ string OSSolverAgent::kill(string osol){
 	string sOSpL;
 	string killResult; 
 	string theSOAP;
+	bool useCDATA = true;
 	// CreateSOAPMessage inputs
 	int numInputs = 1;
 	string smethod = "kill";
 	string msInputs[1];
 	// package up the inputs
 	// first run them through SAOPify, e.g. replace < with &lt; etc.
-	msInputs[0] = WSUtil::SOAPify( osol) ;
+	msInputs[0] = WSUtil::SOAPify( osol, useCDATA) ;
 	string msInputNames[1] = {"osol"};
 	string sSoapAction = "OSSolverService#kill";
 	// create the soap
@@ -196,7 +205,8 @@ string OSSolverAgent::kill(string osol){
 	// strip out the OSxL that we want from the SOAP envelope
 	 killResult =  WSUtil::getOSxL( killResult, "kill");
 	// desoapify the result -- i.e. replace &lt; with <  etc.
-	sOSpL = WSUtil::deSOAPify( killResult);
+	useCDATA = false;
+	sOSpL = WSUtil::deSOAPify( killResult, useCDATA);
 	return sOSpL;
 }//end kill
 
@@ -204,14 +214,15 @@ string OSSolverAgent::knock(string ospl, string osol){
 	string sOSpL; 
 	string theSOAP;
 	string knockResult;
+	bool useCDATA = true;
 	// CreateSOAPMessage inputs
 	int numInputs = 2;
 	string smethod = "knock";
 	string msInputs[2];
 	// package up the inputs
 	// first run them through SAOPify, e.g. replace < with &lt; etc.
-	msInputs[0] = WSUtil::SOAPify( ospl) ;
-	msInputs[1] = WSUtil::SOAPify( osol) ;
+	msInputs[0] = WSUtil::SOAPify( ospl, useCDATA) ;
+	msInputs[1] = WSUtil::SOAPify( osol, useCDATA) ;
 	string msInputNames[2] = {"ospl", "osol"};
 	string sSoapAction = "OSSolverService#knock";
 	// create the soap
@@ -223,6 +234,7 @@ string OSSolverAgent::knock(string ospl, string osol){
 	// strip out the OSxL that we want from the SOAP envelope
 	knockResult = WSUtil::getOSxL( knockResult, "knock");
 	// desoapify the result -- i.e. replace &lt; with <  etc.
-	sOSpL = WSUtil::deSOAPify( knockResult);
+	useCDATA = false;
+	sOSpL = WSUtil::deSOAPify( knockResult, useCDATA);
 	return sOSpL;
 }//end knock
