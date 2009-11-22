@@ -8,6 +8,7 @@
 /Makefile.in -text
 /OS.spp -text
 OS/AUTHORS -text
+OS/ChangeLog -text
 OS/CoinAllExamples/CppAD/Makefile.in -text
 OS/CoinAllExamples/CppAD/dc08.cpp -text
 OS/CoinAllExamples/CppAD/ipopt_cppad_nlp.cpp -text

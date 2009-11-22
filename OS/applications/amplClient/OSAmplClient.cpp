@@ -18,7 +18,7 @@
  * 
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
- * option OSAmplClient_options "solver ipopt"; <br />
+ * option OSAmplClient_options "solver bonmin"; <br />
  * write gtestfile; <br />
  * solve; <br />
  * display x1; <br />
@@ -31,9 +31,26 @@
  * 
  * x2 = 4.743
  * 
- * now if, instesd you wanteded to call a remote OS solver do something like: 
- * option OSAmplClient_options "solver ipopt serviceLocation mysolverservice"
- * 
+ * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient\_options
+ *
+ * \item there are three possible options to specify:
+ *
+ * \begin{itemize}
+ *
+ * \item the name of the solver using the  {\bf solver} option, valid values for this option  are {\tt clp},
+ * {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.   
+ *
+ *
+ * \item the location of the remote server using the {\bf serviceLocation} option
+ *
+ * \item the location of the option file using  the {\bf optionFile} option
+ *
+ * \end{itemize}
+ *
+ * if no options are specified using {\bf OSAmplClient\_options},   by default, for continuous
+ * linear models  clp is used. For continuous nonlinear models ipopt is used. 
+ * For mixed-integer linear models (MIP),   cbc is used. For mixed-integer nonlinear models 
+ * bonmin is used.  All solvers are invoked locally.
  * 
  */
 
