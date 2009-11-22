@@ -31,7 +31,10 @@ AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` 
+	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
+	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
+	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
 	
 	
 #AM_CPPFLAGS += -I`$(CYGPATH_W) /usr/include/w32api` \

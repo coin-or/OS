@@ -17,8 +17,20 @@
  
 #include "OSSolverAgent.h"
 #include "OSWSUtil.h"
+#include "CoinTime.hpp"
+#include "OSParameters.h" 
 
 #include <cstdlib>
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif 
 
 //#define DEBUG
 
@@ -67,11 +79,19 @@ string OSSolverAgent::solve(string osil, string osol){
 	string msInputNames[2] = {"osil", "osol"};
 	string sSoapAction = "OSSolverService#solve";
 	// create the soap
+	double cpuTime =0;
+	double startTime = 0;
+	startTime = CoinCpuTime();
 	theSOAP = WSUtil::createSOAPMessage(numInputs, solverAddress, postURI, 
 				smethod, msInputs, msInputNames, sSoapAction);
 	// send the soap to the HTTP server
 	//std::cout << "SEND THE SOAP " << std::endl;
+	cpuTime = CoinCpuTime() - startTime;
+	//std::cout << "Soapify Cpu Time = "  << cpuTime <<  std::endl;
+	startTime = CoinWallclockTime();
 	solveResult = WSUtil::sendSOAPMessage( theSOAP, solverAddress, solverPortNumber);
+	cpuTime = CoinWallclockTime() - startTime;
+	//std::cout << "Send Cpu Time = "  << cpuTime <<  std::endl;
 	// desoapify the result -- i.e. replace &lt; with <  etc.
 	//std::cout << "CALL DESOAP WITH THE FOLLOWING " << std::endl;
 	//std::cout << solveResult << std::endl;
