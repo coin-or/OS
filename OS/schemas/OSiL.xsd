@@ -409,7 +409,7 @@
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
-								<xs:attribute name="numberOfObjCoefMatrix" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="numberOfObjCoefMatrixOperations" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="objIdx" type="xs:negativeInteger" use="required"/>
 							</xs:complexType>
 						</xs:element>
