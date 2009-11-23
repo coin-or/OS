@@ -424,6 +424,7 @@
 							<xs:complexType>
 								<xs:attribute name="name" type="xs:string" use="optional"/>
 								<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
+								<xs:attribute name="numberOfCols" type="xs:positiveInteger" use="required"/>
 								<xs:attribute name="positiveSemidefinite" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="constantMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="constantMatrixScalarCoef" type="xs:double" use="optional" default="1.0"/>
