@@ -373,13 +373,39 @@
 						<xs:element name="obj" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="coefMatrix" minOccurs="0" maxOccurs="unbounded">
+									<xs:element name="coefMatrixOperation" minOccurs="0" maxOccurs="unbounded">
 										<xs:complexType>
 											<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required"/>
-											<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="required"/>
+											<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+											<xs:attribute name="leftMatrixId" type="xs:nonNegativeInteger" use="optional"/>
+											<xs:attribute name="leftMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+											<xs:attribute name="leftOperation" use="optional" default="matrixProduct">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="matrixProduct"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+											<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
+											<xs:attribute name="rightMatrixId" type="xs:nonNegativeInteger" use="optional"/>
+											<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+											<xs:attribute name="rightOperation" use="optional" default="matrixProduct">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="matrixProduct"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
 											<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-											<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
-											<xs:attribute name="left" type="xs:boolean" use="optional" default="true"/>
+											<xs:attribute name="finalOperation" use="optional" default="trace">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="trace"/>
+														<xs:enumeration value="determinant"/>
+														<xs:enumeration value="elementSum"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
@@ -396,24 +422,11 @@
 					<xs:sequence>
 						<xs:element name="matrixCon" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:double" use="optional"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
 								<xs:attribute name="name" type="xs:string" use="optional"/>
 								<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
-								<xs:attribute name="conIdxStart" type="xs:nonNegativeInteger"/>
-								<xs:attribute name="conIdxEnd" type="xs:nonNegativeInteger"/>
 								<xs:attribute name="positiveSemidefinite" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="constantMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="constantMatrixScalarCoef" type="xs:double" use="optional" default="1.0"/>
 								<xs:attribute name="constantMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="lbMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="lbMatrixtransponse" type="xs:boolean" use="optional" default="false"/>
@@ -425,7 +438,7 @@
 					<xs:attribute name="numberOfMatrixConstraints" type="xs:nonNegativeInteger" use="required"/>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="leftLinearConstraintCoefficientMatrices" minOccurs="0">
+			<xs:element name="LinearConstraintOperatorMatrices" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="start" type="IntVector"/>
@@ -433,52 +446,40 @@
 							<xs:element name="rowIdx" type="IntVector"/>
 							<xs:element name="colIdx" type="IntVector"/>
 						</xs:choice>
-						<xs:element name="matrixID">
+						<xs:element name="matrixOperation">
 							<xs:complexType>
-								<xs:choice>
-									<xs:element name="el" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-									<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-								</xs:choice>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfValueMatrices" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="rightLinearConstraintCoefficientMatrices" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="start" type="IntVector"/>
-						<xs:choice>
-							<xs:element name="rowIdx" type="IntVector"/>
-							<xs:element name="colIdx" type="IntVector"/>
-						</xs:choice>
-						<xs:element name="matrixID">
-							<xs:complexType>
-								<xs:choice>
-									<xs:element name="el" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-									<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-								</xs:choice>
+								<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+								<xs:attribute name="leftMatrixId" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="leftMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="leftOperation" use="optional" default="matrixProduct">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="matrixProduct"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
+								<xs:attribute name="rightMatrixId" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="rightOperation" use="optional" default="matrixProduct">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="matrixProduct"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="finalOperation" use="optional" default="none">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="none"/>
+											<xs:enumeration value="diagonal"/>
+											<xs:enumeration value="upperTriangle"/>
+											<xs:enumeration value="lowerTriangle"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -700,7 +701,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="ConeVar" minOccurs="3" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="positive" type="xs:boolean" use="optional" default="true"/>
@@ -719,9 +720,15 @@
 			<xs:documentation>draft </xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
-			<xs:element name="var" type="ConeVar" maxOccurs="unbounded"/>
+			<xs:element name="var" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="ConeVar"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCone">
 		<xs:annotation>
@@ -730,7 +737,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="ConeVar" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="RotatedQuadraticCone">
 		<xs:annotation>
@@ -739,7 +746,7 @@
 		<xs:sequence minOccurs="0">
 			<xs:element name="var" type="ConeVar" minOccurs="3" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfVars" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="ConeVar">
 		<xs:annotation>
