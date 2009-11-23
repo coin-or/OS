@@ -396,7 +396,7 @@
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="matrixPower" type="xs:int" use="optional" default="1"/>
 		<xs:attribute name="transponse" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="finalManipulation" use="optional" default="none">
+		<xs:attribute name="finalOperation" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="none"/>
