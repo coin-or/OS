@@ -399,6 +399,7 @@
 		<xs:attribute name="finalManipulation" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
+					<xs:enumeration value="none"/>
 					<xs:enumeration value="identity"/>
 					<xs:enumeration value="diagonal"/>
 					<xs:enumeration value="upperTriangle"/>
