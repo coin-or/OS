@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -386,7 +386,7 @@
 													</xs:restriction>
 												</xs:simpleType>
 											</xs:attribute>
-											<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
+											<xs:attribute name="leftOperationFirst" type="xs:boolean" use="optional" default="true"/>
 											<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 											<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
 											<xs:attribute name="rightOperation" use="optional" default="matrixProduct">
@@ -462,7 +462,7 @@
 													</xs:restriction>
 												</xs:simpleType>
 											</xs:attribute>
-											<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
+											<xs:attribute name="leftOperationFirst" type="xs:boolean" use="optional" default="true"/>
 											<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
 											<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
 											<xs:attribute name="rightOperation" use="optional" default="matrixProduct">
