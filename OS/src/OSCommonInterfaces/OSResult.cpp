@@ -1175,6 +1175,27 @@ string OSResult::getGeneralStatusDescription(){
 	return general->generalStatus->description;
 }//getGeneralStatusDescription
 
+int OSResult::getNumberOfGeneralSubstatuses(){
+	if(general->generalStatus == NULL) return -1;
+	return general->generalStatus->numberOfSubstatuses;
+}//getGeneralStatusDescription
+
+string OSResult::getGeneralSubstatusName(int i){
+	if(general->generalStatus == NULL) return NULL;
+	if(general->generalStatus->substatus[i] == NULL) return NULL;
+	return general->generalStatus->substatus[i]->name;
+}//getGeneralSubstatusName
+	
+string OSResult::getGeneralSubstatusDescription(int i){
+	if(general->generalStatus == NULL) return NULL;
+	if(general->generalStatus->substatus[i] == NULL) return NULL;
+	return general->generalStatus->substatus[i]->description;
+}//getGeneralSubstatusDescription
+
+string OSResult::getGeneralMessage(){
+	return general->message;
+}//getServiceName
+
 string OSResult::getServiceName(){
 	return general->serviceName;
 }//getServiceName
@@ -1191,10 +1212,317 @@ string OSResult::getJobID(){
 	return general->jobID;
 }//getJobID
 
+string OSResult::getSolverInvoked(){
+	return general->solverInvoked;
+}//getSolverInvoked
 
-string OSResult::getGeneralMessage(){
-	return general->message;
-}//getGeneralMessage
+string OSResult::getTimeStamp(){
+	return general->timeStamp;
+}//getTimeStamp
+
+int OSResult::getNumberOfOtherGeneralResults(){
+	if(general->otherResults == NULL) return -1;
+	return 	general->otherResults->numberOfOtherResults;
+}//getNumberOfOtherGeneralResults
+
+string OSResult::getGeneralOtherResultName(int idx){
+	if (general->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
+		return NULL;
+	return general->otherResults->other[idx]->name;
+}//getGeneralOtherResultName
+
+string OSResult::getGeneralOtherResultValue(int idx){
+	if (general->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
+		return NULL;
+	return general->otherResults->other[idx]->value;
+}//getGeneralOtherResultValue
+
+string OSResult::getGeneralOtherResultDescription(int idx){
+	if (general->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
+		return NULL;
+	return general->otherResults->other[idx]->description;
+}//getGeneralOtherResultDescription
+
+string OSResult::getSystemInformation(){
+	return system->systemInformation;
+}//getSystemInformation
+
+string OSResult::getAvailableDiskSpaceUnit(){
+	if (system->availableDiskSpace == NULL) return NULL;
+	return system->availableDiskSpace->unit;
+}//getAvailableDiskSpaceUnit
+
+string OSResult::getAvailableDiskSpaceDescription(){
+	if (system->availableDiskSpace == NULL) return NULL;
+	return system->availableDiskSpace->description;
+}//getAvailableDiskSpaceDescription
+
+double OSResult::getAvailableDiskSpaceValue(){
+	if (system->availableDiskSpace == NULL) return -1;
+	return system->availableDiskSpace->value;
+}//getAvailableDiskSpaceValue
+
+string OSResult::getAvailableMemoryUnit(){
+	if (system->availableMemory == NULL) return NULL;
+	return system->availableMemory->unit;
+}//getAvailableMemoryUnit
+
+string OSResult::getAvailableMemoryDescription(){
+	if (system->availableMemory == NULL) return NULL;
+	return system->availableMemory->description;
+}//getAvailableMemoryDescription
+
+double OSResult::getAvailableMemoryValue(){
+	if (system->availableMemory == NULL) return -1;
+	return system->availableMemory->value;
+}//getAvailableMemoryValue
+
+string OSResult::getAvailableCPUSpeedUnit(){
+	if (system->availableCPUSpeed == NULL) return NULL;
+	return system->availableCPUSpeed->unit;
+}//getAvailableCPUSpeedUnit
+
+string OSResult::getAvailableCPUSpeedDescription(){
+	if (system->availableCPUSpeed == NULL) return NULL;
+	return system->availableCPUSpeed->description;
+}//getAvailableCPUSpeedDescription
+
+double OSResult::getAvailableCPUSpeedValue(){
+	if (system->availableCPUSpeed == NULL) return -1;
+	return system->availableCPUSpeed->value;
+}//getAvailableCPUSpeedValue
+
+string OSResult::getAvailableCPUNumberDescription(){
+	if (system->availableCPUNumber == NULL) return NULL;
+	return system->availableCPUNumber->description;
+}//getAvailableCPUNumberDescription
+
+int OSResult::getAvailableCPUNumberValue(){
+	if (system->availableCPUNumber == NULL) return -1;
+	return system->availableCPUNumber->value;
+}//getAvailableCPUNumberValue
+
+int OSResult::getNumberOfOtherSystemResults(){
+	if (system->otherResults == NULL) return -1;
+	return system->otherResults->numberOfOtherResults;
+}//getNumberOfOtherSystemResults
+
+string OSResult::getSystemOtherResultName(int idx){
+	if (system->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
+		return NULL;
+	return system->otherResults->other[idx]->name;
+}//getSystemOtherResultName
+
+string OSResult::getSystemOtherResultValue(int idx){
+	if (system->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
+		return NULL;
+	return system->otherResults->other[idx]->value;
+}//getSystemOtherResultValue
+
+string OSResult::getSystemOtherResultDescription(int idx){
+	if (system->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
+		return NULL;
+	return system->otherResults->other[idx]->description;
+}//getSystemOtherResultDescription
+
+string OSResult::getCurrentState(){
+	return service->currentState;
+}//getCurrentState
+
+int OSResult::getCurrentJobCount(){
+	return service->currentJobCount;
+}//getCurrentJobCount
+
+int OSResult::getTotalJobsSoFar(){
+	return service->totalJobsSoFar;
+}//getTotalJobsSoFar
+
+string OSResult::getTimeServiceStarted(){
+	return service->timeServiceStarted;
+}//getTimeServiceStarted
+
+double OSResult::getServiceUtilization(){
+	return service->serviceUtilization;
+}//getServiceUtilization
+
+int OSResult::getNumberOfOtherServiceResults(){
+	if(service->otherResults == NULL) return -1;
+	return service->otherResults->numberOfOtherResults;
+}//getNumberOfOtherServiceResults
+
+string OSResult::getServiceOtherResultName(int idx){
+	if (service->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
+		return NULL;
+	return service->otherResults->other[idx]->name;
+}//getServiceOtherResultName
+
+string OSResult::getServiceOtherResultValue(int idx){
+	if (service->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
+		return NULL;
+	return service->otherResults->other[idx]->value;
+}//getServiceOtherResultValue
+
+string OSResult::getServiceOtherResultDescription(int idx){
+	if (service->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
+		return NULL;
+	return service->otherResults->other[idx]->description;
+}//getServiceOtherResultDescription
+
+string OSResult::getJobStatus(){
+	return job->status;
+}//getJobStatus
+
+string OSResult::getSubmitTime(){
+	return job->submitTime;
+}//getSubmitTime
+
+string OSResult::getScheduledStartTime(){
+	return job->scheduledStartTime;
+}//getScheduledStartTime
+
+string OSResult::getActualStartTime(){
+	return job->actualStartTime;
+}//getActualStartTime
+
+string OSResult::getJobEndTime(){
+	return job->endTime;
+}//getJobEndTime
+
+int OSResult::getNumberOfTimes(){
+	if (job == NULL) return -1;
+	if (job->timingInformation == NULL) return -1; 
+	return job->timingInformation->numberOfTimes;
+}//getNumberOfTimes
+
+string OSResult::getTimingInfoUnit(int idx){
+	if (job == NULL) return NULL;
+	if (job->timingInformation == NULL) return NULL; 
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return NULL;
+	return job->timingInformation->time[idx]->unit;
+}//getTimingInfoUnit
+
+string OSResult::getTimingInfoType(int idx){
+	if (job == NULL) return NULL;
+	if (job->timingInformation == NULL) return NULL; 
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return NULL;
+	return job->timingInformation->time[idx]->type;
+}//getTimingInfoType
+
+string OSResult::getTimingInfoCategory(int idx){
+	if (job == NULL) return NULL;
+	if (job->timingInformation == NULL) return NULL; 
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return NULL;
+	return job->timingInformation->time[idx]->category;
+}//getTimingInfoCategory
+
+string OSResult::getTimingInfoDescription(int idx){
+	if (job == NULL) return NULL;
+	if (job->timingInformation == NULL) return NULL; 
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return NULL;
+	return job->timingInformation->time[idx]->description;
+}//getTimingInfoDescription
+
+double OSResult::getTimingInfoValue(int idx){
+	if (job == NULL) return NULL;
+	if (job->timingInformation == NULL) return NULL; 
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return NULL;
+	return job->timingInformation->time[idx]->value;
+}//getTimingInfoValue
+
+string OSResult::getUsedDiskSpaceUnit(){
+	if (job->usedDiskSpace == NULL) return NULL;
+	return job->usedDiskSpace->unit;
+}//getUsedDiskSpaceUnit
+
+string OSResult::getUsedDiskSpaceDescription(){
+	if (job->usedDiskSpace == NULL) return NULL;
+	return job->usedDiskSpace->description;
+}//getUsedDiskSpaceDescription
+
+double OSResult::getUsedDiskSpaceValue(){
+	if (job->usedDiskSpace == NULL) return -1;
+	return job->usedDiskSpace->value;
+}//getUsedDiskSpaceValue
+
+string OSResult::getUsedMemoryUnit(){
+	if (job->usedMemory == NULL) return NULL;
+	return job->usedMemory->unit;
+}//getUsedMemoryUnit
+
+string OSResult::getUsedMemoryDescription(){
+	if (job->usedMemory == NULL) return NULL;
+	return job->usedMemory->description;
+}//getUsedMemoryDescription
+
+double OSResult::getUsedMemoryValue(){
+	if (job->usedMemory == NULL) return -1;
+	return job->usedMemory->value;
+}//getUsedMemoryValue
+
+string OSResult::getUsedCPUSpeedUnit(){
+	if (job->usedCPUSpeed == NULL) return NULL;
+	return job->usedCPUSpeed->unit;
+}//getUsedCPUSpeedUnit
+
+string OSResult::getUsedCPUSpeedDescription(){
+	if (job->usedCPUSpeed == NULL) return NULL;
+	return job->usedCPUSpeed->description;
+}//getUsedCPUSpeedDescription
+
+double OSResult::getUsedCPUSpeedValue(){
+	if (job->usedCPUSpeed == NULL) return -1;
+	return job->usedCPUSpeed->value;
+}//getUsedCPUSpeedValue
+
+string OSResult::getUsedCPUNumberDescription(){
+	if (job->usedCPUNumber == NULL) return NULL;
+	return job->usedCPUNumber->description;
+}//getUsedCPUNumberDescription
+
+int OSResult::getUsedCPUNumberValue(){
+	if (job->usedCPUNumber == NULL) return -1;
+	return job->usedCPUNumber->value;
+}//getUsedCPUNumberValue
+
+int OSResult::getNumberOfOtherJobResults(){
+	if (job->otherResults == NULL) return -1;
+	return job->otherResults->numberOfOtherResults;
+}//getNumberOfOtherJobResults
+
+string OSResult::getJobOtherResultName(int idx){
+	if (job->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
+		return NULL;
+	return job->otherResults->other[idx]->name;
+}//getJobOtherResultName
+
+string OSResult::getJobOtherResultValue(int idx){
+	if (job->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
+		return NULL;
+	return job->otherResults->other[idx]->value;
+}//getJobOtherResultValue
+
+string OSResult::getJobOtherResultDescription(int idx){
+	if (job->otherResults == NULL) return NULL;
+	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
+		return NULL;
+	return job->otherResults->other[idx]->description;
+}//getJobOtherResultDescription
 
 
 double OSResult::getTimeValue()
@@ -1202,14 +1530,14 @@ double OSResult::getTimeValue()
 	if (job->timingInformation == NULL) return 0.0;
 	if (job->timingInformation->numberOfTimes <= 0) return 0.0;
 	return job->timingInformation->time[0]->value;
-}//getTime
+}//getTimeValue
 
 
 int OSResult::getTimeNumber()
 {	if (job == NULL) return -1;
 	if (job->timingInformation == NULL) return -1;
 	return job->timingInformation->numberOfTimes;
-}//getTime
+}//getTimeNumber
 
 
 int OSResult::getVariableNumber(){
@@ -1219,7 +1547,6 @@ int OSResult::getVariableNumber(){
 	}
 	return m_iVariableNumber;
 }//getVariableNumber
-
 
 
 int OSResult::getObjectiveNumber(){
@@ -1244,15 +1571,6 @@ int OSResult::getSolutionNumber(){
 	if(optimization->solution == NULL) return 0;
 	return optimization->numberOfSolutions;
 }//getSolutionNumber
-
-
-int OSResult::getNumberOfOtherVariableResults(int solIdx){
-	if(m_iNumberOfOtherVariableResults == -1){
-		if(optimization->solution[solIdx]->variables->other == NULL) return -1;
-		m_iNumberOfOtherVariableResults = optimization->solution[solIdx]->variables->numberOfOtherVariableResults;
-	}
-	return m_iNumberOfOtherVariableResults;
-}//getNumberOfOtherVariableResults
 
 
 OptimizationSolutionStatus* OSResult::getSolutionStatus( int solIdx){
@@ -1281,6 +1599,49 @@ string OSResult::getSolutionStatusDescription(int solIdx){
 	return optimization->solution[solIdx]->status->description;		
 }//getSolutionStatusDescription
 
+int OSResult::getNumberOfSolutionSubstatuses(int solIdx){
+	if(optimization == NULL || optimization->solution == NULL) return 0;
+	if( optimization->numberOfSolutions <= 0 || 
+	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if(optimization->solution[solIdx] == NULL) return 0;
+	if(optimization->solution[solIdx]->status == NULL) return 0;
+	return optimization->solution[solIdx]->status->numberOfSubstatuses;		
+}//getNumberOfSolutionSubstatuses
+
+string OSResult::getSolutionSubstatusType(int solIdx, int substatusIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->status == NULL) return NULL;
+	if (substatusIdx < 0 || substatusIdx >= optimization->solution[solIdx]->status->numberOfSubstatuses) 
+		return NULL;
+	return optimization->solution[solIdx]->status->substatus[substatusIdx]->type;		
+}//getSolutionSubstatusType
+
+string OSResult::getSolutionSubstatusDescription(int solIdx, int substatusIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->status == NULL) return NULL;
+	if (substatusIdx < 0 || substatusIdx >= optimization->solution[solIdx]->status->numberOfSubstatuses) 
+		return NULL;
+	return optimization->solution[solIdx]->status->substatus[substatusIdx]->description;		
+}//getSolutionSubstatusDescription
+
+int OSResult::getSolutionTargetObjectiveIdx(int solIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->targetObjectiveIdx;		
+}//getSolutionTargetObjectiveIdx
+
+bool OSResult::getSolutionWeightedObjectives(int solIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->weightedObjectives;		
+}//getSolutionWeightedObjectives
+
 string OSResult::getSolutionMessage(int solIdx){
 	if(optimization == NULL) return "there is no solution";
 	if(optimization->solution == NULL || 
@@ -1288,6 +1649,40 @@ string OSResult::getSolutionMessage(int solIdx){
 	if(optimization->solution[solIdx] == NULL) return "there is no solution";
 	return optimization->solution[solIdx]->message;
 }//getSolutionMessage
+
+int OSResult::getNumberOfPrimalVariableValues(int solIdx){
+	if (optimization == NULL) return 0;
+	if (optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->variables == NULL) return 0;
+	if (optimization->solution[solIdx]->variables->values == NULL) return 0;
+	return optimization->solution[solIdx]->variables->values->numberOfVar;
+}//getNumberOfPrimalVariableValues
+
+int OSResult::getNumberOfVarValues(int solIdx){
+	if (optimization == NULL) return 0;
+	if (optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->variables == NULL) return 0;
+	if (optimization->solution[solIdx]->variables->values == NULL) return 0;
+	return optimization->solution[solIdx]->variables->values->numberOfVar;
+}//getNumberOfVarValues
+
+IndexValuePair* OSResult::getVarValue(int solIdx, int varIdx){
+	IndexValuePair* temp;
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->values == NULL) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->values->numberOfVar)
+		return NULL;
+	temp->idx   = optimization->solution[solIdx]->variables->values->var[varIdx]->idx;
+	temp->value = optimization->solution[solIdx]->variables->values->var[varIdx]->value;
+	return temp;
+}//getVarValue
 
 std::vector<IndexValuePair*> OSResult::getOptimalPrimalVariableValues(int solIdx){
 	int numberOfVar;
@@ -1316,6 +1711,62 @@ std::vector<IndexValuePair*> OSResult::getOptimalPrimalVariableValues(int solIdx
 }//getOptimalPrimalVariableValues
 
 
+int OSResult::getNumberOfVarValuesString(int solIdx){
+	if (optimization == NULL) return 0;
+	if (optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->variables == NULL) return 0;
+	if (optimization->solution[solIdx]->variables->valuesString == NULL) return 0;
+	return optimization->solution[solIdx]->variables->valuesString->numberOfVar;
+}//getNumberOfVarValuesString
+
+IndexStringPair* OSResult::getVarValueString(int solIdx, int varIdx){
+	IndexStringPair* temp;
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->valuesString->numberOfVar)
+		return NULL;
+	temp->idx   = optimization->solution[solIdx]->variables->valuesString->var[varIdx]->idx;
+	temp->value = optimization->solution[solIdx]->variables->valuesString->var[varIdx]->value;
+	return temp;
+}//getVarValueString
+
+int OSResult::getNumberOfBasisVar(int solIdx){
+	if (optimization == NULL) return 0;
+	if (optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->variables == NULL) return 0;
+	if (optimization->solution[solIdx]->variables->basisStatus == NULL) return 0;
+	return optimization->solution[solIdx]->variables->basisStatus->numberOfVar;
+}//getNumberOfBasisVar
+
+IndexStringPair* OSResult::getBasisVar(int solIdx, int varIdx){
+	IndexStringPair* temp;
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->basisStatus->numberOfVar)
+		return NULL;
+	temp->idx   = optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->idx;
+	temp->value = optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->value;
+	return temp;
+}//getBasisVar
+
+int OSResult::getNumberOfOtherVariableResults(int solIdx){
+	if(m_iNumberOfOtherVariableResults == -1){
+		if(optimization->solution[solIdx]->variables->other == NULL) return -1;
+		m_iNumberOfOtherVariableResults = optimization->solution[solIdx]->variables->numberOfOtherVariableResults;
+	}
+	return m_iNumberOfOtherVariableResults;
+}//getNumberOfOtherVariableResults
+
 int OSResult::getAnOtherVariableResultNumberOfVar(int solIdx, int iOther){
 	if(optimization == NULL || optimization->solution == NULL) return -1;
 	int iSolutions = this->getSolutionNumber();
@@ -1324,11 +1775,224 @@ int OSResult::getAnOtherVariableResultNumberOfVar(int solIdx, int iOther){
 	if (optimization->solution[solIdx]->variables->other == NULL) return -1;
 	if (iOther < 0 || iOther >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults) return -1;
 	return optimization->solution[solIdx]->variables->other[iOther]->numberOfVar;
-}
+}//getAnOtherVariableResultNumberOfVar
 	
-	
-std::vector<IndexValuePair*>  OSResult::getOptimalDualVariableValues(int solIdx){
+string OSResult::getOtherVariableResultName(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->variables->other[ otherIdx]->name;
+}//getOtherVariableResultName
 
+string OSResult::getOtherVariableResultValue(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->variables->other[ otherIdx]->value;
+}//getOtherVariableResultValue
+
+string OSResult::getOtherVariableResultDescription(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->variables->other[ otherIdx]->description;
+}//getOtherVariableResultDescription
+
+int OSResult::getOtherVariableResultNumberOfVar(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return 0;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->variables == NULL) return 0;
+	if (optimization->solution[solIdx]->variables->other == NULL) return 0;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return 0;
+	return optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar;
+}//getOtherVariableResultNumberOfVar
+
+int OSResult::getOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx){
+	if (optimization == NULL || optimization->solution == NULL) return -1;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return -1;
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->variables == NULL) return -1;
+	if (optimization->solution[solIdx]->variables->other == NULL) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults) return -1;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL) return -1;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar) return -1;
+	return optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->idx;
+}//getOtherVariableResultVarIdx
+
+string OSResult::getOtherVariableResultVar(int solIdx, int otherIdx, int varIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults) return NULL;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar) return NULL;
+	return optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->value;
+}//getOtherVariableResultVar
+
+int OSResult::getNumberOfObjValues(int solIdx){
+	if (optimization == NULL) return 0;
+	if (optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->objectives == NULL) return 0;
+	if (optimization->solution[solIdx]->objectives->values == NULL) return 0;
+	return optimization->solution[solIdx]->objectives->values->numberOfObj;
+}//getNumberOfObjValues
+
+IndexValuePair* OSResult::getObjValue(int solIdx, int objIdx){
+	IndexValuePair* temp;
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->values == NULL) return NULL;
+	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->values->numberOfObj)
+		return NULL;
+	temp->idx   = optimization->solution[solIdx]->objectives->values->obj[objIdx]->idx;
+	temp->value = optimization->solution[solIdx]->objectives->values->obj[objIdx]->value;
+	return temp;
+}//getObjValue
+
+double OSResult::getOptimalObjValue(int objIdx, int solIdx)
+{
+	try{
+		if(this->optimization == NULL || this->optimization->solution == NULL)   
+			throw ErrorClass("No optimization or solution object defined");  
+		int iSolutions = this->getSolutionNumber();  
+		for(int i = 0; i < iSolutions; i++){  
+			if(i != solIdx) continue;  
+			if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;  
+			if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||  
+					this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){   
+				return  this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;  
+			}
+			else{  
+				throw ErrorClass("There is no optimal solution");  
+			}
+		}
+		throw ErrorClass("There is no optimal solution");  
+	}
+	catch(const ErrorClass& eclass){  
+		throw ErrorClass(  eclass.errormsg);   
+	}
+}//getOptimalObjValue  
+
+int OSResult::getNumberOfOtherObjectiveResults(int solIdx){
+	if(optimization == NULL || optimization->solution == NULL) return -1;
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions) return -1;
+	if (optimization->solution[solIdx]->objectives == NULL) return -1;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return -1;
+	return optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults;
+}//getNumberOfOtherObjectiveResults
+
+
+string OSResult::getOtherObjectiveResultName(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->objectives->other[ otherIdx]->name;
+}//getOtherObjectiveResultName
+
+string OSResult::getOtherObjectiveResultValue(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->objectives->other[ otherIdx]->value;
+}//getOtherObjectiveResultValue
+
+string OSResult::getOtherObjectiveResultDescription(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->objectives->other[ otherIdx]->description;
+}//getOtherObjectiveResultDescription
+
+int OSResult::getOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return 0;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->objectives == NULL) return 0;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return 0;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return 0;
+	return optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj;
+}//getOtherObjectiveResultNumberOfObj
+
+int OSResult::getOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx){
+	if (optimization == NULL || optimization->solution == NULL) return -1;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return -1;
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->objectives == NULL) return -1;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults) return -1;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx]->obj == NULL) return -1;
+	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj) return -1;
+	return optimization->solution[solIdx]->objectives->other[otherIdx]->obj[objIdx]->idx;
+}//getOtherObjectiveResultObjIdx
+
+string OSResult::getOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults) return NULL;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx]->obj == NULL) return NULL;
+	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj) return NULL;
+	return optimization->solution[solIdx]->objectives->other[otherIdx]->obj[objIdx]->value;
+}//getOtherObjectiveResultObj
+
+int OSResult::getNumberOfDualValues(int solIdx){
+	if (optimization == NULL) return 0;
+	if (optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->constraints == NULL) return 0;
+	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return 0;
+	return optimization->solution[solIdx]->constraints->dualValues->numberOfCon;
+}//getNumberOfDualValues
+
+IndexValuePair* OSResult::getDualValue(int solIdx, int conIdx){
+	IndexValuePair* temp;
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return NULL;
+	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->dualValues->numberOfCon)
+		return NULL;
+	temp->idx   = optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->idx;
+	temp->value = optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->value;
+	return temp;
+}//getDualValue
+
+
+std::vector<IndexValuePair*>  OSResult::getOptimalDualVariableValues(int solIdx){
 	int numberOfCon;
 	struct IndexValuePair *dualValPair;
 	int iSolutions = this->getSolutionNumber();
@@ -1354,29 +2018,205 @@ std::vector<IndexValuePair*>  OSResult::getOptimalDualVariableValues(int solIdx)
 	return dualVals;		
 }//getOptimalDualVariableValues
 
-double OSResult::getOptimalObjValue(int objIdx, int solIdx)
-{
-	try{
-		if(this->optimization == NULL || this->optimization->solution == NULL)   
-			throw ErrorClass("No optimization or solution object defined");  
-		int iSolutions = this->getSolutionNumber();  
-		for(int i = 0; i < iSolutions; i++){  
-			if(i != solIdx) continue;  
-			if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;  
-			if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||  
-					this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){   
-				return  this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;  
-			}
-			else{  
-				throw ErrorClass("There is no optimal solution");  
-			}
-		}
-		throw ErrorClass("There is no optimal solution");  
-	}
-	catch(const ErrorClass& eclass){  
-		throw ErrorClass(  eclass.errormsg);   
-	}
-}//getOptimalObjValue  
+
+int OSResult::getNumberOfOtherConstraintResults(int solIdx){
+	if(optimization == NULL || optimization->solution == NULL) return -1;
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions) return -1;
+	if (optimization->solution[solIdx]->constraints == NULL) return -1;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return -1;
+	return optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults;
+}//getNumberOfOtherConstraintResults
+
+
+string OSResult::getOtherConstraintResultName(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->constraints->other[ otherIdx]->name;
+}//getOtherConstraintResultName
+
+string OSResult::getOtherConstraintResultValue(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->constraints->other[ otherIdx]->value;
+}//getOtherConstraintResultValue
+
+string OSResult::getOtherConstraintResultDescription(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->constraints->other[ otherIdx]->description;
+}//getOtherConstraintResultDescription
+
+int OSResult::getOtherConstraintResultNumberOfCon(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) return 0;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return 0;
+	if (optimization->solution[solIdx] == NULL) return 0;
+	if (optimization->solution[solIdx]->constraints == NULL) return 0;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return 0;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return 0;
+	return optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon;
+}//getOtherConstraintResultNumberOfCon
+
+int OSResult::getOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx){
+	if (optimization == NULL || optimization->solution == NULL) return -1;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return -1;
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->constraints == NULL) return -1;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults) return -1;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx]->con == NULL) return -1;
+	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon) return -1;
+	return optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->idx;
+}//getOtherConstraintResultConIdx
+
+string OSResult::getOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults) return NULL;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx]->con == NULL) return NULL;
+	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon) return NULL;
+	return optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->value;
+}//getOtherConstraintResultCon
+
+int OSResult::getNumberOfOtherSolutionResults(int solIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	return optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults;
+}//getNumberOfOtherSolutionResults
+
+string OSResult::getOtherSolutionResultName(int solIdx, int otherIdx){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return NULL;
+	if (optimization == NULL) return NULL;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->name;
+}//getOtherSolutionResultName
+
+string OSResult::getOtherSolutionResultCategory(int solIdx, int otherIdx){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return NULL;
+	if (optimization == NULL) return NULL;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->category;
+}//getOtherSolutionResultCategory
+
+string OSResult::getOtherSolutionResultDescription(int solIdx, int otherIdx){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return NULL;
+	if (optimization == NULL) return NULL;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->description;
+}//getOtherSolutionResultDescription
+
+int OSResult::getOtherSolutionResultNumberOfItems(int solIdx, int otherIdx){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return NULL;
+	if (optimization == NULL) return NULL;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
+	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->numberOfItems;
+}//getOtherSolutionResultNumberOfItems
+
+string OSResult::getOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return NULL;
+	if (optimization == NULL) return NULL;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults) return NULL;
+	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item == NULL) return NULL;
+	if (itemIdx < 0 || itemIdx >= optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->numberOfItems) return NULL;
+	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item[itemIdx];
+}//getOtherSolutionResultItem
+
+int OSResult::getNumberOfSolverOutputs(){
+	if (optimization == NULL || optimization->otherSolverOutput == NULL) return -1;
+	return optimization->otherSolverOutput->numberOfSolverOutputs;	
+}//getNumberOfSolverOutputs
+
+string OSResult::getSolverOutputName(int otherIdx){
+	if (optimization == NULL) return NULL;
+	if (optimization->otherSolverOutput == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
+		return NULL;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
+	return optimization->otherSolverOutput->solverOutput[otherIdx]->name;
+}//getSolverOutputName
+
+string OSResult::getSolverOutputCategory(int otherIdx){
+	if (optimization == NULL) return NULL;
+	if (optimization->otherSolverOutput == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
+		return NULL;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
+	return optimization->otherSolverOutput->solverOutput[otherIdx]->category;
+}//getSolverOutputCategory
+
+string OSResult::getSolverOutputDescription(int otherIdx){
+	if (optimization == NULL) return NULL;
+	if (optimization->otherSolverOutput == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
+		return NULL;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
+	return optimization->otherSolverOutput->solverOutput[otherIdx]->description;
+}//getSolverOutputDescription
+
+int OSResult::getSolverOutputNumberOfItems(int otherIdx){
+	if (optimization == NULL) return -1;
+	if (optimization->otherSolverOutput == NULL) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
+		return -1;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return -1;
+	return optimization->otherSolverOutput->solverOutput[otherIdx]->numberOfItems;
+}//getSolverOutputNumberOfItems
+
+string OSResult::getSolverOutputItem(int otherIdx, int itemIdx){
+	if (optimization == NULL) return NULL;
+	if (optimization->otherSolverOutput == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
+		return NULL;
+	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
+	if (itemIdx < 0 || itemIdx >= optimization->otherSolverOutput->solverOutput[otherIdx]->numberOfItems)
+		return NULL;
+    return optimization->otherSolverOutput->solverOutput[otherIdx]->item[itemIdx];;
+}//getSolverOutputItem
 
 //==================================================================
 // set methods
@@ -1849,7 +2689,7 @@ bool OSResult::setNumberOfTimes(int numberOfTimes)
 			job->timingInformation->time[i] = new Time();
 	}
 	return true;
-}//setTimeNumber
+}//setNumberOfTimes
 
 bool OSResult::setTimeNumber(int timeNumber)
 {	if (job == NULL) 
@@ -2053,8 +2893,6 @@ bool OSResult::setJobOtherResultDescription(int idx, string description){
 	job->otherResults->other[idx]->description = description;
 	return true;
 }//setJobOtherResultDescription
-
-
 
 
 bool OSResult::setVariableNumber(int variableNumber){
@@ -2635,13 +3473,12 @@ bool OSResult::setOtherVariableResultNumberOfVar(int solIdx, int otherIdx, int n
 	int iNumberOfVariables = numberOfVar;
 	if (iNumberOfVariables <= -1) return false;
 	int nSols = this->getSolutionNumber();
-	if (optimization == NULL) return false;
 	if (nSols <= 0) return false;
 	if (optimization == NULL) return false;
 	if (optimization->solution == NULL || 
 	   solIdx < 0 || solIdx >=  nSols) return false;
 	if (optimization->solution[solIdx] == NULL) return false;
-	if (optimization->solution[solIdx]->variables == NULL)return false;
+	if (optimization->solution[solIdx]->variables == NULL) return false;
 	if (optimization->solution[solIdx]->variables->other == NULL) return false;
 	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
 	if (optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL)
@@ -2717,7 +3554,7 @@ bool OSResult::setOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx
 	if(optimization->solution[solIdx]->variables->other[otherIdx] == NULL) return false;
 	if(optimization->solution[solIdx]->variables->other[otherIdx]->var == NULL) return false;
 	optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->idx = idx;
-	return true;		
+	return true;
 }//setOtherVariableResultVarIdx
 
 bool OSResult::setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, std::string value){

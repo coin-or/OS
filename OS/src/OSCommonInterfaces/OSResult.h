@@ -23,6 +23,24 @@
 
 //#define DEBUG
 
+
+/*! \struct IndexStringPair
+ *  \brief A commonly used structure holding an index-string pair
+ *  This definition is based on the definition of IndexValuePair in OSDataStructures.h
+ */
+struct IndexStringPair{
+	/** idx holds the index of a string-valued entity (such as a variable, constraint, objective)
+	 *  that is part of a sparse vector
+	 */
+	int idx;
+
+	/** value is a string that holds the value of the entity
+	 */ 
+	std::string value;
+		
+};
+
+
 /*! \class GeneralSubstatus
  *  \brief The GeneralSubstatus  Class.
  * 
@@ -2165,14 +2183,44 @@ public:
 	 */
 	std::string getGeneralStatusType();
 	
-   	/**
+	/**
 	 * Get the general status description. 
 	 * 
 	 * @return the general status description, null or empty std::string if none. 
 	 */
 	std::string getGeneralStatusDescription();
+	
+   	/**
+	 * Get the number of substatuses. 
+	 * 
+	 * @return the number of substatuses, -1 if general status does not exist. 
+	 */
+	int getNumberOfGeneralSubstatuses();
+
+	/**
+	 * Get the i_th general substatus name
+	 * 
+	 * @param i the number of the substatus (must be between 0 and numberOfSubstatuses)
+	 * @return the general substatus name, null if none. 
+	 */
+	std::string getGeneralSubstatusName(int i);
+	
+   	/**
+	 * Get the i_th general substatus description. 
+	 * 
+ 	 * @param i the number of the substatus (must be between 0 and numberOfSubstatuses)
+	 * @return the general substatus description, null or empty std::string if none. 
+	 */
+	std::string getGeneralSubstatusDescription(int i);
 
    	/**
+	 * Get the general message.
+	 * 
+	 * @return the general message. 
+	 */
+	std::string getGeneralMessage();
+
+	/**
 	 * Get service name.
 	 * 
 	 * @return the service name. 
@@ -2200,12 +2248,67 @@ public:
 	 */
 	std::string getJobID(); 
 	
-   	/**
-	 * Get the general message. 
+  	/**
+	 * Get the solver invoked.
 	 * 
-	 * @return the general message. 
+	 * @return the solver invoked. 
 	 */
-	std::string getGeneralMessage();
+	std::string getSolverInvoked();
+	
+  	/**
+	 * Get the time stamp.
+	 * 
+	 * @return the time stamp.
+	 */
+	std::string getTimeStamp();
+
+	/**
+	 *  Get the number of other results in the <general> element. 
+	 *
+	 *  @return the number of other <general> results.
+	 */
+	int getNumberOfOtherGeneralResults();
+
+	/**
+	 *  Get the name of the i-th other result in the <general> element. 
+	 *
+	 *  @param i holds the number of the result whose name is saught.
+	 *  @return the name of the other <general> result.
+	 */
+	std::string getGeneralOtherResultName(int idx);
+
+/* */	std::string getGeneralOtherResultValue(int idx);
+/* */	std::string getGeneralOtherResultDescription(int idx);
+/* */	std::string getSystemInformation();
+/* */	std::string getAvailableDiskSpaceUnit();
+/* */	std::string getAvailableDiskSpaceDescription();
+/* */	double getAvailableDiskSpaceValue();
+/* */	std::string getAvailableMemoryUnit();
+/* */	std::string getAvailableMemoryDescription();
+/* */	double getAvailableMemoryValue();
+/* */	std::string getAvailableCPUSpeedUnit();
+/* */	std::string getAvailableCPUSpeedDescription();
+/* */	double getAvailableCPUSpeedValue();
+/* */	std::string getAvailableCPUNumberDescription();
+/* */	int getAvailableCPUNumberValue();
+/* */	int getNumberOfOtherSystemResults();
+/* */	std::string getSystemOtherResultName(int idx);
+/* */	std::string getSystemOtherResultValue(int idx);
+/* */	std::string getSystemOtherResultDescription(int idx);
+/* */	std::string getCurrentState();
+/* */	int getCurrentJobCount();
+/* */	int getTotalJobsSoFar();
+/* */	std::string getTimeServiceStarted();
+/* */	double getServiceUtilization();
+/* */	int getNumberOfOtherServiceResults();
+/* */	std::string getServiceOtherResultName(int idx);
+/* */	std::string getServiceOtherResultValue(int idx);
+/* */	std::string getServiceOtherResultDescription(int idx);
+/* */	std::string getJobStatus();
+/* */	std::string getSubmitTime();
+/* */	std::string getScheduledStartTime();
+/* */	std::string getActualStartTime();
+/* */	std::string getJobEndTime();
 
 	/**
 	 *  Get the number of time measurements. 
@@ -2222,72 +2325,27 @@ public:
 	 */
 	double getTimeValue();
 
-	/**
-	 * Get one solution of optimal primal variable values. 
-	 * 
-	 * @param solIdx holds the solution index the optimal solution corresponds to. 
-	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
-	 */
-	std::vector<IndexValuePair*> getOptimalPrimalVariableValues(int solIdx);
-	
-	/**
-	 * Get one solution of optimal objective values. 
-	 * 
-	 * @param objIdx holds the objective index the optimal value corresponds to. 
-	 * @param solIdx holds the solution index the optimal value corresponds to.
-	 * @return a double with the optimal objective function value. 
-	 */
-	double getOptimalObjValue(int objIdx, int solIdx);
-
-	/**
-	 * Get one solution of optimal dual variable values. 
-	 * 
-	 * @param solIdx holds the solution index the optimal solution corresponds to. 
-	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
-	 */	
-	std::vector<IndexValuePair*> getOptimalDualVariableValues(int solIdx);
-	
-	//Solution getSolution(int solIdx);
-
-	/**
-	 * Get the [i]th optimization solution status, where i equals the given solution index.   
-	 * The solution status includes the status type, optional descriptions and possibly substatuses.
-	 *  
-	 * @param solIdx holds the solution index to get the solution status. 
-	 * @return the optimization solution status that corresponds to solIdx, null if none.
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus
-	 */	
-	OptimizationSolutionStatus* getSolutionStatus( int solIdx);
-
-	/**
-	 * Get the [i]th optimization solution status type, where i equals the given solution index.   
-	 * The solution status type can be: 
-	 * unbounded, globallyOptimal, locallyOptimal, optimal, bestSoFar, feasible, infeasible, 
-	 * stoppedByLimit, unsure, error, other 
-	 * 
-	 * @param solIdx holds the solution index to get the solution status type. 
-	 * @return the optimization solution status type that corresponds to solIdx, null or empty std::string if none.
-	 */	
-	std::string getSolutionStatusType(int solIdx);
-
-	/**
-	 * Get the [i]th optimization solution status description, where i equals the given solution index.   
-	 * 
-	 * @param solIdx holds the solution index to get the solution status description. 
-	 * @return the optimization solution status description that corresponds to solIdx, null or empty std::string if none.
-	 */	
-	std::string getSolutionStatusDescription(int solIdx);
-	
-	/**
-	 * Get the [i]th optimization solution message, where i equals the given solution index.  
-	 * 
-	 * @param solIdx holds the solution index to get the solution message. 
-	 * @return the optimization solution message that corresponds to solIdx, null or empty if none.
-	 */	
-	std::string getSolutionMessage(int solIdx);
-	
-
-	
+/* */	int getNumberOfTimes();
+/* */	std::string getTimingInfoUnit(int idx);
+/* */	std::string getTimingInfoType(int idx);
+/* */	std::string getTimingInfoCategory(int idx);
+/* */	std::string getTimingInfoDescription(int idx);
+/* */	double getTimingInfoValue(int idx);
+/* */	std::string getUsedDiskSpaceUnit();
+/* */	std::string getUsedDiskSpaceDescription();
+/* */	double getUsedDiskSpaceValue();
+/* */	std::string getUsedMemoryUnit();
+/* */	std::string getUsedMemoryDescription();
+/* */	double getUsedMemoryValue();
+/* */	std::string getUsedCPUSpeedUnit();
+/* */	std::string getUsedCPUSpeedDescription();
+/* */	double getUsedCPUSpeedValue();
+/* */	std::string getUsedCPUNumberDescription();
+/* */	int getUsedCPUNumberValue();
+/* */	int getNumberOfOtherJobResults();
+/* */	std::string getJobOtherResultName(int idx);
+/* */	std::string getJobOtherResultValue(int idx);
+/* */	std::string getJobOtherResultDescription(int idx);
 	
 	/**
 	 * Get variable number. 
@@ -2317,6 +2375,67 @@ public:
 	 */
 	int getSolutionNumber();	
 	
+
+	/**
+	 * Get the [i]th optimization solution status, where i equals the given solution index.   
+	 * The solution status includes the status type, optional descriptions and possibly substatuses.
+	 *  
+	 * @param solIdx holds the solution index to get the solution status. 
+	 * @return the optimization solution status that corresponds to solIdx, null if none.
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OptimizationSolutionStatus
+	 */	
+	OptimizationSolutionStatus* getSolutionStatus( int solIdx);
+
+	/**
+	 * Get the [i]th optimization solution status type, where i equals the given solution index.   
+	 * The solution status type can be: 
+	 * unbounded, globallyOptimal, locallyOptimal, optimal, bestSoFar, feasible, infeasible, 
+	 * stoppedByLimit, unsure, error, other 
+	 * 
+	 * @param solIdx holds the solution index to get the solution status type. 
+	 * @return the optimization solution status type that corresponds to solIdx, null or empty std::string if none.
+	 */	
+	std::string getSolutionStatusType(int solIdx);
+
+	/**
+	 * Get the [i]th optimization solution status description, where i equals the given solution index.   
+	 * 
+	 * @param solIdx holds the solution index to get the solution status description. 
+	 * @return the optimization solution status description that corresponds to solIdx, null or empty std::string if none.
+	 */	
+	std::string getSolutionStatusDescription(int solIdx);
+
+	/* */	int getNumberOfSolutionSubstatuses(int solIdx);
+/* */	std::string getSolutionSubstatusType(int solIdx, int substatusIdx);
+/* */	std::string getSolutionSubstatusDescription(int solIdx, int substatusIdx);
+/* */	int getSolutionTargetObjectiveIdx(int solIdx);
+/* */	bool getSolutionWeightedObjectives(int solIdx);
+
+	/**
+	 * Get the [i]th optimization solution message, where i equals the given solution index.  
+	 * 
+	 * @param solIdx holds the solution index to get the solution message. 
+	 * @return the optimization solution message that corresponds to solIdx, null or empty if none.
+	 */	
+	std::string getSolutionMessage(int solIdx);
+	
+/* */	int getNumberOfPrimalVariableValues(int solIdx);
+/* */	int getNumberOfVarValues(int solIdx);
+/* */	IndexValuePair* getVarValue(int solIdx, int varIdx);
+
+	/**
+	 * Get one solution of optimal primal variable values. 
+	 * 
+	 * @param solIdx holds the solution index the optimal solution corresponds to. 
+	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
+	 */
+	std::vector<IndexValuePair*> getOptimalPrimalVariableValues(int solIdx);
+
+/* */	int getNumberOfVarValuesString(int solIdx);
+/* */	IndexStringPair* getVarValueString(int solIdx, int varIdx);
+/* */	int getNumberOfBasisVar(int solIdx);
+/* */	IndexStringPair* getBasisVar(int solIdx, int varIdx);
+	
 	/**
 	 * Get numberOfOtherVariableResult. 
 	 * 
@@ -2324,7 +2443,6 @@ public:
 	 */
 	int getNumberOfOtherVariableResults( int solIdx);
 	
-
 	/**
 	 * Get getAnOtherVariableResultNumberOfVar. 
 	 * 
@@ -2332,6 +2450,61 @@ public:
 	 */
 	int getAnOtherVariableResultNumberOfVar(int solIdx, int iOther);
 
+/* */	std::string getOtherVariableResultName(int solIdx, int otherIdx);
+/* */	std::string getOtherVariableResultValue(int solIdx, int otherIdx);
+/* */	std::string getOtherVariableResultDescription(int solIdx, int otherIdx);
+/* */	int getOtherVariableResultNumberOfVar(int solIdx, int otherIdx);
+/* */	int getOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx);
+/* */	std::string getOtherVariableResultVar(int solIdx, int otherIdx, int varIdx);
+/* */	int getNumberOfObjValues(int solIdx);
+/* */	IndexValuePair* getObjValue(int solIdx, int objIdx);
+
+	/**
+	 * Get one solution of optimal objective values. 
+	 * 
+	 * @param objIdx holds the objective index the optimal value corresponds to. 
+	 * @param solIdx holds the solution index the optimal value corresponds to.
+	 * @return a double with the optimal objective function value. 
+	 */
+	double getOptimalObjValue(int objIdx, int solIdx);
+
+/* */	int getNumberOfOtherObjectiveResults(int solIdx);
+/* */	std::string getOtherObjectiveResultName(int solIdx, int otherIdx);
+/* */	std::string getOtherObjectiveResultValue(int solIdx, int otherIdx);
+/* */	std::string getOtherObjectiveResultDescription(int solIdx, int otherIdx);
+/* */	int getOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx);
+/* */	int getOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx);
+/* */	std::string getOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx);
+/* */	int getNumberOfDualValues(int solIdx);
+/* */	IndexValuePair* getDualValue(int solIdx, int conIdx);
+
+	/**
+	 * Get one solution of optimal dual variable values. 
+	 * 
+	 * @param solIdx holds the solution index the optimal solution corresponds to. 
+	 * @return a vector of variable indexes and values, an empty vector if no optimal value. 
+	 */	
+	std::vector<IndexValuePair*> getOptimalDualVariableValues(int solIdx);
+
+/* */	int getNumberOfOtherConstraintResults(int solIdx);
+/* */	std::string getOtherConstraintResultName(int solIdx, int otherIdx);
+/* */	std::string getOtherConstraintResultValue(int solIdx, int otherIdx);
+/* */	std::string getOtherConstraintResultDescription(int solIdx, int otherIdx);
+/* */	int getOtherConstraintResultNumberOfCon(int solIdx, int otherIdx);
+/* */	int getOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx);
+/* */	std::string getOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx);
+/* */	int getNumberOfOtherSolutionResults(int solIdx);
+/* */	std::string getOtherSolutionResultName(int solIdx, int otherIdx);
+/* */	std::string getOtherSolutionResultCategory(int solIdx, int otherIdx);
+/* */	std::string getOtherSolutionResultDescription(int solIdx, int otherIdx);
+/* */	int getOtherSolutionResultNumberOfItems(int solIdx, int otherIdx);
+/* */	std::string getOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx);
+/* */	int getNumberOfSolverOutputs();
+/* */	std::string getSolverOutputName(int otherIdx);
+/* */	std::string getSolverOutputCategory(int otherIdx);
+/* */	std::string getSolverOutputDescription(int otherIdx);
+/* */	int getSolverOutputNumberOfItems(int otherIdx);
+/* */	std::string getSolverOutputItem(int otherIdx, int itemIdx);
 
 	// set() methods
 	//

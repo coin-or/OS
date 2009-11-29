@@ -242,7 +242,7 @@ int main(int argC, char* argV[])
 	}
 
 #ifdef GUS_DEBUG
-	testConfig = "parser";
+//	testConfig = "parser";
 #endif
 
 	if (testConfig == "install") testLevel = 1;
@@ -337,8 +337,7 @@ int main(int argC, char* argV[])
 	nlFileName =  dataDir  + "amplFiles" + dirsep + "parinc.nl";
 	mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 	fileUtil = new FileUtil();
-	// 
-//	unitTestResult << "HERE ARE THE UNIT TEST RESULTS:" << std::endl << std::endl;
+
 
 if(BASIC_TESTS == true){
 
@@ -1940,7 +1939,8 @@ if( THOROUGH == true){
 		string::size_type pos;
 		pos = solver->osrl.find( "LIMIT_EXCEEDED[COUENNE]");
 		if(pos == std::string::npos)  
-		{	cout << solver->osrl << endl << endl;
+		{
+			cout << solver->osrl << endl << endl;
 			throw ErrorClass(" Error with wayneQuadratic running on Couenne");
 		}
 #ifdef DEBUG
@@ -2139,7 +2139,7 @@ if (OTHER_TESTS){
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver using MPS file" << endl << endl;
 		ok = true;
 //		cout << endl;
-//		cout << "START MPS TESTING" << endl << endl;
+//		cout << "Start testing MPS file conversion" << endl << endl;
 		cout << "create a COIN Solver for MPS - OSInstance solution" << endl;
 		solver = new CoinSolver();
 		solver->sSolverName = "cbc";
@@ -2171,7 +2171,7 @@ if (OTHER_TESTS){
 		delete mps2osil; 
 		mps2osil = NULL;
 //		cout << endl;
-//		cout << "DONE WITH MPS TESTING" << endl;
+//		cout << "Done with MPS testing" << endl;
 		unitTestResult << "TEST " << nOfTest << ": Test the MPS -> OSiL converter on parinc.mps using Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -2512,8 +2512,8 @@ if (PARSER_TESTS){
 		//delete fileUtil;
 		//fileUtil = NULL;
 		//fileUtil = new FileUtil();
-		cout << "TEST PARSING A MODEL" << endl;
-		cout << "FIRST READ THE FILE INTO A STRING" << endl;
+		cout << "Test parsing a model" << endl;
+		cout << "First read the file into a string" << endl;
 		start = clock();
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
@@ -2555,8 +2555,8 @@ if (PARSER_TESTS){
 		//delete fileUtil;
 		//fileUtil = NULL;
 		//fileUtil = new FileUtil();
-		cout << "\nTEST PARSING A STOCHASTIC MODEL" << endl;
-		cout << "FIRST READ THE FILE INTO A STRING" << endl;
+		cout << "\nTest parsing a stochastic model" << endl;
+		cout << "First read the file into a string" << endl;
 		start = clock();
 		osilFileName = dataDir  + "osilFiles" + dirsep + "finplan1.osil";
 		osil = fileUtil->getFileAsString( &osilFileName[0]);
@@ -2873,8 +2873,8 @@ if (PARSER_TESTS){
 		osolreader = new OSoLReader();
 		OSOption *osoption = NULL;
 		//osoption = new OSOption(); 
-		cout << "TEST PARSING AN OSoL FILE" << endl;
-		cout << "FIRST READ THE OSoL FILE INTO A STRING" << endl;
+		cout << "Test parsing an OSoL file" << endl;
+		cout << "First read the OSoL file into a string" << endl;
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
 		cout << osolFileName << endl;
 		start = clock();
@@ -5139,22 +5139,50 @@ if (PARSER_TESTS){
 			}
 		}
 
-		std::cout << "Two copies of osresult built correctly" << std::endl;
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
 		std::string tempOSrL;
 
-		std::cout << "Write osresult to temporary string" << std::endl;
 		tempOSrL = osrlwriter->writeOSrL( osresult1) ;
 		std::cout << tempOSrL << std::endl;
-		std::cout << "Read string into a new copy of osresult" << std::endl;
 		osresult3 = osrlreader->readOSrL( tempOSrL);
-		std::cout << "Compare the two copies of osresult" << std::endl;
 		ok &= (osresult1->IsEqual(osresult3));
 		if (!ok) 
 			throw ErrorClass("Writing an osresult then reading leads to loss of data");
 
 //=================
+// Testing get() methods
+		if (osresult2  != NULL) delete osresult2;
+		osresult2 = new OSResult();
+
+		std::string tempStr;
+		double tempVal;
+		int tempInt;
+
+		tempStr = osresult1->getGeneralStatusType();
+		ok &= osresult2->setGeneralStatusType(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setGeneralStatusType!");
+		tempStr = osresult1->getGeneralStatusDescription();
+		ok &= osresult2->setGeneralStatusDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setGeneralStatusDescription!");
+		tempInt = osresult1->getNumberOfGeneralSubstatuses();
+		ok &= osresult2->setNumberOfGeneralSubstatuses(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setNumberOfGeneralSubstatuses!");
+		for (int i=0; i < tempInt; i++)
+		{
+			tempStr = osresult1->getGeneralSubstatusName(i);
+			ok &= osresult2->setGeneralSubstatusName(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setGeneralSubstatusName!");
+			tempStr = osresult1->getGeneralSubstatusDescription(i);
+			ok &= osresult2->setGeneralSubstatusDescription(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setGeneralSubstatusDescription!");
+		}
+
 
 		std::cout << std::endl << "done" << std::endl;
 
@@ -5197,8 +5225,8 @@ if (PARSER_TESTS){
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
 		//osresult = new OSResult(); 
-		cout << "TEST PARSING AN OSrL FILE" << endl;
-		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
+		cout << "Test parsing an OSrL file" << endl;
+		cout << "First read the OSrL file into a string" << endl;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
 //		osrlFileName = dataDir  + "osrlFiles" + dirsep + "rosenbrockmod.osrl"; 
 		start = clock();
@@ -5229,7 +5257,7 @@ if (PARSER_TESTS){
 
 
 /*		// now a second example
-		cout << endl << "TEST PARSING ANOTHER OSrL FILE" << endl;
+		cout << endl << "Test parsing another OSrL file" << endl;
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
 		cout << "FIRST READ THE OSrL FILE INTO A STRING" << endl;
