@@ -477,17 +477,17 @@ generalOtherAtt:
 	nameAttribute
 	{	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setGeneralOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherGeneralResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setGeneralOtherResultName failed");
 	}
   | valueAttribute
 	{	
-		if (osresult->setGeneralOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherGeneralResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setGeneralOtherResultValue failed");
 	}
   | descriptionAttribute
 	{	
-		if (osresult->setGeneralOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherGeneralResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setGeneralOtherResultDescription failed");
 	}
 ;
@@ -741,17 +741,17 @@ systemOtherAtt:
 	nameAttribute
 	{	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setSystemOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherSystemResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSystemOtherResultName failed");
 	}
   | valueAttribute
 	{	
-		if (osresult->setSystemOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherSystemResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSystemOtherResultValue failed");
 	}
   | descriptionAttribute
 	{	
-		if (osresult->setSystemOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherSystemResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSystemOtherResultDescription failed");
 	}
 ;
@@ -929,17 +929,17 @@ serviceOtherAtt:
 	nameAttribute 
 	{	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setServiceOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherServiceResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setServiceOtherResultName failed");
 	}
   | valueAttribute 
 	{	
-		if (osresult->setServiceOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherServiceResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setServiceOtherResultValue failed");
 	}
   | descriptionAttribute
 	{	
-		if (osresult->setServiceOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherServiceResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setServiceOtherResultDescription failed");
 	}
 ;
@@ -1372,17 +1372,17 @@ jobOtherAtt:
 	nameAttribute 
 	{	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setJobOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherJobResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setJobOtherResultName failed");
 	}
  | valueAttribute 
 	{	
-		if (osresult->setJobOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherJobResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setJobOtherResultValue failed");
 	}
  | descriptionAttribute
 	{	
-		if (osresult->setJobOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherJobResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setJobOtherResultDescription failed");
 	}
 ;

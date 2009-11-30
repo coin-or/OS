@@ -2275,10 +2275,10 @@ public:
 	 *  @param i holds the number of the result whose name is saught.
 	 *  @return the name of the other <general> result.
 	 */
-	std::string getGeneralOtherResultName(int idx);
+	std::string getOtherGeneralResultName(int idx);
 
-/* */	std::string getGeneralOtherResultValue(int idx);
-/* */	std::string getGeneralOtherResultDescription(int idx);
+/* */	std::string getOtherGeneralResultValue(int idx);
+/* */	std::string getOtherGeneralResultDescription(int idx);
 /* */	std::string getSystemInformation();
 /* */	std::string getAvailableDiskSpaceUnit();
 /* */	std::string getAvailableDiskSpaceDescription();
@@ -2292,20 +2292,20 @@ public:
 /* */	std::string getAvailableCPUNumberDescription();
 /* */	int getAvailableCPUNumberValue();
 /* */	int getNumberOfOtherSystemResults();
-/* */	std::string getSystemOtherResultName(int idx);
-/* */	std::string getSystemOtherResultValue(int idx);
-/* */	std::string getSystemOtherResultDescription(int idx);
+/* */	std::string getOtherSystemResultName(int idx);
+/* */	std::string getOtherSystemResultValue(int idx);
+/* */	std::string getOtherSystemResultDescription(int idx);
 /* */	std::string getCurrentState();
 /* */	int getCurrentJobCount();
 /* */	int getTotalJobsSoFar();
 /* */	std::string getTimeServiceStarted();
 /* */	double getServiceUtilization();
 /* */	int getNumberOfOtherServiceResults();
-/* */	std::string getServiceOtherResultName(int idx);
-/* */	std::string getServiceOtherResultValue(int idx);
-/* */	std::string getServiceOtherResultDescription(int idx);
+/* */	std::string getOtherServiceResultName(int idx);
+/* */	std::string getOtherServiceResultValue(int idx);
+/* */	std::string getOtherServiceResultDescription(int idx);
 /* */	std::string getJobStatus();
-/* */	std::string getSubmitTime();
+/* */	std::string getJobSubmitTime();
 /* */	std::string getScheduledStartTime();
 /* */	std::string getActualStartTime();
 /* */	std::string getJobEndTime();
@@ -2343,9 +2343,9 @@ public:
 /* */	std::string getUsedCPUNumberDescription();
 /* */	int getUsedCPUNumberValue();
 /* */	int getNumberOfOtherJobResults();
-/* */	std::string getJobOtherResultName(int idx);
-/* */	std::string getJobOtherResultValue(int idx);
-/* */	std::string getJobOtherResultDescription(int idx);
+/* */	std::string getOtherJobResultName(int idx);
+/* */	std::string getOtherJobResultValue(int idx);
+/* */	std::string getOtherJobResultDescription(int idx);
 	
 	/**
 	 * Get variable number. 
@@ -2421,7 +2421,8 @@ public:
 	
 /* */	int getNumberOfPrimalVariableValues(int solIdx);
 /* */	int getNumberOfVarValues(int solIdx);
-/* */	IndexValuePair* getVarValue(int solIdx, int varIdx);
+/* */	int getVarValueIdx(int solIdx, int varIdx);
+/* */	double getVarValue(int solIdx, int varIdx);
 
 	/**
 	 * Get one solution of optimal primal variable values. 
@@ -2432,9 +2433,11 @@ public:
 	std::vector<IndexValuePair*> getOptimalPrimalVariableValues(int solIdx);
 
 /* */	int getNumberOfVarValuesString(int solIdx);
-/* */	IndexStringPair* getVarValueString(int solIdx, int varIdx);
+/* */	int getVarValueStringIdx(int solIdx, int varIdx);
+/* */	std::string getVarValueString(int solIdx, int varIdx);
 /* */	int getNumberOfBasisVar(int solIdx);
-/* */	IndexStringPair* getBasisVar(int solIdx, int varIdx);
+/* */	int getBasisVarIdx(int solIdx, int varIdx);
+/* */	std::string getBasisVar(int solIdx, int varIdx);
 	
 	/**
 	 * Get numberOfOtherVariableResult. 
@@ -2457,7 +2460,8 @@ public:
 /* */	int getOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx);
 /* */	std::string getOtherVariableResultVar(int solIdx, int otherIdx, int varIdx);
 /* */	int getNumberOfObjValues(int solIdx);
-/* */	IndexValuePair* getObjValue(int solIdx, int objIdx);
+/* */	int getObjValueIdx(int solIdx, int objIdx);
+/* */	double getObjValue(int solIdx, int objIdx);
 
 	/**
 	 * Get one solution of optimal objective values. 
@@ -2476,7 +2480,8 @@ public:
 /* */	int getOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx);
 /* */	std::string getOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx);
 /* */	int getNumberOfDualValues(int solIdx);
-/* */	IndexValuePair* getDualValue(int solIdx, int conIdx);
+/* */	int getDualValueIdx(int solIdx, int conIdx);
+/* */	double getDualValue(int solIdx, int conIdx);
 
 	/**
 	 * Get one solution of optimal dual variable values. 
@@ -2631,7 +2636,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the general otherResult name is set successfully or not. 
 	 */
-	bool setGeneralOtherResultName(int idx, std::string name);	
+	bool setOtherGeneralResultName(int idx, std::string name);	
 	
 	/**
 	 * Set the general otherResult value
@@ -2640,7 +2645,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the general otherResult value is set successfully or not. 
 	 */
-	bool setGeneralOtherResultValue(int idx, std::string value);	
+	bool setOtherGeneralResultValue(int idx, std::string value);	
 	
 	/**
 	 * Set the general otherResult description
@@ -2649,7 +2654,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the general otherResult description is set successfully or not. 
 	 */
-	bool setGeneralOtherResultDescription(int idx, std::string description);	
+	bool setOtherGeneralResultDescription(int idx, std::string description);	
 
 	/**
 	 * Set the system information
@@ -2762,7 +2767,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the system otherResult name is set successfully or not. 
 	 */
-	bool setSystemOtherResultName(int idx, std::string name);	
+	bool setOtherSystemResultName(int idx, std::string name);	
 	
 	/**
 	 * Set the system otherResult value
@@ -2771,7 +2776,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the system otherResult value is set successfully or not. 
 	 */
-	bool setSystemOtherResultValue(int idx, std::string value);	
+	bool setOtherSystemResultValue(int idx, std::string value);	
 	
 	/**
 	 * Set the system otherResult description
@@ -2780,7 +2785,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the system otherResult description is set successfully or not. 
 	 */
-	bool setSystemOtherResultDescription(int idx, std::string description);	
+	bool setOtherSystemResultDescription(int idx, std::string description);	
 
 	/**
 	 * Set the current state of the service
@@ -2838,7 +2843,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the service otherResult name is set successfully or not. 
 	 */
-	bool setServiceOtherResultName(int idx, std::string name);	
+	bool setOtherServiceResultName(int idx, std::string name);	
 	
 	/**
 	 * Set the service otherResult value
@@ -2847,7 +2852,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the service otherResult value is set successfully or not. 
 	 */
-	bool setServiceOtherResultValue(int idx, std::string value);	
+	bool setOtherServiceResultValue(int idx, std::string value);	
 	
 	/**
 	 * Set the service otherResult description
@@ -2856,7 +2861,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the service otherResult description is set successfully or not. 
 	 */
-	bool setServiceOtherResultDescription(int idx, std::string description);	
+	bool setOtherServiceResultDescription(int idx, std::string description);	
 
 	
 	/**
@@ -3055,7 +3060,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the job otherResult name is set successfully or not. 
 	 */
-	bool setJobOtherResultName(int idx, std::string name);	
+	bool setOtherJobResultName(int idx, std::string name);	
 	
 	/**
 	 * Set the job otherResult value
@@ -3064,7 +3069,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the job otherResult value is set successfully or not. 
 	 */
-	bool setJobOtherResultValue(int idx, std::string value);	
+	bool setOtherJobResultValue(int idx, std::string value);	
 	
 	/**
 	 * Set the job otherResult description
@@ -3073,7 +3078,7 @@ public:
 	 * @param idx holds the index of the otherResult in the array
 	 * @return whether the job otherResult description is set successfully or not. 
 	 */
-	bool setJobOtherResultDescription(int idx, std::string description);	
+	bool setOtherJobResultDescription(int idx, std::string description);	
 
 
 	/**

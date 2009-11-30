@@ -1225,26 +1225,26 @@ int OSResult::getNumberOfOtherGeneralResults(){
 	return 	general->otherResults->numberOfOtherResults;
 }//getNumberOfOtherGeneralResults
 
-string OSResult::getGeneralOtherResultName(int idx){
+string OSResult::getOtherGeneralResultName(int idx){
 	if (general->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return NULL;
 	return general->otherResults->other[idx]->name;
-}//getGeneralOtherResultName
+}//getOtherGeneralResultName
 
-string OSResult::getGeneralOtherResultValue(int idx){
+string OSResult::getOtherGeneralResultValue(int idx){
 	if (general->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return NULL;
 	return general->otherResults->other[idx]->value;
-}//getGeneralOtherResultValue
+}//getOtherGeneralResultValue
 
-string OSResult::getGeneralOtherResultDescription(int idx){
+string OSResult::getOtherGeneralResultDescription(int idx){
 	if (general->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return NULL;
 	return general->otherResults->other[idx]->description;
-}//getGeneralOtherResultDescription
+}//getOtherGeneralResultDescription
 
 string OSResult::getSystemInformation(){
 	return system->systemInformation;
@@ -1310,26 +1310,26 @@ int OSResult::getNumberOfOtherSystemResults(){
 	return system->otherResults->numberOfOtherResults;
 }//getNumberOfOtherSystemResults
 
-string OSResult::getSystemOtherResultName(int idx){
+string OSResult::getOtherSystemResultName(int idx){
 	if (system->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return NULL;
 	return system->otherResults->other[idx]->name;
-}//getSystemOtherResultName
+}//getOtherSystemResultName
 
-string OSResult::getSystemOtherResultValue(int idx){
+string OSResult::getOtherSystemResultValue(int idx){
 	if (system->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return NULL;
 	return system->otherResults->other[idx]->value;
-}//getSystemOtherResultValue
+}//getOtherSystemResultValue
 
-string OSResult::getSystemOtherResultDescription(int idx){
+string OSResult::getOtherSystemResultDescription(int idx){
 	if (system->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return NULL;
 	return system->otherResults->other[idx]->description;
-}//getSystemOtherResultDescription
+}//getOtherSystemResultDescription
 
 string OSResult::getCurrentState(){
 	return service->currentState;
@@ -1356,34 +1356,34 @@ int OSResult::getNumberOfOtherServiceResults(){
 	return service->otherResults->numberOfOtherResults;
 }//getNumberOfOtherServiceResults
 
-string OSResult::getServiceOtherResultName(int idx){
+string OSResult::getOtherServiceResultName(int idx){
 	if (service->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return NULL;
 	return service->otherResults->other[idx]->name;
-}//getServiceOtherResultName
+}//getOtherServiceResultName
 
-string OSResult::getServiceOtherResultValue(int idx){
+string OSResult::getOtherServiceResultValue(int idx){
 	if (service->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return NULL;
 	return service->otherResults->other[idx]->value;
-}//getServiceOtherResultValue
+}//getOtherServiceResultValue
 
-string OSResult::getServiceOtherResultDescription(int idx){
+string OSResult::getOtherServiceResultDescription(int idx){
 	if (service->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return NULL;
 	return service->otherResults->other[idx]->description;
-}//getServiceOtherResultDescription
+}//getOtherServiceResultDescription
 
 string OSResult::getJobStatus(){
 	return job->status;
 }//getJobStatus
 
-string OSResult::getSubmitTime(){
+string OSResult::getJobSubmitTime(){
 	return job->submitTime;
-}//getSubmitTime
+}//getJobSubmitTime
 
 string OSResult::getScheduledStartTime(){
 	return job->scheduledStartTime;
@@ -1503,26 +1503,26 @@ int OSResult::getNumberOfOtherJobResults(){
 	return job->otherResults->numberOfOtherResults;
 }//getNumberOfOtherJobResults
 
-string OSResult::getJobOtherResultName(int idx){
+string OSResult::getOtherJobResultName(int idx){
 	if (job->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return NULL;
 	return job->otherResults->other[idx]->name;
-}//getJobOtherResultName
+}//getOtherJobResultName
 
-string OSResult::getJobOtherResultValue(int idx){
+string OSResult::getOtherJobResultValue(int idx){
 	if (job->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return NULL;
 	return job->otherResults->other[idx]->value;
-}//getJobOtherResultValue
+}//getOtherJobResultValue
 
-string OSResult::getJobOtherResultDescription(int idx){
+string OSResult::getOtherJobResultDescription(int idx){
 	if (job->otherResults == NULL) return NULL;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return NULL;
 	return job->otherResults->other[idx]->description;
-}//getJobOtherResultDescription
+}//getOtherJobResultDescription
 
 
 double OSResult::getTimeValue()
@@ -1670,8 +1670,7 @@ int OSResult::getNumberOfVarValues(int solIdx){
 	return optimization->solution[solIdx]->variables->values->numberOfVar;
 }//getNumberOfVarValues
 
-IndexValuePair* OSResult::getVarValue(int solIdx, int varIdx){
-	IndexValuePair* temp;
+int OSResult::getVarValueIdx(int solIdx, int varIdx){
 	if (optimization == NULL || optimization->solution == NULL) return NULL;
 	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
 	if (optimization->solution[solIdx] == NULL) return NULL;
@@ -1679,9 +1678,18 @@ IndexValuePair* OSResult::getVarValue(int solIdx, int varIdx){
 	if (optimization->solution[solIdx]->variables->values == NULL) return NULL;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->values->numberOfVar)
 		return NULL;
-	temp->idx   = optimization->solution[solIdx]->variables->values->var[varIdx]->idx;
-	temp->value = optimization->solution[solIdx]->variables->values->var[varIdx]->value;
-	return temp;
+	return optimization->solution[solIdx]->variables->values->var[varIdx]->idx;
+}//getVarValueIdx
+
+double OSResult::getVarValue(int solIdx, int varIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->values == NULL) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->values->numberOfVar)
+		return NULL;
+	return optimization->solution[solIdx]->variables->values->var[varIdx]->value;
 }//getVarValue
 
 std::vector<IndexValuePair*> OSResult::getOptimalPrimalVariableValues(int solIdx){
@@ -1721,8 +1729,7 @@ int OSResult::getNumberOfVarValuesString(int solIdx){
 	return optimization->solution[solIdx]->variables->valuesString->numberOfVar;
 }//getNumberOfVarValuesString
 
-IndexStringPair* OSResult::getVarValueString(int solIdx, int varIdx){
-	IndexStringPair* temp;
+int OSResult::getVarValueStringIdx(int solIdx, int varIdx){
 	if (optimization == NULL || optimization->solution == NULL) return NULL;
 	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
 	if (optimization->solution[solIdx] == NULL) return NULL;
@@ -1730,9 +1737,18 @@ IndexStringPair* OSResult::getVarValueString(int solIdx, int varIdx){
 	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->valuesString->numberOfVar)
 		return NULL;
-	temp->idx   = optimization->solution[solIdx]->variables->valuesString->var[varIdx]->idx;
-	temp->value = optimization->solution[solIdx]->variables->valuesString->var[varIdx]->value;
-	return temp;
+	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->idx;
+}//getVarValueStringIdx
+
+std::string OSResult::getVarValueString(int solIdx, int varIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->valuesString->numberOfVar)
+		return NULL;
+	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->value;
 }//getVarValueString
 
 int OSResult::getNumberOfBasisVar(int solIdx){
@@ -1745,8 +1761,7 @@ int OSResult::getNumberOfBasisVar(int solIdx){
 	return optimization->solution[solIdx]->variables->basisStatus->numberOfVar;
 }//getNumberOfBasisVar
 
-IndexStringPair* OSResult::getBasisVar(int solIdx, int varIdx){
-	IndexStringPair* temp;
+int OSResult::getBasisVarIdx(int solIdx, int varIdx){
 	if (optimization == NULL || optimization->solution == NULL) return NULL;
 	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
 	if (optimization->solution[solIdx] == NULL) return NULL;
@@ -1754,9 +1769,18 @@ IndexStringPair* OSResult::getBasisVar(int solIdx, int varIdx){
 	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->basisStatus->numberOfVar)
 		return NULL;
-	temp->idx   = optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->idx;
-	temp->value = optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->value;
-	return temp;
+	return optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->idx;
+}//getBasisVarIdx
+
+std::string OSResult::getBasisVar(int solIdx, int varIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables == NULL) return NULL;
+	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->basisStatus->numberOfVar)
+		return NULL;
+	return optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->value;
 }//getBasisVar
 
 int OSResult::getNumberOfOtherVariableResults(int solIdx){
@@ -1853,8 +1877,7 @@ int OSResult::getNumberOfObjValues(int solIdx){
 	return optimization->solution[solIdx]->objectives->values->numberOfObj;
 }//getNumberOfObjValues
 
-IndexValuePair* OSResult::getObjValue(int solIdx, int objIdx){
-	IndexValuePair* temp;
+int OSResult::getObjValueIdx(int solIdx, int objIdx){
 	if (optimization == NULL || optimization->solution == NULL) return NULL;
 	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
 	if (optimization->solution[solIdx] == NULL) return NULL;
@@ -1862,9 +1885,18 @@ IndexValuePair* OSResult::getObjValue(int solIdx, int objIdx){
 	if (optimization->solution[solIdx]->objectives->values == NULL) return NULL;
 	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->values->numberOfObj)
 		return NULL;
-	temp->idx   = optimization->solution[solIdx]->objectives->values->obj[objIdx]->idx;
-	temp->value = optimization->solution[solIdx]->objectives->values->obj[objIdx]->value;
-	return temp;
+	return optimization->solution[solIdx]->objectives->values->obj[objIdx]->idx;
+}//getObjValueIdx
+
+double OSResult::getObjValue(int solIdx, int objIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
+	if (optimization->solution[solIdx]->objectives->values == NULL) return NULL;
+	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->values->numberOfObj)
+		return NULL;
+	return optimization->solution[solIdx]->objectives->values->obj[objIdx]->value;
 }//getObjValue
 
 double OSResult::getOptimalObjValue(int objIdx, int solIdx)
@@ -1977,8 +2009,8 @@ int OSResult::getNumberOfDualValues(int solIdx){
 	return optimization->solution[solIdx]->constraints->dualValues->numberOfCon;
 }//getNumberOfDualValues
 
-IndexValuePair* OSResult::getDualValue(int solIdx, int conIdx){
-	IndexValuePair* temp;
+int OSResult::getDualValueIdx(int solIdx, int conIdx){
+	IndexValuePair* temp = new IndexValuePair();
 	if (optimization == NULL || optimization->solution == NULL) return NULL;
 	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
 	if (optimization->solution[solIdx] == NULL) return NULL;
@@ -1986,11 +2018,19 @@ IndexValuePair* OSResult::getDualValue(int solIdx, int conIdx){
 	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return NULL;
 	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->dualValues->numberOfCon)
 		return NULL;
-	temp->idx   = optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->idx;
-	temp->value = optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->value;
-	return temp;
-}//getDualValue
+	return optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->idx;
+}//getDualValueIdx
 
+double OSResult::getDualValue(int solIdx, int conIdx){
+	if (optimization == NULL || optimization->solution == NULL) return NULL;
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
+	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return NULL;
+	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->dualValues->numberOfCon)
+		return NULL;
+	return optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->value;
+}//getDualValue
 
 std::vector<IndexValuePair*>  OSResult::getOptimalDualVariableValues(int solIdx){
 	int numberOfCon;
@@ -2319,7 +2359,7 @@ bool OSResult::setNumberOfOtherGeneralResults(int num){
 }//setNumberOfOtherGeneralResults
 
 
-bool OSResult::setGeneralOtherResultName(int idx, string name){
+bool OSResult::setOtherGeneralResultName(int idx, string name){
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
@@ -2327,9 +2367,9 @@ bool OSResult::setGeneralOtherResultName(int idx, string name){
 	}
 	general->otherResults->other[idx]->name = name;
 	return true;
-}//setGeneralOtherResultName
+}//setOtherGeneralResultName
 
-bool OSResult::setGeneralOtherResultValue(int idx, string value){
+bool OSResult::setOtherGeneralResultValue(int idx, string value){
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
@@ -2337,9 +2377,9 @@ bool OSResult::setGeneralOtherResultValue(int idx, string value){
 	}
 	general->otherResults->other[idx]->value = value;
 	return true;
-}//setGeneralOtherResultValue
+}//setOtherGeneralResultValue
 
-bool OSResult::setGeneralOtherResultDescription(int idx, string description){
+bool OSResult::setOtherGeneralResultDescription(int idx, string description){
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
@@ -2347,7 +2387,7 @@ bool OSResult::setGeneralOtherResultDescription(int idx, string description){
 	}
 	general->otherResults->other[idx]->description = description;
 	return true;
-}//setGeneralOtherResultDescription
+}//setOtherGeneralResultDescription
 
 bool OSResult::setSystemInformation(string systemInformation){
 	system->systemInformation = systemInformation;
@@ -2465,7 +2505,7 @@ bool OSResult::setNumberOfOtherSystemResults(int num){
 }//setNumberOfOtherSystemResults
 
 
-bool OSResult::setSystemOtherResultName(int idx, string name){
+bool OSResult::setOtherSystemResultName(int idx, string name){
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
@@ -2473,9 +2513,9 @@ bool OSResult::setSystemOtherResultName(int idx, string name){
 	}
 	system->otherResults->other[idx]->name = name;
 	return true;
-}//setSystemOtherResultName
+}//setOtherSystemResultName
 
-bool OSResult::setSystemOtherResultValue(int idx, string value){
+bool OSResult::setOtherSystemResultValue(int idx, string value){
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
@@ -2483,9 +2523,9 @@ bool OSResult::setSystemOtherResultValue(int idx, string value){
 	}
 	system->otherResults->other[idx]->value = value;
 	return true;
-}//setSystemOtherResultValue
+}//setOtherSystemResultValue
 
-bool OSResult::setSystemOtherResultDescription(int idx, string description){
+bool OSResult::setOtherSystemResultDescription(int idx, string description){
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
@@ -2493,7 +2533,7 @@ bool OSResult::setSystemOtherResultDescription(int idx, string description){
 	}
 	system->otherResults->other[idx]->description = description;
 	return true;
-}//setSystemOtherResultDescription
+}//setOtherSystemResultDescription
 
 bool OSResult::setCurrentState(std::string currentState){
 	if (currentState != "busy"                &&
@@ -2539,7 +2579,7 @@ bool OSResult::setNumberOfOtherServiceResults(int num){
 	return true;
 }//setNumberOfOtherServiceResults
 
-bool OSResult::setServiceOtherResultName(int idx, string name){
+bool OSResult::setOtherServiceResultName(int idx, string name){
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
@@ -2547,9 +2587,9 @@ bool OSResult::setServiceOtherResultName(int idx, string name){
 	}
 	service->otherResults->other[idx]->name = name;
 	return true;
-}//setServiceOtherResultName
+}//setOtherServiceResultName
 
-bool OSResult::setServiceOtherResultValue(int idx, string value){
+bool OSResult::setOtherServiceResultValue(int idx, string value){
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
@@ -2557,9 +2597,9 @@ bool OSResult::setServiceOtherResultValue(int idx, string value){
 	}
 	service->otherResults->other[idx]->value = value;
 	return true;
-}//setServiceOtherResultValue
+}//setOtherServiceResultValue
 
-bool OSResult::setServiceOtherResultDescription(int idx, string description){
+bool OSResult::setOtherServiceResultDescription(int idx, string description){
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 	{//	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
@@ -2567,7 +2607,7 @@ bool OSResult::setServiceOtherResultDescription(int idx, string description){
 	}
 	service->otherResults->other[idx]->description = description;
 	return true;
-}//setServiceOtherResultDescription
+}//setOtherServiceResultDescription
 
 bool OSResult::setJobStatus(std::string status){
 	if (status != "waiting"  &&
@@ -2852,7 +2892,7 @@ bool OSResult::setNumberOfOtherJobResults(int num){
 }//setNumberOfOtherJobResults
 
 
-bool OSResult::setJobOtherResultName(int idx, string name){
+bool OSResult::setOtherJobResultName(int idx, string name){
 	if (job == NULL) 
 	{//	throw ErrorClass("job instance was never defined");
 		return false;
@@ -2864,9 +2904,9 @@ bool OSResult::setJobOtherResultName(int idx, string name){
 	}
 	job->otherResults->other[idx]->name = name;
 	return true;
-}//setJobOtherResultName
+}//setOtherJobResultName
 
-bool OSResult::setJobOtherResultValue(int idx, string value){
+bool OSResult::setOtherJobResultValue(int idx, string value){
 	if (job == NULL) 
 	{//	throw ErrorClass("job instance was never defined");
 		return false;
@@ -2878,9 +2918,9 @@ bool OSResult::setJobOtherResultValue(int idx, string value){
 	}
 	job->otherResults->other[idx]->value = value;
 	return true;
-}//setJobOtherResultValue
+}//setOtherJobResultValue
 
-bool OSResult::setJobOtherResultDescription(int idx, string description){
+bool OSResult::setOtherJobResultDescription(int idx, string description){
 	if (job == NULL) 
 	{//	throw ErrorClass("job instance was never defined");
 		return false;
@@ -2892,7 +2932,7 @@ bool OSResult::setJobOtherResultDescription(int idx, string description){
 	}
 	job->otherResults->other[idx]->description = description;
 	return true;
-}//setJobOtherResultDescription
+}//setOtherJobResultDescription
 
 
 bool OSResult::setVariableNumber(int variableNumber){

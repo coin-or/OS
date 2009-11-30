@@ -3519,7 +3519,8 @@ if (PARSER_TESTS){
  *  Two OSResult objects are built one element and attribute at a time.
  *  After every call to the appropriate set() method the two objects are compared:
  *  After the first object has been modified, the objects should compare NOT equal; 
- *  after the second object has been updated in the same way, the objects should be equal.
+ *  after the second object has been updated in the same way, the objects should 
+ *  again be equal.
  */
 	OSResult *osresult1 = new OSResult();
 	OSResult *osresult2 = new OSResult();
@@ -3706,44 +3707,44 @@ if (PARSER_TESTS){
 
 		for (int i=0; i < 3; ++i)
 		{
-			ok &= osresult1->setGeneralOtherResultName(i,"some name");
+			ok &= osresult1->setOtherGeneralResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setGeneralOtherResultName!");
+				throw ErrorClass("Error during setOtherGeneralResultName!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setGeneralOtherResultName: osresult objects falsely compare equal!");
-			ok &= osresult2->setGeneralOtherResultName(i,"some name");
+				throw ErrorClass("setOtherGeneralResultName: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherGeneralResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setGeneralOtherResultName!");
+				throw ErrorClass("Error during setOtherGeneralResultName!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setGeneralOtherResultName: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherGeneralResultName: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setGeneralOtherResultValue(i,"some value");
+			ok &= osresult1->setOtherGeneralResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setGeneralOtherResultValue!");
+				throw ErrorClass("Error during setOtherGeneralResultValue!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setGeneralOtherResultValue: osresult objects falsely compare equal!");
-			ok &= osresult2->setGeneralOtherResultValue(i,"some value");
+				throw ErrorClass("setOtherGeneralResultValue: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherGeneralResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setGeneralOtherResultValue!");
+				throw ErrorClass("Error during setOtherGeneralResultValue!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setGeneralOtherResultValue: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherGeneralResultValue: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setGeneralOtherResultDescription(i,"ABC 123");
+			ok &= osresult1->setOtherGeneralResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setGeneralOtherResultDescription!");
+				throw ErrorClass("Error during setOtherGeneralResultDescription!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setGeneralOtherResultDescription: osresult objects falsely compare equal!");
-			ok &= osresult2->setGeneralOtherResultDescription(i,"ABC 123");
+				throw ErrorClass("setOtherGeneralResultDescription: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherGeneralResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setGeneralOtherResultDescription!");
+				throw ErrorClass("Error during setOtherGeneralResultDescription!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setGeneralOtherResultDescription: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherGeneralResultDescription: osresult objects falsely compare unequal!");
 		}
 
 // <system> element
@@ -3918,44 +3919,44 @@ if (PARSER_TESTS){
 
 		for (int i=0; i < 3; ++i)
 		{
-			ok &= osresult1->setSystemOtherResultName(i,"some name");
+			ok &= osresult1->setOtherSystemResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setSystemOtherResultName!");
+				throw ErrorClass("Error during setOtherSystemResultName!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setSystemOtherResultName: osresult objects falsely compare equal!");
-			ok &= osresult2->setSystemOtherResultName(i,"some name");
+				throw ErrorClass("setOtherSystemResultName: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherSystemResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setSystemOtherResultName!");
+				throw ErrorClass("Error during setOtherSystemResultName!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setSystemOtherResultName: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherSystemResultName: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setSystemOtherResultValue(i,"some value");
+			ok &= osresult1->setOtherSystemResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setSystemOtherResultValue!");
+				throw ErrorClass("Error during setOtherSystemResultValue!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setSystemOtherResultValue: osresult objects falsely compare equal!");
-			ok &= osresult2->setSystemOtherResultValue(i,"some value");
+				throw ErrorClass("setOtherSystemResultValue: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherSystemResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setSystemOtherResultValue!");
+				throw ErrorClass("Error during setOtherSystemResultValue!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setSystemOtherResultValue: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherSystemResultValue: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setSystemOtherResultDescription(i,"ABC 123");
+			ok &= osresult1->setOtherSystemResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setSystemOtherResultDescription!");
+				throw ErrorClass("Error during setSOtherSystemResultDescription!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setSystemOtherResultDescription: osresult objects falsely compare equal!");
-			ok &= osresult2->setSystemOtherResultDescription(i,"ABC 123");
+				throw ErrorClass("setOtherSystemResultDescription: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherSystemResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setSystemOtherResultDescription!");
+				throw ErrorClass("Error during setOtherSystemResultDescription!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setSystemOtherResultDescription: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherSystemResultDescription: osresult objects falsely compare unequal!");
 		}
 
 //  <service> element
@@ -4039,44 +4040,44 @@ if (PARSER_TESTS){
 
 		for (int i=0; i < 3; ++i)
 		{
-			ok &= osresult1->setServiceOtherResultName(i,"some name");
+			ok &= osresult1->setOtherServiceResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setServiceOtherResultName!");
+				throw ErrorClass("Error during setOtherServiceResultName!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setServiceOtherResultName: osresult objects falsely compare equal!");
-			ok &= osresult2->setServiceOtherResultName(i,"some name");
+				throw ErrorClass("setOtherServiceResultName: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherServiceResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setServiceOtherResultName!");
+				throw ErrorClass("Error during setOtherServiceResultName!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setServiceOtherResultName: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherServiceResultName: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setServiceOtherResultValue(i,"some value");
+			ok &= osresult1->setOtherServiceResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setServiceOtherResultValue!");
+				throw ErrorClass("Error during setOtherServiceResultValue!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setServiceOtherResultValue: osresult objects falsely compare equal!");
-			ok &= osresult2->setServiceOtherResultValue(i,"some value");
+				throw ErrorClass("setOtherServiceResultValue: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherServiceResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setServiceOtherResultValue!");
+				throw ErrorClass("Error during setOtherServiceResultValue!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setServiceOtherResultValue: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherServiceResultValue: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setServiceOtherResultDescription(i,"ABC 123");
+			ok &= osresult1->setOtherServiceResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setServiceOtherResultDescription!");
+				throw ErrorClass("Error during setOtherServiceResultDescription!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setServiceOtherResultDescription: osresult objects falsely compare equal!");
-			ok &= osresult2->setServiceOtherResultDescription(i,"ABC 123");
+				throw ErrorClass("setOtherServiceResultDescription: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherServiceResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setServiceOtherResultDescription!");
+				throw ErrorClass("Error during setOtherServiceResultDescription!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setServiceOtherResultDescription: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherServiceResultDescription: osresult objects falsely compare unequal!");
 		}
 //======================
 //	<job> element
@@ -4333,44 +4334,44 @@ if (PARSER_TESTS){
 
 		for (int i=0; i < 3; ++i)
 		{
-			ok &= osresult1->setJobOtherResultName(i,"some name");
+			ok &= osresult1->setOtherJobResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setJobOtherResultName!");
+				throw ErrorClass("Error during setOtherJobResultName!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setJobOtherResultName: osresult objects falsely compare equal!");
-			ok &= osresult2->setJobOtherResultName(i,"some name");
+				throw ErrorClass("setOtherJobResultName: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherJobResultName(i,"some name");
 			if (!ok) 
-				throw ErrorClass("Error during setJobOtherResultName!");
+				throw ErrorClass("Error during setOtherJobResultName!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setJobOtherResultName: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherJobResultName: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setJobOtherResultValue(i,"some value");
+			ok &= osresult1->setOtherJobResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setJobOtherResultValue!");
+				throw ErrorClass("Error during setOtherJobResultValue!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setJobOtherResultValue: osresult objects falsely compare equal!");
-			ok &= osresult2->setJobOtherResultValue(i,"some value");
+				throw ErrorClass("setOtherJobResultValue: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherJobResultValue(i,"some value");
 			if (!ok) 
-				throw ErrorClass("Error during setJobOtherResultValue!");
+				throw ErrorClass("Error during setOtherJobResultValue!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setJobOtherResultValue: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherJobResultValue: osresult objects falsely compare unequal!");
 
-			ok &= osresult1->setJobOtherResultDescription(i,"ABC 123");
+			ok &= osresult1->setOtherJobResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setJobOtherResultDescription!");
+				throw ErrorClass("Error during setOtherJobResultDescription!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setJobOtherResultDescription: osresult objects falsely compare equal!");
-			ok &= osresult2->setJobOtherResultDescription(i,"ABC 123");
+				throw ErrorClass("setOtherJobResultDescription: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherJobResultDescription(i,"ABC 123");
 			if (!ok) 
-				throw ErrorClass("Error during setJobOtherResultDescription!");
+				throw ErrorClass("Error during setOtherJobResultDescription!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setJobOtherResultDescription: osresult objects falsely compare unequal!");
+				throw ErrorClass("setOtherJobResultDescription: osresult objects falsely compare unequal!");
 		}
 
 		ok &= osresult1->setSolutionNumber(2);
@@ -4534,6 +4535,93 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setSolutionMessage: osresult objects falsely compare unequal!");
 
+			ok &= osresult1->setNumberOfVarValues(i,3);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfVarValues!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setNumberOfVarValues: osresult objects falsely compare equal!");
+			ok &= osresult2->setNumberOfVarValues(i,3);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfVarValues!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setNumberOfVarValues: osresult objects falsely compare unequal!");
+
+			for (int j=0; j < 3; ++j)
+			{
+				ok &= osresult1->setVarValue(i,j,j,3.14);
+				if (!ok) 
+					throw ErrorClass("Error during setVarValue!");
+				ok &= (!osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setVarValue: osresult objects falsely compare equal!");
+				ok &= osresult2->setVarValue(i,j,j,3.14);
+				if (!ok) 
+					throw ErrorClass("Error during setVarValue!");
+				ok &= (osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setVarValue: osresult objects falsely compare unequal!");
+			}
+
+			ok &= osresult1->setNumberOfVarValuesString(i,3);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfVarValuesString!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setNumberOfVarValuesString: osresult objects falsely compare equal!");
+			ok &= osresult2->setNumberOfVarValuesString(i,3);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfVarValuesString!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setNumberOfVarValuesString: osresult objects falsely compare unequal!");
+
+			for (int j=0; j < 3; ++j)
+			{
+				ok &= osresult1->setVarValueString(i,j,j,"one");
+				if (!ok) 
+					throw ErrorClass("Error during setVarValueString!");
+				ok &= (!osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setVarValueString: osresult objects falsely compare equal!");
+				ok &= osresult2->setVarValueString(i,j,j,"one");
+				if (!ok) 
+					throw ErrorClass("Error during setVarValueString!");
+				ok &= (osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setVarValueString: osresult objects falsely compare unequal!");
+			}
+
+			ok &= osresult1->setNumberOfBasisVar(i,3);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfBasisVar!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setNumberOfBasisVar: osresult objects falsely compare equal!");
+			ok &= osresult2->setNumberOfBasisVar(i,3);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfBasisVar!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setNumberOfBasisVar: osresult objects falsely compare unequal!");
+
+			for (int j=0; j < 3; ++j)
+			{
+				ok &= osresult1->setBasisVar(i,j,j,"superBasic");
+				if (!ok) 
+					throw ErrorClass("Error during setBasisVar!");
+				ok &= (!osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setBasisVar: osresult objects falsely compare equal!");
+				ok &= osresult2->setBasisVar(i,j,j,"superBasic");
+				if (!ok) 
+					throw ErrorClass("Error during setBasisVar!");
+				ok &= (osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setBasisVar: osresult objects falsely compare unequal!");
+			}
+
 			ok &= osresult1->setNumberOfOtherVariableResults(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfOtherVariableResults!");
@@ -4631,91 +4719,33 @@ if (PARSER_TESTS){
 				}
 			}
 
-			ok &= osresult1->setNumberOfVarValues(i,3);
+			ok &= osresult1->setNumberOfObjValues(i,2);
 			if (!ok) 
-				throw ErrorClass("Error during setNumberOfVarValues!");
+				throw ErrorClass("Error during setNumberOfObjValues!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setNumberOfVarValues: osresult objects falsely compare equal!");
-			ok &= osresult2->setNumberOfVarValues(i,3);
+				throw ErrorClass("setNumberOfObjValues: osresult objects falsely compare equal!");
+			ok &= osresult2->setNumberOfObjValues(i,2);
 			if (!ok) 
-				throw ErrorClass("Error during setNumberOfVarValues!");
+				throw ErrorClass("Error during setNumberOfObjValues!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setNumberOfVarValues: osresult objects falsely compare unequal!");
+				throw ErrorClass("setNumberOfObjValues: osresult objects falsely compare unequal!");
 
-			for (int j=0; j < 3; ++j)
+			for (int j=0; j < 2; ++j)
 			{
-				ok &= osresult1->setVarValue(i,j,j,3.14);
+				ok &= osresult1->setObjValue(i,j,-2,3.14);
 				if (!ok) 
-					throw ErrorClass("Error during setVarValue!");
+					throw ErrorClass("Error during setObjValue!");
 				ok &= (!osresult1->IsEqual(osresult2));
 				if (!ok) 
-					throw ErrorClass("setVarValue: osresult objects falsely compare equal!");
-				ok &= osresult2->setVarValue(i,j,j,3.14);
+					throw ErrorClass("setObjValue: osresult objects falsely compare equal!");
+				ok &= osresult2->setObjValue(i,j,-2,3.14);
 				if (!ok) 
-					throw ErrorClass("Error during setVarValue!");
+					throw ErrorClass("Error during setObjValue!");
 				ok &= (osresult1->IsEqual(osresult2));
 				if (!ok) 
-					throw ErrorClass("setVarValue: osresult objects falsely compare unequal!");
-			}
-
-			ok &= osresult1->setNumberOfVarValuesString(i,3);
-			if (!ok) 
-				throw ErrorClass("Error during setNumberOfVarValuesString!");
-			ok &= (!osresult1->IsEqual(osresult2));
-			if (!ok) 
-				throw ErrorClass("setNumberOfVarValuesString: osresult objects falsely compare equal!");
-			ok &= osresult2->setNumberOfVarValuesString(i,3);
-			if (!ok) 
-				throw ErrorClass("Error during setNumberOfVarValuesString!");
-			ok &= (osresult1->IsEqual(osresult2));
-			if (!ok) 
-				throw ErrorClass("setNumberOfVarValuesString: osresult objects falsely compare unequal!");
-
-			for (int j=0; j < 3; ++j)
-			{
-				ok &= osresult1->setVarValueString(i,j,j,"one");
-				if (!ok) 
-					throw ErrorClass("Error during setVarValueString!");
-				ok &= (!osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setVarValueString: osresult objects falsely compare equal!");
-				ok &= osresult2->setVarValueString(i,j,j,"one");
-				if (!ok) 
-					throw ErrorClass("Error during setVarValueString!");
-				ok &= (osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setVarValueString: osresult objects falsely compare unequal!");
-			}
-
-			ok &= osresult1->setNumberOfBasisVar(i,3);
-			if (!ok) 
-				throw ErrorClass("Error during setNumberOfBasisVar!");
-			ok &= (!osresult1->IsEqual(osresult2));
-			if (!ok) 
-				throw ErrorClass("setNumberOfBasisVar: osresult objects falsely compare equal!");
-			ok &= osresult2->setNumberOfBasisVar(i,3);
-			if (!ok) 
-				throw ErrorClass("Error during setNumberOfBasisVar!");
-			ok &= (osresult1->IsEqual(osresult2));
-			if (!ok) 
-				throw ErrorClass("setNumberOfBasisVar: osresult objects falsely compare unequal!");
-
-			for (int j=0; j < 3; ++j)
-			{
-				ok &= osresult1->setBasisVar(i,j,j,"superBasic");
-				if (!ok) 
-					throw ErrorClass("Error during setBasisVar!");
-				ok &= (!osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setBasisVar: osresult objects falsely compare equal!");
-				ok &= osresult2->setBasisVar(i,j,j,"superBasic");
-				if (!ok) 
-					throw ErrorClass("Error during setBasisVar!");
-				ok &= (osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setBasisVar: osresult objects falsely compare unequal!");
+					throw ErrorClass("setObjValue: osresult objects falsely compare unequal!");
 			}
 
 			ok &= osresult1->setNumberOfOtherObjectiveResults(i,3);
@@ -4815,33 +4845,33 @@ if (PARSER_TESTS){
 				}
 			}
 
-			ok &= osresult1->setNumberOfObjValues(i,2);
+			ok &= osresult1->setNumberOfDualValues(i,3);
 			if (!ok) 
-				throw ErrorClass("Error during setNumberOfObjValues!");
+				throw ErrorClass("Error during setNumberOfDualValues!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setNumberOfObjValues: osresult objects falsely compare equal!");
-			ok &= osresult2->setNumberOfObjValues(i,2);
+				throw ErrorClass("setNumberOfDualValues: osresult objects falsely compare equal!");
+			ok &= osresult2->setNumberOfDualValues(i,3);
 			if (!ok) 
-				throw ErrorClass("Error during setNumberOfObjValues!");
+				throw ErrorClass("Error during setNumberOfDualValues!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setNumberOfObjValues: osresult objects falsely compare unequal!");
+				throw ErrorClass("setNumberOfDualValues: osresult objects falsely compare unequal!");
 
-			for (int j=0; j < 2; ++j)
+			for (int j=0; j < 3; ++j)
 			{
-				ok &= osresult1->setObjValue(i,j,-2,3.14);
+				ok &= osresult1->setDualValue(i,j,j,3.14);
 				if (!ok) 
-					throw ErrorClass("Error during setObjValue!");
+					throw ErrorClass("Error during setDualValue!");
 				ok &= (!osresult1->IsEqual(osresult2));
 				if (!ok) 
-					throw ErrorClass("setObjValue: osresult objects falsely compare equal!");
-				ok &= osresult2->setObjValue(i,j,-2,3.14);
+					throw ErrorClass("setDualValue: osresult objects falsely compare equal!");
+				ok &= osresult2->setDualValue(i,j,j,3.14);
 				if (!ok) 
-					throw ErrorClass("Error during setObjValue!");
+					throw ErrorClass("Error during setDualValue!");
 				ok &= (osresult1->IsEqual(osresult2));
 				if (!ok) 
-					throw ErrorClass("setObjValue: osresult objects falsely compare unequal!");
+					throw ErrorClass("setDualValue: osresult objects falsely compare unequal!");
 			}
 
 			ok &= osresult1->setNumberOfOtherConstraintResults(i,3);
@@ -4939,35 +4969,6 @@ if (PARSER_TESTS){
 					if (!ok) 
 						throw ErrorClass("setOtherConstraintResultCon: osresult objects falsely compare unequal!");
 				}
-			}
-
-			ok &= osresult1->setNumberOfDualValues(i,3);
-			if (!ok) 
-				throw ErrorClass("Error during setNumberOfDualValues!");
-			ok &= (!osresult1->IsEqual(osresult2));
-			if (!ok) 
-				throw ErrorClass("setNumberOfDualValues: osresult objects falsely compare equal!");
-			ok &= osresult2->setNumberOfDualValues(i,3);
-			if (!ok) 
-				throw ErrorClass("Error during setNumberOfDualValues!");
-			ok &= (osresult1->IsEqual(osresult2));
-			if (!ok) 
-				throw ErrorClass("setNumberOfDualValues: osresult objects falsely compare unequal!");
-
-			for (int j=0; j < 3; ++j)
-			{
-				ok &= osresult1->setDualValue(i,j,j,3.14);
-				if (!ok) 
-					throw ErrorClass("Error during setDualValue!");
-				ok &= (!osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setDualValue: osresult objects falsely compare equal!");
-				ok &= osresult2->setDualValue(i,j,j,3.14);
-				if (!ok) 
-					throw ErrorClass("Error during setDualValue!");
-				ok &= (osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setDualValue: osresult objects falsely compare unequal!");
 			}
 
 			ok &= osresult1->setNumberOfOtherSolutionResults(i,3);
@@ -5150,13 +5151,15 @@ if (PARSER_TESTS){
 		if (!ok) 
 			throw ErrorClass("Writing an osresult then reading leads to loss of data");
 
+		cout << endl << "Now test get() methods" << endl;
+
 //=================
 // Testing get() methods
 		if (osresult2  != NULL) delete osresult2;
 		osresult2 = new OSResult();
 
 		std::string tempStr;
-		double tempVal;
+		double tempDbl;
 		int tempInt;
 
 		tempStr = osresult1->getGeneralStatusType();
@@ -5167,6 +5170,7 @@ if (PARSER_TESTS){
 		ok &= osresult2->setGeneralStatusDescription(tempStr);
 		if (!ok) 
 			throw ErrorClass("Error during setGeneralStatusDescription!");
+
 		tempInt = osresult1->getNumberOfGeneralSubstatuses();
 		ok &= osresult2->setNumberOfGeneralSubstatuses(tempInt);
 		if (!ok) 
@@ -5183,6 +5187,587 @@ if (PARSER_TESTS){
 				throw ErrorClass("Error during setGeneralSubstatusDescription!");
 		}
 
+		tempStr = osresult1->getGeneralMessage();
+		ok &= osresult2->setGeneralMessage(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setGeneralMessage!");
+		tempStr = osresult1->getServiceURI();
+		ok &= osresult2->setServiceURI(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setServiceURI!");
+		tempStr = osresult1->getServiceName();
+		ok &= osresult2->setServiceName(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setServiceName!");
+		tempStr = osresult1->getInstanceName();
+		ok &= osresult2->setInstanceName(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setInstanceName!");
+		tempStr = osresult1->getJobID();
+		ok &= osresult2->setJobID(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setJobID!");
+		tempStr = osresult1->getSolverInvoked();
+		ok &= osresult2->setSolverInvoked(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setSolverInvoked!");
+		tempStr = osresult1->getTimeStamp();
+		ok &= osresult2->setTimeStamp(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setTimeStamp!");
+
+		tempInt = osresult1->getNumberOfOtherGeneralResults();
+		ok &= osresult2->setNumberOfOtherGeneralResults(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setNumberOfOtherGeneralResults!");
+		for (int i=0; i < tempInt; i++)
+		{
+			tempStr = osresult1->getOtherGeneralResultName(i);
+			ok &= osresult2->setOtherGeneralResultName(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherGeneralResultName!");
+			tempStr = osresult1->getOtherGeneralResultValue(i);
+			ok &= osresult2->setOtherGeneralResultValue(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherGeneralResultValue!");
+			tempStr = osresult1->getOtherGeneralResultDescription(i);
+			ok &= osresult2->setOtherGeneralResultDescription(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherGeneralResultDescription!");
+		}
+
+		tempStr = osresult1->getSystemInformation();
+		ok &= osresult2->setSystemInformation(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setSystemInformation!");
+		tempStr = osresult1->getAvailableDiskSpaceUnit();
+		ok &= osresult2->setAvailableDiskSpaceUnit(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableDiskSpaceUnit!");
+		tempStr = osresult1->getAvailableDiskSpaceDescription();
+		ok &= osresult2->setAvailableDiskSpaceDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableDiskSpaceDescription!");
+		tempDbl = osresult1->getAvailableDiskSpaceValue();
+		ok &= osresult2->setAvailableDiskSpaceValue(tempDbl);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableDiskSpaceValue!");
+		tempStr = osresult1->getAvailableMemoryUnit();
+		ok &= osresult2->setAvailableMemoryUnit(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableMemoryUnit!");
+		tempStr = osresult1->getAvailableMemoryDescription();
+		ok &= osresult2->setAvailableMemoryDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableMemoryDescription!");
+		tempDbl = osresult1->getAvailableMemoryValue();
+		ok &= osresult2->setAvailableMemoryValue(tempDbl);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableMemoryValue!");
+		tempStr = osresult1->getAvailableCPUSpeedUnit();
+		ok &= osresult2->setAvailableCPUSpeedUnit(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableCPUSpeedUnit!");
+		tempStr = osresult1->getAvailableCPUSpeedDescription();
+		ok &= osresult2->setAvailableCPUSpeedDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableCPUSpeedDescription!");
+		tempDbl = osresult1->getAvailableCPUSpeedValue();
+		ok &= osresult2->setAvailableCPUSpeedValue(tempDbl);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableCPUSpeedValue!");
+		tempStr = osresult1->getAvailableCPUNumberDescription();
+		ok &= osresult2->setAvailableCPUNumberDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableCPUNumberDescription!");
+		tempInt = osresult1->getAvailableCPUNumberValue();
+		ok &= osresult2->setAvailableCPUNumberValue(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setAvailableCPUNumberValue!");
+
+		tempInt = osresult1->getNumberOfOtherSystemResults();
+		ok &= osresult2->setNumberOfOtherSystemResults(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setNumberOfOtherSystemResults!");
+		for (int i=0; i < tempInt; i++)
+		{
+			tempStr = osresult1->getOtherSystemResultName(i);
+			ok &= osresult2->setOtherSystemResultName(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherSystemResultName!");
+			tempStr = osresult1->getOtherSystemResultValue(i);
+			ok &= osresult2->setOtherSystemResultValue(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherSystemResultValue!");
+			tempStr = osresult1->getOtherSystemResultDescription(i);
+			ok &= osresult2->setOtherSystemResultDescription(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherSystemResultDescription!");
+		}
+
+		tempStr = osresult1->getCurrentState();
+		ok &= osresult2->setCurrentState(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setCurrentState!");
+		tempInt = osresult1->getCurrentJobCount();
+		ok &= osresult2->setCurrentJobCount(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setCurrentJobCount!");
+		tempInt = osresult1->getTotalJobsSoFar();
+		ok &= osresult2->setTotalJobsSoFar(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setTotalJobsSoFar!");
+		tempStr = osresult1->getTimeServiceStarted();
+		ok &= osresult2->setTimeServiceStarted(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setTimeServiceStarted!");
+		tempDbl = osresult1->getServiceUtilization();
+		ok &= osresult2->setServiceUtilization(tempDbl);
+		if (!ok) 
+			throw ErrorClass("Error during setServiceUtilization!");
+
+		tempInt = osresult1->getNumberOfOtherServiceResults();
+		ok &= osresult2->setNumberOfOtherServiceResults(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setNumberOfOtherServiceResults!");
+		for (int i=0; i < tempInt; i++)
+		{
+			tempStr = osresult1->getOtherServiceResultName(i);
+			ok &= osresult2->setOtherServiceResultName(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherServiceResultName!");
+			tempStr = osresult1->getOtherServiceResultValue(i);
+			ok &= osresult2->setOtherServiceResultValue(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherServiceResultValue!");
+			tempStr = osresult1->getOtherServiceResultDescription(i);
+			ok &= osresult2->setOtherServiceResultDescription(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherServiceResultDescription!");
+		}
+
+		tempStr = osresult1->getJobStatus();
+		ok &= osresult2->setJobStatus(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setJobStatus!");
+		tempStr = osresult1->getJobSubmitTime();
+		ok &= osresult2->setJobSubmitTime(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setJobSubmitTime!");
+		tempStr = osresult1->getScheduledStartTime();
+		ok &= osresult2->setScheduledStartTime(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setScheduledStartTime!");
+		tempStr = osresult1->getActualStartTime();
+		ok &= osresult2->setActualStartTime(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setActualStartTime!");
+		tempStr = osresult1->getJobEndTime();
+		ok &= osresult2->setJobEndTime(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setJobEndTime!");
+
+		tempInt = osresult1->getNumberOfTimes();
+		ok &= osresult2->setNumberOfTimes(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setNumberOfTimes!");
+		for (int i=0; i < tempInt; i++)
+		{
+			string tempStr1,tempStr2,tempStr3,tempStr4;
+			tempStr1 = osresult1->getTimingInfoType(i);
+			tempStr2 = osresult1->getTimingInfoCategory(i);
+			tempStr3 = osresult1->getTimingInfoUnit(i);
+			tempStr4 = osresult1->getTimingInfoDescription(i);
+			tempDbl  = osresult1->getTimingInfoValue(i);
+			ok &= osresult2->setTimingInformation(i,tempStr1,tempStr2,tempStr3,tempStr4,tempDbl);
+			if (!ok) 
+				throw ErrorClass("Error during setTimingInformation!");
+		}
+
+		tempStr = osresult1->getUsedDiskSpaceUnit();
+		ok &= osresult2->setUsedDiskSpaceUnit(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedDiskSpaceUnit!");
+		tempStr = osresult1->getUsedDiskSpaceDescription();
+		ok &= osresult2->setUsedDiskSpaceDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedDiskSpaceDescription!");
+		tempDbl = osresult1->getUsedDiskSpaceValue();
+		ok &= osresult2->setUsedDiskSpaceValue(tempDbl);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedDiskSpaceValue!");
+		tempStr = osresult1->getUsedMemoryUnit();
+		ok &= osresult2->setUsedMemoryUnit(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedMemoryUnit!");
+		tempStr = osresult1->getUsedMemoryDescription();
+		ok &= osresult2->setUsedMemoryDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedMemoryDescription!");
+		tempDbl = osresult1->getUsedMemoryValue();
+		ok &= osresult2->setUsedMemoryValue(tempDbl);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedMemoryValue!");
+		tempStr = osresult1->getUsedCPUSpeedUnit();
+		ok &= osresult2->setUsedCPUSpeedUnit(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedCPUSpeedUnit!");
+		tempStr = osresult1->getUsedCPUSpeedDescription();
+		ok &= osresult2->setUsedCPUSpeedDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedCPUSpeedDescription!");
+		tempDbl = osresult1->getUsedCPUSpeedValue();
+		ok &= osresult2->setUsedCPUSpeedValue(tempDbl);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedCPUSpeedValue!");
+		tempStr = osresult1->getUsedCPUNumberDescription();
+		ok &= osresult2->setUsedCPUNumberDescription(tempStr);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedCPUNumberDescription!");
+		tempInt = osresult1->getUsedCPUNumberValue();
+		ok &= osresult2->setUsedCPUNumberValue(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setUsedCPUNumberValue!");
+
+		tempInt = osresult1->getNumberOfOtherJobResults();
+		ok &= osresult2->setNumberOfOtherJobResults(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setNumberOfOtherJobResults!");
+		for (int i=0; i < tempInt; i++)
+		{
+			tempStr = osresult1->getOtherJobResultName(i);
+			ok &= osresult2->setOtherJobResultName(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherJobResultName!");
+			tempStr = osresult1->getOtherJobResultValue(i);
+			ok &= osresult2->setOtherJobResultValue(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherJobResultValue!");
+			tempStr = osresult1->getOtherJobResultDescription(i);
+			ok &= osresult2->setOtherJobResultDescription(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherJobResultDescription!");
+		}
+
+		tempInt = osresult1->getSolutionNumber();
+		ok &= osresult2->setSolutionNumber(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setSolutionNumber!");
+		int nSoln = tempInt;
+		int nVar, nObj, nCon, nOther, nItem;
+
+		tempInt = osresult1->getVariableNumber();
+		ok &= osresult2->setVariableNumber(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setVariableNumber!");
+		tempInt = osresult1->getObjectiveNumber();
+		ok &= osresult2->setObjectiveNumber(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setObjectiveNumber!");
+		tempInt = osresult1->getConstraintNumber();
+		ok &= osresult2->setConstraintNumber(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setConstraintNumber!");
+
+		for (int i=0; i < nSoln; ++i)
+		{
+			tempInt = osresult1->getSolutionTargetObjectiveIdx(i);
+			ok &= osresult2->setSolutionTargetObjectiveIdx(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setSolutionTargetObjectiveIdx!");
+			bool tempLog = osresult1->getSolutionWeightedObjectives(i);
+			ok &= osresult2->setSolutionWeightedObjectives(i,tempLog);
+			if (!ok) 
+				throw ErrorClass("Error during setSolutionWeightedObjectives!");
+			tempStr = osresult1->getSolutionStatusType(i);
+			ok &= osresult2->setSolutionStatusType(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setSolutionStatusType!");
+			tempStr = osresult1->getSolutionStatusDescription(i);
+			ok &= osresult2->setSolutionStatusDescription(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setSolutionStatusDescription!");
+			
+			tempInt = osresult1->getNumberOfSolutionSubstatuses(i);
+			ok &= osresult2->setNumberOfSolutionSubstatuses(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfSolutionSubstatuses!");
+
+			for (int j=0; j < tempInt; ++j)
+			{
+				tempStr = osresult1->getSolutionSubstatusType(i,j);
+				ok &= osresult2->setSolutionSubstatusType(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setSolutionSubstatusType!");
+				tempStr = osresult1->getSolutionSubstatusDescription(i,j);
+				ok &= osresult2->setSolutionSubstatusDescription(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setSolutionSubstatusDescription!");
+			}
+
+			tempStr = osresult1->getSolutionMessage(i);
+			ok &= osresult2->setSolutionMessage(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setSolutionMessage!");
+
+			tempInt = osresult1->getNumberOfVarValues(i);
+			ok &= osresult2->setNumberOfVarValues(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfVarValues!");
+			nVar = tempInt;
+			for (int j=0; j < nVar; ++j)
+			{
+				tempInt = osresult1->getVarValueIdx(i,j);
+				tempDbl = osresult1->getVarValue(i,j);
+				ok &= osresult2->setVarValue(i,j,tempInt,tempDbl);
+				if (!ok) 
+					throw ErrorClass("Error during setVarValue!");
+			}
+
+			tempInt = osresult1->getNumberOfVarValuesString(i);
+			ok &= osresult2->setNumberOfVarValuesString(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfVarValuesString!");
+			nVar = tempInt;
+			for (int j=0; j < nVar; ++j)
+			{
+				tempInt = osresult1->getVarValueStringIdx(i,j);
+				tempStr = osresult1->getVarValueString(i,j);
+				ok &= osresult2->setVarValueString(i,j,tempInt,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setVarValueString!");
+			}
+
+			tempInt = osresult1->getNumberOfBasisVar(i);
+			ok &= osresult2->setNumberOfBasisVar(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfBasisVar!");
+			nVar = tempInt;
+			for (int j=0; j < nVar; ++j)
+			{
+				tempInt = osresult1->getBasisVarIdx(i,j);
+				tempStr = osresult1->getBasisVar(i,j);
+				ok &= osresult2->setBasisVar(i,j,tempInt,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setBasisVar!");
+			}
+
+			tempInt = osresult1->getNumberOfOtherVariableResults(i);
+			ok &= osresult2->setNumberOfOtherVariableResults(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfOtherVariableResults!");
+			nOther = tempInt;
+			for (int j=0; j < nOther; ++j)
+			{
+				tempStr = osresult1->getOtherVariableResultName(i,j);
+				ok &= osresult2->setOtherVariableResultName(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherVariableResultName!");
+				tempStr = osresult1->getOtherVariableResultDescription(i,j);
+				ok &= osresult2->setOtherVariableResultDescription(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherVariableResultDescription!");
+				tempStr = osresult1->getOtherVariableResultValue(i,j);
+				ok &= osresult2->setOtherVariableResultValue(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherVariableResultValue!");
+				tempInt = osresult1->getOtherVariableResultNumberOfVar(i,j);
+				ok &= osresult2->setOtherVariableResultNumberOfVar(i,j,tempInt);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherVariableResultNumberOfVar!");
+
+				int nVar = tempInt;
+				for (int k=0; k < nVar; ++k)
+				{
+					tempInt = osresult1->getOtherVariableResultVarIdx(i,j,k);
+					ok &= osresult2->setOtherVariableResultVarIdx(i,j,k,tempInt);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherVariableResultVarIdx!");
+					tempStr = osresult1->getOtherVariableResultVar(i,j,k);
+					ok &= osresult2->setOtherVariableResultVar(i,j,k,tempStr);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherVariableResultVar!");
+				}
+			}
+
+			tempInt = osresult1->getNumberOfObjValues(i);
+			ok &= osresult2->setNumberOfObjValues(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfObjValues!");
+			nObj = tempInt;
+			for (int j=0; j < nObj; ++j)
+			{
+				tempInt = osresult1->getObjValueIdx(i,j);
+				tempDbl = osresult1->getObjValue(i,j);
+				ok &= osresult2->setObjValue(i,j,tempInt,tempDbl);
+				if (!ok) 
+					throw ErrorClass("Error during setObjValue!");
+			}
+
+			tempInt = osresult1->getNumberOfOtherObjectiveResults(i);
+			ok &= osresult2->setNumberOfOtherObjectiveResults(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfOtherObjectiveResults!");
+			nOther = tempInt;
+			for (int j=0; j < nOther; ++j)
+			{
+				tempStr = osresult1->getOtherObjectiveResultName(i,j);
+				ok &= osresult2->setOtherObjectiveResultName(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherObjectiveResultName!");
+				tempStr = osresult1->getOtherObjectiveResultDescription(i,j);
+				ok &= osresult2->setOtherObjectiveResultDescription(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherObjectiveResultDescription!");
+				tempStr = osresult1->getOtherObjectiveResultValue(i,j);
+				ok &= osresult2->setOtherObjectiveResultValue(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherObjectiveResultValue!");
+				tempInt = osresult1->getOtherObjectiveResultNumberOfObj(i,j);
+				ok &= osresult2->setOtherObjectiveResultNumberOfObj(i,j,tempInt);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherObjectiveResultNumberOfObj!");
+
+				nObj = tempInt;
+				for (int k=0; k < nObj; ++k)
+				{
+					tempInt = osresult1->getOtherObjectiveResultObjIdx(i,j,k);
+					ok &= osresult2->setOtherObjectiveResultObjIdx(i,j,k,tempInt);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherObjectiveResultObjIdx!");
+					tempStr = osresult1->getOtherObjectiveResultObj(i,j,k);
+					ok &= osresult2->setOtherObjectiveResultObj(i,j,k,tempStr);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherObjectiveResultObj!");
+				}
+			}
+
+			tempInt = osresult1->getNumberOfDualValues(i);
+			ok &= osresult2->setNumberOfDualValues(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfDualValues!");
+			nCon = tempInt;
+			for (int j=0; j < nCon; ++j)
+			{
+				tempInt = osresult1->getDualValueIdx(i,j);
+				tempDbl = osresult1->getDualValue(i,j);
+				ok &= osresult2->setDualValue(i,j,tempInt,tempDbl);
+				if (!ok) 
+					throw ErrorClass("Error during setDualValue!");
+			}
+
+			tempInt = osresult1->getNumberOfOtherConstraintResults(i);
+			ok &= osresult2->setNumberOfOtherConstraintResults(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfOtherConstraintResults!");
+			nOther = tempInt;
+			for (int j=0; j < nOther; ++j)
+			{
+				tempStr = osresult1->getOtherConstraintResultName(i,j);
+				ok &= osresult2->setOtherConstraintResultName(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherConstraintResultName!");
+				tempStr = osresult1->getOtherConstraintResultDescription(i,j);
+				ok &= osresult2->setOtherConstraintResultDescription(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherConstraintResultDescription!");
+				tempStr = osresult1->getOtherConstraintResultValue(i,j);
+				ok &= osresult2->setOtherConstraintResultValue(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherConstraintResultValue!");
+				tempInt = osresult1->getOtherConstraintResultNumberOfCon(i,j);
+				ok &= osresult2->setOtherConstraintResultNumberOfCon(i,j,tempInt);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherConstraintResultNumberOfCon!");
+
+				nCon = tempInt;
+				for (int k=0; k < nCon; ++k)
+				{
+					tempInt = osresult1->getOtherConstraintResultConIdx(i,j,k);
+					ok &= osresult2->setOtherConstraintResultConIdx(i,j,k,tempInt);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherConstraintResultConIdx!");
+					tempStr = osresult1->getOtherConstraintResultCon(i,j,k);
+					ok &= osresult2->setOtherConstraintResultCon(i,j,k,tempStr);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherConstraintResultCon!");
+				}
+			}
+
+			tempInt = osresult1->getNumberOfOtherSolutionResults(i);
+			ok &= osresult2->setNumberOfOtherSolutionResults(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setNumberOfOtherSolutionResults!");
+			nOther = tempInt;
+			for (int j=0; j < nOther; ++j)
+			{
+				tempStr = osresult1->getOtherSolutionResultName(i,j);
+				ok &= osresult2->setOtherSolutionResultName(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherSolutionResultName!");
+				tempStr = osresult1->getOtherSolutionResultCategory(i,j);
+				ok &= osresult2->setOtherSolutionResultCategory(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherSolutionResultCategory!");
+				tempStr = osresult1->getOtherSolutionResultDescription(i,j);
+				ok &= osresult2->setOtherSolutionResultDescription(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherSolutionResultDescription!");
+				tempInt = osresult1->getOtherSolutionResultNumberOfItems(i,j);
+				ok &= osresult2->setOtherSolutionResultNumberOfItems(i,j,tempInt);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherSolutionResultNumberOfItems!");
+
+				nItem = tempInt;
+				for (int k=0; k < nItem; ++k)
+				{
+					tempStr = osresult1->getOtherSolutionResultItem(i,j,k);
+					ok &= osresult2->setOtherSolutionResultItem(i,j,k,tempStr);
+					if (!ok) 
+						throw ErrorClass("Error during setSolutionResultItem!");
+				}
+			}
+		}
+
+		tempInt = osresult1->getNumberOfSolverOutputs();
+		ok &= osresult2->setNumberOfSolverOutputs(tempInt);
+		if (!ok) 
+			throw ErrorClass("Error during setNumberOfSolverOutputs!");
+		nOther = tempInt;
+		for (int i=0; i < nOther; ++i)
+		{
+			tempStr = osresult1->getSolverOutputName(i);
+			ok &= osresult2->setSolverOutputName(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setSolverOutputName!");
+			tempStr = osresult1->getSolverOutputCategory(i);
+			ok &= osresult2->setSolverOutputCategory(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setSolverOutputCategory!");
+			tempStr = osresult1->getSolverOutputDescription(i);
+			ok &= osresult2->setSolverOutputDescription(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during setSolverOutputDescription!");
+			tempInt = osresult1->getSolverOutputNumberOfItems(i);
+			ok &= osresult2->setSolverOutputNumberOfItems(i,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setSolverOutputNumberOfItems!");
+			for (int j=0; j < tempInt; ++j)
+			{
+				tempStr = osresult1->getSolverOutputItem(i,j);
+				ok &= osresult2->setSolverOutputItem(i,j,tempStr);
+				if (!ok) 
+					throw ErrorClass("Error during setSolverOutputItem!");
+			}
+		}
+
+		ok &= osresult1->IsEqual(osresult2);
+		if (!ok)
+			throw ErrorClass("Error duplicating OSResult object using get() and set() methods");
+
+		std::cout << "OSResult object duplicated with get() and set() methods" << std::endl;
+
+
 
 		std::cout << std::endl << "done" << std::endl;
 
@@ -5190,6 +5775,8 @@ if (PARSER_TESTS){
 		if (osrlreader != NULL) delete osrlreader;
 		if (osresult1  != NULL) delete osresult1;
 		if (osresult2  != NULL) delete osresult2;
+
+
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;

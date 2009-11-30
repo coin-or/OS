@@ -3418,7 +3418,7 @@ yydebug = 1;
 
     {	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setGeneralOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherGeneralResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setGeneralOtherResultName failed");
 	;}
     break;
@@ -3426,7 +3426,7 @@ yydebug = 1;
   case 126:
 
     {	
-		if (osresult->setGeneralOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherGeneralResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setGeneralOtherResultValue failed");
 	;}
     break;
@@ -3434,7 +3434,7 @@ yydebug = 1;
   case 127:
 
     {	
-		if (osresult->setGeneralOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherGeneralResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setGeneralOtherResultDescription failed");
 	;}
     break;
@@ -3657,7 +3657,7 @@ yydebug = 1;
 
     {	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setSystemOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherSystemResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSystemOtherResultName failed");
 	;}
     break;
@@ -3665,7 +3665,7 @@ yydebug = 1;
   case 205:
 
     {	
-		if (osresult->setSystemOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherSystemResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSystemOtherResultValue failed");
 	;}
     break;
@@ -3673,7 +3673,7 @@ yydebug = 1;
   case 206:
 
     {	
-		if (osresult->setSystemOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherSystemResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSystemOtherResultDescription failed");
 	;}
     break;
@@ -3816,7 +3816,7 @@ yydebug = 1;
 
     {	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setServiceOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherServiceResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setServiceOtherResultName failed");
 	;}
     break;
@@ -3824,7 +3824,7 @@ yydebug = 1;
   case 277:
 
     {	
-		if (osresult->setServiceOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherServiceResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setServiceOtherResultValue failed");
 	;}
     break;
@@ -3832,7 +3832,7 @@ yydebug = 1;
   case 278:
 
     {	
-		if (osresult->setServiceOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherServiceResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setServiceOtherResultDescription failed");
 	;}
     break;
@@ -4222,7 +4222,7 @@ yydebug = 1;
 
     {	if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, "otherResult name cannot be empty");
-		if (osresult->setJobOtherResultName(parserData->kounter, parserData->nameAttribute) == false)
+		if (osresult->setOtherJobResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setJobOtherResultName failed");
 	;}
     break;
@@ -4230,7 +4230,7 @@ yydebug = 1;
   case 414:
 
     {	
-		if (osresult->setJobOtherResultValue(parserData->kounter, parserData->valueAttribute) == false)
+		if (osresult->setOtherJobResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setJobOtherResultValue failed");
 	;}
     break;
@@ -4238,7 +4238,7 @@ yydebug = 1;
   case 415:
 
     {	
-		if (osresult->setJobOtherResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
+		if (osresult->setOtherJobResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setJobOtherResultDescription failed");
 	;}
     break;
