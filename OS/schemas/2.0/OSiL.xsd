@@ -373,43 +373,44 @@
 						<xs:element name="obj" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="coefMatrixOperation" minOccurs="0" maxOccurs="unbounded">
+									<xs:element name="linearMatrixOperator" minOccurs="0" maxOccurs="unbounded">
 										<xs:complexType>
 											<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required"/>
+											<xs:attribute name="matrixVarTranspose" type="xs:boolean" use="optional" default="false"/>
 											<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
-											<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-											<xs:attribute name="leftMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
-											<xs:attribute name="leftOperation" use="optional" default="matrixProduct">
-												<xs:simpleType>
-													<xs:restriction base="xs:string">
-														<xs:enumeration value="matrixProduct"/>
-													</xs:restriction>
-												</xs:simpleType>
-											</xs:attribute>
-											<xs:attribute name="leftOperationFirst" type="xs:boolean" use="optional" default="true"/>
-											<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-											<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
-											<xs:attribute name="rightOperation" use="optional" default="matrixProduct">
-												<xs:simpleType>
-													<xs:restriction base="xs:string">
-														<xs:enumeration value="matrixProduct"/>
-													</xs:restriction>
-												</xs:simpleType>
-											</xs:attribute>
-											<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-											<xs:attribute name="finalOperation" use="optional" default="trace">
+											<xs:attribute name="termOperator" use="optional" default="trace">
 												<xs:simpleType>
 													<xs:restriction base="xs:string">
 														<xs:enumeration value="trace"/>
-														<xs:enumeration value="determinant"/>
 														<xs:enumeration value="elementSum"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+											<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+											<xs:attribute name="leftMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+											<xs:attribute name="leftOperator" use="optional" default="matrixProduct">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="matrixProduct"/>
+														<xs:enumeration value="matrixDotProduct"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
+											<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
+											<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+											<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+											<xs:attribute name="rightOperator" use="optional" default="matrixProduct">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:enumeration value="matrixProduct"/>
+														<xs:enumeration value="matrixDotProduct"/>
 													</xs:restriction>
 												</xs:simpleType>
 											</xs:attribute>
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
-								<xs:attribute name="numberOfObjCoefMatrixOperations" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="numberOfObjLinearMatrixOperators" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="objIdx" type="xs:negativeInteger" use="required"/>
 							</xs:complexType>
 						</xs:element>
@@ -439,57 +440,51 @@
 					<xs:attribute name="numberOfMatrixConstraints" type="xs:nonNegativeInteger" use="required"/>
 				</xs:complexType>
 			</xs:element>
-			<xs:element name="LinearConstraintOperatorMatrices" minOccurs="0">
+			<xs:element name="LinearConstraintMatrixOperators" minOccurs="0">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="start" type="IntVector"/>
-						<xs:choice>
-							<xs:element name="rowIdx" type="IntVector"/>
-							<xs:element name="colIdx" type="IntVector"/>
-						</xs:choice>
-						<xs:element name="matrixOperation">
+						<xs:element name="operator" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="op" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
-											<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-											<xs:attribute name="leftMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
-											<xs:attribute name="leftOperation" use="optional" default="matrixProduct">
-												<xs:simpleType>
-													<xs:restriction base="xs:string">
-														<xs:enumeration value="matrixProduct"/>
-													</xs:restriction>
-												</xs:simpleType>
-											</xs:attribute>
-											<xs:attribute name="leftOperationFirst" type="xs:boolean" use="optional" default="true"/>
-											<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-											<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
-											<xs:attribute name="rightOperation" use="optional" default="matrixProduct">
-												<xs:simpleType>
-													<xs:restriction base="xs:string">
-														<xs:enumeration value="matrixProduct"/>
-													</xs:restriction>
-												</xs:simpleType>
-											</xs:attribute>
-											<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-											<xs:attribute name="finalOperation" use="optional" default="none">
-												<xs:simpleType>
-													<xs:restriction base="xs:string">
-														<xs:enumeration value="none"/>
-														<xs:enumeration value="diagonal"/>
-														<xs:enumeration value="upperTriangle"/>
-														<xs:enumeration value="lowerTriangle"/>
-													</xs:restriction>
-												</xs:simpleType>
-											</xs:attribute>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
+								<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="matrixVarTranspose" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+								<xs:attribute name="termOperator" use="optional" default="none">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="none"/>
+											<xs:enumeration value="diagonal"/>
+											<xs:enumeration value="upperTriangle"/>
+											<xs:enumeration value="lowerTriangle"/>
+											<xs:enumeration value="transpose"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="leftMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="leftOperator" use="optional" default="matrixProduct">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="matrixProduct"/>
+											<xs:enumeration value="matrixDotProduct"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
+								<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+								<xs:attribute name="rightOperator" use="optional" default="matrixProduct">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="matrixProduct"/>
+											<xs:enumeration value="matrixDotProduct"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="numberOfMatrixOperations" type="xs:positiveInteger" use="required"/>
+					<xs:attribute name="numberOfMatrixOperators" type="xs:positiveInteger" use="required"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="nonlinearMatrixExpressions" minOccurs="0">
