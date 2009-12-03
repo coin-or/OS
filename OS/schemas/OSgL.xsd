@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -360,7 +360,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="baseMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="baseTransponse" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="leftMatrix" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -376,7 +376,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="leftMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="leftMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="rightMatrix" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -392,10 +392,10 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="rightMatrixTransponse" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="rightMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="matrixPower" type="xs:int" use="optional" default="1"/>
-		<xs:attribute name="transponse" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="finalOperation" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -449,7 +449,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="baseMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="baseTransponse" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixVariableIndexes">
 		<xs:sequence>
@@ -514,7 +514,7 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="baseMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="baseTransponse" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElement">
 		<xs:annotation>
