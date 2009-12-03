@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -316,17 +316,19 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
+		<xs:sequence minOccurs="0">
 			<xs:annotation>
 				<xs:documentation>Number of the matrix child elements must match numberOfMatrices</xs:documentation>
 			</xs:annotation>
-			<xs:element name="numberMatrix" type="NumberMatrix"/>
-			<xs:element name="variableMatrix" type="VariableMatrix"/>
-			<xs:element name="generalMatrix" type="GeneralMatrix"/>
-		</xs:choice>
-		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger" use="required"/>
+			<xs:element name="variableMatrix" type="VariableMatrix" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="constantMatrix" type="ConstantMatrix" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="generalMatrix" type="GeneralMatrix" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariableMatrices" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfConstantMatrices" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfGeneralMatrices" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
-	<xs:complexType name="NumberMatrix">
+	<xs:complexType name="ConstantMatrix">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
@@ -341,7 +343,7 @@
 			</xs:choice>
 			<xs:element name="value" type="DoubleVector"/>
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
@@ -359,7 +361,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="leftMatrix" use="optional" default="none">
 			<xs:simpleType>
@@ -375,7 +377,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="leftMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="leftMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="rightMatrix" use="optional" default="none">
 			<xs:simpleType>
@@ -391,7 +393,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="rightMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="rightMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="matrixPower" type="xs:int" use="optional" default="1"/>
@@ -426,7 +428,7 @@
 			</xs:choice>
 			<xs:element name="variableIndex" type="NonNegativeIntVector"/>
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfVariableIndexes" type="xs:nonNegativeInteger" use="required"/>
@@ -448,7 +450,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixVariableIndexes">
@@ -494,7 +496,7 @@
 			</xs:choice>
 			<xs:element name="value" type="GeneralMatrixElement"/>
 		</xs:sequence>
-		<xs:attribute name="id" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
@@ -513,7 +515,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElement">

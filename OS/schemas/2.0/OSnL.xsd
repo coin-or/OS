@@ -3826,8 +3826,8 @@
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 				<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-				<xs:attribute name="leftCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-				<xs:attribute name="rightCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="leftCoefMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="rightCoefMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>

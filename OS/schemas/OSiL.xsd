@@ -355,12 +355,12 @@
 					<xs:sequence>
 						<xs:element name="matrixVar" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
-								<xs:attribute name="matrixID" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="matrixIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="name" type="xs:string" use="optional"/>
 								<xs:attribute name="positiveSemidefinite" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="lbMatrixID" type="xs:nonNegativeInteger" use="optional"/>
-								<xs:attribute name="ubMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -386,7 +386,7 @@
 													</xs:restriction>
 												</xs:simpleType>
 											</xs:attribute>
-											<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+											<xs:attribute name="leftMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 											<xs:attribute name="leftMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 											<xs:attribute name="leftOperator" use="optional" default="matrixProduct">
 												<xs:simpleType>
@@ -397,7 +397,7 @@
 												</xs:simpleType>
 											</xs:attribute>
 											<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
-											<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+											<xs:attribute name="rightMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 											<xs:attribute name="rightMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 											<xs:attribute name="rightOperator" use="optional" default="matrixProduct">
 												<xs:simpleType>
@@ -427,12 +427,12 @@
 								<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 								<xs:attribute name="numberOfCols" type="xs:positiveInteger" use="required"/>
 								<xs:attribute name="positiveSemidefinite" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="constantMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="constantMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="constantMatrixScalarCoef" type="xs:double" use="optional" default="1.0"/>
 								<xs:attribute name="constantMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="lbMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="lbMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="lbMatrixtranspose" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="ubMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="ubMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="ubMatrixtranspose" type="xs:boolean" use="optional" default="false"/>
 							</xs:complexType>
 						</xs:element>
@@ -460,7 +460,7 @@
 										</xs:restriction>
 									</xs:simpleType>
 								</xs:attribute>
-								<xs:attribute name="leftMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="leftMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="leftMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="leftOperator" use="optional" default="matrixProduct">
 									<xs:simpleType>
@@ -471,7 +471,7 @@
 									</xs:simpleType>
 								</xs:attribute>
 								<xs:attribute name="leftOperatorFirst" type="xs:boolean" use="optional" default="true"/>
-								<xs:attribute name="rightMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="rightMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="rightMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="rightOperator" use="optional" default="matrixProduct">
 									<xs:simpleType>
@@ -512,11 +512,11 @@
 								<xs:attribute name="matrixVarIdxOne" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="matrixVarIdxTwo" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-								<xs:attribute name="leftCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="leftCoefMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="leftCoefMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="middleCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="middleCoefMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="middleCoefMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="rightCoefMatrixID" type="xs:nonNegativeInteger" use="optional"/>
+								<xs:attribute name="rightCoefMatrixIdx" type="xs:nonNegativeInteger" use="optional"/>
 								<xs:attribute name="rightCoefMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 							</xs:complexType>
 						</xs:element>
