@@ -324,9 +324,7 @@
 			<xs:element name="linearMatrix" type="LinearMatrix"/>
 			<xs:element name="generalMatrix" type="GeneralMatrix"/>
 		</xs:choice>
-		<xs:attribute name="numberOfVariableMatrices" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="numberOfConstantMatrices" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="numberOfGeneralMatrices" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrix">
 		<xs:annotation>
