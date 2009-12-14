@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -344,7 +344,7 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSpecifiedElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -491,21 +491,13 @@
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="start" type="IntVector"/>
-			<xs:choice>
-				<xs:element name="rowIdx" type="IntVector"/>
-				<xs:element name="colIdx" type="IntVector"/>
-			</xs:choice>
-			<xs:element name="value" type="GeneralMatrixElement"/>
+		<xs:sequence>
+			<xs:element name="el" type="GeneralMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSpecifiedElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="symmetric" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
@@ -533,31 +525,30 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
-			<xs:choice maxOccurs="unbounded">
-				<xs:element name="el">
-					<xs:complexType>
-						<xs:simpleContent>
-							<xs:extension base="xs:double">
-								<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-								<xs:attribute name="incr" type="xs:double" use="optional"/>
-							</xs:extension>
-						</xs:simpleContent>
-					</xs:complexType>
-				</xs:element>
-				<xs:element name="var">
-					<xs:complexType>
-						<xs:simpleContent>
-							<xs:extension base="xs:nonNegativeInteger">
-								<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-								<xs:attribute name="incr" type="xs:double" use="optional"/>
-							</xs:extension>
-						</xs:simpleContent>
-					</xs:complexType>
-				</xs:element>
-				<xs:element ref="OSnLNode"/>
-			</xs:choice>
+			<xs:element name="num">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:double">
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:double" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="var">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:nonNegativeInteger">
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:double" use="optional"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element ref="OSnLNode"/>
 		</xs:choice>
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="XMLData">
 		<xs:annotation>
