@@ -344,7 +344,7 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -425,7 +425,7 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSpecifiedElements" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="varIdxStart" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="varIdxEnd" type="xs:nonNegativeInteger" use="optional"/>
@@ -505,7 +505,7 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="symmetric" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
