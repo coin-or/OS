@@ -332,7 +332,7 @@
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of elements specified in the value must agree with numberOfSpecifiedElements(after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -420,6 +420,9 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of elements specified must agree with numberOfSpecifiedElements</xs:documentation>
+			</xs:annotation>
 			<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required"/>
@@ -492,6 +495,9 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of elements specified must agree with numberOfSpecifiedElements</xs:documentation>
+			</xs:annotation>
 			<xs:element name="el" type="GeneralMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required"/>
