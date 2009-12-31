@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -349,12 +349,7 @@
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="none"/>
-					<xs:enumeration value="objectiveCoefficients"/>
-					<xs:enumeration value="variableLB"/>
-					<xs:enumeration value="variableUB"/>
 					<xs:enumeration value="linearConstraintCoefficients"/>
-					<xs:enumeration value="constraintLB"/>
-					<xs:enumeration value="constraintUB"/>
 					<xs:enumeration value="matrix"/>
 				</xs:restriction>
 			</xs:simpleType>
@@ -365,55 +360,8 @@
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="leftMatrix" use="optional" default="none">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="none"/>
-					<xs:enumeration value="objectiveCoefficients"/>
-					<xs:enumeration value="variableLB"/>
-					<xs:enumeration value="variableUB"/>
-					<xs:enumeration value="linearConstraintCoefficients"/>
-					<xs:enumeration value="constraintLB"/>
-					<xs:enumeration value="constraintUB"/>
-					<xs:enumeration value="matrix"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="leftMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="leftMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="rightMatrix" use="optional" default="none">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="none"/>
-					<xs:enumeration value="objectiveCoefficients"/>
-					<xs:enumeration value="variableLB"/>
-					<xs:enumeration value="variableUB"/>
-					<xs:enumeration value="linearConstraintCoefficients"/>
-					<xs:enumeration value="constraintLB"/>
-					<xs:enumeration value="constraintUB"/>
-					<xs:enumeration value="matrix"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="rightMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="rightMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="symmetric" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
-		<xs:attribute name="matrixPower" type="xs:int" use="optional" default="1"/>
-		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="finalOperation" use="optional" default="none">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="none"/>
-					<xs:enumeration value="identity"/>
-					<xs:enumeration value="diagonal"/>
-					<xs:enumeration value="upperTriangle"/>
-					<xs:enumeration value="lowerTriangle"/>
-					<xs:enumeration value="symmetric"/>
-					<xs:enumeration value="allZero"/>
-					<xs:enumeration value="AllOne"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrix">
 		<xs:annotation>
@@ -439,11 +387,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="none"/>
 					<xs:enumeration value="objectiveCoefficients"/>
-					<xs:enumeration value="variableLB"/>
-					<xs:enumeration value="variableUB"/>
 					<xs:enumeration value="linearConstraintCoefficients"/>
-					<xs:enumeration value="constraintLB"/>
-					<xs:enumeration value="constraintUB"/>
 					<xs:enumeration value="matrix"/>
 				</xs:restriction>
 			</xs:simpleType>
@@ -462,12 +406,12 @@
 		<xs:sequence>
 			<xs:element name="var" type="LinearMatrixElementVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElementVar">
 		<xs:annotation>
@@ -543,12 +487,9 @@
 			</xs:element>
 			<xs:element name="var">
 				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="xs:nonNegativeInteger">
-							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-							<xs:attribute name="incr" type="xs:double" use="optional"/>
-						</xs:extension>
-					</xs:simpleContent>
+					<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+					<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+					<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element ref="OSnLNode"/>
