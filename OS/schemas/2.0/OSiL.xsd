@@ -687,7 +687,7 @@
 						<xs:element name="scalarVariables">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="var">
+									<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
 										<xs:complexType>
 											<xs:simpleContent>
 												<xs:extension base="xs:nonNegativeInteger">
@@ -698,12 +698,13 @@
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
+								<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 							</xs:complexType>
 						</xs:element>
 						<xs:element name="scalarConstraints">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="con">
+									<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
 										<xs:complexType>
 											<xs:simpleContent>
 												<xs:extension base="xs:nonNegativeInteger">
@@ -714,6 +715,7 @@
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
+								<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 							</xs:complexType>
 						</xs:element>
 						<xs:element name="matrixVar" type="xs:nonNegativeInteger"/>
