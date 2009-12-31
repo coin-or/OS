@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -680,7 +680,49 @@
 	</xs:complexType>
 	<!--Cones: draft -->
 	<xs:complexType name="ConeProgramming">
-		<xs:sequence/>
+		<xs:sequence>
+			<xs:element name="cone" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:choice minOccurs="0">
+						<xs:element name="scalarVariables">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="var">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="scalarConstraints">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="con">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="matrixVar" type="xs:nonNegativeInteger"/>
+						<xs:element name="matrixCon" type="xs:nonNegativeInteger"/>
+					</xs:choice>
+					<xs:attribute name="id" type="xs:string" use="required"/>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Cones">
 		<xs:annotation>
