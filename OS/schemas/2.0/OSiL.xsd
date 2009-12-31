@@ -79,6 +79,11 @@
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="coneProgramming" type="ConeProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -362,11 +367,11 @@
 								<xs:attribute name="lbMatrixID" type="xs:string" use="optional"/>
 								<xs:attribute name="lbMatrixTranspose" type="xs:boolean"/>
 								<xs:attribute name="lbMatrixScalarCoef" type="xs:double"/>
-								<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="lbConeId" type="xs:string"/>
 								<xs:attribute name="ubMatrixID" type="xs:string" use="optional"/>
 								<xs:attribute name="ubMatrixTranspose" type="xs:boolean"/>
 								<xs:attribute name="ubMatrixScalarCoef" type="xs:double"/>
-								<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="ubConeId" type="xs:string"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -439,11 +444,11 @@
 								<xs:attribute name="lbMatrixID" type="xs:string" use="optional"/>
 								<xs:attribute name="lbMatrixtranspose" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="lbMatrixScalarCoef" type="xs:double"/>
-								<xs:attribute name="lbConeIdx" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="lbConeId" type="xs:string"/>
 								<xs:attribute name="ubMatrixID" type="xs:string" use="optional"/>
 								<xs:attribute name="ubMatrixtranspose" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="ubMatrixScalarCoef" type="xs:double"/>
-								<xs:attribute name="ubConeIdx" type="xs:nonNegativeInteger"/>
+								<xs:attribute name="ubConeId" type="xs:string"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -674,6 +679,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<!--Cones: draft -->
+	<xs:complexType name="ConeProgramming">
+		<xs:sequence/>
+	</xs:complexType>
 	<xs:complexType name="Cones">
 		<xs:annotation>
 			<xs:documentation>draft </xs:documentation>
@@ -682,10 +690,15 @@
 			<xs:annotation>
 				<xs:documentation>Number of various cone child elements must match numberOfCones</xs:documentation>
 			</xs:annotation>
-			<xs:element name="nonnegativeCone" type="NonnegativeCone">
+			<xs:element name="nonnegativeCone">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="NonnegativeCone"/>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="nonpositiveCone" type="NonpositiveCone">
 				<xs:annotation>
@@ -721,12 +734,14 @@
 				<xs:complexType>
 					<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="id" type="xs:string" use="required"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="completelyPositiveMatricesCone">
 				<xs:complexType>
 					<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="id" type="xs:string" use="required"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="productCone">
@@ -734,12 +749,13 @@
 					<xs:sequence>
 						<xs:element name="factor" maxOccurs="unbounded">
 							<xs:complexType>
-								<xs:attribute name="coneIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="coneId" type="xs:string" use="required"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
 					<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="id" type="xs:string" use="required"/>
 					<xs:attribute name="numberOfFactors" type="xs:nonNegativeInteger" use="required"/>
 				</xs:complexType>
 			</xs:element>
@@ -748,12 +764,13 @@
 					<xs:sequence>
 						<xs:element name="cone" maxOccurs="unbounded">
 							<xs:complexType>
-								<xs:attribute name="coneIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="coneId" type="xs:string" use="required"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
 					<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="id" type="xs:string" use="required"/>
 					<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
 				</xs:complexType>
 			</xs:element>
@@ -766,6 +783,7 @@
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="type" use="optional" default="positiveDefinite">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -781,6 +799,7 @@
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCols" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonpositiveCone">
 		<xs:annotation>
@@ -788,6 +807,7 @@
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCols" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OrthantCone">
 		<xs:annotation>
@@ -796,6 +816,7 @@
 		<xs:sequence>
 			<xs:element name="direction" maxOccurs="unbounded">
 				<xs:complexType>
+					<xs:attribute name="id" type="xs:string" use="required"/>
 					<xs:attribute name="lb" use="required">
 						<xs:simpleType>
 							<xs:restriction base="xs:double">
@@ -818,6 +839,7 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCols" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCone">
 		<xs:annotation>
@@ -825,6 +847,7 @@
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCols" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
 		<xs:attribute name="normScaleFactor">
 			<xs:simpleType>
@@ -843,6 +866,7 @@
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCols" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
 		<xs:attribute name="normScaleFactor">
 			<xs:simpleType>
@@ -863,6 +887,7 @@
 		</xs:annotation>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCols" use="required"/>
+		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
 		<xs:attribute name="normScaleFactor">
 			<xs:simpleType>
