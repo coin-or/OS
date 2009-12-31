@@ -333,7 +333,7 @@
 		<xs:choice>
 			<xs:element name="elements">
 				<xs:complexType>
-					<xs:sequence>
+					<xs:sequence minOccurs="0">
 						<xs:annotation>
 							<xs:documentation>Number of elements specified in the value must agree with numberOfSpecifiedElements(after "mult" has been considered)</xs:documentation>
 						</xs:annotation>
