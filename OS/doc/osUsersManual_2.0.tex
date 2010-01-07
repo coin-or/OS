@@ -405,7 +405,7 @@ OS-server-version_number.tgz (.zip)
 \end{verbatim}
 For example, the files associated with  OS server release 1.0.0 are in the binary distribution
 \begin{verbatim}
-OS-server-1.0.0.tgz
+OS-server-2.0.0.tgz
 \end{verbatim}
 There is no platform information given since the server and related binaries were written in Java\index{Java}.
 The details and use of this distribution are described in Section~\ref{section:tomcat}.
@@ -3470,23 +3470,29 @@ The first step of the installation procedure is to download the Java binary dist
 OS-server-release_number.zip
 \end{verbatim}
 
-For example, the current release 1.0.0 is in {\tt OS-server-1.0.0.zip}.
-This zip archive contains all of the necessary files for a OS Solver Service. The installation depends on
+For example, the current release 2.0.0 is in {\tt OS-server-2.0.0.zip}.  It is important to make sure that the release of the OS server software coincides with the OS release of the client software at \url{projects.coin-or.org/svn/OS/releases}.
+The  zip archive of the OS solver software contains all of the necessary files for a OS Solver Service for Windows.  Unix users will need to build their own {\tt OSSolverService}  and put this binary in the directory
+\begin{verbatim}
+OS-server-2.0.0/webapps/os/WEB-INF/code/solver 
+\end{verbatim}
+
+
+The installation depends on
 whether a Tomcat server is already installed on the user's machine and whether the machine is running
 under unix or Windows.
 
 After unpacking
-{\tt OS-server-release\_number.zip} you should see the  directory {\tt OS-server-1.0.0} and a single file {\tt os.war}.
+{\tt OS-server-release\_number.zip} you should see the  directory {\tt OS-server-2.0.0} and a single file {\tt os.war}.
 
-%For users who have not installed the Tomcat server,   {\tt OS-server-1.0.0} contains  all of the necessary files
+%For users who have not installed the Tomcat server,   {\tt OS-server-2.0.0} contains  all of the necessary files
 %for a OS Solver Service.  
 If you do not have a Tomcat server running, do the following to set up a  Tomcat server
 with the OS Solver Service on a {\bf Unix system}:
 
 \begin{enumerate}[Step 1.]
-\item{}  Put the folder  {\tt OS-server-1.0.0}   in the desired location for the OS Solver Service on the server machine.
+\item{}  Put the folder  {\tt OS-server-2.0.0}   in the desired location for the OS Solver Service on the server machine.
 
-\item{} Connect to the Tomcat {\tt bin} directory in the {\tt OS-server-1.0.0} root and execute {\tt ./startup.sh}.
+\item{} Connect to the Tomcat {\tt bin} directory in the {\tt OS-server-2.0.0} root and execute {\tt ./startup.sh}.
 
 \item{} \label{itemize:tomcatunix3}
 Test to see if the server is running the {\tt OSSolverService}.  Open a browser on the server and enter the URL
@@ -3521,9 +3527,9 @@ the machine and have the server continue to run. On a {\bf Windows machine} do t
 
 \begin{enumerate}[Step 1.]
 
-\item{}  Put the folder  {\tt OS-server-1.0.0}   in the desired location for the OS Solver Service on the server machine.
+\item{}  Put the folder  {\tt OS-server-2.0.0}   in the desired location for the OS Solver Service on the server machine.
 
-\item{} \label{itemize:tomcatwin2}  Connect to the Tomcat {\tt bin} directory in the {\tt OS-server-1.0.0} root and execute
+\item{} \label{itemize:tomcatwin2}  Connect to the Tomcat {\tt bin} directory in the {\tt OS-server-2.0.0} root and execute
 \begin{verbatim}
 service.bat install
 \end{verbatim}
@@ -3536,7 +3542,7 @@ service.bat remove
 {\tt tomcat5w.exe} application.  This will open a Window for controlling the Tomcat server.
 
 \item{}  \label{itemize:tomcatwin4} Select the {\tt Startup} tab and set the {\tt Working Directory}
-to the path to {\tt OS-server-1.0.0}.
+to the path to {\tt OS-server-2.0.0}.
 
 \item{}  \label{itemize:tomcatwin5} Select the {\tt General} tab and then click the {\tt Start} button.
 
@@ -3551,7 +3557,7 @@ to the path to {\tt OS-server-1.0.0}.
 \noindent {\bf Note:}
 There are many ways to start the Tomcat server and the exact way you choose may be different.
 See {\tt\UrlTomcat} and check out Tomcat version~5.5 for more detail. But do remember to
-properly set the {\tt Tomcat Working Directory} to the path to {\tt OS-server-1.0.0}. By default,
+properly set the {\tt Tomcat Working Directory} to the path to {\tt OS-server-2.0.0}. By default,
 if you start Tomcat on Windows, the {\tt Working Directory} is set to the Windows system folder,
 which will yield unpredictable results.
 
@@ -3566,7 +3572,7 @@ If you already have a Tomcat server with Axis installed do the following:
 
 In the directory,
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/code/OSConfig
+OS-server-2.0.0/webapps/os/WEB-INF/code/OSConfig
 \end{verbatim}
 there is a configuration file {\tt OSParameter.xml} that can be modified to fit individual user needs. You can configure such parameters as service name, service URL/URI. Refer to the xml file for more detail. Descriptions for all the parameters are within the file itself.
 
@@ -3577,58 +3583,58 @@ Below is a summary of the common and important directories and files you may wan
 \begin{itemize}
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/
+OS-server-2.0.0/webapps/os/
 \end{verbatim}
 contains the OS Web application. All directories and files outside of this folder are Tomcat server related.
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF
+OS-server-2.0.0/webapps/os/WEB-INF
 \end{verbatim}
 contains private and important configuration, library, class and executable files to run the Optimization Service.
 All files and directories outside of this folder but within the {\tt /os} Web application folder are publicly viewable (e.g., Web pages).
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/code/OSConfig
+OS-server-2.0.0/webapps/os/WEB-INF/code/OSConfig
 \end{verbatim}
 contains configuration files for Optimization Services, such as the {\tt OSParameter.xml} file.
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/code/temp
+OS-server-2.0.0/webapps/os/WEB-INF/code/temp
 \end{verbatim}
 contains temporarily saved files such as submitted OSiL/OSoL input files, and OSrL output files. This folder can get bigger as the service starts to run more jobs. For maintenance purpose, you may want to keep an eye on it.
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/code/log
+OS-server-2.0.0/webapps/os/WEB-INF/code/log
 \end{verbatim}
 contains log files from the running services in the current Web application.
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/code/solver
+OS-server-2.0.0/webapps/os/WEB-INF/code/solver
 \end{verbatim}
 contains solver binaries that actually carry out the optimization process.
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/code/backup
+OS-server-2.0.0/webapps/os/WEB-INF/code/backup
 \end{verbatim}
 contains backup files from some of the above directories. This folder can get bigger as the service starts to run more jobs.
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/classes
+OS-server-2.0.0/webapps/os/WEB-INF/classes
 \end{verbatim}
 contains class files to run the Optimization Services.
 \item
 \begin{verbatim}
-OS-server-1.0.0/webapps/os/WEB-INF/lib
+OS-server-2.0.0/webapps/os/WEB-INF/lib
 \end{verbatim}
 contains library files needed by the Optimization Services.
 \item
 \begin{verbatim}
-OS-server-1.0.0/conf
+OS-server-2.0.0/conf
 \end{verbatim}
 contains configuration files for the Tomcat server, such as http server port.
 \item
 \begin{verbatim}
-OS-server-1.0.0/bin
+OS-server-2.0.0/bin
 \end{verbatim}
 contains executables and scripts to start and shutdown the Tomcat server.
 \end{itemize}
