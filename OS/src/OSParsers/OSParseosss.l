@@ -336,7 +336,7 @@ browserState (on|off)
 . {
 	std::string error;
 	std::ostringstream outStr;
-	outStr << "ecountered a spurious character in the lexer" << endl;
+	outStr << "encountered a spurious character in the lexer" << endl;
 	outStr << "The first character is: ";
 	outStr <<  yytext;
 	outStr << endl;
