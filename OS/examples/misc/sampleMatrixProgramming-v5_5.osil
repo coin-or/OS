@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
 	<instanceHeader>
-		<name>smaple illustration of matrix programming</name>
+		<name>sample illustration of matrix programming</name>
 		<source>Jun Ma</source>
 		<description><![CDATA[
 			Given 4 scalar variables (x0-x3) and 1 scalar constraint (c0) and 2 matrix constraints (C0, C1). 
@@ -86,75 +86,6 @@
 				</cos>
 			</nl>
 		</nonlinearExpressions>
-		<matrixProgramming>
-			<matrixVariables numberOfMatrixVariables="2">
-				<matrixVar matrixID="X0" lbConeId="C2"/>
-				<matrixVar matrixID="X1" lbMatrixID="M3" lbConeId="C1" ubMatrixID="M4" ubConeId="C1"/>
-			</matrixVariables>
-			<objectives>
-				<obj objIdx="-1" numberOfObjLinearMatrixOperators="2">
-					<linearMatrixOperator termOperator="trace" matrixVarIdx="0" leftMatrixID="M4" leftMatrixTranspose="true"/>
-					<linearMatrixOperator termOperator="elementSum" matrixVarIdx="1" matrixVarTranspose="true" rightMatrixID="M5"/>
-				</obj>
-			</objectives>
-			<matrixConstraints numberOfMatrixConstraints="2">
-				<matrixCon numberOfRows="2" numberOfCols="2" constantMatrixID="M6" constantMatrixScalarCoef="2.0" lbMatrixID="M3" lbConeId="C3" ubMatrixID="M4" ubConeId="C4" positiveSemidefinite="true"/>
-				<matrixCon numberOfRows="2" numberOfCols="2" lbMatrixID="M5" lbConeId="C5" ubMatrixID="M6" ubConeId="C7"/>
-			</matrixConstraints>
-			<linearConstraintMatrixOperators numberOfMatrixOperators="5">
-				<operator rowIdx="0" colIdx="0" scalarCoef="0.5" leftMatrixID="M5" rightMatrixID="M6" rightMatrixTranspose="true" leftOperator="matrixProduct" leftOperatorFirst="true"/>
-				<operator rowIdx="0" colIdx="0" scalarCoef="0.5" leftMatrixID="M6" rightMatrixID="M5" rightMatrixTranspose="true"/>
-				<operator rowIdx="0" colIdx="1" leftMatrixID="M6" rightMatrixID="M5" rightMatrixTranspose="true" leftOperatorFirst="false"/>
-				<operator rowIdx="1" colIdx="0" leftMatrixID="M3" rightMatrixID="M4" rightMatrixTranspose="true"/>
-				<operator rowIdx="1" colIdx="1" leftMatrixID="M4" rightMatrixID="M3" rightMatrixTranspose="true" termOperator="diagonal"/>
-			</linearConstraintMatrixOperators>
-			<nonlinearMatrixExpressions numberOfMatrixNonlinearExpressions="1">
-				<matrixNL matrixConIdx="2">
-					<matrixInverse>
-						<matrix id="3"/>
-					</matrixInverse>
-				</matrixNL>
-			</nonlinearMatrixExpressions>
-		</matrixProgramming>
-		<coneProgramming>
-			<cone id="1">
-				<scalarVariables numberOfVar="2">
-					<var>1</var>
-					<var>2</var>
-				</scalarVariables>
-			</cone>
-			<cone id="2">
-				<scalarConstraints numberOfCon="2">
-					<con>1</con>
-					<con>2</con>
-				</scalarConstraints>
-			</cone>
-			<cone id="3">
-				<matrixCon>1</matrixCon>
-			</cone>
-			<cone id="4">
-				<matrixVar>0</matrixVar>
-			</cone>
-		</coneProgramming>
-		<cones numberOfCones="8">
-			<nonnegativeCone numberOfRows="2" numberOfCols="2" id="C0"/>
-			<semidefiniteCone numberOfColumns="2" numberOfRows="2" type="positiveDefinite" id="C1"/>
-			<intersectionCone numberOfColumns="2" numberOfRows="2" numberOfCones="2" id="C2">
-				<cone coneId="C0"/>
-				<cone coneId="C1"/>
-			</intersectionCone>
-			<quadraticCone numberOfRows="2" numberOfCols="2" id="C3"/>
-			<normedCone numberOfRows="2" numberOfCols="2" pNorm="INF" distortionMatrixId="M10" id="C4"/>
-			<copositiveMatricesCone numberOfColumns="2" numberOfRows="2" id="C5"/>
-			<generalOrthantCone numberOfRows="1" numberOfCols="2" id="C6">
-				<direction ub="INF" lb="0.0"/>
-				<direction ub="0.0" lb="-INF"/>
-			</generalOrthantCone>
-			<productCone numberOfColumns="2" numberOfRows="2" numberOfFactors="2" id="C7">
-				<factor coneId="C6"/>
-				<factor coneId="C6"/>
-			</productCone>
-		</cones>
 		<matrices numberOfMatrices="9">
 			<constantMatrix id="M2" numberOfRows="2" numberOfColumns="2">
 				<elements numberOfValues="4">
@@ -261,5 +192,54 @@
 				</el>
 			</generalMatrix>
 		</matrices>
+		<cones numberOfCones="8">
+			<nonnegativeCone numberOfRows="2" numberOfCols="2" id="C0"/>
+			<semidefiniteCone numberOfColumns="2" numberOfRows="2" type="positiveDefinite" id="C1"/>
+			<intersectionCone numberOfColumns="2" numberOfRows="2" numberOfCones="2" id="C2">
+				<cone coneId="C0"/>
+				<cone coneId="C1"/>
+			</intersectionCone>
+			<quadraticCone numberOfRows="2" numberOfCols="2" id="C3"/>
+			<normedCone numberOfRows="2" numberOfCols="2" pNorm="INF" distortionMatrixId="M10" id="C4"/>
+			<copositiveMatricesCone numberOfColumns="2" numberOfRows="2" id="C5"/>
+			<generalOrthantCone numberOfRows="1" numberOfCols="2" id="C6">
+				<direction ub="INF" lb="0.0"/>
+				<direction ub="0.0" lb="-INF"/>
+			</generalOrthantCone>
+			<productCone numberOfColumns="2" numberOfRows="2" numberOfFactors="2" id="C7">
+				<factor coneId="C6"/>
+				<factor coneId="C6"/>
+			</productCone>
+		</cones>
+		<matrixProgramming>
+			<matrixVariables numberOfMatrixVariables="2">
+				<matrixVar matrixID="X0" lbConeId="C2"/>
+				<matrixVar matrixID="X1" lbMatrixID="M3" lbConeId="C1" ubMatrixID="M4" ubConeId="C1"/>
+			</matrixVariables>
+			<objectives>
+				<obj objIdx="-1" numberOfObjLinearMatrixOperators="2">
+					<linearMatrixOperator termOperator="trace" matrixVarIdx="0" leftMatrixID="M4" leftMatrixTranspose="true"/>
+					<linearMatrixOperator termOperator="elementSum" matrixVarIdx="1" matrixVarTranspose="true" rightMatrixID="M5"/>
+				</obj>
+			</objectives>
+			<matrixConstraints numberOfMatrixConstraints="2">
+				<matrixCon numberOfRows="2" numberOfCols="2" constantMatrixID="M6" constantMatrixScalarCoef="2.0" lbMatrixID="M3" lbConeId="C3" ubMatrixID="M4" ubConeId="C4" positiveSemidefinite="true"/>
+				<matrixCon numberOfRows="2" numberOfCols="2" lbMatrixID="M5" lbConeId="C5" ubMatrixID="M6" ubConeId="C7"/>
+			</matrixConstraints>
+			<linearConstraintMatrixOperators numberOfMatrixOperators="5">
+				<operator matrixConIdx="0" matrixVarIdx="0" scalarCoef="0.5" leftMatrixID="M5" rightMatrixID="M6" rightMatrixTranspose="true" leftOperator="matrixProduct" leftOperatorFirst="true"/>
+				<operator matrixConIdx="0" matrixVarIdx="0" scalarCoef="0.5" leftMatrixID="M6" rightMatrixID="M5" rightMatrixTranspose="true"/>
+				<operator matrixConIdx="0" matrixVarIdx="1" leftMatrixID="M6" rightMatrixID="M5" rightMatrixTranspose="true" leftOperatorFirst="false"/>
+				<operator matrixConIdx="1" matrixVarIdx="0" leftMatrixID="M3" rightMatrixID="M4" rightMatrixTranspose="true"/>
+				<operator matrixConIdx="1" matrixVarIdx="1" leftMatrixID="M4" rightMatrixID="M3" rightMatrixTranspose="true" termOperator="diagonal"/>
+			</linearConstraintMatrixOperators>
+			<nonlinearMatrixExpressions numberOfMatrixNonlinearExpressions="1">
+				<matrixNL matrixConIdx="1">
+					<matrixInverse>
+						<matrix id="3"/>
+					</matrixInverse>
+				</matrixNL>
+			</nonlinearMatrixExpressions>
+		</matrixProgramming>
 	</instanceData>
 </osil>
