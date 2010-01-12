@@ -69,24 +69,24 @@
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>Experiment</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="specialOrderedSets" type="SpecialOrderedSets" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="coneProgramming" type="ConeProgramming" minOccurs="0">
+			<xs:element name="matrices" type="Matrices" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
+					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="cones" type="Cones" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixProgramming" type="MatrixProgramming" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="disjunctiveInformation" type="DisjunctiveInformation" minOccurs="0">
@@ -137,11 +137,6 @@
 			<xs:element name="simulations" type="Simulations" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>finalization</xs:documentation>
-				</xs:annotation>
-			</xs:element>
-			<xs:element name="matrices" type="Matrices" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>experiment</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="xmlData" type="XMLData" minOccurs="0">
@@ -460,8 +455,8 @@
 					<xs:sequence>
 						<xs:element name="operator" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
-								<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="matrixVarTranspose" type="xs:boolean" use="optional" default="false"/>
 								<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 								<xs:attribute name="termOperator" use="optional" default="none">
