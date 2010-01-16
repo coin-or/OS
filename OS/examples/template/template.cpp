@@ -67,9 +67,29 @@ using std::endl;
 
 
 int main(int argC, char* argV[]){
-
+	
 	// template -- add your code here -- //
 	std::cout << "Hello World" << std::endl;
+	FileUtil *fileUtil = NULL; 
+	fileUtil = new FileUtil();
+	try {
+	
+		std::string osrl = fileUtil->getFileAsString( "solutionResult.xml" );	
+		OSrLReader *osrlreader = NULL;
+		osrlreader = new OSrLReader();
+		osrlreader->readOSrL( osrl);
+		delete fileUtil;
+		std::cout << osrl.size() << std::endl;
+		delete osrlreader;
+	}
+	catch(const ErrorClass& eclass){
+		delete fileUtil;
+		std::cout << eclass.errormsg <<  std::endl;
+		return 0;
+	} 
+
+	
+	return 0;
 	
 	time_t rawtime;
 	struct tm * timeinfo;
