@@ -92,9 +92,9 @@ osrlwriter = new OSrLWriter();
 }
 
 CoinSolver::~CoinSolver() {
-	#ifdef DEBUG
+#ifdef DEBUG
 	cout << "inside CoinSolver destructor" << endl;
-	#endif
+#endif
 	if(m_osilreader != NULL) delete m_osilreader;
 	m_osilreader = NULL;
 	if(m_osolreader != NULL) delete m_osolreader;
@@ -115,9 +115,9 @@ CoinSolver::~CoinSolver() {
 		//delete[] cbc_argv;
 		cbc_argv = NULL;
 	}
-	#ifdef DEBUG
+#ifdef DEBUG
 	cout << "leaving CoinSolver destructor" << endl;
-	#endif
+#endif
 }
 
 
@@ -254,7 +254,9 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 
 void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
+#ifdef DEBUG
 	std::cout << "build solver options" << std::endl;
+#endif
 	this->bSetSolverOptions = true;
 	// the osi maps
 	// the OsiHintParameter Map
@@ -340,7 +342,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 
 		if(osoption != NULL){
 
-			//std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
+#ifdef DEBUG
+			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
+#endif
 			if( osoption->getNumberOfSolverOptions() <= 0) return;
 			//this->bSetSolverOptions = true;
 			std::vector<SolverOption*> optionsVector;
@@ -352,7 +356,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			bool yesNo;
 
 			for(i = 0; i < num_osi_options; i++){
+#ifdef DEBUG
 				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
+#endif
 				if (optionsVector[ i]->type == "OsiHintStrength" ){
 					if( hintStrengthMap.find( optionsVector[ i]->name ) != hintStrengthMap.end() ){
 						hintStrength = hintStrengthMap[ optionsVector[ i]->name] ;
@@ -360,8 +366,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				}
 			}
 			for(i = 0; i < num_osi_options; i++){
+#ifdef DEBUG
 				std::cout << "osi solver option  "  << optionsVector[ i]->name << std::endl;
-
+#endif
 				if (optionsVector[ i]->type == "OsiHintParam" ){
 					
 					if( optionsVector[ i]->value == "true" ) {
@@ -423,8 +430,10 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				
 				
 				for(i = 0; i < num_cbc_options; i++){
+#ifdef DEBUG
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
+#endif
 					if(optionsVector[ i]->value.length() > 0){
 						cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
 					}
@@ -463,8 +472,10 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				optionsVector = osoption->getSolverOptions( "symphony");
 				int num_sym_options = optionsVector.size();
 				for(i = 0; i < num_sym_options; i++){
+#ifdef DEBUG
 					std::cout << "symphony solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "symphony solver value  "  << optionsVector[ i]->value << std::endl;
+#endif
 					si->setSymParam(optionsVector[ i]->name,   optionsVector[ i]->value);
 				}				
 			}
@@ -568,7 +579,9 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			}  //  end if (m > 0)		
 		}// end of osoption if	
 		
+#ifdef DEBUG
 		std::cout << "solver options set" << std::endl;	
+#endif
 	}//end of try 
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
