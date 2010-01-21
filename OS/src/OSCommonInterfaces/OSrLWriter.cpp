@@ -904,7 +904,6 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << " idx=\"";
 								outStr <<  m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->idx;
 								outStr <<  "\">";
-std::cout << "dual value: \"" << m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->value << "\"" << std::endl;
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->value);
 								outStr << "</con>" << endl;
 							}
