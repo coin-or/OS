@@ -1170,7 +1170,7 @@ std::string get_version(){
 
 std::string  buildSolver(std::string solverName, std::string osol, OSInstance *osinstance){
 	DefaultSolver *solverType  = NULL;
-	std::cout << "SOLVER NAME = " << solverName << std::endl;
+	//std::cout << "SOLVER NAME = " << solverName << std::endl;
 	try{
 		if (solverName == "") {// must determine the default solver
 			if(osinstance == NULL) throw ErrorClass("there was a NULL instance sent to buildSolver");
@@ -1194,7 +1194,7 @@ std::string  buildSolver(std::string solverName, std::string osol, OSInstance *o
 		
 		//now build the solver through its constructor
 		
-		std::cout << "SOLVER NAME =  " << solverName << std::endl;
+		//std::cout << "SOLVER NAME =  " << solverName << std::endl;
 
 		if( solverName.find( "ipopt") != std::string::npos) {
 			// we are requesting the Ipopt solver
@@ -1219,9 +1219,9 @@ std::string  buildSolver(std::string solverName, std::string osol, OSInstance *o
 			}
 			else{ 
 				if( solverName.find( "clp") != std::string::npos){
-					std::cout << "NEWING SOLVER TYPE " << std::endl;
+					//std::cout << "NEWING SOLVER TYPE " << std::endl;
 					solverType = new CoinSolver();
-					std::cout << "END NEWING SOLVER TYPE " << std::endl;
+					//std::cout << "END NEWING SOLVER TYPE " << std::endl;
 					solverType->sSolverName = "clp";
 				}
 				else{

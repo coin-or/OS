@@ -8,7 +8,7 @@ Sunday November 22 12:00:00 2009 Kipp Martin <kmartin@chicagobooth.edu>
 	* applications/amplClient/OSAmplClient.cpp -- added the feature that this reads an OSoL
 	 file which is given as an option file and sends it on to the solver.
 	
-	* applications/amplClient/OSAmplClient/OSAmplClient.cpp -- changed the solver defaut selection, if no options are specified using 
+	* applications/amplClient/OSAmplClient.cpp -- changed the solver defaut selection, if no options are specified using 
 	 {\bf OSAmplClient\_options}, by default, for continuous linear models  clp is used. 
 	 For continuous nonlinear models ipopt is used. For mixed-integer linear models (MIP), cbc is used. 
 	 For mixed-integer nonlinear models  bonmin is used.  All solvers are invoked locally. 
