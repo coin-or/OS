@@ -97,9 +97,11 @@ string OSSolverAgent::solve(string osil, string osol){
 	//std::cout << solveResult << std::endl;
 	solveResult = WSUtil::getOSxL(solveResult, "solve");
 	//std::cout << "RETURN THE OSRL " << std::endl;
-	//std::cout << sOSrL << std::endl;
+	//std::cout << solveResult << std::endl;
 	useCDATA = false;
 	sOSrL = WSUtil::deSOAPify( solveResult, useCDATA);
+	//std::cout << "RETURN THE OSRL " << std::endl;
+	//std::cout << sOSrL << std::endl;
 	// strip out the OSxL that we want from the SOAP envelope
 	//std::cout << "DONE WITH DESOAP " << std::endl;
 	//std::cout << solveResult << std::endl;

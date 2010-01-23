@@ -428,9 +428,9 @@ void solve(){
 	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
-	try{
-		// now solve either remotely or locally
-		if( osoptions->serviceLocation != "" ){
+	// now solve either remotely or locally
+	if( osoptions->serviceLocation != "" ){
+		try{ //remote try
 			// call a method here to get OSiL if we have an nl or mps file
 			if(osoptions->osil == ""){
 				//we better have an nl file present or mps file or osol file
@@ -490,8 +490,26 @@ void solve(){
 			else cout << osrl << endl;
 			delete osagent;
 			osagent = NULL;
-			
-		} else{// solve locally
+		}//end remote try
+		
+		catch(const ErrorClass& eclass){
+			if(osoptions->osrlFile != ""){
+				fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+				if(osoptions->browser != ""){
+					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
+					const char *ch = &str[ 0];
+					std::system( ch );
+				}
+			}
+			else{
+				//std::cout <<  eclass.errormsg << std::endl;
+				std::cout <<  osrl << std::endl;
+			}
+			delete fileUtil;
+			fileUtil  = NULL;
+		}//end remote catch
+	} else{// solve locally
+		try{
 			if(osoptions->osil != ""){
 				osilreader = new OSiLReader();
 				osrl = buildSolver(osoptions->solverName, osoptions->osol, osilreader->readOSiL( osoptions->osil));
@@ -545,36 +563,40 @@ void solve(){
 				}
 			}
 			else cout << osrl << endl;
-		}//end of local solve
+		}//end local solve try
 		
-	}//end try
-	
-	catch(const ErrorClass& eclass){
-		
-		OSResult *osresult = NULL;
-		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != ""){
-			//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-			fileUtil->writeFileFromString(osoptions->osrlFile,  osrl);
-			if(osoptions->browser != ""){
-				std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
-				const char *ch = &str[ 0];
-				std::system( ch );
+		catch(const ErrorClass& eclass){
+			
+			OSResult *osresult = NULL;
+			OSrLWriter *osrlwriter = NULL;
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage( eclass.errormsg);
+			osresult->setGeneralStatusType( "error");
+			std::string osrl = osrlwriter->writeOSrL( osresult);
+			if(osoptions->osrlFile != ""){
+				//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+				fileUtil->writeFileFromString(osoptions->osrlFile,  osrl);
+				if(osoptions->browser != ""){
+					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
+					const char *ch = &str[ 0];
+					std::system( ch );
+				}
 			}
-		}
-		else{
-			//std::cout <<  eclass.errormsg << std::endl;
-			std::cout <<  osrl << std::endl;
-		}
-		delete osresult;
-		delete osrlwriter;
-	}//end catch
-	
+			else{
+				//std::cout <<  eclass.errormsg << std::endl;
+				std::cout <<  osrl << std::endl;
+			}
+			delete osresult;
+			osresult = NULL;
+			delete osrlwriter;
+			osrlwriter = NULL;
+			delete fileUtil;
+			fileUtil = NULL;
+		}//end local catch
+		
+		
+	}//end of local solve
 	//garbage collection
 	if(osilreader != NULL) delete osilreader;
 	osilreader = NULL;

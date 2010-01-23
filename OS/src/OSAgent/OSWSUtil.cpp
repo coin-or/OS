@@ -355,6 +355,20 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 	// find start of XML information
 	string::size_type startxml = soapstring.find(serviceMethod+"Return" , 1);
 	if (startxml == string::npos){
+		//something went wrong, perhaps we had an error in service location
+	
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( "we had a problem contacting the server which we cannot figure out -- check address of server");
+		osresult->setGeneralStatusType( "error");
+		result = osrlwriter->writeOSrL( osresult);	
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;	
+	//
 		return result;	
 	}    
 	else{
