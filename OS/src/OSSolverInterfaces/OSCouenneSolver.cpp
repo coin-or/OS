@@ -561,7 +561,7 @@ void CouenneSolver::solve() throw (ErrorClass) {
 	
 		//std::cout << "INITIALIZE COUENNE " << std::endl;
 		bool setupInit = false;
-		setupInit = couenneSetup.InitializeCouenne(argv, couenne, ci);
+		setupInit = couenneSetup.InitializeCouenne(argv, couenne, NULL, ci);
 		//std::cout << "ci -> isProvenOptimal ()" << ci -> isProvenOptimal ()<< std::endl;
 		
 
