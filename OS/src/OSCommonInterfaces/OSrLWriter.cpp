@@ -65,9 +65,10 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	#endif
   	// Set directory containing stylesheet files.
   	std::string xsltDir;
-    xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
+	// xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
     // always go with '/' -- it is a hypertext reference
-    xsltDir = "../stylesheets/";
+   // xsltDir = "../stylesheets/";
+	xsltDir = "http://www.coin-or.org/OS/stylesheets/";
 	int i, j;
 	bool generalTagPrinted;
 	bool systemTagPrinted;

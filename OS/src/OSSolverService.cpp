@@ -1314,7 +1314,7 @@ std::string  buildSolver(std::string solverName, std::string osol, OSInstance *o
 			}
 		}		
 		
-		std::cout << "SET SOLVER INSTANCE " << std::endl;
+		//std::cout << "SET SOLVER INSTANCE " << std::endl;
 		solverType->osinstance = osinstance;
 		solverType->osol = osol;
 		solverType->buildSolverInstance();
