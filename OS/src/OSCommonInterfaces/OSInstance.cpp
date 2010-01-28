@@ -1393,7 +1393,7 @@ int OSInstance::getNumberOfQuadraticTerms(){
 	if(m_iQuadraticTermNumber == -1){
 	// if m_iQuadraticTermNumber == -1 then the parser did not find any q terms so 
 	// must new the object
-		if(instanceData->quadraticCoefficients == NULL)instanceData->quadraticCoefficients = new QuadraticCoefficients();
+	//if(instanceData->quadraticCoefficients == NULL)instanceData->quadraticCoefficients = new QuadraticCoefficients();
 		m_iQuadraticTermNumber = instanceData->quadraticCoefficients->numberOfQuadraticTerms;
 	}
 	return m_iQuadraticTermNumber;
