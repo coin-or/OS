@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -22,7 +22,7 @@
 			<xs:element name="analysisData" type="AnalysisData">
 				<xs:annotation>
 					<xs:documentation>Proposal</xs:documentation>
-				</xs:annotation> 
+				</xs:annotation>
 			</xs:element>
 			<!--xs:element name="math" minOccurs="0"/-->
 		</xs:sequence>
@@ -74,7 +74,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="instance" type="InstanceAnalysis" minOccurs="0">
+			<xs:element name="problem" type="InstanceAnalysis" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -89,6 +89,8 @@
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="constraints" type="ConstraintAnalysis" minOccurs="0"/>
+			<xs:element name="linearConstraintCoefficient" type="LinearConstraintCoefficientAnalysis" minOccurs="0"/>
 			<xs:element name="quadraticCoefficients" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
@@ -104,8 +106,16 @@
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="matrixProgramming" type="SemidefiniteBlockAnalysis" minOccurs="0"/>
-			<xs:element name="specialOrderedSets" type="SemidefiniteBlockAnalysis" minOccurs="0"/>
+			<xs:element name="specialOrderedSets" type="SemidefiniteBlockAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="matrixProgramming" type="SemidefiniteBlockAnalysis" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="cones" type="ConeAnalysis" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
