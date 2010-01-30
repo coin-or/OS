@@ -328,6 +328,8 @@ OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/matlab/OSMatlabSolver.cpp -text
 OS/examples/misc/misc.cpp -text
 OS/examples/misc/sampleMatrixProgramming-v5_5.osil -text
+OS/examples/osJavaDemo/OSJavaDemo.java -text
+OS/examples/osJavaDemo/OSParameter.xml -text
 OS/examples/osModificationDemo/Makefile.in -text
 OS/examples/osModificationDemo/OSModificationDemo.cpp -text
 OS/examples/osRemoteTest/Makefile.in -text
