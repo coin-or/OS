@@ -74,13 +74,17 @@ int main(int argC, char* argV[]){
 	fileUtil = new FileUtil();
 	try {
 	
-		std::string osrl = fileUtil->getFileAsString( "solutionResult.xml" );	
-		OSrLReader *osrlreader = NULL;
-		osrlreader = new OSrLReader();
-		osrlreader->readOSrL( osrl);
+		std::string osil = fileUtil->getFileAsString( "test.xml" );	
+		OSiLReader *osilreader = NULL;
+		OSInstance *osinstance = NULL;
+		osilreader = new OSiLReader();
+		osinstance = osilreader->readOSiL( osil);
+		OSiLWriter *osilwriter = NULL;
+		osilwriter = new OSiLWriter();
+		std::cout << osilwriter->writeOSiL( osinstance);
 		delete fileUtil;
-		std::cout << osrl.size() << std::endl;
-		delete osrlreader;
+		delete osilreader;
+		delete osilwriter;
 	}
 	catch(const ErrorClass& eclass){
 		delete fileUtil;
