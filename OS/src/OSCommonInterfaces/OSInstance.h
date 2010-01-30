@@ -793,7 +793,7 @@ private:
 	/**
 	 * m_bProcessVariables holds whether the variables are processed. 
 	 */
-	bool m_bProcessVariables ;
+	bool m_bProcessVariables;
 	
 	/**
 	 * m_iVariableNumber holds the variable number. 
@@ -1021,25 +1021,25 @@ private:
 	 * m_linearConstraintCoefficientsInColumnMajor holds the standard 3 array data structure for linear constraint coefficients 
 	 * (starts, indexes and values) in column major. 
 	 */
-	SparseMatrix* m_linearConstraintCoefficientsInColumnMajor ;
+	SparseMatrix* m_linearConstraintCoefficientsInColumnMajor;
 
 	/**
 	 * m_linearConstraintCoefficientsInRowMajor holds the standard 3 array data structure for linear constraint coefficients 
 	 * (starts, indexes and values) in row major. 
 	 */
-	SparseMatrix* m_linearConstraintCoefficientsInRowMajor ;
+	SparseMatrix* m_linearConstraintCoefficientsInRowMajor;
 
 	
 	/**
 	 * m_bProcessQuadraticTerms holds whether the quadratic terms are processed. 
 	 */
-	bool m_bProcessQuadraticTerms ;
+	bool m_bProcessQuadraticTerms;
 
 	/**
 	 * m_iQuadraticTermNumber holds the number of specified 
 	 * (usually nonzero) qTerms in the quadratic coefficients. 
 	 */
-	int m_iQuadraticTermNumber ;
+	int m_iQuadraticTermNumber;
 
 	/**
 	 * m_mdConstraintFunctionValues holds a double array of constraint function values -- the size of the array is equal to getConstraintNumber().  
@@ -1103,12 +1103,12 @@ private:
 	 * m_iNumberOfNonlinearVariables is the number of variables that appear 
 	 * in a nonlinear expression.
 	 */
-	unsigned int m_iNumberOfNonlinearVariables ;
+	unsigned int m_iNumberOfNonlinearVariables;
 	 
 	/**
 	 * m_bProcessNonlinearExpressions holds whether the nonlinear expressions are processed. 
 	 */
-	bool m_bProcessNonlinearExpressions ;
+	bool m_bProcessNonlinearExpressions;
 	
 	/**
 	 * m_iNonlinearExpressionNumber holds the number of nonlinear expressions. 
@@ -1119,7 +1119,7 @@ private:
 	 * m_miNonlinearExpressionIndexes holds an integer array of nonlinear expression indexes,
 	 * negative indexes correspond to objectives.  
 	 */
-	int* m_miNonlinearExpressionIndexes ;
+	int* m_miNonlinearExpressionIndexes;
 	
 	/**
 	 * m_bProcessExpressionTrees is true if the expression trees have been processed. 
@@ -1221,7 +1221,7 @@ private:
 	bool m_bSparseJacobianCalculated;
 	
 	/**
-	 * m_mapExpressionTrees holds a hash map of expression trees in postfix format, with the key being the row index
+	 * m_mapExpressionTreesInPostfix holds a hash map of expression trees in postfix format, with the key being the row index
 	 * and value being the expression tree representing the nonlinear expression of that row.
 	 */
 	std::map<int, std::vector<OSnLNode*> > m_mapExpressionTreesInPostfix ;
