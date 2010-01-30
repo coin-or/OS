@@ -82,6 +82,16 @@ int main(int argC, char* argV[]){
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		std::cout << osilwriter->writeOSiL( osinstance);
+		std::cout << osinstance->instanceData->constraints->con[0]->lb -11 << std::endl;
+		std::cout << os_dtoa_format( osinstance->instanceData->constraints->con[0]->lb) << std::endl;
+		std::cout << osinstance->instanceData->constraints->con[0]->ub << std::endl;
+		std::cout << os_dtoa_format( osinstance->instanceData->constraints->con[0]->ub) << std::endl;
+		cout << std::endl << std::endl ;
+		//std::cout << os_dtoa_format( inf) << std::endl;
+		char *pEnd;
+		const char *number = "INF";
+		std::cout << os_strtod_wrap(number, &pEnd) << std::endl;
+		std::cout <<  os_dtoa_format ( os_strtod_wrap(number, &pEnd) ) << std::endl;
 		delete fileUtil;
 		delete osilreader;
 		delete osilwriter;
