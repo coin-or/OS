@@ -1,3 +1,22 @@
+/** @file OSJavaDemo.java
+ * 
+ * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @version 1.0, 29/01/2010
+ * @since   OS2.0
+ *
+ * \remarks
+ * Copyright (C) 2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Common Public License. 
+ * Please see the accompanying LICENSE file in root directory for terms.
+ * 
+ * Based on example of Olivier Cailloux
+ * 
+ */ 
+
+
+
 import java.io.File;
 
 //import org.apache.axis.MessageContext;
