@@ -13,6 +13,17 @@ import org.optimizationservices.oscommon.datastructure.osgeneral.SparseVector;
 import org.optimizationservices.oscommon.localinterface.OSInstance;
 import org.optimizationservices.oscommon.representationparser.OSiLWriter;
 
+/**
+ the following are in my CLASSPATH
+ OSCommon.jar
+ axis.jar
+ jaxrpc.jar
+ xerces.jar
+ commons-logging.jar
+ commons-discovery.jar
+ or124.jar
+ */
+
 
 public class OSJavaDemo {
 	
