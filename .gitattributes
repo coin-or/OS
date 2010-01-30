@@ -39,6 +39,7 @@ OSCommon/.classpath -text
 OSCommon/.project -text
 OSCommon/META-INF/MANIFEST.MF -text
 OSCommon/OSCommon.jar -text
+OSCommon/OSParameter.xml -text
 OSCommon/WEB-INF/jwsClasses/SimpleSolver.jws -text
 OSCommon/WEB-INF/lib/axis-ant.jar -text
 OSCommon/WEB-INF/lib/axis.jar -text
