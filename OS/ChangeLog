@@ -5,32 +5,36 @@ Sunday November 22 12:00:00 2009 Kipp Martin <kmartin@chicagobooth.edu>
 
 	* Changes to Trunk
 
+	* changes to OSiL schema for easier conversion of SDPA format
+
+	* added two versions of a small problem (SDPA1) to examples/misc folder
+
 	* add the example OSJavaDemo.java to OS/examples/osJava -- this examples shows how to call the C++ OSSolverService
 	  using Java code from branches/OSjava/OSCommon
 
-	* applications/amplClient/OSAmplClient.cpp -- added the feature that this reads an OSoL
-	 file which is given as an option file and sends it on to the solver.
+	* applications/amplClient/OSAmplClient.cpp -- added a feature to read an option file
+       in OSoL format and send it on to the solver.
 	
-	* applications/amplClient/OSAmplClient.cpp -- changed the solver defaut selection, if no options are specified using 
-	 {\bf OSAmplClient\_options}, by default, for continuous linear models  clp is used. 
-	 For continuous nonlinear models ipopt is used. For mixed-integer linear models (MIP), cbc is used. 
-	 For mixed-integer nonlinear models  bonmin is used.  All solvers are invoked locally. 
+	* applications/amplClient/OSAmplClient/OSAmplClient.cpp -- changed the solver default selection.
+       If no options are specified using {\bf OSAmplClient\_options}, by default, clp is used for continuous linear models. 
+	 For continuous nonlinear models ipopt is used. For mixed-integer linear models (MIP) cbc is used. 
+	 For mixed-integer nonlinear models bonmin is used.  All solvers are invoked locally. 
 	 
-	* src/OSSolverService.cpp -- changed the solver defaut selection, if no options are specified using 
-	 {\bf OSAmplClient\_options}, by default, for continuous linear models  clp is used. 
-	 For continuous nonlinear models ipopt is used. For mixed-integer linear models (MIP), cbc is used. 
-	 For mixed-integer nonlinear models  bonmin is used.  All solvers are invoked locally.
+	* src/OSSolverService.cpp -- changed the solver default selection.
+	 If no options are specified using {\bf OSAmplClient\_options}, by default, clp is used for continuous linear models. 
+	 For continuous nonlinear models ipopt is used. For mixed-integer linear models (MIP) cbc is used. 
+	 For mixed-integer nonlinear models bonmin is used.  All solvers are invoked locally. 
 	 
 	* src/OSModelInterfaces/OSgams2osil.cpp(h) -- added these two files.  This allows for reading of the GAMS
 	 .dat format and converting to OSiL.
 	 
-	* src/OSAgent/OSWSUtil.cpp -- changed the soapify() and defsoapify() to allow for encasing the OSiL, OSoL, OSrL,
-	 to be encased in a CDATA section to speed-up processing
+	* src/OSAgent/OSWSUtil.cpp -- changed the soapify() and desoapify() to allow for encasing the OSiL, OSoL, OSrL
+	 files in a CDATA section to speed up processing.
 	 
-	* Ticket #12 change src/OSSolverInterfaces/OSIpotSolver.cpp to report reduced costs in the result
+	* (Ticket #12) src/OSSolverInterfaces/OSIpoptSolver.cpp -- changed to report reduced costs in the result. 
 	
-	* Ticket #13 change in src/OSSolverInterfaces/ the solver interfaces to work with either 0 variables
-	 specified or an empty variables variables section. Also changed the OSiL parser to allow for an empty
+	* (Ticket #13) src/OSSolverInterfaces/ -- changed the solver interfaces to work with either 0 variables
+	 specified or an empty variables section. Also changed the OSiL parser to allow for an empty
 	 variables section.
 	   
 
