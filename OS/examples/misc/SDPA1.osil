@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSiL.xsd">
+	<instanceHeader>
+		<name>SDPA1</name>
+		<source>
+			created by H.I. Gassmann from the description of the SDPA format 
+			found at htp://plato.asu.edu/ftp/sdpa_format.txt</source>
+		<description>
+			This is a very small semidefinite program:
+			
+			min 10x1 + 20x2
+			st  X = F1x1 + F2x2 - F0
+			    X positive semidefinite
+			    
+			where F0 = [ 1 0 0 0
+			                     0 2 0 0
+			                     0 0 3 0
+			                     0 0 0 4]
+			                     
+			            F1 = [1 0 0 0
+			                     0 1 0 0
+			                     0 0 0 0
+			                     0 0 0 0]
+			                     
+			            F2 = [0 0 0 0
+			                     0 1 0 0 
+			                     0 0 5 2
+			                     0 0 2 6]
+		</description>
+	</instanceHeader>	
+	<instanceData>
+		<variables numberOfVariables="18">
+			<var lb="-INF" ub="INF" mult="18"></var>
+		</variables>
+		<objectives>
+			<obj maxOrMin="min" numberOfObjCoef="2">
+				<coef idx="0">10.</coef>
+				<coef idx="1">20.</coef>
+			</obj>
+		</objectives>
+		<matrices numberOfMatrices="4">
+			<constantMatrix numberOfColumns="4" id="F0" numberOfRows="4" numberOfEl="4">
+				<elements>
+					<start>
+						<el>0</el>
+						<el>1</el>
+						<el>2</el>
+						<el>3</el>
+						<el>4</el>
+					</start>
+					<rowIdx>
+						<el>0</el>
+						<el>1</el>
+						<el>2</el>
+						<el>3</el>
+					</rowIdx>
+					<value>
+						<el>1.</el>
+						<el>2.</el>
+						<el>3.</el>
+						<el>4.</el>
+					</value>
+				</elements>
+			</constantMatrix>			
+			<constantMatrix numberOfColumns="4" id="F1" numberOfRows="4" numberOfEl="2">
+				<elements>
+					<start>
+						<el>0</el>
+						<el>1</el>
+						<el>2</el>
+						<el>2</el>
+						<el>2</el>
+					</start>
+					<rowIdx>
+						<el>0</el>
+						<el>1</el>
+					</rowIdx>
+					<value>
+						<el>1.</el>
+						<el>1.</el>
+					</value>
+				</elements>
+			</constantMatrix>
+			<constantMatrix numberOfColumns="4" id="F2" numberOfRows="4"  symmetric="true" numberOfEl="4">
+				<elements>
+					<start>
+						<el>0</el>
+						<el>0</el>
+						<el>1</el>
+						<el>2</el>
+						<el>4</el>
+					</start>
+					<rowIdx>
+						<el>1</el>
+						<el>2</el>
+						<el>2</el>
+						<el>3</el>
+					</rowIdx>
+					<value>
+						<el>1.</el>
+						<el>5.</el>
+						<el>2.</el>
+						<el>6.</el>
+					</value>
+				</elements>
+			</constantMatrix>
+			<linearMatrix numberOfColumns="4" id="X" numberOfRows="4" numberOfEl="0" varIdxStart="2" varIdxEnd="17"/>
+		</matrices>
+		<cones numberOfCones="1">
+			<semidefiniteCone numberOfColumns="4" id="C0" numberOfRows="4"/>
+		</cones>
+		<matrixProgramming>
+			<matrixVariables numberOfMatrixVariables="1">
+				<matrixVar matrixID="X" lbConeId="C0"/>
+			</matrixVariables>
+			<matrixConstraints numberOfMatrixConstraints="1">
+				<matrixCon numberOfRows="1" numberOfCols="1" lbMatrixID="F0" ubMatrixID="F0"/>			
+			</matrixConstraints>
+			<linearConstraintMatrixOperators numberOfOperators="3">
+				<matrixVarOperator matrixVarIdx="0" matrixConIdx="0" scalarCoef="-1"/>
+				<scalarVarOperator varIdx="0" matrixConIdx="0" matrixID="F1"></scalarVarOperator>
+				<scalarVarOperator varIdx="1" matrixConIdx="0" matrixID="F2"></scalarVarOperator>
+			</linearConstraintMatrixOperators>
+		</matrixProgramming>
+		</instanceData>
+</osil>
