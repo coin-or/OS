@@ -29,7 +29,10 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="el" maxOccurs="unbounded">
+			<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfEl</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:int">
@@ -56,7 +59,10 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="el" maxOccurs="unbounded">
+			<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfEl</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:double">
@@ -330,7 +336,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice>
+		<xs:choice minOccurs="0">
 			<xs:element name="elements" type="ConstantMatrixElements"/>
 			<xs:element name="transformation" type="ConstantMatrixTransformation"/>
 		</xs:choice>
@@ -344,7 +350,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of elements specified in the value must agree with numberOfSpecifiedElements(after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of elements specified in the value must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -353,6 +359,15 @@
 			</xs:choice>
 			<xs:element name="value" type="DoubleVector"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="symmetric" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixTransformation">
 		<xs:annotation>
@@ -2179,11 +2194,11 @@
 			<xs:element name="depots" type="TravellingSalesPersonDepots" minOccurs="0"/>
 			<xs:element name="tours" type="TravellingSalesPersonTours" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="type" use="optional" default="symetricTSP">
+		<xs:attribute name="type" use="optional" default="symmetricTSP">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:enumeration value="symetricTSP"/>
-					<xs:enumeration value="asymetricTSP"/>
+					<xs:enumeration value="symmetricTSP"/>
+					<xs:enumeration value="asymmetricTSP"/>
 					<xs:enumeration value="probalisticTSP"/>
 					<xs:enumeration value="SOP"/>
 					<xs:enumeration value="HCP"/>

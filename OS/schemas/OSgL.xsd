@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -337,17 +337,12 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:choice minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>May be omitted if numberOfEl = 0</xs:documentation>
-			</xs:annotation>
 			<xs:element name="elements" type="ConstantMatrixElements"/>
 			<xs:element name="transformation" type="ConstantMatrixTransformation"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="symmetric" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixElements">
 		<xs:annotation>
@@ -355,7 +350,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of elements specified in the value must agree with numberOfSpecifiedElements (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of elements specified in the value must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -364,6 +359,15 @@
 			</xs:choice>
 			<xs:element name="value" type="DoubleVector"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="symmetric" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixTransformation">
 		<xs:annotation>
@@ -2190,11 +2194,11 @@
 			<xs:element name="depots" type="TravellingSalesPersonDepots" minOccurs="0"/>
 			<xs:element name="tours" type="TravellingSalesPersonTours" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="type" use="optional" default="symetricTSP">
+		<xs:attribute name="type" use="optional" default="symmetricTSP">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:enumeration value="symetricTSP"/>
-					<xs:enumeration value="asymetricTSP"/>
+					<xs:enumeration value="symmetricTSP"/>
+					<xs:enumeration value="asymmetricTSP"/>
 					<xs:enumeration value="probalisticTSP"/>
 					<xs:enumeration value="SOP"/>
 					<xs:enumeration value="HCP"/>
