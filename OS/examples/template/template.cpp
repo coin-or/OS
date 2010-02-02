@@ -74,24 +74,18 @@ int main(int argC, char* argV[]){
 	fileUtil = new FileUtil();
 	try {
 	
-		std::string osil = fileUtil->getFileAsString( "test.xml" );	
+		std::string osil = fileUtil->getFileAsString( "test.osil" );	
+		std::string osilb64;
 		OSiLReader *osilreader = NULL;
 		OSInstance *osinstance = NULL;
 		osilreader = new OSiLReader();
 		osinstance = osilreader->readOSiL( osil);
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
-		std::cout << osilwriter->writeOSiL( osinstance);
-		std::cout << osinstance->instanceData->constraints->con[0]->lb -11 << std::endl;
-		std::cout << os_dtoa_format( osinstance->instanceData->constraints->con[0]->lb) << std::endl;
-		std::cout << osinstance->instanceData->constraints->con[0]->ub << std::endl;
-		std::cout << os_dtoa_format( osinstance->instanceData->constraints->con[0]->ub) << std::endl;
-		cout << std::endl << std::endl ;
-		//std::cout << os_dtoa_format( inf) << std::endl;
-		char *pEnd;
-		const char *number = "INF";
-		std::cout << os_strtod_wrap(number, &pEnd) << std::endl;
-		std::cout <<  os_dtoa_format ( os_strtod_wrap(number, &pEnd) ) << std::endl;
+		osilwriter->m_bWriteBase64 = true;
+		osilb64 = osilwriter->writeOSiL( osinstance);
+		std::cout << osilb64 << std::endl;
+		fileUtil-> writeFileFromString("testb64.osil", osilb64);
 		delete fileUtil;
 		delete osilreader;
 		delete osilwriter;
