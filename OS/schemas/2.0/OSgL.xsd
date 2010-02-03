@@ -440,14 +440,14 @@
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="LinearMatrixElement">
+	<xs:complexType name="LinearMatrixElement"> 
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="var" type="LinearMatrixElementVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
