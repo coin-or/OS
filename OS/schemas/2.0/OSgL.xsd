@@ -482,16 +482,18 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
-				<xs:documentation>Number of elements specified must agree with numberOfSpecifiedElements</xs:documentation>
+				<xs:documentation>Number of El's specified must agree with numberOfEl. Number of blocks specified must agree with numberOfBlocks. </xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="GeneralMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="el" type="GeneralMatrixElement"/>
+			<xs:element name="block" type="GeneralMatrixBlock"/>
+		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="symmetric" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
@@ -519,6 +521,18 @@
 		</xs:sequence>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="GeneralMatrixBlock">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="OSnLNode"/>
+		</xs:sequence>
+		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="XMLData">
 		<xs:annotation>
