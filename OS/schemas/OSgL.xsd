@@ -527,7 +527,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element ref="OSnLNode"/>
+			<xs:element ref="OSnLMNode"/>
 		</xs:sequence>
 		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
