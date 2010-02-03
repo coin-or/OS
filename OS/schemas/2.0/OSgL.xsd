@@ -360,6 +360,16 @@
 			<xs:element name="value" type="DoubleVector"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="base" use="optional" default="none">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none"/>
+					<xs:enumeration value="objectiveCoefficients"/>
+					<xs:enumeration value="linearConstraintCoefficients"/>
+					<xs:enumeration value="matrix"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -488,11 +498,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="none"/>
 					<xs:enumeration value="objectiveCoefficients"/>
-					<xs:enumeration value="variableLB"/>
-					<xs:enumeration value="variableUB"/>
 					<xs:enumeration value="linearConstraintCoefficients"/>
-					<xs:enumeration value="constraintLB"/>
-					<xs:enumeration value="constraintUB"/>
 					<xs:enumeration value="matrix"/>
 				</xs:restriction>
 			</xs:simpleType>
