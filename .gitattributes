@@ -330,6 +330,8 @@ OS/examples/misc/SDPA1.osil -text
 OS/examples/misc/SDPA1v2.osil -text
 OS/examples/misc/SDPA2OSiL.f90 -text
 OS/examples/misc/SDPA_Format.txt -text
+OS/examples/misc/gpp100.dat-s -text
+OS/examples/misc/gpp100.osil -text
 OS/examples/misc/misc.cpp -text
 OS/examples/misc/sampleMatrixProgramming-v5_5.osil -text
 OS/examples/misc/ss30.osil -text
