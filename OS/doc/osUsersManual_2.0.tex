@@ -6034,7 +6034,14 @@ uploaded file that is saved on the server, so that you can put it in the corresp
 \item Investigate the Amazon cloud computing
 
 \item Installer for Windows
+
+\item Documentation on the new Java example \item  Building some sort of Java distribution for users who want to build OSiL from Java and call OSSolverService from Java. The demand for this may be nontrivial.  And then document this.\item  Treat \url{https://projects.coin-or.org/OS/ticket/14} 
+
 \end{itemize}
+
+\begin{comment}
+I like the message handling of Ipopt, where you can register severaljournals that can handle output for different categories with differingprint levels. For the GAMSlinks we then have a GamsJournal that is usedto direct the output into the GAMS output channels.Cbc and Osi-interfaced solvers use CoinMessageHandler. I do not reallylike them because the message handler sometimes insert spaces ornewlines which make them very inflexible about what kind of output youcan print, but we have a GamsMessageHandler that does the job. Not allOsi links support this yet. For Clp, Cbc, DyLP it should work. For thetrunk versions of Cpx, Msk, Xpr it should also work. Symphony I don'tremember.For Bonmin and Couenne one has to pass in both an Ipopt::Journal and aCoinMessageHandler.
+\end{comment}
 
 %\fi %--------------------------------------------------
 
