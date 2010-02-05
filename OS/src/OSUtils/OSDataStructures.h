@@ -35,7 +35,6 @@
 
 
 
-
 /*! \class SparseMatrix
  * \brief a sparse matrix data structure
  */
@@ -362,7 +361,7 @@ public:
 
 
 /*! \struct IndexValuePair
- *  \brief A coomonly used structure holding an index-value pair
+ *  \brief A commonly used structure holding an index-value pair
  */
 struct IndexValuePair{
 	/** idx holds the index of an entity (such as a variable, constraint, objective)
@@ -375,7 +374,6 @@ struct IndexValuePair{
 	double value;
 		
 };
-
 
 #endif
 

@@ -633,7 +633,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 				solutionDescription = "STOP_AT_TINY_STEP[IPOPT]: Algorithm proceeds with very little progress.";
 				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
 				if(x != NULL) osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>( x)); 
-				if(lambda != NULL)  osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));
+				if(lambda != NULL) osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));
 				if(osinstance->getObjectiveNumber() > 0){ 
 					mdObjValues[0] = obj_value ;
 					osresult->setObjectiveValuesDense(solIdx, mdObjValues); 
@@ -642,7 +642,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 			case STOP_AT_ACCEPTABLE_POINT:
 				solutionDescription = "STOP_AT_ACCEPTABLE_POINT[IPOPT]: Algorithm stopped at a point that was converged, not to _desired_ tolerances, but to _acceptable_ tolerances";
 				osresult->setSolutionStatus(solIdx,  "IpoptAccetable", solutionDescription);
-				if(lambda != NULL)  osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));
+				if(lambda != NULL) osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));
 				if(x != NULL)osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x)); 
 				if(osinstance->getObjectiveNumber() > 0){ 
 					mdObjValues[0] = obj_value ;

@@ -242,7 +242,7 @@ int main(int argC, char* argV[])
 	}
 
 #ifdef GUS_DEBUG
-//	testConfig = "parser";
+	testConfig = "parser";
 #endif
 
 	if (testConfig == "install") testLevel = 1;
@@ -5151,10 +5151,13 @@ if (PARSER_TESTS){
 		if (!ok) 
 			throw ErrorClass("Writing an osresult then reading leads to loss of data");
 
+/** The second test verifies the get() methods.
+ *  The OSResult object just created is duplicated using get() and set() methods.
+ *  At the end, the duplicaetd object is compared to the original. 
+ *  The test requires both to be equal.
+ */
 		cout << endl << "Now test get() methods" << endl;
 
-//=================
-// Testing get() methods
 		if (osresult2  != NULL) delete osresult2;
 		osresult2 = new OSResult();
 
@@ -5767,16 +5770,10 @@ if (PARSER_TESTS){
 
 		std::cout << "OSResult object duplicated with get() and set() methods" << std::endl;
 
-
-
-		std::cout << std::endl << "done" << std::endl;
-
 		if (osrlwriter != NULL) delete osrlwriter;
 		if (osrlreader != NULL) delete osrlreader;
 		if (osresult1  != NULL) delete osresult1;
 		if (osresult2  != NULL) delete osresult2;
-
-
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -5815,7 +5812,6 @@ if (PARSER_TESTS){
 		cout << "Test parsing an OSrL file" << endl;
 		cout << "First read the OSrL file into a string" << endl;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
-//		osrlFileName = dataDir  + "osrlFiles" + dirsep + "rosenbrockmod.osrl"; 
 		start = clock();
 		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
 		finish = clock();
