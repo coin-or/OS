@@ -5,6 +5,8 @@ Sunday November 22 12:00:00 2009 Kipp Martin <kmartin@chicagobooth.edu>
 
 	* Changes to Trunk
 
+	* added eror checking to OSInstance, OSOption and OSResult
+
 	* changes to OSiL schema for easier conversion of SDPA format
 
 	* added two versions of a small problem (SDPA1) to examples/misc folder
