@@ -44,7 +44,7 @@ OSmps2osil::~OSmps2osil(){
 	#ifdef DEBUG
 	cout << "now delete m_MpsData" << endl;
 	#endif
-	delete m_MpsData;
+	//delete m_MpsData;
 
 } // end destructor
 
