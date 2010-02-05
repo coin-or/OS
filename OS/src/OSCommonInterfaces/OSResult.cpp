@@ -1155,245 +1155,302 @@ OSResult::~OSResult(){
   	this->dualVals.clear();
 }//end OSResult destructor
 
-
-
 // =============================================================
 // get methods
 
 GeneralStatus* OSResult::getGeneralStatus(){
+	if (general == NULL) return NULL;
 	return general->generalStatus;
 }//getGeneralStatus
 
-
 string OSResult::getGeneralStatusType(){
-	if(general->generalStatus == NULL) return "";
+	if (general == NULL) return "";
+	if (general->generalStatus == NULL) return "";
 	return general->generalStatus->type;
 }//getGeneralStatusType
 
 string OSResult::getGeneralStatusDescription(){
-	if(general->generalStatus == NULL) return NULL;
+	if (general == NULL) return "";
+	if (general->generalStatus == NULL) return "";
 	return general->generalStatus->description;
 }//getGeneralStatusDescription
 
 int OSResult::getNumberOfGeneralSubstatuses(){
-	if(general->generalStatus == NULL) return -1;
+	if (general == NULL) return -1;
+	if (general->generalStatus == NULL) return -1;
 	return general->generalStatus->numberOfSubstatuses;
 }//getGeneralStatusDescription
 
 string OSResult::getGeneralSubstatusName(int i){
-	if(general->generalStatus == NULL) return NULL;
-	if(general->generalStatus->substatus[i] == NULL) return NULL;
+	if (general == NULL) return "";
+	if (general->generalStatus == NULL) return "";
+	if (i < 0 || i >= general->generalStatus->numberOfSubstatuses)
+		throw ErrorClass("idx is outside of range in routine getGeneralSubstatusName()");
+	if (general->generalStatus->substatus[i] == NULL) return "";
 	return general->generalStatus->substatus[i]->name;
 }//getGeneralSubstatusName
 	
 string OSResult::getGeneralSubstatusDescription(int i){
-	if(general->generalStatus == NULL) return NULL;
-	if(general->generalStatus->substatus[i] == NULL) return NULL;
+	if (general == NULL) return "";
+	if (general->generalStatus == NULL) return "";
+	if (i < 0 || i >= general->generalStatus->numberOfSubstatuses)
+		throw ErrorClass("idx is outside of range in routine getGeneralSubstatusDescription()");
+	if (general->generalStatus->substatus[i] == NULL) return "";
 	return general->generalStatus->substatus[i]->description;
 }//getGeneralSubstatusDescription
 
 string OSResult::getGeneralMessage(){
+	if (general == NULL) return "";
 	return general->message;
 }//getServiceName
 
 string OSResult::getServiceName(){
+	if (general == NULL) return "";
 	return general->serviceName;
 }//getServiceName
 
 string OSResult::getServiceURI(){
+	if (general == NULL) return "";
 	return general->serviceURI;
 }//getServiceURI
 
 string OSResult::getInstanceName(){
+	if (general == NULL) return "";
 	return general->instanceName;
 }//getInstanceName
 
 string OSResult::getJobID(){
+	if (general == NULL) return "";
 	return general->jobID;
 }//getJobID
 
 string OSResult::getSolverInvoked(){
+	if (general == NULL) return "";
 	return general->solverInvoked;
 }//getSolverInvoked
 
 string OSResult::getTimeStamp(){
+	if (general == NULL) return "";
 	return general->timeStamp;
 }//getTimeStamp
 
 int OSResult::getNumberOfOtherGeneralResults(){
-	if(general->otherResults == NULL) return -1;
+	if (general == NULL) return -1;
+	if (general->otherResults == NULL) return -1;
 	return 	general->otherResults->numberOfOtherResults;
 }//getNumberOfOtherGeneralResults
 
 string OSResult::getOtherGeneralResultName(int idx){
-	if (general->otherResults == NULL) return NULL;
+	if (general == NULL) return "";
+	if (general->otherResults == NULL) return "";
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherGeneralResultName()");
+	if (general->otherResults->other[idx] == NULL) return "";
 	return general->otherResults->other[idx]->name;
 }//getOtherGeneralResultName
 
 string OSResult::getOtherGeneralResultValue(int idx){
-	if (general->otherResults == NULL) return NULL;
+	if (general == NULL) return "";
+	if (general->otherResults == NULL) return "";
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherGeneralResultValue()");
+	if (general->otherResults->other[idx] == NULL) return "";
 	return general->otherResults->other[idx]->value;
 }//getOtherGeneralResultValue
 
 string OSResult::getOtherGeneralResultDescription(int idx){
-	if (general->otherResults == NULL) return NULL;
+	if (general == NULL) return "";
+	if (general->otherResults == NULL) return "";
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherGeneralResultDescription()");
+	if (general->otherResults->other[idx] == NULL) return "";
 	return general->otherResults->other[idx]->description;
 }//getOtherGeneralResultDescription
 
 string OSResult::getSystemInformation(){
+	if (system == NULL) return "";
 	return system->systemInformation;
 }//getSystemInformation
 
 string OSResult::getAvailableDiskSpaceUnit(){
-	if (system->availableDiskSpace == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->availableDiskSpace == NULL) return "";
 	return system->availableDiskSpace->unit;
 }//getAvailableDiskSpaceUnit
 
 string OSResult::getAvailableDiskSpaceDescription(){
-	if (system->availableDiskSpace == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->availableDiskSpace == NULL) return "";
 	return system->availableDiskSpace->description;
 }//getAvailableDiskSpaceDescription
 
 double OSResult::getAvailableDiskSpaceValue(){
+	if (system == NULL) return -1;
 	if (system->availableDiskSpace == NULL) return -1;
 	return system->availableDiskSpace->value;
 }//getAvailableDiskSpaceValue
 
 string OSResult::getAvailableMemoryUnit(){
-	if (system->availableMemory == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->availableMemory == NULL) return "";
 	return system->availableMemory->unit;
 }//getAvailableMemoryUnit
 
 string OSResult::getAvailableMemoryDescription(){
-	if (system->availableMemory == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->availableMemory == NULL) return "";
 	return system->availableMemory->description;
 }//getAvailableMemoryDescription
 
 double OSResult::getAvailableMemoryValue(){
+	if (system == NULL) return -1;
 	if (system->availableMemory == NULL) return -1;
 	return system->availableMemory->value;
 }//getAvailableMemoryValue
 
 string OSResult::getAvailableCPUSpeedUnit(){
-	if (system->availableCPUSpeed == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->availableCPUSpeed == NULL) return "";
 	return system->availableCPUSpeed->unit;
 }//getAvailableCPUSpeedUnit
 
 string OSResult::getAvailableCPUSpeedDescription(){
-	if (system->availableCPUSpeed == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->availableCPUSpeed == NULL) return "";
 	return system->availableCPUSpeed->description;
 }//getAvailableCPUSpeedDescription
 
 double OSResult::getAvailableCPUSpeedValue(){
+	if (system == NULL) return -1;
 	if (system->availableCPUSpeed == NULL) return -1;
 	return system->availableCPUSpeed->value;
 }//getAvailableCPUSpeedValue
 
 string OSResult::getAvailableCPUNumberDescription(){
-	if (system->availableCPUNumber == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->availableCPUNumber == NULL) return "";
 	return system->availableCPUNumber->description;
 }//getAvailableCPUNumberDescription
 
 int OSResult::getAvailableCPUNumberValue(){
+	if (system == NULL) return -1;
 	if (system->availableCPUNumber == NULL) return -1;
 	return system->availableCPUNumber->value;
 }//getAvailableCPUNumberValue
 
 int OSResult::getNumberOfOtherSystemResults(){
+	if (system == NULL) return -1;
 	if (system->otherResults == NULL) return -1;
 	return system->otherResults->numberOfOtherResults;
 }//getNumberOfOtherSystemResults
 
 string OSResult::getOtherSystemResultName(int idx){
-	if (system->otherResults == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->otherResults == NULL) return "";
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherSystemResultName()");
+	if (system->otherResults->other[idx] == NULL) return "";
 	return system->otherResults->other[idx]->name;
 }//getOtherSystemResultName
 
 string OSResult::getOtherSystemResultValue(int idx){
-	if (system->otherResults == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->otherResults == NULL) return "";
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherSystemResultValue()");
+	if (system->otherResults->other[idx] == NULL) return "";
 	return system->otherResults->other[idx]->value;
 }//getOtherSystemResultValue
 
 string OSResult::getOtherSystemResultDescription(int idx){
-	if (system->otherResults == NULL) return NULL;
+	if (system == NULL) return "";
+	if (system->otherResults == NULL) return "";
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherSystemResultDescription()");
+	if (system->otherResults->other[idx] == NULL) return "";
 	return system->otherResults->other[idx]->description;
 }//getOtherSystemResultDescription
 
 string OSResult::getCurrentState(){
+	if (service == NULL) return "";
 	return service->currentState;
 }//getCurrentState
 
 int OSResult::getCurrentJobCount(){
+	if (service == NULL) return -1;
 	return service->currentJobCount;
 }//getCurrentJobCount
 
 int OSResult::getTotalJobsSoFar(){
+	if (service == NULL) return -1;
 	return service->totalJobsSoFar;
 }//getTotalJobsSoFar
 
 string OSResult::getTimeServiceStarted(){
+	if (service == NULL) return "";
 	return service->timeServiceStarted;
 }//getTimeServiceStarted
 
 double OSResult::getServiceUtilization(){
+	if (service == NULL) return -1;
 	return service->serviceUtilization;
 }//getServiceUtilization
 
 int OSResult::getNumberOfOtherServiceResults(){
-	if(service->otherResults == NULL) return -1;
+	if (service == NULL) return -1;
+	if (service->otherResults == NULL) return -1;
 	return service->otherResults->numberOfOtherResults;
 }//getNumberOfOtherServiceResults
 
 string OSResult::getOtherServiceResultName(int idx){
-	if (service->otherResults == NULL) return NULL;
+	if (service == NULL) return "";
+	if (service->otherResults == NULL) return "";
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherServiceResultName()");
+	if (service->otherResults->other[idx] == NULL) return "";
 	return service->otherResults->other[idx]->name;
 }//getOtherServiceResultName
 
 string OSResult::getOtherServiceResultValue(int idx){
-	if (service->otherResults == NULL) return NULL;
+	if (service == NULL) return "";
+	if (service->otherResults == NULL) return "";
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherServiceResultValue()");
+	if (service->otherResults->other[idx] == NULL) return "";
 	return service->otherResults->other[idx]->value;
 }//getOtherServiceResultValue
 
 string OSResult::getOtherServiceResultDescription(int idx){
-	if (service->otherResults == NULL) return NULL;
+	if (service == NULL) return "";
+	if (service->otherResults == NULL) return "";
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherServiceResultDescription()");
+	if (service->otherResults->other[idx] == NULL) return "";
 	return service->otherResults->other[idx]->description;
 }//getOtherServiceResultDescription
 
 string OSResult::getJobStatus(){
+	if (job == NULL) return "";
 	return job->status;
 }//getJobStatus
 
 string OSResult::getJobSubmitTime(){
+	if (job == NULL) return "";
 	return job->submitTime;
 }//getJobSubmitTime
 
 string OSResult::getScheduledStartTime(){
+	if (job == NULL) return "";
 	return job->scheduledStartTime;
 }//getScheduledStartTime
 
 string OSResult::getActualStartTime(){
+	if (job == NULL) return "";
 	return job->actualStartTime;
 }//getActualStartTime
 
 string OSResult::getJobEndTime(){
+	if (job == NULL) return "";
 	return job->endTime;
 }//getJobEndTime
 
@@ -1404,126 +1461,148 @@ int OSResult::getNumberOfTimes(){
 }//getNumberOfTimes
 
 string OSResult::getTimingInfoUnit(int idx){
-	if (job == NULL) return NULL;
-	if (job->timingInformation == NULL) return NULL; 
+	if (job == NULL) return "";
+	if (job->timingInformation == NULL) return ""; 
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getTimingInfoUnit()");
+	if (job->timingInformation->time[idx] == NULL) return "";
 	return job->timingInformation->time[idx]->unit;
 }//getTimingInfoUnit
 
 string OSResult::getTimingInfoType(int idx){
-	if (job == NULL) return NULL;
-	if (job->timingInformation == NULL) return NULL; 
+	if (job == NULL) return "";
+	if (job->timingInformation == NULL) return ""; 
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getTimingInfoType()");
+	if (job->timingInformation->time[idx] == NULL) return "";
 	return job->timingInformation->time[idx]->type;
 }//getTimingInfoType
 
 string OSResult::getTimingInfoCategory(int idx){
-	if (job == NULL) return NULL;
-	if (job->timingInformation == NULL) return NULL; 
+	if (job == NULL) return "";
+	if (job->timingInformation == NULL) return ""; 
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getTimingInfoCategory()");
+	if (job->timingInformation->time[idx] == NULL) return "";
 	return job->timingInformation->time[idx]->category;
 }//getTimingInfoCategory
 
 string OSResult::getTimingInfoDescription(int idx){
-	if (job == NULL) return NULL;
-	if (job->timingInformation == NULL) return NULL; 
+	if (job == NULL) return "";
+	if (job->timingInformation == NULL) return ""; 
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getTimingInfoDescription()");
+	if (job->timingInformation->time[idx] == NULL) return "";
 	return job->timingInformation->time[idx]->description;
 }//getTimingInfoDescription
 
 double OSResult::getTimingInfoValue(int idx){
-	if (job == NULL) return NULL;
-	if (job->timingInformation == NULL) return NULL; 
+	if (job == NULL) return OSNAN;
+	if (job->timingInformation == NULL) return OSNAN; 
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getTimingInfoValue()");
+	if (job->timingInformation->time[idx] == NULL) return OSNAN;
 	return job->timingInformation->time[idx]->value;
 }//getTimingInfoValue
 
 string OSResult::getUsedDiskSpaceUnit(){
-	if (job->usedDiskSpace == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->usedDiskSpace == NULL) return "";
 	return job->usedDiskSpace->unit;
 }//getUsedDiskSpaceUnit
 
 string OSResult::getUsedDiskSpaceDescription(){
-	if (job->usedDiskSpace == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->usedDiskSpace == NULL) return "";
 	return job->usedDiskSpace->description;
 }//getUsedDiskSpaceDescription
 
 double OSResult::getUsedDiskSpaceValue(){
+	if (job == NULL) return -1;
 	if (job->usedDiskSpace == NULL) return -1;
 	return job->usedDiskSpace->value;
 }//getUsedDiskSpaceValue
 
 string OSResult::getUsedMemoryUnit(){
-	if (job->usedMemory == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->usedMemory == NULL) return "";
 	return job->usedMemory->unit;
 }//getUsedMemoryUnit
 
 string OSResult::getUsedMemoryDescription(){
-	if (job->usedMemory == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->usedMemory == NULL) return "";
 	return job->usedMemory->description;
 }//getUsedMemoryDescription
 
 double OSResult::getUsedMemoryValue(){
+	if (job == NULL) return -1;
 	if (job->usedMemory == NULL) return -1;
 	return job->usedMemory->value;
 }//getUsedMemoryValue
 
 string OSResult::getUsedCPUSpeedUnit(){
-	if (job->usedCPUSpeed == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->usedCPUSpeed == NULL) return "";
 	return job->usedCPUSpeed->unit;
 }//getUsedCPUSpeedUnit
 
 string OSResult::getUsedCPUSpeedDescription(){
-	if (job->usedCPUSpeed == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->usedCPUSpeed == NULL) return "";
 	return job->usedCPUSpeed->description;
 }//getUsedCPUSpeedDescription
 
 double OSResult::getUsedCPUSpeedValue(){
+	if (job == NULL) return -1;
 	if (job->usedCPUSpeed == NULL) return -1;
 	return job->usedCPUSpeed->value;
 }//getUsedCPUSpeedValue
 
 string OSResult::getUsedCPUNumberDescription(){
-	if (job->usedCPUNumber == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->usedCPUNumber == NULL) return "";
 	return job->usedCPUNumber->description;
 }//getUsedCPUNumberDescription
 
 int OSResult::getUsedCPUNumberValue(){
+	if (job == NULL) return -1;
 	if (job->usedCPUNumber == NULL) return -1;
 	return job->usedCPUNumber->value;
 }//getUsedCPUNumberValue
 
 int OSResult::getNumberOfOtherJobResults(){
+	if (job == NULL) return -1;
 	if (job->otherResults == NULL) return -1;
 	return job->otherResults->numberOfOtherResults;
 }//getNumberOfOtherJobResults
 
 string OSResult::getOtherJobResultName(int idx){
-	if (job->otherResults == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->otherResults == NULL) return "";
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherJobResultName()");
+	if (job->otherResults->other[idx] == NULL) return "";
 	return job->otherResults->other[idx]->name;
 }//getOtherJobResultName
 
 string OSResult::getOtherJobResultValue(int idx){
-	if (job->otherResults == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->otherResults == NULL) return "";
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherJobResultValue()");
+	if (job->otherResults->other[idx] == NULL) return "";
 	return job->otherResults->other[idx]->value;
 }//getOtherJobResultValue
 
 string OSResult::getOtherJobResultDescription(int idx){
-	if (job->otherResults == NULL) return NULL;
+	if (job == NULL) return "";
+	if (job->otherResults == NULL) return "";
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
-		return NULL;
+		throw ErrorClass("idx is outside of range in routine getOtherJobResultDescription()");
+	if (job->otherResults->other[idx] == NULL) return "";
 	return job->otherResults->other[idx]->description;
 }//getOtherJobResultDescription
-
 
 double OSResult::getTimeValue()
 {	if (job == NULL) return 0.0;
@@ -1531,7 +1610,6 @@ double OSResult::getTimeValue()
 	if (job->timingInformation->numberOfTimes <= 0) return 0.0;
 	return job->timingInformation->time[0]->value;
 }//getTimeValue
-
 
 int OSResult::getTimeNumber()
 {	if (job == NULL) return -1;
@@ -1548,7 +1626,6 @@ int OSResult::getVariableNumber(){
 	return m_iVariableNumber;
 }//getVariableNumber
 
-
 int OSResult::getObjectiveNumber(){
 	if(m_iObjectiveNumber == -1){
 		if(optimization == NULL) return -1;
@@ -1556,7 +1633,6 @@ int OSResult::getObjectiveNumber(){
 	}
 	return m_iObjectiveNumber;
 }//getObjectiveNumber
-
 
 int OSResult::getConstraintNumber(){
 	if(m_iConstraintNumber == -1){
@@ -1574,72 +1650,84 @@ int OSResult::getSolutionNumber(){
 
 
 OptimizationSolutionStatus* OSResult::getSolutionStatus( int solIdx){
-	if(optimization == NULL || optimization->solution == NULL) return NULL;
-	if( optimization->numberOfSolutions <= 0 || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionStatus()");
 	if(optimization->solution[solIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->status;
 }//getSolutionStatus
 
 string OSResult::getSolutionStatusType(int solIdx){
-	if(optimization == NULL || optimization->solution == NULL) return NULL;
-	if( optimization->numberOfSolutions <= 0 || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
-	if(optimization->solution[solIdx] == NULL) return NULL;
-	if(optimization->solution[solIdx]->status == NULL) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionStatusType()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->status == NULL) return "";
 	return optimization->solution[solIdx]->status->type;		
 }//getSolutionStatusType
 
 string OSResult::getSolutionStatusDescription(int solIdx){
-	if(optimization == NULL || optimization->solution == NULL) return NULL;
-	if( optimization->numberOfSolutions <= 0 || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
-	if(optimization->solution[solIdx] == NULL) return NULL;
-	if(optimization->solution[solIdx]->status == NULL) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionStatusDescription()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->status == NULL) return "";
 	return optimization->solution[solIdx]->status->description;		
 }//getSolutionStatusDescription
 
 int OSResult::getNumberOfSolutionSubstatuses(int solIdx){
-	if(optimization == NULL || optimization->solution == NULL) return 0;
-	if( optimization->numberOfSolutions <= 0 || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
-	if(optimization->solution[solIdx] == NULL) return 0;
-	if(optimization->solution[solIdx]->status == NULL) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfSolutionSubstatuses()");
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->status == NULL) return -1;
 	return optimization->solution[solIdx]->status->numberOfSubstatuses;		
 }//getNumberOfSolutionSubstatuses
 
 string OSResult::getSolutionSubstatusType(int solIdx, int substatusIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
-	if (optimization->solution[solIdx] == NULL) return NULL;
-	if (optimization->solution[solIdx]->status == NULL) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionSubstatusType()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->status == NULL) return "";
 	if (substatusIdx < 0 || substatusIdx >= optimization->solution[solIdx]->status->numberOfSubstatuses) 
-		return NULL;
+		throw ErrorClass("solution substatus index is outside of range in routine getSolutionSubstatusType()");
 	return optimization->solution[solIdx]->status->substatus[substatusIdx]->type;		
 }//getSolutionSubstatusType
 
 string OSResult::getSolutionSubstatusDescription(int solIdx, int substatusIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
-	if (optimization->solution[solIdx] == NULL) return NULL;
-	if (optimization->solution[solIdx]->status == NULL) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionSubstatusDescription()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->status == NULL) return "";
 	if (substatusIdx < 0 || substatusIdx >= optimization->solution[solIdx]->status->numberOfSubstatuses) 
-		return NULL;
+		return "";
 	return optimization->solution[solIdx]->status->substatus[substatusIdx]->description;		
 }//getSolutionSubstatusDescription
 
 int OSResult::getSolutionTargetObjectiveIdx(int solIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return NULL;
-	if (optimization->solution[solIdx] == NULL) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionTargetObjectiveIdx()");
+	if (optimization->solution[solIdx] == NULL) return 0;
 	return optimization->solution[solIdx]->targetObjectiveIdx;		
 }//getSolutionTargetObjectiveIdx
 
 bool OSResult::getSolutionWeightedObjectives(int solIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
-	if (optimization->solution[solIdx] == NULL) return NULL;
-	return optimization->solution[solIdx]->weightedObjectives;		
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionWeightedObjectives()");
+	if (optimization->solution[solIdx] == NULL) return false;
+	return optimization->solution[solIdx]->weightedObjectives;
 }//getSolutionWeightedObjectives
 
 string OSResult::getSolutionMessage(int solIdx){
@@ -1651,9 +1739,10 @@ string OSResult::getSolutionMessage(int solIdx){
 }//getSolutionMessage
 
 int OSResult::getNumberOfPrimalVariableValues(int solIdx){
-	if (optimization == NULL) return 0;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfPrimalVariableValues()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->variables == NULL) return 0;
 	if (optimization->solution[solIdx]->variables->values == NULL) return 0;
@@ -1661,34 +1750,39 @@ int OSResult::getNumberOfPrimalVariableValues(int solIdx){
 }//getNumberOfPrimalVariableValues
 
 int OSResult::getNumberOfVarValues(int solIdx){
-	if (optimization == NULL) return 0;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
-	if (optimization->solution[solIdx] == NULL) return 0;
-	if (optimization->solution[solIdx]->variables == NULL) return 0;
-	if (optimization->solution[solIdx]->variables->values == NULL) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfVarValues()");
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->variables == NULL) return -1;
+	if (optimization->solution[solIdx]->variables->values == NULL) return -1;
 	return optimization->solution[solIdx]->variables->values->numberOfVar;
 }//getNumberOfVarValues
 
 int OSResult::getVarValueIdx(int solIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
-	if (optimization->solution[solIdx] == NULL) return NULL;
-	if (optimization->solution[solIdx]->variables == NULL) return NULL;
-	if (optimization->solution[solIdx]->variables->values == NULL) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getVarValueIdx()");
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->variables == NULL) return -1;
+	if (optimization->solution[solIdx]->variables->values == NULL) return -1;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->values->numberOfVar)
-		return NULL;
+		throw ErrorClass("varIdx is outside of range in routine getVarValueIdx()");
 	return optimization->solution[solIdx]->variables->values->var[varIdx]->idx;
 }//getVarValueIdx
 
 double OSResult::getVarValue(int solIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
-	if (optimization->solution[solIdx] == NULL) return NULL;
-	if (optimization->solution[solIdx]->variables == NULL) return NULL;
-	if (optimization->solution[solIdx]->variables->values == NULL) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getVarValue()");
+	if (optimization->solution[solIdx] == NULL) return OSNAN;
+	if (optimization->solution[solIdx]->variables == NULL) return OSNAN;
+	if (optimization->solution[solIdx]->variables->values == NULL) return OSNAN;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->values->numberOfVar)
-		return NULL;
+		throw ErrorClass("varIdx is outside of range in routine getVarValue()");
 	return optimization->solution[solIdx]->variables->values->var[varIdx]->value;
 }//getVarValue
 
@@ -1720,9 +1814,10 @@ std::vector<IndexValuePair*> OSResult::getOptimalPrimalVariableValues(int solIdx
 
 
 int OSResult::getNumberOfVarValuesString(int solIdx){
-	if (optimization == NULL) return 0;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfVarValuesString()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->variables == NULL) return 0;
 	if (optimization->solution[solIdx]->variables->valuesString == NULL) return 0;
@@ -1730,31 +1825,36 @@ int OSResult::getNumberOfVarValuesString(int solIdx){
 }//getNumberOfVarValuesString
 
 int OSResult::getVarValueStringIdx(int solIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getVarValueStringIdx()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->valuesString->numberOfVar)
-		return NULL;
+		throw ErrorClass("varIdx is outside of range in routine getVarValueStringIdx()");
 	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->idx;
 }//getVarValueStringIdx
 
 std::string OSResult::getVarValueString(int solIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getVarValueString()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->valuesString->numberOfVar)
-		return NULL;
+		throw ErrorClass("varIdx is outside of range in routine getVarValueString()");
 	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->value;
 }//getVarValueString
 
 int OSResult::getNumberOfBasisVar(int solIdx){
-	if (optimization == NULL) return 0;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfBasisVar()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->variables == NULL) return 0;
 	if (optimization->solution[solIdx]->variables->basisStatus == NULL) return 0;
@@ -1762,29 +1862,39 @@ int OSResult::getNumberOfBasisVar(int solIdx){
 }//getNumberOfBasisVar
 
 int OSResult::getBasisVarIdx(int solIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getBasisVarIdx()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->basisStatus->numberOfVar)
-		return NULL;
+		throw ErrorClass("varIdx is outside of range in routine getBasisVarIdx()");
 	return optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->idx;
 }//getBasisVarIdx
 
 std::string OSResult::getBasisVar(int solIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getBasisVar()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->valuesString == NULL) return NULL;
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->basisStatus->numberOfVar)
-		return NULL;
+		throw ErrorClass("varIdx is outside of range in routine getBasisVar()");
 	return optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->value;
 }//getBasisVar
 
 int OSResult::getNumberOfOtherVariableResults(int solIdx){
 	if(m_iNumberOfOtherVariableResults == -1){
+		if (optimization == NULL || optimization->solution == NULL) 
+			throw ErrorClass("No solution defined");
+		if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+			throw ErrorClass("solIdx is outside of range in routine getNumberOfOtherVariableResults()");
+		if(optimization->solution[solIdx] == NULL) return -1;
+		if(optimization->solution[solIdx]->variables == NULL) return -1;
 		if(optimization->solution[solIdx]->variables->other == NULL) return -1;
 		m_iNumberOfOtherVariableResults = optimization->solution[solIdx]->variables->numberOfOtherVariableResults;
 	}
@@ -1792,85 +1902,121 @@ int OSResult::getNumberOfOtherVariableResults(int solIdx){
 }//getNumberOfOtherVariableResults
 
 int OSResult::getAnOtherVariableResultNumberOfVar(int solIdx, int iOther){
-	if(optimization == NULL || optimization->solution == NULL) return -1;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
 	int iSolutions = this->getSolutionNumber();
-	if (solIdx < 0 || solIdx >= iSolutions) return -1;
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getAnOtherVariableResultNumberOfVar()");
+	if (optimization->solution[solIdx] == NULL) return -1;
 	if (optimization->solution[solIdx]->variables == NULL) return -1;
 	if (optimization->solution[solIdx]->variables->other == NULL) return -1;
-	if (iOther < 0 || iOther >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults) return -1;
+	if (iOther < 0 || iOther >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("other variables result index is outside of range in routine getAnOtherVariableResultNumberOfVar()");
 	return optimization->solution[solIdx]->variables->other[iOther]->numberOfVar;
 }//getAnOtherVariableResultNumberOfVar
 	
 string OSResult::getOtherVariableResultName(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultName()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultName()");
 	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->variables->other[ otherIdx]->name;
 }//getOtherVariableResultName
 
 string OSResult::getOtherVariableResultValue(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultValue()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultValue()");
 	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->variables->other[ otherIdx]->value;
 }//getOtherVariableResultValue
 
 string OSResult::getOtherVariableResultDescription(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultDescription()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultDescription()");
 	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->variables->other[ otherIdx]->description;
 }//getOtherVariableResultDescription
 
 int OSResult::getOtherVariableResultNumberOfVar(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return 0;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultNumberOfVar()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->variables == NULL) return 0;
 	if (optimization->solution[solIdx]->variables->other == NULL) return 0;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultNumberOfVar()");
 	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return 0;
 	return optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar;
 }//getOtherVariableResultNumberOfVar
 
 int OSResult::getOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return -1;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return -1;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultVarIdx()");
 	if (optimization->solution[solIdx] == NULL) return -1;
 	if (optimization->solution[solIdx]->variables == NULL) return -1;
 	if (optimization->solution[solIdx]->variables->other == NULL) return -1;
-	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultVarIdx()");
 	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return -1;
 	if (optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL) return -1;
-	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar) return -1;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar)
+		throw ErrorClass("varIdx is outside of range in routine getOtherVariableResultVarIdx()");
 	return optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->idx;
 }//getOtherVariableResultVarIdx
 
 string OSResult::getOtherVariableResultVar(int solIdx, int otherIdx, int varIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultVar()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->other == NULL) return NULL;
-	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultVar()");
 	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL) return NULL;
-	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar) return NULL;
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar)
+		throw ErrorClass("varIdx is outside of range in routine getOtherVariableResultVar()");
 	return optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->value;
 }//getOtherVariableResultVar
 
 int OSResult::getNumberOfObjValues(int solIdx){
-	if (optimization == NULL) return 0;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfObjValues()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->objectives == NULL) return 0;
 	if (optimization->solution[solIdx]->objectives->values == NULL) return 0;
@@ -1878,55 +2024,58 @@ int OSResult::getNumberOfObjValues(int solIdx){
 }//getNumberOfObjValues
 
 int OSResult::getObjValueIdx(int solIdx, int objIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getObjValueIdx()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives->values == NULL) return NULL;
 	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->values->numberOfObj)
-		return NULL;
+		throw ErrorClass("objIdx is outside of range in routine getObjValueIdx()");
 	return optimization->solution[solIdx]->objectives->values->obj[objIdx]->idx;
 }//getObjValueIdx
 
 double OSResult::getObjValue(int solIdx, int objIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();  
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getObjValue()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives->values == NULL) return NULL;
 	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->values->numberOfObj)
-		return NULL;
+		throw ErrorClass("objIdx is outside of range in routine getObjValue()");
 	return optimization->solution[solIdx]->objectives->values->obj[objIdx]->value;
 }//getObjValue
 
 double OSResult::getOptimalObjValue(int objIdx, int solIdx)
 {
-	try{
-		if(this->optimization == NULL || this->optimization->solution == NULL)   
-			throw ErrorClass("No optimization or solution object defined");  
-		int iSolutions = this->getSolutionNumber();  
-		for(int i = 0; i < iSolutions; i++){  
-			if(i != solIdx) continue;  
-			if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;  
-			if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||  
-					this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){   
-				return  this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;  
-			}
-			else{  
-				throw ErrorClass("There is no optimal solution");  
-			}
+	if (this->optimization == NULL || this->optimization->solution == NULL)   
+		throw ErrorClass("No optimization or solution object defined");  
+	int iSolutions = this->getSolutionNumber();  
+	for (int i = 0; i < iSolutions; i++){  
+		if(i != solIdx) continue;  
+		if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;  
+		if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||  
+				this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){   
+			return  this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;  
 		}
-		throw ErrorClass("There is no optimal solution");  
+		else{  
+			throw ErrorClass("There is no optimal solution");  
+		}
 	}
-	catch(const ErrorClass& eclass){  
-		throw ErrorClass(  eclass.errormsg);   
-	}
+	throw ErrorClass("There is no optimal solution");  
 }//getOptimalObjValue  
 
 int OSResult::getNumberOfOtherObjectiveResults(int solIdx){
-	if(optimization == NULL || optimization->solution == NULL) return -1;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
 	int iSolutions = this->getSolutionNumber();
-	if (solIdx < 0 || solIdx >= iSolutions) return -1;
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfOtherObjectiveResults()");
 	if (optimization->solution[solIdx]->objectives == NULL) return -1;
 	if (optimization->solution[solIdx]->objectives->other == NULL) return -1;
 	return optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults;
@@ -1934,75 +2083,107 @@ int OSResult::getNumberOfOtherObjectiveResults(int solIdx){
 
 
 string OSResult::getOtherObjectiveResultName(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultName()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultName()");
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->objectives->other[ otherIdx]->name;
 }//getOtherObjectiveResultName
 
 string OSResult::getOtherObjectiveResultValue(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultValue()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultValue()");
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->objectives->other[ otherIdx]->value;
 }//getOtherObjectiveResultValue
 
 string OSResult::getOtherObjectiveResultDescription(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultDescription()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultDescription()");
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->objectives->other[ otherIdx]->description;
 }//getOtherObjectiveResultDescription
 
 int OSResult::getOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return 0;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultNumberOfObj()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->objectives == NULL) return 0;
 	if (optimization->solution[solIdx]->objectives->other == NULL) return 0;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultNumberOfObj()");
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return 0;
 	return optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj;
 }//getOtherObjectiveResultNumberOfObj
 
 int OSResult::getOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx){
-	if (optimization == NULL || optimization->solution == NULL) return -1;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return -1;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultObjIdx()");
 	if (optimization->solution[solIdx] == NULL) return -1;
 	if (optimization->solution[solIdx]->objectives == NULL) return -1;
 	if (optimization->solution[solIdx]->objectives->other == NULL) return -1;
-	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultObjIdx()");
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return -1;
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx]->obj == NULL) return -1;
-	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj) return -1;
+	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj)
+		throw ErrorClass("objIdx is outside of range in routine getOtherObjectiveResultObjIdx()");
 	return optimization->solution[solIdx]->objectives->other[otherIdx]->obj[objIdx]->idx;
 }//getOtherObjectiveResultObjIdx
 
 string OSResult::getOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultObj()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives->other == NULL) return NULL;
-	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultObj()");
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->objectives->other[ otherIdx]->obj == NULL) return NULL;
-	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj) return NULL;
+	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultObj()");
 	return optimization->solution[solIdx]->objectives->other[otherIdx]->obj[objIdx]->value;
 }//getOtherObjectiveResultObj
 
 int OSResult::getNumberOfDualValues(int solIdx){
-	if (optimization == NULL) return 0;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfDualValues()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->constraints == NULL) return 0;
 	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return 0;
@@ -2011,24 +2192,30 @@ int OSResult::getNumberOfDualValues(int solIdx){
 
 int OSResult::getDualValueIdx(int solIdx, int conIdx){
 	IndexValuePair* temp = new IndexValuePair();
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getDualValueIdx()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return NULL;
 	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->dualValues->numberOfCon)
-		return NULL;
+		throw ErrorClass("conIdx is outside of range in routine getDualValueIdx()");
 	return optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->idx;
 }//getDualValueIdx
 
 double OSResult::getDualValue(int solIdx, int conIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getDualValue()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return NULL;
 	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->dualValues->numberOfCon)
-		return NULL;
+		throw ErrorClass("conIdx is outside of range in routine getDualValue()");
 	return optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->value;
 }//getDualValue
 
@@ -2060,9 +2247,11 @@ std::vector<IndexValuePair*>  OSResult::getOptimalDualVariableValues(int solIdx)
 
 
 int OSResult::getNumberOfOtherConstraintResults(int solIdx){
-	if(optimization == NULL || optimization->solution == NULL) return -1;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
 	int iSolutions = this->getSolutionNumber();
-	if (solIdx < 0 || solIdx >= iSolutions) return -1;
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfOtherConstraintResults()");
 	if (optimization->solution[solIdx]->constraints == NULL) return -1;
 	if (optimization->solution[solIdx]->constraints->other == NULL) return -1;
 	return optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults;
@@ -2070,139 +2259,182 @@ int OSResult::getNumberOfOtherConstraintResults(int solIdx){
 
 
 string OSResult::getOtherConstraintResultName(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultName()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultName()");
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->constraints->other[ otherIdx]->name;
 }//getOtherConstraintResultName
 
 string OSResult::getOtherConstraintResultValue(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultValue()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultValue()");
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->constraints->other[ otherIdx]->value;
 }//getOtherConstraintResultValue
 
 string OSResult::getOtherConstraintResultDescription(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultDescription()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultDescription()");
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->constraints->other[ otherIdx]->description;
 }//getOtherConstraintResultDescription
 
 int OSResult::getOtherConstraintResultNumberOfCon(int solIdx, int otherIdx){
-	if (optimization == NULL || optimization->solution == NULL) return 0;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return 0;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultNumberOfCon()");
 	if (optimization->solution[solIdx] == NULL) return 0;
 	if (optimization->solution[solIdx]->constraints == NULL) return 0;
 	if (optimization->solution[solIdx]->constraints->other == NULL) return 0;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultNumberOfCon()");
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return 0;
 	return optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon;
 }//getOtherConstraintResultNumberOfCon
 
 int OSResult::getOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx){
-	if (optimization == NULL || optimization->solution == NULL) return -1;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return -1;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultConIdx()");
 	if (optimization->solution[solIdx] == NULL) return -1;
 	if (optimization->solution[solIdx]->constraints == NULL) return -1;
 	if (optimization->solution[solIdx]->constraints->other == NULL) return -1;
-	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultConIdx()");
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return -1;
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx]->con == NULL) return -1;
-	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon) return -1;
+	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultConIdx()");
 	return optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->idx;
 }//getOtherConstraintResultConIdx
 
 string OSResult::getOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultCon()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints->other == NULL) return NULL;
-	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultCon()");
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->constraints->other[ otherIdx]->con == NULL) return NULL;
-	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon) return NULL;
+	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultCon()");
 	return optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->value;
 }//getOtherConstraintResultCon
 
 int OSResult::getNumberOfOtherSolutionResults(int solIdx){
-	if (optimization == NULL || optimization->solution == NULL) return NULL;
-	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getNumberOfOtherSolutionResults()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
 	return optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults;
 }//getNumberOfOtherSolutionResults
 
 string OSResult::getOtherSolutionResultName(int solIdx, int otherIdx){
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return NULL;
-	if (optimization == NULL) return NULL;
-	if (optimization->solution == NULL || 
-		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherSolutionResultName()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherSolutionResultName()");
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->name;
 }//getOtherSolutionResultName
 
 string OSResult::getOtherSolutionResultCategory(int solIdx, int otherIdx){
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return NULL;
-	if (optimization == NULL) return NULL;
-	if (optimization->solution == NULL || 
-		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherSolutionResultCategory()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherSolutionResultCategory()");
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->category;
 }//getOtherSolutionResultCategory
 
 string OSResult::getOtherSolutionResultDescription(int solIdx, int otherIdx){
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return NULL;
-	if (optimization == NULL) return NULL;
-	if (optimization->solution == NULL || 
-		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherSolutionResultDescription()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherSolutionResultDescription()");
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->description;
 }//getOtherSolutionResultDescription
 
 int OSResult::getOtherSolutionResultNumberOfItems(int solIdx, int otherIdx){
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return NULL;
-	if (optimization == NULL) return NULL;
-	if (optimization->solution == NULL || 
-		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherSolutionResultNumberOfItems()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherSolutionResultNumberOfItems()");
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
 	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->numberOfItems;
 }//getOtherSolutionResultNumberOfItems
 
 string OSResult::getOtherSolutionResultItem(int solIdx, int otherIdx, int itemIdx){
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return NULL;
-	if (optimization == NULL) return NULL;
-	if (optimization->solution == NULL || 
-		solIdx < 0 || solIdx >=  nSols) return NULL;
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherSolutionResultItem()");
 	if (optimization->solution[solIdx] == NULL) return NULL;
 	if (optimization->solution[solIdx]->otherSolutionResults == NULL) return NULL;
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx] == NULL) return NULL;
-	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults) return NULL;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->otherSolutionResults->numberOfOtherSolutionResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherSolutionResultItem()");
 	if (optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item == NULL) return NULL;
-	if (itemIdx < 0 || itemIdx >= optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->numberOfItems) return NULL;
+	if (itemIdx < 0 || itemIdx >= optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->numberOfItems)
+		throw ErrorClass("itemIdx is outside of range in routine getOtherSolutionResultItem()");
 	return optimization->solution[solIdx]->otherSolutionResults->otherSolutionResult[otherIdx]->item[itemIdx];
 }//getOtherSolutionResultItem
 
@@ -2215,7 +2447,7 @@ string OSResult::getSolverOutputName(int otherIdx){
 	if (optimization == NULL) return NULL;
 	if (optimization->otherSolverOutput == NULL) return NULL;
 	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
-		return NULL;
+		throw ErrorClass("otherIdx is outside of range in routine getSolverOutputName()");
 	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
 	return optimization->otherSolverOutput->solverOutput[otherIdx]->name;
 }//getSolverOutputName
@@ -2224,7 +2456,7 @@ string OSResult::getSolverOutputCategory(int otherIdx){
 	if (optimization == NULL) return NULL;
 	if (optimization->otherSolverOutput == NULL) return NULL;
 	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
-		return NULL;
+		throw ErrorClass("otherIdx is outside of range in routine getSolverOutputCategory()");
 	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
 	return optimization->otherSolverOutput->solverOutput[otherIdx]->category;
 }//getSolverOutputCategory
@@ -2233,7 +2465,7 @@ string OSResult::getSolverOutputDescription(int otherIdx){
 	if (optimization == NULL) return NULL;
 	if (optimization->otherSolverOutput == NULL) return NULL;
 	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
-		return NULL;
+		throw ErrorClass("otherIdx is outside of range in routine getSolverOutputDescription()");
 	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
 	return optimization->otherSolverOutput->solverOutput[otherIdx]->description;
 }//getSolverOutputDescription
@@ -2242,7 +2474,7 @@ int OSResult::getSolverOutputNumberOfItems(int otherIdx){
 	if (optimization == NULL) return -1;
 	if (optimization->otherSolverOutput == NULL) return -1;
 	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
-		return -1;
+		throw ErrorClass("otherIdx is outside of range in routine getSolverOutputNumberOfItems()");
 	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return -1;
 	return optimization->otherSolverOutput->solverOutput[otherIdx]->numberOfItems;
 }//getSolverOutputNumberOfItems
@@ -2251,10 +2483,10 @@ string OSResult::getSolverOutputItem(int otherIdx, int itemIdx){
 	if (optimization == NULL) return NULL;
 	if (optimization->otherSolverOutput == NULL) return NULL;
 	if (otherIdx < 0 || otherIdx >= optimization->otherSolverOutput->numberOfSolverOutputs)
-		return NULL;
+		throw ErrorClass("otherIdx is outside of range in routine getSolverOutputItem");
 	if (optimization->otherSolverOutput->solverOutput[otherIdx] == NULL) return NULL;
 	if (itemIdx < 0 || itemIdx >= optimization->otherSolverOutput->solverOutput[otherIdx]->numberOfItems)
-		return NULL;
+		throw ErrorClass("itemIdx is outside of range in routine getSolverOutputItem()");
     return optimization->otherSolverOutput->solverOutput[otherIdx]->item[itemIdx];;
 }//getSolverOutputItem
 

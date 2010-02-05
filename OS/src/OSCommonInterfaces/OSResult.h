@@ -2409,7 +2409,14 @@ public:
 /* */	std::string getSolutionSubstatusType(int solIdx, int substatusIdx);
 /* */	std::string getSolutionSubstatusDescription(int solIdx, int substatusIdx);
 /* */	int getSolutionTargetObjectiveIdx(int solIdx);
-/* */	bool getSolutionWeightedObjectives(int solIdx);
+
+	/**
+	 * Get the [i]th optimization solution form of the objective
+	 * 
+	 * @param solIdx holds the solution index to get the solution status description. 
+	 * @return whether weighting is applied to the objective.
+	 */
+	bool getSolutionWeightedObjectives(int solIdx);
 
 	/**
 	 * Get the [i]th optimization solution message, where i equals the given solution index.  
