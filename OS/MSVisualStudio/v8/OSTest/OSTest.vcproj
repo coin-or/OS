@@ -158,10 +158,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
+				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib libosi.lib libosicbc.lib libosiclp.lib libcbc.lib libclp.lib libcoinutils.lib libvol.lib libosivol.lib libcgl.lib"
 				OutputFile="..\..\..\test\unitTest$(ConfigurationName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
+				AdditionalLibraryDirectories="..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\release"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=".\$(ConfigurationName)\OSTest.pdb"
 				SubSystem="1"
