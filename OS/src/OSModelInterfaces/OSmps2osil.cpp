@@ -80,7 +80,8 @@ bool OSmps2osil::createOSInstance( )
 		objectiveCoefficients->indexes[i] = i;
 		objectiveCoefficients->values[i] = *(p++);
 	}
-	// kipp -- check on this -- does MPS assume a min???
+	// We will go with the
+	// majority on this one and assume minimization by default
 	osinstance->setObjectiveNumber( numberObj) ;
 	osinstance->addObjective(objIndex, m_MpsData->getObjectiveName(), 
 	"min", m_MpsData->objectiveOffset(),  objWeight, objectiveCoefficients) ;
