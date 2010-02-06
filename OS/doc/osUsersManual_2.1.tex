@@ -177,9 +177,9 @@
 
 % Current software versions
 \newcommand{\GlpkVer}{4.32}
-\newcommand{\OSstable}{2.0}
-\newcommand{\OSrelease}{2.0.1}
-\newcommand{\OStrunk}{2093}
+\newcommand{\OSstable}{2.1}
+\newcommand{\OSrelease}{2.1.0}
+\newcommand{\OStrunk}{3139}
 \newcommand{\MsysVer}{1.0.11}
 \newcommand{\MsysFile}{bash-3.1-MSYS-1.0.11}
 
@@ -3651,59 +3651,137 @@ We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
 \index{OSAmplClient@{\tt OSAmplClient}|(}
-The {\tt OSAmplClient} executable (in {\tt COIN-OS/OS/applications/amplClient}) is designed to work with the AMPL program
-(see \url{www.ampl.com}). The {\tt OSAmplClient} acts like an AMPL ``solver''. The {\tt OSAmplClient} is linked with the
-OS library and can be used to solve problems either locally or remotely. In both cases the {\tt OSAmplClient} uses the
-{\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} class to convert the AMPL generated nl file\index{AMPL nl format}
-(which represents the problem instance) into the corresponding instance representation in the OSiL\index{OSiL} format.
 
-In the following discussion we assume that the AMPL executable {\tt ampl}  (or {\tt ampl.exe} on Windows) obtained
-from {\tt www.ampl.com}, the {\tt OSAmplClient}, and the test problem {\tt hs71.mod} are all in the same directory.
-At first, the user may wish to run everything in the directory
 
-\begin{verbatim}
-COIN-OS/OS/applications/amplClient
-\end{verbatim}
-which is where {\tt OSAmplClient} is located when the OS project is built. The user must obtain {\tt ampl} and put
-it in this directory.  The test problem {\tt hs71.mod} can be copied from
 
-\begin{verbatim}
-COIN-OS/OS/data/amplFiles
-\end{verbatim}
-It is also assumed that {\tt .}~(the current directory) is in the search path.
 
-The  problem instance, {\tt hs71.mod} is an AMPL model file included in the {\tt amplClient} directory.
-To solve this problem locally by calling the {\tt OSAmplClient} from AMPL first start AMPL and then
-execute the following commands. In this case we are testing  {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|(} as the
-local server and therefore it is necessary that {\tt Ipopt} be part of the local OS build. If it is not
-then another solver must be selected and a test problem used that is a linear or integer program.
+This section is based on the assumption that the user has installed  AMPL  on his or her machine.   It is possible to call all of the COIN-OR solvers listed in Section \ref{section:overview} directly from the  AMPL 
+(see {\tt http://www.ampl.com}) modeling language.  In this discussion we assume the user has already obtained and 
+installed AMPL.  In  the download described in Section \ref{section:binary} there is an executable, {\tt OSAmplClient.exe}  that is linked to all of the COIN-OR solvers  listed in Section \ref{section:overview}.   From the  perspective of AMPL, the   {\tt OSAmplClient} acts 
+like an AMPL ``solver''.    The {\tt OSAmplClient.exe}   can be used 
+to solve problems either locally or remotely.   
+In the following discussion we assume that the AMPL executable {\tt ampl.exe}, the {\tt OSAmplClient},  and the test problem {\tt  eastborne.mod} are all in the same directory.  
+
+
+\subsubsection{Using OSAmplClient for a Local Solver}\label{section:localampl}
+
+The  problem instance {\tt eastborne.mod} is an AMPL model file included in the OS distribution in the {\tt amplFiles} directory.  To solve this problem locally by calling the {\tt OSAmplClient.exe} from AMPL, first start AMPL and then open the {\tt eastborne.mod} file inside AMPL.  The test model {\tt eastborne.mod} is a linear integer program. 
 
 \begin{verbatim}
-# take in problem 71 in Hock and Schittkowski
+# take in sample integer linear problem
 # assume the problem is in the AMPL directory
-model hs71.mod;
+model eastborne.mod;
+\end{verbatim}
+
+The next step is to tell AMPL that the solver it is going to use is {\tt OSAmplClient.exe}. Do this by issuing the following command inside AMPL.
+
+\begin{verbatim}
 # tell AMPL that the solver is OSAmplClient
 option solver OSAmplClient;
-# now tell OSAmplClient to use Ipopt
-option OSAmplClient_options "solver ipopt";
-# the name of the nl file (this is optional)
-write gtestfile;
-# now solve the problem
+\end{verbatim}
+It is not necessary to provide the  {\tt OSAmplclient.exe} solver with any options. You can just issue the {\tt solve} command in AMPL as illustrated below.  
+\begin{verbatim}
+# solve the problem
 solve;
 \end{verbatim}
+If no options are specified, by default,   {\bf Clp} is used for linear programs. For continuous nonlinear models {\bf Ipopt} is used. For mixed-integer linear models,   {\bf Cbc} is used. For mixed-integer nonlinear models  {\bf Bonmin} is used.  If you wish to specify a specific solver, use the {\tt solver} option.   For example,  since the test problem {\tt eastborne.mod} is a linear integer program, {\tt Cbc} is used by default. If you want to instead use {\tt SYMPHONY}, then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver as follows.
 
-This will invoke {\tt Ipopt} locally and the result in OSrL\index{OSrL} format will be displayed on the screen.
+\begin{verbatim}
+# now tell OSAmplClient to use SYMPHONY instead of Cbc
+option OSAmplClient_options "solver symphony";
+\end{verbatim}
+Valid values for the {\tt solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp},  {\tt couenne}, {\tt dylp}, {\tt symphony}, and {\tt vol}.   Always specify the name of the solver entirely in lower case.  
 
-In order to call a remote solver service, after the command
-\begin{verbatim}
-option OSAmplClient_options "solver ipopt";
+
+\subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
+
+Next, assume that you have a large problem you want solve on the remote solver. It is necessary to specify the location of the server solver as an option to OSAmplClient.   In this case, the string of options for {\tt OSAmplClient\_options} is:
+ \begin{verbatim}
+serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 \end{verbatim}
-set the solver {\tt service} option to  the address of the remote solver service.
+This will send the problem to the solver server at location {\bf webdss.ise.ufl.edu}.   The {\tt serviceLocation} option is used to specify the location of a solver server. If, in addition, we want to use the {\bf SYMPHONY} solver,  the string of options to {\tt OSAmplClient\_options} is:
 \begin{verbatim}
-option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+solver symphony
 \end{verbatim}
-In this case it is necessary that the {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}|)} solver be part of the OS build on the server.
-\index{OSAmplClient@{\tt OSAmplClient}|)}
+Finally, the user may wish to pass options to the individual solver. This is done by providing an options file. A sample options file, {\bf solveroptions.osol} is provided with this distribution.  The name of the options file is the vlaue of the {\tt optionFile} option.    the string of options to {\tt OSAmplClient\_options} is now
+\begin{verbatim}
+serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService"
+solver symphony 
+optionFile solveroptions.osol
+\end{verbatim}
+This   {\tt solveroptions.osol}  file contains four solver options; two for {\bf Cbc}, one for {\bf Ipopt}, and one for {\bf SYMPHONY}.  You can have any number of options. Note the format for specifying an option:
+\begin{verbatim}
+<solverOption name="maxN" solver="cbc" value="5" />
+\end{verbatim}
+The attribute {\tt name} specifies that the option name is {\tt maxN} which is the maximum number of nodes allowed in the branch-and-bound tree, the {\tt solver} attribute specifies the name of the solver that the option should be applied to, and the {\tt value} attribute specifies the value of the option. As a second example, consider the specification
+\begin{verbatim}
+<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/> 
+\end{verbatim}
+In this example we are specifying an iteration limit for {\tt Ipopt}.  Note the additional attribute {\tt type} that has value  {\tt integer}. The Ipopt solver requires specifying the data type (string, integer, or numeric) for its options.   Different solvers have different options, and we recommend that the user look at the documentation for the solver of interest in order to see which options are available.  A good summary of options for COIN-OR solvers is \url{http://www.coin-or.org/GAMSlinks/gamscoin.pdf}.
+
+
+It is also possible to specify the name of the solver and the server location in the options file. Indeed, if you examine the file {\bf solveroptions.osol} you will see that there is an XML tag {\tt <solverToInvoke>} and that the solver given is {\bf symphony}. There is also an XML tag {\tt <serviceURI>} that can be used to specify the location of the server.  For the option file {\bf solveroptions.osol}  passing the following options to  {\tt OSAmplClient\_options} 
+\begin{verbatim}
+solver symphony
+optionFile solveroptions.osol
+serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+\end{verbatim}
+
+\noindent has exactly the same effect as passing the following options to  {\tt OSAmplClient\_options}
+
+\begin{verbatim}
+optionFile solveroptions.osol;
+\end{verbatim}
+It is possible to override the solver option and the server location given in the option file. For example,  if the following options are passed to {\tt OSAmplClient\_options}
+\begin{verbatim}
+optionFile solveroptions.osol 
+solver bonmin;
+\end{verbatim}
+then  {\bf Bonmin} will be used  rather than {\bf SYMPHONY}. 
+
+
+\vskip 12pt
+
+\subsubsection{AMPL Summary}
+
+\begin{enumerate}
+\item tell  AMPL to use the OSAmplClient as the solver:
+
+\begin{verbatim}
+option solver OSAmplClient;
+\end{verbatim}
+
+\item specify options to the OSAmplclient solver by using the AMPL command {\bf OSAmplClient\_options}
+
+\item there are three possible options to specify:
+
+\begin{itemize}
+
+\item the name of the solver using the  {\bf solver} option, valid values for this option  are {\tt clp},  {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.   
+
+
+\item the location of the remote server using   the {\bf serviceURI} option
+
+\item the location of the option file using  the {\bf optionFile} option
+
+\end{itemize}
+
+\item the {\bf solver} and {\bf service URI} options can be specified in the options file using the {\tt <solverToInvoke>} and {\tt <serviceURI>}  XML tags, respectively. 
+
+
+\item specifying the {\bf solver} or {\bf serviceURI} directly through {\bf OSAmplClient\_options} will override the settings in the options file
+
+\item if no options are specified using {\bf OSAmplClient\_options},   by default, for continuous
+linear models  clp is used. For continuous nonlinear models ipopt is used. For mixed-integer linear models (MIP),   cbc is used. For mixed-integer nonlinear models  bonmin is used.  All solvers are invoked locally. 
+
+\item  the options given to {\bf OSAmplClient\_options}  can be given in any order
+
+
+
+\end{enumerate}
+
+
 
 
 \subsection{GAMS and Optimization Services}\label{section:gamslinks}
@@ -3715,13 +3793,8 @@ In this case it is necessary that the {\tt Ipopt}\index{COIN-OR projects!Ipopt@{
 %In Section \ref{section:amplclient} we described how to hook the AMPL modeling language to solvers using
 %{\tt OSAmplClient}.  It is also possible to use GAMS via the COIN-OR GAMSlinks\index{GAMSlinks|(} project.
 
-This section pertains to GAMS version 23.3 and above which now includes support for OS.  Here we describe how to use OS with the GAMS system.  We assume that the user has installed GAMS.   The {\tt CoinOS}  (similarly {\tt OS} ) solver that is packaged with GAMS is really a {\it solver interface} and is linked to the following COIN-OR solvers:  {\tt Bonmin}, {\tt Cbc}, {\tt Clp}, {\tt Couenne} (remotely), {\tt Glpk}, and {\tt Ipopt} . Think of {\tt CoinOS} as a {\it meta slover.}
+This section pertains to GAMS version 23.3 (and above) that now includes support for OS.  Here we describe how to use OS with the GAMS system.  We assume that the user has installed GAMS.   The {\tt CoinOS}   solver that is packaged with GAMS is really a {\it solver interface} and is linked to the following COIN-OR solvers:  {\tt Bonmin}, {\tt Cbc}, {\tt Clp},  {\tt Couenne},   {\tt Glpk}, and {\tt Ipopt} . Think of {\tt CoinOS} as a {\it meta slover.}   As an example (we assume a Windows operating system and use the .exe extension), consider:
 
-
-\begin{verbatim}
-gams.exe eastborne.gms
-\end{verbatim}
-and for version 23.3 type
 \begin{verbatim}
 gams.exe eastborne.gms MIP=CoinOS
 \end{verbatim}
@@ -3731,20 +3804,9 @@ linear models (LP and RMIP), {\tt CoinOS} or {\tt OS} chooses Clp. For continuou
 QCP, RMIQCP), Ipopt is the default solver. For mixed-integer linear models (MIP),  Cbc is the default solver. For
 mixed-integer nonlinear models (MIQCP, MINLP),  Bonmin is the default solver.
 
-It is possible to control which solver is selected by {\tt CoinOS} or {\tt OS}.   This is done by providing an {\it options file}  to {\tt CoinOS} or {\tt OS}. For versions 22.9-23.2 the option fille  should be named {\tt os.opt} and this file is invoked at the command line by
+It is possible to control which solver is selected by {\tt CoinOS} or {\tt OS}.   One way to do this is to provide an {\it options file}  to  GAMS.   Since the solver is named {\tt  CoinOS}, the option file should  be named {\tt coinos.opt} and the command line call is 
 \begin{verbatim}
-gams.exe eastborne.gms optfile 1
-\end{verbatim}
-It is possible to define multiple GAMS options files following the  specific naming conventions as set out below:
-\begin{verbatim}
-optfile=1 corresponds to os.opt
-optfile=2 corresponds to os.op2
-...
-optfile=99 corresponds to os.o99
-\end{verbatim}
-For GAMS 23.3, since the solver is named {\tt  CoinOS}, the option file should  be named {\tt coinos.opt} and the command line call is 
-\begin{verbatim}
-gams.exe eastborne.gms MIP=CoinOS optfile 1
+gams.exe eastborne.gms LP=CoinOS optfile 1
 \end{verbatim}
 and calling multiple GAMS options files uses the convention
 \begin{verbatim}
@@ -3773,9 +3835,9 @@ then the {\tt Bonmin} solver will be used to solve the problem.   Following are 
 The option just described are options for the GAMS modeling language.  It is also possible to pass options directly to the COIN-OR solvers used by either {\tt CoinOS} or {\tt OS}. This is done by passing the name of an option file that conforms to the  OSoL     (Optimization Services option Language) XML standard.  See \url{http://projects.coin-or.org/OS}  for information on Optimization Services.  The option
 
 \vskip 8pt
-\noindent {\bf readosol  (string):}  Specifies the name of an option  fille in OSoL format that is given to the solver.
+\noindent {\bf readosol  (string):}  Specifies the name of an OS option  fille in OSoL format that is given to the solver.  Note: the file  {\tt coinos.opt} is an option  file for GAMS but the GAMS option {\bf readosol} in the GAMS option file  is specifying the name an OS option file. 
 \vskip 8pt
-The file {\bf solveroptions.osol} is contained in the distribution described in Section \ref{section:binary}. This file contains four solver options; two for Cbc, one for Ipopt, and one for SYMPHONY (which is available for remote server calls, but not locally).  You can have any number of options. Note the format for specifying an option:
+The file {\bf solveroptions.osol} is contained in the OS distribution in the {\tt osolFiles} directory   in the {\tt data} directory. This file contains four solver options; two for Cbc, one for Ipopt, and one for SYMPHONY (which is available for remote server calls, but not locally).  You can have any number of options. Note the format for specifying an option:
 \begin{verbatim}
 <solverOption name="maxN" solver="cbc" value="5" />
 \end{verbatim}
@@ -3789,12 +3851,11 @@ docs/solvers/coin.pdf
 \end{verbatim}
 An up-to-date online version is available at \url{http://www.coin-or.org/GAMSlinks/gamscoin.pdf}.
 
-\noindent {\bf IMPORTANT:} unlike the {\tt OSAmplClient} described in Section \ref{section:ampl},   {\tt OS}  and  {\tt CoinOS}  do not parse the {\bf solveroptions.osol} file,  they simply pass the file directly onto the local solver  or the remote solver service.
-\vskip 10pt
+
 
 \subsubsection{Using GAMS  to Invoke the COIN-OR Solver Service}\label{section:gamsremote}
 
-We now describe how to call the COIN-OR  solver service. There are several reason why you might wish to use this service. 
+We now describe how to call  a remote COIN-OR  solver service. There are several reason why you might wish to use this service. 
 
 \begin{itemize}
 \item Have access to a faster machine.
@@ -3815,7 +3876,7 @@ Use the following value for this option.
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 \end{verbatim}
 
-\noindent {\bf IMPORTANT:} Using the {\bf solver} option will have {\it no effect} on which solver the remote solver service uses.   The remote solver service uses the same defaults as the local service.  For
+  For
 linear models (LP and RMIP),  Clp is the default solver. For continuous nonlinear models (NLP, DNLP, RMINLP,
 QCP, RMIQCP), Ipopt is the default solver. For mixed-integer linear models (MIP),  Cbc is the default solver. For
 mixed-integer nonlinear models (MIQCP, MINLP),  Bonmin is the default solver.  In order to control the solver used, it is necessary to specify the name of the solver inside the XML tag {\tt <solverToInvoke>}.  The   example  {\tt solveroptions.osol} file contains the XML tag
@@ -3851,7 +3912,7 @@ with the command
 \begin{verbatim}
 gams.exe eastborne.gms optfile=1
 \end{verbatim}
-the user will a rather long job id returned to the screen as output. Any job id can be sent to the server as long as it has not been used before.  Assume that the job id returned is {\tt coinor12345xyz}.  This job id is used to submit a job to the server with the {\bf send} method.
+the user will see a rather long job id returned to the screen as output. Any job id can be sent to the server as long as it has not been used before.  Assume that the job id returned is {\tt coinor12345xyz}.  This job id is used to submit a job to the server with the {\bf send} method.
 
 \vskip 8pt
 \noindent {\bf service\_method send:} When working in asynchronous mode, use the {\tt send} service method to submit a job. When using  the {\tt send} service method option an option is required and the option file must specify a  job id that has not been used before.  Assume that in the  {\tt coinos.opt}  we specify the options:
@@ -3924,11 +3985,15 @@ Finally there is a {\bf kill} service method which is used to kill a job that is
 
 
 \subsubsection{GAMS Summary:}\label{section:gamssummary}
-{\bf GAMS SUMMARY:}
+
 
 \begin{enumerate}
 
-\item[1.]  If you are using GAMS 22.9, or 23.0, or 23.1, or 23.2,  put {\bf gmsos\_.zip} in the GAMS directory, execute  {\tt gamsinst} and select {\tt OS}  as the default solver whenever it is listed as a solver. If you are using GAMS 23.3 place the statement {\tt Option ProblemType = CoinOS;} somewhere in the model {\it before} the {\tt Solve} statement.
+\item[1.]   In order to use OS with GAMS you can either specify {\tt CoinOS} as an option to GAMS at the command line,
+\begin{verbatim}
+gams eastborne.gms MIP=CoinOS
+\end{verbatim}
+or, you can  place the statement {\tt Option ProblemType = CoinOS;} somewhere in the model {\it before} the {\tt Solve} statement in the gams file.
 
 
 \item[2.]   If no options are given, then the model will be solved locally and Clp will be used for linear programs, Cbc for integer linear programs, Ipopt for continuous nonlinear programs, and Bonmin for nonlinear integer.
@@ -6204,7 +6269,7 @@ uploaded file that is saved on the server, so that you can put it in the corresp
 
 %\iffalse %------------------------------------------------------
 
-\section{Wish List for Release 2.1}\label{section:wishlist} 
+\section{Wish List for Next Release}\label{section:wishlist} 
 
 \input{Future_work}
 %\begin{itemize}

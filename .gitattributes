@@ -95,6 +95,8 @@ OS/data/amplFiles/LP_unbounded.mod -text
 OS/data/amplFiles/LP_unbounded.nl -text
 OS/data/amplFiles/bonminEx1.mod -text
 OS/data/amplFiles/bonminEx1.nl -text
+OS/data/amplFiles/eastborne.mod -text
+OS/data/amplFiles/eastborne.nl -text
 OS/data/amplFiles/hs71.mod -text
 OS/data/amplFiles/hs71.nl -text
 OS/data/amplFiles/muer.mod -text
@@ -236,6 +238,7 @@ OS/data/osolFiles/rosenbrockmod_knitro.osol -text
 OS/data/osolFiles/rosenbrockmod_lindo.osol -text
 OS/data/osolFiles/send.osol -text
 OS/data/osolFiles/sendWithJobID.osol -text
+OS/data/osolFiles/solveroptions.osol -text
 OS/data/osolFiles/volumeTest_vol.osol -text
 OS/data/osolFiles/wayneQuadratic_Bonmin1.osol -text
 OS/data/osolFiles/wayneQuadratic_Bonmin2.osol -text
