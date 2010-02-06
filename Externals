@@ -16,8 +16,8 @@ ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack
 ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.1.8
 DyLP  https://projects.coin-or.org/svn/DyLP/releases/1.5.0/DyLP
 Ipopt  https://projects.coin-or.org/svn/Ipopt/releases/3.8.1/Ipopt
-cppad  https://projects.coin-or.org/svn/CppAD/releases/20090303.0
-Bonmin  https://projects.coin-or.org/svn/Bonmin/releases/1.1.3/Bonmin
+cppad  https://projects.coin-or.org/svn/CppAD/releases/20100101.0
+Bonmin  https://projects.coin-or.org/svn/Bonmin/stable/1.3/Bonmin
 Couenne  https://projects.coin-or.org/svn/Couenne/releases/0.3.0/Couenne 
 
 GamsUtils https://projects.coin-or.org/svn/GAMSlinks/branches/GamsUtils/GamsUtils

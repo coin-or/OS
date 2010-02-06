@@ -12,7 +12,7 @@
 			<solverOption name="output_file" solver="bonmin" type="string" value="bonmin.out" category="ipopt"/>
 			<solverOption name="node_limit" solver="bonmin" type="integer" value="1000"  category="cbc" />
 			<solverOption name="nlp_solver" solver="bonmin" type="string" value="ipopt"/>
-			<solverOption name="milp_solver" solver="bonmin" type="string" value="Cbc_Par"  />
+			<solverOption name="milp_solver" solver="bonmin" type="string" value="Cbc_Par"  category="cbc" />
 			<solverOption name="number_strong_branch" solver="bonmin" type="integer" value="0" category="cbc"/>
 			
 			
