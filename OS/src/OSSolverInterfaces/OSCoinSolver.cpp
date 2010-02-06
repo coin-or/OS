@@ -888,7 +888,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	double *y = NULL;
 	double *z = NULL;
 	int *idx = NULL;
-
+	int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
 	std::string *rcost = NULL;
 	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
 	if( osinstance->getConstraintNumber() > 0 ) y = new double[osinstance->getConstraintNumber() ];
@@ -951,18 +951,20 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		for(i=0; i <  osinstance->getConstraintNumber(); i++){
 			*(y + i) = solver->getRowPrice()[ i];
 		}
-		osresult->setDualVariableValuesDense(solIdx, y); 
+		if(numOfIntVars <= 0) osresult->setDualVariableValuesDense(solIdx, y); 
 	}
 	// now put the reduced costs into the osrl
 	// Symphony does not get reduced costs
 	if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
 		// first set the number of Other Variable Results
-		osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
-		for(i=0; i < numberOfVar; i++){
-			rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
+		if(numOfIntVars <= 0){
+			osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
+			for(i=0; i < numberOfVar; i++){
+				rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
+			}
+			osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
+			// end of setting reduced costs
 		}
-		osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
-		// end of setting reduced costs
 	}
 	osrl = osrlwriter->writeOSrL( osresult);
 	if(osinstance->getVariableNumber() > 0) delete[] x;
@@ -1047,14 +1049,16 @@ void CoinSolver::writeResult(CbcModel *model){
 	for(i=0; i <  osinstance->getConstraintNumber(); i++){
 		*(y + i) = model->getRowPrice()[ i];
 	}
-	osresult->setDualVariableValuesDense(solIdx, y); 
+	if(numOfIntVars <= 0) osresult->setDualVariableValuesDense(solIdx, y); 
 	// now put the reduced costs into the osrl
 	// first set the number of Other Variable Results
-	osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
-	for(i=0; i < numberOfVar; i++){
-		rcost[ i] = os_dtoa_format( model->getReducedCost()[ i]);
+	if(numOfIntVars <= 0){
+		osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
+		for(i=0; i < numberOfVar; i++){
+			rcost[ i] = os_dtoa_format( model->getReducedCost()[ i]);
+		}
+		osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());	
 	}
-	osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
 	// end of setting reduced costs	
 	osrl = osrlwriter->writeOSrL( osresult);
 	//garbage collection

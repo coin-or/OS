@@ -157,7 +157,7 @@ using std::endl;
 using std::ostringstream;
 using std::string;
 
-#define DEBUG_CL_INTERFACE
+//#define DEBUG_CL_INTERFACE
 
 
 #define MAXCHARS 5000 

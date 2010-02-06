@@ -354,6 +354,7 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 	// strip off the return header information 
 	// find start of XML information
 	string::size_type startxml = soapstring.find(serviceMethod+"Return" , 1);
+	string::size_type pos;
 	if (startxml == string::npos){
 		//something went wrong, perhaps we had an error in service location
 	
@@ -361,7 +362,17 @@ string WSUtil::getOSxL(string soapstring, string serviceMethod){
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		osresult = new OSResult();
-		osresult->setGeneralMessage( "we had a problem contacting the server which we cannot figure out -- check address of server");
+		// see if the SOAP contains <faultstring> -- if so use it
+		startxml = soapstring.find("<faultstring>" , 1);
+		if(startxml == string::npos) {
+			osresult->setGeneralMessage( "we had a problem contacting the server which we cannot figure out -- check address of server");
+		}
+			else {
+				pos = soapstring.find("</faultstring>" , startxml  + 1);
+				std::string tmpString = soapstring.substr(startxml + 13 , pos - startxml - 13);
+				osresult->setGeneralMessage( "There was a communication problem with server, SOAP error message: "  + tmpString);
+		}
+
 		osresult->setGeneralStatusType( "error");
 		result = osrlwriter->writeOSrL( osresult);	
 		delete osresult;
