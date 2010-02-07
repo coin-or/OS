@@ -2085,7 +2085,7 @@ Clp          &x&x&x&x&x&x \\ \hline
 Couenne      &x&x& &x&x&  \\ \hline
 Cplex        & &x& & & &  \\ \hline
 DyLP         &x&x&x&x&x&x \\ \hline
-Glpk         &x&x&x& &x&x \\ \hline
+Glpk         &x&x&x&x&x&  \\ \hline
 Ipopt        &x&x&x&x&x&x \\ \hline
 \ifknitro
 Knitro       &x&x& & & &  \\ \hline
@@ -2605,7 +2605,7 @@ Explanations:\\
 $\qquad{}^1$Requires third-party software to be downloaded\\
 $\qquad{}^2$Requires Fortran compiler (see Section~\ref{section:ipopt})
 \end{tabular}
-\end{table}
+\end{table}\index{supported solvers}
 
 
 \item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. If this optional
@@ -3656,12 +3656,17 @@ We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt
 
 
 
-This section is based on the assumption that the user has installed  AMPL  on his or her machine.   
-It is possible to call all of the COIN-OR solvers listed in Section~\ref{section:overview} directly 
-from the  AMPL (see {\tt http://www.ampl.com}) modeling language.  In this discussion we assume 
+%This section is based on the assumption that the user has installed  AMPL  on his or her machine.   
+It is possible to call all of the COIN-OR solvers listed in %Section~\ref{section:overview} 
+Table~\ref{table:configurations}~(p.\pageref{table:configurations})
+directly from the  AMPL (see {\tt http://www.ampl.com}) modeling language.  In this discussion we assume 
 the user has already obtained and installed AMPL.  
-In  the download described in Section~\ref{section:binary} there is an executable, {\tt OSAmplClient.exe}
-that is linked to all of the COIN-OR solvers  listed in Section~\ref{section:overview}.   
+Both the binary download described in Section~\ref{section:obtainingbinaries}
+and the unix and Windows builds (Section \ref{section:unixbuilds}
+and~\ref{section:windowsinstall}, respectively) contain
+%In  the download described in Section~\ref{section:binary} there is 
+an executable, {\tt OSAmplClient.exe},
+that is linked to all of the COIN-OR solvers  listed in Table~\ref{table:configurations}. %Section~\ref{section:overview}.   
 From the  perspective of AMPL, the   {\tt OSAmplClient} acts like an AMPL ``solver''.    
 The {\tt OSAmplClient.exe}   can be used to solve problems either locally or remotely.   
 
@@ -3720,7 +3725,7 @@ Valid values for the {\tt solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp},
 
 \subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
 
-Next, assume that you have a large problem you want solve on the remote solver. It is necessary 
+Next, assume that you have a large problem you want to solve on the remote solver. It is necessary 
 to specify the location of the server solver as an option to OSAmplClient. In this case, 
 the string of options for {\tt OSAmplClient\_options} is:
 
@@ -3735,7 +3740,7 @@ option OSAmplClient_options
 \end{verbatim}
 the double quotes and the trailing semicolon) in this and the remaining examples.
  
-This option will send the problem to the solver server at location {\bf webdss.ise.ufl.edu}.   
+This option will send the problem to the solver server at location {\tt http://webdss.ise.ufl.edu}.   
 The {\tt serviceLocation} option is used to specify the location of a solver server. If, in addition, 
 we want to use the {\tt SYMPHONY} solver,  the string of options to {\tt OSAmplClient\_options} is:
 \begin{verbatim}
@@ -3758,7 +3763,8 @@ provided with this distribution.  The name of the options file is the value of t
 The string of options to {\tt OSAmplClient\_options} is now
 \begin{verbatim}
 serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
-solver symphony optionFile solveroptions.osol
+solver symphony 
+optionFile solveroptions.osol
 \end{verbatim}
 This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
 and one for {\tt SYMPHONY}.  You can have any number of options. Note the format for specifying an option:
@@ -3916,20 +3922,22 @@ to file {\tt (string)} in    OSiL   format.
 \vskip 8pt
 
 \vskip 8pt
-\noindent {\bf writeosrl  (string)}:  If this option is used, GAMS will write the result of the optimization 
+\noindent {\tt writeosrl  (string)}:  If this option is used, GAMS will write the result of the optimization 
 to file {\tt (string)} in OSrL  format.
 \vskip 8pt
 
 The options just described are options for the GAMS modeling language.  
-It is also possible to pass options directly to the COIN-OR solvers used by either {\tt CoinOS} or {\tt OS}. This is done by passing the name of an option file that conforms to the  OSoL     (Optimization Services option Language) XML standard.  See \url{http://projects.coin-or.org/OS}  for information on Optimization Services.  
+It is also possible to pass options directly to the COIN-OR solvers used by either {\tt CoinOS} or {\tt OS}.
+This is done by passing the name of an option file that conforms to the  OSoL  standard.  
+%See \url{http://projects.coin-or.org/OS}  for information on Optimization Services.  
 The option
 
 \vskip 8pt
-\noindent {\bf readosol  (string)}  specifies the name of an OS option  file in OSoL format that is 
+\noindent {\tt readosol  (string)}  specifies the name of an OS option  file in OSoL format that is 
 given to the solver.  Note: The file  {\tt coinos.opt} is an option  file for GAMS but the GAMS option 
 {\tt readosol} in the GAMS option file  is specifying the name of an OS options file. 
 \vskip 8pt
-The file {\bf solveroptions.osol} is contained in the OS distribution in the {\tt osolFiles} directory   
+The file {\tt solveroptions.osol} is contained in the OS distribution in the {\tt osolFiles} directory   
 in the {\tt data} directory. This file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt},
 and one for {\tt SYMPHONY} (which is available for remote server calls, but not locally).  
 You can have any number of options. Note the format for specifying an option:
@@ -3950,21 +3958,24 @@ An up-to-date online version is available at \url{http://www.coin-or.org/GAMSlin
 
 \subsubsection{Using GAMS  to Invoke the COIN-OR Solver Service}\label{section:gamsremote}
 
-We now describe how to call  a remote COIN-OR  solver service. There are several reason why you might wish to use this service. 
+We now describe how to call  a remote COIN-OR  solver service. There are several reason why you might 
+wish to use this service. 
 
 \begin{itemize}
 \item Have access to a faster machine.
 
-\item  Be able to  submit jobs to run in asynchronous mode -- submit your job,  turn off your laptop,  and check later to see if the job ran.
+\item  Be able to  submit jobs to run in asynchronous mode -- submit your job,  turn off your laptop,  
+and check later to see if the job ran.
 
 \item Call several additional solvers ({\tt SYMPHONY} and {\tt DyLP}).
 
 \end{itemize}
 
-In order to use  the COIN-OR solver service it is necessary to specify the service URL. This is done using the {\bf service} option.
+In order to use  the COIN-OR solver service it is necessary to specify the service URL. 
+This is done using the {\tt service} option.
 
 \vskip 8pt
-{\bf service (string):} Specifes the URL of  the COIN-OR solver service
+\noindent{\tt service (string)}: Specifes the URL of  the COIN-OR solver service
 \vskip 8pt
 Use the following value for this option.
 \begin{verbatim}
@@ -3999,15 +4010,20 @@ if the job is complete.  In order to use the remote solver service in this fashi
 {\it asynchronously}, it  is necessary to use the  {\tt service\_method} option.
 
 \vskip 8pt
-\noindent {\bf service\_method (string)} specifies the method to execute on a server.  
+\noindent {\tt service\_method (string)} specifies the method to execute on a server.  
 Valid values for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt retrieve}, 
 and {\tt kill}. We explain how to use each of these.
 \vskip 8pt
-The default value of {\bf service\_method} is {\tt solve.} A {\tt solve} invokes the the remote service in synchronous mode. When using the {\tt solve} you can optionally specify a set of solver options in an OSoL file  by using the {\tt readosol} option. 
-The  remaining values for the {\bf service\_method} option are used for an asynchronous call.  We illustrate them in the order in which they would most logically be executed. 
+The default value of {\tt service\_method} is {\tt solve.} A {\tt solve} invokes the remote service 
+in synchronous mode. When using the {\tt solve} method you can optionally specify a set of solver options 
+in an OSoL file  by using the {\tt readosol} option. The  remaining values for the {\tt service\_method} 
+option are used for an asynchronous call.  We illustrate them in the order in which they would most 
+logically be executed. 
 
 \vskip 8pt
-\noindent {\bf service\_method getJobID:} When working in asynchronous mode, the server needs to uniquely identify each job. The {\tt getJobID} service method will result in the server returning a unique job id. For example if the following {\tt coinos.opt} file is used
+\noindent {\tt service\_method getJobID}: When working in asynchronous mode, the server needs to 
+uniquely identify each job. The {\tt getJobID} service method will result in the server returning 
+a unique job id. For example if the following {\tt coinos.opt} file is used
 \vskip 8pt
 \begin{verbatim}
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
@@ -4017,18 +4033,23 @@ with the command
 \begin{verbatim}
 gams.exe eastborne.gms optfile=1
 \end{verbatim}
-the user will see a rather long job id returned to the screen as output. Any job id can be sent to the server as long as it has not been used before.  Assume that the job id returned is {\tt coinor12345xyz}.  This job id is used to submit a job to the server with the {\bf send} method.
+the user will see a rather long job id returned to the screen as output. Any job id can be sent to the 
+server as long as it has not been used before.  Assume that the job id returned is {\tt coinor12345xyz}.  
+This job id is used to submit a job to the server with the {\tt send} method.
 
 \vskip 8pt
-\noindent {\bf service\_method send:} When working in asynchronous mode, use the {\tt send} service method to submit a job. When using  the {\tt send} service method option an option is required and the option file must specify a  job id that has not been used before.  Assume that in the  {\tt coinos.opt}  we specify the options:
+\noindent {\tt service\_method send}: When working in asynchronous mode, use the {\tt send} service method 
+to submit a job. When using  the {\tt send} service method option an option is required and the option file
+must specify a  job id that has not been used before.  Assume that in the  {\tt coinos.opt}  we specify 
+the options:
 \vskip 8pt
 \begin{verbatim}
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 service_method send
 readosol sendWithJobID.osol
 \end{verbatim}
-The {\tt sendWithJobID.osol} option file is identical to the {\tt solveroptions.osol} option file except that it has
-an additional XML tag:
+The {\tt sendWithJobID.osol} option file is identical to the {\tt solveroptions.osol} option file except 
+that it has an additional XML tag:
 \begin{verbatim}
 <jobID>coinor12345xyz</jobID> 
 \end{verbatim}
@@ -4037,9 +4058,13 @@ We then execute
 \begin{verbatim}
 gams.exe eastborne.gms optfile=1
 \end{verbatim}
-If all goes well, the response to the above command should  be: ``Problem instance successfully send to OS service.'' At this point the server will schedule the job and work on it. It is possible to turn off the user computer at this point. At some point the user will want to know if the job is finished. This is accomplished using the {\bf knock} service method.
+If all goes well, the response to the above command should  be: ``Problem instance successfully send to 
+OS service''. At this point the server will schedule the job and work on it. It is possible to turn off 
+the user computer at this point. At some point the user will want to know if the job is finished. 
+This is accomplished using the {\tt knock} service method.
 \vskip 8pt
-\noindent {\bf service\_method knock:} When working in asynchronous mode, this is used to check the status of job.  Consider the following {\tt coinos.opt} file:
+\noindent {\tt service\_method knock}: When working in asynchronous mode, this is used to check the status 
+of a job.  Consider the following {\tt coinos.opt} file:
 \vskip 8pt
 \begin{verbatim}
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
@@ -4048,14 +4073,19 @@ readosol sendWithJobID.osol
 readospl knock.ospl
 writeospl knockResult.ospl
 \end{verbatim}
-The {\bf knock} service method requires two  inputs. The first input is the name of an option file, in this case {\tt sendWithJobID} specified through the {\bf readosol} option. In addition, a file in OSpL (Optimization Services process Language) is required. Do not worry about the format of this file, use the {\tt knock.opsl} file provided in the binary distribution. This file name is specified using the {\bf readospl} option.
-If no job id is specified in  OSoL file then the status of all jobs on the server will be returned in the file specified by the {\bf writeospl} option. If a job id is specified in the OSoL file, then only information on the specified job id is returned in the file specified by the {\bf writeospl} option.  In this case the file name is {\tt knockResult.ospl}.
-We then execute
+The {\tt knock} service method requires two  inputs. The first input is the name of an option file, 
+in this case {\tt sendWithJobID.osol} specified through the {\tt readosol} option. In addition, a file 
+in OSpL format is required. You can use the {\tt knock.opsl} file provided in the binary distribution. 
+This file name is specified using the {\tt readospl} option. If no job id is specified in the OSoL file 
+then the status of all jobs on the server will be returned in the file specified by the {\tt writeospl} 
+option. If a job id is specified in the OSoL file, then only information on the specified job id is 
+returned in the file specified by the {\tt writeospl} option.  In this case the file name is 
+{\tt knockResult.ospl}. We then execute
 \vskip 8pt
 \begin{verbatim}
 gams.exe eastborne.gms optfile=1
 \end{verbatim}
-The file {\bf knockResult.ospl} will contain the information
+The file {\tt knockResult.ospl} will contain the information
 \begin{verbatim}
 <job jobID="coinor12345xyz">
 <state>finished</state>
@@ -4066,9 +4096,13 @@ The file {\bf knockResult.ospl} will contain the information
 <duration>1.36</duration>
  </job>
 \end{verbatim}
-Note the  the job is complete as indicated in the {\tt <state>} tag. It is now time to actually retrieve the job solution.  This is done with the {\bf retrieve} option.
+Note that the job is complete as indicated in the {\tt <state>} tag. It is now time to actually retrieve 
+the job solution.  This is done with the {\tt retrieve} method.
 \vskip 8pt
-\noindent {\bf service\_method retrieve:} When working in asynchronous mode, this is used to retrieve the job solution. It is necessary when using {\bf knock}  to specify an option file and in that option file specify a   job id.   Consider the following {\tt coinos.opt} file:
+\noindent {\tt service\_method retrieve}: When working in asynchronous mode, this method is used 
+to retrieve the job solution. It is necessary when using {\tt retrieve} %{\tt knock} ???
+to specify an option file and in that option file specify a job id.   
+Consider the following {\tt coinos.opt} file:
 \vskip 8pt
 \begin{verbatim}
 service http://kipp.chicagobooth.edu/os/OSSolverService.jws
@@ -4076,16 +4110,18 @@ service_method retrieve
 readosol sendWithJobID.osol
 writeosrl answer.osrl
 \end{verbatim}
-We then execute
+When we then execute
 \vskip 8pt
 \begin{verbatim}
 gams.exe eastborne.gms optfile=1
 \end{verbatim}
-and the result is written to the file answer.osrl. 
+the result is written to the file {\tt answer.osrl}. 
 
-Finally there is a {\tt kill} service method which is used to kill a job that is a mistake or running too long on the server. 
+Finally there is a {\tt kill} service method which is used to kill a job that is a mistake or running too 
+long on the server. 
 \vskip 8pt
-\noindent {\bf service\_method kill:} When working in asynchronous mode, this is used to terminate a job. You should specify an OSoL  file containing the JobID by using the readosol option.
+\noindent {\tt service\_method kill:} When working in asynchronous mode, this method is used to terminate 
+a job. You should specify an OSoL  file containing the JobID by using the {\tt readosol} option.
 \vskip 8pt
 
 
@@ -4094,48 +4130,59 @@ Finally there is a {\tt kill} service method which is used to kill a job that is
 
 \begin{enumerate}
 
-\item[1.]   In order to use OS with GAMS you can either specify {\tt CoinOS} as an option to GAMS at the command line,
+\item[1.]   In order to use OS with GAMS you can either specify {\tt CoinOS} as an option to GAMS 
+at the command line,
 \begin{verbatim}
 gams eastborne.gms MIP=CoinOS
 \end{verbatim}
-or, you can  place the statement {\tt Option ProblemType = CoinOS;} somewhere in the model {\it before} the {\tt Solve} statement in the gams file.
+or, you can  place the statement {\tt Option ProblemType = CoinOS;} somewhere in the model {\it before} 
+the {\tt Solve} statement in the GAMS file.
 
 
-\item[2.]   If no options are given, then the model will be solved locally and Clp will be used for linear programs, Cbc for integer linear programs, Ipopt for continuous nonlinear programs, and Bonmin for nonlinear integer.
+\item[2.]   If no options are given, then the model will be solved locally and {\tt Clp} will be used for 
+linear programs, {\tt Cbc} for integer linear programs, {\tt Ipopt} for continuous nonlinear programs, 
+and {\tt Bonmin} for nonlinear integer programs.
 
-\item[3.] In order to control behavior (for example, whether a local or remote solver is used)  an option file, {\bf os.opt} or {\bf coinos.opt}, must be used as follows
+\item[3.] In order to control behavior (for example, whether a local or remote solver is used)  an options
+ file, {\tt os.opt} or {\tt coinos.opt}, must be used as follows
 
 \begin{verbatim}
 gams.exe  eastborne.gms optfile=1
 \end{verbatim}
 
-\item[4.]  The {\bf os.opt} or {\bf coinos.opt} file is used to specify {\it eight potential options}:
+\item[4.]  The {\tt os.opt} or {\tt coinos.opt} file is used to specify {\it eight potential options}:
 
 
 \begin{itemize}
-\item {\bf service (string):} using the COIN-OR solver server, this is done by giving the option
+\item {\tt service (string)}: using the COIN-OR solver server, this is done by giving the option
 
 \begin{verbatim}
 service  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 \end{verbatim}
 
 
-\item  {\bf readosol (string):} whether or not to send the solver an option file, this is done by giving the option
+\item  {\tt readosol (string)}: whether or not to send the solver an option file, this is done by 
+giving the option
 \begin{verbatim}
 readosol  solveroptions.osol
 \end{verbatim}
 
 
-\item   {\bf solver (string):} if a local solve is being done,  a specific solver is specified by the option
+\item   {\tt solver (string)}: if a local solve is being done,  a specific solver is specified by 
+the option
 \begin{verbatim}
 solver solver_name
 \end{verbatim}
 
-Valid values are {\tt clp},  {\tt cbc}, {\tt glpk}, {\tt ipopt}, {\tt bonmin},  and {\tt couenne}.  When the COIN-OR solver service is being used, the only way to specify the solver to use is through the {\tt <solverToInvoke>} tag in an OSoL file. In this case the valid values for the solver are  {\tt clp},  {\tt cbc},  {\tt dylp}, {\tt glpk}, {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.
+Valid values are {\tt clp},  {\tt cbc}, {\tt glpk}, {\tt ipopt}, {\tt bonmin}  and {\tt couenne}.  
+When the COIN-OR solver service is being used, the only way to specify the solver to use is through 
+the {\tt <solverToInvoke>} tag in an OSoL file. In this case the valid values for the solver are  
+{\tt clp}, {\tt cbc}, {\tt dylp}, {\tt glpk}, {\tt ipopt}, {\tt bonmin}, {\tt couenne}, {\tt symphony}
+and {\tt vol}.
 
 
 
-\item  {\bf writeosrl (string):}  the solution result can be put into an XML file by specifying the option
+\item  {\tt writeosrl (string)}:  the solution result can be put into an OSrL file by specifying the option
 
 \begin{verbatim}
 writeosrl  osrl_file_name
@@ -4143,7 +4190,8 @@ writeosrl  osrl_file_name
 
 
 
-\item    {\bf writeosil (string):}   the optimization instance  can be put into an XML file by specifying the option
+\item    {\tt writeosil (string)}:   the optimization instance  can be put into an OSiL file by specifying 
+the option
 
 
 
@@ -4152,20 +4200,23 @@ writeosil  osil_file_name
 \end{verbatim}
 
 
-\item {\bf writeospl (string):} Specifies the name of an OSpL  file in which the answer from the {\tt knock} or {\tt kill} method is written
+\item {\tt writeospl (string):} Specifies the name of an OSpL  file in which the answer from the 
+{\tt knock} or {\tt kill} method is written
 
 \begin{verbatim}
 writeospl  write_ospl_file_name
 \end{verbatim}
 
 
-\item {\bf readospl (string):} Specifies the name of an OSpL  file that the {\tt knock} method sends to  the server
+\item {\tt readospl (string):} Specifies the name of an OSpL  file that the {\tt knock} method 
+sends to  the server
 
 \begin{verbatim}
 readospl  read_ospl_file_name
 \end{verbatim}
 
-\item {\bf service\_method (string):} Specifies the method to execute on a server.  Valid values for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt retrieve}, and {\tt kill}.
+\item {\tt service\_method (string)}: Specifies the method to execute on a server.  Valid values 
+for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt retrieve}, and {\tt kill}.
 
 \end{itemize}
 
@@ -4198,7 +4249,8 @@ We  assume the user has already done a {\tt make install} and that in the OS roo
 \begin{verbatim}
 /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS
 \end{verbatim}
-there is an include directory and lib directory that results from the make install.  The following steps should be followed.
+there is an {\tt include} directory as well as a {\tt lib} directory resulting from the {\tt make install}.
+The following steps should be followed.
 
 
 \begin{enumerate}[{\bf Step 1:}]
