@@ -398,11 +398,11 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
+		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of blocks specified must agree with numberOfBlocks. </xs:documentation>
 			</xs:annotation>
-			<xs:element name="block" type="ConstantMatrixBlock"/>
+			<xs:element name="block" type="ConstantMatrixBlock" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="base" use="optional" default="none">
