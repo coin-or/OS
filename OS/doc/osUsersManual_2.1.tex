@@ -211,7 +211,7 @@
 
 \title{Optimization Services \OSstable\ User's Manual }
 \vskip 2in
-\author{Robert Fourer, Horand Gassmann, Jun Ma,  Kipp Martin, Wayne Sheng}
+\author{Horand Gassmann, Jun Ma,  Kipp Martin, and Wayne Sheng}
 \maketitle
 
 \begin{abstract}
@@ -3755,7 +3755,11 @@ option osamplclient_options "serviceLocation
     http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
-will result in the default server {\tt Cbc} being invoked.
+will result in the default server {\tt Cbc} being invoked.  Each call 
+\begin{verbatim}
+option osamplclient_options
+\end{verbatim}
+is memoryless. That is the options set in one call do not remain in memory for the next call.
 
 Finally, the user may wish to pass options to the individual solver. This is done by providing an options file.
 A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
@@ -3843,7 +3847,7 @@ option solver OSAmplClient;
 
 
 \item specifying the {\tt solver} or {\tt serviceURI} directly through {\tt OSAmplClient\_options} 
-will override the settings in the options file.
+will override the settings in the OS options file.
 
 \item if no options are specified using {\tt OSAmplClient\_options},   by default, for continuous
 linear models  {\tt clp} is used. For continuous nonlinear models {\tt ipopt} is used. 
@@ -3863,57 +3867,65 @@ For mixed-integer linear models (MIP),   {\tt cbc} is used. For mixed-integer no
 
 \subsection{GAMS and Optimization Services}\label{section:gamslinks}
 
-%Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
-%We describe two such hook-ups,
-%The AMPL\index{AMPL} and GAMS modeling languages can be used to generate model instances as input  to an OS
-%compliant solver.
-%In Section \ref{section:amplclient} we described how to hook the AMPL modeling language to solvers using
-%{\tt OSAmplClient}.  It is also possible to use GAMS via the COIN-OR GAMSlinks\index{GAMSlinks|(} project.
 
 This section pertains to GAMS version 23.3 (and above) that now includes support for OS.  
-Here we describe how to use OS with the GAMS system.  We assume that the user has installed GAMS.   
-The {\tt CoinOS} solver that is packaged with GAMS is really a {\it solver interface} and is linked to the 
-following COIN-OR solvers: {\tt Bonmin}, {\tt Cbc}, {\tt Clp}, {\tt Couenne}, {\tt Glpk}, and {\tt Ipopt}. 
-(Think of {\tt CoinOS} as a {\it metasolver}.)   
-As an example (we assume a Windows operating system and use the .exe extension), consider:
+Here we describe the GAMS  implementation of Optimization Services.  We assume that the user has installed GAMS.   
+In GAMS,  OS is implemented through the {\tt CoinOS} solver that is packaged with GAMS.      The GAMS {\tt CoinOS} solver is really a {\it solver interface} and is linked through the OS library to the 
+following COIN-OR solvers: {\tt Bonmin}, {\tt Cbc}, {\tt Clp},  {\tt Glpk}, and {\tt Ipopt}. 
+Think of {\tt CoinOS} as a {\it metasolver}.    As an example (we assume a Windows operating system and use the .exe extension), consider:
 
 \begin{verbatim}
 gams.exe eastborne.gms MIP=CoinOS
 \end{verbatim}
+The solver name {\tt CoinOS} is not case sensitive and 
+\begin{verbatim}
+gams.exe eastborne.gms MIP=coinos
+\end{verbatim}
+will also work.  In addition, if
+\begin{verbatim}
+Option MIP = CoinOS ;
+\end{verbatim}
+is present in the GAMS file, {\tt eastborne.gms}, then writing {\tt MIP=CoinOS} on the command line is unnecessary and 
+\begin{verbatim}
+gams.exe eastborne.gms 
+\end{verbatim}
+will suffice. In the ensuing discussion we assume  {\tt Option MIP = CoinOS;} is always present in the GAMS model file and we will not specify it explicitly on the command line.
 
-Executing the commands above will result in the model being solved on the local machine using the 
+Executing any of the commands above will result in the model being solved on the local machine using the 
 COIN-OR solver {\tt Cbc}.  By default, for continuous linear models (LP and RMIP), 
-{\tt CoinOS} or {\tt OS} chooses {\tt Clp}. For continuous nonlinear models (NLP, DNLP, RMINLP,
+{\tt CoinOS} chooses {\tt Clp}. For continuous nonlinear models (NLP, DNLP, RMINLP,
 QCP, RMIQCP), {\tt Ipopt} is the default solver. For mixed-integer linear models (MIP),  {\tt Cbc} 
 is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), {\tt Bonmin} is the default solver.
 
-It is possible to control which solver is selected by {\tt CoinOS} or {\tt OS}.   
-One way to do this is to provide an {\it options file}  to  GAMS.   
-Since the solver is named {\tt  CoinOS}, the options file should  be named {\tt coinos.opt} 
+It is possible to control which solver is selected by {\tt CoinOS}.    This is done by providing an {\it options file}  to  GAMS.   
+Since the solver is named {\tt  CoinOS}, the options file should  be named {\tt CoinOS.opt}  (the file name is not case sensitive)
 and the command line call is 
 \begin{verbatim}
-gams.exe eastborne.gms LP=CoinOS optfile 1
+gams.exe eastborne.gms optfile 1
 \end{verbatim}
 Calling multiple GAMS options files uses the convention
 \begin{verbatim}
-optfile=1 corresponds to coinos.opt
-optfile=2 corresponds to coinos.op2
+optfile=1 corresponds to CoinOS.opt
+optfile=2 corresponds to CoinOS.op2
 ...
-optfile=99 corresponds to coinos.o99
+optfile=99 corresponds to CoinOS.o99
 \end{verbatim}
 
-We now explain the valid options that can go into a GAMS option file when using either 
-{\tt OS} or {\tt CoinOS}.
+We now explain the valid options that can go into a GAMS option file when using the {\tt CoinOS} solver.  They are:
 
 \vskip 8pt
 \noindent {\tt solver  (string)}:   Specifes the solver that is used to solve an instance. 
-Valid values are {\tt clp},  {\tt cbc}, {\tt glpk}, {\tt ipopt}, {\tt bonmin},  and {\tt couenne}.  
-If a solver name is specified that is not recognized, the default solver for the problem type will be used. 
-For example, if the file {\tt coinos.opt} contains a single line
+Valid values are {\tt clp},  {\tt cbc}, {\tt glpk}, {\tt ipopt},  and {\tt bonmin}.  
+If a solver name is specified that is not recognized, the default solver for the problem type is used.  The value for the solver option is case sensitive. 
+For example, if the file {\tt CoinOS.opt} contains a single line
 \begin{verbatim}
-solver coinbonmin
+solver glpk
 \end{verbatim}
-then the {\tt Bonmin} solver will be used to solve the problem.   
+then executing
+\begin{verbatim}
+gams.exe eastborne.gms optfile 1
+\end{verbatim}
+will result in  using {\tt Glpk}  to solve the problem.   
 
 
 \vskip 8pt
@@ -3927,14 +3939,14 @@ to file {\tt (string)} in OSrL  format.
 \vskip 8pt
 
 The options just described are options for the GAMS modeling language.  
-It is also possible to pass options directly to the COIN-OR solvers used by either {\tt CoinOS} or {\tt OS}.
+It is also possible to pass options directly to the COIN-OR solvers by using the {\tt OS} interface.
 This is done by passing the name of an option file that conforms to the  OSoL  standard.  
 %See \url{http://projects.coin-or.org/OS}  for information on Optimization Services.  
 The option
 
 \vskip 8pt
 \noindent {\tt readosol  (string)}  specifies the name of an OS option  file in OSoL format that is 
-given to the solver.  Note: The file  {\tt coinos.opt} is an option  file for GAMS but the GAMS option 
+given to the solver.  Note: The file  {\tt CoinOS.opt} is an option  file for GAMS but the GAMS option 
 {\tt readosol} in the GAMS option file  is specifying the name of an OS options file. 
 \vskip 8pt
 The file {\tt solveroptions.osol} is contained in the OS distribution in the {\tt osolFiles} directory   
@@ -3956,10 +3968,10 @@ An up-to-date online version is available at \url{http://www.coin-or.org/GAMSlin
 
 
 
-\subsubsection{Using GAMS  to Invoke the COIN-OR Solver Service}\label{section:gamsremote}
+\subsubsection{Using GAMS  to Invoke a Remote OS Solver Service}\label{section:gamsremote}
 
-We now describe how to call  a remote COIN-OR  solver service. There are several reason why you might 
-wish to use this service. 
+We now describe how to call  a remote OS   solver service using the GAMS {\tt CoinOS}.  Before proceeding, it is important to emphasize that when calling a remote OS solver service, the remote service may be a different implementation of OS than the GAMS implementation in {\tt CoinOS}. For example, the remote implementation will may also provide access to solvers such as {\tt SYMPHONY}, {\tt Couenne}, and {\tt DyLP}.  There are several reason why you might 
+wish to use a remote OS solver service. 
 
 \begin{itemize}
 \item Have access to a faster machine.
@@ -3967,7 +3979,7 @@ wish to use this service.
 \item  Be able to  submit jobs to run in asynchronous mode -- submit your job,  turn off your laptop,  
 and check later to see if the job ran.
 
-\item Call several additional solvers ({\tt SYMPHONY} and {\tt DyLP}).
+\item Call several additional solvers ({\tt SYMPHONY}, {\tt Couenne} and {\tt DyLP}).
 
 \end{itemize}
 
@@ -3990,9 +4002,9 @@ inside the XML tag {\tt <solverToInvoke>}. The example  {\tt solveroptions.osol}
 \begin{verbatim}
 <solverToInvoke>symphony</solverToInvoke>
 \end{verbatim}
-If the {\tt coinos.opt} file is
+If, for example,  the {\tt CoinOS.opt} file is
 \begin{verbatim}
-solver coinipopt
+solver ipopt
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 readosol  solveroptions.osol
 writeosrl temp.osrl
@@ -4000,7 +4012,10 @@ writeosrl temp.osrl
 then {\tt Ipopt} is ignored as a solver option and the remote server uses the {\tt  SYMPHONY} solver.  
 Valid values for the remote solver service specified in the {\tt <solverToInvoke>} tag are {\tt clp},  
 {\tt cbc},  {\tt dylp}, {\tt glpk}, {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and 
-{\tt vol}.
+{\tt vol}.  If the problem is solved using a remote solver service the value specified by the GAMS {\tt solver} option is irrelevant and ignored. 
+
+The GAMS {\tt CoinOS} solver behaves differently from the {\tt OSAmplClient} in the following way.  Although it is  possible to put the address of the remote server in the OS options file, it is not read by the GAMS {\tt CoinOS} solver. The only to specify a remote solver is through the GAMS  {\tt service} option.
+
 
 
 By default, the call to the server is a {\it synchronous} call. The GAMS process will wait for the result 
@@ -4023,7 +4038,7 @@ logically be executed.
 \vskip 8pt
 \noindent {\tt service\_method getJobID}: When working in asynchronous mode, the server needs to 
 uniquely identify each job. The {\tt getJobID} service method will result in the server returning 
-a unique job id. For example if the following {\tt coinos.opt} file is used
+a unique job id. For example if the following {\tt CoinOS.opt} file is used
 \vskip 8pt
 \begin{verbatim}
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
@@ -4040,7 +4055,7 @@ This job id is used to submit a job to the server with the {\tt send} method.
 \vskip 8pt
 \noindent {\tt service\_method send}: When working in asynchronous mode, use the {\tt send} service method 
 to submit a job. When using  the {\tt send} service method option an option is required and the option file
-must specify a  job id that has not been used before.  Assume that in the  {\tt coinos.opt}  we specify 
+must specify a  job id that has not been used before.  Assume that in the  {\tt CoinOS.opt}  we specify 
 the options:
 \vskip 8pt
 \begin{verbatim}
@@ -4064,7 +4079,7 @@ the user computer at this point. At some point the user will want to know if the
 This is accomplished using the {\tt knock} service method.
 \vskip 8pt
 \noindent {\tt service\_method knock}: When working in asynchronous mode, this is used to check the status 
-of a job.  Consider the following {\tt coinos.opt} file:
+of a job.  Consider the following {\tt CoinOS.opt} file:
 \vskip 8pt
 \begin{verbatim}
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
@@ -4102,10 +4117,10 @@ the job solution.  This is done with the {\tt retrieve} method.
 \noindent {\tt service\_method retrieve}: When working in asynchronous mode, this method is used 
 to retrieve the job solution. It is necessary when using {\tt retrieve} %{\tt knock} ???
 to specify an option file and in that option file specify a job id.   
-Consider the following {\tt coinos.opt} file:
+Consider the following {\tt CoinOS.opt} file:
 \vskip 8pt
 \begin{verbatim}
-service http://kipp.chicagobooth.edu/os/OSSolverService.jws
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 service_method retrieve
 readosol sendWithJobID.osol
 writeosrl answer.osrl
@@ -4144,13 +4159,13 @@ linear programs, {\tt Cbc} for integer linear programs, {\tt Ipopt} for continuo
 and {\tt Bonmin} for nonlinear integer programs.
 
 \item[3.] In order to control behavior (for example, whether a local or remote solver is used)  an options
- file, {\tt os.opt} or {\tt coinos.opt}, must be used as follows
+ file,  {\tt CoinOS.opt}, must be used as follows
 
 \begin{verbatim}
 gams.exe  eastborne.gms optfile=1
 \end{verbatim}
 
-\item[4.]  The {\tt os.opt} or {\tt coinos.opt} file is used to specify {\it eight potential options}:
+\item[4.]  The {\tt os.opt} or {\tt CoinOS.opt} file is used to specify {\it eight potential options}:
 
 
 \begin{itemize}
@@ -4220,7 +4235,7 @@ for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt r
 
 \end{itemize}
 
-
+\item[5.]  If an OS options file is passed to the GAMS {\tt CoinOS} solver using the GAMS  {\tt CoinOS} option      {\tt readosol}, then GAMS does not interpret  or act on any options in this file. The options in the OS options file are passed directly to either: i) the default local solver, ii) the local solver specified by the  GAMS {\tt CoinOS}  option {\tt solver}, or iii)  to the remote OS solver service if one is specified by the GAMS  {\tt CoinOS} option {\tt service.}
 
 \end{enumerate}
 
@@ -5686,7 +5701,7 @@ The OS protocol for representing an optimization result is {\tt OSrL}. Like the 
 
 In this example, we show how to add cuts to tighten an LP using COIN-OR  {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
 
-\subsection{ \, OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
+\subsection{OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
 
 This example illustrates the API for the six service methods described in Section~\ref{section:servicemethods}.
 The file {\tt osRemoteTest.cpp} in folder {\tt osRemoteTest} first builds a small linear
@@ -5695,7 +5710,33 @@ The asynchronous mode is also tested by submitting the problem to a remote solve
 checking the status and either retrieving the answer or killing the process if it has not
 yet finished.
 
-\subsection{ \,template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} directory.  This is an empty example  that comes with a {\\t Makefile}  that links to all of the necessary header files and libraries.  The user can write his or her own code her. 
+\subsection{OSJavaDemo:  Building an OSiL Instance in Java}\label{section:exampleOSJavaDemo}
+
+In this example we demonstrate how to build an OSiL instance using the Java OSInstance API. In order to use this example, the user will have to download the following:
+
+\begin{verbatim}
+svn co https://projects.coin-or.org/svn/OS/branches/OSjava/OSCommon osjava
+\end{verbatim}
+Then set the Class Path to the following jar files.
+\begin{itemize}
+\item OSCommon.jar
+\item axis.jar
+\item jaxrpc.jar
+\item xerces.jar
+\item commons-logging.jar
+\item commons-discovery.jar
+\item or124.jar
+\end{itemize}
+The code demonstrates how the Java OSInstance can be used to generate a linear program and then call the  C++ {  \bf OSSolverService} executable to solve the problem.  
+
+
+
+\subsection{template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} directory.  This is an empty example  that comes with a {\\t Makefile}  that links to all of the necessary header files and libraries.  The user can write his or her own code her. 
+
+
+
+
+
 
 \section{The OS Algorithmic Differentiation Implementation}\label{section:ad}
 
