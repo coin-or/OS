@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -4289,7 +4289,7 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 		<xs:complexContent>
-			<xs:extension base="OSnLNode">
+			<xs:extension base="OSnLMNode">
 				<xs:sequence minOccurs="5" maxOccurs="5">
 					<xs:element ref="OSnLMNode"/>
 					<xs:element ref="OSnLNode"/>
@@ -4300,7 +4300,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="matrixSubmatrixAt" type="OSnLNodeMatrixSubmatrixAt" substitutionGroup="OSnLNode">
+	<xs:element name="matrixSubmatrixAt" type="OSnLNodeMatrixSubmatrixAt" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>

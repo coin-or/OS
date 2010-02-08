@@ -327,7 +327,13 @@
 				<xs:documentation>Number of the matrix child elements must match numberOfMatrices</xs:documentation>
 			</xs:annotation>
 			<xs:element name="constantMatrix" type="ConstantMatrix"/>
-			<xs:element name="linearMatrix" type="LinearMatrix"/>
+			<xs:element name="linearMatrix">
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="LinearMatrix"/>
+					</xs:complexContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="generalMatrix" type="GeneralMatrix"/>
 		</xs:choice>
 		<xs:attribute name="numberOfMatrices" type="xs:nonNegativeInteger" use="required"/>
@@ -339,6 +345,7 @@
 		<xs:choice>
 			<xs:element name="elements" type="ConstantMatrixElements"/>
 			<xs:element name="transformation" type="ConstantMatrixTransformation"/>
+			<xs:element name="blocks" type="ConstantMatrixBlocks"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
@@ -387,6 +394,48 @@
 			<xs:element ref="OSnLMNode"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:complexType name="ConstantMatrixBlocks">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>Number of blocks specified must agree with numberOfBlocks. </xs:documentation>
+			</xs:annotation>
+			<xs:element name="block" type="ConstantMatrixBlock"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="base" use="optional" default="none">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="none"/>
+					<xs:enumeration value="objectiveCoefficients"/>
+					<xs:enumeration value="linearConstraintCoefficients"/>
+					<xs:enumeration value="matrix"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
+		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="symmetric" type="xs:boolean" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="ConstantMatrixBlock">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element ref="OSnLMNode"/>
+		</xs:sequence>
+		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
 	<xs:complexType name="ConstantMatrixBuilder">
 		<xs:annotation>
 			<xs:documentation>experiment</xs:documentation>
@@ -408,16 +457,18 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
-				<xs:documentation>Number of elements specified must agree with numberOfSpecifiedElements</xs:documentation>
+				<xs:documentation>Number of El's specified must agree with numberOfEl. Number of blocks specified must agree with numberOfBlocks. </xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="LinearMatrixElement" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="el" type="LinearMatrixElement"/>
+			<xs:element name="block" type="LinearMatrixBlock"/>
+		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="varIdxStart" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="varIdxEnd" type="xs:nonNegativeInteger" use="optional"/>
@@ -460,6 +511,18 @@
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixBlock">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:element ref="OSnLMNode"/>
+		</xs:sequence>
+		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixVarIdx">
 		<xs:annotation>
@@ -526,7 +589,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
+		<xs:sequence minOccurs="0">
 			<xs:element ref="OSnLMNode"/>
 		</xs:sequence>
 		<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
