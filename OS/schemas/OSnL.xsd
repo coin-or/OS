@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -27,10 +27,15 @@
 			<xs:extension base="OSnLNode"/>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:element name="OSnLMNode" type="OSnLMNode" abstract="true">
+	<xs:element name="OSnLMNode" abstract="true">
 		<xs:annotation>
 			<xs:documentation> draft. Set abstract to true in order to create a substitution group</xs:documentation>
 		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="OSnLMNode"/>
+			</xs:complexContent>
+		</xs:complexType>
 	</xs:element>
 	<!--Arithmetic Nodes: since version 1.0.0  -->
 	<xs:complexType name="OSnLNodePlus">
@@ -3852,6 +3857,28 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixBlock">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+				<xs:attribute name="rowIdxStart" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="colIdxStart" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="rowIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="colIdxEnd" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixBlock" type="OSnLNodeMatrixBlock" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. Should be appended under blockMatrix</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 	<xs:complexType name="OSnLNodeMatrixIdentical">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -4301,6 +4328,26 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:element name="matrixSubmatrixAt" type="OSnLNodeMatrixSubmatrixAt" substitutionGroup="OSnLMNode">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixBlockMatrix">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLMNode">
+				<xs:sequence maxOccurs="unbounded">
+					<xs:element ref="matrixBlock"/>
+				</xs:sequence>
+				<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
+				<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:element name="matrixBlockMatrix" type="OSnLNodeMatrixBlockMatrix" substitutionGroup="OSnLMNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
