@@ -332,6 +332,7 @@ or MPS format\index{MPS format} and call a solver locally or remotely -- see Sec
 GLPK\index{GLPK@{\tt GLPK}}, \ifknitro Knitro\index{knitro}, \fi
 or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
 
+\item Use GAMS\index{GAMS} to solve problems either locally or remotely -- see Section~\ref{section:gamslinks}.
 
 \item Build a remote solver service using Apache Tomcat\index{Apache Tomcat} -- see Section~\ref{section:tomcat}.
 
@@ -2544,9 +2545,11 @@ must be given on the machine that is running {\tt OSSolverService}. It is not ne
 If this option is not specified then the solver solution is displayed to the screen.
 
 
-\item[] {\bf -osplInput xxx.ospl}\ \  The name of an input file in the  OS Process Language (OSpL), this is used as input  to the {\tt knock} method.
+\item[] {\bf -osplInput xxx.ospl}\ \  The name of an input file in the  OS Process Language (OSpL); 
+this is used as input  to the {\tt knock} method.
 
-\item[] {\bf -osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL), this the  output  string from the {\tt knock}  and {\tt kill} method.
+\item[] {\bf -osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL); 
+this the  output  string from the {\tt knock}  and {\tt kill} method.
 
 \item[] {\bf -serviceLocation url}\ \ This is the URL of the solver service. It is not required, and if not specified it is assumed that the problem is solved locally.
 
@@ -3867,6 +3870,7 @@ For mixed-integer linear models (MIP),   {\tt cbc} is used. For mixed-integer no
 
 \subsection{GAMS and Optimization Services}\label{section:gamslinks}
 
+\index{GAMS|(}
 
 This section pertains to GAMS version 23.3 (and above) that now includes support for OS.  
 Here we describe the GAMS  implementation of Optimization Services.  We assume that the user has installed GAMS.   
@@ -4258,6 +4262,7 @@ for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt r
 
 \end{enumerate}
 
+\index{GAMS|)}
 
 
 
@@ -4714,12 +4719,13 @@ public:\\[\Sb]
 \end{figure}
 
 
-Figure~\ref{figure:osinstancevariables} uses the {\tt Variables} class to provide a closer look at the correspondence 
-between schema and class. On the right, the {\tt Variables} class contains the data member {\tt numberOfVariables} 
-and a sequence of {\tt var} objects of class {\tt Variable}. The {\tt Variable} class has {\tt lb} (double), 
-{\tt ub} (double), {\tt name} (string), and {\tt type} (char) data members. On the left the 
-corresponding XML complexTypes are shown, with arrows indicating the correspondences. The following rules describe 
-the mapping between the OSiL schema and the {\tt OSInstance} class.
+Figure~\ref{figure:osinstancevariables} uses the {\tt Variables} class to provide a closer look 
+at the correspondence between schema and class. On the right, the {\tt Variables} class contains 
+the data member {\tt numberOfVariables} and a sequence of {\tt var} objects of class {\tt Variable}. 
+The {\tt Variable} class has {\tt lb} (double), {\tt ub} (double), {\tt name} (string), and {\tt type} 
+(char) data members. On the left the corresponding XML complexTypes are shown, with arrows indicating 
+the correspondences. The following rules describe the mapping between the OSiL schema and the 
+{\tt OSInstance} class.
 %
 \begin{itemize}
 
@@ -4729,7 +4735,14 @@ Elements in an actual XML file then correspond to objects in {\tt OSInstance};
 for example, the {\tt <variables>} element that is of type {\tt Variables} in an OSiL file
 corresponds to a {\tt variables} object in class {\tt Variables} of {\tt OSInstance}.
 
-\Titem An attribute or element used in the definition of a {\tt complexType} is a member of the corresponding {\tt OSInstance} class, and the type of the attribute or element matches the type of the member.  In Figure~\ref{figure:osinstancevariables}, for example, {\tt lb} is an attribute of the OSiL {\tt complexType} named {\tt Variable}, and {\tt lb} is a member of the {\tt OSInstance} class {\tt Variable}; both have type {\tt double}.  Similarly, {\tt var} is an element in the definition of the OSiL {\tt complexType} named {\tt Variables}, and {\tt var} is a member of the {\tt OSInstance} class {\tt Variables}; the {\tt var} element has type {\tt Variable} and the {\tt var} member is a {\tt Variable} object.
+\Titem An attribute or element used in the definition of a {\tt complexType} is a member of the 
+corresponding {\tt OSInstance} class, and the type of the attribute or element matches the type 
+of the member.  In Figure~\ref{figure:osinstancevariables}, for example, {\tt lb} is an attribute 
+of the OSiL {\tt complexType} named {\tt Variable}, and {\tt lb} is a member of the {\tt OSInstance} 
+class {\tt Variable}; both have type {\tt double}.  Similarly, {\tt <var>} is an element in the definition 
+of the OSiL {\tt complexType} named {\tt Variables}, and {\tt var} is a member of the {\tt OSInstance} 
+class {\tt Variables}; the {\tt <var>} element has type {\tt Variable} and the {\tt var} member is a 
+{\tt Variable} object.
 
 \Titem A schema sequence corresponds to an array. For example, in Figure~\ref{figure:osinstancevariables} the complexType {\tt Variables} has a sequence of {\tt <var>} elements that are of type {\tt Variable}, and the corresponding {\tt Variables} class has a member that is an array of type {\tt Variable}.
 
@@ -4897,8 +4910,9 @@ the instance in nl format to OSiL\index{OSiL} format before calling a solver eit
 
 \subsection{OSParsers}\label{section:osparsers}
 
-The OSParsers component of the OS library contains reentrant parsers that  read OSiL\index{OSiL|(} and OSrL\index{OSrL}
-strings and build, respectively, in-memory OSInstance\index{OSInstance@{\tt OSInstance}} and 
+The OSParsers component of the OS library contains reentrant parsers that  read OSiL\index{OSiL|(},
+OSoL\index{OSoL} and OSrL\index{OSrL} strings and build, respectively, in-memory 
+OSInstance\index{OSInstance@{\tt OSInstance}}, OSOption\index{OSOption@{\tt OSOption}} and 
 OSResult\index{OSResult@{\tt OSResult}}  objects.
 
 
@@ -6118,12 +6132,15 @@ osinstance->reverseAD(2, vlambda);
 \end{verbatim}
 This returns
 \begin{eqnarray*}
-\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2.74, \quad  \D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2.74, \quad  
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2,
 \end{eqnarray*}
 \begin{eqnarray*}
-\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   \DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04.
 \end{eqnarray*}
-
 The reason why
 $$
 \D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2 \times 1.37 = 2.74
