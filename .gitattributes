@@ -93,6 +93,7 @@ OS/data/amplFiles/LP_infeasible.mod -text
 OS/data/amplFiles/LP_infeasible.nl -text
 OS/data/amplFiles/LP_unbounded.mod -text
 OS/data/amplFiles/LP_unbounded.nl -text
+OS/data/amplFiles/blpmpec.nl.zip -text
 OS/data/amplFiles/bonminEx1.mod -text
 OS/data/amplFiles/bonminEx1.nl -text
 OS/data/amplFiles/eastborne.mod -text
