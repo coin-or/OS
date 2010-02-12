@@ -2477,10 +2477,10 @@ quadratic programs, and very general nonlinear programs.  An example solution (f
     </optimization>
 \end{verbatim}
 }
-! Hide this stuff for now...
-!The OSrL schema is also used to return timer and system statistics that are sometimes 
-!gathered by the solvers themselves or generated as a result of using the {\tt knock} 
-!method. (See the example given in Section~\ref{section:knock}.)
+% Hide this stuff for now...
+% The OSrL schema is also used to return timer and system statistics that are sometimes 
+% gathered by the solvers themselves or generated as a result of using the {\tt knock} 
+% method. (See the example given in Section~\ref{section:knock}.)
 \index{OSrL|)}
 
 
@@ -3062,11 +3062,11 @@ where the {\tt testRemoteKnock.config} file is
 \end{verbatim}
 the {\tt demo.ospl} file is
 
-!header to be temporarily hidden...
-!<ospl xmlns="os.optimizationservices.org">
-!      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-!      xsi:schemaLocation="os.optimizationservices.org
-!      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+% header to be temporarily hidden...
+% <ospl xmlns="os.optimizationservices.org">
+%       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+%       xsi:schemaLocation="os.optimizationservices.org
+%       http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -3101,11 +3101,11 @@ file with a valid path name on the local system, e.g.,
 
 Part of the return format is illustrated below.
 
-! Header to be temporarily hidden
-!<ospl xmlns="os.optimizationservices.org"
-!      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-!      xsi:schemaLocation="os.optimizationservices.org
-!      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+% Header to be temporarily hidden
+% <ospl xmlns="os.optimizationservices.org"
+%       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+%       xsi:schemaLocation="os.optimizationservices.org
+%       http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -5764,7 +5764,9 @@ The code demonstrates how the Java OSInstance can be used to generate a linear p
 
 
 
-\subsection{template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} directory.  This is an empty example  that comes with a {\\t Makefile}  that links to all of the necessary header files and libraries.  The user can write his or her own code her. 
+\subsection{template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
+directory.  This is an empty example that comes with a {\tt Makefile}  that links to all of the necessary 
+header files and libraries.  The user can write his or her own code here. 
 
 
 
@@ -5794,7 +5796,7 @@ partials
 \begin{eqnarray}
 \DD{f_{k}}{x_{i}}{x_{j}}\ \ \  \mbox{and}\ \ \     \DD{f_{k}}{x_{j}}{x_{i}} \label{eq:mixedPartials}
 \end{eqnarray}
-exist and are equal to each other for all $k=1,\ldots,m$ and $i,j=1,\ldots,n$. the task is to compute the derivatives 
+exist and are equal to each other for all $k=1,\ldots,m$ and $i,j=1,\ldots,n$. The task is to compute the derivatives 
 of~$f$.
  
 First express the input vector as a function of~$t$ by
@@ -5811,7 +5813,7 @@ In general,  $x^{(k)}$ corresponds to the $kth$ order Taylor coefficient, i.e.,
 \begin{eqnarray}
 x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:xTaylorCoeff}
 \end{eqnarray}
-Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and it is expressed in terms of its Taylor series expansion as
+Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and is expressed in terms of its Taylor series expansion as
 \begin{eqnarray}
 Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3}),
 \end{eqnarray}
@@ -6056,11 +6058,11 @@ y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -0.52.
 \end{eqnarray*}
 By inspection of (\ref{eq:definef1}) (or by appropriate calls to {\tt osinstance->forwardAD} --- not shown here),
 \begin{eqnarray*}
-\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=&  2, \\
-\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0, \\
-\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}} &=& -1, \\
-\DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\
-\DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\
+\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=&  2, \\ [3pt]
+\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0, \\ [3pt]
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}} &=& -1, \\ [3pt]
+\DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\ [3pt]
+\DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\ [3pt]
 \DD{f_{3}(x^{(0)})}{x_{3}}{x_{3}} &=& -0.04.
 \end{eqnarray*}
 Then by (\ref{eq:forward2Resultc}),
@@ -6151,7 +6153,7 @@ $$
 $$
 is that the terms $9x_1$ in the objective and $5x_1$ in the first constraint
 are captured in the linear section of the OSiL input and therefore do not appear as nonlinear terms
-in {\tt  <nonlinearExpressions>}. Again, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms
+in {\tt  <nonlinearExpressions>}. As noted before, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms
 in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
 
 \subsection{Using OSInstance Methods: High Level Calls}

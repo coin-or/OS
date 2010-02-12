@@ -97,12 +97,12 @@
   \indexspace
 
   \item Java, 1, 8, 12
-  \item {\tt JobID}, 42--45, 48
+  \item {\tt JobID}, 42--45, 47, 48
 
   \indexspace
 
   \item {\tt kill}, 36, 38, 47--48
-  \item {\tt knock}, 36, 38, 44--48
+  \item {\tt knock}, 36, 38, 44--46, 48
 
   \indexspace
 
@@ -151,9 +151,9 @@
   \item {\tt OSmps2osil}, 64, 74
   \item OSnL, 35
   \item {\tt OSnl2osil}, 25, 64, 74
-  \item OSoL, 6, 8, 35--36, 38--40, 42--43, 45, 47, 48, 74
+  \item OSoL, 6, 8, 34--36, 38--40, 42--43, 45, 47, 48, 74
   \item {\tt OSOption}, 73--74
-  \item OSpL, 35, 46--48
+  \item OSpL, 35, 46, 48
   \item {\tt OSResult}, 74
   \item OSrL, 6, 8, 33--34, 37--39, 47, 48, 74
   \item {\tt OSSolverAgent}, 68
