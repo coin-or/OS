@@ -252,7 +252,7 @@ or the Optimization Services Home Page {\tt\UrlOs}\index{Optimization Services} 
 
 Like other COIN-OR projects, OS has a versioning system that ensures end users some degree of stability 
 and a stable upgrade path as project development continues. The current stable version of OS is \OSstable, 
-and the current stable release is \OSrelease\index{OS!stable release}, based on trunk version~\OStrunk.
+and the current stable release is \OSrelease\index{OS project!stable release}, based on trunk version~\OStrunk.
 
 The OS project provides the following:
 
@@ -417,7 +417,7 @@ The binary for this is named
 \begin{verbatim}
 OS-version_number-VisualStudio.zip
 \end{verbatim}
-For example, the necessary files associated with  OS  stable\index{OS!stable release} \OSstable\ are in the binary 
+For example, the necessary files associated with  OS  stable\index{OS project!stable release} \OSstable\ are in the binary 
 distribution
 \begin{verbatim}
 OS-1.1-VisualStudio.zip
@@ -426,7 +426,7 @@ The binaries provided are based on Visual Studio Express 2008.  See Section \ref
 
 \subsection{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
 
-Compiling and modifying the OS project source\index{OS!source code} code can be a daunting task,
+Compiling and modifying the OS project source\index{OS project!source code} code can be a daunting task,
 made somewhat easier by the inclusion of configure scripts\index{configure!scripts} and makefiles
 in the distribution of the source. However, additional software packages are
 sometimes needed or convenient, especially on Windows.
@@ -435,7 +435,7 @@ and maintenance of the code.
 
 \subsubsection{Subversion (SVN)}\label{section:svn}
 
-The Subversion\index{Subversion} version control package is used to obtain the C++ source code\index{OS!source code}.
+The Subversion\index{Subversion} version control package is used to obtain the C++ source code\index{OS project!source code}.
 Users with Unix operating systems will most likely have a command line svn client.  If an svn client is not present,
 see~{\tt\UrlSvn} to download an svn client.   For Windows users we recommend the
 svn client  TortoiseSVN.  (See~{\tt\UrlTortoiseSvn}.) Upon installation the TortoiseSVN client is integrated within the
@@ -480,7 +480,7 @@ MinGW (Section~\ref{section:mingw}) and MSYS (Section~\ref{section:msys}). Downl
 packages are included in the sections indicated.
 
 \subsubsection{C++ compiler}\label{section:cpp}
-A C++ compiler\index{C++ compiler} is needed to compile the OS source\index{OS!source code}. This should be present 
+A C++ compiler\index{C++ compiler} is needed to compile the OS source\index{OS project!source code}. This should be present 
 under all unix\index{Unix} installations. If no C++ compiler is available on the system, the free {\tt gcc}\index{gcc} 
 compiler can be downloaded from {\tt\UrlGcc}.
 
@@ -721,7 +721,7 @@ previously downloaded the third-party software packages {\tt BLAS}\index{Blas} a
 \begin{verbatim}
 ./configure
 \end{verbatim}
-\index{configure@{\tt configure}}
+\index{configure}
 
 \noindent otherwise use
 
@@ -813,7 +813,7 @@ All tests completed successfully
 \end{verbatim}
 }
 \else
-Depending upon which third-party software you have installed, the result of running the {\tt unitTest}\index{OS!unit test}
+Depending upon which third-party software you have installed, the result of running the {\tt unitTest}\index{OS project!unit test}
 should look
 something like (we have included the third-party solver LINDO\index{LINDO} in the test results below; it is not
 part of the default build):
@@ -879,7 +879,7 @@ This is described in Section~\ref{section:ossolverservice}. In addition {\tt Clp
 {\tt Cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}}, {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} and {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}
 get installed  in the {\tt bin} directory.
 Necessary header files are installed in the {\tt include} directory.   In this case, {\tt bin}, {\tt lib}
-and {\tt include} are all subdirectories of where {\tt ./configure}\index{configure@{\tt configure}} is run.   
+and {\tt include} are all subdirectories of where {\tt ./configure}\index{configure} is run.   
 If the user wants these files
 installed elsewhere, then {\tt configure} should specify the {\tt prefix} of these directories.  That is,
 
@@ -953,7 +953,7 @@ to download and build gcc/g++/gfortran compilers from source code.
 
 \subsection{Building the OS Project on Windows}\label{section:windowsinstall}
 
-There are a number of options open to Windows users.   First, if you wish to work with source code\index{OS!source code}
+There are a number of options open to Windows users.   First, if you wish to work with source code\index{OS project!source code}
 we recommend downloading  the svn client, TortoiseSVN\index{TortoiseSVN}.  (See section~\ref{section:svn}.)  
 With TortoiseSVN
 in the Windows Explorer connect to the directory (e.g., COIN-OS) where you wish to put the OS code.
@@ -1203,8 +1203,8 @@ Cygwin search path.
 :/cygdrive/c/WINDOWS/system32:/cygdrive/c/WINDOWS
 :/cygdrive/c/WINDOWS/System32/Wbem:/cygdrive/c/Program Files/ATI Technologies/ATI Control Panel
 :/cygdrive/c/Program Files/Common Files/Roxio Shared/DLLShared/
-:/cygdrive/c/Program Files/QuickTime/QTSystem/:/cygdrive/c/Program Files/Microsoft SQL Server/90/Tools/binn/
-:/cygdrive/c/Program Files/Microsoft Platform SDKfor Windows Server 2003 R2/Bin/
+:/cygdrive/c/Program Files/QuickTime/QTSystem/:/cygdrive/c/Program Files/Microsoft SQL Server/90/Tools/bin/
+:/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/
 :/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/WinNT/
 :/cygdrive/c/Program Files/SSH Communications Security/SSH Secure Shell
 :/cygdrive/c/Program Files/Microsoft Platform SDK for Windows Server 2003 R2/Bin/
@@ -1445,7 +1445,7 @@ configure COIN_SKIP_PROJECTS="ThirdParty/Blas"
 if you want to recreate the default configuration.%
 \index{VPATH|)}
 
-\item{}If you work with the trunk\index{OS!trunk version} version of OS, it is possible that files are added to
+\item{}If you work with the trunk\index{OS project!trunk version} version of OS, it is possible that files are added to
 and removed from the distribution due to development activities. These files are not recognized properly
 by the system unless it is reconfigured by running
 \begin{verbatim}
@@ -2579,11 +2579,14 @@ Other solvers supported (if the necessary libraries are present) are
 %, {\tt ipopt} (COIN-OR Ipopt)
 \ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}\fi
 and {\tt lindo} (LINDO)\index{LINDO}.
-If no value is specified for this parameter,
-then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter 
+If no value is specified for this parameter, then a default value is used 
+%then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter 
 for the {\tt solve}\index{solve@{\tt solve}} or {\tt send}\index{send@{\tt send}} service method.
+The default solver depends on the problem type and can be read off from 
+table~\ref{table:defaultsolvers}.\index{default solver}
 
- \begin{table}
+
+\begin{table}
 \caption{Solver configurations}
 \centering
 \label{table:configurations}
@@ -2609,6 +2612,20 @@ $\qquad{}^1$Requires third-party software to be downloaded\\
 $\qquad{}^2$Requires Fortran compiler (see Section~\ref{section:ipopt})
 \end{tabular}
 \end{table}\index{supported solvers}
+
+\begin{table}
+\caption{Default solvers}
+\centering
+\label{table:defaultsolvers}\index{default solver}
+\vskip 8pt
+ \begin{tabular}{l|c|}
+Problem type & Default solver \\ \hline
+Linear, continuous   & Clp \\
+Linear, integer      & Cbc \\
+Nonlinear, continuous& Ipopt \\ 
+Nonlinear, integer   & Bonmin \\ \hline
+\end{tabular}
+\end{table}
 
 
 \item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. If this optional
@@ -2666,8 +2683,8 @@ or in the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
 \item{}  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.
 The service method cannot be specified in the OSoL options file.
 
-\item{}  If the {\tt solver} option is not specified, the COIN-OR solver {\tt Cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default
-solver used. In this case an error is thrown if the problem instance has quadratic or other nonlinear terms.
+\item{}  If the {\tt solver} option is not specified, one of the COIN-OR solvers is used by default.
+The choice depends on the problem features and can be read off from table~\ref{table:defaultsolvers}.\index{default solver}
 
 \item{}  If the options {\tt send}\index{send@{\tt send}}, {\tt kill}\index{kill@{\tt kill}},
 {\tt knock}\index{knock@{\tt knock}},  {\tt getJobID}\index{getJobID@{\tt getJobID}},
@@ -2816,15 +2833,16 @@ where the {\tt testremote.config} file is
 -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws
 \end{verbatim}
 
-No solver is specified and by default the  {\tt Cbc} solver  is used by the {\tt OSSolverService}.
-If, for example, the user wished to solve the problem with the {\tt Clp} solver then this is accomplished
+No solver is specified and by default the  {\tt Clp} solver  is used by the {\tt OSSolverService}, 
+since the problem is a continuous linar program.
+If, for example, the user wished to solve the problem with the {\tt SYMPHONY} solver then this is accomplished
 either by using the  {\tt -solver} option on the command line
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testremote.config -solver clp
+./OSSolverService -config ../data/configFiles/testremote.config -solver symphony
 \end{verbatim}
 or by  adding  the line
 \begin{verbatim}
- -solver clp
+ -solver symphony
 \end{verbatim}
 to the  {\tt testremote.config} file\index{testremote.config@{\tt testremote.config}|)}.
 
@@ -2980,7 +2998,8 @@ The remote Solver Service will send an email to the above address when the job i
 knowing when a job is complete is to use the {\tt knock}\index{knock@{\tt knock}} method.
 
 Note that in all of these examples we provided a value for the {\tt <solverToInvoke>} element.
-The remote solver service will use {\tt Cbc} if another solver is not specified.%
+%The remote solver service will use {\tt Cbc} if another solver is not specified.%
+A default solver is used (see tableref{table:defaultsolvers}\index{default solver} if another solver is not specified.%
 \index{send@{\tt send}|)}
 
 
@@ -3332,7 +3351,7 @@ as in the following hypothetical example.
 
 \end{itemize}
 
-As of trunk version 2164\index{OS!trunk version} the reading of an OSoL file is implemented in the {\tt OSCoinSolver}, 
+As of trunk version 2164\index{OS project!trunk version} the reading of an OSoL file is implemented in the {\tt OSCoinSolver}, 
 {\tt OSBonmin}, and {\tt OSIpopt} solver interfaces.   The  {\tt OSBonmin}, and {\tt OSIpopt} solvers have 
 particularly easy interfaces. 
 They have methods for integer, string, and numeric data types and then take options in format of {\tt (name, value)} pairs.
@@ -3445,7 +3464,7 @@ initial values for variables with an index of 0, 1, and~3.
 </initialVariableValues>
 \end{verbatim}
 
-As of trunk version 2164\index{OS!trunk version} the initial values for variables can be passed
+As of trunk version 2164\index{OS project!trunk version} the initial values for variables can be passed
 to the {\tt Bonmin} and {\tt Ipopt} solvers.
 
 
@@ -3707,13 +3726,15 @@ You can just issue the {\tt solve} command in AMPL as illustrated below.
 solve;
 \end{verbatim}
 
-If no options are specified, the default is to use {\tt Clp}\index{Clp@{\tt Clp}} for linear programs. 
-For continuous nonlinear models {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} is used. 
-For mixed-integer linear models, {\tt Cbc}\index{Cbc@{\tt Cbc}} is used. 
-For mixed-integer nonlinear models  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} is used.  
+If no options are specified, the default solver is used, depending on the problem characteristics 
+(see table~\ref{table:defaultsolvers}).\index{default solver}
+%is to use {\tt Clp}\index{Clp@{\tt Clp}} for linear programs. 
+%For continuous nonlinear models {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} is used. 
+%For mixed-integer linear models, {\tt Cbc}\index{Cbc@{\tt Cbc}} is used. 
+%For mixed-integer nonlinear models  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} is used.  
 If you wish to specify a specific solver, use the {\tt solver} option.   For example,  
 since the test problem {\tt eastborne.mod} is a linear integer program, {\tt Cbc} is used by default. 
-If you want to instead use {\tt SYMPHONY}\index{SYMPHONY@{\tt SYMPHONY}|(}, 
+If you want to instead use {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(},
 then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver as follows.%
 \index{eastborne.mod@{\tt eastborne.mod}|)}
 
@@ -3762,7 +3783,8 @@ will result in the default server {\tt Cbc} being invoked.  Each call
 \begin{verbatim}
 option osamplclient_options
 \end{verbatim}
-is memoryless. That is the options set in one call do not remain in memory for the next call.
+is memoryless. That is, the options set in the first call will be overwritten by the second call and
+will be ignored.
 
 Finally, the user may wish to pass options to the individual solver. This is done by providing an options file.
 A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
@@ -3815,7 +3837,8 @@ For example,  if the following options are passed to {\tt OSAmplClient\_options}
 optionFile solveroptions.osol 
 solver bonmin
 \end{verbatim}
-then  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} will be used  rather than {\tt SYMPHONY}\index{SYMPHONY@{\tt SYMPHONY}|)}. 
+then  {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} will be used  
+rather than {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}. 
 
 
 \vskip 12pt
@@ -3852,10 +3875,15 @@ option solver OSAmplClient;
 \item Specifying the {\tt solver} or {\tt serviceURI} directly through {\tt OSAmplClient\_options} 
 will override the settings in the OS options file.
 
-\item If no options are specified using {\tt OSAmplClient\_options},   by default, for continuous
-linear models  {\tt clp} is used. For continuous nonlinear models {\tt ipopt} is used. 
-For mixed-integer linear models (MIP),   {\tt cbc} is used. For mixed-integer nonlinear models  
-{\tt bonmin} is used.  All solvers are invoked locally. 
+\item If no options are specified using {\tt OSAmplClient\_options},  the default solver is used.
+(For details see table~\ref{table:defaultsolvers}.\index{default solver}
+%
+% by default, for continuous
+%inear models  {\tt clp} is used. For continuous nonlinear models {\tt ipopt} is used. 
+%For mixed-integer linear models (MIP),   {\tt cbc} is used. For mixed-integer nonlinear models  
+%\tt bonmin} is used.  
+%
+All solvers are invoked locally. 
 
 \item  The options given to {\tt OSAmplClient\_options}  can be given in any order.
 
@@ -3896,11 +3924,13 @@ we will not specify it explicitly on the command line in the ensuing discussion.
 gams.exe eastborne.gms 
 \end{verbatim}
 is equivalent to the two versions of the command given previously.  Executing any of the commands will 
-result in the model being solved on the local machine using the COIN-OR solver {\tt Cbc}.  By default, 
-for continuous linear models (LP and RMIP), {\tt CoinOS} chooses {\tt Clp}. For continuous nonlinear 
-models (NLP, DNLP, RMINLP, QCP, RMIQCP), {\tt Ipopt} is the default solver. For mixed-integer linear 
-models (MIP),  {\tt Cbc} is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), 
-{\tt Bonmin} is the default solver.
+result in the model being solved on the local machine using the COIN-OR solver {\tt Cbc}, the default solver 
+for 
+%continuous linear models (LP and RMIP), {\tt CoinOS} chooses {\tt Clp}. For continuous nonlinear 
+%models (NLP, DNLP, RMINLP, QCP, RMIQCP), {\tt Ipopt} is the default solver. For 
+mixed-integer linear models (MIP).
+%,  {\tt Cbc} is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), 
+%{\tt Bonmin} is the default solver.
 
 It is possible to control which solver is selected by {\tt CoinOS}.    This is done by providing an {\it options file}  to  GAMS.   
 Since the solver is named {\tt  CoinOS}, the options file should  be named {\tt CoinOS.opt}  (the file name is not case sensitive)
@@ -4012,10 +4042,13 @@ Use the following value for this option.
 service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 \end{verbatim}
 
-For linear models (LP and RMIP),  {\tt Clp} is the default solver. For continuous nonlinear models 
-(NLP, DNLP, RMINLP, QCP, RMIQCP), {\tt Ipopt} is the default solver. For mixed-integer linear models (MIP),
-{\tt  Cbc} is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), {\tt Bonmin} is 
-the default solver.  In order to control the solver used, it is necessary to specify the name of the solver
+%For linear models (LP and RMIP),  {\tt Clp} is the default solver. For continuous nonlinear models 
+%(NLP, DNLP, RMINLP, QCP, RMIQCP), {\tt Ipopt} is the default solver. For mixed-integer linear models (MIP),
+%{\tt  Cbc} is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), {\tt Bonmin} is 
+%the default solver.  
+Default solver values are present, depending on the problem for characteristics. For more details, consult 
+table~\ref{table:defaultsolvers} (p.\pageref{table:defaultsolvers}).
+In order to control the solver used, it is necessary to specify the name of the solver
 inside the XML tag {\tt <solverToInvoke>}. The example  {\tt solveroptions.osol} file contains the XML tag
 \begin{verbatim}
 <solverToInvoke>symphony</solverToInvoke>
@@ -4177,9 +4210,11 @@ or you can  place the statement {\tt Option ProblemType = CoinOS;} somewhere in 
 the {\tt Solve} statement in the GAMS file.
 
 
-\item[2.]   If no options are given, then the model will be solved locally and {\tt Clp} will be used for 
-linear programs, {\tt Cbc} for integer linear programs, {\tt Ipopt} for continuous nonlinear programs, 
-and {\tt Bonmin} for nonlinear integer programs.
+\item[2.]   If no options are given, then the model will be solved locally using the default solver 
+(see Table~\ref{table:defaultsolvers} on p.\pageref{table:defaultsolvers}).
+%and {\tt Clp} will be used for 
+%linear programs, {\tt Cbc} for integer linear programs, {\tt Ipopt} for continuous nonlinear programs, 
+%and {\tt Bonmin} for nonlinear integer programs.
 
 \item[3.] In order to control behavior (for example, whether a local or remote solver is used)  an options
  file,  {\tt CoinOS.opt}, must be used as follows
@@ -4486,7 +4521,8 @@ Now for the quadratic terms. The only quadratic terms are in the objective funct
 \end{eqnarray*}
 
 
- The quadratic matrix $Q$ has four rows and a column for each quadratic term. In this example there are six quadratic terms.  The first row of $Q$ is the row index where the terms appear. By convention, the objective function has index -1 and we count constraints starting at 0.  The first row of $Q$ is
+The quadratic matrix $Q$ has four rows and a column for each quadratic term. In this example there are six quadratic terms.  
+The first row of $Q$ is the row index where the terms appear. By convention, the objective function has index -1 and we count constraints starting at 0.  The first row of $Q$ is
 
 
  \begin{verbatim}
@@ -5180,7 +5216,8 @@ power
 times
 plus
 \end{verbatim}
-The method, {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class in the {\tt OSSolverInterfaces} library component illustrates using a postfix vector of {\tt OSnLNode} objects to build a Lindo model instance.
+The method, {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class in the {\tt OSSolverInterfaces} 
+library component illustrates using a postfix vector of {\tt OSnLNode} objects to build a Lindo model instance.
 
 
 \subsection{Set Methods}
@@ -5433,6 +5470,7 @@ osinstance->instanceData->nonlinearExpressions->nl[ 1] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->idx = 1;
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree =
 new OSExpressionTree();
+// the nonlinear expression is stored as a vector of nodes in postfix format
 // create a variable nl node for x0
 nlNodeVariablePoint = new OSnLNodeVariable();
 nlNodeVariablePoint->idx=0;
@@ -5444,7 +5482,6 @@ nlNodeVec.push_back( nlNodeVariablePoint);
 // create the nl node for *
 nlNodePoint = new OSnLNodeTimes();
 nlNodeVec.push_back( nlNodePoint);
-// the vectors are in postfix format
 // now the expression tree
 osinstance->instanceData->nonlinearExpressions->nl[ 1]->osExpressionTree->m_treeRoot =
 nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
@@ -5484,27 +5521,27 @@ in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers {\tt Clp}, {\tt Cbc}, {\tt SYMPHONY}, {\tt Ipopt},   {\tt Bonmin}, and {\tt Couenne}.   Each solver class inherits from a virtual {\tt OSDefaultSolver} class. Each solver class has the string data members
 
 \begin{itemize}
-\item {\bf osil --} this string conforms to the OSiL standard and holds the model instance.
+\item {\tt osil --} this string conforms to the OSiL standard and holds the model instance.
 
-\item {\bf osol --} this string conforms to the OSoL standard and holds an instance with the 
+\item {\tt osol --} this string conforms to the OSoL standard and holds an instance with the 
 solver options (if there are any); this string can be empty.
 
-\item {\bf osrl --} this string conforms to the OSrL standard and holds the solution instance; 
+\item {\tt osrl --} this string conforms to the OSrL standard and holds the solution instance; 
 each solver interface produces an osrl string.
 \end{itemize}
 
 Corresponding to each string there is an in-memory object data member, namely
 
 \begin{itemize}
-\item {\bf osinstance --}  an in-memory {\tt OSInstance} object containing the model instance
+\item {\tt osinstance --}  an in-memory {\tt OSInstance} object containing the model instance
 and get() and set() methods to access various parts of the model.
 
 
-\item {\bf osoption --} an in-memory {\tt OSOption} object; solver options can be accessed or 
+\item {\tt osoption --} an in-memory {\tt OSOption} object; solver options can be accessed or 
 set using get() and set() methods.
 
 
-\item {\bf osresult --}  an in-memory OSResult object; various parts of the model solution  
+\item {\tt osresult --}  an in-memory {\tt OSResult} object; various parts of the model solution  
 are accessible through get() and set() methods.
 \end{itemize}
 
@@ -5529,23 +5566,23 @@ A key method in the {\tt OSOption} interface is {\tt setAnotherSolverOption()}. 
 takes the following arguments in order.
 
 \begin{itemize}
-\item[] {\bf std::string name} -- the option name;
-\item[] {\bf std::string value}  -- the value of the option;
-\item[] {\bf std::string solver} -- the name of the solver to which the option applies;
-\item[] {\bf std::string category} -- options may fall into categories. For example, consider the  
+\item[] {\tt std::string name} -- the option name;
+\item[] {\tt std::string value}  -- the value of the option;
+\item[] {\tt std::string solver} -- the name of the solver to which the option applies;
+\item[] {\tt std::string category} -- options may fall into categories. For example, consider the  
 Couenne solver.  This solver is also linked to the Ipopt and Bonmin solvers and  it is possible 
 to set options for these solvers through the Couenne API. In order to set an Ipopt option 
 you would set the {\tt solver} argument to {\tt couenne} and set the {\tt category} option 
 to {\tt ipopt}.
 
-\item[] {\bf std::string type} -- many solvers require knowledge of the data type, so you can set 
+\item[] {\tt std::string type} -- many solvers require knowledge of the data type, so you can set 
 the type to {\tt double}, {\tt integer}, {\tt boolean} or {\tt string}, depending on the solver 
 requirements. Special types defined by the solver, such as the type {\tt numeric} used by the
 Ipopt solver, can also be accommodated. It is the user's responsibility to verify the type
 expected by the solver.
 
 
-\item[] {\bf std::string  description} -- this argument is used to provide any detail or 
+\item[] {\tt std::string  description} -- this argument is used to provide any detail or 
 additional information about the option. An empty string ({\tt""}) can be passed if such additional
 information is not needed.
 \end{itemize}
@@ -6057,14 +6094,13 @@ This call returns the vector of  values
 y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -0.52.
 \end{eqnarray*}
 By inspection of (\ref{eq:definef1}) (or by appropriate calls to {\tt osinstance->forwardAD} --- not shown here),
-\begin{eqnarray*}
-\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=&  2, \\ [3pt]
-\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0, \\ [3pt]
-\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}} &=& -1, \\ [3pt]
-\DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\ [3pt]
-\DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\ [3pt]
-\DD{f_{3}(x^{(0)})}{x_{3}}{x_{3}} &=& -0.04.
-\end{eqnarray*}
+$$
+\begin{array}{rclcrcl}
+\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}} &=&  2, & \qquad & \DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\ [3pt]
+\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}} &=&  0, & \qquad & \DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}} &=&  0, \\ [3pt]
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}} &=& -1, & \qquad & \DD{f_{3}(x^{(0)})}{x_{3}}{x_{3}} &=& -0.04.
+\end{array}
+$$
 Then by (\ref{eq:forward2Resultc}),
 \begin{eqnarray*}
 \DD{f_{1}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{1}^{(2)}  -  \frac{1}{2} \left( \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = 1   -    \frac{1}{2}(2 +  0) = 0, \\
@@ -6198,7 +6234,7 @@ row idx = 1  col idx = 3
 
 The   constant term in constraint 1 corresponds to the linear term $7x_2$,
 which is added after the algorithmic differentiation has taken place.
-However, the linear  term $5x_1$ in equation 0 does not
+However, the linear  term $5x_1$ in constraint 0 does not
 contribute a nonzero in the Jacobian, as it is combined with the
 term $1.37x_1$ that is treated as a nonlinear term and
 therefore accounted for explicitly.
