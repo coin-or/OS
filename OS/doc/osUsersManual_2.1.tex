@@ -5783,6 +5783,7 @@ checking the status and either retrieving the answer or killing the process if i
 yet finished.
 
 \subsection{OSJavaDemo:  Building an OSiL Instance in Java}\label{section:exampleOSJavaDemo}
+\index{Java|(}
 
 In this example we demonstrate how to build an OSiL instance using the Java OSInstance API. In order to use this example, the user will have to download the following:
 
@@ -5799,7 +5800,8 @@ Then set the Class Path to the following jar files.
 \item commons-discovery.jar
 \item or124.jar
 \end{itemize}
-The code demonstrates how the Java OSInstance can be used to generate a linear program and then call the  C++ {  \bf OSSolverService} executable to solve the problem.  
+The code demonstrates how the Java OSInstance can be used to generate a linear program and then call the  
+C++ {  \bf OSSolverService} executable to solve the problem.\index{Java|)}
 
 
 
@@ -5816,7 +5818,8 @@ header files and libraries.  The user can write his or her own code here.
 
 The OS library provides a set of {\tt calculate} methods for calculating  function values, gradients, and Hessians.
 The {\tt calculate} methods are part of the {\tt OSInstance} class and are designed to work with solver APIs.
-
+For instance, {\tt Ipopt} requires derivatives but does not provide its own differentiation routies, 
+expecting the user to make them available through callbacks.
 
 
 \subsection{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
