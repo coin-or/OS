@@ -19,6 +19,7 @@
 #include "OSCoinSolver.h"
 #include "OSConfig.h"
 #include "OSmps2osil.h" 
+#include "OSnl2osil.h" 
 #include "OSResult.h" 
 #include "OSOption.h"
 #include "OSiLReader.h"        
@@ -72,26 +73,22 @@ int main(int argC, char* argV[]){
 	std::cout << "Hello World" << std::endl;
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
+
+	OSnl2osil *nl2osil = NULL;
+
+
 	try {
 	
-		std::string osil = fileUtil->getFileAsString( "test.osil" );	
-		std::string osilb64;
-		OSiLReader *osilreader = NULL;
-		OSInstance *osinstance = NULL;
-		osilreader = new OSiLReader();
-		osinstance = osilreader->readOSiL( osil);
-		OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
-		osilwriter->m_bWriteBase64 = true;
-		osilb64 = osilwriter->writeOSiL( osinstance);
-		std::cout << osilb64 << std::endl;
-		fileUtil-> writeFileFromString("testb64.osil", osilb64);
+		std::string nl = fileUtil->getFileAsString( "test.nl" );	
+		nl2osil = new OSnl2osil( nl); 
+		nl2osil->createOSInstance() ;
 		delete fileUtil;
-		delete osilreader;
-		delete osilwriter;
+		delete nl2osil;
+
 	}
 	catch(const ErrorClass& eclass){
 		delete fileUtil;
+		delete nl2osil;
 		std::cout << eclass.errormsg <<  std::endl;
 		return 0;
 	} 
