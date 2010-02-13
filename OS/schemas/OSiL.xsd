@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -389,7 +389,7 @@
 		<xs:sequence>
 			<xs:element name="matrixVar" type="matrixVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixVariables" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="matrixVar">
 		<xs:annotation>
@@ -414,7 +414,7 @@
 		<xs:sequence>
 			<xs:element name="obj" type="MatrixProgrammingObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjLinearMatrixOperators" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingObj">
 		<xs:annotation>
@@ -424,6 +424,7 @@
 			<xs:element name="linearMatrixOperator" type="MatrixProgrammingObjLinearMatrixOperator" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="objIdx" type="xs:negativeInteger" use="required"/>
+		<xs:attribute name="numberOfLinearMatrixOperators" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingObjLinearMatrixOperator">
 		<xs:annotation>
@@ -469,7 +470,7 @@
 		<xs:sequence>
 			<xs:element name="matrixCon" type="matrixCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixConstraints" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="matrixCon">
 		<xs:annotation>
@@ -559,7 +560,7 @@
 		<xs:sequence>
 			<xs:element name="matrixNL" type="matrixNL" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfMatrixNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfMatrixNL" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="matrixNL">
 		<xs:annotation>
@@ -851,7 +852,7 @@
 		</xs:annotation>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCols" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NonpositiveCone">
 		<xs:annotation>
@@ -859,7 +860,7 @@
 		</xs:annotation>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCols" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OrthantCone">
 		<xs:annotation>
@@ -870,7 +871,7 @@
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCols" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OrthantConeDirection">
 		<xs:annotation>
@@ -900,7 +901,7 @@
 		</xs:annotation>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCols" use="required"/>
+		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
 		<xs:attribute name="normScaleFactor">
 			<xs:simpleType>
@@ -919,7 +920,7 @@
 		</xs:annotation>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCols" use="required"/>
+		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
 		<xs:attribute name="normScaleFactor">
 			<xs:simpleType>
@@ -940,7 +941,7 @@
 		</xs:annotation>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCols" use="required"/>
+		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
 		<xs:attribute name="normScaleFactor">
 			<xs:simpleType>
@@ -1001,7 +1002,7 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfFactors" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfCones" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="IntersectionConeComponent">
 		<xs:annotation>
