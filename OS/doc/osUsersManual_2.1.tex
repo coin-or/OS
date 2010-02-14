@@ -1002,7 +1002,9 @@ We currently provide solution files for Version~8 and Version~9.
 Each contains the file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} and project files
 for building the unitTest\index{unitTest@{\tt unitTest}} ({\tt OSTest.vcproj}\index{OSTest.vcproj@{\tt OSTest.vcproj}}),
 the OSSolverService ({\tt OSSolverService.vcproj}\index{OSSolverService.vcproj@{\tt OSSolverService.vcproj}}) and
-the OS library ({\tt libOS.vcproj}\index{libOS.vcproj@{\tt libOS.vcproj}}).
+the OS libraries
+({\tt libOSCommon.vcproj}\index{libOSCommon.vcproj@{\tt libOSCommon.vcproj}} and
+({\tt libOSSolvers.vcproj}\index{libOSSolvers.vcproj@{\tt libOSSolvers.vcproj}}).
 The Microsoft Visual Studio files are automatically downloaded with an SVN\index{SVN} checkout.
 They are also contained in the tarballs (see Section~\ref{section:getTarBalls}).
 
@@ -1082,12 +1084,17 @@ see Section~\ref{section:amplclient}.
 
 
 
-This zip archive also contains a  {\tt lib} directory that holds  libraries for a number of COIN-OR projects, including OS.
-It is possible to build customized optimization applications that link against these libraries. We provide several examples
-that use various aspects of the OS project in order to build customized applications.
-The Visual Studio example solution file is named {\tt osExamples.sln} and it is in the folder {\tt MSVisualStudioOSExamples}.
-The solution file {\tt osExamples.sln}  currently contains five projects (examples).
+This zip archive also contains a  {\tt lib} directory that holds  libraries
+for a number of COIN-OR projects, including OS. It is possible to build
+customized optimization applications that link against these libraries.
+We provide several examples that use various aspects of the OS project
+in order to build customized applications. The Visual Studio example solution
+file is named {\tt osExamples.sln} and is found in the folder
+{\tt MSVisualStudioOSExamples}. The solution file {\tt osExamples.sln}
+currently contains nine projects (examples). These are described in more
+detail in Section~\ref{section:examples}.
 
+\iffalse
 \begin{itemize}
 
 \item[]  {\bf addCuts --} this project illustrates the use of  the {\tt Cbc} and {\tt Cgl} projects.
@@ -1106,14 +1113,15 @@ calls to the {\tt CppAD} project.
 A number of key nonlinear operators are illustrated.
 
 
-\item[]  {\bf osRemoteTest --}  this project shows  how to call a remote solver using Web Services. {\bf Important:}
-This project links to {\tt wsock32.lib}, which is not part of the Visual Studio  Express Package.  It is necessary
+\item[]  {\bf osRemoteTest --}  this project shows  how to call a remote solver using Web Services.
+{\bf Windows usrs should note}
+that this project links to {\tt wsock32.lib}, which is not part of the Visual Studio  Express Package.  It is necessary
 to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
 
 \medskip
 \noindent{\scriptsize\tt\UrlSdk}. 
 \medskip
-\noindent Refer to Section~\ref{section:msvs}.
+\noindent See also Section~\ref{section:msvs}.
 
 \item[] {\bf osModDemo --} this provides yet another illustration of how to build an optimization instance using the
 {\tt OSInstance} class.  In addition, this project illustrates how to modify and in-memory instance.   Finally, this project  shows how to build solver objects and use the solver object to
@@ -1123,10 +1131,12 @@ optimize the problem. In this particular case, the {\tt Clp} solver is used.
 
 
 In addition, in the zip archive there is a folder {\tt MSVisualStudioTemplate}. This project contains a simple
-{\tt Hello World} demo in the code {\tt demoCode.cpp}. However, the solution file is configured to link with all
-of the libraries in the {\tt lib} directory and points to all of the header files in the {\tt include} directory.
+{\tt Hello World} demo in the code {\tt demoCode.cpp}. However, the
+solution file configured to link with all
+of the libraries in the {\tt lib} directory and pointing to all of the
+header files in the {\tt include} directory.
 The user can simply replace what is currently in {\tt demoCode.cpp} with his or her own code.
-
+\fi
 
 
 
@@ -1217,7 +1227,7 @@ Open the Cygwin shell and check the value of {\tt \$PATH}\index{PATH@{\tt \$PATH
 then the {\tt \$PATH} value needs to be reset.
 
 %\item{} This step is necessary only if you wish to build with the AMPL {\tt ASL} solver
-library\index{AMPL Solver Library (ASL)}.
+%library\index{AMPL Solver Library (ASL)}.
 %Unfortunately, and we regret this, but at the time of this writing the working version of {\tt ASL} for cygwin/
 %cl build is its trunk version. This means that it is necessary to download the trunk version separately
 %and replace the release version we have distributed with the trunk version.  The URL for the trunk
@@ -1456,13 +1466,14 @@ followed by
 \end{enumerate}
 \index{configure|)}
 
+
 \subsection{COIN-OR Projects Requiring Fortran}\label{section:ipopt}
 
 \index{COIN-OR projects!Ipopt@{\tt Ipopt}|(}%
 \index{COIN-OR projects!Bonmin@{\tt Bonmin}|(}%
 \index{COIN-OR projects!Couenne@{\tt Couenne}|(}%
 Ipopt, Bonmin and Couenne are COIN-OR projects 
-(\url{projects.coin-or.org/Ipopt}, \url{projects.coin-or.org/Bonmin}, \url{projects.coin-or.org/Couenne})
+(\url{http://projects.coin-or.org/Ipopt}, \url{http://projects.coin-or.org/Bonmin}, \url{http://projects.coin-or.org/Couenne})
 and are included in the download with the OS project.
 However, unlike the other COIN-OR projects that download with OS, these projects require third-party software
 that is based on FORTRAN\index{Fortran} and is {\it not} part of the default distribution. Care must therefore be taken if
@@ -4439,7 +4450,7 @@ represent the fraction of wealth invested in stock~$i$ and that no stock can hav
 more than 75\% of the total wealth. The problem then is to minimize the total risk
 subject to a budget constraint and a lower bound on the expected portfolio return.
 
-Assume that there are three stocks (variables) and two constraints (do not count the upper limit  %investment
+Assume that there are three stocks (variables) and two constraints (not counting the upper limit  %investment
 of .75 on the investment variables).
 
 
@@ -5499,22 +5510,30 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  This project offers the user with the ability to have control over each node in the branch and process. This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 2) a user-defined cut, and 3) a user-defined variable. 
 
 
-\subsection{OSModDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
+\subsection{OSModificationDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
 
-The {\tt osModDemo} folder holds the file {\tt OSModDemo.cpp}. This is similar to the {\tt instanceGenerator} example.
-In this case, a simple linear program is generated. However, this example also illustrates how to modify an in-memory OSInstance object. In particular, we illustrate how to modify an objective function coeffient. Note the line of code 
+The {\tt osModificationDemo} folder holds the file {\tt OSModificationDemo.cpp}.
+This is similar to the {\tt instanceGenerator} example. In this case, a simple
+linear program is generated. However, this example also illustrates how to
+modify an in-memory OSInstance object. In particular, we illustrate how to
+modify an objective function coeffient. Note the dual occurrence of the
+following code
 
 \begin{verbatim}
 solver->osinstance->bObjectivesModified = true;
 \end{verbatim}
-which is critical, otherwise changes made to the OSInstance object will not be fed to the solver. 
+
+in the {\tt OSModificationDemo.cpp} file (lines 177 and 187).
+This line is critical, since otherwise changes made to the OSInstance object
+will not be passed to the solver.
 
 This example also illustrates calling a COIN-OR solver,
 in this case {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}}.
 
 \vskip 8pt
 
-{\bf Important:} the ability to modify a problem instance is extremely limited in Release 2.0 of OS. A better API for problem modification will come with a later release of OS.
+{\bf Important:} the ability to modify a problem instance is still extremely limited in this release.
+A better API for problem modification will come with a later release of OS.
 
 
 
@@ -5764,14 +5783,18 @@ interface to tell the Bonmin solver to try three starting points at each node.
 
  
 
-\subsection{OSDemoResult: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
+\subsection{OSResultDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
 
-The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\it OSiL} and {\tt OSoL} protocol, this protocol has an associated in-memory {\tt OSResult} class with corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the {\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the {\tt OSrLReader} class and create and {\tt OSResult} object. We then use the {\tt OSResult} API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
+The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\tt OSiL} and {\tt OSoL} protocol, this protocol has an associated in-memory {\tt OSResult} class with corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the {\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the {\tt OSrLReader} class and create and {\tt OSResult} object. We then use the {\tt OSResult} API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
 
 
 \subsection{OSCglCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
-In this example, we show how to add cuts to tighten an LP using COIN-OR  {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
+In this example, we show how to add cuts to tighten an LP using COIN-OR
+{\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
+A file ({\tt p0033.osil}) in OSiL format is used to create an OSInstance object. The linear programming relaxation
+is solved. Then, Gomory, simple rounding, and knapsack cuts are added using {\tt Cgl}.  The model is then optimized
+using {\tt Cbc}.
 
 \subsection{OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
 
@@ -5781,6 +5804,16 @@ example, solves it remotely in synchronous mode and displays the solution.
 The asynchronous mode is also tested by submitting the problem to a remote solver,
 checking the status and either retrieving the answer or killing the process if it has not
 yet finished.
+
+{\bf Windows users should note}
+that this project links to {\tt wsock32.lib}, which is not part of the Visual Studio  Express Package.  It is necessary
+to also download and install the Windows Platform SDK\index{Windows Platform SDK}, which can be found at
+
+\medskip
+\noindent{\scriptsize\tt\UrlSdk}. 
+\medskip
+\noindent See also Section~\ref{section:msvs}.
+
 
 \subsection{OSJavaDemo:  Building an OSiL Instance in Java}\label{section:exampleOSJavaDemo}
 \index{Java|(}
@@ -5807,7 +5840,9 @@ C++ {  \bf OSSolverService} executable to solve the problem.\index{Java|)}
 
 \subsection{template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
 directory.  This is an empty example that comes with a {\tt Makefile}  that links to all of the necessary 
-header files and libraries.  The user can write his or her own code here. 
+header files and libraries. For Windows users there is also a solution file configured to link with all
+of the libraries in the {\tt lib} directory and pointing to all of the header files in the {\tt include} directory.
+The user can write his or her own code here.
 
 
 
