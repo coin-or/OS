@@ -304,7 +304,7 @@ This software uses Web Services technology and acts as middleware between the cl
 and the  solver on the server that optimizes the instance and returns the result. This is illustrated in
 Section~\ref{section:tomcat}.
 
-\item{}  A lightweight version of the project, {\tt OSCommon}\index{OSCommon@{\tt OSCommon}} for modeling language and 
+\item{}  A lightweight version of the project, {\tt OSCommon},\index{OSCommon@{\tt OSCommon}} for modeling language and 
 solver developers who want to use OS API, readers and writers, without the overhead of other COIN-OR projects or any 
 third-party software. For information on how to download {\tt OSCommon} see Section~\ref{section:oslite}.
 \end{enumerate}
@@ -354,8 +354,8 @@ See~{\tt\UrlCpl}.  This project was initially created by Robert Fourer, Jun Ma, 
 The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    
 Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.
 %Below we describe different methods for obtaining the binaries and C++ source code.
-Most users will only be interested in the obtaining the binaries, which we describe 
-in section~\ref{section:obtainingbinaries}. The remaining sections of this chapter deal with obtaining the 
+Most users will only be interested in obtaining the binaries, which we describe 
+in Section~\ref{section:obtainingbinaries}. The remaining sections of this chapter deal with obtaining the 
 source code for the project, which will be of interest mostly to developers.
 
 
@@ -485,10 +485,11 @@ under all unix\index{Unix} installations. If no C++ compiler is available on the
 compiler can be downloaded from {\tt\UrlGcc}.
 
 Microsoft Visual Studio can be configured with the Microsoft {\tt cl}\index{cl compiler@{\tt cl} compiler} compiler, 
-which also works under MSYS\index{MSYS}. MinGW\index{MinGW} is normally configured with the Gnu compiler collection 
-({\tt gcc}), although it can also be used with the {\tt cl} compiler. However, extreme care is needed if the last 
-option is followed. {\tt gcc} and {\tt cl} have very different header files, and it is important to set up the 
-{\tt \$PATH}\index{PATH@{\tt \$PATH}} variable correctly in order not to confuse the header files. 
+which also works under MSYS\index{MSYS}. MinGW\index{MinGW} and Cygwin\index{Cygwin} are normally configured 
+with the Gnu compiler collection ({\tt gcc}), although they can also be used with the {\tt cl} compiler. 
+However, extreme care is needed if the last option is followed. {\tt gcc} and {\tt cl} have very different 
+header files, and it is important to set up the {\tt \$PATH}\index{PATH@{\tt \$PATH}} variable correctly 
+in order not to confuse the header files. 
 In our experience, best results are achieved with the minimal unix-like installation, MSYS, and the 
 Microsoft {\tt cl} compiler.
 
@@ -524,8 +525,7 @@ bison-2.3-MSYS-1.0.11-1
 flex-2.5.33-MSYS-1.0.11-1
 regex-0.12-MSYS-1.0.11-1
 \end{verbatim}
-The last one contains an important DLL, msys-regex-0.dll, without which flex
-will not start.
+The last file contains an important DLL, msys-regex-0.dll, without which {\tt flex} will not start.
 
 \subsubsection{doxygen }\label{section:doxygen}
 Doxygen\index{Doxygen}  ({\tt\UrlDoxygen}) is a document production system that can be used to prepare documentation
@@ -582,7 +582,7 @@ If so, select {\tt (p)} and you should not get this message again.
 
 For more information on downloading the OS project or other COIN-OR projects using SVN\index{SVN} see
 
-\medskip
+\nopagebreak\medskip\nopagebreak
 \noindent{\tt\UrlCoinDownload}.
 \medskip
 
