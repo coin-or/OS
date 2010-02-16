@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
@@ -206,7 +206,6 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="size" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="type" minOccurs="0">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -215,6 +214,14 @@
 						<xs:enumeration value="etcetc"/>
 					</xs:restriction>
 				</xs:simpleType>
+			</xs:element>
+			<xs:element name="size" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="keyWords" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="keyWord" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
@@ -318,6 +325,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -410,6 +418,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -485,6 +494,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -492,7 +502,26 @@
 			</xs:element>
 			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
-					<xs:sequence>
+					<xs:choice>
+						<xs:element name="category" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="varIdx" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
+							</xs:complexType>
+						</xs:element>
 						<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:simpleContent>
@@ -504,7 +533,8 @@
 								</xs:simpleContent>
 							</xs:complexType>
 						</xs:element>
-					</xs:sequence>
+					</xs:choice>
+					<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="name" type="xs:string" use="required"/>
 					<xs:attribute name="value" type="xs:string" use="optional"/>
@@ -673,6 +703,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -818,6 +849,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -876,6 +908,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -941,209 +974,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="polynomiality" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="linear" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="quadratic" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="generalPolynomial" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="nonpolynomial" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="other" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="monotonicity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="increasing" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="decreasing" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="nonmonotonic" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="other" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:negativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1151,7 +982,26 @@
 			</xs:element>
 			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
-					<xs:sequence>
+					<xs:choice>
+						<xs:element name="category" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:negativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
+							</xs:complexType>
+						</xs:element>
 						<xs:element name="obj" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:simpleContent>
@@ -1163,8 +1013,9 @@
 								</xs:simpleContent>
 							</xs:complexType>
 						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+					</xs:choice>
+					<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="name" type="xs:string" use="required"/>
 					<xs:attribute name="value" type="xs:string" use="optional"/>
 					<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -1353,6 +1204,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1445,6 +1297,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1590,6 +1443,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1648,6 +1502,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1713,250 +1568,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="polynomiality" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="linear" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="quadratic" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="generalPolynomial" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="nonpolynomial" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="other" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="monotonicity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="increasing" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="decreasing" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="nonmonotonic" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="other" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="redundancy" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="redundant" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="other" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1964,7 +1576,26 @@
 			</xs:element>
 			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
-					<xs:sequence>
+					<xs:choice>
+						<xs:element name="category" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="conIdx" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:nonNegativeInteger">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
+							</xs:complexType>
+						</xs:element>
 						<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:simpleContent>
@@ -1976,7 +1607,8 @@
 								</xs:simpleContent>
 							</xs:complexType>
 						</xs:element>
-					</xs:sequence>
+					</xs:choice>
+					<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="name" type="xs:string" use="required"/>
 					<xs:attribute name="value" type="xs:string" use="optional"/>
@@ -2307,7 +1939,7 @@
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
-					<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
+					<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="constraints" minOccurs="0">
@@ -2414,6 +2046,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -2559,6 +2192,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -2617,6 +2251,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -2675,209 +2310,7 @@
 								</xs:sequence>
 								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
 								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="polynomiality" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="linear" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="quadratic" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="generalPolynomial" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="nonpolynomial" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="other" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="value" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="monotonicity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="increasing" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="decreasing" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="strict" type="xs:boolean" use="optional"/>
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="nonmonotonic" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="other" minOccurs="0">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:int">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -2885,7 +2318,26 @@
 			</xs:element>
 			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
-					<xs:sequence>
+					<xs:choice>
+						<xs:element name="category" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="nlIdx" minOccurs="0" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="xs:int">
+													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+												</xs:extension>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+								<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
+								<xs:attribute name="value" type="xs:string"/>
+								<xs:attribute name="description" type="xs:string" use="optional"/>
+							</xs:complexType>
+						</xs:element>
 						<xs:element name="nl" minOccurs="0" maxOccurs="unbounded">
 							<xs:complexType>
 								<xs:simpleContent>
@@ -2897,7 +2349,8 @@
 								</xs:simpleContent>
 							</xs:complexType>
 						</xs:element>
-					</xs:sequence>
+					</xs:choice>
+					<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
 					<xs:attribute name="name" type="xs:string" use="required"/>
 					<xs:attribute name="value" type="xs:string" use="optional"/>
