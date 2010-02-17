@@ -259,6 +259,9 @@ OS/doc/OSReleaseProcedure.pdf -text
 OS/doc/OSReleaseProcedure.tex -text
 OS/doc/coinEasyServer.pdf -text
 OS/doc/coinEasyServer.tex -text
+OS/doc/figures/Figure10.png -text
+OS/doc/figures/Figure11.png -text
+OS/doc/figures/Figure9.png -text
 OS/doc/figures/OSDirectory.png -text
 OS/doc/figures/OSProjectRootDirectory.png -text
 OS/doc/figures/OSSolverService.pdf -text
