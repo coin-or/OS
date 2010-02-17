@@ -1,12 +1,12 @@
 \begin{theindex}
 
   \item Algorithmic differentiation, 7, 81--82, 88--89
-  \item AMPL, 6, 7, 29, 54--56
-  \item AMPL nl format, 1, 6, 7, 35, 36, 42, 73
+  \item AMPL, 6, 7, 29, 54--57
+  \item AMPL nl format, 1, 6, 7, 35, 36, 42, 73--74
   \item AMPL Solver Library (ASL), 16, 22, 25
   \item {\tt amplFiles}, 54
   \item Apache Axis, 6, 39
-  \item Apache Tomcat, 1, 6--8, 12, 39, 51--53, 98
+  \item Apache Tomcat, 1, 6--8, 12, 39, 51--54, 99
   \item ASL, \see{AMPL Solver Library (ASL)}{1}
 
   \indexspace
@@ -30,15 +30,15 @@
     \subitem {\tt Bonmin}, 13, 19, 22--23, 28, 56
     \subitem {\tt BuildTools}, 28
     \subitem {\tt Cbc}, 13, 15, 23, 28
-    \subitem {\tt Cgl}, 13, 23, 28, 86
-    \subitem {\tt Clp}, 13, 15, 23, 28, 37, 38, 82
+    \subitem {\tt Cgl}, 13, 23, 28, 87
+    \subitem {\tt Clp}, 13, 15, 23, 28, 37, 38, 83
     \subitem {\tt CoinUtils}, 13, 23, 28, 73
     \subitem {\tt Couenne}, 19, 22--23, 28
     \subitem {\tt CppAD}, 6, 7, 13, 23, 28, 88--89
     \subitem {\tt DyLP}, 23, 28
-    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--23, 28, 38, 42, 75, 76, 94
+    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--23, 28, 38, 42, 75, 76, 95
     \subitem {\tt Osi}, 13, 23, 28, 36
-    \subitem {\tt SYMPHONY}, 15, 23, 28, 54--56
+    \subitem {\tt SYMPHONY}, 15, 23, 28, 55--56
     \subitem {\tt Vol}, 23, 28
   \item {\tt COIN\_HAS\_XXXXX}, 24
   \item {\tt COIN\_SKIP\_PROJECTS}, 13, 15, 19, 21, 24
@@ -55,7 +55,7 @@
   \indexspace
 
   \item debug version, MSYS, 21
-  \item default solver, 36, 37, 43, 54, 56
+  \item default solver, 36, 37, 44, 55, 57
   \item Downloading
     \subitem binaries, 8
     \subitem subversion
@@ -63,12 +63,12 @@
       \subsubitem Windows, 12
     \subitem tarball, 12
     \subitem zip file, 12
-  \item Doxygen, 10, 26--27, 67
+  \item Doxygen, 10, 26--27, 68
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
 
-  \item {\tt eastborne.mod}, 54
+  \item {\tt eastborne.mod}, 54--55
 
   \indexspace
 
@@ -79,7 +79,7 @@
 
   \indexspace
 
-  \item GAMS, 7, 54, 57--62
+  \item GAMS, 7, 54, 57--63
   \item gcc, 9
   \item {\tt getJobID}, 35--37, 44, 47
   \item {\tt GLPK}, 7, 25, 36
@@ -96,13 +96,13 @@
 
   \indexspace
 
-  \item Java, 1, 8, 12, 87
-  \item {\tt JobID}, 42--44, 47
+  \item Java, 1, 8, 12, 87--88
+  \item {\tt JobID}, 42--45, 47, 48
 
   \indexspace
 
-  \item {\tt kill}, 35--37, 46--47
-  \item {\tt knock}, 35--37, 43--47
+  \item {\tt kill}, 35--37, 46--48
+  \item {\tt knock}, 35--37, 44--47
 
   \indexspace
 
@@ -137,27 +137,27 @@
     \subitem stable release, 6, 8
     \subitem trunk version, 22, 49, 51
     \subitem unit test, 14
-  \item {\tt OS.sln}, 16, 80
-  \item {\tt OSAgent}, 6, 67, 98
-  \item {\tt OSAmplClient}, 6, 8, 25, 29, 54--56, 73
+  \item {\tt OS.sln}, 16, 81
+  \item {\tt OSAgent}, 6, 67--68, 99
+  \item {\tt OSAmplClient}, 6, 8, 25, 29, 54--57, 74
   \item {\tt OSCommon}, 7, 13
-  \item {\tt OSExpressionTree}, 69
-  \item {\tt OSFileUpload}, 98--99
+  \item {\tt OSExpressionTree}, 71
+  \item {\tt OSFileUpload}, 99--100
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 6--8, 31--33, 35, 36, 38, 39, 42, 47, 68, 69, 73--75, 
-		98, 100--104
-  \item {\tt OSInstance}, 6, 68--73, 76, 81, 90
-  \item {\tt OSLibrary}, 38, 67--76
-  \item {\tt OSmps2osil}, 63, 73
+  \item OSiL, 1, 6--8, 31--33, 35, 36, 38, 39, 42, 47, 68, 71, 73--75, 
+		99, 101--105
+  \item {\tt OSInstance}, 6, 68--74, 76, 81, 91
+  \item {\tt OSLibrary}, 38, 67--77
+  \item {\tt OSmps2osil}, 63, 73--74
   \item OSnL, 35
   \item {\tt OSnl2osil}, 25, 63, 73
-  \item OSoL, 6, 8, 35, 37, 39, 42--44, 47, 73
-  \item {\tt OSOption}, 72--73
-  \item OSpL, 35, 45--47
-  \item {\tt OSResult}, 73
-  \item OSrL, 6, 8, 33--34, 36, 38, 39, 47, 73
+  \item OSoL, 6, 8, 35, 37, 39, 42--44, 47, 48, 74
+  \item {\tt OSOption}, 73--74
+  \item OSpL, 35, 45--48
+  \item {\tt OSResult}, 74
+  \item OSrL, 6, 8, 33--34, 36, 38, 39, 47, 48, 74
   \item {\tt OSSolverAgent}, 67
-  \item {\tt OSSolverService}, 1, 6, 8, 13, 15, 28, 29, 35--47
+  \item {\tt OSSolverService}, 1, 6, 8, 13, 15, 28, 29, 35--48
   \item {\tt OSSolverService.jws}, 39
   \item {\tt OSSolverService.vcproj}, 16
   \item {\tt OSTest.vcproj}, 16
@@ -169,17 +169,17 @@
 
   \indexspace
 
-  \item {\tt remoteSolve1.osol}, 40--41
-  \item {\tt retrieve}, 35--37, 43--44, 47
+  \item {\tt remoteSolve1.osol}, 41
+  \item {\tt retrieve}, 35--37, 44, 48
   \item {\it Rosenbrock, H.H.}, 31
 
   \indexspace
 
-  \item {\tt send}, 35--37, 41--44, 98
+  \item {\tt send}, 35--37, 42--45, 99
   \item {\tt serviceLocation}, 37
-  \item SOAP protocol, 6, 8, 39, 42, 98
-  \item {\tt solve}, 35--41, 47, 98
-  \item {\tt solveroptions.osol}, 55
+  \item SOAP protocol, 6, 8, 39, 42, 99
+  \item {\tt solve}, 35--41, 47, 99
+  \item {\tt solveroptions.osol}, 56
   \item Subversion, 9
   \item supported solvers, 36
   \item SVN, 12, 13, 16
@@ -188,7 +188,7 @@
   \indexspace
 
   \item {\tt testlocal.config}, 38--39
-  \item {\tt testremote.config}, 40
+  \item {\tt testremote.config}, 40--41
   \item Third-party software, 16, 22--24
   \item TortoiseSVN, 12, 16, 20
   \item Trac system, 1, 6, 26
