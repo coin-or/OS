@@ -1,8 +1,8 @@
 \begin{theindex}
 
-  \item Algorithmic differentiation, 7, 81--82, 88--89
+  \item Algorithmic differentiation, 7, 81--82, 89--90
   \item AMPL, 6, 7, 29, 54--57
-  \item AMPL nl format, 1, 6, 7, 35, 36, 42, 73--74
+  \item AMPL nl format, 1, 6, 7, 35, 36, 42, 74
   \item AMPL Solver Library (ASL), 16, 22, 25
   \item {\tt amplFiles}, 54
   \item Apache Axis, 6, 39
@@ -11,8 +11,8 @@
 
   \indexspace
 
-  \item {\it Bell, Bradley M.}, 88
-  \item {\tt bison}, 10, 21, 74
+  \item {\it Bell, Bradley M.}, 89
+  \item {\tt bison}, 10, 21, 75
   \item Blas, 9, 13, 21
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
   \item Bug reporting, 26
@@ -27,16 +27,16 @@
   \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
   \item COIN-OR, 1, 13
   \item COIN-OR projects
-    \subitem {\tt Bonmin}, 13, 19, 22--23, 28, 56
+    \subitem {\tt Bonmin}, 13, 15, 19, 22--23, 28, 56
     \subitem {\tt BuildTools}, 28
     \subitem {\tt Cbc}, 13, 15, 23, 28
     \subitem {\tt Cgl}, 13, 23, 28, 87
     \subitem {\tt Clp}, 13, 15, 23, 28, 37, 38, 83
     \subitem {\tt CoinUtils}, 13, 23, 28, 73
-    \subitem {\tt Couenne}, 19, 22--23, 28
-    \subitem {\tt CppAD}, 6, 7, 13, 23, 28, 88--89
+    \subitem {\tt Couenne}, 15, 19, 22--23, 28
+    \subitem {\tt CppAD}, 6, 7, 23, 28, 89--90
     \subitem {\tt DyLP}, 23, 28
-    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--23, 28, 38, 42, 75, 76, 95
+    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--23, 28, 38, 42, 75, 77, 95
     \subitem {\tt Osi}, 13, 23, 28, 36
     \subitem {\tt SYMPHONY}, 15, 23, 28, 55--56
     \subitem {\tt Vol}, 23, 28
@@ -74,7 +74,7 @@
 
   \item {\tt f2c}, 10, 19, 23
   \item file naming conventions, 8, 17
-  \item {\tt flex}, 10, 21, 74
+  \item {\tt flex}, 10, 21, 75
   \item Fortran, 9, 13, 19, 22, 24
 
   \indexspace
@@ -83,7 +83,7 @@
   \item gcc, 9
   \item {\tt getJobID}, 35--37, 44, 47
   \item {\tt GLPK}, 7, 25, 36
-  \item {\it Griewank, A.}, 88
+  \item {\it Griewank, A.}, 89
 
   \indexspace
 
@@ -96,7 +96,7 @@
 
   \indexspace
 
-  \item Java, 1, 8, 12, 87--88
+  \item Java, 1, 8, 12, 88
   \item {\tt JobID}, 42--45, 47, 48
 
   \indexspace
@@ -108,8 +108,8 @@
 
   \item Lapack, 9
   \item {\tt LibOS}, 15
-  \item {\tt libOSCommon.vcproj}, 16
-  \item {\tt libOSSolvers.vcproj}, 16
+  \item {\tt libOSCommon.vcproj}, 17
+  \item {\tt libOSSolvers.vcproj}, 17
   \item LINDO, 7, 14, 26, 36, 38, 75, 76
   \item Linux, 27
 
@@ -137,7 +137,7 @@
     \subitem stable release, 6, 8
     \subitem trunk version, 22, 49, 51
     \subitem unit test, 14
-  \item {\tt OS.sln}, 16, 81
+  \item {\tt OS.sln}, 17, 81
   \item {\tt OSAgent}, 6, 67--68, 99
   \item {\tt OSAmplClient}, 6, 8, 25, 29, 54--57, 74
   \item {\tt OSCommon}, 7, 13
@@ -146,21 +146,21 @@
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
   \item OSiL, 1, 6--8, 31--33, 35, 36, 38, 39, 42, 47, 68, 71, 73--75, 
 		99, 101--105
-  \item {\tt OSInstance}, 6, 68--74, 76, 81, 91
+  \item {\tt OSInstance}, 6, 68--74, 77, 81, 82, 91
   \item {\tt OSLibrary}, 38, 67--77
   \item {\tt OSmps2osil}, 63, 73--74
   \item OSnL, 35
-  \item {\tt OSnl2osil}, 25, 63, 73
+  \item {\tt OSnl2osil}, 25, 63, 74
   \item OSoL, 6, 8, 35, 37, 39, 42--44, 47, 48, 74
   \item {\tt OSOption}, 73--74
   \item OSpL, 35, 45--48
-  \item {\tt OSResult}, 74
+  \item {\tt OSResult}, 73--74
   \item OSrL, 6, 8, 33--34, 36, 38, 39, 47, 48, 74
   \item {\tt OSSolverAgent}, 67
   \item {\tt OSSolverService}, 1, 6, 8, 13, 15, 28, 29, 35--48
   \item {\tt OSSolverService.jws}, 39
-  \item {\tt OSSolverService.vcproj}, 16
-  \item {\tt OSTest.vcproj}, 16
+  \item {\tt OSSolverService.vcproj}, 17
+  \item {\tt OSTest.vcproj}, 17
 
   \indexspace
 
@@ -182,7 +182,7 @@
   \item {\tt solveroptions.osol}, 56
   \item Subversion, 9
   \item supported solvers, 36
-  \item SVN, 12, 13, 16
+  \item SVN, 12, 13, 17
   \item {\tt SYMPHONY}, \see{COIN-OR projects, {\tt SYMPHONY}}{1}
 
   \indexspace
@@ -195,18 +195,18 @@
 
   \indexspace
 
-  \item {\tt unitTest}, 14, 16, 17, 29
+  \item {\tt unitTest}, 14, 17, 29
   \item Unix, 9, 10, 13, 25, 27
 
   \indexspace
 
   \item {\tt Vol}, \see{COIN-OR projects, {\tt Vol}}{1}
-  \item VPATH, 21, 24, 63, 80
+  \item VPATH, 21, 24, 63, 81
 
   \indexspace
 
   \item {\tt wget}, 9, 16, 20
-  \item Windows Platform SDK, 16, 18, 20, 87
+  \item Windows Platform SDK, 16, 18, 20, 88
   \item {\tt WSUtil}, 67
 
   \indexspace
