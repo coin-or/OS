@@ -24537,14 +24537,16 @@ else
 fi
 
 
-  case $coin_has_cppad in
-   unavailable|skipping)
-         { { echo "$as_me:$LINENO: error: cannot find CppAD which is necessary to build OS" >&5
-echo "$as_me: error: cannot find CppAD which is necessary to build OS" >&2;}
-   { (exit 1); exit 1; }; } ;;
-  esac
 
 
+
+
+if test $coin_has_cppad = skipping &&
+   test $coin_has_ipopt != skipping ; then
+       { { echo "$as_me:$LINENO: error: Ipopt is present, but not the necessary cppad" >&5
+echo "$as_me: error: Ipopt is present, but not the necessary cppad" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 if test $coin_has_ipopt = skipping &&
    test $coin_has_bonmin != skipping ; then
@@ -24552,6 +24554,14 @@ if test $coin_has_ipopt = skipping &&
 echo "$as_me: error: Bonmin is present, but not the necessary Ipopt" >&2;}
    { (exit 1); exit 1; }; }
 fi
+
+if test $coin_has_bonmin = skipping &&
+   test $coin_has_couenne != skipping ; then
+       { { echo "$as_me:$LINENO: error: Couenne is present, but not the necessary Bonmin" >&5
+echo "$as_me: error: Couenne is present, but not the necessary Bonmin" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 
 
 if test $coin_has_coinutils != unavailable &&

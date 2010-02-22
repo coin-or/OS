@@ -17,7 +17,7 @@
  * 
  */
 
-#define DEBUG
+//#define DEBUG
 
 #include "OSIpoptSolver.h"
 #include "OSDataStructures.h"

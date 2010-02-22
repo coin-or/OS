@@ -125,17 +125,25 @@ if test "$use_couenne" = yes; then
 fi
 AM_CONDITIONAL(COMPILE_BONCOUENNE, test "$use_couenne" = yes)
   
-  case $coin_has_cppad in
-   unavailable|skipping)
-         AC_MSG_ERROR([cannot find CppAD which is necessary to build OS]) ;;
-  esac
 
 
+
+
+if test $coin_has_cppad = skipping &&
+   test $coin_has_ipopt != skipping ; then
+       AC_MSG_ERROR([Ipopt is present, but not the necessary cppad])   
+fi
 
 if test $coin_has_ipopt = skipping &&
    test $coin_has_bonmin != skipping ; then
        AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])   
 fi
+
+if test $coin_has_bonmin = skipping &&
+   test $coin_has_couenne != skipping ; then
+       AC_MSG_ERROR([Couenne is present, but not the necessary Bonmin])   
+fi
+
 
 
 if test $coin_has_coinutils != unavailable &&

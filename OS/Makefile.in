@@ -73,7 +73,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(top_srcdir)/examples/osResultDemo/Makefile.in \
 	$(top_srcdir)/examples/osSolverDemo/Makefile.in \
 	$(top_srcdir)/examples/template/Makefile.in \
-	$(top_srcdir)/inc/config_os.h.in AUTHORS
+	$(top_srcdir)/inc/config_os.h.in AUTHORS ChangeLog
 @HAVE_EXTERNALS_TRUE@am__append_2 = Externals
 @HAVE_EXTERNALS_TRUE@am__append_3 = .Externals-stamp
 subdir = .
