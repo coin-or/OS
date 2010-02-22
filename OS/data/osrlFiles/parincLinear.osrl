@@ -37,7 +37,7 @@
                         <con idx="1">0</con>
                         <con idx="2">6.9378</con>
                         <con idx="3">0</con>
-                    </dualValues>dfads
+                    </dualValues>
                 </constraints>
 					<otherSolutionResults  numberOfOtherSolutionResults="1">
 						<otherSolutionResult name="requestResults" description="the request results"  numberOfRecords="1">
