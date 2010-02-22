@@ -29,6 +29,8 @@ ADDINCFLAGS =  -I${prefix}/include
 SRCDIR = @srcdir@
 VPATH = @srcdir@
 prefix = ../../..
+
+ASLLIB = @ASLLIB@
 #
 #
 ##########################################################################
@@ -101,7 +103,7 @@ LIBS += @clplib@
 
 
 
-@COIN_HAS_ASL_TRUE@LIBS += @USE_ASL_LIB@
+LIBS += $(ASLLIB)
 
 
 LIBS += @coinutilslib@ 

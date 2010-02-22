@@ -32,6 +32,8 @@ VPATH = @srcdir@
 prefix = ../../..
 #
 #
+
+ASLLIB = @ASLLIB@
 ##########################################################################
 #  Usually, you don't have to change anything below.  Note that if you   #
 #  change certain compiler options, you might have to recompile OS.   #
@@ -102,8 +104,8 @@ LIBS += @clplib@
 LIBS += @coinutilslib@ 
 
 
-@COIN_HAS_ASL_TRUE@LIBS += @USE_ASL_LIB@
 
+LIBS += $(ASLLIB) 
  
 #DONE ADDING LIBS
 
