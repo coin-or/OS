@@ -257,6 +257,7 @@ OS/data/osrlFiles/rosenbrockmod.osrl -text
 OS/doc/Future_Work.tex -text
 OS/doc/OSReleaseProcedure.pdf -text
 OS/doc/OSReleaseProcedure.tex -text
+OS/doc/OSSolverServiceRules.txt -text
 OS/doc/coinEasyServer.pdf -text
 OS/doc/coinEasyServer.tex -text
 OS/doc/figures/Figure10.png -text
