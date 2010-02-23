@@ -347,11 +347,12 @@ int main(int argC, const char* argV[])
 				
 				
 			}
-			/*
+			
 			if(osoptions->osilFile != ""){
 				//this takes precedence over what is in the OSoL file
 				 osoptions->osil = fileUtil->getFileAsString( (osoptions->osilFile).c_str()   );
 			}
+			/*
 			else{// we were not given an osil file
 				// make sure we don't have a service URI in the file or are using mps or nl
 				// if we have nl or mps assume a local solve
