@@ -157,7 +157,7 @@ using std::endl;
 using std::ostringstream;
 using std::string;
 
-//#define DEBUG_CL_INTERFACE
+#define DEBUG_CL_INTERFACE
 
 
 #define MAXCHARS 5000 
@@ -173,8 +173,6 @@ int ossslex_destroy (void* scanner );
 std::string get_help();
 std::string get_version();
 
-std::string get_help();
-std::string get_version();
 
  
 // the serviceMethods  
@@ -223,7 +221,7 @@ int main(int argC, const char* argV[])
 	osoptions->osol = "";  
 	osoptions->osrlFile = ""; 
 	osoptions->osrl = ""; 
-	osoptions->insListFile = ""; 
+	//osoptions->insListFile = ""; 
 	osoptions->insList = ""; 
 	osoptions->serviceLocation = "";
 	osoptions->serviceMethod = ""; 
@@ -329,25 +327,27 @@ int main(int argC, const char* argV[])
 		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
 		if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
 		if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
-		if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
+		//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
 		if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
 		if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
 		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
 		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
 		if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
 		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
+		if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
+		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
 #endif
 		// get the data from the files
 		fileUtil = new FileUtil();
 		try{	
-			if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
+			//if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
 			if(osoptions->osolFile != ""){
 			
 				osoptions->osol = fileUtil->getFileAsString( (osoptions->osolFile).c_str() );
 				
 				
 			}
-
+			/*
 			if(osoptions->osilFile != ""){
 				//this takes precedence over what is in the OSoL file
 				 osoptions->osil = fileUtil->getFileAsString( (osoptions->osilFile).c_str()   );
@@ -358,18 +358,8 @@ int main(int argC, const char* argV[])
 					if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->gamsControlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") ) 
 						osoptions->osil = fileUtil->getFileAsString( getInstanceLocation( osoptions->osol).c_str()  );
 			}
-			// see if there is a solver specified
-			if(osoptions->solverName != ""){ 
-//				cout << "Solver Name = " << osoptions->solverName << endl;
-			}
-			else{
-				if(osoptions->osol != ""){
-				
-				//osoptions->solverName  =    getSolverName( osoptions->osolFile.c_str()  );
-				osoptions->solverName  =    getSolverName(  osoptions->osol );
-				
-				}
-			}
+			*/
+			
 			//if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
 			if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsString( (osoptions->osplInputFile).c_str() );
 			//if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
@@ -405,6 +395,7 @@ int main(int argC, const char* argV[])
 					else knock();
 					break;
 				default:
+					
 					break;
 			}
 		}
@@ -493,6 +484,33 @@ void solve(){
 		}//end remote try
 		
 		catch(const ErrorClass& eclass){
+			OSResult *osresult = NULL;
+			OSrLWriter *osrlwriter = NULL;
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage( eclass.errormsg);
+			osresult->setGeneralStatusType( "error");
+			std::string osrl = osrlwriter->writeOSrL( osresult);
+			if(osoptions->osrlFile != ""){
+				//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+				fileUtil->writeFileFromString(osoptions->osrlFile,  osrl);
+				if(osoptions->browser != ""){
+					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
+					const char *ch = &str[ 0];
+					std::system( ch );
+				}
+			}
+			else{
+				//std::cout <<  eclass.errormsg << std::endl;
+				std::cout <<  osrl << std::endl;
+			}
+			delete osresult;
+			osresult = NULL;
+			delete osrlwriter;
+			osrlwriter = NULL;
+			delete fileUtil;
+			fileUtil = NULL;		
+			/**
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
 				if(osoptions->browser != ""){
@@ -504,9 +522,11 @@ void solve(){
 			else{
 				//std::cout <<  eclass.errormsg << std::endl;
 				std::cout <<  osrl << std::endl;
+				std::cout <<  eclass.errormsg  << std::endl;
 			}
 			delete fileUtil;
 			fileUtil  = NULL;
+			*/
 		}//end remote catch
 	} else{// solve locally
 		try{
