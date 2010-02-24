@@ -292,7 +292,7 @@ public final class OSParameter{
 	/**
 	 * OS_SOLVER holds the default solver name that the OSSolverService executable uses, e.g. cbc, clp. 
 	 */
-	public static String OS_SOLVER = "cbc"; //change?
+	public static String OS_SOLVER = ""; //"cbc"; //change?
 
 	/**
 	 * MAXIMUM_TRIAL_NUMBER_FOR_SOLVE holds the maximum number of trials for a (failed) solve
