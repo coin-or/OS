@@ -16,14 +16,23 @@ solve;
 reset;
 model hs71.mod;
 option solver OSAmplClient;
-option OSAmplClient_options "solver ipopt";
-option ipopt_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+
 solve;
 display x3;
 reset;
+
+
+
 model hs71.mod;
 option solver OSAmplClient;
-option OSAmplClient_options "solver clp";
-option clp_options "service http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+option OSAmplClient_options "optionFile solveroptions.osol    serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws  ";
 solve;
+display x3;
+reset;
+
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "solver ipopt    serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverServiceee.jws  ";
+solve;
+
 exit;

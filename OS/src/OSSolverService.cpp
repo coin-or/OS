@@ -187,11 +187,14 @@ void knock();
 void getOSiLFromNl(); 
 void getOSiLFromMps();
 void getOSiLFromGams();
-std::string getServiceURI( std::string osol);
-std::string getInstanceLocation( std::string osol);
-std::string getSolverName( std::string osol);
-std::string setSolverName( std::string osol, std::string solverName);
 std::string buildSolver(std::string solverName, std::string osol, OSInstance *osinstance);
+
+
+//std::string getServiceURI( std::string osol);
+//std::string getInstanceLocation( std::string osol);
+//std::string getSolverName( std::string osol);
+//std::string setSolverName( std::string osol, std::string solverName);
+
 
 //options structure
 // this is the only global variable but 
@@ -958,115 +961,118 @@ void getOSiLFromMps(){
 	
 }//getOSiLFromMps
 
-string getServiceURI( std::string osol){
-	if(osol == "") return osol;
-	string::size_type pos2;
-	string::size_type  pos1 = osol.find( "<serviceURI");
-	if(pos1 != std::string::npos){
-		// get the end of the serviceURI start tag
-		pos1 = osol.find(">", pos1 + 1);
-		if(pos1 != std::string::npos){
-			// get the start of serviceURI end tag
-			pos2 = osol.find( "</serviceURI", pos1 + 1);
-			if( pos2 != std::string::npos){
-				// get the substring
-				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
-			}
-			else return "";
-		}
-		else return "";
-	}
-	else return "";
-}//getServiceURI
+//string getServiceURI( std::string osol){
+//	if(osol == "") return osol;
+//	string::size_type pos2;
+//	string::size_type  pos1 = osol.find( "<serviceURI");
+//	if(pos1 != std::string::npos){
+//		// get the end of the serviceURI start tag
+//		pos1 = osol.find(">", pos1 + 1);
+//		if(pos1 != std::string::npos){
+//			// get the start of serviceURI end tag
+//			pos2 = osol.find( "</serviceURI", pos1 + 1);
+//			if( pos2 != std::string::npos){
+//				// get the substring
+//				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
+//			}
+//			else return "";
+//		}
+//		else return "";
+//	}
+//	else return "";
+//}//getServiceURI
 
-string getInstanceLocation( std::string osol){
-	if(osol == "") return osol;
-	string::size_type pos2;
-	string::size_type pos1 = osol.find( "<instanceLocation");
-	if(pos1 != std::string::npos){
-		// get the end of the instanceLocation start tag
-		pos1 = osol.find(">", pos1 + 1);
-		if(pos1 != std::string::npos){
-			// get the start of instanceLocation end tag
-			pos2 = osol.find( "</instanceLocation", pos1 + 1);
-			if( pos2 != std::string::npos){
-				// get the substring
-				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
-			}
-			else return "";
-		}
-		else return "";
-	}
-	else return "";
-}//getInstanceLocation
-
-std::string getSolverName( std::string osol){
-#ifdef DEBUG_CL_INTERFACE
-	std::cout << "inside getSolverName" << std::endl;
-	std::cout <<  osol << std::endl;
-	std::cout << "done with osol" << std::endl;
-#endif
-	OSOption *osoption = NULL;
-	OSoLReader *osolreader = NULL;
-	osolreader = new OSoLReader();
-
-	osoption = osolreader->readOSoL( osol);
-#ifdef DEBUG_CL_INTERFACE
-	std::cout <<  "invoke getSolverToInvoke" << std::endl;
-#endif
-	std::string optionstring = osoption->getSolverToInvoke();
-#ifdef DEBUG_CL_INTERFACE
-	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
-#endif
-//	delete osoption;
-	delete osolreader;
-	return optionstring;
-	/*
-	if(osol == "") return osol;
-	string::size_type pos2;
-	string::size_type pos1 = osol.find( "solverToInvoke");
-	if(pos1 != std::string::npos){
-		// get the end of the instanceLocation start tag
-		pos1 = osol.find(">", pos1 + 1);
-		if(pos1 != std::string::npos){
-			// get the start of instanceLocation end tag
-			pos2 = osol.find( "</solverToInvoke", pos1 + 1);
-			if( pos2 != std::string::npos){
-				// get the substring
-				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
-			}
-			else return "";
-		}
-		else return "";
-	}
-	else return "";
-	*/
-}//getSolverName
+//string getInstanceLocation( std::string osol){
+//	if(osol == "") return osol;
+//	string::size_type pos2;
+//	string::size_type pos1 = osol.find( "<instanceLocation");
+//	if(pos1 != std::string::npos){
+//		// get the end of the instanceLocation start tag
+//		pos1 = osol.find(">", pos1 + 1);
+//		if(pos1 != std::string::npos){
+//			// get the start of instanceLocation end tag
+//			pos2 = osol.find( "</instanceLocation", pos1 + 1);
+//			if( pos2 != std::string::npos){
+//				// get the substring
+//				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
+//			}
+//			else return "";
+//		}
+//		else return "";
+//	}
+//	else return "";
+//}//getInstanceLocation
 
 
 
-std::string setSolverName( std::string osol, std::string solverName){
-#ifdef DEBUG_CL_INTERFACE
-	std::cout << "inside setSolverName" << std::endl;
-#endif
-	OSOption *osoption = NULL;
-	OSoLReader *osolreader = NULL;
-	osolreader = new OSoLReader();
-	osoption = osolreader->readOSoL( osol);
+//std::string getSolverName( std::string osol){
+//#ifdef DEBUG_CL_INTERFACE
+//	std::cout << "inside getSolverName" << std::endl;
+//	std::cout <<  osol << std::endl;
+//	std::cout << "done with osol" << std::endl;
+//#endif
+//	OSOption *osoption = NULL;
+//	OSoLReader *osolreader = NULL;
+//	osolreader = new OSoLReader();
+//
+//	osoption = osolreader->readOSoL( osol);
+//#ifdef DEBUG_CL_INTERFACE
 //	std::cout <<  "invoke getSolverToInvoke" << std::endl;
-	osoption->setSolverToInvoke( solverName);
-//	std::cout <<  "Solver Name =  " << solverName << std::endl;
+//#endif
+//	std::string optionstring = osoption->getSolverToInvoke();
+//#ifdef DEBUG_CL_INTERFACE
 //	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
-	OSoLWriter *osolwriter = NULL;
-	osolwriter = new OSoLWriter();
-	std::string newOSoL = osolwriter->writeOSoL( osoption);
-//	std::cout << "NEW OSOL" << std::endl;
-//	std::cout << newOSoL << std::endl;
-//	delete osoption;
-	delete osolreader;
-	delete osolwriter;
-	return newOSoL;
-}//setSolverName
+//#endif
+////	delete osoption;
+//	delete osolreader;
+//	return optionstring;
+//	/*
+//	if(osol == "") return osol;
+//	string::size_type pos2;
+//	string::size_type pos1 = osol.find( "solverToInvoke");
+//	if(pos1 != std::string::npos){
+//		// get the end of the instanceLocation start tag
+//		pos1 = osol.find(">", pos1 + 1);
+//		if(pos1 != std::string::npos){
+//			// get the start of instanceLocation end tag
+//			pos2 = osol.find( "</solverToInvoke", pos1 + 1);
+//			if( pos2 != std::string::npos){
+//				// get the substring
+//				return osol.substr( pos1 + 1, pos2 - pos1 - 1); 
+//			}
+//			else return "";
+//		}
+//		else return "";
+//	}
+//	else return "";
+//	*/
+//}//getSolverName
+
+
+
+
+//std::string setSolverName( std::string osol, std::string solverName){
+//#ifdef DEBUG_CL_INTERFACE
+//	std::cout << "inside setSolverName" << std::endl;
+//#endif
+//	OSOption *osoption = NULL;
+//	OSoLReader *osolreader = NULL;
+//	osolreader = new OSoLReader();
+//	osoption = osolreader->readOSoL( osol);
+////	std::cout <<  "invoke getSolverToInvoke" << std::endl;
+//	osoption->setSolverToInvoke( solverName);
+////	std::cout <<  "Solver Name =  " << solverName << std::endl;
+////	std::cout <<  "done with invoke getSolverToInvoke" << std::endl;
+//	OSoLWriter *osolwriter = NULL;
+//	osolwriter = new OSoLWriter();
+//	std::string newOSoL = osolwriter->writeOSoL( osoption);
+////	std::cout << "NEW OSOL" << std::endl;
+////	std::cout << newOSoL << std::endl;
+////	delete osoption;
+//	delete osolreader;
+//	delete osolwriter;
+//	return newOSoL;
+//}//setSolverName
 
 std::string get_help(){
 

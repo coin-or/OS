@@ -170,176 +170,161 @@ int main(int argc, char **argv)
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
 		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceLocation);
 	}
-	if(sSolverName.size() == 0){
-		std::cout << "DETERMINE THE DEFAULT SOLVER " <<    endl;
-		if(osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){//we have an integer program
-			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-			   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and integer
-				sSolverName = "bonmin";
-			}else{//we are linear integer 
-				sSolverName = "cbc";
-			}
-		}else{// we have a continuous problem
-			if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-			   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and continuous
-				sSolverName = "ipopt";
-			}else{//we have linear program 
-				sSolverName = "clp";
-			}
-		}
-	}
-	
+
 	std::cout << " solver Name = " << sSolverName << std::endl;
 	std::cout << " solver Options = " << osol << std::endl;
 	
 	try{
-		if( (amplclient_options == NULL)  && (sSolverName.size() == 0) ) throw ErrorClass( "a local solver was not specified in AMPL option");
-		else{// don't do this if we have specify a remote location
-			if(serviceLocation.size() == 0 ){
-				if( sSolverName == "lindo") {
-					// we are requesting the Lindo solver
-					bool bLindoIsPresent = false;
-					#ifdef COIN_HAS_LINDO
-					bLindoIsPresent = true;
-					solverType = new LindoSolver();
-					solverType->sSolverName = "lindo";
-					#endif
-					if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
-				}
-				else{ 
-					if( sSolverName == "clp" ){
-						if( solver_option != NULL) cout << "HERE ARE THE Clp SOLVER OPTIONS " <<   solver_option << endl;
-						solverType = new CoinSolver();
-						solverType->sSolverName = "clp";
+		if(serviceLocation.size() == 0 ){
+			//determine the solver
+			
+			
+			if(sSolverName.size() == 0){// determine the default solver
+				if(osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){//we have an integer program
+					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+					   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and integer
+						sSolverName = "bonmin";
+					}else{//we are linear integer 
+						sSolverName = "cbc";
 					}
-					else{
-						if( sSolverName == "cbc"){
-
-							solverType = new CoinSolver();
-							solverType->sSolverName = "cbc";
-						}
-						else{
-							if( sSolverName == "cplex"){
-								bool bCplexIsPresent = false;
-								#ifdef COIN_HAS_CPX
-									bCplexIsPresent = true;
-									solverType = new CoinSolver();
-									solverType->sSolverName = "cplex";
-								#endif
-									if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
-							}
-							else{
-								if( sSolverName == "glpk"){
-									bool bGlpkIsPresent = false;
-									#ifdef COIN_HAS_GLPK
-										bGlpkIsPresent = true;
-										solverType = new CoinSolver();
-										solverType = new CoinSolver();
-										solverType->sSolverName = "glpk";
-									#endif
-									if(bGlpkIsPresent == false) throw ErrorClass( "the Glpk solver requested is not present");
-								}
-								else{
-									if( sSolverName == "ipopt"){
-										bool bIpoptIsPresent = false;
-										#ifdef COIN_HAS_IPOPT
-											bIpoptIsPresent = true;
-											solverType = new IpoptSolver();
-											solverType->sSolverName = "ipopt";
-										#endif
-										if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
-									}
-									else{
-										if( sSolverName == "symphony" ){
-											bool bSymIsPresent = false;
-											#ifdef COIN_HAS_SYMPHONY
-												bSymIsPresent = true; 
-												solverType = new CoinSolver();
-												solverType->sSolverName = "symphony";
-											#endif
-											if(bSymIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
-										}
-										else{
-											if( sSolverName == "dylp"){
-												bool bDyLPIsPresent = false;
-												#ifdef COIN_HAS_DYLP
-													bDyLPIsPresent = true;
-													solverType = new CoinSolver();
-													solverType->sSolverName = "dylp";
-												#endif
-												if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
-											}						
-											else{
-												if( sSolverName == "bonmin" ){
-													bool bBonminIsPresent = false;
-													#ifdef COIN_HAS_BONMIN
-														bBonminIsPresent = true;
-														solverType = new BonminSolver();
-														solverType->sSolverName = "bonmin";
-													#endif
-													if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");												
-												}
-												else{
-													if( sSolverName == "couenne"){
-														bool bCouenneIsPresent = false;
-														#ifdef COIN_HAS_COUENNE
-															bCouenneIsPresent = true;
-															solverType = new CouenneSolver();
-															solverType->sSolverName = "counenne";
-														#endif
-														if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");	
-													}
-													else{
-														throw ErrorClass( "a supported solver has not been selected");
-													}
-												}
-											}
-										}	
-									} 
-								}
-							}
-						} 
+				}else{// we have a continuous problem
+					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
+					   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and continuous
+						sSolverName = "ipopt";
+					}else{//we have linear program 
+						sSolverName = "clp";
 					}
 				}
 			}
-		}
-		// do a local solve
-		//if( ( solver_option == NULL) || (strstr(solver_option, "service") == NULL)  ){
-		if( serviceLocation.size() == 0 ){
+			
+			
+			if( sSolverName == "lindo") {
+				// we are requesting the Lindo solver
+				bool bLindoIsPresent = false;
+				#ifdef COIN_HAS_LINDO
+				bLindoIsPresent = true;
+				solverType = new LindoSolver();
+				solverType->sSolverName = "lindo";
+				#endif
+				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
+			}
+			else{ 
+				if( sSolverName == "clp" ){
+					if( solver_option != NULL) cout << "HERE ARE THE Clp SOLVER OPTIONS " <<   solver_option << endl;
+					solverType = new CoinSolver();
+					solverType->sSolverName = "clp";
+				}
+				else{
+					if( sSolverName == "cbc"){
+
+						solverType = new CoinSolver();
+						solverType->sSolverName = "cbc";
+					}
+					else{
+						if( sSolverName == "cplex"){
+							bool bCplexIsPresent = false;
+							#ifdef COIN_HAS_CPX
+								bCplexIsPresent = true;
+								solverType = new CoinSolver();
+								solverType->sSolverName = "cplex";
+							#endif
+								if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
+						}
+						else{
+							if( sSolverName == "glpk"){
+								bool bGlpkIsPresent = false;
+								#ifdef COIN_HAS_GLPK
+									bGlpkIsPresent = true;
+									solverType = new CoinSolver();
+									solverType = new CoinSolver();
+									solverType->sSolverName = "glpk";
+								#endif
+								if(bGlpkIsPresent == false) throw ErrorClass( "the Glpk solver requested is not present");
+							}
+							else{
+								if( sSolverName == "ipopt"){
+									bool bIpoptIsPresent = false;
+									#ifdef COIN_HAS_IPOPT
+										bIpoptIsPresent = true;
+										solverType = new IpoptSolver();
+										solverType->sSolverName = "ipopt";
+									#endif
+									if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
+								}
+								else{
+									if( sSolverName == "symphony" ){
+										bool bSymIsPresent = false;
+										#ifdef COIN_HAS_SYMPHONY
+											bSymIsPresent = true; 
+											solverType = new CoinSolver();
+											solverType->sSolverName = "symphony";
+										#endif
+										if(bSymIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
+									}
+									else{
+										if( sSolverName == "dylp"){
+											bool bDyLPIsPresent = false;
+											#ifdef COIN_HAS_DYLP
+												bDyLPIsPresent = true;
+												solverType = new CoinSolver();
+												solverType->sSolverName = "dylp";
+											#endif
+											if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
+										}						
+										else{
+											if( sSolverName == "bonmin" ){
+												bool bBonminIsPresent = false;
+												#ifdef COIN_HAS_BONMIN
+													bBonminIsPresent = true;
+													solverType = new BonminSolver();
+													solverType->sSolverName = "bonmin";
+												#endif
+												if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");												
+											}
+											else{
+												if( sSolverName == "couenne"){
+													bool bCouenneIsPresent = false;
+													#ifdef COIN_HAS_COUENNE
+														bCouenneIsPresent = true;
+														solverType = new CouenneSolver();
+														solverType->sSolverName = "counenne";
+													#endif
+													if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");	
+												}
+												else{
+													throw ErrorClass( "a supported solver has not been selected");
+												}
+											}
+										}
+									}	
+								} 
+							}
+						}
+					} 
+				}
+			}
+			
+			// now do a local solve
 			solverType->osol = osol;
 			//std::cout << osol << std::endl;
 			OSiLWriter osilwriter;
 			std::cout << "WRITE THE INSTANCE" << std::endl;
 			std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 			std::cout << "DONE WRITE THE INSTANCE" << std::endl;
-
+			
 			solverType->osinstance = osinstance;
 			solverType->buildSolverInstance();
 			solverType->solve();
 			osrl = solverType->osrl ;
-			//std::cout << osrl << std::endl;
-		}
-	}
-	catch(const ErrorClass& eclass){
-		osresult = new OSResult();	
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		std::cout  << osrl << std::endl;
-		osrl = " ";
-		write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
-		delete osresult;
-		return 0;
-	}
-	try{
-		// do the following for a remote solve
-		if( serviceLocation.size()  > 0){
+				//std::cout << osrl << std::endl;
+		}// end if serviceLocation.size() == 0
+		else{// do a remote solve
 			OSSolverAgent* osagent = NULL;
 			OSiLWriter *osilwriter = NULL;
 			osilwriter = new OSiLWriter();
 			std::string  osil = osilwriter->writeOSiL( osinstance);
 			////
-		
+			
 			//agent_address = strstr(solver_option, "service");
 			//agent_address += 7;
 			//URL = strtok( agent_address, delims );
@@ -353,18 +338,21 @@ int main(int argc, char **argv)
 			if (osrl.size() == 0) throw ErrorClass("Nothing was returned from the server, please check service address");
 			delete osilwriter;
 			delete osagent; 
-		} 
-	}
+		}
+	}//end try
 	catch(const ErrorClass& eclass){
-		osresult = new OSResult();
+		osresult = new OSResult();	
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);	
+		osrl = osrlwriter->writeOSrL( osresult);
+		std::cout  << osrl << std::endl;
+		osrl = " ";
 		write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
 		delete osresult;
 		return 0;
 	}
-	try{ 
+
+	try{ // now put solution back to ampl
 		//need_nl = 0;
 		std::string sResultFileName = "solutionResult.osrl";
 		FileUtil *fileUtil;
@@ -538,23 +526,6 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 			*solverOptions = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"></osol>";
 		}
 		
-		OSOption *osoption = NULL;
-		OSoLReader *osolreader = NULL;
-		osolreader = new OSoLReader();
-		osoption = osolreader->readOSoL( *solverOptions);	
-		OSoLWriter *osolwriter = NULL;
-		osolwriter = new OSoLWriter();	
-		
-		// if a solver is specified it overrides what is in the osoptions file, otherwise,
-		// see if we can get it from the solver option file
-		if( (*solverName).size() == 0 ){
-			*solverName = osoption->getSolverToInvoke();
-		}else{ // insert this solver
-			osoption->setSolverToInvoke( *solverName );
-			*solverOptions = osolwriter->writeOSoL(  osoption);
-		}
-
-		
 		// see if a serviceLocation has been specified
 		pos1 = amplOptions.find( "serviceLocation");
 		if(pos1 != std::string::npos){
@@ -571,17 +542,7 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 			}
 		}
 		
-		// if a serviceLocation is specified it overrides what is in the osoptions file, otherwise,
-		// see if we can get it from the solver option file
-		if( (*serviceLocation).size() == 0 ){
-			*serviceLocation = osoption->getServiceURI();
-		}		
 
-		delete osolreader;
-		osolreader = NULL;
-		delete osolwriter;
-		osolwriter = NULL;
-		
 	}//end try
 	catch(const ErrorClass& eclass){
 		cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
