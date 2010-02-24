@@ -448,27 +448,21 @@ void solve(){
 			}
 			// place a remote call
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			if(osoptions->solverName != ""){
-				string::size_type iStringpos;
-				//see if there is an osol file
-				if(osoptions->osol != ""){// we have an osol string
-					// see if a solver is listed, if so don't do anything
-					iStringpos = osoptions->osol.find("solverToInvoke");					
-					if(iStringpos == std::string::npos) { //don't have a solver specify, we must do so
-						osoptions->osol = setSolverName(osoptions->osol, osoptions->solverName);
-					}
-				}
-				else{// no osol string
-					std::ostringstream outStr; 
-					outStr <<  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/" ;
-					outStr << OS_SCHEMA_VERSION ;
-					outStr <<  "/OSoL.xsd\"><other> </other></osol>";	
-					osoptions->osol = outStr.str();
-					iStringpos = osoptions->osol.find("</osol");
-					osoptions->osol.insert(iStringpos, "<general><solverToInvoke>"
-							+ osoptions->solverName  + "</solverToInvoke></general>");
-				}
+			
+			
+			
+			if(osoptions->osol == ""){// we have no osol string
+			
+				std::ostringstream outStr; 
+				outStr <<  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/" ;
+				outStr << OS_SCHEMA_VERSION ;
+				outStr <<  "/OSoL.xsd\"></osol>";	
+				osoptions->osol = outStr.str();
 			}
+			
+			
+			
+			
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
