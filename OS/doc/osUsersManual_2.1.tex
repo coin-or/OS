@@ -2548,23 +2548,26 @@ These methods are explained in more detail in Section~\ref{section:servicemethod
 \subsection{OSSolverService Input Parameters}
 
 At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
-Not all the parameters are required. However, if the {\tt solve}\index{solve@{\tt solve}} or {\tt send}%
-\index{send@{\tt send}} service    methods  (see Section~\ref{section:servicemethods} ) are invoked
-a problem instance location must be specified.
+Not all the parameters are required. However, 
+there are some rules that must be followed. We collected all these rules in the next 
+section~(\ref{section:ossolverservicerules}).
+%if the {\tt solve}\index{solve@{\tt solve}} or {\tt send}\index{send@{\tt send}} service    
+%methods  (see Section~\ref{section:servicemethods} ) are invoked a problem instance location must be specified.
 
 \begin{itemize}
 
-\item[] {\bf -osil xxx.osil}\ \ This is the name of the file that contains the optimization instance in
-OSiL\index{OSiL}  format. It is assumed that this file is available in a directory on the
-machine that is running {\tt OSSolverService}.
-If this option is not specified then the instance location must be specified in the OSoL\index{OSoL} solver options file.
+\item[] {\bf -osil xxx.osil}\ \ This is the path information and name of the file that contains the optimization 
+instance in OSiL\index{OSiL}  format. It is assumed that this file is available on the machine that is running 
+{\tt OSSolverService}.
+%If this option is not specified then the instance location must be specified in the OSoL\index{OSoL} solver options file.
 
-\item[] {\bf -osol xxx.osol}\ \ This is the name of the file that contains the solver options. It is assumed that
-this file is available in a directory on the machine that is running {\tt OSSolverService}. It is not necessary to
-specify this option.
+\item[] {\bf -osol xxx.osol}\ \ This is the path information and name of the file that contains the solver 
+options. It is assumed that this file is available on the machine that is running {\tt OSSolverService}. 
+It is not necessary to specify this option.
 
-\item[] {\bf -osrl xxx.osrl}\ \ This is the name of the file that contains the solver solution. A valid file path
-must be given on the machine that is running {\tt OSSolverService}. It is not necessary to specify this option.
+\item[] {\bf -osrl xxx.osrl}\ \ This is the path information and name of the file that contains the solver 
+solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. 
+It is not necessary to specify this option.
 If this option is not specified then the solver solution is displayed to the screen.
 
 
@@ -2583,12 +2586,12 @@ The options are {\tt solve}\index{solve@{\tt solve}|(}, {\tt send}\index{send@{\
 The use of these options is illustrated in the examples below. This option is not required, and the default
 value is {\tt solve}\index{solve@{\tt solve}|)}.
 
-\item[] {\bf -mps  xxx.mps}\ \ This is the name of the mps file if the problem instance is in mps format\index{MPS format}.
-It is assumed that this file is available in a directory on the machine that is running {\tt OSSolverService}.
-The default file format is OSiL\index{OSiL} so this option is not required.
+\item[] {\bf -mps  xxx.mps}\ \ This is the path information and name of the MPS file if the problem instance 
+is in MPS format\index{MPS format}. It is assumed that this file is available on the machine that is running 
+{\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
 
-\item[] {\bf -nl  xxx.nl}\ \ This is the name of the AMPL nl file if the problem instance is in AMPL nl format%
-\index{AMPL nl format}. It is assumed that this file is available in a directory on the machine that is running
+\item[] {\bf -nl  xxx.nl}\ \ This is the path information and name of the AMPL nl file if the problem instance 
+is in AMPL nl format\index{AMPL nl format}. It is assumed that this file is available on the machine that is running
 {\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
 
 \item[] {\bf -solver  solverName}\ \
@@ -2694,29 +2697,6 @@ Then the command line is
 {\bf Windows users} should {\bf note} that the folder separator is always 
 the forward slash (`/') instead of the customary backslash (`$\backslash$').
 
-\medskip
-
-{\bf Some Rules:}
-
-\begin{enumerate}
-\item{}  When using the {\tt send()}\index{send@{\tt send}} or  {\tt solve()}\index{solve@{\tt solve}} methods
-a problem instance file location {\bf must} be specified either at  the command line, in the configuration file,
-or in the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
-
-\item{}  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.
-The service method cannot be specified in the OSoL options file.
-
-\item{}  If the {\tt solver} option is not specified, one of the COIN-OR solvers is used by default.
-The choice depends on the problem features and can be read off from Table~\ref{table:defaultsolvers}.\index{default solver}
-
-\item{}  If the options {\tt send}\index{send@{\tt send}}, {\tt kill}\index{kill@{\tt kill}},
-{\tt knock}\index{knock@{\tt knock}},  {\tt getJobID}\index{getJobID@{\tt getJobID}},
-or {\tt retrieve}\index{retrieve@{\tt retrieve}} are specified,
-a  {\tt serviceLocation}\index{serviceLocation@{\tt serviceLocation}} must be specified.
-
-\end{enumerate}
-
-
 
 Parameters specified in the configure file are overridden by parameters specified at the command line.
 This is convenient if a user has a base configure file and wishes to override only a few options. For example,
@@ -2729,6 +2709,51 @@ or
 \end{verbatim}
 will result in the LINDO\index{LINDO} solver being used even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
 {\tt testlocalclp} configure file.
+
+
+
+\subsection{Rules Governing the Input Parameters}\label{section:ossolverservicerules}
+
+\begin{enumerate}
+\item{}  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.
+The service method cannot be specified in the OSoL options file.
+
+\item{}  If the options {\tt send}\index{send@{\tt send}}, {\tt kill}\index{kill@{\tt kill}},
+{\tt knock}\index{knock@{\tt knock}},  {\tt getJobID}\index{getJobID@{\tt getJobID}},
+or {\tt retrieve}\index{retrieve@{\tt retrieve}} are specified,
+a  {\tt serviceLocation}\index{serviceLocation@{\tt serviceLocation}} must be specified.
+
+\item{}  The preceding rule implies that only the {\tt solve()} method is available for local calls
+to {\tt OSSolverService}.
+
+\item{} Solver selection and the way to specify the location of the optimization instance are different 
+for local and remote calls.
+
+\item{} For local calls, the solver is set using the {\tt -solver} option on either the command line or in the
+config file. The osol file element {\tt <solverToInvoke>} cannot be used for local calls.
+
+\item{} For remote calls, the solver can only be set in the osol file, using the element {\tt <solverToInvoke>}.
+the {\tt -solver} option has no effect.
+
+\item{}  If the {\tt solver} option is not specified, one of the COIN-OR solvers is used by default.
+The choice depends on the problem features and can be read off from Table~\ref{table:defaultsolvers}.%
+\index{default solver} This is the same for both local and remote calls.
+
+\item{}  When using the {\tt send()}\index{send@{\tt send}} or  {\tt solve()}\index{solve@{\tt solve}} methods
+a problem instance file location {\bf must} be specified.
+
+\item{} For local calls, a path to an osil file, nl file or MPS file must be specified 
+either at  the command line or in the configuration file; if more than one file is mentioned, osil files take 
+precedent over nl files, and nl files are seleced ahead of MPS files. For each file class, information on the
+command line supersedes information in the config file. 
+The {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file has no effect.
+
+\item{} For remote calls the instance location is taken from the
+{\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
+Information on the command line or in the configuration file is ignored.
+
+
+\end{enumerate}
 
 
 
@@ -3753,6 +3778,9 @@ You can just issue the {\tt solve} command in AMPL as illustrated below.
 solve;
 \end{verbatim}
 
+Of the six methods described in Section~\ref{section:ossolverservice} only the {\tt solve} method 
+has been implemented to date.
+
 If no options are specified, the default solver is used, depending on the problem characteristics 
 (see Table~\ref{table:defaultsolvers}).\index{default solver}
 %is to use {\tt Clp}\index{Clp@{\tt Clp}} for linear programs. 
@@ -3928,10 +3956,19 @@ All solvers are invoked locally.
 \index{GAMS|(}
 
 This section pertains to GAMS version 23.3 (and above) that now includes support for OS.  
-Here we describe the GAMS  implementation of Optimization Services.  We assume that the user has installed GAMS.   
-In GAMS,  OS is implemented through the {\tt CoinOS} solver that is packaged with GAMS.      The GAMS {\tt CoinOS} solver is really a {\it solver interface} and is linked through the OS library to the 
+Here we describe the GAMS  implementation of Optimization Services.  We assume that the user has installed GAMS.
+
+There are two ways to access an OS Solver Service from GAMS, on the local machine or on a remote server.
+The difference between the two approaches is explained in the next two sections.
+
+\subsubsection{Using GAMS to Invoke the Local OS Solver Service \tt CoinOS}\label{section:gamslocal}
+
+   
+In GAMS,  OS is implemented through the {\tt CoinOS} solver that is packaged with GAMS.      
+The GAMS {\tt CoinOS} solver is really a {\it solver interface} and is linked through the OS library to the 
 following COIN-OR solvers: {\tt Bonmin}, {\tt Cbc}, {\tt Clp},  {\tt Glpk}, and {\tt Ipopt}. 
-Think of {\tt CoinOS} as a {\it metasolver}.    As an example (we assume a Windows operating system and use the .exe extension), consider:
+Think of {\tt CoinOS} as a {\it metasolver}.    As an example (we assume a Windows operating system 
+and use the .exe extension), consider:
 
 \begin{verbatim}
 gams.exe eastborne.gms MIP=CoinOS
@@ -4034,8 +4071,7 @@ see the file
 \begin{verbatim}
 docs/solvers/coin.pdf
 \end{verbatim}
-inside the GAMS directory.
- 
+inside the GAMS directory. 
 An up-to-date online version of this list is available at \url{http://www.coin-or.org/GAMSlinks/gamscoin.pdf}.
 
 
