@@ -83,7 +83,7 @@ public class StandardOSSolver extends DefaultSolver{
 			" -osil " + sInstanceFile + 
 			" -osol " + sOptionFile +
 			" -osrl " + sResultFile + 
-			" -solver " + sOSSolver; 
+			((sOSSolver==null || sOSSolver.trim().length()<=0)?" ":(" -solver " + sOSSolver)); 
 		
 		String[] msCommandLine = {
 				sSolverPath, 
@@ -91,7 +91,15 @@ public class StandardOSSolver extends DefaultSolver{
 				"-osol", sOptionFile,
 				"-osrl", sResultFile,
 				"-solver", sOSSolver};
-
+		if(sOSSolver==null || sOSSolver.trim().length()<=0){
+			String[] msCommandLineAlt = {
+					sSolverPath, 
+					"-osil", sInstanceFile, 
+					"-osol", sOptionFile,
+					"-osrl", sResultFile};
+			msCommandLine = msCommandLineAlt;
+		}
+			
 		//no need to change below
 		boolean bUseSimple = false;
 		if(OSParameter.SERVICE_URI == null || OSParameter.SERVICE_URI.length() <= 0){
