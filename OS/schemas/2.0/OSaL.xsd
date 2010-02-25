@@ -72,10 +72,15 @@
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="linearConstraintCoefficient" type="LinearConstraintCoefficientAnalysis" minOccurs="0">
+			<xs:element name="linearConstraintCoefficient" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="LinearConstraintCoefficientAnalysis"/>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 			<xs:element name="quadraticCoefficients" minOccurs="0">
 				<xs:annotation>
@@ -168,9 +173,6 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="AnalysisStatus">
 		<xs:annotation>
@@ -216,6 +218,11 @@
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="solutionAvailable" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="numberOfOtherProblemAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ProblemKeyWords">
 		<xs:annotation>
@@ -243,15 +250,15 @@
 			<xs:element name="linearity" type="VariableLinearityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherVariableAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables" use="required">
+		<xs:attribute name="numberOfVariables" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="numberOfOtherVariableAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="VariableTypeAnalysis">
@@ -406,15 +413,15 @@
 			<xs:element name="differentialbility" type="ObjectiveDifferentialbilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObjectives" use="required">
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="numberOfOtherObjectiveAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveLinearityAnalysis">
@@ -659,15 +666,15 @@
 			<xs:element name="differentialbility" type="ConstraintDifferentialbilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfConstraints" use="required">
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="numberOfOtherConstraintAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="ConstraintRegionAnalysis">
@@ -675,41 +682,34 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="convexity" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="value" type="xs:double" use="optional" default="1"/>
-					<xs:attribute name="type" use="optional">
-						<xs:simpleType>
-							<xs:restriction base="xs:string">
-								<xs:enumeration value="linear"/>
-								<xs:enumeration value="convex"/>
-								<xs:enumeration value="nonconvex"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:attribute>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="other" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:simpleContent>
-									<xs:extension base="xs:string">
-										<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
-										<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-										<xs:attribute name="incr" type="xs:int" use="optional"/>
-									</xs:extension>
-								</xs:simpleContent>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="name" type="xs:string" use="required"/>
-					<xs:attribute name="value" type="xs:string" use="optional"/>
-					<xs:attribute name="description" type="xs:string" use="optional"/>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="convexity" type="ConstraintRegionConvexity" minOccurs="0"/>
+			<xs:element name="other" type="OtherConstraintRegionAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
+		<xs:attribute name="numberOfOtherConstraintRegionAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="ConstraintRegionConvexity">
+		<xs:attribute name="value" type="xs:double" use="optional" default="1"/>
+		<xs:attribute name="type" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="nonconvex"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OtherConstraintRegionAnalysis">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintBoundednessAnalysis">
 		<xs:annotation>
@@ -1010,6 +1010,11 @@
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfOtherLinearConstraintCoefficientAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="LinearConstraintCoefficientSize">
 		<xs:annotation>
@@ -1041,6 +1046,11 @@
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherQuadraticCoefficientAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionAnalysis">
 		<xs:annotation>
@@ -1058,6 +1068,11 @@
 			<xs:element name="other" type="OtherNonlinearExpressionAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfOtherNonlinearExpressionAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="NlNodeAnalysis">
 		<xs:annotation>
