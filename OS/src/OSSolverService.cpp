@@ -561,9 +561,9 @@ void solve(){
 							
 						}
 						else{// need an osol file with an instanceLocation specified
-							if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-								throw ErrorClass("solve called and no osil, osol with osil specified, GAMS dat, AMPL nl, or mps file given");
-							}
+							 //if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
+								throw ErrorClass("Error: no serviceLocation specified so we cannot call a remote solver service \n and no osil specified, GAMS dat, AMPL nl, or mps file given for a local solve");
+							//}
 						}
 					}
 				}
