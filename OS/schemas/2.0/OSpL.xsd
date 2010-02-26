@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSpL.xsd: version - 2.0.0-->
 	<!--include: since version 1.0.0-->
 	<xs:include schemaLocation="OSrL.xsd"/>
@@ -55,7 +55,7 @@
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="time" type="xs:dateTime" minOccurs="0">
+			<xs:element name="timeStamp" type="xs:dateTime" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 1.0.0</xs:documentation>
 				</xs:annotation>
@@ -119,9 +119,9 @@
 				<xs:attribute name="status" use="required">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:enumeration value="success"/>
-							<xs:enumeration value="error"/>
+							<xs:enumeration value="normal"/>
 							<xs:enumeration value="warning"/>
+							<xs:enumeration value="error"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>

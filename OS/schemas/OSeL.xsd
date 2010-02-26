@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSeL: version - 2.0.0-->
 	<xs:include schemaLocation="OSoL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -37,7 +37,7 @@
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="serviceURI" type="xs:anyURI">
+			<xs:element name="serviceURI" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -47,7 +47,17 @@
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="registrationDate" type="xs:dateTime" minOccurs="0">
+			<xs:element name="creationTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="registrationTime" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="lastModificationTime" type="xs:dateTime" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -102,6 +112,7 @@
 		</xs:annotation>
 		<xs:all>
 			<xs:element name="access" type="Access" minOccurs="0"/>
+			<xs:element name="limits" type="AccessLimits" minOccurs="0"/>
 			<xs:element name="owner" type="Owner" minOccurs="0"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="links" type="Links" minOccurs="0"/>
@@ -268,7 +279,6 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="type" type="AccessType" default="open" minOccurs="0"/>
-			<xs:element name="limits" type="AccessLimits" minOccurs="0"/>
 		</xs:sequence>
 		<xs:attribute name="commercial" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
@@ -304,8 +314,8 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:element name="link" type="Link" maxOccurs="unbounded"/>
+		<xs:sequence>
+			<xs:element name="link" type="Link" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfLinks" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1044,6 +1054,9 @@
 		</xs:all>
 	</xs:complexType>
 	<xs:simpleType name="MatchType">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="specialized"/>
 			<xs:enumeration value="moreGeneral"/>
@@ -1052,6 +1065,9 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:complexType name="OtherCategoryValueMatchType">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="MatchType">
 				<xs:attribute name="value" type="xs:string" use="optional"/>
@@ -1060,6 +1076,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OtherMatchType">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="category" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>

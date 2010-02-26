@@ -217,7 +217,6 @@
 			<xs:element name="keyWords" type="ProblemKeyWords" minOccurs="0"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="solutionAvailable" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="numberOfOtherProblemAnalyses" type="xs:nonNegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
