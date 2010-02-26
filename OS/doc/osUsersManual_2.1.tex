@@ -2575,7 +2575,7 @@ If this option is not specified then the solver solution is displayed to the scr
 this is used as input  to the {\tt knock} method.
 
 \item[] {\bf -osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL); 
-this the  output  string from the {\tt knock}  and {\tt kill} method.
+this is the  output  string from the {\tt knock}  and {\tt kill} method.
 
 \item[] {\bf -serviceLocation url}\ \ This is the URL of the solver service. It is not required, and if not specified it is assumed that the problem is solved locally.
 
@@ -2644,7 +2644,7 @@ $\qquad{}^2$Requires Fortran compiler (see Section~\ref{section:ipopt})
 \centering
 \label{table:defaultsolvers}\index{default solver}
 \vskip 8pt
- \begin{tabular}{l|c|}
+\begin{tabular}{l|c}
 Problem type & Default solver \\ \hline
 Linear, continuous   & Clp \\
 Linear, integer      & Cbc \\
@@ -2742,15 +2742,24 @@ The choice depends on the problem features and can be read off from Table~\ref{t
 \item{}  When using the {\tt send()}\index{send@{\tt send}} or  {\tt solve()}\index{solve@{\tt solve}} methods
 a problem instance file location {\bf must} be specified.
 
-\item{} For local calls, a path to an osil file, nl file or MPS file must be specified 
+\item{} \label{itemize:locallinstance}
+For local calls, a path to an osil file, nl file or MPS file must be specified 
 either at  the command line or in the configuration file; if more than one file is mentioned, osil files take 
 precedent over nl files, and nl files are seleced ahead of MPS files. For each file class, information on the
 command line supersedes information in the config file. 
-The {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file has no effect.
+The {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file has no effect. 
+This means in particular that the optimization instance {\bf must} reside on the local computer.
 
-\item{} For remote calls the instance location is taken from the
-{\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
-Information on the command line or in the configuration file is ignored.
+\item{} For remote calls the instance location can be specified either as a command parameter 
+(on the command line or in a config file)
+or through the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
+The local server first searches the command line and config file for an instance as explained 
+under rule~\ref{itemize:locallinstance}. This instance is translated to osil format if necessary and passed 
+along to the remote computer, along with the options file, if one is specified. The remote solver server reads 
+the options file for the occurrence of an 
+{\tt <instanceLocation>} element and if present retrieves the corresponding file. If two instance files
+are specified in this way --- one through the local command interface, the other in an options file --- 
+the remote solver server is free to pick which one to choose. If neither method is used, an error is thrown.
 
 
 \end{enumerate}
@@ -2759,12 +2768,15 @@ Information on the command line or in the configuration file is ignored.
 
 \subsection{Solving Problems Locally}
 
-Generally, when solving a problem locally the user will use the {\tt solve}\index{solve@{\tt solve}} service method.
-The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  This is illustrated
-in Figure~\ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} reads a file on the hard drive
-with the optimization instance, usually in OSiL\index{OSiL} format. The optimization instance is parsed into a string
-which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} (see~\ref{section:oslibrary}),
-which is linked with various solvers.
+Generally, when solving a problem locally the user will use the {\tt solve}\index{solve@{\tt solve}} service 
+method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  
+This is illustrated in Figure~\ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} 
+reads a file on the hard drive with the optimization instance, usually in OSiL\index{OSiL} format. 
+The optimization instance is parsed into a string which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} 
+(see~\ref{section:oslibrary}), which is linked with various solvers. 
+Similarly an option file in OSoL\index{OSoL} format is parsed into a string and passed to the {\tt OSLibrary}. 
+{\it No interpretation of the options is done at this stage}, so that any {\tt <solverToInvoke>} or
+{\tt <instanceLocation>} directives in the OSoL file will be ignored for local solves.
 The result of the optimization is passed back to the {\tt OSSolverService} as a string in OSrL\index{OSrL} format.
 
 
@@ -3051,7 +3063,7 @@ knowing when a job is complete is to use the {\tt knock}\index{knock@{\tt knock}
 
 Note that in all of these examples we provided a value for the {\tt <solverToInvoke>} element.
 %The remote solver service will use {\tt Cbc} if another solver is not specified.%
-A default solver is used (see tableref{table:defaultsolvers}\index{default solver} if another solver is not specified.%
+A default solver is used (see Table~\ref{table:defaultsolvers}\index{default solver} if another solver is not specified.%
 \index{send@{\tt send}|)}
 
 
@@ -4110,7 +4122,7 @@ service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 %{\tt  Cbc} is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), {\tt Bonmin} is 
 %the default solver.  
 Default solver values are present, depending on the problem for characteristics. For more details, consult 
-table~\ref{table:defaultsolvers} (p.\pageref{table:defaultsolvers}).
+Table~\ref{table:defaultsolvers} (p.\pageref{table:defaultsolvers}).
 In order to control the solver used, it is necessary to specify the name of the solver
 inside the XML tag {\tt <solverToInvoke>}. The example  {\tt solveroptions.osol} file contains the XML tag
 \begin{verbatim}
