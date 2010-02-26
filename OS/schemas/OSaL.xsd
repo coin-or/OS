@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osal" type="OSaL">
@@ -213,7 +213,26 @@
 					<xs:restriction base="xs:string"/>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element name="size" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="size" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:nonNegativeInteger">
+							<xs:attribute name="unit" use="optional" default="byte">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="byte"/>
+										<xs:enumeration value="kilobyte"/>
+										<xs:enumeration value="megabyte"/>
+										<xs:enumeration value="gigabyte"/>
+										<xs:enumeration value="terabyte"/>
+										<xs:enumeration value="petabyte"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="keyWords" type="ProblemKeyWords" minOccurs="0"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
