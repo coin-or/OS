@@ -441,18 +441,16 @@ void solve(){
 							
 							getOSiLFromGams();
 					}
-						else{// need an osol file with an instanceLocation specified
-							if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-								throw ErrorClass("solve called and no osil, osol with osil specified, nl, or mps file given");
-							}
+						else{// send an empty osil string
+								osoptions->osil = "";
 						}
 					}
 				}
 			}
 			// place a remote call
+			
+		
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			
-			
 			
 			if(osoptions->osol == ""){// we have no osol string
 			
@@ -462,10 +460,6 @@ void solve(){
 				outStr <<  "/OSoL.xsd\"></osol>";	
 				osoptions->osol = outStr.str();
 			}
-			
-			
-			
-			
 			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
 			if(osoptions->osrlFile != ""){
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
@@ -729,8 +723,8 @@ void send(){
 				if(osoptions->mpsFile != ""){
 					getOSiLFromMps();
 				}
-				else{
-					throw ErrorClass("solve called and no osil, nl, or mps file given");
+				else{// send an empty osil string
+					osoptions->osil = "";
 				}
 			}
 		}

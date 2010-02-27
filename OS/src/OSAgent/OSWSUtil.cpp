@@ -133,13 +133,14 @@ string WSUtil::sendSOAPMessage(string theSOAP, string serviceIP, unsigned int se
 		return ret_message.str();  
 	}
 	catch(const ErrorClass& eclass){
-		OSResult osresult;
-		OSrLWriter osrlwriter;
-		string osrl;
-		osresult.setGeneralMessage( eclass.errormsg);
-		osresult.setGeneralStatusType( "error");
-		osrl = osrlwriter.writeOSrL( &osresult);
-		throw ErrorClass( osrl);
+//		OSResult osresult;
+//		OSrLWriter osrlwriter;
+//		string osrl;
+//		osresult.setGeneralMessage( eclass.errormsg);
+//		osresult.setGeneralStatusType( "error");
+//		osrl = osrlwriter.writeOSrL( &osresult);
+//		throw ErrorClass( osrl);
+		throw ErrorClass( eclass.errormsg);
 	}
 }
 
