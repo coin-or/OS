@@ -104,7 +104,7 @@ LIBS += @clplib@
 LIBS += @coinutilslib@ 
 
 
-LIBS += $(ASL)
+LIBS += $(ASLLIB)
 
  
 #DONE ADDING LIBS
