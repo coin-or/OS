@@ -2548,10 +2548,8 @@ These methods are explained in more detail in Section~\ref{section:servicemethod
 \subsection{OSSolverService Input Parameters}
 
 At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
-Not all the parameters are required. However, 
-there are some rules that must be followed. We collected all these rules in the next 
-section~(\ref{section:ossolverservicerules}).
-%if the {\tt solve}\index{solve@{\tt solve}} or {\tt send}\index{send@{\tt send}} service    
+Not all the parameters are required. 
+%However, if the {\tt solve}\index{solve@{\tt solve}} or {\tt send}\index{send@{\tt send}} service    
 %methods  (see Section~\ref{section:servicemethods} ) are invoked a problem instance location must be specified.
 
 \begin{itemize}
@@ -2710,9 +2708,7 @@ or
 will result in the LINDO\index{LINDO} solver being used even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
 {\tt testlocalclp} configure file.
 
-
-
-\subsection{Rules Governing the Input Parameters}\label{section:ossolverservicerules}
+Some things to note:
 
 \begin{enumerate}
 \item{}  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.
@@ -2723,46 +2719,53 @@ The service method cannot be specified in the OSoL options file.
 or {\tt retrieve}\index{retrieve@{\tt retrieve}} are specified,
 a  {\tt serviceLocation}\index{serviceLocation@{\tt serviceLocation}} must be specified.
 
-\item{}  The preceding rule implies that only the {\tt solve()} method is available for local calls
+\item{}  Only the {\tt solve()} method is available for local calls
 to {\tt OSSolverService}.
 
-\item{} Solver selection and the way to specify the location of the optimization instance are different 
-for local and remote calls.
-
-\item{} For local calls, the solver is set using the {\tt -solver} option on either the command line or in the
-config file. The osol file element {\tt <solverToInvoke>} cannot be used for local calls.
-
-\item{} For remote calls, the solver can only be set in the osol file, using the element {\tt <solverToInvoke>}.
-the {\tt -solver} option has no effect.
-
-\item{}  If the {\tt solver} option is not specified, one of the COIN-OR solvers is used by default.
-The choice depends on the problem features and can be read off from Table~\ref{table:defaultsolvers}.%
-\index{default solver} This is the same for both local and remote calls.
-
 \item{}  When using the {\tt send()}\index{send@{\tt send}} or  {\tt solve()}\index{solve@{\tt solve}} methods
-a problem instance file location {\bf must} be specified.
-
-\item{} \label{itemize:locallinstance}
-For local calls, a path to an osil file, nl file or MPS file must be specified 
-either at  the command line or in the configuration file; if more than one file is mentioned, osil files take 
-precedent over nl files, and nl files are seleced ahead of MPS files. For each file class, information on the
-command line supersedes information in the config file. 
-The {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file has no effect. 
-This means in particular that the optimization instance {\bf must} reside on the local computer.
-
-\item{} For remote calls the instance location can be specified either as a command parameter 
-(on the command line or in a config file)
-or through the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
-The local server first searches the command line and config file for an instance as explained 
-under rule~\ref{itemize:locallinstance}. This instance is translated to osil format if necessary and passed 
-along to the remote computer, along with the options file, if one is specified. The remote solver server reads 
-the options file for the occurrence of an 
-{\tt <instanceLocation>} element and if present retrieves the corresponding file. If two instance files
-are specified in this way --- one through the local command interface, the other in an options file --- 
-the remote solver server is free to pick which one to choose. If neither method is used, an error is thrown.
-
+a problem instance must be specified.
 
 \end{enumerate}
+
+
+\subsection{The Command Line Parser}\label{section:commandlineparser}
+
+The top layer of the local OSSolverService is a command line parser that parses the command line and
+the config file (if one is specified) and passes the information on to a local solver or a remote solver service,
+depending on whether a {\tt serviceLocation} was specified. If a 
+{\tt serviceLocation} is specified a call is made to a remote solver service, otherwise a local solver is called.
+
+\medskip
+
+If a local solve is indicated, we pass to a solver in the OSLibrary two things: 
+an OSoL file if one has been specified and a problem instance. The problem instance 
+is the instance in the OSiL file specified by the osil option. If there is no OSiL file, 
+then it is the instance specified in the nl file. If there is no nl file it is the 
+instance in the mps file. If no OSiL, nl or mps file is specified an error is thrown. 
+
+The OSoL file is simply passed on to the OSLibrary. One 
+can also specify which solver to use in the OSLibrary through the {\tt -solver} option. If this 
+option is empty a default solver is selected (see Table~\ref{table:defaultsolvers}\index{default solver}).
+The OSoL file elements {\tt <solverToInvoke>} and {\tt instanceLocation} cannot be used for local calls.
+
+\medskip
+
+If the {\tt serviceLocation} parameter is used, a call is placed to the remote solver service
+specified in the {\tt serviceLocation} parameter. 
+Two strings are passed to the remote solver service: a string which is the OSoL file 
+if one has been specified, or the empty string otherwise, and a string containing an 
+instance if one has been specified. The instance can be specified using the {\tt -osil}, {\tt -nl}, or 
+{\tt -mps}option. If an OSiL file is specified in the {\tt -osil} option, it is used. If there is no 
+OSiL file, then the instance specified in the nl file is used. If there is no nl file,  
+the mps file is used. If no file is given, an empty string is sent.
+
+
+
+For remote calls, the solver can only be set in the osol file, using the element {\tt <solverToInvoke>};
+the {\tt -solver} option has no effect.
+
+
+
 
 
 
@@ -2856,7 +2859,8 @@ It is not necessary to use the Tomcat/Axis combination.
 
 See Figure~\ref{figure:ossolverservice} for an illustration of this process.
 The client machine uses {\tt OSSolverService} executable to call one of the
-six service methods, e.g., {\tt solve}\index{solve@{\tt solve}}. The  information such as the problem
+six service methods, e.g., {\tt solve}\index{solve@{\tt solve}}. 
+The  information such as the problem
 instance in OSiL\index{OSiL} format and solver options in OSoL\index{OSoL} format are packaged into
 a SOAP\index{SOAP protocol} envelope and sent to the server. The server is running the Java Web
 Service {\tt OSSolverService.jws}. This Java program running in the Tomcat
@@ -2868,6 +2872,18 @@ on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn
 calls  the executable {\tt OSSolverService} on the server.
 The Java solver service passes options to the local {\tt OSSolverService}
 such as where the OSiL file is located and where to write the solution result.
+
+
+For remote calls the instance location can be specified either as a command parameter 
+(on the command line or in a config file)
+or through the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
+If two instance files
+are specified in this way --- one through the local command interface, the other in an options file --- 
+the remote solver server is free to pick which one to choose.
+
+
+
+
 
 \begin{figure}
 \centering
