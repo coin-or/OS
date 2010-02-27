@@ -382,6 +382,7 @@ int main(int argC, const char* argV[])
 		// now call the correct serviceMethod
 		// solve is the default
 		if( osoptions->serviceMethod == "") solve();
+		if( (osoptions->serviceMethod[ 0] == 's') && (osoptions->serviceMethod[ 1] == 'o') )  solve();
 		else{
 			switch(osoptions->serviceMethod[ 0]){
 				case 'g': 
@@ -424,8 +425,8 @@ void solve(){
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	// now solve either remotely or locally
-	if( osoptions->serviceLocation != "" ){
-		try{ //remote try
+	try{
+		if( osoptions->serviceLocation != "" ){
 			// call a method here to get OSiL if we have an nl or mps file
 			if(osoptions->osil == ""){
 				//we better have an nl file present or mps file or osol file
@@ -448,7 +449,6 @@ void solve(){
 				}
 			}
 			// place a remote call
-			
 		
 			osagent = new OSSolverAgent( osoptions->serviceLocation );
 			
@@ -473,55 +473,9 @@ void solve(){
 			else cout << osrl << endl;
 			delete osagent;
 			osagent = NULL;
-		}//end remote try
-		
-		catch(const ErrorClass& eclass){
-			OSResult *osresult = NULL;
-			OSrLWriter *osrlwriter = NULL;
-			osrlwriter = new OSrLWriter();
-			osresult = new OSResult();
-			osresult->setGeneralMessage( eclass.errormsg);
-			osresult->setGeneralStatusType( "error");
-			std::string osrl = osrlwriter->writeOSrL( osresult);
-			if(osoptions->osrlFile != ""){
-				//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-				fileUtil->writeFileFromString(osoptions->osrlFile,  osrl);
-				if(osoptions->browser != ""){
-					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
-					const char *ch = &str[ 0];
-					std::system( ch );
-				}
-			}
-			else{
-				//std::cout <<  eclass.errormsg << std::endl;
-				std::cout <<  osrl << std::endl;
-			}
-			delete osresult;
-			osresult = NULL;
-			delete osrlwriter;
-			osrlwriter = NULL;
-			delete fileUtil;
-			fileUtil = NULL;		
-			/**
-			if(osoptions->osrlFile != ""){
-				fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-				if(osoptions->browser != ""){
-					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
-					const char *ch = &str[ 0];
-					std::system( ch );
-				}
-			}
-			else{
-				//std::cout <<  eclass.errormsg << std::endl;
-				std::cout <<  osrl << std::endl;
-				std::cout <<  eclass.errormsg  << std::endl;
-			}
-			delete fileUtil;
-			fileUtil  = NULL;
-			*/
-		}//end remote catch
-	} else{// solve locally
-		try{
+
+		} else{// solve locally
+
 			if(osoptions->osil != ""){
 				osilreader = new OSiLReader();
 				osrl = buildSolver(osoptions->solverName, osoptions->osol, osilreader->readOSiL( osoptions->osil));
@@ -575,55 +529,74 @@ void solve(){
 				}
 			}
 			else cout << osrl << endl;
-		}//end local solve try
-		
-		catch(const ErrorClass& eclass){
 			
-			OSResult *osresult = NULL;
-			OSrLWriter *osrlwriter = NULL;
-			osrlwriter = new OSrLWriter();
-			osresult = new OSResult();
-			osresult->setGeneralMessage( eclass.errormsg);
-			osresult->setGeneralStatusType( "error");
-			std::string osrl = osrlwriter->writeOSrL( osresult);
-			if(osoptions->osrlFile != ""){
-				//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-				fileUtil->writeFileFromString(osoptions->osrlFile,  osrl);
-				if(osoptions->browser != ""){
-					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
-					const char *ch = &str[ 0];
-					std::system( ch );
-				}
-			}
-			else{
-				//std::cout <<  eclass.errormsg << std::endl;
-				std::cout <<  osrl << std::endl;
-			}
-			delete osresult;
-			osresult = NULL;
-			delete osrlwriter;
-			osrlwriter = NULL;
-			delete fileUtil;
-			fileUtil = NULL;
-		}//end local catch
+
+			
+		}//end of local solve
 		
 		
-	}//end of local solve
-	//garbage collection
-	if(osilreader != NULL) delete osilreader;
-	osilreader = NULL;
-	if(mps2osil != NULL) delete mps2osil;
-	mps2osil = NULL;
-	#ifdef COIN_HAS_ASL
-	if(nl2osil != NULL)  delete nl2osil;
-	nl2osil = NULL;
-	#endif
-	#ifdef COIN_HAS_GAMSUTILS
-	if(gams2osil != NULL)  delete gams2osil;
-	gams2osil = NULL;
-	#endif 
-	delete fileUtil;
-	fileUtil  = NULL;
+		//garbage collection
+		if(osilreader != NULL) delete osilreader;
+		osilreader = NULL;
+		if(mps2osil != NULL) delete mps2osil;
+		mps2osil = NULL;
+		#ifdef COIN_HAS_ASL
+		if(nl2osil != NULL)  delete nl2osil;
+		nl2osil = NULL;
+		#endif
+		#ifdef COIN_HAS_GAMSUTILS
+		if(gams2osil != NULL)  delete gams2osil;
+		gams2osil = NULL;
+		#endif 
+		delete fileUtil;
+		fileUtil  = NULL;
+	
+	}//end try
+	catch(const ErrorClass& eclass){
+		
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		std::string osrl = osrlwriter->writeOSrL( osresult);
+		if(osoptions->osrlFile != ""){
+			//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+			fileUtil->writeFileFromString(osoptions->osrlFile,  osrl);
+			if(osoptions->browser != ""){
+				std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
+				const char *ch = &str[ 0];
+				std::system( ch );
+			}
+		}
+		else{
+			//std::cout <<  eclass.errormsg << std::endl;
+			std::cout <<  osrl << std::endl;
+		}
+		//catch garbage collection
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
+		
+		//regular garbage collection
+		if(osilreader != NULL) delete osilreader;
+		osilreader = NULL;
+		if(mps2osil != NULL) delete mps2osil;
+		mps2osil = NULL;
+#ifdef COIN_HAS_ASL
+		if(nl2osil != NULL)  delete nl2osil;
+		nl2osil = NULL;
+#endif
+#ifdef COIN_HAS_GAMSUTILS
+		if(gams2osil != NULL)  delete gams2osil;
+		gams2osil = NULL;
+#endif 		
+		delete fileUtil;
+		fileUtil = NULL;
+	}//end local catch
+	
 }//end solve
 
 void getJobID(){
@@ -736,9 +709,6 @@ void send(){
 				jobID =  osagent->getJobID( sOSoL) ;
 				// insert the jobID into the default osol
 				iStringpos = sOSoL.find("</general");
-#ifdef DEBUG_CL_INTERFACE
-				cout << "startel ==  " << iStringpos << endl;
-#endif
 				if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
 			}
 			else{
@@ -756,10 +726,6 @@ void send(){
 			}
 			cout << sOSoL << endl;
 			bSend = osagent->send(osoptions->osil, sOSoL);
-#ifdef DEBUG_CL_INTERFACE
-			if(bSend == true) cout << "send is true" << endl;
-			else cout << "send is false" << endl;
-#endif
 			delete  osagent;
 		}
 		else{
