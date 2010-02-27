@@ -711,20 +711,10 @@ void send(){
 				iStringpos = sOSoL.find("</general");
 				if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
 			}
-			else{
-				// we have an osol file use it for the sOSoL
-				sOSoL = osoptions->osol;
-				// see if we have a jobID
-				iStringpos = sOSoL.find("<jobID");
-				// if we have a jobId send out the osil and osol files
-				if(iStringpos == std::string::npos){
-					// get a jobID and insert it
-					jobID =  osagent->getJobID( osoptions->osol) ;
-					iStringpos = sOSoL.find("</general");
-					if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
-				}
+			else {
+				sOSoL = osoptions->osolFile;
 			}
-			cout << sOSoL << endl;
+
 			bSend = osagent->send(osoptions->osil, sOSoL);
 			delete  osagent;
 		}
