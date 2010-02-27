@@ -84,7 +84,8 @@
 #include "OShL.h"
 #include "OSErrorClass.h"
 #include "CoinError.hpp"
-
+#include "OSOption.h"
+#include "OSOptionsStruc.h"  
 #include <sstream>
 
 #ifdef HAVE_CSTRING
@@ -104,13 +105,33 @@
 #include <iostream>
 //AMPL includes must be last.
 #include <asl.h>
+
+
+
+
+#define MAXCHARS 5000 
+
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner ); 
+//void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
+void setyyextra(osOptionsStruc *osoptions, void* scanner);
+int ossslex(void* scanner );
+int ossslex_init(void** ptr);
+int ossslex_destroy (void* scanner );
+
+
 using std::cerr;
 using std::cout;
 using std::endl;
 using std::ostringstream;
 
 void getAmplClientOptions(char *options, std::string *solverName, 
-std::string *optionFile, std::string *serviceLocation);
+   std::string *optionFile, std::string *serviceLocation);
+
+
+
+
+
 int main(int argc, char **argv)
 {
 	WindowsErrorPopupBlocker();
@@ -170,6 +191,7 @@ int main(int argc, char **argv)
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
 		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceLocation);
 	}
+
 
 	std::cout << " solver Name = " << sSolverName << std::endl;
 	std::cout << " solver Options = " << osol << std::endl;
@@ -449,100 +471,172 @@ int main(int argc, char **argv)
 } // end main
 
 
+//void getAmplClientOptions(char *amplclient_options, std::string *solverName, 
+//	std::string *solverOptions, std::string *serviceLocation){
+//
+//	
+//	std::string amplOptions = "";
+//	std::ostringstream outStr; 
+//	std::string::size_type  pos1;
+//	std::string::size_type  pos2;
+//	std::string osolFileName = "";
+//	FileUtil *fileUtil = NULL;
+//
+//	size_t i = 0;
+//	size_t n = strlen( amplclient_options);
+//	try{
+//		while( i < n){
+//			//std::cout << amplclient_options[ i] << std::endl;
+//			if( amplclient_options[ i]  == ' '){
+//				outStr << ',';
+//				i++;
+//				while( amplclient_options[ i] == ' '  ){
+//					i++;
+//				}
+//			}
+//			else{
+//				outStr << amplclient_options[ i];
+//				i++;
+//			}
+//
+//		}
+//		//end with a comma
+//		outStr << ',';
+//		amplOptions = outStr.str();
+//		
+//		
+//		// see if a solver has been specified
+//		pos1 = amplOptions.find( "solver");
+//		if(pos1 != std::string::npos){
+//			//we have a solver specified
+//			pos1 += 6;
+//			//std::cout << "position 1 = " << pos1 << std::endl;
+//			// we are at at the comma after solver
+//			pos2 = amplOptions.find( ",", pos1 + 1);
+//			//std::cout << "position 2 = " << pos2 << std::endl;
+//			if(pos2 != std::string::npos){
+//				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
+//				*solverName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
+//				
+//			}
+//		}
+//		
+//		
+//		// see if an option file has been specified
+//		pos1 = amplOptions.find( "optionFile");
+//		if(pos1 != std::string::npos){
+//			//we have a option file specified  specified
+//			pos1 += 10;
+//			//std::cout << "position 1 = " << pos1 << std::endl;
+//			// we are at at the comma after optionfile
+//			pos2 = amplOptions.find( ",", pos1 + 1);
+//			//std::cout << "position 2 = " << pos2 << std::endl;
+//			if(pos2 != std::string::npos){
+//				//std::cout << "optionFile Name = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
+//				osolFileName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
+//			}
+//		}
+//		
+//		//now go ahead and read the OSoL file if specified
+//		
+//		if( osolFileName.size() > 0 ){
+//			fileUtil = new FileUtil();
+//			*solverOptions  = fileUtil->getFileAsString( osolFileName.c_str());
+//			delete fileUtil;
+//			fileUtil = NULL;
+//		}else{ // go ahead and create the osol string
+//			*solverOptions = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"></osol>";
+//		}
+//		
+//		// see if a serviceLocation has been specified
+//		pos1 = amplOptions.find( "serviceLocation");
+//		if(pos1 != std::string::npos){
+//			//we have a serviceLocation specified
+//			pos1 += 15;
+//			//std::cout << "position 1 = " << pos1 << std::endl;
+//			// we are at at the comma after solver
+//			pos2 = amplOptions.find( ",", pos1 + 1);
+//			//std::cout << "position 2 = " << pos2 << std::endl;
+//			if(pos2 != std::string::npos){
+//				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
+//				*serviceLocation = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
+//				
+//			}
+//		}
+//		
+//
+//	}//end try
+//	catch(const ErrorClass& eclass){
+//		cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
+//		throw ErrorClass( eclass.errormsg) ;
+//	}	
+//}//getAmplClientOptions
+
+
+
+
+
 void getAmplClientOptions(char *amplclient_options, std::string *solverName, 
-	std::string *solverOptions, std::string *serviceLocation){
-
+						  std::string *solverOptions, std::string *serviceLocation){
 	
-	std::string amplOptions = "";
-	std::ostringstream outStr; 
-	std::string::size_type  pos1;
-	std::string::size_type  pos2;
-	std::string osolFileName = "";
-	FileUtil *fileUtil = NULL;
-
-	size_t i = 0;
-	size_t n = strlen( amplclient_options);
-	try{
-		while( i < n){
-			//std::cout << amplclient_options[ i] << std::endl;
-			if( amplclient_options[ i]  == ' '){
-				outStr << ',';
-				i++;
-				while( amplclient_options[ i] == ' '  ){
-					i++;
-				}
-			}
-			else{
-				outStr << amplclient_options[ i];
-				i++;
-			}
-
-		}
-		//end with a comma
-		outStr << ',';
-		amplOptions = outStr.str();
+	osOptionsStruc *osoptions; 
+	
+	void* scanner;
+	// initialize the OS options structure
+	
+	osoptions = new osOptionsStruc();
+	osoptions->configFile = ""; 
+	osoptions->osilFile = ""; 
+	osoptions->osil = ""; 
+	osoptions->osolFile = ""; 
+	osoptions->osol = "";  
+	osoptions->osrlFile = ""; 
+	osoptions->osrl = ""; 
+	//osoptions->insListFile = ""; 
+	osoptions->insList = ""; 
+	osoptions->serviceLocation = "";
+	osoptions->serviceMethod = ""; 
+	osoptions->osplInputFile = ""; 
+	osoptions->osplOutputFile = ""; 
+	osoptions->mpsFile = ""; 
+	osoptions->nlFile = ""; 
+	osoptions->gamsControlFile = "";
+	osoptions->solverName = ""; 
+	osoptions->browser = ""; 
+	osoptions->invokeHelp = false;
+	osoptions->writeVersion = false;
+	try{	
+		//cout << "Input String = "  << amplclient_options << endl;
+		ossslex_init( &scanner);
+		//std::cout << "Call Text Extra" << std::endl;
+		setyyextra( osoptions, scanner);
+		//std::cout << "Call scan string " << std::endl;
+		osss_scan_string( amplclient_options, scanner); 
+		//std::cout << "call ossslex" << std::endl;
+		ossslex( scanner);
+		ossslex_destroy( scanner);
+		//std::cout << "done with call to ossslex" << std::endl;
+//		
+//		cout << "HERE ARE THE OPTION VALUES:" << endl;
+//		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
+//		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
+//		if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
+//		if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
+//		//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
+//		if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
+//		if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
+//		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
+//		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
+//		if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
+//		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
+//		if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
+//		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
+//		
 		
+		*solverName = osoptions->solverName;
+		*solverOptions = osoptions->osolFile;
+		*serviceLocation = osoptions->serviceLocation;
 		
-		// see if a solver has been specified
-		pos1 = amplOptions.find( "solver");
-		if(pos1 != std::string::npos){
-			//we have a solver specified
-			pos1 += 6;
-			//std::cout << "position 1 = " << pos1 << std::endl;
-			// we are at at the comma after solver
-			pos2 = amplOptions.find( ",", pos1 + 1);
-			//std::cout << "position 2 = " << pos2 << std::endl;
-			if(pos2 != std::string::npos){
-				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
-				*solverName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-				
-			}
-		}
-		
-		
-		// see if an option file has been specified
-		pos1 = amplOptions.find( "optionFile");
-		if(pos1 != std::string::npos){
-			//we have a option file specified  specified
-			pos1 += 10;
-			//std::cout << "position 1 = " << pos1 << std::endl;
-			// we are at at the comma after optionfile
-			pos2 = amplOptions.find( ",", pos1 + 1);
-			//std::cout << "position 2 = " << pos2 << std::endl;
-			if(pos2 != std::string::npos){
-				//std::cout << "optionFile Name = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
-				osolFileName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-			}
-		}
-		
-		//now go ahead and read the OSoL file if specified
-		
-		if( osolFileName.size() > 0 ){
-			fileUtil = new FileUtil();
-			*solverOptions  = fileUtil->getFileAsString( osolFileName.c_str());
-			delete fileUtil;
-			fileUtil = NULL;
-		}else{ // go ahead and create the osol string
-			*solverOptions = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"></osol>";
-		}
-		
-		// see if a serviceLocation has been specified
-		pos1 = amplOptions.find( "serviceLocation");
-		if(pos1 != std::string::npos){
-			//we have a serviceLocation specified
-			pos1 += 15;
-			//std::cout << "position 1 = " << pos1 << std::endl;
-			// we are at at the comma after solver
-			pos2 = amplOptions.find( ",", pos1 + 1);
-			//std::cout << "position 2 = " << pos2 << std::endl;
-			if(pos2 != std::string::npos){
-				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
-				*serviceLocation = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-				
-			}
-		}
-		
-
 	}//end try
 	catch(const ErrorClass& eclass){
 		cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;

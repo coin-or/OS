@@ -173,8 +173,6 @@ int ossslex_destroy (void* scanner );
 std::string get_help();
 std::string get_version();
 
-
- 
 // the serviceMethods  
 void solve();  
 void getJobID(); 
