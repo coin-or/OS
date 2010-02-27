@@ -504,6 +504,8 @@ int main( ){
 		* Create a result object and get the optimal objective
 		* and primal variable values
 		*/	
+		std::cout  << "call get osresult" << std::endl;
+		std::cout << solver->osrl << std::endl;
 		getOSResult( solver->osrl);
 		
 		// start garbage collection
