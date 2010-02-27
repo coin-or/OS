@@ -879,7 +879,7 @@ void BonminSolver::writeResult(){
 			case TMINLP::LIMIT_EXCEEDED:
 				solutionDescription = "LIMIT_EXCEEDED[BONMIN]: A resource limit was exceeded, we provide the current solution.";
 				//std::cout << solutionDescription << std::endl;
-				osresult->setSolutionStatus(solIdx,  "stoppedByLimit", solutionDescription);
+				osresult->setSolutionStatus(solIdx,  "other", solutionDescription);
 				//osresult->setPrimalVariableValuesDense(solIdx, const_cast<double*>(x));
 				//osresult->setDualVariableValuesDense(solIdx, const_cast<double*>( lambda));	
 				/* Retrieve the solution */
