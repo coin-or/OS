@@ -264,18 +264,18 @@ int main( ){
 
 		/******************** STEP 2 ************************
 		* Create an OSOption object and give the solver options
-//		*/			
-//		osoption = new OSOption();
-//		/** 
-//		 *  here is the format for setting options:
-//		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
-//		 *	std::string category, std::string type, std::string description);
-//		 */
-//		 
-//		//turn on SYMPHONY output
-//		osoption->setAnotherSolverOption("verbosity","0","symphony","","","");
-//		osolwriter = new OSoLWriter();
-//		std::cout << osolwriter-> writeOSoL( osoption);
+		*/			
+		osoption = new OSOption();
+		/** 
+		 *  here is the format for setting options:
+		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		 *	std::string category, std::string type, std::string description);
+		 */
+		 
+		//turn on SYMPHONY output
+		osoption->setAnotherSolverOption("verbosity","0","symphony","","","");
+		osolwriter = new OSoLWriter();
+		std::cout << osolwriter-> writeOSoL( osoption);
 		
 		/******************** STEP 3 ************************
 		* Create the solver object -- for a CoinSolver we must specify
@@ -288,24 +288,24 @@ int main( ){
 //		* Give the solver the instance and options and solve
 //		*/			
 		solver->osinstance = osinstance;
-		//		solver->osoption = osoption;	
-				solver->solve();
+		solver->osoption = osoption;	
+		solver->solve();
 //		
 //		/******************** STEP 5 ************************
 //		* Create a result object and get the optimal objective
 //		* and primal variable values
 //		*/	
-//		getOSResult( solver->osrl);
-//		// start garbage collection
+		getOSResult( solver->osrl);
+		// start garbage collection
 		delete osilreader;
 		osilreader = NULL;
 		delete solver;
 		solver = NULL;
-		//delete osoption;
-		//osoption = NULL;
-		//		delete osolwriter;
-		//osolwriter = NULL;
-//		// finish garbage collection
+		delete osoption;
+		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
+		//finish garbage collection
 		
 /******************** End SYMPHONY Example *************************/	
 		
@@ -315,119 +315,7 @@ int main( ){
 		
 		
 		
-		
-#if 1	
-#ifdef COIN_HAS_COUENNE		
-		/******************** Start Couenne Example *************************/
-		
-		std::cout << std::endl << std::endl;
-		std::cout << "COUENNE EXAMPLE" << std::endl;
-		
-		/******************** STEP 1 ************************
-		 * Get an instance in AMPL nl  format, and create an OSInstance object
-		 */
-		std::string nlFileName;
-		nlFileName =  dataDir  + "amplFiles" + dirsep +  "bonminEx1.nl";
-		// convert to the OS native format
-		OSnl2osil *nl2osil = NULL;
-		nl2osil = new OSnl2osil( nlFileName);
-		// create the first in-memory OSInstance
-		nl2osil->createOSInstance() ;
-		osinstance =  nl2osil->osinstance;
-		
-		/******************** STEP 2 ************************
-		 * Create an OSOption object and give the solver options
-		 */			
-		//		osoption = new OSOption();
-		//		/** 
-		//		 *  here is the format for setting options:
-		//		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
-		//		 *	std::string category, std::string type, std::string description);
-		//		 */
-		//		 
-		//		// set Bonmin options through Couenne 
-		//		// set a limit of 50000 nodes -- this is on Cbc
-		//		osoption->setAnotherSolverOption("node_limit","50000","couenne","bonmin","integer","");
-		//		// control some Bonmin output
-		//		osoption->setAnotherSolverOption("bb_log_level","3","couenne","bonmin","integer","");
-		//		osoption->setAnotherSolverOption("nlp_log_level","2","couenne","bonmin","integer","");
-		//		//solve 3 times at each node and get best solution
-		//		osoption->setAnotherSolverOption("num_resolve_at_node","3","couenne","bonmin","integer","");
-		//		//solve 5 times at root node and get best solution
-		//		//osoption->setAnotherSolverOption("num_resolve_at_root","5","couenne","bonmin","integer","");
-		//		// set Ipopt options through Couenne
-		//		osoption->setAnotherSolverOption("max_iter","100","couenne","ipopt","integer","");
-		//		
-		//		// set a Couenne time limit option -- this seems to have no effect
-		//		osoption->setAnotherSolverOption("time_limit","100","couenne","","numeric","");
-		//		
-		//
-		//		numVar =osinstance->getVariableNumber();
-		//		xinitial = new double[numVar];
-		//		for(i = 0; i < numVar; i++){
-		//			xinitial[ i] = 0.0;
-		//		}
-		//		osoption->setInitVarValuesDense(numVar, xinitial);
-		//		osolwriter = new OSoLWriter();
-		//		std::cout << osolwriter-> writeOSoL( osoption);
-		
-		/******************** STEP 3 ************************
-		 * Create the solver object
-		 */			
-		solver = new CouenneSolver();
-		
-		
-		/******************** STEP 4 ************************
-		 * Give the solver the instance and options and solve
-		 */	
-		
-		solver->osinstance = osinstance;
-		//solver->osoption = osoption;	
-		solver->osol = "";
-		solver->buildSolverInstance();
-		solver->setSolverOptions();
-		solver->solve()	;
-		
-		
-		
-		/******************** STEP 5 ************************
-		 * Create a result object and get the optimal objective
-		 * and primal variable values
-		 */	
-		std::cout  << "call get osresult" << std::endl;
-		std::cout << solver->osrl << std::endl;
-		getOSResult( solver->osrl);
-		
-		// start garbage collection
-		delete[] xinitial;
-		xinitial = NULL;
-		delete osilreader;
-		osilreader = NULL;
-		delete solver;
-		solver = NULL;
-		delete osoption;
-		osoption = NULL;
-		delete osolwriter;
-		osolwriter = NULL;
-		delete nl2osil;
-		nl2osil = NULL;
-		// finish garbage collection
-		
-		/******************** End Couenne Example *************************/
-		
-#endif //end of  COIN_HAS_COUENNE			
-#endif //end #if 0/1	
-		
-		
-		
-		return 0;		
-		
-		
-		
-		
-		
-		
-	
+		
 #ifdef COIN_HAS_IPOPT		
 		/******************** Start Ipopt Example *************************/
 		
@@ -575,7 +463,115 @@ int main( ){
 
 		
 		
-	
+#if 1	
+#ifdef COIN_HAS_COUENNE		
+		/******************** Start Couenne Example *************************/
+		
+		std::cout << std::endl << std::endl;
+		std::cout << "COUENNE EXAMPLE" << std::endl;
+		
+		/******************** STEP 1 ************************
+		 * Get an instance in AMPL nl  format, and create an OSInstance object
+		 */
+		std::string nlFileName;
+		nlFileName =  dataDir  + "amplFiles" + dirsep +  "bonminEx1.nl";
+		// convert to the OS native format
+		OSnl2osil *nl2osil = NULL;
+		nl2osil = new OSnl2osil( nlFileName);
+		// create the first in-memory OSInstance
+		nl2osil->createOSInstance() ;
+		osinstance =  nl2osil->osinstance;
+		
+		/******************** STEP 2 ************************
+		 * Create an OSOption object and give the solver options
+		 */			
+		//		osoption = new OSOption();
+		//		/** 
+		//		 *  here is the format for setting options:
+		//		 *	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
+		//		 *	std::string category, std::string type, std::string description);
+		//		 */
+		//		 
+		//		// set Bonmin options through Couenne 
+		//		// set a limit of 50000 nodes -- this is on Cbc
+		//		osoption->setAnotherSolverOption("node_limit","50000","couenne","bonmin","integer","");
+		//		// control some Bonmin output
+		//		osoption->setAnotherSolverOption("bb_log_level","3","couenne","bonmin","integer","");
+		//		osoption->setAnotherSolverOption("nlp_log_level","2","couenne","bonmin","integer","");
+		//		//solve 3 times at each node and get best solution
+		//		osoption->setAnotherSolverOption("num_resolve_at_node","3","couenne","bonmin","integer","");
+		//		//solve 5 times at root node and get best solution
+		//		//osoption->setAnotherSolverOption("num_resolve_at_root","5","couenne","bonmin","integer","");
+		//		// set Ipopt options through Couenne
+		//		osoption->setAnotherSolverOption("max_iter","100","couenne","ipopt","integer","");
+		//		
+		//		// set a Couenne time limit option -- this seems to have no effect
+		//		osoption->setAnotherSolverOption("time_limit","100","couenne","","numeric","");
+		//		
+		//
+		//		numVar =osinstance->getVariableNumber();
+		//		xinitial = new double[numVar];
+		//		for(i = 0; i < numVar; i++){
+		//			xinitial[ i] = 0.0;
+		//		}
+		//		osoption->setInitVarValuesDense(numVar, xinitial);
+		//		osolwriter = new OSoLWriter();
+		//		std::cout << osolwriter-> writeOSoL( osoption);
+		
+		/******************** STEP 3 ************************
+		 * Create the solver object
+		 */			
+		solver = new CouenneSolver();
+		
+		
+		/******************** STEP 4 ************************
+		 * Give the solver the instance and options and solve
+		 */	
+		
+		solver->osinstance = osinstance;
+		//solver->osoption = osoption;	
+		solver->osol = "";
+		solver->buildSolverInstance();
+		solver->setSolverOptions();
+		solver->solve()	;
+		
+		
+		
+		/******************** STEP 5 ************************
+		 * Create a result object and get the optimal objective
+		 * and primal variable values
+		 */	
+		std::cout  << "call get osresult" << std::endl;
+		std::cout << solver->osrl << std::endl;
+		getOSResult( solver->osrl);
+		
+		// start garbage collection
+		delete[] xinitial;
+		xinitial = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		delete solver;
+		solver = NULL;
+		delete osoption;
+		osoption = NULL;
+		delete osolwriter;
+		osolwriter = NULL;
+		delete nl2osil;
+		nl2osil = NULL;
+		// finish garbage collection
+		
+		/******************** End Couenne Example *************************/
+		
+#endif //end of  COIN_HAS_COUENNE			
+#endif //end #if 0/1	
+		
+		
+		
+		return 0;		
+		
+		
+		
+			
 
 		
 		delete fileUtil;
