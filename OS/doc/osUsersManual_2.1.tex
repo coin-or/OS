@@ -5115,6 +5115,8 @@ or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need t
 \begin{verbatim}
 make  run_parsers
 \end{verbatim}
+%
+(This requires Unix or a unix-like environment (Cygwin, MinGW, MSYS, etc.) under Windows.)
 
 The files {\tt OSParseosrl.l} and {\tt OSParseosrl.y} are used by {\tt flex} and {\tt bison} to  generate the code 
 {\tt OSParseosrl.cpp} and {\tt OSParseosrl.tab.cpp} for parsing strings in OSrL format. The comments made above about the 
@@ -5181,7 +5183,8 @@ std::string osil;
 std::string osol;
 std::string osrl;
 OSInstance *osinstance;
-OSResult  *osresult;
+OSResult   *osresult;
+OSOption   *osoption;
 \end{verbatim}
 and the pure virtual function
 \begin{verbatim}
