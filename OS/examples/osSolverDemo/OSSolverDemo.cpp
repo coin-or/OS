@@ -289,7 +289,7 @@ int main( ){
 //		*/			
 		solver->osinstance = osinstance;
 		//		solver->osoption = osoption;	
-		//		solver->solve();
+				solver->solve();
 //		
 //		/******************** STEP 5 ************************
 //		* Create a result object and get the optimal objective
@@ -303,8 +303,8 @@ int main( ){
 		solver = NULL;
 		//delete osoption;
 		//osoption = NULL;
-		delete osolwriter;
-		osolwriter = NULL;
+		//		delete osolwriter;
+		//osolwriter = NULL;
 //		// finish garbage collection
 		
 /******************** End SYMPHONY Example *************************/	
