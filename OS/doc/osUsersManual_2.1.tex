@@ -328,7 +328,8 @@ If you want to:
 or MPS format\index{MPS format} and call a solver locally or remotely -- see Section~\ref{section:ossolverservice}.
 
 
-\item Use AMPL\index{AMPL} to solve problems either locally or remotely with a COIN-OR solver, Cplex\index{cplex@{\tt cplex}}, 
+\item Use AMPL\index{AMPL} to solve problems either locally or remotely
+with a COIN-OR solver, Cplex\index{cplex@{\tt cplex}},
 GLPK\index{GLPK@{\tt GLPK}}, \ifknitro Knitro\index{knitro}, \fi
 or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
 
@@ -1902,7 +1903,8 @@ See {\tt\UrlGlpk}.  In order to use GLPK with OS, either execute {\tt get.AllThi
 or connect to {\tt ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded,
 run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or Section~\ref{section:vpath}.
 
-Users on MSVS\index{Microsoft Visual Studio} can download the source by anonymous {\tt ftp} from
+Users on MSVS\index{Microsoft Visual Studio} can download the source by
+anonymous {\tt ftp} from
 \begin{verbatim}
 ftp://ftp.gnu.org/gnu/glpk/glpk-version_number.tar.gz
 \end{verbatim}
@@ -2554,9 +2556,11 @@ Not all the parameters are required.
 
 \begin{itemize}
 
-\item[] {\bf -osil xxx.osil}\ \ This is the path information and name of the file that contains the optimization 
-instance in OSiL\index{OSiL}  format. It is assumed that this file is available on the machine that is running 
-{\tt OSSolverService}.
+\item[] {\bf -osil xxx.osil}\ \ This is the path information and name of the
+file that contains the optimization instance in OSiL\index{OSiL} format.
+It is assumed that this file is available on the machine that is running
+{\tt OSSolverService}. This option can be omitted, as there are other ways
+to specify an optimization instance.
 %If this option is not specified then the instance location must be specified in the OSoL\index{OSoL} solver options file.
 
 \item[] {\bf -osol xxx.osol}\ \ This is the path information and name of the file that contains the solver 
@@ -2575,7 +2579,9 @@ this is used as input  to the {\tt knock} method.
 \item[] {\bf -osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL); 
 this is the  output  string from the {\tt knock}  and {\tt kill} method.
 
-\item[] {\bf -serviceLocation url}\ \ This is the URL of the solver service. It is not required, and if not specified it is assumed that the problem is solved locally.
+\item[] {\bf -serviceLocation url}\ \ This is the URL of the solver service.
+It is not required, and if not specified it is assumed that the problem
+is solved locally.
 
 \item[] {\bf -serviceMethod  methodName}\ \ This is  the method on the solver service to be invoked.
 The options are {\tt solve}\index{solve@{\tt solve}|(}, {\tt send}\index{send@{\tt send}},
@@ -2652,13 +2658,13 @@ Nonlinear, integer   & Bonmin \\ \hline
 \end{table}
 
 
-\item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. If this optional
-parameter is specified then the solver result in OSrL\index{OSrL} format is transformed using XSLT into HTML and
-displayed in the browser.
+\item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. 
+If this optional parameter is specified then the solver result in OSrL\index{OSrL} format is transformed 
+using XSLT into HTML and displayed in the browser.
 
-\item[] {\bf -config pathToConfigureFile}\ \ This parameter specifies a path on the local machine to a text file
-containing values for the input parameters. This is convenient for the user not wishing to constantly retype parameter
-values.
+\item[] {\bf -config pathToConfigureFile}\ \ This optional parameter specifies a path on the local machine 
+to a text file containing values for the input parameters. This is convenient for the user not wishing 
+to constantly retype parameter values.
 
 \end{itemize}
 
@@ -2739,14 +2745,14 @@ depending on whether a {\tt serviceLocation} was specified. If a
 
 If a local solve is indicated, we pass to a solver in the OSLibrary two things: 
 an OSoL file if one has been specified and a problem instance. The problem instance 
-is the instance in the OSiL file specified by the osil option. If there is no OSiL file, 
-then it is the instance specified in the nl file. If there is no nl file it is the 
-instance in the mps file. If no OSiL, nl or mps file is specified an error is thrown. 
+is the instance in the OSiL file specified by the {\tt -osil} option. If there is no OSiL file, 
+then it is the instance specified in the nl file. If there is no nl file, it is the 
+instance in the mps file. If no OSiL, nl or mps file is specified, an error is thrown. 
 
-The OSoL file is simply passed on to the OSLibrary. One 
-can also specify which solver to use in the OSLibrary through the {\tt -solver} option. If this 
-option is empty a default solver is selected (see Table~\ref{table:defaultsolvers}\index{default solver}).
+The OSoL file is simply passed on to the OSLibrary; it is not parsed at this point. 
 The OSoL file elements {\tt <solverToInvoke>} and {\tt instanceLocation} cannot be used for local calls.
+One can specify which solver to use in the OSLibrary through the {\tt -solver} option. If this 
+option is empty, a default solver is selected (see Table~\ref{table:defaultsolvers}\index{default solver}).
 
 \medskip
 
@@ -2759,13 +2765,8 @@ instance if one has been specified. The instance can be specified using the {\tt
 OSiL file, then the instance specified in the nl file is used. If there is no nl file,  
 the mps file is used. If no file is given, an empty string is sent.
 
-
-
 For remote calls, the solver can only be set in the osol file, using the element {\tt <solverToInvoke>};
 the {\tt -solver} option has no effect.
-
-
-
 
 
 
@@ -2867,19 +2868,23 @@ Service {\tt OSSolverService.jws}. This Java program running in the Tomcat
 Java Servlet container implements the six service methods. If a {\tt solve}
 or {\tt send} request is sent to the server from the client, an optimization
 problem must be solved. The Java solver service solves the optimization instance
-by  calling the  OSSolverService on the server. So there is an OSSolverService
+by  calling the  {\tt OSSolverService} on the server. So there is an {\tt OSSolverService}
 on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn
 calls  the executable {\tt OSSolverService} on the server.
 The Java solver service passes options to the local {\tt OSSolverService}
-such as where the OSiL file is located and where to write the solution result.
+%such as where the OSiL file is located and where to write the solution result.
+in form of two strings, an osil string representing the instance and an osol string
+representing the options (if any). 
 
 
 For remote calls the instance location can be specified either as a command parameter 
 (on the command line or in a config file)
 or through the {\tt <instanceLocation>} element in the OSoL\index{OSoL} options file.
+OSiL files specified in the {\tt <instanceLocation>} element must be converted to an osil string
+by the solver service.
 If two instance files
 are specified in this way --- one through the local command interface, the other in an options file --- 
-the remote solver server is free to pick which one to choose.
+the solver service is free to pick which one to choose.
 
 
 
@@ -3431,11 +3436,12 @@ as in the following hypothetical example.
 
 \end{itemize}
 
-As of trunk version 2164\index{OS project!trunk version} the reading of an OSoL file is implemented in the {\tt OSCoinSolver}, 
-{\tt OSBonmin}, and {\tt OSIpopt} solver interfaces.   The  {\tt OSBonmin}, and {\tt OSIpopt} solvers have 
-particularly easy interfaces. 
-They have methods for integer, string, and numeric data types and then take options in form of {\tt (name, value)} pairs.
-Below is an example of options for {\tt Ipopt}.
+As of trunk version 2164\index{OS project!trunk version} the reading of an
+OSoL file is implemented in the {\tt OSCoinSolver}, {\tt OSBonmin} and
+{\tt OSIpopt} solver interfaces.   The  {\tt OSBonmin}, and {\tt OSIpopt}
+solvers have particularly easy interfaces. They have methods for integer,
+string, and numeric data types and then take options in form of
+{\tt (name, value)} pairs. Below is an example of options for {\tt Ipopt}.
 
 
 \begin{verbatim}
