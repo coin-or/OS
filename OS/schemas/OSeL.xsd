@@ -36,13 +36,18 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:all>
+		<xs:sequence>
 			<xs:element name="serviceURI" type="xs:string">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="serviceName" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>draft</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="message" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -65,14 +70,9 @@
 			<xs:element name="licenseRequired" type="xs:boolean"/>
 			<xs:element name="userNameRequired" type="xs:boolean"/>
 			<xs:element name="passwordRequired" type="xs:boolean"/>
-			<xs:element name="message" type="xs:string" minOccurs="0">
-				<xs:annotation>
-					<xs:documentation>draft</xs:documentation>
-				</xs:annotation>
-			</xs:element>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
-		</xs:all>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="EntityData">
 		<xs:annotation>
@@ -140,17 +140,44 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:simpleType name="MatchType">
+	<xs:simpleType name="MatchTypeValue">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="specialized"/>
 			<xs:enumeration value="moreGeneral"/>
-			<xs:enumeration value="none"/>
 			<xs:enumeration value="approximate"/>
+			<xs:enumeration value="none"/>
 		</xs:restriction>
 	</xs:simpleType>
+	<xs:complexType name="MatchType">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="MatchTypeValue">
+				<xs:attribute name="minNumber" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="maxNumber" type="xs:positiveInteger" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MatchTypeWithOrderAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="MatchType">
+				<xs:attribute name="order" use="required">
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minInclusive value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 	<xs:complexType name="OtherCategoryValueMatchType">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -168,16 +195,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="category" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="MatchType">
-							<xs:attribute name="value" type="xs:string" use="optional"/>
-							<xs:attribute name="description" type="xs:string" use="optional"/>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="category" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
@@ -186,26 +204,27 @@
 		<xs:attribute name="matchType" use="optional">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:enumeration value="exact"/>
+					<xs:enumeration value="specialized"/>
 					<xs:enumeration value="moreGeneral"/>
-					<xs:enumeration value="moreRestricted"/>
 					<xs:enumeration value="approximate"/>
-					<xs:enumeration value="guess"/>
+					<xs:enumeration value="none"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+		<xs:attribute name="minNumber" type="xs:positiveInteger" use="optional" default="1"/>
+		<xs:attribute name="maxNumber" type="xs:positiveInteger" use="optional"/>
 		<xs:attribute name="link" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="Providernfo">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:all>
+		<xs:sequence>
 			<xs:element name="description" type="xs:string"/>
 			<xs:element name="contacts" type="Contacts"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
-		</xs:all>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Contacts">
 		<xs:annotation>
@@ -220,7 +239,7 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:all>
+		<xs:sequence>
 			<xs:element name="name" type="ContactName"/>
 			<xs:element name="title" type="xs:string" minOccurs="0"/>
 			<xs:element name="role" type="xs:string" minOccurs="0"/>
@@ -237,7 +256,7 @@
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="association" type="Association" minOccurs="0"/>
-		</xs:all>
+		</xs:sequence>
 		<xs:attribute name="isMain" type="xs:boolean" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ContactName">
@@ -249,13 +268,14 @@
 			<xs:element name="lastName" type="xs:string"/>
 			<xs:element name="middleName" type="xs:string" minOccurs="0"/>
 			<xs:element name="firstName" type="xs:string"/>
+			<xs:element name="suffix" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="Association">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:all>
+		<xs:sequence>
 			<xs:element name="name">
 				<xs:complexType>
 					<xs:simpleContent>
@@ -266,15 +286,6 @@
 				</xs:complexType>
 			</xs:element>
 			<xs:element name="description" type="xs:string" minOccurs="0"/>
-			<xs:element name="logoImageURL" minOccurs="0">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="xs:anyURI">
-							<xs:attribute name="uri" type="xs:anyURI" use="required"/>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
 			<xs:element name="address" type="xs:string" minOccurs="0"/>
 			<xs:element name="phone" type="xs:string" minOccurs="0"/>
 			<xs:element name="fax" type="xs:string" minOccurs="0"/>
@@ -286,7 +297,16 @@
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
-		</xs:all>
+			<xs:element name="logoImageURL" minOccurs="0">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:anyURI">
+							<xs:attribute name="uri" type="xs:anyURI" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -304,18 +324,18 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:all>
+		<xs:sequence>
 			<xs:element name="description" type="xs:string"/>
 			<xs:element name="dedication" type="SystemDedication"/>
 			<xs:element name="operatingSystem" type="xs:string" minOccurs="0"/>
-			<xs:element name="networkSpeed" type="NetworkSpeed" minOccurs="0"/>
 			<xs:element name="diskSpace" type="DiskSpace" default="0.0" minOccurs="0"/>
 			<xs:element name="memory" type="MemorySize" default="0.0" minOccurs="0"/>
 			<xs:element name="cpuSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
 			<xs:element name="cpuNumber" type="CPUNumber" default="1" minOccurs="0"/>
+			<xs:element name="networkSpeed" type="NetworkSpeed" minOccurs="0"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
-		</xs:all>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="SystemDedication">
 		<xs:annotation>
@@ -335,7 +355,7 @@
 			<xs:element name="downloadSpeed" type="xs:double" minOccurs="0"/>
 			<xs:element name="uploadSpeed" type="xs:double" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="unit" use="optional" default="byte">
+		<xs:attribute name="unit" use="optional" default="byte/s">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="byte/s"/>
@@ -433,9 +453,8 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:all>
+		<xs:sequence>
 			<xs:element name="description" type="xs:string"/>
-			<xs:element name="wsdlLocation" type="xs:string"/>
 			<xs:element name="type">
 				<xs:simpleType>
 					<xs:restriction base="xs:string">
@@ -449,12 +468,13 @@
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:element>
+			<xs:element name="wsdlLocation" type="xs:string" minOccurs="0"/>
 			<xs:element name="version" type="xs:string" minOccurs="0"/>
 			<xs:element name="software" type="SoftwareInfo" minOccurs="0"/>
 			<xs:element name="maxJobs" type="xs:int" default="-1" minOccurs="0"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
-		</xs:all>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="SoftwareInfo">
 		<xs:annotation>
@@ -510,150 +530,22 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="backup">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="description" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string"/>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="variableType" default="continuous" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="continuous"/>
-									<xs:enumeration value="pureBinary"/>
-									<xs:enumeration value="mixedBinary"/>
-									<xs:enumeration value="pureInteger"/>
-									<xs:enumeration value="mixedInteger"/>
-									<xs:enumeration value="discrete"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="objectiveType" default="singleObjective" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="none"/>
-									<xs:enumeration value="singleObjective"/>
-									<xs:enumeration value="multiObjectives"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="constraintType" default="generalRange" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="generalRange"/>
-									<xs:enumeration value="pureEquality"/>
-									<xs:enumeration value="pureBound"/>
-									<xs:enumeration value="pureLinearComplementarity"/>
-									<xs:enumeration value="pureNonlinearComplementarity"/>
-									<xs:enumeration value="linearMixedComplementarity"/>
-									<xs:enumeration value="nonlinearMixedComplementarity"/>
-									<xs:enumeration value="generalMixedComplementarity"/>
-									<xs:enumeration value="pureCone"/>
-									<xs:enumeration value="mixedCone"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="objectiveLinearity" default="linear" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="none"/>
-									<xs:enumeration value="linearNetwork"/>
-									<xs:enumeration value="linear"/>
-									<xs:enumeration value="sumOfSquares"/>
-									<xs:enumeration value="convexQuadratic"/>
-									<xs:enumeration value="convexNonlinear"/>
-									<xs:enumeration value="generalQuadratic"/>
-									<xs:enumeration value="generalNonlinear"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="constraintLinearity" default="linear" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="none"/>
-									<xs:enumeration value="bound"/>
-									<xs:enumeration value="linearNetwork"/>
-									<xs:enumeration value="linear"/>
-									<xs:enumeration value="convexQuadratic"/>
-									<xs:enumeration value="convexNonlinear"/>
-									<xs:enumeration value="generalQuadratic"/>
-									<xs:enumeration value="generalNonlinear"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="objectiveDifferentiability" default="twiceDifferentiable" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="generallyDifferentiable"/>
-									<xs:enumeration value="twiceDifferentiable"/>
-									<xs:enumeration value="firstDifferentiable"/>
-									<xs:enumeration value="nonDifferentiableContinous"/>
-									<xs:enumeration value="nonContinuous"/>
-									<xs:enumeration value="simulation"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="constraintDifferentiability" default="twiceDifferentiable" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="generallyDifferentiable"/>
-									<xs:enumeration value="twiceDifferentiable"/>
-									<xs:enumeration value="firstDifferentiable"/>
-									<xs:enumeration value="nonDifferentiableContinous"/>
-									<xs:enumeration value="nonContinuous"/>
-									<xs:enumeration value="simulation"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="parameterType" default="number" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="number"/>
-									<xs:enumeration value="string"/>
-									<xs:enumeration value="both"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="stochasticity" default="deterministic" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:string">
-									<xs:enumeration value="deterministic"/>
-									<xs:enumeration value="stochastic"/>
-									<xs:enumeration value="both"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="realTime" type="xs:boolean" default="false" minOccurs="0"/>
-						<xs:element name="functionType" type="FunctionType" minOccurs="0"/>
-						<xs:element name="specialStructure" type="SpecialStructure" minOccurs="0"/>
-						<xs:element name="specialAlgorithm" type="SpecialAlgorithm" minOccurs="0"/>
-						<xs:element name="maxVariables" type="xs:int" default="-1" minOccurs="0"/>
-						<xs:element name="maxBinaryVariables" type="xs:int" default="-1" minOccurs="0"/>
-						<xs:element name="maxIntegerVariables" type="xs:int" default="-1" minOccurs="0"/>
-						<xs:element name="maxObjectives" type="xs:int" default="-1" minOccurs="0"/>
-						<xs:element name="maxConstraints" type="xs:int" default="-1" minOccurs="0"/>
-						<xs:element name="maxNonzeroLinearConstraintCoefficients" type="xs:int" default="-1" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
 			<xs:element name="problem" type="OptimizationProblemInfo">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="variables" type="OptimizationVariableInfo" minOccurs="0">
+			<xs:element name="variables" type="OptimizationVariableInfo">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="objectives" type="OptimizationObjectiveInfo" minOccurs="0">
+			<xs:element name="objectives" type="OptimizationObjectiveInfo">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="constraints" type="OptimizationConstraintInfo" minOccurs="0">
+			<xs:element name="constraints" type="OptimizationConstraintInfo">
 				<xs:annotation>
 					<xs:documentation>draft</xs:documentation>
 				</xs:annotation>
@@ -760,194 +652,182 @@
 					<xs:restriction base="xs:string"/>
 				</xs:simpleType>
 			</xs:element>
-			<xs:element name="maxSize" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxSize" type="OptimizationProblemSize" minOccurs="0"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="solutionAvailable" type="xs:boolean" use="optional" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationProblemSize">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="unit" use="optional" default="byte">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="byte"/>
+							<xs:enumeration value="kilobyte"/>
+							<xs:enumeration value="megabyte"/>
+							<xs:enumeration value="gigabyte"/>
+							<xs:enumeration value="terabyte"/>
+							<xs:enumeration value="petabyte"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OptimizationVariableInfo">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="type" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="continuous" type="MatchType" minOccurs="0"/>
-						<xs:element name="binary" type="MatchType" minOccurs="0"/>
-						<xs:element name="integer" type="MatchType" minOccurs="0"/>
-						<xs:element name="string" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="boundedness" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="leftBounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="rightBounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="bounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="unbounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="linearity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="linear" type="MatchType" minOccurs="0"/>
-						<xs:element name="quadratic" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonlinear" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="type" type="OptimizationVariableTypeInfo"/>
+			<xs:element name="boundedness" type="OptimizationVariableBoundednessInfo"/>
+			<xs:element name="linearity" type="OptimizationVariableLinearityInfo"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="maxNumberOfVariables" use="optional">
+		<xs:attribute name="minNumberOfVariables" type="xs:nonNegativeInteger" use="optional" default="1">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
+		<xs:attribute name="maxNumberOfVariables" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OptimizationVariableTypeInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="continuous" type="MatchType"/>
+			<xs:element name="binary" type="MatchType"/>
+			<xs:element name="integer" type="MatchType"/>
+			<xs:element name="string" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationVariableBoundednessInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="leftBounded" type="MatchType"/>
+			<xs:element name="rightBounded" type="MatchType"/>
+			<xs:element name="bounded" type="MatchType"/>
+			<xs:element name="equallyBounded" type="MatchType"/>
+			<xs:element name="unbounded" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationVariableLinearityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="quadratic" type="MatchType"/>
+			<xs:element name="nonlinear" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OptimizationObjectiveInfo">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="linearity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" type="MatchType" minOccurs="0"/>
-						<xs:element name="linear" type="MatchType" minOccurs="0"/>
-						<xs:element name="quadratic" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonlinear" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="convexity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" type="MatchType" minOccurs="0"/>
-						<xs:element name="linear" type="MatchType" minOccurs="0"/>
-						<xs:element name="convex" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonconvex" type="MatchType" minOccurs="0"/>
-						<xs:element name="concave" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonconcave" type="MatchType" minOccurs="0"/>
-						<xs:element name="notConvexOrConcave" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="continuity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="continuous" type="MatchType" minOccurs="0"/>
-						<xs:element name="discontinuous" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="differentialbility" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="differentiable" type="MatchType" minOccurs="0"/>
-						<xs:element name="nondifferentiable" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="linearity" type="OptimizationObjectiveLinearityInfo"/>
+			<xs:element name="convexity" type="OptimizationObjectiveConvexityInfo"/>
+			<xs:element name="continuity" type="OptimizationObjectiveContinuityInfo"/>
+			<xs:element name="differentialbility" type="OptimizationObjectiveDifferentialbilityInfo"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="maxNumberOfObjectives" use="optional">
+		<xs:attribute name="minNumberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
 		</xs:attribute>
+		<xs:attribute name="maxNumberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="1">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OptimizationObjectiveLinearityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="constant" type="MatchType"/>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="quadratic" type="MatchType"/>
+			<xs:element name="nonlinear" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationObjectiveConvexityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="constant" type="MatchType"/>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="convex" type="MatchType"/>
+			<xs:element name="convexStrict" type="MatchType"/>
+			<xs:element name="nonconvex" type="MatchType"/>
+			<xs:element name="concave" type="MatchType"/>
+			<xs:element name="concaveStrict" type="MatchType"/>
+			<xs:element name="nonconcave" type="MatchType"/>
+			<xs:element name="notConvexOrConcave" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationObjectiveContinuityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="continuous" type="MatchType"/>
+			<xs:element name="discontinuous" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationObjectiveDifferentialbilityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" maxOccurs="unbounded"/>
+			<xs:element name="nondifferentiable" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OptimizationConstraintInfo">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constraintRegion" type="OptimizationConstraintRegionInfo" minOccurs="0"/>
-			<xs:element name="boundedness" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="leftBounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="rightBounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="bounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="unbounded" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="linearity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" type="MatchType" minOccurs="0"/>
-						<xs:element name="linear" type="MatchType" minOccurs="0"/>
-						<xs:element name="quadratic" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonlinear" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="convexity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" type="MatchType" minOccurs="0"/>
-						<xs:element name="linear" type="MatchType" minOccurs="0"/>
-						<xs:element name="convex" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonconvex" type="MatchType" minOccurs="0"/>
-						<xs:element name="concave" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonconcave" type="MatchType" minOccurs="0"/>
-						<xs:element name="notConvexOrConcave" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="continuity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="continuous" type="MatchType" minOccurs="0"/>
-						<xs:element name="discontinuous" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="differentialbility" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="differentiable" type="MatchType" minOccurs="0"/>
-						<xs:element name="nondifferentiable" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="constraintRegion" type="OptimizationConstraintRegionInfo"/>
+			<xs:element name="boundedness" type="OptimizationConstraintBoundednessInfo"/>
+			<xs:element name="linearity" type="OptimizationConstraintLinearityInfo"/>
+			<xs:element name="convexity" type="OptimizationConstraintConvexityInfo"/>
+			<xs:element name="continuity" type="OptimizationConstraintContinuityInfo"/>
+			<xs:element name="differentialbility" type="OptimizationConstraintDifferentialbilityInfo"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="maxNumberOfConstraints" use="optional">
+		<xs:attribute name="minNumberOfConstraints" type="xs:nonNegativeInteger" use="optional" default="0">
 			<xs:annotation>
 				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
 			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="-1"/>
-				</xs:restriction>
-			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="maxNumberOfConstraints" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OptimizationConstraintRegionInfo">
@@ -955,20 +835,89 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="convexity" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="value" type="xs:double" use="optional" default="1"/>
-					<xs:attribute name="type" use="optional">
-						<xs:simpleType>
-							<xs:restriction base="xs:string">
-								<xs:enumeration value="linear"/>
-								<xs:enumeration value="convex"/>
-								<xs:enumeration value="nonconvex"/>
-							</xs:restriction>
-						</xs:simpleType>
-					</xs:attribute>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="convexity" type="OptimizationConstraintRegionConvexityInfo"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationConstraintRegionConvexityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="convex" type="MatchType"/>
+			<xs:element name="nonconvex" type="MatchType"/>
+		</xs:sequence>
+		<xs:attribute name="value" type="xs:double" use="optional" default="1"/>
+		<xs:attribute name="type" use="optional">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="linear"/>
+					<xs:enumeration value="convex"/>
+					<xs:enumeration value="nonconvex"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OptimizationConstraintBoundednessInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="leftBounded" type="MatchType"/>
+			<xs:element name="rightBounded" type="MatchType"/>
+			<xs:element name="bounded" type="MatchType"/>
+			<xs:element name="equallyBounded" type="MatchType"/>
+			<xs:element name="unbounded" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationConstraintLinearityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="constant" type="MatchType"/>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="quadratic" type="MatchType"/>
+			<xs:element name="nonlinear" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationConstraintConvexityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="constant" type="MatchType"/>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="convex" type="MatchType"/>
+			<xs:element name="convexStrict" type="MatchType"/>
+			<xs:element name="nonconvex" type="MatchType"/>
+			<xs:element name="concave" type="MatchType"/>
+			<xs:element name="concaveStrict" type="MatchType"/>
+			<xs:element name="nonconcave" type="MatchType"/>
+			<xs:element name="notConvexOrConcave" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationConstraintContinuityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="continuous" type="MatchType"/>
+			<xs:element name="discontinuous" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationConstraintDifferentialbilityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" maxOccurs="unbounded"/>
+			<xs:element name="nondifferentiable" type="MatchType"/>
 			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -977,59 +926,51 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="size" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="maxNumberOfRows" type="xs:nonNegativeInteger" minOccurs="0"/>
-						<xs:element name="maxNumberOfColumns" type="xs:nonNegativeInteger" minOccurs="0"/>
-						<xs:element name="maxNumberOfSpecifiedValues" type="xs:nonNegativeInteger" minOccurs="0"/>
-						<xs:element name="maxNumberOfNonzeroValues" type="xs:nonNegativeInteger" minOccurs="0"/>
-						<xs:element name="minDensity" default="0" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:double">
-									<xs:minInclusive value="0.0"/>
-									<xs:maxInclusive value="1.0"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-						<xs:element name="maxDensity" default="1.0" minOccurs="0">
-							<xs:simpleType>
-								<xs:restriction base="xs:double">
-									<xs:minInclusive value="0.0"/>
-									<xs:maxInclusive value="1.0"/>
-								</xs:restriction>
-							</xs:simpleType>
-						</xs:element>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="size" type="OptimizationLinearConstraintCoefficientSizeInfo" minOccurs="0"/>
 			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfValues" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="minNumberOfValues" type="xs:nonNegativeInteger" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="maxNumberOfValues" type="xs:nonNegativeInteger" use="optional">
+			<xs:annotation>
+				<xs:documentation>If present, must match number of variables in the original optimization instance</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OptimizationLinearConstraintCoefficientSizeInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="maxNumberOfRows" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfColumns" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfSpecifiedValues" type="xs:nonNegativeInteger" fixed="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfNonzeroValues" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxDensity" default="1.0" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minInclusive value="0.0"/>
+						<xs:maxInclusive value="1.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OptimizationQuadraticCoefficientInfo">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="variables" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="maxNumberOfVariables" type="xs:nonNegativeInteger" use="optional"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="objectives" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="maxNumberOfObjectives" type="xs:nonNegativeInteger" use="optional"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="constraints" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="maxNumberOfConstraints" type="xs:nonNegativeInteger" use="optional"/>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="maxNumberOfQuadraticVariables" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfQuadraticObjectives" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfQuadraticConstraints" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="minNumberOfQuadraticTerms" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="maxNumberOfQuadraticTerms" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNonlinearExpressionInfo">
 		<xs:annotation>
@@ -1037,80 +978,56 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="nodes" type="OptimizationNlNodeInfo" minOccurs="0"/>
-			<xs:element name="variables" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="maxNumberOfVariables" type="xs:int" use="optional" default="0"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="objectives" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional" default="0"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="constraints" minOccurs="0">
-				<xs:complexType>
-					<xs:attribute name="maxNumberOfConstraints" type="xs:nonNegativeInteger" use="optional" default="0"/>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="linearity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" type="MatchType" minOccurs="0"/>
-						<xs:element name="linear" type="MatchType" minOccurs="0"/>
-						<xs:element name="quadratic" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonlinear" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="convexity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="constant" type="MatchType" minOccurs="0"/>
-						<xs:element name="linear" type="MatchType" minOccurs="0"/>
-						<xs:element name="convex" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonconvex" type="MatchType" minOccurs="0"/>
-						<xs:element name="concave" type="MatchType" minOccurs="0"/>
-						<xs:element name="nonconcave" type="MatchType" minOccurs="0"/>
-						<xs:element name="notConvexOrConcave" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="continuity" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="continuous" type="MatchType" minOccurs="0"/>
-						<xs:element name="discontinuous" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="differentialbility" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="differentiable" type="MatchType" minOccurs="0"/>
-						<xs:element name="nondifferentiable" type="MatchType" minOccurs="0"/>
-						<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
-					</xs:sequence>
-				</xs:complexType>
-			</xs:element>
+			<xs:element name="maxNumberOfNonlinearVariables" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfNonlinearObjectives" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfNonlinearConstraints" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="linearity" type="OptimizationNonlinearExpressionLinearityInfo" minOccurs="0"/>
+			<xs:element name="convexity" type="OptimizationNonlinearExpressionConvexityInfo" minOccurs="0"/>
+			<xs:element name="continuity" type="OptimizationNonlinearExpressionContinuityInfo" minOccurs="0"/>
+			<xs:element name="differentialbility" type="OptimizationNonlinearExpressionDifferentialbilityInfo" minOccurs="0"/>
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="minNumberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="maxNumberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNlNodeInfo">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="nodeSetSupported" type="OptimizationNlNodeSet" minOccurs="0"/>
+			<xs:element name="statistics" type="OptimizationNlNodeStatistics" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNlNodeSet">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="OptimizationNlNodeSetElement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="NumberOfEl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNlNodeSetElement">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="count" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNlNodeStatistics">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:all>
-			<xs:element name="maxNumberOfExpressionRootNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfAllNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfArithmeticFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfElementaryFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfTrigonometricFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
-			<xs:element name="maxNumberOfStatisticsAndProbabilityFunctions" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfExpressionRootNodes" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfAllNodes" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfArithmeticFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfElementaryFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfTrigonometricFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="maxNumberOfStatisticsAndProbabilityFunctions" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="maxNumberOfTerminalNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
+			<xs:element name="maxNumberOfConstantNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
 			<xs:element name="maxNumberOfVariableNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
 			<xs:element name="maxNumberOfObjectiveNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
 			<xs:element name="maxNumberOfConstraintNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
@@ -1126,6 +1043,55 @@
 			<xs:element name="maxNumberOfArcRefNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
 			<xs:element name="maxNumberOfComplementsNodes" type="xs:nonNegativeInteger" default="0" minOccurs="0"/>
 		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNonlinearExpressionLinearityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="constant" type="MatchType"/>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="quadratic" type="MatchType"/>
+			<xs:element name="nonlinear" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNonlinearExpressionConvexityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="constant" type="MatchType"/>
+			<xs:element name="linear" type="MatchType"/>
+			<xs:element name="convex" type="MatchType"/>
+			<xs:element name="convexStrict" type="MatchType"/>
+			<xs:element name="nonconvex" type="MatchType"/>
+			<xs:element name="concave" type="MatchType"/>
+			<xs:element name="concaveStrict" type="MatchType"/>
+			<xs:element name="nonconcave" type="MatchType"/>
+			<xs:element name="notConvexOrConcave" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNonlinearExpressionContinuityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="continuous" type="MatchType"/>
+			<xs:element name="discontinuous" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNonlinearExpressionDifferentialbilityInfo">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" maxOccurs="unbounded"/>
+			<xs:element name="nondifferentiable" type="MatchType"/>
+			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="SpecialAlgorithm">
 		<xs:annotation>
@@ -1182,5 +1148,131 @@
 			<xs:element name="coneProgram" type="xs:boolean" default="false" minOccurs="0"/>
 			<xs:element name="disjunctiveProgram" type="xs:boolean" default="false" minOccurs="0"/>
 		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="OptimizationEntityBackup">
+		<xs:sequence>
+			<xs:element name="description" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="variableType" default="continuous" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="continuous"/>
+						<xs:enumeration value="pureBinary"/>
+						<xs:enumeration value="mixedBinary"/>
+						<xs:enumeration value="pureInteger"/>
+						<xs:enumeration value="mixedInteger"/>
+						<xs:enumeration value="discrete"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="objectiveType" default="singleObjective" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="singleObjective"/>
+						<xs:enumeration value="multiObjectives"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="constraintType" default="generalRange" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="generalRange"/>
+						<xs:enumeration value="pureEquality"/>
+						<xs:enumeration value="pureBound"/>
+						<xs:enumeration value="pureLinearComplementarity"/>
+						<xs:enumeration value="pureNonlinearComplementarity"/>
+						<xs:enumeration value="linearMixedComplementarity"/>
+						<xs:enumeration value="nonlinearMixedComplementarity"/>
+						<xs:enumeration value="generalMixedComplementarity"/>
+						<xs:enumeration value="pureCone"/>
+						<xs:enumeration value="mixedCone"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="objectiveLinearity" default="linear" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="linearNetwork"/>
+						<xs:enumeration value="linear"/>
+						<xs:enumeration value="sumOfSquares"/>
+						<xs:enumeration value="convexQuadratic"/>
+						<xs:enumeration value="convexNonlinear"/>
+						<xs:enumeration value="generalQuadratic"/>
+						<xs:enumeration value="generalNonlinear"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="constraintLinearity" default="linear" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="none"/>
+						<xs:enumeration value="bound"/>
+						<xs:enumeration value="linearNetwork"/>
+						<xs:enumeration value="linear"/>
+						<xs:enumeration value="convexQuadratic"/>
+						<xs:enumeration value="convexNonlinear"/>
+						<xs:enumeration value="generalQuadratic"/>
+						<xs:enumeration value="generalNonlinear"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="objectiveDifferentiability" default="twiceDifferentiable" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="generallyDifferentiable"/>
+						<xs:enumeration value="twiceDifferentiable"/>
+						<xs:enumeration value="firstDifferentiable"/>
+						<xs:enumeration value="nonDifferentiableContinous"/>
+						<xs:enumeration value="nonContinuous"/>
+						<xs:enumeration value="simulation"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="constraintDifferentiability" default="twiceDifferentiable" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="generallyDifferentiable"/>
+						<xs:enumeration value="twiceDifferentiable"/>
+						<xs:enumeration value="firstDifferentiable"/>
+						<xs:enumeration value="nonDifferentiableContinous"/>
+						<xs:enumeration value="nonContinuous"/>
+						<xs:enumeration value="simulation"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="parameterType" default="number" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="number"/>
+						<xs:enumeration value="string"/>
+						<xs:enumeration value="both"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="stochasticity" default="deterministic" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="deterministic"/>
+						<xs:enumeration value="stochastic"/>
+						<xs:enumeration value="both"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="realTime" type="xs:boolean" default="false" minOccurs="0"/>
+			<xs:element name="functionType" type="FunctionType" minOccurs="0"/>
+			<xs:element name="specialStructure" type="SpecialStructure" minOccurs="0"/>
+			<xs:element name="specialAlgorithm" type="SpecialAlgorithm" minOccurs="0"/>
+			<xs:element name="maxVariables" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxBinaryVariables" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxIntegerVariables" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxObjectives" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxConstraints" type="xs:int" default="-1" minOccurs="0"/>
+			<xs:element name="maxNonzeroLinearConstraintCoefficients" type="xs:int" default="-1" minOccurs="0"/>
+		</xs:sequence>
 	</xs:complexType>
 </xs:schema>
