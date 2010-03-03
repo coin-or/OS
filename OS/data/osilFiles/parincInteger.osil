@@ -9,8 +9,8 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var name="x0" lb="0" type="C" />
-			<var name="x1" lb="0" type="C" />
+			<var name="x0" lb="0" type="I" />
+			<var name="x1" lb="0" type="I" />
 		</variables>
 		<objectives numberOfObjectives="1">
 			<obj name = "Par, Inc. Objective Function" 
