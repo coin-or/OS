@@ -18,7 +18,7 @@
  * 
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
- * option OSAmplClient_options "solver bonmin"; <br />
+ * option OSAmplClient_options "-solver bonmin"; <br />
  * write gtestfile; <br />
  * solve; <br />
  * display x1; <br />
@@ -32,25 +32,31 @@
  * x2 = 4.743
  * 
  * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient\_options
+ * as another example, if you wanted to solve hs71.mod on a remote server you would do:
+ * model hs71.mod;  <br />
+ * option solver OSAmplClient; <br />
+ * option OSAmplClient_options "-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws"; <br />
+ *
  *
  * \item there are three possible options to specify:
  *
  * \begin{itemize}
  *
- * \item the name of the solver using the  {\bf solver} option, valid values for this option  are {\tt clp},
+ * \item the name of the solver using the  {\bf -solver} option, valid values for this option  are {\tt clp},
  * {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.   
  *
  *
- * \item the location of the remote server using the {\bf serviceLocation} option
+ * \item the location of the remote server using the {\bf -serviceLocation} option
  *
- * \item the location of the option file using  the {\bf optionFile} option
+ * \item the location of the option file using  the {\bf -osol} option
  *
  * \end{itemize}
  *
  * if no options are specified using {\bf OSAmplClient\_options},   by default, for continuous
  * linear models  clp is used. For continuous nonlinear models ipopt is used. 
- * For mixed-integer linear models (MIP),   cbc is used. For mixed-integer nonlinear models 
- * bonmin is used.  All solvers are invoked locally.
+ * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models 
+ * bonmin is used.  All solvers are invoked locally. See the Users Manual in the doc folder
+ * form more information
  * 
  */
 
@@ -195,6 +201,14 @@ int main(int argc, char **argv)
 
 	std::cout << " solver Name = " << sSolverName << std::endl;
 	std::cout << " solver Options = " << osol << std::endl;
+    
+    //convert solver name to lower case for testing purposes
+    
+    unsigned int k;
+    for(k = 0; k < sSolverName.length(); k++){
+        sSolverName[ k] = tolower( sSolverName[ k]);
+    }
+
 	
 	try{
 		if(serviceLocation.size() == 0 ){

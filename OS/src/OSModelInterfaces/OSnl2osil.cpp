@@ -15,37 +15,6 @@
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  */
-/*
-Using AMLP with nl2fml.  Here is the sequence of AMPL commands
-with the parinc problem:
-//
-model parinc.mod;    
-data parinc.dat;
-option solver nl2osil;
-option nl2osil_oopt g; 
-option nl2osil_solver lindo; 
-solve;
-
-Alternatively, if you want to name the file and not use the AMPL randomly 
-generate file name, do the following:
-
-   model hs71.mod;
-   option solver OSAmplClient;
-   option OSAmplClient_options "solver lindo";
-   option lindo_options "<<any options for the lindo solver>>";
-   write gtestfile;
-   solve;
-	
-of course, replacing gtestfile with btestfile generates a binary nl file. 
-// glpk is the default -- replace lindo with clp for that solver
-// on the Mac it wants the nl file to be text and not binary 
-solve;
-display x;
-//
-you should get x1 = 540, x2 = 252
-*/
-
-
 
 #include <iostream>
 #include "OSiLWriter.h"

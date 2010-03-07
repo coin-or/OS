@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
         <general>
-                <solverToInvoke>symphony</solverToInvoke>
-		<serviceURI>http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService</serviceURI>
+            <solverToInvoke>symphony</solverToInvoke>
+            <serviceURI>http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService</serviceURI>
         </general>
         <optimization>
 
@@ -10,7 +10,7 @@
                         <solverOption name="maxN" solver="cbc" value="5" />
                         <solverOption name="cuts" solver="cbc" value="off" />
                         <solverOption name="max_active_nodes" solver="symphony"  value="2" />
-                         <solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/>
+                        <solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/>
                 </solverOptions>
         </optimization>
 </osol>

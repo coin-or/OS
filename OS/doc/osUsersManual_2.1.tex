@@ -3753,7 +3753,7 @@ contains executables and scripts to start and shut down the Tomcat server.
 \section{OS Support for Modeling Languages, Spreadsheets and Numerical Computing Software}\label{section:modellang}
 
 Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
-We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt GAMSlinks} for GAMS\index{GAMS}.
+We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt CoinOS} for GAMS\index{GAMS} (version 23.3 and above).
 
 
 \subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
@@ -3821,7 +3821,7 @@ If no options are specified, the default solver is used, depending on the proble
 %For continuous nonlinear models {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} is used. 
 %For mixed-integer linear models, {\tt Cbc}\index{Cbc@{\tt Cbc}} is used. 
 %For mixed-integer nonlinear models  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} is used.  
-If you wish to specify a specific solver, use the {\tt solver} option.   For example,  
+If you wish to specify a specific solver, use the {\tt -solver} option.   For example,  
 since the test problem {\tt eastborne.mod} is a linear integer program, {\tt Cbc} is used by default. 
 If you want to instead use {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(},
 then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver as follows.%
@@ -3829,11 +3829,11 @@ then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver a
 
 \begin{verbatim}
 # now tell OSAmplClient to use SYMPHONY instead of Cbc
-option OSAmplClient_options "solver symphony";
+option OSAmplClient_options "-solver symphony";
 \end{verbatim}
 
-Valid values for the {\tt solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, 
-{\tt dylp}, {\tt symphony}, and {\tt vol}. Always specify the name of the solver entirely in lower case.  
+Valid values for the {\tt -solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, 
+{\tt dylp}, {\tt symphony}, and {\tt vol}.   The solver name in the {\tt -solver} option is case insensitive.  
 
 
 \subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
@@ -3843,10 +3843,10 @@ to specify the location of the server solver as an option to OSAmplClient. In th
 the string of options for {\tt OSAmplClient\_options} is:
 
 \begin{verbatim}
-serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+-serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 \end{verbatim}
 
-This string is used to replace the string `{\tt solver symphony}' in the previous example. 
+This string is used to replace the string `{\tt -solver symphony}' in the previous example. 
 We will omit the other parts (i.e., the AMPL instruction
 \begin{verbatim}
 option OSAmplClient_options
@@ -3854,21 +3854,17 @@ option OSAmplClient_options
 the double quotes and the trailing semicolon) in this and the remaining examples.
  
 This option will send the problem to the solver server at location {\tt http://webdss.ise.ufl.edu}.   
-The {\tt serviceLocation} option is used to specify the location of a solver server. If, in addition, 
-we want to use the {\tt SYMPHONY} solver,  the string of options to {\tt OSAmplClient\_options} is:
-\begin{verbatim}
-serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
-solver symphony
-\end{verbatim}
+The {\tt -serviceLocation} option is used to specify the location of a solver server. 
 
-Both options must be wrapped into the same AMPL {\tt option} string. Specifically,
+
+If the user were to enter
 \begin{verbatim}
-option osamplclient_options "solver symphony";
-option osamplclient_options "serviceLocation  
+option osamplclient_options "-solver symphony";
+option osamplclient_options "-serviceLocation  
     http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
-will result in the default server {\tt Cbc} being invoked.  Each call 
+will result in the remoter solver being called.  Each call 
 \begin{verbatim}
 option osamplclient_options
 \end{verbatim}
@@ -3877,12 +3873,11 @@ will be ignored.
 
 Finally, the user may wish to pass options to the individual solver. This is done by providing an options file.
 A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
-provided with this distribution.  The name of the options file is the value of the {\tt optionFile} option.
+provided with this distribution.  The name of the options file is the value of the {\tt -osol} option.
 The string of options to {\tt OSAmplClient\_options} is now
 \begin{verbatim}
-serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
-solver symphony 
-optionFile solveroptions.osol
+-serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+-osol solveroptions.osol
 \end{verbatim}
 This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
 and one for {\tt SYMPHONY}.  You can have any number of options. Note the format for specifying an option:
@@ -3904,33 +3899,14 @@ which options are available.
 A good summary of options for COIN-OR solvers is \url{http://www.coin-or.org/GAMSlinks/gamscoin.pdf}.
 
 
-It is also possible to specify the name of the solver and the server location in the options file. 
-Indeed, if you examine the file {\tt solveroptions.osol} you will see that there is an XML tag 
-{\tt <solverToInvoke>} and that the solver given is {\tt symphony}. There is also an XML tag 
-{\tt <serviceURI>} that can be used to specify the location of the server.  For the option file 
-{\tt solveroptions.osol}  passing the following options to  {\tt OSAmplClient\_options} 
-\begin{verbatim}
-solver symphony
-optionFile solveroptions.osol
-serviceURI http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
-\end{verbatim}
-
-\noindent has exactly the same effect as passing the following options to  {\tt OSAmplClient\_options}
+If you examine the file {\tt solveroptions.osol} you will see that there is an XML tag  with the name
+{\tt <solverToInvoke>} and that the solver given is {\tt symphony}.   This has no effect on a local solve, however if this option file is paired with 
 
 \begin{verbatim}
-optionFile solveroptions.osol;
+-serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+-osol solveroptions.osol
 \end{verbatim}
-It is possible to override the solver option and the server location given in the options file. 
-For example,  if the following options are passed to {\tt OSAmplClient\_options}
-\begin{verbatim}
-optionFile solveroptions.osol 
-solver bonmin
-\end{verbatim}
-then  {\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} will be used  
-rather than {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}. 
-
-
-\vskip 12pt
+then in our reference implementation the remote solver service will parse the file {\tt solveroptions.osol}, find the {\tt <solverToInvoke>} tag and then pass the {\tt symphony} solver option to the {\tt OSSolverService} on the remote server.
 
 \subsubsection{AMPL Summary}
 
@@ -3947,22 +3923,18 @@ option solver OSAmplClient;
 
 \begin{itemize}
 
-\item the name of the solver using the  {\tt solver} option; valid values for this option  are {\tt clp}, 
+\item the name of the solver using the  {\tt -solver} option; valid values for this option  are {\tt clp}, 
 {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol};
 
 
-\item the location of the remote server using   the {\tt serviceURI} option;
+\item the location of the remote server using   the {\tt -serviceLocation} option;
 
-\item the location of the options file using  the {\tt optionFile} option.
+\item the location of the options file using  the {\tt -osol} option.
 
 \end{itemize}
 
-\item The {\tt solver} and {\tt serviceURI} options can be specified in the options file using the 
-{\tt <solverToInvoke>} and {\tt <serviceURI>}  XML tags, respectively. 
+These three options behave {\it exactly like} the {\tt -solver}, {\tt -serviceLocation}, and {\tt -osol} options used by the {\tt OSSolverService} described in  Section \ref{section:commandlineparser}.
 
-
-\item Specifying the {\tt solver} or {\tt serviceURI} directly through {\tt OSAmplClient\_options} 
-will override the settings in the OS options file.
 
 \item If no options are specified using {\tt OSAmplClient\_options},  the default solver is used.
 (For details see Table~\ref{table:defaultsolvers}.\index{default solver}
@@ -3976,7 +3948,7 @@ All solvers are invoked locally.
 
 \item  The options given to {\tt OSAmplClient\_options}  can be given in any order.
 
-
+\item A remote solver is called if and only if the {\tt -serviceLocation} option is specified.
 
 \end{enumerate}
 
@@ -4320,7 +4292,7 @@ the {\tt Solve} statement in the GAMS file.
 gams.exe  eastborne.gms optfile=1
 \end{verbatim}
 
-\item[4.]  The {\tt os.opt} or {\tt CoinOS.opt} file is used to specify {\it eight potential options}:
+\item[4.]  The  {\tt CoinOS.opt} file is used to specify {\it eight potential options}:
 
 
 \begin{itemize}
@@ -5959,7 +5931,7 @@ C++ {  \bf OSSolverService} executable to solve the problem.\index{Java|)}
 
 
 
-\subsection{template}\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
+\subsection{  template }\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
 directory.  This is an empty example that comes with a {\tt Makefile}  that links to all of the necessary 
 header files and libraries. For Windows users there is also a solution file configured to link with all
 of the libraries in the {\tt lib} directory and pointing to all of the header files in the {\tt include} directory.

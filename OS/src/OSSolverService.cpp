@@ -157,7 +157,7 @@ using std::endl;
 using std::ostringstream;
 using std::string;
 
-#define DEBUG_CL_INTERFACE
+//#define DEBUG_CL_INTERFACE
 
 
 #define MAXCHARS 5000 
@@ -335,9 +335,17 @@ int main(int argC, const char* argV[])
 		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
 		if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
 		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
-		if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
+		if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;     
 		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
 #endif
+
+
+        //convert to lower case so there is no solver name ambiguity
+        unsigned int k;
+        for(k = 0; k < osoptions->solverName.length(); k++){
+            osoptions->solverName[ k] = tolower( osoptions->solverName[ k]);
+        }
+
 		// get the data from the files
 		fileUtil = new FileUtil();
 		try{	
