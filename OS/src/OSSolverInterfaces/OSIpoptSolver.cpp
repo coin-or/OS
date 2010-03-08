@@ -527,7 +527,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 	double *dualValue = NULL;
 	std::string *rcost = NULL;
 	int* idx = NULL;
-	double*  mdObjValues;
+	double*  mdObjValues = NULL;
 	if(osinstance->getObjectiveNumber() > 0){
 		mdObjValues = new double[1];
 	}
