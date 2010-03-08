@@ -4022,7 +4022,7 @@ We now explain the valid options that can go into a GAMS option file when using 
 \noindent {\tt solver  (string)}:   Specifies the solver that is used to solve an instance. 
 Valid values are {\tt clp},  {\tt cbc}, {\tt glpk}, {\tt ipopt},  and {\tt bonmin}.  
 If a solver name is specified that is not recognized, the default solver for the problem type is used.  
-The value for the solver option is case sensitive and must be given in all lower case. 
+The value for the solver option is case insensitive. 
 For example, if the file {\tt CoinOS.opt} contains a single line
 \begin{verbatim}
 solver glpk
