@@ -67,7 +67,15 @@ using std::ostringstream;
 #include "OSnl2osil.h"
 #endif
 
-
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif 
 
 //#ifdef COIN_HAS_IPOPT  
 //#include "OSIpoptSolver.h"
@@ -108,6 +116,8 @@ using std::string;
 int main(int argC, char* argV[]){
 	
 	// template -- add your code here -- //
+    
+    // temporary experimentation by Kipp 
 	std::cout << "Hello World" << std::endl;
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
@@ -115,18 +125,59 @@ int main(int argC, char* argV[]){
 	OSnl2osil *nl2osil = NULL;
 
 
-	try {	
-		nl2osil = new OSnl2osil( "test.nl"); 
+	try {
+       
+        double cpuTime;
+        cpuTime = CoinCpuTime();
+        //get the size of the nl string
+        //std::string nlstring = fileUtil->getFileAsString("../../../../OS/data/amplFiles/blpmpec1.nl");
+        std::string nlstring = fileUtil->getFileAsString("smalltest.nl");
+        std::cout << "nl string size = " << nlstring.size() << std::endl;
+        std::cout  << "start the process " << std::endl;
+		//nl2osil = new OSnl2osil( "../../../../OS/data/amplFiles/BLPMPEC.nl"); 
+        nl2osil = new OSnl2osil( "smalltest.nl"); 
+        std::cout  << "nl file read " << std::endl;
+        cpuTime = CoinCpuTime() - cpuTime;
+        std::cout  << "Time to read nl file: " <<   cpuTime  << std::endl;
         nl2osil->createOSInstance() ;
-        OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
-		std::string osil;
-		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
-        //std::cout << osil << std::endl;
-        fileUtil->writeFileFromString("tmp.osil", osil);
-		delete fileUtil;
+        std::cout << "Number Variable = " << nl2osil->osinstance->getVariableNumber() << std::endl;
+        std::cout << "Number Constraints = " << nl2osil->osinstance->getConstraintNumber() << std::endl;
+      
+
+        std::cout  << "an osinstance created " << std::endl;
+        cpuTime = CoinCpuTime() - cpuTime;
+        std::cout  << "Time to create osinstance : " <<   cpuTime  << std::endl;
+        
+//         std::cout << "Initialize Nonlinear Structures" << std::endl;
+// 		nl2osil->osinstance->initForAlgDiff( );  
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to initialize Nonlinear Structures : " <<   cpuTime  << std::endl;
+        
+        
+//         std::cout << "Get Sparse Jacobian" << std::endl;
+//         SparseJacobianMatrix *sparseJac;
+// 		sparseJac = nl2osil->osinstance->getJacobianSparsityPattern();
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to get Sparse Jacobian pattern : " <<   cpuTime  << std::endl;
+//         
+//         SparseHessianMatrix *sparseHessian = nl2osil->osinstance->getLagrangianHessianSparsityPattern();
+//         cpuTime = CoinCpuTime() - cpuTime;
+//        std::cout  << "Time to get Sparse Hessain pattern : " <<   cpuTime  << std::endl;
+//         OSiLWriter *osilwriter = NULL;
+// 		osilwriter = new OSiLWriter();
+// 		std::string osil;
+// 		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
+//         std::cout << "osil generated" << std::endl;
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to create osil : " <<   cpuTime  << std::endl;
+//         std::cout  << "Size of osil string : " <<   osil.size()  << std::endl;
+        //fileUtil->writeFileFromString("tmp.osil", osil);
 		delete nl2osil;
-        delete osilwriter;
+        std::cout  << "nl2osil deleted " << std::endl;
+        cpuTime = CoinCpuTime() - cpuTime;
+        std::cout  << "Time to delete nl2osil : " <<   cpuTime  << std::endl;
+        delete fileUtil;
+       // delete osilwriter;
 
 	}
 	catch(const ErrorClass& eclass){
