@@ -241,13 +241,12 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="name" type="ContactName"/>
-			<xs:element name="title" type="xs:string" minOccurs="0"/>
 			<xs:element name="role" type="xs:string" minOccurs="0"/>
 			<xs:element name="description" type="xs:string" minOccurs="0"/>
 			<xs:element name="address" type="xs:string" minOccurs="0"/>
 			<xs:element name="phone" type="xs:string" minOccurs="0"/>
 			<xs:element name="fax" type="xs:string" minOccurs="0"/>
-			<xs:element name="web" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="web" type="xs:string" minOccurs="0"/>
 			<xs:element name="email" minOccurs="0">
 				<xs:complexType>
 					<xs:simpleContent>
@@ -257,7 +256,7 @@
 			</xs:element>
 			<xs:element name="association" type="Association" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="isMain" type="xs:boolean" use="optional"/>
+		<xs:attribute name="isMain" type="xs:boolean" use="optional" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ContactName">
 		<xs:annotation>
@@ -279,9 +278,7 @@
 			<xs:element name="name">
 				<xs:complexType>
 					<xs:simpleContent>
-						<xs:extension base="xs:string">
-							<xs:attribute name="title" type="xs:string" use="optional"/>
-						</xs:extension>
+						<xs:extension base="xs:string"/>
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
@@ -289,7 +286,7 @@
 			<xs:element name="address" type="xs:string" minOccurs="0"/>
 			<xs:element name="phone" type="xs:string" minOccurs="0"/>
 			<xs:element name="fax" type="xs:string" minOccurs="0"/>
-			<xs:element name="web" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="web" type="xs:string" minOccurs="0"/>
 			<xs:element name="email" minOccurs="0">
 				<xs:complexType>
 					<xs:simpleContent>
@@ -300,8 +297,8 @@
 			<xs:element name="logoImageURL" minOccurs="0">
 				<xs:complexType>
 					<xs:simpleContent>
-						<xs:extension base="xs:anyURI">
-							<xs:attribute name="uri" type="xs:anyURI" use="required"/>
+						<xs:extension base="xs:string">
+							<xs:attribute name="uri" type="xs:string" use="required"/>
 						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>
@@ -498,7 +495,7 @@
 		<xs:all>
 			<xs:element name="description" type="xs:string"/>
 			<xs:element name="maxTime" type="TimeLimit" default="INF" minOccurs="0"/>
-			<xs:element name="systemRestriction" type="TimeLimit" default="INF" minOccurs="0"/>
+			<xs:element name="systemRestriction" type="xs:string" default="INF" minOccurs="0"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
 		</xs:all>
