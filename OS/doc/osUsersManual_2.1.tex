@@ -3839,8 +3839,9 @@ Valid values for the {\tt -solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp}
 \subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
 
 Next, assume that you have a large problem you want to solve on the remote solver. It is necessary 
-to specify the location of the server solver as an option to OSAmplClient. In this case, 
-the string of options for {\tt OSAmplClient\_options} is:
+to specify the location of the server solver as an option to OSAmplClient. 
+The {\tt -serviceLocation} option is used to specify the location of a solver server. 
+In this case, the string of options for {\tt OSAmplClient\_options} is:
 
 \begin{verbatim}
 -serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
@@ -3854,22 +3855,28 @@ option OSAmplClient_options
 the double quotes and the trailing semicolon) in this and the remaining examples.
  
 This option will send the problem to the solver server at location {\tt http://webdss.ise.ufl.edu}.   
-The {\tt -serviceLocation} option is used to specify the location of a solver server. 
 
 
-If the user were to enter
+\medskip
+
+
+Each call 
+\begin{verbatim}
+option osamplclient_options
+\end{verbatim}
+is memoryless. That is, the options set in the last call will overwrite any options set in previous calls
+and cause them to be discarded.
+
+For instance, the sequence of option calls
 \begin{verbatim}
 option osamplclient_options "-solver symphony";
 option osamplclient_options "-serviceLocation  
     http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
-will result in the remoter solver being called.  Each call 
-\begin{verbatim}
-option osamplclient_options
-\end{verbatim}
-is memoryless. That is, the options set in the first call will be overwritten by the second call and
-will be ignored.
+will result in the default solver being called. 
+
+\medskip
 
 Finally, the user may wish to pass options to the individual solver. This is done by providing an options file.
 A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
@@ -3937,7 +3944,7 @@ These three options behave {\it exactly like} the {\tt -solver}, {\tt -serviceLo
 
 
 \item If no options are specified using {\tt OSAmplClient\_options},  the default solver is used.
-(For details see Table~\ref{table:defaultsolvers}.\index{default solver}
+(For details see Table~\ref{table:defaultsolvers}).\index{default solver}
 %
 % by default, for continuous
 %inear models  {\tt clp} is used. For continuous nonlinear models {\tt ipopt} is used. 

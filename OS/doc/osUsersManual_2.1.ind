@@ -1,8 +1,8 @@
 \begin{theindex}
 
   \item Algorithmic differentiation, 7, 82--83, 89--90
-  \item AMPL, 6, 7, 29, 55--58
-  \item AMPL nl format, 1, 6, 7, 35, 36, 43, 74--75
+  \item AMPL, 6, 7, 29, 55--57
+  \item AMPL nl format, 1, 6, 7, 35, 36, 43, 74
   \item AMPL Solver Library (ASL), 16, 22, 25
   \item {\tt amplFiles}, 55
   \item Apache Axis, 6, 40
@@ -27,7 +27,7 @@
   \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
   \item COIN-OR, 1, 13
   \item COIN-OR projects
-    \subitem {\tt Bonmin}, 13, 15, 19, 22--23, 28, 57
+    \subitem {\tt Bonmin}, 13, 15, 19, 22--23, 28
     \subitem {\tt BuildTools}, 28
     \subitem {\tt Cbc}, 13, 15, 23, 28
     \subitem {\tt Cgl}, 13, 23, 28, 88
@@ -38,7 +38,7 @@
     \subitem {\tt DyLP}, 23, 28
     \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--23, 28, 38, 43, 76, 77, 96
     \subitem {\tt Osi}, 13, 23, 28, 36
-    \subitem {\tt SYMPHONY}, 15, 23, 28, 55--57
+    \subitem {\tt SYMPHONY}, 15, 23, 28, 55
     \subitem {\tt Vol}, 23, 28
   \item {\tt COIN\_HAS\_XXXXX}, 24
   \item {\tt COIN\_SKIP\_PROJECTS}, 13, 15, 19, 21, 24
@@ -55,7 +55,7 @@
   \indexspace
 
   \item debug version, MSYS, 21
-  \item default solver, 36--38, 44, 55, 58
+  \item default solver, 36--38, 44, 55, 57
   \item Downloading
     \subitem binaries, 8
     \subitem subversion
@@ -63,7 +63,7 @@
       \subsubitem Windows, 12
     \subitem tarball, 12
     \subitem zip file, 12
-  \item Doxygen, 10, 26--27, 69
+  \item Doxygen, 10, 26--27, 68
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
@@ -79,7 +79,7 @@
 
   \indexspace
 
-  \item GAMS, 7, 55, 58--64
+  \item GAMS, 7, 55, 57--63
   \item gcc, 9
   \item {\tt getJobID}, 35, 36, 38, 45, 48
   \item {\tt GLPK}, 7, 25, 36
@@ -139,22 +139,22 @@
     \subitem unit test, 14
   \item {\tt OS.sln}, 17, 82
   \item {\tt OSAgent}, 6, 68, 100
-  \item {\tt OSAmplClient}, 6, 8, 25, 29, 55--58, 75
+  \item {\tt OSAmplClient}, 6, 8, 25, 29, 55--57, 74
   \item {\tt OSCommon}, 7, 13
-  \item {\tt OSExpressionTree}, 71
+  \item {\tt OSExpressionTree}, 70
   \item {\tt OSFileUpload}, 100--101
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 6--8, 31--33, 35, 36, 38, 40, 43, 48, 69, 71, 74--76, 
+  \item OSiL, 1, 6--8, 31--33, 35, 36, 38, 40, 43, 48, 69, 70, 74--76, 
 		100, 102--106
   \item {\tt OSInstance}, 6, 69--75, 77, 82, 92
-  \item {\tt OSLibrary}, 38, 68--78
-  \item {\tt OSmps2osil}, 64, 74--75
+  \item {\tt OSLibrary}, 38, 68--77
+  \item {\tt OSmps2osil}, 64, 74
   \item OSnL, 35
   \item {\tt OSnl2osil}, 25, 64, 74
   \item OSoL, 6, 8, 35, 38--40, 43--45, 48, 75
   \item {\tt OSOption}, 73, 75
   \item OSpL, 35, 46--48
-  \item {\tt OSResult}, 74--75
+  \item {\tt OSResult}, 73, 75
   \item OSrL, 6, 8, 33--34, 36, 38, 39, 48, 75
   \item {\tt OSSolverAgent}, 68
   \item {\tt OSSolverService}, 1, 6, 8, 13, 15, 28, 29, 35--48
