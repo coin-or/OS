@@ -59,6 +59,7 @@ CXXFLAGS = @CXXFLAGS@  $(DEFS)
 
 
 DARWIN=$(findstring darwin, @build_os@)
+WIN=$(findstring gw, @build_os@)
 
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
@@ -114,7 +115,11 @@ LIBS += @coinutilslib@
 
 
 
-LIBS += $(ASLLIB)
+ifeq ($(WIN),gw)
+  KLUDGE =  /FORCE:MULTIPLE
+endif
+
+LIBS += $(ASLLIB) $(KLUDGE)
 
  
 #DONE ADDING LIBS
