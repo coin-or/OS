@@ -50,7 +50,7 @@ CXXFLAGS = @CXXFLAGS@  $(DEFS)
 
 
 DARWIN=$(findstring darwin, @build_os@)
-WIN=$(findstring wub, @build_os@)
+WIN=$(findstring gw, @build_os@)
 
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
