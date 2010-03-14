@@ -311,7 +311,7 @@ if test $coin_has_couenne != unavailable &&
    test $coin_has_couenne != skipping; then
   case $CXX in
     cl*)
-       couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib';;
+       couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libboncouenne.lib  `$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouennereadnl.lib   `$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib        ';;
      *)
        couennelib="-L\$(INSTALLIBDIR) -lBonCouenne -lCouenneReadnl -lCouenne ";;
   esac

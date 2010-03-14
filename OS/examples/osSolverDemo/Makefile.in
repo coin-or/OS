@@ -50,6 +50,7 @@ CXXFLAGS = @CXXFLAGS@  $(DEFS)
 
 
 DARWIN=$(findstring darwin, @build_os@)
+WIN=$(findstring wub, @build_os@)
 
 # additional C++ Compiler options for linking
 CXXLINKFLAGS = @RPATH_FLAGS@
@@ -57,6 +58,8 @@ CXXLINKFLAGS = @RPATH_FLAGS@
 ifeq ($(DARWIN),darwin)
   CXXLINKFLAGS += -bind_at_load
 endif
+
+
 
 # Directory with header files
 OSINCDIR = @includedir@/coin
@@ -104,8 +107,11 @@ LIBS += @clplib@
 LIBS += @coinutilslib@ 
 
 
+ifeq ($(WIN),win)
+  KLUDGE =  /FORCE:MULTIPLE
+endif
 
-LIBS += $(ASLLIB) 
+LIBS += $(ASLLIB) $(KLUDGE)
  
 #DONE ADDING LIBS
 
