@@ -107,7 +107,7 @@ LIBS += @clplib@
 LIBS += @coinutilslib@ 
 
 
-ifeq ($(WIN),win)
+ifeq ($(WIN),gw)
   KLUDGE =  /FORCE:MULTIPLE
 endif
 
