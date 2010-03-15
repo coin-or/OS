@@ -1149,11 +1149,6 @@ OSCommon/util/tcpmon.bat -text
 OSCommon/util/wsdl.exe -text
 OSCommon/util/wsdl2java.bat -text
 OSCommon/xml/web.xml -text
-OSMain/.classpath -text
-OSMain/.project -text
-OSMain/.umlproject -text
-OSMain/META-INF/MANIFEST.MF -text
-OSMain/src/Test.java -text
 OSModeler/.classpath -text
 OSModeler/.project -text
 OSModeler/META-INF/MANIFEST.MF -text
