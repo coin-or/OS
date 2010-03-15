@@ -1,5 +1,4 @@
 * text=auto !eol
-/LICENSE.txt -text
 OSCommon/.classpath -text
 OSCommon/.project -text
 OSCommon/META-INF/MANIFEST.MF -text
