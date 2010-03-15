@@ -1,8 +1,5 @@
 * text=auto !eol
 /LICENSE.txt -text
-OSAnalyzer/.classpath -text
-OSAnalyzer/.project -text
-OSAnalyzer/src/org/optimizationservices/osanalyzer/api/DrAMPLAnalyzerService.java -text
 OSCommon/.classpath -text
 OSCommon/.project -text
 OSCommon/META-INF/MANIFEST.MF -text
