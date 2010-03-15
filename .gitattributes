@@ -1195,11 +1195,6 @@ OSRegistry/OSRegistry.jpx -text
 OSRegistry/OSRegistry.jpx.local -text
 OSRegistry/src/org/optimizationservices/osregistry/api/CGRegistryService.java -text
 OSRegistry/src/org/optimizationservices/osregistry/api/NEOSRegistryService.java -text
-OSScheduler/.classpath -text
-OSScheduler/.project -text
-OSScheduler/.umlproject -text
-OSScheduler/META-INF/MANIFEST.MF -text
-OSScheduler/src/org/optimizationservices/osscheduler/api/CGSchedulerService.java -text
 OSSimulation/.classpath -text
 OSSimulation/.project -text
 OSSimulation/META-INF/MANIFEST.MF -text
