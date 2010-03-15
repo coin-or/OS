@@ -118,7 +118,7 @@ ifeq ($(WIN),gw)
   KLUDGE =  /FORCE:MULTIPLE
 endif
 
-LIBS += $(ASLLIB) $(KLUDGE))
+LIBS += $(ASLLIB) $(KLUDGE)
 
  
 #DONE ADDING LIBS
