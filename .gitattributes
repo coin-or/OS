@@ -1182,12 +1182,6 @@ OSModeler/src/org/optimizationservices/osmodeler/parser/osml/Token.java -text
 OSModeler/src/org/optimizationservices/osmodeler/parser/osml/TokenMgrError.java -text
 OSModeler/src/org/optimizationservices/osmodeler/util/OSmLConstant.java -text
 OSModeler/src/org/optimizationservices/osmodeler/util/OSmLOption.java -text
-OSSimulation/.classpath -text
-OSSimulation/.project -text
-OSSimulation/META-INF/MANIFEST.MF -text
-OSSimulation/OSSimulation.jpx -text
-OSSimulation/src/org/optimizationservices/ossimulation/api/RosenbrockSimulationService.java -text
-OSSimulation/src/org/optimizationservices/ossimulation/simulation/RosenbrockSimulation.java -text
 OSSolver/.cdtproject -text
 OSSolver/.classpath -text
 OSSolver/.project -text
