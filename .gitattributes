@@ -1187,14 +1187,6 @@ OSModeler/src/org/optimizationservices/osmodeler/parser/osml/Token.java -text
 OSModeler/src/org/optimizationservices/osmodeler/parser/osml/TokenMgrError.java -text
 OSModeler/src/org/optimizationservices/osmodeler/util/OSmLConstant.java -text
 OSModeler/src/org/optimizationservices/osmodeler/util/OSmLOption.java -text
-OSRegistry/.classpath -text
-OSRegistry/.project -text
-OSRegistry/.umlproject -text
-OSRegistry/META-INF/MANIFEST.MF -text
-OSRegistry/OSRegistry.jpx -text
-OSRegistry/OSRegistry.jpx.local -text
-OSRegistry/src/org/optimizationservices/osregistry/api/CGRegistryService.java -text
-OSRegistry/src/org/optimizationservices/osregistry/api/NEOSRegistryService.java -text
 OSSimulation/.classpath -text
 OSSimulation/.project -text
 OSSimulation/META-INF/MANIFEST.MF -text
