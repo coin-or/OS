@@ -1,0 +1,6 @@
+2010-03-17: mtim
+  Refactor OSjava for wider development using Eclipse.
+   * Code taken from r3285
+   * Split into Eclipse projects (OSCommon, OSServer, OSLib, OSBinary)
+   * External Java jars will be provided by OSLib or OSBinary (local copies)
+   * Commit hacks to build Tomcat6 based on previous work.
