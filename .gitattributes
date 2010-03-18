@@ -1,6 +1,8 @@
 * text=auto !eol
 /ChangeLog.txt -text
 /LICENSE.txt -text
+OSLib/.classpath -text svneol=unset#text/plain
+OSLib/.project -text svneol=unset#text/plain
 OSServer/.classpath -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
