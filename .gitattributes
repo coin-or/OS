@@ -340,3 +340,30 @@ OSServer/.classpath -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
 OSServer/WebContent/WEB-INF/web.xml -text svneol=unset#text/plain
+OSServer/src/org/optimizationservices/ossolver/api/CBCSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/CGSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/CLPSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/CPLEXSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/GLPKSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/IPOPTSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/KnitroSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/LindoSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/The10SecondSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/The1MinuteSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/api/The3MinuteSolverService.java -text
+OSServer/src/org/optimizationservices/ossolver/parser/LindoOSiLReader.java -text
+OSServer/src/org/optimizationservices/ossolver/problem/JunMaOptProblem_Beale.java -text
+OSServer/src/org/optimizationservices/ossolver/problem/JunMaOptProblem_LP.java -text
+OSServer/src/org/optimizationservices/ossolver/problem/JunMaOptProblem_Rosenbrock.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/CBCSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/CGSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/CLPSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/CPLEXSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/CoinSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/GLPKSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/IPOPTSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/KnitroSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/LindoSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/The10SecondSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/The1MinuteSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/solver/The3MinuteSolver.java -text
