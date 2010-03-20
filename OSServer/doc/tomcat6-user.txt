@@ -1,0 +1,10 @@
+# cd workspace
+# install -d Servers
+
+TOMCAT=Servers/tomcat6
+tomcat6-instance-create $TOMCAT
+ln -s /usr/share/tomcat6/bin/bootstrap.jar $TOMCAT/bin
+cat /etc/tomcat6/policy.d/* > $TOMCAT/conf/catalina.policy
+ln -s /usr/share/tomcat6/lib $TOMCAT
+
+# Eclipse: File > New > Other > "Server" > Tomcat v6.0 Server > select Servers/local tomcat6 for server
