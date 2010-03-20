@@ -212,7 +212,7 @@ int main(int argC, const char* argV[])
 	std::string configFileName = "";
 	int i;
     printf("\n\n");
-    printf("------- This is Optimization Services Version 2.1.0 -------\n\n");
+    printf("------- %s -------\n\n", OS_RELEASE_MESSAGE);
 
 	// initialize the OS options structure
 

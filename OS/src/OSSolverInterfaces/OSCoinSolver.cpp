@@ -643,8 +643,8 @@ void CoinSolver::solve() throw (ErrorClass) {
 	}
 	
 	// resultHeader information
-	if(osresult->setServiceName("Solved with Coin Solver: " + sSolverName) != true)
-		throw ErrorClass("OSResult error: setServiceName");
+	if(osresult->setSolverInvoked("COIN-OR " + sSolverName) != true)
+		throw ErrorClass("OSResult error: SetSolverInvoked");
 	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 		throw ErrorClass("OSResult error: setInstanceName");
 	//if(osresult->setJobID( osresultdata->jobID) != true)
@@ -903,6 +903,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	std::string description = "";
 	osresult->setGeneralStatusType("normal");
 	osresult->setTime(cpuTime);
+    osresult->setServiceName( OS_RELEASE_MESSAGE );
+     osresult->setSolverInvoked( "COIN-OR " + sSolverName );
 	if (solver->isProvenOptimal() == true){
 		osresult->setSolutionStatus(solIdx, "optimal", description);					
 	}
@@ -1003,6 +1005,7 @@ void CoinSolver::writeResult(CbcModel *model){
 	std::string description = "";
 	osresult->setGeneralStatusType("normal");
 	osresult->setTime(cpuTime);
+    osresult->setServiceName( OS_RELEASE_MESSAGE );
 	
 	if (model->isProvenOptimal() == true  ){
 		osresult->setSolutionStatus(solIdx, "optimal", description);			

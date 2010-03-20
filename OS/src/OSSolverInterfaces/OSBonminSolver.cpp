@@ -840,6 +840,8 @@ void BonminSolver::writeResult(){
 		// resultHeader information
 		if(osresult->setServiceName( "Bonmin solver service") != true)
 			throw ErrorClass("OSResult error: setServiceName");
+		if(osresult->setSolverInvoked( "COIN-OR Bonmin") != true)
+			throw ErrorClass("OSResult error: setSolverInvoked");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 			throw ErrorClass("OSResult error: setInstanceName");	
 		//if(osresult->setJobID( osoption->jobID) != true)

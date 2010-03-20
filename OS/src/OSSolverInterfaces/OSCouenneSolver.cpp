@@ -714,7 +714,9 @@ void CouenneSolver::writeResult(){
 		if(osinstance->getVariableNumber()  > 0) x = new double[osinstance->getVariableNumber() ];
 		z = new double[1];		
 		// resultHeader information
-		if(osresult->setServiceName( "Couenne solver service") != true)
+		if(osresult->setSolverInvoked( "COIN-OR Couenne") != true)
+			throw ErrorClass("OSResult error: setSolverInvoked");
+		if(osresult->setServiceName( OS_RELEASE_MESSAGE) != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 			throw ErrorClass("OSResult error: setInstanceName");	
