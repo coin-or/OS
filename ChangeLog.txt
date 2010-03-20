@@ -1,6 +1,10 @@
 2010-03-17: mtim
   Refactor OSjava for wider development using Eclipse.
-   * Code taken from r3285
+   * Code taken from r3235 (oscommon) and  r2647 (ossolver) 
    * Split into Eclipse projects (OSCommon, OSServer, OSLib, OSBinary)
    * External Java jars will be provided by OSLib or OSBinary (local copies)
    * Commit hacks to build Tomcat6 based on previous work.
+  Refactor OSServer log:
+   * Code taken from git-svn e5230d7719241defdf2291ee2b3c003e6545882e
+   * Create a Local Server as per tomcat6-local.txt or other.
+   * OSServer is a Dynamic Website.
