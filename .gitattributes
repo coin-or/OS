@@ -345,6 +345,7 @@ OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
 OSServer/WebContent/WEB-INF/web.xml -text svneol=unset#text/plain
 OSServer/doc/tomcat6-policy.txt -text
 OSServer/doc/tomcat6-user.txt -text
+OSServer/src/OSSolverService.java -text
 OSServer/src/org/optimizationservices/ossolver/api/CBCSolverService.java -text
 OSServer/src/org/optimizationservices/ossolver/api/CGSolverService.java -text
 OSServer/src/org/optimizationservices/ossolver/api/CLPSolverService.java -text
