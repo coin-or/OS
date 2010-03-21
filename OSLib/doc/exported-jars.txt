@@ -1,0 +1,8 @@
+/usr/share/java/xercesImpl.jar
+/usr/share/java/commons-codec.jar
+/usr/share/java/commons-fileupload.jar
+/usr/share/java/servlet-api.jar
+/usr/share/java/axis.jar
+/usr/share/java/jaxrpc.jar
+/usr/share/java/saxonb.jar
+
