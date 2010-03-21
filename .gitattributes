@@ -359,9 +359,6 @@ OSServer/src/org/optimizationservices/ossolver/api/The10SecondSolverService.java
 OSServer/src/org/optimizationservices/ossolver/api/The1MinuteSolverService.java -text
 OSServer/src/org/optimizationservices/ossolver/api/The3MinuteSolverService.java -text
 OSServer/src/org/optimizationservices/ossolver/parser/LindoOSiLReader.java -text
-OSServer/src/org/optimizationservices/ossolver/problem/JunMaOptProblem_Beale.java -text
-OSServer/src/org/optimizationservices/ossolver/problem/JunMaOptProblem_LP.java -text
-OSServer/src/org/optimizationservices/ossolver/problem/JunMaOptProblem_Rosenbrock.java -text
 OSServer/src/org/optimizationservices/ossolver/solver/CBCSolver.java -text
 OSServer/src/org/optimizationservices/ossolver/solver/CGSolver.java -text
 OSServer/src/org/optimizationservices/ossolver/solver/CLPSolver.java -text
