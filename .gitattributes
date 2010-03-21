@@ -340,6 +340,7 @@ OSLib/doc/exported-jars.txt -text
 OSLib/scripts/install-external.sh -text
 OSLib/scripts/install-packages-ubuntu-karmic.sh -text
 OSServer/.classpath -text svneol=unset#text/plain
+OSServer/.externalToolBuilders/org.eclipse.wst.jsdt.core.javascriptValidator.launch -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
 OSServer/WebContent/WEB-INF/web.xml -text svneol=unset#text/plain
