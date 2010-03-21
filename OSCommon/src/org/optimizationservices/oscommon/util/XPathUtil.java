@@ -19,7 +19,7 @@ import javax.xml.transform.stream.StreamSource;
 import net.sf.saxon.Configuration;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.query.QueryResult;
-import net.sf.saxon.xpath.StandaloneContext;
+import net.sf.saxon.sxpath.XPathStaticContext;
 import net.sf.saxon.xpath.XPathEvaluator;
 
 /**
@@ -83,12 +83,12 @@ public class XPathUtil{
 	public List query(String xPathString, HashMap variables){
 		try{
 			if(variables != null){
-				StandaloneContext standaloneContext = (StandaloneContext)m_xPathEvaluator.getStaticContext();
+				XPathStaticContext independentContext = (XPathStaticContext)m_xPathEvaluator.getStaticContext();
 				Iterator it = variables.keySet().iterator();
 				while(it.hasNext()){
 					String sVarName = (String)it.next();
-					Object oVarValue = variables.get(sVarName);
-					standaloneContext.declareVariable(sVarName, oVarValue);
+					String sVarValue = (String)variables.get(sVarName);
+					independentContext.declareVariable(sVarName, sVarValue);
 				}
 			}
 			List queryResult = m_xPathEvaluator.evaluate(xPathString);
@@ -112,12 +112,12 @@ public class XPathUtil{
 	public String queryFirst(String xPathString, HashMap variables){
 		try{
 			if(variables != null){
-				StandaloneContext standaloneContext = (StandaloneContext)m_xPathEvaluator.getStaticContext();
+				XPathStaticContext independentContext = (XPathStaticContext)m_xPathEvaluator.getStaticContext();
 				Iterator it = variables.keySet().iterator();
 				while(it.hasNext()){
 					String sVarName = (String)it.next();
-					Object oVarValue = variables.get(sVarName);
-					standaloneContext.declareVariable(sVarName, oVarValue);
+					String sVarValue = (String)variables.get(sVarName);
+					independentContext.declareVariable(sVarName, sVarValue);
 				}
 			}
 			Object oQueryResult = m_xPathEvaluator.evaluateSingle(xPathString);

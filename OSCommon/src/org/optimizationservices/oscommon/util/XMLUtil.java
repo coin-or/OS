@@ -34,7 +34,8 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.DatatypeFactoryImpl;
+// FIXME: untested change in import
+import org.apache.xerces.jaxp.datatype.DatatypeFactoryImpl;
 
 
 /**

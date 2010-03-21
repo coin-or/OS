@@ -31,8 +31,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
+
 /**
  *
  * <P>The <code>IOUtil</code> class contains methods for performing
@@ -151,7 +151,8 @@ public class IOUtil implements Serializable{
 			byte[] bArray = new byte[iArraySize];
 			dis.read(bArray);
 
-			String sOut = (new BASE64Encoder()).encodeBuffer(bArray);
+			// FIXME: Untested fix for move to commons-codec
+			String sOut = new String((new Base64()).encode(bArray));
 			fis.close();
 			dis.close();
 			return sOut;
@@ -173,7 +174,8 @@ public class IOUtil implements Serializable{
 	 */
 	public static boolean encodedStringToFile(String string, String fileName){
 		try{
-			byte[] bArray =  (new BASE64Decoder()).decodeBuffer(string);
+			// FIXME: Untested fix for move to commons-codec
+			byte[] bArray =  (byte[]) (new Base64()).decode(string);
 			FileOutputStream fos = new FileOutputStream(fileName);
 			DataOutputStream dos = new DataOutputStream(fos);
 			dos.write(bArray);
@@ -222,7 +224,8 @@ public class IOUtil implements Serializable{
 	 * @return the base64 encoded string from the bytes.
 	 */
 	public static String bytesToEncodedString(byte[] byteArray) {
-		return (new BASE64Encoder()).encodeBuffer(byteArray);
+		// FIXME: Untested fix for move to commons-codec
+		return new String((new Base64()).encode(byteArray));
 	}//bytesToEncodedString
 
 	/**
@@ -235,7 +238,8 @@ public class IOUtil implements Serializable{
 	 */
 	public static byte[] encodedStringToBytes(String string){
 		try{
-			return (new BASE64Decoder()).decodeBuffer(string);
+			// FIXME: Untested fix for move to commons-codec
+			return (byte[]) (new Base64()).decode(string);
 		}
 		catch(Exception e){
 			e.printStackTrace();
