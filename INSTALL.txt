@@ -1,0 +1,36 @@
+= OSjava =
+
+This is a work in progress.  Please report any missing steps or problems.
+
+== Install ==
+ * Clone OSjava
+ * Install local copy of Tomcat 6 server in eclipse
+   * in OSServer run `sh scripts/tomcat6-user.sh` or install similar server
+   * install Tomcat in eclipse (follow instructions printed by previous script)
+ * Import from existing (OSLib, OSCommon, OSServer)
+ * OSLib
+   * In OSLib run `sh scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
+   * In OSLib run `sh scripts/install-external.sh` for download locations and re-run to unpack.
+   * project > properties > Project Facets > select: Java; Utility Module
+ * OSCommon
+   * project > properties > Project Facets > select: Java; Utility Module
+   * project > properties > Project References > OSLib
+   * Right click project then validate.
+ * OSServer
+   * project > properties > Project Facets > select: Java; Dynamic Web Module
+   * project > properties > Java EE Module Dependency > select OSLib and OSCommon
+ * Project Clean (OSLib, OSCommon, OSServer)
+ * Start Server
+   * Java EE Perspective > Window > Show View > Servers
+   * Right click server and select `add or remove` and add `OSServer`
+   * Right click and select start.
+   * Errors will be directed to the `console` view
+ * Install OSSolverService
+   * Install OS or coin-or for local OSSolverService binary 
+     * for an automated build of coinall use `OSService/scripts/coin-or.sh` and run sudo `OSService/scripts/coin-or-install.sh`
+   * In your workspace run the following code; substitute source location for local copy of OSSolverService (note this step may be buggy, pay attention to errors produced by server to fix)
+     {{{
+     ln -sf /opt/coinall/bin/OSSolverService .metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/OSServer//WEB-INF/code/solver/OSSolverServiceLinux
+     }}}
+ * Test server
+   * in OSServer/test run `python test.py`
