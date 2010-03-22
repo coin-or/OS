@@ -10,3 +10,5 @@
 /usr/share/java/commons-discovery.jar
 /usr/share/java/wsdl4j.jar
 
+/usr/share/java/log4j-1.2.jar
+
