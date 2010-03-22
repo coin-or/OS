@@ -3,6 +3,8 @@
 	<name>OSServer</name>
 	<comment></comment>
 	<projects>
+		<project>OSCommon</project>
+		<project>OSLib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -1,0 +1,26 @@
+= Eclipse Configuration =
+
+== Install ==
+
+Install a local copy of Tomcat 6
+ * for Ubuntu run scripts/tomcat6-user.sh in OSServer, this will add
+   a server to ../Servers/tomcat6
+
+== Build Notes ==
+
+Web service was created by right clicking OSSolverService and
+selecting Web Services > Create Web Service.  The current Eclipse is
+broken in this regards, so the files here are from earlier work as
+OSSolverService should be ported to Axis2 at some point.
+
+Eclipse/SVN does not save the .settings directory so some aspects of
+the project are lost across machines/development.  Detailed
+instructions will be provided after testing with other people and
+envrionments. The following steps where done and should provide
+guidence if your one on the lucky onces.
+ * Project Settings > Project Facts
+   * Dynamic Web Module
+   * Java
+ * Project Settings > Java EE Dependencies 
+   * OSServer depends on OSCommon and OSLib 
+   * OSLib and OSCommon export jars and classpath.

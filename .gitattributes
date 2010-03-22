@@ -342,7 +342,13 @@ OSLib/scripts/install-packages-ubuntu-karmic.sh -text
 OSServer/.classpath -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
+OSServer/WebContent/WEB-INF/OSSolverServiceService/DefaultNamespace/deploy.wsdd -text
+OSServer/WebContent/WEB-INF/OSSolverServiceService/DefaultNamespace/undeploy.wsdd -text
+OSServer/WebContent/WEB-INF/code/OSConfig/OSParameter.xml -text
+OSServer/WebContent/WEB-INF/server-config.wsdd -text
 OSServer/WebContent/WEB-INF/web.xml -text svneol=unset#text/plain
+OSServer/WebContent/wsdl/OSSolverService.wsdl -text
+OSServer/doc/eclipse.txt -text
 OSServer/doc/tomcat6-policy.txt -text
 OSServer/scripts/tomcat6-user.sh -text
 OSServer/src/OSSolverService.java -text
