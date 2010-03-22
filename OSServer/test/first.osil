@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/OSiL.xsd">
+	<instanceHeader>
+		<name>First</name>
+		<source>Timothy Middelkoop (t.middelkoop@ufl.edu)</source>
+		<description>
+		maximize u=x1+x2
+		s.t.
+			-3/4x1 + x2 &lt;= 3
+   			6x1 + x2 &lt;= 30
+			x1,x2 &gt;= 0
+			
+		OSSolverService -osil first.osil
+		</description>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="2">
+			<var name="x0" />
+			<var name="x1" />
+		</variables>
+		<objectives>
+			<obj maxOrMin="max" numberOfObjCoef="2">
+				<coef idx="0">1</coef>
+				<coef idx="1">1</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="2">
+			<con ub="3"/>
+			<con ub="30"/>
+		</constraints>
+		<linearConstraintCoefficients numberOfValues="4">
+			<start>
+				<el>0</el>
+				<el>2</el>
+				<el>4</el>
+			</start>
+			<colIdx>
+				<el>0</el><el>1</el>
+				<el>0</el><el>1</el>
+			</colIdx>
+			<value>
+				<el>-0.75</el><el>1</el>
+				<el>6</el><el>1</el>			
+			</value>
+		</linearConstraintCoefficients>
+	</instanceData>
+</osil>
