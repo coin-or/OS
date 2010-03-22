@@ -340,6 +340,7 @@ OSLib/.project -text svneol=unset#text/plain
 OSLib/doc/exported-jars.txt -text
 OSLib/scripts/install-external.sh -text
 OSLib/scripts/install-packages-ubuntu-karmic.sh -text
+OSLib/src/META-INF/MANIFEST.MF -text svneol=unset#text/plain
 OSServer/.classpath -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
