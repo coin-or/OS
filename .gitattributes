@@ -377,6 +377,7 @@ OSServer/src/org/optimizationservices/ossolver/solver/The10SecondSolver.java -te
 OSServer/src/org/optimizationservices/ossolver/solver/The1MinuteSolver.java -text
 OSServer/src/org/optimizationservices/ossolver/solver/The3MinuteSolver.java -text
 OSServer/test/first.osil -text
+OSServer/test/remote.osol -text
 OSServer/test/test-coin.py -text
 OSServer/test/test-coin.sh -text
 OSServer/test/test.py -text
