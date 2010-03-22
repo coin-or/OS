@@ -152,7 +152,9 @@ public class MailUtil{
 				}
 			}
 			else{
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(OSParameter.TO_EMAIL));
+				// FIXME: Untested fix for Eclipse port.
+				if(OSParameter.TO_EMAIL != null && OSParameter.TO_EMAIL.length()>0 )
+					msg.addRecipient(Message.RecipientType.TO, new InternetAddress(OSParameter.TO_EMAIL));				
 			}
 			if(m_sCCEmail != null && m_sCCEmail.length() > 0){
 				Vector<String> vCCEmails = CommonUtil.stringToVector(m_sCCEmail, ",; \t\r\n");
@@ -198,7 +200,9 @@ public class MailUtil{
 			    }
 			    msg.setContent(multipart);
 			}
-			Transport.send(msg);
+			// FIXME: Untested fix for Eclipse port.
+			if(OSParameter.TO_EMAIL != null && OSParameter.TO_EMAIL.length()>0 )
+				Transport.send(msg);
 			return true;
 		}
 		catch (Exception e){

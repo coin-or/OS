@@ -33,7 +33,7 @@ public final class OSParameterFile {
 	/**
 	 * NAME holds the file name that keeps the parameter information. 
 	 */
-	public static String NAME = "/code/OSConfig/OSParameter.xml"; //IOUtil.getCurrentDir()+"webapps/os/code/OSParameter.xml"; 
+	public static String NAME = "/code/OSConfig/OSParameter.xml"; 
 	
 
 	/**
@@ -58,37 +58,9 @@ public final class OSParameterFile {
 		else{
 			request = httpRequest;
 		}
-		SERVICE_FOLDER = request.getContextPath();
-		if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
-		if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";		
-
-		//automatically detect where the tomcat installation is. 
-		String sDir = "";
-		try {
-			File dir = new File (".");
-			sDir = dir.getCanonicalPath();
-			sDir = sDir.replace('\\', '/');
-			if(!sDir.endsWith("/")){
-				sDir += "/";
-			}
-		}
-		catch(Exception e) {
-			sDir = "/Program Files/Apache Software Foundation/Tomcat 5.5/";
-		}
-		
-		
-		
-		if(sDir.toLowerCase().endsWith("bin") || 
-				sDir.toLowerCase().endsWith("bin\\") ||
-				sDir.toLowerCase().endsWith("bin/")){
-			int iIndex = sDir.lastIndexOf("bin");
-			sDir = sDir.substring(0, iIndex);
-		}
-		if(!sDir.endsWith("/")){
-			sDir += "/";
-		}
-
-		NAME = sDir+= "webapps/"+SERVICE_FOLDER+"/WEB-INF/code/OSConfig/OSParameter.xml";
+		// FIXME: Untested for wider distribution.
+		SERVICE_FOLDER = request.getRealPath("/");
+		NAME = SERVICE_FOLDER+"/WEB-INF/code/OSConfig/OSParameter.xml";
 		return NAME;
 		
 	}//setParameterFile

@@ -322,6 +322,7 @@ OSCommon/src/org/optimizationservices/oscommon/util/MailUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/MathUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSConstant.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSFileUpload.java -text
+OSCommon/src/org/optimizationservices/oscommon/util/OSLog.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSParameter.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSParameterFile.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSServiceUtil.java -text

@@ -452,7 +452,8 @@ public final class OSParameter{
 	/**
 	 * OS_REGISTRY_SITE holds the site of the OS Registry.
 	 */
-	public static String OS_REGISTRY_SITE = OS_SERVICE_SITE + "/osregistry/OSRegistryService.jws"; //change!
+	// FIXME: Untested.
+	public static String OS_REGISTRY_SITE = null; // OS_SERVICE_SITE + "/osregistry/OSRegistryService.jws"; //change!
 
 	/**
 	 * OS_SCHEDULER_SITE holds the site of the OS scheduler.
@@ -769,9 +770,9 @@ public final class OSParameter{
 				//HttpServlet servlet = (HttpServlet)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLET);
 				//ServletContext servletContext = (ServletContext)servlet.getServletContext();
 				HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
-				//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();		
-				SERVICE_FOLDER = request.getContextPath();
-				if(SERVICE_FOLDER != null && SERVICE_FOLDER.length() > 0)SERVICE_FOLDER = SERVICE_FOLDER.substring(1);
+				//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();
+				// FIXME: Untested for wider distribution.  Uses depreciated function.
+				SERVICE_FOLDER = request.getRealPath("/");
 			}
 			catch(Exception e){
 
@@ -782,18 +783,8 @@ public final class OSParameter{
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_HOME");
 		if(sValue != null && sValue.length() > 0) CODE_HOME = sValue;
 		else{
-			String sDir = IOUtil.getCurrentDir();
-			if(sDir.toLowerCase().endsWith("bin") || 
-					sDir.toLowerCase().endsWith("bin\\") ||
-					sDir.toLowerCase().endsWith("bin/")){
-				int iIndex = sDir.lastIndexOf("bin");
-				sDir = sDir.substring(0, iIndex);
-			}
-			if(!sDir.endsWith("/")){
-				sDir += "/";
-			}
-
-			CODE_HOME = sDir+= "webapps/"+ SERVICE_FOLDER+"/WEB-INF/code/";
+			// FIXME: Untested for wider distribution.
+			CODE_HOME = SERVICE_FOLDER+"/WEB-INF/code/";
 		}
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_DRIVE");
@@ -1481,7 +1472,9 @@ public final class OSParameter{
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("OS_SCHEDULER_SITE");
 		if(sValue != null && sValue.length() > 0) OS_SCHEDULER_SITE = sValue;
-		else OS_SCHEDULER_SITE = OS_SERVICE_SITE + "/osscheduler/OSSchedulerService.jws"; 
+		// FIXME: Untested for wider distribution. Eclipse project port.
+		//else OS_SCHEDULER_SITE = OS_SERVICE_SITE + "/osscheduler/OSSchedulerService.jws";
+		OS_SCHEDULER_SITE = null;
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SCHEDULER_WITH_REGISTRY");
 		if(sValue != null && sValue.length() > 0) SCHEDULER_WITH_REGISTRY = sValue.startsWith("t")?true:false;
@@ -1648,7 +1641,7 @@ public final class OSParameter{
 			sOSParameterFile = PARAMETER_FILE;
 		}
 
-		//String sOSParameterFile = IOUtil.getCurrentDir()+"webapps/os/ossolver/OSParameter.xml";
+		//String sOSParameterFile = IOUtil.getCurrentDir()+"????";
 		//In Eclipse the current directory is the project that the main is in -- e.g. C:/code/java/OSjava/OSTest/
 		//in Tomcat Linux the current directory is PathToTomcat/Tomcat/bin/
 		//in Tomcat the current directory is C:/Program Files/Apache Software Foundation/Tomcat 5.5/???

@@ -649,31 +649,16 @@ public class IOUtil implements Serializable{
 	}//fileToInputStream
 
 	/// <summary>
-	/// logs message to a file. 
+	/// logs messages
 	/// </summary> 
 	/// <param name="logMessage">holds the log message to be appended to the log file.</param>
-	/// <param name="logFileName">holds the log file name. 
-	/// The method uses a default log file if the file name is null or empty.</param>
-	/// <returns>whether the string is appended to the file successfully or not.</returns>
+	/// <param name="logFileName">unused and should be removed, throws an exception if !null 
+	/// The method logs to the log4j facility</param>
+	/// <returns>true</returns>
 	public static boolean log(String logMessage, String logFileName){
-		try{
-			String sLogFileName = OSParameter.LOG_FILE;
-			if(logFileName != null && logFileName.length() > 0) sLogFileName = logFileName;
-			FileWriter fw = new FileWriter(new File(sLogFileName), true);
-			fw.write("\r\nLog Entry: \n\r");
-			Calendar calendar = new GregorianCalendar();
-			fw.write(calendar.getTime().toString());
-			fw.write("\n\r\n\r  :\n\r");
-			fw.write("\n\r  :" + logMessage + "\n\r");
-			fw.write("\n\r---------------------------------\n\r");
-			fw.flush();
-			fw.close();
-			return true;
-		}
-		catch(Exception e){
-			//e.printStackTrace();
-			return false;
-		}		
+        assert logFileName==null; 
+        OSLog.log.info(logMessage); 
+        return true; 
 	}//log
 
 	/**
