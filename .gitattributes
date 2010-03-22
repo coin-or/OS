@@ -353,6 +353,7 @@ OSServer/doc/eclipse.txt -text
 OSServer/doc/tomcat6-policy.txt -text
 OSServer/scripts/tomcat6-user.sh -text
 OSServer/src/OSSolverService.java -text
+OSServer/src/log4j.properties -text
 OSServer/src/org/optimizationservices/ossolver/api/CBCSolverService.java -text
 OSServer/src/org/optimizationservices/ossolver/api/CGSolverService.java -text
 OSServer/src/org/optimizationservices/ossolver/api/CLPSolverService.java -text

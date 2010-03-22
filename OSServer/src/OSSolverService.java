@@ -4,7 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.axis.MessageContext;
 import org.apache.axis.transport.http.HTTPConstants;
+import org.apache.log4j.Logger;
 import org.optimizationservices.oscommon.communicationinterface.OShL;
+import org.optimizationservices.oscommon.util.IOUtil;
+import org.optimizationservices.oscommon.util.OSLog;
 import org.optimizationservices.oscommon.util.OSParameter;
 import org.optimizationservices.oscommon.util.OSParameterFile;
 import org.optimizationservices.oscommon.util.OSServiceUtil;
@@ -21,6 +24,7 @@ import org.optimizationservices.oscommon.util.OSServiceUtil;
  * @since OS 1.0
  */
 public class OSSolverService implements OShL{
+        
 	/**
 	 * m_osServiceUtil holds a default implementation of the solver service.
 	 */
@@ -67,7 +71,9 @@ public class OSSolverService implements OShL{
 	 * @return a jobID string. 
 	 */
 	public String getJobID(String osol){
-		return m_osServiceUtil.getJobID(osol);
+		String jobid=m_osServiceUtil.getJobID(osol);
+		OSLog.log.info(jobid);
+		return jobid;
 	}//getJobID
 
 	/**
