@@ -3,6 +3,7 @@
 	<name>OSCommon</name>
 	<comment></comment>
 	<projects>
+		<project>OSLib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
