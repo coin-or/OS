@@ -8101,7 +8101,100 @@ Breakpoint 1, main (argC=1, argV=0xbff15f04) at
 ../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Jun oc Schema versioning
+
+
+
+>> The strategy is quite clear. In general
+>> 1. The version of the schema decides the version of our code.
+>> If the version of our schema is 2.0, all the code is developed against 2.0 and upgrade with this major version. We change only the minor version.
+>
+> Here is the problem or confusion on my part.  When you say "minor version" above. it looks like you are referring to the second digit in the schema number. Is this correct? However, "minor version" for the C++ code is the third digit.
+>> 2. If the schema either changes extremely significantly or becomes backward incompatible, we will discuss moving to the next major version.
+>> In my opinion, it has to be REALLY significant to justify a change of our current 2.0 to 3.0.
+>> Adding of the matrix/cone programming doesn't justify moving to 3.0. In fact adding of any extension only justifies to move the minor version, e.g. 2.0 to 2.1.
+Sorry, should have been more clear on this. In my convention or in general software engineering practice:
+a.b.c -> a is the major version, b is the minor version and c is the build version
+I am saying "a" should be stable. "b" should be our milestone release.
+From time to time, we have bug fixes and builds. That should be going to "c".
+For the schema standard it probably should just be remaining at a.0.
+
+> Right, once again your minor version does not mean the same thing as in the COIN-OR sense. So here is the issue:
+>
+> The latest release of OS on SVN is 2.0.1 where the .1 is the minor version. The minor version gets incremented when bug fixes are made to stable 2.0. So if we made another bug fix we would be up to 2.0.2. However, this next release of OS represents s LOT MORE than just bug fixes. But the API does not change. So we do not move to release 3.0 exactly as you say. I agree totally. But since we are do so much more than bug fixes, as per COIN-OR policy, we should not call this 2.0.2, we should call this 2.1.0.
+Agreed.
+
+> So now users will see OS release 2.1.0 but the schema version is only 2.0. I am worried that this will confuse users.
+I am not that worried. Anybody can implement their code or a piece of code against our schema; not just us.
+Even for us, we will implement java, and .net, possibly all versioned differently,but all against the same schema.
+We just happen to have our convention to go line up our version with schema version.
+It's the same thing as all other technologies:
+Web Service (SOAP), xml, http, html, css hardly ever move a version. But all the implementation constantly upgrade.
+Another example is Java specification,  right now we say Java 5 or Java 6 (we don't say Java 5.1 or 6.0.1)
+While all the java sdk or run time implementation (e.g. sun jre) has all the minor versions.
+
+I think users are fine with it. Even if they are a bit confused, they should be safe and cannot do anything wrong with it anyway.
+
+>>
+>> By our strategy,
+>> 1. We shouldn't release code against 3.0, because there is no 3.0 schema.
+>> 2. We probably shouldn't change the schema version, or at the most a minor version upgrade.
+>> The matrix/cone stuff are not ready to be versioned. So there is nothing significant in our schema are to be versioned with our new code version.
+>
+> So you are saying use 2.0 for the schema and 2.1.0 for the C++  code. Is this the correct interpretation of your email?
+Yes. as long as our schema extensions are backward compatible.
+Moreover, in our current schema version, we have the safe mechanism of annotations on staging.
+For example, an experimental element is in a 2.0 schema.
+The fact the element is in a stage before versioned means we are free to change without being responsible to the users.
+When they are versioned, they will be versioned with 2.0. So the staging is more like a buffer strategy to a stable versioning strategy.
+We should always be responsible only to the existing users of versioned elements.
+But as argued, they are safe by our strategy: we don't easily change versioned elements.
+When an element is designed, we think of everything thing certain and uncertain (providing extension points) and prepared to extend them in a backward compatible way.
+
+Maybe it helps to think in this way:
+A simple and common versioning strategy is 2.0 alpha -> 2.0 beta -> 2.0 final on the entire software (coarse-grained).
+but our schema versioning is more fine-grained (think of "tiered", "parallel at different pace", "structurally rich" etc.)
+We have 2.0, final on element 1, beta on element 2, alpha on element 3, NOT on the entire schema!
+We release 2.0 final, so that the common element 1 can be used by many users eagerly waiting there. (90% of the market).
+We don't have the luxury of making element 2 and 3 final yet; that will take 2 more years,
+but 90% of users will use only element 1 and don't care about element 2 and 3.
+
+Now during the mean time element 2 will be worked on and we will try to move it from beta to 2.0 final as well.
+Alpha and beta correspond to our many stages, only we have more.
+The reason is that we are promoting a standard, not just a software.
+A standard has to be stable.
+You don't see xml being versioned from 1.0->2->2.5->3->4. If w3c does that, it will only destroy the adoption or market position of xml.
+Of course, this requires an extremely well-thought design and process in the beginning so that we HAVE to think of EVERYTHING upfront.
+SOAP is 1.2 (the only public release), and even though later they found some weakness, and even design flaw, they don't upgrade the version.
+Changing a design drawbacks is far less important then maintaining the stability of a standard.
+SOAP has many extension points, and the extension points start to be versioned separately, sometime even in a different standardization body.
+For example, if we ever find some weakness in OS core later, our default action is to probably just to eat it or live with it, instead of changing it.
+
+Our process of using fine-grained multi-tier "structured stages" versioning strategy should put as in a safer place.
+Usually people (including us) do not have this luxury to the code versioning, it practically too much hassle. So we version the entire distribution instead of on each .cpp file.
+But our modular extensible schema standard element design allows us to have such a luxury.
+
+Jun
 
 
 
 
+
+> Thanks
+>
+>
+> -- 
+> Kipp Martin
+> Professor of Operations Research
+> and Computing Technology
+> Booth School of Business
+> University of Chicago
+> 5807 South Woodlawn Avenue
+> Chicago, IL 60637
+> 773-702-7456
+> kmartin@chicagobooth.edu
+> http://kipp.chicagobooth.edu
+> http://projects.coin-or.org/OS
+>
