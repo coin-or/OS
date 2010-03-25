@@ -1,5 +1,5 @@
 * text=auto !eol
-/ChangeLog-temp.txt -text
+/CHANGELOG.txt -text
 /INSTALL.txt -text
 /LICENSE.txt -text
 OSCommon/.classpath -text svneol=unset#text/plain
