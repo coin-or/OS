@@ -3862,15 +3862,15 @@ This option will send the problem to the solver server at location {\tt http://w
 
 Each call 
 \begin{verbatim}
-option osamplclient_options
+option OSAmplClient_options
 \end{verbatim}
 is memoryless. That is, the options set in the last call will overwrite any options set in previous calls
 and cause them to be discarded.
 
 For instance, the sequence of option calls
 \begin{verbatim}
-option osamplclient_options "-solver symphony";
-option osamplclient_options "-serviceLocation  
+option OSAmplClient_options "-solver symphony";
+option OSAmplClient_options "-serviceLocation  
     http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}

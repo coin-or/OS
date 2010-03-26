@@ -122,32 +122,66 @@ int main(int argC, char* argV[]){
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
     std::cout << std::endl << std::endl;
+    
+    int numberOfNonlinearExpressions;
+	numberOfNonlinearExpressions = 1000000;
+	/** nlarray is pointer to an array of Nl
+	 * object pointers */	
+    Nl **nlarray;
+    nlarray = new Nl*[ numberOfNonlinearExpressions ];
+    
+    std::vector<Nl*> nlNodeVec;
+    std::cout << "Start Loop "  << std::endl;
+    for(int i = 0; i < numberOfNonlinearExpressions ; i++){
+        nlarray[ i] = new Nl();
+        nlarray[i]->idx = i;
+        nlarray[ i]->osExpressionTree = new OSExpressionTree();
+        nlNodeVec.push_back( nlarray[ i]) ;
+        
+    }
+    
+    std::cout << "End Loop" << std::endl;  
+
+	OSnLNodeNumber *nlNodeNumberPoint;
+
+   // for(int i = 0; i <10000000; i++){
+    //    nlNodeNumberPoint = new OSnLNodeNumber(); 
+    //    nlNodeNumberPoint->value = 77.77;
+   //     new Nl();
+    //nlNodeVec.push_back( nlNodeNumberPoint);
+   // }
+    
+  
+
+    
+    
+    
+    
+    
 	OSnl2osil *nl2osil = NULL;
-
-
 	try {
        
         double cpuTime;
         cpuTime = CoinCpuTime();
         //get the size of the nl string
         //std::string nlstring = fileUtil->getFileAsString("../../../../OS/data/amplFiles/blpmpec1.nl");
-        std::string nlstring = fileUtil->getFileAsString("smalltest.nl");
-        std::cout << "nl string size = " << nlstring.size() << std::endl;
-        std::cout  << "start the process " << std::endl;
-		//nl2osil = new OSnl2osil( "../../../../OS/data/amplFiles/BLPMPEC.nl"); 
-        nl2osil = new OSnl2osil( "smalltest.nl"); 
-        std::cout  << "nl file read " << std::endl;
-        cpuTime = CoinCpuTime() - cpuTime;
-        std::cout  << "Time to read nl file: " <<   cpuTime  << std::endl;
-        nl2osil->createOSInstance() ;
-        std::cout << "Number Variable = " << nl2osil->osinstance->getVariableNumber() << std::endl;
-        std::cout << "Number Constraints = " << nl2osil->osinstance->getConstraintNumber() << std::endl;
-      
-
-        std::cout  << "an osinstance created " << std::endl;
-        cpuTime = CoinCpuTime() - cpuTime;
-        std::cout  << "Time to create osinstance : " <<   cpuTime  << std::endl;
-        
+//         std::string nlstring = fileUtil->getFileAsString("smalltest.nl");
+//         std::cout << "nl string size = " << nlstring.size() << std::endl;
+//         std::cout  << "start the process " << std::endl;
+// 		//nl2osil = new OSnl2osil( "../../../../OS/data/amplFiles/BLPMPEC.nl"); 
+//         nl2osil = new OSnl2osil( "smalltest.nl"); 
+//         std::cout  << "nl file read " << std::endl;
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to read nl file: " <<   cpuTime  << std::endl;
+//         nl2osil->createOSInstance() ;
+//         std::cout << "Number Variable = " << nl2osil->osinstance->getVariableNumber() << std::endl;
+//         std::cout << "Number Constraints = " << nl2osil->osinstance->getConstraintNumber() << std::endl;
+//       
+// 
+//         std::cout  << "an osinstance created " << std::endl;
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to create osinstance : " <<   cpuTime  << std::endl;
+//         
 //         std::cout << "Initialize Nonlinear Structures" << std::endl;
 // 		nl2osil->osinstance->initForAlgDiff( );  
 //         cpuTime = CoinCpuTime() - cpuTime;
@@ -172,11 +206,11 @@ int main(int argC, char* argV[]){
 //         std::cout  << "Time to create osil : " <<   cpuTime  << std::endl;
 //         std::cout  << "Size of osil string : " <<   osil.size()  << std::endl;
         //fileUtil->writeFileFromString("tmp.osil", osil);
-		delete nl2osil;
-        std::cout  << "nl2osil deleted " << std::endl;
-        cpuTime = CoinCpuTime() - cpuTime;
-        std::cout  << "Time to delete nl2osil : " <<   cpuTime  << std::endl;
-        delete fileUtil;
+// 		delete nl2osil;
+//         std::cout  << "nl2osil deleted " << std::endl;
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to delete nl2osil : " <<   cpuTime  << std::endl;
+//         delete fileUtil;
        // delete osilwriter;
 
 	}
