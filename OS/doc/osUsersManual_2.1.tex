@@ -5934,7 +5934,19 @@ Then set the Class Path to the following jar files.
 \item or124.jar
 \end{itemize}
 The code demonstrates how the Java OSInstance can be used to generate a linear program and then call the  
-C++ {  \bf OSSolverService} executable to solve the problem.\index{Java|)}
+C++ {  \bf OSSolverService} executable to solve the problem.\index{Java|)}  In order to run the problem type in at the command line
+
+\begin{verbatim}
+javac OSJavaDemo.java
+\end{verbatim}
+
+In order to execute the problem type in
+
+\begin{verbatim}
+java OSJavaDemo
+\end{verbatim}
+
+it will generate the file {\tt parincLinear.osil} that is a test problem that can be used with {\tt OSSolverService}.  In order for this example to work, the file {\tt OSParameter.xml} must be present in the {\tt OSJavaDemo} directory.
 
 
 
