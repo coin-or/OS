@@ -98,6 +98,9 @@ OS/data/amplFiles/blpmpec.mod -text
 OS/data/amplFiles/blpmpec.nl.zip -text
 OS/data/amplFiles/bonminEx1.mod -text
 OS/data/amplFiles/bonminEx1.nl -text
+OS/data/amplFiles/camm_test.dat -text
+OS/data/amplFiles/camm_test.mod -text
+OS/data/amplFiles/camm_test.nl -text
 OS/data/amplFiles/eastborne.mod -text
 OS/data/amplFiles/eastborne.nl -text
 OS/data/amplFiles/hs71.mod -text
