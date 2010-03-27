@@ -6,7 +6,7 @@
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -122,47 +122,60 @@ int main(int argC, char* argV[]){
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
     std::cout << std::endl << std::endl;
-    
-    int numberOfNonlinearExpressions;
+    size_t i;
+    size_t numberOfNonlinearExpressions;
 	numberOfNonlinearExpressions = 1000000;
 	/** nlarray is pointer to an array of Nl
 	 * object pointers */	
     Nl **nlarray;
     nlarray = new Nl*[ numberOfNonlinearExpressions ];
-    
-    std::vector<Nl*> nlNodeVec;
+  	 OSnLNodeNumber *nlNodeNumberPoint;  
+
+    std::vector<Nl*> nlVec;
     std::cout << "Start Loop "  << std::endl;
-    for(int i = 0; i < numberOfNonlinearExpressions ; i++){
-        nlarray[ i] = new Nl();
-        nlarray[i]->idx = i;
-        nlarray[ i]->osExpressionTree = new OSExpressionTree();
-        nlNodeVec.push_back( nlarray[ i]) ;
+    for(i = 0; i < numberOfNonlinearExpressions ; i++){
+        	nlarray[ i] = new Nl();
+        	nlarray[i]->idx = i;
+    		nlarray[ i]->osExpressionTree = new OSExpressionTree();
+        	nlNodeNumberPoint = new OSnLNodeNumber(); 
+        	nlNodeNumberPoint->value = 77.77;
+			nlarray[ i]->osExpressionTree->m_treeRoot = nlNodeNumberPoint;
+       	nlVec.push_back( nlarray[ i]) ;
         
     }
     
-    std::cout << "End Loop" << std::endl;  
+    std::cout << "End Loop" << std::endl; 
 
+/*
 	OSnLNodeNumber *nlNodeNumberPoint;
-
-   // for(int i = 0; i <10000000; i++){
-    //    nlNodeNumberPoint = new OSnLNodeNumber(); 
-    //    nlNodeNumberPoint->value = 77.77;
-   //     new Nl();
-    //nlNodeVec.push_back( nlNodeNumberPoint);
-   // }
-    
+  	std::vector<OSnLNodeNumber*> nlNodeVec;
+	std::cout << "Start OSnLNumberNode loop" << std::endl;
+   for(int i = 0; i <10000; i++){
+        nlNodeNumberPoint = new OSnLNodeNumber(); 
+        nlNodeNumberPoint->value = 77.77;
+        new Nl();
+    	nlNodeVec.push_back( nlNodeNumberPoint);
+    }
+	std::cout << "Finish OSnLNumberNode loop" << std::endl;
+ */
+	//garbage collection   
   
-
+	for(i = 0; i < numberOfNonlinearExpressions; i++){
+		delete nlarray[i];
+		nlarray[i] = NULL;
+	} 
+	delete[] nlarray;
+	nlarray = NULL;
     
+    delete fileUtil;
     
+	return 0;    
     
-    
-    
-	OSnl2osil *nl2osil = NULL;
-	try {
+//	OSnl2osil *nl2osil = NULL;
+//	try {
        
-        double cpuTime;
-        cpuTime = CoinCpuTime();
+//        double cpuTime;
+//        cpuTime = CoinCpuTime();
         //get the size of the nl string
         //std::string nlstring = fileUtil->getFileAsString("../../../../OS/data/amplFiles/blpmpec1.nl");
 //         std::string nlstring = fileUtil->getFileAsString("smalltest.nl");
@@ -213,18 +226,18 @@ int main(int argC, char* argV[]){
 //         delete fileUtil;
        // delete osilwriter;
 
-	}
-	catch(const ErrorClass& eclass){
-        std::cout << "THERE WAS AN ERROR" <<  std::endl;
-		delete fileUtil;
-		delete nl2osil;
-        std::cout << "THERE WAS AN ERROR" <<  std::endl;
-		std::cout << eclass.errormsg <<  std::endl;
-		return 0;
-	} 
+//	}
+//	catch(const ErrorClass& eclass){
+//        std::cout << "THERE WAS AN ERROR" <<  std::endl;
+//		delete fileUtil;
+//		delete nl2osil;
+//        std::cout << "THERE WAS AN ERROR" <<  std::endl;
+//		std::cout << eclass.errormsg <<  std::endl;
+//		return 0;
+//	} 
 
 	
-	return 0;
+
 	
 // 	time_t rawtime;
 // 	struct tm * timeinfo;
@@ -259,6 +272,5 @@ int main(int argC, char* argV[]){
 // 	printf ("That day is a %s.\n", weekday[timeinfo->tm_wday]);
 // 	std::cout << "Days in this month = " << days_per_month[ month-1] << std::endl;
 	
-	return 0;
 }// end main
 
