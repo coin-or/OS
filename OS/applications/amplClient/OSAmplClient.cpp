@@ -344,9 +344,9 @@ int main(int argc, char **argv)
 			solverType->osol = osol;
 			//std::cout << osol << std::endl;
 			OSiLWriter osilwriter;
-			std::cout << "WRITE THE INSTANCE" << std::endl;
-			std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
-			std::cout << "DONE WRITE THE INSTANCE" << std::endl;
+			//std::cout << "WRITE THE INSTANCE" << std::endl;
+			//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+			//std::cout << "DONE WRITE THE INSTANCE" << std::endl;
 			
 			solverType->osinstance = osinstance;
 			solverType->buildSolverInstance();
