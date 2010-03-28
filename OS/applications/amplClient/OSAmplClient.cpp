@@ -184,7 +184,8 @@ int main(int argc, char **argv)
 	OSResult *osresult = NULL;
 	std::string osrl = "";
 	std::string sSolverName = "";
-	std::string osol = "";
+	std::string osolFileName = "";
+    std::string osol ="";
 	std::string serviceLocation = "";
 	//char *URL = NULL;
 	//char delims[] = " ";
@@ -195,10 +196,15 @@ int main(int argc, char **argv)
 	amplclient_options = getenv("OSAmplClient_options");
 	if( amplclient_options != NULL){
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
-		getAmplClientOptions(amplclient_options, &sSolverName, &osol, &serviceLocation);
+		getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
 	}
 
-
+    if(osolFileName.size() > 0){
+        FileUtil *fileUtil;
+		fileUtil = new FileUtil();
+        osol = fileUtil->getFileAsString( osolFileName.c_str() ); 
+        delete fileUtil;
+    }
 	std::cout << " solver Name = " << sSolverName << std::endl;
 	std::cout << " solver Options = " << osol << std::endl;
     
@@ -649,6 +655,7 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 		
 		*solverName = osoptions->solverName;
 		*solverOptions = osoptions->osolFile;
+        
 		*serviceLocation = osoptions->serviceLocation;
 		
 	}//end try
