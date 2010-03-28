@@ -3,7 +3,7 @@ Sunday November 22 12:00:00 2009 Jun Ma <maj@northwestern.edu>
 Sunday November 22 12:00:00 2009 Kipp Martin <kmartin@chicagobooth.edu>
 
 
-	* Changes to Trunk
+	* Changes to Trunk put into Stable 2.1
 
 	* added eror checking to OSInstance, OSOption and OSResult
 
