@@ -137,6 +137,7 @@ AM_CPPFLAGS =  \
 # Kipp add the others here
 LIBS += $(ADDLIBS) `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
 LIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
+LIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
 LIBS  += `cat $(OSOBJDIR)/os_addlibs.txt`
 
 #if COIN_HAS_IPOPT

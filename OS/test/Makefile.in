@@ -342,7 +342,8 @@ LIBOBJS = @LIBOBJS@
 # Kipp add the others here
 LIBS = @LIBS@ $(am__append_7) $(ADDLIBS) `cat \
 	$(COINUTILSOBJDIR)/coinutils_addlibs.txt` `cat \
-	$(OSIOBJDIR)/osi_addlibs.txt` `cat $(OSOBJDIR)/os_addlibs.txt`
+	$(OSIOBJDIR)/osi_addlibs.txt` `cat \
+	$(CBCOBJDIR)/cbc_addlibs.txt` `cat $(OSOBJDIR)/os_addlibs.txt`
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
