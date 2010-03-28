@@ -134,7 +134,7 @@ int main( ){
 
 		// now solve the model synchronously
 		OSSolverAgent* osagent = NULL;
-		osagent = new OSSolverAgent("gsbkip.chicagogsb.edu/os/OSSolverService.jws");
+		osagent = new OSSolverAgent("kipp.chicagobooth.edu/os/OSSolverService.jws");
 		
 
 		std::string osol = "<osol></osol>";
