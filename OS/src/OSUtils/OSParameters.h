@@ -88,7 +88,7 @@
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
 
-#define OS_SCHEMA_VERSION "2.1"
+#define OS_SCHEMA_VERSION "2.0"
 #define OS_RELEASE_MESSAGE "Optimization Services Release 2.1.0"
 
 /**
