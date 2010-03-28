@@ -107,6 +107,13 @@ LIBS += @coinutilslib@
 
 LIBS += $(ASLLIB)
 
+
+ifeq ($(WIN),gw)
+  KLUDGE =  /FORCE:MULTIPLE
+endif
+
+LIBS += $(ASLLIB) $(KLUDGE)
+
  
 #DONE ADDING LIBS
 
