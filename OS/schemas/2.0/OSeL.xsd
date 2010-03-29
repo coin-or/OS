@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSeL: version - 2.0.0-->
 	<xs:include schemaLocation="OSoL.xsd"/>
 	<xs:include schemaLocation="OSsL.xsd"/>
@@ -169,7 +169,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="MatchType">
-				<xs:attribute name="order" use="required">
+				<xs:attribute name="order" use="optional">
 					<xs:simpleType>
 						<xs:restriction base="xs:int">
 							<xs:minInclusive value="1"/>
@@ -1089,7 +1089,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" default="irrelevant" maxOccurs="unbounded"/>
-			<xs:element name="nondifferentiable" type="MatchType" default="irrelevant" maxOccurs="unbounded"/>
+			<xs:element name="nondifferentiable" type="MatchTypeWithOrderAttribute" default="irrelevant" maxOccurs="unbounded"/>
 			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
