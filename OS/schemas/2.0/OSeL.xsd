@@ -800,8 +800,8 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" maxOccurs="unbounded"/>
-			<xs:element name="nondifferentiable" type="MatchType"/>
+			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" default="irrelevant" maxOccurs="unbounded"/>
+			<xs:element name="nondifferentiable" type="MatchTypeWithOrderAttribute" default="irrelevant" maxOccurs="unbounded"/>
 			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -915,8 +915,8 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" maxOccurs="unbounded"/>
-			<xs:element name="nondifferentiable" type="MatchType"/>
+			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" default="irrelevant" maxOccurs="unbounded"/>
+			<xs:element name="nondifferentiable" type="MatchTypeWithOrderAttribute" default="irrelevant" maxOccurs="unbounded"/>
 			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -987,7 +987,7 @@
 			<xs:element name="other" type="OtherMatchType" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="minNumberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="maxNumberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="maxNumberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNlNodeInfo">
 		<xs:annotation>
@@ -1088,8 +1088,8 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" maxOccurs="unbounded"/>
-			<xs:element name="nondifferentiable" type="MatchType"/>
+			<xs:element name="differentiable" type="MatchTypeWithOrderAttribute" default="irrelevant" maxOccurs="unbounded"/>
+			<xs:element name="nondifferentiable" type="MatchType" default="irrelevant" maxOccurs="unbounded"/>
 			<xs:element name="other" type="OtherCategoryValueMatchType" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
