@@ -847,16 +847,6 @@
 			<xs:element name="convex" type="MatchType"/>
 			<xs:element name="nonconvex" type="MatchType"/>
 		</xs:sequence>
-		<xs:attribute name="value" type="xs:double" use="optional" default="1"/>
-		<xs:attribute name="type" use="optional">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="linear"/>
-					<xs:enumeration value="convex"/>
-					<xs:enumeration value="nonconvex"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OptimizationConstraintBoundednessInfo">
 		<xs:annotation>
