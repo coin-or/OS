@@ -222,7 +222,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="description" type="xs:string"/>
+			<xs:element name="association" type="Association"/>
 			<xs:element name="contacts" type="Contacts"/>
 			<xs:element name="keyWords" type="KeyWords" minOccurs="0"/>
 			<xs:element name="otherInformation" type="OtherInformation" minOccurs="0"/>
