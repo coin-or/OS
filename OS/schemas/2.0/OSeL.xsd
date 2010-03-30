@@ -986,9 +986,18 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="nodeSetSupported" type="NlNodeEnumeration" minOccurs="0"/>
+			<xs:element name="nodeSetSupported" type="OptimizationNlNodeSet" minOccurs="0"/>
 			<xs:element name="statistics" type="OptimizationNlNodeStatistics" minOccurs="0"/>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptimizationNlNodeSet">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="el" type="NlNodeEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="NumberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="OptimizationNlNodeStatistics">
 		<xs:annotation>
