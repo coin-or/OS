@@ -316,6 +316,7 @@
 					<xs:enumeration value="military"/>
 					<xs:enumeration value="organization"/>
 					<xs:enumeration value="company"/>
+					<xs:enumeration value="personal"/>
 					<xs:enumeration value="other"/>
 				</xs:restriction>
 			</xs:simpleType>
