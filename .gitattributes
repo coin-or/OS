@@ -346,9 +346,15 @@ OS/examples/misc/SDPA1.osil -text
 OS/examples/misc/SDPA1v2.osil -text
 OS/examples/misc/SDPA2OSiL.f90 -text
 OS/examples/misc/SDPA_Format.txt -text
+OS/examples/misc/coinor-bonmin.osel -text
+OS/examples/misc/coinor-ipopt.osel -text
+OS/examples/misc/example-all.osel -text
+OS/examples/misc/example1.osal -text
 OS/examples/misc/gpp100.dat-s -text
 OS/examples/misc/gpp100.osil -text
 OS/examples/misc/misc.cpp -text
+OS/examples/misc/neos-cbc.osel -text
+OS/examples/misc/neos-clp.osel -text
 OS/examples/misc/postFixRules.txt -text
 OS/examples/misc/rosenbrockmodPostfix.osil -text
 OS/examples/misc/rosenbrockmodPostfixVersion2.osil -text
