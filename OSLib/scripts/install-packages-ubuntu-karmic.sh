@@ -23,5 +23,5 @@ liblog4j1.2-java
 "
 
 sudo apt-get install $PACKAGES
-sudo rm -v /etc/rc?.d/S??tomcat6
-/etc/init.d/tomcat6 stop
+sudo rm -vf /etc/rc?.d/S??tomcat6
+sudo /etc/init.d/tomcat6 stop
