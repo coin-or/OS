@@ -1305,6 +1305,15 @@ The MinGW installation includes the {\tt gcc} compiler, which can interact negat
 For that reason it is advisable to download the even smaller installation MSYS (see next section) if you intend to
 build any software with the Microsoft Visual Studio suite.
 
+\vskip 8pt
+
+{\bf Warning:} A user of  MSYS  with MinGW gcc version 4.4.0   got an error about amissing library  ``pthreadsGC2.dll'' when running the OS {\tt unitTest.}  This user installed {\tt pthreadsGC2.dll} from
+\begin{center}
+ \url{ftp://sources.redhat.com/pub/pthreads-win32/dll-latest/lib/pthreadGC2.dll}
+\end{center}
+and reported that the problem then went away.
+
+
 \subsubsection{MSYS} \label{section:msys}
 
 \index{MSYS|(}%
