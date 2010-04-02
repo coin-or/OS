@@ -31,6 +31,7 @@ file
 
 OS_PACKAGES="
 gfortran
+libatlas-base-dev
 liblapack-dev
 libpopt-dev
 "
@@ -39,8 +40,6 @@ case "${ARCH}" in
   Linux-i686)
     OS_ARCH_PACKAGES="libatlas-sse2-dev"
     ;;
-  Linux-x86_64)
-    OS_ARCH_PACKAGES="libatlas-dev"
 esac
 
 echo Script must be run as root.
