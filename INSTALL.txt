@@ -14,7 +14,7 @@ This is a work in progress.  Please report any missing steps or problems.
    * select OSLib, OSCommon and OSServer and click finish.
  * Configure projects.  In the package windows right click each project and do the folowing:
    * OSLib
-     * In OSLib run `sh scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
+     * In OSLib run `sudo sh scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
      * In OSLib run `sh scripts/install-external.sh` for download locations and re-run to unpack.
      * project > properties > Project Facets > select: Java; Utility Module
    * OSCommon
@@ -39,4 +39,3 @@ This is a work in progress.  Please report any missing steps or problems.
      }}}
  * Test server
    * in OSServer/test run `python test.py`
-
