@@ -34,6 +34,7 @@ gfortran
 libatlas-base-dev
 liblapack-dev
 libpopt-dev
+python-soappy
 "
 
 case "${ARCH}" in
