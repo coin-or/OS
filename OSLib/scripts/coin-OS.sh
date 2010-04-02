@@ -5,6 +5,8 @@
 ## Based on build COIN-OR from build-ps3
 ## Check scripts/install-packages-* for build dependencies
 
+ARCH="$(uname -s)-$(uname -m)"
+
 ## Defaults
 VERSION=trunk
 BRANCH=trunk
@@ -43,7 +45,7 @@ echo @@@ make
 
 echo @@@ install
 install -dv lib/coin-or
-install -v build/CoinOS-trunk/OS/src/OSSolverService lib/coin-or
+install -v build/CoinOS-trunk/OS/src/OSSolverService-${ARCH} lib/coin-or
 
 echo @@@ cleanup
 rm -rf ${COINSRC}
