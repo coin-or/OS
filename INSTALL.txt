@@ -3,10 +3,25 @@
 This is a work in progress.  Please report any missing steps or problems.
 
 == Install ==
+ * Use an Eclipse with WTP
+   * In Ubuntu run sudo eclipse
+   * select help > install new software
+   * in the "work with: " text box select, "Eclipse Galileo Repository" if available.  
+     * If it is not available added by pasting http://download.eclipse.org/releases/galileo/ into text box and click
+add.
+   * Select 
+     * "Web, XML, and Java EE Development"
+     * "Collaboration"
+     * "Programming Languages"
+   * For Ubuntu find and unselect
+     * Eclipse CVS Client
+     * Eclipse Java Development Tools
+   * click Next, Accept, Finish.
+   * Wait and restart Eclipse
  * Clone OSjava
  * Install local copy of Tomcat 6 server in eclipse
    * For Ubuntu
-      * in OSServer run `sh scripts/tomcat6-user.sh` or install similar server
+      * in OSServer run `bash scripts/tomcat6-user.sh` or install similar server
       * install Tomcat in eclipse (follow instructions printed by previous script)
  * Import the project OSLib OSCommon and OSServer into eclipse
    * file > import > general > existing projects into workspace > next
@@ -15,7 +30,7 @@ This is a work in progress.  Please report any missing steps or problems.
  * Configure projects.  In the package windows right click each project and do the folowing:
    * OSLib
      * In OSLib run `sudo sh scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
-     * In OSLib run `sh scripts/install-external.sh` for download locations and re-run to unpack.
+     * In OSLib run `bash scripts/install-external.sh` for download locations and re-run to unpack.
      * project > properties > Project Facets > select: Java; Utility Module
    * OSCommon
      * project > properties > Project Facets > select: Java; Utility Module
@@ -32,7 +47,7 @@ This is a work in progress.  Please report any missing steps or problems.
    * Errors will be directed to the `console` view
  * Install OSSolverService
    * Install OS or coin-or for local OSSolverService binary 
-     * for an automated build of coinall use `OSService/scripts/coin-or.sh` and run sudo `OSService/scripts/coin-or-install.sh`
+     * for an automated build of coinall use `bash OSService/scripts/coin-or.sh` and run sudo `OSService/scripts/coin-or-install.sh`
    * In your workspace run the following code; substitute source location for local copy of OSSolverService (note this step may be buggy, pay attention to errors produced by server to fix)
      {{{
      ln -sf /opt/coinall/bin/OSSolverService .metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/OSServer//WEB-INF/code/solver/OSSolverServiceLinux

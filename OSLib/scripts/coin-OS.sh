@@ -45,7 +45,7 @@ echo @@@ make
 
 echo @@@ install
 install -dv lib/coin-or
-install -v build/CoinOS-trunk/OS/src/OSSolverService-${ARCH} lib/coin-or
+install -v build/CoinOS-trunk/OS/src/OSSolverService lib/coin-or/OSSolverService-${ARCH}
 
 echo @@@ cleanup
 rm -rf ${COINSRC}

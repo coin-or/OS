@@ -66,6 +66,8 @@ public class StandardOSSolver extends DefaultSolver{
 			sSolverPath =  OSParameter.CODE_HOME + "solver/OSSolverService";
 			if(sArch.equals("i386"))
 				sArch="i686";
+			else if(sArch.equals("amd64"))
+				sArch="x86_64";
 			sSolverPath += "-" + sOS + "-" + sArch;
 		}
 		else{
