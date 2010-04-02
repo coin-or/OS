@@ -53,4 +53,8 @@ add.
      ln -sf /opt/coinall/bin/OSSolverService .metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/OSServer//WEB-INF/code/solver/OSSolverServiceLinux
      }}}
  * Test server
-   * in OSServer/test run `python test.py`
+   * in OSServer/test run test.hs
+ * Add grant tomcat6 policies in
+   * OSServer/doc/tomcat6-policy.txt
+
+  
