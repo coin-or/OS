@@ -6,6 +6,7 @@
 package org.optimizationservices.oscommon.util;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.GregorianCalendar;
 import java.util.Vector;
@@ -63,12 +64,20 @@ public class StandardOSSolver extends DefaultSolver{
 		//change starts
 		String sSolverPath = "";
 		if(OSParameter.SOLVER_EXECUTABLE.startsWith("OSSolverService")){
-			sSolverPath =  OSParameter.CODE_HOME + "solver/OSSolverService";
+			// Eclipse deploys to here a lot easier
+			sSolverPath =  OSParameter.SERVICE_FOLDER + "WEB-INF/classes/OSSolverService";
+			// normalize java to unix naming conventions.
 			if(sArch.equals("i386"))
 				sArch="i686";
 			else if(sArch.equals("amd64"))
 				sArch="x86_64";
 			sSolverPath += "-" + sOS + "-" + sArch;
+			// make executable if necessary (war deployment hack)
+			File exe=new File(sSolverPath);
+			if(! exe.canExecute()){
+				exe.setExecutable(true);
+			}
+			
 		}
 		else{
 			sSolverPath =  OSParameter.CODE_HOME + "solver/"+OSParameter.SOLVER_EXECUTABLE;
