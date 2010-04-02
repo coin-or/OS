@@ -343,7 +343,6 @@ OSLib/doc/external-source.txt -text
 OSLib/scripts/coin-OS.sh -text
 OSLib/scripts/install-external.sh -text
 OSLib/scripts/install-packages-ubuntu-karmic.sh -text
-OSLib/src/META-INF/MANIFEST.MF -text svneol=unset#text/plain
 OSServer/.classpath -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
