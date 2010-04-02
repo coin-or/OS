@@ -10,5 +10,10 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OSCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/OSLib"/>
+	<classpathentry kind="lib" path="/OSLib/lib/coin-or">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/classes"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
