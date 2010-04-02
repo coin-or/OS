@@ -37,7 +37,8 @@ public class StandardOSSolver extends DefaultSolver{
 	 * run the standard solve method. 
 	 */
 	public void solve(){
-		String sOS = System.getProperty("os.name").toLowerCase();
+		String sOS = System.getProperty("os.name");
+		String sArch = System.getProperty("os.arch");
 		String sJobID = osOption.getJobID();
 //		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
 		String sOSSolver = osOption.getSolverToInvoke();
@@ -63,18 +64,9 @@ public class StandardOSSolver extends DefaultSolver{
 		String sSolverPath = "";
 		if(OSParameter.SOLVER_EXECUTABLE.startsWith("OSSolverService")){
 			sSolverPath =  OSParameter.CODE_HOME + "solver/OSSolverService";
-			if(sOS.toLowerCase().indexOf("window") >= 0){
-				sSolverPath += ".exe";
-			}
-			else if(sOS.toLowerCase().indexOf("linux") >= 0 || sOS.toLowerCase().indexOf("nix") >= 0){
-				sSolverPath += "Linux";;	
-			}
-			else if(sOS.toLowerCase().indexOf("mac") >= 0){
-				sSolverPath += "Mac";;
-			}
-			else{
-				;
-			}
+			if(sArch.equals("i386"))
+				sArch="i686";
+			sSolverPath += "-" + sOS + "-" + sArch;
 		}
 		else{
 			sSolverPath =  OSParameter.CODE_HOME + "solver/"+OSParameter.SOLVER_EXECUTABLE;
