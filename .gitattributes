@@ -339,6 +339,7 @@ OSCommon/src/org/optimizationservices/oscommon/util/XSLTUtil.java -text
 OSLib/.classpath -text svneol=unset#text/plain
 OSLib/.project -text svneol=unset#text/plain
 OSLib/doc/exported-jars.txt -text
+OSLib/scripts/coin-OS.sh -text
 OSLib/scripts/install-external.sh -text
 OSLib/scripts/install-packages-ubuntu-karmic.sh -text
 OSLib/src/META-INF/MANIFEST.MF -text svneol=unset#text/plain
