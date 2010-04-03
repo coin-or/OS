@@ -21,7 +21,7 @@ add.
  * Clone OSjava
  * Install local copy of Tomcat 6 server in eclipse
    * For Ubuntu
-      * in OSServer run `bash scripts/tomcat6-user.sh` or install similar server
+      * in OSLib run `bash scripts/tomcat6-user.sh` or install similar server
       * install Tomcat in eclipse (follow instructions printed by previous script)
  * Import the project OSLib OSCommon and OSServer into eclipse
    * file > import > general > existing projects into workspace > next
