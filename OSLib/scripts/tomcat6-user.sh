@@ -5,7 +5,6 @@ TOMCAT=../Servers/tomcat6
 if [ ! -d ${TOMCAT} ] ; then
   echo "install tomcat6"
   install -d $(dirname ${TOMCAT})
-  install -d $(dirname ${TOMCAT})/bin
   tomcat6-instance-create $TOMCAT
   ln -s /usr/share/tomcat6/bin/bootstrap.jar $TOMCAT/bin
   cat /etc/tomcat6/policy.d/* > $TOMCAT/conf/catalina.policy
