@@ -13,66 +13,65 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/xercesImpl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="lib/javamail/mail.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/commons-codec.jar">
+	<classpathentry exported="true" kind="lib" path="lib/axis/axis.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/commons-fileupload.jar">
+	<classpathentry exported="true" kind="lib" path="lib/axis/jaxrpc.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/servlet-api.jar">
+	<classpathentry exported="true" kind="lib" path="lib/axis/wsdl4j-1.5.1.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/axis.jar">
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-codec-1.4.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/jaxrpc.jar">
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-discovery-0.4.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/saxonb.jar">
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-fileupload-1.2.1.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/commons-logging.jar">
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-logging-1.1.1.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/commons-discovery.jar">
+	<classpathentry exported="true" kind="lib" path="lib/log4j/log4j-1.2.15.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/wsdl4j.jar">
+	<classpathentry exported="true" kind="lib" path="lib/saxon/saxon9-xpath.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/log4j-1.2.jar">
+	<classpathentry exported="true" kind="lib" path="lib/saxon/saxon9.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/usr/share/java/ant.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/xerces/xercesImpl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="../"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

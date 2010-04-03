@@ -3,4 +3,5 @@ OSCommon/src/META-INF
 OSLib/bin
 OSLib/download
 OSLib/lib
+OSLib/src/META-INF
 OSServer/build
