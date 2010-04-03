@@ -390,5 +390,6 @@ OSServer/test/first.osil -text
 OSServer/test/remote.osol -text
 OSServer/test/test-coin.py -text
 OSServer/test/test-coin.sh -text
+OSServer/test/test.cmd -text
 OSServer/test/test.py -text
 OSServer/test/test.sh -text

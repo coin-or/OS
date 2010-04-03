@@ -5,3 +5,4 @@ OSLib/download
 OSLib/lib
 OSLib/src/META-INF
 OSServer/build
+OSServer/test/first.osrl
