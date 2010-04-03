@@ -1,4 +1,5 @@
 OSCommon/bin
+OSCommon/src/META-INF
 OSLib/bin
 OSLib/download
 OSLib/lib

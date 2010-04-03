@@ -71,13 +71,14 @@ public class StandardOSSolver extends DefaultSolver{
 				sArch="i686";
 			else if(sArch.equals("amd64"))
 				sArch="x86_64";
+			else if(sOS.startsWith("Windows"))
+				sOS="Windows";
 			sSolverPath += "-" + sOS + "-" + sArch;
 			// make executable if necessary (war deployment hack)
 			File exe=new File(sSolverPath);
 			if(! exe.canExecute()){
 				exe.setExecutable(true);
 			}
-			
 		}
 		else{
 			sSolverPath =  OSParameter.CODE_HOME + "solver/"+OSParameter.SOLVER_EXECUTABLE;
