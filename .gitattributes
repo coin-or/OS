@@ -336,6 +336,10 @@ OSCommon/src/org/optimizationservices/oscommon/util/XMLUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XPathUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XQueryUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XSLTUtil.java -text
+OSJavaExamples/.classpath -text
+OSJavaExamples/.project -text
+OSJavaExamples/OSParameter.xml -text
+OSJavaExamples/src/OSJavaInstanceDemo.java -text
 OSLib/.classpath -text svneol=unset#text/plain
 OSLib/.project -text svneol=unset#text/plain
 OSLib/doc/exported-jars.txt -text
