@@ -7,8 +7,7 @@ This is a work in progress.  Please report any missing steps or problems.
    * In Ubuntu run sudo eclipse
    * select help > install new software
    * in the "work with: " text box select, "Eclipse Galileo Repository" if available.  
-     * If it is not available added by pasting http://download.eclipse.org/releases/galileo/ into text box and click
-add.
+     * If it is not available added by pasting http://download.eclipse.org/releases/galileo/ into text box and click add.
    * Select 
      * "Web, XML, and Java EE Development"
      * "Collaboration"
@@ -27,10 +26,19 @@ add.
    * file > import > general > existing projects into workspace > next
    * for "select root directory" use browse to select the OSjava directroy
    * select OSLib, OSCommon and OSServer and click finish.
- * Configure projects.  In the package windows right click each project and do the folowing:
+ * Download/Build ThirdParty
+    * In OSLib run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
+    * In OSLib run `bash scripts/install-external.sh` for download locations and re-run to unpack.
+    * In OSLib run `bash scripts/coin-os.sh`
+      * alternatively copy OSSolverService binaries to OSLib/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
+ * Install Tomcat 6
+    * For Ubuntu or others in OSLib run `bash scripts/tomcat6-user.sh`
+    * File > New > Other > 'Server' > 'select server type:' > apache > Tomcat v6.0 Server > Next 
+    * Select the Tomcat6 installation
+      * Ubuntu select Browse > Servers/local tomcat6"
+      * Select `download or install` or select a local install of tomcat6
+ * Configure projects.  In the package windows right click each project and do the folowing for each project:
    * OSLib
-     * In OSLib run `sudo sh scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
-     * In OSLib run `bash scripts/install-external.sh` for download locations and re-run to unpack.
      * project > properties > Project Facets > select: Java; Utility Module
    * OSCommon
      * project > properties > Project Facets > select: Java; Utility Module
@@ -45,16 +53,7 @@ add.
    * Right click server and select `add or remove` and add `OSServer`
    * Right click and select start.
    * Errors will be directed to the `console` view
- * Install OSSolverService
-   * Install OS or coin-or for local OSSolverService binary 
-     * for an automated build of coinall use `bash OSService/scripts/coin-or.sh` and run sudo `OSService/scripts/coin-or-install.sh`
-   * In your workspace run the following code; substitute source location for local copy of OSSolverService (note this step may be buggy, pay attention to errors produced by server to fix)
-     {{{
-     ln -sf /opt/coinall/bin/OSSolverService .metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/OSServer//WEB-INF/code/solver/OSSolverServiceLinux
-     }}}
  * Test server
    * in OSServer/test run test.hs
  * Add grant tomcat6 policies in
    * OSServer/doc/tomcat6-policy.txt
-
-  

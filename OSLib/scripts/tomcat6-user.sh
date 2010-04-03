@@ -9,9 +9,5 @@ if [ ! -d ${TOMCAT} ] ; then
   ln -s /usr/share/tomcat6/bin/bootstrap.jar $TOMCAT/bin
   cat /etc/tomcat6/policy.d/* > $TOMCAT/conf/catalina.policy
   ln -s /usr/share/tomcat6/lib $TOMCAT
-  echo "install complete"
+  echo @@@ "install complete"
 fi
-
-echo "To install server in eclipse select:"
-echo "  File > New > Other > 'Server' > 'select server type:' > apache "
-echo "   Tomcat v6.0 Server > Next > Browse > Servers/local tomcat6"
