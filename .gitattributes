@@ -343,6 +343,7 @@ OS/examples/cglCuts/OSCglCuts.cpp -text
 OS/examples/instanceGenerator/Makefile.in -text
 OS/examples/instanceGenerator/OSInstanceGenerator.cpp -text
 OS/examples/matlab/OSMatlabSolver.cpp -text
+OS/examples/misc/OSSolverService.exe.zip -text
 OS/examples/misc/SDPA1.osil -text
 OS/examples/misc/SDPA1v2.osil -text
 OS/examples/misc/SDPA2OSiL.f90 -text
