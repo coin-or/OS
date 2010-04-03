@@ -347,7 +347,7 @@ OSLib/doc/external-source.txt -text
 OSLib/scripts/coin-OS.sh -text
 OSLib/scripts/install-external.sh -text
 OSLib/scripts/install-packages-ubuntu-karmic.sh -text
-OSLib/scripts/scripts/tomcat6-user.sh -text
+OSLib/scripts/tomcat6-user.sh -text
 OSServer/.classpath -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
