@@ -56,6 +56,10 @@ using std::endl;
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
+
+
+
+
    
 //#define AMPLDEBUG
 
@@ -92,6 +96,7 @@ OSnl2osil::OSnl2osil(std::string nlfilename){
 		fg_read(nl, 0);
 		R_OPS = 0;
 	}
+	numkount = 0;
 }
 
 OSnl2osil::~OSnl2osil(){
@@ -128,6 +133,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				nlNodePoint = new OSnLNodePlus();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				op_type.push_back( "PLUS");
 				return nlNodePoint;
 				
 			case OPSUMLIST:
@@ -152,8 +158,11 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				
 			case OPMINUS:
 				nlNodePoint = new OSnLNodeMinus();
+				
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				op_type.push_back( "MINUS");
+				
 				return nlNodePoint;
 				
 			case OPUMINUS:
@@ -166,6 +175,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				nlNodePoint = new OSnLNodeTimes();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodePoint->m_mChildren[1] = walkTree (e->R.e);
+				op_type.push_back( "TIMES");
 				return nlNodePoint;
 				
 			case OPDIV:
@@ -179,6 +189,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				nlNodePoint = new OSnLNodePower();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodePoint->m_mChildren[1] = walkTree (e->R.e); 
+				op_type.push_back( "POWER");
 				return nlNodePoint;
 				
 				
@@ -186,10 +197,21 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				//cout << "FOUND OP1POW NODE"  << endl;
 				//cout << "OP1POW EXPONENT =  "  << e->R.en->v<<  endl;
 				nlNodePoint = new OSnLNodePower();
+
+
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
 				nlNodeNumberPoint = new OSnLNodeNumber();
 				nlNodeNumberPoint->value = e->R.en->v;
 				nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
+				
+				op_type.push_back( "NUMBER");
+				op_type.push_back( os_dtoa_format( numkount) );
+				operand.push_back( e->R.en->v );
+				numkount++;
+
+				op_type.push_back( "POWER");
+				
+				
 				return nlNodePoint;
 				
 			case OP2POW:
@@ -200,7 +222,9 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				//nlNodeNumberPoint->value = 2;
 				//nlNodePoint->m_mChildren[1] = nlNodeNumberPoint;
 				nlNodePoint = new OSnLNodeSquare();
+				
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				op_type.push_back( "SQUARE");
 				return nlNodePoint;
 				
 			case OPCPOW:
@@ -216,6 +240,7 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 			case OP_log:
 				nlNodePoint = new OSnLNodeLn();
 				nlNodePoint->m_mChildren[0] = walkTree (e->L.e);
+				op_type.push_back( "LOG");
 				return nlNodePoint;
 				
 			case OP_sqrt:
@@ -248,6 +273,13 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				nlNodeNumberPoint = new OSnLNodeNumber;
 				//cout << "THE NUMBER" << (double) ((expr_n*)e)->v << endl;
 				nlNodeNumberPoint->value = (double) ((expr_n*)e)->v;
+				op_type.push_back( "NUMBER");
+				op_type.push_back( os_dtoa_format(  numkount ) );			
+				
+				operand.push_back( (double) ((expr_n*)e)->v   );
+				numkount++;
+				
+				
 				return nlNodeNumberPoint;
 				
 			case OPVARVAL:
@@ -335,6 +367,11 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 				nlNodeVariablePoint = new OSnLNodeVariable;
 				nlNodeVariablePoint->idx = e->a;
 				nlNodeVariablePoint->coef = 1.0; 
+			
+				op_type.push_back( "VARIABLE");
+				op_type.push_back( os_dtoa_format(  e->a  ) );
+							
+				
 				return nlNodeVariablePoint;
 				break;
 			default:
@@ -702,7 +739,9 @@ bool OSnl2osil::createOSInstance(){
 		osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlc + nlo;
 		osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ nlc + nlo ];
 		int iNLidx = 0;
-		//std::cout << "WALK THE TREE FOR NONLINEAR CONSTRAINT TERMS" << std::endl;
+std::cout << "WALK THE TREE FOR NONLINEAR CONSTRAINT TERMS:  " << nlc << std::endl;
+
+		
 		if(nlc > 0){
 			while (iNLidx < nlc) {
 				m_treeRoot = walkTree ((CON_DE + iNLidx)->e);
@@ -714,7 +753,8 @@ bool OSnl2osil::createOSInstance(){
 				//std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
 			}
 		}
-		//std::cout << "WALK THE TREE FOR NONLINEAR OBJECTIVE TERMS" << std::endl;
+
+		std::cout << "WALK THE TREE FOR NONLINEAR OBJECTIVE TERMS  " << nlo  << std::endl;
 		if(nlo > 0){
 			while ( iNLidx < nlc + nlo){
 				m_treeRoot = walkTree ((OBJ_DE + iNLidx - nlc)->e);
