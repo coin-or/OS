@@ -12,16 +12,6 @@ JAVA_PACKAGES="
 openjdk-6-jre-headless
 tomcat6
 tomcat6-user
-libservlet2.4-java
-libxerces2-java
-libcommons-fileupload-java
-libcommons-logging-java
-libcommons-io-java
-libcommons-discovery-java
-libcommons-codec-java
-libaxis-java
-libsaxonb-java
-liblog4j1.2-java
 "
 
 BUILD_PACKAGES="
