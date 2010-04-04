@@ -296,6 +296,8 @@ OSnLNode* OSnl2osil::walkTree (expr *e){
 					std::cout << "ncom0 = "  << ncom0  << std::endl;
 					std::cout << "jjjjjjjjjjjjjjjjjj = "  << j  << std::endl;
 					*/
+					
+					// Orban: http://www.gerad.ca/~orban/drampl/def-vars.html
 					if(j < ncom0){		
 						struct cexp *common = ((const ASL_fg *) asl) -> I.cexps_ + j ;
 						//walk the tree for the non-linear stuff
