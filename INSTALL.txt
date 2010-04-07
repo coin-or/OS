@@ -43,9 +43,11 @@ This is a work in progress.  Please report any missing steps or problems.
    * OSCommon
      * project > properties > Project Facets > select: Java; Utility Module
      * project > properties > Project References > OSLib
-     * Right click project then validate.
+     * project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
+     * Right click project then select validate.
    * OSServer
      * project > properties > Project Facets > select: Java; Dynamic Web Module
+     * project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
      * project > properties > Java EE Module Dependency > select OSLib and OSCommon
  * To remove "WTP metadata" errors right click on project and select "Validate"
  * Start Server
