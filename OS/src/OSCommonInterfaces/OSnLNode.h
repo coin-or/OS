@@ -33,36 +33,7 @@ typedef double  ADdouble;
 using std::vector;
 #endif
 
-/** \enum OP_CODES we give a name  or op code to each of the values of
- * inodeInt (number identifying the type of node) -- this is
- * easier to work with
- */
- enum OP_CODES{
-	OS_PLUS = 1001,
-	OS_SUM = 1002,
-	OS_MINUS = 1003,
-	OS_NEGATE = 1004,
-	OS_TIMES = 1005,
-	OS_DIVIDE = 1006,
-	OS_POWER = 1009,
-	OS_PRODUCT = 1010,
-	OS_ABS = 2001,
-	OS_SQUARE = 2005,
-	OS_SQRT = 2006,
-	OS_LN = 2007,
-	OS_EXP = 2010,
-	OS_SIN = 3001,
-	OS_COS = 3002,
-	OS_MIN = 4010,
-	OS_MAX = 4011,
-	OS_ERF = 4625,
-	OS_NUMBER = 5001,
-	OS_PI = 5003,
-	OS_E = 5004,
-	OS_VARIABLE = 6001,
-	OS_IF = 7001,
-	OS_ALLDIF = 7016
-};
+
 
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
  *  \brief The OSnLNode Class.

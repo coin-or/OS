@@ -72,7 +72,30 @@
 # endif
 #endif
 
-
+#define OS_PLUS 1001
+#define	OS_SUM  1002
+#define	OS_MINUS  1003
+#define	OS_NEGATE  1004
+#define	OS_TIMES  1005
+#define	OS_DIVIDE  1006
+#define	OS_POWER  1009
+#define	OS_PRODUCT  1010
+#define	OS_ABS  2001
+#define	OS_SQUARE  2005
+#define	OS_SQRT  2006
+#define	OS_LN  2007
+#define	OS_EXP  2010
+#define	OS_SIN  3001
+#define	OS_COS  3002
+#define	OS_MIN  4010
+#define	OS_MAX  4011
+#define	OS_ERF  4625
+#define	OS_NUMBER  5001
+#define	OS_PI  5003
+#define	OS_E  5004
+#define	OS_VARIABLE  6001
+#define	OS_IF  7001
+#define	OS_ALLDIF  7016
 
 
 
@@ -142,3 +165,7 @@ inline double nanKludge(){
 #endif
 
 #endif
+
+
+
+

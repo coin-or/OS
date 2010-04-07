@@ -73,11 +73,11 @@ std::map<int, int> *OSExpressionTree::getVariableIndiciesMap(){
 	m_treeRoot->getVariableIndexMap( mapVarIdx);
 	//std::cout << "SIZE OF MAP =  "  << (*mapVarIdx).size() << std::endl;
 	int kount = 0;
-	for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
-		m_mPosVarIdx->second = kount++;
+	//for(m_mPosVarIdx = (*mapVarIdx).begin(); m_mPosVarIdx != (*mapVarIdx).end(); ++m_mPosVarIdx){
+	//	m_mPosVarIdx->second = kount++;
 		//std::cout <<  "POSITION FIRST =  "  << m_mPosVarIdx->first ;
 		//std::cout <<  "    POSITION SECOND = "  << m_mPosVarIdx->second << std::endl;
-	}
+	//}
 	m_bIndexMapGenerated = true;
 	return mapVarIdx;
 }//getVariableIndicies
