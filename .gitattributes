@@ -446,7 +446,6 @@ OSThirdParty/lib/saxon/saxon9.jar -text
 OSThirdParty/lib/servlet/LICENSE.txt -text
 OSThirdParty/lib/servlet/NOTICE.txt -text
 OSThirdParty/lib/servlet/servlet-api.jar -text
-OSThirdParty/lib/servlet/servlet.jar -text
 OSThirdParty/lib/xerces/LICENSE -text
 OSThirdParty/lib/xerces/LICENSE-SAX.html -text
 OSThirdParty/lib/xerces/LICENSE.DOM-documentation.html -text
