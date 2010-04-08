@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: version 2.0 (The entire schema)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osol" type="OSoL">
@@ -440,6 +440,7 @@
 	<xs:complexType name="ConstraintOption">
 		<xs:sequence>
 			<xs:element name="initialConstraintValues" type="InitConstraintValues" minOccurs="0"/>
+			<xs:element name="initialConstraintStatus" type="InitialConstraintStatus" minOccurs="0"/>
 			<xs:element name="initialDualValues" type="InitDualVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
@@ -454,6 +455,26 @@
 	<xs:complexType name="InitConValue">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="InitialConstraintStatus">
+		<xs:sequence>
+			<xs:element name="con" type="InitConStatus" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="InitConStatus">
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" default="unknown">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="unknown"/>
+					<xs:enumeration value="nonBinding"/>
+					<xs:enumeration value="lbTight"/>
+					<xs:enumeration value="ubTight"/>
+					<xs:enumeration value="tight"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="InitDualVariableValues">
 		<xs:sequence>
