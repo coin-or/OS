@@ -336,18 +336,10 @@ OSCommon/src/org/optimizationservices/oscommon/util/XMLUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XPathUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XQueryUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/XSLTUtil.java -text
-OSJavaExamples/.classpath -text
-OSJavaExamples/.project -text
-OSJavaExamples/OSParameter.xml -text
-OSJavaExamples/src/OSJavaInstanceDemo.java -text
-OSLib/.classpath -text svneol=unset#text/plain
-OSLib/.project -text svneol=unset#text/plain
-OSLib/doc/exported-jars.txt -text
-OSLib/doc/external-source.txt -text
-OSLib/scripts/coin-os.sh -text
-OSLib/scripts/install-external.sh -text
-OSLib/scripts/install-packages-ubuntu-karmic.sh -text
-OSLib/scripts/tomcat6-user.sh -text
+OSExample/.classpath -text
+OSExample/.project -text
+OSExample/OSParameter.xml -text
+OSExample/src/OSJavaInstanceDemo.java -text
 OSServer/.classpath -text svneol=unset#text/plain
 OSServer/.project -text svneol=unset#text/plain
 OSServer/WebContent/META-INF/MANIFEST.MF -text svneol=unset#text/plain
@@ -392,3 +384,11 @@ OSServer/test/test-coin.sh -text
 OSServer/test/test.cmd -text
 OSServer/test/test.py -text
 OSServer/test/test.sh -text
+OSThirdParty/.classpath -text svneol=unset#text/plain
+OSThirdParty/.project -text svneol=unset#text/plain
+OSThirdParty/doc/exported-jars.txt -text
+OSThirdParty/doc/external-source.txt -text
+OSThirdParty/scripts/coin-os.sh -text
+OSThirdParty/scripts/install-external.sh -text
+OSThirdParty/scripts/install-packages-ubuntu-karmic.sh -text
+OSThirdParty/scripts/tomcat6-user.sh -text
