@@ -4,7 +4,7 @@ This is a work in progress.  Please report any missing steps or problems.
 
 == Install ==
  * Use an Eclipse with WTP
-   * In Ubuntu run sudo eclipse
+   * in Ubuntu run sudo eclipse
    * select help > install new software
    * in the "work with: " text box select, "Eclipse Galileo Repository" if available.  
      * If it is not available added by pasting http://download.eclipse.org/releases/galileo/ into text box and click add.
@@ -17,6 +17,8 @@ This is a work in progress.  Please report any missing steps or problems.
      * Eclipse Java Development Tools
    * click Next, Accept, Finish.
    * Wait and restart Eclipse
+   * If asked on restart select "SVN Kit 1.3.0" and install, restart Eclipse when prompted.
+   * Exit Eclipse
  * Clone OSjava
  * Download/Build ThirdParty
     * In OSLib run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
