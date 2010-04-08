@@ -29,24 +29,21 @@ This is a work in progress.  Please report any missing steps or problems.
     * for Ubuntu, in OSLib run `bash scripts/tomcat6-user.sh`
  * Start Eclipse
  * Add a Tomcat 6 "Server" to Eclipse
-    * File > New > Other > 'Server' > 'select server type:' > apache > Tomcat v6.0 Server > Next 
+    * File > New > Other > 'Server' > 'select server type:' > Apache > Tomcat v6.0 Server > Next 
     * Select the Tomcat6 installation
       * Select `download or install` or select a local install of tomcat6 (for Ubuntu tomcat6-user.sh select Browse > Servers/local tomcat6)
  * Import the project OSLib OSCommon and OSServer into eclipse
    * file > import > general > existing projects into workspace > next
-   * for "select root directory" use browse to select the OSjava directroy
+   * for "select root directory" use browse to select the OSjava directory
    * select OSLib, OSCommon and OSServer and click finish.
- * Configure projects.  In the package windows right click each project and do the folowing for each project:
+ * Configure projects.  In the package windows right click each project and do the following for each project:
    * OSLib
      * project > properties > Project Facets > select: Java; Utility Module
    * OSCommon
      * project > properties > Project Facets > select: Java; Utility Module
-     * [REMOVE? project > properties > Project References > OSLib ]
-     * [REMOVE? project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
    * OSServer
      * project > properties > Project Facets > select: Java; Dynamic Web Module > OK (do not skip OK)
      * project > properties > Java EE Module Dependency > select OSLib and OSCommon
-     * [REMOVE] project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
  * To remove "WTP metadata" errors right click on projects and select "validate"
  * Start Server
    * Java EE Perspective > Window > Show View > Servers
@@ -54,6 +51,6 @@ This is a work in progress.  Please report any missing steps or problems.
    * Right click and select start.
    * Errors will be directed to the `console` view
  * Test server
-   * in OSServer/test run test.sh
- * Add grant tomcat6 policies in
-   * OSServer/doc/tomcat6-policy.txt
+   * in OSServer/test run `bash test.sh` or `test.cmd` for Windows.
+ * Optionally deploy (run another server)
+   * add grant tomcat6 policies in OSServer/doc/tomcat6-policy.txt
