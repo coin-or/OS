@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>OSJavaExamples</name>
+	<name>OSExample</name>
 	<comment></comment>
 	<projects>
 		<project>OSCommon</project>
-		<project>OSLib</project>
+		<project>OSThirdParty</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

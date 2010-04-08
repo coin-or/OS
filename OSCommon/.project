@@ -3,7 +3,7 @@
 	<name>OSCommon</name>
 	<comment></comment>
 	<projects>
-		<project>OSLib</project>
+		<project>OSThirdParty</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -23,9 +23,9 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
 		<nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
-		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
 </projectDescription>

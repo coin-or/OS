@@ -1,9 +1,9 @@
 2010-03-22: mtim
   Refactor OSjava for wider development using Eclipse.
    * Code taken from r3235 (oscommon) and  r2647 (ossolver) 
-   * Split into Eclipse projects (OSCommon, OSServer, OSLib)
-   * External Java jars will be provided by OSLib
-     * OSLib/scripts/instal-external.sh to automate unpacking downloads
+   * Split into Eclipse projects (OSCommon, OSServer, OSThirdParty)
+   * External Java jars will be provided by OSThirdParty
+     * OSThirdParty/scripts/instal-external.sh to automate unpacking downloads
    * Ported to new build envrionment
      * Dead/broken code removal
      * Convert to unix EOL
@@ -12,3 +12,8 @@
      * Use log4j for logging (console in eclipse is now clickable)
      * WSDL files generated from a previous version of eclipse
    * Initial documentation (see INSTALL.txt, doc/* and scripts/*)
+   
+2010-04-08: junma
+	Some naming changes/refactoring
+	Some default libraries in OSThirdParty for now to test checkout convenience (ultimately to be pulled from OS Binary using svn external)
+	Some corresponding changes of library configuration

@@ -21,29 +21,29 @@ This is a work in progress.  Please report any missing steps or problems.
    * Exit Eclipse
  * Clone OSjava
  * Download/Build ThirdParty
-    * In OSLib run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
-    * In OSLib run `bash scripts/install-external.sh` for download locations and re-run to unpack.
-    * In OSLib run `bash scripts/coin-os.sh`
-      * alternatively copy OSSolverService binaries to OSLib/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
+    * In OSThirdParty run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
+    * In OSThirdParty run `bash scripts/install-external.sh` for download locations and re-run to unpack.
+    * In OSThirdParty run `bash scripts/coin-os.sh`
+      * alternatively copy OSSolverService binaries to OSThirdParty/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
  * Optional: install a local version of Tomcat
-    * for Ubuntu, in OSLib run `bash scripts/tomcat6-user.sh`
+    * for Ubuntu, in OSThirdParty run `bash scripts/tomcat6-user.sh`
  * Start Eclipse
  * Add a Tomcat 6 "Server" to Eclipse
     * File > New > Other > 'Server' > 'select server type:' > Apache > Tomcat v6.0 Server > Next 
     * Select the Tomcat6 installation
       * Select `download or install` or select a local install of tomcat6 (for Ubuntu tomcat6-user.sh select Browse > Servers/local tomcat6)
- * Import the project OSLib OSCommon and OSServer into eclipse
+ * Import the project OSThirdParty OSCommon and OSServer into eclipse
    * file > import > general > existing projects into workspace > next
    * for "select root directory" use browse to select the OSjava directory
-   * select OSLib, OSCommon and OSServer and click finish.
+   * select OSThirdParty, OSCommon and OSServer and click finish.
  * Configure projects.  In the package windows right click each project and do the following for each project:
-   * OSLib
+   * OSThirdParty
      * project > properties > Project Facets > select: Java; Utility Module
    * OSCommon
      * project > properties > Project Facets > select: Java; Utility Module
    * OSServer
      * project > properties > Project Facets > select: Java; Dynamic Web Module > OK (do not skip OK)
-     * project > properties > Java EE Module Dependency > select OSLib and OSCommon
+     * project > properties > Java EE Module Dependency > select OSThirdParty and OSCommon
  * To remove "WTP metadata" errors right click on projects and select "validate"
  * Start Server
    * Java EE Perspective > Window > Show View > Servers
