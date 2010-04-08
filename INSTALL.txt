@@ -18,44 +18,40 @@ This is a work in progress.  Please report any missing steps or problems.
    * click Next, Accept, Finish.
    * Wait and restart Eclipse
  * Clone OSjava
- * Install local copy of Tomcat 6 server in eclipse
-   * For Ubuntu
-      * in OSLib run `bash scripts/tomcat6-user.sh` or install similar server
-      * install Tomcat in eclipse (follow instructions printed by previous script)
- * Import the project OSLib OSCommon and OSServer into eclipse
-   * file > import > general > existing projects into workspace > next
-   * for "select root directory" use browse to select the OSjava directroy
-   * select OSLib, OSCommon and OSServer and click finish.
  * Download/Build ThirdParty
     * In OSLib run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
     * In OSLib run `bash scripts/install-external.sh` for download locations and re-run to unpack.
     * In OSLib run `bash scripts/coin-os.sh`
       * alternatively copy OSSolverService binaries to OSLib/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
- * Install Tomcat 6
-    * For Ubuntu or others in OSLib run `bash scripts/tomcat6-user.sh`
+ * Optional: install a local version of Tomcat
+    * for Ubuntu, in OSLib run `bash scripts/tomcat6-user.sh`
+ * Start Eclipse
+ * Add a Tomcat 6 "Server" to Eclipse
     * File > New > Other > 'Server' > 'select server type:' > apache > Tomcat v6.0 Server > Next 
     * Select the Tomcat6 installation
-      * Ubuntu select Browse > Servers/local tomcat6"
-      * Select `download or install` or select a local install of tomcat6
+      * Select `download or install` or select a local install of tomcat6 (for Ubuntu tomcat6-user.sh select Browse > Servers/local tomcat6)
+ * Import the project OSLib OSCommon and OSServer into eclipse
+   * file > import > general > existing projects into workspace > next
+   * for "select root directory" use browse to select the OSjava directroy
+   * select OSLib, OSCommon and OSServer and click finish.
  * Configure projects.  In the package windows right click each project and do the folowing for each project:
    * OSLib
      * project > properties > Project Facets > select: Java; Utility Module
    * OSCommon
      * project > properties > Project Facets > select: Java; Utility Module
-     * project > properties > Project References > OSLib
-     * project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
-     * Right click project then select validate.
+     * [REMOVE? project > properties > Project References > OSLib ]
+     * [REMOVE? project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
    * OSServer
-     * project > properties > Project Facets > select: Java; Dynamic Web Module
-     * project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
+     * project > properties > Project Facets > select: Java; Dynamic Web Module > OK (do not skip OK)
      * project > properties > Java EE Module Dependency > select OSLib and OSCommon
- * To remove "WTP metadata" errors right click on project and select "Validate"
+     * [REMOVE] project > properties > Java Build Path > "Libraries" Tab > "Add Library" Button > Server Runtime > Next > Apache Tomcat 6 > Finish > OK
+ * To remove "WTP metadata" errors right click on projects and select "validate"
  * Start Server
    * Java EE Perspective > Window > Show View > Servers
    * Right click server and select `add or remove` and add `OSServer`
    * Right click and select start.
    * Errors will be directed to the `console` view
  * Test server
-   * in OSServer/test run test.hs
+   * in OSServer/test run test.sh
  * Add grant tomcat6 policies in
    * OSServer/doc/tomcat6-policy.txt
