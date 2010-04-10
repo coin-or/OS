@@ -26,11 +26,12 @@ import org.optimizationservices.oscommon.representationparser.OSiLReader;
 import org.optimizationservices.oscommon.representationparser.OSiLWriter;
 import org.optimizationservices.oscommon.representationparser.OSoLReader;
 
-import drasys.or.mp.Constraint;
-import drasys.or.mp.ConstraintI;
-import drasys.or.mp.Problem;
-import drasys.or.mp.VariableI;
-import drasys.or.mp.util.MPSReader;
+//comment out to not use the or124.jar, which license is not compatible. 
+//import drasys.or.mp.Constraint;
+//import drasys.or.mp.ConstraintI;
+//import drasys.or.mp.Problem;
+//import drasys.or.mp.VariableI;
+//import drasys.or.mp.util.MPSReader;
 
 /**
  *
@@ -384,82 +385,83 @@ public class CommonUtil{
 	 * 
 	 * @return whether the OSRepository is created successfully or not. 
 	 */
-	public static boolean createOSRepository(){
-		String sOSRepositoryXMLFile = OSParameter.CODE_HOME + "OSRepository/OSRepository.xml";
-		String sOSRepositoryDir = OSParameter.CODE_HOME + "OSRepository/";
-		String sNetLibProblemDir = sOSRepositoryDir + "other/MPS_netlib/netlib/data/";
-		String sMIP03LibProblemDir = sOSRepositoryDir + "other/miplib2003/";
-
-		OSRepositoryReader osRepositoryReader = new OSRepositoryReader(false);
-		osRepositoryReader.readFile(sOSRepositoryXMLFile);
-		System.out.println("OSRepository Description\n" + osRepositoryReader.getDescription());
-		System.out.println("\nOSRepository News\n");
-		NewsElement[] mNews = osRepositoryReader.getNews();
-		int iNews = mNews==null?0:mNews.length;
-		for(int i = 0; i < iNews; i++){
-			System.out.println("time: " + XMLUtil.createXSDateTime(mNews[i].time) + ": " + mNews[i].value);
-		}
-		RepositoryInstance[] mInstancce = osRepositoryReader.getInstances();
-		int iInstance = mInstancce==null?0:mInstancce.length;
-		int iNetLib = 98; //E226 is treated specially for its obj constant.
-		int iKeninninton = 16; //4 big files are usually skipped. 
-		int iInfeasible = 29; //skipping the infeasible greanbea
-		int iMIP03Lib = 60;//disktom.mps changed to disctom.mps
-		String sLine = "------------------------------------------------------";
-		System.out.println("\n\n" + "OSRepository instances: " + iInstance);
-		System.out.println("Number of Netlib Problems: " + iNetLib);
-		System.out.println("Number of Keninninton Problems: " + iKeninninton);
-		System.out.println("Number of infeasible Problems: " + iInfeasible);
-		System.out.println("Number of mixed integer Problems: " + iMIP03Lib);
-		for(int i = iNetLib+iKeninninton+iInfeasible; i < iNetLib+iKeninninton+iInfeasible+iMIP03Lib; i++){
-			System.out.println(sLine);
-			System.out.println(i);
-			System.out.println("name: " + mInstancce[i].name);
-			
-			//Start of skipping 4 big files and 1 infeasible greenbea. 
-			if(mInstancce[i].name.equals("KEN-18")){
-				System.out.println("!!too big!!");
-				continue;
-			}
-			if(mInstancce[i].name.equals("OSA-30")){
-				System.out.println("!!too big!!");
-				continue;
-			}
-			if(mInstancce[i].name.equals("OSA-60")){
-				System.out.println("!!too big!!");
-				continue;
-			}
-			if(mInstancce[i].name.equals("PDS-20")){
-				System.out.println("!!too big!!");
-				continue;
-			}
-			/////GREENBEA_INFEASIBLE is generated manually////////
-			if(mInstancce[i].name.equals("GREENBEA_INFEASIBLE")){
-				System.out.println("Skip GREENBEA_INFEASIBLE!!!");
-				continue;
-			}
-			//////////////////////////////////////////////////////
-			//End of skipping 4 big files and 1 infeasible greenbea.
-			System.out.println("source: " + mInstancce[i].source);
-			System.out.println("description: " + mInstancce[i].description);
-
-			String sDir = sNetLibProblemDir;
-			if(i >= iNetLib+iKeninninton+iInfeasible) sDir = sMIP03LibProblemDir;
-			System.out.println("originalFileName: " + (sDir + mInstancce[i].originalFileName));
-			System.out.println("osDirectoty: " + mInstancce[i].osDirectoty);
-			System.out.println("osFileName: " + mInstancce[i].osFileName);
-			System.out.println("creating...");
-			System.out.println(CommonUtil.mpsToOSiL(
-					sDir+ mInstancce[i].originalFileName, 
-					sOSRepositoryDir + mInstancce[i].osDirectoty + mInstancce[i].osFileName, 
-					mInstancce[i].name, 
-					mInstancce[i].source, 
-					mInstancce[i].description));
-		}
-		System.out.println(sLine);
-		System.out.println("END");
-		return true;
-	}//createOSRepository
+//	comment out to not use the or124.jar, which license is not compatible. 	
+//	public static boolean createOSRepository(){
+//		String sOSRepositoryXMLFile = OSParameter.CODE_HOME + "OSRepository/OSRepository.xml";
+//		String sOSRepositoryDir = OSParameter.CODE_HOME + "OSRepository/";
+//		String sNetLibProblemDir = sOSRepositoryDir + "other/MPS_netlib/netlib/data/";
+//		String sMIP03LibProblemDir = sOSRepositoryDir + "other/miplib2003/";
+//
+//		OSRepositoryReader osRepositoryReader = new OSRepositoryReader(false);
+//		osRepositoryReader.readFile(sOSRepositoryXMLFile);
+//		System.out.println("OSRepository Description\n" + osRepositoryReader.getDescription());
+//		System.out.println("\nOSRepository News\n");
+//		NewsElement[] mNews = osRepositoryReader.getNews();
+//		int iNews = mNews==null?0:mNews.length;
+//		for(int i = 0; i < iNews; i++){
+//			System.out.println("time: " + XMLUtil.createXSDateTime(mNews[i].time) + ": " + mNews[i].value);
+//		}
+//		RepositoryInstance[] mInstancce = osRepositoryReader.getInstances();
+//		int iInstance = mInstancce==null?0:mInstancce.length;
+//		int iNetLib = 98; //E226 is treated specially for its obj constant.
+//		int iKeninninton = 16; //4 big files are usually skipped. 
+//		int iInfeasible = 29; //skipping the infeasible greanbea
+//		int iMIP03Lib = 60;//disktom.mps changed to disctom.mps
+//		String sLine = "------------------------------------------------------";
+//		System.out.println("\n\n" + "OSRepository instances: " + iInstance);
+//		System.out.println("Number of Netlib Problems: " + iNetLib);
+//		System.out.println("Number of Keninninton Problems: " + iKeninninton);
+//		System.out.println("Number of infeasible Problems: " + iInfeasible);
+//		System.out.println("Number of mixed integer Problems: " + iMIP03Lib);
+//		for(int i = iNetLib+iKeninninton+iInfeasible; i < iNetLib+iKeninninton+iInfeasible+iMIP03Lib; i++){
+//			System.out.println(sLine);
+//			System.out.println(i);
+//			System.out.println("name: " + mInstancce[i].name);
+//			
+//			//Start of skipping 4 big files and 1 infeasible greenbea. 
+//			if(mInstancce[i].name.equals("KEN-18")){
+//				System.out.println("!!too big!!");
+//				continue;
+//			}
+//			if(mInstancce[i].name.equals("OSA-30")){
+//				System.out.println("!!too big!!");
+//				continue;
+//			}
+//			if(mInstancce[i].name.equals("OSA-60")){
+//				System.out.println("!!too big!!");
+//				continue;
+//			}
+//			if(mInstancce[i].name.equals("PDS-20")){
+//				System.out.println("!!too big!!");
+//				continue;
+//			}
+//			/////GREENBEA_INFEASIBLE is generated manually////////
+//			if(mInstancce[i].name.equals("GREENBEA_INFEASIBLE")){
+//				System.out.println("Skip GREENBEA_INFEASIBLE!!!");
+//				continue;
+//			}
+//			//////////////////////////////////////////////////////
+//			//End of skipping 4 big files and 1 infeasible greenbea.
+//			System.out.println("source: " + mInstancce[i].source);
+//			System.out.println("description: " + mInstancce[i].description);
+//
+//			String sDir = sNetLibProblemDir;
+//			if(i >= iNetLib+iKeninninton+iInfeasible) sDir = sMIP03LibProblemDir;
+//			System.out.println("originalFileName: " + (sDir + mInstancce[i].originalFileName));
+//			System.out.println("osDirectoty: " + mInstancce[i].osDirectoty);
+//			System.out.println("osFileName: " + mInstancce[i].osFileName);
+//			System.out.println("creating...");
+//			System.out.println(CommonUtil.mpsToOSiL(
+//					sDir+ mInstancce[i].originalFileName, 
+//					sOSRepositoryDir + mInstancce[i].osDirectoty + mInstancce[i].osFileName, 
+//					mInstancce[i].name, 
+//					mInstancce[i].source, 
+//					mInstancce[i].description));
+//		}
+//		System.out.println(sLine);
+//		System.out.println("END");
+//		return true;
+//	}//createOSRepository
 	
 	
 	/**
@@ -483,160 +485,161 @@ public class CommonUtil{
 	 * @return whether user wants to clear the arrays passed in to save memory if the arrays
 	 * will still be referenced, a false value is to be returned.
 	 */
-	public static boolean mpsToOSiL(String mpsFileName, String osilFileName, String instanceName, String instanceSource, String instanceDescription){
-		drasys.or.mp.Problem problem = new Problem(1000, 1000);
-		String sObjectiveName = "";
-		double dObjectiveConstant = 0; 
-		if(osilFileName.endsWith("e226.osil")) dObjectiveConstant = -7.113;
-		try {
-			FileReader fr = new FileReader(new File(mpsFileName));
-			BufferedReader br = new BufferedReader(fr);
-			br.readLine();
-			br.readLine();
-			String sLine = "";
-			while(true){
-				try {
-					sLine = br.readLine();
-					if(sLine.charAt(1) == 'N' || sLine.charAt(2) == 'N'){
-						sObjectiveName = sLine.substring(4).trim();
-						break;
-					}					
-				} 
-				catch (Exception e) {
-				}
-			}
-			br.close();
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		try{
-			String sMPSFileName = mpsFileName;
-			FileInputStream fis = new FileInputStream(sMPSFileName);
-			InputStreamReader isr = new InputStreamReader(fis);
-			MPSReader mpsReader = new MPSReader(isr);
-			mpsReader.readProblem(problem);
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		
-		int iNumberVariables = problem.sizeOfVariables();
-		int iNumberConstrains = problem.sizeOfConstraints();
-		int iNumberCoefMatrixValues = problem.sizeOfCoefficients();
-		double[] mdObjCoef = new double[iNumberVariables];
-		int[] miObjCoefIndex = new int[iNumberVariables];
-		double[] mdVarLb = new double[iNumberVariables]; 
-		double[] mdVarUb = new double[iNumberVariables];
-		char[] mcVarType = new char[iNumberVariables];
-		String[] msVarName = new String[iNumberVariables];
-		double[] mdConUb = new double[iNumberConstrains];
-		double[] mdConLb = new double[iNumberConstrains];
-		String[] msConName = new String[iNumberConstrains];
-		double[] mdValue = new double[iNumberCoefMatrixValues];
-		int[] miRowIdx = new int[iNumberCoefMatrixValues];
-		//int[] miColIdx = new int[iNumberCoefMatrixValues];
-		int[] miStart = new int[iNumberVariables+1];
-		
-		Enumeration enumVar = problem.variables();
-		VariableI var;
-		while (enumVar.hasMoreElements()){
-			var = (VariableI)enumVar.nextElement();
-			int i=var.getColumnIndex();
-			mdObjCoef[i] = var.getObjectiveCoefficient();
-			miObjCoefIndex[i] = i;
-			mdVarLb[i] = var.getLowerBound();
-			mdVarUb[i] = var.getUpperBound();
-			msVarName[i] = var.getName();
-
-			byte bType = var.getType(); 
-			switch (bType){
-			case VariableI.BOOLEAN:
-				mcVarType[i] = 'B';
-			break;
-			case VariableI.INTEGER:
-				mcVarType[i] = 'I';
-			break;
-			case VariableI.REAL:
-				mcVarType[i] = 'C';
-			break;
-			case VariableI.FREE:
-				mcVarType[i] = 'C';
-			break;
-			}
-		}		
-		Enumeration enumCon = problem.constraints();
-		ConstraintI con;
-
-		while (enumCon.hasMoreElements()){
-			con = (ConstraintI)enumCon.nextElement();
-			int i = con.getRowIndex();
-			msConName[i] = con.getName();
-			switch (con.getType()){
-			case ConstraintI.EQUAL:
-				mdConUb[i] = con.getRightHandSide();
-				mdConLb[i] = con.getRightHandSide();
-			break;
-			case Constraint.GREATER:
-				mdConLb[i] = con.getRightHandSide();
-				mdConUb[i] = Double.POSITIVE_INFINITY;
-			break;
-			case Constraint.LESS:
-				mdConUb[i] = con.getRightHandSide();
-				mdConLb[i] = Double.NEGATIVE_INFINITY;
-			break;
-			case Constraint.FREE:
-				mdConLb[i] = Double.NEGATIVE_INFINITY;
-				mdConUb[i] = Double.POSITIVE_INFINITY;
-			break;
-			case Constraint.RANGE:
-				mdConLb[i] = con.getLowerRange();
-				mdConUb[i] = con.getUpperRange();
-			break;
-			}
-		}
-		
-		drasys.or.matrix.MatrixI matrix = problem.getCoefficientMatrix();
-		Enumeration enumValue;
-		drasys.or.matrix.MatrixElementI matrixEntry;
-		int k = 0;
-		/*
-		for (int i = 0; i < iNumberConstrains; i++){
-			miStart[i] = k;
-			enumValue = matrix.rowElements(i);
-			while (enumValue.hasMoreElements()) {
-				matrixEntry = (drasys.or.matrix.MatrixElementI)enumValue.nextElement();
-				mdValue[k] = matrixEntry.getValue();
-				miColIdx[k] = matrixEntry.getColumnIndex();
-				k++;
-			}
-		}
-		*/
-		for (int i = 0; i < iNumberVariables; i++){
-			miStart[i] = k;
-			enumValue = matrix.columnElements(i);
-			while (enumValue.hasMoreElements()) {
-				matrixEntry = (drasys.or.matrix.MatrixElementI)enumValue.nextElement();
-				mdValue[k] = matrixEntry.getValue();
-				miRowIdx[k] = matrixEntry.getRowIndex();
-				k++;
-			}
-		}
-		miStart[iNumberVariables] = k;
-		
-		String sFileName = osilFileName;
-		OSiLWriter osilWriter = new OSiLWriter();
-		
-		osilWriter.setInstanceHeader(instanceName, instanceSource, instanceDescription);
-		osilWriter.setVariables(iNumberVariables, msVarName, mdVarLb, mdVarUb, mcVarType/*, null, null*/);
-		osilWriter.setConstraints(iNumberConstrains, msConName, mdConLb, mdConUb, null);
-		osilWriter.addObjective(sObjectiveName, true, dObjectiveConstant, 1, mdObjCoef, miObjCoefIndex);
-		osilWriter.setLinearConstraintCoefficients(iNumberCoefMatrixValues, true, mdValue, miRowIdx, miStart);
-		//osilWriter.writeToStandardOutput();
-		osilWriter.writeToFile(sFileName);
-		return true;
-	}//mpsToOSiL
+//	comment out to not use the or124.jar, which license is not compatible. 
+//	public static boolean mpsToOSiL(String mpsFileName, String osilFileName, String instanceName, String instanceSource, String instanceDescription){
+//		drasys.or.mp.Problem problem = new Problem(1000, 1000);
+//		String sObjectiveName = "";
+//		double dObjectiveConstant = 0; 
+//		if(osilFileName.endsWith("e226.osil")) dObjectiveConstant = -7.113;
+//		try {
+//			FileReader fr = new FileReader(new File(mpsFileName));
+//			BufferedReader br = new BufferedReader(fr);
+//			br.readLine();
+//			br.readLine();
+//			String sLine = "";
+//			while(true){
+//				try {
+//					sLine = br.readLine();
+//					if(sLine.charAt(1) == 'N' || sLine.charAt(2) == 'N'){
+//						sObjectiveName = sLine.substring(4).trim();
+//						break;
+//					}					
+//				} 
+//				catch (Exception e) {
+//				}
+//			}
+//			br.close();
+//		} 
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		try{
+//			String sMPSFileName = mpsFileName;
+//			FileInputStream fis = new FileInputStream(sMPSFileName);
+//			InputStreamReader isr = new InputStreamReader(fis);
+//			MPSReader mpsReader = new MPSReader(isr);
+//			mpsReader.readProblem(problem);
+//		}
+//		catch(Exception e){
+//			e.printStackTrace();
+//		}
+//		
+//		int iNumberVariables = problem.sizeOfVariables();
+//		int iNumberConstrains = problem.sizeOfConstraints();
+//		int iNumberCoefMatrixValues = problem.sizeOfCoefficients();
+//		double[] mdObjCoef = new double[iNumberVariables];
+//		int[] miObjCoefIndex = new int[iNumberVariables];
+//		double[] mdVarLb = new double[iNumberVariables]; 
+//		double[] mdVarUb = new double[iNumberVariables];
+//		char[] mcVarType = new char[iNumberVariables];
+//		String[] msVarName = new String[iNumberVariables];
+//		double[] mdConUb = new double[iNumberConstrains];
+//		double[] mdConLb = new double[iNumberConstrains];
+//		String[] msConName = new String[iNumberConstrains];
+//		double[] mdValue = new double[iNumberCoefMatrixValues];
+//		int[] miRowIdx = new int[iNumberCoefMatrixValues];
+//		//int[] miColIdx = new int[iNumberCoefMatrixValues];
+//		int[] miStart = new int[iNumberVariables+1];
+//		
+//		Enumeration enumVar = problem.variables();
+//		VariableI var;
+//		while (enumVar.hasMoreElements()){
+//			var = (VariableI)enumVar.nextElement();
+//			int i=var.getColumnIndex();
+//			mdObjCoef[i] = var.getObjectiveCoefficient();
+//			miObjCoefIndex[i] = i;
+//			mdVarLb[i] = var.getLowerBound();
+//			mdVarUb[i] = var.getUpperBound();
+//			msVarName[i] = var.getName();
+//
+//			byte bType = var.getType(); 
+//			switch (bType){
+//			case VariableI.BOOLEAN:
+//				mcVarType[i] = 'B';
+//			break;
+//			case VariableI.INTEGER:
+//				mcVarType[i] = 'I';
+//			break;
+//			case VariableI.REAL:
+//				mcVarType[i] = 'C';
+//			break;
+//			case VariableI.FREE:
+//				mcVarType[i] = 'C';
+//			break;
+//			}
+//		}		
+//		Enumeration enumCon = problem.constraints();
+//		ConstraintI con;
+//
+//		while (enumCon.hasMoreElements()){
+//			con = (ConstraintI)enumCon.nextElement();
+//			int i = con.getRowIndex();
+//			msConName[i] = con.getName();
+//			switch (con.getType()){
+//			case ConstraintI.EQUAL:
+//				mdConUb[i] = con.getRightHandSide();
+//				mdConLb[i] = con.getRightHandSide();
+//			break;
+//			case Constraint.GREATER:
+//				mdConLb[i] = con.getRightHandSide();
+//				mdConUb[i] = Double.POSITIVE_INFINITY;
+//			break;
+//			case Constraint.LESS:
+//				mdConUb[i] = con.getRightHandSide();
+//				mdConLb[i] = Double.NEGATIVE_INFINITY;
+//			break;
+//			case Constraint.FREE:
+//				mdConLb[i] = Double.NEGATIVE_INFINITY;
+//				mdConUb[i] = Double.POSITIVE_INFINITY;
+//			break;
+//			case Constraint.RANGE:
+//				mdConLb[i] = con.getLowerRange();
+//				mdConUb[i] = con.getUpperRange();
+//			break;
+//			}
+//		}
+//		
+//		drasys.or.matrix.MatrixI matrix = problem.getCoefficientMatrix();
+//		Enumeration enumValue;
+//		drasys.or.matrix.MatrixElementI matrixEntry;
+//		int k = 0;
+//		/*
+//		for (int i = 0; i < iNumberConstrains; i++){
+//			miStart[i] = k;
+//			enumValue = matrix.rowElements(i);
+//			while (enumValue.hasMoreElements()) {
+//				matrixEntry = (drasys.or.matrix.MatrixElementI)enumValue.nextElement();
+//				mdValue[k] = matrixEntry.getValue();
+//				miColIdx[k] = matrixEntry.getColumnIndex();
+//				k++;
+//			}
+//		}
+//		*/
+//		for (int i = 0; i < iNumberVariables; i++){
+//			miStart[i] = k;
+//			enumValue = matrix.columnElements(i);
+//			while (enumValue.hasMoreElements()) {
+//				matrixEntry = (drasys.or.matrix.MatrixElementI)enumValue.nextElement();
+//				mdValue[k] = matrixEntry.getValue();
+//				miRowIdx[k] = matrixEntry.getRowIndex();
+//				k++;
+//			}
+//		}
+//		miStart[iNumberVariables] = k;
+//		
+//		String sFileName = osilFileName;
+//		OSiLWriter osilWriter = new OSiLWriter();
+//		
+//		osilWriter.setInstanceHeader(instanceName, instanceSource, instanceDescription);
+//		osilWriter.setVariables(iNumberVariables, msVarName, mdVarLb, mdVarUb, mcVarType/*, null, null*/);
+//		osilWriter.setConstraints(iNumberConstrains, msConName, mdConLb, mdConUb, null);
+//		osilWriter.addObjective(sObjectiveName, true, dObjectiveConstant, 1, mdObjCoef, miObjCoefIndex);
+//		osilWriter.setLinearConstraintCoefficients(iNumberCoefMatrixValues, true, mdValue, miRowIdx, miStart);
+//		//osilWriter.writeToStandardOutput();
+//		osilWriter.writeToFile(sFileName);
+//		return true;
+//	}//mpsToOSiL
 	
 	/**
 	 * create the native dateTime from a the timeMillis, which is the millisecond
