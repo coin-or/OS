@@ -2327,8 +2327,8 @@ if (OTHER_TESTS){
 		std::string *nodeNames1 = new std::string[ n];
 		std::string *nodeNames2 = new std::string[ n];
 		for (i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->snodeName << std::endl;
-			nodeNames1[i] = postfixVec[i]->snodeName;
+			std::cout << postfixVec[i]->getTokenName() << std::endl;
+			nodeNames1[i] = postfixVec[i]->getTokenName();
 		}
 		
 		// now create back the expression tree 
@@ -2348,8 +2348,8 @@ if (OTHER_TESTS){
 		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
 		std::cout << std::endl << std::endl;
 		for (i = 0 ; i < n; i++){
-			//std::cout << postfixVec[i]->snodeName << std::endl;
-			nodeNames2[i] = postfixVec[i]->snodeName;
+			//std::cout << postfixVec[i]->getTokenName() << std::endl;
+			nodeNames2[i] = postfixVec[i]->getTokenName();
 			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
 		}	
 		
@@ -2390,8 +2390,8 @@ if (OTHER_TESTS){
 		int n = postfixVec.size();
 		std::string *nodeNames1 = new std::string[ n];
 		for (int i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->snodeName << std::endl;
-			nodeNames1[i] = postfixVec[i]->snodeName;
+			std::cout << postfixVec[i]->getTokenName() << std::endl;
+			nodeNames1[i] = postfixVec[i]->getTokenName();
 		}
 		std::cout << std::endl << std::endl;
 		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;

@@ -122,7 +122,7 @@ int main(int argC, char* argV[]){
 	std::cout << std::endl << std::endl;
 	size_t i;
 	size_t numberOfNonlinearExpressions;
-	numberOfNonlinearExpressions = 1;
+	numberOfNonlinearExpressions = 100000;
 	/** nlarray is pointer to an array of Nl
 	 * object pointers */	
 	Nl **nlarray;
@@ -135,9 +135,9 @@ int main(int argC, char* argV[]){
 		nlarray[ i] = new Nl();
 		nlarray[i]->idx = i;
 		nlarray[ i]->osExpressionTree = new OSExpressionTree();
-		//nlNodeNumberPoint = new OSnLNodeNumber(); 
-		//nlNodeNumberPoint->value = 77.77;
-		//	nlarray[ i]->osExpressionTree->m_treeRoot = nlNodeNumberPoint;
+		nlNodeNumberPoint = new OSnLNodeNumber(); 
+		nlNodeNumberPoint->value = 77.77;
+			nlarray[ i]->osExpressionTree->m_treeRoot = nlNodeNumberPoint;
 		nlVec.push_back( nlarray[ i]) ;
 	}
 
@@ -151,75 +151,75 @@ int main(int argC, char* argV[]){
 	delete[] nlarray;
 	nlarray = NULL;
 
-
-	OSnl2osil *nl2osil = NULL;
-	try {
-
-		double cpuTime;
-		cpuTime = CoinCpuTime();
-		std::cout  << "start the process " << std::endl; 
-		// nl2osil = new OSnl2osil( "../../../../OS/data/amplFiles/blpmpec1.nl"); 
-		nl2osil = new OSnl2osil( "rbrockmod.nl");
-		std::cout  << "nl file read " << std::endl;
-		cpuTime = CoinCpuTime() - cpuTime;
-		std::cout  << "Time to read nl file: " <<   cpuTime  << std::endl;
-		nl2osil->createOSInstance() ;
-		std::cout << "Number Variable = " << nl2osil->osinstance->getVariableNumber() << std::endl;
-		std::cout << "Number Constraints = " << nl2osil->osinstance->getConstraintNumber() << std::endl;
-		std::cout  << "an osinstance created " << std::endl;
-		cpuTime = CoinCpuTime() - cpuTime;
-		std::cout  << "Time to create osinstance : " <<   cpuTime  << std::endl;
-		
-		std::cout  << std::endl;
-		std::cout << "THE OPERATORS" << std::endl;
-		for(int i = 0; i <  nl2osil->op_type.size(); i++){
-			std::cout << nl2osil->op_type[ i] << std::endl;
-		}
-		
-		std::cout  << std::endl;
-		std::cout << "THE OPERANDS" << std::endl;
-		for(int i = 0; i <  nl2osil->operand.size(); i++){
-			std::cout << nl2osil->operand[ i] << std::endl;
-		}
-
-		/*****   
-         std::cout << "Initialize Nonlinear Structures" << std::endl;
-	 		nl2osil->osinstance->initForAlgDiff( );  
-         cpuTime = CoinCpuTime() - cpuTime;
-         std::cout  << "Time to initialize Nonlinear Structures : " <<   cpuTime  << std::endl;
-         std::cout << "Get Sparse Jacobian" << std::endl;
-         SparseJacobianMatrix *sparseJac;
-	 		sparseJac = nl2osil->osinstance->getJacobianSparsityPattern();
-         cpuTime = CoinCpuTime() - cpuTime;
-         std::cout  << "Time to get Sparse Jacobian pattern : " <<   cpuTime  << std::endl; 
-         SparseHessianMatrix *sparseHessian = nl2osil->osinstance->getLagrangianHessianSparsityPattern();
-         cpuTime = CoinCpuTime() - cpuTime;
-	      std::cout  << "Time to get Sparse Hessain pattern : " <<   cpuTime  << std::endl;
-         OSiLWriter *osilwriter = NULL;
-	 		osilwriter = new OSiLWriter();
-	 		std::string osil;
-	 		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
-         std::cout << "osil generated" << std::endl;
-         cpuTime = CoinCpuTime() - cpuTime;
-         std::cout  << "Time to create osil : " <<   cpuTime  << std::endl;
-         std::cout  << "Size of osil string : " <<   osil.size()  << std::endl;
-        	fileUtil->writeFileFromString("tmp.osil", osil);
-      	delete osilwriter;
-
-		 */
-		delete nl2osil;
-		std::cout  << "nl2osil deleted " << std::endl;
-		cpuTime = CoinCpuTime() - cpuTime;
-		std::cout  << "Time to delete nl2osil : " <<   cpuTime  << std::endl;
-		return 0;
-	}
-	catch(const ErrorClass& eclass){
-		std::cout << "THERE WAS AN ERROR" <<  std::endl;
-		delete nl2osil;
-		std::cout << "THERE WAS AN ERROR" <<  std::endl;
-		std::cout << eclass.errormsg <<  std::endl;
-		return 0;
-	} 
+	return 0;
+//	OSnl2osil *nl2osil = NULL;
+//	try {
+//
+//		double cpuTime;
+//		cpuTime = CoinCpuTime();
+//		std::cout  << "start the process " << std::endl; 
+//		// nl2osil = new OSnl2osil( "../../../../OS/data/amplFiles/blpmpec1.nl"); 
+//		nl2osil = new OSnl2osil( "rbrockmod.nl");
+//		std::cout  << "nl file read " << std::endl;
+//		cpuTime = CoinCpuTime() - cpuTime;
+//		std::cout  << "Time to read nl file: " <<   cpuTime  << std::endl;
+//		nl2osil->createOSInstance() ;
+//		std::cout << "Number Variable = " << nl2osil->osinstance->getVariableNumber() << std::endl;
+//		std::cout << "Number Constraints = " << nl2osil->osinstance->getConstraintNumber() << std::endl;
+//		std::cout  << "an osinstance created " << std::endl;
+//		cpuTime = CoinCpuTime() - cpuTime;
+//		std::cout  << "Time to create osinstance : " <<   cpuTime  << std::endl;
+//		
+//		std::cout  << std::endl;
+//		std::cout << "THE OPERATORS" << std::endl;
+//		for(int i = 0; i <  nl2osil->op_type.size(); i++){
+//			std::cout << nl2osil->op_type[ i] << std::endl;
+//		}
+//		
+//		std::cout  << std::endl;
+//		std::cout << "THE OPERANDS" << std::endl;
+//		for(int i = 0; i <  nl2osil->operand.size(); i++){
+//			std::cout << nl2osil->operand[ i] << std::endl;
+//		}
+//
+//		/*****   
+//         std::cout << "Initialize Nonlinear Structures" << std::endl;
+//	 		nl2osil->osinstance->initForAlgDiff( );  
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to initialize Nonlinear Structures : " <<   cpuTime  << std::endl;
+//         std::cout << "Get Sparse Jacobian" << std::endl;
+//         SparseJacobianMatrix *sparseJac;
+//	 		sparseJac = nl2osil->osinstance->getJacobianSparsityPattern();
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to get Sparse Jacobian pattern : " <<   cpuTime  << std::endl; 
+//         SparseHessianMatrix *sparseHessian = nl2osil->osinstance->getLagrangianHessianSparsityPattern();
+//         cpuTime = CoinCpuTime() - cpuTime;
+//	      std::cout  << "Time to get Sparse Hessain pattern : " <<   cpuTime  << std::endl;
+//         OSiLWriter *osilwriter = NULL;
+//	 		osilwriter = new OSiLWriter();
+//	 		std::string osil;
+//	 		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
+//         std::cout << "osil generated" << std::endl;
+//         cpuTime = CoinCpuTime() - cpuTime;
+//         std::cout  << "Time to create osil : " <<   cpuTime  << std::endl;
+//         std::cout  << "Size of osil string : " <<   osil.size()  << std::endl;
+//        	fileUtil->writeFileFromString("tmp.osil", osil);
+//      	delete osilwriter;
+//
+//		 */
+//		delete nl2osil;
+//		std::cout  << "nl2osil deleted " << std::endl;
+//		cpuTime = CoinCpuTime() - cpuTime;
+//		std::cout  << "Time to delete nl2osil : " <<   cpuTime  << std::endl;
+//		return 0;
+//	}
+//	catch(const ErrorClass& eclass){
+//		std::cout << "THERE WAS AN ERROR" <<  std::endl;
+//		delete nl2osil;
+//		std::cout << "THERE WAS AN ERROR" <<  std::endl;
+//		std::cout << eclass.errormsg <<  std::endl;
+//		return 0;
+//	} 
 
 	/***
 

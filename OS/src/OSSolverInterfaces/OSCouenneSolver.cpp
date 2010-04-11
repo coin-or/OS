@@ -420,7 +420,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
      		return new exprMul(new exprConst(varnode->coef), new exprClone(couenne->Variables()[varnode->idx]));
      }
      default:
-        cout << node->snodeName << " NOT IMPLEMENTED!!" << endl;
+        cout << node->getTokenName() << " NOT IMPLEMENTED!!" << endl;
         break;
   }
 	

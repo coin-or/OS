@@ -70,6 +70,7 @@ double OSExpressionTree::calculateFunction( double *x, bool new_x){
 std::map<int, int> *OSExpressionTree::getVariableIndiciesMap(){
 	if( m_bIndexMapGenerated == true) return mapVarIdx;
 	mapVarIdx = new std::map<int, int>();
+	std::map<int, int>::iterator m_mPosVarIdx; 
 	m_treeRoot->getVariableIndexMap( mapVarIdx);
 	//std::cout << "SIZE OF MAP =  "  << (*mapVarIdx).size() << std::endl;
 	int kount = 0;

@@ -53,8 +53,6 @@ class OSnLNode{
 public:	
 
 	
-	/** nodeName holds the OSnLNode name */
-	std::string snodeName;
 	
 	/**  numberOfChildren is the number of OSnLNode child elements
 	 * set to -1 if the number is not fixed, i.e. for a sum*/
@@ -92,9 +90,9 @@ public:
 	
 	/**
 	 *
-	 * @return the value of snodeName
+	 * @return the value of operator name
 	 */	
-	virtual std::string getTokenName();
+	virtual std::string getTokenName() = 0;
 	
 	/**
 	 * <p>
@@ -260,6 +258,12 @@ public:
 	 */	
 	~OSnLNodePlus();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodePlus::calculateFunction(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -303,6 +307,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeSum();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeSum::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -350,6 +360,12 @@ public:
 	 */	
 	~OSnLNodeMax();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeMax::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -394,6 +410,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeMin();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeMin::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -441,6 +463,13 @@ public:
 	 */	
 	~OSnLNodeMinus();
 	
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeMinus::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -485,6 +514,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeNegate();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeNegate::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -532,6 +567,12 @@ public:
 	 */	
 	~OSnLNodeTimes();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeTimes::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -578,6 +619,13 @@ public:
 	 */	
 	~OSnLNodeDivide();
 	
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeDivide::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -620,6 +668,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodePower();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodePower::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -665,6 +719,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeProduct();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeProduct::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -712,6 +772,12 @@ public:
 	 */	
 	~OSnLNodeLn();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeLn::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -758,6 +824,12 @@ public:
 	 */	
 	~OSnLNodeSqrt();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeSqrt::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -803,6 +875,12 @@ public:
 	 */	
 	~OSnLNodeSquare();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeSquare::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -845,6 +923,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeCos();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeCos::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -889,6 +973,12 @@ public:
 	 */	
 	~OSnLNodeSin();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeSin::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -931,6 +1021,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeExp();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeExp::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -975,6 +1071,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeAbs();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeAbs::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -1022,6 +1124,12 @@ public:
 	 */	
 	~OSnLNodeErf();
 	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
+	
 	/*! \fn double OSnLNodeErf::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
 	 *  \return a double.
@@ -1067,6 +1175,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeIf();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeIf::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 
@@ -1125,16 +1239,15 @@ public:
 	
 	/**
 	 *
-	 * @return a string token that corresponds to the OSnLNode.
-	 */
-	virtual std::string getTokenNumber();
-	
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/**
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
 	 */
-	virtual std::string getTokenName();
+	virtual std::string getTokenNumber();
 	
 	/**
 	 *
@@ -1190,6 +1303,7 @@ public:
 	 */	
 	~OSnLNodeE();
 	
+
 	/**
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
@@ -1256,6 +1370,7 @@ public:
 	 */	
 	~OSnLNodePI();
 	
+
 	/**
 	 *
 	 * @return a string token that corresponds to the OSnLNode.
@@ -1331,6 +1446,8 @@ public:
 	 */	
 	~OSnLNodeVariable();
 	
+
+	
 	virtual void getVariableIndexMap(std::map<int, int> *varIdx);
 	
 	/**
@@ -1397,6 +1514,12 @@ public:
 	 * default destructor.
 	 */	
 	~OSnLNodeAllDiff();
+	
+	/**
+	 *
+	 * @return the value of operator name
+	 */	
+	virtual std::string getTokenName();
 	
 	/*! \fn double OSnLNodeAllDiff::double(double *x) 
 	 *  \brief The implementation of the virtual functions. 

@@ -1635,7 +1635,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 				std::cout << std::endl << std::endl << std::endl << std::endl;
 				n = opStack.size();
 				for(i = 0; i < n; i++){
-					std::cout  << opStack.top()->snodeName  << std::endl;
+					std::cout  << opStack.top()->getTokenName()  << std::endl;
 				}
 				
 				#endif
@@ -1880,7 +1880,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_){
 							break;
 							
 						default:
-							 throw  ErrorClass("operator " + nlnode->snodeName + " not supported");
+							 throw  ErrorClass("operator " + nlnode->getTokenName() + " not supported");
 						break;
 				  }
 					opStack.pop();
