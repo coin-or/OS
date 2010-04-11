@@ -56,7 +56,8 @@ public:
 	/** nodeName holds the OSnLNode name */
 	std::string snodeName;
 	
-	/**  numberOfChildren is the number of OSnLNode child elements*/
+	/**  numberOfChildren is the number of OSnLNode child elements
+	 * set to -1 if the number is not fixed, i.e. for a sum*/
 	unsigned int inumberOfChildren;	
 
 	/**  ssymbolInt is the unique integer assigned to the OSnLNode*/	
