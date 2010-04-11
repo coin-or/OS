@@ -34,11 +34,11 @@ using std::vector;
 #endif
 
 
-
+ 
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
  *  \brief The OSnLNode Class.
  *
- * @author  Robert Fourer, Jun Ma, Kipp Martin, 
+ * @author  Horeand Gassmand, Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  * 
