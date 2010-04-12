@@ -331,8 +331,13 @@ if test $coin_has_bonmin != unavailable &&
 fi
 
 
-
-
+#############################################################################
+#                             Need to know if we have MS cl                           #
+#############################################################################
+case $CXX in
+    cl*)
+     AC_DEFINE([MSCL_],[1],[use if OS is Windows and cl compiler])  ;;
+esac
 
 #############################################################################
 #                             Third party solvers                           #
