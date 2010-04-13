@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSeL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -124,10 +124,21 @@
 												</xs:restriction>
 											</xs:simpleType>
 										</xs:attribute>
-										<xs:attribute name="matchType" use="required">
+										<xs:attribute name="matchTypeIfTrue" use="optional" default="exact">
 											<xs:simpleType>
 												<xs:restriction base="xs:string">
-													<xs:enumeration value="specialized"/>
+													<xs:enumeration value="exact"/>
+													<xs:enumeration value="moreGeneral"/>
+													<xs:enumeration value="irrelevant"/>
+													<xs:enumeration value="approximate"/>
+													<xs:enumeration value="none"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:attribute>
+										<xs:attribute name="matchTypeIfFalse" use="optional" default="none">
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="exact"/>
 													<xs:enumeration value="moreGeneral"/>
 													<xs:enumeration value="irrelevant"/>
 													<xs:enumeration value="approximate"/>
@@ -184,7 +195,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="specialized"/>
+			<xs:enumeration value="exact"/>
 			<xs:enumeration value="moreGeneral"/>
 			<xs:enumeration value="approximate"/>
 			<xs:enumeration value="irrelevant"/>
@@ -244,7 +255,7 @@
 		<xs:attribute name="matchType" use="optional">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:enumeration value="specialized"/>
+					<xs:enumeration value="exact"/>
 					<xs:enumeration value="moreGeneral"/>
 					<xs:enumeration value="approximate"/>
 					<xs:enumeration value="irrelevant"/>
