@@ -336,8 +336,10 @@ fi
 #############################################################################
 case $CXX in
     cl*)
-     AC_DEFINE([MSCL_],[1],[use if OS is Windows and cl compiler])  ;;
+    cl_compiler=yes  ;;
 esac
+
+AM_CONDITIONAL(MSCL_, test x$cl_compiler = xyes)
 
 #############################################################################
 #                             Third party solvers                           #
