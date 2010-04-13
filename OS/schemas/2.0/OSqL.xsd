@@ -5,9 +5,8 @@
 	<!--OSqL: version - 2.0.0-->
 	<!--include: proposal-->
 	<xs:include schemaLocation="OSgL.xsd"/>
-	<xs:include schemaLocation="OSeL.xsd"/>
-	<xs:include schemaLocation="OSpL.xsd"/>
-	<xs:include schemaLocation="OSbL.xsd"/>
+	<xs:include schemaLocation="OSaL.xsd"/>
+	<xs:include schemaLocation="OSiL.xsd"/>
 	<xs:element name="osql" type="OSqL">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
@@ -17,18 +16,20 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0">
-			<xs:element name="standard" type="StandardQuery">
+		<xs:sequence>
+			<xs:element name="standard" type="StandardQuery" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="xQuery" type="xs:string">
+			<xs:element ref="osal" minOccurs="0"/>
+			<xs:element ref="osil" minOccurs="0"/>
+			<xs:element name="xQuery" type="xs:string" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>proposal</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-		</xs:choice>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OtherQuery">
 		<xs:annotation>
