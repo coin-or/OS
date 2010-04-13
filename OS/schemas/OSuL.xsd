@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSuL: version - 2.0.0-->
 	<xs:element name="osul" type="OSuL">
 		<xs:annotation>
@@ -28,14 +28,13 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:anyURI">
 				<xs:attribute name="serviceName" type="xs:string" use="optional"/>
-				<xs:attribute name="matchType" use="optional" default="exact">
+				<xs:attribute name="matchType" use="optional" default="specialized">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:enumeration value="exact"/>
+							<xs:enumeration value="specialized"/>
 							<xs:enumeration value="moreGeneral"/>
-							<xs:enumeration value="moreRestricted"/>
 							<xs:enumeration value="approximate"/>
-							<xs:enumeration value="guess"/>
+							<xs:enumeration value="unsure"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
