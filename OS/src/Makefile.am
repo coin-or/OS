@@ -344,6 +344,10 @@ includecoin_HEADERS = \
 	OSConfig.h \
 	../inc/config_os.h 
 
+if MSCL_
+   includecoin_HEADERS += ../../BuildTool/headers/configall_system.h
+   includecoin_HEADERS += ../../BuildTool/headers/configall_system_msc.h
+endif
 
 
 #############################################################################
