@@ -345,8 +345,8 @@ includecoin_HEADERS = \
 	../inc/config_os.h 
 
 if MSCL_
-   includecoin_HEADERS += `$(CYGPATH_W)` /BuildTools/headers/configall_system.h
-   includecoin_HEADERS += `$(CYGPATH_W)` /BuildTools/headers/configall_system_msc.h
+   includecoin_HEADERS += $(OSSRCDIR)/../BuildTools/headers/configall_system.h
+   includecoin_HEADERS += $(OSSRCDIR)/../BuildTools/headers/configall_system_msc.h
 endif
 
 

@@ -147,10 +147,8 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
 @COIN_HAS_ASL_TRUE@am__append_42 = $(ASLLIB) 
-@MSCL__TRUE@am__append_43 = `$(CYGPATH_W)` \
-@MSCL__TRUE@	/BuildTools/headers/configall_system.h \
-@MSCL__TRUE@	`$(CYGPATH_W)` \
-@MSCL__TRUE@	/BuildTools/headers/configall_system_msc.h
+@MSCL__TRUE@am__append_43 = $(OSSRCDIR)/../BuildTools/headers/configall_system.h \
+@MSCL__TRUE@	$(OSSRCDIR)/../BuildTools/headers/configall_system_msc.h
 subdir = src
 DIST_COMMON = $(am__includecoin_HEADERS_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -266,8 +264,8 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	pdf-recursive ps-recursive uninstall-info-recursive \
 	uninstall-recursive
 am__includecoin_HEADERS_DIST = OSConfig.h ../inc/config_os.h \
-	`$(CYGPATH_W)` /BuildTools/headers/configall_system.h \
-	/BuildTools/headers/configall_system_msc.h
+	$(OSSRCDIR)/../BuildTools/headers/configall_system.h \
+	$(OSSRCDIR)/../BuildTools/headers/configall_system_msc.h
 includecoinHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(includecoin_HEADERS)
 ETAGS = etags
@@ -955,7 +953,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/../inc $(distdir)//BuildTools/headers
+	$(mkdir_p) $(distdir)/$(OSSRCDIR)/../BuildTools/headers $(distdir)/../inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
