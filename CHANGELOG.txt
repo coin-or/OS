@@ -1,10 +1,16 @@
+2010-04-15: mtim
+  Installation changes - see INSTALL.txt for instructions.
+   * Update OSLib to Third party as per COIN-OR policies.
+   * Rename OSLib to OSThirdParty
+   * Revert binary jar checkin.
+   * Remove click through javamail and or124 jars.
 2010-03-22: mtim
   Refactor OSjava for wider development using Eclipse.
    * Code taken from r3235 (oscommon) and  r2647 (ossolver) 
    * Split into Eclipse projects (OSCommon, OSServer, OSLib)
    * External Java jars will be provided by OSLib
-     * OSLib/scripts/instal-external.sh to automate unpacking downloads
-   * Ported to new build envrionment
+     * OSLib/scripts/install-external.sh to automate unpacking downloads
+   * Ported to new build environment
      * Dead/broken code removal
      * Convert to unix EOL
      * Commit hacks to build Tomcat6 (see todo tags)

@@ -1,9 +1,9 @@
 OSCommon/bin
 OSCommon/src/META-INF
-OSLib/bin
-OSLib/download
-OSLib/lib
-OSLib/src/META-INF
 OSServer/WEB-INF
 OSServer/build
 OSServer/test/first.osrl
+OSThirdParty/bin
+OSThirdParty/download
+OSThirdParty/lib
+OSThirdParty/src/META-INF

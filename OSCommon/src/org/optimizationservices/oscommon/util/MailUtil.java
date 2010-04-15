@@ -6,35 +6,22 @@
 package org.optimizationservices.oscommon.util;
 
 import java.io.File;
-import java.util.Properties;
 import java.util.Vector;
 
-import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
-
- 
-
+import org.apache.commons.mail.EmailAttachment;
+import org.apache.commons.mail.MultiPartEmail;
 
 /**
  *
  * <P>The <code>MailUtil</code> class contains methods for performing
  * common basic EMail related operations </p>
- *
  * </p>
  *
  * @author Jun Ma
  * @version 0.1, 10/13/2006
+ *
+ * @author Timothy Middelkoop
+ * @version 0.2, 2010-04-15, move to Apache Commons Mail
  * @since 0.1
  */
 
@@ -127,58 +114,46 @@ public class MailUtil{
 		m_sMessage = message;
 		m_sAttachedFiles = attachedFiles;
 
+		// FIXME: This is probably broken when Java Mail was removed and converted to Apache commons mail.
+		assert false; // UNTESTED!
+		
 		try{
-			Properties props = System.getProperties();
-			props.put("mail.smtp.host", m_sSMTPServer);
-			props.put("mail.smtp.auth", "true");
-			//props.put("mail.protocol.user", Parameter.FROM_EMAIL.substring(0, Parameter.FROM_EMAIL.indexOf('@')));
-			
-			Authenticator auth = new JAuthenticate();
-			Session session = Session.getInstance(props, auth);
-			//Session session = Session.getDefaultInstance(props, auth);
-			session.setDebug(false);
-			MimeMessage msg = new MimeMessage(session);
+			MultiPartEmail msg = new MultiPartEmail();
+			msg.setHostName(m_sSMTPServer);
 			msg.setSentDate(new java.util.Date());
 			if(m_sFromEmail == null || m_sFromEmail.length() == 0){
-//				msg.setFrom(new InternetAddress(OSParameter.FROM_EMAIL));
+				msg.setFrom(OSParameter.FROM_EMAIL);
 			}
 			else{
-				msg.setFrom(new InternetAddress(m_sFromEmail));
+				msg.setFrom(m_sFromEmail);
 			}
 			if(m_sToEmail != null && m_sToEmail.length() > 0){
 				Vector<String> vToEmails = CommonUtil.stringToVector(m_sToEmail, ",; \t\r\n");
 				for(int i = 0; i < vToEmails.size(); i++){
-					msg.addRecipient(Message.RecipientType.TO, new InternetAddress((String)vToEmails.elementAt(i).trim()));					
+					msg.addTo((String)vToEmails.elementAt(i).trim());					
 				}
 			}
 			else{
-				// FIXME: Untested fix for Eclipse port.
 				if(OSParameter.TO_EMAIL != null && OSParameter.TO_EMAIL.length()>0 )
-					msg.addRecipient(Message.RecipientType.TO, new InternetAddress(OSParameter.TO_EMAIL));				
+					msg.addTo(OSParameter.TO_EMAIL);				
 			}
 			if(m_sCCEmail != null && m_sCCEmail.length() > 0){
 				Vector<String> vCCEmails = CommonUtil.stringToVector(m_sCCEmail, ",; \t\r\n");
 				for(int i = 0; i < vCCEmails.size(); i++){
-					msg.addRecipient(Message.RecipientType.CC, new InternetAddress((String)vCCEmails.elementAt(i).trim()));					
+					msg.addCc((String)vCCEmails.elementAt(i).trim());					
 				}
 			}
 			if(m_sBCCEmail != null && m_sBCCEmail.length() > 0){
 				Vector<String> vBCCEmails = CommonUtil.stringToVector(m_sBCCEmail, ",; \t\r\n");
 				for(int i = 0; i < vBCCEmails.size(); i++){
-					msg.addRecipient(Message.RecipientType.BCC, new InternetAddress((String)vBCCEmails.elementAt(i).trim()));					
+					msg.addBcc((String)vBCCEmails.elementAt(i).trim());					
 				}
 			}
 			msg.setSubject(m_sSubject==null?OSParameter.MAIL_SUBJECT:m_sSubject);
 			if(m_sAttachedFiles == null){
-				msg.setText(m_sMessage==null?OSParameter.MAIL_MESSAGE:m_sMessage);
+				msg.setMsg(m_sMessage==null?OSParameter.MAIL_MESSAGE:m_sMessage);
 			}
 			else{
-			    MimeBodyPart textPart = new MimeBodyPart();
-			    textPart.setContent(m_sMessage==null?OSParameter.MAIL_MESSAGE:m_sMessage, "text/plain");
-			    Multipart multipart = new MimeMultipart();
-			    multipart.addBodyPart(textPart);
-
-			    MimeBodyPart attachedFilePart;
 			    Vector<String> vAttachedFiles = CommonUtil.stringToVector(m_sAttachedFiles, ",; \t\r\n");
 			    for(int i = 0; i < vAttachedFiles.size(); i++){
 				    try {
@@ -188,21 +163,17 @@ public class MailUtil{
 				    		IOUtil.log("File [" + sFileName + "] doesn't exisit.", null);
 				    		continue;
 				    	}
-						FileDataSource fileDataSource = new FileDataSource(sFileName);
-						attachedFilePart = new MimeBodyPart();
-						attachedFilePart.setDataHandler(new DataHandler(fileDataSource));
-						attachedFilePart.setFileName(fileDataSource.getName());
-						multipart.addBodyPart(attachedFilePart);
+						EmailAttachment attachment = new EmailAttachment();
+						attachment.setPath(sFileName);
+						msg.attach(attachment);
 					} 
 				    catch (Exception e) {
 						IOUtil.log(IOUtil.exceptionStackToString(e), null);
 					}
 			    }
-			    msg.setContent(multipart);
 			}
-			// FIXME: Untested fix for Eclipse port.
 			if(OSParameter.TO_EMAIL != null && OSParameter.TO_EMAIL.length()>0 )
-				Transport.send(msg);
+				msg.send();
 			return true;
 		}
 		catch (Exception e){
@@ -244,37 +215,6 @@ public class MailUtil{
 	/**
 	 * <P>The <code>JAuthenticate</code> class is an internal authentication class used <code>MailUtil</code>.
 	 */
-	protected class JAuthenticate extends Authenticator{
-		
-		protected String m_sUserName = m_sSMTPUser; //m_sFromEmail.substring(0, m_sFromEmail.indexOf('@'));
-		//protected String m_sUserName = Parameter.FROM_EMAIL;
-		
-		String m_sPassword = m_sSMTPPassword;
-		/**
-		 * default constructor
-		 *
-		 */
-		public JAuthenticate(){			 
-		}//constructor
-		
-		/**
-		 * 
-		 * @param username
-		 * @param password
-		 */
-		public JAuthenticate(String username, String password){			 
-			m_sUserName = username;
-			m_sPassword = password;
-		}//constructor
-		
-		/**
-		 * username/password get authenticated next line
-		 */
-		protected PasswordAuthentication getPasswordAuthentication(){
-			return new PasswordAuthentication(m_sUserName, m_sPassword);
-		}//PasswordAuthentication
-		
-	}//JAuthenticate
 	
 	/**
 	 * <P>The <code>SendThread</code> class is an internal thread controlled by <code>MailUtil</code>.

@@ -3,7 +3,7 @@
 	<name>OSCommon</name>
 	<comment></comment>
 	<projects>
-		<project>OSLib</project>
+		<project>OSThirdParty</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
