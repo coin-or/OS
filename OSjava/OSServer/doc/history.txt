@@ -1,0 +1,13 @@
+= Eclipse Refactor Notes =
+
+== Web Services WSDL ==
+
+Web service was created by right clicking OSSolverService and
+selecting Web Services > Create Web Service.  The current Eclipse is
+broken in this regards, so the files here are from earlier work as
+OSSolverService should be ported to Axis2 at some point.
+
+== Eclipse and .settings ==
+
+Eclipse/SVN does not save the .settings directory so some aspects of
+the project are lost across machines/development.

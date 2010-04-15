@@ -7,3 +7,12 @@ OSThirdParty/bin
 OSThirdParty/download
 OSThirdParty/lib
 OSThirdParty/src/META-INF
+OSjava/OSCommon/bin
+OSjava/OSCommon/src/META-INF
+OSjava/OSLib/bin
+OSjava/OSLib/download
+OSjava/OSLib/lib
+OSjava/OSLib/src/META-INF
+OSjava/OSServer/WEB-INF
+OSjava/OSServer/build
+OSjava/OSServer/test/first.osrl

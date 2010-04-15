@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://DefaultNamespace" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://DefaultNamespace" xmlns:intf="http://DefaultNamespace" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://DefaultNamespace" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="main">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="argv" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="mainResponse">
+    <complexType/>
+   </element>
+   <element name="retrieve">
+    <complexType>
+     <sequence>
+      <element name="osol" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="retrieveResponse">
+    <complexType>
+     <sequence>
+      <element name="retrieveReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="send">
+    <complexType>
+     <sequence>
+      <element name="osil" type="xsd:string"/>
+      <element name="osol" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="sendResponse">
+    <complexType>
+     <sequence>
+      <element name="sendReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="kill">
+    <complexType>
+     <sequence>
+      <element name="osol" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="killResponse">
+    <complexType>
+     <sequence>
+      <element name="killReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="solve">
+    <complexType>
+     <sequence>
+      <element name="osil" type="xsd:string"/>
+      <element name="osol" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="solveResponse">
+    <complexType>
+     <sequence>
+      <element name="solveReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getJobID">
+    <complexType>
+     <sequence>
+      <element name="osol" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getJobIDResponse">
+    <complexType>
+     <sequence>
+      <element name="getJobIDReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="knock">
+    <complexType>
+     <sequence>
+      <element name="osplInput" type="xsd:string"/>
+      <element name="osol" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="knockResponse">
+    <complexType>
+     <sequence>
+      <element name="knockReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="mainResponse">
+
+      <wsdl:part element="impl:mainResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="retrieveResponse">
+
+      <wsdl:part element="impl:retrieveResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="sendResponse">
+
+      <wsdl:part element="impl:sendResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="knockRequest">
+
+      <wsdl:part element="impl:knock" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobIDResponse">
+
+      <wsdl:part element="impl:getJobIDResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="killResponse">
+
+      <wsdl:part element="impl:killResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="solveRequest">
+
+      <wsdl:part element="impl:solve" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="mainRequest">
+
+      <wsdl:part element="impl:main" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="killRequest">
+
+      <wsdl:part element="impl:kill" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="solveResponse">
+
+      <wsdl:part element="impl:solveResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="retrieveRequest">
+
+      <wsdl:part element="impl:retrieve" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getJobIDRequest">
+
+      <wsdl:part element="impl:getJobID" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="knockResponse">
+
+      <wsdl:part element="impl:knockResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="sendRequest">
+
+      <wsdl:part element="impl:send" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="OSSolverService">
+
+      <wsdl:operation name="main">
+
+         <wsdl:input message="impl:mainRequest" name="mainRequest"/>
+
+         <wsdl:output message="impl:mainResponse" name="mainResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="retrieve">
+
+         <wsdl:input message="impl:retrieveRequest" name="retrieveRequest"/>
+
+         <wsdl:output message="impl:retrieveResponse" name="retrieveResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="send">
+
+         <wsdl:input message="impl:sendRequest" name="sendRequest"/>
+
+         <wsdl:output message="impl:sendResponse" name="sendResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="kill">
+
+         <wsdl:input message="impl:killRequest" name="killRequest"/>
+
+         <wsdl:output message="impl:killResponse" name="killResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="solve">
+
+         <wsdl:input message="impl:solveRequest" name="solveRequest"/>
+
+         <wsdl:output message="impl:solveResponse" name="solveResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobID">
+
+         <wsdl:input message="impl:getJobIDRequest" name="getJobIDRequest"/>
+
+         <wsdl:output message="impl:getJobIDResponse" name="getJobIDResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="knock">
+
+         <wsdl:input message="impl:knockRequest" name="knockRequest"/>
+
+         <wsdl:output message="impl:knockResponse" name="knockResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="OSSolverServiceSoapBinding" type="impl:OSSolverService">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="main">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="mainRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="mainResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="retrieve">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="retrieveRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="retrieveResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="send">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="sendRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="sendResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="kill">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="killRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="killResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="solve">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="solveRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="solveResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getJobID">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getJobIDRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getJobIDResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="knock">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="knockRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="knockResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="OSSolverServiceService">
+
+      <wsdl:port binding="impl:OSSolverServiceSoapBinding" name="OSSolverService">
+
+         <wsdlsoap:address location="http://localhost:8080/OSServer/services/OSSolverService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

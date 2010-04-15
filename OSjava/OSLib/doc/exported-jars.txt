@@ -1,0 +1,15 @@
+/usr/share/java/xercesImpl.jar
+/usr/share/java/commons-codec.jar
+/usr/share/java/commons-fileupload.jar
+/usr/share/java/servlet-api.jar
+/usr/share/java/axis.jar
+/usr/share/java/jaxrpc.jar
+/usr/share/java/saxonb.jar
+
+/usr/share/java/commons-logging.jar
+/usr/share/java/commons-discovery.jar
+/usr/share/java/wsdl4j.jar
+
+/usr/share/java/log4j-1.2.jar
+
+/usr/share/java/ant.jar

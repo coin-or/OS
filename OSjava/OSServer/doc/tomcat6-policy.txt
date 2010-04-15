@@ -1,0 +1,20 @@
+grant codeBase "file:${catalina.base}/webapps/OSServer/WEB-INF/-"{
+  permission java.lang.RuntimePermission "createClassLoader";
+  permission java.lang.RuntimePermission "getClassLoader";
+  permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote";
+  permission java.lang.RuntimePermission "accessClassInPackage.org.apache.coyote.*";
+  permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.*";
+  permission java.util.PropertyPermission "java.*", "read";
+  permission java.util.PropertyPermission "org.apache.commons.discovery.log.level", "read";
+  permission java.util.PropertyPermission "org.apache.axis.EngineConfigurationFactory", "read";
+  permission java.util.PropertyPermission "org.apache.coyote.*", "read";
+  permission java.util.PropertyPermission "axis.*", "read";
+  permission java.util.PropertyPermission "user.*", "read";
+  permission java.util.PropertyPermission "transport.*", "read";
+  permission java.util.PropertyPermission "use-servlet-security", "read";
+};
+
+grant codeBase "file:${catalina.base}/webapps/OSServer/WEB-INF/-"{
+  permission java.io.FilePermission "${catalina.base}/webapps/OSServer/WEB-INF/code/-", "read,write";
+  permission java.io.FilePermission "${catalina.base}/webapps/OSServer/WEB-INF/code/solver/*", "read,execute";
+};
