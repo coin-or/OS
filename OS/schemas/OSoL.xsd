@@ -321,9 +321,13 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="InitialBasisStatus">
+	<xs:complexType name="VariableInitialBasisStatus">
 		<xs:sequence>
-			<xs:element name="var" type="InitBasStatus" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="InitBasStatus" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must equal the value of numberOfVar after mult has been taken into account</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -345,9 +349,12 @@
 					<xs:enumeration value="atLower"/>
 					<xs:enumeration value="atUpper"/>
 					<xs:enumeration value="superbasic"/>
+					<xs:enumeration value="isFree"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+		<xs:attribute name="mult" type="xs:positiveInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:integer" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="IntegerVariableBranchingWeights">
 		<xs:sequence>
@@ -459,23 +466,13 @@
 	</xs:complexType>
 	<xs:complexType name="ConstraintInitialBasisStatus">
 		<xs:sequence>
-			<xs:element name="basic" type="ConstraintBasisIndexes" minOccurs="0"/>
-			<xs:element name="atLower" type="ConstraintBasisIndexes" minOccurs="0"/>
-			<xs:element name="atUpper" type="ConstraintBasisIndexes" minOccurs="0"/>
-			<xs:element name="isFree" type="ConstraintBasisIndexes" minOccurs="0"/>
-			<xs:element name="superBasic" type="ConstraintBasisIndexes" minOccurs="0"/>
-			<xs:element name="unknown" type="ConstraintBasisIndexes" minOccurs="0"/>
+			<xs:element name="con" type="InitBasStatus" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must equal the value of numberOfCon after mult has been taken into account</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="VariableInitialBasisStatus">
-		<xs:sequence>
-			<xs:element name="basic" type="VariableBasisIndexes" minOccurs="0"/>
-			<xs:element name="atLower" type="VariableBasisIndexes" minOccurs="0"/>
-			<xs:element name="atUpper" type="VariableBasisIndexes" minOccurs="0"/>
-			<xs:element name="isFree" type="VariableBasisIndexes" minOccurs="0"/>
-			<xs:element name="superBasic" type="VariableBasisIndexes" minOccurs="0"/>
-			<xs:element name="unknown" type="VariableBasisIndexes" minOccurs="0"/>
-		</xs:sequence>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="InitConStatus">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -541,80 +538,5 @@
 			<xs:element name="solverOption" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="VariableBasisIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="VariableIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="ObjectiveIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="ObjectiveIndex"/>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ObjectiveIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="ConstraintBasisIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="conIdx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="VariableIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="BasisIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
 	</xs:complexType>
 </xs:schema>

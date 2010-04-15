@@ -99,23 +99,10 @@ using std::ostringstream;
 #endif 
 
 
-
-
-
 #ifdef COIN_HAS_LINDO    
 #include "OSLindoSolver.h"
 #endif 
 
-/*
-#ifdef COIN_HAS_IPOPT  
-	#ifndef COIN_HAS_ASL
-		#include "OSIpoptSolver.h"
-		#undef COIN_HAS_ASL
-	#else
-		#include "OSIpoptSolver.h"
-#endif
-#endif 
-*/
 
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
@@ -400,8 +387,7 @@ int main(int argC, const char* argV[])
 					retrieve();
 					break;
 				case 's':
-					if( osoptions->serviceMethod[ 1] == 'e') send();
-					else solve();
+					send();
 					break;
 				case 'k':
 					if(osoptions->serviceMethod[ 1] == 'i') kill();
