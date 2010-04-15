@@ -1,5 +1,6 @@
 OSCommon/bin
 OSCommon/src/META-INF
+OSJavaExamples/bin
 OSServer/WEB-INF
 OSServer/build
 OSServer/test/first.osrl
