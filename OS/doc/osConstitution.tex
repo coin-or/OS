@@ -1,0 +1,50 @@
+\documentclass[11pt]{amsart}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{Optimization Services Constitution}
+\author{Horand Gassmann, Jun Ma, and Kipp Martin}
+\date{\today}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+
+
+
+\begin{itemize}
+
+
+\item[1.]  Separation of functionality. An instance representation should be just that, an instance representation. It should not be convoluted with solver options, solver results, etc.
+
+\item[2.]  Handle sparsity.  Most real-world (especially linear programs) are very sparse.  The instance format should be able to represent problems in a sparse format. 
+
+\item[3.]  Extensible  -- we should be able to extend the core to new optimization types and remain backward compatible. 
+
+\item[4.] Be parser friendly -- the model instance should be easy to parse. This is an advantage of XML, having both tags and data makes for easy parsing. 
+
+\item[5.]   Fit with modern information technology infrastructures -- this is an advantage of using XML, it is consistent with how data is being represented  in middleware software
+
+\item[6.] Have a natural in-memory representation  -- I am not sure how to word this properly. What I am driving at here  are the rules we  having governing how our OSiL, OSrL, and OSoL maps into in-memory objects. Each part of the OSiL  {\it must} be mapped into an in-memory object following our rules. 
+
+
+\item[7.]  Self contained with no ambiguity.  The model instance should be completely defined and there should  be no room for ambiguity. For example, in MPS format a max or min is not specified. This must be  avoided. 
+
+\item[8.]  Parsimonious. The representation should be as compact as possible while fully representing the instance in an unambiguous manner.  There should be no unnecessary redundancy. For example, we should avoid the MPS feature that a column name is repeated for each nonzero in a row.
+
+\item[9.]  The design philosophy of OSiL is to honor the original model constructs as closely as possible, but at the instance level.  It is critical to  allow the solver to "internally"  work with a  condition specified at the model level  rather than ``forcing'' the solver to  deal reformulation of the condition. Examples of this include special ordered sets, and semi continuous variables.  
+
+\item[10.] The representation method should be conducive to error checking. This is why we define a schema and use XML as it facilitates error checking. 
+
+
+
+\end{itemize}
+
+\end{document}  

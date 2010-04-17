@@ -284,6 +284,8 @@ OS/doc/figures/osbinDistribution.png -text
 OS/doc/figures/xmlResult.png -text
 OS/doc/genericParser.pdf -text
 OS/doc/genericParser.tex -text
+OS/doc/osConstitution.pdf -text
+OS/doc/osConstitution.tex -text
 OS/doc/osUsersManual_1.1.bbl -text
 OS/doc/osUsersManual_1.1.ind -text
 OS/doc/osUsersManual_1.1.pdf -text
