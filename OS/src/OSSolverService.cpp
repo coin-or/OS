@@ -251,7 +251,7 @@ int main(int argC, const char* argV[]) {
 #endif
 		// if there is a config file, get those options
 		if (osoptions->configFile != "") {
-			scannerActive = false;
+			scannerActive = true;
 			ossslex_init(&scanner);
 			configFileName = osoptions->configFile;
 #ifdef DEBUG_CL_INTERFACE
