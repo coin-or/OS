@@ -1,6 +1,12 @@
 = OSjava =
 
-This is a work in progress.  Please report any missing steps or problems.
+This is a work in progress.  Please report any missing steps or
+problems.  Please note that Eclipse does not recognize changes done to
+the projects (including copying files) until the project has been
+"refreshed" (right click the project and select refresh).  The order
+is important here otherwise additional steps (refresh and select
+additional options) will need to be performed.  Please ensure the
+scripts complete successfully before proceeding to the next step.
 
 == Install ==
  * Use an Eclipse with WTP

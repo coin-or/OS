@@ -73,6 +73,8 @@ public class StandardOSSolver extends DefaultSolver{
 				sArch="x86_64";
 			else if(sOS.startsWith("Windows"))
 				sOS="Windows";
+			else if(sOS.startsWith("Mac"))
+				sOS="Mac";
 			sSolverPath += "-" + sOS + "-" + sArch;
 			// make executable if necessary (war deployment hack)
 			File exe=new File(sSolverPath);

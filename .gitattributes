@@ -388,7 +388,7 @@ OSThirdParty/.classpath -text svneol=unset#text/plain
 OSThirdParty/.project -text svneol=unset#text/plain
 OSThirdParty/doc/exported-jars.txt -text
 OSThirdParty/doc/external-source.txt -text
-OSThirdParty/scripts/coin-os.sh -text
+OSThirdParty/scripts/build-coin-os.sh -text
 OSThirdParty/scripts/get-third-party.sh -text
 OSThirdParty/scripts/install-packages-ubuntu-karmic.sh -text
 OSThirdParty/scripts/tomcat6-user.sh -text
