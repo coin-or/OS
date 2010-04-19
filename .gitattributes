@@ -260,6 +260,8 @@ OS/data/osrlFiles/parserTest.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text
 OS/doc/Future_Work.tex -text
+OS/doc/OSConstitution.pdf -text
+OS/doc/OSConstitution.tex -text
 OS/doc/OSReleaseProcedure.pdf -text
 OS/doc/OSReleaseProcedure.tex -text
 OS/doc/OSSolverServiceRules.txt -text
@@ -284,8 +286,6 @@ OS/doc/figures/osbinDistribution.png -text
 OS/doc/figures/xmlResult.png -text
 OS/doc/genericParser.pdf -text
 OS/doc/genericParser.tex -text
-OS/doc/osConstitution1.pdf -text
-OS/doc/osConstitution1.tex -text
 OS/doc/osUsersManual_1.1.bbl -text
 OS/doc/osUsersManual_1.1.ind -text
 OS/doc/osUsersManual_1.1.pdf -text
