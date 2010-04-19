@@ -70,7 +70,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt"
 fi
 
 ## Apache Commons Fileupload
@@ -86,7 +86,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/lib/${JAR}.jar "${JAR}/*.txt"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/lib/${JAR}.jar "${JAR}/*.txt"
 fi
 
 ## Apache Commons Logging
@@ -102,7 +102,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt" -x "${JAR}/site/*"
 fi
 
 ## Apache Commons Mail
@@ -118,7 +118,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt"
 fi
 
 ## Apache Commons Discovery
@@ -134,7 +134,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}/${JAR}.jar "${JAR}/*.txt"
 fi
 
 ## Apache log4j
@@ -151,7 +151,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${DOWNLOAD}/${JAR}.jar "${DOWNLOAD}/LICENSE*" "${DOWNLOAD}/NOTICE*"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${DOWNLOAD}/${JAR}.jar "${DOWNLOAD}/LICENSE*" "${DOWNLOAD}/NOTICE*"
 fi
 
 
@@ -168,7 +168,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}.jar ${JAR}-xpath.jar  "notices/*"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${JAR}.jar ${JAR}-xpath.jar  "notices/*"
 fi
 
 NAME='Java Axis 1.4'
@@ -185,7 +185,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/lib/${JAR}.jar ${VERSION}/lib/jaxrpc.jar ${VERSION}/lib/wsdl4j-*.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/lib/${JAR}.jar ${VERSION}/lib/jaxrpc.jar ${VERSION}/lib/wsdl4j-*.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*"
 fi
 
 echo "scripts/get-third-party.sh successful"
