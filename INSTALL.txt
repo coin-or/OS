@@ -29,7 +29,7 @@ scripts complete successfully before proceeding to the next step.
  * Download/Build ThirdParty
     * In OSThirdParty run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
     * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars.
-    * In OSThirdParty run `bash scripts/coin-os.sh`
+    * In OSThirdParty run `bash scripts/build-coin-os.sh`
       * alternatively copy OSSolverService binaries to OSThirdParty/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
  * Optional: install a local version of Tomcat
     * for Ubuntu, in OSThirdParty run `bash scripts/tomcat6-user.sh`

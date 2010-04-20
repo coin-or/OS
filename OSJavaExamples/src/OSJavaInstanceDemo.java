@@ -113,9 +113,18 @@ public class OSJavaInstanceDemo {
 			// this OSJavaDemo class
 			String sArguments = 
 			" -osil parincLinear.osil -osrl answer.osrl" ;
+			String sOS = System.getProperty("os.name");
+			String sArch = System.getProperty("os.arch");
+
+			System.out.print(sOS );
+			System.out.print(sArch );
 			//sArguments = 
 			//	" -osil parincLinear.osil -osrl answer.osrl -serviceLocation http://127.0.0.1:8080/OSServer/services/OSSolverService" ;
-			String sSolverPath = "./OSSolverService-Linux-i686";
+			
+			sArguments = 
+				" -osil parincLinear.osil " ;
+			String sSolverPath = "../../OSThirdParty/lib/coin-or/OSSolverService" + "-"+ sOS + "-"+ sArch;
+			System.out.print(sSolverPath );
 			ProcessUtil.launchAndWaitForFinish(sSolverPath + " " + sArguments);			
 
 
