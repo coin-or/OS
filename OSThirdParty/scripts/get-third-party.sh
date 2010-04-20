@@ -54,7 +54,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jWq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/${JAR}.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*" 
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/${JAR}.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*" 
 fi
 
 ## Apache Commons Codec
