@@ -19,7 +19,7 @@ COINTGZ=download/CoinOS-${VERSION}.tar.gz
 case ${ARCH} in
 Darwin-i386)
     ARCH=Mac-x86_64
-    OPTIONS="${OPTIONS} COIN_SKIP_PROJECTS=ThirdParty/Glpk ADD_FFLAGS='-mmacosx-version-min=10.4'"
+    OPTIONS="${OPTIONS} COIN_SKIP_PROJECTS=ThirdParty/Glpk ADD_FFLAGS=-mmacosx-version-min=10.4"
     ;;
 esac
 
