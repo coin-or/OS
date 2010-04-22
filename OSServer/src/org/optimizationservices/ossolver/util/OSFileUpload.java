@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2005 Impact 
  */
-package org.optimizationservices.oscommon.util;
+package org.optimizationservices.ossolver.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.optimizationservices.oscommon.util.OSParameter;
 
 public class OSFileUpload extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {

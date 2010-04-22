@@ -3,14 +3,14 @@
  *
  * Copyright (c) 2005  
  */
-package org.optimizationservices.oscommon.util;
-
-import java.io.File;
+package org.optimizationservices.ossolver.util;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.axis.MessageContext;
 import org.apache.axis.transport.http.HTTPConstants;
+import org.optimizationservices.oscommon.util.OSParameter;
+
 /**
 *
 * <P>The <code>OSParameterFile</code> class stores OSParameter file related information.  
@@ -40,28 +40,19 @@ public final class OSParameterFile {
 	 * @return the parameter file path name the class sets. 
 	 */
 	public static String setParameterFile(){
-		return setParameterFile(null);
+		MessageContext messageContext = MessageContext.getCurrentContext();
+		HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
+		return setParameterFile(request);
 	}
 	
 	/**
 	 * @return the parameter file path name the class sets. 
 	 */
 	public static String setParameterFile(HttpServletRequest httpRequest){
-		//automatically detect webapp context
-		String SERVICE_FOLDER = "os";		
-		
-		MessageContext messageContext = MessageContext.getCurrentContext();
-		HttpServletRequest request = null;
-		if(httpRequest == null){
-			request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
-		}
-		else{
-			request = httpRequest;
-		}
-		// FIXME: Untested for wider distribution.
-		SERVICE_FOLDER = request.getRealPath("/");
-		NAME = SERVICE_FOLDER+"/WEB-INF/code/OSConfig/OSParameter.xml";
+		OSParameter.SERVICE_FOLDER = httpRequest.getRealPath("/");
+		NAME = OSParameter.SERVICE_FOLDER + "/WEB-INF/code/OSConfig/OSParameter.xml";
 		return NAME;
 		
 	}//setParameterFile
+	
 }//OSParameterFile

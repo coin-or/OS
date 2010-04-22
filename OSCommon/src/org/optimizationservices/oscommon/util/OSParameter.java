@@ -8,16 +8,11 @@ package org.optimizationservices.oscommon.util;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.axis.MessageContext;
-import org.apache.axis.transport.http.HTTPConstants;
 import org.optimizationservices.oscommon.representationparser.OSParameterReader;
 import org.optimizationservices.oscommon.representationparser.OSParameterWriter;
 import org.optimizationservices.oscommon.util.CommonUtil;
 import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.oscommon.util.OSConstant;
-import org.optimizationservices.oscommon.util.OSParameterFile;
 
 /**
  *
@@ -733,6 +728,15 @@ public final class OSParameter{
 	public static String XSLT_LOCATION = "http://www.optimizationservices.org/stylesheets/";
 
 	/**
+	 * read an osParameter file and set the parameters. 
+	 * 
+	 * @param osParameter holds the OS Parameter filename
+	 * @return whether the osParameter is read and set successfully or not.  
+	 */
+	public static boolean readAndSetOSParameter(String osParameter){
+		return readAndSetOSParameter(osParameter,true,false);
+	}
+	/**
 	 * read an osParameter file or string and and set the parameters. 
 	 * 
 	 * @param osParameter holds the OS Parameter in a string which format follows the
@@ -764,21 +768,6 @@ public final class OSParameter{
 		String sValue = "";
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("SERVICE_FOLDER");
 		if(sValue != null && sValue.length() > 0) SERVICE_FOLDER = sValue;
-		else{
-			try{
-				MessageContext messageContext = MessageContext.getCurrentContext();
-				//HttpServlet servlet = (HttpServlet)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLET);
-				//ServletContext servletContext = (ServletContext)servlet.getServletContext();
-				HttpServletRequest request = (HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST);
-				//HttpSession session =((HttpServletRequest)messageContext.getProperty(HTTPConstants.MC_HTTP_SERVLETREQUEST)).getSession();
-				// FIXME: Untested for wider distribution.  Uses depreciated function.
-				SERVICE_FOLDER = request.getRealPath("/");
-			}
-			catch(Exception e){
-
-			}
-			if(SERVICE_FOLDER == null || SERVICE_FOLDER.length() <= 0) SERVICE_FOLDER = "os";	
-		}
 
 		if(bRead) sValue = osParameterReader.getOSParameterValueByName("CODE_HOME");
 		if(sValue != null && sValue.length() > 0) CODE_HOME = sValue;
@@ -1617,38 +1606,5 @@ public final class OSParameter{
 		//TODO write the parameters. 
 		return osParameterWriter.writeToString();
 	}//writeOSParameter
-
-	/**
-	 * main for test purposes.
-	 *
-	 * </p>
-	 *
-	 * @param argv command line arguments.
-	 */
-	public static void main(String[] args){
-	}//main
-
-	/**
-	 * static constructor
-	 */
-	static{
-		String sOSParameterFile = "";
-		if(OSParameterFile.NAME !=null && OSParameterFile.NAME.length() > 0){
-			sOSParameterFile = OSParameterFile.NAME;
-			PARAMETER_FILE = OSParameterFile.NAME;
-		}
-		else{
-			sOSParameterFile = PARAMETER_FILE;
-		}
-
-		//String sOSParameterFile = IOUtil.getCurrentDir()+"????";
-		//In Eclipse the current directory is the project that the main is in -- e.g. C:/code/java/OSjava/OSTest/
-		//in Tomcat Linux the current directory is PathToTomcat/Tomcat/bin/
-		//in Tomcat the current directory is C:/Program Files/Apache Software Foundation/Tomcat 5.5/???
-		//suggestion: have a file in which each service name is mapped to a different osparam file. 
-		if(sOSParameterFile != null && sOSParameterFile.length() > 0){
-			readAndSetOSParameter(sOSParameterFile, true, false);
-		}
-
-	}//static constructor
-}//OSParameter
+	
+	}//OSParameter

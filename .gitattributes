@@ -322,10 +322,8 @@ OSCommon/src/org/optimizationservices/oscommon/util/IOUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/MailUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/MathUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSConstant.java -text
-OSCommon/src/org/optimizationservices/oscommon/util/OSFileUpload.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSLog.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSParameter.java -text
-OSCommon/src/org/optimizationservices/oscommon/util/OSParameterFile.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/OSServiceUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/ProcessUtil.java -text
 OSCommon/src/org/optimizationservices/oscommon/util/SAXContentHandler.java -text
@@ -377,6 +375,8 @@ OSServer/src/org/optimizationservices/ossolver/solver/LindoSolver.java -text
 OSServer/src/org/optimizationservices/ossolver/solver/The10SecondSolver.java -text
 OSServer/src/org/optimizationservices/ossolver/solver/The1MinuteSolver.java -text
 OSServer/src/org/optimizationservices/ossolver/solver/The3MinuteSolver.java -text
+OSServer/src/org/optimizationservices/ossolver/util/OSFileUpload.java -text
+OSServer/src/org/optimizationservices/ossolver/util/OSParameterFile.java -text
 OSServer/test/first.osil -text
 OSServer/test/remote.osol -text
 OSServer/test/test-coin.py -text

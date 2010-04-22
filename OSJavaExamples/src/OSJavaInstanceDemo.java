@@ -15,22 +15,11 @@
  * 
  */ 
 
-
-
-import java.io.File;
-
-//import org.apache.axis.MessageContext;
-
 import org.optimizationservices.oscommon.util.OSParameter;
-import org.optimizationservices.oscommon.util.OSParameterFile;
-import org.optimizationservices.oscommon.util.OSServiceUtil;
-import org.optimizationservices.oscommon.util.StandardOSSolver;
 import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.oscommon.util.ProcessUtil;
 import org.optimizationservices.oscommon.localinterface.OSInstance;
 import org.optimizationservices.oscommon.datastructure.osgeneral.SparseVector;
-import org.optimizationservices.oscommon.localinterface.OSInstance;
-import org.optimizationservices.oscommon.representationparser.OSiLWriter;
 
 /**
  the following are in my CLASSPATH
@@ -46,13 +35,11 @@ import org.optimizationservices.oscommon.representationparser.OSiLWriter;
 
 public class OSJavaInstanceDemo {
 	
-	
-	
 	public static void main(String args[]){
 
 		try {
 			// location of parameter file -- in same directory
-			OSParameterFile.NAME = "OSParameter.xml";
+			OSParameter.readAndSetOSParameter("OSParameter.xml");
 			// build the parinc problem -- see parincLinear.osil
 			OSInstance osinstance = new OSInstance();
 			osinstance.setInstanceName("parinc problem");
@@ -113,17 +100,8 @@ public class OSJavaInstanceDemo {
 			// this OSJavaDemo class
 			String sArguments = 
 			" -osil parincLinear.osil -osrl answer.osrl" ;
-			String sOS = System.getProperty("os.name");
-			String sArch = System.getProperty("os.arch");
 
-			System.out.print(sOS );
-			System.out.print(sArch );
-			//sArguments = 
-			//	" -osil parincLinear.osil -osrl answer.osrl -serviceLocation http://127.0.0.1:8080/OSServer/services/OSSolverService" ;
-			
-			sArguments = 
-				" -osil parincLinear.osil " ;
-			String sSolverPath = "../../OSThirdParty/lib/coin-or/OSSolverService" + "-"+ sOS + "-"+ sArch;
+			String sSolverPath = "../OSThirdParty/lib/coin-or/OSSolverService";
 			System.out.print(sSolverPath );
 			ProcessUtil.launchAndWaitForFinish(sSolverPath + " " + sArguments);			
 

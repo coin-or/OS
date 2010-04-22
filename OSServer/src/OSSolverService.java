@@ -9,8 +9,8 @@ import org.optimizationservices.oscommon.communicationinterface.OShL;
 import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.oscommon.util.OSLog;
 import org.optimizationservices.oscommon.util.OSParameter;
-import org.optimizationservices.oscommon.util.OSParameterFile;
 import org.optimizationservices.oscommon.util.OSServiceUtil;
+import org.optimizationservices.ossolver.util.OSParameterFile;
 
 
 /**
@@ -128,8 +128,6 @@ public class OSSolverService implements OShL{
 	 * static constructor
 	 */
 	static{ 
-		OSParameterFile.NAME = OSParameterFile.setParameterFile();
-		//or directly hard code in the parameter file path by uncommenting and editing the line below. 
-		//OSParameterFile.NAME = sDir+= "/Program Files/Apache Software Foundation/Tomcat 5.5/webapps/os/WEB-INF/code/OSConfig/OSParameter.xml";
+		OSParameter.readAndSetOSParameter(OSParameterFile.setParameterFile());
 	}//static constructor
 }//class 
