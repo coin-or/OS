@@ -66,18 +66,25 @@ public class StandardOSSolver extends DefaultSolver{
 		if(OSParameter.SOLVER_EXECUTABLE.startsWith("OSSolverService")){
 			// Eclipse deploys to here a lot easier
 			sSolverPath =  OSParameter.SERVICE_FOLDER + "WEB-INF/classes/OSSolverService";
-			// normalize java to unix naming conventions.
-			if(sArch.equals("i386"))
-				sArch="i686";
-			else if(sArch.equals("amd64"))
-				sArch="x86_64";
-			else if(sOS.startsWith("Windows"))
-				sOS="Windows";
-			else if(sOS.startsWith("Mac"))
-				sOS="Mac";
-			sSolverPath += "-" + sOS + "-" + sArch;
-			// make executable if necessary (war deployment hack)
 			File exe=new File(sSolverPath);
+			if(!exe.exists()){
+				// normalize java to unix naming conventions.
+				if(sArch.equals("i386"))
+					sArch="-x86";
+				else if(sArch.equals("amd64"))
+					sArch="-x86_64";
+				if(sOS.startsWith("Linux"))
+					sOS="-linux";
+				if(sOS.startsWith("Mac"))
+					sOS="-mac-osx";
+				else if(sOS.startsWith("Windows")){
+					sOS="-win32";
+					sArch="";
+				}
+				sSolverPath += sOS + sArch;
+				exe=new File(sSolverPath);
+			}
+			// make executable if necessary (war deployment hack)
 			if(! exe.canExecute()){
 				exe.setExecutable(true);
 			}

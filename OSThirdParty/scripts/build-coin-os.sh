@@ -1,11 +1,8 @@
 #!/bin/sh
 ## Copyright (c) 2008,2010 Timothy Middelkoop, All rights reserved.
-## Dual Licensed under the GPL 2.0 and the CPL
+## Licenced under the Common Public License (CPL) version 1.0 or later.
 
-## Based on build COIN-OR from build-ps3
-## Check scripts/install-packages-* for build dependencies
-
-ARCH="$(uname -s)-$(uname -m)"
+## Build COIN-OS from SVN, based on build COIN-OR from build-ps3
 
 ## Defaults
 VERSION=trunk
@@ -16,12 +13,25 @@ OPTIONS="--enable-static --disable-shared"
 COINSRC=build/CoinOS-${VERSION}
 COINTGZ=download/CoinOS-${VERSION}.tar.gz
 
+## Arch
+
+ARCH="$(uname -s)-$(uname -m)"
 case ${ARCH} in
 Darwin-i386)
-    ARCH=Mac-x86_64
-    OPTIONS="${OPTIONS} COIN_SKIP_PROJECTS=ThirdParty/Glpk ADD_FFLAGS=-mmacosx-version-min=10.4"
+    ARCH=mac-osx-x86_64
+    OPTIONS="${OPTIONS} ADD_FFLAGS=-mmacosx-version-min=10.4"
+    ;;
+Linux-x86_64)
+    ARCH=linux-x86_64
+    ;;
+Linux-i?86)
+    ARCH=linux-x86
     ;;
 esac
+
+## DO NOT REDISTRUBTE BINARIES THAT CONTAIN GPL CODE (GLPK)
+## Default to redistributable code
+OPTIONS="${OPTIONS} COIN_SKIP_PROJECTS=ThirdParty/Glpk"
 
 set -e
 install -dv build download
@@ -52,9 +62,10 @@ echo @@@ make
 
 echo @@@ install
 install -dv lib/coin-or
+install -v build/CoinOS-trunk/OS/src/OSSolverService lib/coin-or/OSSolverService
 install -v build/CoinOS-trunk/OS/src/OSSolverService lib/coin-or/OSSolverService-${ARCH}
 
 echo @@@ cleanup
 rm -rf ${COINSRC}
 
-echo @@@ done
+echo @@@ build-coin-os.sh done for ${ARCH}
