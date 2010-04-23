@@ -3,8 +3,8 @@
 	<name>OSServer</name>
 	<comment></comment>
 	<projects>
-		<project>OSCommon</project>
 		<project>OSThirdParty</project>
+		<project>OSCommon</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

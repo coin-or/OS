@@ -29,7 +29,6 @@ import org.optimizationservices.oscommon.datastructure.osgeneral.SparseVector;
  xerces.jar
  commons-logging.jar
  commons-discovery.jar
- or124.jar
  */
 
 
@@ -99,10 +98,10 @@ public class OSJavaInstanceDemo {
 			// we are assuming that the OSSolverService executable is in the same directory as
 			// this OSJavaDemo class
 			String sArguments = 
-			" -osil parincLinear.osil -osrl answer.osrl" ;
+			" -osil parincLinear.osil -osrl result.osrl" ;
 
 			String sSolverPath = "../OSThirdParty/lib/coin-or/OSSolverService";
-			System.out.print(sSolverPath );
+			System.out.print(sSolverPath + " " + sArguments );
 			ProcessUtil.launchAndWaitForFinish(sSolverPath + " " + sArguments);			
 
 
