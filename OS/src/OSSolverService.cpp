@@ -188,6 +188,9 @@ int main(int argC, const char* argV[]) {
 	int i;
 	printf("\n\n");
 	printf("------- %s -------\n\n", OS_RELEASE_MESSAGE);
+#ifdef OS_SVN_REV
+	printf(" %s ", OS_SVN_REV);
+#endif
 
 	// initialize the OS options structure
 

@@ -72,6 +72,9 @@
 # endif
 #endif
 
+#include <string>
+using std::string;
+
 #define OS_PLUS 1001
 #define	OS_SUM  1002
 #define	OS_MINUS  1003
@@ -112,7 +115,16 @@
 #define OS_PI_VALUE 2*asin(1.0)
 
 #define OS_SCHEMA_VERSION "2.0"
-#define OS_RELEASE_MESSAGE "Optimization Services Release 2.1.0"
+
+//uncomment the following if we have a release and put in correct number
+//#define OS_RELEASE_NUMBER "Optimization Services Release 2.1.0"
+#ifdef OS_RELEASE_NUMBER
+#define OS_RELEASE_MESSAGE OS_RELEASE_NUMBER
+#else
+#define OS_RELEASE_MESSAGE "We are working with trunk version "
+#endif
+
+
 
 /**
  * we use OS_NEAR_EQUAL in unitTest to see if we 
@@ -164,8 +176,16 @@ inline double nanKludge(){
 #define XSLT_LOCATION  OSSRCDIR;
 #endif
 
-#endif
 
+inline
+
+std::string	getVersionInfo(int i, char c){
+	return "gail";
+
+} 
+
+
+#endif
 
 
 
