@@ -88,7 +88,6 @@
 #include "OSmps2osil.h"   
 #include "OSBase64.h"
 
-using std::ostringstream;
 
 #ifdef COIN_HAS_KNITRO    
 #include "OSKnitroSolver.h"
@@ -186,11 +185,12 @@ int main(int argC, const char* argV[]) {
 	//char *config = "-config";
 	std::string configFileName = "";
 	int i;
-	printf("\n\n");
-	printf("------- %s -------\n\n", OS_RELEASE_MESSAGE);
-#ifdef OS_SVN_REV
-	printf(" %s ", OS_SVN_REV);
-#endif
+	std::cout << endl;
+	std::cout << endl;
+	std::cout << "-------  " ;
+	std::cout << getVersionInfo() ;
+	std::cout << " -------  "  << std::endl;
+	std::cout << endl;
 
 	// initialize the OS options structure
 

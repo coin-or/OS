@@ -73,7 +73,9 @@
 #endif
 
 #include <string>
+#include <sstream>  
 using std::string;
+using std::ostringstream;
 
 #define OS_PLUS 1001
 #define	OS_SUM  1002
@@ -115,14 +117,6 @@ using std::string;
 #define OS_PI_VALUE 2*asin(1.0)
 
 #define OS_SCHEMA_VERSION "2.0"
-
-//uncomment the following if we have a release and put in correct number
-//#define OS_RELEASE_NUMBER "Optimization Services Release 2.1.0"
-#ifdef OS_RELEASE_NUMBER
-#define OS_RELEASE_MESSAGE OS_RELEASE_NUMBER
-#else
-#define OS_RELEASE_MESSAGE "We are working with trunk version "
-#endif
 
 
 
@@ -177,11 +171,26 @@ inline double nanKludge(){
 #endif
 
 
-inline
 
-std::string	getVersionInfo(int i, char c){
-	return "gail";
+//uncomment the following if we have a release and put in correct number
+//#define OS_RELEASE_NUMBER "Optimization Services Release 2.1.0"
 
+
+
+
+inline std::string	getVersionInfo(){
+	ostringstream versionInfo;
+	#ifdef OS_RELEASE_NUMBER
+		versionInfo = OS_RELEASE_NUMBER
+	#else
+		#ifdef OS_SVN_REV
+			versionInfo << "OS trunk version: "; 
+			versionInfo << OS_SVN_REV;
+		#else
+			versionInfo << "no OS version information available";
+		#endif
+	#endif
+	return versionInfo.str() ;
 } 
 
 
