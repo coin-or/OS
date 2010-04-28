@@ -3,7 +3,7 @@
 	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 	<instanceHeader>
 		<name>NonConvex</name>
-		<source>ASW 12e</source>
+		<source>Anderson, Sweeney, Williams, Camm, and Martin 13e</source>
 		<description> Continuous global: x = 0.2282788, y =-1.625535, objVAL =-6.551133
 		</description>
 	</instanceHeader>
