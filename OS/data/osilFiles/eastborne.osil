@@ -2,6 +2,7 @@
 <osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
     <instanceHeader>
+        <source>Anderson, Sweeney, Williams, Camm, and Martin 13e</source>
         <description>Generated from GAMS GMO problem</description>
     </instanceHeader>
     <instanceData>

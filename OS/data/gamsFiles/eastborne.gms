@@ -1,4 +1,4 @@
-* Eastborne Realty from Anderson, Sweeney, Williams
+* Eastborne Realty from Anderson, Sweeney, Williams, Camm and Martin MS 13e
 * optimal solution is x0 = 4, x1 = 2
 
 
