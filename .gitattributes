@@ -143,10 +143,12 @@ OS/data/gamsFiles/225a/gamsstat.dat -text
 OS/data/gamsFiles/225a/gamswrk0.dat -text
 OS/data/gamsFiles/225a/gdxdict.dat -text
 OS/data/gamsFiles/225a/gmsprmun.dat -text
+OS/data/gamsFiles/CoinOS.opt -text
 OS/data/gamsFiles/IP_infeasible.gms -text
 OS/data/gamsFiles/IP_unbounded.gms -text
 OS/data/gamsFiles/LP_primaldualinfeasible.gms -text
 OS/data/gamsFiles/LP_unbounded.gms -text
+OS/data/gamsFiles/eastborne.gms -text
 OS/data/gamsFiles/os.opt -text
 OS/data/gamsFiles/parincLinear.gms -text
 OS/data/gamsFiles/rbrockmod.gms -text
@@ -180,6 +182,7 @@ OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/bonminEx1_Nonlinear.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
+OS/data/osilFiles/eastborne.osil -text
 OS/data/osilFiles/finplan1.osil -text
 OS/data/osilFiles/gamstrnsport.osil -text
 OS/data/osilFiles/lindoapiaddins.osil -text
