@@ -172,24 +172,19 @@ inline double nanKludge(){
 
 
 
-//uncomment the following if we have a release and put in correct number
-//#define OS_RELEASE_NUMBER "Optimization Services Release 2.1.0"
-
 
 
 
 inline std::string	getVersionInfo(){
 	ostringstream versionInfo;
-	#ifdef OS_RELEASE_NUMBER
-		versionInfo = OS_RELEASE_NUMBER
-	#else
+		versionInfo << "OS Version: ";
+		versionInfo << OS_VERSION;
+	
 		#ifdef OS_SVN_REV
-			versionInfo << "OS trunk version: "; 
+			versionInfo << " svn version: "; 
 			versionInfo << OS_SVN_REV;
-		#else
-			versionInfo << "no OS version information available";
 		#endif
-	#endif
+	
 	return versionInfo.str() ;
 } 
 
