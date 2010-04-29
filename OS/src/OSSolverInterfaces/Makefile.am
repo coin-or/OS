@@ -129,7 +129,8 @@ endif
 if COIN_HAS_SYMPHONY
   AM_CPPFLAGS += \
     -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` 
+    -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` \
+ 	-I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include`  
 endif
 
 if COIN_HAS_VOL
