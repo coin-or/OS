@@ -147,8 +147,10 @@ bin_PROGRAMS = OSSolverService$(EXEEXT)
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CPPFLAGS)
 @COIN_HAS_ASL_TRUE@am__append_42 = $(ASLLIB) 
+@MSCL__TRUE@am__append_43 = $(OSSRCDIR)/../BuildTools/headers/configall_system.h \
+@MSCL__TRUE@	$(OSSRCDIR)/../BuildTools/headers/configall_system_msc.h
 subdir = src
-DIST_COMMON = $(includecoin_HEADERS) $(srcdir)/Makefile.am \
+DIST_COMMON = $(am__includecoin_HEADERS_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ac_coin_socket_libs.m4 \
@@ -261,6 +263,9 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	install-recursive installcheck-recursive installdirs-recursive \
 	pdf-recursive ps-recursive uninstall-info-recursive \
 	uninstall-recursive
+am__includecoin_HEADERS_DIST = OSConfig.h ../inc/config_os.h \
+	$(OSSRCDIR)/../BuildTools/headers/configall_system.h \
+	$(OSSRCDIR)/../BuildTools/headers/configall_system_msc.h
 includecoinHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(includecoin_HEADERS)
 ETAGS = etags
@@ -426,6 +431,8 @@ MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
 MPIF77 = @MPIF77@
+MSCL__FALSE = @MSCL__FALSE@
+MSCL__TRUE = @MSCL__TRUE@
 OBJEXT = @OBJEXT@
 OPENMP_FALSE = @OPENMP_FALSE@
 OPENMP_TRUE = @OPENMP_TRUE@
@@ -463,7 +470,6 @@ VOLOBJDIR = @VOLOBJDIR@
 VOLSRCDIR = @VOLSRCDIR@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 YACC = @YACC@
-_SVN_REV = @_SVN_REV@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
@@ -504,7 +510,6 @@ exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
 have_svn = @have_svn@
-have_svnversion = @have_svnversion@
 host = @host@
 host_alias = @host_alias@
 host_cpu = @host_cpu@
@@ -642,10 +647,7 @@ OSSolverService_LDADD = $(ALLLDADD) $(ADDLIBS)
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install/coin'
 includecoindir = $(includedir)/coin
-includecoin_HEADERS = \
-	OSConfig.h \
-	../inc/config_os.h 
-
+includecoin_HEADERS = OSConfig.h ../inc/config_os.h $(am__append_43)
 
 #############################################################################
 # Create the Config.h file that always defines HAVE_CONFIG_H and install it #
@@ -951,7 +953,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/../inc
+	$(mkdir_p) $(distdir)/$(OSSRCDIR)/../BuildTools/headers $(distdir)/../inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

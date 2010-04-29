@@ -124,16 +124,6 @@ public:
 	
 private:
 	
-	/**
-	 * posVarIdx is a map iterator used by the map varIdx
-	 */	
-	std::map<int, int>::iterator m_mPosVarIdx; 
-	
-	/**
-	 * m_ADTape stores the espression tree for m_treeRoot as an AD<double>.
-	 */
-	//AD::AD<double> m_ADTape;
-	
 	
 	/**
 	 * m_dTreeRootValue is the function value of the root node

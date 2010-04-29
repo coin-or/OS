@@ -22,7 +22,9 @@
 
 #include "OSInstance.h"
 #include "OSnLNode.h"
+#include "OSMathUtil.h"
 #include <string>
+#include <vector>
 
 
 /*! \class OSnl2osil
@@ -70,6 +72,10 @@ public:
 	 * created from the instance represented in MPS format
 	 */
 	OSInstance *osinstance;
+	
+	std::vector<std::string> op_type;
+	std::vector<double> operand;
+	int numkount;
 private:
 	
 	/** og is a pointer to the AMPL data structure holding the
@@ -88,6 +94,9 @@ private:
 	/** stub is the name of the file with the nl instance
 	 */
 	char *stub;
+	
+	
+
 
 };
 #endif

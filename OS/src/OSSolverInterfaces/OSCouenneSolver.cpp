@@ -420,7 +420,7 @@ expression* CouenneSolver::createCouenneExpression(OSnLNode* node) {
      		return new exprMul(new exprConst(varnode->coef), new exprClone(couenne->Variables()[varnode->idx]));
      }
      default:
-        cout << node->snodeName << " NOT IMPLEMENTED!!" << endl;
+        cout << node->getTokenName() << " NOT IMPLEMENTED!!" << endl;
         break;
   }
 	
@@ -716,7 +716,7 @@ void CouenneSolver::writeResult(){
 		// resultHeader information
 		if(osresult->setSolverInvoked( "COIN-OR Couenne") != true)
 			throw ErrorClass("OSResult error: setSolverInvoked");
-		if(osresult->setServiceName( OS_RELEASE_MESSAGE) != true)
+		if(osresult->setServiceName( getVersionInfo()) != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 			throw ErrorClass("OSResult error: setInstanceName");	

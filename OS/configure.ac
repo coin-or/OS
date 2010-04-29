@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.1stable],[coin-os@list.coin-or.org])
+AC_INIT([OS],[2.1],[coin-os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -31,6 +31,11 @@ AC_CONFIG_SRCDIR(src/OSUtils/OSErrorClass.cpp)
 AC_PREFIX_DEFAULT([`pwd`])
 
 
+
+#############################################################################
+#                         GET THE VERSION NUMBER                            #
+#############################################################################
+AC_COIN_PROJECTDIR_INIT(OS)
 
 
 
@@ -331,8 +336,15 @@ if test $coin_has_bonmin != unavailable &&
 fi
 
 
+#############################################################################
+#                             Need to know if we have MS cl                           #
+#############################################################################
+case $CXX in
+    cl*)
+    cl_compiler=yes  ;;
+esac
 
-
+AM_CONDITIONAL(MSCL_, test x$cl_compiler = xyes)
 
 #############################################################################
 #                             Third party solvers                           #

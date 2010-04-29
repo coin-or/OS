@@ -66,7 +66,7 @@
  *       machine of LINDO instruction list)
  * </li>
  * </ul>
-*/
+ */
 
 #include "OSCoinSolver.h"
 #include "OSResult.h" 
@@ -89,33 +89,13 @@
 #include "OSBase64.h"
 
 
-
-
-using std::ostringstream;
-
-
 #ifdef COIN_HAS_KNITRO    
 #include "OSKnitroSolver.h"
 #endif 
 
-
-
-
-
 #ifdef COIN_HAS_LINDO    
 #include "OSLindoSolver.h"
 #endif 
-
-/*
-#ifdef COIN_HAS_IPOPT  
-	#ifndef COIN_HAS_ASL
-		#include "OSIpoptSolver.h"
-		#undef COIN_HAS_ASL
-	#else
-		#include "OSIpoptSolver.h"
-#endif
-#endif 
-*/
 
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
@@ -130,15 +110,13 @@ using std::ostringstream;
 //#endif
 
 #ifdef COIN_HAS_IPOPT  
-	#ifndef COIN_HAS_ASL
-		#include "OSIpoptSolver.h"
-		#undef COIN_HAS_ASL
-	#else
-		#include "OSIpoptSolver.h"
-	#endif
+#ifndef COIN_HAS_ASL
+#include "OSIpoptSolver.h"
+#undef COIN_HAS_ASL
+#else
+#include "OSIpoptSolver.h"
 #endif
-
-
+#endif
 
 #ifdef COIN_HAS_BONMIN   
 #include "OSBonminSolver.h"
@@ -148,9 +126,7 @@ using std::ostringstream;
 #include "OSCouenneSolver.h"
 #endif 
 
-
 #include "OSOptionsStruc.h"  
-
 
 using std::cout;
 using std::endl;
@@ -163,30 +139,30 @@ using std::string;
 #define MAXCHARS 5000 
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
-YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner ); 
+YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner);
 //void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
 void setyyextra(osOptionsStruc *osoptions, void* scanner);
-int ossslex(void* scanner );
+int ossslex(void* scanner);
 int ossslex_init(void** ptr);
-int ossslex_destroy (void* scanner );
+int ossslex_destroy(void* scanner);
 
 std::string get_help();
 std::string get_version();
 
 // the serviceMethods  
-void solve();  
-void getJobID(); 
+void solve();
+void getJobID();
 void send();
 void kill();
-void retrieve(); 
+void retrieve();
 void knock();
 
 // additional methods
-void getOSiLFromNl(); 
+void getOSiLFromNl();
 void getOSiLFromMps();
 void getOSiLFromGams();
-std::string buildSolver(std::string solverName, std::string osol, OSInstance *osinstance);
-
+std::string buildSolver(std::string solverName, std::string osol,
+		OSInstance *osinstance);
 
 //std::string getServiceURI( std::string osol);
 //std::string getInstanceLocation( std::string osol);
@@ -197,726 +173,841 @@ std::string buildSolver(std::string solverName, std::string osol, OSInstance *os
 //options structure
 // this is the only global variable but 
 // this is not a problem since this is a main routine
-osOptionsStruc *osoptions; 
+osOptionsStruc *osoptions;
 
-
-int main(int argC, const char* argV[])
-{  	
+int main(int argC, const char* argV[]) {
 	WindowsErrorPopupBlocker();
 	void* scanner;
 	FileUtil *fileUtil = NULL;
-	FileUtil *inputFileUtil = NULL; 
+	FileUtil *inputFileUtil = NULL;
 	char osss[MAXCHARS] = " ";
-	const char *space = " "; 
+	const char *space = " ";
 	//char *config = "-config";
 	std::string configFileName = "";
 	int i;
-    printf("\n\n");
-    printf("------- %s -------\n\n", OS_RELEASE_MESSAGE);
+	std::cout << endl;
+	std::cout << endl;
+	std::cout << "-------  " ;
+	std::cout << getVersionInfo() ;
+	std::cout << " -------  "  << std::endl;
+	std::cout << endl;
 
 	// initialize the OS options structure
 
 	osoptions = new osOptionsStruc();
-	osoptions->configFile = ""; 
-	osoptions->osilFile = ""; 
-	osoptions->osil = ""; 
-	osoptions->osolFile = ""; 
-	osoptions->osol = "";  
-	osoptions->osrlFile = ""; 
-	osoptions->osrl = ""; 
+	osoptions->configFile = "";
+	osoptions->osilFile = "";
+	osoptions->osil = "";
+	osoptions->osolFile = "";
+	osoptions->osol = "";
+	osoptions->osrlFile = "";
+	osoptions->osrl = "";
 	//osoptions->insListFile = ""; 
-	osoptions->insList = ""; 
+	osoptions->insList = "";
 	osoptions->serviceLocation = "";
-	osoptions->serviceMethod = ""; 
-	osoptions->osplInputFile = ""; 
-	osoptions->osplOutputFile = ""; 
-	osoptions->mpsFile = ""; 
-	osoptions->nlFile = ""; 
+	osoptions->serviceMethod = "";
+	osoptions->osplInputFile = "";
+	osoptions->osplOutputFile = "";
+	osoptions->mpsFile = "";
+	osoptions->nlFile = "";
 	osoptions->gamsControlFile = "";
-	osoptions->solverName = ""; 
-	osoptions->browser = ""; 
+	osoptions->solverName = "";
+	osoptions->browser = "";
 	osoptions->invokeHelp = false;
 	osoptions->writeVersion = false;
-	try{
-		if(argC < 2){
-			std::cout << "There must be at least one command line argument" << std::endl;
-			std::cout << "Try -help or --help" << std::endl;
-			delete osoptions;
-			return 1;
+	bool scannerActive = false;
+	try {
+		if (argC < 2) {
+			//std::cout << "There must be at least one command line argument" << std::endl;
+			//std::cout << "Try -h or --help" << std::endl;
+			throw ErrorClass(
+					"There must be at least one command line argument\n  Try -h or --help");
+			//delete osoptions;
+			//return 1;
 		}
 		// see if the first argument is a file name
 		i = 1;
-		while(i < argC) {
-			if(strlen(osss) + strlen(argV[ i]) + 1 > MAXCHARS) throw ErrorClass( "the command line has too many arguments");
-			strcat(osss, argV[ i]);
+		while (i < argC) {
+			if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
+				throw ErrorClass("the command line has too many arguments");
+			strcat(osss, argV[i]);
 			strcat(osss, space);
 			i++;
 		}
 #ifdef DEBUG_CL_INTERFACE
-		cout << "Input String = "  << osss << endl;
+		cout << "Input String = " << osss << endl;
 #endif
-		ossslex_init( &scanner);
+		scannerActive = true;
+		ossslex_init(&scanner);
 		//std::cout << "Call Text Extra" << std::endl;
-		setyyextra( osoptions, scanner);
+		setyyextra(osoptions, scanner);
 		//std::cout << "Call scan string " << std::endl;
-		osss_scan_string( osss, scanner); 
+		osss_scan_string(osss, scanner);
 #ifdef DEBUG_CL_INTERFACE
 		std::cout << "call ossslex" << std::endl;
 #endif
-		ossslex( scanner);
-		ossslex_destroy( scanner);
+		ossslex(scanner);
+		ossslex_destroy(scanner);
+		scannerActive = false;
 #ifdef DEBUG_CL_INTERFACE
 		std::cout << "done with call to ossslex" << std::endl;
 #endif
 		// if there is a config file, get those options
-		if(osoptions->configFile != ""){
-			ossslex_init( &scanner);
+		if (osoptions->configFile != "") {
+			scannerActive = true;
+			ossslex_init(&scanner);
 			configFileName = osoptions->configFile;
 #ifdef DEBUG_CL_INTERFACE
 			cout << "configFileName = " << configFileName << endl;
 #endif
-			std::string osolfileOptions = fileUtil->getFileAsString( configFileName.c_str() );
+			std::string osolfileOptions = fileUtil->getFileAsString(
+					configFileName.c_str());
 #ifdef DEBUG_CL_INTERFACE
 			std::cout << "Call Text Extra" << std::endl;
 #endif
-			setyyextra( osoptions, scanner);
+			setyyextra(osoptions, scanner);
 #ifdef DEBUG_CL_INTERFACE
 			std::cout << "Done with call Text Extra" << std::endl;
 #endif
-			osss_scan_string( osolfileOptions.c_str() , scanner);
-			ossslex(scanner );	
-			ossslex_destroy( scanner);
+			osss_scan_string(osolfileOptions.c_str(), scanner);
+			ossslex(scanner);
+			ossslex_destroy(scanner);
+			scannerActive = false;
 		}
-	}
-		catch(const ErrorClass& eclass){
-		cout << eclass.errormsg <<  endl;
-		cout << "try -help or --help" <<  endl;
-		ossslex_destroy( scanner);
-		delete fileUtil;
-		delete osoptions;
-		return 1;
-	} 
-		try{
-			if(osoptions->invokeHelp == true){ 
-				std::string helpTxt = get_help();
-				std::cout << std::endl << std::endl;
-				std::cout << helpTxt << std::endl;
-				delete	osoptions;
-				osoptions = NULL;	
-				return 0;
-			}
-			if(osoptions->writeVersion == true){ 
-				std::string writeTxt = get_version();
-				std::cout << std::endl << std::endl;
-				std::cout << writeTxt << std::endl;
-				delete	osoptions;
-				osoptions = NULL;	
-				return 0;
-			}
-		}
-		catch(const ErrorClass& eclass){
-			cout << eclass.errormsg <<  endl;
-			cout << "try -help or --help" <<  endl;
-			delete	osoptions;
-			osoptions = NULL;	
-			delete inputFileUtil;
-			inputFileUtil  = NULL;
-			return 1;
-		} 
+	} catch (const ErrorClass& eclass) {
+		//cout << eclass.errormsg <<  endl;
+		//cout << "try -h or --help for more information" <<  endl;
 
-#ifdef DEBUG_CL_INTERFACE
-		cout << "HERE ARE THE OPTION VALUES:" << endl;
-		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
-		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
-		if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
-		if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
-		//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-		if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-		if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
-		if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
-		if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
-		if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
-		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
-		if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;     
-		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
-#endif
-
-
-        //convert to lower case so there is no solver name ambiguity
-        unsigned int k;
-        for(k = 0; k < osoptions->solverName.length(); k++){
-            osoptions->solverName[ k] = tolower( osoptions->solverName[ k]);
-        }
-
-		// get the data from the files
-		fileUtil = new FileUtil();
-		try{	
-			//if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
-			if(osoptions->osolFile != ""){
-			
-				osoptions->osol = fileUtil->getFileAsString( (osoptions->osolFile).c_str() );
-				
-				
-			}
-			
-			if(osoptions->osilFile != ""){
-				//this takes precedence over what is in the OSoL file
-				 osoptions->osil = fileUtil->getFileAsString( (osoptions->osilFile).c_str()   );
-			}
-			/*
-			else{// we were not given an osil file
-				// make sure we don't have a service URI in the file or are using mps or nl
-				// if we have nl or mps assume a local solve
-					if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->gamsControlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") ) 
-						osoptions->osil = fileUtil->getFileAsString( getInstanceLocation( osoptions->osol).c_str()  );
-			}
-			*/
-			
-			//if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
-			if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsString( (osoptions->osplInputFile).c_str() );
-			//if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
-			if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsString( (osoptions->osplOutputFile).c_str() );
-		}
-		catch(const ErrorClass& eclass){
-			//cout << eclass.errormsg <<  endl;
-			cout << "could not open file properly" << endl;
-			cout << "try -help or --help" <<  endl;
-			delete	osoptions;
-			osoptions = NULL;	
-			delete fileUtil;
-			fileUtil = NULL;
-			return 1;
-		}	
-		// now call the correct serviceMethod
-		// solve is the default
-		if( osoptions->serviceMethod == "") solve();
-		if( (osoptions->serviceMethod[ 0] == 's') && (osoptions->serviceMethod[ 1] == 'o') )  solve();
-		else{
-			switch(osoptions->serviceMethod[ 0]){
-				case 'g': 
-					getJobID();
-					break;
-				case 'r':
-					retrieve();
-					break;
-				case 's':
-					if( osoptions->serviceMethod[ 1] == 'e') send();
-					else solve();
-					break;
-				case 'k':
-					if(osoptions->serviceMethod[ 1] == 'i') kill();
-					else knock();
-					break;
-				default:
-					
-					break;
-			}
-		}
-	delete	osoptions;
-	osoptions = NULL;	
-	delete fileUtil;
-	fileUtil = NULL;
-	return 0;
-}
-
-void solve(){
-	std::string osrl = "";
-	OSiLReader *osilreader = NULL; 
-	OSmps2osil *mps2osil = NULL;
-	#ifdef COIN_HAS_ASL
-	OSnl2osil *nl2osil = NULL;
-	#endif
-	#ifdef COIN_HAS_GAMSUTILS
-	OSgams2osil *gams2osil = NULL;					
-	#endif 
-	OSSolverAgent* osagent = NULL;
-	FileUtil *fileUtil = NULL;
-	fileUtil = new FileUtil();
-	// now solve either remotely or locally
-	try{
-		if( osoptions->serviceLocation != "" ){
-			// call a method here to get OSiL if we have an nl or mps file
-			if(osoptions->osil == ""){
-				//we better have an nl file present or mps file or osol file
-				if(osoptions->nlFile != ""){
-					getOSiLFromNl();
-				}
-				else{
-					if(osoptions->mpsFile != ""){
-						getOSiLFromMps();
-					}
-					else{
-						if(osoptions->gamsControlFile != ""){
-							
-							getOSiLFromGams();
-					}
-						else{// send an empty osil string
-								osoptions->osil = "";
-						}
-					}
-				}
-			}
-			// place a remote call
-		
-			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			
-			if(osoptions->osol == ""){// we have no osol string
-			
-				std::ostringstream outStr; 
-				outStr <<  "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/" ;
-				outStr << OS_SCHEMA_VERSION ;
-				outStr <<  "/OSoL.xsd\"></osol>";	
-				osoptions->osol = outStr.str();
-			}
-			osrl = osagent->solve(osoptions->osil  , osoptions->osol);
-			if(osoptions->osrlFile != ""){
-				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-				if(osoptions->browser != ""){
-					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
-					const char *ch = &str[ 0];
-					std::system( ch );
-				}
-			}
-			else cout << osrl << endl;
-			delete osagent;
-			osagent = NULL;
-
-		} else{// solve locally
-
-			if(osoptions->osil != ""){
-				osilreader = new OSiLReader();
-				osrl = buildSolver(osoptions->solverName, osoptions->osol, osilreader->readOSiL( osoptions->osil));
-			}
-			else{
-				//we better have an nl file present or mps file or osol file
-				if(osoptions->nlFile != ""){
-					#ifdef COIN_HAS_ASL
-					nl2osil = new OSnl2osil( osoptions->nlFile); 
-					nl2osil->createOSInstance() ;
-					osrl = buildSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
-					#else
-						throw ErrorClass("nlFile specified locally but ASL not present");
-					#endif
-				}
-				else{
-					if(osoptions->mpsFile != ""){
-						mps2osil = new OSmps2osil( osoptions->mpsFile);
-						mps2osil->createOSInstance() ;
-						osrl = buildSolver(osoptions->solverName, osoptions->osol, mps2osil->osinstance);
-					}
-					else{
-						if(osoptions->gamsControlFile != ""){
-						#ifdef COIN_HAS_GAMSUTILS
-						gams2osil =	new OSgams2osil( osoptions->gamsControlFile); 
-						gams2osil->createOSInstance();
-						osrl = buildSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
-						#else
-						throw ErrorClass("a Gams Control specified locally but GAMSIP not present");
-						#endif
-							
-						}
-						else{// need an osol file with an instanceLocation specified
-							 //if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-								throw ErrorClass("Error: no osil, GAMS dat, AMPL nl, or mps file given for a local solve --- \n information in the osol file is ignored for local solves.");
-							//}
-						}
-					}
-				}
-			}
-			//delete fileUtil;
-			if(osoptions->osrlFile != ""){
-			
-				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-
-				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-				if(osoptions->browser != ""){
-					std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
-					const char *ch = &str[ 0];
-					std::system( ch );
-				}
-			}
-			else cout << osrl << endl;
-			
-
-			
-		}//end of local solve
-		
-		
-		//garbage collection
-		if(osilreader != NULL) delete osilreader;
-		osilreader = NULL;
-		if(mps2osil != NULL) delete mps2osil;
-		mps2osil = NULL;
-		#ifdef COIN_HAS_ASL
-		if(nl2osil != NULL)  delete nl2osil;
-		nl2osil = NULL;
-		#endif
-		#ifdef COIN_HAS_GAMSUTILS
-		if(gams2osil != NULL)  delete gams2osil;
-		gams2osil = NULL;
-		#endif 
-		delete fileUtil;
-		fileUtil  = NULL;
-	
-	}//end try
-	catch(const ErrorClass& eclass){
-		
+		//new stuff on April 17, 2010
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != ""){
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "") {
 			//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-			fileUtil->writeFileFromString(osoptions->osrlFile,  osrl);
-			if(osoptions->browser != ""){
-				std::string str = osoptions->browser + "  " +  osoptions->osrlFile;
-				const char *ch = &str[ 0];
-				std::system( ch );
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			if (osoptions->browser != "") {
+				std::string str = osoptions->browser + "  "
+						+ osoptions->osrlFile;
+				const char *ch = &str[0];
+				std::system(ch);
 			}
-		}
-		else{
+		} else {
 			//std::cout <<  eclass.errormsg << std::endl;
-			std::cout <<  osrl << std::endl;
+			std::cout << osrl << std::endl;
 		}
 		//catch garbage collection
 		delete osresult;
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
-		
-		//regular garbage collection
-		if(osilreader != NULL) delete osilreader;
+		// end new stuff
+
+		if(scannerActive == true) ossslex_destroy(scanner);
+		delete fileUtil;
+		delete osoptions;
+		return 1;
+	}
+	try {
+		if (osoptions->invokeHelp == true) {
+			std::string helpTxt = get_help();
+			std::cout << std::endl << std::endl;
+			std::cout << helpTxt << std::endl;
+			delete osoptions;
+			osoptions = NULL;
+			return 0;
+		}
+		if (osoptions->writeVersion == true) {
+			std::string writeTxt = get_version();
+			std::cout << std::endl << std::endl;
+			std::cout << writeTxt << std::endl;
+			delete osoptions;
+			osoptions = NULL;
+			return 0;
+		}
+	} catch (const ErrorClass& eclass) {
+		//cout << eclass.errormsg <<  endl;
+		//cout << "try -h or --help" <<  endl;
+
+
+		//new stuff on April 17, 2010
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "") {
+			//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			if (osoptions->browser != "") {
+				std::string str = osoptions->browser + "  "
+						+ osoptions->osrlFile;
+				const char *ch = &str[0];
+				std::system(ch);
+			}
+		} else {
+			//std::cout <<  eclass.errormsg << std::endl;
+			std::cout << osrl << std::endl;
+		}
+		//catch garbage collection
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
+		// end new stuff
+
+
+		delete osoptions;
+		osoptions = NULL;
+		delete inputFileUtil;
+		inputFileUtil = NULL;
+		return 1;
+	}
+
+#ifdef DEBUG_CL_INTERFACE
+	cout << "HERE ARE THE OPTION VALUES:" << endl;
+	if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
+	if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
+	if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
+	if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
+	//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
+	if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
+	if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
+	if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
+	if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
+	if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
+	if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
+	if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
+	if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
+#endif
+
+	//convert to lower case so there is no solver name ambiguity
+	unsigned int k;
+	for (k = 0; k < osoptions->solverName.length(); k++) {
+		osoptions->solverName[k] = tolower(osoptions->solverName[k]);
+	}
+
+	// get the data from the files
+	fileUtil = new FileUtil();
+	try {
+		//if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
+		if (osoptions->osolFile != "") {
+
+			osoptions->osol = fileUtil->getFileAsString(
+					(osoptions->osolFile).c_str());
+
+		}
+
+		if (osoptions->osilFile != "") {
+			//this takes precedence over what is in the OSoL file
+			osoptions->osil = fileUtil->getFileAsString(
+					(osoptions->osilFile).c_str());
+		}
+		/*
+		 else{// we were not given an osil file
+		 // make sure we don't have a service URI in the file or are using mps or nl
+		 // if we have nl or mps assume a local solve
+		 if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->gamsControlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") ) 
+		 osoptions->osil = fileUtil->getFileAsString( getInstanceLocation( osoptions->osol).c_str()  );
+		 }
+		 */
+
+		//if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
+		if (osoptions->osplInputFile != "")
+			osoptions->osplInput = fileUtil->getFileAsString(
+					(osoptions->osplInputFile).c_str());
+		//if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
+		if (osoptions->osplOutputFile != "")
+			osoptions->osplOutput = fileUtil->getFileAsString(
+					(osoptions->osplOutputFile).c_str());
+	} catch (const ErrorClass& eclass) {
+		//cout << eclass.errormsg <<  endl;
+		//cout << "could not open file properly" << endl;
+		//cout << "try -h or --help" <<  endl;
+
+
+		//new stuff on April 17, 2010
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "") {
+			//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			if (osoptions->browser != "") {
+				std::string str = osoptions->browser + "  "
+						+ osoptions->osrlFile;
+				const char *ch = &str[0];
+				std::system(ch);
+			}
+		} else {
+			//std::cout <<  eclass.errormsg << std::endl;
+			std::cout << osrl << std::endl;
+		}
+		//catch garbage collection
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
+		// end new stuff
+
+
+		delete osoptions;
+		osoptions = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
+		return 1;
+	}
+	// now call the correct serviceMethod
+	// solve is the default
+	if (osoptions->serviceMethod == "")
+		solve();
+	if ((osoptions->serviceMethod[0] == 's') && (osoptions->serviceMethod[1]
+			== 'o'))
+		solve();
+	else {
+		switch (osoptions->serviceMethod[0]) {
+		case 'g':
+			getJobID();
+			break;
+		case 'r':
+			retrieve();
+			break;
+		case 's':
+			send();
+			break;
+		case 'k':
+			if (osoptions->serviceMethod[1] == 'i')
+				kill();
+			else
+				knock();
+			break;
+		default:
+
+			break;
+		}
+	}
+	delete osoptions;
+	osoptions = NULL;
+	delete fileUtil;
+	fileUtil = NULL;
+	return 0;
+}
+
+void solve() {
+	std::string osrl = "";
+	OSiLReader *osilreader = NULL;
+	OSmps2osil *mps2osil = NULL;
+#ifdef COIN_HAS_ASL
+	OSnl2osil *nl2osil = NULL;
+#endif
+#ifdef COIN_HAS_GAMSUTILS
+	OSgams2osil *gams2osil = NULL;
+#endif 
+	OSSolverAgent* osagent = NULL;
+	FileUtil *fileUtil = NULL;
+	fileUtil = new FileUtil();
+	// now solve either remotely or locally
+	try {
+		if (osoptions->serviceLocation != "") {
+			// call a method here to get OSiL if we have an nl or mps file
+			if (osoptions->osil == "") {
+				//we better have an nl file present or mps file or osol file
+				if (osoptions->nlFile != "") {
+					getOSiLFromNl();
+				} else {
+					if (osoptions->mpsFile != "") {
+						getOSiLFromMps();
+					} else {
+						if (osoptions->gamsControlFile != "") {
+
+							getOSiLFromGams();
+						} else {// send an empty osil string
+							osoptions->osil = "";
+						}
+					}
+				}
+			}
+			// place a remote call
+
+			osagent = new OSSolverAgent(osoptions->serviceLocation);
+
+			if (osoptions->osol == "") {// we have no osol string
+
+				std::ostringstream outStr;
+				outStr
+						<< "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
+				outStr << OS_SCHEMA_VERSION;
+				outStr << "/OSoL.xsd\"></osol>";
+				osoptions->osol = outStr.str();
+			}
+			osrl = osagent->solve(osoptions->osil, osoptions->osol);
+			if (osoptions->osrlFile != "") {
+				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
+				if (osoptions->browser != "") {
+					std::string str = osoptions->browser + "  "
+							+ osoptions->osrlFile;
+					const char *ch = &str[0];
+					std::system(ch);
+				}
+			} else
+				cout << osrl << endl;
+			delete osagent;
+			osagent = NULL;
+
+		} else {// solve locally
+
+			if (osoptions->osil != "") {
+				osilreader = new OSiLReader();
+				osrl = buildSolver(osoptions->solverName, osoptions->osol,
+						osilreader->readOSiL(osoptions->osil));
+			} else {
+				//we better have an nl file present or mps file or osol file
+				if (osoptions->nlFile != "") {
+#ifdef COIN_HAS_ASL
+					nl2osil = new OSnl2osil( osoptions->nlFile);
+					nl2osil->createOSInstance();
+					osrl = buildSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
+#else
+					throw ErrorClass(
+							"nlFile specified locally but ASL not present");
+#endif
+				} else {
+					if (osoptions->mpsFile != "") {
+						mps2osil = new OSmps2osil(osoptions->mpsFile);
+						mps2osil->createOSInstance();
+						osrl = buildSolver(osoptions->solverName,
+								osoptions->osol, mps2osil->osinstance);
+					} else {
+						if (osoptions->gamsControlFile != "") {
+#ifdef COIN_HAS_GAMSUTILS
+							gams2osil = new OSgams2osil( osoptions->gamsControlFile);
+							gams2osil->createOSInstance();
+							osrl = buildSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
+#else
+							throw ErrorClass(
+									"a Gams Control specified locally but GAMSIP not present");
+#endif
+
+						} else {// need an osol file with an instanceLocation specified
+							//if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
+							throw ErrorClass(
+									"Error: no osil, GAMS dat, AMPL nl, or mps file given for a local solve --- \n information in the osol file is ignored for local solves.");
+							//}
+						}
+					}
+				}
+			}
+			//delete fileUtil;
+			if (osoptions->osrlFile != "") {
+
+				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+
+				//const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
+				if (osoptions->browser != "") {
+					std::string str = osoptions->browser + "  "
+							+ osoptions->osrlFile;
+					const char *ch = &str[0];
+					std::system(ch);
+				}
+			} else
+				cout << osrl << endl;
+
+		}//end of local solve
+
+
+		//garbage collection
+		if (osilreader != NULL)
+			delete osilreader;
 		osilreader = NULL;
-		if(mps2osil != NULL) delete mps2osil;
+		if (mps2osil != NULL)
+			delete mps2osil;
 		mps2osil = NULL;
 #ifdef COIN_HAS_ASL
-		if(nl2osil != NULL)  delete nl2osil;
+		if(nl2osil != NULL) delete nl2osil;
 		nl2osil = NULL;
 #endif
 #ifdef COIN_HAS_GAMSUTILS
-		if(gams2osil != NULL)  delete gams2osil;
+		if(gams2osil != NULL) delete gams2osil;
+		gams2osil = NULL;
+#endif 
+		delete fileUtil;
+		fileUtil = NULL;
+
+	}//end try
+	catch (const ErrorClass& eclass) {
+
+		OSResult *osresult = NULL;
+		OSrLWriter *osrlwriter = NULL;
+		osrlwriter = new OSrLWriter();
+		osresult = new OSResult();
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "") {
+			//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+			if (osoptions->browser != "") {
+				std::string str = osoptions->browser + "  "
+						+ osoptions->osrlFile;
+				const char *ch = &str[0];
+				std::system(ch);
+			}
+		} else {
+			//std::cout <<  eclass.errormsg << std::endl;
+			std::cout << osrl << std::endl;
+		}
+		//catch garbage collection
+		delete osresult;
+		osresult = NULL;
+		delete osrlwriter;
+		osrlwriter = NULL;
+
+		//regular garbage collection
+		if (osilreader != NULL)
+			delete osilreader;
+		osilreader = NULL;
+		if (mps2osil != NULL)
+			delete mps2osil;
+		mps2osil = NULL;
+#ifdef COIN_HAS_ASL
+		if(nl2osil != NULL) delete nl2osil;
+		nl2osil = NULL;
+#endif
+#ifdef COIN_HAS_GAMSUTILS
+		if(gams2osil != NULL) delete gams2osil;
 		gams2osil = NULL;
 #endif 		
 		delete fileUtil;
 		fileUtil = NULL;
 	}//end local catch
-	
+
 }//end solve
 
-void getJobID(){
+void getJobID() {
 	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
-	try{
-		if(osoptions->serviceLocation != ""){
-			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			jobID = osagent->getJobID( osoptions->osol);
+	try {
+		if (osoptions->serviceLocation != "") {
+			osagent = new OSSolverAgent(osoptions->serviceLocation);
+			jobID = osagent->getJobID(osoptions->osol);
 			cout << jobID << endl;
 			delete osagent;
 			osagent = NULL;
-		}
-		else{
+		} else {
 			delete osagent;
 			osagent = NULL;
 			throw ErrorClass("please specify service location (url)");
 		}
-	}
-	catch(const ErrorClass& eclass){
+	} catch (const ErrorClass& eclass) {
 		FileUtil *fileUtil = NULL;
 		fileUtil = new FileUtil();
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else cout << osrl << endl;
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "")
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else
+			cout << osrl << endl;
 		delete osresult;
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
-	}	
+	}
 }//end getJobID
- 
 
-void knock(){
+
+void knock() {
 	std::string osplOutput = "";
 	OSSolverAgent* osagent = NULL;
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
-	try{
-		if(osoptions->serviceLocation != ""){
-			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			osplOutput = osagent->knock(osoptions->osplInput,  osoptions->osol);
-			if(osoptions->osplOutputFile != "") fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
-			else cout << osplOutput << endl;
+	try {
+		if (osoptions->serviceLocation != "") {
+			osagent = new OSSolverAgent(osoptions->serviceLocation);
+			osplOutput = osagent->knock(osoptions->osplInput, osoptions->osol);
+			if (osoptions->osplOutputFile != "")
+				fileUtil->writeFileFromString(osoptions->osplOutputFile,
+						osplOutput);
+			else
+				cout << osplOutput << endl;
 			delete osagent;
-		}
-		else{
+		} else {
 			delete osagent;
-			throw ErrorClass( "please specify service location (url)" );
+			throw ErrorClass("please specify service location (url)");
 		}
 		delete fileUtil;
 		fileUtil = NULL;
-	}
-	catch(const ErrorClass& eclass){
+	} catch (const ErrorClass& eclass) {
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else cout << osrl << endl;
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "")
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else
+			cout << osrl << endl;
 		delete osresult;
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
-	}	
+	}
 }//end knock
 
 
-void send(){
+void send() {
 	bool bSend = false;
 	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
 	// first get the jobID
-	std::string sOSoL = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
+	std::string
+			sOSoL =
+					"<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
 	string::size_type iStringpos;
-	try{
+	try {
 		// call a method here to get OSiL if we have an nl or mps file
-		if(osoptions->osil == ""){
+		if (osoptions->osil == "") {
 			//we better have an nl file present or mps file
-			if(osoptions->nlFile != ""){
+			if (osoptions->nlFile != "") {
 				getOSiLFromNl();
-			}
-			else{
-				if(osoptions->mpsFile != ""){
+			} else {
+				if (osoptions->mpsFile != "") {
 					getOSiLFromMps();
-				}
-				else{// send an empty osil string
+				} else {// send an empty osil string
 					osoptions->osil = "";
 				}
 			}
 		}
-		if(osoptions->serviceLocation != ""){
-			osagent = new OSSolverAgent( osoptions->serviceLocation );
+		if (osoptions->serviceLocation != "") {
+			osagent = new OSSolverAgent(osoptions->serviceLocation);
 			// check to see if there is an osol 
-			if(osoptions->osolFile == ""){
+			if (osoptions->osolFile == "") {
 				// get a jobID
-				jobID =  osagent->getJobID( sOSoL) ;
+				jobID = osagent->getJobID(sOSoL);
 				// insert the jobID into the default osol
 				iStringpos = sOSoL.find("</general");
-				if(iStringpos != std::string::npos) sOSoL.insert(iStringpos, "<jobID>" + jobID+ "</jobID>");
-			}
-			else {
+				if (iStringpos != std::string::npos)
+					sOSoL.insert(iStringpos, "<jobID>" + jobID + "</jobID>");
+			} else {
 				sOSoL = osoptions->osolFile;
 			}
 
 			bSend = osagent->send(osoptions->osil, sOSoL);
-			delete  osagent;
+			delete osagent;
+		} else {
+			delete osagent;
+			throw ErrorClass("please specify service location (url)");
 		}
-		else{
-			delete  osagent;
-			throw ErrorClass( "please specify service location (url)" );
-		}
-	}
-	catch(const ErrorClass& eclass){
+	} catch (const ErrorClass& eclass) {
 		FileUtil *fileUtil = NULL;
 		fileUtil = new FileUtil();
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else cout << osrl << endl;
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "")
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else
+			cout << osrl << endl;
 		delete osresult;
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
-	}	
+	}
 }//end send
 
-void retrieve(){
+void retrieve() {
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	std::string osrl = "";
 	OSSolverAgent* osagent = NULL;
-	try{
-		if(osoptions->serviceLocation != ""){
-			osagent = new OSSolverAgent( osoptions->serviceLocation );
+	try {
+		if (osoptions->serviceLocation != "") {
+			osagent = new OSSolverAgent(osoptions->serviceLocation);
 #ifdef DEBUG_CL_INTERFACE
-			std::cout << "HERE ARE THE OSOL OPTIONS " <<  osoptions->osol << std::endl;
+			std::cout << "HERE ARE THE OSOL OPTIONS " << osoptions->osol << std::endl;
 #endif
-			osrl = osagent->retrieve( osoptions->osol);
-			if(osoptions->osrlFile != "") {
-				fileUtil->writeFileFromString(osoptions->osrlFile, osrl); 
-				if(osoptions->browser != ""){
-					std::string str = osoptions->browser + "  " + osoptions->osrlFile ;
-					const char *ch = &str[ 0];
-					std::system( ch );
+			osrl = osagent->retrieve(osoptions->osol);
+			if (osoptions->osrlFile != "") {
+				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+				if (osoptions->browser != "") {
+					std::string str = osoptions->browser + "  "
+							+ osoptions->osrlFile;
+					const char *ch = &str[0];
+					std::system(ch);
 				}
-			}
-			else cout << osrl << endl;
+			} else
+				cout << osrl << endl;
 			delete osagent;
 			osagent = NULL;
-		}
-		else{
+		} else {
 			delete osagent;
 			osagent = NULL;
-			throw ErrorClass( "please specify service location (url)" );
+			throw ErrorClass("please specify service location (url)");
 		}
 		delete fileUtil;
 		fileUtil = NULL;
-	}
-	catch(const ErrorClass& eclass){
+	} catch (const ErrorClass& eclass) {
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else cout << osrl << endl;
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "")
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else
+			cout << osrl << endl;
 		delete osresult;
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
-	}	
+	}
 }//end retrieve
 
-void kill(){
+void kill() {
 	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 	std::string osplOutput = "";
 	OSSolverAgent* osagent = NULL;
-	try{
-		if(osoptions->serviceLocation != ""){
-			osagent = new OSSolverAgent( osoptions->serviceLocation );
-			osplOutput = osagent->kill( osoptions->osol);
-			if(osoptions->osplOutputFile != "") fileUtil->writeFileFromString(osoptions->osplOutputFile, osplOutput);
-			else cout << osplOutput << endl;
+	try {
+		if (osoptions->serviceLocation != "") {
+			osagent = new OSSolverAgent(osoptions->serviceLocation);
+			osplOutput = osagent->kill(osoptions->osol);
+			if (osoptions->osplOutputFile != "")
+				fileUtil->writeFileFromString(osoptions->osplOutputFile,
+						osplOutput);
+			else
+				cout << osplOutput << endl;
 			delete osagent;
 			osagent = NULL;
-		}
-		else{
+		} else {
 			delete osagent;
 			osagent = NULL;
-			throw ErrorClass( "please specify service location (url)" );
+			throw ErrorClass("please specify service location (url)");
 		}
 		delete fileUtil;
 		fileUtil = NULL;
-	}
-	catch(const ErrorClass& eclass){
+	} catch (const ErrorClass& eclass) {
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
 		osrlwriter = new OSrLWriter();
 		osresult = new OSResult();
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		std::string osrl = osrlwriter->writeOSrL( osresult);
-		if(osoptions->osrlFile != "") fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else cout << osrl << endl;
+		osresult->setGeneralMessage(eclass.errormsg);
+		osresult->setGeneralStatusType("error");
+		std::string osrl = osrlwriter->writeOSrL(osresult);
+		if (osoptions->osrlFile != "")
+			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+		else
+			cout << osrl << endl;
 		delete osresult;
 		osresult = NULL;
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
-	}	
+	}
 }//end kill
 
-void getOSiLFromNl(){
-	try{
-		#ifdef COIN_HAS_ASL
+void getOSiLFromNl() {
+	try {
+#ifdef COIN_HAS_ASL
 		OSnl2osil *nl2osil = NULL;
 		nl2osil = new OSnl2osil( osoptions->nlFile);
-		nl2osil->createOSInstance() ;
+		nl2osil->createOSInstance();
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		std::string osil;
-		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
+		osil = osilwriter->writeOSiL( nl2osil->osinstance);
 		osoptions->osil = osil;
 		delete nl2osil;
 		nl2osil = NULL;
 		delete osilwriter;
-		osilwriter = NULL; 	
-		#else
-		throw ErrorClass("trying to convert nl to osil without AMPL ASL configured");
-		#endif
+		osilwriter = NULL;
+#else
+		throw ErrorClass(
+				"trying to convert nl to osil without AMPL ASL configured");
+#endif
+	} catch (const ErrorClass& eclass) {
+		std::cout << eclass.errormsg << std::endl;
+		throw ErrorClass(eclass.errormsg);
 	}
-	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
-		throw ErrorClass( eclass.errormsg) ;
-	}	
 }//getOSiLFromNl
 
 
-
-void getOSiLFromGams(){
-	try{
-		#ifdef COIN_HAS_GAMSIO  
+void getOSiLFromGams() {
+	try {
+#ifdef COIN_HAS_GAMSIO  
 		OSgams2osil *gams2osil = NULL;
 		gams2osil = new OSgams2osil( osoptions->gamsControlFile);
-		gams2osil->createOSInstance() ;
+		gams2osil->createOSInstance();
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		std::string osil;
-		osil = osilwriter->writeOSiL(  gams2osil->osinstance) ;
+		osil = osilwriter->writeOSiL( gams2osil->osinstance);
 		osoptions->osil = osil;
 		delete gams2osil;
 		gams2osil = NULL;
 		delete osilwriter;
-		osilwriter = NULL; 	
-		#else
-		throw ErrorClass("trying to convert Gams control file to osil without GAMSUTILS configured");
-		#endif
+		osilwriter = NULL;
+#else
+		throw ErrorClass(
+				"trying to convert Gams control file to osil without GAMSUTILS configured");
+#endif
+	} catch (const ErrorClass& eclass) {
+		std::cout << eclass.errormsg << std::endl;
+		throw ErrorClass(eclass.errormsg);
 	}
-	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
-		throw ErrorClass( eclass.errormsg) ;
-	}	
 }//getOSiLFromGams
 
 
-void getOSiLFromMps(){
-	try{
+void getOSiLFromMps() {
+	try {
 		OSmps2osil *mps2osil = NULL;
-		mps2osil = new OSmps2osil( osoptions->mpsFile);
-		mps2osil->createOSInstance() ;
+		mps2osil = new OSmps2osil(osoptions->mpsFile);
+		mps2osil->createOSInstance();
 		OSiLWriter *osilwriter = NULL;
 		osilwriter = new OSiLWriter();
 		std::string osil;
-		osil = osilwriter->writeOSiL(  mps2osil->osinstance) ;
+		osil = osilwriter->writeOSiL(mps2osil->osinstance);
 		osoptions->osil = osil;
 		delete mps2osil;
 		mps2osil = NULL;
 		delete osilwriter;
-		osilwriter = NULL; 	
+		osilwriter = NULL;
+	} catch (const ErrorClass& eclass) {
+		std::cout << eclass.errormsg << std::endl;
+		throw ErrorClass(eclass.errormsg);
 	}
-	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg <<  std::endl;
-		throw ErrorClass( eclass.errormsg) ;
-	}	
-	
+
 }//getOSiLFromMps
 
 //string getServiceURI( std::string osol){
@@ -960,7 +1051,6 @@ void getOSiLFromMps(){
 //	}
 //	else return "";
 //}//getInstanceLocation
-
 
 
 //std::string getSolverName( std::string osol){
@@ -1007,8 +1097,6 @@ void getOSiLFromMps(){
 //}//getSolverName
 
 
-
-
 //std::string setSolverName( std::string osol, std::string solverName){
 //#ifdef DEBUG_CL_INTERFACE
 //	std::cout << "inside setSolverName" << std::endl;
@@ -1032,175 +1120,254 @@ void getOSiLFromMps(){
 //	return newOSoL;
 //}//setSolverName
 
-std::string get_help(){
+std::string get_help() {
 
 	std::ostringstream helpMsg;
 
-	
-	helpMsg << "************************* HELP *************************" << endl << endl;
-	helpMsg << "In this HELP file we assume that the solve service method is used and " << endl; 
-	helpMsg << "that we are solving problems locally, that is the solver is on the " << endl; 
-	helpMsg << "machine running this OSSolverService.  See Section 10.3 of the User\'s  " << endl;
-	helpMsg << "Manual for other service methods or calling a server remotely. " << endl; 
-	helpMsg << "The OSSolverService takes the parameters listed below.  " << endl;
-	helpMsg << "The order of the parameters is irrelevant.  Not all the parameters  " << endl;
-	helpMsg << "are required.  However, the location of an instance file is  " << endl;
-	helpMsg << "required when using the solve service method. The location of the " << endl;
+	helpMsg << "************************* HELP *************************"
+			<< endl << endl;
+	helpMsg
+			<< "In this HELP file we assume that the solve service method is used and "
+			<< endl;
+	helpMsg
+			<< "that we are solving problems locally, that is the solver is on the "
+			<< endl;
+	helpMsg
+			<< "machine running this OSSolverService.  See Section 10.3 of the User\'s  "
+			<< endl;
+	helpMsg
+			<< "Manual for other service methods or calling a server remotely. "
+			<< endl;
+	helpMsg << "The OSSolverService takes the parameters listed below.  "
+			<< endl;
+	helpMsg
+			<< "The order of the parameters is irrelevant.  Not all the parameters  "
+			<< endl;
+	helpMsg << "are required.  However, the location of an instance file is  "
+			<< endl;
+	helpMsg
+			<< "required when using the solve service method. The location of the "
+			<< endl;
 	helpMsg << "instance file is specified using the osil option. " << endl;
 
 	helpMsg << endl;
-	
-	helpMsg << "-osil xxx.osil this is the name of the file that contains the  " << endl;
-	helpMsg << "optimization instance in OSiL format.  This option may be  " << endl;
+
+	helpMsg
+			<< "-osil xxx.osil this is the name of the file that contains the  "
+			<< endl;
+	helpMsg << "optimization instance in OSiL format.  This option may be  "
+			<< endl;
 	helpMsg << "specified in the OSoL solver options file. " << endl;
-	
+
 	helpMsg << endl;
 
-	helpMsg << "-osol xxx.osol  this is the name of the file that contains the solver options.   " << endl;
-	helpMsg << "It is not necessary to specify this option. " << endl; 
-	
+	helpMsg
+			<< "-osol xxx.osol  this is the name of the file that contains the solver options.   "
+			<< endl;
+	helpMsg << "It is not necessary to specify this option. " << endl;
+
 	helpMsg << endl;
 
-	helpMsg << "-osrl xxx.osrl  this is the name of the file to which the solver solution is written.  " << endl; 
-	helpMsg << "It is not necessary to specify this option. If this option is not specified,  " << endl;
+	helpMsg
+			<< "-osrl xxx.osrl  this is the name of the file to which the solver solution is written.  "
+			<< endl;
+	helpMsg
+			<< "It is not necessary to specify this option. If this option is not specified,  "
+			<< endl;
 	helpMsg << "the result will be printed to standard out.  " << endl;
-	
-	helpMsg << endl;
-	
-	helpMsg << "-osplInput xxx.ospl  this is the name of an input file in the OS Process" << endl;
-	helpMsg <<  " Language (OSpL), this is used as input  to the knock method." << endl;
-	
+
 	helpMsg << endl;
 
-	helpMsg << "-osplOutput xxx.ospl this is the name of an output file in the  OS Process" << endl;
-	helpMsg <<  "Language (OSpL), this the output string from the knock and kill methods." << endl;
-	
+	helpMsg
+			<< "-osplInput xxx.ospl  this is the name of an input file in the OS Process"
+			<< endl;
+	helpMsg << " Language (OSpL), this is used as input  to the knock method."
+			<< endl;
+
 	helpMsg << endl;
 
-	helpMsg << "-serviceLocation url is the URL of the solver service.  " << endl;
-	helpMsg << "This is not required, and if not specified it is assumed that   " << endl;
+	helpMsg
+			<< "-osplOutput xxx.ospl this is the name of an output file in the  OS Process"
+			<< endl;
+	helpMsg
+			<< "Language (OSpL), this the output string from the knock and kill methods."
+			<< endl;
+
+	helpMsg << endl;
+
+	helpMsg << "-serviceLocation url is the URL of the solver service.  "
+			<< endl;
+	helpMsg
+			<< "This is not required, and if not specified it is assumed that   "
+			<< endl;
 	helpMsg << "the problem is solved locally.  " << endl;
-	
+
 	helpMsg << endl;
 
-	helpMsg << "-serviceMethod  methodName this is the method on the solver service to be invoked.  " << endl; 
-	helpMsg << "The options are  solve,  send,  kill,  knock,  getJobID, and retrieve.   " << endl;
-	helpMsg << "This option is not required, and the default value is  solve.  " << endl;
-	
+	helpMsg
+			<< "-serviceMethod  methodName this is the method on the solver service to be invoked.  "
+			<< endl;
+	helpMsg
+			<< "The options are  solve,  send,  kill,  knock,  getJobID, and retrieve.   "
+			<< endl;
+	helpMsg
+			<< "This option is not required, and the default value is  solve.  "
+			<< endl;
+
 	helpMsg << endl;
 
-	helpMsg << "-mps  xxx.mps  this is the name of the mps file if the problem instance  " << endl;
-	helpMsg << "is in mps format. The default file format is OSiL so this option is not required.  " << endl;
-	
+	helpMsg
+			<< "-mps  xxx.mps  this is the name of the mps file if the problem instance  "
+			<< endl;
+	helpMsg
+			<< "is in mps format. The default file format is OSiL so this option is not required.  "
+			<< endl;
+
 	helpMsg << endl;
 
-	helpMsg << "-nl  xxx.nl  this is the name of the AMPL nl file if the problem  " << endl;
-	helpMsg << "instance is in AMPL nl  format. The default file format is OSiL  " << endl;
+	helpMsg
+			<< "-nl  xxx.nl  this is the name of the AMPL nl file if the problem  "
+			<< endl;
+	helpMsg
+			<< "instance is in AMPL nl  format. The default file format is OSiL  "
+			<< endl;
 	helpMsg << "so this option is not required.  " << endl;
-	
+
 	helpMsg << endl;
 
-	helpMsg << "-solver  solverName  Possible values for default OS installation  " << endl;
-	helpMsg << "are  bonmin(COIN-OR Bonmin), couenne (COIN-OR Couenne), clp (COIN-OR Clp)," << endl;
-	helpMsg << "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt)," << endl;
-	helpMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported" << endl;
-	helpMsg << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi)," << endl;
-	helpMsg << "glpk (glpk through COIN-OR Osi), knitro (Knitro), and lindo (LINDO)." << endl;
+	helpMsg
+			<< "-solver  solverName  Possible values for default OS installation  "
+			<< endl;
+	helpMsg
+			<< "are  bonmin(COIN-OR Bonmin), couenne (COIN-OR Couenne), clp (COIN-OR Clp),"
+			<< endl;
+	helpMsg << "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt),"
+			<< endl;
+	helpMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported"
+			<< endl;
+	helpMsg
+			<< "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),"
+			<< endl;
+	helpMsg
+			<< "glpk (glpk through COIN-OR Osi), knitro (Knitro), and lindo (LINDO)."
+			<< endl;
 	helpMsg << "If no value is specified for this parameter," << endl;
-	helpMsg << "then cbc is the default value of this parameter." << endl; 
-	
+	helpMsg << "then cbc is the default value of this parameter." << endl;
+
 	helpMsg << endl;
 
-	helpMsg << "-browser  browserName this paramater is a path to the browser on the  " << endl; 
-	helpMsg << "local machine. If this optional parameter is specified then the  " << endl; 
-	helpMsg << "solver result in OSrL format is transformed using XSLT into  " << endl; 
-	helpMsg << "HTML and displayed in the browser.  " << endl; 
-	
+	helpMsg
+			<< "-browser  browserName this paramater is a path to the browser on the  "
+			<< endl;
+	helpMsg
+			<< "local machine. If this optional parameter is specified then the  "
+			<< endl;
+	helpMsg << "solver result in OSrL format is transformed using XSLT into  "
+			<< endl;
+	helpMsg << "HTML and displayed in the browser.  " << endl;
+
 	helpMsg << endl;
 
-	helpMsg << "-config pathToConfigureFile this parameter specifies a path on  " << endl; 
-	helpMsg << "the local machine to a text file containing values for the input parameters.  " << endl; 
-	helpMsg << "This is convenient for the user not wishing to constantly retype parameter values.  " << endl;
-	helpMsg << "This configure file can contain values for all of the other parameters. " << endl;
-	
+	helpMsg
+			<< "-config pathToConfigureFile this parameter specifies a path on  "
+			<< endl;
+	helpMsg
+			<< "the local machine to a text file containing values for the input parameters.  "
+			<< endl;
+	helpMsg
+			<< "This is convenient for the user not wishing to constantly retype parameter values.  "
+			<< endl;
+	helpMsg
+			<< "This configure file can contain values for all of the other parameters. "
+			<< endl;
+
 	helpMsg << endl;
 
-	helpMsg << "--version or -v get the current version of this executable  " << endl;
-	
+	helpMsg << "--version or -v get the current version of this executable  "
+			<< endl;
+
 	helpMsg << endl;
 
 	helpMsg << "--help or -h  to get this help file " << endl;
 
-	
 	helpMsg << endl;
-	
-	helpMsg << "Note: If you specify a configure file by using the -config option, you can  " << endl;
-	helpMsg << "override the values of the options in the configure file by putting them in   " << endl;
+
+	helpMsg
+			<< "Note: If you specify a configure file by using the -config option, you can  "
+			<< endl;
+	helpMsg
+			<< "override the values of the options in the configure file by putting them in   "
+			<< endl;
 	helpMsg << "at the command line. " << endl << endl;
-	
-	helpMsg << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf" << endl;
+
+	helpMsg
+			<< "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.0.pdf"
+			<< endl;
 	helpMsg << "for more detail on how to use the OS project. " << endl;
-	
+
 	helpMsg << endl;
-	helpMsg << "********************************************************" << endl << endl;
+	helpMsg << "********************************************************"
+			<< endl << endl;
 
 	return helpMsg.str();
 }// get help
 
 
-std::string get_version(){
+std::string get_version() {
 
 	std::ostringstream versionMsg;
 	versionMsg << "In order to find the version of this project " << endl;
 	versionMsg << "connect to the directory where you downloaded " << endl;
 	versionMsg << "and do: " << endl;
 	versionMsg << "svn info " << endl;
-	
-	
+
 	return versionMsg.str();
 }// get version
 
 
-
-std::string  buildSolver(std::string solverName, std::string osol, OSInstance *osinstance){
-	DefaultSolver *solverType  = NULL;
+std::string buildSolver(std::string solverName, std::string osol,
+		OSInstance *osinstance) {
+	DefaultSolver *solverType = NULL;
 	//std::cout << "SOLVER NAME = " << solverName << std::endl;
-	try{
+	try {
 		if (solverName == "") {// must determine the default solver
-			if(osinstance == NULL) throw ErrorClass("there was a NULL instance sent to buildSolver");
+			if (osinstance == NULL)
+				throw ErrorClass(
+						"there was a NULL instance sent to buildSolver");
 			//see if we have an integer program 
-			if(osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){//we have an integer program
-				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-				   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and integer
+			if (osinstance->getNumberOfIntegerVariables()
+					+ osinstance->getNumberOfBinaryVariables() > 0) {//we have an integer program
+				if ((osinstance->getNumberOfNonlinearExpressions() > 0)
+						|| (osinstance->getNumberOfQuadraticTerms() > 0)) { // we are nonlinear and integer
 					solverName = "bonmin";
-				}else{//we are linear integer 
+				} else {//we are linear integer 
 					solverName = "cbc";
 				}
-			}else{// we have a continuous problem
-				if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-				   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and continuous
+			} else {// we have a continuous problem
+				if ((osinstance->getNumberOfNonlinearExpressions() > 0)
+						|| (osinstance->getNumberOfQuadraticTerms() > 0)) { // we are nonlinear and continuous
 					solverName = "ipopt";
-				}else{//we have linear program 
+				} else {//we have linear program 
 					solverName = "clp";
 				}
 			}
 		}//end of if on solverName
-		
+
 		//now build the solver through its constructor
-		
+
 		//std::cout << "SOLVER NAME =  " << solverName << std::endl;
 
-		if( solverName.find( "ipopt") != std::string::npos) {
+		if (solverName.find("ipopt") != std::string::npos) {
 			// we are requesting the Ipopt solver
 			bool bIpoptIsPresent = false;
 #ifdef COIN_HAS_IPOPT
 			bIpoptIsPresent = true;
-			solverType = new IpoptSolver();	
+			solverType = new IpoptSolver();
 #endif
-			if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
-		}
-		else{
-			if( solverName.find( "lindo") != std::string::npos) {
+			if (bIpoptIsPresent == false)
+				throw ErrorClass("the Ipopt solver requested is not present");
+		} else {
+			if (solverName.find("lindo") != std::string::npos) {
 				// we are requesting the Lindo solver
 				bool bLindoIsPresent = false;
 #ifdef COIN_HAS_LINDO
@@ -1209,58 +1376,64 @@ std::string  buildSolver(std::string solverName, std::string osol, OSInstance *o
 				solverType = new LindoSolver();
 				std::cout << "DONE calling the LINDO Solver " << std::endl;
 #endif
-				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
-			}
-			else{ 
-				if( solverName.find( "clp") != std::string::npos){
+				if (bLindoIsPresent == false)
+					throw ErrorClass(
+							"the Lindo solver requested is not present");
+			} else {
+				if (solverName.find("clp") != std::string::npos) {
 					//std::cout << "NEWING SOLVER TYPE " << std::endl;
 					solverType = new CoinSolver();
 					//std::cout << "END NEWING SOLVER TYPE " << std::endl;
 					solverType->sSolverName = "clp";
-				}
-				else{
-					if( solverName.find( "cplex") != std::string::npos){
+				} else {
+					if (solverName.find("cplex") != std::string::npos) {
 						bool bCplexIsPresent = false;
 #ifdef COIN_HAS_CPX
 						bCplexIsPresent = true;
 						solverType = new CoinSolver();
 						solverType->sSolverName = "cplex";
 #endif
-						if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
-					}
-					else{
-						if( solverName.find( "glpk") != std::string::npos){
+						if (bCplexIsPresent == false)
+							throw ErrorClass(
+									"the Cplex solver requested is not present");
+					} else {
+						if (solverName.find("glpk") != std::string::npos) {
 							bool bGlpkIsPresent = false;
 #ifdef COIN_HAS_GLPK
 							bGlpkIsPresent = true;
 							solverType = new CoinSolver();
 							solverType->sSolverName = "glpk";
 #endif
-							if(bGlpkIsPresent == false) throw ErrorClass( "the GLPK solver requested is not present");
-						}
-						else{
-							if( solverName.find( "dylp") != std::string::npos){
-								bool bDyLPIsPresent  = false;
+							if (bGlpkIsPresent == false)
+								throw ErrorClass(
+										"the GLPK solver requested is not present");
+						} else {
+							if (solverName.find("dylp") != std::string::npos) {
+								bool bDyLPIsPresent = false;
 #ifdef COIN_HAS_DYLP
-								bDyLPIsPresent  = true;
+								bDyLPIsPresent = true;
 								solverType = new CoinSolver();
 								solverType->sSolverName = "dylp";
 								bDyLPIsPresent = true;
 #endif
-								if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
-							}
-							else{
-								if( solverName.find( "symphony") != std::string::npos){
-									bool bSymphonyIsPresent  = false;
+								if (bDyLPIsPresent == false)
+									throw ErrorClass(
+											"the DyLP solver requested is not present");
+							} else {
+								if (solverName.find("symphony")
+										!= std::string::npos) {
+									bool bSymphonyIsPresent = false;
 #ifdef COIN_HAS_SYMPHONY
-									bSymphonyIsPresent  = true;
+									bSymphonyIsPresent = true;
 									solverType = new CoinSolver();
 									solverType->sSolverName = "symphony";
 #endif
-									if(bSymphonyIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
-								}
-								else{
-									if( solverName.find( "knitro") != std::string::npos){
+									if (bSymphonyIsPresent == false)
+										throw ErrorClass(
+												"the SYMPHONY solver requested is not present");
+								} else {
+									if (solverName.find("knitro")
+											!= std::string::npos) {
 										bool bKnitroIsPresent = false;
 #ifdef COIN_HAS_KNITRO
 										bKnitroIsPresent = true;
@@ -1268,69 +1441,79 @@ std::string  buildSolver(std::string solverName, std::string osol, OSInstance *o
 										solverType = new KnitroSolver();
 										std::cout << "DONE calling the KNITRO Solver " << std::endl;
 #endif
-										if(bKnitroIsPresent == false) throw ErrorClass( "the Knitro solver requested is not present");		
-									}
-									else{ 
-										if( solverName.find( "vol") != std::string::npos){
+										if (bKnitroIsPresent == false)
+											throw ErrorClass(
+													"the Knitro solver requested is not present");
+									} else {
+										if (solverName.find("vol")
+												!= std::string::npos) {
 											bool bVolIsPresent = false;
 #ifdef COIN_HAS_VOL
 											bVolIsPresent = true;
 											solverType = new CoinSolver();
 											solverType->sSolverName = "vol";
 #endif
-											if(bVolIsPresent == false) throw ErrorClass( "the Vol solver requested is not present");		
-										}
-										else{
-											if( solverName.find( "bonmin") != std::string::npos){
+											if (bVolIsPresent == false)
+												throw ErrorClass(
+														"the Vol solver requested is not present");
+										} else {
+											if (solverName.find("bonmin")
+													!= std::string::npos) {
 												// we are requesting the Bonmin solver
 												bool bBonminIsPresent = false;
 #ifdef COIN_HAS_BONMIN
 												bBonminIsPresent = true;
-												solverType = new BonminSolver();	
+												solverType = new BonminSolver();
 #endif												
-												if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");		
-											}
-											else{
-												if( solverName.find( "couenne") != std::string::npos){
+												if (bBonminIsPresent == false)
+													throw ErrorClass(
+															"the Bonmin solver requested is not present");
+											} else {
+												if (solverName.find("couenne")
+														!= std::string::npos) {
 													// we are requesting the Couenne solver
-													bool bCouenneIsPresent = false;
+													bool bCouenneIsPresent =
+															false;
 #ifdef COIN_HAS_COUENNE
 													bCouenneIsPresent = true;
-													solverType = new CouenneSolver();	
+													solverType = new CouenneSolver();
 #endif												
-													if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");		
-												}
-												else{ //cbc is the default
-													solverType = new CoinSolver();
-													solverType->sSolverName = "cbc";
+													if (bCouenneIsPresent
+															== false)
+														throw ErrorClass(
+																"the Couenne solver requested is not present");
+												} else { //cbc is the default
+													solverType
+															= new CoinSolver();
+													solverType->sSolverName
+															= "cbc";
 												}
 											}
 										}
-									}									
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-		}		
-		
+		}
+
 		//std::cout << "SET SOLVER INSTANCE " << std::endl;
 		solverType->osinstance = osinstance;
 		solverType->osol = osol;
 		solverType->buildSolverInstance();
 		solverType->setSolverOptions();
-		solverType->solve()	;
-		std::string resultString = solverType->osrl ;
-		if(solverType != NULL) delete solverType;
+		solverType->solve();
+		std::string resultString = solverType->osrl;
+		if (solverType != NULL)
+			delete solverType;
 		solverType = NULL;
-		return  resultString ;
+		return resultString;
 
-	}
-	catch(const ErrorClass& eclass){
+	} catch (const ErrorClass& eclass) {
 		throw eclass;
 	}
-		
-	
+
 }//buildSolver
 

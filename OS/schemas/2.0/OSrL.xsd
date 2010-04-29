@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: version 2.0 (The entire schema except for osrl->optimization->osal)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
@@ -492,23 +492,34 @@
 	</xs:complexType>
 	<xs:complexType name="BasisStatus">
 		<xs:sequence>
-			<xs:element name="var" type="BasStatus" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="basic" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="atLower" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="atUpper" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="isFree" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="superBasic" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="unknown" type="BasisIndexes" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:simpleType name="BasStatusEnum">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="unknown"/>
-			<xs:enumeration value="basic"/>
-			<xs:enumeration value="atLower"/>
-			<xs:enumeration value="atUpper"/>
-			<xs:enumeration value="superBasic"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:complexType name="BasStatus">
+	<xs:complexType name="BasisIndexes">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the idx child elements must agree with numberOfIdx (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="idx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="BasisIndex">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
-			<xs:extension base="BasStatusEnum">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

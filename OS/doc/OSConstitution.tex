@@ -1,0 +1,68 @@
+\documentclass[11pt]{amsart}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\title{Optimization Services Constitution}
+\author{Horand Gassmann, Jun Ma, and Kipp Martin}
+\date{\today}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+%\section{}
+%\subsection{}
+
+
+
+\begin{itemize}
+
+
+\item[1.]  Separation of functionality. An instance representation should be just that, an instance representation. It should not be convoluted with solver options, solver results, etc.
+
+\item[2.]  Handle sparsity.  Most real-world (especially linear programs) are very sparse.  The instance format should be able to represent problems in a sparse format. 
+
+\item[3.]  Extensible  -- we should be able to extend the core to new optimization types and remain backward compatible. 
+
+\item[4.] Be parser friendly -- the model instance should be easy to parse. This is an advantage of XML, having both tags and data makes for easy parsing. 
+
+\item[5.]   Fit with modern information technology infrastructures -- this is an advantage of using XML, it is consistent with how data is being represented  in middleware software
+
+\item[6.] Have a natural in-memory representation  -- I am not sure how to word this properly. What I am driving at here  are the rules we  having governing how our OSiL, OSrL, and OSoL maps into in-memory objects. Each part of the OSiL  {\it must} be mapped into an in-memory object following our rules. 
+
+
+\item[7.]  Self contained with no ambiguity.  The model instance should be completely defined and there should  be no room for ambiguity. For example, in MPS format a max or min is not specified. This must be  avoided. 
+
+\item[8.]  Parsimonious. The representation should be as compact as possible while fully representing the instance in an unambiguous manner.  There should be no unnecessary redundancy. For example, we should avoid the MPS feature that a column name is repeated for each nonzero in a row.
+
+\item[9.]  The design philosophy of OSiL is to honor the original model constructs as closely as possible, but at the instance level.  It is critical to  allow the solver to "internally"  work with a  condition specified at the model level  rather than ``forcing'' the solver to  deal reformulation of the condition. Examples of this include special ordered sets, and semi continuous variables.  
+
+\item[10.] The representation method should be conducive to error checking. This is why we define a schema and use XML as it facilitates error checking. 
+
+
+
+\end{itemize}
+
+Categories:
+
+1) General philosophy
+
+2) Design principals 
+
+3) Guidelines / Implementation
+
+%%%%%%%%%%%%%%
+
+
+I read the OSConstitution.Before that I deliberately did not read it, that way, I am not limited or affected by seeing it and we can combine into a more comprehensive one.After I compared mine with yours, I see that it's good that mine is not that much overlapping with yours.You mainly concentrate on the design principle, while mine is more on the intent, goal and definition plus some design principles.I didn't write it in the tex file, because it's some informal ideas for the constitution.Here it is:-----------------Optimization Services (OS): Providing "service" to facilitate optimization, optimization as (web) 'service", goal is like utility "service", for open source, academic and commercial use(OS should be positioned like "a" [meaning one of several] computational infrastructure for Operations Research (OR) and a Operations Research (OR) Internet kind of thing).OSFramework is Platform independent (OS, programming language, hard ware system)OS Standards and OSP: OSP is a standard set of "XML" and "SOA" based "application" protocol for optimization computing,    Includes subprotocol of representation, communication, registration and discovery.OS System is the implementation of OS Framework with all the OS compatible OS components, can be a local system or a distributed system.OSComponents on the OS System: OS libraries, instances, model, modeling system, solvers, analyzers, simulation for optimization, communication agents and interface, repositotories, optimization servers/registries, preprocessors,OS Library is the set of OS compatible libraries that facilitate OS Components to be built on the OS SystemOS Customers: optimization users, applications and systems that involve optimization, modeler,  optimization framework, standard and system researchers and developers, optimization component researchers and developersOS Standardization: staging process is experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0OS License: any license (e.g. CPL) that follows the OS constitution. Derived research, development and business model, commercial or non-commercial, can be carried out and built upon OS.Design principles:No platform specific features.Should make effort to keep stability of standards.Cleanly built from scratch, with both the bottom-up and top-down approach, e.g. thinking about the whole picture while building a small components.By the whole picture, it means different current and future optimization application, types, and domains, in inter-disciplinary interaction between different OSP sub-protocols and OS components.Implementation/prototyping is suggested to be carried out before standard recommendation.Conservative approach should be taken when modifying existing standards. Each major version should be made backward compatible for that version.Separation of concern/functionalityExtensibility first, but with no scalability issueComputer interfacing first, but without sacrificing user experience, e.g. readability, honoring original model intent-----------------Here is an excerpt from the OS Thesis on OS definitions:Optimization Services is a framework that specifies how a set of cooperative classes and interfacesshould be designed and implemented in order to solve an optimization problem. The Optimization Servicesframework has the following properties:. It consists of multiple classes or components, each of which may provide an abstraction of someparticular optimization concept.. It defines how these abstractions work together to solve an optimization problem.. Its optimization-related components are reusable, which is what makes Optimization Services a goodframework, since it provides generic behavior that many different types of OR applications can use.. It organizes patterns at a higher level. By "pattern" we mean a tried and true way to deal with anoptimization process, from the whole context to the problem and to the final solution that appears overand over again. Thus the adopted patterns in the Optimization Services is an effective means ofcommunication between OR software components, therefore bringing order into chaos.There is a key difference between a library and a framework. A library contains functions or routinesthat an application or a user can invoke. A framework provides generic, cooperative components thatsoftware can follow and extend. The Optimization Services framework provides a foundation upon which OR applications, software, and librariesare built, whereas an OR library is a piece of software used by other OR applications.Jun
+
+
+%%%%%%%%%%%%%
+
+
+
+\end{document}  

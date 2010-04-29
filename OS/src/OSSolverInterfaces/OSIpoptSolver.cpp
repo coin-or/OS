@@ -539,7 +539,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 		// resultHeader infomration
 		if(osresult->setSolverInvoked( "COIN-OR Ipopt") != true)
 			throw ErrorClass("OSResult error: setSolverInvoked");
-        if(osresult->setServiceName( OS_RELEASE_MESSAGE) != true)
+        if(osresult->setServiceName( getVersionInfo()) != true)
 			throw ErrorClass("OSResult error: setServiceName");
 		if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
 			throw ErrorClass("OSResult error: setInstanceName");

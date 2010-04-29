@@ -4186,18 +4186,6 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OSnLNodeMatrixRowNumber">
-		<xs:annotation>
-			<xs:documentation>draft. </xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="OSnLNode">
-				<xs:sequence>
-					<xs:element ref="OSnLMNode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
 	<xs:complexType name="OSnLNodeMatrixLog">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -4249,6 +4237,18 @@
 			<xs:documentation>draft. </xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OSnLNodeMatrixRowNumber">
+		<xs:annotation>
+			<xs:documentation>draft. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="OSnLNode">
+				<xs:sequence>
+					<xs:element ref="OSnLMNode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:element name="matrixRowNumber" type="OSnLNodeMatrixRowNumber" substitutionGroup="OSnLNode">
 		<xs:annotation>
 			<xs:documentation>draft. </xs:documentation>
@@ -5125,4 +5125,304 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:simpleType name="NlNodeEnumeration">
+		<xs:annotation>
+			<xs:documentation>since version 2.0.0. </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="plus"/>
+			<xs:enumeration value="sum"/>
+			<xs:enumeration value="minus"/>
+			<xs:enumeration value="negate"/>
+			<xs:enumeration value="times"/>
+			<xs:enumeration value="divide"/>
+			<xs:enumeration value="quotient"/>
+			<xs:enumeration value="rem"/>
+			<xs:enumeration value="power"/>
+			<xs:enumeration value="product"/>
+			<xs:enumeration value="abs"/>
+			<xs:enumeration value="floor"/>
+			<xs:enumeration value="ceiling"/>
+			<xs:enumeration value="percent"/>
+			<xs:enumeration value="square"/>
+			<xs:enumeration value="squareRoot"/>
+			<xs:enumeration value="ln"/>
+			<xs:enumeration value="log"/>
+			<xs:enumeration value="log10"/>
+			<xs:enumeration value="exp"/>
+			<xs:enumeration value="factorial"/>
+			<xs:enumeration value="combination"/>
+			<xs:enumeration value="permutation"/>
+			<xs:enumeration value="gcd"/>
+			<xs:enumeration value="lcm"/>
+			<xs:enumeration value="roundToInt"/>
+			<xs:enumeration value="round"/>
+			<xs:enumeration value="truncate"/>
+			<xs:enumeration value="sign"/>
+			<xs:enumeration value="rand"/>
+			<xs:enumeration value="gammaFn"/>
+			<xs:enumeration value="gammaLn"/>
+			<xs:enumeration value="sin"/>
+			<xs:enumeration value="cos"/>
+			<xs:enumeration value="tan"/>
+			<xs:enumeration value="arcsin"/>
+			<xs:enumeration value="arccos"/>
+			<xs:enumeration value="arctan"/>
+			<xs:enumeration value="sinh"/>
+			<xs:enumeration value="cosh"/>
+			<xs:enumeration value="tanh"/>
+			<xs:enumeration value="arcsinh"/>
+			<xs:enumeration value="arccosh"/>
+			<xs:enumeration value="arctanh"/>
+			<xs:enumeration value="cot"/>
+			<xs:enumeration value="coth"/>
+			<xs:enumeration value="arccot"/>
+			<xs:enumeration value="arccoth"/>
+			<xs:enumeration value="sec"/>
+			<xs:enumeration value="sech"/>
+			<xs:enumeration value="arcsec"/>
+			<xs:enumeration value="arcsech"/>
+			<xs:enumeration value="csc"/>
+			<xs:enumeration value="csch"/>
+			<xs:enumeration value="arccsc"/>
+			<xs:enumeration value="arcscsch"/>
+			<xs:enumeration value="mean"/>
+			<xs:enumeration value="geometricMean"/>
+			<xs:enumeration value="harmonicMean"/>
+			<xs:enumeration value="trimMean"/>
+			<xs:enumeration value="count"/>
+			<xs:enumeration value="median"/>
+			<xs:enumeration value="firstQuartile"/>
+			<xs:enumeration value="thirdQuartile"/>
+			<xs:enumeration value="mode"/>
+			<xs:enumeration value="min"/>
+			<xs:enumeration value="max"/>
+			<xs:enumeration value="percentile"/>
+			<xs:enumeration value="large"/>
+			<xs:enumeration value="small"/>
+			<xs:enumeration value="range"/>
+			<xs:enumeration value="interQuantileRange"/>
+			<xs:enumeration value="absdev"/>
+			<xs:enumeration value="stddev"/>
+			<xs:enumeration value="variance"/>
+			<xs:enumeration value="cv"/>
+			<xs:enumeration value="skewness"/>
+			<xs:enumeration value="kurtosis"/>
+			<xs:enumeration value="covariance"/>
+			<xs:enumeration value="correlation"/>
+			<xs:enumeration value="pearsonCorrelation"/>
+			<xs:enumeration value="rankCorrelation"/>
+			<xs:enumeration value="autoCorrelation1"/>
+			<xs:enumeration value="autoCorrelation"/>
+			<xs:enumeration value="autoCorrelation"/>
+			<xs:enumeration value="npv"/>
+			<xs:enumeration value="irr"/>
+			<xs:enumeration value="erf"/>
+			<xs:enumeration value="discreteUniformDist"/>
+			<xs:enumeration value="discreteUniformCum"/>
+			<xs:enumeration value="discreteUniformInv"/>
+			<xs:enumeration value="bernoulliDist"/>
+			<xs:enumeration value="bernoulliCum"/>
+			<xs:enumeration value="bernoulliInv"/>
+			<xs:enumeration value="binomialDist"/>
+			<xs:enumeration value="binomialCum"/>
+			<xs:enumeration value="binomialInv"/>
+			<xs:enumeration value="multinomialDist"/>
+			<xs:enumeration value="multinomialCum"/>
+			<xs:enumeration value="multinomialInv"/>
+			<xs:enumeration value="hypergeometricDist"/>
+			<xs:enumeration value="hypergeometricCum"/>
+			<xs:enumeration value="hypergeometricInv"/>
+			<xs:enumeration value="poissonDist"/>
+			<xs:enumeration value="poissonCum"/>
+			<xs:enumeration value="poissonInv"/>
+			<xs:enumeration value="geometricDist"/>
+			<xs:enumeration value="geometricCum"/>
+			<xs:enumeration value="geometricInv"/>
+			<xs:enumeration value="negativeBinomialDist"/>
+			<xs:enumeration value="negativeBinomialCum"/>
+			<xs:enumeration value="negativeBinomialInv"/>
+			<xs:enumeration value="uniformDist"/>
+			<xs:enumeration value="uniformCum"/>
+			<xs:enumeration value="uniformInv"/>
+			<xs:enumeration value="normalDist"/>
+			<xs:enumeration value="normalCum"/>
+			<xs:enumeration value="normalInv"/>
+			<xs:enumeration value="stdNormalDist"/>
+			<xs:enumeration value="stdNormalCum"/>
+			<xs:enumeration value="stdNormalInv"/>
+			<xs:enumeration value="bivariateNormalDist"/>
+			<xs:enumeration value="bivariateNormalCum"/>
+			<xs:enumeration value="exponentialDist"/>
+			<xs:enumeration value="exponentialCum"/>
+			<xs:enumeration value="exponentialInv"/>
+			<xs:enumeration value="weibullDist"/>
+			<xs:enumeration value="weibullCum"/>
+			<xs:enumeration value="weibullInv"/>
+			<xs:enumeration value="erlangDist"/>
+			<xs:enumeration value="erlangCum"/>
+			<xs:enumeration value="erlangInv"/>
+			<xs:enumeration value="gammaDist"/>
+			<xs:enumeration value="gammaCum"/>
+			<xs:enumeration value="gammaInv"/>
+			<xs:enumeration value="betaDist"/>
+			<xs:enumeration value="betaCum"/>
+			<xs:enumeration value="betaInv"/>
+			<xs:enumeration value="betaGeneralDist"/>
+			<xs:enumeration value="betaCumGeneral"/>
+			<xs:enumeration value="betaGeneralInv"/>
+			<xs:enumeration value="lognormalDist"/>
+			<xs:enumeration value="lognormalCum"/>
+			<xs:enumeration value="lognormalInv"/>
+			<xs:enumeration value="cauchyDist"/>
+			<xs:enumeration value="cauchyCum"/>
+			<xs:enumeration value="cauchyInv"/>
+			<xs:enumeration value="tDist"/>
+			<xs:enumeration value="tCum"/>
+			<xs:enumeration value="tInv"/>
+			<xs:enumeration value="chiSquareDist"/>
+			<xs:enumeration value="chiSquareCum"/>
+			<xs:enumeration value="chiSquareInv"/>
+			<xs:enumeration value="fDist"/>
+			<xs:enumeration value="fCum"/>
+			<xs:enumeration value="fInv"/>
+			<xs:enumeration value="logisticDist"/>
+			<xs:enumeration value="logisticCum"/>
+			<xs:enumeration value="logisticInv"/>
+			<xs:enumeration value="logLogisticDist"/>
+			<xs:enumeration value="logLogisticCum"/>
+			<xs:enumeration value="logLogisticInv"/>
+			<xs:enumeration value="logarithmicDist"/>
+			<xs:enumeration value="logarithmicCum"/>
+			<xs:enumeration value="logarithmicInv"/>
+			<xs:enumeration value="paretoDist"/>
+			<xs:enumeration value="paretoCum"/>
+			<xs:enumeration value="paretoInv"/>
+			<xs:enumeration value="rayleighDist"/>
+			<xs:enumeration value="rayleighCum"/>
+			<xs:enumeration value="rayleighInv"/>
+			<xs:enumeration value="pertDist"/>
+			<xs:enumeration value="pertCum"/>
+			<xs:enumeration value="pertInv"/>
+			<xs:enumeration value="triangularDist"/>
+			<xs:enumeration value="triangularCum"/>
+			<xs:enumeration value="triangularInv"/>
+			<xs:enumeration value="unitNormalLinearLoss"/>
+			<xs:enumeration value="number"/>
+			<xs:enumeration value="string"/>
+			<xs:enumeration value="identifier"/>
+			<xs:enumeration value="PI"/>
+			<xs:enumeration value="E"/>
+			<xs:enumeration value="INF"/>
+			<xs:enumeration value="EPS"/>
+			<xs:enumeration value="TRUE"/>
+			<xs:enumeration value="FALSE"/>
+			<xs:enumeration value="EULERGAMMA"/>
+			<xs:enumeration value="NAN"/>
+			<xs:enumeration value="variable"/>
+			<xs:enumeration value="objective"/>
+			<xs:enumeration value="constraint"/>
+			<xs:enumeration value="parameter"/>
+			<xs:enumeration value="randomVariable"/>
+			<xs:enumeration value="if"/>
+			<xs:enumeration value="lt"/>
+			<xs:enumeration value="leq"/>
+			<xs:enumeration value="gt"/>
+			<xs:enumeration value="geq"/>
+			<xs:enumeration value="eq"/>
+			<xs:enumeration value="neq"/>
+			<xs:enumeration value="and"/>
+			<xs:enumeration value="or"/>
+			<xs:enumeration value="xor"/>
+			<xs:enumeration value="implies"/>
+			<xs:enumeration value="not"/>
+			<xs:enumeration value="forAll"/>
+			<xs:enumeration value="exists"/>
+			<xs:enumeration value="logicCount"/>
+			<xs:enumeration value="allDiff"/>
+			<xs:enumeration value="atMost"/>
+			<xs:enumeration value="atLeast"/>
+			<xs:enumeration value="exactly"/>
+			<xs:enumeration value="inSet"/>
+			<xs:enumeration value="inRealSet"/>
+			<xs:enumeration value="inPositiveRealSet"/>
+			<xs:enumeration value="inNonnegativeRealSet"/>
+			<xs:enumeration value="inIntegerSet"/>
+			<xs:enumeration value="inPositiveIntegerSet"/>
+			<xs:enumeration value="inNonnegativeIntegerSet"/>
+			<xs:enumeration value="matrixVariable"/>
+			<xs:enumeration value="matrix"/>
+			<xs:enumeration value="matrixBlock"/>
+			<xs:enumeration value="matrixIdentical"/>
+			<xs:enumeration value="matrixPlus"/>
+			<xs:enumeration value="matrixScalarPlus"/>
+			<xs:enumeration value="matrixSum"/>
+			<xs:enumeration value="matrixMinus"/>
+			<xs:enumeration value="matrixScalarMinus"/>
+			<xs:enumeration value="matrixNegate"/>
+			<xs:enumeration value="matrixTimes"/>
+			<xs:enumeration value="matrixDotTimes"/>
+			<xs:enumeration value="matrixScalarTimes"/>
+			<xs:enumeration value="matrixProduct"/>
+			<xs:enumeration value="matrixRightDivide"/>
+			<xs:enumeration value="matrixLeftDivide"/>
+			<xs:enumeration value="matrixDotRightDivide"/>
+			<xs:enumeration value="matrixDotLeftDivide"/>
+			<xs:enumeration value="matrixScalarDivide"/>
+			<xs:enumeration value="matrixPower"/>
+			<xs:enumeration value="matrixDotPower"/>
+			<xs:enumeration value="matrixLog"/>
+			<xs:enumeration value="matrixExp"/>
+			<xs:enumeration value="matrixSquareRoot"/>
+			<xs:enumeration value="matrixRowNumber"/>
+			<xs:enumeration value="matrixColumnNumber"/>
+			<xs:enumeration value="matrixValueNumber"/>
+			<xs:enumeration value="matrixElementAt"/>
+			<xs:enumeration value="matrixSubmatrixAt"/>
+			<xs:enumeration value="matrixConcatenate"/>
+			<xs:enumeration value="matrixUpperTriangle"/>
+			<xs:enumeration value="matrixLowerTriangle"/>
+			<xs:enumeration value="matrixDiagonal"/>
+			<xs:enumeration value="matrixRank"/>
+			<xs:enumeration value="matrixDeterminant"/>
+			<xs:enumeration value="matrixInverse"/>
+			<xs:enumeration value="matrixTrace"/>
+			<xs:enumeration value="matrixTranspose"/>
+			<xs:enumeration value="matrixDotTranspose"/>
+			<xs:enumeration value="matrixSingular"/>
+			<xs:enumeration value="matrixFullRank"/>
+			<xs:enumeration value="matrixPositiveDefinite"/>
+			<xs:enumeration value="matrixPositiveSemidefinite"/>
+			<xs:enumeration value="matrixNegativeDefinite"/>
+			<xs:enumeration value="matrixNegativeSemidefinite"/>
+			<xs:enumeration value="matrixIndefinite"/>
+			<xs:enumeration value="matrixEigenValues"/>
+			<xs:enumeration value="matrixEigenVectors"/>
+			<xs:enumeration value="matrixNthLargestEigenValue"/>
+			<xs:enumeration value="matrixLargestEigenValue"/>
+			<xs:enumeration value="matrixNorm"/>
+			<xs:enumeration value="matrixFrobeniusNorm"/>
+			<xs:enumeration value="matrixCondition"/>
+			<xs:enumeration value="matrixFrobeniusNormCondition"/>
+			<xs:enumeration value="matrixNullSpace"/>
+			<xs:enumeration value="matrixRangeSpace"/>
+			<xs:enumeration value="matrixIdentity"/>
+			<xs:enumeration value="matrixReducedRowEchelon"/>
+			<xs:enumeration value="matrixSubspaceAngle"/>
+			<xs:enumeration value="matrixCholeskyDecomposition"/>
+			<xs:enumeration value="quadratic"/>
+			<xs:enumeration value="qTerm"/>
+			<xs:enumeration value="sim"/>
+			<xs:enumeration value="simInput"/>
+			<xs:enumeration value="simOutput"/>
+			<xs:enumeration value="userF"/>
+			<xs:enumeration value="arg"/>
+			<xs:enumeration value="xPath"/>
+			<xs:enumeration value="xPathIndex"/>
+			<xs:enumeration value="nodeRef"/>
+			<xs:enumeration value="arcRef"/>
+			<xs:enumeration value="complements"/>
+			<xs:enumeration value="postfix"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>

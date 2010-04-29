@@ -155,7 +155,6 @@ using std::endl;
 //
 
 OSnLNode::OSnLNode():
-	snodeName(""),
 	m_mChildren(NULL),
 	m_dFunctionValue( OSNAN)
 	//inumberOfChildren( 0)
@@ -248,16 +247,16 @@ std::string OSnLNode::getTokenNumber(){
 }//getTokenNumber
 
 
-std::string OSnLNode::getTokenName(){
-	ostringstream outStr;
-	outStr << this->snodeName;
-	if(inodeType == -1){
-		outStr << "[";
-		outStr << inumberOfChildren ;
-		outStr << "]";
-	}
-	return outStr.str();
-}//getTokenNumber
+//std::string OSnLNode::getTokenName(){
+//	ostringstream outStr;
+//	outStr << this->snodeName;
+//	if(inodeType == -1){
+//		outStr << "[";
+//		outStr << inumberOfChildren ;
+//		outStr << "]";
+//	}
+//	return outStr.str();
+//}//getTokenNumber
 
 
 /*
@@ -366,9 +365,9 @@ OSnLNode* OSnLNode::getOSnLNodeFromToken(std::string sToken){
 std::string OSnLNode::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
-	outStr << snodeName;
+	outStr << this->getTokenName();
 #ifdef DEBUGOSNLNODE
-	cout << "nonlinear node " << snodeName << endl;
+	cout << "nonlinear node " << this->getTokenName() << endl;
 #endif
 	if(inumberOfChildren > 0) {
 		outStr << ">";
@@ -383,7 +382,7 @@ std::string OSnLNode::getNonlinearExpressionInXML(){
 	}
 	if(inumberOfChildren > 0) {
 		outStr << "</" ;
-		outStr << snodeName ;
+		outStr << this->getTokenName() ;
 		outStr << ">" ;
 	}
 	return outStr.str();
@@ -404,7 +403,7 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx){
 // OSnLNodePlus Methods	
 OSnLNodePlus::OSnLNodePlus()
 {
-	snodeName = "plus";
+
 	inumberOfChildren = 2;
 	m_mChildren = new OSnLNode*[2];
 	m_mChildren[ 0] = NULL;
@@ -412,6 +411,7 @@ OSnLNodePlus::OSnLNodePlus()
 	inodeInt = 1001;
 	inodeType = 2;
 }//end OSnLNodePlus
+
 
 OSnLNodePlus::~OSnLNodePlus(){
 	#ifdef DEBUGOSNLNODE
@@ -424,6 +424,10 @@ OSnLNodePlus::~OSnLNodePlus(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodePlus
+
+std::string OSnLNodePlus::getTokenName(){
+	return "plus";
+}// end OSnLNodePlus::getTokenName()
 
 
 double OSnLNodePlus::calculateFunction(double *x){
@@ -449,7 +453,6 @@ OSnLNode* OSnLNodePlus::cloneOSnLNode(){
 OSnLNodeSum::OSnLNodeSum()
 {
 	inumberOfChildren = 0;
-	snodeName = "sum";
 	inodeInt = 1002;
 	inodeType = -1;
 }//end OSnLNodeSum
@@ -467,6 +470,10 @@ OSnLNodeSum::~OSnLNodeSum(){
 	//m_mChildren = NULL; 
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSum
+
+std::string OSnLNodeSum::getTokenName(){
+	return "sum";
+}// end OSnLNodeSum::getTokenName()
 
 double OSnLNodeSum::calculateFunction(double *x){
 	m_dFunctionValue = 0.0;  
@@ -501,7 +508,6 @@ OSnLNode* OSnLNodeSum::cloneOSnLNode(){
 OSnLNodeAllDiff::OSnLNodeAllDiff()
 {
 	inumberOfChildren = 0;
-	snodeName = "allDiff";
 	inodeInt = 7016;
 	inodeType = -1;
 }//end OSnLNodeAllDiff
@@ -520,6 +526,10 @@ OSnLNodeAllDiff::~OSnLNodeAllDiff(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeAllDiff
+
+std::string OSnLNodeAllDiff::getTokenName(){
+	return "allDiff";
+}// end OSnLNodeAllDiff::getTokenName(
 
 
 double OSnLNodeAllDiff::calculateFunction(double *x){
@@ -564,7 +574,6 @@ OSnLNode* OSnLNodeAllDiff::cloneOSnLNode(){
 OSnLNodeMax::OSnLNodeMax()
 {
 	inumberOfChildren = 0;
-	snodeName = "max";
 	inodeInt = 4011;
 	inodeType = -1;
 }//end OSnLNodeMax
@@ -595,6 +604,10 @@ double OSnLNodeMax::calculateFunction(double *x){
 	return m_dFunctionValue;
 }// end OSnLNodeMax::calculate
 
+std::string OSnLNodeMax::getTokenName(){
+	return "max";
+}// end OSnLNodeMax::getTokenName(
+
 
 ADdouble OSnLNodeMax::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
 	//if not support in AD, throw an exception
@@ -622,7 +635,6 @@ OSnLNode* OSnLNodeMax::cloneOSnLNode(){
 OSnLNodeMin::OSnLNodeMin()
 {
 	inumberOfChildren = 0;
-	snodeName = "min";
 	inodeInt = 4010;
 	inodeType = -1;
 }//end OSnLNodeMin
@@ -640,6 +652,11 @@ OSnLNodeMin::~OSnLNodeMin(){
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 	//m_mChildren = NULL;
 }//end ~OSnLNodeMin
+
+
+std::string OSnLNodeMin::getTokenName(){
+	return "min";
+}// end OSnLNodeMin::getTokenName(
 
 double OSnLNodeMin::calculateFunction(double *x){
 	m_dFunctionValue = m_mChildren[0]->calculateFunction(x);
@@ -683,7 +700,6 @@ OSnLNodeMinus::OSnLNodeMinus()
 	m_mChildren = new OSnLNode*[2];
 	m_mChildren[ 0] = NULL;
 	m_mChildren[ 1] = NULL;
-	snodeName = "minus";
 	inodeInt = 1003;
 	inodeType = 2;
 }//end OSnLNodeMinus
@@ -700,6 +716,10 @@ OSnLNodeMinus::~OSnLNodeMinus(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeMinus
+
+std::string OSnLNodeMinus::getTokenName(){
+	return "minus";
+}// end OSnLNodeSum::getTokenName(
 
 double OSnLNodeMinus::calculateFunction(double *x){
 	m_dFunctionValue =  m_mChildren[0]->calculateFunction( x) - m_mChildren[1]->calculateFunction( x);
@@ -730,7 +750,6 @@ OSnLNodeNegate::OSnLNodeNegate()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "negate";
 	inodeInt = 1004;
 	inodeType = 1;
 }//end OSnLNodeNegate
@@ -747,6 +766,10 @@ OSnLNodeNegate::~OSnLNodeNegate(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeNegate
+
+std::string OSnLNodeNegate::getTokenName(){
+	return "negate";
+}// end OSnLNodeNegate::getTokenName(
 
 double OSnLNodeNegate::calculateFunction(double *x){
 	m_dFunctionValue =  -m_mChildren[0]->calculateFunction( x) ;
@@ -774,7 +797,6 @@ OSnLNodeTimes::OSnLNodeTimes()
 	m_mChildren = new OSnLNode*[2];
 	m_mChildren[ 0] = NULL;
 	m_mChildren[ 1] = NULL;
-	snodeName = "times";
 	inodeInt = 1005;
 	inodeType = 2;
 }//end OSnLNodeTimes
@@ -791,6 +813,10 @@ OSnLNodeTimes::~OSnLNodeTimes(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeTimes
+
+std::string OSnLNodeTimes::getTokenName(){
+	return "times";
+}// end OSnLNodeTimes::getTokenName(
 
 double OSnLNodeTimes::calculateFunction(double *x){
 	m_dFunctionValue = m_mChildren[0]->calculateFunction( x)*m_mChildren[1]->calculateFunction( x);
@@ -818,7 +844,6 @@ OSnLNodeDivide::OSnLNodeDivide()
 	m_mChildren = new OSnLNode*[2];
 	m_mChildren[ 0] = NULL;
 	m_mChildren[ 1] = NULL;
-	snodeName = "divide";
 	inodeInt = 1006;
 	inodeType = 2;
 }//end OSnLNodeDivide
@@ -835,6 +860,10 @@ OSnLNodeDivide::~OSnLNodeDivide(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeDivide
+
+std::string OSnLNodeDivide::getTokenName(){
+	return "divide";
+}// end OSnLNodeDivide::getTokenName(
 
 double OSnLNodeDivide::calculateFunction(double *x){
 	// kipp throw error if we divide by 0
@@ -864,7 +893,6 @@ OSnLNodePower::OSnLNodePower()
 	m_mChildren = new OSnLNode*[2];
 	m_mChildren[ 0] = NULL;
 	m_mChildren[ 1] = NULL;
-	snodeName = "power";
 	inodeInt = 1009;
 	inodeType = 2;
 }//end OSnLNodePower
@@ -881,6 +909,10 @@ OSnLNodePower::~OSnLNodePower(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodePower 
+
+std::string OSnLNodePower::getTokenName(){
+	return "power";
+}// end OSnLNodePower::getTokenName(
 
 double OSnLNodePower::calculateFunction(double *x){
 	// kipp throw error if operation not defined
@@ -930,7 +962,6 @@ OSnLNode* OSnLNodePower::cloneOSnLNode(){
 OSnLNodeProduct::OSnLNodeProduct()
 {
 	inumberOfChildren = 0;
-	snodeName = "product";
 	inodeInt = 1010;
 	inodeType = -1;
 }//end OSnLNodeProduct
@@ -949,6 +980,10 @@ OSnLNodeProduct::~OSnLNodeProduct(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeProduct
+
+std::string OSnLNodeProduct::getTokenName(){
+	return "product";
+}// end OSnLNodeProduct::getTokenName(
 
 double OSnLNodeProduct::calculateFunction(double *x){
 	// kipp throw error if operation not defined
@@ -987,7 +1022,6 @@ OSnLNodeLn::OSnLNodeLn()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "ln";
 	inodeInt = 2007;
 	inodeType = 1;
 }//end OSnLNodeLn
@@ -1004,6 +1038,10 @@ OSnLNodeLn::~OSnLNodeLn(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeLn
+
+std::string OSnLNodeLn::getTokenName(){
+	return "ln";
+}// end OSnLNodeLn::getTokenName(
 
 double OSnLNodeLn::calculateFunction(double *x){
 	m_dFunctionValue = log(m_mChildren[0]->calculateFunction( x) );
@@ -1033,7 +1071,6 @@ OSnLNodeSqrt::OSnLNodeSqrt()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "squareRoot";
 	inodeInt = 2006;
 	inodeType = 1;
 }//end OSnLNodeSqrt
@@ -1050,6 +1087,10 @@ OSnLNodeSqrt::~OSnLNodeSqrt(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSqrt
+
+std::string OSnLNodeSqrt::getTokenName(){
+	return "sqrt";
+}// end OSnLNodeSqrt::getTokenName(
 
 double OSnLNodeSqrt::calculateFunction(double *x){
 	m_dFunctionValue = sqrt(m_mChildren[0]->calculateFunction( x) );
@@ -1078,7 +1119,6 @@ OSnLNodeSquare::OSnLNodeSquare()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "square";
 	inodeInt = 2005;
 	inodeType = 1;
 }//end OSnLNodeSquare
@@ -1095,6 +1135,10 @@ OSnLNodeSquare::~OSnLNodeSquare(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSquare
+
+std::string OSnLNodeSquare::getTokenName(){
+	return "square";
+}// end OSnLNodeSquare::getTokenName(
 
 double OSnLNodeSquare::calculateFunction(double *x){
 	m_dFunctionValue = pow( (m_mChildren[0]->calculateFunction( x) ), 2);
@@ -1121,7 +1165,6 @@ OSnLNodeSin::OSnLNodeSin()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "sin";
 	inodeInt = 3001;
 	inodeType = 1;
 }//end OSnLNodeSin
@@ -1138,6 +1181,10 @@ OSnLNodeSin::~OSnLNodeSin(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeSin
+
+std::string OSnLNodeSin::getTokenName(){
+	return "sin";
+}// end OSnLNodeSin::getTokenName(
 
 double OSnLNodeSin::calculateFunction(double *x){
 	m_dFunctionValue = sin(m_mChildren[0]->calculateFunction( x) );
@@ -1165,7 +1212,6 @@ OSnLNodeCos::OSnLNodeCos()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "cos";
 	inodeInt = 3002;
 	inodeType = 1;
 }//end OSnLNodeCos
@@ -1182,6 +1228,10 @@ OSnLNodeCos::~OSnLNodeCos(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeCos
+
+std::string OSnLNodeCos::getTokenName(){
+	return "cos";
+}// end OSnLNodeCos::getTokenName(
 
 double OSnLNodeCos::calculateFunction(double *x){
 	m_dFunctionValue = cos(m_mChildren[0]->calculateFunction( x) );
@@ -1211,7 +1261,6 @@ OSnLNodeExp::OSnLNodeExp()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "exp";
 	inodeInt = 2010;
 	inodeType = 1;
 }//end OSnLNodeExp
@@ -1228,6 +1277,10 @@ OSnLNodeExp::~OSnLNodeExp(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeExp
+
+std::string OSnLNodeExp::getTokenName(){
+	return "exp";
+}// end OSnLNodeExp::getTokenName(
 
 double OSnLNodeExp::calculateFunction(double *x){
 	m_dFunctionValue = exp(m_mChildren[0]->calculateFunction( x) );
@@ -1257,7 +1310,6 @@ OSnLNodeAbs::OSnLNodeAbs()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "abs";
 	inodeInt = 2001;
 	inodeType = 1;
 }//end OSnLNodeLn
@@ -1274,6 +1326,10 @@ OSnLNodeAbs::~OSnLNodeAbs(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeAbs
+
+std::string OSnLNodeAbs::getTokenName(){
+	return "abs";
+}// end OSnLNodeAbs::getTokenName(
 
 double OSnLNodeAbs::calculateFunction(double *x){
 	m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
@@ -1304,7 +1360,6 @@ OSnLNodeErf::OSnLNodeErf()
 	inumberOfChildren = 1;
 	m_mChildren = new OSnLNode*[1];
 	m_mChildren[ 0] = NULL;
-	snodeName = "erf";
 	inodeInt = 4625;
 	inodeType = 1;
 }//end OSnLNodeErf
@@ -1321,6 +1376,10 @@ OSnLNodeErf::~OSnLNodeErf(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeErf
+
+std::string OSnLNodeErf::getTokenName(){
+	return "erf";
+}// end OSnLNodeErf::getTokenName(
 
 double OSnLNodeErf::calculateFunction(double *x){
 	m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
@@ -1358,7 +1417,6 @@ OSnLNodeIf::OSnLNodeIf()
 	m_mChildren[ 0] = NULL;
 	m_mChildren[ 1] = NULL;
 	m_mChildren[ 2] = NULL;
-	snodeName = "if";
 	inodeInt = 7001;
 	inodeType = 3;
 }//end OSnLNodeIf
@@ -1375,6 +1433,10 @@ OSnLNodeIf::~OSnLNodeIf(){
 	//m_mChildren = NULL;
 	if(inumberOfChildren > 0 && m_mChildren != NULL) delete[]  m_mChildren;
 }//end ~OSnLNodeIf
+
+std::string OSnLNodeIf::getTokenName(){
+	return "if";
+}// end OSnLNodeIf::getTokenName(
 
 double OSnLNodeIf::calculateFunction(double *x){
 	if(m_mChildren[0]->calculateFunction( x)  >= 0) m_dFunctionValue = m_mChildren[ 1]->calculateFunction( x);
@@ -1408,7 +1470,6 @@ OSnLNodeNumber::OSnLNodeNumber()
 	inodeInt = 5001;
 	inumberOfChildren = 0;
 	m_mChildren = NULL;
-	snodeName = "number";
 	inodeType = 0;  
 	value = 0.0;
 	type = "real";
@@ -1422,7 +1483,6 @@ OSnLNodeNumber::~OSnLNodeNumber(){
 	#endif
 	m_mChildren = NULL;
 }//end ~OSnLNodeNumber
-
 
 std::string OSnLNodeNumber::getTokenNumber(){
 	ostringstream outStr;
@@ -1443,7 +1503,7 @@ std::string OSnLNodeNumber::getTokenNumber(){
 
 std::string OSnLNodeNumber::getTokenName(){
 	ostringstream outStr;
-	outStr << snodeName;
+	outStr << "number";
 	outStr << ":" ;
 	outStr << value ;
 	//if(type.length() > 0){
@@ -1455,13 +1515,13 @@ std::string OSnLNodeNumber::getTokenName(){
 		outStr << id;
 	//}
 	return outStr.str();
-}//getTokenNumber
+}//getTokenName
 
 
 std::string OSnLNodeNumber::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
-	outStr << snodeName;
+	outStr << this->getTokenName();
 		outStr << "  value=\"";
 		outStr << os_dtoa_format(value); 
 		outStr << "\"";
@@ -1502,7 +1562,6 @@ OSnLNodeE::OSnLNodeE()
 	inodeInt = 5004;
 	inumberOfChildren = 0;
 	m_mChildren = NULL;
-	snodeName = "E";
 	inodeType = 0;  
 	//value = 0.0;
 	//type = "real";
@@ -1516,6 +1575,7 @@ OSnLNodeE::~OSnLNodeE(){
 	#endif
 	m_mChildren = NULL;
 }//end ~OSnLNodeE
+
 
 
 std::string OSnLNodeE::getTokenNumber(){
@@ -1537,7 +1597,7 @@ std::string OSnLNodeE::getTokenNumber(){
 
 std::string OSnLNodeE::getTokenName(){
 	ostringstream outStr;
-	outStr << snodeName;
+	outStr << "E";
 	//outStr << ":" ;
 	//outStr << value ;
 	//if(type.length() > 0){
@@ -1555,7 +1615,7 @@ std::string OSnLNodeE::getTokenName(){
 std::string OSnLNodeE::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
-	outStr << snodeName;
+	outStr << "E";
 //		outStr << "  value=\"";
 //		outStr << value ;
 //		outStr << "\"";
@@ -1597,7 +1657,6 @@ OSnLNodePI::OSnLNodePI()
 	inodeInt = 5003;
 	inumberOfChildren = 0;
 	m_mChildren = NULL;
-	snodeName = "PI";
 	inodeType = 0;  
 
 
@@ -1631,7 +1690,7 @@ std::string OSnLNodePI::getTokenNumber(){
 
 std::string OSnLNodePI::getTokenName(){
 	ostringstream outStr;
-	outStr << snodeName;
+	outStr << "PI";
 	//outStr << ":" ;
 	//outStr << value ;
 	//if(type.length() > 0){
@@ -1649,7 +1708,7 @@ std::string OSnLNodePI::getTokenName(){
 std::string OSnLNodePI::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
-	outStr << snodeName;
+	outStr << "PI";
 //		outStr << "  value=\"";
 //		outStr << value ;
 //		outStr << "\"";
@@ -1689,7 +1748,6 @@ OSnLNodeVariable::OSnLNodeVariable()
 {
 	inumberOfChildren = 0;
 	m_mChildren = NULL;
-	snodeName = "variable";
 	inodeInt = 6001;
 	inodeType = -1;
 	coef = 1.0;
@@ -1731,7 +1789,7 @@ std::string OSnLNodeVariable::getTokenNumber(){
 std::string OSnLNodeVariable::getTokenName(){
 	ostringstream outStr;
 	// put in an error if inodeInt is not 6001
-	outStr << snodeName;
+	outStr << "variable";
 	outStr << "[";
 	outStr << inumberOfChildren ;
 	outStr << "]";
@@ -1747,7 +1805,7 @@ std::string OSnLNodeVariable::getTokenName(){
 std::string OSnLNodeVariable::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
-	outStr << snodeName;
+	outStr << "variable";
 		outStr << "  idx=\"";
 		outStr << idx ;
 		outStr << "\"";
@@ -1767,7 +1825,7 @@ std::string OSnLNodeVariable::getNonlinearExpressionInXML(){
 	}
 	if(inumberOfChildren > 0) {
 		outStr << "</" ;
-		outStr << snodeName ;
+		outStr << "variable" ;
 		outStr << ">" ;
 	}
 	return outStr.str();

@@ -96,6 +96,7 @@ OS/data/amplFiles/LP_unbounded.nl -text
 OS/data/amplFiles/blpmpec.dat -text
 OS/data/amplFiles/blpmpec.mod -text
 OS/data/amplFiles/blpmpec.nl.zip -text
+OS/data/amplFiles/blpmpec1.nl -text
 OS/data/amplFiles/bonminEx1.mod -text
 OS/data/amplFiles/bonminEx1.nl -text
 OS/data/amplFiles/camm_test.dat -text
@@ -142,10 +143,12 @@ OS/data/gamsFiles/225a/gamsstat.dat -text
 OS/data/gamsFiles/225a/gamswrk0.dat -text
 OS/data/gamsFiles/225a/gdxdict.dat -text
 OS/data/gamsFiles/225a/gmsprmun.dat -text
+OS/data/gamsFiles/CoinOS.opt -text
 OS/data/gamsFiles/IP_infeasible.gms -text
 OS/data/gamsFiles/IP_unbounded.gms -text
 OS/data/gamsFiles/LP_primaldualinfeasible.gms -text
 OS/data/gamsFiles/LP_unbounded.gms -text
+OS/data/gamsFiles/eastborne.gms -text
 OS/data/gamsFiles/os.opt -text
 OS/data/gamsFiles/parincLinear.gms -text
 OS/data/gamsFiles/rbrockmod.gms -text
@@ -179,6 +182,7 @@ OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/bonminEx1_Nonlinear.osil -text
 OS/data/osilFiles/callBackTest.osil -text
 OS/data/osilFiles/callBackTestRowMajor.osil -text
+OS/data/osilFiles/eastborne.osil -text
 OS/data/osilFiles/finplan1.osil -text
 OS/data/osilFiles/gamstrnsport.osil -text
 OS/data/osilFiles/lindoapiaddins.osil -text
@@ -197,6 +201,7 @@ OS/data/osilFiles/parincLinearZeroVar.osil -text
 OS/data/osilFiles/parincQuadratic.osil -text
 OS/data/osilFiles/reallyEmpty.osil -text
 OS/data/osilFiles/rosenbrockmod.osil -text
+OS/data/osilFiles/rosenbrockmodPostfix.osil -text
 OS/data/osilFiles/rosenbrockorig.osil -text
 OS/data/osilFiles/rosenbrockorigInt.osil -text
 OS/data/osilFiles/test24locR1.osil -text
@@ -258,6 +263,8 @@ OS/data/osrlFiles/parserTest.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text
 OS/doc/Future_Work.tex -text
+OS/doc/OSConstitution.pdf -text
+OS/doc/OSConstitution.tex -text
 OS/doc/OSReleaseProcedure.pdf -text
 OS/doc/OSReleaseProcedure.tex -text
 OS/doc/OSSolverServiceRules.txt -text
@@ -346,9 +353,15 @@ OS/examples/misc/SDPA1.osil -text
 OS/examples/misc/SDPA1v2.osil -text
 OS/examples/misc/SDPA2OSiL.f90 -text
 OS/examples/misc/SDPA_Format.txt -text
+OS/examples/misc/coinor-bonmin.osel -text
+OS/examples/misc/coinor-ipopt.osel -text
+OS/examples/misc/example-all.osel -text
+OS/examples/misc/example1.osal -text
 OS/examples/misc/gpp100.dat-s -text
 OS/examples/misc/gpp100.osil -text
 OS/examples/misc/misc.cpp -text
+OS/examples/misc/neos-cbc.osel -text
+OS/examples/misc/neos-clp.osel -text
 OS/examples/misc/postFixRules.txt -text
 OS/examples/misc/rosenbrockmodPostfix.osil -text
 OS/examples/misc/rosenbrockmodPostfixVersion2.osil -text

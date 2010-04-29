@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:element name="osal" type="OSaL">
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
@@ -485,7 +486,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="differentiable" type="ObjectiveIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="nondifferentiable" type="ObjectiveIndexes" minOccurs="0"/>
+			<xs:element name="nondifferentiable" type="ObjectiveIndexesWithOrderAttribute" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -785,7 +786,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="differentiable" type="ConstraintIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="nondifferentiable" type="ConstraintIndexes" minOccurs="0"/>
+			<xs:element name="nondifferentiable" type="ConstraintIndexesWithOrderAttribute" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -794,7 +795,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="conIdx" type="ConstraintIndex" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="conIdx" type="ConstraintIndexWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -1205,7 +1206,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="differentiable" type="NonlinearExpressionIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="nondifferentiable" type="NonlinearExpressionIndexes" minOccurs="0"/>
+			<xs:element name="nondifferentiable" type="NonlinearExpressionIndexesWithOrderAttribute" minOccurs="0"/>
 			<xs:element name="other" type="OtherNonlinearExpressionIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>

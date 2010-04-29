@@ -13,7 +13,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
- 
+
 #include "OSCoinSolver.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"        
@@ -61,7 +61,7 @@ using std::ostringstream;
 		#include "OSIpoptSolver.h"
 #endif
 #endif 
-*/
+ */
 
 #ifdef COIN_HAS_ASL
 #include "OSnl2osil.h"
@@ -82,12 +82,12 @@ using std::ostringstream;
 //#endif
 
 #ifdef COIN_HAS_IPOPT  
-	#ifndef COIN_HAS_ASL
-		#include "OSIpoptSolver.h"
-		#undef COIN_HAS_ASL
-	#else
-		#include "OSIpoptSolver.h"
-	#endif
+#ifndef COIN_HAS_ASL
+#include "OSIpoptSolver.h"
+#undef COIN_HAS_ASL
+#else
+#include "OSIpoptSolver.h"
+#endif
 #endif
 
 
@@ -114,163 +114,157 @@ using std::string;
 
 
 int main(int argC, char* argV[]){
-	
+
 	// template -- add your code here -- //
-    
-    // temporary experimentation by Kipp 
-	std::cout << "Hello World" << std::endl;
-	FileUtil *fileUtil = NULL; 
-	fileUtil = new FileUtil();
-    std::cout << std::endl << std::endl;
-    size_t i;
-    size_t numberOfNonlinearExpressions;
-	numberOfNonlinearExpressions = 1000000;
+
+	// temporary experimentation by Kipp 
+    std::cout << "Hello World" << std::endl;
+	std::cout << std::endl << std::endl;
+	size_t i;
+	size_t numberOfNonlinearExpressions;
+	numberOfNonlinearExpressions = 100000;
 	/** nlarray is pointer to an array of Nl
 	 * object pointers */	
-    Nl **nlarray;
-    nlarray = new Nl*[ numberOfNonlinearExpressions ];
-  	 OSnLNodeNumber *nlNodeNumberPoint;  
+	Nl **nlarray;
+	nlarray = new Nl*[ numberOfNonlinearExpressions ];
+	OSnLNodeNumber *nlNodeNumberPoint;  
 
-    std::vector<Nl*> nlVec;
-    std::cout << "Start Loop "  << std::endl;
-    for(i = 0; i < numberOfNonlinearExpressions ; i++){
-        	nlarray[ i] = new Nl();
-        	nlarray[i]->idx = i;
-    		nlarray[ i]->osExpressionTree = new OSExpressionTree();
-        	nlNodeNumberPoint = new OSnLNodeNumber(); 
-        	nlNodeNumberPoint->value = 77.77;
+	std::vector<Nl*> nlVec;
+	std::cout << "Start Loop "  << std::endl;
+	for(i = 0; i < numberOfNonlinearExpressions ; i++){
+		nlarray[ i] = new Nl();
+		nlarray[i]->idx = i;
+		nlarray[ i]->osExpressionTree = new OSExpressionTree();
+		nlNodeNumberPoint = new OSnLNodeNumber(); 
+		nlNodeNumberPoint->value = 77.77;
 			nlarray[ i]->osExpressionTree->m_treeRoot = nlNodeNumberPoint;
-       	nlVec.push_back( nlarray[ i]) ;
-        
-    }
-    
-    std::cout << "End Loop" << std::endl; 
+		nlVec.push_back( nlarray[ i]) ;
+	}
 
-/*
-	OSnLNodeNumber *nlNodeNumberPoint;
-  	std::vector<OSnLNodeNumber*> nlNodeVec;
-	std::cout << "Start OSnLNumberNode loop" << std::endl;
-   for(int i = 0; i <10000; i++){
-        nlNodeNumberPoint = new OSnLNodeNumber(); 
-        nlNodeNumberPoint->value = 77.77;
-        new Nl();
-    	nlNodeVec.push_back( nlNodeNumberPoint);
-    }
-	std::cout << "Finish OSnLNumberNode loop" << std::endl;
- */
+	std::cout << "End Loop" << std::endl; 
 	//garbage collection   
-  
+
 	for(i = 0; i < numberOfNonlinearExpressions; i++){
 		delete nlarray[i];
 		nlarray[i] = NULL;
 	} 
 	delete[] nlarray;
 	nlarray = NULL;
-    
-    delete fileUtil;
-    
-	return 0;    
-    
+
+	return 0;
 //	OSnl2osil *nl2osil = NULL;
 //	try {
-       
-//        double cpuTime;
-//        cpuTime = CoinCpuTime();
-        //get the size of the nl string
-        //std::string nlstring = fileUtil->getFileAsString("../../../../OS/data/amplFiles/blpmpec1.nl");
-//         std::string nlstring = fileUtil->getFileAsString("smalltest.nl");
-//         std::cout << "nl string size = " << nlstring.size() << std::endl;
-//         std::cout  << "start the process " << std::endl;
-// 		//nl2osil = new OSnl2osil( "../../../../OS/data/amplFiles/BLPMPEC.nl"); 
-//         nl2osil = new OSnl2osil( "smalltest.nl"); 
-//         std::cout  << "nl file read " << std::endl;
-//         cpuTime = CoinCpuTime() - cpuTime;
-//         std::cout  << "Time to read nl file: " <<   cpuTime  << std::endl;
-//         nl2osil->createOSInstance() ;
-//         std::cout << "Number Variable = " << nl2osil->osinstance->getVariableNumber() << std::endl;
-//         std::cout << "Number Constraints = " << nl2osil->osinstance->getConstraintNumber() << std::endl;
-//       
-// 
-//         std::cout  << "an osinstance created " << std::endl;
-//         cpuTime = CoinCpuTime() - cpuTime;
-//         std::cout  << "Time to create osinstance : " <<   cpuTime  << std::endl;
-//         
+//
+//		double cpuTime;
+//		cpuTime = CoinCpuTime();
+//		std::cout  << "start the process " << std::endl; 
+//		// nl2osil = new OSnl2osil( "../../../../OS/data/amplFiles/blpmpec1.nl"); 
+//		nl2osil = new OSnl2osil( "rbrockmod.nl");
+//		std::cout  << "nl file read " << std::endl;
+//		cpuTime = CoinCpuTime() - cpuTime;
+//		std::cout  << "Time to read nl file: " <<   cpuTime  << std::endl;
+//		nl2osil->createOSInstance() ;
+//		std::cout << "Number Variable = " << nl2osil->osinstance->getVariableNumber() << std::endl;
+//		std::cout << "Number Constraints = " << nl2osil->osinstance->getConstraintNumber() << std::endl;
+//		std::cout  << "an osinstance created " << std::endl;
+//		cpuTime = CoinCpuTime() - cpuTime;
+//		std::cout  << "Time to create osinstance : " <<   cpuTime  << std::endl;
+//		
+//		std::cout  << std::endl;
+//		std::cout << "THE OPERATORS" << std::endl;
+//		for(int i = 0; i <  nl2osil->op_type.size(); i++){
+//			std::cout << nl2osil->op_type[ i] << std::endl;
+//		}
+//		
+//		std::cout  << std::endl;
+//		std::cout << "THE OPERANDS" << std::endl;
+//		for(int i = 0; i <  nl2osil->operand.size(); i++){
+//			std::cout << nl2osil->operand[ i] << std::endl;
+//		}
+//
+//		/*****   
 //         std::cout << "Initialize Nonlinear Structures" << std::endl;
-// 		nl2osil->osinstance->initForAlgDiff( );  
+//	 		nl2osil->osinstance->initForAlgDiff( );  
 //         cpuTime = CoinCpuTime() - cpuTime;
 //         std::cout  << "Time to initialize Nonlinear Structures : " <<   cpuTime  << std::endl;
-        
-        
 //         std::cout << "Get Sparse Jacobian" << std::endl;
 //         SparseJacobianMatrix *sparseJac;
-// 		sparseJac = nl2osil->osinstance->getJacobianSparsityPattern();
+//	 		sparseJac = nl2osil->osinstance->getJacobianSparsityPattern();
 //         cpuTime = CoinCpuTime() - cpuTime;
-//         std::cout  << "Time to get Sparse Jacobian pattern : " <<   cpuTime  << std::endl;
-//         
+//         std::cout  << "Time to get Sparse Jacobian pattern : " <<   cpuTime  << std::endl; 
 //         SparseHessianMatrix *sparseHessian = nl2osil->osinstance->getLagrangianHessianSparsityPattern();
 //         cpuTime = CoinCpuTime() - cpuTime;
-//        std::cout  << "Time to get Sparse Hessain pattern : " <<   cpuTime  << std::endl;
+//	      std::cout  << "Time to get Sparse Hessain pattern : " <<   cpuTime  << std::endl;
 //         OSiLWriter *osilwriter = NULL;
-// 		osilwriter = new OSiLWriter();
-// 		std::string osil;
-// 		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
+//	 		osilwriter = new OSiLWriter();
+//	 		std::string osil;
+//	 		osil = osilwriter->writeOSiL(  nl2osil->osinstance) ;
 //         std::cout << "osil generated" << std::endl;
 //         cpuTime = CoinCpuTime() - cpuTime;
 //         std::cout  << "Time to create osil : " <<   cpuTime  << std::endl;
 //         std::cout  << "Size of osil string : " <<   osil.size()  << std::endl;
-        //fileUtil->writeFileFromString("tmp.osil", osil);
-// 		delete nl2osil;
-//         std::cout  << "nl2osil deleted " << std::endl;
-//         cpuTime = CoinCpuTime() - cpuTime;
-//         std::cout  << "Time to delete nl2osil : " <<   cpuTime  << std::endl;
-//         delete fileUtil;
-       // delete osilwriter;
-
+//        	fileUtil->writeFileFromString("tmp.osil", osil);
+//      	delete osilwriter;
+//
+//		 */
+//		delete nl2osil;
+//		std::cout  << "nl2osil deleted " << std::endl;
+//		cpuTime = CoinCpuTime() - cpuTime;
+//		std::cout  << "Time to delete nl2osil : " <<   cpuTime  << std::endl;
+//		return 0;
 //	}
 //	catch(const ErrorClass& eclass){
-//        std::cout << "THERE WAS AN ERROR" <<  std::endl;
-//		delete fileUtil;
+//		std::cout << "THERE WAS AN ERROR" <<  std::endl;
 //		delete nl2osil;
-//        std::cout << "THERE WAS AN ERROR" <<  std::endl;
+//		std::cout << "THERE WAS AN ERROR" <<  std::endl;
 //		std::cout << eclass.errormsg <<  std::endl;
 //		return 0;
 //	} 
 
-	
+	/***
 
-	
-// 	time_t rawtime;
-// 	struct tm * timeinfo;
-// 	int year, month ,day;
-// 	char * weekday[] = { "Sunday", "Monday",
-// 		"Tuesday", "Wednesday",
-// 		"Thursday", "Friday", "Saturday"};
-// 	int days_per_month[] = {31, 28, 31, 30,
-// 	31, 30, 31, 31, 30, 31, 30, 31};
-// 	
-// 
-// 	
-// 	/* prompt user for date */
-// 	printf ("Enter year: "); scanf ("%d",&year);
-// 	printf ("Enter month: "); scanf ("%d",&month);
-// 	
-// 	// adjust for leap year
-// 	if ( ((year % 4 == 0) && (year % 100 != 0))  || (year % 400 == 0)) {
-// 		days_per_month[ 1] = 29;
-// 	}
-// 	std::cout << "GAIL = " << year % 4 << std::endl;
-// 	/* get current timeinfo and modify it to the user's choice */
-// 	time ( &rawtime );
-// 	timeinfo = localtime ( &rawtime );
-// 	timeinfo->tm_year = year - 1900;
-// 	timeinfo->tm_mon = month - 1;
-// 	timeinfo->tm_mday = 1;
-// 	
-// 	/* call mktime: timeinfo->tm_wday will be set */
-// 	mktime ( timeinfo );
-// 	
-// 	printf ("That day is a %s.\n", weekday[timeinfo->tm_wday]);
-// 	std::cout << "Days in this month = " << days_per_month[ month-1] << std::endl;
-	
+minimize GMM : sum{h1 in H, h2 in H} Zw[h1]*invA[h1, h2]*Zw[h2];
+
+subject to
+
+    conZw {h in H}: Zw[h] = sum {mj in MJ} Z[mj,h]*w[mj] ;
+
+    Shares {mj in MJ}: log(EstShare[mj]) = log(ActuShare[mj]) ; 
+	 */	
+
+
+	// 	time_t rawtime;
+	// 	struct tm * timeinfo;
+	// 	int year, month ,day;
+	// 	char * weekday[] = { "Sunday", "Monday",
+	// 		"Tuesday", "Wednesday",
+	// 		"Thursday", "Friday", "Saturday"};
+	// 	int days_per_month[] = {31, 28, 31, 30,
+	// 	31, 30, 31, 31, 30, 31, 30, 31};
+	// 	
+	// 
+	// 	
+	// 	/* prompt user for date */
+	// 	printf ("Enter year: "); scanf ("%d",&year);
+	// 	printf ("Enter month: "); scanf ("%d",&month);
+	// 	
+	// 	// adjust for leap year
+	// 	if ( ((year % 4 == 0) && (year % 100 != 0))  || (year % 400 == 0)) {
+	// 		days_per_month[ 1] = 29;
+	// 	}
+	// 	std::cout << "GAIL = " << year % 4 << std::endl;
+	// 	/* get current timeinfo and modify it to the user's choice */
+	// 	time ( &rawtime );
+	// 	timeinfo = localtime ( &rawtime );
+	// 	timeinfo->tm_year = year - 1900;
+	// 	timeinfo->tm_mon = month - 1;
+	// 	timeinfo->tm_mday = 1;
+	// 	
+	// 	/* call mktime: timeinfo->tm_wday will be set */
+	// 	mktime ( timeinfo );
+	// 	
+	// 	printf ("That day is a %s.\n", weekday[timeinfo->tm_wday]);
+	// 	std::cout << "Days in this month = " << days_per_month[ month-1] << std::endl;
+
 }// end main
 

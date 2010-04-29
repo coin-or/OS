@@ -159,8 +159,8 @@
 \newcommand{\UrlOsDoxygen}{http://www.coin-or.org/OS/doxydoc/html/index.html}
 \newcommand{\UrlOsi}{http://projects.coin-or.org/Osi}
 \newcommand{\UrlOsJava}{https://projects.coin-or.org/svn/OS/branches/OSjava}
-\newcommand{\UrlOsRelease}{https://projects.coin-or.org/svn/OS/releases/1.1.1}
-\newcommand{\UrlOsStable}{https://projects.coin-or.org/svn/OS/stable/1.1}
+\newcommand{\UrlOsRelease}{https://projects.coin-or.org/svn/OS/releases/2.1.0}
+\newcommand{\UrlOsStable}{https://projects.coin-or.org/svn/OS/stable/2.1}
 \newcommand{\UrlOsTarball}{http://www.coin-or.org/download/source/OS/}
 \newcommand{\UrlOsWin}{https://projects.coin-or.org/CoinBinary/browser/binary/OS}
 \newcommand{\UrlParinclinear}{http://www.coin-or.org/OS/parincLinear.osil}
@@ -365,8 +365,16 @@ source code for the project, which will be of interest mostly to developers.
 \subsection{Obtaining the Binaries}\label{section:obtainingbinaries}
 
 If the user does not wish to compile source code, the OS library, OSSolverService executable
-and Tomcat server software configuration are available at {\tt\UrlOsBinaries}\index{Downloading!binaries}  
-in binary format.    The binary distribution for the OS library and executables follows the following naming convention:
+and Tomcat server software configuration are available in binary format for some operating systems.     
+The repository is at {\tt\UrlOsBinaries}\index{Downloading!binaries}. Unlike the source code described 
+in Section~\ref{section:downloadwithsvn}, the binary files are not subject to version control and can be
+downloaded using an ordinary browser. If binaries are not provided for a particular operating system,
+it may be possible to build them from the source code. Since the source is under version control, 
+this requires svn. (See Sections \ref{section:svn}, \ref{section:downloadwithsvn} and~\ref{section:build}.
+
+The binary distribution for the OS library and executables follows the following naming convention:
+
+
 \begin{verbatim}
 OS-version_number-platform-compiler-build_options.tgz (zip)
 \end{verbatim}
@@ -1304,6 +1312,16 @@ See \url{www.mingw.org}. As with Cygwin, the OS project is  built exactly as des
 The MinGW installation includes the {\tt gcc} compiler, which can interact negatively with the Microsoft {\tt cl} compiler.
 For that reason it is advisable to download the even smaller installation MSYS (see next section) if you intend to
 build any software with the Microsoft Visual Studio suite.
+
+\vskip 8pt
+
+{\bf Warning:} A user of  MSYS  with MinGW gcc version 4.4.0   got an error about a
+missing library  ``pthreadsGC2.dll'' when running the OS {\tt unitTest.}  This user installed {\tt pthreadsGC2.dll} from
+\begin{center}
+ \url{ftp://sources.redhat.com/pub/pthreads-win32/dll-latest/lib/pthreadGC2.dll}
+\end{center}
+and reported that the problem then went away.
+
 
 \subsubsection{MSYS} \label{section:msys}
 
@@ -3887,7 +3905,8 @@ The string of options to {\tt OSAmplClient\_options} is now
 -osol solveroptions.osol
 \end{verbatim}
 This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
-and one for {\tt SYMPHONY}.  You can have any number of options. Note the format for specifying an option:
+and one for {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}.
+You can have any number of options. Note the format for specifying an option:
 \begin{verbatim}
 <solverOption name="maxN" solver="cbc" value="5" />
 \end{verbatim}
@@ -3907,7 +3926,8 @@ A good summary of options for COIN-OR solvers is \url{http://www.coin-or.org/GAM
 
 
 If you examine the file {\tt solveroptions.osol} you will see that there is an XML tag  with the name
-{\tt <solverToInvoke>} and that the solver given is {\tt symphony}.   This has no effect on a local solve, however if this option file is paired with 
+{\tt <solverToInvoke>} and that the solver given is {\tt symphony}.   
+This has no effect on a local solve. However, if this option file is paired with 
 
 \begin{verbatim}
 -serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
