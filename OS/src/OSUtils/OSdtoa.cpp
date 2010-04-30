@@ -572,7 +572,9 @@ Balloc
 #else
 		len = (sizeof(Bigint) + (x-1)*sizeof(ULong) + sizeof(double) - 1)
 			/sizeof(double);
-		if (pmem_next - private_mem + len <= PRIVATE_mem) {
+		unsigned int tmpInt  = PRIVATE_mem;
+		//if (pmem_next - private_mem + len <= PRIVATE_mem) {
+		if (pmem_next - private_mem + len <= tmpInt) {
 			rv = (Bigint*)pmem_next;
 			pmem_next += len;
 			}
