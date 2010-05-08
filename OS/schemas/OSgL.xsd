@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -343,7 +344,6 @@
 		</xs:annotation>
 		<xs:choice>
 			<xs:element name="elements" type="ConstantMatrixElements"/>
-			<xs:element name="transformation" type="ConstantMatrixTransformation"/>
 			<xs:element name="blocks" type="ConstantMatrixBlocks"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
@@ -356,7 +356,7 @@
 		</xs:annotation>
 		<xs:sequence minOccurs="0">
 			<xs:annotation>
-				<xs:documentation>Number of elements specified in the value must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -495,7 +495,17 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="var" type="LinearMatrixElementVar" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="varIdx" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:int">
+							<xs:attribute name="coef" type="xs:double" default="1.0"/>
+							<xs:attribute name="mult" type="xs:positiveInteger" default="1"/>
+							<xs:attribute name="incr" type="xs:integer" default="1"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -508,8 +518,9 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" default="1"/>
+		<xs:attribute name="incr" type="xs:integer" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlock">
 		<xs:annotation>
