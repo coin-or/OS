@@ -458,15 +458,29 @@
 		</xs:annotation>
 		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
-				<xs:documentation>Number of El's specified must agree with numberOfEl. Number of blocks specified must agree with numberOfBlocks. </xs:documentation>
+				<xs:documentation>Number of El's specified must agree with numberOfEl after "mult" has been considered. Number of blocks and linear expressions must agree with numberOfBlocks and numberOfLinearExpressions, respectively. </xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="LinearMatrixElement"/>
+			<xs:element name="el">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:integer">
+							<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+							<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:integer" use="optional" default="1"/>
+							<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="linearExpression" type="LinearMatrixExpression"/>
 			<xs:element name="block" type="LinearMatrixBlock"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfLinearExpressions" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="varIdxStart" type="xs:nonNegativeInteger" use="optional"/>
@@ -491,6 +505,17 @@
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElement">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixExpression">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
