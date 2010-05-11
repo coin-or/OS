@@ -180,7 +180,7 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 			[x0, x1
 			 x2, x3]
 				-->
-			<linearMatrix id="X0" numberOfRows="2" numberOfColumns="2" varIdxEnd="3"/>
+			<linearMatrix id="X0" numberOfRows="2" numberOfColumns="2" varIdxStart="0" varIdxEnd="3"/>
 			<linearMatrix id="X1" numberOfRows="2" numberOfColumns="2">
 			<!--
 			[x0, x1
@@ -191,12 +191,12 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 					<el mult="3" incr="2">0</el>
 				</start>
 				<colIdx>
-<el mult="2">0</el>				
-<el mult="2">2</el>				
+					<el mult="2">0</el>				
+					<el mult="2">2</el>				
 				</colIdx>
 				<varIdx>
-<el mult="2">0</el>				
-<el mult="2" incr="-1">3</el>				
+					<el mult="2">0</el>				
+					<el mult="2" incr="-1">3</el>				
 				</varIdx>
 			</variables>
 			</linearMatrix>
@@ -205,23 +205,25 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 			[x0,                        3.0
 			 1.0 + x0 + x1 + x2 +x3, 2.0*x1 + 2.0*x3]
 				-->
-				<expressions numberOfExpr="4">
-				<start>
-					<el mult="3" incr="2">0</el>
-				</start>
-				<colIdx>
-<el mult="2">0</el>				
-<el mult="2">2</el>				
-				</colIdx>
-				<expr varIdx="0"></expr>
-				<expr constant="3.0"/>
-				<expr constant="1.0" numberOfVar="4">
-					<varIdx mult="4">0</varIdx>
-				</expr>
-				<expr numberOfVar="2" scalarCoef="2.0">
-					<varIdx mult="2" incr="2">2</varIdx>
-				</expr>
-				</expressions>
+				<linearExpressions numberOfExpr="4">
+					<start>
+						<el mult="3" incr="2">0</el>
+					</start>
+					<colIdx>
+						<el mult="2">0</el>				
+						<el mult="2">2</el>				
+					</colIdx>
+					<expressions>
+						<expr varIdx="0"></expr>
+						<expr constant="3.0"/>
+						<expr constant="1.0" numberOfVar="4">
+							<varIdx mult="4">0</varIdx>
+						</expr>
+						<expr numberOfVar="2" scalarCoef="2.0">
+							<varIdx mult="2" incr="2">2</varIdx>
+						</expr>
+					</expressions>
+				</linearExpressions>
 			</linearMatrix>
 			<generalMatrix id="M6" numberOfRows="2" numberOfColumns="2" numberOfEl="1" numberOfBlocks="0" base="matrix" baseTranspose="true" baseMatrixID="M5">
 				<el rowIdx="0" colIdx="1">
