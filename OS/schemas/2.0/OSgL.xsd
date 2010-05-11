@@ -458,7 +458,7 @@
 		</xs:annotation>
 		<xs:choice minOccurs="0">
 			<xs:element name="variables" type="LinearMatrixVariables"/>
-			<xs:element name="expressions" type="LinearMatrixExpressions"/>
+			<xs:element name="linearExpressions" type="LinearMatrixExpressions"/>
 			<xs:element name="blocks" type="LinearMatrixBlocks"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
@@ -510,9 +510,13 @@
 				<xs:element name="rowIdx" type="IntVector"/>
 				<xs:element name="colIdx" type="IntVector"/>
 			</xs:choice>
-			<xs:sequence minOccurs="0" maxOccurs="unbounded">
-				<xs:element name="expr" type="LinearMatrixExpression"/>
-			</xs:sequence>
+			<xs:element name="expressions">
+				<xs:complexType>
+					<xs:sequence minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="expr" type="LinearMatrixExpression"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfExpr" type="xs:integer" use="required"/>
 	</xs:complexType>
