@@ -456,32 +456,14 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:annotation>
-				<xs:documentation>Number of El's specified must agree with numberOfEl after "mult" has been considered. Number of blocks and linear expressions must agree with numberOfBlocks and numberOfLinearExpressions, respectively. </xs:documentation>
-			</xs:annotation>
-			<xs:element name="el">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="xs:integer">
-							<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-							<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
-							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-							<xs:attribute name="incr" type="xs:integer" use="optional" default="1"/>
-							<xs:attribute name="coef" type="xs:double" use="optional" default="1.0"/>
-						</xs:extension>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
-			<xs:element name="linearExpression" type="LinearMatrixExpression"/>
-			<xs:element name="block" type="LinearMatrixBlock"/>
+		<xs:choice minOccurs="0">
+			<xs:element name="variables" type="LinearMatrixVariables"/>
+			<xs:element name="expressions" type="LinearMatrixExpressions"/>
+			<xs:element name="blocks" type="LinearMatrixBlocks"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfLinearExpressions" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="varIdxStart" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="varIdxEnd" type="xs:nonNegativeInteger" use="optional"/>
@@ -503,6 +485,42 @@
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixVariables">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="start" type="IntVector"/>
+			<xs:choice>
+				<xs:element name="rowIdx" type="IntVector"/>
+				<xs:element name="colIdx" type="IntVector"/>
+			</xs:choice>
+			<xs:element name="varIdx" type="IntVector"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVarIdx" type="xs:integer" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixExpressions">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="start" type="IntVector"/>
+			<xs:choice>
+				<xs:element name="rowIdx" type="IntVector"/>
+				<xs:element name="colIdx" type="IntVector"/>
+			</xs:choice>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="expr" type="LinearMatrixExpression"/>
+			</xs:sequence>
+		</xs:sequence>
+		<xs:attribute name="numberOfExpr" type="xs:integer" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="LinearMatrixBlocks">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="block" type="LinearMatrixBlock"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixElement">
 		<xs:annotation>
@@ -533,8 +551,6 @@
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
