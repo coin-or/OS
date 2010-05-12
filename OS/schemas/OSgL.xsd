@@ -600,18 +600,13 @@
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
-			<xs:annotation>
-				<xs:documentation>Number of El's specified must agree with numberOfEl. Number of blocks specified must agree with numberOfBlocks. </xs:documentation>
-			</xs:annotation>
-			<xs:element name="el" type="GeneralMatrixElement"/>
-			<xs:element name="block" type="GeneralMatrixBlock"/>
+		<xs:choice minOccurs="0">
+			<xs:element name="elements" type="GeneralMatrixElements"/>
+			<xs:element name="blocks" type="GeneralMatrixBlocks"/>
 		</xs:choice>
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="symmetric" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
@@ -630,6 +625,37 @@
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
+	<xs:complexType name="GeneralMatrixElements">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of entries in the el and rowIdx/colIdx child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="start" type="IntVector"/>
+			<xs:choice>
+				<xs:element name="rowIdx" type="IntVector"/>
+				<xs:element name="colIdx" type="IntVector"/>
+			</xs:choice>
+			<xs:element name="values" type="GeneralMatrixValues"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfEl" type="xs:integer" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="GeneralMatrixBlocks">
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of blocks must agree with numberOfBlocksl (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="el" type="GeneralMatrixBlock"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="GeneralMatrixValues">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="el" type="GeneralMatrixElement"/>
+		</xs:sequence>
+	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElement">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -637,8 +663,6 @@
 		<xs:sequence>
 			<xs:element ref="OSnLNode"/>
 		</xs:sequence>
-		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="colIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixBlock">
 		<xs:annotation>

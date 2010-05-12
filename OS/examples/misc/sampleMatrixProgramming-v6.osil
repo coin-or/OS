@@ -192,7 +192,7 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 				</start>
 				<colIdx>
 					<el mult="2">0</el>				
-					<el mult="2">2</el>				
+					<el mult="2">0</el>				
 				</colIdx>
 				<varIdx>
 					<el mult="2">0</el>				
@@ -211,7 +211,7 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 					</start>
 					<colIdx>
 						<el mult="2">0</el>				
-						<el mult="2">2</el>				
+						<el mult="2">0</el>				
 					</colIdx>
 					<expressions>
 						<expr varIdx="0"></expr>
@@ -225,12 +225,23 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 					</expressions>
 				</linearExpressions>
 			</linearMatrix>
-			<generalMatrix id="M6" numberOfRows="2" numberOfColumns="2" numberOfEl="1" numberOfBlocks="0" base="matrix" baseTranspose="true" baseMatrixID="M5">
-				<el rowIdx="0" colIdx="1">
-					<matrixDeterminant>
-						<matrix id="5"/>
-					</matrixDeterminant>
-				</el>
+			<generalMatrix id="M6" numberOfRows="2" numberOfColumns="2" base="matrix" baseTranspose="true" baseMatrixID="M5">
+				<elements numberOfEl="1">
+					<start>
+						<el>0</el>					
+						<el mult="2">0</el>					
+					</start>
+					<rowIdx>
+						<el>1</el>					
+					</rowIdx>
+					<values>
+						<el>
+							<matrixDeterminant>
+								<matrix id="5"/>
+							</matrixDeterminant>
+						</el>
+					</values>
+				</elements>
 			</generalMatrix>
 		</matrices>
 		<cones numberOfCones="8">
