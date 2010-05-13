@@ -214,12 +214,14 @@ C:\datafiles\research\os\os-trunk-work\os\schemas\OSiL.xsd">
 						<el mult="2">0</el>				
 					</colIdx>
 					<expressions>
-						<expr varIdx="0"></expr>
-						<expr constant="3.0"/>
-						<expr constant="1.0" numberOfVar="4">
+						<expr numberOfVarIdx="1">
+							<varIdx>0</varIdx>
+						</expr>
+						<expr constant="3.0" numberOfVarIdx="0"/>
+						<expr constant="1.0" numberOfVarIdx="4">
 							<varIdx mult="4">0</varIdx>
 						</expr>
-						<expr numberOfVar="2" scalarCoef="2.0">
+						<expr numberOfVarIdx="2" scalarCoef="2.0">
 							<varIdx mult="2" incr="2">2</varIdx>
 						</expr>
 					</expressions>

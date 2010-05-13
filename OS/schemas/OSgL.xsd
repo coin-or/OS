@@ -376,8 +376,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -414,8 +414,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -479,8 +479,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -489,7 +489,7 @@
 	<xs:complexType name="LinearMatrixVariables">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of entries in the varIdx and rowIdx/colIdx child elements must agree with numberOfVarIdx (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -503,7 +503,7 @@
 	<xs:complexType name="LinearMatrixExpressions">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of entries in the expressions and rowIdx/colIdx child elements must agree with numberOfExpressions</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -522,7 +522,11 @@
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlocks">
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="block" type="LinearMatrixBlock"/>
+			<xs:element name="block" type="LinearMatrixBlock">
+				<xs:annotation>
+					<xs:documentation>number must agree with numerOfBlocks</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
@@ -543,6 +547,9 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="varIdx" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVarIdx</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:int">
@@ -554,7 +561,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
@@ -618,8 +625,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -642,9 +649,9 @@
 	<xs:complexType name="GeneralMatrixBlocks">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of blocks must agree with numberOfBlocksl (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of blocks must agree with numberOfBlocks (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="GeneralMatrixBlock"/>
+			<xs:element name="block" type="GeneralMatrixBlock"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
