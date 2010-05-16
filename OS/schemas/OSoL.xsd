@@ -267,7 +267,7 @@
 			<xs:element name="constraints" type="ConstraintOption" minOccurs="0"/>
 			<xs:element name="solverOptions" type="SolverOptions" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfVariables">
+		<xs:attribute name="numberOfVariables" use="optional">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial values, etc.</xs:documentation>
 			</xs:annotation>
@@ -277,7 +277,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfObjectives">
+		<xs:attribute name="numberOfObjectives" use="optional">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial objective values and bounds</xs:documentation>
 			</xs:annotation>
@@ -287,7 +287,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="numberOfConstraints">
+		<xs:attribute name="numberOfConstraints" use="optional">
 			<xs:annotation>
 				<xs:documentation>Required if dense methods are used for initial dual values, etc.</xs:documentation>
 			</xs:annotation>
@@ -307,7 +307,7 @@
 			<xs:element name="sosVariableBranchingWeights" type="SOSVariableBranchingWeights" minOccurs="0"/>
 			<xs:element name="other" type="OtherVariableOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" default="0" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitVariableValues">
 		<xs:sequence>
@@ -331,7 +331,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitBasStatus">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" default="unknown">
+		<xs:attribute name="value" default="unknown" use="optional">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="unknown"/>
@@ -366,12 +366,12 @@
 			<xs:element name="var" type="BranchingWeight" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="sosIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="groupWeight" type="xs:double" default="1.0"/>
+		<xs:attribute name="groupWeight" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="BranchingWeight">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:double"/>
+		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableOption">
 		<xs:sequence>
@@ -397,7 +397,7 @@
 			<xs:element name="initialObjectiveBounds" type="InitObjectiveBounds" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" default="0" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjectiveValues">
 		<xs:sequence>
@@ -435,8 +435,8 @@
 	<xs:complexType name="OtherObjOption">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="lbValue" type="xs:string"/>
-		<xs:attribute name="ubValue" type="xs:string"/>
+		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="ConstraintOption">
 		<xs:sequence>
@@ -445,7 +445,7 @@
 			<xs:element name="initialDualValues" type="InitDualVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" default="0" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitConstraintValues">
 		<xs:sequence>
@@ -469,7 +469,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitConStatus">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" default="unknown">
+		<xs:attribute name="value" default="unknown" use="optional">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="unknown"/>

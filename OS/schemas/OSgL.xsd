@@ -561,8 +561,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 	</xs:complexType>

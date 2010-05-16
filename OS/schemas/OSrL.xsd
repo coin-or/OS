@@ -548,6 +548,7 @@
 	<xs:complexType name="ConstraintSolution">
 		<xs:sequence>
 			<xs:element name="dualValues" type="DualVariableValues" minOccurs="0"/>
+			<xs:element name="basisStatus" type="BasisStatus" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherConstraintResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
