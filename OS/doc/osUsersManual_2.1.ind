@@ -43,7 +43,7 @@
   \item {\tt COIN\_HAS\_XXXXX}, 24--25
   \item {\tt COIN\_SKIP\_PROJECTS}, 13, 15, 19, 22, 24
   \item {\tt CoinUtils}, \see{COIN-OR projects, {\tt CoinUtils}}{1}
-  \item Common Public License (CPL), 7, 23
+  \item Common Public License (CPL), 7, 23, 25
   \item configure, 13, 15, 21--25
     \subitem cache file, 13
     \subitem scripts, 9
@@ -83,6 +83,7 @@
   \item gcc, 9
   \item {\tt getJobID}, 36, 38, 46, 49
   \item {\tt GLPK}, 7, 25, 37
+  \item GNU General Public Licence (GPL), 25
   \item {\it Griewank, A.}, 90
 
   \indexspace
