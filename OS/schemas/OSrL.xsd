@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: version 2.0 (The entire schema except for osrl->optimization->osal)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
@@ -427,18 +427,13 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="OtherObjResult">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
 	<xs:complexType name="OtherObjectiveResult">
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="enum" type="OtherObjEnum" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnum" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -448,6 +443,13 @@
 		</xs:attribute>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjResult">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="VariableSolution">
 		<xs:sequence>
@@ -500,41 +502,13 @@
 			<xs:element name="unknown" type="BasisIndexes" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="BasisIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the idx child elements must agree with numberOfIdx (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="idx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="BasisIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="OtherVarResult">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
 	<xs:complexType name="OtherVariableResult">
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="enum" type="OtherVarEnum" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnum" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -544,6 +518,13 @@
 		</xs:attribute>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherVarResult">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="ConstraintSolution">
 		<xs:sequence>
@@ -566,17 +547,11 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="OtherConResult">
-		<xs:simpleContent>
-			<xs:extension base="xs:string">
-				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
 	<xs:complexType name="OtherConstraintResult">
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="enum" type="OtherConEnum" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" use="required">
 			<xs:simpleType>
@@ -587,6 +562,13 @@
 		</xs:attribute>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherConResult">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OtherSolverOutput">
 		<xs:sequence>

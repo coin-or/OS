@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -376,8 +376,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -414,8 +414,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -479,8 +479,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -489,7 +489,7 @@
 	<xs:complexType name="LinearMatrixVariables">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of entries in the varIdx and rowIdx/colIdx child elements must agree with numberOfVarIdx (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -503,7 +503,7 @@
 	<xs:complexType name="LinearMatrixExpressions">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of entries in the expressions and rowIdx/colIdx child elements must agree with numberOfExpressions</xs:documentation>
 			</xs:annotation>
 			<xs:element name="start" type="IntVector"/>
 			<xs:choice>
@@ -522,7 +522,11 @@
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlocks">
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="block" type="LinearMatrixBlock"/>
+			<xs:element name="block" type="LinearMatrixBlock">
+				<xs:annotation>
+					<xs:documentation>number must agree with numerOfBlocks</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
@@ -543,6 +547,9 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="varIdx" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfVarIdx</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:simpleContent>
 						<xs:extension base="xs:int">
@@ -554,8 +561,7 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
-		<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
 	</xs:complexType>
@@ -618,8 +624,8 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
@@ -642,9 +648,9 @@
 	<xs:complexType name="GeneralMatrixBlocks">
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>Number of blocks must agree with numberOfBlocksl (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>Number of blocks must agree with numberOfBlocks (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="el" type="GeneralMatrixBlock"/>
+			<xs:element name="block" type="GeneralMatrixBlock"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:integer" use="required"/>
 	</xs:complexType>
@@ -2596,4 +2602,126 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
+	<xs:complexType name="OtherVarEnum">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="varIdx" type="VariableIndex" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjEnum">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="objIdx" type="ObjectiveIndex" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherConEnum">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="conIdx" type="ConstraintIndex" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="required"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="BasisIndexes">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:annotation>
+				<xs:documentation>Number of the idx child elements must agree with numberOfIdx (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="idx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="BasisIndex">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="VariableIndexes">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="varIdx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="VariableIndex">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveIndexes">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="ObjectiveIndex"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveIndex">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:negativeInteger">
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ConstraintIndexes">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="conIdx" type="ConstraintIndex" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ConstraintIndex">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:negativeInteger">
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 </xs:schema>

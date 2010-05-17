@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: version 2.0 (The entire schema)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osol" type="OSoL">
@@ -307,7 +307,7 @@
 			<xs:element name="sosVariableBranchingWeights" type="SOSVariableBranchingWeights" minOccurs="0"/>
 			<xs:element name="other" type="OtherVariableOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" default="0" use="optional"/>
+		<xs:attribute name="numberOfOtherVariableOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitVariableValues">
 		<xs:sequence>
@@ -331,7 +331,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitBasStatus">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" default="unknown" use="optional">
+		<xs:attribute name="value" use="optional" default="unknown">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="unknown"/>
@@ -374,10 +374,12 @@
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableOption">
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="var" type="OtherVarOption" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="enum" type="OtherVarEnum" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnum" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -397,7 +399,7 @@
 			<xs:element name="initialObjectiveBounds" type="InitObjectiveBounds" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" default="0" use="optional"/>
+		<xs:attribute name="numberOfOtherObjectiveOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjectiveValues">
 		<xs:sequence>
@@ -421,10 +423,12 @@
 		<xs:attribute name="ubValue" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveOption">
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="obj" type="OtherObjOption" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="enum" type="OtherObjEnum" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnum" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -445,7 +449,7 @@
 			<xs:element name="initialDualValues" type="InitDualVariableValues" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" default="0" use="optional"/>
+		<xs:attribute name="numberOfOtherConstraintOptions" type="xs:nonNegativeInteger" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="InitConstraintValues">
 		<xs:sequence>
@@ -469,7 +473,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitConStatus">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" default="unknown" use="optional">
+		<xs:attribute name="value" use="optional" default="unknown">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="unknown"/>
@@ -501,10 +505,12 @@
 		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="OtherConstraintOption">
-		<xs:sequence>
+		<xs:choice>
 			<xs:element name="con" type="OtherConOption" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
+			<xs:element name="enum" type="OtherConEnum" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnum" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
@@ -531,74 +537,5 @@
 			<xs:element name="solverOption" type="SolverOption" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="BasisIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the idx child elements must agree with numberOfIdx (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="idx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="VariableIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="ObjectiveIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="ObjectiveIndex"/>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ObjectiveIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="VariableIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="BasisIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
 	</xs:complexType>
 </xs:schema>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -315,26 +315,6 @@
 			<xs:element name="other" type="OtherVariableIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="VariableIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="VariableIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="VariableIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
 	<xs:complexType name="OtherVariableIndexes">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -351,24 +331,13 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="category" type="OtherVariableCategory" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="var" type="OtherVarAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enum" type="OtherVarEnum" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="OtherVariableCategory">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="VariableIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVarAnalysis">
@@ -490,32 +459,6 @@
 			<xs:element name="other" type="OtherObjectiveIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="ObjectiveIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="ObjectiveIndex"/>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ObjectiveIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
 	<xs:complexType name="ObjectiveIndexesWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -580,24 +523,13 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="category" type="OtherObjectiveCategory" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="obj" type="OtherObjAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enum" type="OtherObjEnum" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="OtherObjectiveCategory">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="objIdx" type="ObjectiveIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjAnalysis">
@@ -790,26 +722,6 @@
 			<xs:element name="other" type="OtherConstraintIndexes" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="ConstraintIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="conIdx" type="ConstraintIndexWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ConstraintIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
 	<xs:complexType name="ConstraintIndexesWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -874,24 +786,13 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="category" type="OtherConstraintCategory" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="con" type="OtherConAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enum" type="OtherConEnum" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="OtherConstraintCategory">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="conIdx" type="ConstraintIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherConAnalysis">
