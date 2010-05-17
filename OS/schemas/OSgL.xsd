@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -2634,6 +2634,16 @@
 		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="BasisStatus">
+		<xs:sequence>
+			<xs:element name="basic" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="atLower" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="atUpper" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="isFree" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="superBasic" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="unknown" type="BasisIndexes" minOccurs="0"/>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="BasisIndexes">
 		<xs:annotation>

@@ -492,16 +492,6 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="BasisStatus">
-		<xs:sequence>
-			<xs:element name="basic" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="atLower" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="atUpper" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="isFree" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="superBasic" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="unknown" type="BasisIndexes" minOccurs="0"/>
-		</xs:sequence>
-	</xs:complexType>
 	<xs:complexType name="OtherVariableResult">
 		<xs:choice>
 			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
