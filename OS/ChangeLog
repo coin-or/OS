@@ -3,6 +3,13 @@ Sunday November 22 12:00:00 2009 Jun Ma <maj@northwestern.edu>
 Sunday November 22 12:00:00 2009 Kipp Martin <kmartin@chicagobooth.edu>
 
 
+
+
+	* Changes to Trunk put into Release 2.1.
+
+	* modified acceptable file names for OSSolverService, for example include a + sign as part of the file name
+
+
 	* Changes to Trunk put into Stable 2.1
 
 	* added eror checking to OSInstance, OSOption and OSResult
