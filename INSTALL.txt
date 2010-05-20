@@ -28,7 +28,7 @@ scripts complete successfully before proceeding to the next step.
  * Clone OSjava
  * Download/Build ThirdParty
     * In OSThirdParty run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
-    * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars.
+    * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars. -- if the script runs successfully you should see "scripts/get-third-party.sh successful"
     * In OSThirdParty run `bash scripts/build-coin-os.sh`
       * alternatively copy OSSolverService binaries to OSThirdParty/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
  * Optional: install a local version of Tomcat
@@ -38,10 +38,11 @@ scripts complete successfully before proceeding to the next step.
     * File > New > Other > 'Server' > 'select server type:' > Apache > Tomcat v6.0 Server > Next 
     * Select the Tomcat6 installation
       * Select `download or install` or select a local install of tomcat6 (for Ubuntu tomcat6-user.sh select Browse > Servers/local tomcat6)
+      
  * Import the projects OSThirdParty OSCommon and OSServer into eclipse
    * file > import > general > existing projects into workspace > next
    * for "select root directory" use browse to select the OSjava directory
-   * select OSThirdParty, OSCommon and OSServer and click finish.
+   * select OSThirdParty, OSCommon, OSJavaExamples,  and OSServer and click finish.
  * Configure projects.  In the 'package' window right click each project and do the following for each project:
    * OSThirdParty
      * project > properties > Project Facets > select: Java; Utility Module
