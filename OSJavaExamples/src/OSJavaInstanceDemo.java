@@ -100,7 +100,8 @@ public class OSJavaInstanceDemo {
 
 			String sSolverPath = "../OSThirdParty/lib/coin-or/OSSolverService";
 			System.out.print(sSolverPath + " " + sArguments );
-			ProcessUtil.launchAndWaitForFinish(sSolverPath + " " + sArguments);			
+			ProcessUtil.launchAndWaitForFinish(sSolverPath + " " + sArguments);		
+			System.out.print("\nDone" );
 
 
 		}//end try

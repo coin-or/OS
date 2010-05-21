@@ -84,10 +84,10 @@ public class StandardOSSolver extends DefaultSolver{
 				sSolverPath += sOS + sArch;
 				exe=new File(sSolverPath);
 			}
-			// make executable if necessary (war deployment hack)
-			if(! exe.canExecute()){
-				exe.setExecutable(true);
-			}
+			// make executable if necessary (war deployment hack) -- need 1.6
+			//if(! exe.canExecute()){
+			//	exe.setExecutable(true);
+			//}
 		}
 		else{
 			sSolverPath =  OSParameter.CODE_HOME + "solver/"+OSParameter.SOLVER_EXECUTABLE;
