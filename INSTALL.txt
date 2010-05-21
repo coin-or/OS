@@ -29,6 +29,7 @@ scripts complete successfully before proceeding to the next step.
  * Download/Build ThirdParty
     * In OSThirdParty run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
     * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars. -- if the script runs successfully you should see "scripts/get-third-party.sh successful"
+	(note: the get-third-party.sh requires a version of tar that supports the option --strip-components)
     * In OSThirdParty run `bash scripts/build-coin-os.sh`
       * alternatively copy OSSolverService binaries to OSThirdParty/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
  * Optional: install a local version of Tomcat
@@ -43,6 +44,7 @@ scripts complete successfully before proceeding to the next step.
    * file > import > general > existing projects into workspace > next
    * for "select root directory" use browse to select the OSjava directory
    * select OSThirdParty, OSCommon, OSJavaExamples,  and OSServer and click finish.
+
  * Configure projects.  In the 'package' window right click each project and do the following for each project:
    * OSThirdParty
      * project > properties > Project Facets > select: Java; Utility Module
@@ -52,12 +54,21 @@ scripts complete successfully before proceeding to the next step.
      * project > properties > Project Facets > select: Java; Dynamic Web Module > OK (do not skip OK)
      * project > properties > Java EE Module Dependency > select OSThirdParty and OSCommon
  * To remove "WTP metadata" errors right click on projects and select "validate"
+
  * Start Server
-   * Java EE Perspective > Window > Show View > Servers
    * Right click server and select `add or remove` and add `OSServer`
    * Right click server and select start.
    * Errors will be directed to the `console` view
+
  * Test server
    * in OSServer/test run `bash test.sh` or `test.cmd` for Windows.
- * Optionally deploy (run another server)
-   * add grant tomcat6 policies in OSServer/doc/tomcat6-policy.txt
+
+
+ * Deploy to the server
+   * Right click on the OSServer package and select export
+   * Under Web select "WAR file"
+   * Select "Next" and then save the WAR file in the webapps directory in the Tomcat root directory
+   * Copy the OSSolverService executable to webapps/OSServer/WEB-INF/classes
+   * start the server
+   * in OSServer/test run `bash test.sh` or `test.cmd` for Windows.
+   * (if necessary) add grant tomcat6 policies in OSServer/doc/tomcat6-policy.txt

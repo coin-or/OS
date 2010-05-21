@@ -95,8 +95,6 @@ public class OSJavaInstanceDemo {
 			IOUtil.writeStringToFile(osil, "parincLinear.osil");
 			
 			// now let's solve this guy
-			// we are assuming that the OSSolverService executable is in the same directory as
-			// this OSJavaDemo class
 			String sArguments = 
 			" -osil parincLinear.osil -osrl result.osrl" ;
 
