@@ -8,31 +8,54 @@ is important here otherwise additional steps (refresh and select
 additional options) will need to be performed.  Please ensure the
 scripts complete successfully before proceeding to the next step.
 
-== Install ==
+== Install Without a Web Server==
+
+If you wish to use Java to build model instances, interface with the OS APIs, 
+and solve problems locally do the following. If you wish to incorporate an OS Web Service
+inside Tomcat skip to the section  "Install with a Web Server.
+
+
+* Download/Build ThirdParty
+    * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars. -- if the script runs successfully you should see "scripts/get-third-party.sh successful"
+	(note: the get-third-party.sh requires a version of tar that supports the option --strip-components)
+    * Copy the OSSolverService appropriate for your platform to OSThirdParty/lib/coin-or/OSSolverService.
+    * Alternatively, if you wish to build your own OSSolverService, in OSThirdParty run `bash scripts/build-coin-os.sh`
+     
+
+
+ * Start Eclipse
+   * Import the projects OSThirdParty, OSCommon, and OSJavaExamples into eclipse
+   * file > import > general > existing projects into workspace > next
+   * for "select root directory" use browse to select the OSjava directory
+   * select OSThirdParty, OSCommon, and OSJavaExamples and click finish.
+
+
+* Test the example in OSJavaExamples
+   * Right-click on OSJavaExamples and select "Run As Java Application"
+   * The example, OSJavaInstanceDemo.java will build a simple linear program,
+     call the OSSolverService in OSThirdParty/lib/coin-or/OSSolverService, and write the
+     answer to the file result.osrl in OSJavaExamples
+
+
+== Install With a Web Server==
+
  * Use an Eclipse with WTP
-   * in Ubuntu run sudo eclipse
+   * if you are in Unix platform run sudo eclipse, on Windows simply start Eclipse
    * select help > install new software
    * in the "work with: " text box select, "Eclipse Galileo Repository" if available.  
      * If it is not available added by pasting http://download.eclipse.org/releases/galileo/ into text box and click add.
    * Select 
      * "Web, XML, and Java EE Development"
-     * "Collaboration"
-     * "Programming Languages"
-   * For Ubuntu find and unselect
-     * Eclipse CVS Client
-     * Eclipse Java Development Tools
    * click Next, Accept, Finish.
-   * Wait and restart Eclipse
-   * If asked on restart select "SVN Kit 1.3.0" and install, restart Eclipse when prompted.
    * Exit Eclipse
- * Clone OSjava
+
  * Download/Build ThirdParty
-    * In OSThirdParty run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
     * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars. -- if the script runs successfully you should see "scripts/get-third-party.sh successful"
 	(note: the get-third-party.sh requires a version of tar that supports the option --strip-components)
-    * In OSThirdParty run `bash scripts/build-coin-os.sh`
-      * alternatively copy OSSolverService binaries to OSThirdParty/lib/coin-or/OSSolverService-(Linux-i686|Linux-x86_64).
- * Optional: install a local version of Tomcat
+    * Copy the OSSolverService appropriate for your platform to OSThirdParty/lib/coin-or/OSSolverService.
+    * Alternatively, if you wish to build your own OSSolverService, in OSThirdParty run `bash scripts/build-coin-os.sh`
+
+ * Install a local version of Tomcat
     * for Ubuntu, in OSThirdParty run `bash scripts/tomcat6-user.sh`
  * Start Eclipse
  * Add a Tomcat 6 "Server" to Eclipse
@@ -45,26 +68,21 @@ scripts complete successfully before proceeding to the next step.
    * for "select root directory" use browse to select the OSjava directory
    * select OSThirdParty, OSCommon, OSJavaExamples,  and OSServer and click finish.
 
- * Configure projects.  In the 'package' window right click each project and do the following for each project:
-   * OSThirdParty
-     * project > properties > Project Facets > select: Java; Utility Module
-   * OSCommon
-     * project > properties > Project Facets > select: Java; Utility Module
-   * OSServer
+ * Configure the OSServer project.  In the 'package' window right click each project and do the following for each project:
      * project > properties > Project Facets > select: Java; Dynamic Web Module > OK (do not skip OK)
      * project > properties > Java EE Module Dependency > select OSThirdParty and OSCommon
- * To remove "WTP metadata" errors right click on projects and select "validate"
+ * To remove "WTP metadata" errors, if they exist, right click on projects and select "validate"
 
  * Start Server
    * Right click server and select `add or remove` and add `OSServer`
    * Right click server and select start.
    * Errors will be directed to the `console` view
 
- * Test server
+ * Test server inside Tomcat
    * in OSServer/test run `bash test.sh` or `test.cmd` for Windows.
 
 
- * Deploy to the server
+ * Deploy to the server outside of Tomcat 
    * Right click on the OSServer package and select export
    * Under Web select "WAR file"
    * Select "Next" and then save the WAR file in the webapps directory in the Tomcat root directory
@@ -72,3 +90,27 @@ scripts complete successfully before proceeding to the next step.
    * start the server
    * in OSServer/test run `bash test.sh` or `test.cmd` for Windows.
    * (if necessary) add grant tomcat6 policies in OSServer/doc/tomcat6-policy.txt
+
+
+=======================================================
+Additional Notes:
+
+If you wish to use svn inside Eclipse do the following
+   * in Ubuntu run sudo eclipse
+   * select help > install new software
+   * in the "work with: " text box select, "Eclipse Galileo Repository" if available.  
+     * If it is not available added by pasting http://download.eclipse.org/releases/galileo/ into text box and click add.
+   * Select 
+     * "Collaboration"
+     * "Programming Languages"
+   * For Ubuntu find and unselect
+     * Eclipse CVS Client
+     * Eclipse Java Development Tools
+   * click Next, Accept, Finish.
+   * Wait and restart Eclipse
+   * If asked on restart select "SVN Kit 1.3.0" and install, restart Eclipse when prompted.
+   * Exit Eclipse
+
+In Ubuntu the following may be necessary:
+
+    * In OSThirdParty run `sudo bash scripts/install-packages-ubuntu-karmic.sh` or install similar packages for your distribution.
