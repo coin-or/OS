@@ -11,17 +11,27 @@ scripts complete successfully before proceeding to the next step.
 == Install Without a Web Server==
 
 If you wish to use Java to build model instances, interface with the OS APIs, 
-and solve problems locally do the following. If you wish to incorporate an OS Web Service
-inside Tomcat skip to the section  "Install with a Web Server.
+and solve problems locally do the following ( if you wish to incorporate an OS Web Service
+inside Tomcat skip to the section  "Install with a Web Server):
 
 
 * Download/Build ThirdParty
     * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars. -- if the script runs successfully you should see "scripts/get-third-party.sh successful"
 	(note: the get-third-party.sh requires a version of tar that supports the option --strip-components)
-    * Copy the OSSolverService appropriate for your platform to OSThirdParty/lib/coin-or/OSSolverService.
+    * Copy the OSSolverService executable that is appropriate for your platform to OSThirdParty/lib/coin-or/OSSolverService. You can
+	download OSSolverService for various  platforms at:
+		http://www.coin-or.org/download/binary/OS/OSSolverService/
     * Alternatively, if you wish to build your own OSSolverService, in OSThirdParty run `bash scripts/build-coin-os.sh`
      
-
+ * Use an Eclipse with WTP (Web Tools Platform)
+   * if you are in Unix platform run sudo eclipse, on Windows simply start Eclipse
+   * select help > install new software
+   * in the "work with: " text box select, "Eclipse Galileo Repository" if available.  
+     * If it is not available added by pasting http://download.eclipse.org/releases/galileo/ into text box and click add.
+   * Select 
+     * "Web, XML, and Java EE Development"
+   * click Next, Accept, Finish.
+   * Exit Eclipse
 
  * Start Eclipse
    * Import the projects OSThirdParty, OSCommon, and OSJavaExamples into eclipse
@@ -29,7 +39,10 @@ inside Tomcat skip to the section  "Install with a Web Server.
    * for "select root directory" use browse to select the OSjava directory
    * select OSThirdParty, OSCommon, and OSJavaExamples and click finish.
 
-
+ * Configure the OSCommon and OSThirdParty projects.  In the 'package' window right click each project 
+   and do the following for each project:
+     * project > properties > Project Facets > select: Java; Utility Module > Apply > OK 
+ 
 * Test the example in OSJavaExamples
    * Right-click on OSJavaExamples and select "Run As Java Application"
    * The example, OSJavaInstanceDemo.java will build a simple linear program,
@@ -37,9 +50,12 @@ inside Tomcat skip to the section  "Install with a Web Server.
      answer to the file result.osrl in OSJavaExamples
 
 
+
+
+
 == Install With a Web Server==
 
- * Use an Eclipse with WTP
+ * Use an Eclipse with WTP (Web Tools Platform)
    * if you are in Unix platform run sudo eclipse, on Windows simply start Eclipse
    * select help > install new software
    * in the "work with: " text box select, "Eclipse Galileo Repository" if available.  
@@ -52,7 +68,9 @@ inside Tomcat skip to the section  "Install with a Web Server.
  * Download/Build ThirdParty
     * In OSThirdParty run `bash scripts/get-third-party.sh` to download and unpack third party jars. -- if the script runs successfully you should see "scripts/get-third-party.sh successful"
 	(note: the get-third-party.sh requires a version of tar that supports the option --strip-components)
-    * Copy the OSSolverService appropriate for your platform to OSThirdParty/lib/coin-or/OSSolverService.
+    * Copy the OSSolverService executable that is appropriate for your platform to OSThirdParty/lib/coin-or/OSSolverService. You can
+	download OSSolverService for various  platforms at:
+		http://www.coin-or.org/download/binary/OS/OSSolverService/
     * Alternatively, if you wish to build your own OSSolverService, in OSThirdParty run `bash scripts/build-coin-os.sh`
 
  * Install a local version of Tomcat
@@ -68,7 +86,15 @@ inside Tomcat skip to the section  "Install with a Web Server.
    * for "select root directory" use browse to select the OSjava directory
    * select OSThirdParty, OSCommon, OSJavaExamples,  and OSServer and click finish.
 
- * Configure the OSServer project.  In the 'package' window right click each project and do the following for each project:
+ * Configure the OSThirParty, OSCommon, and OSServer projects.  In the 'package' window right click each 
+     project and do the following for each project:
+   *OSThirdParty
+     * project > properties > Project Facets > select: Java; Utility Module > Apply > OK 
+
+   *OSCommon
+     * project > properties > Project Facets > select: Java; Utility Module > Apply > OK
+    
+   *OSServer
      * project > properties > Project Facets > select: Java; Dynamic Web Module > OK (do not skip OK)
      * project > properties > Java EE Module Dependency > select OSThirdParty and OSCommon
  * To remove "WTP metadata" errors, if they exist, right click on projects and select "validate"
