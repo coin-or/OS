@@ -1,7 +1,7 @@
 \begin{thebibliography}{1}
 
 \bibitem{bell2007}
-B. Bell.
+Bradley Bell.
 \newblock {CppAD Documentation}, 2007.
 \newblock \url{http://www.coin-or.org/CppAD/Doc/cppad.xml}.
 
@@ -11,7 +11,7 @@ R.~Fourer, L.~Lopes, and K.~Martin.
 \newblock {\em {INFORMS} Journal on Computing}, 17:139--158, 2005.
 
 \bibitem{griewank2000}
-A. Griewank.
+Andreas Griewank.
 \newblock {\em Evaluating Derivatives:\ Principles and Techniques of
   Algorithmic Differentiation}.
 \newblock SIAM, Philadelphia, PA, 2000.

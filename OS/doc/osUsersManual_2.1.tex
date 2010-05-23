@@ -13,7 +13,7 @@
 \bibliographystyle{plain}
 \makeindex
 
-
+ 
 %%%%%
 % some other macros
 \newcommand{\figurepath}{./figures}
@@ -43,7 +43,7 @@
 \textwidth 6.5in \topmargin 0pt\textheight 9.0in
 \newtheorem{theorem}{Theorem}
 
-
+ 
 %%%%Added by Leo%%%%
 \newcounter{Fig}
 \renewcommand{\theFig}{\arabic{Fig}}
@@ -237,7 +237,7 @@ more information.
 \hyphenation{com-plex-Type}
 \hyphenation{GAMS-links}
 
-
+ 
 
 %\noindent\hrulefill
 \newpage
@@ -540,7 +540,7 @@ The last file contains an important DLL, msys-regex-0.dll, without which {\tt fl
 Doxygen\index{Doxygen}  ({\tt\UrlDoxygen}) is a document production system that can be used to prepare documentation
 for the OS project and related software. For details, see Section~\ref{section:documentation}.
 
-
+ 
 \subsection{Obtaining OS Source Code Using Subversion (SVN)}\label{section:downloadwithsvn}
 
 For the rest of this documentation, we assume that  the name of the root directory
@@ -1999,7 +1999,7 @@ configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitr
 --with-knitro-incdir=/home/kmartin/files/code/knitro/linux/include
 \end{verbatim}
 
-\end{itemize}
+\end{enumerate}
 \index{Knitro|)}
 \fi
 
@@ -2631,7 +2631,7 @@ Other solvers supported (if the necessary libraries are present) are
 {\tt cplex} (Cplex through COIN-OR Osi)\index{cplex@{\tt cplex}},
 {\tt glpk} (GLPK\index{GLPK@{\tt GLPK}} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}})
 %, {\tt ipopt} (COIN-OR Ipopt)
-\ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}\fi
+\ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}}\fi
 and {\tt lindo} (LINDO)\index{LINDO}.
 If no value is specified for this parameter, then a default value is used 
 %then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter 
@@ -5941,39 +5941,47 @@ to also download and install the Windows Platform SDK\index{Windows Platform SDK
 \noindent See also Section~\ref{section:msvs}.
 
 
-\subsection{OSJavaDemo:  Building an OSiL Instance in Java}\label{section:exampleOSJavaDemo}
+\subsection{OSJavaInstanceDemo:  Building an OSiL Instance in
+Java}\label{section:exampleOSJavaDemo}
 \index{Java|(}
 
-In this example we demonstrate how to build an OSiL instance using the Java OSInstance API. In order to use this example, the user will have to download the following:
+In this example we demonstrate how to build an OSiL instance using the Java
+OSInstance API.  The example code also  illustrates calling the {\tt
+OSSolverService} executable from Java. In order to use this example, the user should do an svn
+checkout:
 
 \begin{verbatim}
-svn co https://projects.coin-or.org/svn/OS/branches/OSjava/OSCommon osjava
+svn co https://projects.coin-or.org/svn/OS/branches/OSjava OSjava
 \end{verbatim}
-Then set the Class Path to the following jar files.
-\begin{itemize}
-\item OSCommon.jar
-\item axis.jar
-\item jaxrpc.jar
-\item xerces.jar
-\item commons-logging.jar
-\item commons-discovery.jar
-\item or124.jar
-\end{itemize}
-The code demonstrates how the Java OSInstance can be used to generate a linear program and then call the  
-C++ {  \bf OSSolverService} executable to solve the problem.\index{Java|)}  In order to run the problem type in at the command line
 
+The {\tt OSjava} folder contains the file {\tt INSTALL.txt}. Please follow the
+instructions in {\tt  INSTALL.txt} under the heading:
 \begin{verbatim}
-javac OSJavaDemo.java
+== Install Without a Web Server==
 \end{verbatim}
 
-In order to execute the problem type in
-
+These instructions assume that the user has installed the Eclipse IDE. See
+\url{http://www.eclipse.org/downloads/}. At this link we recommend that the 
+user get {\tt Eclipse Classic}.  In addition, the user should also have a copy of the
+{\tt OSSolverService} executable that is compatible with his or her platform.
+The {\tt OSSolverService} executable for several different platforms is
+available at \url{http://www.coin-or.org/download/binary/OS/OSSolverService/}. 
+The user can also build the executable as described in this Manual.  See Section
+\ref{section:build}. The code base for this example is in the folder:
 \begin{verbatim}
-java OSJavaDemo
+OSjava/OSJavaExamples/src/OSJavaInstanceDemo.java
 \end{verbatim}
-
-it will generate the file {\tt parincLinear.osil} that is a test problem that can be used with {\tt OSSolverService}.  In order for this example to work, the file {\tt OSParameter.xml} must be present in the {\tt OSJavaDemo} directory.
-
+The code in the file {\tt OSJavaInstanceDemo.java} demonstrates how the
+Java OSInstance API that is in {\tt OSCommon} can be used to generate a linear
+program and then call the C++ {\tt OSSolverService} executable 
+to solve the problem.\index{Java|)}  Running this example in Eclipse will
+generate in the folder
+\begin{verbatim}
+OSjava/OSJavaExamples
+\end{verbatim}
+two files. It will generate {\tt parincLinear.osil} which is a linear program in
+the OS OSiL format, it will also call the {\tt OSSolverService} executable which
+generates the result file {\tt result.osrl} in the OS OSrL format. 
 
 
 \subsection{  template }\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
@@ -5982,7 +5990,7 @@ header files and libraries. For Windows users there is also a solution file conf
 of the libraries in the {\tt lib} directory and pointing to all of the header files in the {\tt include} directory.
 The user can write his or her own code here.
 
-
+ 
 
 
 
@@ -6791,7 +6799,7 @@ CoinMessageHandler.
 \end{comment}
 
 %\fi %--------------------------------------------------
-
+ 
 
 \section{Appendix -- Sample OSiL files}\label{section:appendix}
 
@@ -6960,10 +6968,12 @@ CoinMessageHandler.
 
 \addcontentsline{toc}{section}{Bibliography}
 % \addcontentsline{toc}{section}{Bibliography}% alternative for article class
-\bibliography{\bibpath/kippbib}
-
+%\bibliography{\bibpath/kippbib}
+\bibliographystyle{amsplain}
+\bibliography{kippbib}
+ 
 \printindex
-
+  
 \end{document}
 
 %===========================================================================================================
@@ -6973,8 +6983,8 @@ CoinMessageHandler.
 %===========================================================================================================
 
 Here is where you get winsock.h
-
-
+ 
+ 
 ftp://sunsite.unc.edu/pub/micro/pc-stuff/ms-windows/winsock/winsock-1.1/winsock.h
 
 see also
@@ -6986,7 +6996,7 @@ For the SDK (windows.h)
 
 http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&displaylang=en#Instructions
 
-
+   
 Important comments from Lou:
 
 	Using Coin-All as of late afternoon (up-to-date, according to svn
@@ -7498,7 +7508,7 @@ www.ampl.com/REFS/abstracts.html#rounding and available from netlib.
 02646 #else
 02647     (double d, int mode, int ndigits, int *decpt, int *sign, char **rve)
 02648 #endif
-02649 {
+02649 
 02650  /* Arguments ndigits, decpt, sign are similar to those
 02651     of ecvt and fcvt; trailing zeros are suppressed from
 02652     the returned string.  If not null, *rve is set to point
