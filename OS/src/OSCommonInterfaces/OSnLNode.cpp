@@ -1388,6 +1388,15 @@ double OSnLNodeErf::calculateFunction(double *x){
 
 
 ADdouble OSnLNodeErf::constructADTape(std::map<int, int> *ADIdx, vector< ADdouble > *XAD){
+/***
+ * 
+ * This is a fast approximation (few numerical operations) 
+ * with relative error bound $latex 4 \times 10^{-4}$$; see 
+ * Vedder, J.D., "Simple approximations for the error function and its inverse",
+ * American Journal of Physics, v 55, n 8, 1987, p 762-3. I took this reference from 
+ * Brad Bell's erf.hpp
+ * 
+ */
 	const double a = (993./880.);
 	const double b =  (89./880.); 
 
