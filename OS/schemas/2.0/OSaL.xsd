@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -334,10 +334,10 @@
 		</xs:annotation>
 		<xs:choice>
 			<xs:element name="var" type="OtherVarAnalysis" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enum" type="OtherVarEnum" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enumeration" type="OtherVarEnum" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
-		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -528,8 +528,8 @@
 			<xs:element name="obj" type="OtherObjAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="enum" type="OtherObjEnum" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
-		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -791,8 +791,8 @@
 			<xs:element name="con" type="OtherConAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="enum" type="OtherConEnum" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
-		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
@@ -1200,8 +1200,8 @@
 			<xs:element name="category" type="OtherNonlinearExpressionCategory" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="nl" type="OtherNlAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
-		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
+		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
