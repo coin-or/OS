@@ -334,7 +334,7 @@
 		</xs:annotation>
 		<xs:choice>
 			<xs:element name="var" type="OtherVarAnalysis" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enum" type="OtherVarEnum" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
@@ -526,7 +526,7 @@
 		</xs:annotation>
 		<xs:choice>
 			<xs:element name="obj" type="OtherObjAnalysis" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enum" type="OtherObjEnum" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enum" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="required"/>
@@ -789,7 +789,7 @@
 		</xs:annotation>
 		<xs:choice>
 			<xs:element name="con" type="OtherConAnalysis" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enum" type="OtherConEnum" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enum" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfCategories" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>

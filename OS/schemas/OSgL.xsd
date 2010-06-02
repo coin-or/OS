@@ -2342,7 +2342,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="symmetricTSP"/>
 					<xs:enumeration value="asymmetricTSP"/>
-					<xs:enumeration value="probalisticTSP"/>
+					<xs:enumeration value="probabilisticTSP"/>
 					<xs:enumeration value="SOP"/>
 					<xs:enumeration value="HCP"/>
 					<xs:enumeration value="CVRP"/>
@@ -2602,7 +2602,7 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OtherVarEnum">
+	<xs:complexType name="OtherVarEnumeration">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -2613,7 +2613,7 @@
 		<xs:attribute name="value" type="xs:string" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="OtherObjEnum">
+	<xs:complexType name="OtherObjEnumeration">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -2624,7 +2624,7 @@
 		<xs:attribute name="value" type="xs:string" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="OtherConEnum">
+	<xs:complexType name="OtherConEnumeration">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
