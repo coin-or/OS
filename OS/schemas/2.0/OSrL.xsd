@@ -431,7 +431,7 @@
 	<xs:complexType name="OtherObjectiveResult">
 		<xs:choice>
 			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enumeration" type="OtherObjEnum" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enumeration" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -496,7 +496,7 @@
 	<xs:complexType name="OtherVariableResult">
 		<xs:choice>
 			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enumeration" type="OtherVarEnum" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -541,7 +541,7 @@
 	<xs:complexType name="OtherConstraintResult">
 		<xs:choice>
 			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enumeration" type="OtherConEnum" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enumeration" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:choice>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
