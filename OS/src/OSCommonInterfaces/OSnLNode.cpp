@@ -1382,7 +1382,11 @@ std::string OSnLNodeErf::getTokenName(){
 }// end OSnLNodeErf::getTokenName(
 
 double OSnLNodeErf::calculateFunction(double *x){
-	m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
+	const double a = (993./880.);
+	const double b =  (89./880.); 
+	//m_dFunctionValue = fabs(m_mChildren[0]->calculateFunction( x) );
+	m_dFunctionValue = tanh( (a + b * m_mChildren[0]->calculateFunction( x) * m_mChildren[0]->calculateFunction( x)) * m_mChildren[0]->calculateFunction( x) );
+	//std::cout << "function value =   " << m_dFunctionValue << std::endl;
 	return m_dFunctionValue;
 }// end OSnLNodeErf::calculate
 
