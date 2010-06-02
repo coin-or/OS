@@ -29,7 +29,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="AnalysisHeader">
-		<xs:annotation>
+		<xs:annotation> 
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
