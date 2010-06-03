@@ -2342,7 +2342,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="symmetricTSP"/>
 					<xs:enumeration value="asymmetricTSP"/>
-					<xs:enumeration value="probalisticTSP"/>
+					<xs:enumeration value="probabilisticTSP"/>
 					<xs:enumeration value="SOP"/>
 					<xs:enumeration value="HCP"/>
 					<xs:enumeration value="CVRP"/>
@@ -2602,7 +2602,7 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OtherVarEnum">
+	<xs:complexType name="OtherVarEnumeration">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -2613,7 +2613,7 @@
 		<xs:attribute name="value" type="xs:string" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="OtherObjEnum">
+	<xs:complexType name="OtherObjEnumeration">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -2624,7 +2624,7 @@
 		<xs:attribute name="value" type="xs:string" use="required"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="OtherConEnum">
+	<xs:complexType name="OtherConEnumeration">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -2731,6 +2731,27 @@
 			<xs:extension base="xs:negativeInteger">
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
 				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="StorageCapacity">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" use="optional" default="byte">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="byte"/>
+							<xs:enumeration value="kilobyte"/>
+							<xs:enumeration value="megabyte"/>
+							<xs:enumeration value="gigabyte"/>
+							<xs:enumeration value="terabyte"/>
+							<xs:enumeration value="petabyte"/>
+							<xs:enumeration value="exabyte"/>
+							<xs:enumeration value="zettabyte"/>
+							<xs:enumeration value="yottabyte"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

@@ -333,8 +333,16 @@
 			<xs:documentation>draft. numberOfVar is required if there is a var array and numberOfEnumerations is required if there is an enumeration array</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="var" type="OtherVarAnalysis" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="OtherVarAnalysis" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -525,8 +533,16 @@
 			<xs:documentation>draft. numberOfObj is required if there is an obj array and numberOfEnumerations is required if there is an enumeration array</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="obj" type="OtherObjAnalysis" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enum" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="OtherObjAnalysis" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -583,7 +599,7 @@
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="increasing"/>
 					<xs:enumeration value="strictlyIncreasing"/>
-					<xs:enumeration value="descreasing"/>
+					<xs:enumeration value="decreasing"/>
 					<xs:enumeration value="strictlyDecreasing"/>
 					<xs:enumeration value="constant"/>
 					<xs:enumeration value="none"/>
@@ -788,8 +804,16 @@
 			<xs:documentation>draft. numberOfCon is required if there is a con array and numberOfEnumerations is required if there is an enumeration array</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="con" type="OtherConAnalysis" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enum" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="con" type="OtherConAnalysis" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -1197,8 +1221,16 @@
 			<xs:documentation>draft. numberOfNl is required if there is an nl array and numberOfEnumerations is required if there is an enumeration array</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="enumeration" type="OtherNonlinearExpressionEnumeration" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="nl" type="OtherNlAnalysis" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="nl" type="OtherNlAnalysis" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfNl must be set in parent, and the number of entries must agree with numberOfNl</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherNonlinearExpressionEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfNl" type="xs:nonNegativeInteger" use="optional" default="0"/>

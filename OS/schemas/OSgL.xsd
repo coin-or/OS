@@ -2734,4 +2734,25 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+	<xs:complexType name="StorageCapacity">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" use="optional" default="byte">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="byte"/>
+							<xs:enumeration value="kilobyte"/>
+							<xs:enumeration value="megabyte"/>
+							<xs:enumeration value="gigabyte"/>
+							<xs:enumeration value="terabyte"/>
+							<xs:enumeration value="petabyte"/>
+							<xs:enumeration value="exabyte"/>
+							<xs:enumeration value="zettabyte"/>
+							<xs:enumeration value="yottabyte"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 </xs:schema>

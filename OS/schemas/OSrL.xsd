@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: version 2.0 (The entire schema except for osrl->optimization->osal)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
@@ -63,8 +63,8 @@
 	<xs:complexType name="SystemResult">
 		<xs:all>
 			<xs:element name="systemInformation" type="xs:string" minOccurs="0"/>
-			<xs:element name="availableDiskSpace" type="DiskSpace" default="0.0" minOccurs="0"/>
-			<xs:element name="availableMemory" type="MemorySize" default="0.0" minOccurs="0"/>
+			<xs:element name="availableDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
+			<xs:element name="availableMemory" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="availableCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
 			<xs:element name="availableCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="otherResults" type="OtherResults" minOccurs="0"/>
@@ -113,8 +113,8 @@
 			<xs:element name="actualStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="endTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="timingInformation" type="TimingInformation" minOccurs="0"/>
-			<xs:element name="usedDiskSpace" type="DiskSpace" default="0.0" minOccurs="0"/>
-			<xs:element name="usedMemory" type="MemorySize" default="0.0" minOccurs="0"/>
+			<xs:element name="usedDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
+			<xs:element name="usedMemory" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="usedCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
 			<xs:element name="usedCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="otherResults" type="OtherResults" minOccurs="0"/>
@@ -430,8 +430,16 @@
 	</xs:complexType>
 	<xs:complexType name="OtherObjectiveResult">
 		<xs:choice>
-			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enumeration" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="obj" type="OtherObjResult" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -495,8 +503,16 @@
 	</xs:complexType>
 	<xs:complexType name="OtherVariableResult">
 		<xs:choice>
-			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="var" type="OtherVarResult" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -540,8 +556,16 @@
 	</xs:complexType>
 	<xs:complexType name="OtherConstraintResult">
 		<xs:choice>
-			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="enumeration" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="con" type="OtherConResult" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="enumeration" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
