@@ -50,7 +50,19 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfEl</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:nonNegativeInteger">
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
@@ -2636,25 +2648,38 @@
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="BasisStatus">
-		<xs:sequence>
-			<xs:element name="basic" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="atLower" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="atUpper" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="isFree" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="superBasic" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="unknown" type="BasisIndexes" minOccurs="0"/>
-		</xs:sequence>
-	</xs:complexType>
-	<xs:complexType name="BasisIndexes">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the idx child elements must agree with numberOfIdx (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="idx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="basic" type="IndexSet" minOccurs="0"/>
+			<xs:element name="atLower" type="IndexSet" minOccurs="0"/>
+			<xs:element name="atUpper" type="IndexSet" minOccurs="0"/>
+			<xs:element name="isFree" type="IndexSet" minOccurs="0"/>
+			<xs:element name="superBasic" type="IndexSet" minOccurs="0"/>
+			<xs:element name="unknown" type="IndexSet" minOccurs="0"/>
 		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IndexSet">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="idx" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfIdx</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:nonNegativeInteger">
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+		</xs:choice>
 		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="BasisIndex">
@@ -2749,6 +2774,50 @@
 							<xs:enumeration value="exabyte"/>
 							<xs:enumeration value="zettabyte"/>
 							<xs:enumeration value="yottabyte"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="TimeUnit">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" use="optional" default="second">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="tick"/>
+							<xs:enumeration value="millisecond"/>
+							<xs:enumeration value="second"/>
+							<xs:enumeration value="minute"/>
+							<xs:enumeration value="hour"/>
+							<xs:enumeration value="day"/>
+							<xs:enumeration value="week"/>
+							<xs:enumeration value="month"/>
+							<xs:enumeration value="year"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="CPUSpeed">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" use="optional" default="hertz">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="hertz"/>
+							<xs:enumeration value="kilohertz"/>
+							<xs:enumeration value="megahertz"/>
+							<xs:enumeration value="gigahertz"/>
+							<xs:enumeration value="terahertz"/>
+							<xs:enumeration value="flops"/>
+							<xs:enumeration value="kiloflops"/>
+							<xs:enumeration value="megaflops"/>
+							<xs:enumeration value="gigaflops"/>
+							<xs:enumeration value="teraflops"/>
+							<xs:enumeration value="petaflops"/>
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
