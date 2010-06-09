@@ -185,7 +185,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/lib/${JAR}.jar ${VERSION}/lib/jaxrpc.jar ${VERSION}/lib/wsdl4j-*.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*"
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/lib/${JAR}.jar ${VERSION}/lib/jaxrpc.jar ${VERSION}/lib/saaj.jar ${VERSION}/lib/wsdl4j-*.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*"
 fi
 
 echo "scripts/get-third-party.sh successful"
