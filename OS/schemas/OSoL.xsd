@@ -93,73 +93,10 @@
 		<xs:all>
 			<xs:element name="minDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="minMemorySize" type="StorageCapacity" default="0.0" minOccurs="0"/>
-			<xs:element name="minCPUSpeed" type="MinCPUSpeed" default="0.0" minOccurs="0"/>
-			<xs:element name="minCPUNumber" type="MinCPUNumber" default="1" minOccurs="0"/>
+			<xs:element name="minCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
+			<xs:element name="minCPUNumber" type="xs:positiveInteger" default="1" minOccurs="0"/>
 			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
 		</xs:all>
-	</xs:complexType>
-	<xs:complexType name="MinDiskSpace">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="byte">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="byte"/>
-							<xs:enumeration value="kilobyte"/>
-							<xs:enumeration value="megabyte"/>
-							<xs:enumeration value="gigabyte"/>
-							<xs:enumeration value="terabyte"/>
-							<xs:enumeration value="petabyte"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="MinMemorySize">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="byte">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="byte"/>
-							<xs:enumeration value="kilobyte"/>
-							<xs:enumeration value="megabyte"/>
-							<xs:enumeration value="gigabyte"/>
-							<xs:enumeration value="terabyte"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="MinCPUSpeed">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="hertz">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="hertz"/>
-							<xs:enumeration value="kilohertz"/>
-							<xs:enumeration value="megahertz"/>
-							<xs:enumeration value="gigahertz"/>
-							<xs:enumeration value="terahertz"/>
-							<xs:enumeration value="flops"/>
-							<xs:enumeration value="kiloflops"/>
-							<xs:enumeration value="megaflops"/>
-							<xs:enumeration value="gigaflops"/>
-							<xs:enumeration value="teraflops"/>
-							<xs:enumeration value="petaflops"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="MinCPUNumber">
-		<xs:simpleContent>
-			<xs:extension base="xs:int"/>
-		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="ServiceOption">
 		<xs:all>
@@ -181,7 +118,7 @@
 	</xs:complexType>
 	<xs:complexType name="JobOption">
 		<xs:all>
-			<xs:element name="maxTime" type="MaxTime" default="INF" minOccurs="0"/>
+			<xs:element name="maxTime" type="TimeSpan" default="INF" minOccurs="0"/>
 			<xs:element name="requestedStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="dependencies" type="JobDependencies" minOccurs="0"/>
 			<xs:element name="requiredDirectories" minOccurs="0">
@@ -213,19 +150,7 @@
 	<xs:complexType name="MaxTime">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="second">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="second"/>
-							<xs:enumeration value="minute"/>
-							<xs:enumeration value="hour"/>
-							<xs:enumeration value="day"/>
-							<xs:enumeration value="week"/>
-							<xs:enumeration value="month"/>
-							<xs:enumeration value="year"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="unit" type="GeneralEnumerationTimeUnit" use="optional" default="second"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -380,7 +305,7 @@
 					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
@@ -437,7 +362,7 @@
 					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
@@ -517,7 +442,11 @@
 					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -548,4 +477,69 @@
 		</xs:sequence>
 		<xs:attribute name="numberOfSolverOptions" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<!--
+	<xs:complexType name="MinDiskSpace">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" use="optional" default="byte">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="byte"/>
+							<xs:enumeration value="kilobyte"/>
+							<xs:enumeration value="megabyte"/>
+							<xs:enumeration value="gigabyte"/>
+							<xs:enumeration value="terabyte"/>
+							<xs:enumeration value="petabyte"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MinMemorySize">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" use="optional" default="byte">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="byte"/>
+							<xs:enumeration value="kilobyte"/>
+							<xs:enumeration value="megabyte"/>
+							<xs:enumeration value="gigabyte"/>
+							<xs:enumeration value="terabyte"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MinCPUSpeed">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" use="optional" default="hertz">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="hertz"/>
+							<xs:enumeration value="kilohertz"/>
+							<xs:enumeration value="megahertz"/>
+							<xs:enumeration value="gigahertz"/>
+							<xs:enumeration value="terahertz"/>
+							<xs:enumeration value="flops"/>
+							<xs:enumeration value="kiloflops"/>
+							<xs:enumeration value="megaflops"/>
+							<xs:enumeration value="gigaflops"/>
+							<xs:enumeration value="teraflops"/>
+							<xs:enumeration value="petaflops"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MinCPUNumber">
+		<xs:simpleContent>
+			<xs:extension base="xs:int"/>
+		</xs:simpleContent>
+	</xs:complexType>
+-->
 </xs:schema>
