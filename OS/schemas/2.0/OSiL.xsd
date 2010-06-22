@@ -165,9 +165,14 @@
 	</xs:complexType>
 	<xs:complexType name="Variable">
 		<xs:annotation>
-			<xs:documentation>since version 1.0. Variable type "D" semi-continuous) and "J" (semi-integer) since 2.0.</xs:documentation>
+			<xs:documentation>since version 1.0. Variable type "D" (semi-continuous) and "J" (semi-integer) since 2.0.</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+		<!--		
 		<xs:attribute name="type" use="optional" default="C">
 			<xs:annotation>
 				<xs:documentation>C=continuous, I=integer, B=binary, S= string-valued, D=semicontinuous, J=semi-integer</xs:documentation>
@@ -183,9 +188,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
-		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+-->
 	</xs:complexType>
 	<!--Objectives: since version 1.0-->
 	<xs:complexType name="Objectives">
@@ -1431,6 +1434,11 @@
 			<xs:element name="coneVar" type="StochasticNumberConeVar"/>
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
+		<xs:attribute name="lb" type="xs:double" use="optional"/>
+		<xs:attribute name="ub" type="xs:double" use="optional"/>
+		<xs:attribute name="nominalValue" type="xs:double" use="optional"/>
+		<!--		
 		<xs:attribute name="type" use="optional" default="C">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -1441,9 +1449,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="lb" type="xs:double" use="optional"/>
-		<xs:attribute name="ub" type="xs:double" use="optional"/>
-		<xs:attribute name="nominalValue" type="xs:double" use="optional"/>
+-->
 	</xs:complexType>
 	<xs:complexType name="ParamSetRowInCore">
 		<xs:annotation>
@@ -3030,6 +3036,8 @@
 		<xs:attribute name="name" type="xs:ID" use="required"/>
 		<xs:attribute name="default" type="xs:string" use="optional"/>
 		<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
+		<xs:attribute name="variableType" type="GeneralEnumerationVarType" use="optional" default="C"/>
+		<!--
 		<xs:attribute name="variableType" use="optional" default="C">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -3040,6 +3048,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
+-->
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsUserDefinedSurplusPenalty">
 		<xs:annotation>

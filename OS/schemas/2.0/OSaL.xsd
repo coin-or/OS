@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -35,11 +36,11 @@
 		<xs:sequence>
 			<xs:element name="status" type="AnalysisStatus"/>
 			<xs:element name="message" type="xs:string" minOccurs="0"/>
-			<xs:element name="serviceURI" minOccurs="0"/>
-			<xs:element name="serviceName" minOccurs="0"/>
+			<xs:element name="serviceURI" type="xs:string" minOccurs="0"/>
+			<xs:element name="serviceName" type="xs:string" minOccurs="0"/>
 			<xs:element name="instanceName" type="xs:string" minOccurs="0"/>
 			<xs:element name="jobID" type="xs:string" minOccurs="0"/>
-			<xs:element name="analyzerInvoked" minOccurs="0"/>
+			<xs:element name="analyzerInvoked" type="xs:string" minOccurs="0"/>
 			<xs:element name="timeStamp" type="xs:dateTime" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
@@ -180,7 +181,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="substatus" type="AnslysisSubstatus" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="substatus" type="AnalysisSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
@@ -193,7 +194,7 @@
 		</xs:attribute>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="AnslysisSubstatus">
+	<xs:complexType name="AnalysisSubstatus">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -227,18 +228,7 @@
 	<xs:complexType name="ProblemSize">
 		<xs:simpleContent>
 			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="unit" use="optional" default="byte">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="byte"/>
-							<xs:enumeration value="kilobyte"/>
-							<xs:enumeration value="megabyte"/>
-							<xs:enumeration value="gigabyte"/>
-							<xs:enumeration value="terabyte"/>
-							<xs:enumeration value="petabyte"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="unit" type="GeneralEnumerationStorageUnit" use="optional" default="byte"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -284,13 +274,13 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="continuous" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="binary" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="integer" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="string" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="semiContinuous" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="semiInteger" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherVariableIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="continuous" type="IndexSet" minOccurs="0"/>
+			<xs:element name="binary" type="IndexSet" minOccurs="0"/>
+			<xs:element name="integer" type="IndexSet" minOccurs="0"/>
+			<xs:element name="string" type="IndexSet" minOccurs="0"/>
+			<xs:element name="semiContinuous" type="IndexSet" minOccurs="0"/>
+			<xs:element name="semiInteger" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="VariableBoundednessAnalysis">
@@ -298,12 +288,12 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="leftBounded" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="rightBounded" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="bounded" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="equallyBounded" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="unbounded" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherVariableIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="leftBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="rightBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="bounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="equallyBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="unbounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="VariableLinearityAnalysis">
@@ -311,10 +301,10 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="linear" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="quadratic" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="nonlinear" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherVariableIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="linear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="quadratic" type="IndexSet" minOccurs="0"/>
+			<xs:element name="nonlinear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableIndexes">
@@ -322,7 +312,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="varIdx" type="VariableIndex" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="varIdx" type="IndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
@@ -338,7 +328,7 @@
 					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="OtherVarEnumeration" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
@@ -408,7 +398,7 @@
 			<xs:element name="linearity" type="ObjectiveLinearityAnalysis" minOccurs="0"/>
 			<xs:element name="convexity" type="ObjectiveConvexityAnalysis" minOccurs="0"/>
 			<xs:element name="continuity" type="ObjectiveContinuityAnalysis" minOccurs="0"/>
-			<xs:element name="differentialbility" type="ObjectiveDifferentialbilityAnalysis" minOccurs="0"/>
+			<xs:element name="differentiability" type="ObjectiveDifferentiabilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="required">
@@ -427,11 +417,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constant" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="linear" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="quadratic" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="nonlinear" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherObjectiveIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="constant" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="linear" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="quadratic" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="nonlinear" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="other" type="ObjIndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveConvexityAnalysis">
@@ -439,14 +429,14 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constant" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="linear" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="convex" type="ObjectiveIndexesWithStrictAttribute" minOccurs="0"/>
-			<xs:element name="nonconvex" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="concave" type="ObjectiveIndexesWithStrictAttribute" minOccurs="0"/>
-			<xs:element name="nonconcave" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="notConvexOrConcave" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherObjectiveIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="constant" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="linear" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="convex" type="ObjIndexesWithStrictAttribute" minOccurs="0"/>
+			<xs:element name="nonconvex" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="concave" type="ObjIndexesWithStrictAttribute" minOccurs="0"/>
+			<xs:element name="nonconcave" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="notConvexOrConcave" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="other" type="ObjIndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ObjectiveContinuityAnalysis">
@@ -454,31 +444,32 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="continuous" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="discontinuous" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherObjectiveIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="continuous" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="discontinuous" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="other" type="ObjIndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="ObjectiveDifferentialbilityAnalysis">
+	<xs:complexType name="ObjectiveDifferentiabilityAnalysis">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="differentiable" type="ObjectiveIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="nondifferentiable" type="ObjectiveIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="other" type="OtherObjectiveIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="differentiable" type="ObjIndexesWithOrderAttribute" minOccurs="0"/>
+			<xs:element name="nondifferentiable" type="ObjIndexesWithOrderAttribute" minOccurs="0"/>
+			<xs:element name="other" type="ObjIndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+	<!--
 	<xs:complexType name="ObjectiveIndexesWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="objIdx" type="ObjectiveIndexWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="objIdx" type="ObjectiveIndexesWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="ObjectiveIndexWithStrictAttribute">
+	<xs:complexType name="ObjIndexesWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -517,12 +508,13 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+-->
 	<xs:complexType name="OtherObjectiveIndexes">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="objIdx" type="ObjectiveIndex" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="objIdx" type="ObjIndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
@@ -538,7 +530,7 @@
 					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="OtherObjEnumeration" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="ObjIndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
@@ -632,7 +624,7 @@
 			<xs:element name="linearity" type="ConstraintLinearityAnalysis" minOccurs="0"/>
 			<xs:element name="convexity" type="ConstraintConvexityAnalysis" minOccurs="0"/>
 			<xs:element name="continuity" type="ConstraintContinuityAnalysis" minOccurs="0"/>
-			<xs:element name="differentialbility" type="ConstraintDifferentialbilityAnalysis" minOccurs="0"/>
+			<xs:element name="differentiability" type="ConstraintDifferentiabilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherConstraintAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="required">
@@ -685,12 +677,12 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="leftBounded" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="rightBounded" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="bounded" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="equallyBounded" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="unbounded" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherConstraintIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="leftBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="rightBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="bounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="equallyBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="unbounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ConstraintLinearityAnalysis">
@@ -698,11 +690,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constant" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="linear" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="quadratic" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="nonlinear" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherConstraintIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="constant" type="IndexSet" minOccurs="0"/>
+			<xs:element name="linear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="quadratic" type="IndexSet" minOccurs="0"/>
+			<xs:element name="nonlinear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ConstraintConvexityAnalysis">
@@ -710,14 +702,14 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constant" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="linear" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="convex" type="ConstraintIndexesWithStrictAttribute" minOccurs="0"/>
-			<xs:element name="nonconvex" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="concave" type="ConstraintIndexesWithStrictAttribute" minOccurs="0"/>
-			<xs:element name="nonconcave" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="notConvexOrConcave" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherConstraintIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="constant" type="IndexSet" minOccurs="0"/>
+			<xs:element name="linear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="convex" type="IndexesWithStrictAttribute" minOccurs="0"/>
+			<xs:element name="nonconvex" type="IndexSet" minOccurs="0"/>
+			<xs:element name="concave" type="IndexesWithStrictAttribute" minOccurs="0"/>
+			<xs:element name="nonconcave" type="IndexSet" minOccurs="0"/>
+			<xs:element name="notConvexOrConcave" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ConstraintContinuityAnalysis">
@@ -725,31 +717,23 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="continuous" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="discontinuous" type="ConstraintIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherConstraintIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="continuous" type="IndexSet" minOccurs="0"/>
+			<xs:element name="discontinuous" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="ConstraintDifferentialbilityAnalysis">
+	<xs:complexType name="ConstraintDifferentiabilityAnalysis">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="differentiable" type="ConstraintIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="nondifferentiable" type="ConstraintIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="other" type="OtherConstraintIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="differentiable" type="IndexesWithOrderAttribute" minOccurs="0"/>
+			<xs:element name="nondifferentiable" type="IndexesWithOrderAttribute" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+	<!--
 	<xs:complexType name="ConstraintIndexesWithStrictAttribute">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="conIdx" type="ConstraintIndexWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ConstraintIndexWithStrictAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -793,12 +777,13 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="conIdx" type="ConstraintIndex" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="conIdx" type="IndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="OtherConstraintAnalysis">
 		<xs:annotation>
 			<xs:documentation>draft. numberOfCon is required if there is a con array and numberOfEnumerations is required if there is an enumeration array</xs:documentation>
@@ -809,7 +794,7 @@
 					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="OtherConEnumeration" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
@@ -987,9 +972,9 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="variables" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="objectives" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="constraints" type="ConstraintIndexes" minOccurs="0"/>
+			<xs:element name="variables" type="IndexSet" minOccurs="0"/>
+			<xs:element name="objectives" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="constraints" type="IndexSet" minOccurs="0"/>
 			<xs:element name="other" type="OtherAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfQuadraticTerms" type="xs:nonNegativeInteger" use="required"/>
@@ -1005,13 +990,13 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="nodes" type="NlNodeAnalysis" minOccurs="0"/>
-			<xs:element name="variables" type="VariableIndexes" minOccurs="0"/>
-			<xs:element name="objectives" type="ObjectiveIndexes" minOccurs="0"/>
-			<xs:element name="constraints" type="ConstraintIndexes" minOccurs="0"/>
+			<xs:element name="variables" type="IndexSet" minOccurs="0"/>
+			<xs:element name="objectives" type="ObjIndexSet" minOccurs="0"/>
+			<xs:element name="constraints" type="IndexSet" minOccurs="0"/>
 			<xs:element name="linearity" type="NonlinearExpressionLinearityAnalysis" minOccurs="0"/>
 			<xs:element name="convexity" type="NonlinearExpressionConvexityAnalysis" minOccurs="0"/>
 			<xs:element name="continuity" type="NonlinearExpressionContinuityAnalysis" minOccurs="0"/>
-			<xs:element name="differentialbility" type="NonlinearExpressionDifferentialbilityAnalysis" minOccurs="0"/>
+			<xs:element name="differentiability" type="NonlinearExpressionDifferentiabilityAnalysis" minOccurs="0"/>
 			<xs:element name="other" type="OtherNonlinearExpressionAnalysis" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNonlinearExpressions" type="xs:nonNegativeInteger" use="required"/>
@@ -1083,11 +1068,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="leftBounded" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="rightBounded" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="bounded" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="unbounded" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherNonlinearExpressionIndexes" minOccurs="0"/>
+			<xs:element name="leftBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="rightBounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="bounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="unbounded" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionLinearityAnalysis">
@@ -1095,11 +1080,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constant" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="linear" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="quadratic" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="nonlinear" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherNonlinearExpressionIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="constant" type="IndexSet" minOccurs="0"/>
+			<xs:element name="linear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="quadratic" type="IndexSet" minOccurs="0"/>
+			<xs:element name="nonlinear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionConvexityAnalysis">
@@ -1107,14 +1092,14 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="constant" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="linear" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="convex" type="NonlinearExpressionIndexesWithStrictAttribute" minOccurs="0"/>
-			<xs:element name="nonconvex" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="concave" type="NonlinearExpressionIndexesWithStrictAttribute" minOccurs="0"/>
-			<xs:element name="nonconcave" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="notConvexOrConcave" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherNonlinearExpressionIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="constant" type="IndexSet" minOccurs="0"/>
+			<xs:element name="linear" type="IndexSet" minOccurs="0"/>
+			<xs:element name="convex" type="IndexesWithStrictAttribute" minOccurs="0"/>
+			<xs:element name="nonconvex" type="IndexSet" minOccurs="0"/>
+			<xs:element name="concave" type="IndexesWithStrictAttribute" minOccurs="0"/>
+			<xs:element name="nonconcave" type="IndexSet" minOccurs="0"/>
+			<xs:element name="notConvexOrConcave" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="NonlinearExpressionContinuityAnalysis">
@@ -1122,21 +1107,22 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="continuous" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="discontinuous" type="NonlinearExpressionIndexes" minOccurs="0"/>
-			<xs:element name="other" type="OtherNonlinearExpressionIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="continuous" type="IndexSet" minOccurs="0"/>
+			<xs:element name="discontinuous" type="IndexSet" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="NonlinearExpressionDifferentialbilityAnalysis">
+	<xs:complexType name="NonlinearExpressionDifferentiabilityAnalysis">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="differentiable" type="NonlinearExpressionIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="nondifferentiable" type="NonlinearExpressionIndexesWithOrderAttribute" minOccurs="0"/>
-			<xs:element name="other" type="OtherNonlinearExpressionIndexes" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="differentiable" type="IndexesWithOrderAttribute" minOccurs="0"/>
+			<xs:element name="nondifferentiable" type="IndexesWithOrderAttribute" minOccurs="0"/>
+			<xs:element name="other" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
+	<!--
 	<xs:complexType name="NonlinearExpressionIndexes">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -1210,12 +1196,13 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="nlIdx" type="NonlinearExpressionIndex" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="nlIdx" type="IndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
+-->
 	<xs:complexType name="OtherNonlinearExpressionAnalysis">
 		<xs:annotation>
 			<xs:documentation>draft. numberOfNl is required if there is an nl array and numberOfEnumerations is required if there is an enumeration array</xs:documentation>
@@ -1243,7 +1230,7 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="nlIdx" type="NonlinearExpressionIndex" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="nlIdx" type="IndexSet" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfNlIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="value" type="xs:string"/>
@@ -1563,16 +1550,7 @@
 								<xs:attribute name="name" type="xs:ID" use="required"/>
 								<xs:attribute name="default" type="xs:string" use="optional"/>
 								<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="variableType" use="optional" default="C">
-									<xs:simpleType>
-										<xs:restriction base="xs:string">
-											<xs:enumeration value="C"/>
-											<xs:enumeration value="B"/>
-											<xs:enumeration value="I"/>
-											<xs:enumeration value="S"/>
-										</xs:restriction>
-									</xs:simpleType>
-								</xs:attribute>
+								<xs:attribute name="variableType" type="GeneralEnumerationVarType" use="optional" default="C"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1586,16 +1564,7 @@
 								<xs:attribute name="name" type="xs:ID" use="required"/>
 								<xs:attribute name="default" type="xs:string" use="optional"/>
 								<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="variableType" use="optional" default="C">
-									<xs:simpleType>
-										<xs:restriction base="xs:string">
-											<xs:enumeration value="C"/>
-											<xs:enumeration value="B"/>
-											<xs:enumeration value="I"/>
-											<xs:enumeration value="S"/>
-										</xs:restriction>
-									</xs:simpleType>
-								</xs:attribute>
+								<xs:attribute name="variableType" type="GeneralEnumerationVarType" use="optional" default="C"/>
 							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
@@ -1629,7 +1598,7 @@
 			<xs:element name="arcs">
 				<xs:complexType>
 					<xs:attribute name="numberArcs" type="xs:nonNegativeInteger" use="required"/>
-					<xs:attribute name="declartion" use="optional" default="list">
+					<xs:attribute name="declaration" use="optional" default="list">
 						<xs:simpleType>
 							<xs:restriction base="xs:string">
 								<xs:enumeration value="list"/>
@@ -1672,5 +1641,101 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="hasVariableProperty" type="xs:boolean" use="optional" default="true"/>
+	</xs:complexType>
+	<xs:complexType name="IndexesWithStrictAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="objIdx" type="IndexWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="IndexWithStrictAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="IndexesWithOrderAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="objIdx" type="IndexWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="IndexWithOrderAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:nonNegativeInteger">
+				<xs:attribute name="order" use="optional" default="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minInclusive value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ObjIndexesWithStrictAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="objIdx" type="ObjIndexWithStrictAttribute" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ObjIndexWithStrictAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:negativeInteger">
+				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ObjIndexesWithOrderAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="objIdx" type="ObjIndexWithOrderAttribute" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="ObjIndexWithOrderAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:negativeInteger">
+				<xs:attribute name="order" use="optional" default="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minInclusive value="1"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 </xs:schema>

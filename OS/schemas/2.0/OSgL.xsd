@@ -50,7 +50,19 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:choice>
-			<xs:element name="el" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
+			<xs:element name="el" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfEl</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:nonNegativeInteger">
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
@@ -103,16 +115,7 @@
 		<xs:attribute name="name" type="xs:ID" use="required"/>
 		<xs:attribute name="default" type="xs:string" use="optional"/>
 		<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="variableType" use="optional" default="C">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="C"/>
-					<xs:enumeration value="B"/>
-					<xs:enumeration value="I"/>
-					<xs:enumeration value="S"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="variableType" type="GeneralEnumerationVarType" use="optional" default="C"/>
 	</xs:complexType>
 	<xs:complexType name="PropertyRef">
 		<xs:annotation>
@@ -1734,16 +1737,7 @@
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="init" type="xs:double" use="optional"/>
 		<xs:attribute name="initString" type="xs:string" use="optional"/>
-		<xs:attribute name="type" use="optional" default="C">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="C"/>
-					<xs:enumeration value="B"/>
-					<xs:enumeration value="I"/>
-					<xs:enumeration value="S"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="type" type="GeneralEnumerationVarType" use="optional" default="C"/>
 		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
@@ -2602,157 +2596,188 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 	</xs:element>
-	<xs:complexType name="OtherVarEnumeration">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="VariableIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="required"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="OtherObjEnumeration">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="objIdx" type="ObjectiveIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="required"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-	</xs:complexType>
-	<xs:complexType name="OtherConEnumeration">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="conIdx" type="ConstraintIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" type="xs:string" use="required"/>
-		<xs:attribute name="description" type="xs:string" use="optional"/>
-	</xs:complexType>
 	<xs:complexType name="BasisStatus">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="basic" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="atLower" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="atUpper" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="isFree" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="superBasic" type="BasisIndexes" minOccurs="0"/>
-			<xs:element name="unknown" type="BasisIndexes" minOccurs="0"/>
+			<xs:element name="basic" type="IndexSet" minOccurs="0"/>
+			<xs:element name="atLower" type="IndexSet" minOccurs="0"/>
+			<xs:element name="atUpper" type="IndexSet" minOccurs="0"/>
+			<xs:element name="isFree" type="IndexSet" minOccurs="0"/>
+			<xs:element name="superBasic" type="IndexSet" minOccurs="0"/>
+			<xs:element name="unknown" type="IndexSet" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="BasisIndexes">
+	<xs:complexType name="IndexSet">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:annotation>
-				<xs:documentation>Number of the idx child elements must agree with numberOfIdx (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="idx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="BasisIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="VariableIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="varIdx" type="BasisIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfVarIdx" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="VariableIndex">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:nonNegativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="ObjectiveIndexes">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="objIdx" minOccurs="0" maxOccurs="unbounded">
+		<xs:choice>
+			<xs:element name="idx" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfIdx</xs:documentation>
+				</xs:annotation>
 				<xs:complexType>
 					<xs:simpleContent>
-						<xs:extension base="ObjectiveIndex"/>
+						<xs:extension base="xs:nonNegativeInteger">
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+						</xs:extension>
 					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfObjIdx" type="xs:nonNegativeInteger" use="required"/>
+			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+		</xs:choice>
+		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="ObjectiveIndex">
+	<xs:complexType name="IndexSetWithValueAndDescriptionAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+		<xs:complexContent>
+			<xs:extension base="IndexSet">
+				<xs:attribute name="value" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
-		</xs:simpleContent>
+		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="ConstraintIndexes">
+	<xs:complexType name="ObjIndexSet">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="conIdx" type="ConstraintIndex" minOccurs="0" maxOccurs="unbounded"/>
-		</xs:sequence>
-		<xs:attribute name="numberOfConIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:choice>
+			<xs:element name="idx" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfIdx</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:negativeInteger">
+							<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
+							<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
+		</xs:choice>
+		<xs:attribute name="numberOfIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="ConstraintIndex">
+	<xs:complexType name="ObjIndexSetWithValueAndDescriptionAttribute">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
-		<xs:simpleContent>
-			<xs:extension base="xs:negativeInteger">
-				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+		<xs:complexContent>
+			<xs:extension base="ObjIndexSet">
+				<xs:attribute name="value" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
-		</xs:simpleContent>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="StorageCapacity">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="byte">
+				<xs:attribute name="unit" type="GeneralEnumerationStorageUnit" use="optional" default="byte"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="GeneralEnumerationStorageUnit">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="byte"/>
+			<xs:enumeration value="kilobyte"/>
+			<xs:enumeration value="megabyte"/>
+			<xs:enumeration value="gigabyte"/>
+			<xs:enumeration value="terabyte"/>
+			<xs:enumeration value="petabyte"/>
+			<xs:enumeration value="exabyte"/>
+			<xs:enumeration value="zettabyte"/>
+			<xs:enumeration value="yottabyte"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="TimeMeasurement">
+		<xs:simpleContent>
+			<xs:extension base="TimeSpan">
+				<xs:attribute name="type" use="optional" default="elapsedTime">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
-							<xs:enumeration value="byte"/>
-							<xs:enumeration value="kilobyte"/>
-							<xs:enumeration value="megabyte"/>
-							<xs:enumeration value="gigabyte"/>
-							<xs:enumeration value="terabyte"/>
-							<xs:enumeration value="petabyte"/>
-							<xs:enumeration value="exabyte"/>
-							<xs:enumeration value="zettabyte"/>
-							<xs:enumeration value="yottabyte"/>
+							<xs:enumeration value="cpuTime"/>
+							<xs:enumeration value="elapsedTime"/>
+							<xs:enumeration value="other"/>
 						</xs:restriction>
 					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="category" use="optional" default="total">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="total"/>
+							<xs:enumeration value="input"/>
+							<xs:enumeration value="preprocessing"/>
+							<xs:enumeration value="optimization"/>
+							<xs:enumeration value="postprocessing"/>
+							<xs:enumeration value="output"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="TimeSpan">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" type="GeneralEnumerationTimeUnit" use="optional" default="second">
 				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
+					<xs:simpleType name="GeneralEnumerationTimeUnit">
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="tick"/>
+							<xs:enumeration value="millisecond"/>
+							<xs:enumeration value="second"/>
+							<xs:enumeration value="minute"/>
+							<xs:enumeration value="hour"/>
+							<xs:enumeration value="day"/>
+							<xs:enumeration value="week"/>
+							<xs:enumeration value="month"/>
+							<xs:enumeration value="year"/>
+						</xs:restriction>
+					</xs:simpleType>
+	<xs:complexType name="CPUSpeed">
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="unit" type="GeneralEnumerationCPUSpeedUnit" use="optional" default="hertz"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:simpleType name="GeneralEnumerationCPUSpeedUnit">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="hertz"/>
+			<xs:enumeration value="kilohertz"/>
+			<xs:enumeration value="megahertz"/>
+			<xs:enumeration value="gigahertz"/>
+			<xs:enumeration value="terahertz"/>
+			<xs:enumeration value="flops"/>
+			<xs:enumeration value="kiloflops"/>
+			<xs:enumeration value="megaflops"/>
+			<xs:enumeration value="gigaflops"/>
+			<xs:enumeration value="teraflops"/>
+			<xs:enumeration value="petaflops"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GeneralEnumerationVarType">
+		<xs:annotation>
+			<xs:documentation>C=continuous, I=integer, B=binary, S=string-valued, D=semicontinuous, J=semi-integer</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="C"/>
+			<xs:enumeration value="B"/>
+			<xs:enumeration value="I"/>
+			<xs:enumeration value="S"/>
+			<xs:enumeration value="D"/>
+			<xs:enumeration value="J"/>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>
