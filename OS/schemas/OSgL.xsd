@@ -2679,6 +2679,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="unit" type="GeneralEnumerationStorageUnit" use="optional" default="byte"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -2695,60 +2696,38 @@
 			<xs:enumeration value="yottabyte"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:complexType name="TimeMeasurement">
-		<xs:simpleContent>
-			<xs:extension base="TimeSpan">
-				<xs:attribute name="type" use="optional" default="elapsedTime">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="cpuTime"/>
-							<xs:enumeration value="elapsedTime"/>
-							<xs:enumeration value="other"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="category" use="optional" default="total">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="total"/>
-							<xs:enumeration value="input"/>
-							<xs:enumeration value="preprocessing"/>
-							<xs:enumeration value="optimization"/>
-							<xs:enumeration value="postprocessing"/>
-							<xs:enumeration value="output"/>
-							<xs:enumeration value="other"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
 	<xs:complexType name="TimeSpan">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="unit" type="GeneralEnumerationTimeUnit" use="optional" default="second">
-				</xs:attribute>
+				<xs:attribute name="unit" type="GeneralEnumerationTimeUnit" use="optional" default="second"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-					<xs:simpleType name="GeneralEnumerationTimeUnit">
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="tick"/>
-							<xs:enumeration value="millisecond"/>
-							<xs:enumeration value="second"/>
-							<xs:enumeration value="minute"/>
-							<xs:enumeration value="hour"/>
-							<xs:enumeration value="day"/>
-							<xs:enumeration value="week"/>
-							<xs:enumeration value="month"/>
-							<xs:enumeration value="year"/>
-						</xs:restriction>
-					</xs:simpleType>
+	<xs:simpleType name="GeneralEnumerationTimeUnit">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="tick"/>
+			<xs:enumeration value="millisecond"/>
+			<xs:enumeration value="second"/>
+			<xs:enumeration value="minute"/>
+			<xs:enumeration value="hour"/>
+			<xs:enumeration value="day"/>
+			<xs:enumeration value="week"/>
+			<xs:enumeration value="month"/>
+			<xs:enumeration value="year"/>
+		</xs:restriction>
+	</xs:simpleType>
 	<xs:complexType name="CPUSpeed">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="unit" type="GeneralEnumerationCPUSpeedUnit" use="optional" default="hertz"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="CPUNumber">
+		<xs:simpleContent>
+			<xs:extension base="xs:int">
+				<xs:attribute name="description" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

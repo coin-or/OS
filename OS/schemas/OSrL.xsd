@@ -66,7 +66,7 @@
 			<xs:element name="availableDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="availableMemory" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="availableCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
-			<xs:element name="availableCPUNumber" type="xs:positiveInteger" default="1" minOccurs="0"/>
+			<xs:element name="availableCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="otherResults" type="OtherResults" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
@@ -112,13 +112,54 @@
 			<xs:element name="scheduledStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="actualStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
 			<xs:element name="endTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0"/>
-			<xs:element name="timingInformation" type="TimeMeasurement" minOccurs="0"/>
+			<xs:element name="timingInformation" type="TimingInformation" minOccurs="0"/>
 			<xs:element name="usedDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="usedMemory" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="usedCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
-			<xs:element name="usedCPUNumber" type="xs:positiveInteger" default="1" minOccurs="0"/>
+			<xs:element name="usedCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="otherResults" type="OtherResults" minOccurs="0"/>
 		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="TimingInformation">
+		<xs:sequence>
+			<xs:element name="time" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="TimeMeasurement"/>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfTimes" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="TimeMeasurement">
+		<xs:simpleContent>
+			<xs:extension base="TimeSpan">
+				<xs:attribute name="type" use="optional" default="elapsedTime">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="cpuTime"/>
+							<xs:enumeration value="elapsedTime"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="category" use="optional" default="total">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="total"/>
+							<xs:enumeration value="input"/>
+							<xs:enumeration value="preprocessing"/>
+							<xs:enumeration value="optimization"/>
+							<xs:enumeration value="postprocessing"/>
+							<xs:enumeration value="output"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="OptimizationResult">
 		<xs:annotation>
