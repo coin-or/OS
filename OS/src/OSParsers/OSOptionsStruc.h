@@ -150,6 +150,9 @@ struct osOptionsStruc{
 	 */
 	bool writeVersion;
 	
+	/** if this parameter is true we quit	 */
+	bool quit;
+	
 };
 
 

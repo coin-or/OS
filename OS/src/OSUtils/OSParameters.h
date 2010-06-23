@@ -174,17 +174,28 @@ inline double nanKludge(){
 
 
 
-
 inline std::string	getVersionInfo(){
 	ostringstream versionInfo;
+		versionInfo << std::endl << std::endl;
+		versionInfo << "Optimization Services Solver";
+		versionInfo << std::endl;	
+		versionInfo << "Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin";
+		versionInfo << std::endl;
+		versionInfo << "Distributed under the Common Public License 1.0" ;
+		versionInfo << std::endl;
 		versionInfo << "OS Version: ";
 		versionInfo << OS_VERSION;
+		versionInfo << std::endl;	
+		versionInfo << "Build Date: ";
+		versionInfo << __DATE__;
+		versionInfo << std::endl;	
 	
 		#ifdef OS_SVN_REV
-			versionInfo << " svn version: "; 
+			versionInfo << "SVN Version: "; 
 			versionInfo << OS_SVN_REV;
 		#endif
-	
+			
+		versionInfo << std::endl << std::endl;
 	return versionInfo.str() ;
 } 
 

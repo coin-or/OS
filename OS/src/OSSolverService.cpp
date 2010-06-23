@@ -128,6 +128,8 @@
 
 #include "OSOptionsStruc.h"  
 
+#include<stdio.h>
+
 using std::cout;
 using std::endl;
 using std::ostringstream;
@@ -148,6 +150,7 @@ int ossslex_destroy(void* scanner);
 
 std::string get_help();
 std::string get_version();
+std::string get_options();
 
 // the serviceMethods  
 void solve();
@@ -156,6 +159,7 @@ void send();
 void kill();
 void retrieve();
 void knock();
+
 
 // additional methods
 void getOSiLFromNl();
@@ -185,12 +189,8 @@ int main(int argC, const char* argV[]) {
 	//char *config = "-config";
 	std::string configFileName = "";
 	int i;
-	std::cout << endl;
-	std::cout << endl;
-	std::cout << "-------  " ;
+
 	std::cout << getVersionInfo() ;
-	std::cout << " -------  "  << std::endl;
-	std::cout << endl;
 
 	// initialize the OS options structure
 
@@ -215,21 +215,124 @@ int main(int argC, const char* argV[]) {
 	osoptions->browser = "";
 	osoptions->invokeHelp = false;
 	osoptions->writeVersion = false;
+	osoptions->quit = false;
 	bool scannerActive = false;
 	try {
 		if (argC < 2) {
 			//std::cout << "There must be at least one command line argument" << std::endl;
 			//std::cout << "Try -h or --help" << std::endl;
-			throw ErrorClass(
-					"There must be at least one command line argument\n  Try -h or --help");
+			//throw ErrorClass(
+			//		"There must be at least one command line argument\n  Try -h or --help");
 			//delete osoptions;
 			//return 1;
+			getVersionInfo();
+			//this is the interactive shell
+			scannerActive = true;
+			ossslex_init(&scanner);
+			setyyextra(osoptions, scanner);
+			std::string osss1;
+			std::string osss2;
+
+			std::string::size_type i;
+			unsigned int k;
+			while(osoptions->quit != true){
+				
+				std::cout << "At the prompt below type \"help\" for a list of valid options, " ;
+				std::cout << "otherwise enter\na valid option and option value. Type \"quit\" to leave the application. "  << std::endl << std::endl;
+				
+				std::cout << "Please enter a valid option followed by the corresponding option value: ";
+				std::cin.getline(osss, MAXCHARS);
+				
+				if(strcmp(osss, "quit") == 0){
+					return 0;
+				}else{
+					if(strcmp(osss, "solve") == 0){
+						solve();
+					}else{
+						if(strcmp(osss, "help") == 0){
+							std::cout  << get_options() << std::endl;
+						}else{
+							
+							//see if we have both an option and an option value
+							
+							for(i = 0; i < strlen( osss) ; i++){
+								
+							}
+							
+							
+							std::cout << "scanning the line: " << osss  << std::endl;
+							
+							strcat(osss, space);
+							osss_scan_string(osss, scanner);
+							ossslex(scanner);
+							
+							cout << "HERE ARE THE OPTION VALUES SO FAR:" << endl;
+							if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
+							if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
+							if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
+							if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
+							//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
+							if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
+							if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
+							if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
+							if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
+							if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
+							if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
+							
+							
+							//convert to lower case so there is no solver name ambiguity
+
+							for (k = 0; k < osoptions->solverName.length(); k++) {
+								osoptions->solverName[k] = tolower(osoptions->solverName[k]);
+							}
+							
+							// make sure we can read the files
+							try{
+
+								if (osoptions->osolFile != "") {
+	
+									osoptions->osol = fileUtil->getFileAsString(
+											(osoptions->osolFile).c_str());
+	
+								}
+								if (osoptions->osilFile != "") {
+									osoptions->osil = fileUtil->getFileAsString(
+											(osoptions->osilFile).c_str());
+								}
+	
+								if (osoptions->osplInputFile != "")
+									osoptions->osplInput = fileUtil->getFileAsString(
+											(osoptions->osplInputFile).c_str());
+								if (osoptions->osplOutputFile != "")
+									osoptions->osplOutput = fileUtil->getFileAsString(
+											(osoptions->osplOutputFile).c_str());
+							} 
+							
+							catch (const ErrorClass& eclass) {
+								std::cout << eclass.errormsg << std::endl;
+							}
+							
+							
+							
+						}
+					}
+				}
+
+
+				std::cout << std::endl;
+				
+			}
+			ossslex_destroy(scanner);
+			scannerActive = false;
+			
+			//return 0;
+			
 		}
-		// see if the first argument is a file name
+		// make sure we do not exceed max allowed characters in command line
 		i = 1;
 		while (i < argC) {
 			if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
-				throw ErrorClass("the command line has too many arguments");
+				throw ErrorClass("the command line has too many characters");
 			strcat(osss, argV[i]);
 			strcat(osss, space);
 			i++;
@@ -565,7 +668,6 @@ void solve() {
 			osagent = NULL;
 
 		} else {// solve locally
-
 			if (osoptions->osil != "") {
 				osilreader = new OSiLReader();
 				osrl = buildSolver(osoptions->solverName, osoptions->osol,
@@ -1516,4 +1618,161 @@ std::string buildSolver(std::string solverName, std::string osol,
 	}
 
 }//buildSolver
+
+
+std::string get_options() {
+
+	std::ostringstream optionMsg;
+
+	optionMsg << "************************* VALID OPTIONS *************************"
+			<< endl << endl;
+
+	optionMsg << "The OSSolverService takes the options listed below.  "
+			<< endl;
+	optionMsg
+			<< "The order of the options is irrelevant.  Not all option values  "
+			<< endl;
+	optionMsg << "are required.  However, the location of an instance file is  "
+			<< endl;
+	optionMsg
+			<< "required when using the solve service method. The location of the "
+			<< endl;
+	optionMsg << "instance file is specified using the osil option. " << endl;
+
+	optionMsg << endl;
+	
+	optionMsg
+			<< "quit -- this option does not require a value and will terminate the executable "
+			<< endl;
+	
+	optionMsg
+			<< "help -- this option does not require a value and will produce this list of options "
+			<< endl;
+
+	optionMsg
+			<< "solve -- this option does not require a value and call the solver "
+			<< endl;
+
+	optionMsg << endl;	
+
+
+	
+	optionMsg
+			<< "osil -- the value of this option is the location of the model instance in OSiL format"
+			<< endl;
+	
+	
+
+	optionMsg
+			<< "osol -- the value of this option is the location of the solver option file in OSoL format   "
+			<< endl;
+
+	optionMsg
+			<< "osrl -- the value of this option is the location of the solver result file in OSrL format   "
+			<< endl;
+
+	optionMsg
+			<< "osplInput -- the value of this option is the name of an input file in the OS Process"
+			<< endl;
+	optionMsg << " Language (OSpL), this is used as input  to the knock method."
+			<< endl;
+
+	optionMsg << endl;
+
+	optionMsg
+			<< "osplOutput -- the value of this option is the name of an input file in the OS Process"
+			<< endl;
+	optionMsg
+			<< "Language (OSpL), this the output string from the knock and kill methods."
+			<< endl;
+
+	optionMsg << endl;
+
+	optionMsg << "serviceLocation -- the value of this option is the URL of the solver service.  "
+			<< endl;
+	optionMsg
+			<< "This is not required, and if not specified it is assumed that   "
+			<< endl;
+	optionMsg << "the problem is solved locally.  " << endl;
+
+	optionMsg << endl;
+
+	optionMsg
+			<< "serviceMethod  -- the value of  this option is the method on the solver service to be invoked.  "
+			<< endl;
+	optionMsg
+			<< "Valid option values are solve,  send,  kill,  knock,  getJobID, and retrieve.   "
+			<< endl;
+	optionMsg
+			<< "This option is not required, and the default value is  solve.  "
+			<< endl;
+
+	optionMsg << endl;
+
+	optionMsg
+			<< "mps  -- the value of this option is the name of the mps file if the problem instance  "
+			<< endl;
+	optionMsg
+			<< "is in mps format. The default file format is OSiL so this option is not required.  "
+			<< endl;
+
+	optionMsg << endl;
+
+	optionMsg
+			<< "nl  the value of this option is the name of the AMPL nl file if the problem  "
+			<< endl;
+	optionMsg
+			<< "instance is in AMPL nl  format. The default file format is OSiL  "
+			<< endl;
+	optionMsg << "so this option is not required.  " << endl;
+
+	optionMsg << endl;
+
+	optionMsg
+			<< "solver -- the value of this option is the solver to invoke "
+			<< endl;
+	optionMsg
+			<< "are  bonmin(COIN-OR Bonmin), couenne (COIN-OR Couenne), clp (COIN-OR Clp),"
+			<< endl;
+	optionMsg << "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt),"
+			<< endl;
+	optionMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported"
+			<< endl;
+	optionMsg
+			<< "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),"
+			<< endl;
+	optionMsg
+			<< "glpk (glpk through COIN-OR Osi), knitro (Knitro), and lindo (LINDO)."
+			<< endl;
+	optionMsg << "If no value is specified for this parameter," << endl;
+	optionMsg << "then cbc is the default value of this parameter." << endl;
+
+	optionMsg << endl;
+
+
+	optionMsg
+			<< "config -- the value of this parameter specifies a path on  "
+			<< endl;
+	optionMsg
+			<< "the local machine to a text file containing values for the input parameters.  "
+			<< endl;
+	optionMsg
+			<< "This is convenient for the user not wishing to constantly retype parameter values.  "
+			<< endl;
+	optionMsg
+			<< "This configure file can contain values for all of the other parameters. "
+			<< endl;
+
+
+	optionMsg
+			<< "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.1.pdf"
+			<< endl;
+	optionMsg << "for more detail on how to use the OS project. " << endl;
+
+	optionMsg << endl;
+	optionMsg << "********************************************************"
+			<< endl << endl;
+
+	return optionMsg.str();
+}// get_options
 
