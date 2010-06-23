@@ -88,7 +88,6 @@
 #include "OSmps2osil.h"   
 #include "OSBase64.h"
 
-
 #ifdef COIN_HAS_KNITRO    
 #include "OSKnitroSolver.h"
 #endif 
@@ -160,7 +159,6 @@ void kill();
 void retrieve();
 void knock();
 
-
 // additional methods
 void getOSiLFromNl();
 void getOSiLFromMps();
@@ -190,7 +188,7 @@ int main(int argC, const char* argV[]) {
 	std::string configFileName = "";
 	int i;
 
-	std::cout << getVersionInfo() ;
+	std::cout << getVersionInfo();
 
 	// initialize the OS options structure
 
@@ -217,6 +215,7 @@ int main(int argC, const char* argV[]) {
 	osoptions->writeVersion = false;
 	osoptions->quit = false;
 	bool scannerActive = false;
+
 	try {
 		if (argC < 2) {
 			//std::cout << "There must be at least one command line argument" << std::endl;
@@ -230,103 +229,191 @@ int main(int argC, const char* argV[]) {
 			scannerActive = true;
 			ossslex_init(&scanner);
 			setyyextra(osoptions, scanner);
-			std::string osss1;
-			std::string osss2;
-
-			std::string::size_type i;
+			std::string lineText;
+			bool validName;
+			//use a blank to separate words
+			std::string wordSep = " ";
+			std::string optionName = "";
+			std::string optionValue = "";
+			std::string::size_type indexStart;
+			std::string::size_type indexEnd;
 			unsigned int k;
-			while(osoptions->quit != true){
-				
-				std::cout << "At the prompt below type \"help\" for a list of valid options, " ;
-				std::cout << "otherwise enter\na valid option and corresponding option value. Type \"quit\" to leave the application. "  << std::endl << std::endl;
-				
-				std::cout << "Please enter a valid option followed by the corresponding option value: ";
-				std::cin.getline(osss, MAXCHARS);
-				
-				if(strcmp(osss, "quit") == 0){
-					return 0;
-				}else{
-					if(strcmp(osss, "solve") == 0){
-						solve();
-					}else{
-						if(strcmp(osss, "help") == 0){
-							std::cout  << get_options() << std::endl;
-						}else{
-							
-							//see if we have both an option and an option value
-							
-							for(i = 0; i < strlen( osss) ; i++){
-								
-							}
-							
-							
-							std::cout << "scanning the line: " << osss  << std::endl;
-							
-							strcat(osss, space);
-							osss_scan_string(osss, scanner);
-							ossslex(scanner);
-							
-							cout << "HERE ARE THE OPTION VALUES SO FAR:" << endl;
-							if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
-							if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
-							if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
-							if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
-							//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-							if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-							if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
-							if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
-							if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
-							if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
-							if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
-							
-							
-							//convert to lower case so there is no solver name ambiguity
+			std::string validOptions[8] = { "solve", "quit", "help", "osil",
+					"osrl", "osol", "serviceLocation", "solver" };
 
-							for (k = 0; k < osoptions->solverName.length(); k++) {
-								osoptions->solverName[k] = tolower(osoptions->solverName[k]);
-							}
-							
-							// make sure we can read the files
-							try{
+			size_t size_of_array = (sizeof validOptions)
+					/ (sizeof validOptions[0]);
+			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
+			while (osoptions->quit != true) {
+				validName = false;
+				std::cout
+						<< "At the prompt below type a valid option and option value.\n";
+				std::cout
+						<< "After entering the desired options type \"solve\" to optimize.\n";
+				std::cout
+						<< "Type \"quit\" to leave the application. Type \"help\" for a list\n";
+				std::cout << "of valid options." << std::endl << std::endl;
 
-								if (osoptions->osolFile != "") {
-	
-									osoptions->osol = fileUtil->getFileAsString(
-											(osoptions->osolFile).c_str());
-	
+				std::cout
+						<< "Please enter a valid option followed by the corresponding option value: ";
+				getline(std::cin, lineText);
+				lineText = " " + lineText + " ";
+				//get the name of the option
+				indexStart = lineText.find_first_not_of(wordSep);
+				if (indexStart == string::npos) {
+					std::cout << std::endl;
+					std::cout << "You did not enter a valid option."
+							<< std::endl;
+				} else {
+					indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
+					optionName = lineText.substr(indexStart, indexEnd
+							- indexStart);
+					//std::cout << "Option Name = " << optionName << std::endl;
+					for (k = 0; k < size_of_array; k++) {
+						if (validOptions[k].compare(optionName) == 0)
+							validName = true;
+					}
+					if (validName == false) {
+						std::cout << std::endl;
+						std::cout << "You did not enter a valid option."
+								<< std::endl;
+					} else {
+
+						// get the option value
+						indexStart = lineText.find_first_not_of(wordSep,
+								indexEnd + 1);
+						indexEnd = lineText.find_first_of(wordSep, indexStart
+								+ 1);
+						if (indexStart != std::string::npos && indexEnd
+								!= std::string::npos) {
+							optionValue = lineText.substr(indexStart, indexEnd
+									- indexStart);
+						} else {
+							optionValue = "";
+						}
+
+						//std::cout << "Option Value = " << optionValue << std::endl;
+
+						try {
+							if (optionName.compare("quit") == 0) {
+								return 0;
+							} else {
+								if (optionName.compare("solve") == 0) {
+									solve();
+								} else {
+									if (optionName.compare("help") == 0) {
+										std::cout << get_options() << std::endl;
+									} else {
+
+										if (optionValue == "") {
+											std::cout
+													<< "You entered an option name but not an option value."
+													<< std::endl;
+											std::cout
+													<< "Please enter an option value: ";
+											getline(std::cin, optionValue);
+
+										}
+										lineText = optionName + " "
+												+ optionValue + " ";
+										osss_scan_string(lineText.c_str(),
+												scanner);
+										ossslex(scanner);
+
+										cout
+												<< "HERE ARE THE OPTION VALUES SO FAR:"
+												<< endl;
+										if (osoptions->configFile != "")
+											cout << "Config file = "
+													<< osoptions->configFile
+													<< endl;
+										if (osoptions->osilFile != "")
+											cout << "OSiL file = "
+													<< osoptions->osilFile
+													<< endl;
+										if (osoptions->osolFile != "")
+											cout << "OSoL file = "
+													<< osoptions->osolFile
+													<< endl;
+										if (osoptions->osrlFile != "")
+											cout << "OSrL file = "
+													<< osoptions->osrlFile
+													<< endl;
+										//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
+										if (osoptions->osplInputFile != "")
+											cout << "OSpL Input file = "
+													<< osoptions->osplInputFile
+													<< endl;
+										if (osoptions->serviceMethod != "")
+											cout << "Service Method = "
+													<< osoptions->serviceMethod
+													<< endl;
+										if (osoptions->mpsFile != "")
+											cout << "MPS File Name = "
+													<< osoptions->mpsFile
+													<< endl;
+										if (osoptions->nlFile != "")
+											cout << "NL File Name = "
+													<< osoptions->nlFile
+													<< endl;
+										if (osoptions->solverName != "")
+											cout << "Selected Solver = "
+													<< osoptions->solverName
+													<< endl;
+										if (osoptions->serviceLocation != "")
+											cout << "Service Location = "
+													<< osoptions->serviceLocation
+													<< endl;
+
+										//convert to lower case so there is no solver name ambiguity
+
+										for (k = 0; k
+												< osoptions->solverName.length(); k++) {
+											osoptions->solverName[k] = tolower(
+													osoptions->solverName[k]);
+										}
+
+										// make sure we can read the files
+
+
+										if (osoptions->osolFile != "") {
+
+											osoptions->osol
+													= fileUtil->getFileAsString(
+															(osoptions->osolFile).c_str());
+
+										}
+										if (osoptions->osilFile != "") {
+											osoptions->osil
+													= fileUtil->getFileAsString(
+															(osoptions->osilFile).c_str());
+										}
+
+										if (osoptions->osplInputFile != "")
+											osoptions->osplInput
+													= fileUtil->getFileAsString(
+															(osoptions->osplInputFile).c_str());
+										if (osoptions->osplOutputFile != "")
+											osoptions->osplOutput
+													= fileUtil->getFileAsString(
+															(osoptions->osplOutputFile).c_str());
+
+									}
 								}
-								if (osoptions->osilFile != "") {
-									osoptions->osil = fileUtil->getFileAsString(
-											(osoptions->osilFile).c_str());
-								}
-	
-								if (osoptions->osplInputFile != "")
-									osoptions->osplInput = fileUtil->getFileAsString(
-											(osoptions->osplInputFile).c_str());
-								if (osoptions->osplOutputFile != "")
-									osoptions->osplOutput = fileUtil->getFileAsString(
-											(osoptions->osplOutputFile).c_str());
-							} 
-							
-							catch (const ErrorClass& eclass) {
-								std::cout << eclass.errormsg << std::endl;
 							}
-							
-							
-							
+							std::cout << std::endl;
+						}//end try 
+						catch (const ErrorClass& eclass) {
+							std::cout << eclass.errormsg << std::endl;
 						}
 					}
 				}
-
-
-				std::cout << std::endl;
-				
-			}
+			}//end while loop
 			ossslex_destroy(scanner);
 			scannerActive = false;
-			
-			//return 0;
-			
+
+			return 0;
+
 		}
 		// make sure we do not exceed max allowed characters in command line
 		i = 1;
@@ -409,7 +496,8 @@ int main(int argC, const char* argV[]) {
 		osrlwriter = NULL;
 		// end new stuff
 
-		if(scannerActive == true) ossslex_destroy(scanner);
+		if (scannerActive == true)
+			ossslex_destroy(scanner);
 		delete fileUtil;
 		delete osoptions;
 		return 1;
@@ -1624,7 +1712,8 @@ std::string get_options() {
 
 	std::ostringstream optionMsg;
 
-	optionMsg << "************************* VALID OPTIONS *************************"
+	optionMsg
+			<< "************************* VALID OPTIONS *************************"
 			<< endl << endl;
 
 	optionMsg << "The OSSolverService takes the options listed below.  "
@@ -1632,7 +1721,8 @@ std::string get_options() {
 	optionMsg
 			<< "The order of the options is irrelevant.  Not all option values  "
 			<< endl;
-	optionMsg << "are required.  However, the location of an instance file is  "
+	optionMsg
+			<< "are required.  However, the location of an instance file is  "
 			<< endl;
 	optionMsg
 			<< "required when using the solve service method. The location of the "
@@ -1640,11 +1730,11 @@ std::string get_options() {
 	optionMsg << "instance file is specified using the osil option. " << endl;
 
 	optionMsg << endl;
-	
+
 	optionMsg
 			<< "quit -- this option does not require a value and will terminate the executable "
 			<< endl;
-	
+
 	optionMsg
 			<< "help -- this option does not require a value and will produce this list of options "
 			<< endl;
@@ -1653,15 +1743,11 @@ std::string get_options() {
 			<< "solve -- this option does not require a value and call the solver "
 			<< endl;
 
-	optionMsg << endl;	
+	optionMsg << endl;
 
-
-	
 	optionMsg
 			<< "osil -- the value of this option is the location of the model instance in OSiL format"
 			<< endl;
-	
-	
 
 	optionMsg
 			<< "osol -- the value of this option is the location of the solver option file in OSoL format   "
@@ -1674,7 +1760,8 @@ std::string get_options() {
 	optionMsg
 			<< "osplInput -- the value of this option is the name of an input file in the OS Process"
 			<< endl;
-	optionMsg << " Language (OSpL), this is used as input  to the knock method."
+	optionMsg
+			<< " Language (OSpL), this is used as input  to the knock method."
 			<< endl;
 
 	optionMsg << endl;
@@ -1688,26 +1775,13 @@ std::string get_options() {
 
 	optionMsg << endl;
 
-	optionMsg << "serviceLocation -- the value of this option is the URL of the solver service.  "
+	optionMsg
+			<< "serviceLocation -- the value of this option is the URL of the solver service.  "
 			<< endl;
 	optionMsg
 			<< "This is not required, and if not specified it is assumed that   "
 			<< endl;
 	optionMsg << "the problem is solved locally.  " << endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "serviceMethod  -- the value of  this option is the method on the solver service to be invoked.  "
-			<< endl;
-	optionMsg
-			<< "Valid option values are solve,  send,  kill,  knock,  getJobID, and retrieve.   "
-			<< endl;
-	optionMsg
-			<< "This option is not required, and the default value is  solve.  "
-			<< endl;
-
-	optionMsg << endl;
 
 	optionMsg
 			<< "mps  -- the value of this option is the name of the mps file if the problem instance  "
@@ -1728,13 +1802,13 @@ std::string get_options() {
 
 	optionMsg << endl;
 
-	optionMsg
-			<< "solver -- the value of this option is the solver to invoke "
+	optionMsg << "solver -- the value of this option is the solver to invoke "
 			<< endl;
 	optionMsg
 			<< "are  bonmin(COIN-OR Bonmin), couenne (COIN-OR Couenne), clp (COIN-OR Clp),"
 			<< endl;
-	optionMsg << "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt),"
+	optionMsg
+			<< "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt),"
 			<< endl;
 	optionMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported"
 			<< endl;
@@ -1749,9 +1823,7 @@ std::string get_options() {
 
 	optionMsg << endl;
 
-
-	optionMsg
-			<< "config -- the value of this parameter specifies a path on  "
+	optionMsg << "config -- the value of this parameter specifies a path on  "
 			<< endl;
 	optionMsg
 			<< "the local machine to a text file containing values for the input parameters.  "
@@ -1762,7 +1834,6 @@ std::string get_options() {
 	optionMsg
 			<< "This configure file can contain values for all of the other parameters. "
 			<< endl;
-
 
 	optionMsg
 			<< "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.1.pdf"
