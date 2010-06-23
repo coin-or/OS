@@ -238,7 +238,7 @@ int main(int argC, const char* argV[]) {
 			while(osoptions->quit != true){
 				
 				std::cout << "At the prompt below type \"help\" for a list of valid options, " ;
-				std::cout << "otherwise enter\na valid option and option value. Type \"quit\" to leave the application. "  << std::endl << std::endl;
+				std::cout << "otherwise enter\na valid option and corresponding option value. Type \"quit\" to leave the application. "  << std::endl << std::endl;
 				
 				std::cout << "Please enter a valid option followed by the corresponding option value: ";
 				std::cin.getline(osss, MAXCHARS);
