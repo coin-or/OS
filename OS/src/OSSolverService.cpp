@@ -300,7 +300,7 @@ int main(int argC, const char* argV[]) {
 							} else {
 								if (optionName.compare("solve") == 0) {
 									// check to make sure we have an osil file
-									if(osoptions->osilFile == ""){
+									if(osoptions->osil == ""){
 										std::cout
 												<< std::endl
 												<< "You did not specify an optimization instance"
@@ -389,11 +389,9 @@ int main(int argC, const char* argV[]) {
 										// make sure we can read the files
 
 										if (osoptions->osolFile != "") 
-
 											osoptions->osol
 													= fileUtil->getFileAsString(
 															(osoptions->osolFile).c_str());
-					
 										
 										if (osoptions->osilFile != "") 
 											osoptions->osil
