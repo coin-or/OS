@@ -299,6 +299,19 @@ int main(int argC, const char* argV[]) {
 								return 0;
 							} else {
 								if (optionName.compare("solve") == 0) {
+									// check to make sure we have an osil file
+									if(osoptions->osilFile == ""){
+										std::cout
+												<< std::endl
+												<< "You did not specify an optimization instance"
+												<< std::endl;
+										std::cout
+												<< "Please enter the path and optimization instance file name: ";
+										getline(std::cin, osoptions->osilFile);
+										osoptions->osil
+												= fileUtil->getFileAsString(
+														(osoptions->osilFile).c_str());
+									}
 									solve();
 								} else {
 									if (optionName.compare("help") == 0) {
@@ -375,28 +388,38 @@ int main(int argC, const char* argV[]) {
 
 										// make sure we can read the files
 
-
-										if (osoptions->osolFile != "") {
+										if (osoptions->osolFile != "") 
 
 											osoptions->osol
 													= fileUtil->getFileAsString(
 															(osoptions->osolFile).c_str());
-
-										}
-										if (osoptions->osilFile != "") {
+					
+										
+										if (osoptions->osilFile != "") 
 											osoptions->osil
 													= fileUtil->getFileAsString(
 															(osoptions->osilFile).c_str());
-										}
+										
 
 										if (osoptions->osplInputFile != "")
 											osoptions->osplInput
 													= fileUtil->getFileAsString(
 															(osoptions->osplInputFile).c_str());
+										
 										if (osoptions->osplOutputFile != "")
 											osoptions->osplOutput
 													= fileUtil->getFileAsString(
 															(osoptions->osplOutputFile).c_str());
+										
+										if (osoptions->mpsFile != "")
+											osoptions->mpsFile
+													= fileUtil->getFileAsString(
+															(osoptions->mpsFile).c_str());
+										
+										if (osoptions->nlFile != "")
+											osoptions->nlFile
+													= fileUtil->getFileAsString(
+															(osoptions->nlFile).c_str());
 
 									}
 								}
@@ -414,7 +437,7 @@ int main(int argC, const char* argV[]) {
 
 			return 0;
 
-		}
+		}// end of if (argC < 2)
 		// make sure we do not exceed max allowed characters in command line
 		i = 1;
 		while (i < argC) {
@@ -1805,23 +1828,8 @@ std::string get_options() {
 	optionMsg << "solver -- the value of this option is the solver to invoke "
 			<< endl;
 	optionMsg
-			<< "are  bonmin(COIN-OR Bonmin), couenne (COIN-OR Couenne), clp (COIN-OR Clp),"
+			<< "valid values depend on the build,"
 			<< endl;
-	optionMsg
-			<< "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt),"
-			<< endl;
-	optionMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported"
-			<< endl;
-	optionMsg
-			<< "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),"
-			<< endl;
-	optionMsg
-			<< "glpk (glpk through COIN-OR Osi), knitro (Knitro), and lindo (LINDO)."
-			<< endl;
-	optionMsg << "If no value is specified for this parameter," << endl;
-	optionMsg << "then cbc is the default value of this parameter." << endl;
-
-	optionMsg << endl;
 
 	optionMsg << "config -- the value of this parameter specifies a path on  "
 			<< endl;

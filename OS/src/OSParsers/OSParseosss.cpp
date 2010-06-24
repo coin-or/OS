@@ -1225,7 +1225,7 @@ case 9:
 YY_RULE_SETUP
 #line 173 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->osilFile == ""){
+	//if(yyextra->osilFile == ""){
 		YY_PRINT  
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1234,7 +1234,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->osilFile = str;
-	} 
+	//} 
 }
 	YY_BREAK
 case 10:
@@ -1242,7 +1242,7 @@ case 10:
 YY_RULE_SETUP
 #line 189 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	 if(yyextra->osilFile == ""){
+	// if(yyextra->osilFile == ""){
 		 YY_PRINT  
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1251,7 +1251,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->osilFile = str;
-	 } 
+	// } 
  }
 	YY_BREAK
 case 11:
@@ -1259,7 +1259,7 @@ case 11:
 YY_RULE_SETUP
 #line 203 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	 if(yyextra->osilFile == ""){
+	// if(yyextra->osilFile == ""){
 		 YY_PRINT  
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1268,7 +1268,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->osilFile = str;
-	 } 
+	// } 
  }
 	YY_BREAK
 case 12:
@@ -1276,7 +1276,7 @@ case 12:
 YY_RULE_SETUP
 #line 216 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->osrlFile == ""){
+	//if(yyextra->osrlFile == ""){
 		YY_PRINT 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1285,7 +1285,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->osrlFile = str;
-	}  
+	//}  
 }  
 	YY_BREAK
 case 13:
@@ -1293,7 +1293,7 @@ case 13:
 YY_RULE_SETUP
 #line 229 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	 if(yyextra->osrlFile == ""){
+	 //if(yyextra->osrlFile == ""){
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1302,7 +1302,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->osrlFile = str;
-	 }  
+	 //}  
  } 			 
 	YY_BREAK
 case 14:
@@ -1310,7 +1310,7 @@ case 14:
 YY_RULE_SETUP
 #line 243 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	 if(yyextra->osrlFile == ""){
+	// if(yyextra->osrlFile == ""){
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1319,7 +1319,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->osrlFile = str;
-	 }  
+	// }  
  }			 
 	YY_BREAK
 case 15:
@@ -1327,7 +1327,7 @@ case 15:
 YY_RULE_SETUP
 #line 258 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->insListFile == ""){
+	//if(yyextra->insListFile == ""){
 		YY_PRINT
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1336,7 +1336,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->insListFile = str;
-	}  
+	//}  
 }  
 	YY_BREAK
 case 16:
@@ -1344,7 +1344,7 @@ case 16:
 YY_RULE_SETUP
 #line 273 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	 if(yyextra->insListFile == ""){
+	 //if(yyextra->insListFile == ""){
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1353,7 +1353,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->insListFile = str;
-	 }  
+	// }  
  }
 	YY_BREAK
 case 17:
@@ -1361,7 +1361,7 @@ case 17:
 YY_RULE_SETUP
 #line 287 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	 if(yyextra->insListFile == ""){
+	// if(yyextra->insListFile == ""){
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1370,7 +1370,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->insListFile = str;
-	 }  
+	// }  
  }
 	YY_BREAK
 case 18:
@@ -1378,7 +1378,7 @@ case 18:
 YY_RULE_SETUP
 #line 301 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->osolFile == ""){
+	//if(yyextra->osolFile == ""){
 		YY_PRINT 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1387,7 +1387,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->osolFile = str;  
-	}
+	//}
 }
 	YY_BREAK
 case 19:
@@ -1395,7 +1395,7 @@ case 19:
 YY_RULE_SETUP
 #line 316 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->osolFile == ""){
+	//if(yyextra->osolFile == ""){
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1404,7 +1404,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->osolFile = str;  
-	}
+	//}
 }
 	YY_BREAK
 case 20:
@@ -1412,7 +1412,7 @@ case 20:
 YY_RULE_SETUP
 #line 330 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	 if(yyextra->osolFile == ""){
+	 //if(yyextra->osolFile == ""){
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
 		 char *ch = yytext;
@@ -1421,7 +1421,7 @@ YY_RULE_SETUP
 		 for(; isspace(*ch); ch++);
 		 std::string str(  ch);
 		 yyextra->osolFile = str;  
-	 }
+	// }
  }
 	YY_BREAK
 case 21:
@@ -1429,7 +1429,7 @@ case 21:
 YY_RULE_SETUP
 #line 345 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->osplInputFile == ""){
+	//if(yyextra->osplInputFile == ""){
 		YY_PRINT 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1438,7 +1438,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->osplInputFile = str;  
-	}
+	//}
 }
 	YY_BREAK
 case 22:
@@ -1446,7 +1446,7 @@ case 22:
 YY_RULE_SETUP
 #line 359 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->osplInputFile == ""){
+			// if(yyextra->osplInputFile == ""){
 			 YY_PRINT 
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1455,7 +1455,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->osplInputFile = str;  
-			 }
+			// }
 			 }
 	YY_BREAK
 case 23:
@@ -1463,7 +1463,7 @@ case 23:
 YY_RULE_SETUP
 #line 372 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->osplInputFile == ""){
+			// if(yyextra->osplInputFile == ""){
 			 YY_PRINT 
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1472,7 +1472,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->osplInputFile = str;  
-			 }
+			// }
 			 }
 	YY_BREAK
 case 24:
@@ -1480,7 +1480,7 @@ case 24:
 YY_RULE_SETUP
 #line 385 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->osplOutputFile == ""){
+	//if(yyextra->osplOutputFile == ""){
 		YY_PRINT 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1489,7 +1489,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->osplOutputFile = str;  
-	}
+	//}
 }
 	YY_BREAK
 case 25:
@@ -1497,7 +1497,7 @@ case 25:
 YY_RULE_SETUP
 #line 398 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->serviceMethod == ""){
+	//if(yyextra->serviceMethod == ""){
 		YY_PRINT
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1506,7 +1506,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->serviceMethod = str; 
-	}
+	//}
 }
 	YY_BREAK
 case 26:
@@ -1514,7 +1514,7 @@ case 26:
 YY_RULE_SETUP
 #line 411 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->serviceMethod == ""){
+			// if(yyextra->serviceMethod == ""){
 			 YY_PRINT
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1523,7 +1523,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->serviceMethod = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 27:
@@ -1531,7 +1531,7 @@ case 27:
 YY_RULE_SETUP
 #line 424 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->serviceMethod == ""){
+			// if(yyextra->serviceMethod == ""){
 			 YY_PRINT
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1540,7 +1540,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->serviceMethod = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 28:
@@ -1548,7 +1548,7 @@ case 28:
 YY_RULE_SETUP
 #line 437 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->serviceLocation == ""){
+	//if(yyextra->serviceLocation == ""){
 		YY_PRINT 
 		//yyextra->serviceLocation = strdup(yytext);
 		yyextra->serviceLocation =  yytext;
@@ -1559,7 +1559,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->serviceLocation = str; 
-	}
+	//}
 }
 	YY_BREAK
 case 29:
@@ -1567,7 +1567,7 @@ case 29:
 YY_RULE_SETUP
 #line 454 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->serviceLocation == ""){
+			// if(yyextra->serviceLocation == ""){
 			 YY_PRINT 
 			 //yyextra->serviceLocation = strdup(yytext);
 			 yyextra->serviceLocation =  yytext;
@@ -1578,7 +1578,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->serviceLocation = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 30:
@@ -1586,7 +1586,7 @@ case 30:
 YY_RULE_SETUP
 #line 470 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->serviceLocation == ""){
+			// if(yyextra->serviceLocation == ""){
 			 YY_PRINT 
 			 //yyextra->serviceLocation = strdup(yytext);
 			 yyextra->serviceLocation =  yytext;
@@ -1597,7 +1597,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->serviceLocation = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 31:
@@ -1605,7 +1605,7 @@ case 31:
 YY_RULE_SETUP
 #line 486 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->mpsFile == ""){
+	//if(yyextra->mpsFile == ""){
 		YY_PRINT 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1614,7 +1614,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->mpsFile = str; 
-	}
+	//}
 }
 	YY_BREAK
 case 32:
@@ -1622,7 +1622,7 @@ case 32:
 YY_RULE_SETUP
 #line 502 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->mpsFile == ""){
+			// if(yyextra->mpsFile == ""){
 			 YY_PRINT 
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1631,7 +1631,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->mpsFile = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 33:
@@ -1639,7 +1639,7 @@ case 33:
 YY_RULE_SETUP
 #line 517 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->mpsFile == ""){
+			// if(yyextra->mpsFile == ""){
 			 YY_PRINT 
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1648,7 +1648,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->mpsFile = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 34:
@@ -1656,7 +1656,7 @@ case 34:
 YY_RULE_SETUP
 #line 530 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->nlFile == ""){
+	//if(yyextra->nlFile == ""){
 		YY_PRINT
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1665,7 +1665,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->nlFile = str; 
-	} 
+	//} 
 }
 	YY_BREAK
 case 35:
@@ -1673,7 +1673,7 @@ case 35:
 YY_RULE_SETUP
 #line 546 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->nlFile == ""){
+			// if(yyextra->nlFile == ""){
 			 YY_PRINT
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1682,7 +1682,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->nlFile = str; 
-			 } 
+			// } 
 			 }
 	YY_BREAK
 case 36:
@@ -1690,7 +1690,7 @@ case 36:
 YY_RULE_SETUP
 #line 560 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->nlFile == ""){
+			// if(yyextra->nlFile == ""){
 			 YY_PRINT
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1699,7 +1699,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->nlFile = str; 
-			 } 
+			// } 
 			 }
 	YY_BREAK
 case 37:
@@ -1707,7 +1707,7 @@ case 37:
 YY_RULE_SETUP
 #line 576 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->gamsControlFile == ""){
+	//if(yyextra->gamsControlFile == ""){
 		YY_PRINT
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1716,7 +1716,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->gamsControlFile = str;
-	} 
+	//} 
 }
 	YY_BREAK
 case 38:
@@ -1724,7 +1724,7 @@ case 38:
 YY_RULE_SETUP
 #line 591 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->gamsControlFile == ""){
+			// if(yyextra->gamsControlFile == ""){
 			 YY_PRINT
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1733,7 +1733,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->gamsControlFile = str;
-			 } 
+			// } 
 			 }
 	YY_BREAK
 case 39:
@@ -1741,7 +1741,7 @@ case 39:
 YY_RULE_SETUP
 #line 604 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->gamsControlFile == ""){
+			 //if(yyextra->gamsControlFile == ""){
 			 YY_PRINT
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1750,7 +1750,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->gamsControlFile = str;
-			 } 
+			// } 
 			 }
 	YY_BREAK
 case 40:
@@ -1758,7 +1758,7 @@ case 40:
 YY_RULE_SETUP
 #line 617 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->solverName == ""){
+	//if(yyextra->solverName == ""){
 		YY_PRINT 
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1767,7 +1767,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->solverName = str;
-	} 
+	//} 
 }
 	YY_BREAK
 case 41:
@@ -1775,7 +1775,7 @@ case 41:
 YY_RULE_SETUP
 #line 631 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->solverName == ""){
+			 //if(yyextra->solverName == ""){
 			 YY_PRINT 
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1784,7 +1784,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->solverName = str;
-			 } 
+			// } 
 			 }
 	YY_BREAK
 case 42:
@@ -1792,7 +1792,7 @@ case 42:
 YY_RULE_SETUP
 #line 644 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->solverName == ""){
+			// if(yyextra->solverName == ""){
 			 YY_PRINT 
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1801,7 +1801,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->solverName = str;
-			 } 
+			// } 
 			 }
 	YY_BREAK
 case 43:
@@ -1809,7 +1809,7 @@ case 43:
 YY_RULE_SETUP
 #line 657 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-	if(yyextra->browser == ""){
+	//if(yyextra->browser == ""){
 		YY_PRINT  
 		//char *ch = strdup(yytext);
 		char *ch = yytext;
@@ -1818,7 +1818,7 @@ YY_RULE_SETUP
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
 		yyextra->browser = str; 
-	}
+	//}
 }
 	YY_BREAK
 case 44:
@@ -1826,7 +1826,7 @@ case 44:
 YY_RULE_SETUP
 #line 671 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->browser == ""){
+			// if(yyextra->browser == ""){
 			 YY_PRINT  
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1835,7 +1835,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->browser = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 45:
@@ -1843,7 +1843,7 @@ case 45:
 YY_RULE_SETUP
 #line 685 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosss.l"
 {
-			 if(yyextra->browser == ""){
+			// if(yyextra->browser == ""){
 			 YY_PRINT  
 			 //char *ch = strdup(yytext);
 			 char *ch = yytext;
@@ -1852,7 +1852,7 @@ YY_RULE_SETUP
 			 for(; isspace(*ch); ch++);
 			 std::string str(  ch);
 			 yyextra->browser = str; 
-			 }
+			// }
 			 }
 	YY_BREAK
 case 46:
