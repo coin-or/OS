@@ -150,7 +150,6 @@ int ossslex_destroy(void* scanner);
 std::string get_help();
 std::string get_version();
 std::string get_options();
-std::string get_options_interactive();
 void reset_options();
 
 // the serviceMethods  
@@ -325,7 +324,7 @@ int main(int argC, const char* argV[]) {
 										solve();
 									} else {
 										if (optionName.compare("help") == 0 || optionName.compare("?") == 0) {
-											std::cout << get_options_interactive() << std::endl;
+											std::cout << get_options() << std::endl;
 										} else {
 
 											if (optionValue == "") {
@@ -1832,243 +1831,81 @@ std::string get_options() {
 			<< "************************* VALID OPTIONS *************************"
 			<< endl << endl;
 
-	optionMsg << "The OSSolverService takes the options listed below.  "
+	optionMsg
+			<< "The OSSolverService takes the options listed below (in any order)."
 			<< endl;
 	optionMsg
-			<< "The order of the options is irrelevant.  Not all option values  "
+			<< "Not all option values are required. However, the location of an instance file"
 			<< endl;
 	optionMsg
-			<< "are required.  However, the location of an instance file is  "
-			<< endl;
-	optionMsg
-			<< "required when using the solve service method. The location of the "
-			<< endl;
-	optionMsg << "instance file is specified using the osil option. " << endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "quit -- this option does not require a value and will terminate the executable "
-			<< endl;
-
-	optionMsg
-			<< "help -- this option does not require a value and will produce this list of options "
-			<< endl;
-
-	optionMsg
-			<< "solve -- this option does not require a value and call the solver "
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "osil -- the value of this option is the location of the model instance in OSiL format"
-			<< endl;
-
-	optionMsg
-			<< "osol -- the value of this option is the location of the solver option file in OSoL format   "
-			<< endl;
-
-	optionMsg
-			<< "osrl -- the value of this option is the location of the solver result file in OSrL format   "
-			<< endl;
-
-	optionMsg
-			<< "osplInput -- the value of this option is the name of an input file in the OS Process"
-			<< endl;
-	optionMsg
-			<< " Language (OSpL), this is used as input  to the knock method."
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "osplOutput -- the value of this option is the name of an input file in the OS Process"
-			<< endl;
-	optionMsg
-			<< "Language (OSpL), this the output string from the knock and kill methods."
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "serviceLocation -- the value of this option is the URL of the solver service.  "
-			<< endl;
-	optionMsg
-			<< "This is not required, and if not specified it is assumed that   "
-			<< endl;
-	optionMsg << "the problem is solved locally.  " << endl;
-
-	optionMsg
-			<< "mps  -- the value of this option is the name of the mps file if the problem instance  "
-			<< endl;
-	optionMsg
-			<< "is in mps format. The default file format is OSiL so this option is not required.  "
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "nl  the value of this option is the name of the AMPL nl file if the problem  "
-			<< endl;
-	optionMsg
-			<< "instance is in AMPL nl  format. The default file format is OSiL  "
-			<< endl;
-	optionMsg << "so this option is not required.  " << endl;
-
-	optionMsg << endl;
-
-	optionMsg << "solver -- the value of this option is the solver to invoke "
-			<< endl;
-	optionMsg
-			<< "valid values depend on the build,"
-			<< endl;
-
-	optionMsg << "config -- the value of this parameter specifies a path on  "
-			<< endl;
-	optionMsg
-			<< "the local machine to a text file containing values for the input parameters.  "
-			<< endl;
-	optionMsg
-			<< "This is convenient for the user not wishing to constantly retype parameter values.  "
-			<< endl;
-	optionMsg
-			<< "This configure file can contain values for all of the other parameters. "
-			<< endl;
-
-	optionMsg
-			<< "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.1.pdf"
-			<< endl;
-	optionMsg << "for more detail on how to use the OS project. " << endl;
-
-	optionMsg << endl;
-	optionMsg << "********************************************************"
+			<< "is required when using the solve service method."
 			<< endl << endl;
+
+	optionMsg
+			<< "quit -- terminate the executable (no option value required)"
+			<< endl;
+	optionMsg
+			<< "help -- produce this list of options (no option value required)"
+			<< endl;
+	optionMsg
+			<< "solve -- call the solver (no option value required) "
+			<< endl << endl;
+
+	optionMsg
+			<< "osil -- gives the location of the model instance in OSiL format"
+			<< endl;
+	optionMsg
+			<< "osol -- gives the location of the solver option file in OSoL format"
+			<< endl;
+	optionMsg
+			<< "osrl -- gives the location of the solver result file in OSrL format"
+			<< endl;
+	optionMsg
+			<< "osplInput -- gives the name of an input file in OSpL format"
+			<< endl;
+	optionMsg
+			<< "osplOutput -- gives the name of an output file in the OSpL format"
+			<< endl	<< endl;
+
+	optionMsg
+			<< "serviceLocation -- the value of this option is the URL of the solver service"	
+			<< endl;
+	optionMsg
+			<< "(if not specified it is assumed that the problem is solved locally)."
+			<< endl;
+	optionMsg
+			<< "mps  -- gives the name of the mps file if the problem instance is in mps format"
+			<< endl;
+	optionMsg
+			<< "(only used if problem is solved locally and no osil file specified)."
+			<< endl	<< endl;
+
+	optionMsg
+			<< "nl -- gives the name of the AMPL nl file if problem instance is in AMPL nl format"	
+			<< endl;
+	optionMsg
+			<< "(only used if problem is solved locally and no osil or mps file specified)."
+			<< endl	<< endl;
+
+	optionMsg
+			<< "solver -- specify the solver to invoke"	
+			<< endl;
+	optionMsg
+			<< "config -- gives a text file containing values for the input parameters."
+			<< endl	<< endl;
+
+	optionMsg
+			<< "See the OS User\'s Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.1.pdf"	
+			<< endl;
+	optionMsg
+			<< "for more detail on how to use the OS project."
+			<< endl;
+	optionMsg
+			<< "********************************************************"
+			<< endl;
+
 
 	return optionMsg.str();
 }// get_options
 
-std::string get_options_interactive() {
-
-	std::ostringstream optionMsg;
-
-	optionMsg
-			<< "************************* VALID OPTIONS *************************"
-			<< endl << endl;
-
-	optionMsg << "The OSSolverService takes the options listed below.  "
-			<< endl;
-	optionMsg
-			<< "The order of the options is irrelevant.  Not all option values  "
-			<< endl;
-	optionMsg
-			<< "are required.  However, the location of an instance file is  "
-			<< endl;
-	optionMsg
-			<< "required when using the solve service method. The location of the "
-			<< endl;
-	optionMsg << "instance file is specified using the osil option. " << endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "quit -- this option does not require a value and will terminate the executable "
-			<< endl;
-
-	optionMsg
-			<< "help -- this option does not require a value and will produce this list of options "
-			<< endl;
-
-	optionMsg
-			<< "solve -- this option does not require a value and call the solver "
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "osil -- the value of this option is the location of the model instance in OSiL format"
-			<< endl;
-
-	optionMsg
-			<< "osol -- the value of this option is the location of the solver option file in OSoL format   "
-			<< endl;
-
-	optionMsg
-			<< "osrl -- the value of this option is the location of the solver result file in OSrL format   "
-			<< endl;
-
-	optionMsg
-			<< "osplInput -- the value of this option is the name of an input file in the OS Process"
-			<< endl;
-	optionMsg
-			<< " Language (OSpL), this is used as input  to the knock method."
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "osplOutput -- the value of this option is the name of an input file in the OS Process"
-			<< endl;
-	optionMsg
-			<< "Language (OSpL), this the output string from the knock and kill methods."
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "serviceLocation -- the value of this option is the URL of the solver service.  "
-			<< endl;
-	optionMsg
-			<< "This is not required, and if not specified it is assumed that   "
-			<< endl;
-	optionMsg << "the problem is solved locally.  " << endl;
-
-	optionMsg
-			<< "mps  -- the value of this option is the name of the mps file if the problem instance  "
-			<< endl;
-	optionMsg
-			<< "is in mps format. The default file format is OSiL so this option is not required.  "
-			<< endl;
-
-	optionMsg << endl;
-
-	optionMsg
-			<< "nl  the value of this option is the name of the AMPL nl file if the problem  "
-			<< endl;
-	optionMsg
-			<< "instance is in AMPL nl  format. The default file format is OSiL  "
-			<< endl;
-	optionMsg << "so this option is not required.  " << endl;
-
-	optionMsg << endl;
-
-	optionMsg << "solver -- the value of this option is the solver to invoke "
-			<< endl;
-	optionMsg
-			<< "valid values depend on the build,"
-			<< endl;
-
-	optionMsg << "config -- the value of this parameter specifies a path on  "
-			<< endl;
-	optionMsg
-			<< "the local machine to a text file containing values for the input parameters.  "
-			<< endl;
-	optionMsg
-			<< "This is convenient for the user not wishing to constantly retype parameter values.  "
-			<< endl;
-	optionMsg
-			<< "This configure file can contain values for all of the other parameters. "
-			<< endl;
-
-	optionMsg
-			<< "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual_2.1.pdf"
-			<< endl;
-	optionMsg << "for more detail on how to use the OS project. " << endl;
-
-	optionMsg << endl;
-	optionMsg << "********************************************************"
-			<< endl << endl;
-
-	return optionMsg.str();
-}// get_options_interactive
 
