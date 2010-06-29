@@ -94,7 +94,7 @@
 			<xs:element name="minDiskSpace" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="minMemorySize" type="StorageCapacity" default="0.0" minOccurs="0"/>
 			<xs:element name="minCPUSpeed" type="CPUSpeed" default="0.0" minOccurs="0"/>
-			<xs:element name="minCPUNumber" type="xs:positiveInteger" default="1" minOccurs="0"/>
+			<xs:element name="minCPUNumber" type="CPUNumber" default="1" minOccurs="0"/>
 			<xs:element name="otherOptions" type="OtherOptions" minOccurs="0"/>
 		</xs:all>
 	</xs:complexType>
