@@ -108,7 +108,7 @@ void setyyextra( osOptionsStruc *osoptions, void* scanner);
 
 
 xmlwhitespace ([ \t\r\n])
-optionValue ([-a-zA-Z./~:_0-9$+\\!@#&*()]+|\"[^"\n]*\")
+optionValue ([-a-zA-Z./~:_0-9$\?+\\!@#&*()]+|\"[^"\n]*\")
 serviceMethod (solve|send|kill|retrieve|knock|getJobID)
 browserState (on|off)
 %% 
@@ -148,6 +148,12 @@ browserState (on|off)
 	
 	
 }
+
+
+
+
+			 
+
 
 (--version) {
 	YY_PRINT  
