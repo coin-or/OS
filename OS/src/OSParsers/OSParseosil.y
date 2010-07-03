@@ -2262,6 +2262,12 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
+			
+			// we better not exceed allocation
+			if(kount + 1 >= std::max( osinstance->instanceData->constraints->numberOfConstraints,
+					osinstance->instanceData->variables->numberOfVariables) + 1  ){
+						osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");			
+			}
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ kount++] = 
 			atoimod1( osillineno, *p, ch);
 			//printf("number = %s\n", *p);
