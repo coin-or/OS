@@ -4599,7 +4599,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			
 			// we better not exceed allocation
-			if(kount + 1 >= std::max( osinstance->instanceData->constraints->numberOfConstraints,
+			if(kount  >= std::max( osinstance->instanceData->constraints->numberOfConstraints,
 					osinstance->instanceData->variables->numberOfVariables) + 1  ){
 						osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");			
 			}
