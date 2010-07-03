@@ -1536,8 +1536,7 @@ $ cd ../Mumps
 $ ./get.Mumps
 \end{verbatim}
 
-Alternatively, you can connect into the project root {\tt COIN-OS} and execute the script {\tt ./get.AllThirdParty}.
-This will also get the AMPL {\tt ASL}\index{AMPL Solver Library (ASL)} libraries (see Section~\ref{section:ASL}).
+
 
 What you do next depends upon whether or not a FORTRAN\index{Fortran} compiler is present, and if so, which version
 of FORTRAN.  There are several options. See also
@@ -1921,10 +1920,8 @@ incompatible with the Common Public License (CPL)\index{Common Public License (C
 For that reason we are unable to distribute OS binaries linked to the GLPK solver.  
 Users interested in GLPK must build OS from source and link to the GLPK libraries.
 
-In order to use GLPK with OS in a unix environment, either execute {\tt get.AllThirdParty}
-(see Section~\ref{section:ipopt})
-or connect to {\tt ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded,
-run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or 
+In order to use GLPK with OS in a unix environment, connect to {\tt
+ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or 
 Section~\ref{section:vpath}.
 
 Users on MSVS\index{Microsoft Visual Studio} can download the source by
