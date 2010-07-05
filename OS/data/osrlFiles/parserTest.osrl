@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="../stylesheets/OSrL.xslt"?>
-<osrl xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd" >
+<osrl xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org Y:\datafiles\research\OS\os-trunk-work\os\schemas\OSrL.xsd" >
 	<general>
 		<generalStatus type="normal" numberOfSubstatuses="0" description="some rag about what this does">
 			
@@ -61,7 +61,7 @@
 				<substatus type="other" description="just for testing"></substatus>
 			</status>
 			<message>Hello world</message>
-			<variables numberOfOtherVariableResults="3" >
+                        <variables numberOfOtherVariableResults="4" >
 				<values numberOfVar="2">
 					<var idx="0"  >
 						.8724300006558884
@@ -73,22 +73,33 @@
 				<valuesString numberOfVar="1">
 					<var idx="2">zero</var>
 				</valuesString>
-				<basisStatus numberOfVar="2">
-					<var idx="1">basic</var>
-					<var idx="0">unknown</var>
+				<basisStatus>
+					<basic numberOfEl="6">
+						<el mult="2">0</el>
+						<el>5</el>
+						<el mult="3" incr="-1">4</el>
+					</basic>
 				</basisStatus>
-				<other numberOfVar="2" name="varL" description="Lagrange Multiplier on the Variable Lower Bound">
+				<other numberOfVar="2" numberOfEnumerations="0" name="varL" description="Lagrange Multiplier on the Variable Lower Bound">
 					<var idx="0">2.532850081993274e-9</var>
 					<var idx="1">3.3380536229320414e-9</var>
 				</other>
-				<other numberOfVar="3" name="varU" description="Lagrange Multiplier on the Variable Upper Bound">
+                                <other numberOfVar="3" numberOfEnumerations="0" name="varU" description="Lagrange Multiplier on the Variable Upper Bound">
 					<var idx="0">0</var>
 					<var idx="1">0</var>
 					<var idx="2">0</var>
 				</other>
-				<other name="test" value="3" numberOfVar="2" >
+                                <other name="test" value="3" numberOfVar="2" numberOfEnumerations="0" >
 					<var idx="0">2</var>
 					<var idx="1">3</var>
+				</other>
+				<other name="test" value="4" numberOfEnumerations="2" >
+					<enumeration numberOfEl="3" value="cat1" description="just fooling around">
+						<el mult="3" incr="1">2</el>
+                                </enumeration>
+                                <enumeration numberOfEl="1" value="cat2">
+                                        <el>0</el>
+                                </enumeration>
 				</other>
 			</variables>
 			<objectives numberOfOtherObjectiveResults="1" >
@@ -96,7 +107,7 @@
 					<obj idx="-1">6.727903962147923</obj>
 					<obj idx="-2">3.14</obj>
 				</values>
-				<other numberOfObj="1" name="test" value="NIL" description="Just testing all possibilities">
+                                <other numberOfObj="1" numberOfEnumerations="0" name="test" value="NIL" description="Just testing all possibilities">
 					<obj idx="-1" >zero</obj>
 				</other>
 			</objectives>
@@ -105,7 +116,7 @@
 					<con idx="0">-1.5884608261704753e-10</con>
 					<con idx="1">-.7662938652578929</con>
 				</dualValues>
-				<other numberOfCon="0" name="conTest" description="just a test for the constraints section" value="no commercial"></other>
+				<other numberOfCon="0"  name="conTest" description="just a test for the constraints section" value="no commercial"></other>
 			</constraints>
 			<otherSolutionResults  numberOfOtherSolutionResults="2" >
 				<otherSolutionResult name="requestResults1" description="the request results"  numberOfItems="1" category="testing:local">
@@ -122,11 +133,11 @@
 				<values numberOfVar="1" >
 					<var idx="0">1.0</var>
 				</values>
-				<other numberOfVar="2" name="varL" description="Lagrange Multiplier on the Variable Lower Bound">
+                                <other numberOfVar="2" name="varL" numberOfEnumerations="0" description="Lagrange Multiplier on the Variable Lower Bound">
 					<var idx="0">2.532850081993274e-9</var>
 					<var idx="1">3.3380536229320414e-9</var>
 				</other>
-				<other numberOfVar="0" name="varU" description="Lagrange Multiplier on the Variable Upper Bound">
+                                <other numberOfEnumerations="0" numberOfVar="0" name="varU" description="Lagrange Multiplier on the Variable Upper Bound">
 				</other>
 			</variables>
 			<objectives>
