@@ -2292,7 +2292,11 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 			 	foundEl = false;
 			 	ch = *p;
 			}
-		}		
+		}	
+		
+		if(osinstance->instanceData->linearConstraintCoefficients->start->el[ kount - 1 ] != 
+		osinstance->instanceData->linearConstraintCoefficients->numberOfValues ) 
+		osilerror_wrapper( ch, osillineno,"the value of the last start element is not equal to numberOfValues + 1");	
 	}
 	// get the </start> tag
 	*p = ch;
@@ -2308,6 +2312,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	//printf("TIME TO PARSE STARTS  = %f\n", duration);
 	*p = ch;
 	osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements = kount;
+
 	return true;
 }//end parseSart
 
