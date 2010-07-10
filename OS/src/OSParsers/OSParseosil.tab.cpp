@@ -4631,7 +4631,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 		
 		if(osinstance->instanceData->linearConstraintCoefficients->start->el[ kount - 1 ] != 
 		osinstance->instanceData->linearConstraintCoefficients->numberOfValues ) 
-		osilerror_wrapper( ch, osillineno,"the value of the last start element is not equal to numberOfValues + 1");	
+		osilerror_wrapper( ch, osillineno,"the value of the last start element is not equal to numberOfValues");	
 	}
 	// get the </start> tag
 	*p = ch;
