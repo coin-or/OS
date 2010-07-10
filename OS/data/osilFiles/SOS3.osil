@@ -119,25 +119,19 @@
 		</value>
 		</linearConstraintCoefficients>
 		<specialOrderedSets numberOfSOS="1">
-			<sos numberOfVar="9" type="3" convexityRow="2">
-				<var idx="2"></var>
-				<var idx="3"></var>
-				<var idx="4"></var>
-				<var idx="5"></var>
-				<var idx="6"></var>
-				<var idx="7"></var>
-				<var idx="8"></var>
-				<var idx="9"></var>
-				<var idx="10"></var>
+			<sos  type="3" convexityRow="2">
+				<variables numberOfEl="9">
+					<el mult="6">2</el>
+				</variables>
 				<adjacentVariableSets numberOfSets="8">
-					<set numberOfVar="3"><var idx="2"></var><var idx="3"></var><var idx="6"></var></set>
-					<set numberOfVar="3"><var idx="2"></var><var idx="5"></var><var idx="6"></var></set>
-					<set numberOfVar="3"><var idx="3"></var><var idx="4"></var><var idx="7"></var></set>
-					<set numberOfVar="3"><var idx="3"></var><var idx="6"></var><var idx="7"></var></set>
-					<set numberOfVar="3"><var idx="5"></var><var idx="6"></var><var idx="9"></var></set>
-					<set numberOfVar="3"><var idx="5"></var><var idx="8"></var><var idx="9"></var></set>
-					<set numberOfVar="3"><var idx="6"></var><var idx="7"></var><var idx="10"></var></set>
-					<set numberOfVar="3"><var idx="6"></var><var idx="9"></var><var idx="10"></var></set>
+					<set numberOfEl="3"><el>2</el>   <el>3</el>   <el>6</el></set>
+					<set numberOfEl="3"><el>2</el>   <el>5</el>   <el>6</el></set>
+					<set numberOfEl="3"><el>3</el>   <el>4</el>   <el>7</el></set>
+					<set numberOfEl="3"><el>3</el>   <el>6</el>   <el>7</el></set>
+					<set numberOfEl="3"><el>5</el>   <el>6</el>   <el>9</el></set>
+					<set numberOfEl="3"><el>5</el>   <el>8</el>   <el>9</el></set>
+					<set numberOfEl="3"><el>6</el>   <el>7</el>   <el>10</el></set>
+					<set numberOfEl="3"><el>6</el>   <el>9</el>   <el>10</el></set>
 				</adjacentVariableSets>
 			</sos>
 		</specialOrderedSets>

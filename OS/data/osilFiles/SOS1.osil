@@ -137,25 +137,25 @@
 			</value>
 		</linearConstraintCoefficients>
 		<specialOrderedSets numberOfSOS="4">
-			<sos numberOfVar="4" type="1" convexityRow="0">
-				<var idx="0"></var>				
-				<var idx="1"></var>
-				<var idx="2"></var>
+			<sos type="1" convexityRow="0">
+				<variables numberOfEl="3">
+					<el mult="3">0</el>
+				</variables>
 			</sos>
-			<sos numberOfVar="4" type="1" convexityRow="1">
-				<var idx="3"></var>
-				<var idx="4"></var>
-				<var idx="5"></var>
+			<sos type="1" convexityRow="1">
+				<variables numberOfEl="3">
+					<el mult="3">3</el>
+				</variables>
 			</sos>
-			<sos numberOfVar="4" type="1" convexityRow="2">
-				<var idx="6"></var>
-				<var idx="7"></var>
-				<var idx="8"></var>
+			<sos type="1" convexityRow="2">
+				<variables numberOfEl="3">
+					<el mult="3">6</el>
+				</variables>
 			</sos>
-			<sos numberOfVar="4" type="1" convexityRow="3">
-				<var idx="9"></var>
-				<var idx="10"></var>
-				<var idx="11"></var>
+			<sos type="1" convexityRow="3">
+				<variables numberOfEl="3">
+					<el mult="3">9</el>
+				</variables>
 			</sos>
 		</specialOrderedSets>
 	</instanceData>

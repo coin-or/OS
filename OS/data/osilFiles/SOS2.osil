@@ -105,21 +105,15 @@ It uses two SOS2 constructs.
 		</value>
 		</linearConstraintCoefficients>
 		<specialOrderedSets numberOfSOS="2">
-			<sos numberOfVar="6" type="2" convexityRow="1">
-				<var idx="0"></var>
-				<var idx="1"></var>
-				<var idx="2"></var>
-				<var idx="3"></var>
-				<var idx="4"></var>
-				<var idx="5"></var>
+			<sos  type="2" convexityRow="1">
+				<variables numberOfEl="6">
+					<el mult="6">0</el>
+				</variables>
 			</sos>
-			<sos numberOfVar="6" type="2" convexityRow="2">
-				<var idx="6"></var>
-				<var idx="7"></var>
-				<var idx="8"></var>
-				<var idx="9"></var>
-				<var idx="10"></var>
-				<var idx="11"></var>
+			<sos  type="2" convexityRow="2">
+				<variables numberOfEl="6">
+					<el mult="6">6</el>
+				</variables>
 			</sos>
 		</specialOrderedSets>
 	</instanceData>
