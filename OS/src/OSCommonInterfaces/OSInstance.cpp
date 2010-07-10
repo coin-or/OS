@@ -677,9 +677,11 @@ NonlinearExpressions::~NonlinearExpressions(){
 			#ifdef DEBUG  
 				cout << "DESTROYING EXPRESSION " << nl[ i]->idx << endl;
 			#endif
-			if(nl[i] != NULL){
-				delete nl[i];
-				nl[i] = NULL;
+			if(nl != NULL){
+				if(nl[i] != NULL){
+					delete nl[i];
+					nl[i] = NULL;
+				}
 			}
 		}
 	}

@@ -314,6 +314,9 @@ nlnumberatt: NUMBEROFNONLINEAREXPRESSIONS QUOTE INTEGER QUOTE  GREATERTHAN { if 
 parserData->tmpnlcount = $3;
 osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = $3;  
 if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ $3 ];
+for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
+	osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
+}
 };
 				
 nlnodes: 
@@ -326,7 +329,7 @@ nlnodes:
 }  NLEND ;
 
 nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
+//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $3;
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");

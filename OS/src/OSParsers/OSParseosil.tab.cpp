@@ -1,24 +1,23 @@
-/* A Bison parser, made by GNU Bison 2.3.  */
+
+/* A Bison parser, made by GNU Bison 2.4.1.  */
 
 /* Skeleton implementation for Bison's Yacc-like parsers in C
-
-   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   
+      Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
    Free Software Foundation, Inc.
-
-   This program is free software; you can redistribute it and/or modify
+   
+   This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+   
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-
+   
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.  */
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -29,7 +28,7 @@
    special exception, which will cause the skeleton and the resulting
    Bison output files to be licensed under the GNU General Public
    License without this special exception.
-
+   
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
@@ -47,7 +46,7 @@
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "2.3"
+#define YYBISON_VERSION "2.4.1"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -55,18 +54,178 @@
 /* Pure parsers.  */
 #define YYPURE 1
 
+/* Push parsers.  */
+#define YYPUSH 0
+
+/* Pull parsers.  */
+#define YYPULL 1
+
 /* Using locations.  */
 #define YYLSP_NEEDED 1
 
 /* Substitute the variable and function names.  */
-#define yyparse osilparse
-#define yylex   osillex
-#define yyerror osilerror
-#define yylval  osillval
-#define yychar  osilchar
-#define yydebug osildebug
-#define yynerrs osilnerrs
-#define yylloc osillloc
+#define yyparse         osilparse
+#define yylex           osillex
+#define yyerror         osilerror
+#define yylval          osillval
+#define yychar          osilchar
+#define yydebug         osildebug
+#define yynerrs         osilnerrs
+#define yylloc          osillloc
+
+/* Copy the first part of user declarations.  */
+
+
+
+#include <string>
+#include <iostream>
+#include <sstream>  
+ 
+#include "OSInstance.h" 
+#include "OSnLNode.h"
+#include "OSErrorClass.h"
+#include "OSParameters.h"
+#include "OSiLParserData.h"
+#include "OSBase64.h"
+#include "OSMathUtil.h"
+
+#include "OSConfig.h"
+
+
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif
+
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
+
+#ifdef HAVE_CSTDIO
+# include <cstdio>
+#else
+# ifdef HAVE_STDIO_H
+#  include <stdio.h>
+# else
+#  error "don't have header file for stdio"
+# endif
+#endif
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
+
+
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
+int osillex_init(void** ptr_yy_globals);
+int osillex_destroy (void* yyscanner );
+void osilset_extra (OSiLParserData* parserData , void* yyscanner );
+int osilget_lineno( void* yyscanner);
+char *osilget_text (void* yyscanner );
+void osilset_lineno (int line_number , void* yyscanner );
+void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
+//
+
+double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
+int atoimod1(int* osillineno, const char *ch1, const char *ch2);
+// we distinguish a newline from other whitespace
+// since we need to know when we hit a new line
+void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg);
+bool isnewline(char c, int* osillineno);
+bool parseVariables(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseObjectives(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseObjCoef(const char **pchar, int objcount, OSInstance *osinstance ,int* osillineno);
+bool parseConstraints(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseLinearConstraintCoefficients(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseStart(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseRowIdx(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseColIdx(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseValue(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseInstanceHeader(const char **pchar, OSInstance *osinstance ,int* osillineno);
+bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
+char *parseBase64( const char **p, int *dataSize ,int* osillineno);
+
+#define	ISWHITESPACE( char_) ((char_) == ' ' || \
+                     (char_) == '\t' ||  (char_) == '\r')
+
+#define	ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
+
+#define GETATTRIBUTETEXT  	\
+	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
+	ch++; \
+	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
+	if(*ch == '\"'){ \
+		ch++; \
+	    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	    *p = ch; \
+	    for( ; *ch != '\"'; ch++); \
+	}\
+	else{\
+	    if(*ch == '\'') { \
+	    	ch++; \
+	        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
+	        *p = ch; \
+	        for( ; *ch != '\''; ch++); \
+	    } \
+	    else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
+	}\
+	numChar = ch - *p; \
+	attText = new char[numChar + 1]; \
+	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
+	attText[ki] = '\0'; \
+	attTextEnd = &attText[ki]; 
+	
+#define GAIL printf("GAIL ANN HONDA\n")
+
+
+	
+#define ECHOCHECK \
+	GAIL; \
+	printf("%c", ch[-2]); \
+	printf("%c", ch[-1]); \
+	printf("%c", ch[0]); \
+	printf("%c", ch[1]); \
+	printf("%c", ch[2]); \
+	printf("%c", ch[3]); \
+	printf("%c", ch[4]); \
+	printf("%c", ch[5]); \
+	printf("%c \n", ch[6]); \
+	GAIL;
+
+
+
+/* Enabling traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+
+/* Enabling verbose error messages.  */
+#ifdef YYERROR_VERBOSE
+# undef YYERROR_VERBOSE
+# define YYERROR_VERBOSE 1
+#else
+# define YYERROR_VERBOSE 1
+#endif
+
+/* Enabling the token table.  */
+#ifndef YYTOKEN_TABLE
+# define YYTOKEN_TABLE 0
+#endif
+
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -285,173 +444,22 @@
 
 
 
-/* Copy the first part of user declarations.  */
-
-
-
-#include <string>
-#include <iostream>
-#include <sstream>  
- 
-#include "OSInstance.h" 
-#include "OSnLNode.h"
-#include "OSErrorClass.h"
-#include "OSParameters.h"
-#include "OSiLParserData.h"
-#include "OSBase64.h"
-#include "OSMathUtil.h"
-
-#include "OSConfig.h"
-
-
-
-#ifdef HAVE_CTIME
-# include <ctime>
-#else
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# else
-#  error "don't have header file for time"
-# endif
-#endif
-
-#ifdef HAVE_CSTRING
-# include <cstring>
-#else
-# ifdef HAVE_STRING_H
-#  include <string.h>
-# else
-#  error "don't have header file for string"
-# endif
-#endif
-
-#ifdef HAVE_CSTDIO
-# include <cstdio>
-#else
-# ifdef HAVE_STDIO_H
-#  include <stdio.h>
-# else
-#  error "don't have header file for stdio"
-# endif
-#endif
-
-using std::cout;
-using std::endl;
-using std::ostringstream;
-
-
-typedef struct yy_buffer_state *YY_BUFFER_STATE;
-YY_BUFFER_STATE osil_scan_string (const char *yy_str , void* yyscanner  );
-int osillex_init(void** ptr_yy_globals);
-int osillex_destroy (void* yyscanner );
-void osilset_extra (OSiLParserData* parserData , void* yyscanner );
-int osilget_lineno( void* yyscanner);
-char *osilget_text (void* yyscanner );
-void osilset_lineno (int line_number , void* yyscanner );
-void yygetOSInstance(const char *osil, OSInstance* osinstance, OSiLParserData *parserData) throw(ErrorClass);
-//
-
-double atofmod1(int* osillineno, const char *ch1, const char *ch2 );
-int atoimod1(int* osillineno, const char *ch1, const char *ch2);
-// we distinguish a newline from other whitespace
-// since we need to know when we hit a new line
-void osilerror_wrapper( const char* ch, int* osillineno, const char* errormsg);
-bool isnewline(char c, int* osillineno);
-bool parseVariables(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseObjectives(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseObjCoef(const char **pchar, int objcount, OSInstance *osinstance ,int* osillineno);
-bool parseConstraints(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseLinearConstraintCoefficients(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseStart(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseRowIdx(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseColIdx(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseValue(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseInstanceHeader(const char **pchar, OSInstance *osinstance ,int* osillineno);
-bool parseInstanceData( const char **pchar, OSInstance *osinstance, int* osillineno);
-char *parseBase64( const char **p, int *dataSize ,int* osillineno);
-
-#define	ISWHITESPACE( char_) ((char_) == ' ' || \
-                     (char_) == '\t' ||  (char_) == '\r')
-
-#define	ISDIGIT(_c) ((_c) >= '0' && (_c) <= '9')
-
-#define GETATTRIBUTETEXT  	\
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	if( *ch != '=') {  osilerror_wrapper( ch, osillineno, "found an attribute not defined"); return false;}  \
-	ch++; \
-	for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;	\
-	if(*ch == '\"'){ \
-		ch++; \
-	    for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	    *p = ch; \
-	    for( ; *ch != '\"'; ch++); \
-	}\
-	else{\
-	    if(*ch == '\'') { \
-	    	ch++; \
-	        for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ; \
-	        *p = ch; \
-	        for( ; *ch != '\''; ch++); \
-	    } \
-	    else {  osilerror_wrapper( ch, osillineno,"missing quote on attribute"); return false;} \
-	}\
-	numChar = ch - *p; \
-	attText = new char[numChar + 1]; \
-	for(ki = 0; ki < numChar; ki++) attText[ki] = *((*p)++); \
-	attText[ki] = '\0'; \
-	attTextEnd = &attText[ki]; 
-	
-#define GAIL printf("GAIL ANN HONDA\n")
-
-
-	
-#define ECHOCHECK \
-	GAIL; \
-	printf("%c", ch[-2]); \
-	printf("%c", ch[-1]); \
-	printf("%c", ch[0]); \
-	printf("%c", ch[1]); \
-	printf("%c", ch[2]); \
-	printf("%c", ch[3]); \
-	printf("%c", ch[4]); \
-	printf("%c", ch[5]); \
-	printf("%c \n", ch[6]); \
-	GAIL;
-
-
-/* Enabling traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
-
-/* Enabling verbose error messages.  */
-#ifdef YYERROR_VERBOSE
-# undef YYERROR_VERBOSE
-# define YYERROR_VERBOSE 1
-#else
-# define YYERROR_VERBOSE 1
-#endif
-
-/* Enabling the token table.  */
-#ifndef YYTOKEN_TABLE
-# define YYTOKEN_TABLE 0
-#endif
-
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-
 {
+
+
 	double dval;
 	int ival;
 	char* sval;
 	
-}
-/* Line 193 of yacc.c.  */
 
-	YYSTYPE;
+
+
+} YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
-# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
 #if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
@@ -477,8 +485,6 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
  
 #define scanner parserData->scanner
 
-
-/* Line 216 of yacc.c.  */
 
 
 #ifdef short
@@ -529,7 +535,7 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if defined YYENABLE_NLS && YYENABLE_NLS
+# if YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -554,14 +560,14 @@ typedef short int yytype_int16;
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static int
-YYID (int i)
+YYID (int yyi)
 #else
 static int
-YYID (i)
-    int i;
+YYID (yyi)
+    int yyi;
 #endif
 {
-  return i;
+  return yyi;
 }
 #endif
 
@@ -643,9 +649,9 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
 {
-  yytype_int16 yyss;
-  YYSTYPE yyvs;
-    YYLTYPE yyls;
+  yytype_int16 yyss_alloc;
+  YYSTYPE yyvs_alloc;
+  YYLTYPE yyls_alloc;
 };
 
 /* The size of the maximum gap between one aligned stack and the next.  */
@@ -680,12 +686,12 @@ union yyalloc
    elements in the stack, and YYPTR gives the new location of the
    stack.  Advance YYPTR to a properly aligned location for the next
    stack.  */
-# define YYSTACK_RELOCATE(Stack)					\
+# define YYSTACK_RELOCATE(Stack_alloc, Stack)				\
     do									\
       {									\
 	YYSIZE_T yynewbytes;						\
-	YYCOPY (&yyptr->Stack, Stack, yysize);				\
-	Stack = &yyptr->Stack;						\
+	YYCOPY (&yyptr->Stack_alloc, Stack, yysize);			\
+	Stack = &yyptr->Stack_alloc;					\
 	yynewbytes = yystacksize * sizeof (*Stack) + YYSTACK_GAP_MAXIMUM; \
 	yyptr += yynewbytes / sizeof (*yyptr);				\
       }									\
@@ -862,27 +868,27 @@ static const yytype_uint16 yyrline[] =
 {
        0,   227,   227,   230,   231,   233,   234,   239,   246,   247,
      249,   249,   261,   262,   265,   266,   270,   273,   276,   279,
-     285,   292,   299,   301,   305,   308,   309,   313,   319,   321,
-     320,   328,   343,   344,   345,   346,   347,   348,   349,   350,
-     351,   352,   353,   354,   355,   356,   357,   358,   359,   360,
-     361,   362,   363,   364,   365,   366,   369,   369,   374,   374,
-     379,   379,   384,   384,   389,   389,   394,   394,   399,   399,
-     409,   410,   415,   415,   427,   428,   431,   431,   442,   443,
-     445,   445,   456,   457,   460,   460,   470,   471,   474,   474,
-     479,   479,   484,   484,   489,   489,   494,   494,   501,   501,
-     506,   506,   514,   514,   522,   522,   529,   529,   532,   533,
-     535,   535,   538,   539,   541,   541,   546,   547,   549,   550,
-     552,   554,   556,   560,   560,   564,   564,   568,   571,   575,
-     575,   580,   581,   581,   585,   587,   588,   590,   592,   596,
-     599,   603,   611,   611,   613,   615,   616,   617,   618,   620,
-     621,   623,   674,   676,   690,   691,   693,   693,   717,   718,
-     721,   722,   724,   726,   727,   731,   732,   734,   735,   737,
-     753,   761,   768,   773,   774,   776,   777,   779,   779,   782,
-     791,   792,   794,   795,   799,   800,   802,   803,   805,   821,
-     829,   836,   841,   842,   844,   845,   847,   847,   850,   859,
-     860,   862,   872,   876,   877,   879,   880,   882,   898,   906,
-     913,   918,   919,   921,   922,   924,   924,   927,   936,   937,
-     942,   942,   950,   951,   953,   954,   956,   960,   965,   969
+     285,   292,   299,   301,   305,   308,   309,   313,   322,   324,
+     323,   331,   346,   347,   348,   349,   350,   351,   352,   353,
+     354,   355,   356,   357,   358,   359,   360,   361,   362,   363,
+     364,   365,   366,   367,   368,   369,   372,   372,   377,   377,
+     382,   382,   387,   387,   392,   392,   397,   397,   402,   402,
+     412,   413,   418,   418,   430,   431,   434,   434,   445,   446,
+     448,   448,   459,   460,   463,   463,   473,   474,   477,   477,
+     482,   482,   487,   487,   492,   492,   497,   497,   504,   504,
+     509,   509,   517,   517,   525,   525,   532,   532,   535,   536,
+     538,   538,   541,   542,   544,   544,   549,   550,   552,   553,
+     555,   557,   559,   563,   563,   567,   567,   571,   574,   578,
+     578,   583,   584,   584,   588,   590,   591,   593,   595,   599,
+     602,   606,   614,   614,   616,   618,   619,   620,   621,   623,
+     624,   626,   677,   679,   693,   694,   696,   696,   720,   721,
+     724,   725,   727,   729,   730,   734,   735,   737,   738,   740,
+     756,   764,   771,   776,   777,   779,   780,   782,   782,   785,
+     794,   795,   797,   798,   802,   803,   805,   806,   808,   824,
+     832,   839,   844,   845,   847,   848,   850,   850,   853,   862,
+     863,   865,   875,   879,   880,   882,   883,   885,   901,   909,
+     916,   921,   922,   924,   925,   927,   927,   930,   939,   940,
+     945,   945,   953,   954,   956,   957,   959,   963,   968,   972
 };
 #endif
 
@@ -914,34 +920,34 @@ static const char *const yytname[] =
   "NUMBEROFOBJECTIVESATT", "STARTIDXATT", "VARSTART", "VAREND", "CONSTART",
   "CONEND", "OBJSTART", "OBJEND", "INTERVALSTART", "INTERVALEND",
   "$accept", "osildoc", "theInstanceEnd", "quadraticcoefficients",
-  "quadnumberatt", "qTermlist", "qterm", "@1", "qtermend",
+  "quadnumberatt", "qTermlist", "qterm", "$@1", "qtermend",
   "anotherqTermATT", "qtermatt", "qtermidxOneatt", "qtermidxTwoatt",
   "qtermcoefatt", "qtermidxatt", "nonlinearExpressions", "nlnumberatt",
-  "nlnodes", "@2", "nlIdxATT", "nlnode", "times", "@3", "plus", "@4",
-  "minus", "@5", "negate", "@6", "divide", "@7", "power", "@8", "sum",
-  "@9", "anothersumnlnode", "allDiff", "@10", "anotherallDiffnlnode",
-  "max", "@11", "anothermaxnlnode", "min", "@12", "anotherminnlnode",
-  "product", "@13", "anotherproductnlnode", "ln", "@14", "sqrt", "@15",
-  "square", "@16", "cos", "@17", "sin", "@18", "exp", "@19", "abs", "@20",
-  "erf", "@21", "if", "@22", "E", "@23", "eend", "PI", "@24", "piend",
-  "number", "@25", "numberend", "anotherNumberATT", "numberATT",
-  "numbertypeATT", "@26", "numberidATT", "@27", "numbervalueATT",
-  "variable", "@28", "variableend", "@29", "anotherVariableATT",
+  "nlnodes", "$@2", "nlIdxATT", "nlnode", "times", "$@3", "plus", "$@4",
+  "minus", "$@5", "negate", "$@6", "divide", "$@7", "power", "$@8", "sum",
+  "$@9", "anothersumnlnode", "allDiff", "$@10", "anotherallDiffnlnode",
+  "max", "$@11", "anothermaxnlnode", "min", "$@12", "anotherminnlnode",
+  "product", "$@13", "anotherproductnlnode", "ln", "$@14", "sqrt", "$@15",
+  "square", "$@16", "cos", "$@17", "sin", "$@18", "exp", "$@19", "abs",
+  "$@20", "erf", "$@21", "if", "$@22", "E", "$@23", "eend", "PI", "$@24",
+  "piend", "number", "$@25", "numberend", "anotherNumberATT", "numberATT",
+  "numbertypeATT", "$@26", "numberidATT", "$@27", "numbervalueATT",
+  "variable", "$@28", "variableend", "$@29", "anotherVariableATT",
   "variableATT", "variablecoefATT", "variableidxATT", "timeDomain",
   "timedomainstart", "timedomain", "timedomainend", "stages",
-  "stagesstart", "numberofstagesatt", "stagelist", "stage", "@30",
+  "stagesstart", "numberofstagesatt", "stagelist", "stage", "$@30",
   "stagenameATT", "stageend", "stagecontent", "stagevariables",
   "anotherstagevarATT", "stagevaratt", "numberofstagevariablesatt",
   "stagevarstartidxATT", "restofstagevariables", "emptyvarlist",
-  "stagevarlist", "stagevar", "@31", "stagevaridxATT", "stagevarend",
+  "stagevarlist", "stagevar", "$@31", "stagevaridxATT", "stagevarend",
   "stageconstraints", "anotherstageconATT", "stageconatt",
   "numberofstageconstraintsatt", "stageconstartidxATT",
   "restofstageconstraints", "emptyconlist", "stageconlist", "stagecon",
-  "@32", "stageconidxATT", "stageconend", "stageobjectives",
+  "$@32", "stageconidxATT", "stageconend", "stageobjectives",
   "anotherstageobjATT", "stageobjatt", "numberofstageobjectivesatt",
   "stageobjstartidxATT", "restofstageobjectives", "emptyobjlist",
-  "stageobjlist", "stageobj", "@33", "stageobjidxATT", "stageobjend",
-  "interval", "@34", "intervalend", "anotherIntervalATT", "intervalatt",
+  "stageobjlist", "stageobj", "$@33", "stageobjidxATT", "stageobjend",
+  "interval", "$@34", "intervalend", "anotherIntervalATT", "intervalatt",
   "intervalhorizonatt", "intervalstartatt", 0
 };
 #endif
@@ -1370,7 +1376,7 @@ while (YYID (0))
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+# if YYLTYPE_IS_TRIVIAL
 #  define YY_LOCATION_PRINT(File, Loc)			\
      fprintf (File, "%d.%d-%d.%d",			\
 	      (Loc).first_line, (Loc).first_column,	\
@@ -1492,17 +1498,20 @@ yy_symbol_print (yyoutput, yytype, yyvaluep, yylocationp, osinstance, parserData
 #if (defined __STDC__ || defined __C99__FUNC__ \
      || defined __cplusplus || defined _MSC_VER)
 static void
-yy_stack_print (yytype_int16 *bottom, yytype_int16 *top)
+yy_stack_print (yytype_int16 *yybottom, yytype_int16 *yytop)
 #else
 static void
-yy_stack_print (bottom, top)
-    yytype_int16 *bottom;
-    yytype_int16 *top;
+yy_stack_print (yybottom, yytop)
+    yytype_int16 *yybottom;
+    yytype_int16 *yytop;
 #endif
 {
   YYFPRINTF (stderr, "Stack now");
-  for (; bottom <= top; ++bottom)
-    YYFPRINTF (stderr, " %d", *bottom);
+  for (; yybottom <= yytop; yybottom++)
+    {
+      int yybot = *yybottom;
+      YYFPRINTF (stderr, " %d", yybot);
+    }
   YYFPRINTF (stderr, "\n");
 }
 
@@ -1539,11 +1548,11 @@ yy_reduce_print (yyvsp, yylsp, yyrule, osinstance, parserData)
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
-      fprintf (stderr, "   $%d = ", yyi + 1);
+      YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr, yyrhs[yyprhs[yyrule] + yyi],
 		       &(yyvsp[(yyi + 1) - (yynrhs)])
 		       , &(yylsp[(yyi + 1) - (yynrhs)])		       , osinstance, parserData);
-      fprintf (stderr, "\n");
+      YYFPRINTF (stderr, "\n");
     }
 }
 
@@ -1829,10 +1838,8 @@ yydestruct (yymsg, yytype, yyvaluep, yylocationp, osinstance, parserData)
 	break;
     }
 }
-
 
 /* Prevent warnings from -Wmissing-prototypes.  */
-
 #ifdef YYPARSE_PARAM
 #if defined __STDC__ || defined __cplusplus
 int yyparse (void *YYPARSE_PARAM);
@@ -1851,10 +1858,9 @@ int yyparse ();
 
 
 
-
-/*----------.
-| yyparse.  |
-`----------*/
+/*-------------------------.
+| yyparse or yypush_parse.  |
+`-------------------------*/
 
 #ifdef YYPARSE_PARAM
 #if (defined __STDC__ || defined __C99__FUNC__ \
@@ -1879,24 +1885,59 @@ yyparse (osinstance, parserData)
 #endif
 #endif
 {
-  /* The look-ahead symbol.  */
+/* The lookahead symbol.  */
 int yychar;
 
-/* The semantic value of the look-ahead symbol.  */
+/* The semantic value of the lookahead symbol.  */
 YYSTYPE yylval;
 
-/* Number of syntax errors so far.  */
-int yynerrs;
-/* Location data for the look-ahead symbol.  */
+/* Location data for the lookahead symbol.  */
 YYLTYPE yylloc;
 
-  int yystate;
+    /* Number of syntax errors so far.  */
+    int yynerrs;
+
+    int yystate;
+    /* Number of tokens to shift before error messages enabled.  */
+    int yyerrstatus;
+
+    /* The stacks and their tools:
+       `yyss': related to states.
+       `yyvs': related to semantic values.
+       `yyls': related to locations.
+
+       Refer to the stacks thru separate pointers, to allow yyoverflow
+       to reallocate them elsewhere.  */
+
+    /* The state stack.  */
+    yytype_int16 yyssa[YYINITDEPTH];
+    yytype_int16 *yyss;
+    yytype_int16 *yyssp;
+
+    /* The semantic value stack.  */
+    YYSTYPE yyvsa[YYINITDEPTH];
+    YYSTYPE *yyvs;
+    YYSTYPE *yyvsp;
+
+    /* The location stack.  */
+    YYLTYPE yylsa[YYINITDEPTH];
+    YYLTYPE *yyls;
+    YYLTYPE *yylsp;
+
+    /* The locations where the error started and ended.  */
+    YYLTYPE yyerror_range[2];
+
+    YYSIZE_T yystacksize;
+
   int yyn;
   int yyresult;
-  /* Number of tokens to shift before error messages enabled.  */
-  int yyerrstatus;
-  /* Look-ahead token as an internal (translated) token number.  */
-  int yytoken = 0;
+  /* Lookahead token as an internal (translated) token number.  */
+  int yytoken;
+  /* The variables used to return semantic value and location from the
+     action routines.  */
+  YYSTYPE yyval;
+  YYLTYPE yyloc;
+
 #if YYERROR_VERBOSE
   /* Buffer for error messages, and its allocated size.  */
   char yymsgbuf[128];
@@ -1904,63 +1945,37 @@ YYLTYPE yylloc;
   YYSIZE_T yymsg_alloc = sizeof yymsgbuf;
 #endif
 
-  /* Three stacks and their tools:
-     `yyss': related to states,
-     `yyvs': related to semantic values,
-     `yyls': related to locations.
-
-     Refer to the stacks thru separate pointers, to allow yyoverflow
-     to reallocate them elsewhere.  */
-
-  /* The state stack.  */
-  yytype_int16 yyssa[YYINITDEPTH];
-  yytype_int16 *yyss = yyssa;
-  yytype_int16 *yyssp;
-
-  /* The semantic value stack.  */
-  YYSTYPE yyvsa[YYINITDEPTH];
-  YYSTYPE *yyvs = yyvsa;
-  YYSTYPE *yyvsp;
-
-  /* The location stack.  */
-  YYLTYPE yylsa[YYINITDEPTH];
-  YYLTYPE *yyls = yylsa;
-  YYLTYPE *yylsp;
-  /* The locations where the error started and ended.  */
-  YYLTYPE yyerror_range[2];
-
 #define YYPOPSTACK(N)   (yyvsp -= (N), yyssp -= (N), yylsp -= (N))
-
-  YYSIZE_T yystacksize = YYINITDEPTH;
-
-  /* The variables used to return semantic value and location from the
-     action routines.  */
-  YYSTYPE yyval;
-  YYLTYPE yyloc;
 
   /* The number of symbols on the RHS of the reduced rule.
      Keep to zero when no symbol should be popped.  */
   int yylen = 0;
+
+  yytoken = 0;
+  yyss = yyssa;
+  yyvs = yyvsa;
+  yyls = yylsa;
+  yystacksize = YYINITDEPTH;
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
   yystate = 0;
   yyerrstatus = 0;
   yynerrs = 0;
-  yychar = YYEMPTY;		/* Cause a token to be read.  */
+  yychar = YYEMPTY; /* Cause a token to be read.  */
 
   /* Initialize stack pointers.
      Waste one element of value and location stack
      so that they stay on the same level as the state stack.
      The wasted elements are never initialized.  */
-
   yyssp = yyss;
   yyvsp = yyvs;
   yylsp = yyls;
-#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+
+#if YYLTYPE_IS_TRIVIAL
   /* Initialize the default location before parsing starts.  */
   yylloc.first_line   = yylloc.last_line   = 1;
-  yylloc.first_column = yylloc.last_column = 0;
+  yylloc.first_column = yylloc.last_column = 1;
 #endif
 
   goto yysetstate;
@@ -1999,6 +2014,7 @@ YYLTYPE yylloc;
 		    &yyvs1, yysize * sizeof (*yyvsp),
 		    &yyls1, yysize * sizeof (*yylsp),
 		    &yystacksize);
+
 	yyls = yyls1;
 	yyss = yyss1;
 	yyvs = yyvs1;
@@ -2020,9 +2036,9 @@ YYLTYPE yylloc;
 	  (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
 	if (! yyptr)
 	  goto yyexhaustedlab;
-	YYSTACK_RELOCATE (yyss);
-	YYSTACK_RELOCATE (yyvs);
-	YYSTACK_RELOCATE (yyls);
+	YYSTACK_RELOCATE (yyss_alloc, yyss);
+	YYSTACK_RELOCATE (yyvs_alloc, yyvs);
+	YYSTACK_RELOCATE (yyls_alloc, yyls);
 #  undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
 	  YYSTACK_FREE (yyss1);
@@ -2043,6 +2059,9 @@ YYLTYPE yylloc;
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
 
+  if (yystate == YYFINAL)
+    YYACCEPT;
+
   goto yybackup;
 
 /*-----------.
@@ -2051,16 +2070,16 @@ YYLTYPE yylloc;
 yybackup:
 
   /* Do appropriate processing given the current state.  Read a
-     look-ahead token if we need one and don't already have one.  */
+     lookahead token if we need one and don't already have one.  */
 
-  /* First try to decide what to do without reference to look-ahead token.  */
+  /* First try to decide what to do without reference to lookahead token.  */
   yyn = yypact[yystate];
   if (yyn == YYPACT_NINF)
     goto yydefault;
 
-  /* Not known => get a look-ahead token if don't already have one.  */
+  /* Not known => get a lookahead token if don't already have one.  */
 
-  /* YYCHAR is either YYEMPTY or YYEOF or a valid look-ahead symbol.  */
+  /* YYCHAR is either YYEMPTY or YYEOF or a valid lookahead symbol.  */
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token: "));
@@ -2092,20 +2111,16 @@ yybackup:
       goto yyreduce;
     }
 
-  if (yyn == YYFINAL)
-    YYACCEPT;
-
   /* Count tokens shifted since error; after three, turn off error
      status.  */
   if (yyerrstatus)
     yyerrstatus--;
 
-  /* Shift the look-ahead token.  */
+  /* Shift the lookahead token.  */
   YY_SYMBOL_PRINT ("Shifting", yytoken, &yylval, &yylloc);
 
-  /* Discard the shifted token unless it is eof.  */
-  if (yychar != YYEOF)
-    yychar = YYEMPTY;
+  /* Discard the shifted token.  */
+  yychar = YYEMPTY;
 
   yystate = yyn;
   *++yyvsp = yylval;
@@ -2253,6 +2268,9 @@ osinstance->instanceData->quadraticCoefficients->qTerm[parserData->qtermcount]->
 parserData->tmpnlcount = (yyvsp[(3) - (5)].ival);
 osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = (yyvsp[(3) - (5)].ival);  
 if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0 ) osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ (yyvsp[(3) - (5)].ival) ];
+for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions; i++){
+	osinstance->instanceData->nonlinearExpressions->nl[ i] = new Nl();
+}
 }
     break;
 
@@ -2269,7 +2287,7 @@ if(osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions 
   case 31:
 
     { if ( *(yyvsp[(2) - (4)].sval) != *(yyvsp[(4) - (4)].sval) ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
-osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
+//osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = (yyvsp[(3) - (4)].ival);
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
 if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
@@ -3086,7 +3104,6 @@ osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->os
     break;
 
 
-/* Line 1267 of yacc.c.  */
 
       default: break;
     }
@@ -3163,7 +3180,7 @@ yyerrlab:
 
   if (yyerrstatus == 3)
     {
-      /* If just tried and failed to reuse look-ahead token after an
+      /* If just tried and failed to reuse lookahead token after an
 	 error, discard it.  */
 
       if (yychar <= YYEOF)
@@ -3180,7 +3197,7 @@ yyerrlab:
 	}
     }
 
-  /* Else will try to reuse look-ahead token after shifting the error
+  /* Else will try to reuse lookahead token after shifting the error
      token.  */
   goto yyerrlab1;
 
@@ -3238,14 +3255,11 @@ yyerrlab1:
       YY_STACK_PRINT (yyss, yyssp);
     }
 
-  if (yyn == YYFINAL)
-    YYACCEPT;
-
   *++yyvsp = yylval;
 
   yyerror_range[1] = yylloc;
   /* Using YYLLOC is tempting, but would change the location of
-     the look-ahead.  YYLOC is available though.  */
+     the lookahead.  YYLOC is available though.  */
   YYLLOC_DEFAULT (yyloc, (yyerror_range - 1), 2);
   *++yylsp = yyloc;
 
@@ -3270,7 +3284,7 @@ yyabortlab:
   yyresult = 1;
   goto yyreturn;
 
-#ifndef yyoverflow
+#if !defined(yyoverflow) || YYERROR_VERBOSE
 /*-------------------------------------------------.
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
@@ -3281,7 +3295,7 @@ yyexhaustedlab:
 #endif
 
 yyreturn:
-  if (yychar != YYEOF && yychar != YYEMPTY)
+  if (yychar != YYEMPTY)
      yydestruct ("Cleanup: discarding lookahead",
 		 yytoken, &yylval, &yylloc, osinstance, parserData);
   /* Do not reclaim the symbols of the rule which action triggered

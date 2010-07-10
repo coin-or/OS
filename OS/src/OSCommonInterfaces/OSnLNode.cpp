@@ -238,11 +238,11 @@ std::string OSnLNode::getTokenNumber(){
 	ostringstream outStr;
 	outStr << inodeInt;
 	// when I creat an OSnLNode from a token number, I need to know how many children there are
-	if(inodeType == -1){
+//	if(inodeType == -1){
 		outStr << "[";
 		outStr << inumberOfChildren ;
 		outStr << "]";
-	}
+//	}
 	return outStr.str();
 }//getTokenNumber
 
