@@ -957,14 +957,7 @@
 			<xs:element name="numberOfColumns" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="numberOfNonzeroValues" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="density" minOccurs="0">
-				<xs:simpleType>
-					<xs:restriction base="xs:double">
-						<xs:minInclusive value="0.0"/>
-						<xs:maxInclusive value="1.0"/>
-					</xs:restriction>
-				</xs:simpleType>
-			</xs:element>
+			<xs:element name="density" minOccurs="0" type="probability"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCoefficientAnalysis">
