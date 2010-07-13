@@ -251,15 +251,12 @@ int main(int argC, const char* argV[]) {
 			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
 			while (osoptions->quit != true) {
 				std::cout
-						<< "At the prompt below type a valid option and option value.\n";
-				std::cout
-						<< "After entering the desired options type \"solve\" to optimize.\n";
-				std::cout
-						<< "Type \"quit\" to leave the application. Type \"help\" or \"?\" for a list\n";
-				std::cout << "of valid options." << std::endl << std::endl;
-
-				std::cout
-						<< "Please enter a valid option followed by the corresponding option value: ";
+						<< "At the prompt below type a valid option and option value.\n\
+After entering the desired options type \"solve\" to optimize.\n\
+Type \"quit\" to leave the application. Type \"help\" or \"?\" for a list\n\
+of valid options.\n\
+\
+Please enter a valid option followed by the corresponding option value: ";
 				getline(std::cin, lineText);
 				lineText = " " + lineText + " ";
 				//get the name of the option
