@@ -19,7 +19,7 @@
  * This is the OS unitTest. It currently runs the following tests.
  * 
  * Solvers:
- * 
+ *  
  * COIN-Clp tested on parincLinearByRow.osil
  * 
  * COIN-Cbc tested on p0033.osil
@@ -2502,8 +2502,8 @@ if (OTHER_TESTS){
 	// Now test the parsers --- OSiL parser first
 if (PARSER_TESTS){
 
+//#if 0   //!!!  OSrL parser development
 	try{ 
-#if 0 //(disable parser testing for the time being)
 		cout << endl << "TEST " << ++nOfTest << ":  OSiL parser" << endl << endl;
 		clock_t start, finish;
 		double duration;
@@ -2844,7 +2844,6 @@ if (PARSER_TESTS){
 		unitTestResultFailure << "Sorry Unit Test Failed osinstance get() and set() Methods" << endl;		
 	}	
 
-#if0
 	//
 	// Now test the OSoL parser
 	OSoLWriter *osolwriter = NULL;
@@ -3514,6 +3513,7 @@ if (PARSER_TESTS){
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 	}
 
+//#endif //!!!  end of #if 0: OSrL parser development
 
 /** The first test makes sure that the set() and IsEqual() methods work correctly.
  *  Two OSResult objects are built one element and attribute at a time.
@@ -4592,7 +4592,7 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("setVarValueString: osresult objects falsely compare unequal!");
 			}
-/*
+
 			ok &= osresult1->setNumberOfBasisVar(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfBasisVar!");
@@ -4718,7 +4718,7 @@ if (PARSER_TESTS){
 						throw ErrorClass("setOtherVariableResultVar: osresult objects falsely compare unequal!");
 				}
 			}
-*/
+
 			ok &= osresult1->setNumberOfObjValues(i,2);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfObjValues!");
@@ -5540,7 +5540,7 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("Error during setVarValueString!");
 			}
-/*
+
 			tempInt = osresult1->getNumberOfBasisVar(i);
 			ok &= osresult2->setNumberOfBasisVar(i,tempInt);
 			if (!ok) 
@@ -5592,7 +5592,7 @@ if (PARSER_TESTS){
 						throw ErrorClass("Error during setOtherVariableResultVar!");
 				}
 			}
-*/
+
 			tempInt = osresult1->getNumberOfObjValues(i);
 			ok &= osresult2->setNumberOfObjValues(i,tempInt);
 			if (!ok) 
@@ -5835,10 +5835,11 @@ if (PARSER_TESTS){
 		osrlreader->readOSrL( tmpOSrL);
 		delete osrlwriter;
 		osrlwriter = NULL;
-		delete osrlreader; 
+		delete osrlreader;
 		osrlreader = NULL;
 
-		// now a second example
+
+/*		// now a second example
 		cout << endl << "Test parsing another OSrL file" << endl;
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
@@ -6110,10 +6111,9 @@ if (PARSER_TESTS){
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
-#endif //!!! end of #if 0 above (disable parser testing for the time being)
+*/
 
-
-unitTestResult << 
+		unitTestResult << 
 		     "TEST " << nOfTest << ": Successful test of OSrL parser on file parserTest.osrl" 
 		      << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
