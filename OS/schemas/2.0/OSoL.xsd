@@ -305,7 +305,7 @@
 					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="NonNegativeIntVectorWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
@@ -362,7 +362,7 @@
 					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="NonNegativeIntVectorWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
@@ -442,7 +442,7 @@
 					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="IndexSetWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" type="NonNegativeIntVectorWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>

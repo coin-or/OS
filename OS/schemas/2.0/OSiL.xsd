@@ -277,24 +277,24 @@
 			<xs:annotation>
 				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
 			</xs:annotation>
-			<xs:element name="start" type="IntVector">
+			<xs:element name="start" type="LegacyIntVector">
 				<xs:annotation>
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:choice>
-				<xs:element name="rowIdx" type="IntVector">
+				<xs:element name="rowIdx" type="LegacyIntVector">
 					<xs:annotation>
 						<xs:documentation>since version 1.0</xs:documentation>
 					</xs:annotation>
 				</xs:element>
-				<xs:element name="colIdx" type="IntVector">
+				<xs:element name="colIdx" type="LegacyIntVector">
 					<xs:annotation>
 						<xs:documentation>since version 1.0</xs:documentation>
 					</xs:annotation>
 				</xs:element>
 			</xs:choice>
-			<xs:element name="value" type="DoubleVector">
+			<xs:element name="value" type="LegacyDoubleVector">
 				<xs:annotation>
 					<xs:documentation>since version 1.0</xs:documentation>
 				</xs:annotation>
@@ -360,9 +360,9 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixVariables" type="matrixVariables" minOccurs="0"/>
+			<xs:element name="matrixVariables" type="MatrixVariables" minOccurs="0"/>
 			<xs:element name="objectives" type="MatrixProgrammingObjectives" minOccurs="0"/>
-			<xs:element name="matrixConstraints" type="matrixConstraints" minOccurs="0"/>
+			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
 			<xs:element name="linearConstraintMatrixOperators" type="LinearConstraintMatrixOperators" minOccurs="0"/>
 			<xs:element name="nonlinearMatrixExpressions" type="NonlinearMatrixExpressions" minOccurs="0"/>
 			<!--
@@ -390,16 +390,16 @@
 			-->
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="matrixVariables">
+	<xs:complexType name="MatrixVariables">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixVar" type="matrixVar" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixVar" type="MatrixVar" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixVar" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="matrixVar">
+	<xs:complexType name="MatrixVar">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -471,16 +471,16 @@
 			</xs:simpleType>
 		</xs:attribute>
 	</xs:complexType>
-	<xs:complexType name="matrixConstraints">
+	<xs:complexType name="MatrixConstraints">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixCon" type="matrixCon" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixCon" type="MatrixCon" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixCon" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="matrixCon">
+	<xs:complexType name="MatrixCon">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -566,11 +566,11 @@
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="matrixNL" type="matrixNL" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="matrixNL" type="MatrixNL" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfMatrixNL" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="matrixNL">
+	<xs:complexType name="MatrixNL">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
 		</xs:annotation>
@@ -606,18 +606,13 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="var" type="SOSVar" minOccurs="0" maxOccurs="unbounded">
-				<xs:annotation>
-					<xs:documentation>Number of var elements must match numberOfVar after sequences have been accounted for appropriately</xs:documentation>
-				</xs:annotation>
-			</xs:element>
+			<xs:element name="variables" type="NonNegativeIntVector" minOccurs="0"/>
 			<xs:element name="adjacentVariableSets" type="SOSAdjacentVariableSets" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>Only needed if type > 2.      All nonzero variables belong to the same adjacency set.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="type" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger"/>
 	</xs:complexType>
@@ -626,13 +621,13 @@
 			<xs:documentation>experiment</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="set" type="SOSAdjacencySet" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="set" type="NonNegativeIntVector" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>Number of sets must match numberOfSets</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSets"/>
+		<xs:attribute name="numberOfSets" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSAdjacencySet">
 		<xs:annotation>
@@ -741,40 +736,8 @@
 			<xs:element name="cone" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:choice minOccurs="0">
-						<xs:element name="scalarVariables">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="var" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="scalarConstraints">
-							<xs:complexType>
-								<xs:sequence>
-									<xs:element name="con" minOccurs="0" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:simpleContent>
-												<xs:extension base="xs:nonNegativeInteger">
-													<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-													<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
-												</xs:extension>
-											</xs:simpleContent>
-										</xs:complexType>
-									</xs:element>
-								</xs:sequence>
-								<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="required"/>
-							</xs:complexType>
-						</xs:element>
+						<xs:element name="scalarVariables" type="NonNegativeIntVector"/>
+						<xs:element name="scalarConstraints" type="NonNegativeIntVector"/>
 						<xs:element name="matrixVar" type="xs:nonNegativeInteger"/>
 						<xs:element name="matrixCon" type="xs:nonNegativeInteger"/>
 					</xs:choice>
@@ -927,14 +890,7 @@
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
-		<xs:attribute name="normScaleFactor">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minExclusive value="0.0"/>
-					<xs:maxExclusive value="INF"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="normScaleFactor" type="positiveDouble"/>
 		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger"/>
 		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger"/>
 	</xs:complexType>
@@ -946,14 +902,7 @@
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
-		<xs:attribute name="normScaleFactor">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minExclusive value="0.0"/>
-					<xs:maxExclusive value="INF"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="normScaleFactor" type="positiveDouble"/>
 		<xs:attribute name="firstAxisDirectionRowIdx" type="xs:nonNegativeInteger"/>
 		<xs:attribute name="firstAxisDirectionColIdx" type="xs:nonNegativeInteger"/>
 		<xs:attribute name="secondAxisDirectionRowIdx" type="xs:nonNegativeInteger"/>
@@ -967,14 +916,7 @@
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId"/>
-		<xs:attribute name="normScaleFactor">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minExclusive value="0.0"/>
-					<xs:maxExclusive value="INF"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="normScaleFactor" type="positiveDouble"/>
 		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger"/>
 		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger"/>
 		<xs:attribute name="pNorm" use="required">
@@ -2135,14 +2077,7 @@
 		<xs:complexContent>
 			<xs:extension base="StochasticNumbers">
 				<xs:attribute name="name" type="xs:string" use="optional"/>
-				<xs:attribute name="prob" use="required">
-					<xs:simpleType>
-						<xs:restriction base="xs:double">
-							<xs:minInclusive value="0.0"/>
-							<xs:maxInclusive value="1.0"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="prob" use="required" type="probability"/>
 				<xs:attribute name="base" use="optional" default="coreProgram">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -2162,14 +2097,7 @@
 		<xs:complexContent>
 			<xs:extension base="StochasticNumbers">
 				<xs:attribute name="name" type="xs:string" use="optional"/>
-				<xs:attribute name="prob" use="required">
-					<xs:simpleType>
-						<xs:restriction base="xs:double">
-							<xs:minInclusive value="0.0"/>
-							<xs:maxInclusive value="1.0"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="prob" use="required" type="probability"/>
 				<xs:attribute name="parent" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
@@ -2892,14 +2820,7 @@
 					</xs:choice>
 					<xs:element ref="scenarioNode" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
-				<xs:attribute name="prob" use="required">
-					<xs:simpleType>
-						<xs:restriction base="xs:double">
-							<xs:minInclusive value="0.0"/>
-							<xs:maxInclusive value="1.0"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
+				<xs:attribute name="prob" use="required" type="probability"/>
 				<xs:attribute name="base" use="optional" default="coreProgram">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -2979,13 +2900,7 @@
 			<xs:element name="piecewiseLinearQuadratic" type="SoftConstraintsPiecewiseLinearQuadraticPenalty" minOccurs="0"/>
 			<xs:element name="userDefinedPenalty" type="SoftConstraintsUserDefinedPenalty" minOccurs="0"/>
 		</xs:choice>
-		<xs:attribute name="idx" use="required">
-			<xs:simpleType>
-				<xs:restriction base="xs:int">
-					<xs:minInclusive value="0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="idx" use="required" type="xs:nonNegativeInteger"/>
 		<xs:attribute name="objectiveIdx" type="xs:negativeInteger" use="optional" default="-1"/>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsSimpleRecourse">
@@ -3001,13 +2916,7 @@
 		</xs:annotation>
 		<xs:attribute name="quadraticShortagePenalty" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticSurplusPenalty" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="quadraticFactor" use="optional" default="2.0">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="0.0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="quadraticFactor" use="optional" default="2.0" type="positiveDouble"/>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsPiecewiseLinearQuadraticPenalty">
 		<xs:annotation>
@@ -3017,13 +2926,7 @@
 		<xs:attribute name="linearSurplusParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticShortageParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticSurplusParam" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="quadraticFactor" use="optional" default="2.0">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="0.0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="quadraticFactor" use="optional" default="2.0" type="positiveDouble"/>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsUserDefinedPenalty">
 		<xs:annotation>
@@ -3142,22 +3045,8 @@
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="lb" use="optional" default="0.0">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="0.0"/>
-					<xs:maxInclusive value="1.0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="ub" use="optional" default="1.0">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="0.0"/>
-					<xs:maxInclusive value="1.0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="lb" use="optional" default="0.0" type="probability"/>
+		<xs:attribute name="ub" use="optional" default="1.0" type="probability"/>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsJointChanceConstraint">
 		<xs:annotation>
@@ -3170,22 +3059,8 @@
 			<xs:element name="row" type="SoftConstraintsConstraintRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="lb" use="optional" default="0.0">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="0.0"/>
-					<xs:maxInclusive value="1.0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="ub" use="optional" default="1.0">
-			<xs:simpleType>
-				<xs:restriction base="xs:double">
-					<xs:minInclusive value="0.0"/>
-					<xs:maxInclusive value="1.0"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
+		<xs:attribute name="lb" use="optional" default="0.0" type="probability"/>
+		<xs:attribute name="ub" use="optional" default="1.0" type="probability"/>
 		<xs:attribute name="aggregatingFunction" use="optional" default="and">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
