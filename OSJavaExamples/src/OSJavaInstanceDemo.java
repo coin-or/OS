@@ -97,8 +97,9 @@ public class OSJavaInstanceDemo {
 			// now let's solve this guy
 			String sArguments = 
 			" -osil parincLinear.osil -osrl result.osrl" ;
-
 			String sSolverPath = "../OSThirdParty/lib/coin-or/OSSolverService";
+			String sOS = System.getProperty("os.name");
+			if(sOS != null && sOS.toLowerCase().indexOf("win") >= 0) sSolverPath+=".exe";
 			System.out.print(sSolverPath + " " + sArguments );
 			ProcessUtil.launchAndWaitForFinish(sSolverPath + " " + sArguments);		
 			System.out.print("\nDone" );
