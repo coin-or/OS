@@ -45,6 +45,7 @@ URL=http://xerces.apache.org/xerces2-j/install.html
 DOWNLOAD=Xerces-J-bin.2.10.0
 VERSION=xerces-2_10_0
 JAR=xercesImpl
+DEPENDENTJAR=xml-apis
 DEST=lib/xerces
 MIRROR=http://apache.cyberuse.com/xerces/j/${DOWNLOAD}.zip
 if [ ! -r ${DEST}/${JAR}.jar ] ; then
@@ -54,7 +55,7 @@ if [ ! -r ${DEST}/${JAR}.jar ] ; then
   fi
   echo "Installing ${DEST}"
   install -d ${DEST}
-  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/${JAR}.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*" 
+  unzip -jq -d ${DEST} download/${DOWNLOAD}.zip ${VERSION}/${JAR}.jar ${VERSION}/${DEPENDENTJAR}.jar "${VERSION}/LICENSE*" "${VERSION}/NOTICE*" 
 fi
 
 ## Apache Commons Codec
