@@ -42,8 +42,8 @@ fi
 
 ## Xerces
 URL=http://xerces.apache.org/xerces2-j/install.html
-DOWNLOAD=Xerces-J-bin.2.9.1
-VERSION=xerces-2_9_1
+DOWNLOAD=Xerces-J-bin.2.10.0
+VERSION=xerces-2_10_0
 JAR=xercesImpl
 DEST=lib/xerces
 MIRROR=http://apache.cyberuse.com/xerces/j/${DOWNLOAD}.zip
