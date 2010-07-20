@@ -126,7 +126,7 @@ URL=http://commons.apache.org/discovery/
 DOWNLOAD=commons-discovery-0.4
 JAR=commons-discovery-0.4
 DEST=lib/commons-discovery
-MIRROR=http://apache.siamwebhosting.com/commons/discovery/binaries/${DOWNLOAD}.zip
+MIRROR=http://apache.cyberuse.com/commons/discovery/binaries/${DOWNLOAD}.zip
 if [ ! -r ${DEST}/${JAR}.jar ] ; then
   if [ ! -r download/${DOWNLOAD}.zip ] ; then
     echo "Downloading ${JAR} from  ${URL}"
