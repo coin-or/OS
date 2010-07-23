@@ -205,8 +205,8 @@ int main(int argc, char **argv)
         osol = fileUtil->getFileAsString( osolFileName.c_str() ); 
         delete fileUtil;
     }
-	std::cout << " solver Name = " << sSolverName << std::endl;
-	std::cout << " solver Options = " << osol << std::endl;
+	//std::cout << " solver Name = " << sSolverName << std::endl;
+	//std::cout << " solver Options = " << osol << std::endl;
     
     //convert solver name to lower case for testing purposes
     
