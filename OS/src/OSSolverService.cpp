@@ -1880,26 +1880,26 @@ std::string get_options() {
 			<< "OPTIONS THAT REQUIRE AN OPTION VALUE:"
 			<< endl;
 	optionMsg
-			<< "osil -- gives the location of the model instance in OSiL format"
+			<< "osil -- the location of the model instance in OSiL format"
 			<< endl;
 	optionMsg
-			<< "mps  -- gives the name of the mps file if the problem instance is in mps format"
+			<< "mps  -- the location of the model instance in MPS format"
 			<< endl	;
 	optionMsg
-			<< "nl -- gives the name of the AMPL nl file if problem instance is in AMPL nl format"	
+			<< "nl -- the location of the model instance in AMPL nl format"	
 			<< endl;
 
 	optionMsg
-			<< "osol -- gives the location of the solver option file in OSoL format"
+			<< "osol -- the location of the solver option file in OSoL format"
 			<< endl;
 	optionMsg
-			<< "osrl -- gives the location of the solver result file in OSrL format"
+			<< "osrl -- the location of the solver result file in OSrL format"
 			<< endl;
 	optionMsg
-			<< "osplInput -- gives the name of an input file in OSpL format"
+			<< "osplInput -- the name of an input file in OSpL format"
 			<< endl;
 	optionMsg
-			<< "osplOutput -- gives the name of an output file in the OSpL format"
+			<< "osplOutput --  the name of an output file in the OSpL format"
 			<< endl	;
 
 	optionMsg
