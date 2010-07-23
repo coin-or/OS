@@ -120,8 +120,14 @@ struct osOptionsStruc{
 	/** the name of the mpsFile that holds an instance in mps format */
 	std::string mpsFile;
 	
+	/** the name of the mps string that holds an instance in mps format */
+	std::string mps;
+	
 	/** the name of the nlFile that holds an instance in AMPL nl format */
-	std::string nlFile;  
+	std::string nlFile; 
+	
+	/** the name of the nl string that holds an instance in mps format */
+	std::string nl;
 	
 	
 	/** the name of the .dat that holds the GAMS control file */

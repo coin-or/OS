@@ -312,19 +312,20 @@ Please enter a valid option followed by the corresponding option value: ";
 									}else{
 										if (optionName.compare("solve") == 0) {
 										// check to make sure we have an osil file
-											if(osoptions->osil == ""){
+											if(osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == ""){
 												std::cout
 													<< std::endl
-													<< "You did not specify an optimization instance"
+													<< "You did not specify an optimization instance!!!"
 													<< std::endl;
-												std::cout
-													<< "Please enter the path and optimization instance file name: ";
-												getline(std::cin, osoptions->osilFile);
-												osoptions->osil
-													= fileUtil->getFileAsString(
-															(osoptions->osilFile).c_str());
+												//std::cout
+												//	<< "Please enter the path and optimization instance file name: ";
+												//getline(std::cin, osoptions->osilFile);
+												//osoptions->osil
+												//	= fileUtil->getFileAsString(
+												//			(osoptions->osilFile).c_str());
+											}else{
+												solve();
 											}
-											solve();
 										} else {
 											
 											if (optionName.compare("getJobID") == 0) {
@@ -452,7 +453,7 @@ Please enter a valid option followed by the corresponding option value: ";
 															}
 														}
 			
-			/*											if (optionName == "osrl") {
+														if (optionName == "osrl") {
 			
 															if (osoptions->osrlFile != "") {
 			
@@ -463,12 +464,12 @@ Please enter a valid option followed by the corresponding option value: ";
 															}
 														}
 			
-			*/
+			
 														if (optionName == "mps") {
 			
 															if (osoptions->mpsFile != "") {
 			
-																osoptions->mpsFile
+																osoptions->mps
 																	= fileUtil->getFileAsString(
 																		(osoptions->mpsFile).c_str());
 			
@@ -479,7 +480,7 @@ Please enter a valid option followed by the corresponding option value: ";
 			
 															if (osoptions->nlFile != "") {
 			
-																osoptions->nlFile
+																osoptions->nl
 																	= fileUtil->getFileAsString(
 																		(osoptions->nlFile).c_str());
 			
