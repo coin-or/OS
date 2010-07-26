@@ -49,7 +49,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-#define PARSERDEBUG
+//#define PARSERDEBUG
 #ifdef PARSERDEBUG
 	#define YY_PRINT  printf("Found option:  %s\n", yytext);
 #else     
