@@ -243,20 +243,18 @@ int main(int argC, const char* argV[]) {
 			std::string::size_type indexStart;
 			std::string::size_type indexEnd;
 			unsigned int k;
-			std::string validOptions[16] = { "solve", "send", "getJobID", "quit", "help", "osil",
-					"osrl", "osol", "serviceLocation", "solver", "mps", "nl", "dat", "reset", "list", "?" };
+			std::string validOptions[18] = { "solve", "send", "getJobID", "quit", "exit", "help", "osil",
+					"osrl", "osol", "ospl", "serviceLocation", "solver", "mps", "nl", "dat", "reset", "list", "?" };
 
 			size_t size_of_array = (sizeof validOptions)
 					/ (sizeof validOptions[0]);
 			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
-			while (osoptions->quit != true) {
-				std::cout
-						<< "At the prompt below type a valid option and option value.\n\
-After entering the desired options type \"solve\" to optimize.\n\
-Type \"quit\" to leave the application. Type \"help\" or \"?\" for a list\n\
-of valid options.\n\
-\
-Please enter a valid option followed by the corresponding option value: ";
+			while (osoptions->quit != true && osoptions->exit != true) {
+				std::cout << "At the prompt below type a valid option and option value.\n";
+				std::cout << "After entering the desired options type \"solve\" to optimize.\n";
+				std::cout << "Type \"quit/exit\" to leave the application. \n";
+				std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
+				std::cout <<  "Please enter a valid option followed by the corresponding option value: ";
 				getline(std::cin, lineText);
 				lineText = " " + lineText + " ";
 				//get the name of the option
@@ -298,7 +296,7 @@ Please enter a valid option followed by the corresponding option value: ";
 						//std::cout << "Option Value = " << optionValue << std::endl;
 
 						try {
-							if (optionName.compare("quit") == 0) {
+							if (optionName.compare("quit") == 0 || optionName.compare("exit") == 0) {
 								return 0;
 							} else {
 								if (optionName.compare("reset") == 0) {
@@ -315,7 +313,9 @@ Please enter a valid option followed by the corresponding option value: ";
 											if(osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == ""){
 												std::cout
 													<< std::endl
-													<< "You did not specify an optimization instance!!!"
+													<< "You did not specify an optimization instance!!!\n"
+													<< "Please enter file format option (osil, nl, or mps) \n"
+													<< "followed by the option value which is the file location. \n"
 													<< std::endl;
 												//std::cout
 												//	<< "Please enter the path and optimization instance file name: ";
@@ -452,7 +452,7 @@ Please enter a valid option followed by the corresponding option value: ";
 			
 															}
 														}
-			
+														/* we do not read an osr file only write it
 														if (optionName == "osrl") {
 			
 															if (osoptions->osrlFile != "") {
@@ -463,8 +463,19 @@ Please enter a valid option followed by the corresponding option value: ";
 			
 															}
 														}
+														*/
+														/*
+														if (optionName == "ospl") {
 			
+															if (osoptions->osplFile != "") {
 			
+																osoptions->ospl
+																	= fileUtil->getFileAsString(
+																		(osoptions->osplFile).c_str());
+			
+															}
+														}
+														*/
 														if (optionName == "mps") {
 			
 															if (osoptions->mpsFile != "") {
@@ -1828,6 +1839,7 @@ void reset_options()
 	osoptions->invokeHelp = false;
 	osoptions->writeVersion = false;
 	osoptions->quit = false;
+	osoptions->exit = false;
 }//reset_options
 
 
@@ -1855,7 +1867,7 @@ std::string get_options() {
 			<< "OPTIONS THAT DO NOT REQUIRE AN OPTION VALUE:"
 			<< endl;
 	optionMsg
-			<< "quit -- terminate the executable"
+			<< "quit/exit -- terminate the executable"
 			<< endl;
 	optionMsg
 			<< "help (or  ?) -- produce this list of options"
