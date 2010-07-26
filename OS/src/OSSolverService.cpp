@@ -246,19 +246,15 @@ int main(int argC, const char* argV[]) {
 			std::string::size_type indexStart;
 			std::string::size_type indexEnd;
 			unsigned int k;
-			std::string validOptions[18] = { "solve", "send", "getJobID", "quit", "exit", "help", "osil",
-					"osrl", "osol", "ospl", "serviceLocation", "solver", "mps", "nl", "dat", "reset", "list", "?" };
+
 			
 			std::string commandArray[12] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
 					"quit", "exit",  "reset", "list", "?", "help"};
 			
 			
-			std::string optionArray[11] = { "osil", "osrl", "osol", "osplInput", "osplInput",
-					 "osplOutput", "serviceLocation", "solver", "mps", "nl", "dat"};
+			std::string optionArray[10] = { "osil", "osrl", "osol", "mps", "nl", "dat",
+					"serviceLocation", "solver", "osplInput",  "osplOutput"};
 					 
-
-			size_t size_of_array = (sizeof validOptions)
-					/ (sizeof validOptions[0]);
 			
 			size_t size_of_commandArray = (sizeof commandArray)
 					/ (sizeof commandArray[0]);	
@@ -270,17 +266,27 @@ int main(int argC, const char* argV[]) {
 			//fill in the command array into a map
 			
 			std::map<string, int> commandMap;
-			std::map<string, int>::const_iterator iter;
+			//std::map<string, int>::const_iterator iter;
 
-			
 			for(k = 0; k < size_of_commandArray; k++){
 				commandMap[ commandArray[ k] ] = k;
 			}
 			
-		    for (iter=commandMap.begin(); iter != commandMap.end(); ++iter) {
-		        cout << iter->second << " " << iter->first << endl;
-		    }
 
+			
+			//fill in the option array into a map
+			
+			std::map<string, int> optionMap;
+
+
+			for(k = 0; k < size_of_optionArray; k++){
+				optionMap[ optionArray[ k] ] = k;
+			}
+
+		    //for (iter=optionMap.begin(); iter != optionMap.end(); ++iter) {
+		    //    cout << iter->second << " " << iter->first << endl;
+		   //}
+			
 			
 			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
 			while (osoptions->quit != true && osoptions->exit != true) {
@@ -304,9 +310,9 @@ int main(int argC, const char* argV[]) {
 					//std::cout << "Option Name = " << optionName << std::endl;
 	
 					validName = false;
-					for (k = 0; k < size_of_array; k++) {
-						if (validOptions[k].compare(optionName) == 0)
-							validName = true;
+					if( (commandMap.find(optionName) != commandMap.end() ) || 
+							(optionMap.find(optionName) != optionMap.end() ) ){
+						validName = true;
 					}
 					if (validName == false) {
 						std::cout << std::endl;
@@ -330,8 +336,7 @@ int main(int argC, const char* argV[]) {
 						//std::cout << "Option Value = " << optionValue << std::endl;
 
 						try {
-							
-							
+							//first we process the commands
 							if( commandMap.find(optionName) != commandMap.end()  ){
 								switch (commandMap[ optionName] ){
 								
@@ -457,9 +462,6 @@ int main(int argC, const char* argV[]) {
 									std::cout << get_options() << std::endl;
 									break;
 								
-									
-								
-								
 								
 								default:
 									throw ErrorClass("we don't have a valid  command");
@@ -470,38 +472,78 @@ int main(int argC, const char* argV[]) {
 							} else { // now in the case where we require option values
 
 								if (optionValue == "") {
-									if (optionName == "osil") {
-										std::cout
-											<< "Please enter the name of an osil file: ";
-									} else {
-										if (optionName == "osol") {
+									
+									
+									
+									if(optionMap.find(optionName) != optionMap.end() ){
+										
+										
+										switch (optionMap[ optionName] ){
+										
+										case 0: //osil
+											std::cout
+												<< "Please enter the name of an osil file: ";
+										break;
+										
+										
+										case 1: //osrl
+											std::cout
+												<< "Please enter the name of an osrl file: ";
+										break;
+										
+										case 2: //osol
 											std::cout
 												<< "Please enter the name of an osol file: ";
-										} else {
-											if (optionName == "osrl") {
-												std::cout
-													<< "Please enter the name of an osrl file: ";
-											} else {
-												if (optionName == "mps") {
-													std::cout
-														<< "Please enter the name of an mps file: ";
-												} else {
-													if (optionName == "nl") {
-														std::cout
-															<< "Please enter the name of an AMPL nl file: ";
-													} else {
-														std::cout
-															<< "You entered an option name but not an option value."
-															<< std::endl;
-														std::cout
-															<< "Please enter an option value: ";
-													}
-												}
-											}
-										}
-									}
-									getline(std::cin, optionValue);
-
+										break;
+										
+										case 3: //mps
+											std::cout
+												<< "Please enter the name of an mps file: ";
+										break;
+										
+										case 4: //nl
+											std::cout
+												<< "Please enter the name of an AMPL nl file: ";
+										break;
+										
+										case 5: //dat
+											std::cout
+												<< "Please enter the name of an dat file: ";
+										break;
+										
+										case 6: //service location
+											std::cout
+												<< "Please enter the serviceLocation: ";
+										break;
+										
+										case 7: //solver
+											std::cout
+												<< "Please enter the name of the solver: ";
+										break;
+										
+										case 8: //osplInput
+											std::cout
+												<< "Please enter the name of an osplInput file: ";
+										break;
+										
+										case 9: //osplOutput
+											std::cout
+												<< "Please enter the name of an osplOutput file: ";
+										break;
+										
+										default:
+										
+											std::cout
+												<< "You entered an option name but not an option value."
+												<< std::endl;
+											std::cout
+												<< "Please enter an option value: ";
+											
+											
+										}// end switch
+										// now get the option value
+										getline(std::cin, optionValue);
+									}// end if on finding an element in the optionMap
 								}
 								lineText = optionName + " "
 									+ optionValue + " ";
