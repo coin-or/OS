@@ -128,11 +128,14 @@
 #include "OSOptionsStruc.h"  
 
 #include<stdio.h>
+#include <map>
+
 
 using std::cout;
 using std::endl;
 using std::ostringstream;
 using std::string;
+using std::map;
 
 //#define DEBUG_CL_INTERFACE
 
@@ -245,9 +248,40 @@ int main(int argC, const char* argV[]) {
 			unsigned int k;
 			std::string validOptions[18] = { "solve", "send", "getJobID", "quit", "exit", "help", "osil",
 					"osrl", "osol", "ospl", "serviceLocation", "solver", "mps", "nl", "dat", "reset", "list", "?" };
+			
+			std::string commandArray[12] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
+					"quit", "exit",  "reset", "list", "?", "help"};
+			
+			
+			std::string optionArray[11] = { "osil", "osrl", "osol", "osplInput", "osplInput",
+					 "osplOutput", "serviceLocation", "solver", "mps", "nl", "dat"};
+					 
 
 			size_t size_of_array = (sizeof validOptions)
 					/ (sizeof validOptions[0]);
+			
+			size_t size_of_commandArray = (sizeof commandArray)
+					/ (sizeof commandArray[0]);	
+			
+			size_t size_of_optionArray = (sizeof optionArray)
+					/ (sizeof optionArray[0]);	
+			
+			
+			//fill in the command array into a map
+			
+			std::map<string, int> commandMap;
+			std::map<string, int>::const_iterator iter;
+
+			
+			for(k = 0; k < size_of_commandArray; k++){
+				commandMap[ commandArray[ k] ] = k;
+			}
+			
+		    for (iter=commandMap.begin(); iter != commandMap.end(); ++iter) {
+		        cout << iter->second << " " << iter->first << endl;
+		    }
+
+			
 			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
 			while (osoptions->quit != true && osoptions->exit != true) {
 				std::cout << "At the prompt below type a valid option and option value.\n";
@@ -296,214 +330,267 @@ int main(int argC, const char* argV[]) {
 						//std::cout << "Option Value = " << optionValue << std::endl;
 
 						try {
-							if (optionName.compare("quit") == 0 || optionName.compare("exit") == 0) {
-								return 0;
-							} else {
-								if (optionName.compare("reset") == 0) {
+							
+							
+							if( commandMap.find(optionName) != commandMap.end()  ){
+								switch (commandMap[ optionName] ){
+								
+								case 0: // solve command
+									
+									if(osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == ""){
+										std::cout
+											<< std::endl
+											<< "You did not specify an optimization instance!!!\n"
+											<< "Please enter file format option (osil, nl, or mps) \n"
+											<< "followed by the option value which is the file location. \n"
+											<< std::endl;
+										//std::cout
+										//	<< "Please enter the path and optimization instance file name: ";
+										//getline(std::cin, osoptions->osilFile);
+										//osoptions->osil
+										//	= fileUtil->getFileAsString(
+										//			(osoptions->osilFile).c_str());
+									}else{
+										solve();
+									}
+									break;
+									
+								case 1: // send command
+									
+									if(osoptions->serviceLocation == ""){
+										std::cout
+											<< std::endl
+											<< "A service location is required"
+											<< std::endl;
+										std::cout
+											<< "Please the URL of the remote service: ";
+										getline(std::cin, osoptions->serviceLocation);
+									}
+									
+									
+									if(osoptions->osol == ""){
+										std::cout
+											<< std::endl
+											<< "You did not specify an option file"
+											<< std::endl;
+										std::cout
+											<< "Please enter the path and option file name: ";
+										getline(std::cin, osoptions->osolFile);
+										osoptions->osol
+											= fileUtil->getFileAsString(
+													(osoptions->osolFile).c_str());
+									}												
+									send();
+									break;
+									
+									
+								case 2: // getJobID command
+									
+									if(osoptions->serviceLocation == ""){
+										std::cout
+											<< std::endl
+											<< "A service location is required"
+											<< std::endl;
+										std::cout
+											<< "Please the URL of the remote service: ";
+										getline(std::cin, osoptions->serviceLocation);
+									}
+									
+									getJobID();
+									break;
+									
+									
+								case 3: // retrieve command
+									
+									std::cout << "retrieve case -- not implemented" << std::endl;
+									return 0;
+									break;
+								
+								case 4: // kill command
+									
+									std::cout << "kill case -- not implemented" << std::endl;
+									return 0;
+									break;
+								
+									
+								case 5: // knock command
+									
+									std::cout << "knock case -- not implemented" << std::endl;
+									return 0;
+									break;
+								
+									
+								case 6: // quit command
+									
+									return 0;
+								
+								
+									
+								case 7: // exit command
+									
+									return 0;
+							
+								
+									
+								case 8: // reset command
+									
 									reset_options();
 									std::cout << "\nAll options reset.\n";
-								} else {
-									if(optionName.compare("list") == 0){
-										
-										listOptions( osoptions);
-										
-									}else{
-										if (optionName.compare("solve") == 0) {
-										// check to make sure we have an osil file
-											if(osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == ""){
-												std::cout
-													<< std::endl
-													<< "You did not specify an optimization instance!!!\n"
-													<< "Please enter file format option (osil, nl, or mps) \n"
-													<< "followed by the option value which is the file location. \n"
-													<< std::endl;
-												//std::cout
-												//	<< "Please enter the path and optimization instance file name: ";
-												//getline(std::cin, osoptions->osilFile);
-												//osoptions->osil
-												//	= fileUtil->getFileAsString(
-												//			(osoptions->osilFile).c_str());
-											}else{
-												solve();
-											}
+									break;
+								
+									
+									
+								case 9: // list command
+									
+									listOptions( osoptions);
+									break;
+								
+									
+								case 10: // ? command
+									
+									std::cout << get_options() << std::endl;
+									break;
+								
+									
+								case 11: // help command
+									
+									std::cout << get_options() << std::endl;
+									break;
+								
+									
+								
+								
+								
+								default:
+									throw ErrorClass("we don't have a valid  command");
+									
+								
+								} //end switch
+												
+							} else { // now in the case where we require option values
+
+								if (optionValue == "") {
+									if (optionName == "osil") {
+										std::cout
+											<< "Please enter the name of an osil file: ";
+									} else {
+										if (optionName == "osol") {
+											std::cout
+												<< "Please enter the name of an osol file: ";
 										} else {
-											
-											if (optionName.compare("getJobID") == 0) {
-												
-												if(osoptions->serviceLocation == ""){
-													std::cout
-														<< std::endl
-														<< "A service location is required"
-														<< std::endl;
-													std::cout
-														<< "Please the URL of the remote service: ";
-													getline(std::cin, osoptions->serviceLocation);
-												}
-												
-												getJobID();
-												
+											if (optionName == "osrl") {
+												std::cout
+													<< "Please enter the name of an osrl file: ";
 											} else {
-												
-												if(optionName.compare("send") == 0) {
-													
-													if(osoptions->serviceLocation == ""){
+												if (optionName == "mps") {
+													std::cout
+														<< "Please enter the name of an mps file: ";
+												} else {
+													if (optionName == "nl") {
 														std::cout
-															<< std::endl
-															<< "A service location is required"
-															<< std::endl;
-														std::cout
-															<< "Please the URL of the remote service: ";
-														getline(std::cin, osoptions->serviceLocation);
-													}
-													
-													
-													if(osoptions->osol == ""){
-														std::cout
-															<< std::endl
-															<< "You did not specify an option file"
-															<< std::endl;
-														std::cout
-															<< "Please enter the path and option file name: ";
-														getline(std::cin, osoptions->osolFile);
-														osoptions->osol
-															= fileUtil->getFileAsString(
-																	(osoptions->osolFile).c_str());
-													}												
-													send();
-													
-												}else{
-											
-													if (optionName.compare("help") == 0 || optionName.compare("?") == 0) {
-														std::cout << get_options() << std::endl;
+															<< "Please enter the name of an AMPL nl file: ";
 													} else {
-			
-														if (optionValue == "") {
-															if (optionName == "osil") {
-																std::cout
-																	<< "Please enter the name of an osil file: ";
-															} else {
-																if (optionName == "osol") {
-																	std::cout
-																		<< "Please enter the name of an osol file: ";
-																} else {
-																	if (optionName == "osrl") {
-																		std::cout
-																			<< "Please enter the name of an osrl file: ";
-																	} else {
-																		if (optionName == "mps") {
-																			std::cout
-																				<< "Please enter the name of an mps file: ";
-																		} else {
-																			if (optionName == "nl") {
-																				std::cout
-																					<< "Please enter the name of an AMPL nl file: ";
-																			} else {
-																				std::cout
-																					<< "You entered an option name but not an option value."
-																					<< std::endl;
-																				std::cout
-																					<< "Please enter an option value: ";
-																			}
-																		}
-																	}
-																}
-															}
-															getline(std::cin, optionValue);
-			
-														}
-														lineText = optionName + " "
-															+ optionValue + " ";
-														osss_scan_string(lineText.c_str(),
-															scanner);
-														ossslex(scanner);
-														listOptions( osoptions);
-												// Perform consistency checks on the current option
-			
-														if (optionName == "solver") {
-													//convert to lower case so there is no solver name ambiguity
-			
-															for (k = 0; k
-																< osoptions->solverName.length(); k++) {
-																osoptions->solverName[k] = tolower(
-																	osoptions->solverName[k]);
-															}
-														}
-			
-													// make sure we can read the files
-			
-														if (optionName == "osol") {
-			
-															if (osoptions->osolFile != "") {
-			
-																osoptions->osol
-																	= fileUtil->getFileAsString(
-																		(osoptions->osolFile).c_str());
-			
-															}
-														}
-			
-														if (optionName == "osil") {
-			
-															if (osoptions->osilFile != "") {
-			
-																osoptions->osil
-																	= fileUtil->getFileAsString(
-																		(osoptions->osilFile).c_str());
-			
-															}
-														}
-														/* we do not read an osr file only write it
-														if (optionName == "osrl") {
-			
-															if (osoptions->osrlFile != "") {
-			
-																osoptions->osrl
-																	= fileUtil->getFileAsString(
-																		(osoptions->osrlFile).c_str());
-			
-															}
-														}
-														*/
-														/*
-														if (optionName == "ospl") {
-			
-															if (osoptions->osplFile != "") {
-			
-																osoptions->ospl
-																	= fileUtil->getFileAsString(
-																		(osoptions->osplFile).c_str());
-			
-															}
-														}
-														*/
-														if (optionName == "mps") {
-			
-															if (osoptions->mpsFile != "") {
-			
-																osoptions->mps
-																	= fileUtil->getFileAsString(
-																		(osoptions->mpsFile).c_str());
-			
-															}
-														}
-			
-														if (optionName == "nl") {
-			
-															if (osoptions->nlFile != "") {
-			
-																osoptions->nl
-																	= fileUtil->getFileAsString(
-																		(osoptions->nlFile).c_str());
-			
-															}
-														}
+														std::cout
+															<< "You entered an option name but not an option value."
+															<< std::endl;
+														std::cout
+															<< "Please enter an option value: ";
 													}
 												}
 											}
 										}
 									}
+									getline(std::cin, optionValue);
+
 								}
-							}// end initial if
+								lineText = optionName + " "
+									+ optionValue + " ";
+								osss_scan_string(lineText.c_str(),
+									scanner);
+								ossslex(scanner);
+								listOptions( osoptions);
+						// Perform consistency checks on the current option
+
+								if (optionName == "solver") {
+							//convert to lower case so there is no solver name ambiguity
+
+									for (k = 0; k
+										< osoptions->solverName.length(); k++) {
+										osoptions->solverName[k] = tolower(
+											osoptions->solverName[k]);
+									}
+								}
+
+							// make sure we can read the files
+
+								if (optionName == "osol") {
+
+									if (osoptions->osolFile != "") {
+
+										osoptions->osol
+											= fileUtil->getFileAsString(
+												(osoptions->osolFile).c_str());
+
+									}
+								}
+
+								if (optionName == "osil") {
+
+									if (osoptions->osilFile != "") {
+
+										osoptions->osil
+											= fileUtil->getFileAsString(
+												(osoptions->osilFile).c_str());
+
+									}
+								}
+								/* we do not read an osr file only write it
+								if (optionName == "osrl") {
+
+									if (osoptions->osrlFile != "") {
+
+										osoptions->osrl
+											= fileUtil->getFileAsString(
+												(osoptions->osrlFile).c_str());
+
+									}
+								}
+								*/
+								/*
+								if (optionName == "ospl") {
+
+									if (osoptions->osplFile != "") {
+
+										osoptions->ospl
+											= fileUtil->getFileAsString(
+												(osoptions->osplFile).c_str());
+
+									}
+								}
+								*/
+								if (optionName == "mps") {
+
+									if (osoptions->mpsFile != "") {
+
+										osoptions->mps
+											= fileUtil->getFileAsString(
+												(osoptions->mpsFile).c_str());
+
+									}
+								}
+
+								if (optionName == "nl") {
+
+									if (osoptions->nlFile != "") {
+
+										osoptions->nl
+											= fileUtil->getFileAsString(
+												(osoptions->nlFile).c_str());
+
+									}
+								} // end of nl if
+							} // end of if on options that require a value
+
 							std::cout << std::endl;
 						}//end try 
 						catch (const ErrorClass& eclass) {
