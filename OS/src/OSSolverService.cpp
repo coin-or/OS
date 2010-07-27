@@ -271,9 +271,7 @@ int main(int argC, const char* argV[]) {
 			for(k = 0; k < size_of_commandArray; k++){
 				commandMap[ commandArray[ k] ] = k;
 			}
-			
-
-			
+				
 			//fill in the option array into a map
 			
 			std::map<string, int> optionMap;
@@ -290,11 +288,11 @@ int main(int argC, const char* argV[]) {
 			
 			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
 			while (osoptions->quit != true && osoptions->exit != true) {
-				std::cout << "At the prompt below type a valid option and option value.\n";
-				std::cout << "After entering the desired options type \"solve\" to optimize.\n";
+				std::cout << "At the prompt enter a valid command or option value pair.\n";
+				std::cout << "Enter the \"solve\" command to optimize.\n";
 				std::cout << "Type \"quit/exit\" to leave the application. \n";
 				std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
-				std::cout <<  "Please enter a valid option followed by the corresponding option value: ";
+				std::cout <<  "Please enter either a command or an option followed by an option value: ";
 				getline(std::cin, lineText);
 				lineText = " " + lineText + " ";
 				//get the name of the option
@@ -370,20 +368,6 @@ int main(int argC, const char* argV[]) {
 										std::cout
 											<< "Please the URL of the remote service: ";
 										getline(std::cin, osoptions->serviceLocation);
-									}
-									
-									
-									if(osoptions->osol == ""){
-										std::cout
-											<< std::endl
-											<< "You did not specify an option file"
-											<< std::endl;
-										std::cout
-											<< "Please enter the path and option file name: ";
-										getline(std::cin, osoptions->osolFile);
-										osoptions->osol
-											= fileUtil->getFileAsString(
-													(osoptions->osolFile).c_str());
 									}												
 									send();
 									break;
@@ -407,21 +391,75 @@ int main(int argC, const char* argV[]) {
 									
 								case 3: // retrieve command
 									
-									std::cout << "retrieve case -- not implemented" << std::endl;
-									return 0;
+									if(osoptions->serviceLocation == ""){
+										std::cout
+											<< std::endl
+											<< "A service location is required"
+											<< std::endl;
+										std::cout
+											<< "Please the URL of the remote service: ";
+										getline(std::cin, osoptions->serviceLocation);
+									}
+									if( (osoptions->osolFile == "") && (osoptions->jobID == "") ){
+										std::cout
+											<< std::endl
+											<< "Cannot retrieve: no JobID and no OSoL file"
+											<< std::endl;
+									}else{
+										retrieve();
+									}
+									
 									break;
 								
 								case 4: // kill command
 									
-									std::cout << "kill case -- not implemented" << std::endl;
-									return 0;
+									
+									if(osoptions->serviceLocation == ""){
+										std::cout
+											<< std::endl
+											<< "A service location is required"
+											<< std::endl;
+										std::cout
+											<< "Please the URL of the remote service: ";
+										getline(std::cin, osoptions->serviceLocation);
+									}
+									if( (osoptions->osolFile == "") && (osoptions->jobID == "") ){
+										std::cout
+											<< std::endl
+											<< "Cannot kill: no JobID and no OSoL file"
+											<< std::endl;
+									}else{
+										kill();
+									}
+									
+
 									break;
 								
 									
 								case 5: // knock command
 									
-									std::cout << "knock case -- not implemented" << std::endl;
-									return 0;
+									//note -- can have empty OSoL for knock
+									//however we do need an OSpL file
+									
+									if(osoptions->serviceLocation == ""){
+										std::cout
+											<< std::endl
+											<< "A service location is required"
+											<< std::endl;
+										std::cout
+											<< "Please the URL of the remote service: ";
+										getline(std::cin, osoptions->serviceLocation);
+									}
+									
+									if( osoptions->osplInputFile == ""){
+										std::cout
+											<< std::endl
+											<< "Cannot knock -- no OSplInputFile specificed"
+											<< std::endl;
+									}else{
+										knock();
+									}
+									
 									break;
 								
 									
@@ -473,7 +511,7 @@ int main(int argC, const char* argV[]) {
 
 								if (optionValue == "") {
 									
-									
+
 									
 									if(optionMap.find(optionName) != optionMap.end() ){
 										
@@ -503,7 +541,7 @@ int main(int argC, const char* argV[]) {
 										
 										case 4: //nl
 											std::cout
-												<< "Please enter the name of an AMPL nl file: ";
+												<< "Please enter the name of an AMPL nl file: ";		
 										break;
 										
 										case 5: //dat
@@ -530,108 +568,99 @@ int main(int argC, const char* argV[]) {
 											std::cout
 												<< "Please enter the name of an osplOutput file: ";
 										break;
-										
-										default:
-										
-											std::cout
-												<< "You entered an option name but not an option value."
-												<< std::endl;
-											std::cout
-												<< "Please enter an option value: ";
 											
 											
 										}// end switch
 										// now get the option value
 										getline(std::cin, optionValue);
 									}// end if on finding an element in the optionMap
-								}
+									
+								} // end if on whether or not option value is null
+								
 								lineText = optionName + " "
 									+ optionValue + " ";
 								osss_scan_string(lineText.c_str(),
 									scanner);
 								ossslex(scanner);
 								listOptions( osoptions);
-						// Perform consistency checks on the current option
-
-								if (optionName == "solver") {
-							//convert to lower case so there is no solver name ambiguity
-
-									for (k = 0; k
-										< osoptions->solverName.length(); k++) {
-										osoptions->solverName[k] = tolower(
-											osoptions->solverName[k]);
-									}
-								}
-
-							// make sure we can read the files
-
-								if (optionName == "osol") {
-
-									if (osoptions->osolFile != "") {
-
-										osoptions->osol
-											= fileUtil->getFileAsString(
-												(osoptions->osolFile).c_str());
-
-									}
-								}
-
-								if (optionName == "osil") {
-
-									if (osoptions->osilFile != "") {
+								
+								if(optionMap.find(optionName) != optionMap.end() ){
+									
+									
+									switch (optionMap[ optionName] ){
+									
+									case 0: //osil
 
 										osoptions->osil
 											= fileUtil->getFileAsString(
 												(osoptions->osilFile).c_str());
+									break;
+									
+									
+									case 1: //osrl
 
-									}
-								}
-								/* we do not read an osr file only write it
-								if (optionName == "osrl") {
+									break;
+									
+									case 2: //osol
 
-									if (osoptions->osrlFile != "") {
-
-										osoptions->osrl
+										osoptions->osol
 											= fileUtil->getFileAsString(
-												(osoptions->osrlFile).c_str());
-
-									}
-								}
-								*/
-								/*
-								if (optionName == "ospl") {
-
-									if (osoptions->osplFile != "") {
-
-										osoptions->ospl
-											= fileUtil->getFileAsString(
-												(osoptions->osplFile).c_str());
-
-									}
-								}
-								*/
-								if (optionName == "mps") {
-
-									if (osoptions->mpsFile != "") {
+												(osoptions->osolFile).c_str());
+									break;
+									
+									case 3: //mps
 
 										osoptions->mps
 											= fileUtil->getFileAsString(
 												(osoptions->mpsFile).c_str());
-
-									}
-								}
-
-								if (optionName == "nl") {
-
-									if (osoptions->nlFile != "") {
+									break;
+									
+									case 4: //nl
 
 										osoptions->nl
 											= fileUtil->getFileAsString(
-												(osoptions->nlFile).c_str());
+												(osoptions->nlFile).c_str());			
+									break;
+									
+									case 5: //dat
+										
+										osoptions->dat
+											= fileUtil->getFileAsString(
+												(osoptions->datFile).c_str());	
+									break;
+									
+									case 6: //service location
 
-									}
-								} // end of nl if
-							} // end of if on options that require a value
+									break;
+									
+									case 7: //solver
+
+										//make solver name lower case
+										for (k = 0; k
+											< osoptions->solverName.length(); k++) {
+											osoptions->solverName[k] = tolower(
+												osoptions->solverName[k]);
+										}
+									break;
+									
+									case 8: //osplInput
+
+										osoptions->osplInput
+											= fileUtil->getFileAsString(
+												(osoptions->osplInputFile).c_str());
+									break;
+									
+									case 9: //osplOutput
+
+									break;
+									
+										
+										
+									}// end switch
+
+								}// end if on finding an element in the optionMap
+
+							} // end if on options that require a value
 
 							std::cout << std::endl;
 						}//end try 
@@ -1120,13 +1149,12 @@ void solve() {
 }//end solve
 
 void getJobID() {
-	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
 	try {
 		if (osoptions->serviceLocation != "") {
 			osagent = new OSSolverAgent(osoptions->serviceLocation);
-			jobID = osagent->getJobID(osoptions->osol);
-			cout << jobID << endl;
+			osoptions->jobID = osagent->getJobID(osoptions->osol);
+			cout << osoptions->jobID << endl;
 			delete osagent;
 			osagent = NULL;
 		} else {
@@ -1166,6 +1194,25 @@ void knock() {
 	try {
 		if (osoptions->serviceLocation != "") {
 			osagent = new OSSolverAgent(osoptions->serviceLocation);
+			
+			
+			if (osoptions->osol == "") {
+				// we need to construct the OSoL	
+				OSOption *osOption = NULL;
+				osOption = new OSOption();
+				//set the jobID if there is one
+				if(osoptions->jobID == "") osOption->setJobID( osoptions->jobID);
+				// now read the osOption object into a string
+				OSoLWriter *osolWriter = NULL;
+				osolWriter = new OSoLWriter();
+				osoptions->osol = osolWriter->writeOSoL( osOption);
+				delete osOption;
+				osOption = NULL;
+				delete osolWriter;
+				osolWriter = NULL;
+			} 
+			
+			
 			osplOutput = osagent->knock(osoptions->osplInput, osoptions->osol);
 			if (osoptions->osplOutputFile != "")
 				fileUtil->writeFileFromString(osoptions->osplOutputFile,
@@ -1203,13 +1250,7 @@ void knock() {
 
 void send() {
 	bool bSend = false;
-	std::string jobID = "";
 	OSSolverAgent* osagent = NULL;
-	// first get the jobID
-	std::string
-			sOSoL =
-					"<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/OSoL.xsd\"><general> </general></osol>";
-	string::size_type iStringpos;
 	try {
 		// call a method here to get OSiL if we have an nl or mps file
 		if (osoptions->osil == "") {
@@ -1227,18 +1268,25 @@ void send() {
 		if (osoptions->serviceLocation != "") {
 			osagent = new OSSolverAgent(osoptions->serviceLocation);
 			// check to see if there is an osol 
-			if (osoptions->osolFile == "") {
-				// get a jobID
-				jobID = osagent->getJobID(sOSoL);
-				// insert the jobID into the default osol
-				iStringpos = sOSoL.find("</general");
-				if (iStringpos != std::string::npos)
-					sOSoL.insert(iStringpos, "<jobID>" + jobID + "</jobID>");
-			} else {
-				sOSoL = osoptions->osolFile;
-			}
-
-			bSend = osagent->send(osoptions->osil, sOSoL);
+			if (osoptions->osol == "") {
+				// we need to construct the OSoL	
+				OSOption *osOption = NULL;
+				osOption = new OSOption();
+				// get a jobId if necessary
+				if(osoptions->jobID == "") osoptions->jobID = osagent->getJobID("");
+				//set the jobID
+				
+				osOption->setJobID( osoptions->jobID);
+				// now read the osOption object into a string
+				OSoLWriter *osolWriter = NULL;
+				osolWriter = new OSoLWriter();
+				osoptions->osol = osolWriter->writeOSoL( osOption);
+				delete osOption;
+				osOption = NULL;
+				delete osolWriter;
+				osolWriter = NULL;
+			} 
+			bSend = osagent->send(osoptions->osil, osoptions->osol);	
 			std::cout << "Result of send: " << bSend << std::endl; 
 			delete osagent;
 		} else {
@@ -1276,10 +1324,28 @@ void retrieve() {
 	try {
 		if (osoptions->serviceLocation != "") {
 			osagent = new OSSolverAgent(osoptions->serviceLocation);
-#ifdef DEBUG_CL_INTERFACE
-			std::cout << "HERE ARE THE OSOL OPTIONS " << osoptions->osol << std::endl;
-#endif
+			
+			
+			if (osoptions->osol == "") {
+				// we need to construct the OSoL	
+				OSOption *osOption = NULL;
+				osOption = new OSOption();
+				// get a jobId if necessary
+				if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
+				//set the jobID
+				osOption->setJobID( osoptions->jobID);
+				// now read the osOption object into a string
+				OSoLWriter *osolWriter = NULL;
+				osolWriter = new OSoLWriter();
+				osoptions->osol = osolWriter->writeOSoL( osOption);
+				delete osOption;
+				osOption = NULL;
+				delete osolWriter;
+				osolWriter = NULL;
+			} 
+
 			osrl = osagent->retrieve(osoptions->osol);
+			
 			if (osoptions->osrlFile != "") {
 				fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 				if (osoptions->browser != "") {
@@ -1328,7 +1394,28 @@ void kill() {
 	try {
 		if (osoptions->serviceLocation != "") {
 			osagent = new OSSolverAgent(osoptions->serviceLocation);
+
+			
+			if (osoptions->osol == "") {
+				// we need to construct the OSoL	
+				OSOption *osOption = NULL;
+				osOption = new OSOption();
+				// get a jobId if necessary
+				if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
+				//set the jobID
+				osOption->setJobID( osoptions->jobID);
+				// now read the osOption object into a string
+				OSoLWriter *osolWriter = NULL;
+				osolWriter = new OSoLWriter();
+				osoptions->osol = osolWriter->writeOSoL( osOption);
+				delete osOption;
+				osOption = NULL;
+				delete osolWriter;
+				osolWriter = NULL;
+			} 
+			
 			osplOutput = osagent->kill(osoptions->osol);
+			
 			if (osoptions->osplOutputFile != "")
 				fileUtil->writeFileFromString(osoptions->osplOutputFile,
 						osplOutput);
@@ -1960,15 +2047,21 @@ void reset_options()
 	osoptions->serviceMethod = "";
 	osoptions->osplInputFile = "";
 	osoptions->osplOutputFile = "";
+	osoptions->osplInput = "";
+	osoptions->osplOutput = "";
 	osoptions->mpsFile = "";
+	osoptions->mps = "";
 	osoptions->nlFile = "";
+	osoptions->nl = "";
 	osoptions->gamsControlFile = "";
 	osoptions->solverName = "";
 	osoptions->browser = "";
+	osoptions->jobID = "";
 	osoptions->invokeHelp = false;
 	osoptions->writeVersion = false;
 	osoptions->quit = false;
 	osoptions->exit = false;
+
 }//reset_options
 
 
@@ -1981,25 +2074,16 @@ std::string get_options() {
 	optionMsg << endl;
 
 	optionMsg
-			<< "************************* VALID OPTIONS *************************"
+			<< "***************** VALID COMMANDS AND OPTIONS ********************"
 			<< endl ;
 	optionMsg
-			<< "The OSSolverService takes the options listed below (in any order)."
-			<< endl;
-	optionMsg
-			<< "Not all option values are required. However, the location of an "
-			<< endl;
-	optionMsg
-			<< "instance file is required when using the solve service method."
-			<< endl << endl;
-	optionMsg
-			<< "OPTIONS THAT DO NOT REQUIRE AN OPTION VALUE:"
+			<< "COMMANDS:"
 			<< endl;
 	optionMsg
 			<< "quit/exit -- terminate the executable"
 			<< endl;
 	optionMsg
-			<< "help (or  ?) -- produce this list of options"
+			<< "help/? -- produce this list of options"
 			<< endl;
 	optionMsg
 			<< "reset -- erase all previous option settings"
@@ -2014,12 +2098,21 @@ std::string get_options() {
 			<< "send -- call the solver asynchronously"
 			<< endl ;
 	optionMsg
-			<< "getJobID -- get a job ID"
+			<< "kill -- end a job on the remote server"
+			<< endl ;
+	optionMsg
+			<< "retrieve -- get job result on the remote server"
+			<< endl ;
+	optionMsg
+			<< "knock -- get job information on the remote server"
+			<< endl ;
+	optionMsg
+			<< "getJobID -- get a job ID from the remote server"
 			<< endl << endl;
 	
 
 	optionMsg
-			<< "OPTIONS THAT REQUIRE AN OPTION VALUE:"
+			<< "OPTIONS (THESE REQUIRE A VALUE):"
 			<< endl;
 	optionMsg
 			<< "osil -- the location of the model instance in OSiL format"
@@ -2055,7 +2148,7 @@ std::string get_options() {
 
 
 	optionMsg
-			<< "See  http://www.coin-or.org/OS/doc/osUsersManual_2.1.pdf"	
+			<< "See  http://www.coin-or.org/OS/"	
 			<< endl;
 	optionMsg
 			<< "for more detail on how to use the OS project."
@@ -2113,6 +2206,11 @@ if (osoptions->solverName != "")
 if (osoptions->serviceLocation != "")
 	cout << "Service Location = "
 		<< osoptions->serviceLocation
+		<< endl;
+
+if (osoptions->jobID != "")
+	cout << "Job ID = "
+		<< osoptions->jobID
 		<< endl;
 }// listOptions
 

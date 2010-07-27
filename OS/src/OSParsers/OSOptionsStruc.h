@@ -130,6 +130,14 @@ struct osOptionsStruc{
 	std::string nl;
 	
 	
+	/** the name of the nlFile that holds an instance in GAMS dat format */
+	std::string datFile; 
+	
+	/** the name of the nl string that holds an instance in mps format */
+	std::string dat;
+	
+	
+	
 	/** the name of the .dat that holds the GAMS control file */
 	std::string gamsControlFile;  
 	
@@ -161,6 +169,9 @@ struct osOptionsStruc{
 	
 	/** if this parameter is true we quit/exit	 */
 	bool exit;
+	
+	/** the JobID */
+	std::string jobID;
 	
 };
 
