@@ -285,14 +285,19 @@ int main(int argC, const char* argV[]) {
 		    //    cout << iter->second << " " << iter->first << endl;
 		   //}
 			
+			std::cout << "At the prompt enter a valid command or option value pair.\n";
+			std::cout << "Enter the \"solve\" command to optimize.\n";
+			std::cout << "Type \"quit/exit\" to leave the application. \n";
+			std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
 			
 			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
 			while (osoptions->quit != true && osoptions->exit != true) {
-				std::cout << "At the prompt enter a valid command or option value pair.\n";
+/*				std::cout << "At the prompt enter a valid command or option value pair.\n";
 				std::cout << "Enter the \"solve\" command to optimize.\n";
 				std::cout << "Type \"quit/exit\" to leave the application. \n";
 				std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
-				std::cout <<  "Please enter either a command or an option followed by an option value: ";
+*/
+				std::cout <<  "Please enter either a command, or an option followed by an option value: ";
 				getline(std::cin, lineText);
 				lineText = " " + lineText + " ";
 				//get the name of the option
@@ -355,6 +360,8 @@ int main(int argC, const char* argV[]) {
 										//			(osoptions->osilFile).c_str());
 									}else{
 										solve();
+										if (osoptions->osrlFile != "")
+											std::cout << "solve() concluded. Please see " << osoptions->osrlFile << std::endl << std::endl;
 									}
 									break;
 									
@@ -2155,6 +2162,18 @@ std::string get_options() {
 			<< endl;
 	optionMsg
 			<< "*****************************************************************"
+			<< endl << endl;
+	optionMsg
+			<< "At the prompt enter a valid command or option value pair."
+			<< endl;
+	optionMsg
+			<< "Enter the \"solve\" command to optimize."
+			<< endl;
+	optionMsg
+			<< "Type \"quit/exit\" to leave the application."
+			<< endl;
+	optionMsg
+			<< "Type \"help\" or \"?\" for a list of valid options."
 			<< endl;
 
 
