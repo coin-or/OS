@@ -28,11 +28,11 @@
 #ifdef COIN_HAS_CPPAD  
 #include<cppad/cppad.hpp>
 using CppAD::AD;
-using CppAD::vector;
+//using CppAD::vector;
 typedef AD<double>  ADdouble;
 #else
-typedef double  ADdouble;
-using std::vector;
+//typedef double  ADdouble;
+//using std::vector;
 #endif
 
 
