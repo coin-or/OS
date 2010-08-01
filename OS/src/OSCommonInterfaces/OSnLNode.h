@@ -31,7 +31,7 @@ using CppAD::AD;
 //using CppAD::vector;
 typedef AD<double>  ADdouble;
 #else
-//typedef double  ADdouble;
+typedef double  ADdouble;
 //using std::vector;
 #endif
 
@@ -209,7 +209,7 @@ public:
 	 * @return the expression tree.
 	 */	
 #ifdef COIN_HAS_CPPAD
-	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0;
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0 ;
 #else
 	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) = 0;
 #endif
@@ -280,9 +280,9 @@ public:
 	 *  \return a ADdouble.
 	 */	
 #ifdef COIN_HAS_CPPAD
-	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0;
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) ;
 #else
-	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) = 0;
+	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) ;
 #endif
 	
 	/*! \fn OSnLNode *cloneOSnLNode(double *x) 
@@ -340,9 +340,9 @@ public:
 	 *  \return a ADdouble.
 	 */	
 #ifdef COIN_HAS_CPPAD
-	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0;
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) ;
 #else
-	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) = 0;
+	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) ;
 #endif	
 
 
@@ -447,9 +447,9 @@ public:
 	 *  \return a ADdouble.
 	 */	
 #ifdef COIN_HAS_CPPAD
-	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0;
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) ;
 #else
-	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) = 0;
+	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) ;
 #endif
 
 };//end OSnLNodeMin
@@ -502,9 +502,9 @@ public:
 	 *  \return a ADdouble.
 	 */	
 #ifdef COIN_HAS_CPPAD
-	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0;
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) ;
 #else
-	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) = 0;
+	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) ;
 #endif
 
 };//end OSnLNodeMinus
@@ -556,9 +556,9 @@ public:
 	 *  \return a ADdouble.
 	 */	
 #ifdef COIN_HAS_CPPAD
-	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0;
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) ;
 #else
-	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) = 0;
+	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) ;
 #endif
 };//end OSnLNodeNegate
 
@@ -609,9 +609,9 @@ public:
 	 *  \return a ADdouble.
 	 */	
 #ifdef COIN_HAS_CPPAD
-	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) = 0;
+	virtual ADdouble constructADTape(std::map<int, int> *ADIdx, CppAD::vector< ADdouble > *XAD) ;
 #else
-	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) = 0;
+	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) ;
 #endif
 
 };//end OSnLNodeTimes

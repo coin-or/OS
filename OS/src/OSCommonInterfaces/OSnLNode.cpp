@@ -21,6 +21,16 @@
 #include "OSParameters.h"
 #include "OSMathUtil.h"
 
+
+#ifdef COIN_HAS_CPPAD  
+#include<cppad/cppad.hpp>
+using CppAD::vector;
+typedef AD<double>  ADdouble;
+#else
+using std::vector;
+#endif
+
+
 #include<string>
 
 #ifdef HAVE_CMATH
