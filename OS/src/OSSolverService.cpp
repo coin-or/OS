@@ -297,7 +297,7 @@ int main(int argC, const char* argV[]) {
 				std::cout << "Type \"quit/exit\" to leave the application. \n";
 				std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
 */
-				std::cout <<  "Please enter either a command, or an option followed by an option value: ";
+				std::cout <<  "Please enter a command, or an option followed by an option value: ";
 				getline(std::cin, lineText);
 				lineText = " " + lineText + " ";
 				//get the name of the option
