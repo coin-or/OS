@@ -361,7 +361,7 @@ int main(int argC, const char* argV[]) {
 									}else{
 										solve();
 										if (osoptions->osrlFile != "")
-											std::cout << "solve() concluded. Please see " << osoptions->osrlFile << std::endl << std::endl;
+											std::cout <<  "\nSolve command executed. Please see " << osoptions->osrlFile  << " for results." << std::endl;
 									}
 									break;
 									
