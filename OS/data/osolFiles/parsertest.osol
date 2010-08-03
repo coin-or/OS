@@ -92,11 +92,17 @@
 			<initialVariableValuesString numberOfVar="1">
 				<var idx="1" value="blue"></var>
 			</initialVariableValuesString>
-			<initialBasisStatus numberOfVar="4">
-				<var idx="0" value="basic"></var>
-				<var idx="1" value="atLower"/>
-				<var idx="3" value="unknown"></var>
-				<var idx="5" value="basic"></var>
+			<initialBasisStatus>
+				<basic numberOfEl="2">
+					<el>0</el>
+					<el>5</el>
+				</basic>
+				<atLower numberOfEl="1">
+					<el>1</el>
+				</atLower>
+				<unknown numberOfEl="1">
+					<el>3</el>
+				</unknown>
 			</initialBasisStatus>
 			<integerVariableBranchingWeights numberOfVar="2">
 				<var idx="2" value="1"></var>
@@ -130,6 +136,14 @@
 			<initialConstraintValues numberOfCon="1">
 				<con idx="0" value="5.0"></con>
 			</initialConstraintValues>
+			<initialBasisStatus>
+				<atUpper numberOfEl="1">
+					<el>1</el>
+				</atUpper>
+				<unknown numberOfEl="1">
+					<el>2</el>
+				</unknown>
+			</initialBasisStatus>
 			<initialDualValues numberOfCon="1">
 				<con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
 			</initialDualValues>
