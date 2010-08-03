@@ -92,6 +92,7 @@
 			<initialVariableValuesString numberOfVar="1">
 				<var idx="1" value="blue"></var>
 			</initialVariableValuesString>
+<!-- Hide this element until the parser gets updated... 	
 			<initialBasisStatus>
 				<basic numberOfEl="2">
 					<el>0</el>
@@ -104,6 +105,7 @@
 					<el>3</el>
 				</unknown>
 			</initialBasisStatus>
+-->			
 			<integerVariableBranchingWeights numberOfVar="2">
 				<var idx="2" value="1"></var>
 				<var value="2.5" idx="4"/>
@@ -136,6 +138,7 @@
 			<initialConstraintValues numberOfCon="1">
 				<con idx="0" value="5.0"></con>
 			</initialConstraintValues>
+<!-- Hide this element until the parser gets updated... 	
 			<initialBasisStatus>
 				<atUpper numberOfEl="1">
 					<el>1</el>
@@ -144,6 +147,7 @@
 					<el>2</el>
 				</unknown>
 			</initialBasisStatus>
+-->
 			<initialDualValues numberOfCon="1">
 				<con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
 			</initialDualValues>
