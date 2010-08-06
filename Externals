@@ -13,7 +13,7 @@ ThirdParty/ASL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/relea
 ThirdParty/Blas  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/releases/1.0.14
 ThirdParty/Glpk  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/releases/1.5.0
 ThirdParty/HSL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/releases/1.1.4
-ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/releases/1.1.0
+ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/releases/1.0.21 
 ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.1.8
 DyLP  https://projects.coin-or.org/svn/DyLP/releases/1.5.0/DyLP
 Ipopt  https://projects.coin-or.org/svn/Ipopt/releases/3.8.3/Ipopt
