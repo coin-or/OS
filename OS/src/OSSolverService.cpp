@@ -287,7 +287,7 @@ int main(int argC, const char* argV[]) {
 			
 			std::cout << "At the prompt enter a valid command or option value pair.\n";
 			std::cout << "Enter the \"solve\" command to optimize.\n";
-			std::cout << "Type \"quit/exit\" to leave the application. \n";
+			std::cout << "Type \"quit\" or \"exit\" to leave the application. \n";
 			std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
 			
 			//std::cout << "Number of Options = " <<  size_of_array << std::endl;
