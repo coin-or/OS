@@ -1,10 +1,10 @@
-#BuildTools  https://projects.coin-or.org/svn/BuildTools/releases/0.5.29
-BuildTools  https://projects.coin-or.org/svn/BuildTools/trunk
+BuildTools  https://projects.coin-or.org/svn/BuildTools/releases/0.5.30
+#BuildTools  https://projects.coin-or.org/svn/BuildTools/trunk
 Data/Sample  https://projects.coin-or.org/svn/Data/releases/1.0.7/Sample
-CoinUtils  https://projects.coin-or.org/svn/CoinUtils/releases/2.6.2/CoinUtils
-Cbc  https://projects.coin-or.org/svn/Cbc/releases/2.4.0/Cbc 
+CoinUtils  https://projects.coin-or.org/svn/CoinUtils/releases/2.6.4/CoinUtils
+Cbc  https://projects.coin-or.org/svn/Cbc/releases/2.5.0/Cbc 
 Cgl  https://projects.coin-or.org/svn/Cgl/releases/0.55.0/Cgl
-Clp  https://projects.coin-or.org/svn/Clp/releases/1.11.1/Clp
+Clp  https://projects.coin-or.org/svn/Clp/releases/1.12.0/Clp
 Osi  https://projects.coin-or.org/svn/Osi/releases/0.102.3/Osi
 Vol  https://projects.coin-or.org/svn/Vol/releases/1.1.7/Vol
 SYMPHONY  https://projects.coin-or.org/svn/SYMPHONY/releases/5.2.4/SYMPHONY
@@ -13,7 +13,7 @@ ThirdParty/ASL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/relea
 ThirdParty/Blas  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/releases/1.0.14
 ThirdParty/Glpk  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/releases/1.5.0
 ThirdParty/HSL  https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/releases/1.1.4
-ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/releases/1.0.20
+ThirdParty/Lapack  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/releases/1.1.0
 ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/releases/1.1.8
 DyLP  https://projects.coin-or.org/svn/DyLP/releases/1.5.0/DyLP
 Ipopt  https://projects.coin-or.org/svn/Ipopt/releases/3.8.3/Ipopt
