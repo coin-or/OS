@@ -330,15 +330,6 @@ OS/examples/bearcat-dip/OS_DipInterface.h -text
 OS/examples/bearcat-dip/bearcat.gms -text
 OS/examples/bearcat-dip/bearcat.parm -text
 OS/examples/bearcat-dip/bearcat12.dat -text
-OS/examples/bearcat-dip/data/Bearcat/bearcat.opt -text
-OS/examples/bearcat-dip/data/Bearcat/gap0515-1 -text
-OS/examples/bearcat-dip/data/Bearcat/gap0515-2 -text
-OS/examples/bearcat-dip/data/Bearcat/gap0515-3 -text
-OS/examples/bearcat-dip/data/Bearcat/gap0515-4 -text
-OS/examples/bearcat-dip/data/Bearcat/gap0515-5 -text
-OS/examples/bearcat-dip/data/Bearcat/gap0520-1 -text
-OS/examples/bearcat-dip/data/parincLinear.osil -text
-OS/examples/bearcat-dip/data/spl.xml -text
 OS/examples/bearcat-dip/spl.xml -text
 OS/examples/branchCutPrice/AUTHORS -text
 OS/examples/branchCutPrice/LICENSE -text
