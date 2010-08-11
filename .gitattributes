@@ -330,6 +330,7 @@ OS/examples/bearcat-dip/OS_DipInterface.h -text
 OS/examples/bearcat-dip/bearcat.gms -text
 OS/examples/bearcat-dip/bearcat.parm -text
 OS/examples/bearcat-dip/bearcat12.dat -text
+OS/examples/bearcat-dip/dip-spl1.osol -text
 OS/examples/bearcat-dip/spl.xml -text
 OS/examples/branchCutPrice/AUTHORS -text
 OS/examples/branchCutPrice/LICENSE -text
