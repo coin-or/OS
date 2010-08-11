@@ -547,17 +547,26 @@ int Bearcat_DecompApp::generateInitVars(DecompVarList & initVars){
    int    indPlant1 [6] = {0, 1, 2, 3, 4, 15};
    int    indPlant2 [6] = {5, 6, 7, 8, 9, 16};
    int    indPlant3 [6] = {10, 11, 12, 13, 14, 17};
+   int whichBlock;
+   DecompVar *var;
    
    double els[6] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
    
-   initVars.push_back(new DecompVar(6, indPlant1, els, 23.0));
-   initVars.push_back(new DecompVar(6, indPlant2, els, 19.0));
-   initVars.push_back(new DecompVar(6, indPlant3, els, 18.0));
+   whichBlock = 0;
+   var = new DecompVar(6, indPlant1, els, 23.0);
+   var->setBlockId(whichBlock);
+   initVars.push_back( var);
 
-   //try the optimal columns -- what effect?
-  // double elsOpt[7] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-  // int    indOpt [7] = {0, 1, 12, 13, 14, 15, 17};
-  // initVars.push_back(new DecompVar(7, indOpt, elsOpt, 16.0));
+   
+   whichBlock = 1;
+   var = new DecompVar(6, indPlant2, els, 19.0);
+   var->setBlockId(whichBlock);
+   initVars.push_back( var);
+   
+   whichBlock = 2;
+   var = new DecompVar(6, indPlant3, els, 18.0);
+   var->setBlockId(whichBlock);
+   initVars.push_back(var);
    
    UtilPrintFuncEnd(m_osLog, m_classTag, "generateInitVars()",  m_appParam.LogLevel, 2);
    return static_cast<int>(initVars.size());
