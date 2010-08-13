@@ -21,7 +21,7 @@
 
 
 //===========================================================================//
-void OS_DipInterface::readInstance(string & fileName){
+void OS_DipInterface::readOSiL(string & fileName){
 	
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
@@ -56,7 +56,46 @@ void OS_DipInterface::readInstance(string & fileName){
 	} 
 	
 	
-}
+}//end readOSiL
+
+
+//===========================================================================//
+void OS_DipInterface::readOSoL(string & fileName){
+	
+	FileUtil *fileUtil = NULL; 
+	fileUtil = new FileUtil();
+	OSoLReader *osolreader ;
+
+	
+	try{
+
+
+		std::string osol;
+		osol = fileUtil->getFileAsString( fileName.c_str() );
+		osolreader = new OSoLReader();
+		m_osoption = osolreader->readOSoL( osol);
+	
+		delete fileUtil;
+		fileUtil  = NULL;
+		//kipp  -- worry about garbage collection here -- do I delete m_osinstance
+		//delete  osilreader;
+		//osilreader = NULL;
+		
+		
+	}
+	catch(const ErrorClass& eclass){
+		std::cout << "IN THE CATCH" <<std::endl;
+		delete fileUtil;
+		std::cout << eclass.errormsg <<  std::endl;
+		fileUtil  = NULL;
+		std::cout << "IN THE CATCH" <<std::endl;
+		//delete  osilreader;
+		//osilreader = NULL;
+		
+	} 
+	
+	
+}// end readOSoL
 
 CoinPackedMatrix * OS_DipInterface::getCoinPackedMatrix( ){
 	

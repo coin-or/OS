@@ -30,10 +30,10 @@ void Bearcat_DecompApp::initializeApp(UtilParameters & utilParam) {
 
 	
 	//---
-	//--- read instance
+	//--- read OSiL instance
 	//
 	std::string instanceFile = "spl.xml";
-	m_osInterface.readInstance( instanceFile);
+	m_osInterface.readOSiL( instanceFile);
 
 	//---
 	//--- create models

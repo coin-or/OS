@@ -66,7 +66,9 @@ public:
 
 
 	/** @name Helper Methods. */
-	void readInstance(string & filename);
+	void readOSiL(string & filename);
+	
+	void readOSoL(string & filename);
 
 	CoinPackedVector *getRow( int i);
 	
@@ -221,7 +223,7 @@ public:
 	/** Default constructor. Takes an instance of UtilParameters */
 	OS_DipInterface(string & fileName) {
 		initMembers();
-		readInstance(fileName);
+		readOSiL(fileName);
 	}
 
 	~OS_DipInterface() {
