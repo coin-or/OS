@@ -54,6 +54,9 @@ public:
 	/** The various model constraint systems used for different 
 	 algorithms, keyed by a unique string (model name). */
 	map<string, DecompConstraintSet*> m_models;
+	
+	/** number of block. */
+	int  m_numBlocks;
 
 public:
 	/* @name Inherited (from virtual) methods. */
@@ -96,6 +99,9 @@ public:
 	
 	/* @name Inherited (from virtual) methods. */
 	int generateInitVars(DecompVarList & initVars); 
+	
+	
+	//void createModelMasterOnlys2(vector<int> & masterOnlyCols);
 
 
 	/** @name Constructor and Destructor */

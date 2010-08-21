@@ -33,13 +33,13 @@ void Bearcat_DecompApp::initializeApp(UtilParameters & utilParam) {
 	//---
 	//--- read OSiL instance
 	//
-	std::string osilFile = "spl2.osil";
+	std::string osilFile = "spl1.osil";
 	m_osInterface.readOSiL(osilFile);
 
 	//---
 	//--- read OSoL instance
 	//
-	std::string osolFile = "dip-spl2.osol";
+	std::string osolFile = "dip-spl1.osol";
 	m_osInterface.readOSoL(osolFile);
 
 	//---
@@ -283,11 +283,6 @@ void Bearcat_DecompApp::createModels() {
 			m_appParam.LogLevel, 2);
 	int i;
 	int j;
-	//---
-	//--- how many rows to put into relaxation
-	//---
-
-	const int nRows = m_osInterface.getConstraintNumber();
 	const int nCols = m_osInterface.getVariableNumber();
 
 	//First the define the objective function over the entire variable space
@@ -302,13 +297,7 @@ void Bearcat_DecompApp::createModels() {
 	//---
 	//--- Construct the core matrix.
 	//---
-
-
-	//kipp -- problem specific change later
-
 	int nRowsRelax, nRowsCore;
-	//int nBlocks = 3;
-	//nRowsRelax = 15;
 
 	nRowsRelax = 0;
 	nRowsCore = 0;
@@ -389,12 +378,15 @@ void Bearcat_DecompApp::createModels() {
 	DecompConstraintSet *modelRelax = NULL;
 	char *ch = NULL;
 	ostringstream blockName;
-	std::set<int> blockVars;
+	std::set<int> blockVars; //variables in the block
+	std::set<int> blockVarsAll; //all variables that appear in a block
 	std::set<int>::iterator sit;
 	CoinPackedVector *row;
 	int *rowVars;
 	int rowSize;
-
+	
+	m_numBlocks = 0;
+	//kipp -- throw an exception if we get an index out of range
 	if (m_osInterface.m_osoption != NULL
 			&& m_osInterface.m_osoption->getNumberOfOtherConstraintOptions()
 					> 0) {
@@ -413,6 +405,8 @@ void Bearcat_DecompApp::createModels() {
 
 			if (((*vit)->name.compare("constraintSet") == 0)
 					&& ((*vit)->type.compare("Block") == 0)) {
+				
+				m_numBlocks++;
 
 				blockName << "Relax";
 
@@ -426,7 +420,7 @@ void Bearcat_DecompApp::createModels() {
 				for (i = 0; i < nRowsRelax; i++) {
 
 					rowsRelax[i] = (*vit)->con[i]->idx;
-					//add the variables for this row to the map
+					//add the variables for this row to the set blockVars
 					row = m_osInterface.getRow(rowsRelax[i]);
 					rowSize = row->getNumElements();
 					rowVars = row->getIndices();
@@ -434,6 +428,7 @@ void Bearcat_DecompApp::createModels() {
 					for (j = 0; j < rowSize; j++) {
 						if (blockVars.find(rowVars[j]) == blockVars.end()) {
 							blockVars.insert(rowVars[j]);
+							blockVarsAll.insert(rowVars[j]);
 						}
 					}
 
@@ -450,12 +445,14 @@ void Bearcat_DecompApp::createModels() {
 				whichBlock = atoi(ch);
 				delete ch;
 				blockName << whichBlock;
-				//now get the variables in these constraints
+				//create the active columns in this block
 				for (sit = blockVars.begin(); sit != blockVars.end(); sit++) {
 
 					modelRelax->activeColumns.push_back(*sit);
 
 				}
+				
+				
 
 				//
 				//
@@ -579,62 +576,96 @@ void Bearcat_DecompApp::createModels() {
 
 	UtilPrintFuncBegin(m_osLog, m_classTag, "printCurrentProblem()",
 			m_appParam.LogLevel, 2);
+	
+	//get the master only variables
+	
+	
+	 //modelCore->masterOnlyCols.push_back(i);
+	
+	for(i = 0; i < nCols; i++){
+		
+		
+		if (blockVarsAll.find( i ) == blockVarsAll.end() ) {
+			
+			modelCore->masterOnlyCols.push_back(i);
+			
+			std::cout << "MASTER ONLY VARIABLE " << i << std::endl;
+			
+		}
+		
+		
+	}
+	
+   //---
+   //--- create an extra "empty" block for the master-only vars
+   //---   since I don't know what OSI will do with empty problem
+   //---   we will make column bounds explicity rows
+   //---
+   int nMasterOnlyCols = static_cast<int>(modelCore->masterOnlyCols.size());
+   if(nMasterOnlyCols){
+	  if(m_appParam.LogLevel >= 1)
+		 (*m_osLog) << "Create model part Master-Only." << endl;
+
+	 // createModelMasterOnlys2(modelCore->masterOnlyCols);
+
+   }
 
 }// end createModels()
 
 
 //===========================================================================//
-/**
+/*
  void Bearcat_DecompApp::createModelMasterOnlys2(vector<int> & masterOnlyCols) {
 
- //int nBlocks = static_cast<int> (m_blocks.size());
- //kipp -- problem specific
- int nBlocks = 3;
- const int nCols =  m_osInterface.getVariableNumber();
- const double * colLB =  m_osInterface.getColLower();
- const double * colUB =  m_osInterface.getColUpper();
- const char * integerVars =  m_osInterface.getIntegerColumns();
- int nMasterOnlyCols = static_cast<int> (masterOnlyCols.size());
 
- if (m_appParam.LogLevel >= 1) {
- (*m_osLog) << "nCols           = " << nCols << endl;
- (*m_osLog) << "nMasterOnlyCols = " << nMasterOnlyCols << endl;
- }
+	 int nBlocks = m_numBlocks;
+	 const int nCols =  m_osInterface.getVariableNumber();
+	 const double * colLB =  m_osInterface.getColLower();
+	 const double * colUB =  m_osInterface.getColUpper();
+	 const char * integerVars =  m_osInterface.getIntegerColumns();
+	 int nMasterOnlyCols = static_cast<int> (masterOnlyCols.size());
+	
+	 if (m_appParam.LogLevel >= 1) {
+		 (*m_osLog) << "nCols = " << nCols << endl;
+		 (*m_osLog) << "nMasterOnlyCols = " << nMasterOnlyCols << endl;
+	 }
+	
+	 if (nMasterOnlyCols == 0)
+	 return;
+	
+	 int i;
+	 vector<int>::iterator vit;
+	 for (vit = masterOnlyCols.begin(); vit != masterOnlyCols.end(); vit++) {
+		 i = *vit;
+		
+		 //THINK:
+		 //  what-if master-only var is integer and bound is not at integer
+		
+		 DecompConstraintSet * model = new DecompConstraintSet();
+		 model->m_masterOnly = true;
+		 model->m_masterOnlyIndex = i;
+		 model->m_masterOnlyLB = colLB[i];
+		 std::cout << "MASTER ONLY LB =  " << model->m_masterOnlyLB << std::endl;
+		 model->m_masterOnlyUB = colUB[i];
+		 std::cout << "MASTER ONLY UB =  " << model->m_masterOnlyUB << std::endl;
+		 //0=cont, 1=integer
+		 model->m_masterOnlyIsInt = integerVars[i] ? true : false;
+		 if (m_appParam.ColumnUB < 1.0e15)
+		 if (colUB[i] > 1.0e15)
+		 model->m_masterOnlyUB = m_appParam.ColumnUB;
+		 if (m_appParam.ColumnLB > -1.0e15)
+		 if (colLB[i] < -1.0e15)
+		 model->m_masterOnlyLB = m_appParam.ColumnLB;
+		
+		 //m_modelR.insert(make_pair(nBlocks, model));
+		 setModelRelax(model, "master_only" + UtilIntToStr(i), nBlocks);
+		 nBlocks++;
+	 }
 
- if (nMasterOnlyCols == 0)
- return;
-
- int i;
- vector<int>::iterator vit;
- for (vit = masterOnlyCols.begin(); vit != masterOnlyCols.end(); vit++) {
- i = *vit;
-
- //THINK:
- //  what-if master-only var is integer and bound is not at integer
-
- DecompConstraintSet * model = new DecompConstraintSet();
- model->m_masterOnly = true;
- model->m_masterOnlyIndex = i;
- model->m_masterOnlyLB = colLB[i];
- model->m_masterOnlyUB = colUB[i];
- //0=cont, 1=integer
- model->m_masterOnlyIsInt = integerVars[i] ? true : false;
- if (m_appParam.ColumnUB < 1.0e15)
- if (colUB[i] > 1.0e15)
- model->m_masterOnlyUB = m_appParam.ColumnUB;
- if (m_appParam.ColumnLB > -1.0e15)
- if (colLB[i] < -1.0e15)
- model->m_masterOnlyLB = m_appParam.ColumnLB;
-
- //m_modelR.insert(make_pair(nBlocks, model));
- setModelRelax(model, "master_only" + UtilIntToStr(i), nBlocks);
- nBlocks++;
- }
-
- return;
+	 return;
  }//end createModelMasterOnlys2
+*/
 
- */
 
 int Bearcat_DecompApp::generateInitVars(DecompVarList & initVars) {
 
