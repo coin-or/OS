@@ -15,7 +15,7 @@
 				<var idx="4" value="1"/>
 				<var idx="15" value="1"/>
 			</other>
-			<other name="intialCol" solver="Dip" numberOfVar="6" value="1">
+			<other name="initialCol" solver="Dip" numberOfVar="6" value="1">
 				<var idx="5" value="1"/>
 				<var idx="6" value="1"/>
 				<var idx="7" value="1"/>
@@ -23,7 +23,7 @@
 				<var idx="9" value="1"/>
 				<var idx="16" value="1"/>
 			</other>
-			<other name="intialCol" solver="Dip" numberOfVar="6" value="2">
+			<other name="initialCol" solver="Dip" numberOfVar="6" value="2">
 				<var idx="10" value="1"/>
 				<var idx="11" value="1"/>
 				<var idx="12" value="1"/>

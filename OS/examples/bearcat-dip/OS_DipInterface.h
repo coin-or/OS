@@ -61,8 +61,8 @@ public:
 
 
 
-	OSInstance * m_osinstance;
-	OSOption * m_osoption;
+	OSInstance *m_osinstance;
+	OSOption *m_osoption;
 
 
 	/** @name Helper Methods. */

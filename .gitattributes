@@ -331,7 +331,10 @@ OS/examples/bearcat-dip/bearcat.gms -text
 OS/examples/bearcat-dip/bearcat.parm -text
 OS/examples/bearcat-dip/bearcat12.dat -text
 OS/examples/bearcat-dip/dip-spl1.osol -text
+OS/examples/bearcat-dip/dip-spl2.osol -text
 OS/examples/bearcat-dip/spl.xml -text
+OS/examples/bearcat-dip/spl1.osil -text
+OS/examples/bearcat-dip/spl2.osil -text
 OS/examples/branchCutPrice/AUTHORS -text
 OS/examples/branchCutPrice/LICENSE -text
 OS/examples/branchCutPrice/LP/OS_lp.cpp -text
