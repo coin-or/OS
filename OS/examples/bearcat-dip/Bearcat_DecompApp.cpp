@@ -33,13 +33,13 @@ void Bearcat_DecompApp::initializeApp(UtilParameters & utilParam) {
 	//---
 	//--- read OSiL instance
 	//
-	std::string osilFile = "spl1.osil";
+	std::string osilFile = "spl2.osil";
 	m_osInterface.readOSiL(osilFile);
 
 	//---
 	//--- read OSoL instance
 	//
-	std::string osolFile = "dip-spl1.osol";
+	std::string osolFile = "dip-spl2-b.osol";
 	m_osInterface.readOSoL(osolFile);
 
 	//---
@@ -606,7 +606,7 @@ void Bearcat_DecompApp::createModels() {
 	  if(m_appParam.LogLevel >= 1)
 		 (*m_osLog) << "Create model part Master-Only." << endl;
 
-	 // createModelMasterOnlys2(modelCore->masterOnlyCols);
+	  createModelMasterOnlys2(modelCore->masterOnlyCols);
 
    }
 
@@ -614,7 +614,7 @@ void Bearcat_DecompApp::createModels() {
 
 
 //===========================================================================//
-/*
+
  void Bearcat_DecompApp::createModelMasterOnlys2(vector<int> & masterOnlyCols) {
 
 
@@ -664,7 +664,7 @@ void Bearcat_DecompApp::createModels() {
 
 	 return;
  }//end createModelMasterOnlys2
-*/
+
 
 
 int Bearcat_DecompApp::generateInitVars(DecompVarList & initVars) {

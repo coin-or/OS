@@ -101,7 +101,7 @@ public:
 	int generateInitVars(DecompVarList & initVars); 
 	
 	
-	//void createModelMasterOnlys2(vector<int> & masterOnlyCols);
+	void createModelMasterOnlys2(vector<int> & masterOnlyCols);
 
 
 	/** @name Constructor and Destructor */
