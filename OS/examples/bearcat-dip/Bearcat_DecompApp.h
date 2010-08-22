@@ -21,7 +21,6 @@
 #include "OS_DipInterface.h"
 #include "Bearcat_DecompParam.h"
 
-
 // --------------------------------------------------------------------- //
 /*!
  * \class Bearcat_DecompApp
@@ -45,66 +44,36 @@ public:
 	Bearcat_Param m_appParam;
 
 	/** The model objective coefficients (original space). */
-	double * m_objective;
-	
-	   /** The model constraint systems used for different algos. */
-	   DecompConstraintSet *          m_modelC;
-	   map<int, DecompConstraintSet*> m_modelR;
+	double *m_objective;
 
-	/** The various model constraint systems used for different 
-	 algorithms, keyed by a unique string (model name). */
-	map<string, DecompConstraintSet*> m_models;
-	
-	/** number of block. */
-	int  m_numBlocks;
+	/** The model constraint systems used for different algos. */
+	DecompConstraintSet *m_modelC;
+	map<int, DecompConstraintSet*> m_modelR;
 
-public:
-	/* @name Inherited (from virtual) methods. */
-	/** Solve the relaxed problem. */
-	//DecompSolverStatus solveRelaxed(const int   whichBlock,
-	// const double        * redCostX,
-	//				   const double          convexDual,
-	//				   list<DecompVar*>    & vars);   
-
-	/** Print an original column (format for this app). */
-	//void printOriginalColumn(const int index, ostream * os = &cout) const;
-
-public:
-	/** @name Helper functions (public). */
-	
-	
-	/** Find the active columns for some block. */
-	void findActiveColumns(const vector<int> & rowsPart,
-		set<int> & activeColsSet);
-	   
+	/** Definition of blocks (by rows). */
+	std::map<int, std::vector<int> > m_blocks;
 
 	/** Initialize application. */
 	void initializeApp(UtilParameters & utilParam);
 
 	/** Create model parts. */
 	void createModels();
-	
-	DecompConstraintSet * createModelPart(const int nRowsPart,
-			const int * rowsPart);
-	
+
+	//this creates the coupling/core constraint set
 	void createModelPart(DecompConstraintSet * model, const int nRowsPart,
 			const int * rowsPart);
-	
+
+	//this is used to create each block
 	void createModelPartSparse(DecompConstraintSet * model,
 			const int nRowsPart, const int * rowsPart);
 
-	//void createModelMasterOnlys2(vector<int> & masterOnlyCols);
 
-	//void readInitSolutionFile(DecompVarList & initVars);
-	
 	/* @name Inherited (from virtual) methods. */
-	int generateInitVars(DecompVarList & initVars); 
-	
-	
+	int generateInitVars(DecompVarList & initVars);
+
 	void createModelMasterOnlys2(vector<int> & masterOnlyCols);
 
 
-	/** @name Constructor and Destructor */
 
 	/** Default constructor. Takes an instance of UtilParameters */
 	Bearcat_DecompApp(UtilParameters & utilParam) :
@@ -113,15 +82,12 @@ public:
 	}
 
 	virtual ~Bearcat_DecompApp() {
-		std::cout << "GAIL IS IN BEARCAT DECOMP DESTRUCTOR" << std::endl;
-		UTIL_DELARR(m_objective);
-		UTIL_DELPTR(m_modelC);
-		UtilDeleteMapPtr(m_modelR);
+		std::cout << "INSIDE BEARCAT DECOMP DESTRUCTOR" << std::endl;
+		UTIL_DELARR( m_objective);
+		UTIL_DELPTR( m_modelC);
+		UtilDeleteMapPtr( m_modelR);
 	}
-	
-	
 
-	   
 };
 
 #endif

@@ -62,7 +62,9 @@ public:
 
 
 	OSInstance *m_osinstance;
-	OSOption *m_osoption;
+	OSOption *m_osoption;	
+	OSiLReader *m_osilreader;
+	OSoLReader *m_osolreader;
 
 
 	/** @name Helper Methods. */
@@ -167,8 +169,7 @@ public:
 	 */
 	inline const double* getColLower() const {return m_osinstance->getVariableLowerBounds();} 
 	
-	
-	
+		
 	/**
 	 * Get variable upper bounds. 
 	 * 
@@ -185,7 +186,6 @@ public:
 	inline const std::string* getVariableNames() const {return m_osinstance->getVariableNames();} 
 	
 	
-	
 	/**
 	 * Get constraint lower bounds. 
 	 * 
@@ -193,8 +193,7 @@ public:
 	 */
 	inline const double* getRowLower() const {return m_osinstance->getConstraintLowerBounds();} 
 	
-	
-	
+
 	/**
 	 * Get constraint upper bounds. 
 	 * 
@@ -210,9 +209,6 @@ public:
 	 */
 	inline const std::string* getConstraintNames() const {return m_osinstance->getConstraintNames();} 
 	
-	
-
-
 	//end wrapper methods
 
 	/** Default constructor. */
@@ -227,7 +223,9 @@ public:
 	}
 
 	~OS_DipInterface() {
-		std::cout << "GAIL IS IN OS DIP INTERFACE DESTRUCTOR" << std::endl;
+		std::cout << "INSIDE OS DIP INTERFACE DESTRUCTOR" << std::endl;
+		if(m_osilreader != NULL) delete m_osilreader;
+		if(m_osolreader != NULL) delete m_osolreader;
 	};
 };
 

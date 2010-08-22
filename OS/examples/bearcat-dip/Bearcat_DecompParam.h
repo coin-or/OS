@@ -35,15 +35,11 @@ class Bearcat_Param {
 public:
    int    LogLevel;   
    string DataDir;
-   string Instance;
-   string BlockFile;
-   string BlockFileFormat;
-   string PermuteFile;
-   string InitSolutionFile;
+   string OSiLFile;
+   string OSoLFile;
    int    UseNames;  //col/row names for debugging
    int    UseSparse; //create all blocks sparsely
    int    FullModel; //create full model for CPM or direct
-   int   LogDumpModel; //setting for printing LP or MPS of restricted master
    double BestKnownLB;
    double BestKnownUB;
    double ColumnUB; //hack since missing extreme rays
@@ -57,13 +53,8 @@ public:
       static const char * common = "Bearcat";
       LogLevel     = utilParam.GetSetting("LogLevel",     3,     common);
       DataDir      = utilParam.GetSetting("DataDir",      "",    common);
-      Instance     = utilParam.GetSetting("Instance",     "",    common);    
-      BlockFile    = utilParam.GetSetting("BlockFile",    "",    common);
-      PermuteFile  = utilParam.GetSetting("PermuteFile",  "",    common);
-      BlockFileFormat 
-         = utilParam.GetSetting("BlockFileFormat",    "",    common);    
-      InitSolutionFile
-         = utilParam.GetSetting("InitSolutionFile",    "",    common);    
+      OSiLFile     = utilParam.GetSetting("OSiLFile",     "",    common);   
+      OSoLFile     = utilParam.GetSetting("OSoLFile",     "",    common); 
       UseNames     = utilParam.GetSetting("UseNames",       0, common);
       UseSparse    = utilParam.GetSetting("UseSparse",      0, common);
       FullModel    = utilParam.GetSetting("FullModel",      0, common);
@@ -71,9 +62,7 @@ public:
       BestKnownUB  = utilParam.GetSetting("BestKnownUB",   1.e100, common);
       ColumnUB     = utilParam.GetSetting("ColumnUB",      1.0,  common);
       ColumnLB     = utilParam.GetSetting("ColumnLB",     0.0,  common);
-      LogDumpModel = utilParam.GetSetting("LogDumpModel",  2,  common);
-      //MasterOnlyOneBlock = 
-      // utilParam.GetSetting("MasterOnlyOneBlock",            0,  common);
+
    }
 
    void dumpSettings(ostream * os = &cout){
@@ -82,11 +71,8 @@ public:
             << "Bearcat_DECOMP PARAMETER SETTINGS \n";
       (*os) << common << ": LogLevel          : " << LogLevel         << endl;
       (*os) << common << ": DataDir           : " << DataDir          << endl;
-      (*os) << common << ": Instance          : " << Instance         << endl;
-      (*os) << common << ": BlockFile         : " << BlockFile        << endl;
-      (*os) << common << ": PermuteFile       : " << PermuteFile      << endl;
-      (*os) << common << ": BlockFileFormat   : " << BlockFileFormat  << endl;
-      (*os) << common << ": InitSolutionFile  : " << InitSolutionFile << endl;
+      (*os) << common << ": OSiLFile          : " << OSiLFile         << endl;
+      (*os) << common << ": OSoLFile          : " << OSoLFile         << endl;
       (*os) << common << ": UseNames          : " << UseNames         << endl;
       (*os) << common << ": UseSparse         : " << UseSparse        << endl;
       (*os) << common << ": FullModel         : " << FullModel        << endl;
@@ -94,9 +80,7 @@ public:
       (*os) << common << ": BestKnownUB       : " << BestKnownUB      << endl;
       (*os) << common << ": ColumnUB          : " << ColumnUB         << endl;
       (*os) << common << ": ColumnLB          : " << ColumnLB         << endl;
-      (*os) << common << ": LogDumpModel          : " << LogDumpModel         << endl;
-      //(*os) << common << ": MasterOnlyOneBlock: " 
-      //    << MasterOnlyOneBlock << endl;
+
       (*os) << "\n=====================================================\n";
    }
    
@@ -104,11 +88,8 @@ public:
    Bearcat_Param():    
       LogLevel        (3 ),
       DataDir         (""),
-      Instance        (""),
-      BlockFile       (""), 
-      BlockFileFormat (""),
-      PermuteFile     (""), 
-      InitSolutionFile(""),
+      OSiLFile        (""),
+      OSoLFile        (""),
       UseNames        (0),
       UseSparse       (1),
       FullModel       (0),
@@ -116,7 +97,7 @@ public:
       BestKnownUB     ( 1.e100),
       ColumnUB        ( 1.0),
       ColumnLB        (0.0)
-      //MasterOnlyOneBlock(0)
+   
 {};
    ~Bearcat_Param() {};
 

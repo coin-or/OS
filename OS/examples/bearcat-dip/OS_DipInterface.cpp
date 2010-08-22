@@ -25,7 +25,7 @@ void OS_DipInterface::readOSiL(string & fileName){
 	
 	FileUtil *fileUtil = NULL; 
 	fileUtil = new FileUtil();
-	OSiLReader *osilreader ;
+
 
 	
 	try{
@@ -33,8 +33,8 @@ void OS_DipInterface::readOSiL(string & fileName){
 
 		std::string osil;
 		osil = fileUtil->getFileAsString( fileName.c_str() );
-		osilreader = new OSiLReader();
-		m_osinstance = osilreader->readOSiL( osil);
+		m_osilreader = new OSiLReader();
+		m_osinstance = m_osilreader->readOSiL( osil);
 	
 		delete fileUtil;
 		fileUtil  = NULL;
@@ -45,13 +45,11 @@ void OS_DipInterface::readOSiL(string & fileName){
 		
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << "IN THE CATCH" <<std::endl;
+		std::cout << "PROBLEM READING OSiL File" <<std::endl;
 		delete fileUtil;
 		std::cout << eclass.errormsg <<  std::endl;
 		fileUtil  = NULL;
-		std::cout << "IN THE CATCH" <<std::endl;
-		//delete  osilreader;
-		//osilreader = NULL;
+		throw ErrorClass( eclass.errormsg);
 		
 	} 
 	
@@ -63,17 +61,14 @@ void OS_DipInterface::readOSiL(string & fileName){
 void OS_DipInterface::readOSoL(string & fileName){
 	
 	FileUtil *fileUtil = NULL; 
-	fileUtil = new FileUtil();
-	OSoLReader *osolreader ;
-
-	
+	fileUtil = new FileUtil();	
 	try{
 
 
 		std::string osol;
 		osol = fileUtil->getFileAsString( fileName.c_str() );
-		osolreader = new OSoLReader();
-		m_osoption = osolreader->readOSoL( osol);
+		m_osolreader = new OSoLReader();
+		m_osoption = m_osolreader->readOSoL( osol);
 	
 		delete fileUtil;
 		fileUtil  = NULL;
@@ -84,13 +79,11 @@ void OS_DipInterface::readOSoL(string & fileName){
 		
 	}
 	catch(const ErrorClass& eclass){
-		std::cout << "IN THE CATCH" <<std::endl;
+		std::cout << "Problem reading OSoL File" <<std::endl;
 		delete fileUtil;
 		std::cout << eclass.errormsg <<  std::endl;
 		fileUtil  = NULL;
-		std::cout << "IN THE CATCH" <<std::endl;
-		//delete  osilreader;
-		//osilreader = NULL;
+		throw ErrorClass( eclass.errormsg);
 		
 	} 
 	

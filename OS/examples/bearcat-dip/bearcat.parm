@@ -20,7 +20,6 @@ Settings for all decomp algorithms.
 [DECOMP]
 
 
-
 #############################################################################
 Settings for decomp algorithm cutting plane method. 
   section=CUT
@@ -32,7 +31,7 @@ Settings for decomp algorithm price and cut.
   section=PRICE_AND_CUT
 #############################################################################
 [PRICE_AND_CUT]
-LogDumpModel = 2
+LogDumpModel = 1
 
 #############################################################################
 Settings for ALPS framework.
@@ -49,8 +48,26 @@ Settings for Bearcat application.
 LogLevel       = 3
 
 
+#first simple plant location problem
+#OSiLFile = spl1.osil
+#setup constraints as blocks
+#OSoLFile = dip-spl1.osol
+#assignment constraints as blocks
+#OSoLFile = dip-spl1-b.osol
 
-# Name of file for instance (assumed to be in DataDir).
-Instance        = Simple Plant Location
+#second simple plant location problem
+#OSiLFile = spl2.osil
+#setup constraints as blocks
+#OSoLFile = dip-spl2.osol
+#assignment constraints as blocks
+#OSoLFile = dip-spl2-b.osol
 
-#
+#generalized assignment problem
+OSiLFile = genAssign.osil
+OSoLFile = dip-genAssign.osol
+
+
+DataDir = .
+
+
+

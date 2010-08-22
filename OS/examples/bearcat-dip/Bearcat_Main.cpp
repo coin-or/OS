@@ -55,10 +55,8 @@ int main(int argc, char ** argv){
       //--- create the user application (a DecompApp)
       //---  
       
-   
       Bearcat_DecompApp bearcat( utilParam); 
      
-
       //---
       //--- create the algorithm (a DecompAlgo)
       //---
@@ -109,17 +107,13 @@ int main(int argc, char ** argv){
          //--- solve
          //---
          timer.start();     
-         std::cout << "GAIL START SOLVE" << std::endl;
+         std::cout << "START SOLVE" << std::endl;
          status = alpsModel.solve();
-         std::cout << "GAIL FINISH SOLVE" << std::endl;
+         std::cout << "FINISH SOLVE" << std::endl;
          timer.stop();
          timeSolveCpu  = timer.getCpuTime();
          timeSolveReal = timer.getRealTime();
          
-         
-         
-
-
          //---
          //--- sanity check
          //---
@@ -143,8 +137,8 @@ int main(int argc, char ** argv){
          const DecompSolution * solution = alpsModel.getBestSolution();
          cout << "Optimal Solution" << endl;
          solution->print();
-         
-         algo->getMasterOSI()->writeLp("restrictedMaster.txt", "lp", 1e-30, 5, 10);
+         //print final solution
+         algo->getMasterOSI()->writeLp("finalRestrictedMaster", "lp", 1e-30, 5, 10);
       
       }	 
       //---
@@ -153,10 +147,10 @@ int main(int argc, char ** argv){
       delete algo;
 
    }
-   catch(CoinError & ex){
-      cerr << "COIN Exception [ " << ex.message() << " ]"
-           << " at " << ex.fileName()  << ":L" << ex.lineNumber()
-           << " in " << ex.className() << "::" << ex.methodName() << endl;
+	catch(const ErrorClass& eclass){
+		std::cout << "Something went wrong:" << std::endl;
+		std::cout << eclass.errormsg << std::endl;
+		
       return 1;
    }
    return 0;
