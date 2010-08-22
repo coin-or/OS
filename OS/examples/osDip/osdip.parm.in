@@ -49,11 +49,11 @@ LogLevel       = 3
 
 
 #first simple plant location problem
-#OSiLFile = osilFiles/spl1.osil
+OSiLFile = osilFiles/spl1.osil
 #setup constraints as blocks
 #OSoLFile = osolFiles/spl1.osol
 #assignment constraints as blocks
-#OSoLFile = osolFiles/spl1-b.osol
+OSoLFile = osolFiles/spl1-b.osol
 
 #second simple plant location problem
 #OSiLFile = osilFiles/spl2.osil
@@ -63,8 +63,8 @@ LogLevel       = 3
 #OSoLFile = osolFiles/spl2-b.osol
 
 #generalized assignment problem
-OSiLFile = osilFiles/genAssign.osil
-OSoLFile = osolFiles/genAssign.osol
+#OSiLFile = osilFiles/genAssign.osil
+#OSoLFile = osolFiles/genAssign.osol
 
 
 DataDir = ../../data
