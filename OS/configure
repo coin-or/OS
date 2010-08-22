@@ -30488,12 +30488,12 @@ fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/spl1.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/spl1.osil"
 fi
 
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files data/osolFiles/spl1.osil"
+  coin_vpath_link_files="$coin_vpath_link_files data/osilFiles/spl2.osil"
 fi
 
 
