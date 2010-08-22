@@ -33,13 +33,15 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		//---
 		//--- read OSiL instance
 		//
+		if(m_appParam.OSiLFile.size() <=  1) throw ErrorClass("An OSiL file not specified in the paramater file");
 		std::string osilFile = m_appParam.DataDir 
-			  + UtilDirSlash() + m_appParam.OSiLFile;   
+			  + UtilDirSlash() + m_appParam.OSiLFile;  
 		m_osInterface.readOSiL(osilFile);
 	
 		//---
 		//--- read OSoL instance
 		//
+		if(m_appParam.OSoLFile.size() <=  1) throw ErrorClass("An OSoL file not specified in the paramater file");
 		std::string osolFile = m_appParam.DataDir 
 			  + UtilDirSlash() + m_appParam.OSoLFile;   
 		m_osInterface.readOSoL(osolFile);
