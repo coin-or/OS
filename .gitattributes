@@ -398,6 +398,14 @@ OS/examples/misc/rosenbrockmodPostfixVersion2.osil -text
 OS/examples/misc/sampleMatrixProgramming-v5_5.osil -text
 OS/examples/misc/sampleMatrixProgramming-v6.osil -text
 OS/examples/misc/ss30.osil -text
+OS/examples/osDip/Makefile.in -text
+OS/examples/osDip/OSDipApp.cpp -text
+OS/examples/osDip/OSDipApp.h -text
+OS/examples/osDip/OSDipInterface.cpp -text
+OS/examples/osDip/OSDipInterface.h -text
+OS/examples/osDip/OSDipParam.h -text
+OS/examples/osDip/OSDip_Main.cpp -text
+OS/examples/osDip/osdip.parm.in -text
 OS/examples/osJavaDemo/OSJavaDemo.java -text
 OS/examples/osJavaDemo/OSParameter.xml -text
 OS/examples/osModificationDemo/Makefile.in -text
