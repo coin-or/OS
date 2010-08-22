@@ -182,9 +182,6 @@
 /* Define the path to the OS root */
 #undef OSROOT_DIR
 
-/* SVN revision number of project */
-#undef OS_SVN_REV
-
 /* Version number of project */
 #undef OS_VERSION
 
@@ -236,9 +233,3 @@
 
 /* use if XLC is the compiler */
 #undef XLC_
-
-/* SVN revision number of project */
-#undef _SVN_REV
-
-/* Version number of project */
-#undef _VERSION

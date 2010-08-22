@@ -669,6 +669,7 @@ AC_COIN_VPATH_LINK(data/osilFiles/callBackTestRowMajor.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/CppADTestLag.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/finplan1.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/gamstrnsport.osil)
+AC_COIN_VPATH_LINK(data/osilFiles/genAssign.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLP.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_feas.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/HS071_NLPMod.osil)
@@ -697,6 +698,8 @@ AC_COIN_VPATH_LINK(data/osilFiles/rosenbrockorigInt.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/testOperators.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/test24locR1.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/test48locR1.osil)
+AC_COIN_VPATH_LINK(data/osolFiles/spl1.osil)
+AC_COIN_VPATH_LINK(data/osolFiles/spl1.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/volumeTest.osil)
 AC_COIN_VPATH_LINK(data/osilFiles/wayneQuadratic.osil)
 ##
@@ -724,6 +727,7 @@ AC_COIN_VPATH_LINK(data/osolFiles/bonminEx1_Couenne.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/callBackTestRowMajor_ipopt.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/callBackTest_ipopt.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/callBackTest_knitro.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/genAssign.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/HS071_NLPMod_ipopt.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/HS071_NLP_knitro.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/lindoapiaddins_lindo.osol)
@@ -742,6 +746,10 @@ AC_COIN_VPATH_LINK(data/osolFiles/parincQuadratic_lindo.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/rosenbrockmod_ipopt.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/rosenbrockmod_knitro.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/rosenbrockmod_lindo.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/spl1.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/spl1-b.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/spl2.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/spl2-b.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/volumeTest_vol.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin1.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin2.osol)
@@ -860,10 +868,12 @@ AC_CONFIG_FILES([Makefile
           examples/osModificationDemo/Makefile
           examples/osRemoteTest/Makefile
           examples/osSolverDemo/Makefile
-	  examples/osResultDemo/Makefile
+	      examples/osResultDemo/Makefile
           examples/template/Makefile
           examples/branchCutPrice/Makefile
- 	examples/branchCutPriceTSP/Makefile
+ 	      examples/branchCutPriceTSP/Makefile
+ 	      examples/osDip/Makefile
+ 	      examples/osDip/osdip.parm
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
