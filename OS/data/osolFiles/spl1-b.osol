@@ -8,28 +8,11 @@
         <optimization>
 
         	
-        <constraints numberOfOtherConstraintOptions="6">
-        	<other name="constraintSet" solver="Dip" numberOfCon="15" type="Core">
-        		<con idx="5" />
-        		<con idx="6"/>
-        		<con idx="7"/>
-        		<con idx="8"/>
-        		<con idx="9"/>
-        		<con idx="10"/>
-        		<con idx="11" />
-        		<con idx="12"/>
-        		<con idx="13"/>
-        		<con idx="14"/>
-        		<con idx="15"/>
-        		<con idx="16" />
-        		<con idx="17"/>
-        		<con idx="18"/>
-        		<con idx="19"/>
+        <constraints numberOfOtherConstraintOptions="5">
 
-        	</other>
         	<other name="constraintSet" solver="Dip" numberOfCon="1" type="Block" value="0">
         		<con idx="0" />
-
+        	
         	</other>
         	
         	<other name="constraintSet" solver="Dip" numberOfCon="1" type="Block" value="1">
