@@ -405,7 +405,10 @@ OS/examples/osDip/OSDipInterface.cpp -text
 OS/examples/osDip/OSDipInterface.h -text
 OS/examples/osDip/OSDipParam.h -text
 OS/examples/osDip/OSDip_Main.cpp -text
+OS/examples/osDip/osDip.pdf -text svneol=unset#unset
+OS/examples/osDip/osDip.tex -text
 OS/examples/osDip/osdip.parm.in -text
+OS/examples/osDip/own.sty -text
 OS/examples/osJavaDemo/OSJavaDemo.java -text
 OS/examples/osJavaDemo/OSParameter.xml -text
 OS/examples/osModificationDemo/Makefile.in -text

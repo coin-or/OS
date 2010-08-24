@@ -1,0 +1,337 @@
+\documentclass[11pt]{article}
+\usepackage{graphics,graphicx}
+%\usepackage[dvips]{graphics,graphicx}
+\DeclareGraphicsExtensions{.ps,.jpg,.eps,.pdf,.png}
+\usepackage{boxedminipage,amsmath,amsfonts}
+\usepackage{url}
+\usepackage{./own}
+%\usepackage{secdot}
+%\usepackage{natbib}
+\usepackage{verbatim}
+%\usepackage{moreverb}
+\usepackage{enumerate}
+\usepackage{makeidx}
+\bibliographystyle{plain}
+\makeindex
+     
+     
+%%%%%
+% some other macros
+\newcommand{\figurepath}{./figures}
+\newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
+\newcommand{\figfiletype}{pdf}
+
+%Brad Bell Macros
+
+% Latex macros defined for all the CppAD documentation:
+\newcommand{\T}{ {\rm T} }
+\newcommand{\R}{ {\bf R} }
+\newcommand{\C}{ {\bf C} }
+\newcommand{\D}[2]{ \frac{\partial #1}{\partial #2} }
+\newcommand{\DD}[3]{ \frac{\partial^2 #1}{\partial #2 \partial #3} }
+\newcommand{\Dpow}[2]{ \frac{\partial^{#1}}{\partial  {#2}^{#1}} }
+\newcommand{\dpow}[2]{ \frac{ {\rm d}^{#1}}{{\rm d}\, {#2}^{#1}} }
+
+% Define the hangref environment used for the References list:
+\newenvironment{hangref}
+  {\begin{list}{}{\setlength{\itemsep}{4pt}
+  \setlength{\parsep}{0pt}\setlength{\leftmargin}{+\parindent}
+  \setlength{\itemindent}{-\parindent}}}{\end{list}}
+
+% Set the page margins to 1 inch all around:
+\marginparwidth 0pt\marginparsep 0pt \topskip 0pt\headsep
+0pt\headheight 0pt \oddsidemargin 0pt\evensidemargin 0pt
+\textwidth 6.5in \topmargin 0pt\textheight 9.0in
+\newtheorem{theorem}{Theorem}
+
+   
+%%%%Added by Leo%%%%
+\newcounter{Fig}
+\renewcommand{\theFig}{\arabic{Fig}}
+\newcommand{\Fig}[2]{\refstepcounter{Fig} \label{#1}
+                     {\small\bf Figure \theFig.} {\small\sl #2 \par}}
+
+\setcounter{topnumber}{3}
+\renewcommand{\topfraction}{.9}
+\setcounter{bottomnumber}{3}
+\renewcommand{\bottomfraction}{.9}
+\setcounter{totalnumber}{4}
+\renewcommand{\textfraction}{.1}
+\setlength{\floatsep}{.25in}
+\setlength{\intextsep}{.25in}
+
+\setlength{\fboxrule}{2\fboxrule} \setlength{\fboxsep}{3\fboxsep}
+
+\newcommand{\Sa}{8pt}
+\newcommand{\Sb}{0pt}
+
+\renewcommand{\_}{{\char"5F}}
+\renewcommand{\{}{{\char"7B}}
+\renewcommand{\}}{{\char"7D}}
+\renewcommand{\^}{{\char"0D}}
+
+\let\accute= \'
+\renewcommand{\'}{{\char"0D}}
+
+\newcommand{\bfit}{\bfseries\itshape}
+
+\newlength{\extopskip} \newlength{\exbottomskip}
+\setlength{\exbottomskip}{1\baselineskip}
+\addtolength{\exbottomskip}{-5.0pt}
+\setlength{\extopskip}{1\exbottomskip}
+\addtolength{\extopskip}{-1\parskip}
+
+\newenvironment{Example}{\vspace{1\extopskip}\noindent\hspace*{2em}
+                         \frenchspacing\small
+                         \tt\begin{tabular}{@{}l@{}}}{
+                         \end{tabular}\\[1\exbottomskip]}
+
+\newcommand{\Titem}{\item[$\triangleright$]}
+\newcommand{\Ditem}{\item[$\diamond$]}
+
+\newenvironment{Itemize}{\begin{quote}\normalsize
+   \baselineskip 20pt plus .3pt minus .1pt \begin{itemize}}
+   {\end{itemize}\end{quote}}
+   % Set path to folder containing figures
+\newcommand{\FigureFolder}{figures}
+
+
+
+
+\begin{document}
+
+
+
+\title{Using Dip With OS}
+\vskip 2in
+\author{Horand Gassmann, Jun Ma,  Kipp Martin}
+\maketitle
+
+\begin{abstract}
+In this document we describe how to use the Decomposition in Integer Programming
+(Dip) package with the Optimization Services (OS) package.  The code for this example is contained in the folder {\tt  OS/examples/osDip.}
+
+\end{abstract}
+
+
+\newpage
+%\tableofcontents
+%\listoffigures
+%\listoftables
+\hyphenation{com-plex-Type}
+
+
+ 
+
+%\noindent\hrulefill
+\newpage
+
+\section{Using the OS-Dip Example}
+
+Currently, the Decomposition in Integer Programming ({\bf Dip} package is not a dependency of the Optimization Services ({\bf OS}) package.  In order to run the {\bf osDip} example it is necessary to download both the {\bf OS} and {\bf  Dip} package. Download order is not relevant. In the discussion that follows we assume that for both {\bf OS} and {\bf Dip} the user has successfully completed a {\tt configure}, {\tt make}, and {\tt make install}.
+
+
+
+I have tested this on several simple plant location problems and generalized
+assignment problems. I have tested on both the Mac and Linux and it seems to be
+working. The configure step should generate a working Makefile for your platform.
+The OS project still does not include Dip as an external so you need to point to
+the Dip root. There is a variable in the generated Makefile,
+
+DIPPATH =
+
+that need to be filled in after configure. This "should" be the only line in the
+Makefile you need to edit. So on my machine, I have
+
+DIPPATH = /Users/kmartin/coin/dip-trunk/vpath/
+
+and there exists a directory
+
+/Users/kmartin/coin/dip-trunk/vpath/lib
+
+with the necessary libs and a directory
+
+DIPPATH = /Users/kmartin/coin/dip-trunk/vpath/include
+
+with the necessary headers.
+
+After building the executable run
+
+./osdip --param osdip.parm
+
+Look at the osdip.parm file. You can see by commenting and uncommenting you can
+run one of three problems that will also get downloaded.
+
+sp1.osil -- a simple plant location problem spl2.osil -- a second simple plant
+location problem genAssign.osil -- a generalize assignment problem
+
+The osol files (the option files) determine behavior. For example, if you use
+
+osolFiles/spl1-b.osol
+
+then the assingment constraints are the block constraints. If you use
+
+osolFiles/spl1.osol
+
+then the setup forcing constraints are the block constraints.  This  new  example
+also exhibits the problems I filed ticked on.
+
+
+
+\section{Simple Plant/Lockbox Location Example}
+
+
+ The problem minimizing
+the sum of the cost of capital due to float  and the cost of operating the lock boxes is the
+ problem.  
+
+\noindent {\bf Parameters:}
+\begin{itemize}
+\item[]  $m -$ number of customers to be assigned a lock box
+
+\item[]  $n -$ number of potential lock box sites
+
+\item[]  $c_{ij} -$ annual cost of capital associated with serving customer $j$ from lock box $i$ 
+
+\item[]  $f_{i} -$  annual fixed cost of operating a lock box at location $i$
+\end{itemize}
+
+\noindent {\bf Variables:}
+\begin{itemize}
+
+\item[]  $x_{ij} - $ a binary variable which is equal to 1 if customer $j$ is assigned to lock box $i$
+and 0 if not
+
+\item[]  $y_{i} - $ a binary variable which is equal to 1 if the lock box at location $i$ is opened and 0 if
+not
+
+\end{itemize}
+The   integer linear program  for the lock box location problem is
+$$
+\eqnarrayx{
+  & \min  &\sum_{i = 1}^{n} \sum_{j = 1}^{m} c_{ij} x_{ij}& + &\sum_{i = 1}^{n} f_{i} y_{i} &&&&&
+\eq{eq:lockobj} \cr
+(LB) &{\rm s.t.} & \sum_{i = 1}^{n} x_{ij} &=& 1, & j = 1, \ldots, m &&&&\eq{eq:lockdemand} \cr
+&&x_{ij} - y_{i} &\le& 0, & i = 1, \ldots, n, & j = 1, \ldots, m &&& \eq{eq:locksetup} \cr
+&& x_{ij}, \, \, y_{i} &\in& \{ 0, 1 \}, & i = 1, \ldots, n, & j = 1, \ldots, m. &&&\eq{eq:lockbinary}
+\cr
+}
+$$
+
+The objective (\ref{eq:lockobj}) is to minimize the sum of the cost of capital plus the fixed cost of
+operating the lock boxes.  The requirement that every customer be assigned a lock box is modeled by
+constraint (\ref{eq:lockdemand}).   Constraints (\ref{eq:locksetup})  are forcing  constraints and
+play the same role as constraint set (\ref{eq:mpdlsfixcharge}) in the dynamic lot size model.   
+
+\vskip 10pt
+{\bf Location Example 1:} A three-by-five example.
+
+\vskip 12pt
+
+\begin{center}
+\begin{tabular}{|cc|c|c|} \hline
+       &    & CUSTOMER &         \\
+      &     &\begin{tabular}{ccccc}
+             1&2&3&4&5 \end{tabular} & FIXED COSTS  \\ \hline
+     &   1   &\begin{tabular}{ccccc}
+             2&3&4&5&7 \end{tabular} &   2  \\
+ PLANT & 2   &\begin{tabular}{ccccc}
+             4  &  3  &  1  &  2  &  6 \end{tabular} &  3  \\    
+       & 3   &\begin{tabular}{ccccc}
+            5   &  4  &  2  &  1  &  3 \end{tabular} &  3  \\   \hline
+\end{tabular}     
+\end{center}                         
+
+
+\vskip 12pt
+
+{\bf Location Example 2:} A three-by-three example.
+
+\vskip 10pt
+$\min                                                    
+2x_{11}+x_{12}+x_{13}+x_{21}+2x_{22}+x_{23}+x_{31}+x_{32}+2x_{33}+
+y_{1}+y_{2}+y_{3}$
+
+
+\[
+\begin{array}{llll}
+{\rm s.t.} &x_{11}+x_{21}+x_{31} = 1 & & \\
+&x_{12}+x_{22}+x_{32} = 1 & &   \\
+&x_{13}+x_{23}+x_{33} = 1 & &
+\end{array}   Ax \ge b \,\, {\rm constraints}
+  \]
+  
+  
+\begin{eqnarray*}
+\begin{array}{lll}
+x_{11}\leq y_{1}\leq 1 & &  \\
+x_{12}\leq y_{1}\leq 1 & & \\
+x_{13}\leq y_{1}\leq 1 & & \\
+x_{21}\leq y_{2}\leq 1 & & \\
+x_{22}\leq y_{2}\leq 1 & &   \\
+x_{23}\leq y_{2}\leq 1 & & \\
+x_{31}\leq y_{3}\leq 1 & & \\
+x_{32}\leq y_{3}\leq 1 & &\\
+x_{33}\leq y_{3}\leq 1 & &\\ 
+\end{array}
+ Bx \ge b \,\, {\rm constraints} \\
+x_{ij},y_{i}\ge 0 , \,\, i = 1, \ldots, n, \, \, j = 1, \ldots, m.   
+\end{eqnarray*}
+
+
+
+
+
+
+\section{Generalized Assignment Problem Example}
+
+A problem that plays a prominent role in
+vehicle routing is the {\it generalized assignment problem.}    The problem is to assign each of $n$
+tasks to $m$ servers without exceeding the resource capacity of the servers.
+
+\noindent{\bf Parameters:}
+\begin{itemize}
+\item[]  $n -$ number of required tasks
+\item[]  $m -$   number of servers
+\item[]  $f_{ij} -$ cost of assigning task $i$ to server $j$
+\item[]  $b_{j} -$  units of resource available to server $j$
+\item[]  $a_{ij} -$ units of server $j$ resource required to perform task $i$
+\end{itemize}
+
+\noindent{\bf Variables:}
+\begin{itemize}
+\item[]  $x_{ij} -$ a binary variable which is equal to 1 if task $i$ is assigned to server $j$
+and 0 if not
+\end{itemize}
+The integer linear program for the generalized assignment problem  is 
+$$
+\eqnarrayx{
+&  \min &\sum_{i = 1}^{n} \sum_{j = 1}^{m} f_{ij} x_{ij} &&&&&&& \eq{eq:gapobj} \cr
+(GAP) &{\rm s.t.}& \sum_{j = 1}^{m} x_{ij} &=& 1, & i = 1, \ldots, n  &&&& \eq{eq:gapassign} \cr
+&& \sum_{i = 1}^{n} a_{ij} x_{ij} &\le& b_{j}, &j = 1, \ldots, m  &&&&\eq{eq:gapcapacity}  \cr
+&& x_{ij} &\in& \{ 0, 1 \}, & i = 1, \ldots, n, & j = 1, \ldots, m.  &&&
+\eq{eq:gapbinary}  \cr
+}
+$$
+
+The objective function (\ref{eq:gapobj}) is to minimize the total assignment cost.  Constraint
+(\ref{eq:gapassign}) requires that each task is assigned a server.  The requirement that the
+server capacity not be exceeded is given in (\ref{eq:gapcapacity}). 
+
+The test problem
+
+
+\begin{verbatim}
+ min     2 X11 + 11 X12 + 7 X21 + 7 X22 + 20 X31 + 
+2 X32 + 5 X41 + 5 X42
+s.t.
+X11 + X12 =    1
+X21 + X22 =    1
+X31 + X32 =    1
+X41 + X42 =    1
+
+3 X11 + 6 X21 + 5 X31 + 7 X41 <=   13
+2 X12 + 4 X22 + 10 X32 + 4 X42 <=   10
+\end{verbatim}
+
+\end{document}
