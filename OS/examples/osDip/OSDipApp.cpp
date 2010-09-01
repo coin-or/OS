@@ -146,7 +146,9 @@ void OSDipApp::createModelPart(DecompConstraintSet * model,
 			if (colName)
 				model->colNames.push_back(colName);
 		}
-		if (integerVars && integerVars[i]) {
+		
+		if ( (integerVars != NULL)   && integerVars[i] == '1' ) {
+			//std::cout  << "WE HAVE AN INTEGER VARIABLE " << std::endl;
 			model->integerVars.push_back(i);
 		}
 	}
@@ -167,7 +169,6 @@ void OSDipApp::createModelPartSparse(DecompConstraintSet * model,
 	//--- set model as sparse
 	//---
 	model->setSparse(nColsOrig);
-	std::cout << "GAIL IS STARTING createModelSparse" << std::endl;
 	int nCols, origIndex, newIndex;
 	vector<int>::iterator vit;
 	newIndex = 0;

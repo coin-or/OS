@@ -143,15 +143,16 @@ CoinPackedVector * OS_DipInterface::getRow( int i){
 
 const char* OS_DipInterface::getIntegerColumns(){
 	
-	char* integerVars =  m_osinstance->getVariableTypes();
-	
+	char* integerVars =  NULL;
 	int numVars = getVariableNumber();
+	integerVars = new char[ numVars];
 	int i;
 	
 	for(i  = 0; i < numVars;  i++){
 		
-		if(integerVars[ i] == 'B' || integerVars[i] == 'C') integerVars[i] = '1';
+		if( m_osinstance->getVariableTypes()[ i] == 'B' || m_osinstance->getVariableTypes()[i] == 'I') integerVars[i] = '1';
 		else integerVars[i] = '0';
+		
 		
 	}
 	return integerVars;
