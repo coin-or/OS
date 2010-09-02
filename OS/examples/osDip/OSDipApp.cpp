@@ -179,7 +179,8 @@ void OSDipApp::createModelPartSparse(DecompConstraintSet * model,
 		//std::cout << "upper bound = " << colUB[origIndex] << std::endl;
 
 		model->pushCol(colLB[origIndex], colUB[origIndex],
-				integerVars[origIndex] == 0 ? false : true, origIndex);
+				integerVars[origIndex] == '0' ? false : true, origIndex);
+		
 
 		//---
 		//--- big fat hack... we don't deal with dual rays yet,
