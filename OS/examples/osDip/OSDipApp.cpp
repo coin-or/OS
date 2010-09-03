@@ -388,7 +388,7 @@ void OSDipApp::createModels() {
 	
 						modelRelax->activeColumns.push_back( *sit);
 						
-						
+						   
 						//insert into the all variables set also, but throw an execption
 						//if already there -- same variable cannot be in more than one block
 						
@@ -414,6 +414,9 @@ void OSDipApp::createModels() {
 					m_modelR.insert(make_pair(whichBlock + 1, modelRelax));
 					setModelRelax(modelRelax, "relax" + UtilIntToStr(whichBlock),
 							whichBlock);
+					std::cout << std::endl <<  std::endl << std::endl;
+					std::cout << "HERE COMES THE DUPLICATION"  << std::endl;
+					UtilPrintVector( modelRelax->activeColumns, m_osLog); 
 	
 	
 				}
