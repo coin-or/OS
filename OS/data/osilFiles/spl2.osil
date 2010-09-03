@@ -15,9 +15,9 @@
             <var name="x(3,1)" type="C"/>
             <var name="x(3,2)" type="C"/>
             <var name="x(3,3)" type="C"/>
-            <var name="y(1)" type="C" ub="1"/>
-            <var name="y(2)" type="C" ub="1"/>
-            <var name="y(3)" type="C" ub="1"/>
+            <var name="y(1)" type="B" ub="1"/>
+            <var name="y(2)" type="B" ub="1"/>
+            <var name="y(3)" type="B" ub="1"/>
         </variables>
         <objectives numberOfObjectives="1">
             <obj maxOrMin="min" name="objective" numberOfObjCoef="12">

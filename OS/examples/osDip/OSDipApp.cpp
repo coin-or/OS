@@ -90,7 +90,7 @@ void OSDipApp::createModelPart(DecompConstraintSet * model,
 	//--- set the row upper and lower bounds
 	//--- set the col upper and lower bounds
 	//---
-	m_appParam.UseNames = false;
+	m_appParam.UseNames = true;
 	int i, r;
 	for (i = 0; i < nRowsPart; i++) {
 		r = rowsPart[i];
