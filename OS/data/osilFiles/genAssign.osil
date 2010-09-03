@@ -6,17 +6,17 @@
     </instanceHeader>
     <instanceData>
         <variables numberOfVariables="8">
-            <var name="x(1,1)" type="C" ub="1"/>
-            <var name="x(1,2)" type="C" ub="1"/>
-            <var name="x(2,1)" type="C" ub="1"/>
-            <var name="x(2,2)" type="C" ub="1"/>
-            <var name="x(3,1)" type="C" ub="1"/>
-            <var name="x(3,2)" type="C" ub="1"/>
-            <var name="x(4,1)" type="C" ub="1"/>
-            <var name="x(4,2)" type="C" ub="1"/>
+            <var name="x11" type="B" ub="1"/>
+            <var name="x12" type="B" ub="1"/>
+            <var name="x21" type="B" ub="1"/>
+            <var name="x22" type="B" ub="1"/>
+            <var name="x31" type="B" ub="1"/>
+            <var name="x32" type="B" ub="1"/>
+            <var name="x41" type="B" ub="1"/>
+            <var name="x42" type="B" ub="1"/>
         </variables>
         <objectives numberOfObjectives="1">
-            <obj maxOrMin="min" name="objective" numberOfObjCoef="8">
+            <obj maxOrMin="min" name="obj" numberOfObjCoef="8">
                 <coef idx="0">2</coef>
                 <coef idx="1">11</coef>
                 <coef idx="2">7</coef>
@@ -28,12 +28,12 @@
             </obj>
         </objectives>
         <constraints numberOfConstraints="6">
-            <con name="assign(1)" lb="1" ub="1"/>
-            <con name="assign(2)" lb="1" ub="1"/>
-            <con name="assign(3)" lb="1" ub="1"/>
-            <con name="assign(4)" lb="1" ub="1"/>
-            <con name="resource(1)" ub="13"/>
-            <con name="resource(2)" ub="10"/>
+            <con name="assign1" lb="1" ub="1"/>
+            <con name="assign2" lb="1" ub="1"/>
+            <con name="assign3" lb="1" ub="1"/>
+            <con name="assign4" lb="1" ub="1"/>
+            <con name="r1" ub="13"/>
+            <con name="r2" ub="10"/>
         </constraints>
         <linearConstraintCoefficients numberOfValues="16">
             <start>

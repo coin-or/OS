@@ -89,14 +89,18 @@ void OSDipApp::createModelPart(DecompConstraintSet * model,
 	//--- set the row upper and lower bounds
 	//--- set the col upper and lower bounds
 	//---
+	m_appParam.UseNames = true;
 	int i, r;
 	for (i = 0; i < nRowsPart; i++) {
 		r = rowsPart[i];
-		if (m_appParam.UseNames) {
+		if (true) {
 			const char * rowName =
 					m_osInterface.getConstraintNames()[r].c_str();
+			//		std::cout << "Row Name = " << m_osInterface.getConstraintNames()[r] << std::endl;
 			if (rowName)
 				model->rowNames.push_back(rowName);
+			
+			//std::cout << "Row Name = " << m_osInterface.getConstraintNames()[r] << std::endl;
 		}
 		model->rowLB.push_back(rowLB[r]);
 		model->rowUB.push_back(rowUB[r]);
@@ -141,7 +145,7 @@ void OSDipApp::createModelPart(DecompConstraintSet * model,
 		if (m_appParam.UseNames) {
 			//const char * colName =  m_osInterface.columnName(i);
 			const char * colName =
-					m_osInterface.getConstraintNames()[i].c_str();
+					m_osInterface.getVariableNames()[i].c_str();
 
 			if (colName)
 				model->colNames.push_back(colName);
@@ -353,6 +357,7 @@ void OSDipApp::createModels() {
 					blockVars.clear();
 					for (i = 0; i < nRowsRelax; i++) {
 						rowsRelax[i] = (*vit)->con[i]->idx;
+						
 						if( (*vit)->con[i]->idx >= nRows) throw ErrorClass( "found an invalid row index in OSoL file");
 						
 						m_blocks[ whichBlock].push_back( rowsRelax[i] );
@@ -410,12 +415,18 @@ void OSDipApp::createModels() {
 						UtilPrintVector(modelRelax->activeColumns, m_osLog);
 
 					}
-					createModelPartSparse(modelRelax, nRowsRelax, rowsRelax);
+					//createModelPartSparse(modelRelax, nRowsRelax, rowsRelax);  //does not work for cutting planes
+					createModelPart(modelRelax, nRowsRelax, rowsRelax);
+					modelRelax->fixNonActiveColumns();
 					m_modelR.insert(make_pair(whichBlock + 1, modelRelax));
 					setModelRelax(modelRelax, "relax" + UtilIntToStr(whichBlock),
 							whichBlock);
-					std::cout << std::endl <<  std::endl << std::endl;
-					std::cout << "HERE COMES THE DUPLICATION"  << std::endl;
+					
+					if (m_appParam.LogLevel >= 3) {
+						(*m_osLog) <<  std::endl <<  std::endl;
+						(*m_osLog) << "HERE COMES THE DUPLICATION (WHEN createModelPartSparse USED)" << std::endl;
+					}
+
 					UtilPrintVector( modelRelax->activeColumns, m_osLog); 
 	
 	
@@ -565,7 +576,7 @@ void OSDipApp::createModelMasterOnlys2(vector<int> & masterOnlyCols) {
 		i = *vit;
 
 		//THINK:
-		//  what-if master-only var is integer and bound is not at integer
+		//  what-if master-only var is integer and bound is not at integer?
 
 		DecompConstraintSet * model = new DecompConstraintSet();
 		model->m_masterOnly = true;
@@ -575,7 +586,8 @@ void OSDipApp::createModelMasterOnlys2(vector<int> & masterOnlyCols) {
 		model->m_masterOnlyUB = colUB[i];
 		//std::cout << "MASTER ONLY UB =  " << model->m_masterOnlyUB << std::endl;
 		//0=cont, 1=integer
-		model->m_masterOnlyIsInt = integerVars[i] ? true : false;
+		if(integerVars[i] == '1') model->m_masterOnlyIsInt = true;
+		//model->m_masterOnlyIsInt = integerVars[i] ? true : false;
 		if (m_appParam.ColumnUB < 1.0e15)
 			if (colUB[i] > 1.0e15)
 				model->m_masterOnlyUB = m_appParam.ColumnUB;

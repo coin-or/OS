@@ -70,6 +70,7 @@ public:
 	OSOption *m_osoption;	
 	OSiLReader *m_osilreader;
 	OSoLReader *m_osolreader;
+	char* m_integerVars;
 
 
 	/** @name Helper Methods. */
@@ -231,6 +232,7 @@ public:
 		std::cout << "INSIDE OS DIP INTERFACE DESTRUCTOR" << std::endl;
 		if(m_osilreader != NULL) delete m_osilreader;
 		if(m_osolreader != NULL) delete m_osolreader;
+		if(m_integerVars != NULL) delete m_integerVars;
 	};
 };
 
