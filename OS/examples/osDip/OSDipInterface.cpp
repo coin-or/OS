@@ -40,6 +40,29 @@ void OS_DipInterface::readOSiL(string & fileName){
 		osil = fileUtil->getFileAsString( fileName.c_str() );
 		m_osilreader = new OSiLReader();
 		m_osinstance = m_osilreader->readOSiL( osil);
+		
+		
+		
+		
+	bool columnMajor = false;
+	double maxGap = 0;
+
+	
+	m_coinpm = new CoinPackedMatrix(
+			columnMajor, //Column or Row Major
+			columnMajor? m_osinstance->getConstraintNumber() : m_osinstance->getVariableNumber(), //Minor Dimension
+			columnMajor? m_osinstance->getVariableNumber() : m_osinstance->getConstraintNumber(), //Major Dimension
+			m_osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
+			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->values : 
+				m_osinstance->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
+			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes : 
+				m_osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
+			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : 
+			m_osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
+			0,   0, maxGap );
+				
+		
+		
 	
 		delete fileUtil;
 		fileUtil  = NULL;
@@ -97,31 +120,16 @@ void OS_DipInterface::readOSoL(string & fileName){
 
 CoinPackedMatrix * OS_DipInterface::getCoinPackedMatrix( ){
 	
-	bool columnMajor = false;
-	double maxGap = 0;
-	CoinPackedMatrix *coinpm = NULL;
+
 	
-	coinpm = new CoinPackedMatrix(
-			columnMajor, //Column or Row Major
-			columnMajor? m_osinstance->getConstraintNumber() : m_osinstance->getVariableNumber(), //Minor Dimension
-			columnMajor? m_osinstance->getVariableNumber() : m_osinstance->getConstraintNumber(), //Major Dimension
-			m_osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
-			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->values : 
-				m_osinstance->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
-			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes : 
-				m_osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
-			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : 
-			m_osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
-			0,   0, maxGap );
-	
-	return coinpm;
+	return m_coinpm;
 }//end getCoinPackedMatrix
 
 CoinPackedVector * OS_DipInterface::getRow( int i){
 	
-	 CoinPackedVector *row = NULL;
 	 
-	 row =  new CoinPackedVector();
+	 
+	 m_row =  new CoinPackedVector();
 	 
 
 	 int k;
@@ -132,13 +140,13 @@ CoinPackedVector * OS_DipInterface::getRow( int i){
 	 
 	 for(k = sm->starts[i];  k < sm->starts[i + 1];  k++){
 		 
-		 row->insert(sm->indexes[k], sm->values[k]);
+		 m_row->insert(sm->indexes[k], sm->values[k]);
 		 
 	 }
 	 
 
 	 
-	 return row;
+	 return m_row;
 }//end getRow
 
 const char* OS_DipInterface::getIntegerColumns(){
@@ -198,3 +206,35 @@ double* OS_DipInterface::getObjectiveFunctionCoeff(){
 	
 	return  m_osinstance->getDenseObjectiveCoefficients()[ 0];
 }// end getObjectiveFunctionCoeff()
+
+
+
+	void OS_DipInterface::initMembers(){
+		m_isProvenOptimal =  false;
+		m_bestKnownLB     = -1.e20;
+		m_bestKnownUB     =  1.e20;
+		m_coinpm = NULL;
+		
+
+		
+	}
+
+
+
+	/** Default constructor. */
+	OS_DipInterface::OS_DipInterface(){
+		initMembers();
+	}
+
+	/** Default constructor. Takes an instance of UtilParameters */
+	OS_DipInterface::OS_DipInterface(string & fileName) {
+		initMembers();
+		readOSiL(fileName);
+	}
+
+	OS_DipInterface::~OS_DipInterface() {
+		std::cout << "INSIDE OS DIP INTERFACE DESTRUCTOR" << std::endl;
+		if(m_osilreader != NULL) delete m_osilreader;
+		if(m_osolreader != NULL) delete m_osolreader;
+		delete m_coinpm;
+	}

@@ -71,6 +71,8 @@ public:
 	OSiLReader *m_osilreader;
 	OSoLReader *m_osolreader;
 	char* m_integerVars;
+	CoinPackedMatrix *m_coinpm;
+	CoinPackedVector *m_row ;
 
 
 	/** @name Helper Methods. */
@@ -102,12 +104,7 @@ public:
 	
 
 
-	inline void initMembers(){
-		m_isProvenOptimal =  false;
-		m_bestKnownLB     = -1.e20;
-		m_bestKnownUB     =  1.e20;
-	}
-
+	void initMembers();
 
 	inline const double getBestKnownLB() const {return m_bestKnownLB;}
 	inline const double getBestKnownUB() const {return m_bestKnownUB;}
@@ -217,23 +214,9 @@ public:
 	
 	//end wrapper methods
 
-	/** Default constructor. */
-	OS_DipInterface(){
-		initMembers();
-	};
-
-	/** Default constructor. Takes an instance of UtilParameters */
-	OS_DipInterface(string & fileName) {
-		initMembers();
-		readOSiL(fileName);
-	}
-
-	~OS_DipInterface() {
-		std::cout << "INSIDE OS DIP INTERFACE DESTRUCTOR" << std::endl;
-		if(m_osilreader != NULL) delete m_osilreader;
-		if(m_osolreader != NULL) delete m_osolreader;
-		if(m_integerVars != NULL) delete m_integerVars;
-	};
+	OS_DipInterface(string & fileName);
+	OS_DipInterface();
+	~OS_DipInterface();
 };
 
 #endif

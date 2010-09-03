@@ -49,6 +49,9 @@ public:
 	/** The model constraint systems used for different algos. */
 	DecompConstraintSet *m_modelC;
 	map<int, DecompConstraintSet*> m_modelR;
+	
+	/** The model constraint system used master only vars */
+	map<int, DecompConstraintSet*> m_modelMasterOnly;
 
 	/** Definition of blocks (by rows). */
 	std::map<int, std::vector<int> > m_blocks;
@@ -86,6 +89,7 @@ public:
 		UTIL_DELARR( m_objective);
 		UTIL_DELPTR( m_modelC);
 		UtilDeleteMapPtr( m_modelR);
+		UtilDeleteMapPtr( m_modelMasterOnly);
 	}
 
 };

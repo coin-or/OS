@@ -57,6 +57,8 @@ int main(int argc, char ** argv){
       
       OSDipApp osdip( utilParam); 
       
+      //return 0;
+      
      
       //---
       //--- create the algorithm (a DecompAlgo)
