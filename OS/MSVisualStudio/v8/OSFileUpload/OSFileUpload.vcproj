@@ -2,9 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="OSApplication-fileUpload"
+	Name="OSFileUpload"
 	ProjectGUID="{963AE46B-8C67-4C69-B9DF-5845B65806A9}"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -16,8 +17,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\bin"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -68,7 +69,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile=".\$(ConfigurationName)\OSFileUpload.exe"
+				OutputFile="$(ConfigurationName)\OSFileUpload.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
@@ -96,16 +97,13 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\Release"
-			IntermediateDirectory=".\Release"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\bin"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -157,7 +155,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile=".\$(ConfigurationName)\OSFileUpload.exe"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\bin\OSFileUpload.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateDebugInformation="false"
@@ -184,9 +182,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -273,9 +268,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

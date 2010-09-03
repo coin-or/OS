@@ -6,6 +6,7 @@
 	ProjectGUID="{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}"
 	RootNamespace="libOSCommon"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -17,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\$(ConfigurationName)"
-			IntermediateDirectory=".\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -91,8 +92,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\$(ConfigurationName)"
-			IntermediateDirectory=".\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -143,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile=".\Release\libOSCommon.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -360,86 +361,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath="..\..\..\src\OSUtils\OSDataStructures.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSExpressionTree.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\OSiLParserData.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSiLReader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSiLWriter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSInstance.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSnLNode.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\OSoLParserData.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSoLReader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSoLWriter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSOption.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\OSOptionsStruc.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\OSParseosil.tab.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\OSParseosol.tab.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\OSParseosrl.tab.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSResult.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSParsers\OSrLParserData.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLReader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLWriter.h"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

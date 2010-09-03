@@ -6,6 +6,7 @@
 	ProjectGUID="{C5E6054E-C498-421B-835C-25CAAB7AFB7A}"
 	RootNamespace="OSTest"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -17,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\$(ConfigurationName)"
-			IntermediateDirectory=".\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\bin"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -98,16 +99,13 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\$(ConfigurationName)"
-			IntermediateDirectory=".\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)\bin"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
@@ -158,10 +156,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib libosi.lib libosicbc.lib libosiclp.lib libcbc.lib libclp.lib libcoinutils.lib libvol.lib libosivol.lib libcgl.lib"
-				OutputFile="..\..\..\test\unitTest$(ConfigurationName).exe"
+				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\bin\unitTest.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;..\release"
+				AdditionalLibraryDirectories="..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=".\$(ConfigurationName)\OSTest.pdb"
 				SubSystem="1"
@@ -186,9 +184,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -276,9 +271,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"

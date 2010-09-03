@@ -155,7 +155,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile=".\$(ConfigurationName)\OSFileUpload.exe"
+				OutputFile="$(SolutionDir)$(ConfigurationName)\bin\OSFileUpload.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateDebugInformation="false"
