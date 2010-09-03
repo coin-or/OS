@@ -40,7 +40,6 @@ OS/MSVisualStudio/v8/libOSnl2OSiL/libOSnl2OSiL.vcproj -text
 OS/MSVisualStudio/v9/OS.sln -text
 OS/MSVisualStudio/v9/OSAmplClient/OSamplclient.vcproj -text
 OS/MSVisualStudio/v9/OSAmplClient/OSamplclient.vcproj.GSB.kmartin.user -text
-OS/MSVisualStudio/v9/OSApplication-fileUpload/OSApplication-fileUpload.vcproj -text
 OS/MSVisualStudio/v9/OSExample-algorithmicDiff/OSExample-algorithmicDiff.vcproj -text
 OS/MSVisualStudio/v9/OSExample-instanceGenerator/OSExample-instanceGenerator.vcproj -text
 OS/MSVisualStudio/v9/OSExample-osRemoteTest/OSExample-osRemoteTest.vcproj -text
