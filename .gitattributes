@@ -44,6 +44,7 @@ OS/MSVisualStudio/v9/OSExample-algorithmicDiff/OSExample-algorithmicDiff.vcproj 
 OS/MSVisualStudio/v9/OSExample-instanceGenerator/OSExample-instanceGenerator.vcproj -text
 OS/MSVisualStudio/v9/OSExample-osRemoteTest/OSExample-osRemoteTest.vcproj -text
 OS/MSVisualStudio/v9/OSExample-osTestCode/OSExample-osTestCode.vcproj -text
+OS/MSVisualStudio/v9/OSFileUpload/OSFileUpload.vcproj -text
 OS/MSVisualStudio/v9/OSSolverService/OSSolverService.vcproj -text
 OS/MSVisualStudio/v9/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v9/libOS/libOS.vcproj -text
