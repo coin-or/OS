@@ -19,6 +19,7 @@ EXEDECOMP = osdip@EXEEXT@
 OBJS          = OSDip_Main.@OBJEXT@
 OBJS         += OSDipInterface.@OBJEXT@
 OBJS         += OSDipApp.@OBJEXT@
+OBJS         += OSDipBlockSolver.@OBJEXT@
 
 # CHANGEME: Additional libraries
 ADDLIBS = 

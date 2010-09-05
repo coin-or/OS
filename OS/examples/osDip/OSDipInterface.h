@@ -96,8 +96,9 @@ public:
 	double getObjectiveOffset()	;
 	
 	
-	//get a list of variables that are in ther rows indexed by rowIndexes
-	std::set<int> getVariableMap(std::vector<int> rowIndexes);
+	//get the set of variable indexes for each block in the model
+	//std::vector<std::set<int> > getBlockVarIndexes();
+	
 	
 	//get the objective function coefficients
 	double *getObjectiveFunctionCoeff();

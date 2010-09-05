@@ -180,25 +180,71 @@ double OS_DipInterface::getObjectiveOffset(){
 }// end getObjectiveOffset
 
 
-std::set<int> OS_DipInterface::getVariableMap(std::vector<int> rowIndexes){
-	std::set<int> variableSet;
-	// get a sparse matrix by row
-	SparseMatrix *sm;
-	sm = m_osinstance->getLinearConstraintCoefficientsInRowMajor();	
-    std::vector<int>::iterator vit;
-    int i;
-  
-    for(vit = rowIndexes.begin(); vit != rowIndexes.end(); vit++){
-    	for( i =  sm->starts[*vit]  ; i < sm->starts[*vit + 1]; i++){
-    		// insert int the set any new columns
-			if( variableSet.find( sm->indexes[ i] ) == variableSet.end() ) {
-				variableSet.insert( sm->indexes[ i]);
-			}
-    	}
-	 }	
-    
-	return variableSet;
-} 
+
+
+/*
+std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes(int whichBlock) {
+	
+	//get the variable indexes for each block in the model
+	std::set<int> varSet; //variables indexes in the specific block whichBlock
+	std::vector<std::set<int> > blockVars;
+	
+	try {
+		if (m_osoption == NULL)
+			throw ErrorClass("we have a null osoption");
+	
+		int numVar;
+		int i;
+		std::vector<OtherVariableOption*> otherVariableOptions;
+		std::vector<OtherVariableOption*>::iterator vit;
+
+		
+		if ( m_osoption != NULL && m_osoption->getNumberOfOtherVariableOptions() > 0) {
+
+			otherVariableOptions = m_osoption->getOtherVariableOptions("Dip");
+			//iterate over the vector of contraint options
+			for (vit = otherVariableOptions.begin(); vit
+					!= otherVariableOptions.end(); vit++) {
+
+				// see if we have a set of block variables
+				// if so we insert into our vector of sets
+				varSet.clear();
+				// right now we assume blocks are ordered  -- we ignor value
+				if ( (*vit)->name.compare("variableBlockSet") == 0  ) {
+
+					
+					numVar =  (*vit)->numberOfVar;
+					
+					for (i = 0; i < numVar; i++) {
+						
+						if ((*vit)->var[i]->idx >= m_osinstance->getVariableNumber() )
+							throw ErrorClass(
+									"found an invalid varaible index in OSoL file");
+
+						
+						varSet.insert( (*vit)->var[i]->idx);
+
+
+
+					}//end for on variables in this block
+				}// end of if on whichBlock
+				
+				blockVars.push_back( varSet);
+			}//end for over constraint options
+		}// if on ospton null
+
+	} //end try
+	
+	catch (const ErrorClass& eclass) {
+
+		std::cout << eclass.errormsg << std::endl;
+		throw ErrorClass(eclass.errormsg);
+
+	}
+	return blockVars;
+}//end getBlockVarIndexes
+*/
+
 
 double* OS_DipInterface::getObjectiveFunctionCoeff(){
 	
