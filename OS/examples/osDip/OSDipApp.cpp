@@ -130,7 +130,7 @@ void OSDipApp::createModelPart(DecompConstraintSet * model,
 			//		std::cout << "Row Name = " << m_osInterface.getConstraintNames()[r] << std::endl;
 			if (rowName)
 				model->rowNames.push_back(rowName);
-
+			
 			//std::cout << "Row Name = " << m_osInterface.getConstraintNames()[r] << std::endl;
 		}
 		model->rowLB.push_back(rowLB[r]);
@@ -175,13 +175,14 @@ void OSDipApp::createModelPart(DecompConstraintSet * model,
 	for (i = 0; i < nCols; i++) {
 		if (m_appParam.UseNames == true) {
 			//const char * colName =  m_osInterface.columnName(i);
-			const char * colName = m_osInterface.getVariableNames()[i].c_str();
+			const char * colName =
+					m_osInterface.getVariableNames()[i].c_str();
 
 			if (colName)
 				model->colNames.push_back(colName);
 		}
-
-		if ((integerVars != NULL) && integerVars[i] == '1') {
+		
+		if ( (integerVars != NULL)   && integerVars[i] == '1' ) {
 			//std::cout  << "WE HAVE AN INTEGER VARIABLE " << std::endl;
 			model->integerVars.push_back(i);
 		}
@@ -219,6 +220,10 @@ void OSDipApp::createModelPartSparse(DecompConstraintSet * model,
 
 		model->pushCol(colLB[origIndex], colUB[origIndex],
 				integerVars[origIndex] == '0' ? false : true, origIndex);
+				
+				
+		if(integerVars[origIndex] == 0)  std::cout << "HERE I AM" << std::endl;
+		
 
 		//---
 		//--- big fat hack... we don't deal with dual rays yet,
@@ -315,8 +320,8 @@ void OSDipApp::createModels() {
 	int j;
 	const int nCols = m_osInterface.getVariableNumber();
 	const int nRows = m_osInterface.getConstraintNumber();
-
-	try {
+	
+	try{
 
 		//First the define the objective function over the entire variable space
 		//Create the memory for the objective  function
@@ -326,16 +331,20 @@ void OSDipApp::createModels() {
 			//std::cout << "obj coeff = " << m_objective[i] << std::endl;
 		}
 		setModelObjective( m_objective);
-
+	
 		//---
 		//--- Construct the core matrix.
 		//---
 		int nRowsRelax, nRowsCore;
 		nRowsRelax = 0;
 		nRowsCore = 0;
+  
+	
 
 		std::vector<OtherConstraintOption*> otherConstraintOptions;
 		std::vector<OtherConstraintOption*>::iterator vit;
+		
+		
 
 		//
 		// Now construct the block matrices
@@ -343,7 +352,6 @@ void OSDipApp::createModels() {
 		int *rowsRelax;
 		int whichBlock;
 		DecompConstraintSet *modelRelax = NULL;
-
 
 		std::set<int> blockVars; //variables indexes in the specific block
 		std::set<int> blockVarsAll; //all variable indexes that appear in a block
@@ -355,21 +363,22 @@ void OSDipApp::createModels() {
 		if (m_osInterface.m_osoption != NULL
 				&& m_osInterface.m_osoption->getNumberOfOtherConstraintOptions()
 						> 0) {
-
+	
 			otherConstraintOptions
 					= m_osInterface.m_osoption->getOtherConstraintOptions("Dip");
-
+			
 			//iterate over the vector of contraint options
 			for (vit = otherConstraintOptions.begin(); vit
 					!= otherConstraintOptions.end(); vit++) {
-
+	
 				// see if we have a Core Constraint Set
-
-				if (((*vit)->name.compare("constraintSet") == 0)
-						&& ((*vit)->type.compare("Block") == 0)) {
-
+	
+				if( ( (*vit)->name.compare("constraintSet") == 0)
+						&& ( (*vit)->type.compare("Block") == 0)) {
+					
+					
 					//get the block number
-
+	
 					//ch = new char[(*vit)->value.size() + 1];
 					//ch[(*vit)->value.size()] = 0;
 					//memcpy(ch, (*vit)->value.c_str(), (*vit)->value.size());
@@ -377,70 +386,72 @@ void OSDipApp::createModels() {
 					//delete ch;
 					whichBlock = atoi( (*vit)->value.c_str() );
 			
-
+	
+					
 					// first get the number of constraints in this block
 					nRowsRelax = (*vit)->numberOfCon;
 					rowsRelax = new int[nRowsRelax];
-
+	
 					//now get the variable indexes for just this block
 					//first clear indexes from a previous block
 					blockVars.clear();
 					for (i = 0; i < nRowsRelax; i++) {
 						rowsRelax[i] = (*vit)->con[i]->idx;
-
-						if ((*vit)->con[i]->idx >= nRows)
-							throw ErrorClass(
-									"found an invalid row index in OSoL file");
-
-						m_blocks[whichBlock].push_back(rowsRelax[i]);
-
+						
+						if( (*vit)->con[i]->idx >= nRows) throw ErrorClass( "found an invalid row index in OSoL file");
+						
+						m_blocks[ whichBlock].push_back( rowsRelax[i] );
+						
 						//also add to the set of all rows
-
-						if (blockConAll.find((*vit)->con[i]->idx)
-								== blockConAll.end()) {
-							blockConAll.insert((*vit)->con[i]->idx);
-						}
-
+						
+						if (blockConAll.find(  (*vit)->con[i]->idx ) == blockConAll.end()) {
+							blockConAll.insert(  (*vit)->con[i]->idx );	
+						}					
+						
 						//add the variables for this row to the set blockVars
 						row = m_osInterface.getRow(rowsRelax[i]);
 						rowSize = row->getNumElements();
 						rowVars = row->getIndices();
-
+	
 						for (j = 0; j < rowSize; j++) {
-
+							
 							if (blockVars.find(rowVars[j]) == blockVars.end()) {
-								blockVars.insert(rowVars[j]);
-							}
-
+								blockVars.insert(rowVars[j]);	
+							}	
+							
 						}
-
+						
+						delete row;
+	
 					}//end for or rows in this block
-
+	
 					modelRelax = new DecompConstraintSet();
 					CoinAssertHint(modelRelax, "Error: Out of Memory");
-
+	
+	
+	
 					//create the active columns in this block
 					for (sit = blockVars.begin(); sit != blockVars.end(); sit++) {
-
-						modelRelax->activeColumns.push_back(*sit);
-
+	
+						modelRelax->activeColumns.push_back( *sit);
+						
+						   
 						//insert into the all variables set also, but throw an execption
 						//if already there -- same variable cannot be in more than one block
-
-						if (blockVarsAll.find(*sit) == blockVarsAll.end()) {
-							blockVarsAll.insert(*sit);
-						} else {
-
-							throw ErrorClass("Variable " + UtilIntToStr(*sit)
-									+ " appears in more than one block");
-
+						
+						if (blockVarsAll.find( *sit) == blockVarsAll.end()) {
+							blockVarsAll.insert (*sit);	
+						}else{
+							
+							throw ErrorClass("Variable " + UtilIntToStr(*sit) + " appears in more than one block");
+							
 						}
-
+	
 					}
-
+	
 					//
 					//
-
+	
 					if (m_appParam.LogLevel >= 3) {
 						(*m_osLog) << "Active Columns : " << whichBlock << endl;
 						UtilPrintVector(modelRelax->activeColumns, m_osLog);
@@ -450,97 +461,60 @@ void OSDipApp::createModels() {
 					createModelPart(modelRelax, nRowsRelax, rowsRelax);
 					modelRelax->fixNonActiveColumns();
 					m_modelR.insert(make_pair(whichBlock + 1, modelRelax));
-					setModelRelax(modelRelax, "relax"
-							+ UtilIntToStr(whichBlock), whichBlock);
-
+					setModelRelax(modelRelax, "relax" + UtilIntToStr(whichBlock),
+							whichBlock);
+					
 					if (m_appParam.LogLevel >= 3) {
-						(*m_osLog) << std::endl << std::endl;
-						(*m_osLog)
-								<< "HERE COMES THE DUPLICATION (WHEN createModelPartSparse USED)"
-								<< std::endl;
+						(*m_osLog) <<  std::endl <<  std::endl;
+						(*m_osLog) << "HERE COMES THE DUPLICATION (WHEN createModelPartSparse USED)" << std::endl;
 					}
 
-					UtilPrintVector(modelRelax->activeColumns, m_osLog);
-
+					UtilPrintVector( modelRelax->activeColumns, m_osLog); 
+					
+									
+	 			//free local memory
+	 			UTIL_DELARR( rowsRelax);
+	
+	
 	
 				}
 			}//end for over constraint options
 		}// if on ospton null
-
+	
 		//get the core constraints -- constraints NOT in a block
 		int *rowsCore = NULL;
-
+		
 		int kount = 0;
 		nRowsCore = nRows - blockConAll.size();
-
-		if (nRowsCore <= 0)
-			throw ErrorClass("We need at least one coupling constraint");
-
+		
+		if(nRowsCore <= 0) throw ErrorClass("We need at least one coupling constraint");
+	
 		rowsCore = new int[nRowsCore];
-
-		for (i = 0; i < nRows; i++) {
-
-			if (blockConAll.find(i) == blockConAll.end()) {
-
-				rowsCore[kount++] = i;
-
+			
+		for(i = 0; i < nRows; i++){
+			
+			if (blockConAll.find( i ) == blockConAll.end() ){
+				
+				
+				rowsCore[ kount++] =  i;
+				
+				
+				
 			}
 		}
 
-		if (kount != nRowsCore)
-			throw ErrorClass("There was an error counting coupling constraints");
-
-		/* the old way
-		 if (m_osInterface.m_osoption != NULL
-		 && m_osInterface.m_osoption->getNumberOfOtherConstraintOptions()
-		 > 0) {
-		 std::cout << "Number of other constraint options = "
-		 << m_osInterface.m_osoption->getNumberOfOtherConstraintOptions()
-		 << std::endl;
-		 otherConstraintOptions
-		 = m_osInterface.m_osoption->getOtherConstraintOptions("Dip");
-		 //iterate over the vector
-		 
-		 
-		 for (vit = otherConstraintOptions.begin(); vit
-		 != otherConstraintOptions.end(); vit++) {
-		 
-		 // see if we have a Core Constraint Set
-		 
-		 if (((*vit)->name.compare("constraintSet") == 0)
-		 && ((*vit)->type.compare("Core") == 0)) {
-		 
-		 // get the index of core constraints
-		 // first get the number of core constraints
-		 
-		 
-		 nRowsCore = (*vit)->numberOfCon;
-		 rowsCore = new int[nRowsCore];
-		 
-		 //now get the indexes
-		 
-		 for (i = 0; i < nRowsCore; i++) {
-		 
-		 if( (*vit)->con[i]->idx >= nRows) throw ErrorClass( "found an invalid row index in OSoL file");
-		 
-		 rowsCore[i] = (*vit)->con[i]->idx;
-		 
-		 }
-		 
-		 }
-		 }
-		 }
-		 */
-		//end the old way
-
+		if( kount  !=  nRowsCore) throw ErrorClass("There was an error counting coupling constraints");
+		
+	
 		DecompConstraintSet * modelCore = new DecompConstraintSet();
 		createModelPart(modelCore, nRowsCore, rowsCore);
-
+	
 		setModelCore(modelCore, "core");
 		//---
 		//--- save a pointer so we can delete it later
 		//---
 		m_modelC = modelCore;
+		
 
 		//get the master only variables
 		//modelCore->masterOnlyCols.push_back(i);
@@ -550,32 +524,37 @@ void OSDipApp::createModels() {
 				std::cout << "MASTER ONLY VARIABLE " << i << std::endl;
 			}
 		}
-
+	
 		//---
 		//--- create an extra "empty" block for the master-only vars
 		//---   since I don't know what OSI will do with empty problem
 		//---   we will make column bounds explicity rows
 		//---
-		int nMasterOnlyCols =
-				static_cast<int> (modelCore->masterOnlyCols.size());
+		int nMasterOnlyCols = static_cast<int> (modelCore->masterOnlyCols.size());
 		if (nMasterOnlyCols) {
 			if (m_appParam.LogLevel >= 1)
 				(*m_osLog) << "Create model part Master-Only." << endl;
-
+	
 			createModelMasterOnlys2(modelCore->masterOnlyCols);
-
+	
 		}
-
+		
+		
 		UtilPrintFuncBegin(m_osLog, m_classTag, "printCurrentProblem()",
 				m_appParam.LogLevel, 2);
-
+				
+				
+	 //free local memory
+	 UTIL_DELARR( rowsCore);
+	
+	
 	}//end try
-
-	catch (const ErrorClass& eclass) {
-
-		throw ErrorClass(eclass.errormsg);
-
-	}
+	
+	catch(const ErrorClass& eclass){
+		
+		throw ErrorClass( eclass.errormsg);
+		
+	} 
 
 }// end createModels()
 
@@ -584,7 +563,7 @@ void OSDipApp::createModels() {
 
 void OSDipApp::createModelMasterOnlys2(vector<int> & masterOnlyCols) {
 
-	int nBlocks = static_cast<int> (m_blocks.size());
+	int nBlocks = static_cast<int>(m_blocks.size());
 	const int nCols = m_osInterface.getVariableNumber();
 	const double * colLB = m_osInterface.getColLower();
 	const double * colUB = m_osInterface.getColUpper();
@@ -615,8 +594,7 @@ void OSDipApp::createModelMasterOnlys2(vector<int> & masterOnlyCols) {
 		model->m_masterOnlyUB = colUB[i];
 		//std::cout << "MASTER ONLY UB =  " << model->m_masterOnlyUB << std::endl;
 		//0=cont, 1=integer
-		if (integerVars[i] == '1')
-			model->m_masterOnlyIsInt = true;
+		if(integerVars[i] == '1') model->m_masterOnlyIsInt = true;
 		//model->m_masterOnlyIsInt = integerVars[i] ? true : false;
 		if (m_appParam.ColumnUB < 1.0e15)
 			if (colUB[i] > 1.0e15)
@@ -661,61 +639,59 @@ int OSDipApp::generateInitVars(DecompVarList & initVars) {
 	int whichBlock;
 	DecompVar *var;
 
-	try {
+	try{
 		if (m_osInterface.m_osoption != NULL
-				&& m_osInterface.m_osoption->getNumberOfOtherVariableOptions()
-						> 0) {
+				&& m_osInterface.m_osoption->getNumberOfOtherVariableOptions() > 0) {
 			std::cout << "Number of other variable options = "
 					<< m_osInterface.m_osoption->getNumberOfOtherVariableOptions()
 					<< std::endl;
-			otherVarOptions
-					= m_osInterface.m_osoption->getOtherVariableOptions("Dip");
+			otherVarOptions = m_osInterface.m_osoption->getOtherVariableOptions(
+					"Dip");
 			//iterate over the vector
-
+	
 			for (vit = otherVarOptions.begin(); vit != otherVarOptions.end(); vit++) {
-
+	
 				// see if we have an initialCol option
-
+	
 				if ((*vit)->name.compare("initialCol") == 0) {
-
+	
 					index = new int[(*vit)->numberOfVar];
 					value = new double[(*vit)->numberOfVar];
-
+	
 					objValue = 0.0;
-
+	
 					for (i = 0; i < (*vit)->numberOfVar; i++) {
-
+	
 						index[i] = (*vit)->var[i]->idx;
-
+	
 						//convert the string to integer
 						value[ i] = atoi((*vit)->var[i]->value.c_str());
 						objValue += m_objective[index[i]];
-
+	
 					}
-
-
-					whichBlock = atoi( (*vit)->value.c_str());
-				
-					//std::cout << "value = " << whichBlock << std::endl;
-					//std::cout << "object coefficient =  " << objValue << std::endl;
-					// now add the column
-					var = new DecompVar((*vit)->numberOfVar, index, value,
-							objValue);
+					
+					whichBlock = atoi( (*vit)->value.c_str() );
+					var = new DecompVar((*vit)->numberOfVar, index, value, objValue);
 					var->setBlockId(whichBlock);
 					initVars.push_back(var);
-
+					
+					//free local memory
+	 				UTIL_DELARR( index);
+	 				UTIL_DELARR( value);
+					
+	
 				}
-
+	
 			}
-
+	
 		}
-
+	
 	}//end try
-	catch (const ErrorClass& eclass) {
-
-		throw ErrorClass(eclass.errormsg);
-
-	}
+	catch(const ErrorClass& eclass){
+		
+		throw ErrorClass( eclass.errormsg);
+		
+	} 
 
 	UtilPrintFuncEnd(m_osLog, m_classTag, "generateInitVars()",
 			m_appParam.LogLevel, 2);
