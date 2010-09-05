@@ -54,6 +54,36 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		//--- create models
 		//---
 		createModels();
+		
+		
+		//just temporary playing around
+		
+		std::cout  << std::endl << std::endl << std::endl;
+		
+		std::cout << "VARIABLE TESTING " <<std::endl;
+		
+		std::vector<std::set<int> >  blockVars;
+		std::set<int>::iterator sit;
+		
+		blockVars = m_osInterface.getBlockVarIndexes();
+		
+		for(int i = 0; i < blockVars.size(); i++){
+			
+			std::cout << "INSIDE BLOCK " << i << std::endl;
+			
+			for (sit = blockVars[i].begin(); sit != blockVars[i].end(); sit++) {
+				
+				std::cout << "VARIABLE =  " << *sit << std::endl;
+				
+			}
+		}
+		
+
+		
+
+		
+		
+		
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);

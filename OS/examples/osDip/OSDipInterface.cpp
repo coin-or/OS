@@ -180,10 +180,7 @@ double OS_DipInterface::getObjectiveOffset(){
 }// end getObjectiveOffset
 
 
-
-
-/*
-std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes(int whichBlock) {
+std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes(){
 	
 	//get the variable indexes for each block in the model
 	std::set<int> varSet; //variables indexes in the specific block whichBlock
@@ -206,12 +203,13 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes(int whichBlock) 
 			for (vit = otherVariableOptions.begin(); vit
 					!= otherVariableOptions.end(); vit++) {
 
-				// see if we have a set of block variables
-				// if so we insert into our vector of sets
-				varSet.clear();
+
 				// right now we assume blocks are ordered  -- we ignor value
 				if ( (*vit)->name.compare("variableBlockSet") == 0  ) {
 
+					// see if we have a set of block variables
+					// if so we insert into our vector of sets
+					varSet.clear();
 					
 					numVar =  (*vit)->numberOfVar;
 					
@@ -227,9 +225,11 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes(int whichBlock) 
 
 
 					}//end for on variables in this block
+					
+					blockVars.push_back( varSet);
 				}// end of if on whichBlock
 				
-				blockVars.push_back( varSet);
+			
 			}//end for over constraint options
 		}// if on ospton null
 
@@ -241,9 +241,8 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes(int whichBlock) 
 		throw ErrorClass(eclass.errormsg);
 
 	}
-	return blockVars;
+	return blockVars;	
 }//end getBlockVarIndexes
-*/
 
 
 double* OS_DipInterface::getObjectiveFunctionCoeff(){

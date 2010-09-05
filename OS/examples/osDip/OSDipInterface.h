@@ -43,6 +43,7 @@
 
 #include <map>
 #include <set>
+#include <vector>
 
 //===========================================================================//
 /*!
@@ -97,7 +98,8 @@ public:
 	
 	
 	//get the set of variable indexes for each block in the model
-	//std::vector<std::set<int> > getBlockVarIndexes();
+	std::vector<std::set<int> > getBlockVarIndexes();
+	
 	
 	
 	//get the objective function coefficients
