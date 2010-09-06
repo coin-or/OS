@@ -60,7 +60,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		
 		std::cout  << std::endl << std::endl << std::endl;
 		
-		std::cout << "VARIABLE TESTING " <<std::endl;
+		std::cout << "VARIABLE INDEX TESTING " <<std::endl;
 		
 		std::vector<std::set<int> >  blockVars;
 		std::set<int>::iterator sit;
@@ -77,12 +77,42 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 				
 			}
 		}
+		//now test core constraints
 		
+		
+		
+		std::cout << "CORE CONSTRAINT TESTING " <<std::endl;
+				
+		std::set<int>  conIndexes;
 
+				
+		conIndexes = m_osInterface.getCoreConstraintIndexes();
+				
+					
+		for (sit = conIndexes.begin(); sit != conIndexes.end(); sit++) {
+						
+			std::cout << "CORE INDEX  =  " << *sit << std::endl;
+						
+		}
 		
+		
+		std::cout << "BLOCK CONSTRAINT INDEX TESTING " <<std::endl;
 
+		std::vector<std::set<int> >  blockCons;
+		blockCons = m_osInterface.getBlockConstraintIndexes();
 		
+		for(int i = 0; i < blockCons.size(); i++){
+			
+			std::cout << "INSIDE BLOCK " << i << std::endl;
+			
+			for (sit = blockCons[i].begin(); sit != blockCons[i].end(); sit++) {
+				
+				std::cout << "CONSTRAINT INDEX =  " << *sit << std::endl;
+				
+			}
+		}
 		
+		//m_osInterface.getBlockOSInstances();
 		
 	} catch (const ErrorClass& eclass) {
 

@@ -41,7 +41,7 @@
 #include "CoinHelperFunctions.hpp"
 
 
-#include <map>
+
 #include <set>
 #include <vector>
 
@@ -99,7 +99,16 @@ public:
 	
 	//get the set of variable indexes for each block in the model
 	std::vector<std::set<int> > getBlockVarIndexes();
+		
+	//get the set of core constraint indexes
+	std::set<int>  getCoreConstraintIndexes();
 	
+	//get the set of constraint indexes for each block in the model
+	std::vector<std::set<int> > getBlockConstraintIndexes();
+	
+	//get and osinstance that corresponds to each block in the model
+	std::vector<OSInstance* > getBlockOSInstances();
+	std::vector<OSInstance* > m_blockOSInstances;
 	
 	
 	//get the objective function coefficients
@@ -107,10 +116,10 @@ public:
 	
 
 
-	void initMembers();
+	void initMembers(); // kipp  change this and put in constructor
 
-	inline const double getBestKnownLB() const {return m_bestKnownLB;}
-	inline const double getBestKnownUB() const {return m_bestKnownUB;}
+	inline const double getBestKnownLB() const {return m_bestKnownLB;} //kipp can we get rid of this
+	inline const double getBestKnownUB() const {return m_bestKnownUB;} // kipp can we get rid of this
 
 
 	//some OS wrapper methods
@@ -122,7 +131,6 @@ public:
 	 * @throws Exception if the elements in objectives are logically inconsistent. 
 	 */
 	inline const std::string* getObjectiveMaxOrMins() const {return m_osinstance->getObjectiveMaxOrMins();} 
-
 
 
 	/**

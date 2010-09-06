@@ -6,6 +6,34 @@
 
 	
         <optimization>
+        	
+        	
+        	
+        	<variables numberOfOtherVariableOptions="2">
+
+        		
+        		
+        		
+        		
+        		<other name="variableBlockSet" solver="Dip" numberOfVar="4" >
+        			<var idx="0" />
+        			<var idx="2" />
+        			<var idx="4" />
+        			<var idx="6" />
+
+        		</other>
+        		
+        		<other name="variableBlockSet" solver="Dip" numberOfVar="4" >
+        			<var idx="1" />
+        			<var idx="3" />
+        			<var idx="5" />
+        			<var idx="7" />
+
+        		</other>
+        		
+
+        		
+        	</variables>
 	
         	
         <constraints numberOfOtherConstraintOptions="3">

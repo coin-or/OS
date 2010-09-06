@@ -18,268 +18,501 @@
 //===========================================================================//
 
 
-
-
 #include "OSDipInterface.h"
 #include "UtilMacrosDecomp.h"
- 
-
 
 //===========================================================================//
-void OS_DipInterface::readOSiL(string & fileName){
-	
-	FileUtil *fileUtil = NULL; 
+void OS_DipInterface::readOSiL(string & fileName) {
+
+	FileUtil *fileUtil = NULL;
 	fileUtil = new FileUtil();
 
-
-	
-	try{
-
+	try {
 
 		std::string osil;
-		osil = fileUtil->getFileAsString( fileName.c_str() );
+		osil = fileUtil->getFileAsString(fileName.c_str());
 		m_osilreader = new OSiLReader();
-		m_osinstance = m_osilreader->readOSiL( osil);
-		
-		
-		
-		
-	bool columnMajor = false;
-	double maxGap = 0;
+		m_osinstance = m_osilreader->readOSiL(osil);
 
-	
-	m_coinpm = new CoinPackedMatrix(
-			columnMajor, //Column or Row Major
-			columnMajor? m_osinstance->getConstraintNumber() : m_osinstance->getVariableNumber(), //Minor Dimension
-			columnMajor? m_osinstance->getVariableNumber() : m_osinstance->getConstraintNumber(), //Major Dimension
-			m_osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
-			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->values : 
-				m_osinstance->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
-			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes : 
-				m_osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
-			columnMajor? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : 
-			m_osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
-			0,   0, maxGap );
-				
-		
-		
-	
+		bool columnMajor = false;
+		double maxGap = 0;
+
+		m_coinpm
+				= new CoinPackedMatrix(
+						columnMajor, //Column or Row Major
+						columnMajor ? m_osinstance->getConstraintNumber()
+								: m_osinstance->getVariableNumber(), //Minor Dimension
+						columnMajor ? m_osinstance->getVariableNumber()
+								: m_osinstance->getConstraintNumber(), //Major Dimension
+						m_osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
+						columnMajor ? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->values
+								: m_osinstance->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
+						columnMajor ? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes
+								: m_osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
+						columnMajor ? m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts
+								: m_osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
+						0, 0, maxGap);
+
 		delete fileUtil;
-		fileUtil  = NULL;
+		fileUtil = NULL;
 		//kipp  -- worry about garbage collection here -- do I delete m_osinstance
 		//delete  osilreader;
 		//osilreader = NULL;
-		
-		
-	}
-	catch(const ErrorClass& eclass){
-		std::cout << "PROBLEM READING OSiL File" <<std::endl;
+
+
+	} catch (const ErrorClass& eclass) {
+		std::cout << "PROBLEM READING OSiL File" << std::endl;
 		delete fileUtil;
-		std::cout << eclass.errormsg <<  std::endl;
-		fileUtil  = NULL;
-		throw ErrorClass( eclass.errormsg);
-		
-	} 
-	
-	
+		std::cout << eclass.errormsg << std::endl;
+		fileUtil = NULL;
+		throw ErrorClass(eclass.errormsg);
+
+	}
+
 }//end readOSiL
 
 
 //===========================================================================//
-void OS_DipInterface::readOSoL(string & fileName){
-	
-	FileUtil *fileUtil = NULL; 
-	fileUtil = new FileUtil();	
-	try{
+void OS_DipInterface::readOSoL(string & fileName) {
 
+	FileUtil *fileUtil = NULL;
+	fileUtil = new FileUtil();
+	try {
 
 		std::string osol;
-		osol = fileUtil->getFileAsString( fileName.c_str() );
+		osol = fileUtil->getFileAsString(fileName.c_str());
 		m_osolreader = new OSoLReader();
-		m_osoption = m_osolreader->readOSoL( osol);
-	
+		m_osoption = m_osolreader->readOSoL(osol);
+
 		delete fileUtil;
-		fileUtil  = NULL;
+		fileUtil = NULL;
 		//kipp  -- worry about garbage collection here -- do I delete m_osinstance
 		//delete  osilreader;
 		//osilreader = NULL;
-		
-		
-	}
-	catch(const ErrorClass& eclass){
-		std::cout << "Problem reading OSoL File" <<std::endl;
+
+
+	} catch (const ErrorClass& eclass) {
+		std::cout << "Problem reading OSoL File" << std::endl;
 		delete fileUtil;
-		std::cout << eclass.errormsg <<  std::endl;
-		fileUtil  = NULL;
-		throw ErrorClass( eclass.errormsg);
-		
-	} 
-	
-	
+		std::cout << eclass.errormsg << std::endl;
+		fileUtil = NULL;
+		throw ErrorClass(eclass.errormsg);
+
+	}
+
 }// end readOSoL
 
-CoinPackedMatrix * OS_DipInterface::getCoinPackedMatrix( ){
-	
+CoinPackedMatrix * OS_DipInterface::getCoinPackedMatrix() {
 
-	
 	return m_coinpm;
 }//end getCoinPackedMatrix
 
-CoinPackedVector * OS_DipInterface::getRow( int i){
-	
-	 
-	 
-	 m_row =  new CoinPackedVector();
-	 
+CoinPackedVector * OS_DipInterface::getRow(int i) {
 
-	 int k;
-	 
-	 SparseMatrix* sm;
-	 
-	 sm = m_osinstance->getLinearConstraintCoefficientsInRowMajor();
-	 
-	 for(k = sm->starts[i];  k < sm->starts[i + 1];  k++){
-		 
-		 m_row->insert(sm->indexes[k], sm->values[k]);
-		 
-	 }
-	 
+	m_row = new CoinPackedVector();
 
-	 
-	 return m_row;
+	int k;
+
+	SparseMatrix* sm;
+
+	sm = m_osinstance->getLinearConstraintCoefficientsInRowMajor();
+
+	for (k = sm->starts[i]; k < sm->starts[i + 1]; k++) {
+
+		m_row->insert(sm->indexes[k], sm->values[k]);
+
+	}
+
+	return m_row;
 }//end getRow
 
-const char* OS_DipInterface::getIntegerColumns(){
-	
+const char* OS_DipInterface::getIntegerColumns() {
+
 	int numVars = getVariableNumber();
-	m_integerVars = new char[ numVars];
+	m_integerVars = new char[numVars];
 	int i;
-	
-	for(i  = 0; i < numVars;  i++){
-		
-		if( m_osinstance->getVariableTypes()[ i] == 'B' || m_osinstance->getVariableTypes()[i] == 'I') m_integerVars[i] = '1';
-		else m_integerVars[i] = '0';
-		
-		
+
+	for (i = 0; i < numVars; i++) {
+
+		if (m_osinstance->getVariableTypes()[i] == 'B'
+				|| m_osinstance->getVariableTypes()[i] == 'I')
+			m_integerVars[i] = '1';
+		else
+			m_integerVars[i] = '0';
+
 	}
 	return m_integerVars;
-	
+
 }// end getIntegerColumns
 
 
-double OS_DipInterface::getObjectiveOffset(){
-	
+double OS_DipInterface::getObjectiveOffset() {
+
 	double offset = 0;
 	//assume only one objective function for now
-	
-	if(getObjectiveConstants() != NULL){
+
+	if (getObjectiveConstants() != NULL) {
 		offset = getObjectiveConstants()[0];
 	}
-	
+
 	return offset;
 }// end getObjectiveOffset
 
 
-std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes(){
-	
+std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes() {
+
 	//get the variable indexes for each block in the model
-	std::set<int> varSet; //variables indexes in the specific block whichBlock
-	std::vector<std::set<int> > blockVars;
-	
+	std::set<int> varSet; //variables indexes in a specific block
+	std::vector<std::set<int> > blockVariableIndexes;
+
 	try {
 		if (m_osoption == NULL)
 			throw ErrorClass("we have a null osoption");
-	
+
 		int numVar;
 		int i;
 		std::vector<OtherVariableOption*> otherVariableOptions;
 		std::vector<OtherVariableOption*>::iterator vit;
 
-		
-		if ( m_osoption != NULL && m_osoption->getNumberOfOtherVariableOptions() > 0) {
+		if (m_osoption != NULL && m_osoption->getNumberOfOtherVariableOptions()
+				> 0) {
 
 			otherVariableOptions = m_osoption->getOtherVariableOptions("Dip");
-			//iterate over the vector of contraint options
+			//iterate over the vector of variable options
 			for (vit = otherVariableOptions.begin(); vit
 					!= otherVariableOptions.end(); vit++) {
 
-
 				// right now we assume blocks are ordered  -- we ignor value
-				if ( (*vit)->name.compare("variableBlockSet") == 0  ) {
+				if ((*vit)->name.compare("variableBlockSet") == 0) {
 
 					// see if we have a set of block variables
 					// if so we insert into our vector of sets
 					varSet.clear();
-					
-					numVar =  (*vit)->numberOfVar;
-					
+
+					numVar = (*vit)->numberOfVar;
+
 					for (i = 0; i < numVar; i++) {
-						
-						if ((*vit)->var[i]->idx >= m_osinstance->getVariableNumber() )
+
+						if ((*vit)->var[i]->idx
+								>= m_osinstance->getVariableNumber())
 							throw ErrorClass(
 									"found an invalid varaible index in OSoL file");
 
-						
-						varSet.insert( (*vit)->var[i]->idx);
-
-
+						varSet.insert((*vit)->var[i]->idx);
 
 					}//end for on variables in this block
-					
-					blockVars.push_back( varSet);
-				}// end of if on whichBlock
-				
-			
+
+					blockVariableIndexes.push_back(varSet);
+				}// end of if 
+
+
 			}//end for over constraint options
 		}// if on ospton null
+		
+		
+		if (blockVariableIndexes.size() <= 0 )
+			throw ErrorClass("someting wrong -- no variables in the blocks");
 
 	} //end try
-	
+
 	catch (const ErrorClass& eclass) {
 
 		std::cout << eclass.errormsg << std::endl;
 		throw ErrorClass(eclass.errormsg);
 
 	}
-	return blockVars;	
+	return blockVariableIndexes;
 }//end getBlockVarIndexes
 
 
-double* OS_DipInterface::getObjectiveFunctionCoeff(){
+
+
+std::vector<std::set<int> > OS_DipInterface::getBlockConstraintIndexes() {
+
+	//get the variable indexes for each block in the model
+	std::set<int> conSet; //constraint indexes in a specific block
+	std::set<int> varSet; //constraint indexes in a specific block
+	std::vector<std::set<int> > blockConstraintIndexes;
+	std::set<int> coreConstraintIndexes;
+	std::vector<std::set<int> > blockVariableIndexes;
 	
+	int *starts = NULL;
+	int *indexes = NULL;
+
+	try {
+		
+		// first get the block variable indexes, these are necessary
+		blockVariableIndexes = getBlockVarIndexes();
+		// get the core constraint indexes
+		coreConstraintIndexes = getCoreConstraintIndexes();
+		
+		if (blockVariableIndexes.size() <= 0 )
+			throw ErrorClass("someting wrong -- no variables in the blocks");
+
+
+
+		std::vector<std::set<int> >::iterator vit;
+		std::set<int>::iterator sit;
+		int i;
+
+		for (vit = blockVariableIndexes.begin(); vit
+				!= blockVariableIndexes.end(); vit++) {
+			
+			varSet.clear();
+			conSet.clear();
+			
+			varSet = *vit;
+			//now get the nonzeros for the variables in
+			//varSet and see which nonzeros are in non-core
+			//constraints
+			for (sit = varSet.begin(); sit != varSet.end(); sit++) {
+			
+				starts = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts;
+				indexes = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes;	
+				
+				for(i = starts[*sit]; i < starts[*sit + 1]; i++){
+				
+					//add the row index if not in a core constraint
+					
+					if (coreConstraintIndexes.find( indexes[ i])  == coreConstraintIndexes.end()) {
+						conSet.insert(  indexes[ i] );	
+					}	
+				}		
+			}
+
+			blockConstraintIndexes.push_back( conSet);
+			
+		}//end for iterator
+
+
+	} //end try
+
+	catch (const ErrorClass& eclass) {
+
+		std::cout << eclass.errormsg << std::endl;
+		throw ErrorClass(eclass.errormsg);
+
+	}
+	return blockConstraintIndexes;
+}//end getBlockConstraintIndexes
+
+
+std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
+	//get the OSInstance for each block
+	
+	
+	std::set<int> conSet; //constraint indexes in a specific block
+	std::set<int> varSet; //constraint indexes in a specific block
+	std::vector<std::set<int> > blockConstraintIndexes;
+	std::set<int> coreConstraintIndexes;
+	std::vector<std::set<int> > blockVariableIndexes;
+	
+	
+	int *starts = NULL;
+	int *indexes = NULL;
+	double *values = NULL;
+	
+	OSInstance *osinstance;
+	std::vector<std::set<int> >::iterator vit;
+	std::set<int>::iterator sit;
+	int i;
+	
+	//variable stuff
+	int numberVar;
+	std::string* varNames;
+	char* varTypes;
+	double* varLowerBounds;
+	double* varUpperBounds;
+	
+	//constraint stuff
+	int numberCon;
+	std::string* conNames;
+	double* conLowerBounds;
+	double* conUpperBounds;
+
+	try {
+		
+		// first get the block variable indexes, these are necessary
+		blockVariableIndexes = getBlockVarIndexes();
+		// get the core constraint indexes
+
+		coreConstraintIndexes = getCoreConstraintIndexes();
+		// get the block constraint indexes
+		
+		blockConstraintIndexes = getBlockConstraintIndexes();
+		
+
+		
+		if (blockVariableIndexes.size() <= 0 )
+			throw ErrorClass("someting wrong in getBlockOSInstances() -- no variables in the blocks");
+	
+		//
+		//loop over each block
+		//
+		for (vit = blockVariableIndexes.begin(); vit
+				!= blockVariableIndexes.end(); vit++) {
+			
+			osinstance = new OSInstance();
+			//define variable arrays
+			numberVar = (*vit).size();
+			varTypes = new char[ numberVar];
+			varLowerBounds = new double[ numberVar];
+			varUpperBounds = new double[ numberVar];
+			
+			varSet.clear();
+			conSet.clear();
+						
+			varSet = *vit;
+			//now get the nonzeros for the variables in
+			//varSet and see which nonzeros are in non-core
+			//constraints
+			for (sit = varSet.begin(); sit != varSet.end(); sit++) {
+			
+				//starts = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts;
+				//indexes = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes;	
+				
+				//for(i = starts[*sit]; i < starts[*sit + 1]; i++){
+				
+					//add the row index if not in a core constraint
+					
+					//if (coreConstraintIndexes.find( indexes[ i])  == coreConstraintIndexes.end()) {
+					//	conSet.insert(  indexes[ i] );	
+					//}	
+				//}
+				
+
+				
+			}//end of loop over the variables in this block
+
+			std::cout  << "CALL setVariable() " << std::endl;
+			osinstance->setVariableNumber( numberVar);
+			osinstance->setVariables( numberVar, varNames, varLowerBounds, varUpperBounds, varTypes);
+			std::cout  << "END CALL setVariable() " << std::endl;
+			m_blockOSInstances.push_back( osinstance);
+			
+		}//end for iterator for the blocks
+
+
+	} //end try
+
+	catch (const ErrorClass& eclass) {
+
+		std::cout << eclass.errormsg << std::endl;
+		throw ErrorClass(eclass.errormsg);
+
+	}
+	return m_blockOSInstances;
+	
+	
+}//end getBlockOSInstances()
+
+std::set<int> OS_DipInterface::getCoreConstraintIndexes() {
+
+	//get the indexes of the core constraints
+	std::set<int> coreConstraintIndexes; //constraint indexes in the core
+
+
+	try {
+		if (m_osoption == NULL)
+			throw ErrorClass("we have a null osoption");
+
+		int numCoreCon;
+		int i;
+		std::vector<OtherConstraintOption*> otherConstraintOptions;
+		std::vector<OtherConstraintOption*>::iterator vit;
+
+		if (m_osoption != NULL
+				&& m_osoption->getNumberOfOtherConstraintOptions() > 0) {
+
+			otherConstraintOptions = m_osoption->getOtherConstraintOptions(
+					"Dip");
+			//iterate over the vector of contraint options
+			for (vit = otherConstraintOptions.begin(); vit
+					!= otherConstraintOptions.end(); vit++) {
+
+				// get the core constraints
+				// get the indexes of these constraints
+				if (((*vit)->name.compare("constraintSet") == 0)
+						&& ((*vit)->type.compare("Core") == 0)) {
+
+					numCoreCon = (*vit)->numberOfCon;
+
+					for (i = 0; i < numCoreCon; i++) {
+
+						if ((*vit)->con[i]->idx
+								>= m_osinstance->getConstraintNumber())
+							throw ErrorClass(
+									"found an invalid constraint index in OSoL file");
+
+						coreConstraintIndexes.insert((*vit)->con[i]->idx);
+
+					}//end for on variables in this block
+
+				}//end iff on core constraints
+
+
+			}// end of for on constraint options
+
+
+		}//end of if on osptio null
+
+		if(coreConstraintIndexes.size() <= 0)throw ErrorClass("there were no core constraints listed in the option file");
+	}// end of try
+
+
+	catch (const ErrorClass& eclass) {
+
+		std::cout << eclass.errormsg << std::endl;
+		throw ErrorClass(eclass.errormsg);
+
+	}
+	return coreConstraintIndexes;
+
+}//end getCoreConstraintIndexes
+
+
+double* OS_DipInterface::getObjectiveFunctionCoeff() {
+
 	//Dip has only one objective function 
-	
-	return  m_osinstance->getDenseObjectiveCoefficients()[ 0];
+
+	return m_osinstance->getDenseObjectiveCoefficients()[0];
 }// end getObjectiveFunctionCoeff()
 
 
+void OS_DipInterface::initMembers() {
+	m_isProvenOptimal = false;
+	m_bestKnownLB = -1.e20;
+	m_bestKnownUB = 1.e20;
+	m_coinpm = NULL;
 
-	void OS_DipInterface::initMembers(){
-		m_isProvenOptimal =  false;
-		m_bestKnownLB     = -1.e20;
-		m_bestKnownUB     =  1.e20;
-		m_coinpm = NULL;
+}
+
+/** Default constructor. */
+OS_DipInterface::OS_DipInterface() {
+	initMembers();
+}
+
+/** Default constructor. Takes an instance of UtilParameters */
+OS_DipInterface::OS_DipInterface(string & fileName) {
+	initMembers();
+	readOSiL(fileName);
+}
+
+OS_DipInterface::~OS_DipInterface() {
+	std::cout << "INSIDE OS DIP INTERFACE DESTRUCTOR" << std::endl;
+	if (m_osilreader != NULL)
+		delete m_osilreader;
+	if (m_osolreader != NULL)
+		delete m_osolreader;
+	delete m_coinpm;
+	
+	std::vector<OSInstance* >::iterator vit;
+	
+	if(m_blockOSInstances.size()  > 0 ){
+		for (vit =  m_blockOSInstances.begin(); vit
+			!=  m_blockOSInstances.end(); vit++) {
 		
-
-		
+			delete *vit;
+		}
 	}
-
-
-
-	/** Default constructor. */
-	OS_DipInterface::OS_DipInterface(){
-		initMembers();
-	}
-
-	/** Default constructor. Takes an instance of UtilParameters */
-	OS_DipInterface::OS_DipInterface(string & fileName) {
-		initMembers();
-		readOSiL(fileName);
-	}
-
-	OS_DipInterface::~OS_DipInterface() {
-		std::cout << "INSIDE OS DIP INTERFACE DESTRUCTOR" << std::endl;
-		if(m_osilreader != NULL) delete m_osilreader;
-		if(m_osolreader != NULL) delete m_osolreader;
-		delete m_coinpm;
-	}
+}

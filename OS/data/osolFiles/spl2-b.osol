@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
 	<general> 
-		<instanceName>spl1 -- setup constraints are the blocks</instanceName>
+		<instanceName>spl2 -- setup constraints are the core</instanceName>
 	</general>
 
 	
         <optimization>
+        	
+        	
+        	
+        	<variables numberOfOtherVariableOptions="3">
+        		
+        		
+        		
+        		
+        		<other name="variableBlockSet" solver="Dip" numberOfVar="3" >
+        			<var idx="0" />
+        			<var idx="3" />
+        			<var idx="6" />
+        		
+        		</other>
+        		
+        		<other name="variableBlockSet" solver="Dip" numberOfVar="3" >
+        			<var idx="1" />
+        			<var idx="4" />
+        			<var idx="7" />
+        		
+        			
+        		</other>
+        		
+        		<other name="variableBlockSet" solver="Dip" numberOfVar="3" >
+        			<var idx="2" />
+        			<var idx="5" />
+        			<var idx="8" />
+        		
+        			
+        		</other>
+        		
+        		
+        	</variables>       	
+        	
+        	
 	
         	
         <constraints numberOfOtherConstraintOptions="4">
