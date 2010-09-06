@@ -316,13 +316,14 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 	std::vector<std::set<int> >::iterator vit;
 	std::set<int>::iterator sit;
 	int i;
+	int kount;
 	
 	//variable stuff
 	int numberVar;
-	std::string* varNames;
-	char* varTypes;
-	double* varLowerBounds;
-	double* varUpperBounds;
+	std::string* varNames = NULL;
+	char* varTypes = NULL;
+	double* varLowerBounds = NULL;
+	double* varUpperBounds = NULL;
 	
 	//constraint stuff
 	int numberCon;
@@ -352,22 +353,35 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 		for (vit = blockVariableIndexes.begin(); vit
 				!= blockVariableIndexes.end(); vit++) {
 			
+			varSet.clear();
+			conSet.clear();
+			varSet = *vit;
+			
 			osinstance = new OSInstance();
 			//define variable arrays
-			numberVar = (*vit).size();
+			numberVar = varSet.size();
 			varTypes = new char[ numberVar];
 			varLowerBounds = new double[ numberVar];
 			varUpperBounds = new double[ numberVar];
 			
-			varSet.clear();
-			conSet.clear();
+
 						
-			varSet = *vit;
+
 			//now get the nonzeros for the variables in
 			//varSet and see which nonzeros are in non-core
 			//constraints
+			kount = 0;
+
+			osinstance->setVariableNumber( numberVar);
+
 			for (sit = varSet.begin(); sit != varSet.end(); sit++) {
-			
+				
+				
+				varTypes[ kount] = m_osinstance->getVariableTypes()[ *sit];
+				varLowerBounds[ kount] = m_osinstance->getVariableLowerBounds()[ *sit];
+				varUpperBounds[ kount] = m_osinstance->getVariableUpperBounds()[ *sit];
+				
+
 				//starts = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts;
 				//indexes = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes;	
 				
@@ -380,15 +394,21 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 					//}	
 				//}
 				
-
+				kount++;
 				
 			}//end of loop over the variables in this block
 
-			std::cout  << "CALL setVariable() " << std::endl;
-			osinstance->setVariableNumber( numberVar);
 			osinstance->setVariables( numberVar, varNames, varLowerBounds, varUpperBounds, varTypes);
-			std::cout  << "END CALL setVariable() " << std::endl;
+			
+			// now the objective function
+			
+			
+			
 			m_blockOSInstances.push_back( osinstance);
+			
+			delete []varLowerBounds;
+			delete []varUpperBounds;
+			delete []varTypes;
 			
 		}//end for iterator for the blocks
 

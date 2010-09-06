@@ -112,7 +112,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 			}
 		}
 		
-		//m_osInterface.getBlockOSInstances();
+		m_osInterface.getBlockOSInstances();
 		
 	} catch (const ErrorClass& eclass) {
 
