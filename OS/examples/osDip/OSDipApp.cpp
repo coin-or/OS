@@ -487,9 +487,9 @@ void OSDipApp::createModels() {
 						UtilPrintVector(modelRelax->activeColumns, m_osLog);
 
 					}
-					//createModelPartSparse(modelRelax, nRowsRelax, rowsRelax);  //does not work for cutting planes
-					createModelPart(modelRelax, nRowsRelax, rowsRelax);
-					modelRelax->fixNonActiveColumns();
+					createModelPartSparse(modelRelax, nRowsRelax, rowsRelax);  //does not work for cutting planes
+					//createModelPart(modelRelax, nRowsRelax, rowsRelax);
+					//modelRelax->fixNonActiveColumns();
 					m_modelR.insert(make_pair(whichBlock + 1, modelRelax));
 					setModelRelax(modelRelax, "relax" + UtilIntToStr(whichBlock),
 							whichBlock);

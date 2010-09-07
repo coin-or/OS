@@ -373,6 +373,11 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 			kount = 0;
 
 			osinstance->setVariableNumber( numberVar);
+			
+			
+			SparseVector *objcoeff;
+			objcoeff = new SparseVector( numberVar);   
+
 
 			for (sit = varSet.begin(); sit != varSet.end(); sit++) {
 				
@@ -380,6 +385,9 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 				varTypes[ kount] = m_osinstance->getVariableTypes()[ *sit];
 				varLowerBounds[ kount] = m_osinstance->getVariableLowerBounds()[ *sit];
 				varUpperBounds[ kount] = m_osinstance->getVariableUpperBounds()[ *sit];
+				
+				objcoeff->indexes[ kount] = kount;
+				objcoeff->values[ kount] = 0.0;
 				
 
 				//starts = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts;
@@ -401,11 +409,20 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 			osinstance->setVariables( numberVar, varNames, varLowerBounds, varUpperBounds, varTypes);
 			
 			// now the objective function
+			osinstance->setObjectiveNumber( 1);
+			// now the coefficient
+			osinstance->addObjective(-1, "objfunction", m_osinstance->getObjectiveMaxOrMins()[ 0], 
+					0.0, 1.0, objcoeff);
 			
 			
+			//now the constraints
 			
+			
+			//add the osinstance
 			m_blockOSInstances.push_back( osinstance);
 			
+			objcoeff->bDeleteArrays = true;
+			delete objcoeff;		
 			delete []varLowerBounds;
 			delete []varUpperBounds;
 			delete []varTypes;
