@@ -78,7 +78,9 @@ endif
 
 
 
-
+# Directory with the libraries
+INSTALLIBDIR = @libdir@
+exec_prefix = @exec_prefix@
 #===========================================================================#
 # directory with COIN header files
 
@@ -218,7 +220,7 @@ LIBS += -L$(OSLIBDIR) -lOS
 ###########################################################################
 # define COIN libs
 ###########################################################################
-LIBS += -L$(COINLIBDIR) -lCgl -lOsi -lCoinUtils \
+LIBS += -L$(COINLIBDIR) -lCgl -lOsi  \
 	`cat @CGLOBJDIR@/cgl_addlibs.txt` \
 	`cat @OSIOBJDIR@/osi_addlibs.txt` \
 	`cat @COINUTILSOBJDIR@/coinutils_addlibs.txt`
@@ -226,14 +228,14 @@ LIBS += -L$(COINLIBDIR) -lCgl -lOsi -lCoinUtils \
 LIBS += -lOsiClp -lClp -lCoinUtils `cat @CLPOBJDIR@/clp_addlibs.txt`
 
 
-@COIN_HAS_SYMPHONY_TRUE@LIBS += @osisymphonylib@
-@COIN_HAS_DYLP_TRUE@LIBS += @osidylplib@
-@COIN_HAS_VOL_TRUE@LIBS += @osivollib@ 
-@COIN_HAS_GLPK_TRUE@LIBS += @osiglpklib@ 
-@COIN_HAS_SYMPHONY_TRUE@LIBS += @symphonylib@
-@COIN_HAS_DYLP_TRUE@LIBS += @dylplib@ 
-@COIN_HAS_VOL_TRUE@LIBS += @vollib@
-
+@COIN_HAS_SYMPHONY_TRUE@LIBS += -L$(COINLIBDIR) @osisymphonylib@
+@COIN_HAS_DYLP_TRUE@LIBS += -L$(COINLIBDIR) @osidylplib@
+@COIN_HAS_VOL_TRUE@LIBS += -L$(COINLIBDIR) @osivollib@ 
+@COIN_HAS_GLPK_TRUE@LIBS += -L$(COINLIBDIR) @osiglpklib@ 
+@COIN_HAS_SYMPHONY_TRUE@LIBS += -L$(COINLIBDIR) @symphonylib@
+@COIN_HAS_DYLP_TRUE@LIBS += -L$(COINLIBDIR) @dylplib@ 
+@COIN_HAS_VOL_TRUE@LIBS += -L$(COINLIBDIR) @vollib@
+LIBS += -L$(COINLIBDIR) -lCoinUtils
 
 #===========================================================================#
 # The following is necessary under cygwin, if native compilers are used
