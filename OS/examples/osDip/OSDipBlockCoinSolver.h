@@ -24,6 +24,8 @@
 #include "OSDataStructures.h"
 #include "OSDefaultSolver.h" 
 #include "OSCoinSolver.h"
+#include "OSResult.h"
+#include "OSrLReader.h"
 
 // --------------------------------------------------------------------- //
 /*!
@@ -39,9 +41,10 @@ public:
 	
 
 	OSInstance *m_osinstance;
-	
+	OSResult *m_osresult;
+	OSrLReader *m_osrlreader;
 	// first declare a generic solver
-	DefaultSolver *m_solver ;
+	CoinSolver *m_solver ;
 	
 	/**
 	 * <p>
@@ -61,6 +64,13 @@ public:
 	 * Default Constructor. 
 	 */	
 	OSDipBlockCoinSolver();
+	
+	
+	/**
+	 *
+	 * Create the solver with the instance. 
+	 */	
+	OSDipBlockCoinSolver( OSInstance *osinstance);
 	
 	/**
 	 *
