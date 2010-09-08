@@ -335,3 +335,160 @@ X41 + X42 =    1
 \end{verbatim}
 
 \end{document}
+
+configure - using command line or configure file
+
+for example on lehigh machines that have cplex, my config file is:
+
+
+
+# COIN config.site file for common autotools settings
+#enable_debug=yes
+
+#use CPLEX
+with_lp_solver=cplex
+with_ip_solver=cplex
+
+#location of CPLEX
+with_cplex_incdir="/usr/local/cplex/include/ilcplex"
+with_cplex_lib="-L/usr/local/cplex/lib/x86-64_debian4.0_4.1/static_pic -lcplex -lpthread"
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+
+Matt sept 7
+
+
+CC'ing DIP list.
+
+
+I ran the GAP example for  VERSION1. Got it to run with no problem. Very useful. I was hoping you could clarify the folloiwng.
+
+1) It looks like the only place where the blocks get defined are in 235-238:
+
+for(i = 0; i < nMachines; i++){
+modelName = "KP" + UtilIntToStr(i);
+setModelRelax(NULL, modelName, i);
+}
+
+It looks like you are NOT creating a DecompConstraintSet for each block and you
+are NOT specifying the variables that go into the blocks. Is this correct? You
+simply tell the master how many blocks there are with setModelRelax().
+
+
+That is correct. There is no "explicit" polyhedron in this example. It is
+implicitly defined by the oracle (solveRelaxed).
+
+
+
+
+
+
+2) In the solveRelaxed() method, I assume that the redCostX array contains a
+reduced cost FOR EVERY variable. Is this true? I guess it must be since I have
+not told the master which variables are in which block.  Of course I see the line
+
+const double   * redCostXB   = redCostX + getOffsetI(whichBlock);
+
+which implies maybe redCostX is only the variables for whichBlock? But then I
+have not specified the variables in whichBlock. I am confused here and this seems
+like a key point.
+
+
+redCostX is, in fact, for every variable. You will also notice in the arguments
+the "whichBlock" that tells you which block you are suppose to solve in that
+call. The redCostXB defines the starting point for the reduced costs for block
+`whichBlock`. It uses the user-defined 'getOffsetI' function. Since this is a
+user-defined oracle, they are responsible for keeping track of which variables
+correspond to which blocks. The framework doesn't really need to know that -
+since the polyhedron is defined implicitly.
+
+
+
+
+3) This question is related to 2). What if I define "master only" variables.  Do
+the "master only" variables reduced cost get included in redCostX in
+solveRelaxed()? If you are not telling the master which variables go into which
+block, then I guess the concept of "master only" variables is not really needed
+or is moot. Correct? Just pass all variable to solveRelaxed(). In my case I do
+have variables that appear only in the master. Should I declare these?
+
+
+Yes, master-only would be included in redCostX and as a user you would want to
+ignore them. Each master-only is considered its own block and is dealt with
+internally. I guess I should add an example that shows implicit polyhdreon and
+master-only variables? Is that the case you have? If so, I can work on that soon.
+Yes, you should delcare them and explicitly state them as master-only.
+
+
+
+
+
+
+4) This is related to 3). If indeed, redCostX is the vector of all variables then
+I suppose I could easily do what I wrote you about earlier this  summer, namely
+solve the blocks in parallel. That is I could take redCostX and in my own code,
+in parallel solve a problem for each block and then when each solveRelaxed() is
+called in turn, give it the solution from my parallel solve. Does this make
+sense?
+
+
+Not yet. Two issues there. (1) the logic by default is to loop over all blocks
+and call the solveRelaxed for each value of whichBlock. So, if you solved all in
+parallel, you'd get too many. You, could, of course, just solve the "first one"
+for all and then skip the rest. But, that is an ugly hack. (2) The argument
+convexDual is the dual associated with the convexity constraint for `whichBlock`.
+To do what you want, you really need all the duals for the convexity constraint.
+Again, you could "get this" by grabbing the full dual vector from the master LP
+and parsing it yourself - but that gets tricky when you add in cut and branch
+constraints to the master -- the accounting is tricky.
+
+The better approach is for me to provide you an API for doing what you want. I
+have not got around to that yet: https://projects.coin-or.org/Dip/ticket/30
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+Master-only variables need to be dealt with special. Because of the design of
+DIP, it relies on a mapping between the compact and extended space. If there are
+no master-only vars, this is clearly just x=sum{b} sum{s} lambda^b_s s, where s
+is a vector in projected space of x (for each block).
+
+With master-only vars, this only works if you "put these vars" in another block
+(or blocks). Experience shows that putting them all in one block and treating it
+like another subproblem performs poorly. Since they are unconstrained in the
+subproblems, they are all independent and the most efficient thing to do is to
+treat each as its own block -- with really only 2 choices - set it at its UB or
+LB. All of this can be done efficiently if I know which ones are master-only
+vars.
+
+Yes, the user defines all the vars in the core. But, without knowing which are in
+the blocks, I don't know which are "master-only".
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+But for each block, convexDual affects the value of the reduced cost, but it has
+no effect on which column I choose. The convexDual does not affect the subproblem
+solution, only the solution value. Therefore, in the first call to solveRelaxed
+(whichBlock = 1) I can use redCostX for all the variables and simultaneously find
+the best column for each subproblem. Then when the other subproblems are called
+(whichBlock >1) I simply take the column from the first call (do not solve again)
+and return it. The convexDual did not affect that solution. Hope I  am making
+sense here.
+
+
+
+Yep. You are correct, convexDual does not effect the pricing. It only effects the
+"check" for negative RC (if you choose to do that as a user - you don't need to
+actually) and, the constructor for a DecompVar. The latter could be redesigned so
+the user doesn't need to provide it and the internal adjusts it for you. Either
+one, a change (or addition) in the API would make this cleaner. I will think
+about this and get back to you.
+

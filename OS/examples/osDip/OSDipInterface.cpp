@@ -227,17 +227,17 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes() {
 
 
 
-std::vector<std::set<int> > OS_DipInterface::getBlockConstraintIndexes() {
+std::vector<std::map<int, int> > OS_DipInterface::getBlockConstraintIndexes() {
 
 	//get the variable indexes for each block in the model
-	std::set<int> conSet; //constraint indexes in a specific block
+	std::map<int, int> conMap; //constraint indexes in a specific block
 	std::set<int> varSet; //constraint indexes in a specific block
-	std::vector<std::set<int> > blockConstraintIndexes;
 	std::set<int> coreConstraintIndexes;
 	std::vector<std::set<int> > blockVariableIndexes;
 	
 	int *starts = NULL;
 	int *indexes = NULL;
+	int kount;
 
 	try {
 		
@@ -259,12 +259,13 @@ std::vector<std::set<int> > OS_DipInterface::getBlockConstraintIndexes() {
 				!= blockVariableIndexes.end(); vit++) {
 			
 			varSet.clear();
-			conSet.clear();
+			conMap.clear();
 			
 			varSet = *vit;
 			//now get the nonzeros for the variables in
 			//varSet and see which nonzeros are in non-core
 			//constraints
+			kount = 0;
 			for (sit = varSet.begin(); sit != varSet.end(); sit++) {
 			
 				starts = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts;
@@ -275,12 +276,14 @@ std::vector<std::set<int> > OS_DipInterface::getBlockConstraintIndexes() {
 					//add the row index if not in a core constraint
 					
 					if (coreConstraintIndexes.find( indexes[ i])  == coreConstraintIndexes.end()) {
-						conSet.insert(  indexes[ i] );	
+						//we have a new constraint index
+						conMap.insert(make_pair( indexes[ i], kount));
+						kount++;
 					}	
 				}		
 			}
 
-			blockConstraintIndexes.push_back( conSet);
+			 m_blockConstraintIndexes.push_back( conMap);
 			
 		}//end for iterator
 
@@ -293,7 +296,7 @@ std::vector<std::set<int> > OS_DipInterface::getBlockConstraintIndexes() {
 		throw ErrorClass(eclass.errormsg);
 
 	}
-	return blockConstraintIndexes;
+	return  m_blockConstraintIndexes;
 }//end getBlockConstraintIndexes
 
 
@@ -301,9 +304,9 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 	//get the OSInstance for each block
 	
 	
-	std::set<int> conSet; //constraint indexes in a specific block
+	std::map<int, int> conMap; //constraint indexes in a specific block
 	std::set<int> varSet; //constraint indexes in a specific block
-	std::vector<std::set<int> > blockConstraintIndexes;
+	std::vector<std::map<int, int> > blockConstraintIndexes;
 	std::set<int> coreConstraintIndexes;
 	std::vector<std::set<int> > blockVariableIndexes;
 	
@@ -315,8 +318,13 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 	OSInstance *osinstance;
 	std::vector<std::set<int> >::iterator vit;
 	std::set<int>::iterator sit;
+	std::map<int, int>::iterator mit;
 	int i;
 	int kount;
+
+	int whichBlock;
+	int numNonz;
+	int k1, k2;
 	
 	//variable stuff
 	int numberVar;
@@ -327,9 +335,12 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 	
 	//constraint stuff
 	int numberCon;
-	std::string* conNames;
+	std::string* conNames = NULL;
 	double* conLowerBounds;
 	double* conUpperBounds;
+	double* conConstants;
+	
+	int idx;
 
 	try {
 		
@@ -350,27 +361,27 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 		//
 		//loop over each block
 		//
+		whichBlock = 0;
 		for (vit = blockVariableIndexes.begin(); vit
 				!= blockVariableIndexes.end(); vit++) {
 			
 			varSet.clear();
-			conSet.clear();
+			conMap.clear();
 			varSet = *vit;
 			
 			osinstance = new OSInstance();
 			//define variable arrays
 			numberVar = varSet.size();
 			varTypes = new char[ numberVar];
+			varNames = new string[ numberVar];
 			varLowerBounds = new double[ numberVar];
 			varUpperBounds = new double[ numberVar];
 			
-
-						
-
 			//now get the nonzeros for the variables in
 			//varSet and see which nonzeros are in non-core
 			//constraints
 			kount = 0;
+
 
 			osinstance->setVariableNumber( numberVar);
 			
@@ -378,7 +389,10 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 			SparseVector *objcoeff;
 			objcoeff = new SparseVector( numberVar);   
 
-
+			//need to count the number  of nonzero elements
+			//in the block constraints
+			numNonz = 0;
+			
 			for (sit = varSet.begin(); sit != varSet.end(); sit++) {
 				
 				
@@ -386,27 +400,60 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 				varLowerBounds[ kount] = m_osinstance->getVariableLowerBounds()[ *sit];
 				varUpperBounds[ kount] = m_osinstance->getVariableUpperBounds()[ *sit];
 				
+				varNames[ kount] = m_osinstance->getVariableNames()[ *sit];
+				
 				objcoeff->indexes[ kount] = kount;
 				objcoeff->values[ kount] = 0.0;
 				
-
-				//starts = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts;
-				//indexes = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes;	
-				
-				//for(i = starts[*sit]; i < starts[*sit + 1]; i++){
-				
-					//add the row index if not in a core constraint
-					
-					//if (coreConstraintIndexes.find( indexes[ i])  == coreConstraintIndexes.end()) {
-					//	conSet.insert(  indexes[ i] );	
-					//}	
-				//}
+				numNonz += m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[*sit + 1] 
+				   - m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[*sit ];
 				
 				kount++;
 				
 			}//end of loop over the variables in this block
 
 			osinstance->setVariables( numberVar, varNames, varLowerBounds, varUpperBounds, varTypes);
+			
+			starts = new int[ numberVar + 1];  
+			indexes = new int[ numNonz] ;
+			values = new double[ numNonz] ;
+			kount = 0;
+			starts[ kount] = 0;
+			
+			conMap = blockConstraintIndexes[ whichBlock];
+			numNonz = 0;
+			for (sit = varSet.begin(); sit != varSet.end(); sit++) {
+				
+				
+				
+				k2 = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[*sit + 1];
+				k1 = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts[*sit];
+				
+		
+				for(i = k1;  i < k2; i++){
+					
+					idx = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes[ i ];
+					
+					//check to make sure we are not in a core constraint
+					if (coreConstraintIndexes.find( idx )  == coreConstraintIndexes.end()) {
+						
+						indexes[ numNonz ] = conMap[ idx ];
+						values[ numNonz ] = m_osinstance->getLinearConstraintCoefficientsInColumnMajor()->values[ i ];
+						numNonz++;
+					}
+					
+				
+					
+				}
+				starts[ kount + 1] = numNonz;
+				
+				kount++;
+				
+			}
+			
+			//numNonz--;
+			
+
 			
 			// now the objective function
 			osinstance->setObjectiveNumber( 1);
@@ -416,16 +463,52 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 			
 			
 			//now the constraints
+
+			numberCon = conMap.size();
+			osinstance->setConstraintNumber( numberCon);
+			conLowerBounds = new double[ numberCon];
+			conUpperBounds = new double[ numberCon];
+			conConstants = new double[ numberCon];
 			
+		
+			
+			for (mit = conMap.begin(); mit != conMap.end(); mit++) {
+				
+				conLowerBounds[ mit->second] = m_osinstance->getConstraintLowerBounds()[ mit->first];
+				conUpperBounds[ mit->second] = m_osinstance->getConstraintUpperBounds()[ mit->first];
+				conConstants[ mit->second] = 1.0;
+
+			}
+			
+			
+			osinstance->setConstraints(numberCon, conNames, conLowerBounds, conUpperBounds, conConstants);
+			
+			numNonz--;
+			osinstance->setLinearConstraintCoefficients(numNonz, true, values, 0, numNonz - 1, 
+			indexes, 0, numNonz - 1,  starts, 0, numberVar );
 			
 			//add the osinstance
 			m_blockOSInstances.push_back( osinstance);
+			
+			//see what this puppy looks like
+			
+			std::cout << osinstance->printModel( ) << std::endl;
 			
 			objcoeff->bDeleteArrays = true;
 			delete objcoeff;		
 			delete []varLowerBounds;
 			delete []varUpperBounds;
 			delete []varTypes;
+			
+			//delete []starts;
+			//delete []indexes;
+			//delete []values;
+			
+			delete []conLowerBounds;
+			delete []conUpperBounds;
+			delete []conConstants;
+			
+			whichBlock++;
 			
 		}//end for iterator for the blocks
 

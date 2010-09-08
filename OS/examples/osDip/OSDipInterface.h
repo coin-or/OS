@@ -43,6 +43,7 @@
 
 
 #include <set>
+#include <map>
 #include <vector>
 
 //===========================================================================//
@@ -103,8 +104,11 @@ public:
 	//get the set of core constraint indexes
 	std::set<int>  getCoreConstraintIndexes();
 	
-	//get the set of constraint indexes for each block in the model
-	std::vector<std::set<int> > getBlockConstraintIndexes();
+	//get a map of constraint indexes for each block in the model
+	//the key is the index of the constraint in the original problem
+	//the key points to the index number in the block
+	std::vector<std::map<int, int> > getBlockConstraintIndexes();
+	std::vector<std::map<int, int> > m_blockConstraintIndexes;
 	
 	//get and osinstance that corresponds to each block in the model
 	std::vector<OSInstance* > getBlockOSInstances();

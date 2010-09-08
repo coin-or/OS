@@ -98,16 +98,18 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		
 		std::cout << "BLOCK CONSTRAINT INDEX TESTING " <<std::endl;
 
-		std::vector<std::set<int> >  blockCons;
+		std::vector<std::map<int, int> >  blockCons;
+		std::map<int, int>::iterator mit;
+		
 		blockCons = m_osInterface.getBlockConstraintIndexes();
 		
 		for(int i = 0; i < blockCons.size(); i++){
 			
 			std::cout << "INSIDE BLOCK " << i << std::endl;
 			
-			for (sit = blockCons[i].begin(); sit != blockCons[i].end(); sit++) {
+			for (mit = blockCons[i].begin(); mit != blockCons[i].end(); mit++) {
 				
-				std::cout << "CONSTRAINT INDEX =  " << *sit << std::endl;
+				std::cout << "CONSTRAINT INDEX =  " << mit->first << std::endl;
 				
 			}
 		}
