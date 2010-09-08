@@ -338,9 +338,12 @@ void OSDipApp::createModelPartSparse(DecompConstraintSet * model,
 		rowBeg.push_back(begInd);
 	}
 	model->M->appendRows(nRowsPart, &rowBeg[0], &rowInd[0], &rowVal[0]);
+	
+	//free local memory
 	rowBeg.clear();
 	rowInd.clear();
 	rowVal.clear();
+	UTIL_DELARR( integerVars);
 }
 
 //===========================================================================//

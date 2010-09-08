@@ -483,7 +483,7 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 			
 			osinstance->setConstraints(numberCon, conNames, conLowerBounds, conUpperBounds, conConstants);
 			
-			numNonz--;
+			
 			osinstance->setLinearConstraintCoefficients(numNonz, true, values, 0, numNonz - 1, 
 			indexes, 0, numNonz - 1,  starts, 0, numberVar );
 			
@@ -499,6 +499,7 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 			delete []varLowerBounds;
 			delete []varUpperBounds;
 			delete []varTypes;
+			delete []varNames;
 			
 			//delete []starts;
 			//delete []indexes;
