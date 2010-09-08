@@ -20,6 +20,7 @@ OBJS          = OSDip_Main.@OBJEXT@
 OBJS         += OSDipInterface.@OBJEXT@
 OBJS         += OSDipApp.@OBJEXT@
 OBJS         += OSDipBlockSolver.@OBJEXT@
+OBJS         += OSDipBlockCoinSolver.@OBJEXT@
 
 # CHANGEME: Additional libraries
 ADDLIBS = 
@@ -223,6 +224,15 @@ LIBS += -L$(COINLIBDIR) -lCgl -lOsi -lCoinUtils \
 	`cat @COINUTILSOBJDIR@/coinutils_addlibs.txt`
 #NOTE: CGL depends on CLP
 LIBS += -lOsiClp -lClp -lCoinUtils `cat @CLPOBJDIR@/clp_addlibs.txt`
+
+
+@COIN_HAS_SYMPHONY_TRUE@LIBS += @osisymphonylib@
+@COIN_HAS_DYLP_TRUE@LIBS += @osidylplib@
+@COIN_HAS_VOL_TRUE@LIBS += @osivollib@ 
+@COIN_HAS_GLPK_TRUE@LIBS += @osiglpklib@ 
+@COIN_HAS_SYMPHONY_TRUE@LIBS += @symphonylib@
+@COIN_HAS_DYLP_TRUE@LIBS += @dylplib@ 
+@COIN_HAS_VOL_TRUE@LIBS += @vollib@
 
 
 #===========================================================================#

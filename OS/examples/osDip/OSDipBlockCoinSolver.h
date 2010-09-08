@@ -1,5 +1,5 @@
-/* $Id: OSBlockSolver.h 3038 2009-11-07 11:43:44Z Gassmann $ */
-/** @file OSBlockSolver.h
+/* $Id: OSBlockCoinSolver.h 3038 2009-11-07 11:43:44Z Gassmann $ */
+/** @file OSBlockCoinSolver.h
  * 
  *
  * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
@@ -15,46 +15,34 @@
  * 
  */
 
-#ifndef OSDIPBLOCKSOLVER_H
-#define OSDIPBLOCKSOLVER_H
+#ifndef OSDIPBLOCKCOINSOLVER_H
+#define OSDIPBLOCKCOINSOLVER_H
 
 // --------------------------------------------------------------------- //
-
-#include<OSDataStructures.h>
+#include "OSDipBlockSolver.h"
+#include "OSInstance.h"
+#include "OSDataStructures.h"
+#include "OSDefaultSolver.h" 
+#include "OSCoinSolver.h"
 
 // --------------------------------------------------------------------- //
 /*!
  * \class 
- * OSBDiplockSolver is a virtual class for solving the 
- *    Block subproblem
+ * OSDipBlockCoinSolver solves the block subproblem 
+ *	using a COIN-OR solver
  * 
  *
  */
 // --------------------------------------------------------------------- //
-class OSDipBlockSolver{
+class OSDipBlockCoinSolver : OSDipBlockSolver {
 public:
 	
-	/** m_cost is the objective function
-	 * of (reduced) coefficients
-	 */
-	double *m_cost;
+
+	OSInstance *m_osinstance;
 	
-	/**  m_sparseVec is the column found by solving the block
-	 * optimization problem
-	 */
-	SparseVector *m_sparseVec;
+	// first declare a generic solver
+	DefaultSolver *m_solver ;
 	
-	/** m_optVal is the optimal objective function
-	 * value of the block optimization problem
-	 */
-	double m_optVal;
-	
-	
-	/** m_whichBlock is the index of the subproblem
-	 * we are working with
-	 */
-	int m_whichBlock;
-		
 	/**
 	 * <p>
 	 * Calculate the function value given the current variable values.
@@ -66,19 +54,19 @@ public:
 	 * @param sv -- a return value: sparse vector with the optimal column
 	 * @param optVal -- a return value: the optimal solution value of the subproblem
 	 */
-	virtual void solve(double *cost, SparseVector *sv, double optVal) = 0;
-	
+	virtual void solve(double *cost, SparseVector *sv, double optVal) ;
+		
 	/**
 	 *
 	 * Default Constructor. 
 	 */	
-	OSDipBlockSolver();
+	OSDipBlockCoinSolver();
 	
 	/**
 	 *
 	 * Default destructor. 
 	 */	
-	~OSDipBlockSolver();	
+	~OSDipBlockCoinSolver();	
 	
 	
 	//

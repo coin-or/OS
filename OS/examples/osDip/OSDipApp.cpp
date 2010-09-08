@@ -57,7 +57,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		
 		
 		//just temporary playing around
-		
+		/**
 		std::cout  << std::endl << std::endl << std::endl;
 		
 		std::cout << "VARIABLE INDEX TESTING " <<std::endl;
@@ -113,7 +113,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 				
 			}
 		}
-		
+		*/
 		m_osInterface.getBlockOSInstances();
 		
 	} catch (const ErrorClass& eclass) {
