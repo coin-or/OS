@@ -46,6 +46,12 @@ public:
 	/** m_blockVars is a vector with the set of variables for each block */
 	std::vector<std::set<int> >  m_blockVars;
 	
+	/** m_blockVarsAll is the set of all variables that appear in a block */
+	std::set<int> m_blockVarsAll; 
+	
+	/** m_coreConstraintIndexes is the set core constraint indexes */
+	std::set<int>  m_coreConstraintIndexes;		
+	
 	/** Class id tag (for log / debugging). */
 	const string m_classTag;
 
@@ -65,9 +71,6 @@ public:
 	/** The model constraint system used master only vars */
 	map<int, DecompConstraintSet*> m_modelMasterOnly;
 
-	/** Definition of blocks (by rows). */
-	std::map<int, std::vector<int> > m_blocks;
-
 	/** Initialize application. */
 	void initializeApp(UtilParameters & utilParam);
 
@@ -78,17 +81,17 @@ public:
 	void createModelPart(DecompConstraintSet * model, const int nRowsPart,
 			const int * rowsPart);
 
-	//this is used to create each block
-	void createModelPartSparse(DecompConstraintSet * model,
-			const int nRowsPart, const int * rowsPart);
-
-
 	/* @name Inherited (from virtual) methods. */
 	int generateInitVars(DecompVarList & initVars);
 
 	void createModelMasterOnlys2(vector<int> & masterOnlyCols);
 
-
+	   /* @name Inherited (from virtual) methods. */
+	   /** Solve the relaxed problem. */
+	   DecompSolverStatus solveRelaxed(const int             whichBlock,
+					   const double        * redCostX,
+					   const double          convexDual,
+					   list<DecompVar*>    & vars);   
 
 	/** Default constructor. Takes an instance of UtilParameters */
 	OSDipApp(UtilParameters & utilParam) :

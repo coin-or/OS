@@ -60,7 +60,7 @@ void OSDipBlockCoinSolver::solve(double *cost, std::vector<IndexValuePair*> *sol
 		m_solver->osiSolver->setObjective( cost);
 		//solve the model
 		m_solver->solve();
-		std::cout << "MODEL BEING SOLVED " << std::endl;
+		//std::cout << "MODEL BEING SOLVED " << std::endl;
 		//get the solution
 		//m_osresult  = m_osrlreader->readOSrL( m_solver->osrl );
 		m_osresult = m_solver->osresult;
@@ -70,7 +70,7 @@ void OSDipBlockCoinSolver::solve(double *cost, std::vector<IndexValuePair*> *sol
 		
 		solStatus = m_osresult->getSolutionStatusType( 0 );
 		
-		std::cout << "SOLUTION STATUS " << solStatus << std::endl;
+		//std::cout << "SOLUTION STATUS " << solStatus << std::endl;
 		// if solStatus is optimal get the optimal solution value
 		if( solStatus.find("ptimal") != string::npos ){
 		//first index is objIdx, second is solution index

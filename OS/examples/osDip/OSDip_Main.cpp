@@ -76,7 +76,10 @@ int main(int argc, char ** argv){
       //--- create the PC algorithm object
       //---
       if(doPriceCut){
+    	 std::cout << "CREATE NEW DecompAlgoPC" << std::endl;
          algo = new DecompAlgoPC(&osdip, &utilParam);
+         std::cout << "DONE CREATE NEW DecompAlgoPC" << std::endl;
+         return 0;
 
       }
    
