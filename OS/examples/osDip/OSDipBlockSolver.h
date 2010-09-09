@@ -20,8 +20,9 @@
 
 // --------------------------------------------------------------------- //
 
-#include<OSDataStructures.h>
-#include<vector>
+#include <OSDataStructures.h>
+#include <vector>
+#include <string>
 
 // --------------------------------------------------------------------- //
 /*!
