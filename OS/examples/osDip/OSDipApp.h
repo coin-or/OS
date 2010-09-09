@@ -101,10 +101,19 @@ public:
 
 	virtual ~OSDipApp() {
 		std::cout << "INSIDE OSDip DECOMP DESTRUCTOR" << std::endl;
+		std::vector<OSDipBlockCoinSolver*>::iterator vit;
 		UTIL_DELARR( m_objective);
 		UTIL_DELPTR( m_modelC);
 		UtilDeleteMapPtr( m_modelR);
 		UtilDeleteMapPtr( m_modelMasterOnly);
+	
+		//garbage collection on the solvers
+		for (vit = m_osDipBlockCoinSolver.begin(); vit
+				!= m_osDipBlockCoinSolver.end(); vit++) {
+
+				delete *vit;
+
+		}
 	}
 
 };

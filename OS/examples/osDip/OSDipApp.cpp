@@ -78,7 +78,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		std::vector<std::set<int> >::iterator vit;
 		std::set<int>::iterator sit;
 		std::set<int> blockVar;
-
+	
 		for (vit = m_blockVars.begin(); vit != m_blockVars.end(); vit++) {
 
 			blockVar = *vit;
@@ -94,12 +94,14 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		}
 
 		blockVar.clear();
+		
 		//---
 		//--- create models
 		//---
 		createModels();
 
 		//some testing
+		/*
 		std::vector<std::set<int> >::iterator vit2;
 
 		std::vector<IndexValuePair*> solIndexValPair;
@@ -141,10 +143,11 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 				//std::cout << "VALUE =  " << (*vit3)->value << std::endl;
 			}
 
+			
 			delete[] cost;
 
 		}
-
+		*/
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);
