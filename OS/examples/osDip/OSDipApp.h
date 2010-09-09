@@ -20,6 +20,8 @@
 // --------------------------------------------------------------------- //
 #include "OSDipInterface.h"
 #include "OSDipParam.h"
+#include  "OSDipBlockCoinSolver.h"
+#include "OSInstance.h"
 
 // --------------------------------------------------------------------- //
 /*!
@@ -34,6 +36,16 @@
 // --------------------------------------------------------------------- //
 class OSDipApp: public DecompApp {
 public:
+	
+	/** m_osDipBlockCoinSolver us a vector OSDipBlockCoinSolvers  */
+	std::vector<OSDipBlockCoinSolver* > m_osDipBlockCoinSolver;
+	
+	/** m_blockOSInstances is a vector with an osinstance for each block */
+	std::vector<OSInstance* > m_blockOSInstances;
+	
+	/** m_blockVars is a vector with the set of variables for each block */
+	std::vector<std::set<int> >  m_blockVars;
+	
 	/** Class id tag (for log / debugging). */
 	const string m_classTag;
 

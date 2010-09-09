@@ -42,7 +42,7 @@ public:
 
 	OSInstance *m_osinstance;
 	OSResult *m_osresult;
-	OSrLReader *m_osrlreader;
+	//OSrLReader *m_osrlreader;
 	// first declare a generic solver
 	CoinSolver *m_solver ;
 	
@@ -57,7 +57,7 @@ public:
 	 * @param sv -- a return value: sparse vector with the optimal column
 	 * @param optVal -- a return value: the optimal solution value of the subproblem
 	 */
-	virtual void solve(double *cost, SparseVector *sv, double optVal) ;
+	virtual void solve(double *cost, std::vector<IndexValuePair*> *solIndexValPair, double *optVal) ;
 		
 	/**
 	 *

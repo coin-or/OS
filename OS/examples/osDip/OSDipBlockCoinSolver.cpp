@@ -35,8 +35,8 @@ OSDipBlockCoinSolver::OSDipBlockCoinSolver( OSInstance *osinstance) {
 		m_solver->sSolverName ="cbc";		
 		m_solver->osinstance = m_osinstance;
 		m_solver->buildSolverInstance();
-		m_osrlreader = NULL;
-		m_osrlreader = new OSrLReader();
+		//m_osrlreader = NULL;
+		//m_osrlreader = new OSrLReader();
 	
 	} catch (const ErrorClass& eclass) {
 
@@ -49,10 +49,10 @@ OSDipBlockCoinSolver::OSDipBlockCoinSolver( OSInstance *osinstance) {
 OSDipBlockCoinSolver::~OSDipBlockCoinSolver(){
 	
 	if(m_solver != NULL) delete m_solver;
-	if(m_osrlreader != NULL) delete m_osrlreader;
+	//if(m_osrlreader != NULL) delete m_osrlreader;
 }//end ~OSDipBlockCoinSolver
 
-void OSDipBlockCoinSolver::solve(double *cost, SparseVector *sv, double optVal){
+void OSDipBlockCoinSolver::solve(double *cost, std::vector<IndexValuePair*> *solIndexValPair, double *optVal){
 
 	
 	try{
@@ -60,23 +60,27 @@ void OSDipBlockCoinSolver::solve(double *cost, SparseVector *sv, double optVal){
 		m_solver->osiSolver->setObjective( cost);
 		//solve the model
 		m_solver->solve();
+		std::cout << "MODEL BEING SOLVED " << std::endl;
 		//get the solution
-		m_osresult  = m_osrlreader->readOSrL( m_solver->osrl );
-		
+		//m_osresult  = m_osrlreader->readOSrL( m_solver->osrl );
+		m_osresult = m_solver->osresult;
 		std::string solStatus;
 		// the argument is the solution index
+		
+		
 		solStatus = m_osresult->getSolutionStatusType( 0 );
+		
+		std::cout << "SOLUTION STATUS " << solStatus << std::endl;
 		// if solStatus is optimal get the optimal solution value
 		if( solStatus.find("ptimal") != string::npos ){
 		//first index is objIdx, second is solution index
-			optVal = m_osresult->getOptimalObjValue( -1, 0);
+			*optVal = m_osresult->getOptimalObjValue( -1, 0);
+			*solIndexValPair = m_osresult->getOptimalPrimalVariableValues( 0);	
+			
 		}else{
 			throw ErrorClass("problem -- did not optimize a subproblem");
 		}	
-		
-		
-		
-	
+			
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);

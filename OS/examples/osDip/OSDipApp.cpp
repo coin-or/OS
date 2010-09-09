@@ -114,7 +114,66 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 			}
 		}
 		*/
-		m_osInterface.getBlockOSInstances();
+		
+		m_blockOSInstances = m_osInterface.getBlockOSInstances();
+		//loop over the instances and generate a solver
+		std::vector<OSInstance* >::iterator vit1;
+		
+		OSDipBlockCoinSolver *coinSolver = NULL;
+		
+		for (vit1 = m_blockOSInstances.begin(); vit1 != m_blockOSInstances.end(); vit1++) {
+			
+			coinSolver = new OSDipBlockCoinSolver( *vit1)  ;			
+			m_osDipBlockCoinSolver.push_back( coinSolver ) ;
+			
+		}
+		
+		std::vector<std::set<int> >::iterator vit2;
+		std::set<int>::iterator sit;
+		std::set<int> blockVar;
+		std::vector<IndexValuePair*> solIndexValPair;
+		std::vector<IndexValuePair*>::iterator vit3;
+		double optVal;
+		
+		double *cost = NULL;
+		int index;
+		int whichBlock;
+		
+		m_blockVars = m_osInterface.getBlockVarIndexes();
+		whichBlock = 0;
+		
+		for (vit2 = m_blockVars.begin(); vit2 != m_blockVars.end(); vit2++) {
+			
+			blockVar = *vit2;
+			
+			cost = new double[ blockVar.size() ];
+			
+			index = 0;
+			
+			for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
+				
+				cost[index] = m_objective[ *sit];
+				index++;
+			
+			}
+			
+			m_osDipBlockCoinSolver[whichBlock++]->solve( cost, &solIndexValPair, &optVal);
+			
+			std::cout << "OPTIMAL VALUE  = " << optVal  << std::endl;
+			
+			std::cout << "solIndexValPair SIZE 2 = " << solIndexValPair.size()  << std::endl;
+			
+			for (vit3 = solIndexValPair.begin(); vit3 != solIndexValPair.end(); vit3++) {
+				
+				std::cout << "IDEX =  " << (*vit3)->idx << std::endl;
+				std::cout << "VALUE =  " << (*vit3)->value << std::endl;
+			}
+			
+			delete []cost;
+			
+			
+		}
+		
 		
 	} catch (const ErrorClass& eclass) {
 

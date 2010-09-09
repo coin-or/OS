@@ -21,6 +21,7 @@
 // --------------------------------------------------------------------- //
 
 #include<OSDataStructures.h>
+#include<vector>
 
 // --------------------------------------------------------------------- //
 /*!
@@ -66,7 +67,7 @@ public:
 	 * @param sv -- a return value: sparse vector with the optimal column
 	 * @param optVal -- a return value: the optimal solution value of the subproblem
 	 */
-	virtual void solve(double *cost, SparseVector *sv, double optVal) = 0;
+	virtual void solve(double *cost, std::vector<IndexValuePair*> *solIndexValPair, double *optVal) = 0;
 	
 	/**
 	 *
