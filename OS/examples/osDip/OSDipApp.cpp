@@ -15,6 +15,8 @@
 #include "OSDipApp.h"
 //===========================================================================//
 #include "DecompVar.h"
+#include "OSrLReader.h"
+#include "OSResult.h"
 
 void OSDipApp::initializeApp(UtilParameters & utilParam) {
 
@@ -78,7 +80,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		std::vector<std::set<int> >::iterator vit;
 		std::set<int>::iterator sit;
 		std::set<int> blockVar;
-	
+
 		for (vit = m_blockVars.begin(); vit != m_blockVars.end(); vit++) {
 
 			blockVar = *vit;
@@ -94,60 +96,62 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		}
 
 		blockVar.clear();
-		
+
 		//---
 		//--- create models
 		//---
 		createModels();
 
 		//some testing
-		/*
-		std::vector<std::set<int> >::iterator vit2;
+		/**
+		 std::vector<std::set<int> >::iterator vit2;
 
-		std::vector<IndexValuePair*> solIndexValPair;
-		std::vector<IndexValuePair*>::iterator vit3;
-		double optVal;
+		 std::vector<IndexValuePair*> solIndexValPair;
+		 std::vector<IndexValuePair*>::iterator vit3;
+		 double optVal;
 
-		double *cost = NULL;
-		int index;
-		int whichBlock;
+		 double *cost = NULL;
+		 int index;
+		 int whichBlock;
 
-		whichBlock = 0;
+		 whichBlock = 0;
 
-		for (vit2 = m_blockVars.begin(); vit2 != m_blockVars.end(); vit2++) {
+		 for (vit2 = m_blockVars.begin(); vit2 != m_blockVars.end(); vit2++) {
 
-			blockVar = *vit2;
-			
+		 blockVar = *vit2;
+		 
 
-			cost = new double[blockVar.size()];
+		 cost = new double[blockVar.size()];
 
-			index = 0;
+		 index = 0;
 
-			for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
+		 for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
 
-				cost[index] = m_objective[*sit];
-				index++;
+		 cost[index] = m_objective[*sit];
+		 cost[index] = -1;
+		 index++;
 
-			}
+		 }
+		 solIndexValPair.clear();
+		 m_osDipBlockCoinSolver[whichBlock++]->solve(cost, &solIndexValPair,
+		 &optVal);
 
-			m_osDipBlockCoinSolver[whichBlock++]->solve(cost, &solIndexValPair,
-					&optVal);
+		 std::cout << "OPTIMAL VALUE  = " << optVal  << std::endl;
 
-			//std::cout << "OPTIMAL VALUE  = " << optVal  << std::endl;
+		 std::cout << "solIndexValPair SIZE 2 = " << solIndexValPair.size()  << std::endl;
 
-			//std::cout << "solIndexValPair SIZE 2 = " << solIndexValPair.size()  << std::endl;
+		 for (vit3 = solIndexValPair.begin(); vit3 != solIndexValPair.end(); vit3++) {
 
-			for (vit3 = solIndexValPair.begin(); vit3 != solIndexValPair.end(); vit3++) {
+		 std::cout << "IDEXXXXX =  " << (*vit3)->idx << std::endl;
+		 std::cout << "VALUEEEEE =  " << (*vit3)->value << std::endl;
+		 }
 
-				//std::cout << "IDEX =  " << (*vit3)->idx << std::endl;
-				//std::cout << "VALUE =  " << (*vit3)->value << std::endl;
-			}
+		 
+		 delete[] cost;
 
-			
-			delete[] cost;
-
-		}
-		*/
+		 }
+		*/ 
+		
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);
@@ -271,9 +275,7 @@ void OSDipApp::createModels() {
 	std::string modelName;
 
 	try {
-		
-		
-		
+
 		//First the define the objective function over the entire variable space
 		//Create the memory for the objective  function
 		m_objective = new double[nCols];
@@ -353,9 +355,9 @@ void OSDipApp::createModels() {
 				m_appParam.LogLevel, 2);
 
 		//free local memory
-		
+
 		UTIL_DELARR(rowsCore);
-		
+
 	}//end try
 
 	catch (const ErrorClass& eclass) {
@@ -511,8 +513,87 @@ int OSDipApp::generateInitVars(DecompVarList & initVars) {
 DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 		const double * redCostX, const double convexDual,
 		list<DecompVar*> & vars) {
+
+	UtilPrintFuncBegin(m_osLog, m_classTag, "solveRelaxed()",
+			m_appParam.LogLevel, 2);
+
+	vector<int> solInd;
+	vector<double> solEls;
+	double varRedCost = 0.0;
+	double varOrigCost = 0.0;
+	int kount;
 	
-	std::cout << " --------  INSIDE solveRelaxed -----------" << std::endl;
+	std::set<int> blockVar;
+	
+	std::cout << "WHICH BLOCK " << whichBlock << std::endl;
+	blockVar = m_blockVars[ whichBlock];
+	std::cout << "NUMBER OF VARIABLES =  " << blockVar.size() << std::endl;
+	
+	std::set<int>::iterator sit;
+	std::vector<IndexValuePair*> solIndexValPair;
+	std::string osrl="";
+
+	double *cost = NULL;
+	int index;
+
+	cost = new double[ blockVar.size()];
+
+	index = 0;
+
+	for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
+
+		cost[index] = redCostX[*sit];
+		std::cout  << "cost[index] =  " << cost[index] << std::endl;
+		index++;
+
+	}
+	
+	m_osDipBlockCoinSolver[whichBlock]->solve(cost, &osrl);
+	
+	
+
+	OSrLReader *osrlreader = NULL;
+	OSResult *osresult = NULL;
+	osrlreader = new OSrLReader();
+	osresult  = osrlreader->readOSrL( osrl );
+	
+	solIndexValPair = osresult->getOptimalPrimalVariableValues( 0);
+	
+	kount = 0;
+	
+	varRedCost = osresult->getOptimalObjValue( -1, 0);
+			
+	for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
+		//kipp be careful here 
+	//if(solIndexValPair.size() != blockVar.size() ) -- throw error
+	  solInd.push_back(  *sit ) ;
+	  std::cout << "SOLUTION INDEX = " << *sit << std::endl;
+	  solEls.push_back(  solIndexValPair[ kount]->value ) ;
+	  std::cout << "VARIABLE VALUE  = " << solIndexValPair[ kount]->value << std::endl;
+	  varOrigCost = varOrigCost + m_objective[ *sit];
+	  kount++;
+	
+	}
+	
+
+	std::cout << "Convex Dual = " << convexDual << std::endl;
+
+	UTIL_DEBUG(m_appParam.LogLevel, 2,
+			printf("PUSH var with RC = %g\n", varRedCost - convexDual);
+	);
+
+	DecompVar * var = new DecompVar(solInd, solEls, varRedCost - convexDual,
+			varOrigCost);
+	
+	var->setBlockId(whichBlock);
+	vars.push_back(var);
+
+	UtilPrintFuncEnd(m_osLog, m_classTag, "APPsolveRelaxed()",
+			m_appParam.LogLevel, 2);
+			
+	
+	
+	delete[] cost;	
 
 	return DecompSolStatOptimal;
 }//end solveRelaxed

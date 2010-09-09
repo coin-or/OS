@@ -79,8 +79,8 @@ int main(int argc, char ** argv){
     	 std::cout << "CREATE NEW DecompAlgoPC" << std::endl;
          algo = new DecompAlgoPC(&osdip, &utilParam);
          std::cout << "DONE CREATE NEW DecompAlgoPC" << std::endl;
-         delete algo;
-         return 0;
+         //delete algo;
+         //return 0;
 
       }
    

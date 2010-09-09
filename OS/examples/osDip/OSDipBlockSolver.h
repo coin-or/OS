@@ -69,6 +69,19 @@ public:
 	 */
 	virtual void solve(double *cost, std::vector<IndexValuePair*> *solIndexValPair, double *optVal) = 0;
 	
+	
+	/**
+	 * <p>
+	 * Calculate the function value given the current variable values.
+	 * This is an abstract method which is required to be implemented by the concrete
+	 * operator nodes that derive or extend from this OSnLNode class.
+	 * </p>
+	 *
+	 * @param cost -- an input value: pointer to the objective function (reduced) coefficients.
+	 * @param osrl -- a return value: an osrl string
+	 */
+	virtual void solve(double *cost, std::string *osrl) = 0 ;
+	
 	/**
 	 *
 	 * Default Constructor. 
