@@ -570,13 +570,14 @@ DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 	  std::cout << "SOLUTION INDEX = " << *sit << std::endl;
 	  solEls.push_back(  solIndexValPair[ kount]->value ) ;
 	  std::cout << "VARIABLE VALUE  = " << solIndexValPair[ kount]->value << std::endl;
-	  varOrigCost = varOrigCost + m_objective[ *sit];
+	  varOrigCost +=  m_objective[ *sit]*solIndexValPair[ kount]->value;
 	  kount++;
 	
 	}
 	
 
 	std::cout << "Convex Dual = " << convexDual << std::endl;
+	std::cout << "ORIGINAL COST =  = " <<  varOrigCost << std::endl;
 
 	UTIL_DEBUG(m_appParam.LogLevel, 2,
 			printf("PUSH var with RC = %g\n", varRedCost - convexDual);
@@ -585,7 +586,7 @@ DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 	DecompVar * var = new DecompVar(solInd, solEls, varRedCost - convexDual,
 			varOrigCost);
 	
-	var->setBlockId(whichBlock);
+	var->setBlockId( whichBlock);
 	vars.push_back(var);
 
 	UtilPrintFuncEnd(m_osLog, m_classTag, "APPsolveRelaxed()",
