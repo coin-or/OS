@@ -30,9 +30,9 @@ OSDipBlockSolver::~OSDipBlockSolver(){
 }//end ~OSDipBlockSolver
 
 
-OSDipBlockSolver* classFactory(const std::string &type) {
+OSDipBlockSolver* OSDipBlockSolver::classFactory(const std::string &type, OSInstance *osinstance) {
 	
-	if(type == "OSDipBlockCoinSolver") return new OSDipBlockCoinSolver;
+	if(type == "OSDipBlockCoinSolver") return new OSDipBlockCoinSolver( osinstance);
 
 	
 }//end factory

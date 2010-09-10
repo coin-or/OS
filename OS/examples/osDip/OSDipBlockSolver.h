@@ -19,7 +19,8 @@
 #define OSDIPBLOCKSOLVER_H
 
 // --------------------------------------------------------------------- //
-
+#include "OSInstance.h"
+#include "OSResult.h"
 #include "OSDataStructures.h"
 #include "OSErrorClass.h"
 #include <vector>
@@ -36,6 +37,8 @@
 // --------------------------------------------------------------------- //
 class OSDipBlockSolver{
 public:
+	
+
 	
 	/** m_cost is the objective function
 	 * of (reduced) coefficients
@@ -89,7 +92,7 @@ public:
 	 * Solver Factory
 	 */
 	
-	static OSDipBlockSolver* classFactory(const std::string &type) ;
+	static OSDipBlockSolver* classFactory(const std::string &type, OSInstance *osinstance) ;
 	
 	/**
 	 *

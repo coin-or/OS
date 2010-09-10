@@ -20,11 +20,9 @@
 
 // --------------------------------------------------------------------- //
 #include "OSDipBlockSolver.h"
-#include "OSInstance.h"
 #include "OSDataStructures.h"
 #include "OSDefaultSolver.h" 
 #include "OSCoinSolver.h"
-#include "OSResult.h"
 #include "OSrLReader.h"
 
 // --------------------------------------------------------------------- //
@@ -42,7 +40,7 @@ public:
 
 	OSInstance *m_osinstance;
 	OSResult *m_osresult;
-	//OSrLReader *m_osrlreader;
+
 	// first declare a generic solver
 	CoinSolver *m_solver ;
 	

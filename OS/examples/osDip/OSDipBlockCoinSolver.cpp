@@ -21,6 +21,7 @@
 
 OSDipBlockCoinSolver::OSDipBlockCoinSolver():
 	m_osinstance(NULL) {
+	std::cout << "INSIDE OSDipBlockCoinSolver CONSTRUCTOR" << std::endl;
 }//end OSDipBlockCoinSolver
 
 
@@ -54,7 +55,6 @@ OSDipBlockCoinSolver::~OSDipBlockCoinSolver(){
 
 void OSDipBlockCoinSolver::solve(double *cost, std::vector<IndexValuePair*> *solIndexValPair, double *optVal){
 
-	
 	try{
 		//set the objective function
 		m_solver->osiSolver->setObjective( cost);

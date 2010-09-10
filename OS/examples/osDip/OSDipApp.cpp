@@ -16,6 +16,7 @@
 //===========================================================================//
 #include "DecompVar.h"
 #include  "OSDipBlockSolver.h"
+#include  "OSDipBlockCoinSolver.h"
 
 
 void OSDipApp::initializeApp(UtilParameters & utilParam) {
@@ -67,12 +68,12 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		std::vector<OSInstance*>::iterator vit1;
 
 		OSDipBlockSolver *solver = NULL;
-		char*  sl[] = {"OSDipBlockCoinSolver"};
+
 		for (vit1 = m_blockOSInstances.begin(); vit1
 				!= m_blockOSInstances.end(); vit1++) {
 
 			//solver = new OSDipBlockCoinSolver( *vit1);
-			solver = OSDipBlockSolver::classFactory( sl[0] );
+			solver = OSDipBlockSolver::classFactory( "OSDipBlockCoinSolver", *vit1 );
 			m_osDipBlockSolver.push_back( solver);
 
 		}
@@ -548,6 +549,7 @@ DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 		index++;
 
 	}
+	
 	
 	m_osDipBlockSolver[whichBlock]->solve(cost, &solIndexValPair, &varRedCost);
 	kount = 0;		
