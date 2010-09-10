@@ -123,7 +123,7 @@ CoinSolver::~CoinSolver() {
 
 void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 	try{
-		osresult = new OSResult();
+		//osresult = new OSResult();
 			if(osil.length() == 0 && osinstance == NULL) throw ErrorClass("there is no instance");
 			clock_t start, finish;
 			double duration;
@@ -243,6 +243,7 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 			bCallbuildSolverInstance = true;
 	}
 	catch(const ErrorClass& eclass){
+		osresult = new OSResult();
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
@@ -585,6 +586,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 	}//end of try 
 	catch(const ErrorClass& eclass){
 		std::cout << "THERE IS AN ERROR" << std::endl;
+		osresult = new OSResult();
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
@@ -624,6 +626,7 @@ bool CoinSolver::setCoinPackedMatrix(){
 		return true;
 	}
 	catch(const ErrorClass& eclass){
+		osresult = new OSResult();
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
 		osrl = osrlwriter->writeOSrL( osresult);
@@ -632,6 +635,8 @@ bool CoinSolver::setCoinPackedMatrix(){
 } // end setCoinPackedMatrix
 
 void CoinSolver::solve() throw (ErrorClass) {
+	if(osresult != NULL) delete osresult;
+	osresult = new OSResult();
 	try{
 		// make sure the solver instance exists
 		if( this->bCallbuildSolverInstance == false) buildSolverInstance();

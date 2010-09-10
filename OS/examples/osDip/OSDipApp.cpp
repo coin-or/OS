@@ -15,8 +15,8 @@
 #include "OSDipApp.h"
 //===========================================================================//
 #include "DecompVar.h"
-#include "OSrLReader.h"
-#include "OSResult.h"
+#include  "OSDipBlockSolver.h"
+
 
 void OSDipApp::initializeApp(UtilParameters & utilParam) {
 
@@ -39,7 +39,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 			throw ErrorClass("An OSiL file not specified in the paramater file");
 		std::string osilFile = m_appParam.DataDir + UtilDirSlash()
 				+ m_appParam.OSiLFile;
-		m_osInterface.readOSiL(osilFile);
+		m_osInterface.readOSiL( osilFile);
 
 		//---
 		//--- read OSoL instance --  it is not necessary, if not there
@@ -49,7 +49,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		if (m_appParam.OSoLFile.size() > 0) {
 			std::string osolFile = m_appParam.DataDir + UtilDirSlash()
 					+ m_appParam.OSoLFile;
-			m_osInterface.readOSoL(osolFile);
+			m_osInterface.readOSoL( osolFile);
 		}
 
 		//get relevant sets and vectors
@@ -66,13 +66,14 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		//loop over the instances and generate a solver for each block
 		std::vector<OSInstance*>::iterator vit1;
 
-		OSDipBlockCoinSolver *coinSolver = NULL;
-
+		OSDipBlockSolver *solver = NULL;
+		char*  sl[] = {"OSDipBlockCoinSolver"};
 		for (vit1 = m_blockOSInstances.begin(); vit1
 				!= m_blockOSInstances.end(); vit1++) {
 
-			coinSolver = new OSDipBlockCoinSolver(*vit1);
-			m_osDipBlockCoinSolver.push_back(coinSolver);
+			//solver = new OSDipBlockCoinSolver( *vit1);
+			solver = OSDipBlockSolver::classFactory( sl[0] );
+			m_osDipBlockSolver.push_back( solver);
 
 		}
 
@@ -133,7 +134,7 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 
 		 }
 		 solIndexValPair.clear();
-		 m_osDipBlockCoinSolver[whichBlock++]->solve(cost, &solIndexValPair,
+		 m_osDipBlockSolver[whichBlock++]->solve(cost, &solIndexValPair,
 		 &optVal);
 
 		 std::cout << "OPTIMAL VALUE  = " << optVal  << std::endl;
@@ -531,7 +532,7 @@ DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 	
 	std::set<int>::iterator sit;
 	std::vector<IndexValuePair*> solIndexValPair;
-	std::string osrl="";
+
 
 	double *cost = NULL;
 	int index;
@@ -548,21 +549,8 @@ DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 
 	}
 	
-	m_osDipBlockCoinSolver[whichBlock]->solve(cost, &osrl);
-	
-	
-
-	OSrLReader *osrlreader = NULL;
-	OSResult *osresult = NULL;
-	osrlreader = new OSrLReader();
-	osresult  = osrlreader->readOSrL( osrl );
-	
-	solIndexValPair = osresult->getOptimalPrimalVariableValues( 0);
-	
-	kount = 0;
-	
-	varRedCost = osresult->getOptimalObjValue( -1, 0);
-			
+	m_osDipBlockSolver[whichBlock]->solve(cost, &solIndexValPair, &varRedCost);
+	kount = 0;		
 	for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
 		//kipp be careful here 
 	//if(solIndexValPair.size() != blockVar.size() ) -- throw error
@@ -575,9 +563,9 @@ DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 	
 	}
 	
-
 	std::cout << "Convex Dual = " << convexDual << std::endl;
 	std::cout << "ORIGINAL COST =  = " <<  varOrigCost << std::endl;
+	std::cout << "SUPROBLEM OPT VAL  = " <<  varRedCost << std::endl;
 
 	UTIL_DEBUG(m_appParam.LogLevel, 2,
 			printf("PUSH var with RC = %g\n", varRedCost - convexDual);

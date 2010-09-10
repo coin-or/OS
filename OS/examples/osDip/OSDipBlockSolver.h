@@ -20,7 +20,8 @@
 
 // --------------------------------------------------------------------- //
 
-#include <OSDataStructures.h>
+#include "OSDataStructures.h"
+#include "OSErrorClass.h"
 #include <vector>
 #include <string>
 
@@ -82,6 +83,13 @@ public:
 	 * @param osrl -- a return value: an osrl string
 	 */
 	virtual void solve(double *cost, std::string *osrl) = 0 ;
+	
+	
+	/**
+	 * Solver Factory
+	 */
+	
+	static OSDipBlockSolver* classFactory(const std::string &type) ;
 	
 	/**
 	 *

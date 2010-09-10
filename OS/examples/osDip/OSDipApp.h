@@ -20,7 +20,7 @@
 // --------------------------------------------------------------------- //
 #include "OSDipInterface.h"
 #include "OSDipParam.h"
-#include  "OSDipBlockCoinSolver.h"
+#include  "OSDipBlockSolver.h"
 #include "OSInstance.h"
 
 // --------------------------------------------------------------------- //
@@ -37,8 +37,8 @@
 class OSDipApp: public DecompApp {
 public:
 	
-	/** m_osDipBlockCoinSolver us a vector OSDipBlockCoinSolvers  */
-	std::vector<OSDipBlockCoinSolver* > m_osDipBlockCoinSolver;
+	/** m_osDipBlockSolver is a vector OSDipBlockSolvers  */
+	std::vector<OSDipBlockSolver* > m_osDipBlockSolver;
 	
 	/** m_blockOSInstances is a vector with an osinstance for each block */
 	std::vector<OSInstance* > m_blockOSInstances;
@@ -101,15 +101,15 @@ public:
 
 	virtual ~OSDipApp() {
 		std::cout << "INSIDE OSDip DECOMP DESTRUCTOR" << std::endl;
-		std::vector<OSDipBlockCoinSolver*>::iterator vit;
+		std::vector<OSDipBlockSolver*>::iterator vit;
 		UTIL_DELARR( m_objective);
 		UTIL_DELPTR( m_modelC);
 		UtilDeleteMapPtr( m_modelR);
 		UtilDeleteMapPtr( m_modelMasterOnly);
 	
 		//garbage collection on the solvers
-		for (vit = m_osDipBlockCoinSolver.begin(); vit
-				!= m_osDipBlockCoinSolver.end(); vit++) {
+		for (vit = m_osDipBlockSolver.begin(); vit
+				!= m_osDipBlockSolver.end(); vit++) {
 
 				delete *vit;
 

@@ -60,9 +60,6 @@ void OSDipBlockCoinSolver::solve(double *cost, std::vector<IndexValuePair*> *sol
 		m_solver->osiSolver->setObjective( cost);
 		//solve the model
 		m_solver->solve();
-		//std::cout << "MODEL BEING SOLVED " << std::endl;
-		//get the solution
-		//m_osresult  = m_osrlreader->readOSrL( m_solver->osrl );
 		m_osresult = m_solver->osresult;
 		std::string solStatus;
 		// the argument is the solution index
@@ -70,21 +67,12 @@ void OSDipBlockCoinSolver::solve(double *cost, std::vector<IndexValuePair*> *sol
 		
 		solStatus = m_osresult->getSolutionStatusType( 0 );
 		
-		//std::cout << "SOLUTION STATUS " << solStatus << std::endl;
+		std::cout << "SOLUTION STATUS " << solStatus << std::endl;
 		// if solStatus is optimal get the optimal solution value
 		if( solStatus.find("ptimal") != string::npos ){
 		//first index is objIdx, second is solution index
 			*optVal = m_osresult->getOptimalObjValue( -1, 0);
-			//*solIndexValPair = m_osresult->getOptimalPrimalVariableValues( 0);	
-			std::cout << "GAIL HONDA SIZE " << m_osresult->getOptimalPrimalVariableValues( 0).size() << std::endl;
-			OSResult *osresult = NULL;
-			OSrLReader *osrlreader = NULL;
-		
-			osrlreader = new OSrLReader();
-			osresult  = osrlreader->readOSrL(m_solver->osrl );
-			std::cout << "GAIL HONDA SIZE " << osresult->getOptimalPrimalVariableValues( 0).size() << std::endl;
-			*solIndexValPair = osresult->getOptimalPrimalVariableValues( 0);
-			
+			*solIndexValPair = m_osresult->getOptimalPrimalVariableValues( 0);			
 		}else{
 			throw ErrorClass("problem -- did not optimize a subproblem");
 		}	
@@ -120,8 +108,7 @@ void OSDipBlockCoinSolver::solve(double *cost, std::string *osrl){
 		// if solStatus is optimal get the optimal solution value
 		if( solStatus.find("ptimal") != string::npos ){
 		//first index is objIdx, second is solution index
-			*osrl = m_solver->osrl;
-			
+			*osrl = m_solver->osrl;	
 		}else{
 			throw ErrorClass("problem -- did not optimize a subproblem");
 		}	

@@ -163,7 +163,7 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes() {
 
 	//get the variable indexes for each block in the model
 	std::set<int> varSet; //variables indexes in a specific block
-	std::vector<std::set<int> > blockVariableIndexes;
+	if(m_blockVariableIndexesProcessed == true) return m_blockVariableIndexes;
 
 	try {
 		if (m_osoption == NULL)
@@ -202,7 +202,7 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes() {
 
 					}//end for on variables in this block
 
-					blockVariableIndexes.push_back(varSet);
+					m_blockVariableIndexes.push_back(varSet);
 				}// end of if 
 
 
@@ -210,7 +210,7 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes() {
 		}// if on ospton null
 		
 		
-		if (blockVariableIndexes.size() <= 0 )
+		if (m_blockVariableIndexes.size() <= 0 )
 			throw ErrorClass("someting wrong -- no variables in the blocks");
 
 	} //end try
@@ -221,7 +221,8 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes() {
 		throw ErrorClass(eclass.errormsg);
 
 	}
-	return blockVariableIndexes;
+	m_blockVariableIndexesProcessed = true;
+	return m_blockVariableIndexes;
 }//end getBlockVarIndexes
 
 
@@ -229,6 +230,8 @@ std::vector<std::set<int> > OS_DipInterface::getBlockVarIndexes() {
 
 std::vector<std::map<int, int> > OS_DipInterface::getBlockConstraintIndexes() {
 
+	
+	if(m_blockConstraintIndexesProcessed == true) return m_blockConstraintIndexes;
 	//get the variable indexes for each block in the model
 	std::map<int, int> conMap; //constraint indexes in a specific block
 	std::set<int> varSet; //constraint indexes in a specific block
@@ -296,13 +299,14 @@ std::vector<std::map<int, int> > OS_DipInterface::getBlockConstraintIndexes() {
 		throw ErrorClass(eclass.errormsg);
 
 	}
+	m_blockConstraintIndexesProcessed = true;
 	return  m_blockConstraintIndexes;
 }//end getBlockConstraintIndexes
 
 
 std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 	//get the OSInstance for each block
-	
+	if( m_blockOSInstancesProcessed == true) return  m_blockOSInstances;
 	
 	std::map<int, int> conMap; //constraint indexes in a specific block
 	std::set<int> varSet; //constraint indexes in a specific block
@@ -522,6 +526,7 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 		throw ErrorClass(eclass.errormsg);
 
 	}
+	m_blockOSInstancesProcessed = true;
 	return m_blockOSInstances;
 	
 	
@@ -530,9 +535,8 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 std::set<int> OS_DipInterface::getCoreConstraintIndexes() {
 
 	//get the indexes of the core constraints
-	std::set<int> coreConstraintIndexes; //constraint indexes in the core
 
-
+	if( m_coreConstraintIndexesProcessed == true) return m_coreConstraintIndexes;
 	try {
 		if (m_osoption == NULL)
 			throw ErrorClass("we have a null osoption");
@@ -565,7 +569,7 @@ std::set<int> OS_DipInterface::getCoreConstraintIndexes() {
 							throw ErrorClass(
 									"found an invalid constraint index in OSoL file");
 
-						coreConstraintIndexes.insert((*vit)->con[i]->idx);
+						m_coreConstraintIndexes.insert((*vit)->con[i]->idx);
 
 					}//end for on variables in this block
 
@@ -577,7 +581,7 @@ std::set<int> OS_DipInterface::getCoreConstraintIndexes() {
 
 		}//end of if on osptio null
 
-		if(coreConstraintIndexes.size() <= 0)throw ErrorClass("there were no core constraints listed in the option file");
+		if(m_coreConstraintIndexes.size() <= 0)throw ErrorClass("there were no core constraints listed in the option file");
 	}// end of try
 
 
@@ -587,7 +591,8 @@ std::set<int> OS_DipInterface::getCoreConstraintIndexes() {
 		throw ErrorClass(eclass.errormsg);
 
 	}
-	return coreConstraintIndexes;
+	m_coreConstraintIndexesProcessed = true;
+	return m_coreConstraintIndexes;
 
 }//end getCoreConstraintIndexes
 
@@ -600,24 +605,22 @@ double* OS_DipInterface::getObjectiveFunctionCoeff() {
 }// end getObjectiveFunctionCoeff()
 
 
-void OS_DipInterface::initMembers() {
-	m_isProvenOptimal = false;
-	m_bestKnownLB = -1.e20;
-	m_bestKnownUB = 1.e20;
-	m_coinpm = NULL;
-
-}
 
 /** Default constructor. */
-OS_DipInterface::OS_DipInterface() {
-	initMembers();
+OS_DipInterface::OS_DipInterface():
+		
+		m_isProvenOptimal( false),
+		m_bestKnownLB( -1.e20 ),
+		m_bestKnownUB( 1.e20),
+		m_coinpm( NULL ),
+		m_blockVariableIndexesProcessed( false),
+		m_coreConstraintIndexesProcessed( false),
+		m_blockConstraintIndexesProcessed( false),
+		m_blockOSInstancesProcessed( false) {
+
 }
 
-/** Default constructor. Takes an instance of UtilParameters */
-OS_DipInterface::OS_DipInterface(string & fileName) {
-	initMembers();
-	readOSiL(fileName);
-}
+
 
 OS_DipInterface::~OS_DipInterface() {
 	std::cout << "INSIDE OS DIP INTERFACE DESTRUCTOR" << std::endl;

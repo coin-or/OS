@@ -100,27 +100,30 @@ public:
 	
 	//get the set of variable indexes for each block in the model
 	std::vector<std::set<int> > getBlockVarIndexes();
+	std::vector<std::set<int> > m_blockVariableIndexes;
+	bool m_blockVariableIndexesProcessed;
 		
 	//get the set of core constraint indexes
 	std::set<int>  getCoreConstraintIndexes();
+	std::set<int> m_coreConstraintIndexes;
+	bool m_coreConstraintIndexesProcessed;
 	
 	//get a map of constraint indexes for each block in the model
 	//the key is the index of the constraint in the original problem
 	//the key points to the index number in the block
 	std::vector<std::map<int, int> > getBlockConstraintIndexes();
 	std::vector<std::map<int, int> > m_blockConstraintIndexes;
+	bool m_blockConstraintIndexesProcessed;
 	
 	//get and osinstance that corresponds to each block in the model
 	std::vector<OSInstance* > getBlockOSInstances();
 	std::vector<OSInstance* > m_blockOSInstances;
+	bool m_blockOSInstancesProcessed;
 	
 	
 	//get the objective function coefficients
 	double *getObjectiveFunctionCoeff();
 	
-
-
-	void initMembers(); // kipp  change this and put in constructor
 
 	inline const double getBestKnownLB() const {return m_bestKnownLB;} //kipp can we get rid of this
 	inline const double getBestKnownUB() const {return m_bestKnownUB;} // kipp can we get rid of this
@@ -229,8 +232,10 @@ public:
 	
 	//end wrapper methods
 
-	OS_DipInterface(string & fileName);
+	/** class constructor */
 	OS_DipInterface();
+	
+	/** class destructor */
 	~OS_DipInterface();
 };
 

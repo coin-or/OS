@@ -36,7 +36,7 @@
  *
  */
 // --------------------------------------------------------------------- //
-class OSDipBlockCoinSolver : OSDipBlockSolver {
+class OSDipBlockCoinSolver : public OSDipBlockSolver {
 public:
 	
 

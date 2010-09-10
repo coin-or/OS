@@ -15,6 +15,7 @@
  * 
  */
 #include "OSDipBlockSolver.h"
+#include "OSDipBlockCoinSolver.h"
 
 OSDipBlockSolver::OSDipBlockSolver():
 	m_cost(NULL),
@@ -27,3 +28,11 @@ OSDipBlockSolver::~OSDipBlockSolver(){
 	//cout << "inside OSDipBlockSolver destructor" << endl;
 
 }//end ~OSDipBlockSolver
+
+
+OSDipBlockSolver* classFactory(const std::string &type) {
+	
+	if(type == "OSDipBlockCoinSolver") return new OSDipBlockCoinSolver;
+
+	
+}//end factory
