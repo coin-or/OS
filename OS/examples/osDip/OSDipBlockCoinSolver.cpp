@@ -50,6 +50,7 @@ OSDipBlockCoinSolver::OSDipBlockCoinSolver( OSInstance *osinstance) {
 OSDipBlockCoinSolver::~OSDipBlockCoinSolver(){
 	
 	if(m_solver != NULL) delete m_solver;
+	std::cout << "INSIDED ~OSDipBlockCoinSolver()" << std::endl;
 	//if(m_osrlreader != NULL) delete m_osrlreader;
 }//end ~OSDipBlockCoinSolver
 

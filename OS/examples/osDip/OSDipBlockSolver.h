@@ -99,7 +99,7 @@ public:
 	 *
 	 * Default destructor. 
 	 */	
-	~OSDipBlockSolver();	
+	virtual ~OSDipBlockSolver() = 0;	
 	
 	
 	//

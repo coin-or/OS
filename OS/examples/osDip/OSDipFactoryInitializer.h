@@ -33,10 +33,12 @@ public:
 	
 	//the destructor 
 	~OSDipFactoryInitializer(){
+
 		std::map<std::string, OSDipBlockSolverFactory*>::iterator mit ;
 		for(mit = OSDipBlockSolverFactory::factories.begin(); 
-			mit != OSDipBlockSolverFactory::factories.begin(); mit++){
+			mit != OSDipBlockSolverFactory::factories.end(); mit++){
 			delete mit->second;
+			//std::cout << "DELETED A FACTORY " << std::endl;
 		}		
 	}//end destructor 
 };
