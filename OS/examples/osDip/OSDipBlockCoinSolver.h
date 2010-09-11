@@ -89,8 +89,20 @@ public:
 	 */	
 	~OSDipBlockCoinSolver();	
 	
+	class Factory;
+	class Factory : public OSDipBlockSolverFactory{
+		
+	public:
+
+		OSDipBlockSolver* create() {  return new OSDipBlockCoinSolver( osinstance); };
+		
+	};// end class OSDipBlockSolverFactory
+	
 	
 	//
-};
+};//end class OSDipBlockCoinSolver
+
+
+
 
 #endif

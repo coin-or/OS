@@ -394,6 +394,7 @@ OS/examples/osDip/OSDipBlockCoinSolver.cpp -text
 OS/examples/osDip/OSDipBlockCoinSolver.h -text
 OS/examples/osDip/OSDipBlockSolver.cpp -text
 OS/examples/osDip/OSDipBlockSolver.h -text
+OS/examples/osDip/OSDipFactoryInitializer.h -text
 OS/examples/osDip/OSDipInterface.cpp -text
 OS/examples/osDip/OSDipInterface.h -text
 OS/examples/osDip/OSDipParam.h -text

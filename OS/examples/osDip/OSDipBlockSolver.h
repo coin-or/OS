@@ -25,6 +25,7 @@
 #include "OSErrorClass.h"
 #include <vector>
 #include <string>
+#include <map>
 
 // --------------------------------------------------------------------- //
 /*!
@@ -89,12 +90,6 @@ public:
 	
 	
 	/**
-	 * Solver Factory
-	 */
-	
-	static OSDipBlockSolver* classFactory(const std::string &type, OSInstance *osinstance) ;
-	
-	/**
 	 *
 	 * Default Constructor. 
 	 */	
@@ -108,6 +103,20 @@ public:
 	
 	
 	//
+};//end class OSDipBlockSolver
+
+
+/**
+ * Solver Factory
+ */
+
+class OSDipBlockSolverFactory{
+	
+public:
+	OSInstance *osinstance;
+	virtual  OSDipBlockSolver* create() = 0;
+	static  std::map<std::string, OSDipBlockSolverFactory*> factories;
+	static 	OSDipBlockSolver* createOSDipBlockSolver(const string &solverName) throw(ErrorClass);
 };
 
 #endif

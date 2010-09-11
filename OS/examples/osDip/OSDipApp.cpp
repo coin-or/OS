@@ -19,6 +19,7 @@
 #include  "OSDipBlockCoinSolver.h"
 
 
+
 void OSDipApp::initializeApp(UtilParameters & utilParam) {
 
 	UtilPrintFuncBegin(m_osLog, m_classTag, "initializeApp()",
@@ -68,12 +69,12 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		std::vector<OSInstance*>::iterator vit1;
 
 		OSDipBlockSolver *solver = NULL;
-
+		factoryInit  = new OSDipFactoryInitializer();
+		
 		for (vit1 = m_blockOSInstances.begin(); vit1
 				!= m_blockOSInstances.end(); vit1++) {
-
-			//solver = new OSDipBlockCoinSolver( *vit1);
-			solver = OSDipBlockSolver::classFactory( "OSDipBlockCoinSolver", *vit1 );
+			OSDipBlockSolverFactory::factories["OSDipBlockCoinSolver"]->osinstance = *vit1;
+			solver = OSDipBlockSolverFactory::factories["OSDipBlockCoinSolver"]->create();
 			m_osDipBlockSolver.push_back( solver);
 
 		}

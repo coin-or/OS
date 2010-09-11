@@ -15,7 +15,7 @@
  * 
  */
 #include "OSDipBlockSolver.h"
-#include "OSDipBlockCoinSolver.h"
+
 
 OSDipBlockSolver::OSDipBlockSolver():
 	m_cost(NULL),
@@ -30,9 +30,24 @@ OSDipBlockSolver::~OSDipBlockSolver(){
 }//end ~OSDipBlockSolver
 
 
-OSDipBlockSolver* OSDipBlockSolver::classFactory(const std::string &type, OSInstance *osinstance) {
+//OSDipBlockSolver* OSDipBlockSolver::classFactory(const std::string &type, OSInstance *osinstance) {
 	
-	if(type == "OSDipBlockCoinSolver") return new OSDipBlockCoinSolver( osinstance);
+//	if(type == "OSDipBlockCoinSolver") return new OSDipBlockCoinSolver( osinstance);
 
 	
-}//end factory
+//}//end factory
+
+std::map<std::string, OSDipBlockSolverFactory*> OSDipBlockSolverFactory::factories;
+
+OSDipBlockSolver* OSDipBlockSolverFactory::createOSDipBlockSolver(const string &solverName) throw(ErrorClass){
+	
+	
+	if( factories.find(solverName) != factories.end() ){
+		
+		return factories[ solverName]->create();
+		
+	}else{
+		throw ErrorClass( solverName + " is not a valid OSDipBlockSolver");
+	}
+	
+}//end 

@@ -22,6 +22,7 @@
 #include "OSDipParam.h"
 #include  "OSDipBlockSolver.h"
 #include "OSInstance.h"
+#include  "OSDipFactoryInitializer.h"
 
 // --------------------------------------------------------------------- //
 /*!
@@ -36,6 +37,8 @@
 // --------------------------------------------------------------------- //
 class OSDipApp: public DecompApp {
 public:
+	
+	OSDipFactoryInitializer *factoryInit;
 	
 	/** m_osDipBlockSolver is a vector OSDipBlockSolvers  */
 	std::vector<OSDipBlockSolver* > m_osDipBlockSolver;
@@ -114,6 +117,9 @@ public:
 				delete *vit;
 
 		}
+		//finally delete the factories
+		
+		delete factoryInit;
 	}
 
 };
