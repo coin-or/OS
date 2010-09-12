@@ -1,0 +1,263 @@
+# Copyright (C) 2003, 2006 International Business Machines and others.
+# All Rights Reserved.
+# This file is distributed under the Common Public License.
+
+# $Id: Makefile.in 759 2006-07-07 03:07:08Z andreasw $
+
+##########################################################################
+#    You can modify this example makefile to fit for your own program.   #
+#    Usually, you only need to change the five CHANGEME entries below.   #
+##########################################################################
+
+# CHANGEME: This should be the name of your executable
+EXEDECOMP = osdip@EXEEXT@
+
+# CHANGEME: Here is the name of all object files corresponding to the source
+#           code that you wrote in order to define the problem statement
+
+
+OBJS          = OSDip_Main.@OBJEXT@
+OBJS         += OSDipInterface.@OBJEXT@
+OBJS         += OSDipApp.@OBJEXT@
+OBJS         += OSDipBlockSolver.@OBJEXT@
+OBJS         += OSDipBlockCoinSolver.@OBJEXT@
+
+# CHANGEME: Additional libraries
+ADDLIBS = 
+
+prefix = @prefix@
+
+# CHANGEME: Additional flags for compilation (e.g., include flags)
+ADDINCFLAGS =  -I${prefix}/include
+
+# CHANGEME: SRCDIR and VPATH should be the path to the source code. It is assumed
+# that the lib directory is in prefix/lib and the header files are in
+# prefix/include
+SRCDIR = @srcdir@
+VPATH = @srcdir@
+
+# Directory with OS header files
+OSINCDIR = @includedir@/
+# Directory with OS LIB files
+OSLIBDIR = ${prefix}/lib
+
+# CHANGEME:
+#must fill in see example
+DIPPATH = 
+#DIPPATH = /Users/kmartin/coin/dip-trunk/vpath/
+
+
+
+
+#
+#
+##########################################################################
+#  Usually, you don't have to change anything below.  Note that if you   #
+#  change certain compiler options, you might have to recompile OS.   #
+##########################################################################
+
+# C++ Compiler command
+CXX = @CXX@
+
+DEFS = -DHAVE_CONFIG_H
+
+# C++ Compiler options
+CXXFLAGS = @CXXFLAGS@  $(DEFS)
+
+
+
+DARWIN=$(findstring darwin, @build_os@)
+WIN=$(findstring gw, @build_os@)
+
+# additional C++ Compiler options for linking
+CXXLINKFLAGS = @RPATH_FLAGS@
+
+ifeq ($(DARWIN),darwin)
+  CXXLINKFLAGS += -bind_at_load
+endif
+
+
+
+# Directory with the libraries
+INSTALLIBDIR = @libdir@
+exec_prefix = @exec_prefix@
+#===========================================================================#
+# directory with COIN header files
+
+COININCDIR = $(DIPPATH)include/coin
+
+
+# directory with COIN libraries
+COINLIBDIR = $(DIPPATH)lib
+
+
+# includes, use the CYGPATH_W variables to allow compilation with win
+INCL =  -I`$(CYGPATH_W) $(COININCDIR)` $(ADDINCFLAGS)
+
+
+###########################################################################
+# define DECOMP libs
+###########################################################################
+LIBS = -L$(COINLIBDIR) \
+	-lDecomp       \
+	-lm 
+
+ADDINCFLAGS += -DCOIN_ASSERT
+
+###########################################################################
+#define vars for ALPS
+###########################################################################
+LIBS += -lAlps `cat $(DIPPATH)Dip/../Alps/alps_addlibs.txt`
+
+###########################################################################
+# define the directory for LP/IP solver determined at configure
+###########################################################################
+CPXINCDIR  = 
+
+###########################################################################
+# define vars for which IP solver was chosen in configure
+###########################################################################
+CBC_IP_SOLVER    = TRUE
+CPLEX_IP_SOLVER  = #TRUE
+
+ifeq ($(CBC_IP_SOLVER),TRUE)
+LIBS += -lOsiCbc -lCbcSolver -lCbc `cat $(DIPPATH)Dip/../Cbc/cbc_addlibs.txt`
+ADDINCFLAGS += -D__DECOMP_IP_CBC__
+endif
+
+ifeq ($(CPLEX_IP_SOLVER),TRUE)
+INCL += -I`$(CYGPATH_W) $(CPXINCDIR)`
+LIBS += -lOsiCpx -lcplex
+ADDINCFLAGS += -D__DECOMP_IP_CPX__
+endif
+
+###########################################################################
+# define vars for which LP solver was chosen in configure
+###########################################################################
+CLP_LP_SOLVER    = TRUE
+CPLEX_LP_SOLVER  = #TRUE
+
+ifeq ($(CLP_LP_SOLVER),TRUE)
+LIBS += -lOsiClp -lClp `cat $(DIPPATH)Dip/../Clp/clp_addlibs.txt`
+ADDINCFLAGS += -D__DECOMP_LP_CLP__
+endif
+
+ifeq ($(CPLEX_LP_SOLVER),TRUE)
+INCL += -I`$(CYGPATH_W) $(CPXINCDIR)`
+LIBS += -lOsiCpx -lcplex
+ADDINCFLAGS += -D__DECOMP_LP_CPX__
+endif
+
+
+###########################################################################
+# define OS libs
+###########################################################################
+LIBS += -L$(OSLIBDIR) -lOS
+
+INCL += -I$(OSINCDIR)/coin
+INCL += -I$(OSINCDIR)/coin/include
+
+
+
+###########################################################################
+# define DECOMP libs
+###########################################################################
+LIBS = -L$(COINLIBDIR) \
+	-lDecomp       \
+	-lm 
+
+ADDINCFLAGS += -DCOIN_ASSERT
+
+###########################################################################
+#define vars for ALPS
+###########################################################################
+LIBS += -lAlps `cat $(DIPPATH)Dip/../Alps/alps_addlibs.txt`
+
+###########################################################################
+# define the directory for LP/IP solver determined at configure
+###########################################################################
+CPXINCDIR  = 
+
+###########################################################################
+# define vars for which IP solver was chosen in configure
+###########################################################################
+CBC_IP_SOLVER    = TRUE
+CPLEX_IP_SOLVER  = #TRUE
+
+ifeq ($(CBC_IP_SOLVER),TRUE)
+LIBS += -lOsiCbc -lCbcSolver -lCbc `cat @CBCOBJDIR@/cbc_addlibs.txt`
+ADDINCFLAGS += -D__DECOMP_IP_CBC__
+endif
+
+ifeq ($(CPLEX_IP_SOLVER),TRUE)
+INCL += -I`$(CYGPATH_W) $(CPXINCDIR)`
+LIBS += -lOsiCpx -lcplex
+ADDINCFLAGS += -D__DECOMP_IP_CPX__
+endif
+
+###########################################################################
+# define vars for which LP solver was chosen in configure
+###########################################################################
+CLP_LP_SOLVER    = TRUE
+CPLEX_LP_SOLVER  = #TRUE
+
+ifeq ($(CLP_LP_SOLVER),TRUE)
+LIBS += -lOsiClp -lClp `cat @CLPOBJDIR@/clp_addlibs.txt`
+ADDINCFLAGS += -D__DECOMP_LP_CLP__
+endif
+
+ifeq ($(CPLEX_LP_SOLVER),TRUE)
+INCL += -I`$(CYGPATH_W) $(CPXINCDIR)`
+LIBS += -lOsiCpx -lcplex
+ADDINCFLAGS += -D__DECOMP_LP_CPX__
+endif
+
+
+###########################################################################
+# define OS libs
+###########################################################################
+LIBS += -L$(OSLIBDIR) -lOS
+###########################################################################
+# define COIN libs
+###########################################################################
+LIBS += -L$(COINLIBDIR) -lCgl -lOsi  \
+	`cat @CGLOBJDIR@/cgl_addlibs.txt` \
+	`cat @OSIOBJDIR@/osi_addlibs.txt` \
+	`cat @COINUTILSOBJDIR@/coinutils_addlibs.txt`
+#NOTE: CGL depends on CLP
+LIBS += -lOsiClp -lClp -lCoinUtils `cat @CLPOBJDIR@/clp_addlibs.txt`
+
+
+@COIN_HAS_SYMPHONY_TRUE@LIBS += -L$(COINLIBDIR) @osisymphonylib@
+@COIN_HAS_DYLP_TRUE@LIBS += -L$(COINLIBDIR) @osidylplib@
+@COIN_HAS_VOL_TRUE@LIBS += -L$(COINLIBDIR) @osivollib@ 
+@COIN_HAS_GLPK_TRUE@LIBS += -L$(COINLIBDIR) @osiglpklib@ 
+@COIN_HAS_SYMPHONY_TRUE@LIBS += -L$(COINLIBDIR) @symphonylib@
+@COIN_HAS_DYLP_TRUE@LIBS += -L$(COINLIBDIR) @dylplib@ 
+@COIN_HAS_VOL_TRUE@LIBS += -L$(COINLIBDIR) @vollib@
+LIBS += -L$(COINLIBDIR) -lCoinUtils
+
+#===========================================================================#
+# The following is necessary under cygwin, if native compilers are used
+CYGPATH_W = echo
+
+#===========================================================================#
+all: $(EXEDECOMP)
+
+.SUFFIXES: .cpp .c .o .obj
+
+$(EXEDECOMP):  $(OBJS)
+	bla=;\
+	for file in $(OBJS); do bla="$$bla `$(CYGPATH_W) $$file`"; done; \
+	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) -o $@ $$bla $(ADDLIBS) $(LIBS)
+
+clean:
+	rm -rf $(EXE) $(OBJS)
+
+
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `test -f '$<' || echo '$(SRCDIR)/'`$<
+
+.cpp.obj:
+	$(CXX) $(CXXFLAGS) $(INCL) -c -o $@ `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(SRCDIR)/$<'; fi`

@@ -495,6 +495,23 @@ OS/examplesOld/misc/rosenbrockmodPostfixVersion2.osil -text
 OS/examplesOld/misc/sampleMatrixProgramming-v5_5.osil -text
 OS/examplesOld/misc/sampleMatrixProgramming-v6.osil -text
 OS/examplesOld/misc/ss30.osil -text
+OS/examplesOld/osDip/Makefile.in -text
+OS/examplesOld/osDip/OSDipApp.cpp -text
+OS/examplesOld/osDip/OSDipApp.h -text
+OS/examplesOld/osDip/OSDipAppOld.cpp -text
+OS/examplesOld/osDip/OSDipBlockCoinSolver.cpp -text
+OS/examplesOld/osDip/OSDipBlockCoinSolver.h -text
+OS/examplesOld/osDip/OSDipBlockSolver.cpp -text
+OS/examplesOld/osDip/OSDipBlockSolver.h -text
+OS/examplesOld/osDip/OSDipFactoryInitializer.h -text
+OS/examplesOld/osDip/OSDipInterface.cpp -text
+OS/examplesOld/osDip/OSDipInterface.h -text
+OS/examplesOld/osDip/OSDipParam.h -text
+OS/examplesOld/osDip/OSDip_Main.cpp -text
+OS/examplesOld/osDip/osDip.pdf -text svneol=unset#unset
+OS/examplesOld/osDip/osDip.tex -text
+OS/examplesOld/osDip/osdip.parm.in -text
+OS/examplesOld/osDip/own.sty -text
 OS/examplesOld/osJavaDemo/OSJavaDemo.java -text
 OS/examplesOld/osJavaDemo/OSParameter.xml -text
 OS/examplesOld/osModificationDemo/Makefile.in -text
