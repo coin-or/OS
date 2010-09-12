@@ -865,6 +865,7 @@ AC_CONFIG_FILES([Makefile
           src/OSModelInterfaces/Makefile
           src/OSParsers/Makefile
           test/Makefile
+          examples/algorithmicDiff/Makefile
           examples/instanceGenerator/Makefile
           examples/cglCuts/Makefile
           examples/osModificationDemo/Makefile
@@ -873,7 +874,6 @@ AC_CONFIG_FILES([Makefile
 	      examples/osResultDemo/Makefile
           examples/template/Makefile
           examples/branchCutPrice/Makefile
- 	      examples/branchCutPriceTSP/Makefile
  	      examples/osDip/Makefile
  	      examples/osDip/osdip.parm
           applications/Makefile

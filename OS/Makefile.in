@@ -64,8 +64,8 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/os_addlibs.txt.in \
 	$(top_srcdir)/applications/fileUpload/Makefile.in \
 	$(top_srcdir)/configure \
+	$(top_srcdir)/examples/algorithmicDiff/Makefile.in \
 	$(top_srcdir)/examples/branchCutPrice/Makefile.in \
-	$(top_srcdir)/examples/branchCutPriceTSP/Makefile.in \
 	$(top_srcdir)/examples/cglCuts/Makefile.in \
 	$(top_srcdir)/examples/instanceGenerator/Makefile.in \
 	$(top_srcdir)/examples/osDip/Makefile.in \
@@ -88,12 +88,12 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_os.h
-CONFIG_CLEAN_FILES = examples/instanceGenerator/Makefile \
-	examples/cglCuts/Makefile examples/osModificationDemo/Makefile \
+CONFIG_CLEAN_FILES = examples/algorithmicDiff/Makefile \
+	examples/instanceGenerator/Makefile examples/cglCuts/Makefile \
+	examples/osModificationDemo/Makefile \
 	examples/osRemoteTest/Makefile examples/osSolverDemo/Makefile \
 	examples/osResultDemo/Makefile examples/template/Makefile \
-	examples/branchCutPrice/Makefile \
-	examples/branchCutPriceTSP/Makefile examples/osDip/Makefile \
+	examples/branchCutPrice/Makefile examples/osDip/Makefile \
 	examples/osDip/osdip.parm applications/fileUpload/Makefile \
 	os_addlibs.txt
 SOURCES =
@@ -466,6 +466,8 @@ $(top_srcdir)/inc/config_os.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 
 distclean-hdr:
 	-rm -f inc/config_os.h inc/stamp-h1
+examples/algorithmicDiff/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/algorithmicDiff/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/instanceGenerator/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/instanceGenerator/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/cglCuts/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/cglCuts/Makefile.in
@@ -481,8 +483,6 @@ examples/osResultDemo/Makefile: $(top_builddir)/config.status $(top_srcdir)/exam
 examples/template/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/template/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/branchCutPrice/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/branchCutPrice/Makefile.in
-	cd $(top_builddir) && $(SHELL) ./config.status $@
-examples/branchCutPriceTSP/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/branchCutPriceTSP/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 examples/osDip/Makefile: $(top_builddir)/config.status $(top_srcdir)/examples/osDip/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
@@ -638,7 +638,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/applications/fileUpload $(distdir)/examples/branchCutPrice $(distdir)/examples/branchCutPriceTSP $(distdir)/examples/cglCuts $(distdir)/examples/instanceGenerator $(distdir)/examples/osDip $(distdir)/examples/osModificationDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/osResultDemo $(distdir)/examples/osSolverDemo $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/applications/fileUpload $(distdir)/examples/algorithmicDiff $(distdir)/examples/branchCutPrice $(distdir)/examples/cglCuts $(distdir)/examples/instanceGenerator $(distdir)/examples/osDip $(distdir)/examples/osModificationDemo $(distdir)/examples/osRemoteTest $(distdir)/examples/osResultDemo $(distdir)/examples/osSolverDemo $(distdir)/examples/template $(distdir)/inc $(distdir)/m4
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
