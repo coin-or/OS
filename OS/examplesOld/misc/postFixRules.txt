@@ -1,0 +1,15 @@
+Ideas:
+
+1) We will store two arrays. One array will be an array of doubles. These are the numbers in the expression. We keep a second array of integers that is the operator array.
+
+2) We load into the operator array an integer (i.e. an instruction) for each operator. Most operators such as PLUS, MINUS, SIN, LN, LOG, etc, will require only one integer.  However, operators such as the following will require two integers in the list.  Here are several examples.
+
+SUM -- a second integer which is the number of operands in the summation
+
+PRODUCT -- likewise
+
+NUM --  a second integer, it is the index in the values array that corresponds to the number
+
+VAR -- a second integer, it is the index of the variable
+
+Note -- in my values array I have repeated the number 2.0 three times. This was not necessary and I could have compressed this array.
