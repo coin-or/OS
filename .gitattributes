@@ -243,6 +243,7 @@ OS/data/osolFiles/rosenbrockmod_knitro.osol -text
 OS/data/osolFiles/rosenbrockmod_lindo.osol -text
 OS/data/osolFiles/send.osol -text
 OS/data/osolFiles/sendWithJobID.osol -text
+OS/data/osolFiles/smallIPBook.osol -text
 OS/data/osolFiles/solveroptions.osol -text
 OS/data/osolFiles/spl1-b.osol -text
 OS/data/osolFiles/spl1.osol -text

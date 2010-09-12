@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+	<general> 
+		<instanceName>spl1 -- setup constraints are the blocks</instanceName>
+	</general>
+
+	
+        <optimization>
+
+
+        	<variables numberOfOtherVariableOptions="1">
+
+        		
+        		
+        		
+        		<other name="variableBlockSet" solver="Dip" numberOfVar="2" >
+        			<var idx="0" />
+        			<var idx="1" />
+        		</other>
+        		
+</variables>
+	
+        	
+        <constraints numberOfOtherConstraintOptions="1">
+        	<other name="constraintSet" solver="Dip" numberOfCon="1" type="Core" >
+        		<con idx="2"/>
+        	</other>
+
+
+        	
+
+        	
+        </constraints>	
+        	
+        	
+
+	</optimization>
+</osol>
