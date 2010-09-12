@@ -1948,8 +1948,18 @@ std::string OSInstance::printModel( ){
 	outStr << "Variables:" << std::endl;
 	if(m_bProcessVariables != true ) this->processVariables();
 	for(i = 0; i < numVar; i++){
-		outStr << "x_";
-		outStr << i;
+
+
+	if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  i ]->name.size() > 0){
+					outStr << this->instanceData->variables->var[  i ]->name;
+					}else{
+					outStr << "x_";
+					outStr << i;
+				}
+
+
+		//outStr << "x_";
+		//outStr << i;
 		outStr << " Type = " ;
 		outStr <<  m_mcVariableTypes[i];
 		outStr << "  Lower Bound =  ";

@@ -334,6 +334,20 @@ X41 + X42 =    1
 2 X12 + 4 X22 + 10 X32 + 4 X42 <=   10
 \end{verbatim}
 
+\section{Implementing A Block Solver}
+
+\section{Issues}
+
+\begin{itemize}
+  \item Enhance solveRelaxed to allow parallel processing of blocks. See ticket
+  30.
+  \item Does not work when there are 0 integer variables. See ticket 31.
+  \item Be able to set options in C++ code. See ticket 41.
+  \item Problem with Alps  bounds at node 0. See ticket 43
+  \item Figure out how to use BranchEnforceInMaster or BranchEnforceInSubProb so
+  I don't get the large bonds on the variables. See ticket 47.
+\end{itemize}
+
 \end{document}
 
 configure - using command line or configure file

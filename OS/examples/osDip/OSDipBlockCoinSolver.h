@@ -40,7 +40,7 @@ public:
 
 	OSInstance *m_osinstance;
 	OSResult *m_osresult;
-
+	int m_numberOfVar;
 	// first declare a generic solver
 	CoinSolver *m_solver ;
 	

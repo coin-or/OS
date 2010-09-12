@@ -66,8 +66,13 @@ OSoLFile = osolFiles/spl1.osol
 #OSiLFile = osilFiles/genAssign.osil
 #OSoLFile = osolFiles/genAssign.osol
 
+#Martin textbook example
+#OSiLFile = osilFiles/smallIPBook.osil
+#OSoLFile = osolFiles/smallIPBook.osol
+
 
 DataDir = ../../data
-
+solverFactory  = OSDipBlockCoinSolver
+#solverFactory = MyOwnSolver
 
 

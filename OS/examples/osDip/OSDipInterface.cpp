@@ -496,7 +496,7 @@ std::vector<OSInstance* > OS_DipInterface::getBlockOSInstances(){
 			
 			//see what this puppy looks like
 			
-			std::cout << osinstance->printModel( ) << std::endl;
+			//std::cout << osinstance->printModel( ) << std::endl;
 			
 			objcoeff->bDeleteArrays = true;
 			delete objcoeff;		

@@ -73,8 +73,8 @@ void OSDipApp::initializeApp(UtilParameters & utilParam) {
 		
 		for (vit1 = m_blockOSInstances.begin(); vit1
 				!= m_blockOSInstances.end(); vit1++) {
-			OSDipBlockSolverFactory::factories["OSDipBlockCoinSolver"]->osinstance = *vit1;
-			solver = OSDipBlockSolverFactory::factories["OSDipBlockCoinSolver"]->create();
+			OSDipBlockSolverFactory::factories[ m_appParam.solverFactory]->osinstance = *vit1;
+			solver = OSDipBlockSolverFactory::factories[ m_appParam.solverFactory]->create();
 			m_osDipBlockSolver.push_back( solver);
 
 		}
@@ -551,20 +551,36 @@ DecompSolverStatus OSDipApp::solveRelaxed(const int whichBlock,
 
 	}
 	
+	try{
+		m_osDipBlockSolver[whichBlock]->solve(cost, &solIndexValPair, &varRedCost);
+		kount = 0;		
+		for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
+			//kipp be careful here -- the the dimension of the cost vector
+			//is the same as the number of variable in the block -- NOT in the model
+			if(solIndexValPair.size() != blockVar.size() ) throw ErrorClass("an inconsistent number of block variables");
+			  
+		  solInd.push_back(  *sit ) ; //  again -- subproblem only sees variable in blockVar
+		  
+		
+		  solEls.push_back(  solIndexValPair[ kount]->value ) ;
+		  
+		  std::cout << "SOLUTION INDEX MODEL = " << *sit ;
+		  std::cout << "  SOLUTION INDEX SUBPROBLEM = " << kount ;
+		  std::cout << "  VARIABLE VALUE  = " << solIndexValPair[ kount]->value << std::endl;
+		  
+		  varOrigCost +=  m_objective[ *sit]*solIndexValPair[ kount]->value;
+		  kount++;
+		  
+
+		
+		}
 	
-	m_osDipBlockSolver[whichBlock]->solve(cost, &solIndexValPair, &varRedCost);
-	kount = 0;		
-	for (sit = blockVar.begin(); sit != blockVar.end(); sit++) {
-		//kipp be careful here 
-	//if(solIndexValPair.size() != blockVar.size() ) -- throw error
-	  solInd.push_back(  *sit ) ;
-	  std::cout << "SOLUTION INDEX = " << *sit << std::endl;
-	  solEls.push_back(  solIndexValPair[ kount]->value ) ;
-	  std::cout << "VARIABLE VALUE  = " << solIndexValPair[ kount]->value << std::endl;
-	  varOrigCost +=  m_objective[ *sit]*solIndexValPair[ kount]->value;
-	  kount++;
-	
+	} catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
 	}
+
 	
 	std::cout << "Convex Dual = " << convexDual << std::endl;
 	std::cout << "ORIGINAL COST =  = " <<  varOrigCost << std::endl;

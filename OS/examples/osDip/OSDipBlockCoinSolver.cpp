@@ -38,6 +38,7 @@ OSDipBlockCoinSolver::OSDipBlockCoinSolver( OSInstance *osinstance) {
 		m_solver->buildSolverInstance();
 		//m_osrlreader = NULL;
 		//m_osrlreader = new OSrLReader();
+		m_numberOfVar = m_osinstance->getVariableNumber();
 	
 	} catch (const ErrorClass& eclass) {
 
@@ -58,7 +59,22 @@ void OSDipBlockCoinSolver::solve(double *cost, std::vector<IndexValuePair*> *sol
 
 	try{
 		//set the objective function
+		//here we are using the Osi Interface
+		//we have already built the model
 		m_solver->osiSolver->setObjective( cost);
+		
+		//an echo check -- kipp put this inside a statement using a print log
+		for(int i = 0 ; i < m_numberOfVar; i++){
+			
+			m_osinstance->instanceData->objectives->obj[0]->coef[i]->value 
+					= cost[ i];
+			
+		}
+		m_osinstance->bObjectivesModified = true;
+		std::cout << m_osinstance->printModel( ) << std::endl;
+		//
+		
+		
 		//solve the model
 		m_solver->solve();
 		m_osresult = m_solver->osresult;
@@ -92,7 +108,11 @@ void OSDipBlockCoinSolver::solve(double *cost, std::string *osrl){
 	
 	try{
 		//set the objective function
+		//here we are using the Osi Interface
+		//we have already built the model
 		m_solver->osiSolver->setObjective( cost);
+		
+		std::cout << m_osinstance->printModel( ) << std::endl;
 		//solve the model
 		m_solver->solve();
 		//std::cout << "MODEL BEING SOLVED " << std::endl;

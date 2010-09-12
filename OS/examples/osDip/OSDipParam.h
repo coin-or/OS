@@ -37,6 +37,7 @@ public:
    string DataDir;
    string OSiLFile;
    string OSoLFile;
+   string solverFactory;
    int    UseNames;  //col/row names for debugging
    int    UseSparse; //create all blocks sparsely
    int    FullModel; //create full model for CPM or direct
@@ -55,6 +56,7 @@ public:
       DataDir      = utilParam.GetSetting("DataDir",      "",    common);
       OSiLFile     = utilParam.GetSetting("OSiLFile",     "",    common);   
       OSoLFile     = utilParam.GetSetting("OSoLFile",     "",    common); 
+      solverFactory     = utilParam.GetSetting("solverFactory",     "",    common); 
       UseNames     = utilParam.GetSetting("UseNames",       0, common);
       UseSparse    = utilParam.GetSetting("UseSparse",      0, common);
       FullModel    = utilParam.GetSetting("FullModel",      0, common);
@@ -73,6 +75,7 @@ public:
       (*os) << common << ": DataDir           : " << DataDir          << endl;
       (*os) << common << ": OSiLFile          : " << OSiLFile         << endl;
       (*os) << common << ": OSoLFile          : " << OSoLFile         << endl;
+      (*os) << common << ": solverFactory     : " << solverFactory         << endl;
       (*os) << common << ": UseNames          : " << UseNames         << endl;
       (*os) << common << ": UseSparse         : " << UseSparse        << endl;
       (*os) << common << ": FullModel         : " << FullModel        << endl;
@@ -90,6 +93,7 @@ public:
       DataDir         (""),
       OSiLFile        (""),
       OSoLFile        (""),
+      solverFactory        (""),
       UseNames        (0),
       UseSparse       (1),
       FullModel       (0),
