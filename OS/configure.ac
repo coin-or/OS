@@ -848,7 +848,9 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
 ##
 AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
-
+#### EXAMPLE SOURCE CODE
+AC_COIN_VPATH_LINK(../examples/osSolverDemo/osSolverDemo.cpp)
+AC_COIN_VPATH_LINK(examples/osSolverDemo/osSolverDemo.cpp)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #
@@ -865,17 +867,18 @@ AC_CONFIG_FILES([Makefile
           src/OSModelInterfaces/Makefile
           src/OSParsers/Makefile
           test/Makefile
-          examples/algorithmicDiff/Makefile
-          examples/instanceGenerator/Makefile
-          examples/cglCuts/Makefile
-          examples/osModificationDemo/Makefile
-          examples/osRemoteTest/Makefile
+          ../examples/algorithmicDiff/Makefile
+          ../examples/instanceGenerator/Makefile
+          ../examples/cglCuts/Makefile
+          ../examples/osModificationDemo/Makefile
+          ../examples/osRemoteTest/Makefile
+          ../examples/osSolverDemo/Makefile
+	  ../examples/osResultDemo/Makefile
+          ../examples/template/Makefile
+          ../examples/branchCutPrice/Makefile
+ 	  ../examples/osDip/Makefile
+ 	  ../examples/osDip/osdip.parm
           examples/osSolverDemo/Makefile
-	      examples/osResultDemo/Makefile
-          examples/template/Makefile
-          examples/branchCutPrice/Makefile
- 	      examples/osDip/Makefile
- 	      examples/osDip/osdip.parm
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile

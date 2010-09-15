@@ -80,5 +80,8 @@ AC_COIN_MAIN_SUBDIRS(OS)
 AC_CONFIG_FILES([Makefile]) 
 
 
+
+
+##############################################################################
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE
