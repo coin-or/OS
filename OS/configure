@@ -31114,9 +31114,81 @@ if test $coin_vpath_config = yes; then
   coin_vpath_link_files="$coin_vpath_link_files ../examples/osSolverDemo/osSolverDemo.cpp"
 fi
 
+##AC_COIN_VPATH_LINK(examples/osSolverDemo/osSolverDemo.cpp)
+#### EXAMPLE DATA FILES
 
 if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files examples/osSolverDemo/osSolverDemo.cpp"
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/CoinOS.opt"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/CppADTestLag.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/bonminEx1.nl"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.gms"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.mod"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.nl"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/knock.ospl"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/nonconvex.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/p0033.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/parinc.mps"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/parincLinear.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/rosenbrockmod.osil"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/sendWithJobID.osol"
+fi
+
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/wayneQuadratic.osil"
 fi
 
 

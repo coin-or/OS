@@ -850,7 +850,23 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
 #### EXAMPLE SOURCE CODE
 AC_COIN_VPATH_LINK(../examples/osSolverDemo/osSolverDemo.cpp)
-AC_COIN_VPATH_LINK(examples/osSolverDemo/osSolverDemo.cpp)
+##AC_COIN_VPATH_LINK(examples/osSolverDemo/osSolverDemo.cpp)
+#### EXAMPLE DATA FILES
+AC_COIN_VPATH_LINK(../examples/data/CoinOS.opt)
+AC_COIN_VPATH_LINK(../examples/data/CppADTestLag.osil)
+AC_COIN_VPATH_LINK(../examples/data/bonminEx1.nl)
+AC_COIN_VPATH_LINK(../examples/data/eastborne.gms)
+AC_COIN_VPATH_LINK(../examples/data/eastborne.mod)
+AC_COIN_VPATH_LINK(../examples/data/eastborne.nl)
+AC_COIN_VPATH_LINK(../examples/data/eastborne.osil)
+AC_COIN_VPATH_LINK(../examples/data/knock.ospl)
+AC_COIN_VPATH_LINK(../examples/data/nonconvex.osil)
+AC_COIN_VPATH_LINK(../examples/data/p0033.osil)
+AC_COIN_VPATH_LINK(../examples/data/parinc.mps)
+AC_COIN_VPATH_LINK(../examples/data/parincLinear.osil)
+AC_COIN_VPATH_LINK(../examples/data/rosenbrockmod.osil)
+AC_COIN_VPATH_LINK(../examples/data/sendWithJobID.osol)
+AC_COIN_VPATH_LINK(../examples/data/wayneQuadratic.osil)
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #
