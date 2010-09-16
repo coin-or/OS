@@ -645,12 +645,6 @@ AC_SUBST(oslib)
 AC_SUBST(USE_ASL_LIB)
 
 
-##############################################################################
-#                   VPATH links for example input files                      #
-##############################################################################
-
-# In case this is a VPATH configuration we need to make sure that the
-# input files for the examples are available in the VPATH directory.
 
 
 ##
@@ -848,25 +842,7 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
 ##
 AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
-#### EXAMPLE SOURCE CODE
-AC_COIN_VPATH_LINK(../examples/osSolverDemo/osSolverDemo.cpp)
-##AC_COIN_VPATH_LINK(examples/osSolverDemo/osSolverDemo.cpp)
-#### EXAMPLE DATA FILES
-AC_COIN_VPATH_LINK(../examples/data/CoinOS.opt)
-AC_COIN_VPATH_LINK(../examples/data/CppADTestLag.osil)
-AC_COIN_VPATH_LINK(../examples/data/bonminEx1.nl)
-AC_COIN_VPATH_LINK(../examples/data/eastborne.gms)
-AC_COIN_VPATH_LINK(../examples/data/eastborne.mod)
-AC_COIN_VPATH_LINK(../examples/data/eastborne.nl)
-AC_COIN_VPATH_LINK(../examples/data/eastborne.osil)
-AC_COIN_VPATH_LINK(../examples/data/knock.ospl)
-AC_COIN_VPATH_LINK(../examples/data/nonconvex.osil)
-AC_COIN_VPATH_LINK(../examples/data/p0033.osil)
-AC_COIN_VPATH_LINK(../examples/data/parinc.mps)
-AC_COIN_VPATH_LINK(../examples/data/parincLinear.osil)
-AC_COIN_VPATH_LINK(../examples/data/rosenbrockmod.osil)
-AC_COIN_VPATH_LINK(../examples/data/sendWithJobID.osol)
-AC_COIN_VPATH_LINK(../examples/data/wayneQuadratic.osil)
+
 
 ##############################################################################
 #                   Finishing up by writing all the output                   #
@@ -883,18 +859,6 @@ AC_CONFIG_FILES([Makefile
           src/OSModelInterfaces/Makefile
           src/OSParsers/Makefile
           test/Makefile
-          ../examples/algorithmicDiff/Makefile
-          ../examples/instanceGenerator/Makefile
-          ../examples/cglCuts/Makefile
-          ../examples/osModificationDemo/Makefile
-          ../examples/osRemoteTest/Makefile
-          ../examples/osSolverDemo/Makefile
-	  ../examples/osResultDemo/Makefile
-          ../examples/template/Makefile
-          ../examples/branchCutPrice/Makefile
- 	  ../examples/osDip/Makefile
- 	  ../examples/osDip/osdip.parm
-          examples/osSolverDemo/Makefile
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile

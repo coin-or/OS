@@ -30275,12 +30275,6 @@ esac
 
 
 
-##############################################################################
-#                   VPATH links for example input files                      #
-##############################################################################
-
-# In case this is a VPATH configuration we need to make sure that the
-# input files for the examples are available in the VPATH directory.
 
 
 ##
@@ -31108,88 +31102,6 @@ if test $coin_vpath_config = yes; then
 fi
 
 ##
-#### EXAMPLE SOURCE CODE
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/osSolverDemo/osSolverDemo.cpp"
-fi
-
-##AC_COIN_VPATH_LINK(examples/osSolverDemo/osSolverDemo.cpp)
-#### EXAMPLE DATA FILES
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/CoinOS.opt"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/CppADTestLag.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/bonminEx1.nl"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.gms"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.mod"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.nl"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/eastborne.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/knock.ospl"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/nonconvex.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/p0033.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/parinc.mps"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/parincLinear.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/rosenbrockmod.osil"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/sendWithJobID.osol"
-fi
-
-
-if test $coin_vpath_config = yes; then
-  coin_vpath_link_files="$coin_vpath_link_files ../examples/data/wayneQuadratic.osil"
-fi
 
 
 ##############################################################################
@@ -31198,7 +31110,7 @@ fi
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-                                                                                                                                                                                                                                                          ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile ../examples/algorithmicDiff/Makefile ../examples/instanceGenerator/Makefile ../examples/cglCuts/Makefile ../examples/osModificationDemo/Makefile ../examples/osRemoteTest/Makefile ../examples/osSolverDemo/Makefile ../examples/osResultDemo/Makefile ../examples/template/Makefile ../examples/branchCutPrice/Makefile ../examples/osDip/Makefile ../examples/osDip/osdip.parm examples/osSolverDemo/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile os_addlibs.txt"
+                                                                                                                                  ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile os_addlibs.txt"
 
 
 
@@ -32039,18 +31951,6 @@ do
   "src/OSModelInterfaces/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/OSModelInterfaces/Makefile" ;;
   "src/OSParsers/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/OSParsers/Makefile" ;;
   "test/Makefile" ) CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
-  "../examples/algorithmicDiff/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/algorithmicDiff/Makefile" ;;
-  "../examples/instanceGenerator/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/instanceGenerator/Makefile" ;;
-  "../examples/cglCuts/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/cglCuts/Makefile" ;;
-  "../examples/osModificationDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/osModificationDemo/Makefile" ;;
-  "../examples/osRemoteTest/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/osRemoteTest/Makefile" ;;
-  "../examples/osSolverDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/osSolverDemo/Makefile" ;;
-  "../examples/osResultDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/osResultDemo/Makefile" ;;
-  "../examples/template/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/template/Makefile" ;;
-  "../examples/branchCutPrice/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/branchCutPrice/Makefile" ;;
-  "../examples/osDip/Makefile" ) CONFIG_FILES="$CONFIG_FILES ../examples/osDip/Makefile" ;;
-  "../examples/osDip/osdip.parm" ) CONFIG_FILES="$CONFIG_FILES ../examples/osDip/osdip.parm" ;;
-  "examples/osSolverDemo/Makefile" ) CONFIG_FILES="$CONFIG_FILES examples/osSolverDemo/Makefile" ;;
   "applications/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/Makefile" ;;
   "applications/amplClient/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/amplClient/Makefile" ;;
   "applications/fileUpload/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/fileUpload/Makefile" ;;
