@@ -67,7 +67,27 @@
 			<xs:maxInclusive value="100.0"/>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:complexType name="LegacyIntVector">
+	<xs:complexType name="IndexValuePair">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:double">
+				<xs:attribute name="idx" type="xs:int" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="IndexStringPair">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:int" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="LinearConstraintCoefficientsIntVector">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -88,7 +108,7 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
-	<xs:complexType name="LegacyNonNegativeIntVector">
+	<xs:complexType name="LinearConstraintCoefficientNonNegativeIntVector">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -109,7 +129,7 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 	</xs:complexType>
-	<xs:complexType name="LegacyDoubleVector">
+	<xs:complexType name="LinearConstraintCoefficientsDoubleVector">
 		<xs:annotation>
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
@@ -174,6 +194,17 @@
 		</xs:choice>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
+	<xs:complexType name="NonNegativeIntVectorWithValueAndDescriptionAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="NonNegativeIntVector">
+				<xs:attribute name="value" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="PositiveIntVector">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -217,6 +248,17 @@
 			<xs:element name="base64BinaryData" type="Base64BinaryData"/>
 		</xs:choice>
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NegativeIntVectorWithValueAndDescriptionAttribute">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="NegativeIntVector">
+				<xs:attribute name="value" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="DoubleVector">
 		<xs:annotation>
@@ -505,22 +547,6 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:positiveInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:positiveInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="ConstantMatrixElements">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:sequence minOccurs="0">
-			<xs:annotation>
-				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
-			</xs:annotation>
-			<xs:element name="start" type="IntVector"/>
-			<xs:choice>
-				<xs:element name="rowIdx" type="IntVector"/>
-				<xs:element name="colIdx" type="IntVector"/>
-			</xs:choice>
-			<xs:element name="values" type="DoubleVector"/>
-		</xs:sequence>
 		<xs:attribute name="base" use="optional" default="none">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -539,6 +565,22 @@
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
 		<xs:attribute name="symmetric" type="xs:boolean" default="false"/>
+	</xs:complexType>
+	<xs:complexType name="ConstantMatrixElements">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+		<xs:sequence minOccurs="0">
+			<xs:annotation>
+				<xs:documentation>Number of entries in the value and rowIdx/colIdx child elements must agree with numberOfValues (after "mult" has been considered)</xs:documentation>
+			</xs:annotation>
+			<xs:element name="start" type="IntVector"/>
+			<xs:choice>
+				<xs:element name="rowIdx" type="IntVector"/>
+				<xs:element name="colIdx" type="IntVector"/>
+			</xs:choice>
+			<xs:element name="values" type="DoubleVector"/>
+		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixTransformation">
 		<xs:annotation>
@@ -559,24 +601,6 @@
 			<xs:element name="block" type="ConstantMatrixBlock" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfBlocks" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="base" use="optional" default="none">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="none"/>
-					<xs:enumeration value="objectiveCoefficients"/>
-					<xs:enumeration value="linearConstraintCoefficients"/>
-					<xs:enumeration value="matrix"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
-		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="baseMatrixEndRow" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
-		<xs:attribute name="scalarCoef" type="xs:double" use="optional" default="1.0"/>
-		<xs:attribute name="symmetric" type="xs:boolean" default="false"/>
 	</xs:complexType>
 	<xs:complexType name="ConstantMatrixBlock">
 		<xs:annotation>
@@ -979,7 +1003,7 @@
 		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
-				<xs:attribute name="prob" use="required" type="probability"/>
+				<xs:attribute name="prob" type="probability" use="required"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1014,7 +1038,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="p" use="required" type="probability"/>
+		<xs:attribute name="p" type="probability" use="required"/>
 	</xs:complexType>
 	<xs:element name="bernoulli" type="Bernoulli">
 		<xs:annotation>
@@ -1027,7 +1051,7 @@
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="N" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="p" use="required" type="probability"/>
+		<xs:attribute name="p" type="probability" use="required"/>
 	</xs:complexType>
 	<xs:element name="binomial" type="Binomial">
 		<xs:annotation>
@@ -1053,7 +1077,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="lambda" use="required" type="positiveDouble"/>
+		<xs:attribute name="lambda" type="positiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="poisson" type="Poisson">
 		<xs:annotation>
@@ -1065,7 +1089,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="p" use="required" type="probability"/>
+		<xs:attribute name="p" type="probability" use="required"/>
 	</xs:complexType>
 	<xs:element name="geometric" type="Geometric">
 		<xs:annotation>
@@ -1077,7 +1101,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="p" use="required" type="probability"/>
+		<xs:attribute name="p" type="probability" use="required"/>
 		<xs:attribute name="r" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="negativeBinomial" type="NegativeBinomial">
@@ -1128,7 +1152,7 @@
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="mu" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="sigma" use="optional" default="1" type="nonNegativeDouble"/>
+		<xs:attribute name="sigma" type="nonNegativeDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="normal" type="Normal">
 		<xs:annotation>
@@ -1151,7 +1175,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="lambda" use="required" type="positiveDouble"/>
+		<xs:attribute name="lambda" type="positiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="exponential" type="Exponential">
 		<xs:annotation>
@@ -1165,7 +1189,7 @@
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="location" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="scale" type="xs:double" use="optional" default="1"/>
-		<xs:attribute name="shape" use="required" type="positiveDouble"/>
+		<xs:attribute name="shape" type="positiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="weibull" type="Weibull">
 		<xs:annotation>
@@ -1177,7 +1201,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="lambda" use="required" type="positiveDouble"/>
+		<xs:attribute name="lambda" type="positiveDouble" use="required"/>
 		<xs:attribute name="n" type="xs:positiveInteger" use="required"/>
 	</xs:complexType>
 	<xs:element name="erlang" type="Erlang">
@@ -1195,8 +1219,8 @@
 				<xs:restriction base="xs:double"/>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="scale" use="required" type="nonNegativeDouble"/>
-		<xs:attribute name="shape" use="required" type="nonNegativeDouble"/>
+		<xs:attribute name="scale" type="nonNegativeDouble" use="required"/>
+		<xs:attribute name="shape" type="nonNegativeDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="gamma" type="Gamma">
 		<xs:annotation>
@@ -1208,8 +1232,8 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="degree1" use="required" type="positiveDouble"/>
-		<xs:attribute name="degree2" use="required" type="positiveDouble"/>
+		<xs:attribute name="degree1" type="positiveDouble" use="required"/>
+		<xs:attribute name="degree2" type="positiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="beta" type="Beta">
 		<xs:annotation>
@@ -1221,8 +1245,8 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="degree1" use="required" type="positiveDouble"/>
-		<xs:attribute name="degree2" use="required" type="positiveDouble"/>
+		<xs:attribute name="degree1" type="positiveDouble" use="required"/>
+		<xs:attribute name="degree2" type="positiveDouble" use="required"/>
 		<xs:attribute name="min" type="xs:double" use="required"/>
 		<xs:attribute name="max" type="xs:double" use="required"/>
 	</xs:complexType>
@@ -1237,7 +1261,7 @@
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="mu" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="sigma" use="optional" default="1" type="nonNegativeDouble"/>
+		<xs:attribute name="sigma" type="nonNegativeDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="lognormal" type="Lognormal">
 		<xs:annotation>
@@ -1250,7 +1274,7 @@
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="location" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="scale" use="optional" default="1" type="positiveDouble"/>
+		<xs:attribute name="scale" type="positiveDouble" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:element name="cauchy" type="Cauchy">
 		<xs:annotation>
@@ -1274,7 +1298,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="degree" use="required" type="positiveDouble"/>
+		<xs:attribute name="degree" type="positiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="chiSquare" type="ChiSquare">
 		<xs:annotation>
@@ -1286,8 +1310,8 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="degree1" use="required" type="positiveDouble"/>
-		<xs:attribute name="degree2" use="required" type="positiveDouble"/>
+		<xs:attribute name="degree1" type="positiveDouble" use="required"/>
+		<xs:attribute name="degree2" type="positiveDouble" use="required"/>
 	</xs:complexType>
 	<xs:element name="f" type="F">
 		<xs:annotation>
@@ -1393,7 +1417,7 @@
 		<xs:sequence>
 			<xs:element name="el" type="xs:double" minOccurs="2" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="prob" use="required" type="probability"/>
+		<xs:attribute name="prob" type="probability" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="MultivariateDiscrete">
 		<xs:annotation>
@@ -1414,7 +1438,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="el" maxOccurs="unbounded" type="probability"/>
+			<xs:element name="el" type="probability" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="N" type="xs:positiveInteger"/>
@@ -1430,10 +1454,10 @@
 		</xs:annotation>
 		<xs:attribute name="cdf" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="mu1" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="sigma1" use="optional" default="1" type="nonNegativeDouble"/>
+		<xs:attribute name="sigma1" type="nonNegativeDouble" use="optional" default="1"/>
 		<xs:attribute name="mu2" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="sigma2" use="optional" default="1" type="nonNegativeDouble"/>
-		<xs:attribute name="covariance" use="optional" default="0" type="correlation"/>
+		<xs:attribute name="sigma2" type="nonNegativeDouble" use="optional" default="1"/>
+		<xs:attribute name="covariance" type="correlation" use="optional" default="0"/>
 	</xs:complexType>
 	<xs:element name="bivariateNormal" type="BivariateNormal">
 		<xs:annotation>
@@ -1468,7 +1492,7 @@
 			<xs:documentation>since version 1.0.0</xs:documentation>
 		</xs:annotation>
 		<xs:sequence minOccurs="2" maxOccurs="unbounded">
-			<xs:element name="shape" minOccurs="0" type="nonNegativeDouble"/>
+			<xs:element name="shape" type="nonNegativeDouble" minOccurs="0"/>
 			<xs:element name="min" type="xs:double" default="0.0" minOccurs="0"/>
 			<xs:element name="max" type="xs:double" default="1.0" minOccurs="0"/>
 		</xs:sequence>
@@ -1534,7 +1558,7 @@
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="qProb" use="required" type="probability"/>
+		<xs:attribute name="qProb" type="probability" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -1546,8 +1570,8 @@
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="quantile1" use="required" type="probability"/>
-		<xs:attribute name="percent2" use="required" type="probability"/>
+		<xs:attribute name="quantile1" type="probability" use="required"/>
+		<xs:attribute name="percent2" type="probability" use="required"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -1651,8 +1675,8 @@
 		<xs:sequence>
 			<xs:element ref="OSnLNode" minOccurs="0"/>
 		</xs:sequence>
-		<xs:attribute name="alpha" use="optional" default="0" type="probability"/>
-		<xs:attribute name="beta" use="optional" default="0" type="probability"/>
+		<xs:attribute name="alpha" type="probability" use="optional" default="0"/>
+		<xs:attribute name="beta" type="probability" use="optional" default="0"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
@@ -1696,9 +1720,9 @@
 		</xs:sequence>
 		<xs:attribute name="row" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="col" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="value" use="optional" type="correlation"/>
-		<xs:attribute name="lb" use="optional" type="correlation"/>
-		<xs:attribute name="ub" use="optional" type="correlation"/>
+		<xs:attribute name="value" type="correlation" use="optional"/>
+		<xs:attribute name="lb" type="correlation" use="optional"/>
+		<xs:attribute name="ub" type="correlation" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralDistributionMultivariateCorrelations">
 		<xs:annotation>
@@ -2280,7 +2304,7 @@
 		<xs:sequence>
 			<xs:element name="depot" type="xs:nonNegativeInteger" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="vehicleCapacity" use="required" type="nonNegativeDouble"/>
+		<xs:attribute name="vehicleCapacity" type="nonNegativeDouble" use="required"/>
 		<xs:attribute name="demandPropName" type="xs:IDREF" use="required"/>
 		<xs:attribute name="costPropName" type="xs:IDREF" use="optional"/>
 		<xs:attribute name="xPropName" type="xs:IDREF" use="optional"/>
@@ -2517,25 +2541,6 @@
 			<xs:element name="unknown" type="NonNegativeIntVector" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="NonNegativeIntVectorWithValueAndDescriptionAttribute">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="NonNegativeIntVector">
-				<xs:attribute name="value" type="xs:string" use="required"/>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	<xs:complexType name="NegativeIntVectorWithValueAndDescriptionAttribute">
-		<xs:annotation>
-			<xs:documentation>draft</xs:documentation>
-		</xs:annotation>
-		<xs:complexContent>
-			<xs:extension base="NegativeIntVector"/>
-		</xs:complexContent>
-	</xs:complexType>
 	<xs:complexType name="StorageCapacity">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
@@ -2544,19 +2549,6 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:simpleType name="GeneralEnumerationStorageUnit">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="byte"/>
-			<xs:enumeration value="kilobyte"/>
-			<xs:enumeration value="megabyte"/>
-			<xs:enumeration value="gigabyte"/>
-			<xs:enumeration value="terabyte"/>
-			<xs:enumeration value="petabyte"/>
-			<xs:enumeration value="exabyte"/>
-			<xs:enumeration value="zettabyte"/>
-			<xs:enumeration value="yottabyte"/>
-		</xs:restriction>
-	</xs:simpleType>
 	<xs:complexType name="TimeSpan">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
@@ -2564,19 +2556,6 @@
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
-	<xs:simpleType name="GeneralEnumerationTimeUnit">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="tick"/>
-			<xs:enumeration value="millisecond"/>
-			<xs:enumeration value="second"/>
-			<xs:enumeration value="minute"/>
-			<xs:enumeration value="hour"/>
-			<xs:enumeration value="day"/>
-			<xs:enumeration value="week"/>
-			<xs:enumeration value="month"/>
-			<xs:enumeration value="year"/>
-		</xs:restriction>
-	</xs:simpleType>
 	<xs:complexType name="CPUSpeed">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
@@ -2618,6 +2597,32 @@
 			<xs:enumeration value="S"/>
 			<xs:enumeration value="D"/>
 			<xs:enumeration value="J"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GeneralEnumerationStorageUnit">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="byte"/>
+			<xs:enumeration value="kilobyte"/>
+			<xs:enumeration value="megabyte"/>
+			<xs:enumeration value="gigabyte"/>
+			<xs:enumeration value="terabyte"/>
+			<xs:enumeration value="petabyte"/>
+			<xs:enumeration value="exabyte"/>
+			<xs:enumeration value="zettabyte"/>
+			<xs:enumeration value="yottabyte"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="GeneralEnumerationTimeUnit">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="tick"/>
+			<xs:enumeration value="millisecond"/>
+			<xs:enumeration value="second"/>
+			<xs:enumeration value="minute"/>
+			<xs:enumeration value="hour"/>
+			<xs:enumeration value="day"/>
+			<xs:enumeration value="week"/>
+			<xs:enumeration value="month"/>
+			<xs:enumeration value="year"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
