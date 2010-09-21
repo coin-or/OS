@@ -21,6 +21,7 @@ OS/MSVisualStudio/v9/OSAmplClient/OSamplclient.vcproj -text
 OS/MSVisualStudio/v9/OSAmplClient/OSamplclient.vcproj.GSB.kmartin.user -text
 OS/MSVisualStudio/v9/OSFileUpload/OSFileUpload.vcproj -text
 OS/MSVisualStudio/v9/OSSolverService/OSSolverService.vcproj -text
+OS/MSVisualStudio/v9/OSTest/OSParsingTest.vcproj -text
 OS/MSVisualStudio/v9/OSTest/OSTest.vcproj -text
 OS/MSVisualStudio/v9/libOS/libOS.vcproj -text
 OS/MSVisualStudio/v9/libOSCommon/libOSCommon.vcproj -text
