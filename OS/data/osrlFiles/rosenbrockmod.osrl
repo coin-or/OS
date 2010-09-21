@@ -12,7 +12,7 @@
             <solution targetObjectiveIdx="-1">
                 <status type="locallyOptimal"
                     description="SUCCESS[IPOPT]: Algorithm terminated successfully at a locally optimal point, satisfying the convergence tolerances."/>
-                <variables>
+                <variables numberOfOtherVariableResults="2">
                     <values numberOfVar="2">
                         <var idx="0">.8724300006558884</var>
                         <var idx="1">.7414170851045374</var>

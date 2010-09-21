@@ -10,7 +10,7 @@
             numberOfObjectives="1">
             <solution targetObjectiveIdx="-1">
                 <status type="optimal"/>
-                <variables>
+                <variables numberOfOtherVariableResults="2">
                     <values numberOfVar="2">
                         <var idx="0">539.984</var>
                         <var idx="1">252.011</var>

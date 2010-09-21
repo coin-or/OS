@@ -142,16 +142,10 @@ OS/data/osilFiles/HS071_feas.osil -text
 OS/data/osilFiles/IP_infeasible.osil -text
 OS/data/osilFiles/IP_noconstraint.osil -text
 OS/data/osilFiles/IP_unbounded.osil -text
-OS/data/osilFiles/LINDO-SOS2.osil -text
 OS/data/osilFiles/LP_infeasible.osil -text
 OS/data/osilFiles/LP_nobasis.osil -text
 OS/data/osilFiles/LP_noconstraint.osil -text
 OS/data/osilFiles/LP_unbounded.osil -text
-OS/data/osilFiles/SOS1.osil -text
-OS/data/osilFiles/SOS2.osil -text
-OS/data/osilFiles/SOS2a.osil -text
-OS/data/osilFiles/SOS2b.osil -text
-OS/data/osilFiles/SOS3.osil -text
 OS/data/osilFiles/avion2.osil -text
 OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/bonminEx1_Nonlinear.osil -text
@@ -219,7 +213,6 @@ OS/data/osolFiles/parincQuadratic_lindo.osol -text
 OS/data/osolFiles/parsertest.osol -text
 OS/data/osolFiles/parsertest2.osol -text
 OS/data/osolFiles/parsertest3.osol -text
-OS/data/osolFiles/parsertestNew.osol -text
 OS/data/osolFiles/remoteSolve1.osol -text
 OS/data/osolFiles/remoteSolve2.osol -text
 OS/data/osolFiles/remotegsbkip.osol -text
@@ -246,7 +239,6 @@ OS/data/osrlFiles/errorExample.osrl -text
 OS/data/osrlFiles/ipoptResult.osrl -text
 OS/data/osrlFiles/parincLinear.osrl -text
 OS/data/osrlFiles/parserTest.osrl -text
-OS/data/osrlFiles/parserTestNew.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text
 OS/doc/Future_Work.tex -text

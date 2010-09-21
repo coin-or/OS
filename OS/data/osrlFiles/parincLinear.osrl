@@ -28,7 +28,6 @@
                 <objectives>
                     <values numberOfObj="1">
                         <obj idx="-1">7667.94</obj> 
-                        <obj idx="-1">7667.94</obj>
                     </values>
                 </objectives>
                 <constraints>
@@ -40,8 +39,8 @@
                     </dualValues>
                 </constraints>
 					<otherSolutionResults  numberOfOtherSolutionResults="1">
-						<otherSolutionResult name="requestResults" description="the request results"  numberOfRecords="1">
-							<record>dfkjalkdf</record>
+						<otherSolutionResult name="requestResults" description="the requested results"  numberOfItems="1">
+							<item>dfkjalkdf</item>
 						</otherSolutionResult>
 					</otherSolutionResults>
             </solution>
