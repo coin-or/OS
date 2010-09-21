@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osil xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+	<instanceHeader>
+	<description>
+	   This problem represents the global optimization problem
+max f(x) - g(x) s.t. x in [a,b], where both f and g are given as piecewise linear functions.
+It uses two SOS2 constructs. The interval [a,b] is implicitly given by the nodes that define the
+functions f and g.
+Tthe two reference rows x = sum{a_i lambda_i} and x = sum{c_i mu_i} have been retained,
+as have the expressions f(x) = sum{b_i lambda_i}, g(x) = sum{d_i mu_i}.
+	</description>
+	</instanceHeader>
+	<instanceData>
+		<variables numberOfVariables="16">
+			<var name="x0" type="B"></var>
+			<var name="x1" type="B"></var>
+			<var name="x2" type="B"></var>
+			<var name="x3" type="B"></var>
+			<var name="x4" type="B"></var>
+			<var name="x5" type="B"></var>
+			<var name="y0" type="B"></var>
+			<var name="y1" type="B"></var>
+			<var name="y2" type="B"></var>
+			<var name="y3" type="B"></var>
+			<var name="y4" type="B"></var>
+			<var name="y5" type="B"></var>
+			<var name="z1" lb="-INF" ub="INF"></var>
+			<var name="z2" lb="-INF" ub="INF"></var>
+			<var name="f" lb="-INF" ub="INF"></var>
+			<var name="g" lb="-INF" ub="INF"></var>
+		</variables>
+		<objectives>
+			<obj maxOrMin="max" numberOfObjCoef="2">
+				<coef idx="14">1</coef>
+				<coef idx="15">-1</coef>
+			</obj>
+		</objectives>
+		<constraints numberOfConstraints="6">
+			<con lb="1" ub="1" name="conv1"></con>
+			<con lb="1" ub="1" name="conv2"></con>
+			<con lb="0" ub="0" name="ref1"></con>
+			<con lb="0" ub="0" name="ref2"></con>
+			<con lb="0" ub="0" name="fun1"></con>
+			<con lb="0" ub="0" name="fun2"></con>
+		</constraints>
+		<linearConstraintCoefficients numberOfValues="36">
+			<start>
+				<el>0</el>
+				<el>1</el>
+				<el>4</el>
+				<el>7</el>
+				<el>10</el>
+				<el>13</el>
+				<el>16</el>
+				<el>17</el>
+				<el>20</el>
+				<el>23</el>
+				<el>26</el>
+				<el>29</el>
+				<el>32</el>
+				<el>33</el>
+				<el>34</el>
+				<el>35</el>
+			</start>
+			<rowIdx>
+				<el>0</el>
+				<el>0</el>
+				<el>2</el>
+				<el>4</el>
+				<el>0</el>
+				<el>2</el>
+				<el>4</el>
+				<el>0</el>
+				<el>2</el>
+				<el>4</el>
+				<el>0</el>
+				<el>2</el>
+				<el>4</el>
+				<el>0</el>
+				<el>2</el>
+				<el>4</el>
+				<el>1</el>
+				<el>1</el>
+				<el>3</el>
+				<el>5</el>
+				<el>1</el>
+				<el>3</el>
+				<el>5</el>
+				<el>1</el>
+				<el>3</el>
+				<el>5</el>
+				<el>1</el>
+				<el>3</el>
+				<el>5</el>
+				<el>1</el>
+				<el>3</el>
+				<el>5</el>
+				<el>2</el>
+				<el>3</el>
+				<el>4</el>
+				<el>5</el>
+			</rowIdx>
+			<value>
+				<el>1</el>
+				<el>1</el>
+				<el>6</el>
+				<el>8</el>
+				<el>1</el>
+				<el>10</el>
+				<el>4</el>
+				<el>1</el>
+				<el>12</el>
+				<el>5</el>
+				<el>1</el>
+				<el>13</el>
+				<el>5</el>
+				<el>1</el>
+				<el>15</el>
+				<el>3</el>
+				<el>1</el>
+				<el>1</el>
+				<el>1</el>
+				<el>2</el>
+				<el>1</el>
+				<el>4</el>
+				<el>4</el>
+				<el>1</el>
+				<el>7</el>
+				<el>5</el>
+				<el>1</el>
+				<el>10</el>
+				<el>8</el>
+				<el>1</el>
+				<el>15</el>
+				<el>20</el>
+				<el>-1</el>
+				<el>-1</el>
+				<el>-1</el>
+				<el>-1</el>
+			</value>
+		</linearConstraintCoefficients>
+		<specialOrderedSets numberOfSOS="2">
+			<sos  type="2" convexityRow="1">
+				<variables numberOfEl="6">
+					<el mult="6">0</el>
+				</variables>
+			</sos>
+			<sos  type="2" convexityRow="2">
+				<variables numberOfEl="6">
+					<el mult="6">6</el>
+				</variables>
+			</sos>
+		</specialOrderedSets>
+	</instanceData>
+</osil>
