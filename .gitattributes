@@ -615,6 +615,7 @@ OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
 OS/test/Makefile.in -text
 OS/test/parsingTest.cpp -text
+OS/test/parsingTest.py -text
 OS/test/unitTest.cpp -text
 OS/v2.0/OSBonminSolver.cpp -text
 OS/v2.0/OSCoinSolver.cpp -text
