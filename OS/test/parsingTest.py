@@ -52,11 +52,11 @@ def visit(startDir, dirName, filesInDir):
 			fpath = os.path.join(dirName, fname);
 			if fpath.rfind(".svn") == -1 :
 
-				result = run('ls ' + dirName )
+				result = run('ls ' + fpath )
 				if result['returnCode']==0 :
 					print ' successful run ' + result['stdout']
 				else :
-					print 'not succesfull for file ' +  fname
+					print 'not succesfull for file ' +  fpath
 				
 				
 
@@ -66,10 +66,5 @@ def visit(startDir, dirName, filesInDir):
 os.path.walk(sys.argv[ 1], visit, '.')
 
 
-result = run('ls' )
-if result['returnCode']==0 :
-	print "successful run"
-else :
-	print "not succesfull"
 
 
