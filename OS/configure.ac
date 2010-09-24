@@ -842,6 +842,10 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
 ##
 AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
+## PYTHON FILE
+##
+AC_COIN_VPATH_LINK(test/parsingTest.py)
+##
 
 
 ##############################################################################

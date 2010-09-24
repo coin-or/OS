@@ -15,7 +15,7 @@ AUTOMAKE_OPTIONS = foreign
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
-noinst_PROGRAMS = unitTest
+noinst_PROGRAMS = unitTest parsingTest
 
 # List all source files for this executable, including headers
 unitTest_SOURCES = unitTest.cpp 
@@ -23,6 +23,15 @@ unitTest_SOURCES = unitTest.cpp
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la 
+
+
+# List all source files for this executable, including headers
+parsingTest_SOURCES = parsingTest.cpp 
+
+# List all additionally required COIN libraries
+parsingTest_LDADD =  \
+	$(OSOBJDIR)/src/libOS.la 
+	
 	
 	
 	
@@ -104,6 +113,8 @@ if COIN_HAS_GLPK
 endif
 
 unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+
+parsingTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
 unitTest_LDADD += $(ADDLIBS) 
 

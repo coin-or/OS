@@ -52,9 +52,9 @@ def visit(startDir, dirName, filesInDir):
 			fpath = os.path.join(dirName, fname);
 			if fpath.rfind(".svn") == -1 :
 
-				result = run('ls ' + fpath )
+				result = run('parsingTest ' + fpath + ' osil' )
 				if result['returnCode']==0 :
-					print ' successful run ' + result['stdout']
+					print ' successful run: ' + fname
 				else :
 					print 'not succesfull for file ' +  fpath
 				

@@ -42,7 +42,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = unitTest$(EXEEXT)
+noinst_PROGRAMS = unitTest$(EXEEXT) parsingTest$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 @COIN_HAS_ASL_TRUE@@COIN_HAS_COUENNE_TRUE@am__append_2 = $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
 @COIN_HAS_COUENNE_TRUE@am__append_3 = $(COUENNEOBJDIR)/src/libCouenne.la
@@ -140,6 +140,10 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
+am_parsingTest_OBJECTS = parsingTest.$(OBJEXT)
+parsingTest_OBJECTS = $(am_parsingTest_OBJECTS)
+parsingTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la
 am_unitTest_OBJECTS = unitTest.$(OBJEXT)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 = $(COUENNEOBJDIR)/src/main/libBonCouenne.la
@@ -193,8 +197,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(unitTest_SOURCES)
-DIST_SOURCES = $(unitTest_SOURCES)
+SOURCES = $(parsingTest_SOURCES) $(unitTest_SOURCES)
+DIST_SOURCES = $(parsingTest_SOURCES) $(unitTest_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -488,6 +492,13 @@ unitTest_LDADD = $(OSOBJDIR)/src/libOS.la $(am__append_1) \
 	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(ADDLIBS) \
 	$(am__append_22) $(am__append_27) $(am__append_30)
 
+# List all source files for this executable, including headers
+parsingTest_SOURCES = parsingTest.cpp 
+
+# List all additionally required COIN libraries
+parsingTest_LDADD = $(OSOBJDIR)/src/libOS.la \
+	$(COINUTILSOBJDIR)/src/libCoinUtils.la
+
 # Now add the include paths for compilation
 
 # Here list all include flags, relative to this "srcdir" directory.  This
@@ -566,6 +577,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+parsingTest$(EXEEXT): $(parsingTest_OBJECTS) $(parsingTest_DEPENDENCIES) 
+	@rm -f parsingTest$(EXEEXT)
+	$(CXXLINK) $(parsingTest_LDFLAGS) $(parsingTest_OBJECTS) $(parsingTest_LDADD) $(LIBS)
 unitTest$(EXEEXT): $(unitTest_OBJECTS) $(unitTest_DEPENDENCIES) 
 	@rm -f unitTest$(EXEEXT)
 	$(CXXLINK) $(unitTest_LDFLAGS) $(unitTest_OBJECTS) $(unitTest_LDADD) $(LIBS)
@@ -576,6 +590,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parsingTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitTest.Po@am__quote@
 
 .cpp.o:

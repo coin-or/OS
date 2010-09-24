@@ -31102,6 +31102,14 @@ if test $coin_vpath_config = yes; then
 fi
 
 ##
+## PYTHON FILE
+##
+
+if test $coin_vpath_config = yes; then
+  coin_vpath_link_files="$coin_vpath_link_files test/parsingTest.py"
+fi
+
+##
 
 
 ##############################################################################
