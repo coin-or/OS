@@ -54,7 +54,7 @@ def visit(startDir, dirName, filesInDir):
 
 				result = run('ls ' + dirName )
 				if result['returnCode']==0 :
-					print "successful run"
+					print ' successful run ' + result['stdout']
 				else :
 					print 'not succesfull for file ' +  fname
 				
