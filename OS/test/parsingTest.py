@@ -51,12 +51,22 @@ def visit(startDir, dirName, filesInDir):
 		if dirName.rfind(".svn") == -1 :
 			fpath = os.path.join(dirName, fname);
 			if fpath.rfind(".svn") == -1 :
+				
+				
+				if fpath.rfind("osil") != -1 :
+					fileType = 'osil'
+				if fpath.rfind("osrl") != -1 :
+					fileType = 'osrl'
+				if fpath.rfind("osol") != -1 :
+					fileType = 'osol'
 
-				result = run('parsingTest ' + fpath + ' osil' )
+				result = run('parsingTest ' + fpath + ' ' + fileType )
+
 				if result['returnCode']==0 :
 					print ' successful run: ' + fname
 				else :
 					print 'not succesfull for file ' +  fpath
+					print result['stdout']
 				
 				
 
