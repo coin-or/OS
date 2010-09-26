@@ -71,9 +71,13 @@ def visit(startDir, dirName, filesInDir):
 				
 
 
-#os.path.walk('../data/osilFiles', visit, '.')
+try:
+	os.path.walk(sys.argv[ 1], visit, '.')
+	
+except:	
 
-os.path.walk(sys.argv[ 1], visit, '.')
+	print "Input problem:  Please enter a command line argument which is a valid (osil, osrl, osol) directory"
+
 
 
 
