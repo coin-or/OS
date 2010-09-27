@@ -37,17 +37,22 @@ parsingTest_LDADD =  \
 	
 if COIN_HAS_COUENNE
    unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 if COIN_HAS_ASL
    unitTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
 endif
    unitTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 if COIN_HAS_ASL
    unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif
 endif
 
 if COIN_HAS_BONMIN
    unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
 #	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 
@@ -57,6 +62,7 @@ if COIN_HAS_ASL
 #      unitTest_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
 endif
   unitTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
   LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 	
@@ -66,57 +72,74 @@ endif
 
 
 unitTest_LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+parsingTest_LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
 
 if COIN_HAS_SYMPHONY
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ parsingTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
 endif
 
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
+ parsingTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
 
 if COIN_HAS_DYLP
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
+ parsingTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la  
 endif
 
 if COIN_HAS_VOL
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+ unitTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la
+ parsingTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la  
 endif
 
 if COIN_HAS_CPX
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+ parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 endif
 
  unitTest_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
  unitTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ parsingTest_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
+ parsingTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
 
 if COIN_HAS_SYMPHONY
- unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
+ unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
+ parsingTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la  
 endif
 
  unitTest_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+ parsingTest_LDADD += $(CGLOBJDIR)/src/libCgl.la
 
- unitTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
+ unitTest_LDADD += $(OSIOBJDIR)/src/libOsi.la
+ parsingTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
 
- unitTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
+ unitTest_LDADD += $(CLPOBJDIR)/src/libClp.la
+ parsingTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
 
 if COIN_HAS_DYLP
- unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
+ unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
+ parsingTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
 endif
 
 if COIN_HAS_VOL
- unitTest_LDADD += $(VOLOBJDIR)/src/libVol.la 
+ unitTest_LDADD += $(VOLOBJDIR)/src/libVol.la
+ parsingTest_LDADD += $(VOLOBJDIR)/src/libVol.la 
 endif
 
 if COIN_HAS_GLPK
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
  unitTest_LDADD += $(GLPKLIB)
+ parsingTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
+ parsingTest_LDADD += $(GLPKLIB)
 endif
 
 unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
 parsingTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
 
-unitTest_LDADD += $(ADDLIBS) 
+unitTest_LDADD += $(ADDLIBS)
+parsingTest_LDADD += $(ADDLIBS) 
 
 # Now add the include paths for compilation
 
