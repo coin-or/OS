@@ -989,7 +989,6 @@ int OSInstance::getVariableNumber(){
 bool OSInstance::processVariables() {
 	if(m_bProcessVariables == true && bVariablesModified == false) return true;
 	//m_bProcessVariables = true;
-	string vartype ="CBIS";
 	int i = 0;
 	int n = getVariableNumber();
 	try{
@@ -1007,7 +1006,7 @@ bool OSInstance::processVariables() {
 
 			for(i = 0; i < n; i++){
 				if(instanceData->variables->var[i] == NULL) throw ErrorClass("processVariables(): var element was never defined");
-				if(vartype.find(instanceData->variables->var[i]->type) == string::npos) throw ErrorClass("wrong variable type");
+				if(verifyVarType(instanceData->variables->var[i]->type) != true) throw ErrorClass("wrong variable type");
 				m_mcVariableTypes[i] = instanceData->variables->var[i]->type;
 				if(m_mcVariableTypes[i] == 'B') m_iNumberOfBinaryVariables++;
 				if(m_mcVariableTypes[i] == 'I') m_iNumberOfIntegerVariables++;
@@ -2499,7 +2498,7 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
 		if(types != NULL){
 			for(i = 0; i < number; i++){
 				instanceData->variables->var[i]->type = types[i];
-				if(types[i] != 'C' && types[i] != 'B' && types[i] != 'I' && types[i] != 'S') types[i] = 'C';
+				if(verifyVarType(types[i]) != true) types[i] = 'C';
 			} 
 		}
 		/*
