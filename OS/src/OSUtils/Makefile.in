@@ -60,7 +60,7 @@ CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSUtils_la_LIBADD =
 am_libOSUtils_la_OBJECTS = OSBase64.lo OSErrorClass.lo OSFileUtil.lo \
-	OSMathUtil.lo OSDataStructures.lo OSdtoa.lo
+	OSMathUtil.lo OSdtoa.lo
 libOSUtils_la_OBJECTS = $(am_libOSUtils_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -379,7 +379,6 @@ libOSUtils_la_SOURCES = \
 		OSFileUtil.h \
 		OSMathUtil.cpp \
 		OSMathUtil.h \
-		OSDataStructures.cpp \
 		OSDataStructures.h \
 		OSParameters.h \
 		OSdtoa.h \
@@ -391,7 +390,8 @@ libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` $(am__append_1)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
+	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1)
 
 #if USE_DTOA
 #AM_CPPFLAGS += -DUSE_DTOA=1
@@ -470,7 +470,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSBase64.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDataStructures.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSErrorClass.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSFileUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSMathUtil.Plo@am__quote@

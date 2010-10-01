@@ -61,7 +61,7 @@ CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSCommonInterfaces_la_LIBADD =
-am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo \
+am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo OSGeneral.lo \
 	OSInstance.lo OSResult.lo OSiLReader.lo OSiLWriter.lo \
 	OSoLWriter.lo OSoLReader.lo OSOption.lo OSnLNode.lo \
 	OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo
@@ -378,6 +378,8 @@ noinst_LTLIBRARIES = libOSCommonInterfaces.la
 libOSCommonInterfaces_la_SOURCES = \
 	OSExpressionTree.cpp \
 	OSExpressionTree.h \
+	OSGeneral.cpp \
+	OSGeneral.h \
 	OSInstance.cpp \
 	OSInstance.h \
 	OSResult.cpp \
@@ -434,6 +436,7 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
 	OSExpressionTree.h \
+        OSGeneral.h \
 	OSInstance.h \
 	OSResult.h \
 	OSiLReader.h \
@@ -499,6 +502,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSExpressionTree.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSGeneral.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSInstance.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSOption.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSResult.Plo@am__quote@

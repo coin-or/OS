@@ -20,6 +20,8 @@ noinst_LTLIBRARIES = libOSCommonInterfaces.la
 libOSCommonInterfaces_la_SOURCES = \
 	OSExpressionTree.cpp \
 	OSExpressionTree.h \
+	OSGeneral.cpp \
+	OSGeneral.h \
 	OSInstance.cpp \
 	OSInstance.h \
 	OSResult.cpp \
@@ -91,6 +93,7 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
 	OSExpressionTree.h \
+        OSGeneral.h \
 	OSInstance.h \
 	OSResult.h \
 	OSiLReader.h \
