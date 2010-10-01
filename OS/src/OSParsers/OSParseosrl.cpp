@@ -1582,7 +1582,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[184] =
 #line 17 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 
 #include <iostream>
-#include "OSDataStructures.h"
+#include "OSGeneral.h"
 #include "OSMathUtil.h"
 #include "OSConfig.h"
 

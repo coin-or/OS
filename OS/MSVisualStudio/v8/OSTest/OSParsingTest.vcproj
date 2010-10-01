@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
-	Name="OSTest"
-	ProjectGUID="{C5E6054E-C498-421B-835C-25CAAB7AFB7A}"
+	Version="8.00"
+	Name="OSParsingTest"
+	ProjectGUID="{C6D17043-0174-458F-B81C-0C8CF9B40135}"
 	RootNamespace="OSTest"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="0"
@@ -49,7 +49,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\$(ConfigurationName)\OSTest.pch"
+				PrecompiledHeaderFile=".\$(ConfigurationName)\OSParsingTest.pch"
 				AssemblerListingLocation=".\$(ConfigurationName)\"
 				ObjectFile=".\$(ConfigurationName)\"
 				ProgramDataBaseFileName=".\$(ConfigurationName)\"
@@ -70,13 +70,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile="..\..\..\test\unitTest.exe"
+				OutputFile="..\..\..\test\parsingTest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
-				ProgramDatabaseFile=".\$(ConfigurationName)\OSTest.pdb"
+				ProgramDatabaseFile=".\$(ConfigurationName)\OSParsingTest.pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -136,7 +136,7 @@
 				EnableFunctionLevelLinking="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\$(ConfigurationName)\OSTest.pch"
+				PrecompiledHeaderFile=".\$(ConfigurationName)\OSParsingTest.pch"
 				AssemblerListingLocation=".\$(ConfigurationName)\"
 				ObjectFile=".\$(ConfigurationName)\"
 				ProgramDataBaseFileName=".\$(ConfigurationName)\"
@@ -157,11 +157,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile="..\..\..\test\unitTest.exe"
+				OutputFile="..\..\..\test\parsingTest.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\lib;&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateDebugInformation="false"
-				ProgramDatabaseFile=".\$(ConfigurationName)\OSTest.pdb"
+				ProgramDatabaseFile=".\$(ConfigurationName)\OSParsingTest.pdb"
 				SubSystem="1"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
@@ -199,7 +199,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\..\Os\test\unitTest.cpp"
+				RelativePath="..\..\..\test\parsingTest.cpp"
 				>
 			</File>
 		</Filter>

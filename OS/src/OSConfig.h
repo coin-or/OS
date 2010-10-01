@@ -72,10 +72,10 @@
 			#define COIN_HAS_OSI 1
 
 			/* Define to 1 if the DyLP package is used */
-//			#define COIN_HAS_DYLP 1
+			/* #define COIN_HAS_DYLP 1 */
 
-			/* Define to 1 if the OSI package is used */
-			#define COIN_HAS_OSI 1
+			/* Define to 1 if the Glpk package is used */
+			/* #define COIN_HAS_GLPK 1 */
 
 			/* Define to 1 if the SYMPHONY package is used */
 			#define COIN_HAS_SYMPHONY 1

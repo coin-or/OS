@@ -56,7 +56,7 @@
 #include "OsiCpxSolverInterface.hpp"
 #endif
 
-#include "OSDataStructures.h"
+#include "OSGeneral.h"
 #include "OSParameters.h" 
 #include "OSMathUtil.h"
 

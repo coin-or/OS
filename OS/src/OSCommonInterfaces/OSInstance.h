@@ -34,7 +34,7 @@
 #ifndef OSINSTANCE_H
 #define OSINSTANCE_H
 #include "OSParameters.h"
-#include "OSDataStructures.h"
+#include "OSGeneral.h"
 #include "OSnLNode.h"
 #include "OSExpressionTree.h"
 #include <string>

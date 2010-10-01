@@ -67,6 +67,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiSym", "..\..\..\Osi\M
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOSSolvers", "libOSSolvers\libOSSolvers.vcproj", "{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSParsingTest", "OSTest\OSParsingTest.vcproj", "{C6D17043-0174-458F-B81C-0C8CF9B40135}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C4867F15-438D-4FF8-8388-62FBAAA9786C} = {C4867F15-438D-4FF8-8388-62FBAAA9786C}
+		{9B52F86F-D29F-4EB4-B2AB-35A894A98FBD} = {9B52F86F-D29F-4EB4-B2AB-35A894A98FBD}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -137,6 +143,10 @@ Global
 		{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}.Debug|Win32.Build.0 = Debug|Win32
 		{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}.Release|Win32.ActiveCfg = Release|Win32
 		{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}.Release|Win32.Build.0 = Release|Win32
+		{C6D17043-0174-458F-B81C-0C8CF9B40135}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C6D17043-0174-458F-B81C-0C8CF9B40135}.Debug|Win32.Build.0 = Debug|Win32
+		{C6D17043-0174-458F-B81C-0C8CF9B40135}.Release|Win32.ActiveCfg = Release|Win32
+		{C6D17043-0174-458F-B81C-0C8CF9B40135}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

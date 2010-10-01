@@ -28,7 +28,7 @@
 #include "OSInstance.h"
 #include "OSExpressionTree.h"
 #include "OSnLNode.h"
-#include "OSDataStructures.h"
+#include "OSGeneral.h"
 #include "OSFileUtil.h"  
 #include "OSErrorClass.h"
 

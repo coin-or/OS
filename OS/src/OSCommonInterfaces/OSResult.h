@@ -19,14 +19,14 @@
 #define OSRESULT_H
 #include <string>
 #include <vector>
-#include "OSDataStructures.h"
+#include "OSGeneral.h"
 
 //#define DEBUG
 
 
 /*! \struct IndexStringPair
  *  \brief A commonly used structure holding an index-string pair
- *  This definition is based on the definition of IndexValuePair in OSDataStructures.h
+ *  This definition is based on the definition of IndexValuePair in OSGeneral.h
  */
 struct IndexStringPair{
 	/** idx holds the index of a string-valued entity (such as a variable, constraint, objective)

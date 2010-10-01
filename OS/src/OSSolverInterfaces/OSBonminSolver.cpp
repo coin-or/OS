@@ -23,7 +23,7 @@
 
 
 #include "OSBonminSolver.h"
-#include "OSDataStructures.h"
+#include "OSGeneral.h"
 #include "OSParameters.h" 
 #include "OSMathUtil.h"
 #include "CoinFinite.hpp"

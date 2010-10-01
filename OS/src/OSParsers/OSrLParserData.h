@@ -17,7 +17,7 @@
 #define OSRLPARSERDATA_H
 
 #include "OSnLNode.h"
-#include "OSDataStructures.h"
+#include "OSGeneral.h"
 
 #include <vector> 
 #include <sstream>

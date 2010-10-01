@@ -2572,6 +2572,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:simpleType name="GeneralEnumerationCPUSpeedUnit">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="hertz"/>
 			<xs:enumeration value="kilohertz"/>
@@ -2600,6 +2603,9 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="GeneralEnumerationStorageUnit">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="byte"/>
 			<xs:enumeration value="kilobyte"/>
@@ -2613,6 +2619,9 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="GeneralEnumerationTimeUnit">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="tick"/>
 			<xs:enumeration value="millisecond"/>
