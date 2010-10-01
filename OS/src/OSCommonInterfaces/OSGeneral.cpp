@@ -276,3 +276,5 @@ DoubleVector::~DoubleVector(){
 		el = NULL;
 	}
 }
+
+

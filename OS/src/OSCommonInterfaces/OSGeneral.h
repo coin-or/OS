@@ -373,4 +373,63 @@ struct IndexValuePair{
 		
 };
 
+class OSGeneral{
+
+};
+
+inline bool verifyCPUSpeedUnit(std::string unit)
+{
+			if (unit == "hertz"    ) return true;
+			if (unit == "kilohertz") return true;
+			if (unit == "megahertz") return true;
+			if (unit == "gigahertz") return true;
+			if (unit == "terahertz") return true;
+			if (unit == "flops"    ) return true;
+			if (unit == "kiloflops") return true;
+			if (unit == "megaflops") return true;
+			if (unit == "gigaflops") return true;
+			if (unit == "teraflops") return true;
+			if (unit == "petaflops") return true;
+			return false;
+};
+
+inline bool verifyStorageUnit(std::string unit)
+{
+			if (unit == "byte"     ) return true;
+			if (unit == "kilobyte" ) return true;
+			if (unit == "megabyte" ) return true;
+			if (unit == "gigabyte" ) return true;
+			if (unit == "terabyte" ) return true;
+			if (unit == "petabyte" ) return true;
+			if (unit == "exabyte"  ) return true;
+			if (unit == "zettabyte") return true;
+			if (unit == "yottabyte") return true;
+			return false;
+};
+
+inline bool verifyTimeUnit(std::string unit)
+{
+			if (unit == "millisecond") return true;
+			if (unit == "second"     ) return true;
+			if (unit == "minute"     ) return true;
+			if (unit == "hour"       ) return true;
+			if (unit == "day"        ) return true;
+			if (unit == "week"       ) return true;
+			if (unit == "month"      ) return true;
+			if (unit == "year"       ) return true;
+			return false;
+};
+
+inline bool verifyVarType(char vt)
+{
+			if (vt == 'C') return true;
+			if (vt == 'B') return true;
+			if (vt == 'I') return true;
+			if (vt == 'S') return true;
+			if (vt == 'D') return true;
+			if (vt == 'J') return true;
+			return false;
+};
+
+
 #endif
