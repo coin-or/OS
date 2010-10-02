@@ -355,7 +355,7 @@ public:
 	 */
 	bool bDeleteArrays;
 	double *el;			
-};//class DoubleVector
+}//class DoubleVector
 
 
 /*! \struct IndexValuePair
@@ -375,7 +375,7 @@ struct IndexValuePair{
 
 class OSGeneral{
 
-};
+}
 
 inline bool verifyCPUSpeedUnit(std::string unit)
 {
@@ -391,7 +391,7 @@ inline bool verifyCPUSpeedUnit(std::string unit)
 			if (unit == "teraflops") return true;
 			if (unit == "petaflops") return true;
 			return false;
-};
+}
 
 inline bool verifyStorageUnit(std::string unit)
 {
@@ -405,7 +405,7 @@ inline bool verifyStorageUnit(std::string unit)
 			if (unit == "zettabyte") return true;
 			if (unit == "yottabyte") return true;
 			return false;
-};
+}
 
 inline bool verifyTimeUnit(std::string unit)
 {
@@ -418,7 +418,7 @@ inline bool verifyTimeUnit(std::string unit)
 			if (unit == "month"      ) return true;
 			if (unit == "year"       ) return true;
 			return false;
-};
+}
 
 inline bool verifyVarType(char vt)
 {
@@ -429,7 +429,7 @@ inline bool verifyVarType(char vt)
 			if (vt == 'D') return true;
 			if (vt == 'J') return true;
 			return false;
-};
+}
 
 
 #endif
