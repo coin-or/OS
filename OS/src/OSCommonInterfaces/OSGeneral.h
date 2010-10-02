@@ -355,7 +355,7 @@ public:
 	 */
 	bool bDeleteArrays;
 	double *el;			
-}//class DoubleVector
+};//class DoubleVector
 
 
 /*! \struct IndexValuePair
@@ -375,7 +375,7 @@ struct IndexValuePair{
 
 class OSGeneral{
 
-}
+};
 
 inline bool verifyCPUSpeedUnit(std::string unit)
 {
