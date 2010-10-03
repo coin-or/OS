@@ -86,8 +86,13 @@ bool BonminProblem::get_variables_types(Index n, VariableType* var_types){
 				var_types[i] = INTEGER;
 			}
 			else{
-				var_types[i] = CONTINUOUS;
-			}	
+				if( varType[i] == 'C') {
+					var_types[i] = CONTINUOUS;
+				}
+				else{
+					throw ErrorClass("variable type not yet implemented");
+				}
+			}
 		}
 	}
 	return true;

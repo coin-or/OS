@@ -203,6 +203,14 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 				if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do integer programming");
 				//if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do integer programming");
 			}
+			// throw an exception if we have a solver that cannot handle semi-continuous or semi-integer variables
+			if( osinstance->getNumberOfSemiIntegerVariables() + osinstance->getNumberOfSemiContinuousVariables() > 0){
+				throw ErrorClass( "Semi-integer and semi-continuous variables not supported");
+				//if( sSolverName.find("clp") != std::string::npos) throw ErrorClass( "Clp cannot do semi-integer variables");
+				//if( sSolverName.find("vol") != std::string::npos) throw ErrorClass( "Vol cannot do semi-integer variables");
+				//if( sSolverName.find("dylp") != std::string::npos) throw ErrorClass( "DyLP cannot do semi-integer variables");
+				//if( sSolverName.find("ipopt") != std::string::npos) throw ErrorClass( "Ipopt cannot do semi-integer variables");
+			}
 			// check other trivial solver limitations
 			//if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver:" + sSolverName +" cannot handle unconstrained problems");
 			//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
