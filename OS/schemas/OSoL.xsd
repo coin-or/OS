@@ -464,12 +464,20 @@
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SolverOption">
+		<xs:sequence>
+			<xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>number must agree with numberOfItems</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="numberOfItems" type="xs:nonNegativeInteger" default="0"/>
 	</xs:complexType>
 	<xs:complexType name="SolverOptions">
 		<xs:sequence>
