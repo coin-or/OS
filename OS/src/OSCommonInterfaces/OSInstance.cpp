@@ -990,6 +990,7 @@ bool OSInstance::processVariables() {
 	if(m_bProcessVariables == true && bVariablesModified == false) return true;
 	//m_bProcessVariables = true;
 	int i = 0;
+	int varType;
 	int n = getVariableNumber();
 	try{
 		m_iNumberOfBinaryVariables = 0;
@@ -1006,11 +1007,50 @@ bool OSInstance::processVariables() {
 
 			for(i = 0; i < n; i++){
 				if(instanceData->variables->var[i] == NULL) throw ErrorClass("processVariables(): var element was never defined");
-				if(verifyVarType(instanceData->variables->var[i]->type) != true) throw ErrorClass("wrong variable type");
+				varType = verifyVarType(instanceData->variables->var[i]->type);
+				switch (varType)
+				{
+				case 0: 
+					{
+					throw ErrorClass("unknown variable type");
+					break;
+					}
+				case ENUM_VARTYPE_CONTINUOUS: 
+					{
+					break;
+					}
+				case ENUM_VARTYPE_BINARY: 
+					{
+					m_iNumberOfBinaryVariables++;
+					break;
+					}
+				case ENUM_VARTYPE_INTEGER: 
+					{
+					m_iNumberOfIntegerVariables++;
+					break;
+					}
+				case ENUM_VARTYPE_STRING: 
+					{
+					m_iNumberOfStringVariables++;
+					break;
+					}
+				case ENUM_VARTYPE_SEMICONTINUOUS: 
+					{
+					m_iNumberOfSemiContinuousVariables++;
+					break;
+					}
+				case ENUM_VARTYPE_SEMIINTEGER: 
+					{
+					m_iNumberOfSemiIntegerVariables++;
+					break;
+					}
+				default: 
+					{
+					throw ErrorClass("variable type not yet implemented");
+					break;
+					}
+				}
 				m_mcVariableTypes[i] = instanceData->variables->var[i]->type;
-				if(m_mcVariableTypes[i] == 'B') m_iNumberOfBinaryVariables++;
-				if(m_mcVariableTypes[i] == 'I') m_iNumberOfIntegerVariables++;
-				if(m_mcVariableTypes[i] == 'S') m_iNumberOfStringVariables++;
 				m_mdVariableLowerBounds[i] = instanceData->variables->var[i]->lb;
 				m_mdVariableUpperBounds[i] = instanceData->variables->var[i]->ub;
 				if(instanceData->variables->var[i]->name.length() > 0)
@@ -1048,15 +1088,25 @@ char* OSInstance::getVariableTypes() {
 	return m_mcVariableTypes;
 }//getVariableTypes
 
+int OSInstance::getNumberOfBinaryVariables() {
+	processVariables();
+	return m_iNumberOfBinaryVariables;
+}//getNumberOfBinaryVariables
+
 int OSInstance::getNumberOfIntegerVariables() {
 	processVariables();
 	return m_iNumberOfIntegerVariables;
 }//getNumberOfIntegerVariables
 
-int OSInstance::getNumberOfBinaryVariables() {
+int OSInstance::getNumberOfSemiContinuousVariables() {
 	processVariables();
-	return m_iNumberOfBinaryVariables;
-}//getNumberOfBinaryVariables
+	return m_iNumberOfSemiContinuousVariables;
+}//getNumberOfSemiContinuousVariables
+
+int OSInstance::getNumberOfSemiIntegerVariables() {
+	processVariables();
+	return m_iNumberOfSemiIntegerVariables;
+}//getNumberOfSemiIntegerVariables
 
 int OSInstance::getNumberOfStringVariables() {
 	processVariables();

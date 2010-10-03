@@ -377,59 +377,109 @@ class OSGeneral{
 
 };
 
-inline bool verifyCPUSpeedUnit(std::string unit)
+enum ENUM_CPUSPEEDUNIT 
 {
-			if (unit == "hertz"    ) return true;
-			if (unit == "kilohertz") return true;
-			if (unit == "megahertz") return true;
-			if (unit == "gigahertz") return true;
-			if (unit == "terahertz") return true;
-			if (unit == "flops"    ) return true;
-			if (unit == "kiloflops") return true;
-			if (unit == "megaflops") return true;
-			if (unit == "gigaflops") return true;
-			if (unit == "teraflops") return true;
-			if (unit == "petaflops") return true;
-			return false;
-}
+	ENUM_CPUSPEEDUNIT_hertz = 1,
+	ENUM_CPUSPEEDUNIT_kilohertz,
+	ENUM_CPUSPEEDUNIT_megahertz,
+	ENUM_CPUSPEEDUNIT_gigahertz,
+	ENUM_CPUSPEEDUNIT_terahertz,
+	ENUM_CPUSPEEDUNIT_flops,
+	ENUM_CPUSPEEDUNIT_kiloflops,
+	ENUM_CPUSPEEDUNIT_megaflops,
+	ENUM_CPUSPEEDUNIT_gigaflops,
+	ENUM_CPUSPEEDUNIT_teraflops,
+	ENUM_CPUSPEEDUNIT_petaflops
+};
 
-inline bool verifyStorageUnit(std::string unit)
+inline int verifyCPUSpeedUnit(std::string unit)
 {
-			if (unit == "byte"     ) return true;
-			if (unit == "kilobyte" ) return true;
-			if (unit == "megabyte" ) return true;
-			if (unit == "gigabyte" ) return true;
-			if (unit == "terabyte" ) return true;
-			if (unit == "petabyte" ) return true;
-			if (unit == "exabyte"  ) return true;
-			if (unit == "zettabyte") return true;
-			if (unit == "yottabyte") return true;
-			return false;
-}
+			if (unit == "hertz"    ) return ENUM_CPUSPEEDUNIT_hertz;
+			if (unit == "kilohertz") return ENUM_CPUSPEEDUNIT_kilohertz;
+			if (unit == "megahertz") return ENUM_CPUSPEEDUNIT_megahertz;
+			if (unit == "gigahertz") return ENUM_CPUSPEEDUNIT_gigahertz;
+			if (unit == "terahertz") return ENUM_CPUSPEEDUNIT_terahertz;
+			if (unit == "flops"    ) return ENUM_CPUSPEEDUNIT_flops;
+			if (unit == "kiloflops") return ENUM_CPUSPEEDUNIT_kiloflops;
+			if (unit == "megaflops") return ENUM_CPUSPEEDUNIT_megaflops;
+			if (unit == "gigaflops") return ENUM_CPUSPEEDUNIT_gigaflops;
+			if (unit == "teraflops") return ENUM_CPUSPEEDUNIT_teraflops;
+			if (unit == "petaflops") return ENUM_CPUSPEEDUNIT_petaflops;
+			return 0;
+}//verifyCPUSpeedUnit
 
-inline bool verifyTimeUnit(std::string unit)
+enum ENUM_STORAGEUNIT 
 {
-			if (unit == "millisecond") return true;
-			if (unit == "second"     ) return true;
-			if (unit == "minute"     ) return true;
-			if (unit == "hour"       ) return true;
-			if (unit == "day"        ) return true;
-			if (unit == "week"       ) return true;
-			if (unit == "month"      ) return true;
-			if (unit == "year"       ) return true;
-			return false;
-}
+	ENUM_STORAGEUNIT_byte = 1,
+	ENUM_STORAGEUNIT_kilobyte,
+	ENUM_STORAGEUNIT_megabyte,
+	ENUM_STORAGEUNIT_gigabyte,
+	ENUM_STORAGEUNIT_terabyte,
+	ENUM_STORAGEUNIT_petabyte,
+	ENUM_STORAGEUNIT_exabyte,
+	ENUM_STORAGEUNIT_zettabyte,
+	ENUM_STORAGEUNIT_yottabyte
+};
 
-inline bool verifyVarType(char vt)
+inline int verifyStorageUnit(std::string unit)
 {
-			if (vt == 'C') return true;
-			if (vt == 'B') return true;
-			if (vt == 'I') return true;
-			if (vt == 'S') return true;
-			if (vt == 'D') return true;
-			if (vt == 'J') return true;
-			return false;
-}
+			if (unit == "byte"     ) return ENUM_STORAGEUNIT_byte;
+			if (unit == "kilobyte" ) return ENUM_STORAGEUNIT_kilobyte;
+			if (unit == "megabyte" ) return ENUM_STORAGEUNIT_megabyte;
+			if (unit == "gigabyte" ) return ENUM_STORAGEUNIT_gigabyte;
+			if (unit == "terabyte" ) return ENUM_STORAGEUNIT_terabyte;
+			if (unit == "petabyte" ) return ENUM_STORAGEUNIT_petabyte;
+			if (unit == "exabyte"  ) return ENUM_STORAGEUNIT_exabyte;
+			if (unit == "zettabyte") return ENUM_STORAGEUNIT_zettabyte;
+			if (unit == "yottabyte") return ENUM_STORAGEUNIT_yottabyte;
+			return 0;
+}//verifyStorageUnit
+
+enum ENUM_TIMEUNIT 
+{
+	ENUM_TIMEUNIT_millisecond = 1,
+	ENUM_TIMEUNIT_second,
+	ENUM_TIMEUNIT_minute,
+	ENUM_TIMEUNIT_hour,
+	ENUM_TIMEUNIT_day,
+	ENUM_TIMEUNIT_week,
+	ENUM_TIMEUNIT_month,
+	ENUM_TIMEUNIT_year
+};
+
+inline int verifyTimeUnit(std::string unit)
+{
+			if (unit == "millisecond") return ENUM_TIMEUNIT_millisecond;
+			if (unit == "second"     ) return ENUM_TIMEUNIT_second;
+			if (unit == "minute"     ) return ENUM_TIMEUNIT_minute;
+			if (unit == "hour"       ) return ENUM_TIMEUNIT_hour;
+			if (unit == "day"        ) return ENUM_TIMEUNIT_day;
+			if (unit == "week"       ) return ENUM_TIMEUNIT_week;
+			if (unit == "month"      ) return ENUM_TIMEUNIT_month;
+			if (unit == "year"       ) return ENUM_TIMEUNIT_year;
+			return 0;
+}//verifyTimeUnit
+
+enum ENUM_VARTYPE 
+{
+	ENUM_VARTYPE_CONTINUOUS = 1,
+	ENUM_VARTYPE_INTEGER,
+	ENUM_VARTYPE_BINARY,
+	ENUM_VARTYPE_SEMICONTINUOUS,
+	ENUM_VARTYPE_SEMIINTEGER,
+	ENUM_VARTYPE_STRING
+};
+
+inline int verifyVarType(char vt)
+{
+			if (vt == 'C') return ENUM_VARTYPE_CONTINUOUS;
+			if (vt == 'B') return ENUM_VARTYPE_BINARY;
+			if (vt == 'I') return ENUM_VARTYPE_INTEGER;
+			if (vt == 'S') return ENUM_VARTYPE_STRING;
+			if (vt == 'D') return ENUM_VARTYPE_SEMICONTINUOUS;
+			if (vt == 'J') return ENUM_VARTYPE_SEMIINTEGER;
+			return 0;
+}//verifyVarType
 
 
 #endif

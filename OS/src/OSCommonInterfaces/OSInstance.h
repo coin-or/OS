@@ -811,7 +811,17 @@ private:
 	int m_iNumberOfBinaryVariables;
 	
 	/**
-	 * m_iNumberOfStringVariables holds the number of integer variables. 
+	 * m_iNumberOfSemiContinuousVariables holds the number of semi-continuous variables. 
+	 */
+	int m_iNumberOfSemiContinuousVariables;
+	
+	/**
+	 * m_iNumberOfSemiIntegerVariables holds the number of semi-integer variables. 
+	 */
+	int m_iNumberOfSemiIntegerVariables;
+	
+	/**
+	 * m_iNumberOfStringVariables holds the number of string-valued variables. 
 	 */
 	int m_iNumberOfStringVariables;
 	
@@ -1480,6 +1490,18 @@ public:
 	 * @return an integer which is the number of B variables. 
 	 */
 	int getNumberOfBinaryVariables();
+	
+	/**
+	 * getNumberOfSemiContinuousVariables
+	 * @return an integer which is the number of D variables. 
+	 */
+	int getNumberOfSemiContinuousVariables();
+	
+	/**
+	 * getNumberOfSemiIntegerVariables
+	 * @return an integer which is the number of J variables. 
+	 */
+	int getNumberOfSemiIntegerVariables();
 	
 	/**
 	 * getNumberOfStringVariables
