@@ -44,6 +44,8 @@ OSInstance::OSInstance():
 	m_iVariableNumber(-1),
 	m_iNumberOfIntegerVariables( 0),
 	m_iNumberOfBinaryVariables( 0),
+	m_iNumberOfSemiContinuousVariables( 0),
+	m_iNumberOfSemiIntegerVariables( 0),
 	m_iNumberOfStringVariables( 0),
 	m_iNumberOfQuadraticRowIndexes( 0),
 	m_bQuadraticRowIndexesProcessed( false),
@@ -2505,6 +2507,7 @@ bool OSInstance::setVariableNumber(int number){
 
 
 bool OSInstance::addVariable(int index, string name, double lowerBound, double upperBound, char type){
+	if (verifyVarType(type) == 0) type = 'C';
 	instanceData->variables->var[index] = new Variable();
 	if(index < 0 || instanceData->variables->numberOfVariables <= 0 || index >= instanceData->variables->numberOfVariables) return false;
 	instanceData->variables->var[index]->name = name;
@@ -2548,7 +2551,7 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
 		if(types != NULL){
 			for(i = 0; i < number; i++){
 				instanceData->variables->var[i]->type = types[i];
-				if(verifyVarType(types[i]) != true) types[i] = 'C';
+				if(verifyVarType(types[i]) == 0) types[i] = 'C';
 			} 
 		}
 		/*

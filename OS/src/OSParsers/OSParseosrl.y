@@ -555,13 +555,8 @@ availableDiskSpaceAttList: | availableDiskSpaceAttList availableDiskSpaceAtt;
 
 availableDiskSpaceAtt: 
 	unitAttribute
-	{	if (parserData->unitAttribute != "exabyte"  && 
-			parserData->unitAttribute != "petabyte" && 
-			parserData->unitAttribute != "terabyte" && 
-			parserData->unitAttribute != "gigabyte" &&
-			parserData->unitAttribute != "megabyte" && 
-			parserData->unitAttribute != "kilobyte" && 
-			parserData->unitAttribute != "byte")
+	{
+		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
 			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
 		osresult->setAvailableDiskSpaceUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
@@ -594,13 +589,8 @@ availableMemoryAttList: | availableMemoryAttList availableMemoryAtt;
 
 availableMemoryAtt: 
 	unitAttribute 
-	{	if (parserData->unitAttribute != "exabyte"  && 
-			parserData->unitAttribute != "petabyte" && 
-			parserData->unitAttribute != "terabyte" && 
-			parserData->unitAttribute != "gigabyte" &&
-			parserData->unitAttribute != "megabyte" && 
-			parserData->unitAttribute != "kilobyte" && 
-			parserData->unitAttribute != "byte")
+	{
+		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
 			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
 		osresult->setAvailableMemoryUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
@@ -634,17 +624,19 @@ availableCPUSpeedAttList: | availableCPUSpeedAttList availableCPUSpeedAtt;
 
 availableCPUSpeedAtt: 
 	unitAttribute 
-	{	if (parserData->unitAttribute != "terahertz" && 
-			parserData->unitAttribute != "gigahertz" && 
-			parserData->unitAttribute != "megahertz" && 
-			parserData->unitAttribute != "kilohertz" && 
-			parserData->unitAttribute != "hertz"     && 
-			parserData->unitAttribute != "petaflops" && 
-			parserData->unitAttribute != "teraflops" && 
-			parserData->unitAttribute != "gigaflops" && 
-			parserData->unitAttribute != "megaflops" && 
-			parserData->unitAttribute != "kiloflops" && 
-			parserData->unitAttribute != "flops" )
+	{
+//		if (parserData->unitAttribute != "terahertz" && 
+//			parserData->unitAttribute != "gigahertz" && 
+//			parserData->unitAttribute != "megahertz" && 
+//			parserData->unitAttribute != "kilohertz" && 
+//			parserData->unitAttribute != "hertz"     && 
+//			parserData->unitAttribute != "petaflops" && 
+//			parserData->unitAttribute != "teraflops" && 
+//			parserData->unitAttribute != "gigaflops" && 
+//			parserData->unitAttribute != "megaflops" && 
+//			parserData->unitAttribute != "kiloflops" && 
+//			parserData->unitAttribute != "flops" )
+		if ( verifyCPUSpeedUnit(parserData->unitAttribute) == 0)
 			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
 		osresult->setAvailableCPUSpeedUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
@@ -1114,19 +1106,13 @@ timeAttributes: | timeAttributes timeAtt;
 
 timeAtt: 
 	unitAttribute 
-	{	if (parserData->unitAttribute != "tick"        &&
-			parserData->unitAttribute != "millisecond" &&
-			parserData->unitAttribute != "second"      &&
-			parserData->unitAttribute != "minute"      &&
-			parserData->unitAttribute != "hour"        &&
-			parserData->unitAttribute != "day"         &&
-			parserData->unitAttribute != "week"        &&
-			parserData->unitAttribute != "month"       &&
-			parserData->unitAttribute != "year"   )     
+	{
+ 		if ( verifyTimeUnit(parserData->unitAttribute) == 0)
 			osrlerror(NULL, NULL, parserData, "time unit not recognized");
 	};
   | typeAttribute 
-	{	if (parserData->typeAttribute != "cpuTime"     &&
+	{
+		if (parserData->typeAttribute != "cpuTime"     &&
 			parserData->typeAttribute != "elapsedTime" &&
  			parserData->typeAttribute != "other"   )     
 			osrlerror(NULL, NULL, parserData, "time type not recognized");
@@ -1181,13 +1167,8 @@ usedDiskSpaceAttList: | usedDiskSpaceAttList usedDiskSpaceAtt;
 
 usedDiskSpaceAtt: 
 	unitAttribute
-	{	if (parserData->unitAttribute != "exabyte"  && 
-			parserData->unitAttribute != "petabyte" && 
-			parserData->unitAttribute != "terabyte" && 
-			parserData->unitAttribute != "gigabyte" &&
-			parserData->unitAttribute != "megabyte" && 
-			parserData->unitAttribute != "kilobyte" && 
-			parserData->unitAttribute != "byte")
+	{
+		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
 			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
 		osresult->setUsedDiskSpaceUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
@@ -1221,13 +1202,8 @@ usedMemoryAttList: | usedMemoryAttList usedMemoryAtt;
 
 usedMemoryAtt: 
 	unitAttribute 
-	{	if (parserData->unitAttribute != "exabyte"  && 
-			parserData->unitAttribute != "petabyte" && 
-			parserData->unitAttribute != "terabyte" && 
-			parserData->unitAttribute != "gigabyte" &&
-			parserData->unitAttribute != "megabyte" && 
-			parserData->unitAttribute != "kilobyte" && 
-			parserData->unitAttribute != "byte")
+	{
+		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
 			osrlerror(NULL, NULL, parserData, "usedDiskSpace unit not recognized");
 		osresult->setUsedMemoryUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
@@ -1263,17 +1239,19 @@ usedCPUSpeedAttList: | usedCPUSpeedAttList usedCPUSpeedAtt;
 
 usedCPUSpeedAtt: 
 	unitAttribute 
-	{	if (parserData->unitAttribute != "terahertz" && 
-			parserData->unitAttribute != "gigahertz" && 
-			parserData->unitAttribute != "megahertz" && 
-			parserData->unitAttribute != "kilohertz" && 
-			parserData->unitAttribute != "hertz"     && 
-			parserData->unitAttribute != "petaflops" && 
-			parserData->unitAttribute != "teraflops" && 
-			parserData->unitAttribute != "gigaflops" && 
-			parserData->unitAttribute != "megaflops" && 
-			parserData->unitAttribute != "kiloflops" && 
-			parserData->unitAttribute != "flops" )
+	{
+//		if (parserData->unitAttribute != "terahertz" && 
+//			parserData->unitAttribute != "gigahertz" && 
+//			parserData->unitAttribute != "megahertz" && 
+//			parserData->unitAttribute != "kilohertz" && 
+//			parserData->unitAttribute != "hertz"     && 
+//			parserData->unitAttribute != "petaflops" && 
+//			parserData->unitAttribute != "teraflops" && 
+//			parserData->unitAttribute != "gigaflops" && 
+//			parserData->unitAttribute != "megaflops" && 
+//			parserData->unitAttribute != "kiloflops" && 
+//			parserData->unitAttribute != "flops" )
+		if ( verifyCPUSpeedUnit(parserData->unitAttribute) == 0)
 			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
 		osresult->setUsedCPUSpeedUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;

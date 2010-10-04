@@ -28,6 +28,7 @@
 #include<sstream>
 
 //#define DEBUG_OSRESULT
+//#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
 
@@ -2629,13 +2630,7 @@ bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
 {
 	if (system == NULL) return false;
 	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
-	if (unit != "exabyte"  && 
-		unit != "petabyte" && 
-		unit != "terabyte" && 
-		unit != "gigabyte" &&
-		unit != "megabyte" && 
-		unit != "kilobyte" && 
-		unit != "byte"       )  return false;
+	if (verifyStorageUnit(unit) == 0) return false;
 	system->availableDiskSpace->unit = unit;
 	return true;
 }//setAvailableDiskSpaceUnit
@@ -2656,13 +2651,7 @@ bool OSResult::setAvailableMemoryUnit(std::string unit)
 {
 	if (system == NULL) return false;
 	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
-	if (unit != "exabyte"  && 
-		unit != "petabyte" && 
-		unit != "terabyte" && 
-		unit != "gigabyte" &&
-		unit != "megabyte" && 
-		unit != "kilobyte" && 
-		unit != "byte"       )  return false;
+	if (verifyStorageUnit(unit) == 0) return false;
 	system->availableMemory->unit = unit;
 	return true;
 }//setAvailableMemoryUnit
@@ -2907,21 +2896,13 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 
 bool OSResult::setTimingInformation(int idx, std::string type, std::string category,
 									std::string unit, std::string description, double value)
-{
+{	
 	if (job == NULL) return false;
 	if (job->timingInformation == NULL) return false;
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
 		return false;
 
-	if (unit != "tick"        &&
-		unit != "millisecond" &&
-		unit != "second"      &&
-		unit != "minute"      &&
-		unit != "hour"        &&
-		unit != "day"         &&
-		unit != "week"        &&
-		unit != "month"       &&
-		unit != "year"          ) return false;
+	if ( verifyTimeUnit(unit) == 0) return false;
 
 	if (type != "cpuTime"     &&
 		type != "elapsedTime" &&
@@ -2979,13 +2960,7 @@ bool OSResult::setUsedDiskSpaceUnit(std::string unit)
 		return false;
 	}
 	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
-	if (unit != "exabyte"  && 
-		unit != "petabyte" && 
-		unit != "terabyte" && 
-		unit != "gigabyte" &&
-		unit != "megabyte" && 
-		unit != "kilobyte" && 
-		unit != "byte"       )  return false;
+	if (verifyStorageUnit(unit) == 0) return false;
 	job->usedDiskSpace->unit = unit;
 	return true;
 }//setUsedDiskSpaceUnit
@@ -3016,13 +2991,7 @@ bool OSResult::setUsedMemoryUnit(std::string unit)
 		return false;
 	}
 	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
-	if (unit != "exabyte"  && 
-		unit != "petabyte" && 
-		unit != "terabyte" && 
-		unit != "gigabyte" &&
-		unit != "megabyte" && 
-		unit != "kilobyte" && 
-		unit != "byte"       )  return false;
+	if (verifyStorageUnit(unit) == 0) return false;
 	job->usedMemory->unit = unit;
 	return true;
 }//setUsedMemoryUnit
@@ -4629,7 +4598,7 @@ bool OSResult::setSolverOutputItem(int otherIdx, int itemIdx, std::string item){
  ***************************************************/
 bool OSResult::IsEqual(OSResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OSResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4637,7 +4606,7 @@ bool OSResult::IsEqual(OSResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4646,7 +4615,7 @@ bool OSResult::IsEqual(OSResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4671,7 +4640,7 @@ bool OSResult::IsEqual(OSResult *that)
 
 bool GeneralResult::IsEqual(GeneralResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in GeneralResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4679,7 +4648,7 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4688,7 +4657,7 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4703,7 +4672,7 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 				this->solverInvoked != that->solverInvoked || 
 				this->timeStamp     != that->timeStamp ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "message:       " << this->message       << " vs. " << that->message       << endl;
 				cout << "serviceURI:    " << this->serviceURI    << " vs. " << that->serviceURI    << endl;
 				cout << "serviceName:   " << this->serviceName   << " vs. " << that->serviceName   << endl;
@@ -4728,7 +4697,7 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 
 bool GeneralStatus::IsEqual(GeneralStatus *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in GeneralStatus" << endl;
 	#endif
 	if (this == NULL)
@@ -4736,7 +4705,7 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4745,7 +4714,7 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4756,7 +4725,7 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 				this->type                != that->type                || 
 				this->description         != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
 				cout << "type:                " << this->type                << " vs. " << that->type                << endl;
 				cout << "description:         " << this->description         << " vs. " << that->description         << endl;
@@ -4774,7 +4743,7 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 
 bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in GeneralSubstatus" << endl;
 	#endif
 	if (this == NULL)
@@ -4782,7 +4751,7 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4791,7 +4760,7 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4801,7 +4770,7 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 			if (this->name        != that->name          || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 #endif	
@@ -4815,7 +4784,7 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 
 bool OtherResults::IsEqual(OtherResults *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherResults" << endl;
 	#endif
 	if (this == NULL)
@@ -4823,7 +4792,7 @@ bool OtherResults::IsEqual(OtherResults *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4832,7 +4801,7 @@ bool OtherResults::IsEqual(OtherResults *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4841,7 +4810,7 @@ bool OtherResults::IsEqual(OtherResults *that)
 		{
 			if (this->numberOfOtherResults != that->numberOfOtherResults)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfOtherResults: " << this->numberOfOtherResults << " vs. " << that->numberOfOtherResults << endl;
 #endif	
 
@@ -4859,7 +4828,7 @@ bool OtherResults::IsEqual(OtherResults *that)
 
 bool OtherResult::IsEqual(OtherResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4867,7 +4836,7 @@ bool OtherResult::IsEqual(OtherResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4876,7 +4845,7 @@ bool OtherResult::IsEqual(OtherResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4887,7 +4856,7 @@ bool OtherResult::IsEqual(OtherResult *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -4902,7 +4871,7 @@ bool OtherResult::IsEqual(OtherResult *that)
 
 bool SystemResult::IsEqual(SystemResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in SystemResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4910,7 +4879,7 @@ bool SystemResult::IsEqual(SystemResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4919,7 +4888,7 @@ bool SystemResult::IsEqual(SystemResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4928,7 +4897,7 @@ bool SystemResult::IsEqual(SystemResult *that)
 		{
 			if (this->systemInformation != that->systemInformation) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "systemInformation: " << this->systemInformation << " vs. " << that->systemInformation << endl;
 #endif	
 				return false;
@@ -4953,7 +4922,7 @@ bool SystemResult::IsEqual(SystemResult *that)
 
 bool DiskSpace::IsEqual(DiskSpace *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in DiskSpace" << endl;
 	#endif
 	if (this == NULL)
@@ -4961,7 +4930,7 @@ bool DiskSpace::IsEqual(DiskSpace *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4970,7 +4939,7 @@ bool DiskSpace::IsEqual(DiskSpace *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4981,7 +4950,7 @@ bool DiskSpace::IsEqual(DiskSpace *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -4995,7 +4964,7 @@ bool DiskSpace::IsEqual(DiskSpace *that)
 
 bool MemorySize::IsEqual(MemorySize *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in MemorySize" << endl;
 	#endif
 	if (this == NULL)
@@ -5003,7 +4972,7 @@ bool MemorySize::IsEqual(MemorySize *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5012,7 +4981,7 @@ bool MemorySize::IsEqual(MemorySize *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5023,7 +4992,7 @@ bool MemorySize::IsEqual(MemorySize *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -5037,7 +5006,7 @@ bool MemorySize::IsEqual(MemorySize *that)
 
 bool CPUSpeed::IsEqual(CPUSpeed *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in CPUSpeed" << endl;
 	#endif
 	if (this == NULL)
@@ -5045,7 +5014,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5054,7 +5023,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5065,7 +5034,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -5079,7 +5048,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 
 bool CPUNumber::IsEqual(CPUNumber *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in CPUNumber" << endl;
 	#endif
 	if (this == NULL)
@@ -5087,7 +5056,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5096,7 +5065,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5106,7 +5075,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 			if (this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 #endif	
@@ -5120,7 +5089,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 
 bool ServiceResult::IsEqual(ServiceResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in ServiceResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5128,7 +5097,7 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5137,7 +5106,7 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5150,7 +5119,7 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 				this->timeServiceStarted != that->timeServiceStarted ||
 				this->serviceUtilization != that->serviceUtilization )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "currentState:       " << this->currentState       << " vs. " << that->currentState       << endl;
 				cout << "currentJobCount:    " << this->currentJobCount    << " vs. " << that->currentJobCount    << endl;
 				cout << "totalJobsSoFar:     " << this->totalJobsSoFar     << " vs. " << that->totalJobsSoFar     << endl;
@@ -5170,7 +5139,7 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 
 bool JobResult::IsEqual(JobResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in JobResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5178,7 +5147,7 @@ bool JobResult::IsEqual(JobResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5187,7 +5156,7 @@ bool JobResult::IsEqual(JobResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5200,7 +5169,7 @@ bool JobResult::IsEqual(JobResult *that)
 				this->actualStartTime    != that->actualStartTime    ||
 				this->endTime            != that->endTime          )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "status:             " << this->status             << " vs. " << that->status             << endl;
 				cout << "submitTime:         " << this->submitTime         << " vs. " << that->submitTime         << endl;
 				cout << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
@@ -5231,7 +5200,7 @@ bool JobResult::IsEqual(JobResult *that)
 
 bool TimingInformation::IsEqual(TimingInformation *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in TimingInformation" << endl;
 	#endif
 	if (this == NULL)
@@ -5239,7 +5208,7 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5248,7 +5217,7 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5257,7 +5226,7 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 		{
 			if (this->numberOfTimes != that->numberOfTimes)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfTimes: " << this->numberOfTimes << " vs. " << that->numberOfTimes << endl;
 #endif	
 
@@ -5275,7 +5244,7 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 
 bool Time::IsEqual(Time *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in Time" << endl;
 	#endif
 	if (this == NULL)
@@ -5283,7 +5252,7 @@ bool Time::IsEqual(Time *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5292,7 +5261,7 @@ bool Time::IsEqual(Time *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5305,7 +5274,7 @@ bool Time::IsEqual(Time *that)
 				this->category    != that->category      || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
 				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
@@ -5321,7 +5290,7 @@ bool Time::IsEqual(Time *that)
 
 bool OptimizationResult::IsEqual(OptimizationResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OptimizationResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5329,7 +5298,7 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5338,7 +5307,7 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5350,7 +5319,7 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 				this->numberOfObjectives  != that->numberOfObjectives  || 
 				this->numberOfConstraints != that->numberOfConstraints  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfSolutions:   " << this->numberOfSolutions   << " vs. " << that->numberOfSolutions   << endl;
 				cout << "numberOfVariables:   " << this->numberOfVariables   << " vs. " << that->numberOfVariables   << endl;
 				cout << "numberOfObjectives:  " << this->numberOfObjectives  << " vs. " << that->numberOfObjectives  << endl;
@@ -5374,7 +5343,7 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 
 bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OptimizationSolution " << endl;
 	#endif
 	if (this == NULL)
@@ -5382,7 +5351,7 @@ bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5391,7 +5360,7 @@ bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5400,7 +5369,7 @@ bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 		{
 			if (this->targetObjectiveIdx != that->targetObjectiveIdx)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "targetObjectiveIdx: " << this->targetObjectiveIdx << " vs. " << that->targetObjectiveIdx << endl;
 #endif	
 				return false;
@@ -5408,7 +5377,7 @@ bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 
 			if (this->weightedObjectives != that->weightedObjectives)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "weightedObjectives: " << this->weightedObjectives << " vs. " << that->weightedObjectives << endl;
 #endif	
 				return false;
@@ -5416,7 +5385,7 @@ bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 
 			if (this->message != that->message) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "message: \'" << this->message << "\' vs. \'" << that->message << "\'" << endl;
 #endif	
 				return false;
@@ -5441,7 +5410,7 @@ bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 
 bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OptimizationSolutionStatus" << endl;
 	#endif
 	if (this == NULL)
@@ -5449,7 +5418,7 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5458,7 +5427,7 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5468,7 +5437,7 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 			if (this->type        != that->type          || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 #endif	
@@ -5477,7 +5446,7 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 
 			if (this->numberOfSubstatuses != that->numberOfSubstatuses)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
 #endif	
 
@@ -5496,7 +5465,7 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 
 bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OptimizationSolutionSubstatus" << endl;
 	#endif
 	if (this == NULL)
@@ -5504,7 +5473,7 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5513,7 +5482,7 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5523,7 +5492,7 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 			if (this->type        != that->type          || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 #endif	
@@ -5538,7 +5507,7 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 
 bool VariableSolution::IsEqual(VariableSolution *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in VariableSolution" << endl;
 	#endif
 	if (this == NULL)
@@ -5546,7 +5515,7 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5555,7 +5524,7 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5564,7 +5533,7 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 		{
 			if (this->numberOfOtherVariableResults != that->numberOfOtherVariableResults)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfOtherVariableResults: " << this->numberOfOtherVariableResults << " vs. " << that->numberOfOtherVariableResults << endl;
 #endif	
 
@@ -5589,7 +5558,7 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 
 bool VariableValues::IsEqual(VariableValues *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in VariableValues" << endl;
 	#endif
 	if (this == NULL)
@@ -5597,7 +5566,7 @@ bool VariableValues::IsEqual(VariableValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5606,7 +5575,7 @@ bool VariableValues::IsEqual(VariableValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5615,7 +5584,7 @@ bool VariableValues::IsEqual(VariableValues *that)
 		{
 			if (this->numberOfVar != that->numberOfVar)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 
@@ -5634,7 +5603,7 @@ bool VariableValues::IsEqual(VariableValues *that)
 
 bool VarValue::IsEqual(VarValue *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in VarValue" << endl;
 	#endif
 	if (this == NULL)
@@ -5642,7 +5611,7 @@ bool VarValue::IsEqual(VarValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5651,7 +5620,7 @@ bool VarValue::IsEqual(VarValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5661,7 +5630,7 @@ bool VarValue::IsEqual(VarValue *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5676,7 +5645,7 @@ bool VarValue::IsEqual(VarValue *that)
 
 bool VariableValuesString::IsEqual(VariableValuesString *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in VariableValuesString" << endl;
 	#endif
 	if (this == NULL)
@@ -5684,7 +5653,7 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5693,7 +5662,7 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5702,7 +5671,7 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 		{
 			if (this->numberOfVar != that->numberOfVar)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 
@@ -5721,7 +5690,7 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 
 bool VarValueString::IsEqual(VarValueString *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in VarValueString" << endl;
 	#endif
 	if (this == NULL)
@@ -5729,7 +5698,7 @@ bool VarValueString::IsEqual(VarValueString *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5738,7 +5707,7 @@ bool VarValueString::IsEqual(VarValueString *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5748,7 +5717,7 @@ bool VarValueString::IsEqual(VarValueString *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5763,7 +5732,7 @@ bool VarValueString::IsEqual(VarValueString *that)
 
 bool BasisStatus::IsEqual(BasisStatus *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in BasisStatus" << endl;
 	#endif
 	if (this == NULL)
@@ -5771,7 +5740,7 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5780,7 +5749,7 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5789,7 +5758,7 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 		{
 			if (this->numberOfVar != that->numberOfVar)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 
@@ -5808,7 +5777,7 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 
 bool BasStatus::IsEqual(BasStatus *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in BasStatus" << endl;
 	#endif
 	if (this == NULL)
@@ -5816,7 +5785,7 @@ bool BasStatus::IsEqual(BasStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5825,7 +5794,7 @@ bool BasStatus::IsEqual(BasStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5835,7 +5804,7 @@ bool BasStatus::IsEqual(BasStatus *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5850,7 +5819,7 @@ bool BasStatus::IsEqual(BasStatus *that)
 
 bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherVariableResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5858,7 +5827,7 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5867,7 +5836,7 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5878,7 +5847,7 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -5888,7 +5857,7 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
 			if (this->numberOfVar != that->numberOfVar)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 
@@ -5907,7 +5876,7 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
 bool OtherVarResult::IsEqual(OtherVarResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherVarResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5915,7 +5884,7 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5924,7 +5893,7 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5934,7 +5903,7 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5949,7 +5918,7 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 
 bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in ObjectiveSolution" << endl;
 	#endif
 	if (this == NULL)
@@ -5957,7 +5926,7 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5966,7 +5935,7 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5975,7 +5944,7 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 		{
 			if (this->numberOfOtherObjectiveResults != that->numberOfOtherObjectiveResults)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfOtherObjectiveResults: " << this->numberOfOtherObjectiveResults << " vs. " << that->numberOfOtherObjectiveResults << endl;
 #endif	
 
@@ -5997,7 +5966,7 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 
 bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in ObjectiveValues" << endl;
 	#endif
 	if (this == NULL)
@@ -6005,7 +5974,7 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6014,7 +5983,7 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6023,7 +5992,7 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 		{
 			if (this->numberOfObj != that->numberOfObj)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
 #endif	
 
@@ -6042,7 +6011,7 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 
 bool ObjValue::IsEqual(ObjValue *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in ObjValue" << endl;
 	#endif
 	if (this == NULL)
@@ -6050,7 +6019,7 @@ bool ObjValue::IsEqual(ObjValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6059,7 +6028,7 @@ bool ObjValue::IsEqual(ObjValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6069,7 +6038,7 @@ bool ObjValue::IsEqual(ObjValue *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6084,7 +6053,7 @@ bool ObjValue::IsEqual(ObjValue *that)
 
 bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherObjectiveResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6092,7 +6061,7 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6101,7 +6070,7 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6112,7 +6081,7 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6122,7 +6091,7 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 
 			if (this->numberOfObj != that->numberOfObj)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
 #endif	
 
@@ -6141,7 +6110,7 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 
 bool OtherObjResult::IsEqual(OtherObjResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherObjResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6149,7 +6118,7 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6158,7 +6127,7 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6168,7 +6137,7 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6183,7 +6152,7 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 
 bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in ConstraintSolution" << endl;
 	#endif
 	if (this == NULL)
@@ -6191,7 +6160,7 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6200,7 +6169,7 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6209,7 +6178,7 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 		{
 			if (this->numberOfOtherConstraintResults != that->numberOfOtherConstraintResults)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfOtherConstraintResults: " << this->numberOfOtherConstraintResults << " vs. " << that->numberOfOtherConstraintResults << endl;
 #endif	
 
@@ -6231,7 +6200,7 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 	
 bool DualVariableValues::IsEqual(DualVariableValues *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in DualVariableValues" << endl;
 	#endif
 	if (this == NULL)
@@ -6239,7 +6208,7 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6248,7 +6217,7 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6257,7 +6226,7 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 		{
 			if (this->numberOfCon != that->numberOfCon)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
 #endif	
 
@@ -6275,7 +6244,7 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 
 bool DualVarValue::IsEqual(DualVarValue *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in DualVarValue" << endl;
 	#endif
 	if (this == NULL)
@@ -6283,7 +6252,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6292,7 +6261,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6302,7 +6271,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6316,7 +6285,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 
 bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherConstraintResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6324,7 +6293,7 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6333,7 +6302,7 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6344,7 +6313,7 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6354,7 +6323,7 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
 			if (this->numberOfCon != that->numberOfCon)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
 #endif	
 
@@ -6373,7 +6342,7 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
 bool OtherConResult::IsEqual(OtherConResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherConResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6381,7 +6350,7 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6390,7 +6359,7 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6400,7 +6369,7 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6415,7 +6384,7 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 
 bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherSolutionResults" << endl;
 	#endif
 	if (this == NULL)
@@ -6423,7 +6392,7 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6432,7 +6401,7 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6441,7 +6410,7 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 		{
 			if (this->numberOfOtherSolutionResults != that->numberOfOtherSolutionResults)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfOtherSolutionResults: " << this->numberOfOtherSolutionResults << " vs. " << that->numberOfOtherSolutionResults << endl;
 #endif	
 
@@ -6459,7 +6428,7 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 
 bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherSolutionResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6467,7 +6436,7 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6476,7 +6445,7 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6488,7 +6457,7 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 				this->category    != that->category      || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6498,7 +6467,7 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 
 			if (this->numberOfItems != that->numberOfItems)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
 #endif	
 
@@ -6508,7 +6477,7 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 			for (int i = 0; i < numberOfItems; i++)
 				if (this->item[i] != that->item[i])
 				{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
 #endif	
 					return false;
@@ -6522,7 +6491,7 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 
 bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OtherSolverOutput" << endl;
 	#endif
 	if (this == NULL)
@@ -6530,7 +6499,7 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6539,7 +6508,7 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6548,7 +6517,7 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 		{
 			if (this->numberOfSolverOutputs != that->numberOfSolverOutputs)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfSolverOutputs: " << this->numberOfSolverOutputs << " vs. " << that->numberOfSolverOutputs << endl;
 #endif	
 
@@ -6567,7 +6536,7 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 
 bool SolverOutput::IsEqual(SolverOutput *that)
 {
-	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in SolverOutput" << endl;
 	#endif
 	if (this == NULL)
@@ -6575,7 +6544,7 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6584,7 +6553,7 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSRESULT
+			#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6595,7 +6564,7 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 				this->category    != that->category      || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6605,7 +6574,7 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 
 			if (this->numberOfItems != that->numberOfItems)
 			{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
 #endif	
 
@@ -6615,7 +6584,7 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 			for (int i = 0; i < numberOfItems; i++)
 				if (this->item[i] != that->item[i])
 				{
-#ifdef DEBUG_OSRESULT
+#ifdef DEBUG_ISEQUAL_ROUTINES
 				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
 #endif	
 					return false;

@@ -33,6 +33,7 @@
 #include <vector>
 
 
+
 /*! \class SparseMatrix
  * \brief a sparse matrix data structure
  */
@@ -304,12 +305,12 @@ class QuadraticTerms {
 	int* rowIndexes; 
 
 	/**
-	 * varOneIndexes holds an integer array of the first varialbe indexes of all the quadratic terms. 
+	 * varOneIndexes holds an integer array of the first variable indexes of all the quadratic terms. 
 	 */
 	int* varOneIndexes; 
 
 	/**
-	 * varTwoIndexes holds an integer array of the second varialbe indexes of all the quadratic terms. 
+	 * varTwoIndexes holds an integer array of the second variable indexes of all the quadratic terms. 
 	 */
 	int* varTwoIndexes; 
 
@@ -437,7 +438,8 @@ inline int verifyStorageUnit(std::string unit)
 
 enum ENUM_TIMEUNIT 
 {
-	ENUM_TIMEUNIT_millisecond = 1,
+	ENUM_TIMEUNIT_tick = 1,
+	ENUM_TIMEUNIT_millisecond,
 	ENUM_TIMEUNIT_second,
 	ENUM_TIMEUNIT_minute,
 	ENUM_TIMEUNIT_hour,
@@ -449,6 +451,7 @@ enum ENUM_TIMEUNIT
 
 inline int verifyTimeUnit(std::string unit)
 {
+			if (unit == "tick"       ) return ENUM_TIMEUNIT_tick;
 			if (unit == "millisecond") return ENUM_TIMEUNIT_millisecond;
 			if (unit == "second"     ) return ENUM_TIMEUNIT_second;
 			if (unit == "minute"     ) return ENUM_TIMEUNIT_minute;

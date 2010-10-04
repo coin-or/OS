@@ -462,8 +462,10 @@ mindiskspacehead: MINDISKSPACESTART
 };
 
 mindiskspaceunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
-						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
+{
+//	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
+//						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
+	if ( verifyStorageUnit($2) != 0)
 		osoption->system->minDiskSpace->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -498,8 +500,10 @@ minmemorysizehead: MINMEMORYSIZESTART
 };
 
 minmemoryunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
-						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
+{
+//	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
+//						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
+	if ( verifyStorageUnit($2) != 0)
 		osoption->system->minMemorySize->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -535,10 +539,12 @@ mincpuspeedhead: MINCPUSPEEDSTART
 };
 
 mincpuspeedunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strcmp($2,    "hertz") == 0) || (strcmp($2,"kilohertz") == 0) || (strcmp($2,"megahertz") == 0) || 
-	     (strcmp($2,"gigahertz") == 0) || (strcmp($2,"terahertz") == 0) || (strcmp($2,"petahertz") == 0) ||
-	     (strcmp($2,    "flops") == 0) || (strcmp($2,"kiloflops") == 0) || (strcmp($2,"megaflops") == 0) || 
-	     (strcmp($2,"gigaflops") == 0) || (strcmp($2,"teraflops") == 0) || (strcmp($2,"petahertz") == 0) ) 
+{
+//	if ( (strcmp($2,    "hertz") == 0) || (strcmp($2,"kilohertz") == 0) || (strcmp($2,"megahertz") == 0) || 
+//	     (strcmp($2,"gigahertz") == 0) || (strcmp($2,"terahertz") == 0) || (strcmp($2,"petahertz") == 0) ||
+//	     (strcmp($2,    "flops") == 0) || (strcmp($2,"kiloflops") == 0) || (strcmp($2,"megaflops") == 0) || 
+//	     (strcmp($2,"gigaflops") == 0) || (strcmp($2,"teraflops") == 0) || (strcmp($2,"petahertz") == 0) ) 
+	if ( verifyCPUSpeedUnit($2) != 0)
 		osoption->system->minCPUSpeed->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -826,9 +832,11 @@ maxtimehead: MAXTIMESTART
 };
 
 maxtimeunit: | UNITATT ATTRIBUTETEXT 
-{	if ( (strcmp($2,"second") == 0) || (strcmp($2,"minute") == 0) || (strcmp($2,"hour") == 0) ||
-						     (strcmp($2,"day")    == 0) || (strcmp($2,"week") == 0) ||
-						     (strcmp($2,"month")  == 0) || (strcmp($2,"year") == 0) ) 
+{
+//	if ( (strcmp($2,"second") == 0) || (strcmp($2,"minute") == 0) || (strcmp($2,"hour") == 0) ||
+//						     (strcmp($2,"day")    == 0) || (strcmp($2,"week") == 0) ||
+//						     (strcmp($2,"month")  == 0) || (strcmp($2,"year") == 0) ) 
+	if ( verifyTimeUnit($2) != 0)
                 osoption->job->maxTime->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid time unit");
