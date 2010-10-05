@@ -1009,7 +1009,7 @@ bool OSInstance::processVariables() {
 
 			for(i = 0; i < n; i++){
 				if(instanceData->variables->var[i] == NULL) throw ErrorClass("processVariables(): var element was never defined");
-				varType = verifyVarType(instanceData->variables->var[i]->type);
+				varType = returnVarType(instanceData->variables->var[i]->type);
 				switch (varType)
 				{
 				case 0: 
@@ -2507,7 +2507,7 @@ bool OSInstance::setVariableNumber(int number){
 
 
 bool OSInstance::addVariable(int index, string name, double lowerBound, double upperBound, char type){
-	if (verifyVarType(type) == 0) type = 'C';
+	if (verifyVarType(type) == false) type = 'C';
 	instanceData->variables->var[index] = new Variable();
 	if(index < 0 || instanceData->variables->numberOfVariables <= 0 || index >= instanceData->variables->numberOfVariables) return false;
 	instanceData->variables->var[index]->name = name;
@@ -2551,7 +2551,7 @@ bool OSInstance::setVariables(int number, string *names, double *lowerBounds,
 		if(types != NULL){
 			for(i = 0; i < number; i++){
 				instanceData->variables->var[i]->type = types[i];
-				if(verifyVarType(types[i]) == 0) types[i] = 'C';
+				if(verifyVarType(types[i]) == false) types[i] = 'C';
 			} 
 		}
 		/*

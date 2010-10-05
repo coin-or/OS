@@ -21,6 +21,7 @@
 #include "OSMathUtil.h"
 #include "OSParameters.h"
 #include "OSConfig.h"
+#include "OSGeneral.h"
 #include "OSErrorClass.h"
 #include "OSOption.h"
 #include "OSoLParserData.h"
@@ -224,7 +225,8 @@ instancelocationhead: INSTANCELOCATIONSTART
 };
 
 locationtypeatt: | LOCATIONTYPEATT ATTRIBUTETEXT 
-{	if ( (strcmp($2, "local") == 0) || (strcmp($2, "http") == 0) || (strcmp($2, "ftp") == 0) )
+{	
+	if (verifyLocationType($2) == true)
 		osoption->general->instanceLocation->locationType = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid locationType");
@@ -331,8 +333,8 @@ contacthead: CONTACTSTART
 };
 
 transporttypeatt: | TRANSPORTTYPEATT ATTRIBUTETEXT 
-{	if ( (strcmp($2,"osp") == 0) || (strcmp($2,"smtp") == 0) || (strcmp($2,"http")  == 0) || 
-						  (strcmp($2,"ftp")  == 0) || (strcmp($2,"other") == 0) )
+{
+	if (verifyTransportType($2) == true)
 		osoption->general->contact->transportType = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid transport type");
@@ -463,9 +465,7 @@ mindiskspacehead: MINDISKSPACESTART
 
 mindiskspaceunit: | UNITATT ATTRIBUTETEXT 
 {
-//	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
-//						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
-	if ( verifyStorageUnit($2) != 0)
+	if ( verifyStorageUnit($2) == true)
 		osoption->system->minDiskSpace->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -501,9 +501,7 @@ minmemorysizehead: MINMEMORYSIZESTART
 
 minmemoryunit: | UNITATT ATTRIBUTETEXT 
 {
-//	if ( (strcmp($2,"byte") == 0) || (strcmp($2,"kilobyte") == 0) || (strcmp($2,"megabyte") == 0) || 
-//						   (strcmp($2,"terabyte") == 0) || (strcmp($2,"petabyte") == 0) )
-	if ( verifyStorageUnit($2) != 0)
+	if ( verifyStorageUnit($2) == true)
 		osoption->system->minMemorySize->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -540,11 +538,7 @@ mincpuspeedhead: MINCPUSPEEDSTART
 
 mincpuspeedunit: | UNITATT ATTRIBUTETEXT 
 {
-//	if ( (strcmp($2,    "hertz") == 0) || (strcmp($2,"kilohertz") == 0) || (strcmp($2,"megahertz") == 0) || 
-//	     (strcmp($2,"gigahertz") == 0) || (strcmp($2,"terahertz") == 0) || (strcmp($2,"petahertz") == 0) ||
-//	     (strcmp($2,    "flops") == 0) || (strcmp($2,"kiloflops") == 0) || (strcmp($2,"megaflops") == 0) || 
-//	     (strcmp($2,"gigaflops") == 0) || (strcmp($2,"teraflops") == 0) || (strcmp($2,"petahertz") == 0) ) 
-	if ( verifyCPUSpeedUnit($2) != 0)
+	if ( verifyCPUSpeedUnit($2) == true)
 		osoption->system->minCPUSpeed->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid unit");
@@ -705,9 +699,8 @@ servicetypehead: SERVICETYPESTART
 servicetypebody: ENDOFELEMENT
 	| GREATERTHAN SERVICETYPEEND
 	| GREATERTHAN ELEMENTTEXT 
-{	if ( (strcmp($2,"solver") == 0) || (strcmp($2,"analyzer")   == 0) || (strcmp($2,"scheduler") == 0) ||
-						     (strcmp($2,"simulation") == 0) || (strcmp($2,"registry")  == 0) ||
-						     (strcmp($2,"modeler")    == 0) || (strcmp($2,"agent")     == 0) ) 
+{
+	if (verifyServiceType($2) == true)
 		osoption->service->type = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid service type");
@@ -833,10 +826,7 @@ maxtimehead: MAXTIMESTART
 
 maxtimeunit: | UNITATT ATTRIBUTETEXT 
 {
-//	if ( (strcmp($2,"second") == 0) || (strcmp($2,"minute") == 0) || (strcmp($2,"hour") == 0) ||
-//						     (strcmp($2,"day")    == 0) || (strcmp($2,"week") == 0) ||
-//						     (strcmp($2,"month")  == 0) || (strcmp($2,"year") == 0) ) 
-	if ( verifyTimeUnit($2) != 0)
+	if ( verifyTimeUnit($2) == true)
                 osoption->job->maxTime->unit = $2;
 	else
 		osolerror( NULL, osoption, parserData, "Not a valid time unit");

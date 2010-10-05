@@ -378,6 +378,16 @@ class OSGeneral{
 
 };
 
+/***************************************************************************************
+ * In the schemas there is a growing number of string elements that can only take 
+ * a small number of values. One implementation in C++ uses enumerations, but the
+ * elements appear in the schemas as strings, so they must be stored internally
+ * as strings also. Below we list the enumerations and provide two utility methods
+ * that make working with them convenient:
+ * return...() functions that return the integer value associated with that enumeration
+ * verify...() functions that check that a string has a legal value for the enumeration
+ ***************************************************************************************/
+
 enum ENUM_CPUSPEEDUNIT 
 {
 	ENUM_CPUSPEEDUNIT_hertz = 1,
@@ -393,20 +403,25 @@ enum ENUM_CPUSPEEDUNIT
 	ENUM_CPUSPEEDUNIT_petaflops
 };
 
-inline int verifyCPUSpeedUnit(std::string unit)
+inline int returnCPUSpeedUnit(std::string unit)
 {
-			if (unit == "hertz"    ) return ENUM_CPUSPEEDUNIT_hertz;
-			if (unit == "kilohertz") return ENUM_CPUSPEEDUNIT_kilohertz;
-			if (unit == "megahertz") return ENUM_CPUSPEEDUNIT_megahertz;
-			if (unit == "gigahertz") return ENUM_CPUSPEEDUNIT_gigahertz;
-			if (unit == "terahertz") return ENUM_CPUSPEEDUNIT_terahertz;
-			if (unit == "flops"    ) return ENUM_CPUSPEEDUNIT_flops;
-			if (unit == "kiloflops") return ENUM_CPUSPEEDUNIT_kiloflops;
-			if (unit == "megaflops") return ENUM_CPUSPEEDUNIT_megaflops;
-			if (unit == "gigaflops") return ENUM_CPUSPEEDUNIT_gigaflops;
-			if (unit == "teraflops") return ENUM_CPUSPEEDUNIT_teraflops;
-			if (unit == "petaflops") return ENUM_CPUSPEEDUNIT_petaflops;
-			return 0;
+	if (unit == "hertz"    ) return ENUM_CPUSPEEDUNIT_hertz;
+	if (unit == "kilohertz") return ENUM_CPUSPEEDUNIT_kilohertz;
+	if (unit == "megahertz") return ENUM_CPUSPEEDUNIT_megahertz;
+	if (unit == "gigahertz") return ENUM_CPUSPEEDUNIT_gigahertz;
+	if (unit == "terahertz") return ENUM_CPUSPEEDUNIT_terahertz;
+	if (unit == "flops"    ) return ENUM_CPUSPEEDUNIT_flops;
+	if (unit == "kiloflops") return ENUM_CPUSPEEDUNIT_kiloflops;
+	if (unit == "megaflops") return ENUM_CPUSPEEDUNIT_megaflops;
+	if (unit == "gigaflops") return ENUM_CPUSPEEDUNIT_gigaflops;
+	if (unit == "teraflops") return ENUM_CPUSPEEDUNIT_teraflops;
+	if (unit == "petaflops") return ENUM_CPUSPEEDUNIT_petaflops;
+	return 0;
+}//returnCPUSpeedUnit
+
+inline bool verifyCPUSpeedUnit(std::string unit)
+{
+	return (returnCPUSpeedUnit(unit) > 0);
 }//verifyCPUSpeedUnit
 
 enum ENUM_STORAGEUNIT 
@@ -422,19 +437,24 @@ enum ENUM_STORAGEUNIT
 	ENUM_STORAGEUNIT_yottabyte
 };
 
-inline int verifyStorageUnit(std::string unit)
+inline int returnStorageUnit(std::string unit)
 {
-			if (unit == "byte"     ) return ENUM_STORAGEUNIT_byte;
-			if (unit == "kilobyte" ) return ENUM_STORAGEUNIT_kilobyte;
-			if (unit == "megabyte" ) return ENUM_STORAGEUNIT_megabyte;
-			if (unit == "gigabyte" ) return ENUM_STORAGEUNIT_gigabyte;
-			if (unit == "terabyte" ) return ENUM_STORAGEUNIT_terabyte;
-			if (unit == "petabyte" ) return ENUM_STORAGEUNIT_petabyte;
-			if (unit == "exabyte"  ) return ENUM_STORAGEUNIT_exabyte;
-			if (unit == "zettabyte") return ENUM_STORAGEUNIT_zettabyte;
-			if (unit == "yottabyte") return ENUM_STORAGEUNIT_yottabyte;
-			return 0;
-}//verifyStorageUnit
+	if (unit == "byte"     ) return ENUM_STORAGEUNIT_byte;
+	if (unit == "kilobyte" ) return ENUM_STORAGEUNIT_kilobyte;
+	if (unit == "megabyte" ) return ENUM_STORAGEUNIT_megabyte;
+	if (unit == "gigabyte" ) return ENUM_STORAGEUNIT_gigabyte;
+	if (unit == "terabyte" ) return ENUM_STORAGEUNIT_terabyte;
+	if (unit == "petabyte" ) return ENUM_STORAGEUNIT_petabyte;
+	if (unit == "exabyte"  ) return ENUM_STORAGEUNIT_exabyte;
+	if (unit == "zettabyte") return ENUM_STORAGEUNIT_zettabyte;
+	if (unit == "yottabyte") return ENUM_STORAGEUNIT_yottabyte;
+	return 0;
+}//returnStorageUnit
+
+inline bool verifyStorageUnit(std::string unit)
+{
+	return (returnStorageUnit(unit) > 0);
+}//verifyCPUSpeedUnit
 
 enum ENUM_TIMEUNIT 
 {
@@ -449,19 +469,293 @@ enum ENUM_TIMEUNIT
 	ENUM_TIMEUNIT_year
 };
 
-inline int verifyTimeUnit(std::string unit)
+inline int returnTimeUnit(std::string unit)
 {
-			if (unit == "tick"       ) return ENUM_TIMEUNIT_tick;
-			if (unit == "millisecond") return ENUM_TIMEUNIT_millisecond;
-			if (unit == "second"     ) return ENUM_TIMEUNIT_second;
-			if (unit == "minute"     ) return ENUM_TIMEUNIT_minute;
-			if (unit == "hour"       ) return ENUM_TIMEUNIT_hour;
-			if (unit == "day"        ) return ENUM_TIMEUNIT_day;
-			if (unit == "week"       ) return ENUM_TIMEUNIT_week;
-			if (unit == "month"      ) return ENUM_TIMEUNIT_month;
-			if (unit == "year"       ) return ENUM_TIMEUNIT_year;
-			return 0;
+	if (unit == "tick"       ) return ENUM_TIMEUNIT_tick;
+	if (unit == "millisecond") return ENUM_TIMEUNIT_millisecond;
+	if (unit == "second"     ) return ENUM_TIMEUNIT_second;
+	if (unit == "minute"     ) return ENUM_TIMEUNIT_minute;
+	if (unit == "hour"       ) return ENUM_TIMEUNIT_hour;
+	if (unit == "day"        ) return ENUM_TIMEUNIT_day;
+	if (unit == "week"       ) return ENUM_TIMEUNIT_week;
+	if (unit == "month"      ) return ENUM_TIMEUNIT_month;
+	if (unit == "year"       ) return ENUM_TIMEUNIT_year;
+	return 0;
+}//returnTimeUnit
+
+inline bool verifyTimeUnit(std::string unit)
+{
+	return (returnTimeUnit(unit) > 0);
 }//verifyTimeUnit
+
+enum ENUM_TIMETYPE 
+{
+	ENUM_TIMETYPE_cpuTime = 1,
+	ENUM_TIMETYPE_elapsedTime,
+	ENUM_TIMETYPE_other
+};
+
+inline int returnTimeType(std::string type)
+{
+	if (type == "cpuTime"    ) return ENUM_TIMETYPE_cpuTime;
+	if (type == "elapsedTime") return ENUM_TIMETYPE_elapsedTime;
+	if (type == "other"      ) return ENUM_TIMETYPE_other;
+	return 0;
+}//returnTimeType
+
+inline bool verifyTimeType(std::string type)
+{
+	return (returnTimeType(type) > 0);
+}//verifyTimeType
+
+enum ENUM_TIMECATEGORY 
+{
+	ENUM_TIMECATEGORY_total = 1,
+	ENUM_TIMECATEGORY_input,
+	ENUM_TIMECATEGORY_preprocessing,
+	ENUM_TIMECATEGORY_optimization,
+	ENUM_TIMECATEGORY_postprocessing,
+	ENUM_TIMECATEGORY_output,
+	ENUM_TIMECATEGORY_other
+};
+
+inline int returnTimeCategory(std::string category)
+{
+	if (category == "total"         ) return ENUM_TIMECATEGORY_total;
+	if (category == "input"         ) return ENUM_TIMECATEGORY_input;
+	if (category == "preprocessing" ) return ENUM_TIMECATEGORY_preprocessing;
+	if (category == "optimization"  ) return ENUM_TIMECATEGORY_optimization;
+	if (category == "postprocessing") return ENUM_TIMECATEGORY_postprocessing;
+	if (category == "output"        ) return ENUM_TIMECATEGORY_output;
+	if (category == "other"         ) return ENUM_TIMECATEGORY_other;
+	return 0;
+}//returnTimeCategory
+
+inline bool verifyTimeCategory(std::string category)
+{
+	return (returnTimeCategory(category) > 0);
+}//verifyTimeCategory
+
+enum ENUM_LOCATIONTYPE 
+{
+	ENUM_LOCATIONTYPE_local = 1,
+	ENUM_LOCATIONTYPE_http,
+	ENUM_LOCATIONTYPE_ftp
+};
+
+inline int returnLocationType(std::string type)
+{
+	if (type == "local") return ENUM_LOCATIONTYPE_local;
+	if (type == "http" ) return ENUM_LOCATIONTYPE_http;
+	if (type == "ftp"  ) return ENUM_LOCATIONTYPE_ftp;
+	return 0;
+}//returnLocationType
+
+inline bool verifyLocationType(std::string type)
+{
+	return (returnLocationType(type) > 0);
+}//verifyLocationType
+
+enum ENUM_TRANSPORT_TYPE 
+{
+	ENUM_TRANSPORT_TYPE_osp = 1,
+	ENUM_TRANSPORT_TYPE_http,
+	ENUM_TRANSPORT_TYPE_smtp,
+	ENUM_TRANSPORT_TYPE_ftp,
+	ENUM_TRANSPORT_TYPE_other
+};
+
+inline int returnTransportType(std::string type)
+{
+	if (type == "osp"  ) return ENUM_TRANSPORT_TYPE_osp;
+	if (type == "http" ) return ENUM_TRANSPORT_TYPE_http;
+	if (type == "smtp" ) return ENUM_TRANSPORT_TYPE_smtp;
+	if (type == "ftp"  ) return ENUM_TRANSPORT_TYPE_ftp;
+	if (type == "other") return ENUM_TRANSPORT_TYPE_other;
+	return 0;
+}//returnTransportType
+
+inline bool verifyTransportType(std::string type)
+{
+	return (returnTransportType(type) > 0);
+}//verifyTransportType
+
+enum ENUM_SERVICE_TYPE 
+{
+	ENUM_SERVICE_TYPE_analyzer = 1,
+	ENUM_SERVICE_TYPE_solver,
+	ENUM_SERVICE_TYPE_scheduler,
+	ENUM_SERVICE_TYPE_modeler,
+	ENUM_SERVICE_TYPE_registry,
+	ENUM_SERVICE_TYPE_agent,
+	ENUM_SERVICE_TYPE_simulations
+};
+
+inline int returnServiceType(std::string type)
+{
+	if (type == "analyzer"   ) return ENUM_SERVICE_TYPE_analyzer;
+	if (type == "solver"     ) return ENUM_SERVICE_TYPE_solver;
+	if (type == "scheduler"  ) return ENUM_SERVICE_TYPE_scheduler;
+	if (type == "modeler"    ) return ENUM_SERVICE_TYPE_modeler;
+	if (type == "registry"   ) return ENUM_SERVICE_TYPE_registry;
+	if (type == "agent"      ) return ENUM_SERVICE_TYPE_agent;
+	if (type == "simulations") return ENUM_SERVICE_TYPE_simulations;
+	return 0;
+}//returnServiceType
+
+inline bool verifyServiceType(std::string type)
+{
+	return (returnServiceType(type) > 0);
+}//verifyServiceType
+
+enum ENUM_GENERAL_RESULT_STATUS 
+{
+	ENUM_GENERAL_RESULT_STATUS_error = 1,
+	ENUM_GENERAL_RESULT_STATUS_warning,
+	ENUM_GENERAL_RESULT_STATUS_normal
+};
+
+inline int returnGeneralResultStatus(std::string status)
+{
+	if (status == "error"  ) return ENUM_GENERAL_RESULT_STATUS_error;
+	if (status == "warning") return ENUM_GENERAL_RESULT_STATUS_warning;
+	if (status == "normal" ) return ENUM_GENERAL_RESULT_STATUS_normal;
+	return 0;
+}//returnGeneralResultStatus
+
+inline bool verifyGeneralResultStatus(std::string status)
+{
+	return (returnGeneralResultStatus(status) > 0);
+}//verifyGeneralResultStatus
+
+enum ENUM_SYSTEM_CURRENT_STATE 
+{
+	ENUM_SYSTEM_CURRENT_STATE_busy = 1,
+	ENUM_SYSTEM_CURRENT_STATE_busyButAccepting,
+	ENUM_SYSTEM_CURRENT_STATE_idle,
+	ENUM_SYSTEM_CURRENT_STATE_idleButNotAccepting,
+	ENUM_SYSTEM_CURRENT_STATE_noResponse
+};
+
+inline int returnSystemCurrentState(std::string status)
+{
+	if (status == "busy"               ) return ENUM_SYSTEM_CURRENT_STATE_busy;
+	if (status == "busyButAccepting"   ) return ENUM_SYSTEM_CURRENT_STATE_busyButAccepting;
+	if (status == "idle"               ) return ENUM_SYSTEM_CURRENT_STATE_idle;
+	if (status == "idleButNotAccepting") return ENUM_SYSTEM_CURRENT_STATE_idleButNotAccepting;
+	if (status == "noResponse"         ) return ENUM_SYSTEM_CURRENT_STATE_noResponse;
+	return 0;
+}//returnSystemCurrentState
+
+inline bool verifySystemCurrentState(std::string status)
+{
+	return (returnSystemCurrentState(status) > 0);
+}//verifySystemCurrentState
+
+enum ENUM_JOB_STATUS 
+{
+	ENUM_JOB_STATUS_waiting = 1,
+	ENUM_JOB_STATUS_running,
+	ENUM_JOB_STATUS_killed,
+	ENUM_JOB_STATUS_finished,
+	ENUM_JOB_STATUS_unknown
+};
+
+inline int returnJobStatus(std::string status)
+{
+	if (status == "waiting" ) return ENUM_JOB_STATUS_waiting;
+	if (status == "running" ) return ENUM_JOB_STATUS_running;
+	if (status == "killed"  ) return ENUM_JOB_STATUS_killed;
+	if (status == "finished") return ENUM_JOB_STATUS_finished;
+	if (status == "unknown" ) return ENUM_JOB_STATUS_unknown;
+	return 0;
+}//returnJobStatus
+
+inline bool verifyJobStatus(std::string status)
+{
+	return (returnJobStatus(status) > 0);
+}//verifyJobStatus
+
+
+enum ENUM_BASIS_STATUS 
+{
+	ENUM_BASIS_STATUS_unknown = 1,
+	ENUM_BASIS_STATUS_basic,
+	ENUM_BASIS_STATUS_atLower,
+	ENUM_BASIS_STATUS_atUpper,
+	ENUM_BASIS_STATUS_isFree,
+	ENUM_BASIS_STATUS_superbasic
+};
+
+inline int returnBasisStatus(std::string status)
+{
+	if (status == "unknown"   ) return ENUM_BASIS_STATUS_unknown;
+	if (status == "basic"     ) return ENUM_BASIS_STATUS_basic;
+	if (status == "atLower"   ) return ENUM_BASIS_STATUS_atLower;
+	if (status == "atUpper"   ) return ENUM_BASIS_STATUS_atUpper;
+	if (status == "isFree"    ) return ENUM_BASIS_STATUS_isFree;
+	if (status == "superBasic") return ENUM_BASIS_STATUS_superbasic;
+	return 0;
+}//returnBasisStatus
+
+inline bool verifyBasisStatus(std::string status)
+{
+	return (returnBasisStatus(status) > 0);
+}//verifyBasisStatus
+
+enum ENUM_SOLUTION_STATUS 
+{
+	ENUM_SOLUTION_STATUS_unbounded = 1,
+	ENUM_SOLUTION_STATUS_globallyOptimal,
+	ENUM_SOLUTION_STATUS_locallyOptimal,
+	ENUM_SOLUTION_STATUS_optimal,
+	ENUM_SOLUTION_STATUS_bestSoFar,
+	ENUM_SOLUTION_STATUS_feasible,
+	ENUM_SOLUTION_STATUS_infeasible,
+	ENUM_SOLUTION_STATUS_unsure,
+	ENUM_SOLUTION_STATUS_error,
+	ENUM_SOLUTION_STATUS_other
+};
+
+inline int returnSolutionStatus(std::string status)
+{
+	if (status == "unbounded"      ) return ENUM_SOLUTION_STATUS_unbounded;
+	if (status == "globallyOptimal") return ENUM_SOLUTION_STATUS_globallyOptimal;
+	if (status == "locallyOptimal" ) return ENUM_SOLUTION_STATUS_locallyOptimal;
+	if (status == "optimal"        ) return ENUM_SOLUTION_STATUS_optimal;
+	if (status == "bestSoFar"      ) return ENUM_SOLUTION_STATUS_bestSoFar;
+	if (status == "feasible"       ) return ENUM_SOLUTION_STATUS_feasible;
+	if (status == "infeasible"     ) return ENUM_SOLUTION_STATUS_infeasible;
+	if (status == "unsure"         ) return ENUM_SOLUTION_STATUS_unsure;
+	if (status == "error"          ) return ENUM_SOLUTION_STATUS_error;
+	if (status == "other"          ) return ENUM_SOLUTION_STATUS_other;
+	return 0;
+}//returnSolutionStatus
+
+inline bool verifySolutionStatus(std::string status)
+{
+	return (returnSolutionStatus(status) > 0);
+}//verifySolutionStatus
+
+enum ENUM_SOLUTION_SUBSTATUSTYPE 
+{
+	ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByLimit = 1,
+	ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByBounds,
+	ENUM_SOLUTION_SUBSTATUSTYPE_other
+};
+
+inline int returnSolutionSubstatusType(std::string type)
+{
+	if (type == "stoppedByLimit" ) return ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByLimit;
+	if (type == "stoppedByBounds") return ENUM_SOLUTION_SUBSTATUSTYPE_stoppedByBounds;
+	if (type == "other"          ) return ENUM_SOLUTION_SUBSTATUSTYPE_other;
+	return 0;
+}//returnSolutionSubstatusType
+
+inline bool verifySolutionSubstatusType(std::string type)
+{
+	return (returnSolutionSubstatusType(type) > 0);
+}//verifySolutionSubstatusType
 
 enum ENUM_VARTYPE 
 {
@@ -473,16 +767,20 @@ enum ENUM_VARTYPE
 	ENUM_VARTYPE_STRING
 };
 
-inline int verifyVarType(char vt)
+inline int returnVarType(char vt)
 {
-			if (vt == 'C') return ENUM_VARTYPE_CONTINUOUS;
-			if (vt == 'B') return ENUM_VARTYPE_BINARY;
-			if (vt == 'I') return ENUM_VARTYPE_INTEGER;
-			if (vt == 'S') return ENUM_VARTYPE_STRING;
-			if (vt == 'D') return ENUM_VARTYPE_SEMICONTINUOUS;
-			if (vt == 'J') return ENUM_VARTYPE_SEMIINTEGER;
-			return 0;
-}//verifyVarType
+	if (vt == 'C') return ENUM_VARTYPE_CONTINUOUS;
+	if (vt == 'B') return ENUM_VARTYPE_BINARY;
+	if (vt == 'I') return ENUM_VARTYPE_INTEGER;
+	if (vt == 'S') return ENUM_VARTYPE_STRING;
+	if (vt == 'D') return ENUM_VARTYPE_SEMICONTINUOUS;
+	if (vt == 'J') return ENUM_VARTYPE_SEMIINTEGER;
+	return 0;
+}//returnVarType
 
+inline bool verifyVarType(char vt)
+{
+	return (returnVarType(vt) > 0);
+}//verifyVarType
 
 #endif

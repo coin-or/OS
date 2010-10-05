@@ -2500,10 +2500,7 @@ bool OSResult::setGeneralStatus(GeneralStatus *status){
 }//setGeneralStatus
 
 bool OSResult::setGeneralStatusType(string type){
-    if ((type != "error"  ) &&
-        (type != "warning") && 
-        (type != "normal"))
-		return false;
+	if (verifyGeneralResultStatus(type) == 0) return false;
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->type = type;
 	return true;
@@ -2594,9 +2591,7 @@ bool OSResult::setNumberOfOtherGeneralResults(int num){
 bool OSResult::setOtherGeneralResultName(int idx, string name){
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
 		return false;
-	}
 	general->otherResults->other[idx]->name = name;
 	return true;
 }//setOtherGeneralResultName
@@ -2604,9 +2599,7 @@ bool OSResult::setOtherGeneralResultName(int idx, string name){
 bool OSResult::setOtherGeneralResultValue(int idx, string value){
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
 		return false;
-	}
 	general->otherResults->other[idx]->value = value;
 	return true;
 }//setOtherGeneralResultValue
@@ -2614,9 +2607,7 @@ bool OSResult::setOtherGeneralResultValue(int idx, string value){
 bool OSResult::setOtherGeneralResultDescription(int idx, string description){
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other general result outside of array boundaries.");
 		return false;
-	}
 	general->otherResults->other[idx]->description = description;
 	return true;
 }//setOtherGeneralResultDescription
@@ -2630,7 +2621,7 @@ bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
 {
 	if (system == NULL) return false;
 	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
-	if (verifyStorageUnit(unit) == 0) return false;
+	if (verifyStorageUnit(unit) == false) return false;
 	system->availableDiskSpace->unit = unit;
 	return true;
 }//setAvailableDiskSpaceUnit
@@ -2651,7 +2642,7 @@ bool OSResult::setAvailableMemoryUnit(std::string unit)
 {
 	if (system == NULL) return false;
 	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
-	if (verifyStorageUnit(unit) == 0) return false;
+	if (verifyStorageUnit(unit) == false) return false;
 	system->availableMemory->unit = unit;
 	return true;
 }//setAvailableMemoryUnit
@@ -2672,17 +2663,7 @@ bool OSResult::setAvailableCPUSpeedUnit(std::string unit)
 {
 	if (system == NULL) return false;
 	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
-	if (unit != "terahertz" && 
-		unit != "gigahertz" && 
-		unit != "megahertz" && 
-		unit != "kilohertz" && 
-		unit != "hertz"     && 
-		unit != "petaflops" && 
-		unit != "teraflops" && 
-		unit != "gigaflops" && 
-		unit != "megaflops" && 
-		unit != "kiloflops" && 
-		unit != "flops"      ) return false;
+	if (verifyCPUSpeedUnit(unit) == false) return false;
 	system->availableCPUSpeed->unit = unit;
 	return true;
 }//setAvailableCPUSpeedUnit
@@ -2728,9 +2709,7 @@ bool OSResult::setNumberOfOtherSystemResults(int num){
 bool OSResult::setOtherSystemResultName(int idx, string name){
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
 		return false;
-	}
 	system->otherResults->other[idx]->name = name;
 	return true;
 }//setOtherSystemResultName
@@ -2738,9 +2717,7 @@ bool OSResult::setOtherSystemResultName(int idx, string name){
 bool OSResult::setOtherSystemResultValue(int idx, string value){
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
 		return false;
-	}
 	system->otherResults->other[idx]->value = value;
 	return true;
 }//setOtherSystemResultValue
@@ -2748,20 +2725,13 @@ bool OSResult::setOtherSystemResultValue(int idx, string value){
 bool OSResult::setOtherSystemResultDescription(int idx, string description){
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other system result outside of array boundaries.");
 		return false;
-	}
 	system->otherResults->other[idx]->description = description;
 	return true;
 }//setOtherSystemResultDescription
 
 bool OSResult::setCurrentState(std::string currentState){
-	if (currentState != "busy"                &&
-		currentState != "busyButAccepting"    &&
-		currentState != "idle"                &&
-		currentState != "idleButNotAccepting" &&
-		currentState != "noResponse"           )
-		return false;
+	if(verifySystemCurrentState(currentState) == 0) return false;
 	service->currentState = currentState;
 	return true;
 }//setCurrentState
@@ -2802,9 +2772,7 @@ bool OSResult::setNumberOfOtherServiceResults(int num){
 bool OSResult::setOtherServiceResultName(int idx, string name){
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
 		return false;
-	}
 	service->otherResults->other[idx]->name = name;
 	return true;
 }//setOtherServiceResultName
@@ -2812,9 +2780,7 @@ bool OSResult::setOtherServiceResultName(int idx, string name){
 bool OSResult::setOtherServiceResultValue(int idx, string value){
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
 		return false;
-	}
 	service->otherResults->other[idx]->value = value;
 	return true;
 }//setOtherServiceResultValue
@@ -2822,19 +2788,13 @@ bool OSResult::setOtherServiceResultValue(int idx, string value){
 bool OSResult::setOtherServiceResultDescription(int idx, string description){
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other service result outside of array boundaries.");
 		return false;
-	}
 	service->otherResults->other[idx]->description = description;
 	return true;
 }//setOtherServiceResultDescription
 
 bool OSResult::setJobStatus(std::string status){
-	if (status != "waiting"  &&
-		status != "running"  &&
-		status != "killed"   &&
-		status != "finished" &&
-		status != "unknown"     )
+	if (verifyJobStatus(status) == 0)
 		return false;
 	job->status = status;
 	return true;
@@ -2868,6 +2828,8 @@ bool OSResult::setTime(double time){
 bool OSResult::addTimingInformation(std::string type, std::string category,
 									std::string unit, std::string description, double value)
 {	int nt; int i;
+	if (verifyTimeUnit(unit) != true)
+		throw ErrorClass("Invalid unit of time in addTimingInformation()");
 	if (job == NULL) job = new JobResult();
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
 
@@ -2897,31 +2859,29 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 bool OSResult::setTimingInformation(int idx, std::string type, std::string category,
 									std::string unit, std::string description, double value)
 {	
+	std::cout << "setting timing info" << std::endl;
 	if (job == NULL) return false;
 	if (job->timingInformation == NULL) return false;
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
 		return false;
 
-	if ( verifyTimeUnit(unit) == 0) return false;
+	std::cout << "type = "        << type        << " " << verifyTimeType(type) << std::endl;
+	std::cout << "category = "    << category    << " " << verifyTimeCategory(category) << std::endl;
+	std::cout << "unit = "        << unit        << " " << verifyTimeUnit(unit) << std::endl;
+	std::cout << "description = " << description << std::endl;
+	std::cout << "value = "       << value       << std::endl;
 
-	if (type != "cpuTime"     &&
-		type != "elapsedTime" &&
- 		type != "other"         ) return false;
-		
-	
-	if (category != "total"          &&
-		category != "input"          &&
-		category != "preprocessing"  &&
-		category != "optimization"   &&
-		category != "postprocessing" &&
-		category != "output"         &&
- 		category != "other"            ) return false;
+
+	if (verifyTimeUnit(unit) == 0) return false;
+	if (verifyTimeType(type) == 0) return false;
+	if (verifyTimeCategory(category) == 0) return false;
 
 	job->timingInformation->time[idx]->type = type;
 	job->timingInformation->time[idx]->category = category;
 	job->timingInformation->time[idx]->unit = unit;
 	job->timingInformation->time[idx]->description = description;
 	job->timingInformation->time[idx]->value = value;
+	std::cout << "return true" << std::endl;
 
 	return true;
 }//setTimingInformation
@@ -2929,9 +2889,7 @@ bool OSResult::setTimingInformation(int idx, std::string type, std::string categ
 
 bool OSResult::setNumberOfTimes(int numberOfTimes)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
 	if (numberOfTimes <= 0) return false;
 	job->timingInformation->numberOfTimes = numberOfTimes;
@@ -2945,9 +2903,7 @@ bool OSResult::setNumberOfTimes(int numberOfTimes)
 
 bool OSResult::setTimeNumber(int timeNumber)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
 	if (timeNumber <= 0) return false;
 	job->timingInformation->numberOfTimes = timeNumber;
@@ -2956,9 +2912,7 @@ bool OSResult::setTimeNumber(int timeNumber)
 
 bool OSResult::setUsedDiskSpaceUnit(std::string unit)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
 	if (verifyStorageUnit(unit) == 0) return false;
 	job->usedDiskSpace->unit = unit;
@@ -2967,9 +2921,7 @@ bool OSResult::setUsedDiskSpaceUnit(std::string unit)
 
 bool OSResult::setUsedDiskSpaceDescription(std::string description)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
 	job->usedDiskSpace->description = description;
 	return true;
@@ -2977,9 +2929,7 @@ bool OSResult::setUsedDiskSpaceDescription(std::string description)
 
 bool OSResult::setUsedDiskSpaceValue(double value)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
 	job->usedDiskSpace->value = value;
 	return true;
@@ -2987,9 +2937,7 @@ bool OSResult::setUsedDiskSpaceValue(double value)
 
 bool OSResult::setUsedMemoryUnit(std::string unit)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
 	if (verifyStorageUnit(unit) == 0) return false;
 	job->usedMemory->unit = unit;
@@ -2998,9 +2946,7 @@ bool OSResult::setUsedMemoryUnit(std::string unit)
 
 bool OSResult::setUsedMemoryDescription(std::string description)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
 	job->usedMemory->description = description;
 	return true;
@@ -3008,9 +2954,7 @@ bool OSResult::setUsedMemoryDescription(std::string description)
 
 bool OSResult::setUsedMemoryValue(double value)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
 	job->usedMemory->value = value;
 	return true;
@@ -3018,30 +2962,16 @@ bool OSResult::setUsedMemoryValue(double value)
 
 bool OSResult::setUsedCPUSpeedUnit(std::string unit)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
-	if (unit != "terahertz" && 
-		unit != "gigahertz" && 
-		unit != "megahertz" && 
-		unit != "kilohertz" && 
-		unit != "hertz"     && 
-		unit != "petaflops" && 
-		unit != "teraflops" && 
-		unit != "gigaflops" && 
-		unit != "megaflops" && 
-		unit != "kiloflops" && 
-		unit != "flops"      ) return false;
+	if ( verifyCPUSpeedUnit(unit) == 0) return false;
 	job->usedCPUSpeed->unit = unit;
 	return true;
 }//setUsedCPUSpeedUnit
 
 bool OSResult::setUsedCPUSpeedDescription(std::string description)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->description = description;
 	return true;
@@ -3049,9 +2979,7 @@ bool OSResult::setUsedCPUSpeedDescription(std::string description)
 
 bool OSResult::setUsedCPUSpeedValue(double value)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->value = value;
 	return true;
@@ -3059,9 +2987,7 @@ bool OSResult::setUsedCPUSpeedValue(double value)
 
 bool OSResult::setUsedCPUNumberDescription(std::string description)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->description = description;
 	return true;
@@ -3069,9 +2995,7 @@ bool OSResult::setUsedCPUNumberDescription(std::string description)
 
 bool OSResult::setUsedCPUNumberValue(int value)
 {	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->value = value;
 	return true;
@@ -3094,78 +3018,60 @@ bool OSResult::setNumberOfOtherJobResults(int num){
 
 bool OSResult::setOtherJobResultName(int idx, string name){
 	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
 		return false;
-	}
 	job->otherResults->other[idx]->name = name;
 	return true;
 }//setOtherJobResultName
 
 bool OSResult::setOtherJobResultValue(int idx, string value){
 	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
 		return false;
-	}
 	job->otherResults->other[idx]->value = value;
 	return true;
 }//setOtherJobResultValue
 
 bool OSResult::setOtherJobResultDescription(int idx, string description){
 	if (job == NULL) 
-	{//	throw ErrorClass("job instance was never defined");
 		return false;
-	}
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
-	{//	throw ErrorClass("Attempting to access other job result outside of array boundaries.");
 		return false;
-	}
 	job->otherResults->other[idx]->description = description;
 	return true;
 }//setOtherJobResultDescription
 
 
 bool OSResult::setVariableNumber(int variableNumber){
-	if(variableNumber < 0){
+	if(variableNumber < 0)
 		return false;
-	}
 	if(optimization == NULL) optimization = new OptimizationResult();
 	optimization->numberOfVariables = variableNumber;
 	return true;
 }//setVariableNumber
 
 bool OSResult::setObjectiveNumber(int objectiveNumber){
-	if(objectiveNumber < 0){
+	if(objectiveNumber < 0)
 		return false;
-	}
 	if(optimization == NULL) optimization = new OptimizationResult();
 	optimization->numberOfObjectives = objectiveNumber;
 	return true;
 }//setObjectiveNumber
 
 bool OSResult::setConstraintNumber(int constraintNumber){
-	if(constraintNumber < 0){
+	if(constraintNumber < 0)
 		return false;
-	}
 	if(optimization == NULL) optimization = new OptimizationResult();
 	optimization->numberOfConstraints = constraintNumber;
 	return true;
 }//setConstraintNumber
 
 bool OSResult::setSolutionNumber(int number){
-	//if(getVariableNumber() <= 0) return false;
-	//if(getObjectiveNumber() < 0) return false;
-	//if(getConstraintNumber() < 0) return false;
 	if(number < 0) return false; 
 	if(number == 0) return true;
 	if(optimization == NULL) optimization = new OptimizationResult();
@@ -3183,22 +3089,13 @@ bool OSResult::setSolutionStatus(int solIdx, string type, string description){
 	if(nSols <= 0) return false;
 	if(optimization->solution == NULL || 
 	   solIdx < 0 || solIdx >=  nSols) return false;
-	if(optimization->solution[solIdx] == NULL){
+	if(optimization->solution[solIdx] == NULL)
 		optimization->solution[solIdx] = new OptimizationSolution();
-	}
-	if(optimization->solution[solIdx]->status == NULL){
+	if(optimization->solution[solIdx]->status == NULL)
 		optimization->solution[solIdx]->status = new OptimizationSolutionStatus();
-	}
-	if (type != "unbounded"       && 
-		type != "globallyOptimal" && 
-	    type != "locallyOptimal"  &&
-	    type != "optimal"         && 
-	    type != "bestSoFar"       &&
-	    type != "feasible"        && 
-	    type != "infeasible"      &&
-	    type != "unsure"          && 
-	    type != "error"           &&
-	    type != "other"             ) return false;
+
+	if (verifySolutionStatus(type) == false) return false;
+
 	optimization->solution[solIdx]->status->type = type;
 	optimization->solution[solIdx]->status->description = description;
 	return true;
@@ -3210,22 +3107,13 @@ bool OSResult::setSolutionStatusType(int solIdx, std::string type){
 	if(nSols <= 0) return false;
 	if(optimization->solution == NULL || 
 	   solIdx < 0 || solIdx >=  nSols) return false;
-	if(optimization->solution[solIdx] == NULL){
+	if(optimization->solution[solIdx] == NULL)
 		optimization->solution[solIdx] = new OptimizationSolution();
-	}
-	if(optimization->solution[solIdx]->status == NULL){
+	if(optimization->solution[solIdx]->status == NULL)
 		optimization->solution[solIdx]->status = new OptimizationSolutionStatus();
-	}
-	if (type != "unbounded"       && 
-		type != "globallyOptimal" && 
-	    type != "locallyOptimal"  &&
-	    type != "optimal"         && 
-	    type != "bestSoFar"       &&
-	    type != "feasible"        && 
-	    type != "infeasible"      &&
-	    type != "unsure"          && 
-	    type != "error"           &&
-	    type != "other"             ) return false;
+
+	if (verifySolutionStatus(type) == false) return false;
+
 	optimization->solution[solIdx]->status->type = type;
 	return true;
 }//setSolutionStatusType
@@ -3279,9 +3167,9 @@ bool OSResult::setSolutionSubstatusType(int solIdx, int substatusIdx, std::strin
 	if(optimization->solution[solIdx]->status == NULL) return false;
 	int nSubs = optimization->solution[solIdx]->status->numberOfSubstatuses;
 	if (substatusIdx < 0 || substatusIdx >= nSubs) return false;
-	if (type != "stoppedByLimit"  &&
-		type != "stoppedByBounds" &&
-		type != "other"             ) return false;
+
+	if (verifySolutionSubstatusType(type) == 0) return false;
+
 	optimization->solution[solIdx]->status->substatus[substatusIdx]->type = type;
 	return true;
 }//setSolutionSubstatusType
@@ -3617,11 +3505,9 @@ bool OSResult::setBasisVar(int solIdx, int number, int idx, std::string str){
 	{//	throw ErrorClass("Variable index cannot be negative.");
 		return false;
 	}
-	if (str != "unknown"  &&
-		str != "basic"    &&
-		str != "atLower"  &&
-		str != "atUpper"  &&
-		str != "superBasic" ) return false;
+
+	if (verifyBasisStatus(str) == 0) return false;
+
 	optimization->solution[solIdx]->variables->basisStatus->var[number]->idx   = idx;
 	optimization->solution[solIdx]->variables->basisStatus->var[number]->value = str;
 	return true;
@@ -4221,27 +4107,27 @@ bool OSResult::setDualVariableValuesSparse(int solIdx, std::vector<IndexValuePai
 bool OSResult::setDualVariableValuesDense(int solIdx, double *y){
 	int numberOfCon = this->getConstraintNumber();
 	int iNumberOfConstraints = numberOfCon;
-	if(iNumberOfConstraints < 0) return false;
-	if(iNumberOfConstraints == 0) return true;
+	if (iNumberOfConstraints < 0) return false;
+	if (iNumberOfConstraints == 0) return true;
 	int nSols = this->getSolutionNumber();
-	if(optimization == NULL) return false;
-	if(nSols <= 0) return false;
-	if(optimization == NULL) return false;
-	if(optimization->solution == NULL || 
+	if (optimization == NULL) return false;
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
 	   solIdx < 0 || solIdx >=  nSols) return false;
-	if(optimization->solution[solIdx] == NULL){
+	if (optimization->solution[solIdx] == NULL){
 		optimization->solution[solIdx] = new OptimizationSolution();
 	}
-	if(optimization->solution[solIdx]->constraints == NULL){
+	if (optimization->solution[solIdx]->constraints == NULL){
 		optimization->solution[solIdx]->constraints = new ConstraintSolution();
 	}
-	if(optimization->solution[solIdx]->constraints->dualValues == NULL){
+	if (optimization->solution[solIdx]->constraints->dualValues == NULL){
 		optimization->solution[solIdx]->constraints->dualValues = new DualVariableValues();
 	}
-	if(optimization->solution[solIdx]->constraints->dualValues->con == NULL){
+	if (optimization->solution[solIdx]->constraints->dualValues->con == NULL){
 		optimization->solution[solIdx]->constraints->dualValues->con = new DualVarValue*[numberOfCon];
 	}
-	if(y == NULL){
+	if (y == NULL){
 		optimization->solution[solIdx]->constraints->dualValues = NULL;
 		return true;
 	} 
@@ -4257,26 +4143,26 @@ bool OSResult::setDualVariableValuesDense(int solIdx, double *y){
 bool OSResult::setConstraintValuesDense(int solIdx, double *dualVarValues){
 	int numberOfCon = this->getConstraintNumber();
 	int iNumberOfConstraints = numberOfCon;
-	if(iNumberOfConstraints <= 0) return false;
+	if (iNumberOfConstraints <= 0) return false;
 	int nSols = this->getSolutionNumber();
-	if(optimization == NULL) return false;
-	if(nSols <= 0) return false;
-	if(optimization == NULL) return false;
-	if(optimization->solution == NULL || 
+	if (optimization == NULL) return false;
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
 	   solIdx < 0 || solIdx >=  nSols) return false;
-	if(optimization->solution[solIdx] == NULL){
+	if (optimization->solution[solIdx] == NULL){
 		optimization->solution[solIdx] = new OptimizationSolution();
 	}
-	if(optimization->solution[solIdx]->constraints == NULL){
+	if (optimization->solution[solIdx]->constraints == NULL){
 		optimization->solution[solIdx]->constraints = new ConstraintSolution();
 	}
-	if(optimization->solution[solIdx]->constraints->dualValues == NULL){
+	if (optimization->solution[solIdx]->constraints->dualValues == NULL){
 		optimization->solution[solIdx]->constraints->dualValues = new DualVariableValues();
 	}
-	if(optimization->solution[solIdx]->constraints->dualValues->con == NULL){
+	if (optimization->solution[solIdx]->constraints->dualValues->con == NULL){
 		optimization->solution[solIdx]->constraints->dualValues->con = new DualVarValue*[numberOfCon];
 	}
-	if(dualVarValues == NULL){
+	if (dualVarValues == NULL){
 		optimization->solution[solIdx]->constraints->dualValues = NULL;
 		return true;
 	}

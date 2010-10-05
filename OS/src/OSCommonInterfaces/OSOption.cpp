@@ -23,6 +23,7 @@
 
 #include "OSOption.h"
 #include "OSParameters.h"
+#include "OSGeneral.h"
 #include "OSErrorClass.h"
 #include "CoinFinite.hpp"
 #include <iostream> 
@@ -5401,7 +5402,7 @@ bool OSOption::setInstanceLocationType( std::string locationType)
 		if (this->general->instanceLocation == NULL) 
 			this->general->instanceLocation = new InstanceLocationOption();
 		
-		if ((locationType != "local") && (locationType != "http") && (locationType != "ftp"))
+		if (verifyLocationType(locationType) == 0)
 			throw ErrorClass( "location type not recognized.");
 
 		this->general->instanceLocation->locationType = locationType;
@@ -5464,8 +5465,7 @@ bool OSOption::setContactTransportType( std::string transportType)
 		if (this->general->contact == NULL) 
 			this->general->contact = new ContactOption();
 		
-		if ((transportType != "osp") && (transportType != "http") && (transportType != "smtp") && 
-			(transportType != "ftp") && (transportType != "other"))
+		if (verifyTransportType(transportType) == 0)
 			throw ErrorClass( "transport type not recognized.");
 
 		this->general->contact->transportType = transportType;
@@ -5522,8 +5522,7 @@ bool OSOption::setMinDiskSpaceUnit(std::string unit)
 		if (this->system->minDiskSpace == NULL)
 			this->system->minDiskSpace = new MinDiskSpace();
 		
-		if ((unit != "petabyte") && (unit != "terabyte") && (unit != "gigabyte") &&
-			(unit != "megabyte") && (unit != "kilobyte") && (unit != "byte"))
+		if (verifyStorageUnit(unit) == 0)
 			throw ErrorClass( "disk space unit not recognized.");
 
 		this->system->minDiskSpace->unit = unit;
@@ -5551,8 +5550,7 @@ bool OSOption::setMinMemoryUnit(std::string unit)
 		if (this->system->minMemorySize == NULL)
 			this->system->minMemorySize = new MinMemorySize();
 		
-		if ((unit != "petabyte") && (unit != "terabyte") && (unit != "gigabyte") &&
-			(unit != "megabyte") && (unit != "kilobyte") && (unit != "byte"))
+		if (verifyStorageUnit(unit) == 0)
 			throw ErrorClass( "memory size unit not recognized.");
 
 		this->system->minMemorySize->unit = unit;
@@ -5580,10 +5578,7 @@ bool OSOption::setMinCPUSpeedUnit(std::string unit)
 		if (this->system->minCPUSpeed == NULL)
 			this->system->minCPUSpeed = new MinCPUSpeed();
 		
-		if ((unit != "petaflops") && (unit != "teraflops") && (unit != "gigaflops") &&
-			(unit != "megaflops") && (unit != "kiloflops") && (unit != "flops")     &&
-			(unit != "petahertz") && (unit != "terahertz") && (unit != "gigahertz") &&
-			(unit != "megahertz") && (unit != "kilohertz") && (unit != "hertz")        	)
+		if (verifyCPUSpeedUnit(unit) == 0)
 			throw ErrorClass( "CPU speed unit not recognized.");
 
 		this->system->minCPUSpeed->unit = unit;
@@ -5636,10 +5631,7 @@ bool OSOption::setServiceType( std::string serviceType)
 	{	if (this->service == NULL) 
 			this->service = new ServiceOption();
 		
-		if ((serviceType != "analyzer" ) && (serviceType != "solver" ) && 
-			(serviceType != "scheduler") && (serviceType != "modeler") &&
-			(serviceType != "registry" ) && (serviceType != "agent"  ) && 
-			(serviceType != "simulations"))
+		if (verifyServiceType(serviceType) == 0)
 			throw ErrorClass( "service type not recognized.");
 
 		this->service->type = serviceType;
@@ -5694,9 +5686,7 @@ bool OSOption::setMaxTimeUnit(std::string unit)
 		if (this->job->maxTime == NULL)
 			this->job->maxTime = new MaxTime();
 		
-		if ((unit != "second") && (unit != "minute") && (unit != "hour")  &&
-			(unit != "day")    && (unit != "week")   && (unit != "month") && 
-			(unit != "year"))
+		if (verifyTimeUnit(unit) == 0)
 			throw ErrorClass( "time unit not recognized.");
 
 		this->job->maxTime->unit = unit;
@@ -6131,8 +6121,7 @@ bool OSOption::setInitBasisStatusDense(int numberOfVar, std::string *value)
 	}
 	int i;
 	for (i = 0; i < numberOfVar; i++)
-	{	if ((value[i] == "superbasic") || (value[i] == "atLower") || (value[i] == "basic")
-	                                   || (value[i] == "atUpper") || (value[i] == "unknown"))
+	{	if (verifyBasisStatus(value[i]) != 0)
 			if (!this->optimization->variables->initialBasisStatus->addVar(i, value[i]))
 				return false;
 	}

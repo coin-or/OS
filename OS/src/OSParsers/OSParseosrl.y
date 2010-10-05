@@ -20,6 +20,7 @@
 #include "OSDataStructures.h"
 #include "OSMathUtil.h"
 #include "OSParameters.h"
+#include "OSGeneral.h"
 #include "OSConfig.h"
 #include "OSErrorClass.h"
 #include "OSResult.h"
@@ -231,12 +232,8 @@ generalStatusAttList: generalStatusATT | generalStatusAttList generalStatusATT;
 generalStatusATT: 
     typeAttribute
     { 
-	    if ((parserData->typeAttribute != "error"  ) &&
-	        (parserData->typeAttribute != "warning") && 
-	        (parserData->typeAttribute != "normal"))
-			osrlerror(NULL, NULL, parserData, "general status type does not match any legal value");
 		if (osresult->setGeneralStatusType(parserData->typeAttribute) == false)
-			osrlerror(NULL, NULL, parserData, "Error while setting general status type");
+			osrlerror(NULL, NULL, parserData, "general status type does not match any legal value");
 	}
   | descriptionAttribute 
 	{   
@@ -556,9 +553,8 @@ availableDiskSpaceAttList: | availableDiskSpaceAttList availableDiskSpaceAtt;
 availableDiskSpaceAtt: 
 	unitAttribute
 	{
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
+		if (osresult->setAvailableDiskSpaceUnit( parserData->unitAttribute) == false) 
 			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
-		osresult->setAvailableDiskSpaceUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
 	}
   | descriptionAttribute
@@ -590,9 +586,8 @@ availableMemoryAttList: | availableMemoryAttList availableMemoryAtt;
 availableMemoryAtt: 
 	unitAttribute 
 	{
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
+		if (osresult->setAvailableMemoryUnit( parserData->unitAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
-		osresult->setAvailableMemoryUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
 	}
   | descriptionAttribute
@@ -625,20 +620,8 @@ availableCPUSpeedAttList: | availableCPUSpeedAttList availableCPUSpeedAtt;
 availableCPUSpeedAtt: 
 	unitAttribute 
 	{
-//		if (parserData->unitAttribute != "terahertz" && 
-//			parserData->unitAttribute != "gigahertz" && 
-//			parserData->unitAttribute != "megahertz" && 
-//			parserData->unitAttribute != "kilohertz" && 
-//			parserData->unitAttribute != "hertz"     && 
-//			parserData->unitAttribute != "petaflops" && 
-//			parserData->unitAttribute != "teraflops" && 
-//			parserData->unitAttribute != "gigaflops" && 
-//			parserData->unitAttribute != "megaflops" && 
-//			parserData->unitAttribute != "kiloflops" && 
-//			parserData->unitAttribute != "flops" )
-		if ( verifyCPUSpeedUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
-		osresult->setAvailableCPUSpeedUnit( parserData->unitAttribute); 
+		if (osresult->setAvailableCPUSpeedUnit( parserData->unitAttribute) == false)
+			osrlerror(NULL, NULL, parserData, "available CPU Speed could not be set");
 		parserData->errorText = NULL;
 	}
   | descriptionAttribute
@@ -782,14 +765,8 @@ currentStateLaden: GREATERTHAN currentStateBody CURRENTSTATEEND;
 
 currentStateBody:  ELEMENTTEXT  
     {   parserData->tempStr = $1; free($1);
-		if (parserData->tempStr != "busy"                &&
-			parserData->tempStr != "busyButAccepting"    &&
-			parserData->tempStr != "idle"                &&
-			parserData->tempStr != "idleButNotAccepting" &&
-			parserData->tempStr != "noResponse"             )
-			osrlerror(NULL, NULL, parserData, "current system state not recognized");
 		if (osresult->setCurrentState(parserData->tempStr) == false)
-			osrlerror(NULL, NULL, parserData, "setCurrentState failed");
+			osrlerror(NULL, NULL, parserData, "setCurrentState failed; current system state not recognized");
 		parserData->errorText = NULL;
 	};
 
@@ -974,12 +951,6 @@ jobStatusLaden: GREATERTHAN jobStatusBody STATUSEND;
 
 jobStatusBody:  ELEMENTTEXT  
 	{	parserData->tempStr = $1; free($1);
-		if (parserData->tempStr != "waiting"  &&
-			parserData->tempStr != "running"  &&
-			parserData->tempStr != "killed"   &&
-			parserData->tempStr != "finished" &&
-			parserData->tempStr != "unknown"     )
-			osrlerror (NULL, NULL, parserData, "status of this job not recognized");
 		if (osresult->setJobStatus(parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, "setJobStatus failed");
 		parserData->errorText = NULL;
@@ -1096,38 +1067,16 @@ timeStart: TIMESTART
 	parserData->typeAttributePresent = false;
 	parserData->categoryAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
-	parserData->unitAttribute = "";
-	parserData->typeAttribute = "";
-	parserData->categoryAttribute = "";
+	parserData->unitAttribute = "second";
+	parserData->typeAttribute = "elapsedTime";
+	parserData->categoryAttribute = "total";
 	parserData->descriptionAttribute = "";
 };
 
 timeAttributes: | timeAttributes timeAtt;
 
 timeAtt: 
-	unitAttribute 
-	{
- 		if ( verifyTimeUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "time unit not recognized");
-	};
-  | typeAttribute 
-	{
-		if (parserData->typeAttribute != "cpuTime"     &&
-			parserData->typeAttribute != "elapsedTime" &&
- 			parserData->typeAttribute != "other"   )     
-			osrlerror(NULL, NULL, parserData, "time type not recognized");
-	}
-  | categoryAttribute 
-	{	if (parserData->categoryAttribute != "total"          &&
-			parserData->categoryAttribute != "input"          &&
-			parserData->categoryAttribute != "preprocessing"  &&
-			parserData->categoryAttribute != "optimization"   &&
-			parserData->categoryAttribute != "postprocessing" &&
-			parserData->categoryAttribute != "output"         &&
- 			parserData->categoryAttribute != "other"   )
-			osrlerror(NULL, NULL, parserData, "time category not recognized");
-	}
-  | descriptionAttribute;
+	unitAttribute | typeAttribute | categoryAttribute | descriptionAttribute;
 
 
 timeContent: timeEmpty | timeLaden;
@@ -1137,12 +1086,14 @@ timeEmpty: GREATERTHAN TIMEEND | ENDOFELEMENT;
 timeLaden: GREATERTHAN timeBody TIMEEND;
 
 timeBody:   timeValue 
-{	osresult->setTimingInformation(parserData->ivar, parserData->typeAttribute, parserData->categoryAttribute,
-		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue);       
+{	
+	if (osresult->setTimingInformation(parserData->ivar, parserData->typeAttribute, parserData->categoryAttribute,
+		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue) == false)       
+			osrlerror(NULL, NULL, parserData, "timing information could not be stored");
 	parserData->ivar++;
-	parserData->timeType = "";
-	parserData->timeCategory = "";
-	parserData->timeUnit = "";
+	parserData->timeType = "elapsedTime";
+	parserData->timeCategory = "total";
+	parserData->timeUnit = "unit";
 	parserData->timeDescription = "";      
 }; 
 
@@ -1168,9 +1119,8 @@ usedDiskSpaceAttList: | usedDiskSpaceAttList usedDiskSpaceAtt;
 usedDiskSpaceAtt: 
 	unitAttribute
 	{
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
-		osresult->setUsedDiskSpaceUnit( parserData->unitAttribute); 
+		if (osresult->setUsedDiskSpaceUnit( parserData->unitAttribute) == false) 
+			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit could not be set");
 		parserData->errorText = NULL;
 	}
   | descriptionAttribute
@@ -1203,9 +1153,8 @@ usedMemoryAttList: | usedMemoryAttList usedMemoryAtt;
 usedMemoryAtt: 
 	unitAttribute 
 	{
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "usedDiskSpace unit not recognized");
-		osresult->setUsedMemoryUnit( parserData->unitAttribute); 
+		if (osresult->setUsedMemoryUnit( parserData->unitAttribute) == false) 
+			osrlerror(NULL, NULL, parserData, "usedMemory unit could not be set");
 		parserData->errorText = NULL;
 	}
   | descriptionAttribute
@@ -1240,20 +1189,8 @@ usedCPUSpeedAttList: | usedCPUSpeedAttList usedCPUSpeedAtt;
 usedCPUSpeedAtt: 
 	unitAttribute 
 	{
-//		if (parserData->unitAttribute != "terahertz" && 
-//			parserData->unitAttribute != "gigahertz" && 
-//			parserData->unitAttribute != "megahertz" && 
-//			parserData->unitAttribute != "kilohertz" && 
-//			parserData->unitAttribute != "hertz"     && 
-//			parserData->unitAttribute != "petaflops" && 
-//			parserData->unitAttribute != "teraflops" && 
-//			parserData->unitAttribute != "gigaflops" && 
-//			parserData->unitAttribute != "megaflops" && 
-//			parserData->unitAttribute != "kiloflops" && 
-//			parserData->unitAttribute != "flops" )
-		if ( verifyCPUSpeedUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
-		osresult->setUsedCPUSpeedUnit( parserData->unitAttribute); 
+		if (osresult->setUsedCPUSpeedUnit( parserData->unitAttribute) == false) 
+			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit could not be set");
 		parserData->errorText = NULL;
 	}
   | descriptionAttribute
@@ -1495,17 +1432,7 @@ solutionStatusAttList: solutionStatusATT | solutionStatusAttList solutionStatusA
 
 solutionStatusATT: 
 	typeAttribute
-	{   if ((parserData->typeAttribute != "unbounded"      ) && 
-			(parserData->typeAttribute != "globallyOptimal") && 
-	        (parserData->typeAttribute != "locallyOptimal" ) &&
-	        (parserData->typeAttribute != "optimal"        ) && 
-	        (parserData->typeAttribute != "bestSoFar"      ) &&
-	        (parserData->typeAttribute != "feasible"       ) && 
-	        (parserData->typeAttribute != "infeasible"     ) &&
-	        (parserData->typeAttribute != "unsure"         ) && 
-	        (parserData->typeAttribute != "error"          ) &&
-	        (parserData->typeAttribute != "other"          ))
-			osrlerror(NULL, NULL, parserData, "solution status type does not matched any legal value");
+	{   
 		if (osresult->setSolutionStatusType(parserData->solutionIdx, parserData->typeAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionStatusType failed");
 	}
@@ -1560,10 +1487,6 @@ solutionSubstatusAttList: | solutionSubstatusAttList solutionSubstatusATT;
 solutionSubstatusATT: 
 	typeAttribute 
 	{	
-		if (parserData->typeAttribute != "stoppedByLimit"  &&
-			parserData->typeAttribute != "stoppedByBounds" &&
-			parserData->typeAttribute != "other" )
-		osrlerror(NULL, NULL, parserData, "substatus type attribute has bad value");
 		if (osresult->setSolutionSubstatusType(parserData->solutionIdx, parserData->kounter, 
 											   parserData->typeAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionSubstatusType failed");
@@ -1765,12 +1688,6 @@ basisVarIdxATT : IDXATT quote INTEGER quote { parserData->idx = $3; };
   
 basisVarContent: GREATERTHAN ELEMENTTEXT VAREND
 {   parserData->tempStr = $2; free($2);
-	if (parserData->tempStr != "unknown"  &&
-		parserData->tempStr != "basic"    &&
-		parserData->tempStr != "atLower"  &&
-		parserData->tempStr != "atUpper"  &&
-		parserData->tempStr != "superBasic" )
-		osrlerror(NULL, NULL, parserData, "unrecognized basis status");
 	if (osresult->setBasisVar(parserData->solutionIdx, parserData->kounter, 
 							  parserData->idx,         parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, "setBasisVar failed");

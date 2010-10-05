@@ -413,6 +413,7 @@
 #include "OSDataStructures.h"
 #include "OSMathUtil.h"
 #include "OSParameters.h"
+#include "OSGeneral.h"
 #include "OSConfig.h"
 #include "OSErrorClass.h"
 #include "OSResult.h"
@@ -1083,88 +1084,88 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   167,   167,   169,   176,   176,   178,   180,   183,   183,
-     185,   187,   187,   189,   189,   191,   193,   195,   195,   198,
-     199,   200,   201,   202,   203,   204,   205,   206,   209,   211,
-     223,   229,   229,   232,   241,   245,   253,   257,   262,   262,
-     264,   266,   268,   268,   270,   274,   281,   286,   286,   289,
-     294,   300,   300,   303,   305,   311,   311,   313,   313,   315,
-     317,   320,   322,   328,   328,   330,   330,   332,   334,   337,
-     339,   345,   345,   347,   347,   349,   351,   354,   356,   362,
-     362,   364,   364,   366,   368,   371,   373,   379,   379,   381,
-     381,   383,   385,   388,   390,   396,   396,   398,   398,   400,
-     402,   405,   407,   413,   413,   415,   415,   417,   419,   422,
-     424,   430,   440,   444,   449,   449,   451,   453,   455,   455,
-     457,   461,   469,   474,   474,   477,   483,   488,   495,   495,
-     499,   499,   501,   503,   503,   505,   505,   507,   509,   511,
-     511,   514,   515,   516,   517,   518,   519,   522,   524,   530,
-     530,   532,   532,   534,   536,   542,   544,   552,   554,   554,
-     557,   564,   569,   571,   576,   578,   586,   588,   588,   591,
-     598,   603,   605,   611,   613,   621,   623,   623,   626,   644,
-     649,   651,   657,   659,   666,   667,   672,   674,   678,   680,
-     686,   696,   700,   705,   705,   707,   709,   711,   711,   713,
-     717,   725,   730,   730,   733,   739,   744,   751,   751,   755,
-     755,   756,   758,   758,   761,   762,   763,   764,   765,   766,
-     769,   771,   777,   777,   779,   779,   781,   783,   796,   798,
-     804,   804,   806,   806,   808,   810,   813,   815,   821,   821,
-     823,   823,   825,   827,   830,   832,   838,   838,   840,   840,
-     842,   844,   847,   849,   855,   855,   857,   857,   859,   861,
-     866,   868,   874,   884,   888,   893,   893,   895,   897,   899,
-     899,   901,   905,   913,   918,   918,   921,   927,   932,   939,
-     939,   942,   942,   943,   945,   945,   948,   949,   950,   951,
-     952,   953,   954,   955,   956,   957,   958,   961,   963,   969,
-     969,   971,   971,   973,   975,   988,   990,   996,   996,   998,
-     998,  1000,  1002,  1005,  1007,  1013,  1013,  1015,  1015,  1017,
-    1019,  1022,  1024,  1030,  1030,  1032,  1032,  1034,  1036,  1039,
-    1041,  1047,  1047,  1049,  1049,  1051,  1053,  1056,  1058,  1064,
-    1073,  1077,  1082,  1082,  1084,  1086,  1088,  1088,  1090,  1092,
-    1105,  1105,  1108,  1113,  1120,  1130,  1133,  1133,  1135,  1135,
-    1137,  1139,  1150,  1151,  1154,  1156,  1164,  1166,  1166,  1169,
-    1176,  1181,  1183,  1189,  1191,  1199,  1201,  1201,  1204,  1211,
-    1216,  1218,  1224,  1226,  1236,  1238,  1238,  1241,  1259,  1264,
-    1266,  1272,  1274,  1282,  1283,  1288,  1290,  1295,  1297,  1303,
-    1313,  1317,  1322,  1322,  1324,  1326,  1328,  1328,  1330,  1334,
-    1342,  1347,  1347,  1350,  1356,  1361,  1368,  1368,  1371,  1371,
-    1373,  1380,  1385,  1385,  1388,  1395,  1401,  1407,  1415,  1419,
-    1424,  1424,  1426,  1428,  1430,  1430,  1432,  1434,  1442,  1444,
-    1444,  1446,  1446,  1448,  1457,  1474,  1480,  1482,  1489,  1494,
-    1494,  1497,  1512,  1516,  1525,  1529,  1535,  1535,  1537,  1539,
-    1541,  1541,  1543,  1546,  1553,  1558,  1558,  1561,  1571,  1578,
-    1578,  1581,  1581,  1583,  1585,  1585,  1587,  1587,  1589,  1591,
-    1598,  1598,  1600,  1603,  1603,  1612,  1612,  1614,  1616,  1618,
-    1620,  1620,  1622,  1624,  1632,  1636,  1641,  1641,  1643,  1645,
-    1647,  1647,  1649,  1656,  1662,  1664,  1667,  1668,  1671,  1671,
-    1673,  1675,  1683,  1687,  1692,  1692,  1694,  1696,  1698,  1698,
-    1700,  1708,  1714,  1717,  1718,  1720,  1720,  1722,  1724,  1727,
-    1727,  1729,  1731,  1739,  1743,  1748,  1748,  1750,  1752,  1754,
-    1754,  1756,  1758,  1764,  1766,  1780,  1780,  1782,  1787,  1797,
-    1804,  1804,  1807,  1817,  1823,  1829,  1836,  1836,  1838,  1838,
-    1840,  1842,  1844,  1844,  1846,  1851,  1853,  1860,  1860,  1862,
-    1862,  1864,  1866,  1874,  1874,  1876,  1882,  1882,  1891,  1891,
-    1893,  1895,  1897,  1899,  1899,  1901,  1903,  1911,  1915,  1920,
-    1920,  1922,  1924,  1927,  1927,  1929,  1936,  1943,  1943,  1945,
-    1948,  1949,  1953,  1953,  1955,  1961,  1971,  1979,  1979,  1982,
-    1992,  1998,  2004,  2013,  2013,  2015,  2015,  2017,  2019,  2021,
-    2021,  2023,  2028,  2030,  2035,  2035,  2037,  2037,  2039,  2041,
-    2047,  2047,  2049,  2054,  2054,  2062,  2062,  2064,  2066,  2068,
-    2070,  2070,  2072,  2075,  2083,  2087,  2092,  2092,  2094,  2096,
-    2098,  2098,  2100,  2107,  2113,  2116,  2117,  2120,  2120,  2122,
-    2128,  2138,  2145,  2145,  2148,  2158,  2164,  2170,  2177,  2177,
-    2179,  2179,  2181,  2183,  2185,  2185,  2187,  2192,  2194,  2200,
-    2200,  2202,  2202,  2204,  2206,  2213,  2213,  2215,  2220,  2229,
-    2233,  2238,  2238,  2240,  2242,  2244,  2244,  2246,  2250,  2259,
-    2266,  2266,  2269,  2275,  2281,  2289,  2299,  2303,  2308,  2308,
-    2310,  2312,  2314,  2314,  2316,  2321,  2325,  2327,  2327,  2329,
-    2331,  2342,  2342,  2344,  2349,  2358,  2362,  2367,  2367,  2369,
-    2371,  2373,  2373,  2375,  2379,  2388,  2395,  2395,  2398,  2403,
-    2409,  2415,  2424,  2428,  2433,  2433,  2435,  2437,  2439,  2439,
-    2441,  2446,  2450,  2452,  2452,  2454,  2465,  2471,  2471,  2473,
-    2476,  2479,  2485,  2485,  2487,  2490,  2494,  2500,  2500,  2502,
-    2505,  2508,  2514,  2514,  2516,  2519,  2522,  2528,  2528,  2530,
-    2533,  2536,  2542,  2542,  2544,  2547,  2550,  2555,  2563,  2571,
-    2579,  2587,  2593,  2599,  2605,  2611,  2617,  2623,  2629,  2634,
-    2643,  2649,  2658,  2659,  2662,  2663,  2664,  2666,  2668,  2668,
-    2670,  2671,  2672,  2673
+       0,   168,   168,   170,   177,   177,   179,   181,   184,   184,
+     186,   188,   188,   190,   190,   192,   194,   196,   196,   199,
+     200,   201,   202,   203,   204,   205,   206,   207,   210,   212,
+     224,   230,   230,   233,   238,   242,   250,   254,   259,   259,
+     261,   263,   265,   265,   267,   271,   278,   283,   283,   286,
+     291,   297,   297,   300,   302,   308,   308,   310,   310,   312,
+     314,   317,   319,   325,   325,   327,   327,   329,   331,   334,
+     336,   342,   342,   344,   344,   346,   348,   351,   353,   359,
+     359,   361,   361,   363,   365,   368,   370,   376,   376,   378,
+     378,   380,   382,   385,   387,   393,   393,   395,   395,   397,
+     399,   402,   404,   410,   410,   412,   412,   414,   416,   419,
+     421,   427,   437,   441,   446,   446,   448,   450,   452,   452,
+     454,   458,   466,   471,   471,   474,   480,   485,   492,   492,
+     496,   496,   498,   500,   500,   502,   502,   504,   506,   508,
+     508,   511,   512,   513,   514,   515,   516,   519,   521,   527,
+     527,   529,   529,   531,   533,   539,   541,   549,   551,   551,
+     554,   560,   565,   567,   572,   574,   582,   584,   584,   587,
+     593,   598,   600,   606,   608,   616,   618,   618,   621,   627,
+     632,   634,   640,   642,   649,   650,   655,   657,   661,   663,
+     669,   679,   683,   688,   688,   690,   692,   694,   694,   696,
+     700,   708,   713,   713,   716,   722,   727,   734,   734,   738,
+     738,   739,   741,   741,   744,   745,   746,   747,   748,   749,
+     752,   754,   760,   760,   762,   762,   764,   766,   773,   775,
+     781,   781,   783,   783,   785,   787,   790,   792,   798,   798,
+     800,   800,   802,   804,   807,   809,   815,   815,   817,   817,
+     819,   821,   824,   826,   832,   832,   834,   834,   836,   838,
+     843,   845,   851,   861,   865,   870,   870,   872,   874,   876,
+     876,   878,   882,   890,   895,   895,   898,   904,   909,   916,
+     916,   919,   919,   920,   922,   922,   925,   926,   927,   928,
+     929,   930,   931,   932,   933,   934,   935,   938,   940,   946,
+     946,   948,   948,   950,   952,   959,   961,   967,   967,   969,
+     969,   971,   973,   976,   978,   984,   984,   986,   986,   988,
+     990,   993,   995,  1001,  1001,  1003,  1003,  1005,  1007,  1010,
+    1012,  1018,  1018,  1020,  1020,  1022,  1024,  1027,  1029,  1035,
+    1044,  1048,  1053,  1053,  1055,  1057,  1059,  1059,  1061,  1063,
+    1076,  1076,  1079,  1079,  1079,  1079,  1082,  1082,  1084,  1084,
+    1086,  1088,  1101,  1102,  1105,  1107,  1115,  1117,  1117,  1120,
+    1126,  1131,  1133,  1139,  1141,  1149,  1151,  1151,  1154,  1160,
+    1165,  1167,  1173,  1175,  1185,  1187,  1187,  1190,  1196,  1201,
+    1203,  1209,  1211,  1219,  1220,  1225,  1227,  1232,  1234,  1240,
+    1250,  1254,  1259,  1259,  1261,  1263,  1265,  1265,  1267,  1271,
+    1279,  1284,  1284,  1287,  1293,  1298,  1305,  1305,  1308,  1308,
+    1310,  1317,  1322,  1322,  1325,  1332,  1338,  1344,  1352,  1356,
+    1361,  1361,  1363,  1365,  1367,  1367,  1369,  1371,  1379,  1381,
+    1381,  1383,  1383,  1385,  1394,  1411,  1417,  1419,  1426,  1431,
+    1431,  1434,  1439,  1443,  1452,  1456,  1462,  1462,  1464,  1466,
+    1468,  1468,  1470,  1473,  1480,  1485,  1485,  1488,  1494,  1501,
+    1501,  1504,  1504,  1506,  1508,  1508,  1510,  1510,  1512,  1514,
+    1521,  1521,  1523,  1526,  1526,  1535,  1535,  1537,  1539,  1541,
+    1543,  1543,  1545,  1547,  1555,  1559,  1564,  1564,  1566,  1568,
+    1570,  1570,  1572,  1579,  1585,  1587,  1590,  1591,  1594,  1594,
+    1596,  1598,  1606,  1610,  1615,  1615,  1617,  1619,  1621,  1621,
+    1623,  1631,  1637,  1640,  1641,  1643,  1643,  1645,  1647,  1650,
+    1650,  1652,  1654,  1662,  1666,  1671,  1671,  1673,  1675,  1677,
+    1677,  1679,  1681,  1687,  1689,  1697,  1697,  1699,  1704,  1714,
+    1721,  1721,  1724,  1734,  1740,  1746,  1753,  1753,  1755,  1755,
+    1757,  1759,  1761,  1761,  1763,  1768,  1770,  1777,  1777,  1779,
+    1779,  1781,  1783,  1791,  1791,  1793,  1799,  1799,  1808,  1808,
+    1810,  1812,  1814,  1816,  1816,  1818,  1820,  1828,  1832,  1837,
+    1837,  1839,  1841,  1844,  1844,  1846,  1853,  1860,  1860,  1862,
+    1865,  1866,  1870,  1870,  1872,  1878,  1888,  1896,  1896,  1899,
+    1909,  1915,  1921,  1930,  1930,  1932,  1932,  1934,  1936,  1938,
+    1938,  1940,  1945,  1947,  1952,  1952,  1954,  1954,  1956,  1958,
+    1964,  1964,  1966,  1971,  1971,  1979,  1979,  1981,  1983,  1985,
+    1987,  1987,  1989,  1992,  2000,  2004,  2009,  2009,  2011,  2013,
+    2015,  2015,  2017,  2024,  2030,  2033,  2034,  2037,  2037,  2039,
+    2045,  2055,  2062,  2062,  2065,  2075,  2081,  2087,  2094,  2094,
+    2096,  2096,  2098,  2100,  2102,  2102,  2104,  2109,  2111,  2117,
+    2117,  2119,  2119,  2121,  2123,  2130,  2130,  2132,  2137,  2146,
+    2150,  2155,  2155,  2157,  2159,  2161,  2161,  2163,  2167,  2176,
+    2183,  2183,  2186,  2192,  2198,  2206,  2216,  2220,  2225,  2225,
+    2227,  2229,  2231,  2231,  2233,  2238,  2242,  2244,  2244,  2246,
+    2248,  2259,  2259,  2261,  2266,  2275,  2279,  2284,  2284,  2286,
+    2288,  2290,  2290,  2292,  2296,  2305,  2312,  2312,  2315,  2320,
+    2326,  2332,  2341,  2345,  2350,  2350,  2352,  2354,  2356,  2356,
+    2358,  2363,  2367,  2369,  2369,  2371,  2382,  2388,  2388,  2390,
+    2393,  2396,  2402,  2402,  2404,  2407,  2411,  2417,  2417,  2419,
+    2422,  2425,  2431,  2431,  2433,  2436,  2439,  2445,  2445,  2447,
+    2450,  2453,  2459,  2459,  2461,  2464,  2467,  2472,  2480,  2488,
+    2496,  2504,  2510,  2516,  2522,  2528,  2534,  2540,  2546,  2551,
+    2560,  2566,  2575,  2576,  2579,  2580,  2581,  2583,  2585,  2585,
+    2587,  2588,  2589,  2590
 };
 #endif
 
@@ -3190,12 +3191,8 @@ yydebug = 1;
   case 33:
 
     { 
-	    if ((parserData->typeAttribute != "error"  ) &&
-	        (parserData->typeAttribute != "warning") && 
-	        (parserData->typeAttribute != "normal"))
-			osrlerror(NULL, NULL, parserData, "general status type does not match any legal value");
 		if (osresult->setGeneralStatusType(parserData->typeAttribute) == false)
-			osrlerror(NULL, NULL, parserData, "Error while setting general status type");
+			osrlerror(NULL, NULL, parserData, "general status type does not match any legal value");
 	;}
     break;
 
@@ -3468,9 +3465,8 @@ yydebug = 1;
   case 160:
 
     {
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
+		if (osresult->setAvailableDiskSpaceUnit( parserData->unitAttribute) == false) 
 			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
-		osresult->setAvailableDiskSpaceUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
 	;}
     break;
@@ -3502,9 +3498,8 @@ yydebug = 1;
   case 169:
 
     {
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
+		if (osresult->setAvailableMemoryUnit( parserData->unitAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
-		osresult->setAvailableMemoryUnit( parserData->unitAttribute); 
 		parserData->errorText = NULL;
 	;}
     break;
@@ -3536,20 +3531,8 @@ yydebug = 1;
   case 178:
 
     {
-//		if (parserData->unitAttribute != "terahertz" && 
-//			parserData->unitAttribute != "gigahertz" && 
-//			parserData->unitAttribute != "megahertz" && 
-//			parserData->unitAttribute != "kilohertz" && 
-//			parserData->unitAttribute != "hertz"     && 
-//			parserData->unitAttribute != "petaflops" && 
-//			parserData->unitAttribute != "teraflops" && 
-//			parserData->unitAttribute != "gigaflops" && 
-//			parserData->unitAttribute != "megaflops" && 
-//			parserData->unitAttribute != "kiloflops" && 
-//			parserData->unitAttribute != "flops" )
-		if ( verifyCPUSpeedUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
-		osresult->setAvailableCPUSpeedUnit( parserData->unitAttribute); 
+		if (osresult->setAvailableCPUSpeedUnit( parserData->unitAttribute) == false)
+			osrlerror(NULL, NULL, parserData, "available CPU Speed could not be set");
 		parserData->errorText = NULL;
 	;}
     break;
@@ -3681,14 +3664,8 @@ yydebug = 1;
   case 227:
 
     {   parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
-		if (parserData->tempStr != "busy"                &&
-			parserData->tempStr != "busyButAccepting"    &&
-			parserData->tempStr != "idle"                &&
-			parserData->tempStr != "idleButNotAccepting" &&
-			parserData->tempStr != "noResponse"             )
-			osrlerror(NULL, NULL, parserData, "current system state not recognized");
 		if (osresult->setCurrentState(parserData->tempStr) == false)
-			osrlerror(NULL, NULL, parserData, "setCurrentState failed");
+			osrlerror(NULL, NULL, parserData, "setCurrentState failed; current system state not recognized");
 		parserData->errorText = NULL;
 	;}
     break;
@@ -3840,12 +3817,6 @@ yydebug = 1;
   case 304:
 
     {	parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
-		if (parserData->tempStr != "waiting"  &&
-			parserData->tempStr != "running"  &&
-			parserData->tempStr != "killed"   &&
-			parserData->tempStr != "finished" &&
-			parserData->tempStr != "unknown"     )
-			osrlerror (NULL, NULL, parserData, "status of this job not recognized");
 		if (osresult->setJobStatus(parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, "setJobStatus failed");
 		parserData->errorText = NULL;
@@ -3944,52 +3915,23 @@ yydebug = 1;
 	parserData->typeAttributePresent = false;
 	parserData->categoryAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
-	parserData->unitAttribute = "";
-	parserData->typeAttribute = "";
-	parserData->categoryAttribute = "";
+	parserData->unitAttribute = "second";
+	parserData->typeAttribute = "elapsedTime";
+	parserData->categoryAttribute = "total";
 	parserData->descriptionAttribute = "";
 ;}
     break;
 
-  case 352:
-
-    {
- 		if ( verifyTimeUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "time unit not recognized");
-	;}
-    break;
-
-  case 353:
-
-    {
-		if (parserData->typeAttribute != "cpuTime"     &&
-			parserData->typeAttribute != "elapsedTime" &&
- 			parserData->typeAttribute != "other"   )     
-			osrlerror(NULL, NULL, parserData, "time type not recognized");
-	;}
-    break;
-
-  case 354:
-
-    {	if (parserData->categoryAttribute != "total"          &&
-			parserData->categoryAttribute != "input"          &&
-			parserData->categoryAttribute != "preprocessing"  &&
-			parserData->categoryAttribute != "optimization"   &&
-			parserData->categoryAttribute != "postprocessing" &&
-			parserData->categoryAttribute != "output"         &&
- 			parserData->categoryAttribute != "other"   )
-			osrlerror(NULL, NULL, parserData, "time category not recognized");
-	;}
-    break;
-
   case 361:
 
-    {	osresult->setTimingInformation(parserData->ivar, parserData->typeAttribute, parserData->categoryAttribute,
-		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue);       
+    {	
+	if (osresult->setTimingInformation(parserData->ivar, parserData->typeAttribute, parserData->categoryAttribute,
+		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue) == false)       
+			osrlerror(NULL, NULL, parserData, "timing information could not be stored");
 	parserData->ivar++;
-	parserData->timeType = "";
-	parserData->timeCategory = "";
-	parserData->timeUnit = "";
+	parserData->timeType = "elapsedTime";
+	parserData->timeCategory = "total";
+	parserData->timeUnit = "unit";
 	parserData->timeDescription = "";      
 ;}
     break;
@@ -4017,9 +3959,8 @@ yydebug = 1;
   case 369:
 
     {
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit not recognized");
-		osresult->setUsedDiskSpaceUnit( parserData->unitAttribute); 
+		if (osresult->setUsedDiskSpaceUnit( parserData->unitAttribute) == false) 
+			osrlerror(NULL, NULL, parserData, "availableDiskSpace unit could not be set");
 		parserData->errorText = NULL;
 	;}
     break;
@@ -4051,9 +3992,8 @@ yydebug = 1;
   case 378:
 
     {
-		if ( verifyStorageUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "usedDiskSpace unit not recognized");
-		osresult->setUsedMemoryUnit( parserData->unitAttribute); 
+		if (osresult->setUsedMemoryUnit( parserData->unitAttribute) == false) 
+			osrlerror(NULL, NULL, parserData, "usedMemory unit could not be set");
 		parserData->errorText = NULL;
 	;}
     break;
@@ -4087,20 +4027,8 @@ yydebug = 1;
   case 387:
 
     {
-//		if (parserData->unitAttribute != "terahertz" && 
-//			parserData->unitAttribute != "gigahertz" && 
-//			parserData->unitAttribute != "megahertz" && 
-//			parserData->unitAttribute != "kilohertz" && 
-//			parserData->unitAttribute != "hertz"     && 
-//			parserData->unitAttribute != "petaflops" && 
-//			parserData->unitAttribute != "teraflops" && 
-//			parserData->unitAttribute != "gigaflops" && 
-//			parserData->unitAttribute != "megaflops" && 
-//			parserData->unitAttribute != "kiloflops" && 
-//			parserData->unitAttribute != "flops" )
-		if ( verifyCPUSpeedUnit(parserData->unitAttribute) == 0)
-			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit not recognized");
-		osresult->setUsedCPUSpeedUnit( parserData->unitAttribute); 
+		if (osresult->setUsedCPUSpeedUnit( parserData->unitAttribute) == false) 
+			osrlerror(NULL, NULL, parserData, "availableCPUSpeed unit could not be set");
 		parserData->errorText = NULL;
 	;}
     break;
@@ -4353,17 +4281,7 @@ yydebug = 1;
 
   case 451:
 
-    {   if ((parserData->typeAttribute != "unbounded"      ) && 
-			(parserData->typeAttribute != "globallyOptimal") && 
-	        (parserData->typeAttribute != "locallyOptimal" ) &&
-	        (parserData->typeAttribute != "optimal"        ) && 
-	        (parserData->typeAttribute != "bestSoFar"      ) &&
-	        (parserData->typeAttribute != "feasible"       ) && 
-	        (parserData->typeAttribute != "infeasible"     ) &&
-	        (parserData->typeAttribute != "unsure"         ) && 
-	        (parserData->typeAttribute != "error"          ) &&
-	        (parserData->typeAttribute != "other"          ))
-			osrlerror(NULL, NULL, parserData, "solution status type does not matched any legal value");
+    {   
 		if (osresult->setSolutionStatusType(parserData->solutionIdx, parserData->typeAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionStatusType failed");
 	;}
@@ -4423,10 +4341,6 @@ yydebug = 1;
   case 467:
 
     {	
-		if (parserData->typeAttribute != "stoppedByLimit"  &&
-			parserData->typeAttribute != "stoppedByBounds" &&
-			parserData->typeAttribute != "other" )
-		osrlerror(NULL, NULL, parserData, "substatus type attribute has bad value");
 		if (osresult->setSolutionSubstatusType(parserData->solutionIdx, parserData->kounter, 
 											   parserData->typeAttribute) == false)
 			osrlerror(NULL, NULL, parserData, "setSolutionSubstatusType failed");
@@ -4617,12 +4531,6 @@ yydebug = 1;
   case 544:
 
     {   parserData->tempStr = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
-	if (parserData->tempStr != "unknown"  &&
-		parserData->tempStr != "basic"    &&
-		parserData->tempStr != "atLower"  &&
-		parserData->tempStr != "atUpper"  &&
-		parserData->tempStr != "superBasic" )
-		osrlerror(NULL, NULL, parserData, "unrecognized basis status");
 	if (osresult->setBasisVar(parserData->solutionIdx, parserData->kounter, 
 							  parserData->idx,         parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, "setBasisVar failed");
