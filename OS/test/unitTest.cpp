@@ -3526,7 +3526,8 @@ if (PARSER_TESTS){
 	OSResult *osresult2 = new OSResult();
 	OSResult *osresult3 = NULL;
 	try{ 
-		cout << endl << "TEST " << ++nOfTest << ": OSrL tools" << endl << endl;
+		cout << endl << "TEST " << ++nOfTest << ": OSrL set() tools" << endl << endl;
+
 		ok = true;
 		ok &= (osresult1->IsEqual(osresult2));
 		if (!ok) 
@@ -4161,13 +4162,13 @@ if (PARSER_TESTS){
 
 		for (int i=0; i < 3; ++i)
 		{
-			ok &= osresult1->setTimingInformation(i,"cpuTime","other","tick","blabla",3.14);
+			ok &= osresult1->setTimingInformation(i,"cpuTime","other",/*"tick",*/"second","blabla",3.14);
 			if (!ok) 
 				throw ErrorClass("Error during setTimingInformation!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setTimingInformation: osresult objects falsely compare equal!");
-			ok &= osresult2->setTimingInformation(i,"cpuTime","other","tick","blabla",3.14);
+			ok &= osresult2->setTimingInformation(i,"cpuTime","other",/*"tick",*/"second","blabla",3.14);
 			if (!ok) 
 				throw ErrorClass("Error during setTimingInformation!");
 			ok &= (osresult1->IsEqual(osresult2));
@@ -5140,23 +5141,34 @@ if (PARSER_TESTS){
 			}
 		}
 
+		if (!ok)
+			throw ErrorClass("Unspecified error while testing set() methods");
+
+		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL set() tools" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		cout << endl << "TEST " << ++nOfTest << ": OSrLWriter and OSrLReader " << endl << endl;
+
+
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
 		std::string tempOSrL;
 
-		tempOSrL = osrlwriter->writeOSrL( osresult1) ;
-		std::cout << tempOSrL << std::endl;
+		tempOSrL = osrlwriter->writeOSrL( osresult1);
 		osresult3 = osrlreader->readOSrL( tempOSrL);
 		ok &= (osresult1->IsEqual(osresult3));
 		if (!ok) 
 			throw ErrorClass("Writing an osresult then reading leads to loss of data");
 
+		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrLWriter and OSrLReader" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
 /** The second test verifies the get() methods.
  *  The OSResult object just created is duplicated using get() and set() methods.
- *  At the end, the duplicaetd object is compared to the original. 
+ *  At the end, the duplicated object is compared to the original. 
  *  The test requires both to be equal.
  */
-		cout << endl << "Now test get() methods" << endl;
+		cout << endl << "TEST " << ++nOfTest << ": OSrL get() methods" << endl << endl;
 
 		if (osresult2  != NULL) delete osresult2;
 		osresult2 = new OSResult();
@@ -5787,7 +5799,7 @@ if (PARSER_TESTS){
 		if (osresult2  != NULL) delete osresult2;
 		// " Problem with the test reading OSoL data";
 		unitTestResultFailure << eclass.errormsg << endl;
-		unitTestResultFailure << "There was a failure in the test of OSrL tools" << endl;
+		unitTestResultFailure << "There was a failure in the test of OSrL get() methods" << endl;
 	}
 
 	// Now test the OSrL parser
