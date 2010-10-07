@@ -1303,6 +1303,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	// others
 	int i;
 	int varcount = 0;
+	int vt;
 	int numberOfVariables = 0;
 // variable attribute boolean variables
 	bool varlbattON  = false;
@@ -1419,9 +1420,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					if(vartypeattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable type attributes"); return false;}
 					vartypeattON = true;
 					GETATTRIBUTETEXT;
-					if( strchr("CBIS", attText[0]) == NULL ) {  osilerror_wrapper( ch,osillineno,"variable type not C,B,I, or S"); return false;}
+					vt = returnVarType(attText[0]);
+					if( vt == 0 ) {  osilerror_wrapper( ch,osillineno,"variable type not recognized"); return false;}
 					osinstance->instanceData->variables->var[varcount]->type = attText[0];
-					if (strchr("B",    attText[0]) != NULL) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
+					if (vt == ENUM_VARTYPE_BINARY) osinstance->instanceData->variables->var[varcount]->ub = 1.0;
 					delete [] attText;
 					break;
 				case 'l':
