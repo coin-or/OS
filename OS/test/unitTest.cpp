@@ -102,7 +102,7 @@
  * We test the get() and set() methods for osinstance.
  */ 
 
-//#define DEBUG
+#define DEBUG
 //#define GUS_DEBUG
 
 #include <cppad/cppad.hpp> 
@@ -410,7 +410,7 @@ if(BASIC_TESTS == true){
 		// now create a second object
 		osilreader = new OSiLReader();
 		OSInstance *osinstance2 = osilreader->readOSiL( sOSiL);
-		// now compare the elements in the A matrix for the two intances
+		// now compare the elements in the A matrix for the two instances
 		int nvals = osinstance1->instanceData->linearConstraintCoefficients->numberOfValues;
 		double theDiff, theMax;
 		int theIndex = -1;
@@ -641,6 +641,56 @@ if (SOLVER_TESTS){
 	}
 
 if( THOROUGH == true){
+
+	// now solve the same problem with a different instance representation --- using mult and incr
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033MULT.osil" << endl << endl;
+		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
+		ok = true;
+		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033MULT.osil";
+		//osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cbc.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+		//osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc";
+		solver->osil = osil;
+		solver->osol = osol;  
+		solver->osinstance = NULL; 
+		solver->osoption   = NULL;
+		cout << "call the COIN - Cbc Solver for p0033MULT" << endl;
+		solver->buildSolverInstance();
+		solver->solve();
+		check = 3089;
+		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << solver->osrl << endl;
+#endif
+			cout << "Coin cbc solution for p0033MULT checks" << endl;
+		}
+		else
+		{	cout << "Coin cbc solution for p0033MULT in error:" << endl;
+			cout << solver->osrl << endl;
+		}
+		if (ok == false) throw ErrorClass(" Fail unit test with Cbc on p0033MULT.osil");
+		delete solver;
+		solver = NULL;
+		delete osilreader;
+		osilreader = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033MULT.osil with Cbc" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Testing Cbc Solver:"  + eclass.errormsg<< endl;
+	}
+
+
 	// now test p0201.osil
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033.osil - node limit set" << endl << endl;
@@ -725,7 +775,7 @@ if( THOROUGH == true){
 
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on parincInteger.osil" << endl << endl;
 		ok = true;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "parincInteger.osil";
+		osilFileName = dataDir  + "osilFiles" + dirsep + "parincInteger2.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parincInteger_cbc.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
@@ -734,6 +784,7 @@ if( THOROUGH == true){
 
 		solver = new CoinSolver();
 		solver->sSolverName ="cbc";
+		cout << "parse OSiL file" << endl;
 		solver->osinstance = osilreader->readOSiL( osil);
 		solver->osol = osol; 
 		cout << "call the COIN - Cbc Solver for parincInteger" << endl;
