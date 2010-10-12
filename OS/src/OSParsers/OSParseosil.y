@@ -629,7 +629,7 @@ stages: stagesstart numberofstagesatt stagelist STAGESEND
 		osilerror( NULL, osinstance, parserData, "actual number of stages less than numberOfStages");
  /* After stages have been processed, make sure that all variables and constraints have been assigned
   * to a stage (uniquely) and all objectives have been assigned as well (possibly more than once).
-  * For future reference also record the stage to which each variable and constaint belongs. 
+  * For future reference also record the stage to which each variable and constraint belongs. 
   */
 	parserData->m_miVarStageInfo = new int [ osinstance->instanceData->variables->numberOfVariables ];
 	parserData->m_miObjStageInfo = new int [ osinstance->instanceData->objectives->numberOfObjectives ];
@@ -1267,10 +1267,10 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
 		// we should be pointing to the '<' char in <variables>
 		*p = pchar;
-		if( parseVariables( p, osinstance, osillineno) != true) {throw ErrorClass("error in parse variables");}
-		if( parseObjectives( p, osinstance, osillineno) != true)  throw ErrorClass("error in parse objectives");
-		if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parse Constraints");
-		if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parse ConstraintCoefficients");
+		if( parseVariables( p, osinstance, osillineno) != true) {throw ErrorClass("error in parseVariables");}
+		if( parseObjectives( p, osinstance, osillineno) != true)  throw ErrorClass("error in parseObjectives");
+		if( parseConstraints( p, osinstance, osillineno) != true) throw ErrorClass("error in parseConstraints");
+		if( parseLinearConstraintCoefficients( p, osinstance, osillineno) != true) throw ErrorClass("error in parseLinearConstraintCoefficients");
 	}else{
 		//osilerror_wrapper( pchar,osillineno,"improperly formed <instanceData> element"); 
 		return true;
@@ -1314,6 +1314,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	//bool varinitStringattON = false ;
 	bool varmultattON = false;
 	bool foundVar = false;
+	int varmult; 
 	//
 	// start parsing -- okay not to have variables 
 	// burn white space
@@ -1366,6 +1367,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 			//varinitattON = false ; 
 			//varinitStringattON = false ;
 			varmultattON = false;
+			varmult = 1;
 			foundVar = false;
 			// assume we are pointing to the first character after the r in <var
 			// it should be whitespace
@@ -1454,6 +1456,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					if(varmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable mult attributes"); return false;}
 					varmultattON = true;
 					GETATTRIBUTETEXT;
+					varmult = atoimod1( osillineno,attText, attTextEnd);
 					delete [] attText;
 					//printf("ATTRIBUTE = %s\n", attText);
 					break;
@@ -1467,7 +1470,8 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				case '\r':
 					break;
 				default:
-					{  osilerror_wrapper( ch,osillineno,"invalid attribute character"); return false;}
+					osilerror_wrapper( ch,osillineno,"invalid attribute character"); 
+					return false;
 					break;
 				}
 				ch++;
@@ -1527,8 +1531,19 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					ch = *p;
 				}
 			}
-			if( (varcount == numberOfVariables - 1) && (foundVar == true) ) {   osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
-			varcount++;
+			if( ((varcount+varmult) == numberOfVariables) && (foundVar == true) ) {   osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is less than actual number found");  return false;}
+			for (int k=1; k < varmult; k++)
+			{
+				osinstance->instanceData->variables->var[varcount+k]->name 
+				= osinstance->instanceData->variables->var[varcount]->name;
+				osinstance->instanceData->variables->var[varcount+k]->type 
+				= osinstance->instanceData->variables->var[varcount]->type;
+				osinstance->instanceData->variables->var[varcount+k]->lb 
+				= osinstance->instanceData->variables->var[varcount]->lb;
+				osinstance->instanceData->variables->var[varcount+k]->ub 
+				= osinstance->instanceData->variables->var[varcount]->ub;
+			}
+			varcount += varmult;
 		}// end while(foundVar)
 		if(varcount < numberOfVariables) {  osilerror_wrapper( ch,osillineno,"attribute numberOfVariables is greater than actual number found");   return false;}
 		// get the </variables> tag
@@ -1539,7 +1554,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		// better have >
 		if(*ch != '>') {   osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}
 		ch++;
-	}else {//end if(numberOfVarialbe > 0)
+	}else {//end if(numberOfVariables > 0)
 		// error if the number is negative
 		if(numberOfVariables < 0) {  osilerror_wrapper( ch,osillineno,"cannot have a negative number of variables"); return false;}
 		// if we are here we have numberOfConstraints = 0
@@ -1554,7 +1569,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		}
 		else{
 			// if we are here we must have an '>' and then  </constraints> tag
-			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed varialbes tag"); return false;}
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed variables tag"); return false;}
 			ch++;
 			// burn white space
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -1608,6 +1623,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	int objcount = 0;
 	int numberOfObjectives;
 	bool foundObj;
+	int objmult; 
 	// start parsing
 	// burn white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -1672,6 +1688,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 		objweightattON = false;
 		objmultattON = false;
 		objnumberOfObjCoefattON = false;
+		objmult = 1;
 		// assume we are pointing to the first character after the r in <obj
 		// it should be a space so let's increment ch
 		ch++;
@@ -1763,6 +1780,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 						if(objmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj mult attributes"); return false;}
 						objmultattON = true;
 						GETATTRIBUTETEXT;
+						objmult = atoimod1( osillineno,attText, attTextEnd);
 						//printf("ATTRIBUTE = %s\n", attText);
 						//osinstance->instanceData->objectives->obj[objcount]->name=attText;
 						delete [] attText;
@@ -1827,8 +1845,33 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 			if(i == 4) foundObj = true;
 				else foundObj = false;
 		}
-		if( (objcount == numberOfObjectives - 1) && (foundObj == true)) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is less than actual number found"); return false;}
-		objcount++;
+		if( ((objcount+objmult) == numberOfObjectives) && (foundObj == true)) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is less than actual number found"); return false;}
+		for (int k=1; k < objmult; k++)
+		{
+			osinstance->instanceData->objectives->obj[objcount+k]->name 
+			= osinstance->instanceData->objectives->obj[objcount]->name;
+			osinstance->instanceData->objectives->obj[objcount+k]->maxOrMin 
+			= osinstance->instanceData->objectives->obj[objcount]->maxOrMin;
+			osinstance->instanceData->objectives->obj[objcount+k]->constant 
+			= osinstance->instanceData->objectives->obj[objcount]->constant;
+			osinstance->instanceData->objectives->obj[objcount+k]->weight 
+			= osinstance->instanceData->objectives->obj[objcount]->weight;
+			osinstance->instanceData->objectives->obj[objcount+k]->numberOfObjCoef 
+			= osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef;
+			if (osinstance->instanceData->objectives->obj[objcount]->numberOfObjCoef > 0)
+			{
+				osinstance->instanceData->objectives->obj[objcount+k]->coef = new ObjCoef*[osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef];
+				for(int i = 0; i < osinstance->instanceData->objectives->obj[ objcount]->numberOfObjCoef; i++)
+				{
+					osinstance->instanceData->objectives->obj[objcount+k]->coef[i] = new ObjCoef();
+					osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->idx = 
+					  osinstance->instanceData->objectives->obj[objcount]->coef[i]->idx;
+					osinstance->instanceData->objectives->obj[objcount+k]->coef[i]->value = 
+					  osinstance->instanceData->objectives->obj[objcount]->coef[i]->value;
+				}
+			}
+		}
+		objcount += objmult;
 	}
 	if(objcount < numberOfObjectives) {  osilerror_wrapper( ch,osillineno,"attribute numberOfObjectives is greater than actual number found"); return false;}
 	ch -= i;
@@ -1902,7 +1945,9 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 	bool conconstantattON  = false;
 	bool conmultattON = false;
 	bool foundCon = false;
-	// start parsing
+	int conmult;
+	// 
+	// start parsing -- ok not to have constraints
 	// burn white space
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// if, present we should be pointing to <constraints element if there -- it is not required
@@ -1950,6 +1995,8 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 		connameattON = false;
 		conconstantattON  = false;
 		conmultattON = false;
+		conmult = 1;
+
 		// assume we are pointing to the first character after the n in <con
 		// it should be a space so let's increment ch
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -2007,6 +2054,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 				mult -= 5;
 				conmultattON = true;
 				GETATTRIBUTETEXT;
+				conmult = atoimod1( osillineno,attText, attTextEnd);
 				delete [] attText;
 				//printf("ATTRIBUTE = %s\n", attText);
 				break;
@@ -2020,7 +2068,6 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			case '\r':
 				break;
 			default:
-				 
 				osilerror_wrapper( ch,osillineno,"invalid attribute character");
 				return false;
 				break;
@@ -2082,8 +2129,19 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			 	ch = *p;
 			}
 		}
-		if( (concount == numberOfConstraints - 1) && (foundCon == true) ) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is less than actual number found"); return false;}
-		concount++;
+		if( ((concount+conmult) == numberOfConstraints) && (foundCon == true) ) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is less than actual number found"); return false;}
+		for (int k=1; k < conmult; k++)
+		{
+			osinstance->instanceData->constraints->con[concount+k]->name
+			= osinstance->instanceData->constraints->con[concount]->name ;
+			osinstance->instanceData->constraints->con[concount+k]->constant
+			= osinstance->instanceData->constraints->con[concount]->constant ;
+			osinstance->instanceData->constraints->con[concount+k]->lb
+			= osinstance->instanceData->constraints->con[concount]->lb ;
+			osinstance->instanceData->constraints->con[concount+k]->ub
+			= osinstance->instanceData->constraints->con[concount]->ub ;
+		}
+		concount += conmult;
 	}
 	if(concount < numberOfConstraints) {  osilerror_wrapper( ch,osillineno,"attribute numberOfConstraints is greater than actual number found"); return false;}
 	// get the </constraints> tag
@@ -2164,7 +2222,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 	numberOfValues = atoimod1( osillineno, attText, attTextEnd);
 	if(numberOfValues > 0 && osinstance->instanceData->variables->numberOfVariables == 0){  osilerror_wrapper( ch,osillineno,"we have zero variables, but A matrix coefficients"); return false;}
 	delete [] attText;
-	if(numberOfValues <= 0) {  osilerror_wrapper( ch,osillineno,"the number of nonlinear nozeros must be positive"); return false;}
+	if(numberOfValues <= 0) {  osilerror_wrapper( ch,osillineno,"the number of nonlinear nonzeros must be positive"); return false;}
 	osinstance->instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
 	// get rid of white space after the numberOfConstraints element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
@@ -2173,7 +2231,7 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 		ch++;
 		if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the linearConstraintCoefficients element does not have a proper closing"); return false;} 
 		else{
-			if(numberOfValues > 0) {  osilerror_wrapper( ch,osillineno,"numberOfValues positive, but there are no objectives"); return false;}
+			if(numberOfValues > 0) {  osilerror_wrapper( ch,osillineno,"numberOfValues positive, but there are no values"); return false;}
 			return false;
 		}		
 	}
@@ -2201,15 +2259,26 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	//double duration;
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startStart = "<start";
 	const char* endStart = "</start";
 	const char* startEl = "<el";
 	const char* endEl = "</el";
+	// attributes
+	char *attText = NULL;
+	const char *incr = "incr";
+	const char *mult = "mult";
 	int kount = 0;
 	int i;
+	// element attribute boolean variables
+	bool elmultattON = false ;
+	bool elincrattON = false;
 	bool foundEl = false;
+	int elmult;
+	int elincr;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// if, present we should be pointing to <start element 
 	*p = ch;
@@ -2253,6 +2322,58 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 		new int[ std::max( osinstance->instanceData->constraints->numberOfConstraints,
 		osinstance->instanceData->variables->numberOfVariables) + 1];
 		while(foundEl){
+		
+			elmultattON = false ;
+			elincrattON  = false;
+			elmult = 1;
+			elincr = 1;
+
+			// assume we are pointing to the first character after the l in <el
+			// it should be a space so let's increment ch
+			for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+			while(*ch != '/' && *ch != '>'){
+				switch (*ch) {
+				case 'i':
+					*p = ch;
+					while( *incr++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in starts incr attribute"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
+					incr -= 5;
+					elincrattON = true;
+					GETATTRIBUTETEXT;
+					elincr = atoimod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case 'm':
+					*p = ch;
+					while( *mult++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in starts mult attribute"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
+					mult -= 5;
+					elmultattON = true;
+					GETATTRIBUTETEXT;
+					elmult = atoimod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case ' ':
+					break;
+				case '\n':
+					(*osillineno)++;
+					break;
+				case '\t':
+					break;
+				case '\r':
+					break;
+				default:
+					osilerror_wrapper( ch,osillineno,"invalid attribute character");
+					return false;
+					break;
+				}
+				ch++;
+			}
+
 			// start eating white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
@@ -2269,18 +2390,24 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			
 			// we better not exceed allocation
-			if(kount  >= std::max( osinstance->instanceData->constraints->numberOfConstraints,
-					osinstance->instanceData->variables->numberOfVariables) + 1  ){
-						osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");			
+			if(kount +elmult > std::max(osinstance->instanceData->constraints->numberOfConstraints,
+										osinstance->instanceData->variables->numberOfVariables) + 1 )
+			{
+ 				osilerror_wrapper( ch, osillineno,"number of start elements exceeds the maximum number of rows or columns plus  1");			
 			}
-			osinstance->instanceData->linearConstraintCoefficients->start->el[ kount++] = 
-			atoimod1( osillineno, *p, ch);
+			osinstance->instanceData->linearConstraintCoefficients->start->el[kount] = atoimod1( osillineno, *p, ch);
+			for (int k=1; k < elmult; k++)
+			{
+				osinstance->instanceData->linearConstraintCoefficients->start->el[ kount+k]
+				= osinstance->instanceData->linearConstraintCoefficients->start->el[ kount] + k*elincr;
+			}
+			kount += elmult;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
 			*p = ch;
 			while( *endEl++  == *ch) ch++;
 			endEl -= 5;
-			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot fine an </el>"); return false;}
+			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
@@ -2319,20 +2446,31 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements = kount;
 
 	return true;
-}//end parseSart
+}//end parseStart
 
 bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	//double duration;
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startRowIdx = "<rowIdx";
 	const char* endRowIdx = "</rowIdx";
 	const char* startEl = "<el";
 	const char* endEl = "</el";
+	// attributes
+	char *attText = NULL;
+	const char *incr = "incr";
+	const char *mult = "mult";
 	int kount = 0;
 	int i;
+	// element attribute boolean variables
+	bool elmultattON = false ;
+	bool elincrattON = false;
 	bool foundEl = false;
+	int elmult;
+	int elincr;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// if, present we should be pointing to <rowIdx element 
 	*p = ch;
@@ -2381,6 +2519,58 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = NULL;
 		while(foundEl){
+		
+			elmultattON = false ;
+			elincrattON  = false;
+			elmult = 1;
+			elincr = 1;
+
+			// assume we are pointing to the first character after the l in <el
+			// it should be a space so let's increment ch
+			for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+			while(*ch != '/' && *ch != '>'){
+				switch (*ch) {
+				case 'i':
+					*p = ch;
+					while( *incr++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in rowIdx incr attribute"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
+					incr -= 5;
+					elincrattON = true;
+					GETATTRIBUTETEXT;
+					elincr = atoimod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case 'm':
+					*p = ch;
+					while( *mult++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in rowIdx mult attribute"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
+					mult -= 5;
+					elmultattON = true;
+					GETATTRIBUTETEXT;
+					elmult = atoimod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case ' ':
+					break;
+				case '\n':
+					(*osillineno)++;
+					break;
+				case '\t':
+					break;
+				case '\r':
+					break;
+				default:
+					osilerror_wrapper( ch,osillineno,"invalid attribute character");
+					return false;
+					break;
+				}
+				ch++;
+			}
+
 			// start munging white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
@@ -2395,8 +2585,19 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {   osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
-			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount++] = 
-			atoimod1( osillineno, *p, ch);
+			
+			// we better not exceed allocation
+			if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
+			{
+				osilerror_wrapper( ch, osillineno,"number of rowIdx elements exceeds the number declared");			
+			}
+			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount] = atoimod1( osillineno, *p, ch);
+			for (int k=1; k < elmult; k++)
+			{
+				osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount+k] 
+				= osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ kount] + k*elincr;
+			}
+			kount += elmult;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
 			*p = ch;
@@ -2442,15 +2643,26 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	//double duration;
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startColIdx = "<colIdx";
 	const char* endColIdx = "</colIdx";
 	const char* startEl = "<el";
 	const char* endEl = "</el";
+	// attributes
+	char *attText = NULL;
+	const char *incr = "incr";
+	const char *mult = "mult";
 	int kount = 0;
 	int i;
+	// element attribute boolean variables
+	bool elmultattON = false ;
+	bool elincrattON = false;
 	bool foundEl = false;
+	int elmult;
+	int elincr;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// if, present we should be pointing to <colIdx element 
 	*p = ch;
@@ -2499,6 +2711,58 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = NULL;
 		while(foundEl){
+		
+			elmultattON = false ;
+			elincrattON  = false;
+			elmult = 1;
+			elincr = 1;
+
+			// assume we are pointing to the first character after the l in <el
+			// it should be a space so let's increment ch
+			for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+			while(*ch != '/' && *ch != '>'){
+				switch (*ch) {
+				case 'i':
+					*p = ch;
+					while( *incr++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in colIdx incr attribute"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
+					incr -= 5;
+					elincrattON = true;
+					GETATTRIBUTETEXT;
+					elincr = atoimod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case 'm':
+					*p = ch;
+					while( *mult++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in colIdx mult attribute"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
+					mult -= 5;
+					elmultattON = true;
+					GETATTRIBUTETEXT;
+					elmult = atoimod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case ' ':
+					break;
+				case '\n':
+					(*osillineno)++;
+					break;
+				case '\t':
+					break;
+				case '\r':
+					break;
+				default:
+					osilerror_wrapper( ch,osillineno,"invalid attribute character");
+					return false;
+					break;
+				}
+				ch++;
+			}
+		
 			// start eating white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
@@ -2513,12 +2777,18 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
-			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] = 
-			atoimod1( osillineno, *p, ch);
-			if(osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount]  >= osinstance->instanceData->variables->numberOfVariables){
-	 			osilerror_wrapper( ch, osillineno, "variable index exceeds number of variables");
-	 		}
-			kount++;
+			// we better not exceed allocation
+			if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
+			{
+				osilerror_wrapper( ch, osillineno,"number of colIdx elements exceeds the number declared");			
+			}
+			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] = atoimod1( osillineno, *p, ch);
+			for (int k=1; k < elmult; k++)
+			{
+				osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount+k] 
+				= osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ kount] + k*elincr;
+			}
+			kount += elmult;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
 			*p = ch;
@@ -2564,15 +2834,26 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
 	//double duration;
+	int ki, numChar;
+	char *attTextEnd;
 	const char *ch = *p;
 	start = clock(); 
 	const char* startValue = "<value";
 	const char* endValue = "</value";
 	const char* startEl = "<el";
 	const char* endEl = "</el";
+	// attributes
+	char *attText = NULL;
+	const char *incr = "incr";
+	const char *mult = "mult";
 	int kount = 0;
 	int i;
+	// element attribute boolean variables
+	bool elmultattON = false ;
+	bool elincrattON = false;
 	bool foundEl = false;
+	int elmult;
+	double elincr;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ ) ;
 	// if present we should be pointing to <value element 
 	*p = ch;
@@ -2633,6 +2914,58 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 		osinstance->instanceData->linearConstraintCoefficients->value->el = 
 			new double[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		while( foundEl){
+		
+			elmultattON = false ;
+			elincrattON  = false;
+			elmult = 1;
+			elincr = 1;
+
+			// assume we are pointing to the first character after the l in <el
+			// it should be a space so let's increment ch
+			for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
+			while(*ch != '/' && *ch != '>'){
+				switch (*ch) {
+				case 'i':
+					*p = ch;
+					while( *incr++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in values incr attribute"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
+					incr -= 5;
+					elincrattON = true;
+					GETATTRIBUTETEXT;
+					elincr = atofmod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case 'm':
+					*p = ch;
+					while( *mult++  == *ch) ch++;
+					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in values mult attribute"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
+					mult -= 5;
+					elmultattON = true;
+					GETATTRIBUTETEXT;
+					elmult = atoimod1( osillineno,attText, attTextEnd);
+					delete [] attText;
+					//printf("ATTRIBUTE = %s\n", attText);
+					break;
+				case ' ':
+					break;
+				case '\n':
+					(*osillineno)++;
+					break;
+				case '\t':
+					break;
+				case '\r':
+					break;
+				default:
+					osilerror_wrapper( ch,osillineno,"invalid attribute character");
+					return false;
+					break;
+				}
+				ch++;
+			}
+		
 			// start eat white space until an '>' is found,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
 			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed <el> tag"); return false;}
@@ -2646,8 +2979,18 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 			}
 			// we better have a <, or not valid
 			if(*ch != '<') {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
-			osinstance->instanceData->linearConstraintCoefficients->value->el[ kount++] = 
-			atofmod1( osillineno, *p, ch);
+			// we better not exceed allocation
+			if(kount + elmult > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) 
+			{
+				osilerror_wrapper( ch, osillineno,"number of nonzero elements exceeds the number declared");			
+			}
+			osinstance->instanceData->linearConstraintCoefficients->value->el[ kount] = atofmod1( osillineno, *p, ch);
+			for (int k=1; k < elmult; k++)
+			{
+				osinstance->instanceData->linearConstraintCoefficients->value->el[ kount+k] 
+				= osinstance->instanceData->linearConstraintCoefficients->value->el[ kount] + k*elincr;
+			}
+			kount += elmult;
 			//printf("number = %s\n", *p);
 			// we are pointing to <, make sure there is /el
 			*p = ch;
