@@ -775,7 +775,7 @@ if( THOROUGH == true){
 
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on parincInteger.osil" << endl << endl;
 		ok = true;
-		osilFileName = dataDir  + "osilFiles" + dirsep + "parincInteger2.osil";
+		osilFileName = dataDir  + "osilFiles" + dirsep + "parincInteger.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parincInteger_cbc.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
