@@ -1,13 +1,13 @@
 /* $Id$ */
 /** @file MathUtil.cpp
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.2, 13/Oct/2010
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin, and Wayne Sheng
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2010, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, and Wayne Sheng
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -169,7 +169,5 @@ std::string os_dtoa_format(double  x){
 	return outStr.str();
 #endif
 }// end os_dtoa_format
-
-
 
 

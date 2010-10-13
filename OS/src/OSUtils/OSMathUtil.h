@@ -1,13 +1,13 @@
 /* $Id$ */
 /** @file MathUtil.h
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @version 2.2, 13/Oct/2010
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 20052010, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -143,6 +143,155 @@ class MathUtil{
 	 * if the str contains text or is in anyway not a valid number
 	 */
 	//double os_strtod_wrap(const char *str,  const char *strEnd) throw(ErrorClass);
-			
+
+
+
 };//class MathUtil
+
+
+/**
+ * getMultIncr
+ *
+ * Identify the next run in an integer array
+ * 
+ * @param i holds a pointer to the array to be processed. 
+ * @param mult holds the length of the run. This parameter is passed by reference
+ * @param incr holds the increment. This parameter is also passed by reference
+ * @param size holds the number of elements in the array. This parameter is passed by value
+ *
+ */
+inline void getMultIncr(int* i, int *mult, int *incr, int size)
+{
+	int mark;
+	int k;
+
+	*mult = 1;
+	*incr = 0;
+
+	if (size == 1) return;
+
+	mark = i[0];
+	for (k=1; k < size; k++)
+	{
+		if (i[k] != mark) break;
+		(*mult)++;
+	}
+	if (*mult > 1 || size == 2) return;
+
+	*incr = i[1] - i[0];
+	if (i[2] - i[1] != *incr) return;
+
+	*mult = 3;
+	for (k=3; k < size; k++)
+	{
+		if (i[k] - i[k-1] != *incr) break;
+		(*mult)++;
+	}
+	return;
+}	
+
+
+/**
+ * getMultIncr
+ *
+ * Identify the next run in an array of type double.
+ * 
+ * @param i holds a pointer to the array to be processed. 
+ * @param mult holds the length of the run. This parameter is passed by reference
+ * @param incr holds the increment. This parameter is also passed by reference
+ * @param size holds the number of elements in the array. This parameter is passed by value
+ *
+ */
+inline void getMultIncr(double* a, int *mult, double *incr, int size)
+{
+	double mark;
+	int k;
+
+	*mult = 1;
+	*incr = 0;
+
+	if (size == 1) return;
+
+	mark = a[0];
+	for (k=1; k < size; k++)
+	{
+		if (a[k] != mark) break;
+		(*mult)++;
+	}
+	if (*mult > 1 || size == 2) return;
+
+	*incr = a[1] - a[0];
+	if (a[2] - a[1] != *incr) return;
+
+	*mult = 3;
+	for (k=3; k < size; k++)
+	{
+		if (a[k] - a[k-1] != *incr) break;
+		(*mult)++;
+	}
+	return;
+}	
+
+
+
+/**
+ * getMult
+ *
+ * Identify the number of duplicates at the start of an integer array
+ * 
+ * @param i holds a pointer to the array to be processed. 
+ * @param size holds the number of elements in the array.
+ *
+ * @return the length of the run. 
+ */
+inline int getMult(int* i, int size)
+{
+	int mark;
+
+	int mult = 1;
+
+	if (size == 1) return mult;
+
+	mark = i[0];
+	for (int k=1; k < size; k++)
+	{
+		if (i[k] != mark) break;
+		mult++;
+	}
+	return mult;
+}	
+
+
+
+/**
+ * getMult
+ *
+ * Identify the number of duplicates at the start of an array of type double
+ * 
+ * @param i holds a pointer to the array to be processed. 
+ * @param size holds the number of elements in the array.
+ *
+ * @return the length of the run. 
+ */
+inline int getMult(double* a, int size)
+{
+	double mark;
+
+	int mult = 1;
+
+	if (size == 1) return mult;
+
+	mark = a[0];
+	for (int k=1; k < size; k++)
+	{
+		if (a[k] != mark) break;
+		mult++;
+	}
+	return mult;
+}	
+
+
+
+
+
 #endif
