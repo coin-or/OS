@@ -158,22 +158,23 @@ class MathUtil{
  * @param mult holds the length of the run. This parameter is passed by reference
  * @param incr holds the increment. This parameter is also passed by reference
  * @param size holds the number of elements in the array. This parameter is passed by value
+ * @param defaultIncr holds the default value for incr from the schema file. Using just <el mult="..."
+ * saves space whenever a run of two or more elements has been encountered, whereas <el mult="..." incr="..."
+ * saves space only for runs of three or more elements. Thus the defaultIncr must be treated specially
+ * (and unfortunately it changes from one schema element to the next).
  *
  */
-inline void getMultIncr(int* i, int *mult, int *incr, int size)
+inline void getMultIncr(int* i, int *mult, int *incr, int size, int defaultIncr)
 {
-	int mark;
 	int k;
 
 	*mult = 1;
-	*incr = 0;
+	*incr = defaultIncr;
 
 	if (size == 1) return;
 
-	mark = i[0];
-	for (k=1; k < size; k++)
+	for (k=1; (k < size) && (i[k] - i[k-1] == defaultIncr); k++)
 	{
-		if (i[k] != mark) break;
 		(*mult)++;
 	}
 	if (*mult > 1 || size == 2) return;
@@ -182,9 +183,8 @@ inline void getMultIncr(int* i, int *mult, int *incr, int size)
 	if (i[2] - i[1] != *incr) return;
 
 	*mult = 3;
-	for (k=3; k < size; k++)
+	for (k=3; (k < size) && (i[k] - i[k-1] == *incr); k++)
 	{
-		if (i[k] - i[k-1] != *incr) break;
 		(*mult)++;
 	}
 	return;

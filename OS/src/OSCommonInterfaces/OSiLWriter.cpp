@@ -160,7 +160,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 			outStr << "\"" ;
 			outStr << ">" ;
 			if( m_bWhiteSpace == true) outStr << endl;
-
 			for (j = 0; j < m_OSInstance->instanceData->objectives->numberOfObjectives;)
 			{
 				mult = 1;
@@ -330,7 +329,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 //									if( m_bWhiteSpace == true) outStr << endl;
 //									i++;
 									getMultIncr(&(m_OSInstance->instanceData->linearConstraintCoefficients->start->el[i]), 
-											&mult, &incr, (m_OSInstance->instanceData->variables->numberOfVariables) + 1-i);
+											&mult, &incr, (m_OSInstance->instanceData->variables->numberOfVariables) + 1-i,1);
 									if (mult == 1)
 										outStr << "<el>" ;
 									else if (incr == 1)
@@ -364,7 +363,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 //							outStr << "</el>"  ;
 //							if( m_bWhiteSpace == true) outStr << endl;
 									getMultIncr(&(m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx->el[i]), 
-											&mult, &incr, (m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues)-i);
+											&mult, &incr, (m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues)-i,1);
 									if (mult == 1)
 										outStr << "<el>" ;
 									else if (incr == 1)
@@ -396,14 +395,14 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 							if( m_bWhiteSpace == true) outStr << endl;
 							if(m_OSInstance->instanceData->constraints != NULL && m_OSInstance->instanceData->constraints->numberOfConstraints > 0){
 								if(m_bWriteBase64 == false){
-									for(i = 0; i <= m_OSInstance->instanceData->constraints->numberOfConstraints;)
+									for(i = 0; i <= m_OSInstance->instanceData->constraints->numberOfConstraints;)										
 									{
 //										outStr << "<el>" ;
 //										outStr << m_OSInstance->instanceData->linearConstraintCoefficients->start->el[i];
 //										outStr << "</el>" ;
 //										if( m_bWhiteSpace == true) outStr << endl;
 									getMultIncr(&(m_OSInstance->instanceData->linearConstraintCoefficients->start->el[i]), 
-											&mult, &incr, (m_OSInstance->instanceData->constraints->numberOfConstraints) + 1-i);
+											&mult, &incr, (m_OSInstance->instanceData->constraints->numberOfConstraints) + 1-i,1);
 									if (mult == 1)
 										outStr << "<el>" ;
 									else if (incr == 1)
@@ -437,7 +436,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 //								outStr << "</el>"  ;
 //								if( m_bWhiteSpace == true) outStr << endl;
 									getMultIncr(&(m_OSInstance->instanceData->linearConstraintCoefficients->colIdx->el[i]), 
-											&mult, &incr, (m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues)-i);
+											&mult, &incr, (m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues)-i,1);
 									if (mult == 1)
 										outStr << "<el>" ;
 									else if (incr == 1)
@@ -469,7 +468,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						for(i = 0; i < m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues;)
 						{
 							mult = getMult(&(m_OSInstance->instanceData->linearConstraintCoefficients->value->el[i]), 
-								(m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues)-1);
+								(m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues)-i);
 							if (mult == 1)
 								outStr << "<el>" ;
 							else 

@@ -5,7 +5,7 @@
   
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 18/Sep/2008
+ * @version 1.0, 18/Sep/2010
  * @since   OS2.2
  *
  * \remarks
