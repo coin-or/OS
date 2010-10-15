@@ -421,7 +421,6 @@ OS/misc/additionalDataFiles/oselFiles/coinor-ipopt.osel -text
 OS/misc/additionalDataFiles/oselFiles/example-all.osel -text
 OS/misc/additionalDataFiles/oselFiles/neos-cbc.osel -text
 OS/misc/additionalDataFiles/oselFiles/neos-clp.osel -text
-OS/misc/additionalDataFiles/osilFiles/mean.osil -text
 OS/misc/additionalDataFiles/osolFiles/parsertestNew.osol -text
 OS/misc/additionalDataFiles/osrlFiles/parserTestNew.osrl -text
 OS/misc/misc.cpp -text
