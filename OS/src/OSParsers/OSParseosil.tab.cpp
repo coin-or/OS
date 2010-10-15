@@ -302,7 +302,7 @@
 #include "OSMathUtil.h"
 
 #include "OSConfig.h"
-
+#define CHECK_PARSE_TIME;
 
 
 #ifdef HAVE_CTIME
@@ -3619,7 +3619,9 @@ bool parseInstanceData( const char **p, OSInstance *osinstance, int* osillineno)
 
 bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	//double duration;
+	#ifdef CHECK_PARSE_TIME
+	double duration;
+	#endif
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -3919,8 +3921,10 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 
 	}
 	finish = clock();
-	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	//printf("TIME TO PARSE VARIABLES = %f\n", duration);
+	#ifdef CHECK_PARSE_TIME
+	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	printf("TIME TO PARSE VARIABLES = %f\n", duration);
+	#endif
 	*p = ch;
 	return true;
 }//end parseVariables
@@ -3928,7 +3932,9 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 
 bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	//double duration;
+	#ifdef CHECK_PARSE_TIME
+	double duration;
+	#endif
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -4246,15 +4252,19 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 		}
 	}
 	finish = clock();
-	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	//printf("TIME TO PARSE OBJECTIVES = %f\n", duration);
+	#ifdef CHECK_PARSE_TIME
+	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	printf("TIME TO PARSE OBJECTIVES = %f\n", duration);
+	#endif
 	*p = ch;
 	return true;
 }//end parseObjectives
 
 bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	//double duration;
+	#ifdef CHECK_PARSE_TIME
+	double duration;
+	#endif
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -4517,8 +4527,10 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 		}
 	}
 	finish = clock();
-	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	//printf("TIME TO PARSE CONSTRAINTS = %f\n", duration);
+	#ifdef CHECK_PARSE_TIME
+	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	printf("TIME TO PARSE CONSTRAINTS = %f\n", duration);
+	#endif
 	*p = ch;
 	return true;
 }//end parseConstraints
@@ -4593,7 +4605,9 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 
 bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	//double duration;
+	#ifdef CHECK_PARSE_TIME
+	double duration;
+	#endif
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -4775,8 +4789,10 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	ch++;	
 	// get the end element
 	finish = clock();
-	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	//printf("TIME TO PARSE STARTS  = %f\n", duration);
+	#ifdef CHECK_PARSE_TIME
+	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	printf("TIME TO PARSE STARTS  = %f\n", duration);
+	#endif
 	*p = ch;
 	osinstance->instanceData->linearConstraintCoefficients->iNumberOfStartElements = kount;
 
@@ -4785,7 +4801,9 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 
 bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	//double duration;
+	#ifdef CHECK_PARSE_TIME
+	double duration;
+	#endif
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -4968,8 +4986,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute less than number of row indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) { osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute greater than number of row indices found"); return false;}
 	finish = clock();
-	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	//printf("TIME TO PARSE ROW INDEXES = %f\n", duration);
+	#ifdef CHECK_PARSE_TIME
+	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	printf("TIME TO PARSE ROW INDEXES = %f\n", duration);
+	#endif
 	*p = ch;
  	return true;
 }//end parseRowIdx
@@ -4977,7 +4997,9 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
 bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	//double duration;
+	#ifdef CHECK_PARSE_TIME
+	double duration;
+	#endif
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -5159,8 +5181,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute less than number of column indices found"); return false;}
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues) {  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients attribute greater than number of column indices found"); return false;}
 	finish = clock();
-	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	//printf("TIME TO PARSE COLUMN INDEXES = %f\n", duration);
+	#ifdef CHECK_PARSE_TIME
+	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	printf("TIME TO PARSE COLUMN INDEXES = %f\n", duration);
+	#endif
 	*p = ch;
  	return true;
 }//end parseColIdx
@@ -5168,7 +5192,9 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 
 bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 	clock_t start, finish;
-	//double duration;
+	#ifdef CHECK_PARSE_TIME
+	double duration;
+	#endif
 	int ki, numChar;
 	char *attTextEnd;
 	const char *ch = *p;
@@ -5361,8 +5387,10 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 	if(kount < osinstance->instanceData->linearConstraintCoefficients->numberOfValues){  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients greater than number of values found"); return false;}
 	if(kount > osinstance->instanceData->linearConstraintCoefficients->numberOfValues){  osilerror_wrapper( ch,osillineno,"numberOfLinearCoefficients less than the number of values found"); return false;}
 	finish = clock();
-	//duration = (double) (finish - start) / CLOCKS_PER_SEC; 
-	//printf("TIME TO PARSE VALUES = %f\n", duration);
+	#ifdef CHECK_PARSE_TIME
+	duration = (double) (finish - start) / CLOCKS_PER_SEC; 
+	printf("TIME TO PARSE VALUES = %f\n", duration);
+	#endif
 	*p = ch;
 	return true;
 }//end parseValue
@@ -5485,8 +5513,8 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
 	//check for INF
-	//std::string strINF ("INF");
-	//if(strINF.compare( number)  == 0) return OSDBL_MAX;
+	std::string strINF ("INF");
+	if(strINF.compare(0, 3,  number, numberend - number)  == 0) return OSDBL_MAX;
 	double val;
    	char *pEnd;
 	val = os_strtod_wrap(number, &pEnd);
