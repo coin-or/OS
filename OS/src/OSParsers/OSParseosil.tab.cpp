@@ -302,7 +302,7 @@
 #include "OSMathUtil.h"
 
 #include "OSConfig.h"
-#define CHECK_PARSE_TIME;
+#define CHECK_PARSE_TIME
 
 
 #ifdef HAVE_CTIME
