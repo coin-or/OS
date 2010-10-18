@@ -568,10 +568,10 @@ LinearConstraintCoefficients::LinearConstraintCoefficients():
 	#ifdef DEBUG 
 	cout << "Inside the LinearConstraintCoefficients Constructor" << endl; 
 	#endif
-	start = new IntVector();
+	start  = new IntVector();
 	rowIdx = new IntVector();
 	colIdx = new IntVector();
-	value = new DoubleVector();
+	value  = new DoubleVector();
 
 } 
 
@@ -2740,7 +2740,8 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
 		int* starts, int startsBegin, int startsEnd)
 {
 	if(numberOfValues < 0) return false;
-	if(instanceData->linearConstraintCoefficients == NULL) instanceData->linearConstraintCoefficients = new LinearConstraintCoefficients() ;
+	if(instanceData->linearConstraintCoefficients == NULL) 
+		instanceData->linearConstraintCoefficients = new LinearConstraintCoefficients() ;
 	if(numberOfValues == 0) return true;
 	if((values == 0 ) ||
 	   (valuesBegin < 0 || (valuesEnd - valuesBegin + 1) != numberOfValues) ||

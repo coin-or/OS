@@ -328,6 +328,7 @@ class QuadraticTerms {
 }; //QuadraticTerms
 
 
+
 /*! \class IntVector
  * \brief an integer Vector data structure
  */	
@@ -340,7 +341,16 @@ public:
 	 * set to true by default
 	 */
 	bool bDeleteArrays;
+	int numberOfEl;
 	int *el;
+
+	/**
+	 *  @brief writeVector returns a string containing the elements of the vector
+	 *
+	 *  @param addWhiteSpace controls whether whitespace (i.e., newline) is to be added between elements
+	 *  @param writeBase64 controls whether output is in base64 form or as a sequence of <el> (with mult and incr attributes)
+	 */
+	std::string writeEl(bool addWhiteSpace, bool writeBase64);
 };//class IntVector
 
 /*! \class DoubleVector
@@ -355,7 +365,16 @@ public:
 	 * set to true by default
 	 */
 	bool bDeleteArrays;
+	int numberOfEl;
 	double *el;			
+
+	/**
+	 *  @brief writeVector returns a string containing the elements of the vector
+	 *
+	 *  @param addWhiteSpace controls whether whitespace (i.e., newline) is to be added between elements
+	 *  @param writeBase64 controls whether output is in base64 form or as a sequence of <el> (with mult and incr attributes)
+	 */
+	std::string writeEl(bool addWhiteSpace, bool writeBase64);
 };//class DoubleVector
 
 

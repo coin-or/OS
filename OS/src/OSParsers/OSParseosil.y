@@ -6,7 +6,7 @@
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005-2007, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2010, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -27,9 +27,9 @@
 #include "OSiLParserData.h"
 #include "OSBase64.h"
 #include "OSMathUtil.h"
-
 #include "OSConfig.h"
-#define CHECK_PARSE_TIME
+
+//#define CHECK_PARSE_TIME
 
 
 #ifdef HAVE_CTIME

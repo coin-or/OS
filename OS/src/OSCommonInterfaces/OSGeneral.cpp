@@ -19,6 +19,7 @@
 #include "OSParameters.h"
 #include "OSErrorClass.h"
 #include "OSMathUtil.h"
+#include "OSBase64.h"
 
 #include<iostream>
 #include<sstream>
@@ -238,6 +239,7 @@ QuadraticTerms::~QuadraticTerms(){
 
 IntVector::IntVector():
 	bDeleteArrays(true),
+	numberOfEl(0),
 	el(NULL)
 {  
 	#ifdef DEBUG
@@ -255,6 +257,42 @@ IntVector::~IntVector(){
 	}
 
 } 
+
+std::string IntVector::writeEl(bool addWhiteSpace, bool writeBase64)
+{
+	ostringstream outStr;
+	int mult, incr;
+
+	if (this->numberOfEl > 0)
+	{
+		if(writeBase64 == false)
+		{
+			for(int i = 0; i <= this->numberOfEl;)
+			{
+				getMultIncr(&(this->el[i]), &mult, &incr, (this->numberOfEl) - i, 1);
+				if (mult == 1)
+					outStr << "<el>" ;
+				else if (incr == 1)
+					outStr << "<el mult=\"" << mult << "\">";
+				else
+					outStr << "<el mult=\"" << mult << "\" incr=\"" << incr << "\">";
+				outStr << this->el[i];
+				outStr << "</el>" ;
+				if(addWhiteSpace == true) outStr << endl;
+				i += mult;
+			}
+		}
+		else
+		{
+			outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
+			outStr << Base64::encodeb64( (char*)this->el, (this->numberOfEl)*sizeof(int) );
+			outStr << "</base64BinaryData>" ;
+			if(addWhiteSpace == true) outStr << endl;
+		}
+	}
+	return outStr.str();
+}// end IntVector::writeEl
+
 
 DoubleVector::DoubleVector():
 	bDeleteArrays(true),
@@ -276,5 +314,38 @@ DoubleVector::~DoubleVector(){
 		el = NULL;
 	}
 }
+
+std::string DoubleVector::writeEl(bool addWhiteSpace, bool writeBase64)
+{
+	ostringstream outStr;
+	int mult, incr;
+
+	if (this->numberOfEl > 0)
+	{
+		if(writeBase64 == false)
+		{
+			for(int i = 0; i <= this->numberOfEl;)
+			{
+				mult = getMult(&(this->el[i]), (this->numberOfEl) - i);
+				if (mult == 1)
+					outStr << "<el>" ;
+				else 
+					outStr << "<el mult=\"" << mult << "\">";
+				outStr << os_dtoa_format(this->el[i] );
+				outStr << "</el>" ;
+				if(addWhiteSpace == true) outStr << endl;
+				i += mult;
+			}
+		}
+		else
+		{
+			outStr << "<base64BinaryData sizeOf=\"" << sizeof(double) << "\"  >" ;
+			outStr << Base64::encodeb64( (char*)this->el, (this->numberOfEl)*sizeof(double) );
+			outStr << "</base64BinaryData>" ;
+			if(addWhiteSpace == true) outStr << endl;
+		}
+	}
+	return outStr.str();
+}// end DoubleVector::writeEl
 
 

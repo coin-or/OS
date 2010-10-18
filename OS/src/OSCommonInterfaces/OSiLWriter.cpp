@@ -55,22 +55,27 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 
 	if(m_OSInstance == NULL)  return outStr.str();
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ;
+	if( m_bWhiteSpace == true) outStr << endl;
 	outStr << "<osil xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 	outStr << "xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
 	outStr << OS_SCHEMA_VERSION;
 	outStr << "/OSiL.xsd\" >" ;
-	outStr << "<instanceHeader>" ;
+	if( m_bWhiteSpace == true) outStr << endl;
+	outStr << "<instanceHeader>";
 	if( m_bWhiteSpace == true) outStr << endl;
 	if(m_OSInstance->instanceHeader != NULL){
 		if(m_OSInstance->instanceHeader->name.length() > 0){
 			outStr << "<name>" + m_OSInstance->instanceHeader->name + "</name>"  ;
+			if( m_bWhiteSpace == true) outStr << endl;
 		}
 
 		if(m_OSInstance->instanceHeader->source.length() > 0){
 			outStr << "<source>" + m_OSInstance->instanceHeader->source + "</source>"  ;
+			if( m_bWhiteSpace == true) outStr << endl;
 		}
 		if(m_OSInstance->instanceHeader->description.length() > 0){
 			outStr << "<description>" + m_OSInstance->instanceHeader->description  + "</description>";
+			if( m_bWhiteSpace == true) outStr << endl;
 		}
 	}
 	outStr << "</instanceHeader>" ;
@@ -343,10 +348,10 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 								}
 							}
 							else{
-								outStr << "<base64BinaryData sizeOf=\"4\"  >" ;
+								outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 								outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->start->el, 
 									(m_OSInstance->instanceData->variables->numberOfVariables + 1)*sizeof(int) );
-								outStr<< "</base64BinaryData>" ;
+								outStr << "</base64BinaryData>" ;
 								if( m_bWhiteSpace == true) outStr << endl;
 							}
 						}
@@ -378,10 +383,10 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					else{
 						//outStr << "<base64BinaryData sizeOf=\"4\" numericType=\"int\" >" ;
-						outStr << "<base64BinaryData sizeOf=\"4\"  >" ;
+						outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 						outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx->el, 
 							m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues*sizeof(int) );
-						outStr<< "</base64BinaryData>" ;
+						outStr << "</base64BinaryData>" ;
 						if( m_bWhiteSpace == true) outStr << endl;
 					}
 					outStr << "</rowIdx>" ;
@@ -416,10 +421,10 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 									}
 								}
 								else{
-									outStr << "<base64BinaryData sizeOf=\"4\"  >" ;
+									outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 									outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->start->el, 
 										(m_OSInstance->instanceData->variables->numberOfVariables + 1)*sizeof(int) );
-									outStr<< "</base64BinaryData>" ;
+									outStr << "</base64BinaryData>" ;
 									if( m_bWhiteSpace == true) outStr << endl;
 								}
 							}
@@ -450,10 +455,10 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 							}
 						}
 						else{
-							outStr << "<base64BinaryData sizeOf=\"4\"  >" ;
+							outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 							outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->colIdx->el, 
 								m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues*sizeof(int) );
-							outStr<< "</base64BinaryData>" ;
+							outStr << "</base64BinaryData>" ;
 							if( m_bWhiteSpace == true) outStr << endl;
 						}
 						outStr << "</colIdx>" ;
@@ -480,10 +485,10 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						}
 					}
 					else{
-						outStr << "<base64BinaryData sizeOf=\"8\"  >" ;
+						outStr << "<base64BinaryData sizeOf=\"" << sizeof(double) << "\"  >" ;
 						outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->value->el, 
 							m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues*sizeof( double) );
-						outStr<< "</base64BinaryData>" ;
+						outStr << "</base64BinaryData>" ;
 						if( m_bWhiteSpace == true) outStr << endl;
 					}
 				}
