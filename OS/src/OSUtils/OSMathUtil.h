@@ -173,7 +173,7 @@ inline void getMultIncr(int* i, int *mult, int *incr, int size, int defaultIncr)
 
 	if (size == 1) return;
 
-	for (k=1; (i[k] - i[k-1] == defaultIncr) && (k < size); k++)
+	for (k=1; (k < size) && (i[k] - i[k-1] == defaultIncr); k++)
 	{
 		(*mult)++;
 	}
@@ -183,7 +183,7 @@ inline void getMultIncr(int* i, int *mult, int *incr, int size, int defaultIncr)
 	if (i[2] - i[1] != *incr) return;
 
 	*mult = 3;
-	for (k=3; (i[k] - i[k-1] == *incr) && (k < size) ; k++)
+	for (k=3; (k < size) && (i[k] - i[k-1] == *incr); k++)
 	{
 		(*mult)++;
 	}
@@ -213,7 +213,7 @@ inline void getMultIncr(double* a, int *mult, double *incr, int size)
 	if (size == 1) return;
 
 	mark = a[0];
-	for (k=1; (a[k] == mark) && (k < size); k++)
+	for (k=1; (k < size) && (a[k] == mark); k++)
 	{
 		(*mult)++;
 	}
@@ -223,7 +223,7 @@ inline void getMultIncr(double* a, int *mult, double *incr, int size)
 	if (a[2] - a[1] != *incr) return;
 
 	*mult = 3;
-	for (k=3; (a[k] - a[k-1] == *incr) && (k < size); k++)
+	for (k=3; (k < size) && (a[k] - a[k-1] == *incr); k++)
 	{
 		(*mult)++;
 	}
@@ -251,7 +251,7 @@ inline int getMult(int* i, int size)
 	if (size == 1) return mult;
 
 	mark = i[0];
-	for (int k=1; (i[k] == mark) && (k < size); k++)
+	for (int k=1; (k < size) && (i[k] == mark); k++)
 	{
 		mult++;
 	}
@@ -279,15 +279,11 @@ inline int getMult(double* a, int size)
 	if (size == 1) return mult;
 
 	mark = a[0];
-	for (int k=1; (a[k] == mark) && (k < size); k++)
+	for (int k=1; (k < size) && (a[k] == mark); k++)
 	{
 		mult++;
 	}
 	return mult;
 }	
-
-
-
-
 
 #endif
