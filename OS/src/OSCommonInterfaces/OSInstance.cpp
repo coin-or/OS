@@ -1997,7 +1997,7 @@ std::string OSInstance::printModel( ){
 	
 	outStr << std::endl;
 	outStr << "Variables:" << std::endl;
-	if(m_bProcessVariables != true ) this->processVariables();
+	if(m_bProcessVariables != true  || bVariablesModified == false ) this->processVariables();
 	for(i = 0; i < numVar; i++){
 
 
@@ -2047,7 +2047,7 @@ std::string OSInstance::printModel(int rowIdx ){
 	this->initForAlgDiff( );	
 	
 	if( rowIdx >= 0){
-		if( m_bProcessConstraints != true ) this->processConstraints() ;
+		if( m_bProcessConstraints != true || bConstraintsModified == false) this->processConstraints() ;
 		if( m_mdConstraintLowerBounds[ rowIdx] >  -OSDBL_MAX){
 			if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx]){
 				outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
@@ -2082,7 +2082,7 @@ std::string OSInstance::printModel(int rowIdx ){
 			}
 		}
 	}else{// process an objective function
-		if(m_bProcessObjectives != true ) this->processObjectives() ;
+		if(m_bProcessObjectives != true || bObjectivesModified == false)  this->processObjectives() ;
 		int obj_idx =  -rowIdx - 1;
 		obj_nonz = m_miNumberOfObjCoef[ obj_idx];
 		for(j = 0; j < obj_nonz; j++){
