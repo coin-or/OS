@@ -834,6 +834,17 @@ AC_COIN_VPATH_LINK(data/matlabFiles/markowitz.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/parincLinear.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/template.m)
 AC_COIN_VPATH_LINK(data/matlabFiles/OSCallMatlabSolver.m)
+###
+## columnGen Application files
+##
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen5.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen5.osil)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osil)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osil)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osil)
+
 ##
 ## XSLT FILE
 ##
@@ -867,6 +878,7 @@ AC_CONFIG_FILES([Makefile
           applications/Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
+          applications/columnGen/code/Makefile
           os_addlibs.txt])
           
 

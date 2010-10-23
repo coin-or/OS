@@ -62,6 +62,7 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/../ltmain.sh $(srcdir)/../missing \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/os_addlibs.txt.in \
+	$(top_srcdir)/applications/columnGen/code/Makefile.in \
 	$(top_srcdir)/applications/fileUpload/Makefile.in \
 	$(top_srcdir)/configure $(top_srcdir)/inc/config_os.h.in \
 	AUTHORS ChangeLog
@@ -77,7 +78,8 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno configure.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_os.h
-CONFIG_CLEAN_FILES = applications/fileUpload/Makefile os_addlibs.txt
+CONFIG_CLEAN_FILES = applications/fileUpload/Makefile \
+	applications/columnGen/code/Makefile os_addlibs.txt
 SOURCES =
 DIST_SOURCES =
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
@@ -450,6 +452,8 @@ distclean-hdr:
 	-rm -f inc/config_os.h inc/stamp-h1
 applications/fileUpload/Makefile: $(top_builddir)/config.status $(top_srcdir)/applications/fileUpload/Makefile.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+applications/columnGen/code/Makefile: $(top_builddir)/config.status $(top_srcdir)/applications/columnGen/code/Makefile.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 os_addlibs.txt: $(top_builddir)/config.status $(srcdir)/os_addlibs.txt.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 
@@ -598,7 +602,7 @@ distclean-tags:
 distdir: $(DISTFILES)
 	$(am__remove_distdir)
 	mkdir $(distdir)
-	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/applications/fileUpload $(distdir)/inc $(distdir)/m4
+	$(mkdir_p) $(distdir)/. $(distdir)/.. $(distdir)/../BuildTools $(distdir)/applications/columnGen/code $(distdir)/applications/fileUpload $(distdir)/inc $(distdir)/m4
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
