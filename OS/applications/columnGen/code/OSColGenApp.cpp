@@ -1211,10 +1211,6 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 												m_initSolMap.insert( std::pair<int, std::map<int, std::vector<int> > >(solutionNumber, tmpMap) )  ;
 												
 											}
-											
-											
-											
-											
 										}
 									}
 								}
