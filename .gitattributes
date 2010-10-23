@@ -41,6 +41,17 @@ OS/applications/amplClient/nltrans.dat -text
 OS/applications/amplClient/nltrans.mod -text
 OS/applications/amplClient/nltrans.nl -text
 OS/applications/amplClient/testfile.nl -text
+OS/applications/columnGen/code/Makefile.in -text
+OS/applications/columnGen/code/OSColGenApp.cpp -text
+OS/applications/columnGen/code/OSColGenApp.h -text
+OS/applications/columnGen/code/OSColGenMain.cpp -text
+OS/applications/columnGen/data/colgen10.osil -text
+OS/applications/columnGen/data/colgen10.osol -text
+OS/applications/columnGen/data/colgen12.osil -text
+OS/applications/columnGen/data/colgen12.osol -text
+OS/applications/columnGen/data/colgen12b.osil -text
+OS/applications/columnGen/data/colgen5.osil -text
+OS/applications/columnGen/data/colgen5.osol -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
 OS/applications/fileUpload/OSFileUpload.java -text

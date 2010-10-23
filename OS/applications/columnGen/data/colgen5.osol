@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="../stylesheets/OSoL.xslt"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+    <optimization>
+
+        <solverOptions numberOfSolverOptions="15">
+            <solverOption name="osilFile" value="../data/colgen5.osil" solver="decomp" type="string"/>
+            <solverOption name="numHubs" value="1" solver="decomp" type="integer"/>
+            <solverOption name="numNodes" value="5" solver="decomp" type="integer"/>
+            <solverOption name="totalDemand" value="4" solver="decomp" type="integer"/>
+            <solverOption name="minDemand" value="1" solver="decomp" type="integer"/>
+            <solverOption name="routeCapacity" value="4" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="0" solver="decomp" type="integer"  />
+            <solverOption name="demand" value="1" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="1" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="1" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="1" solver="decomp" type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="1" solver="decomp"
+                category="solution0:route0"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="2" solver="decomp"
+                category="solution0:route0"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="3" solver="decomp"
+                category="solution0:route0"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="4" solver="decomp"
+                category="solution0:route0"  type="integer"/>
+        </solverOptions>
+    </optimization>
+</osol>
