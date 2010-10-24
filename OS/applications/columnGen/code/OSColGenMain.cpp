@@ -59,7 +59,8 @@ int main(int argc, char ** argv){
 		
 		//now generate the restriced master
 		colgenApp->getInitialRestrictedMaster( );
-
+		//now solve the master
+		colgenApp->solveRestrictedMasterRelaxation();
 		
 		//garbage collection
 		delete fileUtil;

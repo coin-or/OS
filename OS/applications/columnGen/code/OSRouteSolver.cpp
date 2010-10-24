@@ -45,24 +45,25 @@ OSRouteSolver::OSRouteSolver() {
 
 OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	std::cout << "INSIDE OSRouteSolver CONSTRUCTOR with OSOption argument" << std::endl;
+	
+	m_u = NULL;
+	m_v = NULL;
+	m_g = NULL;
+	m_px = NULL;
+	m_tx =NULL;
+	m_varIdx = NULL;
+	
+	m_optL = NULL;
+	m_optD = NULL;
+	m_vv = NULL;
+	m_vvpnt = NULL;
+	
+	m_demand = NULL;
+	m_cost = NULL;
 
 	try{
 		
 	
-				
-
-		m_demand = NULL;
-		m_u = NULL;
-		m_v = NULL;
-		m_g = NULL;
-		m_px = NULL;
-		m_tx =NULL;
-		m_varIdx = NULL;
-		
-		m_optL = NULL;
-		m_optD = NULL;
-		m_vv = NULL;
-		m_vvpnt = NULL;
 		
 		getOptions( osoption);
 		
@@ -86,8 +87,9 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_px = new int*[ m_numNodes];
 		m_tx = new int*[ m_numNodes];
 		
-		
+		int k;
 		int i;
+	
 		int l;
 		for (i = 0; i < m_numNodes; i++) {
 			
@@ -101,7 +103,6 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			}
 			
 			m_g[ i] = new double[ m_numNodes];
-			std::cout << "CREATING NUMBER NODES = " << i << std::endl;
 			m_px[ i] = new int[ m_upperBoundL + 1];
 			m_tx[ i] = new int[m_upperBoundL + 1];
 			
@@ -115,13 +116,14 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		m_vv = new double*[ m_numHubs];
 		m_vvpnt = new int*[ m_numHubs];
+		m_cost = new double*[ m_numHubs];
 		
-		for (i = 0; i < m_numHubs; i++) {
+		for (k = 0; k < m_numHubs; k++) {
 			
 			
-			m_vv[ i] = new double[ m_totalDemand + 1];
-			m_vvpnt[ i] = new int[ m_totalDemand + 1];
-
+			m_vv[ k] = new double[ m_totalDemand + 1];
+			m_vvpnt[ k] = new int[ m_totalDemand + 1];
+			m_cost[ k] = new double[ m_numNodes*m_numNodes - m_numNodes];
 			
 			
 		}
@@ -188,6 +190,7 @@ OSRouteSolver::~OSRouteSolver(){
 		
 		delete[] m_vv[i];
 		delete[] m_vvpnt[i];
+		delete[] m_cost[ i];
 		
 		
 	}
@@ -199,6 +202,9 @@ OSRouteSolver::~OSRouteSolver(){
 	m_vv = NULL;
 	delete[] m_vvpnt;
 	m_vvpnt = NULL;
+	
+	delete[] m_cost;
+	m_cost = NULL;
 	
 }//end ~OSRouteSolver
 
@@ -854,10 +860,37 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 
 		
 		int i;
+		int j;
 		int k;
-
-	
+		//fill in the cost vector first
+		//the x vector starts at 2*m_numHubs
 		
+		int idx1;
+		int idx2;
+		
+		
+		idx2 = 0;  //zRouteDemand have 0 coefficients in obj
+		
+		for(k = 0; k < m_numHubs; k++){
+			
+			idx1 = 0;
+			
+			for(i = 0; i < m_numNodes; i++){
+				
+				for(j = 0; j < i; j++){
+				
+					m_cost[k][idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
+				}
+				
+				for(j = i + 1; j < m_numNodes; j++){
+					
+					m_cost[k][idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
+					
+				}
+			}
+		}
+	
+
 	
 		//get variable names for checking purposes
 		std::string* varNames;
@@ -919,7 +952,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 					
 							
 					osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
-					std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
+					//std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
 					
 					values[ kountNonz] = 1.0;
 					indexes[ kountNonz ] = *vit - m_numHubs ;  //0 based counting
@@ -1146,14 +1179,14 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 											
 											std::istringstream solutionBuffer( solutionString.substr( pos2 + 1)  );
 											solutionBuffer >> solutionNumber;
-											std::cout << "solution number = " << solutionNumber  << std::endl;
+											//std::cout << "solution number = " << solutionNumber  << std::endl;
 											
 											
 											pos3 = routeString.find( "e");
 											if(pos3  == std::string::npos ) throw ErrorClass("OSoL category attribute not properly defined");
 											std::istringstream routeBuffer( routeString.substr( pos3 + 1)  );
 											routeBuffer >> routeNumber;
-											std::cout << "route number = " <<  routeNumber << std::endl;
+											//std::cout << "route number = " <<  routeNumber << std::endl;
 											std::istringstream nodeBuffer( (*vit)->value);
 											nodeBuffer >> tmpVal;
 											

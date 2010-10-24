@@ -32,6 +32,14 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 
+#ifdef COIN_HAS_COUENNE    
+#include "OSCouenneSolver.h"
+#endif
+
+#ifdef COIN_HAS_IPOPT    
+#include "OSIpoptSolver.h"
+#endif
+
 
 
 #include <sstream>
@@ -51,9 +59,10 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  //std::cout << "the contructor things whichBlock = " << m_whichBlock<< std::endl;
 	  m_osinstanceMaster = NULL;
 	  m_osrouteSolver = NULL;
+	  m_osoption = osoption;
+	  m_osrouteSolver = new OSRouteSolver( m_osoption);
+	  getOptions( m_osoption);
 	  
-	  m_osrouteSolver = new OSRouteSolver( osoption);
-	  getOptions( osoption);
 
 } //end OSColGenApp Constructor
 
@@ -105,6 +114,65 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 
 void OSColGenApp::solveRestrictedMasterRelaxation(){
 	
+	
+ 	CoinSolver *solver = NULL;
+	solver = new CoinSolver();
+	solver->sSolverName ="clp";
+	//solver->sSolverName ="symphony"; 
+	std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
+	solver->osinstance = m_osinstanceMaster;
+	solver->osoption = m_osoption;	
+	std::cout << "CALL Solve  " << std::endl;
+ 	solver->solve();
+ 	std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+ 	//std::cout <<  solver->osrl << std::endl;
+	
+    /** Add a column (primal variable) to the problem. */
+ 	
+ 	///just testing
+ 	
+   // virtual void addCol(int numberElements,
+	//		const int* rows, const double* elements,
+	////		const double collb, const double colub,   
+	//		const double obj) ;	
+	
+ 	int numberElements = 5;
+ 	double obj = -1;
+ 	
+ 	int* rows = NULL;
+ 	double* values = NULL;
+ 	
+ 	double collb = 0.0;
+ 	double colub = 1.0;
+ 	
+ 	rows = new int[ 5];
+ 	rows[0] =  5;
+ 	rows[1] =  6;
+ 	rows[2] =  7;
+ 	rows[3] =  9;
+ 	rows[4] =  11;
+ 	
+ 	values = new double[ 5];
+ 	values[0] =  1.0;
+ 	values[1] =  1.0;
+ 	values[2] =  1.0;
+ 	values[3] =  1.0;
+ 	values[4] =  1.0;
+ 	
+ 	OsiSolverInterface *si = solver->osiSolver;
+	//OsiClpSolverInterface * si =
+	//dynamic_cast<OsiClpSolverInterface *>(solver->osiSolver) ;
+ 	
+ 	si->addCol(numberElements, rows, values,
+ 			collb, colub,   obj) ;	
+ 	
+ 	
+ 	std::cout << std::endl  << std::endl << std::endl;
+ 	std::cout << "CALL Solve  " << std::endl;
+ 	
+ 	solver->solve();
+ 	std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+ 	//std::cout <<  solver->osrl << std::endl;
 	
 }// end solveRelaxation
 

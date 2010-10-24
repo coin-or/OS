@@ -45,6 +45,9 @@ public:
 	int m_minDemand;
 	int* m_demand;
 	
+	/** the distance/cost vectors */
+	double** m_cost;
+	
 
 	double** m_u; 
 	double** m_v;

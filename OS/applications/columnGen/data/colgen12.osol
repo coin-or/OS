@@ -2,7 +2,9 @@
 <osol>
     <optimization>
 
-        <solverOptions numberOfSolverOptions="38">
+        <solverOptions numberOfSolverOptions="39">
+            <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="false"/>
+            
             <solverOption name="osilFile" value="../data/colgen12.osil" solver="decomp" type="string"/>
             <solverOption name="numHubs" value="2" solver="decomp" type="integer"/>
             <solverOption name="numNodes" value="12" solver="decomp" type="integer"/>
