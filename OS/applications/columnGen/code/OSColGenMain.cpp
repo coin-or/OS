@@ -58,7 +58,7 @@ int main(int argc, char ** argv){
 		colgenApp = new OSColGenApp( osoption);
 		
 		//now generate the restriced master
-		colgenApp->generateInitialRestrictedMaster( );
+		colgenApp->getInitialRestrictedMaster( );
 
 		
 		//garbage collection
