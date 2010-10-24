@@ -45,6 +45,8 @@ OS/applications/columnGen/code/Makefile.in -text
 OS/applications/columnGen/code/OSColGenApp.cpp -text
 OS/applications/columnGen/code/OSColGenApp.h -text
 OS/applications/columnGen/code/OSColGenMain.cpp -text
+OS/applications/columnGen/code/OSRouteSolver.cpp -text
+OS/applications/columnGen/code/OSRouteSolver.h -text
 OS/applications/columnGen/data/colgen10.osil -text
 OS/applications/columnGen/data/colgen10.osol -text
 OS/applications/columnGen/data/colgen12.osil -text
