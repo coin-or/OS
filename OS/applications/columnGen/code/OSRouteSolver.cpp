@@ -48,7 +48,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 
 	try{
 		
-		getOptions( osoption);
+	
 				
 
 		m_demand = NULL;
@@ -63,6 +63,8 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_optD = NULL;
 		m_vv = NULL;
 		m_vvpnt = NULL;
+		
+		getOptions( osoption);
 		
 		
 		if(m_routeCapacity > m_totalDemand){
@@ -174,7 +176,11 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	
 	
-	if(m_demand != NULL) delete[] m_demand;
+	if(m_demand != NULL){
+		//std::cout << "I AM DELETING m_demand" << std::endl;
+		delete[] m_demand;
+	}
+
 	
 	if(m_varIdx != NULL) delete[] m_varIdx;
 	
