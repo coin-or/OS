@@ -168,6 +168,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		if(numRows > 0) delete[] y;
 		y = NULL;
 		
+		delete solver;
+		
 		/** Add a column (primal variable) to the problem. */
 		
 		///just testing
@@ -175,7 +177,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		//		const int* rows, const double* elements,
 		////		const double collb, const double colub,   
 		//		const double obj) ;	
-		
+		/*
 		int numberElements = 5;
 		double obj = -1;
 		
@@ -199,7 +201,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		values[3] =  1.0;
 		values[4] =  1.0;
 		
-		
+		*/
 		//OsiClpSolverInterface * si =
 		//dynamic_cast<OsiClpSolverInterface *>(solver->osiSolver) ;
 		/*
