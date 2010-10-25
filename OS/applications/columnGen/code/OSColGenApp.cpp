@@ -90,8 +90,9 @@ void OSColGenApp::getCuts(const  double* x) {
 	
 }//end generateCuts
 
-void OSColGenApp::getColumns(const  double* u) {
-	
+void OSColGenApp::getColumns( const double* y,  int const numRows ) {
+
+	m_osrouteSolver->getColumns(y, numRows);
 	
 }//end generateColumns
 
@@ -114,65 +115,111 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 
 void OSColGenApp::solveRestrictedMasterRelaxation(){
 	
+	int i;
+	int numRows;
 	
- 	CoinSolver *solver = NULL;
-	solver = new CoinSolver();
-	solver->sSolverName ="clp";
-	//solver->sSolverName ="symphony"; 
-	std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
-	solver->osinstance = m_osinstanceMaster;
-	solver->osoption = m_osoption;	
-	std::cout << "CALL Solve  " << std::endl;
- 	solver->solve();
- 	std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
- 	//std::cout <<  solver->osrl << std::endl;
+	try{
+		numRows = m_osinstanceMaster->getConstraintNumber();
+		
+		CoinSolver *solver = NULL;
+		solver = new CoinSolver();
+		//kipp -- later have clp be an option
+		//I guess for now it must be an Osi solver
+		solver->sSolverName ="clp";
+		std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
+		solver->osinstance = m_osinstanceMaster;
+		solver->osoption = m_osoption;	
+		std::cout << "CALL Solve  " << std::endl;
+		solver->solve();
+		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+		//std::cout <<  solver->osrl << std::endl;
+		
+		//get the solver interface
+		OsiSolverInterface *si = solver->osiSolver;
+		//get the dual solution 
+		// y holds the dual values
+		double *y = NULL;
+		
+		
+		if(si->getNumRows() != numRows ) 
+			throw ErrorClass("detect a row number inconsistency in solveRestrictedMasterRelaxation");
+		
+		if( numRows > 0 ) y = new double[m_osinstanceMaster->getConstraintNumber() ];
+		
+		if(si->getRowPrice() == NULL  ) 
+			throw ErrorClass("problem getting dual values in solveRestrictedMasterRelaxation");
+		
+		
+		for(i = 0; i <  numRows; i++){
+			
+			*(y + i) = si->getRowPrice()[ i];
+			
+		}
+		
+		
+		
+		//kipp here is where the while loop goes
+		//start while loop
+		getColumns(y, numRows);
+		
+		//end while loop
+		
+		
+		if(numRows > 0) delete[] y;
+		y = NULL;
+		
+		/** Add a column (primal variable) to the problem. */
+		
+		///just testing
+	   // virtual void addCol(int numberElements,
+		//		const int* rows, const double* elements,
+		////		const double collb, const double colub,   
+		//		const double obj) ;	
+		
+		int numberElements = 5;
+		double obj = -1;
+		
+		int* rows = NULL;
+		double* values = NULL;
+		
+		double collb = 0.0;
+		double colub = 1.0;
+		
+		rows = new int[ 5];
+		rows[0] =  5;
+		rows[1] =  6;
+		rows[2] =  7;
+		rows[3] =  9;
+		rows[4] =  11;
+		
+		values = new double[ 5];
+		values[0] =  1.0;
+		values[1] =  1.0;
+		values[2] =  1.0;
+		values[3] =  1.0;
+		values[4] =  1.0;
+		
+		
+		//OsiClpSolverInterface * si =
+		//dynamic_cast<OsiClpSolverInterface *>(solver->osiSolver) ;
+		
+		si->addCol(numberElements, rows, values,
+				collb, colub,   obj) ;	
+		
+		
+		std::cout << std::endl  << std::endl << std::endl;
+		std::cout << "CALL Solve  " << std::endl;
+		
+		solver->solve();
+		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+		//std::cout <<  solver->osrl << std::endl;
+		
+	} catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}		
 	
-    /** Add a column (primal variable) to the problem. */
- 	
- 	///just testing
- 	
-   // virtual void addCol(int numberElements,
-	//		const int* rows, const double* elements,
-	////		const double collb, const double colub,   
-	//		const double obj) ;	
-	
- 	int numberElements = 5;
- 	double obj = -1;
- 	
- 	int* rows = NULL;
- 	double* values = NULL;
- 	
- 	double collb = 0.0;
- 	double colub = 1.0;
- 	
- 	rows = new int[ 5];
- 	rows[0] =  5;
- 	rows[1] =  6;
- 	rows[2] =  7;
- 	rows[3] =  9;
- 	rows[4] =  11;
- 	
- 	values = new double[ 5];
- 	values[0] =  1.0;
- 	values[1] =  1.0;
- 	values[2] =  1.0;
- 	values[3] =  1.0;
- 	values[4] =  1.0;
- 	
- 	OsiSolverInterface *si = solver->osiSolver;
-	//OsiClpSolverInterface * si =
-	//dynamic_cast<OsiClpSolverInterface *>(solver->osiSolver) ;
- 	
- 	si->addCol(numberElements, rows, values,
- 			collb, colub,   obj) ;	
- 	
- 	
- 	std::cout << std::endl  << std::endl << std::endl;
- 	std::cout << "CALL Solve  " << std::endl;
- 	
- 	solver->solve();
- 	std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
- 	//std::cout <<  solver->osrl << std::endl;
 	
 }// end solveRelaxation
 

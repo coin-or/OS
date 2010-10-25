@@ -60,13 +60,12 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	
 	m_demand = NULL;
 	m_cost = NULL;
+	
+	m_rc = NULL;
 
 	try{
 		
-	
-		
 		getOptions( osoption);
-		
 		
 		if(m_routeCapacity > m_totalDemand){
 			m_upperBoundL = m_totalDemand;
@@ -91,6 +90,8 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		int i;
 	
 		int l;
+		
+		
 		for (i = 0; i < m_numNodes; i++) {
 			
 			
@@ -127,6 +128,19 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			
 			
 		}
+		
+		//allocate memory for the reduced cost vector. 
+		//assume order is k, l, i, j
+		m_rc = new double[ m_numHubs*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes)];
+		
+		
+		//allocate memory for convexity row
+		m_psi = new double[ m_numHubs];
+		
+		//allocate memory for node assignment
+		m_phi = new double[ m_numNodes];
+		
+		m_optValHub = new double[ m_numHubs];
 		
 		
 	} catch (const ErrorClass& eclass) {
@@ -205,6 +219,18 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	delete[] m_cost;
 	m_cost = NULL;
+	
+	delete[] m_rc;
+	m_rc = NULL;
+	
+	delete[] m_phi;
+	m_phi = NULL;
+	
+	delete[] m_psi;
+	m_psi = NULL;
+	
+	delete[] m_optValHub;
+	m_optValHub = NULL;
 	
 }//end ~OSRouteSolver
 
@@ -666,143 +692,104 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 
 
-
-
-
-
-/**
-void OSRouteSolver::solveMaster(const double *cost, std::vector<IndexValuePair*> *solIndexValPair, 
-		double *optVal, const double& convexDual){
-
-	try{
-		
-		int i;  
-		
-		//kipp fix the line below
-		cost+=  m_whichBlock*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) ;
-		
-		struct IndexValuePair *primalValPair;
-
-		std::vector<IndexValuePair*>::iterator  vit;
-		
-		for (vit = m_primalVals.begin(); vit != m_primalVals.end(); vit++) {
-			
-			delete *vit;
-		}
-		m_primalVals.clear();
-		
-			
-		//now, lets find the minimum reduced cost
-		
-		*optVal = OSDBL_MAX;
-		
-		//std::cout << "Number of Var " << m_numberOfVar  << std::endl;
+void OSRouteSolver::getColumns( const double* y,  const int numRows ){
+	
+//first strip of the phi dual values and then the convexity row costs
 	
 
+	int i;
+	int j;
+	int numCoulpingConstraints;
+	
+	numCoulpingConstraints = m_numNodes - m_numHubs;
+	
+	try{
+		
+
+		
+		if(numRows != m_numNodes) throw ErrorClass("inconsistent row count in getColumns");
+		
+		for(i = 0; i < m_numHubs; i++){
+			
+			m_phi[i] = 0.0;
+		}
+		
+		for(i = 0; i < numCoulpingConstraints; i++){
+			
+			m_phi[ i + m_numHubs] = y[ i];
+			
+		}
+		
+		for(i = 0; i < m_numHubs; i++){
+			
+			m_psi[ i ] = y[ i + numCoulpingConstraints];
+			
+		}
+		
+		//get the reduced costs 
+		calcReducedCost( m_cost,  m_phi,  m_rc);
+		
+		
 		int bestl;
 		int kountVar;
 		double testVal;
-		
 		testVal = 0;
-		if(m_whichBlock == 0){
+		int k;
+		int startPntInc;
+		
+		
+		startPntInc = m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes);
+		
+		getOptL( m_rc);
+		
+		for(k = 0; k < m_numHubs; k++){
 			
-			getOptL( cost);
+			std::cout << " whichBlock =  " << k << "  L = " << m_optL[ k] << std::endl;
+			testVal += m_optL[ k];
 			
-			for(i = 0; i < m_numHubs; i++){
+			m_optValHub[ k] = qrouteCost(k,  m_optL[ k], m_rc,  &kountVar);
+			
+			m_optValHub[ k] -= m_psi[ k ];
+			
+			std::cout << "Best Reduced Cost Hub " << k << " =  "  << m_optValHub[ k] << std::endl;
+			
+			//get the variable indexes
+			
+			for(j = 0; j < kountVar; j++){
 				
-				std::cout << " whichBlock =  " << i << "  L = " << m_optL[ i] << std::endl;
-				testVal += m_optL[ i];
-				
-			}
-			
-			
-			
-			if(testVal != m_totalDemand) {
-				
-				std::cout  << "TOTAL DEMAND = " << m_totalDemand << std::endl;
-				std::cout  << "Test Value = " << testVal << std::endl;
-				throw  ErrorClass( "inconsistent demand calculation" );
-			}
-			
-		}
-		
-		
-
-		
-
-		
-		//kipp -- set back
-		//bestl = 4;
-		
-		bestl = m_optL[ m_whichBlock];
-		//m_trueMin = m_trueMin - convexDual;
-		
-		std::cout  << "WHICH BLOCK =  " << m_whichBlock << "  BEST L = " << bestl <<  "  m_trueMin " <<  m_trueMin << std::endl;
-		// when m_whichBlock == m_numHubs  - 1 we have a lower bound
-		std::cout << "LOWER BOUND = " << m_trueMin << std::endl;
-		if(  (m_whichBlock == m_numHubs  - 1) && m_trueMin > 0){
-			std::cout << "WE ARE OPTIMAL " << std::endl;
-			//exit( 1);
-		}
-		
-
-		
-		                  
-		*optVal = qrouteCost(m_whichBlock,  bestl,  cost,  &kountVar);
-		
-		
-
-		//std::cout <<   "best reduced cost = " << *optVal << std::endl;
-		
-		std::map<int, int> indexCount;
-		
-		std::map<int, int>::iterator mit;
-		
-		
-		for(i = 0; i < kountVar; i++){
-			
-			if( indexCount.find(  m_varIdx[ i]) == indexCount.end()  ){
-				
-				indexCount[ m_varIdx[ i]] = 1;
-				
-			}else{
-				
-				indexCount[ m_varIdx[ i]] += 1;
+				std::cout << "Variable Index = " <<  m_varIdx[ j] - (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes) << std::endl;
+				//std::cout << "Node Number = " <<  << std::endl;
 				
 			}
-				
-				
+			
+			//m_rc += startPntInc;
+			
 		}
 		
-		for (mit = indexCount.begin(); mit != indexCount.end(); mit++){
+		if(testVal != m_totalDemand) {
 			
-			//std::cout << "Variable Index " << mit->first << " Count =  " << mit->second << std::endl;
-			
-			//std::cout << "Variable Name = " << m_osinstanceMasterMaster->getVariableNames()[   mit->first]  << std::endl;
-			
-			// get unique indexes
-			primalValPair = new IndexValuePair();
-			
-			primalValPair->value =  mit->second;
-			primalValPair->idx =  mit->first;
-	
-			
-			m_primalVals.push_back( primalValPair);
+			std::cout  << "TOTAL DEMAND = " << m_totalDemand << std::endl;
+			std::cout  << "Test Value = " << testVal << std::endl;
+			throw  ErrorClass( "inconsistent demand calculation" );
 		}
+		
+		
+		
+		//kipp -- don't forget to subtract off psi
+		//kipp -- don't forget to calculate the true obj cost
 		
 
 		
-		 *solIndexValPair = m_primalVals;
-
-			
+		
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);
 
-	}	
+	}
 	
-}//end solveMaster
-*/
+}//end getColumns
+
+
 
 
 OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
@@ -830,7 +817,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 	std::map<int, std::vector<int> >::iterator  mit2;
 	std::vector<int>::iterator  vit;
 	
-	OSInstance *m_osinstanceMaster = NULL;
+	m_osinstanceMaster = NULL;
 	//add linear constraint coefficients
 	//number of values will nodes.size() the coefficients in the node constraints
 	//plus coefficients in convexity constraints which is the number of varaibles
@@ -1262,6 +1249,52 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 }//end getOptions
 
 
+void OSRouteSolver::getCuts(const  double* x){
+	
+	
+}//end getCuts
+
+void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
+	
+	int k;
+	int i;
+	int j;
+	int l;
+	int kount;
+	kount = 0;
+	int tmpVal;
+	tmpVal = m_numNodes - 1;
+	
+	for(k = 0; k < m_numHubs; k++){
+		
+		for(l = 0; l < m_upperBoundL; l++){
+			
+			
+			for(i = 0; i< m_numHubs; i++){
+				
+				//if we have (i, j) where j is hub then do not subtract off phi[ j]
+				for(j = 0; j < i; j++){
+					
+					m_rc[ kount++] = (l + 1)*c[k][ (i - 1)*tmpVal + j ] - phi[ j];
+					
+				}
+				
+				for(j = i + 1; j < m_numHubs; j++){
+					
+					m_rc[ kount++] = (l + 1)*c[k][ (i - 1)*tmpVal + (j - 1) ] - phi[ j];
+					
+				}
+				
+				
+			}
+			
+			
+		}
+		
+		
+	}
+	
+}//end calcReducedCost
 
 std::string makeStringFromInt(std::string theString, int theInt){
 	ostringstream outStr;

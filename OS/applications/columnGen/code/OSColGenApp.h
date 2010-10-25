@@ -58,7 +58,7 @@ public:
 	
 	void getCuts(const  double* x) ;
 	
-	void getColumns(const  double* u) ;
+	void getColumns(const  double* y, const int numRows) ;
 	
 	/**
 	 *

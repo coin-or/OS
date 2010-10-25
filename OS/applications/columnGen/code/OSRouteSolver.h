@@ -45,16 +45,35 @@ public:
 	int m_minDemand;
 	int* m_demand;
 	
-	/** the distance/cost vectors */
+	/** the distance/cost vectors
+	 */
+	
 	double** m_cost;
 	
-
+	/** the reduced cost vector
+	 * we asssume order is (k, l, i, j)
+	 */
+	double* m_rc;
+	/** dual vectors */
+	/** the dual vector on convexity row
+	 * see the paper for notation
+	 */
+	double* m_psi;
+	/** the dual vector on node assignments row
+	 * see the paper for notation
+	 */
+	double* m_phi;
+	
+	//will be the optimal reduced cost for each hub
+	double* m_optValHub;
+	
+	
+	//start variables for the q-route dynamic program
 	double** m_u; 
 	double** m_v;
 	int** m_px;
 	int** m_tx;
 	double** m_g;
-	
 	int* m_varIdx;
 	//end variables for the q-route  dynamic programming solution
 	
@@ -64,15 +83,18 @@ public:
 	int* m_optD; //size is number of routes
 	double** m_vv;
 	int** m_vvpnt;
-	int m_totalDemand;
+	//end of variable on the outer dynamic program
 	
+	
+	int m_totalDemand;
 	int m_upperBoundL;
 	int m_numberOfSolutions;
 	
 	
-	//kipp get rid of this
-	int m_whichBlock;
+	//kipp get rid of this and replace with a local
 	double m_trueMin;
+	
+	OSInstance *m_osinstanceMaster;
 
 	OSInstance* getInitialRestrictedMaster( );
 
@@ -84,13 +106,21 @@ public:
 	void getOptL(const  double* c) ;
 	
 	
-	//this c vector is for the entire cost vector
-	void getColumns(const  double* c) ;
+	void getCuts(const  double* x) ;
+	
+	//y is a pointer to the dual vars
+	void getColumns( const double* y,  const int numRows ) ;
 	
 	
 	void getOptions( OSOption *osoption);
 	
 	
+	/** calculate the reduced costs
+	 * c -- input of the objective function costs
+	 * phi -- dual values on node assignment
+	 * d -- reduced with convexity dual value
+	 */
+	void calcReducedCost( double** c, double* phi, double* d);
 	
 	/**
 	 *
