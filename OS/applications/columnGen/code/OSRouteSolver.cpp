@@ -452,7 +452,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 			
 			m_u[i][l1] = OSDBL_MAX;
 			m_v[i][l1] = OSDBL_MAX;
-			
+			m_px[i][l1] = 0;
 			if(l1 == *(m_demand + i) ){
 				
 				m_px[i][l1] = k;
