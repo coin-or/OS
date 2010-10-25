@@ -202,7 +202,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		//OsiClpSolverInterface * si =
 		//dynamic_cast<OsiClpSolverInterface *>(solver->osiSolver) ;
-		
+		/*
 		si->addCol(numberElements, rows, values,
 				collb, colub,   obj) ;	
 		
@@ -213,7 +213,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		solver->solve();
 		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 		//std::cout <<  solver->osrl << std::endl;
-		
+		*/
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);

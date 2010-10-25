@@ -142,6 +142,17 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		m_optValHub = new double[ m_numHubs];
 		
+		m_variableNames = new string[ m_numNodes*m_numNodes - m_numHubs];
+		
+		createVariableNames();
+		
+		//kipp -- hardcoded --change
+		m_pntAmatrix = new int[ m_numNodes - m_numHubs + 1];
+		m_Amatrix = new  int[ (m_numNodes - m_numHubs)*(m_numNodes - 1) ];
+		createAmatrix();
+		
+		//this has size of the number of x variables
+		m_tmpVarArray = new int[ m_numNodes*m_numNodes - m_numHubs ];
 		
 	} catch (const ErrorClass& eclass) {
 
@@ -232,6 +243,18 @@ OSRouteSolver::~OSRouteSolver(){
 	delete[] m_optValHub;
 	m_optValHub = NULL;
 	
+	delete[] m_variableNames;
+	m_variableNames = NULL;
+	
+	delete[] m_pntAmatrix;
+	m_pntAmatrix = NULL;
+	
+	delete[] m_Amatrix;
+	m_Amatrix = NULL;
+	
+	delete[] m_tmpVarArray;
+	m_tmpVarArray = NULL;
+	
 }//end ~OSRouteSolver
 
 
@@ -304,7 +327,7 @@ void OSRouteSolver::getOptL(const  double* c) {
 			
 		}
 		
-		c+=  startPntInc ;	
+		//c+=  startPntInc ;	
 		
 	}//  end for on k
 	
@@ -396,9 +419,9 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 	
 	//start of the cost vector for hub k plus move to start of l demands
 	// now move the pointer up
-	//int startPnt = k*totalDemand*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
+	int startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 	
-	int startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
+	//int startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 	c+=  startPnt ;
 	
 
@@ -700,8 +723,10 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 	int i;
 	int j;
 	int numCoulpingConstraints;
-	
 	numCoulpingConstraints = m_numNodes - m_numHubs;
+	
+	int numVar;
+	numVar = m_numNodes*m_numNodes - m_numHubs;
 	
 	try{
 		
@@ -730,22 +755,26 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 		calcReducedCost( m_cost,  m_phi,  m_rc);
 		
 		
-		int bestl;
+		
 		int kountVar;
 		double testVal;
 		testVal = 0;
 		int k;
 		int startPntInc;
+		int rowCount;
 		
 		
-		startPntInc = m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes);
 		
 		getOptL( m_rc);
 		
 		for(k = 0; k < m_numHubs; k++){
 			
+			startPntInc  =  k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes);
+			
 			std::cout << " whichBlock =  " << k << "  L = " << m_optL[ k] << std::endl;
 			testVal += m_optL[ k];
+			
+			kountVar = 0;
 			
 			m_optValHub[ k] = qrouteCost(k,  m_optL[ k], m_rc,  &kountVar);
 			
@@ -753,18 +782,78 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 			
 			std::cout << "Best Reduced Cost Hub " << k << " =  "  << m_optValHub[ k] << std::endl;
 			
+			//loop over the rows, scatter each row and figure
+			//out the column coefficients in this row
+			
 			//get the variable indexes
 			
+			for(i = 0; i < numCoulpingConstraints; i++){
+				
+				rowCount = 0;
+				
+				//initialize the array at zero for now
+				// kipp get rid of the later?
+				for(j = 0; j < numVar; j++){
+					
+					m_tmpVarArray[ j] = 0;
+					
+				}
+				
+				//now scatter
+				
+				for(j = 0; j < kountVar; j++){
+					
+					
+					m_tmpVarArray[ m_varIdx[ j] - startPntInc  ] += 1;
+					
+					// is variable m_varIdx[ j] - startPntInc in this row
+					
+					
+					
+					
+				}
+				
+				//when done put m_tmpVarArray in the transformation matrix
+				
+				
+				
+					
+			}
+			
+			
+			
+			//stuff for debugging
+			int ivalue;
+			int jvalue;
 			for(j = 0; j < kountVar; j++){
 				
-				std::cout << "Variable Index = " <<  m_varIdx[ j] - (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes) << std::endl;
-				//std::cout << "Node Number = " <<  << std::endl;
+				startPntInc  =  k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes);
+				
+				
+				std::cout << "Variable Index = " <<  m_varIdx[ j] - startPntInc ;
+				std::cout << "  Variable = " << m_variableNames[  m_varIdx[ j] - startPntInc ]	<< std::endl ;	
+				
+				//tmp -- get the node
+				
+				//tmp = fmod(m_varIdx[ j] - startPntInc, m_numNodes) ;  
+				
+				ivalue = floor( (m_varIdx[ j] - startPntInc)/(m_numNodes - 1) );
+				jvalue = (m_varIdx[ j] - startPntInc) - ivalue*(m_numNodes - 1);
+				std::cout << " i NODE NUMBER = " << ivalue  ;
+				
+				if(  jvalue  > ivalue ){
+					
+					std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
+				}else{
+					
+					std::cout << " j NODE NUMBER = " <<  jvalue   << std::endl;
+				}
+				
 				
 			}
 			
-			//m_rc += startPntInc;
-			
 		}
+		
 		
 		if(testVal != m_totalDemand) {
 			
@@ -1270,18 +1359,18 @@ void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
 		for(l = 0; l < m_upperBoundL; l++){
 			
 			
-			for(i = 0; i< m_numHubs; i++){
+			for(i = 0; i< m_numNodes; i++){
 				
 				//if we have (i, j) where j is hub then do not subtract off phi[ j]
 				for(j = 0; j < i; j++){
 					
-					m_rc[ kount++] = (l + 1)*c[k][ (i - 1)*tmpVal + j ] - phi[ j];
+					m_rc[ kount++] = (l + 1)*c[k][ i*tmpVal + j ] - phi[ j];
 					
 				}
 				
-				for(j = i + 1; j < m_numHubs; j++){
+				for(j = i + 1; j < m_numNodes; j++){
 					
-					m_rc[ kount++] = (l + 1)*c[k][ (i - 1)*tmpVal + (j - 1) ] - phi[ j];
+					m_rc[ kount++] = (l + 1)*c[k][ i*tmpVal + j - 1 ] - phi[ j];
 					
 				}
 				
@@ -1295,6 +1384,89 @@ void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
 	}
 	
 }//end calcReducedCost
+
+
+void OSRouteSolver::createVariableNames( ){
+	
+	int i;
+	int j;
+	int kount;
+	
+	kount = 0;
+	
+	for(i = 0; i< m_numNodes; i++){
+		
+		//if we have (i, j) where j is hub then do not subtract off phi[ j]
+		for(j = 0; j < i; j++){
+			
+			m_variableNames[ kount] = makeStringFromInt("x(" , i);
+			m_variableNames[ kount] += makeStringFromInt( "," , j);
+			m_variableNames[ kount] +=  ")";
+			kount++;
+			
+		}
+		
+		for(j = i + 1; j < m_numNodes; j++){
+			
+			m_variableNames[ kount] = makeStringFromInt("x(" , i);
+			m_variableNames[ kount] += makeStringFromInt( "," , j);
+			m_variableNames[ kount] +=  ")";
+			kount++;
+			
+		}
+		
+		
+	}	
+}//end createVariableNames
+
+void OSRouteSolver::createAmatrix(){
+	
+	//arrays for the coupling constraint matrix
+	//int* m_pntAmatrix;
+	//int* m_Amatrix;
+	
+	
+	int i;
+	int j;
+
+	int numNonz;
+	
+	//loop over nodes 
+	m_pntAmatrix[ 0] = 0; 
+	numNonz = 0;
+	
+	for(j = m_numHubs; j < m_numNodes; j++){
+		
+		
+		for(i = 0; i < j; i++){
+			
+			m_Amatrix[ numNonz++] = i*(m_numNodes - 1) + j - 1 ;
+
+		}
+		
+		for(i = j + 1; i < m_numNodes; i++){
+			
+			m_Amatrix[ numNonz++] = i*(m_numNodes - 1) + j ;		
+			
+		}
+		
+		m_pntAmatrix[ j - m_numHubs + 1]  = numNonz;
+	
+	}
+	
+	/*
+	for(i = 0; i < m_numNodes - m_numHubs; i++){
+		
+		for(j = m_pntAmatrix[ i]; j <  m_pntAmatrix[ i + 1]; j++){
+			
+			std::cout << m_variableNames[  m_Amatrix[ j ] ] << std::endl;
+			
+		}
+
+	}
+	*/
+	
+}//end createAmatrix
 
 std::string makeStringFromInt(std::string theString, int theInt){
 	ostringstream outStr;

@@ -91,6 +91,15 @@ public:
 	int m_numberOfSolutions;
 	
 	
+	std::string* m_variableNames;
+	
+	//arrays for the coupling constraint matrix
+	int* m_pntAmatrix;
+	int* m_Amatrix;
+	
+	int* m_tmpVarArray;
+	
+	
 	//kipp get rid of this and replace with a local
 	double m_trueMin;
 	
@@ -121,6 +130,12 @@ public:
 	 * d -- reduced with convexity dual value
 	 */
 	void calcReducedCost( double** c, double* phi, double* d);
+	
+	
+	void createVariableNames( );
+	
+	//this is the matrix that says we must visit each node
+	void createAmatrix();
 	
 	/**
 	 *
