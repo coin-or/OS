@@ -97,11 +97,19 @@ public:
 	int* m_pntAmatrix;
 	int* m_Amatrix;
 	
-	int* m_tmpVarArray;
+	//below  is a scatter array we scatter into in order
+	//to multiply the transformation matrix times the A matrix
+	int* m_tmpScatterArray;
 	
-	
-	//kipp get rid of this and replace with a local
-	double m_trueMin;
+	//arguments for getColumns
+	double m_lowerBnd;
+	int* m_nonzVec;
+	double* m_costVec;
+	int** m_newColumnRowIdx;
+	double** m_newColumnRowValue;
+
+
+
 	
 	OSInstance *m_osinstanceMaster;
 
@@ -117,8 +125,23 @@ public:
 	
 	void getCuts(const  double* x) ;
 	
-	//y is a pointer to the dual vars
-	void getColumns( const double* y,  const int numRows ) ;
+	/**
+	 * RETURN VALUES: 
+	 * int numColumns -- number of new columns generated
+	 * int* numNonz -- number of nonzeros in each column
+	 * double* cost -- the objective function coefficient on each new column
+	 * double* rcost -- the reduced cost of each new column
+	 * double** rowIdx -- vectors row indexes of new columns
+	 * double** values -- vectors of matrix coefficient values of new columns
+	 * double lowerBound -- the lowerBound
+	 * 
+	 * INPUT:
+	 * double* y -- the vector of dual values
+	 * int numRows -- size of dual vector
+	 */
+	void getColumns(const  double* y, const int numRows,
+			int &numColumns, int* numNonz, double* cost, double* rcost,
+			int** rowIdx, double** values, double &lowerBound) ;
 	
 	
 	void getOptions( OSOption *osoption);

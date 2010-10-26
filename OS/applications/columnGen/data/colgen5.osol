@@ -3,7 +3,8 @@
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
     <optimization>
 
-        <solverOptions numberOfSolverOptions="15">
+        <solverOptions numberOfSolverOptions="16">
+            <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="false"/>
             <solverOption name="osilFile" value="../data/colgen5.osil" solver="decomp" type="string"/>
             <solverOption name="numHubs" value="1" solver="decomp" type="integer"/>
             <solverOption name="numNodes" value="5" solver="decomp" type="integer"/>

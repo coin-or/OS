@@ -152,7 +152,31 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		createAmatrix();
 		
 		//this has size of the number of x variables
-		m_tmpVarArray = new int[ m_numNodes*m_numNodes - m_numHubs ];
+		int numVar = m_numNodes*m_numNodes - m_numHubs ;
+		m_tmpScatterArray = new int[ numVar ];
+		for(i = 0; i < numVar; i++){
+			
+			m_tmpScatterArray[ i] = 0;
+			
+		}
+		
+		m_nonzVec = new int[ m_numHubs] ;
+		m_costVec = new double[ m_numHubs];
+		
+		
+		m_newColumnRowIdx = new int*[ m_numHubs];
+		m_newColumnRowValue = new double*[ m_numHubs];
+		
+//kipp change -- put the 1000 in as an option
+		
+		for (k = 0; k < m_numHubs; k++) {
+			
+			m_newColumnRowValue[ k] = new double[ 1000];
+			m_newColumnRowIdx[ k] = new int[ 1000];
+			
+		}
+
+		
 		
 	} catch (const ErrorClass& eclass) {
 
@@ -252,8 +276,26 @@ OSRouteSolver::~OSRouteSolver(){
 	delete[] m_Amatrix;
 	m_Amatrix = NULL;
 	
-	delete[] m_tmpVarArray;
-	m_tmpVarArray = NULL;
+	delete[] m_tmpScatterArray;
+	m_tmpScatterArray = NULL;
+	
+	delete[] m_nonzVec  ;
+	m_nonzVec = NULL;
+	delete[] m_costVec ;
+	m_costVec = NULL;
+	
+	for(i = 0; i < m_numHubs; i++){
+		
+		delete[] m_newColumnRowIdx[i];
+		delete[] m_newColumnRowValue[i];
+	}
+	
+	delete[] m_newColumnRowIdx;
+	m_newColumnRowIdx = NULL;
+	
+	delete[] m_newColumnRowValue;
+	m_newColumnRowValue = NULL;
+
 	
 }//end ~OSRouteSolver
 
@@ -273,10 +315,11 @@ void OSRouteSolver::getOptL(const  double* c) {
 	int kountVar;
 	double testVal;
 	int l;
-	int startPntInc;
+	//int startPntInc;
+	double trueMin;
 	
 	kountVar = 0;
-	startPntInc = m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes);
+	//startPntInc = m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes);
 	
 	m_vv[ 0][ 0] = 0;
 	for(d = 1; d <=  m_totalDemand; d++){
@@ -331,7 +374,7 @@ void OSRouteSolver::getOptL(const  double* c) {
 		
 	}//  end for on k
 	
-	m_trueMin = OSDBL_MAX;
+	trueMin = OSDBL_MAX;
 	//we now enter the last stage through the other hubs
 	// have satisfied total demand d
 
@@ -355,9 +398,9 @@ void OSRouteSolver::getOptL(const  double* c) {
 			//std::cout << "l = " << l << std::endl;
 			//std::cout << "testVal = " << testVal << std::endl;
 			
-			if(m_vv[ m_numHubs - 1][ d] + testVal < m_trueMin){
+			if(m_vv[ m_numHubs - 1][ d] + testVal < trueMin){
 				
-				m_trueMin = m_vv[ m_numHubs -1][ d] + testVal;
+				trueMin = m_vv[ m_numHubs -1][ d] + testVal;
 				m_optD[  m_numHubs -1 ] = d;
 				m_optL[  m_numHubs -1 ] = l;
 				
@@ -367,7 +410,7 @@ void OSRouteSolver::getOptL(const  double* c) {
 		}
 	}
 	
-	std::cout << "TRUE MIN = " <<  m_trueMin << std::endl;
+	std::cout << "TRUE MIN = " <<  trueMin << std::endl;
 
 	k = m_numHubs -1;
 	
@@ -715,11 +758,13 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 
 
-void OSRouteSolver::getColumns( const double* y,  const int numRows ){
+void OSRouteSolver::getColumns(const  double* y, const int numRows,
+		int &numColumns, int* numNonzVec, double* costVec, double* rcostVec,
+		int** rowIdxVec, double** valuesVec, double &lowerBound) 
+{
 	
 //first strip of the phi dual values and then the convexity row costs
 	
-
 	int i;
 	int j;
 	int numCoulpingConstraints;
@@ -727,6 +772,7 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 	
 	int numVar;
 	numVar = m_numNodes*m_numNodes - m_numHubs;
+	int numNonz;
 	
 	try{
 		
@@ -766,12 +812,13 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 		
 		
 		getOptL( m_rc);
-		
+		m_lowerBnd = 0.0;
 		for(k = 0; k < m_numHubs; k++){
 			
 			startPntInc  =  k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes);
 			
 			std::cout << " whichBlock =  " << k << "  L = " << m_optL[ k] << std::endl;
+			
 			testVal += m_optL[ k];
 			
 			kountVar = 0;
@@ -780,49 +827,79 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 			
 			m_optValHub[ k] -= m_psi[ k ];
 			
+
+			
 			std::cout << "Best Reduced Cost Hub " << k << " =  "  << m_optValHub[ k] << std::endl;
+			m_lowerBnd += m_optValHub[ k];
 			
 			//loop over the rows, scatter each row and figure
 			//out the column coefficients in this row
+			//first scatter the sparse array m_varIdx[ j]
 			
-			//get the variable indexes
+			m_costVec[ k] = 0.0;
 			
-			for(i = 0; i < numCoulpingConstraints; i++){
-				
-				rowCount = 0;
-				
-				//initialize the array at zero for now
-				// kipp get rid of the later?
-				for(j = 0; j < numVar; j++){
-					
-					m_tmpVarArray[ j] = 0;
-					
-				}
-				
-				//now scatter
-				
-				for(j = 0; j < kountVar; j++){
-					
-					
-					m_tmpVarArray[ m_varIdx[ j] - startPntInc  ] += 1;
-					
-					// is variable m_varIdx[ j] - startPntInc in this row
-					
-					
-					
-					
-				}
-				
-				//when done put m_tmpVarArray in the transformation matrix
+			for(j = 0; j < kountVar; j++){
 				
 				
+				m_tmpScatterArray[ m_varIdx[ j] - startPntInc  ] += 1;
 				
-					
+				// is variable m_varIdx[ j] - startPntInc in this row	
+				
+				m_costVec[ k] += m_cost[k][  m_varIdx[ j] - startPntInc  ];
+				
 			}
 			
 			
 			
+			numNonz = 0;
+			//multiply the sparse array by each constraint
+			for(i = 0; i < numCoulpingConstraints; i++){
+				
+				rowCount = 0;
+				
+				for(j = m_pntAmatrix[ i]; j < m_pntAmatrix[ i + 1]; j++){
+					
+					//m_Amatrix[ j] is a variable index -- this logic works
+					//since the Amatrix coefficient is 1 -- we don't need a value
+					rowCount += m_tmpScatterArray[  m_Amatrix[ j] ];
+
+				}
+				
+				if(rowCount > 0){
+					
+					//std::cout << "GAIL NODE " << i + m_numHubs <<  " COUNT = " << rowCount << std::endl;
+					m_newColumnRowIdx[ k][ numNonz] = i;
+					m_newColumnRowValue[ k][ numNonz] = rowCount;
+					numNonz++;
+				}
+					
+					
+			}//end loop on coupling constraints
+			
+			//add a 1 in the convexity row
+			m_newColumnRowIdx[ k][ numNonz] = m_numNodes - m_numHubs + k;
+			m_newColumnRowValue[ k][ numNonz] = 1.0;
+			numNonz++;
+			
+			m_nonzVec[ k] = numNonz;
+			
+			//zero out the scatter vector
+			for(j = 0; j < kountVar; j++){
+				
+				
+				m_tmpScatterArray[ m_varIdx[ j] - startPntInc  ]  = 0;
+				
+				// is variable m_varIdx[ j] - startPntInc in this row	
+				
+			}
+			
+			m_costVec[ k] =  m_optL[ k]*m_costVec[ k];
+			
+			//std::cout << "GAIL COST VECTOR " <<  m_costVec[ k] << std::endl;
+			
 			//stuff for debugging
+			//*****************************//
+			/**
 			int ivalue;
 			int jvalue;
 			for(j = 0; j < kountVar; j++){
@@ -852,7 +929,15 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 				
 			}
 			
-		}
+			std::cout << "Route True Cost = " << m_costVec[ k] << std::endl;
+			*/
+			//**************************//
+			//end debugging stuff
+	
+			
+		}//end of loop on hubs
+		
+		std::cout << "Lower Bound = " << m_lowerBnd << std::endl;
 		
 		
 		if(testVal != m_totalDemand) {
@@ -864,9 +949,6 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 		
 		
 		
-		//kipp -- don't forget to subtract off psi
-		//kipp -- don't forget to calculate the true obj cost
-		
 
 		
 		
@@ -875,6 +957,14 @@ void OSRouteSolver::getColumns( const double* y,  const int numRows ){
 		throw ErrorClass(eclass.errormsg);
 
 	}
+	
+	
+	//set method parameters
+	numColumns = m_numHubs;
+	lowerBound =  m_lowerBnd;
+	
+	std::cout << "LEAVING GET COLUMNS" << std::endl;
+	return;
 	
 }//end getColumns
 

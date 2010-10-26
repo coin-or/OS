@@ -1,64 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="../stylesheets/OSoL.xslt"?>
-<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+<osol>
     <optimization>
 
-        <solverOptions numberOfSolverOptions="33">
-            
+        <solverOptions numberOfSolverOptions="39">
             <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="false"/>
-            <solverOption name="osilFile" value="../data/colgen10.osil" solver="decomp" type="string"/>
+            
+            <solverOption name="osilFile" value="../data/colgen12b.osil" solver="decomp" type="string"/>
             <solverOption name="numHubs" value="2" solver="decomp" type="integer"/>
-            <solverOption name="numNodes" value="10" solver="decomp" type="integer"/>
-            <solverOption name="totalDemand" value="8" solver="decomp" type="integer"/>
+            <solverOption name="numNodes" value="12" solver="decomp" type="integer"/>
+            <solverOption name="totalDemand" value="21" solver="decomp" type="integer"/>
             <solverOption name="minDemand" value="1" solver="decomp" type="integer"/>
-            <solverOption name="routeCapacity" value="8" solver="decomp" type="integer"/>
+            <solverOption name="routeCapacity" value="15" solver="decomp" type="integer"/>
+            
+            
             <solverOption name="demand" value="0" solver="decomp" type="integer"/>
             <solverOption name="demand" value="0" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="2" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="2" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="3" solver="decomp" type="integer"/>
             <solverOption name="demand" value="1" solver="decomp" type="integer"/>
             <solverOption name="demand" value="1" solver="decomp" type="integer"/>
             <solverOption name="demand" value="1" solver="decomp" type="integer"/>
             <solverOption name="demand" value="1" solver="decomp" type="integer"/>
             <solverOption name="demand" value="1" solver="decomp" type="integer"/>
-            <solverOption name="demand" value="1" solver="decomp" type="integer"/>
-            <solverOption name="demand" value="1" solver="decomp" type="integer"/>
-            <solverOption name="demand" value="1" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="5" solver="decomp" type="integer"/>
+            <solverOption name="demand" value="4" solver="decomp" type="integer"/>
             
           
+            <solverOption name="restrictedMasterSolution" value="2" solver="decomp"
+                category="solution0:route0"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="3" solver="decomp"
+                category="solution0:route0"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="4" solver="decomp"
                 category="solution0:route0"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="5" solver="decomp"
                 category="solution0:route0"  type="integer"/>
-            <solverOption name="restrictedMasterSolution" value="7" solver="decomp"
+            <solverOption name="restrictedMasterSolution" value="6" solver="decomp"
+                category="solution0:route0"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="10" solver="decomp"
                 category="solution0:route0"  type="integer"/>
             
-            <solverOption name="restrictedMasterSolution" value="2" solver="decomp"
-                category="solution0:route1"  type="integer"/>
-            <solverOption name="restrictedMasterSolution" value="4" solver="decomp"
-                category="solution0:route1"  type="integer"/>
-            <solverOption name="restrictedMasterSolution" value="6" solver="decomp"
+
+            <solverOption name="restrictedMasterSolution" value="7" solver="decomp"
                 category="solution0:route1"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="8" solver="decomp"
                 category="solution0:route1"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="9" solver="decomp"
+                category="solution0:route1"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="11" solver="decomp"
                 category="solution0:route1"  type="integer"/>
             
             <solverOption name="restrictedMasterSolution" value="2" solver="decomp"
                 category="solution1:route0"  type="integer"/>         
             <solverOption name="restrictedMasterSolution" value="3" solver="decomp"
                 category="solution1:route0"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="4" solver="decomp"
+                category="solution1:route0"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="5" solver="decomp"
                 category="solution1:route0"  type="integer"/>
-            <solverOption name="restrictedMasterSolution" value="7" solver="decomp"
-                category="solution1:route0"  type="integer"/>
-            
-
-            <solverOption name="restrictedMasterSolution" value="4" solver="decomp"
-                category="solution1:route1"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="6" solver="decomp"
+                category="solution1:route0"  type="integer"/>
+
+            
+            <solverOption name="restrictedMasterSolution" value="10" solver="decomp"
+                category="solution1:route1"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="7" solver="decomp"
                 category="solution1:route1"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="8" solver="decomp"
                 category="solution1:route1"  type="integer"/>
             <solverOption name="restrictedMasterSolution" value="9" solver="decomp"
+                category="solution1:route1"  type="integer"/>
+            <solverOption name="restrictedMasterSolution" value="11" solver="decomp"
                 category="solution1:route1"  type="integer"/>
             
             

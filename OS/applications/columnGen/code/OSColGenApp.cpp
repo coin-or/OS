@@ -90,9 +90,16 @@ void OSColGenApp::getCuts(const  double* x) {
 	
 }//end generateCuts
 
-void OSColGenApp::getColumns( const double* y,  int const numRows ) {
+void OSColGenApp::getColumns(const  double* y, const int numRows,
+		int &numColumns, int* numNonz, double* cost, double* rcost,
+		int** rowIdx, double** values, double &lowerBound) 
+ {
 
-	m_osrouteSolver->getColumns(y, numRows);
+
+	m_osrouteSolver->getColumns(y, numRows,
+			numColumns, numNonz, cost, rcost,
+			rowIdx, values,  lowerBound);
+	
 	
 }//end generateColumns
 
@@ -116,7 +123,23 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 void OSColGenApp::solveRestrictedMasterRelaxation(){
 	
 	int i;
+	int j;
+	int k;
 	int numRows;
+	// y holds the dual values
+	double *y = NULL;
+	int numColumns;
+	int* numNonz = NULL;
+	double* cost = NULL; 
+	double* rcost;
+	int** rowIdx = NULL; 
+	double** values = NULL ; 
+	double lowerBound;
+	double collb;
+	double colub;
+	collb = 0.0;
+	colub = 1.0;
+
 	
 	try{
 		numRows = m_osinstanceMaster->getConstraintNumber();
@@ -129,7 +152,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 		solver->osinstance = m_osinstanceMaster;
 		solver->osoption = m_osoption;	
-		std::cout << "CALL Solve  " << std::endl;
+		std::cout << "CALL Solveee  " << std::endl;
 		solver->solve();
 		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 		//std::cout <<  solver->osrl << std::endl;
@@ -137,8 +160,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		//get the solver interface
 		OsiSolverInterface *si = solver->osiSolver;
 		//get the dual solution 
-		// y holds the dual values
-		double *y = NULL;
+
 		
 		
 		if(si->getNumRows() != numRows ) 
@@ -155,15 +177,94 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			*(y + i) = si->getRowPrice()[ i];
 			
 		}
+		lowerBound = -1;
 		
+		int loopKount = 0;
+		while(lowerBound < -.01 && loopKount < 70){
+			loopKount++;
 		
+			//kipp here is where the while loop goes
+			//start while loop
+			getColumns(y, numRows, numColumns, numNonz, 
+					cost, rcost, rowIdx, values,  lowerBound);
+			
+			std::cout << "LOWER BOUND = " <<  lowerBound << std::endl;
+			
+			
+			numNonz = m_osrouteSolver->m_nonzVec; 
+			cost =  m_osrouteSolver->m_costVec; 
+			rcost = m_osrouteSolver->m_optValHub;
+			rowIdx = m_osrouteSolver->m_newColumnRowIdx; 
+			values = m_osrouteSolver->m_newColumnRowValue;
+	
 		
-		//kipp here is where the while loop goes
-		//start while loop
-		getColumns(y, numRows);
+			/*
+			double tmpVal;
+			
+			for(i = 0; i < numColumns; i++){
+				
+				tmpVal = cost[ i];
+				
+				//std::cout << "OBJ  COST = " << cost[ i] << std::endl;
+				
+				for(j = 0; j < numNonz[i] ; j++){
+					
+					tmpVal = tmpVal -  y[ rowIdx[i][j] ]*values[i][j];
+					
+					//std::cout << "NODE INDEX  = "  << rowIdx[i][j] + numColumns << std::endl;
+					//std::cout << "row value = "  << values[i][j] << std::endl;
+					
+				}
+				
 		
-		//end while loop
+				
+				
+				//if(rcost[ i] > tmpVal + .1 || rcost[ i] < tmpVal - .1) exit( 1);
+				std::cout << "Kipp REDUCED COST = " << rcost[ i] << std::endl;
+				std::cout << "Clp REDUCED COST = " << tmpVal << std::endl;
+				
+				
+			}
+			*/
+			
 		
+			//add columns
+			
+			for(k = 0; k < numColumns; k++){
+				
+				si->addCol(numNonz[ k], rowIdx[k], values[k],
+						collb, colub,   cost[ k]) ;		
+				
+				
+				
+			}
+		
+			std::cout << std::endl  << std::endl << std::endl;
+			std::cout << "CALL Solve  " << std::endl;
+			
+			solver->solve();
+			std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+			std::cout << "Number of columns =  " <<  si->getNumCols()  << std::endl;
+			
+			for(i = 0; i < si->getNumCols(); i++){
+				
+				//std::cout << "REDUCED COST  =  " <<  si->getReducedCost()[ i]  << std::endl;
+				
+				
+				
+			}
+			
+			
+			for(i = 0; i <  numRows; i++){
+				
+				*(y + i) = si->getRowPrice()[ i];
+				
+				//std::cout << "DUAL VALUE " << *(y + i) << std::endl;
+				
+			}
+			
+			
+		}//end while
 		
 		if(numRows > 0) delete[] y;
 		y = NULL;
