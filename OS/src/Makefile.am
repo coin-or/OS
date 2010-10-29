@@ -137,11 +137,11 @@ LDADD += $(VOL_LIBS)
 endif
 
 
-if COIN_HAS_CPX
+#if COIN_HAS_CPX
 # LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
- LDADD += $(CPX_LIBS)
- OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-endif
+# LDADD += $(CPX_LIBS)
+# OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+#endif
 
 #LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
 #LDADD += $(CBCOBJDIR)/src/libCbc.la 
@@ -270,12 +270,12 @@ endif
 
 
 
-if COIN_HAS_CPX
+#if COIN_HAS_CPX
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-AM_CPPFLAGS += $(CPX_CFLAGS)
-endif
+#AM_CPPFLAGS += $(CPX_CFLAGS)
+#endif
 
 
 

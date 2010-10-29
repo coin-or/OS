@@ -75,9 +75,9 @@ if COIN_HAS_VOL
 endif
 
 
-if COIN_HAS_CPX
- OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-endif
+#if COIN_HAS_CPX
+# OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+#endif
 
  OSAmplClient_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
  OSAmplClient_LDADD += $(CBCOBJDIR)/src/libCbc.la 
@@ -177,11 +177,11 @@ if COIN_HAS_VOL
 endif
 
 
-if COIN_HAS_CPX
-  AM_CPPFLAGS += \
-	-I`$(CYGPATH_W) $(CPXINCDIR)` \
-	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-endif
+#if COIN_HAS_CPX
+#  AM_CPPFLAGS += \
+#	-I`$(CYGPATH_W) $(CPXINCDIR)` \
+#	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
+#endif
 
 
 if COIN_HAS_GLPK

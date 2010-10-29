@@ -89,10 +89,10 @@ if COIN_HAS_VOL
  parsingTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la  
 endif
 
-if COIN_HAS_CPX
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
- parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-endif
+#if COIN_HAS_CPX
+# unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+# parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+#endif
 
  unitTest_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
  unitTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
@@ -211,12 +211,12 @@ endif
 
 
 
-if COIN_HAS_CPX
+#if COIN_HAS_CPX
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-AM_CPPFLAGS += $(CPX_CFLAGS)
-endif
+#AM_CPPFLAGS += $(CPX_CFLAGS)
+#endif
 
 
 

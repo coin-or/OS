@@ -60,11 +60,11 @@ AC_COIN_PROG_CXX
 # Check if we have a Fortran compiler; if we do, acquire the appropriate
 # options. This has to be done before we call AC_COIN_INIT_AUTO_TOOLS, else
 # it will helpfully set FFLAGS to an incorrect value.
-AC_COIN_FIND_F77
-if test "$F77" != unavailable ; then
-  AC_COIN_PROG_F77
-  AC_COIN_F77_WRAPPERS
-fi
+#AC_COIN_FIND_F77
+#if test "$F77" != unavailable ; then
+#  AC_COIN_PROG_F77
+#  AC_COIN_F77_WRAPPERS
+#fi
 
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
@@ -120,227 +120,218 @@ AC_COIN_HAS_PACKAGE(Bonmin)
 AC_COIN_HAS_PACKAGE(Bcp)
 
 
-AC_COIN_HAS_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
-AC_COIN_HAS_PACKAGE(Glpk, [osi-glpk],   [OSLib])
+#AC_COIN_HAS_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
+#AC_COIN_HAS_PACKAGE(Glpk, [osi-glpk],   [OSLib])
 
 
 
-AC_ARG_WITH([boncouenne],
-            AC_HELP_STRING([--with-boncouenne],
-                           [Compile Bonmin with Couenne parallel version]),
-            [use_couenne="$withval"], [use_couenne=no])
-if test "$use_couenne" = yes; then
-  if test $m4_tolower(coin_has_$1) = unavailable ||
-     test $m4_tolower(coin_has_$1) = skipping; then
-     AC_MSG_ERROR([You specified --with-boncouenne, but Couenne is not available])
-  fi
-fi
-AM_CONDITIONAL(COMPILE_BONCOUENNE, test "$use_couenne" = yes)
+
   
 
 
 
 
-if test $coin_has_cppad = skipping &&
-   test $coin_has_ipopt != skipping ; then
-       AC_MSG_ERROR([Ipopt is present, but not the necessary cppad])   
-fi
+#if test $coin_has_cppad = skipping &&
+#   test $coin_has_ipopt != skipping ; then
+#       AC_MSG_ERROR([Ipopt is present, but not the necessary cppad])   
+#fi
 
-if test $coin_has_ipopt = skipping &&
-   test $coin_has_bonmin != skipping ; then
-       AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])   
-fi
+#if test $coin_has_ipopt = skipping &&
+#   test $coin_has_bonmin != skipping ; then
+#       AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])   
+#fi
 
-if test $coin_has_bonmin = skipping &&
-   test $coin_has_couenne != skipping ; then
-       AC_MSG_ERROR([Couenne is present, but not the necessary Bonmin])   
-fi
-
-
-
-if test $coin_has_coinutils != unavailable &&
-   test $coin_has_coinutils != skipping; then
-  case $CXX in
-    cl*)
-       coinutilslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCoinUtils.lib';;
-     *)
-       coinutilslib="-L\$(INSTALLIBDIR) -lCoinUtils";;
-  esac
-  AC_SUBST(coinutilslib) 
-  else
-    AC_MSG_ERROR([cannot find CoinTuils which is necessary to build OS])   
-fi
-
-if test $coin_has_clp != unavailable &&
-   test $coin_has_clp != skipping; then
-  case $CXX in
-    cl*)
-       clplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libClp.lib'
-       osiclplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiClp.lib';;
-     *)
-       clplib="-L\$(INSTALLIBDIR) -lClp"
-       osiclplib="-L\$(INSTALLIBDIR) -lOsiClp";;
-  esac
-  AC_SUBST(clplib)
-  AC_SUBST(osiclplib) 
-  else
-    AC_MSG_ERROR([cannot find Clp which is necessary to build OS])   
-fi
-
-if test $coin_has_cbc != unavailable &&
-   test $coin_has_cbc != skipping; then
-  case $CXX in
-    cl*)
-       cbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbcSolver.lib    `$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbc.lib'
-       osicbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiCbc.lib';;
-     *)
-       cbclib="-L\$(INSTALLIBDIR) -lCbcSolver -lCbc"
-       osicbclib="-L\$(INSTALLIBDIR) -lOsiCbc";;
-  esac
-  AC_SUBST(cbclib) 
-  AC_SUBST(osicbclib)
-  else
-    AC_MSG_ERROR([cannot find Cbc which is necessary to build OS])   
-fi 
-
-
-if test $coin_has_cgl != unavailable &&
-   test $coin_has_cgl != skipping; then
-  case $CXX in
-    cl*)
-       cgllib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCgl.lib';;
-     *)
-       cgllib="-L\$(INSTALLIBDIR) -lCgl";;
-  esac
-  AC_SUBST(cgllib) 
-  else
-    AC_MSG_ERROR([cannot find Cgl which is necessary to build OS])   
-fi
-
-
-if test $coin_has_osi != unavailable &&
-   test $coin_has_osi != skipping; then
-  case $CXX in
-    cl*)
-       osilib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsi.lib';;
-     *)
-       osilib="-L\$(INSTALLIBDIR) -lOsi";;
-  esac
-  AC_SUBST(osilib) 
-  else
-    AC_MSG_ERROR([cannot find Osi which is necessary to build OS])   
-fi
-
-
-if test $coin_has_dylp != unavailable &&
-   test $coin_has_dylp != skipping; then
-  case $CXX in
-    cl*)
-       osiglpklib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiGlpk.lib';;
-     *)
-       osiglpklib="-L\$(INSTALLIBDIR) -lOsiGlpk";;
-  esac
-  AC_SUBST(osiglpklib) 
-fi
+#if test $coin_has_bonmin = skipping &&
+#   test $coin_has_couenne != skipping ; then
+#       AC_MSG_ERROR([Couenne is present, but not the necessary Bonmin])   
+#fi
 
 
 
+#if test $coin_has_coinutils != unavailable &&
+#   test $coin_has_coinutils != skipping; then
+#  case $CXX in
+#    cl*)
+#       coinutilslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCoinUtils.lib';;
+#     *)
+#       coinutilslib="-L\$(INSTALLIBDIR) -lCoinUtils";;
+#  esac
+#  AC_SUBST(coinutilslib) 
+#  else
+#    AC_MSG_ERROR([cannot find CoinTuils which is necessary to build OS])   
+#fi
+#
+#if test $coin_has_clp != unavailable &&
+#   test $coin_has_clp != skipping; then
+#  case $CXX in
+#    cl*)
+#       clplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libClp.lib'
+#       osiclplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiClp.lib';;
+#     *)
+#       clplib="-L\$(INSTALLIBDIR) -lClp"
+#       osiclplib="-L\$(INSTALLIBDIR) -lOsiClp";;
+#  esac
+#  AC_SUBST(clplib)
+#  AC_SUBST(osiclplib) 
+#  else
+#    AC_MSG_ERROR([cannot find Clp which is necessary to build OS])   
+#fi
+#
+#if test $coin_has_cbc != unavailable &&
+#   test $coin_has_cbc != skipping; then
+# case $CXX in
+#    cl*)
+#       cbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbcSolver.lib    `$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbc.lib'
+#       osicbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiCbc.lib';;
+#     *)
+#       cbclib="-L\$(INSTALLIBDIR) -lCbcSolver -lCbc"
+#       osicbclib="-L\$(INSTALLIBDIR) -lOsiCbc";;
+#  esac
+#  AC_SUBST(cbclib) 
+#  AC_SUBST(osicbclib)
+#  else
+#    AC_MSG_ERROR([cannot find Cbc which is necessary to build OS])   
+#fi 
 
 
-if test $coin_has_dylp != unavailable &&
-   test $coin_has_dylp != skipping; then
-  case $CXX in
-    cl*)
-       dylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libDylp.lib'
-       osidylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiDylp.lib';;
-     *)
-       dylplib="-L\$(INSTALLIBDIR) -lDylp"
-       osidylplib="-L\$(INSTALLIBDIR) -lOsiDylp";;
-  esac
-  AC_SUBST(dylplib) 
-  AC_SUBST(osidylplib) 
-fi
+#if test $coin_has_cgl != unavailable &&
+#   test $coin_has_cgl != skipping; then
+#  case $CXX in
+#    cl*)
+#       cgllib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCgl.lib';;
+#     *)
+#       cgllib="-L\$(INSTALLIBDIR) -lCgl";;
+#  esac
+#  AC_SUBST(cgllib) 
+#  else
+#    AC_MSG_ERROR([cannot find Cgl which is necessary to build OS])   
+#fi
 
 
-if test $coin_has_vol != unavailable &&
-   test $coin_has_vol != skipping; then
-  case $CXX in
-    cl*)
-       vollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib'
-       osivollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiVol.lib';;
-     *)
-       vollib="-L\$(INSTALLIBDIR) -lVol"
-       osivollib="-L\$(INSTALLIBDIR) -lOsiVol";;
-  esac
-  AC_SUBST(vollib) 
-  AC_SUBST(osivollib) 
-fi
+#if test $coin_has_osi != unavailable &&
+#   test $coin_has_osi != skipping; then
+#  case $CXX in
+#    cl*)
+#       osilib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsi.lib';;
+#     *)
+#       osilib="-L\$(INSTALLIBDIR) -lOsi";;
+#  esac
+#  AC_SUBST(osilib) 
+#  else
+#    AC_MSG_ERROR([cannot find Osi which is necessary to build OS])   
+#fi
 
 
-if test $coin_has_bcp != unavailable &&
-   test $coin_has_bcp != skipping; then
-  case $CXX in
-    cl*)
-       bcplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbcp.lib';;
-     *)
-       bcplib="-L\$(INSTALLIBDIR) -lBcp";;
-  esac
-  AC_SUBST(bcplib)
-fi
+#if test $coin_has_dylp != unavailable &&
+#   test $coin_has_dylp != skipping; then
+#  case $CXX in
+#    cl*)
+#       osiglpklib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiGlpk.lib';;
+#     *)
+#       osiglpklib="-L\$(INSTALLIBDIR) -lOsiGlpk";;
+#  esac
+#  AC_SUBST(osiglpklib) 
+#fi
 
 
 
 
-if test $coin_has_symphony != unavailable &&
-   test $coin_has_symphony != skipping; then
-  case $CXX in
-    cl*)
-       symphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libSym.lib'
-       osisymphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiSym.lib';;
-     *)
-       symphonylib="-L\$(INSTALLIBDIR) -lSym"
-       osisymphonylib="-L\$(INSTALLIBDIR) -lOsiSym";;
-  esac
-  AC_SUBST(symphonylib) 
-  AC_SUBST(osisymphonylib)  
-fi
 
-if test $coin_has_ipopt != unavailable &&
-   test $coin_has_ipopt != skipping; then
-  case $CXX in
-    cl*)
-       ipoptlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libipopt.lib';;
-    xl*)
-       AC_DEFINE([XLC_],[1],[use if XLC is the compiler]);;
-     *)
-       ipoptlib="-L\$(INSTALLIBDIR) -lipopt";;
-  esac
-  AC_SUBST(ipoptlib)  
-fi
+#if test $coin_has_dylp != unavailable &&
+#   test $coin_has_dylp != skipping; then
+#  case $CXX in
+#    cl*)
+#       dylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libDylp.lib'
+#       osidylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiDylp.lib';;
+#     *)
+#       dylplib="-L\$(INSTALLIBDIR) -lDylp"
+#       osidylplib="-L\$(INSTALLIBDIR) -lOsiDylp";;
+#  esac
+#  AC_SUBST(dylplib) 
+#  AC_SUBST(osidylplib) 
+#fi
 
 
-if test $coin_has_couenne != unavailable &&
-   test $coin_has_couenne != skipping; then
-  case $CXX in
-    cl*)
-       couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libboncouenne.lib  `$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouennereadnl.lib   `$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib        ';;
-     *)
-       couennelib="-L\$(INSTALLIBDIR) -lBonCouenne -lCouenneReadnl -lCouenne ";;
-  esac
-  AC_SUBST(couennelib)  
-fi
+#if test $coin_has_vol != unavailable &&
+#   test $coin_has_vol != skipping; then
+#  case $CXX in
+#    cl*)
+#       vollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib'
+#       osivollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiVol.lib';;
+#     *)
+#       vollib="-L\$(INSTALLIBDIR) -lVol"
+#       osivollib="-L\$(INSTALLIBDIR) -lOsiVol";;
+#  esac
+#  AC_SUBST(vollib) 
+#  AC_SUBST(osivollib) 
+#fi
 
 
-if test $coin_has_bonmin != unavailable &&
-   test $coin_has_bonmin != skipping; then
-  case $CXX in
-    cl*)
-       bonminlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
-     *)
-       bonminlib="-L\$(INSTALLIBDIR) -lbonminampl -lbonmin";;
-  esac
-  AC_SUBST(bonminlib)  
-fi
+#if test $coin_has_bcp != unavailable &&
+#   test $coin_has_bcp != skipping; then
+#  case $CXX in
+#    cl*)
+#       bcplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbcp.lib';;
+#     *)
+#       bcplib="-L\$(INSTALLIBDIR) -lBcp";;
+#  esac
+#  AC_SUBST(bcplib)
+#fi
+
+
+
+
+#if test $coin_has_symphony != unavailable &&
+#   test $coin_has_symphony != skipping; then
+#  case $CXX in
+#    cl*)
+#       symphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libSym.lib'
+#       osisymphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiSym.lib';;
+#     *)
+#       symphonylib="-L\$(INSTALLIBDIR) -lSym"
+#       osisymphonylib="-L\$(INSTALLIBDIR) -lOsiSym";;
+#  esac
+#  AC_SUBST(symphonylib) 
+#  AC_SUBST(osisymphonylib)  
+#fi
+
+#if test $coin_has_ipopt != unavailable &&
+#   test $coin_has_ipopt != skipping; then
+#  case $CXX in
+#    cl*)
+#       ipoptlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libipopt.lib';;
+#    xl*)
+#       AC_DEFINE([XLC_],[1],[use if XLC is the compiler]);;
+#     *)
+#       ipoptlib="-L\$(INSTALLIBDIR) -lipopt";;
+#  esac
+#  AC_SUBST(ipoptlib)  
+#fi
+
+
+#if test $coin_has_couenne != unavailable &&
+#   test $coin_has_couenne != skipping; then
+#  case $CXX in
+#    cl*)
+#       couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libboncouenne.lib  `$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouennereadnl.lib   `
+#(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib        ';;
+#     *)
+#       couennelib="-L\$(INSTALLIBDIR) -lBonCouenne -lCouenneReadnl -lCouenne ";;
+#  esac
+#  AC_SUBST(couennelib)  
+#fi
+
+
+#if test $coin_has_bonmin != unavailable &&
+#   test $coin_has_bonmin != skipping; then
+#  case $CXX in
+#    cl*)
+#       bonminlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
+#     *)
+#       bonminlib="-L\$(INSTALLIBDIR) -lbonminampl -lbonmin";;
+#  esac
+#  AC_SUBST(bonminlib)  
+#fi
 
 
 #############################################################################
@@ -357,7 +348,7 @@ AM_CONDITIONAL(MSCL_, test x$cl_compiler = xyes)
 #                             Third party solvers                           #
 #############################################################################
 
-AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
+#AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
 AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
 #AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
 AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])

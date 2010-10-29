@@ -110,12 +110,12 @@ AM_CPPFLAGS += $(ASL_CFLAGS)
 endif
 
 
-if COIN_HAS_CPX
+#if COIN_HAS_CPX
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-AM_CPPFLAGS += $(CPX_CFLAGS)
-endif
+#AM_CPPFLAGS += $(CPX_CFLAGS)
+#endif
 
 
 if COIN_HAS_GLPK

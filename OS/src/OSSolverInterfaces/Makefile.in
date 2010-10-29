@@ -63,34 +63,36 @@ host_triplet = @host@
 @COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
 @COIN_HAS_ASL_TRUE@	$(ASL_CFLAGS)
 
+#if COIN_HAS_CPX
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(CPXINCDIR)` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCpx`
-@COIN_HAS_CPX_TRUE@am__append_7 = $(CPX_CFLAGS)
+#AM_CPPFLAGS += $(CPX_CFLAGS)
+#endif
 
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-@COIN_HAS_GLPK_TRUE@am__append_8 = $(GLPK_CFLAGS)
+@COIN_HAS_GLPK_TRUE@am__append_7 = $(GLPK_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 #    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 #    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp` 
-@COIN_HAS_DYLP_TRUE@am__append_9 = $(DYLP_CFLAGS)
+@COIN_HAS_DYLP_TRUE@am__append_8 = $(DYLP_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #    -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 #    -I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym` \
 # 	-I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include`  
-@COIN_HAS_SYMPHONY_TRUE@am__append_10 = $(SYMPHONY_CFLAGS)
+@COIN_HAS_SYMPHONY_TRUE@am__append_9 = $(SYMPHONY_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
 #    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
-@COIN_HAS_VOL_TRUE@am__append_11 = $(VOL_CFLAGS)
+@COIN_HAS_VOL_TRUE@am__append_10 = $(VOL_CFLAGS)
 
 #  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 
 
@@ -103,7 +105,7 @@ host_triplet = @host@
 #	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 #	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 #	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-@COIN_HAS_IPOPT_TRUE@am__append_12 = $(IPOPT_CFLAGS)
+@COIN_HAS_IPOPT_TRUE@am__append_11 = $(IPOPT_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
@@ -117,7 +119,7 @@ host_triplet = @host@
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms/Branching` \
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 #	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
-@COIN_HAS_BONMIN_TRUE@am__append_13 = $(BONMIN_CFLAGS)
+@COIN_HAS_BONMIN_TRUE@am__append_12 = $(BONMIN_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/bound_tightening` \
@@ -134,12 +136,12 @@ host_triplet = @host@
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/util` \
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COUENNEOBJDIR)/inc`
-@COIN_HAS_COUENNE_TRUE@am__append_14 = $(COUENNE_CFLAGS)
-@COIN_HAS_LINDO_TRUE@am__append_15 = OSLindoSolver.h
-@COIN_HAS_KNITRO_TRUE@am__append_16 = OSKnitroSolver.h
-@COIN_HAS_IPOPT_TRUE@am__append_17 = OSIpoptSolver.h
-@COIN_HAS_BONMIN_TRUE@am__append_18 = OSBonminSolver.h
-@COIN_HAS_COUENNE_TRUE@am__append_19 = OSCouenneSolver.h
+@COIN_HAS_COUENNE_TRUE@am__append_13 = $(COUENNE_CFLAGS)
+@COIN_HAS_LINDO_TRUE@am__append_14 = OSLindoSolver.h
+@COIN_HAS_KNITRO_TRUE@am__append_15 = OSKnitroSolver.h
+@COIN_HAS_IPOPT_TRUE@am__append_16 = OSIpoptSolver.h
+@COIN_HAS_BONMIN_TRUE@am__append_17 = OSBonminSolver.h
+@COIN_HAS_COUENNE_TRUE@am__append_18 = OSCouenneSolver.h
 subdir = src/OSSolverInterfaces
 DIST_COMMON = $(am__includecoin_HEADERS_DIST) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -209,7 +211,6 @@ ACLOCAL = @ACLOCAL@
 ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
-ADD_FFLAGS = @ADD_FFLAGS@
 ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
 ALWAYS_FALSE_TRUE = @ALWAYS_FALSE_TRUE@
 AMDEP_FALSE = @AMDEP_FALSE@
@@ -266,8 +267,6 @@ COIN_HAS_COUENNE_FALSE = @COIN_HAS_COUENNE_FALSE@
 COIN_HAS_COUENNE_TRUE = @COIN_HAS_COUENNE_TRUE@
 COIN_HAS_CPPAD_FALSE = @COIN_HAS_CPPAD_FALSE@
 COIN_HAS_CPPAD_TRUE = @COIN_HAS_CPPAD_TRUE@
-COIN_HAS_CPX_FALSE = @COIN_HAS_CPX_FALSE@
-COIN_HAS_CPX_TRUE = @COIN_HAS_CPX_TRUE@
 COIN_HAS_DYLP_FALSE = @COIN_HAS_DYLP_FALSE@
 COIN_HAS_DYLP_TRUE = @COIN_HAS_DYLP_TRUE@
 COIN_HAS_GLPK_FALSE = @COIN_HAS_GLPK_FALSE@
@@ -286,8 +285,6 @@ COIN_HAS_VOL_FALSE = @COIN_HAS_VOL_FALSE@
 COIN_HAS_VOL_TRUE = @COIN_HAS_VOL_TRUE@
 COIN_PKG_CONFIG_PATH = @COIN_PKG_CONFIG_PATH@
 COIN_PKG_CONFIG_PATH_UNINSTALLED = @COIN_PKG_CONFIG_PATH_UNINSTALLED@
-COMPILE_BONCOUENNE_FALSE = @COMPILE_BONCOUENNE_FALSE@
-COMPILE_BONCOUENNE_TRUE = @COMPILE_BONCOUENNE_TRUE@
 COUENNE_CFLAGS = @COUENNE_CFLAGS@
 COUENNE_DATA = @COUENNE_DATA@
 COUENNE_LIBS = @COUENNE_LIBS@
@@ -296,11 +293,6 @@ CPPADDOCDIR = @CPPADDOCDIR@
 CPPADOBJDIR = @CPPADOBJDIR@
 CPPADSRCDIR = @CPPADSRCDIR@
 CPPFLAGS = @CPPFLAGS@
-CPXINCDIR = @CPXINCDIR@
-CPXLIB = @CPXLIB@
-CPX_CFLAGS = @CPX_CFLAGS@
-CPX_DATA = @CPX_DATA@
-CPX_LIBS = @CPX_LIBS@
 CXX = @CXX@
 CXXCPP = @CXXCPP@
 CXXDEFS = @CXXDEFS@
@@ -309,7 +301,6 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@
 DBG_CXXFLAGS = @DBG_CXXFLAGS@
-DBG_FFLAGS = @DBG_FFLAGS@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DYLP_CFLAGS = @DYLP_CFLAGS@
@@ -324,13 +315,9 @@ EXEEXT = @EXEEXT@
 F77 = @F77@
 FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
-FLIBS = @FLIBS@
 GLPKINCDIR = @GLPKINCDIR@
 GLPKLIB = @GLPKLIB@
 GLPKOBJDIR = @GLPKOBJDIR@
-GLPK_CFLAGS = @GLPK_CFLAGS@
-GLPK_DATA = @GLPK_DATA@
-GLPK_LIBS = @GLPK_LIBS@
 HAVE_EXTERNALS_FALSE = @HAVE_EXTERNALS_FALSE@
 HAVE_EXTERNALS_TRUE = @HAVE_EXTERNALS_TRUE@
 INSTALL_DATA = @INSTALL_DATA@
@@ -359,7 +346,6 @@ MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
-MPIF77 = @MPIF77@
 MSCL__FALSE = @MSCL__FALSE@
 MSCL__TRUE = @MSCL__TRUE@
 OBJEXT = @OBJEXT@
@@ -367,7 +353,6 @@ OPENMP_FALSE = @OPENMP_FALSE@
 OPENMP_TRUE = @OPENMP_TRUE@
 OPT_CFLAGS = @OPT_CFLAGS@
 OPT_CXXFLAGS = @OPT_CXXFLAGS@
-OPT_FFLAGS = @OPT_FFLAGS@
 OSLIB_CFLAGS = @OSLIB_CFLAGS@
 OSLIB_LIBS = @OSLIB_LIBS@
 OSLIB_PCLIBS = @OSLIB_PCLIBS@
@@ -423,21 +408,13 @@ am__leading_dot = @am__leading_dot@
 am__quote = @am__quote@
 am__tar = @am__tar@
 am__untar = @am__untar@
-bcplib = @bcplib@
 bindir = @bindir@
-bonminlib = @bonminlib@
 build = @build@
 build_alias = @build_alias@
 build_cpu = @build_cpu@
 build_os = @build_os@
 build_vendor = @build_vendor@
-cbclib = @cbclib@
-cgllib = @cgllib@
-clplib = @clplib@
-coinutilslib = @coinutilslib@
-couennelib = @couennelib@
 datadir = @datadir@
-dylplib = @dylplib@
 exec_prefix = @exec_prefix@
 have_autoconf = @have_autoconf@
 have_automake = @have_automake@
@@ -451,30 +428,20 @@ host_vendor = @host_vendor@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-ipoptlib = @ipoptlib@
 libdir = @libdir@
 libexecdir = @libexecdir@
 localstatedir = @localstatedir@
 mandir = @mandir@
 mkdir_p = @mkdir_p@
 oldincludedir = @oldincludedir@
-osicbclib = @osicbclib@
-osiclplib = @osiclplib@
-osidylplib = @osidylplib@
-osiglpklib = @osiglpklib@
-osilib = @osilib@
-osisymphonylib = @osisymphonylib@
-osivollib = @osivollib@
 oslib = @oslib@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 sol_cc_compiler = @sol_cc_compiler@
-symphonylib = @symphonylib@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
-vollib = @vollib@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
@@ -535,7 +502,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(OSSRCDIR)/src` -I`$(CYGPATH_W) \
 	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
 	$(am__append_6) $(am__append_7) $(am__append_8) \
 	$(am__append_9) $(am__append_10) $(am__append_11) \
-	$(am__append_12) $(am__append_13) $(am__append_14)
+	$(am__append_12) $(am__append_13)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -549,8 +516,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'install/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = ../../inc/config_os.h OSCoinSolver.h \
-	OSMatlabSolver.h $(am__append_15) $(am__append_16) \
-	$(am__append_17) $(am__append_18) $(am__append_19)
+	OSMatlabSolver.h $(am__append_14) $(am__append_15) \
+	$(am__append_16) $(am__append_17) $(am__append_18)
 all: all-am
 
 .SUFFIXES:
