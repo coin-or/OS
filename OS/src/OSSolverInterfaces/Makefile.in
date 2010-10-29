@@ -499,7 +499,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 	$(srcdir)/../OSParsers` -I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` $(COINDEPEND_CFLAGS) \
 	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
-	$(am__append_6) $(am__append_7) $(am__append_8) \
+	$(CBC_CFLAGS) $(am__append_6) $(am__append_7) $(am__append_8) \
 	$(am__append_9) $(am__append_10) $(am__append_11) \
 	$(am__append_12) $(am__append_13)
 
