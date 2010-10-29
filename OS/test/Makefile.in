@@ -533,12 +533,13 @@ unitTest_LDFLAGS = -rpath $(libdir)
 
 # Here we add additional libraries
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
-	$(srcdir)/../OSAgent` -I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
-	$(srcdir)/../OSSolverInterfaces` -I`$(CYGPATH_W) \
-	$(srcdir)/../OSModelInterfaces` -I`$(CYGPATH_W) \
+	$(top_srcdir)/src/OSAgent` -I`$(CYGPATH_W) \
+	$(top_srcdir)/src/OSParsers` -I`$(CYGPATH_W) \
+	$(top_srcdir)/src/OSUtils` -I`$(CYGPATH_W) \
+	$(top_srcdir)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
+	$(top_srcdir)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
-	$(srcdir)/../OSCommonInterfaces` $(COINDEPEND_CFLAGS) \
+	$(top_srcdir)/src/OSCommonInterfaces` $(COINDEPEND_CFLAGS) \
 	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
 	$(CBC_CFLAGS) $(SYMPHONY_CFLAGS) $(am__append_28) \
 	$(am__append_29) $(am__append_30) $(am__append_31) \

@@ -155,13 +155,13 @@ unitTest_LDFLAGS = -rpath $(libdir)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSModelInterfaces` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSAgent` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSParsers` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSUtils` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSSolverInterfaces` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` 
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces` 
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
 #	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
