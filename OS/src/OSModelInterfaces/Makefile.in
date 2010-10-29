@@ -379,7 +379,9 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
 	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
 	$(srcdir)/../OSParsers` $(COINDEPEND_CFLAGS) \
-	$(COINUTILS_CFLAGS) $(am__append_2) $(am__append_3)
+	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
+	$(CBC_CFLAGS) $(SYMPHONY_CFLAGS) $(am__append_2) \
+	$(am__append_3)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
