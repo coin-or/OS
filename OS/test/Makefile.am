@@ -22,7 +22,7 @@ unitTest_SOURCES = unitTest.cpp
 
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la $(OS_LIBS)
+	../src/libOS.la $(OS_LIBS)
 
 # List all source files for this executable, including headers
 parsingTest_SOURCES = parsingTest.cpp 

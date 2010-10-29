@@ -173,7 +173,7 @@ parsingTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am_unitTest_OBJECTS = unitTest.$(OBJEXT)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
-unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la $(am__DEPENDENCIES_2) \
+unitTest_DEPENDENCIES = ../src/libOS.la $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
@@ -446,7 +446,7 @@ unitTest_SOURCES = unitTest.cpp
 # unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 # parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
-unitTest_LDADD = $(OSOBJDIR)/src/libOS.la $(OS_LIBS) $(am__append_1) \
+unitTest_LDADD = ../src/libOS.la $(OS_LIBS) $(am__append_1) \
 	$(am__append_3) $(am__append_5) $(CBC_LIBS) $(CLP_LIBS) \
 	$(am__append_7) $(am__append_9) $(am__append_11) $(CBC_LIBS) \
 	$(CGL_LIBS) $(am__append_13) $(am__append_15)
