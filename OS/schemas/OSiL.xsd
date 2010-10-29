@@ -213,7 +213,7 @@
 		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
-				<xs:documentation>number of coef child elements must match numberOfObjCoef (after "mult" has been considered)</xs:documentation>
+				<xs:documentation>number of coef child elements must match numberOfObjCoef</xs:documentation>
 			</xs:annotation>
 			<xs:element name="coef" type="ObjCoef" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>

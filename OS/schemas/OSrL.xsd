@@ -307,6 +307,7 @@
 	<xs:complexType name="ObjectiveSolution">
 		<xs:sequence>
 			<xs:element name="values" type="ObjectiveValues" minOccurs="0"/>
+			<xs:element name="basisStatus" type="BasisStatus" minOccurs="0"/>
 			<xs:element name="other" type="OtherObjectiveResult" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfOtherObjectiveResults" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -331,10 +332,18 @@
 					<xs:documentation>If present, numberOfObj must be set in parent, and the number of entries must agree with numberOfObj</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="NegativeIntVectorWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="IntVector">
+							<xs:attribute name="value" type="xs:string" use="required"/>
+							<xs:attribute name="description" type="xs:string"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -404,10 +413,18 @@
 					<xs:documentation>If present, numberOfVar must be set in parent, and the number of entries must agree with numberOfVar</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="NonNegativeIntVectorWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="IntVector">
+							<xs:attribute name="value" type="xs:string" use="required"/>
+							<xs:attribute name="description" type="xs:string"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfVar" type="xs:nonNegativeInteger" use="optional" default="0"/>
@@ -457,10 +474,18 @@
 					<xs:documentation>If present, numberOfCon must be set in parent, and the number of entries must agree with numberOfCon</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="enumeration" type="NonNegativeIntVectorWithValueAndDescriptionAttribute" minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="enumeration" minOccurs="0" maxOccurs="unbounded">
 				<xs:annotation>
 					<xs:documentation>If present, numberOfEnumerations must be set in parent, and the number of entries must agree with numberOfEnumerations</xs:documentation>
 				</xs:annotation>
+				<xs:complexType>
+					<xs:complexContent>
+						<xs:extension base="IntVector">
+							<xs:attribute name="value" type="xs:string" use="required"/>
+							<xs:attribute name="description" type="xs:string"/>
+						</xs:extension>
+					</xs:complexContent>
+				</xs:complexType>
 			</xs:element>
 		</xs:choice>
 		<xs:attribute name="numberOfCon" type="xs:nonNegativeInteger" use="optional" default="0"/>
