@@ -43,10 +43,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_1 = -I`$(CYGPATH_W) \
-@COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
-@COIN_HAS_ASL_TRUE@	$(ASL_CFLAGS)
+@COIN_HAS_ASL_TRUE@am__append_1 = $(ASL_CFLAGS) 
 @COIN_HAS_CPPAD_TRUE@am__append_2 = -I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 @COIN_HAS_CPPAD_TRUE@	$(CPPAD_CPPFLAGS)
 subdir = src/OSParsers
@@ -372,9 +372,9 @@ libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1) \
+	$(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSSolverInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSCommonInterfaces` $(am__append_1) \
 	$(am__append_2)
 
 #if USE_DTOA

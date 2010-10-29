@@ -61,12 +61,12 @@ libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src` \
+	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSAgent` 
+	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` 
 	
 	
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
@@ -104,7 +104,7 @@ AM_CPPFLAGS += $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(OSI_CFLAGS)   $(CLP_CF
 	
 	
 if COIN_HAS_ASL
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
 AM_CPPFLAGS += $(ASL_CFLAGS)
 endif

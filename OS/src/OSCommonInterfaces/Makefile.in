@@ -43,10 +43,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(srcdir)/../ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_1 = -I`$(CYGPATH_W) \
-@COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
-@COIN_HAS_ASL_TRUE@	$(ASL_CFLAGS)
+@COIN_HAS_ASL_TRUE@am__append_1 = $(ASL_CFLAGS) 
 @COIN_HAS_CPPAD_TRUE@am__append_2 = -I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 @COIN_HAS_CPPAD_TRUE@	$(CPPAD_CPPFLAGS)
 subdir = src/OSCommonInterfaces
@@ -384,8 +384,12 @@ libOSCommonInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
 #	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` 
-AM_CPPFLAGS = $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(am__append_1) \
-	$(am__append_2) -DLindo_Off
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSSolverInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSParsers` $(COINDEPEND_CFLAGS) \
+	$(COINUTILS_CFLAGS) $(am__append_1) $(am__append_2) \
+	-DLindo_Off
 
 #if USE_DTOA
 #AM_CPPFLAGS += -DUSE_DTOA=1

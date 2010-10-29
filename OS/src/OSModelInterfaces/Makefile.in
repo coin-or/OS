@@ -46,10 +46,10 @@ host_triplet = @host@
 @COIN_HAS_ASL_TRUE@am__append_1 = OSnl2osil.cpp \
 @COIN_HAS_ASL_TRUE@	 OSnl2osil.h
 
+
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_2 = -I`$(CYGPATH_W) \
-@COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
-@COIN_HAS_ASL_TRUE@	$(ASL_CFLAGS)
+@COIN_HAS_ASL_TRUE@am__append_2 = $(ASL_CFLAGS)
 
 #if COIN_HAS_GAMSUTILS
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
@@ -375,8 +375,11 @@ libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
-AM_CPPFLAGS = $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(am__append_2) \
-	$(am__append_3)
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
+	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSParsers` $(COINDEPEND_CFLAGS) \
+	$(COINUTILS_CFLAGS) $(am__append_2) $(am__append_3)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

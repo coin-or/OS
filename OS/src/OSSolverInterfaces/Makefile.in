@@ -58,10 +58,10 @@ host_triplet = @host@
 @COIN_HAS_KNITRO_TRUE@am__append_5 = OSKnitroSolver.cpp \
 @COIN_HAS_KNITRO_TRUE@	OSKnitroSolver.h
 
+
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_6 = -I`$(CYGPATH_W) \
-@COIN_HAS_ASL_TRUE@	$(OSSRCDIR)/src/ThirdPartyASL` \
-@COIN_HAS_ASL_TRUE@	$(ASL_CFLAGS)
+@COIN_HAS_ASL_TRUE@am__append_6 = $(ASL_CFLAGS)
 
 #if COIN_HAS_CPX
 #  AM_CPPFLAGS += \
@@ -493,12 +493,11 @@ libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 #	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` 
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(OSSRCDIR)/src` -I`$(CYGPATH_W) \
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSParsers` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSAgent` $(COINDEPEND_CFLAGS) \
+	$(srcdir)/../OSCommonInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSParsers` -I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` $(COINDEPEND_CFLAGS) \
 	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
 	$(am__append_6) $(am__append_7) $(am__append_8) \
 	$(am__append_9) $(am__append_10) $(am__append_11) \

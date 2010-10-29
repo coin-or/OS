@@ -363,7 +363,7 @@ libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(am__append_1)
+	$(srcdir)/../OSCommonInterfaces` $(am__append_1)
 
 #if USE_DTOA
 #AM_CPPFLAGS += -DUSE_DTOA=1

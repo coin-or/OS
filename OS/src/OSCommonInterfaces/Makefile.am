@@ -52,19 +52,19 @@ libOSCommonInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSSolverInterfaces`	\
-	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers`	\
+	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces`	\
+	-I`$(CYGPATH_W) $(srcdir)/../OSParsers`	
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
 #	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` 
 
-AM_CPPFLAGS =$(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) 
+AM_CPPFLAGS += $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) 
 	
 	
 	
 if COIN_HAS_ASL
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(srcdir)/../ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
 AM_CPPFLAGS += $(ASL_CFLAGS) 
 endif

@@ -605,18 +605,17 @@ OSSolverService_LDFLAGS = -rpath $(libdir)
 #	-I`$(CYGPATH_W) $(OSIOBJDIR)/inc` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` 
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(OSSRCDIR)/src` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSAgent` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSParsers` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSUtils` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSSolverInterfaces` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSModelInterfaces` -I`$(CYGPATH_W) \
+AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSAgent` -I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSSolverInterfaces` -I`$(CYGPATH_W) \
+	$(srcdir)/../OSModelInterfaces` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
-	$(OSSRCDIR)/src/OSCommonInterfaces` $(COINDEPEND_CFLAGS) \
+	$(srcdir)/../OSCommonInterfaces` $(COINDEPEND_CFLAGS) \
 	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
-	$(am__append_18) $(am__append_19) $(am__append_20) \
-	$(am__append_21) $(am__append_22) $(am__append_23) \
-	$(am__append_24) $(am__append_25)
+	$(CBC_CFLAGS) $(am__append_18) $(am__append_19) \
+	$(am__append_20) $(am__append_21) $(am__append_22) \
+	$(am__append_23) $(am__append_24) $(am__append_25)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
