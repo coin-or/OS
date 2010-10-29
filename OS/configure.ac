@@ -124,13 +124,6 @@ AC_COIN_HAS_PACKAGE(Bcp)
 #AC_COIN_HAS_PACKAGE(Glpk, [osi-glpk],   [OSLib])
 
 
-
-
-  
-
-
-
-
 #if test $coin_has_cppad = skipping &&
 #   test $coin_has_ipopt != skipping ; then
 #       AC_MSG_ERROR([Ipopt is present, but not the necessary cppad])   

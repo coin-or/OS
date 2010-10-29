@@ -22,8 +22,7 @@ unitTest_SOURCES = unitTest.cpp
 
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la 
-
+	$(OSOBJDIR)/src/libOS.la $(OS_LIBS)
 
 # List all source files for this executable, including headers
 parsingTest_SOURCES = parsingTest.cpp 
@@ -31,62 +30,65 @@ parsingTest_SOURCES = parsingTest.cpp
 # List all additionally required COIN libraries
 parsingTest_LDADD =  \
 	$(OSOBJDIR)/src/libOS.la $(OS_LIBS)
-	
-	
-	
-	
+		
 if COIN_HAS_COUENNE
-   unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
-   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+unitTest_LDADD +=  $(COUENNE_LIBS)
+parsingTest_LDADD +=  $(COUENNE_LIBS)
+#   unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 if COIN_HAS_ASL
-   unitTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
-   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+#   unitTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
 endif
-   unitTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
-   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+#   unitTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 if COIN_HAS_ASL
-   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif
 endif
 
 if COIN_HAS_BONMIN
-   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
-   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+unitTest_LDADD +=  $(BONMIN_LIBS)
+parsingTest_LDADD +=  $(BONMIN_LIBS)
+#   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
 #	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 
 
 if COIN_HAS_IPOPT
+  unitTest_LDADD +=  $(IPOPT_LIBS)
+  parsingTest_LDADD +=  $(IPOPT_LIBS)
 if COIN_HAS_ASL
 #      unitTest_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
 endif
-  unitTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+#  unitTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 	
 	
-unitTest_LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
-parsingTest_LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
+unitTest_LDADD +=  $(CBC_LIBS)
+parsingTest_LDADD +=  $(CBC_LIBS)
+
+unitTest_LDADD += $(CLP_LIBS) 
+parsingTest_LDADD += $(CLP_LIBS)
 
 
 if COIN_HAS_SYMPHONY
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
- parsingTest_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ unitTest_LDADD += $(SYMPHONY_LIBS)
+ parsingTest_LDADD += $(SYMPHONY_LIBS) 
 endif
 
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
- parsingTest_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-
 if COIN_HAS_DYLP
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
- parsingTest_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la  
+ unitTest_LDADD += $(DYLP_LIBS)
+ parsingTest_LDADD +=  $(DYLP_LIBS)
 endif
 
 if COIN_HAS_VOL
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la
- parsingTest_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la  
+ unitTest_LDADD += $(VOL_LIBS)
+ parsingTest_LDADD += $(VOL_LIBS)  
 endif
 
 #if COIN_HAS_CPX
@@ -94,34 +96,11 @@ endif
 # parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
 
- unitTest_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
- unitTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
- parsingTest_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
- parsingTest_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ unitTest_LDADD += $(CBC_LIBS)
+ unitTest_LDADD += $(CBC_LIBS)
 
-if COIN_HAS_SYMPHONY
- unitTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la
- parsingTest_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la  
-endif
-
- unitTest_LDADD += $(CGLOBJDIR)/src/libCgl.la 
- parsingTest_LDADD += $(CGLOBJDIR)/src/libCgl.la
-
- unitTest_LDADD += $(OSIOBJDIR)/src/libOsi.la
- parsingTest_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-
- unitTest_LDADD += $(CLPOBJDIR)/src/libClp.la
- parsingTest_LDADD += $(CLPOBJDIR)/src/libClp.la 
-
-if COIN_HAS_DYLP
- unitTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la
- parsingTest_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
-endif
-
-if COIN_HAS_VOL
- unitTest_LDADD += $(VOLOBJDIR)/src/libVol.la
- parsingTest_LDADD += $(VOLOBJDIR)/src/libVol.la 
-endif
+ unitTest_LDADD +=  $(CGL_LIBS)
+ parsingTest_LDADD += $(CGL_LIBS)
 
 if COIN_HAS_GLPK
  unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
@@ -130,19 +109,19 @@ if COIN_HAS_GLPK
  parsingTest_LDADD += $(GLPKLIB)
 endif
 
-unitTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+if COIN_HAS_ASL
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+  unitTest_LDADD += $(ASL_LIBS) 
+  parsingTest_LDADD += $(ASL_LIBS) 
+endif
 
-parsingTest_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-
-unitTest_LDADD += $(ADDLIBS)
-parsingTest_LDADD += $(ADDLIBS) 
 
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-unitTest_LDFLAGS = -rpath $(libdir) 
-
+#unitTest_LDFLAGS = -rpath $(libdir) 
 
 
 
@@ -155,6 +134,7 @@ unitTest_LDFLAGS = -rpath $(libdir)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(srcdir)/..` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSAgent` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSParsers` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSUtils` \
@@ -175,10 +155,8 @@ AM_CPPFLAGS =\
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiCbc` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` 
 
-# Here we add additional libraries
 
-
-AM_CPPFLAGS += $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS)  $(CGL_CFLAGS) $(CBC_CFLAGS) $(SYMPHONY_CFLAGS)
+AM_CPPFLAGS += $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS)  $(CGL_CFLAGS) $(CBC_CFLAGS) 
 
 
 
@@ -280,13 +258,6 @@ AM_CPPFLAGS += $(COUENNE_CFLAGS)
 endif
 
 
-if COIN_HAS_ASL
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
-#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-AM_CPPFLAGS += $(ASL_CFLAGS) 
-  unitTest_LDADD += $(ASLLIB) 
-  parsingTest_LDADD += $(ASLLIB) 
-endif
 
 
 # This line is necessary to allow VPATH compilation with MS compilers
