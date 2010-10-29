@@ -31,11 +31,11 @@ libOSModelInterfaces_la_SOURCES +=  OSnl2osil.cpp \
 endif
 
 # should be another if
-if COIN_HAS_GAMSUTILS
-libOSModelInterfaces_la_SOURCES +=  OSgams2osil.cpp OSosrl2gams.cpp
-libOSModelInterfaces_la_LIBADD  += $(GAMSUTILSOBJDIR)/src/GamsUtils/libGamsUtils.la
-libOSModelInterfaces_la_DEPENDENCIES  += $(GAMSUTILSOBJDIR)/src/GamsUtils/libGamsUtils.la
-endif
+#if COIN_HAS_GAMSUTILS
+#libOSModelInterfaces_la_SOURCES +=  OSgams2osil.cpp OSosrl2gams.cpp
+#libOSModelInterfaces_la_LIBADD  += $(GAMSUTILSOBJDIR)/src/GamsUtils/libGamsUtils.la
+#libOSModelInterfaces_la_DEPENDENCIES  += $(GAMSUTILSOBJDIR)/src/GamsUtils/libGamsUtils.la
+#endif
 
 # This is for libtool (on Windows)
 libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -48,25 +48,25 @@ AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces`  \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils`  \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSParsers` \
-	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
+#	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
+#	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
 
-
-
+AM_CPPFLAGS =$(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) 
 
 
 
 
 if COIN_HAS_ASL
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
-  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+AM_CPPFLAGS += $(ASL_CFLAGS)
 endif
 
-if COIN_HAS_GAMSUTILS
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src`
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src/GamsUtils`
-endif
+#if COIN_HAS_GAMSUTILS
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src`
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src/GamsUtils`
+#endif
 
 if COIN_HAS_CPPAD
   AM_CPPFLAGS += -I`$(CYGPATH_W) $(CPPADSRCDIR)` 

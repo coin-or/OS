@@ -320,6 +320,8 @@ OS/misc/additionalDataFiles/oselFiles/neos-clp.osel -text
 OS/misc/additionalDataFiles/osolFiles/parsertestNew.osol -text
 OS/misc/additionalDataFiles/osrlFiles/parserTestNew.osrl -text
 OS/misc/misc.cpp -text
+OS/os-uninstalled.pc.in -text
+OS/os.pc.in -text
 OS/os_addlibs.txt.in -text
 OS/schemas/1.0/OSParameter.xsd -text
 OS/schemas/1.0/OSRegistry.xsd -text

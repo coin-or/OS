@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.2],[coin-os@list.coin-or.org])
+AC_INIT([OS],[trunk],[coin-os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -101,21 +101,28 @@ AC_CHECK_SIZEOF( long)
 #                              COIN components                              #
 #############################################################################
 
-AC_COIN_HAS_PROJECT(OS)
-AC_COIN_HAS_PROJECT(Bcp)
-AC_COIN_HAS_PROJECT(CoinUtils)
-AC_COIN_HAS_PROJECT(Osi)
-AC_COIN_HAS_PROJECT(Clp)
-AC_COIN_HAS_PROJECT(Cbc)
-AC_COIN_HAS_PROJECT(Cgl)
-AC_COIN_HAS_PROJECT(SYMPHONY)
-AC_COIN_HAS_PROJECT(DyLP)
-AC_COIN_HAS_PROJECT(Vol)
-AC_COIN_HAS_PROJECT(Ipopt)
-AC_COIN_HAS_PROJECT(Couenne)
-AC_COIN_HAS_PROJECT(Bonmin)
+AC_COIN_HAS_PACKAGE(CoinDepend, [coinutils = trunk osi], [OSLib])
+if test $coin_has_coindepend != yes ; then
+  AC_MSG_ERROR([Required package CoinUtils or Osi not available.])
+fi
+
+AC_COIN_HAS_PACKAGE(Clp,  [osi-clp],  [OSLib])
+AC_COIN_HAS_PACKAGE(DyLP, [osi-dylp], [OSLib])
+AC_COIN_HAS_PACKAGE(Vol,  [osi-vol],  [OSLib])
+AC_COIN_HAS_PACKAGE(Cgl,  [cgl],      [OSLib])
+AC_COIN_HAS_PACKAGE(SYMPHONY,  [symphony],      [OSLib])
+AC_COIN_HAS_PACKAGE(Cbc,  [cbc],      [OSLib])
+AC_COIN_HAS_PACKAGE(Ipopt,  [ipopt],      [OSLib])
 AC_COIN_HAS_PROJECT(cppad)
-AC_COIN_HAS_PROJECT(GamsUtils)
+#AC_COIN_HAS_PACKAGE(cppad)
+AC_COIN_HAS_PACKAGE(Couenne)
+AC_COIN_HAS_PACKAGE(Bonmin)
+AC_COIN_HAS_PACKAGE(Bcp)
+
+
+AC_COIN_HAS_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
+AC_COIN_HAS_PACKAGE(Glpk, [osi-glpk],   [OSLib])
+
 
 
 AC_ARG_WITH([boncouenne],
@@ -879,7 +886,8 @@ AC_CONFIG_FILES([Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
           applications/columnGen/code/Makefile
-          os_addlibs.txt])
+          os.pc
+	  os-uninstalled.pc])
           
 
 # Here put the location and name of the configuration header file

@@ -3,25 +3,25 @@
 /* If defined, the Ampl Solver Library is available. */
 #undef COIN_HAS_ASL
 
-/* Define to 1 if the Bcp package is used */
+/* Define to 1 if the Bcp package is available */
 #undef COIN_HAS_BCP
 
-/* Define to 1 if the Bonmin package is used */
+/* Define to 1 if the Bonmin package is available */
 #undef COIN_HAS_BONMIN
 
-/* Define to 1 if the Cbc package is used */
+/* Define to 1 if the Cbc package is available */
 #undef COIN_HAS_CBC
 
-/* Define to 1 if the Cgl package is used */
+/* Define to 1 if the Cgl package is available */
 #undef COIN_HAS_CGL
 
-/* Define to 1 if the Clp package is used */
+/* Define to 1 if the Clp package is available */
 #undef COIN_HAS_CLP
 
-/* Define to 1 if the CoinUtils package is used */
-#undef COIN_HAS_COINUTILS
+/* Define to 1 if the CoinDepend package is available */
+#undef COIN_HAS_COINDEPEND
 
-/* Define to 1 if the Couenne package is used */
+/* Define to 1 if the Couenne package is available */
 #undef COIN_HAS_COUENNE
 
 /* Define to 1 if the cppad package is used */
@@ -30,16 +30,13 @@
 /* Define to 1 if the Cplex package is available */
 #undef COIN_HAS_CPX
 
-/* Define to 1 if the DyLP package is used */
+/* Define to 1 if the DyLP package is available */
 #undef COIN_HAS_DYLP
-
-/* Define to 1 if the GamsUtils package is used */
-#undef COIN_HAS_GAMSUTILS
 
 /* Define to 1 if Glpk package is available */
 #undef COIN_HAS_GLPK
 
-/* Define to 1 if the Ipopt package is used */
+/* Define to 1 if the Ipopt package is available */
 #undef COIN_HAS_IPOPT
 
 /* Define to 1 if the Knitro package is available */
@@ -48,16 +45,10 @@
 /* Define to 1 if the Lindo package is available */
 #undef COIN_HAS_LINDO
 
-/* Define to 1 if the OS package is used */
-#undef COIN_HAS_OS
-
-/* Define to 1 if the Osi package is used */
-#undef COIN_HAS_OSI
-
-/* Define to 1 if the SYMPHONY package is used */
+/* Define to 1 if the SYMPHONY package is available */
 #undef COIN_HAS_SYMPHONY
 
-/* Define to 1 if the Vol package is used */
+/* Define to 1 if the Vol package is available */
 #undef COIN_HAS_VOL
 
 /* Define to the debug sanity check level (0 is no test) */
@@ -182,6 +173,9 @@
 /* Define the path to the OS root */
 #undef OSROOT_DIR
 
+/* SVN revision number of project */
+#undef OS_SVN_REV
+
 /* Version number of project */
 #undef OS_VERSION
 
@@ -233,3 +227,9 @@
 
 /* use if XLC is the compiler */
 #undef XLC_
+
+/* SVN revision number of project */
+#undef _SVN_REV
+
+/* Version number of project */
+#undef _VERSION

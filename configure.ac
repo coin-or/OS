@@ -42,34 +42,34 @@ AC_COIN_CREATE_LIBTOOL
 #             Check which ThirdParty sources are available                  #
 #############################################################################
 
-AC_COIN_THIRDPARTY_SUBDIRS([ASL],[ThirdParty/ASL],[solvers/asl.h])
-AC_COIN_THIRDPARTY_SUBDIRS([Blas],[ThirdParty/Blas],[daxpy.f])
-AC_COIN_THIRDPARTY_SUBDIRS([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f])
-AC_COIN_THIRDPARTY_SUBDIRS([HSL],[ThirdParty/HSL],[configure.ac])
-AC_COIN_THIRDPARTY_SUBDIRS([Glpk],[ThirdParty/Glpk],[glpk/src/glplpx01.c])
-AC_COIN_THIRDPARTY_SUBDIRS([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F])
+AC_COIN_MAIN_PACKAGEDIR([ASL],[ThirdParty/ASL],[solvers/asl.h],coinasl)
+AC_COIN_MAIN_PACKAGEDIR([Blas],[ThirdParty/Blas],[daxpy.f],coinblas)
+AC_COIN_MAIN_PACKAGEDIR([Lapack],[ThirdParty/Lapack],[LAPACK/SRC/dlarf.f],coinlapack)
+AC_COIN_MAIN_PACKAGEDIR([HSL],[ThirdParty/HSL],[configure.ac],coinhsl)
+AC_COIN_MAIN_PACKAGEDIR([Glpk],[ThirdParty/Glpk],[glpk/src/glplpx01.c],coinglpk)
+AC_COIN_MAIN_PACKAGEDIR([Mumps],[ThirdParty/Mumps],[MUMPS/src/dmumps_part1.F],coinmumps)
 
 #############################################################################
 #                  Check which subprojects are there                        #
 #############################################################################
 
-AC_COIN_MAIN_SUBDIRS(Data/Sample)
-AC_COIN_MAIN_SUBDIRS(CoinUtils)
-AC_COIN_MAIN_SUBDIRS(Vol)
-AC_COIN_MAIN_SUBDIRS(DyLP)
-AC_COIN_MAIN_SUBDIRS(Clp)
-AC_COIN_MAIN_SUBDIRS(Cgl)
-AC_COIN_MAIN_SUBDIRS(Osi)
-AC_COIN_MAIN_SUBDIRS(SYMPHONY)
-AC_COIN_MAIN_SUBDIRS(Cbc)
-AC_COIN_MAIN_SUBDIRS(Ipopt)
-AC_COIN_MAIN_SUBDIRS(cppad)
-AC_COIN_MAIN_SUBDIRS(Bonmin)
-AC_COIN_MAIN_SUBDIRS(Couenne)
-AC_COIN_MAIN_SUBDIRS(Bcp)
-AC_COIN_MAIN_SUBDIRS(GamsUtils)
-AC_COIN_MAIN_SUBDIRS(ApplicationTemplates)
-AC_COIN_MAIN_SUBDIRS(OS)
+AC_COIN_MAIN_PACKAGEDIR(Data/Sample)
+AC_COIN_MAIN_PACKAGEDIR(CoinUtils)
+AC_COIN_MAIN_PACKAGEDIR(Vol)
+AC_COIN_MAIN_PACKAGEDIR(DyLP)
+AC_COIN_MAIN_PACKAGEDIR(Clp)
+AC_COIN_MAIN_PACKAGEDIR(Cgl)
+AC_COIN_MAIN_PACKAGEDIR(Osi)
+AC_COIN_MAIN_PACKAGEDIR(SYMPHONY)
+AC_COIN_MAIN_PACKAGEDIR(Cbc)
+AC_COIN_MAIN_PACKAGEDIR(Ipopt)
+AC_COIN_MAIN_PACKAGEDIR(cppad)
+AC_COIN_MAIN_PACKAGEDIR(Bonmin)
+AC_COIN_MAIN_PACKAGEDIR(Couenne)
+AC_COIN_MAIN_PACKAGEDIR(Bcp)
+AC_COIN_MAIN_PACKAGEDIR(GamsUtils)
+AC_COIN_MAIN_PACKAGEDIR(ApplicationTemplates)
+AC_COIN_MAIN_PACKAGEDIR(OS)
 
 
 ##############################################################################

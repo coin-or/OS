@@ -1,0 +1,10 @@
+prefix=@prefix@
+libdir=@ABSBUILDDIR@/src
+includedir=@abs_source_dir@/src
+
+Name: OS
+Description: Optimization Services Interfaces Package
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lOS @OSLIB_PCLIBS@
+Cflags: -I${includedir} -I@ABSBUILDDIR@/inc
+Requires: @OSLIB_PCREQUIRES@

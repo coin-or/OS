@@ -29,17 +29,14 @@ libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
 # being compiled.
 AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
+#	-I`$(CYGPATH_W) $(CLPSRCDIR)/src` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSCommonInterfaces` \
 	-I`$(CYGPATH_W) $(OSSRCDIR)/src/OSUtils` \
-	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
-	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
-	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
+#	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
+#	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
+#	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
 	
-	
-#AM_CPPFLAGS += -I`$(CYGPATH_W) /usr/include/w32api` \
-#  				  -I ../include \
-#  				  -I ../PlatformSDK/include
+AM_CPPFLAGS =$(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS)	
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

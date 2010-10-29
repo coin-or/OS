@@ -69,17 +69,22 @@ run_parsers:
 #                  Installation of the addlibs file                    #
 ########################################################################
 
-addlibsfile = os_addlibs.txt
-addlibsdir = $(prefix)/share/doc/coin/$(PACKAGE_NAME)
 
-install-exec-local: install-doc
-	$(install_sh_DATA) $(addlibsfile) $(DESTDIR)$(addlibsdir)/$(addlibsfile)
-
-uninstall-local: uninstall-doc
-	rm -f $(DESTDIR)$(addlibsdir)/$(addlibsfile)
+pkgconfiglibdir = $(libdir)/pkgconfig
+pkgconfiglib_DATA = os.pc 
 
 
+if COIN_HAS_PKGCONFIG
+addlibsdir = $(DESTDIR)$(datadir)/coin/doc/OS
+	
+install-data-hook:
+	@$(mkdir_p) "$(addlibsdir)"
+	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
+	$(PKG_CONFIG) --libs os > $(addlibsdir)/os_addlibs.txt
 
+uninstall-hook:
+	rm -f $(addlibsdir)/os_addlibs.txt
+endif
 
 ########################################################################
 #                         Maintainer Stuff                             #
