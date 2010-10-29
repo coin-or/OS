@@ -66,12 +66,8 @@ noinst_PROGRAMS = unitTest$(EXEEXT) parsingTest$(EXEEXT)
 @COIN_HAS_DYLP_TRUE@am__append_10 = $(DYLP_LIBS)
 @COIN_HAS_VOL_TRUE@am__append_11 = $(VOL_LIBS)
 @COIN_HAS_VOL_TRUE@am__append_12 = $(VOL_LIBS)  
-@COIN_HAS_GLPK_TRUE@am__append_13 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
-@COIN_HAS_GLPK_TRUE@am__append_14 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
+@COIN_HAS_GLPK_TRUE@am__append_13 = $(GLPK_LIBS)
+@COIN_HAS_GLPK_TRUE@am__append_14 = $(GLPK_LIBS)
 
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
@@ -168,16 +164,13 @@ am__DEPENDENCIES_1 =
 @COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_1)
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_1)
 @COIN_HAS_VOL_TRUE@am__DEPENDENCIES_7 = $(am__DEPENDENCIES_1)
-@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_8 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_1)
 parsingTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
 	$(am__DEPENDENCIES_2) $(am__DEPENDENCIES_3) \
 	$(am__DEPENDENCIES_4) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_5) \
 	$(am__DEPENDENCIES_6) $(am__DEPENDENCIES_7) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_8) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am_unitTest_OBJECTS = unitTest.$(OBJEXT)
 unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la $(am__DEPENDENCIES_2) \
@@ -186,7 +179,7 @@ unitTest_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
 	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_8) $(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -456,7 +449,7 @@ unitTest_SOURCES = unitTest.cpp
 unitTest_LDADD = $(OSOBJDIR)/src/libOS.la $(OS_LIBS) $(am__append_1) \
 	$(am__append_3) $(am__append_5) $(CBC_LIBS) $(CLP_LIBS) \
 	$(am__append_7) $(am__append_9) $(am__append_11) $(CBC_LIBS) \
-	$(CBC_LIBS) $(CGL_LIBS) $(am__append_13) $(am__append_15)
+	$(CGL_LIBS) $(am__append_13) $(am__append_15)
 
 # List all source files for this executable, including headers
 parsingTest_SOURCES = parsingTest.cpp 
@@ -465,7 +458,7 @@ parsingTest_SOURCES = parsingTest.cpp
 parsingTest_LDADD = $(OSOBJDIR)/src/libOS.la $(OS_LIBS) \
 	$(am__append_2) $(am__append_4) $(am__append_6) $(CBC_LIBS) \
 	$(CLP_LIBS) $(am__append_8) $(am__append_10) $(am__append_12) \
-	$(CGL_LIBS) $(am__append_14) $(am__append_16)
+	$(CBC_LIBS) $(CGL_LIBS) $(am__append_14) $(am__append_16)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic

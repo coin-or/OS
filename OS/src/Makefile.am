@@ -74,138 +74,98 @@ endif
 
 # List all additionally required COIN libraries
 
-LDADD +=  \
+OSSolverService_LDADD =  \
 	libOS.la $(OS_LIBS)
 	
 
-OSSolverService_DEPENDENCIES += libOS.la
+#OSSolverService_DEPENDENCIES += libOS.la
+
+
+
+
 
 if COIN_HAS_COUENNE
-#   LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la 
-LDADD += $(COUENNE_LIBS)
+OSSolverService_LDADD +=  $(COUENNE_LIBS)
+#   OSSolverService_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 if COIN_HAS_ASL
-#   LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
-LDADD += $(ASL_LIBS)
+#   OSSolverService_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
 endif
-#   LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+#   OSSolverService_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
 if COIN_HAS_ASL
-#  LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#   OSSolverService_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif
 endif
 
 if COIN_HAS_BONMIN
-#   LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
-#    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
-LDADD += $(BONMIN_LIBS)
+OSSolverService_LDADD +=  $(BONMIN_LIBS)
+#   OSSolverService_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 
 
 if COIN_HAS_IPOPT
+  OSSolverService_LDADD +=  $(IPOPT_LIBS)
 if COIN_HAS_ASL
-#      LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/libamplinterface.la 
+#      OSSolverService_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
 endif
-#  LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la 
-#        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
-#  ADDLIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+#  OSSolverService_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
+	
+	
+OSSolverService_LDADD +=  $(CBC_LIBS)
 
-#  OSSolverService_DEPENDENCIES +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+
+OSSolverService_LDADD += $(CLP_LIBS) 
 
 
-LDADD +=  $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la 
 
 if COIN_HAS_SYMPHONY
-# LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-# OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-LDADD += $(SYMPHONY_LIBS)
+ OSSolverService_LDADD += $(SYMPHONY_LIBS) 
 endif
 
-#LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-LDADD += $(OSI_LIBS)
-OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-
 if COIN_HAS_DYLP
-# LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
- OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
-LDADD += $(DYLP_LIBS)
+ OSSolverService_LDADD += $(DYLP_LIBS)
 endif
 
 if COIN_HAS_VOL
-# LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
-LDADD += $(VOL_LIBS)
- OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la
+ OSSolverService_LDADD += $(VOL_LIBS)
 endif
-
 
 #if COIN_HAS_CPX
-# LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-# LDADD += $(CPX_LIBS)
-# OSSolverService_DEPENDENCIES += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+# OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+# parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
 
-#LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
-#LDADD += $(CBCOBJDIR)/src/libCbc.la 
-#ADDLIBS += `cat $(CBCOBJDIR)/cbc_addlibs.txt`
-LDADD += $(CBC_LIBS)
-OSSolverService_DEPENDENCIES += $(CBCOBJDIR)/src/libCbc.la
-
-if COIN_HAS_SYMPHONY
-# LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
-#ADDLIBS += `cat $(SYMPHONYOBJDIR)/sym_addlibs.txt`
-LDADD += $(SYMPHONY_LIBS)
-OSSolverService_DEPENDENCIES += $(SYMPHONYOBJDIR)/src/libSym.la 
-endif
-
-#LDADD += $(CGLOBJDIR)/src/libCgl.la 
-#ADDLIBS += `cat $(CGLOBJDIR)/cgl_addlibs.txt`
-LDADD += $(CGL_LIBS)
-OSSolverService_DEPENDENCIES += $(CGLOBJDIR)/src/libCgl.la 
-
-#LDADD += $(OSIOBJDIR)/src/libOsi.la 
-#ADDLIBS += `cat $(OSIOBJDIR)/osi_addlibs.txt`
-LDADD += $(OSI_LIBS)
-OSSolverService_DEPENDENCIES +=  $(OSIOBJDIR)/src/libOsi.la 
-
-#LDADD += $(CLPOBJDIR)/src/libClp.la 
-#ADDLIBS += `cat $(CLPOBJDIR)/clp_addlibs.txt`
-LDADD += $(CLP_LIBS) 
-OSSolverService_DEPENDENCIES +=  $(CLPOBJDIR)/src/libClp.la 
-
-if COIN_HAS_DYLP
-#LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
-#ADDLIBS += `cat $(DYLPOBJDIR)/dylp_addlibs.txt`
-LDADD += $(DYLP_LIBS)
-OSSolverService_DEPENDENCIES +=  $(DYLPOBJDIR)/src/Dylp/libDylp.la
-endif
-
-if COIN_HAS_VOL
-#LDADD += $(VOLOBJDIR)/src/libVol.la 
-#ADDLIBS += `cat $(VOLOBJDIR)/vol_addlibs.txt`
-LDADD += $(VOL_LIBS)
-OSSolverService_DEPENDENCIES +=  $(VOLOBJDIR)/src/libVol.la
-endif
+ OSSolverService_LDADD += $(CBC_LIBS)
 
 
+ OSSolverService_LDADD +=  $(CGL_LIBS)
 
 
 if COIN_HAS_GLPK
-# LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-# LDADD += $(GLPKLIB)
-LDADD += $(GLPK_LIBS)
- OSSolverService_DEPENDENCIES +=  $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  OSSolverService_DEPENDENCIES +=  $(GLPKLIB)
+OSSolverService_LDADD += $(GLPK_LIBS)
 endif
 
-#LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
-#ADDLIBS += `cat $(COINUTILSOBJDIR)/coinutils_addlibs.txt`
-#LDADD += $(COINUTILS_LIBS)
-LDADD += $(COINUTILS_LIBS)
+if COIN_HAS_ASL
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+  OSSolverService_LDADD += $(ASL_LIBS) 
+endif
+
 
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-OSSolverService_LDFLAGS = -rpath $(libdir)
+#unitTest_LDFLAGS = -rpath $(libdir) 
+
 
 
 ########################################################################
@@ -217,13 +177,14 @@ OSSolverService_LDFLAGS = -rpath $(libdir)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSModelInterfaces` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSAgent` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSParsers` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSUtils` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSSolverInterfaces` \
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` 
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces` 
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
 #	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
@@ -238,8 +199,9 @@ AM_CPPFLAGS =\
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiClp` 
 
 
-AM_CPPFLAGS += $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS)  $(CGL_CFLAGS) $(CBC_CFLAGS)  $(SYMPHONY_CFLAGS)
-	
+AM_CPPFLAGS += $(COINDEPEND_CFLAGS) $(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS)  $(CGL_CFLAGS) $(CBC_CFLAGS) 
+
+
 
 if COIN_HAS_DYLP
 #  AM_CPPFLAGS += \
@@ -338,21 +300,12 @@ if COIN_HAS_COUENNE
 AM_CPPFLAGS += $(COUENNE_CFLAGS)
 endif
 
-#if COIN_HAS_KNITRO
-# AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
-#  LDADD += $(KNITROLIB)
-#if USEMULTIPLYDEFINED
-#  OSSolverService_LDFLAGS += -multiply_defined suppress
-#endif
-#endif
 
 
-if COIN_HAS_ASL
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
-#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-#  LDADD += $(ASLLIB) 
-AM_CPPFLAGS += $(ASL_CFLAGS)
-endif
+
+
+
+
 
 
 # This line is necessary to allow VPATH compilation with MS compilers
@@ -363,7 +316,7 @@ ALLLDADD += $(LDADD)
 
 
 
-OSSolverService_LDADD = $(ALLLDADD) $(ADDLIBS)  
+#OSSolverService_LDADD = $(ALLLDADD) $(ADDLIBS)  
 ########################################################################
 #                Headers that need to be installed                     #
 ########################################################################

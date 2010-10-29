@@ -97,16 +97,14 @@ endif
 #endif
 
  unitTest_LDADD += $(CBC_LIBS)
- unitTest_LDADD += $(CBC_LIBS)
+ parsingTest_LDADD += $(CBC_LIBS)
 
  unitTest_LDADD +=  $(CGL_LIBS)
  parsingTest_LDADD += $(CGL_LIBS)
 
 if COIN_HAS_GLPK
- unitTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
- unitTest_LDADD += $(GLPKLIB)
- parsingTest_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
- parsingTest_LDADD += $(GLPKLIB)
+ unitTest_LDADD += $(GLPK_LIBS)
+ parsingTest_LDADD += $(GLPK_LIBS)
 endif
 
 if COIN_HAS_ASL
