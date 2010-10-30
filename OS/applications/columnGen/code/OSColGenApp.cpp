@@ -180,7 +180,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		lowerBound = -1;
 		
 		int loopKount = 0;
-		while(lowerBound < -.01 && loopKount < 70){
+		while(lowerBound < -.01 && loopKount < 1000){
 			loopKount++;
 		
 			//kipp here is where the while loop goes
@@ -188,7 +188,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			getColumns(y, numRows, numColumns, numNonz, 
 					cost, rcost, rowIdx, values,  lowerBound);
 			
-			std::cout << "LOWER BOUND = " <<  lowerBound << std::endl;
+			std::cout << "LOWER BOUND = " <<  lowerBound << "loop kount = " loopKount <<  << std::endl;
 			
 			
 			numNonz = m_osrouteSolver->m_nonzVec; 

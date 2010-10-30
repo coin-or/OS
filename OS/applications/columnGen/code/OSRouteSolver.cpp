@@ -146,8 +146,14 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		createVariableNames();
 		
-		//kipp -- hardcoded --change
+		//these are constraints that say we must be incident to each
+		//non-hub node -- there are  m_numNodes - m_numHubs of these
 		m_pntAmatrix = new int[ m_numNodes - m_numHubs + 1];
+		//the variables -- the variable space we are in is x_{ij} NOT
+		// x_{ijk} -- a bit tricky
+		//m_Amatrix[ j] is a variable index -- this logic works
+		//since the Amatrix coefficient is 1 -- we don't need a value
+		//it indexes variable that points into the node
 		m_Amatrix = new  int[ (m_numNodes - m_numHubs)*(m_numNodes - 1) ];
 		createAmatrix();
 		
@@ -168,6 +174,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_newColumnRowValue = new double*[ m_numHubs];
 		
 //kipp change -- put the 1000 in as an option
+//hardcoding
 		
 		for (k = 0; k < m_numHubs; k++) {
 			
@@ -841,6 +848,8 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 			for(j = 0; j < kountVar; j++){
 				
 				
+				//we are counting the NUMBER of times the variable used
+				//the same variable can appear more than once in m_varIdx
 				m_tmpScatterArray[ m_varIdx[ j] - startPntInc  ] += 1;
 				
 				// is variable m_varIdx[ j] - startPntInc in this row	
@@ -861,6 +870,7 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 					
 					//m_Amatrix[ j] is a variable index -- this logic works
 					//since the Amatrix coefficient is 1 -- we don't need a value
+					//it indexes variable that points into the node
 					rowCount += m_tmpScatterArray[  m_Amatrix[ j] ];
 
 				}

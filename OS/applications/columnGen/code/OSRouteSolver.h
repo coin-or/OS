@@ -90,6 +90,9 @@ public:
 	int m_upperBoundL;
 	int m_numberOfSolutions;
 	
+	//We store the transformation matrix from our theta variables
+	//to our xijk
+	
 	
 	std::string* m_variableNames;
 	
