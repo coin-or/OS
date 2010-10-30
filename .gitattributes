@@ -41,6 +41,7 @@ OS/applications/amplClient/nltrans.dat -text
 OS/applications/amplClient/nltrans.mod -text
 OS/applications/amplClient/nltrans.nl -text
 OS/applications/amplClient/testfile.nl -text
+OS/applications/columnGen/code/Makefile.am -text
 OS/applications/columnGen/code/Makefile.in -text
 OS/applications/columnGen/code/OSColGenApp.cpp -text
 OS/applications/columnGen/code/OSColGenApp.h -text
@@ -55,9 +56,14 @@ OS/applications/columnGen/data/colgen12b.osil -text
 OS/applications/columnGen/data/colgen12b.osol -text
 OS/applications/columnGen/data/colgen5.osil -text
 OS/applications/columnGen/data/colgen5.osol -text
+OS/applications/fileUpload/Makefile.am -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
 OS/applications/fileUpload/OSFileUpload.java -text
+OS/applications/parsingTest/Makefile.am -text
+OS/applications/parsingTest/Makefile.in -text
+OS/applications/parsingTest/parsingTest.cpp -text
+OS/applications/parsingTest/parsingTest.py -text
 OS/configure -text
 OS/configure.ac -text
 OS/data/OSSolverTests.xls -text
@@ -510,8 +516,6 @@ OS/stylesheets/OSrL.css -text
 OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text
 OS/test/Makefile.in -text
-OS/test/parsingTest.cpp -text
-OS/test/parsingTest.py -text
 OS/test/unitTest.cpp -text
 OS/v2.0/OSBonminSolver.cpp -text
 OS/v2.0/OSCoinSolver.cpp -text

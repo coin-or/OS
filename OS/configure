@@ -33092,6 +33092,17 @@ if test $coin_vpath_config = yes; then
 fi
 
 
+### Python Code
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="applications/parsingTest/parsingTest.py"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
 ##
 ## XSLT FILE
 ##
@@ -33140,7 +33151,7 @@ fi
 
 # Here list all the files that configure should create (except for the
 # configuration header file)
-                                                                                                                                                      ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile applications/columnGen/code/Makefile os.pc os-uninstalled.pc"
+                                                                                                                                                                ac_config_files="$ac_config_files Makefile src/Makefile src/OSAgent/Makefile src/OSUtils/Makefile src/OSCommonInterfaces/Makefile src/OSSolverInterfaces/Makefile src/OSModelInterfaces/Makefile src/OSParsers/Makefile test/Makefile applications/Makefile applications/amplClient/Makefile applications/fileUpload/Makefile applications/columnGen/code/Makefile applications/parsingTest/Makefile os.pc os-uninstalled.pc"
 
 
 
@@ -34052,6 +34063,7 @@ do
   "applications/amplClient/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/amplClient/Makefile" ;;
   "applications/fileUpload/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/fileUpload/Makefile" ;;
   "applications/columnGen/code/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/columnGen/code/Makefile" ;;
+  "applications/parsingTest/Makefile" ) CONFIG_FILES="$CONFIG_FILES applications/parsingTest/Makefile" ;;
   "os.pc" ) CONFIG_FILES="$CONFIG_FILES os.pc" ;;
   "os-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES os-uninstalled.pc" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;

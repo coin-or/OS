@@ -836,6 +836,8 @@ AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osil)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osil)
 
+### Python Code
+AC_COIN_VPATH_LINK(applications/parsingTest/parsingTest.py)
 ##
 ## XSLT FILE
 ##
@@ -870,6 +872,7 @@ AC_CONFIG_FILES([Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
           applications/columnGen/code/Makefile
+          applications/parsingTest/Makefile
           os.pc
 	  os-uninstalled.pc])
           
