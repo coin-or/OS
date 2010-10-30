@@ -42,57 +42,49 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = unitTest$(EXEEXT) parsingTest$(EXEEXT)
+noinst_PROGRAMS = unitTest$(EXEEXT)
 @COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNE_LIBS)
-@COIN_HAS_COUENNE_TRUE@am__append_2 = $(COUENNE_LIBS)
 #   unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
-#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+
 #   unitTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
-#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+
 #   unitTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
-#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+
 #   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-@COIN_HAS_BONMIN_TRUE@am__append_3 = $(BONMIN_LIBS)
-@COIN_HAS_BONMIN_TRUE@am__append_4 = $(BONMIN_LIBS)
+@COIN_HAS_BONMIN_TRUE@am__append_2 = $(BONMIN_LIBS)
+
 #   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
-#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+
 #	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
-@COIN_HAS_IPOPT_TRUE@am__append_5 = $(IPOPT_LIBS)
-@COIN_HAS_IPOPT_TRUE@am__append_6 = $(IPOPT_LIBS)
-@COIN_HAS_SYMPHONY_TRUE@am__append_7 = $(SYMPHONY_LIBS)
-@COIN_HAS_SYMPHONY_TRUE@am__append_8 = $(SYMPHONY_LIBS) 
-@COIN_HAS_DYLP_TRUE@am__append_9 = $(DYLP_LIBS)
-@COIN_HAS_DYLP_TRUE@am__append_10 = $(DYLP_LIBS)
-@COIN_HAS_VOL_TRUE@am__append_11 = $(VOL_LIBS)
-@COIN_HAS_VOL_TRUE@am__append_12 = $(VOL_LIBS)  
-@COIN_HAS_GLPK_TRUE@am__append_13 = $(GLPK_LIBS)
-@COIN_HAS_GLPK_TRUE@am__append_14 = $(GLPK_LIBS)
+@COIN_HAS_IPOPT_TRUE@am__append_3 = $(IPOPT_LIBS)
+@COIN_HAS_SYMPHONY_TRUE@am__append_4 = $(SYMPHONY_LIBS)
+@COIN_HAS_DYLP_TRUE@am__append_5 = $(DYLP_LIBS)
+@COIN_HAS_VOL_TRUE@am__append_6 = $(VOL_LIBS) 
+@COIN_HAS_GLPK_TRUE@am__append_7 = $(GLPK_LIBS)
 
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_15 = $(ASL_LIBS) 
-@COIN_HAS_ASL_TRUE@am__append_16 = $(ASL_LIBS) 
+@COIN_HAS_ASL_TRUE@am__append_8 = $(ASL_LIBS) 
 
 #  AM_CPPFLAGS += \
 #    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 #    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 #    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-@COIN_HAS_DYLP_TRUE@am__append_17 = $(DYLP_CFLAGS)
+@COIN_HAS_DYLP_TRUE@am__append_9 = $(DYLP_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #   -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 #    -I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
-@COIN_HAS_SYMPHONY_TRUE@am__append_18 = $(SYMPHONY_CFLAGS)
+@COIN_HAS_SYMPHONY_TRUE@am__append_10 = $(SYMPHONY_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
 # -I`$(CYGPATH_W) $(VOLOBJDIR)/include` \
 #    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
-@COIN_HAS_VOL_TRUE@am__append_19 = $(VOL_CFLAGS)
+@COIN_HAS_VOL_TRUE@am__append_11 = $(VOL_CFLAGS)
 
 #if COIN_HAS_CPX
 #  AM_CPPFLAGS += \
@@ -104,7 +96,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT) parsingTest$(EXEEXT)
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-@COIN_HAS_GLPK_TRUE@am__append_20 = $(GLPK_CFLAGS)
+@COIN_HAS_GLPK_TRUE@am__append_12 = $(GLPK_CFLAGS)
 
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
 #  LDADD += $(LINDOLIB)
@@ -114,7 +106,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT) parsingTest$(EXEEXT)
 #	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 #	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 #	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-@COIN_HAS_IPOPT_TRUE@am__append_21 = $(IPOPT_CFLAGS)
+@COIN_HAS_IPOPT_TRUE@am__append_13 = $(IPOPT_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
@@ -128,7 +120,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT) parsingTest$(EXEEXT)
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms/Branching` \
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 #	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
-@COIN_HAS_BONMIN_TRUE@am__append_22 = $(BONMIN_CFLAGS)
+@COIN_HAS_BONMIN_TRUE@am__append_14 = $(BONMIN_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/bound_tightening` \
@@ -143,7 +135,7 @@ noinst_PROGRAMS = unitTest$(EXEEXT) parsingTest$(EXEEXT)
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/util` \
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COUENNEOBJDIR)/inc`
-@COIN_HAS_COUENNE_TRUE@am__append_23 = $(COUENNE_CFLAGS)
+@COIN_HAS_COUENNE_TRUE@am__append_15 = $(COUENNE_CFLAGS)
 subdir = test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -155,8 +147,8 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/inc/config_os.h
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
-am_parsingTest_OBJECTS = parsingTest.$(OBJEXT)
-parsingTest_OBJECTS = $(am_parsingTest_OBJECTS)
+am_unitTest_OBJECTS = unitTest.$(OBJEXT)
+unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 am__DEPENDENCIES_1 =
 @COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
 @COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_3 = $(am__DEPENDENCIES_1)
@@ -165,15 +157,6 @@ am__DEPENDENCIES_1 =
 @COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_1)
 @COIN_HAS_VOL_TRUE@am__DEPENDENCIES_7 = $(am__DEPENDENCIES_1)
 @COIN_HAS_ASL_TRUE@am__DEPENDENCIES_8 = $(am__DEPENDENCIES_1)
-parsingTest_DEPENDENCIES = ../src/libOS.la $(am__DEPENDENCIES_2) \
-	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
-	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_8)
-am_unitTest_OBJECTS = unitTest.$(OBJEXT)
-unitTest_OBJECTS = $(am_unitTest_OBJECTS)
 unitTest_DEPENDENCIES = ../src/libOS.la $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -191,8 +174,8 @@ LTCXXCOMPILE = $(LIBTOOL) --tag=CXX --mode=compile $(CXX) $(DEFS) \
 CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-SOURCES = $(parsingTest_SOURCES) $(unitTest_SOURCES)
-DIST_SOURCES = $(parsingTest_SOURCES) $(unitTest_SOURCES)
+SOURCES = $(unitTest_SOURCES)
+DIST_SOURCES = $(unitTest_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -439,28 +422,19 @@ AUTOMAKE_OPTIONS = foreign
 unitTest_SOURCES = unitTest.cpp 
 
 # List all additionally required COIN libraries
+
 #      unitTest_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
 #  unitTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-#  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+
 #  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 
 #if COIN_HAS_CPX
 # unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-# parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
 unitTest_LDADD = ../src/libOS.la $(OS_LIBS) $(am__append_1) \
-	$(am__append_3) $(am__append_5) $(CBC_LIBS) $(CLP_LIBS) \
-	$(am__append_7) $(am__append_9) $(am__append_11) $(CBC_LIBS) \
-	$(CGL_LIBS) $(am__append_13) $(am__append_15)
-
-# List all source files for this executable, including headers
-parsingTest_SOURCES = parsingTest.cpp 
-
-# List all additionally required COIN libraries
-parsingTest_LDADD = ../src/libOS.la $(OS_LIBS) $(am__append_2) \
-	$(am__append_4) $(am__append_6) $(CBC_LIBS) $(CLP_LIBS) \
-	$(am__append_8) $(am__append_10) $(am__append_12) $(CBC_LIBS) \
-	$(CGL_LIBS) $(am__append_14) $(am__append_16)
+	$(am__append_2) $(am__append_3) $(CBC_LIBS) $(CLP_LIBS) \
+	$(am__append_4) $(am__append_5) $(am__append_6) $(CBC_LIBS) \
+	$(CGL_LIBS) $(am__append_7) $(am__append_8)
 
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
@@ -494,9 +468,9 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
 	$(top_srcdir)/src/OSCommonInterfaces` $(COINDEPEND_CFLAGS) \
 	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
-	$(CBC_CFLAGS) $(am__append_17) $(am__append_18) \
-	$(am__append_19) $(am__append_20) $(am__append_21) \
-	$(am__append_22) $(am__append_23)
+	$(CBC_CFLAGS) $(am__append_9) $(am__append_10) \
+	$(am__append_11) $(am__append_12) $(am__append_13) \
+	$(am__append_14) $(am__append_15)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -542,9 +516,6 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
-parsingTest$(EXEEXT): $(parsingTest_OBJECTS) $(parsingTest_DEPENDENCIES) 
-	@rm -f parsingTest$(EXEEXT)
-	$(CXXLINK) $(parsingTest_LDFLAGS) $(parsingTest_OBJECTS) $(parsingTest_LDADD) $(LIBS)
 unitTest$(EXEEXT): $(unitTest_OBJECTS) $(unitTest_DEPENDENCIES) 
 	@rm -f unitTest$(EXEEXT)
 	$(CXXLINK) $(unitTest_LDFLAGS) $(unitTest_OBJECTS) $(unitTest_LDADD) $(LIBS)
@@ -555,7 +526,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parsingTest.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitTest.Po@am__quote@
 
 .cpp.o:

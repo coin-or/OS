@@ -15,7 +15,7 @@ AUTOMAKE_OPTIONS = foreign
 
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
-noinst_PROGRAMS = unitTest parsingTest
+noinst_PROGRAMS = unitTest
 
 # List all source files for this executable, including headers
 unitTest_SOURCES = unitTest.cpp 
@@ -24,94 +24,82 @@ unitTest_SOURCES = unitTest.cpp
 unitTest_LDADD =  \
 	../src/libOS.la $(OS_LIBS)
 
-# List all source files for this executable, including headers
-parsingTest_SOURCES = parsingTest.cpp 
 
-# List all additionally required COIN libraries
-parsingTest_LDADD =  \
-	../src/libOS.la $(OS_LIBS)
 		
 if COIN_HAS_COUENNE
 unitTest_LDADD +=  $(COUENNE_LIBS)
-parsingTest_LDADD +=  $(COUENNE_LIBS)
 #   unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
-#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+
 if COIN_HAS_ASL
 #   unitTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
-#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+
 endif
 #   unitTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
-#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+
 if COIN_HAS_ASL
 #   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+
 endif
 endif
 
 if COIN_HAS_BONMIN
 unitTest_LDADD +=  $(BONMIN_LIBS)
-parsingTest_LDADD +=  $(BONMIN_LIBS)
+
 #   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
-#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+
 #	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
 
 
 if COIN_HAS_IPOPT
   unitTest_LDADD +=  $(IPOPT_LIBS)
-  parsingTest_LDADD +=  $(IPOPT_LIBS)
+
 if COIN_HAS_ASL
 #      unitTest_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
 endif
 #  unitTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
-#  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+
 #  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
 	
 	
 unitTest_LDADD +=  $(CBC_LIBS)
-parsingTest_LDADD +=  $(CBC_LIBS)
-
 unitTest_LDADD += $(CLP_LIBS) 
-parsingTest_LDADD += $(CLP_LIBS)
+
 
 
 if COIN_HAS_SYMPHONY
  unitTest_LDADD += $(SYMPHONY_LIBS)
- parsingTest_LDADD += $(SYMPHONY_LIBS) 
 endif
 
 if COIN_HAS_DYLP
  unitTest_LDADD += $(DYLP_LIBS)
- parsingTest_LDADD +=  $(DYLP_LIBS)
 endif
 
 if COIN_HAS_VOL
- unitTest_LDADD += $(VOL_LIBS)
- parsingTest_LDADD += $(VOL_LIBS)  
+ unitTest_LDADD += $(VOL_LIBS) 
 endif
 
 #if COIN_HAS_CPX
 # unitTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
-# parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
 
  unitTest_LDADD += $(CBC_LIBS)
- parsingTest_LDADD += $(CBC_LIBS)
+
 
  unitTest_LDADD +=  $(CGL_LIBS)
- parsingTest_LDADD += $(CGL_LIBS)
+
 
 if COIN_HAS_GLPK
  unitTest_LDADD += $(GLPK_LIBS)
- parsingTest_LDADD += $(GLPK_LIBS)
+
 endif
 
 if COIN_HAS_ASL
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
   unitTest_LDADD += $(ASL_LIBS) 
-  parsingTest_LDADD += $(ASL_LIBS) 
+
 endif
 
 
