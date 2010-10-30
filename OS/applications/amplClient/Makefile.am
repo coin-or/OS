@@ -13,14 +13,13 @@ AUTOMAKE_OPTIONS = foreign
 #                          OSAmplClient  program                               #
 ########################################################################
 
-
+# Name of the executable compiled in this directory.  We want it to be
+# installed in the 'bin' directory
+bin_PROGRAMS = OSAmplClient
 
 # List all source files for this executable, including headers
 OSAmplClient_SOURCES = OSAmplClient.cpp 
 
-# Name of the executable compiled in this directory.  We want it to be
-# installed in the 'bin' directory
-bin_PROGRAMS = OSAmplClient
 
 # List all additionally required COIN libraries
 

@@ -426,10 +426,6 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 
-########################################################################
-#                          OSAmplClient  program                               #
-########################################################################
-
 # List all source files for this executable, including headers
 OSAmplClient_SOURCES = OSAmplClient.cpp 
 
