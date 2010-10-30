@@ -22630,7 +22630,7 @@ else
 fi
 
 
-;
+
 
 
 echo "$as_me:$LINENO: checking for COIN-OR package CoinDepend" >&5

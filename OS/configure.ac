@@ -100,7 +100,7 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 #                              COIN components                              #
 #############################################################################
-AC_COIN_HAS_PACKAGE(ASL,   [coinasl]);
+AC_COIN_HAS_PACKAGE(ASL,   [coinasl])
 
 AC_COIN_HAS_PACKAGE(CoinDepend, [coinutils = trunk osi], [OSLib])
 if test $coin_has_coindepend != yes ; then
