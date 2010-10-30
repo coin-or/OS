@@ -29,7 +29,7 @@ parsingTest_SOURCES = parsingTest.cpp
 
 # List all additionally required COIN libraries
 parsingTest_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la $(OS_LIBS)
+	../src/libOS.la $(OS_LIBS)
 		
 if COIN_HAS_COUENNE
 unitTest_LDADD +=  $(COUENNE_LIBS)
