@@ -44,43 +44,50 @@ build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = OSAmplClient$(EXEEXT)
 bin_PROGRAMS = OSAmplClient$(EXEEXT)
-@COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
-@COIN_HAS_ASL_TRUE@@COIN_HAS_COUENNE_TRUE@am__append_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-@COIN_HAS_BONMIN_TRUE@am__append_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
-#    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
-@COIN_HAS_IPOPT_TRUE@am__append_4 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
-@COIN_HAS_IPOPT_TRUE@        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
 
-@COIN_HAS_IPOPT_TRUE@am__append_5 = `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
-@COIN_HAS_SYMPHONY_TRUE@am__append_6 = $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
-@COIN_HAS_DYLP_TRUE@am__append_7 = $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
-@COIN_HAS_VOL_TRUE@am__append_8 = $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
-@COIN_HAS_SYMPHONY_TRUE@am__append_9 = $(SYMPHONYOBJDIR)/src/libSym.la 
-@COIN_HAS_DYLP_TRUE@am__append_10 = $(DYLPOBJDIR)/src/Dylp/libDylp.la 
-@COIN_HAS_VOL_TRUE@am__append_11 = $(VOLOBJDIR)/src/libVol.la 
-@COIN_HAS_GLPK_TRUE@am__append_12 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(GLPKLIB)
+#OSAmplClient_DEPENDENCIES += libOS.la
+@COIN_HAS_COUENNE_TRUE@am__append_1 = $(COUENNE_LIBS)
+#   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+#   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+#   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+#   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+@COIN_HAS_BONMIN_TRUE@am__append_2 = $(BONMIN_LIBS)
+#   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
+@COIN_HAS_IPOPT_TRUE@am__append_3 = $(IPOPT_LIBS)
+@COIN_HAS_SYMPHONY_TRUE@am__append_4 = $(SYMPHONY_LIBS) 
+@COIN_HAS_DYLP_TRUE@am__append_5 = $(DYLP_LIBS)
+@COIN_HAS_VOL_TRUE@am__append_6 = $(VOL_LIBS)
+@COIN_HAS_GLPK_TRUE@am__append_7 = $(GLPK_LIBS)
+
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_8 = $(ASL_LIBS) 
 
 #  AM_CPPFLAGS += \
 #    -I`$(CYGPATH_W) $(DYLPOBJDIR)/inc` \
 #    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/Dylp` \
 #    -I`$(CYGPATH_W) $(DYLPSRCDIR)/src/DylpStdLib` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiDylp`
-@COIN_HAS_DYLP_TRUE@am__append_13 = $(DYLP_CFLAGS)
+@COIN_HAS_DYLP_TRUE@am__append_9 = $(DYLP_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #   -I`$(CYGPATH_W) $(SYMPHONYSRCDIR)/include` \
 #    -I`$(CYGPATH_W) $(SYMPHONYOBJDIR)/include` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiSym`
-@COIN_HAS_SYMPHONY_TRUE@am__append_14 = $(SYMPHONY_CFLAGS)
+@COIN_HAS_SYMPHONY_TRUE@am__append_10 = $(SYMPHONY_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #    -I`$(CYGPATH_W) $(VOLSRCDIR)/include` \
 # -I`$(CYGPATH_W) $(VOLOBJDIR)/include` \
 #    -I`$(CYGPATH_W) $(VOLSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiVol`
-@COIN_HAS_VOL_TRUE@am__append_15 = $(VOL_CFLAGS)
+@COIN_HAS_VOL_TRUE@am__append_11 = $(VOL_CFLAGS)
 
 #if COIN_HAS_CPX
 #  AM_CPPFLAGS += \
@@ -92,7 +99,7 @@ bin_PROGRAMS = OSAmplClient$(EXEEXT)
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(GLPKINCDIR)` \
 #	-I`$(CYGPATH_W) $(OSISRCDIR)/src/OsiGlpk`
-@COIN_HAS_GLPK_TRUE@am__append_16 = $(GLPK_CFLAGS)
+@COIN_HAS_GLPK_TRUE@am__append_12 = $(GLPK_CFLAGS)
 
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(LINDOINCDIR)` 
 #  LDADD += $(LINDOLIB)
@@ -102,7 +109,7 @@ bin_PROGRAMS = OSAmplClient$(EXEEXT)
 #	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/LinAlg` \
 #	-I`$(CYGPATH_W) $(IPOPTSRCDIR)/src/Common` \
 #	-I`$(CYGPATH_W) $(IPOPTOBJDIR)/inc`
-@COIN_HAS_IPOPT_TRUE@am__append_17 = $(IPOPT_CFLAGS)
+@COIN_HAS_IPOPT_TRUE@am__append_13 = $(IPOPT_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Interfaces` \
@@ -116,7 +123,7 @@ bin_PROGRAMS = OSAmplClient$(EXEEXT)
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/Algorithms/Branching` \
 #	-I`$(CYGPATH_W) $(BONMINSRCDIR)/src/CbcBonmin` \
 #	-I`$(CYGPATH_W) $(BONMINOBJDIR)/inc`
-@COIN_HAS_BONMIN_TRUE@am__append_18 = $(BONMIN_CFLAGS)
+@COIN_HAS_BONMIN_TRUE@am__append_14 = $(BONMIN_CFLAGS)
 
 #  AM_CPPFLAGS += \
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/bound_tightening` \
@@ -131,7 +138,11 @@ bin_PROGRAMS = OSAmplClient$(EXEEXT)
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src/util` \
 #	-I`$(CYGPATH_W) $(COUENNESRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COUENNEOBJDIR)/inc`
-@COIN_HAS_COUENNE_TRUE@am__append_19 = $(COUENNE_CFLAGS)
+@COIN_HAS_COUENNE_TRUE@am__append_15 = $(COUENNE_CFLAGS)
+
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+@COIN_HAS_ASL_TRUE@am__append_16 = $(ASL_CFLAGS)
 subdir = applications/amplClient
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -147,39 +158,21 @@ binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
 am_OSAmplClient_OBJECTS = OSAmplClient.$(OBJEXT)
 OSAmplClient_OBJECTS = $(am_OSAmplClient_OBJECTS)
-@COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_1 = $(COUENNEOBJDIR)/src/main/libBonCouenne.la \
-@COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la \
-@COIN_HAS_COUENNE_TRUE@	$(COUENNEOBJDIR)/src/libCouenne.la
-@COIN_HAS_ASL_TRUE@@COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_2 = $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
-@COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_3 = $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la
-@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
-@COIN_HAS_IPOPT_TRUE@	$(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
-@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_5 =  \
-@COIN_HAS_SYMPHONY_TRUE@	$(OSIOBJDIR)/src/OsiSym/libOsiSym.la
-@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_6 =  \
-@COIN_HAS_DYLP_TRUE@	$(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la
-@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_7 =  \
-@COIN_HAS_VOL_TRUE@	$(OSIOBJDIR)/src/OsiVol/libOsiVol.la
-@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_8 =  \
-@COIN_HAS_SYMPHONY_TRUE@	$(SYMPHONYOBJDIR)/src/libSym.la
-@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_9 =  \
-@COIN_HAS_DYLP_TRUE@	$(DYLPOBJDIR)/src/Dylp/libDylp.la
-@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_10 = $(VOLOBJDIR)/src/libVol.la
-am__DEPENDENCIES_11 =
-@COIN_HAS_GLPK_TRUE@am__DEPENDENCIES_12 =  \
-@COIN_HAS_GLPK_TRUE@	$(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la \
-@COIN_HAS_GLPK_TRUE@	$(am__DEPENDENCIES_11)
-OSAmplClient_DEPENDENCIES = $(OSOBJDIR)/src/libOS.la \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
+am__DEPENDENCIES_1 =
+@COIN_HAS_COUENNE_TRUE@am__DEPENDENCIES_2 = $(am__DEPENDENCIES_1)
+@COIN_HAS_BONMIN_TRUE@am__DEPENDENCIES_3 = $(am__DEPENDENCIES_1)
+@COIN_HAS_IPOPT_TRUE@am__DEPENDENCIES_4 = $(am__DEPENDENCIES_1)
+@COIN_HAS_SYMPHONY_TRUE@am__DEPENDENCIES_5 = $(am__DEPENDENCIES_1)
+@COIN_HAS_DYLP_TRUE@am__DEPENDENCIES_6 = $(am__DEPENDENCIES_1)
+@COIN_HAS_VOL_TRUE@am__DEPENDENCIES_7 = $(am__DEPENDENCIES_1)
+@COIN_HAS_ASL_TRUE@am__DEPENDENCIES_8 = $(am__DEPENDENCIES_1)
+OSAmplClient_DEPENDENCIES = ../../src/libOS.la $(am__DEPENDENCIES_2) \
 	$(am__DEPENDENCIES_3) $(am__DEPENDENCIES_4) \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__DEPENDENCIES_5) \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__DEPENDENCIES_6) \
-	$(am__DEPENDENCIES_7) $(CBCOBJDIR)/src/libCbcSolver.la \
-	$(CBCOBJDIR)/src/libCbc.la $(am__DEPENDENCIES_8) \
-	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la $(am__DEPENDENCIES_9) \
-	$(am__DEPENDENCIES_10) $(am__DEPENDENCIES_12) \
-	$(COINUTILSOBJDIR)/src/libCoinUtils.la $(am__DEPENDENCIES_11)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_5) $(am__DEPENDENCIES_6) \
+	$(am__DEPENDENCIES_7) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_8)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
@@ -322,7 +315,7 @@ KNITROLIB = @KNITROLIB@
 LDFLAGS = @LDFLAGS@
 LIBEXT = @LIBEXT@
 LIBOBJS = @LIBOBJS@
-LIBS = @LIBS@ $(am__append_5)
+LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
 LIBTOOLM4 = @LIBTOOLM4@
 LINDOINCDIR = @LINDOINCDIR@
@@ -438,20 +431,19 @@ AUTOMAKE_OPTIONS = foreign
 OSAmplClient_SOURCES = OSAmplClient.cpp 
 
 # List all additionally required COIN libraries
+#      OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
+#  OSAmplClient_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 
 #if COIN_HAS_CPX
 # OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+# parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
-OSAmplClient_LDADD = $(OSOBJDIR)/src/libOS.la $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4) \
-	$(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la $(am__append_6) \
-	$(OSIOBJDIR)/src/OsiClp/libOsiClp.la $(am__append_7) \
-	$(am__append_8) $(CBCOBJDIR)/src/libCbcSolver.la \
-	$(CBCOBJDIR)/src/libCbc.la $(am__append_9) \
-	$(CGLOBJDIR)/src/libCgl.la $(OSIOBJDIR)/src/libOsi.la \
-	$(CLPOBJDIR)/src/libClp.la $(am__append_10) $(am__append_11) \
-	$(am__append_12) $(COINUTILSOBJDIR)/src/libCoinUtils.la \
-	$(ADDLIBS)
+OSAmplClient_LDADD = ../../src/libOS.la $(OS_LIBS) $(am__append_1) \
+	$(am__append_2) $(am__append_3) $(CBC_LIBS) $(CLP_LIBS) \
+	$(am__append_4) $(am__append_5) $(am__append_6) $(CBC_LIBS) \
+	$(CGL_LIBS) $(am__append_7) $(am__append_8)
 
 # Now add the include paths for compilation
 
@@ -485,9 +477,9 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 	$(CPPADSRCDIR)` -I`$(CYGPATH_W) \
 	$(top_srcdir)/src/OSCommonInterfaces` $(COINDEPEND_CFLAGS) \
 	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
-	$(CBC_CFLAGS) $(am__append_13) $(am__append_14) \
-	$(am__append_15) $(am__append_16) $(am__append_17) \
-	$(am__append_18) $(am__append_19)
+	$(CBC_CFLAGS) $(am__append_9) $(am__append_10) \
+	$(am__append_11) $(am__append_12) $(am__append_13) \
+	$(am__append_14) $(am__append_15) $(am__append_16)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

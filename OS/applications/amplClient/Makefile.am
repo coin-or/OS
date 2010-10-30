@@ -26,88 +26,92 @@ bin_PROGRAMS = OSAmplClient
 
 # List all additionally required COIN libraries
 
-
 OSAmplClient_LDADD =  \
-	$(OSOBJDIR)/src/libOS.la 
+	../../src/libOS.la $(OS_LIBS)
 	
-	
-	  
+
+#OSAmplClient_DEPENDENCIES += libOS.la
+
+
+
+
+
 if COIN_HAS_COUENNE
-   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la $(COUENNEOBJDIR)/src/libCouenne.la
+OSAmplClient_LDADD +=  $(COUENNE_LIBS)
+#   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 if COIN_HAS_ASL
-   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/readnl/libCouenneReadnl.la
+endif
+#   OSAmplClient_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+#   parsingTest_LDADD += $(COUENNEOBJDIR)/src/libCouenne.la
+if COIN_HAS_ASL
+#   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonminampl.la
 endif
 endif
 
 if COIN_HAS_BONMIN
-   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
-#    	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
+OSAmplClient_LDADD +=  $(BONMIN_LIBS)
+#   OSAmplClient_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
+#	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
 endif
-
 
 
 if COIN_HAS_IPOPT
+  OSAmplClient_LDADD +=  $(IPOPT_LIBS)
 if COIN_HAS_ASL
+#      OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
+endif
+#  OSAmplClient_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
+#  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
+endif
+	
+	
+OSAmplClient_LDADD +=  $(CBC_LIBS)
 
-endif
-  OSAmplClient_LDADD += $(IPOPTOBJDIR)/src/Interfaces/libipopt.la \
-        $(IPOPTOBJDIR)/src/LinAlg/liblinalg.la
-  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
-endif
-	
-	
-	
-	
-OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCbc/libOsiCbc.la
+
+OSAmplClient_LDADD += $(CLP_LIBS) 
+
+
 
 if COIN_HAS_SYMPHONY
- OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiSym/libOsiSym.la 
+ OSAmplClient_LDADD += $(SYMPHONY_LIBS) 
 endif
 
- OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiClp/libOsiClp.la 
-
 if COIN_HAS_DYLP
- OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiDylp/libOsiDylp.la 
+ OSAmplClient_LDADD += $(DYLP_LIBS)
 endif
 
 if COIN_HAS_VOL
- OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiVol/libOsiVol.la 
+ OSAmplClient_LDADD += $(VOL_LIBS)
 endif
-
 
 #if COIN_HAS_CPX
 # OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
+# parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
 
- OSAmplClient_LDADD += $(CBCOBJDIR)/src/libCbcSolver.la 
- OSAmplClient_LDADD += $(CBCOBJDIR)/src/libCbc.la 
+ OSAmplClient_LDADD += $(CBC_LIBS)
 
-if COIN_HAS_SYMPHONY
- OSAmplClient_LDADD += $(SYMPHONYOBJDIR)/src/libSym.la 
-endif
 
- OSAmplClient_LDADD += $(CGLOBJDIR)/src/libCgl.la 
+ OSAmplClient_LDADD +=  $(CGL_LIBS)
 
- OSAmplClient_LDADD += $(OSIOBJDIR)/src/libOsi.la 
-
- OSAmplClient_LDADD += $(CLPOBJDIR)/src/libClp.la 
-
-if COIN_HAS_DYLP
- OSAmplClient_LDADD += $(DYLPOBJDIR)/src/Dylp/libDylp.la 
-endif
-
-if COIN_HAS_VOL
- OSAmplClient_LDADD += $(VOLOBJDIR)/src/libVol.la 
-endif
 
 if COIN_HAS_GLPK
-  OSAmplClient_LDADD += $(OSIOBJDIR)/src/OsiGlpk/libOsiGlpk.la
-  OSAmplClient_LDADD += $(GLPKLIB)
+OSAmplClient_LDADD += $(GLPK_LIBS)
 endif
 
-OSAmplClient_LDADD += $(COINUTILSOBJDIR)/src/libCoinUtils.la  
+if COIN_HAS_ASL
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+  OSAmplClient_LDADD += $(ASL_LIBS) 
+endif
 
-OSAmplClient_LDADD += $(ADDLIBS) 
+
 
 # Now add the include paths for compilation
 
@@ -250,7 +254,11 @@ endif
 
 
 
-
+if COIN_HAS_ASL
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
+#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
+AM_CPPFLAGS += $(ASL_CFLAGS)
+endif
 
 
 
