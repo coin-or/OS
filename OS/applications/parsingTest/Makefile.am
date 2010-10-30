@@ -13,16 +13,12 @@ AUTOMAKE_OPTIONS = foreign
 #                          parsingTest  program                               #
 ########################################################################
 
-# Name of the executable compiled in this directory.  We want it to be
-# installed in the 'bin' directory
+# Name of the executable compiled in this directory.  
 noinst_PROGRAMS = parsingTest
 
 # List all source files for this executable, including headers
 parsingTest_SOURCES = parsingTest.cpp 
 
-# Name of the executable compiled in this directory.  We want it to be
-# installed in the 'bin' directory
-bin_PROGRAMS = parsingTest
 
 # List all additionally required COIN libraries
 

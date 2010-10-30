@@ -13,9 +13,9 @@ AUTOMAKE_OPTIONS = foreign
 #                          OSFileUpload  program                               #
 ########################################################################
 
-# Name of the executable compiled in this directory.  We want it to be
-# installed in the 'bin' directory
+# Name of the executable compiled in this directory. 
 noinst_PROGRAMS = OSFileUpload
+
 
 # List all source files for this executable, including headers
 OSFileUpload_SOURCES = OSFileUpload.cpp 

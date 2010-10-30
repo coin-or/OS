@@ -13,8 +13,7 @@ AUTOMAKE_OPTIONS = foreign
 #                          OSColGenMain program                               #
 ########################################################################
 
-# Name of the executable compiled in this directory.  We want it to be
-# installed in the 'bin' directory
+# Name of the executable compiled in this directory. 
 noinst_PROGRAMS = OSColGenMain
 
 # List all source files for this executable, including headers
