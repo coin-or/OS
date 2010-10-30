@@ -1,6 +1,6 @@
 /* inc/config_os.h.in.  Generated from configure.ac by autoheader.  */
 
-/* If defined, the Ampl Solver Library is available. */
+/* Define to 1 if the ASL package is available */
 #undef COIN_HAS_ASL
 
 /* Define to 1 if the Bcp package is available */

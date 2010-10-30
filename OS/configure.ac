@@ -100,7 +100,7 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 #                              COIN components                              #
 #############################################################################
-AC_COIN_HAS_PACKAGE(ASL,   [coinasl])
+AC_COIN_HAS_PACKAGE(ASL, [coinasl], [OSLib])
 
 AC_COIN_HAS_PACKAGE(CoinDepend, [coinutils = trunk osi], [OSLib])
 if test $coin_has_coindepend != yes ; then
@@ -347,7 +347,7 @@ AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
 AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 
 AC_COIN_HAS_GLPK(Glpk)
-AC_COIN_HAS_ASL
+#AC_COIN_HAS_ASL
 
 
 

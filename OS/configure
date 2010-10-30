@@ -472,7 +472,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion OS_SVN_REV build build_cpu build_vendor build_os _SVN_REV CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED ASL_LIBS ASL_CFLAGS ASL_DATA COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE COINDEPEND_LIBS COINDEPEND_CFLAGS COINDEPEND_DATA OSLIB_CFLAGS OSLIB_LIBS OSLIB_PCLIBS OSLIB_PCREQUIRES COIN_HAS_COINDEPEND_TRUE COIN_HAS_COINDEPEND_FALSE CLP_LIBS CLP_CFLAGS CLP_DATA COIN_HAS_CLP_TRUE COIN_HAS_CLP_FALSE DYLP_LIBS DYLP_CFLAGS DYLP_DATA COIN_HAS_DYLP_TRUE COIN_HAS_DYLP_FALSE VOL_LIBS VOL_CFLAGS VOL_DATA COIN_HAS_VOL_TRUE COIN_HAS_VOL_FALSE SYMPHONY_LIBS SYMPHONY_CFLAGS SYMPHONY_DATA COIN_HAS_SYMPHONY_TRUE COIN_HAS_SYMPHONY_FALSE CBC_LIBS CBC_CFLAGS CBC_DATA COIN_HAS_CBC_TRUE COIN_HAS_CBC_FALSE CGL_LIBS CGL_CFLAGS CGL_DATA COIN_HAS_CGL_TRUE COIN_HAS_CGL_FALSE IPOPT_LIBS IPOPT_CFLAGS IPOPT_DATA COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE CPPADSRCDIR CPPADOBJDIR CPPADDOCDIR COIN_HAS_CPPAD_TRUE COIN_HAS_CPPAD_FALSE COUENNE_LIBS COUENNE_CFLAGS COUENNE_DATA COIN_HAS_COUENNE_TRUE COIN_HAS_COUENNE_FALSE BONMIN_LIBS BONMIN_CFLAGS BONMIN_DATA COIN_HAS_BONMIN_TRUE COIN_HAS_BONMIN_FALSE BCP_LIBS BCP_CFLAGS BCP_DATA COIN_HAS_BCP_TRUE COIN_HAS_BCP_FALSE MSCL__TRUE MSCL__FALSE LINDOINCDIR LINDOLIB COIN_HAS_LINDO_TRUE COIN_HAS_LINDO_FALSE KNITROINCDIR KNITROLIB COIN_HAS_KNITRO_TRUE COIN_HAS_KNITRO_FALSE GLPKINCDIR GLPKLIB COIN_HAS_GLPK_TRUE COIN_HAS_GLPK_FALSE GLPKOBJDIR COIN_BUILD_GLPK_TRUE COIN_BUILD_GLPK_FALSE ASLLIB ASL_CPPFLAGS OPENMP_TRUE OPENMP_FALSE USEMULTIPLYDEFINED_TRUE USEMULTIPLYDEFINED_FALSE YACC OSROOT_DIR oslib USE_ASL_LIB LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion OS_SVN_REV build build_cpu build_vendor build_os _SVN_REV CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX MPICXX EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED ASL_LIBS ASL_CFLAGS ASL_DATA OSLIB_CFLAGS OSLIB_LIBS OSLIB_PCLIBS OSLIB_PCREQUIRES COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE COINDEPEND_LIBS COINDEPEND_CFLAGS COINDEPEND_DATA COIN_HAS_COINDEPEND_TRUE COIN_HAS_COINDEPEND_FALSE CLP_LIBS CLP_CFLAGS CLP_DATA COIN_HAS_CLP_TRUE COIN_HAS_CLP_FALSE DYLP_LIBS DYLP_CFLAGS DYLP_DATA COIN_HAS_DYLP_TRUE COIN_HAS_DYLP_FALSE VOL_LIBS VOL_CFLAGS VOL_DATA COIN_HAS_VOL_TRUE COIN_HAS_VOL_FALSE SYMPHONY_LIBS SYMPHONY_CFLAGS SYMPHONY_DATA COIN_HAS_SYMPHONY_TRUE COIN_HAS_SYMPHONY_FALSE CBC_LIBS CBC_CFLAGS CBC_DATA COIN_HAS_CBC_TRUE COIN_HAS_CBC_FALSE CGL_LIBS CGL_CFLAGS CGL_DATA COIN_HAS_CGL_TRUE COIN_HAS_CGL_FALSE IPOPT_LIBS IPOPT_CFLAGS IPOPT_DATA COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE CPPADSRCDIR CPPADOBJDIR CPPADDOCDIR COIN_HAS_CPPAD_TRUE COIN_HAS_CPPAD_FALSE COUENNE_LIBS COUENNE_CFLAGS COUENNE_DATA COIN_HAS_COUENNE_TRUE COIN_HAS_COUENNE_FALSE BONMIN_LIBS BONMIN_CFLAGS BONMIN_DATA COIN_HAS_BONMIN_TRUE COIN_HAS_BONMIN_FALSE BCP_LIBS BCP_CFLAGS BCP_DATA COIN_HAS_BCP_TRUE COIN_HAS_BCP_FALSE MSCL__TRUE MSCL__FALSE LINDOINCDIR LINDOLIB COIN_HAS_LINDO_TRUE COIN_HAS_LINDO_FALSE KNITROINCDIR KNITROLIB COIN_HAS_KNITRO_TRUE COIN_HAS_KNITRO_FALSE GLPKINCDIR GLPKLIB COIN_HAS_GLPK_TRUE COIN_HAS_GLPK_FALSE GLPKOBJDIR COIN_BUILD_GLPK_TRUE COIN_BUILD_GLPK_FALSE OPENMP_TRUE OPENMP_FALSE USEMULTIPLYDEFINED_TRUE USEMULTIPLYDEFINED_FALSE YACC OSROOT_DIR oslib USE_ASL_LIB LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1167,8 +1167,6 @@ Optional Packages:
   --with-knitro-lib specify the flags used to link with the library Knitro
   --with-glpk-incdir specify the header file directory for library Glpk
   --with-glpk-lib specify the flags used to link with the library Glpk
-  --with-asldir           specify path to AMPL solver directory (or BUILD for
-                          compilation, or "no" for disabling AMPL)
 
 Some influential environment variables:
   CDEFS       Additional -D flags to be used when compiling C code.
@@ -6032,7 +6030,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6035 "configure"' > conftest.$ac_ext
+  echo '#line 6033 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7166,7 +7164,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:7169:" \
+echo "$as_me:7167:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -8233,11 +8231,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8236: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8234: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8240: \$? = $ac_status" >&5
+   echo "$as_me:8238: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8501,11 +8499,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8504: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8502: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8508: \$? = $ac_status" >&5
+   echo "$as_me:8506: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8605,11 +8603,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8608: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8606: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8612: \$? = $ac_status" >&5
+   echo "$as_me:8610: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10950,7 +10948,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10953 "configure"
+#line 10951 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11050,7 +11048,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11053 "configure"
+#line 11051 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13394,11 +13392,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13397: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13395: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13401: \$? = $ac_status" >&5
+   echo "$as_me:13399: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13498,11 +13496,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13501: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13499: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13505: \$? = $ac_status" >&5
+   echo "$as_me:13503: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15068,11 +15066,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15071: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15069: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15075: \$? = $ac_status" >&5
+   echo "$as_me:15073: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15172,11 +15170,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15175: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15173: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15179: \$? = $ac_status" >&5
+   echo "$as_me:15177: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17379,11 +17377,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17382: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17380: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17386: \$? = $ac_status" >&5
+   echo "$as_me:17384: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17647,11 +17645,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17650: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17648: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17654: \$? = $ac_status" >&5
+   echo "$as_me:17652: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17751,11 +17749,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17754: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17752: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17758: \$? = $ac_status" >&5
+   echo "$as_me:17756: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -22365,6 +22363,11 @@ ASL_DATA=
 
 
 
+
+
+
+
+
 #check if user provided LIBS, CFLAGS, or DATA for module
 if test $coin_has_asl != skipping; then
 
@@ -22375,6 +22378,9 @@ if test "${with_asl_lib+set}" = set; then
   coin_has_asl=yes
        ASL_LIBS="$withval"
 
+         OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
+         OSLIB_LIBS="$withval $OSLIB_LIBS"
+
 
 fi;
 
@@ -22384,6 +22390,7 @@ if test "${with_asl_incdir+set}" = set; then
   withval="$with_asl_incdir"
   coin_has_asl=yes
      ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
+     OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
 
 
 fi;
@@ -22426,6 +22433,7 @@ if test -n "$PKG_CONFIG" ; then
      coin_has_asl=yes
         echo "$as_me:$LINENO: result: yes: $ASL_VERSIONS" >&5
 echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
+        OSLIB_PCREQUIRES="coinasl $OSLIB_PCREQUIRES"
 
 
 
@@ -22449,7 +22457,10 @@ fi
     PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
     export PKG_CONFIG_PATH
 
-    # augment X_CFLAGS and X_LIBS for each build target X in
+    # augment X_CFLAGS and X_LIBS for each build target X in OSLib
+
+      OSLIB_CFLAGS="$ASL_CFLAGS $OSLIB_CFLAGS"
+      OSLIB_LIBS="$ASL_LIBS $OSLIB_LIBS"
 
   else
     echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
@@ -22549,6 +22560,10 @@ _ACEOF
 
 
 
+      OSLIB_PCREQUIRES="coinasl $OSLIB_PCREQUIRES"
+      OSLIB_CFLAGS="$ASL_CFLAGS $OSLIB_CFLAGS"
+      OSLIB_LIBS="$ASL_LIBS $OSLIB_LIBS"
+
 
     if test 1 = 0 ; then  #change this test to enable a bit of debugging output
       if test -n "$ASL_CFLAGS" ; then
@@ -22563,6 +22578,11 @@ echo "$as_me: ASL LIBS   are $ASL_LIBS" >&6;}
         { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
 echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
       fi
+
+        { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
+echo "$as_me: OSLib CFLAGS are $OSLIB_CFLAGS" >&6;}
+        { echo "$as_me:$LINENO: OSLib LIBS   are $OSLIB_LIBS" >&5
+echo "$as_me: OSLib LIBS   are $OSLIB_LIBS" >&6;}
 
     fi
   fi
@@ -22613,6 +22633,11 @@ echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
       { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
 echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
     fi
+
+      { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
+echo "$as_me: OSLib CFLAGS are $OSLIB_CFLAGS" >&6;}
+      { echo "$as_me:$LINENO: OSLib LIBS   are $OSLIB_LIBS" >&5
+echo "$as_me: OSLib LIBS   are $OSLIB_LIBS" >&6;}
 
   fi
 fi
@@ -26804,189 +26829,7 @@ fi
 
 
 
-coin_aslobjdir=../ThirdParty/ASL
-coin_aslsrcdir=$srcdir/$coin_aslobjdir
-
-# Determine the name of the ASL library
-case "$CC" in
-  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    ampllib=amplsolv.lib ;;
-  *)
-    ampllib=amplsolver.a ;;
-esac
-
-
-# Check whether --with-asldir or --without-asldir was given.
-if test "${with_asldir+set}" = set; then
-  withval="$with_asldir"
-  use_asldir=$withval
-else
-  use_asldir=
-fi;
-
-if test "$use_asldir" = BUILD; then
-  if test "$PACKAGE_NAME" != ThirdPartyASL; then
-    # If we are configuring ThirdParty/ASL, don't check
-    if test -r $coin_aslobjdir/.MakeOk; then :; else
-      { { echo "$as_me:$LINENO: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&5
-echo "$as_me: error: option \"BUILD\" specified for asldir, but directory is not configure (sources missing?)" >&2;}
-   { (exit 1); exit 1; }; }
-    fi
-  fi
-elif test -z "$use_asldir"; then
- # try to find sources - if not given don't compile
-  if test "$PACKAGE_NAME" != ThirdPartyASL; then
-    if test -r $coin_aslobjdir/.MakeOk; then
-      use_asldir=BUILD
-    else
-      use_asldir=no
-    fi
-  else
-    use_asldir=no
-  fi
-elif test "$use_asldir" != "no"; then
-  if test -r $use_asldir/$ampllib; then
-
-  :
-else
-  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but library missing" >&5
-echo "$as_me: error: ASL directory \"$use_asldir\" specified, but library missing" >&2;}
-   { (exit 1); exit 1; }; }
-  :
-fi
-
-  if test -r $use_asldir/asl.h; then
-
-  :
-else
-  { { echo "$as_me:$LINENO: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&5
-echo "$as_me: error: ASL directory \"$use_asldir\" specified, but header files are missing" >&2;}
-   { (exit 1); exit 1; }; }
-  :
-fi
-
-  use_asldir=`cd $use_asldir; pwd`
-  case $build in
-    *-cygwin*) use_asldir=`cygpath -w $use_asldir | sed -e sX\\\\\\\\X/Xg` ;;
-  esac
-fi
-
-# Variable containing ASL library (including full path)
-
-# Variable containing flags for including ASL header files
-
-
-if test "$use_asldir" = BUILD; then
-  coin_aslobjdir=`cd $coin_aslobjdir; pwd`
-  ASLLIB=`$CYGPATH_W $coin_aslobjdir/$ampllib | sed -e sX\\\\\\\\X/Xg`
-  coin_aslsrcdir=`cd $coin_aslsrcdir; pwd`
-  ASL_CPPFLAGS="-I"`$CYGPATH_W $coin_aslobjdir | sed -e sX\\\\\\\\X/Xg`" -I"`$CYGPATH_W $coin_aslsrcdir/solvers | sed -e sX\\\\\\\\X/Xg`
-elif test "$use_asldir" != no; then
-  ASLLIB=`$CYGPATH_W $use_asldir/$ampllib | sed -e sX\\\\\\\\X/Xg`
-  ASL_CPPFLAGS="-I"`$CYGPATH_W $use_asldir | sed -e sX\\\\\\\\X/Xg`
-fi
-
-if test "$use_asldir" != no; then
-  ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-  echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
-echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6
-if test "${ac_cv_lib_dl_dlopen+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldl  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any gcc2 internal prototype to avoid an error.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-/* We use char because int might match the return type of a gcc2
-   builtin and then its argument prototype would still apply.  */
-char dlopen ();
-int
-main ()
-{
-dlopen ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
-  (eval $ac_link) 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag"
-			 || test ! -s conftest.err'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_dl_dlopen=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-ac_cv_lib_dl_dlopen=no
-fi
-rm -f conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
-echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6
-if test $ac_cv_lib_dl_dlopen = yes; then
-  ASLLIB="$ASLLIB -ldl"
-fi
-
-  coin_has_asl=yes
-
-cat >>confdefs.h <<\_ACEOF
-#define COIN_HAS_ASL 1
-_ACEOF
-
-  ac_ext=cc
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-else
-  coin_has_asl=no
-fi
-
-
-if test $coin_has_asl = yes; then
-  COIN_HAS_ASL_TRUE=
-  COIN_HAS_ASL_FALSE='#'
-else
-  COIN_HAS_ASL_TRUE='#'
-  COIN_HAS_ASL_FALSE=
-fi
-
-
+#AC_COIN_HAS_ASL
 
 
 
@@ -33738,13 +33581,6 @@ echo "$as_me: error: conditional \"COIN_BUILD_GLPK\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
-if test -z "${COIN_HAS_ASL_TRUE}" && test -z "${COIN_HAS_ASL_FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_ASL\" was never defined.
-Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"COIN_HAS_ASL\" was never defined.
-Usually this means the macro was only invoked conditionally." >&2;}
-   { (exit 1); exit 1; }; }
-fi
 if test -z "${OPENMP_TRUE}" && test -z "${OPENMP_FALSE}"; then
   { { echo "$as_me:$LINENO: error: conditional \"OPENMP\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
@@ -34417,15 +34253,15 @@ s,@COIN_PKG_CONFIG_PATH_UNINSTALLED@,$COIN_PKG_CONFIG_PATH_UNINSTALLED,;t t
 s,@ASL_LIBS@,$ASL_LIBS,;t t
 s,@ASL_CFLAGS@,$ASL_CFLAGS,;t t
 s,@ASL_DATA@,$ASL_DATA,;t t
+s,@OSLIB_CFLAGS@,$OSLIB_CFLAGS,;t t
+s,@OSLIB_LIBS@,$OSLIB_LIBS,;t t
+s,@OSLIB_PCLIBS@,$OSLIB_PCLIBS,;t t
+s,@OSLIB_PCREQUIRES@,$OSLIB_PCREQUIRES,;t t
 s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
 s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
 s,@COINDEPEND_LIBS@,$COINDEPEND_LIBS,;t t
 s,@COINDEPEND_CFLAGS@,$COINDEPEND_CFLAGS,;t t
 s,@COINDEPEND_DATA@,$COINDEPEND_DATA,;t t
-s,@OSLIB_CFLAGS@,$OSLIB_CFLAGS,;t t
-s,@OSLIB_LIBS@,$OSLIB_LIBS,;t t
-s,@OSLIB_PCLIBS@,$OSLIB_PCLIBS,;t t
-s,@OSLIB_PCREQUIRES@,$OSLIB_PCREQUIRES,;t t
 s,@COIN_HAS_COINDEPEND_TRUE@,$COIN_HAS_COINDEPEND_TRUE,;t t
 s,@COIN_HAS_COINDEPEND_FALSE@,$COIN_HAS_COINDEPEND_FALSE,;t t
 s,@CLP_LIBS@,$CLP_LIBS,;t t
@@ -34500,8 +34336,6 @@ s,@COIN_HAS_GLPK_FALSE@,$COIN_HAS_GLPK_FALSE,;t t
 s,@GLPKOBJDIR@,$GLPKOBJDIR,;t t
 s,@COIN_BUILD_GLPK_TRUE@,$COIN_BUILD_GLPK_TRUE,;t t
 s,@COIN_BUILD_GLPK_FALSE@,$COIN_BUILD_GLPK_FALSE,;t t
-s,@ASLLIB@,$ASLLIB,;t t
-s,@ASL_CPPFLAGS@,$ASL_CPPFLAGS,;t t
 s,@OPENMP_TRUE@,$OPENMP_TRUE,;t t
 s,@OPENMP_FALSE@,$OPENMP_FALSE,;t t
 s,@USEMULTIPLYDEFINED_TRUE@,$USEMULTIPLYDEFINED_TRUE,;t t
