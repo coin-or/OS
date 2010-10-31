@@ -142,7 +142,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		m_optValHub = new double[ m_numHubs];
 		
-		m_variableNames = new string[ m_numNodes*m_numNodes - m_numHubs];
+		m_variableNames = new string[ m_numNodes*(m_numNodes - 1)];
 		
 		createVariableNames();
 		
@@ -175,13 +175,21 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 //kipp change -- put the 1000 in as an option
 //hardcoding
-		
+/// the 1000 is the number of rows -- coupling plus tour breaking		
 		for (k = 0; k < m_numHubs; k++) {
 			
 			m_newColumnRowValue[ k] = new double[ 1000];
 			m_newColumnRowIdx[ k] = new int[ 1000];
 			
 		}
+		//for now, the number of columns will be 10000
+		//for now number of nonzeros will be 500000
+		m_thetaPnt = new int[ 10000];
+		m_thetaCost = new double[ 10000];
+		m_thetaIndex = new int[ 500000];
+		m_numThetaVar = 0;
+		m_numThetaNonz = 0;
+		m_thetaPnt[ m_numThetaVar++ ] = 0;
 
 		
 		
@@ -302,6 +310,16 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	delete[] m_newColumnRowValue;
 	m_newColumnRowValue = NULL;
+	
+	delete[] m_thetaPnt;
+	m_thetaPnt = NULL;
+	
+	delete[] m_thetaIndex;
+	m_thetaIndex = 0;
+
+	
+	delete[] m_thetaCost;
+	m_thetaCost = 0;
 
 	
 }//end ~OSRouteSolver
@@ -872,6 +890,7 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 					//since the Amatrix coefficient is 1 -- we don't need a value
 					//it indexes variable that points into the node
 					rowCount += m_tmpScatterArray[  m_Amatrix[ j] ];
+					
 
 				}
 				
@@ -893,9 +912,11 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 			
 			m_nonzVec[ k] = numNonz;
 			
-			//zero out the scatter vector
+			//zero out the scatter vector and store the generated column
 			for(j = 0; j < kountVar; j++){
 				
+				
+				m_thetaIndex[ m_numThetaNonz++ ] =  m_varIdx[ j] - startPntInc ;
 				
 				m_tmpScatterArray[ m_varIdx[ j] - startPntInc  ]  = 0;
 				
@@ -904,6 +925,8 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 			}
 			
 			m_costVec[ k] =  m_optL[ k]*m_costVec[ k];
+			m_thetaCost[ m_numThetaVar ] = m_costVec[ k];
+			m_thetaPnt[ m_numThetaVar++ ]  = m_numThetaNonz;
 			
 			//std::cout << "GAIL COST VECTOR " <<  m_costVec[ k] << std::endl;
 			
@@ -1046,7 +1069,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 		
 		
 		idx2 = 0;  //zRouteDemand have 0 coefficients in obj
-		
+		//fill in m_cost from the cost coefficient in osil
 		for(k = 0; k < m_numHubs; k++){
 			
 			idx1 = 0;
@@ -1164,6 +1187,29 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 			//loop over routes again to create master objective coefficients
 
 			for(k = 0; k < m_numHubs; k++){
+				
+				
+				//lets get the x variables
+				//the variables for this route should be from 2*numHubs + k*(numNodes - 1*)*(numNodes - 1)
+				idx1 = 2*m_numHubs + k*m_numNodes*(m_numNodes - 1);
+				idx2 = idx1 + m_numNodes*(m_numNodes - 1);
+				//end of x variables
+			
+				//std::cout << "HUB " <<  k  << " VARIABLES" << std::endl;
+				
+			
+
+				for(i = idx1; i < idx2; i++){
+					if(  primalValPair[ i]->value > .1 ){
+						//std::cout <<  osinstance->getVariableNames()[  primalValPair[ i]->idx  ] << std::endl;
+						//std::cout <<  m_variableNames[  primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs  ] << std::endl;
+						m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
+					}
+					
+				}
+				
+				m_thetaCost[ m_numThetaVar ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+				m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
 				
 				masterVarName = makeStringFromInt("theta(", mit->first);
 				masterVarName += makeStringFromInt(",", k);
@@ -1502,6 +1548,8 @@ void OSRouteSolver::createVariableNames( ){
 			m_variableNames[ kount] = makeStringFromInt("x(" , i);
 			m_variableNames[ kount] += makeStringFromInt( "," , j);
 			m_variableNames[ kount] +=  ")";
+			//std::cout << "GAIL VARIABLE NAME " << m_variableNames[ kount] << std::endl;
+			
 			kount++;
 			
 		}
@@ -1511,6 +1559,8 @@ void OSRouteSolver::createVariableNames( ){
 			m_variableNames[ kount] = makeStringFromInt("x(" , i);
 			m_variableNames[ kount] += makeStringFromInt( "," , j);
 			m_variableNames[ kount] +=  ")";
+			
+			//std::cout << "GAIL VARIABLE NAME " << m_variableNames[ kount] << std::endl;
 			kount++;
 			
 		}
@@ -1567,6 +1617,61 @@ void OSRouteSolver::createAmatrix(){
 	*/
 	
 }//end createAmatrix
+
+void OSRouteSolver::pauHana(const double* theta){
+	
+	std::cout <<  std::endl;
+	std::cout << "     PAU HANA TIME! " << std::endl;
+	
+	int i;
+	int j;
+	int k;
+	double cost = 0;
+	for(i = 0; i < m_numThetaVar - 1  ; i++){
+	
+		cost += theta[ i]*m_thetaCost[ i + 1];
+		//std::cout << "COLUMN VALUE = " << theta[ i] << std::endl;
+	}
+	
+	
+	std::cout << "FINAL SOLUTION VALUE = " << cost << std::endl;
+	std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
+	std::cout << std::endl <<  std::endl;
+	
+	int numSets;
+	int kount;
+	
+	numSets = floor( (m_numThetaVar - 1 ) / m_numHubs);
+	kount = 0;
+	
+	
+	for(i = 0; i < numSets  ; i++){
+		
+		for(k = 0; k < m_numHubs; k++){
+			
+			if( theta[ kount ] > .001){
+				
+				std::cout << "HUB = "  <<  k << "  THETA = " << kount << " = "  << theta[ kount] << std::endl;
+				
+				for(j = m_thetaPnt[ kount ];  j <  m_thetaPnt[ kount + 1];  j++){
+					
+					std::cout << "VARIABLE "  <<  m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
+					
+				}
+				
+			}//loop on if positive
+			
+			kount++;
+			
+		}//loop on hubs
+	
+	}//loop on sets
+	
+	//let's see what we have back in x-space
+	
+	
+	
+}//end pauHana -- no pun intended
 
 std::string makeStringFromInt(std::string theString, int theInt){
 	ostringstream outStr;

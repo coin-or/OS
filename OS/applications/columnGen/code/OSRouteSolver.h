@@ -90,10 +90,9 @@ public:
 	int m_upperBoundL;
 	int m_numberOfSolutions;
 	
-	//We store the transformation matrix from our theta variables
-	//to our xijk
+
 	
-	
+	//these variable names are in x(i, j) space
 	std::string* m_variableNames;
 	
 	//arrays for the coupling constraint matrix
@@ -108,8 +107,16 @@ public:
 	double m_lowerBnd;
 	int* m_nonzVec;
 	double* m_costVec;
+	
 	int** m_newColumnRowIdx;
 	double** m_newColumnRowValue;
+	
+	//the transformation matrix
+	int* m_thetaPnt;
+	int* m_thetaIndex;
+	int m_numThetaVar;
+	int m_numThetaNonz;
+	double* m_thetaCost;
 
 
 
@@ -157,11 +164,14 @@ public:
 	 */
 	void calcReducedCost( double** c, double* phi, double* d);
 	
-	
+	//these are the variable in x(i, j) space
 	void createVariableNames( );
 	
 	//this is the matrix that says we must visit each node
 	void createAmatrix();
+	
+	//this method gets called when we are done
+	void pauHana(const double* theta);
 	
 	/**
 	 *

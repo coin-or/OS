@@ -188,7 +188,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			getColumns(y, numRows, numColumns, numNonz, 
 					cost, rcost, rowIdx, values,  lowerBound);
 			
-			std::cout << "LOWER BOUND = " <<  lowerBound << "loop kount = " loopKount <<  << std::endl;
+			std::cout << "LOWER BOUND = " <<  lowerBound   << std::endl;
 			
 			
 			numNonz = m_osrouteSolver->m_nonzVec; 
@@ -244,15 +244,19 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			
 			solver->solve();
 			std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
-			std::cout << "Number of columns =  " <<  si->getNumCols()  << std::endl;
+			std::cout << "Number of solver interface columns =  " <<  si->getNumCols()  << std::endl;
 			
-			for(i = 0; i < si->getNumCols(); i++){
+			//std::cout << "Number of master columns =  " <<  m_osrouteSolver->m_numThetaVar  << std::endl;
+			
+			if(si->getNumCols() != m_osrouteSolver->m_numThetaVar - 1) throw ErrorClass("number variables in solver not consistent with master");
+			
+			//for(i = 0; i < si->getNumCols(); i++){
 				
 				//std::cout << "REDUCED COST  =  " <<  si->getReducedCost()[ i]  << std::endl;
 				
 				
 				
-			}
+			//}
 			
 			
 			for(i = 0; i <  numRows; i++){
@@ -260,63 +264,39 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				*(y + i) = si->getRowPrice()[ i];
 				
 				//std::cout << "DUAL VALUE " << *(y + i) << std::endl;
-				
 			}
 			
 			
 		}//end while
 		
+		
+		
+		//get a primal solution
+		
+		int numCols = 0;
+		
+		double* theta = NULL;
+		numCols = si->getNumCols();
+		theta = new double[ numCols];
+		
+		for(i=0; i < numCols; i++){
+			*(theta + i) = si->getColSolution()[i];
+		}
+	
+		m_osrouteSolver->pauHana( theta);
+		
 		if(numRows > 0) delete[] y;
 		y = NULL;
 		
+		if(numCols > 0) delete[] theta;
+		theta = NULL;
+		
+		
 		delete solver;
-		
-		/** Add a column (primal variable) to the problem. */
-		
-		///just testing
-	   // virtual void addCol(int numberElements,
-		//		const int* rows, const double* elements,
-		////		const double collb, const double colub,   
-		//		const double obj) ;	
-		/*
-		int numberElements = 5;
-		double obj = -1;
-		
-		int* rows = NULL;
-		double* values = NULL;
-		
-		double collb = 0.0;
-		double colub = 1.0;
-		
-		rows = new int[ 5];
-		rows[0] =  5;
-		rows[1] =  6;
-		rows[2] =  7;
-		rows[3] =  9;
-		rows[4] =  11;
-		
-		values = new double[ 5];
-		values[0] =  1.0;
-		values[1] =  1.0;
-		values[2] =  1.0;
-		values[3] =  1.0;
-		values[4] =  1.0;
-		
-		*/
-		//OsiClpSolverInterface * si =
-		//dynamic_cast<OsiClpSolverInterface *>(solver->osiSolver) ;
-		/*
-		si->addCol(numberElements, rows, values,
-				collb, colub,   obj) ;	
+	
+
 		
 		
-		std::cout << std::endl  << std::endl << std::endl;
-		std::cout << "CALL Solve  " << std::endl;
-		
-		solver->solve();
-		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
-		//std::cout <<  solver->osrl << std::endl;
-		*/
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);

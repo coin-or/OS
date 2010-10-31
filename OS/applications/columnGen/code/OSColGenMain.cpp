@@ -18,6 +18,18 @@
 //===========================================================================//
 #include "OSColGenApp.h"
 #include "OSFileUtil.h" 
+#include "CoinTime.hpp"
+
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif 
 //===========================================================================//
 
 //===========================================================================//
@@ -44,7 +56,8 @@ int main(int argc, char ** argv){
 		
 		
 		// define the classes
-
+		double cpuTime;
+		double start = CoinCpuTime();
 		fileUtil = new FileUtil();
 		osolFileName = argv[1];
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
@@ -66,6 +79,10 @@ int main(int argc, char ** argv){
 		delete fileUtil;
 		delete osolreader;
 		delete colgenApp;
+		
+		cpuTime = CoinCpuTime() - start;
+		
+		std::cout << "CPU TIME  " << cpuTime << std::endl;
    }
 	catch(const ErrorClass& eclass){
 		std::cout << "Something went wrong:" << std::endl;
