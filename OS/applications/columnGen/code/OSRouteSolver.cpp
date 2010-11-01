@@ -1907,7 +1907,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	     model.factorization()->maximumPivots(1000);
 	     //model.factorization()->maximumPivots(1);
 	     if (model.numberRows() < 50)
-	          model.messageHandler()->setLogLevel( 63);
+	          model.messageHandler()->setLogLevel( 10);
 	     //model.dual();
 		model.primal();
 		
@@ -1928,7 +1928,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		
 		
 		
-		exit( 1);
+		//exit( 1);
 		
 		//
 		delete objcoeff;
