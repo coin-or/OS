@@ -22,7 +22,7 @@
 
      
 #ifndef __OSCONFIG_H__
-#define __COINUTILSCONFIG_H__ 
+#define __OSCONFIG_H__ 
 
 
 
