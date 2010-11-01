@@ -1695,7 +1695,8 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	//we build these on nodes that do not include the hubs
 	int numYvar = (m_numNodes - m_numHubs)*(m_numNodes - m_numHubs - 1);
 	int numVvar = m_numNodes - m_numHubs;
-	int numCon = (m_numNodes - m_numHubs) + (m_numNodes - m_numHubs)*(m_numNodes - m_numHubs - 1)/2;
+	//the plus 1 is for the kludge row
+	int numCon = (m_numNodes - m_numHubs) + (m_numNodes - m_numHubs)*(m_numNodes - m_numHubs - 1)/2 + 1;
 	double *values = new double[ 2*numYvar + numVvar];
 	int *indexes = new int[ 2*numYvar + numVvar];
 	int *starts = new int[ numYvar + numVvar + 1]; 
@@ -1717,9 +1718,45 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		//start building the separation instance
 
 		m_osinstanceSeparation->setInstanceDescription("The Tour Breaking Separation Problem");
+
 		
-		// first the variables
+		// now the constraints
+		m_osinstanceSeparation->setConstraintNumber( numCon); 
+		
+		
+		//add the node rows
+		for( i =  0; i < m_numNodes - m_numHubs ; i++){
+			
+			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , 0.0, 1.0, 0); 
+			
+		}
+		
+		//add the variable rows rows
+	
+		int rowKounter;
+		rowKounter = m_numNodes - m_numHubs;
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			
+			
+			for(j = i+1; j < m_numNodes; j++){
+				separationConName = makeStringFromInt("Row_(", i);
+				separationConName += makeStringFromInt(",", j);
+				separationConName += ")";
+				
+				m_osinstanceSeparation->addConstraint(rowKounter++,  separationConName , 0, 0, 0); 
+			}
+			
+		}	
+		
+		// the klude row so we have +/-1 in every column
+		m_osinstanceSeparation->addConstraint(rowKounter++,  "kludgeRow" , 0, m_numNodes, 0);
+		
+		//  the variables
 		m_osinstanceSeparation->setVariableNumber(  numYvar + numVvar);   
+		
+		
 		
 		std::cout << "NUMBER OF VARIABLES SET = " << numYvar + numVvar << std::endl;
 		//add the v variables
@@ -1814,36 +1851,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		
 
 	
-		// now the constraints
-		m_osinstanceSeparation->setConstraintNumber( numCon); 
-		
-		
-		//add the node rows
-		for( i =  0; i < m_numNodes - m_numHubs ; i++){
-			
-			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , 0.0, 1.0, 0); 
-			
-		}
-		
-		//add the variable rows
-		
-		
-		
-		kount = m_numNodes - m_numHubs;
-		
-		for(i = m_numHubs; i < m_numNodes; i++){
-			
-			
-			
-			for(j = i+1; j < m_numNodes; j++){
-				separationConName = makeStringFromInt("Row_(", i);
-				separationConName += makeStringFromInt(",", j);
-				separationConName += ")";
-				
-				m_osinstanceSeparation->addConstraint(kount++,  separationConName , -1.0, -1.0, 0); 
-			}
-			
-		}		
+	
 		
 		m_osinstanceSeparation->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
 		//now for the nonzeros
@@ -1876,7 +1884,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
 		
 		
-	    model.setOptimizationDirection(-1);
+	    model.setOptimizationDirection( 1);
 		model.loadProblem( *matrix, m_osinstanceSeparation->getVariableLowerBounds(), 
 				m_osinstanceSeparation->getVariableUpperBounds(),  
 				m_osinstanceSeparation->getDenseObjectiveCoefficients()[0], 
@@ -1895,6 +1903,24 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	          model.messageHandler()->setLogLevel(10);
 	     //model.dual();
 		model.primal();
+		
+		
+	     if (model.numberRows() < 50)
+	          model.messageHandler()->setLogLevel(10);
+	     //model.dual();
+		model.primal();
+		for(i = 0; i < numYvar + numVvar ; i++){
+			std::cout <<   m_osinstanceSeparation->getVariableNames()[ i]   << " = " << model.getColSolution()[ i] << std::endl;
+		}
+		
+		for(i = 0; i < rowKounter ; i++){
+			std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << model.getRowPrice()[ i] << std::endl;
+		}
+		
+				
+		
+		
+		
 		exit( 1);
 		
 		//
