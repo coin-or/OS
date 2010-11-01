@@ -36,6 +36,12 @@
 #include "OSFileUtil.h"  
 
 
+#include "ClpSimplex.hpp"
+#include "ClpFactorization.hpp"
+#include "ClpNetworkMatrix.hpp"
+#include "OsiClpSolverInterface.hpp"
+
+
 std::string makeStringFromInt(std::string theString, int theInt);
 
 
@@ -1847,9 +1853,51 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	
 		
 		
-		//std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
+		std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
+		//below is temporty see if we can setup as a Clp network problem
+	    CoinPackedMatrix* matrix;
+	    bool columnMajor = true;
+	    double maxGap = 0;
+		matrix = new CoinPackedMatrix(
+		columnMajor, //Column or Row Major
+		columnMajor? m_osinstanceSeparation->getConstraintNumber() : m_osinstanceSeparation->getVariableNumber(), //Minor Dimension
+		columnMajor? m_osinstanceSeparation->getVariableNumber() : m_osinstanceSeparation->getConstraintNumber(), //Major Dimension
+		m_osinstanceSeparation->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->values : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->indexes : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->starts : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
+		0,   0, maxGap ); 
+		
+		ClpNetworkMatrix network( *matrix);
+		
+
+		ClpSimplex  model;
+		
+		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
 		
 		
+	    model.setOptimizationDirection(-1);
+		model.loadProblem( *matrix, m_osinstanceSeparation->getVariableLowerBounds(), 
+				m_osinstanceSeparation->getVariableUpperBounds(),  
+				m_osinstanceSeparation->getDenseObjectiveCoefficients()[0], 
+				m_osinstanceSeparation->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
+		);
+		
+
+		
+		//model.loadProblem(network, lowerColumn, upperColumn, objective,
+	    //lower, upper);
+		
+	     model.factorization()->maximumPivots(200 + model.numberRows() / 100);
+	     model.factorization()->maximumPivots(1000);
+	     //model.factorization()->maximumPivots(1);
+	     if (model.numberRows() < 50)
+	          model.messageHandler()->setLogLevel(10);
+	     //model.dual();
+		model.primal();
+		exit( 1);
+		
+		//
 		delete objcoeff;
 		
 	}catch (const ErrorClass& eclass) {

@@ -836,6 +836,10 @@ AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osil)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osil)
 
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4b.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4.osil)
+
 ### Python Code
 AC_COIN_VPATH_LINK(applications/parsingTest/parsingTest.py)
 ##
