@@ -122,8 +122,13 @@ public:
 
 	
 	OSInstance *m_osinstanceMaster;
+	OSInstance *m_osinstanceSeparation;
 
+	//create the initial restricted master
 	OSInstance* getInitialRestrictedMaster( );
+	//this method generates the instance for 
+	//separating the tour breaking constraints
+	OSInstance* getSeparationInstance();
 
 	/** kipp -- document */
 	// note -- this c vector is only for hub k
@@ -168,10 +173,13 @@ public:
 	void createVariableNames( );
 	
 	//this is the matrix that says we must visit each node
+	//this A matrix defines the "coupling constraints"
 	void createAmatrix();
 	
 	//this method gets called when we are done
 	void pauHana(const double* theta);
+	
+
 	
 	/**
 	 *

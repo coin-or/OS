@@ -72,6 +72,7 @@ OSColGenApp::~OSColGenApp(){
 	std::cout << "INSIDE ~OSColGenApp DESTRUCTOR" << std::endl;
 
 	if( m_osinstanceMaster != NULL) delete  m_osinstanceMaster;
+
 	if( m_osrouteSolver != NULL) delete  m_osrouteSolver;
 
 }//end ~OSColGenApp() destructor

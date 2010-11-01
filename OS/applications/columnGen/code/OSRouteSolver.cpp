@@ -191,8 +191,8 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_numThetaNonz = 0;
 		m_thetaPnt[ m_numThetaVar++ ] = 0;
 
-		
-		
+		//kipp -- move this later
+		getSeparationInstance();
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);
@@ -321,7 +321,7 @@ OSRouteSolver::~OSRouteSolver(){
 	delete[] m_thetaCost;
 	m_thetaCost = 0;
 
-	
+
 }//end ~OSRouteSolver
 
 
@@ -1030,6 +1030,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 	std::vector<int>::iterator  vit;
 	
 	m_osinstanceMaster = NULL;
+	
 	//add linear constraint coefficients
 	//number of values will nodes.size() the coefficients in the node constraints
 	//plus coefficients in convexity constraints which is the number of varaibles
@@ -1642,6 +1643,8 @@ void OSRouteSolver::pauHana(const double* theta){
 	int kount;
 	
 	numSets = floor( (m_numThetaVar - 1 ) / m_numHubs);
+	
+	//kipp throw exception if number of columns not an even multiple of m_numHubs
 	kount = 0;
 	
 	
@@ -1666,12 +1669,198 @@ void OSRouteSolver::pauHana(const double* theta){
 		}//loop on hubs
 	
 	}//loop on sets
-	
-	//let's see what we have back in x-space
-	
-	
-	
+		
 }//end pauHana -- no pun intended
+
+
+OSInstance* OSRouteSolver::getSeparationInstance(){
+	
+
+	
+	
+	m_osinstanceSeparation = NULL;
+	
+	//add linear constraint coefficients
+	//number of values will nodes.size() the coefficients in the node constraints
+	//plus coefficients in convexity constraints which is the number of varaibles
+	int kountNonz;
+	int kount;
+	int startsIdx;
+	//we build these on nodes that do not include the hubs
+	int numYvar = (m_numNodes - m_numHubs)*(m_numNodes - m_numHubs - 1);
+	int numVvar = m_numNodes - m_numHubs;
+	int numCon = (m_numNodes - m_numHubs) + (m_numNodes - m_numHubs)*(m_numNodes - m_numHubs - 1)/2;
+	double *values = new double[ 2*numYvar + numVvar];
+	int *indexes = new int[ 2*numYvar + numVvar];
+	int *starts = new int[ numYvar + numVvar + 1]; 
+	starts[ 0] = 0;	
+	startsIdx = 0;
+	startsIdx++;
+	kountNonz = 0;
+	int i;
+	int j;
+	
+			
+	std::string separationVarName;
+	std::string separationConName;
+
+	try {
+		
+		m_osinstanceSeparation = new OSInstance();
+		
+		//start building the separation instance
+
+		m_osinstanceSeparation->setInstanceDescription("The Tour Breaking Separation Problem");
+		
+		// first the variables
+		m_osinstanceSeparation->setVariableNumber(  numYvar + numVvar);   
+		
+		std::cout << "NUMBER OF VARIABLES SET = " << numYvar + numVvar << std::endl;
+		//add the v variables
+		for(i = 0; i < numVvar; i++){
+			
+			separationVarName = makeStringFromInt("v", i + m_numHubs);
+			
+			m_osinstanceSeparation->addVariable(i, separationVarName, 0, 1, 'C');
+			
+			values[ kountNonz ] = -1.0;
+			indexes[ kountNonz ] = i;
+			kountNonz++;
+			starts[ startsIdx++ ] = kountNonz;
+			
+			
+		}
+		//add the y variables
+		kount = numVvar;
+		
+		int i1;
+		int j1;
+		int kountCon;
+	
+		//adjust for fact we don't use hub nodes
+		i1 = i - m_numHubs;
+		j1 = j - m_numHubs;
+		
+		kountCon = m_numNodes - m_numHubs;
+		
+		for(i1 = 0; i1 < m_numNodes - m_numHubs; i1++){
+			
+
+			
+			for(j1 = i1 + 1; j1 < m_numNodes - m_numHubs; j1++){
+				
+	
+				
+				separationVarName = makeStringFromInt("y(", i1 + m_numHubs);
+				separationVarName += makeStringFromInt(",", j1 + m_numHubs);
+				separationVarName += ")";
+				m_osinstanceSeparation->addVariable(kount++, separationVarName, 0, 1, 'C');
+				
+				values[ kountNonz ] = 1.0;
+				indexes[ kountNonz ] = i1;
+				kountNonz++;
+						
+				values[ kountNonz ] = -1.0;
+				indexes[ kountNonz ] = kountCon ;
+				kountNonz++;
+			
+				starts[ startsIdx++ ] = kountNonz;
+				
+				
+				
+				
+				separationVarName = makeStringFromInt("y(", j1 + m_numHubs);
+				separationVarName += makeStringFromInt(",", i1 + m_numHubs);
+				separationVarName += ")";
+				m_osinstanceSeparation->addVariable(kount++, separationVarName, 0, 1, 'C');
+				
+				values[ kountNonz ] = 1.0;
+				indexes[ kountNonz ] = j1;
+				kountNonz++;
+						
+				values[ kountNonz ] = -1.0;
+				indexes[ kountNonz ] = kountCon ;
+				kountNonz++;
+			
+				starts[ startsIdx++ ] = kountNonz;
+				
+				
+				kountCon++;
+				
+				
+			}
+			
+		}
+		
+		std::cout << "NUMBER OF VARIABLES ADDED = " << kount << std::endl;
+		
+		// now add the objective function
+		m_osinstanceSeparation->setObjectiveNumber( 1);
+		SparseVector *objcoeff = new SparseVector( numVvar);  
+
+		
+		for(i = 0; i < numVvar; i++){
+			
+			objcoeff->indexes[ i] = i;
+			objcoeff->values[ i] = 1.0;
+		
+		}
+		
+
+	
+		// now the constraints
+		m_osinstanceSeparation->setConstraintNumber( numCon); 
+		
+		
+		//add the node rows
+		for( i =  0; i < m_numNodes - m_numHubs ; i++){
+			
+			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , 0.0, 1.0, 0); 
+			
+		}
+		
+		//add the variable rows
+		
+		
+		
+		kount = m_numNodes - m_numHubs;
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			
+			
+			for(j = i+1; j < m_numNodes; j++){
+				separationConName = makeStringFromInt("Row_(", i);
+				separationConName += makeStringFromInt(",", j);
+				separationConName += ")";
+				
+				m_osinstanceSeparation->addConstraint(kount++,  separationConName , -1.0, -1.0, 0); 
+			}
+			
+		}		
+		
+		m_osinstanceSeparation->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
+		//now for the nonzeros
+		//add the linear constraints coefficients
+		m_osinstanceSeparation->setLinearConstraintCoefficients(kountNonz , true, 
+				values, 0, kountNonz - 1,  indexes, 0, kountNonz - 1, starts, 0, startsIdx);
+	
+		
+		
+		//std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
+		
+		
+		delete objcoeff;
+		
+	}catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}	
+	
+	return NULL;
+}//end getSeparationInstance
+
 
 std::string makeStringFromInt(std::string theString, int theInt){
 	ostringstream outStr;
