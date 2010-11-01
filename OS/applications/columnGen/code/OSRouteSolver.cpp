@@ -1697,8 +1697,8 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	int numVvar = m_numNodes - m_numHubs;
 	//the plus 1 is for the kludge row
 	int numCon = (m_numNodes - m_numHubs) + (m_numNodes - m_numHubs)*(m_numNodes - m_numHubs - 1)/2 + 1;
-	double *values = new double[ 2*numYvar + numVvar];
-	int *indexes = new int[ 2*numYvar + numVvar];
+	double *values = new double[ 2*numYvar + 2*numVvar];
+	int *indexes = new int[ 2*numYvar + 2*numVvar];
 	int *starts = new int[ numYvar + numVvar + 1]; 
 	starts[ 0] = 0;	
 	startsIdx = 0;
@@ -1769,6 +1769,13 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 			values[ kountNonz ] = -1.0;
 			indexes[ kountNonz ] = i;
 			kountNonz++;
+			
+			values[ kountNonz ] = 1.0;
+			indexes[ kountNonz ] = rowKounter - 1;
+			kountNonz++;
+			
+			
+			
 			starts[ startsIdx++ ] = kountNonz;
 			
 			
@@ -1885,7 +1892,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		
 		
 	    model.setOptimizationDirection( 1);
-		model.loadProblem( *matrix, m_osinstanceSeparation->getVariableLowerBounds(), 
+		model.loadProblem( network, m_osinstanceSeparation->getVariableLowerBounds(), 
 				m_osinstanceSeparation->getVariableUpperBounds(),  
 				m_osinstanceSeparation->getDenseObjectiveCoefficients()[0], 
 				m_osinstanceSeparation->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
@@ -1900,7 +1907,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	     model.factorization()->maximumPivots(1000);
 	     //model.factorization()->maximumPivots(1);
 	     if (model.numberRows() < 50)
-	          model.messageHandler()->setLogLevel(10);
+	          model.messageHandler()->setLogLevel( 63);
 	     //model.dual();
 		model.primal();
 		
