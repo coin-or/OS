@@ -23,7 +23,7 @@ parsingTest_SOURCES = parsingTest.cpp
 # List all additionally required COIN libraries
 
 parsingTest_LDADD =  \
-	../../src/libOS.la $(OS_LIBS)
+	../../src/libOS.la $(OSLIB_LIBS)
 	
 
 #parsingTest_DEPENDENCIES += libOS.la

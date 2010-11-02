@@ -510,7 +510,7 @@ OSSolverService_SOURCES = OSSolverService.cpp $(am__append_1)
 # OSSolverService_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 # parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
-OSSolverService_LDADD = libOS.la $(OS_LIBS) $(am__append_2) \
+OSSolverService_LDADD = libOS.la $(OSLIB_LIBS) $(am__append_2) \
 	$(am__append_3) $(am__append_4) $(CBC_LIBS) $(CLP_LIBS) \
 	$(am__append_5) $(am__append_6) $(am__append_7) $(CBC_LIBS) \
 	$(CGL_LIBS) $(am__append_8) $(am__append_9)

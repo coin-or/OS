@@ -24,7 +24,7 @@ OSAmplClient_SOURCES = OSAmplClient.cpp
 # List all additionally required COIN libraries
 
 OSAmplClient_LDADD =  \
-	../../src/libOS.la $(OS_LIBS)
+	../../src/libOS.la $(OSLIB_LIBS)
 	
 
 #OSAmplClient_DEPENDENCIES += libOS.la

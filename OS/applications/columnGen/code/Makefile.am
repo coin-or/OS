@@ -23,7 +23,7 @@ OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h OSRouteSol
 # List all additionally required COIN libraries
 
 OSColGenMain_LDADD =  \
-	../../../src/libOS.la $(OS_LIBS)
+	../../../src/libOS.la $(OSLIB_LIBS)
 	
 
 

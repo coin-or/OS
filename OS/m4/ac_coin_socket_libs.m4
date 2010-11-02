@@ -43,8 +43,8 @@ AC_DEFUN([AC_COIN_OS_SOCKET_LIBS],
 	AC_LINK_IFELSE(
 	  [AC_LANG_PROGRAM([[#include <winsock.h>]],[[socket(0,0,0)]])],
 	  [WINSOCKLIBS="$LIBS"
-	  OS_LIBS="$LIBS"
-      OS_PCLIBS="$LIBS"
+	  OSLIB_LIBS="$LIBS"
+      OSLIB_PCLIBS="$LIBS"
 	   ac_coin_found_socket_libraries=yes
 	   AC_MSG_RESULT(yes)],
 	  [AC_MSG_RESULT(no)])
@@ -60,8 +60,8 @@ AC_DEFUN([AC_COIN_OS_SOCKET_LIBS],
 	  AC_LINK_IFELSE(
 	    [AC_LANG_PROGRAM([[#include <winsock.h>]],[[socket(0,0,0)]])],
 	    [WINSOCKLIBS="$LIBS"
-	     OS_LIBS="$LIBS"
-         OS_PCLIBS="$LIBS"
+	     OSLIB_LIBS="$LIBS"
+         OSLIB_PCLIBS="$LIBS"
 	     ac_coin_found_socket_libraries=yes
 	     AC_MSG_RESULT(yes)
 	     break],
@@ -76,8 +76,8 @@ AC_DEFUN([AC_COIN_OS_SOCKET_LIBS],
 	  AC_LINK_IFELSE(
 	    [AC_LANG_PROGRAM([[#include <sys/socket.h>]],[[socket(0,0,0)]])],
 	    [WINSOCKLIBS="$LIBS"
-	     OS_LIBS="$LIBS"
-         OS_PCLIBS="$LIBS"
+	     OSLIB_LIBS="$LIBS"
+         OSLIB_PCLIBS="$LIBS"
 	     ac_coin_found_socket_libraries=yes
 	     AC_MSG_RESULT(yes)
 	     break],

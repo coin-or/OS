@@ -31177,8 +31177,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   WINSOCKLIBS="$LIBS"
-	  OS_LIBS="$LIBS"
-      OS_PCLIBS="$LIBS"
+	  OSLIB_LIBS="$LIBS"
+      OSLIB_PCLIBS="$LIBS"
 	   ac_coin_found_socket_libraries=yes
 	   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31239,8 +31239,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   WINSOCKLIBS="$LIBS"
-	     OS_LIBS="$LIBS"
-         OS_PCLIBS="$LIBS"
+	     OSLIB_LIBS="$LIBS"
+         OSLIB_PCLIBS="$LIBS"
 	     ac_coin_found_socket_libraries=yes
 	     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -31300,8 +31300,8 @@ if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; }; then
   WINSOCKLIBS="$LIBS"
-	     OS_LIBS="$LIBS"
-         OS_PCLIBS="$LIBS"
+	     OSLIB_LIBS="$LIBS"
+         OSLIB_PCLIBS="$LIBS"
 	     ac_coin_found_socket_libraries=yes
 	     echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6

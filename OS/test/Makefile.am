@@ -22,7 +22,7 @@ unitTest_SOURCES = unitTest.cpp
 
 # List all additionally required COIN libraries
 unitTest_LDADD =  \
-	../src/libOS.la $(OS_LIBS)
+	../src/libOS.la $(OSLIB_LIBS)
 
 
 		

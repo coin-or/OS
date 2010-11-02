@@ -78,7 +78,7 @@ endif
 # List all additionally required COIN libraries
 
 OSSolverService_LDADD =  \
-	libOS.la $(OS_LIBS)
+	libOS.la $(OSLIB_LIBS)
 	
 
 #OSSolverService_DEPENDENCIES += libOS.la

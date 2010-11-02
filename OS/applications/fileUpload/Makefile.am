@@ -25,7 +25,7 @@ OSFileUpload_SOURCES = OSFileUpload.cpp
 # List all additionally required COIN libraries
 
 OSFileUpload_LDADD =  \
-	../../src/libOS.la $(OS_LIBS)
+	../../src/libOS.la $(OSLIB_LIBS)
 	
 
 #OSFileUpload_DEPENDENCIES += libOS.la
