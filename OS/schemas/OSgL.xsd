@@ -2593,6 +2593,14 @@
 			<xs:element name="unknown" type="IntVector" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
+	<xs:complexType name="OtherOptionEnumeration">
+		<xs:complexContent>
+			<xs:extension base="IntVector">
+				<xs:attribute name="value" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 	<xs:complexType name="StorageCapacity">
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
