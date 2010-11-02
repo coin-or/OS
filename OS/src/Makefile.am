@@ -15,7 +15,10 @@ AUTOMAKE_OPTIONS = foreign
 
 # Name of the library compiled in this directory.  We want it to be installed
 # in the 'lib' directory
-lib_LTLIBRARIES = libOS.la
+#lib_LTLIBRARIES = libOS.la
+
+coinlibdir = ${libdir}/coin
+coinlib_LTLIBRARIES = libOS.la
 
 # List all source files for this library, including headers
 libOS_la_SOURCES = 
