@@ -40,7 +40,7 @@ typedef double  ADdouble;
 /*! \class OSnLNode OSnLNode.h "OSnLNode.h"
  *  \brief The OSnLNode Class.
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horeand Gassmand, Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  * 
@@ -57,20 +57,19 @@ public:
 	
 	
 	/**  numberOfChildren is the number of OSnLNode child elements
-	 * set to -1 if the number is not fixed, e.g., for a sum node
-	 */
+	 * set to -1 if the number is not fixed, i.e. for a sum*/
 	unsigned int inumberOfChildren;	
 
 	/**  ssymbolInt is the unique integer assigned to the OSnLNode*/	
 	int inodeInt;
 
 	/** inodeType is the number of children the node has, it is set
-	 * to -1 if the number is not known a priori, e.g., a sum node
+	 * to -1 if the number is not known a prior, e.g. a sum node
 	 */	
 	int inodeType;
 	
 	/**
-	 * m_mChildren holds all the operands, that is, nodes that the current node operate on.
+	 * m_mChildren holds all the operands, that is nodes that the current node operate on.
 	 */
 	OSnLNode **m_mChildren;
 	
@@ -226,6 +225,8 @@ public:
 	 */
 	virtual OSnLNode *cloneOSnLNode() = 0;
 	
+
+	
 	/**
 	 * default constructor.
 	 */
@@ -235,11 +236,7 @@ public:
 	 * default destructor.
 	 */	
 	virtual ~OSnLNode();
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(OSnLNode *that);
+	
 };//end OSnLNode
 
 /*! \class OSnLNodePlus
@@ -253,6 +250,7 @@ public:
  * The in-memory representation of the OSnL element <plus>
  * 
  */
+
 class OSnLNodePlus : public OSnLNode{  
 public:
 	/**
@@ -346,6 +344,8 @@ public:
 #else
 	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD) ;
 #endif	
+
+
 };//end OSnLNodeSum
 
 /*! \class OSnLNodeMax
@@ -398,6 +398,7 @@ public:
 #else
 	virtual double constructADTape(std::map<int, int> *ADIdx, std::vector< double > *XAD);
 #endif
+
 };//end OSnLNodeMax
 
 /*! \class OSnLNodeMin

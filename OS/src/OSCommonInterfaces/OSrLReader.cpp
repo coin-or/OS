@@ -21,7 +21,7 @@
 
 
 
-void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData, OSgLParserData *osglData) throw(ErrorClass);
+void yygetOSResult( const char *ch, OSResult* m_osresult, OSrLParserData *m_parserData) throw(ErrorClass);
 int osrllex_init(void** ptr_yy_globals);
 int osrllex_destroy (void* scanner );
 void osrlset_extra (OSrLParserData* parserData , void* yyscanner );
@@ -32,10 +32,6 @@ OSrLReader::OSrLReader( )  {
 	std::cout << "new OSrLParserData()" << std::endl;
 #endif
 	m_parserData = new OSrLParserData();
-#ifdef OSRLREADER_DEBUG
-	std::cout << "new OSgLParserData()" << std::endl;
-#endif
-	m_osglData = new OSgLParserData();
 #ifdef OSRLREADER_DEBUG
 	std::cout << "new OSResult()" << std::endl;
 #endif
@@ -73,12 +69,6 @@ OSrLReader::~OSrLReader(){
 	m_parserData = NULL;
 	
 #ifdef OSRLREADER_DEBUG
-	std::cout << "delete osglData" << std::endl;
-#endif
-	if( m_osglData != NULL) delete m_osglData;
-	m_osglData = NULL;
-
-#ifdef OSRLREADER_DEBUG
 	std::cout << "success!" << std::endl;
 #endif
 } 
@@ -86,7 +76,7 @@ OSrLReader::~OSrLReader(){
 OSResult* OSrLReader::readOSrL(const std::string& posrl) throw(ErrorClass){  	
 	try{
 		const char *ch = posrl.c_str();
-		yygetOSResult( ch, m_osresult, m_parserData, m_osglData);
+		yygetOSResult( ch, m_osresult, m_parserData);
 		return m_osresult;
 	}
 		catch(const ErrorClass& eclass){

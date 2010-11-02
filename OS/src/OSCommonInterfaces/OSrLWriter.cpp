@@ -22,7 +22,6 @@
 
 #include "OSrLWriter.h"
 #include "OSResult.h"
-#include "OSgLWriter.h"
 
 #include "OSGeneral.h"
 #include "OSParameters.h" 
@@ -38,8 +37,6 @@ using std::endl;
 using std::ostringstream;
 
 OSrLWriter::OSrLWriter( ) {	 
-	m_bWriteBase64 = false;
-	m_bWhiteSpace = false;
 }
 
 OSrLWriter::~OSrLWriter(){
@@ -762,32 +759,37 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 #ifdef DEBUG
 	cout << "output <variables> <basisStatus>" << endl;
 #endif
-						outStr << writeBasisStatus(m_OSResult->optimization->solution[i]->variables->basisStatus, m_bWhiteSpace, m_bWriteBase64);
+						outStr << "<basisStatus numberOfVar=\"" << m_OSResult->optimization->solution[i]->variables->basisStatus->numberOfVar << "\">" << endl;
+						for(j = 0; j < m_OSResult->optimization->solution[i]->variables->basisStatus->numberOfVar; j++){
+							if(m_OSResult->optimization->solution[i]->variables->basisStatus->var[j] != NULL){
+								outStr << "<var";
+								outStr << " idx=\"";
+								outStr << m_OSResult->optimization->solution[i]->variables->basisStatus->var[j]->idx;
+								outStr << "\">";
+								outStr << m_OSResult->optimization->solution[i]->variables->basisStatus->var[j]->value;
+								outStr << "</var>" << endl;
+							}
+						}
+						outStr << "</basisStatus>" << endl;
 					}
+
 
 #ifdef DEBUG
 	cout << "output <variables> <other>" << endl;
 #endif
 					if(m_OSResult->optimization->solution[i]->variables->other != NULL){
 						if(m_OSResult->optimization->solution[i]->variables->numberOfOtherVariableResults > 0){
-							for(int k = 0; k < m_OSResult->optimization->solution[i]->variables->numberOfOtherVariableResults; k++)
-							{
-								outStr << "<other";
-								if (m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar > 0)
-								{
-									outStr << " numberOfVar=\"";
-									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar;
-									outStr << "\"" ;
-								}
-								else if(m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations > 0)
-								{
-									outStr << " numberOfEnumerations=\"";
-									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations;
-									outStr << "\"" ;
-								}
-								outStr << " name=\"";
-								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->name;
+							for(int k = 0; k < m_OSResult->optimization->solution[i]->variables->numberOfOtherVariableResults; k++){
+								outStr << "<other" ;
+								outStr << " numberOfVar=\"";
+								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar;
 								outStr << "\"" ;
+								if (m_OSResult->optimization->solution[i]->variables->other[k]->name != "")
+								{
+									outStr << " name=\"";
+									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->name;
+									outStr << "\"" ;
+								}
 								if (m_OSResult->optimization->solution[i]->variables->other[k]->value != "")
 								{
 									outStr << " value=\"";
@@ -800,11 +802,9 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->description;
 									outStr << "\"" ;
 								}
-								outStr << ">" << endl;
-								if(m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar > 0)
-								{
-									for(j = 0; j < m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar; j++)
-									{
+								outStr <<  ">" << endl;
+								if(m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar > 0){
+									for(j = 0; j < m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar; j++){
 										outStr << "<var";
 										outStr << " idx=\"";
 										outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->idx ;
@@ -813,20 +813,15 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 										outStr << "</var>" << endl;
 									}
 								}
-								else if (m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations > 0)
-								{
-									for(j = 0; j < m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations; j++)
-									{
-										outStr << writeOtherOptionEnumeration(m_OSResult->optimization->solution[i]->variables->other[k]->enumeration[j], 
-													 m_bWhiteSpace, m_bWriteBase64);
-									}
-								}
 								outStr << "</other>" << endl;
 							}
 						}
 					} // end of if on other variables
 					outStr << "</variables>" << endl;
 				}
+				//
+				//
+				//
 				if(m_OSResult->optimization->solution[i]->objectives != NULL){
 					outStr << "<objectives ";
 					if (m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults > 0)
@@ -850,34 +845,16 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 
 						outStr << "</values>" << endl;
 					}
-
-					if(m_OSResult->optimization->solution[i]->objectives->basisStatus != NULL){
-#ifdef DEBUG
-	cout << "output <objectives> <basisStatus>" << endl;
-#endif
-						outStr << writeBasisStatus(m_OSResult->optimization->solution[i]->objectives->basisStatus, m_bWhiteSpace, m_bWriteBase64);
-					}
-
 #ifdef DEBUG
 	cout << "output <objectives> <other>" << endl;
 #endif
 					if(m_OSResult->optimization->solution[i]->objectives->other != NULL){
 						if(m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults > 0){
-							for(int k = 0; k < m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults; k++)
-							{
+							for(int k = 0; k < m_OSResult->optimization->solution[i]->objectives->numberOfOtherObjectiveResults; k++){
 								outStr << "<other" ;
-								if (m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj > 0)
-								{
-									outStr << " numberOfObj=\"";
-									outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj;
-									outStr << "\"" ;
-								}
-								else if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfEnumerations > 0)
-								{
-									outStr << " numberOfEnumerations=\"";
-									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations;
-									outStr << "\"" ;
-								}
+								outStr << " numberOfObj=\"";
+								outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj;
+								outStr << "\"" ;
 								if (m_OSResult->optimization->solution[i]->objectives->other[k]->name != "")
 								{
 									outStr << " name=\"";\
@@ -897,24 +874,14 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << "\"" ;
 								};
 								outStr <<  ">" << endl;
-								if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj > 0)
-								{
-									for(j = 0; j < m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj; j++)
-									{
+								if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj > 0){
+									for(j = 0; j < m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj; j++){
 										outStr << "<obj";
 										outStr << " idx=\"";
 										outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->idx;
 										outStr <<  "\">";
 										outStr <<   m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->value;
 										outStr << "</obj>" << endl;
-									}
-								}
-								else if (m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfEnumerations > 0)
-								{
-									for(j = 0; j < m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfEnumerations; j++)
-									{
-										outStr << writeOtherOptionEnumeration(m_OSResult->optimization->solution[i]->objectives->other[k]->enumeration[j], 
-													 m_bWhiteSpace, m_bWriteBase64);
 									}
 								}
 								outStr << "</other>" << endl;
@@ -945,14 +912,6 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						}
 						outStr << "</dualValues>" << endl;
 					}
-
-					if(m_OSResult->optimization->solution[i]->constraints->basisStatus != NULL){
-#ifdef DEBUG
-	cout << "output <constraints> <basisStatus>" << endl;
-#endif
-						outStr << writeBasisStatus(m_OSResult->optimization->solution[i]->constraints->basisStatus, m_bWhiteSpace, m_bWriteBase64);
-					}
-
 #ifdef DEBUG
 	cout << "output <constraints> <other>" << endl;
 #endif
@@ -960,21 +919,15 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						if(m_OSResult->optimization->solution[i]->constraints->numberOfOtherConstraintResults > 0){
 							for(int k = 0; k < m_OSResult->optimization->solution[i]->constraints->numberOfOtherConstraintResults; k++){
 								outStr << "<other" ;
-								if (m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0)
-								{
-									outStr << " numberOfCon=\"";
-									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon;
-									outStr << "\"";
-								}
-								else if(m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfEnumerations > 0)
-								{
-									outStr << " numberOfEnumerations=\"";
-									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfEnumerations;
-									outStr << "\"" ;
-								}
-								outStr << " name=\"";\
-								outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->name;
+								outStr << " numberOfCon=\"";
+								outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon;
 								outStr << "\"" ;
+								if (m_OSResult->optimization->solution[i]->constraints->other[k]->name != "")
+								{
+									outStr << " name=\"";\
+									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->name;
+									outStr << "\"" ;
+								};
 								if (m_OSResult->optimization->solution[i]->constraints->other[k]->value != "")
 								{
 									outStr << " value=\"";\
@@ -988,8 +941,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << "\"" ;
 								};
 								outStr <<  ">" << endl;
-								if(m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0)
-								{
+								if(m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0){
 									for(j = 0; j < m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon; j++){
 										outStr << "<con";
 										outStr << " idx=\"";
@@ -997,14 +949,6 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 										outStr <<  "\">";
 										outStr <<  m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->value;
 										outStr << "</con>" << endl;
-									}
-								}
-								else if (m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfEnumerations > 0)
-								{
-									for(j = 0; j < m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfEnumerations; j++)
-									{
-										outStr << writeOtherOptionEnumeration(m_OSResult->optimization->solution[i]->constraints->other[k]->enumeration[j], 
-													 m_bWhiteSpace, m_bWriteBase64);
 									}
 								}
 								outStr << "</other>" << endl;

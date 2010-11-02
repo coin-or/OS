@@ -50,11 +50,6 @@ public:
 	 * default destructor.
 	 */	
 	~OSExpressionTree();
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(OSExpressionTree *that);
 	
 	/**
 	 * Calculate the expression tree function value given the current variable

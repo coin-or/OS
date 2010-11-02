@@ -59,20 +59,6 @@ public:
    	 */	
 	std::string writeOSrL( OSResult *theosresult);
 	
-
-	/** m_bWriteBase64 is set to true if we encode the linear constraint coefficients
-	 * in base64 binary
-	 */
-	bool m_bWriteBase64;
-	
-	/** m_bWhiteSpace is set to true if we write white space in the file
-	 */
-	bool m_bWhiteSpace;
-
-	/** m_sB64encoded is a string of data (start, colIdx, rowIdx, or values) from
-	 * linear constraints coefficients encoded in base64 binary
-	 */	
-	std::string m_sB64encoded;
    	/**
    	 * create an osrl char* from an OSResult object
    	 * necessary kludge since on Linux the catch doesn't like strings

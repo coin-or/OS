@@ -62,11 +62,6 @@ public:
 	
 	/** the source of the problem instance */
 	std::string source;		
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(InstanceHeader *that);
 };//class InstanceHeader
 
 
@@ -92,6 +87,11 @@ public:
 	 */
 	double ub;
 	
+	/** init corresponds to the optional attribute that holds the variable initial value,
+	 * the default value is OSNAN  -- now deprecated
+	 */
+	//double init;
+	
 	/** type corresponds to the attribute that holds the variable type: C (Continuous),
 	 * B (binary), I (general integer), or S (string). The default is C
 	 */
@@ -102,11 +102,10 @@ public:
 	 */ 
 	std::string name;
 	
-
-	/**
-	 * A function to check for the equality of two objects
+	/** initString corresponds to the optional attribute that holds the name std::string 
+	 * -- now deprecated
 	 */
-	bool IsEqual(Variable *that);
+	//std::string initString;
 }; // class Variable
 
 
@@ -127,11 +126,6 @@ public:
 	
 	/** Here we define a pointer to an array of var pointers */
 	Variable **var;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(Variables *that);
 }; // class Variables
 
 
@@ -157,12 +151,58 @@ public:
 	 * corresponding to the variable with index idx
 	 */
 	double value;
+};//class Coef
 
-	/**
-	 * A function to check for the equality of two objects
+/*! \class Constraint
+ * \brief The in-memory representation of the 
+ * <b><con></b> element.
+ */
+class Constraint{
+public:
+
+	/** The Constraint class constructor */
+	Constraint();
+	
+	/** The Constraint class destructor */
+	~Constraint();
+	
+	/** name is the name of the constraint */
+	std::string name;
+	
+	/** constant is a value that is added to the constraint */
+	double constant;
+	
+	/** lb is the lower bound on the constraint */
+	double lb;
+	
+	/** ub is the upper bound on the constraint */
+	double ub;
+};//class Constraint
+
+
+/*! \class Constraints
+ * \brief The in-memory representation of the 
+ * <b><constraints></b> element.
+ */
+class Constraints{
+public:
+
+	/** The Constraints class constructor */
+	Constraints();
+	
+	/** The Constraints class destructor */
+	~Constraints();
+	
+	/** numberOfConstraints is the number of 
+	 * constraints in the instance
 	 */
-	bool IsEqual(ObjCoef *that);
-};//class ObjCoef
+	int numberOfConstraints;
+	
+	/** con is pointer to an array of Constraint
+	 * object pointers */
+	Constraint **con;
+};//class Constraints
+
 
 
 /*! \class Objective
@@ -204,11 +244,6 @@ public:
 	/** coef is pointer to an array of ObjCoef
 	 * object pointers */	
 	ObjCoef **coef;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(Objective *that);
 };//class Objective
 
 /*! \class Objectives
@@ -232,74 +267,7 @@ public:
 	/** coef is pointer to an array of ObjCoef
 	 * object pointers */	
 	Objective **obj;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(Objectives *that);
 };//class Objectives
-
-
-/*! \class Constraint
- * \brief The in-memory representation of the 
- * <b><con></b> element.
- */
-class Constraint{
-public:
-
-	/** The Constraint class constructor */
-	Constraint();
-	
-	/** The Constraint class destructor */
-	~Constraint();
-	
-	/** name is the name of the constraint */
-	std::string name;
-	
-	/** constant is a value that is added to the constraint */
-	double constant;
-	
-	/** lb is the lower bound on the constraint */
-	double lb;
-	
-	/** ub is the upper bound on the constraint */
-	double ub;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(Constraint *that);
-};//class Constraint
-
-
-/*! \class Constraints
- * \brief The in-memory representation of the 
- * <b><constraints></b> element.
- */
-class Constraints{
-public:
-
-	/** The Constraints class constructor */
-	Constraints();
-	
-	/** The Constraints class destructor */
-	~Constraints();
-	
-	/** numberOfConstraints is the number of 
-	 * constraints in the instance
-	 */
-	int numberOfConstraints;
-	
-	/** con is pointer to an array of Constraint
-	 * object pointers */
-	Constraint **con;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(Constraints *that);
-};//class Constraints
-
 
 /*! \class LinearConstraintCoefficients
  * \brief The in-memory representation of the 
@@ -341,16 +309,11 @@ public:
 	DoubleVector *value;
 	/**
 	 * iNumberOfStartElements counts the number of elements in the <start>
-	 * section of <linearConstraintCoefficients>. This is useful for the parser in
+	 * section of <linearConstraintCoefficients> this is useful for the parser in
 	 * checking consistency of the number of start elements with variables or
 	 * rows
 	 */
 	int iNumberOfStartElements;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(LinearConstraintCoefficients *that);
 };//class LinearConstraintCoefficients
 
 
@@ -389,11 +352,6 @@ public:
     
     /** coef is the coefficient of the quadratic term */
     double coef;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(QuadraticTerm *that);
 }; // QuadraticTerm
 
 
@@ -421,11 +379,6 @@ public:
 	/** qTerm is a pointer to an array of QuadraticTerm
 	 * object pointers */	
     QuadraticTerm** qTerm;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(QuadraticCoefficients *that);
 }; // QuadraticCoefficients
 
 
@@ -457,11 +410,6 @@ public:
 	 * default destructor.
 	 */	
 	~Nl();
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(Nl *that);
 };//end Nl
 
 /*! \class NonlinearExpressions
@@ -486,12 +434,7 @@ public:
 	/** nl is pointer to an array of Nl
 	 * object pointers */	
     Nl **nl;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(NonlinearExpressions *that);
-}; // NonlinearExpressions
+}; // NonlinearExpression
 
 
 
@@ -767,11 +710,6 @@ public:
 	 * TimeDomain object
 	 */	
 	TimeDomain* timeDomain;
-
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(InstanceData *that);
 }; // class InstanceData
 
 
@@ -816,11 +754,6 @@ public:
 	/** A pointer to an InstanceData object */
 	InstanceData *instanceData;
 	
-	/**
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(OSInstance *that);
-
 	/**
 	 * bVariablesModified is true if the variables data has been modified. 
 	 */

@@ -18,6 +18,8 @@
 #include "OSResult.h"
 #include "OSParameters.h"
 #include "OSErrorClass.h"
+
+
 #include "OSGeneral.h"
 #include "OSParameters.h" 
 #include "OSMathUtil.h"
@@ -26,9 +28,6 @@
 #include<sstream>
 
 //#define DEBUG_OSRESULT
-//#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
-//#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
-//#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
 //#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
@@ -525,6 +524,50 @@ VariableValuesString::~VariableValuesString(){
 }// end VariableValuesString destructor 
 
 
+BasStatus::BasStatus():
+	idx( -1),
+	value( "")
+{ 
+	#ifdef DEBUG_OSRESULT
+	cout << "Inside the BasStatus Constructor" << endl;
+	#endif
+}//end BasStatus constructor
+
+
+BasStatus::~BasStatus(){
+	#ifdef DEBUG_OSRESULT  
+	cout << "Inside the BasStatus Destructor" << endl;
+	#endif
+}// end BasStatus destructor 
+
+
+
+BasisStatus::BasisStatus():
+	numberOfVar(0),
+	var(NULL) 
+{ 
+	#ifdef DEBUG_OSRESULT
+	cout << "Inside the BasisStatus Constructor" << endl;
+	#endif
+}//end BasisStatus constructor
+
+
+BasisStatus::~BasisStatus(){
+	#ifdef DEBUG_OSRESULT  
+	cout << "Inside the BasisStatus Destructor" << endl;
+	#endif
+	if(var != NULL)
+	{	for(int i = 0; i < numberOfVar; i++)
+		{
+			delete var[i];
+			var[i] = NULL;
+		}
+		delete[] var;
+		var = NULL;
+	}
+}// end BasisStatus destructor 
+
+
 OtherVarResult::OtherVarResult():
 	idx( -1),
 	value( "")
@@ -545,12 +588,10 @@ OtherVarResult::~OtherVarResult(){
 
 OtherVariableResult::OtherVariableResult():
 	numberOfVar(0),    //(-1),
-	numberOfEnumerations(0),
-	name(""),
 	value(""),
+	name(""),
 	description(""),
-	var(NULL),
-	enumeration(NULL)
+	var(NULL)
 { 
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherVariableResult Constructor" << endl;
@@ -570,14 +611,6 @@ OtherVariableResult::~OtherVariableResult(){
 		}
 		delete[] var;
 		var = NULL;
-	}
-	if (enumeration != NULL)
-	{	for(int i = 0; i < numberOfEnumerations; i++){
-			delete enumeration[i];
-			enumeration[i] = NULL;
-		}
-		delete[] enumeration;
-		enumeration = NULL;
 	}
 	#ifdef DEBUG_OSRESULT  
 	cout << "Inside the OtherVariableResult Destructor - Done" << endl;
@@ -689,12 +722,10 @@ OtherObjResult::~OtherObjResult(){
 
 OtherObjectiveResult::OtherObjectiveResult():
 	numberOfObj(0),
-	numberOfEnumerations(0),
 	name(""),
 	value(""),
 	description(""),
-	obj(NULL),
-	enumeration(NULL)
+	obj(NULL)
 { 
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherObjectiveResult Constructor" << endl;
@@ -720,8 +751,8 @@ OtherObjectiveResult::~OtherObjectiveResult(){
 ObjectiveSolution::ObjectiveSolution():
 	numberOfOtherObjectiveResults( 0),
 	values( NULL),
-	basisStatus(NULL),
 	other( NULL)
+
 { 
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the ObjectiveSolution Constructor" << endl;
@@ -734,12 +765,8 @@ ObjectiveSolution::~ObjectiveSolution(){
 	cout << "Inside the ObjectiveSolution Destructor" << endl;
 	#endif
 	if (values != NULL)
-	{	delete values;
+	{	delete  values;
 		values = NULL;
-	}
-	if (basisStatus != NULL)
-	{	delete basisStatus;
-		basisStatus = NULL;
 	}
 	if(numberOfOtherObjectiveResults > 0 && other != NULL){
 		for(int i = 0; i < numberOfOtherObjectiveResults; i++){
@@ -817,12 +844,10 @@ OtherConResult::~OtherConResult(){
 
 OtherConstraintResult::OtherConstraintResult():
 	numberOfCon(0),
-	numberOfEnumerations(0),
 	name(""),
 	value(""),
 	description(""),
-	con(NULL),
-	enumeration(NULL)
+	con(NULL)
 { 
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OtherConstraintResult Constructor" << endl;
@@ -849,7 +874,6 @@ OtherConstraintResult::~OtherConstraintResult(){
 ConstraintSolution::ConstraintSolution():
 	numberOfOtherConstraintResults( 0),
 	dualValues( NULL),
-	basisStatus(NULL),
 	other( NULL)
 { 
 	#ifdef DEBUG_OSRESULT
@@ -863,12 +887,8 @@ ConstraintSolution::~ConstraintSolution(){
 	cout << "Inside the ConstraintSolution Destructor" << endl;
 	#endif
 	if (dualValues != NULL)
-	{	delete dualValues;
+	{	delete  dualValues;
 		dualValues = NULL;
-	}
-	if (basisStatus != NULL)
-	{	delete basisStatus;
-		basisStatus = NULL;
 	}
 	if(numberOfOtherConstraintResults > 0 && other != NULL){
 		for(int i = 0; i < numberOfOtherConstraintResults; i++){
@@ -1831,7 +1851,6 @@ std::string OSResult::getVarValueString(int solIdx, int varIdx){
 	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->value;
 }//getVarValueString
 
-/*
 int OSResult::getNumberOfBasisVar(int solIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
 		throw ErrorClass("No solution defined");
@@ -1868,7 +1887,6 @@ std::string OSResult::getBasisVar(int solIdx, int varIdx){
 		throw ErrorClass("varIdx is outside of range in routine getBasisVar()");
 	return optimization->solution[solIdx]->variables->basisStatus->var[varIdx]->value;
 }//getBasisVar
-*/
 
 int OSResult::getNumberOfOtherVariableResults(int solIdx){
 	if(m_iNumberOfOtherVariableResults == -1){
@@ -2841,10 +2859,18 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 bool OSResult::setTimingInformation(int idx, std::string type, std::string category,
 									std::string unit, std::string description, double value)
 {	
+	std::cout << "setting timing info" << std::endl;
 	if (job == NULL) return false;
 	if (job->timingInformation == NULL) return false;
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
 		return false;
+
+	std::cout << "type = "        << type        << " " << verifyTimeType(type) << std::endl;
+	std::cout << "category = "    << category    << " " << verifyTimeCategory(category) << std::endl;
+	std::cout << "unit = "        << unit        << " " << verifyTimeUnit(unit) << std::endl;
+	std::cout << "description = " << description << std::endl;
+	std::cout << "value = "       << value       << std::endl;
+
 
 	if (verifyTimeUnit(unit) == 0) return false;
 	if (verifyTimeType(type) == 0) return false;
@@ -2855,6 +2881,7 @@ bool OSResult::setTimingInformation(int idx, std::string type, std::string categ
 	job->timingInformation->time[idx]->unit = unit;
 	job->timingInformation->time[idx]->description = description;
 	job->timingInformation->time[idx]->value = value;
+	std::cout << "return true" << std::endl;
 
 	return true;
 }//setTimingInformation
@@ -3418,49 +3445,74 @@ bool OSResult::setVarValueString(int solIdx, int number, int idx, std::string st
 	return true;
 }//setVarValueString
 
-bool OSResult::setBasisStatus(int solIdx, char object, int status, int *i, int ni)
-{
+bool OSResult::setNumberOfBasisVar(int solIdx, int numberOfVar){
 	if (optimization == NULL || optimization->solution == NULL)
+	{
 		return false;
+	}
 	int nSols = optimization->numberOfSolutions;
 	if (solIdx < 0 || solIdx >=  nSols)
-		return false;
-	if (optimization->solution[solIdx] == NULL)
-		optimization->solution[solIdx] = new OptimizationSolution();
-
-	switch (object) 
 	{
-		case 'v':
-		{
-			if (optimization->solution[solIdx]->variables == NULL)
-				optimization->solution[solIdx]->variables = new VariableSolution();
-			if (optimization->solution[solIdx]->variables->basisStatus == NULL)
-				optimization->solution[solIdx]->variables->basisStatus = new BasisStatus();
-			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-			return optimization->solution[solIdx]->variables->basisStatus->setBasisStatusIntVector(status, i, ni);
-		}
-		case 'o':	
-		{
-			if (optimization->solution[solIdx]->objectives == NULL)
-				optimization->solution[solIdx]->objectives = new ObjectiveSolution();
-			if (optimization->solution[solIdx]->objectives->basisStatus == NULL)
-				optimization->solution[solIdx]->objectives->basisStatus = new BasisStatus();
-			for (int j=0; j<ni; j++) if (i[j] >= 0) return false;
-			return optimization->solution[solIdx]->objectives->basisStatus->setBasisStatusIntVector(status, i, ni);
-		}
-		case 'c':	
-		{
-			if (optimization->solution[solIdx]->constraints == NULL)
-				optimization->solution[solIdx]->constraints = new ConstraintSolution();
-			if (optimization->solution[solIdx]->constraints->basisStatus == NULL)
-				optimization->solution[solIdx]->constraints->basisStatus = new BasisStatus();
-			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-			return optimization->solution[solIdx]->constraints->basisStatus->setBasisStatusIntVector(status, i, ni);
-		}
-		default: 
-			throw ErrorClass("target object not implemented in setBasisStatus");
+		return false;
 	}
-}//setBasisStatus
+	if (optimization->solution[solIdx] == NULL)
+		optimization->solution[solIdx] = new OptimizationSolution();	
+	if (optimization->solution[solIdx]->variables == NULL)
+		optimization->solution[solIdx]->variables = new VariableSolution();
+	if (optimization->solution[solIdx]->variables->basisStatus == NULL)
+		optimization->solution[solIdx]->variables->basisStatus = new BasisStatus();
+	if (optimization->solution[solIdx]->variables->basisStatus->numberOfVar > 0)
+		return false;
+	if (numberOfVar < 0) return false;
+	if (optimization->solution[solIdx]->variables->basisStatus->var != NULL) return false;
+	optimization->solution[solIdx]->variables->basisStatus->numberOfVar = numberOfVar;
+	if (numberOfVar > 0)
+	{	optimization->solution[solIdx]->variables->basisStatus->var = new BasStatus*[numberOfVar];
+		for(int i = 0; i < numberOfVar; i++)
+			optimization->solution[solIdx]->variables->basisStatus->var[i] = new BasStatus();
+	}
+	return true;
+}//setNumberOfBasisVar
+
+bool OSResult::setBasisVar(int solIdx, int number, int idx, std::string str){
+	if (optimization == NULL || optimization->solution == NULL)
+	{//	throw ErrorClass("No optimization or solution object defined");  
+		return false;
+	}
+	int nSols = optimization->numberOfSolutions;
+	if (solIdx < 0 || solIdx >=  nSols)
+	{//	throw ErrorClass("Trying to use a solution that was not previously declared");  
+		return false;
+	}
+	if (optimization->solution[solIdx] == NULL)
+	{//	throw ErrorClass("Solution object not previously defined");  
+		return false;
+	}
+	if (optimization->solution[solIdx]->variables == NULL)
+	{//	throw ErrorClass("variables object not previously defined");  
+		return false;
+	}
+	if (optimization->solution[solIdx]->variables->basisStatus == NULL)
+	{//	throw ErrorClass("values object not previously defined");  
+		return false;
+	}
+	int nVar = 	optimization->solution[solIdx]->variables->basisStatus->numberOfVar;
+	if (number < 0 || number >= nVar)
+	{//	throw ErrorClass("Trying to set value outside of var array boundaries");
+		return false;
+	}
+	if (idx < 0)
+	{//	throw ErrorClass("Variable index cannot be negative.");
+		return false;
+	}
+
+	if (verifyBasisStatus(str) == 0) return false;
+
+	optimization->solution[solIdx]->variables->basisStatus->var[number]->idx   = idx;
+	optimization->solution[solIdx]->variables->basisStatus->var[number]->value = str;
+	return true;
+}//setVarValueString
+
 
 bool OSResult::setNumberOfOtherVariableResults(int solIdx, int num){
 	//int iNumberOfVariables = this->getVariableNumber();
@@ -3563,27 +3615,6 @@ bool OSResult::setOtherVariableResultNumberOfVar(int solIdx, int otherIdx, int n
 	return true;
 }//setOtherVariableResultNumberOfVar
 
-
-bool OSResult::setOtherVariableResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfEnumerations){
-	int iNumberOfEnumerations = numberOfEnumerations;
-	if (iNumberOfEnumerations <= -1) return false;
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return false;
-	if (optimization == NULL) return false;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  nSols) return false;
-	if (optimization->solution[solIdx] == NULL) return false;
-	if (optimization->solution[solIdx]->variables == NULL) return false;
-	if (optimization->solution[solIdx]->variables->other == NULL) return false;
-	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
-	if (optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration == NULL)
-		optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
-	for(int i = 0; i < numberOfEnumerations; i++)
-		optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[i] = new OtherOptionEnumeration();
-	optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfEnumerations = numberOfEnumerations;
-	return true;
-}//setOtherVariableResultNumberOfEnumerations
-
 bool OSResult::setOtherVariableResultName(int solIdx, int otherIdx, std::string name){
 	int numberOfVar = this->getVariableNumber();
 	int iNumberOfVariables = numberOfVar;
@@ -3665,63 +3696,6 @@ bool OSResult::setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, s
 	optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->value = value;
 	return true;		
 }//setOtherVariableResultVar
-
-bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, int enumIdx, std::string value, std::string description, int *i, int ni)
-{
-	if (optimization == NULL || optimization->solution == NULL)
-		return false;
-	int nSols = optimization->numberOfSolutions;
-	if (solIdx < 0 || solIdx >=  nSols)
-		return false;
-	if (optimization->solution[solIdx] == NULL) return false;
-
-	switch (object) 
-	{
-		case 'v':
-		{
-			if (optimization->solution[solIdx]->variables == NULL) return false;
-			if (optimization->solution[solIdx]->variables->other == NULL) return false;
-			if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
-			if (optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration == NULL) return false;
-			int n_enum = optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfEnumerations;
-			if (enumIdx < 0 || enumIdx >= n_enum) return false;
-			if (optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx] == NULL) 
-				optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionEnumeration();
-			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-			return optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
-		}
-		case 'o':
-		{
-			if (optimization->solution[solIdx]->objectives == NULL) return false;
-			if (optimization->solution[solIdx]->objectives->other == NULL) return false;
-			if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
-			if (optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration == NULL) return false;
-			int n_enum = optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfEnumerations;
-			if (enumIdx < 0 || enumIdx >= n_enum) return false;
-			if (optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx] == NULL) 
-				optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionEnumeration();
-			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-			return optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
-		}
-		case 'c':
-		{
-			if (optimization->solution[solIdx]->constraints == NULL) return false;
-			if (optimization->solution[solIdx]->constraints->other == NULL) return false;
-			if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
-			if (optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration == NULL) return false;
-			int n_enum = optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfEnumerations;
-			if (enumIdx < 0 || enumIdx >= n_enum) return false;
-			if (optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx] == NULL) 
-				optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionEnumeration();
-			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-			return optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
-		}
-
-		default: 
-			throw ErrorClass("target object not implemented in setOtherOptionEnumeration");
-	}
-}//setOtherOptionEnumeration
-
 
 bool OSResult::setNumberOfOtherObjectiveResults(int solIdx, int num){
 	int nSols = this->getSolutionNumber();
@@ -3931,27 +3905,6 @@ bool OSResult::setOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx, int 
 	optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfObj = numberOfObj;
 	return true;
 }//setOtherObjectiveResultNumberOfObj
-
-
-bool OSResult::setOtherObjectiveResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfEnumerations){
-	int iNumberOfEnumerations = numberOfEnumerations;
-	if (iNumberOfEnumerations <= -1) return false;
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return false;
-	if (optimization == NULL) return false;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  nSols) return false;
-	if (optimization->solution[solIdx] == NULL) return false;
-	if (optimization->solution[solIdx]->objectives == NULL) return false;
-	if (optimization->solution[solIdx]->objectives->other == NULL) return false;
-	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
-	if (optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration == NULL)
-		optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
-	for(int i = 0; i < numberOfEnumerations; i++)
-		optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[i] = new OtherOptionEnumeration();
-	optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfEnumerations = numberOfEnumerations;
-	return true;
-}//setOtherObjectiveResultNumberOfEnumerations
 
 bool OSResult::setOtherObjectiveResultName(int solIdx, int otherIdx, std::string name){
 	int numberOfObj = this->getObjectiveNumber();
@@ -4280,27 +4233,6 @@ bool OSResult::setOtherConstraintResultNumberOfCon(int solIdx, int otherIdx, int
 	optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfCon = numberOfCon;
 	return true;
 }//setOtherConstraintResultNumberOfCon
-
-
-bool OSResult::setOtherConstraintResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfEnumerations){
-	int iNumberOfEnumerations = numberOfEnumerations;
-	if (iNumberOfEnumerations <= -1) return false;
-	int nSols = this->getSolutionNumber();
-	if (nSols <= 0) return false;
-	if (optimization == NULL) return false;
-	if (optimization->solution == NULL || 
-	   solIdx < 0 || solIdx >=  nSols) return false;
-	if (optimization->solution[solIdx] == NULL) return false;
-	if (optimization->solution[solIdx]->constraints == NULL) return false;
-	if (optimization->solution[solIdx]->constraints->other == NULL) return false;
-	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
-	if (optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration == NULL)
-		optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration = new OtherOptionEnumeration*[numberOfEnumerations];
-	for(int i = 0; i < numberOfEnumerations; i++)
-		optimization->solution[solIdx]->constraints->other[ otherIdx]->enumeration[i] = new OtherOptionEnumeration();
-	optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfEnumerations = numberOfEnumerations;
-	return true;
-}//setOtherConstraintResultNumberOfEnumerations
 
 bool OSResult::setOtherConstraintResultName(int solIdx, int otherIdx, std::string name){
 	int numberOfCon = this->getConstraintNumber();
@@ -4638,6 +4570,7 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 
 				return false;
 			}
+
 			if (!this->generalStatus->IsEqual(that->generalStatus))
 				return false;
 			if (!this->otherResults->IsEqual(that->otherResults))
@@ -5294,7 +5227,7 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 }//OptimizationResult::IsEqual
 
 
-bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
+bool OptimizationSolution ::IsEqual(OptimizationSolution  *that)
 {
 	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Start comparing in OptimizationSolution " << endl;
@@ -5683,6 +5616,93 @@ bool VarValueString::IsEqual(VarValueString *that)
 }//VarValueString::IsEqual
 
 
+bool BasisStatus::IsEqual(BasisStatus *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in BasisStatus" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfVar != that->numberOfVar)
+			{
+#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfVar; i++)
+				if (!this->var[i]->IsEqual(that->var[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//BasisStatus::IsEqual
+
+
+bool BasStatus::IsEqual(BasStatus *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in BasStatus" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx   != that->idx  || 
+				this->value != that->value )
+			{
+#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//BasStatus::IsEqual
+
+
 bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 {
 	#ifdef DEBUG_ISEQUAL_ROUTINES
@@ -5732,19 +5752,6 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
 			for (int i = 0; i < numberOfVar; i++)
 				if (!this->var[i]->IsEqual(that->var[i]))
-					return false;
-
-			if (this->numberOfEnumerations != that->numberOfEnumerations)
-			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfEnumerations; i++)
-				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
 					return false;
 
 			return true;
@@ -5835,8 +5842,6 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 					return false;
 
 			if (!this->values->IsEqual(that->values))
-				return false;
-			if (!this->basisStatus->IsEqual(that->basisStatus))
 				return false;
 
 			return true;
@@ -5983,19 +5988,6 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 				if (!this->obj[i]->IsEqual(that->obj[i]))
 					return false;
 
-			if (this->numberOfEnumerations != that->numberOfEnumerations)
-			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfEnumerations; i++)
-				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
-					return false;
-
 			return true;
 		}
 	}
@@ -6084,8 +6076,6 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 					return false;
 
 			if (!this->dualValues->IsEqual(that->dualValues))
-				return false;
-			if (!this->basisStatus->IsEqual(that->basisStatus))
 				return false;
 
 			return true;
@@ -6228,19 +6218,6 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
 			for (int i = 0; i < numberOfCon; i++)
 				if (!this->con[i]->IsEqual(that->con[i]))
-					return false;
-
-			if (this->numberOfEnumerations != that->numberOfEnumerations)
-			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfEnumerations; i++)
-				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
 					return false;
 
 			return true;

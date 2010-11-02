@@ -2,13 +2,13 @@
 /** @file OSiLWriter.cpp
  * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
  * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -16,9 +16,8 @@
  */
 
 #include "OSiLWriter.h"
-#include "OSgLWriter.h"
+//#include "OSxLWriter.h"
 #include "OSInstance.h"
-#include "OSGeneral.h"
 #include "OSParameters.h" 
 #include "OSBase64.h"
 #include "OSMathUtil.h"
@@ -53,7 +52,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 	char tmptype;
 	int tmpnum;
 
-	std::cout << "Starting writeOSiL" << std::endl;
 
 	if(m_OSInstance == NULL)  return outStr.str();
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ;
@@ -63,7 +61,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 	outStr << OS_SCHEMA_VERSION;
 	outStr << "/OSiL.xsd\" >" ;
 	if( m_bWhiteSpace == true) outStr << endl;
-	std::cout << "print header info" << std::endl;
 	outStr << "<instanceHeader>";
 	if( m_bWhiteSpace == true) outStr << endl;
 	if(m_OSInstance->instanceHeader != NULL){
@@ -87,7 +84,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 		outStr << "<instanceData>" ;
 		if( m_bWhiteSpace == true) outStr << endl;
 		if(m_OSInstance->instanceData->variables != NULL && m_OSInstance->instanceData->variables->numberOfVariables > 0){
-	std::cout << "print variables" << std::endl;
 			outStr << "<variables " ;
 			outStr << "numberOfVariables=\"";
 			outStr << m_OSInstance->instanceData->variables->numberOfVariables ;
@@ -100,6 +96,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 				mult = 1;
 				if (m_OSInstance->instanceData->variables->var[i] != NULL)
 				{
+//----------------------------------------------------
 					if (i < m_OSInstance->instanceData->variables->numberOfVariables - 1)
 					{
 						tmpname = m_OSInstance->instanceData->variables->var[i]->name;
@@ -115,6 +112,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 							mult++;
 						}
 					}
+//----------------------------------------------------
 					outStr << "<var" ;
 					if (m_OSInstance->instanceData->variables->var[i]->name.length() > 0){
 						outStr << " name=\"" ;
@@ -139,6 +137,19 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					if (mult > 1)
 						outStr << " mult=\"" << mult <<  "\"";
+					/* we no longer do init
+					if(CoinIsnan(m_OSInstance->instanceData->variables->var[i]->init) == false){
+						outStr << " init=\"" ;
+						outStr << os_dtoa_format(m_OSInstance->instanceData->variables->var[i]->init) ;
+						outStr <<  "\"";
+					}
+					
+					if(m_OSInstance->instanceData->variables->var[i]->initString != ""){
+						outStr << " initString=\"" ;
+						outStr << m_OSInstance->instanceData->variables->var[i]->initString ;
+						outStr <<  "\"";
+					}
+					*/
 					outStr << "/>" ;
 					if( m_bWhiteSpace == true) outStr << endl;
 				}
@@ -148,7 +159,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 			if( m_bWhiteSpace == true) outStr << endl;
 		}
 		if(m_OSInstance->instanceData->objectives != NULL && m_OSInstance->instanceData->objectives->numberOfObjectives > 0){
-	std::cout << "print objectives" << std::endl;
 			outStr << "<objectives " ; 
 			outStr << "numberOfObjectives=\"";
 			outStr << m_OSInstance->instanceData->objectives->numberOfObjectives ;
@@ -160,6 +170,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 				mult = 1;
 				if(m_OSInstance->instanceData->objectives->obj[j] != NULL)
 				{
+//----------------------------------------------------
 					if (j < m_OSInstance->instanceData->objectives->numberOfObjectives - 1)
 					{
 						tmpname   = m_OSInstance->instanceData->objectives->obj[j]->name;
@@ -185,6 +196,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 							mult++;
 						}
 					}
+//----------------------------------------------------
 					outStr << "<obj" ;
 					if(m_OSInstance->instanceData->objectives->obj[j]->maxOrMin.length() > 0){
 						outStr << " maxOrMin=\"" ;
@@ -240,7 +252,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 		}
 		// Now the constraints
 		if(m_OSInstance->instanceData->constraints != NULL && m_OSInstance->instanceData->constraints->numberOfConstraints > 0){
-	std::cout << "print constraints" << std::endl;
 			outStr << "<constraints " ;
 			outStr << "numberOfConstraints=\"";
 			outStr << m_OSInstance->instanceData->constraints->numberOfConstraints ;
@@ -252,6 +263,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 				mult = 1;
 				if(m_OSInstance->instanceData->constraints->con[i] != NULL)
 				{
+//----------------------------------------------------
 					if (i < m_OSInstance->instanceData->constraints->numberOfConstraints - 1)
 					{
 						tmpname  = m_OSInstance->instanceData->constraints->con[i]->name;
@@ -267,6 +279,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 							mult++;
 						}
 					}
+//--------------------------------------
 					outStr << "<con" ; 
 					if(m_OSInstance->instanceData->constraints->con[i]->name.length()){
 						outStr << " name=\"" ;
@@ -300,7 +313,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 		}
 		// now the linearConstraintsCoefficients
 		if(m_OSInstance->instanceData->linearConstraintCoefficients != NULL && m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues > 0){
-	std::cout << "print A-matrix" << std::endl;
 			outStr << "<linearConstraintCoefficients " ;
 			outStr << "numberOfValues=\"";
 			outStr << m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues ;
@@ -310,7 +322,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 			if( (m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx != NULL) &&
 				(m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx->el != NULL) ){
 					if(m_OSInstance->instanceData->linearConstraintCoefficients->start->el != NULL){
-	std::cout << "print <start>" << std::endl;
 						outStr << "<start>" ;
 						if( m_bWhiteSpace == true) outStr << endl;
 						if(m_OSInstance->instanceData->variables != NULL && m_OSInstance->instanceData->variables->numberOfVariables > 0){
@@ -337,7 +348,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 								}
 							}
 							else{
-								outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\">" ;
+								outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 								outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->start->el, 
 									(m_OSInstance->instanceData->variables->numberOfVariables + 1)*sizeof(int) );
 								outStr << "</base64BinaryData>" ;
@@ -347,7 +358,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						outStr << "</start>" ;
 						if( m_bWhiteSpace == true) outStr << endl;
 					}
-	std::cout << "print <rowIdx>" << std::endl;
 					outStr << "<rowIdx>" ;
 					if( m_bWhiteSpace == true) outStr << endl;
 					if(m_bWriteBase64 == false){		
@@ -373,7 +383,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					else{
 						//outStr << "<base64BinaryData sizeOf=\"4\" numericType=\"int\" >" ;
-						outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\">" ;
+						outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 						outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->rowIdx->el, 
 							m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues*sizeof(int) );
 						outStr << "</base64BinaryData>" ;
@@ -386,7 +396,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 				if( (m_OSInstance->instanceData->linearConstraintCoefficients->colIdx != NULL)  &&
 					(m_OSInstance->instanceData->linearConstraintCoefficients->colIdx->el != NULL) ){
 						if(m_OSInstance->instanceData->linearConstraintCoefficients->start->el != NULL){
-	std::cout << "print <start>" << std::endl;
 							outStr << "<start>" ;
 							if( m_bWhiteSpace == true) outStr << endl;
 							if(m_OSInstance->instanceData->constraints != NULL && m_OSInstance->instanceData->constraints->numberOfConstraints > 0){
@@ -412,7 +421,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 									}
 								}
 								else{
-									outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\">" ;
+									outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 									outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->start->el, 
 										(m_OSInstance->instanceData->variables->numberOfVariables + 1)*sizeof(int) );
 									outStr << "</base64BinaryData>" ;
@@ -422,7 +431,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 							outStr << "</start>" ;
 							if( m_bWhiteSpace == true) outStr << endl;
 						}
-	std::cout << "print <colIdx>" << std::endl;
 						outStr << "<colIdx>";
 						if( m_bWhiteSpace == true) outStr << endl;
 						if(m_bWriteBase64 == false){
@@ -447,7 +455,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 							}
 						}
 						else{
-							outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\">" ;
+							outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
 							outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->colIdx->el, 
 								m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues*sizeof(int) );
 							outStr << "</base64BinaryData>" ;
@@ -458,7 +466,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 			}
 			if(m_OSInstance->instanceData->linearConstraintCoefficients->value != NULL){
-	std::cout << "print <value>" << std::endl;
 				outStr << "<value>" ;
 				if( m_bWhiteSpace == true) outStr << endl;
 				if(m_OSInstance->instanceData->linearConstraintCoefficients->value->el != NULL){
@@ -478,7 +485,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						}
 					}
 					else{
-						outStr << "<base64BinaryData sizeOf=\"" << sizeof(double) << "\">" ;
+						outStr << "<base64BinaryData sizeOf=\"" << sizeof(double) << "\"  >" ;
 						outStr << Base64::encodeb64( (char*)m_OSInstance->instanceData->linearConstraintCoefficients->value->el, 
 							m_OSInstance->instanceData->linearConstraintCoefficients->numberOfValues*sizeof( double) );
 						outStr << "</base64BinaryData>" ;
@@ -492,7 +499,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 			if( m_bWhiteSpace == true) outStr << endl;
 		}
 		if(m_OSInstance->instanceData->quadraticCoefficients != NULL && m_OSInstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > 0){
-	std::cout << "print quadratic coefficients" << std::endl;
 			outStr << "<quadraticCoefficients";
 			outStr << "  numberOfQuadraticTerms=\"";
 			outStr << m_OSInstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms;
@@ -524,7 +530,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 			if( m_bWhiteSpace == true) outStr << endl;
 		}
 		if(m_OSInstance->instanceData->nonlinearExpressions != NULL && m_OSInstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions > 0){	
-	std::cout << "print nonlinear expressions" << std::endl;
 			outStr << "<nonlinearExpressions";
 			outStr << "  numberOfNonlinearExpressions=\"";
 			outStr << m_OSInstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions;
@@ -550,7 +555,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 		if( m_bWhiteSpace == true) outStr << endl;
 	} // end instanceData if
 	outStr << "</osil>" ;
-	std::cout << "printing completed" << std::endl;
 	if( m_bWhiteSpace == true) outStr << endl;
 	outStr << endl;
 	return outStr.str();

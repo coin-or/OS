@@ -22,7 +22,6 @@
 
 #include "OSResult.h"
 #include "OSrLParserData.h"
-#include "OSgLParserData.h"
 #include "OSErrorClass.h"
 
 
@@ -73,13 +72,8 @@ private:
 	OSResult *m_osresult;
 	
 	/** m_parserData is the object used in the parser to 
-	 * temporarily store data from the OSrL schema elements. 
+	 * temporarily store data. 
 	 */
 	OSrLParserData *m_parserData;
-	
-	/** m_osglData is the object used in the parser to 
-	 * temporarily store data from the OSgL schema elements. 
-	 */
-	OSgLParserData *m_osglData;
 };
 #endif

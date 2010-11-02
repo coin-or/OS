@@ -1001,6 +1001,92 @@ public:
 };// class VariableValuesString
 
 
+/*! \class BasStatus
+ *  \brief BasStatus Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that is used to provide the basis status and index
+ * associated with (part of) the optimal solution.  
+ */
+class BasStatus{
+public:
+
+	/** idx is the index of the variable in the solution */
+	int idx;
+	
+	/* value is the value of the variable indexed by idx
+	 * in the solution
+	 */	
+	std::string value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	BasStatus();
+
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~BasStatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(BasStatus *that);
+
+};// class BasStatus
+
+
+/*! \class BasisStatus
+ *  \brief The BasisStatus Class.
+ * 
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ * @version 2.0, 10/09/2009
+ * @since OS 1.0
+ * 
+ * \remarks
+ * A class that contains values for all the string-valued variables
+ */	
+class BasisStatus{
+public:
+
+	/** the number of string-valued variable values that are in the solution
+	 */
+	int numberOfVar;
+
+	/** a vector of VarValueString objects, there will be one
+	 * for each variable in the solution
+	 */
+	BasStatus** var;
+
+	
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	BasisStatus();
+	
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~BasisStatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(BasisStatus *that);
+
+};// class BasisStatus
+
 /*! \class OtherVarResult
  *  \brief OtherVarResult Class.
  * 
@@ -1065,11 +1151,6 @@ public:
 	 */
 	int numberOfVar;
 
-	/** the number of distinct values for this
-	    particular type of result
-	 */
-	int numberOfEnumerations;
-
 	/** this element allows a specific value associated with this
 	    particular type of result
 	 */
@@ -1086,12 +1167,6 @@ public:
 	 * this user defined variable result
 	 */
 	OtherVarResult** var;
-	
-	/* a pointer to OtherOptionEnumeration objects that will
-	 * give for each distinct value the set of indices for 
-	 * this user defined variable result
-	 */
-	OtherOptionEnumeration** enumeration;
 
 	/**
 	 *
@@ -1314,11 +1389,6 @@ public:
 	 */
 	int numberOfObj;
 
-	/** the number of distinct values for this
-	    particular type of result
-	 */
-	int numberOfEnumerations;
-
 	/** the name of the result the user is defining */
 	std::string name;
 	
@@ -1336,12 +1406,6 @@ public:
 	 */	
 	OtherObjResult** obj;
 	
-	/* a pointer to OtherOptionEnumeration objects that will
-	 * give for each distinct value the set of indices for 
-	 * this user defined variable result
-	 */
-	OtherOptionEnumeration** enumeration;
-
 	/**
 	 *
 	 * Default constructor. 
@@ -1385,9 +1449,6 @@ public:
 	
 	/** a pointer to an array of ObjectiveValues objects */	
 	ObjectiveValues *values;
-
-	/** a pointer to a BasisStatus object */
-	BasisStatus *basisStatus;
 
 	/** a pointer to an array of other pointer objects for 
 	 * objective functions
@@ -1580,11 +1641,6 @@ public:
 	 */
 	int numberOfCon;
 
-	/** the number of distinct values for this
-	    particular type of result
-	 */
-	int numberOfEnumerations;
-
 	/** the name of the result the user is defining */
 	std::string name;
 
@@ -1602,12 +1658,6 @@ public:
 	 * value for this user defined objective function result
 	 */	
 	OtherConResult** con;
-
-	/* a pointer to OtherOptionEnumeration objects that will
-	 * give for each distinct value the set of indices for 
-	 * this user defined variable result
-	 */
-	OtherOptionEnumeration** enumeration;
 
 	/**
 	 *
@@ -1653,9 +1703,6 @@ public:
 	/** a pointer to an array of DualVariableValues objects */
 	DualVariableValues *dualValues;
 	
-	/** a pointer to a BasisStatus object */
-	BasisStatus *basisStatus;
-
 	/** a pointer to an array of other pointer objects for 
 	 * constraint functions
 	 */	 
@@ -3262,21 +3309,29 @@ public:
 	 */
 	bool setVarValueString(int solIdx, int number, int idx, std::string str);
 
+	/**
+	 * Set the number of variables in the basis that are to be given a status.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param numberOfVar holds the number of primal variables that are to be set
+	 * 
+	 * @return whether the information was set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setNumberOfBasisVar(int solIdx, int numberOfVar);
 
 	/**
-	 * Set the basis status of a number of variables/constraints/objectives.
-	 * @param solIdx holds the index of the solution to which the basis values belong. 
-	 * @param object holds the type of basis object to be used 
-	 * ("variables", "objectives", "constraints" are legal values)
-	 * @param status holds the status which is to be used
-	 * (leagal values are "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
-	 * @param i holds the integer array whose values are to be transferred.
-	 * @param ni holds the number of elements of i
+	 * Set the basis status of a primal variable.
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index to set the primal variable values. 
+	 * @param number holds the location within the sparse array var that is to be used
+	 * @param idx holds the index of the primal variable that is to be set
+	 * @param str holds the variable value to set.
 	 * 
 	 * @return whether primal variable value was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setBasisStatus(int solIdx, char object, int status, int *i, int ni);
+	bool setBasisVar(int solIdx, int number, int idx, std::string str);
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
@@ -3346,21 +3401,6 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setOtherVariableResultNumberOfVar(int solIdx, int otherIdx, int numberOfVar);
-	
-	/**
-	 * Set the number of <enumeration> children of another (non-standard/solver specific) 
-	 * variable-related result, for the [i]th solution.   
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index  
-	 * @param otherIdx holds the index of the OtherVariableResult object
-	 * @param numberOfVar holds the number of <var> children
-	 *
-	 * @return whether the other variable result's name was set successfully or not. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setOtherVariableResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfVar);
 
 	/**
 	 * Set the name of another (non-standard/solver specific) variable-related result, 
@@ -3438,27 +3478,6 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, std::string value);
-
-	/**
-	 * Set the value and corresponding indices of another (non-standard/solver specific) variable-related result, 
-	 * for the [k]th solution, where k equals the given solution index.   
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index 
-	 * @param otherIdx holds the index of the OtherVariableResult object
-	 * @param object holds the object to which this enumeration pertains 
-	 * --- variables, objectives and constraints can be handled identically
-	 * @param enumIdx holds the index of the OtherOptionEnumeration object
-	 * @param value holds the value of this result
-	 * @param description holds a description of this result
-	 * @param i holds the indices of the variables that take on this value
-	 * @param ni holds the dimension of the index vector i
-	 *
-	 * @return whether the other variable result's value was set successfully or not. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setOtherOptionEnumeration(int solIdx, int otherIdx, char object, int enumIdx, std::string value, std::string description, int *i, int ni);
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific) objective-related results, 
@@ -3561,21 +3580,6 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx, int numberOfObj);
-
-		/**
-	 * Set the number of <enumeration> children of another (non-standard/solver specific) 
-	 * objective-related result, for the [i]th solution.   
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index  
-	 * @param otherIdx holds the index of the OtherObjectiveResult object
-	 * @param numberOfObj holds the number of <obj> children
-	 *
-	 * @return whether the other objective result's name was set successfully or not. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setOtherObjectiveResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfObj);
 
 	/**
 	 * Set the name of another (non-standard/solver specific) objective-related result, 
@@ -3759,21 +3763,6 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setOtherConstraintResultNumberOfCon(int solIdx, int otherIdx, int numberOfCon);
-	
-	/**
-	 * Set the number of <enumeration> children of another (non-standard/solver specific) 
-	 * constraint-related result, for the [i]th solution.   
-	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
-	 * @param solIdx holds the solution index  
-	 * @param otherIdx holds the index of the OtherConstraintResult object
-	 * @param numberOfCon holds the number of <con> children
-	 *
-	 * @return whether the other constraint result's name was set successfully or not. 
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
-	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
-	 * @see #setSolutionNumber(int)
-	 */
-	bool setOtherConstraintResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfCon);
 
 	/**
 	 * Set the name of another (non-standard/solver specific) constraint-related result, 
