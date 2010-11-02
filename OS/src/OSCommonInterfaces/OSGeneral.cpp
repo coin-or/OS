@@ -21,10 +21,11 @@
 #include "OSMathUtil.h"
 #include "OSBase64.h"
 
-#include<iostream>
-#include<sstream>
+#include <iostream>
+#include <sstream>
 
 //#define DEBUG_OSGENERAL
+//#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
 using std::cout;
@@ -247,6 +248,18 @@ IntVector::IntVector():
 	#endif
 } 
 
+
+IntVector::IntVector(int n):
+	bDeleteArrays(true)
+{  
+	#ifdef DEBUG
+	cout << "Inside the IntVector Constructor" << endl;
+	#endif
+
+	numberOfEl = n;
+	el = new int[n];
+} 
+
 IntVector::~IntVector(){  
 	#ifdef DEBUG
 	cout << "Inside the IntVector Destructor" << endl;
@@ -255,43 +268,138 @@ IntVector::~IntVector(){
 		delete[] el;
 		el = NULL;
 	}
-
 } 
 
-std::string IntVector::writeEl(bool addWhiteSpace, bool writeBase64)
-{
-	ostringstream outStr;
-	int mult, incr;
 
-	if (this->numberOfEl > 0)
-	{
-		if(writeBase64 == false)
-		{
-			for(int i = 0; i <= this->numberOfEl;)
-			{
-				getMultIncr(&(this->el[i]), &mult, &incr, (this->numberOfEl) - i, 1);
-				if (mult == 1)
-					outStr << "<el>" ;
-				else if (incr == 1)
-					outStr << "<el mult=\"" << mult << "\">";
-				else
-					outStr << "<el mult=\"" << mult << "\" incr=\"" << incr << "\">";
-				outStr << this->el[i];
-				outStr << "</el>" ;
-				if(addWhiteSpace == true) outStr << endl;
-				i += mult;
-			}
-		}
+bool IntVector::IsEqual(IntVector *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in IntVector" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
 		else
 		{
-			outStr << "<base64BinaryData sizeOf=\"" << sizeof(int) << "\"  >" ;
-			outStr << Base64::encodeb64( (char*)this->el, (this->numberOfEl)*sizeof(int) );
-			outStr << "</base64BinaryData>" ;
-			if(addWhiteSpace == true) outStr << endl;
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
 		}
 	}
-	return outStr.str();
-}// end IntVector::writeEl
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfEl != that->numberOfEl)
+			{
+#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "numberOfEl: " << this->numberOfEl << " vs. " << that->numberOfEl << endl;
+#endif	
+				return false;
+			}
+			for (int i=0; i<this->numberOfEl; i++)
+			{
+				if (this->el[i] != that->el[i])
+				{
+
+#ifdef DEBUG_ISEQUAL_ROUTINES
+					cout << "El[" << i << "]: " << this->el[i] << " vs. " << that->el[i] << endl;
+#endif	
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+}//IntVector::IsEqual
+
+
+OtherOptionEnumeration::OtherOptionEnumeration():
+	value(""),
+	description("")
+{  
+	#ifdef DEBUG
+	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
+	#endif
+	IntVector::IntVector();
+} 
+
+OtherOptionEnumeration::OtherOptionEnumeration(int n):
+	value(""),
+	description("")
+{  
+	#ifdef DEBUG
+	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
+	#endif
+
+	IntVector::IntVector(n);
+} 
+
+OtherOptionEnumeration::~OtherOptionEnumeration(){  
+	#ifdef DEBUG
+	cout << "Inside the OtherOptionEnumeration Destructor" << endl;
+	#endif
+	IntVector::~IntVector();
+} 
+
+bool OtherOptionEnumeration::setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni)
+{
+	if (this->el == NULL) this->el = new int[ni];
+	this->value = value;
+	this->description = description;
+	this->numberOfEl = ni;
+	for (int j=0; j<ni; j++)
+		this->el[j] = i[j];
+	return true;
+}
+
+bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in IntVector" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->value != that->value || this->description != that->description)
+			{
+#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			return this->IntVector::IsEqual(that);
+		}
+	}
+}//IntVector::IsEqual
+
 
 
 DoubleVector::DoubleVector():
@@ -315,37 +423,208 @@ DoubleVector::~DoubleVector(){
 	}
 }
 
-std::string DoubleVector::writeEl(bool addWhiteSpace, bool writeBase64)
-{
-	ostringstream outStr;
-	int mult, incr;
 
-	if (this->numberOfEl > 0)
-	{
-		if(writeBase64 == false)
-		{
-			for(int i = 0; i <= this->numberOfEl;)
-			{
-				mult = getMult(&(this->el[i]), (this->numberOfEl) - i);
-				if (mult == 1)
-					outStr << "<el>" ;
-				else 
-					outStr << "<el mult=\"" << mult << "\">";
-				outStr << os_dtoa_format(this->el[i] );
-				outStr << "</el>" ;
-				if(addWhiteSpace == true) outStr << endl;
-				i += mult;
-			}
-		}
+bool DoubleVector::IsEqual(DoubleVector *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in DoubleVector" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
 		else
 		{
-			outStr << "<base64BinaryData sizeOf=\"" << sizeof(double) << "\"  >" ;
-			outStr << Base64::encodeb64( (char*)this->el, (this->numberOfEl)*sizeof(double) );
-			outStr << "</base64BinaryData>" ;
-			if(addWhiteSpace == true) outStr << endl;
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
 		}
 	}
-	return outStr.str();
-}// end DoubleVector::writeEl
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfEl != that->numberOfEl)
+			{
+#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "numberOfEl: " << this->numberOfEl << " vs. " << that->numberOfEl << endl;
+#endif	
+				return false;
+			}
+			for (int i=0; i<this->numberOfEl; i++)
+			{
+				if (this->el[i] != that->el[i])
+				{
+
+#ifdef DEBUG_ISEQUAL_ROUTINES
+					cout << "El[" << i << "]: " << this->el[i] << " vs. " << that->el[i] << endl;
+#endif	
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+}//DoubleVector::IsEqual
+
+
+BasisStatus::BasisStatus():
+	basic(NULL),
+	atLower(NULL),
+	atUpper(NULL),
+	isFree(NULL),
+	superbasic(NULL),
+	unknown(NULL)
+{ 
+	#ifdef DEBUG_OSRESULT
+	cout << "Inside the BasisStatus Constructor" << endl;
+	#endif
+}//end BasisStatus constructor
+
+
+BasisStatus::~BasisStatus()
+{
+	#ifdef DEBUG_OSRESULT  
+	cout << "Inside the BasisStatus Destructor" << endl;
+	#endif
+	if (basic != NULL)
+	{
+		delete basic;
+		basic = NULL;
+	}
+	if (atLower != NULL)
+	{
+		delete atLower;
+		atLower = NULL;
+	}
+	if (atUpper != NULL)
+	{
+		delete atUpper;
+		atUpper = NULL;
+	}
+	if (isFree != NULL)
+	{
+		delete isFree;
+		isFree = NULL;
+	}
+	if (superbasic != NULL)
+	{
+		delete superbasic;
+		superbasic = NULL;
+	}
+	if (unknown != NULL)
+	{
+		delete unknown;
+		unknown = NULL;
+	}
+}// end BasisStatus destructor 
+
+
+bool BasisStatus::setBasisStatusIntVector(int status, int *i, int ni)
+{
+	switch (status)
+	{
+		case ENUM_BASIS_STATUS_basic:
+		{
+			if (this->basic == NULL) this->basic = new IntVector(ni);
+			else delete[] this->basic;
+			this->basic->numberOfEl = ni;
+			for (int j=0; j<ni; j++)
+				this->basic->el[j] = i[j];
+			return true;
+		}
+		case ENUM_BASIS_STATUS_atLower:
+		{
+			if (this->atLower == NULL) this->atLower = new IntVector(ni);
+			else delete[] this->atLower;
+			this->atLower->numberOfEl = ni;
+			for (int j=0; j<ni; j++)
+				this->atLower->el[j] = i[j];
+			return true;
+		}
+		case ENUM_BASIS_STATUS_atUpper:
+		{
+			if (this->atUpper == NULL) this->atUpper = new IntVector(ni);
+			else delete[] this->atUpper;
+			this->atUpper->numberOfEl = ni;
+			for (int j=0; j<ni; j++)
+				this->atUpper->el[j] = i[j];
+			return true;
+		}
+		case ENUM_BASIS_STATUS_isFree:
+		{
+			if (this->isFree == NULL) this->isFree = new IntVector(ni);
+			else delete[] this->isFree;
+			this->isFree->numberOfEl = ni;
+			for (int j=0; j<ni; j++)
+				this->isFree->el[j] = i[j];
+			return true;
+		}
+		case ENUM_BASIS_STATUS_superbasic:
+		{
+			if (this->superbasic == NULL) this->superbasic = new IntVector(ni);
+			else delete[] this->superbasic;
+			this->superbasic->numberOfEl = ni;
+			for (int j=0; j<ni; j++)
+				this->superbasic->el[j] = i[j];
+			return true;
+		}
+		case ENUM_BASIS_STATUS_unknown:
+		{
+			if (this->unknown == NULL) this->unknown = new IntVector(ni);
+			else delete[] this->unknown;
+			this->unknown->numberOfEl = ni;
+			for (int j=0; j<ni; j++)
+				this->unknown->el[j] = i[j];
+			return true;
+		}
+	default:
+		throw ErrorClass("Unknown basis status encountered in setBasisStatusIntVector");  
+	 }
+}//setBasisStatusIntVector
+
+bool BasisStatus::IsEqual(BasisStatus *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in BasisStatus" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (      !this->basic->IsEqual(that->basic)      ) return false;
+			if (    !this->atLower->IsEqual(that->atLower)    ) return false;
+			if (    !this->atUpper->IsEqual(that->atUpper)    ) return false;
+			if (     !this->isFree->IsEqual(that->isFree)     ) return false;
+			if ( !this->superbasic->IsEqual(that->superbasic) ) return false;
+			if (    !this->unknown->IsEqual(that->unknown)    ) return false;
+
+			return true;
+		}
+	}
+}//BasisStatus::IsEqual
 
 

@@ -82,3 +82,38 @@ std::map<int, int> *OSExpressionTree::getVariableIndiciesMap(){
 	return mapVarIdx;
 }//getVariableIndicies
 
+bool OSExpressionTree::IsEqual(OSExpressionTree *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in OSExpressionTree" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (!this->m_treeRoot->IsEqual(that->m_treeRoot))
+				return false;
+
+			return true;
+		}
+	}
+}//OSExpressionTree::IsEqual
+
+

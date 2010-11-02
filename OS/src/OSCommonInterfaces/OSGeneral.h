@@ -336,6 +336,10 @@ class IntVector{
 public:
 	IntVector();
 	~IntVector();
+
+	// alternate constructor
+	IntVector(int n);
+
 	/**
 	 * bDeleteArrays is true if we delete the arrays in garbage collection
 	 * set to true by default
@@ -344,14 +348,39 @@ public:
 	int numberOfEl;
 	int *el;
 
-	/**
-	 *  @brief writeVector returns a string containing the elements of the vector
-	 *
-	 *  @param addWhiteSpace controls whether whitespace (i.e., newline) is to be added between elements
-	 *  @param writeBase64 controls whether output is in base64 form or as a sequence of <el> (with mult and incr attributes)
-	 */
-	std::string writeEl(bool addWhiteSpace, bool writeBase64);
+	bool IsEqual(IntVector *that);
 };//class IntVector
+
+
+/*! \class OtherOptionEnumeration
+ *  brief an integer vector data structure used in OSOption and OSResult
+ *
+ *  This class extends IntVector by adding two string-valued elements, value and description
+ */	
+class OtherOptionEnumeration : public IntVector{
+public:
+	std::string value;
+	std::string description;
+
+	OtherOptionEnumeration();
+	~OtherOptionEnumeration();
+
+	// alternate constructor
+	OtherOptionEnumeration(int n);
+
+	bool IsEqual(OtherOptionEnumeration *that);
+
+	/**
+	 *  Set the indices for a particular value in an enumeration
+	 *  @param value represents the value of this enumeration member
+	 *  @param description holds additional information about this value
+	 *  @param i contains the array of indices
+	 *  @param ni contains the number of elements in i
+	 */
+	bool setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni);
+};//class OtherOptionEnumeration
+
+
 
 /*! \class DoubleVector
  * \brief a double vector data structure
@@ -368,13 +397,7 @@ public:
 	int numberOfEl;
 	double *el;			
 
-	/**
-	 *  @brief writeVector returns a string containing the elements of the vector
-	 *
-	 *  @param addWhiteSpace controls whether whitespace (i.e., newline) is to be added between elements
-	 *  @param writeBase64 controls whether output is in base64 form or as a sequence of <el> (with mult and incr attributes)
-	 */
-	std::string writeEl(bool addWhiteSpace, bool writeBase64);
+	bool IsEqual(DoubleVector *that);
 };//class DoubleVector
 
 
@@ -393,6 +416,34 @@ struct IndexValuePair{
 		
 };
 
+/*! \class BasisStatus
+ * \brief a data structure to represent an LP basis on both input and output 
+ *
+ */
+class BasisStatus{
+public:
+	BasisStatus();
+	~BasisStatus();
+
+	IntVector* basic;
+	IntVector* atLower;
+	IntVector* atUpper;
+	IntVector* isFree;
+	IntVector* superbasic;
+	IntVector* unknown;
+	bool IsEqual(BasisStatus *that);
+
+/**
+ *  Set the indices for a particular status
+ *  @param status is a string representing the allowed statuses 
+ *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *  @param i contains the array of indices
+ *  @param ni contains the number of elements in i
+ */
+	bool setBasisStatusIntVector(int status, int *i, int ni);
+
+};//class BasisStatus 
+	
 class OSGeneral{
 
 };
@@ -698,22 +749,22 @@ inline bool verifyJobStatus(std::string status)
 
 enum ENUM_BASIS_STATUS 
 {
-	ENUM_BASIS_STATUS_unknown = 1,
-	ENUM_BASIS_STATUS_basic,
+	ENUM_BASIS_STATUS_basic = 1,
 	ENUM_BASIS_STATUS_atLower,
 	ENUM_BASIS_STATUS_atUpper,
 	ENUM_BASIS_STATUS_isFree,
-	ENUM_BASIS_STATUS_superbasic
+	ENUM_BASIS_STATUS_superbasic,
+	ENUM_BASIS_STATUS_unknown
 };
 
 inline int returnBasisStatus(std::string status)
 {
-	if (status == "unknown"   ) return ENUM_BASIS_STATUS_unknown;
 	if (status == "basic"     ) return ENUM_BASIS_STATUS_basic;
 	if (status == "atLower"   ) return ENUM_BASIS_STATUS_atLower;
 	if (status == "atUpper"   ) return ENUM_BASIS_STATUS_atUpper;
 	if (status == "isFree"    ) return ENUM_BASIS_STATUS_isFree;
 	if (status == "superBasic") return ENUM_BASIS_STATUS_superbasic;
+	if (status == "unknown"   ) return ENUM_BASIS_STATUS_unknown;
 	return 0;
 }//returnBasisStatus
 

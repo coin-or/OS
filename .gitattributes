@@ -434,6 +434,8 @@ OS/src/OSCommonInterfaces/OSOption.cpp -text
 OS/src/OSCommonInterfaces/OSOption.h -text
 OS/src/OSCommonInterfaces/OSResult.cpp -text
 OS/src/OSCommonInterfaces/OSResult.h -text
+OS/src/OSCommonInterfaces/OSgLWriter.cpp -text
+OS/src/OSCommonInterfaces/OSgLWriter.h -text
 OS/src/OSCommonInterfaces/OSiLReader.cpp -text
 OS/src/OSCommonInterfaces/OSiLReader.h -text
 OS/src/OSCommonInterfaces/OSiLWriter.cpp -text
