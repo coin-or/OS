@@ -65,7 +65,7 @@ libOSCommonInterfaces_la_LIBADD =
 am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo OSGeneral.lo \
 	OSInstance.lo OSResult.lo OSiLReader.lo OSiLWriter.lo \
 	OSoLWriter.lo OSoLReader.lo OSOption.lo OSnLNode.lo \
-	OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo OSgLWriter.lo
+	OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo
 libOSCommonInterfaces_la_OBJECTS =  \
 	$(am_libOSCommonInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -365,8 +365,6 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSInstance.h \
 	OSResult.cpp \
 	OSResult.h \
-	OSgLWriter.cpp \
-	OSgLWriter.h \
 	OSiLReader.cpp \
 	OSiLReader.h \
 	OSiLWriter.cpp \
@@ -383,7 +381,7 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLReader.h \
 	OSrLWriter.cpp \
 	OSrLWriter.h \
-	OSDefaultSolver.cpp \
+    OSDefaultSolver.cpp \
 	OSDefaultSolver.h 
 
 
@@ -423,7 +421,6 @@ includecoin_HEADERS = \
         OSGeneral.h \
 	OSInstance.h \
 	OSResult.h \
-	OSgLWriter.h \
 	OSiLReader.h \
 	OSiLWriter.h \
 	OSnLNode.h \
@@ -491,7 +488,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSInstance.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSOption.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSResult.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSgLWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLWriter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSnLNode.Plo@am__quote@

@@ -1,5 +1,5 @@
 /* $Id$ */
-/** @file OSParseosil.y
+/** @file parseosil.y
  * 
  * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
  * @version 2.2, 12/Oct/2010
@@ -999,7 +999,7 @@ void  yygetOSInstance( const char *osil, OSInstance* osinstance, OSiLParserData 
 	try {
 		parseInstanceHeader( &osil, osinstance, &parserData->osillineno);
 		parseInstanceData( &osil, osinstance, &parserData->osillineno);	
-		/** at this point here we have parsed everything through <linearConstraintCoefficients>
+		/** at this point here we have parsed everything through <linearConstraint coefficient>
 		 *	we have done so without bison and just moved the pointer on osil to point to what is past
 		 *	the linear part	
 		 * call the flex scanner and start scanning the nonlinear part of the problem
@@ -1381,7 +1381,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					while(*name++  == *ch) ch++;
 					if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"error in variables name attribute"); return false;}
 					name -= 5;
-					if(varnameattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable name attributes"); return false;}
+					if(varnameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable name attributes"); return false;}
 					varnameattON = true;
 					GETATTRIBUTETEXT;
 					osinstance->instanceData->variables->var[varcount]->name=attText;
@@ -1397,7 +1397,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					// if i = 10 we matched initString
 					if( ( (ch - *p) != 4)  && ( (ch - *p) != 10)) {  osilerror_wrapper( ch,osillineno,"error in variables init or initString attribute"); return false;}
 					if((ch - *p) == 4){
-						if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable init attributes"); return false;}
+						if(varinitattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable init attributes"); return false;}
 						varinitattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1406,7 +1406,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 						initString -= 5;
 					}
 					else{
-						if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable initString attributes"); return false;}
+						if(varinitStringattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable initString attributes"); return false;}
 						varinitStringattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1421,7 +1421,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					while(*type++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables type attribute"); return false;}
 					type -= 5;
-					if(vartypeattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable type attributes"); return false;}
+					if(vartypeattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable type attributes"); return false;}
 					vartypeattON = true;
 					GETATTRIBUTETEXT;
 					vt = returnVarType(attText[0]);
@@ -1433,7 +1433,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				case 'l':
 					ch++;
 					if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables lower bound attribute"); return false;}
-					if(varlbattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable lb attributes"); return false;}
+					if(varlbattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable lb attributes"); return false;}
 					varlbattON = true;
 					GETATTRIBUTETEXT;
 					osinstance->instanceData->variables->var[varcount]->lb = atofmod1( osillineno,attText, attTextEnd);
@@ -1443,7 +1443,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 				case 'u':
 					ch++;
 					if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in variables upper bound attribute"); return false;}
-					if(varubattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable ub attributes"); return false;}
+					if(varubattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable ub attributes"); return false;}
 					varubattON = true;
 					GETATTRIBUTETEXT;
 					osinstance->instanceData->variables->var[varcount]->ub = atofmod1( osillineno,attText, attTextEnd);
@@ -1455,7 +1455,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 					while(*mult++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in variables mult attribute"); return false;}
 					mult -= 5;
-					if(varmultattON == true) {  osilerror_wrapper( ch,osillineno,"too many variable mult attributes"); return false;}
+					if(varmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many variable mult attributes"); return false;}
 					varmultattON = true;
 					GETATTRIBUTETEXT;
 					varmult = atoimod1( osillineno,attText, attTextEnd);
@@ -1551,7 +1551,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		// get the </variables> tag
 		*p = ch;
 		while(*endVariables++  == *ch) ch++;
-		if( (ch - *p) != 11) {   osilerror_wrapper( ch,osillineno,"cannot find </variables> tag"); return false;}
+		if( (ch - *p) != 11) {   osilerror_wrapper( ch,osillineno,"cannot find </varialbes> tag"); return false;}
 		for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );	
 		// better have >
 		if(*ch != '>') {   osilerror_wrapper( ch,osillineno,"improperly formed </variables> tag"); return false;}
@@ -1559,14 +1559,14 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 	}else {//end if(numberOfVariables > 0)
 		// error if the number is negative
 		if(numberOfVariables < 0) {  osilerror_wrapper( ch,osillineno,"cannot have a negative number of variables"); return false;}
-		// if we are here we have numberOfVariables = 0
-		// must close with /> or </variables>
+		// if we are here we have numberOfConstraints = 0
+		// must close with /> or </constraints>
 		// get rid of white space
 		for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 		if( *ch == '/'){
 			// better have a >
 			ch++;
-			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed variables tag"); return false;}
+			if( *ch  != '>') {  osilerror_wrapper( ch,osillineno,"improperly closed constraints tag"); return false;}
 			ch++;
 		}
 		else{
@@ -1707,7 +1707,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					numberOfObjCoef -= 16;
 					if( ( (ch - *p) != 15)  ) {  osilerror_wrapper( ch,osillineno,"error in objective numberOfObjCoef attribute"); return false;}
 					else{
-						if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj numberOfObjCoefatt attributes"); return false;}
+						if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj numberOfObjCoefatt attributes"); return false;}
 						objnumberOfObjCoefattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1724,7 +1724,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					name -= 5;
 					if( ( (ch - *p) != 4)  ) {  osilerror_wrapper( ch,osillineno,"error in objective name attribute"); return false;}
 					else{
-						if(objnameattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj name attributes"); return false;}
+						if(objnameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj name attributes"); return false;}
 						objnameattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1739,7 +1739,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 				constant -= 9;	
 				if( ( (ch - *p) != 8)  ) {  osilerror_wrapper( ch,osillineno,"error in objective constant attribute"); return false;}
 				else{
-					if(objconstantattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj constant attributes"); return false;}
+					if(objconstantattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj constant attributes"); return false;}
 					objconstantattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
@@ -1753,7 +1753,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 				weight -= 7;
 				if( ( (ch - *p) != 6)  ) {  osilerror_wrapper( ch,osillineno,"error in objective weight attribute"); return false;}
 				else{
-					if(objweightattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj weight attributes"); return false;}
+					if(objweightattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj weight attributes"); return false;}
 					objweightattON = true;
 					GETATTRIBUTETEXT;
 					//printf("ATTRIBUTE = %s\n", attText);
@@ -1768,7 +1768,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					maxOrMin -= 9;
 					if( ( ( ch - *p)  != 8)  ) {  osilerror_wrapper( ch,osillineno,"error in objective maxOrMin attribute"); return false;}
 					else{
-						if(objmaxOrMinattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj maxOrMin attributes"); return false;}
+						if(objmaxOrMinattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj maxOrMin attributes"); return false;}
 						objmaxOrMinattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -1783,7 +1783,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					mult -= 5;
 					if( ( (ch - *p) != 4)  ) {  osilerror_wrapper( ch,osillineno,"error in objective mult attribute"); return false;}
 					else{
-						if(objmultattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj mult attributes"); return false;}
+						if(objmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many obj mult attributes"); return false;}
 						objmultattON = true;
 						GETATTRIBUTETEXT;
 						objmult = atoimod1( osillineno,attText, attTextEnd);
@@ -1842,7 +1842,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 			// burn off the whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			// better have an > to end </obj
-			if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element missing"); return false;}
+			if(*ch++ != '>'){   osilerror_wrapper( ch,osillineno,"</obj> element missing >"); return false;}
 			// look for a new <obj> element
 			// get rid of whitespace
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
@@ -2016,7 +2016,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 				*p = ch;
 				while( *name++  == *ch) ch++;
 				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in constraints name attribute"); return false;}
-				if(connameattON == true) {  osilerror_wrapper( ch,osillineno,"too many con name attributes"); return false;}
+				if(connameattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con name attributes"); return false;}
 				name -= 5;
 				connameattON = true;
 				GETATTRIBUTETEXT;
@@ -2028,7 +2028,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 				*p = ch;
 				while( *constant++  == *ch) ch++;
 				if( ((ch - *p)  != 8)  ) {  osilerror_wrapper( ch,osillineno,"error in constraint constant attribute"); return false;}
-				if(conconstantattON == true) {  osilerror_wrapper( ch,osillineno,"too many con constant attributes"); return false;}
+				if(conconstantattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con constant attributes"); return false;}
 				constant -= 9;
 				conconstantattON = true;
 				GETATTRIBUTETEXT;
@@ -2039,7 +2039,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			case 'l':
 				ch++;
 				if(*ch++ != 'b') {   osilerror_wrapper( ch,osillineno,"error in constraint lb attribute"); return false;}
-				if(conlbattON == true) {  osilerror_wrapper( ch,osillineno,"too many con lb attributes"); return false;}
+				if(conlbattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con lb attributes"); return false;}
 				conlbattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->lb = atofmod1( osillineno,attText, attTextEnd);
@@ -2049,7 +2049,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 			case 'u':
 				ch++;
 				if(*ch++ != 'b') {  osilerror_wrapper( ch,osillineno,"error in constraint ub attribute"); return false;}
-				if(conubattON == true) {  osilerror_wrapper( ch,osillineno,"too many con ub attributes"); return false;}
+				if(conubattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con ub attributes"); return false;}
 				conubattON = true;
 				GETATTRIBUTETEXT;
 				osinstance->instanceData->constraints->con[concount]->ub = atofmod1( osillineno,attText, attTextEnd);
@@ -2060,7 +2060,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 				*p = ch;
 				while( *mult++  == *ch) ch++;
 				if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in constraints mult attribute"); return false;}
-				if(conmultattON == true) {  osilerror_wrapper( ch,osillineno,"too many con mult attributes"); return false;}
+				if(conmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many con mult attributes"); return false;}
 				mult -= 5;
 				conmultattON = true;
 				GETATTRIBUTETEXT;
@@ -2109,7 +2109,7 @@ bool parseConstraints( const char **p, OSInstance *osinstance, int* osillineno){
 		else{
 			// the ch is the > at the end of the con element 
 			// double check to make sure it really is a >
-			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <con> element"); return false;}
+			if(*ch != '>') {  osilerror_wrapper( ch,osillineno,"improper ending to a <obj> element"); return false;}
 			// look for </con
 			// fist get rid of white space
 			ch++;
@@ -2251,36 +2251,10 @@ bool parseLinearConstraintCoefficients( const char **p, OSInstance *osinstance, 
 	if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"the <linearConstraintCoefficients> element does not have a proper closing"); return false;}
 	// get rid of white space after the <linearConstraintCoefficients> element
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-	if(  parseStart(  &ch, osinstance, osillineno) != true) {osilerror_wrapper( ch,osillineno,"error processing <start> element"); return false;}
-//	if( (parseColIdx( &ch, osinstance, osillineno) != true) && (parseRowIdx( &ch, osinstance, osillineno) != true)) return false;
-//	if( (parseColIdx( &ch, osinstance, osillineno) == true) && (parseRowIdx( &ch, osinstance, osillineno) == true)) {osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); return false;}
-
-	if(  parseColIdx( &ch, osinstance, osillineno) == true) // <colIdx> is found as first element
-	{
-		if( parseRowIdx( &ch, osinstance, osillineno) == true) //also have <rowIdx> --- can't happen
-		{
-			osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); 
-			return false;
-		}
-	}
-	else //<colIdx> is not the first element
-	{
-		if( parseRowIdx( &ch, osinstance, osillineno) != true) // neither <rowIdx> nor <colIdx> is present
-		{
-			osilerror_wrapper( ch,osillineno,"must have either RowIdx or ColIdx"); 
-			return false;
-		}
-		else //<rowIdx> is found as first element
-		{
-			if ( parseColIdx( &ch, osinstance, osillineno) == true ) //also have <colIdx> --- can't happen 
-			{
-				osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); 
-				return false;
-			}
-		}
-	}
-
-	if(  parseValue(  &ch, osinstance, osillineno) != true) {osilerror_wrapper( ch,osillineno, "could not parse <value> element"); return false;}
+	if( parseStart( &ch, osinstance, osillineno) != true) return false;
+	if( (parseColIdx( &ch, osinstance, osillineno) != true) && ( parseRowIdx( &ch, osinstance, osillineno) != true)) return false;
+	if( (parseColIdx( &ch, osinstance, osillineno) == true) && (parseRowIdx( &ch, osinstance, osillineno) == true) ){  osilerror_wrapper( ch,osillineno,"cannot store by both row and column"); return false;}
+	if( parseValue( &ch, osinstance, osillineno) != true) return false;
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// get the </linearConstraintCoefficients> tag
 	*p = ch;
@@ -2351,7 +2325,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 		int *intvec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->start->el = new int[(base64decodeddatalength/dataSize) ];
 		intvec = (int*)&base64decodeddata[0];
-		for (int i = 0; i < (base64decodeddatalength/dataSize); i++){
+		for(i = 0; i < (base64decodeddatalength/dataSize); i++){
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = *(intvec++);
 		}
 		delete [] b64string;
@@ -2377,7 +2351,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *incr++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in starts incr attribute"); return false;}
-					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"too many el incr attributes"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
 					incr -= 5;
 					elincrattON = true;
 					GETATTRIBUTETEXT;
@@ -2389,7 +2363,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *mult++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in starts mult attribute"); return false;}
-					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"too many el mult attributes"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
 					mult -= 5;
 					elmultattON = true;
 					GETATTRIBUTETEXT;
@@ -2515,8 +2489,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	bool foundEl = false;
 	int elmult;
 	int elincr;
-	int numberOfEl;
-	
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// if, present we should be pointing to <rowIdx element 
 	*p = ch;
@@ -2547,14 +2519,10 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
-		numberOfEl = (base64decodeddatalength/dataSize);
-		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = new int[numberOfEl ];
+		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = new int[(base64decodeddatalength/dataSize) ];
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = NULL;
-		osinstance->instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = numberOfEl;
-		osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = 0;
-		osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->variables->numberOfVariables + 1;
 		intvec = (int*)&base64decodeddata[0];
-		for(i = 0; i < numberOfEl; i++){
+		for(i = 0; i < (base64decodeddatalength/dataSize); i++){
 			osinstance->instanceData->linearConstraintCoefficients->rowIdx->el[ i] = *(intvec++);
 			kount++;
 		}
@@ -2568,9 +2536,6 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		osilerror_wrapper( ch, osillineno,"we are storing in column major format, but number of start elements not equal number of variables + 1");
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = NULL;
-		osinstance->instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = osinstance->instanceData->linearConstraintCoefficients->numberOfValues;
-		osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = 0;
-		osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->variables->numberOfVariables + 1;
 		while(foundEl){
 		
 			elmultattON = false ;
@@ -2587,7 +2552,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *incr++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in rowIdx incr attribute"); return false;}
-					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"too many el incr attributes"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
 					incr -= 5;
 					elincrattON = true;
 					GETATTRIBUTETEXT;
@@ -2599,7 +2564,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *mult++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in rowIdx mult attribute"); return false;}
-					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"too many el mult attributes"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
 					mult -= 5;
 					elmultattON = true;
 					GETATTRIBUTETEXT;
@@ -2720,8 +2685,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 	bool foundEl = false;
 	int elmult;
 	int elincr;
-	int numberOfEl;
-	
 	for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
 	// if, present we should be pointing to <colIdx element 
 	*p = ch;
@@ -2752,14 +2715,10 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		std::string base64decodeddata = Base64::decodeb64( b64string );
 		int base64decodeddatalength = base64decodeddata.length();
 		int *intvec = NULL;
-		numberOfEl = (base64decodeddatalength/dataSize);
-		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[numberOfEl ];
+		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[(base64decodeddatalength/dataSize) ];
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = NULL;
-		osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = numberOfEl;
-		osinstance->instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = 0;
-		osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->constraints->numberOfConstraints + 1;
 		intvec = (int*)&base64decodeddata[0];
-		for(i = 0; i < numberOfEl; i++){
+		for(i = 0; i < (base64decodeddatalength/dataSize); i++){
 			osinstance->instanceData->linearConstraintCoefficients->colIdx->el[ i] = *(intvec++);
 			kount++;
 		}
@@ -2773,9 +2732,6 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 		osilerror_wrapper( ch, osillineno,"we are storing in row major format, but number of start elements not equal number of rows + 1");
 		osinstance->instanceData->linearConstraintCoefficients->colIdx->el = new int[ osinstance->instanceData->linearConstraintCoefficients->numberOfValues];
 		osinstance->instanceData->linearConstraintCoefficients->rowIdx->el = NULL;
-		osinstance->instanceData->linearConstraintCoefficients->colIdx->numberOfEl = osinstance->instanceData->linearConstraintCoefficients->numberOfValues;
-		osinstance->instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = 0;
-		osinstance->instanceData->linearConstraintCoefficients->start->numberOfEl = osinstance->instanceData->constraints->numberOfConstraints + 1;
 		while(foundEl){
 		
 			elmultattON = false ;
@@ -2792,7 +2748,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *incr++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in colIdx incr attribute"); return false;}
-					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"too many el incr attributes"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
 					incr -= 5;
 					elincrattON = true;
 					GETATTRIBUTETEXT;
@@ -2804,7 +2760,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *mult++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in colIdx mult attribute"); return false;}
-					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"too many el mult attributes"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
 					mult -= 5;
 					elmultattON = true;
 					GETATTRIBUTETEXT;
@@ -2860,7 +2816,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			*p = ch;
 			while( *endEl++  == *ch) ch++;
 			endEl -= 5;
-			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
+			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ );
 			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
@@ -2999,7 +2955,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *incr++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in values incr attribute"); return false;}
-					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"too many el incr attributes"); return false;}
+					if(elincrattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el incr attributes"); return false;}
 					incr -= 5;
 					elincrattON = true;
 					GETATTRIBUTETEXT;
@@ -3011,7 +2967,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 					*p = ch;
 					while( *mult++  == *ch) ch++;
 					if( (ch - *p) != 4) {  osilerror_wrapper( ch,osillineno,"error in values mult attribute"); return false;}
-					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"too many el mult attributes"); return false;}
+					if(elmultattON == true) {  osilerror_wrapper( ch,osillineno,"error too many el mult attributes"); return false;}
 					mult -= 5;
 					elmultattON = true;
 					GETATTRIBUTETEXT;
@@ -3066,7 +3022,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 			*p = ch;
 			while( *endEl++  == *ch) ch++;
 			endEl -= 5;
-			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot find an </el>"); return false;}
+			if( (ch - *p) != 4 ) {  osilerror_wrapper( ch,osillineno,"cannot fine an </el>"); return false;}
 			// start eating white space until an '>' is found for </el>,
 			for(; ISWHITESPACE( *ch) || isnewline( *ch, osillineno) ; ch++ );
 			if( *ch++ != '>') {  osilerror_wrapper( ch,osillineno,"improperly formed </el> tag"); return false;}
@@ -3085,8 +3041,6 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 			}
 		}	
 	}
-	osinstance->instanceData->linearConstraintCoefficients->value->numberOfEl = osinstance->instanceData->linearConstraintCoefficients->numberOfValues;
-	
 	// get the </value> tag
 	*p = ch;
 	while( *endValue++  == *ch) ch++;

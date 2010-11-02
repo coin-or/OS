@@ -16,7 +16,7 @@
 %{
 
 #include <iostream>
-#include "OSGeneral.h"
+#include "OSDataStructures.h"
 #include "OSMathUtil.h"
 #include "OSConfig.h"
 
@@ -140,13 +140,10 @@ return(DOUBLE);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
- /* attributes returning numeric values*/
+ /* numerical attributes */
 
 ({xmlwhitespace}+numberOfCon{equality}) {YY_PRINT; return(NUMBEROFCONATT);}
 ({xmlwhitespace}+numberOfConstraints{equality}) {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
-({xmlwhitespace}+numberOfEl{equality}) {YY_PRINT;  return(NUMBEROFELATT);}
-({xmlwhitespace}+numberOfEnumerations{equality}) {YY_PRINT;  return(NUMBEROFENUMERATIONSATT);}
-({xmlwhitespace}+numberOfIdx{equality}) {YY_PRINT;  return(NUMBEROFIDXATT);}
 ({xmlwhitespace}+numberOfItems{equality}) {YY_PRINT;  return(NUMBEROFITEMSATT);}
 ({xmlwhitespace}+numberOfObj{equality}) {YY_PRINT; return(NUMBEROFOBJATT);}
 ({xmlwhitespace}+numberOfObjectives{equality}) {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
@@ -161,13 +158,9 @@ return(DOUBLE);}
 ({xmlwhitespace}+numberOfTimes{equality}) {YY_PRINT; return(NUMBEROFTIMESATT);}
 ({xmlwhitespace}+numberOfVar{equality}) {YY_PRINT; return(NUMBEROFVARATT);}
 ({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
-({xmlwhitespace}+numberOfVarIdx{equality}) {YY_PRINT; return(NUMBEROFVARIDXATT);}
 
 ({xmlwhitespace}+idx{equality}) {YY_PRINT; return(IDXATT);}
-({xmlwhitespace}+incr{equality}) {YY_PRINT; return(INCRATT);}
-({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
-({xmlwhitespace}+sizeOf{equality}) {YY_PRINT; return(SIZEOFATT);}
-({xmlwhitespace}+targetObjectiveIdx{equality}) {YY_PRINT; return(TARGETOBJECTIVEIDXATT);}
+({xmlwhitespace}+targetObjectiveIdx{equality}) {YY_PRINT;  return(TARGETOBJECTIVEIDXATT);}
 
  /* attributes returning strings (that are potentially empty)*/
 
@@ -233,10 +226,6 @@ return(DOUBLE);}
  
 {xmlwhitespace}*\<actualStartTime {YY_PRINT;  return(ACTUALSTARTTIMESTART);}
 {xmlwhitespace}*\<\/actualStartTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ACTUALSTARTTIMEEND);}
-{xmlwhitespace}*\<atLower {YY_PRINT; return(ATLOWERSTART);}
-{xmlwhitespace}*\<\/atLower{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATLOWEREND);}
-{xmlwhitespace}*\<atUpper {YY_PRINT; return(ATUPPERSTART);}
-{xmlwhitespace}*\<\/atUpper{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATUPPEREND);}
 {xmlwhitespace}*\<availableCPUNumber {YY_PRINT;  return(AVAILABLECPUNUMBERSTART);}
 {xmlwhitespace}*\<\/availableCPUNumber{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(AVAILABLECPUNUMBEREND);}
 {xmlwhitespace}*\<availableCPUSpeed {YY_PRINT;  return(AVAILABLECPUSPEEDSTART);}
@@ -245,10 +234,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/availableDiskSpace{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(AVAILABLEDISKSPACEEND);}
 {xmlwhitespace}*\<availableMemory {YY_PRINT;  return(AVAILABLEMEMORYSTART);}
 {xmlwhitespace}*\<\/availableMemory{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(AVAILABLEMEMORYEND);}
-{xmlwhitespace}*\<base64BinaryData {YY_PRINT; return(BASE64START);}
-{xmlwhitespace}*\<\/base64BinaryData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASE64END);}
-{xmlwhitespace}*\<basic {YY_PRINT; return(BASICSTART);}
-{xmlwhitespace}*\<\/basic{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASICEND);}
 {xmlwhitespace}*\<basisStatus {YY_PRINT;  return(BASISSTATUSSTART);}
 {xmlwhitespace}*\<\/basisStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASISSTATUSEND);}
 {xmlwhitespace}*\<basStatus {YY_PRINT;  return(BASSTATUSSTART);}
@@ -263,20 +248,12 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/currentState{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(CURRENTSTATEEND);}
 {xmlwhitespace}*\<dualValues {YY_PRINT; return(DUALVALUESSTART);}
 {xmlwhitespace}*\<\/dualValues{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(DUALVALUESEND);}
-{xmlwhitespace}*\<el {YY_PRINT;  return(ELSTART);}
-{xmlwhitespace}*\<\/el{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ELEND);}
 {xmlwhitespace}*\<endTime {YY_PRINT;  return(ENDTIMESTART);}
 {xmlwhitespace}*\<\/endTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ENDTIMEEND);}
-{xmlwhitespace}*\<enumeration {YY_PRINT;  return(ENUMERATIONSTART);}
-{xmlwhitespace}*\<\/enumeration{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ENUMERATIONEND);}
 {xmlwhitespace}*\<generalStatus {YY_PRINT; return(GENERALSTATUSSTART);}
 {xmlwhitespace}*\<\/generalStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALSTATUSEND);}
 {xmlwhitespace}*\<instanceName {YY_PRINT;  return(INSTANCENAMESTART);}
 {xmlwhitespace}*\<\/instanceName{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(INSTANCENAMEEND);}
-{xmlwhitespace}*\<idx {YY_PRINT; return(IDXSTART);}
-{xmlwhitespace}*\<\/idx{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(IDXEND);}
-{xmlwhitespace}*\<isFree {YY_PRINT; return(ISFREESTART);}
-{xmlwhitespace}*\<\/isFree{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ISFREEEND);}
 {xmlwhitespace}*\<jobID {YY_PRINT;  return(JOBIDSTART);}
 {xmlwhitespace}*\<\/jobID{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(JOBIDEND);}
 {xmlwhitespace}*\<message {YY_PRINT;  return(MESSAGESTART);}
@@ -317,8 +294,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/submitTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SUBMITTIMEEND);}
 {xmlwhitespace}*\<substatus {YY_PRINT;  return(SUBSTATUSSTART);}
 {xmlwhitespace}*\<\/substatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SUBSTATUSEND);}
-{xmlwhitespace}*\<superBasic {YY_PRINT; return(SUPERBASICSTART);}
-{xmlwhitespace}*\<\/superBasic{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SUPERBASICEND);}
 {xmlwhitespace}*\<systemInformation {YY_PRINT;  return(SYSTEMINFORMATIONSTART);}
 {xmlwhitespace}*\<\/systemInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SYSTEMINFORMATIONEND);}
 {xmlwhitespace}*\<time {YY_PRINT;  return(TIMESTART);}
@@ -331,8 +306,6 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/timingInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TIMINGINFORMATIONEND);}
 {xmlwhitespace}*\<totalJobsSoFar {YY_PRINT;  return(TOTALJOBSSOFARSTART);}
 {xmlwhitespace}*\<\/totalJobsSoFar{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(TOTALJOBSSOFAREND);}
-{xmlwhitespace}*\<unknown {YY_PRINT; return(UNKNOWNSTART);}
-{xmlwhitespace}*\<\/unknown{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(UNKNOWNEND);}
 {xmlwhitespace}*\<usedCPUNumber {YY_PRINT;  return(USEDCPUNUMBERSTART);}
 {xmlwhitespace}*\<\/usedCPUNumber{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(USEDCPUNUMBEREND);}
 {xmlwhitespace}*\<usedCPUSpeed {YY_PRINT;  return(USEDCPUSPEEDSTART);}
@@ -349,13 +322,11 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/var{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VAREND);}
 {xmlwhitespace}*\<variables {YY_PRINT; return(VARIABLESSTART);}
 {xmlwhitespace}*\<\/variables{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIABLESEND);}
-{xmlwhitespace}*\<varIdx {YY_PRINT; return(VARIDXSTART);}
-{xmlwhitespace}*\<\/varIdx{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(VARIDXEND);}
 
 
  /* environments and comments */
 
-[a-zA-Z0-9.:_*#$@, \t\r\n\/\-\+\=]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$@, \t\r\n\/\-]+ { YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 <itemtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 
 "<!--" BEGIN comment;

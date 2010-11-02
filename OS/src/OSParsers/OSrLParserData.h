@@ -133,29 +133,17 @@ public:
 	/** total number of Objectives in the model instance */
 	int numberOfObjectives;
 	
-	/** number of indexes in a category of basis elements,
-	 * may change from category to category and solution to solution
-	 */
-	int numberOfIdx;
-	
-	/** number of variables in a solution instance,
+	/** number of variables in the a solution instance,
 	 * may change from solution to solution
 	 */
 	int numberOfVar;
-
-	/** number of variables indices in other variable result enumeration,
-	 * may change from solution to solution
-	 */
-	int numberOfVarIdx;
-
-	/** number of constraints in a solution instance,
+	
+	/** number of constraints in the a solution instance,
 	 * may change from solution to solution
 	 */
 	int numberOfCon;
 	
-	int numberOfEnumerations;
-
-	/** number of Objectives in a solution instance 
+	/** number of Objectives in the a solution instance 
 	 * may change from solution to solution
 	 */
 	int numberOfObj;
@@ -205,12 +193,6 @@ public:
 	/** an index of which solution we have found */
 	unsigned int solutionIdx;
 
-	/** a multiplier or repeat count for compact representation of an array */
-	int mult;
-
-	/** an increment for compact representation of an array (used with mult) */
-	int incr;
-
 	/** a number of boolean vriables to track which of the attributes
 	 *  have been found in the present list. Attributes have standardized names,
 	 *  and the information about their presence or absence is immaterial once
@@ -218,19 +200,10 @@ public:
 	 *  reused in the same way the names can be reused.
 	 */
 	bool numberAttributePresent;
-	bool incrPresent;
-	bool multPresent;
 	bool idxAttributePresent;
 	bool categoryAttributePresent;
 	bool descriptionAttributePresent;
 	bool nameAttributePresent;
-	bool numberOfVarAttributePresent;
-	bool numberOfVarIdxAttributePresent;
-	bool numberOfObjAttributePresent;
-	bool numberOfObjIdxAttributePresent;
-	bool numberOfConAttributePresent;
-	bool numberOfConIdxAttributePresent;
-	bool numberOfEnumerationsAttributePresent;
 	bool typeAttributePresent;
 	bool unitAttributePresent;
 	bool valueAttributePresent;

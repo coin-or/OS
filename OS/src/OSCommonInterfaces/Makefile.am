@@ -26,8 +26,6 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSInstance.h \
 	OSResult.cpp \
 	OSResult.h \
-	OSgLWriter.cpp \
-	OSgLWriter.h \
 	OSiLReader.cpp \
 	OSiLReader.h \
 	OSiLWriter.cpp \
