@@ -100,27 +100,27 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 #                              COIN components                              #
 #############################################################################
-AC_COIN_HAS_PACKAGE(ASL, [coinasl], [OSLib])
+AC_COIN_CHECK_PACKAGE(ASL, [coinasl], [OSLib])
 
-AC_COIN_HAS_PACKAGE(CoinDepend, [coinutils = trunk osi], [OSLib])
+AC_COIN_CHECK_PACKAGE(CoinDepend, [coinutils = trunk osi], [OSLib])
 if test $coin_has_coindepend != yes ; then
   AC_MSG_ERROR([Required package CoinUtils or Osi not available.])
 fi
-AC_COIN_HAS_PACKAGE(Clp,  [osi-clp],  [OSLib])
-AC_COIN_HAS_PACKAGE(DyLP, [osi-dylp], [OSLib])
-AC_COIN_HAS_PACKAGE(Vol,  [osi-vol],  [OSLib])
-AC_COIN_HAS_PACKAGE(SYMPHONY,  [osi-sym],  [OSLib])
-AC_COIN_HAS_PACKAGE(Cbc,  [osi-cbc],  [OSLib])
-AC_COIN_HAS_PACKAGE(Cgl,  [cgl],  [OSLib])
-AC_COIN_HAS_PACKAGE(Ipopt, [ipopt], [OSLib])
+AC_COIN_CHECK_PACKAGE(Clp,  [osi-clp],  [OSLib])
+AC_COIN_CHECK_PACKAGE(DyLP, [osi-dylp], [OSLib])
+AC_COIN_CHECK_PACKAGE(Vol,  [osi-vol],  [OSLib])
+AC_COIN_CHECK_PACKAGE(SYMPHONY,  [osi-sym],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Cbc,  [osi-cbc],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Cgl,  [cgl],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Ipopt, [ipopt], [OSLib])
 AC_COIN_HAS_PROJECT(cppad)
-#AC_COIN_HAS_PACKAGE(cppad)
-AC_COIN_HAS_PACKAGE(Couenne)
-AC_COIN_HAS_PACKAGE(Bonmin)
-AC_COIN_HAS_PACKAGE(Bcp)
+#AC_COIN_CHECK_PACKAGE(cppad)
+AC_COIN_CHECK_PACKAGE(Couenne)
+AC_COIN_CHECK_PACKAGE(Bonmin)
+AC_COIN_CHECK_PACKAGE(Bcp)
 
-AC_COIN_HAS_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
-AC_COIN_HAS_PACKAGE(Glpk, [osi-glpk],   [OSLib])
+AC_COIN_CHECK_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Glpk, [osi-glpk],   [OSLib])
 
 
 #if test $coin_has_cppad = skipping &&
@@ -340,10 +340,10 @@ AM_CONDITIONAL(MSCL_, test x$cl_compiler = xyes)
 #                             Third party solvers                           #
 #############################################################################
 
-#AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
-AC_COIN_HAS_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
-#AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
-AC_COIN_HAS_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
+#AC_COIN_CHECK_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
+AC_COIN_CHECK_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
+#AC_COIN_CHECK_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
+AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 
 AC_COIN_HAS_GLPK(Glpk)
 #AC_COIN_HAS_ASL

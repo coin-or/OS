@@ -25254,7 +25254,7 @@ fi
 echo "$as_me:$LINENO: result: $coin_has_cppad" >&5
 echo "${ECHO_T}$coin_has_cppad" >&6
 
-#AC_COIN_HAS_PACKAGE(cppad)
+#AC_COIN_CHECK_PACKAGE(cppad)
 
 echo "$as_me:$LINENO: checking for COIN-OR package Couenne" >&5
 echo $ECHO_N "checking for COIN-OR package Couenne... $ECHO_C" >&6
@@ -26983,7 +26983,7 @@ fi
 #                             Third party solvers                           #
 #############################################################################
 
-#AC_COIN_HAS_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
+#AC_COIN_CHECK_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
 
   echo "$as_me:$LINENO: checking if user provides library for Lindo" >&5
 echo $ECHO_N "checking if user provides library for Lindo... $ECHO_C" >&6
@@ -27091,7 +27091,7 @@ else
 fi
 
 
-#AC_COIN_HAS_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
+#AC_COIN_CHECK_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
 
   echo "$as_me:$LINENO: checking if user provides library for Knitro" >&5
 echo $ECHO_N "checking if user provides library for Knitro... $ECHO_C" >&6

@@ -179,15 +179,15 @@ endif
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
-	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSAgent` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSParsers` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSUtils` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSModelInterfaces` \
+	-I`$(CYGPATH_W) $(abs_source_dir)/..` \
+	-I`$(CYGPATH_W) $(abs_source_dir)/src` \
+	-I`$(CYGPATH_W) $(abs_source_dir)/src/OSAgent` \
+	-I`$(CYGPATH_W) $(abs_source_dir)/src/OSParsers` \
+	-I`$(CYGPATH_W) $(abs_source_dir)/src/OSUtils` \
+	-I`$(CYGPATH_W) $(abs_source_dir)/src/OSSolverInterfaces` \
+	-I`$(CYGPATH_W) $(abs_source_dir)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces` 
+	-I`$(CYGPATH_W) $(abs_source_dir)/src/OSCommonInterfaces` 
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc` \
 #	-I`$(CYGPATH_W) $(CBCSRCDIR)/src` \
@@ -332,8 +332,8 @@ includecoin_HEADERS = \
 	../inc/config_os.h 
 
 if MSCL_
-   includecoin_HEADERS += $(top_srcdir)/../BuildTools/headers/configall_system.h
-   includecoin_HEADERS += $(top_srcdir)/../BuildTools/headers/configall_system_msc.h
+   includecoin_HEADERS += $(abs_source_dir)/../BuildTools/headers/configall_system.h
+   includecoin_HEADERS += $(abs_source_dir)/../BuildTools/headers/configall_system_msc.h
 endif
 
 
