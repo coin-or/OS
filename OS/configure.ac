@@ -119,9 +119,8 @@ AC_COIN_HAS_PACKAGE(Couenne)
 AC_COIN_HAS_PACKAGE(Bonmin)
 AC_COIN_HAS_PACKAGE(Bcp)
 
-
-#AC_COIN_HAS_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
-#AC_COIN_HAS_PACKAGE(Glpk, [osi-glpk],   [OSLib])
+AC_COIN_HAS_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
+AC_COIN_HAS_PACKAGE(Glpk, [osi-glpk],   [OSLib])
 
 
 #if test $coin_has_cppad = skipping &&
