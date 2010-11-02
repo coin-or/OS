@@ -66,7 +66,7 @@
  * osil string and then set m_bWriteBase64 = true. We then
  * write a new instance in base 64 format and solve it.
  * 
- * In addition there are a number of tests concerning th logic of many
+ * In addition there are a number of tests concerning the logic of many
  * of the components of the OS project. These tests have little in common
  * with the installation and functionality tests, but they are useful for
  * debugging and to give a thorough workout to the program logic.
