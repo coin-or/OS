@@ -65,7 +65,7 @@ libOSParsers_la_LIBADD =
 am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
 	OSParseosol.lo OSParseosol.tab.lo OSParseosrl.lo \
 	OSParseosrl.tab.lo OSParseosss.lo OSiLParserData.lo \
-	OSrLParserData.lo OSoLParserData.lo
+	OSgLParserData.lo OSrLParserData.lo OSoLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
 am__depfiles_maybe = depfiles
@@ -369,6 +369,8 @@ libOSParsers_la_SOURCES = \
 		OSParseosss.cpp	\
 		OSiLParserData.h \
 		OSiLParserData.cpp \
+                OSgLParserData.cpp \
+                OSgLParserData.h \
 		OSrLParserData.h \
 		OSrLParserData.cpp \
                 OSoLParserData.h \
@@ -407,6 +409,7 @@ includecoin_HEADERS = \
 	OSParseosil.tab.hpp \
 	OSParseosrl.tab.hpp \
         OSParseosol.tab.hpp \
+        OSgLParserData.h \
 	OSiLParserData.h \
 	OSrLParserData.h \
         OSoLParserData.h
@@ -469,6 +472,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosrl.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosrl.tab.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParseosss.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSgLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSoLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLParserData.Plo@am__quote@
