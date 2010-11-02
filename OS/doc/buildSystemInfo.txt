@@ -12,4 +12,11 @@ From Lou:
 
 %%%%%%%%%%%
 
-export  PKG_CONFIG_PATH=/Users/kmartin/coin/os-tmp/vpath-debug/lib/pkgconfig 
+export  PKG_CONFIG_PATH=/Users/kmartin/coin/os-tmp/vpath-debug/lib/pkgconfig 
+
+%%%%%%
+
+Here is something from Ted explaining how the Build System determines if something is a dependency
+
+
+Well, here's the answer. The check in configure.ac looks like this:AC_COIN_HAS_PACKAGE(ASL,   [coinasl])   <====== missing the third argumentAC_COIN_HAS_PACKAGE(HSL,   [coinhsl],   [IpoptLib])AC_COIN_HAS_PACKAGE(Mumps, [coinmumps], [IpoptLib])So ASL is not going to be listed as a dependency for the Ipopt*library* and I guess that's because it isn't a dependency of the*library*, just of the *binary*. Apparently, the AMPL interpreter isnot part of the library (unless this is a mistake). So you can link tothe Ipopt library without liniking to ASL. However, in the case ofASL, that really is a direct dependency of OS, right? You can directlyread AMPL files, independent of any solver being able to solvewhatever you read in, right?
