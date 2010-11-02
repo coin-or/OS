@@ -254,6 +254,7 @@ OS/doc/OSConstitution.tex -text
 OS/doc/OSReleaseProcedure.pdf -text
 OS/doc/OSReleaseProcedure.tex -text
 OS/doc/OSSolverServiceRules.txt -text
+OS/doc/buildSystemInfo.txt -text
 OS/doc/coinEasyServer.pdf -text
 OS/doc/coinEasyServer.tex -text
 OS/doc/figures/Figure10.png -text
