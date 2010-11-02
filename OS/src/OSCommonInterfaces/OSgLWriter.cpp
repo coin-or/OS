@@ -46,7 +46,7 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
 	{
 		if(writeBase64 == false)
 		{
-			for(int i = 0; i <= v->numberOfEl;)
+			for(int i = 0; i < v->numberOfEl;)
 			{
 				getMultIncr(&(v->el[i]), &mult, &incr, (v->numberOfEl) - i, 1);
 				if (mult == 1)
@@ -114,7 +114,7 @@ std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBa
 	{
 		if(writeBase64 == false)
 		{
-			for(int i = 0; i <= v->numberOfEl;)
+			for(int i = 0; i < v->numberOfEl;)
 			{
 				mult = getMult(&(v->el[i]), (v->numberOfEl) - i);
 				if (mult == 1)
@@ -209,4 +209,4 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 	outStr << "</basisStatus>" << endl;
 	
 	return outStr.str();
-}// end writeDblVectorData
+}// end writeBasisStatus

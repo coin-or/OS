@@ -322,16 +322,18 @@ bool IntVector::IsEqual(IntVector *that)
 
 
 OtherOptionEnumeration::OtherOptionEnumeration():
+	IntVector(),
 	value(""),
 	description("")
 {  
 	#ifdef DEBUG
 	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
 	#endif
-	IntVector::IntVector();
+	//IntVector::IntVector();
 } 
 
 OtherOptionEnumeration::OtherOptionEnumeration(int n):
+	IntVector(n),
 	value(""),
 	description("")
 {  
@@ -339,14 +341,13 @@ OtherOptionEnumeration::OtherOptionEnumeration(int n):
 	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
 	#endif
 
-	IntVector::IntVector(n);
+	//IntVector::IntVector(n);
 } 
 
 OtherOptionEnumeration::~OtherOptionEnumeration(){  
 	#ifdef DEBUG
 	cout << "Inside the OtherOptionEnumeration Destructor" << endl;
 	#endif
-	IntVector::~IntVector();
 } 
 
 bool OtherOptionEnumeration::setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni)
