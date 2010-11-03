@@ -409,7 +409,50 @@ void OSnLNode::getVariableIndexMap(std::map<int, int> *varIdx){
 		}
 	}
 }//getVariableIndexMap
-	
+
+bool OSnLNode::IsEqual(OSnLNode *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in OSnLNode" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->inumberOfChildren != that->inumberOfChildren)
+				return false;
+			if (this->inodeInt != that->inodeInt)
+				return false;
+			if (this->inodeType != that->inodeType)
+				return false;
+
+			for (int i=0; i<this->inumberOfChildren; i++)
+				if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//OSnLNode::IsEqual
+
+
 // OSnLNodePlus Methods	
 OSnLNodePlus::OSnLNodePlus()
 {

@@ -27,7 +27,8 @@
 #include<sstream>
 
 //#define DEBUG
- 
+#define DEBUG_ISEQUAL_ROUTINES
+
 using namespace std;
 using std::ostringstream; 
 
@@ -4823,5 +4824,600 @@ int  OSInstance::getADSparsityHessian(){
 		throw ErrorClass( eclass.errormsg);
 	}
 }//end getADSparsityHessian()
+
+
+
+/***************************************************
+ * methods to test whether two OSInstance objects 
+ * or their components are equal to each other
+ ***************************************************/
+bool OSInstance::IsEqual(OSInstance *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in OSInstance" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (!this->instanceHeader->IsEqual(that->instanceHeader))
+				return false;
+			if (!this->instanceData->IsEqual(that->instanceData))
+				return false;
+
+			return true;
+		}
+	}
+}//OSInstance::IsEqual
+
+/*------------------------------------------*/
+bool InstanceHeader::IsEqual(InstanceHeader *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in InstanceHeader" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->description != that->description)
+				return false;
+			if (this->name != that->name)
+				return false;
+			if (this->source != that->source)
+				return false;
+
+			return true;
+		}
+	}
+}//InstanceHeader::IsEqual
+
+bool InstanceData::IsEqual(InstanceData *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in InstanceData" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (!this->variables->IsEqual(that->variables))
+				return false;
+			if (!this->objectives->IsEqual(that->objectives))
+				return false;
+			if (!this->constraints->IsEqual(that->constraints))
+				return false;
+			if (!this->linearConstraintCoefficients->IsEqual(that->linearConstraintCoefficients))
+				return false;
+			if (!this->quadraticCoefficients->IsEqual(that->quadraticCoefficients))
+				return false;
+			if (!this->nonlinearExpressions->IsEqual(that->nonlinearExpressions))
+				return false;
+
+			return true;
+		}
+	}
+}//InstanceData::IsEqual
+
+bool Variables::IsEqual(Variables *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in Variables" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfVariables != that->numberOfVariables)
+				return false;
+			for (int i=0; i<this->numberOfVariables; i++)
+				if (!this->var[i]->IsEqual(that->var[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//Variables::IsEqual
+
+bool Variable::IsEqual(Variable *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in Variable" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->lb != that->lb)
+				return false;
+			if (this->ub != that->ub)
+				return false;
+			if (this->type != that->type)
+				return false;
+			if (this->name != that->name)
+				return false;
+
+			return true;
+		}
+	}
+}//Variable::IsEqual
+
+bool Objectives::IsEqual(Objectives *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in Objectives" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfObjectives != that->numberOfObjectives)
+				return false;
+			for (int i=0; i<this->numberOfObjectives; i++)
+				if (!this->obj[i]->IsEqual(that->obj[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//Objectives::IsEqual
+
+bool Objective::IsEqual(Objective *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in Objective" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->name != that->name)
+				return false;
+			if (this->maxOrMin != that->maxOrMin)
+				return false;
+			if (this->constant != that->constant)
+				return false;
+			if (this->weight != that->weight)
+				return false;
+			if (this->numberOfObjCoef != that->numberOfObjCoef)
+				return false;
+
+			for (int i=0; i<this->numberOfObjCoef; i++)
+				if (!this->coef[i]->IsEqual(that->coef[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//Objective::IsEqual
+
+bool ObjCoef::IsEqual(ObjCoef *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in ObjCoef" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx != that->idx)
+				return false;
+			if (this->value != that->value)
+				return false;
+
+			return true;
+		}
+	}
+}//ObjCoef::IsEqual
+
+bool Constraints::IsEqual(Constraints *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in Constraints" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfConstraints != that->numberOfConstraints)
+				return false;
+			for (int i=0; i<this->numberOfConstraints; i++)
+				if (!this->con[i]->IsEqual(that->con[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//Constraints::IsEqual
+
+bool Constraint::IsEqual(Constraint *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in Constraint" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->name != that->name)
+				return false;
+			if (this->constant != that->constant)
+				return false;
+			if (this->lb != that->lb)
+				return false;
+			if (this->ub != that->ub)
+				return false;
+
+			return true;
+		}
+	}
+}//Constraint::IsEqual
+
+bool LinearConstraintCoefficients::IsEqual(LinearConstraintCoefficients *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in LinearConstraintCoefficients" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfValues != that->numberOfValues)
+				return false;
+
+			if (!this->start->IsEqual(that->start))
+				return false;
+			if (!this->rowIdx->IsEqual(that->rowIdx))
+				return false;
+			if (!this->colIdx->IsEqual(that->colIdx))
+				return false;
+			if (!this->value->IsEqual(that->value))
+				return false;
+
+			return true;
+		}
+	}
+}//LinearConstraintCoefficients::IsEqual
+
+bool QuadraticCoefficients::IsEqual(QuadraticCoefficients *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in QuadraticCoefficients" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfQuadraticTerms != that->numberOfQuadraticTerms)
+				return false;
+			for (int i=0; i<this->numberOfQuadraticTerms; i++)
+				if (!this->qTerm[i]->IsEqual(that->qTerm[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//QuadraticCoefficients::IsEqual
+
+
+bool QuadraticTerm::IsEqual(QuadraticTerm *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in QuadraticTerm" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx != that->idx)
+				return false;
+			if (this->idxOne != that->idxOne)
+				return false;
+			if (this->idxTwo != that->idxTwo)
+				return false;
+			if (this->coef != that->coef)
+				return false;
+
+			return true;
+		}
+	}
+}//QuadraticTerm::IsEqual
+
+bool NonlinearExpressions::IsEqual(NonlinearExpressions *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in NonlinearExpressions" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfNonlinearExpressions != that->numberOfNonlinearExpressions)
+				return false;
+
+			for (int i=0; i<this->numberOfNonlinearExpressions; i++)
+				if (!this->nl[i]->IsEqual(that->nl[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//NonlinearExpressions::IsEqual
+
+
+
+bool Nl::IsEqual(Nl *that)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Start comparing in Nl" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_ISEQUAL_ROUTINES
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx != that->idx)
+				return false;
+			if (!this->osExpressionTree->IsEqual(that->osExpressionTree))
+				return false;
+
+			return true;
+		}
+	}
+}//Nl::IsEqual
 
 

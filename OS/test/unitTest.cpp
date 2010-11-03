@@ -4645,6 +4645,7 @@ if (PARSER_TESTS){
 					throw ErrorClass("setVarValueString: osresult objects falsely compare unequal!");
 			}
 
+/*
 			ok &= osresult1->setNumberOfBasisVar(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfBasisVar!");
@@ -4673,6 +4674,7 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("setBasisVar: osresult objects falsely compare unequal!");
 			}
+*/
 
 			ok &= osresult1->setNumberOfOtherVariableResults(i,3);
 			if (!ok) 
@@ -5604,6 +5606,7 @@ if (PARSER_TESTS){
 					throw ErrorClass("Error during setVarValueString!");
 			}
 
+/*
 			tempInt = osresult1->getNumberOfBasisVar(i);
 			ok &= osresult2->setNumberOfBasisVar(i,tempInt);
 			if (!ok) 
@@ -5617,7 +5620,7 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("Error during setBasisVar!");
 			}
-
+*/
 			tempInt = osresult1->getNumberOfOtherVariableResults(i);
 			ok &= osresult2->setNumberOfOtherVariableResults(i,tempInt);
 			if (!ok) 

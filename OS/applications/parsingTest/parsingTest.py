@@ -60,7 +60,7 @@ def visit(startDir, dirName, filesInDir):
 				if fpath.rfind("osol") != -1 :
 					fileType = 'osol'
 
-				result = run('parsingTest ' + fpath + ' ' + fileType )
+				result = run('parsingTest ' + fileType + ' ' + fpath )
 
 				if result['returnCode']==0 :
 					print ' successful run: ' + fname
