@@ -115,9 +115,9 @@ AC_COIN_CHECK_PACKAGE(Cgl,  [cgl],  [OSLib])
 AC_COIN_CHECK_PACKAGE(Ipopt, [ipopt], [OSLib])
 AC_COIN_HAS_PROJECT(cppad)
 #AC_COIN_CHECK_PACKAGE(cppad)
-AC_COIN_CHECK_PACKAGE(Couenne)
-AC_COIN_CHECK_PACKAGE(Bonmin)
-AC_COIN_CHECK_PACKAGE(Bcp)
+AC_COIN_CHECK_PACKAGE(Couenne, [couenne], [OSLib])
+AC_COIN_CHECK_PACKAGE(Bonmin,  [bonmin],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Bcp,     [bcp],     [OSLib])
 
 AC_COIN_CHECK_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
 AC_COIN_CHECK_PACKAGE(Glpk, [osi-glpk],   [OSLib])
@@ -345,7 +345,7 @@ AC_COIN_CHECK_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
 #AC_COIN_CHECK_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
 AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
 
-AC_COIN_HAS_GLPK(Glpk)
+#AC_COIN_HAS_GLPK(Glpk)
 #AC_COIN_HAS_ASL
 
 
