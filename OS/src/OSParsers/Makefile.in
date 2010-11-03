@@ -65,7 +65,7 @@ libOSParsers_la_LIBADD =
 am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
 	OSParseosol.lo OSParseosol.tab.lo OSParseosrl.lo \
 	OSParseosrl.tab.lo OSParseosss.lo OSgLParserData.lo \
-	OSiLParserData.lo OgrLParserData.lo OSrLParserData.lo \
+	OSiLParserData.lo OSgLParserData.lo OSrLParserData.lo \
 	OSoLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -368,7 +368,7 @@ libOSParsers_la_SOURCES = \
 		OSiLParserData.h \
 		OSiLParserData.cpp \
    		OSgLParserData.h \
-		OgrLParserData.cpp \
+		OSgLParserData.cpp \
 		OSrLParserData.h \
 		OSrLParserData.cpp \
                 OSoLParserData.h \
@@ -475,7 +475,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSiLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSoLParserData.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSrLParserData.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgrLParserData.Plo@am__quote@
 
 .cpp.o:
 @am__fastdepCXX_TRUE@	if $(CXXCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \

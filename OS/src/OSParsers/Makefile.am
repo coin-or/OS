@@ -34,7 +34,7 @@ libOSParsers_la_SOURCES = \
 		OSiLParserData.h \
 		OSiLParserData.cpp \
    		OSgLParserData.h \
-		OgrLParserData.cpp \
+		OSgLParserData.cpp \
 		OSrLParserData.h \
 		OSrLParserData.cpp \
                 OSoLParserData.h \
