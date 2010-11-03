@@ -33,6 +33,8 @@ libOSParsers_la_SOURCES = \
 		OSgLParserData.cpp \
 		OSiLParserData.h \
 		OSiLParserData.cpp \
+   		OSgLParserData.h \
+		OgrLParserData.cpp \
 		OSrLParserData.h \
 		OSrLParserData.cpp \
                 OSoLParserData.h \
@@ -86,6 +88,7 @@ includecoin_HEADERS = \
         OSParseosol.tab.hpp \
 	OSgLParserData.h \
 	OSiLParserData.h \
+        OSgLParserData.h \
 	OSrLParserData.h \
         OSoLParserData.h
 
