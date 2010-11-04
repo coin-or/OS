@@ -235,7 +235,7 @@
 		<xs:sequence>
 			<xs:element name="substatus" type="GeneralSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" default="0"/>
+		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" default="0" use="optional"/>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -340,7 +340,7 @@
 					<xs:complexContent>
 						<xs:extension base="IntVector">
 							<xs:attribute name="value" type="xs:string" use="required"/>
-							<xs:attribute name="description" type="xs:string"/>
+							<xs:attribute name="description" type="xs:string" use="optional"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -421,7 +421,7 @@
 					<xs:complexContent>
 						<xs:extension base="IntVector">
 							<xs:attribute name="value" type="xs:string" use="required"/>
-							<xs:attribute name="description" type="xs:string"/>
+							<xs:attribute name="description" type="xs:string" use="optional"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -482,7 +482,7 @@
 					<xs:complexContent>
 						<xs:extension base="IntVector">
 							<xs:attribute name="value" type="xs:string" use="required"/>
-							<xs:attribute name="description" type="xs:string"/>
+							<xs:attribute name="description" type="xs:string" use="optional"/>
 						</xs:extension>
 					</xs:complexContent>
 				</xs:complexType>
@@ -553,136 +553,4 @@
 		<xs:attribute name="category" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
 	</xs:complexType>
-	<!--
-	<xs:complexType name="DiskSpace">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="byte">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="byte"/>
-							<xs:enumeration value="kilobyte"/>
-							<xs:enumeration value="megabyte"/>
-							<xs:enumeration value="gigabyte"/>
-							<xs:enumeration value="terabyte"/>
-							<xs:enumeration value="petabyte"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="MemorySize">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="byte">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="byte"/>
-							<xs:enumeration value="kilobyte"/>
-							<xs:enumeration value="megabyte"/>
-							<xs:enumeration value="gigabyte"/>
-							<xs:enumeration value="terabyte"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="CPUSpeed">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="hertz">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="hertz"/>
-							<xs:enumeration value="kilohertz"/>
-							<xs:enumeration value="megahertz"/>
-							<xs:enumeration value="gigahertz"/>
-							<xs:enumeration value="terahertz"/>
-							<xs:enumeration value="flops"/>
-							<xs:enumeration value="kiloflops"/>
-							<xs:enumeration value="megaflops"/>
-							<xs:enumeration value="gigaflops"/>
-							<xs:enumeration value="teraflops"/>
-							<xs:enumeration value="petaflops"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="CPUNumber">
-		<xs:simpleContent>
-			<xs:extension base="xs:int">
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="TimeLastJobTook">
-		<xs:simpleContent>
-			<xs:extension base="xs:double">
-				<xs:attribute name="unit" use="optional" default="second">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="tick"/>
-							<xs:enumeration value="millisecond"/>
-							<xs:enumeration value="second"/>
-							<xs:enumeration value="minute"/>
-							<xs:enumeration value="hour"/>
-							<xs:enumeration value="day"/>
-							<xs:enumeration value="week"/>
-							<xs:enumeration value="month"/>
-							<xs:enumeration value="year"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
-	<xs:complexType name="TimingInformation">
-		<xs:sequence>
-			<xs:element name="time" minOccurs="0" maxOccurs="unbounded">
-				<xs:complexType>
-					<xs:simpleContent>
-						<xs:extension base="TimeMeasurement"/>
-					</xs:simpleContent>
-				</xs:complexType>
-			</xs:element>
-		</xs:sequence>
-		<xs:attribute name="numberOfTimes" type="xs:nonNegativeInteger" use="required"/>
-	</xs:complexType>
-	<xs:complexType name="TimeMeasurement">
-		<xs:simpleContent>
-			<xs:extension base="TimeSpan">
-				<xs:attribute name="type" use="optional" default="elapsedTime">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="cpuTime"/>
-							<xs:enumeration value="elapsedTime"/>
-							<xs:enumeration value="other"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="category" use="optional" default="total">
-					<xs:simpleType>
-						<xs:restriction base="xs:string">
-							<xs:enumeration value="total"/>
-							<xs:enumeration value="input"/>
-							<xs:enumeration value="preprocessing"/>
-							<xs:enumeration value="optimization"/>
-							<xs:enumeration value="postprocessing"/>
-							<xs:enumeration value="output"/>
-							<xs:enumeration value="other"/>
-						</xs:restriction>
-					</xs:simpleType>
-				</xs:attribute>
-				<xs:attribute name="description" type="xs:string" use="optional"/>
-			</xs:extension>
-		</xs:simpleContent>
-	</xs:complexType>
--->
 </xs:schema>
