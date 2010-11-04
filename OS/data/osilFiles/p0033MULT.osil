@@ -2,6 +2,10 @@
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
 <instanceHeader>
     <name>P0033</name>
+    <description>
+        This version of p0033 uses mult and incr attributes to compress the data arrays
+        Variable and constraint names have been taken out for maximum compression
+    </description>
 </instanceHeader>
 <instanceData>
 <variables numberOfVariables="33">
@@ -69,9 +73,9 @@
 <el mult="3" incr="5">26</el>
 <el>38</el>
 <el mult="4" incr="4">41</el>
-<el mult="3">54</el>
+<el mult="3" incr="1">54</el>
 <el>58</el>
-<el mult="3">60</el>
+<el mult="3" incr="1">60</el>
 <el>66</el>
 <el mult="3" incr="3">70</el>
 <el>80</el>
@@ -91,7 +95,7 @@
 <el>6</el>
 <el>9</el>
 <el>0</el>
-<el mult="3">5</el>
+<el mult="3" incr="1">5</el>
 <el>1</el>
 <el>5</el>
 <el>6</el>
@@ -132,11 +136,11 @@
 <el>8</el>
 <el>9</el>
 <el>3</el>
-<el mult="2" incr="0">4</el>
+<el mult="2">4</el>
 <el>12</el>
 <el>13</el>
 <el>12</el>
-<el mult="3" incr="0">13</el>
+<el mult="3">13</el>
 <el>5</el>
 <el>6</el>
 <el>10</el>

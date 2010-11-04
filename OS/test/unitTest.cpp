@@ -660,9 +660,11 @@ if( THOROUGH == true){
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		solver->osoption   = NULL;
-		cout << "call the COIN - Cbc Solver for p0033MULT" << endl;
+		cout << "build instance - Cbc Solver for p0033MULT" << endl;
 		solver->buildSolverInstance();
+		cout << "call the COIN - Cbc Solver for p0033MULT" << endl;
 		solver->solve();
+		cout << "verify solution - Cbc Solver for p0033MULT" << endl;
 		check = 3089;
 		ok = ( fabs(check - getObjVal( solver->osrl) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if (ok)
@@ -5208,6 +5210,7 @@ if (PARSER_TESTS){
 		std::string tempOSrL;
 
 		tempOSrL = osrlwriter->writeOSrL( osresult1);
+		cout << endl << endl << tempOSrL << endl << endl;
 		osresult3 = osrlreader->readOSrL( tempOSrL);
 		ok &= (osresult1->IsEqual(osresult3));
 		if (!ok) 

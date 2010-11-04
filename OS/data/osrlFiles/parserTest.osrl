@@ -80,7 +80,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 				</valuesString>
 				<basisStatus>
 					<basic numberOfEl="6">
-						<el mult="2">0</el>
+						<el mult="2" incr="1">0</el>
 						<el>5</el>
 						<el mult="3" incr="-1">4</el>
 					</basic>
@@ -131,7 +131,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 				</dualValues>
 				<basisStatus>
 					<atLower numberOfEl="2">
-						<el mult="2">0</el>
+						<el mult="2" incr="1">0</el>
 					</atLower>
 				</basisStatus>
 				<other numberOfCon="0"  name="conTest" description="just a test for the constraints section" value="no commercial"></other>

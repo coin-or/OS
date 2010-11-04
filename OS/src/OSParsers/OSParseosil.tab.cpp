@@ -4701,7 +4701,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 			elmultattON = false ;
 			elincrattON  = false;
 			elmult = 1;
-			elincr = 1;
+			elincr = 0;
 
 			// assume we are pointing to the first character after the l in <el
 			// it should be a space so let's increment ch
@@ -4911,7 +4911,7 @@ bool parseRowIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			elmultattON = false ;
 			elincrattON  = false;
 			elmult = 1;
-			elincr = 1;
+			elincr = 0;
 
 			// assume we are pointing to the first character after the l in <el
 			// it should be a space so let's increment ch
@@ -5116,7 +5116,7 @@ bool parseColIdx( const char **p, OSInstance *osinstance, int* osillineno){
 			elmultattON = false ;
 			elincrattON  = false;
 			elmult = 1;
-			elincr = 1;
+			elincr = 0;
 
 			// assume we are pointing to the first character after the l in <el
 			// it should be a space so let's increment ch
@@ -5323,7 +5323,7 @@ bool parseValue( const char **p, OSInstance *osinstance, int* osillineno){
 			elmultattON = false ;
 			elincrattON  = false;
 			elmult = 1;
-			elincr = 1;
+			elincr = 0;
 
 			// assume we are pointing to the first character after the l in <el
 			// it should be a space so let's increment ch

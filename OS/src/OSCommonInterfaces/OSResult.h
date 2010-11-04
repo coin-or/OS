@@ -1070,13 +1070,13 @@ public:
 	 */
 	int numberOfEnumerations;
 
+	/** the name of the result the user is defining */
+	std::string name;
+
 	/** this element allows a specific value associated with this
 	    particular type of result
 	 */
 	std::string value;
-
-	/** the name of the result the user is defining */
-	std::string name;
 	
 	/** a brief description of the type of result */
 	std::string description;

@@ -3,8 +3,8 @@
  * 
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 20/Oct/2010
- * @since   OS2.2
+ * @version 1.0, 10/05/2005
+ * @since   OS1.0
  *
  * \remarks
  * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -48,7 +48,7 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
 		{
 			for(int i = 0; i < v->numberOfEl;)
 			{
-				getMultIncr(&(v->el[i]), &mult, &incr, (v->numberOfEl) - i, 1);
+				getMultIncr(&(v->el[i]), &mult, &incr, (v->numberOfEl) - i, 0);
 				if (mult == 1)
 					outStr << "<el>" ;
 				else if (incr == 1)
@@ -209,4 +209,4 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 	outStr << "</basisStatus>" << endl;
 	
 	return outStr.str();
-}// end writeBasisStatus
+}// end writeDblVectorData

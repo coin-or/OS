@@ -57,7 +57,7 @@
 	numberOfOtherObjectiveResults( 0),
 	numberOfOtherConstraintResults( 0),
 	solutionIdx( 0),
-	mult(0),
+	mult(1),
 	incr(0),
 	numberAttributePresent( false),
 	incrPresent(false),

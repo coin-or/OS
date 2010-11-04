@@ -6608,7 +6608,7 @@ yydebug = 1;
 	osglData->osglMultPresent = false;
 	osglData->osglIncrPresent = false;
 	osglData->osglMult = 1;
-	osglData->osglIncr = 1;
+	osglData->osglIncr = 0;
 ;}
     break;
 

@@ -161,7 +161,7 @@ class MathUtil{
  * @param defaultIncr holds the default value for incr from the schema file. Using just <el mult="..."
  * saves space whenever a run of two or more elements has been encountered, whereas <el mult="..." incr="..."
  * saves space only for runs of three or more elements. Thus the defaultIncr must be treated specially
- * (and unfortunately it changes from one schema element to the next).
+ * (and it might change from one schema element to the next).
  *
  */
 inline void getMultIncr(int* i, int *mult, int *incr, int size, int defaultIncr)
