@@ -65,7 +65,7 @@ libOSParsers_la_LIBADD =
 am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
 	OSParseosol.lo OSParseosol.tab.lo OSParseosrl.lo \
 	OSParseosrl.tab.lo OSParseosss.lo OSgLParserData.lo \
-	OSiLParserData.lo OSgLParserData.lo OSrLParserData.lo \
+	OSiLParserData.lo OSrLParserData.lo \
 	OSoLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/../depcomp
@@ -367,9 +367,7 @@ libOSParsers_la_SOURCES = \
 		OSgLParserData.cpp \
 		OSiLParserData.h \
 		OSiLParserData.cpp \
-   		OSgLParserData.h \
-		OSgLParserData.cpp \
-		OSrLParserData.h \
+ 		OSrLParserData.h \
 		OSrLParserData.cpp \
                 OSoLParserData.h \
                 OSoLParserData.cpp
@@ -409,8 +407,7 @@ includecoin_HEADERS = \
         OSParseosol.tab.hpp \
 	OSgLParserData.h \
 	OSiLParserData.h \
-        OSgLParserData.h \
-	OSrLParserData.h \
+ 	OSrLParserData.h \
         OSoLParserData.h
 
 all: all-am

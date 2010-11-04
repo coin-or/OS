@@ -44,7 +44,7 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLReader.h \
 	OSrLWriter.cpp \
 	OSrLWriter.h \
-    OSDefaultSolver.cpp \
+	OSDefaultSolver.cpp \
 	OSDefaultSolver.h 
 
 # This is for libtool (on Windows)
