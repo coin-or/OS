@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+	<general>
+	</general>
+	<job>
+	</job>	
+	<optimization>
+		<solverOptions numberOfSolverOptions="18">
+			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"/>
+			<solverOption name="milp_log_level" solver="bonmin" type="integer" value="3"/>
+			<solverOption name="max_iter" solver="bonmin" type="integer" value="1000" category="ipopt"/>
+			<solverOption name="output_file" solver="bonmin" type="string" value="bonmin.out" category="ipopt"/>
+			<solverOption name="node_limit" solver="bonmin" type="integer" value="1000"  category="cbc" />
+			<solverOption name="nlp_solver" solver="bonmin" type="string" value="ipopt"/>
+			<solverOption name="milp_solver" solver="bonmin" type="string" value="Cbc_Par"  category="cbc" />
+			<solverOption name="number_strong_branch" solver="bonmin" type="integer" value="0" category="cbc"/>
+			
+			
+			<solverOption name="pivot" solver="clp" category="tol:model" value="1.e-5"/>
+			<solverOption name="mu_strategy" solver="ipopt" type="string" value="adaptive"/>
+
+			
+			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"/>
+
+			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="model"  type="integer" value="0"/>
+			<solverOption name="LS_IPARAM_LP_PRINTLEVEL" solver="lindo" category="environment" type="integer" value="1"/>
+
+
+			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"/>
+			<solverOption name="OsiHintIgnore" solver="osi" type="OsiHintStrength"   />
+
+		
+			<solverOption name="maxN" solver="cbc" value="100" />
+			<solverOption name="cuts" solver="cbc" value="off" />
+
+			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
+
+		</solverOptions>
+	</optimization>
+</osol>

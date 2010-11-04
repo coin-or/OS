@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+	<general>
+	</general>
+	<job>
+		<maxTime unit="second">0.01</maxTime>
+	</job>	
+	<optimization>
+		<variables numberOfOtherVariableOptions="0">
+			<initialVariableValues numberOfVar="2">
+					<var idx="2" value="5."/>
+					<var idx="1" value="5."/>
+			</initialVariableValues>
+		</variables>	
+		<solverOptions numberOfSolverOptions="5">	
+			<solverOption name="node_limit" solver="couenne" type="integer" value="1000" category="bonmin"/>
+			<solverOption name="bb_log_level" solver="couenne" type="integer" value="3" category="bonmin"/>
+			<solverOption name="nlp_log_level" solver="couenne" type="integer" value="2" category="bonmin"/>
+			<solverOption name="display_stats" solver="couenne" type="string" value="yes"/>
+			<solverOption name="max_iter" solver="couenne" type="integer" value="2000" category="ipopt"/>		
+		</solverOptions>
+	</optimization>
+</osol>

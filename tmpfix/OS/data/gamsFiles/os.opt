@@ -1,0 +1,4 @@
+writeosil osil.xml
+writeosrl osrl.xml
+readosol ../osolFiles/rosenbrockmod_ipopt.osol
+solver ipopt

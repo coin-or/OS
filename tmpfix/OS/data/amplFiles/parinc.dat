@@ -1,0 +1,22 @@
+set PROD := std del;
+set DEP := cutanddye sewing finishing inspectandpack;
+
+param:  c :=
+std 10
+del 9;
+
+
+param: hours :=
+cutanddye 630
+sewing 600
+finishing 708
+inspectandpack 135;
+
+
+
+param a:
+                  std    del :=
+cutanddye         .7    1.0
+sewing            .5    .8333
+finishing         1.0   .6667
+inspectandpack    0.1   .25  ;

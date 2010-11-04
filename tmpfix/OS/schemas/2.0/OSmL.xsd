@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
+	<!--OSmL.xsd is not an OS standard.-->
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:element name="model" type="Model">
+		<xs:annotation>
+			<xs:documentation> This is the only allowed root element.</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="Model">
+		<xs:all>
+			<xs:element name="variables" type="ModelVariables" minOccurs="0"/>
+			<xs:element name="objectives" type="ModelObjectives" minOccurs="0"/>
+			<xs:element name="constraints" type="ModelConstraints" minOccurs="0"/>
+			<xs:element name="userFunctions" type="ModelUserFunctions" minOccurs="0"/>
+		</xs:all>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="source" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="ModelVariables">
+		<xs:sequence>
+			<xs:element name="var" type="ModelVar" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ModelVar">
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="init" type="xs:double" use="optional"/>
+		<xs:attribute name="initString" type="xs:string" use="optional"/>
+		<xs:attribute name="type" use="optional" default="C">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="C"/>
+					<xs:enumeration value="B"/>
+					<xs:enumeration value="I"/>
+					<xs:enumeration value="S"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+	</xs:complexType>
+	<xs:complexType name="ModelObjectives">
+		<xs:sequence>
+			<xs:element name="obj" type="ModelObj" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ModelObj" mixed="true">
+		<xs:sequence>
+			<xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="maxOrMin" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="min"/>
+					<xs:enumeration value="max"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="constant" type="xs:double" use="optional" default="0.0"/>
+	</xs:complexType>
+	<xs:complexType name="ModelConstraints">
+		<xs:sequence>
+			<xs:element name="con" type="ModelCon" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ModelCon" mixed="true">
+		<xs:sequence>
+			<xs:any processContents="skip" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
+		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
+		<xs:attribute name="lb" type="xs:double" use="optional" default="-INF"/>
+	</xs:complexType>
+	<xs:complexType name="ModelUserFunctions">
+		<xs:sequence>
+			<xs:element name="userFunction" type="ModelUserFunction" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ModelUserFunction"/>
+</xs:schema>
