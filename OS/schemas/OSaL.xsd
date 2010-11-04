@@ -348,7 +348,7 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -477,7 +477,7 @@
 			<xs:extension base="xs:negativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -504,7 +504,7 @@
 					</xs:simpleType>
 				</xs:attribute>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -550,7 +550,7 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -741,7 +741,7 @@
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -768,7 +768,7 @@
 					</xs:simpleType>
 				</xs:attribute>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -814,7 +814,7 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -957,7 +957,7 @@
 			<xs:element name="numberOfColumns" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="numberOfNonzeroValues" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="density" minOccurs="0" type="probability"/>
+			<xs:element name="density" type="probability" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCoefficientAnalysis">
@@ -1132,7 +1132,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:int">
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1153,7 +1153,7 @@
 			<xs:extension base="xs:int">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1180,7 +1180,7 @@
 					</xs:simpleType>
 				</xs:attribute>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1237,7 +1237,7 @@
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:int" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
-				<xs:attribute name="incr" type="xs:int" use="optional"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1259,7 +1259,7 @@
 								<xs:simpleContent>
 									<xs:extension base="xs:nonNegativeInteger">
 										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-										<xs:attribute name="incr" type="xs:int" use="optional"/>
+										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 									</xs:extension>
 								</xs:simpleContent>
 							</xs:complexType>
@@ -1278,7 +1278,7 @@
 								<xs:simpleContent>
 									<xs:extension base="xs:nonNegativeInteger">
 										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-										<xs:attribute name="incr" type="xs:int" use="optional"/>
+										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 									</xs:extension>
 								</xs:simpleContent>
 							</xs:complexType>
@@ -1297,7 +1297,7 @@
 								<xs:simpleContent>
 									<xs:extension base="xs:nonNegativeInteger">
 										<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-										<xs:attribute name="incr" type="xs:int" use="optional"/>
+										<xs:attribute name="incr" type="xs:int" use="optional" default="0"/>
 									</xs:extension>
 								</xs:simpleContent>
 							</xs:complexType>
@@ -1652,7 +1652,11 @@
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1679,7 +1683,11 @@
 					</xs:simpleType>
 				</xs:attribute>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1700,7 +1708,11 @@
 			<xs:extension base="xs:negativeInteger">
 				<xs:attribute name="strict" type="xs:boolean" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1727,7 +1739,11 @@
 					</xs:simpleType>
 				</xs:attribute>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

@@ -172,23 +172,6 @@
 		<xs:attribute name="lb" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-		<!--		
-		<xs:attribute name="type" use="optional" default="C">
-			<xs:annotation>
-				<xs:documentation>C=continuous, I=integer, B=binary, S= string-valued, D=semicontinuous, J=semi-integer</xs:documentation>
-			</xs:annotation>
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="C"/>
-					<xs:enumeration value="B"/>
-					<xs:enumeration value="I"/>
-					<xs:enumeration value="S"/>
-					<xs:enumeration value="D"/>
-					<xs:enumeration value="J"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
--->
 	</xs:complexType>
 	<!--Objectives: since version 1.0-->
 	<xs:complexType name="Objectives">
@@ -365,29 +348,6 @@
 			<xs:element name="matrixConstraints" type="MatrixConstraints" minOccurs="0"/>
 			<xs:element name="linearConstraintMatrixOperators" type="LinearConstraintMatrixOperators" minOccurs="0"/>
 			<xs:element name="nonlinearMatrixExpressions" type="NonlinearMatrixExpressions" minOccurs="0"/>
-			<!--
-			<xs:element name="quadraticCoefficientMatrices" minOccurs="0">
-				<xs:complexType>
-					<xs:sequence>
-						<xs:element name="qMatrixTerm" minOccurs="0" maxOccurs="unbounded">
-							<xs:complexType>
-								<xs:attribute name="matrixConIdx" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="matrixVarIdxOne" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="matrixVarIdxTwo" type="xs:nonNegativeInteger" use="required"/>
-								<xs:attribute name="coef" type="xs:double" use="optional" default="1"/>
-								<xs:attribute name="leftCoefMatrixID" type="xs:string" use="optional"/>
-								<xs:attribute name="leftCoefMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="middleCoefMatrixID" type="xs:string" use="optional"/>
-								<xs:attribute name="middleCoefMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
-								<xs:attribute name="rightCoefMatrixID" type="xs:string" use="optional"/>
-								<xs:attribute name="rightCoefMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
-							</xs:complexType>
-						</xs:element>
-					</xs:sequence>
-					<xs:attribute name="numberOfQuadraticMatrixTerms" type="xs:nonNegativeInteger" use="required"/>
-				</xs:complexType>
-			</xs:element>
-			-->
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="MatrixVariables">
@@ -407,13 +367,13 @@
 		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="transpose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="lbMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="lbMatrixTranspose" type="xs:boolean"/>
-		<xs:attribute name="lbMatrixScalarCoef" type="xs:double"/>
-		<xs:attribute name="lbConeId" type="xs:string"/>
+		<xs:attribute name="lbMatrixTranspose" type="xs:boolean" use="optional"/>
+		<xs:attribute name="lbMatrixScalarCoef" type="xs:double" use="optional"/>
+		<xs:attribute name="lbConeId" type="xs:string" use="optional"/>
 		<xs:attribute name="ubMatrixID" type="xs:string" use="optional"/>
-		<xs:attribute name="ubMatrixTranspose" type="xs:boolean"/>
-		<xs:attribute name="ubMatrixScalarCoef" type="xs:double"/>
-		<xs:attribute name="ubConeId" type="xs:string"/>
+		<xs:attribute name="ubMatrixTranspose" type="xs:boolean" use="optional"/>
+		<xs:attribute name="ubMatrixScalarCoef" type="xs:double" use="optional"/>
+		<xs:attribute name="ubConeId" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingObjectives">
 		<xs:annotation>
@@ -422,7 +382,7 @@
 		<xs:sequence>
 			<xs:element name="obj" type="MatrixProgrammingObj" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" default="1"/>
+		<xs:attribute name="numberOfObj" type="xs:nonNegativeInteger" use="optional" default="1"/>
 	</xs:complexType>
 	<xs:complexType name="MatrixProgrammingObj">
 		<xs:annotation>
@@ -493,12 +453,12 @@
 		<xs:attribute name="constantMatrixTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="lbMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="lbMatrixtranspose" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="lbMatrixScalarCoef" type="xs:double"/>
-		<xs:attribute name="lbConeId" type="xs:string"/>
+		<xs:attribute name="lbMatrixScalarCoef" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="lbConeId" type="xs:string" use="optional"/>
 		<xs:attribute name="ubMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="ubMatrixtranspose" type="xs:boolean" use="optional" default="false"/>
-		<xs:attribute name="ubMatrixScalarCoef" type="xs:double"/>
-		<xs:attribute name="ubConeId" type="xs:string"/>
+		<xs:attribute name="ubMatrixScalarCoef" type="xs:double" use="optional" default="1.0"/>
+		<xs:attribute name="ubConeId" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="LinearConstraintMatrixOperators">
 		<xs:annotation>
@@ -612,7 +572,7 @@
 			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="type" type="xs:positiveInteger" use="required"/>
-		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="convexityRowIdx" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="SOSAdjacentVariableSets">
 		<xs:annotation>
@@ -625,7 +585,7 @@
 				</xs:annotation>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="numberOfSets" use="required"/>
+		<xs:attribute name="numberOfSets" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="SOSAdjacencySet">
 		<xs:annotation>
@@ -642,7 +602,11 @@
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-		<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+		<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>NEW in release 2.2.1</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SOS1">
 		<xs:annotation>
@@ -687,7 +651,11 @@
 		</xs:annotation>
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-		<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+		<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+			<xs:annotation>
+				<xs:documentation>NEW in release 2.2.1</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="SOS1Var">
 		<xs:annotation>
@@ -697,7 +665,11 @@
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -709,7 +681,11 @@
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -721,7 +697,11 @@
 			<xs:extension base="xs:nonNegativeInteger">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -806,7 +786,7 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="type" default="positiveSemidefinite">
+		<xs:attribute name="type" use="optional" default="positiveSemidefinite">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
 					<xs:enumeration value="positiveSemidefinite"/>
@@ -878,7 +858,7 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="mult" type="xs:positiveInteger"/>
+		<xs:attribute name="mult" type="xs:positiveInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCone">
 		<xs:annotation>
@@ -887,10 +867,10 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="distortionMatrixId"/>
-		<xs:attribute name="normScaleFactor" type="positiveDouble"/>
-		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="distortionMatrixId" use="optional"/>
+		<xs:attribute name="normScaleFactor" type="positiveDouble" use="optional" default="1.0"/>
+		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="RotatedQuadraticCone">
 		<xs:annotation>
@@ -899,12 +879,12 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="distortionMatrixId"/>
-		<xs:attribute name="normScaleFactor" type="positiveDouble"/>
-		<xs:attribute name="firstAxisDirectionRowIdx" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="firstAxisDirectionColIdx" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="secondAxisDirectionRowIdx" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="secondAxisDirectionColIdx" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="distortionMatrixId" use="optional"/>
+		<xs:attribute name="normScaleFactor" type="positiveDouble" use="optional" default="1.0"/>
+		<xs:attribute name="firstAxisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="firstAxisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="secondAxisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="secondAxisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="NormedCone">
 		<xs:annotation>
@@ -913,10 +893,10 @@
 		<xs:attribute name="id" type="xs:string" use="required"/>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
-		<xs:attribute name="distortionMatrixId"/>
-		<xs:attribute name="normScaleFactor" type="positiveDouble"/>
-		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger"/>
-		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger"/>
+		<xs:attribute name="distortionMatrixId" use="optional"/>
+		<xs:attribute name="normScaleFactor" type="positiveDouble" use="optional" default="1.0"/>
+		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="pNorm" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:double">
@@ -952,7 +932,11 @@
 				<xs:attribute name="varIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="matrixVarIdx" type="xs:nonNegativeInteger" use="optional"/>
 				<xs:attribute name="mult" type="xs:positiveInteger" use="optional" default="1"/>
-				<xs:attribute name="incr" type="xs:int" use="optional" default="1"/>
+				<xs:attribute name="incr" type="xs:int" use="optional" default="0">
+					<xs:annotation>
+						<xs:documentation>NEW in release 2.2.1</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -1378,18 +1362,6 @@
 		<xs:attribute name="lb" type="xs:double" use="optional"/>
 		<xs:attribute name="ub" type="xs:double" use="optional"/>
 		<xs:attribute name="nominalValue" type="xs:double" use="optional"/>
-		<!--		
-		<xs:attribute name="type" use="optional" default="C">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="C"/>
-					<xs:enumeration value="B"/>
-					<xs:enumeration value="I"/>
-					<xs:enumeration value="S"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
--->
 	</xs:complexType>
 	<xs:complexType name="ParamSetRowInCore">
 		<xs:annotation>
@@ -2485,7 +2457,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="description" type="xs:string"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
 		<xs:attribute name="basevalue" type="xs:double" default="0.0"/>
 	</xs:complexType>
 	<xs:complexType name="StochasticLinearTransformationMatrixCoefficients">
@@ -2920,7 +2892,7 @@
 		<xs:annotation>
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="linearShortageParam" type="xs:double" default="0"/>
+		<xs:attribute name="linearShortageParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="linearSurplusParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticShortageParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticSurplusParam" type="xs:double" use="optional" default="0"/>
@@ -2938,18 +2910,6 @@
 		<xs:attribute name="default" type="xs:string" use="optional"/>
 		<xs:attribute name="isVariable" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="variableType" type="GeneralEnumerationVarType" use="optional" default="C"/>
-		<!--
-		<xs:attribute name="variableType" use="optional" default="C">
-			<xs:simpleType>
-				<xs:restriction base="xs:string">
-					<xs:enumeration value="C"/>
-					<xs:enumeration value="B"/>
-					<xs:enumeration value="I"/>
-					<xs:enumeration value="S"/>
-				</xs:restriction>
-			</xs:simpleType>
-		</xs:attribute>
--->
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsUserDefinedSurplusPenalty">
 		<xs:annotation>
