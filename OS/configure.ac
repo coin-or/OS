@@ -102,7 +102,7 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 AC_COIN_CHECK_PACKAGE(ASL, [coinasl], [OSLib])
 
-AC_COIN_CHECK_PACKAGE(CoinDepend, [coinutils = trunk osi], [OSLib])
+AC_COIN_CHECK_PACKAGE(CoinDepend, [coinutils osi], [OSLib])
 if test $coin_has_coindepend != yes ; then
   AC_MSG_ERROR([Required package CoinUtils or Osi not available.])
 fi

@@ -22740,9 +22740,9 @@ if test $coin_has_coindepend = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "coinutils = trunk osi"; then
-    COINDEPEND_VERSIONS="`$PKG_CONFIG --modversion "coinutils = trunk osi" 2>/dev/null`"
-     cflags=`$PKG_CONFIG --cflags "coinutils = trunk osi" 2>/dev/null`
+  if $PKG_CONFIG --exists "coinutils osi"; then
+    COINDEPEND_VERSIONS="`$PKG_CONFIG --modversion "coinutils osi" 2>/dev/null`"
+     cflags=`$PKG_CONFIG --cflags "coinutils osi" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -22751,17 +22751,17 @@ if test -n "$PKG_CONFIG" ; then
 	  cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
 	fi
     COINDEPEND_CFLAGS="$cflags"
-    COINDEPEND_LIBS=`$PKG_CONFIG --libs "coinutils = trunk osi" 2>/dev/null`
-    COINDEPEND_DATA=`$PKG_CONFIG --variable=datadir "coinutils = trunk osi" 2>/dev/null`
+    COINDEPEND_LIBS=`$PKG_CONFIG --libs "coinutils osi" 2>/dev/null`
+    COINDEPEND_DATA=`$PKG_CONFIG --variable=datadir "coinutils osi" 2>/dev/null`
      coin_has_coindepend=yes
         echo "$as_me:$LINENO: result: yes: $COINDEPEND_VERSIONS" >&5
 echo "${ECHO_T}yes: $COINDEPEND_VERSIONS" >&6
-        OSLIB_PCREQUIRES="coinutils = trunk osi $OSLIB_PCREQUIRES"
+        OSLIB_PCREQUIRES="coinutils osi $OSLIB_PCREQUIRES"
 
 
 
   else
-    COINDEPEND_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinutils = trunk osi`
+    COINDEPEND_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors coinutils osi`
       coin_has_coindepend=notGiven
         echo "$as_me:$LINENO: result: not given: $COINDEPEND_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $COINDEPEND_PKG_ERRORS" >&6
@@ -22797,8 +22797,8 @@ COINDEPEND_LIBS=
 COINDEPEND_CFLAGS=
 COINDEPEND_DATA=
 
-# initial list of dependencies is "coinutils = trunk osi", but we need to filter out version number specifications (= x, <= x, >= x)
-projtoprocess="coinutils  osi"
+# initial list of dependencies is "coinutils osi", but we need to filter out version number specifications (= x, <= x, >= x)
+projtoprocess="coinutils osi"
 projprocessed=""
 
 while test $coin_has_coindepend = notGiven ; do
@@ -22883,7 +22883,7 @@ _ACEOF
 
 
 
-      OSLIB_PCREQUIRES="coinutils = trunk osi $OSLIB_PCREQUIRES"
+      OSLIB_PCREQUIRES="coinutils osi $OSLIB_PCREQUIRES"
       OSLIB_CFLAGS="$COINDEPEND_CFLAGS $OSLIB_CFLAGS"
       OSLIB_LIBS="$COINDEPEND_LIBS $OSLIB_LIBS"
 
