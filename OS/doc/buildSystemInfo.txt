@@ -36,4 +36,11 @@ INFO on Externals
 
 Stefan on LIBS
 
-XXXLIB_LIBS is what you should use in your Makefile.am, XXXLIB_PCLIBS iswhat you should use in the .pc.in file to setup the Libs entry.The thing is that XXXLIB_LIBS hold all flags needed to link againstXXXLIB, but for the .pc file you want to distinguish betweendependencies that have a .pc file and those where you just know thelinking flags. So these two informations are stored in XXXLIB_PCREQUIREDand XXXLIB_PCLIBS.
+XXXLIB_LIBS is what you should use in your Makefile.am, XXXLIB_PCLIBS iswhat you should use in the .pc.in file to setup the Libs entry.The thing is that XXXLIB_LIBS hold all flags needed to link againstXXXLIB, but for the .pc file you want to distinguish betweendependencies that have a .pc file and those where you just know thelinking flags. So these two informations are stored in XXXLIB_PCREQUIREDand XXXLIB_PCLIBS.
+
+
+%%%%%%%%%%%%
+
+Ralphs on naming convention
+
+First of all, if it's working, then the names are correct  :) . Don'toverthink it  :) . The names are whatever *you* choose them to be foryour individual project. Whatever name you give to the correspondingpackage in *your* configure.ac is how those variables get named. Sinceyou have the lineAC_COIN_CHECK_PACKAGE(Clp, [osi-clp]. [OSLib])in your configure.ac, the variable for Clp libraries will be CLP_LIBS.If you change the first argument of AC_COIN_CHECK_PACKAGE to "ClpLib,"then you would use CLPLIB_LIBS. It doesn't matter what any otherproject does. You choose your names within your project, though itwould probably be nice if we did it all similarly to avoid too muchconfusion. At the moments, I believe we are mostly similar, but thereason project add "LIB" onto the names internally is to distinguishbetween dependencies for the library versus the executable. Since youdon't have to make that distinction (you are only using the library),you don't need the redundant "LIB" added to the name.Cheers,

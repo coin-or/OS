@@ -261,9 +261,9 @@ endif
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install/coin'
 includecoindir = $(includedir)/coin
-includecoin_HEADERS = \
-	OSConfig.h \
-	../inc/config_os.h 
+includecoin_HEADERS =
+#	OSConfig.h \
+#	../inc/config_os.h 
 
 if MSCL_
    includecoin_HEADERS += $(top_srcdir)/../BuildTools/headers/configall_system.h

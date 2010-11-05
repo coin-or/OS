@@ -143,6 +143,8 @@ noinst_PROGRAMS = OSFileUpload$(EXEEXT)
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
 @COIN_HAS_ASL_TRUE@am__append_16 = $(ASL_CFLAGS)
+#	OSConfig.h \
+#	../inc/config_os.h 
 @MSCL__TRUE@am__append_17 = $(top_srcdir)/../BuildTools/headers/configall_system.h \
 @MSCL__TRUE@	$(top_srcdir)/../BuildTools/headers/configall_system_msc.h
 subdir = applications/fileUpload
@@ -187,7 +189,7 @@ CXXLINK = $(LIBTOOL) --tag=CXX --mode=link $(CXXLD) $(AM_CXXFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(OSFileUpload_SOURCES)
 DIST_SOURCES = $(OSFileUpload_SOURCES)
-am__includecoin_HEADERS_DIST = OSConfig.h ../inc/config_os.h \
+am__includecoin_HEADERS_DIST =  \
 	$(top_srcdir)/../BuildTools/headers/configall_system.h \
 	$(top_srcdir)/../BuildTools/headers/configall_system_msc.h
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -501,7 +503,7 @@ AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/..` -I`$(CYGPATH_W) \
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'install/coin'
 includecoindir = $(includedir)/coin
-includecoin_HEADERS = OSConfig.h ../inc/config_os.h $(am__append_17)
+includecoin_HEADERS = $(am__append_17)
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -655,7 +657,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/../../../BuildTools/headers $(distdir)/../inc
+	$(mkdir_p) $(distdir)/../../../BuildTools/headers
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \
