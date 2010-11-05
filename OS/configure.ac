@@ -100,6 +100,7 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 #                              COIN components                              #
 #############################################################################
+AC_COIN_CHECK_PACKAGE(Ipopt, [ipopt], [OSLib])
 AC_COIN_CHECK_PACKAGE(ASL, [coinasl], [OSLib])
 
 AC_COIN_CHECK_PACKAGE(CoinDepend, [coinutils osi], [OSLib])
@@ -112,7 +113,7 @@ AC_COIN_CHECK_PACKAGE(Vol,  [osi-vol],  [OSLib])
 AC_COIN_CHECK_PACKAGE(SYMPHONY,  [osi-sym],  [OSLib])
 AC_COIN_CHECK_PACKAGE(Cbc,  [osi-cbc],  [OSLib])
 AC_COIN_CHECK_PACKAGE(Cgl,  [cgl],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Ipopt, [ipopt], [OSLib])
+
 AC_COIN_HAS_PROJECT(cppad)
 #AC_COIN_CHECK_PACKAGE(cppad)
 AC_COIN_CHECK_PACKAGE(Couenne, [couenne], [OSLib])

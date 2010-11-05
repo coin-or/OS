@@ -967,7 +967,7 @@ serviceOtherAtt:
 serviceOtherEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 
-jobElement: jobElementStart jobElementContent;
+jobElement: | jobElementStart jobElementContent;
 
 jobElementStart: JOBSTART;
 
