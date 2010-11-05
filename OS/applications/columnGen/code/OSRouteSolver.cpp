@@ -40,6 +40,8 @@
 #include "ClpFactorization.hpp"
 #include "ClpNetworkMatrix.hpp"
 #include "OsiClpSolverInterface.hpp"
+#include <cmath>
+
 
 
 std::string makeStringFromInt(std::string theString, int theInt);
@@ -1645,11 +1647,12 @@ void OSRouteSolver::pauHana(const double* theta){
 	std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
 	std::cout << std::endl <<  std::endl;
 	
-	int numSets;
+	float numSets;
 	int kount;
 	
-	numSets = floor( (m_numThetaVar - 1 ) / m_numHubs);
-	
+	numSets = floor( double((m_numThetaVar - 1 ) / m_numHubs));
+
+
 	//kipp throw exception if number of columns not an even multiple of m_numHubs
 	kount = 0;
 	
