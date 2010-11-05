@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org"
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="os.optimizationservices.org 
+http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+    <general>
+         <instanceLocation locationType="local">c:\parincLinear.osil</instanceLocation>
+         <contact transportType="smtp">kipp.martin@uc.edu</contact> 
+         <solverToInvoke>clp</solverToInvoke>
+    </general>
+    <optimization numberOfVariables="2" numberOfObjectives="1" numberOfConstraints="4">
+         <solverOptions numberOfSolverOptions="8">
+              <solverOption solver="clp" name="OsiDualTolerance" category="OsiDblParam" value="1e-07"/>
+              <solverOption solver="clp" name="OsiMaxNumIteration" category="OsiIntParam"  value="10000"/>
+              <solverOption solver="clp" name="OsiDualScale" category="OsiHintParam" value="true"/>
+         
+              <solverOption solver="ipopt" name="tol" category="numeric"  type="double" value="1e-9"/>
+              <solverOption solver="ipopt" name="print_level" category="integer" type="integer"   value="0"/>
+              <solverOption solver="ipopt" name="mu_strategy" category="string" value="adaptive"/>
+         
+              <solverOption solver="lindo" name="LS_IPARAM_CHECK_FOR_ERRORS" category="EnvInt" type="boolean" value="true" />
+              <solverOption solver="lindo" name="LS_DPARAM_NLP_FEASTOL" category="ModelDou" value="1e-9"/>
+         </solverOptions>      
+    </optimization>
+</osol>

@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@/coin
+includedir=@includedir@/coin
+
+Name: OS
+Description: COIN-OR Optimization Services
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -lOS @OSLIB_PCLIBS@
+Cflags: -I${includedir}
+Requires: @OSLIB_PCREQUIRES@

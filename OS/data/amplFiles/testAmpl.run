@@ -1,0 +1,32 @@
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "-solver xyz";
+solve;
+reset;
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "-solver ipopt";
+solve;
+display x3;
+reset;
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "-solver cbc";
+solve;
+reset;
+
+
+
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "-osol solveroptions.osol    -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws  ";
+solve;
+display x3;
+reset;
+
+model hs71.mod;
+option solver OSAmplClient;
+option OSAmplClient_options "-solver ipopt    -serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverServiceee.jws  ";
+solve;
+
+exit;

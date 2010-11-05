@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+	<general>
+		<instanceName>spl1 -- setup constraints are the blocks</instanceName>
+	</general>
+
+
+	<optimization>
+		<variables numberOfOtherVariableOptions="6">
+			<other name="initialCol" solver="Dip" numberOfVar="6" value="0">
+				<var idx="0" value="1"/>
+				<var idx="1" value="1"/>
+				<var idx="2" value="1"/>
+				<var idx="3" value="1"/>
+				<var idx="4" value="1"/>
+				<var idx="15" value="1"/>
+			</other>
+			<other name="initialCol" solver="Dip" numberOfVar="6" value="1">
+				<var idx="5" value="1"/>
+				<var idx="6" value="1"/>
+				<var idx="7" value="1"/>
+				<var idx="8" value="1"/>
+				<var idx="9" value="1"/>
+				<var idx="16" value="1"/>
+			</other>
+			<other name="initialCol" solver="Dip" numberOfVar="6" value="2">
+				<var idx="10" value="1"/>
+				<var idx="11" value="1"/>
+				<var idx="12" value="1"/>
+				<var idx="13" value="1"/>
+				<var idx="14" value="1"/>
+				<var idx="17" value="1"/>
+			</other>
+
+
+
+
+			<other name="variableBlockSet" solver="Dip" numberOfVar="6" >
+				<var idx="0" />
+				<var idx="1" />
+				<var idx="2" />
+				<var idx="3" />
+				<var idx="4" />
+				<var idx="15" />
+			</other>
+			
+			<other name="variableBlockSet" solver="Dip" numberOfVar="6" >
+				<var idx="5" />
+				<var idx="6" />
+				<var idx="7" />
+				<var idx="8" />
+				<var idx="9" />
+				<var idx="16" />
+			</other>
+			
+			<other name="variableBlockSet" solver="Dip" numberOfVar="6" >
+				<var idx="10" />
+				<var idx="11" />
+				<var idx="12" />
+				<var idx="13" />
+				<var idx="14" />
+				<var idx="17" />
+			</other>
+
+
+		</variables>
+
+		<constraints numberOfOtherConstraintOptions="4">
+			<other name="constraintSet" solver="Dip" numberOfCon="5" type="Core">
+				<con idx="0"/>
+				<con idx="1"/>
+				<con idx="2"/>
+				<con idx="3"/>
+				<con idx="4"/>
+			</other>
+			<other name="constraintSet" solver="Dip" numberOfCon="5" type="Block" value="0">
+				<con idx="5"/>
+				<con idx="6"/>
+				<con idx="7"/>
+				<con idx="8"/>
+				<con idx="9"/>
+			</other>
+
+			<other name="constraintSet" solver="Dip" numberOfCon="5" type="Block" value="1">
+				<con idx="10"/>
+				<con idx="11"/>
+				<con idx="12"/>
+				<con idx="13"/>
+				<con idx="14"/>
+			</other>
+
+			<other name="constraintSet" solver="Dip" numberOfCon="5" type="Block" value="2">
+				<con idx="15"/>
+				<con idx="16"/>
+				<con idx="17"/>
+				<con idx="18"/>
+				<con idx="19"/>
+			</other>
+
+		</constraints>
+
+
+
+	</optimization>
+</osol>

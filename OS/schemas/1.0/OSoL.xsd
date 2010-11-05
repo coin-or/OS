@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--OSoL.xsd: version - 1.0.0 -->
+	<!--include: since version 1.0.0-->
+	<xs:include schemaLocation="OSgL.xsd"/>
+	<xs:element name="osol" type="OSoL">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:complexType name="OSoL">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="general" type="GeneralOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="system" type="SystemOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="service" type="ServiceOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="job" type="JobOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="optimization" type="OptimizationOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="GeneralOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="serviceURI" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="serviceName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="instanceName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="instanceLocation" type="InstanceLocationOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="jobID" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="license" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="userName" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="password" type="xs:string" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="contact" type="ContactOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="InstanceLocationOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="locationType" use="optional" default="local">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="local"/>
+							<xs:enumeration value="http"/>
+							<xs:enumeration value="ftp"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ContactOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="transportType" use="optional" default="osp">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="osp"/>
+							<xs:enumeration value="smtp"/>
+							<xs:enumeration value="http"/>
+							<xs:enumeration value="ftp"/>
+							<xs:enumeration value="other"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="SystemOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="minDiskSpace" type="xs:double" default="0.0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="minMemorySize" type="xs:double" default="0.0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="minCPUSpeed" type="xs:double" default="0.0" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="ServiceOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="type" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="solver"/>
+						<xs:enumeration value="analyzer"/>
+						<xs:enumeration value="scheduler"/>
+						<xs:enumeration value="simulation"/>
+						<xs:enumeration value="registry"/>
+						<xs:enumeration value="modeler"/>
+						<xs:enumeration value="agent"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="JobOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:all>
+			<xs:element name="maxTime" default="INF" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:double">
+						<xs:minExclusive value="0.0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="scheduledStartTime" type="xs:dateTime" default="1970-01-01T00:00:00-00:00" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="dependencies" type="JobDependencies" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="requiredDirectoriesAndFiles" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="directoriesToMake" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="filesToCreate" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="inputFilesToCopyFrom" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="inputFilesToCopyTo" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="inputFilesToMoveFrom" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="inputFilesToMoveTo" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="outputFilesToCopyFrom" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="outputFilesToCopyTo" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="outputFilesToMoveFrom" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="outputFilesToMoveTo" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="filesToDelete" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="directoriesToDelete" type="DirectoriesAndFiles" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="processesToKill" type="Processes" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:complexType name="OptimizationOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="variables" type="VariableOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="objectives" type="ObjectiveOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="constraints" type="ConstraintOption" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="numberOfVariables" type="xs:positiveInteger" use="optional"/>
+		<xs:attribute name="numberOfObjectives" type="xs:nonNegativeInteger" use="optional"/>
+		<xs:attribute name="numberOfConstraints" type="xs:nonNegativeInteger" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="VariableOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="initialVariableValues" type="InitVariableValues" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherVariableOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InitVariableValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="var" type="InitVarValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InitVarValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="value" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="InitVarValueString">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="value" type="xs:double" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="OtherVariableOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="var" type="OtherVarOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherVarOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="value" type="xs:string" use="optional"/>
+				<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+				<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ObjectiveOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="initialObjectiveValues" type="InitObjectiveValues" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="initialObjectiveBounds" type="InitObjectiveBounds" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherObjectiveOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InitObjectiveValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="obj" type="InitObjValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InitObjValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+				<xs:attribute name="value" type="xs:double" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="InitObjectiveBounds">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="obj" type="InitObjBound" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InitObjBound">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+				<xs:attribute name="lbValue" type="xs:double" use="optional"/>
+				<xs:attribute name="ubValue" type="xs:double" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="OtherObjectiveOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="obj" type="OtherObjOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="OtherObjOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+				<xs:attribute name="value" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ConstraintOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="initialConstraintValues" type="InitConstraintValues" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="initialDualValues" type="InitDualVariableValues" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="other" type="OtherConstraintOption" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>since version 1.0.0</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InitConstraintValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="con" type="InitConValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OtherConstraintOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="con" type="OtherConOption" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="name" type="xs:string" use="required"/>
+		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="description" type="xs:string" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="InitConValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:negativeInteger" use="optional"/>
+				<xs:attribute name="value" type="xs:double" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="InitDualVariableValues">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:sequence maxOccurs="unbounded">
+			<xs:element name="con" type="InitDualVarValue" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InitDualVarValue">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="lbValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="ubValue" use="optional" default="0.0">
+			<xs:simpleType>
+				<xs:restriction base="xs:double"/>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="OtherConOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="optional"/>
+				<xs:attribute name="value" type="xs:string" use="optional"/>
+				<xs:attribute name="lbValue" type="xs:string" use="optional"/>
+				<xs:attribute name="ubValue" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="OtherOption">
+		<xs:annotation>
+			<xs:documentation>since version 1.0.0</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required"/>
+				<xs:attribute name="description" type="xs:string" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>
