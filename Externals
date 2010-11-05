@@ -19,6 +19,6 @@ Ipopt  https://projects.coin-or.org/svn/Ipopt/trunk/Ipopt
 cppad  https://projects.coin-or.org/svn/CppAD/releases/20090303.1
 #Bonmin  https://projects.coin-or.org/svn/Bonmin/trunk/Bonmin
 #Couenne  https://projects.coin-or.org/svn/Couenne/trunk/Couenne 
-ApplicationTemplates https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates
+ApplicationTemplates https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/trunk
 #GamsUtils https://projects.coin-or.org/svn/GAMSlinks/branches/GamsUtils/GamsUtils
 #GamsUtils/src/GamsUtils https://projects.coin-or.org/svn/GAMSlinks/trunk/GAMSlinks/src/GamsUtils
