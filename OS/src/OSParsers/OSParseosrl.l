@@ -317,8 +317,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/submitTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SUBMITTIMEEND);}
 {xmlwhitespace}*\<substatus {YY_PRINT;  return(SUBSTATUSSTART);}
 {xmlwhitespace}*\<\/substatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SUBSTATUSEND);}
-{xmlwhitespace}*\<superBasic {YY_PRINT; return(SUPERBASICSTART);}
-{xmlwhitespace}*\<\/superBasic{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SUPERBASICEND);}
+{xmlwhitespace}*\<superbasic {YY_PRINT; return(SUPERBASICSTART);}
+{xmlwhitespace}*\<\/superbasic{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SUPERBASICEND);}
 {xmlwhitespace}*\<systemInformation {YY_PRINT;  return(SYSTEMINFORMATIONSTART);}
 {xmlwhitespace}*\<\/systemInformation{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(SYSTEMINFORMATIONEND);}
 {xmlwhitespace}*\<time {YY_PRINT;  return(TIMESTART);}

@@ -944,18 +944,6 @@ private:
 	 * m_msVariableNames holds an array of variable names. 
 	 */
 	std::string* m_msVariableNames;
-	
-	/**
-	 * m_mdVariableInitialValues holds a double array of the initial variable values.
-	 * -- now deprecated 
-	 */
-	//double* m_mdVariableInitialValues ;
-
-	/**
-	 * m_msVariableInitialStringValues holds a std::string array of the initial variable values.
-	 * -- now deprecated 
-	 */
-	//std::string* m_msVariableInitialStringValues;
 
 	/**
 	 * m_mcVariableTypes holds a char array of variable types (default = 'C').

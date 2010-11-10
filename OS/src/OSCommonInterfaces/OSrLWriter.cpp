@@ -875,7 +875,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								else if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfEnumerations > 0)
 								{
 									outStr << " numberOfEnumerations=\"";
-									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations;
+									outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfEnumerations;
 									outStr << "\"" ;
 								}
 								if (m_OSResult->optimization->solution[i]->objectives->other[k]->name != "")

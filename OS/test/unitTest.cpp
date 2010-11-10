@@ -102,7 +102,7 @@
  * We test the get() and set() methods for osinstance.
  */ 
 
-#define DEBUG
+//#define DEBUG
 //#define GUS_DEBUG
 
 #include <cppad/cppad.hpp> 
@@ -217,6 +217,7 @@ int main(int argC, char* argV[])
 //#endif 
 	WindowsErrorPopupBlocker();
 	double getObjVal(std::string osrl);
+	void tempPrintArrays(OSResult* os); //  OSrl parser development only
 	//using CppAD::NearEqual;
 	bool ok;
 	double check;
@@ -3576,6 +3577,10 @@ if (PARSER_TESTS){
 	OSResult *osresult1 = new OSResult();
 	OSResult *osresult2 = new OSResult();
 	OSResult *osresult3 = NULL;
+
+	int* intArray;
+	intArray = new int[3];
+
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": OSrL set() tools" << endl << endl;
 
@@ -4645,37 +4650,109 @@ if (PARSER_TESTS){
 					throw ErrorClass("setVarValueString: osresult objects falsely compare unequal!");
 			}
 
-/*
-			ok &= osresult1->setNumberOfBasisVar(i,3);
+			intArray[0]=1000*i + 1100 + 10 + 1;
+			intArray[1]=1000*i + 1100 + 10 + 2;
+			intArray[2]=1000*i + 1100 + 10 + 3;
+
+			ok &= osresult1->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_basic, intArray, 3);
 			if (!ok) 
-				throw ErrorClass("Error during setNumberOfBasisVar!");
+				throw ErrorClass("Error during setBasisStatus (variables basic)!");
 			ok &= (!osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setNumberOfBasisVar: osresult objects falsely compare equal!");
-			ok &= osresult2->setNumberOfBasisVar(i,3);
+				throw ErrorClass("setBasisStatus (variables basic): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_basic, intArray, 3);
 			if (!ok) 
-				throw ErrorClass("Error during setNumberOfBasisVar!");
+				throw ErrorClass("Error during setBasisStatus (variables basic)!");
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
-				throw ErrorClass("setNumberOfBasisVar: osresult objects falsely compare unequal!");
+				throw ErrorClass("setBasisStatus (variables basic): osresult objects falsely compare unequal!");
 
-			for (int j=0; j < 3; ++j)
-			{
-				ok &= osresult1->setBasisVar(i,j,j,"superBasic");
-				if (!ok) 
-					throw ErrorClass("Error during setBasisVar!");
-				ok &= (!osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setBasisVar: osresult objects falsely compare equal!");
-				ok &= osresult2->setBasisVar(i,j,j,"superBasic");
-				if (!ok) 
-					throw ErrorClass("Error during setBasisVar!");
-				ok &= (osresult1->IsEqual(osresult2));
-				if (!ok) 
-					throw ErrorClass("setBasisVar: osresult objects falsely compare unequal!");
-			}
-*/
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
 
+
+			ok &= osresult1->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_atLower, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atLower)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables atLower): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_atLower, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atLower)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables atLower): osresult objects falsely compare unequal!");
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+
+			ok &= osresult1->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_atUpper, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atUpper)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables atUpper): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_atUpper, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atUpper)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables atUpper): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+			ok &= osresult1->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_isFree, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables isFree)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables isFree): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_isFree, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables isFree)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables isFree): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+			ok &= osresult1->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_superbasic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables superbasic)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables superbasic): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_superbasic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables superbasic)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables superbasic): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+			ok &= osresult1->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_unknown, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables unknown)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables unknown): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'v', ENUM_BASIS_STATUS_unknown, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables unknown)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables unknown): osresult objects falsely compare unequal!");
+			
 			ok &= osresult1->setNumberOfOtherVariableResults(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfOtherVariableResults!");
@@ -4689,7 +4766,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setNumberOfOtherVariableResults: osresult objects falsely compare unequal!");
 
-			for (int j=0; j < 3; ++j)
+			for (int j=0; j < 2; ++j)
 			{
 				ok &= osresult1->setOtherVariableResultName(i,j,"other");
 				if (!ok) 
@@ -4773,6 +4850,85 @@ if (PARSER_TESTS){
 				}
 			}
 
+// The third <other> result uses enumerations
+
+			ok &= osresult1->setOtherVariableResultName(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultName!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultName: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherVariableResultName(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultName!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultName: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherVariableResultDescription(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultDescription!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultDescription: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherVariableResultDescription(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultDescription!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultDescription: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherVariableResultValue(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultValue!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultValue: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherVariableResultValue(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultValue!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultValue: osresult objects falsely compare unequal!");
+
+
+			ok &= osresult1->setOtherVariableResultNumberOfEnumerations(i,2,2);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultNumberOfEnumerations!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultNumberOfEnumerations: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherVariableResultNumberOfEnumerations(i,2,2);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherVariableResultNumberOfEnumerations!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherVariableResultNumberOfEnumerations: osresult objects falsely compare unequal!");
+
+			for (int k=0; k < 2; ++k)
+			{
+			intArray[0] = 1000*i + 1130 + 10*k + 1;
+			intArray[1] = 1000*i + 1130 + 10*k + 2;
+			intArray[2] = 1000*i + 1130 + 10*k + 3;
+
+				ok &= osresult1->setOtherOptionEnumeration(i,2,'v',k,"value","description",intArray,3);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherOptionEnumeration!");
+				ok &= (!osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare equal!");
+				ok &= osresult2->setOtherOptionEnumeration(i,2,'v',k,"value","description",intArray,3);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherOptionEnumeration!");
+				ok &= (osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare unequal!");
+			}
+
+
+//==========================================================================================
+
+
 			ok &= osresult1->setNumberOfObjValues(i,2);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfObjValues!");
@@ -4801,6 +4957,114 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("setObjValue: osresult objects falsely compare unequal!");
 			}
+			intArray[0] = -1000*i - 1200 - 10 - 1;
+			intArray[1] = -1000*i - 1200 - 10 - 2;
+			intArray[2] = -1000*i - 1200 - 10 - 3;
+
+//===============================================
+			ok &= osresult1->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_basic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives basic)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives basic): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_basic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives basic)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives basic): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] - 10;
+			intArray[1] = intArray[1] - 10;
+			intArray[2] = intArray[2] - 10;
+
+			ok &= osresult1->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_atLower, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atLower)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives atLower): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_atLower, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atLower)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives atLower): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] - 10;
+			intArray[1] = intArray[1] - 10;
+			intArray[2] = intArray[2] - 10;
+
+			ok &= osresult1->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_atUpper, intArray, 3);
+
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atUpper)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives atUpper): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_atUpper, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atUpper)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives atUpper): osresult objects falsely compare unequal!");
+
+
+			intArray[0] = intArray[0] - 10;
+			intArray[1] = intArray[1] - 10;
+			intArray[2] = intArray[2] - 10;
+
+			ok &= osresult1->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_isFree, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives isFree)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives isFree): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_isFree, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives isFree)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives isFree): osresult objects falsely compare unequal!");
+
+
+			intArray[0] = intArray[0] - 10;
+			intArray[1] = intArray[1] - 10;
+			intArray[2] = intArray[2] - 10;
+
+			ok &= osresult1->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_superbasic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives superbasic)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives superbasic): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_superbasic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives superbasic)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives superbasic): osresult objects falsely compare unequal!");
+
+
+			intArray[0] = intArray[0] - 10;
+			intArray[1] = intArray[1] - 10;
+			intArray[2] = intArray[2] - 10;
+
+			ok &= osresult1->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_unknown, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives unknown)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives unknown): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'o', ENUM_BASIS_STATUS_unknown, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives unknown)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives unknown): osresult objects falsely compare unequal!");
+
+//===============================================
 
 			ok &= osresult1->setNumberOfOtherObjectiveResults(i,3);
 			if (!ok) 
@@ -4815,7 +5079,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setNumberOfOtherObjectiveResults: osresult objects falsely compare unequal!");
 
-			for (int j=0; j < 3; ++j)
+			for (int j=0; j < 2; ++j)
 			{
 				ok &= osresult1->setOtherObjectiveResultName(i,j,"other");
 				if (!ok) 
@@ -4898,7 +5162,83 @@ if (PARSER_TESTS){
 						throw ErrorClass("setOtherObjectiveResultObj: osresult objects falsely compare unequal!");
 				}
 			}
+// The third <other> result uses enumerations
 
+			ok &= osresult1->setOtherObjectiveResultName(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultName!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultName: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherObjectiveResultName(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultName!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultName: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherObjectiveResultDescription(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultDescription!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultDescription: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherObjectiveResultDescription(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultDescription!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultDescription: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherObjectiveResultValue(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultValue!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultValue: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherObjectiveResultValue(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultValue!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultValue: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherObjectiveResultNumberOfEnumerations(i,2,2);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultNumberOfEnumerations!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultNumberOfEnumerations: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherObjectiveResultNumberOfEnumerations(i,2,2);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherObjectiveResultNumberOfEnumerations!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherObjectiveResultNumberOfEnumerations: osresult objects falsely compare unequal!");
+
+			for (int k=0; k < 2; ++k)
+			{
+
+			intArray[0] = -(1000*i + 1230 + 10*k + 1);
+			intArray[1] = -(1000*i + 1230 + 10*k + 2);
+			intArray[2] = -(1000*i + 1230 + 10*k + 3);
+
+				ok &= osresult1->setOtherOptionEnumeration(i,2,'o',k,"value","description",intArray,3);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherOptionEnumeration (objective)!");
+				ok &= (!osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare equal!");
+				ok &= osresult2->setOtherOptionEnumeration(i,2,'o',k,"value","description",intArray,3);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherOptionEnumeration (objective)!");
+				ok &= (osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare unequal!");
+			}
+
+
+//==========================================================================================
 			ok &= osresult1->setNumberOfDualValues(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfDualValues!");
@@ -4927,7 +5267,115 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("setDualValue: osresult objects falsely compare unequal!");
 			}
+//==============================
 
+
+			intArray[0] = 1000*i + 1300 + 10 + 1;
+			intArray[1] = 1000*i + 1300 + 10 + 2;
+			intArray[2] = 1000*i + 1300 + 10 + 3;
+
+			ok &= osresult1->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_basic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints basic)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints basic): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_basic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints basic)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints basic): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+			ok &= osresult1->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_atLower, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atLower)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints atLower): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_atLower, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atLower)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints atLower): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+
+			ok &= osresult1->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_atUpper, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atUpper)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints atUpper): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_atUpper, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atUpper)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints atUpper): osresult objects falsely compare unequal!");
+
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+			ok &= osresult1->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_isFree, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints isFree)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints isFree): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_isFree, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints isFree)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints isFree): osresult objects falsely compare unequal!");
+
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+			ok &= osresult1->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_superbasic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints superbasic)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints superbasic): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_superbasic, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints superbasic)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints superbasic): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+
+			ok &= osresult1->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_unknown, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints unknown)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints unknown): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, 'c', ENUM_BASIS_STATUS_unknown, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints unknown)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints unknown): osresult objects falsely compare unequal!");
+//=================================
 			ok &= osresult1->setNumberOfOtherConstraintResults(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfOtherConstraintResults!");
@@ -4941,7 +5389,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setNumberOfOtherConstraintResults: osresult objects falsely compare unequal!");
 
-			for (int j=0; j < 3; ++j)
+			for (int j=0; j < 2; ++j)
 			{
 				ok &= osresult1->setOtherConstraintResultName(i,j,"other");
 				if (!ok) 
@@ -5024,6 +5472,84 @@ if (PARSER_TESTS){
 						throw ErrorClass("setOtherConstraintResultCon: osresult objects falsely compare unequal!");
 				}
 			}
+
+
+// The third <other> result uses enumerations
+
+			ok &= osresult1->setOtherConstraintResultName(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultName!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultName: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherConstraintResultName(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultName!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultName: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherConstraintResultDescription(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultDescription!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultDescription: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherConstraintResultDescription(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultDescription!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultDescription: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherConstraintResultValue(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultValue!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultValue: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherConstraintResultValue(i,2,"other");
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultValue!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultValue: osresult objects falsely compare unequal!");
+
+			ok &= osresult1->setOtherConstraintResultNumberOfEnumerations(i,2,2);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultNumberOfEnumerations!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultNumberOfEnumerations: osresult objects falsely compare equal!");
+			ok &= osresult2->setOtherConstraintResultNumberOfEnumerations(i,2,2);
+			if (!ok) 
+				throw ErrorClass("Error during setOtherConstraintResultNumberOfEnumerations!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setOtherConstraintResultNumberOfEnumerations: osresult objects falsely compare unequal!");
+
+			for (int k=0; k < 2; ++k)
+			{
+			intArray[0] = 1000*i + 1330 + 10*k + 1;
+			intArray[1] = 1000*i + 1330 + 10*k + 2;
+			intArray[2] = 1000*i + 1330 + 10*k + 3;
+
+				ok &= osresult1->setOtherOptionEnumeration(i,2,'c',k,"value","description",intArray,3);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherOptionEnumeration (constraint)!");
+				ok &= (!osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare equal!");
+				ok &= osresult2->setOtherOptionEnumeration(i,2,'c',k,"value","description",intArray,3);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherOptionEnumeration (constraint)!");
+				ok &= (osresult1->IsEqual(osresult2));
+				if (!ok) 
+					throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare unequal!");
+			}
+
+
+//==========================================================================================
 
 			ok &= osresult1->setNumberOfOtherSolutionResults(i,3);
 			if (!ok) 
@@ -5208,7 +5734,9 @@ if (PARSER_TESTS){
 		std::string tempOSrL;
 
 		tempOSrL = osrlwriter->writeOSrL( osresult1);
+
 		osresult3 = osrlreader->readOSrL( tempOSrL);
+
 		ok &= (osresult1->IsEqual(osresult3));
 		if (!ok) 
 			throw ErrorClass("Writing an osresult then reading leads to loss of data");
@@ -5606,21 +6134,49 @@ if (PARSER_TESTS){
 					throw ErrorClass("Error during setVarValueString!");
 			}
 
-/*
-			tempInt = osresult1->getNumberOfBasisVar(i);
-			ok &= osresult2->setNumberOfBasisVar(i,tempInt);
+			int* tempArray = new int[3];
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'v',ENUM_BASIS_STATUS_basic);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'v',ENUM_BASIS_STATUS_basic,j);
+			ok &= osresult2->setBasisStatus(i,'v',ENUM_BASIS_STATUS_basic,tempArray,tempInt);
 			if (!ok) 
-				throw ErrorClass("Error during setNumberOfBasisVar!");
-			nVar = tempInt;
-			for (int j=0; j < nVar; ++j)
-			{
-				tempInt = osresult1->getBasisVarIdx(i,j);
-				tempStr = osresult1->getBasisVar(i,j);
-				ok &= osresult2->setBasisVar(i,j,tempInt,tempStr);
-				if (!ok) 
-					throw ErrorClass("Error during setBasisVar!");
-			}
-*/
+				throw ErrorClass("Error during setBasisStatus (variables basic)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'v',ENUM_BASIS_STATUS_atLower);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'v',ENUM_BASIS_STATUS_atLower,j);
+			ok &= osresult2->setBasisStatus(i,'v',ENUM_BASIS_STATUS_atLower,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atLower)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'v',ENUM_BASIS_STATUS_atUpper);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'v',ENUM_BASIS_STATUS_atUpper,j);
+			ok &= osresult2->setBasisStatus(i,'v',ENUM_BASIS_STATUS_atUpper,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atUpper)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'v',ENUM_BASIS_STATUS_isFree);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'v',ENUM_BASIS_STATUS_isFree,j);
+			ok &= osresult2->setBasisStatus(i,'v',ENUM_BASIS_STATUS_isFree,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables isFree)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'v',ENUM_BASIS_STATUS_superbasic);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'v',ENUM_BASIS_STATUS_superbasic,j);
+			ok &= osresult2->setBasisStatus(i,'v',ENUM_BASIS_STATUS_superbasic,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables superbasic)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'v',ENUM_BASIS_STATUS_unknown);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'v',ENUM_BASIS_STATUS_unknown,j);
+			ok &= osresult2->setBasisStatus(i,'v',ENUM_BASIS_STATUS_unknown,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables unknown)!");
+
 
 			tempInt = osresult1->getNumberOfOtherVariableResults(i);
 			ok &= osresult2->setNumberOfOtherVariableResults(i,tempInt);
@@ -5641,6 +6197,7 @@ if (PARSER_TESTS){
 				ok &= osresult2->setOtherVariableResultValue(i,j,tempStr);
 				if (!ok) 
 					throw ErrorClass("Error during setOtherVariableResultValue!");
+
 				tempInt = osresult1->getOtherVariableResultNumberOfVar(i,j);
 				ok &= osresult2->setOtherVariableResultNumberOfVar(i,j,tempInt);
 				if (!ok) 
@@ -5658,6 +6215,26 @@ if (PARSER_TESTS){
 					if (!ok) 
 						throw ErrorClass("Error during setOtherVariableResultVar!");
 				}
+
+				int nEnum = osresult1->getOtherVariableResultNumberOfEnumerations(i,j);
+				ok &= osresult2->setOtherVariableResultNumberOfEnumerations(i,j,nEnum);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherVariableResultNumberOfEnumerations!");
+
+				std::string tempStr1, tempStr2;
+
+				for (int k=0; k < nEnum; ++k)
+				{
+//	                if (tempArray != NULL) delete[] tempArray;
+					tempStr1  = osresult1->getOtherVariableResultEnumerationValue(i,j,k);
+					tempStr2  = osresult1->getOtherVariableResultEnumerationDescription(i,j,k);
+					tempInt   = osresult1->getOtherVariableResultEnumerationNumberOfEl(i,j,k);
+					for (int l=0; l<tempInt; ++l)
+						tempArray[l] = osresult1->getOtherVariableResultEnumerationEl(i,j,k,l);
+					ok &= osresult2->setOtherOptionEnumeration(i,j,'v',k,tempStr1,tempStr2,tempArray,tempInt);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherVariableResultEnumeration!");
+				}
 			}
 
 			tempInt = osresult1->getNumberOfObjValues(i);
@@ -5673,6 +6250,51 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("Error during setObjValue!");
 			}
+
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'o',ENUM_BASIS_STATUS_basic);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'o',ENUM_BASIS_STATUS_basic,j);
+			ok &= osresult2->setBasisStatus(i,'o',ENUM_BASIS_STATUS_basic,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives basic)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'o',ENUM_BASIS_STATUS_atLower);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'o',ENUM_BASIS_STATUS_atLower,j);
+			ok &= osresult2->setBasisStatus(i,'o',ENUM_BASIS_STATUS_atLower,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atLower)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'o',ENUM_BASIS_STATUS_atUpper);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'o',ENUM_BASIS_STATUS_atUpper,j);
+			ok &= osresult2->setBasisStatus(i,'o',ENUM_BASIS_STATUS_atUpper,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atUpper)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'o',ENUM_BASIS_STATUS_isFree);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'o',ENUM_BASIS_STATUS_isFree,j);
+			ok &= osresult2->setBasisStatus(i,'o',ENUM_BASIS_STATUS_isFree,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives isFree)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'o',ENUM_BASIS_STATUS_superbasic);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'o',ENUM_BASIS_STATUS_superbasic,j);
+			ok &= osresult2->setBasisStatus(i,'o',ENUM_BASIS_STATUS_superbasic,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives superbasic)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'o',ENUM_BASIS_STATUS_unknown);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'o',ENUM_BASIS_STATUS_unknown,j);
+			ok &= osresult2->setBasisStatus(i,'o',ENUM_BASIS_STATUS_unknown,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives unknown)!");
+
+
 
 			tempInt = osresult1->getNumberOfOtherObjectiveResults(i);
 			ok &= osresult2->setNumberOfOtherObjectiveResults(i,tempInt);
@@ -5693,6 +6315,7 @@ if (PARSER_TESTS){
 				ok &= osresult2->setOtherObjectiveResultValue(i,j,tempStr);
 				if (!ok) 
 					throw ErrorClass("Error during setOtherObjectiveResultValue!");
+
 				tempInt = osresult1->getOtherObjectiveResultNumberOfObj(i,j);
 				ok &= osresult2->setOtherObjectiveResultNumberOfObj(i,j,tempInt);
 				if (!ok) 
@@ -5710,7 +6333,27 @@ if (PARSER_TESTS){
 					if (!ok) 
 						throw ErrorClass("Error during setOtherObjectiveResultObj!");
 				}
+
+				int nEnum = osresult1->getOtherObjectiveResultNumberOfEnumerations(i,j);
+				ok &= osresult2->setOtherObjectiveResultNumberOfEnumerations(i,j,nEnum);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherObjectiveResultNumberOfEnumerations!");
+				std::string tempStr1, tempStr2;
+
+				for (int k=0; k < nEnum; ++k)
+				{
+//	                if (tempArray != NULL) delete[] tempArray;
+					tempStr1  = osresult1->getOtherObjectiveResultEnumerationValue(i,j,k);
+					tempStr2  = osresult1->getOtherObjectiveResultEnumerationDescription(i,j,k);
+					tempInt   = osresult1->getOtherObjectiveResultEnumerationNumberOfEl(i,j,k);
+					for (int l=0; l<tempInt; ++l)
+						tempArray[l] = osresult1->getOtherObjectiveResultEnumerationEl(i,j,k,l);
+					ok &= osresult2->setOtherOptionEnumeration(i,j,'o',k,tempStr1,tempStr2,tempArray,tempInt);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherObjectiveResultEnumeration!");
+				}
 			}
+
 
 			tempInt = osresult1->getNumberOfDualValues(i);
 			ok &= osresult2->setNumberOfDualValues(i,tempInt);
@@ -5725,6 +6368,52 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("Error during setDualValue!");
 			}
+
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'c',ENUM_BASIS_STATUS_basic);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'c',ENUM_BASIS_STATUS_basic,j);
+			ok &= osresult2->setBasisStatus(i,'c',ENUM_BASIS_STATUS_basic,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints basic)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'c',ENUM_BASIS_STATUS_atLower);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'c',ENUM_BASIS_STATUS_atLower,j);
+			ok &= osresult2->setBasisStatus(i,'c',ENUM_BASIS_STATUS_atLower,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atLower)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'c',ENUM_BASIS_STATUS_atUpper);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'c',ENUM_BASIS_STATUS_atUpper,j);
+			ok &= osresult2->setBasisStatus(i,'c',ENUM_BASIS_STATUS_atUpper,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atUpper)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'c',ENUM_BASIS_STATUS_isFree);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'c',ENUM_BASIS_STATUS_isFree,j);
+			ok &= osresult2->setBasisStatus(i,'c',ENUM_BASIS_STATUS_isFree,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints isFree)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'c',ENUM_BASIS_STATUS_superbasic);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'c',ENUM_BASIS_STATUS_superbasic,j);
+			ok &= osresult2->setBasisStatus(i,'c',ENUM_BASIS_STATUS_superbasic,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints superbasic)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,'c',ENUM_BASIS_STATUS_unknown);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,'c',ENUM_BASIS_STATUS_unknown,j);
+			ok &= osresult2->setBasisStatus(i,'c',ENUM_BASIS_STATUS_unknown,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints unknown)!");
+
+
+
 
 			tempInt = osresult1->getNumberOfOtherConstraintResults(i);
 			ok &= osresult2->setNumberOfOtherConstraintResults(i,tempInt);
@@ -5762,7 +6451,29 @@ if (PARSER_TESTS){
 					if (!ok) 
 						throw ErrorClass("Error during setOtherConstraintResultCon!");
 				}
+
+
+
+				int nEnum = osresult1->getOtherConstraintResultNumberOfEnumerations(i,j);
+				ok &= osresult2->setOtherConstraintResultNumberOfEnumerations(i,j,nEnum);
+				if (!ok) 
+					throw ErrorClass("Error during setOtherConstraintResultNumberOfEnumerations!");
+				std::string tempStr1, tempStr2;
+
+				for (int k=0; k < nEnum; ++k)
+				{
+//	                if (tempArray != NULL) delete[] tempArray;
+					tempStr1  = osresult1->getOtherConstraintResultEnumerationValue(i,j,k);
+					tempStr2  = osresult1->getOtherConstraintResultEnumerationDescription(i,j,k);
+					tempInt   = osresult1->getOtherConstraintResultEnumerationNumberOfEl(i,j,k);
+					for (int l=0; l<tempInt; ++l)
+						tempArray[l] = osresult1->getOtherConstraintResultEnumerationEl(i,j,k,l);
+					ok &= osresult2->setOtherOptionEnumeration(i,j,'c',k,tempStr1,tempStr2,tempArray,tempInt);
+					if (!ok) 
+						throw ErrorClass("Error during setOtherConstraintResultEnumeration!");
+				}
 			}
+
 
 			tempInt = osresult1->getNumberOfOtherSolutionResults(i);
 			ok &= osresult2->setNumberOfOtherSolutionResults(i,tempInt);
@@ -5830,6 +6541,7 @@ if (PARSER_TESTS){
 					throw ErrorClass("Error during setSolverOutputItem!");
 			}
 		}
+
 
 		ok &= osresult1->IsEqual(osresult2);
 		if (!ok)
@@ -6242,4 +6954,129 @@ double getObjVal( std::string osrl){
 		else return OSNAN;
 	}
 	else return OSNAN;
+}
+
+void tempPrintArrays(OSResult* os)
+{
+	std::cout << "Print out array content" << std::endl;
+	for (int i=0; i < os->optimization->numberOfSolutions; ++i)
+	{
+		std::cout << "solution " << i << std::endl << std::endl;
+		std::cout << "variables   basic      ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->basic->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->basic->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->basic->el[2] << endl;
+		std::cout << "variables   atLower    ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atLower->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atLower->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atLower->el[2] << endl;
+		std::cout << "variables   atUpper    ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atUpper->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atUpper->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atUpper->el[2] << endl;
+		std::cout << "variables   isFree     ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->isFree->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->isFree->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->isFree->el[2] << endl;
+		std::cout << "variables   superbasic ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->superbasic->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->superbasic->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->superbasic->el[2] << endl;
+		std::cout << "variables   unknown    ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->unknown->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->unknown->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->unknown->el[2] << endl;
+
+		std::cout << std::endl;
+
+
+		std::cout << "objectives  basic      ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->basic->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->basic->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->basic->el[2] << endl;
+		std::cout << "objectives  atLower    ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atLower->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atLower->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atLower->el[2] << endl;
+		std::cout << "objectives  atUpper    ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atUpper->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atUpper->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atUpper->el[2] << endl;
+		std::cout << "objectives  isFree     ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->isFree->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->isFree->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->isFree->el[2] << endl;
+		std::cout << "objectives  superbasic ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->superbasic->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->superbasic->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->superbasic->el[2] << endl;
+		std::cout << "objectives  unknown    ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->unknown->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->unknown->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->unknown->el[2] << endl;
+
+		std::cout << std::endl;
+
+		std::cout << "constraints basic      ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->basic->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->basic->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->basic->el[2] << endl;
+		std::cout << "constraints atLower    ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atLower->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atLower->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atLower->el[2] << endl;
+		std::cout << "constraints atUpper    ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atUpper->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atUpper->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atUpper->el[2] << endl;
+		std::cout << "constraints isFree     ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->isFree->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->isFree->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->isFree->el[2] << endl;
+		std::cout << "constraints superbasic ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->superbasic->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->superbasic->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->superbasic->el[2] << endl;
+		std::cout << "constraints unknown    ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->unknown->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->unknown->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->unknown->el[2] << endl;
+
+		std::cout << std::endl;
+
+		for (int k=0; k < os->optimization->solution[i]->variables->other[2]->numberOfEnumerations; k++)
+		{
+			std::cout << "other variable results --- enum " << k;
+			std::cout << "  " << os->optimization->solution[i]->variables->other[2]->enumeration[k]->el[0];
+			std::cout << "  " << os->optimization->solution[i]->variables->other[2]->enumeration[k]->el[1];
+			std::cout << "  " << os->optimization->solution[i]->variables->other[2]->enumeration[k]->el[2];
+
+			std::cout << std::endl;
+		}
+
+		std::cout << std::endl;
+
+		for (int k=0; k < os->optimization->solution[i]->objectives->other[2]->numberOfEnumerations; k++)
+		{
+			std::cout << "other objective results --- enum " << k;
+			std::cout << "  " << os->optimization->solution[i]->objectives->other[2]->enumeration[k]->el[0];
+			std::cout << "  " << os->optimization->solution[i]->objectives->other[2]->enumeration[k]->el[1];
+			std::cout << "  " << os->optimization->solution[i]->objectives->other[2]->enumeration[k]->el[2];
+
+			std::cout << std::endl;
+		}
+
+		std::cout << std::endl;
+
+		for (int k=0; k < os->optimization->solution[i]->constraints->other[2]->numberOfEnumerations; k++)
+		{
+			std::cout << "other constraint results --- enum " << k;
+			std::cout << "  " << os->optimization->solution[i]->constraints->other[2]->enumeration[k]->el[0];
+			std::cout << "  " << os->optimization->solution[i]->constraints->other[2]->enumeration[k]->el[1];
+			std::cout << "  " << os->optimization->solution[i]->constraints->other[2]->enumeration[k]->el[2];
+
+			std::cout << std::endl;
+		}
+		return;
+	}
 }

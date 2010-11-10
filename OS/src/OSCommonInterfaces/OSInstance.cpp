@@ -12,7 +12,7 @@
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
- * Please see the accompanying LICENSE file in root directory for terms.osinstance->getVariableNumber()
+ * Please see the accompanying LICENSE file in root directory for terms.
  *
  *
  */
@@ -1073,18 +1073,6 @@ string* OSInstance::getVariableNames() {
 	processVariables();
 	return m_msVariableNames;
 }//getVariableNames	
-
-/*
-double* OSInstance::getVariableInitialValues() {
-	processVariables();
-	return m_mdVariableInitialValues;
-}//getVariableInitialValues
-
-string* OSInstance::getVariableInitialStringValues() {
-	processVariables();
-	return m_msVariableInitialStringValues;
-}//getVariableInitialStringValues
-*/
 
 char* OSInstance::getVariableTypes() {
 	processVariables();

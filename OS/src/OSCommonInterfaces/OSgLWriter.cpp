@@ -51,7 +51,7 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
 				getMultIncr(&(v->el[i]), &mult, &incr, (v->numberOfEl) - i, 0);
 				if (mult == 1)
 					outStr << "<el>" ;
-				else if (incr == 1)
+				else if (incr == 0)
 					outStr << "<el mult=\"" << mult << "\">";
 				else
 					outStr << "<el mult=\"" << mult << "\" incr=\"" << incr << "\">";

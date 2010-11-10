@@ -878,7 +878,7 @@ public:
  * @since OS 1.0
  * 
  * \remarks
- * A class that cotnains values for all the variables
+ * A class that contains values for all the variables
  */	
 class VariableValues{
 public:
@@ -2395,9 +2395,27 @@ public:
 /* */	int getNumberOfVarValuesString(int solIdx);
 /* */	int getVarValueStringIdx(int solIdx, int varIdx);
 /* */	std::string getVarValueString(int solIdx, int varIdx);
-/* */	int getNumberOfBasisVar(int solIdx);
-/* */	int getBasisVarIdx(int solIdx, int varIdx);
-/* */	std::string getBasisVar(int solIdx, int varIdx);
+
+	/**
+	 * Get the number of indices that belong to a particular basis status
+	 *
+	 * @param solIdx holds the solution index for the current solution
+	 * @param object describes the kind of indices to be retrieved
+	 * ('v' = variables, 'c' = constraints -- i.e., slacks, 'o' = objective rows)
+	 * @param status gives the basis status type
+	 */
+	int getBasisStatusNumberOfEl(int solIdx, char object, int status);
+
+	/**
+	 * Get an entry in the array of indices that belong to a particular basis status
+	 *
+	 * @param solIdx holds the solution index for the current solution
+	 * @param object describes the kind of indices to be retrieved
+	 * ('v' = variables, 'c' = constraints -- i.e., slacks, 'o' = objective rows)
+	 * @param status gives the basis status (basic, atLower, atUpper, etc.)
+	 * @param j is the (zero-based) position of the desired entry within the index array
+	 */
+	int getBasisStatusEl(int solIdx, char object, int status, int j);
 	
 	/**
 	 * Get numberOfOtherVariableResult. 
@@ -2417,14 +2435,53 @@ public:
 /* */	std::string getOtherVariableResultValue(int solIdx, int otherIdx);
 /* */	std::string getOtherVariableResultDescription(int solIdx, int otherIdx);
 /* */	int getOtherVariableResultNumberOfVar(int solIdx, int otherIdx);
+/* */	int getOtherVariableResultNumberOfEnumerations(int solIdx, int otherIdx);
 /* */	int getOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx);
 /* */	std::string getOtherVariableResultVar(int solIdx, int otherIdx, int varIdx);
+
+	/** Get the value of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the value 
+	 */
+	std::string getOtherVariableResultEnumerationValue(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get the description of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the description 
+	 */
+	std::string getOtherVariableResultEnumerationDescription(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get the size of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the number of indices that assume this level 
+	 */
+	int  getOtherVariableResultEnumerationNumberOfEl(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get one index of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @param enumIdx is the index of the current enumeration level
+	 * @param j jis the (zero-based) position of the index within the index array
+	 *
+	 * @return the array of indices 
+	 */
+	int getOtherVariableResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j);
+
 /* */	int getNumberOfObjValues(int solIdx);
 /* */	int getObjValueIdx(int solIdx, int objIdx);
 /* */	double getObjValue(int solIdx, int objIdx);
 
 	/**
-	 * Get one solution of optimal objective values. 
+	 * Get one solution's optimal objective value. 
 	 * 
 	 * @param objIdx holds the objective index the optimal value corresponds to. 
 	 * @param solIdx holds the solution index the optimal value corresponds to.
@@ -2437,8 +2494,48 @@ public:
 /* */	std::string getOtherObjectiveResultValue(int solIdx, int otherIdx);
 /* */	std::string getOtherObjectiveResultDescription(int solIdx, int otherIdx);
 /* */	int getOtherObjectiveResultNumberOfObj(int solIdx, int otherIdx);
+/* */	int getOtherObjectiveResultNumberOfEnumerations(int solIdx, int otherIdx);
 /* */	int getOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx);
 /* */	std::string getOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx);
+
+	/** Get the value of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the value 
+	 */
+	std::string getOtherObjectiveResultEnumerationValue(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get the description of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the description 
+	 */
+	std::string getOtherObjectiveResultEnumerationDescription(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get the size of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the number of indices that assume this level 
+	 */
+	int  getOtherObjectiveResultEnumerationNumberOfEl(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get one index of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 * @param j is the (zero-based) position of the index in the array
+	 *
+	 * @return the array of indices 
+	 */
+	int getOtherObjectiveResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j);
+
+
 /* */	int getNumberOfDualValues(int solIdx);
 /* */	int getDualValueIdx(int solIdx, int conIdx);
 /* */	double getDualValue(int solIdx, int conIdx);
@@ -2456,8 +2553,50 @@ public:
 /* */	std::string getOtherConstraintResultValue(int solIdx, int otherIdx);
 /* */	std::string getOtherConstraintResultDescription(int solIdx, int otherIdx);
 /* */	int getOtherConstraintResultNumberOfCon(int solIdx, int otherIdx);
+/* */	int getOtherConstraintResultNumberOfEnumerations(int solIdx, int otherIdx);
 /* */	int getOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx);
 /* */	std::string getOtherConstraintResultCon(int solIdx, int otherIdx, int conIdx);
+
+
+	/** Get the value of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the value 
+	 */
+	std::string getOtherConstraintResultEnumerationValue(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get the description of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the description 
+	 */
+	std::string getOtherConstraintResultEnumerationDescription(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get the size of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 *
+	 * @return the number of indices that assume this level 
+	 */
+	int  getOtherConstraintResultEnumerationNumberOfEl(int solIdx,int otherIdx, int enumIdx);
+
+	/** Get one index of an enum associated with an <other> result for some solution
+	 * @param solIdx is the solution index
+	 * @param otherIndex is the index of the current <other> result
+	 * @enumIdx is the index of the current enumeration level
+	 * @param j is the (zeo-based) position of the entry in the array
+	 *
+	 * @return the array of indices 
+	 */
+	int getOtherConstraintResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j);
+
+
+
 /* */	int getNumberOfOtherSolutionResults(int solIdx);
 /* */	std::string getOtherSolutionResultName(int solIdx, int otherIdx);
 /* */	std::string getOtherSolutionResultCategory(int solIdx, int otherIdx);

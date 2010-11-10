@@ -348,7 +348,29 @@ public:
 	int numberOfEl;
 	int *el;
 
+	/**
+	 *  A method to compare two invectors
+	 */	  
 	bool IsEqual(IntVector *that);
+
+	/**
+	 *  set values into an IntVector
+	 *  @param ni contains the dimension of the IntVector
+	 *  @param i contains the array of values
+	 */
+ 	bool setIntVector(int *i, int ni);
+
+	/**
+	 *  get the dimension of an IntVector
+	 */
+	int getNumberOfEl();
+
+	/**
+	 *  get an entry in the data array of an IntVector
+	 *  @param j is the index of the entry that is to be retrieved
+	 */
+	int getEl(int j);
+
 };//class IntVector
 
 
@@ -371,13 +393,25 @@ public:
 	bool IsEqual(OtherOptionEnumeration *that);
 
 	/**
-	 *  Set the indices for a particular value in an enumeration
+	 *  Set the indices for a particular level in an enumeration
 	 *  @param value represents the value of this enumeration member
 	 *  @param description holds additional information about this value
 	 *  @param i contains the array of indices
 	 *  @param ni contains the number of elements in i
 	 */
 	bool setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni);
+
+
+	/**
+	 *  Get the value for a particular level in an enumeration
+	 */
+	std::string getValue();
+
+	/**
+	 *  Get the description for a particular level in an enumeration
+	 */
+	std::string getDescription();
+
 };//class OtherOptionEnumeration
 
 
@@ -440,8 +474,26 @@ public:
  *  @param i contains the array of indices
  *  @param ni contains the number of elements in i
  */
-	bool setBasisStatusIntVector(int status, int *i, int ni);
+	bool setIntVector(int status, int *i, int ni);
 
+
+/**
+ *  Get the number of indices for a particular status
+ *  @param status is a string representing the allowed statuses 
+ *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *  @return the number of indices or -1 if the object does not exist
+ */
+	int getNumberOfEl(int status);
+
+
+/**
+ *  Get one entry in the array of indices for a particular status
+ *  @param status is a string representing the allowed statuses 
+ *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *  @param j is the (zero-based) position of the entry within the arry
+ *  @return the value
+ */
+	int getEl(int status, int j);
 };//class BasisStatus 
 	
 class OSGeneral{

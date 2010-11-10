@@ -1726,7 +1726,7 @@ variableBasisStatusEmpty: ENDOFELEMENT;
 
 variableBasisStatusLaden: GREATERTHAN variableBasisStatusBody BASISSTATUSEND;
 
-variableBasisStatusBody:  variablesBasic variablesAtLower variablesAtUpper variablesIsFree variablesSuperBasic variablesUnknown;
+variableBasisStatusBody:  variablesBasic variablesAtLower variablesAtUpper variablesIsFree variablesSuperbasic variablesUnknown;
 
 variablesBasic: | variablesBasicStart variablesBasicNumberOfElATT variablesBasicContent
 {
@@ -1837,7 +1837,7 @@ variablesIsFreeLaden: GREATERTHAN variablesIsFreeBody ISFREEEND;
 variablesIsFreeBody:  osglIntArrayData;
 
 
-variablesSuperBasic: | variablesSuperBasicStart variablesSuperBasicNumberOfElATT variablesSuperBasicContent
+variablesSuperbasic: | variablesSuperbasicStart variablesSuperbasicNumberOfElATT variablesSuperbasicContent
 {
 	if (osresult->setBasisStatus(parserData->solutionIdx, 'v', ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 		osrlerror(NULL, NULL, parserData, osglData, "set variables superbasic failed");	
@@ -1846,22 +1846,22 @@ variablesSuperBasic: | variablesSuperBasicStart variablesSuperBasicNumberOfElATT
 	osglData->osglNumberOfEl = 0;
 };
 
-variablesSuperBasicStart: SUPERBASICSTART;
+variablesSuperbasicStart: SUPERBASICSTART;
 
-variablesSuperBasicNumberOfElATT: numberOfElAttribute
+variablesSuperbasicNumberOfElATT: numberOfElAttribute
 {
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
-variablesSuperBasicContent: variablesSuperBasicEmpty | variablesSuperBasicLaden;
+variablesSuperbasicContent: variablesSuperbasicEmpty | variablesSuperbasicLaden;
 
-variablesSuperBasicEmpty: ENDOFELEMENT;
+variablesSuperbasicEmpty: ENDOFELEMENT;
 
-variablesSuperBasicLaden: GREATERTHAN variablesSuperBasicBody SUPERBASICEND;
+variablesSuperbasicLaden: GREATERTHAN variablesSuperbasicBody SUPERBASICEND;
 
-variablesSuperBasicBody:  osglIntArrayData;
+variablesSuperbasicBody:  osglIntArrayData;
 
 
 variablesUnknown: | variablesUnknownStart variablesUnknownNumberOfElATT variablesUnknownContent
@@ -2152,7 +2152,7 @@ objectiveBasisStatusEmpty: ENDOFELEMENT;
 
 objectiveBasisStatusLaden: GREATERTHAN objectiveBasisStatusBody BASISSTATUSEND;
 
-objectiveBasisStatusBody:  objectivesBasic objectivesAtLower objectivesAtUpper objectivesIsFree objectivesSuperBasic objectivesUnknown;
+objectiveBasisStatusBody:  objectivesBasic objectivesAtLower objectivesAtUpper objectivesIsFree objectivesSuperbasic objectivesUnknown;
 
 objectivesBasic: | objectivesBasicStart objectivesBasicNumberOfElATT objectivesBasicContent
 {
@@ -2261,7 +2261,7 @@ objectivesIsFreeLaden: GREATERTHAN objectivesIsFreeBody ISFREEEND;
 objectivesIsFreeBody:  osglIntArrayData;
 
 
-objectivesSuperBasic: | objectivesSuperBasicStart objectivesSuperBasicNumberOfElATT objectivesSuperBasicContent
+objectivesSuperbasic: | objectivesSuperbasicStart objectivesSuperbasicNumberOfElATT objectivesSuperbasicContent
 {
 	if (osresult->setBasisStatus(parserData->solutionIdx, 'o', ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 		osrlerror(NULL, NULL, parserData, osglData, "set objectives superbasic failed");	
@@ -2270,22 +2270,22 @@ objectivesSuperBasic: | objectivesSuperBasicStart objectivesSuperBasicNumberOfEl
 	osglData->osglNumberOfEl = 0;
 };
 
-objectivesSuperBasicStart: SUPERBASICSTART;
+objectivesSuperbasicStart: SUPERBASICSTART;
 
-objectivesSuperBasicNumberOfElATT: numberOfElAttribute
+objectivesSuperbasicNumberOfElATT: numberOfElAttribute
 {
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
-objectivesSuperBasicContent: objectivesSuperBasicEmpty | objectivesSuperBasicLaden;
+objectivesSuperbasicContent: objectivesSuperbasicEmpty | objectivesSuperbasicLaden;
 
-objectivesSuperBasicEmpty: ENDOFELEMENT;
+objectivesSuperbasicEmpty: ENDOFELEMENT;
 
-objectivesSuperBasicLaden: GREATERTHAN objectivesSuperBasicBody SUPERBASICEND;
+objectivesSuperbasicLaden: GREATERTHAN objectivesSuperbasicBody SUPERBASICEND;
 
-objectivesSuperBasicBody:  osglIntArrayData;
+objectivesSuperbasicBody:  osglIntArrayData;
 
 
 objectivesUnknown: | objectivesUnknownStart objectivesUnknownNumberOfElATT objectivesUnknownContent
@@ -2565,7 +2565,7 @@ slackBasisStatusEmpty: ENDOFELEMENT;
 
 slackBasisStatusLaden: GREATERTHAN slackBasisStatusBody BASISSTATUSEND;
 
-slackBasisStatusBody:  slacksBasic slacksAtLower slacksAtUpper slacksIsFree slacksSuperBasic slacksUnknown;
+slackBasisStatusBody:  slacksBasic slacksAtLower slacksAtUpper slacksIsFree slacksSuperbasic slacksUnknown;
 
 slacksBasic: | slacksBasicStart slacksBasicNumberOfElATT slacksBasicContent
 {
@@ -2674,31 +2674,31 @@ slacksIsFreeLaden: GREATERTHAN slacksIsFreeBody ISFREEEND;
 slacksIsFreeBody:  osglIntArrayData;
 
 
-slacksSuperBasic: | slacksSuperBasicStart slacksSuperBasicNumberOfElATT slacksSuperBasicContent
+slacksSuperbasic: | slacksSuperbasicStart slacksSuperbasicNumberOfElATT slacksSuperbasicContent
 {
-	if (osresult->setBasisStatus(parserData->solutionIdx, 'v', ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+	if (osresult->setBasisStatus(parserData->solutionIdx, 'c', ENUM_BASIS_STATUS_superbasic, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
 		osrlerror(NULL, NULL, parserData, osglData, "set variables superbasic failed");	
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
 };
 
-slacksSuperBasicStart: SUPERBASICSTART;
+slacksSuperbasicStart: SUPERBASICSTART;
 
-slacksSuperBasicNumberOfElATT: numberOfElAttribute
+slacksSuperbasicNumberOfElATT: numberOfElAttribute
 {
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
 }; 
 
-slacksSuperBasicContent: slacksSuperBasicEmpty | slacksSuperBasicLaden;
+slacksSuperbasicContent: slacksSuperbasicEmpty | slacksSuperbasicLaden;
 
-slacksSuperBasicEmpty: ENDOFELEMENT;
+slacksSuperbasicEmpty: ENDOFELEMENT;
 
-slacksSuperBasicLaden: GREATERTHAN slacksSuperBasicBody SUPERBASICEND;
+slacksSuperbasicLaden: GREATERTHAN slacksSuperbasicBody SUPERBASICEND;
 
-slacksSuperBasicBody:  osglIntArrayData;
+slacksSuperbasicBody:  osglIntArrayData;
 
 
 slacksUnknown: | slacksUnknownStart slacksUnknownNumberOfElATT slacksUnknownContent

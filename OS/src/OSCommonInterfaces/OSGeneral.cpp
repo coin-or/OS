@@ -270,6 +270,30 @@ IntVector::~IntVector(){
 	}
 } 
 
+bool IntVector::setIntVector(int *i, int ni)
+{
+	if (this->numberOfEl != 0)
+		delete[] this->el;
+
+	this->numberOfEl = ni;
+	this->el = new int[ni];
+
+	for (int j=0; j<ni; j++)
+		this->el[j] = i[j];
+	return true;
+}//setIntVector
+
+int IntVector::getNumberOfEl()
+{
+	return this->numberOfEl;
+}
+
+int IntVector::getEl(int j)
+{
+	if (j < 0 || j >= this->numberOfEl)
+		throw ErrorClass("Attempting to access undefined memory in IntVector::getEl");  
+	return this->el[j];
+}
 
 bool IntVector::IsEqual(IntVector *that)
 {
@@ -322,29 +346,27 @@ bool IntVector::IsEqual(IntVector *that)
 
 
 OtherOptionEnumeration::OtherOptionEnumeration():
-	IntVector(),
 	value(""),
-	description("")
+	description(""),
+	IntVector()
 {  
 	#ifdef DEBUG
 	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
 	#endif
-	//IntVector::IntVector();
 } 
 
 OtherOptionEnumeration::OtherOptionEnumeration(int n):
-	IntVector(n),
 	value(""),
-	description("")
+	description(""),
+	IntVector(n)
 {  
 	#ifdef DEBUG
 	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
 	#endif
-
-	//IntVector::IntVector(n);
 } 
 
-OtherOptionEnumeration::~OtherOptionEnumeration(){  
+OtherOptionEnumeration::~OtherOptionEnumeration()
+{  
 	#ifdef DEBUG
 	cout << "Inside the OtherOptionEnumeration Destructor" << endl;
 	#endif
@@ -352,19 +374,32 @@ OtherOptionEnumeration::~OtherOptionEnumeration(){
 
 bool OtherOptionEnumeration::setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni)
 {
-	if (this->el == NULL) this->el = new int[ni];
+//	if (this->el == NULL) this->el = new int[ni];
 	this->value = value;
 	this->description = description;
-	this->numberOfEl = ni;
-	for (int j=0; j<ni; j++)
-		this->el[j] = i[j];
-	return true;
+//	this->numberOfEl = ni;
+//	for (int j=0; j<ni; j++)
+//		this->el[j] = i[j];
+//	return true;
+	return this->IntVector::setIntVector(i, ni);
 }
+
+std::string OtherOptionEnumeration::getValue()
+{
+	return this->value;
+}
+
+std::string OtherOptionEnumeration::getDescription()
+{
+	return this->description;
+}
+
+
 
 bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
 {
 	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in IntVector" << endl;
+		cout << "Start comparing in OtherOptionEnumeration" << endl;
 	#endif
 	if (this == NULL)
 	{	if (that == NULL)
@@ -399,7 +434,7 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
 			return this->IntVector::IsEqual(that);
 		}
 	}
-}//IntVector::IsEqual
+}//OtherOptionEnumeration::IsEqual
 
 
 
@@ -527,18 +562,19 @@ BasisStatus::~BasisStatus()
 }// end BasisStatus destructor 
 
 
-bool BasisStatus::setBasisStatusIntVector(int status, int *i, int ni)
+bool BasisStatus::setIntVector(int status, int *i, int ni)
 {
 	switch (status)
 	{
 		case ENUM_BASIS_STATUS_basic:
 		{
-			if (this->basic == NULL) this->basic = new IntVector(ni);
-			else delete[] this->basic;
-			this->basic->numberOfEl = ni;
-			for (int j=0; j<ni; j++)
-				this->basic->el[j] = i[j];
-			return true;
+			if (this->basic == NULL) this->basic = new IntVector();
+//			else delete[] this->basic;
+//			this->basic->numberOfEl = ni;
+//			for (int j=0; j<ni; j++)
+//				this->basic->el[j] = i[j];
+//			return true;
+			return this->basic->setIntVector(i, ni);
 		}
 		case ENUM_BASIS_STATUS_atLower:
 		{
@@ -586,9 +622,96 @@ bool BasisStatus::setBasisStatusIntVector(int status, int *i, int ni)
 			return true;
 		}
 	default:
-		throw ErrorClass("Unknown basis status encountered in setBasisStatusIntVector");  
+		throw ErrorClass("Unknown basis status encountered in setIntVector");  
 	 }
-}//setBasisStatusIntVector
+}//BasisStatus::setIntVector
+
+
+
+int BasisStatus::getNumberOfEl(int status)
+{
+	switch (status)
+	{
+		case ENUM_BASIS_STATUS_basic:
+		{
+			if (this->basic == NULL) return -1;
+			else return	this->basic->numberOfEl;
+		}
+		case ENUM_BASIS_STATUS_atLower:
+		{
+			if (this->atLower == NULL) return -1;
+			else return	this->atLower->numberOfEl;
+		}
+		case ENUM_BASIS_STATUS_atUpper:
+		{
+			if (this->atUpper == NULL) return -1;
+			else return	this->atUpper->numberOfEl;
+		}
+		case ENUM_BASIS_STATUS_isFree:
+		{
+			if (this->isFree == NULL) return -1;
+			else return	this->isFree->numberOfEl;
+		}
+		case ENUM_BASIS_STATUS_superbasic:
+		{
+			if (this->superbasic == NULL) return -1;
+			else return	this->superbasic->numberOfEl;
+		}
+		case ENUM_BASIS_STATUS_unknown:
+		{
+			if (this->unknown == NULL) return -1;
+			else return	this->unknown->numberOfEl;
+		}
+	default:
+		throw ErrorClass("Unknown basis status encountered in getBasisStatusNumberOfEl");  
+	 }
+}//getNumberOfEl
+
+
+int BasisStatus::getEl(int status, int j)
+{
+	switch (status)
+	{
+		case ENUM_BASIS_STATUS_basic:
+		{
+			if (this->basic == NULL) 
+				throw ErrorClass("\"basic\" index array never defined in routine BasisStatus::getEl()");
+			else return	this->basic->el[j];
+		}
+		case ENUM_BASIS_STATUS_atLower:
+		{
+			if (this->atLower == NULL)
+				throw ErrorClass("\"atLower\" index array never defined in routine BasisStatus::getEl()");
+			else return	this->atLower->el[j];
+		}
+		case ENUM_BASIS_STATUS_atUpper:
+		{
+			if (this->atUpper == NULL)
+				throw ErrorClass("\"atUpper\" index array never defined in routine BasisStatus::getEl()");
+			else return	this->atUpper->el[j];
+		}
+		case ENUM_BASIS_STATUS_isFree:
+		{
+			if (this->isFree == NULL)
+				throw ErrorClass("\"isFree\" index array never defined in routine BasisStatus::getEl()");
+			else return	this->isFree->el[j];
+		}
+		case ENUM_BASIS_STATUS_superbasic:
+		{
+			if (this->superbasic == NULL)
+				throw ErrorClass("\"superbasic\" index array never defined in routine BasisStatus::getEl()");
+			else return	this->superbasic->el[j];
+		}
+		case ENUM_BASIS_STATUS_unknown:
+		{
+			if (this->unknown == NULL)
+				throw ErrorClass("\"unknown\" index array never defined in routine BasisStatus::getEl()");
+			else return	this->unknown->el[j];
+		}
+	default:
+		throw ErrorClass("Unknown basis status encountered in getBasisStatusNumberOfEl");  
+	 }
+}//getEl
 
 bool BasisStatus::IsEqual(BasisStatus *that)
 {
@@ -627,5 +750,4 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 		}
 	}
 }//BasisStatus::IsEqual
-
 
