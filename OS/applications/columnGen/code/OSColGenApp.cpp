@@ -286,6 +286,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	
 		m_osrouteSolver->pauHana( theta);
 		
+		m_osrouteSolver->getCuts( theta,  numCols);
+		
 		if(numRows > 0) delete[] y;
 		y = NULL;
 		

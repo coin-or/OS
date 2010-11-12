@@ -96,8 +96,16 @@ public:
 	std::string* m_variableNames;
 	
 	//arrays for the coupling constraint matrix
+	//we store indexes since values are 1.0
 	int* m_pntAmatrix;
 	int* m_Amatrix;
+	//
+	//arrays for the tour breaking contraints
+	//
+	int* m_pntBmatrix;
+	int* m_Bmatrix;
+	int m_numTourBreakCon;
+	//
 	
 	//below  is a scatter array we scatter into in order
 	//to multiply the transformation matrix times the A matrix
@@ -119,7 +127,12 @@ public:
 	double* m_thetaCost;
 
 
-
+	double m_eps;
+	 /** m_separationIndexMap maps the variable index into the
+	  * appropriate row in the separation problem for the 
+	  * tour breaking constraints
+	  */
+	int* m_separationIndexMap;
 	
 	OSInstance *m_osinstanceMaster;
 	OSInstance *m_osinstanceSeparation;
@@ -137,8 +150,8 @@ public:
 	//this c vector is for the entire cost vector
 	void getOptL(const  double* c) ;
 	
-	
-	void getCuts(const  double* x) ;
+	//return true if cuts got generated
+	bool getCuts(const  double* theta, const int numTheta) ;
 	
 	/**
 	 * RETURN VALUES: 

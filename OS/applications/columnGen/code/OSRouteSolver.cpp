@@ -64,6 +64,7 @@ OSRouteSolver::OSRouteSolver() {
 OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	std::cout << "INSIDE OSRouteSolver CONSTRUCTOR with OSOption argument" << std::endl;
 	
+	m_eps = 0.001;
 	m_u = NULL;
 	m_v = NULL;
 	m_g = NULL;
@@ -208,6 +209,23 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_numThetaVar = 0;
 		m_numThetaNonz = 0;
 		m_thetaPnt[ m_numThetaVar++ ] = 0;
+		
+		//hard coding of cuts
+		m_numTourBreakCon = 0;
+		m_pntBmatrix = new int[ 10000];
+		m_Bmatrix = new int[ 500000];
+		
+		
+		m_separationIndexMap = new int[m_numNodes*(m_numNodes - 1)];
+		
+		for(i = 0; i < m_numNodes*(m_numNodes - 1); i++){
+			
+			m_separationIndexMap[ i] =  OSINT_MAX;
+			
+		}
+			
+			
+		
 
 		//kipp -- move this later
 		getSeparationInstance();
@@ -333,11 +351,22 @@ OSRouteSolver::~OSRouteSolver(){
 	m_thetaPnt = NULL;
 	
 	delete[] m_thetaIndex;
-	m_thetaIndex = 0;
+	m_thetaIndex = NULL;
 
 	
 	delete[] m_thetaCost;
-	m_thetaCost = 0;
+	m_thetaCost = NULL;
+	
+	
+	delete[] m_pntBmatrix ;
+	m_pntBmatrix = NULL;
+	
+	delete[]  m_Bmatrix ;
+	m_Bmatrix = NULL;
+	
+	delete[] m_separationIndexMap;
+	m_separationIndexMap = NULL;
+	
 
 
 }//end ~OSRouteSolver
@@ -1503,9 +1532,129 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 }//end getOptions
 
 
-void OSRouteSolver::getCuts(const  double* x){
+bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 	
-	
+	//first let's modify the m_osinstanceSeparation to reflect
+	//the current theta solution
+	//change the right hand side vectors
+	int ivalue;
+	int jvalue;
+	int i;
+	int j;
+	int index;
+	int rowKount;
+	int indexAdjust;
+	indexAdjust = (m_numNodes - m_numHubs);
+	try{
+		m_osinstanceSeparation->bConstraintsModified = true;
+		
+		if(numTheta != m_numThetaVar - 1) throw ErrorClass("number of master varibles in OSRouteSolver::getCuts");
+		
+		for(i = 0; i < numTheta; i++){
+			
+			//get a postive theta
+			if(theta[ i] > m_eps){
+				
+				//get the xij indexes associated with this variable
+				for(j = m_thetaPnt[ i]; j <  m_thetaPnt[ i + 1]; j++ ){
+					
+					//get the xij index 
+					
+					index = m_thetaIndex[ j]; 
+					ivalue = floor( index / (m_numNodes - 1) );
+					jvalue = index - ivalue*(m_numNodes - 1);
+					if (jvalue > ivalue) jvalue++;
+					
+					//std::cout << m_variableNames[ index ] << " i = " << ivalue << " j = " << jvalue << std::endl;
+					
+					rowKount = m_separationIndexMap[ index];
+					
+					//std::cout << "rowKount = " << rowKount  <<std::endl;
+					
+					if(rowKount < OSINT_MAX ){
+						
+						m_osinstanceSeparation->instanceData->constraints->con[ rowKount]->ub -=  theta[ i]; 
+						m_osinstanceSeparation->instanceData->constraints->con[ rowKount]->lb -=  theta[ i];
+						
+					}
+
+					
+					
+				}
+			}
+		}
+		
+		
+		m_osinstanceSeparation->instanceData->constraints->con[ 9]->ub = 0; 
+		
+		std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
+		
+		
+		m_osinstanceSeparation->instanceData->constraints->con[ 9]->ub -=  theta[ i]; 
+		
+		//below is temporty see if we can setup as a Clp network problem
+	    CoinPackedMatrix* matrix;
+	    bool columnMajor = true;
+	    double maxGap = 0;
+		matrix = new CoinPackedMatrix(
+		columnMajor, //Column or Row Major
+		columnMajor? m_osinstanceSeparation->getConstraintNumber() : m_osinstanceSeparation->getVariableNumber(), //Minor Dimension
+		columnMajor? m_osinstanceSeparation->getVariableNumber() : m_osinstanceSeparation->getConstraintNumber(), //Major Dimension
+		m_osinstanceSeparation->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->values : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->indexes : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->starts : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
+		0,   0, maxGap ); 
+		
+		ClpNetworkMatrix network( *matrix);
+		
+
+		ClpSimplex  model;
+		
+		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
+		
+		
+	    model.setOptimizationDirection( 1);
+		model.loadProblem( network, m_osinstanceSeparation->getVariableLowerBounds(), 
+				m_osinstanceSeparation->getVariableUpperBounds(),  
+				m_osinstanceSeparation->getDenseObjectiveCoefficients()[0], 
+				m_osinstanceSeparation->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
+		);
+		
+
+		
+		//model.loadProblem(network, lowerColumn, upperColumn, objective,
+	    //lower, upper);
+		
+	     model.factorization()->maximumPivots(200 + model.numberRows() / 100);
+	     model.factorization()->maximumPivots(1000);
+	     //model.factorization()->maximumPivots(1);
+	     if (model.numberRows() < 50)
+	          model.messageHandler()->setLogLevel( 10);
+	     //model.dual();
+		model.primal();
+		
+		
+	    // if (model.numberRows() < 50)
+	   //       model.messageHandler()->setLogLevel(10);
+	     //model.dual();
+		//model.primal();
+		//for(i = 0; i < numYvar + numVvar ; i++){
+		//	std::cout <<   m_osinstanceSeparation->getVariableNames()[ i]   << " = " << model.getColSolution()[ i] << std::endl;
+		//}
+		
+		//for(i = 0; i < rowKounter ; i++){
+		//	std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << model.getRowPrice()[ i] << std::endl;
+		//}
+		
+				
+		
+	} catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}		
+	return false;
 }//end getCuts
 
 void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
@@ -1591,13 +1740,13 @@ void OSRouteSolver::createVariableNames( ){
 void OSRouteSolver::createAmatrix(){
 	
 	//arrays for the coupling constraint matrix
+	//this is in the x variable space, not theta
 	//int* m_pntAmatrix;
 	//int* m_Amatrix;
 	
 	
 	int i;
 	int j;
-
 	int numNonz;
 	
 	//loop over nodes 
@@ -1740,7 +1889,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		//add the node rows
 		for( i =  0; i < m_numNodes - m_numHubs ; i++){
 			
-			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , 0.0, 1.0, 0); 
+			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , -m_numNodes, 1.0, 0); 
 			
 		}
 		
@@ -1799,25 +1948,27 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		int i1;
 		int j1;
 		int kountCon;
-	
-		//adjust for fact we don't use hub nodes
-		i1 = i - m_numHubs;
-		j1 = j - m_numHubs;
-		
 		kountCon = m_numNodes - m_numHubs;
 		
 		for(i1 = 0; i1 < m_numNodes - m_numHubs; i1++){
 			
 
+			i = i1 + m_numHubs;
 			
 			for(j1 = i1 + 1; j1 < m_numNodes - m_numHubs; j1++){
 				
 	
+				j = j1 + m_numHubs;
 				
-				separationVarName = makeStringFromInt("y(", i1 + m_numHubs);
-				separationVarName += makeStringFromInt(",", j1 + m_numHubs);
+				separationVarName = makeStringFromInt("y(", i);
+				separationVarName += makeStringFromInt(",", j);
 				separationVarName += ")";
 				m_osinstanceSeparation->addVariable(kount++, separationVarName, 0, 1, 'C');
+				
+				//map the variable to row kountCon
+				
+				// i < j case
+				m_separationIndexMap[ i*(m_numNodes - 1)  + (j - 1) ] = kountCon;
 				
 				values[ kountNonz ] = 1.0;
 				indexes[ kountNonz ] = i1;
@@ -1832,15 +1983,18 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 				
 				
 				
-				separationVarName = makeStringFromInt("y(", j1 + m_numHubs);
-				separationVarName += makeStringFromInt(",", i1 + m_numHubs);
+				separationVarName = makeStringFromInt("y(", j );
+				separationVarName += makeStringFromInt(",", i);
 				separationVarName += ")";
 				m_osinstanceSeparation->addVariable(kount++, separationVarName, 0, 1, 'C');
 				
 				values[ kountNonz ] = 1.0;
 				indexes[ kountNonz ] = j1;
 				kountNonz++;
-						
+				
+				// i < j case
+				m_separationIndexMap[ j*(m_numNodes - 1)  + i ] = kountCon;
+				
 				values[ kountNonz ] = -1.0;
 				indexes[ kountNonz ] = kountCon ;
 				kountNonz++;
@@ -1881,67 +2035,11 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	
 		
 		
-		std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
-		//below is temporty see if we can setup as a Clp network problem
-	    CoinPackedMatrix* matrix;
-	    bool columnMajor = true;
-	    double maxGap = 0;
-		matrix = new CoinPackedMatrix(
-		columnMajor, //Column or Row Major
-		columnMajor? m_osinstanceSeparation->getConstraintNumber() : m_osinstanceSeparation->getVariableNumber(), //Minor Dimension
-		columnMajor? m_osinstanceSeparation->getVariableNumber() : m_osinstanceSeparation->getConstraintNumber(), //Major Dimension
-		m_osinstanceSeparation->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
-		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->values : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
-		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->indexes : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
-		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->starts : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
-		0,   0, maxGap ); 
-		
-		ClpNetworkMatrix network( *matrix);
-		
-
-		ClpSimplex  model;
-		
-		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
-		
-		
-	    model.setOptimizationDirection( 1);
-		model.loadProblem( network, m_osinstanceSeparation->getVariableLowerBounds(), 
-				m_osinstanceSeparation->getVariableUpperBounds(),  
-				m_osinstanceSeparation->getDenseObjectiveCoefficients()[0], 
-				m_osinstanceSeparation->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
-		);
-		
+		//std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
 
 		
-		//model.loadProblem(network, lowerColumn, upperColumn, objective,
-	    //lower, upper);
 		
-	     model.factorization()->maximumPivots(200 + model.numberRows() / 100);
-	     model.factorization()->maximumPivots(1000);
-	     //model.factorization()->maximumPivots(1);
-	     if (model.numberRows() < 50)
-	          model.messageHandler()->setLogLevel( 10);
-	     //model.dual();
-		model.primal();
-		
-		
-	     if (model.numberRows() < 50)
-	          model.messageHandler()->setLogLevel(10);
-	     //model.dual();
-		model.primal();
-		for(i = 0; i < numYvar + numVvar ; i++){
-			std::cout <<   m_osinstanceSeparation->getVariableNames()[ i]   << " = " << model.getColSolution()[ i] << std::endl;
-		}
-		
-		for(i = 0; i < rowKounter ; i++){
-			std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << model.getRowPrice()[ i] << std::endl;
-		}
-		
-				
-		
-		
-		
-		//exit( 1);
+	
 		
 		//
 		delete objcoeff;

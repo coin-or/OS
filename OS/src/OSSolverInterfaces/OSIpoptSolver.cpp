@@ -773,9 +773,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		}
 	}
 	catch(const ErrorClass& eclass){
-#ifdef DEBUG
-		cout << "error in OSIpoptSolver, line 695:\n" << eclass.errormsg << endl;
-#endif
 		std::cout << "THERE IS AN ERROR" << std::endl;
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");
