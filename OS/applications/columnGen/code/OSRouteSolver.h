@@ -105,6 +105,7 @@ public:
 	int* m_pntBmatrix;
 	int* m_Bmatrix;
 	int m_numTourBreakCon;
+	int m_numTourBreakNonz;
 	//
 	
 	//below  is a scatter array we scatter into in order

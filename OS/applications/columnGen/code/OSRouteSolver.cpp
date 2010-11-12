@@ -211,9 +211,15 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_thetaPnt[ m_numThetaVar++ ] = 0;
 		
 		//hard coding of cuts
-		m_numTourBreakCon = 0;
+
+		
 		m_pntBmatrix = new int[ 10000];
 		m_Bmatrix = new int[ 500000];
+		m_numTourBreakCon = 0;
+		m_numTourBreakNonz = 0;
+		m_pntBmatrix[ m_numTourBreakCon++] = 0;
+		
+;
 		
 		
 		m_separationIndexMap = new int[m_numNodes*(m_numNodes - 1)];
@@ -1621,33 +1627,65 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 				m_osinstanceSeparation->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
 		);
 		
-
 		
-		//model.loadProblem(network, lowerColumn, upperColumn, objective,
-	    //lower, upper);
-		
-	     model.factorization()->maximumPivots(200 + model.numberRows() / 100);
-	     model.factorization()->maximumPivots(1000);
-	     //model.factorization()->maximumPivots(1);
-	     if (model.numberRows() < 50)
-	          model.messageHandler()->setLogLevel( 10);
-	     //model.dual();
+		model.factorization()->maximumPivots(200 + model.numberRows() / 100);
+	    model.factorization()->maximumPivots(1000);
 		model.primal();
 		
+
+		std::vector<int> dualIdx;
+		std::vector<int>::iterator vit1;
+		std::vector<int>::iterator vit2;
 		
-	    // if (model.numberRows() < 50)
-	   //       model.messageHandler()->setLogLevel(10);
-	     //model.dual();
-		//model.primal();
-		//for(i = 0; i < numYvar + numVvar ; i++){
-		//	std::cout <<   m_osinstanceSeparation->getVariableNames()[ i]   << " = " << model.getColSolution()[ i] << std::endl;
-		//}
+		//if the objective function value is greater than zero we have a cut
+		//the cut is based on the nodes with dual value - 1
 		
-		//for(i = 0; i < rowKounter ; i++){
-		//	std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << model.getRowPrice()[ i] << std::endl;
-		//}
+		if(model.getObjValue() > m_eps){
 		
+			for(i = 0; i < m_numNodes - m_numHubs ; i++){
+				//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << model.getRowPrice()[ i] << std::endl;
+				if( model.getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
+			}
+			
+			for (vit1 = dualIdx.begin(); vit1 != dualIdx.end(); vit1++) {
 				
+				i = *vit1 + m_numHubs;
+				
+				for (vit2 = dualIdx.begin(); vit2 != dualIdx.end(); vit2++) {
+					
+					j = *vit2 + m_numHubs;
+					
+					if(i > j){
+					
+						index = i*(m_numNodes -1) + j;
+						std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;
+						
+						m_Bmatrix[   m_numTourBreakNonz++ ] = index;
+						
+					}else{
+						
+						if(i < j){
+							
+							index = i*(m_numNodes -1) + j - 1;
+							std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;
+							
+							m_Bmatrix[   m_numTourBreakNonz++ ] = index;
+							
+						}
+					}
+				}//end for on vit2
+			}//end for on vit1
+			
+			//add the cut
+			m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
+
+			// multiply the transformation matrix times this cut to get the cut in theta space
+			// do the usual trick and scatter m_Bmatrix into a dense vector
+			
+		}//end if on obj value		
+		
+		
+		
 		
 	} catch (const ErrorClass& eclass) {
 

@@ -56,6 +56,8 @@ OS/applications/columnGen/data/colgen12b.osil -text
 OS/applications/columnGen/data/colgen12b.osol -text
 OS/applications/columnGen/data/colgen5.osil -text
 OS/applications/columnGen/data/colgen5.osol -text
+OS/applications/columnGen/data/colgenpercentile4.osil -text
+OS/applications/columnGen/data/colgenpercentile4.osol -text
 OS/applications/fileUpload/Makefile.am -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
