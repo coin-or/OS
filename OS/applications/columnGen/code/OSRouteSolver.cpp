@@ -1543,6 +1543,8 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 	//first let's modify the m_osinstanceSeparation to reflect
 	//the current theta solution
 	//change the right hand side vectors
+	bool isCutAdded;
+	isCutAdded = false;
 	int ivalue;
 	int jvalue;
 	int i;
@@ -1641,6 +1643,8 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 		//the cut is based on the nodes with dual value - 1
 		
 		if(model.getObjValue() > m_eps){
+			
+			isCutAdded = true;
 		
 			for(i = 0; i < m_numNodes - m_numHubs ; i++){
 				//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << model.getRowPrice()[ i] << std::endl;
@@ -1692,7 +1696,7 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 		throw ErrorClass(eclass.errormsg);
 
 	}		
-	return false;
+	return isCutAdded;
 }//end getCuts
 
 void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
