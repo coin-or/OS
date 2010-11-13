@@ -36,7 +36,7 @@
 #include "OSFileUtil.h"  
 
 
-#include "ClpSimplex.hpp"
+
 #include "ClpFactorization.hpp"
 #include "ClpNetworkMatrix.hpp"
 #include "OsiClpSolverInterface.hpp"
@@ -215,6 +215,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		m_pntBmatrix = new int[ 10000];
 		m_Bmatrix = new int[ 500000];
+		m_BmatrixRhs = new int[ 10000];
 		m_numTourBreakCon = 0;
 		m_numTourBreakNonz = 0;
 		m_pntBmatrix[ m_numTourBreakCon++] = 0;
@@ -369,6 +370,11 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	delete[]  m_Bmatrix ;
 	m_Bmatrix = NULL;
+	
+	delete[]  m_BmatrixRhs ;
+	m_BmatrixRhs = NULL;
+		
+
 	
 	delete[] m_separationIndexMap;
 	m_separationIndexMap = NULL;
@@ -1545,14 +1551,22 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 	//change the right hand side vectors
 	bool isCutAdded;
 	isCutAdded = false;
-	int ivalue;
-	int jvalue;
 	int i;
 	int j;
+	int k;
 	int index;
 	int rowKount;
-	int indexAdjust;
-	indexAdjust = (m_numNodes - m_numHubs);
+	int indexAdjust = m_numNodes - m_numHubs;
+	double* tmpRhs;
+	int numSepRows = m_osinstanceSeparation->getConstraintNumber() ;
+	
+	tmpRhs = new double[ numSepRows ]; 
+	
+	for(i = 0; i < numSepRows; i++){
+		
+		tmpRhs[ i] = 0;
+	}
+	
 	try{
 		m_osinstanceSeparation->bConstraintsModified = true;
 		
@@ -1568,21 +1582,15 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 					
 					//get the xij index 
 					
-					index = m_thetaIndex[ j]; 
-					ivalue = floor( index / (m_numNodes - 1) );
-					jvalue = index - ivalue*(m_numNodes - 1);
-					if (jvalue > ivalue) jvalue++;
 					
-					//std::cout << m_variableNames[ index ] << " i = " << ivalue << " j = " << jvalue << std::endl;
-					
-					rowKount = m_separationIndexMap[ index];
+
+					rowKount = m_separationIndexMap[  m_thetaIndex[ j] ];
 					
 					//std::cout << "rowKount = " << rowKount  <<std::endl;
 					
 					if(rowKount < OSINT_MAX ){
 						
-						m_osinstanceSeparation->instanceData->constraints->con[ rowKount]->ub -=  theta[ i]; 
-						m_osinstanceSeparation->instanceData->constraints->con[ rowKount]->lb -=  theta[ i];
+						tmpRhs[ rowKount] -= theta[ i];
 						
 					}
 
@@ -1592,48 +1600,16 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 			}
 		}
 		
+		// don't adjust the kludge row
+		for(i = indexAdjust; i < numSepRows - 1; i++){
+			
+			m_separationClpModel->setRowUpper(i, tmpRhs[ i] );
+			m_separationClpModel->setRowLower(i, tmpRhs[ i] );		
+			
+		}
 		
-		m_osinstanceSeparation->instanceData->constraints->con[ 9]->ub = 0; 
-		
-		std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
-		
-		
-		m_osinstanceSeparation->instanceData->constraints->con[ 9]->ub -=  theta[ i]; 
-		
-		//below is temporty see if we can setup as a Clp network problem
-	    CoinPackedMatrix* matrix;
-	    bool columnMajor = true;
-	    double maxGap = 0;
-		matrix = new CoinPackedMatrix(
-		columnMajor, //Column or Row Major
-		columnMajor? m_osinstanceSeparation->getConstraintNumber() : m_osinstanceSeparation->getVariableNumber(), //Minor Dimension
-		columnMajor? m_osinstanceSeparation->getVariableNumber() : m_osinstanceSeparation->getConstraintNumber(), //Major Dimension
-		m_osinstanceSeparation->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
-		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->values : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
-		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->indexes : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
-		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->starts : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
-		0,   0, maxGap ); 
-		
-		ClpNetworkMatrix network( *matrix);
-		
-
-		ClpSimplex  model;
-		
-		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
-		
-		
-	    model.setOptimizationDirection( 1);
-		model.loadProblem( network, m_osinstanceSeparation->getVariableLowerBounds(), 
-				m_osinstanceSeparation->getVariableUpperBounds(),  
-				m_osinstanceSeparation->getDenseObjectiveCoefficients()[0], 
-				m_osinstanceSeparation->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
-		);
-		
-		
-		model.factorization()->maximumPivots(200 + model.numberRows() / 100);
-	    model.factorization()->maximumPivots(1000);
-		model.primal();
-		
+		//std::cout << m_osinstanceSeparation->printModel() << std::endl;
+	
 
 		std::vector<int> dualIdx;
 		std::vector<int>::iterator vit1;
@@ -1642,54 +1618,89 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 		//if the objective function value is greater than zero we have a cut
 		//the cut is based on the nodes with dual value - 1
 		
-		if(model.getObjValue() > m_eps){
-			
-			isCutAdded = true;
-		
-			for(i = 0; i < m_numNodes - m_numHubs ; i++){
-				//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << model.getRowPrice()[ i] << std::endl;
-				if( model.getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
-			}
-			
-			for (vit1 = dualIdx.begin(); vit1 != dualIdx.end(); vit1++) {
+		for(k = 0; k < indexAdjust; k++){
+			m_separationClpModel->setRowUpper(k, 0.0);
+			m_separationClpModel->primal();		
+			if(m_separationClpModel->getObjValue() > m_eps){
 				
-				i = *vit1 + m_numHubs;
+				isCutAdded = true;
+			
+				for(i = 0; i < m_numNodes - m_numHubs ; i++){
+					//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
+					if( m_separationClpModel->getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
+				}
 				
-				for (vit2 = dualIdx.begin(); vit2 != dualIdx.end(); vit2++) {
+				for (vit1 = dualIdx.begin(); vit1 != dualIdx.end(); vit1++) {
 					
-					j = *vit2 + m_numHubs;
+					i = *vit1 + m_numHubs;
 					
-					if(i > j){
-					
-						index = i*(m_numNodes -1) + j;
-						std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;
+					for (vit2 = dualIdx.begin(); vit2 != dualIdx.end(); vit2++) {
 						
-						m_Bmatrix[   m_numTourBreakNonz++ ] = index;
+						j = *vit2 + m_numHubs;
 						
-					}else{
+						if( i > j ){
 						
-						if(i < j){
-							
-							index = i*(m_numNodes -1) + j - 1;
-							std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;
-							
+							index = i*(m_numNodes -1) + j;
+							std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;						
 							m_Bmatrix[   m_numTourBreakNonz++ ] = index;
 							
+						}else{
+							
+							if( i < j ){
+								
+								index = i*(m_numNodes -1) + j - 1;
+								std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;							
+								m_Bmatrix[   m_numTourBreakNonz++ ] = index;
+								
+							}
 						}
-					}
-				}//end for on vit2
-			}//end for on vit1
+						
+					}//end for on vit2
+				}//end for on vit1
+				
+				//add the cut
+				m_BmatrixRhs[ m_numTourBreakCon ] =  dualIdx.size()  - 1;
+				m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
+	
+				// multiply the transformation matrix times this cut to get the cut in theta space
+				// do the usual trick and scatter m_Bmatrix into a dense vector
+				
+				
+				dualIdx.clear();
+				//reset
+				// don't adjust the kludge row
+				for(i = indexAdjust; i < numSepRows - 1; i++){
+					
+					m_separationClpModel->setRowUpper(i, 0.0 );
+					m_separationClpModel->setRowLower(i, 0.0 );
+					
+					
+				}
+				m_separationClpModel->setRowUpper(k, 1.0);
+				delete[] tmpRhs;
+				tmpRhs = NULL;
+				
+				return isCutAdded;
+				
+			}//end if on obj value		
+			m_separationClpModel->setRowUpper(k, 1.0);
+			dualIdx.clear();
 			
-			//add the cut
-			m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
-
-			// multiply the transformation matrix times this cut to get the cut in theta space
-			// do the usual trick and scatter m_Bmatrix into a dense vector
+		}//end loop on k
+		
+		//if we are here there was no cut
+		//reset
+		// don't adjust the kludge row
+		for(i = indexAdjust; i < numSepRows - 1; i++){
 			
-		}//end if on obj value		
+			m_separationClpModel->setRowUpper(i, 0.0 );
+			m_separationClpModel->setRowLower(i, 0.0 );
+			
+			
+		}
 		
-		
-		
+		delete[] tmpRhs;
+		tmpRhs = NULL;
 		
 	} catch (const ErrorClass& eclass) {
 
@@ -1931,7 +1942,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 		//add the node rows
 		for( i =  0; i < m_numNodes - m_numHubs ; i++){
 			
-			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , -m_numNodes, 1.0, 0); 
+			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , 0.0, 1.0, 0); 
 			
 		}
 		
@@ -2077,14 +2088,44 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 	
 		
 		
-		//std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;
-
-		
-		
-	
-		
+		//std::cout << m_osinstanceSeparation->printModel(  ) << std::endl;	
 		//
 		delete objcoeff;
+		
+		
+		// now create the Clp model
+		
+		
+		//below is temporty see if we can setup as a Clp network problem
+	    CoinPackedMatrix* matrix;
+	    bool columnMajor = true;
+	    double maxGap = 0;
+		matrix = new CoinPackedMatrix(
+		columnMajor, //Column or Row Major
+		columnMajor? m_osinstanceSeparation->getConstraintNumber() : m_osinstanceSeparation->getVariableNumber(), //Minor Dimension
+		columnMajor? m_osinstanceSeparation->getVariableNumber() : m_osinstanceSeparation->getConstraintNumber(), //Major Dimension
+		m_osinstanceSeparation->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->values : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->indexes : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
+		columnMajor? m_osinstanceSeparation->getLinearConstraintCoefficientsInColumnMajor()->starts : m_osinstanceSeparation->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
+		0,   0, maxGap ); 
+		
+		ClpNetworkMatrix network( *matrix);
+		
+		m_separationClpModel = new ClpSimplex();
+		
+		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
+	    m_separationClpModel->setOptimizationDirection( 1);
+		m_separationClpModel->loadProblem( network, m_osinstanceSeparation->getVariableLowerBounds(), 
+				m_osinstanceSeparation->getVariableUpperBounds(),  
+				m_osinstanceSeparation->getDenseObjectiveCoefficients()[0], 
+				m_osinstanceSeparation->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
+		);
+		
+		m_separationClpModel->factorization()->maximumPivots(200 + m_separationClpModel->numberRows() / 100);
+		
+		
+		delete matrix;
 		
 	}catch (const ErrorClass& eclass) {
 

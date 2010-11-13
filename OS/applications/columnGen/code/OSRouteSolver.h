@@ -20,6 +20,7 @@
 
 #include "OSInstance.h"
 #include "OSOption.h"
+#include "ClpSimplex.hpp"
 // --------------------------------------------------------------------- //
 /*!
  * \class 
@@ -104,6 +105,7 @@ public:
 	//
 	int* m_pntBmatrix;
 	int* m_Bmatrix;
+	int* m_BmatrixRhs;
 	int m_numTourBreakCon;
 	int m_numTourBreakNonz;
 	//
@@ -137,6 +139,9 @@ public:
 	
 	OSInstance *m_osinstanceMaster;
 	OSInstance *m_osinstanceSeparation;
+	
+	//the Clp model 
+	ClpSimplex*  m_separationClpModel;
 
 	//create the initial restricted master
 	OSInstance* getInitialRestrictedMaster( );
