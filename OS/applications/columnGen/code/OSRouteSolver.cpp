@@ -843,7 +843,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 
 void OSRouteSolver::getColumns(const  double* y, const int numRows,
-		int &numColumns, int* numNonzVec, double* costVec, double* rcostVec,
+		int &numColumns, int* numNonzVec, double* costVec, 
 		int** rowIdxVec, double** valuesVec, double &lowerBound) 
 {
 	
@@ -894,7 +894,7 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 		int rowCount;
 		
 		
-		
+		//// get optimal q for each route
 		getOptL( m_rc);
 		m_lowerBnd = 0.0;
 		for(k = 0; k < m_numHubs; k++){
@@ -907,11 +907,10 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 			
 			kountVar = 0;
 			
+			///// calling qrouteCost
 			m_optValHub[ k] = qrouteCost(k,  m_optL[ k], m_rc,  &kountVar);
 			
 			m_optValHub[ k] -= m_psi[ k ];
-			
-
 			
 			std::cout << "Best Reduced Cost Hub " << k << " =  "  << m_optValHub[ k] << std::endl;
 			m_lowerBnd += m_optValHub[ k];
@@ -966,10 +965,40 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 			
 			//add a 1 in the convexity row
 			m_newColumnRowIdx[ k][ numNonz] = m_numNodes - m_numHubs + k;
-			m_newColumnRowValue[ k][ numNonz] = 1.0;
-			numNonz++;
+			m_newColumnRowValue[ k][ numNonz++] = 1.0;
+			
+			
+			
+			//now multiply the sparse array by each tour-breaking constraint
+			
+			for(i = 0; i < m_numTourBreakCon; i++){
+				
+				rowCount = 0;
+				
+				
+				for(j = m_pntBmatrix[ i]; j < m_pntBmatrix[ i + 1]; j++){
+					
+					//m_Bmatrix[ j] is a variable index -- this logic works
+					//since the Bmatrix coefficient is 1 -- we don't need a value
+					//it indexes variable that points into the node
+					rowCount += m_tmpScatterArray[  m_Bmatrix[ j] ];
+					
+
+				}
+				
+				if(rowCount > 0){
+					
+					//std::cout << "GAIL NODE " << i + m_numHubs <<  " COUNT = " << rowCount << std::endl;
+					m_newColumnRowIdx[ k][ numNonz] = i;
+					m_newColumnRowValue[ k][ numNonz++] = rowCount;
+					
+				}
+				
+				
+			}
 			
 			m_nonzVec[ k] = numNonz;
+			
 			
 			//zero out the scatter vector and store the generated column
 			for(j = 0; j < kountVar; j++){

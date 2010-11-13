@@ -92,13 +92,13 @@ void OSColGenApp::getCuts(const  double* x) {
 }//end generateCuts
 
 void OSColGenApp::getColumns(const  double* y, const int numRows,
-		int &numColumns, int* numNonz, double* cost, double* rcost,
+		int &numColumns, int* numNonz, double* cost, 
 		int** rowIdx, double** values, double &lowerBound) 
  {
 
 
 	m_osrouteSolver->getColumns(y, numRows,
-			numColumns, numNonz, cost, rcost,
+			numColumns, numNonz, cost, 
 			rowIdx, values,  lowerBound);
 	
 	
@@ -132,7 +132,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	int numColumns;
 	int* numNonz = NULL;
 	double* cost = NULL; 
-	double* rcost;
 	int** rowIdx = NULL; 
 	double** values = NULL ; 
 	double lowerBound;
@@ -222,13 +221,12 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			//kipp here is where the while loop goes
 			//start while loop
 			getColumns(y, numRows, numColumns, numNonz, 
-					cost, rcost, rowIdx, values,  lowerBound);
+					cost,  rowIdx, values,  lowerBound);
 			
 			std::cout << "LOWER BOUND = " <<  lowerBound   << std::endl;
 			
 			numNonz = m_osrouteSolver->m_nonzVec; 
 			cost =  m_osrouteSolver->m_costVec; 
-			rcost = m_osrouteSolver->m_optValHub;
 			rowIdx = m_osrouteSolver->m_newColumnRowIdx; 
 			values = m_osrouteSolver->m_newColumnRowValue;
 			//add columns

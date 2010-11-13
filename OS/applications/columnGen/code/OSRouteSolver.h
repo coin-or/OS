@@ -164,7 +164,6 @@ public:
 	 * int numColumns -- number of new columns generated
 	 * int* numNonz -- number of nonzeros in each column
 	 * double* cost -- the objective function coefficient on each new column
-	 * double* rcost -- the reduced cost of each new column
 	 * double** rowIdx -- vectors row indexes of new columns
 	 * double** values -- vectors of matrix coefficient values of new columns
 	 * double lowerBound -- the lowerBound
@@ -174,7 +173,7 @@ public:
 	 * int numRows -- size of dual vector
 	 */
 	void getColumns(const  double* y, const int numRows,
-			int &numColumns, int* numNonz, double* cost, double* rcost,
+			int &numColumns, int* numNonz, double* cost, 
 			int** rowIdx, double** values, double &lowerBound) ;
 	
 	
