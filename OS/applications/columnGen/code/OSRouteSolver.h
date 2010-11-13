@@ -172,7 +172,8 @@ public:
 	 * double* y -- the vector of dual values
 	 * int numRows -- size of dual vector
 	 */
-	void getColumns(const  double* y, const int numRows,
+	void getColumns(const  double* yA, const int numARows,
+			const  double* yB, const int numBRows,
 			int &numColumns, int* numNonz, double* cost, 
 			int** rowIdx, double** values, double &lowerBound) ;
 	

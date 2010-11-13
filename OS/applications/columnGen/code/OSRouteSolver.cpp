@@ -842,7 +842,8 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 
 
-void OSRouteSolver::getColumns(const  double* y, const int numRows,
+void OSRouteSolver::getColumns(const  double* yA, const int numARows,
+		const  double* yB, const int numBRows,
 		int &numColumns, int* numNonzVec, double* costVec, 
 		int** rowIdxVec, double** valuesVec, double &lowerBound) 
 {
@@ -862,7 +863,7 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 		
 
 		
-		if(numRows != m_numNodes) throw ErrorClass("inconsistent row count in getColumns");
+		if(numARows != m_numNodes) throw ErrorClass("inconsistent row count in getColumns");
 		
 		for(i = 0; i < m_numHubs; i++){
 			
@@ -871,13 +872,13 @@ void OSRouteSolver::getColumns(const  double* y, const int numRows,
 		
 		for(i = 0; i < numCoulpingConstraints; i++){
 			
-			m_phi[ i + m_numHubs] = y[ i];
+			m_phi[ i + m_numHubs] = yA[ i];
 			
 		}
 		
 		for(i = 0; i < m_numHubs; i++){
 			
-			m_psi[ i ] = y[ i + numCoulpingConstraints];
+			m_psi[ i ] = yA[ i + numCoulpingConstraints];
 			
 		}
 		

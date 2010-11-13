@@ -91,13 +91,15 @@ void OSColGenApp::getCuts(const  double* x) {
 	
 }//end generateCuts
 
-void OSColGenApp::getColumns(const  double* y, const int numRows,
+void OSColGenApp::getColumns(const  double* yA, const int numARows,
+		const  double* yB, const int numBRows,
 		int &numColumns, int* numNonz, double* cost, 
 		int** rowIdx, double** values, double &lowerBound) 
  {
 
 
-	m_osrouteSolver->getColumns(y, numRows,
+	m_osrouteSolver->getColumns(yA, numARows,
+			yB, numBRows,
 			numColumns, numNonz, cost, 
 			rowIdx, values,  lowerBound);
 	
@@ -126,9 +128,21 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	int i;
 	int j;
 	int k;
-	int numRows;
-	// y holds the dual values
-	double *y = NULL;
+	//we include convexity constraints in this number
+	int numARows;
+	// y holds the dual values for the coupling constraints
+	double *yA = NULL;
+	//kipp -- really dangerous what happens when we add rows to si, these don't get added to 
+	//m_osinstanceMaster
+	// dimension y to number of nodes
+	yA = new double[m_osinstanceMaster->getConstraintNumber() ];
+	
+	//kipp -- hard coding, come back and fix with option
+	double *yB = NULL;
+	yB = new double[ 10000];
+	int numBRows;
+	
+	
 	int numColumns;
 	int* numNonz = NULL;
 	double* cost = NULL; 
@@ -164,15 +178,10 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 	}
 	
-	
-
-	
-	
 	//now for the row
 
-	
 	try{
-		numRows = m_osinstanceMaster->getConstraintNumber();
+		numARows = m_osrouteSolver->m_numNodes;
 		
 		CoinSolver *solver = NULL;
 		solver = new CoinSolver();
@@ -193,22 +202,22 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 
 		
 		
-		if(si->getNumRows() != numRows ) 
+		if(si->getNumRows() != numARows + m_osrouteSolver->m_numTourBreakCon - 1) {
+			std::cout << "si->getNumRows() = " << si->getNumRows() << std::endl;
+			std::cout << "numARows = " << numARows << std::endl;
+			std::cout << "m_numTourBreakCon = " << m_osrouteSolver->m_numTourBreakCon << std::endl;
 			throw ErrorClass("detect a row number inconsistency in solveRestrictedMasterRelaxation");
+		}
 		
 		
-		//kipp -- really dangerous what happens when we add rows to si, these don't get added to 
-		//m_osinstanceMaster
-		// dimension y to number of nodes
-		if( numRows > 0 ) y = new double[m_osinstanceMaster->getConstraintNumber() ];
 		
 		if(si->getRowPrice() == NULL  ) 
 			throw ErrorClass("problem getting dual values in solveRestrictedMasterRelaxation");
 		
 		
-		for(i = 0; i <  numRows; i++){
+		for(i = 0; i <  numARows; i++){
 			
-			*(y + i) = si->getRowPrice()[ i];
+			*(yA + i) = si->getRowPrice()[ i];
 			
 		}
 		
@@ -218,9 +227,11 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		while(lowerBound < -.01 && loopKount < 1000){
 			loopKount++;
+			numBRows = m_osrouteSolver->m_numTourBreakCon;
 			//kipp here is where the while loop goes
 			//start while loop
-			getColumns(y, numRows, numColumns, numNonz, 
+			getColumns(yA, numARows, yB, numBRows,
+					numColumns, numNonz, 
 					cost,  rowIdx, values,  lowerBound);
 			
 			std::cout << "LOWER BOUND = " <<  lowerBound   << std::endl;
@@ -246,16 +257,16 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			
 			if(si->getNumCols() != m_osrouteSolver->m_numThetaVar - 1) throw ErrorClass("number variables in solver not consistent with master");
 			
-			for(i = 0; i <  numRows; i++){
+			for(i = 0; i <  numARows; i++){
 				
-				*(y + i) = si->getRowPrice()[ i];
+				*(yA + i) = si->getRowPrice()[ i];
 				
 			}
 			
 		}//end while
 		
 		
-		
+
 		//get a primal solution
 		int numCols = 0;
 		double* theta = NULL;
@@ -267,7 +278,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		}
 	
 		m_osrouteSolver->pauHana( theta);
-	
 		
 		//add the cuts
 		// virtual void addRow(int numberElements,
@@ -291,17 +301,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				
 				
 			}
-			
-			//multiply by the transformation matrix
-			//tmpScatterArray contains the indexes of xij 
-			//variables in the tour-breaking cut
-			//int* m_thetaPnt;
-			//int* m_thetaIndex;
-			//int m_numThetaVar;
-			//int m_numThetaNonz;
-			//cutColIndexes 
-			//cutColValues 
-			
+
 			for(i = 0; i < m_osrouteSolver->m_numThetaVar - 1; i++){
 				
 				//get the xij indexes in this colum 
@@ -349,20 +349,17 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		}
 		
 		
+		//end loop
 		solver->solve();
-		
-		for(i=0; i < numCols; i++){
-			*(theta + i) = si->getColSolution()[i];
-		}
-	
-		
-		
+
 		
 		std::cout << "NUMBER OF ROWS =  " << si->getNumRows() << std::endl;
 	
+		delete[] yA;
+		yA = NULL;
 		
-		if(numRows > 0) delete[] y;
-		y = NULL;
+		delete[] yB;
+		yB = NULL;
 		
 		if(numCols > 0) delete[] theta;
 		theta = NULL;
