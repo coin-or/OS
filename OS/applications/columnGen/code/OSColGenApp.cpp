@@ -93,14 +93,14 @@ void OSColGenApp::getCuts(const  double* x) {
 
 void OSColGenApp::getColumns(const  double* yA, const int numARows,
 		const  double* yB, const int numBRows,
-		int &numColumns, int* numNonz, double* cost, 
+		int &numNewColumns, int* numNonz, double* cost, 
 		int** rowIdx, double** values, double &lowerBound) 
  {
 
 
 	m_osrouteSolver->getColumns(yA, numARows,
 			yB, numBRows,
-			numColumns, numNonz, cost, 
+			numNewColumns, numNonz, cost, 
 			rowIdx, values,  lowerBound);
 	
 	
@@ -142,8 +142,16 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	yB = new double[ 10000];
 	int numBRows;
 	
+	int numCols;
+	double* theta = NULL;
+	//kipp again hard coding -- remove later
+	int maxCols;
+	maxCols = 100000;
+	theta = new double[ maxCols];
 	
-	int numColumns;
+	
+	
+	int numNewColumns;
 	int* numNonz = NULL;
 	double* cost = NULL; 
 	int** rowIdx = NULL; 
@@ -191,17 +199,21 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 		solver->osinstance = m_osinstanceMaster;
 		solver->osoption = m_osoption;	
-		std::cout << "CALL Solveee  " << std::endl;
-		solver->solve();
-		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
-		//std::cout <<  solver->osrl << std::endl;
+		solver->buildSolverInstance();
+
 		
 		//get the solver interface
 		OsiSolverInterface *si = solver->osiSolver;
 		//get the dual solution 
+		
+		
+		
+		//start out loop on if cuts found
+		std::cout << "CALL Solve  " << std::endl;
+		solver->solve();
+		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+		//std::cout <<  solver->osrl << std::endl;
 
-		
-		
 		if(si->getNumRows() != numARows + m_osrouteSolver->m_numTourBreakCon - 1) {
 			std::cout << "si->getNumRows() = " << si->getNumRows() << std::endl;
 			std::cout << "numARows = " << numARows << std::endl;
@@ -215,9 +227,17 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			throw ErrorClass("problem getting dual values in solveRestrictedMasterRelaxation");
 		
 		
+		numBRows = m_osrouteSolver->m_numTourBreakCon;
+		
 		for(i = 0; i <  numARows; i++){
 			
 			*(yA + i) = si->getRowPrice()[ i];
+			
+		}
+		
+		for(i = numARows; i <  numARows + numBRows; i++){
+			
+			*(yB + i) = si->getRowPrice()[ i];
 			
 		}
 		
@@ -227,22 +247,23 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		while(lowerBound < -.01 && loopKount < 1000){
 			loopKount++;
-			numBRows = m_osrouteSolver->m_numTourBreakCon;
+			
 			//kipp here is where the while loop goes
 			//start while loop
 			getColumns(yA, numARows, yB, numBRows,
-					numColumns, numNonz, 
+					numNewColumns, numNonz, 
 					cost,  rowIdx, values,  lowerBound);
 			
 			std::cout << "LOWER BOUND = " <<  lowerBound   << std::endl;
 			
+			//kipp -- get rid of the variables below
 			numNonz = m_osrouteSolver->m_nonzVec; 
 			cost =  m_osrouteSolver->m_costVec; 
 			rowIdx = m_osrouteSolver->m_newColumnRowIdx; 
 			values = m_osrouteSolver->m_newColumnRowValue;
 			//add columns
 			
-			for(k = 0; k < numColumns; k++){
+			for(k = 0; k < numNewColumns; k++){
 				
 				si->addCol(numNonz[ k], rowIdx[k], values[k],
 						collb, colub,   cost[ k]) ;			
@@ -263,21 +284,27 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				
 			}
 			
+			
+			for(i = numARows; i <  numARows + numBRows; i++){
+				
+				*(yB + i) = si->getRowPrice()[ i];
+				
+			}
+			
 		}//end while
 		
 		
 
 		//get a primal solution
-		int numCols = 0;
-		double* theta = NULL;
+
 		numCols = si->getNumCols();
-		theta = new double[ numCols];
+		if(numCols + m_osrouteSolver->m_numHubs >= maxCols) throw ErrorClass("we ran out of columns");
 		
 		for(i=0; i < numCols; i++){
 			*(theta + i) = si->getColSolution()[i];
 		}
-	
-		m_osrouteSolver->pauHana( theta);
+
+		//m_osrouteSolver->pauHana( theta);
 		
 		//add the cuts
 		// virtual void addRow(int numberElements,
@@ -352,7 +379,11 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		//end loop
 		solver->solve();
 
-		
+		for(i=0; i < numCols; i++){
+			*(theta + i) = si->getColSolution()[i];
+		}
+
+		m_osrouteSolver->pauHana( theta);
 		std::cout << "NUMBER OF ROWS =  " << si->getNumRows() << std::endl;
 	
 		delete[] yA;
