@@ -883,7 +883,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 		}
 		
 		//get the reduced costs 
-		calcReducedCost( m_cost,  m_phi,  m_rc);
+		calcReducedCost( m_cost,  m_phi, yB,  m_rc);
 		
 		
 		
@@ -989,8 +989,8 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 				
 				if(rowCount > 0){
 					
-					//std::cout << "GAIL NODE " << i + m_numHubs <<  " COUNT = " << rowCount << std::endl;
-					m_newColumnRowIdx[ k][ numNonz] = i;
+					
+					m_newColumnRowIdx[ k][ numNonz] = i + m_numNodes;
 					m_newColumnRowValue[ k][ numNonz++] = rowCount;
 					
 				}
@@ -1649,6 +1649,8 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 		//the cut is based on the nodes with dual value - 1
 		
 		for(k = 0; k < indexAdjust; k++){
+			std::cout <<   std::endl << std::endl;
+			std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
 			m_separationClpModel->setRowUpper(k, 0.0);
 			m_separationClpModel->primal();		
 			if(m_separationClpModel->getObjValue() > m_eps){
@@ -1740,7 +1742,7 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 	return isCutAdded;
 }//end getCuts
 
-void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
+void OSRouteSolver::calcReducedCost( double** c, double* phi, const double* yB,  double* d){
 	
 	int k;
 	int i;
@@ -1753,15 +1755,18 @@ void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
 	
 	for(k = 0; k < m_numHubs; k++){
 		
+		
 		for(l = 0; l < m_upperBoundL; l++){
 			
 			
 			for(i = 0; i< m_numNodes; i++){
 				
-				//if we have (i, j) where j is hub then do not subtract off phi[ j]
+				//important phi[ j] is zero if j is hub node
 				for(j = 0; j < i; j++){
 					
 					m_rc[ kount++] = (l + 1)*c[k][ i*tmpVal + j ] - phi[ j];
+					
+					
 					
 				}
 				
@@ -1775,8 +1780,39 @@ void OSRouteSolver::calcReducedCost( double** c, double* phi, double* d){
 			}
 			
 			
-		}
+		}//end l loop
 		
+		
+	}//end hub loop
+	
+	//now adjust for tour breaking constraints
+
+	
+	int startPnt ;
+	
+	for(i = 0; i < m_numTourBreakCon; i++){
+		
+		//get the xij
+		
+		for(j = m_pntBmatrix[ i]; j < m_pntBmatrix[ i + 1]; j++){
+			
+			
+			
+			for(k = 0; k < m_numHubs; k++){
+				
+				
+				for(l = 1; l <= m_upperBoundL; l++){
+					
+					startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
+					
+					m_rc[ startPnt + m_Bmatrix[ j] ] = m_rc[ startPnt + m_Bmatrix[ j] ]  -  yB[ i];
+					
+				}
+				
+			}
+			
+
+		}
 		
 	}
 	

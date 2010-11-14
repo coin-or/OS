@@ -184,9 +184,10 @@ public:
 	/** calculate the reduced costs
 	 * c -- input of the objective function costs
 	 * phi -- dual values on node assignment
+	 * yB -- dual values on tour breaking constraints
 	 * d -- reduced with convexity dual value
 	 */
-	void calcReducedCost( double** c, double* phi, double* d);
+	void calcReducedCost( double** c, double* phi,  const double* yB,  double* d);
 	
 	//these are the variable in x(i, j) space
 	void createVariableNames( );

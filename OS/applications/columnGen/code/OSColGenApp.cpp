@@ -186,7 +186,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 	}
 	
-	//now for the row
+	bool isCutAdded;
 
 	try{
 		numARows = m_osrouteSolver->m_numNodes;
@@ -206,77 +206,31 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		OsiSolverInterface *si = solver->osiSolver;
 		//get the dual solution 
 		
+		isCutAdded = true;
 		
-		
-		//start out loop on if cuts found
-		std::cout << "CALL Solve  " << std::endl;
-		solver->solve();
-		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
-		//std::cout <<  solver->osrl << std::endl;
-
-		if(si->getNumRows() != numARows + m_osrouteSolver->m_numTourBreakCon - 1) {
-			std::cout << "si->getNumRows() = " << si->getNumRows() << std::endl;
-			std::cout << "numARows = " << numARows << std::endl;
-			std::cout << "m_numTourBreakCon = " << m_osrouteSolver->m_numTourBreakCon << std::endl;
-			throw ErrorClass("detect a row number inconsistency in solveRestrictedMasterRelaxation");
-		}
-		
-		
-		
-		if(si->getRowPrice() == NULL  ) 
-			throw ErrorClass("problem getting dual values in solveRestrictedMasterRelaxation");
-		
-		
-		numBRows = m_osrouteSolver->m_numTourBreakCon;
-		
-		for(i = 0; i <  numARows; i++){
+		while(isCutAdded == true && m_osrouteSolver->m_numTourBreakCon <= 100){
 			
-			*(yA + i) = si->getRowPrice()[ i];
-			
-		}
-		
-		for(i = numARows; i <  numARows + numBRows; i++){
-			
-			*(yB + i) = si->getRowPrice()[ i];
-			
-		}
-		
-		lowerBound = -1;
-		int loopKount = 0;
-		
-		
-		while(lowerBound < -.01 && loopKount < 1000){
-			loopKount++;
-			
-			//kipp here is where the while loop goes
-			//start while loop
-			getColumns(yA, numARows, yB, numBRows,
-					numNewColumns, numNonz, 
-					cost,  rowIdx, values,  lowerBound);
-			
-			std::cout << "LOWER BOUND = " <<  lowerBound   << std::endl;
-			
-			//kipp -- get rid of the variables below
-			numNonz = m_osrouteSolver->m_nonzVec; 
-			cost =  m_osrouteSolver->m_costVec; 
-			rowIdx = m_osrouteSolver->m_newColumnRowIdx; 
-			values = m_osrouteSolver->m_newColumnRowValue;
-			//add columns
-			
-			for(k = 0; k < numNewColumns; k++){
-				
-				si->addCol(numNonz[ k], rowIdx[k], values[k],
-						collb, colub,   cost[ k]) ;			
-				
-			}
-		
-			std::cout << std::endl  << std::endl << std::endl;
+			isCutAdded = false;
+			//start out loop on if cuts found
 			std::cout << "CALL Solve  " << std::endl;
 			solver->solve();
 			std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
-			std::cout << "Number of solver interface columns =  " <<  si->getNumCols()  << std::endl;
+			//std::cout <<  solver->osrl << std::endl;
+	
+			if(si->getNumRows() != numARows + m_osrouteSolver->m_numTourBreakCon - 1) {
+				std::cout << "si->getNumRows() = " << si->getNumRows() << std::endl;
+				std::cout << "numARows = " << numARows << std::endl;
+				std::cout << "m_numTourBreakCon = " << m_osrouteSolver->m_numTourBreakCon << std::endl;
+				throw ErrorClass("detect a row number inconsistency in solveRestrictedMasterRelaxation");
+			}
 			
-			if(si->getNumCols() != m_osrouteSolver->m_numThetaVar - 1) throw ErrorClass("number variables in solver not consistent with master");
+			
+			
+			if(si->getRowPrice() == NULL  ) 
+				throw ErrorClass("problem getting dual values in solveRestrictedMasterRelaxation");
+			
+			
+			numBRows = m_osrouteSolver->m_numTourBreakCon;
 			
 			for(i = 0; i <  numARows; i++){
 				
@@ -284,106 +238,159 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				
 			}
 			
-			
 			for(i = numARows; i <  numARows + numBRows; i++){
 				
-				*(yB + i) = si->getRowPrice()[ i];
+				*(yB + i - numARows) = si->getRowPrice()[ i];
 				
 			}
 			
-		}//end while
+			lowerBound = -1;
+			int loopKount = 0;
+			
+			
+			while(lowerBound < -.01 && loopKount < 10000){
+				loopKount++;
+				
+				//kipp here is where the while loop goes
+				//start while loop
+				getColumns(yA, numARows, yB, numBRows,
+						numNewColumns, numNonz, 
+						cost,  rowIdx, values,  lowerBound);
+				
+				std::cout << "LOWER BOUND = " <<  lowerBound   << std::endl;
+				
+				//kipp -- get rid of the variables below
+				numNonz = m_osrouteSolver->m_nonzVec; 
+				cost =  m_osrouteSolver->m_costVec; 
+				rowIdx = m_osrouteSolver->m_newColumnRowIdx; 
+				values = m_osrouteSolver->m_newColumnRowValue;
+				//add columns
+				
+				for(k = 0; k < numNewColumns; k++){
+					
+					si->addCol(numNonz[ k], rowIdx[k], values[k],
+							collb, colub,   cost[ k]) ;			
+					
+				}
+			
+				std::cout << std::endl  << std::endl << std::endl;
+				std::cout << "CALL Solve  " << std::endl;
+				solver->solve();
+				std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+				std::cout << "Number of solver interface columns =  " <<  si->getNumCols()  << std::endl;
+				
+				if(si->getNumCols() != m_osrouteSolver->m_numThetaVar - 1) throw ErrorClass("number variables in solver not consistent with master");
+				
+				for(i = 0; i <  numARows; i++){
+					
+					*(yA + i) = si->getRowPrice()[ i];
+					
+				}
+				
+				
+				for(i = numARows; i <  numARows + numBRows; i++){
+					
+					*(yB + i - numARows) = si->getRowPrice()[ i];
+					
+				}
+				
+			}//end while
+			
+			
+	
+			//get a primal solution
+	
+			numCols = si->getNumCols();
+			if(numCols + m_osrouteSolver->m_numHubs >= maxCols) throw ErrorClass("we ran out of columns");
+			
+			for(i=0; i < numCols; i++){
+				*(theta + i) = si->getColSolution()[i];
+			}
+	
+			//m_osrouteSolver->pauHana( theta);
+			
+			//add the cuts
+			// virtual void addRow(int numberElements,
+			//		const int *columns, const double *element,
+			//		const double rowlb, const double rowub) ;		
+			
+			numRowEls = 0;
+			
+			if(m_osrouteSolver->getCuts( theta,  numCols ) == true){
+				
+				isCutAdded = true;
+				
+				rowub = m_osrouteSolver->m_BmatrixRhs[ m_osrouteSolver->m_numTourBreakCon  - 1];
+				
 		
+				//scatter the constraint in the x - variables
+				
+				for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
+						i <  m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 1] ; i++){
+					
+					tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 1;
+					
+					
+					
+				}
+	
+				for(i = 0; i < m_osrouteSolver->m_numThetaVar - 1; i++){
+					
+					//get the xij indexes in this colum 
+					tmpKount = 0;
+					for(j = m_osrouteSolver->m_thetaPnt[i]; j < m_osrouteSolver->m_thetaPnt[i + 1] ;  j++){
+						
+						if(tmpScatterArray[ m_osrouteSolver->m_thetaIndex[ j] ] > 0 ){ //count number of xij for theta_i
+							
+							tmpKount++;
+							
+						}
+						
+					}//end loop on j
+					
+					if(tmpKount > 0){
+						//theta_i has a nonzero coefficient in this row
+						cutColIndexes[ numRowEls] = i;
+						cutColValues[ numRowEls++] = tmpKount;
+						
+						//std::cout << " INDEX = " << i <<  " VALUE = " << tmpKount << std::endl;
+						
+					}
+					
+				}//end loop on i
+				
+	
+				std::cout << " RHS = " <<  rowub << std::endl;
+				si->addRow(numRowEls, cutColIndexes, cutColValues,
+						rowlb, rowub ) ;	
+				
+				
+				
+				
+				//zero out the scatter array again
+				
+				for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
+						i <  m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 1] ; i++){
+					
+					tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 0;
+					
+					
+					
+				}		
+				
+			}// end if on wherther or not we got cuts
+			
+			
+			//end loop
+			solver->solve();
 		
+		}//end while on isCutAdded
 
-		//get a primal solution
-
-		numCols = si->getNumCols();
-		if(numCols + m_osrouteSolver->m_numHubs >= maxCols) throw ErrorClass("we ran out of columns");
-		
 		for(i=0; i < numCols; i++){
 			*(theta + i) = si->getColSolution()[i];
 		}
 
 		//m_osrouteSolver->pauHana( theta);
-		
-		//add the cuts
-		// virtual void addRow(int numberElements,
-		//		const int *columns, const double *element,
-		//		const double rowlb, const double rowub) ;		
-		
-		numRowEls = 0;
-		
-		if(m_osrouteSolver->getCuts( theta,  numCols ) == true){
-			
-			rowub = m_osrouteSolver->m_BmatrixRhs[ m_osrouteSolver->m_numTourBreakCon  - 1];
-			
-	
-			//scatter the constraint in the x - variables
-			
-			for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
-					i <  m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 1] ; i++){
-				
-				tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 1;
-				
-				
-				
-			}
-
-			for(i = 0; i < m_osrouteSolver->m_numThetaVar - 1; i++){
-				
-				//get the xij indexes in this colum 
-				tmpKount = 0;
-				for(j = m_osrouteSolver->m_thetaPnt[i]; j < m_osrouteSolver->m_thetaPnt[i + 1] ;  j++){
-					
-					if(tmpScatterArray[ m_osrouteSolver->m_thetaIndex[ j] ] > 0 ){ //count number of xij for theta_i
-						
-						tmpKount++;
-						
-					}
-					
-				}//end loop on j
-				
-				if(tmpKount > 0){
-					//theta_i has a nonzero coefficient in this row
-					cutColIndexes[ numRowEls] = i;
-					cutColValues[ numRowEls++] = tmpKount;
-					
-					//std::cout << " INDEX = " << i <<  " VALUE = " << tmpKount << std::endl;
-					
-				}
-				
-			}//end loop on i
-			
-
-			std::cout << " RHS = " <<  rowub << std::endl;
-			si->addRow(numRowEls, cutColIndexes, cutColValues,
-					rowlb, rowub ) ;	
-			
-			
-			
-			
-			//zero out the scatter array again
-			
-			for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
-					i <  m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 1] ; i++){
-				
-				tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 0;
-				
-				
-				
-			}		
-			
-		}
-		
-		
-		//end loop
-		solver->solve();
-
-		for(i=0; i < numCols; i++){
-			*(theta + i) = si->getColSolution()[i];
-		}
-
-		m_osrouteSolver->pauHana( theta);
 		std::cout << "NUMBER OF ROWS =  " << si->getNumRows() << std::endl;
 	
 		delete[] yA;
