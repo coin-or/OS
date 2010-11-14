@@ -68,8 +68,10 @@ public:
 	 * double lowerBound -- the lowerBound
 	 * 
 	 * INPUT:
-	 * double* y -- the vector of dual values
-	 * int numRows -- size of dual vector
+	 * double* yA -- the vector of dual values on the coupling constraints
+	 * int numARows -- size of the yA dual vector
+	 * double* yB -- the vector of dual values on the tour breaking constaints
+	 * int numBRows -- size of the yA dual vector
 	 */
 	void getColumns(const  double* yA, const int numARows,
 			const  double* yB, const int numBRows,

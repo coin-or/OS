@@ -624,8 +624,6 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 	}//end if on l == minDemand
 	
 
-	
-	
 // now calculate values for demand 2 or greater 	
 	//address of node (j, i) is j*(m_numNodes-1) + i when i < j
 	//address of node (j, i) is j*(m_numNodes-1) + i - 1 when i > j
@@ -716,7 +714,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 						
 						if( (m_g[j][i] < m_v[i][l2] ) && (m_px[i][l2] != j)  ){ // kipp the && gives the second best
 							
-							//if(g(j, i) < v(i, l2),
+						//if( m_g[j][i] < m_v[i][l2] )  {	
 							
 							m_v[i][l2] = m_g[j][i];
 							m_tx[i][l2] = j;	
@@ -727,7 +725,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 					}
 					
 					
-				}//end second best calculation, anothe for loop on j
+				}//end second best calculation, another for loop on j
 				
 				//now if l2 = l  we are done
 				if(l2 == l ){
@@ -1612,20 +1610,48 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 						tmpRhs[ rowKount] -= theta[ i];
 						
 					}
-
-					
 					
 				}
 			}
 		}
 		
+		
 		// don't adjust the kludge row
+		
+		
 		for(i = indexAdjust; i < numSepRows - 1; i++){
+			
+			if(-tmpRhs[ i] > 1){
+			
+				std::cout << " tmpRhs[ i] =  " << tmpRhs[ i]  << std::endl;
+				//which variable is this 
+				int tmpKount = indexAdjust;
+				for(int i1 = m_numHubs; i1 < m_numNodes; i1++){
+				
+				
+				
+					for(int j1 = i1+1; j1 < m_numNodes; j1++){
+						
+						if(tmpKount ==  i){
+							
+							std::cout << "i = " << i1 << std::endl;
+							std::cout << "j = " << j1 << std::endl;
+							
+						}
+						tmpKount++;
+					
+					}
+					
+				}
+			
+			
+			}
 			
 			m_separationClpModel->setRowUpper(i, tmpRhs[ i] );
 			m_separationClpModel->setRowLower(i, tmpRhs[ i] );		
 			
 		}
+		
 		
 		//std::cout << m_osinstanceSeparation->printModel() << std::endl;
 	
@@ -1640,14 +1666,16 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 		for(k = 0; k < indexAdjust; k++){
 			std::cout <<   std::endl << std::endl;
 			std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+			
 			m_separationClpModel->setRowUpper(k, 0.0);
 			m_separationClpModel->primal();		
+			std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
 			if(m_separationClpModel->getObjValue() > m_eps){
 				
 				isCutAdded = true;
 			
 				for(i = 0; i < m_numNodes - m_numHubs ; i++){
-					//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
+					std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
 					if( m_separationClpModel->getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
 				}
 				

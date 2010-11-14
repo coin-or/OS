@@ -387,16 +387,13 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		}
 
 		m_osrouteSolver->pauHana( theta);
-		std::cout << "NUMBER OF ROWS =  " << si->getNumRows() << std::endl;
 		
-		
+
 		//solve as an integer program
 		
 		for(i=0; i < numCols; i++){
 			solver->osiSolver->setInteger( i);
 		}
-		
-		
 		//solver->osiSolver->branchAndBound();
 		
 		//for(i=0; i < numCols; i++){

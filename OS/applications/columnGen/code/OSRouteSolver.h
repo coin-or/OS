@@ -87,8 +87,22 @@ public:
 	//these variable names are in x(i, j) space
 	std::string* m_variableNames;
 	
+	
+	//below  is a scatter array we scatter into in order
+	//to multiply the transformation matrix times the A matrix
+	int* m_tmpScatterArray;
+	
+	//arguments for getColumns
+	double m_lowerBnd;
+	int* m_nonzVec;
+	double* m_costVec;
+	int** m_newColumnRowIdx;
+	double** m_newColumnRowValue;
+	
+	
 	//arrays for the coupling constraint matrix
 	//we store indexes since values are 1.0
+	//also the RHS is 1.0
 	int* m_pntAmatrix;
 	int* m_Amatrix;
 	//
@@ -100,18 +114,6 @@ public:
 	int m_numTourBreakCon;
 	int m_numTourBreakNonz;
 	//
-	
-	//below  is a scatter array we scatter into in order
-	//to multiply the transformation matrix times the A matrix
-	int* m_tmpScatterArray;
-	
-	//arguments for getColumns
-	double m_lowerBnd;
-	int* m_nonzVec;
-	double* m_costVec;
-	
-	int** m_newColumnRowIdx;
-	double** m_newColumnRowValue;
 	
 	//the transformation matrix
 	int* m_thetaPnt;
