@@ -195,7 +195,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		solver = new CoinSolver();
 		//kipp -- later have clp be an option
 		//I guess for now it must be an Osi solver
-		solver->sSolverName ="clp";
+		solver->sSolverName ="cbc";
 		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 		solver->osinstance = m_osinstanceMaster;
 		solver->osoption = m_osoption;	
@@ -294,10 +294,9 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					
 				}
 				
-			}//end while
+			}//end while on column generation
 			
-			
-	
+
 			//get a primal solution
 	
 			numCols = si->getNumCols();
@@ -307,12 +306,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				*(theta + i) = si->getColSolution()[i];
 			}
 	
-			//m_osrouteSolver->pauHana( theta);
-			
-			//add the cuts
-			// virtual void addRow(int numberElements,
-			//		const int *columns, const double *element,
-			//		const double rowlb, const double rowub) ;		
 			
 			numRowEls = 0;
 			
@@ -360,13 +353,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				}//end loop on i
 				
 	
-				std::cout << " RHS = " <<  rowub << std::endl;
-				si->addRow(numRowEls, cutColIndexes, cutColValues,
-						rowlb, rowub ) ;	
-				
-				
-				
-				
+				si->addRow(numRowEls, cutColIndexes, cutColValues, rowlb, rowub ) ;	
+								
 				//zero out the scatter array again
 				
 				for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
@@ -374,15 +362,17 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					
 					tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 0;
 					
-					
-					
-				}		
+				}	
 				
-			}// end if on wherther or not we got cuts
+				
+				std::cout << std::endl;
+				std::cout << "CUTS WERE ADDED CALL SOLVE" << std::endl;
+				solver->solve();
+				
+			} // end if on whether or not we added cuts
 			
-			
-			//end loop
-			solver->solve();
+
+
 		
 		}//end while on isCutAdded
 
@@ -390,8 +380,23 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			*(theta + i) = si->getColSolution()[i];
 		}
 
-		//m_osrouteSolver->pauHana( theta);
+		m_osrouteSolver->pauHana( theta);
 		std::cout << "NUMBER OF ROWS =  " << si->getNumRows() << std::endl;
+		
+		
+		//solve as an integer program
+		
+		for(i=0; i < numCols; i++){
+			solver->osiSolver->setInteger( i);
+		}
+		
+		
+		solver->osiSolver->branchAndBound();
+		
+		for(i=0; i < numCols; i++){
+			if( si->getColSolution()[i] > 0)
+			std::cout <<  si->getColSolution()[i] << std::endl;
+		}
 	
 		delete[] yA;
 		yA = NULL;
