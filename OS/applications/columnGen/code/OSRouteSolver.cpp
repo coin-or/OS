@@ -74,7 +74,7 @@ OSRouteSolver::OSRouteSolver() {
 OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	std::cout << "INSIDE OSRouteSolver CONSTRUCTOR with OSOption argument" << std::endl;
 	
-	m_eps = 0.001;
+	m_eps = 0.00001;
 	m_u = NULL;
 	m_v = NULL;
 	m_g = NULL;
@@ -401,6 +401,9 @@ void OSRouteSolver::getOptL(const  double* c) {
 	//int startPntInc;
 	double trueMin;
 	
+	bool isFeasible;
+	isFeasible = false;
+	
 	kountVar = 0;
 	//startPntInc = m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes);
 	
@@ -471,9 +474,11 @@ void OSRouteSolver::getOptL(const  double* c) {
 		
 		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL && l >= 1){
 		
-			
+			//must execute this loop at least once
 			
 			//std::cout << "LL = " <<  l  << std::endl;
+			
+			isFeasible = true;
 			
 			
 			testVal = qrouteCost(m_numHubs -1 ,  l,  c,  &kountVar);
@@ -493,7 +498,13 @@ void OSRouteSolver::getOptL(const  double* c) {
 		}
 	}
 	
-	std::cout << "TRUE MIN = " <<  trueMin << std::endl;
+	//std::cout << "TRUE MIN = " <<  trueMin << std::endl;
+	
+	if( isFeasible == false){
+		
+		std::cout << "NOT ENOUGH CAPACITY " << std::endl;
+		throw ErrorClass( "NOT ENOUGH CAPACITY ");
+	}
 
 	k = m_numHubs -1;
 	
@@ -1618,13 +1629,13 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 		
 		// don't adjust the kludge row
 		
-		
 		for(i = indexAdjust; i < numSepRows - 1; i++){
 			
-			if(-tmpRhs[ i] > 1){
+			if(-tmpRhs[ i] > 1 + m_eps ){
 			
 				std::cout << " tmpRhs[ i] =  " << tmpRhs[ i]  << std::endl;
 				//which variable is this 
+				//kipp this an inefficient way of finding i and j -- improve this
 				int tmpKount = indexAdjust;
 				for(int i1 = m_numHubs; i1 < m_numNodes; i1++){
 				
@@ -1636,8 +1647,24 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 							
 							std::cout << "i = " << i1 << std::endl;
 							std::cout << "j = " << j1 << std::endl;
+							//okay generate a cut that says
+							// x(i1,j1) + x(j1, i1) << 1
+							//get index for i1,j1
+							m_Bmatrix[   m_numTourBreakNonz++ ] = i1*(m_numNodes - 1) + j1 - 1;
+							//get index for j1,i1
+							m_Bmatrix[   m_numTourBreakNonz++ ] = j1*(m_numNodes - 1) + i1;
+							m_BmatrixRhs[ m_numTourBreakCon ] =  1.0;
+							m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
+
+							
+							delete[] tmpRhs;
+							tmpRhs = NULL;
+							isCutAdded = true;
+							return isCutAdded;
+							
 							
 						}
+						
 						tmpKount++;
 					
 					}
@@ -1645,7 +1672,7 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 				}
 			
 			
-			}
+			}//end if on tmpRHS
 			
 			m_separationClpModel->setRowUpper(i, tmpRhs[ i] );
 			m_separationClpModel->setRowLower(i, tmpRhs[ i] );		
@@ -1675,7 +1702,7 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 				isCutAdded = true;
 			
 				for(i = 0; i < m_numNodes - m_numHubs ; i++){
-					std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
+					//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
 					if( m_separationClpModel->getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
 				}
 				
@@ -1996,6 +2023,7 @@ void OSRouteSolver::pauHana(const double* theta){
 	std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
 	std::cout << "NUMBER OF GENERATED CUTS  = " << m_numTourBreakCon - 1 << std::endl;
 	std::cout << "        PAU!!!" << std::endl;
+	
 	std::cout << std::endl <<  std::endl;
 		
 }//end pauHana -- no pun intended
