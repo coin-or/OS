@@ -393,10 +393,10 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		solver->osiSolver->branchAndBound();
 		
-		for(i=0; i < numCols; i++){
-			if( si->getColSolution()[i] > 0)
-			std::cout <<  si->getColSolution()[i] << std::endl;
-		}
+		//for(i=0; i < numCols; i++){
+		//	if( si->getColSolution()[i] > 0)
+		//	std::cout <<  si->getColSolution()[i] << std::endl;
+		//}
 	
 		delete[] yA;
 		yA = NULL;
