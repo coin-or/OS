@@ -55,16 +55,7 @@ public:
 	 * we asssume order is (k, l, i, j)
 	 */
 	double* m_rc;
-	/** dual vectors */
-	/** the dual vector on convexity row
-	 * see the paper for notation
-	 */
-	double* m_psi;
-	/** the dual vector on node assignments row
-	 * see the paper for notation
-	 */
-	double* m_phi;
-	
+
 	//will be the optimal reduced cost for each hub
 	double* m_optValHub;
 	
@@ -183,11 +174,11 @@ public:
 	
 	/** calculate the reduced costs
 	 * c -- input of the objective function costs
-	 * phi -- dual values on node assignment
+	 * yA -- dual values on node assignment -- coupling constraints
 	 * yB -- dual values on tour breaking constraints
 	 * d -- reduced with convexity dual value
 	 */
-	void calcReducedCost( double** c, double* phi,  const double* yB,  double* d);
+	void calcReducedCost(const double* yA,  const double* yB );
 	
 	//these are the variable in x(i, j) space
 	void createVariableNames( );

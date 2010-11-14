@@ -268,8 +268,14 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				
 				for(k = 0; k < numNewColumns; k++){
 					
-					si->addCol(numNonz[ k], rowIdx[k], values[k],
-							collb, colub,   cost[ k]) ;			
+					//si->addCol(numNonz[ k], rowIdx[k], values[k],
+					//		collb, colub,   cost[ k]) ;		
+					
+					
+					si->addCol( m_osrouteSolver->m_nonzVec[ k], 
+							m_osrouteSolver->m_newColumnRowIdx[k], 
+							m_osrouteSolver->m_newColumnRowValue[k],
+							collb, colub,   m_osrouteSolver->m_costVec[ k]) ;	
 					
 				}
 			
@@ -391,7 +397,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		}
 		
 		
-		solver->osiSolver->branchAndBound();
+		//solver->osiSolver->branchAndBound();
 		
 		//for(i=0; i < numCols; i++){
 		//	if( si->getColSolution()[i] > 0)

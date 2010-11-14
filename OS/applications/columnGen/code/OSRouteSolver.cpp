@@ -35,7 +35,7 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 
-
+#include "CoinTime.hpp"
 
 #include "ClpFactorization.hpp"
 #include "ClpNetworkMatrix.hpp"
@@ -51,6 +51,16 @@
 #  error "don't have header file for math"
 # endif
 #endif
+
+#ifdef HAVE_CTIME
+# include <ctime>
+#else
+# ifdef HAVE_TIME_H
+#  include <time.h>
+# else
+#  error "don't have header file for time"
+# endif
+#endif 
 
 
 
@@ -152,12 +162,6 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		//assume order is k, l, i, j
 		m_rc = new double[ m_numHubs*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes)];
 		
-		
-		//allocate memory for convexity row
-		m_psi = new double[ m_numHubs];
-		
-		//allocate memory for node assignment
-		m_phi = new double[ m_numNodes];
 		
 		m_optValHub = new double[ m_numHubs];
 		
@@ -316,11 +320,6 @@ OSRouteSolver::~OSRouteSolver(){
 	delete[] m_rc;
 	m_rc = NULL;
 	
-	delete[] m_phi;
-	m_phi = NULL;
-	
-	delete[] m_psi;
-	m_psi = NULL;
 	
 	delete[] m_optValHub;
 	m_optValHub = NULL;
@@ -865,25 +864,10 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 		
 		if(numARows != m_numNodes) throw ErrorClass("inconsistent row count in getColumns");
 		
-		for(i = 0; i < m_numHubs; i++){
-			
-			m_phi[i] = 0.0;
-		}
-		
-		for(i = 0; i < numCoulpingConstraints; i++){
-			
-			m_phi[ i + m_numHubs] = yA[ i];
-			
-		}
-		
-		for(i = 0; i < m_numHubs; i++){
-			
-			m_psi[ i ] = yA[ i + numCoulpingConstraints];
-			
-		}
+
 		
 		//get the reduced costs 
-		calcReducedCost( m_cost,  m_phi, yB,  m_rc);
+		calcReducedCost( yA, yB );
 		
 		
 		
@@ -896,7 +880,12 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 		
 		
 		//// get optimal q for each route
+		
+		double cpuTime;
+		double start = CoinCpuTime();
 		getOptL( m_rc);
+		cpuTime = CoinCpuTime() - start;
+		std::cout << "DYNAMIC PROGRSMMING CPU TIME  " << cpuTime << std::endl;
 		m_lowerBnd = 0.0;
 		for(k = 0; k < m_numHubs; k++){
 			
@@ -911,7 +900,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			///// calling qrouteCost
 			m_optValHub[ k] = qrouteCost(k,  m_optL[ k], m_rc,  &kountVar);
 			
-			m_optValHub[ k] -= m_psi[ k ];
+			m_optValHub[ k] -= yA[ k + numCoulpingConstraints];
 			
 			std::cout << "Best Reduced Cost Hub " << k << " =  "  << m_optValHub[ k] << std::endl;
 			m_lowerBnd += m_optValHub[ k];
@@ -1742,7 +1731,7 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 	return isCutAdded;
 }//end getCuts
 
-void OSRouteSolver::calcReducedCost( double** c, double* phi, const double* yB,  double* d){
+void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 	
 	int k;
 	int i;
@@ -1761,18 +1750,37 @@ void OSRouteSolver::calcReducedCost( double** c, double* phi, const double* yB, 
 			
 			for(i = 0; i< m_numNodes; i++){
 				
-				//important phi[ j] is zero if j is hub node
+
+				
 				for(j = 0; j < i; j++){
-					
-					m_rc[ kount++] = (l + 1)*c[k][ i*tmpVal + j ] - phi[ j];
-					
+				
+					if(j < m_numHubs){
+						
+						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j ] ;
+						
+					}else{
+						
+						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j ] - yA[ j - m_numHubs] ;
+					}
 					
 					
 				}
 				
+
+				
 				for(j = i + 1; j < m_numNodes; j++){
 					
-					m_rc[ kount++] = (l + 1)*c[k][ i*tmpVal + j - 1 ] - phi[ j];
+					
+					if(j < m_numHubs){
+					
+						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j - 1 ];
+					
+					} else {
+						
+						
+						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j - 1 ] - yA[ j - m_numHubs ];
+						
+					}
 					
 				}
 				
@@ -1805,7 +1813,7 @@ void OSRouteSolver::calcReducedCost( double** c, double* phi, const double* yB, 
 					
 					startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					
-					m_rc[ startPnt + m_Bmatrix[ j] ] = m_rc[ startPnt + m_Bmatrix[ j] ]  -  yB[ i];
+					m_rc[ startPnt + m_Bmatrix[ j] ]  -=  yB[ i];
 					
 				}
 				
@@ -1921,9 +1929,7 @@ void OSRouteSolver::pauHana(const double* theta){
 	}
 	
 	
-	std::cout << "FINAL SOLUTION VALUE = " << cost << std::endl;
-	std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
-	std::cout << std::endl <<  std::endl;
+
 	
 	float numSets;
 	int kount;
@@ -1956,6 +1962,13 @@ void OSRouteSolver::pauHana(const double* theta){
 		}//loop on hubs
 	
 	}//loop on sets
+	
+	std::cout << std::endl <<  std::endl;
+	std::cout << "FINAL SOLUTION VALUE = " << cost << std::endl;
+	std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
+	std::cout << "NUMBER OF GENERATED CUTS  = " << m_numTourBreakCon - 1 << std::endl;
+	std::cout << "        PAU!!!" << std::endl;
+	std::cout << std::endl <<  std::endl;
 		
 }//end pauHana -- no pun intended
 
