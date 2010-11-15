@@ -852,8 +852,8 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 		const  double* yB, const int numBRows,
-		int &numColumns, int* numNonzVec, double* costVec, 
-		int** rowIdxVec, double** valuesVec, double &lowerBound) 
+		int &numNewColumns, int* &numNonzVec, double* &costVec, 
+		int** &rowIdxVec, double** &valuesVec, double &lowerBound) 
 {
 	
 //first strip of the phi dual values and then the convexity row costs
@@ -999,6 +999,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			m_nonzVec[ k] = numNonz;
 			
 			
+			
 			//zero out the scatter vector and store the generated column
 			for(j = 0; j < kountVar; j++){
 				
@@ -1015,7 +1016,11 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			m_thetaCost[ m_numThetaVar ] = m_costVec[ k];
 			m_thetaPnt[ m_numThetaVar++ ]  = m_numThetaNonz;
 			
-			//std::cout << "GAIL COST VECTOR " <<  m_costVec[ k] << std::endl;
+			numNonzVec = m_nonzVec;
+			costVec = m_costVec;
+			rowIdxVec = m_newColumnRowIdx;
+			valuesVec = m_newColumnRowValue;		
+
 			
 			//stuff for debugging
 			//*****************************//
@@ -1080,7 +1085,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 	
 	
 	//set method parameters
-	numColumns = m_numHubs;
+	numNewColumns = m_numHubs;
 	lowerBound =  m_lowerBnd;
 	
 	std::cout << "LEAVING GET COLUMNS" << std::endl;

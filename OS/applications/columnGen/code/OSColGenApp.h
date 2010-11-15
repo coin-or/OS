@@ -56,11 +56,11 @@ public:
 	
 	void getOptions( OSOption *osoption);
 	
-	void getCuts(const  double* x) ;
+	void getCuts(const  double* theta) ;
 	
 	/**
 	 * RETURN VALUES: 
-	 * int numColumns -- number of new columns generated
+	 * int numNewColumns -- number of new columns generated
 	 * int* numNonz -- number of nonzeros in each column
 	 * double* cost -- the objective function coefficient on each new column
 	 * double** rowIdx -- vectors row indexes of new columns
@@ -75,8 +75,8 @@ public:
 	 */
 	void getColumns(const  double* yA, const int numARows,
 			const  double* yB, const int numBRows,
-			int &numColumns, int* numNonz, double* cost, 
-			int** rowIdx, double** values, double &lowerBound) ;
+			int &numNewColumns, int* &numNonz, double* &cost, 
+			int** &rowIdx, double** &values, double &lowerBound) ;
 	
 	/**
 	 *

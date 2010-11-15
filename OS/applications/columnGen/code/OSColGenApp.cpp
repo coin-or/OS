@@ -71,6 +71,9 @@ OSColGenApp::~OSColGenApp(){
 	
 	std::cout << "INSIDE ~OSColGenApp DESTRUCTOR" << std::endl;
 
+	//kipp -- why doesn't m_osrouteSolver delete the 
+	//m_osinstanceMaster object
+	
 	if( m_osinstanceMaster != NULL) delete  m_osinstanceMaster;
 
 	if( m_osrouteSolver != NULL) delete  m_osrouteSolver;
@@ -91,17 +94,17 @@ void OSColGenApp::getCuts(const  double* x) {
 	
 }//end generateCuts
 
-void OSColGenApp::getColumns(const  double* yA, const int numARows,
-		const  double* yB, const int numBRows,
-		int &numNewColumns, int* numNonz, double* cost, 
-		int** rowIdx, double** values, double &lowerBound) 
- {
 
+void OSColGenApp::getColumns(const  double* yA, const int numARows,
+			const  double* yB, const int numBRows,
+			int &numNewColumns, int* &numNonz, double* &cost, 
+			int** &rowIdx, double** &values, double &lowerBound) {
 
 	m_osrouteSolver->getColumns(yA, numARows,
-			yB, numBRows,
-			numNewColumns, numNonz, cost, 
-			rowIdx, values,  lowerBound);
+			yB, numBRows, numNewColumns, numNonz, 
+			cost, rowIdx, values,  lowerBound);
+	
+
 	
 	
 }//end generateColumns
@@ -150,18 +153,20 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	theta = new double[ maxCols];
 	
 	
-	
+	//getColumns function call return parameters
 	int numNewColumns;
 	int* numNonz = NULL;
 	double* cost = NULL; 
 	int** rowIdx = NULL; 
 	double** values = NULL ; 
 	double lowerBound;
+	//end of getColumns function call return parameters
+	
 	double collb;
 	double colub;
+	//all of our theta columns have a lower bound of 0 and upper bound of 1
 	collb = 0.0;
 	colub = 1.0;
-	
 	
 	double rowlb;
 	rowlb = 0.0;
@@ -257,25 +262,12 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 						numNewColumns, numNonz, 
 						cost,  rowIdx, values,  lowerBound);
 				
-				std::cout << "LOWER BOUND = " <<  lowerBound   << std::endl;
-				
-				//kipp -- get rid of the variables below
-				numNonz = m_osrouteSolver->m_nonzVec; 
-				cost =  m_osrouteSolver->m_costVec; 
-				rowIdx = m_osrouteSolver->m_newColumnRowIdx; 
-				values = m_osrouteSolver->m_newColumnRowValue;
-				//add columns
-				
+				std::cout << "Lower Bound = " <<  lowerBound   << std::endl;
+			
 				for(k = 0; k < numNewColumns; k++){
 					
-					//si->addCol(numNonz[ k], rowIdx[k], values[k],
-					//		collb, colub,   cost[ k]) ;		
-					
-					
-					si->addCol( m_osrouteSolver->m_nonzVec[ k], 
-							m_osrouteSolver->m_newColumnRowIdx[k], 
-							m_osrouteSolver->m_newColumnRowValue[k],
-							collb, colub,   m_osrouteSolver->m_costVec[ k]) ;	
+					si->addCol( numNonz[ k], rowIdx[k], values[k],
+							collb, colub,  cost[ k]) ;	
 					
 				}
 			
