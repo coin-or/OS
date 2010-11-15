@@ -117,9 +117,16 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		int k;
 		int i;
-	
 		int l;
 		
+		/**
+		 * m_u[i, l] -- this will be the minimum cost of reaching
+		 * node i on a q-route with demand l, note that m_u[ i] has
+		 * dimension m_upperBoundL + 1 so the possible values for l
+		 * are l = 0, 1, \ldots, m_upperBoundL -- l is the actual value
+		 * of demand
+		 * 
+		 */
 		
 		for (i = 0; i < m_numNodes; i++) {
 			
@@ -127,7 +134,10 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			m_u[ i] = new double[ m_upperBoundL + 1];
 			m_v[ i] = new double[ m_upperBoundL + 1];
 			
+			
+			
 			for(l = 0; l <= m_upperBoundL; l++){
+
 				m_u[ i][l] = OSDBL_MAX;
 				m_v[ i][l] = OSDBL_MAX;
 			}
@@ -1805,7 +1815,7 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 	for(k = 0; k < m_numHubs; k++){
 		
 		
-		for(l = 0; l < m_upperBoundL; l++){
+		for(l = 1; l <= m_upperBoundL; l++){
 			
 			
 			for(i = 0; i< m_numNodes; i++){
@@ -1816,11 +1826,11 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 				
 					if(j < m_numHubs){
 						
-						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j ] ;
+						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j ] ;
 						
 					}else{
 						
-						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j ] - yA[ j - m_numHubs] ;
+						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j ] - yA[ j - m_numHubs] ;
 					}
 					
 					
@@ -1833,12 +1843,12 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 					
 					if(j < m_numHubs){
 					
-						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j - 1 ];
+						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ];
 					
 					} else {
 						
 						
-						m_rc[ kount++] = (l + 1)*m_cost[k][ i*tmpVal + j - 1 ] - yA[ j - m_numHubs ];
+						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ] - yA[ j - m_numHubs ];
 						
 					}
 					
