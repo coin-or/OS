@@ -146,11 +146,13 @@ GeneralResult::~GeneralResult(){
 	cout << "GeneralResult Destructor Called" << endl;
 	#endif
 	if (generalStatus != NULL)
-	{	delete generalStatus;
+	{	
+		delete generalStatus;
 		generalStatus = NULL;
 	}
 	if (otherResults != NULL)
-	{	delete otherResults;
+	{	
+		delete otherResults;
 		otherResults = NULL;
 	}
 }// end GeneralResult destructor
@@ -713,6 +715,14 @@ OtherObjectiveResult::~OtherObjectiveResult(){
 		delete[] obj; 
 		obj = NULL;
 	}
+	if (enumeration != NULL)
+	{	for(int i = 0; i < numberOfEnumerations; i++){
+			delete enumeration[i];
+			enumeration[i] = NULL;
+		}
+		delete[] enumeration;
+		enumeration = NULL;
+	}
 }// end OtherObjectiveResult destructor
 
 
@@ -840,6 +850,14 @@ OtherConstraintResult::~OtherConstraintResult(){
 		}
 		delete[] con;
 		con = NULL;
+	}
+	if (enumeration != NULL)
+	{	for(int i = 0; i < numberOfEnumerations; i++){
+			delete enumeration[i];
+			enumeration[i] = NULL;
+		}
+		delete[] enumeration;
+		enumeration = NULL;
 	}
 }// end OtherConstraintResult destructor
 
@@ -1097,39 +1115,56 @@ OSResult::~OSResult(){
 	#endif
 	// delete the children of OSResult
 	// delete general object
-	if(general != NULL) delete general;
-	general = NULL;
+	if (general != NULL) 
+	{
+		delete general;
+		general = NULL;
+	}
 	//delete system object
-	if(system != NULL)  delete system;
-	system = NULL;
+	if (system != NULL)  
+	{
+		delete system;
+		system = NULL;
+	}
 	//delete service object
-	if(service != NULL)  delete service;
-	service = NULL;
+	if (service != NULL)  
+	{
+		delete service;
+		service = NULL;
+	}
 	//delete job object
-	if(job != NULL)  delete job;
-	job = NULL;
+	if (job != NULL)  
+	{
+		delete job;
+		job = NULL;
+	}
 	//delete optimization object
-	if(optimization != NULL)  delete optimization;
-	optimization = NULL;
+	if (optimization != NULL)  
+	{
+		delete optimization;
+		optimization = NULL;
+	}
 	
 	int k;
 
-	if(m_mdPrimalValues != NULL) delete[] m_mdPrimalValues;
+	if (m_mdPrimalValues != NULL) delete[] m_mdPrimalValues;
 	m_mdPrimalValues = 0;
-	if(m_mdDualValues != NULL) delete[] m_mdDualValues;
+
+	if (m_mdDualValues != NULL) delete[] m_mdDualValues;
 	m_mdDualValues = 0;
 	
 	int numPrimalVals =  this->primalVals.size();
-  	for(k = 0; k < numPrimalVals; k++){	
-  		if( this->primalVals[ k]  != NULL  ) 
+  	for (k = 0; k < numPrimalVals; k++)
+	{
+  		if (this->primalVals[ k]  != NULL  ) 
 			delete this->primalVals[ k];
   	}
   	this->primalVals.clear();
 	
-	
 	int numDualVals =  this->dualVals.size();
-  	for(k = 0; k < numDualVals; k++){
-  		if( this->dualVals[ k]  != NULL  ) 
+  	for (k = 0; k < numDualVals; k++)
+	{
+  		if (this->dualVals[ k]  != NULL  ) 
 			delete this->dualVals[ k];
   	}
   	this->dualVals.clear();

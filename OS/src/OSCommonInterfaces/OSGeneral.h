@@ -371,6 +371,15 @@ public:
 	 */
 	int getEl(int j);
 
+
+	/**
+	 *  Get the integer data array of an IntVector
+	 *  @param i is the location where the user wants to store the array
+	 *  @return the value
+	 *
+	 *  @note it is the user's responsibility to reserve sufficient memory to hold the vector being returned.
+	 */
+	bool getEl(int *i);
 };//class IntVector
 
 
@@ -490,10 +499,21 @@ public:
  *  Get one entry in the array of indices for a particular status
  *  @param status is a string representing the allowed statuses 
  *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
- *  @param j is the (zero-based) position of the entry within the arry
+ *  @param j is the (zero-based) position of the entry within the array
  *  @return the value
  */
 	int getEl(int status, int j);
+
+/**
+ *  Get the entire array of indices for a particular status
+ *  @param status is a string representing the allowed statuses 
+ *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *  @param i is the location where the user wants to store the array
+ *  @return the value
+ *
+ *  @note it is the user's responsibility to reserve sufficient memory to hold the vector being returned.
+ */
+	bool getIntVector(int status, int *i);
 };//class BasisStatus 
 	
 class OSGeneral{

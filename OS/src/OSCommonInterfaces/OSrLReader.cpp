@@ -65,7 +65,7 @@ OSrLReader::~OSrLReader(){
 #endif
 	osrllex_destroy(m_parserData->scanner );
 
-	// findally delete parser data
+	// finally delete parser data
 #ifdef OSRLREADER_DEBUG
 	std::cout << "delete parser data" << std::endl;
 #endif

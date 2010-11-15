@@ -108,7 +108,7 @@ std::string writeOtherOptionEnumeration(OtherOptionEnumeration *e, bool addWhite
 std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBase64)
 {
 	ostringstream outStr;
-	int mult, incr;
+	int mult;
 
 	if (v->numberOfEl > 0)
 	{

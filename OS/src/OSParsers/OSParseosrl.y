@@ -2840,7 +2840,7 @@ otherConEnumeration: otherConEnumerationStart otherConEnumerationAttributes othe
 { 	
 	if (osresult->setOtherOptionEnumeration(parserData->solutionIdx, parserData->iOther, 'c', parserData->kounter, parserData->valueAttribute, 
 			parserData->descriptionAttribute, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
-		osrlerror(NULL, NULL, parserData, osglData, "set other constraint option failed");	
+		osrlerror(NULL, NULL, parserData, osglData, "set other constraint option failed");
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;

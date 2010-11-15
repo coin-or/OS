@@ -291,8 +291,15 @@ int IntVector::getNumberOfEl()
 int IntVector::getEl(int j)
 {
 	if (j < 0 || j >= this->numberOfEl)
-		throw ErrorClass("Attempting to access undefined memory in IntVector::getEl");  
+		throw ErrorClass("Attempting to access undefined memory in IntVector::getEl(j)");  
 	return this->el[j];
+}
+
+bool IntVector::getEl(int* i)
+{
+	for (int j=0; j < this->numberOfEl; ++j)
+		i[j] = this->el[j];  
+	return true;
 }
 
 bool IntVector::IsEqual(IntVector *that)
@@ -346,9 +353,9 @@ bool IntVector::IsEqual(IntVector *that)
 
 
 OtherOptionEnumeration::OtherOptionEnumeration():
+	IntVector(),
 	value(""),
-	description(""),
-	IntVector()
+	description("")
 {  
 	#ifdef DEBUG
 	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
@@ -356,9 +363,9 @@ OtherOptionEnumeration::OtherOptionEnumeration():
 } 
 
 OtherOptionEnumeration::OtherOptionEnumeration(int n):
+	IntVector(n),
 	value(""),
-	description(""),
-	IntVector(n)
+	description("")
 {  
 	#ifdef DEBUG
 	cout << "Inside the OtherOptionEnumeration Constructor" << endl;
@@ -374,13 +381,8 @@ OtherOptionEnumeration::~OtherOptionEnumeration()
 
 bool OtherOptionEnumeration::setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni)
 {
-//	if (this->el == NULL) this->el = new int[ni];
 	this->value = value;
 	this->description = description;
-//	this->numberOfEl = ni;
-//	for (int j=0; j<ni; j++)
-//		this->el[j] = i[j];
-//	return true;
 	return this->IntVector::setIntVector(i, ni);
 }
 
@@ -570,62 +572,82 @@ bool BasisStatus::setIntVector(int status, int *i, int ni)
 		{
 			if (this->basic == NULL) this->basic = new IntVector();
 //			else delete[] this->basic;
-//			this->basic->numberOfEl = ni;
-//			for (int j=0; j<ni; j++)
-//				this->basic->el[j] = i[j];
-//			return true;
 			return this->basic->setIntVector(i, ni);
 		}
 		case ENUM_BASIS_STATUS_atLower:
 		{
 			if (this->atLower == NULL) this->atLower = new IntVector(ni);
-			else delete[] this->atLower;
-			this->atLower->numberOfEl = ni;
-			for (int j=0; j<ni; j++)
-				this->atLower->el[j] = i[j];
-			return true;
+//			else delete[] this->atLower;
+			return this->atLower->setIntVector(i, ni);
 		}
 		case ENUM_BASIS_STATUS_atUpper:
 		{
 			if (this->atUpper == NULL) this->atUpper = new IntVector(ni);
-			else delete[] this->atUpper;
-			this->atUpper->numberOfEl = ni;
-			for (int j=0; j<ni; j++)
-				this->atUpper->el[j] = i[j];
-			return true;
+//			else delete[] this->atUpper;
+			return this->atUpper->setIntVector(i, ni);
 		}
 		case ENUM_BASIS_STATUS_isFree:
 		{
 			if (this->isFree == NULL) this->isFree = new IntVector(ni);
-			else delete[] this->isFree;
-			this->isFree->numberOfEl = ni;
-			for (int j=0; j<ni; j++)
-				this->isFree->el[j] = i[j];
-			return true;
+//			else delete[] this->isFree;
+			return this->isFree->setIntVector(i, ni);
 		}
 		case ENUM_BASIS_STATUS_superbasic:
 		{
 			if (this->superbasic == NULL) this->superbasic = new IntVector(ni);
-			else delete[] this->superbasic;
-			this->superbasic->numberOfEl = ni;
-			for (int j=0; j<ni; j++)
-				this->superbasic->el[j] = i[j];
-			return true;
+//			else delete[] this->superbasic;
+			return this->superbasic->setIntVector(i, ni);
 		}
 		case ENUM_BASIS_STATUS_unknown:
 		{
 			if (this->unknown == NULL) this->unknown = new IntVector(ni);
-			else delete[] this->unknown;
-			this->unknown->numberOfEl = ni;
-			for (int j=0; j<ni; j++)
-				this->unknown->el[j] = i[j];
-			return true;
+//			else delete[] this->unknown;
+			return this->unknown->setIntVector(i, ni);
 		}
 	default:
 		throw ErrorClass("Unknown basis status encountered in setIntVector");  
 	 }
 }//BasisStatus::setIntVector
 
+
+bool BasisStatus::getIntVector(int status, int *i)
+{
+	switch (status)
+	{
+		case ENUM_BASIS_STATUS_basic:
+		{
+			if (this->basic == NULL) return false;
+			return this->basic->getEl(i);
+		}
+		case ENUM_BASIS_STATUS_atLower:
+		{
+			if (this->atLower == NULL) return false;
+			return this->atLower->getEl(i);
+		}
+		case ENUM_BASIS_STATUS_atUpper:
+		{
+			if (this->atUpper == NULL) return false;
+			return this->atUpper->getEl(i);
+		}
+		case ENUM_BASIS_STATUS_isFree:
+		{
+			if (this->isFree == NULL) return false;
+			return this->isFree->getEl(i);
+		}
+		case ENUM_BASIS_STATUS_superbasic:
+		{
+			if (this->superbasic == NULL) return false;
+			return this->superbasic->getEl(i);
+		}
+		case ENUM_BASIS_STATUS_unknown:
+		{
+			if (this->unknown == NULL) return false;
+			return this->unknown->getEl(i);
+		}
+	default:
+		throw ErrorClass("Unknown basis status encountered in setIntVector");  
+	 }
+}//BasisStatus::getIntVector
 
 
 int BasisStatus::getNumberOfEl(int status)

@@ -435,6 +435,7 @@ if(BASIC_TESTS == true){
 			cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		}
 		delete mps2osil;
+		mps2osil = NULL;
 		delete osilreader;
 		osilreader = NULL;
 
@@ -562,30 +563,30 @@ if (SOLVER_TESTS){
 		cout << "read successfully" << endl;
 #endif
 		delete osilreader;
+		osilreader = NULL;	
 #ifdef DEBUG
 		cout << "osilreader successfully deleted" << endl;
 #endif
-		osilreader = NULL;	
 		delete osolreader;
+		osolreader = NULL;	
 #ifdef DEBUG
 		cout << "osolreader successfully deleted" << endl;
 #endif
-		osolreader = NULL;	
 		delete solver;
+		solver = NULL;
 #ifdef DEBUG
 		cout << "solver successfully deleted" << endl;
 #endif
-		solver = NULL;
 		delete osilwriter;
+		osilwriter = NULL;
 #ifdef DEBUG
 		cout << "osilwriter successfully deleted" << endl;
 #endif
-		osilwriter = NULL;
 		delete osrlreader;
+		osrlreader = NULL;
 #ifdef DEBUG
 		cout << "osrlreader successfully deleted" << endl;
 #endif		
-		osrlreader = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -1476,6 +1477,8 @@ if(THOROUGH == true){
 			if(ok == false) 
 			{	cout << "Ipopt solver returns:" << endl;
 				cout << solver->osrl << endl;
+				delete solver;
+				solver = NULL;
 				throw ErrorClass(" Fail unit test with Ipopt on HS071_feas.osil");
 			}
 		}
@@ -2168,8 +2171,8 @@ if( THOROUGH == true){
 		if(ok == false) throw ErrorClass(" Fail unit test with LINDO on wayneQuadratic.osil");
 		delete solver;
 		solver = NULL;
-		osilreader = NULL;	
 		delete osolreader;
+		osolreader = NULL;	
 		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		*/
@@ -2249,6 +2252,7 @@ if (OTHER_TESTS){
 	std::cout << gams2osil->osinstance->printModel() << std::endl;
 	std::cout  << "Done Working with GAMSIO " << std::endl;
 	delete gams2osil;
+	gams2osil = NULL;
 	exit( 1);
 #endif
 #endif
@@ -2407,7 +2411,9 @@ if (OTHER_TESTS){
 		
 		//delete osinstance;
 		delete[] nodeNames1;
+		nodeNames1 = NULL;
 		delete[] nodeNames2; 
+		nodeNames2 = NULL;
 
 		delete osilreader;
 		osilreader = NULL;
@@ -2522,6 +2528,7 @@ if (OTHER_TESTS){
 		ok = ( fabs(checkPartial3Con1 - sp->values[ 2] )/(fabs( checkPartial3Con1) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing gradient calculation");
 		delete sp;
+		sp = NULL;
 		SparseHessianMatrix *sh;
 		// calcuate Hessian of objective function (index = -1)
 		osinstance->getLagrangianHessianSparsityPattern( );
@@ -2579,7 +2586,7 @@ if (PARSER_TESTS){
 		osilreader->readOSiL( osil);
 		//cout << osilwriter->writeOSiL( osilreader->readOSiL( osil)) << endl;
 		delete osilreader;
-		osilreader = 0;
+		osilreader = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
 		finish = clock();
@@ -2622,7 +2629,7 @@ if (PARSER_TESTS){
 		osilreader->readOSiL( osil);
 		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
 		delete osilreader;
-		osilreader = 0;
+		osilreader = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
 		finish = clock();
@@ -3559,7 +3566,9 @@ if (PARSER_TESTS){
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		if(osolwriter != NULL) delete osolwriter;
+		osolwriter = NULL;
 		if(osolreader != NULL) delete osolreader;
+		osolreader = NULL;
 		// " Problem with the test reading OSoL data";
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
@@ -3574,12 +3583,15 @@ if (PARSER_TESTS){
  *  after the second object has been updated in the same way, the objects should 
  *  again be equal.
  */
+
+	OSResult *osresult;
 	OSResult *osresult1 = new OSResult();
 	OSResult *osresult2 = new OSResult();
 	OSResult *osresult3 = NULL;
 
 	int* intArray;
 	intArray = new int[3];
+	int* tempArray = new int[3];
 
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": OSrL set() tools" << endl << endl;
@@ -6134,7 +6146,7 @@ if (PARSER_TESTS){
 					throw ErrorClass("Error during setVarValueString!");
 			}
 
-			int* tempArray = new int[3];
+//			int* tempArray = new int[3];
 			tempInt = osresult1->getBasisStatusNumberOfEl(i,'v',ENUM_BASIS_STATUS_basic);
 			for (int j=0; j<tempInt; ++j)
 				tempArray[j] = osresult1->getBasisStatusEl(i,'v',ENUM_BASIS_STATUS_basic,j);
@@ -6550,9 +6562,17 @@ if (PARSER_TESTS){
 		std::cout << "OSResult object duplicated with get() and set() methods" << std::endl;
 
 		if (osrlwriter != NULL) delete osrlwriter;
+		osrlwriter = NULL;
 		if (osrlreader != NULL) delete osrlreader;
+		osrlreader = NULL;
 		if (osresult1  != NULL) delete osresult1;
+		osresult1 = NULL;
 		if (osresult2  != NULL) delete osresult2;
+		osresult2 = NULL;
+//		if (osresult   != NULL) delete osresult;
+//		osresult = NULL;
+		if (tempArray  != NULL) delete[] tempArray;
+		tempArray = NULL;
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -6561,9 +6581,17 @@ if (PARSER_TESTS){
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
 		if (osrlwriter != NULL) delete osrlwriter;
+		osrlwriter = NULL;
 		if (osrlreader != NULL) delete osrlreader;
+		osrlreader = NULL;
 		if (osresult1  != NULL) delete osresult1;
+		osresult1 = NULL;
 		if (osresult2  != NULL) delete osresult2;
+		osresult2 = NULL;
+//		if (osresult   != NULL) delete osresult;
+//		osresult = NULL;
+		if (tempArray  != NULL) delete[] tempArray;
+		tempArray = NULL;
 		// " Problem with the test reading OSoL data";
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test of OSrL get() methods" << endl;
@@ -6584,10 +6612,8 @@ if (PARSER_TESTS){
 		clock_t start, finish;
 		double duration;
 		std::string osrl;
-		OSResult *osresult = NULL;
 		osrlwriter = new OSrLWriter();
 		osrlreader = new OSrLReader();
-		//osresult = new OSResult(); 
 		cout << "Test parsing an OSrL file" << endl;
 		cout << "First read the OSrL file into a string" << endl;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
@@ -6602,16 +6628,16 @@ if (PARSER_TESTS){
 		osresult = osrlreader->readOSrL( osrl);
 		cout << "Finished read; write OSResult object to temporary string" << endl;
 
-		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
+		tmpOSrL = osrlwriter->writeOSrL( osresult);
+
 		cout << tmpOSrL << endl;
 
 
 		// make sure we can parse without error
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
-		cout << "Parse temporary string" << endl;
 		osrlreader->readOSrL( tmpOSrL);
+
 		delete osrlwriter;
 		osrlwriter = NULL;
 		delete osrlreader;
@@ -6633,7 +6659,6 @@ if (PARSER_TESTS){
 		osresult = osrlreader->readOSrL( osrl);
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		osrlreader->readOSrL( tmpOSrL);
 		delete osrlwriter;
@@ -6656,7 +6681,6 @@ if (PARSER_TESTS){
 		osresult = osrlreader->readOSrL( osrl);
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		osrlreader->readOSrL( tmpOSrL);
 		delete osrlwriter;
@@ -6680,7 +6704,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6705,7 +6728,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6731,7 +6753,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6756,7 +6777,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6781,7 +6801,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6806,7 +6825,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6831,7 +6849,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6856,7 +6873,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6882,7 +6898,6 @@ if (PARSER_TESTS){
 		cout << "WRITE THE OSRESULT OBJECT INTO A NEW OSRL STRING" << endl;
 		tmpOSrL = osrlwriter->writeOSrL( osresult) ;
 		delete osrlreader;
-		osrlreader = NULL;
 		osrlreader = new OSrLReader();
 		cout << "PARSE THE NEW OSRL STRING INTO AN OSRESULT OBJECT" << endl;
 		osrlreader->readOSrL( tmpOSrL);
@@ -6891,7 +6906,6 @@ if (PARSER_TESTS){
 		delete osrlreader;
 		osrlreader = NULL;
 */
-
 		unitTestResult << 
 		     "TEST " << nOfTest << ": Successful test of OSrL parser on file parserTest.osrl" 
 		      << std::endl;
@@ -6901,10 +6915,18 @@ if (PARSER_TESTS){
 
 		cout << endl << endl << endl;
 		if(osrlwriter != NULL) delete osrlwriter;
+		osrlwriter = NULL;
 		if(osrlreader != NULL) delete osrlreader;
+		osrlreader = NULL;
 		// " Problem with the test reading OSrL data";
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
+	}
+
+	if (intArray !=NULL) 
+	{
+		delete[] intArray;
+		intArray = NULL;
 	}
 
 }       // PARSER_TESTS
