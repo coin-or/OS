@@ -3458,7 +3458,8 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 	std::string base64decodeddata = Base64::decodeb64( b64string );
 	int base64decodeddatalength = base64decodeddata.length();
 	int *intvec = NULL;
-	osglData->osglIntArray = new int[(base64decodeddatalength/osglData->osglSize) ];
+	if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
+		osrlerror(NULL, NULL, parserData, osglData, "base 64 data length does not match numberOfEl"); 
 	intvec = (int*)&base64decodeddata[0];
 	for(int i = 0; i < (base64decodeddatalength/osglData->osglSize); i++)
 	{
@@ -3513,6 +3514,7 @@ xmlWhiteSpaceChar: ' '
 void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
 {
 	osrl_empty_vectors( parserData);
+	osgl_empty_vectors(	osglData);
 	std::ostringstream outStr;
 	std::string error = errormsg;
 	error = "Input is either not valid or well formed: "  + error;
