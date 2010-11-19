@@ -22538,7 +22538,7 @@ while test $coin_has_ipopt = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -22854,7 +22854,7 @@ while test $coin_has_asl = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -23171,7 +23171,7 @@ while test $coin_has_coindepend = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -23492,7 +23492,7 @@ while test $coin_has_clp = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -23808,7 +23808,7 @@ while test $coin_has_dylp = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -24124,7 +24124,7 @@ while test $coin_has_vol = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -24440,7 +24440,7 @@ while test $coin_has_symphony = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -24756,7 +24756,7 @@ while test $coin_has_cbc = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -25072,7 +25072,7 @@ while test $coin_has_cgl = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -25448,7 +25448,7 @@ while test $coin_has_couenne = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -25764,7 +25764,7 @@ while test $coin_has_bonmin = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -26080,7 +26080,7 @@ while test $coin_has_bcp = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -26397,7 +26397,7 @@ while test $coin_has_cpx = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
@@ -26713,7 +26713,7 @@ while test $coin_has_glpk = notGiven ; do
       fi
 
       # read dependencies from $pcfile, filter it, and add to list of projects that need to be processed next
-      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]*[^ 	]\{0,\}//g'`
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
       nextprojtoprocess="$nextprojtoprocess $projrequires"
 
       # remember that we have processed $proj
