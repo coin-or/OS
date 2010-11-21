@@ -129,7 +129,6 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 void OSColGenApp::solveRestrictedMasterRelaxation(){
 	
 	int i;
-	int j;
 	int k;
 	//we include convexity constraints in this number
 	int numARows;
@@ -162,35 +161,23 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	double lowerBound;
 	//end of getColumns function call return parameters
 	
-	double collb;
-	double colub;
+	double collb; // kipp -- put in getColumns
+	double colub; // kipp -- put in getColumns
 	//all of our theta columns have a lower bound of 0 and upper bound of 1
 	collb = 0.0;
 	colub = 1.0;
 	
-	double rowlb;
-	rowlb = 0.0;
-	double rowub;
-	int numRowEls;
-	int tmpKount;
+	
+	//getRows function call return parameters
+	int numNewRows;
+	int* numRowNonz = NULL;
+	int** colIdx = NULL; 
+	double** rowValues = NULL ; 
+	double* rowLB;
+	double* rowUB;
+	//end of getRows function call return parameters	
+	
 
-	int* cutColIndexes;
-	double* cutColValues;
-	int* tmpScatterArray;
-	int scatterArraySize;
-	scatterArraySize = m_osrouteSolver->m_numNodes*(m_osrouteSolver->m_numNodes - 1);
-	//kippster -- make this dimension a parameter
-	cutColIndexes = new int[ 100000];
-	cutColValues = new double [ 100000];
-	tmpScatterArray = new int[ scatterArraySize ];
-	//zero out the scatter array
-	
-	for(i = 0; i < scatterArraySize; i++){
-		
-		tmpScatterArray[ i] = 0;
-		
-	}
-	
 	bool isCutAdded;
 
 	try{
@@ -305,15 +292,27 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			}
 	
 			
-			numRowEls = 0;
 			
-			if(m_osrouteSolver->getCuts( theta,  numCols ) == true){
+			
+			numNewRows = 0;
+			m_osrouteSolver->getCutsTheta(theta, numCols, numNewRows, numRowNonz, colIdx,
+			rowValues, rowLB, rowUB);
+			
+			
+			
+			if( numNewRows >= 1 ){
 				
 				isCutAdded = true;
 				
-				rowub = m_osrouteSolver->m_BmatrixRhs[ m_osrouteSolver->m_numTourBreakCon  - 1];
 				
-		
+				
+				///
+				///
+				///
+				//here is where we calculate the cut
+				/*
+				rowub = m_osrouteSolver->m_BmatrixRhs[ m_osrouteSolver->m_numTourBreakCon  - 1];
+
 				//scatter the constraint in the x - variables
 				
 				for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
@@ -350,6 +349,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					
 				}//end loop on i
 				
+				////
+				/////
 	
 				si->addRow(numRowEls, cutColIndexes, cutColValues, rowlb, rowub ) ;	
 								
@@ -358,10 +359,19 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
 						i <  m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 1] ; i++){
 					
-					tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 0;
-					
+					tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 0;	
 				}	
 				
+				*/
+				
+
+				
+				for(i = 0; i < numNewRows; i++){
+					
+					si->addRow(numRowNonz[ i], colIdx[ i], rowValues[ i], rowLB[ i], rowUB[ i] ) ;
+					
+					
+				}
 				
 				std::cout << std::endl;
 				std::cout << "CUTS WERE ADDED CALL SOLVE" << std::endl;
@@ -402,15 +412,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		if(numCols > 0) delete[] theta;
 		theta = NULL;
 		
-		
-		delete[]  cutColIndexes;
-		cutColIndexes = NULL;
-		
-		delete[]  cutColValues;
-		cutColValues = NULL;
-		
-		delete[]  tmpScatterArray;
-		tmpScatterArray = NULL;
 		
 		
 		delete solver;

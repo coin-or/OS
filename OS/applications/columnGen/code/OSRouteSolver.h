@@ -94,12 +94,18 @@ public:
 	
 	//arguments for getColumns
 	double m_lowerBnd;
-	int* m_nonzVec;
+	int* m_newColumnNonz;
 	double* m_costVec;
 	int** m_newColumnRowIdx;
 	double** m_newColumnRowValue;
-	
-	
+		
+	//arguments for getRows
+	int* m_newRowNonz;
+	int** m_newRowColumnIdx;
+	double** m_newRowColumnValue;
+	double* m_newRowUB;
+	double* m_newRowLB;
+		
 	//arrays for the coupling constraint matrix
 	//we store indexes since values are 1.0
 	//also the RHS is 1.0
@@ -152,6 +158,25 @@ public:
 	//return true if cuts got generated
 	bool getCuts(const  double* theta, const int numTheta) ;
 	
+	
+	/**
+	 * RETURN VALUES: 
+	 * int numNewRows -- number of new rows generated
+	 * int* numNonz -- number of nonzeros in each row
+	 * double** colIdx -- vectors column indexes of new rows
+	 * double** values -- vectors of matrix coefficient values of new rows
+	 * double* rowLB -- vector of row lower bounds
+	 * double* rowUB -- vector of row upper bounds
+	 * 
+	 * INPUT:
+	 * double* thetaVar -- the vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 */
+	void getCutsTheta(const  double* thetaVar, const int numThetaVar,
+			int &numNewRows, int*  &numNonz, int** &colIdx,
+			double** &values, double* &rowLB, double* &rowUB) ;	
+	
+	
 	/**
 	 * RETURN VALUES: 
 	 * int numNewColumns -- number of new columns generated
@@ -159,7 +184,7 @@ public:
 	 * double* cost -- the objective function coefficient on each new column
 	 * double** rowIdx -- vectors row indexes of new columns
 	 * double** values -- vectors of matrix coefficient values of new columns
-	 * double lowerBound -- the lowerBound
+	 * double lowerBound -- the lowerBound, this is a value on the LP relaxation
 	 * 
 	 * INPUT:
 	 * double* y -- the vector of dual values
