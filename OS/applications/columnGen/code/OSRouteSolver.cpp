@@ -1435,6 +1435,264 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 
 
 
+
+
+
+
+
+OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
+
+	
+	std::cout << "Executing OSRouteSolver::getInitialRestrictedMaster( )" << std::endl;
+	
+	// define the classes
+	FileUtil *fileUtil = NULL;
+	OSiLReader *osilreader = NULL;
+	DefaultSolver *solver  = NULL;
+	OSInstance *osinstance = NULL;
+
+
+	// end classes    
+
+	std::string testFileName;
+	std::string osil;
+	
+	//std::vector< int> indexes;
+	fileUtil = new FileUtil();
+	
+	
+	std::map<int, std::map<int, std::vector<int> > >::iterator  mit;
+	std::map<int, std::vector<int> >::iterator  mit2;
+	std::vector<int>::iterator  vit;
+	
+	//m_osinstanceMaster = NULL;
+	
+	//add linear constraint coefficients
+	//number of values will nodes.size() the coefficients in the node constraints
+	//plus coefficients in convexity constraints which is the number of varaibles
+	int kountNonz;
+	int kount;
+	int numThetaVar = m_numberOfSolutions*m_numHubs;
+	double *values = new double[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar];
+	int *indexes = new int[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar];
+	int *starts = new int[ numThetaVar + 1]; 
+	kount = 0;
+	
+	starts[ 0] = 0;	
+	
+	int startsIdx;
+	startsIdx = 0;
+
+	std::vector<IndexValuePair*> primalValPair;
+	
+	
+
+	try {
+		
+		if(m_initOSiLFile.size() == 0) throw ErrorClass("OSiL file to generate restricted master missing");
+		osil = fileUtil->getFileAsString( m_initOSiLFile.c_str());
+
+		osilreader = new OSiLReader();
+		osinstance = osilreader->readOSiL(osil);
+		
+
+		
+		int i;
+		int j;
+		int k;
+		//fill in the cost vector first
+		//the x vector starts at 2*m_numHubs
+		
+		int idx1;
+		int idx2;
+		
+		
+		idx2 = 0;  //zRouteDemand have 0 coefficients in obj
+		//fill in m_cost from the cost coefficient in osil
+		for(k = 0; k < m_numHubs; k++){
+			
+			idx1 = 0;
+			
+			for(i = 0; i < m_numNodes; i++){
+				
+				for(j = 0; j < i; j++){
+				
+					m_cost[k][idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
+				}
+				
+				for(j = i + 1; j < m_numNodes; j++){
+					
+					m_cost[k][idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
+					
+				}
+			}
+		}
+	
+
+	
+		//get variable names for checking purposes
+		std::string* varNames;
+		varNames =  osinstance->getVariableNames();
+
+		
+		//start building the restricted master here
+		
+		
+		//m_osinstanceMaster = new OSInstance();
+		//m_osinstanceMaster->setInstanceDescription("The Initial Restricted Master");
+		
+		// first the variables
+		//m_osinstanceMaster->setVariableNumber( m_numberOfSolutions*m_numHubs);   
+		
+		// now add the objective function
+		//m_osinstanceMaster->setObjectiveNumber( 1);
+		SparseVector *objcoeff = new SparseVector( m_numberOfSolutions*m_numHubs);   
+
+		
+		// now the constraints
+		//m_osinstanceMaster->setConstraintNumber( m_numNodes); 		
+		
+		
+		//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
+		// we could use setVariables() and add all the variable with one method call -- below is easier
+
+		//
+		//return NULL;
+		int varNumber;
+		varNumber = 0;
+		std::string masterVarName;
+		kountNonz = 0;
+		// now get the primal solution
+		//solve the model for solution in the osoption object
+
+		
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc"; 
+		solver->osinstance = osinstance;	
+		
+		solver->buildSolverInstance();
+		solver->solve();
+		
+	
+		
+		//get the solver solution status
+		
+		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+		
+		//get the optimal objective function value
+		
+		
+		primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
+
+		//loop over routes again to create master objective coefficients
+
+		for(k = 0; k < m_numHubs; k++){
+			
+			
+			//lets get the x variables
+			//the variables for this route should be from 2*numHubs + k*(numNodes - 1*)*(numNodes - 1)
+			idx1 = 2*m_numHubs + k*m_numNodes*(m_numNodes - 1);
+			idx2 = idx1 + m_numNodes*(m_numNodes - 1);
+			//end of x variables
+		
+			//std::cout << "HUB " <<  k  << " VARIABLES" << std::endl;
+			
+		
+
+			for(i = idx1; i < idx2; i++){
+				if(  primalValPair[ i]->value > .1 ){
+					std::cout <<  osinstance->getVariableNames()[  primalValPair[ i]->idx  ] << std::endl;
+					std::cout <<  m_variableNames[  primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs  ] << std::endl;
+					//m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
+				}
+				
+			}
+			
+			//m_thetaCost[ m_numThetaVar ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			//m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
+			
+			//masterVarName = makeStringFromInt("theta(", mit->first);
+			//masterVarName += makeStringFromInt(",", k);
+			//masterVarName += ")";
+			std::cout << masterVarName << std::endl;
+			//m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
+			
+			std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
+			
+			//objcoeff->indexes[ k + (mit->first)*m_numHubs] = k +  (mit->first)*m_numHubs;
+			//objcoeff->values[ k + (mit->first)*m_numHubs] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+
+			
+			std::cout <<  osinstance->getVariableNames()[ k ] << std::endl;
+			std::cout <<  osinstance->getVariableNames()[ k + m_numHubs ] << std::endl;
+			
+
+		}//end for on k -- hubs
+		
+	
+		return NULL;
+		primalValPair.clear();
+		delete solver;
+		solver = NULL;
+
+		
+		//add the constraints
+		//add the row saying we must visit each node
+		/*
+		for( i =  0; i < m_numNodes - m_numHubs ; i++){
+			
+			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("visitNode_", i + m_numHubs) , 1.0, 1.0, 0); 
+		}
+		
+		kount = 0;
+		
+		//add the convexity row
+		for( i =  m_numNodes - m_numHubs; i < m_numNodes ; i++){
+			
+			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("convexityRowRoute_", kount++ ) , 1.0, 1.0, 0); 
+		}
+		
+		m_osinstanceMaster->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
+		
+		std::cout << "kountNonz = " << kountNonz << std::endl;
+		
+		//add the linear constraints coefficients
+		m_osinstanceMaster->setLinearConstraintCoefficients(kountNonz , true, 
+				values, 0, kountNonz - 1,  indexes, 0, kountNonz - 1, starts, 0, startsIdx);
+	
+		
+
+		delete objcoeff;
+		*/
+		
+		//delete[] values;
+		//delete[] starts;
+		//delete[] indexes;
+		delete osilreader;
+		osilreader = NULL;
+
+		
+
+	} catch (const ErrorClass& eclass) {
+		std::cout << std::endl << std::endl << std::endl;
+		if (osilreader != NULL)
+			delete osilreader;
+		if (solver != NULL)
+			delete solver;
+
+
+		//  Problem with the parser
+		throw ErrorClass(eclass.errormsg);
+	}
+
+	delete fileUtil;
+	fileUtil = NULL;
+
+	return m_osinstanceMaster;
+}//end generateInitialRestrictedMaster2
+
+
+
 void OSRouteSolver::getOptions(OSOption *osoption) {
 	
 	
@@ -1718,8 +1976,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
 
 							
-							delete[] tmpRhs;
-							tmpRhs = NULL;
+
 							numNewRows = 1;
 							
 							m_newRowNonz[ 0] = 0;
@@ -1780,17 +2037,19 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							rowUB =  m_newRowUB;
 							rowLB =  m_newRowLB;
 							
+							delete[] tmpRhs;
+							tmpRhs = NULL;
 							return;
 
 							
 							
-						}
+						} //end loop on if tmpKount
 						
 						tmpKount++;
 					
-					}
+					}//loop on j1
 					
-				}
+				}//loop  on i1
 			
 			
 			}//end if on tmpRHS
@@ -1971,7 +2230,226 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 	
 	
 	
-}//end getCuts
+}//end getCutsTheta
+
+
+
+
+
+
+
+void OSRouteSolver::getCutsX(const  double* x, const int numX,
+		int &numNewRows, int*  &numNonz, int** &colIdx,
+		double** &values, double* &rowLB, double* &rowUB) {
+	//critical -- we are assuming that the size of x is going to be 
+	// m_numNodes*(m_numNodes - 1)
+	
+	int i;
+	int j;
+	int k;
+	int index;
+	int rowKount;
+
+	
+	int indexAdjust = m_numNodes - m_numHubs;
+	double* tmpRhs;
+	int numSepRows = m_osinstanceSeparation->getConstraintNumber() ;
+	
+	tmpRhs = new double[ numSepRows ]; 
+	
+	for(i = 0; i < numSepRows; i++){
+		
+		tmpRhs[ i] = 0;
+	}
+	
+	try{
+		m_osinstanceSeparation->bConstraintsModified = true;
+			
+		for(i = 0; i < numX; i++){
+			
+			//get a postive theta
+			if(x[ i] > m_eps){
+				
+				//the row index for x_{ij}
+				rowKount = m_separationIndexMap[ i ];
+				
+				if(rowKount < OSINT_MAX ){
+					
+					tmpRhs[ rowKount] -= x[ i];
+					
+				}
+				
+			}
+		}// end i loop
+		
+		for(i = indexAdjust; i < numSepRows - 1; i++){
+			
+			if(-tmpRhs[ i] > 1 + m_eps ){
+				// quick and dirty does x_{ij} + x_{ji} <= 1 cut off anything
+				//std::cout << " tmpRhs[ i] =  " << tmpRhs[ i]  << std::endl;
+				//which variable is this 
+				//kipp this an inefficient way of finding i and j -- improve this
+				int tmpKount = indexAdjust;
+				for(int i1 = m_numHubs; i1 < m_numNodes; i1++){
+				
+					for(int j1 = i1+1; j1 < m_numNodes; j1++){
+						
+						if(tmpKount ==  i){
+							
+							numNewRows = 1;
+							
+							m_newRowNonz[ 0] = 2;
+							m_newRowUB[ 0] = 1;
+							m_newRowLB[ 0] = 0;
+						
+							m_newRowColumnIdx[ 0][ 0 ] = i1*(m_numNodes - 1) + j1 - 1;
+							m_newRowColumnIdx[ 0][ 1 ] = j1*(m_numNodes - 1) + i1;
+							m_newRowColumnValue[ 0][ 0] = 1;
+							m_newRowColumnValue[ 0][ 1] = 1;
+						
+							numNonz = m_newRowNonz;
+							colIdx =  m_newRowColumnIdx;
+							values =  m_newRowColumnValue;
+							rowUB =  m_newRowUB;
+							rowLB =  m_newRowLB;
+							
+							delete[] tmpRhs;
+							tmpRhs = NULL;
+							return;
+
+							
+							
+						}
+						
+						tmpKount++;
+					
+					}// end loop on j1
+					
+				}//end loop on i1
+			
+			
+			}//end if on tmpRHS
+			
+			m_separationClpModel->setRowUpper(i, tmpRhs[ i] );
+			m_separationClpModel->setRowLower(i, tmpRhs[ i] );		
+
+		}//end loop on i
+		
+		
+		//std::cout << m_osinstanceSeparation->printModel() << std::endl;
+	
+
+		std::vector<int> dualIdx;
+		std::vector<int>::iterator vit1;
+		std::vector<int>::iterator vit2;
+		
+		//if the objective function value is greater than zero we have a cut
+		//the cut is based on the nodes with dual value - 1
+		
+		for(k = 0; k < indexAdjust; k++){
+			std::cout <<   std::endl << std::endl;
+			std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+			
+			m_separationClpModel->setRowUpper(k, 0.0);
+			m_separationClpModel->primal();		
+			std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
+			if(m_separationClpModel->getObjValue() > m_eps){
+				
+				numNewRows = 1;
+				m_newRowNonz[ 0] = 0;
+				m_newRowLB[ 0] = 0;
+			
+				for(i = 0; i < m_numNodes - m_numHubs ; i++){
+					//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
+					if( m_separationClpModel->getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
+				}
+				
+				for (vit1 = dualIdx.begin(); vit1 != dualIdx.end(); vit1++) {
+					
+					i = *vit1 + m_numHubs;
+					
+					for (vit2 = dualIdx.begin(); vit2 != dualIdx.end(); vit2++) {
+						
+						j = *vit2 + m_numHubs;
+						
+						if( i > j ){
+						
+							index = i*(m_numNodes -1) + j;
+							std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;
+							m_newRowColumnValue[ 0][   m_newRowNonz[ 0] ] = 1.0;
+							m_newRowColumnIdx[ 0][   m_newRowNonz[ 0]++ ] = index;
+							
+						}else{
+							
+							if( i < j ){
+								
+								index = i*(m_numNodes -1) + j - 1;
+								std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;	
+								m_newRowColumnValue[ 0][   m_newRowNonz[ 0] ] = 1.0;
+								m_newRowColumnIdx[ 0][   m_newRowNonz[ 0]++ ] = index;
+								
+							}
+						}
+						
+					}//end for on vit2
+				}//end for on vit1
+				
+
+				m_newRowUB[ 0] =  dualIdx.size()  - 1;
+				
+				dualIdx.clear();
+				//reset
+				// don't adjust the kludge row
+				for(i = indexAdjust; i < numSepRows - 1; i++){
+					
+					m_separationClpModel->setRowUpper(i, 0.0 );
+					m_separationClpModel->setRowLower(i, 0.0 );
+					
+					
+				}
+				m_separationClpModel->setRowUpper(k, 1.0);
+				delete[] tmpRhs;
+				tmpRhs = NULL;
+
+				
+				numNonz = m_newRowNonz;
+				colIdx =  m_newRowColumnIdx;
+				values =  m_newRowColumnValue;
+				rowUB =  m_newRowUB;
+				rowLB =  m_newRowLB;
+			
+				return;
+				
+			
+				
+			}//end if on obj value		
+			m_separationClpModel->setRowUpper(k, 1.0);
+			dualIdx.clear();
+			
+		}//end loop on k
+		
+		//if we are here there was no cut
+		//reset
+		// don't adjust the kludge row
+		for(i = indexAdjust; i < numSepRows - 1; i++){
+			
+			m_separationClpModel->setRowUpper(i, 0.0 );
+			m_separationClpModel->setRowLower(i, 0.0 );
+			
+			
+		}
+		
+		delete[] tmpRhs;
+		tmpRhs = NULL;
+		
+	} catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}		
+	
+	
+}//end getCutsX
 
 
 bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){

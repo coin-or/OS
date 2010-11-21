@@ -54,6 +54,8 @@ public:
 	
 	void getInitialRestrictedMaster( );
 	
+	void getInitialRestrictedMaster2( );
+	
 	void getOptions( OSOption *osoption);
 	
 	/**

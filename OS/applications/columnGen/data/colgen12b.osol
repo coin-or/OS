@@ -5,7 +5,7 @@
         <solverOptions numberOfSolverOptions="39">
             <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="false"/>
             
-            <solverOption name="osilFile" value="../data/colgen12b.osil" solver="decomp" type="string"/>
+            <solverOption name="osilFile" value="/Users/kmartin/Documents/files/research/bearcat/code/data/colgen12bb.osil" solver="decomp" type="string"/>
             <solverOption name="numHubs" value="2" solver="decomp" type="integer"/>
             <solverOption name="numNodes" value="12" solver="decomp" type="integer"/>
             <solverOption name="totalDemand" value="21" solver="decomp" type="integer"/>

@@ -89,6 +89,14 @@ void OSColGenApp::getInitialRestrictedMaster( ){
 }//end generateInitialRestrictedMaster
 
 
+void OSColGenApp::getInitialRestrictedMaster2( ){
+
+	m_osinstanceMaster = m_osrouteSolver->getInitialRestrictedMaster2( );
+	//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
+	
+}//end generateInitialRestrictedMaster2
+
+
 void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 		int &numNewRows, int*  &numNonz, int** &colIdx,
 		double** &values, double* &rowLB, double* &rowUB) {

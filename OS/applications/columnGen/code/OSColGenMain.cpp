@@ -70,6 +70,12 @@ int main(int argc, char ** argv){
 		//now create the column generation object
 		colgenApp = new OSColGenApp( osoption);
 		
+		
+		//now generate the restriced master
+		colgenApp->getInitialRestrictedMaster2( );
+		
+		exit( 1);
+		
 		//now generate the restriced master
 		colgenApp->getInitialRestrictedMaster( );
 		//now solve the master
