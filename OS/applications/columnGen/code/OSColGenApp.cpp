@@ -89,10 +89,14 @@ void OSColGenApp::getInitialRestrictedMaster( ){
 }//end generateInitialRestrictedMaster
 
 
-void OSColGenApp::getCuts(const  double* x) {
+void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
+		int &numNewRows, int*  &numNonz, int** &colIdx,
+		double** &values, double* &rowLB, double* &rowUB) {
 	
+	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
+			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-}//end generateCuts
+}//end getCuts
 
 
 void OSColGenApp::getColumns(const  double* yA, const int numARows,
@@ -239,8 +243,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			lowerBound = -1;
 			int loopKount = 0;
 			
-			
-			while(lowerBound < -.01 && loopKount < 10000){
+			//kipp -- hard coding in the .0001
+			while(lowerBound < -.0001 && loopKount < 10000){
 				loopKount++;
 				
 				//kipp here is where the while loop goes
@@ -281,9 +285,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				
 			}//end while on column generation
 			
-
 			//get a primal solution
-	
 			numCols = si->getNumCols();
 			if(numCols + m_osrouteSolver->m_numHubs >= maxCols) throw ErrorClass("we ran out of columns");
 			
@@ -292,79 +294,13 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			}
 	
 			
-			
-			
 			numNewRows = 0;
-			m_osrouteSolver->getCutsTheta(theta, numCols, numNewRows, numRowNonz, colIdx,
-			rowValues, rowLB, rowUB);
-			
-			
+			getCuts(theta, numCols, numNewRows, numRowNonz, 
+					colIdx,rowValues, rowLB, rowUB);
 			
 			if( numNewRows >= 1 ){
 				
 				isCutAdded = true;
-				
-				
-				
-				///
-				///
-				///
-				//here is where we calculate the cut
-				/*
-				rowub = m_osrouteSolver->m_BmatrixRhs[ m_osrouteSolver->m_numTourBreakCon  - 1];
-
-				//scatter the constraint in the x - variables
-				
-				for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
-						i <  m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 1] ; i++){
-					
-					tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 1;
-					
-					
-					
-				}
-	
-				for(i = 0; i < m_osrouteSolver->m_numThetaVar - 1; i++){
-					
-					//get the xij indexes in this colum 
-					tmpKount = 0;
-					for(j = m_osrouteSolver->m_thetaPnt[i]; j < m_osrouteSolver->m_thetaPnt[i + 1] ;  j++){
-						
-						if(tmpScatterArray[ m_osrouteSolver->m_thetaIndex[ j] ] > 0 ){ //count number of xij for theta_i
-							
-							tmpKount++;
-							
-						}
-						
-					}//end loop on j
-					
-					if(tmpKount > 0){
-						//theta_i has a nonzero coefficient in this row
-						cutColIndexes[ numRowEls] = i;
-						cutColValues[ numRowEls++] = tmpKount;
-						
-						//std::cout << " INDEX = " << i <<  " VALUE = " << tmpKount << std::endl;
-						
-					}
-					
-				}//end loop on i
-				
-				////
-				/////
-	
-				si->addRow(numRowEls, cutColIndexes, cutColValues, rowlb, rowub ) ;	
-								
-				//zero out the scatter array again
-				
-				for(i = m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 2] ; 
-						i <  m_osrouteSolver->m_pntBmatrix[  m_osrouteSolver->m_numTourBreakCon  - 1] ; i++){
-					
-					tmpScatterArray[ m_osrouteSolver->m_Bmatrix[ i] ] = 0;	
-				}	
-				
-				*/
-				
-
 				
 				for(i = 0; i < numNewRows; i++){
 					
@@ -413,10 +349,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		theta = NULL;
 		
 		
-		
 		delete solver;
-	
-
 		
 		
 	} catch (const ErrorClass& eclass) {
