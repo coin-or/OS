@@ -620,6 +620,8 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 	*kountVar = 0;
 	int bestLastNode;
+	//initialize
+	bestLastNode = OSINT_MAX;
 	int i;
 	int j;
 	int l1;
@@ -833,7 +835,9 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 	*(m_varIdx + (*kountVar)++) = startPnt + bestLastNode*(m_numNodes - 1)  +  k ;
 	
 	
-	
+	//if we are here we should have a value for bestLastNode
+	//if not return infinity
+	if( bestLastNode == OSINT_MAX) return OSDBL_MAX;
 
 	//by successor, I mean node after current node in the path
 	successorNode = k;
@@ -843,7 +847,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 
 	while(currentNode != k){
-
+		//std::cout << "currentNode = " << currentNode << "   " <<  "lvalue " <<  lvalue << std::endl;
 		if( m_px[ currentNode][ lvalue ] != successorNode){
 			
 
