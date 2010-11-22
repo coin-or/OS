@@ -74,6 +74,9 @@ OSRouteSolver::OSRouteSolver() {
 OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	std::cout << "INSIDE OSRouteSolver CONSTRUCTOR with OSOption argument" << std::endl;
 	
+	
+	m_bestIPValue = OSDBL_MAX;
+	
 	m_eps = 0.00001;
 	m_u = NULL;
 	m_v = NULL;
@@ -95,7 +98,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	try{
 		
 		getOptions( osoption);
-		
+		m_osoption = osoption;
 		if(m_routeCapacity > m_totalDemand){
 			m_upperBoundL = m_totalDemand;
 		}else{
@@ -1404,7 +1407,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 				values, 0, kountNonz - 1,  indexes, 0, kountNonz - 1, starts, 0, startsIdx);
 	
 		
-
+		std::cout << m_osinstanceMaster->printModel() << std::endl;
 		delete objcoeff;
 		
 		//delete[] values;
@@ -1443,48 +1446,68 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 
 	
-	std::cout << "Executing OSRouteSolver::getInitialRestrictedMaster( )" << std::endl;
+	std::cout << "Executing OSRouteSolver::getInitialRestrictedMaster2( )" << std::endl;
 	
 	// define the classes
 	FileUtil *fileUtil = NULL;
 	OSiLReader *osilreader = NULL;
-	DefaultSolver *solver  = NULL;
+	CoinSolver *solver  = NULL;
 	OSInstance *osinstance = NULL;
-
-
 	// end classes    
 
+	int i;
+	int j;
+	int k;
 	std::string testFileName;
 	std::string osil;
 	
 	//std::vector< int> indexes;
 	fileUtil = new FileUtil();
 	
-	
-	std::map<int, std::map<int, std::vector<int> > >::iterator  mit;
-	std::map<int, std::vector<int> >::iterator  mit2;
-	std::vector<int>::iterator  vit;
-	
-	//m_osinstanceMaster = NULL;
+	m_osinstanceMaster = NULL;
 	
 	//add linear constraint coefficients
 	//number of values will nodes.size() the coefficients in the node constraints
 	//plus coefficients in convexity constraints which is the number of varaibles
 	int kountNonz;
 	int kount;
+	m_numberOfSolutions = 1;
 	int numThetaVar = m_numberOfSolutions*m_numHubs;
 	double *values = new double[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar];
 	int *indexes = new int[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar];
 	int *starts = new int[ numThetaVar + 1]; 
 	kount = 0;
-	
 	starts[ 0] = 0;	
-	
 	int startsIdx;
 	startsIdx = 0;
+	startsIdx++;
 
 	std::vector<IndexValuePair*> primalValPair;
 	
+	//
+	//stuff for cut generation
+	//
+	double* xVar;
+	int numXVar;
+	numXVar = m_numNodes*(m_numNodes - 1);
+	xVar = new double[ numXVar];
+	//zero this array out
+	for(i = 0; i < numXVar; i++){
+		
+		xVar[ i] = 0;
+		
+	}
+	//getRows function call return parameters
+	int numNewRows;
+	int* numRowNonz = NULL;
+	int** colIdx = NULL; 
+	double** rowValues = NULL ; 
+	double* rowLB;
+	double* rowUB;
+	//end of getRows function call return parameters	
+	//
+	//end of cut generation stuff
+	//
 	
 
 	try {
@@ -1497,16 +1520,12 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		
 
 		
-		int i;
-		int j;
-		int k;
+
 		//fill in the cost vector first
 		//the x vector starts at 2*m_numHubs
 		
 		int idx1;
 		int idx2;
-		
-		
 		idx2 = 0;  //zRouteDemand have 0 coefficients in obj
 		//fill in m_cost from the cost coefficient in osil
 		for(k = 0; k < m_numHubs; k++){
@@ -1536,26 +1555,20 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 
 		
 		//start building the restricted master here
-		
-		
-		//m_osinstanceMaster = new OSInstance();
-		//m_osinstanceMaster->setInstanceDescription("The Initial Restricted Master");
+		m_osinstanceMaster = new OSInstance();
+		m_osinstanceMaster->setInstanceDescription("The Initial Restricted Master");
 		
 		// first the variables
-		//m_osinstanceMaster->setVariableNumber( m_numberOfSolutions*m_numHubs);   
+		m_osinstanceMaster->setVariableNumber( m_numberOfSolutions*m_numHubs);   
 		
 		// now add the objective function
-		//m_osinstanceMaster->setObjectiveNumber( 1);
+		m_osinstanceMaster->setObjectiveNumber( 1);
 		SparseVector *objcoeff = new SparseVector( m_numberOfSolutions*m_numHubs);   
 
 		
 		// now the constraints
-		//m_osinstanceMaster->setConstraintNumber( m_numNodes); 		
+		m_osinstanceMaster->setConstraintNumber( m_numNodes); 		
 		
-		
-		//addVariable(int index, string name, double lowerBound, double upperBound, char type, double init, string initString);
-		// we could use setVariables() and add all the variable with one method call -- below is easier
-
 		//
 		//return NULL;
 		int varNumber;
@@ -1569,8 +1582,9 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		solver = new CoinSolver();
 		solver->sSolverName ="cbc"; 
 		solver->osinstance = osinstance;	
-		
 		solver->buildSolverInstance();
+		solver->osoption = m_osoption;	
+		OsiSolverInterface *si = solver->osiSolver;
 		solver->solve();
 		
 	
@@ -1581,64 +1595,222 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		
 		//get the optimal objective function value
 		
-		
 		primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
 
 		//loop over routes again to create master objective coefficients
-
-		for(k = 0; k < m_numHubs; k++){
+		bool isCutAdded;
+		isCutAdded = true;
+		while(isCutAdded == true){
 			
+			isCutAdded = false;
+			
+			for(k = 0; k < m_numHubs; k++){
+				numNewRows = 0;
+				
+				//lets get the x variables
+				//the variables for this route should be from 2*numHubs + k*(numNodes - 1*)*(numNodes - 1)
+				idx1 = 2*m_numHubs + k*m_numNodes*(m_numNodes - 1);
+				idx2 = idx1 + m_numNodes*(m_numNodes - 1);
+				//end of x variables
+			
+				std::cout << "HUB " <<  k  << " VARIABLES" << std::endl;
+				
+				//generate a cut
+				//need to do index mapping
+				
+				
+	
+				for(i = idx1; i < idx2; i++){
+					if(  primalValPair[ i]->value > .01 ){
+						std::cout <<  osinstance->getVariableNames()[  primalValPair[ i]->idx  ]   <<  std::endl;
+						std::cout <<  m_variableNames[  primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs  ] <<   "  " << primalValPair[ i]->value << std::endl;
+						//m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
+						
+						//scatter operation
+						xVar[ primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs   ] = primalValPair[ i]->value;
+						
+						
+					}	
+				}
+				
+				//get a cut
+				
+				
+				getCutsX(xVar, numXVar, numNewRows, numRowNonz, 
+						colIdx,rowValues, rowLB, rowUB);
+				
+				
+				
+				
+				if(numNewRows >= 1){
+					isCutAdded  = true;
+					std::cout << "WE HAVE A CUT " << std::endl;
+					std::cout << "EXPRESS CUT IN X(I, J) SPACE" << std::endl;
+					for(i = 0; i < numRowNonz[ 0]; i++){
+						
+						std::cout <<  m_variableNames[ colIdx[0][ i] ] << std::endl;
+						
+					}
+					
+					
+					for(i = 0; i < numNewRows; i++){
+						
+						//set the variable indexes to the correct values
+						
+						std::cout << "EXPRESS CUT IN X(K, I, J) SPACE" << std::endl;
+						
+						for(j = 0; j < numRowNonz[ i]; j++){
+							
+							colIdx[ i][ j]  = colIdx[ i][ j] + k*(m_numNodes - 1)*m_numNodes + 2*m_numHubs ;
+							
+							std::cout <<  osinstance->getVariableNames()[  colIdx[ i][ j]  ]   <<  std::endl;
+						}
+						
+						std::cout << "CUT UPPER BOUND = " <<  rowUB[ i] << std::endl;
+						
+						
+						si->addRow(numRowNonz[ i], colIdx[ i], rowValues[ i], rowLB[ i], rowUB[ i] ) ;
+						
+						
+					}
+					
+					
+					
+				}
+
+				//zero out the vector again
+				for(i = idx1; i < idx2; i++){
+					if(  primalValPair[ i]->value > .01 ){
+						xVar[ primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs   ] = 0;
+					}
+						
+				}
+				
+				
+				//std::cout <<  osinstance->getVariableNames()[ k ] << std::endl;
+				//std::cout <<  osinstance->getVariableNames()[ k + m_numHubs ] << std::endl;
+				std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
+	
+			}//end for on k -- hubs
+			
+			
+			std::cout << std::endl << std::endl;
+			if( isCutAdded == true) {
+				
+				solver->solve();
+				primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
+				std::cout << "New Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+				std::cout << "Optimal Objective Value = " << solver->osresult->getObjValue(0, 0) << std::endl;
+			}
+
+			
+		}//end while -- we have an integer solution with no subtours
+		
+
+		
+		int i1;
+		int j1;
+		
+		for(k = 0; k < m_numHubs; k++){
 			
 			//lets get the x variables
 			//the variables for this route should be from 2*numHubs + k*(numNodes - 1*)*(numNodes - 1)
 			idx1 = 2*m_numHubs + k*m_numNodes*(m_numNodes - 1);
 			idx2 = idx1 + m_numNodes*(m_numNodes - 1);
-			//end of x variables
-		
-			//std::cout << "HUB " <<  k  << " VARIABLES" << std::endl;
 			
-		
-
-			for(i = idx1; i < idx2; i++){
-				if(  primalValPair[ i]->value > .1 ){
-					std::cout <<  osinstance->getVariableNames()[  primalValPair[ i]->idx  ] << std::endl;
-					std::cout <<  m_variableNames[  primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs  ] << std::endl;
-					//m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
-				}
+			//for(i = idx1; i < idx2; i++){
 				
-			}
+			//	if(  primalValPair[ i]->value > .1 ){
+					//std::cout <<  osinstance->getVariableNames()[  primalValPair[ i]->idx  ] << std::endl;
+					//std::cout <<  m_variableNames[  primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs  ] << std::endl;
+					//m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
+				//}
+				
+			//}
 			
-			//m_thetaCost[ m_numThetaVar ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
-			//m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
 			
-			//masterVarName = makeStringFromInt("theta(", mit->first);
-			//masterVarName += makeStringFromInt(",", k);
-			//masterVarName += ")";
+			
+			for(i1 = 0; i1 < m_numNodes; i1++){
+				
+				
+				for(j1 = 0; j1 < i1; j1++){
+					
+					//std::cout <<  osinstance->getVariableNames()[ primalValPair[ idx1 ]->idx]  << " " << primalValPair[ idx1 ]->value  << " " << i1 << " " << j1 << std::endl;
+					
+					if(  primalValPair[ idx1 ]->value > .1 ){
+						
+						m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ idx1]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
+						
+						// a positive variable pointing into node j1
+						if(j1 >= m_numHubs){
+							
+							values[ kountNonz] = 1;
+							indexes[ kountNonz++] = j1 - m_numHubs ;
+						
+							
+						}
+						
+					}
+					
+					idx1++;
+				}//end of for on j1
+				
+				
+				for(j1 = i1 + 1; j1 < m_numNodes; j1++){
+					
+					//std::cout <<  osinstance->getVariableNames()[ primalValPair[ idx1 ]->idx]  << " " << primalValPair[ idx1 ]->value  << " " << i1 << " " << j1 << std::endl;
+					
+					
+					if(  primalValPair[ idx1 ]->value > .1 ){
+						
+						m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ idx1]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
+						
+						
+						// a positive variable pointing into node j1
+						if(j1 >= m_numHubs){
+							
+							values[ kountNonz] = 1;
+							indexes[ kountNonz++] = j1 - m_numHubs ;
+							
+						}
+					
+					}
+					
+					idx1++;
+					
+				}//end of for on j1
+				
+			}//end of for on i1
+			
+			
+			//now for convexity row  k
+			
+			values[ kountNonz] = 1;
+			indexes[ kountNonz++] = m_numNodes - m_numHubs + k ;
+			
+			
+			m_thetaCost[ m_numThetaVar ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
+			
+			masterVarName = makeStringFromInt("theta(", 0);
+			masterVarName += makeStringFromInt(",", k);
+			masterVarName += ")";
 			std::cout << masterVarName << std::endl;
-			//m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
+			m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
 			
 			std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
 			
-			//objcoeff->indexes[ k + (mit->first)*m_numHubs] = k +  (mit->first)*m_numHubs;
-			//objcoeff->values[ k + (mit->first)*m_numHubs] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
-
+			objcoeff->indexes[ k ] = k ;
+			objcoeff->values[ k ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			
-			std::cout <<  osinstance->getVariableNames()[ k ] << std::endl;
-			std::cout <<  osinstance->getVariableNames()[ k + m_numHubs ] << std::endl;
 			
-
-		}//end for on k -- hubs
-		
-	
-		return NULL;
-		primalValPair.clear();
-		delete solver;
-		solver = NULL;
-
+			starts[ startsIdx++] = kountNonz;	
+			
+		}//end of index on k
 		
 		//add the constraints
 		//add the row saying we must visit each node
-		/*
+		
 		for( i =  0; i < m_numNodes - m_numHubs ; i++){
 			
 			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("visitNode_", i + m_numHubs) , 1.0, 1.0, 0); 
@@ -1654,20 +1826,28 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		
 		m_osinstanceMaster->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
 		
-		std::cout << "kountNonz = " << kountNonz << std::endl;
 		
 		//add the linear constraints coefficients
 		m_osinstanceMaster->setLinearConstraintCoefficients(kountNonz , true, 
 				values, 0, kountNonz - 1,  indexes, 0, kountNonz - 1, starts, 0, startsIdx);
 	
 		
+		primalValPair.clear();
+		delete solver;
+		solver = NULL;
 
 		delete objcoeff;
-		*/
+		objcoeff = NULL;
+		std::cout << m_osinstanceMaster->printModel() << std::endl;
+		
+		std::cout << "NONZ = " << kountNonz << std::endl;
 		
 		//delete[] values;
+		//values = NULL;
 		//delete[] starts;
+		//starts = NULL;
 		//delete[] indexes;
+		//indexes = NULL;
 		delete osilreader;
 		osilreader = NULL;
 
@@ -1687,6 +1867,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 
 	delete fileUtil;
 	fileUtil = NULL;
+	delete[] xVar;
+	xVar = NULL;
 
 	return m_osinstanceMaster;
 }//end generateInitialRestrictedMaster2
@@ -2072,13 +2254,14 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 		
 		for(k = 0; k < indexAdjust; k++){
 			std::cout <<   std::endl << std::endl;
-			std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+			
 			
 			m_separationClpModel->setRowUpper(k, 0.0);
 			m_separationClpModel->primal();		
-			std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
+			
 			if(m_separationClpModel->getObjValue() > m_eps){
-				
+				std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+				std::cout << "SEPERATION OBJJJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
 				numNewRows = 1;
 			
 				for(i = 0; i < m_numNodes - m_numHubs ; i++){
@@ -2285,6 +2468,7 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 		for(i = indexAdjust; i < numSepRows - 1; i++){
 			
 			if(-tmpRhs[ i] > 1 + m_eps ){
+			
 				// quick and dirty does x_{ij} + x_{ji} <= 1 cut off anything
 				//std::cout << " tmpRhs[ i] =  " << tmpRhs[ i]  << std::endl;
 				//which variable is this 
@@ -2348,13 +2532,14 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 		
 		for(k = 0; k < indexAdjust; k++){
 			std::cout <<   std::endl << std::endl;
-			std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+			
 			
 			m_separationClpModel->setRowUpper(k, 0.0);
 			m_separationClpModel->primal();		
-			std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
+			
 			if(m_separationClpModel->getObjValue() > m_eps){
-				
+				std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+				std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
 				numNewRows = 1;
 				m_newRowNonz[ 0] = 0;
 				m_newRowLB[ 0] = 0;
@@ -2572,13 +2757,14 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 		
 		for(k = 0; k < indexAdjust; k++){
 			std::cout <<   std::endl << std::endl;
-			std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+			
 			
 			m_separationClpModel->setRowUpper(k, 0.0);
 			m_separationClpModel->primal();		
-			std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
+			
 			if(m_separationClpModel->getObjValue() > m_eps){
-				
+				std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
+				std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
 				isCutAdded = true;
 			
 				for(i = 0; i < m_numNodes - m_numHubs ; i++){
@@ -2899,7 +3085,8 @@ void OSRouteSolver::pauHana(const double* theta){
 	}//loop on sets
 	
 	std::cout << std::endl <<  std::endl;
-	std::cout << "FINAL SOLUTION VALUE = " << cost << std::endl;
+	std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
+	std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
 	std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
 	std::cout << "NUMBER OF GENERATED CUTS  = " << m_numTourBreakCon - 1 << std::endl;
 	std::cout << "        PAU!!!" << std::endl;

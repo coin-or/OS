@@ -70,14 +70,20 @@ int main(int argc, char ** argv){
 		//now create the column generation object
 		colgenApp = new OSColGenApp( osoption);
 		
+		 
+		//now generate the restriced master
+		//colgenApp->getInitialRestrictedMaster( );
 		
 		//now generate the restriced master
 		colgenApp->getInitialRestrictedMaster2( );
 		
-		exit( 1);
+		cpuTime = CoinCpuTime() - start;
 		
-		//now generate the restriced master
-		colgenApp->getInitialRestrictedMaster( );
+		std::cout << "CPU TIME FOR GETTING INITIAL SOLUTION " << cpuTime << std::endl;
+		
+		//exit( 1);
+		
+
 		//now solve the master
 		colgenApp->solveRestrictedMasterRelaxation();
 		

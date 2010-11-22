@@ -33,7 +33,9 @@ class OSRouteSolver {
 public:
 	
 	
+	OSOption *m_osoption;
 	
+	double m_bestIPValue;
 	
 	std::string m_initOSiLFile;
 	std::map<int, std::map<int, std::vector<int> > > m_initSolMap;
@@ -185,6 +187,24 @@ public:
 	
 	/**
 	 * RETURN VALUES: 
+	 * int numNewRows -- number of new rows generated
+	 * int* numNonz -- number of nonzeros in each row
+	 * double** colIdx -- vectors column indexes of new rows
+	 * double** values -- vectors of matrix coefficient values of new rows
+	 * double* rowLB -- vector of row lower bounds
+	 * double* rowUB -- vector of row upper bounds
+	 * 
+	 * INPUT:
+	 * double* xVar -- the vector of primal  values
+	 * int numXVar -- size of master primal vector
+	 */
+	void getCutsX(const  double* xVar, const int numXVar,
+			int &numNewRows, int*  &numNonz, int** &colIdx,
+			double** &values, double* &rowLB, double* &rowUB) ;	
+	
+	
+	/**
+	 * RETURN VALUES: 
 	 * int numNewColumns -- number of new columns generated
 	 * int* numNonz -- number of nonzeros in each column
 	 * double* cost -- the objective function coefficient on each new column
@@ -202,22 +222,7 @@ public:
 			int** &rowIdx, double** &values, double &lowerBound) ;
 	
 	
-	/**
-	 * RETURN VALUES: 
-	 * int numNewRows -- number of new rows generated
-	 * int* numNonz -- number of nonzeros in each row
-	 * double** colIdx -- vectors column indexes of new rows
-	 * double** values -- vectors of matrix coefficient values of new rows
-	 * double* rowLB -- vector of row lower bounds
-	 * double* rowUB -- vector of row upper bounds
-	 * 
-	 * INPUT:
-	 * double* xVar -- the vector of primal  values
-	 * int numXVar -- size of master primal vector
-	 */
-	void getCutsX(const  double* xVar, const int numXVar,
-			int &numNewRows, int*  &numNonz, int** &colIdx,
-			double** &values, double* &rowLB, double* &rowUB) ;	
+
 	
 	
 	void getOptions( OSOption *osoption);

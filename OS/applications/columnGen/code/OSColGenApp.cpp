@@ -59,8 +59,9 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  //std::cout << "the contructor things whichBlock = " << m_whichBlock<< std::endl;
 	  m_osinstanceMaster = NULL;
 	  m_osrouteSolver = NULL;
+	
+	  m_osrouteSolver = new OSRouteSolver( osoption);
 	  m_osoption = osoption;
-	  m_osrouteSolver = new OSRouteSolver( m_osoption);
 	  getOptions( m_osoption);
 	  
 
@@ -332,7 +333,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			*(theta + i) = si->getColSolution()[i];
 		}
 
-		m_osrouteSolver->pauHana( theta);
+
 		
 
 		//solve as an integer program
@@ -340,7 +341,11 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		for(i=0; i < numCols; i++){
 			solver->osiSolver->setInteger( i);
 		}
-		//solver->osiSolver->branchAndBound();
+		solver->osiSolver->branchAndBound();
+		
+		m_osrouteSolver->m_bestIPValue = si->getObjValue();
+		
+		m_osrouteSolver->pauHana( theta);
 		
 		//for(i=0; i < numCols; i++){
 		//	if( si->getColSolution()[i] > 0)
