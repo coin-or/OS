@@ -57,6 +57,7 @@ int main(int argc, char ** argv){
 		
 		// define the classes
 		double cpuTime;
+		double masterCpuTime;
 		double start = CoinCpuTime();
 		fileUtil = new FileUtil();
 		osolFileName = argv[1];
@@ -77,9 +78,9 @@ int main(int argc, char ** argv){
 		//now generate the restriced master
 		colgenApp->getInitialRestrictedMaster2( );
 		
-		cpuTime = CoinCpuTime() - start;
+		masterCpuTime = CoinCpuTime() - start;
 		
-		std::cout << "CPU TIME FOR GETTING INITIAL SOLUTION " << cpuTime << std::endl;
+		
 		
 		//exit( 1);
 		
@@ -93,6 +94,8 @@ int main(int argc, char ** argv){
 		delete colgenApp;
 		
 		cpuTime = CoinCpuTime() - start;
+		
+		std::cout << "CPU TIME FOR GETTING INITIAL SOLUTION " << masterCpuTime << std::endl;
 		
 		std::cout << "CPU TIME  " << cpuTime << std::endl;
    }
