@@ -294,8 +294,10 @@ OS/doc/osUsersManual_2.1.bbl -text
 OS/doc/osUsersManual_2.1.ind -text
 OS/doc/osUsersManual_2.1.pdf -text
 OS/doc/osUsersManual_2.1.tex -text
+OS/doc/osUsersManual_2.2.bbl -text
 OS/doc/osUsersManual_2.2.pdf -text
 OS/doc/osUsersManual_2.2.tex -text
+OS/doc/osusersmanual_2.2.ind -text
 OS/doc/usersManualAdditions.txt -text
 OS/doc/visualstudio.pdf -text
 OS/doc/visualstudio.tex -text

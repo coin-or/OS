@@ -436,7 +436,7 @@ The binaries provided are based on Visual Studio Express 2008.  See Section \ref
 \subsection{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
 
 Compiling and modifying the OS project source\index{OS project!source code} code can be a daunting task,
-made somewhat easier by the inclusion of configure scripts\index{configure!scripts} and makefiles
+made somewhat easier by the inclusion of configure scripts\index{configure!scripts} and makefiles\index{makefile}
 in the distribution of the source. However, additional software packages are
 sometimes needed or convenient, especially on Windows.
 We collect in this section a number of recommended packages that we ourselves use in the development
@@ -771,12 +771,14 @@ These projects must be present.
 
 \item{}  Run the make files.
 
+\index{make@{\tt make}}
 \begin{verbatim}
 make
 \end{verbatim}
 
 \item{} Run the {\tt unitTest}\index{unitTest@{\tt unitTest}}.
 
+\index{make test@{\tt make test}}
 \begin{verbatim}
 make test
 \end{verbatim}
@@ -876,7 +878,7 @@ then you have not passed the unitTest and hopefully some semi-intelligible error
 
 \item{}  Install the libraries and executables.
 
-
+\index{make install@{\tt make install}}
 \begin{verbatim}
 make install
 \end{verbatim}
@@ -912,7 +914,9 @@ For example, running
 ./configure  --prefix=/usr/local  COIN_SKIP_PROJECTS="Ipopt Bonmin"
 \end{verbatim}
 
-\noindent and then running {\tt make} and {\tt make install} will put the relevant files in
+\noindent and then running {\tt make}\index{make@{\tt make}}
+ and {\tt make install}\index{make install@{\tt make install}}
+ will put the relevant files in
 
 \begin{verbatim}
 /usr/local/bin
@@ -924,7 +928,8 @@ For example, running
 
 \vskip 8pt
 
-{\bf Run an Example!}  If {\tt make test} works, proceed to Section~\ref{section:ossolverservice} 
+{\bf Run an Example!}  If {\tt make test}\index{make test@{\tt make test}}
+ works, proceed to Section~\ref{section:ossolverservice} 
 to run the key executable, {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}.
 
 
@@ -988,7 +993,7 @@ Also, if you plan to build any of the projects contained in {\tt ThirdParty}\ind
 
 \subsubsection{Microsoft Visual Studio (MSVS)} \label{section:msvs}
 
-
+\index{Microsoft Visual Studio|(}%
 Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.
 We currently support Versions 8 and~9. These versions are also sometimes referred to by their
 (approximate) release dates, which is 2008 for Version~9 and 2005 for Version~8.   In addition there is
@@ -1038,22 +1043,27 @@ on them in Windows Explorer)  and select Build from the menu bar.
 either the release or debug version of the {\tt unitTest} executable.
 \end{enumerate}
 
-\iffalse %\ifipopt
 %The solution file for version~7 provides two configurations, {\tt Debug} and {\tt Release}.
 %The former includes debug information, but both are configured without Ipopt
 %(see Section~\ref{section:ipopt}) or any of the third-party software described in
 %section~\ref{section:otherthirdparty}.
-The solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} contains three configurations, 
+%The solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} contains three configurations, 
+%{\tt Debug}\index{Microsoft Visual Studio!{\tt Debug} configuration} and 
+%{\tt Release}\index{Microsoft Visual Studio!{\tt Release} configuration}, 
+%both of which are configured without {\tt Ipopt}, as well as 
+%{\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration},
+%which can be used to add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
+%{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
+%(see Section~\ref{section:ASL}). In order to build this configuration successfully,
+%the user must first download and process additional third-party software\index{Third-party software} as explained in 
+%sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
+
+The solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} contains two configurations, 
 {\tt Debug}\index{Microsoft Visual Studio!{\tt Debug} configuration} and 
 {\tt Release}\index{Microsoft Visual Studio!{\tt Release} configuration}, 
-both of which are configured without {\tt Ipopt}, as well as 
-{\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration},
-which can be used to add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
-{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
-(see Section~\ref{section:ASL}). In order to build this configuration successfully,
-the user must first download and process additional third-party software\index{Third-party software} as explained in 
-sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
-\fi
+both of which are configured without {\tt Ipopt}.
+
+\index{Microsoft Visual Studio|)}%
 
 
 \subsubsection{Visual Studio Examples Distribution}\label{section:vsexamples}
@@ -1328,7 +1338,7 @@ and reported that the problem then went away.
 \index{MSYS|(}%
 MSYS (Minimal SYStem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice,
 such as the Microsoft command line C++ {\tt cl} compiler.  MSYS is intended as an alternative to the DOS command window.
-It is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.
+It is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and makefiles\index{makefile}.
 No compilers come with MSYS.
 In the Cygwin\index{Cygwin}, MinGW\index{MinGW}, and MSYS\index{MSYS} hierarchy, it is at the bottom of the food chain in terms of tools provided.
 However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user
@@ -1397,13 +1407,15 @@ C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib
 The environment variables can be set using the {\tt System Properties} in the Windows {\tt Control Panel}.
 
 
-\item{}  In the MSYS command window connect to the root of the OS project and run the {\tt configure}  script  followed by {\tt make} as described in Section~\ref{section:unixbuilds}.
+\item{}  In the MSYS command window connect to the root of the OS project and run the {\tt configure} 
+script  followed by {\tt make}\index{make@{\tt make}}  as described in Section~\ref{section:unixbuilds}.
 
 \end{enumerate}
 
 
 
-{\bf Run an Example!}  If {\tt make test} works, proceed to Section~\ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
+{\bf Run an Example!}  If {\tt make test}\index{make test@{\tt make test}}
+ works, proceed to Section~\ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
 
 
 Microsoft Windows users who wish to obtain MSYS for building the OS project can download
@@ -1446,8 +1458,9 @@ run {\tt configure} as follows:
 %
 After you run {\tt configure}, the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir})
 will be mirrored in the {\tt vpath-debug} directory, and all of the necessary
-{\tt Makefile}s will be copied there.  Next from the {\tt vpath-debug} directory execute
+{\tt Makefile}s\index{makefile|(} will be copied there.  Next from the {\tt vpath-debug} directory execute
 
+\index{make@{\tt make}}
 \begin{verbatim}
 make
 \end{verbatim}
@@ -1463,6 +1476,7 @@ inside {\tt vpath-debug} and not {\tt ../COIN-OS}.\index{debug version, MSYS|)}
 inside the {\tt ../COIN-OS} directory, you cannot do a {\tt VPATH} build
 until you have run
 %
+\index{make distclean@{\tt make distclean}}
 \begin{verbatim}
 make distclean
 \end{verbatim}
@@ -1470,7 +1484,7 @@ make distclean
 in the {\tt ../COIN-OS} directory.
 
 \item{}Note also that {\tt configure} automatically detects the presence of third-party software and prepares
-the configuration and make files accordingly. Once you have downloaded, e.g., Blas\index{Blas}, you must specify
+the configuration and make files\index{makefile|)} accordingly. Once you have downloaded, e.g., Blas\index{Blas}, you must specify
 %
 \begin{verbatim}
 configure COIN_SKIP_PROJECTS="ThirdParty/Blas"
@@ -1483,6 +1497,8 @@ if you want to recreate the default configuration.%
 \item{}If you work with the trunk\index{OS project!trunk version} version of OS, it is possible that files are added to
 and removed from the distribution due to development activities. These files are not recognized properly
 by the system unless it is reconfigured by running
+%
+\index{make distclean@{\tt make distclean}}
 \begin{verbatim}
 make distclean
 \end{verbatim}
@@ -1490,6 +1506,14 @@ followed by
 \begin{verbatim}
 ./configure
 \end{verbatim}
+in the {\tt VPATH} directory.
+
+\item{}You can customize compiler flags, linker options, include directories, and many other options by setting
+appropriate environment variables. For further information you may want to consult the built-in help function by specifying
+\begin{verbatim}
+./configure --help
+\end{verbatim}
+or the help file available at the homepage of the {\tt BuildTools} project ({\UrlBuildtools}).
 \end{enumerate}
 \index{configure|)}
 
@@ -1752,7 +1776,7 @@ In the OS distribution directory structure (see Figure~\ref{figure:osprojectroot
 directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.
 The source code for any of these packages must be downloaded separately using the {\tt get.xxxx} scripts,
 as {\tt configure}\index{configure|(} will not build these projects without the source code being present. After the download,
-{\tt configure} will recognize the presence of these files and will configure the makefiles accordingly.
+{\tt configure} will recognize the presence of these files and will configure the makefiles\index{makefile} accordingly.
 
 If the user wants to exclude these projects from the build after they have been downloaded and detected,
 a new {\tt configure} is required with instructions to skip them. For instance, if the user experiences problems
@@ -1805,7 +1829,7 @@ variable is defined in  {\tt config\_os.h}.
 
 \medskip
 Make sure to run {\tt configure} after you have downloaded the required
-source code, in order to modify the makefiles appropriately. It is {\bf important to note} that even though there are
+source code, in order to modify the makefiles\index{makefile} appropriately. It is {\bf important to note} that even though there are
 multiple files named {\tt configure} in various subdirectories, you should only ever run the master configure in the
 distribution root directory, possibly accessed from a {\tt VPATH}\index{VPATH} as in Section~\ref{section:vpath}.
 It sets important global variables and will call all other necessary configure files in turn.\index{configure|)}
@@ -1921,7 +1945,8 @@ For that reason we are unable to distribute OS binaries linked to the GLPK solve
 Users interested in GLPK must build OS from source and link to the GLPK libraries.
 
 In order to use GLPK with OS in a unix environment, connect to {\tt
-ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or 
+ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, run {\tt configure}, 
+followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or 
 Section~\ref{section:vpath}.
 
 Users on MSVS\index{Microsoft Visual Studio} can download the source by
@@ -2184,11 +2209,11 @@ If you download the OS package, you get these additional COIN-OR projects. The l
 
 The following directories are also in the project root.
 \begin{itemize}
-\item {\tt bin} - after executing {\tt make install} the bin directory will contain 
-{\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}, {\tt clp}, {\tt cbc},  
-{\tt cbc-generic} and {\tt symphony}.
+\item {\tt bin} - after executing {\tt make install}\index{make install@{\tt make install}}
+the bin directory will contain {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}, {\tt clp}, {\tt cbc}  
+and {\tt symphony}.
 
-\item {\tt Data} - this directory contains numerous test problems that are used by the {\tt unitTest}s of
+\item {\tt Data} - this directory contains numerous test problems that are used by the unit tests of
 the COIN-OR projects just mentioned.
 
 \item {\tt doxydoc} - is a folder for documentation.
@@ -4387,7 +4412,7 @@ and takes MATLAB arrays to create an OSiL instance.  This class is part of the O
 In order to use the {\tt OSMatlab} class it is necessary to  compile
 {\tt OSmatlabSolver.cpp}  into  a MATLAB Executable ({\tt mex}) file.
 The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory.
-We  assume the user has already done a {\tt make install} and that in the OS root directory
+We  assume the user has already done a {\tt make install}\ref{section:unixbuilds} and that in the OS root directory
 \begin{verbatim}
 /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS
 \end{verbatim}
@@ -4683,13 +4708,18 @@ string serviceLocation = http://kipp.chicagobooth.edu/os/OSSolverService.jws
 osagent = new OSSolverAgent(  serviceLocation );
 string sOSrL = osagent->solve(sOSiL, sOSoL);
 \end{verbatim}
-Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  The use of these methods is described in Section~\ref{section:servicemethods}.
+Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  
+The use of these methods is described in Section~\ref{section:servicemethods}.
 
 
 
-The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks as creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages.
+The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks as 
+creating and parsing SOAP messages and making low level socket calls to the server running the solver service. 
+The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages.
 
-There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code {\tt OSFileUpload.cpp} described in Section~\ref{section:fileupload}.
+There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to upload files from the hard drive of a client to the server. 
+It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code 
+{\tt OSFileUpload.cpp} described in Section~\ref{section:fileupload}.
 \index{OSAgent@{\tt OSAgent}|)}
 
 \subsection{OSCommonInterfaces}
@@ -5083,6 +5113,8 @@ The generated parser code from {\tt flex} and {\tt bison} is distributed with th
 of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} 
 or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with 
 {\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
+%
+\index{make run_parsers@{\tt make run\_parsers}}
 \begin{verbatim}
 make  run_parsers
 \end{verbatim}
@@ -5439,6 +5471,8 @@ x_1 Type = C  Lower Bound =  0  Upper Bound =  1.7976931348623157e308
 
 These example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples
 in a unix environment the user must first run
+%
+\index{make install@{\tt make install}}
 \begin{verbatim}
 make install
 \end{verbatim}
@@ -5457,39 +5491,17 @@ example is in the directory
 COIN-OS/OS/examples/osModDemo
 \end{verbatim}
 Next, the user should connect to the appropriate example directory and run {\tt make}.
-If the user has done a VPATH\index{VPATH} build, the Makefiles will be in each respective example directory under
+If the user has done a VPATH\index{VPATH} build, the makefiles\index{makefile|(} will be in each respective example directory under
 \begin{verbatim}
 vpath_root/OS/examples
 \end{verbatim}
-otherwise, the Makefiles will be in each respective example directory under
+otherwise, the makefiles will be in each respective example directory under
 \begin{verbatim}
 COIN-OS/OS/examples
 \end{verbatim}
 
 The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified by the user
 if necessary.  The part of the Makefile to be adjusted, if necessary, is
-%\begin{verbatim}
-%##########################################################################
-%#    You can modify this example makefile to fit for your own program.   #
-%#    Usually, you only need to change the five CHANGEME entries below.   #
-%##########################################################################
-%
-%# CHANGEME: This should be the name of your executable
-%EXE = OSTestCode
-%# CHANGEME: Here is the name of all object files corresponding to the source
-%#           code that you wrote in order to define the problem statement
-%OBJS =  OSTestCode.o
-%# CHANGEME: Additional libraries
-%ADDLIBS =
-%# CHANGEME: Additional flags for compilation (e.g., include flags)
-%ADDINCFLAGS =  -I${prefix}/include
-%# CHANGEME: SRCDIR and VPATH should be the path to the source code. It is assumed
-%# that the lib directory is in prefix/lib and the header files are in
-%# prefix/include
-%SRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
-%VPATH = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
-%prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
-%\end{verbatim}
 
 \begin{verbatim}
 ##########################################################################
@@ -5516,7 +5528,7 @@ prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
 
 
 Developers can use the Makefiles as a starting point for building applications that use the 
-OS project libraries.
+OS project libraries\index{makefile|)}.
 
 \medskip
 Users of Microsoft Visual Studio can obtain the executables by opening the solution file 
@@ -5599,7 +5611,11 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 \subsection{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
 
-This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  This project offers the user with the ability to have control over each node in the branch and process. This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 2) a user-defined cut, and 3) a user-defined variable. 
+This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  
+This project offers the user with the ability to have control over each node in the branch and process. 
+This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, 
+a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 
+2) a user-defined cut, and 3) a user-defined variable. 
 
 
 \subsection{OSModificationDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
@@ -5951,7 +5967,7 @@ generates the result file {\tt result.osrl} in the OS OSrL format.
 
 
 \subsection{  template }\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
-directory.  This is an empty example that comes with a {\tt Makefile}  that links to all of the necessary 
+directory.  This is an empty example that comes with a {\tt Makefile}\index{makefile}  that links to all of the necessary 
 header files and libraries. For Windows users there is also a solution file configured to link with all
 of the libraries in the {\tt lib} directory and pointing to all of the header files in the {\tt include} directory.
 The user can write his or her own code here.
@@ -6630,7 +6646,7 @@ COIN-OS/OS/applications/fileUpload
 
 Before you can use {\tt OSFileUpload}, you must give a valid URL for the location of the server.
 This information must be provided in line 82 of the source code {\tt OSFileUpload.cpp} before 
-issuing the {\tt make} command (in a unix environment) or the build (under MS VisualStudio).
+issuing the {\tt make}\index{make@{\tt make}} command (in a unix environment) or the build (under MS VisualStudio)\index{Microsoft Visual Studio}.
 
 The {\tt OSFileUpload} client executable (see {\tt OS/applications/fileUpload}) takes one argument on the command line,
 which is the location of the file on the local directory to upload to the server. For example,
