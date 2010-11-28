@@ -73,18 +73,19 @@ run_parsers:
 pkgconfiglibdir = $(libdir)/pkgconfig
 pkgconfiglib_DATA = os.pc 
 
-
-if COIN_HAS_PKGCONFIG
 addlibsdir = $(DESTDIR)$(datadir)/coin/doc/OS
 	
 install-data-hook:
 	@$(mkdir_p) "$(addlibsdir)"
+if COIN_HAS_PKGCONFIG
 	PKG_CONFIG_PATH=@COIN_PKG_CONFIG_PATH@ \
 	$(PKG_CONFIG) --libs os > $(addlibsdir)/os_addlibs.txt
+else
+	echo -L@abs_lib_dir@ -lOS @OSLIB_LIBS_INSTALLED@ > $(addlibsdir)/os_addlibs.txt
+endif
 
 uninstall-hook:
 	rm -f $(addlibsdir)/os_addlibs.txt
-endif
 
 ########################################################################
 #                         Maintainer Stuff                             #
