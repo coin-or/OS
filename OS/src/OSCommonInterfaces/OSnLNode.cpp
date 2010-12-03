@@ -1553,34 +1553,22 @@ OSnLNodeNumber::~OSnLNodeNumber(){
 std::string OSnLNodeNumber::getTokenNumber(){
 	ostringstream outStr;
 	outStr << inodeInt;
-	outStr << ":" ;
-	outStr << value ;
-	//if(type.length() > 0){
-		outStr << ":" ;
-		outStr << type ;
-	//}
-	//if(id.length() > 0){
-		outStr << ":" ;
-		outStr << id;
-	//}
+//	outStr << ":" ;
+//	outStr << value ;
+//	//if(type.length() > 0){
+//		outStr << ":" ;
+//		outStr << type ;
+//	//}
+//	//if(id.length() > 0){
+//		outStr << ":" ;
+//		outStr << id;
+//	//}
 	return outStr.str();
 }//getTokenNumber
 
 
 std::string OSnLNodeNumber::getTokenName(){
-	ostringstream outStr;
-	outStr << "number";
-	outStr << ":" ;
-	outStr << value ;
-	//if(type.length() > 0){
-		outStr << ":" ;
-		outStr << type ;
-	//}
-	//if(id.length() > 0){
-		outStr << ":" ;
-		outStr << id;
-	//}
-	return outStr.str();
+	return "number";
 }//getTokenName
 
 
@@ -1647,16 +1635,6 @@ OSnLNodeE::~OSnLNodeE(){
 std::string OSnLNodeE::getTokenNumber(){
 	ostringstream outStr;
 	outStr << inodeInt;
-	//outStr << ":" ;
-	//outStr << value ;
-	//if(type.length() > 0){
-	//	outStr << ":" ;
-	//	outStr << type ;
-	//}
-	//if(id.length() > 0){
-	//	outStr << ":" ;
-	//	outStr << id;
-	//}
 	return outStr.str();
 }//getTokenNumber
 
@@ -1664,16 +1642,6 @@ std::string OSnLNodeE::getTokenNumber(){
 std::string OSnLNodeE::getTokenName(){
 	ostringstream outStr;
 	outStr << "E";
-	//outStr << ":" ;
-	//outStr << value ;
-	//if(type.length() > 0){
-	//	outStr << ":" ;
-	//	outStr << type ;
-	//}
-	//if(id.length() > 0){
-	//	outStr << ":" ;
-	//	outStr << id;
-	//}
 	return outStr.str();
 }//getTokenName
 
@@ -1682,17 +1650,6 @@ std::string OSnLNodeE::getNonlinearExpressionInXML(){
 	ostringstream outStr;
 	outStr << "<" ;
 	outStr << "E";
-//		outStr << "  value=\"";
-//		outStr << value ;
-//		outStr << "\"";
-//		outStr << " type=\"";
-//		outStr << type ;
-//		outStr << "\"";
-//		if(id.length() > 0){
-//			outStr << "  id=\"";
-//			outStr << id ;
-//			outStr << "\"";
-//		}
 		outStr << "/>";
 	return outStr.str();
 }//getNonlinearExpressionInXML()
