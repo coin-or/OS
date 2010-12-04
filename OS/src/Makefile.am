@@ -26,7 +26,6 @@ libOS_la_SOURCES =
 # This is for libtool (on Windows)
 libOS_la_LDFLAGS = $(LT_LDFLAGS)
 
-
 # We want to have all the OS objects in this library
 libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSCommonInterfaces/libOSCommonInterfaces.la \
@@ -34,11 +33,10 @@ libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSModelInterfaces/libOSModelInterfaces.la \
 		./OSParsers/libOSParsers.la \
 		./OSSolverInterfaces/libOSSolverInterfaces.la 
+		
 # Since automake is not doing this on its own, we need to declare the
 # dependencies to the subdirectory libraries here
 libOS_la_DEPENDENCIES = $(libOS_la_LIBADD)
-
-
 
 # Now we check into which directories to recurse, and which subdirectory
 # libraries to include
@@ -57,11 +55,6 @@ SUBDIRS =
 #                    OSSolverService program                               #
 ########################################################################
 
-LDADD =
-ALLLDADD =
-LIBS = 
-OSSolverService_DEPENDENCIES =
-
 # Name of the executable compiled in this directory.  We want it to be
 # installed in the 'bin' directory
 bin_PROGRAMS = OSSolverService
@@ -69,26 +62,21 @@ bin_PROGRAMS = OSSolverService
 # List all source files for this executable, including headers
 OSSolverService_SOURCES = OSSolverService.cpp 
 
-
-if COIN_HAS_COUENNE
-     OSSolverService_SOURCES += $(COUENNESRCDIR)/src/main/BonCouenneInfo.cpp $(COUENNESRCDIR)/src/main/BonCouenneInfo.hpp
-endif
-
-
-# List all additionally required COIN libraries
-
-OSSolverService_LDADD =  \
-	libOS.la $(OSLIB_LIBS)
-	
-
-#OSSolverService_DEPENDENCIES += libOS.la
+# TODO? the following will not work with the new buildsystem anymore
+#if COIN_HAS_COUENNE
+#     OSSolverService_SOURCES += $(COUENNESRCDIR)/src/main/BonCouenneInfo.cpp $(COUENNESRCDIR)/src/main/BonCouenneInfo.hpp
+#endif
 
 
+# List all additionally required libraries
 
+OSSolverService_LDADD = libOS.la $(OSLIB_LIBS)
+OSSolverService_DEPENDENCIES = libOS.la $(OSLIB_DEPENDENCIES)
 
 
 if COIN_HAS_COUENNE
 OSSolverService_LDADD +=  $(COUENNE_LIBS)
+OSSolverService_DEPENDENCIES +=  $(COUENNE_DEPENDENCIES)
 #   OSSolverService_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 #   parsingTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 if COIN_HAS_ASL
@@ -105,6 +93,7 @@ endif
 
 if COIN_HAS_BONMIN
 OSSolverService_LDADD +=  $(BONMIN_LIBS)
+OSSolverService_DEPENDENCIES +=  $(BONMIN_DEPENDENCIES)
 #   OSSolverService_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
 #   parsingTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
 #	$(BONMINOBJDIR)/src/Interfaces/libbonmininterfaces.la 
@@ -113,6 +102,7 @@ endif
 
 if COIN_HAS_IPOPT
   OSSolverService_LDADD +=  $(IPOPT_LIBS)
+  OSSolverService_DEPENDENCIES +=  $(IPOPT_DEPENDENCIES)
 if COIN_HAS_ASL
 #      OSSolverService_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
 endif
@@ -120,25 +110,26 @@ endif
 #  parsingTest_LDADD +=  $(IPOPTOBJDIR)/src/Interfaces/libipopt.la
 #  LIBS += `cat $(IPOPTOBJDIR)/src/Interfaces/ipopt_addlibs_cpp.txt`
 endif
-	
-	
-OSSolverService_LDADD +=  $(CBC_LIBS)
 
+OSSolverService_LDADD += $(CBC_LIBS)
+OSSolverService_DEPENDENCIES += $(CBC_LIBS)
 
-OSSolverService_LDADD += $(CLP_LIBS) 
-
-
+OSSolverService_LDADD += $(CLP_LIBS)
+OSSolverService_DEPENDENCIES += $(CLP_DEPENDENCIES)
 
 if COIN_HAS_SYMPHONY
- OSSolverService_LDADD += $(SYMPHONY_LIBS) 
+ OSSolverService_LDADD += $(SYMPHONY_LIBS)
+ OSSolverService_DEPENDENCIES += $(SYMPHONY_DEPENDENCIES)
 endif
 
 if COIN_HAS_DYLP
  OSSolverService_LDADD += $(DYLP_LIBS)
+ OSSolverService_DEPENDENCIES += $(DYLP_DEPENDENCIES)
 endif
 
 if COIN_HAS_VOL
  OSSolverService_LDADD += $(VOL_LIBS)
+ OSSolverService_DEPENDENCIES += $(VOL_DEPENDENCIES)
 endif
 
 #if COIN_HAS_CPX
@@ -146,20 +137,23 @@ endif
 # parsingTest_LDADD += $(OSIOBJDIR)/src/OsiCpx/libOsiCpx.la
 #endif
 
- OSSolverService_LDADD += $(CBC_LIBS)
+OSSolverService_LDADD += $(CBC_LIBS)
+OSSolverService_DEPENDENCIES += $(CBC_LIBS)
 
-
- OSSolverService_LDADD +=  $(CGL_LIBS)
+OSSolverService_LDADD +=  $(CGL_LIBS)
+OSSolverService_DEPENDENCIES +=  $(CGL_DEPENDENCIES)
 
 
 if COIN_HAS_GLPK
 OSSolverService_LDADD += $(GLPK_LIBS)
+OSSolverService_LDADD += $(GLPK_DEPENDENCIES)
 endif
 
 if COIN_HAS_ASL
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-  OSSolverService_LDADD += $(ASL_LIBS) 
+  OSSolverService_LDADD += $(ASL_LIBS)
+  OSSolverService_LDADD += $(ASL_DEPENDENCIES)
 endif
 
 
@@ -315,9 +309,6 @@ endif
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
-ALLLDADD += $(LDADD) 
-
-
 
 #OSSolverService_LDADD = $(ALLLDADD) $(ADDLIBS)  
 ########################################################################
@@ -325,7 +316,7 @@ ALLLDADD += $(LDADD)
 ########################################################################
 
 # Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'install/coin'
+# and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSConfig.h \

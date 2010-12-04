@@ -20,14 +20,15 @@ noinst_PROGRAMS = unitTest
 # List all source files for this executable, including headers
 unitTest_SOURCES = unitTest.cpp 
 
-# List all additionally required COIN libraries
-unitTest_LDADD =  \
-	../src/libOS.la $(OSLIB_LIBS)
+# List all additionally required libraries
+unitTest_LDADD =  ../src/libOS.la $(OSLIB_LIBS)
+unitTest_DEPENDENCIES =  ../src/libOS.la $(OSLIB_DEPENDENCIES)
 
 
 		
 if COIN_HAS_COUENNE
 unitTest_LDADD +=  $(COUENNE_LIBS)
+unitTest_DEPENDENCIES +=  $(COUENNE_DEPENDENCIES)
 #   unitTest_LDADD += $(COUENNEOBJDIR)/src/main/libBonCouenne.la
 
 if COIN_HAS_ASL
@@ -44,6 +45,7 @@ endif
 
 if COIN_HAS_BONMIN
 unitTest_LDADD +=  $(BONMIN_LIBS)
+unitTest_DEPENDENCIES +=  $(BONMIN_DEPENDENCIES)
 
 #   unitTest_LDADD += $(BONMINOBJDIR)/src/CbcBonmin/libbonmin.la 
 
@@ -53,6 +55,7 @@ endif
 
 if COIN_HAS_IPOPT
   unitTest_LDADD +=  $(IPOPT_LIBS)
+  unitTest_DEPENDENCIES +=  $(IPOPT_DEPENDENCIES)
 
 if COIN_HAS_ASL
 #      unitTest_LDADD += $(IPOPTOBJDIR)/src/Apps/AmplSolver/#libamplinterface.la 
@@ -64,20 +67,25 @@ endif
 	
 	
 unitTest_LDADD +=  $(CBC_LIBS)
-unitTest_LDADD += $(CLP_LIBS) 
+unitTest_DEPENDENCIES +=  $(CBC_DEPENDENCIES)
 
+unitTest_LDADD += $(CLP_LIBS)
+unitTest_DEPENDENCIES += $(CLP_DEPENDENCIES)
 
 
 if COIN_HAS_SYMPHONY
  unitTest_LDADD += $(SYMPHONY_LIBS)
+ unitTest_DEPENDENCIES += $(SYMPHONY_DEPENDENCIES)
 endif
 
 if COIN_HAS_DYLP
  unitTest_LDADD += $(DYLP_LIBS)
+ unitTest_DEPENDENCIES += $(DYLP_DEPENDENCIES)
 endif
 
 if COIN_HAS_VOL
- unitTest_LDADD += $(VOL_LIBS) 
+ unitTest_LDADD += $(VOL_LIBS)
+ unitTest_DEPENDENCIES += $(VOL_DEPENDENCIES)
 endif
 
 #if COIN_HAS_CPX
@@ -85,13 +93,16 @@ endif
 #endif
 
  unitTest_LDADD += $(CBC_LIBS)
+ unitTest_DEPENDENCIES += $(CBC_DEPENDENCIES)
 
 
  unitTest_LDADD +=  $(CGL_LIBS)
+ unitTest_DEPENDENCIES += $(CBC_DEPENDENCIES)
 
 
 if COIN_HAS_GLPK
  unitTest_LDADD += $(GLPK_LIBS)
+ unitTest_DEPENDENCIES += $(GLPK_DEPENDENCIES)
 
 endif
 
@@ -99,7 +110,7 @@ if COIN_HAS_ASL
 #  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
 #  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
   unitTest_LDADD += $(ASL_LIBS) 
-
+  unitTest_DEPENDENCIES += $(ASL_DEPENDENCIES)
 endif
 
 
