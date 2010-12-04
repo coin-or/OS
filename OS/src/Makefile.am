@@ -112,7 +112,7 @@ endif
 endif
 
 OSSolverService_LDADD += $(CBC_LIBS)
-OSSolverService_DEPENDENCIES += $(CBC_LIBS)
+OSSolverService_DEPENDENCIES += $(CBC_DEPENDENCIES)
 
 OSSolverService_LDADD += $(CLP_LIBS)
 OSSolverService_DEPENDENCIES += $(CLP_DEPENDENCIES)
@@ -138,7 +138,7 @@ endif
 #endif
 
 OSSolverService_LDADD += $(CBC_LIBS)
-OSSolverService_DEPENDENCIES += $(CBC_LIBS)
+OSSolverService_DEPENDENCIES += $(CBC_DEPENDENCIES)
 
 OSSolverService_LDADD +=  $(CGL_LIBS)
 OSSolverService_DEPENDENCIES +=  $(CGL_DEPENDENCIES)
