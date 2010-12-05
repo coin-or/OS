@@ -129,6 +129,11 @@ public:
 	int m_numThetaVar;
 	int m_numThetaNonz;
 	double* m_thetaCost;
+	
+	//the number of artificial variables in the restricted master
+	//they should be the first variables
+	
+	int m_numVarArt;
 
 
 	double m_eps;
