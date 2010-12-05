@@ -17,8 +17,8 @@ CXXFLAGS = -O3  -pipe -DNDEBUG -pedantic-errors -Wimplicit -Wparentheses -Wretur
 ########################################################################
 
 SUBDIRS = src
-  SUBDIRS += test
-  SUBDIRS += applications
+#  SUBDIRS += test
+#  SUBDIRS += applications
 
 # We don't want to compile the test subdirectory, unless the test target is
 # specified.  But we need to list it as subdirectory to make sure that it is
