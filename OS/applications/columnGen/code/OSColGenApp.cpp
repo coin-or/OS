@@ -332,6 +332,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 
 		for(i=0; i < numCols; i++){
 			*(theta + i) = si->getColSolution()[i];
+			
 		}
 
 

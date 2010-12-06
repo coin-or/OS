@@ -1456,9 +1456,9 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 	
 	//this master will have m_numNodes artificial variables
 	
-	m_numVarArt = m_numNodes;
+	m_numVarArt = 2*m_numNodes;
 	
-	m_numVarArt = 0;
+	//m_numVarArt = 0;
 	
 	// define the classes
 	FileUtil *fileUtil = NULL;
@@ -1582,14 +1582,68 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 
 		
 		// now the constraints
-		m_osinstanceMaster->setConstraintNumber( m_numNodes); 		
+		m_osinstanceMaster->setConstraintNumber( m_numNodes); 	
 		
-		//
-		//return NULL;
+		
+		
+		//add the artificial variables -- they must be first in the model
+		
 		int varNumber;
 		varNumber = 0;
 		std::string masterVarName;
 		kountNonz = 0;
+		
+		for(i = 0; i < m_numNodes; i++){
+			
+			
+			objcoeff->indexes[ varNumber ] = varNumber ;
+			//if obj too large we get the following error
+			//Assertion failed: (fabs(obj[i]) < 1.0e25), function createRim, 
+			//file ../../../Clp/src/ClpSimplex.cpp, l
+			
+			//objcoeff->values[ varNumber ] = OSDBL_MAX;
+			
+			objcoeff->values[ varNumber ] = 1.0e24;
+			
+			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
+					0, 1, 'C');
+			
+			
+			values[ kountNonz] = 1;
+			indexes[ kountNonz++] = i ;
+			starts[ startsIdx++] = kountNonz;
+			
+			
+			
+		}
+		
+		
+		for(i = 0; i < m_numNodes; i++){
+			
+			
+			objcoeff->indexes[ varNumber ] = varNumber ;
+			
+			//if obj too large we get the following error
+			//Assertion failed: (fabs(obj[i]) < 1.0e25), function createRim, 
+			//file ../../../Clp/src/ClpSimplex.cpp, l
+			objcoeff->values[ varNumber ] = 1.0e24;
+			
+			
+			
+			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AN", i ) , 
+					0, 1, 'C');
+			
+			
+			values[ kountNonz] = -1;
+			indexes[ kountNonz++] = i ;
+			starts[ startsIdx++] = kountNonz;
+			
+			
+			
+		}
+		
+		
+		//
 		// now get the primal solution
 		//solve the model for solution in the osoption object
 
@@ -1815,8 +1869,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			
 			std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
 			
-			objcoeff->indexes[ k ] = k ;
-			objcoeff->values[ k ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			objcoeff->indexes[ k + m_numVarArt ] = k + m_numVarArt ;
+			objcoeff->values[ k + m_numVarArt ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			
 			
 			starts[ startsIdx++] = kountNonz;	
@@ -1838,32 +1892,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			
 			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("convexityRowRoute_", kount++ ) , 1.0, 1.0, 0); 
 		}
-		
-	
-		
-		
-		//add the artificial variables
-		
-		for(i = 0; i < m_numVarArt; i++){
-			
-			
-			objcoeff->indexes[ varNumber ] = varNumber ;
-			//objcoeff->values[ varNumber ] = OSDBL_MAX;
-			
-			objcoeff->values[ varNumber ] = 10000;
-			
-			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("A", i ) , 
-					0, 1, 'C');
-			
-			
-			values[ kountNonz] = 1;
-			indexes[ kountNonz++] = i ;
-			starts[ startsIdx++] = kountNonz;
-			
-			
-			
-		}
-		
+				
 		m_osinstanceMaster->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
 		
 		
@@ -3088,60 +3117,73 @@ void OSRouteSolver::pauHana(const double* theta){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
-	
-	int i;
-	int j;
-	int k;
-	double cost = 0;
-	for(i = 0; i < m_numThetaVar - 1  ; i++){
-	
-		cost += theta[ i]*m_thetaCost[ i + 1];
-		//std::cout << "COLUMN VALUE = " << theta[ i] << std::endl;
-	}
-	
-	
-
-	
-	float numSets;
-	int kount;
-	
-	numSets = floor( double((m_numThetaVar - 1 ) / m_numHubs));
-
-
-	//kipp throw exception if number of columns not an even multiple of m_numHubs
-	kount = 0;
-	
-	
-	for(i = 0; i < numSets  ; i++){
+	try{
+		int i;
+		int j;
+		int k;
+		double cost = 0;
+		//we better NOT have any artifical variables positive
+		for(i = 0; i < m_numVarArt  ; i++){
+			
+			if(theta[ i] > m_eps) throw ErrorClass("we have a positive artificial variable");
+		}
 		
-		for(k = 0; k < m_numHubs; k++){
+		for(i = m_numVarArt; i < m_numThetaVar - 1 + m_numVarArt  ; i++){
+		
+			cost += theta[ i]*m_thetaCost[ i + 1  - m_numVarArt];
+			//std::cout << "COLUMN VALUE = " << theta[ i] << std::endl;
+		}
+		
+		
+	
+		
+		float numSets;
+		int kount;
+		
+		numSets = floor( double((m_numThetaVar - 1 ) / m_numHubs));
+	
+	
+		//kipp throw exception if number of columns not an even multiple of m_numHubs
+		kount = 0;
+		
+		
+		for(i = 0; i < numSets  ; i++){
 			
-			if( theta[ kount ] > .001){
+			for(k = 0; k < m_numHubs; k++){
 				
-				std::cout << "HUB = "  <<  k << "  THETA = " << kount << " = "  << theta[ kount] << std::endl;
-				
-				for(j = m_thetaPnt[ kount ];  j <  m_thetaPnt[ kount + 1];  j++){
+				if( theta[ kount + m_numVarArt  ] > m_eps){
 					
-					std::cout << "VARIABLE "  <<  m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
+					std::cout << "HUB = "  <<  k << "  THETA = " << kount << " = "  << theta[ kount + m_numVarArt] << std::endl;
 					
-				}
+					for(j = m_thetaPnt[ kount ];  j <  m_thetaPnt[ kount + 1];  j++){
+						
+						std::cout << "VARIABLE "  <<  m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
+						
+					}
+					
+				}//loop on if positive
 				
-			}//loop on if positive
-			
-			kount++;
-			
-		}//loop on hubs
+				kount++;
+				
+			}//loop on hubs
+		
+		}//loop on sets
+		
+		std::cout << std::endl <<  std::endl;
+		std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
+		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
+		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
+		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numTourBreakCon - 1 << std::endl;
+		std::cout << "        PAU!!!" << std::endl;
+		
+		std::cout << std::endl <<  std::endl;
 	
-	}//loop on sets
 	
-	std::cout << std::endl <<  std::endl;
-	std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
-	std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
-	std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
-	std::cout << "NUMBER OF GENERATED CUTS  = " << m_numTourBreakCon - 1 << std::endl;
-	std::cout << "        PAU!!!" << std::endl;
-	
-	std::cout << std::endl <<  std::endl;
+	}catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}	
 		
 }//end pauHana -- no pun intended
 
