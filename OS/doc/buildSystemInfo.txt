@@ -51,4 +51,10 @@ The macro figures out all the compiler and linker flags necessary tolink to Osi
 
 More on Externals -- I think I understand
 
-The svn:externals properties are part of the repository, so they are seton the server. When svn does a checkout, it looks for the value ofsvn:externals, and the checks out everything in there too.The Externals or Dependencies file is just something COIN-OR specific. Ithink the use of the Externals file is to make it easier to edit thesvn:externals property. I.e., you edit the file and then set the svnproperty to the content of this file (svn propset svn:external . -FExternals)
+The svn:externals properties are part of the repository, so they are seton the server. When svn does a checkout, it looks for the value ofsvn:externals, and the checks out everything in there too.The Externals or Dependencies file is just something COIN-OR specific. Ithink the use of the Externals file is to make it easier to edit thesvn:externals property. I.e., you edit the file and then set the svnproperty to the content of this file (svn propset svn:external . -FExternals)
+
+Here is the thing to do:
+
+Okay, this really helps. So when things settle down, then I should:1) trash the OS Externals file2) set the Dependicies file to point to BuildTools stable.3) run BuildTools/set_externals
+
+4) do an svn commitand that will then set the svn:externals properties on the server/repository. 
