@@ -177,9 +177,9 @@
 
 % Current software versions
 \newcommand{\GlpkVer}{4.42}
-\newcommand{\OSstable}{2.2}
-\newcommand{\OSrelease}{2.2.0}
-\newcommand{\OStrunk}{3139}
+\newcommand{\OSstable}{2.3}
+\newcommand{\OSrelease}{2.3.0}
+\newcommand{\OStrunk}{3903}
 \newcommand{\MsysVer}{1.0.11}
 \newcommand{\MsysFile}{bash-3.1-MSYS-1.0.11}
 
@@ -188,9 +188,14 @@
 \begin{document}
 
 %Some cross-referencing index entries (to be expanded as needed)
-\index{ASL|see{AMPL Solver Library (ASL)}}
-\index{HSL|see{Harwell Subroutine Library (HSL)}}
-\index{nl files|see{AMPL nl format}}
+\index{AMPL Solver Library |see{Third-party software, ASL}}
+\index{ASL|see{Third-party software, ASL}}
+\index{Blas|see{Third-party software, Blas}}
+\index{Harwell Subroutine Library|see{Third-party software, HSL}}
+\index{HSL|see{Third-party software, HSL}}
+\index{Lapack|see{Third-party software, Lapack}}
+\index{Mumps|see{Third-party software, Mumps}}
+
 \index{Bonmin@{\tt Bonmin}|see{COIN-OR projects, {\tt Bonmin}}}
 \index{BuildTools@{\tt BuildTools}|see{COIN-OR projects, {\tt BuildTools}}}
 \index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
@@ -203,6 +208,7 @@
 %\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
 \index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
 \index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
+\index{nl files|see{AMPL nl format}}
 \index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
 %\index{Release configuration|see{Microsoft Visual Studio, {\tt Release} configuration}}
 %\index{Release-plus configuration|see{Microsoft Visual Studio, {\tt Release-plus} configuration}}
@@ -507,8 +513,8 @@ The COIN-OR project Ipopt\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (see Section
 the third-party software described in Section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, 
 which must be compiled with a Fortran compiler if the user wants to include these projects in the build. A free 
 Fortran~95 compiler
-can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Blas},
-HSL\index{Harwell Subroutine Library (HSL)} and Lapack\index{Lapack} projects --- but {\bf not} Mumps\index{Mumps}) 
+can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Third-party software!Blas},
+HSL\index{Third-party software!HSL} and Lapack\index{Third-party software!Lapack} projects --- but {\bf not} Mumps\index{Third-party software!Mumps}) 
 it might be sufficient to download the {\tt f2c}\index{f2c@{\tt f2c}} translator
 which turns Fortran~77 code into code that can subsequently be fed into a C compiler.
 The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from {\tt\UrlFToC}.
@@ -724,7 +730,8 @@ In order to build the OS project on Unix/Linux systems do the following.
 
 \item{} \label{itemize:unixbuilds} Run the configure script that will generate the makefiles.
 If you are running on a machine with a Fortran\index{Fortran} 95 compiler present (e.g., {\tt gfortran}), and you have
-previously downloaded the third-party software packages {\tt BLAS}\index{Blas} and {\tt Mumps}\index{Mumps}
+previously downloaded the third-party software packages {\tt BLAS}\index{Third-party software!Blas} 
+and {\tt Mumps}\index{Third-party software!Mumps}
 (see Section~\ref{section:ipopt}), run the command
 
 \begin{verbatim}
@@ -987,7 +994,7 @@ give the URL for the version of the OS project you wish to check out, e.g.,
 \medskip
 
 Also, if you plan to build any of the projects contained in {\tt ThirdParty}\index{Third-party software}
-(e.g., ASL)\index{AMPL Solver Library (ASL)} we recommend using {\tt wget}\index{wget@{\tt wget}}. 
+(e.g., ASL)\index{Third-party software!ASL} we recommend using {\tt wget}\index{wget@{\tt wget}}. 
 (See Section~\ref{section:wget}.)
 
 
@@ -1032,7 +1039,7 @@ They are also contained in the tarballs (see Section~\ref{section:getTarBalls}).
 
 Open the solution file or the individual project files (for instance by double-clicking
 on them in Windows Explorer)  and select Build from the menu bar.
-%If you have ASL\index{AMPL Solver Library (ASL)} (see Section~\ref{section:ASL}) downloaded,
+%If you have ASL\index{Third-party software!ASL} (see Section~\ref{section:ASL}) downloaded,
 %you can also build the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient})
 %by modifying the Configuration Manager\index{Microsoft Visual Studio!Configuration Manager} and selecting the
 %two projects {\tt libOSnl2OSiL}\index{libOSnl2OSiL@{\tt libOSnl2OSiL}}
@@ -1053,7 +1060,7 @@ either the release or debug version of the {\tt unitTest} executable.
 %both of which are configured without {\tt Ipopt}, as well as 
 %{\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration},
 %which can be used to add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
-%{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
+%{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{Third-party software!ASL}
 %(see Section~\ref{section:ASL}). In order to build this configuration successfully,
 %the user must first download and process additional third-party software\index{Third-party software} as explained in 
 %sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
@@ -1254,7 +1261,7 @@ Open the Cygwin shell and check the value of {\tt \$PATH}\index{PATH@{\tt \$PATH
 then the {\tt \$PATH} value needs to be reset.
 
 %\item{} This step is necessary only if you wish to build with the AMPL {\tt ASL} solver
-%library\index{AMPL Solver Library (ASL)}.
+%library\index{Third-party software!ASL}.
 %Unfortunately, and we regret this, but at the time of this writing the working version of {\tt ASL} for cygwin/
 %cl build is its trunk version. This means that it is necessary to download the trunk version separately
 %and replace the release version we have distributed with the trunk version.  The URL for the trunk
@@ -1283,7 +1290,7 @@ The following is a work-around. (See also Section~\ref{section:ipopt}.)
 
 \begin{enumerate}[Step a.]
 
-\item{}  Obtain one of the   Harwell Subroutine Library (HSL)\index{Harwell Subroutine Library (HSL)} routines
+\item{}  Obtain one of the   Harwell Subroutine Library (HSL)\index{Third-party software!HSL} routines
 {\tt ma27ad.f} or {\tt MA57ad.f}. See {\tt\UrlHsl}.  Put the Harwell code in the
 directory {\tt ThirdParty/HSL}. (Note the case in the file names, which is relevant in a unix-like environment.)
 
@@ -1484,7 +1491,8 @@ make distclean
 in the {\tt ../COIN-OS} directory.
 
 \item{}Note also that {\tt configure} automatically detects the presence of third-party software and prepares
-the configuration and make files\index{makefile|)} accordingly. Once you have downloaded, e.g., Blas\index{Blas}, you must specify
+the configuration and make files\index{makefile|)} accordingly. Once you have downloaded, 
+e.g., Blas\index{Third-party software!Blas}, you must specify
 %
 \begin{verbatim}
 configure COIN_SKIP_PROJECTS="ThirdParty/Blas"
@@ -1581,13 +1589,13 @@ or {\tt g95} --- see~{\tt\UrlGgs}), you can simply run the {\tt configure} scrip
 compiler will be detected and the {\tt Ipopt}, {\tt Bonmin} and {\tt Couenne} projects will be built.
 
 \item{}   If your Fortran 95 compiler cannot deal with the preprocessor statements embedded in the
-Mumps\index{Mumps} code, it may be possible to run the Fortran code through a preprocessor such as {\tt cpp}.
+Mumps\index{Third-party software!Mumps} code, it may be possible to run the Fortran code through a preprocessor such as {\tt cpp}.
 In the worst case you may have to resort to manual edits before you can build Ipopt --- or see 
 Option~\ref{enumerate:ipopt3}.
 
 \item{} \label{enumerate:ipopt3}
 If you have a FORTRAN 77 compiler, you can replace Mumps by one of the Harwell Subroutine Library (HSL)%
-\index{Harwell Subroutine Library (HSL)} routines {\tt ma27ad.f} or {\tt MA57ad.f}. 
+\index{Third-party software!HSL} routines {\tt ma27ad.f} or {\tt MA57ad.f}. 
 (Unix is case-sensitive, so note the file names carefully.) See
 
 {\tt\UrlHsl}.  
@@ -1697,9 +1705,9 @@ at the end of line~9 of {\tt makefile.vc}.
 and put it somewhere into your path
    (e.g., {\tt C:$\backslash$Windows})
 
-\item{} Download the source code for Blas\index{Blas} (from {\tt\UrlBlas}),
-Lapack\index{Lapack} (from {\tt\UrlLapack}),
-and HSL\index{Harwell Subroutine Library (HSL)} (see previous section).
+\item{} Download the source code for Blas\index{Third-party software!Blas} (from {\tt\UrlBlas}),
+Lapack\index{Third-party software!Lapack} (from {\tt\UrlLapack}),
+and HSL\index{Third-party software!HSL} (see previous section).
 Install each download into the appropriate subdirectory in {\tt ThirdParty}.
 
 \item{} \label{enumerate:ipopt-step5}
@@ -1730,7 +1738,7 @@ In a DOS window, go to the directory
    using the {\tt convert\_*.bat} files you find there.
 
 \item{}
-   Download the ASL\index{AMPL Solver Library (ASL)} code and follow the steps in Section~\ref{section:ASL}.
+   Download the ASL\index{Third-party software!ASL} code and follow the steps in Section~\ref{section:ASL}.
 
 \item{}
 Now you can open the solution file
@@ -1848,7 +1856,7 @@ You may also wish to view
 
 \subsubsection{AMPL Solver Library (ASL)} \label{section:ASL}
 
-\index{AMPL Solver Library (ASL)|(}%
+\index{Third-party software!ASL|(}%
 The OS library contains a class, {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} (see Section~\ref{section:nl2osil}),
 and the program {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient}) that
 require the use of the AMPL Solver Library~(ASL). See {\tt\UrlAmpl}  and  {\tt\UrlAmplSandia}.
@@ -1933,11 +1941,11 @@ Activate these projects in the Configuration Manager\index{Microsoft Visual Stud
 %(or copy) this configuration and tailor it to your needs.
 \fi
 \fi
-\index{AMPL Solver Library (ASL)|)}
+\index{Third-party software!ASL|)}
 
 \subsubsection{GLPK}
 
-\index{GLPK@{\tt GLPK}|(}%
+\index{Third-party software!GLPK|(}%
 {\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See {\tt\UrlGlpk}. 
 GLPK is distributed under the GNU General Public Licence (GPL)\index{GNU General Public Licence (GPL)}, which is 
 incompatible with the Common Public License (CPL)\index{Common Public License (CPL)} that governs OS. 
@@ -1959,7 +1967,7 @@ At the time of this writing, the most up-to-date version is \GlpkVer, which can 
 %\begin{verbatim}
 %ftp://ftp.gnu.org/gnu/glpk/glpk-4.30.tar.gz
 %\end{verbatim}
-\index{GLPK@{\tt GLPK}|)}
+\index{Third-party software!GLPK|)}
 
 \noindent{\tt\UrlGlpkDownload}
 
@@ -2661,7 +2669,7 @@ Possible values of this parameter depend on the installation. The default config
 Table~\ref{table:configurations}.
 Other solvers supported (if the necessary libraries are present) are 
 {\tt cplex} (Cplex through COIN-OR Osi)\index{cplex@{\tt cplex}},
-{\tt glpk} (GLPK\index{GLPK@{\tt GLPK}} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}})
+{\tt glpk} (GLPK\index{Third-party software!GLPK} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}})
 %, {\tt ipopt} (COIN-OR Ipopt)
 \ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}}\fi
 and {\tt lindo} (LINDO)\index{LINDO}.

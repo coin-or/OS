@@ -3,17 +3,17 @@
   \item Algorithmic differentiation, 7, 82--83, 89--90
   \item AMPL, 6, 7, 29, 55--57
   \item AMPL nl format, 1, 6, 7, 36, 37, 44, 74
-  \item AMPL Solver Library (ASL), 16, 25
+  \item AMPL Solver Library , \see{Third-party software, ASL}{1}
   \item {\tt amplFiles}, 55
   \item Apache Axis, 6, 40
   \item Apache Tomcat, 1, 6--8, 12, 40, 53--54, 100
-  \item ASL, \see{AMPL Solver Library (ASL)}{1}
+  \item ASL, \see{Third-party software, ASL}{1}
 
   \indexspace
 
   \item {\it Bell, Bradley M.}, 89
   \item {\tt bison}, 10, 21, 75
-  \item Blas, 9, 13, 22
+  \item Blas, \see{Third-party software, Blas}{1}
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
   \item Bug reporting, 26
   \item {\tt BuildTools}, \see{COIN-OR projects, {\tt BuildTools}}{1}
@@ -82,14 +82,14 @@
   \item GAMS, 7, 55, 57--63
   \item gcc, 9
   \item {\tt getJobID}, 36, 38, 46, 49
-  \item {\tt GLPK}, 7, 25, 37
+  \item {\tt GLPK}, 7
   \item GNU General Public Licence (GPL), 25
   \item {\it Griewank, A.}, 89
 
   \indexspace
 
-  \item Harwell Subroutine Library (HSL), 9, 19, 23
-  \item HSL, \see{Harwell Subroutine Library (HSL)}{1}
+  \item Harwell Subroutine Library, \see{Third-party software, HSL}{1}
+  \item HSL, \see{Third-party software, HSL}{1}
 
   \indexspace
 
@@ -107,7 +107,7 @@
 
   \indexspace
 
-  \item Lapack, 9
+  \item Lapack, \see{Third-party software, Lapack}{1}
   \item {\tt LibOS}, 15
   \item {\tt libOSCommon.vcproj}, 17
   \item {\tt libOSSolvers.vcproj}, 17
@@ -131,7 +131,7 @@
   \item MinGW, 9, 19, 20, 27
   \item MPS format, 1, 6, 7, 36, 74
   \item MSYS, 9, 20--21, 27
-  \item Mumps, 10, 13, 23
+  \item Mumps, \see{Third-party software, Mumps}{1}
 
   \indexspace
 
@@ -199,6 +199,12 @@
   \item {\tt testlocal.config}, 39
   \item {\tt testremote.config}, 41--42
   \item Third-party software, 16, 23--25
+    \subitem ASL, 16, 25
+    \subitem Blas, 9, 13, 22
+    \subitem GLPK, 25, 37
+    \subitem HSL, 9, 19, 23
+    \subitem Lapack, 9
+    \subitem Mumps, 10, 13, 23
   \item TortoiseSVN, 12, 16, 20
   \item Trac system, 1, 6, 26
 
