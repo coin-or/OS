@@ -159,8 +159,8 @@
 \newcommand{\UrlOsDoxygen}{http://www.coin-or.org/OS/doxydoc/html/index.html}
 \newcommand{\UrlOsi}{http://projects.coin-or.org/Osi}
 \newcommand{\UrlOsJava}{https://projects.coin-or.org/svn/OS/branches/OSjava}
-\newcommand{\UrlOsRelease}{https://projects.coin-or.org/svn/OS/releases/2.1.0}
-\newcommand{\UrlOsStable}{https://projects.coin-or.org/svn/OS/stable/2.1}
+\newcommand{\UrlOsRelease}{https://projects.coin-or.org/svn/OS/releases/2.3.0}
+\newcommand{\UrlOsStable}{https://projects.coin-or.org/svn/OS/stable/2.3}
 \newcommand{\UrlOsTarball}{http://www.coin-or.org/download/source/OS/}
 \newcommand{\UrlOsWin}{https://projects.coin-or.org/CoinBinary/browser/binary/OS}
 \newcommand{\UrlParinclinear}{http://www.coin-or.org/OS/parincLinear.osil}
@@ -177,9 +177,9 @@
 
 % Current software versions
 \newcommand{\GlpkVer}{4.42}
-\newcommand{\OSstable}{2.1}
-\newcommand{\OSrelease}{2.1.0}
-\newcommand{\OStrunk}{3139}
+\newcommand{\OSstable}{2.3}
+\newcommand{\OSrelease}{2.3.0}
+\newcommand{\OStrunk}{3903}
 \newcommand{\MsysVer}{1.0.11}
 \newcommand{\MsysFile}{bash-3.1-MSYS-1.0.11}
 
@@ -188,9 +188,14 @@
 \begin{document}
 
 %Some cross-referencing index entries (to be expanded as needed)
-\index{ASL|see{AMPL Solver Library (ASL)}}
-\index{HSL|see{Harwell Subroutine Library (HSL)}}
-\index{nl files|see{AMPL nl format}}
+\index{AMPL Solver Library |see{Third-party software, ASL}}
+\index{ASL|see{Third-party software, ASL}}
+\index{Blas|see{Third-party software, Blas}}
+\index{Harwell Subroutine Library|see{Third-party software, HSL}}
+\index{HSL|see{Third-party software, HSL}}
+\index{Lapack|see{Third-party software, Lapack}}
+\index{Mumps|see{Third-party software, Mumps}}
+
 \index{Bonmin@{\tt Bonmin}|see{COIN-OR projects, {\tt Bonmin}}}
 \index{BuildTools@{\tt BuildTools}|see{COIN-OR projects, {\tt BuildTools}}}
 \index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
@@ -203,6 +208,7 @@
 %\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
 \index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
 \index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
+\index{nl files|see{AMPL nl format}}
 \index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
 %\index{Release configuration|see{Microsoft Visual Studio, {\tt Release} configuration}}
 %\index{Release-plus configuration|see{Microsoft Visual Studio, {\tt Release-plus} configuration}}
@@ -436,7 +442,7 @@ The binaries provided are based on Visual Studio Express 2008.  See Section \ref
 \subsection{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
 
 Compiling and modifying the OS project source\index{OS project!source code} code can be a daunting task,
-made somewhat easier by the inclusion of configure scripts\index{configure!scripts} and makefiles
+made somewhat easier by the inclusion of configure scripts\index{configure!scripts} and makefiles\index{makefile}
 in the distribution of the source. However, additional software packages are
 sometimes needed or convenient, especially on Windows.
 We collect in this section a number of recommended packages that we ourselves use in the development
@@ -507,8 +513,8 @@ The COIN-OR project Ipopt\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (see Section
 the third-party software described in Section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, 
 which must be compiled with a Fortran compiler if the user wants to include these projects in the build. A free 
 Fortran~95 compiler
-can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Blas},
-HSL\index{Harwell Subroutine Library (HSL)} and Lapack\index{Lapack} projects --- but {\bf not} Mumps\index{Mumps}) 
+can be downloaded from {\tt\UrlGgs}. For Fortran~77 code (which includes the Blas\index{Third-party software!Blas},
+HSL\index{Third-party software!HSL} and Lapack\index{Third-party software!Lapack} projects --- but {\bf not} Mumps\index{Third-party software!Mumps}) 
 it might be sufficient to download the {\tt f2c}\index{f2c@{\tt f2c}} translator
 which turns Fortran~77 code into code that can subsequently be fed into a C compiler.
 The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from {\tt\UrlFToC}.
@@ -724,7 +730,8 @@ In order to build the OS project on Unix/Linux systems do the following.
 
 \item{} \label{itemize:unixbuilds} Run the configure script that will generate the makefiles.
 If you are running on a machine with a Fortran\index{Fortran} 95 compiler present (e.g., {\tt gfortran}), and you have
-previously downloaded the third-party software packages {\tt BLAS}\index{Blas} and {\tt Mumps}\index{Mumps}
+previously downloaded the third-party software packages {\tt BLAS}\index{Third-party software!Blas} 
+and {\tt Mumps}\index{Third-party software!Mumps}
 (see Section~\ref{section:ipopt}), run the command
 
 \begin{verbatim}
@@ -771,12 +778,14 @@ These projects must be present.
 
 \item{}  Run the make files.
 
+\index{make@{\tt make}}
 \begin{verbatim}
 make
 \end{verbatim}
 
 \item{} Run the {\tt unitTest}\index{unitTest@{\tt unitTest}}.
 
+\index{make test@{\tt make test}}
 \begin{verbatim}
 make test
 \end{verbatim}
@@ -876,7 +885,7 @@ then you have not passed the unitTest and hopefully some semi-intelligible error
 
 \item{}  Install the libraries and executables.
 
-
+\index{make install@{\tt make install}}
 \begin{verbatim}
 make install
 \end{verbatim}
@@ -912,7 +921,9 @@ For example, running
 ./configure  --prefix=/usr/local  COIN_SKIP_PROJECTS="Ipopt Bonmin"
 \end{verbatim}
 
-\noindent and then running {\tt make} and {\tt make install} will put the relevant files in
+\noindent and then running {\tt make}\index{make@{\tt make}}
+ and {\tt make install}\index{make install@{\tt make install}}
+ will put the relevant files in
 
 \begin{verbatim}
 /usr/local/bin
@@ -924,7 +935,8 @@ For example, running
 
 \vskip 8pt
 
-{\bf Run an Example!}  If {\tt make test} works, proceed to Section~\ref{section:ossolverservice} 
+{\bf Run an Example!}  If {\tt make test}\index{make test@{\tt make test}}
+ works, proceed to Section~\ref{section:ossolverservice} 
 to run the key executable, {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}.
 
 
@@ -982,13 +994,13 @@ give the URL for the version of the OS project you wish to check out, e.g.,
 \medskip
 
 Also, if you plan to build any of the projects contained in {\tt ThirdParty}\index{Third-party software}
-(e.g., ASL)\index{AMPL Solver Library (ASL)} we recommend using {\tt wget}\index{wget@{\tt wget}}. 
+(e.g., ASL)\index{Third-party software!ASL} we recommend using {\tt wget}\index{wget@{\tt wget}}. 
 (See Section~\ref{section:wget}.)
 
 
 \subsubsection{Microsoft Visual Studio (MSVS)} \label{section:msvs}
 
-
+\index{Microsoft Visual Studio|(}%
 Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.
 We currently support Versions 8 and~9. These versions are also sometimes referred to by their
 (approximate) release dates, which is 2008 for Version~9 and 2005 for Version~8.   In addition there is
@@ -1027,7 +1039,7 @@ They are also contained in the tarballs (see Section~\ref{section:getTarBalls}).
 
 Open the solution file or the individual project files (for instance by double-clicking
 on them in Windows Explorer)  and select Build from the menu bar.
-%If you have ASL\index{AMPL Solver Library (ASL)} (see Section~\ref{section:ASL}) downloaded,
+%If you have ASL\index{Third-party software!ASL} (see Section~\ref{section:ASL}) downloaded,
 %you can also build the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient})
 %by modifying the Configuration Manager\index{Microsoft Visual Studio!Configuration Manager} and selecting the
 %two projects {\tt libOSnl2OSiL}\index{libOSnl2OSiL@{\tt libOSnl2OSiL}}
@@ -1038,22 +1050,27 @@ on them in Windows Explorer)  and select Build from the menu bar.
 either the release or debug version of the {\tt unitTest} executable.
 \end{enumerate}
 
-\iffalse %\ifipopt
 %The solution file for version~7 provides two configurations, {\tt Debug} and {\tt Release}.
 %The former includes debug information, but both are configured without Ipopt
 %(see Section~\ref{section:ipopt}) or any of the third-party software described in
 %section~\ref{section:otherthirdparty}.
-The solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} contains three configurations, 
+%The solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} contains three configurations, 
+%{\tt Debug}\index{Microsoft Visual Studio!{\tt Debug} configuration} and 
+%{\tt Release}\index{Microsoft Visual Studio!{\tt Release} configuration}, 
+%both of which are configured without {\tt Ipopt}, as well as 
+%{\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration},
+%which can be used to add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
+%{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{Third-party software!ASL}
+%(see Section~\ref{section:ASL}). In order to build this configuration successfully,
+%the user must first download and process additional third-party software\index{Third-party software} as explained in 
+%sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
+
+The solution file {\tt OS.sln}\index{OS sln@{\tt OS.sln}} contains two configurations, 
 {\tt Debug}\index{Microsoft Visual Studio!{\tt Debug} configuration} and 
 {\tt Release}\index{Microsoft Visual Studio!{\tt Release} configuration}, 
-both of which are configured without {\tt Ipopt}, as well as 
-{\tt Release-Plus}\index{Microsoft Visual Studio!{\tt Release-Plus} configuration},
-which can be used to add {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
-{\tt Bonmin}\index{COIN-OR projects!Bonmin@{\tt Bonmin}} and ASL\index{AMPL Solver Library (ASL)}
-(see Section~\ref{section:ASL}). In order to build this configuration successfully,
-the user must first download and process additional third-party software\index{Third-party software} as explained in 
-sections \ref{section:ipopt-msvs} and~\ref{section:ASL}.
-\fi
+both of which are configured without {\tt Ipopt}.
+
+\index{Microsoft Visual Studio|)}%
 
 
 \subsubsection{Visual Studio Examples Distribution}\label{section:vsexamples}
@@ -1244,7 +1261,7 @@ Open the Cygwin shell and check the value of {\tt \$PATH}\index{PATH@{\tt \$PATH
 then the {\tt \$PATH} value needs to be reset.
 
 %\item{} This step is necessary only if you wish to build with the AMPL {\tt ASL} solver
-%library\index{AMPL Solver Library (ASL)}.
+%library\index{Third-party software!ASL}.
 %Unfortunately, and we regret this, but at the time of this writing the working version of {\tt ASL} for cygwin/
 %cl build is its trunk version. This means that it is necessary to download the trunk version separately
 %and replace the release version we have distributed with the trunk version.  The URL for the trunk
@@ -1273,7 +1290,7 @@ The following is a work-around. (See also Section~\ref{section:ipopt}.)
 
 \begin{enumerate}[Step a.]
 
-\item{}  Obtain one of the   Harwell Subroutine Library (HSL)\index{Harwell Subroutine Library (HSL)} routines
+\item{}  Obtain one of the   Harwell Subroutine Library (HSL)\index{Third-party software!HSL} routines
 {\tt ma27ad.f} or {\tt MA57ad.f}. See {\tt\UrlHsl}.  Put the Harwell code in the
 directory {\tt ThirdParty/HSL}. (Note the case in the file names, which is relevant in a unix-like environment.)
 
@@ -1328,7 +1345,7 @@ and reported that the problem then went away.
 \index{MSYS|(}%
 MSYS (Minimal SYStem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice,
 such as the Microsoft command line C++ {\tt cl} compiler.  MSYS is intended as an alternative to the DOS command window.
-It is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and {\tt Makefiles}.
+It is an application that gives the user a Bourne shell that can run {\tt configure}  scripts and makefiles\index{makefile}.
 No compilers come with MSYS.
 In the Cygwin\index{Cygwin}, MinGW\index{MinGW}, and MSYS\index{MSYS} hierarchy, it is at the bottom of the food chain in terms of tools provided.
 However, it is very easy to use and build the OS project with MSYS.    In this discussion we assume that the user
@@ -1397,13 +1414,15 @@ C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib
 The environment variables can be set using the {\tt System Properties} in the Windows {\tt Control Panel}.
 
 
-\item{}  In the MSYS command window connect to the root of the OS project and run the {\tt configure}  script  followed by {\tt make} as described in Section~\ref{section:unixbuilds}.
+\item{}  In the MSYS command window connect to the root of the OS project and run the {\tt configure} 
+script  followed by {\tt make}\index{make@{\tt make}}  as described in Section~\ref{section:unixbuilds}.
 
 \end{enumerate}
 
 
 
-{\bf Run an Example!}  If {\tt make test} works, proceed to Section~\ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
+{\bf Run an Example!}  If {\tt make test}\index{make test@{\tt make test}}
+ works, proceed to Section~\ref{section:ossolverservice} to run the key executable, {\tt OSSolverService}.
 
 
 Microsoft Windows users who wish to obtain MSYS for building the OS project can download
@@ -1446,8 +1465,9 @@ run {\tt configure} as follows:
 %
 After you run {\tt configure}, the OS distribution directory structure (see Figure~\ref{figure:osprojectrootdir})
 will be mirrored in the {\tt vpath-debug} directory, and all of the necessary
-{\tt Makefile}s will be copied there.  Next from the {\tt vpath-debug} directory execute
+{\tt Makefile}s\index{makefile|(} will be copied there.  Next from the {\tt vpath-debug} directory execute
 
+\index{make@{\tt make}}
 \begin{verbatim}
 make
 \end{verbatim}
@@ -1463,6 +1483,7 @@ inside {\tt vpath-debug} and not {\tt ../COIN-OS}.\index{debug version, MSYS|)}
 inside the {\tt ../COIN-OS} directory, you cannot do a {\tt VPATH} build
 until you have run
 %
+\index{make distclean@{\tt make distclean}}
 \begin{verbatim}
 make distclean
 \end{verbatim}
@@ -1470,7 +1491,8 @@ make distclean
 in the {\tt ../COIN-OS} directory.
 
 \item{}Note also that {\tt configure} automatically detects the presence of third-party software and prepares
-the configuration and make files accordingly. Once you have downloaded, e.g., Blas\index{Blas}, you must specify
+the configuration and make files\index{makefile|)} accordingly. Once you have downloaded, 
+e.g., Blas\index{Third-party software!Blas}, you must specify
 %
 \begin{verbatim}
 configure COIN_SKIP_PROJECTS="ThirdParty/Blas"
@@ -1483,6 +1505,8 @@ if you want to recreate the default configuration.%
 \item{}If you work with the trunk\index{OS project!trunk version} version of OS, it is possible that files are added to
 and removed from the distribution due to development activities. These files are not recognized properly
 by the system unless it is reconfigured by running
+%
+\index{make distclean@{\tt make distclean}}
 \begin{verbatim}
 make distclean
 \end{verbatim}
@@ -1490,6 +1514,14 @@ followed by
 \begin{verbatim}
 ./configure
 \end{verbatim}
+in the {\tt VPATH} directory.
+
+\item{}You can customize compiler flags, linker options, include directories, and many other options by setting
+appropriate environment variables. For further information you may want to consult the built-in help function by specifying
+\begin{verbatim}
+./configure --help
+\end{verbatim}
+or the help file available at the homepage of the {\tt BuildTools} project ({\UrlBuildtools}).
 \end{enumerate}
 \index{configure|)}
 
@@ -1557,13 +1589,13 @@ or {\tt g95} --- see~{\tt\UrlGgs}), you can simply run the {\tt configure} scrip
 compiler will be detected and the {\tt Ipopt}, {\tt Bonmin} and {\tt Couenne} projects will be built.
 
 \item{}   If your Fortran 95 compiler cannot deal with the preprocessor statements embedded in the
-Mumps\index{Mumps} code, it may be possible to run the Fortran code through a preprocessor such as {\tt cpp}.
+Mumps\index{Third-party software!Mumps} code, it may be possible to run the Fortran code through a preprocessor such as {\tt cpp}.
 In the worst case you may have to resort to manual edits before you can build Ipopt --- or see 
 Option~\ref{enumerate:ipopt3}.
 
 \item{} \label{enumerate:ipopt3}
 If you have a FORTRAN 77 compiler, you can replace Mumps by one of the Harwell Subroutine Library (HSL)%
-\index{Harwell Subroutine Library (HSL)} routines {\tt ma27ad.f} or {\tt MA57ad.f}. 
+\index{Third-party software!HSL} routines {\tt ma27ad.f} or {\tt MA57ad.f}. 
 (Unix is case-sensitive, so note the file names carefully.) See
 
 {\tt\UrlHsl}.  
@@ -1673,9 +1705,9 @@ at the end of line~9 of {\tt makefile.vc}.
 and put it somewhere into your path
    (e.g., {\tt C:$\backslash$Windows})
 
-\item{} Download the source code for Blas\index{Blas} (from {\tt\UrlBlas}),
-Lapack\index{Lapack} (from {\tt\UrlLapack}),
-and HSL\index{Harwell Subroutine Library (HSL)} (see previous section).
+\item{} Download the source code for Blas\index{Third-party software!Blas} (from {\tt\UrlBlas}),
+Lapack\index{Third-party software!Lapack} (from {\tt\UrlLapack}),
+and HSL\index{Third-party software!HSL} (see previous section).
 Install each download into the appropriate subdirectory in {\tt ThirdParty}.
 
 \item{} \label{enumerate:ipopt-step5}
@@ -1706,7 +1738,7 @@ In a DOS window, go to the directory
    using the {\tt convert\_*.bat} files you find there.
 
 \item{}
-   Download the ASL\index{AMPL Solver Library (ASL)} code and follow the steps in Section~\ref{section:ASL}.
+   Download the ASL\index{Third-party software!ASL} code and follow the steps in Section~\ref{section:ASL}.
 
 \item{}
 Now you can open the solution file
@@ -1752,7 +1784,7 @@ In the OS distribution directory structure (see Figure~\ref{figure:osprojectroot
 directory, which does not contain anything other than {\tt get.xxxx} scripts and other utilities.
 The source code for any of these packages must be downloaded separately using the {\tt get.xxxx} scripts,
 as {\tt configure}\index{configure|(} will not build these projects without the source code being present. After the download,
-{\tt configure} will recognize the presence of these files and will configure the makefiles accordingly.
+{\tt configure} will recognize the presence of these files and will configure the makefiles\index{makefile} accordingly.
 
 If the user wants to exclude these projects from the build after they have been downloaded and detected,
 a new {\tt configure} is required with instructions to skip them. For instance, if the user experiences problems
@@ -1805,7 +1837,7 @@ variable is defined in  {\tt config\_os.h}.
 
 \medskip
 Make sure to run {\tt configure} after you have downloaded the required
-source code, in order to modify the makefiles appropriately. It is {\bf important to note} that even though there are
+source code, in order to modify the makefiles\index{makefile} appropriately. It is {\bf important to note} that even though there are
 multiple files named {\tt configure} in various subdirectories, you should only ever run the master configure in the
 distribution root directory, possibly accessed from a {\tt VPATH}\index{VPATH} as in Section~\ref{section:vpath}.
 It sets important global variables and will call all other necessary configure files in turn.\index{configure|)}
@@ -1824,7 +1856,7 @@ You may also wish to view
 
 \subsubsection{AMPL Solver Library (ASL)} \label{section:ASL}
 
-\index{AMPL Solver Library (ASL)|(}%
+\index{Third-party software!ASL|(}%
 The OS library contains a class, {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} (see Section~\ref{section:nl2osil}),
 and the program {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} (see Section~\ref{section:amplclient}) that
 require the use of the AMPL Solver Library~(ASL). See {\tt\UrlAmpl}  and  {\tt\UrlAmplSandia}.
@@ -1909,11 +1941,11 @@ Activate these projects in the Configuration Manager\index{Microsoft Visual Stud
 %(or copy) this configuration and tailor it to your needs.
 \fi
 \fi
-\index{AMPL Solver Library (ASL)|)}
+\index{Third-party software!ASL|)}
 
 \subsubsection{GLPK}
 
-\index{GLPK@{\tt GLPK}|(}%
+\index{Third-party software!GLPK|(}%
 {\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See {\tt\UrlGlpk}. 
 GLPK is distributed under the GNU General Public Licence (GPL)\index{GNU General Public Licence (GPL)}, which is 
 incompatible with the Common Public License (CPL)\index{Common Public License (CPL)} that governs OS. 
@@ -1921,7 +1953,8 @@ For that reason we are unable to distribute OS binaries linked to the GLPK solve
 Users interested in GLPK must build OS from source and link to the GLPK libraries.
 
 In order to use GLPK with OS in a unix environment, connect to {\tt
-ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, run {\tt configure}, followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or 
+ThirdParty/Glpk} and execute {\tt get.Glpk}. Once the source code has been downloaded, run {\tt configure}, 
+followed by a {\tt make}, as explained in Section~\ref{section:unixbuilds} or 
 Section~\ref{section:vpath}.
 
 Users on MSVS\index{Microsoft Visual Studio} can download the source by
@@ -1934,7 +1967,7 @@ At the time of this writing, the most up-to-date version is \GlpkVer, which can 
 %\begin{verbatim}
 %ftp://ftp.gnu.org/gnu/glpk/glpk-4.30.tar.gz
 %\end{verbatim}
-\index{GLPK@{\tt GLPK}|)}
+\index{Third-party software!GLPK|)}
 
 \noindent{\tt\UrlGlpkDownload}
 
@@ -2184,11 +2217,11 @@ If you download the OS package, you get these additional COIN-OR projects. The l
 
 The following directories are also in the project root.
 \begin{itemize}
-\item {\tt bin} - after executing {\tt make install} the bin directory will contain 
-{\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}, {\tt clp}, {\tt cbc},  
-{\tt cbc-generic} and {\tt symphony}.
+\item {\tt bin} - after executing {\tt make install}\index{make install@{\tt make install}}
+the bin directory will contain {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}, {\tt clp}, {\tt cbc}  
+and {\tt symphony}.
 
-\item {\tt Data} - this directory contains numerous test problems that are used by the {\tt unitTest}s of
+\item {\tt Data} - this directory contains numerous test problems that are used by the unit tests of
 the COIN-OR projects just mentioned.
 
 \item {\tt doxydoc} - is a folder for documentation.
@@ -2568,6 +2601,15 @@ or asynchronously. At present six service methods are implemented, {\tt solve}\i
 {\tt getJobID}\index{getJobID@{\tt getJobID}}, {\tt knock}\index{knock@{\tt knock}} and {\tt kill}\index{kill@{\tt kill}}.
 These methods are explained in more detail in Section~\ref{section:servicemethods}.
 
+There are two ways  to use the {\tt OSSolverService} executable. The first way
+is to use the interactive shell. The interactive shell is invoked by either 
+double clicking on the icon for the {\tt OSSolverService} executable, or by opening a command
+window, connecting to the directory holding the executable, and then typing in
+{\tt OSSolverService} with no arguments. Using the interactive shell is fairly
+intuitive and we do not discuss in detail. The second way to use the {\tt
+OSSolverService} executable is to provide arguments at the command line. This is
+discussed next. The command line arguments are valid for the interactive shell. 
+
 \subsection{OSSolverService Input Parameters}
 
 At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
@@ -2577,56 +2619,57 @@ Not all the parameters are required.
 
 \begin{itemize}
 
-\item[] {\bf -osil xxx.osil}\ \ This is the path information and name of the
-file that contains the optimization instance in OSiL\index{OSiL} format.
+
+\item[] {\bf osil xxx.osil}\ \ This is the path information and name of
+the file that contains the optimization instance in OSiL\index{OSiL} format.
 It is assumed that this file is available on the machine that is running
 {\tt OSSolverService}. This option can be omitted, as there are other ways
 to specify an optimization instance.
 %If this option is not specified then the instance location must be specified in the OSoL\index{OSoL} solver options file.
 
-\item[] {\bf -osol xxx.osol}\ \ This is the path information and name of the file that contains the solver 
+\item[] {\bf osol xxx.osol}\ \ This is the path information and name of the file that contains the solver 
 options. It is assumed that this file is available on the machine that is running {\tt OSSolverService}. 
 It is not necessary to specify this option.
 
-\item[] {\bf -osrl xxx.osrl}\ \ This is the path information and name of the file that contains the solver 
+\item[] {\bf osrl xxx.osrl}\ \ This is the path information and name of the file that contains the solver 
 solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. 
 It is not necessary to specify this option.
 If this option is not specified then the solver solution is displayed to the screen.
 
 
-\item[] {\bf -osplInput xxx.ospl}\ \  The name of an input file in the  OS Process Language (OSpL); 
+\item[] {\bf osplInput xxx.ospl}\ \  The name of an input file in the  OS Process Language (OSpL); 
 this is used as input  to the {\tt knock} method.
 
-\item[] {\bf -osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL); 
+\item[] {\bf osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL); 
 this is the  output  string from the {\tt knock}  and {\tt kill} method.
 
-\item[] {\bf -serviceLocation url}\ \ This is the URL of the solver service.
+\item[] {\bf serviceLocation url}\ \ This is the URL of the solver service.
 It is not required, and if not specified it is assumed that the problem
 is solved locally.
 
-\item[] {\bf -serviceMethod  methodName}\ \ This is  the method on the solver service to be invoked.
+\item[] {\bf serviceMethod  methodName}\ \ This is  the method on the solver service to be invoked.
 The options are {\tt solve}\index{solve@{\tt solve}|(}, {\tt send}\index{send@{\tt send}},
 {\tt kill}\index{kill@{\tt kill}}, {\tt knock}\index{knock@{\tt knock}},
 {\tt getJobID}\index{getJobID@{\tt getJobID}}, and {\tt retrieve}\index{retrieve@{\tt retrieve}}.
 The use of these options is illustrated in the examples below. This option is not required, and the default
 value is {\tt solve}\index{solve@{\tt solve}|)}.
 
-\item[] {\bf -mps  xxx.mps}\ \ This is the path information and name of the MPS file if the problem instance 
+\item[] {\bf mps  xxx.mps}\ \ This is the path information and name of the MPS file if the problem instance 
 is in MPS format\index{MPS format}. It is assumed that this file is available on the machine that is running 
 {\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
 
-\item[] {\bf -nl  xxx.nl}\ \ This is the path information and name of the AMPL nl file if the problem instance 
+\item[] {\bf nl  xxx.nl}\ \ This is the path information and name of the AMPL nl file if the problem instance 
 is in AMPL nl format\index{AMPL nl format}. It is assumed that this file is available on the machine that is running
 {\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
 
-\item[] {\bf -solver  solverName}\ \
+\item[] {\bf solver  solverName}\ \
 %Possible values for default OS installation are {\tt clp} (COIN-OR Clp),
 %{\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY).
 Possible values of this parameter depend on the installation. The default configurations can be read off from
 Table~\ref{table:configurations}.
 Other solvers supported (if the necessary libraries are present) are 
 {\tt cplex} (Cplex through COIN-OR Osi)\index{cplex@{\tt cplex}},
-{\tt glpk} (GLPK\index{GLPK@{\tt GLPK}} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}})
+{\tt glpk} (GLPK\index{Third-party software!GLPK} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}})
 %, {\tt ipopt} (COIN-OR Ipopt)
 \ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}}\fi
 and {\tt lindo} (LINDO)\index{LINDO}.
@@ -2679,11 +2722,11 @@ Nonlinear, integer   & Bonmin \\ \hline
 \end{table}
 
 
-\item[] {\bf -browser  browserName}\ \ This parameter is a path to the browser on the local machine. 
+\item[] {\bf browser  browserName}\ \ This parameter is a path to the browser on the local machine. 
 If this optional parameter is specified then the solver result in OSrL\index{OSrL} format is transformed 
 using XSLT into HTML and displayed in the browser.
 
-\item[] {\bf -config pathToConfigureFile}\ \ This optional parameter specifies a path on the local machine 
+\item[] {\bf config pathToConfigureFile}\ \ This optional parameter specifies a path on the local machine 
 to a text file containing values for the input parameters. This is convenient for the user not wishing 
 to constantly retype parameter values.
 
@@ -2703,20 +2746,20 @@ from this {\tt src} directory so that all that follows is correct in terms of pa
 
 
 \begin{verbatim}
-./OSSolverService -solver clp -osil ../data/osilFiles/parincLinear.osil
+./OSSolverService solver clp osil ../data/osilFiles/parincLinear.osil
 \end{verbatim}
 
 Alternatively, these parameters can be put into a configuration file.
 Assume that the configuration file of interest is {\tt testlocalclp.config}.
 It would contain the two lines of information
 \begin{verbatim}
--osil ../data/osilFiles/parincLinear.osil
--solver clp
+osil ../data/osilFiles/parincLinear.osil
+solver clp
 \end{verbatim}
 \index{parincLinear.osil@{\tt parincLinear.osil}|)}
 Then the command line is
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testlocalclp.config
+./OSSolverService config ../data/configFiles/testlocalclp.config
 \end{verbatim}
 
 {\bf Windows users} should {\bf note} that the folder separator is always 
@@ -2726,11 +2769,11 @@ the forward slash (`/') instead of the customary backslash (`$\backslash$').
 Parameters specified in the configure file are overridden by parameters specified at the command line.
 This is convenient if a user has a base configure file and wishes to override only a few options. For example,
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testlocalclp.config -solver lindo
+./OSSolverService config ../data/configFiles/testlocalclp.config solver lindo
 \end{verbatim}
 or
 \begin{verbatim}
-./OSSolverService -solver lindo -config ../data/configFiles/testlocalclp.config
+./OSSolverService solver lindo config ../data/configFiles/testlocalclp.config
 \end{verbatim}
 will result in the LINDO\index{LINDO} solver being used even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
 {\tt testlocalclp} configure file.
@@ -2766,13 +2809,13 @@ depending on whether a {\tt serviceLocation} was specified. If a
 
 If a local solve is indicated, we pass to a solver in the OSLibrary two things: 
 an OSoL file if one has been specified and a problem instance. The problem instance 
-is the instance in the OSiL file specified by the {\tt -osil} option. If there is no OSiL file, 
+is the instance in the OSiL file specified by the {\tt osil} option. If there is no OSiL file, 
 then it is the instance specified in the nl file. If there is no nl file, it is the 
 instance in the mps file. If no OSiL, nl or mps file is specified, an error is thrown. 
 
 The OSoL file is simply passed on to the OSLibrary; it is not parsed at this point. 
 The OSoL file elements {\tt <solverToInvoke>} and {\tt instanceLocation} cannot be used for local calls.
-One can specify which solver to use in the OSLibrary through the {\tt -solver} option. If this 
+One can specify which solver to use in the OSLibrary through the {\tt solver} option. If this 
 option is empty, a default solver is selected (see Table~\ref{table:defaultsolvers}\index{default solver}).
 
 \medskip
@@ -2781,13 +2824,13 @@ If the {\tt serviceLocation} parameter is used, a call is placed to the remote s
 specified in the {\tt serviceLocation} parameter. 
 Two strings are passed to the remote solver service: a string which is the OSoL file 
 if one has been specified, or the empty string otherwise, and a string containing an 
-instance if one has been specified. The instance can be specified using the {\tt -osil}, {\tt -nl}, or 
-{\tt -mps} option. If an OSiL file is specified in the {\tt -osil} option, it is used. If there is no 
+instance if one has been specified. The instance can be specified using the {\tt osil}, {\tt -nl}, or 
+{\tt -mps} option. If an OSiL file is specified in the {\tt osil} option, it is used. If there is no 
 OSiL file, then the instance specified in the nl file is used. If there is no nl file,  
 the mps file is used. If no file is given, an empty string is sent.
 
 For remote calls, the solver can only be set in the osol file, using the element {\tt <solverToInvoke>};
-the {\tt -solver} option has no effect.
+the {\tt solver} option has no effect.
 
 
 
@@ -2821,11 +2864,11 @@ Here is an example of using a configure file,  {\tt testlocal.config}\index{test
 to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using the {\tt solve}\index{solve@{\tt solve}} command.
 
 \begin{verbatim}
--osil ../data/osilFiles/parincQuadratic.osil
--solver ipopt
--serviceMethod solve
--browser /Applications/Firefox.app/Contents/MacOS/firefox
--osrl /Users/kmartin/temp/test.osrl
+osil ../data/osilFiles/parincQuadratic.osil
+solver ipopt
+serviceMethod solve
+browser /Applications/Firefox.app/Contents/MacOS/firefox
+osrl /Users/kmartin/temp/test.osrl
 \end{verbatim}
 
 
@@ -2833,8 +2876,8 @@ to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using th
 The first line of {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|)} gives the local location
 of the OSiL file,
 {\tt parincQuadratic.osil}, that contains the problem instance. The second parameter,
-{\tt -solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt.
-The third parameter {\tt -serviceMethod solve} is not really needed, since the default solver service 
+{\tt solver ipopt},  is the solver to be invoked, in this case COIN-OR Ipopt.
+The third parameter {\tt serviceMethod solve} is not really needed, since the default solver service 
 is {\tt solve}. It is included only for illustration. 
 The fourth parameter is the location of the browser on the local machine. 
 The fifth parameter is  {\tt osrl}. The value of this parameter, {\tt /Users/kmartin/temp/test.osrl}, 
@@ -2844,8 +2887,8 @@ specifies the location on the local machine where the OSrL\index{OSrL} result fi
 Parameters may also be contained in an XML-file in OSoL\index{OSoL} format. In the configuration file
 {\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
 \begin{verbatim}
--osol ../data/osolFiles/demo.osol
--solver clp
+osol ../data/osolFiles/demo.osol
+solver clp
 \end{verbatim}
 The file {\tt demo.osol} is
 
@@ -2929,24 +2972,24 @@ In the following sections we illustrate each of the six service methods.
 First we illustrate a simple call to  {\tt OSSolverService.jws}.  The call on the client machine is
 \index{testremote.config@{\tt testremote.config}|(}
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testremote.config
+./OSSolverService config ../data/configFiles/testremote.config
 \end{verbatim}
 where the {\tt testremote.config} file is
 \begin{verbatim}
--osil ../data/osilFiles/parincLinear.osil
--serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+osil ../data/osilFiles/parincLinear.osil
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
 \end{verbatim}
 
 No solver is specified and by default the  {\tt Clp} solver  is used by the {\tt OSSolverService}, 
 since the problem is a continuous linar program.
 If, for example, the user wished to solve the problem with the {\tt SYMPHONY} solver then this is accomplished
-either by using the  {\tt -solver} option on the command line
+either by using the  {\tt solver} option on the command line
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testremote.config -solver symphony
+./OSSolverService config ../data/configFiles/testremote.config solver symphony
 \end{verbatim}
 or by  adding  the line
 \begin{verbatim}
- -solver symphony
+ solver symphony
 \end{verbatim}
 to the  {\tt testremote.config} file\index{testremote.config@{\tt testremote.config}|)}.
 
@@ -2954,8 +2997,8 @@ to the  {\tt testremote.config} file\index{testremote.config@{\tt testremote.con
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing
 on the remote machine that is hosting the {\tt OSSolverService} and not on the client machine.
 \begin{verbatim}
-./OSSolverService -osol ../data/osolFiles/remoteSolve1.osol
-     -serviceLocation  http://kipp.chicagobooth.edu/os/OSSolverService.jws
+./OSSolverService osol ../data/osolFiles/remoteSolve1.osol
+     serviceLocation  http://kipp.chicagobooth.edu/os/OSSolverService.jws
 \end{verbatim}
 where the {\tt remoteSolve1.osol} file is
 \begin{verbatim}
@@ -3021,13 +3064,13 @@ finish execution until the solution is returned from the remote solver service.
 method is used, the instance is communicated to the remote service and the
 {\tt OSSolverService} terminates after submission. An example of this is
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testremoteSend.config
+./OSSolverService config ../data/configFiles/testremoteSend.config
 \end{verbatim}
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 -nl ../data/amplFiles/hs71.nl
--serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
--serviceMethod send
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceMethod send
 \end{verbatim}
 In this example the COIN-OR {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} solver is specified. The input file {\tt hs71.nl}
 is in AMPL nl format\index{AMPL nl format|(}.
@@ -3115,14 +3158,14 @@ A default solver is used (see Table~\ref{table:defaultsolvers}\index{default sol
 \index{retrieve@{\tt retrieve}|(}
 The {\tt retrieve} method is used to get information about the instance solution.  This method has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testremoteRetrieve.config
+./OSSolverService config ../data/configFiles/testremoteRetrieve.config
 \end{verbatim}
 The {\tt testremoteRetrieve.config} file is
 \begin{verbatim}
--serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
--osol ../data/osolFiles/retrieve.osol
--serviceMethod retrieve
--osrl /home/kmartin/temp/test.osrl
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+osol ../data/osolFiles/retrieve.osol
+serviceMethod retrieve
+osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
 and the {\tt retrieve.osol} file is
 
@@ -3144,11 +3187,11 @@ The {\tt <jobID>}\index{JobID@{\tt JobID}} should reflect a {\tt <jobID>} that w
 using a {\tt send()} command.
 The result is returned as a string in OSrL format.  The user must modify the line
 \begin{verbatim}
--osrl /home/kmartin/temp/test.osrl
+osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
 to reflect a valid path for their own machine.  (It is also possible to delete the line
 in which case the result will be displayed on the screen instead of being saved to the
-file indicated in the {\tt -osrl} option.)\index{retrieve@{\tt retrieve}|)}
+file indicated in the {\tt osrl} option.)\index{retrieve@{\tt retrieve}|)}
 
 
 \subsubsection{The  {\tt getJobID} Service Method}\label{section:getjobid}
@@ -3157,8 +3200,8 @@ file indicated in the {\tt -osrl} option.)\index{retrieve@{\tt retrieve}|)}
 Before  submitting a job with the {\tt send}\index{send@{\tt send}} method a {\tt JobID}\index{JobID@{\tt JobID}}
 is required. The {\tt OSSolverService} can get a {\tt JobID} with the following options.
 \begin{verbatim}
--serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
--serviceMethod getJobID
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceMethod getJobID
 \end{verbatim}
 Note that no OSoL\index{OSoL} input file is specified. In this case, the {\tt OSSolverService} sends an empty string.
 A string is returned with the {\tt JobID}. This {\tt JobID} is then put into a {\tt <jobID>} element in an
@@ -3176,14 +3219,14 @@ This was illustrated in Section~\ref{section:solve}.  A second way to check on t
 to use the {\tt knock} service method.  For example, assume a user   wants to know if  the job
 with {\tt JobID 123456abcd}\index{JobID@{\tt JobID}}  is complete. A user would make the request
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testRemoteKnock.config
+./OSSolverService config ../data/configFiles/testRemoteKnock.config
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
--serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
--osplInput ../data/osolFiles/demo.ospl
--osol ../data/osolFiles/retrieve.osol
--serviceMethod knock
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+osplInput ../data/osolFiles/demo.ospl
+osol ../data/osolFiles/retrieve.osol
+serviceMethod knock
 \end{verbatim}
 the {\tt demo.ospl} file is
 
@@ -3221,7 +3264,7 @@ to be redirected to a file, a command should be added to the {\tt testRemoteKnoc
 file with a valid path name on the local system, e.g.,
 
 \begin{verbatim}
--osplOutput ./result.ospl
+osplOutput ./result.ospl
 \end{verbatim}
 
 Part of the return format is illustrated below.
@@ -3282,13 +3325,13 @@ to check if the remote solver service is up and running. For details, check the 
 If the user submits a job that is taking too long or is a mistake, it is possible to kill the job on the remote server using the {\tt kill} service method.
 For example, to kill job {\tt 123456abcd}, at the command line type
 \begin{verbatim}
-./OSSolverService -config  ../data/configFiles/kill.config
+./OSSolverService config  ../data/configFiles/kill.config
 \end{verbatim}
 where the configure file {\tt kill.config} is
 \begin{verbatim}
--osol ../data/osolFiles/kill.osol
--serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
--serviceMethod kill
+osol ../data/osolFiles/kill.osol
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceMethod kill
 \end{verbatim}
 and the {\tt kill.osol} file is
 \begin{verbatim}
@@ -3415,7 +3458,7 @@ may be empty because no options are required to get the JobID)
 
 The OSoL (Optimization Services option Language) protocol is used to pass options to solvers.   
 When using the {\tt OSSolverService} executable this will typically be done through an OSoL XML file 
-by specifying the {\tt -osol} option followed by the location of the file.  However, it is also possible 
+by specifying the {\tt osol} option followed by the location of the file.  However, it is also possible 
 to write a custom application that links to the OS library and to build an OSOption object in memory 
 and then pass this to a solver. We next describe the  feature of the OSoL protocol that will be the most 
 useful to the typical user.
@@ -3627,14 +3670,14 @@ After the final installation is complete on the server we recommend testing  by
 doing someting like the following. On a client machine, create  the file {\tt
 testremote.config} with the following lines of text
 \begin{verbatim}
--serviceLocation http://***.***.***.***:8080/OSServer/services/OSSolverService
--osil /parincLinear.osil
+serviceLocation http://***.***.***.***:8080/OSServer/services/OSSolverService
+osil /parincLinear.osil
 \end{verbatim}
 where {\tt ***.***.***.***} is the IP address of the Tomcat server machine. Then, assuming the files
 {\tt testremote.config} and {\tt parincLinear.osil} are in the same directory on the client machine as the
 {\tt OSSolverService} execute:
 \begin{verbatim}
-./OSSolverService -config testremote.config
+./OSSolverService config testremote.config
 \end{verbatim}
 You should get back an OSrL result printed to the screen.
 
@@ -3801,7 +3844,7 @@ If no options are specified, the default solver is used, depending on the proble
 %For continuous nonlinear models {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} is used. 
 %For mixed-integer linear models, {\tt Cbc}\index{Cbc@{\tt Cbc}} is used. 
 %For mixed-integer nonlinear models  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} is used.  
-If you wish to specify a specific solver, use the {\tt -solver} option.   For example,  
+If you wish to specify a specific solver, use the {\tt solver} option.   For example,  
 since the test problem {\tt eastborne.mod} is a linear integer program, {\tt Cbc} is used by default. 
 If you want to instead use {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(},
 then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver as follows.%
@@ -3809,25 +3852,25 @@ then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver a
 
 \begin{verbatim}
 # now tell OSAmplClient to use SYMPHONY instead of Cbc
-option OSAmplClient_options "-solver symphony";
+option OSAmplClient_options "solver symphony";
 \end{verbatim}
 
-Valid values for the {\tt -solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, 
-{\tt dylp}, {\tt symphony}, and {\tt vol}.   The solver name in the {\tt -solver} option is case insensitive.  
+Valid values for the {\tt solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, 
+{\tt dylp}, {\tt symphony}, and {\tt vol}.   The solver name in the {\tt solver} option is case insensitive.  
 
 
 \subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
 
 Next, assume that you have a large problem you want to solve on the remote solver. It is necessary 
 to specify the location of the server solver as an option to OSAmplClient. 
-The {\tt -serviceLocation} option is used to specify the location of a solver server. 
+The {\tt serviceLocation} option is used to specify the location of a solver server. 
 In this case, the string of options for {\tt OSAmplClient\_options} is:
 
 \begin{verbatim}
--serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 \end{verbatim}
 
-This string is used to replace the string `{\tt -solver symphony}' in the previous example. 
+This string is used to replace the string `{\tt solver symphony}' in the previous example. 
 We will omit the other parts (i.e., the AMPL instruction
 \begin{verbatim}
 option OSAmplClient_options
@@ -3849,8 +3892,8 @@ and cause them to be discarded.
 
 For instance, the sequence of option calls
 \begin{verbatim}
-option OSAmplClient_options "-solver symphony";
-option OSAmplClient_options "-serviceLocation  
+option OSAmplClient_options "solver symphony";
+option OSAmplClient_options "serviceLocation  
     http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
@@ -3860,11 +3903,11 @@ will result in the default solver being called.
 
 Finally, the user may wish to pass options to the individual solver. This is done by providing an options file.
 A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
-provided with this distribution.  The name of the options file is the value of the {\tt -osol} option.
+provided with this distribution.  The name of the options file is the value of the {\tt osol} option.
 The string of options to {\tt OSAmplClient\_options} is now
 \begin{verbatim}
--serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
--osol solveroptions.osol
+serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+osol solveroptions.osol
 \end{verbatim}
 This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
 and one for {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}.
@@ -3892,8 +3935,8 @@ If you examine the file {\tt solveroptions.osol} you will see that there is an X
 This has no effect on a local solve. However, if this option file is paired with 
 
 \begin{verbatim}
--serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
--osol solveroptions.osol
+serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+osol solveroptions.osol
 \end{verbatim}
 then in our reference implementation the remote solver service will parse the file {\tt solveroptions.osol}, find the {\tt <solverToInvoke>} tag and then pass the {\tt symphony} solver option to the {\tt OSSolverService} on the remote server.
 
@@ -3912,17 +3955,17 @@ option solver OSAmplClient;
 
 \begin{itemize}
 
-\item the name of the solver using the  {\tt -solver} option; valid values for this option  are {\tt clp}, 
+\item the name of the solver using the  {\tt solver} option; valid values for this option  are {\tt clp}, 
 {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol};
 
 
-\item the location of the remote server using   the {\tt -serviceLocation} option;
+\item the location of the remote server using   the {\tt serviceLocation} option;
 
-\item the location of the options file using  the {\tt -osol} option.
+\item the location of the options file using  the {\tt osol} option.
 
 \end{itemize}
 
-These three options behave {\it exactly like} the {\tt -solver}, {\tt -serviceLocation}, and {\tt -osol} options used by the {\tt OSSolverService} described in  Section \ref{section:commandlineparser}.
+These three options behave {\it exactly like} the {\tt solver}, {\tt serviceLocation}, and {\tt osol} options used by the {\tt OSSolverService} described in  Section \ref{section:commandlineparser}.
 
 
 \item If no options are specified using {\tt OSAmplClient\_options},  the default solver is used.
@@ -3937,7 +3980,7 @@ All solvers are invoked locally.
 
 \item  The options given to {\tt OSAmplClient\_options}  can be given in any order.
 
-\item A remote solver is called if and only if the {\tt -serviceLocation} option is specified.
+\item A remote solver is called if and only if the {\tt serviceLocation} option is specified.
 
 \end{enumerate}
 
@@ -4377,7 +4420,7 @@ and takes MATLAB arrays to create an OSiL instance.  This class is part of the O
 In order to use the {\tt OSMatlab} class it is necessary to  compile
 {\tt OSmatlabSolver.cpp}  into  a MATLAB Executable ({\tt mex}) file.
 The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory.
-We  assume the user has already done a {\tt make install} and that in the OS root directory
+We  assume the user has already done a {\tt make install}\ref{section:unixbuilds} and that in the OS root directory
 \begin{verbatim}
 /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS
 \end{verbatim}
@@ -4400,14 +4443,13 @@ Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are inc
 
 \begin{verbatim}
 CXXLIBS="$MLIBS -lstdc++
-    -L/Users/kmartin/Documents/files/code/ipopt/macosx/Ipopt-3.2.2/lib
     -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib
     -lOS  -lbonmin -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lCbc -lCgl -lOsi -lClp
     -lSym -lCoinUtils  -lm"
 \end{verbatim}
 
 For a UNIX system the {\tt mexopts.sh} file  is typically  found in a directory with the release name in 
-{\tt  $\sim$/.matlab}. For example, {\tt $\sim$/.matlab/R14SP3}.  It may also be in the {\tt bin} directory 
+{\tt  $\tt\sim$/.matlab}. For example, {\tt $\tt\sim$/.matlab/R14SP3}.  It may also be in the {\tt bin} directory 
 in the MATLAB application root folder.
 
 
@@ -4673,13 +4715,18 @@ string serviceLocation = http://kipp.chicagobooth.edu/os/OSSolverService.jws
 osagent = new OSSolverAgent(  serviceLocation );
 string sOSrL = osagent->solve(sOSiL, sOSoL);
 \end{verbatim}
-Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  The use of these methods is described in Section~\ref{section:servicemethods}.
+Other methods in the {\tt OSSolverAgent} class are {\tt send}, {\tt retrieve}, {\tt getJobID}, {\tt knock}, and {\tt kill}.  
+The use of these methods is described in Section~\ref{section:servicemethods}.
 
 
 
-The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks as creating and parsing SOAP messages and making low level socket calls to the server running the solver service. The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages.
+The methods in the {\tt OSSolverAgent} class call methods in the {\tt WSUtil} class that perform such tasks as 
+creating and parsing SOAP messages and making low level socket calls to the server running the solver service. 
+The average user will not use methods in the {\tt WSUtil} class, but they are available to anyone wanting to make socket calls or create SOAP messages.
 
-There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to upload files from the hard drive of a client to the server. It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code {\tt OSFileUpload.cpp} described in Section~\ref{section:fileupload}.
+There is also a method, {\tt OSFileUpload}, in the OSAgentClass that is used to upload files from the hard drive of a client to the server. 
+It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload}  method is illustrated and described in the example code 
+{\tt OSFileUpload.cpp} described in Section~\ref{section:fileupload}.
 \index{OSAgent@{\tt OSAgent}|)}
 
 \subsection{OSCommonInterfaces}
@@ -5073,6 +5120,8 @@ The generated parser code from {\tt flex} and {\tt bison} is distributed with th
 of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} 
 or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with 
 {\tt flex} and {\tt bison}. If these programs are present, in the OS directory  execute
+%
+\index{make run_parsers@{\tt make run\_parsers}}
 \begin{verbatim}
 make  run_parsers
 \end{verbatim}
@@ -5429,6 +5478,8 @@ x_1 Type = C  Lower Bound =  0  Upper Bound =  1.7976931348623157e308
 
 These example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples
 in a unix environment the user must first run
+%
+\index{make install@{\tt make install}}
 \begin{verbatim}
 make install
 \end{verbatim}
@@ -5447,39 +5498,17 @@ example is in the directory
 COIN-OS/OS/examples/osModDemo
 \end{verbatim}
 Next, the user should connect to the appropriate example directory and run {\tt make}.
-If the user has done a VPATH\index{VPATH} build, the Makefiles will be in each respective example directory under
+If the user has done a VPATH\index{VPATH} build, the makefiles\index{makefile|(} will be in each respective example directory under
 \begin{verbatim}
 vpath_root/OS/examples
 \end{verbatim}
-otherwise, the Makefiles will be in each respective example directory under
+otherwise, the makefiles will be in each respective example directory under
 \begin{verbatim}
 COIN-OS/OS/examples
 \end{verbatim}
 
 The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified by the user
 if necessary.  The part of the Makefile to be adjusted, if necessary, is
-%\begin{verbatim}
-%##########################################################################
-%#    You can modify this example makefile to fit for your own program.   #
-%#    Usually, you only need to change the five CHANGEME entries below.   #
-%##########################################################################
-%
-%# CHANGEME: This should be the name of your executable
-%EXE = OSTestCode
-%# CHANGEME: Here is the name of all object files corresponding to the source
-%#           code that you wrote in order to define the problem statement
-%OBJS =  OSTestCode.o
-%# CHANGEME: Additional libraries
-%ADDLIBS =
-%# CHANGEME: Additional flags for compilation (e.g., include flags)
-%ADDINCFLAGS =  -I${prefix}/include
-%# CHANGEME: SRCDIR and VPATH should be the path to the source code. It is assumed
-%# that the lib directory is in prefix/lib and the header files are in
-%# prefix/include
-%SRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
-%VPATH = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osTestCode
-%prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
-%\end{verbatim}
 
 \begin{verbatim}
 ##########################################################################
@@ -5506,7 +5535,7 @@ prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
 
 
 Developers can use the Makefiles as a starting point for building applications that use the 
-OS project libraries.
+OS project libraries\index{makefile|)}.
 
 \medskip
 Users of Microsoft Visual Studio can obtain the executables by opening the solution file 
@@ -5589,7 +5618,11 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 
 \subsection{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
 
-This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  This project offers the user with the ability to have control over each node in the branch and process. This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 2) a user-defined cut, and 3) a user-defined variable. 
+This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  
+This project offers the user with the ability to have control over each node in the branch and process. 
+This makes it possible to add user-defined cuts and/or user-defined variables. At each node in the tree, 
+a call is made to the method {\tt process\_lp\_result()}. In the example problem we illustrate 1) adding COIN-OR Cgl cuts, 
+2) a user-defined cut, and 3) a user-defined variable. 
 
 
 \subsection{OSModificationDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
@@ -5941,7 +5974,7 @@ generates the result file {\tt result.osrl} in the OS OSrL format.
 
 
 \subsection{  template }\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
-directory.  This is an empty example that comes with a {\tt Makefile}  that links to all of the necessary 
+directory.  This is an empty example that comes with a {\tt Makefile}\index{makefile}  that links to all of the necessary 
 header files and libraries. For Windows users there is also a solution file configured to link with all
 of the libraries in the {\tt lib} directory and pointing to all of the header files in the {\tt include} directory.
 The user can write his or her own code here.
@@ -6620,7 +6653,7 @@ COIN-OS/OS/applications/fileUpload
 
 Before you can use {\tt OSFileUpload}, you must give a valid URL for the location of the server.
 This information must be provided in line 82 of the source code {\tt OSFileUpload.cpp} before 
-issuing the {\tt make} command (in a unix environment) or the build (under MS VisualStudio).
+issuing the {\tt make}\index{make@{\tt make}} command (in a unix environment) or the build (under MS VisualStudio)\index{Microsoft Visual Studio}.
 
 The {\tt OSFileUpload} client executable (see {\tt OS/applications/fileUpload}) takes one argument on the command line,
 which is the location of the file on the local directory to upload to the server. For example,
@@ -6648,14 +6681,14 @@ This location is used in the {\tt osol} file as shown below.
 
 Once the file is on the server, invoke the local {\tt OSSolverService} by
 \begin{verbatim}
-./OSSolverService -config ../data/configFiles/testremote.config
+./OSSolverService config ../data/configFiles/testremote.config
 \end{verbatim}
-where the {\tt config} file is as follows. Notice there is no {\tt -osil}  option as the OSiL file has already
+where the {\tt config} file is as follows. Notice there is no {\tt osil}  option as the OSiL file has already
 been uploaded and its instance location (``local'' to the server) is specified in the {\tt osol} file.
 \begin{verbatim}
--osol ../data/osolFiles/remoteSolve2.osol
--serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
--serviceMethod solve
+osol ../data/osolFiles/remoteSolve2.osol
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceMethod solve
 \end{verbatim}
 and the {\tt osol} file is
 \begin{verbatim}
@@ -7610,12 +7643,12 @@ http://calvin.ie.lehigh.edu/os/OSSolverService.jws
 
 
 
--serviceLocation http://calvin.ie.lehigh.edu/os/OSSolverService.jws
--osil ../data/osilFiles/p0201.osil
--solver symphony
--osol ../data/osolFiles/symphony.osol
--osrl ./test.osrl
--browser /Applications/Firefox.app/Contents/MacOS/firefox
+serviceLocation http://calvin.ie.lehigh.edu/os/OSSolverService.jws
+osil ../data/osilFiles/p0201.osil
+solver symphony
+osol ../data/osolFiles/symphony.osol
+osrl ./test.osrl
+browser /Applications/Firefox.app/Contents/MacOS/firefox
 
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org"
