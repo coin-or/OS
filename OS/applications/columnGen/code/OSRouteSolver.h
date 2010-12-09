@@ -88,7 +88,7 @@ public:
 	
 	//these variable names are in x(i, j) space
 	std::string* m_variableNames;
-	
+
 	
 	//below  is a scatter array we scatter into in order
 	//to multiply the transformation matrix times the A matrix
@@ -132,8 +132,13 @@ public:
 	
 	//the number of artificial variables in the restricted master
 	//they should be the first variables
-	
 	int m_numVarArt;
+	
+	//keep track of the artificial variables
+	/** m_varArt[ i] = = 1 if variable i is an
+	 * artificial variable, 0 otherwise
+	 */
+	int* m_varArt;
 
 
 	double m_eps;

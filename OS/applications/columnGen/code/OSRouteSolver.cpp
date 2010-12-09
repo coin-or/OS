@@ -219,6 +219,15 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			
 		}
 		
+		//number of artificial variables is 2*rows
+		
+		m_varArt = new int[ 2*1000];
+		for(i = 0; i < 2*1000; i++){
+			
+			m_varArt[ i] = 0;
+			
+		}
+		
 		//New row arrays
 		m_newRowNonz = new int[ m_numHubs] ; //at most one cut per Hub
 		m_newRowColumnIdx =  new int*[ m_numHubs] ; //at most one cut per Hub
@@ -383,6 +392,9 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	delete[] m_newColumnRowValue;
 	m_newColumnRowValue = NULL;
+	
+	
+	delete[] m_varArt;
 	
 	
 	//getCut arrays
@@ -641,6 +653,8 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 	//
 	// initialize
 	
+	
+	
 	for(i = m_numHubs; i < m_numNodes; i++){
 		
 		
@@ -656,13 +670,12 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 				// note: k < i so use that formula
 				m_u[i][l1] = *(c + k*(m_numNodes - 1) + i - 1);  // put in correct cost
 
-				
+		
 			}
 		}	
 	}
 	//end initialize
-	
-	
+
 	//
 	
 	//if l = minDemand we visit only one node, let's get the reduced cost in this case
@@ -1494,6 +1507,12 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 	int startsIdx;
 	startsIdx = 0;
 	startsIdx++;
+	
+	for(i = 0; i < m_numVarArt; i++){
+		
+		m_varArt[ i] = 0;
+		
+	}
 
 	std::vector<IndexValuePair*> primalValPair;
 	
