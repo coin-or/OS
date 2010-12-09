@@ -252,8 +252,8 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_thetaIndex = new int[ 500000];
 		m_numThetaVar = 0;
 		m_numThetaNonz = 0;
-		m_thetaPnt[ m_numThetaVar++ ] = 0;
-		
+		//m_thetaPnt[ m_numThetaVar++ ] = 0;
+		m_thetaPnt[ m_numThetaVar ] = 0;
 		//hard coding of cuts
 
 		
@@ -1087,8 +1087,8 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			}
 			
 			m_costVec[ k] =  m_optL[ k]*m_costVec[ k];
-			m_thetaCost[ m_numThetaVar ] = m_costVec[ k];
-			m_thetaPnt[ m_numThetaVar++ ]  = m_numThetaNonz;
+			m_thetaCost[ m_numThetaVar++ ] = m_costVec[ k];
+			m_thetaPnt[ m_numThetaVar ]  = m_numThetaNonz;
 			
 			numNonzVec = m_newColumnNonz;
 			costVec = m_costVec;
@@ -1375,8 +1375,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 					
 				}
 				
-				m_thetaCost[ m_numThetaVar ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
-				m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
+				m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+				m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 				
 				masterVarName = makeStringFromInt("theta(", k);
 				masterVarName += makeStringFromInt(",", mit->first);
@@ -1511,6 +1511,10 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 	for(i = 0; i < m_numVarArt; i++){
 		
 		m_varArt[ i] = 0;
+		
+		
+		
+		 //m_thetaPnt[ m_numThetaVar++] = 0;
 		
 	}
 
@@ -1877,8 +1881,11 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			indexes[ kountNonz++] = m_numNodes - m_numHubs + k ;
 			
 			
-			m_thetaCost[ m_numThetaVar ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
-			m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
+			std::cout << " m_numThetaVar  " << m_numThetaVar  << std::endl;
+			
+			
+			m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 			
 			masterVarName = makeStringFromInt("theta(", k);
 			masterVarName += makeStringFromInt(",", 0);
@@ -1927,6 +1934,30 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		delete objcoeff;
 		objcoeff = NULL;
 		std::cout << m_osinstanceMaster->printModel( ) << std::endl;
+		
+		
+		
+		for(int i1 = 0; i1 < m_numThetaVar; i1++){
+			
+			std::cout <<  " obj value = "  << m_thetaCost[ i1] << std::endl;
+			
+			std::cout <<  " m_thetaPnt[ i1]  = "  <<  m_thetaPnt[ i1] << std::endl;
+			
+			std::cout <<  " m_thetaPnt[ i2]  = "  <<  m_thetaPnt[ i1 + 1] - 1<< std::endl;
+			
+			std::cout <<  "m_numThetaNonz "  <<  m_numThetaNonz << std::endl;
+			
+			std::cout <<  "m_numThetaVar "  <<  m_numThetaVar << std::endl;
+			
+			for(int i2 = m_thetaPnt[ i1];  i2 < m_thetaPnt[ i1 + 1] ;  i2++){
+			//	
+				std::cout << " i2 = "  << i2 << std::endl;
+				std::cout << "  m_thetaIndex = "  << m_variableNames[ m_thetaIndex[ i2] ] << std::endl;
+				
+			}	
+
+			
+		}
 		
 		//exit( 1);
 		
@@ -2188,7 +2219,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 	try{
 		m_osinstanceSeparation->bConstraintsModified = true;
 		//m_numNodes is the number of artificial variables
-		if(numTheta != m_numThetaVar - 1 + m_numVarArt) throw 
+		if(numTheta != m_numThetaVar  + m_numVarArt) throw 
 				ErrorClass("number of master varibles in OSRouteSolver::getCuts inconsistent");
 		
 		//for(i = 0; i < numTheta; i++){
@@ -2275,7 +2306,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							
 							
 							
-							for(k = 0; k < m_numThetaVar - 1; k++){
+							for(k = 0; k < m_numThetaVar ; k++){
 								
 								//get the xij indexes in this column 
 								tmpKount = 0;
@@ -2435,7 +2466,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				
 				
 				
-				for(i = 0; i < m_numThetaVar - 1; i++){
+				for(i = 0; i < m_numThetaVar ; i++){
 					
 					//get the xij indexes in this column 
 					tmpKount = 0;
@@ -2761,7 +2792,7 @@ bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
 	try{
 		m_osinstanceSeparation->bConstraintsModified = true;
 		
-		if(numTheta != m_numThetaVar - 1) throw ErrorClass("number of master varibles in OSRouteSolver::getCuts");
+		if(numTheta != m_numThetaVar ) throw ErrorClass("number of master varibles in OSRouteSolver::getCuts");
 		
 		for(i = 0; i < numTheta; i++){
 			
@@ -3147,9 +3178,9 @@ void OSRouteSolver::pauHana(const double* theta){
 			if(theta[ i] > m_eps) throw ErrorClass("we have a positive artificial variable");
 		}
 		
-		for(i = m_numVarArt; i < m_numThetaVar - 1 + m_numVarArt  ; i++){
+		for(i = m_numVarArt; i < m_numThetaVar  + m_numVarArt  ; i++){
 		
-			cost += theta[ i]*m_thetaCost[ i + 1  - m_numVarArt];
+			cost += theta[ i]*m_thetaCost[ i   - m_numVarArt];
 			//std::cout << "COLUMN VALUE = " << theta[ i] << std::endl;
 		}
 		
@@ -3159,7 +3190,7 @@ void OSRouteSolver::pauHana(const double* theta){
 		float numSets;
 		int kount;
 		
-		numSets = floor( double((m_numThetaVar - 1 ) / m_numHubs));
+		numSets = floor( double((m_numThetaVar  ) / m_numHubs));
 	
 	
 		//kipp throw exception if number of columns not an even multiple of m_numHubs
@@ -3191,7 +3222,7 @@ void OSRouteSolver::pauHana(const double* theta){
 		std::cout << std::endl <<  std::endl;
 		std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
-		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 1 << std::endl;
+		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar << std::endl;
 		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numTourBreakCon - 1 << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
 		
