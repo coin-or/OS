@@ -277,8 +277,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 				std::cout << "Number of solver interface columns =  " <<  si->getNumCols()  << std::endl;
 				//m_numNodes is number of artificial variables
-				if(si->getNumCols() != m_osrouteSolver->m_numThetaVar  + 
-						m_osrouteSolver->m_numVarArt) throw ErrorClass("number variables in solver not consistent with master");
+				if(si->getNumCols() != m_osrouteSolver->m_numThetaVar ) throw ErrorClass("number variables in solver not consistent with master");
 				
 				for(i = 0; i <  numARows; i++){
 					
