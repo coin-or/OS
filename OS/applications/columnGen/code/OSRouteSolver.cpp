@@ -251,7 +251,6 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		m_pntBmatrix = new int[ 10000];
 		m_Bmatrix = new int[ 500000];
-		m_BmatrixRhs = new int[ 10000];
 		m_numTourBreakCon = 0;
 		m_numTourBreakNonz = 0;
 		m_pntBmatrix[ m_numTourBreakCon++] = 0;
@@ -431,8 +430,6 @@ OSRouteSolver::~OSRouteSolver(){
 	delete[]  m_Bmatrix ;
 	m_Bmatrix = NULL;
 	
-	delete[]  m_BmatrixRhs ;
-	m_BmatrixRhs = NULL;
 		
 
 	
@@ -2250,10 +2247,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							m_Bmatrix[   m_numTourBreakNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
 							//get index for j1,i1
 							m_Bmatrix[   m_numTourBreakNonz++ ] = j1*(m_numNodes - 1) + i1 ;
-							//m_BmatrixRhs[ m_numTourBreakCon ] =  1.0;
 							m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
-
-							
 
 							numNewRows = 1;
 							
@@ -2410,7 +2404,6 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				}//end for on vit1
 				
 				//add the cut
-				//m_BmatrixRhs[ m_numTourBreakCon ] =  dualIdx.size()  - 1;
 				m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
 	
 				// multiply the transformation matrix times this cut to get the cut in theta space
@@ -2434,7 +2427,6 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				
 			
 				m_newRowNonz[ 0] = 0;
-				//m_newRowUB[ 0] =  m_BmatrixRhs[ m_numTourBreakCon  - 1];
 				m_newRowUB[ 0] =  dualIdx.size()  - 1;
 				m_newRowLB[ 0] = 0;
 				

@@ -114,14 +114,16 @@ public:
 	int* m_pntAmatrix;
 	int* m_Amatrix;
 	//
-	//arrays for the tour breaking contraints
+	//arrays for the added constraints
+	//for now the added constraints are 
+	//tour breaking and variable branching
 	//
 	int* m_pntBmatrix;
 	int* m_Bmatrix;
-	int* m_BmatrixRhs;
 	int m_numTourBreakCon;
 	int m_numTourBreakNonz;
 	//
+	//end arrays for added constaints
 	
 	//the transformation matrix
 	int* m_thetaPnt;
@@ -203,20 +205,14 @@ public:
 	
 	/**
 	 * RETURN VALUES: 
-	 * int* numNonz -- number of nonzeros in branching row
-	 * int* colIdx --  column indexes of theta variables 
+	 * return the integer index of a fractional x_{ij} variable
 	 * 
 	 * INPUT:
 	 * double* thetaVar -- the vector of primal master values
 	 * int numThetaVar -- size of master primal vector
 	 * 
-	 * NOTE: we are not really returning a variable, are returning
-	 * a set of theta variables indexed by thetaVar that correspond
-	 * to a fractional x_{ij} -- stated another way we are returning
-	 * a row of the transformation matrix
 	 */
-	void getBranchingVar(const  double* thetaVar, const int numThetaVar,
-			int &numNonz, int* &colIdx) ;	
+	int getBranchingVar(const  double* thetaVar, const int numThetaVar ) ;	
 	
 	
 	/**
