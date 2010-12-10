@@ -130,15 +130,6 @@ public:
 	int m_numThetaNonz;
 	double* m_thetaCost;
 	
-	//the number of artificial variables in the restricted master
-	//they should be the first variables
-	int m_numVarArt;
-	
-	//keep track of the artificial variables
-	/** m_varArt[ i] = = 1 if variable i is an
-	 * artificial variable, 0 otherwise
-	 */
-	int* m_varArt;
 
 
 	double m_eps;
@@ -173,15 +164,12 @@ public:
 	//this c vector is for the entire cost vector
 	void getOptL(const  double* c) ;
 	
-	//return true if cuts got generated
-	bool getCuts(const  double* theta, const int numTheta) ;
-	
 	
 	/**
 	 * RETURN VALUES: 
 	 * int numNewRows -- number of new rows generated
 	 * int* numNonz -- number of nonzeros in each row
-	 * double** colIdx -- vectors column indexes of new rows
+	 * int** colIdx -- vectors column indexes of new rows
 	 * double** values -- vectors of matrix coefficient values of new rows
 	 * double* rowLB -- vector of row lower bounds
 	 * double* rowUB -- vector of row upper bounds
@@ -199,7 +187,7 @@ public:
 	 * RETURN VALUES: 
 	 * int numNewRows -- number of new rows generated
 	 * int* numNonz -- number of nonzeros in each row
-	 * double** colIdx -- vectors column indexes of new rows
+	 * int** colIdx -- vectors column indexes of new rows
 	 * double** values -- vectors of matrix coefficient values of new rows
 	 * double* rowLB -- vector of row lower bounds
 	 * double* rowUB -- vector of row upper bounds
@@ -211,6 +199,24 @@ public:
 	void getCutsX(const  double* xVar, const int numXVar,
 			int &numNewRows, int*  &numNonz, int** &colIdx,
 			double** &values, double* &rowLB, double* &rowUB) ;	
+	
+	
+	/**
+	 * RETURN VALUES: 
+	 * int* numNonz -- number of nonzeros in branching row
+	 * int* colIdx --  column indexes of theta variables 
+	 * 
+	 * INPUT:
+	 * double* thetaVar -- the vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 * 
+	 * NOTE: we are not really returning a variable, are returning
+	 * a set of theta variables indexed by thetaVar that correspond
+	 * to a fractional x_{ij} -- stated another way we are returning
+	 * a row of the transformation matrix
+	 */
+	void getBranchingVar(const  double* thetaVar, const int numThetaVar,
+			int &numNonz, int* &colIdx) ;	
 	
 	
 	/**

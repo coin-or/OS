@@ -153,6 +153,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	yA = new double[m_osinstanceMaster->getConstraintNumber() ];
 	
 	//kipp -- hard coding, come back and fix with option
+	//kipp -- do all of the newing in a separate routine
 	double *yB = NULL;
 	yB = new double[ 10000];
 	int numBRows;
@@ -181,6 +182,9 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	colub = 1.0;
 	
 	
+	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
+	double bigNum = 1.0e24;
+	
 	//getRows function call return parameters
 	int numNewRows;
 	int* numRowNonz = NULL;
@@ -189,7 +193,13 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	double* rowLB;
 	double* rowUB;
 	//end of getRows function call return parameters	
+	//art variables
+	int* rowArtIdx;
+	double* rowArtVal;
 	
+	rowArtIdx = new int[ 1];
+	rowArtVal = new double[ 1];
+
 
 	bool isCutAdded;
 
@@ -258,9 +268,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				
 				//kipp here is where the while loop goes
 				//start while loop
-				getColumns(yA, numARows, yB, numBRows,
-						numNewColumns, numNonz, 
-						cost,  rowIdx, values,  lowerBound);
+				getColumns(yA, numARows, yB, numBRows, numNewColumns, 
+						numNonz, cost,  rowIdx, values,  lowerBound);
 				
 				std::cout << "Lower Bound = " <<  lowerBound   << std::endl;
 			
@@ -284,8 +293,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					*(yA + i) = si->getRowPrice()[ i];
 					
 				}
-				
-				
+							
 				for(i = numARows; i <  numARows + numBRows; i++){
 					
 					*(yB + i - numARows) = si->getRowPrice()[ i];
@@ -304,8 +312,10 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	
 			
 			numNewRows = 0;
+			
 			getCuts(theta, numCols, numNewRows, numRowNonz, 
 					colIdx,rowValues, rowLB, rowUB);
+		
 			
 			if( numNewRows >= 1 ){
 				
@@ -314,6 +324,21 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				for(i = 0; i < numNewRows; i++){
 					
 					si->addRow(numRowNonz[ i], colIdx[ i], rowValues[ i], rowLB[ i], rowUB[ i] ) ;
+					
+					//add two artificial variables for this row so we can never be infeasible
+					//si->addCol( numNonz, rowIdx[k], values[k],
+					//		collb, colub,  cost[ k]) ;
+					
+					//add the artificial variable for the UB					
+					rowArtVal[ 0] = -1.0;
+					rowArtIdx[ 0] = si->getNumRows() - 1;
+					si->addCol(1, rowArtIdx, rowArtVal, 0, bigNum, bigNum);
+					
+					//add the artificial variable for the LB					
+					rowArtVal[ 0] = 1.0;
+					//rowArtIdx[ 0] = si->getNumRows() - 1; //same as above
+					si->addCol(1, rowArtIdx, rowArtVal, 0, bigNum, bigNum);
+					
 					
 					
 				}
@@ -361,6 +386,14 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		if(numCols > 0) delete[] theta;
 		theta = NULL;
+		
+		delete[] rowArtIdx;
+		rowArtIdx = NULL;
+		
+		delete[] rowArtVal;
+		rowArtVal = NULL;
+		
+
 		
 		
 		delete solver;

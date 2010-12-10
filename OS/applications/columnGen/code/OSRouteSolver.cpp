@@ -77,7 +77,6 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	
 	m_bestIPValue = OSDBL_MAX;
 	
-	m_numVarArt = 0;
 	
 	m_eps = 0.00001;
 	m_u = NULL;
@@ -219,14 +218,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			
 		}
 		
-		//number of artificial variables is 2*rows
-		
-		m_varArt = new int[ 2*1000];
-		for(i = 0; i < 2*1000; i++){
-			
-			m_varArt[ i] = 0;
-			
-		}
+
 		
 		//New row arrays
 		m_newRowNonz = new int[ m_numHubs] ; //at most one cut per Hub
@@ -394,7 +386,7 @@ OSRouteSolver::~OSRouteSolver(){
 	m_newColumnRowValue = NULL;
 	
 	
-	delete[] m_varArt;
+
 	
 	
 	//getCut arrays
@@ -1468,10 +1460,10 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 	std::cout << "Executing OSRouteSolver::getInitialRestrictedMaster2( )" << std::endl;
 	
 	//this master will have m_numNodes artificial variables
+	int numVarArt;
+	numVarArt = 2*m_numNodes;
 	
-	m_numVarArt = 2*m_numNodes;
-	
-	//m_numVarArt = 0;
+	//numVarArt = 0;
 	
 	// define the classes
 	FileUtil *fileUtil = NULL;
@@ -1499,19 +1491,16 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 	m_numberOfSolutions = 1;
 	int numThetaVar = m_numberOfSolutions*m_numHubs;
 	//the extra  is for the artificial variables
-	double *values = new double[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar + m_numVarArt];
-	int *indexes = new int[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar +  m_numVarArt]  ;
-	int *starts = new int[ numThetaVar + 1 + m_numVarArt]; 
+	double *values = new double[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar + numVarArt];
+	int *indexes = new int[ m_numberOfSolutions*(m_numNodes-m_numHubs) + numThetaVar +  numVarArt]  ;
+	int *starts = new int[ numThetaVar + 1 + numVarArt]; 
 	kount = 0;
 	starts[ 0] = 0;	
 	int startsIdx;
 	startsIdx = 0;
 	startsIdx++;
 	
-	for(i = 0; i < m_numVarArt; i++){
-		
-		m_varArt[ i] = 0;
-		
+	for(i = 0; i < numVarArt; i++){
 		
 		m_thetaPnt[ m_numThetaVar++] = 0;
 		
@@ -1594,13 +1583,13 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		m_osinstanceMaster->setInstanceDescription("The Initial Restricted Master");
 		
 		// first the variables
-		// we have m_numVarArt] artificial variables 
-		m_osinstanceMaster->setVariableNumber( m_numberOfSolutions*m_numHubs + m_numVarArt);   
+		// we have numVarArt] artificial variables 
+		m_osinstanceMaster->setVariableNumber( m_numberOfSolutions*m_numHubs + numVarArt);   
 		
 		// now add the objective function
 		m_osinstanceMaster->setObjectiveNumber( 1);
 		//add m_numNodes artificial variables
-		SparseVector *objcoeff = new SparseVector( m_numberOfSolutions*m_numHubs + m_numVarArt);   
+		SparseVector *objcoeff = new SparseVector( m_numberOfSolutions*m_numHubs + numVarArt);   
 
 		
 		// now the constraints
@@ -1894,8 +1883,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			
 			std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
 			
-			objcoeff->indexes[ k + m_numVarArt ] = k + m_numVarArt ;
-			objcoeff->values[ k + m_numVarArt ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			objcoeff->indexes[ k + numVarArt ] = k + numVarArt ;
+			objcoeff->values[ k + numVarArt ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			
 			
 			starts[ startsIdx++] = kountNonz;	
@@ -2261,7 +2250,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							m_Bmatrix[   m_numTourBreakNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
 							//get index for j1,i1
 							m_Bmatrix[   m_numTourBreakNonz++ ] = j1*(m_numNodes - 1) + i1 ;
-							m_BmatrixRhs[ m_numTourBreakCon ] =  1.0;
+							//m_BmatrixRhs[ m_numTourBreakCon ] =  1.0;
 							m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
 
 							
@@ -2272,11 +2261,14 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							m_newRowUB[ 0] = 1;
 							m_newRowLB[ 0] = 0;
 						
-							//now we have to get the theata column indexes
+							//now we have to get the theta column indexes
 							//scatter the constraint in the x - variables
 							
 							for(j = m_pntBmatrix[  m_numTourBreakCon  - 2] ; 
 									j <  m_pntBmatrix[ m_numTourBreakCon  - 1] ; j++){
+								
+								
+								std::cout << " m_Bmatrix[ j] "  << m_Bmatrix[ j] <<  std::endl ;
 								
 								m_tmpScatterArray[ m_Bmatrix[ j] ] = 1;
 								
@@ -2289,9 +2281,13 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 								
 								//get the xij indexes in this column 
 								tmpKount = 0;
+							
+								
 								for(j = m_thetaPnt[k]; j < m_thetaPnt[k + 1] ;  j++){
 									
 									if(m_tmpScatterArray[ m_thetaIndex[ j] ] > 0 ){ //count number of xij for theta_i
+										
+										std::cout << " Variable  " << m_variableNames[ m_thetaIndex[ j]  ]  << std::endl;
 										
 										tmpKount++;
 										
@@ -2303,6 +2299,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 									//theta_i has a nonzero coefficient in this row
 									
 									m_newRowColumnIdx[0][ m_newRowNonz[ 0] ] = k ;
+									//m_newRowColumnValue[0][ m_newRowNonz[ 0]++ ] = tmpKount;
 									m_newRowColumnValue[0][ m_newRowNonz[ 0]++ ] = tmpKount;
 									 
 									
@@ -2313,8 +2310,11 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							
 							//zero out the scatter array again
 							
+							//std::cout << " m_numTourBreakCon  - 2  " << m_numTourBreakCon  - 2  << std::endl;
+							//std::cout << " m_pntBmatrix[  m_numTourBreakCon  - 2] "  << m_pntBmatrix[  m_numTourBreakCon  - 2] <<  std::endl ;
+							//std::cout << " m_pntBmatrix[  m_numTourBreakCon  - 1] "  << m_pntBmatrix[  m_numTourBreakCon  - 1] <<  std::endl ;
 							for(j = m_pntBmatrix[  m_numTourBreakCon  - 2] ; 
-									m_pntBmatrix[  m_numTourBreakCon  - 1] ; j++){
+									j < m_pntBmatrix[  m_numTourBreakCon  - 1] ; j++){
 								
 								m_tmpScatterArray[ m_Bmatrix[ j] ] = 0;
 								
@@ -2328,9 +2328,14 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							
 							delete[] tmpRhs;
 							tmpRhs = NULL;
-							return;
-
 							
+							//we found a row, add the corresponding artificial variables
+							//to the transformation matrix
+							
+							m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+							m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+							
+							return;						
 							
 						} //end loop on if tmpKount
 						
@@ -2405,7 +2410,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				}//end for on vit1
 				
 				//add the cut
-				m_BmatrixRhs[ m_numTourBreakCon ] =  dualIdx.size()  - 1;
+				//m_BmatrixRhs[ m_numTourBreakCon ] =  dualIdx.size()  - 1;
 				m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
 	
 				// multiply the transformation matrix times this cut to get the cut in theta space
@@ -2413,7 +2418,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				
 				//exit( 1);
 				
-				dualIdx.clear();
+
 				//reset
 				// don't adjust the kludge row
 				for(i = indexAdjust; i < numSepRows - 1; i++){
@@ -2429,8 +2434,11 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				
 			
 				m_newRowNonz[ 0] = 0;
-				m_newRowUB[ 0] =  m_BmatrixRhs[ m_numTourBreakCon  - 1];
+				//m_newRowUB[ 0] =  m_BmatrixRhs[ m_numTourBreakCon  - 1];
+				m_newRowUB[ 0] =  dualIdx.size()  - 1;
 				m_newRowLB[ 0] = 0;
+				
+				dualIdx.clear();
 			
 				//now we have to get the theata column indexes
 				//scatter the constraint in the x - variables
@@ -2488,6 +2496,9 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				values =  m_newRowColumnValue;
 				rowUB =  m_newRowUB;
 				rowLB =  m_newRowLB;
+				
+				m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+				m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
 			
 				return;
 				
@@ -2745,221 +2756,6 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 }//end getCutsX
 
 
-bool OSRouteSolver::getCuts(const  double* theta, const int numTheta){
-	
-	//first let's modify the m_osinstanceSeparation to reflect
-	//the current theta solution
-	//change the right hand side vectors
-	bool isCutAdded;
-	isCutAdded = false;
-	int i;
-	int j;
-	int k;
-	int index;
-	int rowKount;
-	int indexAdjust = m_numNodes - m_numHubs;
-	double* tmpRhs;
-	int numSepRows = m_osinstanceSeparation->getConstraintNumber() ;
-	
-	tmpRhs = new double[ numSepRows ]; 
-	
-	for(i = 0; i < numSepRows; i++){
-		
-		tmpRhs[ i] = 0;
-	}
-	
-	try{
-		m_osinstanceSeparation->bConstraintsModified = true;
-		
-		if(numTheta != m_numThetaVar ) throw ErrorClass("number of master varibles in OSRouteSolver::getCuts");
-		
-		for(i = 0; i < numTheta; i++){
-			
-			//get a postive theta
-			if(theta[ i] > m_eps){
-				
-				//get the xij indexes associated with this variable
-				for(j = m_thetaPnt[ i]; j <  m_thetaPnt[ i + 1]; j++ ){
-					
-					//get the xij index 
-					
-					
-
-					rowKount = m_separationIndexMap[  m_thetaIndex[ j] ];
-					
-					//std::cout << "rowKount = " << rowKount  <<std::endl;
-					
-					if(rowKount < OSINT_MAX ){
-						
-						tmpRhs[ rowKount] -= theta[ i];
-						
-					}
-					
-				}
-			}
-		}
-		
-		
-		// don't adjust the kludge row
-		
-		for(i = indexAdjust; i < numSepRows - 1; i++){
-			
-			if(-tmpRhs[ i] > 1 + m_eps ){
-			
-				std::cout << " tmpRhs[ i] =  " << tmpRhs[ i]  << std::endl;
-				//which variable is this 
-				//kipp this an inefficient way of finding i and j -- improve this
-				int tmpKount = indexAdjust;
-				for(int i1 = m_numHubs; i1 < m_numNodes; i1++){
-				
-				
-				
-					for(int j1 = i1+1; j1 < m_numNodes; j1++){
-						
-						if(tmpKount ==  i){
-							
-							std::cout << "i = " << i1 << std::endl;
-							std::cout << "j = " << j1 << std::endl;
-							//okay generate a cut that says
-							// x(i1,j1) + x(j1, i1) << 1
-							//get index for i1,j1
-							m_Bmatrix[   m_numTourBreakNonz++ ] = i1*(m_numNodes - 1) + j1 - 1;
-							//get index for j1,i1
-							m_Bmatrix[   m_numTourBreakNonz++ ] = j1*(m_numNodes - 1) + i1;
-							m_BmatrixRhs[ m_numTourBreakCon ] =  1.0;
-							m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
-
-							
-							delete[] tmpRhs;
-							tmpRhs = NULL;
-							isCutAdded = true;
-							return isCutAdded;
-							
-							
-						}
-						
-						tmpKount++;
-					
-					}
-					
-				}
-			
-			
-			}//end if on tmpRHS
-			
-			m_separationClpModel->setRowUpper(i, tmpRhs[ i] );
-			m_separationClpModel->setRowLower(i, tmpRhs[ i] );		
-			
-		}
-		
-		
-		//std::cout << m_osinstanceSeparation->printModel() << std::endl;
-	
-
-		std::vector<int> dualIdx;
-		std::vector<int>::iterator vit1;
-		std::vector<int>::iterator vit2;
-		
-		//if the objective function value is greater than zero we have a cut
-		//the cut is based on the nodes with dual value - 1
-		
-		for(k = 0; k < indexAdjust; k++){
-			std::cout <<   std::endl << std::endl;
-			
-			
-			m_separationClpModel->setRowUpper(k, 0.0);
-			m_separationClpModel->primal();		
-			
-			if(m_separationClpModel->getObjValue() > m_eps){
-				std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
-				std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
-				isCutAdded = true;
-			
-				for(i = 0; i < m_numNodes - m_numHubs ; i++){
-					//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
-					if( m_separationClpModel->getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
-				}
-				
-				for (vit1 = dualIdx.begin(); vit1 != dualIdx.end(); vit1++) {
-					
-					i = *vit1 + m_numHubs;
-					
-					for (vit2 = dualIdx.begin(); vit2 != dualIdx.end(); vit2++) {
-						
-						j = *vit2 + m_numHubs;
-						
-						if( i > j ){
-						
-							index = i*(m_numNodes -1) + j;
-							std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;						
-							m_Bmatrix[   m_numTourBreakNonz++ ] = index;
-							
-						}else{
-							
-							if( i < j ){
-								
-								index = i*(m_numNodes -1) + j - 1;
-								std::cout << "CUT VARIABLE = " << m_variableNames[ index] <<std::endl;							
-								m_Bmatrix[   m_numTourBreakNonz++ ] = index;
-								
-							}
-						}
-						
-					}//end for on vit2
-				}//end for on vit1
-				
-				//add the cut
-				m_BmatrixRhs[ m_numTourBreakCon ] =  dualIdx.size()  - 1;
-				m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
-	
-				// multiply the transformation matrix times this cut to get the cut in theta space
-				// do the usual trick and scatter m_Bmatrix into a dense vector
-				
-				
-				dualIdx.clear();
-				//reset
-				// don't adjust the kludge row
-				for(i = indexAdjust; i < numSepRows - 1; i++){
-					
-					m_separationClpModel->setRowUpper(i, 0.0 );
-					m_separationClpModel->setRowLower(i, 0.0 );
-					
-					
-				}
-				m_separationClpModel->setRowUpper(k, 1.0);
-				delete[] tmpRhs;
-				tmpRhs = NULL;
-				
-				return isCutAdded;
-				
-			}//end if on obj value		
-			m_separationClpModel->setRowUpper(k, 1.0);
-			dualIdx.clear();
-			
-		}//end loop on k
-		
-		//if we are here there was no cut
-		//reset
-		// don't adjust the kludge row
-		for(i = indexAdjust; i < numSepRows - 1; i++){
-			
-			m_separationClpModel->setRowUpper(i, 0.0 );
-			m_separationClpModel->setRowLower(i, 0.0 );
-			
-			
-		}
-		
-		delete[] tmpRhs;
-		tmpRhs = NULL;
-		
-	} catch (const ErrorClass& eclass) {
-
-		throw ErrorClass(eclass.errormsg);
-
-	}		
-	return isCutAdded;
-}//end getCuts
-
 void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 	
 	int k;
@@ -3149,10 +2945,10 @@ void OSRouteSolver::pauHana(const double* theta){
 	try{
 		int i;
 		int j;
-		int k;
+
 		double cost = 0;
 		//we better NOT have any artifical variables positive
-		//for(i = 0; i < m_numVarArt  ; i++){
+		//for(i = 0; i < numVarArt  ; i++){
 		//	
 		//	if(theta[ i] > m_eps) throw ErrorClass("we have a positive artificial variable");
 		//}
@@ -3165,15 +2961,15 @@ void OSRouteSolver::pauHana(const double* theta){
 		}
 		
 		
-		for(int i1 = 0; i1 < m_numThetaVar; i1++){
+		for(i = 0; i < m_numThetaVar; i++){
 			
-			if( theta[ i1  ] > m_eps){
+			if( theta[ i  ] > m_eps){
 				
 				
-				for(int i2 = m_thetaPnt[ i1];  i2 < m_thetaPnt[ i1 + 1] ;  i2++){
+				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 				
 			
-					std::cout << "  m_thetaIndex = "  << m_variableNames[ m_thetaIndex[ i2] ] << std::endl;
+					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  << theta[ i  ]  << std::endl;
 					
 				}	
 				
