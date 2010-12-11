@@ -107,6 +107,11 @@ public:
 	double** m_newRowColumnValue;
 	double* m_newRowUB;
 	double* m_newRowLB;
+	
+	//arguments for the getBranchingCut
+	int* branchCutIndexes;
+	double* branchCutValues;
+	//end arguments for the getBranchingCut
 		
 	//arrays for the coupling constraint matrix
 	//we store indexes since values are 1.0
@@ -201,6 +206,21 @@ public:
 	void getCutsX(const  double* xVar, const int numXVar,
 			int &numNewRows, int*  &numNonz, int** &colIdx,
 			double** &values, double* &rowLB, double* &rowUB) ;	
+	
+	
+	/**
+	 * RETURN VALUES: 
+	 * numNonz -- number of theta indexes in the cut
+	 * indexes -- the indexes of the theta variables 
+	 * in the cut
+	 * 
+	 * INPUT:
+	 * double* thetaVar -- the vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 * 
+	 */
+	void getBranchingCut(const  double* thetaVar, const int numThetaVar,
+			int &numNonz, int* &indexes, double* &values) ;	
 	
 	
 	/**

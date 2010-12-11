@@ -236,6 +236,10 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		}
 
 		
+		//new arrays for branches
+		//yet some more hard coding
+		branchCutIndexes = new int[ 10000];
+		branchCutValues = new double[ 10000];
 		
 		//for now, the number of columns will be 10000
 		//for now number of nonzeros will be 500000
@@ -411,6 +415,13 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	delete[] m_newRowColumnValue;
 	m_newRowColumnValue = NULL;
+	
+	
+	delete[] branchCutIndexes ;
+	branchCutIndexes = NULL;
+	
+	delete[] branchCutValues ;
+	branchCutValues = NULL;
 	
 	
 	delete[] m_thetaPnt;
@@ -2957,6 +2968,7 @@ void OSRouteSolver::pauHana(const double* theta){
 			
 			if( theta[ i  ] > m_eps){
 				
+				std::cout <<  "x variables for column "  << i  << std::endl;
 				
 				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 				
@@ -3015,8 +3027,20 @@ void OSRouteSolver::pauHana(const double* theta){
 		std::cout << "        PAU!!!" << std::endl;
 		
 		std::cout << std::endl <<  std::endl;
+		
+		
+		//temp testing 
+		int numNonz;
+		int* indexes;
+		double* values;
+		getBranchingCut(theta, m_numThetaVar, numNonz, indexes,  values);
+		for(i = 0; i < numNonz; i++){
+			
+			std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
+		}
+		//end temp test
 	
-	
+		std::cout << std::endl <<  std::endl;
 	}catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);
@@ -3269,12 +3293,209 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 }//end getSeparationInstance
 
 
+
+int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) {
+
+	int varIdx;
+	varIdx = -1;
+	int i;
+	int j;
+	int numVar = m_numNodes*m_numNodes - m_numHubs ;
+	
+	double from1Distance;
+	double from0Distance;
+	double fraction;
+	double minFraction;
+	
+	double *xvalues;
+	
+	
+	xvalues = new double[ numVar];
+	
+	try{
+		if(numThetaVar != m_numThetaVar) throw ErrorClass("inconsistent number of variables in getBranchingVar");
+		//loop over the fractional thetas
+		for(i = 0; i < m_numThetaVar; i++){
+			
+			if( ( theta[ i  ] > m_eps ) && ( theta[ i  ] < 1 - m_eps ) ){
+				
+				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
+					
+					xvalues[  m_thetaIndex[  j] ] = theta[ i  ] ;
+					
+				}	
+			
+			}
+	
+			
+		}
+	
+	
+		//let's branch on a variable in and out of hub first
+		minFraction = 1.0;
+		//ideally we find minFraction very close to .5
+		
+		for(i = 0; i < m_numHubs; i++){
+			
+			for( j = 0;  j < i;  j++){
+				
+				//j < i so the index is i*(m_numNodes - 1) + j
+				from1Distance = 1 - xvalues[ i*(m_numNodes - 1) + j  ];
+				from0Distance = xvalues[ i*(m_numNodes - 1) + j  ];
+				fraction = std::max(from1Distance, from0Distance);
+				//try to find fractional variable that is the closest to .5
+				if(fraction < minFraction){
+					
+					minFraction = fraction;
+					varIdx = i*(m_numNodes - 1) + j;
+				}
+				
+			}
+			
+			for(j = i + 1;  j < m_numNodes;  j++){
+				
+				//j < i so the index is i*(m_numNodes - 1) + j - 1
+				//j < i so the index is i*(m_numNodes - 1) + j
+				from1Distance = 1 - xvalues[ i*(m_numNodes - 1) + j - 1 ];
+				from0Distance = xvalues[ i*(m_numNodes - 1) + j - 1 ];
+				fraction = std::max(from1Distance, from0Distance);
+				//try to find fractional variable that is the closest to .5
+				if(fraction < minFraction) {
+					
+					minFraction = fraction;
+					varIdx = i*(m_numNodes - 1) + j - 1;
+				}
+				
+				
+			}
+			
+		}
+		
+		//if we have a candidate among arcs in/out of hubs, take it
+		
+		if(minFraction > 1 - m_eps){
+		
+			for(i = m_numHubs; i < m_numNodes; i++){
+				
+				
+				
+				for( j = 0;  j < i;  j++){
+					
+					//j < i so the index is i*(m_numNodes - 1) + j
+					from1Distance = 1 - xvalues[ i*(m_numNodes - 1) + j  ];
+					from0Distance = xvalues[ i*(m_numNodes - 1) + j  ];
+					fraction = std::max(from1Distance, from0Distance);
+					//try to find fractional variable that is the closest to .5
+					if(fraction < minFraction) {
+						
+						minFraction = fraction;
+						varIdx = i*(m_numNodes - 1) + j ;
+					}
+					
+				}
+				
+				for(j = i + 1;  j < m_numNodes;  j++){
+					
+					//j < i so the index is i*(m_numNodes - 1) + j - 1
+					//j < i so the index is i*(m_numNodes - 1) + j
+					from1Distance = 1 - xvalues[ i*(m_numNodes - 1) + j - 1 ];
+					from0Distance = xvalues[ i*(m_numNodes - 1) + j - 1 ];
+					fraction = std::max(from1Distance, from0Distance);
+					//try to find fractional variable that is the closest to .5
+					if(fraction < minFraction) {
+						
+						minFraction = fraction;
+						varIdx = i*(m_numNodes - 1) + j - 1;
+					}
+					
+				}
+				
+			}
+		
+		}//end of if on minFraction
+		
+		//zero out the scatter array
+		
+		delete[] xvalues;
+		xvalues = NULL;
+		
+		return varIdx;
+	
+	}catch (const ErrorClass& eclass) {
+		
+		delete[] xvalues;
+		xvalues = NULL;
+
+		throw ErrorClass(eclass.errormsg);
+
+	}	
+
+	
+}//end getBranchingVar
+
+
+void OSRouteSolver::getBranchingCut(const  double* thetaVar, const int numThetaVar,
+		int &numNonz, int* &indexes, double* &values) {
+	
+	//get a branching variable
+	
+	int varIdx;
+	int i;
+	int j;
+	int kount;
+	numNonz = 0;
+	
+	try{
+		
+		if(numThetaVar != m_numThetaVar) throw ErrorClass("inconsistent number of variables in getBranchingCut");
+	
+		varIdx = getBranchingVar(thetaVar, numThetaVar );
+		
+		std::cout << "Branching on Variable:  " << m_variableNames[ varIdx] << std::endl;
+		
+		for(i = 0; i < m_numThetaVar; i++){
+			
+			kount = 0;
+			
+			for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
+				
+				if ( m_thetaIndex[  j]  == varIdx) kount++ ;
+				
+			}
+			
+			//count is the number times variable i appears in the constraint
+			
+			if(kount > 0){
+				
+				branchCutIndexes[ numNonz] = i;
+				branchCutValues[ numNonz++] = kount ;
+				
+			}
+			
+		}
+	
+	//kipp add varIdx cut to B matrix
+		
+		indexes = branchCutIndexes;
+		values = branchCutValues;
+	
+	}catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}	
+	
+}//end getBranchingCut
+
+
 std::string makeStringFromInt(std::string theString, int theInt){
 	ostringstream outStr;
 	outStr << theString;
 	outStr << theInt;
 	return outStr.str();
 }//end makeStringFromInt
+
+
 
 
 
