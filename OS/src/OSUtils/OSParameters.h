@@ -103,16 +103,6 @@ using std::ostringstream;
 #define	OS_ALLDIF  7016
 
 
-
-//#include <limits.h>
-//#ifdef INFINITY //This is the definition in the ISO C99 standard.
-//	#define OSINFINITY INFINITY
-//#else
-//	#define OSINFINITY 1e20
-//#endif
-
-//#define OSINFINITY 1e30
-
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
 
@@ -149,6 +139,16 @@ inline double nanKludge(){
 
 
 
+//#include <limits.h>
+//#ifdef INFINITY //This is the definition in the ISO C99 standard.
+//	#define OSINFINITY INFINITY
+//#else
+//	#define OSINFINITY 1e20
+//#endif
+
+//#define OSINFINITY 1e30
+
+
 
 #ifdef DBL_MAX
 	#define OSDBL_MAX DBL_MAX
@@ -156,7 +156,7 @@ inline double nanKludge(){
 	//#define OSDBL_MAX OSINFINITY
 	#define OSDBL_MAX HUGE_VAL
 #else
-	#define OSDBL_MAX 1e30 // wow, what a last resort, I don't like this!
+	#define OSDBL_MAX 1e37 // guaranteed to be representable as a double by ANSI standard
 #endif
 
 
