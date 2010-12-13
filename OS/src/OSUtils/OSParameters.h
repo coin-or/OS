@@ -156,7 +156,7 @@ inline double nanKludge(){
 	//#define OSDBL_MAX OSINFINITY
 	#define OSDBL_MAX HUGE_VAL
 #else
-	#define OSDBL_MAX 1e30
+	#define OSDBL_MAX 1e30 // wow, what a last resort, I don't like this!
 #endif
 
 

@@ -96,16 +96,18 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 
 double os_strtod_wrap(const char *str,  char **strEnd){
 #ifndef USE_DTOA
-	return strtod(str,  strEnd);	
+	return    strtod(str, strEnd);	
 #else
-	return os_strtod(str,  strEnd);;
+	return os_strtod(str, strEnd);
 #endif
 }//end os_strtod_wrap
 
 
 std::string os_dtoa_format(double  x){
 	ostringstream outStr;
-#ifndef USE_DTOA
+	if (x ==  OSDBL_MAX) {outStr <<  "INF"; return outStr.str();}
+	if (x == -OSDBL_MAX) {outStr << "-INF"; return outStr.str();}
+#ifndef USE_DTOA 
 	outStr << x;
 	return outStr.str();
 #else

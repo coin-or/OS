@@ -1355,7 +1355,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		ch++;
 		// get rid of white space
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-		// now loop over the var element when there we numberOfVariables is strictly positive
+		// now loop over the var element when the numberOfVariables is strictly positive
 		*p = ch;
 		while(*startVar++  == *ch) ch++;
 		if( (ch - *p) ==  4) foundVar = true;
@@ -3224,8 +3224,8 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
 	//check for INF
-	std::string strINF ("INF");
-	if(strINF.compare(0, 3,  number, numberend - number)  == 0) return OSDBL_MAX;
+//	std::string strINF ("INF");
+//	if(strINF.compare(0, 3,  number, numberend - number)  == 0) return OSDBL_MAX;
 	double val;
    	char *pEnd;
 	val = os_strtod_wrap(number, &pEnd);

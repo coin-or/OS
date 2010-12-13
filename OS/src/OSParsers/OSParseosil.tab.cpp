@@ -5559,8 +5559,8 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
 	//check for INF
-	std::string strINF ("INF");
-	if(strINF.compare(0, 3,  number, numberend - number)  == 0) return OSDBL_MAX;
+//	std::string strINF ("INF");
+//	if(strINF.compare(0, 3,  number, numberend - number)  == 0) return OSDBL_MAX;
 	double val;
    	char *pEnd;
 	val = os_strtod_wrap(number, &pEnd);

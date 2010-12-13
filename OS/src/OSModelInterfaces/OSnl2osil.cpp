@@ -59,7 +59,7 @@ using std::endl;
 
 
 
-//#define AMPLDEBUG
+#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename){	
 	//Initialize the AMPL library

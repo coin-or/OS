@@ -63,9 +63,9 @@ def visit(startDir, dirName, filesInDir):
 				result = run('parsingTest ' + fileType + ' ' + fpath )
 
 				if result['returnCode']==0 :
-					print ' successful run: ' + fname
+					print 'successful run: ' + fname
 				else :
-					print 'not succesfull for file ' +  fpath
+					print 'not successful for file ' +  fpath
 					print result['stdout']
 				
 				
