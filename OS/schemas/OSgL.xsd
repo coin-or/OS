@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSgL: version - 2.0.0-->
 	<xs:include schemaLocation="OSnL.xsd"/>
 	<xs:include schemaLocation="OSiL.xsd"/>
@@ -607,6 +607,11 @@
 		</xs:sequence>
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
+	<xs:attribute name="baseTranspose" type="xs:boolean" default="false">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
+	</xs:attribute>
 	<xs:complexType name="ConstantMatrixTransformation">
 		<xs:annotation>
 			<xs:documentation>draft</xs:documentation>
@@ -681,7 +686,6 @@
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
-		<xs:attribute name="baseTranspose" type="xs:boolean" use="optional" default="false"/>
 		<xs:attribute name="baseMatrixID" type="xs:string" use="optional"/>
 		<xs:attribute name="baseMatrixStartRow" type="xs:nonNegativeInteger" use="optional"/>
 		<xs:attribute name="baseMatrixStartCol" type="xs:nonNegativeInteger" use="optional"/>
@@ -689,6 +693,9 @@
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixVariables">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of entries in the varIdx and rowIdx/colIdx child elements must agree with numberOfVarIdx (after "mult" has been considered)</xs:documentation>
@@ -712,6 +719,9 @@
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixValues">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="indexes">
 				<xs:complexType>
@@ -748,6 +758,9 @@
 		<xs:attribute name="numberOfEl" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
 	<xs:complexType name="LinearMatrixBlocks">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="block" type="LinearMatrixBlock">
 				<xs:annotation>
@@ -890,6 +903,9 @@
 		<xs:attribute name="baseMatrixEndCol" type="xs:nonNegativeInteger" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixElements">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of entries in the el and rowIdx/colIdx child elements must agree with numberOfEl (after "mult" has been considered)</xs:documentation>
@@ -900,6 +916,9 @@
 		<xs:attribute name="rowMajor" type="xs:boolean" use="optional" default="true"/>
 	</xs:complexType>
 	<xs:complexType name="GeneralMatrixBlocks">
+		<xs:annotation>
+			<xs:documentation>draft</xs:documentation>
+		</xs:annotation>
 		<xs:sequence>
 			<xs:annotation>
 				<xs:documentation>Number of blocks must agree with numberOfBlocks (after "mult" has been considered)</xs:documentation>
@@ -2626,6 +2645,9 @@
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="OtherOptionEnumeration">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="IntVector">
 				<xs:attribute name="value" type="xs:string" use="required"/>
@@ -2634,6 +2656,9 @@
 		</xs:complexContent>
 	</xs:complexType>
 	<xs:complexType name="StorageCapacity">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="unit" type="GeneralEnumerationStorageUnit" use="optional" default="byte"/>
@@ -2642,6 +2667,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="TimeSpan">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="unit" type="GeneralEnumerationTimeUnit" use="optional" default="second"/>
@@ -2649,6 +2677,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="CPUSpeed">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="unit" type="GeneralEnumerationCPUSpeedUnit" use="optional" default="hertz"/>
@@ -2657,6 +2688,9 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="CPUNumber">
+		<xs:annotation>
+			<xs:documentation>finalize</xs:documentation>
+		</xs:annotation>
 		<xs:simpleContent>
 			<xs:extension base="xs:int">
 				<xs:attribute name="description" type="xs:string" use="optional"/>
