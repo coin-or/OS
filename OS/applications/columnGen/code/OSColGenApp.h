@@ -25,7 +25,7 @@
 #include "OSOption.h"
 #include "OSInstance.h"
 #include "OSoLReader.h"
-
+#include "OSCoinSolver.h"
 #include "OSRouteSolver.h"
 
 
@@ -48,6 +48,22 @@ public:
 	
 	OSRouteSolver *m_osrouteSolver;
 	
+	CoinSolver *m_solver;
+
+	OsiSolverInterface *m_si;
+	
+	
+	/** m_yA is the dual values for the initial restricted constraints */
+	double *m_yA;
+	
+	/** m_yB is the dual for the cuts that get added */
+	double *m_yB;
+	
+	/** m_theta is the primal values in the restricted master */
+	double* m_theta;
+	
+	/** m_maxCols is the maximum number of columns we can have */
+	int m_maxCols;
 	
 	/** kipp -- document */
 	void solveRestrictedMasterRelaxation();
@@ -57,6 +73,15 @@ public:
 	void getInitialRestrictedMaster2( );
 	
 	void getOptions( OSOption *osoption);
+	
+	/** the method that invokes and controls
+	 * branch and bound
+	 */
+	
+	void branchAndBound();
+	
+	
+	void solve();
 	
 	/**
 	 * RETURN VALUES: 

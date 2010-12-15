@@ -80,13 +80,9 @@ int main(int argc, char ** argv){
 		
 		masterCpuTime = CoinCpuTime() - start;
 		
-		
-		
 		//exit( 1);
-		
-
-		//now solve the master
-		colgenApp->solveRestrictedMasterRelaxation();
+		//now solve the problem
+		colgenApp->solve();
 		
 		//garbage collection
 		delete fileUtil;
