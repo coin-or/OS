@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSiL.xsd: version 2.0.0 -->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -868,7 +868,7 @@
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId" use="optional"/>
-		<xs:attribute name="normScaleFactor" type="positiveDouble" use="optional" default="1.0"/>
+		<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
 		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
 	</xs:complexType>
@@ -880,7 +880,7 @@
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId" use="optional"/>
-		<xs:attribute name="normScaleFactor" type="positiveDouble" use="optional" default="1.0"/>
+		<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
 		<xs:attribute name="firstAxisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="firstAxisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="secondAxisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
@@ -894,7 +894,7 @@
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="numberOfColumns" use="required"/>
 		<xs:attribute name="distortionMatrixId" use="optional"/>
-		<xs:attribute name="normScaleFactor" type="positiveDouble" use="optional" default="1.0"/>
+		<xs:attribute name="normScaleFactor" type="PositiveDouble" use="optional" default="1.0"/>
 		<xs:attribute name="axisDirectionRowIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="axisDirectionColIdx" type="xs:nonNegativeInteger" use="required"/>
 		<xs:attribute name="pNorm" use="required">
@@ -2047,7 +2047,7 @@
 		<xs:complexContent>
 			<xs:extension base="StochasticNumbers">
 				<xs:attribute name="name" type="xs:string" use="optional"/>
-				<xs:attribute name="prob" type="probability" use="required"/>
+				<xs:attribute name="prob" type="Probability" use="required"/>
 				<xs:attribute name="base" use="optional" default="coreProgram">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -2067,7 +2067,7 @@
 		<xs:complexContent>
 			<xs:extension base="StochasticNumbers">
 				<xs:attribute name="name" type="xs:string" use="optional"/>
-				<xs:attribute name="prob" type="probability" use="required"/>
+				<xs:attribute name="prob" type="Probability" use="required"/>
 				<xs:attribute name="parent" type="xs:nonNegativeInteger" use="required"/>
 				<xs:attribute name="stage" type="xs:nonNegativeInteger" use="required"/>
 			</xs:extension>
@@ -2790,7 +2790,7 @@
 					</xs:choice>
 					<xs:element ref="scenarioNode" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
-				<xs:attribute name="prob" type="probability" use="required"/>
+				<xs:attribute name="prob" type="Probability" use="required"/>
 				<xs:attribute name="base" use="optional" default="coreProgram">
 					<xs:simpleType>
 						<xs:restriction base="xs:string">
@@ -2886,7 +2886,7 @@
 		</xs:annotation>
 		<xs:attribute name="quadraticShortagePenalty" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticSurplusPenalty" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="quadraticFactor" type="positiveDouble" use="optional" default="2.0"/>
+		<xs:attribute name="quadraticFactor" type="PositiveDouble" use="optional" default="2.0"/>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsPiecewiseLinearQuadraticPenalty">
 		<xs:annotation>
@@ -2896,7 +2896,7 @@
 		<xs:attribute name="linearSurplusParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticShortageParam" type="xs:double" use="optional" default="0"/>
 		<xs:attribute name="quadraticSurplusParam" type="xs:double" use="optional" default="0"/>
-		<xs:attribute name="quadraticFactor" type="positiveDouble" use="optional" default="2.0"/>
+		<xs:attribute name="quadraticFactor" type="PositiveDouble" use="optional" default="2.0"/>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsUserDefinedPenalty">
 		<xs:annotation>
@@ -3003,8 +3003,8 @@
 			<xs:documentation>proposal</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name="rowIdx" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="lb" type="probability" use="optional" default="0.0"/>
-		<xs:attribute name="ub" type="probability" use="optional" default="1.0"/>
+		<xs:attribute name="lb" type="Probability" use="optional" default="0.0"/>
+		<xs:attribute name="ub" type="Probability" use="optional" default="1.0"/>
 	</xs:complexType>
 	<xs:complexType name="SoftConstraintsJointChanceConstraint">
 		<xs:annotation>
@@ -3017,8 +3017,8 @@
 			<xs:element name="row" type="SoftConstraintsConstraintRow" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 		<xs:attribute name="numberOfRows" type="xs:nonNegativeInteger" use="required"/>
-		<xs:attribute name="lb" type="probability" use="optional" default="0.0"/>
-		<xs:attribute name="ub" type="probability" use="optional" default="1.0"/>
+		<xs:attribute name="lb" type="Probability" use="optional" default="0.0"/>
+		<xs:attribute name="ub" type="Probability" use="optional" default="1.0"/>
 		<xs:attribute name="aggregatingFunction" use="optional" default="and">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">

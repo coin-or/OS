@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="os.optimizationservices.org" elementFormDefault="qualified">
 	<!--OSaL: version - 2.0.0-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSnL.xsd"/>
@@ -957,7 +957,7 @@
 			<xs:element name="numberOfColumns" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="numberOfSpecifiedValues" type="xs:nonNegativeInteger" minOccurs="0"/>
 			<xs:element name="numberOfNonzeroValues" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="density" type="probability" minOccurs="0"/>
+			<xs:element name="density" type="Probability" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="QuadraticCoefficientAnalysis">
