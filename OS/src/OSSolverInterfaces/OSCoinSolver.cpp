@@ -942,6 +942,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 					{
 						
 						//a free variable 
+						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_isFree, &i, 1);
 						
 						break;
 						
@@ -952,7 +953,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 						//a basic variable
 						
 						//setBasisStatus(int solIdx, char object, int status, int *i, int ni);
-						//osresult->setBasisStatus(0, 'v', 0, &i, 1);
+						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_basic, &i, 1);
 						
 						break;
 						
@@ -963,12 +964,15 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 						
 						//nonbasic at upper bound
 						
+						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atUpper, &i, 1);
+						
 						break;
 					}
 					
 					case 3:
 					{
 						//nonbasic at lower bound
+						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atLower, &i, 1);
 						break;	
 					}
 					default: 
@@ -976,6 +980,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 						
 				}
 				*/
+				
 				
 			}
 		}
