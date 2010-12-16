@@ -260,7 +260,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		isCutAdded = true;
 		
-		while(isCutAdded == true && m_osrouteSolver->m_numTourBreakCon <= 100){
+		while(isCutAdded == true && m_osrouteSolver->m_numBmatrixCon <= 100){
 			
 			isCutAdded = false;
 			//start out loop on if cuts found
@@ -269,10 +269,10 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			std::cout << "Solution Status =  " << m_solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 			//std::cout <<  m_solver->osrl << std::endl;
 	
-			if(m_si->getNumRows() != numARows + m_osrouteSolver->m_numTourBreakCon - 1) {
+			if(m_si->getNumRows() != numARows + m_osrouteSolver->m_numBmatrixCon - 1) {
 				std::cout << "m_si->getNumRows() = " << m_si->getNumRows() << std::endl;
 				std::cout << "numARows = " << numARows << std::endl;
-				std::cout << "m_numTourBreakCon = " << m_osrouteSolver->m_numTourBreakCon << std::endl;
+				std::cout << "m_numBmatrixCon = " << m_osrouteSolver->m_numBmatrixCon << std::endl;
 				throw ErrorClass("detect a row number inconsistency in solveRestrictedMasterRelaxation");
 			}
 			
@@ -282,7 +282,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				throw ErrorClass("problem getting dual values in solveRestrictedMasterRelaxation");
 			
 			
-			numBRows = m_osrouteSolver->m_numTourBreakCon;
+			numBRows = m_osrouteSolver->m_numBmatrixCon;
 			
 			for(i = 0; i <  numARows; i++){
 				

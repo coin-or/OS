@@ -255,9 +255,9 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		m_pntBmatrix = new int[ 10000];
 		m_Bmatrix = new int[ 500000];
-		m_numTourBreakCon = 0;
+		m_numBmatrixCon = 0;
 		m_numTourBreakNonz = 0;
-		m_pntBmatrix[ m_numTourBreakCon++] = 0;
+		m_pntBmatrix[ m_numBmatrixCon++] = 0;
 		
 ;
 		
@@ -1044,7 +1044,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			
 			//now multiply the sparse array by each tour-breaking constraint
 			
-			for(i = 0; i < m_numTourBreakCon; i++){
+			for(i = 0; i < m_numBmatrixCon; i++){
 				
 				rowCount = 0;
 				
@@ -2258,7 +2258,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							m_Bmatrix[   m_numTourBreakNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
 							//get index for j1,i1
 							m_Bmatrix[   m_numTourBreakNonz++ ] = j1*(m_numNodes - 1) + i1 ;
-							m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
+							m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numTourBreakNonz;
 
 							numNewRows = 1;
 							
@@ -2269,8 +2269,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							//now we have to get the theta column indexes
 							//scatter the constraint in the x - variables
 							
-							for(j = m_pntBmatrix[  m_numTourBreakCon  - 2] ; 
-									j <  m_pntBmatrix[ m_numTourBreakCon  - 1] ; j++){
+							for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
+									j <  m_pntBmatrix[ m_numBmatrixCon  - 1] ; j++){
 								
 								
 								std::cout << " m_Bmatrix[ j] "  << m_Bmatrix[ j] <<  std::endl ;
@@ -2315,11 +2315,11 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							
 							//zero out the scatter array again
 							
-							//std::cout << " m_numTourBreakCon  - 2  " << m_numTourBreakCon  - 2  << std::endl;
-							//std::cout << " m_pntBmatrix[  m_numTourBreakCon  - 2] "  << m_pntBmatrix[  m_numTourBreakCon  - 2] <<  std::endl ;
-							//std::cout << " m_pntBmatrix[  m_numTourBreakCon  - 1] "  << m_pntBmatrix[  m_numTourBreakCon  - 1] <<  std::endl ;
-							for(j = m_pntBmatrix[  m_numTourBreakCon  - 2] ; 
-									j < m_pntBmatrix[  m_numTourBreakCon  - 1] ; j++){
+							//std::cout << " m_numBmatrixCon  - 2  " << m_numBmatrixCon  - 2  << std::endl;
+							//std::cout << " m_pntBmatrix[  m_numBmatrixCon  - 2] "  << m_pntBmatrix[  m_numBmatrixCon  - 2] <<  std::endl ;
+							//std::cout << " m_pntBmatrix[  m_numBmatrixCon  - 1] "  << m_pntBmatrix[  m_numBmatrixCon  - 1] <<  std::endl ;
+							for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
+									j < m_pntBmatrix[  m_numBmatrixCon  - 1] ; j++){
 								
 								m_tmpScatterArray[ m_Bmatrix[ j] ] = 0;
 								
@@ -2415,7 +2415,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				}//end for on vit1
 				
 				//add the cut
-				m_pntBmatrix[ m_numTourBreakCon++ ] =  m_numTourBreakNonz;
+				m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numTourBreakNonz;
 	
 				// multiply the transformation matrix times this cut to get the cut in theta space
 				// do the usual trick and scatter m_Bmatrix into a dense vector
@@ -2446,8 +2446,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				//now we have to get the theata column indexes
 				//scatter the constraint in the x - variables
 				
-				for(j = m_pntBmatrix[  m_numTourBreakCon  - 2] ; 
-						j <  m_pntBmatrix[ m_numTourBreakCon  - 1] ; j++){
+				for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
+						j <  m_pntBmatrix[ m_numBmatrixCon  - 1] ; j++){
 					
 					m_tmpScatterArray[ m_Bmatrix[ j] ] = 1;
 					
@@ -2485,8 +2485,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 			
 				//zero out the scatter array again
 	
-				for(j = m_pntBmatrix[  m_numTourBreakCon  - 2] ; 
-						j < m_pntBmatrix[  m_numTourBreakCon  - 1] ; j++){
+				for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
+						j < m_pntBmatrix[  m_numBmatrixCon  - 1] ; j++){
 					
 					m_tmpScatterArray[ m_Bmatrix[ j] ] = 0;
 					
@@ -2826,7 +2826,7 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 	
 	int startPnt ;
 	
-	for(i = 0; i < m_numTourBreakCon; i++){
+	for(i = 0; i < m_numBmatrixCon; i++){
 		
 		//get the xij
 		
@@ -3023,7 +3023,7 @@ void OSRouteSolver::pauHana(const double* theta){
 		std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
 		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar << std::endl;
-		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numTourBreakCon - 1 << std::endl;
+		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon - 1 << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
 		
 		std::cout << std::endl <<  std::endl;

@@ -122,10 +122,19 @@ public:
 	//arrays for the added constraints
 	//for now the added constraints are 
 	//tour breaking and variable branching
+	//constraints
 	//
 	int* m_pntBmatrix;
-	int* m_Bmatrix;
-	int m_numTourBreakCon;
+	int* m_Bmatrix;   
+	
+	/** m_numBmatrixCon is the number of
+	 * constraints in B - 1, we have the -1
+	 * because:
+	 * m_pntBmatrix[ k] points to the start of
+	 * constraint k and m_pntBmatrix[ m_numBmatrixCon ]
+	 * is equal to m_numTourBreakNonz
+	 */
+	int m_numBmatrixCon;   
 	int m_numTourBreakNonz;
 	//
 	//end arrays for added constaints
@@ -259,6 +268,8 @@ public:
 	
 	void getOptions( OSOption *osoption);
 	
+	
+	//some utility methods are below
 	
 	/** calculate the reduced costs
 	 * c -- input of the objective function costs

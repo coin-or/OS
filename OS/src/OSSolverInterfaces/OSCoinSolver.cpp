@@ -929,13 +929,13 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		if (solver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
 			
-			solver->getBasisStatus( cbasis, rbasis);
+			//solver->getBasisStatus( cbasis, rbasis);
 			
 			for(i = 0; i < numberOfVar; i++){
 				
 				std::cout << " Basis status = " << cbasis[ i] << std::endl; 
 				
-				
+				/*
 				switch (cbasis[ i] ) 
 				{
 					case 0:
@@ -975,7 +975,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 						throw ErrorClass("unknown result from Osi getBasisStatus ");
 						
 				}
-				
+				*/
 				
 			}
 		}

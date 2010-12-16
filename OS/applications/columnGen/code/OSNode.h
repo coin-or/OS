@@ -49,6 +49,21 @@ class OSNode {
 	/** lpValue is the LP relaxation for the node */
 	double lpValue
 	
+	/** thetaNumNonz is the number of non-zero elements in the
+	 * theta variable solution at this node */
+	int thetaNumNonz
+	
+	/** theta is a vector of primal solution
+	 * variable indexes
+	 */
+	int* thetaIdx
+	
+	/** theta is a vector of primal solutions 
+	 * this is used for branching and creating new
+	 * children nodes
+	 */
+	double* theta
+	
 	
 };//end class OSNode
 
