@@ -933,7 +933,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			
 			for(i = 0; i < numberOfVar; i++){
 				
-				std::cout << " Basis status = " << cbasis[ i] << std::endl; 
+				//std::cout << " Basis status = " << cbasis[ i] << std::endl; 
 				
 				/*
 				switch (cbasis[ i] ) 

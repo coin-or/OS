@@ -256,7 +256,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_pntBmatrix = new int[ 10000];
 		m_Bmatrix = new int[ 500000];
 		m_numBmatrixCon = 0;
-		m_numTourBreakNonz = 0;
+		m_numBmatrixNonz = 0;
 		m_pntBmatrix[ m_numBmatrixCon++] = 0;
 		
 ;
@@ -2255,10 +2255,10 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							//okay generate a cut that says
 							// x(i1,j1) + x(j1, i1) << 1
 							//get index for i1,j1
-							m_Bmatrix[   m_numTourBreakNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
+							m_Bmatrix[   m_numBmatrixNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
 							//get index for j1,i1
-							m_Bmatrix[   m_numTourBreakNonz++ ] = j1*(m_numNodes - 1) + i1 ;
-							m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numTourBreakNonz;
+							m_Bmatrix[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + i1 ;
+							m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numBmatrixNonz;
 
 							numNewRows = 1;
 							
@@ -2398,7 +2398,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 						
 							index = i*(m_numNodes -1) + j;
 							std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;						
-							m_Bmatrix[   m_numTourBreakNonz++ ] = index ;
+							m_Bmatrix[   m_numBmatrixNonz++ ] = index ;
 							
 						}else{
 							
@@ -2406,7 +2406,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 								
 								index = i*(m_numNodes -1) + j - 1;
 								std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;							
-								m_Bmatrix[   m_numTourBreakNonz++ ] = index  ;
+								m_Bmatrix[   m_numBmatrixNonz++ ] = index  ;
 								
 							}
 						}
@@ -2415,7 +2415,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				}//end for on vit1
 				
 				//add the cut
-				m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numTourBreakNonz;
+				m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numBmatrixNonz;
 	
 				// multiply the transformation matrix times this cut to get the cut in theta space
 				// do the usual trick and scatter m_Bmatrix into a dense vector

@@ -116,6 +116,7 @@ public:
 	//arrays for the coupling constraint matrix
 	//we store indexes since values are 1.0
 	//also the RHS is 1.0
+	//size of this matrix is m_numNodes
 	int* m_pntAmatrix;
 	int* m_Amatrix;
 	//
@@ -132,10 +133,10 @@ public:
 	 * because:
 	 * m_pntBmatrix[ k] points to the start of
 	 * constraint k and m_pntBmatrix[ m_numBmatrixCon ]
-	 * is equal to m_numTourBreakNonz
+	 * is equal to m_numBmatrixNonz
 	 */
 	int m_numBmatrixCon;   
-	int m_numTourBreakNonz;
+	int m_numBmatrixNonz;
 	//
 	//end arrays for added constaints
 	
