@@ -3406,13 +3406,14 @@ public:
 	 * Set the basis status of a number of variables/constraints/objectives.
 	 * @param solIdx holds the index of the solution to which the basis values belong. 
 	 * @param object holds the type of basis object to be used 
-	 * ("variables", "objectives", "constraints" are legal values)
+	 *     ('v', 'o', 'c' are legal values for variables, objectives and constraints, respectively)
 	 * @param status holds the status which is to be used
-	 * (leagal values are "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+	 *     (legal values are taken from the ENUM_BASIS_STATUS enumeration --- see OSGeneral.h)
 	 * @param i holds the integer array whose values are to be transferred.
+	 *     (NOTE WELL: This method does not handle individual variables --- the entire basis must be processed at once.)
 	 * @param ni holds the number of elements of i
 	 * 
-	 * @return whether primal variable value was set successfully or not. 
+	 * @return whether basis status was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setBasisStatus(int solIdx, char object, int status, int *i, int ni);
