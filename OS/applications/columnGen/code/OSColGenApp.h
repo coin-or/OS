@@ -1,5 +1,5 @@
 /* $Id: OSColGenApp.h 3038 2009-11-07 11:43:44Z kmartin $ */
-/** @file OSBlockBearcatSolver.h
+/** @file OSColGenApp.h
  * 
  *
  * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
