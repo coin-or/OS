@@ -940,51 +940,56 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		if (solver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
 			
-			solver->getBasisStatus( cbasis, rbasis);
+			
+			if( (sSolverName.find( "vol") == std::string::npos) &&
+					(sSolverName.find( "symphony") == std::string::npos)  ){//vol and symphony do not support this
+				solver->getBasisStatus( cbasis, rbasis);
 		
-			for(i = 0; i < numberOfVar; i++){
-				
-				//std::cout << " Basis status = " << cbasis[ i] << std::endl; 
-				
-				
-				switch (cbasis[ i] ) 
-				{
-					case 0:
-					{
-						//a free variable 
-						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_isFree, &i, 1);
-						freeVars.push_back( i);
-						break;
-					}
+				for(i = 0; i < numberOfVar; i++){
 					
-					case 1:
-					{
-						//a basic variable	
-						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_basic, &i, 1);
-						basicVars.push_back( i);					
-						break;
-					}
+					//std::cout << " Basis status = " << cbasis[ i] << std::endl; 
 					
-					case 2:
-					{
-						//nonbasic at upper bound
-						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atUpper, &i, 1);
-						nonBasicUpper.push_back( i );
-						break;
-					}
 					
-					case 3:
+					switch (cbasis[ i] ) 
 					{
-						//nonbasic at lower bound
-						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atLower, &i, 1);
-						nonBasicLower.push_back( i) ;
-						break;	
-					}
-					default: 
-						throw ErrorClass("unknown result from Osi getBasisStatus ");
+						case 0:
+						{
+							//a free variable 
+							//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_isFree, &i, 1);
+							freeVars.push_back( i);
+							break;
+						}
 						
+						case 1:
+						{
+							//a basic variable	
+							//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_basic, &i, 1);
+							basicVars.push_back( i);					
+							break;
+						}
+						
+						case 2:
+						{
+							//nonbasic at upper bound
+							//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atUpper, &i, 1);
+							nonBasicUpper.push_back( i );
+							break;
+						}
+						
+						case 3:
+						{
+							//nonbasic at lower bound
+							//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atLower, &i, 1);
+							nonBasicLower.push_back( i) ;
+							break;	
+						}
+						default: 
+							throw ErrorClass("unknown result from Osi getBasisStatus ");
+							
+					}
+					
 				}
-				
+			
 			}
 		}
 		else{ 
@@ -1032,6 +1037,9 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			assert(solver->getRowPrice() != NULL);
 			for(i=0; i <  osinstance->getConstraintNumber(); i++){
 				*(y + i) = solver->getRowPrice()[ i];
+				
+				//std::cout << "ROW Basis status = " << rbasis[ i] << std::endl;
+				
 			}
 			if(numOfIntVars <= 0) osresult->setDualVariableValuesDense(solIdx, y); 
 		}
@@ -1053,7 +1061,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		//now set basis information
 		//setBasisStatus(int solIdx, char object, int status, int *i, int ni);
 		int kount;
-	
+
 		if(freeVars.size()  > 0){
 			
 			kount = 0;
@@ -1130,9 +1138,10 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			delete[] basisIdx[ 3];
 
 		}
-		
-		
-		
+	
+	
+	
+	
 		
 		osrl = osrlwriter->writeOSrL( osresult);
 	
