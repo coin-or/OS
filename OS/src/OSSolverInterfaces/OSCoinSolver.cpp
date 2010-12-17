@@ -903,6 +903,17 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	int *cbasis = NULL;  //column basis information
 	int *rbasis = NULL;  //row basis information
 	int *idx = NULL;
+	
+	//vectors to hold the basis information
+	std::vector<int> freeVars;
+	std::vector<int> basicVars;
+	std::vector<int> nonBasicLower;
+	std::vector<int> nonBasicUpper;
+	std::vector<int>::iterator vit;
+	int **basisIdx;
+	basisIdx = new int*[ 4];
+	//end of vectors
+	
 	int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
 	std::string *rcost = NULL;
 	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
@@ -929,58 +940,50 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		if (solver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
 			
-			//solver->getBasisStatus( cbasis, rbasis);
-			
+			solver->getBasisStatus( cbasis, rbasis);
+		
 			for(i = 0; i < numberOfVar; i++){
 				
 				//std::cout << " Basis status = " << cbasis[ i] << std::endl; 
 				
-				/*
+				
 				switch (cbasis[ i] ) 
 				{
 					case 0:
 					{
-						
 						//a free variable 
-						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_isFree, &i, 1);
-						
+						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_isFree, &i, 1);
+						freeVars.push_back( i);
 						break;
-						
 					}
 					
 					case 1:
 					{
-						//a basic variable
-						
-						//setBasisStatus(int solIdx, char object, int status, int *i, int ni);
-						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_basic, &i, 1);
-						
+						//a basic variable	
+						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_basic, &i, 1);
+						basicVars.push_back( i);					
 						break;
-						
 					}
 					
 					case 2:
 					{
-						
 						//nonbasic at upper bound
-						
-						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atUpper, &i, 1);
-						
+						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atUpper, &i, 1);
+						nonBasicUpper.push_back( i );
 						break;
 					}
 					
 					case 3:
 					{
 						//nonbasic at lower bound
-						osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atLower, &i, 1);
+						//osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS__atLower, &i, 1);
+						nonBasicLower.push_back( i) ;
 						break;	
 					}
 					default: 
 						throw ErrorClass("unknown result from Osi getBasisStatus ");
 						
 				}
-				*/
-				
 				
 			}
 		}
@@ -1021,6 +1024,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			*(x + i) = solver->getColSolution()[i];
 			*(idx + i) = i;
 		}
+		
 		osresult->setPrimalVariableValuesDense(solIdx, x); 
 		// Symphony does not get dual prices
 		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
@@ -1044,6 +1048,92 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				// end of setting reduced costs
 			}
 		}
+		
+		
+		//now set basis information
+		//setBasisStatus(int solIdx, char object, int status, int *i, int ni);
+		int kount;
+	
+		if(freeVars.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 0] = new int[ freeVars.size()];
+			
+			for(vit = freeVars.begin(); vit < freeVars.end(); vit++){
+				
+				basisIdx[0][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
+			delete[] basisIdx[ 0];
+
+		}
+		
+		
+				
+		if(basicVars.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 1] = new int[ basicVars.size()];
+			
+			for(vit = basicVars.begin(); vit < basicVars.end(); vit++){
+				
+				basisIdx[1][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
+			delete[] basisIdx[ 1];
+
+		}
+		
+		
+		
+		if(nonBasicUpper.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 2] = new int[ nonBasicUpper.size()];
+			
+			for(vit = nonBasicUpper.begin(); vit < nonBasicUpper.end(); vit++){
+				
+				basisIdx[2][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
+			delete[] basisIdx[ 2];
+
+		}
+		
+		
+		if(nonBasicLower.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 3] = new int[ nonBasicLower.size()];
+			
+			for(vit = nonBasicLower.begin(); vit < nonBasicLower.end(); vit++){
+				
+				basisIdx[3][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
+			delete[] basisIdx[ 3];
+
+		}
+		
+		
+		
+		
 		osrl = osrlwriter->writeOSrL( osresult);
 	
 	
@@ -1060,6 +1150,9 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		
 		delete[] z;	
 		z = NULL;
+		
+		delete[] basisIdx;
+		basisIdx = NULL;
 		
 		if(osinstance->getVariableNumber() > 0){
 			delete[] cbasis;
