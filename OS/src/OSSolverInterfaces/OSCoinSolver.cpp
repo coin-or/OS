@@ -1347,7 +1347,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			delete[] y;
 			y = NULL;
 			if( (sSolverName.find( "vol") == std::string::npos) &&
-					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] cbasis;
+					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] rbasis;
 			rbasis = NULL;
 			
 			
