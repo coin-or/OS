@@ -904,6 +904,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	int *rbasis = NULL;  //row basis information
 	int *idx = NULL;
 	int kount;
+	
 
 	//vectors to hold the basis information
 	std::vector<int> freeVars;
@@ -917,26 +918,26 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	
 	int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
 	std::string *rcost = NULL;
-	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
+	if( solver->getNumCols() > 0 ) x = new double[solver->getNumCols() ];
 	
 	
 	
 	
-	if( (osinstance->getVariableNumber() > 0)  && (sSolverName.find( "vol") == std::string::npos)
+	if( (solver->getNumCols() > 0)  && (sSolverName.find( "vol") == std::string::npos)
 			&& (sSolverName.find( "symphony") == std::string::npos) ) 
-			cbasis = new int[osinstance->getVariableNumber() ];
+			cbasis = new int[solver->getNumCols() ];
 	
 	if( (osinstance->getConstraintNumber() > 0) && (sSolverName.find( "vol") == std::string::npos)
 			&& (sSolverName.find( "symphony") == std::string::npos) ) 
-			rbasis = new int[osinstance->getConstraintNumber() ];
+			rbasis = new int[solver->getNumRows() ];
 	
 
-	if( osinstance->getConstraintNumber() > 0 ) y = new double[osinstance->getConstraintNumber() ];
-	if( osinstance->getVariableNumber() > 0 ) idx = new int[ osinstance->getVariableNumber() ];
+	if( solver->getNumRows() > 0 ) y = new double[solver->getNumRows() ];
+	if( solver->getNumCols() > 0 ) idx = new int[ solver->getNumCols() ];
 	z = new double[1];
-	if( osinstance->getVariableNumber() > 0 ) rcost = new std::string[ osinstance->getVariableNumber()];
-	int numberOfVar = osinstance->getVariableNumber();
-	int numberOfCon = osinstance->getConstraintNumber();
+	if( solver->getNumCols() > 0 ) rcost = new std::string[ solver->getNumCols()];
+	int numberOfVar = solver->getNumCols();
+	int numberOfCon = solver->getNumRows();
 	int solIdx = 0;
 	int i = 0;
 	int numberOfOtherVariableResults = 1;
@@ -990,7 +991,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 							else{
 								if(solver->isAbandoned() == true)
 									osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
-									if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
+									if( solver->getNumCols() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
 								else
 									osresult->setSolutionStatus(solIdx, "other", description);
 							}
@@ -1143,7 +1144,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		osresult->setPrimalVariableValuesDense(solIdx, x); 
 		// Symphony does not get dual prices
 		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
-			//assert(solver->getNumRows() >= osinstance->getConstraintNumber());
+			//assert(solver->getNumRows() >= solver->getNumRows());
 			//assert(solver->getRowPrice() != NULL);
 			
 			
@@ -1296,7 +1297,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				for(i=0; i < numberOfVar; i++){
 					rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
 				}
-				osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
+				osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, solver->getNumCols());			
 				// end of setting reduced costs
 			}
 		}
@@ -1305,7 +1306,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		osrl = osrlwriter->writeOSrL( osresult);
 	
 	
-		if(osinstance->getConstraintNumber() > 0) {
+		if(solver->getNumRows() > 0) {
 			
 			delete[] y;
 			y = NULL;
@@ -1323,7 +1324,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		delete[] basisIdx;
 		basisIdx = NULL;
 		
-		if(osinstance->getVariableNumber() > 0){
+		if(solver->getNumCols() > 0){
 			
 			if( (sSolverName.find( "vol") == std::string::npos) &&
 					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] cbasis;
@@ -1342,7 +1343,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	catch(const ErrorClass& eclass){
 		
 		
-		if(osinstance->getConstraintNumber() > 0) {
+		if(solver->getNumRows() > 0) {
 			
 			delete[] y;
 			y = NULL;
@@ -1357,7 +1358,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		delete[] z;	
 		z = NULL;
 		
-		if(osinstance->getVariableNumber() > 0){
+		if(solver->getNumCols() > 0){
 			if( (sSolverName.find( "vol") == std::string::npos) &&
 					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] cbasis;
 			cbasis = NULL;
@@ -1384,15 +1385,16 @@ void CoinSolver::writeResult(CbcModel *model){
 	double *z = NULL;
 	int *idx = NULL;
 	std::string *rcost = NULL;
-	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
-	if( osinstance->getConstraintNumber() > 0 ) y = new double[osinstance->getConstraintNumber() ];
-	if( osinstance->getVariableNumber() > 0 ) idx = new int[ osinstance->getVariableNumber() ];
+	//if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
+	if( model->getNumCols() > 0 ) x = new double[model->getNumCols() ];
+	if( model->getNumRows() > 0 ) y = new double[model->getNumRows() ];
+	if( model->getNumCols() > 0 ) idx = new int[ model->getNumCols() ];
 	z = new double[1];
-	if( osinstance->getVariableNumber() > 0 ) rcost = new std::string[ osinstance->getVariableNumber()];
+	if( model->getNumCols() > 0 ) rcost = new std::string[ model->getNumCols()];
 
 	int numberOfOtherVariableResults = 1;
 	int otherIdx = 0;	
-	int numberOfVar =  osinstance->getVariableNumber();
+	int numberOfVar =  model->getNumCols();
 	int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
 	int i = 0;
 	int solIdx = 0;
@@ -1438,12 +1440,12 @@ void CoinSolver::writeResult(CbcModel *model){
 	/* Retrieve the solution -- of course it may not be optimal */
 	if(numOfIntVars > 0) *(z + 0)  =  model->getObjValue();
 	osresult->setObjectiveValuesDense(solIdx, z); 
-	for(i=0; i < osinstance->getVariableNumber(); i++){
+	for(i=0; i < model->getNumCols(); i++){
 		*(x + i) = model->getColSolution()[i];
 		*(idx + i) = i;
 	}
 	osresult->setPrimalVariableValuesDense(solIdx, x); 
-	for(i=0; i <  osinstance->getConstraintNumber(); i++){
+	for(i=0; i <  model->getNumRows(); i++){
 		*(y + i) = model->getRowPrice()[ i];
 	}
 	if(numOfIntVars <= 0) osresult->setDualVariableValuesDense(solIdx, y); 
@@ -1454,18 +1456,18 @@ void CoinSolver::writeResult(CbcModel *model){
 		for(i=0; i < numberOfVar; i++){
 			rcost[ i] = os_dtoa_format( model->getReducedCost()[ i]);
 		}
-		osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());	
+		osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, model->getNumCols());	
 	}
 	// end of setting reduced costs	
 	osrl = osrlwriter->writeOSrL( osresult);
 	//garbage collection
-	if(osinstance->getVariableNumber() > 0) delete[] x;
+	if(model->getNumCols() > 0) delete[] x;
 	x = NULL;
-	if(osinstance->getConstraintNumber() > 0) delete[] y;
+	if(model->getNumRows() > 0) delete[] y;
 	y = NULL;
 	delete[] z;	
 	z = NULL;
-	if(osinstance->getVariableNumber() > 0){
+	if(model->getNumCols() > 0){
 		delete[] rcost;
 		rcost = NULL;
 		delete[] idx;
