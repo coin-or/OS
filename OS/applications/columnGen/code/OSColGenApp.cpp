@@ -269,7 +269,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			std::cout << "Solution Status =  " << m_solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 			//std::cout <<  m_solver->osrl << std::endl;
 	
-			if(m_si->getNumRows() != numARows + m_osrouteSolver->m_numBmatrixCon - 1) {
+			if(m_si->getNumRows() != numARows + m_osrouteSolver->m_numBmatrixCon ) {
 				std::cout << "m_si->getNumRows() = " << m_si->getNumRows() << std::endl;
 				std::cout << "numARows = " << numARows << std::endl;
 				std::cout << "m_numBmatrixCon = " << m_osrouteSolver->m_numBmatrixCon << std::endl;

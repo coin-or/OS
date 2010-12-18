@@ -257,7 +257,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_Bmatrix = new int[ 500000];
 		m_numBmatrixCon = 0;
 		m_numBmatrixNonz = 0;
-		m_pntBmatrix[ m_numBmatrixCon++] = 0;
+		m_pntBmatrix[ m_numBmatrixCon] = 0;
 		
 ;
 		
@@ -2258,7 +2258,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							m_Bmatrix[   m_numBmatrixNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
 							//get index for j1,i1
 							m_Bmatrix[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + i1 ;
-							m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numBmatrixNonz;
+							m_numBmatrixCon++;
+							m_pntBmatrix[ m_numBmatrixCon ] =  m_numBmatrixNonz;
 
 							numNewRows = 1;
 							
@@ -2269,8 +2270,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							//now we have to get the theta column indexes
 							//scatter the constraint in the x - variables
 							
-							for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
-									j <  m_pntBmatrix[ m_numBmatrixCon  - 1] ; j++){
+							for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
+									j <  m_pntBmatrix[ m_numBmatrixCon  ] ; j++){
 								
 								
 								std::cout << " m_Bmatrix[ j] "  << m_Bmatrix[ j] <<  std::endl ;
@@ -2315,11 +2316,11 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							
 							//zero out the scatter array again
 							
-							//std::cout << " m_numBmatrixCon  - 2  " << m_numBmatrixCon  - 2  << std::endl;
-							//std::cout << " m_pntBmatrix[  m_numBmatrixCon  - 2] "  << m_pntBmatrix[  m_numBmatrixCon  - 2] <<  std::endl ;
+							//::cout << " m_numBmatrixCon  - 1  " << m_numBmatrixCon  - 1  << std::endl;
 							//std::cout << " m_pntBmatrix[  m_numBmatrixCon  - 1] "  << m_pntBmatrix[  m_numBmatrixCon  - 1] <<  std::endl ;
-							for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
-									j < m_pntBmatrix[  m_numBmatrixCon  - 1] ; j++){
+							//std::cout << " m_pntBmatrix[  m_numBmatrixCon  ] "  << m_pntBmatrix[  m_numBmatrixCon  ] <<  std::endl ;
+							for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
+									j < m_pntBmatrix[  m_numBmatrixCon  ] ; j++){
 								
 								m_tmpScatterArray[ m_Bmatrix[ j] ] = 0;
 								
@@ -2415,7 +2416,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				}//end for on vit1
 				
 				//add the cut
-				m_pntBmatrix[ m_numBmatrixCon++ ] =  m_numBmatrixNonz;
+				m_numBmatrixCon++;
+				m_pntBmatrix[ m_numBmatrixCon ] =  m_numBmatrixNonz;
 	
 				// multiply the transformation matrix times this cut to get the cut in theta space
 				// do the usual trick and scatter m_Bmatrix into a dense vector
@@ -2446,8 +2448,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				//now we have to get the theata column indexes
 				//scatter the constraint in the x - variables
 				
-				for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
-						j <  m_pntBmatrix[ m_numBmatrixCon  - 1] ; j++){
+				for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
+						j <  m_pntBmatrix[ m_numBmatrixCon  ] ; j++){
 					
 					m_tmpScatterArray[ m_Bmatrix[ j] ] = 1;
 					
@@ -2485,8 +2487,8 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 			
 				//zero out the scatter array again
 	
-				for(j = m_pntBmatrix[  m_numBmatrixCon  - 2] ; 
-						j < m_pntBmatrix[  m_numBmatrixCon  - 1] ; j++){
+				for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
+						j < m_pntBmatrix[  m_numBmatrixCon  ] ; j++){
 					
 					m_tmpScatterArray[ m_Bmatrix[ j] ] = 0;
 					
@@ -3022,8 +3024,9 @@ void OSRouteSolver::pauHana(const double* theta){
 		std::cout << std::endl <<  std::endl;
 		std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
-		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar << std::endl;
-		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon - 1 << std::endl;
+		std::cout << "TOTAL NUMBER OF COLUMNS = " << m_numThetaVar << std::endl;
+		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 2*m_numNodes - 2*m_numBmatrixCon << std::endl;
+		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon  << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
 		
 		std::cout << std::endl <<  std::endl;
