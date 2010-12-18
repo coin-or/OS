@@ -1153,7 +1153,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				
 				*(y + i) = solver->getRowPrice()[ i];
 				
-				//std::cout << "ROW BASIS STATUS " << rbasis[ i]  << std::endl;
+				//std::cout << "------ ROW BASIS STATUS ----- " << rbasis[ i]  << std::endl;
 				
 				// get basis information
 				if(rbasis != NULL){

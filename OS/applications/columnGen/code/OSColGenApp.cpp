@@ -146,12 +146,11 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 
 void OSColGenApp::solve(){
 	
-	/** branchingConSet is a set containing
-	 * the indexes of all the constraints that we
-	 * branch on -- we are working in theta space, i.e.
-	 * the space of the master
+	/** varConMap is a map that maps the index
+	 * of an x_{ij} variable to the corresponding
+	 * branching constraint number in the master
 	 */
-	std::set<int> branchingConSet;
+	std::map<int, int> varConMap;
 	
 	try{
 		  
@@ -188,15 +187,29 @@ void OSColGenApp::solve(){
 		
 		
 		//temp testing 
+		int varIdx;
 		int numNonz;
 		int* indexes;
 		double* values;
-		//getBranchingCut(theta, m_numThetaVar, numNonz, indexes,  values);
+		
+		//get m_theta and m_numThetaVar
+
+		//getBranchingCut(m_theta, m_numThetaVar, 
+		//varConMap, varIdx, numNonz, indexes,  values);
 		//for(i = 0; i < numNonz; i++){
 			
 		//	std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
 		//}
 		//end temp test
+		
+		
+		//getBranchingCut(const double* thetaVar, const int numThetaVar,
+		//			const std::map<int, int> &varConMap, int &varIdx,  int &numNonz, 
+		//			int* &indexes,  double* &values)
+		
+		
+		
+		//done testing
 		
 		m_osrouteSolver->pauHana( m_theta);
 		

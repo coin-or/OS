@@ -2415,15 +2415,12 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 					}//end for on vit2
 				}//end for on vit1
 				
-				//add the cut
+				//add the tour-breaking cut
 				m_numBmatrixCon++;
 				m_pntBmatrix[ m_numBmatrixCon ] =  m_numBmatrixNonz;
 	
 				// multiply the transformation matrix times this cut to get the cut in theta space
 				// do the usual trick and scatter m_Bmatrix into a dense vector
-				
-				//exit( 1);
-				
 
 				//reset
 				// don't adjust the kludge row
@@ -3428,13 +3425,11 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 }//end getBranchingVar
 
 
-void OSRouteSolver::getBranchingCut(const  double* thetaVar, const int numThetaVar,
-		std::map<int, int> &conVarMap,  int &numNonz, int* &indexes, 
-		double* &values) {
+void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVar,
+		const std::map<int, int> &varConMap, int &varIdx,  int &numNonz, 
+		int* &indexes,  double* &values) {
 	
 	//get a branching variable
-	
-	int varIdx;
 	int i;
 	int j;
 	int kount;
@@ -3450,31 +3445,54 @@ void OSRouteSolver::getBranchingCut(const  double* thetaVar, const int numThetaV
 		
 		std::cout << "Branching on Variable:  " << m_variableNames[ varIdx] << std::endl;
 		
-		for(i = 0; i < m_numThetaVar; i++){
+		//if this variable is in the map, then we just return with the index, 
+		//if this variable is NOT in the map then we add a cut
+		
+		if( varConMap.find( varIdx) != varConMap.end() ){
 			
-			kount = 0;
-			
-			for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
+			for(i = 0; i < m_numThetaVar; i++){
 				
-				if ( m_thetaIndex[  j]  == varIdx) kount++ ;
+				kount = 0;
+				
+				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
+					
+					if ( m_thetaIndex[  j]  == varIdx) kount++ ;
+					
+				}
+				
+				//count is the number times variable i appears in the constraint
+				
+				if(kount > 0){
+					
+					branchCutIndexes[ numNonz] = i;
+					branchCutValues[ numNonz++] = kount ;
+					
+				}
 				
 			}
 			
-			//count is the number times variable i appears in the constraint
 			
-			if(kount > 0){
-				
-				branchCutIndexes[ numNonz] = i;
-				branchCutValues[ numNonz++] = kount ;
-				
-			}
+			//add varIdx cut to B matrix
+			m_Bmatrix[ m_numBmatrixNonz++] = varIdx;
+			m_numBmatrixCon++;
+			m_pntBmatrix[ m_numBmatrixCon] = m_numBmatrixNonz;
 			
-		}
-	
-	//kipp add varIdx cut to B matrix
+			//make sure to add artificial variables
+			//of course they have no nonzero elements in 
+			//the transformation matrix
+			
+			m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+			m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+		
+		
+		}//end of if on checking for map membership
+		
+		//set return arguments
 		
 		indexes = branchCutIndexes;
 		values = branchCutValues;
+		
+		return;
 	
 	}catch (const ErrorClass& eclass) {
 

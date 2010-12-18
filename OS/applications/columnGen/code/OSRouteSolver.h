@@ -222,22 +222,25 @@ public:
 	
 	/**
 	 * RETURN VALUES: 
+	 * varIdx -- the variable number x_{ij} for branching
 	 * numNonz -- number of theta indexes in the cut
 	 * indexes -- the indexes of the theta variables
 	 * values -- the number of times the theta indexed 
 	 * in indexes appears in the cut 
 	 * note -- set numNonz to zero if the generated cut
-	 * variable already appears in conVarMap
+	 * variable already appears in varConMap
+	 * 
 	 * 
 	 * INPUT:
 	 * double* thetaVar -- the vector of primal master values
 	 * int numThetaVar -- size of master primal vector
-	 * conVarMap -- the map of constraint numbers to xij vars
+	 * varConMap -- the map of variables in x_{ij} space to 
+	 * a consraint number
 	 * 
 	 */
-	void getBranchingCut(const  double* thetaVar, const int numThetaVar,
-			std::map<int, int> &conVarMap,  int &numNonz, int* &indexes, 
-			double* &values) ;	
+	void getBranchingCut(const double* thetaVar, const int numThetaVar,
+			const std::map<int, int> &varConMap, int &varIdx,  int &numNonz, 
+			int* &indexes,  double* &values) ;	
 	
 	
 	/**
