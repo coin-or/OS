@@ -3032,16 +3032,7 @@ void OSRouteSolver::pauHana(const double* theta){
 		std::cout << std::endl <<  std::endl;
 		
 		
-		//temp testing 
-		int numNonz;
-		int* indexes;
-		double* values;
-		getBranchingCut(theta, m_numThetaVar, numNonz, indexes,  values);
-		for(i = 0; i < numNonz; i++){
-			
-			std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
-		}
-		//end temp test
+
 	
 		std::cout << std::endl <<  std::endl;
 	}catch (const ErrorClass& eclass) {
@@ -3438,7 +3429,8 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 
 
 void OSRouteSolver::getBranchingCut(const  double* thetaVar, const int numThetaVar,
-		int &numNonz, int* &indexes, double* &values) {
+		std::map<int, int> &conVarMap,  int &numNonz, int* &indexes, 
+		double* &values) {
 	
 	//get a branching variable
 	
@@ -3447,6 +3439,8 @@ void OSRouteSolver::getBranchingCut(const  double* thetaVar, const int numThetaV
 	int j;
 	int kount;
 	numNonz = 0;
+	//keep numNonz at zero if there is no cut
+	//there will be no cut if the xij is in conVarMap
 	
 	try{
 		

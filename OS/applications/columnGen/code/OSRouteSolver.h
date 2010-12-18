@@ -21,6 +21,7 @@
 #include "OSInstance.h"
 #include "OSOption.h"
 #include "ClpSimplex.hpp"
+#include<map>
 // --------------------------------------------------------------------- //
 /*!
  * \class 
@@ -57,6 +58,7 @@ public:
 	 * we asssume order is (k, l, i, j)
 	 */
 	double* m_rc;
+	
 
 	//will be the optimal reduced cost for each hub
 	double* m_optValHub;
@@ -221,16 +223,21 @@ public:
 	/**
 	 * RETURN VALUES: 
 	 * numNonz -- number of theta indexes in the cut
-	 * indexes -- the indexes of the theta variables 
-	 * in the cut
+	 * indexes -- the indexes of the theta variables
+	 * values -- the number of times the theta indexed 
+	 * in indexes appears in the cut 
+	 * note -- set numNonz to zero if the generated cut
+	 * variable already appears in conVarMap
 	 * 
 	 * INPUT:
 	 * double* thetaVar -- the vector of primal master values
 	 * int numThetaVar -- size of master primal vector
+	 * conVarMap -- the map of constraint numbers to xij vars
 	 * 
 	 */
 	void getBranchingCut(const  double* thetaVar, const int numThetaVar,
-			int &numNonz, int* &indexes, double* &values) ;	
+			std::map<int, int> &conVarMap,  int &numNonz, int* &indexes, 
+			double* &values) ;	
 	
 	
 	/**

@@ -29,7 +29,7 @@
 #include "OSRouteSolver.h"
 
 
-#include<map>
+
 // --------------------------------------------------------------------- //
 /*!
  * \class 
@@ -53,13 +53,20 @@ public:
 	OsiSolverInterface *m_si;
 	
 	
+	/** m_zUB is the upper bound */
+	double m_zUB;
+	
+	/** m_zLB is the lower bound */
+	double m_zLB;
+	
+	
 	/** m_yA is the dual values for the initial restricted constraints */
 	double *m_yA;
 	
 	/** m_yB is the dual for the cuts that get added */
 	double *m_yB;
 	
-	/** m_theta is the primal values in the restricted master */
+	/** m_theta is the primal values in the  master */
 	double* m_theta;
 	
 	/** m_maxCols is the maximum number of columns we can have */

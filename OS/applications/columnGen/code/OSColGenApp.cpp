@@ -38,7 +38,7 @@
 #include "OSIpoptSolver.h"
 #endif
 
-
+#include<map>
 
 #include <sstream>
 using std::ostringstream;
@@ -62,6 +62,10 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  m_osrouteSolver = new OSRouteSolver( osoption);
 	  m_osoption = osoption;
 	  getOptions( m_osoption);
+	  
+	  //initialize the bounds
+	  m_zUB = OSDBL_MAX;
+	  m_zLB = -OSDBL_MAX;
 	    
 	  	  
 	  //now the arrays
@@ -142,6 +146,12 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 
 void OSColGenApp::solve(){
 	
+	/** branchingConSet is a set containing
+	 * the indexes of all the constraints that we
+	 * branch on -- we are working in theta space, i.e.
+	 * the space of the master
+	 */
+	std::set<int> branchingConSet;
 	
 	try{
 		  
@@ -175,6 +185,21 @@ void OSColGenApp::solve(){
 		
 		//get initial LP relaxation of master
 		solveRestrictedMasterRelaxation();
+		
+		
+		//temp testing 
+		int numNonz;
+		int* indexes;
+		double* values;
+		//getBranchingCut(theta, m_numThetaVar, numNonz, indexes,  values);
+		//for(i = 0; i < numNonz; i++){
+			
+		//	std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
+		//}
+		//end temp test
+		
+		m_osrouteSolver->pauHana( m_theta);
+		
 		
 		
 		delete m_solver;
@@ -405,7 +430,9 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		m_osrouteSolver->m_bestIPValue = m_si->getObjValue();
 		
-		m_osrouteSolver->pauHana( m_theta);
+		if(m_si->getObjValue() < m_zUB) m_zUB = m_si->getObjValue() ;
+		
+		
 		
 		//for(i=0; i < numCols; i++){
 		//	if( m_si->getColSolution()[i] > 0)
