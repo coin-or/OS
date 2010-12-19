@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[trunk],[coin-os@list.coin-or.org])
+AC_INIT([OS],[2.3],[coin-os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -100,46 +100,30 @@ AC_CHECK_SIZEOF( long)
 #############################################################################
 #                              COIN components                              #
 #############################################################################
-AC_COIN_CHECK_PACKAGE(Ipopt, [ipopt], [OSLib])
-AC_COIN_CHECK_PACKAGE(ASL, [coinasl], [OSLib])
 
-AC_COIN_CHECK_PACKAGE(CoinDepend, [coinutils osi], [OSLib])
-if test $coin_has_coindepend != yes ; then
-  AC_MSG_ERROR([Required package CoinUtils or Osi not available.])
+AC_COIN_CHECK_PACKAGE(CoinUtils,[coinutils],[OSLib])
+if test $coin_has_coinutils != yes ; then
+  AC_MSG_ERROR([Required package CoinUtils not available.])
 fi
-AC_COIN_CHECK_PACKAGE(Clp,  [osi-clp],  [OSLib])
-AC_COIN_CHECK_PACKAGE(DyLP, [osi-dylp], [OSLib])
-AC_COIN_CHECK_PACKAGE(Vol,  [osi-vol],  [OSLib])
-AC_COIN_CHECK_PACKAGE(SYMPHONY,  [osi-sym],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Cbc,  [osi-cbc],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Cgl,  [cgl],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Ipopt,    [ipopt],    [OSLib])
+AC_COIN_CHECK_PACKAGE(Clp,      [osi-clp],  [OSLib])
+AC_COIN_CHECK_PACKAGE(DyLP,     [osi-dylp], [OSLib])
+AC_COIN_CHECK_PACKAGE(Vol,      [osi-vol],  [OSLib])
+AC_COIN_CHECK_PACKAGE(SYMPHONY, [osi-sym],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Cpx,      [osi-cplex],[OSLib])
+AC_COIN_CHECK_PACKAGE(Glpk,     [osi-glpk], [OSLib])
+AC_COIN_CHECK_PACKAGE(Cbc,      [osi-cbc],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin],   [OSLib])
+AC_COIN_CHECK_PACKAGE(Couenne,  [couenne],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],      [OSLib])
+AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],  [OSLib])
 
 AC_COIN_HAS_PROJECT(cppad)
-#AC_COIN_CHECK_PACKAGE(cppad)
-AC_COIN_CHECK_PACKAGE(Couenne, [couenne], [OSLib])
-AC_COIN_CHECK_PACKAGE(Bonmin,  [bonmin],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Bcp,     [bcp],     [OSLib])
 
-AC_COIN_CHECK_PACKAGE(Cpx,  [osi-cplex],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Glpk, [osi-glpk],   [OSLib])
-
-
-#if test $coin_has_cppad = skipping &&
-#   test $coin_has_ipopt != skipping ; then
-#       AC_MSG_ERROR([Ipopt is present, but not the necessary cppad])   
-#fi
-
-#if test $coin_has_ipopt = skipping &&
-#   test $coin_has_bonmin != skipping ; then
-#       AC_MSG_ERROR([Bonmin is present, but not the necessary Ipopt])   
-#fi
-
-#if test $coin_has_bonmin = skipping &&
-#   test $coin_has_couenne != skipping ; then
-#       AC_MSG_ERROR([Couenne is present, but not the necessary Bonmin])   
-#fi
-
-
+if test $coin_has_cppad = skipping &&
+   test $coin_has_ipopt != skipping ; then
+       AC_MSG_ERROR([Ipopt is present, but not the necessary cppad])   
+fi
 
 #if test $coin_has_coinutils != unavailable &&
 #   test $coin_has_coinutils != skipping; then
@@ -151,7 +135,7 @@ AC_COIN_CHECK_PACKAGE(Glpk, [osi-glpk],   [OSLib])
 #  esac
 #  AC_SUBST(coinutilslib) 
 #  else
-#    AC_MSG_ERROR([cannot find CoinTuils which is necessary to build OS])   
+#    AC_MSG_ERROR([cannot find CoinUtils which is necessary to build OS])   
 #fi
 #
 #if test $coin_has_clp != unavailable &&
@@ -341,14 +325,8 @@ AM_CONDITIONAL(MSCL_, test x$cl_compiler = xyes)
 #                             Third party solvers                           #
 #############################################################################
 
-#AC_COIN_CHECK_USER_LIBRARY([Cplex],[CPX],[cplex.h],[])
-AC_COIN_CHECK_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[])
-#AC_COIN_CHECK_USER_LIBRARY([Ipopt],[IPOPT],[IpoptConfig.h],[])
-AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[])
-
-#AC_COIN_HAS_GLPK(Glpk)
-#AC_COIN_HAS_ASL
-
+AC_COIN_CHECK_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[OSLib])
+AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[OSLib])
 
 
 #############################################################################
@@ -837,7 +815,6 @@ AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osil)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osil)
 
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4b.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4.osil)
 
 ### Python Code
@@ -851,10 +828,8 @@ AC_COIN_VPATH_LINK(stylesheets/OSrL.xslt)
 ##
 AC_COIN_VPATH_LINK(stylesheets/OSrL.css)
 ##
-## PYTHON FILE
-##
-AC_COIN_VPATH_LINK(test/parsingTest.py)
-##
+
+
 
 
 ##############################################################################
