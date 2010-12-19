@@ -285,7 +285,39 @@ void OSColGenApp::solve(){
 		
 		//m_si->writeMps("gailMpsTest");
 		//solve  LP relaxation of master again
-		solveRestrictedMasterRelaxation();
+		//solveRestrictedMasterRelaxation();
+		
+		numCols = m_si->getNumCols();	
+		
+		
+		//int* m_thetaPnt;
+		//int* m_thetaIndex;
+		
+		for(i = 0;  i < numCols; i++){
+			
+			std::cout << "PROCESSING THETA COLUMN " << i  << std::endl;
+			
+			for(int j = m_osrouteSolver->m_thetaPnt[ i]; j <  m_osrouteSolver->m_thetaPnt[ i + 1]; j++ ){
+				
+				std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[ j] ] << std::endl;
+				
+			}
+		}
+		
+		numRows = m_si->getNumRows();
+		
+		for(i = m_osrouteSolver->m_numNodes;  i < numRows; i++){
+			
+			std::cout << "PROCESSING ROW " << i  << std::endl;
+			
+			for(int j = m_osrouteSolver->m_pntBmatrix[ i  -   m_osrouteSolver->m_numNodes]; j <  m_osrouteSolver->m_pntBmatrix[ i + 1 -  m_osrouteSolver->m_numNodes]; j++ ){
+				
+				
+				
+				std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_Bmatrix[ j] ] << std::endl;
+				
+			}
+		}
 		
 		exit( 1);
 		
@@ -356,8 +388,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	collb = 0.0;
 	colub = 1.0;
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
-	double bigNum = 1.0e24;
-	
+	//double bigNum = 1.0e24;
+	double bigNum  = 1000000;
 	//getRows function call return parameters
 	int numNewRows;
 	int* numRowNonz = NULL;
@@ -492,11 +524,13 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					//add the artificial variable for the UB					
 					rowArtVal = -1.0;
 					rowArtIdx = m_si->getNumRows() - 1;
-					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigNum, bigNum);
+					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigNum, bigNum);
+					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigNum);
 					//add the artificial variable for the LB					
 					rowArtVal = 1.0;
 					
-					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigNum, bigNum);
+					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigNum, bigNum);
+					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigNum);
 							
 				}
 				

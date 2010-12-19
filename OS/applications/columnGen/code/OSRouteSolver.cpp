@@ -1042,12 +1042,11 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			
 			
 			
-			//now multiply the sparse array by each tour-breaking constraint
+			//now multiply the sparse array by each B-matrix constraint
 			
 			for(i = 0; i < m_numBmatrixCon; i++){
 				
 				rowCount = 0;
-				
 				
 				for(j = m_pntBmatrix[ i]; j < m_pntBmatrix[ i + 1]; j++){
 					
@@ -1086,9 +1085,15 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 				
 			}
 			
+
+			
 			m_costVec[ k] =  m_optL[ k]*m_costVec[ k];
 			m_thetaCost[ m_numThetaVar++ ] = m_costVec[ k];
 			m_thetaPnt[ m_numThetaVar ]  = m_numThetaNonz;
+			
+			
+			//std::cout << "WE ADDED VARIABLE " << m_numThetaVar << std::endl;
+			//std::cout << "VARIBLE NONZEROS = "  << kippster
 			
 			numNonzVec = m_newColumnNonz;
 			costVec = m_costVec;
