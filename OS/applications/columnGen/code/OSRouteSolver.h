@@ -147,6 +147,8 @@ public:
 	int* m_thetaIndex;
 	int m_numThetaVar;
 	int m_numThetaNonz;
+	//kipp -- be carefull does m_thetaCost have
+	// artificial variables
 	double* m_thetaCost;
 	
 

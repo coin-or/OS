@@ -473,8 +473,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			numNewRows = 0;
 			
 			//do not get cuts if LP relaxation worse than upper bound
-			//if(m_si->getObjValue() < m_zUB) getCuts(m_theta, numCols, numNewRows, numRowNonz, 
-			//		colIdx,rowValues, rowLB, rowUB);
+			if(m_si->getObjValue() < m_zUB) getCuts(m_theta, numCols, numNewRows, numRowNonz, 
+					colIdx,rowValues, rowLB, rowUB);
 		
 			
 			if( numNewRows >= 1 ){

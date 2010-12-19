@@ -897,6 +897,7 @@ void CoinSolver::dataEchoCheck(){
 
 
 void CoinSolver::writeResult(OsiSolverInterface *solver){
+
 	double *x = NULL;
 	double *y = NULL;
 	double *z = NULL;
@@ -953,7 +954,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		if (solver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
 			if( (sSolverName.find( "vol") == std::string::npos) &&
-					(sSolverName.find( "symphony") == std::string::npos)  ){//vol and symphony do not support this
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony and glpk do not support this
 				solver->getBasisStatus( cbasis, rbasis);
 			}
 
@@ -968,7 +970,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 					if(solver->isPrimalObjectiveLimitReached() == true) {
 						osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
 					if( (sSolverName.find( "vol") == std::string::npos) &&
-							(sSolverName.find( "symphony") == std::string::npos)  ){//vol and symphony do not support this
+							(sSolverName.find( "symphony") == std::string::npos) &&
+							(sSolverName.find( "glpk") == std::string::npos) ){//vol glpk, and symphony do not support this
 						solver->getBasisStatus( cbasis, rbasis);
 					}
 					}
@@ -976,7 +979,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 						if(solver->isDualObjectiveLimitReached() == true) {
 							osresult->setSolutionStatus(solIdx, "other", "dual objective limit reached");
 							if( (sSolverName.find( "vol") == std::string::npos) &&
-									(sSolverName.find( "symphony") == std::string::npos)  ){//vol and symphony do not support this
+									(sSolverName.find( "symphony") == std::string::npos) &&
+									(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony do not support this
 								solver->getBasisStatus( cbasis, rbasis);
 							}
 						}
@@ -984,7 +988,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 							if(solver->isIterationLimitReached() == true) {
 								osresult->setSolutionStatus(solIdx, "other", "iteration limit reached");
 								if( (sSolverName.find( "vol") == std::string::npos) &&
-										(sSolverName.find( "symphony") == std::string::npos)  ){//vol and symphony do not support this
+										(sSolverName.find( "symphony") == std::string::npos) &&
+										(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony do not support this
 									solver->getBasisStatus( cbasis, rbasis);
 								}
 							}
@@ -1311,7 +1316,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			delete[] y;
 			y = NULL;
 			if( (sSolverName.find( "vol") == std::string::npos) &&
-					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] rbasis;
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
 			rbasis = NULL;
 			
 			
@@ -1327,7 +1333,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		if(solver->getNumCols() > 0){
 			
 			if( (sSolverName.find( "vol") == std::string::npos) &&
-					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] cbasis;
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] cbasis;
 			cbasis = NULL;
 			
 			delete[] x;
@@ -1348,7 +1355,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			delete[] y;
 			y = NULL;
 			if( (sSolverName.find( "vol") == std::string::npos) &&
-					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] rbasis;
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
 			rbasis = NULL;
 			
 			
@@ -1360,7 +1368,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		
 		if(solver->getNumCols() > 0){
 			if( (sSolverName.find( "vol") == std::string::npos) &&
-					(sSolverName.find( "symphony") == std::string::npos)  ) delete[] cbasis;
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] cbasis;
 			cbasis = NULL;
 			
 			delete[] x;
