@@ -152,6 +152,21 @@ void OSColGenApp::solve(){
 	 */
 	std::map<int, int> varConMap;
 	
+	int numCols;
+	int numRows;
+	int varIdx;
+	int numNonz;
+	int* indexes;
+	double* values;	
+	int i;
+	
+
+	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
+	//double bigNum  = 1.0e24;
+	double bigNum  = 1000000;
+	double rowArtVal ;
+	int rowArtIdx ;
+	
 	try{
 		  
 		// the solver
@@ -184,33 +199,102 @@ void OSColGenApp::solve(){
 		
 		//get initial LP relaxation of master
 		solveRestrictedMasterRelaxation();
+		//get the solution
+		numCols = m_si->getNumCols();	
 		
+		for(i = 0; i < numCols; i++){	
+			//get the LP relaxation
+			*(m_theta + i) = m_si->getColSolution()[i];	
+		}
 		
-		//temp testing 
-		int varIdx;
-		int numNonz;
-		int* indexes;
-		double* values;
+		m_zLB =  m_si->getObjValue();
 		
-		//get m_theta and m_numThetaVar
-
-		//getBranchingCut(m_theta, m_numThetaVar, 
-		//varConMap, varIdx, numNonz, indexes,  values);
-		//for(i = 0; i < numNonz; i++){
+		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
+		
+		//now get the upper bound
+		
+		//solve as an integer program to get initial upper bound
+		/*
+		for(i=0; i < numCols; i++){
 			
-		//	std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
-		//}
+			m_solver->osiSolver->setInteger( i);
+		}
+		
+		m_solver->osiSolver->branchAndBound();
+		
+		
+		
+		if(m_si->getObjValue() < m_zUB) m_zUB = m_si->getObjValue() ;
+		
+		
+		
+		std::cout << "OPTIMAL IP VALUE = " << m_zUB << std::endl;
+		*/
+		
+		//kipp
+		//kipp -- make variables continuous again		
+		
+		for(i=0; i < numCols; i++){
+			
+			m_solver->osiSolver->setContinuous( i);
+		}
+				
+		
+		
+		m_osrouteSolver->getBranchingCut(m_theta, numCols, 
+				varConMap, varIdx, numNonz, indexes,  values);
+			
+		std::cout << "varIDX = " << varIdx << std::endl;
+		std::cout << "numNonz = " << numNonz << std::endl;			
+		for(i = 0; i < numNonz; i++){
+			
+			std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
+		}
 		//end temp test
 		
+		//if numNonz is greater than zero:
+		// 1) add add new variable to map
+		// 2) add constraint then add to the formulation
+		// 3) add artificial variables
 		
-		//getBranchingCut(const double* thetaVar, const int numThetaVar,
-		//			const std::map<int, int> &varConMap, int &varIdx,  int &numNonz, 
-		//			int* &indexes,  double* &values)
+		if( numNonz >0){
+			
+			//insert into map
+			varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() + 1) );
+			
+			//add the row
+			//make upper and lower bound 0 and 1 first 
+			m_si->addRow(numNonz, indexes, values, 1, 1 ) ;
+			
+			//add the artificial variables
+			
+			//add the artificial variable for the UB					
+			rowArtVal = -1.0;
+			rowArtIdx = m_si->getNumRows() - 1;
+			
+			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
+			//add the artificial variable for the LB					
+			rowArtVal = 1.0;
+			
+			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);			
+			
+		}
+		
+		m_si->writeLp("gailTest");
 		
 		
+		//m_si->writeMps("gailMpsTest");
+		//solve  LP relaxation of master again
+		solveRestrictedMasterRelaxation();
 		
-		//done testing
+		exit( 1);
 		
+
+		
+		std::cout << "OPTIMAL LP VALUE = " << m_si->getObjValue() << std::endl;
+		
+
+		m_osrouteSolver->m_bestIPValue = m_zUB;
 		m_osrouteSolver->pauHana( m_theta);
 		
 		
@@ -388,8 +472,9 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			
 			numNewRows = 0;
 			
-			getCuts(m_theta, numCols, numNewRows, numRowNonz, 
-					colIdx,rowValues, rowLB, rowUB);
+			//do not get cuts if LP relaxation worse than upper bound
+			//if(m_si->getObjValue() < m_zUB) getCuts(m_theta, numCols, numNewRows, numRowNonz, 
+			//		colIdx,rowValues, rowLB, rowUB);
 		
 			
 			if( numNewRows >= 1 ){
@@ -426,32 +511,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		}//end while on isCutAdded
 
-		for(i=0; i < numCols; i++){
-			*(m_theta + i) = m_si->getColSolution()[i];
-			
-		}
-
-
-		
-
-		//solve as an integer program
-		
-		for(i=0; i < numCols; i++){
-			m_solver->osiSolver->setInteger( i);
-		}
-		m_solver->osiSolver->branchAndBound();
-		
-		m_osrouteSolver->m_bestIPValue = m_si->getObjValue();
-		
-		if(m_si->getObjValue() < m_zUB) m_zUB = m_si->getObjValue() ;
-		
-		
-		
-		//for(i=0; i < numCols; i++){
-		//	if( m_si->getColSolution()[i] > 0)
-		//	std::cout <<  m_si->getColSolution()[i] << std::endl;
-		//}
-
 		
 		
 	} catch (const ErrorClass& eclass) {
@@ -461,7 +520,29 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	}		
 	
 	
-}// end solveRelaxation
+}//end solveRestrictedMasterRelaxation
+
+
+bool OSColGenApp::isInteger( const double *thetaVar, const int numThetaVar, 
+		const double tol){
+	
+	
+	bool isInt;
+	isInt = false;
+	
+	try{	
+		
+		return isInt;
+		
+	} catch (const ErrorClass& eclass) {
+	
+		throw ErrorClass(eclass.errormsg);
+	
+	}		
+
+	
+	
+}//end isInteger
 
 
 

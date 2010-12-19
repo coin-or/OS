@@ -1622,7 +1622,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			
 			//objcoeff->values[ varNumber ] = OSDBL_MAX;
 			
-			objcoeff->values[ varNumber ] = 1.0e24;
+			//objcoeff->values[ varNumber ] = 1.0e24;
+			objcoeff->values[ varNumber ] = 1000000;
 			
 			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
 					0, 1, 'C');
@@ -1645,7 +1646,10 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			//if obj too large we get the following error
 			//Assertion failed: (fabs(obj[i]) < 1.0e25), function createRim, 
 			//file ../../../Clp/src/ClpSimplex.cpp, l
-			objcoeff->values[ varNumber ] = 1.0e24;
+			//objcoeff->values[ varNumber ] = 1.0e24;
+			//kipp -- change this number -- even 1.0e24 drives
+			//clp crazy and gives infeasible when actually feasible
+			objcoeff->values[ varNumber ] = 1000000;
 			
 			
 			
@@ -2180,7 +2184,6 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 	int index;
 	int rowKount;
 	int tmpKount;
-	
 	int indexAdjust = m_numNodes - m_numHubs;
 	double* tmpRhs;
 	int numSepRows = m_osinstanceSeparation->getConstraintNumber() ;
@@ -2371,15 +2374,19 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 		//the cut is based on the nodes with dual value - 1
 		
 		for(k = 0; k < indexAdjust; k++){
-			std::cout <<   std::endl << std::endl;
+			//std::cout <<   std::endl << std::endl;
 			
 			
 			m_separationClpModel->setRowUpper(k, 0.0);
+			//we don't need output
+			
+			m_separationClpModel->setLogLevel( 0);
+			
 			m_separationClpModel->primal();		
 			
 			if(m_separationClpModel->getObjValue() > m_eps){
 				std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
-				std::cout << "SEPERATION OBJJJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
+				std::cout << "SEPERATION OBJ VALUE =  "  <<  m_separationClpModel->getObjValue() << std::endl;
 				numNewRows = 1;
 			
 				for(i = 0; i < m_numNodes - m_numHubs ; i++){
@@ -2656,6 +2663,8 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 			
 			
 			m_separationClpModel->setRowUpper(k, 0.0);
+			
+			
 			m_separationClpModel->primal();		
 			
 			if(m_separationClpModel->getObjValue() > m_eps){
@@ -3448,7 +3457,7 @@ void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVa
 		//if this variable is in the map, then we just return with the index, 
 		//if this variable is NOT in the map then we add a cut
 		
-		if( varConMap.find( varIdx) != varConMap.end() ){
+		if( varConMap.find( varIdx) == varConMap.end() ){
 			
 			for(i = 0; i < m_numThetaVar; i++){
 				

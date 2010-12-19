@@ -85,10 +85,23 @@ public:
 	 * branch and bound
 	 */
 	
-	void branchAndBound();
 	
+	/** return true if nothing goes wrong */
+	bool branchAndBound();
 	
 	void solve();
+	
+	/**
+	 * 
+	 * INPUT:
+	 * double* thetaVar -- the vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 * tol -- is the tolerance on 0/1
+	 * 
+	 * return true if the solution is integer
+	 */
+	bool isInteger( const double *thetaVar, const int numThetaVar, 
+			const double tol);
 	
 	/**
 	 * RETURN VALUES: 
