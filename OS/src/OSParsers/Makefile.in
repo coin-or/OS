@@ -67,7 +67,7 @@ am_libOSParsers_la_OBJECTS = OSParseosil.lo OSParseosil.tab.lo \
 	OSParseosrl.tab.lo OSParseosss.lo OSgLParserData.lo \
 	OSiLParserData.lo OSrLParserData.lo OSoLParserData.lo
 libOSParsers_la_OBJECTS = $(am_libOSParsers_la_OBJECTS)
-depcomp = $(SHELL) $(top_srcdir)/../depcomp
+depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)

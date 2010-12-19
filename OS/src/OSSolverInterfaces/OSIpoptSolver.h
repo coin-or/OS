@@ -42,7 +42,6 @@
 # include <cassert>
 # include <stack>
 #include <string>
-# include <cppad/cppad.hpp>
 #include<iostream>
 
 #ifdef HAVE_CTIME

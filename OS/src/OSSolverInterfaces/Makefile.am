@@ -62,12 +62,15 @@ libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS =\
 	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` 
-	
+
+if COIN_HAS_CPPAD
+AM_CPPFLAGS += -I`$(CYGPATH_W) $(CPPADSRCDIR)`
+endif
+
 	
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
 #	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/inc` \
