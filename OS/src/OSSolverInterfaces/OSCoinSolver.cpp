@@ -925,11 +925,13 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	
 	
 	if( (solver->getNumCols() > 0)  && (sSolverName.find( "vol") == std::string::npos)
-			&& (sSolverName.find( "symphony") == std::string::npos) ) 
+			&& (sSolverName.find( "symphony") == std::string::npos) && 
+				(sSolverName.find( "glpk") == std::string::npos) ) 
 			cbasis = new int[solver->getNumCols() ];
 	
 	if( (osinstance->getConstraintNumber() > 0) && (sSolverName.find( "vol") == std::string::npos)
-			&& (sSolverName.find( "symphony") == std::string::npos) ) 
+			&& (sSolverName.find( "symphony") == std::string::npos)  && 
+			(sSolverName.find( "glpk") == std::string::npos) ) 
 			rbasis = new int[solver->getNumRows() ];
 	
 
