@@ -1,5 +1,5 @@
-#BuildTools  https://projects.coin-or.org/svn/BuildTools/stable/0.6
-BuildTools  https://projects.coin-or.org/svn/BuildTools/trunk
+BuildTools  https://projects.coin-or.org/svn/BuildTools/stable/0.6
+#BuildTools  https://projects.coin-or.org/svn/BuildTools/trunk
 Data/Sample  https://projects.coin-or.org/svn/Data/Sample/stable/1.1/
 CoinUtils  https://projects.coin-or.org/svn/CoinUtils/stable/2.7/CoinUtils
 Cbc  https://projects.coin-or.org/svn/Cbc/stable/2.6/Cbc 
@@ -18,7 +18,7 @@ ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/s
 DyLP  https://projects.coin-or.org/svn/DyLP/stable/1.7/DyLP
 Ipopt  https://projects.coin-or.org/svn/Ipopt/stable/3.9/Ipopt
 cppad  https://projects.coin-or.org/svn/CppAD/stable/20090303
-#Bonmin  https://projects.coin-or.org/svn/Bonmin/stable/1.4/Bonmin
+Bonmin  https://projects.coin-or.org/svn/Bonmin/trunk/Bonmin
 #Couenne  https://projects.coin-or.org/svn/Couenne/stable/0.3/Couenne 
 ApplicationTemplates https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/stable/1.0
 
