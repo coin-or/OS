@@ -76,6 +76,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	
 	
 	m_bestIPValue = OSDBL_MAX;
+	m_bestLPValue = -OSDBL_MAX;
 	
 	
 	m_eps = 0.00001;
@@ -3004,7 +3005,7 @@ void OSRouteSolver::pauHana(const double* theta){
 		
 		
 		std::cout << std::endl <<  std::endl;
-		//std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
+		std::cout << "FINAL LP SOLUTION VALUE = " << m_bestLPValue << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
 		std::cout << "TOTAL NUMBER OF COLUMNS = " << m_numThetaVar << std::endl;
 		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 2*m_numNodes - 2*m_numBmatrixCon << std::endl;

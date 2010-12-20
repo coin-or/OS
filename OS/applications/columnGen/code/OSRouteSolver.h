@@ -37,6 +37,7 @@ public:
 	OSOption *m_osoption;
 	
 	double m_bestIPValue;
+	double m_bestLPValue;
 	
 	std::string m_initOSiLFile;
 	std::map<int, std::map<int, std::vector<int> > > m_initSolMap;

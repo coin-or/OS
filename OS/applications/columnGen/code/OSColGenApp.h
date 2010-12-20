@@ -103,6 +103,9 @@ public:
 	bool isInteger( const double *thetaVar, const int numThetaVar, 
 			const double tol);
 	
+
+	void printDebugInfo( );
+	
 	/**
 	 * RETURN VALUES: 
 	 * int numNewRows -- number of new rows generated

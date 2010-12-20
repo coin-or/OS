@@ -145,29 +145,9 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 
 
 void OSColGenApp::solve(){
-	
-	/** varConMap is a map that maps the index
-	 * of an x_{ij} variable to the corresponding
-	 * branching constraint number in the master
-	 */
-	std::map<int, int> varConMap;
-	
-	int numCols;
-	int numRows;
-	int varIdx;
-	int numNonz;
-	int* indexes;
-	double* values;	
-	int i;
-	
-	std::set<std::pair<int, double> >::iterator sit;
-	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
-	//double bigNum  = 1.0e24;
-	double bigNum  = 1000000;
-	double rowArtVal ;
-	int rowArtIdx ;
-	
-	
+
+	std::set<std::pair<int, double> >::iterator sit;	
+
 	//initialize upper bound
 	m_zUB = m_osrouteSolver->m_bestIPValue;
 	
@@ -205,24 +185,12 @@ void OSColGenApp::solve(){
 		
 		//get initial LP relaxation of master
 		solveRestrictedMasterRelaxation();
-		//get the solution
-		numCols = m_si->getNumCols();	
-		
-		for(i = 0; i < numCols; i++){	
-			//get the LP relaxation
-			*(m_theta + i) = m_si->getColSolution()[i];	
-		}
-		
 		m_zLB =  m_si->getObjValue();
 		
-		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		
 
-		
-		
 		//now get the upper bound
 		//solve as an integer program to get initial upper bound
-		
 		
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
@@ -236,12 +204,10 @@ void OSColGenApp::solve(){
 		CbcModel model(  *m_si);
 		OsiSolverInterface *ipSolver = model.solver();
 
-		//ipSolver->branchAndBound();
+		ipSolver->branchAndBound();
 		//CbcMain0(  model);	
-		
 		//CbcMain1( 0, 0, model);
-		
-		//if( ipSolver->getObjValue() < m_zUB) m_zUB = ipSolver->getObjValue() ;
+		if( ipSolver->getObjValue() < m_zUB) m_zUB = ipSolver->getObjValue() ;
 			
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
@@ -250,102 +216,19 @@ void OSColGenApp::solve(){
 			m_si->setContinuous( sit->first);
 			m_si->setColUpper( sit->first, sit->second);
 			
-		}			
-		
-		for(i = 0; i < numCols; i++)std::cout << m_theta[ i] << std::endl;
-	
-		m_osrouteSolver->getBranchingCut(m_theta, numCols, 
-				varConMap, varIdx, numNonz, indexes,  values);
-			
-		std::cout << "varIDX = " << varIdx << std::endl;
-		std::cout << "numNonz = " << numNonz << std::endl;			
-		for(i = 0; i < numNonz; i++){
-			
-			std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
-		}
-		//end temp test
-		
-		
-		//if numNonz is greater than zero:
-		// 1) add add new variable to map
-		// 2) add constraint then add to the formulation
-		// 3) add artificial variables
-		
-		if( numNonz >0){
-			
-			//insert into map
-			varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() + 1) );
-			
-			//add the row
-			//make upper and lower bound 0 and 1 first 
-			m_si->addRow(numNonz, indexes, values, 1, 1) ;
-			
-			//add the artificial variables
-			
-			//add the artificial variable for the UB					
-			rowArtVal = -1.0;
-			rowArtIdx = m_si->getNumRows() - 1;
-			
-			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
-			//add the artificial variable for the LB					
-			rowArtVal = 1.0;
-			
-			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);			
-			
 		}
 		
-		m_si->writeLp("gailTest");
 
-		solveRestrictedMasterRelaxation();
 		
-		
-		//******??
-		//start echo 
-		
-		numCols = m_si->getNumCols();	
-		
-		
-		for(i = 0;  i < numCols; i++){
-			
-			std::cout << "PROCESSING THETA COLUMN " << i <<  "  value =  " <<  m_si->getColSolution()[i] << std::endl;
-			
-			for(int j = m_osrouteSolver->m_thetaPnt[ i]; j <  m_osrouteSolver->m_thetaPnt[ i + 1]; j++ ){
-				
-				//std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[ j] ] << std::endl;
-				
-			}
-		}
-		
-		numRows = m_si->getNumRows();
-		
-		for(i = m_osrouteSolver->m_numNodes;  i < numRows; i++){
-			
-			std::cout << "PROCESSING ROW " << i  << std::endl;
-			
-			for(int j = m_osrouteSolver->m_pntBmatrix[ i  -   m_osrouteSolver->m_numNodes]; j <  m_osrouteSolver->m_pntBmatrix[ i + 1 -  m_osrouteSolver->m_numNodes]; j++ ){
-				
-				//std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_Bmatrix[ j] ] << std::endl;
-				
-			}
-		}
-		//check integer variables and upper bounds -- loop over integer variable set
-		
-		//std::set<std::pair<int, double> >::iterator sit;
-		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
-				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
-			
-			//std::cout << "Integer variable  " << sit->first << " Upper Bound = "  << sit->second  << std::endl;
-			
-			
-		}
-		
-		//end echo outpute
-		
-		std::cout << "OPTIMAL LP AFTER A BRANCH VALUE = " << m_si->getObjValue() << std::endl;
+		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
-		//exit( 1);
-
+		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;
+		
+		
+		branchAndBound();
+		
+		
 		m_osrouteSolver->pauHana( m_theta);
 		
 		
@@ -581,9 +464,20 @@ bool OSColGenApp::isInteger( const double *thetaVar, const int numThetaVar,
 	
 	
 	bool isInt;
-	isInt = false;
+	isInt = true;
+	int i;
 	
 	try{	
+		
+		for(i = 0; i < numThetaVar; i++){
+			
+			if( (thetaVar[ i] > tol) && (thetaVar[ i] < 1 -  tol) ){
+				
+				isInt = false;
+				break;
+			}
+			
+		}
 		
 		return isInt;
 		
@@ -596,6 +490,147 @@ bool OSColGenApp::isInteger( const double *thetaVar, const int numThetaVar,
 	
 	
 }//end isInteger
+
+
+void OSColGenApp::printDebugInfo( ){
+	
+	int numCols;
+	int numRows;
+	std::set<std::pair<int, double> >::iterator sit;
+	int i;
+	
+	numCols = m_si->getNumCols();	
+	
+	
+	for(i = 0;  i < numCols; i++){
+		
+		std::cout << "PROCESSING THETA COLUMN " << i <<  "  value =  " <<  m_si->getColSolution()[i] << std::endl;
+		
+		for(int j = m_osrouteSolver->m_thetaPnt[ i]; j <  m_osrouteSolver->m_thetaPnt[ i + 1]; j++ ){
+			
+			//std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[ j] ] << std::endl;
+			
+		}
+	}
+
+	numRows = m_si->getNumRows();
+	
+	for(i = m_osrouteSolver->m_numNodes;  i < numRows; i++){
+		
+		std::cout << "PROCESSING ROW " << i  << std::endl;
+		
+		for(int j = m_osrouteSolver->m_pntBmatrix[ i  -   m_osrouteSolver->m_numNodes]; j <  m_osrouteSolver->m_pntBmatrix[ i + 1 -  m_osrouteSolver->m_numNodes]; j++ ){
+			
+			//std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_Bmatrix[ j] ] << std::endl;
+			
+		}
+	}
+	//check integer variables and upper bounds -- loop over integer variable set
+
+	//
+	for ( sit = m_osrouteSolver->intVarSet.begin() ; 
+			sit != m_osrouteSolver->intVarSet.end(); sit++ ){
+		
+		//std::cout << "Integer variable  " << sit->first << " Upper Bound = "  << sit->second  << std::endl;	
+		
+	}	
+}//end printDebugInfo
+
+
+bool OSColGenApp::branchAndBound(){
+	
+	/** varConMap is a map that maps the index
+	 * of an x_{ij} variable to the corresponding
+	 * branching constraint number in the master
+	 */
+	std::map<int, int> varConMap;
+	
+	bool bandbWorked;
+	
+	bandbWorked = true;
+	
+	int numCols;
+	int varIdx;
+	int numNonz;
+	int* indexes;
+	double* values;	
+	int i;
+	
+	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
+	//double bigNum  = 1.0e24;
+	double bigNum  = 1000000;
+	double rowArtVal ;
+	int rowArtIdx ;
+	
+	try{
+		
+		
+		
+		//get the solution
+		numCols = m_si->getNumCols();	
+		
+		for(i = 0; i < numCols; i++){	
+			//get the LP relaxation
+			*(m_theta + i) = m_si->getColSolution()[i];	
+		}
+		
+		
+		m_osrouteSolver->getBranchingCut(m_theta, numCols, 
+				varConMap, varIdx, numNonz, indexes,  values);
+			
+		std::cout << "varIDX = " << varIdx << std::endl;
+		std::cout << "numNonz = " << numNonz << std::endl;			
+		for(i = 0; i < numNonz; i++){
+			
+			std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
+		}
+		//end temp test
+		
+		
+		//if numNonz is greater than zero:
+		// 1) add add new variable to map
+		// 2) add constraint then add to the formulation
+		// 3) add artificial variables
+		
+		if( numNonz >0){
+			
+			//insert into map
+			varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() + 1) );
+			
+			//add the row
+			//make upper and lower bound 0 and 1 first 
+			m_si->addRow(numNonz, indexes, values, 1, 1) ;
+			
+			//add the artificial variables
+			
+			//add the artificial variable for the UB					
+			rowArtVal = -1.0;
+			rowArtIdx = m_si->getNumRows() - 1;
+			
+			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
+			//add the artificial variable for the LB					
+			rowArtVal = 1.0;
+			
+			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);			
+			
+		}
+		
+		//m_si->writeLp("gailTest");
+		
+		solveRestrictedMasterRelaxation();
+		
+		m_zLB  =  m_si->getObjValue();	
+		m_osrouteSolver->m_bestLPValue = m_zLB;
+		
+		return bandbWorked;
+
+	} catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}		
+
+}// end branchAndBound
 
 
 
