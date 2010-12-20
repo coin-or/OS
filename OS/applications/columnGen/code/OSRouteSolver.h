@@ -41,6 +41,12 @@ public:
 	std::string m_initOSiLFile;
 	std::map<int, std::map<int, std::vector<int> > > m_initSolMap;
 	
+	/** intVarSet holds and std::pair where the first
+	 * element is the index of an integer variable and 
+	 * the second is the variable upper bound
+	 */
+	std::set<std::pair<int, double> > intVarSet;
+	
 	//variables for the q-route dynamic programming solution
 	int m_numberOfVar;
 	int m_numHubs;

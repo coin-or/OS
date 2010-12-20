@@ -248,11 +248,9 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_thetaIndex = new int[ 500000];
 		m_numThetaVar = 0;
 		m_numThetaNonz = 0;
-		//m_thetaPnt[ m_numThetaVar++ ] = 0;
 		m_thetaPnt[ m_numThetaVar ] = 0;
-		//hard coding of cuts
-
 		
+		//hard coding of cuts
 		m_pntBmatrix = new int[ 10000];
 		m_Bmatrix = new int[ 500000];
 		m_numBmatrixCon = 0;
@@ -1078,7 +1076,6 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 				
 				
 				m_thetaIndex[ m_numThetaNonz++ ] =  m_varIdx[ j] - startPntInc ;
-				
 				m_tmpScatterArray[ m_varIdx[ j] - startPntInc  ]  = 0;
 				
 				// is variable m_varIdx[ j] - startPntInc in this row	
@@ -1086,14 +1083,12 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			}
 			
 
-			
+			intVarSet.insert ( std::pair<int,double>( m_numThetaVar, 1.0) );
 			m_costVec[ k] =  m_optL[ k]*m_costVec[ k];
 			m_thetaCost[ m_numThetaVar++ ] = m_costVec[ k];
 			m_thetaPnt[ m_numThetaVar ]  = m_numThetaNonz;
 			
-			
-			//std::cout << "WE ADDED VARIABLE " << m_numThetaVar << std::endl;
-			//std::cout << "VARIBLE NONZEROS = "  << kippster
+
 			
 			numNonzVec = m_newColumnNonz;
 			costVec = m_costVec;
@@ -1386,7 +1381,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 				masterVarName = makeStringFromInt("theta(", k);
 				masterVarName += makeStringFromInt(",", mit->first);
 				masterVarName += ")";
-				std::cout << masterVarName << std::endl;
+				intVarSet.insert ( std::pair<int,double>(varNumber, 1.0) );
 				m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
 				
 				std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
@@ -1787,6 +1782,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 				//std::cout <<  osinstance->getVariableNames()[ k ] << std::endl;
 				//std::cout <<  osinstance->getVariableNames()[ k + m_numHubs ] << std::endl;
 				std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
+				
+				
 	
 			}//end for on k -- hubs
 			
@@ -1803,10 +1800,11 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			
 		}//end while -- we have an integer solution with no subtours
 		
-
 		
 		int i1;
 		int j1;
+		
+		m_bestIPValue = 0;
 		
 		for(k = 0; k < m_numHubs; k++){
 			
@@ -1895,7 +1893,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			masterVarName = makeStringFromInt("theta(", k);
 			masterVarName += makeStringFromInt(",", 0);
 			masterVarName += ")";
-			std::cout << masterVarName << std::endl;
+			intVarSet.insert ( std::pair<int,double>(varNumber, 1.0) );
 			m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
 			
 			std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
@@ -1903,7 +1901,9 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			objcoeff->indexes[ k + numVarArt ] = k + numVarArt ;
 			objcoeff->values[ k + numVarArt ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			
+			m_bestIPValue += primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			
+			std::cout << "m_bestIPValue = " << m_bestIPValue << std::endl;
 			starts[ startsIdx++] = kountNonz;	
 			
 		}//end of index on k
@@ -1938,16 +1938,10 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 
 		delete objcoeff;
 		objcoeff = NULL;
-		std::cout << m_osinstanceMaster->printModel( ) << std::endl;
-		
-
-		
-
-		
+		std::cout << m_osinstanceMaster->printModel( ) << std::endl;		
 		std::cout << "NONZ = " << kountNonz << std::endl;
 		
 		//exit( 1);
-		
 		//delete[] values;
 		//values = NULL;
 		//delete[] starts;
@@ -2345,9 +2339,9 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							
 							//we found a row, add the corresponding artificial variables
 							//to the transformation matrix
-							
+							m_numThetaVar++;
 							m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
-							m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+							m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 							
 							return;						
 							
@@ -2510,9 +2504,9 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				values =  m_newRowColumnValue;
 				rowUB =  m_newRowUB;
 				rowLB =  m_newRowLB;
-				
+				m_numThetaVar++;
 				m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
-				m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+				m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 			
 				return;
 				
@@ -3494,9 +3488,9 @@ void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVa
 			//make sure to add artificial variables
 			//of course they have no nonzero elements in 
 			//the transformation matrix
-			
+			m_numThetaVar++;
 			m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
-			m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+			m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 		
 		
 		}//end of if on checking for map membership

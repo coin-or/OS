@@ -160,12 +160,18 @@ void OSColGenApp::solve(){
 	double* values;	
 	int i;
 	
-
+	std::set<std::pair<int, double> >::iterator sit;
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
 	//double bigNum  = 1.0e24;
 	double bigNum  = 1000000;
 	double rowArtVal ;
 	int rowArtIdx ;
+	
+	
+	//initialize upper bound
+	m_zUB = m_osrouteSolver->m_bestIPValue;
+	
+	std::cout << " m_zUB  " << m_zUB  << std::endl;
 	
 	try{
 		  
@@ -211,36 +217,43 @@ void OSColGenApp::solve(){
 		
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		
+
+		
+		
 		//now get the upper bound
-		
 		//solve as an integer program to get initial upper bound
-		/*
-		for(i=0; i < numCols; i++){
+		
+		
+		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
+				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
 			
-			m_solver->osiSolver->setInteger( i);
+			m_si->setInteger( sit->first);
+			
+			
 		}
 		
-		m_solver->osiSolver->branchAndBound();
 		
+		CbcModel model(  *m_si);
+		OsiSolverInterface *ipSolver = model.solver();
+
+		//ipSolver->branchAndBound();
+		//CbcMain0(  model);	
 		
+		//CbcMain1( 0, 0, model);
 		
-		if(m_si->getObjValue() < m_zUB) m_zUB = m_si->getObjValue() ;
-		
-		
-		
-		std::cout << "OPTIMAL IP VALUE = " << m_zUB << std::endl;
-		*/
-		
-		//kipp
-		//kipp -- make variables continuous again		
-		
-		for(i=0; i < numCols; i++){
+		//if( ipSolver->getObjValue() < m_zUB) m_zUB = ipSolver->getObjValue() ;
 			
-			m_solver->osiSolver->setContinuous( i);
-		}
-				
+
+		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
+				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
+			
+			m_si->setContinuous( sit->first);
+			m_si->setColUpper( sit->first, sit->second);
+			
+		}			
 		
-		
+		for(i = 0; i < numCols; i++)std::cout << m_theta[ i] << std::endl;
+	
 		m_osrouteSolver->getBranchingCut(m_theta, numCols, 
 				varConMap, varIdx, numNonz, indexes,  values);
 			
@@ -251,6 +264,7 @@ void OSColGenApp::solve(){
 			std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
 		}
 		//end temp test
+		
 		
 		//if numNonz is greater than zero:
 		// 1) add add new variable to map
@@ -264,7 +278,7 @@ void OSColGenApp::solve(){
 			
 			//add the row
 			//make upper and lower bound 0 and 1 first 
-			m_si->addRow(numNonz, indexes, values, 1, 1 ) ;
+			m_si->addRow(numNonz, indexes, values, 1, 1) ;
 			
 			//add the artificial variables
 			
@@ -281,25 +295,23 @@ void OSColGenApp::solve(){
 		}
 		
 		m_si->writeLp("gailTest");
+
+		solveRestrictedMasterRelaxation();
 		
 		
-		//m_si->writeMps("gailMpsTest");
-		//solve  LP relaxation of master again
-		//solveRestrictedMasterRelaxation();
+		//******??
+		//start echo 
 		
 		numCols = m_si->getNumCols();	
 		
 		
-		//int* m_thetaPnt;
-		//int* m_thetaIndex;
-		
 		for(i = 0;  i < numCols; i++){
 			
-			std::cout << "PROCESSING THETA COLUMN " << i  << std::endl;
+			std::cout << "PROCESSING THETA COLUMN " << i <<  "  value =  " <<  m_si->getColSolution()[i] << std::endl;
 			
 			for(int j = m_osrouteSolver->m_thetaPnt[ i]; j <  m_osrouteSolver->m_thetaPnt[ i + 1]; j++ ){
 				
-				std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[ j] ] << std::endl;
+				//std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[ j] ] << std::endl;
 				
 			}
 		}
@@ -312,19 +324,26 @@ void OSColGenApp::solve(){
 			
 			for(int j = m_osrouteSolver->m_pntBmatrix[ i  -   m_osrouteSolver->m_numNodes]; j <  m_osrouteSolver->m_pntBmatrix[ i + 1 -  m_osrouteSolver->m_numNodes]; j++ ){
 				
-				
-				
-				std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_Bmatrix[ j] ] << std::endl;
+				//std::cout << m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_Bmatrix[ j] ] << std::endl;
 				
 			}
 		}
+		//check integer variables and upper bounds -- loop over integer variable set
 		
+		//std::set<std::pair<int, double> >::iterator sit;
+		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
+				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
+			
+			//std::cout << "Integer variable  " << sit->first << " Upper Bound = "  << sit->second  << std::endl;
+			
+			
+		}
+		
+		//end echo outpute
+		
+		std::cout << "OPTIMAL LP AFTER A BRANCH VALUE = " << m_si->getObjValue() << std::endl;
+		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
 		exit( 1);
-		
-
-		
-		std::cout << "OPTIMAL LP VALUE = " << m_si->getObjValue() << std::endl;
-		
 
 		m_osrouteSolver->m_bestIPValue = m_zUB;
 		m_osrouteSolver->pauHana( m_theta);
