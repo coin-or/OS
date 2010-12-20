@@ -343,7 +343,7 @@ void OSColGenApp::solve(){
 		
 		std::cout << "OPTIMAL LP AFTER A BRANCH VALUE = " << m_si->getObjValue() << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
-		exit( 1);
+		//exit( 1);
 
 		m_osrouteSolver->m_bestIPValue = m_zUB;
 		m_osrouteSolver->pauHana( m_theta);

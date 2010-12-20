@@ -244,6 +244,9 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		//for now, the number of columns will be 10000
 		//for now number of nonzeros will be 500000
 		m_thetaPnt = new int[ 10000];
+		for(i = 0; i < 9999; i++){
+			m_thetaPnt[ i] = 0;
+		}
 		m_thetaCost = new double[ 10000];
 		m_thetaIndex = new int[ 500000];
 		m_numThetaVar = 0;
@@ -445,7 +448,11 @@ OSRouteSolver::~OSRouteSolver(){
 	delete[] m_separationIndexMap;
 	m_separationIndexMap = NULL;
 	
-
+	delete m_separationClpModel;
+	m_separationClpModel = NULL;
+	
+	delete m_osinstanceSeparation;
+	m_osinstanceSeparation = NULL;
 
 }//end ~OSRouteSolver
 
@@ -2146,7 +2153,7 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 		//now fill in demand
 		m_demand = new int[ m_numNodes];
 		std::vector<int>::iterator vit2;
-		if(m_numNodes != demand.size( ) ) throw ErrorClass("inconsistent number of demand nodes");
+		//if(m_numNodes != demand.size( ) ) throw ErrorClass("inconsistent number of demand nodes");
 		int i;
 		i = 0;
 		for (vit2 = demand.begin(); vit2 != demand.end(); vit2++) {
@@ -2952,11 +2959,14 @@ void OSRouteSolver::pauHana(const double* theta){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
+	double cost;
+	cost = 0;
+	
 	try{
 		int i;
 		int j;
 
-		double cost = 0;
+		
 		//we better NOT have any artifical variables positive
 		//for(i = 0; i < numVarArt  ; i++){
 		//	
@@ -2992,42 +3002,9 @@ void OSRouteSolver::pauHana(const double* theta){
 			
 		}
 		
-		float numSets;
-		int kount;
-		
-		numSets = floor( double((m_numThetaVar  ) / m_numHubs));
-	
-	
-		//kipp throw exception if number of columns not an even multiple of m_numHubs
-		kount = 0;
-		
-		/*
-		for(i = 0; i < numSets  ; i++){
-			
-			for(k = 0; k < m_numHubs; k++){
-				
-				if( theta[ kount  ] > m_eps){
-					
-					std::cout << "HUB = "  <<  k << "  THETA = " << kount << " = "  << theta[ kount ] << std::endl;
-					
-					for(j = m_thetaPnt[ kount ];  j <  m_thetaPnt[ kount + 1];  j++){
-						
-						std::cout << "VARIABLE "  <<  m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
-						
-					}
-					
-				}//loop on if positive
-				
-				kount++;
-				
-			}//loop on hubs
-		
-		}//loop on sets
-		*/
-		
 		
 		std::cout << std::endl <<  std::endl;
-		std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
+		//std::cout << "FINAL LP SOLUTION VALUE = " << cost << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
 		std::cout << "TOTAL NUMBER OF COLUMNS = " << m_numThetaVar << std::endl;
 		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 2*m_numNodes - 2*m_numBmatrixCon << std::endl;
@@ -3310,6 +3287,9 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 	
 	
 	xvalues = new double[ numVar];
+	for(i = 0; i < numVar; i++){
+		xvalues[ i] = 0;
+	}
 	
 	try{
 		if(numThetaVar != m_numThetaVar) throw ErrorClass("inconsistent number of variables in getBranchingVar");
