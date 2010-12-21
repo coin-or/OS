@@ -552,6 +552,8 @@ bool OSColGenApp::branchAndBound(){
 	std::vector<OSNode*>::iterator vit;
 	
 	OSNode *osnode = NULL;
+	OSNode *osnodeLeft = NULL;
+	OSNode *osnodeRight = NULL;
 	
 	int nodeLimit;
 	nodeLimit = 10;
@@ -679,21 +681,21 @@ bool OSColGenApp::branchAndBound(){
 				
 				//create node 1
 				std::cout << "GAIL HONDA 4 LEFT " << std::endl;
-				osnode = new OSNode(1,  thetaNumNonz );
+				osnodeLeft = new OSNode(1,  thetaNumNonz );
 				//kipp inefficient we are doing this a second time. 
-				osnode->rowIdx[ 0] = rowArtIdx;
-				osnode->rowUB[ 0] = 0;
-				osnode->rowLB[ 0] = 0;
+				osnodeLeft->rowIdx[ 0] = rowArtIdx;
+				osnodeLeft->rowUB[ 0] = 0;
+				osnodeLeft->rowLB[ 0] = 0;
 				
-				osnode->lpValue = m_si->getObjValue();
+				osnodeLeft->lpValue = m_si->getObjValue();
 				
 				for(i = 0; i < thetaNumNonz; i++){
 					
-					osnode->thetaIdx[ i] = thetaIdx[ i];
-					osnode->theta[ i] = theta[ i];
+					osnodeLeft->thetaIdx[ i] = thetaIdx[ i];
+					osnodeLeft->theta[ i] = theta[ i];
 					
 				}
-				nodeVec.push_back( osnode);
+				nodeVec.push_back( osnodeLeft);
 			}//end else
 		}
 		
@@ -738,21 +740,21 @@ bool OSColGenApp::branchAndBound(){
 				
 				//create node 1
 				std::cout << "GAIL HONDA 4 RIGHT " << std::endl;
-				osnode = new OSNode(1,  thetaNumNonz );
+				osnodeRight = new OSNode(1,  thetaNumNonz );
 				//kipp inefficient we are doing this a second time. 
-				osnode->rowIdx[ 0] = rowArtIdx;
-				osnode->rowUB[ 0] = 0;
-				osnode->rowLB[ 0] = 0;
+				osnodeRight->rowIdx[ 0] = rowArtIdx;
+				osnodeRight->rowUB[ 0] = 0;
+				osnodeRight->rowLB[ 0] = 0;
 				
-				osnode->lpValue = m_si->getObjValue();
+				osnodeRight->lpValue = m_si->getObjValue();
 				
 				for(i = 0; i < thetaNumNonz; i++){
 					
-					osnode->thetaIdx[ i] = thetaIdx[ i];
-					osnode->theta[ i] = theta[ i];
+					osnodeRight->thetaIdx[ i] = thetaIdx[ i];
+					osnodeRight->theta[ i] = theta[ i];
 					
 				}
-				nodeVec.push_back( osnode);
+				nodeVec.push_back( osnodeRight);
 			}//end else
 			
 		}		
@@ -763,20 +765,40 @@ bool OSColGenApp::branchAndBound(){
 		while( (nodeVec.size() > 0) && (nodesCreated <= nodeLimit) ){
 			
 			nodesCreated++;
+			//grab a node -- for now the last node, we do FIFO
+			osnode =  nodeVec.back();
+			std::cout << nodeVec.back()->lpValue << std::endl;
 			
 			
-		}
+			
+			
+			
+			std::cout << "SIZE BEFORE = " << nodeVec.size() << std::endl;
+			
+			nodeVec.erase( nodeVec.end() - 1) ;
+			delete osnode;
+			// delete the node we just got
+			//vit = nodeVec.end() - 1;
+			//delete *vit;
+			std::cout << "SIZE AFTER = " << nodeVec.size() << std::endl;
+
+			
+			
+			
+		}//end the while
 		
-		if(nodeVec.size() == 0) m_zLB = m_zUB;
+		exit( 1);
 
 		delete[] thetaIdx;
 		thetaIdx = NULL;
 		delete[] theta;
 		theta = NULL;
 		
+		m_zLB = m_zUB;
 		for ( vit = nodeVec.begin() ; 
 				vit != nodeVec.end(); vit++ ){
 			std::cout << "NODE LP VALUE = " << (*vit)->lpValue << std::endl;
+			if( (*vit)->lpValue < m_zLB) m_zLB = (*vit)->lpValue;
 			delete *vit;
 			
 		}

@@ -61,7 +61,7 @@
 		delete[] theta;
 		theta = NULL;
 		
-		std::cout << "I AM DELETING A NODE " << std::endl;
+		std::cout << "I AM DELETING A NODE IN OSNODE DESTRUCTOR" << std::endl;
 	}//end default destructor
 	
 	
