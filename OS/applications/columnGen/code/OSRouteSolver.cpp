@@ -3301,7 +3301,7 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 				
 				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 					
-					xvalues[  m_thetaIndex[  j] ] = theta[ i  ] ;
+					xvalues[  m_thetaIndex[  j] ] += theta[ i  ] ;
 					
 				}	
 			
@@ -3437,16 +3437,15 @@ int OSRouteSolver::getBranchingVar(const int* thetaIdx, const double* theta,
 	}
 	
 	try{
-		if(numThetaVar != m_numThetaVar) 
-			throw ErrorClass("inconsistent number of variables in getBranchingVar");
 		//loop over the fractional thetas
-		for(i = 0; i < m_numThetaVar; i++){
+		//working with a sparse matrix
+		for(i = 0; i < numThetaVar; i++){
 			
 			if( ( theta[ i  ] > m_eps ) && ( theta[ i  ] < 1 - m_eps ) ){
 				
 				for(j = m_thetaPnt[ thetaIdx[ i] ];  j < m_thetaPnt[ thetaIdx[ i]  + 1] ;  j++){
 					
-					xvalues[  m_thetaIndex[  j] ] = theta[ i  ] ;
+					xvalues[  m_thetaIndex[  j] ] += theta[ i  ] ;
 					
 				}	
 			
@@ -3634,7 +3633,86 @@ void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVa
 
 	}	
 	
-}//end getBranchingCut
+}//end getBranchingCut dense
+
+
+void OSRouteSolver::getBranchingCut(const int* thetaIdx, const double* thetaVar, 
+		const int numThetaVar, const std::map<int, int> &varConMap, 
+		int &varIdx,  int &numNonz, int* &indexes, double* &values) {
+	
+	//get a branching variable
+	int i;
+	int j;
+	int kount;
+	numNonz = 0;
+	//keep numNonz at zero if there is no cut
+	//there will be no cut if the xij is in conVarMap
+	
+	try{
+		
+		
+	
+		varIdx = getBranchingVar(thetaIdx, thetaVar, numThetaVar );
+		
+		std::cout << "Branching on Variable:  " << m_variableNames[ varIdx] << std::endl;
+		
+		//if this variable is in the map, then we just return with the index, 
+		//if this variable is NOT in the map then we add a cut
+		
+		if( varConMap.find( varIdx) == varConMap.end() ){
+			
+			for(i = 0; i < numThetaVar; i++){
+				
+				kount = 0;
+				
+				for(j = m_thetaPnt[ thetaIdx[ i] ];  j < m_thetaPnt[ thetaIdx[ i]  + 1] ;  j++){
+					
+					if ( m_thetaIndex[  j]  == varIdx) kount++ ;
+					
+				}
+				
+				//count is the number times variable i appears in the constraint
+				
+				if(kount > 0){
+					
+					branchCutIndexes[ numNonz] = i;
+					branchCutValues[ numNonz++] = kount ;
+					
+				}
+				
+			}
+			
+			
+			//add varIdx cut to B matrix
+			m_Bmatrix[ m_numBmatrixNonz++] = varIdx;
+			m_numBmatrixCon++;
+			m_pntBmatrix[ m_numBmatrixCon] = m_numBmatrixNonz;
+			
+			//make sure to add artificial variables
+			//of course they have no nonzero elements in 
+			//the transformation matrix
+			m_numThetaVar++;
+			m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
+			m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
+		
+		
+		}//end of if on checking for map membership
+		
+		//set return arguments
+		
+		indexes = branchCutIndexes;
+		values = branchCutValues;
+		
+		return;
+	
+	}catch (const ErrorClass& eclass) {
+
+		throw ErrorClass(eclass.errormsg);
+
+	}	
+	
+}//end getBranchingCut sparse
+
 
 
 std::string makeStringFromInt(std::string theString, int theInt){

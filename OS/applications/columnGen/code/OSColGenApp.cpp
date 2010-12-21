@@ -38,9 +38,9 @@
 #include "OSIpoptSolver.h"
 #endif
 
-#include "OSNode.h"
 
-#include<map>
+
+
 #include<vector>
 #include <sstream>
 using std::ostringstream;
@@ -547,6 +547,7 @@ bool OSColGenApp::branchAndBound(){
 	 * branching constraint number in the master
 	 */
 	std::map<int, int> varConMap;
+	std::map<int, int>::iterator mit;
 	
 	std::vector<OSNode*> nodeVec;
 	std::vector<OSNode*>::iterator vit;
@@ -559,7 +560,7 @@ bool OSColGenApp::branchAndBound(){
 	nodeLimit = 10;
 	
 	int nodesCreated;
-	
+	int rowIdx;
 	
 	bool bandbWorked;
 	
@@ -604,10 +605,10 @@ bool OSColGenApp::branchAndBound(){
 			
 		std::cout << "varIDX = " << varIdx << std::endl;
 		std::cout << "numNonz = " << numNonz << std::endl;			
-		for(i = 0; i < numNonz; i++){
+		//for(i = 0; i < numNonz; i++){
 			
-			std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
-		}
+		//	std::cout <<  indexes[ i]  << "   "  << values[ i  ]  << std::endl;
+		//}
 		//end temp test
 		
 		
@@ -618,8 +619,6 @@ bool OSColGenApp::branchAndBound(){
 		
 		if( numNonz >0){
 			
-			//insert into map -- this is the first variable
-			varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() + 1) );
 			
 			//add the row
 			//make upper and lower bound 0 and 1 first 
@@ -634,7 +633,10 @@ bool OSColGenApp::branchAndBound(){
 			//add the artificial variable for the LB					
 			rowArtVal = 1.0;
 			
-			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);			
+			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
+			
+			//insert into map -- this is the first variable
+			varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() -1 ) );
 			
 		}
 		
@@ -740,8 +742,7 @@ bool OSColGenApp::branchAndBound(){
 				
 				//create node 1
 				std::cout << "GAIL HONDA 4 RIGHT " << std::endl;
-				osnodeRight = new OSNode(1,  thetaNumNonz );
-				//kipp inefficient we are doing this a second time. 
+				osnodeRight = new OSNode(1,  thetaNumNonz ); 
 				osnodeRight->rowIdx[ 0] = rowArtIdx;
 				osnodeRight->rowUB[ 0] = 0;
 				osnodeRight->rowLB[ 0] = 0;
@@ -762,27 +763,81 @@ bool OSColGenApp::branchAndBound(){
 		
 		// now loop
 		nodesCreated = 0;
+		nodeLimit = 0;
+		return true;
+		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		while( (nodeVec.size() > 0) && (nodesCreated <= nodeLimit) ){
 			
 			nodesCreated++;
 			//grab a node -- for now the last node, we do FIFO
 			osnode =  nodeVec.back();
-			std::cout << nodeVec.back()->lpValue << std::endl;
-			
-			
-			
-			
-			
-			std::cout << "SIZE BEFORE = " << nodeVec.size() << std::endl;
-			
-			nodeVec.erase( nodeVec.end() - 1) ;
-			delete osnode;
-			// delete the node we just got
-			//vit = nodeVec.end() - 1;
-			//delete *vit;
-			std::cout << "SIZE AFTER = " << nodeVec.size() << std::endl;
+			if( osnode->lpValue < m_zUB - m_osrouteSolver->m_eps){
+				//this node is worth branching on
+				//get a branching variable 
+				
+				m_osrouteSolver->getBranchingCut(osnode->thetaIdx, osnode->theta, 
+						osnode->thetaNumNonz, varConMap, varIdx, numNonz, 
+						indexes,  values);
+					
+				std::cout << "varIDX = " << varIdx << std::endl;
+				std::cout << "numNonzz = " << numNonz << std::endl;	
+				
+				
+				
+				//if numNonz is greater than zero:
+				// 1) add add new variable to map -- at this point varConMap is empty
+				// 2) add constraint then add to the formulation
+				// 3) add artificial variables
+				
+				if( numNonz >0){
+					
+					//insert into map -- this is the first variable
+					varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() + 1) );
+					
+					//add the row
+					//make upper and lower bound 0 and 1 first 
+					m_si->addRow(numNonz, indexes, values, 0, 1) ;
+					
+					//add the artificial variables
+					//add the artificial variable for the UB					
+					rowArtVal = -1.0;
+					rowArtIdx = m_si->getNumRows() - 1;
+					
+					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
+					//add the artificial variable for the LB					
+					rowArtVal = 1.0;
+					
+					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
+					
+					
+				} else{
+					//the variable varIdx is in the map
+					//get the constraint associated with this variable
+					//throw and exception if varIdx not a key
+					mit = varConMap.find( varIdx);
+					if( mit == varConMap.end() ) throw ErrorClass("in branchAndBound getBranchingCut() returned inconsistent value for varIdx");
+							else rowIdx = mit->second;
+					
+					//set upper and lower bounds correctly
+					//really not necessary, but do it anyway
+					m_si->setRowLower( rowIdx, 0);
+					m_si->setRowUpper( rowIdx, 1);
+				}//end if on numNonz
+				//at this point we are branching on row rowIdx create left and right nodes
+				
+				
+				//kipp don't forget to erase the node
+				
+				
+			}else{
+				
+				//fathom node by virtue of the upper bound
+				nodeVec.erase( nodeVec.end() - 1) ;
+				delete osnode;
 
+			}//end if on lp bound check
 			
+			//kipp -- critical reset upper and lower bounds 
 			
 			
 		}//end the while

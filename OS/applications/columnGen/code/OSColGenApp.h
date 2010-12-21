@@ -28,7 +28,7 @@
 #include "OSCoinSolver.h"
 #include "OSRouteSolver.h"
 
-
+#include "OSNode.h"
 
 // --------------------------------------------------------------------- //
 /*!
@@ -142,6 +142,20 @@ public:
 			const  double* yB, const int numBRows,
 			int &numNewColumns, int* &numNonz, double* &cost, 
 			int** &rowIdx, double** &values, double &lowerBound) ;
+	
+	
+	/**
+	 * 
+	 * INPUT:
+	 * double* yA -- the vector of dual values on the coupling constraints
+	 * int numARows -- size of the yA dual vector
+	 * double* yB -- the vector of dual values on the tour breaking constaints
+	 * int numBRows -- size of the yA dual vector
+	 * 
+	 * method returns a pointer to a child node
+	 */
+	OSNode* createChild(OSNode *osnode, const std::map<int, int> varConMap,
+			int rowIdx, double rowLB, double rowUB);
 	
 	/**
 	 *
