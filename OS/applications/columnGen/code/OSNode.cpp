@@ -14,3 +14,54 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
+
+#include "OSNode.h"
+#include <iostream>
+
+
+
+	OSNode::OSNode(){
+		
+		
+	}//end default constructor
+	
+	
+	OSNode::OSNode(int rowIdxNumNonz_,  int thetaNumNonz_){
+		
+		rowIdxNumNonz = rowIdxNumNonz_;
+		rowIdx = new int[ rowIdxNumNonz] ;
+		rowUB = new double[ rowIdxNumNonz] ;
+		rowLB = new double[ rowIdxNumNonz] ;
+		
+		thetaNumNonz = thetaNumNonz_;
+		thetaIdx = new int[ thetaNumNonz] ;
+		theta = new double[ thetaNumNonz] ;
+		
+		
+	}//end constructor for allocating arrays
+	
+	
+
+	OSNode::~OSNode(){
+		
+		//garbage collection
+		
+		delete[] rowIdx;
+		rowIdx = NULL;
+		
+		delete[] rowUB;
+		rowUB = NULL;
+		
+		delete[] rowLB;
+		rowLB = NULL;
+		
+		delete[] thetaIdx;
+		thetaIdx = NULL;
+		
+		delete[] theta;
+		theta = NULL;
+		
+		std::cout << "I AM DELETING A NODE " << std::endl;
+	}//end default destructor
+	
+	

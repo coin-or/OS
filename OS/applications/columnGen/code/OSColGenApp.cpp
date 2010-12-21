@@ -38,8 +38,10 @@
 #include "OSIpoptSolver.h"
 #endif
 
-#include<map>
+#include "OSNode.h"
 
+#include<map>
+#include<vector>
 #include <sstream>
 using std::ostringstream;
 
@@ -222,12 +224,13 @@ void OSColGenApp::solve(){
 		
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
-		m_osrouteSolver->m_bestLPValue = m_zLB;
-		m_osrouteSolver->m_bestIPValue = m_zUB;
+
 		
 		
 		branchAndBound();
 		
+		m_osrouteSolver->m_bestLPValue = m_zLB;
+		m_osrouteSolver->m_bestIPValue = m_zUB;
 		
 		m_osrouteSolver->pauHana( m_theta);
 		
@@ -545,6 +548,17 @@ bool OSColGenApp::branchAndBound(){
 	 */
 	std::map<int, int> varConMap;
 	
+	std::vector<OSNode*> nodeVec;
+	std::vector<OSNode*>::iterator vit;
+	
+	OSNode *osnode = NULL;
+	
+	int nodeLimit;
+	nodeLimit = 10;
+	
+	int nodesCreated;
+	
+	
 	bool bandbWorked;
 	
 	bandbWorked = true;
@@ -556,6 +570,17 @@ bool OSColGenApp::branchAndBound(){
 	double* values;	
 	int i;
 	
+	//we want to store the solution vector (theta space)
+	//in sparse format
+	int thetaNumNonz;
+	int *thetaIdx;
+	double *theta;
+	//kipp -- hard coding -- change
+	thetaIdx = new int[ 10000];
+	theta = new double[ 10000];
+	//
+	//
+	
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
 	//double bigNum  = 1.0e24;
 	double bigNum  = 1000000;
@@ -564,17 +589,14 @@ bool OSColGenApp::branchAndBound(){
 	
 	try{
 		
-		
-		
 		//get the solution
 		numCols = m_si->getNumCols();	
-		
 		for(i = 0; i < numCols; i++){	
 			//get the LP relaxation
 			*(m_theta + i) = m_si->getColSolution()[i];	
 		}
 		
-		
+		//get the initial branching variable
 		m_osrouteSolver->getBranchingCut(m_theta, numCols, 
 				varConMap, varIdx, numNonz, indexes,  values);
 			
@@ -588,21 +610,20 @@ bool OSColGenApp::branchAndBound(){
 		
 		
 		//if numNonz is greater than zero:
-		// 1) add add new variable to map
+		// 1) add add new variable to map -- at this point varConMap is empty
 		// 2) add constraint then add to the formulation
 		// 3) add artificial variables
 		
 		if( numNonz >0){
 			
-			//insert into map
+			//insert into map -- this is the first variable
 			varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() + 1) );
 			
 			//add the row
 			//make upper and lower bound 0 and 1 first 
-			m_si->addRow(numNonz, indexes, values, 1, 1) ;
+			m_si->addRow(numNonz, indexes, values, 0, 1) ;
 			
 			//add the artificial variables
-			
 			//add the artificial variable for the UB					
 			rowArtVal = -1.0;
 			rowArtIdx = m_si->getNumRows() - 1;
@@ -617,14 +638,158 @@ bool OSColGenApp::branchAndBound(){
 		
 		//m_si->writeLp("gailTest");
 		
-		solveRestrictedMasterRelaxation();
 		
-		m_zLB  =  m_si->getObjValue();	
-		m_osrouteSolver->m_bestLPValue = m_zLB;
+		//// start left node ////
+		//now create two nodes, an up and down node
+		//first set upper and lower bound to zero
+		//we are working with row rowArtIdx
+		m_si->setRowUpper( rowArtIdx, 0);
+		m_si->setRowLower( rowArtIdx, 0);
+		//solve the new problem
+		solveRestrictedMasterRelaxation();
+		// let's try and fathom the node
+		// if we are not as good a upper bound
+		// we fathom, if we are integer we fathom
+		std::cout << "GAIL HONDA 1 LEFT" << std::endl;
+		if( m_si->getObjValue() < m_zUB) {
+			// okay cannot fathom based on bound try integrality
+			std::cout << "GAIL HONDA 2 LEFT " << std::endl;
+			numCols = m_si->getNumCols();
+			thetaNumNonz = 0;
+			for(i = 0; i < numCols; i++){	
+				//get the LP relaxation
+				*(m_theta + i) = m_si->getColSolution()[i];	
+				if( *(m_theta + i) > m_osrouteSolver->m_eps){
+					
+					thetaIdx[ thetaNumNonz] = i;
+					theta[ thetaNumNonz] = *(m_theta + i);
+					thetaNumNonz++;
+					
+				}
+				
+			}
+			
+			
+			if( isInteger( m_theta, numCols, m_osrouteSolver->m_eps) == true){
+				//fathom by integrality
+				m_zUB = m_si->getObjValue();
+				std::cout << "GAIL HONDA 3 LEFT " << m_zUB << std::endl;
+				
+			}else{
+				
+				//create node 1
+				std::cout << "GAIL HONDA 4 LEFT " << std::endl;
+				osnode = new OSNode(1,  thetaNumNonz );
+				//kipp inefficient we are doing this a second time. 
+				osnode->rowIdx[ 0] = rowArtIdx;
+				osnode->rowUB[ 0] = 0;
+				osnode->rowLB[ 0] = 0;
+				
+				osnode->lpValue = m_si->getObjValue();
+				
+				for(i = 0; i < thetaNumNonz; i++){
+					
+					osnode->thetaIdx[ i] = thetaIdx[ i];
+					osnode->theta[ i] = theta[ i];
+					
+				}
+				nodeVec.push_back( osnode);
+			}//end else
+		}
+		
+		//// end of left node ////
+		
+		
+		//// start right node ////
+		
+		m_si->setRowUpper( rowArtIdx, 1);
+		m_si->setRowLower( rowArtIdx, 1);
+		//solve the new problem
+		solveRestrictedMasterRelaxation();
+		// let's try and fathom the node
+		// if we are not as good a upper bound
+		// we fathom, if we are integer we fathom
+		std::cout << "GAIL HONDA 1 RIGHT " << std::endl;
+		if( m_si->getObjValue() < m_zUB) {
+			// okay cannot fathom based on bound try integrality
+			std::cout << "GAIL HONDA 2 RIGHT" << std::endl;
+			numCols = m_si->getNumCols();
+			thetaNumNonz = 0;
+			for(i = 0; i < numCols; i++){	
+				//get the LP relaxation
+				*(m_theta + i) = m_si->getColSolution()[i];	
+				if( *(m_theta + i) > m_osrouteSolver->m_eps){
+					
+					thetaIdx[ thetaNumNonz] = i;
+					theta[ thetaNumNonz] = *(m_theta + i);
+					thetaNumNonz++;
+					
+				}
+				
+			}
+			
+			
+			if( isInteger( m_theta, numCols, m_osrouteSolver->m_eps) == true){
+				//fathom by integrality
+				m_zUB = m_si->getObjValue();
+				std::cout << "GAIL HONDA 3 RIGHT " << m_zUB << std::endl;
+				
+			}else{
+				
+				//create node 1
+				std::cout << "GAIL HONDA 4 RIGHT " << std::endl;
+				osnode = new OSNode(1,  thetaNumNonz );
+				//kipp inefficient we are doing this a second time. 
+				osnode->rowIdx[ 0] = rowArtIdx;
+				osnode->rowUB[ 0] = 0;
+				osnode->rowLB[ 0] = 0;
+				
+				osnode->lpValue = m_si->getObjValue();
+				
+				for(i = 0; i < thetaNumNonz; i++){
+					
+					osnode->thetaIdx[ i] = thetaIdx[ i];
+					osnode->theta[ i] = theta[ i];
+					
+				}
+				nodeVec.push_back( osnode);
+			}//end else
+			
+		}		
+		//// end of right node ////
+		
+		// now loop
+		nodesCreated = 0;
+		while( (nodeVec.size() > 0) && (nodesCreated <= nodeLimit) ){
+			
+			nodesCreated++;
+			
+			
+		}
+		
+		if(nodeVec.size() == 0) m_zLB = m_zUB;
+
+		delete[] thetaIdx;
+		thetaIdx = NULL;
+		delete[] theta;
+		theta = NULL;
+		
+		for ( vit = nodeVec.begin() ; 
+				vit != nodeVec.end(); vit++ ){
+			std::cout << "NODE LP VALUE = " << (*vit)->lpValue << std::endl;
+			delete *vit;
+			
+		}
+		nodeVec.clear();
 		
 		return bandbWorked;
 
 	} catch (const ErrorClass& eclass) {
+		
+		delete[] thetaIdx;
+		thetaIdx = NULL;
+		delete[] theta;
+		theta = NULL;
 
 		throw ErrorClass(eclass.errormsg);
 

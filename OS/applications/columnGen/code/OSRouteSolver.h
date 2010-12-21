@@ -257,11 +257,26 @@ public:
 	 * return the integer index of a fractional x_{ij} variable
 	 * 
 	 * INPUT:
-	 * double* thetaVar -- the vector of primal master values
+	 * double* theta -- the vector of primal master values
 	 * int numThetaVar -- size of master primal vector
 	 * 
 	 */
-	int getBranchingVar(const  double* thetaVar, const int numThetaVar ) ;	
+	int getBranchingVar(const  double* theta, const int numThetaVar ) ;	
+	
+	
+	/**
+	 * Sparse Version
+	 * 
+	 * RETURN VALUES: 
+	 * return the integer index of a fractional x_{ij} variable
+	 * 
+	 * INPUT:
+	 * int* thetaIdx -- index vector of nonzero theta variables 
+	 * double* theta -- the sparse vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 * 
+	 */
+	int getBranchingVar(const int* thetaIdx, const double* theta, const int numThetaVar ) ;	
 	
 	
 	/**

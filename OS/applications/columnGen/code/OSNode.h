@@ -35,34 +35,55 @@ class OSNode {
 	/** rowIdx is a vector of row indexes for which we are setting
 	 * the upper and lower bounds
 	 */
-	int* rowIdx
+	int* rowIdx;
 	
 	/** rowIdxNumNonz is the number of non-zero elements in rowIndex */
-	int rowIdxNumNonz
+	int rowIdxNumNonz;
 	
 	/** rowUB is a vector of row upper bounds */
-	double* rowUB
+	double* rowUB;
 	
 	/** rowLB is a vector of row lower bounds */
-	double* rowUB
+	double* rowLB;
 	
 	/** lpValue is the LP relaxation for the node */
-	double lpValue
+	double lpValue;
 	
 	/** thetaNumNonz is the number of non-zero elements in the
 	 * theta variable solution at this node */
-	int thetaNumNonz
+	int thetaNumNonz;
 	
-	/** theta is a vector of primal solution
+	/** theta is an array of primal solution
 	 * variable indexes
 	 */
-	int* thetaIdx
+	int* thetaIdx;
 	
-	/** theta is a vector of primal solutions 
+	/** theta is an array of primal solutions 
 	 * this is used for branching and creating new
 	 * children nodes
 	 */
-	double* theta
+	double* theta;
+	
+	
+	/**
+	 *
+	 * Default Constructor. 
+	 */	
+	OSNode();
+	
+	/**
+	 *
+	 * Constructor for allocating arrays 
+	 */	
+	OSNode(int rowIdxNumNonz_, int thetaNumNonz_ );
+	
+
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~OSNode();	
+	
 	
 	
 };//end class OSNode
