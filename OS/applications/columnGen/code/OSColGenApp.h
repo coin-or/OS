@@ -147,15 +147,15 @@ public:
 	/**
 	 * 
 	 * INPUT:
-	 * double* yA -- the vector of dual values on the coupling constraints
-	 * int numARows -- size of the yA dual vector
-	 * double* yB -- the vector of dual values on the tour breaking constaints
-	 * int numBRows -- size of the yA dual vector
+	 * OSNode* osnode -- the parent node for which we create a child
+	 * std::map<int, int> varConMap -- the variable constraint map
 	 * 
 	 * method returns a pointer to a child node
+	 * if a new branching variable is found we may add that to
+	 * the map so varConMap can gen
 	 */
-	OSNode* createChild(OSNode *osnode, const std::map<int, int> varConMap,
-			int rowIdx, double rowLB, double rowUB);
+	OSNode* createChild(const OSNode *osnode, std::map<int, int> varConMap,
+			const double rowLB, const double rowUB);
 	
 	/**
 	 *

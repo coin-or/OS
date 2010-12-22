@@ -547,20 +547,20 @@ bool OSColGenApp::branchAndBound(){
 	 * branching constraint number in the master
 	 */
 	std::map<int, int> varConMap;
-	std::map<int, int>::iterator mit;
+
 	
 	std::vector<OSNode*> nodeVec;
 	std::vector<OSNode*>::iterator vit;
 	
 	OSNode *osnode = NULL;
-	OSNode *osnodeLeft = NULL;
-	OSNode *osnodeRight = NULL;
+	OSNode *osnodeLeftChild = NULL;
+	OSNode *osnodeRightChild = NULL;
 	
 	int nodeLimit;
 	nodeLimit = 10;
 	
 	int nodesCreated;
-	int rowIdx;
+
 	
 	bool bandbWorked;
 	
@@ -589,6 +589,9 @@ bool OSColGenApp::branchAndBound(){
 	double bigNum  = 1000000;
 	double rowArtVal ;
 	int rowArtIdx ;
+	
+	bool leftNodeCreated = false;
+	bool rightNodeCreated = false;
 	
 	try{
 		
@@ -636,7 +639,7 @@ bool OSColGenApp::branchAndBound(){
 			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
 			
 			//insert into map -- this is the first variable
-			varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() -1 ) );
+			varConMap.insert ( std::pair<int,int>(varIdx , rowArtIdx ) );
 			
 		}
 		
@@ -683,21 +686,21 @@ bool OSColGenApp::branchAndBound(){
 				
 				//create node 1
 				std::cout << "GAIL HONDA 4 LEFT " << std::endl;
-				osnodeLeft = new OSNode(1,  thetaNumNonz );
+				osnodeLeftChild = new OSNode(1,  thetaNumNonz );
 				//kipp inefficient we are doing this a second time. 
-				osnodeLeft->rowIdx[ 0] = rowArtIdx;
-				osnodeLeft->rowUB[ 0] = 0;
-				osnodeLeft->rowLB[ 0] = 0;
+				osnodeLeftChild->rowIdx[ 0] = rowArtIdx;
+				osnodeLeftChild->rowUB[ 0] = 0;
+				osnodeLeftChild->rowLB[ 0] = 0;
 				
-				osnodeLeft->lpValue = m_si->getObjValue();
+				osnodeLeftChild->lpValue = m_si->getObjValue();
 				
 				for(i = 0; i < thetaNumNonz; i++){
 					
-					osnodeLeft->thetaIdx[ i] = thetaIdx[ i];
-					osnodeLeft->theta[ i] = theta[ i];
+					osnodeLeftChild->thetaIdx[ i] = thetaIdx[ i];
+					osnodeLeftChild->theta[ i] = theta[ i];
 					
 				}
-				nodeVec.push_back( osnodeLeft);
+				nodeVec.push_back( osnodeLeftChild);
 			}//end else
 		}
 		
@@ -742,20 +745,20 @@ bool OSColGenApp::branchAndBound(){
 				
 				//create node 1
 				std::cout << "GAIL HONDA 4 RIGHT " << std::endl;
-				osnodeRight = new OSNode(1,  thetaNumNonz ); 
-				osnodeRight->rowIdx[ 0] = rowArtIdx;
-				osnodeRight->rowUB[ 0] = 0;
-				osnodeRight->rowLB[ 0] = 0;
+				osnodeRightChild = new OSNode(1,  thetaNumNonz ); 
+				osnodeRightChild->rowIdx[ 0] = rowArtIdx;
+				osnodeRightChild->rowUB[ 0] = 0;
+				osnodeRightChild->rowLB[ 0] = 0;
 				
-				osnodeRight->lpValue = m_si->getObjValue();
+				osnodeRightChild->lpValue = m_si->getObjValue();
 				
 				for(i = 0; i < thetaNumNonz; i++){
 					
-					osnodeRight->thetaIdx[ i] = thetaIdx[ i];
-					osnodeRight->theta[ i] = theta[ i];
+					osnodeRightChild->thetaIdx[ i] = thetaIdx[ i];
+					osnodeRightChild->theta[ i] = theta[ i];
 					
 				}
-				nodeVec.push_back( osnodeRight);
+				nodeVec.push_back( osnodeRightChild);
 			}//end else
 			
 		}		
@@ -763,86 +766,54 @@ bool OSColGenApp::branchAndBound(){
 		
 		// now loop
 		nodesCreated = 0;
-		nodeLimit = 0;
-		return true;
+		nodeLimit = 5;
+
+		
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		while( (nodeVec.size() > 0) && (nodesCreated <= nodeLimit) ){
 			
 			nodesCreated++;
 			//grab a node -- for now the last node, we do FIFO
 			osnode =  nodeVec.back();
+			
+			
+			
 			if( osnode->lpValue < m_zUB - m_osrouteSolver->m_eps){
 				//this node is worth branching on
 				//get a branching variable 
+				// create children
 				
-				m_osrouteSolver->getBranchingCut(osnode->thetaIdx, osnode->theta, 
-						osnode->thetaNumNonz, varConMap, varIdx, numNonz, 
-						indexes,  values);
-					
-				std::cout << "varIDX = " << varIdx << std::endl;
-				std::cout << "numNonzz = " << numNonz << std::endl;	
+				//create the left node
+				osnodeLeftChild = createChild(osnode, varConMap, 0, 0);
+				if(osnodeLeftChild != NULL) leftNodeCreated = true;
 				
-				
-				
-				//if numNonz is greater than zero:
-				// 1) add add new variable to map -- at this point varConMap is empty
-				// 2) add constraint then add to the formulation
-				// 3) add artificial variables
-				
-				if( numNonz >0){
-					
-					//insert into map -- this is the first variable
-					varConMap.insert ( std::pair<int,int>(varIdx , m_si->getNumRows() + 1) );
-					
-					//add the row
-					//make upper and lower bound 0 and 1 first 
-					m_si->addRow(numNonz, indexes, values, 0, 1) ;
-					
-					//add the artificial variables
-					//add the artificial variable for the UB					
-					rowArtVal = -1.0;
-					rowArtIdx = m_si->getNumRows() - 1;
-					
-					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
-					//add the artificial variable for the LB					
-					rowArtVal = 1.0;
-					
-					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
-					
-					
-				} else{
-					//the variable varIdx is in the map
-					//get the constraint associated with this variable
-					//throw and exception if varIdx not a key
-					mit = varConMap.find( varIdx);
-					if( mit == varConMap.end() ) throw ErrorClass("in branchAndBound getBranchingCut() returned inconsistent value for varIdx");
-							else rowIdx = mit->second;
-					
-					//set upper and lower bounds correctly
-					//really not necessary, but do it anyway
-					m_si->setRowLower( rowIdx, 0);
-					m_si->setRowUpper( rowIdx, 1);
-				}//end if on numNonz
-				//at this point we are branching on row rowIdx create left and right nodes
+				//create the right node
+				osnodeRightChild = createChild(osnode, varConMap, 1, 1);
+				if(osnodeRightChild != NULL) rightNodeCreated = true;
 				
 				
-				//kipp don't forget to erase the node
+				nodeVec.erase( nodeVec.end() - 1) ;
+				delete osnode;
 				
+				if( leftNodeCreated == true) nodeVec.push_back( osnodeLeftChild) ;
+				if( rightNodeCreated == true) nodeVec.push_back( osnodeRightChild) ;
+
 				
 			}else{
 				
 				//fathom node by virtue of the upper bound
+				std::cout << "FATHAM BY UPPER BOUND " << std::endl;
 				nodeVec.erase( nodeVec.end() - 1) ;
 				delete osnode;
 
 			}//end if on lp bound check
 			
 			//kipp -- critical reset upper and lower bounds 
-			
+			//kipp don't forget to erase the parent node
 			
 		}//end the while
 		
-		exit( 1);
+		//exit( 1);
 
 		delete[] thetaIdx;
 		thetaIdx = NULL;
@@ -850,6 +821,7 @@ bool OSColGenApp::branchAndBound(){
 		theta = NULL;
 		
 		m_zLB = m_zUB;
+		std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << nodeVec.size() << std::endl;
 		for ( vit = nodeVec.begin() ; 
 				vit != nodeVec.end(); vit++ ){
 			std::cout << "NODE LP VALUE = " << (*vit)->lpValue << std::endl;
@@ -858,7 +830,8 @@ bool OSColGenApp::branchAndBound(){
 			
 		}
 		nodeVec.clear();
-		
+		exit( 1);
+	
 		return bandbWorked;
 
 	} catch (const ErrorClass& eclass) {
@@ -873,6 +846,214 @@ bool OSColGenApp::branchAndBound(){
 	}		
 
 }// end branchAndBound
+
+OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> varConMap,
+		const double rowLB, const double rowUB){
+	
+	OSNode *osnodeChild;
+	osnodeChild = NULL;
+	int varIdx;
+	int numNonz;
+	int* indexes;
+	double* values;	
+	int rowIdx;
+	std::map<int, int>::iterator mit;
+	
+	int i;
+	int childRowIdxNumNonz;
+	childRowIdxNumNonz = 0;
+	
+	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
+	//double bigNum  = 1.0e24;
+	double bigNum  = 1000000;
+	double rowArtVal ;
+	int numCols;
+
+	//we want to store the solution vector (theta space)
+	//in sparse format
+	int thetaNumNonz;
+	int *thetaIdx;
+	double *theta;
+	//kipp -- hard coding -- change
+	thetaIdx = new int[ 10000];
+	theta = new double[ 10000];
+	//
+	//	
+	
+	try{
+		//get the branching variable
+		m_osrouteSolver->getBranchingCut(osnodeParent->thetaIdx, osnodeParent->theta, 
+				osnodeParent->thetaNumNonz, varConMap, varIdx, numNonz, 
+				indexes,  values);
+			
+		std::cout << "varIDX = " << varIdx << std::endl;
+		std::cout << "numNonzz = " << numNonz << std::endl;	
+		std::cout << "variable Lower bound  = " << rowLB << std::endl;
+		std::cout << "variable Upper bound  = " << rowUB << std::endl;
+	
+		
+		
+		
+		//if numNonz is greater than zero:
+		// 1) add add new variable to map -- at this point varConMap is empty
+		// 2) add constraint then add to the formulation
+		// 3) add artificial variables
+		
+		if( numNonz >0){
+
+			
+			//add the row
+			//make upper and lower bound 0 and 1 first 
+			m_si->addRow(numNonz, indexes, values, 0, 1) ;
+			
+			//add the artificial variables
+			//add the artificial variable for the UB					
+			rowArtVal = -1.0;
+			rowIdx = m_si->getNumRows() - 1;
+			
+			m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
+			//add the artificial variable for the LB					
+			rowArtVal = 1.0;
+			
+			m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
+			
+			
+			//insert into map -- this is the first variable
+			varConMap.insert ( std::pair<int,int>(varIdx , rowIdx) );
+			
+			childRowIdxNumNonz = osnodeParent->rowIdxNumNonz + 1;
+			
+			
+		} else{
+			//the variable varIdx is in the map
+			//get the constraint associated with this variable
+			//throw and exception if varIdx not a key
+			mit = varConMap.find( varIdx);
+			if( mit == varConMap.end() ) throw ErrorClass("in branchAndBound getBranchingCut() returned inconsistent value for varIdx");
+					else rowIdx = mit->second;
+			childRowIdxNumNonz = osnodeParent->rowIdxNumNonz;
+			//kipp -- this case should not happen correct -- we cannot be
+			// branchin on a variable already branched on in the parent. 
+			throw ErrorClass("we are trying to branch on a child node variable which was fixed in parent");
+
+		}//end if on numNonz
+		
+		
+		//set upper and lower bounds correctly
+		//set the parent values 
+		for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
+			
+			
+			m_si->setRowLower( osnodeParent->rowIdx[ i], osnodeParent->rowLB[ i]);
+			m_si->setRowUpper( osnodeParent->rowIdx[ i], osnodeParent->rowUB[ i]);
+			
+			
+		}
+		//set the new value
+		m_si->setRowLower( rowIdx, rowLB);
+		m_si->setRowUpper( rowIdx, rowUB);
+		//now solve
+		solveRestrictedMasterRelaxation();
+		//now reset the upper and lower bound
+		//set the parent values 
+		for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
+			
+			
+			m_si->setRowLower( osnodeParent->rowIdx[ i], 0);
+			m_si->setRowUpper( osnodeParent->rowIdx[ i], 1);
+			
+			
+		}
+		//set the new value
+		m_si->setRowLower( rowIdx, 0);
+		m_si->setRowUpper( rowIdx, 1);
+		// let's try and fathom the node
+		// if we are not as good a upper bound
+		// we fathom, if we are integer we fathom
+		std::cout << "MESSAGE: START CREATION OF A CHILD NODE" << std::endl;
+		std::cout << "MESSAGE: LP RELAXATION VALUE OF POTENTIAL CHILD NODE  " << m_si->getObjValue() << std::endl;
+		if( m_si->getObjValue() < m_zUB - m_osrouteSolver->m_eps) {
+			// okay cannot fathom based on bound try integrality
+			std::cout << "MESSAGE: WE CANNOT FATHOM THE CHILD BASED ON UPPER BOUND " << std::endl;
+			numCols = m_si->getNumCols();
+			thetaNumNonz = 0;
+			
+			for(i = 0; i < numCols; i++){	
+				//get the LP relaxation
+				*(m_theta + i) = m_si->getColSolution()[i];	
+				if( *(m_theta + i) > m_osrouteSolver->m_eps){
+					
+					thetaIdx[ thetaNumNonz] = i;
+					theta[ thetaNumNonz] = *(m_theta + i);
+					thetaNumNonz++;
+					
+				}
+				
+			}
+			if( isInteger( m_theta, numCols, m_osrouteSolver->m_eps) == true){
+				//fathom by integrality
+				if( m_zUB > m_si->getObjValue() ) m_zUB = m_si->getObjValue() ;
+				std::cout << "MESSAGE:  WE HAVE AN INTEGRALITY FATHOM " << m_zUB << std::endl;
+				
+			}else{
+				//create the child node
+				std::cout << "MESSAGE:  WE ARE CREATING A CHILD NODE " << std::endl;
+				osnodeChild = new OSNode(childRowIdxNumNonz,  thetaNumNonz );
+				
+				
+				//now set bound arrays 
+				if(osnodeParent == NULL){
+					osnodeChild->rowIdx[ 0] = rowIdx;
+					osnodeChild->rowLB[ 0] = rowLB;
+					osnodeChild->rowUB[ 0] = rowUB;
+				}else{
+					//set old values
+					for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
+						
+						osnodeChild->rowIdx[ i] = osnodeParent->rowIdx[ i];
+						osnodeChild->rowLB[ i] = osnodeParent->rowLB[ i];
+						osnodeChild->rowUB[ i] = osnodeParent->rowUB[ i];				
+						
+					}
+					//set new value
+					
+					osnodeChild->rowIdx[ childRowIdxNumNonz - 1] = rowIdx;
+					osnodeChild->rowLB[ childRowIdxNumNonz - 1 ] = rowLB;
+					osnodeChild->rowUB[ childRowIdxNumNonz - 1 ] = rowUB;	
+					
+					
+				}
+				//set child lp value
+				osnodeChild->lpValue = m_si->getObjValue();
+				//set theta
+				for(i = 0; i < thetaNumNonz; i++){
+					
+					osnodeChild->thetaIdx[ i] = thetaIdx[ i];
+					osnodeChild->theta[ i] = theta[ i];
+					
+				}
+				
+			}//end else on isInteger
+		}// end if on upper bound test
+		
+		delete[] thetaIdx;
+		thetaIdx = NULL;
+		delete[] theta;
+		theta = NULL;
+		
+		return osnodeChild;
+	
+	} catch (const ErrorClass& eclass) {
+	
+		delete[] thetaIdx;
+		thetaIdx = NULL;
+		delete[] theta;
+		theta = NULL;
+		throw ErrorClass(eclass.errormsg);
+
+	}		
+	
+}//end createChild
 
 
 
