@@ -41,7 +41,8 @@
 class OSColGenApp {
 public:
 	
-
+	std::ostringstream outStr;
+	
 	OSInstance *m_osinstanceMaster;
 	OSOption *m_osoption;
 	OSResult *m_osresult;
@@ -149,13 +150,16 @@ public:
 	 * INPUT:
 	 * OSNode* osnode -- the parent node for which we create a child
 	 * std::map<int, int> varConMap -- the variable constraint map
+	 * rowIdx is the index of the branching row
+	 * rowLB is the lower bound of the new branching row
+	 * rowUB is the upper bound of the new branching row
 	 * 
 	 * method returns a pointer to a child node
 	 * if a new branching variable is found we may add that to
 	 * the map so varConMap can gen
 	 */
 	OSNode* createChild(const OSNode *osnode, std::map<int, int> varConMap,
-			const double rowLB, const double rowUB);
+			const int rowIdx, const double rowLB, const double rowUB);
 	
 	/**
 	 *

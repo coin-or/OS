@@ -32,13 +32,23 @@
 class OSNode {
 	public:
 	
+	/** parentID is the node ID of the parent
+	 * 
+	 */
+	int parentID;
+	
+	/** nodeID is the node ID 
+	 * 
+	 */
+	int nodeID;
+	
+	/** rowIdxNumNonz is the number of non-zero elements in rowIndex */
+	int rowIdxNumNonz;
+	
 	/** rowIdx is a vector of row indexes for which we are setting
 	 * the upper and lower bounds
 	 */
 	int* rowIdx;
-	
-	/** rowIdxNumNonz is the number of non-zero elements in rowIndex */
-	int rowIdxNumNonz;
 	
 	/** rowUB is a vector of row upper bounds */
 	double* rowUB;

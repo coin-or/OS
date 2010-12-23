@@ -3497,6 +3497,8 @@ int OSRouteSolver::getBranchingVar(const int* thetaIdx, const double* theta,
 		
 		//if we have a candidate among arcs in/out of hubs, take it
 		
+		std::cout << "MIN FRACTION = " <<  minFraction << std::endl;
+		
 		if(minFraction > 1 - m_eps){
 		
 			for(i = m_numHubs; i < m_numNodes; i++){
@@ -3661,11 +3663,16 @@ void OSRouteSolver::getBranchingCut(const int* thetaIdx, const double* thetaVar,
 		
 		if( varConMap.find( varIdx) == varConMap.end() ){
 			
-			for(i = 0; i < numThetaVar; i++){
+			
+			
+			
+			
+			
+			for(i = 0; i < m_numThetaVar; i++){
 				
 				kount = 0;
 				
-				for(j = m_thetaPnt[ thetaIdx[ i] ];  j < m_thetaPnt[ thetaIdx[ i]  + 1] ;  j++){
+				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 					
 					if ( m_thetaIndex[  j]  == varIdx) kount++ ;
 					

@@ -37,6 +37,8 @@
 		thetaIdx = new int[ thetaNumNonz] ;
 		theta = new double[ thetaNumNonz] ;
 		
+		nodeID = -99999;
+		
 		
 	}//end constructor for allocating arrays
 	
