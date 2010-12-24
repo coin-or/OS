@@ -169,6 +169,40 @@ public:
 	OSNode* createChild(const OSNode *osnode, std::map<int, int> &varConMap,
 			const int rowIdx, const double rowLB, const double rowUB);
 	
+	
+	
+	/**
+	 * 
+	 * INPUT: -- sparse version
+	 * int* thetaIdx -- index vector of nonzero theta variables 
+	 * double* theta -- the sparse vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 * std::map<int, int> varConMap -- the variable constraint map
+	 * 
+	 * RETURN:
+	 * 
+	 * rowIdx is the row index of the row used for branching
+	 * 
+	 */
+	void createBranchingCut(const int* thetaIdx, const double* theta, 
+			const int numThetaVar, std::map<int, int> &varConMap, int &rowIdx);
+	
+	
+	/**
+	 * 
+	 * INPUT: -- dense version
+	 * double* theta -- the dense vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 * std::map<int, int> varConMap -- the variable constraint map
+	 * 
+	 * RETURN:
+	 * 
+	 * rowIdx is the row index of the row used for branching
+	 * 
+	 */
+	void createBranchingCut(const double* theta, const int numThetaVar, 
+			std::map<int, int> &varConMap, int &rowIdx);
+	
 	/**
 	 *
 	 * Default Constructor. 
