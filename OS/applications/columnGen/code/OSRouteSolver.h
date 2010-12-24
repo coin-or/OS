@@ -348,9 +348,7 @@ public:
 	void createAmatrix();
 	
 	//this method gets called when we are done
-	void pauHana(const double* theta);
-	
-
+	void pauHana(std::vector<int> &m_zOptIndexes);
 	
 	/**
 	 *

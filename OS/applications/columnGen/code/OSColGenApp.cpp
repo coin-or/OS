@@ -149,6 +149,10 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 void OSColGenApp::solve(){
 
 	std::set<std::pair<int, double> >::iterator sit;	
+	
+	
+	int numCols;
+	int i;
 
 	//initialize upper bound
 	m_zUB = m_osrouteSolver->m_bestIPValue;
@@ -209,8 +213,29 @@ void OSColGenApp::solve(){
 		ipSolver->branchAndBound();
 		//CbcMain0(  model);	
 		//CbcMain1( 0, 0, model);
+		//kipp -- put in check to make sure we get an integer solution
 		if( ipSolver->getObjValue() < m_zUB) m_zUB = ipSolver->getObjValue() ;
+		
+		//kippster
+
+		//get the solution
+		numCols = m_si->getNumCols();
+		
+		for(i = 0; i < numCols; i++){	
+			//get the LP relaxation
 			
+			*(m_theta + i) = model.getColSolution()[i];	
+			
+			if( *(m_theta + i) > m_osrouteSolver->m_eps){
+				
+				m_zOptIndexes.push_back( i) ;
+				
+				std::cout << "GAIL PUSHING BACK INDEX " << *(m_theta + i) << std::endl;
+				std::cout << "GAIL PUSHING BACK INDEX " << i << std::endl;
+
+			}
+			
+		}
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
@@ -225,14 +250,12 @@ void OSColGenApp::solve(){
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
 
-		
-		
 		branchAndBound();
 		
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;
 		
-		m_osrouteSolver->pauHana( m_theta);
+		m_osrouteSolver->pauHana( m_zOptIndexes);
 		
 		
 		
@@ -586,7 +609,7 @@ bool OSColGenApp::branchAndBound(){
 	//double bigNum  = 1.0e24;
 	double bigNum  = 1000000;
 	double rowArtVal ;
-	int rowArtIdx ;
+	
 	
 	int rowIdx;
 	rowIdx = 0;
@@ -633,92 +656,46 @@ bool OSColGenApp::branchAndBound(){
 			//add the artificial variables
 			//add the artificial variable for the UB					
 			rowArtVal = -1.0;
-			rowArtIdx = m_si->getNumRows() - 1;
+			rowIdx = m_si->getNumRows() - 1;
 			
-			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
+			m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
 			//add the artificial variable for the LB					
 			rowArtVal = 1.0;
 			
-			m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1.0, bigNum);
+			m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
 			
 			//insert into map -- this is the first variable
-			varConMap.insert ( std::pair<int,int>(varIdx , rowArtIdx ) );
+			varConMap.insert ( std::pair<int,int>(varIdx , rowIdx ) );
 			
 		}
 		
 		//m_si->writeLp("gailTest");
 		
 		
+
 		
 		//// start left node ////
-		//now create two nodes, an up and down node
-		//first set upper and lower bound to zero
-		//we are working with row rowArtIdx
-		m_si->setRowUpper( rowArtIdx, 0);
-		m_si->setRowLower( rowArtIdx, 0);
 		
-		//solve the new problem
-		solveRestrictedMasterRelaxation();
-		// let's try and fathom the node
-		// if we are not as good a upper bound
-		// we fathom, if we are integer we fathom
-		std::cout << "GAIL HONDA 1 LEFT" << std::endl;
-		if( m_si->getObjValue() < m_zUB) {
-			// okay cannot fathom based on bound try integrality
-			std::cout << "GAIL HONDA 2 LEFT " << std::endl;
-			numCols = m_si->getNumCols();
-			thetaNumNonz = 0;
-			for(i = 0; i < numCols; i++){	
-				//get the LP relaxation
-				*(m_theta + i) = m_si->getColSolution()[i];	
-				if( *(m_theta + i) > m_osrouteSolver->m_eps){
-					
-					thetaIdx[ thetaNumNonz] = i;
-					theta[ thetaNumNonz] = *(m_theta + i);
-					thetaNumNonz++;
-					
-				}
-				
-			}
-			
-			
-			if( isInteger( m_theta, numCols, m_osrouteSolver->m_eps) == true){
-				//fathom by integrality
-				m_zUB = m_si->getObjValue();
-				std::cout << "GAIL HONDA 3 LEFT " << m_zUB << std::endl;
-				
-			}else{
-				
-				//create node 1
-				std::cout << "GAIL HONDA 4 LEFT " << std::endl;
-				osnodeLeftChild = new OSNode(1,  thetaNumNonz );
-				numNodesGenerated = 1;
-				osnodeLeftChild->nodeID = 1;
-				osnodeLeftChild->parentID = 0;
-				//kipp inefficient we are doing this a second time. 
-				osnodeLeftChild->rowIdx[ 0] = rowArtIdx;
-				osnodeLeftChild->rowUB[ 0] = 0;
-				osnodeLeftChild->rowLB[ 0] = 0;
-				
-				osnodeLeftChild->lpValue = m_si->getObjValue();
-				
-				for(i = 0; i < thetaNumNonz; i++){
-					
-					osnodeLeftChild->thetaIdx[ i] = thetaIdx[ i];
-					osnodeLeftChild->theta[ i] = theta[ i];
-					
-				}
-				nodeVec.push_back( osnodeLeftChild);
-			}//end else
+		
+		osnodeLeftChild = createChild(osnode, varConMap, rowIdx, 0, 0);
+		if(osnodeLeftChild != NULL){
+			//finally set the nodeID
+			//and record parent ID
+			numNodesGenerated++;
+			osnodeLeftChild->nodeID = numNodesGenerated;
+			osnodeLeftChild->parentID = 0;
+			nodeVec.push_back( osnodeLeftChild);
 		}
 		
+		
+
 		//// end of left node ////
 		
 		
 		//// start right node ////
 		
-		m_si->setRowUpper( rowArtIdx, 1);
-		m_si->setRowLower( rowArtIdx, 1);
+		m_si->setRowUpper( rowIdx, 1);
+		m_si->setRowLower( rowIdx, 1);
 		//solve the new problem
 		solveRestrictedMasterRelaxation();
 		// let's try and fathom the node
@@ -757,7 +734,7 @@ bool OSColGenApp::branchAndBound(){
 				numNodesGenerated = 2;
 				osnodeRightChild->parentID = 0;
 				osnodeRightChild->nodeID = numNodesGenerated;
-				osnodeRightChild->rowIdx[ 0] = rowArtIdx;
+				osnodeRightChild->rowIdx[ 0] = rowIdx;
 				osnodeRightChild->rowUB[ 0] = 1;
 				osnodeRightChild->rowLB[ 0] = 1;
 				
@@ -776,7 +753,7 @@ bool OSColGenApp::branchAndBound(){
 		//// end of right node ////
 		
 		// now loop
-		
+		//kipp -- make this an option
 		nodeLimit = 100;
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		while( (nodeVec.size() > 0) && (numNodesGenerated <= nodeLimit) ){
@@ -803,17 +780,12 @@ bool OSColGenApp::branchAndBound(){
 				std::cout << "numNonzz = " << numNonz << std::endl;	
 				
 				
-				for(int i = 0; i < numNonz; i++){
-					
-					std::cout <<  "x variables for column "  << indexes[i]  << std::endl;
-					
-					for(int j = m_osrouteSolver->m_thetaPnt[ indexes[ i] ];  j < m_osrouteSolver->m_thetaPnt[ indexes[ i] + 1] ;  j++){
-					
-				
-						std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ thetaNumNonz]  << std::endl;
-						
-					}	
-				}
+				//for(int i = 0; i < numNonz; i++){
+				//	std::cout <<  "x variables for column "  << indexes[i]  << std::endl;
+				//	for(int j = m_osrouteSolver->m_thetaPnt[ indexes[ i] ];  j < m_osrouteSolver->m_thetaPnt[ indexes[ i] + 1] ;  j++){
+				//		std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ thetaNumNonz]  << std::endl;
+				//	}	
+				//}
 
 			
 			
@@ -954,7 +926,7 @@ bool OSColGenApp::branchAndBound(){
 
 }// end branchAndBound
 
-OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> varConMap,
+OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> &varConMap,
 		const int rowIdx, const double rowLB, const double rowUB){
 	
 	OSNode *osnodeChild;
@@ -983,17 +955,20 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 	
 	try{
 
-		childRowIdxNumNonz = osnodeParent->rowIdxNumNonz + 1;
+		if(osnodeParent != NULL) childRowIdxNumNonz = osnodeParent->rowIdxNumNonz + 1;
+		else childRowIdxNumNonz = 1;
 			
 		//set upper and lower bounds correctly
 		//set the parent values 
-		for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
-			
-			
-			m_si->setRowLower( osnodeParent->rowIdx[ i], osnodeParent->rowLB[ i]);
-			m_si->setRowUpper( osnodeParent->rowIdx[ i], osnodeParent->rowUB[ i]);
-			
-			
+		if(osnodeParent != NULL){
+			for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
+				
+				
+				m_si->setRowLower( osnodeParent->rowIdx[ i], osnodeParent->rowLB[ i]);
+				m_si->setRowUpper( osnodeParent->rowIdx[ i], osnodeParent->rowUB[ i]);
+				
+				
+			}
 		}
 		//set the new value
 		m_si->setRowLower( rowIdx, rowLB);
@@ -1010,13 +985,15 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 		std::cout << "FINISH SOLVING THE MASTER "  << std::endl;
 		//now reset the upper and lower bound
 		//set the parent values 
-		for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
-			
-			
-			m_si->setRowLower( osnodeParent->rowIdx[ i], 0);
-			m_si->setRowUpper( osnodeParent->rowIdx[ i], 1);
-			
-			
+		if( osnodeParent != NULL){
+			for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
+				
+				
+				m_si->setRowLower( osnodeParent->rowIdx[ i], 0);
+				m_si->setRowUpper( osnodeParent->rowIdx[ i], 1);
+				
+				
+			}
 		}
 		//reset the new value
 		m_si->setRowLower( rowIdx, 0);
@@ -1041,9 +1018,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				if( *(m_theta + i) > m_osrouteSolver->m_eps){
 					
 					thetaIdx[ thetaNumNonz] = i;
-					theta[ thetaNumNonz] = *(m_theta + i);
-					//std::cout << "GAIL " <<  theta[ thetaNumNonz]  <<  std::endl;
-					
+					theta[ thetaNumNonz] = *(m_theta + i);	
 					
 					thetaNumNonz++;
 					
@@ -1052,8 +1027,17 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 			}
 			if( isInteger( m_theta, numCols, m_osrouteSolver->m_eps) == true){
 				//fathom by integrality
-				if( m_zUB > m_si->getObjValue() ) m_zUB = m_si->getObjValue() ;
 				std::cout << "MESSAGE:  WE HAVE AN INTEGRALITY FATHOM " << m_zUB << std::endl;
+				if( m_zUB > m_si->getObjValue() ){
+					
+					m_zUB = m_si->getObjValue() ;
+					//clear out out solution vector
+					if( m_zOptIndexes.size() > 0) m_zOptIndexes.clear();
+					
+					for(i = 0; i < thetaNumNonz; i++){
+						m_zOptIndexes.push_back( thetaIdx[ i]) ;
+					}
+				}
 				
 			}else{
 				//create the child node
@@ -1092,18 +1076,12 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 					osnodeChild->theta[ i] = theta[ i];
 					
 					
-					std::cout <<  "x variables for column "  << thetaIdx[ i]  << std::endl;
-					
-					for(int j = m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] ];  j < m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] + 1] ;  j++){
-					
-				
-						std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ i]  << std::endl;
-						
-					}
+					//std::cout <<  "x variables for column "  << thetaIdx[ i]  << std::endl;
+					//for(int j = m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] ];  j < m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] + 1] ;  j++){
+					//	std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ i]  << std::endl;	
+					//}
 					
 				}
-				
-				
 			}//end else on isInteger
 		}// end if on upper bound test
 		

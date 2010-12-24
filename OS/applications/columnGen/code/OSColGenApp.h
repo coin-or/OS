@@ -30,6 +30,8 @@
 
 #include "OSNode.h"
 
+#include<vector>
+
 // --------------------------------------------------------------------- //
 /*!
  * \class 
@@ -56,6 +58,12 @@ public:
 	
 	/** m_zUB is the upper bound */
 	double m_zUB;
+	
+	/** *
+	 * m_zOptIndexes is the vector theta indexes
+	 * corresponding to the current m_zUB
+	 */
+	std::vector<int> m_zOptIndexes;
 	
 	/** m_zLB is the lower bound */
 	double m_zLB;
@@ -158,7 +166,7 @@ public:
 	 * if a new branching variable is found we may add that to
 	 * the map so varConMap can gen
 	 */
-	OSNode* createChild(const OSNode *osnode, std::map<int, int> varConMap,
+	OSNode* createChild(const OSNode *osnode, std::map<int, int> &varConMap,
 			const int rowIdx, const double rowLB, const double rowUB);
 	
 	/**

@@ -2956,13 +2956,13 @@ void OSRouteSolver::createAmatrix(){
 	
 }//end createAmatrix
 
-void OSRouteSolver::pauHana(const double* theta){
+void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
 	double cost;
 	cost = 0;
-	
+	std::vector<int>::iterator vit;
 	try{
 		int i;
 		int j;
@@ -2974,35 +2974,32 @@ void OSRouteSolver::pauHana(const double* theta){
 		//	if(theta[ i] > m_eps) throw ErrorClass("we have a positive artificial variable");
 		//}
 		
-		for(i = 0; i < m_numThetaVar    ; i++){
+		//for(i = 0; i < m_numThetaVar    ; i++){
 		
-			cost += theta[ i]*m_thetaCost[ i ];
+			//cost += theta[ i]*m_thetaCost[ i ];
 			//std::cout << "COLUMN VALUE = " << theta[ i] << std::endl;
 			
-		}
+		//}
 		
 		
-		for(i = 0; i < m_numThetaVar; i++){
+		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
 			
-			if( theta[ i  ] > m_eps){
-				
+				i = *vit;
 				std::cout <<  "x variables for column "  << i  << std::endl;
+				
+				cost += m_thetaCost[ i ];
 				
 				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 				
 			
-					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  << theta[ i  ]  << std::endl;
+					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << std::endl;
 					
 				}	
-				
-				
-				std::cout << std::endl << std::endl;
-			
-			}
-
 			
 		}
 		
+		
+		std::cout <<  "cost = " << cost << std::endl << std::endl;
 		
 		std::cout << std::endl <<  std::endl;
 		std::cout << "LOWER BOUND VALUE = " << m_bestLPValue << std::endl;
