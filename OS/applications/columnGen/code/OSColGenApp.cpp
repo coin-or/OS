@@ -609,7 +609,7 @@ bool OSColGenApp::branchAndBound(){
 
 		//// start left node ////
 			
-		osnodeLeftChild = createChild(osnode, varConMap, rowIdx, 0, 0);
+		osnodeLeftChild = createChild(osnode, varConMap, rowIdx, 1, 1);
 		if(osnodeLeftChild != NULL){
 			//finally set the nodeID
 			//and record parent ID
@@ -623,7 +623,7 @@ bool OSColGenApp::branchAndBound(){
 		
 		//// start right node ////
 		
-		osnodeRightChild = createChild(osnode, varConMap, rowIdx, 1, 1);
+		osnodeRightChild = createChild(osnode, varConMap, rowIdx, 0, 0);
 		if(osnodeRightChild != NULL){
 			//finally set the nodeID
 			//and record parent ID
@@ -656,7 +656,7 @@ bool OSColGenApp::branchAndBound(){
 				
 				// create children
 				//create the left node
-				osnodeLeftChild = createChild(osnode, varConMap, rowIdx, 0, 0);
+				osnodeLeftChild = createChild(osnode, varConMap, rowIdx, 1, 1);
 				if(osnodeLeftChild != NULL){
 					//finally set the nodeID
 					//and record parent ID
@@ -667,7 +667,7 @@ bool OSColGenApp::branchAndBound(){
 				}
 				
 				//create the right node
-				osnodeRightChild = createChild(osnode, varConMap, rowIdx, 1, 1);
+				osnodeRightChild = createChild(osnode, varConMap, rowIdx, 0, 0);
 				if(osnodeRightChild != NULL){
 					//finally set the nodeID
 					//and record parent ID
@@ -753,13 +753,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 	//we want to store the solution vector (theta space)
 	//in sparse format
 	int thetaNumNonz;
-	int *thetaIdx;
-	double *theta;
-	//kipp -- hard coding -- change
-	thetaIdx = new int[ 10000];
-	theta = new double[ 10000];
-	//
-	//	
+
 	
 	try{
 
@@ -823,14 +817,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 			for(i = 0; i < numCols; i++){	
 				//get the LP relaxation
 				*(m_theta + i) = m_si->getColSolution()[i];	
-				if( *(m_theta + i) > m_osrouteSolver->m_eps){
-					
-					thetaIdx[ thetaNumNonz] = i;
-					theta[ thetaNumNonz] = *(m_theta + i);	
-					
-					thetaNumNonz++;
-					
-				}
+				if( *(m_theta + i) > m_osrouteSolver->m_eps) thetaNumNonz++;
 				
 			}
 			if( isInteger( m_theta, numCols, m_osrouteSolver->m_eps) == true){
@@ -842,8 +829,10 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 					//clear out out solution vector
 					if( m_zOptIndexes.size() > 0) m_zOptIndexes.clear();
 					
-					for(i = 0; i < thetaNumNonz; i++){
-						m_zOptIndexes.push_back( thetaIdx[ i]) ;
+					for(i = 0; i < numCols; i++){
+						
+						if( *(m_theta + i) > m_osrouteSolver->m_eps) m_zOptIndexes.push_back( i) ;
+						
 					}
 				}
 				
@@ -878,34 +867,33 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				//set child lp value
 				osnodeChild->lpValue = m_si->getObjValue();
 				//set theta
-				for(i = 0; i < thetaNumNonz; i++){
+				thetaNumNonz = 0;
+				for(i = 0; i < numCols; i++){
 					
-					osnodeChild->thetaIdx[ i] = thetaIdx[ i];
-					osnodeChild->theta[ i] = theta[ i];
+					if( *(m_theta + i) > m_osrouteSolver->m_eps){
+						
+						osnodeChild->thetaIdx[ thetaNumNonz] = i;
+						osnodeChild->theta[ thetaNumNonz] = *(m_theta + i);
+						
+						thetaNumNonz++;
+						//std::cout <<  "x variables for column "  << i  << std::endl;
+						//for(int j = m_osrouteSolver->m_thetaPnt[ i ];  j < m_osrouteSolver->m_thetaPnt[ i + 1] ;  j++){
+						//	std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  <<  *(m_theta + i) << std::endl;	
+						//}
+					}
 					
 					
-					//std::cout <<  "x variables for column "  << thetaIdx[ i]  << std::endl;
-					//for(int j = m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] ];  j < m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] + 1] ;  j++){
-					//	std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ i]  << std::endl;	
-					//}
 					
 				}
 			}//end else on isInteger
 		}// end if on upper bound test
-		
-		delete[] thetaIdx;
-		thetaIdx = NULL;
-		delete[] theta;
-		theta = NULL;
+
 		std::cout << std::endl << std::endl;
 		return osnodeChild;
 	
 	} catch (const ErrorClass& eclass) {
 	
-		delete[] thetaIdx;
-		thetaIdx = NULL;
-		delete[] theta;
-		theta = NULL;
+
 		throw ErrorClass(eclass.errormsg);
 
 	}		
