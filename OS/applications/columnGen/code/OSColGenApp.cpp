@@ -217,7 +217,7 @@ void OSColGenApp::solve(){
 		//kipp -- put in check to make sure we get an integer solution
 		if( ipSolver->getObjValue() < m_zUB) m_zUB = ipSolver->getObjValue() ;
 		
-		//kippster
+	
 
 		//get the solution
 		numCols = m_si->getNumCols();
@@ -571,13 +571,15 @@ bool OSColGenApp::branchAndBound(){
 	 * branching constraint number in the master
 	 */
 	std::map<int, int> varConMap;
-	//std::map<int, int>::iterator mit;
 	
 	std::vector<OSNode*> nodeVec;
 	std::vector<OSNode*>::iterator vit;
 	
 	std::map<int, OSNode*> nodeMap;
-	std::map<int, OSNode*>::iterator mit2;
+	std::map<int, OSNode*>::iterator mit;
+	int bestNodeID;
+	double bestNodeBound;
+
 	
 	OSNode *osnode = NULL;
 	OSNode *osnodeLeftChild = NULL;
@@ -620,7 +622,9 @@ bool OSColGenApp::branchAndBound(){
 			numNodesGenerated++;
 			osnodeLeftChild->nodeID = numNodesGenerated;
 			osnodeLeftChild->parentID = 0;
-			nodeVec.push_back( osnodeLeftChild);
+			//nodeVec.push_back( osnodeLeftChild);
+			nodeMap.insert ( std::pair<int, OSNode*>(osnodeLeftChild->nodeID, osnodeLeftChild) );
+
 		}
 		
 		//// end of left node ////
@@ -634,22 +638,54 @@ bool OSColGenApp::branchAndBound(){
 			numNodesGenerated++;
 			osnodeRightChild->nodeID = numNodesGenerated;
 			osnodeRightChild->parentID = 0;
-			nodeVec.push_back( osnodeRightChild);
+			//nodeVec.push_back( osnodeRightChild);
+			nodeMap.insert ( std::pair<int, OSNode*>(osnodeRightChild->nodeID, osnodeRightChild) );
 		}
 			
 		//// end of right node ////
 		
 		// now loop
 		//kipp -- make this an option
-		nodeLimit = 100;
+		nodeLimit = 150;
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		std::cout << "numNodesGenerated = " <<  numNodesGenerated  << std::endl;
-		while( (nodeVec.size() > 0) && (numNodesGenerated <= nodeLimit) ){
+		//while( (nodeVec.size() > 0) && (numNodesGenerated <= nodeLimit) ){
+		while( (nodeMap.size() > 0) && (numNodesGenerated <= nodeLimit) ){
 			
 			leftNodeCreated = false;
 			rightNodeCreated = false;
 			//grab a node -- for now the last node, we do FIFO
-			osnode =  nodeVec.back();
+			//osnode =  nodeVec.back();
+			
+			//let's loop and find node with the largest nodeID -- this will
+			//corespond to fifo
+			
+			bestNodeID = 0;
+			bestNodeBound = OSDBL_MAX;
+			//mit->first is the the OSNode nodeID
+			//mit->second is an OSNode
+			for (mit = nodeMap.begin(); mit != nodeMap.end(); mit++ ){
+				
+				//FIFO criterions
+				//if( mit->second->nodeID > bestNodeID) bestNodeID =  mit->second->nodeID;
+				
+				//Best Bound criterion
+				if( mit->second->lpValue < bestNodeBound) {
+					
+					bestNodeBound = mit->second->lpValue;
+					bestNodeID =  mit->first;
+					//note same as:
+					//bestNodeID =  mit->second->nodeID;
+					
+					
+				}
+				
+			}
+
+			//get the node
+			mit = nodeMap.find( bestNodeID );
+			if(mit == nodeMap.end() ) throw ErrorClass("a node selection problem in branch and bound");
+			osnode = mit->second;
 			
 			if( osnode->lpValue < m_zUB - m_osrouteSolver->m_eps){
 			
@@ -682,18 +718,26 @@ bool OSColGenApp::branchAndBound(){
 				}
 				
 				
-				nodeVec.erase( nodeVec.end() - 1) ;
+				//nodeVec.erase( nodeVec.end() - 1) ;
+				nodeMap.erase( mit);
 				delete osnode;
 				
-				if( leftNodeCreated == true) nodeVec.push_back( osnodeLeftChild) ;
-				if( rightNodeCreated == true) nodeVec.push_back( osnodeRightChild) ;
+				//if( leftNodeCreated == true) nodeVec.push_back( osnodeLeftChild) ;
+				//if( rightNodeCreated == true) nodeVec.push_back( osnodeRightChild) ;
+				
+				if( leftNodeCreated == true) 
+					nodeMap.insert ( std::pair<int, OSNode*>(osnodeLeftChild->nodeID, osnodeLeftChild) ) ;
+				
+				if( rightNodeCreated == true) 
+					nodeMap.insert ( std::pair<int, OSNode*>(osnodeRightChild->nodeID, osnodeRightChild) ) ;
 
 				 
 			}else{
 				
 				//fathom node by virtue of the upper bound
 				std::cout << "FATHAM BY UPPER BOUND " << std::endl;
-				nodeVec.erase( nodeVec.end() - 1) ;
+				//nodeVec.erase( nodeVec.end() - 1) ;
+				nodeMap.erase( mit);
 				delete osnode;
 
 			}//end if on lp bound check
@@ -707,7 +751,10 @@ bool OSColGenApp::branchAndBound(){
 		
 		m_zLB = m_zUB;
 		std::cout <<  std::endl << std::endl;
-		std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << nodeVec.size() << std::endl;
+		//std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << nodeVec.size() << std::endl;
+		std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << nodeMap.size() << std::endl;
+		
+		/*
 		for ( vit = nodeVec.begin() ; 
 				vit != nodeVec.end(); vit++ ){
 			
@@ -726,6 +773,30 @@ bool OSColGenApp::branchAndBound(){
 			
 		}
 		nodeVec.clear();
+		*/
+		
+		
+		
+		
+		for ( mit = nodeMap.begin() ; 
+				mit != nodeMap.end(); mit++ ){
+			
+			std::cout << "NODE ID VALUE = " << mit->second->nodeID << " " ;
+			std::cout << "  NODE LP VALUE = " << mit->second->lpValue << std::endl;
+			
+			for(i = 0; i < mit->second->rowIdxNumNonz; i++){
+				
+				std::cout << "CONSTRAINT =  " << mit->second->rowIdx[ i]  ;
+				std::cout << "  CONSTRAINT LB = " <<  mit->second->rowLB[ i]  ;
+				std::cout << "  CONSTRAINT UB = " <<  mit->second->rowUB[ i]  << std::endl;
+			}
+				
+			if(  mit->second->lpValue < m_zLB) m_zLB =  mit->second->lpValue;
+	
+			
+		}
+		nodeMap.clear();
+		
 		//exit( 1);
 	
 		return bandbWorked;
