@@ -229,6 +229,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_newRowLB =  new double[ m_numHubs] ; //at most one cut per Hub
 		
 		//for now, the number of columns will be 10000	
+		//for now, the number of columns will be 50000	
 		for (k = 0; k < m_numHubs; k++) {
 			
 			m_newRowColumnValue[ k] = new double[ 50000];
@@ -249,14 +250,14 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			m_thetaPnt[ i] = 0;
 		}
 		m_thetaCost = new double[ 50000];
-		m_thetaIndex = new int[ 500000];
+		m_thetaIndex = new int[ 750000];
 		m_numThetaVar = 0;
 		m_numThetaNonz = 0;
 		m_thetaPnt[ m_numThetaVar ] = 0;
 		
 		//hard coding of cuts
-		m_pntBmatrix = new int[ 50000];
-		m_Bmatrix = new int[ 500000];
+		m_pntBmatrix = new int[ 10000];
+		m_Bmatrix = new int[ 750000];
 		m_numBmatrixCon = 0;
 		m_numBmatrixNonz = 0;
 		m_pntBmatrix[ m_numBmatrixCon] = 0;

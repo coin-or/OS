@@ -392,6 +392,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 						numNonz, cost,  rowIdx, values,  lowerBound);
 				
 				std::cout << "Lower Bound = " <<  lowerBound   << std::endl;
+				
+				
 			
 				for(k = 0; k < numNewColumns; k++){
 					
@@ -399,6 +401,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 							collb, colub,  cost[ k]) ;	
 					
 				}
+				//kippster
+				if(lowerBound + m_si->getObjValue() > m_zUB) break;
 			
 				std::cout << std::endl  << std::endl << std::endl;
 				std::cout << "CALL Solve  " << std::endl;
@@ -646,7 +650,7 @@ bool OSColGenApp::branchAndBound(){
 		
 		// now loop
 		//kipp -- make this an option
-		nodeLimit = 150;
+		nodeLimit = 250;
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		std::cout << "numNodesGenerated = " <<  numNodesGenerated  << std::endl;
 		//while( (nodeVec.size() > 0) && (numNodesGenerated <= nodeLimit) ){
