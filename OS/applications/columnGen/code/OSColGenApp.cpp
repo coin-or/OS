@@ -42,6 +42,7 @@
 
 
 #include<vector>
+#include<map>
 #include <sstream>
 using std::ostringstream;
 
@@ -570,10 +571,13 @@ bool OSColGenApp::branchAndBound(){
 	 * branching constraint number in the master
 	 */
 	std::map<int, int> varConMap;
-	std::map<int, int>::iterator mit;
+	//std::map<int, int>::iterator mit;
 	
 	std::vector<OSNode*> nodeVec;
 	std::vector<OSNode*>::iterator vit;
+	
+	std::map<int, OSNode*> nodeMap;
+	std::map<int, OSNode*>::iterator mit2;
 	
 	OSNode *osnode = NULL;
 	OSNode *osnodeLeftChild = NULL;
