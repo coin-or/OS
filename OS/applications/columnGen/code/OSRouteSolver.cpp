@@ -96,20 +96,37 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	m_cost = NULL;
 	
 	m_rc = NULL;
+	
+	m_routeCapacity = NULL;
 
 	try{
 		
+		int k;
+		int i;
+		int l;
+		
+		m_upperBoundL =  -OSINT_MAX;
+		m_minDemand = OSINT_MAX;
+		
+		//get all the parameter values
 		getOptions( osoption);
 		m_osoption = osoption;
-		if(m_routeCapacity > m_totalDemand){
-			m_upperBoundL = m_totalDemand;
-		}else{
-			m_upperBoundL = m_routeCapacity;
+		
+		
+		for(k = 0; k < m_numHubs; k++){
+			//set m_upperBoundL to largest route capacity
+			if( m_routeCapacity[ k] > m_upperBoundL) 
+				m_upperBoundL = m_routeCapacity[ k] ;
 		}
+		//set m_upperBoundL cannot exceed total demand
+		if(m_upperBoundL > m_totalDemand) m_upperBoundL = m_totalDemand;
+
 		
 		
 		
 		//m_varIdx = new int[ m_numNodes];
+		// I think we can make this the max of  m_upperBoundL
+		// over the k
 		m_varIdx = new int[ m_upperBoundL + 1];
 		
 		
@@ -120,9 +137,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_px = new int*[ m_numNodes];
 		m_tx = new int*[ m_numNodes];
 		
-		int k;
-		int i;
-		int l;
+
 		
 		/**
 		 * m_u[i, l] -- this will be the minimum cost of reaching
@@ -135,7 +150,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		for (i = 0; i < m_numNodes; i++) {
 			
-			
+			//kipp we can use the biggest possible m_upperBoundL
 			m_u[ i] = new double[ m_upperBoundL + 1];
 			m_v[ i] = new double[ m_upperBoundL + 1];
 			
@@ -296,6 +311,8 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	//delete data structures for arrays used in calculating minimum reduced cost
 	int i;
+	
+	delete[] m_routeCapacity;
 	
 	for(i = 0; i < m_numNodes; i++){
 		 
@@ -496,6 +513,7 @@ void OSRouteSolver::getOptL(const  double* c) {
 	
 	for(k = 1; k < m_numHubs; k++){
 		
+		//kipp make d the min demand for the previous routes
 		for(d = 1; d <= m_totalDemand; d++){
 			
 			m_vv[ k][ d] = OSDBL_MAX;
@@ -504,7 +522,7 @@ void OSRouteSolver::getOptL(const  double* c) {
 			for(d1 = 0; d1 <= m_totalDemand; d1++){
 			
 				l = d - d1;
-				
+				//kipp make m_upperBoundL the route capapcity
 				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL) && (l >= 1) ){
 				
 					
@@ -1990,9 +2008,15 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 	std::cout << "Executing getOptions(OSOption *osoption)" << std::endl;
 	//get any options relevant to OSColGenApp
 	try{
+		
+		int i;
+
+		
 		std::vector<SolverOption*> solverOptions;
 		std::vector<SolverOption*>::iterator vit;
+		std::vector<int>::iterator vit2;
 		std::vector<int >demand;
+		std::vector<int >routeCapacity;
 	
 		m_numberOfSolutions = 0;
 		solverOptions = osoption->getSolverOptions("decomp");
@@ -2050,8 +2074,9 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 							
 							
 							std::istringstream minDemandBuffer( (*vit)->value);
-							minDemandBuffer >> m_minDemand;
-							std::cout << "m_minDemand = " << m_minDemand <<  std::endl;
+							//minDemandBuffer >> tmpVal;
+							//mindemand.push_back( tmpVal);
+							//std::cout << "m_minDemand = " << tmpVal <<  std::endl;
 						
 						}else{
 							if( (*vit)->name.find("demand") !=  std::string::npos ){
@@ -2059,14 +2084,17 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 								
 								std::istringstream demandBuffer( (*vit)->value);
 								demandBuffer >> tmpVal;
+								if(tmpVal <= 0 && demand.size() > m_numHubs) throw ErrorClass("must have strictly positive demand");
+								if(tmpVal < m_minDemand  && demand.size() > m_numHubs ) m_minDemand = tmpVal;
 								demand.push_back( tmpVal);
 								//std::cout << "demand = " << tmpVal <<  std::endl;
 								
 							}else{
 								if((*vit)->name.find("routeCapacity") !=  std::string::npos ){
 									std::istringstream routeCapacityBuffer( (*vit)->value);
-									routeCapacityBuffer >> m_routeCapacity;
-									std::cout << "m_routeCapacity = " << m_routeCapacity <<  std::endl;
+									routeCapacityBuffer >> tmpVal;
+									routeCapacity.push_back( tmpVal);
+									//std::cout << "m_routeCapacity = " << tmpVal <<  std::endl;
 									
 								}else{
 									
@@ -2151,13 +2179,26 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 			}//end if on solver options
 			
 		}//end for loop on options
-	
-		//now fill in demand
-		m_demand = new int[ m_numNodes];
-		std::vector<int>::iterator vit2;
-		//if(m_numNodes != demand.size( ) ) throw ErrorClass("inconsistent number of demand nodes");
-		int i;
+		
+		
+		//now fill in route capacities
 		i = 0;
+		m_routeCapacity = new int[ m_numHubs];
+		if(m_numHubs != routeCapacity.size( ) ) throw ErrorClass("inconsistent number of HUBS");
+		for (vit2 = routeCapacity.begin(); vit2 != routeCapacity.end(); vit2++) {
+			
+			*(m_routeCapacity + i++) = *vit2;
+			
+		}
+		routeCapacity.clear();
+		
+		
+
+		
+		//now fill in demand		
+		i = 0;
+		m_demand = new int[ m_numNodes];
+		if(m_numNodes != demand.size( ) ) throw ErrorClass("inconsistent number of demand nodes");
 		for (vit2 = demand.begin(); vit2 != demand.end(); vit2++) {
 			
 			*(m_demand + i++) = *vit2;

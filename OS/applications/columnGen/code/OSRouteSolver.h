@@ -52,8 +52,19 @@ public:
 	int m_numberOfVar;
 	int m_numHubs;
 	int m_numNodes;
-	int m_routeCapacity;
+	
+	
+	//make route capacity depend on route
+	int* m_routeCapacity;
+	//m_minDemand is the value of the minimum demand 
+	// node -- it is not the minimum demand that must
+	// be carried on a route
 	int m_minDemand;
+	
+	//make m_upperBoundL depend on route
+	int m_upperBoundL;
+	
+	
 	int* m_demand;
 	
 	/** the distance/cost vectors
@@ -90,7 +101,6 @@ public:
 	
 	
 	int m_totalDemand;
-	int m_upperBoundL;
 	int m_numberOfSolutions;
 	
 
