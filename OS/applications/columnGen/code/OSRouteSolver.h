@@ -54,18 +54,38 @@ public:
 	int m_numNodes;
 	
 	
-	//make route capacity depend on route
+	/** the route capacity -- bus seating limit 
+	 * this can vary with the route/hub
+	 */
 	int* m_routeCapacity;
-	//m_minDemand is the value of the minimum demand 
-	// node -- it is not the minimum demand that must
-	// be carried on a route
-	int m_minDemand;
 	
-	/**  largest possible L-value on a route */
+	/** the minimum number of students that we
+	 * pickup on a route this can vary with the 
+	 * route/hub
+	 */
+	int* m_routeMinPickup;
+	
+	
+	/** largest possible L-value on a route --
+	 * this will be the minimum of m_routeCapacity
+	 * and total demand
+	 */
 	int* m_upperBoundL;
+	
+	
+	/**  smallest possible L-value on a route
+	 *  for now this will equal 
+	 */
+	int* m_lowerBoundL;
 	
 	/**  largest possible L-value over all routes */
 	int m_upperBoundLMax;
+	
+	/**m_minDemand is the value of the minimum demand 
+	 * node -- it is not the minimum demand that must
+	 *  be carried on a route
+	 */
+	int m_minDemand;
 	
 	/** m_demand is the vector of node demands */
 	int* m_demand;

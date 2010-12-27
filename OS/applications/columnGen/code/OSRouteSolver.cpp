@@ -98,6 +98,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	m_rc = NULL;
 	
 	m_routeCapacity = NULL;
+	m_routeMinPickup = NULL;
 
 	try{
 		
@@ -115,10 +116,12 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		
 		m_upperBoundL = new int[ m_numHubs];
+		m_lowerBoundL = new int[ m_numHubs];
 		
 		for(k = 0; k < m_numHubs; k++){
 			
 			m_upperBoundL[ k] = m_routeCapacity[ k];
+			m_lowerBoundL[ k] = m_routeMinPickup[ k];
 			//set m_upperBoundL cannot exceed total demand
 			if(m_upperBoundL[ k] > m_totalDemand) m_upperBoundL[ k] = m_totalDemand;
 			if( m_upperBoundL[ k] > m_upperBoundLMax) m_upperBoundLMax = m_upperBoundL[ k];
@@ -319,6 +322,11 @@ OSRouteSolver::~OSRouteSolver(){
 	int i;
 	
 	delete[] m_routeCapacity;
+	m_routeCapacity = NULL;
+	
+	
+	delete[] m_routeMinPickup;
+	m_routeMinPickup = NULL;
 	
 	for(i = 0; i < m_numNodes; i++){
 		 
@@ -384,6 +392,9 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	delete[] m_upperBoundL;	
 	m_upperBoundL = NULL;
+	
+	delete[] m_lowerBoundL;	
+	m_lowerBoundL = NULL;
 	
 	
 	delete[] m_optValHub;
@@ -519,12 +530,14 @@ void OSRouteSolver::getOptL( double** c) {
 	
 	//now loop over the other HUBS
 	
-
+	int  dlower;
+	dlower = 0;
 	
 	for(k = 1; k < m_numHubs; k++){
 		
+		
 		//kipp make d the min demand for the previous routes
-		for(d = 1; d <= m_totalDemand; d++){
+		for(d = dlower; d <= m_totalDemand; d++){
 			
 			m_vv[ k][ d] = OSDBL_MAX;
 			
@@ -533,7 +546,7 @@ void OSRouteSolver::getOptL( double** c) {
 			
 				l = d - d1;
 				//kipp make m_upperBoundL the route capapcity
-				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL[ k]) && (l >= 1) ){
+				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL[ k  - 1]) && (l >= m_lowerBoundL[ k - 1]) ){
 				
 					
 					// l was the decision at state d1 in stage k-1
@@ -568,7 +581,7 @@ void OSRouteSolver::getOptL( double** c) {
 	//we now enter the last stage through the other hubs
 	// have satisfied total demand d
 
-	int  dlower = 0;
+
 	if (m_numHubs > 1) dlower = 1;
 	
 	for(d = dlower; d < m_totalDemand; d++){
@@ -576,7 +589,7 @@ void OSRouteSolver::getOptL( double** c) {
 		//std::cout << "m_vv[ m_numHubs - 1 ][ d]  " << m_vv[ m_numHubs - 1 ][ d]  << std::endl;
 		l = m_totalDemand - d;
 		
-		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL[ m_numHubs - 1] && l >= 1){
+		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL[ m_numHubs - 1] && l >= m_lowerBoundL[ m_numHubs - 1]){
 		
 			//must execute this loop at least once
 			
@@ -2031,6 +2044,7 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 		std::vector<int>::iterator vit2;
 		std::vector<int >demand;
 		std::vector<int >routeCapacity;
+		std::vector<int >routeMinPickup;
 	
 		m_numberOfSolutions = 0;
 		solverOptions = osoption->getSolverOptions("decomp");
@@ -2084,12 +2098,12 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 						std::cout << "m_totalDemand = " << m_totalDemand <<  std::endl;
 						
 					}else{
-						if((*vit)->name.find("minDemand") !=  std::string::npos){
+						if((*vit)->name.find("routeMinPickup") !=  std::string::npos){
 							
 							
-							std::istringstream minDemandBuffer( (*vit)->value);
-							//minDemandBuffer >> tmpVal;
-							//mindemand.push_back( tmpVal);
+							std::istringstream routeMinPickupBuffer( (*vit)->value);
+							routeMinPickupBuffer >> tmpVal;
+							routeMinPickup.push_back( tmpVal);
 							//std::cout << "m_minDemand = " << tmpVal <<  std::endl;
 						
 						}else{
@@ -2205,6 +2219,18 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 			
 		}
 		routeCapacity.clear();
+		
+		
+		//now fill in route min pickups
+		i = 0;
+		m_routeMinPickup = new int[ m_numHubs];
+		if(m_numHubs != routeMinPickup.size( ) ) throw ErrorClass("inconsistent number of HUBS");
+		for (vit2 = routeMinPickup.begin(); vit2 != routeMinPickup.end(); vit2++) {
+			
+			*(m_routeMinPickup + i++) = *vit2;
+			
+		}
+		routeMinPickup.clear();
 		
 		
 
