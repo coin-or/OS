@@ -61,21 +61,23 @@ public:
 	// be carried on a route
 	int m_minDemand;
 	
-	//make m_upperBoundL depend on route
-	int m_upperBoundL;
+	/**  largest possible L-value on a route */
+	int* m_upperBoundL;
 	
+	/**  largest possible L-value over all routes */
+	int m_upperBoundLMax;
 	
+	/** m_demand is the vector of node demands */
 	int* m_demand;
 	
-	/** the distance/cost vectors
-	 */
-	
+	/** the distance/cost vectors */
 	double** m_cost;
 	
 	/** the reduced cost vector
 	 * we asssume order is (k, l, i, j)
+	 * we asssume order is (l, i, j)
 	 */
-	double* m_rc;
+	double** m_rc;
 	
 
 	//will be the optimal reduced cost for each hub
@@ -200,7 +202,7 @@ public:
 	double qrouteCost(const int& k, const int& l, const double* c, int* kountVar) ;
 	
 	//this c vector is for the entire cost vector
-	void getOptL(const  double* c) ;
+	void getOptL( double** c) ;
 	
 	
 	/**

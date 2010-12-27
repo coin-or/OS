@@ -105,7 +105,8 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		int i;
 		int l;
 		
-		m_upperBoundL =  -OSINT_MAX;
+		m_upperBoundL = NULL;
+		m_upperBoundLMax = -OSINT_MAX;
 		m_minDemand = OSINT_MAX;
 		
 		//get all the parameter values
@@ -113,13 +114,17 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_osoption = osoption;
 		
 		
+		m_upperBoundL = new int[ m_numHubs];
+		
 		for(k = 0; k < m_numHubs; k++){
-			//set m_upperBoundL to largest route capacity
-			if( m_routeCapacity[ k] > m_upperBoundL) 
-				m_upperBoundL = m_routeCapacity[ k] ;
+			
+			m_upperBoundL[ k] = m_routeCapacity[ k];
+			//set m_upperBoundL cannot exceed total demand
+			if(m_upperBoundL[ k] > m_totalDemand) m_upperBoundL[ k] = m_totalDemand;
+			if( m_upperBoundL[ k] > m_upperBoundLMax) m_upperBoundLMax = m_upperBoundL[ k];
+			
 		}
-		//set m_upperBoundL cannot exceed total demand
-		if(m_upperBoundL > m_totalDemand) m_upperBoundL = m_totalDemand;
+
 
 		
 		
@@ -127,7 +132,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		//m_varIdx = new int[ m_numNodes];
 		// I think we can make this the max of  m_upperBoundL
 		// over the k
-		m_varIdx = new int[ m_upperBoundL + 1];
+		m_varIdx = new int[ m_upperBoundLMax + 1];
 		
 		
 		m_u = new double*[ m_numNodes];
@@ -151,20 +156,20 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		for (i = 0; i < m_numNodes; i++) {
 			
 			//kipp we can use the biggest possible m_upperBoundL
-			m_u[ i] = new double[ m_upperBoundL + 1];
-			m_v[ i] = new double[ m_upperBoundL + 1];
+			m_u[ i] = new double[ m_upperBoundLMax + 1];
+			m_v[ i] = new double[ m_upperBoundLMax + 1];
 			
 			
 			
-			for(l = 0; l <= m_upperBoundL; l++){
+			for(l = 0; l <= m_upperBoundLMax; l++){
 
 				m_u[ i][l] = OSDBL_MAX;
 				m_v[ i][l] = OSDBL_MAX;
 			}
 			
 			m_g[ i] = new double[ m_numNodes];
-			m_px[ i] = new int[ m_upperBoundL + 1];
-			m_tx[ i] = new int[m_upperBoundL + 1];
+			m_px[ i] = new int[ m_upperBoundLMax + 1];
+			m_tx[ i] = new int[m_upperBoundLMax + 1];
 			
 			
 		}
@@ -177,6 +182,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_vv = new double*[ m_numHubs];
 		m_vvpnt = new int*[ m_numHubs];
 		m_cost = new double*[ m_numHubs];
+		m_rc = new double*[ m_numHubs];
 		
 		for (k = 0; k < m_numHubs; k++) {
 			
@@ -185,13 +191,13 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			m_vvpnt[ k] = new int[ m_totalDemand + 1];
 			m_cost[ k] = new double[ m_numNodes*m_numNodes - m_numNodes];
 			
+			//allocate memory for the reduced cost vector. 
+			//assume order is k, l, i, j
+			//assume order is l, i, j
+			m_rc[ k] = new double[ m_upperBoundL[ k]*(m_numNodes*m_numNodes - m_numNodes)];
+			
 			
 		}
-		
-		//allocate memory for the reduced cost vector. 
-		//assume order is k, l, i, j
-		m_rc = new double[ m_numHubs*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes)];
-		
 		
 		m_optValHub = new double[ m_numHubs];
 		
@@ -357,6 +363,7 @@ OSRouteSolver::~OSRouteSolver(){
 		delete[] m_vv[i];
 		delete[] m_vvpnt[i];
 		delete[] m_cost[ i];
+		delete[] m_rc[ i];
 		
 		
 	}
@@ -374,6 +381,9 @@ OSRouteSolver::~OSRouteSolver(){
 	
 	delete[] m_rc;
 	m_rc = NULL;
+	
+	delete[] m_upperBoundL;	
+	m_upperBoundL = NULL;
 	
 	
 	delete[] m_optValHub;
@@ -481,7 +491,7 @@ OSRouteSolver::~OSRouteSolver(){
 
 
 
-void OSRouteSolver::getOptL(const  double* c) {
+void OSRouteSolver::getOptL( double** c) {
 	
 	//initialize the first HUB
 	
@@ -523,14 +533,14 @@ void OSRouteSolver::getOptL(const  double* c) {
 			
 				l = d - d1;
 				//kipp make m_upperBoundL the route capapcity
-				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL) && (l >= 1) ){
+				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL[ k]) && (l >= 1) ){
 				
 					
 					// l was the decision at state d1 in stage k-1
 					// l + d1 brings us to state d at stage k
 					// d is the total carried on routes 0 -- k-1
 				
-					testVal = qrouteCost(k - 1,  l,  c,  &kountVar);
+					testVal = qrouteCost(k - 1,  l,  c[ k - 1],  &kountVar);
 					
 					//std::cout << "L = " << l << std::endl;
 					//std::cout << "testVal " << testVal << std::endl;
@@ -566,7 +576,7 @@ void OSRouteSolver::getOptL(const  double* c) {
 		//std::cout << "m_vv[ m_numHubs - 1 ][ d]  " << m_vv[ m_numHubs - 1 ][ d]  << std::endl;
 		l = m_totalDemand - d;
 		
-		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL && l >= 1){
+		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL[ k] && l >= 1){
 		
 			//must execute this loop at least once
 			
@@ -575,7 +585,7 @@ void OSRouteSolver::getOptL(const  double* c) {
 			isFeasible = true;
 			
 			
-			testVal = qrouteCost(m_numHubs -1 ,  l,  c,  &kountVar);
+			testVal = qrouteCost(m_numHubs -1 ,  l,  c[ m_numHubs -1],  &kountVar);
 			
 			//std::cout << "l = " << l << std::endl;
 			//std::cout << "testVal = " << testVal << std::endl;
@@ -642,7 +652,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 
 	
-	if(l > m_upperBoundL){
+	if(l > m_upperBoundL[ k]){
 		
 		std::cout  << "LVALUE  BIGGER THAN UPPER BOUND " << l  << std::endl;
 		exit( 1);
@@ -650,9 +660,9 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 	
 	//start of the cost vector for hub k plus move to start of l demands
 	// now move the pointer up
-	int startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
+	//int startPnt = m_upperBoundL[ k]*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 	
-	//int startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
+	int startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 	c+=  startPnt ;
 	
 
@@ -694,6 +704,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 				// want the cost for arc (k, i)
 				// note: k < i so use that formula
 				m_u[i][l1] = *(c + k*(m_numNodes - 1) + i - 1);  // put in correct cost
+				
 
 		
 			}
@@ -726,6 +737,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 		//node bestLastNode is a higher number than k
 		*(m_varIdx + (*kountVar)++) = startPnt + bestLastNode*(m_numNodes - 1)  +  k ;
 		*(m_varIdx + (*kountVar)++) = startPnt + k*(m_numNodes - 1)  + bestLastNode - 1;
+		
 		
 
 		return rcost;	
@@ -976,9 +988,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 		
 		//get the reduced costs 
 		calcReducedCost( yA, yB );
-		
-		
-		
+	
 		int kountVar;
 		double testVal;
 		testVal = 0;
@@ -997,7 +1007,9 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 		m_lowerBnd = 0.0;
 		for(k = 0; k < m_numHubs; k++){
 			
-			startPntInc  =  k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes);
+			
+			//startPntInc  = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes);
+			startPntInc  =   (m_optL[ k] - 1)*(m_numNodes*m_numNodes - m_numNodes);
 			
 			std::cout << " whichBlock =  " << k << "  L = " << m_optL[ k] << std::endl;
 			
@@ -1006,7 +1018,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			kountVar = 0;
 			
 			///// calling qrouteCost
-			m_optValHub[ k] = qrouteCost(k,  m_optL[ k], m_rc,  &kountVar);
+			m_optValHub[ k] = qrouteCost(k,  m_optL[ k], m_rc[ k],  &kountVar);
 			
 			m_optValHub[ k] -= yA[ k + numCoulpingConstraints];
 			
@@ -1116,11 +1128,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			m_thetaPnt[ m_numThetaVar ]  = m_numThetaNonz;
 			
 
-			
-			numNonzVec = m_newColumnNonz;
-			costVec = m_costVec;
-			rowIdxVec = m_newColumnRowIdx;
-			valuesVec = m_newColumnRowValue;		
+	
 
 			
 			//stuff for debugging
@@ -1163,6 +1171,12 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			
 		}//end of loop on hubs
 		
+		
+		
+		numNonzVec = m_newColumnNonz;
+		costVec = m_costVec;
+		rowIdxVec = m_newColumnRowIdx;
+		valuesVec = m_newColumnRowValue;	
 		std::cout << "Lower Bound = " << m_lowerBnd << std::endl;
 		
 		
@@ -2830,7 +2844,7 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 	for(k = 0; k < m_numHubs; k++){
 		
 		
-		for(l = 1; l <= m_upperBoundL; l++){
+		for(l = 1; l <= m_upperBoundL[ k]; l++){
 			
 			
 			for(i = 0; i< m_numNodes; i++){
@@ -2841,11 +2855,11 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 				
 					if(j < m_numHubs){
 						
-						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j ] ;
+						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j ] ;
 						
 					}else{
 						
-						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j ] - yA[ j - m_numHubs] ;
+						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j ] - yA[ j - m_numHubs] ;
 					}
 					
 					
@@ -2858,12 +2872,12 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 					
 					if(j < m_numHubs){
 					
-						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ];
+						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ];
 					
 					} else {
 						
 						
-						m_rc[ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ] - yA[ j - m_numHubs ];
+						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ] - yA[ j - m_numHubs ];
 						
 					}
 					
@@ -2894,11 +2908,12 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 			for(k = 0; k < m_numHubs; k++){
 				
 				
-				for(l = 1; l <= m_upperBoundL; l++){
+				for(l = 1; l <= m_upperBoundL[ k]; l++){
 					
-					startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
+					//startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
+					startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					
-					m_rc[ startPnt + m_Bmatrix[ j] ]  -=  yB[ i];
+					m_rc[ k][ startPnt + m_Bmatrix[ j] ]  -=  yB[ i];
 					
 				}
 				
@@ -3033,7 +3048,7 @@ void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes){
 				
 				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 				
-			
+					std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
 					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << std::endl;
 					
 				}	
