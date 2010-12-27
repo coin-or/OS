@@ -576,7 +576,7 @@ void OSRouteSolver::getOptL( double** c) {
 		//std::cout << "m_vv[ m_numHubs - 1 ][ d]  " << m_vv[ m_numHubs - 1 ][ d]  << std::endl;
 		l = m_totalDemand - d;
 		
-		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL[ k] && l >= 1){
+		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL[ m_numHubs - 1] && l >= 1){
 		
 			//must execute this loop at least once
 			
@@ -2837,12 +2837,12 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 	int j;
 	int l;
 	int kount;
-	kount = 0;
+	
 	int tmpVal;
 	tmpVal = m_numNodes - 1;
 	
 	for(k = 0; k < m_numHubs; k++){
-		
+		kount = 0;
 		
 		for(l = 1; l <= m_upperBoundL[ k]; l++){
 			

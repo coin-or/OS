@@ -251,7 +251,7 @@ void OSColGenApp::solve(){
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
 
-		//branchAndBound();
+		branchAndBound();
 		
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;
@@ -384,7 +384,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			
 			//kipp -- hard coding in the .0001  and loopKount
 			while(lowerBound < -.0001 && loopKount < 10000){
-			//while(lowerBound < -.0001 && loopKount < 20){
 				loopKount++;
 				
 				//kipp here is where the while loop goes
@@ -393,15 +392,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 						numNonz, cost,  rowIdx, values,  lowerBound);
 				
 				std::cout << "Lower Bound = " <<  lowerBound   << std::endl;
-				
-				for(int i1 = 0; i1 < numNewColumns; i1++){
-					
-					for(int i2 = 0; i2 < numNonz[ i1]; i2++){
-						
-						std::cout << "rowidx = " << rowIdx[i1][i2] << "  value =  " << values[i1][i2] << std::endl; 
-					}
-					
-				}
+
 				
 			
 				for(k = 0; k < numNewColumns; k++){
