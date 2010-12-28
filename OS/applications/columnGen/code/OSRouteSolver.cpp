@@ -535,6 +535,7 @@ void OSRouteSolver::getOptL( double** c) {
 	
 	for(k = 1; k < m_numHubs; k++){
 		
+		dlower += m_lowerBoundL[ k - 1];
 		
 		//kipp make d the min demand for the previous routes
 		for(d = dlower; d <= m_totalDemand; d++){
@@ -582,7 +583,7 @@ void OSRouteSolver::getOptL( double** c) {
 	// have satisfied total demand d
 
 
-	if (m_numHubs > 1) dlower = 1;
+	//if (m_numHubs > 1) dlower = 1;
 	
 	for(d = dlower; d < m_totalDemand; d++){
 		
