@@ -101,6 +101,8 @@ void OSColGenApp::getInitialRestrictedMaster( ){
 void OSColGenApp::getInitialRestrictedMaster2( ){
 
 	m_osinstanceMaster = m_osrouteSolver->getInitialRestrictedMaster2( );
+	
+	//exit( 1);
 	//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 	
 }//end generateInitialRestrictedMaster2

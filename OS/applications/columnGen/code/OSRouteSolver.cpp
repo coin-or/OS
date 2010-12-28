@@ -1541,6 +1541,10 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 	std::string testFileName;
 	std::string osil;
 	
+	std::map<int, std::map<int, std::vector<int> > >::iterator  mit;
+	std::map<int, std::vector<int> >::iterator  mit2;
+	std::vector<int>::iterator  vit;
+	
 	//std::vector< int> indexes;
 	fileUtil = new FileUtil();
 	
@@ -1605,7 +1609,30 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		osilreader = new OSiLReader();
 		osinstance = osilreader->readOSiL(osil);
 		
+		
 
+
+			//set kount to the start of the z variables
+			//go past the x variables
+			kount  =  2*m_numHubs + m_numHubs*(m_numNodes*m_numNodes - m_numNodes);
+			osinstance->bVariablesModified = true;
+			//get the first solution
+			mit = m_initSolMap.find( 0);
+			for ( mit2 = mit->second.begin() ; mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
+				
+				
+	
+				for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
+					
+							
+					//osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
+					std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
+					
+				}
+				
+			}
+			
+       
 		
 
 		//fill in the cost vector first
@@ -1732,13 +1759,18 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		solver->buildSolverInstance();
 		solver->osoption = m_osoption;	
 		OsiSolverInterface *si = solver->osiSolver;
+
 		solver->solve();
 		
-	
 		
 		//get the solver solution status
 		
 		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+		
+		
+
+		
+	
 		
 		//get the optimal objective function value
 		
@@ -1785,7 +1817,6 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 				
 				getCutsX(xVar, numXVar, numNewRows, numRowNonz, 
 						colIdx,rowValues, rowLB, rowUB);
-				
 				
 				
 				
@@ -1846,6 +1877,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			std::cout << std::endl << std::endl;
 			if( isCutAdded == true) {
 				
+				std::cout << "A CUT WAS ADDED, CALL SOLVE AGAIN" << std::endl;
 				solver->solve();
 				primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
 				std::cout << "New Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
@@ -1854,6 +1886,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 
 			
 		}//end while -- we have an integer solution with no subtours
+		
+	
 		
 		
 		int i1;
@@ -2005,6 +2039,8 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		//indexes = NULL;
 		delete osilreader;
 		osilreader = NULL;
+		
+	
 
 		
 

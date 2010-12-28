@@ -40,6 +40,11 @@ public:
 	double m_bestLPValue;
 	
 	std::string m_initOSiLFile;
+	
+	/** the index on the outer map is on the solution number,
+	 * the index on the inner map indexes the route number, 
+	 * the vector is the list of nodes assigned to that route
+	 */
 	std::map<int, std::map<int, std::vector<int> > > m_initSolMap;
 	
 	/** intVarSet holds and std::pair where the first
