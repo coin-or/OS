@@ -20,6 +20,6 @@ Ipopt  https://projects.coin-or.org/svn/Ipopt/stable/3.9/Ipopt
 cppad  https://projects.coin-or.org/svn/CppAD/stable/20090303
 Bonmin  https://projects.coin-or.org/svn/Bonmin/trunk/Bonmin
 #Couenne  https://projects.coin-or.org/svn/Couenne/stable/0.3/Couenne 
-ApplicationTemplates https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/stable/1.0
+ApplicationTemplates https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/trunk
 
 
