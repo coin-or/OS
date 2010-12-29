@@ -99,6 +99,8 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	
 	m_routeCapacity = NULL;
 	m_routeMinPickup = NULL;
+	
+	m_osoption = osoption;
 
 	try{
 		
@@ -112,7 +114,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		//get all the parameter values
 		getOptions( osoption);
-		m_osoption = osoption;
+	
 		
 		
 		m_upperBoundL = new int[ m_numHubs];
@@ -1625,7 +1627,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 				for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
 					
 							
-					//osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
+					osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
 					std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
 					
 				}
@@ -3836,6 +3838,32 @@ void OSRouteSolver::getBranchingCut(const int* thetaIdx, const double* thetaVar,
 	}	
 	
 }//end getBranchingCut sparse
+
+
+void OSRouteSolver::getInitialSolution(){
+	
+	try{	
+		
+		//let's get the initial assignment of nodes to hubs
+		//this is in m_initSolMap which is calculated when we
+		//call  getOptions( OSOption *osoption);
+		
+		if(m_initSolMap.size() == 0) getOptions( m_osoption);
+		
+		//get cost vector
+		
+		//get demand vector
+		
+		//now improve on m_initSolMap
+		
+	}catch (const ErrorClass& eclass) {
+	
+		throw ErrorClass(eclass.errormsg);
+	
+	}	
+	
+	
+}//end getInitialSolution
 
 
 

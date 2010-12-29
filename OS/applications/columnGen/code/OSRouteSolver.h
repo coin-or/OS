@@ -99,8 +99,7 @@ public:
 	double** m_cost;
 	
 	/** the reduced cost vector
-	 * we asssume order is (k, l, i, j)
-	 * we asssume order is (l, i, j)
+	 * for each k, we asssume order is (l, i, j)
 	 */
 	double** m_rc;
 	
@@ -383,6 +382,11 @@ public:
 	//this is the matrix that says we must visit each node
 	//this A matrix defines the "coupling constraints"
 	void createAmatrix();
+	
+	/** generate an intitial feasible solution
+	 * in theta space for the initial master
+	 */
+	void getInitialSolution();
 	
 	//this method gets called when we are done
 	void pauHana(std::vector<int> &m_zOptIndexes);
