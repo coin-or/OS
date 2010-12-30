@@ -60,4 +60,9 @@ Here is the thing to do:
 
 Okay, this really helps. So when things settle down, then I should:1) trash the OS Externals file2) set the Dependicies file to point to BuildTools stable.3) run BuildTools/set_externals
 
-4) do an svn commitand that will then set the svn:externals properties on the server/repository. 
+4) do an svn commitand that will then set the svn:externals properties on the server/repository. 
+
+%%%%%%%%%%%
+Stefan on examples
+
+The only way that the examples work under cygwin/cl is if you disablepkg-config. Examples with cygwin/cl/pkg-config does not work for anyproject.I also added documentation about the examples Makefile's athttps://projects.coin-or.org/BuildTools/wiki/pm-switch#RootXxxexamplesMakefile.inAndreas noted to me today that the "ifeq" and "+=" that are used in theexamples makefiles now work only for GNU make  :-( . So for Ipopt we willdo something different,https://projects.coin-or.org/Ipopt/browser/trunk/Ipopt/examples/Cpp_example/Makefile.in?rev=1875Stefan
