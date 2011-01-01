@@ -2206,6 +2206,7 @@ fi
 	       comps="xlc gcc pgcc icc cc"
 	     fi
 	     ;;
+  *-linux-gnu*) comps="gcc cc pgcc icc xlc" ;;
   *-linux-*) comps="xlc gcc cc pgcc icc" ;;
   *)         comps="xlc_r xlc cc gcc pgcc icc" ;;
 esac
@@ -3403,6 +3404,8 @@ case $build in
   *-*-solaris*)
   	     comps="CC xlC_r aCC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
   *-darwin*) comps="g++ c++ CC" ;;
+  *-linux-gnu*)
+             comps="g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC xlC_r aCC CC" ;;
           *) comps="xlC_r aCC CC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
 esac
 
@@ -6062,7 +6065,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6065 "configure"' > conftest.$ac_ext
+  echo '#line 6068 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7196,7 +7199,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:7199:" \
+echo "$as_me:7202:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -8263,11 +8266,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8266: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8269: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8270: \$? = $ac_status" >&5
+   echo "$as_me:8273: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8531,11 +8534,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8534: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8537: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8538: \$? = $ac_status" >&5
+   echo "$as_me:8541: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8635,11 +8638,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8638: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8641: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8642: \$? = $ac_status" >&5
+   echo "$as_me:8645: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10980,7 +10983,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10983 "configure"
+#line 10986 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11080,7 +11083,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11083 "configure"
+#line 11086 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13424,11 +13427,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13427: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13430: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13431: \$? = $ac_status" >&5
+   echo "$as_me:13434: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13528,11 +13531,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13531: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13534: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13535: \$? = $ac_status" >&5
+   echo "$as_me:13538: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15098,11 +15101,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15101: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15104: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15105: \$? = $ac_status" >&5
+   echo "$as_me:15108: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15202,11 +15205,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15205: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15208: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15209: \$? = $ac_status" >&5
+   echo "$as_me:15212: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17409,11 +17412,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17412: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17415: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17416: \$? = $ac_status" >&5
+   echo "$as_me:17419: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17677,11 +17680,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17680: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17683: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17684: \$? = $ac_status" >&5
+   echo "$as_me:17687: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17781,11 +17784,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17784: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17787: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17788: \$? = $ac_status" >&5
+   echo "$as_me:17791: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -22764,10 +22767,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  COINUTILS_DEPENDENCIES=`echo " $COINUTILS_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  COINUTILS_DEPENDENCIES=`echo " $COINUTILS_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -23208,10 +23212,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  IPOPT_DEPENDENCIES=`echo " $IPOPT_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  IPOPT_DEPENDENCIES=`echo " $IPOPT_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -23647,10 +23652,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  CLP_DEPENDENCIES=`echo " $CLP_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  CLP_DEPENDENCIES=`echo " $CLP_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -24086,10 +24092,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  DYLP_DEPENDENCIES=`echo " $DYLP_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  DYLP_DEPENDENCIES=`echo " $DYLP_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -24525,10 +24532,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  VOL_DEPENDENCIES=`echo " $VOL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  VOL_DEPENDENCIES=`echo " $VOL_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -24964,10 +24972,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  SYMPHONY_DEPENDENCIES=`echo " $SYMPHONY_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  SYMPHONY_DEPENDENCIES=`echo " $SYMPHONY_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -25403,10 +25412,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  CPX_DEPENDENCIES=`echo " $CPX_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  CPX_DEPENDENCIES=`echo " $CPX_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -25842,10 +25852,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  GLPK_DEPENDENCIES=`echo " $GLPK_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  GLPK_DEPENDENCIES=`echo " $GLPK_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -26281,10 +26292,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  CBC_DEPENDENCIES=`echo " $CBC_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  CBC_DEPENDENCIES=`echo " $CBC_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -26720,10 +26732,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  BONMIN_DEPENDENCIES=`echo " $BONMIN_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  BONMIN_DEPENDENCIES=`echo " $BONMIN_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -27159,10 +27172,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  COUENNE_DEPENDENCIES=`echo " $COUENNE_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  COUENNE_DEPENDENCIES=`echo " $COUENNE_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -27598,10 +27612,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  BCP_DEPENDENCIES=`echo " $BCP_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  BCP_DEPENDENCIES=`echo " $BCP_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -28037,10 +28052,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
