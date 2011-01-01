@@ -21,7 +21,7 @@
 /* Define to 1 if the Couenne package is available */
 #undef COIN_HAS_COUENNE
 
-/* Define to 1 if the cppad package is used */
+/* Define to 1 if the cppad package is available */
 #undef COIN_HAS_CPPAD
 
 /* Define to 1 if the Cpx package is available */

@@ -472,7 +472,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion OS_SVN_REV build build_cpu build_vendor build_os _SVN_REV COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED COINUTILS_LIBS COINUTILS_CFLAGS COINUTILS_DATA COINUTILS_DEPENDENCIES COINUTILS_LIBS_INSTALLED COINUTILS_CFLAGS_INSTALLED COINUTILS_DATA_INSTALLED OSLIB_CFLAGS OSLIB_LIBS OSLIB_PCLIBS OSLIB_PCREQUIRES OSLIB_DEPENDENCIES OSLIB_CFLAGS_INSTALLED OSLIB_LIBS_INSTALLED COIN_HAS_COINUTILS_TRUE COIN_HAS_COINUTILS_FALSE IPOPT_LIBS IPOPT_CFLAGS IPOPT_DATA IPOPT_DEPENDENCIES IPOPT_LIBS_INSTALLED IPOPT_CFLAGS_INSTALLED IPOPT_DATA_INSTALLED COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE CLP_LIBS CLP_CFLAGS CLP_DATA CLP_DEPENDENCIES CLP_LIBS_INSTALLED CLP_CFLAGS_INSTALLED CLP_DATA_INSTALLED COIN_HAS_CLP_TRUE COIN_HAS_CLP_FALSE DYLP_LIBS DYLP_CFLAGS DYLP_DATA DYLP_DEPENDENCIES DYLP_LIBS_INSTALLED DYLP_CFLAGS_INSTALLED DYLP_DATA_INSTALLED COIN_HAS_DYLP_TRUE COIN_HAS_DYLP_FALSE VOL_LIBS VOL_CFLAGS VOL_DATA VOL_DEPENDENCIES VOL_LIBS_INSTALLED VOL_CFLAGS_INSTALLED VOL_DATA_INSTALLED COIN_HAS_VOL_TRUE COIN_HAS_VOL_FALSE SYMPHONY_LIBS SYMPHONY_CFLAGS SYMPHONY_DATA SYMPHONY_DEPENDENCIES SYMPHONY_LIBS_INSTALLED SYMPHONY_CFLAGS_INSTALLED SYMPHONY_DATA_INSTALLED COIN_HAS_SYMPHONY_TRUE COIN_HAS_SYMPHONY_FALSE CPX_LIBS CPX_CFLAGS CPX_DATA CPX_DEPENDENCIES CPX_LIBS_INSTALLED CPX_CFLAGS_INSTALLED CPX_DATA_INSTALLED COIN_HAS_CPX_TRUE COIN_HAS_CPX_FALSE GLPK_LIBS GLPK_CFLAGS GLPK_DATA GLPK_DEPENDENCIES GLPK_LIBS_INSTALLED GLPK_CFLAGS_INSTALLED GLPK_DATA_INSTALLED COIN_HAS_GLPK_TRUE COIN_HAS_GLPK_FALSE CBC_LIBS CBC_CFLAGS CBC_DATA CBC_DEPENDENCIES CBC_LIBS_INSTALLED CBC_CFLAGS_INSTALLED CBC_DATA_INSTALLED COIN_HAS_CBC_TRUE COIN_HAS_CBC_FALSE BONMIN_LIBS BONMIN_CFLAGS BONMIN_DATA BONMIN_DEPENDENCIES BONMIN_LIBS_INSTALLED BONMIN_CFLAGS_INSTALLED BONMIN_DATA_INSTALLED COIN_HAS_BONMIN_TRUE COIN_HAS_BONMIN_FALSE COUENNE_LIBS COUENNE_CFLAGS COUENNE_DATA COUENNE_DEPENDENCIES COUENNE_LIBS_INSTALLED COUENNE_CFLAGS_INSTALLED COUENNE_DATA_INSTALLED COIN_HAS_COUENNE_TRUE COIN_HAS_COUENNE_FALSE BCP_LIBS BCP_CFLAGS BCP_DATA BCP_DEPENDENCIES BCP_LIBS_INSTALLED BCP_CFLAGS_INSTALLED BCP_DATA_INSTALLED COIN_HAS_BCP_TRUE COIN_HAS_BCP_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE CPPADSRCDIR CPPADOBJDIR CPPADDOCDIR COIN_HAS_CPPAD_TRUE COIN_HAS_CPPAD_FALSE MSCL__TRUE MSCL__FALSE LINDOINCDIR LINDOLIB COIN_HAS_LINDO_TRUE COIN_HAS_LINDO_FALSE KNITROINCDIR KNITROLIB COIN_HAS_KNITRO_TRUE COIN_HAS_KNITRO_FALSE OPENMP_TRUE OPENMP_FALSE USEMULTIPLYDEFINED_TRUE USEMULTIPLYDEFINED_FALSE YACC OSROOT_DIR oslib USE_ASL_LIB LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion OS_SVN_REV build build_cpu build_vendor build_os _SVN_REV COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED COINUTILS_LIBS COINUTILS_CFLAGS COINUTILS_DATA COINUTILS_DEPENDENCIES COINUTILS_LIBS_INSTALLED COINUTILS_CFLAGS_INSTALLED COINUTILS_DATA_INSTALLED OSLIB_CFLAGS OSLIB_LIBS OSLIB_PCLIBS OSLIB_PCREQUIRES OSLIB_DEPENDENCIES OSLIB_CFLAGS_INSTALLED OSLIB_LIBS_INSTALLED COIN_HAS_COINUTILS_TRUE COIN_HAS_COINUTILS_FALSE IPOPT_LIBS IPOPT_CFLAGS IPOPT_DATA IPOPT_DEPENDENCIES IPOPT_LIBS_INSTALLED IPOPT_CFLAGS_INSTALLED IPOPT_DATA_INSTALLED COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE CLP_LIBS CLP_CFLAGS CLP_DATA CLP_DEPENDENCIES CLP_LIBS_INSTALLED CLP_CFLAGS_INSTALLED CLP_DATA_INSTALLED COIN_HAS_CLP_TRUE COIN_HAS_CLP_FALSE DYLP_LIBS DYLP_CFLAGS DYLP_DATA DYLP_DEPENDENCIES DYLP_LIBS_INSTALLED DYLP_CFLAGS_INSTALLED DYLP_DATA_INSTALLED COIN_HAS_DYLP_TRUE COIN_HAS_DYLP_FALSE VOL_LIBS VOL_CFLAGS VOL_DATA VOL_DEPENDENCIES VOL_LIBS_INSTALLED VOL_CFLAGS_INSTALLED VOL_DATA_INSTALLED COIN_HAS_VOL_TRUE COIN_HAS_VOL_FALSE SYMPHONY_LIBS SYMPHONY_CFLAGS SYMPHONY_DATA SYMPHONY_DEPENDENCIES SYMPHONY_LIBS_INSTALLED SYMPHONY_CFLAGS_INSTALLED SYMPHONY_DATA_INSTALLED COIN_HAS_SYMPHONY_TRUE COIN_HAS_SYMPHONY_FALSE CPX_LIBS CPX_CFLAGS CPX_DATA CPX_DEPENDENCIES CPX_LIBS_INSTALLED CPX_CFLAGS_INSTALLED CPX_DATA_INSTALLED COIN_HAS_CPX_TRUE COIN_HAS_CPX_FALSE GLPK_LIBS GLPK_CFLAGS GLPK_DATA GLPK_DEPENDENCIES GLPK_LIBS_INSTALLED GLPK_CFLAGS_INSTALLED GLPK_DATA_INSTALLED COIN_HAS_GLPK_TRUE COIN_HAS_GLPK_FALSE CBC_LIBS CBC_CFLAGS CBC_DATA CBC_DEPENDENCIES CBC_LIBS_INSTALLED CBC_CFLAGS_INSTALLED CBC_DATA_INSTALLED COIN_HAS_CBC_TRUE COIN_HAS_CBC_FALSE BONMIN_LIBS BONMIN_CFLAGS BONMIN_DATA BONMIN_DEPENDENCIES BONMIN_LIBS_INSTALLED BONMIN_CFLAGS_INSTALLED BONMIN_DATA_INSTALLED COIN_HAS_BONMIN_TRUE COIN_HAS_BONMIN_FALSE COUENNE_LIBS COUENNE_CFLAGS COUENNE_DATA COUENNE_DEPENDENCIES COUENNE_LIBS_INSTALLED COUENNE_CFLAGS_INSTALLED COUENNE_DATA_INSTALLED COIN_HAS_COUENNE_TRUE COIN_HAS_COUENNE_FALSE BCP_LIBS BCP_CFLAGS BCP_DATA BCP_DEPENDENCIES BCP_LIBS_INSTALLED BCP_CFLAGS_INSTALLED BCP_DATA_INSTALLED COIN_HAS_BCP_TRUE COIN_HAS_BCP_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE CPPAD_LIBS CPPAD_CFLAGS CPPAD_DATA CPPAD_DEPENDENCIES CPPAD_LIBS_INSTALLED CPPAD_CFLAGS_INSTALLED CPPAD_DATA_INSTALLED COIN_HAS_CPPAD_TRUE COIN_HAS_CPPAD_FALSE LINDOINCDIR LINDOLIB COIN_HAS_LINDO_TRUE COIN_HAS_LINDO_FALSE KNITROINCDIR KNITROLIB COIN_HAS_KNITRO_TRUE COIN_HAS_KNITRO_FALSE OPENMP_TRUE OPENMP_FALSE USEMULTIPLYDEFINED_TRUE USEMULTIPLYDEFINED_FALSE YACC OSROOT_DIR oslib LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1161,6 +1161,9 @@ Optional Packages:
   --with-asl-lib linker flags for using package ASL
   --with-asl-incdir directory with header files for using package ASL
   --with-asl-datadir directory with data files for using package ASL
+  --with-cppad-lib linker flags for using package cppad
+  --with-cppad-incdir directory with header files for using package cppad
+  --with-cppad-datadir directory with data files for using package cppad
   --with-lindo-incdir specify the header file directory for library Lindo
   --with-lindo-lib specify the flags used to link with the library Lindo
   --with-knitro-incdir specify the header file directory for library Knitro
@@ -1667,24 +1670,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 #############################################################################
 #                         GET THE VERSION NUMBER                            #
 #############################################################################
-# Initialize the ADDLIBS variable
-ADDLIBS="-lm $LIBS"
-
-
-# Initialize the PCADDLIBS variable.
-# This variable is used to setup library flags for the "Libs:" section in a .pc file.
-# In certain cases, it may contain more flags than the ADDLIBS variable.
-PCADDLIBS=""
-
 
 # As backup, we make sure we don't loose an FLIBS if it has been set
 # by the user
 save_FLIBS="$FLIBS"
-
-# Initialize the FADDLIBS variable (which is to be used with a fortran
-# compiler and will not include FLIBS)
-FADDLIBS="$LIBS"
-
 
 # A useful makefile conditional that is always false
 
@@ -1831,25 +1820,11 @@ build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
 
 
 
-# Initialise ADDLIBS and FADDLIBS
-# Initialize the ADDLIBS variable
-ADDLIBS="-lm $LIBS"
-
-
-# Initialize the PCADDLIBS variable.
-# This variable is used to setup library flags for the "Libs:" section in a .pc file.
-# In certain cases, it may contain more flags than the ADDLIBS variable.
-PCADDLIBS=""
-
+# Initialise projectdir
 
 # As backup, we make sure we don't loose an FLIBS if it has been set
 # by the user
 save_FLIBS="$FLIBS"
-
-# Initialize the FADDLIBS variable (which is to be used with a fortran
-# compiler and will not include FLIBS)
-FADDLIBS="$LIBS"
-
 
 # A useful makefile conditional that is always false
 
@@ -1931,8 +1906,6 @@ fi
 # Capture libtool library version, if given.
 
 
-
-LIBS_without_ADDLIBS="$LIBS"
 
 # Check if user wants to produce debugging code
 
@@ -2206,6 +2179,7 @@ fi
 	       comps="xlc gcc pgcc icc cc"
 	     fi
 	     ;;
+  *-linux-gnu*) comps="gcc cc pgcc icc xlc" ;;
   *-linux-*) comps="xlc gcc cc pgcc icc" ;;
   *)         comps="xlc_r xlc cc gcc pgcc icc" ;;
 esac
@@ -3345,10 +3319,9 @@ echo "$as_me: Will use MPI C compiler $MPICC" >&6;}
   CC="$MPICC"
 fi
 
-# Correct ADDLIBS initialization if we are using the MS compiler
+# Correct the LD variable if we are using the MS or Intel-windows compiler
 case "$CC" in
   cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-    ADDLIBS=
     case $build in
   *-mingw*)
     if test "${LD+set}" = set; then :; else
@@ -3403,6 +3376,8 @@ case $build in
   *-*-solaris*)
   	     comps="CC xlC_r aCC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
   *-darwin*) comps="g++ c++ CC" ;;
+  *-linux-gnu*)
+             comps="g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC xlC_r aCC CC" ;;
           *) comps="xlC_r aCC CC g++ c++ pgCC icpc gpp cxx cc++ cl FCC KCC RCC" ;;
 esac
 
@@ -4283,8 +4258,9 @@ echo "$as_me: Will use MPI C++ compiler $MPICXX" >&6;}
   CXX="$MPICXX"
 fi
 
+# correct the LD variable in a mingw build with MS or intel compiler
 case "$CXX" in
-  cl* | */cl* | CL* | */CL* )
+  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
     case $build in
   *-mingw*)
     if test "${LD+set}" = set; then :; else
@@ -5478,7 +5454,7 @@ else
 fi
 full_prefix=`cd $full_prefix ; pwd`
 
-abs_lib_dir=$full_prefix/lib/coin
+abs_lib_dir=$full_prefix/lib
 
 abs_include_dir=$full_prefix/include
 
@@ -6062,7 +6038,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6065 "configure"' > conftest.$ac_ext
+  echo '#line 6041 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7196,7 +7172,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:7199:" \
+echo "$as_me:7175:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -8263,11 +8239,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8266: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8242: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8270: \$? = $ac_status" >&5
+   echo "$as_me:8246: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8531,11 +8507,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8534: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8510: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8538: \$? = $ac_status" >&5
+   echo "$as_me:8514: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8635,11 +8611,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8638: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8614: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8642: \$? = $ac_status" >&5
+   echo "$as_me:8618: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10980,7 +10956,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10983 "configure"
+#line 10959 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11080,7 +11056,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11083 "configure"
+#line 11059 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13424,11 +13400,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13427: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13403: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13431: \$? = $ac_status" >&5
+   echo "$as_me:13407: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13528,11 +13504,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13531: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13507: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13535: \$? = $ac_status" >&5
+   echo "$as_me:13511: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15098,11 +15074,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15101: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15077: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15105: \$? = $ac_status" >&5
+   echo "$as_me:15081: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15202,11 +15178,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15205: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15181: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15209: \$? = $ac_status" >&5
+   echo "$as_me:15185: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17409,11 +17385,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17412: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17388: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17416: \$? = $ac_status" >&5
+   echo "$as_me:17392: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17677,11 +17653,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17680: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17656: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17684: \$? = $ac_status" >&5
+   echo "$as_me:17660: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17781,11 +17757,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17784: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17760: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17788: \$? = $ac_status" >&5
+   echo "$as_me:17764: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -20580,7 +20556,7 @@ if test $enable_shared = yes; then
     *-linux-*)
       if test "$GXX" = "yes"; then
         RPATH_FLAGS=
-        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
+        for dir in $abs_lib_dir; do
           RPATH_FLAGS="$RPATH_FLAGS -Wl,--rpath -Wl,$dir"
         done
       fi ;;
@@ -20597,7 +20573,7 @@ if test $enable_shared = yes; then
         RPATH_FLAGS=nothing ;;
     *-*-solaris*)
         RPATH_FLAGS=
-        for dir in $abs_lib_dir $abs_lib_dir/ThirdParty; do
+        for dir in $abs_lib_dir; do
           RPATH_FLAGS="$RPATH_FLAGS -R$dir"
         done
   esac
@@ -22362,6 +22338,9 @@ if test x$coin_projectdir = xyes ; then
       if test -d ../$i ; then
         COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../$i; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
       fi
+      if test -d ../$i/pkgconfig ; then
+        COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../$i/pkgconfig; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
+      fi
     done
   fi
 
@@ -22369,6 +22348,9 @@ if test x$coin_projectdir = xyes ; then
     for i in `cat ../../coin_subdirs.txt` ; do
       if test -d ../../$i ; then
         COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../../$i; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
+      fi
+      if test -d ../../$i/pkgconfig ; then
+        COIN_PKG_CONFIG_PATH_UNINSTALLED="`cd ../../$i/pkgconfig; pwd`:${COIN_PKG_CONFIG_PATH_UNINSTALLED}"
       fi
     done
   fi
@@ -22462,7 +22444,7 @@ if test $coin_has_coinutils = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinutils"; then
-    COINUTILS_VERSIONS="`$PKG_CONFIG --modversion "coinutils" 2>/dev/null`"
+    COINUTILS_VERSIONS="`$PKG_CONFIG --modversion "coinutils" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinutils" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -22764,10 +22746,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  COINUTILS_DEPENDENCIES=`echo " $COINUTILS_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  COINUTILS_DEPENDENCIES=`echo " $COINUTILS_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -22906,7 +22889,7 @@ if test $coin_has_ipopt = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "ipopt"; then
-    IPOPT_VERSIONS="`$PKG_CONFIG --modversion "ipopt" 2>/dev/null`"
+    IPOPT_VERSIONS="`$PKG_CONFIG --modversion "ipopt" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "ipopt" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -23208,10 +23191,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  IPOPT_DEPENDENCIES=`echo " $IPOPT_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  IPOPT_DEPENDENCIES=`echo " $IPOPT_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -23345,7 +23329,7 @@ if test $coin_has_clp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-clp"; then
-    CLP_VERSIONS="`$PKG_CONFIG --modversion "osi-clp" 2>/dev/null`"
+    CLP_VERSIONS="`$PKG_CONFIG --modversion "osi-clp" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "osi-clp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -23647,10 +23631,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  CLP_DEPENDENCIES=`echo " $CLP_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  CLP_DEPENDENCIES=`echo " $CLP_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -23784,7 +23769,7 @@ if test $coin_has_dylp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-dylp"; then
-    DYLP_VERSIONS="`$PKG_CONFIG --modversion "osi-dylp" 2>/dev/null`"
+    DYLP_VERSIONS="`$PKG_CONFIG --modversion "osi-dylp" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "osi-dylp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -24086,10 +24071,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  DYLP_DEPENDENCIES=`echo " $DYLP_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  DYLP_DEPENDENCIES=`echo " $DYLP_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -24223,7 +24209,7 @@ if test $coin_has_vol = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-vol"; then
-    VOL_VERSIONS="`$PKG_CONFIG --modversion "osi-vol" 2>/dev/null`"
+    VOL_VERSIONS="`$PKG_CONFIG --modversion "osi-vol" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "osi-vol" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -24525,10 +24511,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  VOL_DEPENDENCIES=`echo " $VOL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  VOL_DEPENDENCIES=`echo " $VOL_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -24662,7 +24649,7 @@ if test $coin_has_symphony = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-sym"; then
-    SYMPHONY_VERSIONS="`$PKG_CONFIG --modversion "osi-sym" 2>/dev/null`"
+    SYMPHONY_VERSIONS="`$PKG_CONFIG --modversion "osi-sym" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "osi-sym" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -24964,10 +24951,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  SYMPHONY_DEPENDENCIES=`echo " $SYMPHONY_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  SYMPHONY_DEPENDENCIES=`echo " $SYMPHONY_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -25101,7 +25089,7 @@ if test $coin_has_cpx = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-cplex"; then
-    CPX_VERSIONS="`$PKG_CONFIG --modversion "osi-cplex" 2>/dev/null`"
+    CPX_VERSIONS="`$PKG_CONFIG --modversion "osi-cplex" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "osi-cplex" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -25403,10 +25391,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  CPX_DEPENDENCIES=`echo " $CPX_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  CPX_DEPENDENCIES=`echo " $CPX_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -25540,7 +25529,7 @@ if test $coin_has_glpk = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-glpk"; then
-    GLPK_VERSIONS="`$PKG_CONFIG --modversion "osi-glpk" 2>/dev/null`"
+    GLPK_VERSIONS="`$PKG_CONFIG --modversion "osi-glpk" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "osi-glpk" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -25842,10 +25831,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  GLPK_DEPENDENCIES=`echo " $GLPK_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  GLPK_DEPENDENCIES=`echo " $GLPK_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -25979,7 +25969,7 @@ if test $coin_has_cbc = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-cbc"; then
-    CBC_VERSIONS="`$PKG_CONFIG --modversion "osi-cbc" 2>/dev/null`"
+    CBC_VERSIONS="`$PKG_CONFIG --modversion "osi-cbc" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "osi-cbc" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -26281,10 +26271,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  CBC_DEPENDENCIES=`echo " $CBC_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  CBC_DEPENDENCIES=`echo " $CBC_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -26418,7 +26409,7 @@ if test $coin_has_bonmin = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "bonmin"; then
-    BONMIN_VERSIONS="`$PKG_CONFIG --modversion "bonmin" 2>/dev/null`"
+    BONMIN_VERSIONS="`$PKG_CONFIG --modversion "bonmin" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "bonmin" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -26720,10 +26711,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  BONMIN_DEPENDENCIES=`echo " $BONMIN_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  BONMIN_DEPENDENCIES=`echo " $BONMIN_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -26857,7 +26849,7 @@ if test $coin_has_couenne = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "couenne"; then
-    COUENNE_VERSIONS="`$PKG_CONFIG --modversion "couenne" 2>/dev/null`"
+    COUENNE_VERSIONS="`$PKG_CONFIG --modversion "couenne" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "couenne" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -27159,10 +27151,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  COUENNE_DEPENDENCIES=`echo " $COUENNE_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  COUENNE_DEPENDENCIES=`echo " $COUENNE_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -27296,7 +27289,7 @@ if test $coin_has_bcp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "bcp"; then
-    BCP_VERSIONS="`$PKG_CONFIG --modversion "bcp" 2>/dev/null`"
+    BCP_VERSIONS="`$PKG_CONFIG --modversion "bcp" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "bcp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -27598,10 +27591,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  BCP_DEPENDENCIES=`echo " $BCP_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  BCP_DEPENDENCIES=`echo " $BCP_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -27735,7 +27729,7 @@ if test $coin_has_asl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinasl"; then
-    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null`"
+    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`"
      cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28037,10 +28031,11 @@ _ACEOF
 
   # construct dependencies variables from LIBS variables
   # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
   # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
-  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+  ASL_DEPENDENCIES=`echo " $ASL_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
-    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
 
 
   if test 1 = 0 ; then  #change this test to enable a bit of debugging output
@@ -28090,53 +28085,365 @@ fi
 
 
 
-echo "$as_me:$LINENO: checking for COIN project cppad" >&5
-echo $ECHO_N "checking for COIN project cppad... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking for COIN-OR package cppad" >&5
+echo $ECHO_N "checking for COIN-OR package cppad... $ECHO_C" >&6
 
-# First check, if the sub-project is actually available (ToDo: allow
-# other locations)
+coin_has_cppad=notGiven
 
-coin_has_cppad=unavailable
+# check if user wants to skip package in any case
 if test x"$COIN_SKIP_PROJECTS" != x; then
   for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = cppad; then
+    if test $dir = "cppad"; then
       coin_has_cppad=skipping
     fi
   done
 fi
 
+CPPAD_LIBS=
+CPPAD_CFLAGS=
+CPPAD_DATA=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#check if user provided LIBS, CFLAGS, or DATA for module
 if test $coin_has_cppad != skipping; then
-  if test $PACKAGE_TARNAME = cppad; then
-    coin_has_cppad=.
-  else
-    if test -d $srcdir/../cppad; then
-      coin_has_cppad=../cppad
-    fi
-  fi
+
+
+# Check whether --with-m4_tolower(cppad)-lib or --without-m4_tolower(cppad)-lib was given.
+if test "${with_cppad_lib+set}" = set; then
+  withval="$with_cppad_lib"
+  coin_has_cppad=yes
+       CPPAD_LIBS="$withval"
+
+         OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
+         OSLIB_LIBS="$withval $OSLIB_LIBS"
+
+
+fi;
+
+
+# Check whether --with-m4_tolower(cppad)-incdir or --without-m4_tolower(cppad)-incdir was given.
+if test "${with_cppad_incdir+set}" = set; then
+  withval="$with_cppad_incdir"
+  coin_has_cppad=yes
+     CPPAD_CFLAGS="-I`${CYGPATH_W} $withval`"
+     OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+
+
+fi;
+
+
+# Check whether --with-m4_tolower(cppad)-datadir or --without-m4_tolower(cppad)-datadir was given.
+if test "${with_cppad_datadir+set}" = set; then
+  withval="$with_cppad_datadir"
+  coin_has_cppad=yes
+     CPPAD_DATA="$withval"
+fi;
 fi
 
-if test $coin_has_cppad != unavailable &&
-   test $coin_has_cppad != skipping; then
-  # Set the #define if the component is available
+if test $coin_has_cppad = notGiven; then
+  if test -n "$PKG_CONFIG" ; then
+    # set search path for pkg-config
+    # need to export variable to be sure that the following pkg-config gets these values
+    coin_save_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
+    PKG_CONFIG_PATH="$COIN_PKG_CONFIG_PATH:$COIN_PKG_CONFIG_PATH_UNINSTALLED"
+    export PKG_CONFIG_PATH
+
+    # let pkg-config do it's magic
+
+
+
+if test -n "$PKG_CONFIG" ; then
+  if $PKG_CONFIG --exists "cppad"; then
+    CPPAD_VERSIONS="`$PKG_CONFIG --modversion "cppad" 2>/dev/null | tr '\n' ' '`"
+     cflags=`$PKG_CONFIG --cflags "cppad" 2>/dev/null`
+    # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
+	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
+	# but only do this if is not trivial
+    if test "$CYGPATH_W" != "echo" ; then
+      # need to put into brackets since otherwise autoconf replaces the brackets in the sed command
+      cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
+    CPPAD_CFLAGS="$cflags"
+    CPPAD_LIBS=`$PKG_CONFIG --libs "cppad" 2>/dev/null`
+    CPPAD_DATA=`$PKG_CONFIG --variable=datadir "cppad" 2>/dev/null`
+     coin_has_cppad=yes
+        echo "$as_me:$LINENO: result: yes: $CPPAD_VERSIONS" >&5
+echo "${ECHO_T}yes: $CPPAD_VERSIONS" >&6
+
+        # adjust linker flags for (i)cl compiler
+        # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl)
+        if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+        then
+          CPPAD_LIBS=`echo " $CPPAD_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
+        fi
+
+        # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
+
+          OSLIB_PCREQUIRES="cppad $OSLIB_PCREQUIRES"
+          OSLIB_CFLAGS="$CPPAD_CFLAGS $OSLIB_CFLAGS"
+          OSLIB_LIBS="$CPPAD_LIBS $OSLIB_LIBS"
+
+
+
+  else
+    CPPAD_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "cppad"`
+      coin_has_cppad=notGiven
+        echo "$as_me:$LINENO: result: not given: $CPPAD_PKG_ERRORS" >&5
+echo "${ECHO_T}not given: $CPPAD_PKG_ERRORS" >&6
+
+  fi
+else
+  { { echo "$as_me:$LINENO: error: \"Cannot check for existance of module cppad without pkg-config\"" >&5
+echo "$as_me: error: \"Cannot check for existance of module cppad without pkg-config\"" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+
+    # reset PKG_CONFIG_PATH variable
+    PKG_CONFIG_PATH="$coin_save_PKG_CONFIG_PATH"
+    export PKG_CONFIG_PATH
+
+  else
+    echo "$as_me:$LINENO: result: skipped check via pkg-config, redirect to fallback" >&5
+echo "${ECHO_T}skipped check via pkg-config, redirect to fallback" >&6
+
+echo "$as_me:$LINENO: checking for COIN-OR package cppad (fallback)" >&5
+echo $ECHO_N "checking for COIN-OR package cppad (fallback)... $ECHO_C" >&6
+
+coin_has_cppad=notGiven
+CPPAD_LIBS=
+CPPAD_LIBS_INSTALLED=
+CPPAD_CFLAGS=
+CPPAD_CFLAGS_INSTALLED=
+CPPAD_DATA=
+CPPAD_DATA_INSTALLED=
+
+# initial list of dependencies is "cppad", but we need to filter out version number specifications (= x, <= x, >= x)
+projtoprocess="cppad"
+
+# we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
+# further, we collect the list of corresponding .pc files, but do this in reverse order, because we need this order afterwards
+# the latter we also do with .pc files corresponding to the installed projects, which will be needed to setup Makefiles for examples
+# also, we setup the DATA variable
+allproj=""
+allpcfiles=""
+allpcifiles=""
+while test "x$projtoprocess" != x ; do
+
+  for proj in $projtoprocess ; do
+    # if $proj is available and configured, then a project-uninstalled.pc file should have been created, so search for it
+    pcfile=""
+    save_IFS="$IFS"
+    IFS=":"
+    for dir in $COIN_PKG_CONFIG_PATH_UNINSTALLED ; do
+      # the base directory configure should have setup coin_subdirs.txt in a way that it does not contain projects that should be skipped, so we do not need to test this here again
+      if test -r "$dir/${proj}-uninstalled.pc" ; then
+        pcfile="$dir/$proj-uninstalled.pc"
+        if test -r "$dir/${proj}.pc" ; then
+          pcifile="$dir/${proj}.pc"
+        else
+          { echo "$as_me:$LINENO: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This may break Makefile's of examples." >&5
+echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This may break Makefile's of examples." >&2;}
+          pcifile=
+        fi
+        break
+      fi
+    done
+    IFS="$save_IFS"
+
+    if test "x$pcfile" != x ; then
+      # read dependencies from $pcfile and filter it
+      projrequires=`sed -n -e 's/Requires://gp' "$pcfile" | sed -e 's/<\{0,1\}>\{0,1\}=[ 	]\{0,\}[^ 	]\{1,\}//g'`
+
+      # add projrequires to the front of the list of projects that have to be processed next
+      # at the same time, remove $proj from this list
+      projtoprocess=${projtoprocess/$proj/$projrequires}
+
+      # read DATA from $pcfile, if _DATA is still empty
+      if test "x$CPPAD_DATA" = x ; then
+        projdatadir=
+        pcfilemod=`sed -e '/[a-zA-Z]:/d' -e 's/datadir=\(.*\)/echo projdatadir=\\\\"\1\\\\"/g' $pcfile`
+        eval `sh -c "$pcfilemod"`
+        CPPAD_DATA="$projdatadir"
+      fi
+
+      allproj="$allproj $proj"
+      allpcfiles="$pcfile:$allpcfiles"
+
+    else
+      echo "$as_me:$LINENO: result: no, dependency $proj not available" >&5
+echo "${ECHO_T}no, dependency $proj not available" >&6
+      allproj=fail
+      break 2
+    fi
+
+    if test "x$pcifile" != x ; then
+      allpcifiles="$pcifile:$allpcifiles"
+
+      # read DATA_INSTALLED from $pcifile, if _DATA_INSTALLED is still empty
+      if test "x$CPPAD_DATA_INSTALLED" = x ; then
+        projdatadir=
+        pcifilemod=`sed -e '/[a-zA-Z]:/d' -e 's/datadir=\(.*\)/echo projdatadir=\\\\"\1\\\\"/g' $pcifile`
+        eval `sh -c "$pcifilemod"`
+        if test "${CYGPATH_W}" != "echo"; then
+          projdatadir="\`\$(CYGPATH_W) ${projdatadir} | sed -e 's/\\\\\\\\/\\\\\\\\\\\\\\\\/g'\`"
+        fi
+        CPPAD_DATA_INSTALLED="$projdatadir"
+      fi
+
+    fi
+
+    break
+  done
+
+  # remove spaces on begin of $projtoprocess
+  projtoprocess=`echo $projtoprocess | sed -e 's/^ *//'`
+
+done
+
+if test "$allproj" != fail ; then
+
+  # now go through the list of .pc files and assemble compiler and linker flags
+  # important is here to obey the reverse order that has been setup before,
+  # since then libraries that are required by several others should be after these other libraries
+  pcfilesprocessed=""
+
+  save_IFS="$IFS"
+  IFS=":"
+  for pcfile in $allpcfiles ; do
+
+    # if $pcfile has been processed already, skip this round
+    if test "x$pcfilesprocessed" != x ; then
+      for pcfiledone in $pcfilesprocessed ; do
+        if test "$pcfiledone" = "$pcfile" ; then
+          continue 2
+        fi
+      done
+    fi
+
+    # modify .pc file to a shell script that prints shell commands for setting the compiler and library flags:
+    #   replace "Libs:" by "echo projlibs="
+    #   replace "Cflags:" by "echo projcflags="
+    #   remove every line starting with <some word>:
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+
+    # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
+    eval `sh -c "$pcfilemod"`
+
+    # add CYGPATH_W cludge into include flags and set CFLAGS variable
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
+    CPPAD_CFLAGS="$projcflags $CPPAD_CFLAGS"
+
+    # set LIBS variable
+    CPPAD_LIBS="$projlibs $CPPAD_LIBS"
+
+    # remember that we have processed $pcfile
+    pcfilesprocessed="$pcfilesprocessed:$pcfile"
+
+  done
+  IFS="$save_IFS"
+
+
+  # now go through the list of .pc files for installed projects and assemble compiler and linker flags
+  # important is here again to obey the reverse order that has been setup before,
+  # since then libraries that are required by several others should be after these other libraries
+  pcfilesprocessed=""
+
+  save_IFS="$IFS"
+  IFS=":"
+  for pcfile in $allpcifiles ; do
+
+    # if $pcfile has been processed already, skip this round
+    if test "x$pcfilesprocessed" != x ; then
+      for pcfiledone in $pcfilesprocessed ; do
+        if test "$pcfiledone" = "$pcfile" ; then
+          continue 2
+        fi
+      done
+    fi
+
+    # modify .pc file to a shell script that prints shell commands for setting the compiler and library flags:
+    #   replace "Libs:" by "echo projlibs="
+    #   replace "Cflags:" by "echo projcflags="
+    #   remove every line starting with <some word>:
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+
+    # set projcflags and projlibs variables by running $pcfilemod
+    projcflags=
+    projlibs=
+    eval `sh -c "$pcfilemod"`
+
+    # add CYGPATH_W cludge into include flags and set CFLAGS variable
+    if test "${CYGPATH_W}" != "echo"; then
+      projcflags=`echo "$projcflags" | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
+    fi
+    CPPAD_CFLAGS_INSTALLED="$projcflags $CPPAD_CFLAGS_INSTALLED"
+
+    # set LIBS variable
+    CPPAD_LIBS_INSTALLED="$projlibs $CPPAD_LIBS_INSTALLED"
+
+    # remember that we have processed $pcfile
+    pcfilesprocessed="$pcfilesprocessed:$pcfile"
+
+  done
+  IFS="$save_IFS"
+
+
+  # finish up
+  coin_has_cppad=yes
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
 
 cat >>confdefs.h <<\_ACEOF
 #define COIN_HAS_CPPAD 1
 _ACEOF
 
 
-  # Set the variables for source and object code location
+  # adjust linker flags for (i)cl compiler
+  # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
+  # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
+  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
+  #    everything of the form "-lname" by "libname.lib"
+  if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
+  then
+    CPPAD_LIBS=`echo " $CPPAD_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
+    CPPAD_LIBS_INSTALLED=`echo " $CPPAD_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+  fi
 
-  CPPADSRCDIR=`cd $srcdir/$coin_has_cppad; pwd`
 
-  CPPADOBJDIR=`pwd`/$coin_has_cppad
+    OSLIB_PCREQUIRES="cppad $OSLIB_PCREQUIRES"
+    OSLIB_CFLAGS="$CPPAD_CFLAGS $OSLIB_CFLAGS"
+    OSLIB_LIBS="$CPPAD_LIBS $OSLIB_LIBS"
+    OSLIB_CFLAGS_INSTALLED="$CPPAD_CFLAGS_INSTALLED $OSLIB_CFLAGS_INSTALLED"
+    OSLIB_LIBS_INSTALLED="$CPPAD_LIBS_INSTALLED $OSLIB_LIBS_INSTALLED"
 
-  CPPADDOCDIR=$abs_lib_dir/../../share/doc/coin/cppad
+
 fi
 
-  # Define the Makefile conditional
 
 
-if test $coin_has_cppad != unavailable &&
+if test $coin_has_cppad != notGiven &&
                 test $coin_has_cppad != skipping; then
   COIN_HAS_CPPAD_TRUE=
   COIN_HAS_CPPAD_FALSE='#'
@@ -28145,14 +28452,82 @@ else
   COIN_HAS_CPPAD_FALSE=
 fi
 
-echo "$as_me:$LINENO: result: $coin_has_cppad" >&5
+
+
+  fi
+
+else
+  echo "$as_me:$LINENO: result: $coin_has_cppad" >&5
 echo "${ECHO_T}$coin_has_cppad" >&6
+fi
+
+if test $coin_has_cppad != skipping &&
+   test $coin_has_cppad != notGiven ; then
+
+cat >>confdefs.h <<\_ACEOF
+#define COIN_HAS_CPPAD 1
+_ACEOF
 
 
-if test $coin_has_cppad = skipping &&
-   test $coin_has_ipopt != skipping ; then
-       { { echo "$as_me:$LINENO: error: Ipopt is present, but not the necessary cppad" >&5
-echo "$as_me: error: Ipopt is present, but not the necessary cppad" >&2;}
+  # construct dependencies variables from LIBS variables
+  # we add an extra space in LIBS so we can substitute out everything starting with " -"
+  # before, substitute out everything of the form -framework xxx as used on Mac
+  # also substitute out everything of the form `xxx`yyy (may have been added for cygwin/cl)
+  CPPAD_DEPENDENCIES=`echo " $CPPAD_LIBS" | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+    OSLIB_DEPENDENCIES=`echo " $OSLIB_LIBS " | sed -e 's/ -framework  *[^ ]*//g' -e 's/ -[^ ]*//g' -e 's/\`[^\`]*\`[^ ]* //g'`
+
+
+  if test 1 = 0 ; then  #change this test to enable a bit of debugging output
+    if test -n "$CPPAD_CFLAGS" ; then
+      { echo "$as_me:$LINENO: cppad CFLAGS are $CPPAD_CFLAGS" >&5
+echo "$as_me: cppad CFLAGS are $CPPAD_CFLAGS" >&6;}
+    fi
+    if test -n "$CPPAD_LIBS" ; then
+      { echo "$as_me:$LINENO: cppad LIBS   are $CPPAD_LIBS" >&5
+echo "$as_me: cppad LIBS   are $CPPAD_LIBS" >&6;}
+    fi
+    if test -n "$CPPAD_DEPENDENCIES" ; then
+      { echo "$as_me:$LINENO: cppad DEPENDENCIES are $CPPAD_DEPENDENCIES" >&5
+echo "$as_me: cppad DEPENDENCIES are $CPPAD_DEPENDENCIES" >&6;}
+    fi
+    if test -n "$CPPAD_DATA" ; then
+      { echo "$as_me:$LINENO: cppad DATA   is  $CPPAD_DATA" >&5
+echo "$as_me: cppad DATA   is  $CPPAD_DATA" >&6;}
+    fi
+    if test -n "$CPPAD_CFLAGS" ; then
+      { echo "$as_me:$LINENO: cppad CFLAGS are $CPPAD_CFLAGS" >&5
+echo "$as_me: cppad CFLAGS are $CPPAD_CFLAGS" >&6;}
+    fi
+
+      { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
+echo "$as_me: OSLib CFLAGS are $OSLIB_CFLAGS" >&6;}
+      { echo "$as_me:$LINENO: OSLib LIBS   are $OSLIB_LIBS" >&5
+echo "$as_me: OSLib LIBS   are $OSLIB_LIBS" >&6;}
+      { echo "$as_me:$LINENO: OSLib DEPENDENCIES are $OSLIB_DEPENDENCIES" >&5
+echo "$as_me: OSLib DEPENDENCIES are $OSLIB_DEPENDENCIES" >&6;}
+
+  fi
+fi
+
+# Define the Makefile conditional
+
+
+if test $coin_has_cppad != notGiven &&
+                test $coin_has_cppad != skipping; then
+  COIN_HAS_CPPAD_TRUE=
+  COIN_HAS_CPPAD_FALSE='#'
+else
+  COIN_HAS_CPPAD_TRUE='#'
+  COIN_HAS_CPPAD_FALSE=
+fi
+
+
+
+
+if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
+  { { echo "$as_me:$LINENO: error: Ipopt is present, but not the necessary CppAD." >&5
+echo "$as_me: error: Ipopt is present, but not the necessary CppAD." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -28343,25 +28718,6 @@ fi
 
 
 #############################################################################
-#                             Need to know if we have MS cl                           #
-#############################################################################
-case $CXX in
-    cl*)
-    cl_compiler=yes  ;;
-esac
-
-
-
-if test x$cl_compiler = xyes; then
-  MSCL__TRUE=
-  MSCL__FALSE='#'
-else
-  MSCL__TRUE='#'
-  MSCL__FALSE=
-fi
-
-
-#############################################################################
 #                             Third party solvers                           #
 #############################################################################
 
@@ -28442,7 +28798,7 @@ fi
 
     if test x"$lindo_libcheck" != xno; then
 	   coin_save_LIBS="$LIBS"
-	   LIBS="$LINDOLIB $ADDLIBS "
+	   LIBS="$LINDOLIB "
 	   coin_LINDO_link=no
 	   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -28520,10 +28876,9 @@ echo "$as_me: error: Cannot find symbol(s) OSLib with LINDO" >&2;}
 
 
 # If we make it this far, we've verified the file and linked the function. Add
-# the necessary link flags to ADDLIBS and _{PC}LIBS and define the preprocessor symbol
+# the necessary link flags to _{PC}LIBS and define the preprocessor symbol
 # COIN_HAS_LBRY.
 
-    ADDLIBS="$LINDOLIB $ADDLIBS"
 
 
 
@@ -28626,7 +28981,7 @@ fi
 
     if test x"$knitro_libcheck" != xno; then
 	   coin_save_LIBS="$LIBS"
-	   LIBS="$KNITROLIB $ADDLIBS "
+	   LIBS="$KNITROLIB "
 	   coin_KNITRO_link=no
 	   ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -28704,10 +29059,9 @@ echo "$as_me: error: Cannot find symbol(s) OSLib with KNITRO" >&2;}
 
 
 # If we make it this far, we've verified the file and linked the function. Add
-# the necessary link flags to ADDLIBS and _{PC}LIBS and define the preprocessor symbol
+# the necessary link flags to _{PC}LIBS and define the preprocessor symbol
 # COIN_HAS_LBRY.
 
-    ADDLIBS="$KNITROLIB $ADDLIBS"
 
 
 
@@ -32703,7 +33057,7 @@ fi
 
 
 
-# Set ADDLIBS appropriately for socket libraries. Check for the presence of
+# Check for the sockets library. Check for the presence of
 # header files, then see what we need in the way of libraries.
 
   #if test x"" = x; then
@@ -33243,7 +33597,6 @@ if test x$ac_coin_found_socket_libraries = xno ; then
 echo "$as_me: error: Can't build OS without socket libraries!" >&2;}
    { (exit 1); exit 1; }; }
 fi
-ADDLIBS="$WINSOCKLIBS   $ADDLIBS"
 
 
 
@@ -33254,8 +33607,6 @@ else
   USEMULTIPLYDEFINED_TRUE='#'
   USEMULTIPLYDEFINED_FALSE=
 fi
-
-
 
 
 #############################################################################
@@ -33334,16 +33685,6 @@ esac
 #############################################################################
 #  See if we are disabling shared libs###
 #############################################################################
-
-
-     if test $enable_static != yes; then
-         USE_ASL_LIB=$ASLLIB
-     fi
-
-
-
-
-
 
 ##
 ## the help file
@@ -35102,12 +35443,6 @@ echo "${ECHO_T}$coin_link_input_cmd" >&6
 
 if test x$coin_skip_ac_output != xyes; then
 
-  FADDLIBS="$ADDLIBS"
-  if test x"$coin_need_flibs" = xyes; then
-    ADDLIBS="$ADDLIBS $FLIBS"
-  fi
-  PCADDLIBS="$PCADDLIBS $ADDLIBS"
-
   # library extension
 
   case "$CC" in
@@ -35499,10 +35834,10 @@ echo "$as_me: error: conditional \"COIN_HAS_CPPAD\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
-if test -z "${MSCL__TRUE}" && test -z "${MSCL__FALSE}"; then
-  { { echo "$as_me:$LINENO: error: conditional \"MSCL_\" was never defined.
+if test -z "${COIN_HAS_CPPAD_TRUE}" && test -z "${COIN_HAS_CPPAD_FALSE}"; then
+  { { echo "$as_me:$LINENO: error: conditional \"COIN_HAS_CPPAD\" was never defined.
 Usually this means the macro was only invoked conditionally." >&5
-echo "$as_me: error: conditional \"MSCL_\" was never defined.
+echo "$as_me: error: conditional \"COIN_HAS_CPPAD\" was never defined.
 Usually this means the macro was only invoked conditionally." >&2;}
    { (exit 1); exit 1; }; }
 fi
@@ -36081,9 +36416,6 @@ s,@ECHO_C@,$ECHO_C,;t t
 s,@ECHO_N@,$ECHO_N,;t t
 s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
-s,@ADDLIBS@,$ADDLIBS,;t t
-s,@PCADDLIBS@,$PCADDLIBS,;t t
-s,@FADDLIBS@,$FADDLIBS,;t t
 s,@ALWAYS_FALSE_TRUE@,$ALWAYS_FALSE_TRUE,;t t
 s,@ALWAYS_FALSE_FALSE@,$ALWAYS_FALSE_FALSE,;t t
 s,@have_svnversion@,$have_svnversion,;t t
@@ -36318,13 +36650,15 @@ s,@ASL_CFLAGS_INSTALLED@,$ASL_CFLAGS_INSTALLED,;t t
 s,@ASL_DATA_INSTALLED@,$ASL_DATA_INSTALLED,;t t
 s,@COIN_HAS_ASL_TRUE@,$COIN_HAS_ASL_TRUE,;t t
 s,@COIN_HAS_ASL_FALSE@,$COIN_HAS_ASL_FALSE,;t t
-s,@CPPADSRCDIR@,$CPPADSRCDIR,;t t
-s,@CPPADOBJDIR@,$CPPADOBJDIR,;t t
-s,@CPPADDOCDIR@,$CPPADDOCDIR,;t t
+s,@CPPAD_LIBS@,$CPPAD_LIBS,;t t
+s,@CPPAD_CFLAGS@,$CPPAD_CFLAGS,;t t
+s,@CPPAD_DATA@,$CPPAD_DATA,;t t
+s,@CPPAD_DEPENDENCIES@,$CPPAD_DEPENDENCIES,;t t
+s,@CPPAD_LIBS_INSTALLED@,$CPPAD_LIBS_INSTALLED,;t t
+s,@CPPAD_CFLAGS_INSTALLED@,$CPPAD_CFLAGS_INSTALLED,;t t
+s,@CPPAD_DATA_INSTALLED@,$CPPAD_DATA_INSTALLED,;t t
 s,@COIN_HAS_CPPAD_TRUE@,$COIN_HAS_CPPAD_TRUE,;t t
 s,@COIN_HAS_CPPAD_FALSE@,$COIN_HAS_CPPAD_FALSE,;t t
-s,@MSCL__TRUE@,$MSCL__TRUE,;t t
-s,@MSCL__FALSE@,$MSCL__FALSE,;t t
 s,@LINDOINCDIR@,$LINDOINCDIR,;t t
 s,@LINDOLIB@,$LINDOLIB,;t t
 s,@COIN_HAS_LINDO_TRUE@,$COIN_HAS_LINDO_TRUE,;t t
@@ -36340,7 +36674,6 @@ s,@USEMULTIPLYDEFINED_FALSE@,$USEMULTIPLYDEFINED_FALSE,;t t
 s,@YACC@,$YACC,;t t
 s,@OSROOT_DIR@,$OSROOT_DIR,;t t
 s,@oslib@,$oslib,;t t
-s,@USE_ASL_LIB@,$USE_ASL_LIB,;t t
 s,@LIBEXT@,$LIBEXT,;t t
 s,@VPATH_DISTCLEANFILES@,$VPATH_DISTCLEANFILES,;t t
 s,@ABSBUILDDIR@,$ABSBUILDDIR,;t t
@@ -37127,8 +37460,5 @@ else
   { echo "$as_me:$LINENO: No configuration of $PACKAGE_NAME necessary" >&5
 echo "$as_me: No configuration of $PACKAGE_NAME necessary" >&6;}
 fi
-
-
-
 
 

@@ -9,7 +9,7 @@
 AUTOMAKE_OPTIONS = foreign
 
 ########################################################################
-#                             libOSUtils                           #
+#                             libOSUtils                               #
 ########################################################################
 
 # Name of the library compiled in this directory.  We want it to be installed
@@ -36,7 +36,7 @@ libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS =\
+AM_CPPFLAGS = $(ASL_CFLAGS) \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` 
 
@@ -45,8 +45,6 @@ AM_CPPFLAGS =\
 #AM_CPPFLAGS += -DUSE_DTOA=1
 #endif
 
-
- 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
@@ -56,7 +54,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 ########################################################################
 
 # Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'install/coin'
+# and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
@@ -67,10 +65,3 @@ includecoin_HEADERS = \
 	OSDataStructures.h \
 	OSParameters.h \
 	OSdtoa.h
-
-if COIN_HAS_ASL
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
-#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-AM_CPPFLAGS += $(ASL_CFLAGS) 
-endif
-

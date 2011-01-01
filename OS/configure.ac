@@ -45,11 +45,9 @@ AC_COIN_PROJECTDIR_INIT(OS)
 # Get the system type
 AC_CANONICAL_BUILD
 
-# Initialise ADDLIBS and FADDLIBS
+# Initialise projectdir
 AC_COIN_PROJECTDIR_INIT
 
-LIBS_without_ADDLIBS="$LIBS"
-  
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(OS)
 
@@ -117,12 +115,10 @@ AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin],   [OSLib])
 AC_COIN_CHECK_PACKAGE(Couenne,  [couenne],  [OSLib])
 AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],      [OSLib])
 AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],  [OSLib])
+AC_COIN_CHECK_PACKAGE(cppad,    [cppad],    [OSLib])
 
-AC_COIN_HAS_PROJECT(cppad)
-
-if test $coin_has_cppad = skipping &&
-   test $coin_has_ipopt != skipping ; then
-       AC_MSG_ERROR([Ipopt is present, but not the necessary cppad])   
+if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
+  AC_MSG_ERROR([Ipopt is present, but not the necessary CppAD.])
 fi
 
 #if test $coin_has_coinutils != unavailable &&
@@ -312,20 +308,10 @@ fi
 
 
 #############################################################################
-#                             Need to know if we have MS cl                           #
-#############################################################################
-case $CXX in
-    cl*)
-    cl_compiler=yes  ;;
-esac
-
-AM_CONDITIONAL(MSCL_, test x$cl_compiler = xyes)
-
-#############################################################################
 #                             Third party solvers                           #
 #############################################################################
 
-AC_COIN_CHECK_USER_LIBRARY([Lindo],[LINDO],[lindo.h],[OSLib])
+AC_COIN_CHECK_USER_LIBRARY([Lindo], [LINDO], [lindo.h], [OSLib])
 AC_COIN_CHECK_USER_LIBRARY([Knitro],[KNITRO],[knitro.h],[OSLib])
 
 
@@ -560,17 +546,14 @@ fi
 
 
 
-# Set ADDLIBS appropriately for socket libraries. Check for the presence of
+# Check for the sockets library. Check for the presence of
 # header files, then see what we need in the way of libraries.
 AC_COIN_OS_SOCKET_LIBS
 if test x$ac_coin_found_socket_libraries = xno ; then
   AC_MSG_ERROR([Can't build OS without socket libraries!])
 fi
-ADDLIBS="$WINSOCKLIBS   $ADDLIBS"
   
 AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
-
-
  
 #############################################################################
 #                     Parser stuff                         #
@@ -605,16 +588,6 @@ AC_SUBST(oslib)
 #############################################################################
 #  See if we are disabling shared libs###
 #############################################################################
-
-
-     if test $enable_static != yes; then
-         USE_ASL_LIB=$ASLLIB
-     fi
-
-AC_SUBST(USE_ASL_LIB)
-
-
-
 
 ##
 ## the help file
@@ -861,6 +834,3 @@ AC_CONFIG_HEADER([inc/config_os.h])
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE
-
-
-

@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = foreign
 
 
 ########################################################################
-#                          OSAmplClient  program                               #
+#                          OSAmplClient  program                       #
 ########################################################################
 
 # Name of the executable compiled in this directory.  We want it to be
@@ -50,8 +50,7 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)`
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces`
 
 # This line is necessary to allow VPATH compilation with MS compilers on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc

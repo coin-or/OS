@@ -5,6 +5,7 @@ includedir=@includedir@/coin
 
 Name: OS
 Description: COIN-OR Optimization Services
+URL: https://projects.coin-or.org/OS
 Version: @PACKAGE_VERSION@
 Libs: -L${libdir} -lOS @OSLIB_PCLIBS@
 Cflags: -I${includedir}

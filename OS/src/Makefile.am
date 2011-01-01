@@ -107,7 +107,7 @@ includecoin_HEADERS = \
 	OSConfig.h \
 	../inc/config_os.h 
 
-if MSCL_
+if COIN_CXX_IS_CL
    includecoin_HEADERS += $(abs_source_dir)/../BuildTools/headers/configall_system.h
    includecoin_HEADERS += $(abs_source_dir)/../BuildTools/headers/configall_system_msc.h
 endif

@@ -41,8 +41,7 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)`
+	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces`
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin

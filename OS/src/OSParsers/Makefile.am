@@ -44,24 +44,11 @@ libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS =\
+AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` 
-	
-	
-if COIN_HAS_ASL
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
-#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-AM_CPPFLAGS += $(ASL_CFLAGS) 
-endif
-
-
-if COIN_HAS_CPPAD
-  AM_CPPFLAGS += -I`$(CYGPATH_W) $(CPPADSRCDIR)` 
-  AM_CPPFLAGS += $(CPPAD_CPPFLAGS) 
-endif
 
 #if USE_DTOA
 #AM_CPPFLAGS += -DUSE_DTOA=1
@@ -76,7 +63,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 ########################################################################
 
 # Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'install/coin'
+# and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
@@ -88,5 +75,3 @@ includecoin_HEADERS = \
 	OSiLParserData.h \
 	OSrLParserData.h \
         OSoLParserData.h
-
-

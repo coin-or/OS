@@ -44,20 +44,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @COIN_HAS_ASL_TRUE@am__append_1 = OSnl2osil.cpp \
-@COIN_HAS_ASL_TRUE@	 OSnl2osil.h
+@COIN_HAS_ASL_TRUE@	OSnl2osil.h
 
-
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(OSSRCDIR)/src/ThirdPartyASL` 
-#  AM_CPPFLAGS += $(ASL_CPPFLAGS) 
-@COIN_HAS_ASL_TRUE@am__append_2 = $(ASL_CFLAGS)
-
-#if COIN_HAS_GAMSUTILS
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src`
-#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src/GamsUtils`
-#endif
-@COIN_HAS_CPPAD_TRUE@am__append_3 = -I`$(CYGPATH_W) $(CPPADSRCDIR)` \
-@COIN_HAS_CPPAD_TRUE@	$(CPPAD_CPPFLAGS)
 subdir = src/OSModelInterfaces
 DIST_COMMON = $(includecoin_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -110,7 +98,6 @@ CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ABSBUILDDIR = @ABSBUILDDIR@
 ACLOCAL = @ACLOCAL@
-ADDLIBS = @ADDLIBS@
 ADD_CFLAGS = @ADD_CFLAGS@
 ADD_CXXFLAGS = @ADD_CXXFLAGS@
 ALWAYS_FALSE_FALSE = @ALWAYS_FALSE_FALSE@
@@ -219,9 +206,13 @@ COUENNE_DEPENDENCIES = @COUENNE_DEPENDENCIES@
 COUENNE_LIBS = @COUENNE_LIBS@
 COUENNE_LIBS_INSTALLED = @COUENNE_LIBS_INSTALLED@
 CPP = @CPP@
-CPPADDOCDIR = @CPPADDOCDIR@
-CPPADOBJDIR = @CPPADOBJDIR@
-CPPADSRCDIR = @CPPADSRCDIR@
+CPPAD_CFLAGS = @CPPAD_CFLAGS@
+CPPAD_CFLAGS_INSTALLED = @CPPAD_CFLAGS_INSTALLED@
+CPPAD_DATA = @CPPAD_DATA@
+CPPAD_DATA_INSTALLED = @CPPAD_DATA_INSTALLED@
+CPPAD_DEPENDENCIES = @CPPAD_DEPENDENCIES@
+CPPAD_LIBS = @CPPAD_LIBS@
+CPPAD_LIBS_INSTALLED = @CPPAD_LIBS_INSTALLED@
 CPPFLAGS = @CPPFLAGS@
 CPX_CFLAGS = @CPX_CFLAGS@
 CPX_CFLAGS_INSTALLED = @CPX_CFLAGS_INSTALLED@
@@ -254,7 +245,6 @@ ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
-FADDLIBS = @FADDLIBS@
 FFLAGS = @FFLAGS@
 GLPK_CFLAGS = @GLPK_CFLAGS@
 GLPK_CFLAGS_INSTALLED = @GLPK_CFLAGS_INSTALLED@
@@ -295,8 +285,6 @@ MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
 MPICC = @MPICC@
 MPICXX = @MPICXX@
-MSCL__FALSE = @MSCL__FALSE@
-MSCL__TRUE = @MSCL__TRUE@
 OBJEXT = @OBJEXT@
 OPENMP_FALSE = @OPENMP_FALSE@
 OPENMP_TRUE = @OPENMP_TRUE@
@@ -318,7 +306,6 @@ PACKAGE_STRING = @PACKAGE_STRING@
 PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
-PCADDLIBS = @PCADDLIBS@
 PKG_CONFIG = @PKG_CONFIG@
 RANLIB = @RANLIB@
 RPATH_FLAGS = @RPATH_FLAGS@
@@ -334,7 +321,6 @@ SYMPHONY_LIBS = @SYMPHONY_LIBS@
 SYMPHONY_LIBS_INSTALLED = @SYMPHONY_LIBS_INSTALLED@
 USEMULTIPLYDEFINED_FALSE = @USEMULTIPLYDEFINED_FALSE@
 USEMULTIPLYDEFINED_TRUE = @USEMULTIPLYDEFINED_TRUE@
-USE_ASL_LIB = @USE_ASL_LIB@
 VERSION = @VERSION@
 VOL_CFLAGS = @VOL_CFLAGS@
 VOL_CFLAGS_INSTALLED = @VOL_CFLAGS_INSTALLED@
@@ -431,15 +417,19 @@ libOSModelInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-#	-I`$(CYGPATH_W) $(COINUTILSSRCDIR)/src` \
-#	-I`$(CYGPATH_W) $(COINUTILSOBJDIR)/inc`
-AM_CPPFLAGS = -I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
-	$(srcdir)/..` -I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` -I`$(CYGPATH_W) \
-	$(srcdir)/../OSParsers` $(COINDEPEND_CFLAGS) \
-	$(COINUTILS_CFLAGS) $(OSI_CFLAGS) $(CLP_CFLAGS) $(CGL_CFLAGS) \
-	$(CBC_CFLAGS) $(SYMPHONY_CFLAGS) $(am__append_2) \
-	$(am__append_3)
+AM_CPPFLAGS = $(OSLIB_CFLAGS) \
+	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
+	-I`$(CYGPATH_W) $(srcdir)/..` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSParsers`
+
+
+#if COIN_HAS_GAMSUTILS
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSOBJDIR)/inc`
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src`
+#  AM_CPPFLAGS += -I`$(CYGPATH_W) $(GAMSUTILSSRCDIR)/src/GamsUtils`
+#endif
 
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
@@ -450,7 +440,7 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 ########################################################################
 
 # Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'install/coin'
+# and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	../../inc/config_os.h \
