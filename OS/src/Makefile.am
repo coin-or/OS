@@ -14,10 +14,8 @@ AUTOMAKE_OPTIONS = foreign
 ########################################################################
 
 # Name of the library compiled in this directory.  We want it to be installed
-# in the 'lib/coin' directory
-
-coinlibdir = ${libdir}/coin
-coinlib_LTLIBRARIES = libOS.la
+# in $libdir
+lib_LTLIBRARIES = libOS.la
 
 # List all source files for this library, including headers
 libOS_la_SOURCES = 
@@ -71,7 +69,7 @@ OSSolverService_DEPENDENCIES = libOS.la $(OSLIB_DEPENDENCIES)
 # The -rpath flag is used by libtool to make sure that the shared
 # library is found (in the lib install directory) when we are using dynamic
 # libraries.
-OSSolverService_LDFLAGS = -rpath $(coinlibdir) 
+OSSolverService_LDFLAGS = -rpath $(libdir)
 
 
 

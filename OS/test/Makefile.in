@@ -373,11 +373,6 @@ unitTest_SOURCES = unitTest.cpp
 unitTest_LDADD = ../src/libOS.la $(OSLIB_LIBS)
 unitTest_DEPENDENCIES = ../src/libOS.la $(OSLIB_DEPENDENCIES)
 
-# The -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
-unitTest_LDFLAGS = -rpath $(libdir)/coin
-
 ########################################################################
 #                            Additional flags                          #
 ########################################################################
@@ -397,7 +392,7 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 # This line is necessary to allow VPATH compilation with MS compilers
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
-DISTCLEANFILES = ipopt.out
+DISTCLEANFILES = ipopt.out bonmin.out
 all: all-am
 
 .SUFFIXES:

@@ -12,8 +12,8 @@ AUTOMAKE_OPTIONS = foreign
 #                          unitTest  program                           #
 ########################################################################
 
-# Name of the executable compiled in this directory.  We want it to be
-# installed in the 'bin' directory
+# Name of the executable compiled in this directory.  We do not want it
+# to be installed.
 noinst_PROGRAMS = unitTest
 
 # List all source files for this executable, including headers
@@ -22,11 +22,6 @@ unitTest_SOURCES = unitTest.cpp
 # List all additionally required libraries
 unitTest_LDADD =  ../src/libOS.la $(OSLIB_LIBS)
 unitTest_DEPENDENCIES =  ../src/libOS.la $(OSLIB_DEPENDENCIES)
-
-# The -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
-unitTest_LDFLAGS = -rpath $(libdir)/coin
 
 ########################################################################
 #                            Additional flags                          #
@@ -47,7 +42,7 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 # on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 
-DISTCLEANFILES = ipopt.out
+DISTCLEANFILES = ipopt.out bonmin.out
 
 test: unitTest$(EXEEXT)
 	./unitTest$(EXEEXT)
