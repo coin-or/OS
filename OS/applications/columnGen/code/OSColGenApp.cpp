@@ -185,10 +185,10 @@ void OSColGenApp::solve(){
 		m_yA = new double[m_osinstanceMaster->getConstraintNumber() ];
 		//kipp -- hard coding, come back and fix with option
 		//kipp -- do all of the newing in a separate routine
-		m_yB = new double[ 10000];
+		m_yB = new double[  m_osrouteSolver->m_maxBmatrixCon];
 		
 		//kipp again hard coding -- remove later
-		m_maxCols = 100000;
+		m_maxCols = m_osrouteSolver->m_maxMasterColumns;
 		m_theta = new double[ m_maxCols];
 		
 		

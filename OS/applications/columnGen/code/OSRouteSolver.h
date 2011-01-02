@@ -53,10 +53,51 @@ public:
 	 */
 	std::set<std::pair<int, double> > intVarSet;
 	
-	//variables for the q-route dynamic programming solution
-	int m_numberOfVar;
+	
+	/** m_numHubs is the number of hubs/routes */
 	int m_numHubs;
+	
+	/** m_numNodes is the number of nodes (both pickup 
+	 * and hub) in the model
+	 */
 	int m_numNodes;
+	
+	
+	/*****************Route Solver Parameters***********************/
+	
+	
+	/** m_maxMasterColumns is the maximumn number
+	 * of columns we allow in the master
+	 */
+	int m_maxMasterColumns;
+	
+	/** m_masterRestValue triggers deleting all the
+	 * columns from the master except those corresponding
+	 * to the current basis and the columns correxponding
+	 * to the best integer value
+	 */
+	int m_masterResetValue;
+	
+	/** m_maxMasterNonz is the maximumn number
+	 * of nonzero elements we allow in the transformation matrix
+	 * betwee the theta variables and the xij variables
+	 */
+	int m_maxThetaNonz;
+	
+	/** m_maxBmatrixCon is the maximum number of B matrix constraints
+	 * it is the number of tour breaking constraints plus variable 
+	 * branch constraints
+	 */
+	int m_maxBmatrixCon;
+	
+	/** m_maxBmatrixNonz is the maximum number of nonzero elements
+	 * in the B matrix constraints 
+	 */
+	int m_maxBmatrixNonz;
+	
+	
+	/*****************End Route Solver Parameters***********************/	
+
 	
 	
 	/** the route capacity -- bus seating limit 
@@ -69,6 +110,7 @@ public:
 	 * route/hub
 	 */
 	int* m_routeMinPickup;
+	
 	
 	
 	/** largest possible L-value on a route --

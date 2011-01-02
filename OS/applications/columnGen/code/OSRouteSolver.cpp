@@ -235,13 +235,12 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		m_costVec = new double[ m_numHubs];
 		m_newColumnRowIdx = new int*[ m_numHubs];
 		m_newColumnRowValue = new double*[ m_numHubs];
-		//kipp change -- put the 1000 in as an option
-		//hardcoding
-		/// the 1000 is the number of rows -- coupling plus tour breaking		
+	
 		for (k = 0; k < m_numHubs; k++) {
-			
-			m_newColumnRowValue[ k] = new double[ 1000];
-			m_newColumnRowIdx[ k] = new int[ 1000];
+			//size of arrray is maximum number of constraints
+			// 1) coupling + 2) tour breaking + 3) branching
+			m_newColumnRowValue[ k] = new double[ m_maxBmatrixCon + m_numNodes];
+			m_newColumnRowIdx[ k] = new int[ m_maxBmatrixCon + m_numNodes];
 			
 		}
 		
@@ -249,41 +248,42 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 		
 		//New row arrays
 		m_newRowNonz = new int[ m_numHubs] ; //at most one cut per Hub
-		m_newRowColumnIdx =  new int*[ m_numHubs] ; //at most one cut per Hub
-		m_newRowColumnValue  = new double*[ m_numHubs] ; //at most one cut per Hub
-		m_newRowUB =  new double[ m_numHubs] ; //at most one cut per Hub
-		m_newRowLB =  new double[ m_numHubs] ; //at most one cut per Hub
+		m_newRowColumnIdx = new int*[ m_numHubs] ; //at most one cut per Hub
+		m_newRowColumnValue = new double*[ m_numHubs] ; //at most one cut per Hub
+		m_newRowUB = new double[ m_numHubs]; //at most one cut per Hub
+		m_newRowLB = new double[ m_numHubs]; //at most one cut per Hub
 		
-		//for now, the number of columns will be 10000	
-		//for now, the number of columns will be 50000	
+
+		//for now, the number of columns will be m_maxMasterColumns 	
 		for (k = 0; k < m_numHubs; k++) {
 			
-			m_newRowColumnValue[ k] = new double[ 50000];
-			m_newRowColumnIdx[ k] = new int[ 50000];
+			m_newRowColumnValue[ k] = new double[ m_maxMasterColumns];
+			m_newRowColumnIdx[ k] = new int[ m_maxMasterColumns];
 			
 		}
 
-		
 		//new arrays for branches
 		//yet some more hard coding
-		branchCutIndexes = new int[ 50000];
-		branchCutValues = new double[ 50000];
-		
-		//for now, the number of columns will be 10000
-		//for now number of nonzeros will be 500000
-		m_thetaPnt = new int[ 50000];
-		for(i = 0; i < 49999; i++){
+		branchCutIndexes = new int[ m_maxMasterColumns];
+		branchCutValues = new double[ m_maxMasterColumns];
+
+		m_thetaPnt = new int[ m_maxMasterColumns + 1];
+		for(i = 0; i <= m_maxMasterColumns; i++){
 			m_thetaPnt[ i] = 0;
 		}
-		m_thetaCost = new double[ 50000];
-		m_thetaIndex = new int[ 750000];
+		m_thetaCost = new double[ m_maxMasterColumns];
+		m_thetaIndex = new int[ m_maxThetaNonz];
 		m_numThetaVar = 0;
 		m_numThetaNonz = 0;
-		m_thetaPnt[ m_numThetaVar ] = 0;
+		m_thetaPnt[ m_numThetaVar] = 0;
 		
-		//hard coding of cuts
-		m_pntBmatrix = new int[ 10000];
-		m_Bmatrix = new int[ 750000];
+
+		//the number of cuts will be at most nubmer of tour 
+		// breaking constraints + braching variable cuts
+		// branching variable constraints = m_numNodes*(m_numNodes - 1)
+		m_pntBmatrix = new int[ m_maxBmatrixCon];
+		// number of nonzeros in the Bmatrix
+		m_Bmatrix = new int[ m_maxBmatrixNonz];
 		m_numBmatrixCon = 0;
 		m_numBmatrixNonz = 0;
 		m_pntBmatrix[ m_numBmatrixCon] = 0;
@@ -2235,6 +2235,49 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 												tmpMap.insert( std::pair<int,std::vector<int> >(routeNumber, tmpVec) );
 												m_initSolMap.insert( std::pair<int, std::map<int, std::vector<int> > >(solutionNumber, tmpMap) )  ;
 												
+											}
+										}//if on restricted master solution
+										else{
+											if( (*vit)->name.find("maxMasterColumns") !=  std::string::npos){
+												
+
+												std::istringstream maxMasterColumns( (*vit)->value);
+												maxMasterColumns >> m_maxMasterColumns;
+												std::cout << "m_maxMasterColumn = " << m_maxMasterColumns <<  std::endl;
+												
+											}else{
+												if( (*vit)->name.find("maxThetaNonz") !=  std::string::npos){
+													
+													std::istringstream maxThetaNonz( (*vit)->value);
+													maxThetaNonz >> m_maxThetaNonz;
+													std::cout << "m_maxThetaNonz = " << m_maxThetaNonz <<  std::endl;
+													
+												}else{
+													if( (*vit)->name.find("masterResetValue") !=  std::string::npos){
+														
+														std::istringstream masterResetValue( (*vit)->value);
+														masterResetValue >> m_masterResetValue;
+														std::cout << "m_masterResetValue = " << m_masterResetValue <<  std::endl;
+														
+													}else{
+														if( (*vit)->name.find("maxBmatrixCon") !=  std::string::npos ){
+															
+															std::istringstream maxBmatrixCon( (*vit)->value);
+															maxBmatrixCon >> m_maxBmatrixCon;
+															std::cout << "m_maxBmatrixCon = " << m_maxBmatrixCon <<  std::endl;
+															
+														}else{
+															if( (*vit)->name.find("maxBmatrixNonz") !=  std::string::npos ){
+																
+																std::istringstream maxBmatrixNonz( (*vit)->value);
+																maxBmatrixNonz >> m_maxBmatrixNonz;
+																std::cout << "m_maxBmatrixNonz = " << m_maxBmatrixNonz <<  std::endl;
+																
+																
+															}
+														}
+													}
+												}
 											}
 										}
 									}
