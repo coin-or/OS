@@ -319,8 +319,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	collb = 0.0;
 	colub = 1.0;
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
-	//double bigNum = 1.0e24;
-	double bigNum  = 1000000;
+	//double bigM = 1.0e24;
+	double bigM  = 1000000;
 	//getRows function call return parameters
 	int numNewRows;
 	int* numRowNonz = NULL;
@@ -345,7 +345,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		isCutAdded = true;
 		
-		while(isCutAdded == true && m_osrouteSolver->m_numBmatrixCon <= 100){
+		while(isCutAdded == true && m_osrouteSolver->m_numBmatrixCon <= 10000){
 			
 			isCutAdded = false;
 			//start out loop on if cuts found
@@ -385,7 +385,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			int loopKount = 0;
 			
 			//kipp -- hard coding in the .0001  and loopKount
-			while(lowerBound < -.0001 && loopKount < 10000){
+			while(lowerBound < -.0001 && loopKount < 100000){
 				loopKount++;
 				
 				//kipp here is where the while loop goes
@@ -463,13 +463,13 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					//add the artificial variable for the UB					
 					rowArtVal = -1.0;
 					rowArtIdx = m_si->getNumRows() - 1;
-					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigNum, bigNum);
-					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigNum);
+					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigM, bigM);
+					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
 					//add the artificial variable for the LB					
 					rowArtVal = 1.0;
 					
-					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigNum, bigNum);
-					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigNum);
+					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigM, bigM);
+					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
 							
 				}
 				
@@ -998,8 +998,8 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	
 	
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
-	//double bigNum  = 1.0e24;
-	double bigNum  = 1000000;
+	//double bigM  = 1.0e24;
+	double bigM  = 1000000;
 	double rowArtVal ;
 	
 	std::map<int, int>::iterator mit;
@@ -1036,11 +1036,11 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 		rowArtVal = -1.0;
 		rowIdx = m_si->getNumRows() - 1;
 		
-		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
+		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
 		//add the artificial variable for the LB					
 		rowArtVal = 1.0;
 		
-		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
+		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
 		
 		
 		//insert into map -- this is the first variable
@@ -1076,8 +1076,8 @@ void OSColGenApp::createBranchingCut(const double* theta,
 	double* values;	
 	
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
-	//double bigNum  = 1.0e24;
-	double bigNum  = 1000000;
+	//double bigM  = 1.0e24;
+	double bigM  = 1000000;
 	double rowArtVal ;
 	
 	std::map<int, int>::iterator mit;
@@ -1114,11 +1114,11 @@ void OSColGenApp::createBranchingCut(const double* theta,
 		rowArtVal = -1.0;
 		rowIdx = m_si->getNumRows() - 1;
 		
-		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
+		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
 		//add the artificial variable for the LB					
 		rowArtVal = 1.0;
 		
-		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigNum);
+		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
 		
 		
 		//insert into map -- this is the first variable
