@@ -96,7 +96,7 @@
 		// needed for cygwin gcc 3.*,*
 	#endif /* HAVE_CONFIG_H NOT DEFINED */
 #ifndef OS_VERSION
-#define OS_VERSION "2.3.2"
+#define OS_VERSION "2.1"
 #endif
 #endif /*__OSCONFIG_H___*/
 //#ifdef WIN_
