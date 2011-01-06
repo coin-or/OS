@@ -352,15 +352,16 @@ if(BASIC_TESTS == true){
 		osil = fileUtil->getFileAsString( osilFileName.c_str() );
 		std::cout << "Done reading the test file" << std::endl;
 		osilreader = new OSiLReader(); 
-		//OSInstance *osinstance = osilreader->readOSiL( osil);
+		OSInstance *osinstance = osilreader->readOSiL( osil);
 		//osinstance->initForAlgDiff();
 		unitTestResult << "TEST " << nOfTest << ": Reading files successfully" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWhiteSpace = true;
-		//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
+		exit( 1);
 		//cout << "The unitTest passed the following" << endl << endl;
 		//cout << unitTestResult.str() << endl << endl;
 		/*
