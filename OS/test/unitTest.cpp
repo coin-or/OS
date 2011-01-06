@@ -361,7 +361,7 @@ if(BASIC_TESTS == true){
 		std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
 		delete osilreader;
 		osilreader = NULL;
-		exit( 1);
+		//exit( 1);
 		//cout << "The unitTest passed the following" << endl << endl;
 		//cout << unitTestResult.str() << endl << endl;
 		/*
