@@ -64,6 +64,7 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	
 	  m_osrouteSolver = new OSRouteSolver( osoption);
 	  m_osoption = osoption;
+	  //right now this does not do anything
 	  getOptions( m_osoption);
 	  
 	  //initialize the bounds
@@ -175,6 +176,8 @@ void OSColGenApp::solve(){
 		m_solver->sSolverName ="cbc";
 		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 		m_solver->osinstance = m_osinstanceMaster;
+		
+		//pass options
 		m_solver->osoption = m_osoption;	
 		m_solver->buildSolverInstance();
 
@@ -212,15 +215,13 @@ void OSColGenApp::solve(){
 		
 		CbcModel model(  *m_si);
 		OsiSolverInterface *ipSolver = model.solver();
-
+		
 		ipSolver->branchAndBound();
 		//CbcMain0(  model);	
 		//CbcMain1( 0, 0, model);
 		//kipp -- put in check to make sure we get an integer solution
 		if( ipSolver->getObjValue() < m_zUB) m_zUB = ipSolver->getObjValue() ;
 		
-	
-
 		//get the solution
 		numCols = m_si->getNumCols();
 		
@@ -252,7 +253,7 @@ void OSColGenApp::solve(){
 		
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
-
+		//go into branch and bound
 		branchAndBound();
 		
 		m_osrouteSolver->m_bestLPValue = m_zLB;
@@ -345,7 +346,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 		
 		isCutAdded = true;
 		
-		while(isCutAdded == true && m_osrouteSolver->m_numBmatrixCon <= 10000){
+		//while(isCutAdded == true && m_osrouteSolver->m_numBmatrixCon <= 10000){
+		while(isCutAdded == true ){
 			
 			isCutAdded = false;
 			//start out loop on if cuts found

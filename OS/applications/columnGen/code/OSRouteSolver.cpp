@@ -2086,7 +2086,7 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 		std::vector<int >routeMinPickup;
 	
 		m_numberOfSolutions = 0;
-		solverOptions = osoption->getSolverOptions("decomp");
+		solverOptions = osoption->getSolverOptions("routeSolver");
 		//iterate over the vector
 		
 		int tmpVal;
