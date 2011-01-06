@@ -18,7 +18,7 @@ noinst_PROGRAMS = OSColGenMain
 
 # List all source files for this executable, including headers
 OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h OSRouteSolver.cpp OSRouteSolver.h 
-OSColGenMain_SOURCES += OSNode.cpp OSNode.h
+OSColGenMain_SOURCES += OSNode.cpp OSNode.h OSDecompParam.h
 
 
 # List all additionally required COIN libraries

@@ -1,13 +1,8 @@
 /* $Id: OSRouteSolver.cpp 3038 2009-11-07 11:43:44Z kmartin $ */
 /** @file OSRouteSolver.cpp
- * 
- *
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 23/October/2020
- * @since   OS2.2
  *
  * \remarks
- * Copyright (C) 2005-2010, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University,  Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -2087,6 +2082,7 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 	
 		m_numberOfSolutions = 0;
 		solverOptions = osoption->getSolverOptions("routeSolver");
+		if (solverOptions.size() == 0) throw ErrorClass( "options for routeSolver not available");
 		//iterate over the vector
 		
 		int tmpVal;

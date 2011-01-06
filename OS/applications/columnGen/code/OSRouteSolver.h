@@ -1,13 +1,8 @@
 /* $Id: OSRouteSolver.h 3038 2009-11-07 11:43:44Z kmartin $ */
 /** @file OSRouteSolver.h
  * 
- *
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 23/October/2010
- * @since   OS1.1
- *
  * \remarks
- * Copyright (C) 2005-2010, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University,  Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 

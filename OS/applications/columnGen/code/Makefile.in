@@ -377,7 +377,8 @@ AUTOMAKE_OPTIONS = foreign
 
 # List all source files for this executable, including headers
 OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h \
-	OSRouteSolver.cpp OSRouteSolver.h OSNode.cpp OSNode.h
+	OSRouteSolver.cpp OSRouteSolver.h OSNode.cpp OSNode.h \
+	OSDecompParam.h
 
 # List all additionally required COIN libraries
 OSColGenMain_LDADD = ../../../src/libOS.la $(OSLIB_LIBS)

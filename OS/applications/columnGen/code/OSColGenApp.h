@@ -1,13 +1,8 @@
 /* $Id: OSColGenApp.h 3038 2009-11-07 11:43:44Z kmartin $ */
 /** @file OSColGenApp.h
  * 
- *
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 21/July/2008
- * @since   OS1.1
- *
  * \remarks
- * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University,  Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -27,6 +22,7 @@
 #include "OSoLReader.h"
 #include "OSCoinSolver.h"
 #include "OSRouteSolver.h"
+#include "OSDecompParam.h"
 
 #include "OSNode.h"
 
@@ -54,6 +50,9 @@ public:
 	CoinSolver *m_solver;
 
 	OsiSolverInterface *m_si;
+	
+	/** Application specific parameters. */
+	OSDecompParam m_osDecompParam;
 	
 	
 	/** m_zUB is the upper bound */

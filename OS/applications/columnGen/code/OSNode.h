@@ -1,15 +1,9 @@
 /* $Id: OSNodeApp.h 3038 2009-11-07 11:43:44Z kmartin $ */
 /** @file OSNodeApp.h
- * 
- *
- *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 19/07/2010
- * @since   OS2.2
  *
  * \remarks
- * Copyright (C) 2005-2010, Jun Ma, Horand Gassmann, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.

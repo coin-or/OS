@@ -1,13 +1,8 @@
 /* $Id: OSColGenApp.cpp 3038 2009-11-07 11:43:44Z kmartin $ */
 /** @file OSColGenApp.cpp
  * 
- *
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 21/July/2008
- * @since   OS1.1
- *
  * \remarks
- * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University,  Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -64,7 +59,7 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	
 	  m_osrouteSolver = new OSRouteSolver( osoption);
 	  m_osoption = osoption;
-	  //right now this does not do anything
+	  //get the options for the OSDecompSolver
 	  getOptions( m_osoption);
 	  
 	  //initialize the bounds
@@ -140,6 +135,44 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 	
 	try{
 
+		std::vector<SolverOption*> solverOptions;
+		std::vector<SolverOption*>::iterator vit;
+		
+		solverOptions = osoption->getSolverOptions("OSDecompSolver");
+		if (solverOptions.size() == 0) throw ErrorClass( "options for OSDecompSolver not available");
+		
+		
+		for (vit = solverOptions.begin(); vit != solverOptions.end(); vit++) {
+			
+			if((*vit)->name.find("columnLimit") !=  std::string::npos){
+				
+				
+				std::istringstream columnLimitBuffer( (*vit)->value);
+				columnLimitBuffer >> m_osDecompParam.columnLimit;
+				std::cout << "columnLimit = " <<  m_osDecompParam.columnLimit <<  std::endl;
+				
+			}else{
+				
+				if( (*vit)->name.find("artVarCoeff") !=  std::string::npos ){
+					
+					std::istringstream artVarCoeffBuffer( (*vit)->value);
+					artVarCoeffBuffer >> m_osDecompParam.artVarCoeff;
+					std::cout << "artVarCoeff = " <<  m_osDecompParam.artVarCoeff <<  std::endl;
+					
+				}else{
+					
+					if( (*vit)->name.find("zeroTol") !=  std::string::npos){
+						
+						std::istringstream zeroTolBuffer( (*vit)->value);
+						zeroTolBuffer >> m_osDecompParam.zeroTol;
+						std::cout << "zeroTol = " <<  m_osDecompParam.zeroTol <<  std::endl;
+						
+					}
+				}
+			}
+			
+			
+		}
 	
 	} catch (const ErrorClass& eclass) {
 
@@ -321,7 +354,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	colub = 1.0;
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
 	//double bigM = 1.0e24;
-	double bigM  = 1000000;
+	double bigM  = m_osDecompParam.artVarCoeff;
 	//getRows function call return parameters
 	int numNewRows;
 	int* numRowNonz = NULL;
@@ -387,7 +420,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			int loopKount = 0;
 			
 			//kipp -- hard coding in the .0001  and loopKount
-			while(lowerBound < -.0001 && loopKount < 100000){
+			while(lowerBound < -m_osDecompParam.zeroTol && loopKount < m_osDecompParam.columnLimit){
 				loopKount++;
 				
 				//kipp here is where the while loop goes
@@ -1001,7 +1034,7 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
 	//double bigM  = 1.0e24;
-	double bigM  = 1000000;
+	double bigM  = m_osDecompParam.artVarCoeff;
 	double rowArtVal ;
 	
 	std::map<int, int>::iterator mit;
@@ -1079,7 +1112,7 @@ void OSColGenApp::createBranchingCut(const double* theta,
 	
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
 	//double bigM  = 1.0e24;
-	double bigM  = 1000000;
+	double bigM  = m_osDecompParam.artVarCoeff;
 	double rowArtVal ;
 	
 	std::map<int, int>::iterator mit;
