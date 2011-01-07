@@ -3690,7 +3690,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		ch++;
 		// get rid of white space
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-		// now loop over the var element when there we numberOfVariables is strictly positive
+		// now loop over the var element when the numberOfVariables is strictly positive
 		*p = ch;
 		while(*startVar++  == *ch) ch++;
 		if( (ch - *p) ==  4) foundVar = true;
