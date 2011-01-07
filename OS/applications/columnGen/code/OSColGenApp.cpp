@@ -2,7 +2,7 @@
 /** @file OSColGenApp.cpp
  * 
  * \remarks
- * Copyright (C) 2005-2008, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University,  Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -54,20 +54,24 @@ OSColGenApp::OSColGenApp():
 OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  std::cout << "INSIDE OSColGenApp CONSTRUCTOR" << std::endl;
 	  //std::cout << "the contructor things whichBlock = " << m_whichBlock<< std::endl;
-	  m_osinstanceMaster = NULL;
-	  m_osrouteSolver = NULL;
-	
-	  m_osrouteSolver = new OSRouteSolver( osoption);
+	  //get parameters-options
 	  m_osoption = osoption;
 	  //get the options for the OSDecompSolver
 	  getOptions( m_osoption);
+	  
+	  
+	  m_osinstanceMaster = NULL;
+	  m_osrouteSolver = NULL;
+	  m_osrouteSolver = new OSRouteSolver( osoption);
+	  //share the common parameters
+	  m_osrouteSolver->m_osDecompParam = m_osDecompParam;
+	  m_osrouteSolver->initializeDataStructures();
 	  
 	  //initialize the bounds
 	  m_zUB = OSDBL_MAX;
 	  m_zLB = -OSDBL_MAX;
 	    
-	  	  
-	  //now the arrays
+
 
 } //end OSColGenApp Constructor
 
@@ -373,13 +377,9 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	try{
 		numARows = m_osrouteSolver->m_numNodes;
 		
-
-
-		//get the dual solution 
 		
 		isCutAdded = true;
 		
-		//while(isCutAdded == true && m_osrouteSolver->m_numBmatrixCon <= 10000){
 		while(isCutAdded == true ){
 			
 			isCutAdded = false;
@@ -419,7 +419,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			lowerBound = -1;
 			int loopKount = 0;
 			
-			//kipp -- hard coding in the .0001  and loopKount
+			//////////////////////
 			while(lowerBound < -m_osDecompParam.zeroTol && loopKount < m_osDecompParam.columnLimit){
 				loopKount++;
 				
@@ -451,7 +451,11 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				std::cout << "Solution Status =  " << m_solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 				std::cout << "Number of solver interface columns =  " <<  m_si->getNumCols()  << std::endl;
 				//m_numNodes is number of artificial variables
-				if(m_si->getNumCols() != m_osrouteSolver->m_numThetaVar ) throw ErrorClass("number variables in solver not consistent with master");
+				
+				numCols = m_si->getNumCols();
+				
+				if( numCols != m_osrouteSolver->m_numThetaVar ) throw ErrorClass("number variables in solver not consistent with master");
+				if( numCols + m_osrouteSolver->m_numHubs >= m_maxCols) throw ErrorClass("we ran out of columns");
 				
 				for(i = 0; i <  numARows; i++){
 					
@@ -466,11 +470,12 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				}
 				
 			}//end while on column generation
+			//////////////////////////////////
+			
+			if( loopKount >=  m_osDecompParam.columnLimit)throw ErrorClass("we exceeded loop kount in column generation");
 			
 			//get a primal solution
 			numCols = m_si->getNumCols();
-			if(numCols + m_osrouteSolver->m_numHubs >= m_maxCols) throw ErrorClass("we ran out of columns");
-			
 			for(i=0; i < numCols; i++){
 				*(m_theta + i) = m_si->getColSolution()[i];
 			}

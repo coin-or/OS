@@ -73,7 +73,11 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	m_bestIPValue = OSDBL_MAX;
 	m_bestLPValue = -OSDBL_MAX;
 	
+	m_upperBoundL = NULL;
+	m_upperBoundLMax = -OSINT_MAX;
+	m_minDemand = OSINT_MAX;
 	
+
 	m_eps = 0.00001;
 	m_u = NULL;
 	m_v = NULL;
@@ -96,19 +100,20 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	m_routeMinPickup = NULL;
 	
 	m_osoption = osoption;
+	
+}//end OSRouteSolverDestructor
 
+void OSRouteSolver::initializeDataStructures(){
+	
+	int k;
+	int i;
+	int l;
+	
 	try{
 		
-		int k;
-		int i;
-		int l;
-		
-		m_upperBoundL = NULL;
-		m_upperBoundLMax = -OSINT_MAX;
-		m_minDemand = OSINT_MAX;
-		
+
 		//get all the parameter values
-		getOptions( osoption);
+		getOptions( m_osoption);
 	
 		
 		
@@ -125,10 +130,6 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 			
 		}
 
-
-		
-		
-		
 		//m_varIdx = new int[ m_numNodes];
 		// I think we can make this the max of  m_upperBoundL
 		// over the k
@@ -306,7 +307,7 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	}	
 	
 	
-}//end OSRouteSolver Constructor
+}//end initializeDataStructures
 
 
 OSRouteSolver::~OSRouteSolver(){

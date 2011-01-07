@@ -16,6 +16,7 @@
 #include "OSInstance.h"
 #include "OSOption.h"
 #include "ClpSimplex.hpp"
+#include "OSDecompParam.h"
 #include<map>
 // --------------------------------------------------------------------- //
 /*!
@@ -30,6 +31,11 @@ public:
 	
 	
 	OSOption *m_osoption;
+	
+	/** share the parameters with the 
+	 * decomposition solver
+	 */
+	OSDecompParam m_osDecompParam;
 	
 	double m_bestIPValue;
 	double m_bestLPValue;
@@ -419,6 +425,12 @@ public:
 	//this is the matrix that says we must visit each node
 	//this A matrix defines the "coupling constraints"
 	void createAmatrix();
+	
+	
+	/** allocate memory and initialize
+	 * arrays
+	 */
+	void initializeDataStructures();
 	
 	/** generate an intitial feasible solution
 	 * in theta space for the initial master
