@@ -7,7 +7,8 @@
 		<variables numberOfOtherVariableOptions="0">
 			<initialVariableValues numberOfVar="0">
 			</initialVariableValues>
-			<initialBasisStatus numberOfVar="0">
+			<initialBasisStatus>
+				<basic numberOfEl="0"></basic>
 			</initialBasisStatus>
 		</variables>	
 		<solverOptions numberOfSolverOptions="0">

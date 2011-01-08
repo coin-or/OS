@@ -2,12 +2,10 @@
 /** @file OSOption.h
  * 
  *
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 21/July/2008
- * @since   OS1.1
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
@@ -17,9 +15,12 @@
 
 #ifndef OSOPTION_H
 #define OSOPTION_H
-//#define DEBUG
 #include <string>
 #include <vector> 
+#include "OSGeneral.h"
+
+//#define DEBUG
+
 
 /*! \class InstanceLocationOption
  *  \brief the InstanceLocationOption class.
@@ -278,6 +279,9 @@ public:
 	/** the unit in which disk space is measured */
 	std::string unit;
 
+	/** additional description about the disk space */
+	std::string description;
+
 	/** the minimum disk space required */
 	double value;
 
@@ -316,6 +320,9 @@ class MinMemorySize {
 public:
 	/** the unit in which memory size is measured */
 	std::string unit;
+
+	/** additional description about the memory */
+	std::string description;
 
 	/** the minimum memory size required */
 	double value;
@@ -356,6 +363,9 @@ public:
 	/** the unit in which CPU speed is measured */
 	std::string unit;
 
+	/** additional description about the CPU speed */
+	std::string description;
+
 	/** the minimum CPU speed required */
 	double value;
 
@@ -377,6 +387,45 @@ public:
 	 */
 	bool IsEqual(MinCPUSpeed *that);
 }; //MinCPUSpeed
+
+/*! \class MinCPUNumber
+ *  \brief the MinCPUNumber class.
+ * 
+ * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSoL schema.  
+ */
+class MinCPUNumber {
+
+public:
+	/** additional description about the CPU */
+	std::string description;
+
+	/** the minimum number of CPUs required */
+	int value;
+
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	MinCPUNumber();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~MinCPUNumber();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(MinCPUNumber *that);
+}; //MinCPUNumber
 
 
 /*! \class SystemOption
@@ -403,7 +452,7 @@ public:
 	MinCPUSpeed *minCPUSpeed;
 
 	/** the minimum number of processors required */
-	int minCPUNumber;
+	MinCPUNumber *minCPUNumber;
 
 	/** the list of other system options */
 	OtherOptions *otherOptions;
@@ -689,6 +738,7 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(PathPairs *that);
+
 	/**
 	 *
 	 * A function to set an array of <pathPair> elements
@@ -696,6 +746,17 @@ public:
 	 * @param path: the array of <pathPair> elements that are to be set
 	 */
 	bool setPathPair(int numberOfPathPairs, PathPair **pathPair);
+
+	/**
+	 *
+	 * Alternate signature for this function
+	 * @param from: array containing a list of objects to be moved
+	 * @param to: array containing a list of destinations
+	 * @param makeCopy: records whether each object is to be moved or copied
+	 * @param numberOfPathPairs: number of <pathPair> elements to be set
+	 */
+	bool setPathPair(std::string *from, std::string *to, bool *makeCopy, int numberOfPathPairs);
+
 	/**
 	 *
 	 * A function to add a <pathPair> element
@@ -912,6 +973,7 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitVariableValues *that);
+
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -919,6 +981,16 @@ public:
 	 * @param var: the array of <var> elements that are to be set
 	 */
 	bool setVar(int numberOfVar, InitVarValue **var);
+
+	/**
+	 *
+	 * Alternative signature for this function 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param idx: the array of indices 
+	 * @param value: the array of corresponding values
+	 */
+	bool setVar(int numberOfVar, int *idx, double *value);
+
 	/**
 	 *
 	 * A function to add a <var> element
@@ -1004,6 +1076,7 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitVariableValuesString *that);
+
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1011,6 +1084,16 @@ public:
 	 * @param var: the array of <var> elements that are to be set
 	 */
 	bool setVar(int numberOfVar, InitVarValueString **var);
+
+	/**
+	 *
+	 * Alternative signature for this function 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param idx: the array of indices 
+	 * @param value: the array of corresponding values
+	 */
+	bool setVar(int numberOfVar, int *idx, std::string *value);
+
 	/**
 	 *
 	 * A function to add a <var> element
@@ -1187,6 +1270,7 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(IntegerVariableBranchingWeights *that);
+
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1194,6 +1278,16 @@ public:
 	 * @param var: the array of <var> elements to be that are to be set
 	 */
 	bool setVar(int numberOfVar, BranchingWeight **var);
+
+	/**
+	 *
+	 * Alternative signature for this function 
+	 * @param numberOfVar: number of <var> elements to be set
+	 * @param idx: the array of indices 
+	 * @param value: the array of corresponding values
+	 */
+	bool setVar(int numberOfVar, int *idx, double *value);
+
 	/**
 	 *
 	 * A function to add a <var> element
@@ -1365,9 +1459,6 @@ public:
 /*! \class OtherVariableOption
  *  \brief the OtherVariableOption class.
  * 
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
- * @version 1.0, 21/07/2008
- * @since OS 1.1
  * 
  * \remarks
  * A data structure class that corresponds to an xml element in 
@@ -1378,6 +1469,9 @@ class OtherVariableOption {
 public:
 	/** number of <var> child elements */
 	int numberOfVar;
+
+	/** number of <enumeration> child elements */
+	int numberOfEnumerations;
 
 	/** name of the option */
 	std::string name;
@@ -1400,6 +1494,12 @@ public:
 	/** array of option values */
 	OtherVarOption **var;
 
+	/* a pointer to OtherOptionEnumeration objects that will
+	 * give for each distinct value the set of indices for 
+	 * this user defined variable result
+	 */
+	OtherOptionEnumeration** enumeration;
+
 	/**
 	 *
 	 * Default constructor. 
@@ -1416,6 +1516,7 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherVariableOption *that);
+
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1423,6 +1524,7 @@ public:
 	 * @param var: the array of <var> elements that are to be set
 	 */
 	bool setVar(int numberOfVar, OtherVarOption **var);
+
 	/**
 	 *
 	 * A function to add a <var> element
@@ -1459,7 +1561,7 @@ public:
 	InitVariableValuesString *initialVariableValuesString;
 
 	/** initial basis information*/
-	InitialBasisStatus *initialBasisStatus;
+	BasisStatus *initialBasisStatus;
 
 	/** branching weights for integer variables */
 	IntegerVariableBranchingWeights *integerVariableBranchingWeights;
@@ -1584,6 +1686,16 @@ public:
 	 * @param obj: the array of <obj> elements that are to be set
 	 */
 	bool setObj(int numberOfObj, InitObjValue **obj);
+
+	/**
+	 *
+	 * Alternative signature for this function 
+	 * @param numberOfObj: number of <obj> elements to be set
+	 * @param idx: the array of indices 
+	 * @param value: the array of corresponding values
+	 */
+	bool setObj(int numberOfObj, int *idx, double *value);
+
 	/**
 	 *
 	 * A function to add a <obj> element
@@ -1679,6 +1791,17 @@ public:
 	 * @param obj: the array of <obj> elements that are to be set
 	 */
 	bool setObj(int numberOfObj, InitObjBound **obj);
+
+	/**
+	 *
+	 * Alternative signature for this function 
+	 * @param numberOfObj: number of <obj> elements to be set
+	 * @param idx: the array of indices 
+	 * @param lbValue: the array of corresponding lower bounds
+	 * @param ubValue: the array of corresponding upper bounds
+	 */
+	bool setObj(int numberOfObj, int *idx, double *lbValue, double *ubValue);
+
 	/**
 	 *
 	 * A function to add a <obj> element
@@ -1752,6 +1875,9 @@ public:
 	/** number of <obj> children */
 	int numberOfObj;
 
+	/** number of <enumeration> child elements */
+	int numberOfEnumerations;
+
 	/** name of the option */
 	std::string name;
 
@@ -1772,6 +1898,12 @@ public:
 
 	/** array of option values */
 	OtherObjOption **obj;
+
+	/* a pointer to OtherOptionEnumeration objects that will
+	 * give for each distinct value the set of indices for 
+	 * this user defined variable result
+	 */
+	OtherOptionEnumeration** enumeration;
 
 	/**
 	 *
@@ -1828,8 +1960,11 @@ public:
 	/** initial values for the objectives */
 	InitObjectiveValues *initialObjectiveValues;
 
-	/** initial vounds for the objectives */
+	/** initial bounds for the objectives */
 	InitObjectiveBounds *initialObjectiveBounds;
+
+	/** initial basis status for the objectives */
+	BasisStatus *initialBasisStatus;
 
 	/** other information about the objectives */
 	OtherObjectiveOption **other;
@@ -1941,6 +2076,7 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitConstraintValues *that);
+
 	/**
 	 *
 	 * A function to set an array of <con> elements 
@@ -1948,6 +2084,16 @@ public:
 	 * @param con: the array of <con> elements that are to be set
 	 */
 	bool setCon(int numberOfCon, InitConValue **con);
+
+	/**
+	 *
+	 * Alternative signature for this function 
+	 * @param numberOfCon: number of <con> elements to be set
+	 * @param idx: the array of indices 
+	 * @param value: the array of corresponding values
+	 */
+	bool setCon(int numberOfCon, int *idx, double *value);
+
 	/**
 	 *
 	 * A function to add a <con> element
@@ -2036,6 +2182,7 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitDualVariableValues *that);
+
 	/**
 	 *
 	 * A function to set an array of <con> elements 
@@ -2043,6 +2190,17 @@ public:
 	 * @param con: the array of <con> elements that are to be set
 	 */
 	bool setCon(int numberOfCon, InitDualVarValue **con);
+
+	/**
+	 *
+	 * Alternative signature for this function 
+	 * @param numberOfCon: number of <con> elements to be set
+	 * @param idx: the array of indices 
+	 * @param lbValue: the array of dual values for the lower bound
+	 * @param ubValue: the array of dual values for the upper bound
+	 */
+	bool setCon(int numberOfCon, int *idx, double *lbValue, double *ubValue);
+
 	/**
 	 *
 	 * A function to add a <con> element
@@ -2116,6 +2274,9 @@ public:
 	/** number of <con> children */
 	int numberOfCon;
 
+	/** number of <enumeration> child elements */
+	int numberOfEnumerations;
+
 	/** name of the option */
 	std::string name;
 
@@ -2136,6 +2297,12 @@ public:
 
 	/** array of option values */
 	OtherConOption **con;
+
+	/* a pointer to OtherOptionEnumeration objects that will
+	 * give for each distinct value the set of indices for 
+	 * this user defined variable result
+	 */
+	OtherOptionEnumeration** enumeration;
 
 	/**
 	 *
@@ -2195,6 +2362,9 @@ public:
 	/** initial dual values for the constraints */
 	InitDualVariableValues *initialDualValues;
 
+	/** initial basis status for the slack variables */
+	BasisStatus *initialBasisStatus;
+
 	/** other information about the constraints */
 	OtherConstraintOption **other;
 
@@ -2244,13 +2414,16 @@ public:
 class SolverOption {
 
 public:
+	/** the number of items (additional pieces of data) of the option */
+	int numberOfItems;
+
 	/** the name of the option */
 	std::string name;
 
 	/** the value of the option */
 	std::string value;
 
-	/** the solver to which the option applies*/
+	/** the solver to which the option applies */
 	std::string solver;
 
 	/** the category to which the option belongs */
@@ -2261,6 +2434,9 @@ public:
 
 	/** the description of the option */
 	std::string description;
+
+	/** the list of items of the option */
+	std::string* item;
 
 	/**
 	 *
@@ -2456,7 +2632,7 @@ private:
 	/**
 	 *  m_mdInitBasisStatusDense holds the initial basis status in dense form
 	 */
-	std::string* m_mdInitBasisStatusDense;
+	int* m_mdInitBasisStatusDense;
 
 	/**
 	 *  m_mdIntegerVariableBranchingWeightsDense holds the branching weights for integer variables
@@ -2580,6 +2756,11 @@ public:
 	 * Get the CPU speed unit
 	 */
 	std::string  getMinCPUSpeedUnit();
+
+	/**
+	 * Get the CPU description unit
+	 */
+	std::string  getMinCPUNumberDescription();
 
 	/**
 	 * Get the service type
@@ -2739,13 +2920,6 @@ public:
 	 * @return the number of initial variable strings. 
 	 */
 	int getNumberOfInitVarValuesString();
-
-	/**
-	 * Get the number of variables for which initial basis information is provided. 
-	 * 
-	 * @return the number of variables. 
-	 */
-	int getNumberOfInitialBasisVariables();
 
 	/**
 	 * Get the number of variables for which integer branching weights are provided. 
@@ -3057,7 +3231,7 @@ public:
 	InitBasStatus** getInitBasisStatusSparse();
 
 	/**
-	 * Get the initial basis status in dense form
+	 * Get the initial basis information in dense form
 	 * <p>
 	 * 
 	 * @return a vector of strings that 
@@ -3066,15 +3240,39 @@ public:
 	std::string *getInitBasisStatusDense();
 
 	/**
-	 * Get the initial basis status in dense form
+	 * Get the initial basis status for all variables in dense form
 	 * <p>
 	 * 
-	 * @param numberOfVariables holds the dimension of the vector
-	 * @return a vector of strings that 
-	 * holds initial basis status (or "unknown") for all of the variables
+	 * @return an array of int, with values corresponding to ENUM_BASIS_STATUS -- see OSGeneral.h)
+	 * @note returns ENUM_BASIS_STATUS_unknown for variables that are not initialed
+	 * @param numberOfVariables is the dimension of the array
 	 */
-	std::string *getInitBasisStatusDense(int numberOfVariables);
+	int* getVariableInitialBasisStatusDense(int numberOfVariables);
 
+	/**
+	 * Get the number of initial basis elements for a particular variable type and basis status
+	 * <p>
+	 * 
+	 * @return the number of elements 
+	 * @param type: the type of variable or problem component
+	 *		(contained in ENUM_PROBLEM_COMPONENT --- see OSGeneral.h)
+	 * @param status: the basis status
+	 *		(contained in ENUM_BASIS_STATUS --- see OSGeneral.h)
+	 */
+	int getNumberOfInitialBasisElements(int type, int status);
+
+	/**
+	 * Get the initial basis elements for a particular variable type and basis status
+	 * <p>
+	 * 
+	 * @return whether the operation was successful or not
+	 * @param type: the type of variable or problem component
+	 *		(contained in ENUM_PROBLEM_COMPONENT --- see OSGeneral.h)
+	 * @param status: the basis status
+	 *		(contained in ENUM_BASIS_STATUS --- see OSGeneral.h)
+	 * @param elem: pointer to the memory location where the user wants to store the returned values
+	 */
+	bool getInitialBasisElements(int type, int status, int* elem);
 
 	/**
 	 * Get the integer branching weights in sparse form
@@ -3207,6 +3405,16 @@ public:
 	double *getInitObjUpperBoundsDense(int numberOfObjectives);
 
 	/**
+	 * Get the initial basis status for all objectives in dense form
+	 * <p>
+	 * 
+	 * @return an array of int, with values corresponding to ENUM_BASIS_STATUS -- see OSGeneral.h)
+	 * @note returns ENUM_BASIS_STATUS_unknown for objectives that are not initialed
+	 * @param numberOfObjectives is the dimension of the array
+	 */
+	int* getObjectiveInitialBasisStatusDense(int numberOfObjectives);
+
+	/**
 	 * Get the array of other objective options
 	 * <p>
 	 * 
@@ -3300,6 +3508,16 @@ public:
 	double *getInitDualVarUpperBoundsDense(int numberOfConstraints);
 
 	/**
+	 * Get the initial basis status for all slack variables in dense form
+	 * <p>
+	 * 
+	 * @return an array of int, with values corresponding to ENUM_BASIS_STATUS -- see OSGeneral.h)
+	 * @note returns ENUM_BASIS_STATUS_unknown for slack variables that are not initialed
+	 * @param numberOfConstraints is the dimension of the array
+	 */
+	int* getSlackVariableInitialBasisStatusDense(int numberOfConstraints);
+
+	/**
 	 * Get the array of other constraint options
 	 * <p>
 	 * 
@@ -3360,6 +3578,12 @@ public:
 	bool setInstanceLocation( std::string instanceLocation);
 
 	/**
+	 * Alternative signature to set the instance location
+	 * and location type simultaneously
+	 */
+	bool setInstanceLocation( std::string instanceLocation, std::string locationType);
+
+	/**
 	 * Set the instance location type
 	 */
 	bool setInstanceLocationType( std::string locationType);
@@ -3395,6 +3619,12 @@ public:
 	bool setContact( std::string contact);
 
 	/**
+	 * Alternative signature to set the contact information
+	 * and transport type simultaneously
+	 */
+	bool setContact( std::string contact, std::string transportType);
+
+	/**
 	 * Set the transport type for contact
 	 */
 	bool setContactTransportType( std::string transportType);
@@ -3409,18 +3639,25 @@ public:
 	 */
 	bool setAnOtherGeneralOption(std::string name, std::string value, std::string description);
 
+	bool setMinDiskSpace(std::string unit, std::string description, double value);
 
 	bool setMinDiskSpace(double value);
 
 	bool setMinDiskSpaceUnit(std::string unit);
 
+	bool setMinMemorySize(std::string unit, std::string description, double value);
+
 	bool setMinMemorySize(double value);
 
 	bool setMinMemoryUnit(std::string unit);
 
+	bool setMinCPUSpeed(std::string unit, std::string description, double value);
+
 	bool setMinCPUSpeed(double value);
 
 	bool setMinCPUSpeedUnit(std::string unit);
+
+	bool setMinCPUNumber( int number, std::string description);
 
 	bool setMinCPUNumber( int number);
 
@@ -3435,6 +3672,8 @@ public:
 
 	bool setAnOtherServiceOption(std::string name, std::string value, std::string description);
 
+
+	bool setMaxTime(double value, std::string unit);
 
 	bool setMaxTime(double value);
 
@@ -3456,6 +3695,25 @@ public:
 
 	bool setFilesToMake(int numberOfPaths, std::string* paths);
 	bool setAnotherFileToMake(std::string path);
+
+	/**  setPathPairs 
+	 *   set a number of path pairs into the OSOption object
+	 *   @param object describes the type of pathpairs
+	 *       legal values are
+	 *           ENUM_PATHPAIR_input_dir,
+	 *           ENUM_PATHPAIR_input_file,
+	 *           ENUM_PATHPAIR_output_file,
+	 *           ENUM_PATHPAIR_output_dir
+	 *    @param from is a pointer to an array of strings containing the 
+	 *           location of the original object
+	 *    @param to   is a pointer to an array of strings containing the 
+	 *           location of the destination object
+	 *    @param makeCopy is a pointer to an array of boolean, describing
+	 *           for each object whether it is to be copied or moved
+	 *    @param numberOfPathPairs is an integer giving the number of PathPairs
+	 *           this must equal the number of entries in the from, to and makeCopy arrays
+	 **/
+	bool setPathPairs(int object, std::string *from, std::string *to, bool *makeCopy, int numberOfPathPairs);
 
 	bool setInputDirectoriesToMove(int numberOfPathPairs, PathPair** pathPair);
 	bool setAnotherInputDirectoryToMove(std::string fromPath, std::string toPath, bool makeCopy);
@@ -3482,59 +3740,215 @@ public:
 	bool setAnOtherJobOption(std::string name, std::string value, std::string description);
 
 
-	bool setNumberOfVariables(int numberOfObjects);
+	bool setNumberOfVariables(int numberOfVariables);
 
-	bool setNumberOfObjectives(int numberOfObjects);
+	bool setNumberOfObjectives(int numberOfObjectives);
 
-	bool setNumberOfConstraints(int numberOfObjects);
+	bool setNumberOfConstraints(int numberOfConstraints);
 
+	bool setInitVarValues(int numberOfVar, int* idx, double* value);
 	bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var);
 	bool setInitVarValuesDense(int numberOfVar, double *value);
 	bool setAnotherInitVarValue(int idx, double value);
 
+	bool setInitVarValuesString(int numberOfVar, int* idx, std::string* value);
 	bool setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var);
 	bool setInitVarValuesStringDense(int numberOfVar, std::string *value);
 	bool setAnotherInitVarValueString(int idx, std::string value);
 
+	bool setInitBasisStatus(int object, int status, int *i, int ni);
 	bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var);
 	bool setInitBasisStatusDense(int numberOfVar, std::string *var);
-	bool setAnotherInitBasisStatus(int idx, std::string value);
 
+	/**
+	 *
+	 * Set the basis status for another variable, objective or constraint/slack
+	 * @param type: type of this element (see ENUM_PROBLEM_COMPONENT - OSGeneral.h)
+	 * @param idx: index of this element (nonnegative for variable or constraint,
+	 *		negative for objective)
+	 * @param status: basis status (see ENUM_BASIS_STATUS - OSGeneral.h)
+	 */
+	bool setAnotherInitBasisStatus(int type, int idx, int status);
+
+	bool setIntegerVariableBranchingWeights(int numberOfVar, int* idx, double* value);
 	bool setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var);
 	bool setIntegerVariableBranchingWeightsDense(int numberOfVar, double *value);
 	bool setAnotherIntegerVariableBranchingWeight(int idx, double value);
 
 	bool setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos);
 	bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value);
-
+ 
+	bool setNumberOfOtherVariableOptions(int numberOfOther);
 	bool setOtherVariableOptions(int numberOfVar, OtherVariableOption** var);
 	bool setAnOtherVariableOption(OtherVariableOption* varOption);
 
+	/**
+	 *
+	 * Set the attributes for one particular <other> <variable> option
+	 * @param iOther: position of this element in the array of <other>
+	 * @param numberOfVar: number of <var> children contained in this <other> element
+	 * @param numberOfEnumerations: number of <enumeration> children
+	 * @param name: name of this <other> element
+	 * @param value: a value associated with this <other> element
+	 * @param solver: the solver associated with this <other> element
+	 * @param category: the category of this <other> element
+	 * @param type: type of this <other> element
+	 * @param description: further description of this <other> element
+	 */
+	bool setOtherVariableOptionAttributes(int iOther, int numberOfVar,
+				int numberOfEnumerations, std::string name,
+				std::string value, std::string solver,
+				std::string category, std::string type,
+				std::string description);
+
+
+	/**
+	 *  Set one enumeration associated with an <other> option in
+	 *  the <variables>, <objectives> or <constraints> element
+	 *  @param object: the object into which the enumeration is to be stored
+	 *		(legal values see ENUM_PROBLEM_COMPONENT in OSGeneral.h)
+	 *  @param otherOptionNumber: number of the <other> option in the list of <other> options (zero-based)
+	 *  @param enumerationNumber: number of the <enumeration> in the list of enumerations (zero-based)
+	 *	@param numberOfEl: number of objects sharing the value of this enumeration
+	 *	@param value: value of the enumeration (as a string)
+	 *	@param description: further information about the enumeration and its value
+	 *	@param idxArray: the array of indices for the objects sharing this enumeration
+	 */
+	bool setOtherOptionEnumeration(int object, int otherOptionNumber, int enumerationNumber,
+			int numberOfEl, std::string value, std::string description, int* idxArray);
+
+	/**
+	 *  Set one <var> element associated with an <other> option in
+	 *  the <variables> element
+	 *  @param otherOptionNumber: number of the <other> option in the list of <other> options (zero-based)
+	 *  @param varNumber: number of the <var> in the array (zero-based)
+	 *	@param idx: index of the variable to which this value belongs
+	 *	@param value: value of the option (as a string)
+	 *	@param lbValue: value associated with the lower bound of the variable (as a string)
+	 *	@param ubValue: value associated with the upper bound of the variable (as a string)
+	 */
+	bool setOtherVariableOptionVar(int otherOptionNumber, int varNumber,
+			int idx, std::string value, std::string lbValue, std::string ubValue);
+
+	bool setInitObjValues(int numberOfObj, int* idx, double* value);
 	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
 	bool setInitObjValuesDense(int numberOfObj, double *value);
 	bool setAnotherInitObjValue(int idx, double value);
 
+	bool setInitObjBounds(int numberOfObj, int* idx, double* lbValue, double* ubValue);
 	bool setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj);
 	bool setInitObjBoundsDense(int numberOfObj, double *lb, double *ub);
 	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
 
+	bool setNumberOfOtherObjectiveOptions(int numberOfOther);
 	bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj);
 	bool setAnOtherObjectiveOption(OtherObjectiveOption* objOption);
 
+	/**
+	 *
+	 * Set the attributes for one particular <other> <objective> option
+	 * @param iOther: position of this element in the array of <other>
+	 * @param numberOfObj: number of <obj> children contained in this <other> element
+	 * @param numberOfEnumerations: number of <enumeration> children
+	 * @param name: name of this <other> element
+	 * @param value: a value associated with this <other> element
+	 * @param solver: the solver associated with this <other> element
+	 * @param category: the category of this <other> element
+	 * @param type: type of this <other> element
+	 * @param description: further description of this <other> element
+	 */
+	bool setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
+				int numberOfEnumerations, std::string name,
+				std::string value, std::string solver,
+				std::string category, std::string type,
+				std::string description);
+
+
+	/**
+	 *  Set one <obj> element associated with an <other> option in
+	 *  the <objectives> element
+	 *  @param otherOptionNumber: number of the <other> option in the list of <other> options (zero-based)
+	 *  @param objNumber: number of the <obj> in the array (zero-based)
+	 *	@param idx: index of the objective to which this value belongs
+	 *	@param value: value of the option (as a string)
+	 *	@param lbValue: value associated with the lower bound of the objective (as a string)
+	 *	@param ubValue: value associated with the upper bound of the objective (as a string)
+	 */
+	bool setOtherObjectiveOptionObj(int otherOptionNumber, int objNumber,
+			int idx, std::string value, std::string lbValue, std::string ubValue);
+
+	bool setInitConValues(int numberOfCon, int* idx, double* value);
 	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
 	bool setInitConValuesDense(int numberOfCon, double *value);
 	bool setAnotherInitConValue(int idx, double value);
 
+	bool setInitDualValues(int numberOfCon, int* idx, double* lbValue, double* ubValue);
 	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
 	bool setInitDualVarValuesDense(int numberOfCon, double *lb, double *ub);
 	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
 
+	bool setNumberOfOtherConstraintOptions(int numberOfOther);
 	bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other);
 	bool setAnOtherConstraintOption(OtherConstraintOption* optionValue);
+
+	/**
+	 *
+	 * Set the attributes for one particular <other> <constraint> option
+	 * @param iOther: position of this element in the array of <other>
+	 * @param numberOfCon: number of <con> children contained in this <other> element
+	 * @param numberOfEnumerations: number of <enumeration> children
+	 * @param name: name of this <other> element
+	 * @param value: a value associated with this <other> element
+	 * @param solver: the solver associated with this <other> element
+	 * @param category: the category of this <other> element
+	 * @param type: type of this <other> element
+	 * @param description: further description of this <other> element
+	 */
+	bool setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
+				int numberOfEnumerations, std::string name,
+				std::string value, std::string solver,
+				std::string category, std::string type,
+				std::string description);
+
+
+	/**
+	 *  Set one <con> element associated with an <other> option in
+	 *  the <constraints> element
+	 *  @param otherOptionNumber: number of the <other> option in the list of <other> options (zero-based)
+	 *  @param conNumber: number of the <obj> in the array (zero-based)
+	 *	@param idx: index of the constraint to which this value belongs
+	 *	@param value: value of the option (as a string)
+	 *	@param lbValue: value associated with the lower bound of the constraint (as a string)
+	 *	@param ubValue: value associated with the upper bound of the constraint (as a string)
+	 */
+	bool setOtherConstraintOptionCon(int otherOptionNumber, int conNumber,
+			int idx, std::string value, std::string lbValue, std::string ubValue);
+
+	bool setNumberOfSolverOptions(int numberOfOptions);
+
+	/**
+	 *
+	 * Set the attributes for one particular solver option
+	 * @param iOption: position of this element in the array of options
+	 * @param numberOfVar: number of <var> children contained in this <other> element
+	 * @param name: name of this solver option
+	 * @param value: a value associated with this option
+	 * @param solver: the solver to which this option applies
+	 * @param category: the category of this option (solver specific)
+	 * @param type: type of this option (e.g., numeric or string)
+	 * @param description: further description of this option
+	 * "param itemList: the list of items associated with this option (could be NULL) 
+	 */
+	bool setSolverOptionContent(int iOption, int numberOfItems,
+				std::string name,
+				std::string value, std::string solver,
+				std::string category, std::string type,
+				std::string description, std::string *itemList);
 
 	bool setSolverOptions(int numberOfSolverOptions, SolverOption** solverOption);
 	bool setAnotherSolverOption(std::string name, std::string value, std::string solver, 
 		 std::string category, std::string type, std::string description);
+
 
 	bool setOptionInt(std::string optionName, int optionValue);
 
@@ -3543,4 +3957,5 @@ public:
 	bool setOptionDbl(std::string optionName, double value);
 
 };//OSOption
+
 #endif

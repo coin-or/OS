@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="../stylesheets/OSrL.xslt"?>
-<!--
-<osrl xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<osrl xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd">
--->
-<osrl xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trunk-test-2.2\os\schemas\OSrL.xsd">
 	<general>
 		<generalStatus type="normal" numberOfSubstatuses="0" description="some rag about what this does">
-		
 		</generalStatus>
 		<serviceURI>http://ispc12.dal.ca</serviceURI>
 		<serviceName>Ipopt solver service</serviceName>
@@ -22,7 +17,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 		</otherResults>
 	</general>
 	<system>
-		<systemInformation  >Microsoft Windows XP    </systemInformation>
+		<systemInformation >Microsoft Windows XP </systemInformation>
 		<availableDiskSpace unit="gigabyte" description="Space left on the C: drive">51.0</availableDiskSpace>
 		<availableMemory unit="megabyte" description="Where's the Gb?">896</availableMemory>
 		<availableCPUSpeed unit="gigahertz" description="but it overheats...">3.2</availableCPUSpeed>
@@ -37,7 +32,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 		<totalJobsSoFar >17</totalJobsSoFar>
 		<timeServiceStarted >1970-01-01T00:00:00Z</timeServiceStarted>
 		<serviceUtilization>0.80</serviceUtilization>
-		<otherResults numberOfOtherResults="1"  >
+		<otherResults numberOfOtherResults="1" >
 			<other name="other" description="just there to test parser" value="none"></other>
 		</otherResults>
 	</service>
@@ -68,7 +63,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 			<message>Hello world</message>
 			<variables numberOfOtherVariableResults="4" >
 				<values numberOfVar="2">
-					<var idx="0"  >
+					<var idx="0" >
 						.8724300006558884
 					</var >
 					<var idx="1" >
@@ -85,7 +80,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 						<el mult="3" incr="-1">4</el>
 					</basic>
 					<unknown numberOfEl="3">
-						<base64BinaryData sizeOf="4"  >AAAAAAQAAAAIAAAA</base64BinaryData>					
+						<base64BinaryData sizeOf="4" >AAAAAAQAAAAIAAAA</base64BinaryData>
 					</unknown>
 				</basisStatus>
 				<other numberOfVar="2" numberOfEnumerations="0" name="varL" description="Lagrange Multiplier on the Variable Lower Bound">
@@ -134,19 +129,19 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 						<el mult="2" incr="1">0</el>
 					</atLower>
 				</basisStatus>
-				<other numberOfCon="0"  name="conTest" description="just a test for the constraints section" value="no commercial"></other>
+				<other numberOfCon="0" name="conTest" description="just a test for the constraints section" value="no commercial"></other>
 			</constraints>
-			<otherSolutionResults  numberOfOtherSolutionResults="2" >
-				<otherSolutionResult name="requestResults1" description="the request results"  numberOfItems="1" category="testing:local">
+			<otherSolutionResults numberOfOtherSolutionResults="2" >
+				<otherSolutionResult name="requestResults1" description="the request results" numberOfItems="1" category="testing:local">
 					<item>Hi Gus</item>
 				</otherSolutionResult>
-				<otherSolutionResult name="requestResults2" description="the request results"  numberOfItems="1">
+				<otherSolutionResult name="requestResults2" description="the request results" numberOfItems="1">
 					<item>Bye Gus</item>
 				</otherSolutionResult>
 			</otherSolutionResults>
 		</solution>
 		<solution targetObjectiveIdx="-2">
-			<status type="locallyOptimal" description="SUCCESS[IPOPT]: Algorithm terminated normally at a 	locally optimal point, satisfying the convergence tolerances."/>
+			<status type="locallyOptimal" description="SUCCESS[IPOPT]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances."/>
 			<variables numberOfOtherVariableResults="2" >
 				<values numberOfVar="1" >
 					<var idx="0">1.0</var>
@@ -163,7 +158,7 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 					<obj idx="-2">3.14</obj>
 				</values>
 			</objectives>
-			<constraints numberOfOtherConstraintResults="1"> 
+			<constraints numberOfOtherConstraintResults="1">
 				<dualValues numberOfCon="1">
 					<con idx="1">-.7662938652578929</con>
 				</dualValues>
@@ -173,19 +168,19 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 					</enumeration>
 				</other>
 			</constraints>
-			<otherSolutionResults numberOfOtherSolutionResults="2"> 
-				<otherSolutionResult name="requestResults" description="the request results" numberOfItems="5"> 
-					<item>777 Liberty,Surgical,AM,M,1,Storz,1</item> 
-					<item>777,Liberty,Surgical,AM,T,1,Storz,1</item> 
-					<item>778,Liberty,Surgical,AM,M,1,Dummy,1</item> 
-					<item>778,Liberty,Surgical,AM,T,1,Dummy,1</item> 
+			<otherSolutionResults numberOfOtherSolutionResults="2">
+				<otherSolutionResult name="requestResults" description="the request results" numberOfItems="5">
+					<item>777 Liberty,Surgical,AM,M,1,Storz,1</item>
+					<item>777,Liberty,Surgical,AM,T,1,Storz,1</item>
+					<item>778,Liberty,Surgical,AM,M,1,Dummy,1</item>
+					<item>778,Liberty,Surgical,AM,T,1,Dummy,1</item>
 					<item>812,Liberty,Surgical,AM,M,1,Stryker,1</item>
-				</otherSolutionResult> 
-				<otherSolutionResult name="test" description="additional parser tests" numberOfItems="3"> 
-					<item>  </item>
+				</otherSolutionResult>
+				<otherSolutionResult name="test" description="additional parser tests" numberOfItems="3">
+					<item> </item>
 					<item/>
-					<item></item>	
-				</otherSolutionResult> 
+					<item></item>
+				</otherSolutionResult>
 			</otherSolutionResults>
 		</solution>
 		<otherSolverOutput numberOfSolverOutputs="1" >
@@ -195,3 +190,5 @@ xsi:schemaLocation="os.optimizationservices.org C:\datafiles\research\os\os-trun
 		</otherSolverOutput>
 	</optimization>
 </osrl>
+
+

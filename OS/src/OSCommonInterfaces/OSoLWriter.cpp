@@ -2,15 +2,13 @@
 /** @file OSoLWriter.cpp
  * 
  *
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 17/July/2008
- * @since   OS1.1
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Gus Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -19,6 +17,8 @@
  
 #include "OSoLWriter.h"
 #include "OSOption.h"
+#include "OSgLWriter.h"
+#include "OSGeneral.h"
 #include "OSParameters.h"
 #include "OSConfig.h"
 #include "OSBase64.h"
@@ -32,6 +32,8 @@ using std::endl;
 using std::ostringstream;
 
 OSoLWriter::OSoLWriter( ) {	 
+	m_bWriteBase64 = false;
+	m_bWhiteSpace = false;
 }
 
 OSoLWriter::~OSoLWriter(){
@@ -60,64 +62,145 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
   	std::string xsltDir;
 	xsltDir = dirsep == '/' ? "../stylesheets/" : "..\\stylesheets\\";
 	// always go with '/' -- it is a hypertext reference
-	xsltDir = "../stylesheets/";
+	xsltDir = "http://www.coin-or.org/OS/stylesheets/";
+
+	int i, j;
+	bool generalTagPrinted;
+	bool systemTagPrinted;
+	bool serviceTagPrinted;
+	bool jobTagPrinted;
+#ifdef DEBUG
+	cout << "in OSrLWriter" << endl;
+#endif
+
 	if(m_OSOption == NULL)  return outStr.str(); 
 	outStr << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ; 
 	outStr << "<?xml-stylesheet type=\"text/xsl\" href=\"";
 	outStr << xsltDir;
 	outStr << "OSoL.xslt\"?>";
+	outStr << endl;
 	outStr << "<osol xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 	outStr << "xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
 	outStr << OS_SCHEMA_VERSION;
 	outStr	<<"/OSoL.xsd\" >" ;
 	outStr << endl;
 
-/**
- * 	Put the <general> element
- */
+#ifdef DEBUG
+	cout << "output <general>" << endl;
+#endif
 	if(m_OSOption->general != NULL)
-	{	outStr << "<general>" << endl;
+	{	
+		generalTagPrinted = false;
 		if (m_OSOption->general->serviceURI != "")
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<serviceURI>" << m_OSOption->general->serviceURI << "</serviceURI>" << endl;
+		}
 		if (m_OSOption->general->serviceName != "")
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<serviceName>" << m_OSOption->general->serviceName << "</serviceName>" << endl;
+		}
 		if (m_OSOption->general->instanceName != "")
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
 			outStr << "<instanceName>" << m_OSOption->general->instanceName << "</instanceName>" << endl;
+		}
 		if (m_OSOption->general->instanceLocation != NULL)
-		{	if (m_OSOption->general->instanceLocation->locationType == "")
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			if (m_OSOption->general->instanceLocation->locationType == "")
 			{	outStr << "<instanceLocation>";
 			}
 			else 
 			{	outStr << "<instanceLocation locationType=\"" << m_OSOption->general->instanceLocation->locationType << "\">";
 			};
 			outStr << m_OSOption->general->instanceLocation->value << "</instanceLocation>" << endl;
-		};
+		}
 		if (m_OSOption->general->jobID != "")
-		{	outStr << "<jobID>" << m_OSOption->general->jobID << "</jobID>" << endl;
-		};
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			outStr << "<jobID>" << m_OSOption->general->jobID << "</jobID>" << endl;
+		}
 		if (m_OSOption->general->solverToInvoke != "")
-		{	outStr << "<solverToInvoke>" << m_OSOption->general->solverToInvoke << "</solverToInvoke>" << endl;
-		};
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			outStr << "<solverToInvoke>" << m_OSOption->general->solverToInvoke << "</solverToInvoke>" << endl;
+		}
 		if (m_OSOption->general->license != "")
-		{	outStr << "<license>" << m_OSOption->general->license << "</license>" << endl;
-		};
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			outStr << "<license>" << m_OSOption->general->license << "</license>" << endl;
+		}
 		if (m_OSOption->general->userName != "")
-		{	outStr << "<userName>" << m_OSOption->general->userName << "</userName>" << endl;
-		};
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			outStr << "<userName>" << m_OSOption->general->userName << "</userName>" << endl;
+		}
 		if (m_OSOption->general->password != "")
-		{	outStr << "<password>" << m_OSOption->general->password << "</password>" << endl;
-		};
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			outStr << "<password>" << m_OSOption->general->password << "</password>" << endl;
+		}
 		if (m_OSOption->general->contact != NULL)
-		{	if (m_OSOption->general->contact->transportType == "")
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			if (m_OSOption->general->contact->transportType == "")
 			{	outStr << "<contact>";
 			}
 			else 
 			{	outStr << "<contact transportType=\"" << m_OSOption->general->contact->transportType << "\">";
 			};
 			outStr << m_OSOption->general->contact->value << "</contact>" << endl;
-		};
+		}
 		if (m_OSOption->general->otherOptions != NULL)
-		{	if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
+		{
+			if (generalTagPrinted == false)
+			{	
+				outStr << "<general>" << endl;
+				generalTagPrinted = true;
+			}
+			if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
 				outStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
@@ -132,34 +215,54 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</general>" << endl;
-//		cout << "Done with <general> element" << endl;
+#ifdef DEBUG
+		cout << "Done with <general> element" << endl;
+#endif
 	};
 
 /**
  * 	Put the <system> element
  */
 	if(m_OSOption->system != NULL)
-	{	outStr << "<system>" << endl;
+	{
+		outStr << "<system>" << endl;
 		if (m_OSOption->system->minDiskSpace != NULL)
-		{	if (m_OSOption->system->minDiskSpace->unit == "")
-				m_OSOption->system->minDiskSpace->unit = "byte";
-			outStr << "<minDiskSpace unit=\"" << m_OSOption->system->minDiskSpace->unit << "\">";
+		{
+			outStr << "<minDiskSpace";
+			if (m_OSOption->system->minDiskSpace->unit != "byte")
+				outStr << " unit=\"" << m_OSOption->system->minDiskSpace->unit << "\"";
+			if (m_OSOption->system->minDiskSpace->description != "")
+				outStr << " description=\"" << m_OSOption->system->minDiskSpace->description << "\"";
+			outStr << ">";
 			outStr << os_dtoa_format(m_OSOption->system->minDiskSpace->value) << "</minDiskSpace>" << endl;
 		}
 		if (m_OSOption->system->minMemorySize != NULL)
-		{	if (m_OSOption->system->minMemorySize->unit == "")
-				m_OSOption->system->minMemorySize->unit = "byte";
-			outStr << "<minMemorySize unit=\"" << m_OSOption->system->minMemorySize->unit << "\">";
+		{
+			outStr << "<minMemorySize";
+			if (m_OSOption->system->minMemorySize->unit != "byte")
+				outStr << " unit=\"" << m_OSOption->system->minMemorySize->unit << "\"";
+			if (m_OSOption->system->minMemorySize->description != "")
+				outStr << " description=\"" << m_OSOption->system->minMemorySize->description << "\"";
+			outStr << ">";
 			outStr << os_dtoa_format(m_OSOption->system->minMemorySize->value) << "</minMemorySize>" << endl;
 		}
 		if (m_OSOption->system->minCPUSpeed != NULL)
-		{	if (m_OSOption->system->minCPUSpeed->unit == "")
-				m_OSOption->system->minCPUSpeed->unit = "hertz";
-			outStr << "<minCPUSpeed unit=\"" << m_OSOption->system->minCPUSpeed->unit << "\">";
+		{
+			outStr << "<minCPUSpeed";
+			if (m_OSOption->system->minCPUSpeed->unit != "hertz")
+				outStr << " unit=\"" << m_OSOption->system->minCPUSpeed->unit << "\"";
+			if (m_OSOption->system->minCPUSpeed->description != "")
+				outStr << " description=\"" << m_OSOption->system->minCPUSpeed->description << "\"";
+			outStr << ">";
 			outStr << os_dtoa_format(m_OSOption->system->minCPUSpeed->value) << "</minCPUSpeed>" << endl;
 		}
-		if (m_OSOption->system->minCPUNumber != 1.0)
-		{	outStr << "<minCPUNumber>" << m_OSOption->system->minCPUNumber << "</minCPUNumber>";
+		if (m_OSOption->system->minCPUNumber != NULL)
+		{
+			outStr << "<minCPUNumber";
+			if (m_OSOption->system->minCPUNumber->description != "")
+				outStr << " description=\"" << m_OSOption->system->minCPUNumber->description << "\"";
+			outStr << ">";
+			outStr << m_OSOption->system->minCPUNumber->value << "</minCPUNumber>" << endl;
 		};
 		if (m_OSOption->system->otherOptions != NULL)
 		{	if (m_OSOption->system->otherOptions->numberOfOtherOptions > 0)
@@ -177,7 +280,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</system>" << endl;
+#ifdef DEBUG
 		cout << "Done with <system> element" << endl;
+#endif
 	};
 
 /**
@@ -204,7 +309,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</service>" << endl;
+#ifdef DEBUG
 		cout << "Done with <service> element" << endl;
+#endif
 	};
 
 /**
@@ -372,7 +479,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		outStr << "</job>" << endl;
+#ifdef DEBUG
 		cout << "Done with <job> element" << endl;
+#endif
 	};
 
 /**
@@ -428,20 +537,17 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialVariableValuesString>" << endl;
 			}
-#ifdef DEBUG
-			cout << "initialBasisStatus: " << (m_OSOption->optimization->variables->initialBasisStatus != NULL) << endl;
-#endif
+
 			if (m_OSOption->optimization->variables->initialBasisStatus != NULL)
-			{	outStr << "<initialBasisStatus numberOfVar=\"";
-				outStr << m_OSOption->optimization->variables->initialBasisStatus->numberOfVar << "\">" << endl;
-				for (int i=0; i < m_OSOption->optimization->variables->initialBasisStatus->numberOfVar; i++)
-				{	outStr << "<var";
-					outStr << " idx=\"" << m_OSOption->optimization->variables->initialBasisStatus->var[i]->idx << "\"";
-					outStr << " value=\"" << m_OSOption->optimization->variables->initialBasisStatus->var[i]->value << "\"";
-					outStr << "/>" << endl;
-				}
+			{
+#ifdef DEBUG
+	cout << "output <variables> <basisStatus>" << endl;
+#endif
+				outStr << "<initialBasisStatus>" << endl;
+				outStr << writeBasisStatus(m_OSOption->optimization->variables->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
 				outStr << "</initialBasisStatus>" << endl;
 			}
+
 #ifdef DEBUG
 			cout << "integerVariableBranchingWeights: " << (m_OSOption->optimization->variables->integerVariableBranchingWeights != NULL) << endl;
 #endif
@@ -492,17 +598,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
-#ifdef DEBUG
-			cout << "option " << i << ":" << endl;
-			cout << "   numberOfVar \'" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\'" << endl;
-			cout << "   value       \'" << m_OSOption->optimization->variables->other[i]->value << "\'" << endl;
-			cout << "   solver      \'" << m_OSOption->optimization->variables->other[i]->solver << "\'" << endl;
-			cout << "   category    \'" << m_OSOption->optimization->variables->other[i]->category << "\'" << endl;
-			cout << "   type        \'" << m_OSOption->optimization->variables->other[i]->type << "\'" << endl;
-			cout << "   description \'" << m_OSOption->optimization->variables->other[i]->description << "\'" << endl;
-#endif
-//					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
+					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
 						outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
+					if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
+						outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->variables->other[i]->numberOfEnumerations << "\"";
 					if (m_OSOption->optimization->variables->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->variables->other[i]->value << "\"";
 					if (m_OSOption->optimization->variables->other[i]->solver != "")
@@ -525,6 +624,12 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 								outStr << " ubValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->ubValue << "\"";
 							outStr << "/>" << endl;
 						}
+					else 
+					{
+						if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
+						for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfEnumerations; j++)
+							outStr << writeOtherOptionEnumeration(m_OSOption->optimization->variables->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+					}
 					outStr << "</other>" << endl;
 				}
 			outStr << "</variables>" << endl;
@@ -548,8 +653,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 							outStr << "-INF";
 						else
 							outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value);
+						outStr << "\"" << endl;
 					}
-					outStr << "\"/>" << endl;
+					outStr << "/>" << endl;
 				}
 				outStr << "</initialObjectiveValues>" << endl;
 			}
@@ -577,24 +683,28 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialObjectiveBounds>" << endl;
 			}
+
+			if (m_OSOption->optimization->objectives->initialBasisStatus != NULL)
+			{
+#ifdef DEBUG
+	cout << "output <objectives> <basisStatus>" << endl;
+#endif
+				outStr << "<initialBasisStatus>" << endl;
+				outStr << writeBasisStatus(m_OSOption->optimization->objectives->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
+				outStr << "</initialBasisStatus>" << endl;
+			}
+
 #ifdef DEBUG
 			printf("\n%s%d\n","Number of other objective options: ",m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions);
 #endif
 			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
-				{	outStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
-#ifdef DEBUG
-			cout << "option " << i << ":" << endl;
-			cout << "   numberOfObj \'" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\'" << endl;
-			cout << "   value       \'" << m_OSOption->optimization->objectives->other[i]->value << "\'" << endl;
-			cout << "   solver      \'" << m_OSOption->optimization->objectives->other[i]->solver << "\'" << endl;
-			cout << "   category    \'" << m_OSOption->optimization->objectives->other[i]->category << "\'" << endl;
-			cout << "   type        \'" << m_OSOption->optimization->objectives->other[i]->type << "\'" << endl;
-			cout << "   description \'" << m_OSOption->optimization->objectives->other[i]->description << "\'" << endl;
-#endif
-
-//					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
+				{
+					outStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
+					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
 						outStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
+					if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
+						outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->objectives->other[i]->numberOfEnumerations << "\"";
 					if (m_OSOption->optimization->objectives->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->value << "\"";
 					if (m_OSOption->optimization->objectives->other[i]->solver != "")
@@ -613,10 +723,17 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 								outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->value << "\"";
 							outStr << "/>" << endl;
 						}
+					else if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
+						for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfEnumerations; j++)
+							outStr << writeOtherOptionEnumeration(m_OSOption->optimization->objectives->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+
 					outStr << "</other>" << endl;
 				}
 			outStr << "</objectives>" << endl;
 		}
+#ifdef DEBUG
+	cout << "Done with <objectives> element" << endl;
+#endif
 		if (m_OSOption->optimization->constraints != NULL)
 		{	outStr << "<constraints";
 			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
@@ -641,6 +758,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialConstraintValues>" << endl;
 			}
+
 			if (m_OSOption->optimization->constraints->initialDualValues != NULL)
 			{	outStr << "<initialDualValues numberOfCon=\"";
 				outStr << m_OSOption->optimization->constraints->initialDualValues->numberOfCon << "\">" << endl;
@@ -665,24 +783,28 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				}
 				outStr << "</initialDualValues>" << endl;
 			}
+
+			if (m_OSOption->optimization->constraints->initialBasisStatus != NULL)
+			{
+#ifdef DEBUG
+	cout << "output <constraints> <basisStatus>" << endl;
+#endif
+				outStr << "<initialBasisStatus>" << endl;
+				outStr << writeBasisStatus(m_OSOption->optimization->constraints->initialBasisStatus, m_bWhiteSpace, m_bWriteBase64);
+				outStr << "</initialBasisStatus>" << endl;
+			}
+
 #ifdef DEBUG
 			printf("\n%s%d\n","Number of other constraint options: ",m_OSOption->optimization->constraints->numberOfOtherConstraintOptions);
 #endif
 			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->constraints->numberOfOtherConstraintOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->constraints->other[i]->name << "\"";
-#ifdef DEBUG
-			cout << "option " << i << ":" << endl;
-			cout << "   numberOfCon \'" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\'" << endl;
-			cout << "   value       \'" << m_OSOption->optimization->constraints->other[i]->value << "\'" << endl;
-			cout << "   solver      \'" << m_OSOption->optimization->constraints->other[i]->solver << "\'" << endl;
-			cout << "   category    \'" << m_OSOption->optimization->constraints->other[i]->category << "\'" << endl;
-			cout << "   type        \'" << m_OSOption->optimization->constraints->other[i]->type << "\'" << endl;
-			cout << "   description \'" << m_OSOption->optimization->constraints->other[i]->description << "\'" << endl;
-#endif
 
-//					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
+					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
 						outStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
+					if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
+						outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->constraints->other[i]->numberOfEnumerations << "\"";
 					if (m_OSOption->optimization->constraints->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->value << "\"";
 					if (m_OSOption->optimization->constraints->other[i]->solver != "")
@@ -705,16 +827,24 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 								outStr << " ubValue=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->ubValue << "\"";
 							outStr << "/>" << endl;
 						}
+					else if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
+						for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfEnumerations; j++)
+							outStr << writeOtherOptionEnumeration(m_OSOption->optimization->constraints->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
+
 					outStr << "</other>" << endl;
 				}
 			outStr << "</constraints>" << endl;
 		}
+#ifdef DEBUG
+		cout << "Done with <constraint> element" << endl;
+#endif
 		if (m_OSOption->optimization->solverOptions != NULL)
 		{	if (m_OSOption->optimization->solverOptions->numberOfSolverOptions > 0)
 			{	outStr << "<solverOptions numberOfSolverOptions=\""; 
 				outStr << m_OSOption->optimization->solverOptions->numberOfSolverOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->optimization->solverOptions->numberOfSolverOptions; i++)
-				{	outStr << "<solverOption name=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->name << "\"";
+				{
+					outStr << "<solverOption name=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->name << "\"";
 					if (m_OSOption->optimization->solverOptions->solverOption[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->value << "\"";
 					if (m_OSOption->optimization->solverOptions->solverOption[i]->solver != "")
@@ -725,7 +855,15 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 						outStr << " type=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->type << "\"";
 					if (m_OSOption->optimization->solverOptions->solverOption[i]->description != "")
 						outStr << " description=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->description << "\"";
-					outStr << "/>" << endl;
+					if (m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems == 0)
+						outStr << "/>" << endl;
+					else
+					{
+						outStr << " numberOfItems=\"" << m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems << "\">";
+						for (int k=0; k<m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems; k++)
+							outStr << "<item>" << m_OSOption->optimization->solverOptions->solverOption[i]->item[k] << "</item>" << endl;
+						outStr << "</solverOption>" << endl;
+					}
 				}
 				outStr << "</solverOptions>" << endl;
 			}
@@ -733,6 +871,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		outStr << "</optimization>" << endl;
 	};
 	outStr << "</osol>" << endl;
+#ifdef DEBUG
+	cout << "Done with <optimization> element" << endl;
+#endif
 	return outStr.str();
 }// end writeOSoL
 

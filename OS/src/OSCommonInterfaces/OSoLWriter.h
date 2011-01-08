@@ -2,15 +2,13 @@
 /** @file OSoLWriter.h
  * 
  *
- * @author  Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 17/July/2008
- * @since   OS1.1
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -24,7 +22,7 @@
 
 /*! \class OSoLWriter OSoLWriter.h "OSoLWriter.h"
  *  \brief Take an OSOption object and write 
- * a string that validates against the OSoL schema.
+ *  a string that validates against the OSoL schema.
  *
  * 
  */
@@ -57,8 +55,18 @@ public:
    	 */		
 	std::string writeOSoL( OSOption *theosoption);
 	
+	/** m_bWriteBase64 is set to true if we encode the linear constraint coefficients
+	 * in base64 binary
+	 */
+	bool m_bWriteBase64;
+	
 	/** m_bWhiteSpace is set to true if we write white space in the file
 	 */
 	bool m_bWhiteSpace;
+
+	/** m_sB64encoded is a string of data (start, colIdx, rowIdx, or values) from
+	 * linear constraints coefficients encoded in base64 binary
+	 */	
+	std::string m_sB64encoded;
 };
 #endif

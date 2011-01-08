@@ -6,7 +6,10 @@
 		<variables numberOfOtherVariableOptions="0">
 			<initialVariableValues numberOfVar="0">
 			</initialVariableValues>
-			<initialBasisStatus numberOfVar="0">
+			<initialBasisStatus>
+				<unknown numberOfEl="2">
+					<el mult="2" incr="1">0</el>
+				</unknown>
 			</initialBasisStatus>
 		</variables>	
 		<solverOptions numberOfSolverOptions="0">

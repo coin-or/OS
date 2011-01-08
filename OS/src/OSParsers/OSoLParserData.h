@@ -1,15 +1,13 @@
 /* $Id$ */
 /** @file OSoLParserData.h
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 29/08/2008
- * @since   OS1.1
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -58,17 +56,16 @@ public:
 	bool passwordPresent;
 	bool contactPresent;
 	bool transportTypeattON;
-
 	bool otherGeneralOptionsPresent;
-      int numberOfOtherGeneralOptions;
+	int  numberOfOtherGeneralOptions;
 
 
 	/** children of the <system> element */
 	bool minDiskSpacePresent;
 	bool minDiskSpaceUnitPresent;
 
-	bool minMemorySizePresent;
-	bool minMemorySizeUnitPresent;
+	bool minMemoryPresent;
+	bool minMemoryUnitPresent;
 
 	bool minCPUSpeedPresent;
 	bool minCPUSpeedUnitPresent;
@@ -76,14 +73,14 @@ public:
 	bool minCPUNumberPresent;
 
 	bool otherSystemOptionsPresent;
-      int numberOfOtherSystemOptions;
+	int  numberOfOtherSystemOptions;
 
 
 	/** children of the <service> element */
 	bool serviceTypePresent;
 
 	bool otherServiceOptionsPresent;
-      int numberOfOtherServiceOptions;
+	int  numberOfOtherServiceOptions;
 
 
 	/** children of the <job> element */
@@ -96,54 +93,57 @@ public:
 	std::string requestedStartTime;
 
 	bool dependenciesPresent;
-	int numberOfDependencies;
+	int  numberOfDependencies;
 
 	bool requiredDirectoriesPresent;
-	int numberOfRequiredDirectories;
+	int  numberOfRequiredDirectories;
 
 	bool requiredFilesPresent;
-	int numberOfRequiredFiles;
+	int  numberOfRequiredFiles;
 
 	bool directoriesToMakePresent;
-	int numberOfDirectoriesToMake;
+	int  numberOfDirectoriesToMake;
 
 	bool filesToMakePresent;
-	int numberOfFilesToMake;
+	int  numberOfFilesToMake;
 
 	bool pathPairFromPresent;
 	bool pathPairToPresent;
 	bool pathPairMakeCopyPresent;
+	bool pathPairMakeCopy;
 
 	bool inputDirectoriesToMovePresent;
-	int numberOfInputDirectoriesToMove;
+	int  numberOfInputDirectoriesToMove;
 
 	bool inputFilesToMovePresent;
-	int numberOfInputFilesToMove;
+	int  numberOfInputFilesToMove;
 
 	bool outputDirectoriesToMovePresent;
-	int numberOfOutputDirectoriesToMove;
+	int  numberOfOutputDirectoriesToMove;
 
 	bool outputFilesToMovePresent;
-	int numberOfOutputFilesToMove;
+	int  numberOfOutputFilesToMove;
 
 	bool directoriesToDeletePresent;
-	int numberOfDirectoriesToDelete;
+	int  numberOfDirectoriesToDelete;
 
 	bool filesToDeletePresent;
-	int numberOfFilesToDelete;
+	int  numberOfFilesToDelete;
 
 	bool processesToKillPresent;
-	int numberOfProcessesToKill;
+	int  numberOfProcessesToKill;
 
 	bool otherJobOptionsPresent;
-      int numberOfOtherJobOptions;
+	int  numberOfOtherJobOptions;
+
+	int  numberOfPathPairs;
 	
 	/** children of the <optimization> element */
-	int numberOfVariables;
+	int  numberOfVariables;
 	bool numberOfVariablesPresent;
-	int numberOfObjectives;
+	int  numberOfObjectives;
 	bool numberOfObjectivesPresent;
-	int numberOfConstraints;
+	int  numberOfConstraints;
 	bool numberOfConstraintsPresent;
 	bool variablesPresent;
 	bool objectivesPresent;
@@ -151,8 +151,8 @@ public:
 	bool solverOptionsPresent;
 	bool idxAttributePresent;
 	bool valAttributePresent;
-	bool lbvalAttributePresent;
-	bool ubvalAttributePresent;
+	bool lbValAttributePresent;
+	bool ubValAttributePresent;
 	int  numberOfOtherVariableOptions;
 	bool initialVariableValuesPresent;
 	int  numberOfVar;
@@ -161,24 +161,33 @@ public:
 	bool initialBasisStatusPresent;
 	int  numberOfBasVar;
 	bool sosIdxAttributePresent;
-	bool grpWgtAttributePresent;
-	bool nOfVarAttributePresent;
+	bool groupWeightAttributePresent;
+	bool numberOfVarAttributePresent;
+	bool numberOfObjAttributePresent;
+	bool numberOfConAttributePresent;
+	bool numberOfEnumerationsAttributePresent;
 	int  numberOfIntWt;
 	int  numberOfSOS;
+	int  currentSOS;
+	int  sosIdx;
 	int  numberOfSOSVar;
+	int  numberOfObj;
 	int  numberOfOtherObjectiveOptions;
 	bool initialObjectiveValuesPresent;
-	int numberOfObjValues;
+	int  numberOfObjValues;
 	bool initialObjectiveBoundsPresent;
-	int numberOfObjBounds;
-	int numberOfOtherConstraintOptions;
+	int  numberOfObjBounds;
+	int  numberOfCon;
+	int  numberOfOtherConstraintOptions;
 	bool initialConstraintValuesPresent;
-	int numberOfCon;
 	bool initialDualVariableValuesPresent;
-	int numberOfDuals;
-	int numberOfSolverOptions;
-
-	int numberOfObj;
+	int  numberOfDuals;
+	int  numberOfSolverOptions;
+	double groupWeight;
+	double lbDualValue;
+	double ubDualValue;
+	int numberOfEnumerations;
+	int otherOptionType;
 
 	/** attributes of <other> options */
 	bool otherOptionNumberPresent;
@@ -188,6 +197,8 @@ public:
 	bool otherOptionCategoryPresent;
 	bool otherOptionTypePresent;
 	bool otherOptionDescriptionPresent;
+	bool numberOfItemsPresent;
+	int  numberOfItems;
 
 	/** attributes of <solverOptions> element */
 	bool solverOptionNamePresent;
@@ -196,12 +207,64 @@ public:
 	bool solverOptionCategoryPresent;
 	bool solverOptionTypePresent;
 	bool solverOptionDescriptionPresent;
+	std::string itemContent;
 
+
+	/** generic attributes */
+	bool categoryAttributePresent;
+	std::string categoryAttribute;
+	bool typeAttributePresent;
+	std::string typeAttribute;
+	bool nameAttributePresent;
+	std::string nameAttribute;
+	bool valueAttributePresent;
+	std::string valueAttribute;
+	bool lbValueAttributePresent;
+	std::string lbValueAttribute;
+	bool ubValueAttributePresent;
+	std::string ubValueAttribute;
+	bool descriptionAttributePresent;
+	std::string descriptionAttribute;
+	bool solverAttributePresent;
+	std::string solverAttribute;
+	bool unitAttributePresent;
+	std::string unitAttribute;
+	int  idxAttribute;
+
+	
+	/** all arrays are collected here */
+	std::string* jobDependencies;
+	std::string* paths;
+	std::string* fromPaths;
+	std::string* toPaths;
+	std::string* processesToKill;
+
+	std::string* valueString;
+	std::string* lbValueString;
+	std::string* ubValueString;
+	std::string* itemList;
+
+	bool* makeCopy;
+	int*  idxArray;
+
+	double* valArray;
+	double* lbValArray;
+	double* ubValArray;
+
+
+	/** some temporary items to facilitate code sharing */
+	int tempInt;
+	int numberOf;
+	int kounter;
+	int iOther;
+	int iOption;
+	double tempVal;
+	std::string tempStr;
 
 	/** the OSoLParserData class constructor */
 	OSoLParserData( );
 	
-	//** the OSoLParserData class destructor */
+	/** the OSoLParserData class destructor */
 	~OSoLParserData() ;
 	
 	
@@ -212,7 +275,8 @@ public:
 	std::string statusDescription;
 
 	/** scanner is used to store data in a reentrant lexer 
-	 * we use this to pass an OSoLParserData object to the parser*/
+	 * we use this to pass an OSoLParserData object to the parser
+	 */
 	void* scanner;
 	
 	
@@ -220,6 +284,6 @@ public:
 	 * if the file was not valid
 	 */
 	char *errorText;
-};//OSoLPArserData
+};//OSoLParserData
 
 #endif /*OSOLPARSERDATA_H_*/

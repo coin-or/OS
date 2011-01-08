@@ -1,13 +1,11 @@
 /* $Id$ */
 /** @file OSParseosil.y
  * 
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.2, 12/Oct/2010
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005-2010, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -1098,7 +1096,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// pchar better be '>' or there is an error
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
 			pchar++;
-			// proces <name> element text
+			// process <name> element text
 			// there better be a </name
 			ptemp = strstr( pchar, endName);
 			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </name> element"); return false;}
@@ -1149,7 +1147,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// pchar better be '>' or there is an error
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <source> element"); return false;}
 			pchar++;
-			// proces <source> element text
+			// process <source> element text
 			// there better be a </source
 			ptemp = strstr( pchar, endSource);
 			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </source> element"); return false;}
@@ -1200,7 +1198,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// pchar better be '>' or there is an error
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
 			pchar++;
-			// proces <source> element text
+			// process <source> element text
 			// there better be a </description
 			ptemp = strstr( pchar, endDescription);
 			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </description> element"); return false;}
@@ -3223,9 +3221,6 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
-	//check for INF
-//	std::string strINF ("INF");
-//	if(strINF.compare(0, 3,  number, numberend - number)  == 0) return OSDBL_MAX;
 	double val;
    	char *pEnd;
 	val = os_strtod_wrap(number, &pEnd);

@@ -2,15 +2,13 @@
 /** @file OSGeneral.h
  * 
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 19/07/2010
- * @since   OS2.2
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
  * \remarks
- * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma,  Kipp Martin,
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma,  Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -361,6 +359,12 @@ public:
  	bool setIntVector(int *i, int ni);
 
 	/**
+	 *  append a value to an IntVector
+	 *  @param i contains the value to be appended 
+	 */
+ 	bool extendIntVector(int i);
+
+	/**
 	 *  get the dimension of an IntVector
 	 */
 	int getNumberOfEl();
@@ -479,12 +483,19 @@ public:
 /**
  *  Set the indices for a particular status
  *  @param status is a string representing the allowed statuses 
- *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *		(as defined in enumeration ENUM_BASIS_STATUS - see below)
  *  @param i contains the array of indices
  *  @param ni contains the number of elements in i
  */
 	bool setIntVector(int status, int *i, int ni);
 
+/**
+ *  Add one index to a particular status
+ *  @param status is a string representing the allowed statuses 
+ *		(as defined in enumeration ENUM_BASIS_STATUS - see below)
+ *  @param idx contains the value of the index
+ */
+	bool addIdx(int status, int idx);
 
 /**
  *  Get the number of indices for a particular status
@@ -497,8 +508,8 @@ public:
 
 /**
  *  Get one entry in the array of indices for a particular status
- *  @param status is a string representing the allowed statuses 
- *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *  @param status is an integer representing the allowed statuses 
+ *  (as governed by enumeration ENUM_BASIS_STATUS --- see below)
  *  @param j is the (zero-based) position of the entry within the array
  *  @return the value
  */
@@ -507,7 +518,7 @@ public:
 /**
  *  Get the entire array of indices for a particular status
  *  @param status is a string representing the allowed statuses 
- *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *  (as governed by enumeration ENUM_BASIS_STATUS --- see below)
  *  @param i is the location where the user wants to store the array
  *  @return the value
  *
@@ -899,6 +910,13 @@ inline bool verifySolutionSubstatusType(std::string type)
 	return (returnSolutionSubstatusType(type) > 0);
 }//verifySolutionSubstatusType
 
+enum ENUM_PROBLEM_COMPONENT
+{
+	ENUM_PROBLEM_COMPONENT_variables = 1,
+	ENUM_PROBLEM_COMPONENT_objectives,
+	ENUM_PROBLEM_COMPONENT_constraints
+};
+
 enum ENUM_VARTYPE 
 {
 	ENUM_VARTYPE_CONTINUOUS = 1,
@@ -924,5 +942,16 @@ inline bool verifyVarType(char vt)
 {
 	return (returnVarType(vt) > 0);
 }//verifyVarType
+
+
+enum ENUM_PATHPAIR 
+{
+
+	ENUM_PATHPAIR_input_dir = 1,
+	ENUM_PATHPAIR_input_file,
+	ENUM_PATHPAIR_output_file,
+	ENUM_PATHPAIR_output_dir
+};
+
 
 #endif

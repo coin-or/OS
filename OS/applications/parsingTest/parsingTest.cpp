@@ -3,7 +3,7 @@
  * 
  * \brief This file tests the validity of an OSiL, OSoL or OSrL file.  
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  * @version 1.0, 18/Sep/2010
  * @since   OS2.2
  *
@@ -11,7 +11,7 @@
  * Copyright (C) 2010, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  * 
@@ -20,12 +20,12 @@
 #include <cppad/cppad.hpp> 
 #include "OSConfig.h"
 #include "OSInstance.h"  
-//#include "OSOption.h"
+#include "OSOption.h"
 #include "OSResult.h" 
 #include "OSiLReader.h"        
 #include "OSiLWriter.h"        
-//#include "OSoLReader.h"        
-//#include "OSoLWriter.h"        
+#include "OSoLReader.h"        
+#include "OSoLWriter.h"        
 #include "OSrLReader.h"          
 #include "OSrLWriter.h"        
 #include "OSFileUtil.h"  
@@ -84,7 +84,7 @@ using std::cout;
 using std::endl;
 using std::ostringstream; 
 
-//#define MY_DEBUG
+#define MY_DEBUG
 
 bool interactiveShell(std::string *schema, std::string *testFileName, std::string *outFileName,
 					  bool *compress, bool *addWhiteSpace, bool *verifyObjects);
@@ -99,7 +99,7 @@ int main(int argC, char* argV[])
 	// define the classes
 	FileUtil *fileUtil = NULL;  
 	OSiLReader *osilreader = NULL;
-//	OSoLReader *osolreader = NULL;
+	OSoLReader *osolreader = NULL;
 	OSrLReader *osrlreader = NULL;
 	// end classes    
 
@@ -179,17 +179,23 @@ int main(int argC, char* argV[])
 		osxl = fileUtil->getFileAsString( testFileName.c_str() );
 
 #ifdef MY_DEBUG
-		std::cout << "Done reading the file" << std::endl;
+		std::cout << "Done reading the file into memory" << std::endl;
 #endif
 
+/*********************************************************************
+ * Check OSiL files
+ *********************************************************************/
 		if (schema == "osil")
 		{
 			osilreader = new OSiLReader(); 
 			OSInstance *osinstance;
+#ifdef MY_DEBUG
+			std::cout << "Start parsing the file" << std::endl;
+#endif
 			osinstance = osilreader->readOSiL( osxl);
 
 #ifdef MY_DEBUG
-			parsingTestResult << "Reading files successfully" << std::endl;
+			parsingTestResult << "Parsed file successfully" << std::endl;
 #endif
 
 			if (doOutput == true)
@@ -223,15 +229,21 @@ int main(int argC, char* argV[])
 			delete osilreader;
 			osilreader = NULL;
 		}
+
+/*********************************************************************
+ * Check OSoL files
+ *********************************************************************/
 		else if (schema == "osol")
 		{
-/*
 			osolreader = new OSoLReader(); 
 			OSOption *osoption;
+#ifdef MY_DEBUG
+			std::cout << "Start parsing the file" << std::endl;
+#endif
 			osoption = osolreader->readOSoL( osxl);
 
 #ifdef MY_DEBUG
-			parsingTestResult << "Reading files successfully" << std::endl;
+			parsingTestResult << "Parsed file successfully" << std::endl;
 #endif
 
 			if (doOutput == true)
@@ -253,10 +265,21 @@ int main(int argC, char* argV[])
 				if (verifyObjects == true)
 				{
 					osxl = fileUtil->getFileAsString( outFileName.c_str() );
+					OSoLReader *osolreader2;
+					osolreader2 = new OSoLReader(); 
 					OSOption *osoption2;
-					osoption2 = osolreader->readOSoL( osxl);
+					osoption2 = osolreader2->readOSoL( osxl);
+#ifdef MY_DEBUG
+					std::cout << "Compare in-memory objects" << std::endl;
+#endif
 					if (osoption2->IsEqual(osoption) == false)
 						throw ErrorClass("Two objects are not equal!");
+#ifdef MY_DEBUG
+					else
+						std::cout << "in-memory objects compare equal" << std::endl;
+#endif
+					delete osolreader2;
+					osolreader2 = NULL;
 				}
 
 				delete osolwriter;
@@ -264,15 +287,22 @@ int main(int argC, char* argV[])
 			}
 			delete osolreader;
 			osolreader = NULL;
-*/		}
+		}
+
+/*********************************************************************
+ * Check OSrL files
+ *********************************************************************/
 		else if (schema == "osrl")
 		{
 			osrlreader = new OSrLReader(); 
 			OSResult *osresult;
+#ifdef MY_DEBUG
+			std::cout << "Start parsing the file" << std::endl;
+#endif
 			osresult = osrlreader->readOSrL( osxl);
 
 #ifdef MY_DEBUG
-			parsingTestResult << "Reading files successfully" << std::endl;
+			parsingTestResult << "Parsed file successfully" << std::endl;
 #endif
 
 			if (doOutput == true)

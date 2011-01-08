@@ -1,15 +1,13 @@
 //Id: OSSolverService.cpp 3561 2010-06-24 19:27:07Z kmartin $
 /** @file OSSolverService.cpp
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005  
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  * 
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  *  
  * <b>INPUTS:</b>

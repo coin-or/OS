@@ -2,15 +2,13 @@
 /** @file OSResult.h
  * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 19/07/2009
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -2401,21 +2399,21 @@ public:
 	 *
 	 * @param solIdx holds the solution index for the current solution
 	 * @param object describes the kind of indices to be retrieved
-	 * ('v' = variables, 'c' = constraints -- i.e., slacks, 'o' = objective rows)
+	 *	(legal values are described in ENUM_BASIS_STATUS --- see OSGeneral.h)
 	 * @param status gives the basis status type
 	 */
-	int getBasisStatusNumberOfEl(int solIdx, char object, int status);
+	int getBasisStatusNumberOfEl(int solIdx, int object, int status);
 
 	/**
 	 * Get an entry in the array of indices that belong to a particular basis status
 	 *
 	 * @param solIdx holds the solution index for the current solution
 	 * @param object describes the kind of indices to be retrieved
-	 * ('v' = variables, 'c' = constraints -- i.e., slacks, 'o' = objective rows)
+	 *	(legal values are described in ENUM_BASIS_STATUS --- see OSGeneral.h)
 	 * @param status gives the basis status (basic, atLower, atUpper, etc.)
 	 * @param j is the (zero-based) position of the desired entry within the index array
 	 */
-	int getBasisStatusEl(int solIdx, char object, int status, int j);
+	int getBasisStatusEl(int solIdx, int object, int status, int j);
 	
 	/**
 	 * Get numberOfOtherVariableResult. 
@@ -3406,7 +3404,7 @@ public:
 	 * Set the basis status of a number of variables/constraints/objectives.
 	 * @param solIdx holds the index of the solution to which the basis values belong. 
 	 * @param object holds the type of basis object to be used 
-	 *     ('v', 'o', 'c' are legal values for variables, objectives and constraints, respectively)
+	 *     (legal values are taken from the ENUMM_PROBLEM_COMPONENT enumeration --- see OSGeneral.h))
 	 * @param status holds the status which is to be used
 	 *     (legal values are taken from the ENUM_BASIS_STATUS enumeration --- see OSGeneral.h)
 	 * @param i holds the integer array whose values are to be transferred.
@@ -3416,7 +3414,7 @@ public:
 	 * @return whether basis status was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setBasisStatus(int solIdx, char object, int status, int *i, int ni);
+	bool setBasisStatus(int solIdx, int object, int status, int *i, int ni);
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results, 
@@ -3586,7 +3584,7 @@ public:
 	 * @param solIdx holds the solution index 
 	 * @param otherIdx holds the index of the OtherVariableResult object
 	 * @param object holds the object to which this enumeration pertains 
-	 * --- variables, objectives and constraints can be handled identically
+	 *     (legal values are taken from the ENUM_PROBLEM_COMPONENT enumeration --- see OSGeneral.h))
 	 * @param enumIdx holds the index of the OtherOptionEnumeration object
 	 * @param value holds the value of this result
 	 * @param description holds a description of this result
@@ -3598,7 +3596,7 @@ public:
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setOtherOptionEnumeration(int solIdx, int otherIdx, char object, int enumIdx, std::string value, std::string description, int *i, int ni);
+	bool setOtherOptionEnumeration(int solIdx, int otherIdx, int object, int enumIdx, std::string value, std::string description, int *i, int ni);
 
 	/**
 	 * Set the [i]th optimization solution's other (non-standard/solver specific) objective-related results, 

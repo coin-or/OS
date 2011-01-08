@@ -1,16 +1,13 @@
 /* $Id: OSGeneral.cpp 3186 2010-02-06 23:38:35Z Gassmann $ */
 /** @file OSGeneral.cpp
  * 
- *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 19/07/2010
- * @since   OS2.2
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -280,6 +277,45 @@ bool IntVector::setIntVector(int *i, int ni)
 
 	for (int j=0; j<ni; j++)
 		this->el[j] = i[j];
+	return true;
+}//setIntVector
+
+bool IntVector::extendIntVector(int i)
+{
+	std::cout << "extending an intvector" << std::endl;
+	std::cout << "is object NULL " << (this == NULL) << std::endl;
+	std::cout << "is el NULL " << (this->el == NULL) << std::endl;
+	std::cout << "continue" << std::endl;
+
+	int ni;
+//	if (this == NULL)
+//		this = new IntVector();
+
+	if (this->el == NULL)
+		ni = 0;
+	else
+		ni = this->numberOfEl;
+
+	std::cout << "ni = " << ni << std::endl;
+
+	int* temp = new int[ni+1];
+	for (int j = 0; j < ni; ++j)
+			temp[j] = this->el[j]; 
+
+	std::cout << "made a temporary copy" << std::endl;
+
+	delete[] this->el;
+
+	std::cout << "deleted old location" << std::endl;
+
+	temp[ni] = i;
+
+	std::cout << "store new" << std::endl;
+
+	this->el = temp;
+	this->numberOfEl = ++ni;
+	std::cout << "successfully extended an intvector" << std::endl;
+
 	return true;
 }//setIntVector
 
@@ -605,9 +641,48 @@ bool BasisStatus::setIntVector(int status, int *i, int ni)
 			return this->unknown->setIntVector(i, ni);
 		}
 	default:
-		throw ErrorClass("Unknown basis status encountered in setIntVector");  
+		throw ErrorClass("Unknown basis status encountered in BasisStatus::setIntVector");  
 	 }
 }//BasisStatus::setIntVector
+
+bool BasisStatus::addIdx(int status, int idx)
+{
+	switch (status)
+	{
+		case ENUM_BASIS_STATUS_basic:
+		{
+			if (this->basic == NULL) this->basic = new IntVector();
+			return this->basic->extendIntVector(idx);
+		}
+		case ENUM_BASIS_STATUS_atLower:
+		{
+			if (this->atLower == NULL) this->atLower = new IntVector();
+			return this->atLower->extendIntVector(idx);
+		}
+		case ENUM_BASIS_STATUS_atUpper:
+		{
+			if (this->atUpper == NULL) this->atUpper = new IntVector();
+			return this->atUpper->extendIntVector(idx);
+		}
+		case ENUM_BASIS_STATUS_isFree:
+		{
+			if (this->isFree == NULL) this->isFree = new IntVector();
+			return this->isFree->extendIntVector(idx);
+		}
+		case ENUM_BASIS_STATUS_superbasic:
+		{
+			if (this->superbasic == NULL) this->superbasic = new IntVector();
+			return this->superbasic->extendIntVector(idx);
+		}
+		case ENUM_BASIS_STATUS_unknown:
+		{
+			if (this->unknown == NULL) this->unknown = new IntVector();
+			return this->unknown->extendIntVector(idx);
+		}
+	default:
+		throw ErrorClass("Unknown basis status encountered in BasisStatus::addIdx");  
+	 }
+}//BasisStatus::addIdx
 
 
 bool BasisStatus::getIntVector(int status, int *i)

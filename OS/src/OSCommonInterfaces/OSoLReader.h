@@ -3,14 +3,12 @@
  * 
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 17/07/2008
- * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -19,12 +17,12 @@
 #ifndef OSOLREADER_H
 #define OSOLREADER_H
 
+#include <string>
 
-
+#include "OSErrorClass.h"
 #include "OSOption.h"
 #include "OSoLParserData.h"
-#include "OSErrorClass.h"
-#include <string>
+#include "OSgLParserData.h"
 
 
 /*! \class OSoLReader
@@ -68,6 +66,11 @@ private:
 	/** m_parserData is the object used in the parser to temporarily store data 
 	 */
 	OSoLParserData *m_parserData;
+	
+	/** m_osglData is the object used in the parser to 
+	 * temporarily store data from the OSgL schema elements. 
+	 */
+	OSgLParserData *m_osglData;
 };
 
 

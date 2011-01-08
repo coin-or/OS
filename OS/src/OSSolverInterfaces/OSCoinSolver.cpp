@@ -4,15 +4,13 @@
  * \brief This file defines the CoinSolver class.
  * \detail Read an OSInstance object and convert to COIN data structures
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -1079,7 +1077,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				
 			}
 			
-			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
 			delete[] basisIdx[ 0];
 			freeVars.clear();
 
@@ -1100,7 +1098,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				
 			}
 			
-			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
 			delete[] basisIdx[ 1];
 			basicVars.clear();
 
@@ -1121,7 +1119,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				
 			}
 			
-			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
 			delete[] basisIdx[ 2];
 			nonBasicUpper.clear();
 
@@ -1141,7 +1139,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 				
 			}
 			
-			osresult->setBasisStatus(0, 'v', ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
 			delete[] basisIdx[ 3];
 			nonBasicLower.clear();
 
@@ -1222,7 +1220,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 					
 				}
 				
-				osresult->setBasisStatus(0, 'c', ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
 				delete[] basisIdx[ 0];
 				freeVars.clear();
 
@@ -1243,7 +1241,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 					
 				}
 				
-				osresult->setBasisStatus(0, 'c', ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
 				delete[] basisIdx[ 1];
 				basicVars.clear();
 
@@ -1264,7 +1262,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 					
 				}
 				
-				osresult->setBasisStatus(0, 'c', ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
 				delete[] basisIdx[ 2];
 				nonBasicUpper.clear();
 
@@ -1284,7 +1282,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 					
 				}
 				
-				osresult->setBasisStatus(0, 'c', ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
 				delete[] basisIdx[ 3];
 				nonBasicLower.clear();
 

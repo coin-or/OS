@@ -150,7 +150,6 @@ std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBa
 std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase64)
 {
 	ostringstream outStr;
-	outStr << "<basisStatus>" << endl;
 	
 	if (bs->basic != NULL && bs->basic->numberOfEl > 0)
 	{
@@ -205,8 +204,6 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		outStr << "</unknown>";
 		if(addWhiteSpace == true) outStr << endl;
 	}
-	
-	outStr << "</basisStatus>" << endl;
 	
 	return outStr.str();
 }// end writeDblVectorData

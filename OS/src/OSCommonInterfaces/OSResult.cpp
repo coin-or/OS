@@ -2,15 +2,13 @@
 /** @file OSResult.cpp
  * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 19/07/2009
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -1865,7 +1863,7 @@ std::string OSResult::getVarValueString(int solIdx, int varIdx){
 	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->value;
 }//getVarValueString
 
-int OSResult::getBasisStatusNumberOfEl(int solIdx, char object, int status)
+int OSResult::getBasisStatusNumberOfEl(int solIdx, int object, int status)
 {
 	if (optimization == NULL || optimization->solution == NULL) 
 		throw ErrorClass("No solution defined");
@@ -1875,19 +1873,19 @@ int OSResult::getBasisStatusNumberOfEl(int solIdx, char object, int status)
 
 	switch (object)
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) return -1;
 			if (optimization->solution[solIdx]->variables->basisStatus == NULL) return -1;
 			return optimization->solution[solIdx]->variables->basisStatus->getNumberOfEl(status);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) return -1;
 			if (optimization->solution[solIdx]->objectives->basisStatus == NULL) return -1;
 			return optimization->solution[solIdx]->objectives->basisStatus->getNumberOfEl(status);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL) return -1;
 			if (optimization->solution[solIdx]->constraints->basisStatus == NULL) return -1;
@@ -1898,7 +1896,7 @@ int OSResult::getBasisStatusNumberOfEl(int solIdx, char object, int status)
 	}
 }//getBasisStatusNumberOfEl
 
-int OSResult::getBasisStatusEl(int solIdx, char object, int status, int j)
+int OSResult::getBasisStatusEl(int solIdx, int object, int status, int j)
 {
 	if (optimization == NULL || optimization->solution == NULL) 
 		throw ErrorClass("No solution defined");
@@ -1909,7 +1907,7 @@ int OSResult::getBasisStatusEl(int solIdx, char object, int status, int j)
 
 	switch (object)
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) 
 				throw ErrorClass("variables result never defined in routine getBasisStatusEl()");
@@ -1917,7 +1915,7 @@ int OSResult::getBasisStatusEl(int solIdx, char object, int status, int j)
 				throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
 			return optimization->solution[solIdx]->variables->basisStatus->getEl(status, j);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) 
 				throw ErrorClass("objectives result never defined in routine getBasisStatusEl()");
@@ -1925,7 +1923,7 @@ int OSResult::getBasisStatusEl(int solIdx, char object, int status, int j)
 				throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
 			return optimization->solution[solIdx]->objectives->basisStatus->getEl(status, j);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL)
 				throw ErrorClass("constraints result never defined in routine getBasisStatusEl()");
@@ -2238,7 +2236,7 @@ int* OSResult::getOtherOptionResultName(int solIdx, int otherIdx, char object, i
 
 	switch (object)
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) 
 				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
@@ -2248,7 +2246,7 @@ int* OSResult::getOtherOptionResultName(int solIdx, int otherIdx, char object, i
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) 
 				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
@@ -2258,7 +2256,7 @@ int* OSResult::getOtherOptionResultName(int solIdx, int otherIdx, char object, i
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL)
 				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
@@ -2285,7 +2283,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 
 	switch (object)
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) 
 				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
@@ -2295,7 +2293,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) 
 				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
@@ -2305,7 +2303,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL)
 				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
@@ -2332,7 +2330,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 
 	switch (object)
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) 
 				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
@@ -2342,7 +2340,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) 
 				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
@@ -2352,7 +2350,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL)
 				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
@@ -2379,7 +2377,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 
 	switch (object)
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) 
 				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
@@ -2389,7 +2387,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) 
 				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
@@ -2399,7 +2397,7 @@ int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int
 				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
 			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL)
 				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
@@ -4097,7 +4095,7 @@ bool OSResult::setVarValueString(int solIdx, int number, int idx, std::string st
 	return true;
 }//setVarValueString
 
-bool OSResult::setBasisStatus(int solIdx, char object, int status, int *i, int ni)
+bool OSResult::setBasisStatus(int solIdx, int object, int status, int *i, int ni)
 {
 	if (optimization == NULL || optimization->solution == NULL)
 		return false;
@@ -4109,7 +4107,7 @@ bool OSResult::setBasisStatus(int solIdx, char object, int status, int *i, int n
 
 	switch (object) 
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL)
 				optimization->solution[solIdx]->variables = new VariableSolution();
@@ -4118,7 +4116,7 @@ bool OSResult::setBasisStatus(int solIdx, char object, int status, int *i, int n
 			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
 			return optimization->solution[solIdx]->variables->basisStatus->setIntVector(status, i, ni);
 		}
-		case 'o':	
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL)
 				optimization->solution[solIdx]->objectives = new ObjectiveSolution();
@@ -4127,7 +4125,7 @@ bool OSResult::setBasisStatus(int solIdx, char object, int status, int *i, int n
 			for (int j=0; j<ni; j++) if (i[j] >= 0) return false;
 			return optimization->solution[solIdx]->objectives->basisStatus->setIntVector(status, i, ni);
 		}
-		case 'c':	
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL)
 				optimization->solution[solIdx]->constraints = new ConstraintSolution();
@@ -4345,7 +4343,7 @@ bool OSResult::setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, s
 	return true;		
 }//setOtherVariableResultVar
 
-bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, int enumIdx, std::string value, std::string description, int *i, int ni)
+bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, int object, int enumIdx, std::string value, std::string description, int *i, int ni)
 {
 	if (optimization == NULL || optimization->solution == NULL)
 		return false;
@@ -4356,7 +4354,7 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, 
 
 	switch (object) 
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) return false;
 			if (optimization->solution[solIdx]->variables->other == NULL) return false;
@@ -4371,7 +4369,7 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, 
 			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
 			return optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) return false;
 			if (optimization->solution[solIdx]->objectives->other == NULL) return false;
@@ -4384,7 +4382,7 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, 
 			for (int j=0; j<ni; j++) if (i[j] >= 0) return false;
 			return optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL) return false;
 			if (optimization->solution[solIdx]->constraints->other == NULL) return false;
