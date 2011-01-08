@@ -267,7 +267,7 @@ void OSColGenApp::solve(){
 			
 			*(m_theta + i) = model.getColSolution()[i];	
 			
-			if( *(m_theta + i) > m_osrouteSolver->m_eps){
+			if( *(m_theta + i) > m_osDecompParam.zeroTol){
 				
 				m_zOptIndexes.push_back( i) ;
 				
@@ -737,7 +737,7 @@ bool OSColGenApp::branchAndBound(){
 			if(mit == nodeMap.end() ) throw ErrorClass("a node selection problem in branch and bound");
 			osnode = mit->second;
 			
-			if( osnode->lpValue < m_zUB - m_osrouteSolver->m_eps){
+			if( osnode->lpValue < m_zUB - m_osDecompParam.zeroTol){
 			
 				
 				//create a branching cut 
@@ -933,7 +933,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 		std::cout << "MESSAGE: START CREATION OF A CHILD NODE" << std::endl;
 		std::cout << "LB " << rowLB  <<  " UB = " << rowUB << std::endl;
 		std::cout << "MESSAGE: LP RELAXATION VALUE OF POTENTIAL CHILD NODE  " << m_si->getObjValue() << std::endl;
-		if( m_si->getObjValue() < m_zUB - m_osrouteSolver->m_eps) {
+		if( m_si->getObjValue() < m_zUB - m_osDecompParam.zeroTol) {
 			// okay cannot fathom based on bound try integrality
 			std::cout << "MESSAGE: WE CANNOT FATHOM THE CHILD BASED ON UPPER BOUND " << std::endl;
 			numCols = m_si->getNumCols();
@@ -942,10 +942,10 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 			for(i = 0; i < numCols; i++){	
 				//get the LP relaxation
 				*(m_theta + i) = m_si->getColSolution()[i];	
-				if( *(m_theta + i) > m_osrouteSolver->m_eps) thetaNumNonz++;
+				if( *(m_theta + i) > m_osDecompParam.zeroTol) thetaNumNonz++;
 				
 			}
-			if( isInteger( m_theta, numCols, m_osrouteSolver->m_eps) == true){
+			if( isInteger( m_theta, numCols, m_osDecompParam.zeroTol) == true){
 				//fathom by integrality
 				std::cout << "MESSAGE:  WE HAVE AN INTEGRALITY FATHOM " << m_zUB << std::endl;
 				if( m_zUB > m_si->getObjValue() ){
@@ -956,7 +956,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 					
 					for(i = 0; i < numCols; i++){
 						
-						if( *(m_theta + i) > m_osrouteSolver->m_eps) m_zOptIndexes.push_back( i) ;
+						if( *(m_theta + i) > m_osDecompParam.zeroTol) m_zOptIndexes.push_back( i) ;
 						
 					}
 				}
@@ -995,7 +995,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				thetaNumNonz = 0;
 				for(i = 0; i < numCols; i++){
 					
-					if( *(m_theta + i) > m_osrouteSolver->m_eps){
+					if( *(m_theta + i) > m_osDecompParam.zeroTol){
 						
 						osnodeChild->thetaIdx[ thetaNumNonz] = i;
 						osnodeChild->theta[ thetaNumNonz] = *(m_theta + i);

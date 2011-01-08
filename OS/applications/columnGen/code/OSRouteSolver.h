@@ -238,8 +238,6 @@ public:
 	double* m_thetaCost;
 	
 
-
-	double m_eps;
 	 /** m_separationIndexMap maps the variable index into the
 	  * appropriate row in the separation problem for the 
 	  * tour breaking constraints

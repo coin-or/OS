@@ -77,8 +77,6 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	m_upperBoundLMax = -OSINT_MAX;
 	m_minDemand = OSINT_MAX;
 	
-
-	m_eps = 0.00001;
 	m_u = NULL;
 	m_v = NULL;
 	m_g = NULL;
@@ -1703,7 +1701,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			//objcoeff->values[ varNumber ] = OSDBL_MAX;
 			
 			//objcoeff->values[ varNumber ] = 1.0e24;
-			objcoeff->values[ varNumber ] = 1000000;
+			objcoeff->values[ varNumber ] = m_osDecompParam.artVarCoeff;
 			
 			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
 					0, 1, 'C');
@@ -1729,7 +1727,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			//objcoeff->values[ varNumber ] = 1.0e24;
 			//kipp -- change this number -- even 1.0e24 drives
 			//clp crazy and gives infeasible when actually feasible
-			objcoeff->values[ varNumber ] = 1000000;
+			objcoeff->values[ varNumber ] =m_osDecompParam.artVarCoeff;
 			
 			
 			
@@ -2379,7 +2377,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 		for(i = 0; i < numTheta; i++){
 			
 			//get a postive theta
-			if(theta[ i] > m_eps){
+			if(theta[ i] > m_osDecompParam.zeroTol){
 				
 				//get the xij indexes associated with this variable
 				for(j = m_thetaPnt[ i ]; j <  m_thetaPnt[ i + 1 ]; j++ ){
@@ -2407,7 +2405,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 		
 		for(i = indexAdjust; i < numSepRows - 1; i++){
 			
-			if(-tmpRhs[ i] > 1 + m_eps ){
+			if(-tmpRhs[ i] > 1 + m_osDecompParam.zeroTol ){
 				// quick and dirty does x_{ij} + x_{ji} <= 1 cut off anything
 				//std::cout << " tmpRhs[ i] =  " << tmpRhs[ i]  << std::endl;
 				//which variable is this 
@@ -2552,14 +2550,14 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 			
 			m_separationClpModel->primal();		
 			
-			if(m_separationClpModel->getObjValue() > m_eps){
+			if(m_separationClpModel->getObjValue() > m_osDecompParam.zeroTol){
 				std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
 				std::cout << "SEPERATION OBJ VALUE =  "  <<  m_separationClpModel->getObjValue() << std::endl;
 				numNewRows = 1;
 			
 				for(i = 0; i < m_numNodes - m_numHubs ; i++){
 					//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
-					if( m_separationClpModel->getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
+					if( m_separationClpModel->getRowPrice()[ i] - m_osDecompParam.zeroTol <= -1) dualIdx.push_back( i) ;
 				}
 				
 				for (vit1 = dualIdx.begin(); vit1 != dualIdx.end(); vit1++) {
@@ -2747,7 +2745,7 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 		for(i = 0; i < numX; i++){
 			
 			//get a postive theta
-			if(x[ i] > m_eps){
+			if(x[ i] > m_osDecompParam.zeroTol){
 				
 				//the row index for x_{ij}
 				rowKount = m_separationIndexMap[ i ];
@@ -2763,7 +2761,7 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 		
 		for(i = indexAdjust; i < numSepRows - 1; i++){
 			
-			if(-tmpRhs[ i] > 1 + m_eps ){
+			if(-tmpRhs[ i] > 1 + m_osDecompParam.zeroTol ){
 			
 				// quick and dirty does x_{ij} + x_{ji} <= 1 cut off anything
 				//std::cout << " tmpRhs[ i] =  " << tmpRhs[ i]  << std::endl;
@@ -2835,7 +2833,7 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 			
 			m_separationClpModel->primal();		
 			
-			if(m_separationClpModel->getObjValue() > m_eps){
+			if(m_separationClpModel->getObjValue() > m_osDecompParam.zeroTol){
 				std::cout << "DOING SEPARATION FOR NODE "  << k + m_numHubs << std::endl;
 				std::cout << "SEPERATION OBJ =  "  <<  m_separationClpModel->getObjValue() << std::endl;
 				numNewRows = 1;
@@ -2844,7 +2842,7 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 			
 				for(i = 0; i < m_numNodes - m_numHubs ; i++){
 					//std::cout <<   m_osinstanceSeparation->getConstraintNames()[ i]   << " = " << m_separationClpModel->getRowPrice()[ i] << std::endl;
-					if( m_separationClpModel->getRowPrice()[ i] - m_eps <= -1) dualIdx.push_back( i) ;
+					if( m_separationClpModel->getRowPrice()[ i] - m_osDecompParam.zeroTol <= -1) dualIdx.push_back( i) ;
 				}
 				
 				for (vit1 = dualIdx.begin(); vit1 != dualIdx.end(); vit1++) {
@@ -3133,7 +3131,7 @@ void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes){
 		//we better NOT have any artifical variables positive
 		//for(i = 0; i < numVarArt  ; i++){
 		//	
-		//	if(theta[ i] > m_eps) throw ErrorClass("we have a positive artificial variable");
+		//	if(theta[ i] > m_osDecompParam.zeroTol) throw ErrorClass("we have a positive artificial variable");
 		//}
 		
 		//for(i = 0; i < m_numThetaVar    ; i++){
@@ -3456,7 +3454,7 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 		//loop over the fractional thetas
 		for(i = 0; i < m_numThetaVar; i++){
 			
-			if( ( theta[ i  ] > m_eps ) && ( theta[ i  ] < 1 - m_eps ) ){
+			if( ( theta[ i  ] > m_osDecompParam.zeroTol ) && ( theta[ i  ] < 1 - m_osDecompParam.zeroTol ) ){
 				
 				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 					
@@ -3512,7 +3510,7 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 		
 		//if we have a candidate among arcs in/out of hubs, take it
 		
-		if(minFraction > 1 - m_eps){
+		if(minFraction > 1 - m_osDecompParam.zeroTol){
 		
 			for(i = m_numHubs; i < m_numNodes; i++){
 				
@@ -3600,7 +3598,7 @@ int OSRouteSolver::getBranchingVar(const int* thetaIdx, const double* theta,
 		//working with a sparse matrix
 		for(i = 0; i < numThetaVar; i++){
 			
-			if( ( theta[ i  ] > m_eps ) && ( theta[ i  ] < 1 - m_eps ) ){
+			if( ( theta[ i  ] > m_osDecompParam.zeroTol ) && ( theta[ i  ] < 1 - m_osDecompParam.zeroTol ) ){
 				
 				for(j = m_thetaPnt[ thetaIdx[ i] ];  j < m_thetaPnt[ thetaIdx[ i]  + 1] ;  j++){
 					
@@ -3658,7 +3656,7 @@ int OSRouteSolver::getBranchingVar(const int* thetaIdx, const double* theta,
 		
 		std::cout << "MIN FRACTION = " <<  minFraction << std::endl;
 		
-		if(minFraction > 1 - m_eps){
+		if(minFraction > 1 - m_osDecompParam.zeroTol){
 		
 			for(i = m_numHubs; i < m_numNodes; i++){
 				
