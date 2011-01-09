@@ -32,6 +32,8 @@
 // Couenne stuff
 
 #include "CouenneTypes.hpp"
+#include "CouenneJournalist.hpp"
+#ifndef COUENNE_NEW
 #include "exprClone.hpp"
 #include "exprGroup.hpp"
 #include "exprAbs.hpp"
@@ -50,7 +52,27 @@
 #include "exprSub.hpp"
 #include "exprSum.hpp"
 #include "exprVar.hpp"
-#include "CouenneJournalist.hpp"
+#else
+#include "CouenneExprClone.hpp"
+#include "CouenneExprGroup.hpp"
+#include "CouenneExprAbs.hpp"
+#include "CouenneExprConst.hpp"
+#include "CouenneExprCos.hpp"
+#include "CouenneExprDiv.hpp"
+#include "CouenneExprExp.hpp"
+#include "CouenneExprInv.hpp"
+#include "CouenneExprLog.hpp"
+#include "CouenneExprMax.hpp"
+#include "CouenneExprMin.hpp"
+#include "CouenneExprMul.hpp"
+#include "CouenneExprOpp.hpp"
+#include "CouenneExprPow.hpp"
+#include "CouenneExprSin.hpp"
+#include "CouenneExprSub.hpp"
+#include "CouenneExprSum.hpp"
+#include "CouenneExprVar.hpp"
+using namespace Couenne;
+#endif
 // end Couenne stuff
 
 
