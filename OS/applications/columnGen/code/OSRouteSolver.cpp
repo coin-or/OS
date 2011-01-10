@@ -3881,7 +3881,7 @@ void OSRouteSolver::getBranchingCut(const int* thetaIdx, const double* thetaVar,
 void OSRouteSolver::getInitialSolution(){
 	
 	try{	
-		
+		//kipp -- stil not done we depend on SKs solution
 		//let's get the initial assignment of nodes to hubs
 		//this is in m_initSolMap which is calculated when we
 		//call  getOptions( OSOption *osoption);
@@ -3902,6 +3902,63 @@ void OSRouteSolver::getInitialSolution(){
 	
 	
 }//end getInitialSolution
+
+
+void OSRouteSolver::resetMaster( std::set<int> inVars, OsiSolverInterface *si){
+	
+	int i;
+	int kount;
+	int numNonz;
+	std::set<int>::iterator sit;
+	//temporarily create memory for the columns we keep
+	int numVars = inVars.size();
+	//temporay holders
+	int* thetaPntTmp;
+	int* thetaIndexTmp;
+	
+	
+	//get the number of nonzeros that we need
+	numNonz = 0;
+	
+	for(sit = inVars.begin();  sit != inVars.end(); sit++){
+		numNonz += m_thetaPnt[*sit + 1 ] - m_thetaPnt[ *sit ];
+	}
+	
+	//allocate the memory
+	thetaPntTmp = new int[ numVars + 1];
+	thetaIndexTmp = new int[ numNonz];
+	
+	//fill in the temporary arrays
+	kount = 0;
+	numNonz = 0;
+	thetaPntTmp[ kount++] = 0;
+	
+	for(sit = inVars.begin();  sit != inVars.end(); sit++){
+		
+		thetaPntTmp[ kount++] = m_thetaPnt[*sit + 1 ] - m_thetaPnt[ *sit ];
+		
+		for(i = m_thetaPnt[ *sit ]; i < m_thetaPnt[*sit + 1 ]; i++){
+			
+			thetaIndexTmp[ numNonz++] = m_thetaIndex[ i];
+			
+		}
+		
+		
+	}
+	
+	//write old master
+	si->writeLp( "gailTest" );
+	
+	//construct the new master
+
+	
+	
+	//fill in the theta transformation matrix
+	
+	//garbage collection
+	delete[] thetaPntTmp;
+	delete[] thetaIndexTmp;
+}
 
 
 

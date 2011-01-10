@@ -17,6 +17,7 @@
 #include "OSOption.h"
 #include "ClpSimplex.hpp"
 #include "OSDecompParam.h"
+#include "OSCoinSolver.h"
 #include<map>
 // --------------------------------------------------------------------- //
 /*!
@@ -437,6 +438,17 @@ public:
 	
 	//this method gets called when we are done
 	void pauHana(std::vector<int> &m_zOptIndexes);
+	
+	/** use this method to reset the master
+	 * RETURN VALUES: 
+	 * 
+	 * INPUT:
+	 * std::set<int> inVars -- variables to include in new master
+	 * OsiSolverInterface *si -- the current solver interface for 
+	 * the master
+	 */
+	
+	void resetMaster( std::set<int> inVars, OsiSolverInterface *si );
 	
 	/**
 	 *

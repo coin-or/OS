@@ -236,7 +236,19 @@ void OSColGenApp::solve(){
 		solveRestrictedMasterRelaxation();
 		m_zLB =  m_si->getObjValue();
 		
+		//kipp -- temp stuff here delete later
+		//////
 		
+		std::set<int> inVars;
+		
+		for(i = 0; i < m_si->getNumCols(); i++){
+			
+			if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( i);
+		}
+		
+		m_osrouteSolver->resetMaster( inVars, m_si );
+		exit( 1);
+		/////
 
 		//now get the upper bound
 		//solve as an integer program to get initial upper bound
