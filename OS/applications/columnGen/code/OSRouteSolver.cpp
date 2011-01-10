@@ -3950,7 +3950,14 @@ void OSRouteSolver::resetMaster( std::set<int> inVars, OsiSolverInterface *si){
 	si->writeLp( "gailTest" );
 	
 	//construct the new master
-
+	//create an OSInstance from the tmp arrays
+	//this osinstance is temporary
+	OSInstance *osinstance = NULL;
+	osinstance = new OSInstance();
+	
+	
+	
+	kippster
 	
 	
 	//fill in the theta transformation matrix
