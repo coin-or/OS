@@ -238,16 +238,18 @@ void OSColGenApp::solve(){
 		
 		//kipp -- temp stuff here delete later
 		//////
-		
-		std::set<int> inVars;
+		/*
+		std::map<int, int> inVars;
 		
 		for(i = 0; i < m_si->getNumCols(); i++){
 			
-			if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( i);
+			//if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( i);
+			inVars.insert( std::pair<int, int>(i, i) );
 		}
 		
 		m_osrouteSolver->resetMaster( inVars, m_si );
 		exit( 1);
+		*/
 		/////
 
 		//now get the upper bound
@@ -519,7 +521,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
 					//add the artificial variable for the LB					
 					rowArtVal = 1.0;
-					
 					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigM, bigM);
 					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
 							
@@ -1096,7 +1097,7 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 		
 		
 		//insert into map -- this is the first variable
-		varConMap.insert ( std::pair<int,int>(varIdx , rowIdx) );
+		varConMap.insert ( std::pair<int, int>(varIdx , rowIdx) );
 		
 		
 		

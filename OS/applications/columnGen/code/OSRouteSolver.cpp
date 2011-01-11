@@ -3904,12 +3904,12 @@ void OSRouteSolver::getInitialSolution(){
 }//end getInitialSolution
 
 
-void OSRouteSolver::resetMaster( std::set<int> inVars, OsiSolverInterface *si){
+void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *si){
 	
 	int i;
 	int kount;
 	int numNonz;
-	std::set<int>::iterator sit;
+	std::map<int, int>::iterator mit;
 	//temporarily create memory for the columns we keep
 	int numVars = inVars.size();
 	//temporay holders
@@ -3920,8 +3920,8 @@ void OSRouteSolver::resetMaster( std::set<int> inVars, OsiSolverInterface *si){
 	//get the number of nonzeros that we need
 	numNonz = 0;
 	
-	for(sit = inVars.begin();  sit != inVars.end(); sit++){
-		numNonz += m_thetaPnt[*sit + 1 ] - m_thetaPnt[ *sit ];
+	for(mit = inVars.begin();  mit != inVars.end(); mit++){
+		numNonz += m_thetaPnt[mit->first + 1 ] - m_thetaPnt[ mit->first ];
 	}
 	
 	//allocate the memory
@@ -3933,11 +3933,11 @@ void OSRouteSolver::resetMaster( std::set<int> inVars, OsiSolverInterface *si){
 	numNonz = 0;
 	thetaPntTmp[ kount++] = 0;
 	
-	for(sit = inVars.begin();  sit != inVars.end(); sit++){
+	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
-		thetaPntTmp[ kount++] = m_thetaPnt[*sit + 1 ] - m_thetaPnt[ *sit ];
+		thetaPntTmp[ kount++] = m_thetaPnt[mit->first + 1 ] - m_thetaPnt[ mit->first ];
 		
-		for(i = m_thetaPnt[ *sit ]; i < m_thetaPnt[*sit + 1 ]; i++){
+		for(i = m_thetaPnt[ mit->first ]; i < m_thetaPnt[mit->first + 1 ]; i++){
 			
 			thetaIndexTmp[ numNonz++] = m_thetaIndex[ i];
 			
@@ -3952,12 +3952,33 @@ void OSRouteSolver::resetMaster( std::set<int> inVars, OsiSolverInterface *si){
 	//construct the new master
 	//create an OSInstance from the tmp arrays
 	//this osinstance is temporary
+	// change to m_osinstanceMaster
 	OSInstance *osinstance = NULL;
 	osinstance = new OSInstance();
 	
+	int numVarArt;
+	//there 2*m_numNodes in the A matrix
+	//there are  m_numBmatrixCon B matrix constraints
+	numVarArt = 2*m_numNodes +  2*m_numBmatrixCon;
+	
+	//start building the restricted master here
+	osinstance = new OSInstance();
+	osinstance->setInstanceDescription("The Restricted Master");
+	
+	// first the variables
+	// we have numVarArt] artificial variables 
+	osinstance->setVariableNumber( numVars + numVarArt );   
+	
+	// now add the objective function
+	osinstance->setObjectiveNumber( 1);
+	//add m_numNodes artificial variables
+	SparseVector *objcoeff = new SparseVector( numVars + numVarArt);   
+
+	// now the constraints
+	osinstance->setConstraintNumber( m_numNodes  + m_numBmatrixCon); 
 	
 	
-	kippster
+
 	
 	
 	//fill in the theta transformation matrix
@@ -3965,6 +3986,8 @@ void OSRouteSolver::resetMaster( std::set<int> inVars, OsiSolverInterface *si){
 	//garbage collection
 	delete[] thetaPntTmp;
 	delete[] thetaIndexTmp;
+	
+	delete[] objcoeff;
 }
 
 

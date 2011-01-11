@@ -448,7 +448,7 @@ public:
 	 * the master
 	 */
 	
-	void resetMaster( std::set<int> inVars, OsiSolverInterface *si );
+	void resetMaster( std::map<int, int> inVars, OsiSolverInterface *si );
 	
 	/**
 	 *
