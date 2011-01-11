@@ -686,7 +686,8 @@ OtherVarOption::~OtherVarOption()
 
 
 OtherVariableOption::OtherVariableOption(): 
-	numberOfVar (0),
+	numberOfVar(0),
+	numberOfEnumerations(0),
 	name (""),
 	value (""),
 	solver(""),
@@ -698,6 +699,7 @@ OtherVariableOption::OtherVariableOption():
 	cout << "Inside OtherVariableOption Constructor" << endl;
 	#endif
 	var = NULL;
+	enumeration = NULL;
 }// end OtherVariableOption constructor  
 
 OtherVariableOption::~OtherVariableOption()
@@ -706,14 +708,24 @@ OtherVariableOption::~OtherVariableOption()
 	cout << "OtherVariableOption Destructor Called" << endl;
 	#endif
 	if (var != NULL) 
-	{	int i;
-		for (i=0; i < numberOfVar; i++)
+	{
+		for (int i=0; i < numberOfVar; i++)
 		{	delete var[i];
 			var[i] = NULL;
 		}
 		delete[] var;
 		var = NULL;
-	};
+	}
+	if (enumeration != NULL) 
+	{
+		for (int i=0; i < numberOfEnumerations; i++)
+		{
+			delete enumeration[i];
+			enumeration[i] = NULL;
+		}
+		delete[] enumeration;
+		enumeration = NULL;
+	}
 }//end OtherVariableOption destructor 
 
 
@@ -867,7 +879,8 @@ OtherObjOption::~OtherObjOption()
 
 
 OtherObjectiveOption::OtherObjectiveOption(): 
-	numberOfObj (0),
+	numberOfObj(0),
+	numberOfEnumerations(0),
 	name (""),
 	value (""),
 	solver(""),
@@ -879,6 +892,7 @@ OtherObjectiveOption::OtherObjectiveOption():
 	cout << "Inside OtherObjectiveOption Constructor" << endl;
 	#endif
 	obj = NULL;
+	enumeration = NULL;
 }// end OtherObjectiveOption constructor  
 
 OtherObjectiveOption::~OtherObjectiveOption()
@@ -887,14 +901,24 @@ OtherObjectiveOption::~OtherObjectiveOption()
 	cout << "OtherObjectiveOption Destructor Called" << endl;
 	#endif
 	if (obj != NULL) 
-	{	int i;
-		for (i=0; i < numberOfObj; i++)
+	{
+		for (int i=0; i < numberOfObj; i++)
 		{	delete obj[i];
 			obj[i] = NULL;
 		}
 		delete[] obj;
 		obj = NULL;
-	};
+	}
+	if (enumeration != NULL) 
+	{
+		for (int i=0; i < numberOfEnumerations; i++)
+		{
+			delete enumeration[i];
+			enumeration[i] = NULL;
+		}
+		delete[] enumeration;
+		enumeration = NULL;
+	}
 }//end OtherObjectiveOption destructor 
 
 
@@ -1041,6 +1065,7 @@ OtherConOption::~OtherConOption()
 
 OtherConstraintOption::OtherConstraintOption(): 
 	numberOfCon(0),
+	numberOfEnumerations(0),
 	name (""),
 	value (""),
 	solver(""),
@@ -1052,6 +1077,7 @@ OtherConstraintOption::OtherConstraintOption():
 	cout << "Inside OtherConstraintOption Constructor" << endl;
 	#endif
 	con = NULL;
+	enumeration = NULL;
 }// end OtherConstraintOption constructor  
 
 OtherConstraintOption::~OtherConstraintOption()
@@ -1060,15 +1086,25 @@ OtherConstraintOption::~OtherConstraintOption()
 	cout << "OtherConstraintOption Destructor Called" << endl;
 	#endif
 	if (con != NULL) 
-	{	int i;
-		for (i=0; i < numberOfCon; i++)
+	{
+		for (int i=0; i < numberOfCon; i++)
 		{
 			if (con[i]!= NULL) delete con[i];
 			con[i] = NULL;
 		}
 		delete[] con;
 		con = NULL;
-	};
+	}
+	if (enumeration != NULL) 
+	{
+		for (int i=0; i < numberOfEnumerations; i++)
+		{
+			delete enumeration[i];
+			enumeration[i] = NULL;
+		}
+		delete[] enumeration;
+		enumeration = NULL;
+	}
 }//end OtherConstraintOption destructor
 
 
@@ -5099,7 +5135,19 @@ bool VariableOption::addOther(OtherVariableOption *other)
 		temp[ nopt]->numberOfEnumerations = other->numberOfEnumerations;
 
 		if (other->numberOfEnumerations > 0)
-				throw ErrorClass( "enumerations in otherVariableOption cannot be set by this routine");
+		{	
+			temp[ nopt]->enumeration = new OtherOptionEnumeration*[other->numberOfEnumerations];
+			for (j = 0; j < other->numberOfEnumerations; j++)
+			{
+				temp[ nopt]->enumeration[j]  = new OtherOptionEnumeration();
+				temp[ nopt]->enumeration[j]->setOtherOptionEnumeration(
+					other->enumeration[j]->value, 
+					other->enumeration[j]->description, 
+					other->enumeration[j]->el, 
+					other->enumeration[j]->numberOfEl);
+			}
+		}
+
 
 		this->other = temp;   //hook the new pointers into the data structure
 		this->numberOfOtherVariableOptions = ++nopt;
@@ -5478,10 +5526,25 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
 			}
 		}
 
+		if (other->numberOfEnumerations < 0)
+			throw ErrorClass( "the number of enumerations in otherObjectiveOption cannot be negative.");
+
 		temp[ nopt]->numberOfEnumerations = other->numberOfEnumerations;
 
 		if (other->numberOfEnumerations > 0)
-				throw ErrorClass( "enumerations in otherObjectiveOption cannot be set by this routine");
+		{	
+			temp[ nopt]->enumeration = new OtherOptionEnumeration*[other->numberOfEnumerations];
+			for (j = 0; j < other->numberOfEnumerations; j++)
+			{
+				temp[ nopt]->enumeration[j]  = new OtherOptionEnumeration();
+				temp[ nopt]->enumeration[j]->setOtherOptionEnumeration(
+					other->enumeration[j]->value, 
+					other->enumeration[j]->description, 
+					other->enumeration[j]->el, 
+					other->enumeration[j]->numberOfEl);
+			}
+		}
+
 
 		this->other = temp;   //hook the new pointers into the data structure
 		this->numberOfOtherObjectiveOptions = ++nopt;
@@ -5725,7 +5788,7 @@ bool OtherConstraintOption::setCon(int numberOfCon, OtherConOption **con)
 	{	cout << eclass.errormsg << endl;
 		return false;
 	}
-}//setVar
+}//setCon
 
 /**
  *
@@ -5861,12 +5924,28 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
 		{	
 			temp[ nopt]->con = new OtherConOption*[other->numberOfCon];
 			for (j = 0; j < other->numberOfCon; j++)
-			{	 temp[ nopt]->con[j] = new OtherConOption();
+			{
+				 temp[ nopt]->con[j] = new OtherConOption();
 				*temp[ nopt]->con[j] = *other->con[j];
 			}
 		}
+
+		if (other->numberOfEnumerations < 0)
+			throw ErrorClass( "the number of enumerations in otherObjectiveOption cannot be negative.");
+
 		if (other->numberOfEnumerations > 0)
-				throw ErrorClass( "enumerations in otherConstraintOption cannot be set by this routine");
+		{	
+			temp[ nopt]->enumeration = new OtherOptionEnumeration*[other->numberOfEnumerations];
+			for (j = 0; j < other->numberOfEnumerations; j++)
+			{
+				temp[ nopt]->enumeration[j]  = new OtherOptionEnumeration();
+				temp[ nopt]->enumeration[j]->setOtherOptionEnumeration(
+					other->enumeration[j]->value, 
+					other->enumeration[j]->description, 
+					other->enumeration[j]->el, 
+					other->enumeration[j]->numberOfEl);
+			}
+		}
 
 		this->other = temp;   //hook the new pointers into the data structure
 		this->numberOfOtherConstraintOptions = ++nopt;

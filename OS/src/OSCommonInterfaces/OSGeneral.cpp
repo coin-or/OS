@@ -273,19 +273,16 @@ bool IntVector::setIntVector(int *i, int ni)
 		delete[] this->el;
 
 	this->numberOfEl = ni;
-	this->el = new int[ni];
 
+	this->el = new int[ni];
 	for (int j=0; j<ni; j++)
 		this->el[j] = i[j];
+
 	return true;
 }//setIntVector
 
 bool IntVector::extendIntVector(int i)
 {
-	std::cout << "extending an intvector" << std::endl;
-	std::cout << "is object NULL " << (this == NULL) << std::endl;
-	std::cout << "is el NULL " << (this->el == NULL) << std::endl;
-	std::cout << "continue" << std::endl;
 
 	int ni;
 //	if (this == NULL)
@@ -296,28 +293,19 @@ bool IntVector::extendIntVector(int i)
 	else
 		ni = this->numberOfEl;
 
-	std::cout << "ni = " << ni << std::endl;
-
 	int* temp = new int[ni+1];
 	for (int j = 0; j < ni; ++j)
 			temp[j] = this->el[j]; 
 
-	std::cout << "made a temporary copy" << std::endl;
-
 	delete[] this->el;
-
-	std::cout << "deleted old location" << std::endl;
 
 	temp[ni] = i;
 
-	std::cout << "store new" << std::endl;
-
 	this->el = temp;
 	this->numberOfEl = ++ni;
-	std::cout << "successfully extended an intvector" << std::endl;
 
 	return true;
-}//setIntVector
+}//extendIntVector
 
 int IntVector::getNumberOfEl()
 {

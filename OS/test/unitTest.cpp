@@ -2267,7 +2267,7 @@ if (OTHER_TESTS){
 
 		OSiLWriter tmp_osil_writer;
 		tmp_osil_writer.m_bWhiteSpace = true;
-		std::cout << tmp_osil_writer.writeOSiL( solver->osinstance) << std::endl;
+		//std::cout << tmp_osil_writer.writeOSiL( solver->osinstance) << std::endl;
 
 		osol = "";  //<osol></osol>";
 		solver->osol = osol;
@@ -2321,7 +2321,7 @@ if (OTHER_TESTS){
 		solver->osol = osol;
 		mps2osil->createOSInstance() ;
 		solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
-		std::cout << solver->osil << std::endl;
+		//std::cout << solver->osil << std::endl;
 		solver->buildSolverInstance();
 		solver->solve();
 		cout << endl << endl;
@@ -2379,7 +2379,7 @@ if (OTHER_TESTS){
 		std::string *nodeNames1 = new std::string[ n];
 		std::string *nodeNames2 = new std::string[ n];
 		for (i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->getTokenName() << std::endl;
+			//std::cout << postfixVec[i]->getTokenName() << std::endl;
 			nodeNames1[i] = postfixVec[i]->getTokenName();
 		}
 		
@@ -2398,7 +2398,7 @@ if (OTHER_TESTS){
 		postfixVec = expTree->m_treeRoot->getPostfixFromExpressionTree();
 		//postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
 		if(postfixVec.size() != n) throw ErrorClass(" Problem with creating expression trees");
-		std::cout << std::endl << std::endl;
+		//std::cout << std::endl << std::endl;
 		for (i = 0 ; i < n; i++){
 			//std::cout << postfixVec[i]->getTokenName() << std::endl;
 			nodeNames2[i] = postfixVec[i]->getTokenName();
@@ -2444,18 +2444,18 @@ if (OTHER_TESTS){
 		int n = postfixVec.size();
 		std::string *nodeNames1 = new std::string[ n];
 		for (int i = 0 ; i < n; i++){
-			std::cout << postfixVec[i]->getTokenName() << std::endl;
+		//	std::cout << postfixVec[i]->getTokenName() << std::endl;
 			nodeNames1[i] = postfixVec[i]->getTokenName();
 		}
-		std::cout << std::endl << std::endl;
-		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
+//		std::cout << std::endl << std::endl;
+//		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
 		// now test value
 		double *x = NULL;
 		x = new double[2];
 		x[0] = 1;
 		x[1] = 2;
 		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
-		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
+//		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
 		check = 11;
 		//ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check -  expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
@@ -2506,9 +2506,9 @@ if (OTHER_TESTS){
 		// get the gradient for constraint 1
 		osinstance->getJacobianSparsityPattern();
 		sp = osinstance->calculateConstraintFunctionGradient(x, 1, true);
-		for(int i = 0; i < sp->number; i++){
-			std::cout << "gradient value " << sp->values[i] << std::endl;
-		}
+//		for(int i = 0; i < sp->number; i++){
+//			std::cout << "gradient value " << sp->values[i] << std::endl;
+//		}
 		ok = true;
 		//check gradient for constraint with index 1
 		double checkPartial2Con1 = 7.0 ;
@@ -2529,9 +2529,9 @@ if (OTHER_TESTS){
 		// calcuate Hessian of objective function (index = -1)
 		osinstance->getLagrangianHessianSparsityPattern( );
 		sh = osinstance->calculateHessian(x, -1, true);
-		for(int i = 0; i < sh->hessDimension; i++){
-			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
-		}
+//		for(int i = 0; i < sh->hessDimension; i++){
+//			std::cout << "Hessian value " << sh->hessValues[i] << std::endl;
+//		}
 		//ok &= NearEqual( sh->hessValues[ 0], 2., 1e-10, 1e-10);
 		ok = ( fabs(2. - sh->hessValues[0] )/(2. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation"); 
@@ -2989,8 +2989,16 @@ if (PARSER_TESTS){
 		OtherVariableOption *varopt;
 		varopt = new OtherVariableOption();
 		varopt->name = "testVarOpt";
-		varopt->numberOfVar = 0;
+		varopt->numberOfVar = 2;
 		varopt->numberOfEnumerations = 0;
+		varopt->var = new OtherVarOption*[2];
+		varopt->var[0] = new OtherVarOption();
+		varopt->var[0]->idx = 0;
+		varopt->var[0]->value = "3.0";
+		varopt->var[1] = new OtherVarOption();
+		varopt->var[1]->idx = 1;
+		varopt->var[1]->lbValue = "0.0";
+		varopt->var[1]->ubValue = "10.0";
 		ok = osoption->setAnOtherVariableOption(varopt) && ok;
 		delete varopt;
 		varopt = NULL;
@@ -3015,17 +3023,22 @@ if (PARSER_TESTS){
 
 		OtherConstraintOption *conopt;
 		conopt = new OtherConstraintOption();
-		conopt->name = "testObjOpt";
-		conopt->numberOfCon = 2;
-		conopt->numberOfEnumerations = 0;
-		conopt->con = new OtherConOption*[2];
-		conopt->con[0] = new OtherConOption();
-		conopt->con[0]->idx = 0;
-		conopt->con[0]->value = "3.0";
-		conopt->con[1] = new OtherConOption();
-		conopt->con[1]->idx = 1;
-		conopt->con[1]->lbValue = "0.0";
-		conopt->con[1]->ubValue = "10.0";
+		conopt->name = "testConOpt";
+
+		conopt->numberOfCon = 0;
+		conopt->numberOfEnumerations = 1;
+
+		conopt->enumeration = new OtherOptionEnumeration*[1];
+		conopt->enumeration[0] = new OtherOptionEnumeration();
+		conopt->enumeration[0]->numberOfEl = 3;
+		conopt->enumeration[0]->value = "test";
+		conopt->enumeration[0]->description = "this is not a test";
+		conopt->enumeration[0]->numberOfEl = 3;
+		conopt->enumeration[0]->el = new int[3];
+		conopt->enumeration[0]->el[0] = 1;
+		conopt->enumeration[0]->el[1] = 3;
+		conopt->enumeration[0]->el[2] = 5;
+
 		ok = osoption->setAnOtherConstraintOption(conopt) && ok;
 		delete conopt;
 		conopt = NULL;
@@ -3488,14 +3501,10 @@ if (PARSER_TESTS){
 
 		nopt = osoption->getNumberOfInitObjValues();
 		InitObjValue** IOV;
-		std::cout << "get init obj values dense" << std::endl;
-		std::cout << "nobj = " << nobj << std::endl;
 		IOV = osoption->getInitObjValuesSparse();
 		for (int lmn=0; lmn < nobj; lmn++)
-		std::cout << "obj(" << lmn << ") = " << IOV[lmn] << std::endl;
 
 		ok = osoption2->setInitObjValuesSparse(nopt, IOV) && ok;		
-		std::cout << "set init obj values successful" << std::endl;
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set InitObjValues");
@@ -3503,11 +3512,8 @@ if (PARSER_TESTS){
 
 		nopt = osoption->getNumberOfInitObjBounds();
 		InitObjBound** IOB;
-		std::cout << "get init obj bounds dense" << std::endl;
-		std::cout << "nobj = " << nopt << std::endl;
 		IOB = osoption->getInitObjBoundsSparse();
 		ok = osoption2->setInitObjBoundsSparse(nopt, IOB) && ok;		
-		std::cout << "set init obj bounds successful" << std::endl;
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set InitObjBounds");
@@ -3710,13 +3716,8 @@ if (PARSER_TESTS){
 		SO = osoption->getAllSolverOptions();
 		nopt = osoption->getNumberOfSolverOptions();
 		ok = osoption2->setSolverOptions(nopt, SO) && ok;
-		std::cout  << "old item ";
-		std::cout  << osoption->optimization->solverOptions->numberOfSolverOptions << std::endl;
-		std::cout  << osoption->optimization->solverOptions->solverOption[nopt-2]->numberOfItems << std::endl;
 
-		std::cout  << osoption->optimization->solverOptions->solverOption[nopt-2]->item[0] << std::endl;
-		std::cout  << "new item ";
-		std::cout  << osoption2->optimization->solverOptions->solverOption[nopt-2]->item[0] << std::endl;
+
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set SolverOptions");
@@ -6825,8 +6826,6 @@ if (PARSER_TESTS){
 		ok &= osresult1->IsEqual(osresult2);
 		if (!ok)
 			throw ErrorClass("Error duplicating OSResult object using get() and set() methods");
-
-		std::cout << "OSResult object duplicated with get() and set() methods" << std::endl;
 
 		if (osrlwriter != NULL) delete osrlwriter;
 		osrlwriter = NULL;
