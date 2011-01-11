@@ -510,18 +510,18 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					
 					m_si->addRow(numRowNonz[ i], colIdx[ i], rowValues[ i], rowLB[ i], rowUB[ i] ) ;
 					
-					//add two artificial variables for this row so we can never be infeasible
+					//add two  variables for this row so we can never be infeasible
 					//m_si->addCol( numNonz, rowIdx[k], values[k],
 					//		collb, colub,  cost[ k]) ;
 					
 					//add the artificial variable for the UB					
 					rowArtVal = -1.0;
 					rowArtIdx = m_si->getNumRows() - 1;
-					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigM, bigM);
-					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
+					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
+					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
 					//add the artificial variable for the LB					
 					rowArtVal = 1.0;
-					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, bigM, bigM);
+					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
 					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
 							
 				}
@@ -1075,7 +1075,7 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	//if numNonz is greater than zero:
 	// 1) add add new variable to map -- at this point varConMap is empty
 	// 2) add constraint then add to the formulation
-	// 3) add artificial variables
+	// 3) add  variables
 	
 	if( numNonz >0){
 
@@ -1089,11 +1089,12 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 		rowArtVal = -1.0;
 		rowIdx = m_si->getNumRows() - 1;
 		
-		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
+		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
+		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
 		//add the artificial variable for the LB					
 		rowArtVal = 1.0;
-		
 		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
+		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
 		
 		
 		//insert into map -- this is the first variable
@@ -1167,11 +1168,13 @@ void OSColGenApp::createBranchingCut(const double* theta,
 		rowArtVal = -1.0;
 		rowIdx = m_si->getNumRows() - 1;
 		
-		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
+		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
+		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
 		//add the artificial variable for the LB					
 		rowArtVal = 1.0;
 		
 		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
+		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
 		
 		
 		//insert into map -- this is the first variable
