@@ -3914,20 +3914,29 @@ void OSRouteSolver::getInitialSolution(){
 void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *si){
 	
 	int i;
+	int j;
+	int k;
 	int kount;
 	int numNonz;
+	int kountNonz;
 	std::map<int, int>::iterator mit;
 	//temporarily create memory for the columns we keep
 	int numVars = inVars.size();
+	int numVarArt;
+	//there 2*m_numNodes in the A matrix
+	//there are  m_numBmatrixCon B matrix constraints
+	//numVarArt = 2*m_numNodes +  2*m_numBmatrixCon;
+	numVarArt = m_numNodes +  m_numBmatrixCon;
+	
 	//temporay holders
 	int* thetaPntTmp;
 	int* thetaIndexTmp;
-	
 	
 	//get the number of nonzeros that we need
 	numNonz = 0;
 	
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
+		
 		numNonz += m_thetaPnt[mit->first + 1 ] - m_thetaPnt[ mit->first ];
 	}
 	
@@ -3938,64 +3947,192 @@ void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *
 	//fill in the temporary arrays
 	kount = 0;
 	numNonz = 0;
-	thetaPntTmp[ kount++] = 0;
+	thetaPntTmp[ kount] = 0;
 	
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
-		thetaPntTmp[ kount++] = m_thetaPnt[mit->first + 1 ] - m_thetaPnt[ mit->first ];
+		kount++;
 		
 		for(i = m_thetaPnt[ mit->first ]; i < m_thetaPnt[mit->first + 1 ]; i++){
 			
 			thetaIndexTmp[ numNonz++] = m_thetaIndex[ i];
 			
+			std::cout << "Column = " <<   mit->first << "  Variable   " <<   m_variableNames[ m_thetaIndex[ i] ]   << std::endl;
+			
 		}
 		
+		thetaPntTmp[ kount] = numNonz;
+		
+		std::cout << "kount =  " << kount << "  thetaPntTmp[ kount] = " << thetaPntTmp[ kount] << std::endl;
+		//readjust numbering to take into account artificial variables
+		mit->second += numVarArt;
 		
 	}
 	
+	std::cout << "kount = " <<  kount  << std::endl;
+	std::cout << "numVars = " << numVars  << std::endl;
+	
+	//reset the theta pointers
+	//first the artificial variables
+	m_numThetaVar = 0;
+	m_numThetaNonz = 0;
+	for(i = 0; i < numVarArt; i++){
+		
+		m_thetaPnt[ m_numThetaVar++] = 0;
+		
+	}
+	//now fill in the other pointers from the temp arrarys
+	
+	
+	for(i = 0; i < numVars; i++){
+		
+		std::cout << " m_numThetaVar =  "  << m_numThetaVar << "  m_numThetaNonz =  " <<  m_numThetaNonz  << std::endl;
+		
+		m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
+		
+		for(j = thetaPntTmp[ i]; j < thetaPntTmp[ i + 1 ]; j++){
+			
+			m_thetaIndex[ m_numThetaNonz ] = thetaIndexTmp[ m_numThetaNonz] ;
+			m_numThetaNonz++;
+			
+		}
+		
+	}
+	
+	m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
+	std::cout << " number of art vars = " <<  numVarArt  << std::endl;
+	std::cout << " m_numThetaVar = " <<  m_numThetaVar  << std::endl;
+	std::cout << " m_numThetaNonz = " <<  m_numThetaNonz  << std::endl;
+	//done with the transformation matrix
+	
+
+	//
 	//write old master
 	si->writeLp( "gailTest" );
 	
+	//now create the formulation
+	
+	//first get each column of the new master
+	
+	numNonz = 0;
+	int rowCount;
+	
+	for(k = numVarArt; k < m_numThetaVar; k++){
+		
+		for(j = m_thetaPnt[ k]; j < m_thetaPnt[ k + 1 ]; j++){
+			
+			m_tmpScatterArray[ m_thetaIndex[ j] ]++;
+			
+			std::cout << "Column = " <<  k << "  Variable   " <<   m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
+			
+		}
+		
+		
+		
+		
+		/*
+	
+		//multiply the sparse array by each A matrix constraint
+		for(i = 0; i < m_numNodes; i++){
+			
+			rowCount = 0;
+			
+			for(j = m_pntAmatrix[ i]; j < m_pntAmatrix[ i + 1]; j++){
+				
+				//m_Amatrix[ j] is a variable index -- this logic works
+				//since the Amatrix coefficient is 1 -- we don't need a value
+				//it indexes variable that points into the node
+				rowCount += m_tmpScatterArray[  m_Amatrix[ j] ];
+				
+
+			}
+			
+			if(rowCount > 0){
+				
+				//std::cout << "Column = " <<  k << "  Nonzero in row  " << i  <<  " Value = " << rowCount << std::endl;
+
+				numNonz++;
+			}
+				
+				
+		}//end loop on coupling constraints
+		
+		
+		//zero back out scatter
+		
+		for(j = m_thetaPnt[ k]; j < m_thetaPnt[ k + 1 ]; j++){
+			
+			m_tmpScatterArray[ m_thetaIndex[ j] ] = 0;
+			
+		}
+		
+		*/
+		
+	}
+	
+	/*
+	
 	//construct the new master
 	//create an OSInstance from the tmp arrays
-	//this osinstance is temporary
-	// change to m_osinstanceMaster
-	OSInstance *osinstance = NULL;
-	osinstance = new OSInstance();
-	
-	int numVarArt;
-	//there 2*m_numNodes in the A matrix
-	//there are  m_numBmatrixCon B matrix constraints
-	//numVarArt = 2*m_numNodes +  2*m_numBmatrixCon;
-	numVarArt = m_numNodes +  m_numBmatrixCon;
+	// delete the old  m_osinstanceMaster
+
+	delete m_osinstanceMaster;
 	
 	//start building the restricted master here
-	osinstance = new OSInstance();
-	osinstance->setInstanceDescription("The Restricted Master");
+	m_osinstanceMaster = new OSInstance();
+	m_osinstanceMaster->setInstanceDescription("The Restricted Master");
 	
 	// first the variables
 	// we have numVarArt] artificial variables 
-	osinstance->setVariableNumber( numVars + numVarArt );   
+	m_osinstanceMaster->setVariableNumber( numVars + numVarArt );   
 	
 	// now add the objective function
-	osinstance->setObjectiveNumber( 1);
+	m_osinstanceMaster->setObjectiveNumber( 1);
 	//add m_numNodes artificial variables
 	SparseVector *objcoeff = new SparseVector( numVars + numVarArt);   
 
 	// now the constraints
-	osinstance->setConstraintNumber( m_numNodes  + m_numBmatrixCon); 
+	m_osinstanceMaster->setConstraintNumber( m_numNodes  + m_numBmatrixCon); 
 	
+	
+	//add the artificial variables first
+	
+	int varNumber;
+	varNumber = 0;
+	std::string masterVarName;
+	kountNonz = 0;
+	
+	for(i = 0; i < m_numNodes; i++){
+		
+		
+		objcoeff->indexes[ varNumber ] = varNumber ;
+		//if obj too large we get the following error
+		//Assertion failed: (fabs(obj[i]) < 1.0e25), function createRim, 
+		//file ../../../Clp/src/ClpSimplex.cpp, l
+		
+		//objcoeff->values[ varNumber ] = OSDBL_MAX;
+		
+		//objcoeff->values[ varNumber ] = 1.0e24;
+		objcoeff->values[ varNumber ] = m_osDecompParam.artVarCoeff;
+		
+		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
+				0, 1.0, 'C');
+											
+		values[ kountNonz] = 1;
+		indexes[ kountNonz++] = i ;
+		starts[ startsIdx++] = kountNonz;
+		
+		
+		
+	}
 	
 
-	
-	
-	//fill in the theta transformation matrix
+	*/
 	
 	//garbage collection
 	delete[] thetaPntTmp;
 	delete[] thetaIndexTmp;
-	
-	delete[] objcoeff;
+	//delete[] objcoeff;
 }
 
 

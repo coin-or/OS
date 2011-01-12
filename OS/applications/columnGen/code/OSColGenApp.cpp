@@ -238,18 +238,17 @@ void OSColGenApp::solve(){
 		
 		//kipp -- temp stuff here delete later
 		//////
-		/*
-		std::map<int, int> inVars;
 		
+		std::map<int, int> inVars;
+		int kount = 0;
 		for(i = 0; i < m_si->getNumCols(); i++){
 			
-			//if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( i);
-			inVars.insert( std::pair<int, int>(i, i) );
+			if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
 		}
 		
 		m_osrouteSolver->resetMaster( inVars, m_si );
 		exit( 1);
-		*/
+		
 		/////
 
 		//now get the upper bound

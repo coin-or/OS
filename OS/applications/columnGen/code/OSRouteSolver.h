@@ -205,8 +205,9 @@ public:
 	//arrays for the coupling constraint matrix
 	//we store indexes since values are 1.0
 	//also the RHS is 1.0
-	//size of this matrix is m_numNodes
+	//the matrix has m_numNodes - m_numHubs rows
 	int* m_pntAmatrix;
+	//m_Amatrix holds the column indexes for each row
 	int* m_Amatrix;
 	//
 	//arrays for the added constraints
