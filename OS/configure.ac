@@ -117,6 +117,7 @@ AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],      [OSLib])
 AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],  [OSLib])
 AC_COIN_CHECK_PACKAGE(cppad,    [cppad],    [OSLib])
 
+
 if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
   AC_MSG_ERROR([Ipopt is present, but not the necessary CppAD.])
 fi

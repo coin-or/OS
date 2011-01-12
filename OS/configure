@@ -28892,6 +28892,7 @@ fi
 
 
 
+
 if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
   { { echo "$as_me:$LINENO: error: Ipopt is present, but not the necessary CppAD." >&5
 echo "$as_me: error: Ipopt is present, but not the necessary CppAD." >&2;}
