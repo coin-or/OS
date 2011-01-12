@@ -3966,7 +3966,8 @@ void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *
 	int numVarArt;
 	//there 2*m_numNodes in the A matrix
 	//there are  m_numBmatrixCon B matrix constraints
-	numVarArt = 2*m_numNodes +  2*m_numBmatrixCon;
+	//numVarArt = 2*m_numNodes +  2*m_numBmatrixCon;
+	numVarArt = m_numNodes +  m_numBmatrixCon;
 	
 	//start building the restricted master here
 	osinstance = new OSInstance();
