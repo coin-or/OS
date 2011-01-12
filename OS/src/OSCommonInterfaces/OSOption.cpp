@@ -6171,7 +6171,7 @@ bool OSOption::setContact( std::string contact)
 
 bool OSOption::setContact(std::string contact,std::string transportType)
 {
-	if (verifyLocationType(transportType) == 0)
+	if (verifyTransportType(transportType) == 0)
 		return false;
 
 	if (this->general == NULL) 
