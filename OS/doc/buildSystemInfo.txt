@@ -65,4 +65,10 @@ Here is the thing to do:
 %%%%%%%%%%%
 Stefan on examples
 
-The only way that the examples work under cygwin/cl is if you disablepkg-config. Examples with cygwin/cl/pkg-config does not work for anyproject.I also added documentation about the examples Makefile's athttps://projects.coin-or.org/BuildTools/wiki/pm-switch#RootXxxexamplesMakefile.inAndreas noted to me today that the "ifeq" and "+=" that are used in theexamples makefiles now work only for GNU make  :-( . So for Ipopt we willdo something different,https://projects.coin-or.org/Ipopt/browser/trunk/Ipopt/examples/Cpp_example/Makefile.in?rev=1875Stefan
+The only way that the examples work under cygwin/cl is if you disablepkg-config. Examples with cygwin/cl/pkg-config does not work for anyproject.I also added documentation about the examples Makefile's athttps://projects.coin-or.org/BuildTools/wiki/pm-switch#RootXxxexamplesMakefile.inAndreas noted to me today that the "ifeq" and "+=" that are used in theexamples makefiles now work only for GNU make  :-( . So for Ipopt we willdo something different,https://projects.coin-or.org/Ipopt/browser/trunk/Ipopt/examples/Cpp_example/Makefile.in?rev=1875Stefan
+
+%%%%%%%%%%%%%%%%
+
+Setting Externals the old way
+
+Hmm, I haven't tried what happens if set_externals does not find arelease, maybe you just try  :-) .Otherwise, I think just doing  svn propset svn:externals -F Dependencies .would be enough.
