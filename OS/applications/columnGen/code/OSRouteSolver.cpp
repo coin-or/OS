@@ -255,9 +255,11 @@ void OSRouteSolver::initializeDataStructures(){
 			m_newRowColumnIdx[ k] = new int[ m_maxMasterColumns];
 			
 		}
-
+		
+		//new array for keeping track of convexity rows
+		convexityRowIndex = new int[ m_maxMasterColumns];
 		//new arrays for branches
-		//yet some more hard coding
+		
 		branchCutIndexes = new int[ m_maxMasterColumns];
 		branchCutValues = new double[ m_maxMasterColumns];
 
@@ -426,7 +428,8 @@ OSRouteSolver::~OSRouteSolver(){
 	m_newColumnRowValue = NULL;
 	
 	
-
+	delete[] convexityRowIndex;
+	convexityRowIndex = NULL;
 	
 	
 	//getCut arrays
@@ -1133,6 +1136,7 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 			
 
 			intVarSet.insert ( std::pair<int,double>( m_numThetaVar, 1.0) );
+			convexityRowIndex[ m_numThetaVar] = k;
 			m_costVec[ k] =  m_optL[ k]*m_costVec[ k];
 			m_thetaCost[ m_numThetaVar++ ] = m_costVec[ k];
 			m_thetaPnt[ m_numThetaVar ]  = m_numThetaNonz;
@@ -1425,7 +1429,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 					}
 					
 				}
-				
+				convexityRowIndex[ m_numThetaVar] = k;
 				m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 				m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 				
@@ -1565,7 +1569,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 	startsIdx++;
 	
 	for(i = 0; i < numVarArt; i++){
-		
+		convexityRowIndex[ m_numThetaVar] = -1;
 		m_thetaPnt[ m_numThetaVar++] = 0;
 		
 	}
@@ -1974,7 +1978,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			
 			std::cout << " m_numThetaVar  " << m_numThetaVar  << std::endl;
 			
-			
+			convexityRowIndex[ m_numThetaVar] = k;
 			m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 			
@@ -2510,6 +2514,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 							//we found a row, add the corresponding artificial variables
 							//to the transformation matrix
 							m_numThetaVar++;
+							convexityRowIndex[ m_numThetaVar] = -1;
 							m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 							//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
 							//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
@@ -2676,6 +2681,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 				rowUB =  m_newRowUB;
 				rowLB =  m_newRowLB;
 				m_numThetaVar++;
+				convexityRowIndex[ m_numThetaVar] = -1;
 				m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 				//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz; //first artificial variable
 				//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz; //second artificial varaible
@@ -3778,6 +3784,7 @@ void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVa
 			//of course they have no nonzero elements in 
 			//the transformation matrix
 			m_numThetaVar++;
+			convexityRowIndex[ m_numThetaVar] = -1;
 			m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 			//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz; //first artificial variable
 			//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz; //second artificial variable
@@ -3862,6 +3869,7 @@ void OSRouteSolver::getBranchingCut(const int* thetaIdx, const double* thetaVar,
 			//of course they have no nonzero elements in 
 			//the transformation matrix
 			m_numThetaVar++;
+			convexityRowIndex[ m_numThetaVar] = -1;
 			m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 			//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz; //first artificial variable
 			//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz; // second artificial variable
@@ -3911,14 +3919,14 @@ void OSRouteSolver::getInitialSolution(){
 }//end getInitialSolution
 
 
-void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *si){
+void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface *si){
 	
 	int i;
 	int j;
-	int k;
+
 	int kount;
 	int numNonz;
-	int kountNonz;
+
 	std::map<int, int>::iterator mit;
 	//temporarily create memory for the columns we keep
 	int numVars = inVars.size();
@@ -3928,6 +3936,19 @@ void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *
 	//numVarArt = 2*m_numNodes +  2*m_numBmatrixCon;
 	numVarArt = m_numNodes +  m_numBmatrixCon;
 	
+	//arrays for the new osinstance
+	std::vector<double> valuesVec;
+	double *values = NULL;
+	
+	std::vector<int> indexesVec;
+	int *indexes = NULL  ;
+	
+	int *starts = new int[ numVars + 1 + numVarArt]; 
+	
+	int startsIdx;
+
+
+
 	//temporay holders
 	int* thetaPntTmp;
 	int* thetaIndexTmp;
@@ -3977,20 +3998,24 @@ void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *
 	m_numThetaVar = 0;
 	m_numThetaNonz = 0;
 	for(i = 0; i < numVarArt; i++){
-		
+		convexityRowIndex[ m_numThetaVar] = -1;
 		m_thetaPnt[ m_numThetaVar++] = 0;
 		
 	}
 	//now fill in the other pointers from the temp arrarys
 	
 	
-	for(i = 0; i < numVars; i++){
+	for(mit = inVars.begin();  mit != inVars.end(); mit++){
+		
+		
 		
 		std::cout << " m_numThetaVar =  "  << m_numThetaVar << "  m_numThetaNonz =  " <<  m_numThetaNonz  << std::endl;
+		if( convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
+		convexityRowIndex[ m_numThetaVar] = convexityRowIndex[ mit->first];
 		
 		m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
 		
-		for(j = thetaPntTmp[ i]; j < thetaPntTmp[ i + 1 ]; j++){
+		for(j = thetaPntTmp[ mit->second - numVarArt]; j < thetaPntTmp[ mit->second - numVarArt  + 1 ]; j++){
 			
 			m_thetaIndex[ m_numThetaNonz ] = thetaIndexTmp[ m_numThetaNonz] ;
 			m_numThetaNonz++;
@@ -4006,34 +4031,55 @@ void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *
 	//done with the transformation matrix
 	
 
+	
 	//
-	//write old master
+	//write old master --- just for testing
 	si->writeLp( "gailTest" );
 	
 	//now create the formulation
 	
 	//first get each column of the new master
 	
+	
+	//first take care of the artificial variables
 	numNonz = 0;
+	startsIdx = 0;
+	starts[ startsIdx++] = numNonz;	
+
+	for(i = 0; i < numVarArt; i++){
+		numNonz++;
+		starts[ startsIdx++] = numNonz;
+		valuesVec.push_back( 1.0);
+		indexesVec.push_back( i);
+		
+	}
+	
+	
 	int rowCount;
 	
-	for(k = numVarArt; k < m_numThetaVar; k++){
+	int numAmatrixRows;
+	numAmatrixRows = m_numNodes - m_numHubs;
+	
+	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
-		for(j = m_thetaPnt[ k]; j < m_thetaPnt[ k + 1 ]; j++){
+		std::cout << "CONVEXITY ROW = " << convexityRowIndex[ mit->second]  << std::endl;
+		valuesVec.push_back( 1.0);
+		indexesVec.push_back( numAmatrixRows + convexityRowIndex[ mit->second] );
+		//increment numNonz by 1 for the convexity row
+		numNonz++;
+		
+		for(j = m_thetaPnt[ mit->second ]; j < m_thetaPnt[ mit->second + 1 ]; j++){
 			
 			m_tmpScatterArray[ m_thetaIndex[ j] ]++;
 			
-			std::cout << "Column = " <<  k << "  Variable   " <<   m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
+			std::cout << "Column = " <<  mit->second << "  Variable   " <<   m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
 			
 		}
 		
-		
-		
-		
-		/*
+
 	
 		//multiply the sparse array by each A matrix constraint
-		for(i = 0; i < m_numNodes; i++){
+		for(i = 0; i < numAmatrixRows; i++){
 			
 			rowCount = 0;
 			
@@ -4049,24 +4095,81 @@ void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *
 			
 			if(rowCount > 0){
 				
-				//std::cout << "Column = " <<  k << "  Nonzero in row  " << i  <<  " Value = " << rowCount << std::endl;
-
 				numNonz++;
+				
+				std::cout << "Column = " <<  mit->second << "  Nonzero in A marix row  " << i  <<  " Value = " << rowCount << std::endl;
+				valuesVec.push_back( rowCount);
+				indexesVec.push_back( i);
+
+				
 			}
 				
 				
 		}//end loop on coupling constraints
 		
 		
-		//zero back out scatter
 		
-		for(j = m_thetaPnt[ k]; j < m_thetaPnt[ k + 1 ]; j++){
+		
+		//multiply the sparse array by each B matrix constraint
+		for(i = 0; i < m_numBmatrixCon; i++){
+			
+			rowCount = 0;
+			
+			for(j = m_pntBmatrix[ i]; j < m_pntBmatrix[ i + 1]; j++){
+				
+				//m_Amatrix[ j] is a variable index -- this logic works
+				//since the Amatrix coefficient is 1 -- we don't need a value
+				//it indexes variable that points into the node
+				rowCount += m_tmpScatterArray[  m_Bmatrix[ j] ];
+				
+
+			}
+			
+			if(rowCount > 0){
+				numNonz++;
+				
+				std::cout << "Column = " <<  mit->first << "  Nonzero in B matrix row  " << i  + m_numNodes<<  " Value = " << rowCount << std::endl;
+
+				valuesVec.push_back( rowCount);
+				indexesVec.push_back( i + m_numNodes);
+			}
+				
+				
+		}//end loop on B matrix constraints
+		
+		
+		//zero out the scatter array
+		
+		for(j = m_thetaPnt[ mit->second ]; j < m_thetaPnt[ mit->second + 1 ]; j++){
 			
 			m_tmpScatterArray[ m_thetaIndex[ j] ] = 0;
 			
 		}
 		
-		*/
+		starts[ startsIdx++] = numNonz;	
+		
+	}
+	
+	///tmp
+	
+	for(i = 0; i < startsIdx; i++){
+		
+		
+		std::cout << "starts[ i] = " << starts[ i] << std::endl;
+	}
+	
+	
+	
+	values = new double[ numNonz];
+	indexes = new int[ numNonz];
+	
+	if(numNonz != valuesVec.size() ) throw ErrorClass("dimension problem in reset");
+	if(numNonz != indexesVec.size() ) throw ErrorClass("dimension problem in reset");
+	
+	for(i = 0; i < numNonz; i++){
+		
+		values[ i] = valuesVec[i];
+		indexes[ i] = indexesVec[i];
 		
 	}
 	
@@ -4106,9 +4209,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> inVars, OsiSolverInterface *
 		
 		
 		objcoeff->indexes[ varNumber ] = varNumber ;
-		//if obj too large we get the following error
-		//Assertion failed: (fabs(obj[i]) < 1.0e25), function createRim, 
-		//file ../../../Clp/src/ClpSimplex.cpp, l
+
 		
 		//objcoeff->values[ varNumber ] = OSDBL_MAX;
 		

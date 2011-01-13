@@ -235,9 +235,16 @@ public:
 	int* m_thetaIndex;
 	int m_numThetaVar;
 	int m_numThetaNonz;
+	
 	//kipp -- be carefull does m_thetaCost have
-	// artificial variables
+	// artificial variables -- it is 
 	double* m_thetaCost;
+	
+	/** conconvexityRowIndex holds the index of the convexity row
+	 * that the theta columns are in. If the theta is an artificial
+	 * variable this value is 0
+	 */
+	int* convexityRowIndex;
 	
 
 	 /** m_separationIndexMap maps the variable index into the
@@ -449,7 +456,7 @@ public:
 	 * the master
 	 */
 	
-	void resetMaster( std::map<int, int> inVars, OsiSolverInterface *si );
+	void resetMaster( std::map<int, int> &inVars, OsiSolverInterface *si );
 	
 	/**
 	 *
