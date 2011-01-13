@@ -4621,15 +4621,18 @@ Now for the quadratic terms. The only quadratic terms are in the objective funct
 \end{eqnarray*}
 
 
-The quadratic matrix $Q$ has four rows and a column for each quadratic term. In this example there are six quadratic terms.  
-The first row of $Q$ is the row index where the terms appear. By convention, the objective function has index -1 and we count constraints starting at 0.  The first row of $Q$ is
+To represent quadratic terms MATLAB uses an array, here denoted $Q$, which has four rows, and a column for each quadratic term. 
+In this example there are six quadratic terms. The first row of $Q$ is the row index where the terms appear. By convention, 
+the objective function has index -1, and constraints are counted starting at 0.  The first row of $Q$ is
 
 
  \begin{verbatim}
  -1 -1 -1 -1 -1 -1
  \end{verbatim}
 
-The second row of $Q$ is the index of the first variable in the quadratic term. We use zero based counting.  Variable $x_{1}$ has index 0, variable  $x_{2}$ has index 1, and variable $x_{3}$ has index 2.  Therefore, the second row of $Q$ is
+The second row of $Q$ is the index of the first variable in the quadratic term. We use zero based counting.  
+Variable $x_{1}$ has index 0, variable  $x_{2}$ has index 1, and variable $x_{3}$ has index 2.  
+Therefore, the second row of $Q$ is
 
 
 
@@ -4644,10 +4647,10 @@ The third row of $Q$ is the index of the second variable in the quadratic term. 
 
 
 \begin{verbatim}
-0 1 2  1 2 2
+0 1 2 1 2 2
 \end{verbatim}
 
-
+Note that terms such as $x_1^2$ are treated as $x_1*x_1$ and that mixed terms such as $x_2x_3$ could be given in either order.
 
 The last (fourth) row is the coefficient. Therefore, the fourth row reads
 
@@ -4656,12 +4659,11 @@ The last (fourth) row is the coefficient. Therefore, the fourth row reads
 
 
 \begin{verbatim}
-.425349654  .445784443  .231430983
-.370437388  .27862509   .27763384
+.425349654  .445784443  .231430983   .370437388  .27862509   .27763384
 \end{verbatim}
 
 
-The quadratic matrix is
+The full array is
 
 
 
@@ -4669,8 +4671,7 @@ The quadratic matrix is
 Q = [ -1 -1 -1 -1 -1 -1;
       0 1 2 0 0 1 ;
       0 1 2 1 2 2;
-      .425349654  .445784443  .231430983   ...
-      .370437388  .27862509   .27763384
+      .425349654  .445784443  .231430983   .370437388  .27862509   .27763384
     ];
 \end{verbatim}
 
