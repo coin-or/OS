@@ -4173,13 +4173,14 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		
 	}
 	
-	/*
+
 	
 	//construct the new master
 	//create an OSInstance from the tmp arrays
 	// delete the old  m_osinstanceMaster
-
+	
 	delete m_osinstanceMaster;
+	
 	
 	//start building the restricted master here
 	m_osinstanceMaster = new OSInstance();
@@ -4190,9 +4191,11 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	m_osinstanceMaster->setVariableNumber( numVars + numVarArt );   
 	
 	// now add the objective function
-	m_osinstanceMaster->setObjectiveNumber( 1);
+	//m_osinstanceMaster->setObjectiveNumber( 1);
 	//add m_numNodes artificial variables
 	SparseVector *objcoeff = new SparseVector( numVars + numVarArt);   
+	
+
 
 	// now the constraints
 	m_osinstanceMaster->setConstraintNumber( m_numNodes  + m_numBmatrixCon); 
@@ -4202,38 +4205,71 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	
 	int varNumber;
 	varNumber = 0;
-	std::string masterVarName;
-	kountNonz = 0;
 	
-	for(i = 0; i < m_numNodes; i++){
-		
+
+	//define the artificial variables
+	for(i = 0; i < numVarArt; i++){
 		
 		objcoeff->indexes[ varNumber ] = varNumber ;
 
-		
-		//objcoeff->values[ varNumber ] = OSDBL_MAX;
-		
-		//objcoeff->values[ varNumber ] = 1.0e24;
 		objcoeff->values[ varNumber ] = m_osDecompParam.artVarCoeff;
 		
 		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
-				0, 1.0, 'C');
-											
-		values[ kountNonz] = 1;
-		indexes[ kountNonz++] = i ;
-		starts[ startsIdx++] = kountNonz;
+				0, 1.0, 'C');	
 		
+
+	}
+	
+	// now the theta variables
+	kount = 0;
+	for(mit = inVars.begin();  mit != inVars.end(); mit++){
+		
+		objcoeff->indexes[ varNumber ] = varNumber ;
+
+		objcoeff->values[ varNumber ] = si->getObjCoefficients()[ mit->first] ;
+		
+		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("x", kount + numVarArt ) , 
+				0, 1.0, 'C');	
+		
+		kount++;
+		
+	}
+
+
+	
+	for(i = 0; i < m_numNodes; i++){
+		
+		m_osinstanceMaster->addConstraint(i,  makeStringFromInt("con", i), 
+				1.0, 1.0, 0);
+	
+	}
+	
+	
+	for(i = m_numNodes; i <  m_numBmatrixCon + m_numNodes; i++){
+		
+		m_osinstanceMaster->addConstraint(i,  makeStringFromInt("con", i), 
+				si->getRowLower()[ i], si->getRowUpper()[ i], 0);
 		
 		
 	}
 	
 
-	*/
+	// now add the objective function
+	m_osinstanceMaster->setObjectiveNumber( 1);
+	m_osinstanceMaster->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
+	
+	//add the linear constraints coefficients
+	m_osinstanceMaster->setLinearConstraintCoefficients(numNonz , true, 
+			values, 0, numNonz - 1,  indexes, 0, numNonz - 1, starts, 0, startsIdx);
+	
+	
+	std::cout << m_osinstanceMaster->printModel( ) << std::endl;	
 	
 	//garbage collection
 	delete[] thetaPntTmp;
 	delete[] thetaIndexTmp;
-	//delete[] objcoeff;
+	delete objcoeff;
+	objcoeff = NULL;
 }
 
 
