@@ -243,7 +243,8 @@ void OSColGenApp::solve(){
 		int kount = 0;
 		for(i = 0; i < m_si->getNumCols(); i++){
 			
-			if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
+			//if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
+			if( m_si->getObjCoefficients()[i] < 10000) inVars.insert( std::pair<int, int>(i, kount++) );
 		}
 		
 		m_osrouteSolver->resetMaster( inVars, m_si );

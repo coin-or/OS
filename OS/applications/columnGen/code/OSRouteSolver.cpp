@@ -4214,7 +4214,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 
 		objcoeff->values[ varNumber ] = m_osDecompParam.artVarCoeff;
 		
-		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
+		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("x", i ) , 
 				0, 1.0, 'C');	
 		
 
@@ -4270,7 +4270,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	delete[] thetaIndexTmp;
 	delete objcoeff;
 	objcoeff = NULL;
-}
+}//end resetMaster
 
 
 
