@@ -234,11 +234,17 @@ void OSColGenApp::solve(){
 		
 		//get initial LP relaxation of master
 		solveRestrictedMasterRelaxation();
+		//get the solution vector
+		numCols = m_si->getNumCols();
+		for(i = 0; i < numCols; i++){	
+			//get the LP relaxation
+			*(m_theta + i) = m_si->getColSolution()[i];	
+		}
 		m_zLB =  m_si->getObjValue();
 		
 		//kipp -- temp stuff here delete later
 		//////
-		
+		/*
 		std::map<int, int> inVars;
 		int kount = 0;
 		for(i = 0; i < m_si->getNumCols(); i++){
@@ -248,8 +254,33 @@ void OSColGenApp::solve(){
 		}
 		
 		m_osrouteSolver->resetMaster( inVars, m_si );
-		exit( 1);
 		
+		///now delete stuff and reset
+		
+		delete m_solver;
+		
+		m_solver = new CoinSolver();
+		
+		// the solver interface
+		
+		//kipp -- later have clp be an option
+		//I guess for now it must be an Osi solver
+		m_solver->sSolverName ="cbc";
+		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
+		m_solver->osinstance = m_osrouteSolver->m_osinstanceMaster;
+		
+		m_solver->buildSolverInstance();
+
+		
+		//get the solver interface
+		m_si = m_solver->osiSolver;
+		
+		
+		m_si->writeLp( "gailTest2" );
+		
+		//exit( 1);
+		
+		*/
 		/////
 
 		//now get the upper bound
@@ -277,16 +308,11 @@ void OSColGenApp::solve(){
 		numCols = m_si->getNumCols();
 		
 		for(i = 0; i < numCols; i++){	
-			//get the LP relaxation
 			
-			*(m_theta + i) = model.getColSolution()[i];	
-			
-			if( *(m_theta + i) > m_osDecompParam.zeroTol){
+			//get the indexes of integer variables
+			if( model.getColSolution()[i] > m_osDecompParam.zeroTol){
 				
 				m_zOptIndexes.push_back( i) ;
-				
-				std::cout << "GAIL PUSHING BACK VALUE " << *(m_theta + i) << std::endl;
-				std::cout << "GAIL PUSHING BACK INDEX " << i << std::endl;
 
 			}
 			
@@ -309,6 +335,8 @@ void OSColGenApp::solve(){
 		
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;
+		
+		std::cout << "NUMBER OF NODES GENERATED = " << m_numNodesGenerated << std::endl;
 		
 		m_osrouteSolver->pauHana( m_zOptIndexes);
 		
@@ -659,22 +687,23 @@ bool OSColGenApp::branchAndBound(){
 	bool leftNodeCreated = false;
 	bool rightNodeCreated = false;
 	
-	int numNodesGenerated;
-	numNodesGenerated = 0;
+
+	m_numNodesGenerated = 0;
 	
 	try{
 		
 		//get the solution
 		numCols = m_si->getNumCols();	
-		
-		for(i = 0; i < numCols; i++){	
-			//get the LP relaxation
-			*(m_theta + i) = m_si->getColSolution()[i];	
-		}
+		//kipp -- imporant this is now found earliear.
+		//for(i = 0; i < numCols; i++){	
+		//	//get the LP relaxation
+			//*(m_theta + i) = m_si->getColSolution()[i];	
+		//}
 		
 		
 		//create a branching cut 
 		createBranchingCut(m_theta, numCols, varConMap, rowIdx);
+		
 
 		//// start left node ////
 			
@@ -682,8 +711,8 @@ bool OSColGenApp::branchAndBound(){
 		if(osnodeLeftChild != NULL){
 			//finally set the nodeID
 			//and record parent ID
-			numNodesGenerated++;
-			osnodeLeftChild->nodeID = numNodesGenerated;
+			m_numNodesGenerated++;
+			osnodeLeftChild->nodeID = m_numNodesGenerated;
 			osnodeLeftChild->parentID = 0;
 			//nodeVec.push_back( osnodeLeftChild);
 			nodeMap.insert ( std::pair<int, OSNode*>(osnodeLeftChild->nodeID, osnodeLeftChild) );
@@ -698,8 +727,8 @@ bool OSColGenApp::branchAndBound(){
 		if(osnodeRightChild != NULL){
 			//finally set the nodeID
 			//and record parent ID
-			numNodesGenerated++;
-			osnodeRightChild->nodeID = numNodesGenerated;
+			m_numNodesGenerated++;
+			osnodeRightChild->nodeID = m_numNodesGenerated;
 			osnodeRightChild->parentID = 0;
 			//nodeVec.push_back( osnodeRightChild);
 			nodeMap.insert ( std::pair<int, OSNode*>(osnodeRightChild->nodeID, osnodeRightChild) );
@@ -711,9 +740,9 @@ bool OSColGenApp::branchAndBound(){
 		//kipp -- make this an option
 		nodeLimit = 250;
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
-		std::cout << "numNodesGenerated = " <<  numNodesGenerated  << std::endl;
-		//while( (nodeVec.size() > 0) && (numNodesGenerated <= nodeLimit) ){
-		while( (nodeMap.size() > 0) && (numNodesGenerated <= nodeLimit) ){
+		std::cout << "m_numNodesGenerated = " <<  m_numNodesGenerated  << std::endl;
+		//while( (nodeVec.size() > 0) && (m_numNodesGenerated <= nodeLimit) ){
+		while( (nodeMap.size() > 0) && (m_numNodesGenerated <= nodeLimit) ){
 			
 			leftNodeCreated = false;
 			rightNodeCreated = false;
@@ -763,8 +792,8 @@ bool OSColGenApp::branchAndBound(){
 				if(osnodeLeftChild != NULL){
 					//finally set the nodeID
 					//and record parent ID
-					numNodesGenerated++;
-					osnodeLeftChild->nodeID = numNodesGenerated;
+					m_numNodesGenerated++;
+					osnodeLeftChild->nodeID = m_numNodesGenerated;
 					osnodeLeftChild->parentID = osnode->nodeID;
 					leftNodeCreated = true;
 				}
@@ -774,8 +803,8 @@ bool OSColGenApp::branchAndBound(){
 				if(osnodeRightChild != NULL){
 					//finally set the nodeID
 					//and record parent ID
-					numNodesGenerated++;
-					osnodeRightChild->nodeID = numNodesGenerated;
+					m_numNodesGenerated++;
+					osnodeRightChild->nodeID = m_numNodesGenerated;
 					osnodeRightChild->parentID = osnode->nodeID;
 					rightNodeCreated = true;
 				}
@@ -1058,8 +1087,11 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	std::map<int, int>::iterator mit;
 	
 	//get the branching cut information
+	std::cout << "GAIL HONDA 1" << std::endl;
 	m_osrouteSolver->getBranchingCut(thetaIdx, theta, numThetaVar, 
 			varConMap, varIdx, numNonz, indexes,  values);
+	std::cout << "GAIL HONDA 2" << std::endl;
+	
 		
 	std::cout << "varIDX = " << varIdx << std::endl;
 	std::cout << "numNonzz = " << numNonz << std::endl;	
@@ -1139,6 +1171,7 @@ void OSColGenApp::createBranchingCut(const double* theta,
 	//get the branching cut information
 	m_osrouteSolver->getBranchingCut( theta, numThetaVar, 
 			varConMap, varIdx, numNonz, indexes,  values);
+
 		
 	std::cout << "varIDX = " << varIdx << std::endl;
 	std::cout << "numNonzz = " << numNonz << std::endl;	

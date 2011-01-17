@@ -32,6 +32,11 @@ class OSDecompParam {
 	 */
 	int columnLimit;
 	
+	/** nodeLimit is the limit on the number of nodes that are
+	 * allowed in the branch and bound tree
+	 */
+	int nodeLimit;
+	
 	/** we terminate column generation when the reduced costs are 
 	 * not smaller than zeroTol
 	 */

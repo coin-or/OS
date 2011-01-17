@@ -54,6 +54,9 @@ public:
 	/** Application specific parameters. */
 	OSDecompParam m_osDecompParam;
 	
+	/** kount the nodes generated **/
+	int m_numNodesGenerated;
+	
 	
 	/** m_zUB is the upper bound */
 	double m_zUB;

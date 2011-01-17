@@ -1612,9 +1612,12 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 		
 		
 
-
+			//turn on or off fixing the variables
+		
+			///*
 			//set kount to the start of the z variables
 			//go past the x variables
+			//here is where we fix the z variables
 			kount  =  2*m_numHubs + m_numHubs*(m_numNodes*m_numNodes - m_numNodes);
 			osinstance->bVariablesModified = true;
 			//get the first solution
@@ -1632,7 +1635,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 				}
 				
 			}
-			
+			//*/
        
 		
 
@@ -3478,7 +3481,6 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 			
 		}
 	
-	
 		//let's branch on a variable in and out of hub first
 		minFraction = 1.0;
 		//ideally we find minFraction very close to .5
@@ -3522,10 +3524,8 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 		//if we have a candidate among arcs in/out of hubs, take it
 		
 		if(minFraction > 1 - m_osDecompParam.zeroTol){
-		
+			
 			for(i = m_numHubs; i < m_numNodes; i++){
-				
-				
 				
 				for( j = 0;  j < i;  j++){
 					
@@ -3561,10 +3561,12 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 			}
 		
 		}//end of if on minFraction
+		std::cout << " HERE IS GAIL 1" << std::endl;
 		
 		//zero out the scatter array
 		
 		delete[] xvalues;
+		std::cout << " HERE IS GAIL 2" << std::endl;
 		xvalues = NULL;
 		
 		return varIdx;
@@ -3744,6 +3746,7 @@ void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVa
 		
 		if(numThetaVar != m_numThetaVar) throw ErrorClass("inconsistent number of variables in getBranchingCut");
 	
+		
 		varIdx = getBranchingVar(thetaVar, numThetaVar );
 		
 		std::cout << "Branching on Variable:  " << m_variableNames[ varIdx] << std::endl;
@@ -3952,6 +3955,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	//temporay holders
 	int* thetaPntTmp;
 	int* thetaIndexTmp;
+	int*  tmpConvexity = new int[  m_numThetaVar];
 	
 	//get the number of nonzeros that we need
 	numNonz = 0;
@@ -3978,13 +3982,13 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 			
 			thetaIndexTmp[ numNonz++] = m_thetaIndex[ i];
 			
-			std::cout << "Column = " <<   mit->first << "  Variable   " <<   m_variableNames[ m_thetaIndex[ i] ]   << std::endl;
+			//std::cout << "Column = " <<   mit->first << "  Variable   " <<   m_variableNames[ m_thetaIndex[ i] ]   << std::endl;
 			
 		}
 		
 		thetaPntTmp[ kount] = numNonz;
 		
-		std::cout << "kount =  " << kount << "  thetaPntTmp[ kount] = " << thetaPntTmp[ kount] << std::endl;
+		//std::cout << "kount =  " << kount << "  thetaPntTmp[ kount] = " << thetaPntTmp[ kount] << std::endl;
 		//readjust numbering to take into account artificial variables
 		mit->second += numVarArt;
 		
@@ -3993,25 +3997,40 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	std::cout << "kount = " <<  kount  << std::endl;
 	std::cout << "numVars = " << numVars  << std::endl;
 	
+	//error check
+	for(mit = inVars.begin();  mit != inVars.end(); mit++){
+		
+		if( convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
+		
+		
+	}
+	
+	//copy old values of convexityRowIndex
+	for(i = 0; i < m_numThetaVar; i++) tmpConvexity[ i] = convexityRowIndex[ i];
+	
 	//reset the theta pointers
 	//first the artificial variables
 	m_numThetaVar = 0;
 	m_numThetaNonz = 0;
 	for(i = 0; i < numVarArt; i++){
+		
 		convexityRowIndex[ m_numThetaVar] = -1;
 		m_thetaPnt[ m_numThetaVar++] = 0;
 		
+		
 	}
 	//now fill in the other pointers from the temp arrarys
-	
-	
+	std::cout << "Number of artificial variables =  " << numVarArt   << std::endl;
+	intVarSet.clear();
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
 		
+		intVarSet.insert ( std::pair<int,double>(mit->second, 1.0) );
 		
-		std::cout << " m_numThetaVar =  "  << m_numThetaVar << "  m_numThetaNonz =  " <<  m_numThetaNonz  << std::endl;
-		if( convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
-		convexityRowIndex[ m_numThetaVar] = convexityRowIndex[ mit->first];
+		//std::cout << " m_numThetaVar =  "  << m_numThetaVar << "  m_numThetaNonz =  " <<  m_numThetaNonz  << std::endl;
+		std::cout << "Variable number " << mit->first << "  OBJ coefficient = " <<   si->getObjCoefficients()[  mit->first] << std::endl;
+		
+		convexityRowIndex[ m_numThetaVar] = tmpConvexity[ mit->first];
 		
 		m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
 		
@@ -4039,8 +4058,6 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	//now create the formulation
 	
 	//first get each column of the new master
-	
-	
 	//first take care of the artificial variables
 	numNonz = 0;
 	startsIdx = 0;
@@ -4108,8 +4125,6 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		}//end loop on coupling constraints
 		
 		
-		
-		
 		//multiply the sparse array by each B matrix constraint
 		for(i = 0; i < m_numBmatrixCon; i++){
 			
@@ -4150,16 +4165,8 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		
 	}
 	
-	///tmp
-	
-	for(i = 0; i < startsIdx; i++){
-		
-		
-		std::cout << "starts[ i] = " << starts[ i] << std::endl;
-	}
-	
-	
-	
+
+	//for(i = 0; i < startsIdx; i++) std::cout << "starts[ i] = " << starts[ i] << std::endl;
 	values = new double[ numNonz];
 	indexes = new int[ numNonz];
 	
@@ -4180,7 +4187,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	// delete the old  m_osinstanceMaster
 	
 	delete m_osinstanceMaster;
-	
+	m_osinstanceMaster = NULL;
 	
 	//start building the restricted master here
 	m_osinstanceMaster = new OSInstance();
@@ -4266,8 +4273,12 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	std::cout << m_osinstanceMaster->printModel( ) << std::endl;	
 	
 	//garbage collection
+	delete[] tmpConvexity;
+	tmpConvexity = NULL;
 	delete[] thetaPntTmp;
+	thetaPntTmp = NULL;
 	delete[] thetaIndexTmp;
+	thetaIndexTmp = NULL;
 	delete objcoeff;
 	objcoeff = NULL;
 }//end resetMaster

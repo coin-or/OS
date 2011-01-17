@@ -242,7 +242,7 @@ public:
 	
 	/** conconvexityRowIndex holds the index of the convexity row
 	 * that the theta columns are in. If the theta is an artificial
-	 * variable this value is 0
+	 * variable this value is -1
 	 */
 	int* convexityRowIndex;
 	
