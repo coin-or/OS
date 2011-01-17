@@ -244,7 +244,7 @@ void OSColGenApp::solve(){
 		
 		//kipp -- temp stuff here delete later
 		//////
-		/*
+	
 		std::map<int, int> inVars;
 		int kount = 0;
 		for(i = 0; i < m_si->getNumCols(); i++){
@@ -258,7 +258,7 @@ void OSColGenApp::solve(){
 		///now delete stuff and reset
 		
 		delete m_solver;
-		
+		m_osinstanceMaster = m_osrouteSolver->m_osinstanceMaster;
 		m_solver = new CoinSolver();
 		
 		// the solver interface
@@ -280,7 +280,7 @@ void OSColGenApp::solve(){
 		
 		//exit( 1);
 		
-		*/
+		
 		/////
 
 		//now get the upper bound
