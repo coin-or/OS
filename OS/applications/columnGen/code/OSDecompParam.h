@@ -37,6 +37,11 @@ class OSDecompParam {
 	 */
 	int nodeLimit;
 	
+	/** when the number of columns in the master hits
+	 * masterColumnResetValue do a column purge
+	 */
+	int masterColumnResetValue;
+	
 	/** we terminate column generation when the reduced costs are 
 	 * not smaller than zeroTol
 	 */
@@ -46,6 +51,9 @@ class OSDecompParam {
 	 * in the objective function
 	 */
 	double artVarCoeff;
+	
+	
+
 	
 	
 };//end class OSDecompParam

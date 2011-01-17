@@ -1619,21 +1619,24 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 			//go past the x variables
 			//here is where we fix the z variables
 			kount  =  2*m_numHubs + m_numHubs*(m_numNodes*m_numNodes - m_numNodes);
-			osinstance->bVariablesModified = true;
-			//get the first solution
-			mit = m_initSolMap.find( 0);
-			for ( mit2 = mit->second.begin() ; mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
-				
-				
-	
-				for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
+			//if we are using SK's heuristic fix the assignment of nodes to hubs
+			if(m_use1OPTstart == true){
+				osinstance->bVariablesModified = true;
+				//get the first solution
+				mit = m_initSolMap.find( 0);
+				for ( mit2 = mit->second.begin() ; mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
 					
-							
-					osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
-					std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
+					
+		
+					for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
+						
+								
+						osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
+						std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
+						
+					}
 					
 				}
-				
 			}
 			//*/
        
@@ -2258,11 +2261,10 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 													std::cout << "m_maxThetaNonz = " << m_maxThetaNonz <<  std::endl;
 													
 												}else{
-													if( (*vit)->name.find("masterResetValue") !=  std::string::npos){
-														
-														std::istringstream masterResetValue( (*vit)->value);
-														masterResetValue >> m_masterResetValue;
-														std::cout << "m_masterResetValue = " << m_masterResetValue <<  std::endl;
+													if( (*vit)->name.find("use1OPTstart") !=  std::string::npos){
+														m_use1OPTstart  = false;
+														if ( (*vit)->value.find("true") !=  std::string::npos ) m_use1OPTstart  = true;
+														std::cout << "m_use1OPTstart = " << m_use1OPTstart <<  std::endl;
 														
 													}else{
 														if( (*vit)->name.find("maxBmatrixCon") !=  std::string::npos ){
@@ -3130,7 +3132,7 @@ void OSRouteSolver::createAmatrix(){
 	
 }//end createAmatrix
 
-void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes){
+void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes, int numNodes){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
@@ -3181,6 +3183,7 @@ void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes){
 		std::cout << "TOTAL NUMBER OF COLUMNS = " << m_numThetaVar << std::endl;
 		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 2*m_numNodes - 2*m_numBmatrixCon << std::endl;
 		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon  << std::endl;
+		std::cout << "NUMBER OF NODES  = " <<  numNodes  << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
 		
 		std::cout << std::endl <<  std::endl;

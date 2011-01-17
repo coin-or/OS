@@ -73,12 +73,10 @@ public:
 	 */
 	int m_maxMasterColumns;
 	
-	/** m_masterRestValue triggers deleting all the
-	 * columns from the master except those corresponding
-	 * to the current basis and the columns correxponding
-	 * to the best integer value
+	/** if m_use1OPTstart is true we use the option file to
+	 * fix the nodes to hubs found by SK's 1OPT heuristic
 	 */
-	int m_masterResetValue;
+	bool m_use1OPTstart;
 	
 	/** m_maxMasterNonz is the maximumn number
 	 * of nonzero elements we allow in the transformation matrix
@@ -445,7 +443,7 @@ public:
 	void getInitialSolution();
 	
 	//this method gets called when we are done
-	void pauHana(std::vector<int> &m_zOptIndexes);
+	void pauHana(std::vector<int> &m_zOptIndexesm , int numNodes);
 	
 	/** use this method to reset the master
 	 * RETURN VALUES: 

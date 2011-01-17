@@ -54,7 +54,16 @@ OSColGenApp::OSColGenApp():
 OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  std::cout << "INSIDE OSColGenApp CONSTRUCTOR" << std::endl;
 	  //std::cout << "the contructor things whichBlock = " << m_whichBlock<< std::endl;
+	  
 	  //get parameters-options
+	  //set default values:
+	  
+	  m_osDecompParam.nodeLimit = 1000;
+	  m_osDecompParam.columnLimit = 20000;
+	  m_osDecompParam.masterColumnResetValue = 5000;
+	  m_osDecompParam.zeroTol = .0001;
+	  m_osDecompParam.artVarCoeff = 1000000;
+	  
 	  m_osoption = osoption;
 	  //get the options for the OSDecompSolver
 	  getOptions( m_osoption);
@@ -171,11 +180,27 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 						zeroTolBuffer >> m_osDecompParam.zeroTol;
 						std::cout << "zeroTol = " <<  m_osDecompParam.zeroTol <<  std::endl;
 						
+					}else{
+						
+						
+						if( (*vit)->name.find("nodeLimit") !=  std::string::npos){
+							
+							std::istringstream nodeLimitBuffer( (*vit)->value);
+							nodeLimitBuffer >> m_osDecompParam.nodeLimit;
+							std::cout << "nodeLimit = " <<  m_osDecompParam.nodeLimit <<  std::endl;
+							
+						}else{
+							
+							if( (*vit)->name.find("masterColumnResetValue") !=  std::string::npos){
+								
+								std::istringstream masterColumnResetValueBuffer( (*vit)->value);
+								masterColumnResetValueBuffer >> m_osDecompParam.masterColumnResetValue;
+								std::cout << "masterColumnResetValue = " <<  m_osDecompParam.masterColumnResetValue <<  std::endl;
+							}
+						}
 					}
 				}
 			}
-			
-			
 		}
 	
 	} catch (const ErrorClass& eclass) {
@@ -244,7 +269,7 @@ void OSColGenApp::solve(){
 		
 		//kipp -- temp stuff here delete later
 		//////
-	
+		/*
 		std::map<int, int> inVars;
 		int kount = 0;
 		for(i = 0; i < m_si->getNumCols(); i++){
@@ -279,7 +304,7 @@ void OSColGenApp::solve(){
 		m_si->writeLp( "gailTest2" );
 		
 		//exit( 1);
-		
+		*/
 		
 		/////
 
@@ -338,7 +363,7 @@ void OSColGenApp::solve(){
 		
 		std::cout << "NUMBER OF NODES GENERATED = " << m_numNodesGenerated << std::endl;
 		
-		m_osrouteSolver->pauHana( m_zOptIndexes);
+		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated);
 		
 		
 		
@@ -676,7 +701,6 @@ bool OSColGenApp::branchAndBound(){
 	OSNode *osnodeLeftChild = NULL;
 	OSNode *osnodeRightChild = NULL;
 	
-	int nodeLimit;
 	bool bandbWorked;
 	bandbWorked = true;
 	int numCols;
@@ -689,7 +713,6 @@ bool OSColGenApp::branchAndBound(){
 	
 
 	m_numNodesGenerated = 0;
-	
 	try{
 		
 		//get the solution
@@ -738,11 +761,11 @@ bool OSColGenApp::branchAndBound(){
 		
 		// now loop
 		//kipp -- make this an option
-		nodeLimit = 250;
+
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		std::cout << "m_numNodesGenerated = " <<  m_numNodesGenerated  << std::endl;
 		//while( (nodeVec.size() > 0) && (m_numNodesGenerated <= nodeLimit) ){
-		while( (nodeMap.size() > 0) && (m_numNodesGenerated <= nodeLimit) ){
+		while( (nodeMap.size() > 0) && (m_numNodesGenerated <= m_osDecompParam.nodeLimit) ){
 			
 			leftNodeCreated = false;
 			rightNodeCreated = false;
