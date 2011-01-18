@@ -264,6 +264,30 @@ void OSColGenApp::solve(){
 		for(i = 0; i < numCols; i++){	
 			//get the LP relaxation
 			*(m_theta + i) = m_si->getColSolution()[i];	
+			
+			///optionally print out the corresponding x columns
+			
+			
+			 
+			int j;
+			if( *(m_theta + i) > m_osDecompParam.zeroTol){
+				
+					
+					std::cout <<  "x variables for column "  << i  << std::endl;
+				
+					
+					for(j = m_osrouteSolver->m_thetaPnt[ i];  j < m_osrouteSolver->m_thetaPnt[ i + 1] ;  j++){
+					
+						
+						std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  <<  *(m_theta + i)  << std::endl;
+						
+					}	
+				
+			}			
+			
+			///end of optionally print out
+			
+			
 		}
 		m_zLB =  m_si->getObjValue();
 		
@@ -356,7 +380,7 @@ void OSColGenApp::solve(){
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
 		//go into branch and bound
-		branchAndBound();
+		//branchAndBound();
 		
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;
