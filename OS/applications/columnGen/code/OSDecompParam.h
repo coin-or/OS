@@ -53,6 +53,10 @@ class OSDecompParam {
 	double artVarCoeff;
 	
 	
+	/** we fathom a node if UB*(1 - optTolPerCent) <= LB */
+	double optTolPerCent;
+	
+	
 
 	
 	

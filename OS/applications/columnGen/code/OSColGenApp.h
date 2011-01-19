@@ -61,6 +61,11 @@ public:
 	/** m_zUB is the upper bound */
 	double m_zUB;
 	
+	/** nodeMap is the map of nodes in the
+	 * branch and bound tree
+	 */
+	std::map<int, OSNode*> m_nodeMap;
+	
 	/** *
 	 * m_zOptIndexes is the vector theta indexes
 	 * corresponding to the current m_zUB
@@ -204,6 +209,9 @@ public:
 	 */
 	void createBranchingCut(const double* theta, const int numThetaVar, 
 			std::map<int, int> &varConMap, int &rowIdx);
+	
+	
+	void resetMaster( );
 	
 	/**
 	 *

@@ -63,6 +63,7 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  m_osDecompParam.masterColumnResetValue = 5000;
 	  m_osDecompParam.zeroTol = .0001;
 	  m_osDecompParam.artVarCoeff = 1000000;
+	  m_osDecompParam.optTolPerCent = 0;
 	  
 	  m_osoption = osoption;
 	  //get the options for the OSDecompSolver
@@ -196,6 +197,14 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 								std::istringstream masterColumnResetValueBuffer( (*vit)->value);
 								masterColumnResetValueBuffer >> m_osDecompParam.masterColumnResetValue;
 								std::cout << "masterColumnResetValue = " <<  m_osDecompParam.masterColumnResetValue <<  std::endl;
+							}else{
+								
+								if( (*vit)->name.find("optTolPerCent") !=  std::string::npos){
+									
+									std::istringstream optTolPerCentBuffer( (*vit)->value);
+									optTolPerCentBuffer >> m_osDecompParam.optTolPerCent;
+									std::cout << "masterColumnResetValue = " <<  m_osDecompParam.optTolPerCent<<  std::endl;
+								}
 							}
 						}
 					}
@@ -266,9 +275,7 @@ void OSColGenApp::solve(){
 			*(m_theta + i) = m_si->getColSolution()[i];	
 			
 			///optionally print out the corresponding x columns
-			
-			
-			 
+				 
 			int j;
 			if( *(m_theta + i) > m_osDecompParam.zeroTol){
 				
@@ -282,71 +289,24 @@ void OSColGenApp::solve(){
 						std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  <<  *(m_theta + i)  << std::endl;
 						
 					}	
-				
 			}			
 			
 			///end of optionally print out
-			
-			
 		}
 		m_zLB =  m_si->getObjValue();
 		
-		//kipp -- temp stuff here delete later
-		//////
-		/*
-		std::map<int, int> inVars;
-		int kount = 0;
-		for(i = 0; i < m_si->getNumCols(); i++){
-			
-			//if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
-			if( m_si->getObjCoefficients()[i] < 10000) inVars.insert( std::pair<int, int>(i, kount++) );
-		}
 		
-		m_osrouteSolver->resetMaster( inVars, m_si );
-		
-		///now delete stuff and reset
-		
-		delete m_solver;
-		m_osinstanceMaster = m_osrouteSolver->m_osinstanceMaster;
-		m_solver = new CoinSolver();
-		
-		// the solver interface
-		
-		//kipp -- later have clp be an option
-		//I guess for now it must be an Osi solver
-		m_solver->sSolverName ="cbc";
-		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
-		m_solver->osinstance = m_osrouteSolver->m_osinstanceMaster;
-		
-		m_solver->buildSolverInstance();
 
-		
-		//get the solver interface
-		m_si = m_solver->osiSolver;
-		
-		
-		m_si->writeLp( "gailTest2" );
-		
-		//exit( 1);
-		*/
-		
-		/////
-
-		//now get the upper bound
-		//solve as an integer program to get initial upper bound
-		
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
 			
 			m_si->setInteger( sit->first);
-			
-			
+
 		}
-		
 		
 		CbcModel model(  *m_si);
 		OsiSolverInterface *ipSolver = model.solver();
-		
+
 		ipSolver->branchAndBound();
 		//CbcMain0(  model);	
 		//CbcMain1( 0, 0, model);
@@ -379,8 +339,10 @@ void OSColGenApp::solve(){
 		
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
+		//reset the master
+		resetMaster();
 		//go into branch and bound
-		//branchAndBound();
+		branchAndBound();
 		
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;
@@ -534,7 +496,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				
 				std::cout << "m_zUB  = " <<  m_zUB << std::endl;
 				
-				if(lowerBound + m_si->getObjValue() > m_zUB) break;
+				if(lowerBound + m_si->getObjValue() > (1 - m_osDecompParam.optTolPerCent)*m_zUB) break;
 			
 				std::cout << std::endl  << std::endl << std::endl;
 				std::cout << "CALL Solve  " << std::endl;
@@ -575,7 +537,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			numNewRows = 0;
 			
 			//do not get cuts if LP relaxation worse than upper bound
-			if(m_si->getObjValue() < m_zUB) getCuts(m_theta, numCols, numNewRows, numRowNonz, 
+			if(m_si->getObjValue() < (1 - m_osDecompParam.optTolPerCent)*m_zUB) 
+				getCuts(m_theta, numCols, numNewRows, numRowNonz, 
 					colIdx,rowValues, rowLB, rowUB);
 		
 			
@@ -704,7 +667,7 @@ void OSColGenApp::printDebugInfo( ){
 }//end printDebugInfo
 
 
-bool OSColGenApp::branchAndBound(){
+bool OSColGenApp::branchAndBound( ){
 	
 	/** varConMap is a map that maps the index
 	 * of an x_{ij} variable to the corresponding
@@ -715,7 +678,7 @@ bool OSColGenApp::branchAndBound(){
 	std::vector<OSNode*> nodeVec;
 	std::vector<OSNode*>::iterator vit;
 	
-	std::map<int, OSNode*> nodeMap;
+	
 	std::map<int, OSNode*>::iterator mit;
 	int bestNodeID;
 	double bestNodeBound;
@@ -744,8 +707,9 @@ bool OSColGenApp::branchAndBound(){
 		//kipp -- imporant this is now found earliear.
 		//for(i = 0; i < numCols; i++){	
 		//	//get the LP relaxation
-			//*(m_theta + i) = m_si->getColSolution()[i];	
+		//	std::cout  << "theta = " <<   *(m_theta + i) << std::endl; 
 		//}
+		
 		
 		
 		//create a branching cut 
@@ -762,7 +726,7 @@ bool OSColGenApp::branchAndBound(){
 			osnodeLeftChild->nodeID = m_numNodesGenerated;
 			osnodeLeftChild->parentID = 0;
 			//nodeVec.push_back( osnodeLeftChild);
-			nodeMap.insert ( std::pair<int, OSNode*>(osnodeLeftChild->nodeID, osnodeLeftChild) );
+			m_nodeMap.insert ( std::pair<int, OSNode*>(osnodeLeftChild->nodeID, osnodeLeftChild) );
 
 		}
 		
@@ -778,7 +742,7 @@ bool OSColGenApp::branchAndBound(){
 			osnodeRightChild->nodeID = m_numNodesGenerated;
 			osnodeRightChild->parentID = 0;
 			//nodeVec.push_back( osnodeRightChild);
-			nodeMap.insert ( std::pair<int, OSNode*>(osnodeRightChild->nodeID, osnodeRightChild) );
+			m_nodeMap.insert ( std::pair<int, OSNode*>(osnodeRightChild->nodeID, osnodeRightChild) );
 		}
 			
 		//// end of right node ////
@@ -789,7 +753,7 @@ bool OSColGenApp::branchAndBound(){
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		std::cout << "m_numNodesGenerated = " <<  m_numNodesGenerated  << std::endl;
 		//while( (nodeVec.size() > 0) && (m_numNodesGenerated <= nodeLimit) ){
-		while( (nodeMap.size() > 0) && (m_numNodesGenerated <= m_osDecompParam.nodeLimit) ){
+		while( (m_nodeMap.size() > 0) && (m_numNodesGenerated <= m_osDecompParam.nodeLimit) ){
 			
 			leftNodeCreated = false;
 			rightNodeCreated = false;
@@ -803,7 +767,7 @@ bool OSColGenApp::branchAndBound(){
 			bestNodeBound = OSDBL_MAX;
 			//mit->first is the the OSNode nodeID
 			//mit->second is an OSNode
-			for (mit = nodeMap.begin(); mit != nodeMap.end(); mit++ ){
+			for (mit = m_nodeMap.begin(); mit != m_nodeMap.end(); mit++ ){
 				
 				//FIFO criterions
 				//if( mit->second->nodeID > bestNodeID) bestNodeID =  mit->second->nodeID;
@@ -822,11 +786,11 @@ bool OSColGenApp::branchAndBound(){
 			}
 
 			//get the node
-			mit = nodeMap.find( bestNodeID );
-			if(mit == nodeMap.end() ) throw ErrorClass("a node selection problem in branch and bound");
+			mit = m_nodeMap.find( bestNodeID );
+			if(mit == m_nodeMap.end() ) throw ErrorClass("a node selection problem in branch and bound");
 			osnode = mit->second;
 			
-			if( osnode->lpValue < m_zUB - m_osDecompParam.zeroTol){
+			if( osnode->lpValue < (1 - m_osDecompParam.optTolPerCent)*m_zUB - m_osDecompParam.zeroTol){
 			
 				
 				//create a branching cut 
@@ -858,17 +822,17 @@ bool OSColGenApp::branchAndBound(){
 				
 				
 				//nodeVec.erase( nodeVec.end() - 1) ;
-				nodeMap.erase( mit);
+				m_nodeMap.erase( mit);
 				delete osnode;
 				
 				//if( leftNodeCreated == true) nodeVec.push_back( osnodeLeftChild) ;
 				//if( rightNodeCreated == true) nodeVec.push_back( osnodeRightChild) ;
 				
 				if( leftNodeCreated == true) 
-					nodeMap.insert ( std::pair<int, OSNode*>(osnodeLeftChild->nodeID, osnodeLeftChild) ) ;
+					m_nodeMap.insert ( std::pair<int, OSNode*>(osnodeLeftChild->nodeID, osnodeLeftChild) ) ;
 				
 				if( rightNodeCreated == true) 
-					nodeMap.insert ( std::pair<int, OSNode*>(osnodeRightChild->nodeID, osnodeRightChild) ) ;
+					m_nodeMap.insert ( std::pair<int, OSNode*>(osnodeRightChild->nodeID, osnodeRightChild) ) ;
 
 				 
 			}else{
@@ -876,7 +840,7 @@ bool OSColGenApp::branchAndBound(){
 				//fathom node by virtue of the upper bound
 				std::cout << "FATHAM BY UPPER BOUND " << std::endl;
 				//nodeVec.erase( nodeVec.end() - 1) ;
-				nodeMap.erase( mit);
+				m_nodeMap.erase( mit);
 				delete osnode;
 
 			}//end if on lp bound check
@@ -888,10 +852,11 @@ bool OSColGenApp::branchAndBound(){
 		
 
 		
-		m_zLB = m_zUB;
+		if(m_numNodesGenerated > 0) m_zLB = (1 - m_osDecompParam.optTolPerCent)*m_zUB;
+		
 		std::cout <<  std::endl << std::endl;
-		//std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << nodeVec.size() << std::endl;
-		std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << nodeMap.size() << std::endl;
+		
+		std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << m_nodeMap.size() << std::endl;
 		
 		/*
 		for ( vit = nodeVec.begin() ; 
@@ -917,8 +882,8 @@ bool OSColGenApp::branchAndBound(){
 		
 		
 		
-		for ( mit = nodeMap.begin() ; 
-				mit != nodeMap.end(); mit++ ){
+		for ( mit = m_nodeMap.begin() ; 
+				mit != m_nodeMap.end(); mit++ ){
 			
 			std::cout << "NODE ID VALUE = " << mit->second->nodeID << " " ;
 			std::cout << "  NODE LP VALUE = " << mit->second->lpValue << std::endl;
@@ -934,7 +899,7 @@ bool OSColGenApp::branchAndBound(){
 	
 			
 		}
-		nodeMap.clear();
+		m_nodeMap.clear();
 		
 		//exit( 1);
 	
@@ -1022,7 +987,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 		std::cout << "MESSAGE: START CREATION OF A CHILD NODE" << std::endl;
 		std::cout << "LB " << rowLB  <<  " UB = " << rowUB << std::endl;
 		std::cout << "MESSAGE: LP RELAXATION VALUE OF POTENTIAL CHILD NODE  " << m_si->getObjValue() << std::endl;
-		if( m_si->getObjValue() < m_zUB - m_osDecompParam.zeroTol) {
+		if( m_si->getObjValue() < (1 - m_osDecompParam.optTolPerCent)*m_zUB - m_osDecompParam.zeroTol) {
 			// okay cannot fathom based on bound try integrality
 			std::cout << "MESSAGE: WE CANNOT FATHOM THE CHILD BASED ON UPPER BOUND " << std::endl;
 			numCols = m_si->getNumCols();
@@ -1280,7 +1245,121 @@ void OSColGenApp::createBranchingCut(const double* theta,
 }//end createBranchingCut Dense
 
 
+void  OSColGenApp::resetMaster(){
+	
+	//kipp -- temp stuff here delete later
+	//////
+	
+	std::map<int, int> inVars;
+	std::map<int, int>::iterator mit;
+	std::vector<int>::iterator vit;
+	std::map<int, OSNode*>::iterator mit2;
+	
+	
+	int i;
+	int kount = 0;
+	
+	//first add the variables corresponding to the current LP relaxation
+	for(i = 0; i < m_si->getNumCols(); i++){
+		
+		//if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
+		if( m_si->getObjCoefficients()[i] < 10000) inVars.insert( std::pair<int, int>(i, kount++) );
+	}
+	
+	
+	
+	
+	//add the integer varaibles
+	for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
+		
+		//if( inVars.find( *vit ) != inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
+		
+	}
+	
+	//now loop over the nodes in the branch and bound tree
+	
+	for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
+		
+		//int thetaNumNonz;
+		//int* thetaIdx;
+		
+		//if( inVars.find( *vit ) != inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
+		
+	}
+	
 
+	//reset the nodes in the branch and bound tree
+	m_osrouteSolver->resetMaster( inVars, m_si );
+	
+	
+	int numVars =   m_osrouteSolver->m_osinstanceMaster->getVariableNumber();
+	double *tmpVals = NULL;
+	tmpVals = new double[ numVars];
+	
+	for(i = 0;  i < numVars; i++){
+		
+		tmpVals[ i ] = 0;
+		
+	}
+	
+	for(mit = inVars.begin(); mit != inVars.end(); mit++){
+		
+		
+		tmpVals[ mit->second] = m_theta[ mit->first] ;
+		
+	}
+	
+	delete[] m_theta;
+	//m_theta = NULL;
+
+	//m_theta = new double[ numVars];
+	
+	m_theta = new double[ m_maxCols];
+	
+	for(i = 0; i  < numVars; i++){
+		
+		m_theta[ i] = tmpVals[ i] ;
+		//std::cout << "theta = " << m_theta[ i] << std::endl;
+	}
+	 
+	delete[] tmpVals;
+	tmpVals = 0;
+	
+
+	
+
+	///now delete stuff and reset
+	
+	delete m_solver;
+	m_osinstanceMaster = m_osrouteSolver->m_osinstanceMaster;
+	m_solver = new CoinSolver();
+	
+	// the solver interface
+	
+	//kipp -- later have clp be an option
+	//I guess for now it must be an Osi solver
+	m_solver->sSolverName ="cbc";
+	//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
+	m_solver->osinstance = m_osrouteSolver->m_osinstanceMaster;
+	
+	m_solver->buildSolverInstance();
+
+	
+	//get the solver interface
+	m_si = m_solver->osiSolver;
+	
+	
+	m_si->writeLp( "gailTest2" );
+	
+	//exit( 1);
+	
+	
+	/////
+
+	//now get the upper bound
+	//solve as an integer program to get initial upper bound
+	
+}//end resetMaster
 
 
 
