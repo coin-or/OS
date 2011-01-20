@@ -3972,6 +3972,15 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	thetaPntTmp = new int[ numVars + 1];
 	thetaIndexTmp = new int[ numNonz];
 	
+	
+	//error check
+	for(mit = inVars.begin();  mit != inVars.end(); mit++){
+		
+		if( convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
+		
+		
+	}
+	
 	//fill in the temporary arrays
 	kount = 0;
 	numNonz = 0;
@@ -3985,7 +3994,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 			
 			thetaIndexTmp[ numNonz++] = m_thetaIndex[ i];
 			
-			//std::cout << "Column = " <<   mit->first << "  Variable   " <<   m_variableNames[ m_thetaIndex[ i] ]   << std::endl;
+			std::cout << "Column = " <<   mit->first << "  Variable   " <<   m_variableNames[ m_thetaIndex[ i] ]   << std::endl;
 			
 		}
 		
@@ -3993,20 +4002,15 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		
 		//std::cout << "kount =  " << kount << "  thetaPntTmp[ kount] = " << thetaPntTmp[ kount] << std::endl;
 		//readjust numbering to take into account artificial variables
-		mit->second += numVarArt;
+		//mit->second += numVarArt;
+		inVars[ mit->first] = numVarArt + kount - 1 ;
 		
 	}
 	
 	std::cout << "kount = " <<  kount  << std::endl;
 	std::cout << "numVars = " << numVars  << std::endl;
 	
-	//error check
-	for(mit = inVars.begin();  mit != inVars.end(); mit++){
-		
-		if( convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
-		
-		
-	}
+
 	
 	//copy old values of convexityRowIndex
 	for(i = 0; i < m_numThetaVar; i++) tmpConvexity[ i] = convexityRowIndex[ i];
@@ -4038,6 +4042,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
 		
 		for(j = thetaPntTmp[ mit->second - numVarArt]; j < thetaPntTmp[ mit->second - numVarArt  + 1 ]; j++){
+		
 			
 			m_thetaIndex[ m_numThetaNonz ] = thetaIndexTmp[ m_numThetaNonz] ;
 			m_numThetaNonz++;

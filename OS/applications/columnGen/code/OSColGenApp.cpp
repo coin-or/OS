@@ -755,6 +755,10 @@ bool OSColGenApp::branchAndBound( ){
 		//while( (nodeVec.size() > 0) && (m_numNodesGenerated <= nodeLimit) ){
 		while( (m_nodeMap.size() > 0) && (m_numNodesGenerated <= m_osDecompParam.nodeLimit) ){
 			
+			//kipp -- experimental
+			
+			//if( m_si->getNumCols() > 500) resetMaster();
+			
 			leftNodeCreated = false;
 			rightNodeCreated = false;
 			//grab a node -- for now the last node, we do FIFO
@@ -852,7 +856,13 @@ bool OSColGenApp::branchAndBound( ){
 		
 
 		
-		if(m_numNodesGenerated > 0) m_zLB = (1 - m_osDecompParam.optTolPerCent)*m_zUB;
+		if(m_numNodesGenerated > 0){
+			
+			m_zLB = (1 - m_osDecompParam.optTolPerCent)*m_zUB;
+		}else{
+			
+			m_zLB = m_zUB;
+		}
 		
 		std::cout <<  std::endl << std::endl;
 		
@@ -1099,10 +1109,10 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	std::map<int, int>::iterator mit;
 	
 	//get the branching cut information
-	std::cout << "GAIL HONDA 1" << std::endl;
+	
 	m_osrouteSolver->getBranchingCut(thetaIdx, theta, numThetaVar, 
 			varConMap, varIdx, numNonz, indexes,  values);
-	std::cout << "GAIL HONDA 2" << std::endl;
+	
 	
 		
 	std::cout << "varIDX = " << varIdx << std::endl;
@@ -1259,105 +1269,169 @@ void  OSColGenApp::resetMaster(){
 	int i;
 	int kount = 0;
 	
-	//first add the variables corresponding to the current LP relaxation
-	for(i = 0; i < m_si->getNumCols(); i++){
+	try{
+		//first add the variables corresponding to the current LP relaxation
+		for(i = 0; i < m_si->getNumCols(); i++){
+			
+			if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
+			//if( m_si->getObjCoefficients()[i] < 10000) inVars.insert( std::pair<int, int>(i, kount++) );
+		}
 		
-		//if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
-		if( m_si->getObjCoefficients()[i] < 10000) inVars.insert( std::pair<int, int>(i, kount++) );
-	}
-	
-	
-	
-	
-	//add the integer varaibles
-	for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
-		
-		//if( inVars.find( *vit ) != inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
-		
-	}
-	
-	//now loop over the nodes in the branch and bound tree
-	
-	for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
-		
-		//int thetaNumNonz;
-		//int* thetaIdx;
-		
-		//if( inVars.find( *vit ) != inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
-		
-	}
-	
 
-	//reset the nodes in the branch and bound tree
-	m_osrouteSolver->resetMaster( inVars, m_si );
-	
-	
-	int numVars =   m_osrouteSolver->m_osinstanceMaster->getVariableNumber();
-	double *tmpVals = NULL;
-	tmpVals = new double[ numVars];
-	
-	for(i = 0;  i < numVars; i++){
+		//add the integer varaibles
+		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
+			
+			if( inVars.find( *vit ) == inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
+			
+			std::cout << "VARIABLE INDEX =  " << *vit << std::endl;
+			
+			for(int k = m_osrouteSolver->m_thetaPnt[*vit]; k <  m_osrouteSolver->m_thetaPnt[*vit + 1]; k++){
+				
+				std::cout << m_osrouteSolver-> m_variableNames[ m_osrouteSolver->m_thetaIndex[ k] ] <<  std::endl;
+				
+			}
+			
+			
+			
+		}
 		
-		tmpVals[ i ] = 0;
 		
-	}
+		for(mit = inVars.begin(); mit != inVars.end(); mit++){
+			
+			
+			std::cout << "first index = " << mit->first << " second index " << mit->second << std::endl;
+			
+		}
+		
+		
 	
-	for(mit = inVars.begin(); mit != inVars.end(); mit++){
 		
+		//now loop over the nodes in the branch and bound tree
 		
-		tmpVals[ mit->second] = m_theta[ mit->first] ;
-		
-	}
-	
-	delete[] m_theta;
-	//m_theta = NULL;
+		for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
+			
 
-	//m_theta = new double[ numVars];
-	
-	m_theta = new double[ m_maxCols];
-	
-	for(i = 0; i  < numVars; i++){
+			for(i = 0; i < mit2->second->thetaNumNonz; i++){
+				
+				if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ) 
+					inVars.insert( std::pair<int, int>(mit2->second->thetaIdx[ i], kount++) );
+				
+			}
+		}
 		
-		m_theta[ i] = tmpVals[ i] ;
-		//std::cout << "theta = " << m_theta[ i] << std::endl;
-	}
-	 
-	delete[] tmpVals;
-	tmpVals = 0;
-	
+		
+		
+		m_osrouteSolver->resetMaster( inVars, m_si );
+		
 
-	
+		
+		int numVars =   m_osrouteSolver->m_osinstanceMaster->getVariableNumber();
+		double *tmpVals = NULL;
+		tmpVals = new double[ numVars];
+		
+		for(i = 0;  i < numVars; i++){
+			
+			tmpVals[ i ] = 0;
+			
+		}
+		
+		for(mit = inVars.begin(); mit != inVars.end(); mit++){
+			
+			
+			tmpVals[ mit->second] = m_theta[ mit->first] ;
+			
+		}
+		
+		//delete[] m_theta;
+		//m_theta = NULL;
+		//m_theta = new double[ numVars];
+		//m_theta = new double[ m_maxCols];
+		
+		for(i = 0; i  < numVars; i++) m_theta[ i] = tmpVals[ i] ;
+		
+		//reset the nodes in the branch and bound tree
+		
+		for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
 
-	///now delete stuff and reset
-	
-	delete m_solver;
-	m_osinstanceMaster = m_osrouteSolver->m_osinstanceMaster;
-	m_solver = new CoinSolver();
-	
-	// the solver interface
-	
-	//kipp -- later have clp be an option
-	//I guess for now it must be an Osi solver
-	m_solver->sSolverName ="cbc";
-	//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
-	m_solver->osinstance = m_osrouteSolver->m_osinstanceMaster;
-	
-	m_solver->buildSolverInstance();
+			
+			for(i = 0; i < mit2->second->thetaNumNonz; i++){
+				
+				//inVars[mit2->second->thetaIdx[ i] ]
+				//if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ) throw ErrorClass("index problem in resetMaster");
+				if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ){
+					
+					std::cout << "START VARIABLES in inVars " << std::endl;
+					
+					
+					for(mit = inVars.begin(); mit != inVars.end(); mit++){
+						
+						
+						std::cout << "first index = " << mit->first << " second index " << mit->second << std::endl;
+						
+					}
+					
+					//kippster
+					std::cout << "END OF VARIABLES in inVars " << std::endl;
+					
+					
+					
+					
+					std::cout << "START VARIABLES in the NODE " << std::endl;
+					
+					
+					for(int jj = 0; jj < mit2->second->thetaNumNonz; jj++){
+						
+						
+						std::cout << "NODE INDEX  = " << mit2->second->thetaIdx[ jj] << std::endl;
+						
+					}
+					
+					//kippster
+					std::cout << "END OF VARIABLES in the NODE " << std::endl;
+					
+					exit( 1);
+							
+							
+					
+				}
+				//kipp check to make sure we do not index an aritifical variable
+				mit2->second->thetaIdx[ i] =  inVars[ mit2->second->thetaIdx[ i] ] ;
+				//if( inVars.find( mit2->second->thetaIdx[ i] ) != inVars.end() ) 
+				//	inVars.insert( std::pair<int, int>(mit2->second->thetaIdx[ i], kount++) );
+				
+			}
+		}
+		
+		///now delete stuff and reset
+		
+		delete m_solver;
+		m_osinstanceMaster = m_osrouteSolver->m_osinstanceMaster;
+		m_solver = new CoinSolver();
 
+		//kipp -- later have clp be an option
+		//I guess for now it must be an Osi solver
+		m_solver->sSolverName ="cbc";
+		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
+		m_solver->osinstance = m_osrouteSolver->m_osinstanceMaster;
+		
+		m_solver->buildSolverInstance();
 	
-	//get the solver interface
-	m_si = m_solver->osiSolver;
+		//get the solver interface
+		m_si = m_solver->osiSolver;
+		
+		if(m_si->getNumCols() !=  numVars) throw ErrorClass("there is an inconsistency in the the model rebuid in resetMaster");
+		
+		//m_si->writeLp( "gailTest2" );
+		
+		delete[] tmpVals;
+		tmpVals = NULL;
 	
-	
-	m_si->writeLp( "gailTest2" );
-	
-	//exit( 1);
-	
-	
-	/////
+	} catch (const ErrorClass& eclass) {
 
-	//now get the upper bound
-	//solve as an integer program to get initial upper bound
+		throw ErrorClass(eclass.errormsg);
+
+	}	
+
 	
 }//end resetMaster
 
