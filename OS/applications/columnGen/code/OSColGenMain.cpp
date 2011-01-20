@@ -35,6 +35,11 @@
 //===========================================================================//
 int main(int argc, char ** argv){
    try{
+	   std::cout << "Enter an integer " << std::endl;
+	   int myInt;
+	   std::cin >> myInt;
+	   std::cout << "myInt = " << myInt << std::endl;
+	   exit( 1);
 	   OSColGenApp *colgenApp;
 	   OSOption *osoption = NULL;
 	   OSoLReader *osolreader = NULL;
