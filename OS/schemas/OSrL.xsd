@@ -16,6 +16,11 @@
 			<xs:documentation>version 2.0, all descendant elements included except for osrl->optimization->osal</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
+			<xs:element name="resultHeader" type="GeneralFileHeader" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>since version 2.3</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="general" type="GeneralResult" minOccurs="0">
 				<xs:annotation>
 					<xs:documentation>since version 2.0</xs:documentation>
@@ -235,7 +240,7 @@
 		<xs:sequence>
 			<xs:element name="substatus" type="GeneralSubstatus" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
-		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" default="0" use="optional"/>
+		<xs:attribute name="numberOfSubstatuses" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="type" use="required">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
