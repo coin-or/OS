@@ -3052,12 +3052,24 @@ if (PARSER_TESTS){
 			throw ErrorClass(" Could not add to osoption data structure");
 
 		//Now transfer to another osoption using get() and set() methods
-		std::string optionstring;
+		std::string optionstring, fileName, fileSource, fileDescription, fileCreatedBy, fileLicence;
 		int option_i;
 		double option_d;
 		OSOption* osoption2 = new OSOption();
 
 		cout << endl << "transfer osoption to another OSOption object" << endl;
+		
+		fileName        = osoption->getFileName();
+		fileSource      = osoption->getFileSource();
+		fileDescription = osoption->getFileDescription();
+		fileCreatedBy   = osoption->getFileCreatedBy();
+		fileLicence     = osoption->getFileLicence();
+		ok = osoption2->setOptionHeader(fileName, fileSource, fileDescription, fileCreatedBy, fileLicence);
+#ifdef DEBUG
+		if (!ok)
+			throw ErrorClass(" error in get/set option header");
+#endif
+
 
 		optionstring = osoption->getServiceURI();
 		ok = osoption2->setServiceURI(optionstring);
@@ -3152,47 +3164,34 @@ if (PARSER_TESTS){
 		if (!ok)
 			throw ErrorClass(" error in get/set OtherGeneralOption");
 #endif
+		
+		std::string tempDescription;
 
+		optionstring = osoption->getMinDiskSpaceUnit();
+		tempDescription = osoption->getMinDiskSpaceDescription();
 		option_d = osoption->getMinDiskSpace();
-		ok = osoption2->setMinDiskSpace(option_d) && ok;
+		ok = osoption2->setMinDiskSpace(optionstring,tempDescription,option_d) && ok;
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set MinDiskSpace");
 #endif
 
-		optionstring = osoption->getMinDiskSpaceUnit();
-		ok = osoption2->setMinDiskSpaceUnit(optionstring) && ok;
-#ifdef DEBUG
-		if (!ok)
-			throw ErrorClass(" error in get/set MinDiskSpaceUnit");
-#endif
-
+		optionstring = osoption->getMinMemoryUnit();
+		tempDescription = osoption->getMinMemoryDescription();
 		option_d = osoption->getMinMemorySize();
-		ok = osoption2->setMinMemorySize(option_d) && ok;
+		ok = osoption2->setMinMemorySize(optionstring,tempDescription,option_d) && ok;
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set MinMemorySize");
 #endif
 
-		optionstring = osoption->getMinMemoryUnit();
-		ok = osoption2->setMinMemoryUnit(optionstring) && ok;
-#ifdef DEBUG
-		if (!ok)
-			throw ErrorClass(" error in get/set MinMemoryUnit");
-#endif
-
+		optionstring = osoption->getMinCPUSpeedUnit();
+		tempDescription = osoption->getMinCPUSpeedDescription();
 		option_d = osoption->getMinCPUSpeed();
-		ok = osoption2->setMinCPUSpeed(option_d) && ok;
+		ok = osoption2->setMinCPUSpeed(optionstring,tempDescription,option_d) && ok;
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set MinCPUSpeed");
-#endif
-
-		optionstring = osoption->getMinCPUSpeedUnit();
-		ok = osoption2->setMinCPUSpeedUnit(optionstring) && ok;
-#ifdef DEBUG
-		if (!ok)
-			throw ErrorClass(" error in get/set MinCPUSpeedUnit");
 #endif
 
 		option_i = osoption->getMinCPUNumber();
@@ -3725,7 +3724,7 @@ if (PARSER_TESTS){
 
 		ok = osoption->IsEqual(osoption2) && ok;
 		if (!ok)
-			throw ErrorClass(" OSOption get() and  set() methods do not work correctly");
+			throw ErrorClass("OSOption get() and  set() methods do not work correctly");
 
 		cout << "Write the content to a new file" << endl;		
 		tmpOSoL = osolwriter->writeOSoL( osoption);
