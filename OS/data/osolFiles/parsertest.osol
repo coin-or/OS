@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
-	<general> 
+  <optionHeader>
+    <name>parserTest.osol</name>
+    <source></source>
+    <description>
+      This file is intended to test the OSoL parser.
+      All elements are listed, but the content may not be meaningful.
+    </description>
+    <fileCreatedBy>
+      Horand Gassmann, Jun Ma and Kipp Martin
+    </fileCreatedBy>
+    <licence>
+      This file is licensed under the Eclipse Public License.
+      Please see the accompanying LICENSE file in root directory for terms.
+    </licence>
+  </optionHeader>
+  <general> 
 		<solverToInvoke/>
 		<serviceURI>http://www.w3.org/2001/XMLSchema-instance</serviceURI> 
 		<license></license>
