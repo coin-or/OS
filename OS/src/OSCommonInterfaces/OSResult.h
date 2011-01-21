@@ -284,180 +284,6 @@ public:
 };//class GeneralResult
 
 
-/*! \class DiskSpace
- *  \brief The DiskSpace Class.
- * 
- * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
- * @version 1.0, 10/09/2009
- * @since OS 1.0
- * 
- * \remarks
- * A data structure class that corresponds to an xml element in 
- * the OSrL schema.  
- */
-class DiskSpace {
-
-public:
- 
-	/** the unit in which disk space is measured */
-	std::string unit;
-
-	/** a descriptive string to further describe the disk space */
-	std::string description;
-
-	/** the number of disk space units */
-	double value;
-
-	/**
-	 *
-	 * Default constructor. 
-	 */
-	DiskSpace();
-	/**
-	 *
-	 * Class destructor. 
-	 */
-	~DiskSpace();
-
-	/**
-	 *
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(DiskSpace *that);
-		
-};//DiskSpace
-
-
-/*! \class MemorySize
- *  \brief The MemorySize Class.
- * 
- * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
- * @version 1.0, 10/09/2009
- * @since OS 1.0
- * 
- * \remarks
- * A data structure class that corresponds to an xml element in 
- * the OSrL schema.  
- */
-class MemorySize {
-
-public:
- 
-	/** the unit in which memory size is measured */
-	std::string unit;
-
-	/** a descriptive string to further describe the memory */
-	std::string description;
-
-	/** the number of memory units */
-	double value;
-
-	/**
-	 *
-	 * Default constructor. 
-	 */
-	MemorySize();
-	/**
-	 *
-	 * Class destructor. 
-	 */
-	~MemorySize();
-
-	/**
-	 *
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(MemorySize *that);
-		
-};//MemorySize
-
-
-/*! \class CPUSpeed
- *  \brief The CPUSpeed Class.
- * 
- * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
- * @version 1.0, 10/09/2009
- * @since OS 1.0
- * 
- * \remarks
- * A data structure class that corresponds to an xml element in 
- * the OSrL schema.  
- */
-class CPUSpeed {
-
-public:
- 
-	/** the unit in which CPU speed is measured */
-	std::string unit;
-
-	/** a descriptive string to further describe the CPU */
-	std::string description;
-
-	/** the number of CPU speed units */
-	double value;
-
-	/**
-	 *
-	 * Default constructor. 
-	 */
-	CPUSpeed();
-	/**
-	 *
-	 * Class destructor. 
-	 */
-	~CPUSpeed();
-
-	/**
-	 *
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(CPUSpeed *that);
-		
-};//CPUSpeed
-
-
-
-/*! \class CPUNumber
- *  \brief The CPUNumber Class.
- * 
- * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
- * @version 1.0, 10/09/2009
- * @since OS 1.0
- * 
- * \remarks
- * A data structure class that corresponds to an xml element in 
- * the OSrL schema.  
- */
-class CPUNumber {
-
-public:
- 
-	/** a descriptive string to further describe the CPU */
-	std::string description;
-
-	/** the number of CPUs available and/or used */
-	int value;
-
-	/**
-	 *
-	 * Default constructor. 
-	 */
-	CPUNumber();
-	/**
-	 *
-	 * Class destructor. 
-	 */
-	~CPUNumber();
-
-	/**
-	 *
-	 * A function to check for the equality of two objects
-	 */
-	bool IsEqual(CPUNumber *that);
-		
-};//CPUNumber
-
-
 /*! \class SystemResult
  *  \brief The SystemResult  Class.
  * 
@@ -477,11 +303,11 @@ public:
 
 	/** a pointer to the DiskSpace class
 	 */
-	DiskSpace *availableDiskSpace;
+	StorageCapacity *availableDiskSpace;
 
 	/** a pointer to the MemorySize class
 	 */
-	MemorySize *availableMemory;
+	StorageCapacity *availableMemory;
 
 	/** a pointer to the CPUSpeed class
 	 */
@@ -703,11 +529,11 @@ public:
 
 	/** a pointer to the DiskSpace class
 	 */
-	DiskSpace *usedDiskSpace;
+	StorageCapacity *usedDiskSpace;
 
 	/** a pointer to the MemorySize class
 	 */
-	MemorySize *usedMemory;
+	StorageCapacity *usedMemory;
 
 	/** a pointer to the CPUSpeed class
 	 */
@@ -2032,6 +1858,11 @@ class OSResult{
 
 public:
 
+	/** 
+	 * header information 
+	 */
+	GeneralFileHeader *resultHeader;
+
 	/**
 	 * general holds the first child of the OSResult specified by the OSrL Schema. 
 	 */
@@ -2068,6 +1899,19 @@ public:
 	 * Class destructor. 
 	 */
 	~OSResult();
+
+
+	/**
+	 *
+	 * A function to populate an instance of the result header element
+	 * @param name: the name of this file or instance
+	 * @param source: the source (e.g., in BiBTeX format)
+	 * @param fileCreatedBy: the creator of this file
+	 * @param description: further description about this file and/or its contents
+	 * @param licence: licence information if applicable
+	 */
+	bool setResultHeader(std::string name, std::string source, 
+		           std::string fileCreatedBy, std::string description, std::string licence);
 
 public:	
 	

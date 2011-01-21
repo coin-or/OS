@@ -15,6 +15,7 @@
 #define OSGLPARSERDATA_H
 
 #include <stdio.h>
+#include <string>
 
 
 
@@ -40,6 +41,13 @@ public:
 	int  osglSize;
 	int  osglCounter;
 	int  osglTempint;
+
+	/** data structure to process a GeneralFileHeader and hold the data temporarily */
+	std::string fileName;
+	std::string source;
+	std::string description;
+	std::string fileCreatedBy;
+	std::string licence;
 
 	/** the OSgLParserData class constructor */
 	OSgLParserData( );

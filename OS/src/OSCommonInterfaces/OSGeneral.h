@@ -31,6 +31,82 @@
 #include <vector>
 
 
+/*! \class GeneralFileHeader
+ * \brief a data structure that holds general information about files
+ * that conform to one of the OSxL schemas
+ */
+class GeneralFileHeader {
+	public:
+	
+	/**
+	 * used to give a name to the file or the problem contained within it
+	 */
+	std::string name;
+	
+	/**
+	 * used when the file or problem appeared in the literature
+	 * (could be in BiBTeX format or similar) 
+	 */
+	std::string source;
+
+	/**
+	 * name(s) of author(s) who created this file
+	 */
+	std::string fileCreatedBy;
+
+	/**
+	 * further information about the file or the problem contained within it
+	 */
+	std::string description;
+
+	/**
+	 * licensing information if applicable
+	 */
+	std::string licence;
+	
+	
+	/**
+	 * Constructor.
+	 * 
+	 */
+	GeneralFileHeader(); 
+
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~GeneralFileHeader(); 
+	
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(GeneralFileHeader *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
+	/**
+	 *
+	 * A function to populate an instance of this class
+	 * @param name: the name of this file or instance
+	 * @param source: the source (e.g., in BiBTeX format)
+	 * @param fileCreatedBy: the creator of this file
+	 * @param description: further description about this file and/or its contents
+	 * @param licence: licence information if applicable
+	 */
+	bool setHeader(std::string name, std::string source, 
+		           std::string fileCreatedBy, std::string description, std::string licence);
+
+}; //GeneralFileHeader
+
+
 
 /*! \class SparseMatrix
  * \brief a sparse matrix data structure
@@ -352,6 +428,15 @@ public:
 	bool IsEqual(IntVector *that);
 
 	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
+	/**
 	 *  set values into an IntVector
 	 *  @param ni contains the dimension of the IntVector
 	 *  @param i contains the array of values
@@ -403,7 +488,20 @@ public:
 	// alternate constructor
 	OtherOptionEnumeration(int n);
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
 	bool IsEqual(OtherOptionEnumeration *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *  Set the indices for a particular level in an enumeration
@@ -469,16 +567,30 @@ struct IndexValuePair{
  */
 class BasisStatus{
 public:
-	BasisStatus();
-	~BasisStatus();
-
 	IntVector* basic;
 	IntVector* atLower;
 	IntVector* atUpper;
 	IntVector* isFree;
 	IntVector* superbasic;
 	IntVector* unknown;
+
+	BasisStatus();
+	~BasisStatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
 	bool IsEqual(BasisStatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
 
 /**
  *  Set the indices for a particular status
@@ -526,7 +638,199 @@ public:
  */
 	bool getIntVector(int status, int *i);
 };//class BasisStatus 
-	
+
+/*! \class StorageCapacity
+ *  \brief the StorageCapacity class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class StorageCapacity {
+
+public:
+	/** the unit in which storage capacity is measured */
+	std::string unit;
+
+	/** additional description about the storage */
+	std::string description;
+
+	/** the number of units of storage capacity */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	StorageCapacity(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~StorageCapacity(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(StorageCapacity *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //StorageCapacity
+
+/*! \class CPUSpeed
+ *  \brief the CPUSpeed class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class CPUSpeed {
+
+public:
+	/** the unit in which CPU speed is measured */
+	std::string unit;
+
+	/** additional description about the CPU speed */
+	std::string description;
+
+	/** the CPU speed (expressed in multiples of unit) */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	CPUSpeed(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~CPUSpeed(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(CPUSpeed *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //CPUSpeed
+
+/*! \class CPUNumber
+ *  \brief the CPUNumber class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class CPUNumber {
+
+public:
+	/** additional description about the CPU */
+	std::string description;
+
+	/** the number of CPUs */
+	int value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	CPUNumber(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~CPUNumber(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(CPUNumber *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //CPUNumber
+
+/*! \class TimeSpan
+ *  \brief the TimeSpan class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class TimeSpan {
+
+public:
+	/** the unit in which time is measured */
+	std::string unit;
+
+	/** the maximum time allowed */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	TimeSpan(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~TimeSpan(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(TimeSpan *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //TimeSpan
+
+
+
 class OSGeneral{
 
 };

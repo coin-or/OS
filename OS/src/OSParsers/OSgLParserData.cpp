@@ -33,7 +33,13 @@
 	osglIncr(1),
 	osglSize(0),
  	osglCounter(0),
-	osglTempint(0)
+	osglTempint(0),
+	fileName(""),
+	source(""),
+	description(""),
+	fileCreatedBy(""),
+	licence("")
+
 {
 
  }//OSgLParserData

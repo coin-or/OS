@@ -103,8 +103,15 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token SOLVERATT EMPTYSOLVERATT WEIGHTATT EMPTYWEIGHTATT;
 %token TRANSPORTTYPEATT LOCATIONTYPEATT;
 
-%token GENERALSTART GENERALEND SYSTEMSTART SYSTEMEND SERVICESTART SERVICEEND;
+%token HEADERSTART HEADEREND GENERALSTART GENERALEND SYSTEMSTART SYSTEMEND SERVICESTART SERVICEEND;
 %token JOBSTART JOBEND OPTIMIZATIONSTART OPTIMIZATIONEND;
+
+%token FILENAMESTART FILENAMEEND FILENAMEEMPTY FILENAMESTARTANDEND;
+%token FILESOURCESTART FILESOURCEEND FILESOURCEEMPTY FILESOURCESTARTANDEND;
+%token FILEDESCRIPTIONSTART FILEDESCRIPTIONEND FILEDESCRIPTIONEMPTY FILEDESCRIPTIONSTARTANDEND; 
+%token FILECREATEDBYSTART FILECREATEDBYEND FILECREATEDBYEMPTY FILECREATEDBYSTARTANDEND;
+%token FILELICENCESTART FILELICENCEEND FILELICENCEEMPTY FILELICENCESTARTANDEND;
+
 %token SERVICEURISTART SERVICEURIEND SERVICENAMESTART SERVICENAMEEND;
 %token INSTANCENAMESTART INSTANCENAMEEND INSTANCELOCATIONSTART INSTANCELOCATIONEND;
 %token JOBIDSTART JOBIDEND SOLVERTOINVOKESTART SOLVERTOINVOKEEND;
@@ -177,8 +184,95 @@ osolEmpty: ENDOFELEMENT;
 osolLaden: GREATERTHAN osolBody OSOLEND; 
 
 osolBody: 
-	generalElement systemElement serviceElement jobElement optimizationElement;
+	headerElement generalElement systemElement serviceElement jobElement optimizationElement;
 
+/**
+ * ========================================================== 
+ * OSoL header 
+ * ==========================================================
+ */
+
+headerElement: | headerElementStart headerElementContent
+{
+	if (osglData->fileName      != "" || osglData->source      != "" ||
+		osglData->fileCreatedBy != "" || osglData->description != "" ||
+		osglData->licence       != "")
+		if(!osoption->setOptionHeader(osglData->fileName, osglData->source, 	
+				osglData->fileCreatedBy, osglData->description, osglData->licence) )	
+			osolerror( NULL, osoption, parserData, osglData, "setHeader failed");
+};
+ 
+headerElementStart: HEADERSTART
+{
+	osglData->fileName      = "";
+	osglData->source        = "";
+	osglData->fileCreatedBy = "";
+	osglData->description   = "";
+	osglData->licence       = "";
+};
+
+headerElementContent: headerElementEmpty | headerElementLaden;
+
+headerElementEmpty: ENDOFELEMENT;
+
+headerElementLaden: GREATERTHAN headerElementBody HEADEREND; 
+
+headerElementBody:  fileName fileSource fileDescription fileCreatedBy fileLicence
+
+fileName: | fileNameContent;
+
+fileNameContent: fileNameEmpty | fileNameLaden;
+
+fileNameEmpty: FILENAMESTARTANDEND | FILENAMEEMPTY;
+
+fileNameLaden: FILENAMESTART ITEMTEXT FILENAMEEND
+{
+	osglData->fileName = $2;
+};
+
+fileSource: | fileSourceContent;
+
+fileSourceContent: fileSourceEmpty | fileSourceLaden;
+
+fileSourceEmpty: FILESOURCESTARTANDEND | FILESOURCEEMPTY;
+
+fileSourceLaden: FILESOURCESTART ITEMTEXT FILESOURCEEND
+{
+	osglData->source = $2;
+};
+
+fileDescription: | fileDescriptionContent;
+
+fileDescriptionContent: fileDescriptionEmpty | fileDescriptionLaden;
+
+fileDescriptionEmpty: FILEDESCRIPTIONSTARTANDEND | FILEDESCRIPTIONEMPTY;
+
+fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
+{
+	osglData->description = $2;
+};
+
+fileCreatedBy: | fileCreatedByContent;
+
+fileCreatedByContent: fileCreatedByEmpty | fileCreatedByLaden;
+
+fileCreatedByEmpty: FILECREATEDBYSTARTANDEND | FILECREATEDBYEMPTY;
+
+fileCreatedByLaden: FILECREATEDBYSTART ITEMTEXT FILECREATEDBYEND
+{
+	osglData->fileCreatedBy = $2;
+};
+
+fileLicence: | fileLicenceContent;
+
+fileLicenceContent: fileLicenceEmpty | fileLicenceLaden;
+
+fileLicenceEmpty: FILELICENCESTARTANDEND | FILELICENCEEMPTY;
+
+fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
+{
+	osglData->licence = $2;
+};
 
 /**
  * ========================================================== 

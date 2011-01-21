@@ -286,4 +286,24 @@ inline int getMult(double* a, int size)
 	return mult;
 }	
 
+
+/**
+ * OSRand()
+ *
+ * @return a random number between 0 and 1 (inclusive)
+ * @notes The random number generator used, rand(), is not very good.
+ * It has a period of at most 2^16 - 1 and should be replaced by a serious
+ * random number generator for serious work.
+ */
+inline double OSRand()
+{
+	int i;
+
+	i = rand();
+
+	return i/RAND_MAX;
+}	
+
+
+
 #endif

@@ -70,7 +70,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	bool serviceTagPrinted;
 	bool jobTagPrinted;
 #ifdef DEBUG
-	cout << "in OSrLWriter" << endl;
+	cout << "in OSoLWriter" << endl;
 #endif
 
 	if(m_OSOption == NULL)  return outStr.str(); 
@@ -82,8 +82,25 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	outStr << "<osol xmlns=\"os.optimizationservices.org\"   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ";
 	outStr << "xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
 	outStr << OS_SCHEMA_VERSION;
-	outStr	<<"/OSoL.xsd\" >" ;
+	outStr << "/OSoL.xsd\" >" ;
 	outStr << endl;
+
+#ifdef DEBUG
+	cout << "output <optionHeader>" << endl;
+#endif
+	if(m_OSOption->optionHeader != NULL)
+	{
+		if (m_OSOption->optionHeader->name          != "" ||
+			m_OSOption->optionHeader->source        != "" ||
+			m_OSOption->optionHeader->description   != "" ||
+			m_OSOption->optionHeader->fileCreatedBy != "" ||
+			m_OSOption->optionHeader->licence       != "" )
+		{
+			outStr << "<optionHeader>" << endl;
+			outStr << writeGeneralFileHeader(m_OSOption->optionHeader, true);
+			outStr << "</optionHeader>" << endl;
+		}
+	}
 
 #ifdef DEBUG
 	cout << "output <general>" << endl;

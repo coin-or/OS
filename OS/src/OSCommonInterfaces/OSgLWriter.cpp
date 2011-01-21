@@ -72,6 +72,48 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
 	return outStr.str();
 }// end writeIntVectorData
 
+/*! \brief Take a GeneralFileHeader object and write
+ * a string that validates against the OSgL schema.
+ *
+ * @param v is the object to be output
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
+ */
+std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace)
+{
+	ostringstream outStr;
+
+	if (v->name != "")
+	{
+		outStr << "<name>" << v->name << "</name>" ;
+		if(addWhiteSpace == true) outStr << endl;
+	}
+
+	if (v->source != "")
+	{
+		outStr << "<source>" << v->source << "</source>" ;
+		if(addWhiteSpace == true) outStr << endl;
+	}
+
+	if (v->description != "")
+	{
+		outStr << "<description>" << v->description << "</description>" ;
+		if(addWhiteSpace == true) outStr << endl;
+	}
+
+	if (v->fileCreatedBy != "")
+	{
+		outStr << "<fileCreatedBy>" << v->fileCreatedBy << "</fileCreatedBy>" ;
+		if(addWhiteSpace == true) outStr << endl;
+	}
+
+	if (v->licence != "")
+	{
+		outStr << "<licence>" << v->licence << "</licence>" ;
+		if(addWhiteSpace == true) outStr << endl;
+	}
+	return outStr.str();
+}// end writeGeneralFileHeader
+
 
 /*! \brief Take an OtherOptionEnumeration object and write
  * a string that validates against the OSgL schema.

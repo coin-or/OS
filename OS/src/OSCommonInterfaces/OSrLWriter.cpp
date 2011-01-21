@@ -87,6 +87,24 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 	outStr << endl;
 
 #ifdef DEBUG
+	cout << "output <resultHeader>" << endl;
+#endif
+	if(m_OSResult->resultHeader != NULL)
+	{
+		if (m_OSResult->resultHeader->name          != "" ||
+			m_OSResult->resultHeader->source        != "" ||
+			m_OSResult->resultHeader->description   != "" ||
+			m_OSResult->resultHeader->fileCreatedBy != "" ||
+			m_OSResult->resultHeader->licence       != "" )
+		{
+			outStr << "<resultHeader>" << endl;
+			outStr << writeGeneralFileHeader(m_OSResult->resultHeader, true);
+			outStr << "</resultHeader>" << endl;
+		}
+	}
+
+
+#ifdef DEBUG
 	cout << "output <general>" << endl;
 #endif
 	if(m_OSResult->general != NULL)

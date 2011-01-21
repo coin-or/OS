@@ -28,6 +28,84 @@ using namespace std;
 using std::cout;
 using std::endl;
 
+GeneralFileHeader::GeneralFileHeader():
+	name(""),
+	source(""),
+	fileCreatedBy(""),
+	description(""),
+	licence("")
+{
+}// end GeneralFileHeader constructor
+
+GeneralFileHeader::~GeneralFileHeader()
+{
+	#ifdef DEBUG
+	cout << "inside sparseVector destructor" << endl;
+	#endif
+}// end GeneralFileHeader destructor
+
+bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
+{
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{	if ((this->name          != that->name)          || 
+				(this->source        != that->source)        ||
+				(this->fileCreatedBy != that->fileCreatedBy) || 
+				(this->description   != that->description)   || 
+				(this->licence       != that->licence))
+			{
+#ifdef DEBUG_OSOPTION
+				cout << "name: "          << this->name          << " vs. " << that->name          << endl;
+				cout << "source: "        << this->source        << " vs. " << that->source        << endl;
+				cout << "fileCreatedBy: " << this->fileCreatedBy << " vs. " << that->fileCreatedBy << endl;
+				cout << "description: "   << this->description   << " vs. " << that->description   << endl;
+				cout << "licence: "       << this->licence       << " vs. " << that->licence       << endl;
+#endif	
+				return false;
+			}
+			return true;
+		}
+	}
+}// end of GeneralFileHeader::IsEqual
+
+bool GeneralFileHeader::setRandom(double density, bool conformant)
+{
+	if (OSRand() <= density) this->name          = "random string";
+	if (OSRand() <= density) this->source        = "random string";
+	if (OSRand() <= density) this->fileCreatedBy = "random string";
+	if (OSRand() <= density) this->description   = "random string";
+	if (OSRand() <= density) this->licence       = "random string";
+	return true;
+}// end of GeneralFileHeader::setRandom
+
+bool GeneralFileHeader::setHeader(std::string name, std::string source, 
+		           std::string fileCreatedBy, std::string description, std::string licence)
+{
+	this->name          = name;
+	this->source        = source;
+	this->fileCreatedBy = fileCreatedBy;
+	this->description   = description;
+	this->licence       = licence;
+	return true;
+}// end of GeneralFileHeader::setHeader
 
 SparseVector::SparseVector( int number_):
 number( number_)
@@ -58,7 +136,7 @@ cout << "delete[] indexes and arrays" << endl;
 	}
 	values = NULL;
 	indexes = NULL;
-}// end SparseVector constructor
+}// end SparseVector destructor
 
 SparseMatrix::SparseMatrix():
 	bDeleteArrays( true),
@@ -283,7 +361,6 @@ bool IntVector::setIntVector(int *i, int ni)
 
 bool IntVector::extendIntVector(int i)
 {
-
 	int ni;
 //	if (this == NULL)
 //		this = new IntVector();
@@ -375,6 +452,24 @@ bool IntVector::IsEqual(IntVector *that)
 	}
 }//IntVector::IsEqual
 
+bool IntVector::setRandom(double density, bool conformant)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Set random in IntVector" << endl;
+	#endif
+	this->numberOfEl = (int)(4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfEl;
+	else            n = (int)(4*OSRand());
+
+	el = new int[n];	
+	for (int i = 0; i < n; i++)
+		el[i] = (int)(4*OSRand());
+	return true;
+}//IntVector::setRandom
+
 
 OtherOptionEnumeration::OtherOptionEnumeration():
 	IntVector(),
@@ -461,6 +556,18 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
 		}
 	}
 }//OtherOptionEnumeration::IsEqual
+
+bool OtherOptionEnumeration::setRandom(double density, bool conformant)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Set random OtherOptionEnumeration" << endl;
+	#endif
+	if (OSRand() <= density) this->value       = "random string";
+	if (OSRand() <= density) this->description = "random string";
+
+	if (OSRand() <= density) this->IntVector::setRandom(density,conformant);
+	return true;
+}//OtherOptionEnumeration::setRandom
 
 
 
@@ -835,4 +942,298 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 		}
 	}
 }//BasisStatus::IsEqual
+
+bool BasisStatus::setRandom(double density, bool conformant)
+{
+	#ifdef DEBUG_ISEQUAL_ROUTINES
+		cout << "Set random BasisStatus" << endl;
+	#endif
+	if (OSRand() <= density)      this->basic->setRandom(density, conformant);
+	if (OSRand() <= density)    this->atLower->setRandom(density, conformant);
+	if (OSRand() <= density)    this->atUpper->setRandom(density, conformant);
+	if (OSRand() <= density)     this->isFree->setRandom(density, conformant);
+	if (OSRand() <= density) this->superbasic->setRandom(density, conformant);
+	if (OSRand() <= density)    this->unknown->setRandom(density, conformant);
+
+	return true;
+}//BasisStatus::setRandom
+
+
+StorageCapacity::StorageCapacity():
+	unit("byte"),
+	description(""),
+	value(0.0)
+{
+}// end StorageCapacity constructor
+
+StorageCapacity::~StorageCapacity()
+{
+	#ifdef DEBUG
+	cout << "inside StorageCapacity destructor" << endl;
+	#endif
+}// end StorageCapacity destructor
+
+bool StorageCapacity::IsEqual(StorageCapacity *that)
+{
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_OSGENERAL
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_OSGENERAL
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{	if ((this->unit        != that->unit)        || 
+				(this->description != that->description) || 
+				(this->value       != that->value))
+			{
+//#ifdef DEBUG_OSGENERAL
+				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+//#endif	
+				return false;
+			}
+			return true;
+		}
+	}
+}// end of StorageCapacity::IsEqual
+
+bool StorageCapacity::setRandom(double density, bool conformant)
+{
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->unit = "byte";
+		else if (temp <= 0.50) this->unit = "megabyte";
+		else if (temp <= 0.75) this->unit = "";
+		else                   this->unit = "overbyte";
+	} 
+	if (OSRand() <= density) this->description   = "random string";
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5) this->value = 3.14156;
+		else                 this->value = 2.71828;
+	}
+	return true;
+}// end of StorageCapacity::setRandom
+
+
+CPUSpeed::CPUSpeed():
+	unit("hertz"),
+	description(""),
+	value(0.0)
+{
+}// end CPUSpeed constructor
+
+CPUSpeed::~CPUSpeed()
+{
+	#ifdef DEBUG
+	cout << "inside CPUSpeed destructor" << endl;
+	#endif
+}// end CPUSpeed destructor
+
+bool CPUSpeed::IsEqual(CPUSpeed *that)
+{
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{	if ((this->unit        != that->unit)        || 
+				(this->description != that->description) || 
+				(this->value       != that->value))
+			{
+#ifdef DEBUG_OSOPTION
+				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+#endif	
+				return false;
+			}
+			return true;
+		}
+	}
+}// end of CPUSpeed::IsEqual
+
+bool CPUSpeed::setRandom(double density, bool conformant)
+{
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->unit = "hertz";
+		else if (temp <= 0.50) this->unit = "gigaflops";
+		else if (temp <= 0.75) this->unit = "";
+		else                   this->unit = "bellyflops";
+	} 
+	if (OSRand() <= density) this->description   = "random string";
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5) this->value = 3.14156;
+		else                 this->value = 2.71828;
+	}
+	return true;
+}// end of CPUSpeed::setRandom
+
+
+CPUNumber::CPUNumber():
+	description(""),
+	value(0.0)
+{
+}// end CPUNumber constructor
+
+CPUNumber::~CPUNumber()
+{
+	#ifdef DEBUG
+	cout << "inside CPUNumber destructor" << endl;
+	#endif
+}// end CPUNumber destructor
+
+bool CPUNumber::IsEqual(CPUNumber *that)
+{
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{	if ((this->description != that->description) || 
+				(this->value       != that->value))
+			{
+#ifdef DEBUG_OSOPTION
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+#endif	
+				return false;
+			}
+			return true;
+		}
+	}
+}// end of CPUNumber::IsEqual
+
+bool CPUNumber::setRandom(double density, bool conformant)
+{
+	if (OSRand() <= density) this->description   = "random string";
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5) this->value = 3.14156;
+		else                 this->value = 2.71828;
+	}
+	return true;
+}// end of CPUNumber::setRandom
+
+
+TimeSpan::TimeSpan():
+	unit("second"),
+	value(0.0)
+{
+}// end TimeSpan constructor
+
+TimeSpan::~TimeSpan()
+{
+	#ifdef DEBUG
+	cout << "inside TimeSpan destructor" << endl;
+	#endif
+}// end TimeSpan destructor
+
+bool TimeSpan::IsEqual(TimeSpan *that)
+{
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#ifdef DEBUG_OSOPTION
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{	if ((this->unit        != that->unit)        || 
+				(this->value       != that->value))
+			{
+#ifdef DEBUG_OSOPTION
+				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
+				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+#endif	
+				return false;
+			}
+			return true;
+		}
+	}
+}// end of TimeSpan::IsEqual
+
+bool TimeSpan::setRandom(double density, bool conformant)
+{
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->unit = "second";
+		else if (temp <= 0.50) this->unit = "tick";
+		else if (temp <= 0.75) this->unit = "";
+		else                   this->unit = "flea";
+	} 
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5) this->value = 3.14156;
+		else                 this->value = 2.71828;
+	}
+	return true;
+}// end of TimeSpan::setRandom
 

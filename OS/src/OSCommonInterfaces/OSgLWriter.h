@@ -20,7 +20,6 @@
 
 #include "OSGeneral.h"
 #include "OSiLWriter.h"
-#include "OSgLWriter.h"
 #include "OSInstance.h"
 #include "OSGeneral.h"
 #include "OSParameters.h" 
@@ -204,6 +203,14 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
  */
 std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase64);
 
+
+/*! \brief Take a GeneralFileHeader object and write
+ * a string that validates against the OSgL schema.
+ *
+ * @param v is the header to be output
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
+ */
+std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace);
 
 /*! \brief Take an OtherOptionEnumeration object and write
  * a string that validates against the OSgL schema.

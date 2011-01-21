@@ -18,6 +18,8 @@
 #include <string>
 #include <vector> 
 #include "OSGeneral.h"
+#include "OSMathUtil.h"
+
 
 //#define DEBUG
 
@@ -47,6 +49,7 @@ public:
 	 * Default constructor. 
 	 */
 	InstanceLocationOption();
+
 	/**
 	 *
 	 * Class destructor. 
@@ -58,6 +61,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InstanceLocationOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InstanceLocationOption
 
 
@@ -97,6 +109,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ContactOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //ContactOption
 
 
@@ -139,6 +160,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //OtherOption
 
 
@@ -178,6 +208,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherOptions *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <other> elements
@@ -185,6 +225,7 @@ public:
 	 * @param other: the array of <other> elements that are to be set
 	 */
 	bool setOther(int numberOfOptions, OtherOption** other);
+
 	/**
 	 *
 	 * A function to add an <other> element
@@ -260,6 +301,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(GeneralOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//GeneralOption
 
 /*! \class MinDiskSpace
@@ -272,6 +322,8 @@ public:
  * \remarks
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
+ * This class has been superseded as of version 2.3 
+ * by the class StorageCapacity (see OSGeneral.h)
  */
 class MinDiskSpace {
 
@@ -314,6 +366,8 @@ public:
  * \remarks
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
+ * This class has been superseded as of version 2.3 
+ * by the class StorageCapacity (see OSGeneral.h)
  */
 class MinMemorySize {
 
@@ -356,6 +410,8 @@ public:
  * \remarks
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
+ * This class has been superseded as of version 2.3 
+ * by the class CPUSpeed (see OSGeneral.h)
  */
 class MinCPUSpeed {
 
@@ -398,6 +454,8 @@ public:
  * \remarks
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
+ * This class has been superseded as of version 2.3 
+ * by the class CPUNumber (see OSGeneral.h)
  */
 class MinCPUNumber {
 
@@ -443,16 +501,16 @@ class SystemOption {
 
 public:
 	/** the minimum disk space required */
-	MinDiskSpace *minDiskSpace;
+	StorageCapacity *minDiskSpace;
 
 	/** the minimum memory required */
-	MinMemorySize *minMemorySize;
+	StorageCapacity *minMemorySize;
 
 	/** the minimum CPU speed required */
-	MinCPUSpeed *minCPUSpeed;
+	CPUSpeed *minCPUSpeed;
 
 	/** the minimum number of processors required */
-	MinCPUNumber *minCPUNumber;
+	CPUNumber *minCPUNumber;
 
 	/** the list of other system options */
 	OtherOptions *otherOptions;
@@ -473,6 +531,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SystemOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //SystemOption
 
 
@@ -512,6 +579,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ServiceOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //ServiceOption
 
 
@@ -525,6 +601,8 @@ public:
  * \remarks
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
+ * This class has been superseded as of version 2.3 
+ * by the class TimeSpan (see OSGeneral.h) 
  */
 class MaxTime {
 
@@ -591,6 +669,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(JobDependencies *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <jobID> elements
@@ -598,6 +686,7 @@ public:
 	 * @param jobID: the array of <jobID> elements that are to be set
 	 */
 	bool setJobID(int numberOfJobIDs, std::string *jobID);
+
 	/**
 	 *
 	 * A function to add an <jobID> element
@@ -643,6 +732,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(DirectoriesAndFiles *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <path> elements
@@ -699,6 +798,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(PathPair *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //PathPair
 
 
@@ -738,6 +846,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(PathPairs *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *
@@ -804,6 +921,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(Processes *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <process> elements
@@ -811,6 +938,7 @@ public:
 	 * @param path: the array of <process> elements that are to be set
 	 */
 	bool setProcess(int numberOfProcesses, std::string *process);
+
 	/**
 	 *
 	 * A function to add a <process> element
@@ -835,7 +963,7 @@ class JobOption {
 
 public:
 	/** the maximum time allowed */
-	MaxTime *maxTime;
+	TimeSpan *maxTime;
 
 	/** the requested time to start the job */
 	std::string requestedStartTime;
@@ -895,6 +1023,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(JobOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //JobOption
 
 
@@ -934,6 +1071,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitVarValue *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InitVarValue
 
 
@@ -973,6 +1119,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitVariableValues *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *
@@ -1037,6 +1192,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitVarValueString *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InitVarValueString
 
 
@@ -1079,6 +1243,15 @@ public:
 
 	/**
 	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
+	/**
+	 *
 	 * A function to set an array of <var> elements 
 	 * @param numberOfVar: number of <var> elements to be set
 	 * @param var: the array of <var> elements that are to be set
@@ -1113,6 +1286,7 @@ public:
  * \remarks
  * A data structure class that corresponds to an xml element in 
  * the OSoL schema.  
+ * This class has been made redundant since OS version 2.3.
  */
 class InitBasStatus {
 
@@ -1139,6 +1313,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitBasStatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InitBasStatus
 
 
@@ -1151,7 +1334,9 @@ public:
  * 
  * \remarks
  * A data structure class that corresponds to an xml element in 
- * the OSoL schema.  
+ * the OSoL schema.
+ * As of OS version 2.3 this class has been superseded by
+ * the class BasisStatus (see OSGeneral.h)
  */
 class InitialBasisStatus {
 
@@ -1178,6 +1363,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitialBasisStatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1185,6 +1380,7 @@ public:
 	 * @param var: the array of <var> elements to be that are to be set
 	 */
 	bool setVar(int numberOfVar, InitBasStatus **var);
+
 	/**
 	 *
 	 * A function to add a <var> element
@@ -1230,6 +1426,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(BranchingWeight *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //BranchingWeight
 
 
@@ -1270,6 +1475,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(IntegerVariableBranchingWeights *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *
@@ -1339,6 +1553,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SOSWeights *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <var> elements 
@@ -1346,6 +1570,7 @@ public:
 	 * @param var: the array of <var> elements that are to be set
 	 */
 	bool setVar(int numberOfVar, BranchingWeight **var);
+
 	/**
 	 *
 	 * A function to add a <var> element
@@ -1392,12 +1617,23 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SOSVariableBranchingWeights *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <sos> elements 
 	 * @param numberOfSOS: number of <sos> elements to be set
 	 * @param sos: the array of <sos> elements that are to be set
 	 */
+
 	bool setSOS(int numberOfSOS, SOSWeights **sos);
 	/**
 	 *
@@ -1453,6 +1689,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherVarOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //OtherVarOption
 
 
@@ -1516,6 +1761,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherVariableOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *
@@ -1588,6 +1842,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(VariableOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <other> elements
@@ -1595,6 +1859,7 @@ public:
 	 * @param other: the array of <other> elements that are to be set
 	 */
 	bool setOther(int numberOfOptions, OtherVariableOption  **other);
+
 	/**
 	 *
 	 * A function to add an <other> element
@@ -1640,6 +1905,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitObjValue *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InitObjValue
 
 
@@ -1679,6 +1953,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitObjectiveValues *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <obj> elements 
@@ -1745,6 +2029,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitObjBound *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InitObjBound
 
 
@@ -1784,6 +2077,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitObjectiveBounds *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <obj> elements 
@@ -1855,6 +2158,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherObjOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //OtherObjOption
 
 
@@ -1921,6 +2233,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherObjectiveOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <obj> elements 
@@ -1928,6 +2250,7 @@ public:
 	 * @param obj: the array of <obj> elements that are to be set
 	 */
 	bool setObj(int numberOfObj, OtherObjOption **obj);
+
 	/**
 	 *
 	 * A function to add a <obj> element
@@ -1985,6 +2308,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ObjectiveOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <other> elements
@@ -1992,6 +2325,7 @@ public:
 	 * @param other: the array of <other> elements that are to be set
 	 */
 	bool setOther(int numberOfOptions, OtherObjectiveOption  **other);
+
 	/**
 	 *
 	 * A function to add an <other> element
@@ -2037,6 +2371,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitConValue *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InitConValue
 
 
@@ -2076,6 +2419,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitConstraintValues *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *
@@ -2132,6 +2484,7 @@ public:
 	 * Default constructor. 
 	 */
 	InitDualVarValue();
+
 	/**
 	 *
 	 * Class destructor. 
@@ -2143,6 +2496,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitDualVarValue *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //InitDualVarValue
 
 
@@ -2182,6 +2544,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(InitDualVariableValues *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *
@@ -2254,6 +2625,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherConOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //OtherConOption
 
 
@@ -2320,6 +2700,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherConstraintOption *that);
+	
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <con> elements 
@@ -2327,6 +2717,7 @@ public:
 	 * @param obj: the array of <con> elements that are to be set
 	 */
 	bool setCon(int numberOfCon, OtherConOption **con);
+
 	/**
 	 *
 	 * A function to add a <con> element
@@ -2384,6 +2775,16 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ConstraintOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 	/**
 	 *
 	 * A function to set an array of <other> elements
@@ -2391,6 +2792,7 @@ public:
 	 * @param other: the array of <other> elements that are to be set
 	 */
 	bool setOther(int numberOfOptions, OtherConstraintOption  **other);
+
 	/**
 	 *
 	 * A function to add an <other> element
@@ -2414,9 +2816,6 @@ public:
 class SolverOption {
 
 public:
-	/** the number of items (additional pieces of data) of the option */
-	int numberOfItems;
-
 	/** the name of the option */
 	std::string name;
 
@@ -2434,6 +2833,9 @@ public:
 
 	/** the description of the option */
 	std::string description;
+
+	/** the number of items (additional pieces of data) of the option */
+	int numberOfItems;
 
 	/** the list of items of the option */
 	std::string* item;
@@ -2454,6 +2856,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SolverOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //SolverOption
 
 
@@ -2493,6 +2904,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SolverOptions *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 	/**
 	 *
@@ -2567,6 +2987,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OptimizationOption *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 }; //OptimizationOption
 
 
@@ -2585,8 +3014,14 @@ class OSOption{
 public:
 
 	/** 
-	 * OSOption has five children: general, system, service, job, and optimization.
-	 *
+	 * OSOption has a header and five other children: general, system, service, job, and optimization.
+	 */
+
+	/** 
+	 * header information 
+	 */
+	GeneralFileHeader *optionHeader;
+	/**
 	 * generalOption holds the first child of the OSOption specified by the OSoL Schema. 
 	 */
 	GeneralOption *general;
@@ -2617,6 +3052,18 @@ public:
 	 * Class destructor. 
 	 */
 	~OSOption();
+
+	/**
+	 *
+	 * A function to populate an instance of the option header element
+	 * @param name: the name of this file or instance
+	 * @param source: the source (e.g., in BiBTeX format)
+	 * @param fileCreatedBy: the creator of this file
+	 * @param description: further description about this file and/or its contents
+	 * @param licence: licence information if applicable
+	 */
+	bool setOptionHeader(std::string name, std::string source, 
+		           std::string fileCreatedBy, std::string description, std::string licence);
 
 private:
 	/**
@@ -2678,10 +3125,44 @@ public:
 	 */
 	bool IsEqual(OSOption *that);
 
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 public: 
 	
 	// get() methods...
 	
+	/**
+	 * Get the name of the file
+	 */
+	std::string  getFileName();
+
+	/**
+	 * Get the source of the file or problem
+	 */
+	std::string  getFileSource();
+
+	/**
+	 * Get a description for the file or problem
+	 */
+	std::string  getFileDescription();
+
+	/**
+	 * Get the name of the person who created the file
+	 */
+	std::string  getFileCreatedBy();
+
+	/**
+	 * Get licence information associated with the file
+	 */
+	std::string  getFileLicence();
+
 	/**
 	 * Get the service URI
 	 */
@@ -2748,9 +3229,19 @@ public:
 	std::string  getMinDiskSpaceUnit();
 
 	/**
+	 * get the disk space description
+	 */
+	std::string  getMinDiskSpaceDescription();
+
+	/**
 	 * Get the memory unit
 	 */
 	std::string  getMinMemoryUnit();
+
+	/**
+	 * get the memory description
+	 */
+	std::string  getMinMemoryDescription();
 
 	/**
 	 * Get the CPU speed unit
@@ -2758,7 +3249,12 @@ public:
 	std::string  getMinCPUSpeedUnit();
 
 	/**
-	 * Get the CPU description unit
+	 * Get the CPU speed description 
+	 */
+	std::string  getMinCPUSpeedDescription();
+
+	/**
+	 * Get the CPU description 
 	 */
 	std::string  getMinCPUNumberDescription();
 

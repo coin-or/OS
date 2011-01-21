@@ -155,79 +155,6 @@ GeneralResult::~GeneralResult(){
 	}
 }// end GeneralResult destructor
 
-
-DiskSpace::DiskSpace():
-	unit( "byte"),
-	description( ""),
-	value( 0.0)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the DiskSpace Constructor" << endl;
-	#endif
-}// end DiskSpace constructor
-
-DiskSpace::~DiskSpace()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the DiskSpace Destructor" << endl;
-	#endif
-}// end DiskSpace destructor
-
-
-
-MemorySize::MemorySize():
-	unit( "byte"),
-	description( ""),
-	value( 0.0)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the MemorySize Constructor" << endl;
-	#endif
-}// end MemorySize constructor
-
-MemorySize::~MemorySize()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the MemorySize Destructor" << endl;
-	#endif
-}// end MemorySize destructor
-
-
-CPUSpeed::CPUSpeed():
-	unit( "hertz"),
-	description( ""),
-	value( 0.0)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUSpeed Constructor" << endl;
-	#endif
-}// end CPUSpeed constructor
-
-CPUSpeed::~CPUSpeed()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUSpeed Destructor" << endl;
-	#endif
-}// end CPUSpeed destructor
-
-
-CPUNumber::CPUNumber():
-	description( ""),
-	value( 1)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUNumber Constructor" << endl;
-	#endif
-}// end CPUNumber constructor
-
-CPUNumber::~CPUNumber()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUNumber Destructor" << endl;
-	#endif
-}// end CPUNumber destructor
-
-
 SystemResult::SystemResult():
 	systemInformation(""),
 	availableDiskSpace(NULL),
@@ -1100,6 +1027,7 @@ OSResult::OSResult():
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OSResult Constructor" << endl;
 	#endif
+	this->resultHeader = new GeneralFileHeader();
 	this->general = new GeneralResult();
 	this->system = new SystemResult();
 	this->service = new ServiceResult();
@@ -1112,6 +1040,12 @@ OSResult::~OSResult(){
 	cout << "OSResult Destructor Called" << endl;
 	#endif
 	// delete the children of OSResult
+	// delete resultHeader object
+	if (resultHeader != NULL) 
+	{
+		delete resultHeader;
+		resultHeader = NULL;
+	}
 	// delete general object
 	if (general != NULL) 
 	{
@@ -3152,6 +3086,14 @@ string OSResult::getSolverOutputItem(int otherIdx, int itemIdx){
 //==================================================================
 // set methods
 
+bool OSResult::setResultHeader(std::string name, std::string source, 
+		           std::string fileCreatedBy, std::string description, std::string licence)
+{
+	if (this->resultHeader == NULL) 
+		this->resultHeader = new GeneralFileHeader();
+	return this->resultHeader->setHeader(name, source, fileCreatedBy, description, licence);
+}// end of OSResult::setResultHeader
+
 bool OSResult::setGeneralStatus(GeneralStatus *status){
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus = status;
@@ -3279,20 +3221,20 @@ bool OSResult::setSystemInformation(string systemInformation){
 bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
 {
 	if (system == NULL) return false;
-	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	if (verifyStorageUnit(unit) == false) return false;
 	system->availableDiskSpace->unit = unit;
 	return true;
 }//setAvailableDiskSpaceUnit
 
 bool OSResult::setAvailableDiskSpaceDescription(std::string description)
-{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	system->availableDiskSpace->description = description;
 	return true;
 }//setAvailableDiskSpaceDescription
 
 bool OSResult::setAvailableDiskSpaceValue(double value)
-{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	system->availableDiskSpace->value = value;
 	return true;
 }//setAvailableDiskSpaceValue
@@ -3300,20 +3242,20 @@ bool OSResult::setAvailableDiskSpaceValue(double value)
 bool OSResult::setAvailableMemoryUnit(std::string unit)
 {
 	if (system == NULL) return false;
-	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	if (verifyStorageUnit(unit) == false) return false;
 	system->availableMemory->unit = unit;
 	return true;
 }//setAvailableMemoryUnit
 
 bool OSResult::setAvailableMemoryDescription(std::string description)
-{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+{	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	system->availableMemory->description = description;
 	return true;
 }//setAvailableMemoryDescription
 
 bool OSResult::setAvailableMemoryValue(double value)
-{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+{	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	system->availableMemory->value = value;
 	return true;
 }//setAvailableMemoryValue
@@ -3563,7 +3505,7 @@ bool OSResult::setTimeNumber(int timeNumber)
 bool OSResult::setUsedDiskSpaceUnit(std::string unit)
 {	if (job == NULL) 
 		return false;
-	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	if (verifyStorageUnit(unit) == 0) return false;
 	job->usedDiskSpace->unit = unit;
 	return true;
@@ -3572,7 +3514,7 @@ bool OSResult::setUsedDiskSpaceUnit(std::string unit)
 bool OSResult::setUsedDiskSpaceDescription(std::string description)
 {	if (job == NULL) 
 		return false;
-	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->description = description;
 	return true;
 }//setUsedDiskSpaceDescription
@@ -3580,7 +3522,7 @@ bool OSResult::setUsedDiskSpaceDescription(std::string description)
 bool OSResult::setUsedDiskSpaceValue(double value)
 {	if (job == NULL) 
 		return false;
-	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->value = value;
 	return true;
 }//setUsedDiskSpaceValue
@@ -3588,7 +3530,7 @@ bool OSResult::setUsedDiskSpaceValue(double value)
 bool OSResult::setUsedMemoryUnit(std::string unit)
 {	if (job == NULL) 
 		return false;
-	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	if (verifyStorageUnit(unit) == 0) return false;
 	job->usedMemory->unit = unit;
 	return true;
@@ -3597,7 +3539,7 @@ bool OSResult::setUsedMemoryUnit(std::string unit)
 bool OSResult::setUsedMemoryDescription(std::string description)
 {	if (job == NULL) 
 		return false;
-	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->description = description;
 	return true;
 }//setUsedMemoryDescription
@@ -3605,7 +3547,7 @@ bool OSResult::setUsedMemoryDescription(std::string description)
 bool OSResult::setUsedMemoryValue(double value)
 {	if (job == NULL) 
 		return false;
-	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->value = value;
 	return true;
 }//setUsedMemoryValue
@@ -5571,184 +5513,6 @@ bool SystemResult::IsEqual(SystemResult *that)
 	}
 }//SystemResult::IsEqual
 
-
-bool DiskSpace::IsEqual(DiskSpace *that)
-{
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in DiskSpace" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DiskSpace" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DiskSpace" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->unit        != that->unit          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DiskSpace" << endl;
-				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//DiskSpace::IsEqual
-
-bool MemorySize::IsEqual(MemorySize *that)
-{
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in MemorySize" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in MemorySize" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in MemorySize" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->unit        != that->unit          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in MemorySize" << endl;
-				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//MemorySize::IsEqual
-
-bool CPUSpeed::IsEqual(CPUSpeed *that)
-{
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in CPUSpeed" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in CPUSpeed" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in CPUSpeed" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->unit        != that->unit          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in CPUSpeed" << endl;
-				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//CPUSpeed::IsEqual
-
-bool CPUNumber::IsEqual(CPUNumber *that)
-{
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in CPUNumber" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in CPUNumber" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in CPUNumber" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in CPUNumber" << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//CPUNumber::IsEqual
 
 
 bool ServiceResult::IsEqual(ServiceResult *that)
