@@ -12,6 +12,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -43,7 +46,82 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Bonmin\src\Algorithms;..\..\..\..\Bonmin\src\Algorithms\Ampl;..\..\..\..\Bonmin\src\Algorithms\Branching;..\..\..\..\Bonmin\src\Algorithms\OaGenerators;..\..\..\..\Bonmin\src\Algorithms\QuadCuts;..\..\..\..\Bonmin\src\CbcBonmin;..\..\..\..\Bonmin\src\CbcBonmin\Heuristics;..\..\..\..\Bonmin\src\Interfaces;..\..\..\..\Bonmin\src\Interfaces\Filter;..\..\..\..\Bonmin\src\Interfaces\Ampl;..\..\..\..\Bonmin\src\Interfaces\Ipopt"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Bonmin\src\Algorithms;..\..\..\..\Bonmin\src\Algorithms\Ampl;..\..\..\..\Bonmin\src\Algorithms\Branching;..\..\..\..\Bonmin\src\Algorithms\OaGenerators;..\..\..\..\Bonmin\src\Algorithms\QuadCuts;..\..\..\..\Bonmin\src\CbcBonmin;..\..\..\..\Bonmin\src\CbcBonmin\Heuristics;..\..\..\..\Bonmin\src\Interfaces;..\..\..\..\Bonmin\src\Interfaces\Filter;..\..\..\..\Bonmin\src\Interfaces\Ampl;..\..\..\..\Bonmin\src\Interfaces\Ipopt;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src\OsiClp;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Osi\src\Osi"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile=""
+				AssemblerOutput="0"
+				AssemblerListingLocation=".\$(ConfigurationName)\"
+				ObjectFile=".\$(ConfigurationName)\"
+				ProgramDataBaseFileName=".\$(ConfigurationName)\"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
+				CompileAs="0"
+				DisableSpecificWarnings="4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\$(ConfigurationName)\$(ProjectName).lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Bonmin\src\Algorithms;..\..\..\..\Bonmin\src\Algorithms\Ampl;..\..\..\..\Bonmin\src\Algorithms\Branching;..\..\..\..\Bonmin\src\Algorithms\OaGenerators;..\..\..\..\Bonmin\src\Algorithms\QuadCuts;..\..\..\..\Bonmin\src\CbcBonmin;..\..\..\..\Bonmin\src\CbcBonmin\Heuristics;..\..\..\..\Bonmin\src\Interfaces;..\..\..\..\Bonmin\src\Interfaces\Filter;..\..\..\..\Bonmin\src\Interfaces\Ampl;..\..\..\..\Bonmin\src\Interfaces\Ipopt;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src\OsiClp;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Osi\src\Osi"
 				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
@@ -117,7 +195,80 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Bonmin\src\Algorithms;..\..\..\..\Bonmin\src\Algorithms\Ampl;..\..\..\..\Bonmin\src\Algorithms\Branching;..\..\..\..\Bonmin\src\Algorithms\OaGenerators;..\..\..\..\Bonmin\src\Algorithms\QuadCuts;..\..\..\..\Bonmin\src\CbcBonmin;..\..\..\..\Bonmin\src\CbcBonmin\Heuristics;..\..\..\..\Bonmin\src\Interfaces;..\..\..\..\Bonmin\src\Interfaces\Filter;..\..\..\..\Bonmin\src\Interfaces\Ampl;..\..\..\..\Bonmin\src\Interfaces\Ipopt"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Bonmin\src\Algorithms;..\..\..\..\Bonmin\src\Algorithms\Ampl;..\..\..\..\Bonmin\src\Algorithms\Branching;..\..\..\..\Bonmin\src\Algorithms\OaGenerators;..\..\..\..\Bonmin\src\Algorithms\QuadCuts;..\..\..\..\Bonmin\src\CbcBonmin;..\..\..\..\Bonmin\src\CbcBonmin\Heuristics;..\..\..\..\Bonmin\src\Interfaces;..\..\..\..\Bonmin\src\Interfaces\Filter;..\..\..\..\Bonmin\src\Interfaces\Ampl;..\..\..\..\Bonmin\src\Interfaces\Ipopt;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src\OsiClp;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Osi\src\Osi"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				AssemblerListingLocation=".\$(ConfigurationName)\"
+				ObjectFile=".\$(ConfigurationName)\"
+				ProgramDataBaseFileName=".\$(ConfigurationName)\"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="0"
+				CompileAs="0"
+				DisableSpecificWarnings="4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Bonmin\src\Algorithms;..\..\..\..\Bonmin\src\Algorithms\Ampl;..\..\..\..\Bonmin\src\Algorithms\Branching;..\..\..\..\Bonmin\src\Algorithms\OaGenerators;..\..\..\..\Bonmin\src\Algorithms\QuadCuts;..\..\..\..\Bonmin\src\CbcBonmin;..\..\..\..\Bonmin\src\CbcBonmin\Heuristics;..\..\..\..\Bonmin\src\Interfaces;..\..\..\..\Bonmin\src\Interfaces\Filter;..\..\..\..\Bonmin\src\Interfaces\Ampl;..\..\..\..\Bonmin\src\Interfaces\Ipopt;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src\OsiClp;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Osi\src\Osi"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -171,14 +322,6 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath="..\..\..\..\Cbc\src\CbcSolver.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\OSSolverInterfaces\OSBonminSolver.cpp"
-				>
-			</File>
 			<File
 				RelativePath="..\..\..\src\OSSolverInterfaces\OSCoinSolver.cpp"
 				>

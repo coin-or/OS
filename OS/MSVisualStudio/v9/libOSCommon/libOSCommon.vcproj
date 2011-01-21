@@ -12,6 +12,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -43,7 +46,82 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiDylp;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Cbc\src;..\..\..\..\Clp\src;..\..\..\..\SYMPHONY\include;..\..\..\..\Vol\src;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdLib"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\SYMPHONY\include"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;USE_DTOA;WIN_;_LINDO_DLL_;OSROOT_DIR"
+				MinimalRebuild="false"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				PrecompiledHeaderFile=""
+				AssemblerOutput="0"
+				AssemblerListingLocation=".\$(ConfigurationName)\"
+				ObjectFile=".\$(ConfigurationName)\"
+				ProgramDataBaseFileName=".\$(ConfigurationName)\"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
+				CompileAs="0"
+				DisableSpecificWarnings="4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile=".\$(ConfigurationName)\$(ProjectName).lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|x64"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\SYMPHONY\include"
 				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;USE_DTOA;WIN_;_LINDO_DLL_;OSROOT_DIR"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
@@ -112,6 +190,79 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\SYMPHONY\include"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;COIN_HAS_SYMPHONY;USE_DTOA;WIN_;_LINDO_DLL_;OSROOT_DIR"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				AssemblerListingLocation=".\$(ConfigurationName)\"
+				ObjectFile=".\$(ConfigurationName)\"
+				ProgramDataBaseFileName=".\$(ConfigurationName)\"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="false"
+				DebugInformationFormat="0"
+				CompileAs="0"
+				DisableSpecificWarnings="4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -197,6 +348,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSGeneral.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSgLParserData.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSgLWriter.cpp"
 				>
 			</File>
 			<File
@@ -289,6 +448,118 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSBase64.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSConfig.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSDefaultSolver.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSdtoa.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSErrorClass.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSExpressionTree.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSFileUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSGeneral.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSgLParserData.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSgLWriter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSAgent\OShL.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSiLParserData.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSiLReader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSiLWriter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSInstance.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSUtils\OSMathUtil.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSnLNode.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSoLParserData.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSoLReader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSoLWriter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSOption.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosil.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosol.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSParseosrl.tab.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSResult.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSrLParserData.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLReader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLWriter.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
