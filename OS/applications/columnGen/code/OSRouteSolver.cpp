@@ -3132,7 +3132,7 @@ void OSRouteSolver::createAmatrix(){
 	
 }//end createAmatrix
 
-void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes, int numNodes){
+void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, int numColsGen){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
@@ -3180,9 +3180,10 @@ void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes, int numNodes){
 		std::cout << std::endl <<  std::endl;
 		std::cout << "LOWER BOUND VALUE = " << m_bestLPValue << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
-		std::cout << "TOTAL NUMBER OF COLUMNS = " << m_numThetaVar << std::endl;
+		std::cout << "NUMBER OF COLUMNS IN FINAL MASTER = " << m_numThetaVar << std::endl;
 		//std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 2*m_numNodes - 2*m_numBmatrixCon << std::endl;
-		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - m_numNodes - m_numBmatrixCon << std::endl;
+		//the original master has m_numHubs + m_numNodes columns
+		std::cout << "NUMBER OF GENERATED COLUMNS = " << numColsGen << std::endl;
 		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon  << std::endl;
 		std::cout << "NUMBER OF NODES  = " <<  numNodes  << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
@@ -4288,7 +4289,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 			values, 0, numNonz - 1,  indexes, 0, numNonz - 1, starts, 0, startsIdx);
 	
 	
-	std::cout << m_osinstanceMaster->printModel( ) << std::endl;	
+	//std::cout << m_osinstanceMaster->printModel( ) << std::endl;	
 	
 	//garbage collection
 	delete[] tmpConvexity;

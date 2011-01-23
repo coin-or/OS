@@ -299,6 +299,17 @@ void OSColGenApp::solve(){
 		}
 		m_zLB =  m_si->getObjValue();
 		
+		//kipp -- just testing
+		/**
+		std::cout << "REDUNDANT SOLVE OF RESTRICTED MASTER" << std::endl;
+		int tmpCols =  m_numColumnsGenerated;
+		std::cout << "NUMBER OF GENERATED COLUMNS =  "  << m_numColumnsGenerated << std::endl;
+		resetMaster();
+		solveRestrictedMasterRelaxation();
+		std::cout << "NUMBER OF NEW GENERATED COLUMNS =  "  << m_numColumnsGenerated - tmpCols << std::endl;
+		exit( 1);
+		*/
+		//kipp -- end just testing
 		
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
@@ -354,7 +365,7 @@ void OSColGenApp::solve(){
 		std::cout << "NUMBER OF NODES GENERATED = " << m_numNodesGenerated << std::endl;
 		std::cout << "NUMBER OF COLUMNS GENERATED = " << m_numColumnsGenerated << std::endl;
 		
-		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated);
+		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated);
 		
 		
 		
@@ -770,7 +781,7 @@ bool OSColGenApp::branchAndBound( ){
 			
 			//kipp -- experimental
 			
-			if( m_si->getNumCols() > 10000) {
+			if( m_si->getNumCols() > 100) {
 				std::cout << "DOING A MASTER RESET IN BRANCH AND BOUND" << std::endl;
 				std::cout << "NUMBER OF COLUMNS BEFORE RESET = " << m_si->getNumCols() << std::endl;
 				resetMaster();
@@ -1399,7 +1410,7 @@ void  OSColGenApp::resetMaster(){
 		m_solver->sSolverName ="cbc";
 		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 		m_solver->osinstance = m_osrouteSolver->m_osinstanceMaster;
-		//m_solver->osoption = m_osoption;
+		m_solver->osoption = m_osoption;
 		
 		m_solver->buildSolverInstance();
 	
