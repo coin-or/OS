@@ -57,6 +57,9 @@ public:
 	/** kount the nodes generated **/
 	int m_numNodesGenerated;
 	
+	/** kount the columns generated **/
+	int m_numColumnsGenerated;
+	
 	
 	/** m_zUB is the upper bound */
 	double m_zUB;
@@ -66,11 +69,18 @@ public:
 	 */
 	std::map<int, OSNode*> m_nodeMap;
 	
-	/** *
+	/** 
 	 * m_zOptIndexes is the vector theta indexes
 	 * corresponding to the current m_zUB
 	 */
 	std::vector<int> m_zOptIndexes;
+	
+	/** 
+	 * m_zOptRootLP is the vector theta indexes
+	 * corresponding to optimal LP solution 
+	 * at the roor tnode
+	 */
+	std::vector<int> m_zOptRootLP;
 	
 	/** m_zLB is the lower bound */
 	double m_zLB;

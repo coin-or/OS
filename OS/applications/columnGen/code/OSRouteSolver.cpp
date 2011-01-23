@@ -3181,7 +3181,8 @@ void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes, int numNodes){
 		std::cout << "LOWER BOUND VALUE = " << m_bestLPValue << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
 		std::cout << "TOTAL NUMBER OF COLUMNS = " << m_numThetaVar << std::endl;
-		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 2*m_numNodes - 2*m_numBmatrixCon << std::endl;
+		//std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - 2*m_numNodes - 2*m_numBmatrixCon << std::endl;
+		std::cout << "NUMBER OF GENERATED COLUMNS = " << m_numThetaVar - m_numNodes - m_numBmatrixCon << std::endl;
 		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon  << std::endl;
 		std::cout << "NUMBER OF NODES  = " <<  numNodes  << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
@@ -3988,13 +3989,15 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
+		//std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;
+		
 		kount++;
 		
 		for(i = m_thetaPnt[ mit->first ]; i < m_thetaPnt[mit->first + 1 ]; i++){
 			
 			thetaIndexTmp[ numNonz++] = m_thetaIndex[ i];
 			
-			std::cout << "Column = " <<   mit->first << "  Variable   " <<   m_variableNames[ m_thetaIndex[ i] ]   << std::endl;
+			//std::cout << "Column = " <<   mit->first << "  Variable   " <<   m_variableNames[ m_thetaIndex[ i] ]   << std::endl;
 			
 		}
 		
@@ -4003,12 +4006,13 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		//std::cout << "kount =  " << kount << "  thetaPntTmp[ kount] = " << thetaPntTmp[ kount] << std::endl;
 		//readjust numbering to take into account artificial variables
 		//mit->second += numVarArt;
+		//kipp -- double check calculation below
 		inVars[ mit->first] = numVarArt + kount - 1 ;
 		
 	}
 	
-	std::cout << "kount = " <<  kount  << std::endl;
-	std::cout << "numVars = " << numVars  << std::endl;
+	//std::cout << "kount = " <<  kount  << std::endl;
+	//std::cout << "numVars = " << numVars  << std::endl;
 	
 
 	
@@ -4027,7 +4031,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		
 	}
 	//now fill in the other pointers from the temp arrarys
-	std::cout << "Number of artificial variables =  " << numVarArt   << std::endl;
+	//std::cout << "Number of artificial variables =  " << numVarArt   << std::endl;
 	intVarSet.clear();
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
@@ -4035,7 +4039,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 		intVarSet.insert ( std::pair<int,double>(mit->second, 1.0) );
 		
 		//std::cout << " m_numThetaVar =  "  << m_numThetaVar << "  m_numThetaNonz =  " <<  m_numThetaNonz  << std::endl;
-		std::cout << "Variable number " << mit->first << "  OBJ coefficient = " <<   si->getObjCoefficients()[  mit->first] << std::endl;
+		//std::cout << "Variable number " << mit->first << "  OBJ coefficient = " <<   si->getObjCoefficients()[  mit->first] << std::endl;
 		
 		convexityRowIndex[ m_numThetaVar] = tmpConvexity[ mit->first];
 		
@@ -4052,9 +4056,9 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	}
 	
 	m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
-	std::cout << " number of art vars = " <<  numVarArt  << std::endl;
-	std::cout << " m_numThetaVar = " <<  m_numThetaVar  << std::endl;
-	std::cout << " m_numThetaNonz = " <<  m_numThetaNonz  << std::endl;
+	//std::cout << " number of art vars = " <<  numVarArt  << std::endl;
+	//std::cout << " m_numThetaVar = " <<  m_numThetaVar  << std::endl;
+	//std::cout << " m_numThetaNonz = " <<  m_numThetaNonz  << std::endl;
 	//done with the transformation matrix
 	
 
@@ -4087,7 +4091,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
-		std::cout << "CONVEXITY ROW = " << convexityRowIndex[ mit->second]  << std::endl;
+		//std::cout << "CONVEXITY ROW = " << convexityRowIndex[ mit->second]  << std::endl;
 		valuesVec.push_back( 1.0);
 		indexesVec.push_back( numAmatrixRows + convexityRowIndex[ mit->second] );
 		//increment numNonz by 1 for the convexity row
@@ -4097,7 +4101,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 			
 			m_tmpScatterArray[ m_thetaIndex[ j] ]++;
 			
-			std::cout << "Column = " <<  mit->second << "  Variable   " <<   m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
+			//std::cout << "Column = " <<  mit->second << "  Variable   " <<   m_variableNames[ m_thetaIndex[ j] ]   << std::endl;
 			
 		}
 		
@@ -4122,7 +4126,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 				
 				numNonz++;
 				
-				std::cout << "Column = " <<  mit->second << "  Nonzero in A marix row  " << i  <<  " Value = " << rowCount << std::endl;
+				//std::cout << "Column = " <<  mit->second << "  Nonzero in A marix row  " << i  <<  " Value = " << rowCount << std::endl;
 				valuesVec.push_back( rowCount);
 				indexesVec.push_back( i);
 
@@ -4151,7 +4155,7 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 			if(rowCount > 0){
 				numNonz++;
 				
-				std::cout << "Column = " <<  mit->first << "  Nonzero in B matrix row  " << i  + m_numNodes<<  " Value = " << rowCount << std::endl;
+				//std::cout << "Column = " <<  mit->first << "  Nonzero in B matrix row  " << i  + m_numNodes<<  " Value = " << rowCount << std::endl;
 
 				valuesVec.push_back( rowCount);
 				indexesVec.push_back( i + m_numNodes);
@@ -4229,6 +4233,8 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 
 		objcoeff->values[ varNumber ] = m_osDecompParam.artVarCoeff;
 		
+		m_thetaCost[ varNumber] = m_osDecompParam.artVarCoeff;
+		
 		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("x", i ) , 
 				0, 1.0, 'C');	
 		
@@ -4243,10 +4249,14 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 
 		objcoeff->values[ varNumber ] = si->getObjCoefficients()[ mit->first] ;
 		
+		m_thetaCost[ varNumber] = si->getObjCoefficients()[ mit->first];
+		
 		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("x", kount + numVarArt ) , 
 				0, 1.0, 'C');	
 		
 		kount++;
+		
+	
 		
 	}
 

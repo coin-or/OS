@@ -232,6 +232,10 @@ void OSColGenApp::solve(){
 	//initialize upper bound
 	m_zUB = m_osrouteSolver->m_bestIPValue;
 	
+	//initialize number of columns generated
+	
+	m_numColumnsGenerated = 0;
+	
 	std::cout << " m_zUB  " << m_zUB  << std::endl;
 	
 	try{
@@ -279,16 +283,16 @@ void OSColGenApp::solve(){
 			int j;
 			if( *(m_theta + i) > m_osDecompParam.zeroTol){
 				
-					
-					std::cout <<  "x variables for column "  << i  << std::endl;
+				m_zOptRootLP.push_back( i);
+				std::cout <<  "x variables for column "  << i  << std::endl;
 				
 					
-					for(j = m_osrouteSolver->m_thetaPnt[ i];  j < m_osrouteSolver->m_thetaPnt[ i + 1] ;  j++){
+				for(j = m_osrouteSolver->m_thetaPnt[ i];  j < m_osrouteSolver->m_thetaPnt[ i + 1] ;  j++){
 					
 						
-						std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  <<  *(m_theta + i)  << std::endl;
+					std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  <<  *(m_theta + i)  << std::endl;
 						
-					}	
+				}	
 			}			
 			
 			///end of optionally print out
@@ -340,7 +344,7 @@ void OSColGenApp::solve(){
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
 		//reset the master
-		resetMaster();
+		//resetMaster();
 		//go into branch and bound
 		branchAndBound();
 		
@@ -348,6 +352,7 @@ void OSColGenApp::solve(){
 		m_osrouteSolver->m_bestIPValue = m_zUB;
 		
 		std::cout << "NUMBER OF NODES GENERATED = " << m_numNodesGenerated << std::endl;
+		std::cout << "NUMBER OF COLUMNS GENERATED = " << m_numColumnsGenerated << std::endl;
 		
 		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated);
 		
@@ -437,8 +442,11 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			
 			isCutAdded = false;
 			//start out loop on if cuts found
-			std::cout << "CALL Solve  " << std::endl;
+			std::cout << "CALL Solve  " << " Number of columns =  " <<  m_si->getNumCols() <<  std::endl;
+			//kippster -- key problem
+			//we are going through OS here, m_solver is a CoinSolver object
 			m_solver->solve();
+			//m_si->initialSolve();
 			std::cout << "Solution Status =  " << m_solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 			//std::cout <<  m_solver->osrl << std::endl;
 	
@@ -488,7 +496,10 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				for(k = 0; k < numNewColumns; k++){
 					
 					m_si->addCol( numNonz[ k], rowIdx[k], values[k],
-							collb, colub,  cost[ k]) ;	
+							collb, colub,  cost[ k]) ;
+					
+					
+					m_numColumnsGenerated++;
 					
 				}
 			
@@ -499,8 +510,9 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 				if(lowerBound + m_si->getObjValue() > (1 - m_osDecompParam.optTolPerCent)*m_zUB) break;
 			
 				std::cout << std::endl  << std::endl << std::endl;
-				std::cout << "CALL Solve  " << std::endl;
+				std::cout << "CALL Solve  " << " Number of columns =  " <<  m_si->getNumCols() <<  std::endl;
 				m_solver->solve();
+				//m_si->initialSolve();
 				std::cout << "Solution Status =  " << m_solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 				std::cout << "Number of solver interface columns =  " <<  m_si->getNumCols()  << std::endl;
 				//m_numNodes is number of artificial variables
@@ -563,6 +575,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 					rowArtVal = 1.0;
 					//m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
 					m_si->addCol(1, &rowArtIdx, &rowArtVal, 0, 1, bigM);
+					m_numColumnsGenerated++;
 							
 				}
 				
@@ -757,7 +770,12 @@ bool OSColGenApp::branchAndBound( ){
 			
 			//kipp -- experimental
 			
-			//if( m_si->getNumCols() > 500) resetMaster();
+			if( m_si->getNumCols() > 10000) {
+				std::cout << "DOING A MASTER RESET IN BRANCH AND BOUND" << std::endl;
+				std::cout << "NUMBER OF COLUMNS BEFORE RESET = " << m_si->getNumCols() << std::endl;
+				resetMaster();
+				std::cout << "NUMBER OF COLUMNS AFTER RESET = " << m_si->getNumCols() << std::endl;
+			}
 			
 			leftNodeCreated = false;
 			rightNodeCreated = false;
@@ -971,6 +989,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 		//if(rowUB == 0) m_si->writeLp( "gailTest2" );
 	
 		//exit( 1);
+		std::cout << "CALL SOLVE FROM CREATE CHILD "  << std::endl;
 		solveRestrictedMasterRelaxation();
 		std::cout << std::endl << std::endl;
 		std::cout << "FINISH SOLVING THE MASTER "  << std::endl;
@@ -1110,13 +1129,19 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	
 	//get the branching cut information
 	
+	//
+	for(int i = 0; i < numThetaVar; i++ ){
+		
+		std::cout << "theta idx = " << thetaIdx[ i] << "  theta = " << theta[ i] << std::endl;
+	}
+	
 	m_osrouteSolver->getBranchingCut(thetaIdx, theta, numThetaVar, 
 			varConMap, varIdx, numNonz, indexes,  values);
 	
 	
 		
 	std::cout << "varIDX = " << varIdx << std::endl;
-	std::cout << "numNonzz = " << numNonz << std::endl;	
+	std::cout << "numNonz1 = " << numNonz << std::endl;	
 	
 	
 	//for(int i = 0; i < numNonz; i++){
@@ -1149,7 +1174,7 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 		rowArtVal = 1.0;
 		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
 		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
-		
+		m_numColumnsGenerated++;
 		
 		//insert into map -- this is the first variable
 		varConMap.insert ( std::pair<int, int>(varIdx , rowIdx) );
@@ -1195,8 +1220,8 @@ void OSColGenApp::createBranchingCut(const double* theta,
 			varConMap, varIdx, numNonz, indexes,  values);
 
 		
-	std::cout << "varIDX = " << varIdx << std::endl;
-	std::cout << "numNonzz = " << numNonz << std::endl;	
+	std::cout << "varIDX2 = " << varIdx << std::endl;
+	std::cout << "numNonz2 = " << numNonz << std::endl;	
 	
 	
 	//for(int i = 0; i < numNonz; i++){
@@ -1230,7 +1255,7 @@ void OSColGenApp::createBranchingCut(const double* theta,
 		
 		m_si->addCol(1, &rowIdx, &rowArtVal, 0, 1.0, bigM);
 		//m_si->addCol(1, &rowIdx, &rowArtVal, 0, OSDBL_MAX, bigM);
-		
+		m_numColumnsGenerated++;
 		
 		//insert into map -- this is the first variable
 		varConMap.insert ( std::pair<int,int>(varIdx , rowIdx) );
@@ -1264,50 +1289,47 @@ void  OSColGenApp::resetMaster(){
 	std::map<int, int>::iterator mit;
 	std::vector<int>::iterator vit;
 	std::map<int, OSNode*>::iterator mit2;
-	
-	
 	int i;
 	int kount = 0;
 	
 	try{
-		//first add the variables corresponding to the current LP relaxation
-		for(i = 0; i < m_si->getNumCols(); i++){
+
+		//first add the columns corresponding to the root node solution
+		
+		//for(i = 0; i < m_si->getNumCols(); i++){
 			
-			if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
+			//if( m_si->getColSolution()[i] > m_osDecompParam.zeroTol) inVars.insert( std::pair<int, int>(i, kount++) );
 			//if( m_si->getObjCoefficients()[i] < 10000) inVars.insert( std::pair<int, int>(i, kount++) );
+		//}	
+
+		for(vit = m_zOptRootLP.begin() ; vit != m_zOptRootLP.end(); vit++){
+			
+			inVars.insert( std::pair<int, int>(*vit, kount++) );
+			
 		}
 		
+		
 
-		//add the integer varaibles
+		//next add the integer varaibles
 		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
 			
 			if( inVars.find( *vit ) == inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
 			
-			std::cout << "VARIABLE INDEX =  " << *vit << std::endl;
+			//std::cout << "VARIABLE INDEX =  " << *vit << std::endl;
 			
-			for(int k = m_osrouteSolver->m_thetaPnt[*vit]; k <  m_osrouteSolver->m_thetaPnt[*vit + 1]; k++){
+			//for(int k = m_osrouteSolver->m_thetaPnt[*vit]; k <  m_osrouteSolver->m_thetaPnt[*vit + 1]; k++){
 				
-				std::cout << m_osrouteSolver-> m_variableNames[ m_osrouteSolver->m_thetaIndex[ k] ] <<  std::endl;
+				//std::cout << m_osrouteSolver-> m_variableNames[ m_osrouteSolver->m_thetaIndex[ k] ] <<  std::endl;
 				
-			}
-			
-			
-			
+			//}
+
 		}
 		
 		
-		for(mit = inVars.begin(); mit != inVars.end(); mit++){
-			
-			
-			std::cout << "first index = " << mit->first << " second index " << mit->second << std::endl;
-			
-		}
-		
-		
-	
+
 		
 		//now loop over the nodes in the branch and bound tree
-		
+	
 		for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
 			
 
@@ -1318,34 +1340,24 @@ void  OSColGenApp::resetMaster(){
 				
 			}
 		}
-		
-		
-		
-		m_osrouteSolver->resetMaster( inVars, m_si );
-		
 
 		
+		
+		//for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;	
+		m_osrouteSolver->resetMaster( inVars, m_si );
+		//for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;
+			
 		int numVars =   m_osrouteSolver->m_osinstanceMaster->getVariableNumber();
 		double *tmpVals = NULL;
 		tmpVals = new double[ numVars];
 		
-		for(i = 0;  i < numVars; i++){
+		for(i = 0;  i < numVars; i++)  tmpVals[ i ] = 0;
 			
-			tmpVals[ i ] = 0;
-			
-		}
-		
 		for(mit = inVars.begin(); mit != inVars.end(); mit++){
-			
-			
+			//tmpVals now point to old index values
 			tmpVals[ mit->second] = m_theta[ mit->first] ;
-			
 		}
 		
-		//delete[] m_theta;
-		//m_theta = NULL;
-		//m_theta = new double[ numVars];
-		//m_theta = new double[ m_maxCols];
 		
 		for(i = 0; i  < numVars; i++) m_theta[ i] = tmpVals[ i] ;
 		
@@ -1357,51 +1369,25 @@ void  OSColGenApp::resetMaster(){
 			for(i = 0; i < mit2->second->thetaNumNonz; i++){
 				
 				//inVars[mit2->second->thetaIdx[ i] ]
-				//if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ) throw ErrorClass("index problem in resetMaster");
-				if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ){
-					
-					std::cout << "START VARIABLES in inVars " << std::endl;
-					
-					
-					for(mit = inVars.begin(); mit != inVars.end(); mit++){
-						
-						
-						std::cout << "first index = " << mit->first << " second index " << mit->second << std::endl;
-						
-					}
-					
-					//kippster
-					std::cout << "END OF VARIABLES in inVars " << std::endl;
-					
-					
-					
-					
-					std::cout << "START VARIABLES in the NODE " << std::endl;
-					
-					
-					for(int jj = 0; jj < mit2->second->thetaNumNonz; jj++){
-						
-						
-						std::cout << "NODE INDEX  = " << mit2->second->thetaIdx[ jj] << std::endl;
-						
-					}
-					
-					//kippster
-					std::cout << "END OF VARIABLES in the NODE " << std::endl;
-					
-					exit( 1);
-							
-							
-					
-				}
+				if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ) throw ErrorClass("index problem in resetMaster");
+
 				//kipp check to make sure we do not index an aritifical variable
 				mit2->second->thetaIdx[ i] =  inVars[ mit2->second->thetaIdx[ i] ] ;
 				//if( inVars.find( mit2->second->thetaIdx[ i] ) != inVars.end() ) 
 				//	inVars.insert( std::pair<int, int>(mit2->second->thetaIdx[ i], kount++) );
 				
 			}
+			
+
 		}
 		
+		//reset the indexes of variables in the current integer incumbent
+		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++) *vit = inVars[ *vit ];
+		
+		
+		//reset the indexes of variables in the root LP
+		for(vit = m_zOptRootLP.begin() ; vit != m_zOptRootLP.end(); vit++) *vit = inVars[ *vit ];
+
 		///now delete stuff and reset
 		
 		delete m_solver;
@@ -1413,6 +1399,7 @@ void  OSColGenApp::resetMaster(){
 		m_solver->sSolverName ="cbc";
 		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 		m_solver->osinstance = m_osrouteSolver->m_osinstanceMaster;
+		//m_solver->osoption = m_osoption;
 		
 		m_solver->buildSolverInstance();
 	
@@ -1420,6 +1407,39 @@ void  OSColGenApp::resetMaster(){
 		m_si = m_solver->osiSolver;
 		
 		if(m_si->getNumCols() !=  numVars) throw ErrorClass("there is an inconsistency in the the model rebuid in resetMaster");
+		
+		std::cout << "OSINTANCE NUMBER OF COLUMNS = "  << m_osrouteSolver->m_osinstanceMaster->getVariableNumber() << std::endl;
+		std::cout << "OSINTANCE NUMBER OF ROWS = "  << m_osrouteSolver->m_osinstanceMaster->getConstraintNumber() << std::endl;
+		
+		std::cout << "SOLVER INTERFACE NUMBER OF COLUMNS = "  << m_si->getNumCols() << std::endl;
+		std::cout << "SOLVER INTERFACE NUMBER OF ROWS = "  <<m_si->getNumRows() << std::endl;
+		
+		
+		//kipp this is a check, DO NOT do in production run
+		
+		
+		
+		double lpVal;
+		
+		for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
+
+			lpVal = 0;
+			
+			for(i = 0; i < mit2->second->thetaNumNonz; i++){
+				
+				lpVal +=  m_si->getObjCoefficients()[  mit2->second->thetaIdx[ i] ]*mit2->second->theta[ i];
+				
+				
+			}
+			
+			if( ( lpVal - mit2->second->lpValue > m_osDecompParam.zeroTol )  ||   
+					(mit2->second->lpValue - lpVal > m_osDecompParam.zeroTol )	) throw ErrorClass( "uh oh, problem with node lp value" );
+			
+			//std::cout << "lpVal = " << lpVal <<  "  lpValue = " << mit2->second->lpValue << std::endl ;
+		}		
+		
+		
+		//end check
 		
 		//m_si->writeLp( "gailTest2" );
 		
