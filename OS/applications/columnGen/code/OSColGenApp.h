@@ -82,6 +82,9 @@ public:
 	 */
 	std::vector<int> m_zOptRootLP;
 	
+	
+	std::map<int, int> inVars;
+	
 	/** m_zLB is the lower bound */
 	double m_zLB;
 	

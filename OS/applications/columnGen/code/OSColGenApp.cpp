@@ -25,6 +25,8 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 
+
+
 #ifdef COIN_HAS_COUENNE    
 #include "OSCouenneSolver.h"
 #endif
@@ -283,7 +285,7 @@ void OSColGenApp::solve(){
 			int j;
 			if( *(m_theta + i) > m_osDecompParam.zeroTol){
 				
-				m_zOptRootLP.push_back( i);
+				//m_zOptRootLP.push_back( i);
 				std::cout <<  "x variables for column "  << i  << std::endl;
 				
 					
@@ -300,15 +302,117 @@ void OSColGenApp::solve(){
 		m_zLB =  m_si->getObjValue();
 		
 		//kipp -- just testing
-		/**
+		int *cbasis = NULL;
+		int *rbasis = NULL;
+		double *dualVec = NULL;
+		cbasis = new int[m_si->getNumCols() ];
+		rbasis = new int[m_si->getNumRows() ];
+		dualVec = new double[m_si->getNumRows() ];
 		std::cout << "REDUNDANT SOLVE OF RESTRICTED MASTER" << std::endl;
 		int tmpCols =  m_numColumnsGenerated;
 		std::cout << "NUMBER OF GENERATED COLUMNS =  "  << m_numColumnsGenerated << std::endl;
+		m_si->getBasisStatus( cbasis, rbasis);
+	
+		double dualObj;
+		dualObj = 0;
+		for(i = 0;  i < m_si->getNumRows() ; i++){ 
+		
+			std::cout <<  m_si->getRowPrice()[ i] << std::endl;
+			dualVec[ i] = m_si->getRowPrice()[ i];
+			dualObj +=  m_si->getRowPrice()[ i];
+			
+		}
+		std::cout << "dualObj = "  << dualObj  << std::endl;
+		for(i = 0; i < m_si->getNumCols(); i++){
+			
+			if(cbasis[ i ] == 1) {
+				std::cout << "BASIC VARIABLE INDEX " << i <<  "  Value = " << m_si->getColSolution()[ i] <<std::endl;
+				m_zOptRootLP.push_back( i);
+			}
+			
+		}
 		resetMaster();
+	
+		std::map<int, int>::iterator mit;
+		for (mit = inVars.begin(); mit != inVars.end(); mit++ ){
+			
+			std::cout << "variable " <<  mit->first <<  " status " <<  cbasis[mit->first ]  << std::endl;
+			
+		}
+		
+		int *new_cbasis;
+		new_cbasis = new int[  m_si->getNumCols() ];
+	
+		
+		for(i = 0; i < m_si->getNumCols(); i++){
+			
+			new_cbasis[ i] = 3;
+		}
+
+		
+		
+		
+		for (mit = inVars.begin(); mit != inVars.end(); mit++ ){
+			
+
+			new_cbasis[  mit->second ] = 1;
+			
+		
+			
+		}
+
+		
+		std::cout << "size of invars "  <<  inVars.size()   << std::endl;
+		std::cout << "size of LP "  <<  m_si->getNumCols()  << std::endl;
+		
+		m_si->setBasisStatus( new_cbasis, rbasis);
+		
+		/*
+		m_si->initialSolve();
+		m_si->getBasisStatus( new_cbasis, rbasis);
+		
+		
+		for(i = 0; i < m_si->getNumCols(); i++){
+			
+		
+				std::cout << "BASIC VARIABLE INDEX " << i <<  "  Value = " << new_cbasis[ i] <<std::endl;
+		
+		
+			
+		}
+		//new dual solution
+		dualObj = 0;
+		for(i = 0; i < m_si->getNumRows() ; i++) {
+			
+			std::cout <<  m_si->getRowPrice()[ i] << std::endl;
+			dualObj +=  m_si->getRowPrice()[ i];
+		
+		}
+		
+		std::cout << "dualObj = "  << dualObj  << std::endl;
+		
+		
+		
+		for (mit = inVars.begin(); mit != inVars.end(); mit++ ){
+			
+				std::cout << "first index =  " << mit->first << "  second index  " << mit->second << std::endl;
+			
+			kount1++;
+			
+		}
+		//exit( 1);
+
+		 */
+		
+		//m_si->setBasisStatus( new_cbasis, rbasis);
+		
 		solveRestrictedMasterRelaxation();
 		std::cout << "NUMBER OF NEW GENERATED COLUMNS =  "  << m_numColumnsGenerated - tmpCols << std::endl;
+		delete[] cbasis;
+		delete[] new_cbasis;
+		delete[] rbasis;
 		exit( 1);
-		*/
+		
 		//kipp -- end just testing
 		
 
@@ -456,6 +560,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			std::cout << "CALL Solve  " << " Number of columns =  " <<  m_si->getNumCols() <<  std::endl;
 			//kippster -- key problem
 			//we are going through OS here, m_solver is a CoinSolver object
+			//set initial basis here if we have one
 			m_solver->solve();
 			//m_si->initialSolve();
 			std::cout << "Solution Status =  " << m_solver->osresult->getSolutionStatusType( 0 ) << std::endl;
@@ -1296,7 +1401,7 @@ void  OSColGenApp::resetMaster(){
 	//kipp -- temp stuff here delete later
 	//////
 	
-	std::map<int, int> inVars;
+	//std::map<int, int> inVars;
 	std::map<int, int>::iterator mit;
 	std::vector<int>::iterator vit;
 	std::map<int, OSNode*>::iterator mit2;
