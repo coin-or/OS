@@ -365,7 +365,11 @@ void OSColGenApp::solve(){
 		std::cout << "size of invars "  <<  inVars.size()   << std::endl;
 		std::cout << "size of LP "  <<  m_si->getNumCols()  << std::endl;
 		
-		m_si->setBasisStatus( new_cbasis, rbasis);
+		//m_si->setBasisStatus( new_cbasis, rbasis);
+		
+		delete[] cbasis;
+		delete[] new_cbasis;
+		delete[] rbasis;
 		
 		/*
 		m_si->initialSolve();
@@ -404,13 +408,11 @@ void OSColGenApp::solve(){
 
 		 */
 		
-		//m_si->setBasisStatus( new_cbasis, rbasis);
+		m_si->setBasisStatus( new_cbasis, rbasis);
 		
 		solveRestrictedMasterRelaxation();
 		std::cout << "NUMBER OF NEW GENERATED COLUMNS =  "  << m_numColumnsGenerated - tmpCols << std::endl;
-		delete[] cbasis;
-		delete[] new_cbasis;
-		delete[] rbasis;
+
 		exit( 1);
 		
 		//kipp -- end just testing
@@ -886,7 +888,7 @@ bool OSColGenApp::branchAndBound( ){
 			
 			//kipp -- experimental
 			
-			if( m_si->getNumCols() > 100) {
+			if( m_si->getNumCols() > 100000) {
 				std::cout << "DOING A MASTER RESET IN BRANCH AND BOUND" << std::endl;
 				std::cout << "NUMBER OF COLUMNS BEFORE RESET = " << m_si->getNumCols() << std::endl;
 				resetMaster();
