@@ -18,6 +18,8 @@
 	OSNode::OSNode(){
 		
 		
+		
+		
 	}//end default constructor
 	
 	
@@ -34,8 +36,7 @@
 		
 		nodeID = -99999;
 		
-		colBasisStatus = NULL;
-		rowBasisStatus = NULL;
+
 		
 		
 	}//end constructor for allocating arrays
@@ -61,11 +62,6 @@
 		delete[] theta;
 		theta = NULL;
 		
-		if (colBasisStatus != NULL)delete colBasisStatus;
-		colBasisStatus = NULL;
-		
-		if (rowBasisStatus != NULL)delete rowBasisStatus;
-		rowBasisStatus = NULL;	
 		
 		std::cout << "I AM DELETING A NODE IN OSNODE DESTRUCTOR" << std::endl;
 	}//end default destructor

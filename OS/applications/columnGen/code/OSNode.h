@@ -12,7 +12,7 @@
 
 #ifndef OSNODE_H
 #define OSNODE_H
-
+#include<vector>
 
 // --------------------------------------------------------------------- //
 /*!
@@ -68,8 +68,9 @@ class OSNode {
 	 */
 	double* theta;
 	
-	/** colBasisStatus is an index vector, for 
-	 * each variable index we store the following
+	/** colBasisStatus is vector of integer pairs, for 
+	 * each element of the vector we store the pair
+	 * (index, status) where status is:
 	 * basis code:
 	 *     <ul>
       <li> 0: free
@@ -78,13 +79,11 @@ class OSNode {
       <li> 3: nonbasic at lower bound
     </ul>
 	 */
-	int *colBasisStatus;
+	std::vector<std::pair<int, int> >  colBasisStatus;
 	
-	/** rowBasisStatus is an index vector, for 
-	 * the rows and stores the basis row status
-	 * using same coding as for colBasisStatus
+	/** rowBasisStatus is the vector of pairs for rows
 	 */
-	int *rowBasisStatus;
+	std::vector<std::pair<int, int> >  rowBasisStatus;
 	
 	
 	/**

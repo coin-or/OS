@@ -833,7 +833,7 @@ bool OSColGenApp::branchAndBound( ){
 			if( m_si->getNumCols() > 100000) {
 				std::cout << "DOING A MASTER RESET IN BRANCH AND BOUND" << std::endl;
 				std::cout << "NUMBER OF COLUMNS BEFORE RESET = " << m_si->getNumCols() << std::endl;
-				resetMaster();
+				//resetMaster();
 				std::cout << "NUMBER OF COLUMNS AFTER RESET = " << m_si->getNumCols() << std::endl;
 			}
 			
@@ -1006,18 +1006,22 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 	
 	OSNode *osnodeChild;
 	osnodeChild = NULL;
-
-
+	int numRows;
+	int numCols;
+	
+	int tmpColNum ;
+	int tmpRowNum  ;
 	
 	std::map<int, int>::iterator mit;
-	int *colBasisStatus = NULL;  
-	int *rowBasisStatus = NULL;
+	std::vector<std::pair<int, int> >::iterator vit;
+
 	
 	int i;
+	int k;
 	int childRowIdxNumNonz;
 	childRowIdxNumNonz = 0;
 	
-	int numCols;
+
 
 	//we want to store the solution vector (theta space)
 	//in sparse format
@@ -1052,9 +1056,56 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 	
 		//exit( 1);
 		std::cout << "CALL SOLVE FROM CREATE CHILD "  << std::endl;
-		solveRestrictedMasterRelaxation( colBasisStatus, rowBasisStatus);
+		//kipp -- important, you really need to verify that an optimal solution was obtained!!!
+		if(osnodeParent != NULL){
+			
+			tmpColNum = m_si->getNumCols() ;
+			tmpRowNum = m_si->getNumRows() ;
+			int *tmpColParent = new int[ tmpColNum];
+			int *tmpRowParent = new int[ tmpRowNum ];
+			
+			for(k = 0; k < tmpColNum; k++){
+				
+				tmpColParent[ k] = 0;
+			}
+			
+			for(k = 0; k < tmpRowNum; k++){
+				
+				tmpRowParent[ k] = 0;
+			}
+			
+			//for(vit = osnodeParent->colBasisStatus.begin(); 
+			//		vit != osnodeParent->colBasisStatus.end(); vit++){
+				
+				
+			//	tmpColParent[ (*vit).first ] = 5;
+				
+				
+			//}
+			for(k = 0; k < osnodeParent->colBasisStatus.size(); k++){
+				
+				//tmpColParent[osnodeParent->colBasisStatus[k].first  ] = osnodeParent->colBasisStatus[k].second;
+			}
+			solveRestrictedMasterRelaxation(NULL, NULL);
+			
+			delete[] tmpColParent;
+			tmpColParent = NULL;
+			delete[] tmpRowParent;
+			tmpRowParent = NULL;
+			
+			//solveRestrictedMasterRelaxation( osnodeParent->colBasisStatus, 
+			//		osnodeParent->rowBasisStatus);
+		} else { 
+			
+			solveRestrictedMasterRelaxation(NULL, NULL);
+		}
+		
+		
 		std::cout << std::endl << std::endl;
 		std::cout << "FINISH SOLVING THE MASTER "  << std::endl;
+		
+
+		//
 		//now reset the upper and lower bound
 		//set the parent values 
 		if( osnodeParent != NULL){
@@ -1082,6 +1133,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 			// okay cannot fathom based on bound try integrality
 			std::cout << "MESSAGE: WE CANNOT FATHOM THE CHILD BASED ON UPPER BOUND " << std::endl;
 			numCols = m_si->getNumCols();
+			numRows = m_si->getNumRows();
 			thetaNumNonz = 0;
 			
 			for(i = 0; i < numCols; i++){	
@@ -1108,9 +1160,35 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				
 			}else{
 				//create the child node
-				std::cout << "MESSAGE:  WE ARE CREATING A CHILD NODE " << std::endl;
+				std::cout << "MESSAGE:  WE ARE CREATING A CHILD NODE WITH NUMBER COLUMNS = "<<  numCols << std::endl;
 				osnodeChild = new OSNode(childRowIdxNumNonz,  thetaNumNonz );
 				
+				
+				//set the basis
+				tmpColNum = m_si->getNumCols() ;
+				tmpRowNum = m_si->getNumRows() ;
+				int *tmpColChild = new int[ tmpColNum];
+				int *tmpRowChild = new int[ tmpRowNum ];
+				
+				m_si->getBasisStatus(tmpColChild, tmpRowChild);
+				
+				for(k = 0; k < tmpColNum; k++){
+					
+					osnodeChild->colBasisStatus.push_back(std::make_pair(k, tmpColChild[ k]) );
+					
+				}
+				
+				for(k = 0; k < tmpRowNum; k++){
+					
+					osnodeChild->rowBasisStatus.push_back(std::make_pair(k, tmpRowChild[ k]) );
+					
+				}
+				
+				delete[] tmpColChild;
+				tmpColChild = NULL;
+
+				delete[] tmpRowChild;
+				tmpRowChild = NULL;
 				
 				//now set bound arrays 
 				if(osnodeParent == NULL){
