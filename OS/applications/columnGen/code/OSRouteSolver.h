@@ -73,6 +73,15 @@ public:
 	 */
 	int m_maxMasterColumns;
 	
+	/** m_maxMasterColumns is the maximumn number
+	 * of rows we allow in the master, in this
+	 * application it is equal to m_maxBmatrixCon
+	 * plus m_numNodes -- we therefore do not need
+	 * to read this from an option file as we might
+	 * for other problems
+	 */
+	int m_maxMasterRows;
+	
 	/** if m_use1OPTstart is true we use the option file to
 	 * fix the nodes to hubs found by SK's 1OPT heuristic
 	 */

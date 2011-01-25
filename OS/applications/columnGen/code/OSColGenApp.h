@@ -47,9 +47,11 @@ public:
 	
 	OSRouteSolver *m_osrouteSolver;
 	
+	//the OS solver wrapper
 	CoinSolver *m_solver;
 
 	OsiSolverInterface *m_si;
+
 	
 	/** Application specific parameters. */
 	OSDecompParam m_osDecompParam;
@@ -101,8 +103,12 @@ public:
 	/** m_maxCols is the maximum number of columns we can have */
 	int m_maxCols;
 	
+	/** m_maxRows is the maximum number of rows we can have */
+	int m_maxRows;
+	
 	/** kipp -- document */
-	void solveRestrictedMasterRelaxation();
+	void solveRestrictedMasterRelaxation(const int *colBasisStatus,  
+			const int *rowBasisStatus);
 	
 	void getInitialRestrictedMaster( );
 	

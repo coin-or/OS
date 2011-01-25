@@ -113,7 +113,7 @@ void OSRouteSolver::initializeDataStructures(){
 		//get all the parameter values
 		getOptions( m_osoption);
 	
-		
+		m_maxMasterRows =  m_maxBmatrixCon + m_numNodes;
 		
 		m_upperBoundL = new int[ m_numHubs];
 		m_lowerBoundL = new int[ m_numHubs];

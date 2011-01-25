@@ -68,6 +68,24 @@ class OSNode {
 	 */
 	double* theta;
 	
+	/** colBasisStatus is an index vector, for 
+	 * each variable index we store the following
+	 * basis code:
+	 *     <ul>
+      <li> 0: free
+      <li> 1: basic
+      <li> 2: nonbasic at upper bound
+      <li> 3: nonbasic at lower bound
+    </ul>
+	 */
+	int *colBasisStatus;
+	
+	/** rowBasisStatus is an index vector, for 
+	 * the rows and stores the basis row status
+	 * using same coding as for colBasisStatus
+	 */
+	int *rowBasisStatus;
+	
 	
 	/**
 	 *

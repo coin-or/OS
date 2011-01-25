@@ -28,7 +28,9 @@ class OSDecompParam {
 	public:
 	
 	/** columnLimit is the limit on the number of columns that
-	 * can be generated at any node
+	 * can be generated in a single call to solveRestrictedMasterRelaxation, 
+	 * this number is different than the maximum number of columns
+	 * allowed in the master
 	 */
 	int columnLimit;
 	

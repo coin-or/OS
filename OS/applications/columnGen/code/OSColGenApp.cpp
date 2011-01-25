@@ -225,11 +225,22 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 
 void OSColGenApp::solve(){
 
-	std::set<std::pair<int, double> >::iterator sit;	
+	int *cbasis = NULL;
+	int *rbasis = NULL;
+	int *new_cbasis = NULL;
 	
+	
+	
+	std::set<std::pair<int, double> >::iterator sit;
+	std::vector<int>::iterator vit;
+	std::map<int, int>::iterator mit;
 	
 	int numCols;
+	int numRows;
 	int i;
+	int j;
+	
+	
 
 	//initialize upper bound
 	m_zUB = m_osrouteSolver->m_bestIPValue;
@@ -267,25 +278,33 @@ void OSColGenApp::solve(){
 		//kipp -- do all of the newing in a separate routine
 		m_yB = new double[  m_osrouteSolver->m_maxBmatrixCon];
 		
-		//kipp again hard coding -- remove later
-		m_maxCols = m_osrouteSolver->m_maxMasterColumns;
-		m_theta = new double[ m_maxCols];
 		
+		m_maxCols = m_osrouteSolver->m_maxMasterColumns;
+		m_maxRows = m_osrouteSolver->m_maxMasterRows;
+		
+		m_theta = new double[ m_maxCols];
+
 		
 		//get initial LP relaxation of master
-		solveRestrictedMasterRelaxation();
+		solveRestrictedMasterRelaxation(cbasis, rbasis);
 		//get the solution vector
 		numCols = m_si->getNumCols();
-		for(i = 0; i < numCols; i++){	
+		numRows = m_si->getNumRows();
+		
+		//kipp -- just testing
+		cbasis = new int[ numCols];
+		rbasis = new int[ numRows ];
+		m_si->getBasisStatus( cbasis, rbasis);
+		
+		for(i = 0; i < numCols; i++){
+			//get the basic primal variables
+			if(cbasis[ i] == 1) m_zOptRootLP.push_back( i);
 			//get the LP relaxation
 			*(m_theta + i) = m_si->getColSolution()[i];	
-			
 			///optionally print out the corresponding x columns
-				 
-			int j;
 			if( *(m_theta + i) > m_osDecompParam.zeroTol){
 				
-				//m_zOptRootLP.push_back( i);
+				
 				std::cout <<  "x variables for column "  << i  << std::endl;
 				
 					
@@ -296,127 +315,10 @@ void OSColGenApp::solve(){
 						
 				}	
 			}			
-			
 			///end of optionally print out
 		}
+		
 		m_zLB =  m_si->getObjValue();
-		
-		//kipp -- just testing
-		int *cbasis = NULL;
-		int *rbasis = NULL;
-		double *dualVec = NULL;
-		cbasis = new int[m_si->getNumCols() ];
-		rbasis = new int[m_si->getNumRows() ];
-		dualVec = new double[m_si->getNumRows() ];
-		std::cout << "REDUNDANT SOLVE OF RESTRICTED MASTER" << std::endl;
-		int tmpCols =  m_numColumnsGenerated;
-		std::cout << "NUMBER OF GENERATED COLUMNS =  "  << m_numColumnsGenerated << std::endl;
-		m_si->getBasisStatus( cbasis, rbasis);
-	
-		double dualObj;
-		dualObj = 0;
-		for(i = 0;  i < m_si->getNumRows() ; i++){ 
-		
-			std::cout <<  m_si->getRowPrice()[ i] << std::endl;
-			dualVec[ i] = m_si->getRowPrice()[ i];
-			dualObj +=  m_si->getRowPrice()[ i];
-			
-		}
-		std::cout << "dualObj = "  << dualObj  << std::endl;
-		for(i = 0; i < m_si->getNumCols(); i++){
-			
-			if(cbasis[ i ] == 1) {
-				std::cout << "BASIC VARIABLE INDEX " << i <<  "  Value = " << m_si->getColSolution()[ i] <<std::endl;
-				m_zOptRootLP.push_back( i);
-			}
-			
-		}
-		resetMaster();
-	
-		std::map<int, int>::iterator mit;
-		for (mit = inVars.begin(); mit != inVars.end(); mit++ ){
-			
-			std::cout << "variable " <<  mit->first <<  " status " <<  cbasis[mit->first ]  << std::endl;
-			
-		}
-		
-		int *new_cbasis;
-		new_cbasis = new int[  m_si->getNumCols() ];
-	
-		
-		for(i = 0; i < m_si->getNumCols(); i++){
-			
-			new_cbasis[ i] = 3;
-		}
-
-		
-		
-		
-		for (mit = inVars.begin(); mit != inVars.end(); mit++ ){
-			
-
-			new_cbasis[  mit->second ] = 1;
-			
-		
-			
-		}
-
-		
-		std::cout << "size of invars "  <<  inVars.size()   << std::endl;
-		std::cout << "size of LP "  <<  m_si->getNumCols()  << std::endl;
-		
-		//m_si->setBasisStatus( new_cbasis, rbasis);
-		
-		delete[] cbasis;
-		delete[] new_cbasis;
-		delete[] rbasis;
-		
-		/*
-		m_si->initialSolve();
-		m_si->getBasisStatus( new_cbasis, rbasis);
-		
-		
-		for(i = 0; i < m_si->getNumCols(); i++){
-			
-		
-				std::cout << "BASIC VARIABLE INDEX " << i <<  "  Value = " << new_cbasis[ i] <<std::endl;
-		
-		
-			
-		}
-		//new dual solution
-		dualObj = 0;
-		for(i = 0; i < m_si->getNumRows() ; i++) {
-			
-			std::cout <<  m_si->getRowPrice()[ i] << std::endl;
-			dualObj +=  m_si->getRowPrice()[ i];
-		
-		}
-		
-		std::cout << "dualObj = "  << dualObj  << std::endl;
-		
-		
-		
-		for (mit = inVars.begin(); mit != inVars.end(); mit++ ){
-			
-				std::cout << "first index =  " << mit->first << "  second index  " << mit->second << std::endl;
-			
-			kount1++;
-			
-		}
-		//exit( 1);
-
-		 */
-		
-		m_si->setBasisStatus( new_cbasis, rbasis);
-		
-		solveRestrictedMasterRelaxation();
-		std::cout << "NUMBER OF NEW GENERATED COLUMNS =  "  << m_numColumnsGenerated - tmpCols << std::endl;
-
-		exit( 1);
-		
-		//kipp -- end just testing
-		
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
@@ -455,24 +357,35 @@ void OSColGenApp::solve(){
 			m_si->setColUpper( sit->first, sit->second);
 			
 		}
-		
-
-		
+	
 		std::cout << "OPTIMAL LP VALUE = " << m_zLB << std::endl;
 		std::cout << "CURRENT BEST IP VALUE = " << m_zUB << std::endl;
-		//reset the master
-		//resetMaster();
+		
+		/////////////
+		//start reset
+		/*
+		int tmpCols =  m_numColumnsGenerated;
+		resetMaster();
+		numCols = m_si->getNumCols();
+		new_cbasis = new int[ numCols  ];
+		for(i = 0; i < numCols; i++) new_cbasis[ i] = 3;
+		for (vit = m_zOptRootLP.begin(); vit != m_zOptRootLP.end(); vit++ ) new_cbasis[  *vit ] = 1;
+		solveRestrictedMasterRelaxation(new_cbasis, rbasis);
+		//m_si->setBasisStatus( new_cbasis, rbasis);
+		//m_si->initialSolve();
+		for(i = 0; i < numCols; i++) *(m_theta + i) = m_si->getColSolution()[i];	
+		std::cout << "NUMBER OF NEW GENERATED COLUMNS =  "  << m_numColumnsGenerated - tmpCols << std::endl;
+		*/
+		//end reset
+		/////////////////////////
+		
+		
 		//go into branch and bound
+		std::cout << "START BRANCH AND BOUND =  "   << std::endl;
 		branchAndBound();
-		
 		m_osrouteSolver->m_bestLPValue = m_zLB;
-		m_osrouteSolver->m_bestIPValue = m_zUB;
-		
-		std::cout << "NUMBER OF NODES GENERATED = " << m_numNodesGenerated << std::endl;
-		std::cout << "NUMBER OF COLUMNS GENERATED = " << m_numColumnsGenerated << std::endl;
-		
+		m_osrouteSolver->m_bestIPValue = m_zUB;	
 		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated);
-		
 		
 		
 		delete m_solver;
@@ -485,6 +398,14 @@ void OSColGenApp::solve(){
 		
 		delete[] m_theta;
 		m_theta = NULL;
+
+		
+		delete[] cbasis;
+		cbasis = NULL;
+		if(new_cbasis != NULL) delete[] new_cbasis;
+		new_cbasis = NULL;
+		delete[] rbasis;
+		rbasis = NULL;
 	
 
 	} catch (const ErrorClass& eclass) {
@@ -498,7 +419,16 @@ void OSColGenApp::solve(){
 		m_yB = NULL;
 		
 		delete[] m_theta;
-		m_theta = NULL;		
+		m_theta = NULL;	
+		
+
+	
+		delete[] cbasis;
+		cbasis = NULL;
+		if(new_cbasis != NULL) delete[] new_cbasis;
+		new_cbasis = NULL;
+		delete[] rbasis;
+		rbasis = NULL;
 
 		throw ErrorClass(eclass.errormsg);
 
@@ -507,7 +437,8 @@ void OSColGenApp::solve(){
 }//end solve
 
 
-void OSColGenApp::solveRestrictedMasterRelaxation(){
+void OSColGenApp::solveRestrictedMasterRelaxation(const int *colBasisStatus,  
+		const int *rowBasisStatus){
 	
 	int i;
 	int k;
@@ -548,6 +479,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 	double rowArtVal;
 	
 	bool isCutAdded;
+	
+	
 
 	try{
 		numARows = m_osrouteSolver->m_numNodes;
@@ -562,7 +495,16 @@ void OSColGenApp::solveRestrictedMasterRelaxation(){
 			std::cout << "CALL Solve  " << " Number of columns =  " <<  m_si->getNumCols() <<  std::endl;
 			//kippster -- key problem
 			//we are going through OS here, m_solver is a CoinSolver object
-			//set initial basis here if we have one
+
+			if( (colBasisStatus != NULL)  && (rowBasisStatus != NULL) )  {
+				std::cout << "CALL  setBasisStatus " <<  std::endl;
+				m_si->setBasisStatus( colBasisStatus, rowBasisStatus);
+				std::cout << "FINISH CALL  setBasisStatus " <<  std::endl;
+				
+			}
+				
+			
+			//now solve
 			m_solver->solve();
 			//m_si->initialSolve();
 			std::cout << "Solution Status =  " << m_solver->osresult->getSolutionStatusType( 0 ) << std::endl;
@@ -841,7 +783,7 @@ bool OSColGenApp::branchAndBound( ){
 		//	std::cout  << "theta = " <<   *(m_theta + i) << std::endl; 
 		//}
 		
-		
+		//NOTE -- we must know theta here
 		
 		//create a branching cut 
 		createBranchingCut(m_theta, numCols, varConMap, rowIdx);
@@ -1068,6 +1010,8 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 
 	
 	std::map<int, int>::iterator mit;
+	int *colBasisStatus = NULL;  
+	int *rowBasisStatus = NULL;
 	
 	int i;
 	int childRowIdxNumNonz;
@@ -1108,7 +1052,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 	
 		//exit( 1);
 		std::cout << "CALL SOLVE FROM CREATE CHILD "  << std::endl;
-		solveRestrictedMasterRelaxation();
+		solveRestrictedMasterRelaxation( colBasisStatus, rowBasisStatus);
 		std::cout << std::endl << std::endl;
 		std::cout << "FINISH SOLVING THE MASTER "  << std::endl;
 		//now reset the upper and lower bound
@@ -1528,7 +1472,6 @@ void  OSColGenApp::resetMaster(){
 		
 		std::cout << "OSINTANCE NUMBER OF COLUMNS = "  << m_osrouteSolver->m_osinstanceMaster->getVariableNumber() << std::endl;
 		std::cout << "OSINTANCE NUMBER OF ROWS = "  << m_osrouteSolver->m_osinstanceMaster->getConstraintNumber() << std::endl;
-		
 		std::cout << "SOLVER INTERFACE NUMBER OF COLUMNS = "  << m_si->getNumCols() << std::endl;
 		std::cout << "SOLVER INTERFACE NUMBER OF ROWS = "  <<m_si->getNumRows() << std::endl;
 		
