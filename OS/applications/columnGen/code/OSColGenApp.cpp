@@ -496,12 +496,12 @@ void OSColGenApp::solveRestrictedMasterRelaxation(const int *colBasisStatus,
 			//kippster -- key problem
 			//we are going through OS here, m_solver is a CoinSolver object
 
-			if( (colBasisStatus != NULL)  && (rowBasisStatus != NULL) )  {
-				std::cout << "CALL  setBasisStatus " <<  std::endl;
-				m_si->setBasisStatus( colBasisStatus, rowBasisStatus);
-				std::cout << "FINISH CALL  setBasisStatus " <<  std::endl;
+			//if( (colBasisStatus != NULL)  && (rowBasisStatus != NULL) )  {
+			//	std::cout << "CALL  setBasisStatus " <<  std::endl;
+			//	m_si->setBasisStatus( colBasisStatus, rowBasisStatus);
+			//	std::cout << "FINISH CALL  setBasisStatus " <<  std::endl;
 				
-			}
+			//}
 				
 			
 			//now solve
@@ -1084,9 +1084,14 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 			//}
 			for(k = 0; k < osnodeParent->colBasisStatus.size(); k++){
 				
-				//tmpColParent[osnodeParent->colBasisStatus[k].first  ] = osnodeParent->colBasisStatus[k].second;
+				tmpColParent[osnodeParent->colBasisStatus[k].first  ] = osnodeParent->colBasisStatus[k].second;
 			}
-			solveRestrictedMasterRelaxation(NULL, NULL);
+			
+			m_si->setBasisStatus(tmpColParent, tmpRowParent);
+			//m_si->initialSolve();
+			//std::cout << "DONE WITH INITIAL SOLVE" << std::endl;
+			//solveRestrictedMasterRelaxation(NULL, NULL);
+			solveRestrictedMasterRelaxation(tmpColParent, tmpRowParent);
 			
 			delete[] tmpColParent;
 			tmpColParent = NULL;
