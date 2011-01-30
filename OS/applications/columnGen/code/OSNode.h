@@ -13,6 +13,7 @@
 #ifndef OSNODE_H
 #define OSNODE_H
 #include<vector>
+#include<set>
 
 // --------------------------------------------------------------------- //
 /*!
@@ -62,7 +63,7 @@ class OSNode {
 	 */
 	int* thetaIdx;
 	
-	/** theta is an array of primal solutions 
+	/** theta is an array of primal positive values
 	 * this is used for branching and creating new
 	 * children nodes
 	 */
@@ -84,6 +85,11 @@ class OSNode {
 	/** rowBasisStatus is the vector of pairs for rows
 	 */
 	std::vector<std::pair<int, int> >  rowBasisStatus;
+	
+	/** reducedCostVec will hold variables within a tolerance
+	 * on their reduced costs. 
+	 */
+	std::set<int>  reducedCostIdx;
 	
 	
 	/**

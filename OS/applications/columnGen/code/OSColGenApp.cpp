@@ -39,6 +39,7 @@
 
 
 #include<vector>
+
 #include<map>
 #include <sstream>
 using std::ostringstream;
@@ -286,7 +287,7 @@ void OSColGenApp::solve(){
 
 		
 		//get initial LP relaxation of master
-		solveRestrictedMasterRelaxation(cbasis, rbasis);
+		solveRestrictedMasterRelaxation();
 		//get the solution vector
 		numCols = m_si->getNumCols();
 		numRows = m_si->getNumRows();
@@ -370,9 +371,10 @@ void OSColGenApp::solve(){
 		new_cbasis = new int[ numCols  ];
 		for(i = 0; i < numCols; i++) new_cbasis[ i] = 3;
 		for (vit = m_zOptRootLP.begin(); vit != m_zOptRootLP.end(); vit++ ) new_cbasis[  *vit ] = 1;
-		solveRestrictedMasterRelaxation(new_cbasis, rbasis);
-		//m_si->setBasisStatus( new_cbasis, rbasis);
+		m_si->setBasisStatus( new_cbasis, rbasis );
+		solveRestrictedMasterRelaxation();
 		//m_si->initialSolve();
+		//exit( 1);
 		for(i = 0; i < numCols; i++) *(m_theta + i) = m_si->getColSolution()[i];	
 		std::cout << "NUMBER OF NEW GENERATED COLUMNS =  "  << m_numColumnsGenerated - tmpCols << std::endl;
 		*/
@@ -437,8 +439,7 @@ void OSColGenApp::solve(){
 }//end solve
 
 
-void OSColGenApp::solveRestrictedMasterRelaxation(const int *colBasisStatus,  
-		const int *rowBasisStatus){
+void OSColGenApp::solveRestrictedMasterRelaxation( ){
 	
 	int i;
 	int k;
@@ -495,15 +496,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation(const int *colBasisStatus,
 			std::cout << "CALL Solve  " << " Number of columns =  " <<  m_si->getNumCols() <<  std::endl;
 			//kippster -- key problem
 			//we are going through OS here, m_solver is a CoinSolver object
-
-			//if( (colBasisStatus != NULL)  && (rowBasisStatus != NULL) )  {
-			//	std::cout << "CALL  setBasisStatus " <<  std::endl;
-			//	m_si->setBasisStatus( colBasisStatus, rowBasisStatus);
-			//	std::cout << "FINISH CALL  setBasisStatus " <<  std::endl;
-				
-			//}
-				
-			
 			//now solve
 			m_solver->solve();
 			//m_si->initialSolve();
@@ -830,11 +822,15 @@ bool OSColGenApp::branchAndBound( ){
 			
 			//kipp -- experimental
 			
-			if( m_si->getNumCols() > 100000) {
+			if( m_si->getNumCols() > 200000) {
 				std::cout << "DOING A MASTER RESET IN BRANCH AND BOUND" << std::endl;
 				std::cout << "NUMBER OF COLUMNS BEFORE RESET = " << m_si->getNumCols() << std::endl;
-				//resetMaster();
+				resetMaster();
 				std::cout << "NUMBER OF COLUMNS AFTER RESET = " << m_si->getNumCols() << std::endl;
+				//int tmpCols =  m_numColumnsGenerated;
+				//solveRestrictedMasterRelaxation();
+				//std::cout << "NUMBER OF NEW GENERATED COLUMNS =  "  << m_numColumnsGenerated - tmpCols << std::endl;
+				//exit( 1);
 			}
 			
 			leftNodeCreated = false;
@@ -1013,15 +1009,13 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 	int tmpRowNum  ;
 	
 	std::map<int, int>::iterator mit;
-	std::vector<std::pair<int, int> >::iterator vit;
+
 
 	
 	int i;
 	int k;
 	int childRowIdxNumNonz;
 	childRowIdxNumNonz = 0;
-	
-
 
 	//we want to store the solution vector (theta space)
 	//in sparse format
@@ -1066,7 +1060,13 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 			
 			for(k = 0; k < tmpColNum; k++){
 				
-				tmpColParent[ k] = 0;
+				if( m_si->getObjCoefficients()[k]  >=  
+					m_osDecompParam.artVarCoeff -  m_osDecompParam.zeroTol)
+					tmpColParent[ k ] = 3;
+				else if( osnodeParent->reducedCostIdx.find(k) == osnodeParent->reducedCostIdx.end() )
+					tmpColParent[ k ] = 3;
+				else tmpColParent[ k] = 0;
+				
 			}
 			
 			for(k = 0; k < tmpRowNum; k++){
@@ -1074,24 +1074,22 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				tmpRowParent[ k] = 0;
 			}
 			
-			//for(vit = osnodeParent->colBasisStatus.begin(); 
-			//		vit != osnodeParent->colBasisStatus.end(); vit++){
+			
+		
+			//for(k = 0; k < osnodeParent->colBasisStatus.size(); k++){
 				
-				
-			//	tmpColParent[ (*vit).first ] = 5;
-				
-				
+				//make the basis status of artificial variables 3
+				//that is, nonbasic at lower bound
+				//if( m_si->getObjCoefficients()[ osnodeParent->colBasisStatus[k].first]  
+				//    >=  m_osDecompParam.artVarCoeff -  m_osDecompParam.zeroTol)
+				//	tmpColParent[osnodeParent->colBasisStatus[k].first  ] = 3;
+				//else
+					//tmpColParent[osnodeParent->colBasisStatus[k].first  ] = 
+					//		osnodeParent->colBasisStatus[k].second;
 			//}
-			for(k = 0; k < osnodeParent->colBasisStatus.size(); k++){
-				
-				tmpColParent[osnodeParent->colBasisStatus[k].first  ] = osnodeParent->colBasisStatus[k].second;
-			}
 			
 			m_si->setBasisStatus(tmpColParent, tmpRowParent);
-			//m_si->initialSolve();
-			//std::cout << "DONE WITH INITIAL SOLVE" << std::endl;
-			//solveRestrictedMasterRelaxation(NULL, NULL);
-			solveRestrictedMasterRelaxation(tmpColParent, tmpRowParent);
+			solveRestrictedMasterRelaxation( );
 			
 			delete[] tmpColParent;
 			tmpColParent = NULL;
@@ -1102,7 +1100,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 			//		osnodeParent->rowBasisStatus);
 		} else { 
 			
-			solveRestrictedMasterRelaxation(NULL, NULL);
+			solveRestrictedMasterRelaxation( );
 		}
 		
 		
@@ -1170,6 +1168,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				
 				
 				//set the basis
+				/*
 				tmpColNum = m_si->getNumCols() ;
 				tmpRowNum = m_si->getNumRows() ;
 				int *tmpColChild = new int[ tmpColNum];
@@ -1194,6 +1193,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 
 				delete[] tmpRowChild;
 				tmpRowChild = NULL;
+				*/
 				
 				//now set bound arrays 
 				if(osnodeParent == NULL){
@@ -1235,7 +1235,9 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 						//}
 					}
 					
+					//add the reduced costs
 					
+					if(m_si->getReducedCost()[i] < (m_zUB - osnodeChild->lpValue) ) osnodeChild->reducedCostIdx.insert( i);
 					
 				}
 			}//end else on isInteger
@@ -1275,18 +1277,16 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	//get the branching cut information
 	
 	//
-	for(int i = 0; i < numThetaVar; i++ ){
-		
-		std::cout << "theta idx = " << thetaIdx[ i] << "  theta = " << theta[ i] << std::endl;
-	}
+	//for(int i = 0; i < numThetaVar; i++ ) std::cout << "theta idx = " << thetaIdx[ i] << "  theta = " << theta[ i] << std::endl;
+
 	
 	m_osrouteSolver->getBranchingCut(thetaIdx, theta, numThetaVar, 
 			varConMap, varIdx, numNonz, indexes,  values);
 	
 	
 		
-	std::cout << "varIDX = " << varIdx << std::endl;
-	std::cout << "numNonz1 = " << numNonz << std::endl;	
+	//std::cout << "varIDX = " << varIdx << std::endl;
+	//std::cout << "numNonz1 = " << numNonz << std::endl;	
 	
 	
 	//for(int i = 0; i < numNonz; i++){
@@ -1432,10 +1432,15 @@ void  OSColGenApp::resetMaster(){
 	
 	//std::map<int, int> inVars;
 	std::map<int, int>::iterator mit;
+	std::set<int>::iterator sit;
 	std::vector<int>::iterator vit;
+	std::vector<std::pair<int, int> >::iterator vit2;
 	std::map<int, OSNode*>::iterator mit2;
 	int i;
 	int kount = 0;
+
+	
+	inVars.clear();
 	
 	try{
 
@@ -1460,7 +1465,6 @@ void  OSColGenApp::resetMaster(){
 			
 			if( inVars.find( *vit ) == inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
 			
-			//std::cout << "VARIABLE INDEX =  " << *vit << std::endl;
 			
 			//for(int k = m_osrouteSolver->m_thetaPnt[*vit]; k <  m_osrouteSolver->m_thetaPnt[*vit + 1]; k++){
 				
@@ -1470,25 +1474,63 @@ void  OSColGenApp::resetMaster(){
 
 		}
 		
-		
-
+	
 		
 		//now loop over the nodes in the branch and bound tree
+		
 	
 		for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
 			
-
-			for(i = 0; i < mit2->second->thetaNumNonz; i++){
+			//insert the basic variables
+			//for(i = 0; i < mit2->second->thetaNumNonz; i++){
 				
-				if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ) 
-					inVars.insert( std::pair<int, int>(mit2->second->thetaIdx[ i], kount++) );
+			//	if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ) {
+					
+					
+			//		inVars.insert( std::pair<int, int>(mit2->second->thetaIdx[ i], kount++) );
+			//	}
+					
+				
+			//}
+			
+			
+			//for(vit2 = mit2->second->colBasisStatus.begin(); 
+			//		vit2 != mit2->second->colBasisStatus.end(); vit2++){
+				
+			//	if ( (*vit2).second == 1 &&  m_si->getObjCoefficients()[(*vit2).first] < m_osDecompParam.artVarCoeff) {
+					
+			//		inVars.insert( std::pair<int, int>((*vit2).first, kount++) );
+					
+
+					
+			//	}
+					
+				
+					
+			//}
+			
+			std::cout << "NUMBER OF REDUCED COSTS = " << mit2->second->reducedCostIdx.size() << std::endl;
+			
+			for(sit = mit2->second->reducedCostIdx.begin(); 
+					sit != mit2->second->reducedCostIdx.end(); sit++){
+				
+				if( ( inVars.find( *sit ) == inVars.end() )   && (m_si->getObjCoefficients()[*sit] < m_osDecompParam.artVarCoeff)  )
+								inVars.insert( std::pair<int, int>(*sit, kount++) );
+			
 				
 			}
+
 		}
+
 
 		
 		
-		//for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;	
+		
+		
+		for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;	
+		std::cout << "NUMBER OF COLUMNS =  " <<  inVars.size()  <<  std::endl;
+		std::cout << "CALLING osroute solver reset " << std::endl;
+		
 		m_osrouteSolver->resetMaster( inVars, m_si );
 		//for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;
 			
@@ -1523,8 +1565,33 @@ void  OSColGenApp::resetMaster(){
 				
 			}
 			
+			
+			for(vit2 = mit2->second->colBasisStatus.begin(); 
+					vit2 != mit2->second->colBasisStatus.end(); vit2++){
+				
+				(*vit2).first =  inVars[ (*vit2).first ] ;
+				
+					
+			}
+			
+			//reset reduced cost indexes
+			std::set<int> tmpSet;
+			for(sit = mit2->second->reducedCostIdx.begin(); 
+					sit != mit2->second->reducedCostIdx.end(); sit++){
+				
+				tmpSet.insert( inVars[ *sit ] );
+			}
+			
+			mit2->second->reducedCostIdx.clear();
+			
+			for(sit = tmpSet.begin(); sit != tmpSet.end(); sit++){
+				
+				mit2->second->reducedCostIdx.insert( *sit );
+			}
+			tmpSet.clear();
+			//end reset reduced cost indexes
 
-		}
+		}//end loop over nodes in tree
 		
 		//reset the indexes of variables in the current integer incumbent
 		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++) *vit = inVars[ *vit ];

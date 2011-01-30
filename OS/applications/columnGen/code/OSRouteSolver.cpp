@@ -3978,6 +3978,8 @@ void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface 
 	//error check
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
+		
+		//std::cout << "VARIABLE INDEX =  " <<  mit->first  << " OBJ COEF = " <<  si->getObjCoefficients()[ mit->first ] << std::endl;
 		if( convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
 		
 		

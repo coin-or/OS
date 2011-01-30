@@ -107,8 +107,7 @@ public:
 	int m_maxRows;
 	
 	/** kipp -- document */
-	void solveRestrictedMasterRelaxation(const int *colBasisStatus,  
-			const int *rowBasisStatus);
+	void solveRestrictedMasterRelaxation( );
 	
 	void getInitialRestrictedMaster( );
 	
