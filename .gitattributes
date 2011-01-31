@@ -45,7 +45,12 @@ OS/applications/columnGen/code/Makefile.in -text
 OS/applications/columnGen/code/OSColGenApp.cpp -text
 OS/applications/columnGen/code/OSColGenApp.h -text
 OS/applications/columnGen/code/OSColGenMain.cpp -text
+OS/applications/columnGen/code/OSDecompFactoryInitializer.h -text
 OS/applications/columnGen/code/OSDecompParam.h -text
+OS/applications/columnGen/code/OSDecompSolver.cpp -text
+OS/applications/columnGen/code/OSDecompSolver.h -text
+OS/applications/columnGen/code/OSDecompSolverFactory.cpp -text
+OS/applications/columnGen/code/OSDecompSolverFactory.h -text
 OS/applications/columnGen/code/OSNode.cpp -text
 OS/applications/columnGen/code/OSNode.h -text
 OS/applications/columnGen/code/OSRouteSolver.cpp -text

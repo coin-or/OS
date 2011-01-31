@@ -22309,9 +22309,9 @@ COIN_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
 # best would actually to use ${libdir}, since .pc files get installed into ${libdir}/pkgconfig,
 # unfortunately, ${libdir} expands to ${exec_prefix}/lib and ${exec_prefix} to ${prefix}...
 if test "x${prefix}" = xNONE ; then
-  COIN_PKG_CONFIG_PATH="${ac_default_prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+  COIN_PKG_CONFIG_PATH="${ac_default_prefix}/lib/pkgconfig:${ac_default_prefix}/share/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 else
-  COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+  COIN_PKG_CONFIG_PATH="${prefix}/lib/pkgconfig:${prefix}/share/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 fi
 
 
@@ -22323,7 +22323,7 @@ if test "${with_coin_instdir+set}" = set; then
 echo "$as_me: error: argument for --with-coin-instdir not a directory" >&2;}
    { (exit 1); exit 1; }; }
    fi
-   COIN_PKG_CONFIG_PATH="$withval/lib/pkgconfig:${COIN_PKG_CONFIG_PATH}"
+   COIN_PKG_CONFIG_PATH="$withval/lib/pkgconfig:$withval/share/pkgconfig:${COIN_PKG_CONFIG_PATH}"
 
 fi;
 
@@ -22412,6 +22412,11 @@ if test "${with_coinutils_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COINUTILS_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -22427,7 +22432,12 @@ if test "${with_coinutils_incdir+set}" = set; then
      else
        coin_has_coinutils=yes
        COINUTILS_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COINUTILS_CFLAGS_INSTALLED="$COINUTILS_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$COINUTILS_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -22443,6 +22453,10 @@ if test "${with_coinutils_datadir+set}" = set; then
      else
        coin_has_coinutils=yes
        COINUTILS_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COINUTILS_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -22883,6 +22897,11 @@ if test "${with_ipopt_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         IPOPT_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -22898,7 +22917,12 @@ if test "${with_ipopt_incdir+set}" = set; then
      else
        coin_has_ipopt=yes
        IPOPT_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         IPOPT_CFLAGS_INSTALLED="$IPOPT_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$IPOPT_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -22914,6 +22938,10 @@ if test "${with_ipopt_datadir+set}" = set; then
      else
        coin_has_ipopt=yes
        IPOPT_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         IPOPT_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -23349,6 +23377,11 @@ if test "${with_clp_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CLP_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -23364,7 +23397,12 @@ if test "${with_clp_incdir+set}" = set; then
      else
        coin_has_clp=yes
        CLP_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CLP_CFLAGS_INSTALLED="$CLP_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$CLP_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -23380,6 +23418,10 @@ if test "${with_clp_datadir+set}" = set; then
      else
        coin_has_clp=yes
        CLP_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CLP_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -23815,6 +23857,11 @@ if test "${with_dylp_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         DYLP_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -23830,7 +23877,12 @@ if test "${with_dylp_incdir+set}" = set; then
      else
        coin_has_dylp=yes
        DYLP_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         DYLP_CFLAGS_INSTALLED="$DYLP_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$DYLP_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -23846,6 +23898,10 @@ if test "${with_dylp_datadir+set}" = set; then
      else
        coin_has_dylp=yes
        DYLP_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         DYLP_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -24281,6 +24337,11 @@ if test "${with_vol_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         VOL_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -24296,7 +24357,12 @@ if test "${with_vol_incdir+set}" = set; then
      else
        coin_has_vol=yes
        VOL_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         VOL_CFLAGS_INSTALLED="$VOL_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$VOL_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -24312,6 +24378,10 @@ if test "${with_vol_datadir+set}" = set; then
      else
        coin_has_vol=yes
        VOL_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         VOL_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -24747,6 +24817,11 @@ if test "${with_symphony_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         SYMPHONY_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -24762,7 +24837,12 @@ if test "${with_symphony_incdir+set}" = set; then
      else
        coin_has_symphony=yes
        SYMPHONY_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         SYMPHONY_CFLAGS_INSTALLED="$SYMPHONY_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$SYMPHONY_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -24778,6 +24858,10 @@ if test "${with_symphony_datadir+set}" = set; then
      else
        coin_has_symphony=yes
        SYMPHONY_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         SYMPHONY_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -25213,6 +25297,11 @@ if test "${with_cpx_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CPX_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -25228,7 +25317,12 @@ if test "${with_cpx_incdir+set}" = set; then
      else
        coin_has_cpx=yes
        CPX_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CPX_CFLAGS_INSTALLED="$CPX_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$CPX_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -25244,6 +25338,10 @@ if test "${with_cpx_datadir+set}" = set; then
      else
        coin_has_cpx=yes
        CPX_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CPX_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -25679,6 +25777,11 @@ if test "${with_glpk_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         GLPK_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -25694,7 +25797,12 @@ if test "${with_glpk_incdir+set}" = set; then
      else
        coin_has_glpk=yes
        GLPK_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         GLPK_CFLAGS_INSTALLED="$GLPK_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$GLPK_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -25710,6 +25818,10 @@ if test "${with_glpk_datadir+set}" = set; then
      else
        coin_has_glpk=yes
        GLPK_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         GLPK_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -26145,6 +26257,11 @@ if test "${with_cbc_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CBC_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -26160,7 +26277,12 @@ if test "${with_cbc_incdir+set}" = set; then
      else
        coin_has_cbc=yes
        CBC_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CBC_CFLAGS_INSTALLED="$CBC_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$CBC_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -26176,6 +26298,10 @@ if test "${with_cbc_datadir+set}" = set; then
      else
        coin_has_cbc=yes
        CBC_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CBC_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -26611,6 +26737,11 @@ if test "${with_bonmin_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BONMIN_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -26626,7 +26757,12 @@ if test "${with_bonmin_incdir+set}" = set; then
      else
        coin_has_bonmin=yes
        BONMIN_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BONMIN_CFLAGS_INSTALLED="$BONMIN_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$BONMIN_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -26642,6 +26778,10 @@ if test "${with_bonmin_datadir+set}" = set; then
      else
        coin_has_bonmin=yes
        BONMIN_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BONMIN_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -27077,6 +27217,11 @@ if test "${with_couenne_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COUENNE_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -27092,7 +27237,12 @@ if test "${with_couenne_incdir+set}" = set; then
      else
        coin_has_couenne=yes
        COUENNE_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COUENNE_CFLAGS_INSTALLED="$COUENNE_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$COUENNE_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -27108,6 +27258,10 @@ if test "${with_couenne_datadir+set}" = set; then
      else
        coin_has_couenne=yes
        COUENNE_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COUENNE_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -27543,6 +27697,11 @@ if test "${with_bcp_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BCP_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -27558,7 +27717,12 @@ if test "${with_bcp_incdir+set}" = set; then
      else
        coin_has_bcp=yes
        BCP_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BCP_CFLAGS_INSTALLED="$BCP_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$BCP_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -27574,6 +27738,10 @@ if test "${with_bcp_datadir+set}" = set; then
      else
        coin_has_bcp=yes
        BCP_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BCP_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -28009,6 +28177,11 @@ if test "${with_asl_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28024,7 +28197,12 @@ if test "${with_asl_incdir+set}" = set; then
      else
        coin_has_asl=yes
        ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_CFLAGS_INSTALLED="$ASL_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$ASL_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28040,6 +28218,10 @@ if test "${with_asl_datadir+set}" = set; then
      else
        coin_has_asl=yes
        ASL_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;
@@ -28475,6 +28657,11 @@ if test "${with_cppad_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CPPAD_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28490,7 +28677,12 @@ if test "${with_cppad_incdir+set}" = set; then
      else
        coin_has_cppad=yes
        CPPAD_CFLAGS="-I`${CYGPATH_W} $withval`"
-       OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+       OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CPPAD_CFLAGS_INSTALLED="$CPPAD_CFLAGS"
+         OSLIB_CFLAGS_INSTALLED="$CPPAD_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+       fi
      fi
 
 fi;
@@ -28506,6 +28698,10 @@ if test "${with_cppad_datadir+set}" = set; then
      else
        coin_has_cppad=yes
        CPPAD_DATA="$withval"
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CPPAD_DATA_INSTALLED="$withval"
+       fi
      fi
 
 fi;

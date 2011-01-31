@@ -17,8 +17,11 @@ AUTOMAKE_OPTIONS = foreign
 noinst_PROGRAMS = OSColGenMain
 
 # List all source files for this executable, including headers
-OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h OSRouteSolver.cpp OSRouteSolver.h 
+OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h 
 OSColGenMain_SOURCES += OSNode.cpp OSNode.h OSDecompParam.h
+OSColGenMain_SOURCES += OSDecompSolver.cpp OSDecompSolver.h
+OSColGenMain_SOURCES += OSDecompSolverFactory.cpp OSDecompSolverFactory.h OSDecompFactoryInitializer.h
+OSColGenMain_SOURCES += OSRouteSolver.cpp  OSRouteSolver.h
 
 
 # List all additionally required COIN libraries
@@ -54,6 +57,7 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces`
+
 
 # This line is necessary to allow VPATH compilation with MS compilers on Cygwin
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
