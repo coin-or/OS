@@ -824,7 +824,7 @@ bool OSColGenApp::branchAndBound( ){
 		while( (m_nodeMap.size() > 0) && (m_numNodesGenerated <= m_osDecompParam.nodeLimit) ){
 			
 			//kipp -- experimental
-			m_osDecompParam.masterColumnResetValue = 6000;
+			//m_osDecompParam.masterColumnResetValue = 3000;
 			//if( m_si->getNumCols() > 200000) {
 			if( (m_numColumnsGenerated - m_numColumnsOld)  > 
 				m_osDecompParam.masterColumnResetValue)  {
@@ -1482,7 +1482,7 @@ void  OSColGenApp::resetMaster(){
 		
 		//now loop over the nodes in the branch and bound tree
 		//kipp -- this is hardcoded play with it later
-		double tmpEps = 10;
+		double tmpEps = OSDBL_MAX;
 		for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
 			
 			std::cout << "NUMBER OF REDUCED COSTS = " << mit2->second->reducedCostIdx.size() << std::endl;
@@ -1491,7 +1491,7 @@ void  OSColGenApp::resetMaster(){
 				
 				if( ( inVars.find( *sit ) == inVars.end() )   
 						&& (m_si->getObjCoefficients()[*sit] < m_osDecompParam.artVarCoeff) 
-						//&& (m_si->getReducedCost()[*sit] < tmpEps )
+						&& (m_si->getReducedCost()[*sit] < tmpEps )
 				) 
 					inVars.insert( std::pair<int, int>(*sit, kount++) );
 			

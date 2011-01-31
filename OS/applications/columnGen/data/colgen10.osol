@@ -3,7 +3,7 @@
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
     <optimization>
 
-        <solverOptions numberOfSolverOptions="47">
+        <solverOptions numberOfSolverOptions="46">
             
             <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="false"/>
             
@@ -11,7 +11,7 @@
             <solverOption name="artVarCoeff" value="1000000" solver="OSDecompSolver" type="double"/>
             <solverOption name="zeroTol" value=".0001" solver="OSDecompSolver" type="double"/>
             <solverOption name="nodeLimit" value="1000" solver="OSDecompSolver" type="int"/>
-            <solverOption name="masterColumnResetValue" value="5000" solver="OSDecompSolver" type="int"/>
+            <solverOption name="masterColumnResetValue" value="10000" solver="OSDecompSolver" type="int"/>
             <solverOption name="optTolPerCent" value="0" solver="OSDecompSolver" type="double"/>
             
         
@@ -19,7 +19,6 @@
             <solverOption name="numHubs" value="2" solver="routeSolver" type="integer"/>
             <solverOption name="numNodes" value="10" solver="routeSolver" type="integer"/>
 	    <solverOption name="maxMasterColumns" value="15000" solver="routeSolver" type="integer"/>
-            <solverOption name="masterResetValue" value="15000" solver="routeSolver" type="integer"/>
             <solverOption name="maxThetaNonz" value="750000" solver="routeSolver" type="integer"/>
             <solverOption name="use1OPTstart" value="true" solver="routeSolver" type="bool"/>
 <solverOption name="maxBmatrixCon" value="2000" solver="routeSolver" type="integer"/>
