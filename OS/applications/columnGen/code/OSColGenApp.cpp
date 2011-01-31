@@ -83,6 +83,9 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  //initialize the bounds
 	  m_zUB = OSDBL_MAX;
 	  m_zLB = -OSDBL_MAX;
+	  
+	  //set the column number
+	  m_numColumnsOld = 0;
 	    
 
 
@@ -821,8 +824,11 @@ bool OSColGenApp::branchAndBound( ){
 		while( (m_nodeMap.size() > 0) && (m_numNodesGenerated <= m_osDecompParam.nodeLimit) ){
 			
 			//kipp -- experimental
-			
-			if( m_si->getNumCols() > 200000) {
+			m_osDecompParam.masterColumnResetValue = 6000;
+			//if( m_si->getNumCols() > 200000) {
+			if( (m_numColumnsGenerated - m_numColumnsOld)  > 
+				m_osDecompParam.masterColumnResetValue)  {
+				m_numColumnsOld = m_numColumnsGenerated;
 				std::cout << "DOING A MASTER RESET IN BRANCH AND BOUND" << std::endl;
 				std::cout << "NUMBER OF COLUMNS BEFORE RESET = " << m_si->getNumCols() << std::endl;
 				resetMaster();
@@ -1063,8 +1069,8 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				if( m_si->getObjCoefficients()[k]  >=  
 					m_osDecompParam.artVarCoeff -  m_osDecompParam.zeroTol)
 					tmpColParent[ k ] = 3;
-				else if( osnodeParent->reducedCostIdx.find(k) == osnodeParent->reducedCostIdx.end() )
-					tmpColParent[ k ] = 3;
+				//else if( osnodeParent->reducedCostIdx.find(k) == osnodeParent->reducedCostIdx.end() )
+				//	tmpColParent[ k ] = 3;
 				else tmpColParent[ k] = 0;
 				
 			}
@@ -1460,78 +1466,56 @@ void  OSColGenApp::resetMaster(){
 		
 		
 
-		//next add the integer varaibles
+		//next add the integer varaibles in the best known integer solution
 		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
 			
 			if( inVars.find( *vit ) == inVars.end() ) inVars.insert( std::pair<int, int>(*vit, kount++) );
-			
 			
 			//for(int k = m_osrouteSolver->m_thetaPnt[*vit]; k <  m_osrouteSolver->m_thetaPnt[*vit + 1]; k++){
 				
 				//std::cout << m_osrouteSolver-> m_variableNames[ m_osrouteSolver->m_thetaIndex[ k] ] <<  std::endl;
 				
 			//}
-
 		}
 		
-	
+
 		
 		//now loop over the nodes in the branch and bound tree
-		
-	
+		//kipp -- this is hardcoded play with it later
+		double tmpEps = 10;
 		for(mit2 = m_nodeMap.begin(); mit2 !=m_nodeMap.end(); mit2++){
 			
-			//insert the basic variables
-			//for(i = 0; i < mit2->second->thetaNumNonz; i++){
-				
-			//	if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() ) {
-					
-					
-			//		inVars.insert( std::pair<int, int>(mit2->second->thetaIdx[ i], kount++) );
-			//	}
-					
-				
-			//}
-			
-			
-			//for(vit2 = mit2->second->colBasisStatus.begin(); 
-			//		vit2 != mit2->second->colBasisStatus.end(); vit2++){
-				
-			//	if ( (*vit2).second == 1 &&  m_si->getObjCoefficients()[(*vit2).first] < m_osDecompParam.artVarCoeff) {
-					
-			//		inVars.insert( std::pair<int, int>((*vit2).first, kount++) );
-					
-
-					
-			//	}
-					
-				
-					
-			//}
-			
 			std::cout << "NUMBER OF REDUCED COSTS = " << mit2->second->reducedCostIdx.size() << std::endl;
-			
 			for(sit = mit2->second->reducedCostIdx.begin(); 
 					sit != mit2->second->reducedCostIdx.end(); sit++){
 				
-				if( ( inVars.find( *sit ) == inVars.end() )   && (m_si->getObjCoefficients()[*sit] < m_osDecompParam.artVarCoeff)  )
-								inVars.insert( std::pair<int, int>(*sit, kount++) );
+				if( ( inVars.find( *sit ) == inVars.end() )   
+						&& (m_si->getObjCoefficients()[*sit] < m_osDecompParam.artVarCoeff) 
+						//&& (m_si->getReducedCost()[*sit] < tmpEps )
+				) 
+					inVars.insert( std::pair<int, int>(*sit, kount++) );
 			
+				
+			}
+			
+			//insert the thetat variables
+			for(i = 0; i < mit2->second->thetaNumNonz; i++){
+				
+				if( inVars.find( mit2->second->thetaIdx[ i] ) == inVars.end() )
+					
+					inVars.insert( std::pair<int, int>(mit2->second->thetaIdx[ i], kount++) );
 				
 			}
 
 		}
-
-
 		
+	
 		
-		
-		
-		for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;	
+		//for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;	
 		std::cout << "NUMBER OF COLUMNS =  " <<  inVars.size()  <<  std::endl;
 		std::cout << "CALLING osroute solver reset " << std::endl;
-		
 		m_osrouteSolver->resetMaster( inVars, m_si );
+		//std::cout << "THE MAPPING AFTER A RESET: "   <<  std::endl;
 		//for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;
 			
 		int numVars =   m_osrouteSolver->m_osinstanceMaster->getVariableNumber();
@@ -1586,12 +1570,15 @@ void  OSColGenApp::resetMaster(){
 			
 			for(sit = tmpSet.begin(); sit != tmpSet.end(); sit++){
 				
-				mit2->second->reducedCostIdx.insert( *sit );
+				//make sure that variable *sit is in the new reset master
+				
+				if( inVars.find( *sit) !=  inVars.end()  ) 
+					mit2->second->reducedCostIdx.insert( *sit );
 			}
 			tmpSet.clear();
 			//end reset reduced cost indexes
 
-		}//end loop over nodes in tree
+		}//end loop over nodes in tree -- mit2
 		
 		//reset the indexes of variables in the current integer incumbent
 		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++) *vit = inVars[ *vit ];

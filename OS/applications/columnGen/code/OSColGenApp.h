@@ -62,6 +62,14 @@ public:
 	/** kount the columns generated **/
 	int m_numColumnsGenerated;
 	
+	/** when
+	 * m_numColumnsGenerated - m_numColumnsOld
+	 * hits masterColumnResetValue we do a 
+	 * reset
+	 */
+	
+	int m_numColumnsOld;
+	
 	
 	/** m_zUB is the upper bound */
 	double m_zUB;
