@@ -526,6 +526,15 @@ void OSRouteSolver::getOptL( double** c) {
 		m_vv[ 0][ d] = OSDBL_MAX;
 		
 	}
+	//initialize up to last hub
+	for(k = 1; k < m_numHubs - 1; k++){
+		for(d = 0; d <=  m_totalDemand; d++){
+			
+			m_vv[ k][ d] = OSDBL_MAX;
+			
+		}
+	}
+
 	
 	//now loop over the other HUBS
 	
