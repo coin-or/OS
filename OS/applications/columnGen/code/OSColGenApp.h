@@ -21,7 +21,7 @@
 #include "OSInstance.h"
 #include "OSoLReader.h"
 #include "OSCoinSolver.h"
-#include "OSRouteSolver.h"
+#include "OSBearcatSolverXij.h"
 #include "OSDecompParam.h"
 
 #include "OSNode.h"
@@ -45,7 +45,8 @@ public:
 	OSOption *m_osoption;
 	OSResult *m_osresult;
 	
-	OSRouteSolver *m_osrouteSolver;
+	OSBearcatSolverXij *m_osrouteSolver;
+	//OSDecompSolver *m_osrouteSolver;
 	
 	//the OS solver wrapper
 	CoinSolver *m_solver;

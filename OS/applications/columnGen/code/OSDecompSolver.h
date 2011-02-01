@@ -18,6 +18,7 @@
 #include "OSResult.h"
 #include "OSDataStructures.h"
 #include "OSErrorClass.h"
+#include "OSOption.h"
 #include <vector>
 #include <string>
 #include <map>
@@ -39,7 +40,7 @@ public:
 	
 
 
-	virtual void getInitialRestrictedMaster( ) = 0;
+	virtual OSInstance* getInitialRestrictedMaster( ) = 0;
 	
 	
 	/**
@@ -57,7 +58,7 @@ public:
 	 */
 	virtual void getCuts(const  double* thetaVar, const int numThetaVar,
 				 int &numNewRows, int*  &numNonz, int** &colIdx,
-				 double** &values, double* &rowLB, double* &rowUB) = 0 ;	
+				 double** &values, double* &rowLB, double* &rowUB) = 0;	
 	
 	/**
 	 * RETURN VALUES: 
@@ -115,13 +116,16 @@ public:
 						std::map<int, int> &varConMap, int &rowIdx) = 0;
 	
 	
-	virtual void resetMaster( ) = 0;
+
 	
 	
 	
 	//this method gets called when we are done
-	void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
-				 int numColsGen);
+	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
+				 int numColsGen) = 0;
+	
+	
+		virtual void resetMaster( ) = 0;
 	
 	
 	/**
@@ -129,6 +133,13 @@ public:
 	 * Default Constructor. 
 	 */	
 	OSDecompSolver();
+	
+	/**
+	 *
+	 * Constructor with OSOption Arg 
+	 */	
+	OSDecompSolver( OSOption* osoption);
+		
 	
 	/**
 	 *

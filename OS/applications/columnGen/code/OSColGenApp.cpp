@@ -12,7 +12,7 @@
 #include "OSColGenApp.h"
 #include "OSErrorClass.h" 
 #include "OSDataStructures.h"
-
+#include "OSBearcatSolverXij.h"
 #include "OSConfig.h"
 #include "OSResult.h" 
 #include "OSOption.h"
@@ -75,10 +75,17 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  
 	  m_osinstanceMaster = NULL;
 	  m_osrouteSolver = NULL;
-	  m_osrouteSolver = new OSRouteSolver( osoption);
+	  m_osrouteSolver = new OSBearcatSolverXij( osoption);
+
 	  //share the common parameters
 	  m_osrouteSolver->m_osDecompParam = m_osDecompParam;
 	  m_osrouteSolver->initializeDataStructures();
+	  
+	  /////
+	  
+	  
+	  
+	  //////
 	  
 	  //initialize the bounds
 	  m_zUB = OSDBL_MAX;

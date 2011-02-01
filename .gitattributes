@@ -42,6 +42,8 @@ OS/applications/amplClient/nltrans.nl -text
 OS/applications/amplClient/testfile.nl -text
 OS/applications/columnGen/code/Makefile.am -text
 OS/applications/columnGen/code/Makefile.in -text
+OS/applications/columnGen/code/OSBearcatSolverXij.cpp -text
+OS/applications/columnGen/code/OSBearcatSolverXij.h -text
 OS/applications/columnGen/code/OSColGenApp.cpp -text
 OS/applications/columnGen/code/OSColGenApp.h -text
 OS/applications/columnGen/code/OSColGenMain.cpp -text
@@ -53,8 +55,6 @@ OS/applications/columnGen/code/OSDecompSolverFactory.cpp -text
 OS/applications/columnGen/code/OSDecompSolverFactory.h -text
 OS/applications/columnGen/code/OSNode.cpp -text
 OS/applications/columnGen/code/OSNode.h -text
-OS/applications/columnGen/code/OSRouteSolver.cpp -text
-OS/applications/columnGen/code/OSRouteSolver.h -text
 OS/applications/columnGen/data/colgen10.osil -text
 OS/applications/columnGen/data/colgen10.osol -text
 OS/applications/columnGen/data/colgen12.osil -text

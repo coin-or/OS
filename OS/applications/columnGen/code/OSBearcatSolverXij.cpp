@@ -1,5 +1,5 @@
-/* $Id: OSRouteSolver.cpp 3038 2009-11-07 11:43:44Z kmartin $ */
-/** @file OSRouteSolver.cpp
+/* $Id: OSBearcatSolverXij.cpp 3038 2009-11-07 11:43:44Z kmartin $ */
+/** @file OSBearcatSolverXij.cpp
  *
  * \remarks
  * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -11,7 +11,7 @@
  */
 
 
-#include "OSRouteSolver.h"
+#include "OSBearcatSolverXij.h"
 
 #include "OSErrorClass.h" 
 #include "OSDataStructures.h"
@@ -62,12 +62,12 @@
 std::string makeStringFromInt(std::string theString, int theInt);
 
 
-OSRouteSolver::OSRouteSolver() {
-	std::cout << "INSIDE OSRouteSolver CONSTRUCTOR with OSOption argument" << std::endl;
-}//end default OSRouteSolver constructor
+OSBearcatSolverXij::OSBearcatSolverXij() {
+	std::cout << "INSIDE OSBearcatSolverXij CONSTRUCTOR with OSOption argument" << std::endl;
+}//end default OSBearcatSolverXij constructor
 
-OSRouteSolver::OSRouteSolver(OSOption *osoption) {
-	std::cout << "INSIDE OSRouteSolver CONSTRUCTOR with OSOption argument" << std::endl;
+OSBearcatSolverXij::OSBearcatSolverXij(OSOption *osoption) {
+	std::cout << "INSIDE OSBearcatSolverXij CONSTRUCTOR with OSOption argument" << std::endl;
 	
 	
 	m_bestIPValue = OSDBL_MAX;
@@ -99,9 +99,9 @@ OSRouteSolver::OSRouteSolver(OSOption *osoption) {
 	
 	m_osoption = osoption;
 	
-}//end OSRouteSolverDestructor
+}//end OSBearcatSolverXijDestructor
 
-void OSRouteSolver::initializeDataStructures(){
+void OSBearcatSolverXij::initializeDataStructures(){
 	
 	int k;
 	int i;
@@ -310,9 +310,9 @@ void OSRouteSolver::initializeDataStructures(){
 }//end initializeDataStructures
 
 
-OSRouteSolver::~OSRouteSolver(){
+OSBearcatSolverXij::~OSBearcatSolverXij(){
 	
-	std::cout << "INSIDE ~OSRouteSolver DESTRUCTOR" << std::endl;
+	std::cout << "INSIDE ~OSBearcatSolverXij DESTRUCTOR" << std::endl;
 
 
 	
@@ -493,7 +493,7 @@ OSRouteSolver::~OSRouteSolver(){
 	delete m_osinstanceSeparation;
 	m_osinstanceSeparation = NULL;
 
-}//end ~OSRouteSolver
+}//end ~OSBearcatSolverXij
 
 
 
@@ -501,7 +501,7 @@ OSRouteSolver::~OSRouteSolver(){
 
 
 
-void OSRouteSolver::getOptL( double** c) {
+void OSBearcatSolverXij::getOptL( double** c) {
 	
 	//initialize the first HUB
 	
@@ -656,7 +656,7 @@ void OSRouteSolver::getOptL( double** c) {
 
 
 
-double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, int* kountVar){
+double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* c, int* kountVar){
 	
 	//critical -- nodes 0, ..., m_numNodes - 1 are the hub nodes
 	// we are doing the calculation for hub k, k <= m_numNodes - 1
@@ -983,7 +983,7 @@ double OSRouteSolver::qrouteCost(const int& k, const int& l, const double* c, in
 
 
 
-void OSRouteSolver::getColumns(const  double* yA, const int numARows,
+void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 		const  double* yB, const int numBRows,
 		int &numNewColumns, int* &numNonzVec, double* &costVec, 
 		int** &rowIdxVec, double** &valuesVec, double &lowerBound) 
@@ -1234,10 +1234,10 @@ void OSRouteSolver::getColumns(const  double* yA, const int numARows,
 
 
 
-OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
+OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 	
-	std::cout << "Executing OSRouteSolver::getInitialRestrictedMaster( )" << std::endl;
+	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster( )" << std::endl;
 	
 	// define the classes
 	FileUtil *fileUtil = NULL;
@@ -1526,10 +1526,10 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster( ){
 
 
 
-OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
+OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster2( ){
 
 	
-	std::cout << "Executing OSRouteSolver::getInitialRestrictedMaster2( )" << std::endl;
+	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster2( )" << std::endl;
 	
 	//this master will have m_numNodes artificial variables
 	int numVarArt;
@@ -2084,7 +2084,7 @@ OSInstance* OSRouteSolver::getInitialRestrictedMaster2( ){
 
 
 
-void OSRouteSolver::getOptions(OSOption *osoption) {
+void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 	
 	
 	std::cout << "Executing getOptions(OSOption *osoption)" << std::endl;
@@ -2358,7 +2358,7 @@ void OSRouteSolver::getOptions(OSOption *osoption) {
 
 
 
-void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
+void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 		int &numNewRows, int*  &numNonz, int** &colIdx,
 		double** &values, double* &rowLB, double* &rowUB) {
 	//critical -- the variables that come in the theta variables
@@ -2386,7 +2386,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 		m_osinstanceSeparation->bConstraintsModified = true;
 		//m_numNodes is the number of artificial variables
 		if(numTheta != m_numThetaVar ) throw 
-				ErrorClass("number of master varibles in OSRouteSolver::getCuts inconsistent");
+				ErrorClass("number of master varibles in OSBearcatSolverXij::getCuts inconsistent");
 		
 		//for(i = 0; i < numTheta; i++){
 		
@@ -2740,7 +2740,7 @@ void OSRouteSolver::getCutsTheta(const  double* theta, const int numTheta,
 
 
 
-void OSRouteSolver::getCutsX(const  double* x, const int numX,
+void OSBearcatSolverXij::getCutsX(const  double* x, const int numX,
 		int &numNewRows, int*  &numNonz, int** &colIdx,
 		double** &values, double* &rowLB, double* &rowUB) {
 	//critical -- we are assuming that the size of x is going to be 
@@ -2958,7 +2958,7 @@ void OSRouteSolver::getCutsX(const  double* x, const int numX,
 }//end getCutsX
 
 
-void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
+void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
 	
 	int k;
 	int i;
@@ -3055,7 +3055,7 @@ void OSRouteSolver::calcReducedCost( const double* yA, const double* yB){
 }//end calcReducedCost
 
 
-void OSRouteSolver::createVariableNames( ){
+void OSBearcatSolverXij::createVariableNames( ){
 	
 	int i;
 	int j;
@@ -3092,7 +3092,7 @@ void OSRouteSolver::createVariableNames( ){
 	}	
 }//end createVariableNames
 
-void OSRouteSolver::createAmatrix(){
+void OSBearcatSolverXij::createAmatrix(){
 	
 	//arrays for the coupling constraint matrix
 	//this is in the x variable space, not theta
@@ -3141,7 +3141,7 @@ void OSRouteSolver::createAmatrix(){
 	
 }//end createAmatrix
 
-void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, int numColsGen){
+void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, int numColsGen){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
@@ -3212,7 +3212,7 @@ void OSRouteSolver::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, int 
 }//end pauHana -- no pun intended
 
 
-OSInstance* OSRouteSolver::getSeparationInstance(){
+OSInstance* OSBearcatSolverXij::getSeparationInstance(){
 	
 
 	
@@ -3456,7 +3456,7 @@ OSInstance* OSRouteSolver::getSeparationInstance(){
 
 
 
-int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) {
+int OSBearcatSolverXij::getBranchingVar(const double* theta, const int numThetaVar ) {
 
 	int varIdx;
 	varIdx = -1;
@@ -3599,7 +3599,7 @@ int OSRouteSolver::getBranchingVar(const double* theta, const int numThetaVar ) 
 
 
 
-int OSRouteSolver::getBranchingVar(const int* thetaIdx, const double* theta, 
+int OSBearcatSolverXij::getBranchingVar(const int* thetaIdx, const double* theta, 
 		const int numThetaVar) {
 
 	int varIdx;
@@ -3744,7 +3744,7 @@ int OSRouteSolver::getBranchingVar(const int* thetaIdx, const double* theta,
 }//end getBranchingVar Sparse
 
 
-void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVar,
+void OSBearcatSolverXij::getBranchingCut(const double* thetaVar, const int numThetaVar,
 		const std::map<int, int> &varConMap, int &varIdx,  int &numNonz, 
 		int* &indexes,  double* &values) {
 	
@@ -3825,7 +3825,7 @@ void OSRouteSolver::getBranchingCut(const double* thetaVar, const int numThetaVa
 }//end getBranchingCut dense
 
 
-void OSRouteSolver::getBranchingCut(const int* thetaIdx, const double* thetaVar, 
+void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thetaVar, 
 		const int numThetaVar, const std::map<int, int> &varConMap, 
 		int &varIdx,  int &numNonz, int* &indexes, double* &values) {
 	
@@ -3910,7 +3910,7 @@ void OSRouteSolver::getBranchingCut(const int* thetaIdx, const double* thetaVar,
 }//end getBranchingCut sparse
 
 
-void OSRouteSolver::getInitialSolution(){
+void OSBearcatSolverXij::getInitialSolution(){
 	
 	try{	
 		//kipp -- stil not done we depend on SKs solution
@@ -3936,7 +3936,7 @@ void OSRouteSolver::getInitialSolution(){
 }//end getInitialSolution
 
 
-void OSRouteSolver::resetMaster( std::map<int, int> &inVars, OsiSolverInterface *si){
+void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInterface *si){
 	
 	int i;
 	int j;

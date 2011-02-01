@@ -21,7 +21,7 @@ OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h
 OSColGenMain_SOURCES += OSNode.cpp OSNode.h OSDecompParam.h
 OSColGenMain_SOURCES += OSDecompSolver.cpp OSDecompSolver.h
 OSColGenMain_SOURCES += OSDecompSolverFactory.cpp OSDecompSolverFactory.h OSDecompFactoryInitializer.h
-OSColGenMain_SOURCES += OSRouteSolver.cpp  OSRouteSolver.h
+OSColGenMain_SOURCES += OSBearcatSolverXij.cpp  OSBearcatSolverXij.h
 
 
 # List all additionally required COIN libraries

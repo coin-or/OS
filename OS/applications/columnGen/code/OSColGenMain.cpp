@@ -21,6 +21,7 @@
 #include "CoinTime.hpp"
 
 
+
 #ifdef HAVE_CTIME
 # include <ctime>
 #else
@@ -35,6 +36,8 @@
 //===========================================================================//
 int main(int argc, char ** argv){
    try{
+	   
+	
 
 	   OSColGenApp *colgenApp;
 	   OSOption *osoption = NULL;

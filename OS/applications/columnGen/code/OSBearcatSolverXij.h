@@ -1,5 +1,5 @@
-/* $Id: OSRouteSolver.h 3038 2009-11-07 11:43:44Z kmartin $ */
-/** @file OSRouteSolver.h
+/* $Id: OSBearcatSolverXij.h 3038 2009-11-07 11:43:44Z kmartin $ */
+/** @file OSBearcatSolverXij.h
  * 
  * \remarks
  * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -10,9 +10,10 @@
  * 
  */
 
-#ifndef OSROUTESOLVER_H
-#define OSROUTESOLVER_H
+#ifndef OSBEARCATSOLVERXIJ_H
+#define OSBEARCATSOLVERXIJ_H
 
+#include "OSDecompSolver.h"
 #include "OSInstance.h"
 #include "OSOption.h"
 #include "ClpSimplex.hpp"
@@ -22,12 +23,12 @@
 // --------------------------------------------------------------------- //
 /*!
  * \class 
- * OSRouteSolver
+ * OSBearcatSolverXij
  * 
  *
  */
 // --------------------------------------------------------------------- //
-class OSRouteSolver {
+class OSBearcatSolverXij : public OSDecompSolver {
 public:
 	
 	
@@ -267,7 +268,7 @@ public:
 	ClpSimplex*  m_separationClpModel;
 
 	//create the initial restricted master
-	OSInstance* getInitialRestrictedMaster( );
+	virtual OSInstance* getInitialRestrictedMaster( );
 	
 
 	//create the initial restricted master a second way
@@ -340,9 +341,10 @@ public:
 	 * a consraint number
 	 * 
 	 */
-	void getBranchingCut(const double* thetaVar, const int numThetaVar,
+	virtual void getBranchingCut(const double* thetaVar, const int numThetaVar,
 			const std::map<int, int> &varConMap, int &varIdx,  int &numNonz, 
 			int* &indexes,  double* &values) ;	
+	
 	
 	
 	/**
@@ -366,7 +368,7 @@ public:
 	 * a consraint number
 	 * 
 	 */
-	void getBranchingCut(const int* thetaIdx, const double* theta, 
+	virtual void getBranchingCut(const int* thetaIdx, const double* theta, 
 			const int numThetaVar, const std::map<int, int> &varConMap, 
 			int &varIdx,  int &numNonz, int* &indexes, double* &values) ;
 	
@@ -411,7 +413,7 @@ public:
 	 * double* y -- the vector of dual values
 	 * int numRows -- size of dual vector
 	 */
-	void getColumns(const  double* yA, const int numARows,
+	virtual void getColumns(const  double* yA, const int numARows,
 			const  double* yB, const int numBRows,
 			int &numNewColumns, int*  &numNonz, double* &cost, 
 			int** &rowIdx, double** &values, double &lowerBound) ;
@@ -451,11 +453,17 @@ public:
 	 */
 	void getInitialSolution();
 	
+
+	
+	virtual void resetMaster( std::map<int, int> &inVars, 
+			OsiSolverInterface *si );
+	
+	
 	//this method gets called when we are done
-	void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
+	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
 			int numColsGen);
 	
-	/** use this method to reset the master
+	/** use this method to  the master
 	 * RETURN VALUES: 
 	 * 
 	 * INPUT:
@@ -464,29 +472,27 @@ public:
 	 * the master
 	 */
 	
-	void resetMaster( std::map<int, int> &inVars, OsiSolverInterface *si );
-	
 	/**
 	 *
 	 * Default Constructor. 
 	 */	
-	OSRouteSolver();
+	OSBearcatSolverXij();
 	
 	/**
 	 *
 	 * Second  Constructor. 
 	 */	
-	OSRouteSolver(OSOption* osoption);
+	OSBearcatSolverXij(OSOption* osoption);
 	
 	
 	/** 
 	 * Default Destructor
 	 */
 	
-	~OSRouteSolver();
+	~OSBearcatSolverXij();
 	
 
-};//end class OSRouteSolver
+};//end class OSBearcatSolverXij
 
 #endif
 
