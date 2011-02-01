@@ -14,7 +14,7 @@
 #include<map>
 #include "OSDecompSolverFactory.h"
 #include "OSDecompSlpSolver.h"
-#include "OSDecompBearcatSolver.h"
+#include "OSBearcatSolverXij.h"
 //#include "MySolver.h"
 
 
@@ -30,7 +30,7 @@ public:
 		//OSDecompSolverFactory::factories["MySolver"] = new MySolver::Factory;
 		//OSDecompSolverFactory::factories["OSDecompCoinSolver"] = new OSDecompCoinSolver::Factory;
 		//OSDecompSolverFactory::factories["OSDecompSlpSolver"] = new OSDecompSlpSolver::Factory;
-		OSDecompSolverFactory::factories["OSDecompBearcatSolver"] = new OSDecompBearcatSolver::Factory;
+		OSDecompSolverFactory::factories["OSDecompBearcatSolver"] = new OSBearcatSolverXij::Factory;
 	}
 	
 	

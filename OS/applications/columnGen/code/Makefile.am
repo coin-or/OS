@@ -30,6 +30,7 @@ OSColGenMain_SOURCES += OSRouteSolver.cpp  OSRouteSolver.h
 OSColGenMain_LDADD = ../../../src/libOS.la $(OSLIB_LIBS)
 
 OSColGenMain_DEPENDENCIES = ../../../src/libOS.la $(OSLIB_DEPENDENCIES)
+
 	
 
 # The -rpath flag is used by libtool to make sure that the shared
@@ -57,6 +58,7 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces`
+	
 
 
 # This line is necessary to allow VPATH compilation with MS compilers on Cygwin

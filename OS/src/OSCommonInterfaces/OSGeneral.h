@@ -30,7 +30,6 @@
 #include <string>
 #include <vector>
 
-
 /*! \class GeneralFileHeader
  * \brief a data structure that holds general information about files
  * that conform to one of the OSxL schemas

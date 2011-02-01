@@ -452,7 +452,7 @@ public:
 	void getInitialSolution();
 	
 	//this method gets called when we are done
-	void pauHana(std::vector<int> &m_zOptIndexesm , int numNodes,
+	void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
 			int numColsGen);
 	
 	/** use this method to reset the master

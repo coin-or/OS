@@ -13,13 +13,10 @@
 #include "OSDecompSolverFactory.h"
 
 
-OSDecompSolver::OSDecompSolver():
-	m_cost(NULL),
-	m_sparseVec( NULL),
-	m_optVal( 0) {
+OSDecompSolver::OSDecompSolver() {
 }//end OSDecompSolver
 
-OSDecompSolver::~OSDecompSolver(){
+OSDecompSolver::~OSDecompSolver() {
 
 	//cout << "inside OSDecompSolver destructor" << endl;
 

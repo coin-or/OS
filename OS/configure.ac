@@ -826,6 +826,7 @@ AC_CONFIG_FILES([Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
           applications/columnGen/code/Makefile
+
           applications/parsingTest/Makefile
           os.pc
 	  os-uninstalled.pc])

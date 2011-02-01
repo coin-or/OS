@@ -117,7 +117,7 @@ public:
 	/** kipp -- document */
 	void solveRestrictedMasterRelaxation( );
 	
-	void getInitialRestrictedMaster( );
+
 	
 	void getInitialRestrictedMaster2( );
 	
@@ -132,6 +132,9 @@ public:
 	bool branchAndBound();
 	
 	void solve();
+	
+	
+	void getInitialRestrictedMaster( );
 	
 	/**
 	 * 

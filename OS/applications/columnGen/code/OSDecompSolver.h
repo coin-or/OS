@@ -38,53 +38,90 @@ class OSDecompSolver{
 public:
 	
 
-	
-	/** m_cost is the objective function
-	 * of (reduced) coefficients
-	 */
-	double *m_cost;
-	
-	/**  m_sparseVec is the column found by solving the block
-	 * optimization problem
-	 */
-	SparseVector *m_sparseVec;
-	
-	/** m_optVal is the optimal objective function
-	 * value of the block optimization problem
-	 */
-	double m_optVal;
-	
-	
-	/** m_whichBlock is the index of the subproblem
-	 * we are working with
-	 */
-	int m_whichBlock;
-		
-	/**
-	 * <p>
-	 * Calculate the function value given the current variable values.
-	 * This is an abstract method which is required to be implemented by the concrete
-	 * operator nodes that derive or extend from this OSnLNode class.
-	 * </p>
-	 *
-	 * @param cost -- an input value: pointer to the objective function (reduced) coefficients.
-	 * @param sv -- a return value: sparse vector with the optimal column
-	 * @param optVal -- a return value: the optimal solution value of the subproblem
-	 */
-	virtual void solve(double *cost, std::vector<IndexValuePair*> *solIndexValPair, double *optVal) = 0;
+
+	virtual void getInitialRestrictedMaster( ) = 0;
 	
 	
 	/**
-	 * <p>
-	 * Calculate the function value given the current variable values.
-	 * This is an abstract method which is required to be implemented by the concrete
-	 * operator nodes that derive or extend from this OSnLNode class.
-	 * </p>
-	 *
-	 * @param cost -- an input value: pointer to the objective function (reduced) coefficients.
-	 * @param osrl -- a return value: an osrl string
+	 * RETURN VALUES: 
+	 * @paramint numNewRows -- number of new rows generated
+	 * @param int* numNonz -- number of nonzeros in each row
+	 * @param double** colIdx -- vectors column indexes of new rows
+	 * @param double** values -- vectors of matrix coefficient values of new rows
+	 * @param double* rowLB -- vector of row lower bounds
+	 * @paramdouble* rowUB -- vector of row upper bounds
+	 * 
+	 * INPUT:
+	 * @param double* thetaVar -- the vector of primal master values
+	 * @param int numThetaVar -- size of master primal vector
 	 */
-	virtual void solve(double *cost, std::string *osrl) = 0 ;
+	virtual void getCuts(const  double* thetaVar, const int numThetaVar,
+				 int &numNewRows, int*  &numNonz, int** &colIdx,
+				 double** &values, double* &rowLB, double* &rowUB) = 0 ;	
+	
+	/**
+	 * RETURN VALUES: 
+	 * @param iny numNewColumns -- number of new columns generated
+	 * @param int* numNonz -- number of nonzeros in each column
+	 * @param double* cost -- the objective function coefficient on each new column
+	 * @param double** rowIdx -- vectors row indexes of new columns
+	 * @param double** values -- vectors of matrix coefficient values of new columns
+	 * @paramdouble lowerBound -- the lowerBound
+	 * 
+	 * INPUT:
+	 * @param double* yA -- the vector of dual values on the coupling constraints
+	 * @param int numARows -- size of the yA dual vector
+	 * @paramdouble* yB -- the vector of dual values on the tour breaking constaints
+	 * @param int numBRows -- size of the yA dual vector
+	 */
+	virtual void getColumns(const  double* yA, const int numARows,
+					const  double* yB, const int numBRows,
+					int &numNewColumns, int* &numNonz, double* &cost, 
+					int** &rowIdx, double** &values, double &lowerBound)  = 0;
+	
+	
+
+	
+	/**
+	 * 
+	 * INPUT: -- sparse version
+	 * @param int* thetaIdx -- index vector of nonzero theta variables 
+	 * @param double* theta -- the sparse vector of primal master values
+	 * @param int numThetaVar -- size of master primal vector
+	 * @param std::map<int, int> varConMap -- the variable constraint map
+	 * 
+	 * RETURN:
+	 * 
+	 * rowIdx is the row index of the row used for branching
+	 * 
+	 */
+	virtual void createBranchingCut(const int* thetaIdx, const double* theta, 
+							const int numThetaVar, std::map<int, int> &varConMap, int &rowIdx) = 0;
+	
+	
+	/**
+	 * 
+	 * INPUT: -- dense version
+	 * @param double* theta -- the dense vector of primal master values
+	 * @param int numThetaVar -- size of master primal vector
+	 * @param std::map<int, int> varConMap -- the variable constraint map
+	 * 
+	 * RETURN:
+	 * 
+	 * @param rowIdx is the row index of the row used for branching
+	 * 
+	 */
+	virtual void createBranchingCut(const double* theta, const int numThetaVar, 
+						std::map<int, int> &varConMap, int &rowIdx) = 0;
+	
+	
+	virtual void resetMaster( ) = 0;
+	
+	
+	
+	//this method gets called when we are done
+	void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
+				 int numColsGen);
 	
 	
 	/**

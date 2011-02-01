@@ -138,6 +138,20 @@ inline double nanKludge(){
 
 
 
+inline bool OSIsnan(double x) {
+	//this is taken directly from COINUTILS
+#ifdef MY_C_ISNAN
+	
+    return MY_C_ISNAN( x)!=0;
+#else
+    return false;
+#endif
+	
+} 
+
+
+
+
 
 //#include <limits.h>
 //#ifdef INFINITY //This is the definition in the ISO C99 standard.
