@@ -301,7 +301,7 @@ inline double OSRand()
 
 	i = rand();
 
-	return i/RAND_MAX;
+	return (double) i/RAND_MAX;
 }	
 
 

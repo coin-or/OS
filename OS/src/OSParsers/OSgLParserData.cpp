@@ -37,7 +37,7 @@
 	fileName(""),
 	source(""),
 	description(""),
-	fileCreatedBy(""),
+	fileCreator(""),
 	licence("")
 
 {

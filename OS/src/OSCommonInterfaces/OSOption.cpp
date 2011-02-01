@@ -13,7 +13,7 @@
  * 
  */
 
-//#define DEBUG
+#define DEBUG
 
 #ifdef  DEBUG
 #define DEBUG_OSOPTION
@@ -1128,13 +1128,13 @@ ConstraintOption::~ConstraintOption()
 
 
 SolverOption::SolverOption(): 
-	numberOfItems(0),
 	name (""),
 	value (""),
 	solver(""),
 	category (""),
 	type (""),
 	description (""),
+	numberOfItems(0),
 	item(NULL)
 {    
 	#ifdef DEBUG_OSOPTION
@@ -1336,12 +1336,12 @@ std::string  OSOption::getFileDescription()
 /**
  * get the file creator (in <optionHeader> element)
  */
-std::string  OSOption::getFileCreatedBy()
+std::string  OSOption::getFileCreator()
 {	if (this->optionHeader != NULL) 
-		return this->optionHeader->fileCreatedBy;
+		return this->optionHeader->fileCreator;
 
 	return "";
-}//getFileCreatedBy
+}//getFileCreator
 
 /**
  * get the file licence information (in <optionHeader> element)
@@ -6180,11 +6180,11 @@ bool SolverOptions::addSolverOption(std::string name, std::string value, std::st
  */
 	
 bool OSOption::setOptionHeader(std::string name, std::string source, 
-		           std::string fileCreatedBy, std::string description, std::string licence)
+		           std::string description, std::string fileCreator, std::string licence)
 {
 	if (this->optionHeader == NULL) 
 		this->optionHeader = new GeneralFileHeader();
-	return this->optionHeader->setHeader(name, source, fileCreatedBy, description, licence);
+	return this->optionHeader->setHeader(name, source, description, fileCreator, licence);
 }// end of OSOption::setOptionHeader
 
 /** 
@@ -8044,7 +8044,10 @@ bool OSOption::IsEqual(OSOption *that)
 			return false;
 		}
 		else	
-		{	if (!this->general->IsEqual(that->general))
+		{
+			if (!this->optionHeader->IsEqual(that->optionHeader))
+				return false;
+			if (!this->general->IsEqual(that->general))
 				return false;
 			if (!this->system->IsEqual(that->system))
 				return false;
@@ -8525,7 +8528,8 @@ bool MinDiskSpace::IsEqual(MinDiskSpace *that)
 		}
 		else	
 		{	if ((this->unit        != that->unit)  || 
-				(this->value       != that->value) ||
+//				(this->value       != that->value) ||
+				!isEqual(this->value, that->value) ||
 				(this->description != that->description) ) 
 			{	
 #ifdef DEBUG_OSOPTION
@@ -8565,8 +8569,10 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 			return false;
 		}
 		else	
-		{	if ((this->unit  != that->unit)  || 
-				(this->value != that->value) ) 
+		{	if ((this->unit        != that->unit)  || 
+//				(this->value       != that->value) ||
+				!isEqual(this->value, that->value) ||
+				(this->description != that->description) ) 
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
@@ -8604,8 +8610,10 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 			return false;
 		}
 		else	
-		{	if ((this->unit  != that->unit)  || 
-				(this->value != that->value) ) 
+		{	if ((this->unit        != that->unit)  || 
+//				(this->value       != that->value) ||
+				!isEqual(this->value, that->value) ||
+				(this->description != that->description) ) 
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
@@ -8644,10 +8652,10 @@ bool MinCPUNumber::IsEqual(MinCPUNumber *that)
 		}
 		else	
 		{	if ((this->description != that->description)  || 
-				(this->value       != that->value) ) 
+				(this->value != that->value) )
 			{
 #ifdef DEBUG_OSOPTION
-				cout << "description: "  << this->description  << " vs. " << that->description  << endl;
+				cout << "description: " << this->description  << " vs. " << that->description  << endl;
 				cout << "value:       " << this->value << " vs. " << that->value << endl;
 #endif	
 				return false;
@@ -9004,7 +9012,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || (this->value != that->value))
+		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9290,7 +9298,7 @@ bool SOSWeights::IsEqual(SOSWeights *that)
 		}
 		else	
 		{	if ((this->sosIdx != that->sosIdx) ||
-				(this->groupWeight != that->groupWeight))  
+				!isEqual(this->groupWeight, that->groupWeight))  
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "sosIdx: "      << this->sosIdx      << " vs. " << that->sosIdx      << endl;
@@ -9343,7 +9351,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || (this->value != that->value))
+		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9583,7 +9591,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || (this->value != that->value))
+		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9662,8 +9670,8 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx     != that->idx)    || (this->lbValue != that->lbValue) || 
-				(this->ubValue != that->ubValue) )
+		{	if ((this->idx     != that->idx)    || !isEqual(this->lbValue,that->lbValue) || 
+				!isEqual(this->ubValue, that->ubValue) )
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "     << this->idx     << " vs. " << that->idx     << endl;
@@ -9893,7 +9901,7 @@ bool InitConValue::IsEqual(InitConValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || (this->value != that->value))
+		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9972,8 +9980,8 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || (this->lbDualValue != that->lbDualValue) ||
-				(this->ubDualValue != that->ubDualValue))
+		{	if ((this->idx != that->idx) || !isEqual(this->lbDualValue, that->lbDualValue) ||
+			                                !isEqual(this->ubDualValue, that->ubDualValue))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "         << this->idx         << " vs. " << that->idx         << endl;
@@ -10198,8 +10206,8 @@ bool OSOption::setRandom( double density, bool conformant )
 #endif
 	if (OSRand() <= density)
 	{
-		general = new GeneralOption();
-		general->setRandom(density, conformant);
+		optionHeader = new GeneralFileHeader();
+		optionHeader->setRandom(density, conformant);
 	}
 	if (OSRand() <= density)      
 	{
@@ -10210,6 +10218,11 @@ bool OSOption::setRandom( double density, bool conformant )
 	{
 		system = new SystemOption();
 		system->setRandom(density, conformant);
+	if (OSRand() <= density)
+	{
+		general = new GeneralOption();
+		general->setRandom(density, conformant);
+	}
 	}
 	if (OSRand() <= density)          
 	{
@@ -10255,7 +10268,7 @@ bool GeneralOption::setRandom( double density, bool conformant )
 		otherOptions->setRandom(density, conformant);
 	}
 	return true;
-}//GeneralOption::IsEqual
+}//GeneralOption::setRandom
 
 
 bool SystemOption::setRandom( double density, bool conformant )
@@ -10308,7 +10321,11 @@ bool ServiceOption::setRandom( double density, bool conformant )
 		else                   this->type = "spy";
 	} 
 
-	if (OSRand() <= density)  otherOptions->setRandom(density, conformant);
+	if (OSRand() <= density)  
+	{
+		otherOptions = new OtherOptions(); 
+		otherOptions->setRandom(density, conformant);
+	}
 	return true;
 }//ServiceOption::setRandom
 
@@ -10398,9 +10415,9 @@ bool OptimizationOption::setRandom( double density, bool conformant )
 #ifdef DEBUG_OSOPTION
 	cout << "Set random OptimizationOption" << endl;
 #endif
-	if (OSRand() <= density) this->numberOfVariables   = (int)(10*OSRand());
-	if (OSRand() <= density) this->numberOfObjectives  = (int)(10*OSRand());
-	if (OSRand() <= density) this->numberOfConstraints = (int)(10*OSRand());
+	if (OSRand() <= density && !conformant) this->numberOfVariables   = (int)(1+9*OSRand());
+	if (OSRand() <= density && !conformant) this->numberOfObjectives  = (int)(1+9*OSRand());
+	if (OSRand() <= density && !conformant) this->numberOfConstraints = (int)(1+9*OSRand());
 
 	if (OSRand() <= density)    
 	{
@@ -10471,13 +10488,18 @@ bool OtherOptions::setRandom( double density, bool conformant )
 #endif
 	int n;
 
-	if (OSRand() <= density || conformant) 
-	{
-		this->numberOfOtherOptions = (int)(4*OSRand());
+	this->numberOfOtherOptions = (int)(1+4*OSRand());
 
-		if (conformant)	n = this->numberOfOtherOptions;
-		else            n = (int)(4*OSRand());
+std::cout << "number of other options: " << this->numberOfOtherOptions << std::endl;
 
+	if (conformant)	n = this->numberOfOtherOptions;
+	else            n = (int)(1+4*OSRand());
+
+std::cout << "n: " << n << std::endl;
+
+
+//	if (n > 0) 
+//	{
 		other = new OtherOption*[n];
 
 		for (int i = 0; i < n; i++)
@@ -10485,7 +10507,7 @@ bool OtherOptions::setRandom( double density, bool conformant )
 			other[i] = new OtherOption();
 			other[i]->setRandom(density, conformant);
 		}
-	}
+//	}
 
 	return true;
 }//OtherOptions::setRandom
@@ -10510,17 +10532,17 @@ bool JobDependencies::setRandom( double density, bool conformant )
 #endif
 	int n;
 
-	if (OSRand() <= density) 
-	{
-		this->numberOfJobIDs = (int)(4*OSRand());
+	this->numberOfJobIDs = (int)(1+4*OSRand());
 
-		if (conformant)	n = this->numberOfJobIDs;
-		else            n = (int)(4*OSRand());
+	if (conformant)	n = this->numberOfJobIDs;
+	else            n = (int)(1+4*OSRand());
 
+//	if (n > 0) 
+//	{
 		jobID = new std::string[n];
 		for (int i = 0; i < n; i++)
 			jobID[i] = "random string";
-	}
+//	}
 
 	return true;
 }//JobDependencies::setRandom
@@ -10532,20 +10554,20 @@ bool DirectoriesAndFiles::setRandom( double density, bool conformant )
 #endif
 	int n;
 
-	if (OSRand() <= density) 
-	{
-		this->numberOfPaths = (int)(4*OSRand());
+	this->numberOfPaths = (int)(1+4*OSRand());
 
-		if (conformant)	n = this->numberOfPaths;
-		else            n = (int)(4*OSRand());
+	if (conformant)	n = this->numberOfPaths;
+	else            n = (int)(1+4*OSRand());
 
+//	if (n > 0)
+//	{
 		path = new std::string[n];
 		for (int i = 0; i < n; i++)
 			path[i] = "random string";
-	}
+//	}
 
 	return true;
-}//DirectoriesAndFiles::IsEqual
+}//DirectoriesAndFiles::setRandom
 
 bool PathPairs::setRandom( double density, bool conformant )
 {
@@ -10554,23 +10576,23 @@ bool PathPairs::setRandom( double density, bool conformant )
 #endif
 	int n;
 
-	if (OSRand() <= density) 
-	{
-		this->numberOfPathPairs = (int)(4*OSRand());
+	this->numberOfPathPairs = (int)(1+4*OSRand());
 
-		if (conformant)	n = this->numberOfPathPairs;
-		else            n =(int)(4*OSRand());
+	if (conformant)	n = this->numberOfPathPairs;
+	else            n =(int)(1+4*OSRand());
 
+//	if (n > 0) 
+//	{
 		pathPair = new PathPair*[n];
 		for (int i = 0; i < n; i++)
 		{
 			this->pathPair[i] = new PathPair();
 			this->pathPair[i]->setRandom(density, conformant);
 		}
-	}
+//	}
 
 	return true;
-}//PathPairs::IsEqual
+}//PathPairs::setRandom
 
 bool PathPair::setRandom( double density, bool conformant )
 {
@@ -10581,7 +10603,7 @@ bool PathPair::setRandom( double density, bool conformant )
 	this->to   = "random string";
 	if (OSRand() <= density) this->makeCopy = (OSRand() <= 0.5);
 	return true;
-}//PathPair::IsEqual
+}//PathPair::setRandom
 
 bool Processes::setRandom( double density, bool conformant )
 {
@@ -10590,17 +10612,14 @@ bool Processes::setRandom( double density, bool conformant )
 #endif
 	int n;
 
-	if (OSRand() <= density) 
-	{
-		this->numberOfProcesses = (int)(4*OSRand());
+	this->numberOfProcesses = (int)(1+4*OSRand());
 
-		if (conformant)	n = this->numberOfProcesses;
-		else            n = (int)(4*OSRand());
+	if (conformant)	n = this->numberOfProcesses;
+	else            n = (int)(1+4*OSRand());
 
-		process = new std::string[n];	
-		for (int i = 0; i < n; i++)
-			process[i] = "random string";
-	}
+	process = new std::string[n];	
+	for (int i = 0; i < n; i++)
+		process[i] = "random string";
 
 	return true;
 }//Processes::setRandom
@@ -10638,21 +10657,18 @@ bool VariableOption::setRandom( double density, bool conformant )
 	}
 
 
-	if (OSRand() <= density) 
+	this->numberOfOtherVariableOptions = (int)(4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfOtherVariableOptions;
+	else            n = (int)(4*OSRand());
+
+	other = new OtherVariableOption*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfOtherVariableOptions = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfOtherVariableOptions;
-		else            n = (int)(4*OSRand());
-
-		other = new OtherVariableOption*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			other[i] = new OtherVariableOption();
-			other[i]->setRandom(density, conformant);
-		}
+		other[i] = new OtherVariableOption();
+		other[i]->setRandom(density, conformant);
 	}
 	return true;
 }//VariableOption::setRandom
@@ -10662,21 +10678,18 @@ bool InitVariableValues::setRandom( double density, bool conformant )
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitVariableValues" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfVar = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfVar;
+	else            n = (int)(1+4*OSRand());
+
+	var = new InitVarValue*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfVar = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfVar;
-		else            n = (int)(4*OSRand());
-
-		var = new InitVarValue*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			var[i] = new InitVarValue();
-			var[i]->setRandom(density, conformant);
-		}
+		var[i] = new InitVarValue();
+		var[i]->setRandom(density, conformant);
 	}
 	return true;
 }//InitVariableValues::setRandom
@@ -10698,7 +10711,7 @@ bool InitVarValue::setRandom( double density, bool conformant )
 		else                 this->value = 2.71828;
 	}
 	return true;
-}//InitVarValue::IsEqual
+}//InitVarValue::setRandom
 
 
 bool InitVariableValuesString::setRandom( double density, bool conformant )
@@ -10706,24 +10719,21 @@ bool InitVariableValuesString::setRandom( double density, bool conformant )
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitVariableValuesString" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfVar = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfVar;
+	else            n = (int)(1+4*OSRand());
+
+	var = new InitVarValueString*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfVar = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfVar;
-		else            n = (int)(4*OSRand());
-
-		var = new InitVarValueString*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			var[i] = new InitVarValueString();
-			var[i]->setRandom(density, conformant);
-		}
+		var[i] = new InitVarValueString();
+		var[i]->setRandom(density, conformant);
 	}
 	return true;
-}//InitVariableValuesString::IsEqual
+}//InitVariableValuesString::setRandom
 
 bool InitVarValueString::setRandom( double density, bool conformant )
 {
@@ -10735,7 +10745,7 @@ bool InitVarValueString::setRandom( double density, bool conformant )
 	if (OSRand() <= density) this->value = "random string";
 
 	return true;
-}//InitVarValueString::IsEqual
+}//InitVarValueString::setRandom
 
 
 bool IntegerVariableBranchingWeights::setRandom( double density, bool conformant )
@@ -10743,45 +10753,39 @@ bool IntegerVariableBranchingWeights::setRandom( double density, bool conformant
 #ifdef DEBUG_OSOPTION
 	cout << "Set random IntegerVariableBranchingWeights" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfVar = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfVar;
+	else            n = (int)(1+4*OSRand());
+
+	var = new BranchingWeight*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfVar = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfVar;
-		else            n = (int)(4*OSRand());
-
-		var = new BranchingWeight*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			var[i] = new BranchingWeight();
-			var[i]->setRandom(density, conformant);
-		}
+		var[i] = new BranchingWeight();
+		var[i]->setRandom(density, conformant);
 	}
 	return true;
-}//IntegerVariableBranchingWeights::IsEqual
+}//IntegerVariableBranchingWeights::setRandom
 
 bool SOSVariableBranchingWeights::setRandom( double density, bool conformant )
 {
 #ifdef DEBUG_OSOPTION
 	cout << "Set random SOSVariableBranchingWeights" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfSOS = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfSOS;
+	else            n = (int)(1+4*OSRand());
+
+	sos = new SOSWeights*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfSOS = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfSOS;
-		else            n = (int)(4*OSRand());
-
-		sos = new SOSWeights*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			sos[i] = new SOSWeights();
-			sos[i]->setRandom(density, conformant);
-		}
+		sos[i] = new SOSWeights();
+		sos[i]->setRandom(density, conformant);
 	}
 	return true;
 }//SOSVariableBranchingWeights::setRandom
@@ -10886,7 +10890,7 @@ bool OtherVarOption::setRandom( double density, bool conformant )
 	if (OSRand() <= density) this->lbValue = "random string";
 	if (OSRand() <= density) this->ubValue = "random string";
 	return true;
-}//OtherVarOption::IsEqual
+}//OtherVarOption::setRandom
 
 bool ObjectiveOption::setRandom( double density, bool conformant )
 {
@@ -10927,31 +10931,28 @@ bool ObjectiveOption::setRandom( double density, bool conformant )
 		}
 	}
 	return true;
-}//ObjectiveOption::IsEqual
+}//ObjectiveOption::setRandom
 
 bool InitObjectiveValues::setRandom( double density, bool conformant )
 {
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitObjectiveValues" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfObj = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfObj;
+	else            n = (int)(1+4*OSRand());
+
+	obj = new InitObjValue*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfObj = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfObj;
-		else            n = (int)(4*OSRand());
-
-		obj = new InitObjValue*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			obj[i] = new InitObjValue();
-			obj[i]->setRandom(density, conformant);
-		}
+		obj[i] = new InitObjValue();
+		obj[i]->setRandom(density, conformant);
 	}
 	return true;
-}//InitObjectiveValues::IsEqual
+}//InitObjectiveValues::setRandom
 
 bool InitObjValue::setRandom( double density, bool conformant )
 {
@@ -10971,31 +10972,28 @@ bool InitObjValue::setRandom( double density, bool conformant )
 		else                  this->value = 2.71828;
 	}
 	return true;
-}//InitObjValue::IsEqual
+}//InitObjValue::setRandom
 
 bool InitObjectiveBounds::setRandom( double density, bool conformant )
 {
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitObjectiveBounds" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfObj = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfObj;
+	else            n = (int)(1+4*OSRand());
+
+	obj = new InitObjBound*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfObj = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfObj;
-		else            n = (int)(4*OSRand());
-
-		obj = new InitObjBound*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			obj[i] = new InitObjBound();
-			obj[i]->setRandom(density, conformant);
-		}
+		obj[i] = new InitObjBound();
+		obj[i]->setRandom(density, conformant);
 	}
 	return true;
-}//InitObjectiveBounds::IsEqual
+}//InitObjectiveBounds::setRandom
 
 bool InitObjBound::setRandom( double density, bool conformant )
 {
@@ -11013,7 +11011,7 @@ bool InitObjBound::setRandom( double density, bool conformant )
 		else                 this->ubValue = 2.71828;
 	}
 	return true;
-}//InitObjBound::IsEqual
+}//InitObjBound::setRandom
 
 bool OtherObjectiveOption::setRandom( double density, bool conformant )
 {
@@ -11064,7 +11062,7 @@ bool OtherObjectiveOption::setRandom( double density, bool conformant )
 		}
 	}
 	return true;
-}//OtherObjectiveOption::IsEqual
+}//OtherObjectiveOption::setRandom
 
 bool OtherObjOption::setRandom( double density, bool conformant )
 {
@@ -11077,7 +11075,7 @@ bool OtherObjOption::setRandom( double density, bool conformant )
 	if (OSRand() <= density) this->lbValue = "random string";
 	if (OSRand() <= density) this->ubValue = "random string";
 	return true;
-}//OtherObjOption::IsEqual
+}//OtherObjOption::setRandom
 
 bool ConstraintOption::setRandom( double density, bool conformant )
 {
@@ -11118,31 +11116,28 @@ bool ConstraintOption::setRandom( double density, bool conformant )
 		}
 	}
 	return true;
-}//ConstraintOption::IsEqual
+}//ConstraintOption::setRandom
 
 bool InitConstraintValues::setRandom( double density, bool conformant )
 {
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitConstraintValues" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfCon = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfCon;
+	else            n = (int)(1+4*OSRand());
+
+	con = new InitConValue*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfCon = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfCon;
-		else            n = (int)(4*OSRand());
-
-		con = new InitConValue*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			con[i] = new InitConValue();
-			con[i]->setRandom(density, conformant);
-		}
+		con[i] = new InitConValue();
+		con[i]->setRandom(density, conformant);
 	}
 	return true;
-}//InitConstraintValues::IsEqual
+}//InitConstraintValues::setRandom
 
 bool InitConValue::setRandom( double density, bool conformant )
 {
@@ -11157,31 +11152,28 @@ bool InitConValue::setRandom( double density, bool conformant )
 		else                 this->value = 2.71828;
 	}
 	return true;
-}//InitConValue::IsEqual
+}//InitConValue::setRandom
 
 bool InitDualVariableValues::setRandom( double density, bool conformant )
 {
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitDualVariableValues" << endl;
 #endif
-	if (OSRand() <= density) 
+	this->numberOfCon = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfCon;
+	else            n = (int)(1+4*OSRand());
+
+	con = new InitDualVarValue*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfCon = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfCon;
-		else            n = (int)(4*OSRand());
-
-		con = new InitDualVarValue*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			con[i] = new InitDualVarValue();
-			con[i]->setRandom(density, conformant);
-		}
+		con[i] = new InitDualVarValue();
+		con[i]->setRandom(density, conformant);
 	}
 	return true;
-}//InitDualVariableValues::IsEqual
+}//InitDualVariableValues::setRandom
 
 bool InitDualVarValue::setRandom( double density, bool conformant )
 {
@@ -11198,7 +11190,7 @@ bool InitDualVarValue::setRandom( double density, bool conformant )
 		else                 this->ubDualValue = 2.71828;
 	}
 	return true;
-}//InitDualVarValue::IsEqual
+}//InitDualVarValue::setRandom
 
 bool OtherConstraintOption::setRandom( double density, bool conformant )
 {
@@ -11249,7 +11241,7 @@ bool OtherConstraintOption::setRandom( double density, bool conformant )
 		}
 	}
 	return true;
-}//OtherConstraintOption::IsEqual
+}//OtherConstraintOption::setRandom
 
 bool OtherConOption::setRandom( double density, bool conformant )
 {
@@ -11261,7 +11253,7 @@ bool OtherConOption::setRandom( double density, bool conformant )
 	if (OSRand() <= density) this->lbValue = "random string";
 	if (OSRand() <= density) this->ubValue = "random string";
 	return true;
-}//OtherConOption::IsEqual
+}//OtherConOption::setRandom
 
 
 bool SolverOptions::setRandom( double density, bool conformant )
@@ -11269,24 +11261,21 @@ bool SolverOptions::setRandom( double density, bool conformant )
 #ifdef DEBUG_OSOPTION
 	cout << "Set random SolverOptions" << endl;
 #endif
-	if (OSRand() <= density)
+	this->numberOfSolverOptions = (int)(1+4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfSolverOptions;
+	else            n = (int)(1+4*OSRand());
+
+	solverOption = new SolverOption*[n];	
+	for (int i = 0; i < n; i++)
 	{
-		this->numberOfSolverOptions = (int)(4*OSRand());
-
-		int n;
-
-		if (conformant)	n = this->numberOfSolverOptions;
-		else            n = (int)(4*OSRand());
-
-		solverOption = new SolverOption*[n];	
-		for (int i = 0; i < n; i++)
-		{
-			solverOption[i] = new SolverOption();
-			solverOption[i]->setRandom(density, conformant);
-		}
+		solverOption[i] = new SolverOption();
+		solverOption[i]->setRandom(density, conformant);
 	}
 	return true;
-}//SolverOptions::IsEqual
+}//SolverOptions::setRandom
 
 bool SolverOption::setRandom( double density, bool conformant )
 {
@@ -11315,4 +11304,4 @@ bool SolverOption::setRandom( double density, bool conformant )
 			item[i] = "random string";
 	}
 	return true;
-}//SolverOption::IsEqual
+}//SolverOption::setRandom

@@ -26,6 +26,7 @@
 #endif
 
 #include "OSConfig.h"
+#include "OSParameters.h" 
 
 #include <string>
 #include <vector>
@@ -49,14 +50,14 @@ class GeneralFileHeader {
 	std::string source;
 
 	/**
-	 * name(s) of author(s) who created this file
-	 */
-	std::string fileCreatedBy;
-
-	/**
 	 * further information about the file or the problem contained within it
 	 */
 	std::string description;
+
+	/**
+	 * name(s) of author(s) who created this file
+	 */
+	std::string fileCreator;
 
 	/**
 	 * licensing information if applicable
@@ -87,7 +88,7 @@ class GeneralFileHeader {
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant);
 
@@ -96,12 +97,11 @@ class GeneralFileHeader {
 	 * A function to populate an instance of this class
 	 * @param name: the name of this file or instance
 	 * @param source: the source (e.g., in BiBTeX format)
-	 * @param fileCreatedBy: the creator of this file
 	 * @param description: further description about this file and/or its contents
-	 * @param licence: licence information if applicable
+	 * @param fileCreator: the creator of this file	 * @param licence: licence information if applicable
 	 */
-	bool setHeader(std::string name, std::string source, 
-		           std::string fileCreatedBy, std::string description, std::string licence);
+	bool setHeader(std::string name, std::string source, std::string description, 
+		           std::string fileCreator, std::string licence);
 
 }; //GeneralFileHeader
 
@@ -431,7 +431,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant);
 
@@ -498,7 +498,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant);
 
@@ -587,7 +587,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant); 
 
@@ -681,7 +681,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant); 
 }; //StorageCapacity
@@ -731,7 +731,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant); 
 }; //CPUSpeed
@@ -778,7 +778,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant); 
 }; //CPUNumber
@@ -823,7 +823,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant); 
 }; //TimeSpan
@@ -1255,6 +1255,28 @@ enum ENUM_PATHPAIR
 	ENUM_PATHPAIR_output_file,
 	ENUM_PATHPAIR_output_dir
 };
+
+/********************************************
+ *
+ * A function to test equality of two doubles
+ * This is needed to check equality of objects 
+ * when members can have NaN as a possible value
+ *
+********************************************/
+inline bool isEqual(double x, double y)
+{
+	if (OSIsnan(x)) 
+	{
+		if (OSIsnan(y)) return true;
+		else            return false;
+	}
+	else
+	{
+		if (x == y)     return true;
+		else            return false;
+	}
+	return true;
+}
 
 
 #endif

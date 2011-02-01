@@ -7,9 +7,9 @@
       This file is intended to test the OSoL parser.
       All elements are listed, but the content may not be meaningful.
     </description>
-    <fileCreatedBy>
+    <fileCreator>
       Horand Gassmann, Jun Ma and Kipp Martin
-    </fileCreatedBy>
+    </fileCreator>
     <licence>
       This file is licensed under the Eclipse Public License.
       Please see the accompanying LICENSE file in root directory for terms.
@@ -101,11 +101,12 @@
 	</job>	
 	<optimization numberOfConstraints="8" numberOfVariables="10" numberOfObjectives="2" >
 		<variables numberOfOtherVariableOptions="4">
-			<initialVariableValues numberOfVar="4">
+			<initialVariableValues numberOfVar="5">
 					<var idx="0" value="1"/>
 					<var value="4.742999643577776e-2" idx="1"></var>
 					<var idx="3" value="1.379408293215363"/>
 					<var idx="2"/>
+					<var value="NaN" idx="5" />
 			</initialVariableValues>
 			<initialVariableValuesString numberOfVar="3">
 				<var idx="1" value="blue"></var>

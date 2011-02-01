@@ -162,10 +162,10 @@
      FILEDESCRIPTIONEND = 343,
      FILEDESCRIPTIONEMPTY = 344,
      FILEDESCRIPTIONSTARTANDEND = 345,
-     FILECREATEDBYSTART = 346,
-     FILECREATEDBYEND = 347,
-     FILECREATEDBYEMPTY = 348,
-     FILECREATEDBYSTARTANDEND = 349,
+     FILECREATORSTART = 346,
+     FILECREATOREND = 347,
+     FILECREATOREMPTY = 348,
+     FILECREATORSTARTANDEND = 349,
      FILELICENCESTART = 350,
      FILELICENCEEND = 351,
      FILELICENCEEMPTY = 352,
@@ -391,10 +391,10 @@
 #define FILEDESCRIPTIONEND 343
 #define FILEDESCRIPTIONEMPTY 344
 #define FILEDESCRIPTIONSTARTANDEND 345
-#define FILECREATEDBYSTART 346
-#define FILECREATEDBYEND 347
-#define FILECREATEDBYEMPTY 348
-#define FILECREATEDBYSTARTANDEND 349
+#define FILECREATORSTART 346
+#define FILECREATOREND 347
+#define FILECREATOREMPTY 348
+#define FILECREATORSTARTANDEND 349
 #define FILELICENCESTART 350
 #define FILELICENCEEND 351
 #define FILELICENCEEMPTY 352
@@ -1383,91 +1383,91 @@ static const yytype_uint16 yyrline[] =
     1033,  1034,  1035,  1036,  1037,  1038,  1039,  1040,  1041,  1042,
     1043,  1044,  1045,  1050,  1056,  1066,  1068,  1068,  1070,  1070,
     1072,  1074,  1076,  1083,  1085,  1091,  1091,  1093,  1093,  1095,
-    1097,  1107,  1109,  1116,  1118,  1118,  1120,  1120,  1122,  1132,
-    1132,  1134,  1145,  1147,  1153,  1155,  1155,  1157,  1157,  1159,
-    1169,  1169,  1171,  1182,  1184,  1190,  1192,  1192,  1194,  1194,
-    1196,  1206,  1206,  1208,  1218,  1220,  1226,  1228,  1228,  1230,
-    1230,  1232,  1242,  1242,  1244,  1254,  1256,  1262,  1264,  1264,
-    1266,  1266,  1268,  1278,  1278,  1280,  1291,  1293,  1299,  1301,
-    1301,  1303,  1303,  1305,  1320,  1320,  1322,  1326,  1328,  1334,
-    1336,  1336,  1338,  1338,  1340,  1355,  1355,  1357,  1361,  1363,
-    1369,  1371,  1371,  1373,  1373,  1375,  1390,  1390,  1392,  1396,
-    1398,  1404,  1406,  1406,  1408,  1408,  1410,  1425,  1425,  1427,
-    1431,  1433,  1439,  1441,  1441,  1443,  1443,  1445,  1455,  1455,
-    1457,  1468,  1470,  1476,  1478,  1478,  1480,  1480,  1482,  1492,
-    1492,  1494,  1505,  1507,  1514,  1516,  1516,  1518,  1518,  1520,
-    1530,  1530,  1532,  1544,  1546,  1552,  1560,  1564,  1569,  1569,
-    1571,  1573,  1577,  1577,  1579,  1586,  1597,  1602,  1602,  1605,
-    1610,  1611,  1614,  1614,  1622,  1622,  1624,  1635,  1637,  1637,
-    1640,  1646,  1652,  1660,  1660,  1662,  1664,  1666,  1673,  1673,
-    1675,  1680,  1687,  1687,  1692,  1692,  1694,  1696,  1698,  1703,
-    1703,  1705,  1710,  1718,  1723,  1735,  1735,  1737,  1739,  1741,
-    1741,  1744,  1749,  1757,  1757,  1760,  1771,  1778,  1778,  1782,
-    1782,  1784,  1789,  1797,  1802,  1814,  1814,  1816,  1818,  1820,
-    1820,  1823,  1828,  1837,  1843,  1843,  1846,  1856,  1859,  1859,
-    1863,  1863,  1865,  1867,  1867,  1869,  1871,  1873,  1876,  1876,
-    1884,  1890,  1897,  1897,  1899,  1901,  1903,  1907,  1907,  1916,
-    1922,  1929,  1929,  1931,  1933,  1935,  1939,  1939,  1947,  1953,
-    1960,  1960,  1962,  1964,  1966,  1970,  1970,  1978,  1984,  1991,
-    1991,  1993,  1995,  1997,  2001,  2001,  2009,  2015,  2022,  2022,
-    2024,  2026,  2028,  2032,  2032,  2040,  2046,  2053,  2053,  2055,
-    2057,  2059,  2063,  2063,  2066,  2071,  2079,  2084,  2096,  2096,
-    2098,  2100,  2104,  2104,  2106,  2111,  2120,  2126,  2126,  2129,
-    2139,  2145,  2145,  2149,  2149,  2151,  2157,  2165,  2169,  2174,
-    2174,  2176,  2178,  2178,  2180,  2190,  2200,  2208,  2208,  2211,
-    2212,  2219,  2222,  2222,  2224,  2224,  2226,  2231,  2231,  2233,
-    2238,  2260,  2277,  2277,  2280,  2284,  2288,  2289,  2290,  2291,
-    2292,  2293,  2296,  2296,  2298,  2298,  2300,  2302,  2302,  2304,
-    2304,  2307,  2320,  2333,  2335,  2335,  2338,  2348,  2349,  2350,
-    2353,  2355,  2355,  2417,  2417,  2419,  2422,  2429,  2429,  2434,
-    2434,  2436,  2438,  2440,  2444,  2444,  2446,  2452,  2460,  2465,
-    2477,  2477,  2479,  2481,  2483,  2483,  2486,  2491,  2500,  2506,
-    2506,  2509,  2519,  2526,  2526,  2529,  2529,  2531,  2536,  2545,
-    2550,  2564,  2564,  2566,  2568,  2570,  2570,  2573,  2578,  2590,
-    2597,  2597,  2600,  2610,  2615,  2621,  2621,  2625,  2625,  2627,
-    2629,  2629,  2631,  2633,  2635,  2638,  2638,  2646,  2652,  2659,
-    2659,  2661,  2663,  2665,  2668,  2668,  2676,  2682,  2689,  2689,
-    2691,  2693,  2695,  2698,  2698,  2706,  2712,  2719,  2719,  2721,
-    2723,  2725,  2728,  2728,  2736,  2742,  2749,  2749,  2751,  2753,
-    2755,  2758,  2758,  2766,  2773,  2780,  2780,  2782,  2784,  2786,
-    2790,  2790,  2798,  2804,  2811,  2811,  2813,  2815,  2817,  2821,
-    2821,  2823,  2829,  2851,  2868,  2868,  2871,  2875,  2879,  2880,
-    2881,  2882,  2883,  2884,  2887,  2887,  2889,  2889,  2891,  2893,
-    2893,  2895,  2895,  2898,  2911,  2925,  2933,  2933,  2936,  2946,
-    2947,  2948,  2951,  2953,  2953,  3013,  3013,  3015,  3020,  3027,
-    3027,  3032,  3032,  3034,  3036,  3038,  3042,  3042,  3044,  3049,
-    3057,  3062,  3074,  3074,  3076,  3078,  3080,  3080,  3083,  3088,
-    3096,  3096,  3099,  3110,  3117,  3117,  3121,  3121,  3123,  3128,
-    3137,  3142,  3156,  3156,  3158,  3160,  3162,  3162,  3165,  3170,
-    3181,  3187,  3187,  3190,  3201,  3202,  3205,  3205,  3209,  3209,
-    3211,  3213,  3213,  3215,  3217,  3219,  3222,  3222,  3230,  3236,
-    3243,  3243,  3245,  3247,  3249,  3252,  3252,  3260,  3266,  3273,
-    3273,  3275,  3277,  3279,  3283,  3283,  3291,  3297,  3304,  3304,
-    3306,  3308,  3310,  3314,  3314,  3322,  3328,  3335,  3335,  3337,
-    3339,  3341,  3345,  3345,  3353,  3359,  3366,  3366,  3368,  3370,
-    3372,  3376,  3376,  3384,  3390,  3397,  3397,  3399,  3401,  3403,
-    3407,  3407,  3409,  3415,  3437,  3454,  3454,  3457,  3461,  3465,
-    3466,  3467,  3468,  3469,  3470,  3473,  3473,  3475,  3475,  3477,
-    3479,  3479,  3481,  3481,  3484,  3497,  3510,  3512,  3512,  3515,
-    3525,  3526,  3527,  3530,  3532,  3532,  3596,  3596,  3598,  3606,
-    3614,  3619,  3625,  3627,  3629,  3629,  3633,  3652,  3670,  3676,
-    3676,  3679,  3680,  3681,  3682,  3683,  3684,  3685,  3692,  3696,
-    3701,  3701,  3703,  3705,  3707,  3707,  3709,  3716,  3722,  3724,
-    3724,  3726,  3728,  3739,  3748,  3758,  3763,  3763,  3766,  3767,
-    3768,  3770,  3778,  3786,  3794,  3794,  3800,  3807,  3807,  3809,
-    3814,  3821,  3828,  3828,  3830,  3833,  3840,  3847,  3854,  3861,
-    3863,  3869,  3876,  3876,  3878,  3883,  3890,  3896,  3896,  3898,
-    3901,  3906,  3912,  3912,  3914,  3917,  3924,  3930,  3930,  3932,
-    3935,  3942,  3948,  3950,  3958,  3964,  3964,  3966,  3969,  3976,
-    3983,  3983,  3985,  3990,  3997,  4003,  4003,  4005,  4008,  4015,
-    4021,  4021,  4023,  4026,  4033,  4039,  4039,  4041,  4044,  4056,
-    4065,  4074,  4083,  4092,  4101,  4110,  4119,  4127,  4133,  4139,
-    4145,  4151,  4162,  4171,  4181,  4187,  4196,  4216,  4216,  4218,
-    4235,  4246,  4253,  4253,  4256,  4263,  4264,  4268,  4268,  4270,
-    4272,  4274,  4291,  4296,  4298,  4298,  4300,  4302,  4311,  4313,
-    4313,  4315,  4315,  4317,  4325,  4327,  4332,  4332,  4334,  4334,
-    4336,  4358,  4366,  4380,  4381,  4388,  4390,  4390,  4392,  4393,
-    4394,  4395
+    1097,  1107,  1115,  1122,  1124,  1124,  1126,  1126,  1128,  1138,
+    1138,  1140,  1151,  1159,  1165,  1167,  1167,  1169,  1169,  1171,
+    1181,  1181,  1183,  1194,  1202,  1208,  1210,  1210,  1212,  1212,
+    1214,  1224,  1224,  1226,  1236,  1244,  1250,  1252,  1252,  1254,
+    1254,  1256,  1266,  1266,  1268,  1278,  1286,  1292,  1294,  1294,
+    1296,  1296,  1298,  1308,  1308,  1310,  1321,  1334,  1340,  1342,
+    1342,  1344,  1344,  1346,  1361,  1361,  1363,  1367,  1380,  1386,
+    1388,  1388,  1390,  1390,  1392,  1407,  1407,  1409,  1413,  1426,
+    1432,  1434,  1434,  1436,  1436,  1438,  1453,  1453,  1455,  1459,
+    1472,  1478,  1480,  1480,  1482,  1482,  1484,  1499,  1499,  1501,
+    1505,  1513,  1519,  1521,  1521,  1523,  1523,  1525,  1535,  1535,
+    1537,  1548,  1556,  1562,  1564,  1564,  1566,  1566,  1568,  1578,
+    1578,  1580,  1591,  1599,  1606,  1608,  1608,  1610,  1610,  1612,
+    1622,  1622,  1624,  1636,  1638,  1644,  1652,  1656,  1661,  1661,
+    1663,  1665,  1669,  1669,  1671,  1678,  1689,  1694,  1694,  1697,
+    1702,  1703,  1706,  1706,  1714,  1714,  1716,  1727,  1729,  1729,
+    1732,  1738,  1744,  1752,  1752,  1754,  1756,  1758,  1765,  1765,
+    1767,  1772,  1779,  1779,  1784,  1784,  1786,  1788,  1790,  1795,
+    1795,  1805,  1810,  1818,  1823,  1835,  1835,  1837,  1839,  1841,
+    1841,  1844,  1849,  1857,  1857,  1860,  1871,  1878,  1878,  1882,
+    1882,  1892,  1897,  1905,  1910,  1922,  1922,  1924,  1926,  1928,
+    1928,  1931,  1936,  1945,  1951,  1951,  1954,  1964,  1967,  1967,
+    1971,  1971,  1973,  1975,  1975,  1977,  1979,  1981,  1984,  1984,
+    1992,  1998,  2005,  2005,  2007,  2009,  2011,  2015,  2015,  2024,
+    2030,  2037,  2037,  2039,  2041,  2043,  2047,  2047,  2055,  2061,
+    2068,  2068,  2070,  2072,  2074,  2078,  2078,  2086,  2092,  2099,
+    2099,  2101,  2103,  2105,  2109,  2109,  2117,  2123,  2130,  2130,
+    2132,  2134,  2136,  2140,  2140,  2148,  2154,  2161,  2161,  2163,
+    2165,  2167,  2171,  2171,  2182,  2187,  2195,  2200,  2212,  2212,
+    2214,  2216,  2220,  2220,  2222,  2227,  2236,  2242,  2242,  2245,
+    2255,  2261,  2261,  2265,  2265,  2267,  2273,  2281,  2285,  2290,
+    2290,  2292,  2294,  2294,  2296,  2306,  2316,  2324,  2324,  2327,
+    2328,  2335,  2338,  2338,  2340,  2340,  2342,  2347,  2347,  2349,
+    2354,  2376,  2393,  2393,  2396,  2400,  2404,  2405,  2406,  2407,
+    2408,  2409,  2412,  2412,  2414,  2414,  2416,  2418,  2418,  2420,
+    2420,  2423,  2436,  2449,  2451,  2451,  2454,  2464,  2465,  2466,
+    2469,  2471,  2471,  2479,  2479,  2481,  2484,  2491,  2491,  2496,
+    2496,  2498,  2500,  2502,  2506,  2506,  2517,  2523,  2531,  2536,
+    2548,  2548,  2550,  2552,  2554,  2554,  2557,  2562,  2571,  2577,
+    2577,  2580,  2590,  2597,  2597,  2600,  2600,  2613,  2618,  2627,
+    2632,  2646,  2646,  2648,  2650,  2652,  2652,  2655,  2660,  2672,
+    2679,  2679,  2682,  2692,  2697,  2703,  2703,  2707,  2707,  2709,
+    2711,  2711,  2713,  2715,  2717,  2720,  2720,  2728,  2734,  2741,
+    2741,  2743,  2745,  2747,  2750,  2750,  2758,  2764,  2771,  2771,
+    2773,  2775,  2777,  2780,  2780,  2788,  2794,  2801,  2801,  2803,
+    2805,  2807,  2810,  2810,  2818,  2824,  2831,  2831,  2833,  2835,
+    2837,  2840,  2840,  2848,  2855,  2862,  2862,  2864,  2866,  2868,
+    2872,  2872,  2880,  2886,  2893,  2893,  2895,  2897,  2899,  2903,
+    2903,  2905,  2911,  2933,  2950,  2950,  2953,  2957,  2961,  2962,
+    2963,  2964,  2965,  2966,  2969,  2969,  2971,  2971,  2973,  2975,
+    2975,  2977,  2977,  2980,  2993,  3007,  3015,  3015,  3018,  3028,
+    3029,  3030,  3033,  3035,  3035,  3043,  3043,  3045,  3050,  3057,
+    3057,  3062,  3062,  3064,  3066,  3068,  3072,  3072,  3083,  3088,
+    3096,  3101,  3113,  3113,  3115,  3117,  3119,  3119,  3122,  3127,
+    3135,  3135,  3138,  3149,  3156,  3156,  3160,  3160,  3173,  3178,
+    3187,  3192,  3206,  3206,  3208,  3210,  3212,  3212,  3215,  3220,
+    3231,  3237,  3237,  3240,  3251,  3252,  3255,  3255,  3259,  3259,
+    3261,  3263,  3263,  3265,  3267,  3269,  3272,  3272,  3280,  3286,
+    3293,  3293,  3295,  3297,  3299,  3302,  3302,  3310,  3316,  3323,
+    3323,  3325,  3327,  3329,  3333,  3333,  3341,  3347,  3354,  3354,
+    3356,  3358,  3360,  3364,  3364,  3372,  3378,  3385,  3385,  3387,
+    3389,  3391,  3395,  3395,  3403,  3409,  3416,  3416,  3418,  3420,
+    3422,  3426,  3426,  3434,  3440,  3447,  3447,  3449,  3451,  3453,
+    3457,  3457,  3459,  3465,  3487,  3504,  3504,  3507,  3511,  3515,
+    3516,  3517,  3518,  3519,  3520,  3523,  3523,  3525,  3525,  3527,
+    3529,  3529,  3531,  3531,  3534,  3547,  3560,  3562,  3562,  3565,
+    3575,  3576,  3577,  3580,  3582,  3582,  3590,  3590,  3592,  3600,
+    3608,  3613,  3619,  3621,  3623,  3623,  3627,  3646,  3664,  3670,
+    3670,  3673,  3674,  3675,  3676,  3677,  3678,  3679,  3686,  3690,
+    3695,  3695,  3697,  3699,  3701,  3701,  3703,  3710,  3716,  3718,
+    3718,  3720,  3722,  3733,  3742,  3752,  3757,  3757,  3760,  3761,
+    3762,  3764,  3772,  3780,  3788,  3788,  3794,  3801,  3801,  3803,
+    3808,  3815,  3822,  3822,  3824,  3827,  3834,  3841,  3848,  3855,
+    3857,  3863,  3870,  3870,  3872,  3877,  3884,  3890,  3890,  3892,
+    3895,  3900,  3906,  3906,  3908,  3911,  3918,  3924,  3924,  3926,
+    3929,  3936,  3942,  3944,  3952,  3958,  3958,  3960,  3963,  3970,
+    3977,  3977,  3979,  3984,  3991,  3997,  3997,  3999,  4002,  4009,
+    4015,  4015,  4017,  4020,  4027,  4033,  4033,  4035,  4038,  4050,
+    4059,  4068,  4077,  4086,  4095,  4104,  4113,  4121,  4127,  4133,
+    4139,  4145,  4156,  4165,  4175,  4181,  4190,  4210,  4210,  4212,
+    4229,  4240,  4247,  4247,  4250,  4257,  4258,  4262,  4262,  4264,
+    4266,  4268,  4285,  4290,  4292,  4292,  4294,  4296,  4305,  4307,
+    4307,  4309,  4309,  4311,  4319,  4321,  4326,  4326,  4328,  4328,
+    4330,  4352,  4360,  4374,  4375,  4382,  4384,  4384,  4386,  4387,
+    4388,  4389
 };
 #endif
 
@@ -1500,8 +1500,8 @@ static const char *const yytname[] =
   "FILENAMESTARTANDEND", "FILESOURCESTART", "FILESOURCEEND",
   "FILESOURCEEMPTY", "FILESOURCESTARTANDEND", "FILEDESCRIPTIONSTART",
   "FILEDESCRIPTIONEND", "FILEDESCRIPTIONEMPTY",
-  "FILEDESCRIPTIONSTARTANDEND", "FILECREATEDBYSTART", "FILECREATEDBYEND",
-  "FILECREATEDBYEMPTY", "FILECREATEDBYSTARTANDEND", "FILELICENCESTART",
+  "FILEDESCRIPTIONSTARTANDEND", "FILECREATORSTART", "FILECREATOREND",
+  "FILECREATOREMPTY", "FILECREATORSTARTANDEND", "FILELICENCESTART",
   "FILELICENCEEND", "FILELICENCEEMPTY", "FILELICENCESTARTANDEND",
   "SERVICEURISTART", "SERVICEURIEND", "SERVICENAMESTART", "SERVICENAMEEND",
   "INSTANCENAMESTART", "INSTANCENAMEEND", "INSTANCELOCATIONSTART",
@@ -1551,8 +1551,8 @@ static const char *const yytname[] =
   "fileName", "fileNameContent", "fileNameEmpty", "fileNameLaden",
   "fileSource", "fileSourceContent", "fileSourceEmpty", "fileSourceLaden",
   "fileDescription", "fileDescriptionContent", "fileDescriptionEmpty",
-  "fileDescriptionLaden", "fileCreatedBy", "fileCreatedByContent",
-  "fileCreatedByEmpty", "fileCreatedByLaden", "fileLicence",
+  "fileDescriptionLaden", "fileCreator", "fileCreatorContent",
+  "fileCreatorEmpty", "fileCreatorLaden", "fileLicence",
   "fileLicenceContent", "fileLicenceEmpty", "fileLicenceLaden",
   "generalElement", "generalElementStart", "generalElementContent",
   "generalElementEmpty", "generalElementLaden", "generalElementBody",
@@ -3957,11 +3957,11 @@ yydebug = 1;
   case 14:
 
     {
-	if (osglData->fileName      != "" || osglData->source      != "" ||
-		osglData->fileCreatedBy != "" || osglData->description != "" ||
-		osglData->licence       != "")
+	if (osglData->fileName    != "" || osglData->source      != "" ||
+		osglData->fileCreator != "" || osglData->description != "" ||
+		osglData->licence     != "")
 		if(!osoption->setOptionHeader(osglData->fileName, osglData->source, 	
-				osglData->fileCreatedBy, osglData->description, osglData->licence) )	
+				osglData->description, osglData->fileCreator, osglData->licence) )	
 			osolerror( NULL, osoption, parserData, osglData, "setHeader failed");
 ;}
     break;
@@ -3969,11 +3969,11 @@ yydebug = 1;
   case 15:
 
     {
-	osglData->fileName      = "";
-	osglData->source        = "";
-	osglData->fileCreatedBy = "";
-	osglData->description   = "";
-	osglData->licence       = "";
+	osglData->fileName    = "";
+	osglData->source      = "";
+	osglData->description = "";
+	osglData->fileCreator = "";
+	osglData->licence     = "";
 ;}
     break;
 
@@ -4001,7 +4001,7 @@ yydebug = 1;
   case 48:
 
     {
-	osglData->fileCreatedBy = (yyvsp[(2) - (3)].sval);
+	osglData->fileCreator = (yyvsp[(2) - (3)].sval);
 ;}
     break;
 
@@ -4249,9 +4249,9 @@ yydebug = 1;
   case 165:
 
     {	if (parserData->otherGeneralOptionsPresent)
-			osolerror(NULL, NULL, parserData, osglData, "only one <general> <other> element allowed");
-		parserData->otherGeneralOptionsPresent = true;
-	;}
+		osolerror(NULL, NULL, parserData, osglData, "only one <general> <other> element allowed");
+	parserData->otherGeneralOptionsPresent = true;
+;}
     break;
 
   case 166:
@@ -4400,9 +4400,9 @@ yydebug = 1;
   case 235:
 
     {	if (parserData->otherSystemOptionsPresent)
-			osolerror(NULL, NULL, parserData, osglData, "only one <system> <other> element allowed");
-		parserData->otherSystemOptionsPresent = true;
-	;}
+		osolerror(NULL, NULL, parserData, osglData, "only one <system> <other> element allowed");
+	parserData->otherSystemOptionsPresent = true;
+;}
     break;
 
   case 236:
@@ -4487,9 +4487,9 @@ yydebug = 1;
   case 277:
 
     {	if (parserData->otherServiceOptionsPresent)
-			osolerror(NULL, NULL, parserData, osglData, "only one <service> <other> element allowed");
-		parserData->otherServiceOptionsPresent = true;
-	;}
+		osolerror(NULL, NULL, parserData, osglData, "only one <service> <other> element allowed");
+	parserData->otherServiceOptionsPresent = true;
+;}
     break;
 
   case 278:
@@ -4597,6 +4597,16 @@ yydebug = 1;
 		;}
     break;
 
+  case 341:
+
+    {
+	if (osoption->setJobDependencies(parserData->numberOf, parserData->jobDependencies) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <job> <dependencies> failed");
+	delete[] parserData->jobDependencies;
+	parserData->jobDependencies = NULL;
+;}
+    break;
+
   case 342:
 
     {
@@ -4611,10 +4621,10 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <dependencies> element");
-	if (osoption->setJobDependencies(parserData->numberOf, parserData->jobDependencies) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <job> <dependencies> failed");
-	delete[] parserData->jobDependencies;
-	parserData->jobDependencies = NULL;
+//	if (osoption->setJobDependencies(parserData->numberOf, parserData->jobDependencies) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <job> <dependencies> failed");
+//	delete[] parserData->jobDependencies;
+//	parserData->jobDependencies = NULL;
 ;}
     break;
 
@@ -4626,6 +4636,16 @@ yydebug = 1;
 	parserData->jobDependencies[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3); 
 	parserData->kounter++;
+;}
+    break;
+
+  case 352:
+
+    {
+	if (osoption->setRequiredDirectories(parserData->numberOf,parserData->paths) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <requiredDirectories> failed");
+	delete[] parserData->paths;
+	parserData->paths = NULL;
 ;}
     break;
 
@@ -4641,11 +4661,11 @@ yydebug = 1;
 
     {
 	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <requiredDirectories> element");
-	if (osoption->setRequiredDirectories(parserData->numberOf,parserData->paths) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <requiredDirectories> failed");
-	delete[] parserData->paths;
-	parserData->paths = NULL;
+		osolerror (NULL, osoption, parserData, osglData, "too few paths in <requiredDirectories> element");
+//	if (osoption->setRequiredDirectories(parserData->numberOf,parserData->paths) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <requiredDirectories> failed");
+//	delete[] parserData->paths;
+//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4653,10 +4673,20 @@ yydebug = 1;
 
     {
 	if (parserData->kounter >= parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too many ¨paths in <requiredDirectories> element");
+		osolerror (NULL, osoption, parserData, osglData, "too many paths in <requiredDirectories> element");
 	parserData->paths[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3); 
 	parserData->kounter++;
+;}
+    break;
+
+  case 363:
+
+    {
+	if (osoption->setRequiredFiles(parserData->numberOf, parserData->paths) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <requiredFiles> failed");
+	delete[] parserData->paths;
+	parserData->paths = NULL;
 ;}
     break;
 
@@ -4672,11 +4702,11 @@ yydebug = 1;
 
     {
 	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <requiredFiles> element");
-	if (osoption->setRequiredFiles(parserData->numberOf, parserData->paths) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <requiredFiles> failed");
-	delete[] parserData->paths;
-	parserData->paths = NULL;
+		osolerror (NULL, osoption, parserData, osglData, "too few paths in <requiredFiles> element");
+//	if (osoption->setRequiredFiles(parserData->numberOf, parserData->paths) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <requiredFiles> failed");
+//	delete[] parserData->paths;
+//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4684,10 +4714,20 @@ yydebug = 1;
 
     {
 	if (parserData->kounter >= parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too many ¨paths in <requiredFiles> element");
+		osolerror (NULL, osoption, parserData, osglData, "too many paths in <requiredFiles> element");
 	parserData->paths[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3);
 	parserData->kounter++;
+;}
+    break;
+
+  case 374:
+
+    {
+	if (osoption->setDirectoriesToMake(parserData->numberOf, parserData->paths) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToMake> failed");
+	delete[] parserData->paths;
+	parserData->paths = NULL;
 ;}
     break;
 
@@ -4703,11 +4743,11 @@ yydebug = 1;
 
     {
 	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <directoriesToMake> element");
-	if (osoption->setDirectoriesToMake(parserData->numberOf, parserData->paths) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToMake> failed");
-	delete[] parserData->paths;
-	parserData->paths = NULL;
+		osolerror (NULL, osoption, parserData, osglData, "too few paths in <directoriesToMake> element");
+//	if (osoption->setDirectoriesToMake(parserData->numberOf, parserData->paths) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToMake> failed");
+//	delete[] parserData->paths;
+//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4715,10 +4755,20 @@ yydebug = 1;
 
     {
 	if (parserData->kounter >= parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too many ¨paths in <directoriesToMake> element");
+		osolerror (NULL, osoption, parserData, osglData, "too many paths in <directoriesToMake> element");
 	parserData->paths[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3); 
 	parserData->kounter++;
+;}
+    break;
+
+  case 385:
+
+    {
+	if (osoption->setFilesToMake(parserData->numberOf, parserData->paths) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <filesToMake> failed");
+	delete[] parserData->paths;
+	parserData->paths = NULL;
 ;}
     break;
 
@@ -4734,11 +4784,11 @@ yydebug = 1;
 
     {
 	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <filesToMake> element");
-	if (osoption->setFilesToMake(parserData->numberOf, parserData->paths) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <filesToMake> failed");
-	delete[] parserData->paths;
-	parserData->paths = NULL;
+		osolerror (NULL, osoption, parserData, osglData, "too few paths in <filesToMake> element");
+//	if (osoption->setFilesToMake(parserData->numberOf, parserData->paths) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <filesToMake> failed");
+//	delete[] parserData->paths;
+//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4746,10 +4796,25 @@ yydebug = 1;
 
     {
 	if (parserData->kounter >= parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too many ¨paths in <filesToMake> element");
+		osolerror (NULL, osoption, parserData, osglData, "too many paths in <filesToMake> element");
 	parserData->paths[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3); 
 	parserData->kounter++;
+;}
+    break;
+
+  case 396:
+
+    {
+	if (osoption->setPathPairs(ENUM_PATHPAIR_input_dir, parserData->fromPaths, 
+			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
+	delete[] parserData->fromPaths;
+	delete[] parserData->toPaths;
+	delete[] parserData->makeCopy;
+	parserData->fromPaths = NULL;
+	parserData->toPaths   = NULL;
+	parserData->makeCopy  = NULL;
 ;}
     break;
 
@@ -4764,11 +4829,26 @@ yydebug = 1;
   case 403:
 
     {
-	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <inputDirectoriesToMake> element");
-	if (osoption->setPathPairs(ENUM_PATHPAIR_input_dir, parserData->fromPaths, 
-			parserData->toPaths, parserData->makeCopy, parserData->numberOf) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
+	if (parserData->kounter > parserData->numberOfPathPairs)
+		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <inputDirectoriesToMove> element");
+//	if (osoption->setPathPairs(ENUM_PATHPAIR_input_dir, parserData->fromPaths, 
+//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
+//	delete[] parserData->fromPaths;
+//	delete[] parserData->toPaths;
+//	delete[] parserData->makeCopy;
+//	parserData->fromPaths = NULL;
+//	parserData->toPaths   = NULL;
+//	parserData->makeCopy  = NULL;
+;}
+    break;
+
+  case 407:
+
+    {
+	if (osoption->setPathPairs(ENUM_PATHPAIR_input_file, parserData->fromPaths, 
+			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
 	delete[] parserData->fromPaths;
 	delete[] parserData->toPaths;
 	delete[] parserData->makeCopy;
@@ -4789,10 +4869,25 @@ yydebug = 1;
   case 414:
 
     {
-	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <inputFilesToMake> element");
-	if (osoption->setPathPairs(ENUM_PATHPAIR_input_file, parserData->fromPaths, 
-			parserData->toPaths, parserData->makeCopy, parserData->numberOf) == false)
+	if (parserData->kounter > parserData->numberOfPathPairs)
+		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <inputFilesToMove> element");
+//	if (osoption->setPathPairs(ENUM_PATHPAIR_input_file, parserData->fromPaths, 
+//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
+//	delete[] parserData->fromPaths;
+//	delete[] parserData->toPaths;
+//	delete[] parserData->makeCopy;
+//	parserData->fromPaths = NULL;
+//	parserData->toPaths   = NULL;
+//	parserData->makeCopy  = NULL;
+;}
+    break;
+
+  case 418:
+
+    {
+	if (osoption->setPathPairs(ENUM_PATHPAIR_output_file, parserData->fromPaths, 
+			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
 	delete[] parserData->fromPaths;
 	delete[] parserData->toPaths;
@@ -4814,10 +4909,25 @@ yydebug = 1;
   case 425:
 
     {
-	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <outputFilesToMake> element");
-	if (osoption->setPathPairs(ENUM_PATHPAIR_output_file, parserData->fromPaths, 
-			parserData->toPaths, parserData->makeCopy, parserData->numberOf) == false)
+	if (parserData->kounter > parserData->numberOfPathPairs)
+		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <outputFilesToMake> element");
+//	if (osoption->setPathPairs(ENUM_PATHPAIR_output_file, parserData->fromPaths, 
+//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
+//	delete[] parserData->fromPaths;
+//	delete[] parserData->toPaths;
+//	delete[] parserData->makeCopy;
+//	parserData->fromPaths = NULL;
+//	parserData->toPaths   = NULL;
+//	parserData->makeCopy  = NULL;
+;}
+    break;
+
+  case 429:
+
+    {
+	if (osoption->setPathPairs(ENUM_PATHPAIR_output_dir, parserData->fromPaths, 
+			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
 	delete[] parserData->fromPaths;
 	delete[] parserData->toPaths;
@@ -4839,17 +4949,27 @@ yydebug = 1;
   case 436:
 
     {
-	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <outputDirectoriesToMake> element");
-	if (osoption->setPathPairs(ENUM_PATHPAIR_output_dir, parserData->fromPaths, 
-			parserData->toPaths, parserData->makeCopy, parserData->numberOf) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
-	delete[] parserData->fromPaths;
-	delete[] parserData->toPaths;
-	delete[] parserData->makeCopy;
-	parserData->fromPaths = NULL;
-	parserData->toPaths   = NULL;
-	parserData->makeCopy  = NULL;
+	if (parserData->kounter > parserData->numberOfPathPairs)
+		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <outputDirectoriesToMake> element");
+//	if (osoption->setPathPairs(ENUM_PATHPAIR_output_dir, parserData->fromPaths, 
+//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
+//	delete[] parserData->fromPaths;
+//	delete[] parserData->toPaths;
+//	delete[] parserData->makeCopy;
+//	parserData->fromPaths = NULL;
+//	parserData->toPaths   = NULL;
+//	parserData->makeCopy  = NULL;
+;}
+    break;
+
+  case 440:
+
+    {
+	if (osoption->setFilesToDelete(parserData->numberOf, parserData->paths) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <filesToDelete> failed");
+	delete[] parserData->paths;
+	parserData->paths = NULL;
 ;}
     break;
 
@@ -4865,11 +4985,11 @@ yydebug = 1;
 
     {
 	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <filesToDelete> element");
-	if (osoption->setFilesToDelete(parserData->numberOf, parserData->paths) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <filesToDelete> failed");
-	delete[] parserData->paths;
-	parserData->paths = NULL;
+		osolerror (NULL, osoption, parserData, osglData, "too few paths in <filesToDelete> element");
+//	if (osoption->setFilesToDelete(parserData->numberOf, parserData->paths) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <filesToDelete> failed");
+//	delete[] parserData->paths;
+//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4877,10 +4997,20 @@ yydebug = 1;
 
     {
 	if (parserData->kounter >= parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too many ¨paths in <filesToDelete> element");
+		osolerror (NULL, osoption, parserData, osglData, "too many paths in <filesToDelete> element");
 	parserData->paths[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3); 
 	parserData->kounter++;
+;}
+    break;
+
+  case 451:
+
+    {
+	if (osoption->setDirectoriesToDelete(parserData->numberOf, parserData->paths) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToDelete> failed");
+	delete[] parserData->paths;
+	parserData->paths = NULL;
 ;}
     break;
 
@@ -4896,11 +5026,11 @@ yydebug = 1;
 
     {
 	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <directoriesToDelete> element");
-	if (osoption->setDirectoriesToDelete(parserData->numberOf, parserData->paths) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToDelete> failed");
-	delete[] parserData->paths;
-	parserData->paths = NULL;
+		osolerror (NULL, osoption, parserData, osglData, "too few paths in <directoriesToDelete> element");
+//	if (osoption->setDirectoriesToDelete(parserData->numberOf, parserData->paths) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToDelete> failed");
+//	delete[] parserData->paths;
+//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4908,10 +5038,20 @@ yydebug = 1;
 
     {
 	if (parserData->kounter >= parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too many ¨paths in <directoriesToDelete> element");
+		osolerror (NULL, osoption, parserData, osglData, "too many paths in <directoriesToDelete> element");
 	parserData->paths[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3); 
 	parserData->kounter++;
+;}
+    break;
+
+  case 462:
+
+    {
+	if (osoption->setProcessesToKill(parserData->numberOf, parserData->processesToKill) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <processesToKill> failed");
+	delete[] parserData->processesToKill;
+	parserData->processesToKill = NULL;
 ;}
     break;
 
@@ -4928,11 +5068,11 @@ yydebug = 1;
 
     {
 	if (parserData->kounter > parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <processesToKill> element");
-	if (osoption->setProcessesToKill(parserData->numberOf, parserData->processesToKill) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <processesToKill> failed");
-	delete[] parserData->processesToKill;
-	parserData->processesToKill = NULL;
+		osolerror (NULL, osoption, parserData, osglData, "too few process IDs in <processesToKill> element");
+//	if (osoption->setProcessesToKill(parserData->numberOf, parserData->processesToKill) == false)
+//		osolerror (NULL, osoption, parserData, osglData, "set <processesToKill> failed");
+//	delete[] parserData->processesToKill;
+//	parserData->processesToKill = NULL;
 ;}
     break;
 
@@ -4940,7 +5080,7 @@ yydebug = 1;
 
     {
 	if (parserData->kounter >= parserData->numberOf)
-		osolerror (NULL, osoption, parserData, osglData, "too many job IDs in <processesToKill> element");
+		osolerror (NULL, osoption, parserData, osglData, "too many process IDs in <processesToKill> element");
 	parserData->processesToKill[parserData->kounter] = (yyvsp[(3) - (4)].sval);
 	//free($3); 
 	parserData->kounter++;
@@ -4950,9 +5090,9 @@ yydebug = 1;
   case 474:
 
     {	if (parserData->otherJobOptionsPresent)
-			osolerror(NULL, NULL, parserData, osglData, "only one <job> <other> element allowed");
-		parserData->otherJobOptionsPresent = true;
-	;}
+		osolerror(NULL, NULL, parserData, osglData, "only one <job> <other> element allowed");
+	parserData->otherJobOptionsPresent = true;
+;}
     break;
 
   case 475:
@@ -5078,6 +5218,18 @@ yydebug = 1;
 ;}
     break;
 
+  case 520:
+
+    {
+		if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
+			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
+		delete[] parserData->idxArray;
+		delete[] parserData->valArray;
+		parserData->idxArray = NULL;
+		parserData->valArray = NULL;
+;}
+    break;
+
   case 521:
 
     {
@@ -5107,12 +5259,12 @@ yydebug = 1;
     {
 		if (parserData->kounter > parserData->numberOfVar)
 			osolerror (NULL, osoption, parserData, osglData, "too few initial values in <initialVariableValues> element");
-		if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->valArray;
-		parserData->idxArray = NULL;
-		parserData->valArray = NULL;
+//		if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
+//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
+//		delete[] parserData->idxArray;
+//		delete[] parserData->valArray;
+//		parserData->idxArray = NULL;
+//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -5156,6 +5308,18 @@ yydebug = 1;
 	;}
     break;
 
+  case 540:
+
+    {
+	if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
+	delete[] parserData->idxArray;
+	delete[] parserData->valueString;
+	parserData->idxArray = NULL;
+	parserData->valueString = NULL;
+;}
+    break;
+
   case 541:
 
     {
@@ -5185,12 +5349,12 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfVar)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-		if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->valueString;
-		parserData->idxArray = NULL;
-		parserData->valueString = NULL;
+//		if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString) == false)
+//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
+//		delete[] parserData->idxArray;
+//		delete[] parserData->valueString;
+//		parserData->idxArray = NULL;
+//		parserData->valueString = NULL;
 	;}
     break;
 
@@ -5395,6 +5559,18 @@ yydebug = 1;
 ;}
     break;
 
+  case 623:
+
+    {
+	if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
+	delete[] parserData->idxArray;
+	delete[] parserData->valArray;
+	parserData->idxArray = NULL;
+	parserData->valArray = NULL;
+;}
+    break;
+
   case 624:
 
     {
@@ -5424,12 +5600,12 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfVar)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-		if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->valArray;
-		parserData->idxArray = NULL;
-		parserData->valArray = NULL;
+//		if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
+//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
+//		delete[] parserData->idxArray;
+//		delete[] parserData->valArray;
+//		parserData->idxArray = NULL;
+//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -5682,6 +5858,18 @@ yydebug = 1;
 ;}
     break;
 
+  case 715:
+
+    {
+	if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveValues> failed");
+	delete[] parserData->idxArray;
+	delete[] parserData->valArray;
+	parserData->idxArray = NULL;
+	parserData->valArray = NULL;
+;}
+    break;
+
   case 716:
 
     {
@@ -5711,12 +5899,12 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfObj)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
-		if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveValues> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->valArray;
-		parserData->idxArray = NULL;
-		parserData->valArray = NULL;
+//		if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray) == false)
+//			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveValues> failed");
+//		delete[] parserData->idxArray;
+//		delete[] parserData->valArray;
+//		parserData->idxArray = NULL;
+//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -5767,6 +5955,20 @@ yydebug = 1;
 	;}
     break;
 
+  case 736:
+
+    {
+	if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveBounds> failed");
+	delete[] parserData->idxArray;
+	delete[] parserData->lbValArray;
+	delete[] parserData->ubValArray;
+	parserData->idxArray = NULL;
+	parserData->lbValArray = NULL;
+	parserData->ubValArray = NULL;
+;}
+    break;
+
   case 737:
 
     {
@@ -5797,14 +5999,14 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfObj)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
-		if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveBounds> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->lbValArray;
-		delete[] parserData->ubValArray;
-		parserData->idxArray = NULL;
-		parserData->lbValArray = NULL;
-		parserData->ubValArray = NULL;
+//		if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
+//			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveBounds> failed");
+//		delete[] parserData->idxArray;
+//		delete[] parserData->lbValArray;
+//		delete[] parserData->ubValArray;
+//		parserData->idxArray = NULL;
+//		parserData->lbValArray = NULL;
+//		parserData->ubValArray = NULL;
 	;}
     break;
 
@@ -6169,6 +6371,18 @@ yydebug = 1;
 ;}
     break;
 
+  case 867:
+
+    {
+	if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
+	delete[] parserData->idxArray;
+	delete[] parserData->valArray;
+	parserData->idxArray = NULL;
+	parserData->valArray = NULL;
+;}
+    break;
+
   case 868:
 
     {
@@ -6198,12 +6412,12 @@ yydebug = 1;
     {
 		if (parserData->kounter > parserData->numberOfCon)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
-		if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->valArray;
-		parserData->idxArray = NULL;
-		parserData->valArray = NULL;
+//		if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray) == false)
+//			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
+//		delete[] parserData->idxArray;
+//		delete[] parserData->valArray;
+//		parserData->idxArray = NULL;
+//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -6247,6 +6461,20 @@ yydebug = 1;
 	;}
     break;
 
+  case 887:
+
+    {
+	if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
+	delete[] parserData->idxArray;
+	delete[] parserData->lbValArray;
+	delete[] parserData->ubValArray;
+	parserData->idxArray = NULL;
+	parserData->lbValArray = NULL;
+	parserData->ubValArray = NULL;
+;}
+    break;
+
   case 888:
 
     {
@@ -6277,14 +6505,14 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfCon)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
-		if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->lbValArray;
-		delete[] parserData->ubValArray;
-		parserData->idxArray = NULL;
-		parserData->lbValArray = NULL;
-		parserData->ubValArray = NULL;
+//		if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
+//			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
+//		delete[] parserData->idxArray;
+//		delete[] parserData->lbValArray;
+//		delete[] parserData->ubValArray;
+//		parserData->idxArray = NULL;
+//		parserData->lbValArray = NULL;
+//		parserData->ubValArray = NULL;
 	;}
     break;
 

@@ -46,7 +46,7 @@ public:
 	std::string fileName;
 	std::string source;
 	std::string description;
-	std::string fileCreatedBy;
+	std::string fileCreator;
 	std::string licence;
 
 	/** the OSgLParserData class constructor */

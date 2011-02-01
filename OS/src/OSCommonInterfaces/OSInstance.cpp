@@ -18,7 +18,7 @@
  */
 
   
- 
+#include "OSGeneral.h"
 #include "OSInstance.h"
 #include "OSMathUtil.h"
 #include "OSErrorClass.h"
@@ -141,7 +141,7 @@ OSInstance::OSInstance():
 	#ifdef DEBUG
 	cout << "Inside OSInstance Constructor" << endl;
 	#endif
-	this->instanceHeader = new InstanceHeader();
+	this->instanceHeader = new GeneralFileHeader();
 	this->instanceData = new InstanceData();
 }  
 

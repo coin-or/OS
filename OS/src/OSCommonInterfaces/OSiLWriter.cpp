@@ -76,6 +76,14 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 			outStr << "<description>" + m_OSInstance->instanceHeader->description  + "</description>";
 			if( m_bWhiteSpace == true) outStr << endl;
 		}
+		if(m_OSInstance->instanceHeader->fileCreator.length() > 0){
+			outStr << "<fileCreator>" + m_OSInstance->instanceHeader->fileCreator  + "</fileCreator>";
+			if( m_bWhiteSpace == true) outStr << endl;
+		}
+		if(m_OSInstance->instanceHeader->licence.length() > 0){
+			outStr << "<licence>" + m_OSInstance->instanceHeader->licence  + "</licence>";
+			if( m_bWhiteSpace == true) outStr << endl;
+		}
 	}
 	outStr << "</instanceHeader>" ;
 	if( m_bWhiteSpace == true) outStr << endl;

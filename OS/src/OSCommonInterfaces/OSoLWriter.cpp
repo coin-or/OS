@@ -90,11 +90,11 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #endif
 	if(m_OSOption->optionHeader != NULL)
 	{
-		if (m_OSOption->optionHeader->name          != "" ||
-			m_OSOption->optionHeader->source        != "" ||
-			m_OSOption->optionHeader->description   != "" ||
-			m_OSOption->optionHeader->fileCreatedBy != "" ||
-			m_OSOption->optionHeader->licence       != "" )
+		if (m_OSOption->optionHeader->name        != "" ||
+			m_OSOption->optionHeader->source      != "" ||
+			m_OSOption->optionHeader->description != "" ||
+			m_OSOption->optionHeader->fileCreator != "" ||
+			m_OSOption->optionHeader->licence     != "" )
 		{
 			outStr << "<optionHeader>" << endl;
 			outStr << writeGeneralFileHeader(m_OSOption->optionHeader, true);
@@ -217,7 +217,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << "<general>" << endl;
 				generalTagPrinted = true;
 			}
-			if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
+//			if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
 				outStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
@@ -282,7 +282,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			outStr << m_OSOption->system->minCPUNumber->value << "</minCPUNumber>" << endl;
 		};
 		if (m_OSOption->system->otherOptions != NULL)
-		{	if (m_OSOption->system->otherOptions->numberOfOtherOptions > 0)
+		{
+//			if (m_OSOption->system->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
 				outStr << m_OSOption->system->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->system->otherOptions->numberOfOtherOptions; i++)
@@ -300,7 +301,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #ifdef DEBUG
 		cout << "Done with <system> element" << endl;
 #endif
-	};
+	}
 
 /**
  * 	Put the <service> element
@@ -309,9 +310,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	{	outStr << "<service>" << endl;
 		if (m_OSOption->service->type != "")
 		{	outStr << "<type>" << m_OSOption->service->type << "</type>" << endl;
-		};
+		}
 		if (m_OSOption->service->otherOptions != NULL)
-		{	if (m_OSOption->service->otherOptions->numberOfOtherOptions > 0)
+		{
+//			if (m_OSOption->service->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
 				outStr << m_OSOption->service->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->service->otherOptions->numberOfOtherOptions; i++)
@@ -348,7 +350,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		if (m_OSOption->job->requestedStartTime != "")
 			outStr << "<requestedStartTime>" << m_OSOption->job->requestedStartTime << "</requestedStartTime>" << endl;
 		if (m_OSOption->job->dependencies != NULL)
-		{	if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
+		{
+//			if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
 			{	outStr << "<dependencies numberOfJobIDs=\"";
 				outStr << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->dependencies->numberOfJobIDs; i++)
@@ -358,7 +361,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->requiredDirectories != NULL)
-		{	if (m_OSOption->job->requiredDirectories->numberOfPaths > 0)
+		{
+//			if (m_OSOption->job->requiredDirectories->numberOfPaths > 0)
 			{	outStr << "<requiredDirectories numberOfPaths=\"";
 				outStr << m_OSOption->job->requiredDirectories->numberOfPaths << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->requiredDirectories->numberOfPaths; i++)
@@ -367,7 +371,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->requiredFiles != NULL)
-		{	if (m_OSOption->job->requiredFiles->numberOfPaths > 0)
+		{
+//			if (m_OSOption->job->requiredFiles->numberOfPaths > 0)
 			{	outStr << "<requiredFiles numberOfPaths=\"";
 				outStr << m_OSOption->job->requiredFiles->numberOfPaths << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->requiredFiles->numberOfPaths; i++)
@@ -376,7 +381,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->directoriesToMake != NULL)
-		{	if (m_OSOption->job->directoriesToMake->numberOfPaths > 0)
+		{
+//			if (m_OSOption->job->directoriesToMake->numberOfPaths > 0)
 			{	outStr << "<directoriesToMake numberOfPaths=\"";
 				outStr << m_OSOption->job->directoriesToMake->numberOfPaths << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->directoriesToMake->numberOfPaths; i++)
@@ -385,7 +391,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->filesToMake != NULL)
-		{	if (m_OSOption->job->filesToMake->numberOfPaths > 0)
+		{
+//			if (m_OSOption->job->filesToMake->numberOfPaths > 0)
 			{	outStr << "<filesToMake numberOfPaths=\"";
 				outStr << m_OSOption->job->filesToMake->numberOfPaths << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->filesToMake->numberOfPaths; i++)
@@ -394,7 +401,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->inputDirectoriesToMove != NULL)
-		{	if (m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs > 0)
+		{
+//			if (m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs > 0)
 			{	outStr << "<inputDirectoriesToMove numberOfPathPairs=\"";
 				outStr << m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs; i++)
@@ -409,7 +417,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->inputFilesToMove != NULL)
-		{	if (m_OSOption->job->inputFilesToMove->numberOfPathPairs > 0)
+		{
+//			if (m_OSOption->job->inputFilesToMove->numberOfPathPairs > 0)
 			{	outStr << "<inputFilesToMove numberOfPathPairs=\"";
 				outStr << m_OSOption->job->inputFilesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->inputFilesToMove->numberOfPathPairs; i++)
@@ -424,7 +433,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->outputFilesToMove != NULL)
-		{	if (m_OSOption->job->outputFilesToMove->numberOfPathPairs > 0)
+		{
+//			if (m_OSOption->job->outputFilesToMove->numberOfPathPairs > 0)
 			{	outStr << "<outputFilesToMove numberOfPathPairs=\"";
 				outStr << m_OSOption->job->outputFilesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->outputFilesToMove->numberOfPathPairs; i++)
@@ -439,7 +449,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->outputDirectoriesToMove != NULL)
-		{	if (m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs > 0)
+		{
+//			if (m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs > 0)
 			{	outStr << "<outputDirectoriesToMove numberOfPathPairs=\"";
 				outStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs; i++)
@@ -454,7 +465,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->filesToDelete != NULL)
-		{	if (m_OSOption->job->filesToDelete->numberOfPaths > 0)
+		{
+//			if (m_OSOption->job->filesToDelete->numberOfPaths > 0)
 			{	outStr << "<filesToDelete numberOfPaths=\"";
 				outStr << m_OSOption->job->filesToDelete->numberOfPaths << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->filesToDelete->numberOfPaths; i++)
@@ -463,7 +475,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->directoriesToDelete != NULL)
-		{	if (m_OSOption->job->directoriesToDelete->numberOfPaths > 0)
+		{
+//			if (m_OSOption->job->directoriesToDelete->numberOfPaths > 0)
 			{	outStr << "<directoriesToDelete numberOfPaths=\"";
 				outStr << m_OSOption->job->directoriesToDelete->numberOfPaths << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->directoriesToDelete->numberOfPaths; i++)
@@ -472,7 +485,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->processesToKill != NULL)
-		{	if (m_OSOption->job->processesToKill->numberOfProcesses > 0)
+		{
+//			if (m_OSOption->job->processesToKill->numberOfProcesses > 0)
 			{	outStr << "<processesToKill numberOfProcesses=\"";
 				outStr << m_OSOption->job->processesToKill->numberOfProcesses << "\">" << endl; 
 				for (int i=0; i < m_OSOption->job->processesToKill->numberOfProcesses; i++)
@@ -481,7 +495,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			}
 		}
 		if (m_OSOption->job->otherOptions != NULL)
-		{	if (m_OSOption->job->otherOptions->numberOfOtherOptions > 0)
+		{
+//			if (m_OSOption->job->otherOptions->numberOfOtherOptions > 0)
 			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
 				outStr << m_OSOption->job->otherOptions->numberOfOtherOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->job->otherOptions->numberOfOtherOptions; i++)
@@ -515,7 +530,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		outStr << ">" << endl;
 		if (m_OSOption->optimization->variables != NULL)
 		{	outStr << "<variables";
-			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
+//			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				outStr << " numberOfOtherVariableOptions=\"" << m_OSOption->optimization->variables->numberOfOtherVariableOptions << "\"";
 			outStr << ">" << endl;
 #ifdef DEBUG
@@ -612,12 +627,12 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #ifdef DEBUG
 			printf("\n%s%d\n","Number of other variable options: ",m_OSOption->optimization->variables->numberOfOtherVariableOptions);
 #endif
-			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
+//			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->variables->numberOfOtherVariableOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->variables->other[i]->name << "\"";
-					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
+//					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
 						outStr << " numberOfVar=\"" << m_OSOption->optimization->variables->other[i]->numberOfVar << "\"";
-					if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
+//					if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
 						outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->variables->other[i]->numberOfEnumerations << "\"";
 					if (m_OSOption->optimization->variables->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->variables->other[i]->value << "\"";
@@ -630,7 +645,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					if (m_OSOption->optimization->variables->other[i]->description != "")
 						outStr << " description=\"" << m_OSOption->optimization->variables->other[i]->description << "\"";
 					outStr << ">" << endl;
-					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
+//					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
 						for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfVar; j++)
 						{	outStr << "<var idx=\"" << m_OSOption->optimization->variables->other[i]->var[j]->idx << "\"";
 							if (m_OSOption->optimization->variables->other[i]->var[j]->value != "")
@@ -641,9 +656,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 								outStr << " ubValue=\"" << m_OSOption->optimization->variables->other[i]->var[j]->ubValue << "\"";
 							outStr << "/>" << endl;
 						}
-					else 
+//					else 
 					{
-						if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
+//						if (m_OSOption->optimization->variables->other[i]->numberOfEnumerations > 0)
 						for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfEnumerations; j++)
 							outStr << writeOtherOptionEnumeration(m_OSOption->optimization->variables->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 					}
@@ -653,7 +668,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		}
 		if (m_OSOption->optimization->objectives != NULL)
 		{	outStr << "<objectives";
-			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
+//			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
 				outStr << " numberOfOtherObjectiveOptions=\"" << m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions << "\"";
 			outStr << ">" << endl;
 			if (m_OSOption->optimization->objectives->initialObjectiveValues != NULL)
@@ -714,13 +729,13 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #ifdef DEBUG
 			printf("\n%s%d\n","Number of other objective options: ",m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions);
 #endif
-			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
+//			if (m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
 				{
 					outStr << "<other name=\"" << m_OSOption->optimization->objectives->other[i]->name << "\"";
-					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
+//					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
 						outStr << " numberOfObj=\"" << m_OSOption->optimization->objectives->other[i]->numberOfObj << "\"";
-					if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
+//					if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
 						outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->objectives->other[i]->numberOfEnumerations << "\"";
 					if (m_OSOption->optimization->objectives->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->value << "\"";
@@ -733,14 +748,14 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					if (m_OSOption->optimization->objectives->other[i]->description != "")
 						outStr << " description=\"" << m_OSOption->optimization->objectives->other[i]->description << "\"";
 					outStr << ">" << endl;
-					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
+//					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
 						for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfObj; j++)
 						{	outStr << "<var idx=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->idx << "\"";
 							if (m_OSOption->optimization->objectives->other[i]->obj[j]->value != "")
 								outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->value << "\"";
 							outStr << "/>" << endl;
 						}
-					else if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
+//					else if (m_OSOption->optimization->objectives->other[i]->numberOfEnumerations > 0)
 						for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfEnumerations; j++)
 							outStr << writeOtherOptionEnumeration(m_OSOption->optimization->objectives->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
@@ -753,7 +768,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #endif
 		if (m_OSOption->optimization->constraints != NULL)
 		{	outStr << "<constraints";
-			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
+//			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
 				outStr << " numberOfOtherConstraintOptions=\"" << m_OSOption->optimization->constraints->numberOfOtherConstraintOptions << "\"";
 			outStr << ">" << endl;
 			if (m_OSOption->optimization->constraints->initialConstraintValues != NULL)
@@ -814,13 +829,13 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #ifdef DEBUG
 			printf("\n%s%d\n","Number of other constraint options: ",m_OSOption->optimization->constraints->numberOfOtherConstraintOptions);
 #endif
-			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
+//			if (m_OSOption->optimization->constraints->numberOfOtherConstraintOptions > 0)
 				for (int i=0; i < m_OSOption->optimization->constraints->numberOfOtherConstraintOptions; i++)
 				{	outStr << "<other name=\"" << m_OSOption->optimization->constraints->other[i]->name << "\"";
 
-					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
+//					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
 						outStr << " numberOfCon=\"" << m_OSOption->optimization->constraints->other[i]->numberOfCon << "\"";
-					if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
+//					if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
 						outStr << " numberOfEnumerations=\"" << m_OSOption->optimization->constraints->other[i]->numberOfEnumerations << "\"";
 					if (m_OSOption->optimization->constraints->other[i]->value != "")
 						outStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->value << "\"";
@@ -833,7 +848,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					if (m_OSOption->optimization->constraints->other[i]->description != "")
 						outStr << " description=\"" << m_OSOption->optimization->constraints->other[i]->description << "\"";
 					outStr << ">" << endl;
-					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
+//					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
 						for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfCon; j++)
 						{	outStr << "<con idx=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->idx << "\"";
 							if (m_OSOption->optimization->constraints->other[i]->con[j]->value != "")
@@ -844,7 +859,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 								outStr << " ubValue=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->ubValue << "\"";
 							outStr << "/>" << endl;
 						}
-					else if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
+//					else if (m_OSOption->optimization->constraints->other[i]->numberOfEnumerations > 0)
 						for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfEnumerations; j++)
 							outStr << writeOtherOptionEnumeration(m_OSOption->optimization->constraints->other[i]->enumeration[j], m_bWhiteSpace, m_bWriteBase64);
 
@@ -856,7 +871,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		cout << "Done with <constraint> element" << endl;
 #endif
 		if (m_OSOption->optimization->solverOptions != NULL)
-		{	if (m_OSOption->optimization->solverOptions->numberOfSolverOptions > 0)
+		{
+//			if (m_OSOption->optimization->solverOptions->numberOfSolverOptions > 0)
 			{	outStr << "<solverOptions numberOfSolverOptions=\""; 
 				outStr << m_OSOption->optimization->solverOptions->numberOfSolverOptions << "\">" << endl;
 				for (int i=0; i < m_OSOption->optimization->solverOptions->numberOfSolverOptions; i++)
@@ -880,7 +896,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 						for (int k=0; k<m_OSOption->optimization->solverOptions->solverOption[i]->numberOfItems; k++)
 							outStr << "<item>" << m_OSOption->optimization->solverOptions->solverOption[i]->item[k] << "</item>" << endl;
 						outStr << "</solverOption>" << endl;
-					}
+				}
 				}
 				outStr << "</solverOptions>" << endl;
 			}

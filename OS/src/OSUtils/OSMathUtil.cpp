@@ -1,15 +1,13 @@
 /* $Id$ */
 /** @file MathUtil.cpp
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.2, 13/Oct/2010
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
  * \remarks
- * Copyright (C) 2005-2010, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, and Wayne Sheng
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin, and Wayne Sheng
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  * <p>The <code>MathUtil</code> class contains methods for performing
@@ -64,7 +62,7 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 		}
 	}
 	// at this point, miStart[ i] holds the number of columns with a nonzero in row i - 1
-	// we are not done with the start indicies, if we are here, and we
+	// we are not done with the start indices, if we are here, and we
 	// knew the correct starting point of row i -1, the correct starting point
 	// for row i is miStart[i] + miStart [i - 1]
 	miStart[0] = 0;
@@ -74,7 +72,7 @@ SparseMatrix* MathUtil::convertLinearConstraintCoefficientMatrixToTheOtherMajor(
 	
 	// now get the correct values
 	// again assume we are converting column major to row major
-	// loop over bariables		
+	// loop over columns		
 	for (i = 0; i < iNumSource; i++){
 		// get row indices and values of the A matrix
 		for (j = start[i]; j < start[ i + 1 ]; j++){

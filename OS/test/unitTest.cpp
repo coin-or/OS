@@ -3052,7 +3052,7 @@ if (PARSER_TESTS){
 			throw ErrorClass(" Could not add to osoption data structure");
 
 		//Now transfer to another osoption using get() and set() methods
-		std::string optionstring, fileName, fileSource, fileDescription, fileCreatedBy, fileLicence;
+		std::string optionstring, fileName, fileSource, fileDescription, fileCreator, fileLicence;
 		int option_i;
 		double option_d;
 		OSOption* osoption2 = new OSOption();
@@ -3062,9 +3062,9 @@ if (PARSER_TESTS){
 		fileName        = osoption->getFileName();
 		fileSource      = osoption->getFileSource();
 		fileDescription = osoption->getFileDescription();
-		fileCreatedBy   = osoption->getFileCreatedBy();
+		fileCreator     = osoption->getFileCreator();
 		fileLicence     = osoption->getFileLicence();
-		ok = osoption2->setOptionHeader(fileName, fileSource, fileDescription, fileCreatedBy, fileLicence);
+		ok = osoption2->setOptionHeader(fileName, fileSource, fileDescription, fileCreator, fileLicence);
 #ifdef DEBUG
 		if (!ok)
 			throw ErrorClass(" error in get/set option header");

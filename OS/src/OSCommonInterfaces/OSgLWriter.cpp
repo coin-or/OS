@@ -100,9 +100,9 @@ std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace)
 		if(addWhiteSpace == true) outStr << endl;
 	}
 
-	if (v->fileCreatedBy != "")
+	if (v->fileCreator != "")
 	{
-		outStr << "<fileCreatedBy>" << v->fileCreatedBy << "</fileCreatedBy>" ;
+		outStr << "<fileCreator>" << v->fileCreator << "</fileCreator>" ;
 		if(addWhiteSpace == true) outStr << endl;
 	}
 

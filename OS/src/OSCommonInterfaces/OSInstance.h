@@ -810,8 +810,8 @@ public:
 	/** The OSInstance class destructor */
 	~OSInstance();
 	
-	/** A pointer to an InstanceHeader object */
-	InstanceHeader *instanceHeader;
+	/** the instanceHeader is implemented as a general file header object to allow sharing of classes between schemas */
+	GeneralFileHeader *instanceHeader;
 	
 	/** A pointer to an InstanceData object */
 	InstanceData *instanceData;

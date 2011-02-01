@@ -1035,6 +1035,10 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	const char *endSource = "</source";
 	const char *startDescription = "<description";
 	const char *endDescription = "</description";
+	const char *startFileCreator = "<fileCreator";
+	const char *endFileCreator = "</fileCreator";
+	const char *startLicence = "<licence";
+	const char *endLicence = "</licence";
 	const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
 	char *pelementText = NULL;
 	const char *ptemp = NULL;
@@ -1198,7 +1202,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// pchar better be '>' or there is an error
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
 			pchar++;
-			// process <source> element text
+			// process <description> element text
 			// there better be a </description
 			ptemp = strstr( pchar, endDescription);
 			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </description> element"); return false;}
@@ -1223,6 +1227,111 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 		}
 	}// end of else after discovering a description element
 	//done processing <description> element
+
+	//
+	//
+	//process the <fileCreator> element
+	//
+	// first burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+	// if, present we should be pointing to <fileCreator element if there -- it is not required
+	*p = pchar;
+	while(*startFileCreator++  == *pchar) pchar++;
+	if( (pchar - *p) != 12) {
+		//reset pchar
+		pchar = *p;
+	}
+	else{
+	// we have a fileCreator element, process the text
+	// burn the whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+		if( *pchar == '/'){
+			pchar++;
+			// better point to a '>'
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <fileCreator> element"); return false;}
+		}
+		else{
+			// pchar better be '>' or there is an error
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <fileCreator> element"); return false;}
+			pchar++;
+			// process <fileCreator> element text
+			// there better be a </fileCreator
+			ptemp = strstr( pchar, endFileCreator);
+			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </fileCreator> element"); return false;}
+			elementSize = ptemp - pchar;
+			pelementText = new char[ elementSize + 1];
+			strncpy(pelementText, pchar, elementSize);
+			pelementText[ elementSize] = '\0';
+			osinstance->instanceHeader->fileCreator = pelementText;
+			//garbage collection
+			delete [] pelementText;
+			// move pchar up to the end of </description
+			while(elementSize-- > 0){
+				if(*pchar++ == '\n') (*osillineno)++;
+			}
+			// pchar should now be pointing to the start of </fileCreator
+			// move to first char after </fileCreator
+			pchar += 13;
+			// get rid of the whitespace
+			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+			// we better have the '>' for the end of </fileCreator>
+			if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </fileCreator> element"); return false;}
+		}
+	}// end of else after discovering a fileCreator element
+	//done processing <fileCreator> element
+	//
+	//
+	//process the <licence> element
+	//
+	// first burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+	// if, present we should be pointing to <licence element if there -- it is not required
+	*p = pchar;
+	while(*startLicence++  == *pchar) pchar++;
+	if( (pchar - *p) != 8) {
+		//reset pchar
+		pchar = *p;
+	}
+	else{
+	// we have a licence element, process the text
+	// burn the whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+		if( *pchar == '/'){
+			pchar++;
+			// better point to a '>'
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <licence> element"); return false;}
+		}
+		else{
+			// pchar better be '>' or there is an error
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <licence> element"); return false;}
+			pchar++;
+			// process <licence> element text
+			// there better be a </licence
+			ptemp = strstr( pchar, endLicence);
+			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </licence> element"); return false;}
+			elementSize = ptemp - pchar;
+			pelementText = new char[ elementSize + 1];
+			strncpy(pelementText, pchar, elementSize);
+			pelementText[ elementSize] = '\0';
+			osinstance->instanceHeader->licence = pelementText;
+			//garbage collection
+			delete [] pelementText;
+			// move pchar up to the end of </licence
+			while(elementSize-- > 0){
+				if(*pchar++ == '\n') (*osillineno)++;
+			}
+			// pchar should now be pointing to the start of </licence
+			// move to first char after </licence
+			pchar += 9;
+			// get rid of the whitespace
+			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+			// we better have the '>' for the end of </description>
+			if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </licence> element"); return false;}
+		}
+	}// end of else after discovering a licence element
+	//done processing <licence> element
+
+
 	//
 	// if we are here there must be an </instanceHeader > element
 	// burn the whitespace

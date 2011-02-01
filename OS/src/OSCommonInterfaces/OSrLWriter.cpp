@@ -91,11 +91,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 #endif
 	if(m_OSResult->resultHeader != NULL)
 	{
-		if (m_OSResult->resultHeader->name          != "" ||
-			m_OSResult->resultHeader->source        != "" ||
-			m_OSResult->resultHeader->description   != "" ||
-			m_OSResult->resultHeader->fileCreatedBy != "" ||
-			m_OSResult->resultHeader->licence       != "" )
+		if (m_OSResult->resultHeader->name        != "" ||
+			m_OSResult->resultHeader->source      != "" ||
+			m_OSResult->resultHeader->description != "" ||
+			m_OSResult->resultHeader->fileCreator != "" ||
+			m_OSResult->resultHeader->licence     != "" )
 		{
 			outStr << "<resultHeader>" << endl;
 			outStr << writeGeneralFileHeader(m_OSResult->resultHeader, true);

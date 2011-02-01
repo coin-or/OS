@@ -116,7 +116,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token FILENAMESTART FILENAMEEND FILENAMEEMPTY FILENAMESTARTANDEND;
 %token FILESOURCESTART FILESOURCEEND FILESOURCEEMPTY FILESOURCESTARTANDEND;
 %token FILEDESCRIPTIONSTART FILEDESCRIPTIONEND FILEDESCRIPTIONEMPTY FILEDESCRIPTIONSTARTANDEND; 
-%token FILECREATEDBYSTART FILECREATEDBYEND FILECREATEDBYEMPTY FILECREATEDBYSTARTANDEND;
+%token FILECREATORSTART FILECREATOREND FILECREATOREMPTY FILECREATORSTARTANDEND;
 %token FILELICENCESTART FILELICENCEEND FILELICENCEEMPTY FILELICENCESTARTANDEND;
 
 %token ACTUALSTARTTIMESTART ACTUALSTARTTIMEEND
@@ -225,21 +225,22 @@ osrlBody:
 
 headerElement: | headerElementStart headerElementContent
 {
-	if (osglData->fileName      != "" || osglData->source      != "" ||
-		osglData->fileCreatedBy != "" || osglData->description != "" ||
-		osglData->licence       != "")
+	if (osglData->fileName    != "" || osglData->source      != "" ||
+		osglData->fileCreator != "" || osglData->description != "" ||
+		osglData->licence     != "")
 		if(!osresult->setResultHeader(osglData->fileName, osglData->source, 	
-				osglData->fileCreatedBy, osglData->description, osglData->licence) )	
+				osglData->description, 
+osglData->fileCreator, osglData->licence) )	
 			osrlerror( NULL, osresult, parserData, osglData, "setHeader failed");
 };
  
 headerElementStart: HEADERSTART
 {
-	osglData->fileName      = "";
-	osglData->source        = "";
-	osglData->fileCreatedBy = "";
-	osglData->description   = "";
-	osglData->licence       = "";
+	osglData->fileName    = "";
+	osglData->source      = "";
+	osglData->description = "";
+	osglData->fileCreator = "";
+	osglData->licence     = "";
 };
 
 headerElementContent: headerElementEmpty | headerElementLaden;
@@ -248,7 +249,7 @@ headerElementEmpty: ENDOFELEMENT;
 
 headerElementLaden: GREATERTHAN headerElementBody HEADEREND; 
 
-headerElementBody:  fileName fileSource fileDescription fileCreatedBy fileLicence
+headerElementBody:  fileName fileSource fileDescription fileCreator fileLicence
 
 fileName: | fileNameContent;
 
@@ -283,15 +284,15 @@ fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
 	osglData->description = $2;
 };
 
-fileCreatedBy: | fileCreatedByContent;
+fileCreator: | fileCreatorContent;
 
-fileCreatedByContent: fileCreatedByEmpty | fileCreatedByLaden;
+fileCreatorContent: fileCreatorEmpty | fileCreatorLaden;
 
-fileCreatedByEmpty: FILECREATEDBYSTARTANDEND | FILECREATEDBYEMPTY;
+fileCreatorEmpty: FILECREATORSTARTANDEND | FILECREATOREMPTY;
 
-fileCreatedByLaden: FILECREATEDBYSTART ITEMTEXT FILECREATEDBYEND
+fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
 {
-	osglData->fileCreatedBy = $2;
+	osglData->fileCreator = $2;
 };
 
 fileLicence: | fileLicenceContent;

@@ -38,7 +38,7 @@ libOSUtils_la_LDFLAGS = $(LT_LDFLAGS)
 # "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = $(ASL_CFLAGS) \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` 
+	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces`  
 
 
 #if USE_DTOA

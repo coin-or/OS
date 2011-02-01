@@ -31,8 +31,8 @@ using std::endl;
 GeneralFileHeader::GeneralFileHeader():
 	name(""),
 	source(""),
-	fileCreatedBy(""),
 	description(""),
+	fileCreator(""),
 	licence("")
 {
 }// end GeneralFileHeader constructor
@@ -66,18 +66,18 @@ bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
 			return false;
 		}
 		else	
-		{	if ((this->name          != that->name)          || 
-				(this->source        != that->source)        ||
-				(this->fileCreatedBy != that->fileCreatedBy) || 
-				(this->description   != that->description)   || 
-				(this->licence       != that->licence))
+		{	if ((this->name        != that->name)         || 
+				(this->source      != that->source)      ||
+				(this->description != that->description) || 
+				(this->fileCreator != that->fileCreator) || 
+				(this->licence     != that->licence))
 			{
 #ifdef DEBUG_OSOPTION
-				cout << "name: "          << this->name          << " vs. " << that->name          << endl;
-				cout << "source: "        << this->source        << " vs. " << that->source        << endl;
-				cout << "fileCreatedBy: " << this->fileCreatedBy << " vs. " << that->fileCreatedBy << endl;
-				cout << "description: "   << this->description   << " vs. " << that->description   << endl;
-				cout << "licence: "       << this->licence       << " vs. " << that->licence       << endl;
+				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
+				cout << "source: "      << this->source      << " vs. " << that->source      << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+				cout << "fileCreator: " << this->fileCreator << " vs. " << that->fileCreator << endl;
+				cout << "licence: "     << this->licence     << " vs. " << that->licence     << endl;
 #endif	
 				return false;
 			}
@@ -88,22 +88,22 @@ bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
 
 bool GeneralFileHeader::setRandom(double density, bool conformant)
 {
-	if (OSRand() <= density) this->name          = "random string";
-	if (OSRand() <= density) this->source        = "random string";
-	if (OSRand() <= density) this->fileCreatedBy = "random string";
-	if (OSRand() <= density) this->description   = "random string";
-	if (OSRand() <= density) this->licence       = "random string";
+	if (OSRand() <= density) this->name        = "random string";
+	if (OSRand() <= density) this->source      = "random string";
+	if (OSRand() <= density) this->description = "random string";
+	if (OSRand() <= density) this->fileCreator = "random string";
+	if (OSRand() <= density) this->licence     = "random string";
 	return true;
 }// end of GeneralFileHeader::setRandom
 
 bool GeneralFileHeader::setHeader(std::string name, std::string source, 
-		           std::string fileCreatedBy, std::string description, std::string licence)
+		           std::string description, std::string fileCreator, std::string licence)
 {
-	this->name          = name;
-	this->source        = source;
-	this->fileCreatedBy = fileCreatedBy;
-	this->description   = description;
-	this->licence       = licence;
+	this->name        = name;
+	this->source      = source;
+	this->description = description;
+	this->fileCreator = fileCreator;
+	this->licence     = licence;
 	return true;
 }// end of GeneralFileHeader::setHeader
 
@@ -628,7 +628,7 @@ bool DoubleVector::IsEqual(DoubleVector *that)
 			}
 			for (int i=0; i<this->numberOfEl; i++)
 			{
-				if (this->el[i] != that->el[i])
+				if (!isEqual(this->el[i], that->el[i]))
 				{
 
 #ifdef DEBUG_ISEQUAL_ROUTINES
@@ -997,7 +997,8 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
 		else	
 		{	if ((this->unit        != that->unit)        || 
 				(this->description != that->description) || 
-				(this->value       != that->value))
+//				(this->value       != that->value))
+				!isEqual(this->value, that->value))
 			{
 //#ifdef DEBUG_OSGENERAL
 				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
@@ -1071,7 +1072,8 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 		else	
 		{	if ((this->unit        != that->unit)        || 
 				(this->description != that->description) || 
-				(this->value       != that->value))
+//				(this->value       != that->value))
+				!isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
@@ -1204,7 +1206,8 @@ bool TimeSpan::IsEqual(TimeSpan *that)
 		}
 		else	
 		{	if ((this->unit        != that->unit)        || 
-				(this->value       != that->value))
+				!isEqual(this->value, that->value))
+//				(this->value       != that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
@@ -1236,4 +1239,5 @@ bool TimeSpan::setRandom(double density, bool conformant)
 	}
 	return true;
 }// end of TimeSpan::setRandom
+
 

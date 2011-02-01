@@ -154,10 +154,10 @@
      FILEDESCRIPTIONEND = 335,
      FILEDESCRIPTIONEMPTY = 336,
      FILEDESCRIPTIONSTARTANDEND = 337,
-     FILECREATEDBYSTART = 338,
-     FILECREATEDBYEND = 339,
-     FILECREATEDBYEMPTY = 340,
-     FILECREATEDBYSTARTANDEND = 341,
+     FILECREATORSTART = 338,
+     FILECREATOREND = 339,
+     FILECREATOREMPTY = 340,
+     FILECREATORSTARTANDEND = 341,
      FILELICENCESTART = 342,
      FILELICENCEEND = 343,
      FILELICENCEEMPTY = 344,
@@ -370,10 +370,10 @@
 #define FILEDESCRIPTIONEND 335
 #define FILEDESCRIPTIONEMPTY 336
 #define FILEDESCRIPTIONSTARTANDEND 337
-#define FILECREATEDBYSTART 338
-#define FILECREATEDBYEND 339
-#define FILECREATEDBYEMPTY 340
-#define FILECREATEDBYSTARTANDEND 341
+#define FILECREATORSTART 338
+#define FILECREATOREND 339
+#define FILECREATOREMPTY 340
+#define FILECREATORSTARTANDEND 341
 #define FILELICENCESTART 342
 #define FILELICENCEEND 343
 #define FILELICENCEEMPTY 344
@@ -1442,8 +1442,8 @@ static const char *const yytname[] =
   "FILENAMESTARTANDEND", "FILESOURCESTART", "FILESOURCEEND",
   "FILESOURCEEMPTY", "FILESOURCESTARTANDEND", "FILEDESCRIPTIONSTART",
   "FILEDESCRIPTIONEND", "FILEDESCRIPTIONEMPTY",
-  "FILEDESCRIPTIONSTARTANDEND", "FILECREATEDBYSTART", "FILECREATEDBYEND",
-  "FILECREATEDBYEMPTY", "FILECREATEDBYSTARTANDEND", "FILELICENCESTART",
+  "FILEDESCRIPTIONSTARTANDEND", "FILECREATORSTART", "FILECREATOREND",
+  "FILECREATOREMPTY", "FILECREATORSTARTANDEND", "FILELICENCESTART",
   "FILELICENCEEND", "FILELICENCEEMPTY", "FILELICENCESTARTANDEND",
   "ACTUALSTARTTIMESTART", "ACTUALSTARTTIMEEND", "ATLOWERSTART",
   "ATLOWEREND", "ATUPPERSTART", "ATUPPEREND", "AVAILABLECPUNUMBERSTART",
@@ -1490,8 +1490,8 @@ static const char *const yytname[] =
   "fileName", "fileNameContent", "fileNameEmpty", "fileNameLaden",
   "fileSource", "fileSourceContent", "fileSourceEmpty", "fileSourceLaden",
   "fileDescription", "fileDescriptionContent", "fileDescriptionEmpty",
-  "fileDescriptionLaden", "fileCreatedBy", "fileCreatedByContent",
-  "fileCreatedByEmpty", "fileCreatedByLaden", "fileLicence",
+  "fileDescriptionLaden", "fileCreator", "fileCreatorContent",
+  "fileCreatorEmpty", "fileCreatorLaden", "fileLicence",
   "fileLicenceContent", "fileLicenceEmpty", "fileLicenceLaden",
   "generalElement", "generalElementStart", "generalElementContent",
   "generalElementEmpty", "generalElementLaden", "generalElementBody",
@@ -3843,11 +3843,11 @@ yydebug = 1;
   case 14:
 
     {
-	if (osglData->fileName      != "" || osglData->source      != "" ||
-		osglData->fileCreatedBy != "" || osglData->description != "" ||
-		osglData->licence       != "")
+	if (osglData->fileName    != "" || osglData->source      != "" ||
+		osglData->fileCreator != "" || osglData->description != "" ||
+		osglData->licence     != "")
 		if(!osresult->setResultHeader(osglData->fileName, osglData->source, 	
-				osglData->fileCreatedBy, osglData->description, osglData->licence) )	
+				osglData->description, osglData->fileCreator, osglData->licence) )	
 			osrlerror( NULL, osresult, parserData, osglData, "setHeader failed");
 ;}
     break;
@@ -3855,11 +3855,11 @@ yydebug = 1;
   case 15:
 
     {
-	osglData->fileName      = "";
-	osglData->source        = "";
-	osglData->fileCreatedBy = "";
-	osglData->description   = "";
-	osglData->licence       = "";
+	osglData->fileName    = "";
+	osglData->source      = "";
+	osglData->description = "";
+	osglData->fileCreator = "";
+	osglData->licence     = "";
 ;}
     break;
 
@@ -3887,7 +3887,7 @@ yydebug = 1;
   case 48:
 
     {
-	osglData->fileCreatedBy = (yyvsp[(2) - (3)].sval);
+	osglData->fileCreator = (yyvsp[(2) - (3)].sval);
 ;}
     break;
 

@@ -2,15 +2,13 @@
 /** @file OSParameters.h
  * 
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
@@ -195,7 +193,7 @@ inline std::string	getVersionInfo(){
 		versionInfo << std::endl;	
 		versionInfo << "Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin";
 		versionInfo << std::endl;
-		versionInfo << "Distributed under the Common Public License 1.0" ;
+		versionInfo << "Distributed under the Eclipse Public License" ;
 		versionInfo << std::endl;
 		versionInfo << "OS Version: ";
 		versionInfo << OS_VERSION;

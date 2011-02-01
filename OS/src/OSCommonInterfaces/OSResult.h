@@ -1906,12 +1906,12 @@ public:
 	 * A function to populate an instance of the result header element
 	 * @param name: the name of this file or instance
 	 * @param source: the source (e.g., in BiBTeX format)
-	 * @param fileCreatedBy: the creator of this file
+	 * @param fileCreator: the creator of this file
 	 * @param description: further description about this file and/or its contents
 	 * @param licence: licence information if applicable
 	 */
 	bool setResultHeader(std::string name, std::string source, 
-		           std::string fileCreatedBy, std::string description, std::string licence);
+		           std::string fileCreator, std::string description, std::string licence);
 
 public:	
 	

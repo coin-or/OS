@@ -371,10 +371,10 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/description{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONEND);}
 {xmlwhitespace}*\<description{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONSTARTANDEND);}
 
-{xmlwhitespace}*\<fileCreatedBy{xmlwhitespace}*\>{xmlwhitespace}*\<\/fileCreatedBy{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILECREATEDBYEMPTY);}
-{xmlwhitespace}*\<fileCreatedBy{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILECREATEDBYSTART);}
-{xmlwhitespace}*\<\/fileCreatedBy{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILECREATEDBYEND);}
-{xmlwhitespace}*\<fileCreatedBy{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILECREATEDBYSTARTANDEND);}
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILECREATOREMPTY);}
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILECREATORSTART);}
+{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILECREATOREND);}
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILECREATORSTARTANDEND);}
 
 {xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}*\<\/licence{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILELICENCEEMPTY);}
 {xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILELICENCESTART);}
