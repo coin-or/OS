@@ -25,6 +25,8 @@
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
 
+#include  "OSDecompSolverFactory.h"
+
 
 
 #ifdef COIN_HAS_COUENNE    
@@ -75,7 +77,16 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  
 	  m_osinstanceMaster = NULL;
 	  m_osrouteSolver = NULL;
-	  m_osrouteSolver = new OSBearcatSolverXij( osoption);
+	  
+	  m_osrouteSolver = NULL;
+	  factoryInit  = new OSDecompFactoryInitializer();
+	  std::cout << "CREATE THE FACTORY " << std::endl;
+	  m_osrouteSolver = OSDecompSolverFactory::factories[ "OSBearcatSolverXij"]->create();
+	  std::cout << "FINISH FACTORY CREATION " << std::endl;
+	  std::cout << "SET FACTORY OPTION " << std::endl;
+	  m_osrouteSolver->m_osoption =  m_osoption;
+	  std::cout << "FINISH SET FACTORY OPTION " << std::endl;
+	  //m_osrouteSolver = new OSBearcatSolverXij( osoption);
 
 	  //share the common parameters
 	  m_osrouteSolver->m_osDecompParam = m_osDecompParam;
@@ -110,6 +121,10 @@ OSColGenApp::~OSColGenApp(){
 
 	if( m_osrouteSolver != NULL) delete  m_osrouteSolver;
 
+	//finally delete the factories
+	
+	delete factoryInit;
+
 }//end ~OSColGenApp() destructor
 
 
@@ -119,16 +134,6 @@ void OSColGenApp::getInitialRestrictedMaster( ){
 	//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 	
 }//end generateInitialRestrictedMaster
-
-
-void OSColGenApp::getInitialRestrictedMaster2( ){
-
-	m_osinstanceMaster = m_osrouteSolver->getInitialRestrictedMaster2( );
-	
-	//exit( 1);
-	//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
-	
-}//end generateInitialRestrictedMaster2
 
 
 void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
@@ -1525,7 +1530,8 @@ void  OSColGenApp::resetMaster(){
 		//std::cout << "THE MAPPING AFTER A RESET: "   <<  std::endl;
 		//for(mit = inVars.begin();  mit != inVars.end(); mit++)  std::cout << "mit->first " <<   mit->first << "  mit->second   " << mit->second   << std::endl;
 			
-		int numVars =   m_osrouteSolver->m_osinstanceMaster->getVariableNumber();
+		//int numVars =   m_osrouteSolver->m_osinstanceMaster->getVariableNumber();
+		int numVars =   m_si->getNumCols();
 		double *tmpVals = NULL;
 		tmpVals = new double[ numVars];
 		
@@ -1612,7 +1618,8 @@ void  OSColGenApp::resetMaster(){
 		//get the solver interface
 		m_si = m_solver->osiSolver;
 		
-		if(m_si->getNumCols() !=  numVars) throw ErrorClass("there is an inconsistency in the the model rebuid in resetMaster");
+		if(m_si->getNumCols() !=  m_osrouteSolver->m_osinstanceMaster->getVariableNumber() ) 
+			throw ErrorClass("there is an inconsistency in the the model rebuid in resetMaster");
 		
 		std::cout << "OSINTANCE NUMBER OF COLUMNS = "  << m_osrouteSolver->m_osinstanceMaster->getVariableNumber() << std::endl;
 		std::cout << "OSINTANCE NUMBER OF ROWS = "  << m_osrouteSolver->m_osinstanceMaster->getConstraintNumber() << std::endl;

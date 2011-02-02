@@ -14,10 +14,10 @@
 #define OSBEARCATSOLVERXIJ_H
 
 #include "OSDecompSolver.h"
+#include "OSDecompSolverFactory.h"
 #include "OSInstance.h"
 #include "OSOption.h"
 #include "ClpSimplex.hpp"
-#include "OSDecompParam.h"
 #include "OSCoinSolver.h"
 #include<map>
 // --------------------------------------------------------------------- //
@@ -32,15 +32,13 @@ class OSBearcatSolverXij : public OSDecompSolver {
 public:
 	
 	
-	OSOption *m_osoption;
+
+
+/***************** Bearcat Specific Solver Parameters ***********************/
 	
-	/** share the parameters with the 
-	 * decomposition solver
-	 */
-	OSDecompParam m_osDecompParam;
 	
-	double m_bestIPValue;
-	double m_bestLPValue;
+
+	
 	
 	std::string m_initOSiLFile;
 	
@@ -50,38 +48,9 @@ public:
 	 */
 	std::map<int, std::map<int, std::vector<int> > > m_initSolMap;
 	
-	/** intVarSet holds and std::pair where the first
-	 * element is the index of an integer variable and 
-	 * the second is the variable upper bound
-	 */
-	std::set<std::pair<int, double> > intVarSet;
 	
 	
-	/** m_numHubs is the number of hubs/routes */
-	int m_numHubs;
-	
-	/** m_numNodes is the number of nodes (both pickup 
-	 * and hub) in the model
-	 */
-	int m_numNodes;
-	
-	
-	/*****************Route Solver Parameters***********************/
-	
-	
-	/** m_maxMasterColumns is the maximumn number
-	 * of columns we allow in the master
-	 */
-	int m_maxMasterColumns;
-	
-	/** m_maxMasterColumns is the maximumn number
-	 * of rows we allow in the master, in this
-	 * application it is equal to m_maxBmatrixCon
-	 * plus m_numNodes -- we therefore do not need
-	 * to read this from an option file as we might
-	 * for other problems
-	 */
-	int m_maxMasterRows;
+
 	
 	/** if m_use1OPTstart is true we use the option file to
 	 * fix the nodes to hubs found by SK's 1OPT heuristic
@@ -94,21 +63,8 @@ public:
 	 */
 	int m_maxThetaNonz;
 	
-	/** m_maxBmatrixCon is the maximum number of B matrix constraints
-	 * it is the number of tour breaking constraints plus variable 
-	 * branch constraints
-	 */
-	int m_maxBmatrixCon;
-	
-	/** m_maxBmatrixNonz is the maximum number of nonzero elements
-	 * in the B matrix constraints 
-	 */
-	int m_maxBmatrixNonz;
-	
-	
-	/*****************End Route Solver Parameters***********************/	
 
-	
+
 	
 	/** the route capacity -- bus seating limit 
 	 * this can vary with the route/hub
@@ -181,11 +137,6 @@ public:
 	int m_totalDemand;
 	int m_numberOfSolutions;
 	
-
-	
-	//these variable names are in x(i, j) space
-	std::string* m_variableNames;
-
 	
 	//below  is a scatter array we scatter into in order
 	//to multiply the transformation matrix times the A matrix
@@ -210,39 +161,9 @@ public:
 	double* branchCutValues;
 	//end arguments for the getBranchingCut
 		
-	//arrays for the coupling constraint matrix
-	//we store indexes since values are 1.0
-	//also the RHS is 1.0
-	//the matrix has m_numNodes - m_numHubs rows
-	int* m_pntAmatrix;
-	//m_Amatrix holds the column indexes for each row
-	int* m_Amatrix;
-	//
-	//arrays for the added constraints
-	//for now the added constraints are 
-	//tour breaking and variable branching
-	//constraints
-	//
-	int* m_pntBmatrix;
-	int* m_Bmatrix;   
+
 	
-	/** m_numBmatrixCon is the number of
-	 * constraints in B - 1, we have the -1
-	 * because:
-	 * m_pntBmatrix[ k] points to the start of
-	 * constraint k and m_pntBmatrix[ m_numBmatrixCon ]
-	 * is equal to m_numBmatrixNonz
-	 */
-	int m_numBmatrixCon;   
-	int m_numBmatrixNonz;
-	//
-	//end arrays for added constaints
-	
-	//the transformation matrix
-	int* m_thetaPnt;
-	int* m_thetaIndex;
-	int m_numThetaVar;
-	int m_numThetaNonz;
+
 	
 	//kipp -- be carefull does m_thetaCost have
 	// artificial variables -- it is 
@@ -261,7 +182,7 @@ public:
 	  */
 	int* m_separationIndexMap;
 	
-	OSInstance *m_osinstanceMaster;
+	//
 	OSInstance *m_osinstanceSeparation;
 	
 	//the Clp model 
@@ -269,11 +190,7 @@ public:
 
 	//create the initial restricted master
 	virtual OSInstance* getInitialRestrictedMaster( );
-	
 
-	//create the initial restricted master a second way
-	OSInstance* getInitialRestrictedMaster2( );
-	
 	
 	//this method generates the instance for 
 	//separating the tour breaking constraints
@@ -441,36 +358,24 @@ public:
 	//this is the matrix that says we must visit each node
 	//this A matrix defines the "coupling constraints"
 	void createAmatrix();
-	
-	
+		
 	/** allocate memory and initialize
 	 * arrays
 	 */
-	void initializeDataStructures();
+	virtual void initializeDataStructures();
 	
 	/** generate an intitial feasible solution
 	 * in theta space for the initial master
 	 */
 	void getInitialSolution();
-	
-
-	
+		
 	virtual void resetMaster( std::map<int, int> &inVars, 
 			OsiSolverInterface *si );
-	
-	
+		
 	//this method gets called when we are done
 	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
 			int numColsGen);
 	
-	/** use this method to  the master
-	 * RETURN VALUES: 
-	 * 
-	 * INPUT:
-	 * std::set<int> inVars -- variables to include in new master
-	 * OsiSolverInterface *si -- the current solver interface for 
-	 * the master
-	 */
 	
 	/**
 	 *
@@ -490,6 +395,24 @@ public:
 	 */
 	
 	~OSBearcatSolverXij();
+	
+	
+	class Factory;
+	class Factory : public OSDecompSolverFactory{
+		
+	public:
+		
+		Factory(){
+			
+		}
+		
+		~Factory(){
+			
+		}
+		
+		OSDecompSolver* create() {  return new OSBearcatSolverXij(  osoption); };
+		
+	};// end class OSDipBlockSolverFactory
 	
 
 };//end class OSBearcatSolverXij

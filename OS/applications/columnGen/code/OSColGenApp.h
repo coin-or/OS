@@ -23,6 +23,7 @@
 #include "OSCoinSolver.h"
 #include "OSBearcatSolverXij.h"
 #include "OSDecompParam.h"
+#include  "OSDecompFactoryInitializer.h"
 
 #include "OSNode.h"
 
@@ -39,14 +40,21 @@
 class OSColGenApp {
 public:
 	
+	OSDecompFactoryInitializer *factoryInit;
+	
+
+	OSDecompSolver *m_osrouteSolver;
+	
+	//OSBearcatSolverXij *m_osrouteSolver;
+	//OSDecompSolver *m_osrouteSolver;
+	
 	std::ostringstream outStr;
 	
 	OSInstance *m_osinstanceMaster;
 	OSOption *m_osoption;
 	OSResult *m_osresult;
 	
-	OSBearcatSolverXij *m_osrouteSolver;
-	//OSDecompSolver *m_osrouteSolver;
+
 	
 	//the OS solver wrapper
 	CoinSolver *m_solver;
@@ -117,10 +125,7 @@ public:
 	
 	/** kipp -- document */
 	void solveRestrictedMasterRelaxation( );
-	
 
-	
-	void getInitialRestrictedMaster2( );
 	
 	void getOptions( OSOption *osoption);
 	

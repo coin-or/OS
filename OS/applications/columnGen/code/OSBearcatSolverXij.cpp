@@ -1233,7 +1233,7 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 
 
 
-
+/**
 OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 	
@@ -1518,6 +1518,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 	return m_osinstanceMaster;
 }//end generateInitialRestrictedMaster
+*/
 
 
 
@@ -1525,8 +1526,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 
 
-
-OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster2( ){
+OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 	
 	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster2( )" << std::endl;

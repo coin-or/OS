@@ -41,7 +41,7 @@ public:
 		for(mit = OSDecompSolverFactory::factories.begin(); 
 			mit != OSDecompSolverFactory::factories.end(); mit++){
 			delete mit->second;
-			//std::cout << "DELETED A FACTORY " << std::endl;
+			std::cout << "DELETED A FACTORY " << std::endl;
 		}		
 	}//end destructor 
 };

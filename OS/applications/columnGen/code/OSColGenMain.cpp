@@ -19,6 +19,7 @@
 #include "OSColGenApp.h"
 #include "OSFileUtil.h" 
 #include "CoinTime.hpp"
+#include "OSGeneral.h"
 
 
 
@@ -38,7 +39,6 @@ int main(int argc, char ** argv){
    try{
 	   
 	
-
 	   OSColGenApp *colgenApp;
 	   OSOption *osoption = NULL;
 	   OSoLReader *osolreader = NULL;
@@ -80,7 +80,7 @@ int main(int argc, char ** argv){
 		//colgenApp->getInitialRestrictedMaster( );
 		
 		//now generate the restriced master
-		colgenApp->getInitialRestrictedMaster2( );
+		colgenApp->getInitialRestrictedMaster( );
 		
 		masterCpuTime = CoinCpuTime() - start;
 		

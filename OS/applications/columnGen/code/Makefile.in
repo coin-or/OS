@@ -56,7 +56,8 @@ CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am_OSColGenMain_OBJECTS = OSColGenMain.$(OBJEXT) OSColGenApp.$(OBJEXT) \
 	OSNode.$(OBJEXT) OSDecompSolver.$(OBJEXT) \
-	OSDecompSolverFactory.$(OBJEXT) OSBearcatSolverXij.$(OBJEXT)
+	OSDecompSolverFactory.$(OBJEXT) OSBearcatSolverXij.$(OBJEXT) \
+	OSBearcatSolverXkij.$(OBJEXT)
 OSColGenMain_OBJECTS = $(am_OSColGenMain_OBJECTS)
 am__DEPENDENCIES_1 =
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -381,7 +382,8 @@ OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h \
 	OSNode.cpp OSNode.h OSDecompParam.h OSDecompSolver.cpp \
 	OSDecompSolver.h OSDecompSolverFactory.cpp \
 	OSDecompSolverFactory.h OSDecompFactoryInitializer.h \
-	OSBearcatSolverXij.cpp OSBearcatSolverXij.h
+	OSBearcatSolverXij.cpp OSBearcatSolverXij.h \
+	OSBearcatSolverXkij.cpp OSBearcatSolverXkij.h
 
 # List all additionally required COIN libraries
 OSColGenMain_LDADD = ../../../src/libOS.la $(OSLIB_LIBS)
@@ -466,6 +468,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSBearcatSolverXij.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSBearcatSolverXkij.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSColGenApp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSColGenMain.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDecompSolver.Po@am__quote@
