@@ -318,11 +318,11 @@ int main(int argC, char* argV[])
 			else if (schema == "osol")
 			{
 				OSOption *osoption, *osoption2;
-				osoption = new OSOption();
+//				osoption = new OSOption();
 				OSoLWriter *osolwriter;
 				osolwriter = new OSoLWriter();
 				OSoLReader *osolreader;
-				osolreader = new OSoLReader();
+//				osolreader = new OSoLReader();
 
 				for (int irep=0; irep < nrep; irep++)
 				{
@@ -331,7 +331,7 @@ std::cout << "use random number seed: " << seed << std::endl;
 					srand(seed);
 
 std::cout << "set random osoption" << std::endl;
-
+					osoption = new OSOption();
 					osoption->setRandom(density, conformant);
 
 std::cout << "write to string" << std::endl;
@@ -340,12 +340,21 @@ std::cout << "write to string" << std::endl;
 
 std::cout << osxl << std::endl;
 
+//					osoption2 = new OSOption();
+					osolreader = new OSoLReader();
 					osoption2 = osolreader->readOSoL( osxl);
 					if (verifyObjects == true)
 					{
 						if (osoption->IsEqual(osoption2) == false)
 							throw ErrorClass("Two objects are not equal!");
 					}
+					delete osoption;
+//					delete osoption2;
+					delete osolreader;
+					osoption  = NULL;
+//					osoption2 = NULL;
+					osolreader = NULL;
+
 					seed = rand();
 				}
 			}

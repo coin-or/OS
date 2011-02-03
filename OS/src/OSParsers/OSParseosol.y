@@ -194,9 +194,9 @@ osolBody:
 
 headerElement: | headerElementStart headerElementContent
 {
-	if (osglData->fileName    != "" || osglData->source      != "" ||
-		osglData->fileCreator != "" || osglData->description != "" ||
-		osglData->licence     != "")
+//	if (osglData->fileName    != "" || osglData->source      != "" ||
+//		osglData->description != "" || osglData->fileCreator != "" ||
+//		osglData->licence     != "")
 		if(!osoption->setOptionHeader(osglData->fileName, osglData->source, 	
 				osglData->description, osglData->fileCreator, osglData->licence) )	
 			osolerror( NULL, osoption, parserData, osglData, "setHeader failed");
@@ -281,7 +281,20 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
  */
 generalElement: | generalElementStart generalElementContent;
 
-generalElementStart: GENERALSTART;
+generalElementStart: GENERALSTART
+{
+	parserData->serviceURIPresent = false;	
+	parserData->serviceNamePresent = false;
+	parserData->instanceNamePresent = false;
+	parserData->instanceLocationPresent = false;
+	parserData->jobIDPresent = false;
+	parserData->solverToInvokePresent = false;
+	parserData->licensePresent = false;
+	parserData->usernamePresent = false;
+	parserData->passwordPresent = false;
+	parserData->contactPresent = false;
+	parserData->otherGeneralOptionsPresent = false;
+};
 
 generalElementContent: generalElementEmpty | generalElementLaden;
 
@@ -669,7 +682,14 @@ otherGeneralEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
  */
 systemElement: | systemElementStart systemElementContent;
 
-systemElementStart: SYSTEMSTART;
+systemElementStart: SYSTEMSTART
+{
+	parserData->minDiskSpacePresent = false;	
+	parserData->minMemoryPresent = false;
+	parserData->minCPUSpeedPresent = false;
+	parserData->minCPUNumberPresent = false;
+	parserData->otherSystemOptionsPresent = false;
+};
 
 systemElementContent: systemElementEmpty | systemElementLaden;
 
@@ -814,7 +834,8 @@ minCPUNumberValue: INTEGER
 otherSystemOptions: otherSystemOptionsStart otherSystemOptionsAttributes otherSystemOptionsContent;
 
 otherSystemOptionsStart: OTHEROPTIONSSTART
-{	if (parserData->otherSystemOptionsPresent)
+{
+	if (parserData->otherSystemOptionsPresent)
 		osolerror(NULL, NULL, parserData, osglData, "only one <system> <other> element allowed");
 	parserData->otherSystemOptionsPresent = true;
 };
@@ -892,7 +913,11 @@ otherSystemOptionEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
  */
 serviceElement: | serviceElementStart serviceElementContent;
 
-serviceElementStart: SERVICESTART;
+serviceElementStart: SERVICESTART
+{
+	parserData->serviceTypePresent = false;	
+	parserData->otherServiceOptionsPresent = false;
+};
 
 serviceElementContent: serviceElementEmpty | serviceElementLaden;
 
@@ -938,7 +963,8 @@ serviceTypeBody:  ELEMENTTEXT
 otherServiceOptions: otherServiceOptionsStart otherServiceOptionsAttributes otherServiceOptionsContent;
 
 otherServiceOptionsStart: OTHEROPTIONSSTART
-{	if (parserData->otherServiceOptionsPresent)
+{
+	if (parserData->otherServiceOptionsPresent)
 		osolerror(NULL, NULL, parserData, osglData, "only one <service> <other> element allowed");
 	parserData->otherServiceOptionsPresent = true;
 };
@@ -1015,7 +1041,24 @@ otherServiceOptionEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
  */
 jobElement: | jobElementStart jobElementContent;
 
-jobElementStart: JOBSTART;
+jobElementStart: JOBSTART
+{
+	parserData->maxTimePresent = false;	
+	parserData->requestedStartTimePresent = false;	
+	parserData->dependenciesPresent = false;	
+	parserData->requiredDirectoriesPresent = false;	
+	parserData->requiredFilesPresent = false;	
+	parserData->directoriesToMakePresent = false;	
+	parserData->filesToMakePresent = false;	
+	parserData->inputDirectoriesToMovePresent = false;	
+	parserData->inputFilesToMovePresent = false;	
+	parserData->outputDirectoriesToMovePresent = false;	
+	parserData->outputFilesToMovePresent = false;	
+	parserData->filesToDeletePresent = false;	
+	parserData->directoriesToDeletePresent = false;	
+	parserData->processesToKillPresent = false;	
+	parserData->otherJobOptionsPresent = false;	 
+ };
 
 jobElementContent: jobElementEmpty | jobElementLaden;
 
@@ -1368,7 +1411,7 @@ inputFilesToMove: inputFilesToMoveStart inputFilesToMoveAttributes inputFilesToM
 {
 	if (osoption->setPathPairs(ENUM_PATHPAIR_input_file, parserData->fromPaths, 
 			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
+		osolerror (NULL, osoption, parserData, osglData, "set <inputFilesToMove> failed");
 	delete[] parserData->fromPaths;
 	delete[] parserData->toPaths;
 	delete[] parserData->makeCopy;
@@ -1715,9 +1758,9 @@ optimizationElement: | optimizationStart optimizationAttributes optimizationCont
 
 optimizationStart: OPTIMIZATIONSTART
 {
-	if (parserData->osoloptimizationPresent)
-		osolerror( NULL, osoption, parserData, osglData, "only one <optimization> element allowed");
-	parserData->osoloptimizationPresent = true;
+//	if (parserData->osoloptimizationPresent)
+//		osolerror( NULL, osoption, parserData, osglData, "only one <optimization> element allowed");
+//	parserData->osoloptimizationPresent = true;
 	osoption->optimization = new OptimizationOption();
 	parserData->numberOfVariablesPresent = false;
 	parserData->numberOfObjectivesPresent = false;
@@ -3590,10 +3633,10 @@ solverOptions: | solverOptionsStart numberOfSolverOptionsATT solverOptionsConten
 
 solverOptionsStart: SOLVEROPTIONSSTART
 {
-	if (parserData->solverOptionsPresent)
-		osolerror( NULL, osoption, parserData, osglData, "only one <solverOptions> element allowed");
-	else
-		parserData->solverOptionsPresent = true;
+//	if (parserData->solverOptionsPresent)
+//		osolerror( NULL, osoption, parserData, osglData, "only one <solverOptions> element allowed");
+//	else
+//		parserData->solverOptionsPresent = true;
 };
 
 numberOfSolverOptionsATT: numberOfSolverOptionsAttribute

@@ -15,9 +15,9 @@
 
 //#define DEBUG
 
-#ifdef  DEBUG
+//#ifdef  DEBUG
 #define DEBUG_OSOPTION
-#endif
+//#endif
 
 #include "OSOption.h"
 #include "OSParameters.h"
@@ -4139,7 +4139,7 @@ bool OtherOptions::setOther(int numberOfOptions, OtherOption** other)
 }//setOther
 
 /** addOther()
- *  used to add an <other> element in <general>, <system>, <service> and <job>
+ *  used to add an <other> element in <general>, <system>, <service>, <job> etc.
  */
 bool OtherOptions::addOther(std::string name, std::string value, std::string description)
 {	try
@@ -4343,8 +4343,8 @@ bool PathPairs::setPathPair(int numberOfPathPairs, PathPair **pathPair)
 
 bool PathPairs::setPathPair(std::string *from, std::string *to, bool *makeCopy, int numberOfPathPairs)
 {
-	if (this->pathPair != NULL)
-		return false;
+//	if (this->pathPair != NULL)
+//		return false;
 		
 	this->numberOfPathPairs = numberOfPathPairs;
 	if (numberOfPathPairs == 0)
@@ -6736,7 +6736,7 @@ bool OSOption::setAnotherFileToMake(std::string path)
 bool OSOption::setPathPairs(int object, std::string *from, std::string *to, bool *makeCopy, int numberOfPathPairs)
 {
 	if (numberOfPathPairs < 0) return false;
-
+std::cout << "numberOfPathPairs is not negative!" << std::endl;
 	if (this->job == NULL) 
 		this->job = new JobOption();
 	switch (object)
@@ -6751,6 +6751,7 @@ bool OSOption::setPathPairs(int object, std::string *from, std::string *to, bool
 		{
 			if (this->job->inputFilesToMove == NULL) 
 				this->job->inputFilesToMove = new PathPairs();
+std::cout << "call setPathPair" << std::endl;
 			return this->job->inputFilesToMove->setPathPair(from, to, makeCopy, numberOfPathPairs);
 		}
 		case ENUM_PATHPAIR_output_file:

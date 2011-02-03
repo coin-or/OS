@@ -90,11 +90,11 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #endif
 	if(m_OSOption->optionHeader != NULL)
 	{
-		if (m_OSOption->optionHeader->name        != "" ||
-			m_OSOption->optionHeader->source      != "" ||
-			m_OSOption->optionHeader->description != "" ||
-			m_OSOption->optionHeader->fileCreator != "" ||
-			m_OSOption->optionHeader->licence     != "" )
+//		if (m_OSOption->optionHeader->name        != "" ||
+//			m_OSOption->optionHeader->source      != "" ||
+//			m_OSOption->optionHeader->description != "" ||
+//			m_OSOption->optionHeader->fileCreator != "" ||
+//			m_OSOption->optionHeader->licence     != "" )
 		{
 			outStr << "<optionHeader>" << endl;
 			outStr << writeGeneralFileHeader(m_OSOption->optionHeader, true);

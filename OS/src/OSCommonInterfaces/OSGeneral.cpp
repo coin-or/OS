@@ -21,7 +21,7 @@
 #include <iostream>
 #include <sstream>
 
-//#define DEBUG_OSGENERAL
+#define DEBUG_OSGENERAL
 //#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
@@ -46,23 +46,26 @@ GeneralFileHeader::~GeneralFileHeader()
 
 bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
 {
+#ifdef DEBUG_OSGENERAL
+		cout << "Start comparing in GeneralFileHeader" << endl;
+#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSOPTION
+#ifdef DEBUG_OSGENERAL
 				cout << "First object is NULL, second is not" << endl;
-			#endif
+#endif
 			return false;
 		}
 	}
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSOPTION
+#ifdef DEBUG_OSGENERAL
 				cout << "Second object is NULL, first is not" << endl;
-			#endif
+#endif
 			return false;
 		}
 		else	
@@ -72,7 +75,7 @@ bool GeneralFileHeader::IsEqual(GeneralFileHeader *that)
 				(this->fileCreator != that->fileCreator) || 
 				(this->licence     != that->licence))
 			{
-#ifdef DEBUG_OSOPTION
+#ifdef DEBUG_OSGENERAL
 				cout << "name: "        << this->name        << " vs. " << that->name        << endl;
 				cout << "source: "      << this->source      << " vs. " << that->source      << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -1055,7 +1058,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSOPTION
+			#ifdef DEBUG_OSGENERAL
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -1064,7 +1067,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSOPTION
+			#ifdef DEBUG_OSGENERAL
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -1075,7 +1078,7 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 //				(this->value       != that->value))
 				!isEqual(this->value, that->value))
 			{
-#ifdef DEBUG_OSOPTION
+#ifdef DEBUG_OSGENERAL
 				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
@@ -1129,7 +1132,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSOPTION
+			#ifdef DEBUG_OSGENERAL
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -1138,7 +1141,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSOPTION
+			#ifdef DEBUG_OSGENERAL
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -1147,7 +1150,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 		{	if ((this->description != that->description) || 
 				(this->value       != that->value))
 			{
-#ifdef DEBUG_OSOPTION
+#ifdef DEBUG_OSGENERAL
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
 #endif	
@@ -1190,7 +1193,7 @@ bool TimeSpan::IsEqual(TimeSpan *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_OSOPTION
+			#ifdef DEBUG_OSGENERAL
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -1199,7 +1202,7 @@ bool TimeSpan::IsEqual(TimeSpan *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_OSOPTION
+			#ifdef DEBUG_OSGENERAL
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -1209,7 +1212,7 @@ bool TimeSpan::IsEqual(TimeSpan *that)
 				!isEqual(this->value, that->value))
 //				(this->value       != that->value))
 			{
-#ifdef DEBUG_OSOPTION
+#ifdef DEBUG_OSGENERAL
 				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
 #endif	
