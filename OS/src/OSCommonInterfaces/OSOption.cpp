@@ -198,7 +198,7 @@ MinCPUSpeed::~MinCPUSpeed()
 
 MinCPUNumber::MinCPUNumber():
 	description(""),
-	value (0.0)
+	value (0)
 {
 	#ifdef DEBUG_OSOPTION
 	cout << "Inside MinCPUNumber Constructor" << endl;

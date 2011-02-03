@@ -2419,7 +2419,6 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	const char *incr = "incr";
 	const char *mult = "mult";
 	int kount = 0;
-	int i;
 	// element attribute boolean variables
 	bool elmultattON = false ;
 	bool elincrattON = false;
@@ -2458,7 +2457,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 		int *intvec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->start->el = new int[(base64decodeddatalength/dataSize) ];
 		intvec = (int*)&base64decodeddata[0];
-		for (int i = 0; i < (base64decodeddatalength/dataSize); i++){
+		for (i = 0; i < (base64decodeddatalength/dataSize); i++){
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = *(intvec++);
 		}
 		delete [] b64string;

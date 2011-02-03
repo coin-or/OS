@@ -64,11 +64,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 	// always go with '/' -- it is a hypertext reference
 	xsltDir = "http://www.coin-or.org/OS/stylesheets/";
 
-	int i, j;
 	bool generalTagPrinted;
-	bool systemTagPrinted;
-	bool serviceTagPrinted;
-	bool jobTagPrinted;
 #ifdef DEBUG
 	cout << "in OSoLWriter" << endl;
 #endif

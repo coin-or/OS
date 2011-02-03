@@ -1114,7 +1114,7 @@ bool CPUSpeed::setRandom(double density, bool conformant)
 
 CPUNumber::CPUNumber():
 	description(""),
-	value(0.0)
+	value(0)
 {
 }// end CPUNumber constructor
 
@@ -1163,12 +1163,8 @@ bool CPUNumber::IsEqual(CPUNumber *that)
 
 bool CPUNumber::setRandom(double density, bool conformant)
 {
-	if (OSRand() <= density) this->description   = "random string";
-	if (OSRand() <= density) 
-	{
-		if (OSRand() <= 0.5) this->value = 3.14156;
-		else                 this->value = 2.71828;
-	}
+	if (OSRand() <= density) this->description = "random string";
+	if (OSRand() <= density) this->value = (int)(4*OSRand());
 	return true;
 }// end of CPUNumber::setRandom
 
