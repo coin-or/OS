@@ -194,11 +194,8 @@ osolBody:
 
 headerElement: | headerElementStart headerElementContent
 {
-//	if (osglData->fileName    != "" || osglData->source      != "" ||
-//		osglData->description != "" || osglData->fileCreator != "" ||
-//		osglData->licence     != "")
-		if(!osoption->setOptionHeader(osglData->fileName, osglData->source, 	
-				osglData->description, osglData->fileCreator, osglData->licence) )	
+		if(!osoption->setOptionHeader(osglData->fileName, osglData->source,
+				osglData->description, osglData->fileCreator, osglData->licence) ) 	
 			osolerror( NULL, osoption, parserData, osglData, "setHeader failed");
 };
  
@@ -294,6 +291,7 @@ generalElementStart: GENERALSTART
 	parserData->passwordPresent = false;
 	parserData->contactPresent = false;
 	parserData->otherGeneralOptionsPresent = false;
+	osoption->general = new GeneralOption();
 };
 
 generalElementContent: generalElementEmpty | generalElementLaden;
@@ -689,6 +687,7 @@ systemElementStart: SYSTEMSTART
 	parserData->minCPUSpeedPresent = false;
 	parserData->minCPUNumberPresent = false;
 	parserData->otherSystemOptionsPresent = false;
+	osoption->system = new SystemOption();
 };
 
 systemElementContent: systemElementEmpty | systemElementLaden;
@@ -917,6 +916,7 @@ serviceElementStart: SERVICESTART
 {
 	parserData->serviceTypePresent = false;	
 	parserData->otherServiceOptionsPresent = false;
+	osoption->service = new ServiceOption();
 };
 
 serviceElementContent: serviceElementEmpty | serviceElementLaden;
@@ -1058,6 +1058,7 @@ jobElementStart: JOBSTART
 	parserData->directoriesToDeletePresent = false;	
 	parserData->processesToKillPresent = false;	
 	parserData->otherJobOptionsPresent = false;	 
+	osoption->job = new JobOption();
  };
 
 jobElementContent: jobElementEmpty | jobElementLaden;
@@ -1172,10 +1173,6 @@ dependenciesLaden: GREATERTHAN dependenciesList DEPENDENCIESEND
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <dependencies> element");
-//	if (osoption->setJobDependencies(parserData->numberOf, parserData->jobDependencies) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <job> <dependencies> failed");
-//	delete[] parserData->jobDependencies;
-//	parserData->jobDependencies = NULL;
 };
 
 dependenciesList: dependencyJobID | dependenciesList dependencyJobID;
@@ -1215,10 +1212,6 @@ requiredDirectoriesLaden: GREATERTHAN requiredDirectoriesList REQUIREDDIRECTORIE
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <requiredDirectories> element");
-//	if (osoption->setRequiredDirectories(parserData->numberOf,parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <requiredDirectories> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 };
 
 requiredDirectoriesList: requiredDirectory | requiredDirectoriesList requiredDirectory;
@@ -1258,10 +1251,6 @@ requiredFilesLaden: GREATERTHAN requiredFilesList REQUIREDFILESEND
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <requiredFiles> element");
-//	if (osoption->setRequiredFiles(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <requiredFiles> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 };
 
 requiredFilesList: requiredFile | requiredFilesList requiredFile;
@@ -1300,10 +1289,6 @@ directoriesToMakeLaden: GREATERTHAN directoriesToMakeList DIRECTORIESTOMAKEEND
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <directoriesToMake> element");
-//	if (osoption->setDirectoriesToMake(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToMake> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 };
 
 directoriesToMakeList: directoryToMake | directoriesToMakeList directoryToMake;
@@ -1342,10 +1327,6 @@ filesToMakeLaden: GREATERTHAN filesToMakeList FILESTOMAKEEND
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <filesToMake> element");
-//	if (osoption->setFilesToMake(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <filesToMake> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 };
 
 filesToMakeList: fileToMake | filesToMakeList fileToMake;
@@ -1390,15 +1371,6 @@ inputDirectoriesToMoveLaden: GREATERTHAN inputDirectoriesToMoveList INPUTDIRECTO
 {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <inputDirectoriesToMove> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_input_dir, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 };
 
 inputDirectoriesToMoveList: inputDirectoryToMove | inputDirectoriesToMoveList inputDirectoryToMove;
@@ -1436,15 +1408,6 @@ inputFilesToMoveLaden: GREATERTHAN inputFilesToMoveList INPUTFILESTOMOVEEND
 {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <inputFilesToMove> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_input_file, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 };
 
 inputFilesToMoveList: inputFileToMove | inputFilesToMoveList inputFileToMove;
@@ -1482,15 +1445,6 @@ outputFilesToMoveLaden: GREATERTHAN outputFilesToMoveList OUTPUTFILESTOMOVEEND
 {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <outputFilesToMake> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_output_file, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 };
 
 outputFilesToMoveList: outputFileToMove | outputFilesToMoveList outputFileToMove;
@@ -1528,15 +1482,6 @@ outputDirectoriesToMoveLaden: GREATERTHAN outputDirectoriesToMoveList OUTPUTDIRE
 {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <outputDirectoriesToMake> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_output_dir, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 };
 
 outputDirectoriesToMoveList: outputDirectoryToMove | outputDirectoriesToMoveList outputDirectoryToMove;
@@ -1569,10 +1514,6 @@ filesToDeleteLaden: GREATERTHAN filesToDeleteList FILESTODELETEEND
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <filesToDelete> element");
-//	if (osoption->setFilesToDelete(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <filesToDelete> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 };
 
 filesToDeleteList: fileToDelete | filesToDeleteList fileToDelete;
@@ -1612,10 +1553,6 @@ directoriesToDeleteLaden: GREATERTHAN directoriesToDeleteList DIRECTORIESTODELET
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <directoriesToDelete> element");
-//	if (osoption->setDirectoriesToDelete(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToDelete> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 };
 
 directoriesToDeleteList: directoryToDelete | directoriesToDeleteList directoryToDelete;
@@ -1656,10 +1593,6 @@ processesToKillLaden: GREATERTHAN processesToKillList PROCESSESTOKILLEND
 {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few process IDs in <processesToKill> element");
-//	if (osoption->setProcessesToKill(parserData->numberOf, parserData->processesToKill) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <processesToKill> failed");
-//	delete[] parserData->processesToKill;
-//	parserData->processesToKill = NULL;
 };
 
 processesToKillList: processID | processesToKillList processID;
@@ -1758,9 +1691,6 @@ optimizationElement: | optimizationStart optimizationAttributes optimizationCont
 
 optimizationStart: OPTIMIZATIONSTART
 {
-//	if (parserData->osoloptimizationPresent)
-//		osolerror( NULL, osoption, parserData, osglData, "only one <optimization> element allowed");
-//	parserData->osoloptimizationPresent = true;
 	osoption->optimization = new OptimizationOption();
 	parserData->numberOfVariablesPresent = false;
 	parserData->numberOfObjectivesPresent = false;
@@ -1867,12 +1797,6 @@ initialVariableValuesContent:
 	{
 		if (parserData->kounter > parserData->numberOfVar)
 			osolerror (NULL, osoption, parserData, osglData, "too few initial values in <initialVariableValues> element");
-//		if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	};
 
 initialVariableValuesEmpty: GREATERTHAN INITIALVARIABLEVALUESEND | ENDOFELEMENT;
@@ -1954,12 +1878,6 @@ initialVariableValuesStringContent:
 	{
 		if (parserData->kounter != parserData->numberOfVar)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-//		if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valueString;
-//		parserData->idxArray = NULL;
-//		parserData->valueString = NULL;
 	};
 
 initialVariableValuesStringEmpty: GREATERTHAN INITIALVARIABLEVALUESSTRINGEND | ENDOFELEMENT;
@@ -2244,12 +2162,6 @@ integerVariableBranchingWeightsContent:
 	{
 		if (parserData->kounter != parserData->numberOfVar)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-//		if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	};
 
 integerVariableBranchingWeightsEmpty: GREATERTHAN INTEGERVARIABLEBRANCHINGWEIGHTSEND | ENDOFELEMENT;
@@ -2579,12 +2491,6 @@ initialObjectiveValuesContent:
 	{
 		if (parserData->kounter != parserData->numberOfObj)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
-//		if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	};
 
 initialObjectiveValuesEmpty: GREATERTHAN INITIALOBJECTIVEVALUESEND | ENDOFELEMENT;
@@ -2675,14 +2581,6 @@ initialObjectiveBoundsContent:
 	{
 		if (parserData->kounter != parserData->numberOfObj)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
-//		if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveBounds> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->lbValArray;
-//		delete[] parserData->ubValArray;
-//		parserData->idxArray = NULL;
-//		parserData->lbValArray = NULL;
-//		parserData->ubValArray = NULL;
 	};
 
 initialObjectiveBoundsEmpty: GREATERTHAN INITIALOBJECTIVEBOUNDSEND | ENDOFELEMENT;
@@ -3144,12 +3042,6 @@ initialConstraintValuesContent:
 	{
 		if (parserData->kounter > parserData->numberOfCon)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
-//		if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	};
 
 initialConstraintValuesEmpty: GREATERTHAN INITIALCONSTRAINTVALUESEND | ENDOFELEMENT;
@@ -3235,14 +3127,6 @@ initialDualValuesContent:
 	{
 		if (parserData->kounter != parserData->numberOfCon)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
-//		if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->lbValArray;
-//		delete[] parserData->ubValArray;
-//		parserData->idxArray = NULL;
-//		parserData->lbValArray = NULL;
-//		parserData->ubValArray = NULL;
 	};
 
 initialDualValuesEmpty: GREATERTHAN INITIALDUALVALUESEND | ENDOFELEMENT;
@@ -3631,13 +3515,7 @@ otherConEmpty: GREATERTHAN CONEND | ENDOFELEMENT;
  */
 solverOptions: | solverOptionsStart numberOfSolverOptionsATT solverOptionsContent;
 
-solverOptionsStart: SOLVEROPTIONSSTART
-{
-//	if (parserData->solverOptionsPresent)
-//		osolerror( NULL, osoption, parserData, osglData, "only one <solverOptions> element allowed");
-//	else
-//		parserData->solverOptionsPresent = true;
-};
+solverOptionsStart: SOLVEROPTIONSSTART;
 
 numberOfSolverOptionsATT: numberOfSolverOptionsAttribute
 {

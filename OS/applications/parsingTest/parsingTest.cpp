@@ -132,8 +132,6 @@ int main(int argC, char* argV[])
 		if (interactiveShell(&schema, &testFileName, &outFileName, &compress, &addWhiteSpace, &verifyObjects,
 			&seed, &nrep, &density, &conformant) != true) return 0;
 
-		if (outFileName != "") doOutput = true;
-
 #ifdef MY_DEBUG
 			std::cout << "User dialog completed " << std::endl;
 #endif
@@ -269,6 +267,11 @@ int main(int argC, char* argV[])
 					verifyObjects = true;
 				else 
 					verifyObjects = !(value == "NO" || value == "no" || value == "N" || value == "N" || value == "");
+
+				if (verifyObjects)
+				{
+					if (outFileName == "") outFileName = "junk.tmp";
+				}
 			}
 			else if (option == "-norandom")
 			{
@@ -290,8 +293,15 @@ int main(int argC, char* argV[])
 			{
 				verifyObjects = false;
 			}
+			else
+			{
+				std::cout << "option \"" << option << "\" not recognized" << std::endl;
+			}
+
 		}
 	}
+
+	if (outFileName != "") doOutput = true;
 
 	fileUtil = new FileUtil();
 
@@ -301,7 +311,7 @@ int main(int argC, char* argV[])
 /*********************************************************************
  * Generate and parse random objects
  *********************************************************************/
-		if (random)
+		if (useRandomObjects)
 		{
 			if (schema == "osil")
 			{
@@ -318,11 +328,9 @@ int main(int argC, char* argV[])
 			else if (schema == "osol")
 			{
 				OSOption *osoption, *osoption2;
-//				osoption = new OSOption();
 				OSoLWriter *osolwriter;
 				osolwriter = new OSoLWriter();
 				OSoLReader *osolreader;
-//				osolreader = new OSoLReader();
 
 				for (int irep=0; irep < nrep; irep++)
 				{
@@ -340,7 +348,6 @@ std::cout << "write to string" << std::endl;
 
 std::cout << osxl << std::endl;
 
-//					osoption2 = new OSOption();
 					osolreader = new OSoLReader();
 					osoption2 = osolreader->readOSoL( osxl);
 					if (verifyObjects == true)
@@ -349,10 +356,8 @@ std::cout << osxl << std::endl;
 							throw ErrorClass("Two objects are not equal!");
 					}
 					delete osoption;
-//					delete osoption2;
 					delete osolreader;
 					osoption  = NULL;
-//					osoption2 = NULL;
 					osolreader = NULL;
 
 					seed = rand();

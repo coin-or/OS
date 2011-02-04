@@ -1350,124 +1350,124 @@ static const yytype_int16 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,   161,   161,   162,   164,   171,   178,   178,   180,   180,
-     182,   184,   187,   195,   195,   205,   214,   214,   216,   218,
-     220,   222,   222,   224,   224,   226,   226,   228,   233,   233,
-     235,   235,   237,   237,   239,   244,   244,   246,   246,   248,
-     248,   250,   255,   255,   257,   257,   259,   259,   261,   266,
-     266,   268,   268,   270,   270,   272,   282,   282,   284,   299,
-     299,   301,   301,   303,   305,   307,   307,   310,   311,   312,
-     313,   314,   315,   316,   317,   318,   319,   320,   324,   326,
-     334,   334,   336,   336,   338,   340,   350,   352,   358,   358,
-     360,   360,   362,   364,   373,   375,   381,   381,   383,   383,
-     385,   387,   397,   404,   412,   413,   420,   426,   426,   428,
-     428,   430,   432,   440,   442,   448,   448,   450,   450,   452,
-     454,   463,   465,   472,   472,   474,   474,   476,   478,   488,
-     490,   497,   497,   499,   499,   501,   503,   513,   515,   521,
-     521,   523,   523,   525,   527,   537,   539,   545,   545,   547,
-     547,   549,   551,   561,   568,   577,   578,   584,   591,   591,
-     593,   593,   595,   597,   604,   606,   612,   620,   624,   629,
-     629,   631,   633,   637,   637,   639,   646,   657,   663,   663,
-     666,   670,   671,   674,   674,   683,   683,   685,   694,   694,
-     696,   696,   698,   700,   702,   702,   705,   706,   707,   708,
-     709,   713,   715,   725,   727,   727,   730,   731,   734,   736,
-     744,   746,   756,   758,   758,   761,   762,   765,   767,   776,
-     778,   788,   790,   790,   793,   794,   797,   799,   808,   810,
-     818,   819,   821,   823,   834,   836,   843,   851,   855,   860,
-     860,   862,   864,   868,   868,   870,   877,   888,   893,   893,
-     896,   901,   902,   905,   905,   914,   914,   916,   922,   922,
+     182,   184,   187,   195,   195,   202,   211,   211,   213,   215,
+     217,   219,   219,   221,   221,   223,   223,   225,   230,   230,
+     232,   232,   234,   234,   236,   241,   241,   243,   243,   245,
+     245,   247,   252,   252,   254,   254,   256,   256,   258,   263,
+     263,   265,   265,   267,   267,   269,   279,   279,   281,   297,
+     297,   299,   299,   301,   303,   305,   305,   308,   309,   310,
+     311,   312,   313,   314,   315,   316,   317,   318,   322,   324,
+     332,   332,   334,   334,   336,   338,   348,   350,   356,   356,
+     358,   358,   360,   362,   371,   373,   379,   379,   381,   381,
+     383,   385,   395,   402,   410,   411,   418,   424,   424,   426,
+     426,   428,   430,   438,   440,   446,   446,   448,   448,   450,
+     452,   461,   463,   470,   470,   472,   472,   474,   476,   486,
+     488,   495,   495,   497,   497,   499,   501,   511,   513,   519,
+     519,   521,   521,   523,   525,   535,   537,   543,   543,   545,
+     545,   547,   549,   559,   566,   575,   576,   582,   589,   589,
+     591,   591,   593,   595,   602,   604,   610,   618,   622,   627,
+     627,   629,   631,   635,   635,   637,   644,   655,   661,   661,
+     664,   668,   669,   672,   672,   681,   681,   683,   693,   693,
+     695,   695,   697,   699,   701,   701,   704,   705,   706,   707,
+     708,   712,   714,   724,   726,   726,   729,   730,   733,   735,
+     743,   745,   755,   757,   757,   760,   761,   764,   766,   775,
+     777,   787,   789,   789,   792,   793,   796,   798,   807,   809,
+     817,   818,   820,   822,   833,   835,   842,   850,   854,   859,
+     859,   861,   863,   867,   867,   869,   876,   887,   892,   892,
+     895,   900,   901,   904,   904,   913,   913,   915,   922,   922,
      924,   924,   926,   928,   930,   930,   933,   934,   938,   940,
      946,   946,   948,   948,   950,   952,   963,   965,   972,   980,
      984,   989,   989,   991,   993,   997,   997,   999,  1006,  1017,
     1022,  1022,  1025,  1030,  1031,  1034,  1034,  1042,  1042,  1044,
-    1063,  1063,  1065,  1065,  1067,  1069,  1071,  1071,  1074,  1075,
-    1076,  1077,  1078,  1079,  1080,  1081,  1082,  1083,  1084,  1085,
-    1086,  1087,  1088,  1093,  1099,  1109,  1111,  1111,  1113,  1113,
-    1115,  1117,  1119,  1126,  1128,  1134,  1134,  1136,  1136,  1138,
-    1140,  1150,  1158,  1165,  1167,  1167,  1169,  1169,  1171,  1181,
-    1181,  1183,  1194,  1202,  1208,  1210,  1210,  1212,  1212,  1214,
-    1224,  1224,  1226,  1237,  1245,  1251,  1253,  1253,  1255,  1255,
-    1257,  1267,  1267,  1269,  1279,  1287,  1293,  1295,  1295,  1297,
-    1297,  1299,  1309,  1309,  1311,  1321,  1329,  1335,  1337,  1337,
-    1339,  1339,  1341,  1351,  1351,  1353,  1364,  1377,  1383,  1385,
-    1385,  1387,  1387,  1389,  1404,  1404,  1406,  1410,  1423,  1429,
-    1431,  1431,  1433,  1433,  1435,  1450,  1450,  1452,  1456,  1469,
-    1475,  1477,  1477,  1479,  1479,  1481,  1496,  1496,  1498,  1502,
-    1515,  1521,  1523,  1523,  1525,  1525,  1527,  1542,  1542,  1544,
-    1548,  1556,  1562,  1564,  1564,  1566,  1566,  1568,  1578,  1578,
-    1580,  1591,  1599,  1605,  1607,  1607,  1609,  1609,  1611,  1621,
-    1621,  1623,  1634,  1642,  1649,  1651,  1651,  1653,  1653,  1655,
-    1665,  1665,  1667,  1679,  1681,  1687,  1695,  1699,  1704,  1704,
-    1706,  1708,  1712,  1712,  1714,  1721,  1732,  1737,  1737,  1740,
-    1745,  1746,  1749,  1749,  1757,  1757,  1759,  1770,  1772,  1772,
-    1775,  1781,  1787,  1795,  1795,  1797,  1799,  1801,  1808,  1808,
-    1810,  1815,  1822,  1822,  1827,  1827,  1829,  1831,  1833,  1838,
-    1838,  1848,  1853,  1861,  1866,  1878,  1878,  1880,  1882,  1884,
-    1884,  1887,  1892,  1900,  1900,  1903,  1914,  1921,  1921,  1925,
-    1925,  1935,  1940,  1948,  1953,  1965,  1965,  1967,  1969,  1971,
-    1971,  1974,  1979,  1988,  1994,  1994,  1997,  2007,  2010,  2010,
-    2014,  2014,  2016,  2018,  2018,  2020,  2022,  2024,  2027,  2027,
-    2035,  2041,  2048,  2048,  2050,  2052,  2054,  2058,  2058,  2067,
-    2073,  2080,  2080,  2082,  2084,  2086,  2090,  2090,  2098,  2104,
-    2111,  2111,  2113,  2115,  2117,  2121,  2121,  2129,  2135,  2142,
-    2142,  2144,  2146,  2148,  2152,  2152,  2160,  2166,  2173,  2173,
-    2175,  2177,  2179,  2183,  2183,  2191,  2197,  2204,  2204,  2206,
-    2208,  2210,  2214,  2214,  2225,  2230,  2238,  2243,  2255,  2255,
-    2257,  2259,  2263,  2263,  2265,  2270,  2279,  2285,  2285,  2288,
-    2298,  2304,  2304,  2308,  2308,  2310,  2316,  2324,  2328,  2333,
-    2333,  2335,  2337,  2337,  2339,  2349,  2359,  2367,  2367,  2370,
-    2371,  2378,  2381,  2381,  2383,  2383,  2385,  2390,  2390,  2392,
-    2397,  2419,  2436,  2436,  2439,  2443,  2447,  2448,  2449,  2450,
-    2451,  2452,  2455,  2455,  2457,  2457,  2459,  2461,  2461,  2463,
-    2463,  2466,  2479,  2492,  2494,  2494,  2497,  2507,  2508,  2509,
-    2512,  2514,  2514,  2522,  2522,  2524,  2527,  2534,  2534,  2539,
-    2539,  2541,  2543,  2545,  2549,  2549,  2560,  2566,  2574,  2579,
-    2591,  2591,  2593,  2595,  2597,  2597,  2600,  2605,  2614,  2620,
-    2620,  2623,  2633,  2640,  2640,  2643,  2643,  2656,  2661,  2670,
-    2675,  2689,  2689,  2691,  2693,  2695,  2695,  2698,  2703,  2715,
-    2722,  2722,  2725,  2735,  2740,  2746,  2746,  2750,  2750,  2752,
-    2754,  2754,  2756,  2758,  2760,  2763,  2763,  2771,  2777,  2784,
-    2784,  2786,  2788,  2790,  2793,  2793,  2801,  2807,  2814,  2814,
-    2816,  2818,  2820,  2823,  2823,  2831,  2837,  2844,  2844,  2846,
-    2848,  2850,  2853,  2853,  2861,  2867,  2874,  2874,  2876,  2878,
-    2880,  2883,  2883,  2891,  2898,  2905,  2905,  2907,  2909,  2911,
-    2915,  2915,  2923,  2929,  2936,  2936,  2938,  2940,  2942,  2946,
-    2946,  2948,  2954,  2976,  2993,  2993,  2996,  3000,  3004,  3005,
-    3006,  3007,  3008,  3009,  3012,  3012,  3014,  3014,  3016,  3018,
-    3018,  3020,  3020,  3023,  3036,  3050,  3058,  3058,  3061,  3071,
-    3072,  3073,  3076,  3078,  3078,  3086,  3086,  3088,  3093,  3100,
-    3100,  3105,  3105,  3107,  3109,  3111,  3115,  3115,  3126,  3131,
-    3139,  3144,  3156,  3156,  3158,  3160,  3162,  3162,  3165,  3170,
-    3178,  3178,  3181,  3192,  3199,  3199,  3203,  3203,  3216,  3221,
-    3230,  3235,  3249,  3249,  3251,  3253,  3255,  3255,  3258,  3263,
-    3274,  3280,  3280,  3283,  3294,  3295,  3298,  3298,  3302,  3302,
-    3304,  3306,  3306,  3308,  3310,  3312,  3315,  3315,  3323,  3329,
-    3336,  3336,  3338,  3340,  3342,  3345,  3345,  3353,  3359,  3366,
-    3366,  3368,  3370,  3372,  3376,  3376,  3384,  3390,  3397,  3397,
-    3399,  3401,  3403,  3407,  3407,  3415,  3421,  3428,  3428,  3430,
-    3432,  3434,  3438,  3438,  3446,  3452,  3459,  3459,  3461,  3463,
-    3465,  3469,  3469,  3477,  3483,  3490,  3490,  3492,  3494,  3496,
-    3500,  3500,  3502,  3508,  3530,  3547,  3547,  3550,  3554,  3558,
-    3559,  3560,  3561,  3562,  3563,  3566,  3566,  3568,  3568,  3570,
-    3572,  3572,  3574,  3574,  3577,  3590,  3603,  3605,  3605,  3608,
-    3618,  3619,  3620,  3623,  3625,  3625,  3633,  3633,  3635,  3643,
-    3651,  3656,  3662,  3664,  3666,  3666,  3670,  3689,  3707,  3713,
-    3713,  3716,  3717,  3718,  3719,  3720,  3721,  3722,  3729,  3733,
-    3738,  3738,  3740,  3742,  3744,  3744,  3746,  3753,  3759,  3761,
-    3761,  3763,  3765,  3776,  3785,  3795,  3800,  3800,  3803,  3804,
-    3805,  3807,  3815,  3823,  3831,  3831,  3837,  3844,  3844,  3846,
-    3851,  3858,  3865,  3865,  3867,  3870,  3877,  3884,  3891,  3898,
-    3900,  3906,  3913,  3913,  3915,  3920,  3927,  3933,  3933,  3935,
-    3938,  3943,  3949,  3949,  3951,  3954,  3961,  3967,  3967,  3969,
-    3972,  3979,  3985,  3987,  3995,  4001,  4001,  4003,  4006,  4013,
-    4020,  4020,  4022,  4027,  4034,  4040,  4040,  4042,  4045,  4052,
-    4058,  4058,  4060,  4063,  4070,  4076,  4076,  4078,  4081,  4093,
-    4102,  4111,  4120,  4129,  4138,  4147,  4156,  4164,  4170,  4176,
-    4182,  4188,  4199,  4208,  4218,  4224,  4233,  4253,  4253,  4255,
-    4272,  4283,  4290,  4290,  4293,  4300,  4301,  4305,  4305,  4307,
-    4309,  4311,  4328,  4333,  4335,  4335,  4337,  4339,  4348,  4350,
-    4350,  4352,  4352,  4354,  4362,  4364,  4369,  4369,  4371,  4371,
-    4373,  4395,  4403,  4417,  4418,  4425,  4427,  4427,  4429,  4430,
-    4431,  4432
+    1064,  1064,  1066,  1066,  1068,  1070,  1072,  1072,  1075,  1076,
+    1077,  1078,  1079,  1080,  1081,  1082,  1083,  1084,  1085,  1086,
+    1087,  1088,  1089,  1094,  1100,  1110,  1112,  1112,  1114,  1114,
+    1116,  1118,  1120,  1127,  1129,  1135,  1135,  1137,  1137,  1139,
+    1141,  1151,  1159,  1166,  1168,  1168,  1170,  1170,  1172,  1178,
+    1178,  1180,  1191,  1199,  1205,  1207,  1207,  1209,  1209,  1211,
+    1217,  1217,  1219,  1230,  1238,  1244,  1246,  1246,  1248,  1248,
+    1250,  1256,  1256,  1258,  1268,  1276,  1282,  1284,  1284,  1286,
+    1286,  1288,  1294,  1294,  1296,  1306,  1314,  1320,  1322,  1322,
+    1324,  1324,  1326,  1332,  1332,  1334,  1345,  1358,  1364,  1366,
+    1366,  1368,  1368,  1370,  1376,  1376,  1378,  1382,  1395,  1401,
+    1403,  1403,  1405,  1405,  1407,  1413,  1413,  1415,  1419,  1432,
+    1438,  1440,  1440,  1442,  1442,  1444,  1450,  1450,  1452,  1456,
+    1469,  1475,  1477,  1477,  1479,  1479,  1481,  1487,  1487,  1489,
+    1493,  1501,  1507,  1509,  1509,  1511,  1511,  1513,  1519,  1519,
+    1521,  1532,  1540,  1546,  1548,  1548,  1550,  1550,  1552,  1558,
+    1558,  1560,  1571,  1579,  1586,  1588,  1588,  1590,  1590,  1592,
+    1598,  1598,  1600,  1612,  1614,  1620,  1628,  1632,  1637,  1637,
+    1639,  1641,  1645,  1645,  1647,  1654,  1665,  1670,  1670,  1673,
+    1678,  1679,  1682,  1682,  1690,  1690,  1692,  1700,  1702,  1702,
+    1705,  1711,  1717,  1725,  1725,  1727,  1729,  1731,  1738,  1738,
+    1740,  1745,  1752,  1752,  1757,  1757,  1759,  1761,  1763,  1768,
+    1768,  1778,  1783,  1791,  1796,  1802,  1802,  1804,  1806,  1808,
+    1808,  1811,  1816,  1824,  1824,  1827,  1838,  1845,  1845,  1849,
+    1849,  1859,  1864,  1872,  1877,  1883,  1883,  1885,  1887,  1889,
+    1889,  1892,  1897,  1906,  1912,  1912,  1915,  1925,  1928,  1928,
+    1932,  1932,  1934,  1936,  1936,  1938,  1940,  1942,  1945,  1945,
+    1953,  1959,  1966,  1966,  1968,  1970,  1972,  1976,  1976,  1985,
+    1991,  1998,  1998,  2000,  2002,  2004,  2008,  2008,  2016,  2022,
+    2029,  2029,  2031,  2033,  2035,  2039,  2039,  2047,  2053,  2060,
+    2060,  2062,  2064,  2066,  2070,  2070,  2078,  2084,  2091,  2091,
+    2093,  2095,  2097,  2101,  2101,  2109,  2115,  2122,  2122,  2124,
+    2126,  2128,  2132,  2132,  2143,  2148,  2156,  2161,  2167,  2167,
+    2169,  2171,  2175,  2175,  2177,  2182,  2191,  2197,  2197,  2200,
+    2210,  2216,  2216,  2220,  2220,  2222,  2228,  2236,  2240,  2245,
+    2245,  2247,  2249,  2249,  2251,  2261,  2271,  2279,  2279,  2282,
+    2283,  2290,  2293,  2293,  2295,  2295,  2297,  2302,  2302,  2304,
+    2309,  2331,  2348,  2348,  2351,  2355,  2359,  2360,  2361,  2362,
+    2363,  2364,  2367,  2367,  2369,  2369,  2371,  2373,  2373,  2375,
+    2375,  2378,  2391,  2404,  2406,  2406,  2409,  2419,  2420,  2421,
+    2424,  2426,  2426,  2434,  2434,  2436,  2439,  2446,  2446,  2451,
+    2451,  2453,  2455,  2457,  2461,  2461,  2472,  2478,  2486,  2491,
+    2497,  2497,  2499,  2501,  2503,  2503,  2506,  2511,  2520,  2526,
+    2526,  2529,  2539,  2546,  2546,  2549,  2549,  2562,  2567,  2576,
+    2581,  2587,  2587,  2589,  2591,  2593,  2593,  2596,  2601,  2613,
+    2620,  2620,  2623,  2633,  2638,  2644,  2644,  2648,  2648,  2650,
+    2652,  2652,  2654,  2656,  2658,  2661,  2661,  2669,  2675,  2682,
+    2682,  2684,  2686,  2688,  2691,  2691,  2699,  2705,  2712,  2712,
+    2714,  2716,  2718,  2721,  2721,  2729,  2735,  2742,  2742,  2744,
+    2746,  2748,  2751,  2751,  2759,  2765,  2772,  2772,  2774,  2776,
+    2778,  2781,  2781,  2789,  2796,  2803,  2803,  2805,  2807,  2809,
+    2813,  2813,  2821,  2827,  2834,  2834,  2836,  2838,  2840,  2844,
+    2844,  2846,  2852,  2874,  2891,  2891,  2894,  2898,  2902,  2903,
+    2904,  2905,  2906,  2907,  2910,  2910,  2912,  2912,  2914,  2916,
+    2916,  2918,  2918,  2921,  2934,  2948,  2956,  2956,  2959,  2969,
+    2970,  2971,  2974,  2976,  2976,  2984,  2984,  2986,  2991,  2998,
+    2998,  3003,  3003,  3005,  3007,  3009,  3013,  3013,  3024,  3029,
+    3037,  3042,  3048,  3048,  3050,  3052,  3054,  3054,  3057,  3062,
+    3070,  3070,  3073,  3084,  3091,  3091,  3095,  3095,  3108,  3113,
+    3122,  3127,  3133,  3133,  3135,  3137,  3139,  3139,  3142,  3147,
+    3158,  3164,  3164,  3167,  3178,  3179,  3182,  3182,  3186,  3186,
+    3188,  3190,  3190,  3192,  3194,  3196,  3199,  3199,  3207,  3213,
+    3220,  3220,  3222,  3224,  3226,  3229,  3229,  3237,  3243,  3250,
+    3250,  3252,  3254,  3256,  3260,  3260,  3268,  3274,  3281,  3281,
+    3283,  3285,  3287,  3291,  3291,  3299,  3305,  3312,  3312,  3314,
+    3316,  3318,  3322,  3322,  3330,  3336,  3343,  3343,  3345,  3347,
+    3349,  3353,  3353,  3361,  3367,  3374,  3374,  3376,  3378,  3380,
+    3384,  3384,  3386,  3392,  3414,  3431,  3431,  3434,  3438,  3442,
+    3443,  3444,  3445,  3446,  3447,  3450,  3450,  3452,  3452,  3454,
+    3456,  3456,  3458,  3458,  3461,  3474,  3487,  3489,  3489,  3492,
+    3502,  3503,  3504,  3507,  3509,  3509,  3517,  3517,  3519,  3521,
+    3529,  3534,  3540,  3542,  3544,  3544,  3548,  3567,  3585,  3591,
+    3591,  3594,  3595,  3596,  3597,  3598,  3599,  3600,  3607,  3611,
+    3616,  3616,  3618,  3620,  3622,  3622,  3624,  3631,  3637,  3639,
+    3639,  3641,  3643,  3654,  3663,  3673,  3678,  3678,  3681,  3682,
+    3683,  3685,  3693,  3701,  3709,  3709,  3715,  3722,  3722,  3724,
+    3729,  3736,  3743,  3743,  3745,  3748,  3755,  3762,  3769,  3776,
+    3778,  3784,  3791,  3791,  3793,  3798,  3805,  3811,  3811,  3813,
+    3816,  3821,  3827,  3827,  3829,  3832,  3839,  3845,  3845,  3847,
+    3850,  3857,  3863,  3865,  3873,  3879,  3879,  3881,  3884,  3891,
+    3898,  3898,  3900,  3905,  3912,  3918,  3918,  3920,  3923,  3930,
+    3936,  3936,  3938,  3941,  3948,  3954,  3954,  3956,  3959,  3971,
+    3980,  3989,  3998,  4007,  4016,  4025,  4034,  4042,  4048,  4054,
+    4060,  4066,  4077,  4086,  4096,  4102,  4111,  4131,  4131,  4133,
+    4150,  4161,  4168,  4168,  4171,  4178,  4179,  4183,  4183,  4185,
+    4187,  4189,  4206,  4211,  4213,  4213,  4215,  4217,  4226,  4228,
+    4228,  4230,  4230,  4232,  4240,  4242,  4247,  4247,  4249,  4249,
+    4251,  4273,  4281,  4295,  4296,  4303,  4305,  4305,  4307,  4308,
+    4309,  4310
 };
 #endif
 
@@ -3957,11 +3957,8 @@ yydebug = 1;
   case 14:
 
     {
-//	if (osglData->fileName    != "" || osglData->source      != "" ||
-//		osglData->description != "" || osglData->fileCreator != "" ||
-//		osglData->licence     != "")
-		if(!osoption->setOptionHeader(osglData->fileName, osglData->source, 	
-				osglData->description, osglData->fileCreator, osglData->licence) )	
+		if(!osoption->setOptionHeader(osglData->fileName, osglData->source,
+				osglData->description, osglData->fileCreator, osglData->licence) ) 	
 			osolerror( NULL, osoption, parserData, osglData, "setHeader failed");
 ;}
     break;
@@ -4026,6 +4023,7 @@ yydebug = 1;
 	parserData->passwordPresent = false;
 	parserData->contactPresent = false;
 	parserData->otherGeneralOptionsPresent = false;
+	osoption->general = new GeneralOption();
 ;}
     break;
 
@@ -4339,6 +4337,7 @@ yydebug = 1;
 	parserData->minCPUSpeedPresent = false;
 	parserData->minCPUNumberPresent = false;
 	parserData->otherSystemOptionsPresent = false;
+	osoption->system = new SystemOption();
 ;}
     break;
 
@@ -4499,6 +4498,7 @@ yydebug = 1;
     {
 	parserData->serviceTypePresent = false;	
 	parserData->otherServiceOptionsPresent = false;
+	osoption->service = new ServiceOption();
 ;}
     break;
 
@@ -4608,6 +4608,7 @@ yydebug = 1;
 	parserData->directoriesToDeletePresent = false;	
 	parserData->processesToKillPresent = false;	
 	parserData->otherJobOptionsPresent = false;	 
+	osoption->job = new JobOption();
  ;}
     break;
 
@@ -4680,10 +4681,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few job IDs in <dependencies> element");
-//	if (osoption->setJobDependencies(parserData->numberOf, parserData->jobDependencies) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <job> <dependencies> failed");
-//	delete[] parserData->jobDependencies;
-//	parserData->jobDependencies = NULL;
 ;}
     break;
 
@@ -4721,10 +4718,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <requiredDirectories> element");
-//	if (osoption->setRequiredDirectories(parserData->numberOf,parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <requiredDirectories> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4762,10 +4755,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <requiredFiles> element");
-//	if (osoption->setRequiredFiles(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <requiredFiles> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4803,10 +4792,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <directoriesToMake> element");
-//	if (osoption->setDirectoriesToMake(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToMake> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4844,10 +4829,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <filesToMake> element");
-//	if (osoption->setFilesToMake(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <filesToMake> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 ;}
     break;
 
@@ -4890,15 +4871,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <inputDirectoriesToMove> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_input_dir, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 ;}
     break;
 
@@ -4930,15 +4902,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <inputFilesToMove> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_input_file, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMove> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 ;}
     break;
 
@@ -4970,15 +4933,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <outputFilesToMake> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_output_file, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 ;}
     break;
 
@@ -5010,15 +4964,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOfPathPairs)
 		osolerror (NULL, osoption, parserData, osglData, "too few path pairs in <outputDirectoriesToMake> element");
-//	if (osoption->setPathPairs(ENUM_PATHPAIR_output_dir, parserData->fromPaths, 
-//			parserData->toPaths, parserData->makeCopy, parserData->numberOfPathPairs) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <inputDirectoriesToMake> failed");
-//	delete[] parserData->fromPaths;
-//	delete[] parserData->toPaths;
-//	delete[] parserData->makeCopy;
-//	parserData->fromPaths = NULL;
-//	parserData->toPaths   = NULL;
-//	parserData->makeCopy  = NULL;
 ;}
     break;
 
@@ -5045,10 +4990,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <filesToDelete> element");
-//	if (osoption->setFilesToDelete(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <filesToDelete> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 ;}
     break;
 
@@ -5086,10 +5027,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few paths in <directoriesToDelete> element");
-//	if (osoption->setDirectoriesToDelete(parserData->numberOf, parserData->paths) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <directoriesToDelete> failed");
-//	delete[] parserData->paths;
-//	parserData->paths = NULL;
 ;}
     break;
 
@@ -5128,10 +5065,6 @@ yydebug = 1;
     {
 	if (parserData->kounter > parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too few process IDs in <processesToKill> element");
-//	if (osoption->setProcessesToKill(parserData->numberOf, parserData->processesToKill) == false)
-//		osolerror (NULL, osoption, parserData, osglData, "set <processesToKill> failed");
-//	delete[] parserData->processesToKill;
-//	parserData->processesToKill = NULL;
 ;}
     break;
 
@@ -5217,9 +5150,6 @@ yydebug = 1;
   case 496:
 
     {
-//	if (parserData->osoloptimizationPresent)
-//		osolerror( NULL, osoption, parserData, osglData, "only one <optimization> element allowed");
-//	parserData->osoloptimizationPresent = true;
 	osoption->optimization = new OptimizationOption();
 	parserData->numberOfVariablesPresent = false;
 	parserData->numberOfObjectivesPresent = false;
@@ -5318,12 +5248,6 @@ yydebug = 1;
     {
 		if (parserData->kounter > parserData->numberOfVar)
 			osolerror (NULL, osoption, parserData, osglData, "too few initial values in <initialVariableValues> element");
-//		if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -5408,12 +5332,6 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfVar)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-//		if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valueString;
-//		parserData->idxArray = NULL;
-//		parserData->valueString = NULL;
 	;}
     break;
 
@@ -5659,12 +5577,6 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfVar)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-//		if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -5958,12 +5870,6 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfObj)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
-//		if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -6058,14 +5964,6 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfObj)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
-//		if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveBounds> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->lbValArray;
-//		delete[] parserData->ubValArray;
-//		parserData->idxArray = NULL;
-//		parserData->lbValArray = NULL;
-//		parserData->ubValArray = NULL;
 	;}
     break;
 
@@ -6471,12 +6369,6 @@ yydebug = 1;
     {
 		if (parserData->kounter > parserData->numberOfCon)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
-//		if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->valArray;
-//		parserData->idxArray = NULL;
-//		parserData->valArray = NULL;
 	;}
     break;
 
@@ -6564,14 +6456,6 @@ yydebug = 1;
     {
 		if (parserData->kounter != parserData->numberOfCon)
 			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
-//		if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
-//			osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
-//		delete[] parserData->idxArray;
-//		delete[] parserData->lbValArray;
-//		delete[] parserData->ubValArray;
-//		parserData->idxArray = NULL;
-//		parserData->lbValArray = NULL;
-//		parserData->ubValArray = NULL;
 	;}
     break;
 
@@ -6884,16 +6768,6 @@ yydebug = 1;
 				osolerror (NULL, osoption, parserData, osglData, "constraint index exceeds upper limit");
 		};
 	;}
-    break;
-
-  case 1008:
-
-    {
-//	if (parserData->solverOptionsPresent)
-//		osolerror( NULL, osoption, parserData, osglData, "only one <solverOptions> element allowed");
-//	else
-//		parserData->solverOptionsPresent = true;
-;}
     break;
 
   case 1009:

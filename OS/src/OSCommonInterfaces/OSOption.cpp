@@ -158,7 +158,7 @@ MinDiskSpace::~MinDiskSpace()
 	#ifdef DEBUG_OSOPTION
 	cout << "MinDiskSpace Destructor Called" << endl;
 	#endif
-}// end MinDiskSpace constructor
+}// end MinDiskSpace destructor
 
 
 MinMemorySize::MinMemorySize():
@@ -176,7 +176,7 @@ MinMemorySize::~MinMemorySize()
 	#ifdef DEBUG_OSOPTION
 	cout << "MinMemorySize Destructor Called" << endl;
 	#endif
-}// end MinMemorySize constructor
+}// end MinMemorySize destructor
 
 
 MinCPUSpeed::MinCPUSpeed():
@@ -194,7 +194,7 @@ MinCPUSpeed::~MinCPUSpeed()
 	#ifdef DEBUG_OSOPTION
 	cout << "MinCPUSpeed Destructor Called" << endl;
 	#endif
-}// end MinCPUSpeed constructor
+}// end MinCPUSpeed destructor
 
 MinCPUNumber::MinCPUNumber():
 	description(""),
@@ -210,7 +210,7 @@ MinCPUNumber::~MinCPUNumber()
 	#ifdef DEBUG_OSOPTION
 	cout << "MinCPUNumber Destructor Called" << endl;
 	#endif
-}// end MinCPUNumber constructor
+}// end MinCPUNumber destructor
 
 
 SystemOption::SystemOption() 
@@ -291,7 +291,7 @@ DirectoriesAndFiles::DirectoriesAndFiles():
 	cout << "Inside DirectoriesAndFiles Constructor" << endl;
 	#endif
 	path = NULL;
-}// end DirectoriesAndFiles constructor  template
+}// end DirectoriesAndFiles constructor
 
 DirectoriesAndFiles::~DirectoriesAndFiles()
 {    
@@ -6736,7 +6736,6 @@ bool OSOption::setAnotherFileToMake(std::string path)
 bool OSOption::setPathPairs(int object, std::string *from, std::string *to, bool *makeCopy, int numberOfPathPairs)
 {
 	if (numberOfPathPairs < 0) return false;
-std::cout << "numberOfPathPairs is not negative!" << std::endl;
 	if (this->job == NULL) 
 		this->job = new JobOption();
 	switch (object)
@@ -6751,7 +6750,6 @@ std::cout << "numberOfPathPairs is not negative!" << std::endl;
 		{
 			if (this->job->inputFilesToMove == NULL) 
 				this->job->inputFilesToMove = new PathPairs();
-std::cout << "call setPathPair" << std::endl;
 			return this->job->inputFilesToMove->setPathPair(from, to, makeCopy, numberOfPathPairs);
 		}
 		case ENUM_PATHPAIR_output_file:
@@ -8152,19 +8150,14 @@ bool SystemOption::IsEqual(SystemOption *that)
 		{
 			if (!this->minDiskSpace->IsEqual(that->minDiskSpace))
 				return false;
-	std::cout << "disk space is equal" << std::endl;
 			if (!this->minMemorySize->IsEqual(that->minMemorySize))
 				return false;
-	std::cout << "memory size is equal" << std::endl;
 			if (!this->minCPUSpeed->IsEqual(that->minCPUSpeed))
 				return false;
-	std::cout << "CPU speed is equal" << std::endl;
 			if (!this->minCPUNumber->IsEqual(that->minCPUNumber))
 				return false;
-	std::cout << "CPU number is equal" << std::endl;
 			if (!this->otherOptions->IsEqual(that->otherOptions))
 				return false;
-	std::cout << "other options are equal" << std::endl;
 			return true;
 		}	
 	}
@@ -10491,24 +10484,16 @@ bool OtherOptions::setRandom( double density, bool conformant )
 
 	this->numberOfOtherOptions = (int)(1+4*OSRand());
 
-std::cout << "number of other options: " << this->numberOfOtherOptions << std::endl;
-
 	if (conformant)	n = this->numberOfOtherOptions;
 	else            n = (int)(1+4*OSRand());
 
-std::cout << "n: " << n << std::endl;
+	other = new OtherOption*[n];
 
-
-//	if (n > 0) 
-//	{
-		other = new OtherOption*[n];
-
-		for (int i = 0; i < n; i++)
-		{
-			other[i] = new OtherOption();
-			other[i]->setRandom(density, conformant);
-		}
-//	}
+	for (int i = 0; i < n; i++)
+	{
+		other[i] = new OtherOption();
+		other[i]->setRandom(density, conformant);
+	}
 
 	return true;
 }//OtherOptions::setRandom
@@ -10538,12 +10523,9 @@ bool JobDependencies::setRandom( double density, bool conformant )
 	if (conformant)	n = this->numberOfJobIDs;
 	else            n = (int)(1+4*OSRand());
 
-//	if (n > 0) 
-//	{
-		jobID = new std::string[n];
-		for (int i = 0; i < n; i++)
-			jobID[i] = "random string";
-//	}
+	jobID = new std::string[n];
+	for (int i = 0; i < n; i++)
+		jobID[i] = "random string";
 
 	return true;
 }//JobDependencies::setRandom
@@ -10560,12 +10542,9 @@ bool DirectoriesAndFiles::setRandom( double density, bool conformant )
 	if (conformant)	n = this->numberOfPaths;
 	else            n = (int)(1+4*OSRand());
 
-//	if (n > 0)
-//	{
-		path = new std::string[n];
-		for (int i = 0; i < n; i++)
-			path[i] = "random string";
-//	}
+	path = new std::string[n];
+	for (int i = 0; i < n; i++)
+		path[i] = "random string";
 
 	return true;
 }//DirectoriesAndFiles::setRandom
@@ -10582,15 +10561,12 @@ bool PathPairs::setRandom( double density, bool conformant )
 	if (conformant)	n = this->numberOfPathPairs;
 	else            n =(int)(1+4*OSRand());
 
-//	if (n > 0) 
-//	{
-		pathPair = new PathPair*[n];
-		for (int i = 0; i < n; i++)
-		{
-			this->pathPair[i] = new PathPair();
-			this->pathPair[i]->setRandom(density, conformant);
-		}
-//	}
+	pathPair = new PathPair*[n];
+	for (int i = 0; i < n; i++)
+	{
+		this->pathPair[i] = new PathPair();
+		this->pathPair[i]->setRandom(density, conformant);
+	}
 
 	return true;
 }//PathPairs::setRandom
@@ -10700,10 +10676,6 @@ bool InitVarValue::setRandom( double density, bool conformant )
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitVarValue" << endl;
 #endif
-//	int n;
-//	if (conformant) n = 
-//	else            n = (int)(4*OSRand());
-
 	this->idx = (int)(4*OSRand());
 
 	if (OSRand() <= density) 
@@ -10960,17 +10932,13 @@ bool InitObjValue::setRandom( double density, bool conformant )
 #ifdef DEBUG_OSOPTION
 	cout << "Set random InitObjValue" << endl;
 #endif
-//	int n;
-//	if (conformant) n = 
-//	else            n = (int)(4*OSRand());
-
 	if (OSRand() <= 0.5) idx = -1;
 	else                 idx = -2;
 
 	if (OSRand() <= density) 
 	{
 		if (OSRand() <= 0.5) this->value = 3.14156;
-		else                  this->value = 2.71828;
+		else                 this->value = 2.71828;
 	}
 	return true;
 }//InitObjValue::setRandom

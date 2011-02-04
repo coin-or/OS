@@ -2419,6 +2419,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 	const char *incr = "incr";
 	const char *mult = "mult";
 	int kount = 0;
+	int i;
 	// element attribute boolean variables
 	bool elmultattON = false ;
 	bool elincrattON = false;

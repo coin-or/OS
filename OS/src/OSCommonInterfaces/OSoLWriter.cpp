@@ -86,16 +86,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 #endif
 	if(m_OSOption->optionHeader != NULL)
 	{
-//		if (m_OSOption->optionHeader->name        != "" ||
-//			m_OSOption->optionHeader->source      != "" ||
-//			m_OSOption->optionHeader->description != "" ||
-//			m_OSOption->optionHeader->fileCreator != "" ||
-//			m_OSOption->optionHeader->licence     != "" )
-		{
-			outStr << "<optionHeader>" << endl;
-			outStr << writeGeneralFileHeader(m_OSOption->optionHeader, true);
-			outStr << "</optionHeader>" << endl;
-		}
+		outStr << "<optionHeader>" << endl;
+		outStr << writeGeneralFileHeader(m_OSOption->optionHeader, true);
+		outStr << "</optionHeader>" << endl;
 	}
 
 #ifdef DEBUG
@@ -213,20 +206,21 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				outStr << "<general>" << endl;
 				generalTagPrinted = true;
 			}
-//			if (m_OSOption->general->otherOptions->numberOfOtherOptions > 0)
-			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-				outStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
-				for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" << m_OSOption->general->otherOptions->other[i]->name << "\"";
-					if (m_OSOption->general->otherOptions->other[i]->value != "")
-						outStr << " value=\"" << m_OSOption->general->otherOptions->other[i]->value << "\"";
-					if (m_OSOption->general->otherOptions->other[i]->description != "")
-						outStr << " description=\"" << m_OSOption->general->otherOptions->other[i]->description << "\"";
-					outStr << "/>" << endl;
-				}
-				outStr << "</otherOptions>" << endl;
+			outStr << "<otherOptions numberOfOtherOptions=\""; 
+			outStr << m_OSOption->general->otherOptions->numberOfOtherOptions << "\">" << endl;
+			for (int i=0; i < m_OSOption->general->otherOptions->numberOfOtherOptions; i++)
+			{	outStr << "<other name=\"" << m_OSOption->general->otherOptions->other[i]->name << "\"";
+				if (m_OSOption->general->otherOptions->other[i]->value != "")
+					outStr << " value=\"" << m_OSOption->general->otherOptions->other[i]->value << "\"";
+				if (m_OSOption->general->otherOptions->other[i]->description != "")
+					outStr << " description=\"" << m_OSOption->general->otherOptions->other[i]->description << "\"";
+				outStr << "/>" << endl;
 			}
+			outStr << "</otherOptions>" << endl;
 		}
+		if (generalTagPrinted == false)
+			outStr << "<general>" << endl;
+
 		outStr << "</general>" << endl;
 #ifdef DEBUG
 		cout << "Done with <general> element" << endl;
@@ -279,19 +273,17 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		};
 		if (m_OSOption->system->otherOptions != NULL)
 		{
-//			if (m_OSOption->system->otherOptions->numberOfOtherOptions > 0)
-			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-				outStr << m_OSOption->system->otherOptions->numberOfOtherOptions << "\">" << endl;
-				for (int i=0; i < m_OSOption->system->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" << m_OSOption->system->otherOptions->other[i]->name << "\"";
-					if (m_OSOption->system->otherOptions->other[i]->value != "")
-						outStr << " value=\"" << m_OSOption->system->otherOptions->other[i]->value << "\"";
-					if (m_OSOption->system->otherOptions->other[i]->description != "")
-						outStr << " description=\"" << m_OSOption->system->otherOptions->other[i]->description << "\"";
-					outStr << "/>" << endl;
-				}
-				outStr << "</otherOptions>" << endl;
+			outStr << "<otherOptions numberOfOtherOptions=\""; 
+			outStr << m_OSOption->system->otherOptions->numberOfOtherOptions << "\">" << endl;
+			for (int i=0; i < m_OSOption->system->otherOptions->numberOfOtherOptions; i++)
+			{	outStr << "<other name=\"" << m_OSOption->system->otherOptions->other[i]->name << "\"";
+				if (m_OSOption->system->otherOptions->other[i]->value != "")
+					outStr << " value=\"" << m_OSOption->system->otherOptions->other[i]->value << "\"";
+				if (m_OSOption->system->otherOptions->other[i]->description != "")
+					outStr << " description=\"" << m_OSOption->system->otherOptions->other[i]->description << "\"";
+				outStr << "/>" << endl;
 			}
+			outStr << "</otherOptions>" << endl;
 		}
 		outStr << "</system>" << endl;
 #ifdef DEBUG
@@ -309,19 +301,17 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		}
 		if (m_OSOption->service->otherOptions != NULL)
 		{
-//			if (m_OSOption->service->otherOptions->numberOfOtherOptions > 0)
-			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-				outStr << m_OSOption->service->otherOptions->numberOfOtherOptions << "\">" << endl;
-				for (int i=0; i < m_OSOption->service->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" << m_OSOption->service->otherOptions->other[i]->name << "\"";
-					if (m_OSOption->service->otherOptions->other[i]->value != "")
-						outStr << " value=\"" << m_OSOption->service->otherOptions->other[i]->value << "\"";
-					if (m_OSOption->service->otherOptions->other[i]->description != "")
-						outStr << " description=\"" << m_OSOption->service->otherOptions->other[i]->description << "\"";
-					outStr << "/>" << endl;
-				}
-				outStr << "</otherOptions>" << endl;
+			outStr << "<otherOptions numberOfOtherOptions=\""; 
+			outStr << m_OSOption->service->otherOptions->numberOfOtherOptions << "\">" << endl;
+			for (int i=0; i < m_OSOption->service->otherOptions->numberOfOtherOptions; i++)
+			{	outStr << "<other name=\"" << m_OSOption->service->otherOptions->other[i]->name << "\"";
+				if (m_OSOption->service->otherOptions->other[i]->value != "")
+					outStr << " value=\"" << m_OSOption->service->otherOptions->other[i]->value << "\"";
+				if (m_OSOption->service->otherOptions->other[i]->description != "")
+					outStr << " description=\"" << m_OSOption->service->otherOptions->other[i]->description << "\"";
+				outStr << "/>" << endl;
 			}
+			outStr << "</otherOptions>" << endl;
 		}
 		outStr << "</service>" << endl;
 #ifdef DEBUG
@@ -347,164 +337,137 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 			outStr << "<requestedStartTime>" << m_OSOption->job->requestedStartTime << "</requestedStartTime>" << endl;
 		if (m_OSOption->job->dependencies != NULL)
 		{
-//			if (m_OSOption->job->dependencies->numberOfJobIDs > 0)
-			{	outStr << "<dependencies numberOfJobIDs=\"";
-				outStr << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->dependencies->numberOfJobIDs; i++)
-				{	outStr << "<jobID>" << m_OSOption->job->dependencies->jobID[i] << "</jobID>" << endl;
-				}
-				outStr << "</dependencies>" << endl;
-			}
+			outStr << "<dependencies numberOfJobIDs=\"";
+			outStr << m_OSOption->job->dependencies->numberOfJobIDs << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->dependencies->numberOfJobIDs; i++)
+				outStr << "<jobID>" << m_OSOption->job->dependencies->jobID[i] << "</jobID>" << endl;
+			outStr << "</dependencies>" << endl;
 		}
 		if (m_OSOption->job->requiredDirectories != NULL)
 		{
-//			if (m_OSOption->job->requiredDirectories->numberOfPaths > 0)
-			{	outStr << "<requiredDirectories numberOfPaths=\"";
-				outStr << m_OSOption->job->requiredDirectories->numberOfPaths << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->requiredDirectories->numberOfPaths; i++)
-					outStr << "<path>" << m_OSOption->job->requiredDirectories->path[i] << "</path>" << endl;
-				outStr << "</requiredDirectories>" << endl;
-			}
+			outStr << "<requiredDirectories numberOfPaths=\"";
+			outStr << m_OSOption->job->requiredDirectories->numberOfPaths << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->requiredDirectories->numberOfPaths; i++)
+				outStr << "<path>" << m_OSOption->job->requiredDirectories->path[i] << "</path>" << endl;
+			outStr << "</requiredDirectories>" << endl;
 		}
 		if (m_OSOption->job->requiredFiles != NULL)
 		{
-//			if (m_OSOption->job->requiredFiles->numberOfPaths > 0)
-			{	outStr << "<requiredFiles numberOfPaths=\"";
-				outStr << m_OSOption->job->requiredFiles->numberOfPaths << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->requiredFiles->numberOfPaths; i++)
-					outStr << "<path>" << m_OSOption->job->requiredFiles->path[i] << "</path>" << endl;
-				outStr << "</requiredFiles>" << endl;
-			}
+			outStr << "<requiredFiles numberOfPaths=\"";
+			outStr << m_OSOption->job->requiredFiles->numberOfPaths << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->requiredFiles->numberOfPaths; i++)
+				outStr << "<path>" << m_OSOption->job->requiredFiles->path[i] << "</path>" << endl;
+			outStr << "</requiredFiles>" << endl;
 		}
 		if (m_OSOption->job->directoriesToMake != NULL)
 		{
-//			if (m_OSOption->job->directoriesToMake->numberOfPaths > 0)
-			{	outStr << "<directoriesToMake numberOfPaths=\"";
-				outStr << m_OSOption->job->directoriesToMake->numberOfPaths << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->directoriesToMake->numberOfPaths; i++)
-					outStr << "<path>" << m_OSOption->job->directoriesToMake->path[i] << "</path>" << endl;
-				outStr << "</directoriesToMake>" << endl;
-			}
+			outStr << "<directoriesToMake numberOfPaths=\"";
+			outStr << m_OSOption->job->directoriesToMake->numberOfPaths << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->directoriesToMake->numberOfPaths; i++)
+				outStr << "<path>" << m_OSOption->job->directoriesToMake->path[i] << "</path>" << endl;
+			outStr << "</directoriesToMake>" << endl;
 		}
 		if (m_OSOption->job->filesToMake != NULL)
 		{
-//			if (m_OSOption->job->filesToMake->numberOfPaths > 0)
-			{	outStr << "<filesToMake numberOfPaths=\"";
-				outStr << m_OSOption->job->filesToMake->numberOfPaths << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->filesToMake->numberOfPaths; i++)
-					outStr << "<path>" << m_OSOption->job->filesToMake->path[i] << "</path>" << endl;
-				outStr << "</filesToMake>" << endl;
-			}
+			outStr << "<filesToMake numberOfPaths=\"";
+			outStr << m_OSOption->job->filesToMake->numberOfPaths << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->filesToMake->numberOfPaths; i++)
+				outStr << "<path>" << m_OSOption->job->filesToMake->path[i] << "</path>" << endl;
+			outStr << "</filesToMake>" << endl;
 		}
 		if (m_OSOption->job->inputDirectoriesToMove != NULL)
 		{
-//			if (m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs > 0)
-			{	outStr << "<inputDirectoriesToMove numberOfPathPairs=\"";
-				outStr << m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs; i++)
-				{	outStr << "<pathPair";
-					outStr << " from=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->from << "\"";
-					outStr << " to=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->to << "\"";
-					if (m_OSOption->job->inputDirectoriesToMove->pathPair[i]->makeCopy)
-						outStr << " makeCopy=\"true\""; 
-					outStr << "/>" << endl;
-				}
-				outStr << "</inputDirectoriesToMove>" << endl;
+			outStr << "<inputDirectoriesToMove numberOfPathPairs=\"";
+			outStr << m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->inputDirectoriesToMove->numberOfPathPairs; i++)
+			{	outStr << "<pathPair";
+				outStr << " from=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->from << "\"";
+				outStr << " to=\"" << m_OSOption->job->inputDirectoriesToMove->pathPair[i]->to << "\"";
+				if (m_OSOption->job->inputDirectoriesToMove->pathPair[i]->makeCopy)
+					outStr << " makeCopy=\"true\""; 
+				outStr << "/>" << endl;
 			}
+			outStr << "</inputDirectoriesToMove>" << endl;
 		}
 		if (m_OSOption->job->inputFilesToMove != NULL)
 		{
-//			if (m_OSOption->job->inputFilesToMove->numberOfPathPairs > 0)
-			{	outStr << "<inputFilesToMove numberOfPathPairs=\"";
-				outStr << m_OSOption->job->inputFilesToMove->numberOfPathPairs << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->inputFilesToMove->numberOfPathPairs; i++)
-				{	outStr << "<pathPair";
-					outStr << " from=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->from << "\"";
-					outStr << " to=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->to << "\"";
-					if (m_OSOption->job->inputFilesToMove->pathPair[i]->makeCopy)
-						outStr << " makeCopy=\"true\""; 
-					outStr << "/>" << endl;
-				}
-				outStr << "</inputFilesToMove>" << endl;
+			outStr << "<inputFilesToMove numberOfPathPairs=\"";
+			outStr << m_OSOption->job->inputFilesToMove->numberOfPathPairs << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->inputFilesToMove->numberOfPathPairs; i++)
+			{	outStr << "<pathPair";
+				outStr << " from=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->from << "\"";
+				outStr << " to=\"" << m_OSOption->job->inputFilesToMove->pathPair[i]->to << "\"";
+				if (m_OSOption->job->inputFilesToMove->pathPair[i]->makeCopy)
+					outStr << " makeCopy=\"true\""; 
+				outStr << "/>" << endl;
 			}
+			outStr << "</inputFilesToMove>" << endl;
 		}
 		if (m_OSOption->job->outputFilesToMove != NULL)
 		{
-//			if (m_OSOption->job->outputFilesToMove->numberOfPathPairs > 0)
-			{	outStr << "<outputFilesToMove numberOfPathPairs=\"";
-				outStr << m_OSOption->job->outputFilesToMove->numberOfPathPairs << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->outputFilesToMove->numberOfPathPairs; i++)
-				{	outStr << "<pathPair";
-					outStr << " from=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->from << "\"";
-					outStr << " to=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->to << "\"";
-					if (m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy)
-						outStr << " makeCopy=\"true\""; 
-					outStr << "/>" << endl;
-				}
-				outStr << "</outputFilesToMove>" << endl;
+			outStr << "<outputFilesToMove numberOfPathPairs=\"";
+			outStr << m_OSOption->job->outputFilesToMove->numberOfPathPairs << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->outputFilesToMove->numberOfPathPairs; i++)
+			{	outStr << "<pathPair";
+				outStr << " from=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->from << "\"";
+				outStr << " to=\"" << m_OSOption->job->outputFilesToMove->pathPair[i]->to << "\"";
+				if (m_OSOption->job->outputFilesToMove->pathPair[i]->makeCopy)
+					outStr << " makeCopy=\"true\""; 
+				outStr << "/>" << endl;
 			}
+			outStr << "</outputFilesToMove>" << endl;
 		}
 		if (m_OSOption->job->outputDirectoriesToMove != NULL)
 		{
-//			if (m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs > 0)
-			{	outStr << "<outputDirectoriesToMove numberOfPathPairs=\"";
-				outStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs; i++)
-				{	outStr << "<pathPair";
-					outStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
-					outStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
-					if (m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy)
-						outStr << " makeCopy=\"true\""; 
-					outStr << "/>" << endl;
-				}
-				outStr << "</outputDirectoriesToMove>" << endl;
+			outStr << "<outputDirectoriesToMove numberOfPathPairs=\"";
+			outStr << m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->outputDirectoriesToMove->numberOfPathPairs; i++)
+			{	outStr << "<pathPair";
+				outStr << " from=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->from << "\"";
+				outStr << " to=\"" << m_OSOption->job->outputDirectoriesToMove->pathPair[i]->to << "\"";
+				if (m_OSOption->job->outputDirectoriesToMove->pathPair[i]->makeCopy)
+					outStr << " makeCopy=\"true\""; 
+				outStr << "/>" << endl;
 			}
+			outStr << "</outputDirectoriesToMove>" << endl;
 		}
 		if (m_OSOption->job->filesToDelete != NULL)
 		{
-//			if (m_OSOption->job->filesToDelete->numberOfPaths > 0)
-			{	outStr << "<filesToDelete numberOfPaths=\"";
-				outStr << m_OSOption->job->filesToDelete->numberOfPaths << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->filesToDelete->numberOfPaths; i++)
-					outStr << "<path>" << m_OSOption->job->filesToDelete->path[i] << "</path>" << endl;
-				outStr << "</filesToDelete>" << endl;
-			}
+			outStr << "<filesToDelete numberOfPaths=\"";
+			outStr << m_OSOption->job->filesToDelete->numberOfPaths << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->filesToDelete->numberOfPaths; i++)
+				outStr << "<path>" << m_OSOption->job->filesToDelete->path[i] << "</path>" << endl;
+			outStr << "</filesToDelete>" << endl;
 		}
 		if (m_OSOption->job->directoriesToDelete != NULL)
 		{
-//			if (m_OSOption->job->directoriesToDelete->numberOfPaths > 0)
-			{	outStr << "<directoriesToDelete numberOfPaths=\"";
-				outStr << m_OSOption->job->directoriesToDelete->numberOfPaths << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->directoriesToDelete->numberOfPaths; i++)
-					outStr << "<path>" << m_OSOption->job->directoriesToDelete->path[i] << "</path>" << endl;
-				outStr << "</directoriesToDelete>" << endl;
-			}
+			outStr << "<directoriesToDelete numberOfPaths=\"";
+			outStr << m_OSOption->job->directoriesToDelete->numberOfPaths << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->directoriesToDelete->numberOfPaths; i++)
+				outStr << "<path>" << m_OSOption->job->directoriesToDelete->path[i] << "</path>" << endl;
+			outStr << "</directoriesToDelete>" << endl;
 		}
 		if (m_OSOption->job->processesToKill != NULL)
 		{
-//			if (m_OSOption->job->processesToKill->numberOfProcesses > 0)
-			{	outStr << "<processesToKill numberOfProcesses=\"";
-				outStr << m_OSOption->job->processesToKill->numberOfProcesses << "\">" << endl; 
-				for (int i=0; i < m_OSOption->job->processesToKill->numberOfProcesses; i++)
-					outStr << "<process>" << m_OSOption->job->processesToKill->process[i] << "</process>" << endl;
-				outStr << "</processesToKill>" << endl;
-			}
+			outStr << "<processesToKill numberOfProcesses=\"";
+			outStr << m_OSOption->job->processesToKill->numberOfProcesses << "\">" << endl; 
+			for (int i=0; i < m_OSOption->job->processesToKill->numberOfProcesses; i++)
+				outStr << "<process>" << m_OSOption->job->processesToKill->process[i] << "</process>" << endl;
+			outStr << "</processesToKill>" << endl;
 		}
 		if (m_OSOption->job->otherOptions != NULL)
 		{
-//			if (m_OSOption->job->otherOptions->numberOfOtherOptions > 0)
-			{	outStr << "<otherOptions numberOfOtherOptions=\""; 
-				outStr << m_OSOption->job->otherOptions->numberOfOtherOptions << "\">" << endl;
-				for (int i=0; i < m_OSOption->job->otherOptions->numberOfOtherOptions; i++)
-				{	outStr << "<other name=\"" << m_OSOption->job->otherOptions->other[i]->name << "\"";
-					if (m_OSOption->job->otherOptions->other[i]->value != "")
-						outStr << " value=\"" << m_OSOption->job->otherOptions->other[i]->value << "\"";
-					if (m_OSOption->job->otherOptions->other[i]->description != "")
-						outStr << " description=\"" << m_OSOption->job->otherOptions->other[i]->description << "\"";
-					outStr << "/>" << endl;
-				}
-				outStr << "</otherOptions>" << endl;
+			outStr << "<otherOptions numberOfOtherOptions=\""; 
+			outStr << m_OSOption->job->otherOptions->numberOfOtherOptions << "\">" << endl;
+			for (int i=0; i < m_OSOption->job->otherOptions->numberOfOtherOptions; i++)
+			{	outStr << "<other name=\"" << m_OSOption->job->otherOptions->other[i]->name << "\"";
+				if (m_OSOption->job->otherOptions->other[i]->value != "")
+					outStr << " value=\"" << m_OSOption->job->otherOptions->other[i]->value << "\"";
+				if (m_OSOption->job->otherOptions->other[i]->description != "")
+					outStr << " description=\"" << m_OSOption->job->otherOptions->other[i]->description << "\"";
+				outStr << "/>" << endl;
 			}
+			outStr << "</otherOptions>" << endl;
 		}
 		outStr << "</job>" << endl;
 #ifdef DEBUG
@@ -526,7 +489,7 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		outStr << ">" << endl;
 		if (m_OSOption->optimization->variables != NULL)
 		{	outStr << "<variables";
-//			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
+			if (m_OSOption->optimization->variables->numberOfOtherVariableOptions > 0)
 				outStr << " numberOfOtherVariableOptions=\"" << m_OSOption->optimization->variables->numberOfOtherVariableOptions << "\"";
 			outStr << ">" << endl;
 #ifdef DEBUG
