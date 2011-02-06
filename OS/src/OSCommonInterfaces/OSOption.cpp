@@ -16,7 +16,7 @@
 //#define DEBUG
 
 //#ifdef  DEBUG
-#define DEBUG_OSOPTION
+//#define DEBUG_OSOPTION
 //#endif
 
 #include "OSOption.h"
