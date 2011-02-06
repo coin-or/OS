@@ -101,7 +101,12 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 			throw;  
 		}
 		//std::cout << "Done calling sparse jacobian" << std::endl;
-		nnz_jac_g = sparseJacobian->valueSize;
+		if (sparseJacobian != NULL){
+			nnz_jac_g = sparseJacobian->valueSize;
+		}else{
+			nnz_jac_g = 0;
+		}
+		
 	#ifdef DEBUG
 		cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	#endif
