@@ -117,7 +117,11 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 			//std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
 			SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
 			//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
-			nnz_h_lag = sparseHessian->hessDimension;
+			if(sparseHessian != NULL){
+				nnz_h_lag = sparseHessian->hessDimension;
+			}else{
+				nnz_h_lag = 0;
+			}
 		}
 	#ifdef DEBUG
 		cout << "print nnz_h_lag (OSIpoptSolver.cpp)" << endl;	

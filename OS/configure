@@ -34483,6 +34483,16 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osilFiles/nanTest.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
   cvl_tmp="data/osilFiles/nonconvex.osil"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
