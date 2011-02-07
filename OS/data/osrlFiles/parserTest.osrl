@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="../stylesheets/OSrL.xslt"?>
 <osrl xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd">
+	<resultHeader>
+		<name>parserTest.osrl</name>
+		<source></source>
+		<description>
+			This file is intended to test the OSrL parser.
+			All elements are listed, but the content may not be meaningful.
+		</description>
+		<fileCreator>
+			Horand Gassmann, Jun Ma and Kipp Martin
+		</fileCreator>
+		<licence>
+			This file is licensed under the Eclipse Public License.
+			Please see the accompanying LICENSE file in root directory for terms.
+		</licence>
+	</resultHeader>
 	<general>
 		<generalStatus type="normal" numberOfSubstatuses="0" description="some rag about what this does">
 		</generalStatus>

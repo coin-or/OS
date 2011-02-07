@@ -2263,6 +2263,7 @@ for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonli
 
     {
 	// IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
+	if(parserData->nlnodecount >= parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
 	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
 	parserData->nlnodecount++;
@@ -2275,7 +2276,6 @@ for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonli
 //osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = (yyvsp[(3) - (4)].ival);
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
-if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
 parserData->nlNodeVec.clear();
 parserData->sumVec.clear();
