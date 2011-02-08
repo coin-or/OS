@@ -164,6 +164,7 @@ OS/data/osilFiles/LP_infeasible.osil -text
 OS/data/osilFiles/LP_nobasis.osil -text
 OS/data/osilFiles/LP_noconstraint.osil -text
 OS/data/osilFiles/LP_unbounded.osil -text
+OS/data/osilFiles/NaNTest2.osil -text
 OS/data/osilFiles/avion2.osil -text
 OS/data/osilFiles/bonminEx1.osil -text
 OS/data/osilFiles/bonminEx1_Nonlinear.osil -text
