@@ -318,14 +318,18 @@ for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonli
 };
 				
 nlnodes: 
-		| nlnodes NLSTART 
+		| nlnodes nlstart  
 		nlIdxATT  GREATERTHAN nlnode {
 	// IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
-	if(parserData->nlnodecount >= parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
 	parserData->nlNodeVec[ 0]->createExpressionTreeFromPrefix( parserData->nlNodeVec);
 	parserData->nlnodecount++;
 }  NLEND ;
+
+nlstart: NLSTART
+{
+	if(parserData->nlnodecount >= parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
+};
 
 nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 //osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
