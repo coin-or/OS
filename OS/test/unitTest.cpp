@@ -5184,7 +5184,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setOtherVariableResultNumberOfEnumerations: osresult objects falsely compare unequal!");
 
-			for (int k=0; k < 2; ++k)
+			for (int k=0; k < 3; ++k)
 			{
 			intArray[0] = 1000*i + 1130 + 10*k + 1;
 			intArray[1] = 1000*i + 1130 + 10*k + 2;
@@ -5495,7 +5495,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setOtherObjectiveResultNumberOfEnumerations: osresult objects falsely compare unequal!");
 
-			for (int k=0; k < 2; ++k)
+			for (int k=0; k < 3; ++k)
 			{
 
 			intArray[0] = -(1000*i + 1230 + 10*k + 1);
@@ -5807,7 +5807,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setOtherConstraintResultNumberOfEnumerations: osresult objects falsely compare unequal!");
 
-			for (int k=0; k < 2; ++k)
+			for (int k=0; k < 3; ++k)
 			{
 			intArray[0] = 1000*i + 1330 + 10*k + 1;
 			intArray[1] = 1000*i + 1330 + 10*k + 2;
@@ -6013,6 +6013,8 @@ if (PARSER_TESTS){
 		std::string tempOSrL;
 
 		tempOSrL = osrlwriter->writeOSrL( osresult1);
+
+		std::cout << "Here is the temporary OSrL string produced from OSrLWriter" << std::endl << tempOSrL << std::endl;
 
 		osresult3 = osrlreader->readOSrL( tempOSrL);
 

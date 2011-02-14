@@ -26,7 +26,7 @@
 //#define DEBUG_OSRESULT
 //#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
 //#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
-//#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
+#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
 
 using namespace std;
 
@@ -5547,7 +5547,7 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 				this->currentJobCount    != that->currentJobCount ||
 				this->totalJobsSoFar     != that->totalJobsSoFar  ||
 				this->timeServiceStarted != that->timeServiceStarted ||
-				this->serviceUtilization != that->serviceUtilization )
+				!isEqual(this->serviceUtilization, that->serviceUtilization) )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in ServiceResult" << endl;
@@ -5707,11 +5707,11 @@ bool Time::IsEqual(Time *that)
 		}
 		else	
 		{
-			if (this->unit        != that->unit          || 
-				this->type        != that->type          || 
-				this->value       != that->value         || 
-				this->category    != that->category      || 
-				this->description != that->description  ) 
+			if (!isEqual(this->value,         that->value)    || 
+						 this->unit        != that->unit      || 
+						 this->type        != that->type      || 
+						 this->category    != that->category  || 
+						 this->description != that->description  ) 
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in Time" << endl;
@@ -6090,8 +6090,7 @@ bool VarValue::IsEqual(VarValue *that)
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
+			if (this->idx != that->idx || !isEqual(this->value, that->value) )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in VarValue" << endl;
@@ -6494,8 +6493,8 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 		}
 		else	
 		{
-			if (this->name        != that->name          || 
-				this->value       != that->value         || 
+			if (this->value       != that->value   || 
+				this->name        != that->name    || 				
 				this->description != that->description  ) 
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -6714,8 +6713,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
+			if (this->idx != that->idx || !isEqual(this->value, that->value) )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in DualVarValue" << endl;

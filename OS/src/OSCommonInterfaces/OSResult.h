@@ -841,7 +841,7 @@ public:
 	/** the index of a variable in the solution */
 	int idx;
 	
-	/** value holds a general value for a variable,
+	/** value holds a general value associated with a variable,
 	 *  for example, rather than the value of a variable
 	 *  we may wish to store the variable name associated
 	 *  with the variable with index idx, hence we want
@@ -1256,19 +1256,6 @@ public:
 	/** idx is the index on a constraint */
 	int idx;
 
-	/** lbValue is the value of dual variable on
-	 * the constraint indexed by idx if the constraint
-	 * is at its lower bound
-	 */		
-	//double lbValue;
-	
-	
-	/** ubValue is the value of dual variable on
-	 * the constraint indexed by idx if the constraint
-	 * is at its upper bound
-	 */	
-	//double ubValue;
-	
 	/** value of dual variable on
 	 * the constraint indexed by idx 
 	 */
@@ -3335,14 +3322,14 @@ public:
 	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
 	 * @param solIdx holds the solution index  
 	 * @param otherIdx holds the index of the OtherVariableResult object
-	 * @param numberOfVar holds the number of <var> children
+	 * @param numberOfEnumerations holds the number of <enumeration> children
 	 *
 	 * @return whether the other variable result's name was set successfully or not. 
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setOtherVariableResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfVar);
+	bool setOtherVariableResultNumberOfEnumerations(int solIdx, int otherIdx, int numberOfEnumerations);
 
 	/**
 	 * Set the name of another (non-standard/solver specific) variable-related result, 

@@ -196,29 +196,6 @@ int main(int argC, const char* argV[]) {
 	// initialize the OS options structure
 
 	osoptions = new osOptionsStruc();
-	/*
-	osoptions->configFile = "";
-	osoptions->osilFile = "";
-	osoptions->osil = "";
-	osoptions->osolFile = "";
-	osoptions->osol = "";
-	osoptions->osrlFile = "";
-	osoptions->osrl = "";
-	//osoptions->insListFile = ""; 
-	osoptions->insList = "";
-	osoptions->serviceLocation = "";
-	osoptions->serviceMethod = "";
-	osoptions->osplInputFile = "";
-	osoptions->osplOutputFile = "";
-	osoptions->mpsFile = "";
-	osoptions->nlFile = "";
-	osoptions->gamsControlFile = "";
-	osoptions->solverName = "";
-	osoptions->browser = "";
-	osoptions->invokeHelp = false;
-	osoptions->writeVersion = false;
-	osoptions->quit = false;
-	*/
 	reset_options();
 	bool scannerActive = false;
 

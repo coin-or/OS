@@ -17,7 +17,8 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 		</licence>
 	</resultHeader>
 	<general>
-		<generalStatus type="normal" numberOfSubstatuses="0" description="some rag about what this does">
+		<generalStatus type="normal" numberOfSubstatuses="1" description="some rag about what this does">
+			<substatus name="test" description="for completeness only..."></substatus>
 		</generalStatus>
 		<serviceURI>http://ispc12.dal.ca</serviceURI>
 		<serviceName>Ipopt solver service</serviceName>
@@ -79,10 +80,10 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 			<variables numberOfOtherVariableResults="4" >
 				<values numberOfVar="2">
 					<var idx="0" >
-						.8724300006558884
+						.8724300006558884E0
 					</var >
 					<var idx="1" >
-						.7414170851045374
+						NaN
 					</var >
 				</values>
 				<valuesString numberOfVar="1">
@@ -123,7 +124,7 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 			<objectives numberOfOtherObjectiveResults="1" >
 				<values numberOfObj="2">
 					<obj idx="-1">6.727903962147923</obj>
-					<obj idx="-2">3.14</obj>
+					<obj idx="-2">INF</obj>
 				</values>
 				<basisStatus>
 					<isFree numberOfEl="1">

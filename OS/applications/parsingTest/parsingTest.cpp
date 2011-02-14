@@ -124,7 +124,8 @@ int main(int argC, char* argV[])
 	double density = 0.5;
 	bool conformant = true;
 	
-	seed = time(NULL);
+	seed = time(NULL);
+
 //	Command line parser and user interface
 
 	if (argC == 1)

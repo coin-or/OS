@@ -106,6 +106,7 @@ std::string os_dtoa_format(double  x){
 	ostringstream outStr;
 	if (x ==  OSDBL_MAX) {outStr <<  "INF"; return outStr.str();}
 	if (x == -OSDBL_MAX) {outStr << "-INF"; return outStr.str();}
+	if ( OSIsnan(x) )    {outStr <<  "NaN"; return outStr.str();}
 #ifndef USE_DTOA 
 	outStr << x;
 	return outStr.str();

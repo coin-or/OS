@@ -98,13 +98,62 @@ class GeneralFileHeader {
 	 * @param name: the name of this file or instance
 	 * @param source: the source (e.g., in BiBTeX format)
 	 * @param description: further description about this file and/or its contents
-	 * @param fileCreator: the creator of this file	 * @param licence: licence information if applicable
+	 * @param fileCreator: the creator of this file
+	 * @param licence: licence information if applicable
 	 */
 	bool setHeader(std::string name, std::string source, std::string description, 
 		           std::string fileCreator, std::string licence);
 
 }; //GeneralFileHeader
 
+
+/*! \class SparseVector
+ * \brief a sparse vector data structure
+ */
+class SparseVector{
+	public:
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param number holds the size of the vector.
+	 */
+	SparseVector(int number);
+	
+	/**
+	 *
+	 * Default Constructor. 
+	 */	
+	SparseVector();
+	
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~SparseVector();
+
+	/**
+	 * bDeleteArrays is true if we delete the arrays in garbage collection
+	 * set to true by default
+	 */
+	bool bDeleteArrays;
+	
+	/**
+	 * number is the number of elements in the indexes and values arrays.
+	 */
+	int number;
+	
+	/**
+	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
+	 */
+	int* indexes;
+
+	/**
+	 * values holds a double array of nonzero values.
+	 */
+	double* values;
+
+}; //SparseVector
 
 
 /*! \class SparseMatrix
@@ -182,55 +231,6 @@ class SparseMatrix {
 	bool display(int secondaryDim);
 
 }; //SparseMatrix
-
-
-/*! \class SparseVector
- * \brief a sparse vector data structure
- */
-class SparseVector{
-	public:
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param number holds the size of the vector.
-	 */
-	SparseVector(int number);
-	
-	/**
-	 *
-	 * Default Constructor. 
-	 */	
-	SparseVector();
-	
-	/**
-	 *
-	 * Default destructor. 
-	 */	
-	~SparseVector();
-
-	/**
-	 * bDeleteArrays is true if we delete the arrays in garbage collection
-	 * set to true by default
-	 */
-	bool bDeleteArrays;
-	
-	/**
-	 * number is the number of elements in the indexes and values arrays.
-	 */
-	int number;
-	
-	/**
-	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
-	 */
-	int* indexes;
-
-	/**
-	 * values holds a double array of nonzero values.
-	 */
-	double* values;
-
-}; //SparseVector
 
 
 /*! \class SparseJacobianMatrix
@@ -1256,13 +1256,13 @@ enum ENUM_PATHPAIR
 	ENUM_PATHPAIR_output_dir
 };
 
-/********************************************
+/*************************************************
  *
  * A function to test equality of two doubles
  * This is needed to check equality of objects 
  * when members can have NaN as a possible value
  *
-********************************************/
+*************************************************/
 inline bool isEqual(double x, double y)
 {
 	if (OSIsnan(x)) 

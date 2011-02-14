@@ -328,9 +328,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 		{	if (m_OSOption->job->maxTime->unit == "")
 				m_OSOption->job->maxTime->unit = "second";
 			outStr << "<maxTime unit=\"" << m_OSOption->job->maxTime->unit << "\">";
-			if (m_OSOption->job->maxTime->value == OSDBL_MAX)
-				outStr << "INF" << "</maxTime>" << endl;
-			else
+//			if (m_OSOption->job->maxTime->value == OSDBL_MAX)
+//				outStr << "INF" << "</maxTime>" << endl;
+//			else
 				outStr << os_dtoa_format(m_OSOption->job->maxTime->value) << "</maxTime>" << endl;
 		}
 		if (m_OSOption->job->requestedStartTime != "")
@@ -505,9 +505,9 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					{	outStr << " value=\"";
 						if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == OSDBL_MAX)
 							outStr << "INF";
-						else if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == -OSDBL_MAX)
-							outStr << "-INF";
-						else
+//						else if (m_OSOption->optimization->variables->initialVariableValues->var[i]->value == -OSDBL_MAX)
+//							outStr << "-INF";
+//						else
 							outStr << os_dtoa_format(m_OSOption->optimization->variables->initialVariableValues->var[i]->value);
 					}
 					outStr << "\"/>" << endl;
@@ -638,11 +638,11 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->idx << "\"";
 					if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value != OSNAN)
 					{	outStr << " value=\"";
-						if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == OSDBL_MAX)
-							outStr << "INF";
-						else if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == -OSDBL_MAX)
-							outStr << "-INF";
-						else
+//						if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == OSDBL_MAX)
+//							outStr << "INF";
+//						else if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value == -OSDBL_MAX)
+//							outStr << "-INF";
+//						else
 							outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value);
 						outStr << "\"" << endl;
 					}
@@ -657,18 +657,18 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{	outStr << "<obj";
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->idx << "\"";
 					outStr << " lbValue=\"";
-					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue == OSDBL_MAX)
-						outStr << "INF";
-					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue == -OSDBL_MAX)
-						outStr << "-INF";
-					else
+//					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue == OSDBL_MAX)
+//						outStr << "INF";
+//					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue == -OSDBL_MAX)
+//						outStr << "-INF";
+//					else
 						outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue);
 					outStr << "\" ubValue=\"";
-					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == OSDBL_MAX)
-						outStr << "INF";
-					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == -OSDBL_MAX)
-						outStr << "-INF";
-					else
+//					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == OSDBL_MAX)
+//						outStr << "INF";
+//					else if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue == -OSDBL_MAX)
+//						outStr << "-INF";
+//					else
 						outStr << os_dtoa_format(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->ubValue);
 					outStr << "\"/>" << endl;
 				}
@@ -738,11 +738,11 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->idx << "\"";
 					if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value != OSNAN)
 					{	outStr << " value=\"";
-						if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == OSDBL_MAX)
-							outStr << "INF";
-						else if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == -OSDBL_MAX)
-							outStr << "-INF";
-						else
+//						if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == OSDBL_MAX)
+//							outStr << "INF";
+//						else if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value == -OSDBL_MAX)
+//							outStr << "-INF";
+//						else
 							outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value);
 					}
 					outStr << "\"/>" << endl;
@@ -757,18 +757,18 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->idx << "\"";
 					outStr << " lbDualValue=\"";
-					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue == OSDBL_MAX)
-						outStr << "INF";
-					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue == -OSDBL_MAX)
-						outStr << "-INF";
-					else
+//					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue == OSDBL_MAX)
+//						outStr << "INF";
+//					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue == -OSDBL_MAX)
+//						outStr << "-INF";
+//					else
 						outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue);
 					outStr << "\" ubDualValue=\"";
-					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue == OSDBL_MAX)
-						outStr << "INF";
-					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue == -OSDBL_MAX)
-						outStr << "-INF";
-					else
+//					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue == OSDBL_MAX)
+//						outStr << "INF";
+//					else if (m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue == -OSDBL_MAX)
+//						outStr << "-INF";
+//					else
 						outStr << os_dtoa_format(m_OSOption->optimization->constraints->initialDualValues->con[i]->ubDualValue);
 					outStr << "\"/>" << endl;
 				}

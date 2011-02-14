@@ -2254,6 +2254,10 @@ sosWeightGroup: sosWeightGroupStart sosWeightGroupAttributes sosWeightGroupConte
 				parserData->numberOfVar, parserData->groupWeight,
 				parserData->idxArray,	 parserData->valArray) )
 		osolerror (NULL, osoption, parserData, osglData, "error processing SOS branching weights");
+	delete[] parserData->idxArray;
+	delete[] parserData->valArray;
+	parserData->idxArray = NULL;
+	parserData->valArray = NULL;
 	parserData->currentSOS++;
 };
 
@@ -2472,7 +2476,8 @@ initialObjectiveValues: | initialObjectiveValuesStart initialObjectiveValuesAttr
 initialObjectiveValuesStart: INITIALOBJECTIVEVALUESSTART
 {
 	parserData->numberOfObjAttributePresent = false;
-};
+};
+
 
 initialObjectiveValuesAttributes: numberOfObjAttribute 
 {
