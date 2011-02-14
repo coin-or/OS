@@ -3850,7 +3850,6 @@ if (PARSER_TESTS){
  *  after the second object has been updated in the same way, the objects should 
  *  again be equal.
  */
-
 	OSResult *osresult;
 	OSResult *osresult1 = new OSResult();
 	OSResult *osresult2 = new OSResult();
@@ -3860,6 +3859,7 @@ if (PARSER_TESTS){
 	intArray = new int[3];
 	int* tempArray = new int[3];
 
+#ifdef TEMP   //---------------------------for the time being----------------------------------
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": OSrL set() tools" << endl << endl;
 
@@ -6863,6 +6863,7 @@ if (PARSER_TESTS){
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test of OSrL get() methods" << endl;
 	}
+#endif    //#ifdef TEMP   //---------------------------for the time being----------------------------------
 
 	// Now test the OSrL parser
 	try{ 
