@@ -1,5 +1,5 @@
-/* $Id: OSBearcatSolverXij.cpp 3038 2009-11-07 11:43:44Z kmartin $ */
-/** @file OSBearcatSolverXij.cpp
+/* $Id: OSBearcatSolverXkij.cpp 3038 2009-11-07 11:43:44Z kmartin $ */
+/** @file OSBearcatSolverXkij.cpp
  *
  * \remarks
  * Copyright (C) 2005-2010, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -11,7 +11,7 @@
  */
 
 
-#include "OSBearcatSolverXij.h"
+#include "OSBearcatSolverXkij.h"
 
 #include "OSErrorClass.h" 
 #include "OSDataStructures.h"
@@ -59,15 +59,15 @@
 
 
 
-std::string makeStringFromInt(std::string theString, int theInt);
+std::string makeStringFromInt2(std::string theString, int theInt);
 
 
-OSBearcatSolverXij::OSBearcatSolverXij() {
-	std::cout << "INSIDE OSBearcatSolverXij CONSTRUCTOR with OSOption argument" << std::endl;
-}//end default OSBearcatSolverXij constructor
+OSBearcatSolverXkij::OSBearcatSolverXkij() {
+	std::cout << "INSIDE OSBearcatSolverXkij CONSTRUCTOR with OSOption argument" << std::endl;
+}//end default OSBearcatSolverXkij constructor
 
-OSBearcatSolverXij::OSBearcatSolverXij(OSOption *osoption) {
-	std::cout << "INSIDE OSBearcatSolverXij CONSTRUCTOR with OSOption argument" << std::endl;
+OSBearcatSolverXkij::OSBearcatSolverXkij(OSOption *osoption) {
+	std::cout << "INSIDE OSBearcatSolverXkij CONSTRUCTOR with OSOption argument" << std::endl;
 	
 	
 	m_bestIPValue = OSDBL_MAX;
@@ -99,9 +99,9 @@ OSBearcatSolverXij::OSBearcatSolverXij(OSOption *osoption) {
 	
 	m_osoption = osoption;
 	
-}//end OSBearcatSolverXijDestructor
+}//end OSBearcatSolverXkijDestructor
 
-void OSBearcatSolverXij::initializeDataStructures(){
+void OSBearcatSolverXkij::initializeDataStructures(){
 	
 	int k;
 	int i;
@@ -310,9 +310,9 @@ void OSBearcatSolverXij::initializeDataStructures(){
 }//end initializeDataStructures
 
 
-OSBearcatSolverXij::~OSBearcatSolverXij(){
+OSBearcatSolverXkij::~OSBearcatSolverXkij(){
 	
-	std::cout << "INSIDE ~OSBearcatSolverXij DESTRUCTOR" << std::endl;
+	std::cout << "INSIDE ~OSBearcatSolverXkij DESTRUCTOR" << std::endl;
 
 
 	
@@ -493,7 +493,7 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	delete m_osinstanceSeparation;
 	m_osinstanceSeparation = NULL;
 
-}//end ~OSBearcatSolverXij
+}//end ~OSBearcatSolverXkij
 
 
 
@@ -501,7 +501,7 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 
 
 
-void OSBearcatSolverXij::getOptL( double** c) {
+void OSBearcatSolverXkij::getOptL( double** c) {
 	
 	//initialize the first HUB
 	
@@ -551,12 +551,9 @@ void OSBearcatSolverXij::getOptL( double** c) {
 			m_vv[ k][ d] = OSDBL_MAX;
 			
 			//d1 is the state variable at stage k -1
-			//for(d1 = 0; d1 <= m_totalDemand; d1++){
-			for(d1 = 0; d1 <= d; d1++){
-				
+			for(d1 = 0; d1 <= m_totalDemand; d1++){
+			
 				l = d - d1;
-				
-				//std::cout << "L = " << l <<  "  m_upperBoundL[ k  - 1]  "  << m_upperBoundLMax << std::endl;
 				//kipp make m_upperBoundL the route capapcity
 				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL[ k  - 1]) && (l >= m_lowerBoundL[ k - 1]) ){
 				
@@ -595,8 +592,6 @@ void OSBearcatSolverXij::getOptL( double** c) {
 
 
 	//if (m_numHubs > 1) dlower = 1;
-	
-	//std::cout << " dlower = " << dlower << "  m_totalDemand = " << m_totalDemand << std::endl;
 	
 	for(d = dlower; d < m_totalDemand; d++){
 		
@@ -661,7 +656,7 @@ void OSBearcatSolverXij::getOptL( double** c) {
 
 
 
-double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* c, int* kountVar){
+double OSBearcatSolverXkij::qrouteCost(const int& k, const int& l, const double* c, int* kountVar){
 	
 	//critical -- nodes 0, ..., m_numNodes - 1 are the hub nodes
 	// we are doing the calculation for hub k, k <= m_numNodes - 1
@@ -671,9 +666,9 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 	
 
 	
-	if(l <= 0){
+	if(l < 0){
 		
-		std::cout  << "LVALUE  NEGATIVE OR ZERO  " << l  << std::endl;
+		std::cout  << "LVALUE  NEGATIVE " << l  << std::endl;
 		exit( 1);
 	}
 
@@ -716,19 +711,16 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 	// initialize
 	
 	
+	
 	for(i = m_numHubs; i < m_numNodes; i++){
 		
 		
 		for(l1 = m_minDemand; l1 <= l; l1++){  //l-1  is total demand on network
-			//std::cout << "HUB : " << k << " i = " << i << "  l1 " << l1 << std::endl;
-			//std::cout << "m_upperBoundLMax: " <<   m_upperBoundLMax << std::endl;
+			
 			m_u[i][l1] = OSDBL_MAX;
-			//std::cout << "DONE: " << " i = " << i << "  l1 " << l1 << std::endl;
 			m_v[i][l1] = OSDBL_MAX;
 			m_px[i][l1] = -1; //a node we don't have
-			
-			
-			if(l1 == *(m_demand + i) ){//this should be valid even if demand is zero
+			if(l1 == *(m_demand + i) ){
 				
 				m_px[i][l1] = k;
 				// want the cost for arc (k, i)
@@ -738,12 +730,9 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 
 		
 			}
-			
 		}	
 	}
 	//end initialize
-	
-
 
 	//
 	
@@ -771,20 +760,19 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 		*(m_varIdx + (*kountVar)++) = startPnt + bestLastNode*(m_numNodes - 1)  +  k ;
 		*(m_varIdx + (*kountVar)++) = startPnt + k*(m_numNodes - 1)  + bestLastNode - 1;
 		
+		
 
 		return rcost;	
 	}//end if on l == minDemand
 	
-	
+
 // now calculate values for demand 2 or greater 	
 	//address of node (j, i) is j*(m_numNodes-1) + i when i < j
 	//address of node (j, i) is j*(m_numNodes-1) + i - 1 when i > j
 	// we start l2 at 2 since demand must be at least 1
 	// change to min demand + 1
-	//int lowerVal = m_minDemand + 1;
-	//lowerVal = m_minDemand;
-	//for(l2 = lowerVal; l2 <= l; l2++){// loop over possible demand values assuming we have already gone to at least one node
-	for(l2 = m_minDemand; l2 <= l; l2++){// loop over possible demand values assuming we have already gone to at least one node
+	int lowerVal = m_minDemand + 1;
+	for(l2 = lowerVal; l2 <= l; l2++){// loop over possible demand values assuming we have already gone to at least one node
 			
 		for(i = m_numHubs; i < m_numNodes; i++) { //we are finding least cost to node i
 			
@@ -902,7 +890,6 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 		
 	}//l2 loop
 
-	//
 	
 	//std::cout << "best Last Node = "  << bestLastNode << std::endl;
 	
@@ -932,9 +919,7 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 	//the lvalue is the demand through the currentNode
 	lvalue = l ;
 
-	
-	std::cout << "rcost = " << rcost << std::endl;
-    //return 0;
+
 	while(currentNode != k){
 		//std::cout << "currentNode = " << currentNode << "   " <<  "lvalue " <<  lvalue << std::endl;
 		if( m_px[ currentNode][ lvalue ] != successorNode){
@@ -998,7 +983,7 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 
 
 
-void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
+void OSBearcatSolverXkij::getColumns(const  double* yA, const int numARows,
 		const  double* yB, const int numBRows,
 		int &numNewColumns, int* &numNonzVec, double* &costVec, 
 		int** &rowIdxVec, double** &valuesVec, double &lowerBound) 
@@ -1040,7 +1025,7 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 		double start = CoinCpuTime();
 		getOptL( m_rc);
 		cpuTime = CoinCpuTime() - start;
-		std::cout << "DYNAMIC PROGRAMMING CPU TIME  " << cpuTime << std::endl;
+		std::cout << "DYNAMIC PROGRSMMING CPU TIME  " << cpuTime << std::endl;
 		m_lowerBnd = 0.0;
 		for(k = 0; k < m_numHubs; k++){
 			
@@ -1249,10 +1234,10 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 
 
 /**
-OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
+OSInstance* OSBearcatSolverXkij::getInitialRestrictedMaster( ){
 
 	
-	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster( )" << std::endl;
+	std::cout << "Executing OSBearcatSolverXkij::getInitialRestrictedMaster( )" << std::endl;
 	
 	// define the classes
 	FileUtil *fileUtil = NULL;
@@ -1457,8 +1442,8 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 				m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 				m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 				
-				masterVarName = makeStringFromInt("theta(", k);
-				masterVarName += makeStringFromInt(",", mit->first);
+				masterVarName = makeStringFromInt2("theta(", k);
+				masterVarName += makeStringFromInt2(",", mit->first);
 				masterVarName += ")";
 				intVarSet.insert ( std::pair<int,double>(varNumber, 1.0) );
 				m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
@@ -1485,7 +1470,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		//add the row saying we must visit each node
 		for( i =  0; i < m_numNodes - m_numHubs ; i++){
 			
-			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("visitNode_", i + m_numHubs) , 1.0, 1.0, 0); 
+			m_osinstanceMaster->addConstraint(i,  makeStringFromInt2("visitNode_", i + m_numHubs) , 1.0, 1.0, 0); 
 		}
 		
 		kount = 0;
@@ -1493,7 +1478,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		//add the convexity row
 		for( i =  m_numNodes - m_numHubs; i < m_numNodes ; i++){
 			
-			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("convexityRowRoute_", kount++ ) , 1.0, 1.0, 0); 
+			m_osinstanceMaster->addConstraint(i,  makeStringFromInt2("convexityRowRoute_", kount++ ) , 1.0, 1.0, 0); 
 		}
 		
 		m_osinstanceMaster->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
@@ -1541,10 +1526,10 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 
 
-OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
+OSInstance* OSBearcatSolverXkij::getInitialRestrictedMaster( ){
 
 	
-	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster2( )" << std::endl;
+	std::cout << "Executing OSBearcatSolverXkij::getInitialRestrictedMaster2( )" << std::endl;
 	
 	//this master will have m_numNodes artificial variables
 	int numVarArt;
@@ -1738,7 +1723,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			//objcoeff->values[ varNumber ] = 1.0e24;
 			objcoeff->values[ varNumber ] = m_osDecompParam.artVarCoeff;
 			
-			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
+			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt2("AP", i ) , 
 					0, 1.0, 'C');
 											
 			
@@ -1767,7 +1752,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			
 			
 			
-			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AN", i ) , 
+			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt2("AN", i ) , 
 					0, OSDBL_MAX, 'C');
 			
 			
@@ -2012,8 +1997,8 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 			
-			masterVarName = makeStringFromInt("theta(", k);
-			masterVarName += makeStringFromInt(",", 0);
+			masterVarName = makeStringFromInt2("theta(", k);
+			masterVarName += makeStringFromInt2(",", 0);
 			masterVarName += ")";
 			intVarSet.insert ( std::pair<int,double>(varNumber, 1.0) );
 			m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
@@ -2035,7 +2020,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		
 		for( i =  0; i < m_numNodes - m_numHubs ; i++){
 			
-			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("visitNode_", i + m_numHubs) , 1.0, 1.0, 0); 
+			m_osinstanceMaster->addConstraint(i,  makeStringFromInt2("visitNode_", i + m_numHubs) , 1.0, 1.0, 0); 
 		}
 		
 		kount = 0;
@@ -2043,7 +2028,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		//add the convexity row
 		for( i =  m_numNodes - m_numHubs; i < m_numNodes ; i++){
 			
-			m_osinstanceMaster->addConstraint(i,  makeStringFromInt("convexityRowRoute_", kount++ ) , 1.0, 1.0, 0); 
+			m_osinstanceMaster->addConstraint(i,  makeStringFromInt2("convexityRowRoute_", kount++ ) , 1.0, 1.0, 0); 
 		}
 				
 		m_osinstanceMaster->addObjective(-1, "objfunction", "min", 0.0, 1.0, objcoeff);
@@ -2099,7 +2084,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 
 
-void OSBearcatSolverXij::getOptions(OSOption *osoption) {
+void OSBearcatSolverXkij::getOptions(OSOption *osoption) {
 	
 	
 	std::cout << "Executing getOptions(OSOption *osoption)" << std::endl;
@@ -2183,7 +2168,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 								
 								std::istringstream demandBuffer( (*vit)->value);
 								demandBuffer >> tmpVal;
-								//if(tmpVal <= 0 && demand.size() > m_numHubs) throw ErrorClass("must have strictly positive demand");
+								if(tmpVal <= 0 && demand.size() > m_numHubs) throw ErrorClass("must have strictly positive demand");
 								if(tmpVal < m_minDemand  && demand.size() > m_numHubs ) m_minDemand = tmpVal;
 								demand.push_back( tmpVal);
 								//std::cout << "demand = " << tmpVal <<  std::endl;
@@ -2193,7 +2178,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 									std::istringstream routeCapacityBuffer( (*vit)->value);
 									routeCapacityBuffer >> tmpVal;
 									routeCapacity.push_back( tmpVal);
-									std::cout << "m_routeCapacity = " << tmpVal <<  std::endl;
+									//std::cout << "m_routeCapacity = " << tmpVal <<  std::endl;
 									
 								}else{
 									
@@ -2330,8 +2315,6 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 			
 			*(m_routeCapacity + i++) = *vit2;
 			
-			std::cout << "ROUTE CAP = " << *vit2 << std::endl;
-			
 		}
 		routeCapacity.clear();
 		
@@ -2375,7 +2358,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 
 
 
-void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
+void OSBearcatSolverXkij::getCutsTheta(const  double* theta, const int numTheta,
 		int &numNewRows, int*  &numNonz, int** &colIdx,
 		double** &values, double* &rowLB, double* &rowUB) {
 	//critical -- the variables that come in the theta variables
@@ -2403,7 +2386,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 		m_osinstanceSeparation->bConstraintsModified = true;
 		//m_numNodes is the number of artificial variables
 		if(numTheta != m_numThetaVar ) throw 
-				ErrorClass("number of master varibles in OSBearcatSolverXij::getCuts inconsistent");
+				ErrorClass("number of master varibles in OSBearcatSolverXkij::getCuts inconsistent");
 		
 		//for(i = 0; i < numTheta; i++){
 		
@@ -2757,7 +2740,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 
 
 
-void OSBearcatSolverXij::getCutsX(const  double* x, const int numX,
+void OSBearcatSolverXkij::getCutsX(const  double* x, const int numX,
 		int &numNewRows, int*  &numNonz, int** &colIdx,
 		double** &values, double* &rowLB, double* &rowUB) {
 	//critical -- we are assuming that the size of x is going to be 
@@ -2975,7 +2958,7 @@ void OSBearcatSolverXij::getCutsX(const  double* x, const int numX,
 }//end getCutsX
 
 
-void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
+void OSBearcatSolverXkij::calcReducedCost( const double* yA, const double* yB){
 	
 	int k;
 	int i;
@@ -3072,7 +3055,7 @@ void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
 }//end calcReducedCost
 
 
-void OSBearcatSolverXij::createVariableNames( ){
+void OSBearcatSolverXkij::createVariableNames( ){
 	
 	int i;
 	int j;
@@ -3085,8 +3068,8 @@ void OSBearcatSolverXij::createVariableNames( ){
 		//if we have (i, j) where j is hub then do not subtract off phi[ j]
 		for(j = 0; j < i; j++){
 			
-			m_variableNames[ kount] = makeStringFromInt("x(" , i);
-			m_variableNames[ kount] += makeStringFromInt( "," , j);
+			m_variableNames[ kount] = makeStringFromInt2("x(" , i);
+			m_variableNames[ kount] += makeStringFromInt2( "," , j);
 			m_variableNames[ kount] +=  ")";
 			//std::cout << "GAIL VARIABLE NAME " << m_variableNames[ kount] << std::endl;
 			
@@ -3096,8 +3079,8 @@ void OSBearcatSolverXij::createVariableNames( ){
 		
 		for(j = i + 1; j < m_numNodes; j++){
 			
-			m_variableNames[ kount] = makeStringFromInt("x(" , i);
-			m_variableNames[ kount] += makeStringFromInt( "," , j);
+			m_variableNames[ kount] = makeStringFromInt2("x(" , i);
+			m_variableNames[ kount] += makeStringFromInt2( "," , j);
 			m_variableNames[ kount] +=  ")";
 			
 			//std::cout << "GAIL VARIABLE NAME " << m_variableNames[ kount] << std::endl;
@@ -3109,7 +3092,7 @@ void OSBearcatSolverXij::createVariableNames( ){
 	}	
 }//end createVariableNames
 
-void OSBearcatSolverXij::createAmatrix(){
+void OSBearcatSolverXkij::createAmatrix(){
 	
 	//arrays for the coupling constraint matrix
 	//this is in the x variable space, not theta
@@ -3158,7 +3141,7 @@ void OSBearcatSolverXij::createAmatrix(){
 	
 }//end createAmatrix
 
-void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, int numColsGen){
+void OSBearcatSolverXkij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, int numColsGen){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
@@ -3183,55 +3166,25 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 			
 		//}
 		
-		double routeDemand;
-		
-	
-		int ivalue;
-		int jvalue;
 		
 		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
 			
 				i = *vit;
 				std::cout <<  "x variables for column "  << i  << std::endl;
 				
-				
-				//cost += m_thetaCost[ i ];
-				routeDemand = 0; 
+				cost += m_thetaCost[ i ];
 				
 				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 				
-					
 					std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
 					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << std::endl;
 					
-					ivalue = floor( m_thetaIndex[  j] /(m_numNodes - 1) );
-					
-					jvalue = m_thetaIndex[  j] - ivalue*(m_numNodes - 1);
-					
-					if(  jvalue  >= ivalue ){
-						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
-						//std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
-						routeDemand += m_demand[ jvalue + 1];
-
-						
-					}else{
-						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
-						//std::cout << " j NODE NUMBER = " <<  jvalue    << std::endl;
-						routeDemand += m_demand[ jvalue ];
-					}
-					
-					
-				}
-				
-				std::cout <<  "route demand = " << routeDemand << std::endl << std::endl;
-				std::cout <<  "distance for this route "  << m_thetaCost[ i ] / routeDemand  << std::endl;
-				
-			
+				}	
 			
 		}
 		
 		
-		//std::cout <<  "cost = " << cost << std::endl << std::endl;
+		std::cout <<  "cost = " << cost << std::endl << std::endl;
 		
 		std::cout << std::endl <<  std::endl;
 		std::cout << "LOWER BOUND VALUE = " << m_bestLPValue << std::endl;
@@ -3259,7 +3212,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 }//end pauHana -- no pun intended
 
 
-OSInstance* OSBearcatSolverXij::getSeparationInstance(){
+OSInstance* OSBearcatSolverXkij::getSeparationInstance(){
 	
 
 	
@@ -3307,7 +3260,7 @@ OSInstance* OSBearcatSolverXij::getSeparationInstance(){
 		//add the node rows
 		for( i =  0; i < m_numNodes - m_numHubs ; i++){
 			
-			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt("nodeRow_", i+  m_numHubs ) , 0.0, 1.0, 0); 
+			m_osinstanceSeparation->addConstraint(i,  makeStringFromInt2("nodeRow_", i+  m_numHubs ) , 0.0, 1.0, 0); 
 			
 		}
 		
@@ -3321,8 +3274,8 @@ OSInstance* OSBearcatSolverXij::getSeparationInstance(){
 			
 			
 			for(j = i+1; j < m_numNodes; j++){
-				separationConName = makeStringFromInt("Row_(", i);
-				separationConName += makeStringFromInt(",", j);
+				separationConName = makeStringFromInt2("Row_(", i);
+				separationConName += makeStringFromInt2(",", j);
 				separationConName += ")";
 				
 				m_osinstanceSeparation->addConstraint(rowKounter++,  separationConName , 0, 0, 0); 
@@ -3342,7 +3295,7 @@ OSInstance* OSBearcatSolverXij::getSeparationInstance(){
 		//add the v variables
 		for(i = 0; i < numVvar; i++){
 			
-			separationVarName = makeStringFromInt("v", i + m_numHubs);
+			separationVarName = makeStringFromInt2("v", i + m_numHubs);
 			
 			m_osinstanceSeparation->addVariable(i, separationVarName, 0, 1, 'C');
 			
@@ -3378,8 +3331,8 @@ OSInstance* OSBearcatSolverXij::getSeparationInstance(){
 	
 				j = j1 + m_numHubs;
 				
-				separationVarName = makeStringFromInt("y(", i);
-				separationVarName += makeStringFromInt(",", j);
+				separationVarName = makeStringFromInt2("y(", i);
+				separationVarName += makeStringFromInt2(",", j);
 				separationVarName += ")";
 				m_osinstanceSeparation->addVariable(kount++, separationVarName, 0, 1, 'C');
 				
@@ -3401,8 +3354,8 @@ OSInstance* OSBearcatSolverXij::getSeparationInstance(){
 				
 				
 				
-				separationVarName = makeStringFromInt("y(", j );
-				separationVarName += makeStringFromInt(",", i);
+				separationVarName = makeStringFromInt2("y(", j );
+				separationVarName += makeStringFromInt2(",", i);
 				separationVarName += ")";
 				m_osinstanceSeparation->addVariable(kount++, separationVarName, 0, 1, 'C');
 				
@@ -3503,7 +3456,7 @@ OSInstance* OSBearcatSolverXij::getSeparationInstance(){
 
 
 
-int OSBearcatSolverXij::getBranchingVar(const double* theta, const int numThetaVar ) {
+int OSBearcatSolverXkij::getBranchingVar(const double* theta, const int numThetaVar ) {
 
 	int varIdx;
 	varIdx = -1;
@@ -3646,7 +3599,7 @@ int OSBearcatSolverXij::getBranchingVar(const double* theta, const int numThetaV
 
 
 
-int OSBearcatSolverXij::getBranchingVar(const int* thetaIdx, const double* theta, 
+int OSBearcatSolverXkij::getBranchingVar(const int* thetaIdx, const double* theta, 
 		const int numThetaVar) {
 
 	int varIdx;
@@ -3791,7 +3744,7 @@ int OSBearcatSolverXij::getBranchingVar(const int* thetaIdx, const double* theta
 }//end getBranchingVar Sparse
 
 
-void OSBearcatSolverXij::getBranchingCut(const double* thetaVar, const int numThetaVar,
+void OSBearcatSolverXkij::getBranchingCut(const double* thetaVar, const int numThetaVar,
 		const std::map<int, int> &varConMap, int &varIdx,  int &numNonz, 
 		int* &indexes,  double* &values) {
 	
@@ -3872,7 +3825,7 @@ void OSBearcatSolverXij::getBranchingCut(const double* thetaVar, const int numTh
 }//end getBranchingCut dense
 
 
-void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thetaVar, 
+void OSBearcatSolverXkij::getBranchingCut(const int* thetaIdx, const double* thetaVar, 
 		const int numThetaVar, const std::map<int, int> &varConMap, 
 		int &varIdx,  int &numNonz, int* &indexes, double* &values) {
 	
@@ -3957,7 +3910,7 @@ void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thet
 }//end getBranchingCut sparse
 
 
-void OSBearcatSolverXij::getInitialSolution(){
+void OSBearcatSolverXkij::getInitialSolution(){
 	
 	try{	
 		//kipp -- stil not done we depend on SKs solution
@@ -3983,7 +3936,7 @@ void OSBearcatSolverXij::getInitialSolution(){
 }//end getInitialSolution
 
 
-void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInterface *si){
+void OSBearcatSolverXkij::resetMaster( std::map<int, int> &inVars, OsiSolverInterface *si){
 	
 	int i;
 	int j;
@@ -4294,7 +4247,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 		
 		m_thetaCost[ varNumber] = m_osDecompParam.artVarCoeff;
 		
-		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("x", i ) , 
+		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt2("x", i ) , 
 				0, 1.0, 'C');	
 		
 
@@ -4310,7 +4263,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 		
 		m_thetaCost[ varNumber] = si->getObjCoefficients()[ mit->first];
 		
-		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("x", kount + numVarArt ) , 
+		m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt2("x", kount + numVarArt ) , 
 				0, 1.0, 'C');	
 		
 		kount++;
@@ -4323,7 +4276,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 	
 	for(i = 0; i < m_numNodes; i++){
 		
-		m_osinstanceMaster->addConstraint(i,  makeStringFromInt("con", i), 
+		m_osinstanceMaster->addConstraint(i,  makeStringFromInt2("con", i), 
 				1.0, 1.0, 0);
 	
 	}
@@ -4331,7 +4284,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 	
 	for(i = m_numNodes; i <  m_numBmatrixCon + m_numNodes; i++){
 		
-		m_osinstanceMaster->addConstraint(i,  makeStringFromInt("con", i), 
+		m_osinstanceMaster->addConstraint(i,  makeStringFromInt2("con", i), 
 				si->getRowLower()[ i], si->getRowUpper()[ i], 0);
 		
 		
@@ -4362,7 +4315,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 
 
 
-std::string makeStringFromInt(std::string theString, int theInt){
+std::string makeStringFromInt2(std::string theString, int theInt){
 	ostringstream outStr;
 	outStr << theString;
 	outStr << theInt;

@@ -303,6 +303,7 @@ void OSColGenApp::solve(){
 		
 		//get initial LP relaxation of master
 		solveRestrictedMasterRelaxation();
+		//exit( 1);
 		//get the solution vector
 		numCols = m_si->getNumCols();
 		numRows = m_si->getNumRows();
@@ -399,7 +400,7 @@ void OSColGenApp::solve(){
 		
 		//go into branch and bound
 		std::cout << "START BRANCH AND BOUND =  "   << std::endl;
-		branchAndBound();
+		//branchAndBound();
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;	
 		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated);
@@ -859,7 +860,7 @@ bool OSColGenApp::branchAndBound( ){
 			//let's loop and find node with the largest nodeID -- this will
 			//corespond to fifo
 			
-			bestNodeID = 0;
+			bestNodeID = -1;
 			bestNodeBound = OSDBL_MAX;
 			//mit->first is the the OSNode nodeID
 			//mit->second is an OSNode
@@ -873,8 +874,7 @@ bool OSColGenApp::branchAndBound( ){
 					
 					bestNodeBound = mit->second->lpValue;
 					bestNodeID =  mit->first;
-					//note same as:
-					//bestNodeID =  mit->second->nodeID;
+					//note same as:bestNodeID =  mit->second->nodeID;
 					
 					
 				}

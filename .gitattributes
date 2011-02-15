@@ -44,6 +44,8 @@ OS/applications/columnGen/code/Makefile.am -text
 OS/applications/columnGen/code/Makefile.in -text
 OS/applications/columnGen/code/OSBearcatSolverXij.cpp -text
 OS/applications/columnGen/code/OSBearcatSolverXij.h -text
+OS/applications/columnGen/code/OSBearcatSolverXkij.cpp -text
+OS/applications/columnGen/code/OSBearcatSolverXkij.h -text
 OS/applications/columnGen/code/OSColGenApp.cpp -text
 OS/applications/columnGen/code/OSColGenApp.h -text
 OS/applications/columnGen/code/OSColGenMain.cpp -text
