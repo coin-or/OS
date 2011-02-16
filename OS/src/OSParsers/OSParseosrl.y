@@ -1767,7 +1767,7 @@ varValueStart: VARSTART
 
 varIdxATT: IDXATT quote INTEGER quote {	parserData->idx = $3; };
 
-varValueContent: GREATERTHAN ElementValue {/*aNumber*/} VAREND;
+varValueContent: GREATERTHAN aNumber VAREND;
   
 
 variableValuesString: | variableValuesStringStart numberOfVarStringATT variableValuesStringContent;
@@ -3605,9 +3605,6 @@ osglMultAttribute: MULTATT quote INTEGER quote
 aNumber:
 	INTEGER {parserData->tempVal = $1;}
   | DOUBLE  {parserData->tempVal = $1;}
-  |  "INF"  {parserData->tempVal =  OSDBL_MAX;}
-  | "-INF"  {parserData->tempVal = -OSDBL_MAX;}
-  |  "NaN"  {parserData->tempVal = OSNAN;}
   ;
 
 ElementValue: 

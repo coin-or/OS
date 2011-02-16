@@ -3859,7 +3859,7 @@ if (PARSER_TESTS){
 	intArray = new int[3];
 	int* tempArray = new int[3];
 
-#ifdef TEMP   //---------------------------for the time being----------------------------------
+//#ifdef TEMP   //---------------------------for the time being----------------------------------
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": OSrL set() tools" << endl << endl;
 
@@ -5184,7 +5184,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setOtherVariableResultNumberOfEnumerations: osresult objects falsely compare unequal!");
 
-			for (int k=0; k < 3; ++k)
+			for (int k=0; k < 2; ++k)
 			{
 			intArray[0] = 1000*i + 1130 + 10*k + 1;
 			intArray[1] = 1000*i + 1130 + 10*k + 2;
@@ -5495,7 +5495,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setOtherObjectiveResultNumberOfEnumerations: osresult objects falsely compare unequal!");
 
-			for (int k=0; k < 3; ++k)
+			for (int k=0; k < 2; ++k)
 			{
 
 			intArray[0] = -(1000*i + 1230 + 10*k + 1);
@@ -5807,7 +5807,7 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setOtherConstraintResultNumberOfEnumerations: osresult objects falsely compare unequal!");
 
-			for (int k=0; k < 3; ++k)
+			for (int k=0; k < 2; ++k)
 			{
 			intArray[0] = 1000*i + 1330 + 10*k + 1;
 			intArray[1] = 1000*i + 1330 + 10*k + 2;
@@ -6018,6 +6018,11 @@ if (PARSER_TESTS){
 
 		osresult3 = osrlreader->readOSrL( tempOSrL);
 
+		tempOSrL = osrlwriter->writeOSrL( osresult3);
+
+		std::cout << "Here is the temporary OSrL string produced from OSrLReader" << std::endl << tempOSrL << std::endl;
+
+
 		ok &= (osresult1->IsEqual(osresult3));
 		if (!ok) 
 			throw ErrorClass("Writing an osresult then reading leads to loss of data");
@@ -6031,6 +6036,7 @@ if (PARSER_TESTS){
  *  The test requires both to be equal.
  */
 		cout << endl << "TEST " << ++nOfTest << ": OSrL get() methods" << endl << endl;
+//#ifdef TEMP   //---------------------------for the time being----------------------------------
 
 		if (osresult2  != NULL) delete osresult2;
 		osresult2 = new OSResult();
@@ -6840,6 +6846,7 @@ if (PARSER_TESTS){
 //		osresult = NULL;
 		if (tempArray  != NULL) delete[] tempArray;
 		tempArray = NULL;
+//#endif    //#ifdef TEMP   //---------------------------for the time being----------------------------------
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -6863,7 +6870,7 @@ if (PARSER_TESTS){
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test of OSrL get() methods" << endl;
 	}
-#endif    //#ifdef TEMP   //---------------------------for the time being----------------------------------
+//#endif    //#ifdef TEMP   //---------------------------for the time being----------------------------------
 
 	// Now test the OSrL parser
 	try{ 

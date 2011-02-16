@@ -2,7 +2,7 @@
 /** @file parseosrl.l
  * 
  * @author  Horand Gassmann, Jun Ma, Kipp Martin 
-  *
+ *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
@@ -109,7 +109,7 @@ quote (\"|\')
 twoquotes (\"\"|\'\')
 greater_than (>)
 aninteger (-?[0-9]+)
-adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
+adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF)|NaN)
 %% 
 
 

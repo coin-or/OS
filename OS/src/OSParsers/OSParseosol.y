@@ -1,6 +1,8 @@
 /* $Id$ */
 /** @file OSParseosol.y
  *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
+ *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
