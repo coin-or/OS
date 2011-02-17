@@ -1050,9 +1050,9 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	if(pinstanceHeadStart == NULL ) {
 		//on instance header better be 
 		const char *startInstanceData = "<instanceData";
-		const char *pinstanceDataInstance  = strstr(pchar, startInstanceData);
-		*p = pinstanceDataInstance;
-		std::cout << "GAIL = "  << *pinstanceDataInstance  << std::endl; 
+		//const char *pinstanceDataInstance  = strstr(pchar, startInstanceData);
+		//*p = pinstanceDataInstance;
+		*p = strstr(pchar, startInstanceData);
 		return true;
 	}
 	//if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
