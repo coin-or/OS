@@ -3391,10 +3391,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	const char *ptemp = NULL;
 	int elementSize;
 	if(pinstanceHeadStart == NULL ) {
-		//on instance header better be 
 		const char *startInstanceData = "<instanceData";
-		//const char *pinstanceDataInstance  = strstr(pchar, startInstanceData);
-		//*p = pinstanceDataInstance;
 		*p = strstr(pchar, startInstanceData);
 		return true;
 	}
