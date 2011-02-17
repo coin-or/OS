@@ -1047,7 +1047,15 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	char *pelementText = NULL;
 	const char *ptemp = NULL;
 	int elementSize;
-	if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
+	if(pinstanceHeadStart == NULL ) {
+		//on instance header better be 
+		const char *startInstanceData = "<instanceData";
+		const char *pinstanceDataInstance  = strstr(pchar, startInstanceData);
+		*p = pinstanceDataInstance;
+		std::cout << "GAIL = "  << *pinstanceDataInstance  << std::endl; 
+		return true;
+	}
+	//if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
 	// increment the line number counter if there are any newlines between the start of
 	// the osil string and pinstanceHeadStart
 	int	kount = pinstanceHeadStart - pchar;

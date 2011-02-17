@@ -657,7 +657,7 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if YYENABLE_NLS
+# if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -3040,7 +3040,7 @@ while (YYID (0))
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if YYLTYPE_IS_TRIVIAL
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
 #  define YY_LOCATION_PRINT(File, Loc)			\
      fprintf (File, "%d.%d-%d.%d",			\
 	      (Loc).first_line, (Loc).first_column,	\
@@ -3634,7 +3634,7 @@ YYLTYPE yylloc;
   yyssp = yyss;
   yyvsp = yyvs;
   yylsp = yyls;
-#if YYLTYPE_IS_TRIVIAL
+#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
   /* Initialize the default location before parsing starts.  */
   yylloc.first_line   = yylloc.last_line   = 1;
   yylloc.first_column = yylloc.last_column = 0;
@@ -3828,7 +3828,7 @@ yyreduce:
 #ifdef DEBUG
 yydebug = 1;
 #endif
-;}
+}
     break;
 
   case 5:
@@ -3837,7 +3837,7 @@ yydebug = 1;
 #ifdef DEBUG
 yydebug = 1;
 #endif
-;}
+}
     break;
 
   case 14:
@@ -3850,7 +3850,7 @@ yydebug = 1;
 				osglData->description, 
 osglData->fileCreator, osglData->licence) )	
 			osrlerror( NULL, osresult, parserData, osglData, "setHeader failed");
-;}
+}
     break;
 
   case 15:
@@ -3861,42 +3861,42 @@ osglData->fileCreator, osglData->licence) )
 	osglData->description = "";
 	osglData->fileCreator = "";
 	osglData->licence     = "";
-;}
+}
     break;
 
   case 27:
 
     {
 	osglData->fileName = (yyvsp[(2) - (3)].sval);
-;}
+}
     break;
 
   case 34:
 
     {
 	osglData->source = (yyvsp[(2) - (3)].sval);
-;}
+}
     break;
 
   case 41:
 
     {
 	osglData->description = (yyvsp[(2) - (3)].sval);
-;}
+}
     break;
 
   case 48:
 
     {
 	osglData->fileCreator = (yyvsp[(2) - (3)].sval);
-;}
+}
     break;
 
   case 55:
 
     {
 	osglData->licence = (yyvsp[(2) - (3)].sval);
-;}
+}
     break;
 
   case 77:
@@ -3912,7 +3912,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->numberOf = 0;
 		parserData->typeAttribute = "";
 		parserData->descriptionAttribute = "";
-	;}
+	}
     break;
 
   case 78:
@@ -3920,7 +3920,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (!parserData->typeAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "type attribute must be present for generalStatus element");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 81:
@@ -3928,14 +3928,14 @@ osglData->fileCreator, osglData->licence) )
     { 
 		if (osresult->setGeneralStatusType(parserData->typeAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "general status type does not match any legal value");
-	;}
+	}
     break;
 
   case 82:
 
     {   
 		osresult->setGeneralStatusDescription(parserData->descriptionAttribute);
-	;}
+	}
     break;
 
   case 83:
@@ -3944,27 +3944,27 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "Attempting to reallocate substatus array. Potential loss of data.");
 		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 84:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <substatus> element");
-	;}
+	}
     break;
 
   case 85:
 
     {	if (parserData->kounter != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <substatus> elements than specified");
-	;}
+	}
     break;
 
   case 92:
 
     {	parserData->kounter++;
-;}
+}
     break;
 
   case 93:
@@ -3975,14 +3975,14 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;
 	parserData->nameAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 94:
 
     {	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<substatus> must have name attribute");
-;}
+}
     break;
 
   case 97:
@@ -3990,7 +3990,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setGeneralSubstatusName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "Error while setting <general> substatus name");
-	;}
+	}
     break;
 
   case 98:
@@ -3998,7 +3998,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setGeneralSubstatusDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "Error while setting <general> substatus description");
-	;}
+	}
     break;
 
   case 102:
@@ -4006,12 +4006,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->generalMessagePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one message element allowed");
 		parserData->generalMessagePresent = true;
-	;}
+	}
     break;
 
   case 108:
 
-    {osresult->setGeneralMessage((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setGeneralMessage((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 110:
@@ -4019,12 +4019,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->generalServiceURIPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one serviceURI element allowed");
 		parserData->generalServiceURIPresent = true;
-	;}
+	}
     break;
 
   case 116:
 
-    {osresult->setServiceURI((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setServiceURI((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 118:
@@ -4032,12 +4032,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->generalServiceNamePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one serviceName element allowed");
 		parserData->generalServiceNamePresent = true;
-	;}
+	}
     break;
 
   case 124:
 
-    {osresult->setServiceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setServiceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 126:
@@ -4045,12 +4045,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->generalInstanceNamePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one instanceName element allowed");
 		parserData->generalInstanceNamePresent = true;
-	;}
+	}
     break;
 
   case 132:
 
-    {osresult->setInstanceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setInstanceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 134:
@@ -4058,12 +4058,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->generalJobIDPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one jobID element allowed");
 		parserData->generalJobIDPresent = true;
-	;}
+	}
     break;
 
   case 140:
 
-    {osresult->setJobID((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setJobID((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 142:
@@ -4071,12 +4071,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->generalSolverInvokedPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one solverInvoked element allowed");
 		parserData->generalSolverInvokedPresent = true;
-	;}
+	}
     break;
 
   case 148:
 
-    {osresult->setSolverInvoked((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setSolverInvoked((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 150:
@@ -4084,12 +4084,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->generalTimeStampPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one timeStamp element allowed");
 		parserData->generalTimeStampPresent = true;
-	;}
+	}
     break;
 
   case 156:
 
-    {osresult->setTimeStamp((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setTimeStamp((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 158:
@@ -4097,7 +4097,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->otherGeneralResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one general other results element allowed");
 		parserData->otherGeneralResultsPresent = true;
-	;}
+	}
     break;
 
   case 159:
@@ -4108,27 +4108,27 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror(NULL, NULL, parserData, osglData, "Attempting to reallocate other general results array. Potential loss of data.");
 	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 160:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
-	;}
+	}
     break;
 
   case 161:
 
     {	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
-	;}
+	}
     break;
 
   case 168:
 
     {	parserData->kounter++;
-;}
+}
     break;
 
   case 169:
@@ -4141,14 +4141,14 @@ osglData->fileCreator, osglData->licence) )
 	parserData->nameAttribute = "";
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 170:
 
     {	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
-;}
+}
     break;
 
   case 173:
@@ -4157,7 +4157,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherGeneralResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setGeneralOtherResultName failed");
-	;}
+	}
     break;
 
   case 174:
@@ -4165,7 +4165,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherGeneralResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setGeneralOtherResultValue failed");
-	;}
+	}
     break;
 
   case 175:
@@ -4173,7 +4173,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherGeneralResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setGeneralOtherResultDescription failed");
-	;}
+	}
     break;
 
   case 196:
@@ -4181,7 +4181,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->systemInformationPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one systemInformation element allowed");
 		parserData->systemInformationPresent = true;
-	;}
+	}
     break;
 
   case 202:
@@ -4189,7 +4189,7 @@ osglData->fileCreator, osglData->licence) )
     {	osresult->setSystemInformation((yyvsp[(1) - (1)].sval)); 
 		free((yyvsp[(1) - (1)].sval)); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 204:
@@ -4201,7 +4201,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->descriptionAttributePresent = false;	
 		parserData->unitAttribute = "";	
 		parserData->descriptionAttribute = "";
-	;}
+	}
     break;
 
   case 208:
@@ -4210,21 +4210,21 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setAvailableDiskSpaceUnit( parserData->unitAttribute) == false) 
 			osrlerror(NULL, NULL, parserData, osglData, "availableDiskSpace unit not recognized");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 209:
 
     {	osresult->setAvailableDiskSpaceDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 211:
 
     {	osresult->setAvailableDiskSpaceValue(parserData->tempVal);  
 	parserData->errorText = NULL;
-;}
+}
     break;
 
   case 213:
@@ -4236,7 +4236,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->descriptionAttributePresent = false;	
 		parserData->unitAttribute = "";	
 		parserData->descriptionAttribute = "";
-	;}
+	}
     break;
 
   case 217:
@@ -4245,21 +4245,21 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setAvailableMemoryUnit( parserData->unitAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "availableDiskSpace unit not recognized");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 218:
 
     {	osresult->setAvailableMemoryDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 220:
 
     {	osresult->setAvailableMemoryValue(parserData->tempVal);  
     parserData->errorText = NULL;
-;}
+}
     break;
 
   case 222:
@@ -4271,7 +4271,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->descriptionAttributePresent = false;	
 		parserData->unitAttribute = "";	
 		parserData->descriptionAttribute = "";
-	;}
+	}
     break;
 
   case 226:
@@ -4280,21 +4280,21 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setAvailableCPUSpeedUnit( parserData->unitAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "available CPU Speed could not be set");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 227:
 
     {	osresult->setAvailableCPUSpeedDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 229:
 
     {	osresult->setAvailableCPUSpeedValue(parserData->tempVal);  
     parserData->errorText = NULL;
-;}
+}
     break;
 
   case 231:
@@ -4304,19 +4304,19 @@ osglData->fileCreator, osglData->licence) )
 		parserData->systemAvailableCPUNumberPresent = true;
 		parserData->descriptionAttributePresent = false;	
 		parserData->descriptionAttribute = "";	
-	;}
+	}
     break;
 
   case 233:
 
     {	osresult->setAvailableCPUNumberDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 235:
 
-    {	osresult->setAvailableCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL; ;}
+    {	osresult->setAvailableCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL; }
     break;
 
   case 237:
@@ -4324,7 +4324,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->otherSystemResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one system other results element allowed");
 		parserData->otherSystemResultsPresent = true;
-	;}
+	}
     break;
 
   case 238:
@@ -4335,27 +4335,27 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherSystemResults failed");
 	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 239:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
-	;}
+	}
     break;
 
   case 240:
 
     {	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
-	;}
+	}
     break;
 
   case 247:
 
     {	parserData->kounter++;
-;}
+}
     break;
 
   case 248:
@@ -4368,14 +4368,14 @@ osglData->fileCreator, osglData->licence) )
 	parserData->nameAttribute = "";
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 249:
 
     {	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
-;}
+}
     break;
 
   case 252:
@@ -4384,7 +4384,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherSystemResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSystemOtherResultName failed");
-	;}
+	}
     break;
 
   case 253:
@@ -4392,7 +4392,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherSystemResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSystemOtherResultValue failed");
-	;}
+	}
     break;
 
   case 254:
@@ -4400,7 +4400,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherSystemResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSystemOtherResultDescription failed");
-	;}
+	}
     break;
 
   case 275:
@@ -4408,7 +4408,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->serviceCurrentStatePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one currentState element allowed");
 		parserData->serviceCurrentStatePresent = true;
-	;}
+	}
     break;
 
   case 281:
@@ -4417,7 +4417,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setCurrentState(parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setCurrentState failed; current system state not recognized");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 283:
@@ -4425,12 +4425,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->serviceCurrentJobCountPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one currentJobCount element allowed");
 		parserData->serviceCurrentJobCountPresent = true;
-	;}
+	}
     break;
 
   case 289:
 
-    { osresult->setCurrentJobCount((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL; ;}
+    { osresult->setCurrentJobCount((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL; }
     break;
 
   case 291:
@@ -4438,12 +4438,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->serviceTotalJobsSoFarPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one totalJobsSoFar element allowed");
 		parserData->serviceTotalJobsSoFarPresent = true;
-	;}
+	}
     break;
 
   case 297:
 
-    { osresult->setTotalJobsSoFar((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL; ;}
+    { osresult->setTotalJobsSoFar((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL; }
     break;
 
   case 299:
@@ -4451,12 +4451,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->timeServiceStartedPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one timeServiceStarted element allowed");
 		parserData->timeServiceStartedPresent = true;
-	;}
+	}
     break;
 
   case 305:
 
-    {osresult->setTimeServiceStarted((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setTimeServiceStarted((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 307:
@@ -4464,7 +4464,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->serviceUtilizationPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one serviceUtilization element allowed");
 		parserData->serviceUtilizationPresent = true;
-	;}
+	}
     break;
 
   case 313:
@@ -4472,7 +4472,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (osresult->setServiceUtilization( parserData->tempVal) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setServiceUtilization failed");
 	parserData->errorText = NULL;
-;}
+}
     break;
 
   case 315:
@@ -4480,7 +4480,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->otherServiceResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one service other results element allowed");
 		parserData->otherServiceResultsPresent = true;
-	;}
+	}
     break;
 
   case 316:
@@ -4491,27 +4491,27 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherServiceResults failed");
 	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 317:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
-	;}
+	}
     break;
 
   case 318:
 
     {	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
-	;}
+	}
     break;
 
   case 325:
 
     {	parserData->kounter++;
-;}
+}
     break;
 
   case 326:
@@ -4524,14 +4524,14 @@ osglData->fileCreator, osglData->licence) )
 	parserData->nameAttribute = "";
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 327:
 
     {	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
-;}
+}
     break;
 
   case 330:
@@ -4540,7 +4540,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherServiceResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setServiceOtherResultName failed");
-	;}
+	}
     break;
 
   case 331:
@@ -4548,7 +4548,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherServiceResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setServiceOtherResultValue failed");
-	;}
+	}
     break;
 
   case 332:
@@ -4556,7 +4556,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherServiceResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setServiceOtherResultDescription failed");
-	;}
+	}
     break;
 
   case 358:
@@ -4564,7 +4564,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->jobStatusPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one job status element allowed");
 		parserData->jobStatusPresent = true;
-	;}
+	}
     break;
 
   case 364:
@@ -4573,7 +4573,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setJobStatus(parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setJobStatus failed");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 366:
@@ -4581,12 +4581,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->jobSubmitTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one submitTime element allowed");
 		parserData->jobSubmitTimePresent = true;
-	;}
+	}
     break;
 
   case 372:
 
-    {osresult->setJobSubmitTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setJobSubmitTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 374:
@@ -4594,12 +4594,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->scheduledStartTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one scheduledStartTime element allowed");
 		parserData->scheduledStartTimePresent = true;
-	;}
+	}
     break;
 
   case 380:
 
-    {osresult->setScheduledStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;;}
+    {osresult->setScheduledStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
     break;
 
   case 382:
@@ -4607,12 +4607,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->actualStartTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one actualStartTime element allowed");
 		parserData->actualStartTimePresent = true;
-	;}
+	}
     break;
 
   case 388:
 
-    {osresult->setActualStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;;}
+    {osresult->setActualStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;}
     break;
 
   case 390:
@@ -4620,12 +4620,12 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->jobEndTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one job endTime element allowed");
 		parserData->jobEndTimePresent = true;
-	;}
+	}
     break;
 
   case 396:
 
-    {osresult->setJobEndTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;;}
+    {osresult->setJobEndTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;}
     break;
 
   case 398:
@@ -4633,7 +4633,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->jobTimingInformationPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one timingInformation element allowed");
 		parserData->jobTimingInformationPresent = true;
-	;}
+	}
     break;
 
   case 399:
@@ -4643,21 +4643,21 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "setNumberOfTimes failed");
 	parserData->numberOfTimes = parserData->tempInt;
 	parserData->ivar = 0;
-;}
+}
     break;
 
   case 400:
 
     {	if (parserData->numberOfTimes > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <time> element");
-	;}
+	}
     break;
 
   case 401:
 
     {	if (parserData->ivar != parserData->numberOfTimes)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <time> elements than specified");
-	;}
+	}
     break;
 
   case 409:
@@ -4672,7 +4672,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->typeAttribute = "elapsedTime";
 	parserData->categoryAttribute = "total";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 421:
@@ -4686,17 +4686,17 @@ osglData->fileCreator, osglData->licence) )
 //	parserData->timeCategory = "total";
 //	parserData->timeUnit = "unit";
 //	parserData->timeDescription = "";      
-;}
+}
     break;
 
   case 422:
 
-    { parserData->timeValue = (yyvsp[(1) - (1)].dval); ;}
+    { parserData->timeValue = (yyvsp[(1) - (1)].dval); }
     break;
 
   case 423:
 
-    { parserData->timeValue = (yyvsp[(1) - (1)].ival); ;}
+    { parserData->timeValue = (yyvsp[(1) - (1)].ival); }
     break;
 
   case 425:
@@ -4708,7 +4708,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->descriptionAttributePresent = false;
 		parserData->unitAttribute = "";
 		parserData->descriptionAttribute = "";
-	;}
+	}
     break;
 
   case 429:
@@ -4717,21 +4717,21 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setUsedDiskSpaceUnit( parserData->unitAttribute) == false) 
 			osrlerror(NULL, NULL, parserData, osglData, "availableDiskSpace unit could not be set");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 430:
 
     {	osresult->setUsedDiskSpaceDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 432:
 
     {	osresult->setUsedDiskSpaceValue(parserData->tempVal);  
 	parserData->errorText = NULL;
-;}
+}
     break;
 
   case 434:
@@ -4743,7 +4743,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->descriptionAttributePresent = false;	
 		parserData->unitAttribute = "";
 		parserData->descriptionAttribute = "";
-	;}
+	}
     break;
 
   case 438:
@@ -4752,21 +4752,21 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setUsedMemoryUnit( parserData->unitAttribute) == false) 
 			osrlerror(NULL, NULL, parserData, osglData, "usedMemory unit could not be set");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 439:
 
     {	osresult->setUsedMemoryDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 441:
 
     {	osresult->setUsedMemoryValue(parserData->tempVal);  
 	parserData->errorText = NULL;
-;}
+}
     break;
 
   case 443:
@@ -4778,7 +4778,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->descriptionAttributePresent = false;	
 		parserData->unitAttribute = "";	
 		parserData->descriptionAttribute = "";	
-	;}
+	}
     break;
 
   case 447:
@@ -4787,21 +4787,21 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setUsedCPUSpeedUnit( parserData->unitAttribute) == false) 
 			osrlerror(NULL, NULL, parserData, osglData, "availableCPUSpeed unit could not be set");
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 448:
 
     {	osresult->setUsedCPUSpeedDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 450:
 
     {	osresult->setUsedCPUSpeedValue(parserData->tempVal);  
 	parserData->errorText = NULL;
-;}
+}
     break;
 
   case 452:
@@ -4811,19 +4811,19 @@ osglData->fileCreator, osglData->licence) )
 		parserData->jobUsedCPUNumberPresent = true;
 		parserData->descriptionAttributePresent = false;	
 		parserData->descriptionAttribute = "";	
-	;}
+	}
     break;
 
   case 454:
 
     {	osresult->setUsedCPUNumberDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 456:
 
-    { osresult->setUsedCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL; ;}
+    { osresult->setUsedCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL; }
     break;
 
   case 458:
@@ -4831,7 +4831,7 @@ osglData->fileCreator, osglData->licence) )
     {	if (parserData->otherJobResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one job other results element allowed");
 		parserData->otherJobResultsPresent = true;
-	;}
+	}
     break;
 
   case 459:
@@ -4842,27 +4842,27 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherJobResults failed");
 	parserData->numberOf = parserData->tempInt;
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 460:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
-	;}
+	}
     break;
 
   case 461:
 
     {	if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
-	;}
+	}
     break;
 
   case 468:
 
     {	parserData->kounter++;
-;}
+}
     break;
 
   case 469:
@@ -4875,14 +4875,14 @@ osglData->fileCreator, osglData->licence) )
 	parserData->nameAttribute = "";
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 470:
 
     {	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
-;}
+}
     break;
 
   case 473:
@@ -4891,7 +4891,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherJobResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setJobOtherResultName failed");
-	;}
+	}
     break;
 
   case 474:
@@ -4899,7 +4899,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherJobResultValue(parserData->kounter, parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setJobOtherResultValue failed");
-	;}
+	}
     break;
 
   case 475:
@@ -4907,7 +4907,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setOtherJobResultDescription(parserData->kounter, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setJobOtherResultDescription failed");
-	;}
+	}
     break;
 
   case 480:
@@ -4917,14 +4917,14 @@ osglData->fileCreator, osglData->licence) )
 	parserData->nVarPresent = false;
 	parserData->nObjPresent = false;
 	parserData->nConPresent = false;
-;}
+}
     break;
 
   case 481:
 
     {	if (!parserData->numberAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "numberOfSolutions was never set");
-;}
+}
     break;
 
   case 484:
@@ -4934,7 +4934,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setSolutionNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionNumber failed");
 		parserData->solutionIdx = 0;
-	;}
+	}
     break;
 
   case 485:
@@ -4943,7 +4943,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->numberOfVariables = parserData->tempInt; 
 		if (osresult->setVariableNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setVariableNumber failed");
-	;}
+	}
     break;
 
   case 486:
@@ -4952,7 +4952,7 @@ osglData->fileCreator, osglData->licence) )
 		parserData->numberOfConstraints = parserData->tempInt; 
 		if (osresult->setConstraintNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setConstraintNumber failed");
-	;}
+	}
     break;
 
   case 487:
@@ -4961,21 +4961,21 @@ osglData->fileCreator, osglData->licence) )
 		parserData->numberOfObjectives = parserData->tempInt; 
 		if (osresult->setObjectiveNumber(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setObjectiveNumber failed");
-	;}
+	}
     break;
 
   case 488:
 
     {	if (parserData->numberOfSolutions > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <solution> element");
-	;}
+	}
     break;
 
   case 489:
 
     {	if (parserData->solutionIdx != parserData->numberOfSolutions)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <solution> elements than specified");
-	;}
+	}
     break;
 
   case 497:
@@ -4985,7 +4985,7 @@ osglData->fileCreator, osglData->licence) )
         osrlerror(NULL, NULL, parserData, osglData, "too many solutions"); 
 	parserData->idxAttributePresent = false;
 	parserData->weightedObjAttributePresent = false;
-;}
+}
     break;
 
   case 503:
@@ -4996,7 +4996,7 @@ osglData->fileCreator, osglData->licence) )
 	if((yyvsp[(3) - (4)].ival) >= 0) osrlerror(NULL, NULL, parserData, osglData, "target objective index must be negative");
   	if (osresult->setSolutionTargetObjectiveIdx(parserData->solutionIdx, (yyvsp[(3) - (4)].ival)) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setSolutionTargetObjectiveIdx failed");
- ;}
+ }
     break;
 
   case 504:
@@ -5015,14 +5015,14 @@ osglData->fileCreator, osglData->licence) )
 	}
 	else
 		osrlerror(NULL, NULL, parserData, osglData, "weightedobjectives must be true or false");
-;}
+}
     break;
 
   case 505:
 
     {
 		parserData->solutionIdx++;
-	;}
+	}
     break;
 
   case 507:
@@ -5034,14 +5034,14 @@ osglData->fileCreator, osglData->licence) )
 		parserData->numberOf = 0;
 		parserData->typeAttribute = "";
 		parserData->descriptionAttribute = "";
-	;}
+	}
     break;
 
   case 508:
 
     {	if (!parserData->typeAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "type attribute must be present for solution status element");
-	;}
+	}
     break;
 
   case 511:
@@ -5049,14 +5049,14 @@ osglData->fileCreator, osglData->licence) )
     {   
 		if (osresult->setSolutionStatusType(parserData->solutionIdx, parserData->typeAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionStatusType failed");
-	;}
+	}
     break;
 
   case 512:
 
     {   if (osresult->setSolutionStatusDescription(parserData->solutionIdx, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionStatusDescription failed");
-	;}
+	}
     break;
 
   case 513:
@@ -5065,26 +5065,26 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "setNumberOfSolutionSubstatuses failed");
 		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 514:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <substatus> element");
-	;}
+	}
     break;
 
   case 515:
 
     {	if (parserData->kounter != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <substatus> elements than specified");
-	;}
+	}
     break;
 
   case 522:
 
-    {	parserData->kounter++; ;}
+    {	parserData->kounter++; }
     break;
 
   case 523:
@@ -5095,14 +5095,14 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;
 	parserData->typeAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 524:
 
     {	if (!parserData->typeAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<substatus> must have type attribute");
-;}
+}
     break;
 
   case 527:
@@ -5111,7 +5111,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setSolutionSubstatusType(parserData->solutionIdx, parserData->kounter, 
 											   parserData->typeAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionSubstatusType failed");
-	;}
+	}
     break;
 
   case 528:
@@ -5120,7 +5120,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setSolutionSubstatusDescription(parserData->solutionIdx, parserData->kounter,
 													  parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionSubstatusDescription failed");
-	;}
+	}
     break;
 
   case 539:
@@ -5129,12 +5129,12 @@ osglData->fileCreator, osglData->licence) )
         free((yyvsp[(1) - (1)].sval));
 		osresult->setSolutionMessage(parserData->solutionIdx, parserData->tempStr);
 		parserData->errorText = NULL;
-	;}
+	}
     break;
 
   case 542:
 
-    {	parserData->numberOfOtherVariableResults = 0; ;}
+    {	parserData->numberOfOtherVariableResults = 0; }
     break;
 
   case 544:
@@ -5145,7 +5145,7 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherVariableResults failed");
 	parserData->numberOfOtherVariableResults = parserData->tempInt;
 	parserData->iOther = 0;
-;}
+}
     break;
 
   case 553:
@@ -5154,21 +5154,21 @@ osglData->fileCreator, osglData->licence) )
 	if (osresult->setNumberOfVarValues(parserData->solutionIdx, parserData->numberOfVar) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfVarValues failed");
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 554:
 
     {	if (parserData->numberOfVar > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <var> element");
-	;}
+	}
     break;
 
   case 555:
 
     {	if (parserData->kounter != parserData->numberOfVar)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-	;}
+	}
     break;
 
   case 562:
@@ -5177,7 +5177,7 @@ osglData->fileCreator, osglData->licence) )
 							  parserData->idx,         parserData->tempVal) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setVarValue failed");
 	parserData->kounter++;
-;}
+}
     break;
 
   case 563:
@@ -5185,12 +5185,12 @@ osglData->fileCreator, osglData->licence) )
     {	
 	if (parserData->kounter >= parserData->numberOfVar)
 		osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
-;}
+}
     break;
 
   case 564:
 
-    {	parserData->idx = (yyvsp[(3) - (4)].ival); ;}
+    {	parserData->idx = (yyvsp[(3) - (4)].ival); }
     break;
 
   case 569:
@@ -5199,21 +5199,21 @@ osglData->fileCreator, osglData->licence) )
 	if (osresult->setNumberOfVarValuesString(parserData->solutionIdx, parserData->numberOfVar) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfVarValuesString failed");
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 570:
 
     {	if (parserData->numberOfVar > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <var> element");
-	;}
+	}
     break;
 
   case 571:
 
     {	if (parserData->kounter != parserData->numberOfVar)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
-	;}
+	}
     break;
 
   case 578:
@@ -5223,7 +5223,7 @@ osglData->fileCreator, osglData->licence) )
 					 				parserData->idx,         parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setVarValueString failed");
 	parserData->kounter++;
-;}
+}
     break;
 
   case 579:
@@ -5231,22 +5231,22 @@ osglData->fileCreator, osglData->licence) )
     {	
 	if (parserData->kounter >= parserData->numberOfVar)
 		osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
-;}
+}
     break;
 
   case 580:
 
-    { parserData->idx = (yyvsp[(3) - (4)].ival); ;}
+    { parserData->idx = (yyvsp[(3) - (4)].ival); }
     break;
 
   case 581:
 
-    {parserData->tempStr = "";;}
+    {parserData->tempStr = "";}
     break;
 
   case 586:
 
-    {parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));;}
+    {parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));}
     break;
 
   case 596:
@@ -5257,7 +5257,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 598:
@@ -5266,7 +5266,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 605:
@@ -5277,7 +5277,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 607:
@@ -5286,7 +5286,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 614:
@@ -5297,7 +5297,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 616:
@@ -5306,7 +5306,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 623:
@@ -5317,7 +5317,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 625:
@@ -5326,7 +5326,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 632:
@@ -5337,7 +5337,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 634:
@@ -5346,7 +5346,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 641:
@@ -5357,7 +5357,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 643:
@@ -5366,14 +5366,14 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 651:
 
     { 	 
 		parserData->iOther++;
-	;}
+	}
     break;
 
   case 652:
@@ -5388,7 +5388,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";	
-;}
+}
     break;
 
   case 653:
@@ -5397,7 +5397,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
 //		if(!parserData->numberAttributePresent) 
 //			osrlerror(NULL, NULL, parserData, osglData, "other element requires numberOfVar attribute"); 
-	;}
+	}
     break;
 
   case 656:
@@ -5410,7 +5410,7 @@ osglData->fileCreator, osglData->licence) )
  														parserData->numberOfVar) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultNumberOfVar failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 657:
@@ -5423,7 +5423,7 @@ osglData->fileCreator, osglData->licence) )
  														parserData->numberOfEnumerations) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultNumberOfEnumerations failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 658:
@@ -5432,7 +5432,7 @@ osglData->fileCreator, osglData->licence) )
 	 	if (osresult->setOtherVariableResultValue(parserData->solutionIdx, parserData->iOther, 
  												  parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultValue failed");
-    ;}
+    }
     break;
 
   case 659:
@@ -5441,7 +5441,7 @@ osglData->fileCreator, osglData->licence) )
 	 	if (osresult->setOtherVariableResultName(parserData->solutionIdx, parserData->iOther, 
  												 parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultName failed");
-    ;}
+    }
     break;
 
   case 660:
@@ -5450,14 +5450,14 @@ osglData->fileCreator, osglData->licence) )
 	 	if (osresult->setOtherVariableResultDescription(parserData->solutionIdx, parserData->iOther, 
  														parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultDescription failed");
-    ;}
+    }
     break;
 
   case 670:
 
     { 	
 	parserData->kounter++;
-;}
+}
     break;
 
   case 672:
@@ -5466,7 +5466,7 @@ osglData->fileCreator, osglData->licence) )
  	if (osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, 
  											   parserData->kounter, (yyvsp[(3) - (4)].ival)) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarIdx failed");
-;}
+}
     break;
 
   case 678:
@@ -5476,7 +5476,7 @@ osglData->fileCreator, osglData->licence) )
 	 											parserData->kounter,     parserData->tempStr) 
 	 											    == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVar failed");
-	;}
+	}
     break;
 
   case 681:
@@ -5489,7 +5489,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
 	parserData->kounter++;
-;}
+}
     break;
 
   case 682:
@@ -5500,7 +5500,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 683:
@@ -5509,7 +5509,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
 //		if(!parserData->numberOfVarIdxAttributePresent) 
 //			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires numberOfVarIdx attribute"); 
-	;}
+	}
     break;
 
   case 686:
@@ -5518,7 +5518,7 @@ osglData->fileCreator, osglData->licence) )
 		osglData->osglCounter = 0; 
 		osglData->osglNumberOfEl = parserData->numberOf;
 		osglData->osglIntArray = new int[parserData->numberOf];
-	;}
+	}
     break;
 
   case 687:
@@ -5527,7 +5527,7 @@ osglData->fileCreator, osglData->licence) )
 //	 	if (osresult->setOtherVariableResultValue(parserData->solutionIdx, parserData->iOther, 
 //												  parserData->valueAttribute) == false)
 //			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultValue failed");
-    ;}
+    }
     break;
 
   case 688:
@@ -5536,14 +5536,14 @@ osglData->fileCreator, osglData->licence) )
 //	 	if (osresult->setOtherVariableResultDescription(parserData->solutionIdx, parserData->iOther, 
 // 														parserData->descriptionAttribute) == false)
 //			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultDescription failed");
-    ;}
+    }
     break;
 
   case 696:
 
     {	parserData->numberOfOtherObjectiveResults = 0; 
 	parserData->iOther = 0;
-;}
+}
     break;
 
   case 698:
@@ -5554,7 +5554,7 @@ osglData->fileCreator, osglData->licence) )
 												   parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherObjectiveResults failed");
 	parserData->iOther = 0;
-;}
+}
     break;
 
   case 707:
@@ -5563,21 +5563,21 @@ osglData->fileCreator, osglData->licence) )
 	if (osresult->setNumberOfObjValues(parserData->solutionIdx, parserData->numberOfObj) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setNumberOfObjValues failed");
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 708:
 
     {	if (parserData->numberOfObj > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <obj> element");
-	;}
+	}
     break;
 
   case 709:
 
     {	if (parserData->kounter != parserData->numberOfObj)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
-	;}
+	}
     break;
 
   case 716:
@@ -5586,7 +5586,7 @@ osglData->fileCreator, osglData->licence) )
 							  parserData->idx,         parserData->tempVal) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setObjValue failed");
 	parserData->kounter++;
-;}
+}
     break;
 
   case 717:
@@ -5595,22 +5595,22 @@ osglData->fileCreator, osglData->licence) )
 	if (parserData->kounter >= parserData->numberOfObj)
 		osrlerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
 	parserData->idx = -1;
-;}
+}
     break;
 
   case 719:
 
-    { parserData->idx = (yyvsp[(3) - (4)].ival); ;}
+    { parserData->idx = (yyvsp[(3) - (4)].ival); }
     break;
 
   case 721:
 
-    {parserData->tempVal = (yyvsp[(1) - (1)].ival); ;}
+    {parserData->tempVal = (yyvsp[(1) - (1)].ival); }
     break;
 
   case 722:
 
-    {parserData->tempVal = (yyvsp[(1) - (1)].dval); ;}
+    {parserData->tempVal = (yyvsp[(1) - (1)].dval); }
     break;
 
   case 732:
@@ -5621,7 +5621,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 734:
@@ -5630,7 +5630,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 741:
@@ -5641,7 +5641,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 743:
@@ -5650,7 +5650,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 750:
@@ -5661,7 +5661,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 752:
@@ -5670,7 +5670,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 759:
@@ -5681,7 +5681,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 761:
@@ -5690,7 +5690,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 768:
@@ -5701,7 +5701,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 770:
@@ -5710,7 +5710,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 777:
@@ -5721,7 +5721,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 779:
@@ -5730,14 +5730,14 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 787:
 
     { 	 
 		parserData->iOther++;  
-	;}
+	}
     break;
 
   case 788:
@@ -5752,7 +5752,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 789:
@@ -5761,7 +5761,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
 //		if(!parserData->numberAttributePresent) 
 //			osrlerror(NULL, NULL, parserData, osglData, "other element requires numberOfObj attribute"); 
-	;}
+	}
     break;
 
   case 792:
@@ -5774,7 +5774,7 @@ osglData->fileCreator, osglData->licence) )
  						                                 parserData->numberOfObj) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultNumberOfObj failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 793:
@@ -5787,7 +5787,7 @@ osglData->fileCreator, osglData->licence) )
  														parserData->numberOfEnumerations) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultNumberOfEnumerations failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 794:
@@ -5796,7 +5796,7 @@ osglData->fileCreator, osglData->licence) )
 	 	if (osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, 
  												   parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultValue failed");
-    ;}
+    }
     break;
 
   case 795:
@@ -5805,7 +5805,7 @@ osglData->fileCreator, osglData->licence) )
 	  	if (osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, 
  												  parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultName failed");
-    ;}
+    }
     break;
 
   case 796:
@@ -5816,28 +5816,28 @@ osglData->fileCreator, osglData->licence) )
  														 parserData->descriptionAttribute) 
  														     == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultDescription failed");
-    ;}
+    }
     break;
 
   case 806:
 
     {  
 	parserData->kounter++;
-;}
+}
     break;
 
   case 808:
 
     {	if (osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, (yyvsp[(3) - (4)].ival)) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjIdx failed");
-;}
+}
     break;
 
   case 814:
 
     {	if (osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObj failed");
-	;}
+	}
     break;
 
   case 817:
@@ -5850,7 +5850,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
 	parserData->kounter++;
-;}
+}
     break;
 
   case 818:
@@ -5861,7 +5861,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 819:
@@ -5870,7 +5870,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
 //		if(!parserData->numberOfObjIdxAttributePresent) 
 //			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires numberOfObjIdx attribute"); 
-	;}
+	}
     break;
 
   case 822:
@@ -5879,7 +5879,7 @@ osglData->fileCreator, osglData->licence) )
 		osglData->osglCounter = 0; 
 		osglData->osglNumberOfEl = parserData->numberOf;
 		osglData->osglIntArray = new int[parserData->numberOf];
-	;}
+	}
     break;
 
   case 823:
@@ -5888,7 +5888,7 @@ osglData->fileCreator, osglData->licence) )
 //	 	if (osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, 
 //												  parserData->valueAttribute) == false)
 //			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultValue failed");
-    ;}
+    }
     break;
 
   case 824:
@@ -5897,14 +5897,14 @@ osglData->fileCreator, osglData->licence) )
 //	 	if (osresult->setOtherObjectiveResultDescription(parserData->solutionIdx, parserData->iOther, 
 // 														parserData->descriptionAttribute) == false)
 //			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultDescription failed");
-    ;}
+    }
     break;
 
   case 832:
 
     {	parserData->numberOfOtherConstraintResults = 0; 
 	parserData->iOther = 0;
-;}
+}
     break;
 
   case 834:
@@ -5914,12 +5914,12 @@ osglData->fileCreator, osglData->licence) )
 	if (osresult->setNumberOfOtherConstraintResults(parserData->solutionIdx, parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherConstraintResults failed");
 	parserData->iOther = 0;
-;}
+}
     break;
 
   case 842:
 
-    {	parserData->numberAttributePresent = false; ;}
+    {	parserData->numberAttributePresent = false; }
     break;
 
   case 843:
@@ -5928,21 +5928,21 @@ osglData->fileCreator, osglData->licence) )
 	if (osresult->setNumberOfDualValues(parserData->solutionIdx, parserData->numberOfCon) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfDualValues failed");
 	parserData->kounter = 0;
-;}
+}
     break;
 
   case 844:
 
     {	if (parserData->numberOfCon > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <con> element");
-	;}
+	}
     break;
 
   case 845:
 
     {	if (parserData->kounter != parserData->numberOfCon)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
-	;}
+	}
     break;
 
   case 852:
@@ -5951,7 +5951,7 @@ osglData->fileCreator, osglData->licence) )
 							   parserData->idx,         parserData->tempVal) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setDualValue failed");
 	parserData->kounter++;
-;}
+}
     break;
 
   case 853:
@@ -5959,12 +5959,12 @@ osglData->fileCreator, osglData->licence) )
     {	
 	if (parserData->kounter >= parserData->numberOfCon)
 		osrlerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
-;}
+}
     break;
 
   case 854:
 
-    { parserData->idx = (yyvsp[(3) - (4)].ival); ;}
+    { parserData->idx = (yyvsp[(3) - (4)].ival); }
     break;
 
   case 865:
@@ -5975,7 +5975,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 867:
@@ -5984,7 +5984,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 874:
@@ -5995,7 +5995,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 876:
@@ -6004,7 +6004,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 883:
@@ -6015,7 +6015,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 885:
@@ -6024,7 +6024,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 892:
@@ -6035,7 +6035,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 894:
@@ -6044,7 +6044,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 901:
@@ -6055,7 +6055,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 903:
@@ -6064,7 +6064,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 910:
@@ -6075,7 +6075,7 @@ osglData->fileCreator, osglData->licence) )
 	delete[] osglData->osglIntArray;
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
-;}
+}
     break;
 
   case 912:
@@ -6084,14 +6084,14 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglCounter = 0; 
 	osglData->osglNumberOfEl = parserData->numberOf;
 	osglData->osglIntArray = new int[parserData->numberOf];
-;}
+}
     break;
 
   case 920:
 
     { 	 
 		parserData->iOther++;  
-	;}
+	}
     break;
 
   case 921:
@@ -6106,7 +6106,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 922:
@@ -6115,7 +6115,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
 //		if(!parserData->numberAttributePresent) 
 //			osrlerror(NULL, NULL, parserData, osglData, "other element requires numberOfCon attribute"); 
-	;}
+	}
     break;
 
   case 925:
@@ -6128,7 +6128,7 @@ osglData->fileCreator, osglData->licence) )
  							                              parserData->numberOfCon) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultNumberOfCon failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 926:
@@ -6141,7 +6141,7 @@ osglData->fileCreator, osglData->licence) )
  														parserData->numberOfEnumerations) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultNumberOfEnumerations failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 927:
@@ -6150,7 +6150,7 @@ osglData->fileCreator, osglData->licence) )
 	 	if (osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, 
  													parserData->valueAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultValue failed");
-    ;}
+    }
     break;
 
   case 928:
@@ -6159,7 +6159,7 @@ osglData->fileCreator, osglData->licence) )
 	 	if (osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, 
  												   parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultName failed");
-    ;}
+    }
     break;
 
   case 929:
@@ -6168,14 +6168,14 @@ osglData->fileCreator, osglData->licence) )
 	 	if (osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, 
  														  parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultDescription failed");
-    ;}
+    }
     break;
 
   case 939:
 
     { 	
 	parserData->kounter++;
-;}
+}
     break;
 
   case 941:
@@ -6183,7 +6183,7 @@ osglData->fileCreator, osglData->licence) )
     {	
  	if (osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, (yyvsp[(3) - (4)].ival)) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConIdx failed");
-;}
+}
     break;
 
   case 947:
@@ -6191,7 +6191,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 	 	if (osresult->setOtherConstraintResultCon(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultCon failed");
-	;}
+	}
     break;
 
   case 950:
@@ -6204,7 +6204,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglIntArray = NULL;
 	osglData->osglNumberOfEl = 0;
 	parserData->kounter++;
-;}
+}
     break;
 
   case 951:
@@ -6215,7 +6215,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 952:
@@ -6224,7 +6224,7 @@ osglData->fileCreator, osglData->licence) )
 			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
 //		if(!parserData->numberOfConIdxAttributePresent) 
 //			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires numberOfConIdx attribute"); 
-	;}
+	}
     break;
 
   case 955:
@@ -6233,7 +6233,7 @@ osglData->fileCreator, osglData->licence) )
 		osglData->osglCounter = 0; 
 		osglData->osglNumberOfEl = parserData->numberOf;
 		osglData->osglIntArray = new int[parserData->numberOf];
-	;}
+	}
     break;
 
   case 956:
@@ -6242,7 +6242,7 @@ osglData->fileCreator, osglData->licence) )
 //	 	if (osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, 
 //												  parserData->valueAttribute) == false)
 //			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultValue failed");
-    ;}
+    }
     break;
 
   case 957:
@@ -6251,14 +6251,14 @@ osglData->fileCreator, osglData->licence) )
 //	 	if (osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, 
 // 														parserData->descriptionAttribute) == false)
 //			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultDescription failed");
-    ;}
+    }
     break;
 
   case 965:
 
     {
 	parserData->numberOf = 0; 
-;}
+}
     break;
 
   case 966:
@@ -6268,27 +6268,27 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherSolutionResults failed");
 	parserData->numberOf = parserData->tempInt;
 	parserData->iOther = 0; 
-;}
+}
     break;
 
   case 967:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <otherSolutionResult> element");
-	;}
+	}
     break;
 
   case 968:
 
     {	if (parserData->iOther != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <otherSolutionResult> elements than specified");
-	;}
+	}
     break;
 
   case 975:
 
     {	parserData->iOther++;
-;}
+}
     break;
 
   case 976:
@@ -6301,7 +6301,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;
 	parserData->categoryAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 977:
@@ -6310,7 +6310,7 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have name attribute");
 	if (!parserData->numberOfItemsPresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have numberOfItems attribute");
-;}
+}
     break;
 
   case 980:
@@ -6319,7 +6319,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setOtherSolutionResultName(parserData->solutionIdx, parserData->iOther,
 												 parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultName failed");
-	;}
+	}
     break;
 
   case 981:
@@ -6328,7 +6328,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setOtherSolutionResultCategory(parserData->solutionIdx, parserData->iOther,
 													 parserData->categoryAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultCategory failed");
-	;}
+	}
     break;
 
   case 982:
@@ -6339,7 +6339,7 @@ osglData->fileCreator, osglData->licence) )
 														parserData->descriptionAttribute) 
 														    == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultDescription failed");
-	;}
+	}
     break;
 
   case 983:
@@ -6350,34 +6350,34 @@ osglData->fileCreator, osglData->licence) )
 														  parserData->numberOfItems) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultNumberOfItems failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 984:
 
     {	if (parserData->numberOfItems > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <item> element");
-	;}
+	}
     break;
 
   case 985:
 
     {	if (parserData->kounter != parserData->numberOfItems)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <item> elements than specified");
-	;}
+	}
     break;
 
   case 992:
 
     {	parserData->kounter++;
-;}
+}
     break;
 
   case 993:
 
     {	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
-;}
+}
     break;
 
   case 998:
@@ -6389,14 +6389,14 @@ osglData->fileCreator, osglData->licence) )
 											 parserData->kounter, parserData->itemContent) 
 											     == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultItem failed");
-;}
+}
     break;
 
   case 1001:
 
     {
 	parserData->numberOf = 0; 
-;}
+}
     break;
 
   case 1002:
@@ -6406,27 +6406,27 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfSolverOutputs failed");
 	parserData->numberOf = parserData->tempInt;
 	parserData->iOther = 0; 
-;}
+}
     break;
 
   case 1003:
 
     {	if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <solverOutput> element");
-	;}
+	}
     break;
 
   case 1004:
 
     {	if (parserData->iOther != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <solverOutput> elements than specified");
-	;}
+	}
     break;
 
   case 1011:
 
     {	parserData->iOther++;
-;}
+}
     break;
 
   case 1012:
@@ -6439,7 +6439,7 @@ osglData->fileCreator, osglData->licence) )
 	parserData->descriptionAttributePresent = false;
 	parserData->categoryAttribute = "";
 	parserData->descriptionAttribute = "";
-;}
+}
     break;
 
   case 1013:
@@ -6448,7 +6448,7 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror (NULL, NULL, parserData, osglData, "<solverOutput> element must have name attribute");
 	if (!parserData->numberOfItemsPresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<solverOutput> element must have numberOfItems attribute");
-;}
+}
     break;
 
   case 1016:
@@ -6456,7 +6456,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 		if (osresult->setSolverOutputName(parserData->iOther, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputName failed");
-	;}
+	}
     break;
 
   case 1017:
@@ -6465,7 +6465,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setSolverOutputCategory(parserData->iOther, 
 											  parserData->categoryAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputCategory failed");
-	;}
+	}
     break;
 
   case 1018:
@@ -6474,7 +6474,7 @@ osglData->fileCreator, osglData->licence) )
 		if (osresult->setSolverOutputDescription(parserData->iOther, 
 												 parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputDescription failed");
-	;}
+	}
     break;
 
   case 1019:
@@ -6484,34 +6484,34 @@ osglData->fileCreator, osglData->licence) )
 												   parserData->numberOfItems) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputNumberOfItems failed");
 		parserData->kounter = 0;
-	;}
+	}
     break;
 
   case 1020:
 
     {	if (parserData->numberOfItems > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <item> element");
-	;}
+	}
     break;
 
   case 1021:
 
     {	if (parserData->kounter != parserData->numberOfItems)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <item> elements than specified");
-	;}
+	}
     break;
 
   case 1028:
 
     {	parserData->kounter++;
-;}
+}
     break;
 
   case 1029:
 
     {	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
-;}
+}
     break;
 
   case 1034:
@@ -6522,7 +6522,7 @@ osglData->fileCreator, osglData->licence) )
 	if (osresult->setSolverOutputItem(parserData->iOther, parserData->kounter, 
 									  parserData->itemContent) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setSolverOutputItem failed");
-;}
+}
     break;
 
   case 1035:
@@ -6530,17 +6530,17 @@ osglData->fileCreator, osglData->licence) )
     {   if (parserData->categoryAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, osglData, "only one category attribute allowed for this element");
 			parserData->categoryAttributePresent = true;
-		;}
+		}
     break;
 
   case 1038:
 
-    { parserData->categoryAttribute = ""; ;}
+    { parserData->categoryAttribute = ""; }
     break;
 
   case 1039:
 
-    { parserData->categoryAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval)); ;}
+    { parserData->categoryAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval)); }
     break;
 
   case 1040:
@@ -6548,17 +6548,17 @@ osglData->fileCreator, osglData->licence) )
     {   if (parserData->descriptionAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, osglData, "only one description attribute allowed for this element");
 			parserData->descriptionAttributePresent = true;
-		;}
+		}
     break;
 
   case 1043:
 
-    { parserData->descriptionAttribute = ""; ;}
+    { parserData->descriptionAttribute = ""; }
     break;
 
   case 1044:
 
-    { parserData->descriptionAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));;}
+    { parserData->descriptionAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 1045:
@@ -6566,17 +6566,17 @@ osglData->fileCreator, osglData->licence) )
     {   if (parserData->nameAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, osglData, "only one name attribute allowed for this element");
 			parserData->nameAttributePresent = true;
-		;}
+		}
     break;
 
   case 1048:
 
-    { parserData->nameAttribute = ""; ;}
+    { parserData->nameAttribute = ""; }
     break;
 
   case 1049:
 
-    { parserData->nameAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));;}
+    { parserData->nameAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 1050:
@@ -6584,17 +6584,17 @@ osglData->fileCreator, osglData->licence) )
     {   if (parserData->typeAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, osglData, "only one type attribute allowed for this element");
 			parserData->typeAttributePresent = true;
-		;}
+		}
     break;
 
   case 1053:
 
-    { parserData->typeAttribute = ""; ;}
+    { parserData->typeAttribute = ""; }
     break;
 
   case 1054:
 
-    { parserData->typeAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));;}
+    { parserData->typeAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 1055:
@@ -6602,17 +6602,17 @@ osglData->fileCreator, osglData->licence) )
     {   if (parserData->unitAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, osglData, "only one unit attribute allowed for this element");
 			parserData->unitAttributePresent = true;
-		;}
+		}
     break;
 
   case 1058:
 
-    { parserData->unitAttribute = ""; ;}
+    { parserData->unitAttribute = ""; }
     break;
 
   case 1059:
 
-    { parserData->unitAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));;}
+    { parserData->unitAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 1060:
@@ -6620,17 +6620,17 @@ osglData->fileCreator, osglData->licence) )
     {   if (parserData->valueAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, osglData, "only one value attribute allowed for this element");
 			parserData->valueAttributePresent = true;
-		;}
+		}
     break;
 
   case 1063:
 
-    { parserData->valueAttribute = ""; ;}
+    { parserData->valueAttribute = ""; }
     break;
 
   case 1064:
 
-    { parserData->valueAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));;}
+    { parserData->valueAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
     break;
 
   case 1065:
@@ -6638,7 +6638,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <con> cannot be negative");
 	parserData->numberOfCon = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1066:
@@ -6648,7 +6648,7 @@ osglData->fileCreator, osglData->licence) )
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of constraints cannot be negative");
 	parserData->nConPresent = true;		
 	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
-;}
+}
     break;
 
   case 1067:
@@ -6656,7 +6656,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <el> cannot be negative");
 	parserData->numberOf = (yyvsp[(3) - (4)].ival); 
-;}
+}
     break;
 
   case 1068:
@@ -6664,7 +6664,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <enumeration> elements cannot be negative");
 	parserData->numberOfEnumerations = (yyvsp[(3) - (4)].ival); 
-;}
+}
     break;
 
   case 1069:
@@ -6675,7 +6675,7 @@ osglData->fileCreator, osglData->licence) )
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of items cannot be negative");
 	parserData->numberOfItemsPresent = true;
 	parserData->numberOfItems = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1070:
@@ -6683,7 +6683,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <obj> cannot be negative");
 	parserData->numberOfObj = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1071:
@@ -6693,7 +6693,7 @@ osglData->fileCreator, osglData->licence) )
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of objectives cannot be negative");
 	parserData->nObjPresent = true;
 	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
-;}
+}
     break;
 
   case 1072:
@@ -6701,7 +6701,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other constraint results cannot be negative");
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1073:
@@ -6709,7 +6709,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other objective results cannot be negative");
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1074:
@@ -6717,7 +6717,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other results cannot be negative");
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1075:
@@ -6725,7 +6725,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other solution results cannot be negative");
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1076:
@@ -6733,7 +6733,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other variable results cannot be negative");
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1077:
@@ -6743,7 +6743,7 @@ osglData->fileCreator, osglData->licence) )
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of solutions cannot be negative");
 	parserData->numberAttributePresent = true;
 	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
-;}
+}
     break;
 
   case 1078:
@@ -6751,7 +6751,7 @@ osglData->fileCreator, osglData->licence) )
     {	
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of other solver outputs cannot be negative");
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1079:
@@ -6761,14 +6761,14 @@ osglData->fileCreator, osglData->licence) )
     parserData->numberAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <substatus> elements cannot be negative");
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1080:
 
     {
 	parserData->tempInt = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1081:
@@ -6776,7 +6776,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <var> cannot be negative");
 	parserData->numberOfVar = (yyvsp[(3) - (4)].ival); 
-;}
+}
     break;
 
   case 1082:
@@ -6786,7 +6786,7 @@ osglData->fileCreator, osglData->licence) )
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of variables cannot be negative");
 	parserData->nVarPresent = true;	
 	parserData->tempInt = (yyvsp[(3) - (4)].ival); 
-;}
+}
     break;
 
   case 1083:
@@ -6794,7 +6794,7 @@ osglData->fileCreator, osglData->licence) )
     {
 	 	if (osglData->osglCounter + osglData->osglMult < osglData->osglNumberOfEl)
 		osrlerror(NULL, NULL, parserData, osglData, "fewer data elements than specified");
-	;}
+	}
     break;
 
   case 1088:
@@ -6804,7 +6804,7 @@ osglData->fileCreator, osglData->licence) )
 	osglData->osglIncrPresent = false;
 	osglData->osglMult = 1;
 	osglData->osglIncr = 0;
-;}
+}
     break;
 
   case 1094:
@@ -6814,14 +6814,14 @@ osglData->fileCreator, osglData->licence) )
 		osrlerror(NULL, NULL, parserData, osglData, "more data elements than specified");
 	for (int i=0; i<osglData->osglMult; i++)
 		osglData->osglIntArray[osglData->osglCounter++] = (yyvsp[(2) - (3)].ival) + i*osglData->osglIncr;	
-;}
+}
     break;
 
   case 1096:
 
     {
 	osglData->osglSize = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1101:
@@ -6845,7 +6845,7 @@ osglData->fileCreator, osglData->licence) )
 	}
 	//delete [] b64string;
 	free((yyvsp[(2) - (3)].sval));
-;}
+}
     break;
 
   case 1102:
@@ -6855,7 +6855,7 @@ osglData->fileCreator, osglData->licence) )
         osrlerror(NULL, NULL, parserData, osglData, "only one incr attribute allowed");
 	osglData->osglIncrPresent = true;
 	osglData->osglIncr = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1103:
@@ -6866,32 +6866,32 @@ osglData->fileCreator, osglData->licence) )
 	if ((yyvsp[(3) - (4)].ival) <= 0) osrlerror(NULL, NULL, parserData, osglData, "mult must be positive");
 	osglData->osglMultPresent = true;
 	osglData->osglMult = (yyvsp[(3) - (4)].ival);
-;}
+}
     break;
 
   case 1104:
 
-    {parserData->tempVal = (yyvsp[(1) - (1)].ival);;}
+    {parserData->tempVal = (yyvsp[(1) - (1)].ival);}
     break;
 
   case 1105:
 
-    {parserData->tempVal = (yyvsp[(1) - (1)].dval);;}
+    {parserData->tempVal = (yyvsp[(1) - (1)].dval);}
     break;
 
   case 1106:
 
-    { parserData->tempStr = (yyvsp[(1) - (1)].sval);       free((yyvsp[(1) - (1)].sval)); ;}
+    { parserData->tempStr = (yyvsp[(1) - (1)].sval);       free((yyvsp[(1) - (1)].sval)); }
     break;
 
   case 1107:
 
-    { parserData->tempStr = os_dtoa_format((yyvsp[(1) - (1)].ival)); ;}
+    { parserData->tempStr = os_dtoa_format((yyvsp[(1) - (1)].ival)); }
     break;
 
   case 1108:
 
-    { parserData->tempStr = os_dtoa_format((yyvsp[(1) - (1)].dval)); ;}
+    { parserData->tempStr = os_dtoa_format((yyvsp[(1) - (1)].dval)); }
     break;
 
 

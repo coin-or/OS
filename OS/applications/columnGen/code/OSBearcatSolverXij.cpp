@@ -933,10 +933,11 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 	lvalue = l ;
 
 	
-	std::cout << "rcost = " << rcost << std::endl;
-    //return 0;
+	
+	
 	while(currentNode != k){
 		//std::cout << "currentNode = " << currentNode << "   " <<  "lvalue " <<  lvalue << std::endl;
+		if(*kountVar == m_upperBoundLMax + 1) return OSDBL_MAX;
 		if( m_px[ currentNode][ lvalue ] != successorNode){
 			
 
@@ -948,12 +949,16 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 			
 			if(currentNode - successorNode > 0){
 				 //below diagonal
+				
+				//std::cout << "startPnt "  << startPnt << "  currentNode  " << currentNode << "  successorNode  " << successorNode << " Kount "  << *kountVar << std::endl;
 
 				*(m_varIdx  + (*kountVar)++) = startPnt + currentNode*(m_numNodes - 1)  +  successorNode;
 
 				
 			}else{
 				 //above diagonal
+				
+				//std::cout << "startPnt "  << startPnt << "  currentNode  " << currentNode << "  successorNode  " << successorNode   << " Kount "  << *kountVar << std::endl;
 
 				*(m_varIdx + (*kountVar)++) = startPnt + currentNode*(m_numNodes - 1)  +  successorNode  - 1 ;
 
@@ -969,10 +974,13 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 			
 			if(currentNode - successorNode > 0){
 				 //below diagonal
+				
+				//std::cout << "startPnt "  << startPnt << "  currentNode  " << currentNode << "  successorNode  " << successorNode << " Kount "  << *kountVar  << std::endl;
 				*(m_varIdx  + (*kountVar)++) = startPnt + currentNode*(m_numNodes - 1)  +  successorNode;
 				
 			}else{
 				 //above diagonal
+				//std::cout << "startPnt "  << startPnt << "  currentNode  " << currentNode << "  successorNode  " << successorNode << " Kount "  << *kountVar << std::endl;
 				*(m_varIdx + (*kountVar)++) = startPnt + currentNode*(m_numNodes - 1)  +  successorNode  - 1 ;
 				
 			}
@@ -980,8 +988,10 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 		}
 		
 		//update lvalue
+		//if ( *(m_demand + successorNode) == 0) lvalue = lvalue - 1;
+		//else lvalue = lvalue - *(m_demand + successorNode);
 		lvalue = lvalue - *(m_demand + successorNode);
-	
+		
 		
 
 	}//end while
