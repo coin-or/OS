@@ -5167,6 +5167,7 @@ bool OSResult::setSolverOutputItem(int otherIdx, int itemIdx, std::string item){
 }//setSolverOutputItem
 
 
+
 /***************************************************
  * methods to test whether two OSResult objects 
  * or their components are equal to each other
@@ -7076,4 +7077,1850 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 		}
 	}
 }//SolverOutput::IsEqual
+#if 0
+/******************************************************
+ * methods to set random objects and their components
+ ******************************************************/
+bool OSResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OSResult" << endl;
+#endif
+	if (OSRand() <= density)
+	{
+		resultHeader = new GeneralFileHeader();
+		resultHeader->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)
+	{
+		general = new GeneralResult();
+		general->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)       
+	{
+		system = new SystemResult();
+		system->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)      
+	{
+		service = new ServiceResult();
+		service->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)          
+	{
+		job = new JobResult();
+		job->setRandom(density, conformant);
+	}
+	if (OSRand() <= density) 
+	{
+		optimization = new OptimizationResult();
+		optimization->setRandom(density, conformant);
+	}
+	return true;
+}//OSResult::setRandom
+
+
+bool GeneralResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random GeneralResult" << endl;
+#endif
+	if (OSRand() <= density) this->message        = "random string";
+	if (OSRand() <= density) this->serviceURI     = "random string";
+	if (OSRand() <= density) this->serviceName    = "random string";
+	if (OSRand() <= density) this->instanceName   = "random string";
+	if (OSRand() <= density) this->jobID          = "random string";
+	if (OSRand() <= density) this->solverInvoked  = "random string";
+	if (OSRand() <= density) this->timeStamp      = "random string";
+
+	if (OSRand() <= density)
+	{
+		generalStatus = new GeneralStatus(); 
+		generalStatus->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
+	}
+	return true;
+}//GeneralResult::setRandom
+
+
+bool GeneralStatus::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT	cout << "Set random GeneralStatus" << endl;#endif	int n;
+
+	if (OSRand() <= density) numberOfSubstatuses = (int)(1+4*OSRand());    
+	if (OSRand() <= density) type = "normal" else type = "error";
+ 	if (OSRand() <= density) description = "random string";
+
+	if (conformant)	n = this->numberOfSubstatuses;
+	else            n = (int)(1+4*OSRand());
+	 
+	substatus = new GeneralSubstatus*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		substatus[i] = new GeneralSubstatus();
+		substatus[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//GeneralStatus::setRandom
+
+bool setRandom(double density, bool conformant)
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in GeneralSubstatus" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralSubstatus" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralSubstatus" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->name        != that->name          || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralSubstatus" << endl;
+				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+ 		}
+		return true;
+	}
+}//GeneralSubstatus::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherResults" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResults" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResults" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfOtherResults != that->numberOfOtherResults)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResults" << endl;
+				cout << "numberOfOtherResults: " << this->numberOfOtherResults << " vs. " << that->numberOfOtherResults << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfOtherResults; i++)
+				if (!this->other[i]->IsEqual(that->other[i]))
+					return false;
+			return true;
+		}
+	}
+}//OtherResults::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->name        != that->name          || 
+				this->value       != that->value         || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResult" << endl;
+				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
+				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+			return true;
+		}
+	}
+}//OtherResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in SystemResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SystemResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SystemResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->systemInformation != that->systemInformation) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SystemResult" << endl;
+				cout << "systemInformation: " << this->systemInformation << " vs. " << that->systemInformation << endl;
+#endif	
+				return false;
+			}
+
+			if (!this->availableDiskSpace->IsEqual(that->availableDiskSpace))
+				return false;
+			if (!this->availableMemory->IsEqual(that->availableMemory))
+				return false;
+			if (!this->availableCPUSpeed->IsEqual(that->availableCPUSpeed))
+				return false;
+			if (!this->availableCPUNumber->IsEqual(that->availableCPUNumber))
+				return false;
+			if (!this->otherResults->IsEqual(that->otherResults))
+				return false;
+
+			return true;
+		}
+	}
+}//SystemResult::setRandom
+
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in ServiceResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ServiceResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ServiceResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->currentState       != that->currentState ||
+				this->currentJobCount    != that->currentJobCount ||
+				this->totalJobsSoFar     != that->totalJobsSoFar  ||
+				this->timeServiceStarted != that->timeServiceStarted ||
+				!isEqual(this->serviceUtilization, that->serviceUtilization) )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ServiceResult" << endl;
+				cout << "currentState:       " << this->currentState       << " vs. " << that->currentState       << endl;
+				cout << "currentJobCount:    " << this->currentJobCount    << " vs. " << that->currentJobCount    << endl;
+				cout << "totalJobsSoFar:     " << this->totalJobsSoFar     << " vs. " << that->totalJobsSoFar     << endl;
+				cout << "timeServiceStarted: " << this->timeServiceStarted << " vs. " << that->timeServiceStarted << endl;
+				cout << "serviceUtilization: " << this->serviceUtilization << " vs. " << that->serviceUtilization << endl;
+#endif	
+				return false;
+			}
+
+			if (!this->otherResults->IsEqual(that->otherResults))
+				return false;
+		}
+		return true;
+	}
+}//ServiceResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in JobResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in JobResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in JobResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->status             != that->status             ||
+				this->submitTime         != that->submitTime         ||
+				this->scheduledStartTime != that->scheduledStartTime ||
+				this->actualStartTime    != that->actualStartTime    ||
+				this->endTime            != that->endTime          )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in JobResult" << endl;
+				cout << "status:             " << this->status             << " vs. " << that->status             << endl;
+				cout << "submitTime:         " << this->submitTime         << " vs. " << that->submitTime         << endl;
+				cout << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
+				cout << "actualStartTime:    " << this->actualStartTime    << " vs. " << that->actualStartTime    << endl;
+				cout << "endTime:            " << this->endTime            << " vs. " << that->endTime            << endl;
+#endif	
+				return false;
+			}
+
+			if (!this->timingInformation->IsEqual(that->timingInformation))
+				return false;
+			if (!this->usedDiskSpace->IsEqual(that->usedDiskSpace))
+				return false;
+			if (!this->usedMemory->IsEqual(that->usedMemory))
+				return false;
+			if (!this->usedCPUSpeed->IsEqual(that->usedCPUSpeed))
+				return false;
+			if (!this->usedCPUNumber->IsEqual(that->usedCPUNumber))
+				return false;
+			if (!this->otherResults->IsEqual(that->otherResults))
+				return false;
+
+			return true;
+		}
+	}
+}//JobResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in TimingInformation" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimingInformation" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimingInformation" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfTimes != that->numberOfTimes)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimingInformation" << endl;
+				cout << "numberOfTimes: " << this->numberOfTimes << " vs. " << that->numberOfTimes << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfTimes; i++)
+				if (!this->time[i]->IsEqual(that->time[i]))
+					return false;
+			return true;
+		}
+	}
+}//TimingInformation::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in Time" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (!isEqual(this->value,         that->value)    || 
+						 this->unit        != that->unit      || 
+						 this->type        != that->type      || 
+						 this->category    != that->category  || 
+						 this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
+				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
+				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
+				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
+				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+			return true;
+		}
+	}
+}//Time::setRandom
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OptimizationResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfSolutions   != that->numberOfSolutions   || 
+				this->numberOfVariables   != that->numberOfVariables   || 
+				this->numberOfObjectives  != that->numberOfObjectives  || 
+				this->numberOfConstraints != that->numberOfConstraints  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationResult" << endl;
+				cout << "numberOfSolutions:   " << this->numberOfSolutions   << " vs. " << that->numberOfSolutions   << endl;
+				cout << "numberOfVariables:   " << this->numberOfVariables   << " vs. " << that->numberOfVariables   << endl;
+				cout << "numberOfObjectives:  " << this->numberOfObjectives  << " vs. " << that->numberOfObjectives  << endl;
+				cout << "numberOfConstraints: " << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
+#endif	
+				return false;
+			}
+
+			for (int i = 0; i < numberOfSolutions; i++)
+				if (!this->solution[i]->IsEqual(that->solution[i]))
+					return false;
+
+			if (!this->otherSolverOutput->IsEqual(that->otherSolverOutput))
+				return false;
+
+			return true;
+		}
+	}
+}//OptimizationResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OptimizationSolution " << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->targetObjectiveIdx != that->targetObjectiveIdx)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
+				cout << "targetObjectiveIdx: " << this->targetObjectiveIdx << " vs. " << that->targetObjectiveIdx << endl;
+#endif	
+				return false;
+			}
+
+			if (this->weightedObjectives != that->weightedObjectives)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
+				cout << "weightedObjectives: " << this->weightedObjectives << " vs. " << that->weightedObjectives << endl;
+#endif	
+				return false;
+			}
+
+			if (this->message != that->message) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
+				cout << "message: \'" << this->message << "\' vs. \'" << that->message << "\'" << endl;
+#endif	
+				return false;
+			}
+
+			if (!this->status->IsEqual(that->status))
+				return false;
+			if (!this->variables->IsEqual(that->variables))
+				return false;
+			if (!this->objectives->IsEqual(that->objectives))
+				return false;
+			if (!this->constraints->IsEqual(that->constraints))
+				return false;
+			if (!this->otherSolutionResults->IsEqual(that->otherSolutionResults))
+				return false;
+
+			return true;
+		}
+	}
+}//OptimizationSolution ::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OptimizationSolutionStatus" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->type        != that->type          || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
+				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			if (this->numberOfSubstatuses != that->numberOfSubstatuses)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
+				cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfSubstatuses; i++)
+				if (!this->substatus[i]->IsEqual(that->substatus[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//OptimizationSolutionStatus::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OptimizationSolutionSubstatus" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionSubstatus" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionSubstatus" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->type        != that->type          || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionSubstatus" << endl;
+				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//OptimizationSolutionSubstatus::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in VariableSolution" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableSolution" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableSolution" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfOtherVariableResults != that->numberOfOtherVariableResults)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableSolution" << endl;
+				cout << "numberOfOtherVariableResults: " << this->numberOfOtherVariableResults << " vs. " << that->numberOfOtherVariableResults << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfOtherVariableResults; i++)
+				if (!this->other[i]->IsEqual(that->other[i]))
+					return false;
+
+			if (!this->values->IsEqual(that->values))
+				return false;
+			if (!this->valuesString->IsEqual(that->valuesString))
+				return false;
+			if (!this->basisStatus->IsEqual(that->basisStatus))
+				return false;
+
+			return true;
+		}
+	}
+}//VariableSolution::setRandom
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in VariableValues" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValues" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValues" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfVar != that->numberOfVar)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValues" << endl;
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfVar; i++)
+				if (!this->var[i]->IsEqual(that->var[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//VariableValues::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in VarValue" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValue" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValue" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx != that->idx || !isEqual(this->value, that->value) )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValue" << endl;
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//VarValue::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in VariableValuesString" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValuesString" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValuesString" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfVar != that->numberOfVar)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValuesString" << endl;
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfVar; i++)
+				if (!this->var[i]->IsEqual(that->var[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//VariableValuesString::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in VarValueString" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValueString" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValueString" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx   != that->idx  || 
+				this->value != that->value )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValueString" << endl;
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//VarValueString::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherVariableResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->name        != that->name          || 
+				this->value       != that->value         || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
+				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
+				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			if (this->numberOfVar != that->numberOfVar)
+			{
+#if DEBUG_ISEQUAL_ROUTINES == 2
+				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfVar; i++)
+				if (!this->var[i]->IsEqual(that->var[i]))
+					return false;
+
+			if (this->numberOfEnumerations != that->numberOfEnumerations)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
+				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfEnumerations; i++)
+				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//OtherVariableResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherVarResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVarResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVarResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx   != that->idx  || 
+				this->value != that->value ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVarResult" << endl;
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//OtherVarResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in ObjectiveSolution" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveSolution" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveSolution" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfOtherObjectiveResults != that->numberOfOtherObjectiveResults)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveSolution" << endl;
+
+				cout << "numberOfOtherObjectiveResults: " << this->numberOfOtherObjectiveResults << " vs. " << that->numberOfOtherObjectiveResults << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfOtherObjectiveResults; i++)
+				if (!this->other[i]->IsEqual(that->other[i]))
+					return false;
+
+			if (!this->values->IsEqual(that->values))
+				return false;
+			if (!this->basisStatus->IsEqual(that->basisStatus))
+				return false;
+
+			return true;
+		}
+	}
+}//ObjectiveSolution::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in ObjectiveValues" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveValues" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveValues" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfObj != that->numberOfObj)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveValues" << endl;
+				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfObj; i++)
+				if (!this->obj[i]->IsEqual(that->obj[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//ObjectiveValues::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in ObjValue" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjValue" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjValue" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx   != that->idx  || 
+				this->value != that->value )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjValue" << endl;
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//ObjValue::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherObjectiveResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->value       != that->value   || 
+				this->name        != that->name    || 				
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
+				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
+				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			if (this->numberOfObj != that->numberOfObj)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
+				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfObj; i++)
+				if (!this->obj[i]->IsEqual(that->obj[i]))
+					return false;
+
+			if (this->numberOfEnumerations != that->numberOfEnumerations)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
+				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfEnumerations; i++)
+				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//OtherObjectiveResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherObjResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx   != that->idx  || 
+				this->value != that->value )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjResult" << endl;
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//OtherObjResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in ConstraintSolution" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ConstraintSolution" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ConstraintSolution" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfOtherConstraintResults != that->numberOfOtherConstraintResults)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ConstraintSolution" << endl;
+				cout << "numberOfOtherConstraintResults: " << this->numberOfOtherConstraintResults << " vs. " << that->numberOfOtherConstraintResults << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfOtherConstraintResults; i++)
+				if (!this->other[i]->IsEqual(that->other[i]))
+					return false;
+
+			if (!this->dualValues->IsEqual(that->dualValues))
+				return false;
+			if (!this->basisStatus->IsEqual(that->basisStatus))
+				return false;
+
+			return true;
+		}
+	}
+}//ConstraintSolution::setRandom
+
+	
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in DualVariableValues" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVariableValues" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVariableValues" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfCon != that->numberOfCon)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVariableValues" << endl;
+				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfCon; i++)
+				if (!this->con[i]->IsEqual(that->con[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//DualVariableValues::setRandom
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in DualVarValue" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVarValue" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVarValue" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx != that->idx || !isEqual(this->value, that->value) )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVarValue" << endl;
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//DualVarValue::setRandom
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherConstraintResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->name        != that->name          || 
+				this->value       != that->value         || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
+				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
+				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			if (this->numberOfCon != that->numberOfCon)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
+				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfCon; i++)
+				if (!this->con[i]->IsEqual(that->con[i]))
+					return false;
+
+			if (this->numberOfEnumerations != that->numberOfEnumerations)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
+				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfEnumerations; i++)
+				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//OtherConstraintResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherConResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->idx   != that->idx  || 
+				this->value != that->value )
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConResult" << endl;
+				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
+#endif	
+				return false;
+			}
+
+			return true;
+		}
+	}
+}//OtherConResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherSolutionResults" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResults" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResults" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfOtherSolutionResults != that->numberOfOtherSolutionResults)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResults" << endl;
+				cout << "numberOfOtherSolutionResults: " << this->numberOfOtherSolutionResults << " vs. " << that->numberOfOtherSolutionResults << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfOtherSolutionResults; i++)
+				if (!this->otherSolutionResult[i]->IsEqual(that->otherSolutionResult[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//OtherSolutionResults::setRandom
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherSolutionResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+
+			if (this->name        != that->name          || 
+				this->category    != that->category      || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
+				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
+				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			if (this->numberOfItems != that->numberOfItems)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
+				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfItems; i++)
+				if (this->item[i] != that->item[i])
+				{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
+				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
+#endif	
+					return false;
+				}
+
+			return true;
+		}
+	}
+}//OtherSolutionResult::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OtherSolverOutput" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolverOutput" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolverOutput" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->numberOfSolverOutputs != that->numberOfSolverOutputs)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolverOutput" << endl;
+				cout << "numberOfSolverOutputs: " << this->numberOfSolverOutputs << " vs. " << that->numberOfSolverOutputs << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfSolverOutputs; i++)
+				if (!this->solverOutput[i]->IsEqual(that->solverOutput[i]))
+					return false;
+
+			return true;
+		}
+	}
+}//OtherSolverOutput::setRandom
+
+
+bool setRandom(double density, bool conformant);
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in SolverOutput" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->name        != that->name          || 
+				this->category    != that->category      || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
+				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
+				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+
+			if (this->numberOfItems != that->numberOfItems)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
+				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
+#endif	
+
+				return false;
+			}
+
+			for (int i = 0; i < numberOfItems; i++)
+				if (this->item[i] != that->item[i])
+				{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
+				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
+#endif	
+					return false;
+				}
+
+			return true;
+		}
+	}
+}//SolverOutput::setRandom
+#endif //if0
 

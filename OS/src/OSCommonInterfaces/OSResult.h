@@ -76,6 +76,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(GeneralSubstatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 		
 };//GeneralSubstatus
 
@@ -123,6 +132,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(GeneralStatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 		
 };//GeneralStatus
 
@@ -167,6 +185,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 		
 };//OtherResult
 
@@ -208,6 +235,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherResults *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 		
 };//OtherResults
 
@@ -281,6 +317,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(GeneralResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//class GeneralResult
 
 
@@ -337,6 +382,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SystemResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//class SystemResult
 
 
@@ -389,6 +443,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ServiceResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//class ServiceResult
 
 
@@ -447,6 +510,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(Time *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//class Time
 
 
@@ -492,6 +564,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(TimingInformation *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//class TimingInformation
 
 
@@ -563,6 +644,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(JobResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//class JobResult
 
 
@@ -603,6 +693,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OptimizationSolutionSubstatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 		
 };//OptimizationSolutionSubstatus
 
@@ -648,6 +747,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OptimizationSolutionStatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 		
 };//OptimizationSolutionStatus
 
@@ -690,6 +798,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(VarValue *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 };// class VarValue
 
@@ -735,6 +852,15 @@ public:
 	 */
 	bool IsEqual(VariableValues *that);
 
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 };// class VariableValues
 
 
@@ -777,6 +903,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(VarValueString *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 };// class VarValueString
 
@@ -822,6 +957,15 @@ public:
 	 */
 	bool IsEqual(VariableValuesString *that);
 
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 };// class VariableValuesString
 
 
@@ -865,6 +1009,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherVarResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherVarResult
 
@@ -934,6 +1087,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherVariableResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherVariableResult
 
@@ -989,6 +1151,15 @@ public:
 	 */
 	bool IsEqual(VariableSolution *that);
 
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 };// class VariableSolution
 
 
@@ -1029,6 +1200,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ObjValue *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 };//ObjValue
 
 /*! \class ObjectiveValues
@@ -1071,6 +1251,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ObjectiveValues *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//ObjectiveValues
 
@@ -1115,6 +1304,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherObjResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherObjResult
 
@@ -1183,6 +1381,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherObjectiveResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherObjectiveResult
 
@@ -1236,6 +1443,15 @@ public:
 	 */
 	bool IsEqual(ObjectiveSolution *that);
 
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 };//ObjectiveSolution
 
 
@@ -1278,6 +1494,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(DualVarValue *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//DualVarValue
 
@@ -1323,6 +1548,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(DualVariableValues *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//DualVariableValues
 
@@ -1368,6 +1602,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherConResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherConResult
 
@@ -1437,6 +1680,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherConstraintResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherConstraintResult
 
@@ -1489,6 +1741,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(ConstraintSolution *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//ConstraintSolution
 
@@ -1545,6 +1806,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherSolutionResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherSolutionResult
 
@@ -1590,6 +1860,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherSolutionResults *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherSolutionResults
 
@@ -1663,6 +1942,15 @@ public:
 	 */
 	bool IsEqual(OptimizationSolution *that);
 
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
 };// class OptimizationSolution
 
 
@@ -1716,6 +2004,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(SolverOutput *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//SolverOutput
 
@@ -1760,6 +2057,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OtherSolverOutput *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 };//OtherSolverOutput
 
@@ -1826,6 +2132,15 @@ public:
 	 * A function to check for the equality of two objects
 	 */
 	bool IsEqual(OptimizationResult *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 
 };// class OptimizationResult
 
@@ -1945,6 +2260,15 @@ public:
 	 */
 	bool IsEqual(OSResult *that);
 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
 	
 
 
