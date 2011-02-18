@@ -1030,6 +1030,27 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	//
 	*osillineno = 1;
 	const char *pchar = *p;
+	
+		
+	//first check of osil start
+	const char *startOSiL = "<osil";
+	const char *pOSiLStart = strstr(pchar, startOSiL);
+	if(pOSiLStart == NULL){
+	  osilerror_wrapper( pchar,osillineno,"<osil> element missing"); 
+	  return false;
+	}else{
+		//look for osil end
+			const char *pOSiLEnd = strstr(pOSiLStart, ">");
+		if(pOSiLEnd == NULL) {  osilerror_wrapper( pchar,osillineno,"end of osil element missing"); return false;
+			} else {
+			pchar = pOSiLEnd;
+			pchar++;
+		}
+	}
+	
+	
+	std::cout << "GAIL = " << *pchar << std::endl;
+	
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
 	const char *endInstanceHeader = "</instanceHeader";

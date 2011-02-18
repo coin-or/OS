@@ -529,7 +529,7 @@ typedef short int yytype_int16;
 #define YYSIZE_MAXIMUM ((YYSIZE_T) -1)
 
 #ifndef YY_
-# if YYENABLE_NLS
+# if defined YYENABLE_NLS && YYENABLE_NLS
 #  if ENABLE_NLS
 #   include <libintl.h> /* INFRINGES ON USER NAME SPACE */
 #   define YY_(msgid) dgettext ("bison-runtime", msgid)
@@ -1374,7 +1374,7 @@ while (YYID (0))
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if YYLTYPE_IS_TRIVIAL
+# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
 #  define YY_LOCATION_PRINT(File, Loc)			\
      fprintf (File, "%d.%d-%d.%d",			\
 	      (Loc).first_line, (Loc).first_column,	\
@@ -1961,7 +1961,7 @@ YYLTYPE yylloc;
   yyssp = yyss;
   yyvsp = yyvs;
   yylsp = yyls;
-#if YYLTYPE_IS_TRIVIAL
+#if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
   /* Initialize the default location before parsing starts.  */
   yylloc.first_line   = yylloc.last_line   = 1;
   yylloc.first_column = yylloc.last_column = 0;
@@ -3373,6 +3373,27 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	//
 	*osillineno = 1;
 	const char *pchar = *p;
+	
+		
+	//first check of osil start
+	const char *startOSiL = "<osil";
+	const char *pOSiLStart = strstr(pchar, startOSiL);
+	if(pOSiLStart == NULL){
+	  osilerror_wrapper( pchar,osillineno,"<osil> element missing"); 
+	  return false;
+	}else{
+		//look for osil end
+			const char *pOSiLEnd = strstr(pOSiLStart, ">");
+		if(pOSiLEnd == NULL) {  osilerror_wrapper( pchar,osillineno,"end of osil element missing"); return false;
+			} else {
+			pchar = pOSiLEnd;
+			pchar++;
+		}
+	}
+	
+	
+	std::cout << "GAIL = " << *pchar << std::endl;
+	
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
 	const char *endInstanceHeader = "</instanceHeader";
