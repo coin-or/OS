@@ -3392,7 +3392,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	}
 	
 	
-	std::cout << "GAIL = " << *pchar << std::endl;
+	
 	
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
