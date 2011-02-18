@@ -160,7 +160,7 @@ int osollex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 
 osoldoc: 
-	osolStartEmpty osolBody OSOLEND
+	osolStartEmpty osolBody osolEnd
   | osolStart osolAttributes osolContent;
 
 osolStartEmpty: OSOLSTARTEMPTY
@@ -183,7 +183,10 @@ osolContent: osolEmpty | osolLaden;
 
 osolEmpty: ENDOFELEMENT;
 
-osolLaden: GREATERTHAN osolBody OSOLEND; 
+osolLaden: GREATERTHAN osolBody osolEnd; 
+	
+osolEnd: OSOLEND
+	| {	osolerror( NULL, osoption, parserData, osglData, "unexpected end of file, expecting </osol>");};
 
 osolBody: 
 	headerElement generalElement systemElement serviceElement jobElement optimizationElement;

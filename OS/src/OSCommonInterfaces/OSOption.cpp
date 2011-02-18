@@ -10205,20 +10205,20 @@ bool OSOption::setRandom( double density, bool conformant )
 		optionHeader = new GeneralFileHeader();
 		optionHeader->setRandom(density, conformant);
 	}
-	if (OSRand() <= density)      
-	{
-		service = new ServiceOption();
-		service->setRandom(density, conformant);
-	}
-	if (OSRand() <= density)       
-	{
-		system = new SystemOption();
-		system->setRandom(density, conformant);
 	if (OSRand() <= density)
 	{
 		general = new GeneralOption();
 		general->setRandom(density, conformant);
 	}
+	if (OSRand() <= density)       
+	{
+		system = new SystemOption();
+		system->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)      
+	{
+		service = new ServiceOption();
+		service->setRandom(density, conformant);
 	}
 	if (OSRand() <= density)          
 	{

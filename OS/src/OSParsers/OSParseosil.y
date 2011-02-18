@@ -222,13 +222,17 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients nonlinearExpressions timeDomain theInstanceEnd  OSILEND;
+osildoc: quadraticCoefficients nonlinearExpressions timeDomain theInstanceEnd osilEnd;
 
 
 theInstanceEnd:  INSTANCEDATASTARTEND
 	| INSTANCEDATAEND ;
+	
+osilEnd: OSILEND
+	| {	osilerror( NULL, osinstance, parserData, "unexpected end of file, expecting </osil>");};
 
-quadraticcoefficients: 
+
+quadraticCoefficients: 
 	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND 
 	{if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) 
 	osilerror( NULL, osinstance, parserData, "actual number of qterms less than numberOfQuadraticTerms");};
@@ -244,17 +248,25 @@ for(int i = 0; i < $3; i++) osinstance->instanceData->quadraticCoefficients->qTe
 qTermlist:  qterm
 		| qTermlist qterm ;
 		   
-qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
- osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");} 
-QTERMSTART  anotherqTermATT  qtermend {parserData->qtermcount++; 
-if(!parserData->qtermidxattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idx is required"); 
-if(!parserData->qtermidxOneattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxOne is required"); 
-if(!parserData->qtermidxTwoattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxTwo is required"); 
-parserData->qtermidattON = false; 
-parserData->qtermidxattON = false; 
-parserData->qtermidxOneattON = false; 
-parserData->qtermidxTwoattON = false;
-parserData->qtermcoefattON = false;} ;
+qterm: qtermStart anotherqTermATT  qtermend 
+{
+	parserData->qtermcount++; 
+	if(!parserData->qtermidxattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idx is required"); 
+	if(!parserData->qtermidxOneattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxOne is required"); 
+	if(!parserData->qtermidxTwoattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxTwo is required"); 
+	parserData->qtermidattON = false; 
+	parserData->qtermidxattON = false; 
+	parserData->qtermidxOneattON = false; 
+	parserData->qtermidxTwoattON = false;
+	parserData->qtermcoefattON = false;
+} ;
+
+qtermStart: QTERMSTART
+{
+	if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
+ 	osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");
+} 
+  
 				
 qtermend:  ENDOFELEMENT
 		| GREATERTHAN  QTERMEND;
@@ -1041,7 +1053,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	}else{
 		//look for osil end
 			const char *pOSiLEnd = strstr(pOSiLStart, ">");
-		if(pOSiLEnd == NULL) {  osilerror_wrapper( pchar,osillineno,"end of osil element missing"); return false;
+		if(pOSiLEnd == NULL) {  osilerror_wrapper( pchar,osillineno,"end of <osil> element missing"); return false;
 			} else {
 			pchar = pOSiLEnd;
 			pchar++;

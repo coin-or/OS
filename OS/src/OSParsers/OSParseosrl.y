@@ -188,7 +188,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 
 osrldoc: 
-	osrlStartEmpty osrlBody OSRLEND
+	osrlStartEmpty osrlBody osrlEnd
   | osrlStart osrlAttributes osrlContent
   
 osrlStartEmpty: OSRLSTARTEMPTY
@@ -211,7 +211,10 @@ osrlContent: osrlEmpty | osrlLaden;
 
 osrlEmpty: ENDOFELEMENT;
 
-osrlLaden: GREATERTHAN osrlBody OSRLEND; 
+osrlLaden: GREATERTHAN osrlBody osrlEnd; 
+
+osrlEnd: OSRLEND
+	| {	osrlerror( NULL, osresult, parserData, osglData, "unexpected end of file, expecting </osrl>");};
 
 osrlBody: 
 	headerElement generalElement systemElement serviceElement jobElement optimizationElement;

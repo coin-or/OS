@@ -1000,14 +1000,13 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
 		else	
 		{	if ((this->unit        != that->unit)        || 
 				(this->description != that->description) || 
-//				(this->value       != that->value))
 				!isEqual(this->value, that->value))
 			{
-//#ifdef DEBUG_OSGENERAL
+#ifdef DEBUG_OSGENERAL
 				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
-//#endif	
+#endif	
 				return false;
 			}
 			return true;
@@ -1204,13 +1203,13 @@ bool TimeSpan::IsEqual(TimeSpan *that)
 			return false;
 		}
 		else	
-		{	if ((this->unit        != that->unit)        || 
-				!isEqual(this->value, that->value))
-//				(this->value       != that->value))
+		{	if (!isEqual(this->value,  that->value) ||
+						 this->unit != that->unit )  
+				
 			{
 #ifdef DEBUG_OSGENERAL
-				cout << "unit: "        << this->unit        << " vs. " << that->unit        << endl;
-				cout << "value: "       << this->value       << " vs. " << that->value       << endl;
+				cout << "unit: "  << this->unit  << " vs. " << that->unit  << endl;
+				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
 				return false;
 			}

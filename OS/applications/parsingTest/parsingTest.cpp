@@ -366,8 +366,40 @@ std::cout << osxl << std::endl;
 			}
 			else if (schema == "osrl")
 			{
+				OSResult *osresult, *osresult2;
+				OSrLWriter *osrlwriter;
+				osrlwriter = new OSrLWriter();
+				OSrLReader *osrlreader;
+
 				for (int irep=0; irep < nrep; irep++)
 				{
+std::cout << "use random number seed: " << seed << std::endl;
+
+					srand(seed);
+
+std::cout << "set random osresult" << std::endl;
+					osresult = new OSResult();
+					osresult->setRandom(density, conformant);
+
+std::cout << "write to string" << std::endl;
+
+					osxl = osrlwriter->writeOSrL(osresult);
+
+std::cout << osxl << std::endl;
+
+					osrlreader = new OSrLReader();
+					osresult2 = osrlreader->readOSrL( osxl);
+					if (verifyObjects == true)
+					{
+						if (osresult->IsEqual(osresult2) == false)
+							throw ErrorClass("Two objects are not equal!");
+					}
+					delete osresult;
+					delete osrlreader;
+					osresult  = NULL;
+					osrlreader = NULL;
+
+					seed = rand();
 				}
 			}
 		}

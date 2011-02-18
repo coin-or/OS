@@ -220,7 +220,7 @@ ServiceResult::~ServiceResult(){
 	}
 }// end ServiceResult destructor
 
-
+#if 0
 Time::Time():
 	type("elapsedTime"),
 	category("total"),
@@ -240,7 +240,26 @@ Time::~Time(){
 	#endif
 
 }// end Time destructor
+#endif
 
+TimeMeasurement::TimeMeasurement():
+	TimeSpan(),
+	type("elapsedTime"),
+	category("total"),
+	description("")
+{ 
+//	#ifdef DEBUG_OSRESULT
+	cout << "Inside the TimeMeasurement Constructor" << endl;
+//	#endif
+}//end TimeMeasurement constructor
+
+
+TimeMeasurement::~TimeMeasurement(){
+	#ifdef DEBUG_OSRESULT  
+	cout << "Inside the TimeMeasurement Destructor" << endl;
+	#endif
+
+}// end TimeMeasurement destructor
 
 TimingInformation::TimingInformation():
 	numberOfTimes(0),
@@ -3422,7 +3441,6 @@ bool OSResult::setJobEndTime(std::string endTime){
 }//setJobEndTime
 
 bool OSResult::setTime(double time){
-//	general->time = os_dtoa_format( time);
 	return addTimingInformation("elapsedTime", "total", "second", "", time);
 }//setTime
 
@@ -3435,14 +3453,14 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
 
 	nt = job->timingInformation->numberOfTimes;
-	Time** temp = new Time*[nt+1];  //Allocate the new pointers
+	TimeMeasurement** temp = new TimeMeasurement*[nt+1];  //Allocate the new pointers
 	for (i = 0; i < nt; i++)
 		temp[i] = job->timingInformation->time[i];  //copy the pointers
 
 	delete[] job->timingInformation->time; //delete old pointers
 	
 //	add in the new element
-	temp[ nt] = new Time();
+	temp[ nt] = new TimeMeasurement();
 
 	temp[ nt]->type = type;
 	temp[ nt]->category = category;
@@ -3486,9 +3504,9 @@ bool OSResult::setNumberOfTimes(int numberOfTimes)
 	if (numberOfTimes <= 0) return false;
 	job->timingInformation->numberOfTimes = numberOfTimes;
 	if (numberOfTimes > 0)
-	{	job->timingInformation->time = new Time*[numberOfTimes];
+	{	job->timingInformation->time = new TimeMeasurement*[numberOfTimes];
 		for(int i = 0; i < numberOfTimes; i++) 	
-			job->timingInformation->time[i] = new Time();
+			job->timingInformation->time[i] = new TimeMeasurement();
 	}
 	return true;
 }//setNumberOfTimes
@@ -5679,7 +5697,7 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 	}
 }//TimingInformation::IsEqual
 
-
+#if 0
 bool Time::IsEqual(Time *that)
 {
 	#if DEBUG_ISEQUAL_ROUTINES == 2
@@ -5728,6 +5746,54 @@ bool Time::IsEqual(Time *that)
 		}
 	}
 }//Time::IsEqual
+#endif
+
+
+bool TimeMeasurement::IsEqual(TimeMeasurement *that)
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in TimeMeasurement" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->type        != that->type      || 
+				this->category    != that->category  || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimeMeasurement" << endl;
+				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
+				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+			return this->TimeSpan::IsEqual(that);
+		}
+	}
+}//TimeMeasurement::IsEqual
+
 
 bool OptimizationResult::IsEqual(OptimizationResult *that)
 {
@@ -7077,7 +7143,8 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 		}
 	}
 }//SolverOutput::IsEqual
-#if 0
+
+
 /******************************************************
  * methods to set random objects and their components
  ******************************************************/
@@ -7149,10 +7216,13 @@ bool GeneralResult::setRandom(double density, bool conformant)
 
 bool GeneralStatus::setRandom(double density, bool conformant)
 {
-#ifdef DEBUG_OSRESULT	cout << "Set random GeneralStatus" << endl;#endif	int n;
+#ifdef DEBUG_OSRESULT
+	cout << "Set random GeneralStatus" << endl;
+#endif
+	int n;
 
 	if (OSRand() <= density) numberOfSubstatuses = (int)(1+4*OSRand());    
-	if (OSRand() <= density) type = "normal" else type = "error";
+	if (OSRand() <= density) type = "normal"; else type = "error";
  	if (OSRand() <= density) description = "random string";
 
 	if (conformant)	n = this->numberOfSubstatuses;
@@ -7169,1758 +7239,970 @@ bool GeneralStatus::setRandom(double density, bool conformant)
 	return true;
 }//GeneralStatus::setRandom
 
-bool setRandom(double density, bool conformant)
+bool GeneralSubstatus::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in GeneralSubstatus" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in GeneralSubstatus" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in GeneralSubstatus" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->name        != that->name          || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in GeneralSubstatus" << endl;
-				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
- 		}
-		return true;
-	}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random GeneralSubstatus" << endl;
+#endif
+	name = "substatus name";
+ 	if (OSRand() <= density) description = "random string";
+	return true;
 }//GeneralSubstatus::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherResults::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherResults" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherResults" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherResults" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfOtherResults != that->numberOfOtherResults)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherResults" << endl;
-				cout << "numberOfOtherResults: " << this->numberOfOtherResults << " vs. " << that->numberOfOtherResults << endl;
-#endif	
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherResults" << endl;
+#endif
+	int n;
 
-				return false;
-			}
+	this->numberOfOtherResults = (int)(1+4*OSRand());
 
-			for (int i = 0; i < numberOfOtherResults; i++)
-				if (!this->other[i]->IsEqual(that->other[i]))
-					return false;
-			return true;
-		}
+	if (conformant)	n = this->numberOfOtherResults;
+	else            n = (int)(1+4*OSRand());
+
+	other = new OtherResult*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		other[i] = new OtherResult();
+		other[i]->setRandom(density, conformant);
 	}
+
+	return true;
 }//OtherResults::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->name        != that->name          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherResult" << endl;
-				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherResult" << endl;
+#endif
+	name        = "other result";
+	value       = "random string";
+	description = "random string";
+	return true;
 }//OtherResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool SystemResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in SystemResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SystemResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SystemResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->systemInformation != that->systemInformation) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SystemResult" << endl;
-				cout << "systemInformation: " << this->systemInformation << " vs. " << that->systemInformation << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random SystemResult" << endl;
+#endif
+	if (OSRand() <= density) systemInformation = "random string"; 
 
-			if (!this->availableDiskSpace->IsEqual(that->availableDiskSpace))
-				return false;
-			if (!this->availableMemory->IsEqual(that->availableMemory))
-				return false;
-			if (!this->availableCPUSpeed->IsEqual(that->availableCPUSpeed))
-				return false;
-			if (!this->availableCPUNumber->IsEqual(that->availableCPUNumber))
-				return false;
-			if (!this->otherResults->IsEqual(that->otherResults))
-				return false;
+	if (OSRand() <= density) availableDiskSpace->setRandom(density, conformant);
+	if (OSRand() <= density) availableMemory->setRandom(density, conformant);
+	if (OSRand() <= density) availableCPUSpeed->setRandom(density, conformant);
+	if (OSRand() <= density) availableCPUNumber->setRandom(density, conformant);
 
-			return true;
-		}
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
 	}
+	return true;
 }//SystemResult::setRandom
 
-
-
-bool setRandom(double density, bool conformant);
+bool ServiceResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in ServiceResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ServiceResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ServiceResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->currentState       != that->currentState ||
-				this->currentJobCount    != that->currentJobCount ||
-				this->totalJobsSoFar     != that->totalJobsSoFar  ||
-				this->timeServiceStarted != that->timeServiceStarted ||
-				!isEqual(this->serviceUtilization, that->serviceUtilization) )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ServiceResult" << endl;
-				cout << "currentState:       " << this->currentState       << " vs. " << that->currentState       << endl;
-				cout << "currentJobCount:    " << this->currentJobCount    << " vs. " << that->currentJobCount    << endl;
-				cout << "totalJobsSoFar:     " << this->totalJobsSoFar     << " vs. " << that->totalJobsSoFar     << endl;
-				cout << "timeServiceStarted: " << this->timeServiceStarted << " vs. " << that->timeServiceStarted << endl;
-				cout << "serviceUtilization: " << this->serviceUtilization << " vs. " << that->serviceUtilization << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ServiceResult" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
 
-			if (!this->otherResults->IsEqual(that->otherResults))
-				return false;
-		}
-		return true;
+		if      (temp <= 0.25) this->currentState = "unknown";
+		else if (temp <= 0.50) this->currentState = "busy";
+		else if (temp <= 0.75) this->currentState = "";
+		else                   this->currentState = "known";
+	} 
+
+	if (OSRand() <= density) currentJobCount = (int) (-1+4*OSRand());
+	if (OSRand() <= density) totalJobsSoFar  = (int) (-1+4*OSRand());
+	if (OSRand() <= density) timeServiceStarted  = "2010-07-12T01:23:45-03:00";	
+	
+	if (OSRand() <= density) 	
+	{
+		double temp = OSRand();
+
+		serviceUtilization  = (int) (-1+4*OSRand());
+		if      (temp <= 0.25) this->serviceUtilization = OSRand();
+		else if (temp <= 0.50) this->serviceUtilization = -1.0;
+		else if (temp <= 0.75) this->serviceUtilization = OSDBL_MAX;
+		else                   this->serviceUtilization = OSNAN;
+	} 
+
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
 	}
+	return true;
 }//ServiceResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool JobResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in JobResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in JobResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in JobResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->status             != that->status             ||
-				this->submitTime         != that->submitTime         ||
-				this->scheduledStartTime != that->scheduledStartTime ||
-				this->actualStartTime    != that->actualStartTime    ||
-				this->endTime            != that->endTime          )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in JobResult" << endl;
-				cout << "status:             " << this->status             << " vs. " << that->status             << endl;
-				cout << "submitTime:         " << this->submitTime         << " vs. " << that->submitTime         << endl;
-				cout << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
-				cout << "actualStartTime:    " << this->actualStartTime    << " vs. " << that->actualStartTime    << endl;
-				cout << "endTime:            " << this->endTime            << " vs. " << that->endTime            << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random SystemResult" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
 
-			if (!this->timingInformation->IsEqual(that->timingInformation))
-				return false;
-			if (!this->usedDiskSpace->IsEqual(that->usedDiskSpace))
-				return false;
-			if (!this->usedMemory->IsEqual(that->usedMemory))
-				return false;
-			if (!this->usedCPUSpeed->IsEqual(that->usedCPUSpeed))
-				return false;
-			if (!this->usedCPUNumber->IsEqual(that->usedCPUNumber))
-				return false;
-			if (!this->otherResults->IsEqual(that->otherResults))
-				return false;
+		if      (temp <= 0.25) this->status = "finished";
+		else if (temp <= 0.50) this->status = "running";
+		else if (temp <= 0.75) this->status = "";
+		else                   this->status = "walking";
+	} 
 
-			return true;
-		}
+	if (OSRand() <= density) submitTime         = "1970-01-01T00:00:00-00:00";
+	if (OSRand() <= density) scheduledStartTime = "1970-01-01T00:00:00-00:00";
+	if (OSRand() <= density) actualStartTime    = "1970-01-01T00:00:00-00:00";
+	if (OSRand() <= density) endTime            = "1970-01-01T00:00:00-00:00";
+
+	if (OSRand() <= density)     
+	{
+		timingInformation = new TimingInformation(); 
+		timingInformation->setRandom(density, conformant);
 	}
+
+	if (OSRand() <= density)     
+	{
+		usedDiskSpace = new StorageCapacity(); 
+		usedDiskSpace->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		usedMemory = new StorageCapacity(); 
+		usedMemory->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		usedCPUSpeed = new CPUSpeed(); 
+		usedCPUSpeed->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		usedCPUNumber = new CPUNumber(); 
+		usedCPUNumber->setRandom(density, conformant);
+	}
+				
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
+	}
+	return true;
 }//JobResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool TimingInformation::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in TimingInformation" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in TimingInformation" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in TimingInformation" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfTimes != that->numberOfTimes)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in TimingInformation" << endl;
-				cout << "numberOfTimes: " << this->numberOfTimes << " vs. " << that->numberOfTimes << endl;
-#endif	
+#ifdef DEBUG_OSRESULT
+	cout << "Set random TimingInformation" << endl;
+#endif
+	int n;
 
-				return false;
-			}
+	this->numberOfTimes = (int)(1+4*OSRand());
 
-			for (int i = 0; i < numberOfTimes; i++)
-				if (!this->time[i]->IsEqual(that->time[i]))
-					return false;
-			return true;
-		}
+	if (conformant)	n = this->numberOfTimes;
+	else            n = (int)(1+4*OSRand());
+
+	time = new TimeMeasurement*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		time[i] = new TimeMeasurement();
+		time[i]->setRandom(density, conformant);
 	}
+
+	return true;
 }//TimingInformation::setRandom
 
-
-bool setRandom(double density, bool conformant);
+#if 0
+bool Time::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in Time" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in Time" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random TimingInformation" << endl;
+#endif
+	if (OSRand() <= density) 
+		this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->type = "elapsedTime";
+		else if (temp <= 0.50) this->type = "cpuTime";
+		else if (temp <= 0.75) this->type = "";
+		else                   this->type = "dinnerTime";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->category = "total";
+		else if (temp <= 0.50) this->category = "input";
+		else if (temp <= 0.75) this->category = "";
+		else                   this->category = "putin";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->unit = "second";
+		else if (temp <= 0.50) this->unit = "tick";
+		else if (temp <= 0.75) this->unit = "";
+		else                   this->unit = "flea";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5) this->value = 3.14156;
+		else                 this->value = 2.71828;
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in Time" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (!isEqual(this->value,         that->value)    || 
-						 this->unit        != that->unit      || 
-						 this->type        != that->type      || 
-						 this->category    != that->category  || 
-						 this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in Time" << endl;
-				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
+	return true;
 }//Time::setRandom
+#endif
 
-bool setRandom(double density, bool conformant);
+bool TimeMeasurement::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OptimizationResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random TimeMeasurement" << endl;
+#endif
+	if (OSRand() <= density) 
+		this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->type = "elapsedTime";
+		else if (temp <= 0.50) this->type = "cpuTime";
+		else if (temp <= 0.75) this->type = "";
+		else                   this->type = "dinnerTime";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->category = "total";
+		else if (temp <= 0.50) this->category = "input";
+		else if (temp <= 0.75) this->category = "";
+		else                   this->category = "putin";
+	} 
+
+	if (OSRand() <= density) this->TimeSpan::setRandom(density,conformant);
+
+	return true;
+}//TimeMeasurement::setRandom
+
+bool OptimizationResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationResult" << endl;
+#endif
+	numberOfSolutions = (int)(1+4*OSRand());
+
+	numberOfVariables   = 10; 
+	numberOfObjectives  = 2;
+	numberOfConstraints = 5;
+
+	int n;
+
+	if (conformant)	n = this->numberOfSolutions;
+	else            n = (int)(1+4*OSRand());
+
+	solution = new OptimizationSolution*[n];
+	
+	for (int i = 0; i < n; i++)
+	{
+		solution[i] = new OptimizationSolution();
+		solution[i]->setRandom(density,conformant);
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfSolutions   != that->numberOfSolutions   || 
-				this->numberOfVariables   != that->numberOfVariables   || 
-				this->numberOfObjectives  != that->numberOfObjectives  || 
-				this->numberOfConstraints != that->numberOfConstraints  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationResult" << endl;
-				cout << "numberOfSolutions:   " << this->numberOfSolutions   << " vs. " << that->numberOfSolutions   << endl;
-				cout << "numberOfVariables:   " << this->numberOfVariables   << " vs. " << that->numberOfVariables   << endl;
-				cout << "numberOfObjectives:  " << this->numberOfObjectives  << " vs. " << that->numberOfObjectives  << endl;
-				cout << "numberOfConstraints: " << this->numberOfConstraints << " vs. " << that->numberOfConstraints << endl;
-#endif	
-				return false;
-			}
 
-			for (int i = 0; i < numberOfSolutions; i++)
-				if (!this->solution[i]->IsEqual(that->solution[i]))
-					return false;
-
-			if (!this->otherSolverOutput->IsEqual(that->otherSolverOutput))
-				return false;
-
-			return true;
-		}
-	}
+	return true;
 }//OptimizationResult::setRandom
 
-
-bool setRandom(double density, bool conformant);
+bool OptimizationSolution::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OptimizationSolution " << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolution" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationSolution" << endl;
+#endif
+	if (OSRand() <= density)
+	{
+		if (OSRand() <= density) targetObjectiveIdx = -1;
+		else					 targetObjectiveIdx = -2;
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolution" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->targetObjectiveIdx != that->targetObjectiveIdx)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolution" << endl;
-				cout << "targetObjectiveIdx: " << this->targetObjectiveIdx << " vs. " << that->targetObjectiveIdx << endl;
-#endif	
-				return false;
-			}
 
-			if (this->weightedObjectives != that->weightedObjectives)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolution" << endl;
-				cout << "weightedObjectives: " << this->weightedObjectives << " vs. " << that->weightedObjectives << endl;
-#endif	
-				return false;
-			}
+	if (OSRand() <= density) weightedObjectives = (OSRand() < 0.5);
 
-			if (this->message != that->message) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolution" << endl;
-				cout << "message: \'" << this->message << "\' vs. \'" << that->message << "\'" << endl;
-#endif	
-				return false;
-			}
+	if (OSRand() <= density) message = "random string";
 
-			if (!this->status->IsEqual(that->status))
-				return false;
-			if (!this->variables->IsEqual(that->variables))
-				return false;
-			if (!this->objectives->IsEqual(that->objectives))
-				return false;
-			if (!this->constraints->IsEqual(that->constraints))
-				return false;
-			if (!this->otherSolutionResults->IsEqual(that->otherSolutionResults))
-				return false;
+	status = new OptimizationSolutionStatus();
+	status->setRandom(density, conformant);
 
-			return true;
-		}
+	if (OSRand() <= density)
+	{
+		variables = new VariableSolution();
+		variables->setRandom(density, conformant);
 	}
-}//OptimizationSolution ::setRandom
+
+	if (OSRand() <= density)
+	{
+		objectives = new ObjectiveSolution();
+		objectives->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		constraints = new ConstraintSolution();
+		constraints->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		otherSolutionResults = new OtherSolutionResults();
+		otherSolutionResults->setRandom(density, conformant);
+	}
+
+	return true;
+}//OptimizationSolution::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OptimizationSolutionStatus::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OptimizationSolutionStatus" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationSolutionStatus" << endl;
+#endif
+	double temp = OSRand();
+	if (conformant) temp = 0.5*temp;
+
+	if      (temp <= 0.25) this->type = "optimal";
+	else if (temp <= 0.50) this->type = "unsure";
+	else if (temp <= 0.75) this->type = "";
+	else                   this->type = "sure";
+
+	if (OSRand() <= density) this->description = "random string";
+
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfSubstatuses = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfSubstatuses;
+		else            n = (int)(1+4*OSRand());
+
+		substatus = new OptimizationSolutionSubstatus*[n];
+
+		for (int i = 0; i < n; i++)
 		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolutionStatus" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
+			substatus[i] = new OptimizationSolutionSubstatus();
+			substatus[i]->setRandom(density, conformant);
 		}
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolutionStatus" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->type        != that->type          || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolutionStatus" << endl;
-				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
 
-			if (this->numberOfSubstatuses != that->numberOfSubstatuses)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolutionStatus" << endl;
-				cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfSubstatuses; i++)
-				if (!this->substatus[i]->IsEqual(that->substatus[i]))
-					return false;
-
-			return true;
-		}
-	}
+	return true;
 }//OptimizationSolutionStatus::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OptimizationSolutionSubstatus::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OptimizationSolutionSubstatus" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolutionSubstatus" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolutionSubstatus" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->type        != that->type          || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OptimizationSolutionSubstatus" << endl;
-				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationSolutionSubstatus" << endl;
+#endif
+	double temp = OSRand();
+	if (conformant) temp = 0.5*temp;
 
-			return true;
-		}
-	}
+	if      (temp <= 0.25) this->type = "stoppedByLimit";
+	else if (temp <= 0.50) this->type = "stoppedByBounds";
+	else if (temp <= 0.75) this->type = "";
+	else                   this->type = "stoppedByPolice";
+
+	if (OSRand() <= density) this->description = "random string";
+
+	return true;
 }//OptimizationSolutionSubstatus::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool VariableSolution::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in VariableSolution" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VariableSolution" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfOtherVariableResults = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfOtherVariableResults;
+		else            n = (int)(1+4*OSRand());
+
+		other = new OtherVariableResult*[n];
+	
+		for (int i = 0; i < n; i++)
 		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableSolution" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
+			other[i] = new OtherVariableResult();
+			other[i]->setRandom(density, conformant);
 		}
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableSolution" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfOtherVariableResults != that->numberOfOtherVariableResults)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableSolution" << endl;
-				cout << "numberOfOtherVariableResults: " << this->numberOfOtherVariableResults << " vs. " << that->numberOfOtherVariableResults << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfOtherVariableResults; i++)
-				if (!this->other[i]->IsEqual(that->other[i]))
-					return false;
-
-			if (!this->values->IsEqual(that->values))
-				return false;
-			if (!this->valuesString->IsEqual(that->valuesString))
-				return false;
-			if (!this->basisStatus->IsEqual(that->basisStatus))
-				return false;
-
-			return true;
-		}
+	if (OSRand() <= density) 
+	{
+		values = new VariableValues();
+		values->setRandom(density, conformant);
 	}
+
+	if (OSRand() <= density) 
+	{
+		valuesString = new VariableValuesString();
+		valuesString->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density) 
+	{
+		basisStatus = new BasisStatus();
+		basisStatus->setRandom(density, conformant);
+	}
+
+	return true;
 }//VariableSolution::setRandom
 
-bool setRandom(double density, bool conformant);
+bool VariableValues::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in VariableValues" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableValues" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VariableValues" << endl;
+#endif
+	int n;
+
+	this->numberOfVar = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfVar;
+	else            n = (int)(1+4*OSRand());
+
+	var = new VarValue*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		var[i] = new VarValue();
+		var[i]->setRandom(density, conformant);
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableValues" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfVar != that->numberOfVar)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableValues" << endl;
-				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfVar; i++)
-				if (!this->var[i]->IsEqual(that->var[i]))
-					return false;
-
-			return true;
-		}
-	}
+	return true;
 }//VariableValues::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool VarValue::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in VarValue" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VarValue" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VarValue" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->idx != that->idx || !isEqual(this->value, that->value) )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VarValue" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VarValue" << endl;
+#endif
+	this->idx = (10*OSRand());
+	if (OSRand() <= 0.5) this->value = 3.14156;
+	else                 this->value = 2.71828;
 
-			return true;
-		}
-	}
+	return true;
 }//VarValue::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool VariableValuesString::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in VariableValuesString" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableValuesString" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VariableValuesString" << endl;
+#endif
+	int n;
+
+	this->numberOfVar = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfVar;
+	else            n = (int)(1+4*OSRand());
+
+	var = new VarValueString*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		var[i] = new VarValueString();
+		var[i]->setRandom(density, conformant);
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableValuesString" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfVar != that->numberOfVar)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VariableValuesString" << endl;
-				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfVar; i++)
-				if (!this->var[i]->IsEqual(that->var[i]))
-					return false;
-
-			return true;
-		}
-	}
+	return true;
 }//VariableValuesString::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool VarValueString::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in VarValueString" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VarValueString" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VarValueString" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in VarValueString" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VarValueString" << endl;
+#endif
+	this->idx = (10*OSRand());
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
 
-			return true;
-		}
-	}
+	return true;
 }//VarValueString::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherVariableResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherVariableResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherVariableResult" << endl;
+#endif
+	this->name = "random string";
+	if (OSRand() <= density) this->value       = "random string"; 
+	if (OSRand() <= density) this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5)
+		{
+			int n;
+
+			this->numberOfVar = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfVar;
+			else            n = (int)(1+4*OSRand());
+
+			var = new OtherVarResult*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				var[i] = new OtherVarResult();
+				var[i]->setRandom(density, conformant);
+			}
+		}
 		else
 		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherVariableResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
+			int n;
+
+			this->numberOfEnumerations = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfEnumerations;
+			else            n = (int)(1+4*OSRand());
+
+			enumeration = new OtherOptionEnumeration*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				enumeration[i] = new OtherOptionEnumeration();
+				enumeration[i]->setRandom(density, conformant);
+			}
 		}
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherVariableResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->name        != that->name          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherVariableResult" << endl;
-				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-
-			if (this->numberOfVar != that->numberOfVar)
-			{
-#if DEBUG_ISEQUAL_ROUTINES == 2
-				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfVar; i++)
-				if (!this->var[i]->IsEqual(that->var[i]))
-					return false;
-
-			if (this->numberOfEnumerations != that->numberOfEnumerations)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherVariableResult" << endl;
-				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfEnumerations; i++)
-				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
-					return false;
-
-			return true;
-		}
-	}
+	
+	return true;
 }//OtherVariableResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherVarResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherVarResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherVarResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherVarResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherVarResult" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherVarResult" << endl;
+#endif
+	this->idx = (10*OSRand());
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
 
-			return true;
-		}
-	}
+	return true;
 }//OtherVarResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool ObjectiveSolution::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in ObjectiveSolution" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ObjectiveSolution" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfOtherObjectiveResults = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfOtherObjectiveResults;
+		else            n = (int)(1+4*OSRand());
+
+		other = new OtherObjectiveResult*[n];
+	
+		for (int i = 0; i < n; i++)
 		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjectiveSolution" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
+			other[i] = new OtherObjectiveResult();
+			other[i]->setRandom(density, conformant);
 		}
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjectiveSolution" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfOtherObjectiveResults != that->numberOfOtherObjectiveResults)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjectiveSolution" << endl;
 
-				cout << "numberOfOtherObjectiveResults: " << this->numberOfOtherObjectiveResults << " vs. " << that->numberOfOtherObjectiveResults << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfOtherObjectiveResults; i++)
-				if (!this->other[i]->IsEqual(that->other[i]))
-					return false;
-
-			if (!this->values->IsEqual(that->values))
-				return false;
-			if (!this->basisStatus->IsEqual(that->basisStatus))
-				return false;
-
-			return true;
-		}
+	if (OSRand() <= density) 
+	{
+		values = new ObjectiveValues();
+		values->setRandom(density, conformant);
 	}
+
+	if (OSRand() <= density) 
+	{
+		basisStatus = new BasisStatus();
+		basisStatus->setRandom(density, conformant);
+	}
+
+	return true;
 }//ObjectiveSolution::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool ObjectiveValues::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in ObjectiveValues" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjectiveValues" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ObjectiveValues" << endl;
+#endif
+	int n;
+
+	this->numberOfObj = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfObj;
+	else            n = (int)(1+4*OSRand());
+
+	obj = new ObjValue*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		obj[i] = new ObjValue();
+		obj[i]->setRandom(density, conformant);
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjectiveValues" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfObj != that->numberOfObj)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjectiveValues" << endl;
-				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfObj; i++)
-				if (!this->obj[i]->IsEqual(that->obj[i]))
-					return false;
-
-			return true;
-		}
-	}
+	return true;
 }//ObjectiveValues::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool ObjValue::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in ObjValue" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjValue" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjValue" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ObjValue" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ObjValue" << endl;
+#endif
+	this->idx = (-2*OSRand());
+	if (OSRand() <= 0.5) this->value = 3.14156;
+	else                 this->value = 2.71828;
 
-			return true;
-		}
-	}
+	return true;
 }//ObjValue::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherObjectiveResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherObjectiveResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherObjectiveResult" << endl;
+#endif
+	this->name = "random string";
+	if (OSRand() <= density) this->value       = "random string"; 
+	if (OSRand() <= density) this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5)
+		{
+			int n;
+
+			this->numberOfObj = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfObj;
+			else            n = (int)(1+4*OSRand());
+
+			obj = new OtherObjResult*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				obj[i] = new OtherObjResult();
+				obj[i]->setRandom(density, conformant);
+			}
+		}
 		else
 		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjectiveResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
+			int n;
+
+			this->numberOfEnumerations = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfEnumerations;
+			else            n = (int)(1+4*OSRand());
+
+			enumeration = new OtherOptionEnumeration*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				enumeration[i] = new OtherOptionEnumeration();
+				enumeration[i]->setRandom(density, conformant);
+			}
 		}
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjectiveResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->value       != that->value   || 
-				this->name        != that->name    || 				
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjectiveResult" << endl;
-				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-
-			if (this->numberOfObj != that->numberOfObj)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjectiveResult" << endl;
-				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfObj; i++)
-				if (!this->obj[i]->IsEqual(that->obj[i]))
-					return false;
-
-			if (this->numberOfEnumerations != that->numberOfEnumerations)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjectiveResult" << endl;
-				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfEnumerations; i++)
-				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
-					return false;
-
-			return true;
-		}
-	}
+	
+	return true;
 }//OtherObjectiveResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherObjResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherObjResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherObjResult" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherObjResult" << endl;
+#endif
+	this->idx = (-2*OSRand());
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
 
-			return true;
-		}
-	}
+	return true;
 }//OtherObjResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool ConstraintSolution::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in ConstraintSolution" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ConstraintSolution" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfOtherConstraintResults = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfOtherConstraintResults;
+		else            n = (int)(1+4*OSRand());
+
+		other = new OtherConstraintResult*[n];
+	
+		for (int i = 0; i < n; i++)
 		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ConstraintSolution" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
+			other[i] = new OtherConstraintResult();
+			other[i]->setRandom(density, conformant);
 		}
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ConstraintSolution" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfOtherConstraintResults != that->numberOfOtherConstraintResults)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in ConstraintSolution" << endl;
-				cout << "numberOfOtherConstraintResults: " << this->numberOfOtherConstraintResults << " vs. " << that->numberOfOtherConstraintResults << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfOtherConstraintResults; i++)
-				if (!this->other[i]->IsEqual(that->other[i]))
-					return false;
-
-			if (!this->dualValues->IsEqual(that->dualValues))
-				return false;
-			if (!this->basisStatus->IsEqual(that->basisStatus))
-				return false;
-
-			return true;
-		}
+	if (OSRand() <= density) 
+	{
+		dualValues = new DualVariableValues();
+		dualValues->setRandom(density, conformant);
 	}
+
+	if (OSRand() <= density) 
+	{
+		basisStatus = new BasisStatus();
+		basisStatus->setRandom(density, conformant);
+	}
+
+	return true;
 }//ConstraintSolution::setRandom
 
 	
-bool setRandom(double density, bool conformant);
+bool DualVariableValues::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in DualVariableValues" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DualVariableValues" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random DualVariableValues" << endl;
+#endif
+	int n;
+
+	this->numberOfCon = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfCon;
+	else            n = (int)(1+4*OSRand());
+
+	con = new DualVarValue*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		con[i] = new DualVarValue();
+		con[i]->setRandom(density, conformant);
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DualVariableValues" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfCon != that->numberOfCon)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DualVariableValues" << endl;
-				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfCon; i++)
-				if (!this->con[i]->IsEqual(that->con[i]))
-					return false;
-
-			return true;
-		}
-	}
+	return true;
 }//DualVariableValues::setRandom
 
-bool setRandom(double density, bool conformant);
+bool DualVarValue::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in DualVarValue" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DualVarValue" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DualVarValue" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->idx != that->idx || !isEqual(this->value, that->value) )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in DualVarValue" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random DualVarValue" << endl;
+#endif
+	this->idx = (5*OSRand());
+	if (OSRand() <= 0.5) this->value = 3.14156;
+	else                 this->value = 2.71828;
 
-			return true;
-		}
-	}
+	return true;
 }//DualVarValue::setRandom
 
-bool setRandom(double density, bool conformant);
+bool OtherConstraintResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherConstraintResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherConstraintResult" << endl;
+#endif
+	this->name = "random string";
+	if (OSRand() <= density) this->value       = "random string"; 
+	if (OSRand() <= density) this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5)
+		{
+			int n;
+
+			this->numberOfCon = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfCon;
+			else            n = (int)(1+4*OSRand());
+
+			con = new OtherConResult*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				con[i] = new OtherConResult();
+				con[i]->setRandom(density, conformant);
+			}
+		}
 		else
 		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConstraintResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
+			int n;
+
+			this->numberOfEnumerations = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfEnumerations;
+			else            n = (int)(1+4*OSRand());
+
+			enumeration = new OtherOptionEnumeration*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				enumeration[i] = new OtherOptionEnumeration();
+				enumeration[i]->setRandom(density, conformant);
+			}
 		}
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConstraintResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->name        != that->name          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConstraintResult" << endl;
-				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-
-			if (this->numberOfCon != that->numberOfCon)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConstraintResult" << endl;
-				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfCon; i++)
-				if (!this->con[i]->IsEqual(that->con[i]))
-					return false;
-
-			if (this->numberOfEnumerations != that->numberOfEnumerations)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConstraintResult" << endl;
-				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfEnumerations; i++)
-				if (!this->enumeration[i]->IsEqual(that->enumeration[i]))
-					return false;
-
-			return true;
-		}
-	}
+	
+	return true;
 }//OtherConstraintResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherConResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherConResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherConResult" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
-#endif	
-				return false;
-			}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherConResult" << endl;
+#endif
+	this->idx = (5*OSRand());
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
 
-			return true;
-		}
-	}
+	return true;
 }//OtherConResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherSolutionResults::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherSolutionResults" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResults" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherSolutionResults" << endl;
+#endif
+	numberOfOtherSolutionResults = (int)(4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfOtherSolutionResults;
+	else            n = (int)(4*OSRand());
+
+	otherSolutionResult = new OtherSolutionResult*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		otherSolutionResult[i] = new OtherSolutionResult();
+		otherSolutionResult[i]->setRandom(density, conformant);
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResults" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfOtherSolutionResults != that->numberOfOtherSolutionResults)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResults" << endl;
-				cout << "numberOfOtherSolutionResults: " << this->numberOfOtherSolutionResults << " vs. " << that->numberOfOtherSolutionResults << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfOtherSolutionResults; i++)
-				if (!this->otherSolutionResult[i]->IsEqual(that->otherSolutionResult[i]))
-					return false;
-
-			return true;
-		}
-	}
+	return true;
 }//OtherSolutionResults::setRandom
 
-bool setRandom(double density, bool conformant);
+bool OtherSolutionResult::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherSolutionResult" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResult" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherSolutionResult" << endl;
+#endif
+	name = "random string";
+	numberOfItems = (int) (4*OSRand());
+
+	if (OSRand() <= density) category    = "random string";
+	if (OSRand() <= density) description = "random string";
+
+	int n;
+
+	if (conformant)	n = this->numberOfItems;
+	else            n = (int)(1+4*OSRand());
+
+	if (n > 0 || OSRand() <= density)
+	{
+		item = new std::string[n];
+
+		for (int i = 0; i < n; i++)
+			item[i] = "random string";
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResult" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
 
-			if (this->name        != that->name          || 
-				this->category    != that->category      || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResult" << endl;
-				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-
-			if (this->numberOfItems != that->numberOfItems)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResult" << endl;
-				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfItems; i++)
-				if (this->item[i] != that->item[i])
-				{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolutionResult" << endl;
-				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
-#endif	
-					return false;
-				}
-
-			return true;
-		}
-	}
+	return true;
 }//OtherSolutionResult::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool OtherSolverOutput::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in OtherSolverOutput" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolverOutput" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherSolverOutput" << endl;
+#endif
+	int n;
+
+	this->numberOfSolverOutputs = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfSolverOutputs;
+	else            n = (int)(1+4*OSRand());
+
+	solverOutput = new SolverOutput*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		solverOutput[i] = new SolverOutput();
+		solverOutput[i]->setRandom(density, conformant);
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolverOutput" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->numberOfSolverOutputs != that->numberOfSolverOutputs)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in OtherSolverOutput" << endl;
-				cout << "numberOfSolverOutputs: " << this->numberOfSolverOutputs << " vs. " << that->numberOfSolverOutputs << endl;
-#endif	
 
-				return false;
-			}
-
-			for (int i = 0; i < numberOfSolverOutputs; i++)
-				if (!this->solverOutput[i]->IsEqual(that->solverOutput[i]))
-					return false;
-
-			return true;
-		}
-	}
+	return true;
 }//OtherSolverOutput::setRandom
 
 
-bool setRandom(double density, bool conformant);
+bool SolverOutput::setRandom(double density, bool conformant)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in SolverOutput" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SolverOutput" << endl;
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
+#ifdef DEBUG_OSRESULT
+	cout << "Set random SolverOutput" << endl;
+#endif
+	name = "random string";
+	numberOfItems = (int) (4*OSRand());
+
+	if (OSRand() <= density) category    = "random string";
+	if (OSRand() <= density) description = "random string";
+
+	int n;
+
+	if (conformant)	n = this->numberOfItems;
+	else            n = (int)(1+4*OSRand());
+
+	if (n > 0 || OSRand() <= density)
+	{
+		item = new std::string[n];
+
+		for (int i = 0; i < n; i++)
+			item[i] = "random string";
 	}
-	else 
-	{	if (that == NULL)
-		{
-			#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SolverOutput" << endl;
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->name        != that->name          || 
-				this->category    != that->category      || 
-				this->description != that->description  ) 
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SolverOutput" << endl;
-				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
-				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
 
-			if (this->numberOfItems != that->numberOfItems)
-			{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SolverOutput" << endl;
-				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
-#endif	
-
-				return false;
-			}
-
-			for (int i = 0; i < numberOfItems; i++)
-				if (this->item[i] != that->item[i])
-				{
-#if DEBUG_ISEQUAL_ROUTINES > 0
-				cout << "Differences in SolverOutput" << endl;
-				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
-#endif	
-					return false;
-				}
-
-			return true;
-		}
-	}
+	return true;
 }//SolverOutput::setRandom
-#endif //if0
-

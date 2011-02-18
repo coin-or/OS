@@ -798,7 +798,7 @@ public:
 	/** the unit in which time is measured */
 	std::string unit;
 
-	/** the maximum time allowed */
+	/** the number of units */
 	double value;
 
 	/**

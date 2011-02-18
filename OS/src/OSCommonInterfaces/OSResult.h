@@ -454,17 +454,18 @@ public:
 	bool setRandom(double density, bool conformant);
 };//class ServiceResult
 
-
+#if 0
 /*! \class Time
- *  \brief The Time  Class.
+ *  \brief The Time Class.
  * 
  * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
  * 
  * \remarks
- * A class that provides an array of individual time measurements
- * that are defined in the OSrL schema.  
+ * A class that provides an individual time measurement
+ * as defined in the OSrL schema.  
+ * This class is superseded by class TimeMeasurement since version 2.3
  */
 class Time{
 public:
@@ -520,6 +521,63 @@ public:
 	 */
 	bool setRandom(double density, bool conformant);
 };//class Time
+#endif
+
+/*! \class TimeMeasurement
+ *  \brief The TimeMeasurement Class.
+ * 
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
+ * 
+ * \remarks
+ * A class that provides an individual time measurement as defined in the OSrL schema.
+ * Extends the class TimeSpan defined in OSGeneral.h by adding three elements 
+ * type, category and description.  
+ * This class supersedes the old class Time since version 2.3.
+ */
+class TimeMeasurement : public TimeSpan{
+public:
+
+	/** 
+	 * The type of timer used (cpuTime/elapsedTime/other)
+	 */
+	std::string type;
+
+	/** 
+	 * The category of time (total/input/preprocessing/optimization/postprocessing/output/other)
+	 */
+	std::string category;
+
+	/** 
+	 * Further description on the timer used
+	 */
+	std::string description;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	TimeMeasurement();
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~TimeMeasurement();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(TimeMeasurement *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+};//class TimeMeasurement
 
 
 /*! \class TimingInformation
@@ -546,7 +604,7 @@ public:
 	 *
 	 * An array of time measurements
 	 */
-	Time** time;
+	TimeMeasurement** time;
 
 	/**
 	 *
