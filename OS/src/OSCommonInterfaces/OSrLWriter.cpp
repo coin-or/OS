@@ -278,7 +278,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->system->availableDiskSpace->value ;
+			outStr << os_dtoa_format(m_OSResult->system->availableDiskSpace->value);
 			outStr << "</availableDiskSpace>" << endl;
 		}		
 
@@ -300,7 +300,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->system->availableMemory->value ;
+			outStr << os_dtoa_format(m_OSResult->system->availableMemory->value);
 			outStr << "</availableMemory>" << endl;
 		}		
 
@@ -322,7 +322,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->system->availableCPUSpeed->value ;
+			outStr << os_dtoa_format(m_OSResult->system->availableCPUSpeed->value);
 			outStr << "</availableCPUSpeed>" << endl;
 		}		
 
@@ -418,13 +418,13 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << "<timeServiceStarted>" << m_OSResult->service->timeServiceStarted << "</timeServiceStarted>" << endl;
 		}
-		if(m_OSResult->service->serviceUtilization >= 0){
+		if(m_OSResult->service->serviceUtilization != -1.0){
 			if (serviceTagPrinted == false)
 			{	
 				outStr << "<service>" << endl;
 				serviceTagPrinted = true;
 			}
-			outStr << "<serviceUtilization>" << m_OSResult->service->serviceUtilization << "</serviceUtilization>" << endl;
+			outStr << "<serviceUtilization>" << os_dtoa_format(m_OSResult->service->serviceUtilization) << "</serviceUtilization>" << endl;
 		}
 
 		if(m_OSResult->service->otherResults != NULL)
@@ -513,31 +513,31 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 		}
 
 		if (m_OSResult->job->timingInformation != NULL)
-			if (m_OSResult->job->timingInformation->numberOfTimes > 0)
+		{	
+			if (jobTagPrinted == false)
 			{	
-				if (jobTagPrinted == false)
-				{	
-					outStr << "<job>" << endl;
-					jobTagPrinted = true;
-				}
-				outStr << "<timingInformation numberOfTimes=\"";
-				outStr << m_OSResult->job->timingInformation->numberOfTimes << "\">" << endl;
-				for (i=0; i<m_OSResult->job->timingInformation->numberOfTimes; i++)
-				{	outStr << "<time ";
-					if (m_OSResult->job->timingInformation->time[i]->type != "")
-						outStr << "type=\"" << m_OSResult->job->timingInformation->time[i]->type << "\" ";
-					if (m_OSResult->job->timingInformation->time[i]->unit != "")
-						outStr << "unit=\"" << m_OSResult->job->timingInformation->time[i]->unit << "\" ";
-					if (m_OSResult->job->timingInformation->time[i]->category != "")
-						outStr << "category=\"" << m_OSResult->job->timingInformation->time[i]->category << "\" ";
-					if (m_OSResult->job->timingInformation->time[i]->description != "")
-						outStr << "description=\"" << m_OSResult->job->timingInformation->time[i]->description << "\" ";
-					outStr << ">" << endl;
-					outStr << os_dtoa_format(m_OSResult->job->timingInformation->time[i]->value);
-					outStr << "</time>" << endl; 
-				}
-				outStr << "</timingInformation>" << endl;
+				outStr << "<job>" << endl;
+				jobTagPrinted = true;
 			}
+			outStr << "<timingInformation numberOfTimes=\"";
+			outStr << m_OSResult->job->timingInformation->numberOfTimes << "\">" << endl;
+			for (i=0; i<m_OSResult->job->timingInformation->numberOfTimes; i++)
+			{
+				outStr << "<time ";
+				if (m_OSResult->job->timingInformation->time[i]->type != "")
+					outStr << "type=\"" << m_OSResult->job->timingInformation->time[i]->type << "\" ";
+				if (m_OSResult->job->timingInformation->time[i]->unit != "")
+					outStr << "unit=\"" << m_OSResult->job->timingInformation->time[i]->unit << "\" ";
+				if (m_OSResult->job->timingInformation->time[i]->category != "")
+					outStr << "category=\"" << m_OSResult->job->timingInformation->time[i]->category << "\" ";
+				if (m_OSResult->job->timingInformation->time[i]->description != "")
+					outStr << "description=\"" << m_OSResult->job->timingInformation->time[i]->description << "\" ";
+				outStr << ">" << endl;
+				outStr << os_dtoa_format(m_OSResult->job->timingInformation->time[i]->value);
+				outStr << "</time>" << endl; 
+			}
+			outStr << "</timingInformation>" << endl;
+		}
 
 		if(m_OSResult->job->usedDiskSpace != NULL){
 			if (jobTagPrinted == false)
@@ -557,7 +557,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->job->usedDiskSpace->value ;
+			outStr << os_dtoa_format(m_OSResult->job->usedDiskSpace->value);
 			outStr << "</usedDiskSpace>" << endl;
 		}		
 
@@ -579,7 +579,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->job->usedMemory->value ;
+			outStr << os_dtoa_format(m_OSResult->job->usedMemory->value);
 			outStr << "</usedMemory>" << endl;
 		}		
 
@@ -601,7 +601,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			outStr << ">";
-			outStr << m_OSResult->job->usedCPUSpeed->value ;
+			outStr << os_dtoa_format(m_OSResult->job->usedCPUSpeed->value);
 			outStr << "</usedCPUSpeed>" << endl;
 		}		
 
@@ -663,24 +663,35 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 #ifdef DEBUG
 	cout << "output <optimization>" << endl;
 #endif
-	if(m_OSResult->optimization != NULL && m_OSResult->optimization->numberOfSolutions > 0){
+	if(m_OSResult->optimization != NULL)
+	{
 		outStr << "<optimization " ;
 		outStr << "numberOfSolutions=\"";
 		outStr << m_OSResult->optimization->numberOfSolutions ;
 		outStr <<  "\"";
-		outStr << " numberOfVariables=\"";
-		outStr << m_OSResult->optimization->numberOfVariables ;
-		outStr <<  "\"";
-		outStr << " numberOfConstraints=\"";
-		outStr << m_OSResult->optimization->numberOfConstraints ;
-		outStr <<  "\"";
-		outStr << " numberOfObjectives=\"";
-		outStr << m_OSResult->optimization->numberOfObjectives ;
-		outStr << "\"" ;
+		if (m_OSResult->optimization->numberOfVariables >= 0)
+		{
+			outStr << " numberOfVariables=\"";
+			outStr << m_OSResult->optimization->numberOfVariables ;
+			outStr <<  "\"";
+		}
+		if (m_OSResult->optimization->numberOfConstraints >= 0)
+		{
+			outStr << " numberOfConstraints=\"";
+			outStr << m_OSResult->optimization->numberOfConstraints ;
+			outStr <<  "\"";
+		}
+		if (m_OSResult->optimization->numberOfObjectives >= 0)
+		{
+			outStr << " numberOfObjectives=\"";
+			outStr << m_OSResult->optimization->numberOfObjectives ;
+			outStr << "\"" ;
+		}
 		outStr << ">" << endl;
 		// get solution information
 		for(i = 0; i < m_OSResult->optimization->numberOfSolutions; i++){
-			if(m_OSResult->optimization->solution[i] != NULL){
+			if(m_OSResult->optimization->solution[i] != NULL)
+			{
 				outStr << "<solution" ;
 				outStr << " targetObjectiveIdx=\"";
 				outStr << m_OSResult->optimization->solution[i]->targetObjectiveIdx ;
@@ -1037,41 +1048,42 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 #ifdef DEBUG
 	cout << "output <otherSolutionResults>" << endl;
 #endif
-			if (m_OSResult->optimization->solution[i]->otherSolutionResults != NULL)
-					if (m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults > 0){
-						outStr << "<otherSolutionResults numberOfOtherSolutionResults=\"";
-						outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults;
-						outStr << "\">" << std::endl;
-						for(int k = 0; k < m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults; k++){
-							outStr << "<otherSolutionResult";
-							outStr << " name=\"";
-							outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->name;
-							outStr << "\"";
-							outStr << " numberOfItems=\"";
-							outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; 
-							outStr << "\"";
-							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category != "")
-								outStr << " category=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category << "\"";
-							if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description != "")
-								outStr << " description=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description << "\"";
-							outStr << ">" << std::endl;
-							for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; j++){
-								outStr << "<item>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->item[j] << "</item>" << std::endl;
-							}
-							outStr << "</otherSolutionResult>" << std::endl;
-						}
-						outStr << "</otherSolutionResults>" << std::endl;
+				if (m_OSResult->optimization->solution[i]->otherSolutionResults != NULL)
+				{
+					outStr << "<otherSolutionResults numberOfOtherSolutionResults=\"";
+					outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults;
+					outStr << "\">" << std::endl;
+					for(int k = 0; k < m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults; k++)
+					{
+						outStr << "<otherSolutionResult";
+						outStr << " name=\"";
+						outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->name;
+						outStr << "\"";
+						outStr << " numberOfItems=\"";
+						outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; 
+						outStr << "\"";
+						if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category != "")
+							outStr << " category=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category << "\"";
+						if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description != "")
+							outStr << " description=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description << "\"";
+						outStr << ">" << std::endl;
+						for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; j++)
+							outStr << "<item>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->item[j] << "</item>" << std::endl;
+						outStr << "</otherSolutionResult>" << std::endl;
 					}
+					outStr << "</otherSolutionResults>" << std::endl;
+				}
 				outStr << "</solution>" << endl;
-			}
-		} // end the solution for loop
+			} // end if solution not NULL
+		} // end for loop(i=0..numberOfSolutions)
 
 
 #ifdef DEBUG
 	cout << "output <otherSolverOutput>" << endl;
 #endif
 		if (m_OSResult->optimization->otherSolverOutput != NULL)
-			if (m_OSResult->optimization->otherSolverOutput->numberOfSolverOutputs > 0){
+//			if (m_OSResult->optimization->otherSolverOutput->numberOfSolverOutputs > 0)
+			{
 				outStr << "<otherSolverOutput numberOfSolverOutputs=\"";
 				outStr << m_OSResult->optimization->otherSolverOutput->numberOfSolverOutputs;
 				outStr << "\">" << std::endl;

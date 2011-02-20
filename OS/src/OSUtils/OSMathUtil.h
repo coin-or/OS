@@ -290,10 +290,9 @@ inline int getMult(double* a, int size)
 /**
  * OSRand()
  *
- * @return a random number between 0 and 1 (inclusive)
- * @notes The random number generator used, rand(), is not very good.
- * It has a period of at most 2^16 - 1 and should be replaced by a serious
- * random number generator for serious work.
+ * @return a uniformly distributed random number between 0 and 1 (inclusive)
+ * @notes The random number generator used, rand(), is not very good
+ * and should be replaced by a serious random number generator for serious work.
  */
 inline double OSRand()
 {
@@ -304,6 +303,15 @@ inline double OSRand()
 	return (double) i/RAND_MAX;
 }	
 
+
+/** * OSiRand(int iMin, int iMax) * * @return a uniformly distributed random integer between iMin and iMax (inclusive)
+ * @notes The random number generator used, rand(), is not very good
+ * and should be replaced by a serious random number generator for serious work.
+ */
+inline double OSiRand(int iMin, int iMax)
+{
+	return iMin + rand()%(iMax - iMin + 1);
+}	
 
 
 #endif

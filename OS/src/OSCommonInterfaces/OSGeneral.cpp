@@ -22,7 +22,7 @@
 #include <sstream>
 
 #define DEBUG_OSGENERAL
-//#define DEBUG_ISEQUAL_ROUTINES
+#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
 using std::cout;
@@ -455,11 +455,11 @@ bool IntVector::IsEqual(IntVector *that)
 	}
 }//IntVector::IsEqual
 
-bool IntVector::setRandom(double density, bool conformant)
+bool IntVector::setRandom(double density, bool conformant, int iMin, int iMax)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Set random in IntVector" << endl;
-	#endif
+#ifdef DEBUG_ISEQUAL_ROUTINES
+	cout << "Set random IntVector" << endl;
+#endif
 	this->numberOfEl = (int)(4*OSRand());
 
 	int n;
@@ -469,7 +469,7 @@ bool IntVector::setRandom(double density, bool conformant)
 
 	el = new int[n];	
 	for (int i = 0; i < n; i++)
-		el[i] = (int)(4*OSRand());
+		el[i] = OSiRand(iMin, iMax);
 	return true;
 }//IntVector::setRandom
 
@@ -560,7 +560,7 @@ bool OtherOptionEnumeration::IsEqual(OtherOptionEnumeration *that)
 	}
 }//OtherOptionEnumeration::IsEqual
 
-bool OtherOptionEnumeration::setRandom(double density, bool conformant)
+bool OtherOptionEnumeration::setRandom(double density, bool conformant, int iMin, int iMax)
 {
 	#ifdef DEBUG_ISEQUAL_ROUTINES
 		cout << "Set random OtherOptionEnumeration" << endl;
@@ -568,7 +568,7 @@ bool OtherOptionEnumeration::setRandom(double density, bool conformant)
 	if (OSRand() <= density) this->value       = "random string";
 	if (OSRand() <= density) this->description = "random string";
 
-	if (OSRand() <= density) this->IntVector::setRandom(density,conformant);
+	if (OSRand() <= density) this->IntVector::setRandom(density,conformant,iMin,iMax);
 	return true;
 }//OtherOptionEnumeration::setRandom
 
@@ -910,9 +910,9 @@ int BasisStatus::getEl(int status, int j)
 
 bool BasisStatus::IsEqual(BasisStatus *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in BasisStatus" << endl;
-	#endif
+#ifdef DEBUG_ISEQUAL_ROUTINES
+	cout << "Start comparing in BasisStatus" << endl;
+#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
@@ -946,17 +946,41 @@ bool BasisStatus::IsEqual(BasisStatus *that)
 	}
 }//BasisStatus::IsEqual
 
-bool BasisStatus::setRandom(double density, bool conformant)
+bool BasisStatus::setRandom(double density, bool conformant, int iMin, int iMax)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Set random BasisStatus" << endl;
-	#endif
-	if (OSRand() <= density)      this->basic->setRandom(density, conformant);
-	if (OSRand() <= density)    this->atLower->setRandom(density, conformant);
-	if (OSRand() <= density)    this->atUpper->setRandom(density, conformant);
-	if (OSRand() <= density)     this->isFree->setRandom(density, conformant);
-	if (OSRand() <= density) this->superbasic->setRandom(density, conformant);
-	if (OSRand() <= density)    this->unknown->setRandom(density, conformant);
+#ifdef DEBUG_ISEQUAL_ROUTINES
+	cout << "Set random BasisStatus" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		this->basic = new IntVector();
+		this->basic->setRandom(density, conformant, iMin, iMax);
+	}
+	if (OSRand() <= density)
+	{
+		this->atLower = new IntVector();
+		this->atLower->setRandom(density, conformant, iMin, iMax);
+	}
+	if (OSRand() <= density)
+	{
+		this->atUpper = new IntVector();
+		this->atUpper->setRandom(density, conformant, iMin, iMax);
+	}
+	if (OSRand() <= density)
+	{
+		this->isFree = new IntVector();
+		this->isFree->setRandom(density, conformant, iMin, iMax);
+	}
+	if (OSRand() <= density)
+	{
+		this->superbasic = new IntVector();
+		this->superbasic->setRandom(density, conformant, iMin, iMax);
+	}
+	if (OSRand() <= density)
+	{
+		this->unknown = new IntVector();
+		this->unknown->setRandom(density, conformant, iMin, iMax);
+	}
 
 	return true;
 }//BasisStatus::setRandom

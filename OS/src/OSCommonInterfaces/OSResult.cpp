@@ -23,10 +23,10 @@
 #include<iostream>
 #include<sstream>
 
-//#define DEBUG_OSRESULT
-#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
+#define DEBUG_OSRESULT
+//#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
 //#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
-//#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
+#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
 
 using namespace std;
 
@@ -999,7 +999,7 @@ OtherSolverOutput::~OtherSolverOutput(){
 
 
 OptimizationResult::OptimizationResult():
-	numberOfSolutions( -1),
+	numberOfSolutions(0),
 	numberOfVariables( -1),
 	numberOfObjectives( -1),
 	numberOfConstraints(-1),
@@ -6707,9 +6707,9 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 	
 bool DualVariableValues::IsEqual(DualVariableValues *that)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in DualVariableValues" << endl;
-	#endif
+#if DEBUG_ISEQUAL_ROUTINES == 2
+	cout << "Start comparing in DualVariableValues" << endl;
+#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
@@ -6754,9 +6754,9 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 
 bool DualVarValue::IsEqual(DualVarValue *that)
 {
-	#if DEBUG_ISEQUAL_ROUTINES == 2
-		cout << "Start comparing in DualVarValue" << endl;
-	#endif
+#if DEBUG_ISEQUAL_ROUTINES == 2
+	cout << "Start comparing in DualVarValue" << endl;
+#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
@@ -7293,10 +7293,28 @@ bool SystemResult::setRandom(double density, bool conformant)
 #endif
 	if (OSRand() <= density) systemInformation = "random string"; 
 
-	if (OSRand() <= density) availableDiskSpace->setRandom(density, conformant);
-	if (OSRand() <= density) availableMemory->setRandom(density, conformant);
-	if (OSRand() <= density) availableCPUSpeed->setRandom(density, conformant);
-	if (OSRand() <= density) availableCPUNumber->setRandom(density, conformant);
+	if (OSRand() <= density)
+	{
+		availableDiskSpace = new StorageCapacity(); 
+		availableDiskSpace->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		availableMemory = new StorageCapacity(); 
+		availableMemory->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)
+	{
+		availableCPUSpeed = new CPUSpeed(); 
+		availableCPUSpeed->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		availableCPUNumber = new CPUNumber(); 
+		availableCPUNumber->setRandom(density, conformant);
+	}
 
 	if (OSRand() <= density)     
 	{
@@ -7330,7 +7348,6 @@ bool ServiceResult::setRandom(double density, bool conformant)
 	{
 		double temp = OSRand();
 
-		serviceUtilization  = (int) (-1+4*OSRand());
 		if      (temp <= 0.25) this->serviceUtilization = OSRand();
 		else if (temp <= 0.50) this->serviceUtilization = -1.0;
 		else if (temp <= 0.75) this->serviceUtilization = OSDBL_MAX;
@@ -7682,7 +7699,7 @@ bool VariableSolution::setRandom(double density, bool conformant)
 	if (OSRand() <= density) 
 	{
 		basisStatus = new BasisStatus();
-		basisStatus->setRandom(density, conformant);
+		basisStatus->setRandom(density, conformant, 0, 9);
 	}
 
 	return true;
@@ -7804,7 +7821,7 @@ bool OtherVariableResult::setRandom(double density, bool conformant)
 			for (int i = 0; i < n; i++)
 			{
 				enumeration[i] = new OtherOptionEnumeration();
-				enumeration[i]->setRandom(density, conformant);
+				enumeration[i]->setRandom(density, conformant, 0, 9);
 			}
 		}
 	}
@@ -7859,7 +7876,7 @@ bool ObjectiveSolution::setRandom(double density, bool conformant)
 	if (OSRand() <= density) 
 	{
 		basisStatus = new BasisStatus();
-		basisStatus->setRandom(density, conformant);
+		basisStatus->setRandom(density, conformant, -2, -1);
 	}
 
 	return true;
@@ -7895,7 +7912,9 @@ bool ObjValue::setRandom(double density, bool conformant)
 #ifdef DEBUG_OSRESULT
 	cout << "Set random ObjValue" << endl;
 #endif
-	this->idx = (-2*OSRand());
+	if (OSRand() <= 0.5) this->idx = -1;
+	else                 this->idx = -2;
+
 	if (OSRand() <= 0.5) this->value = 3.14156;
 	else                 this->value = 2.71828;
 
@@ -7945,7 +7964,7 @@ bool OtherObjectiveResult::setRandom(double density, bool conformant)
 			for (int i = 0; i < n; i++)
 			{
 				enumeration[i] = new OtherOptionEnumeration();
-				enumeration[i]->setRandom(density, conformant);
+				enumeration[i]->setRandom(density, conformant, -2, -1);
 			}
 		}
 	}
@@ -7959,7 +7978,9 @@ bool OtherObjResult::setRandom(double density, bool conformant)
 #ifdef DEBUG_OSRESULT
 	cout << "Set random OtherObjResult" << endl;
 #endif
-	this->idx = (-2*OSRand());
+	if (OSRand() <= 0.5) this->idx = -1;
+	else                 this->idx = -2;
+
 	if (OSRand() <= 0.5) this->value = "random string";
 	else                 this->value = "";
 
@@ -7999,7 +8020,7 @@ bool ConstraintSolution::setRandom(double density, bool conformant)
 	if (OSRand() <= density) 
 	{
 		basisStatus = new BasisStatus();
-		basisStatus->setRandom(density, conformant);
+		basisStatus->setRandom(density, conformant, 0 ,4);
 	}
 
 	return true;
@@ -8083,7 +8104,7 @@ bool OtherConstraintResult::setRandom(double density, bool conformant)
 			for (int i = 0; i < n; i++)
 			{
 				enumeration[i] = new OtherOptionEnumeration();
-				enumeration[i]->setRandom(density, conformant);
+				enumeration[i]->setRandom(density, conformant, 0, 4);
 			}
 		}
 	}

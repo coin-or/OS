@@ -7252,9 +7252,10 @@ bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double
 bool OSOption::setNumberOfOtherVariableOptions(int numberOfOther)
 {
 	if (optimization == NULL) return false;
-	if (optimization->variables != NULL) return false;
+	if (optimization->variables == NULL) 
+		optimization->variables = new VariableOption();
+	if(optimization->variables->numberOfOtherVariableOptions > 0) return false;
 
-	optimization->variables = new VariableOption();
 	optimization->variables->numberOfOtherVariableOptions = numberOfOther;
 	
 	if (numberOfOther > 0)
@@ -7556,9 +7557,10 @@ bool OSOption::setOtherObjectiveOptionObj(int otherOptionNumber, int objNumber,
 bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfOther)
 {
 	if (optimization == NULL) return false;
-	if (optimization->objectives != NULL) return false;
+	if (optimization->objectives == NULL) 
+		optimization->objectives = new ObjectiveOption();
+	if (optimization->objectives->numberOfOtherObjectiveOptions > 0) return false;
 
-	optimization->objectives = new ObjectiveOption();
 	optimization->objectives->numberOfOtherObjectiveOptions = numberOfOther;
 
 	if (numberOfOther > 0)
@@ -7761,9 +7763,10 @@ bool OSOption::setAnotherInitDualVarValue(int idx, double lbValue, double ubValu
 bool OSOption::setNumberOfOtherConstraintOptions(int numberOfOther)
 {
 	if (optimization == NULL) return false;
-	if (optimization->constraints != NULL) return false;
+	if (optimization->constraints == NULL) 	
+		optimization->constraints = new ConstraintOption();
+	if (optimization->constraints->numberOfOtherConstraintOptions > 0) return false;
 
-	optimization->constraints = new ConstraintOption();
 	optimization->constraints->numberOfOtherConstraintOptions = numberOfOther;
 
 	if (numberOfOther > 0)
@@ -10622,7 +10625,7 @@ bool VariableOption::setRandom( double density, bool conformant )
 	if (OSRand() <= density) 
 	{
 		this->initialBasisStatus = new BasisStatus();
-		this->initialBasisStatus->setRandom(density, conformant);
+		this->initialBasisStatus->setRandom(density, conformant, 0, 9);
 	}
 	if (OSRand() <= density) 
 	{
@@ -10848,7 +10851,7 @@ bool OtherVariableOption::setRandom( double density, bool conformant )
 			for (int i = 0; i < n; i++)
 			{
 				enumeration[i] = new OtherOptionEnumeration();
-				enumeration[i]->setRandom(density, conformant);
+				enumeration[i]->setRandom(density, conformant, 0, 9);
 			}
 		}
 	}
@@ -10886,7 +10889,7 @@ bool ObjectiveOption::setRandom( double density, bool conformant )
 	if (OSRand() <= density) 
 	{
 		this->initialBasisStatus = new BasisStatus();
-		this->initialBasisStatus->setRandom(density, conformant);
+		this->initialBasisStatus->setRandom(density, conformant, -2, -1);
 	}
 
 	if (OSRand() <= density) 
@@ -11028,7 +11031,7 @@ bool OtherObjectiveOption::setRandom( double density, bool conformant )
 			for (int i = 0; i < n; i++)
 			{
 				enumeration[i] = new OtherOptionEnumeration();
-				enumeration[i]->setRandom(density, conformant);
+				enumeration[i]->setRandom(density, conformant, -2, -1);
 			}
 		}
 	}
@@ -11067,7 +11070,7 @@ bool ConstraintOption::setRandom( double density, bool conformant )
 	if (OSRand() <= density) 
 	{
 		this->initialBasisStatus = new BasisStatus();
-		this->initialBasisStatus->setRandom(density, conformant);
+		this->initialBasisStatus->setRandom(density, conformant, 0, 4);
 	}
 
 	if (OSRand() <= density) 
@@ -11207,7 +11210,7 @@ bool OtherConstraintOption::setRandom( double density, bool conformant )
 			for (int i = 0; i < n; i++)
 			{
 				enumeration[i] = new OtherOptionEnumeration();
-				enumeration[i]->setRandom(density, conformant);
+				enumeration[i]->setRandom(density, conformant, 0, 4);
 			}
 		}
 	}

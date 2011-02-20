@@ -193,7 +193,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 {
 	ostringstream outStr;
 	
-	if (bs->basic != NULL && bs->basic->numberOfEl > 0)
+	if (bs->basic != NULL)
 	{
 		outStr << "<basic numberOfEl=\"" << bs->basic->numberOfEl << "\">";
 		if(addWhiteSpace == true) outStr << endl;
@@ -202,7 +202,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		if(addWhiteSpace == true) outStr << endl;
 	}
 	
-	if (bs->atLower != NULL && bs->atLower->numberOfEl > 0)
+	if (bs->atLower != NULL)
 	{
 		outStr << "<atLower numberOfEl=\"" << bs->atLower->numberOfEl << "\">";
 		if(addWhiteSpace == true) outStr << endl;
@@ -211,7 +211,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		if(addWhiteSpace == true) outStr << endl;
 	}
 	
-	if (bs->atUpper != NULL && bs->atUpper->numberOfEl > 0)
+	if (bs->atUpper != NULL)
 	{
 		outStr << "<atUpper numberOfEl=\"" << bs->atUpper->numberOfEl << "\">";
 		if(addWhiteSpace == true) outStr << endl;
@@ -220,7 +220,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		if(addWhiteSpace == true) outStr << endl;
 	}
 	
-	if (bs->isFree != NULL && bs->isFree->numberOfEl > 0)
+	if (bs->isFree != NULL)
 	{
 		outStr << "<isFree numberOfEl=\"" << bs->isFree->numberOfEl << "\">";
 		if(addWhiteSpace == true) outStr << endl;
@@ -229,7 +229,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		if(addWhiteSpace == true) outStr << endl;
 	}
 	
-	if (bs->superbasic != NULL && bs->superbasic->numberOfEl > 0)
+	if (bs->superbasic != NULL)
 	{
 		outStr << "<superbasic numberOfEl=\"" << bs->superbasic->numberOfEl << "\">";
 		if(addWhiteSpace == true) outStr << endl;
@@ -238,7 +238,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		if(addWhiteSpace == true) outStr << endl;
 	}
 
-	if (bs->unknown != NULL && bs->unknown->numberOfEl > 0)
+	if (bs->unknown != NULL)
 	{
 		outStr << "<unknown numberOfEl=\"" << bs->unknown->numberOfEl << "\">";
 		if(addWhiteSpace == true) outStr << endl;

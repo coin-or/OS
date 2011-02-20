@@ -199,9 +199,9 @@ osolBody:
 
 headerElement: | headerElementStart headerElementContent
 {
-		if(!osoption->setOptionHeader(osglData->fileName, osglData->source,
-				osglData->description, osglData->fileCreator, osglData->licence) ) 	
-			osolerror( NULL, osoption, parserData, osglData, "setHeader failed");
+	if(!osoption->setOptionHeader(osglData->fileName, osglData->source,
+			osglData->description, osglData->fileCreator, osglData->licence) ) 	
+		osolerror( NULL, osoption, parserData, osglData, "setHeader failed");
 };
  
 headerElementStart: HEADERSTART
@@ -1745,6 +1745,7 @@ variables: | variablesStart variablesAttributes variablesContent;
 variablesStart: VARIABLESSTART
 {
 	parserData->numberOfOtherVariableOptions = 0;
+	osoption->optimization->variables = new VariableOption();
 };
 
 variablesAttributes: numberOfOtherVariableOptions
@@ -1936,7 +1937,10 @@ initVarValueStringContent: GREATERTHAN VAREND | ENDOFELEMENT;
 /* -------------------------------------------- */
 variableInitialBasis: | variableInitialBasisStart variableInitialBasisContent;
 
-variableInitialBasisStart: INITIALBASISSTATUSSTART;
+variableInitialBasisStart: INITIALBASISSTATUSSTART
+{
+	osoption->optimization->variables->initialBasisStatus = new BasisStatus();
+};
 
 variableInitialBasisContent: variableInitialBasisEmpty | variableInitialBasisLaden;
 
@@ -2443,7 +2447,10 @@ otherVarEmpty: GREATERTHAN VAREND | ENDOFELEMENT;
 objectives: | objectivesStart objectivesAttributes objectivesContent;
 
 objectivesStart: OBJECTIVESSTART
-{	parserData->numberOfOtherObjectiveOptions = 0; };
+{
+	parserData->numberOfOtherObjectiveOptions = 0; 
+	osoption->optimization->objectives = new ObjectiveOption();
+};
 
 objectivesAttributes: numberOfOtherObjectiveOptions
 {	
@@ -2656,7 +2663,10 @@ initObjBoundContent: GREATERTHAN OBJEND | ENDOFELEMENT;
 /* -------------------------------------------- */
 objectiveInitialBasis: | objectiveInitialBasisStart objectiveInitialBasisContent;
 
-objectiveInitialBasisStart: INITIALBASISSTATUSSTART;
+objectiveInitialBasisStart: INITIALBASISSTATUSSTART
+{
+	osoption->optimization->objectives->initialBasisStatus = new BasisStatus();
+};
 
 objectiveInitialBasisContent: objectiveInitialBasisEmpty | objectiveInitialBasisLaden;
  
@@ -2995,6 +3005,7 @@ constraints: | constraintsStart constraintsAttributes constraintsContent;
 constraintsStart: CONSTRAINTSSTART
 {
 	parserData->numberOfOtherConstraintOptions = 0; 
+	osoption->optimization->constraints = new ConstraintOption();
 };
 
 constraintsAttributes: numberOfOtherConstraintOptions
@@ -3194,7 +3205,10 @@ initDualValueContent: GREATERTHAN CONEND | ENDOFELEMENT;
 /* -------------------------------------------- */
 slacksInitialBasis: | slacksInitialBasisStart slacksInitialBasisContent;
 
-slacksInitialBasisStart: INITIALBASISSTATUSSTART;
+slacksInitialBasisStart: INITIALBASISSTATUSSTART
+{
+	osoption->optimization->constraints->initialBasisStatus = new BasisStatus();
+};
 
 slacksInitialBasisContent: slacksInitialBasisEmpty | slacksInitialBasisLaden;
  

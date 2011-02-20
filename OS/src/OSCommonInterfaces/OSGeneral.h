@@ -432,8 +432,10 @@ public:
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
 	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 * @param iMin: lowest value (inclusive) that an entry in this vector can take
+	 * @param iMax: greatest value (inclusive) that an entry in this vector can take
 	 */
-	bool setRandom(double density, bool conformant);
+	bool setRandom(double density, bool conformant, int iMin, int iMax);
 
 	/**
 	 *  set values into an IntVector
@@ -499,8 +501,10 @@ public:
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
 	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 * @param iMin: lowest value (inclusive) that an entry in this vector can take
+	 * @param iMax: greatest value (inclusive) that an entry in this vector can take
 	 */
-	bool setRandom(double density, bool conformant);
+	bool setRandom(double density, bool conformant, int iMin, int iMax);
 
 	/**
 	 *  Set the indices for a particular level in an enumeration
@@ -588,8 +592,10 @@ public:
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
 	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 * @param iMin: lowest index value (inclusive) that an entry in this basis can take
+	 * @param iMax: greatest index value (inclusive) that an entry in this basis can take
 	 */
-	bool setRandom(double density, bool conformant); 
+	bool setRandom(double density, bool conformant, int iMin, int iMax);
 
 /**
  *  Set the indices for a particular status

@@ -222,19 +222,15 @@ osrlBody:
 
 /**
  * ========================================================== 
- * OSoL header 
+ * OSrL header 
  * ==========================================================
  */
 
 headerElement: | headerElementStart headerElementContent
 {
-	if (osglData->fileName    != "" || osglData->source      != "" ||
-		osglData->fileCreator != "" || osglData->description != "" ||
-		osglData->licence     != "")
-		if(!osresult->setResultHeader(osglData->fileName, osglData->source, 	
-				osglData->description, 
-osglData->fileCreator, osglData->licence) )	
-			osrlerror( NULL, osresult, parserData, osglData, "setHeader failed");
+	if (!osresult->setResultHeader(osglData->fileName, osglData->source, 	
+			osglData->description, osglData->fileCreator, osglData->licence) )	
+		osrlerror( NULL, osresult, parserData, osglData, "setHeader failed");
 };
  
 headerElementStart: HEADERSTART
@@ -316,7 +312,19 @@ fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
  */
 generalElement: | generalElementStart generalElementContent;
 
-generalElementStart: GENERALSTART;
+generalElementStart: GENERALSTART
+{
+	parserData->generalStatusPresent = false;	
+	parserData->generalMessagePresent = false;
+	parserData->generalServiceURIPresent = false;
+	parserData->generalServiceNamePresent = false;
+	parserData->generalInstanceNamePresent = false;
+	parserData->generalJobIDPresent = false;
+	parserData->generalSolverInvokedPresent = false;
+	parserData->generalTimeStampPresent = false;
+	parserData->otherGeneralResultsPresent = false;
+	osresult->general = new GeneralResult();
+};
 
 generalElementContent: generalElementEmpty | generalElementLaden;
 
@@ -635,7 +643,16 @@ otherGeneralResultEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 systemElement: | systemElementStart systemElementContent;
 
-systemElementStart: SYSTEMSTART;
+systemElementStart: SYSTEMSTART
+{
+	parserData->systemInformationPresent = false;	
+	parserData->systemAvailableDiskSpacePresent = false;	
+	parserData->systemAvailableMemoryPresent = false;
+	parserData->systemAvailableCPUSpeedPresent = false;
+	parserData->systemAvailableCPUNumberPresent = false;
+	parserData->otherSystemResultsPresent = false;
+	osresult->system = new SystemResult();
+};
 
 systemElementContent: systemElementEmpty | systemElementLaden;
 
@@ -887,7 +904,16 @@ otherSystemResultEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 serviceElement: | serviceElementStart serviceElementContent;
 
-serviceElementStart: SERVICESTART;
+serviceElementStart: SERVICESTART
+{
+	parserData->serviceCurrentStatePresent = false;	
+	parserData->serviceCurrentJobCountPresent = false;	
+	parserData->serviceTotalJobsSoFarPresent = false;	
+	parserData->timeServiceStartedPresent = false;	
+	parserData->serviceUtilizationPresent = false;	
+	parserData->otherServiceResultsPresent = false;
+	osresult->service = new ServiceResult();
+};
 
 serviceElementContent: serviceElementEmpty | serviceElementLaden;
 
@@ -1081,7 +1107,21 @@ otherServiceResultEnd: GREATERTHAN OTHEREND | ENDOFELEMENT;
 
 jobElement: | jobElementStart jobElementContent;
 
-jobElementStart: JOBSTART;
+jobElementStart: JOBSTART
+{
+	parserData->jobStatusPresent = false;	
+	parserData->jobSubmitTimePresent = false;	
+	parserData->scheduledStartTimePresent = false;	
+	parserData->actualStartTimePresent = false;	
+	parserData->jobEndTimePresent = false;	
+	parserData->jobTimingInformationPresent = false;	
+	parserData->jobUsedDiskSpacePresent = false;	
+	parserData->jobUsedMemoryPresent = false;	
+	parserData->jobUsedCPUSpeedPresent = false;	
+	parserData->jobUsedCPUNumberPresent = false;	
+	parserData->otherJobResultsPresent = false;	 
+	osresult->job = new JobResult();
+};
 
 jobElementContent: jobElementEmpty | jobElementLaden;
 
@@ -1707,12 +1747,14 @@ solutionMessageBody:  ELEMENTTEXT
 variables: | variablesStart numberOfOtherVariableResults variablesContent;
 
 variablesStart: VARIABLESSTART
-{	parserData->numberOfOtherVariableResults = 0; };
+{
+	parserData->numberOfOtherVariableResults = 0;
+	osresult->optimization->solution[parserData->solutionIdx]->variables = new VariableSolution();
+};
 
 numberOfOtherVariableResults: | numberOfOtherVariableResultsAttribute
 {	
-	if (osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, 
-												  parserData->tempInt) == false)
+	if (osresult->setNumberOfOtherVariableResults(parserData->solutionIdx, parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherVariableResults failed");
 	parserData->numberOfOtherVariableResults = parserData->tempInt;
 	parserData->iOther = 0;
@@ -1831,7 +1873,10 @@ varValueStringBody: ELEMENTTEXT
 
 variableBasisStatus: | variableBasisStatusStart variableBasisStatusContent;
 
-variableBasisStatusStart: BASISSTATUSSTART;
+variableBasisStatusStart: BASISSTATUSSTART
+{
+	osresult->optimization->solution[parserData->solutionIdx]->variables->basisStatus = new BasisStatus();
+};
 
 variableBasisStatusContent: variableBasisStatusEmpty | variableBasisStatusLaden;
 
@@ -2178,16 +2223,17 @@ otherVarEnumerationBody:  osglIntArrayData;
 objectives: | objectivesStart numberOfOtherObjectiveResults objectivesContent;
 
 objectivesStart: OBJECTIVESSTART
-{	parserData->numberOfOtherObjectiveResults = 0; 
+{
+	parserData->numberOfOtherObjectiveResults = 0; 
 	parserData->iOther = 0;
+	osresult->optimization->solution[parserData->solutionIdx]->objectives = new ObjectiveSolution();
 };
 
 
 numberOfOtherObjectiveResults: | numberOfOtherObjectiveResultsAttribute
 {
 	parserData->numberOfOtherObjectiveResults = parserData->tempInt;
-    if (osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, 
-												   parserData->tempInt) == false)
+	if (osresult->setNumberOfOtherObjectiveResults(parserData->solutionIdx, parserData->tempInt) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setNumberOfOtherObjectiveResults failed");
 	parserData->iOther = 0;
 };
@@ -2255,11 +2301,13 @@ objVal:
 
 objectiveBasisStatus: | objectiveBasisStatusStart objectiveBasisStatusContent;
 
-objectiveBasisStatusStart: BASISSTATUSSTART;
+objectiveBasisStatusStart: BASISSTATUSSTART
+{
+	osresult->optimization->solution[parserData->solutionIdx]->objectives->basisStatus = new BasisStatus();
+};
 
 objectiveBasisStatusContent: objectiveBasisStatusEmpty | objectiveBasisStatusLaden;
  
-
 
 objectiveBasisStatusEmpty: ENDOFELEMENT;
 
@@ -2600,8 +2648,10 @@ otherObjEnumerationBody:  osglIntArrayData;
 constraints: | constraintsStart numberOfOtherConstraintResults constraintsContent;
 
 constraintsStart: CONSTRAINTSSTART
-{	parserData->numberOfOtherConstraintResults = 0; 
+{
+	parserData->numberOfOtherConstraintResults = 0; 
 	parserData->iOther = 0;
+	osresult->optimization->solution[parserData->solutionIdx]->constraints = new ConstraintSolution();
 };
 
 numberOfOtherConstraintResults: | numberOfOtherConstraintResultsAttribute
@@ -2670,7 +2720,10 @@ dualValueContent: GREATERTHAN aNumber CONEND;
 
 slackBasisStatus: | slackBasisStatusStart slackBasisStatusContent;
 
-slackBasisStatusStart: BASISSTATUSSTART;
+slackBasisStatusStart: BASISSTATUSSTART
+{
+	osresult->optimization->solution[parserData->solutionIdx]->constraints->basisStatus = new BasisStatus();
+};
 
 slackBasisStatusContent: slackBasisStatusEmpty | slackBasisStatusLaden;
  
