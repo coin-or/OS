@@ -7254,7 +7254,7 @@ bool OSOption::setNumberOfOtherVariableOptions(int numberOfOther)
 	if (optimization == NULL) return false;
 	if (optimization->variables == NULL) 
 		optimization->variables = new VariableOption();
-	if(optimization->variables->numberOfOtherVariableOptions > 0) return false;
+	if(optimization->variables->numberOfOtherVariableOptions < 0) return false;
 
 	optimization->variables->numberOfOtherVariableOptions = numberOfOther;
 	
@@ -7559,7 +7559,7 @@ bool OSOption::setNumberOfOtherObjectiveOptions(int numberOfOther)
 	if (optimization == NULL) return false;
 	if (optimization->objectives == NULL) 
 		optimization->objectives = new ObjectiveOption();
-	if (optimization->objectives->numberOfOtherObjectiveOptions > 0) return false;
+	if (optimization->objectives->numberOfOtherObjectiveOptions < 0) return false;
 
 	optimization->objectives->numberOfOtherObjectiveOptions = numberOfOther;
 
@@ -7765,7 +7765,7 @@ bool OSOption::setNumberOfOtherConstraintOptions(int numberOfOther)
 	if (optimization == NULL) return false;
 	if (optimization->constraints == NULL) 	
 		optimization->constraints = new ConstraintOption();
-	if (optimization->constraints->numberOfOtherConstraintOptions > 0) return false;
+	if (optimization->constraints->numberOfOtherConstraintOptions < 0) return false;
 
 	optimization->constraints->numberOfOtherConstraintOptions = numberOfOther;
 

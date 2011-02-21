@@ -21,8 +21,8 @@
 #include <iostream>
 #include <sstream>
 
-#define DEBUG_OSGENERAL
-#define DEBUG_ISEQUAL_ROUTINES
+//#define DEBUG_OSGENERAL
+//#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
 using std::cout;
