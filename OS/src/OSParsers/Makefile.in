@@ -328,7 +328,6 @@ VOL_LIBS = @VOL_LIBS@
 VOL_LIBS_INSTALLED = @VOL_LIBS_INSTALLED@
 VPATH_DISTCLEANFILES = @VPATH_DISTCLEANFILES@
 YACC = @YACC@
-_SVN_REV = @_SVN_REV@
 abs_bin_dir = @abs_bin_dir@
 abs_include_dir = @abs_include_dir@
 abs_lib_dir = @abs_lib_dir@
