@@ -784,7 +784,7 @@ double OSBearcatSolverXij::qrouteCost(const int& k, const int& l, const double* 
 	//int lowerVal = m_minDemand + 1;
 	//lowerVal = m_minDemand;
 	//for(l2 = lowerVal; l2 <= l; l2++){// loop over possible demand values assuming we have already gone to at least one node
-	for(l2 = m_minDemand; l2 <= l; l2++){// loop over possible demand values assuming we have already gone to at least one node
+	for(l2 = m_minDemand + 1; l2 <= l; l2++){// loop over possible demand values assuming we have already gone to at least one node
 			
 		for(i = m_numHubs; i < m_numNodes; i++) { //we are finding least cost to node i
 			
@@ -2193,7 +2193,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 								
 								std::istringstream demandBuffer( (*vit)->value);
 								demandBuffer >> tmpVal;
-								//if(tmpVal <= 0 && demand.size() > m_numHubs) throw ErrorClass("must have strictly positive demand");
+								if(tmpVal <= 0 && demand.size() > m_numHubs) throw ErrorClass("must have strictly positive demand");
 								if(tmpVal < m_minDemand  && demand.size() > m_numHubs ) m_minDemand = tmpVal;
 								demand.push_back( tmpVal);
 								//std::cout << "demand = " << tmpVal <<  std::endl;
@@ -3632,12 +3632,10 @@ int OSBearcatSolverXij::getBranchingVar(const double* theta, const int numThetaV
 			}
 		
 		}//end of if on minFraction
-		std::cout << " HERE IS GAIL 1" << std::endl;
-		
-		//zero out the scatter array
-		
+
+	
 		delete[] xvalues;
-		std::cout << " HERE IS GAIL 2" << std::endl;
+
 		xvalues = NULL;
 		
 		return varIdx;
@@ -3819,7 +3817,7 @@ void OSBearcatSolverXij::getBranchingCut(const double* thetaVar, const int numTh
 	
 		
 		varIdx = getBranchingVar(thetaVar, numThetaVar );
-		
+		std::cout << "VARIABLE INDEX = " << varIdx << std::endl;
 		std::cout << "Branching on Variable:  " << m_variableNames[ varIdx] << std::endl;
 		
 		//if this variable is in the map, then we just return with the index, 

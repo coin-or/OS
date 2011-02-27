@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="../stylesheets/OSoL.xslt"?>
 <osol>
 <optimization>
-
-
-
 <solverOptions numberOfSolverOptions="77">
- 
 <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="false"/>
- 
  <solverOption name="columnLimit" value="20000" solver="OSDecompSolver" type="integer"/>
  <solverOption name="artVarCoeff" value="1000000" solver="OSDecompSolver" type="double"/>
  <solverOption name="zeroTol" value=".0001" solver="OSDecompSolver" type="double"/>
  <solverOption name="nodeLimit" value="1000" solver="OSDecompSolver" type="int"/>
  <solverOption name="masterColumnResetValue" value="10000" solver="OSDecompSolver" type="int"/>
  <solverOption name="optTolPerCent" value="0" solver="OSDecompSolver" type="double"/>
- 
 <solverOption name="osilFile" value="../data/colgenpercentile4.osil" solver="routeSolver" type="string"/>
 <solverOption name="numHubs" value="3" solver="routeSolver" type="integer"/>
 <solverOption name="numNodes" value="29" solver="routeSolver" type="integer"/>
@@ -22,14 +16,11 @@
             <solverOption name="maxThetaNonz" value="750000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixCon" value="2000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixNonz" value="100000" solver="routeSolver" type="integer"/>
-<solverOption name="totalDemand" value="32" solver="routeSolver" type="integer"/>
+<solverOption name="totalDemand" value="35" solver="routeSolver" type="integer"/>
  <solverOption name="use1OPTstart" value="true" solver="routeSolver" type="bool"/>
-
-
  <solverOption name="routeCapacity" value="25" solver="routeSolver"  category="0" type="integer" />
  <solverOption name="routeCapacity" value="25" solver="routeSolver"  category="1" type="integer" />  
  <solverOption name="routeCapacity" value="25" solver="routeSolver"  category="2" type="integer" /> 
- 
  <solverOption name="routeMinPickup" value="2" solver="routeSolver"  category="0" type="integer" />
  <solverOption name="routeMinPickup" value="2" solver="routeSolver"  category="1" type="integer" />
  <solverOption name="routeMinPickup" value="2" solver="routeSolver"  category="2" type="integer" />
@@ -40,9 +31,9 @@
 <solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
-<solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
+<solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="4" solver="routeSolver" type="integer"/>
-<solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
+<solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
@@ -60,7 +51,7 @@
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="2" solver="routeSolver" type="integer"/>
-<solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
+<solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
