@@ -4103,7 +4103,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	char *attText = NULL;
 	const char *constant = "constant";
 	const char *maxOrMin = "maxOrMin";
-	const char *numberOfObjCoef = "numberOfObjCoeff";
+	const char *numberOfObjCoef = "numberOfObjCoef";
 	const char *weight = "weight";
 	const char *name = "name";
 	const char *mult = "mult";
@@ -4197,7 +4197,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					numberOfObjCoef -= 16;
 					if( ( (ch - *p) != 15)  ) {  osilerror_wrapper( ch,osillineno,"error in objective numberOfObjCoef attribute"); return false;}
 					else{
-						if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj numberOfObjCoefatt attributes"); return false;}
+						if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj numberOfObjCoef attributes"); return false;}
 						objnumberOfObjCoefattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);

@@ -471,7 +471,7 @@ Objective::Objective():
 	name("") ,
 	maxOrMin("min"),
 	constant(0.0),
-	weight(1.0),
+	weight(OSNAN),
 	numberOfObjCoef(0),
 	coef(NULL)
 { 

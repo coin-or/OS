@@ -248,9 +248,9 @@ TimeMeasurement::TimeMeasurement():
 	category("total"),
 	description("")
 { 
-//	#ifdef DEBUG_OSRESULT
+	#ifdef DEBUG_OSRESULT
 	cout << "Inside the TimeMeasurement Constructor" << endl;
-//	#endif
+	#endif
 }//end TimeMeasurement constructor
 
 
@@ -5749,6 +5749,7 @@ bool Time::IsEqual(Time *that)
 #endif
 
 
+
 bool TimeMeasurement::IsEqual(TimeMeasurement *that)
 {
 	#if DEBUG_ISEQUAL_ROUTINES == 2
@@ -7496,6 +7497,7 @@ bool Time::setRandom(double density, bool conformant)
 	return true;
 }//Time::setRandom
 #endif
+
 
 bool TimeMeasurement::setRandom(double density, bool conformant)
 {
