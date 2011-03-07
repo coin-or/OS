@@ -1706,6 +1706,19 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 				}
 			}
 		}
+		
+		//kippster -- temporary
+		mit = m_initSolMap.find( 0);
+		
+		for ( mit2 = mit->second.begin(); mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
+				
+			getRouteDistance(m_numNodes, m_cost, mit2->second);
+			
+		}
+			
+		exit( 1);
+		
+		//end temporary
 	
  
 	
@@ -4372,30 +4385,211 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 
 
 
-double OSBearcatSolverXij::getRouteDistance(int routeIndex){
+double OSBearcatSolverXij::getRouteDistance(int numNodes, 
+		double* cost, std::vector<int> zk){
 	
 	int i;
-	
+	int j;
 	int numVar;
+	numVar = numNodes*numNodes - numNodes;
+	int numNonz;
+	int kount;
+	double objValue;
+	std::vector<int>::iterator vit;
+	double* rhsVec;
+	CoinSolver *solver  = NULL;
 	
-	OSInstance *osinstance = new OSInstance();
-	osinstance->setInstanceSource("generated from OSBearcatSoleverXij");
-	osinstance->setInstanceDescription("Find the minimum tour for a route");
+	std::vector<IndexValuePair*> primalValPair;
 	
-	numVar = m_numNodes*m_numNodes - m_numNodes;
+	rhsVec = new double[ 2*numNodes];
 	
-	osinstance->setVariableNumber( numVar); 
-	
-	for(i = 0; i < numVar; i++){
+	for(i = 0; i < 2*numNodes; i++){
 		
-		osinstance->addVariable(i, m_variableNames[ i], 0, 1, 'B');
+		rhsVec[ i] = 0;
+		
+	}
+	
+	for ( vit = zk.begin() ; vit != zk.end(); vit++){	
+		
+		rhsVec[*vit] = 1;
+		rhsVec[*vit + numNodes] = 1;
 		
 	}
 	
 	
 	
-	// now add the objective function
-	osinstance->setObjectiveNumber( 1);
+	
+	//
+	//stuff for cut generation
+	//
+	double* xVar;
+
+	xVar = new double[ numVar];
+	//zero this array out
+	for(i = 0; i < numVar; i++){
+		
+		xVar[ i] = 0;
+		
+	}
+	//getRows function call return parameters
+	int numNewRows;
+	int* numRowNonz = NULL;
+	int** colIdx = NULL; 
+	double** rowValues = NULL ; 
+	double* rowLB;
+	double* rowUB;
+	//end of getRows function call return parameters	
+	//
+	//end of cut generation stuff
+	//
+	
+	
+	
+	OSInstance *osinstance = new OSInstance();
+	try{
+		
+		osinstance->setInstanceSource("generated from OSBearcatSoleverXij");
+		osinstance->setInstanceDescription("Find the minimum tour for a route");
+		
+
+		
+		osinstance->setVariableNumber( numVar); 
+		
+		for(i = 0; i < numVar; i++){
+			
+			osinstance->addVariable(i, m_variableNames[ i], 0, 1, 'B');
+			
+		}
+		// now add the objective function
+		osinstance->setObjectiveNumber( 1);
+		
+		// now the coefficient
+		SparseVector *objcoeff = new SparseVector( numVar); 
+		
+		for(i = 0; i < numVar; i++){
+			
+			objcoeff->indexes[ i] = i;
+			objcoeff->values[ i] = cost[ i];
+			
+		}
+	
+		osinstance->addObjective(-1, "minimizeDistance", "min", 0.0, 1.0, objcoeff);
+		objcoeff->bDeleteArrays = true;
+		delete objcoeff;
+		
+		osinstance->setConstraintNumber( 2*numNodes); 
+		//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
+		
+		for(i = 0; i < numNodes; i++){
+			
+			osinstance->addConstraint(i, makeStringFromInt("enter_node_", i) , rhsVec[i], rhsVec[i],  0);
+			
+		}
+		
+		for(i = numNodes; i < 2*numNodes; i++){
+			
+			osinstance->addConstraint(i, makeStringFromInt("leave_node_", i - numNodes) , rhsVec[i], rhsVec[i], 0);
+			
+		}
+		 
+		//now the A matrix
+	
+		numNonz = numVar*numVar - numVar;
+	
+	
+		double *values = new double[ numNonz];
+		int *rowIndexes = new int[ numNonz];
+		int *starts = new int[ numVar + 1];  
+		kount = 0;
+		numNonz = 0;
+		starts[ kount++] = 0;
+		for(i = 0; i < numNodes; i++){
+			
+			for(j = 0; j < i; j++){
+				//we have xij, j < i
+				
+				rowIndexes[ numNonz] = j; //enter node j
+				values[ numNonz++] = 1.0;
+				
+				rowIndexes[ numNonz] = numNodes + i; //leave node i
+				values[ numNonz++] = 1.0;
+				
+				
+				starts[ kount++] = numNonz;
+				
+				
+			}
+			
+			for(j = i+1; j < numNodes; j++){
+				//we have xij, j > i
+	
+				rowIndexes[ numNonz] = j; //enter node j
+				values[ numNonz++] = 1.0;
+				
+				rowIndexes[ numNonz] = numNodes + i; //leave node i
+				values[ numNonz++] = 1.0;
+				
+				
+				starts[ kount++] = numNonz;
+				
+				
+			}
+			
+			
+		}
+		
+		osinstance->setLinearConstraintCoefficients(numNonz, true, values, 0, numNonz - 1, 
+			rowIndexes, 0, numNonz - 1, starts, 0, numVar);
+		
+		std::cout << osinstance->printModel() << std::endl;
+		//now solve as integer program with Cbc
+		
+		
+		solver = new CoinSolver();
+		solver->sSolverName ="cbc"; 
+		solver->osinstance = osinstance;	
+		solver->buildSolverInstance();
+		solver->osoption = m_osoption;	
+		OsiSolverInterface *si = solver->osiSolver;
+	
+		solver->solve();
+		
+		//throw an exception if we don't get an optimal solution
+		
+		if(solver->osresult->getSolutionStatusType( 0 ) != "optimal" ) throw ErrorClass("Trouble with integer program used to construct initial master");
+		objValue = solver->osresult->getObjValue(0, 0) ;
+		// now get the X values -- use these to get a cut
+		primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
+		
+		for(i = 0; i < numVar; i++){
+			
+			std::cout << "index = " << primalValPair[i]->idx << std::endl;
+			std::cout << "value = " << primalValPair[i]->value << std::endl;
+		}
+		
+		
+		delete osinstance;
+		delete[] rhsVec;
+		delete[] xVar;
+		delete solver;
+		
+		return objValue;
+	
+	
+	} catch (const ErrorClass& eclass) {
+		
+		std::cout << std::endl << std::endl << std::endl;
+		if (osinstance != NULL)
+			delete osinstance;
+		if (solver != NULL)
+			delete solver;
+		if( rhsVec != NULL)
+			delete[] rhsVec;
+		if( xVar != NULL)
+			delete  xVar;
+		//  Problem with the parser
+		throw ErrorClass(eclass.errormsg);
+	}
 	
 }//end getRouteDistance
 

@@ -378,13 +378,17 @@ public:
 			OsiSolverInterface *si );
 	
 	
-	/** call this method to get a minimum TSP for
+	/** call this method to get a minimum TSP tour for
 	 * a given assignment of nodes to routes
 	 * INPUT:
-	 * int index -- the route index
+	 * int numNodes -- number of cities/nodes in tour
+	 * double* cost -- the cost vector, this should have
+	 * numNodes*numNodes - numNodes entries, we are assuming
+	 * zk -- indexes the nodes assigned this route
+	 * asymmetric
 	 * 
 	 */
-	double getRouteDistance(int routeIndex);
+	double getRouteDistance(int numNodes, double* cost, std::vector<int> zk);
 		
 	//this method gets called when we are done
 	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
