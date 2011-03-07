@@ -400,7 +400,7 @@ void OSColGenApp::solve(){
 		
 		//go into branch and bound
 		std::cout << "START BRANCH AND BOUND =  "   << std::endl;
-		branchAndBound();
+		//branchAndBound();
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;	
 		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated);

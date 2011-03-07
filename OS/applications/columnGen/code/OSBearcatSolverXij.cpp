@@ -1672,8 +1672,6 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 					
 				}
 			}
-			//*/
-       
 		
 
 		//fill in the cost vector first
@@ -1810,10 +1808,6 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		
 		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
 		
-		
-
-		
-	
 		
 		//get the optimal objective function value
 		
@@ -2029,9 +2023,12 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
 			
 			std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
-			
+		
 			objcoeff->indexes[ k + numVarArt ] = k + numVarArt ;
 			objcoeff->values[ k + numVarArt ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			
+			std::cout << " Demand = " <<  primalValPair[ k]->value << std::endl;
+			std::cout << " Distance = " <<  primalValPair[ k + m_numHubs]->value << std::endl;
 			
 			m_bestIPValue += primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 			
@@ -2039,7 +2036,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			starts[ startsIdx++] = kountNonz;	
 			
 		}//end of index on k
-		
+	
 		//add the constraints
 		//add the row saying we must visit each node
 		
@@ -3202,7 +3199,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
 			
 				i = *vit;
-				std::cout <<  "x variables for column "  << i  << std::endl;
+				std::cout <<  "x variables for column "  << i  << " CONVEXITY ROW = "<< convexityRowIndex[ i]  <<   std::endl;
 				
 				
 				//cost += m_thetaCost[ i ];
@@ -3212,7 +3209,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 				
 					
 					std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
-					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << std::endl;
+					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " COST = " <<  m_cost[convexityRowIndex[ i] ][ m_thetaIndex[  j] ]  << std::endl;
 					
 					ivalue = floor( m_thetaIndex[  j] /(m_numNodes - 1) );
 					
