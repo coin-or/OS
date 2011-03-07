@@ -174,13 +174,14 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		}
 		
 		
+		if(m_cost == NULL) m_cost = new double[ m_numNodes*m_numNodes - m_numNodes];
+		
 		//outer dynamic programming arrays
 		m_optL = new int[ m_numHubs];
 		m_optD = new int[ m_numHubs];
 		
 		m_vv = new double*[ m_numHubs];
 		m_vvpnt = new int*[ m_numHubs];
-		m_cost = new double*[ m_numHubs];
 		m_rc = new double*[ m_numHubs];
 		
 		for (k = 0; k < m_numHubs; k++) {
@@ -188,7 +189,6 @@ void OSBearcatSolverXij::initializeDataStructures(){
 			
 			m_vv[ k] = new double[ m_totalDemand + 1];
 			m_vvpnt[ k] = new int[ m_totalDemand + 1];
-			m_cost[ k] = new double[ m_numNodes*m_numNodes - m_numNodes];
 			
 			//allocate memory for the reduced cost vector. 
 			//assume order is k, l, i, j
@@ -362,13 +362,21 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	}
 
 	
-	if(m_varIdx != NULL) delete[] m_varIdx;
+	if(m_varIdx != NULL){ 
+		delete[] m_varIdx;
+		m_varIdx = NULL;
+	
+	}
+	
+	if(m_cost != NULL ){
+		delete[] m_cost;
+		m_cost = NULL;
+	}
 	
 	for(i = 0; i < m_numHubs; i++){
 		
 		delete[] m_vv[i];
 		delete[] m_vvpnt[i];
-		delete[] m_cost[ i];
 		delete[] m_rc[ i];
 		
 		
@@ -381,9 +389,6 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	m_vv = NULL;
 	delete[] m_vvpnt;
 	m_vvpnt = NULL;
-	
-	delete[] m_cost;
-	m_cost = NULL;
 	
 	delete[] m_rc;
 	m_rc = NULL;
@@ -1087,7 +1092,7 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 				
 				// is variable m_varIdx[ j] - startPntInc in this row	
 				
-				m_costVec[ k] += m_cost[k][  m_varIdx[ j] - startPntInc  ];
+				m_costVec[ k] += m_cost[  m_varIdx[ j] - startPntInc  ];
 				
 			}
 			
@@ -1681,21 +1686,23 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		int idx2;
 		idx2 = 0;  //zRouteDemand have 0 coefficients in obj
 		//fill in m_cost from the cost coefficient in osil
-		for(k = 0; k < m_numHubs; k++){
-			
-			idx1 = 0;
-			
-			for(i = 0; i < m_numNodes; i++){
+		if(m_costSetInOption == false){
+			for(k = 0; k < m_numHubs; k++){
 				
-				for(j = 0; j < i; j++){
+				idx1 = 0;
 				
-					m_cost[k][idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
-				}
-				
-				for(j = i + 1; j < m_numNodes; j++){
+				for(i = 0; i < m_numNodes; i++){
 					
-					m_cost[k][idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
+					for(j = 0; j < i; j++){
 					
+						m_cost[idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
+					}
+					
+					for(j = i + 1; j < m_numNodes; j++){
+						
+						m_cost[idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
+						
+					}
 				}
 			}
 		}
@@ -1759,39 +1766,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			
 		}
 		
-		/*
-		for(i = 0; i < m_numNodes; i++){
-			
-			
-			objcoeff->indexes[ varNumber ] = varNumber ;
-			
-			//if obj too large we get the following error
-			//Assertion failed: (fabs(obj[i]) < 1.0e25), function createRim, 
-			//file ../../../Clp/src/ClpSimplex.cpp, l
-			//objcoeff->values[ varNumber ] = 1.0e24;
-			//kipp -- change this number -- even 1.0e24 drives
-			//clp crazy and gives infeasible when actually feasible
-			objcoeff->values[ varNumber ] =m_osDecompParam.artVarCoeff;
-			
-			
-			
-			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AN", i ) , 
-					0, OSDBL_MAX, 'C');
-			
-			
-			values[ kountNonz] = -1;
-			indexes[ kountNonz++] = i ;
-			starts[ startsIdx++] = kountNonz;
-			
-			
-			
-		}
-		 */
-		
-		
-		//
-		// now get the primal solution
-		//solve the model for solution in the osoption object
+
 
 		
 		solver = new CoinSolver();
@@ -2122,6 +2097,8 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		std::vector<int >demand;
 		std::vector<int >routeCapacity;
 		std::vector<int >routeMinPickup;
+		std::vector<double >arcCost;
+		std::vector<double >::iterator vit3;
 	
 		m_numberOfSolutions = 0;
 		solverOptions = osoption->getSolverOptions("routeSolver");
@@ -2129,6 +2106,8 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		//iterate over the vector
 		
 		int tmpVal;
+		double tmpCost;
+
 		
 		std::string routeString; //variable for parsing a category option
 		std::string solutionString; //variable for parsing a category option
@@ -2312,6 +2291,16 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 																std::cout << "m_maxBmatrixNonz = " << m_maxBmatrixNonz <<  std::endl;
 																
 																
+															}else{
+																
+																if( (*vit)->name.find("cost") !=  std::string::npos ){
+																	
+																	
+																	std::istringstream costBuffer( (*vit)->value);
+																	costBuffer >> tmpCost;
+																	arcCost.push_back( tmpCost);
+																	
+																}
 															}
 														}
 													}
@@ -2367,6 +2356,22 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 			
 		}
 		demand.clear();
+		
+		
+		//now fill in costs	
+		m_cost = NULL;
+		m_costSetInOption = false;
+		if(arcCost.size() >= 1){
+			m_costSetInOption = true;
+			i = 0;
+			m_cost = new double[ m_numNodes*m_numNodes - m_numNodes ];
+			for (vit3 = arcCost.begin(); vit3 != arcCost.end(); vit3++) {
+				
+				*(m_cost + i++) = *vit3;
+				
+			}
+			arcCost.clear();
+		}
 		
 		//kipp -- fill in numberOfRestricedMasterSolutions from map size
 		 m_numberOfSolutions = m_initSolMap.size();
@@ -3007,11 +3012,11 @@ void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
 				
 					if(j < m_numHubs){
 						
-						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j ] ;
+						m_rc[k][ kount++] = l*m_cost[ i*tmpVal + j ] ;
 						
 					}else{
 						
-						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j ] - yA[ j - m_numHubs] ;
+						m_rc[k][ kount++] = l*m_cost[ i*tmpVal + j ] - yA[ j - m_numHubs] ;
 					}
 					
 					
@@ -3024,12 +3029,12 @@ void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
 					
 					if(j < m_numHubs){
 					
-						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ];
+						m_rc[k][ kount++] = l*m_cost[ i*tmpVal + j - 1 ];
 					
 					} else {
 						
 						
-						m_rc[k][ kount++] = l*m_cost[k][ i*tmpVal + j - 1 ] - yA[ j - m_numHubs ];
+						m_rc[k][ kount++] = l*m_cost[ i*tmpVal + j - 1 ] - yA[ j - m_numHubs ];
 						
 					}
 					
@@ -3209,7 +3214,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 				
 					
 					std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
-					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " COST = " <<  m_cost[convexityRowIndex[ i] ][ m_thetaIndex[  j] ]  << std::endl;
+					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " COST = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
 					
 					ivalue = floor( m_thetaIndex[  j] /(m_numNodes - 1) );
 					
@@ -4364,6 +4369,35 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 	delete objcoeff;
 	objcoeff = NULL;
 }//end resetMaster
+
+
+
+double OSBearcatSolverXij::getRouteDistance(int routeIndex){
+	
+	int i;
+	
+	int numVar;
+	
+	OSInstance *osinstance = new OSInstance();
+	osinstance->setInstanceSource("generated from OSBearcatSoleverXij");
+	osinstance->setInstanceDescription("Find the minimum tour for a route");
+	
+	numVar = m_numNodes*m_numNodes - m_numNodes;
+	
+	osinstance->setVariableNumber( numVar); 
+	
+	for(i = 0; i < numVar; i++){
+		
+		osinstance->addVariable(i, m_variableNames[ i], 0, 1, 'B');
+		
+	}
+	
+	
+	
+	// now add the objective function
+	osinstance->setObjectiveNumber( 1);
+	
+}//end getRouteDistance
 
 
 

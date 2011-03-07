@@ -104,7 +104,12 @@ public:
 	int* m_demand;
 	
 	/** the distance/cost vectors */
-	double** m_cost;
+	double* m_cost;
+
+	/** m_costSetInOption is true if the costs are set
+	 * using the OSOption file
+	 */
+	bool m_costSetInOption;
 	
 	/** the reduced cost vector
 	 * for each k, we asssume order is (l, i, j)
@@ -371,6 +376,15 @@ public:
 		
 	virtual void resetMaster( std::map<int, int> &inVars, 
 			OsiSolverInterface *si );
+	
+	
+	/** call this method to get a minimum TSP for
+	 * a given assignment of nodes to routes
+	 * INPUT:
+	 * int index -- the route index
+	 * 
+	 */
+	double getRouteDistance(int routeIndex);
 		
 	//this method gets called when we are done
 	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
@@ -412,7 +426,7 @@ public:
 		
 		OSDecompSolver* create() {  return new OSBearcatSolverXij(  osoption); };
 		
-	};// end class OSDipBlockSolverFactory
+	};// end class OSDecompSolverFactory
 	
 
 };//end class OSBearcatSolverXij
