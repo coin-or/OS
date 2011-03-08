@@ -79,8 +79,8 @@ int main(int argc, char ** argv){
 		//now generate the restriced master
 		//colgenApp->getInitialRestrictedMaster( );
 		
-		//now generate the restriced master
-		colgenApp->getInitialRestrictedMaster( );
+
+		
 		
 		masterCpuTime = CoinCpuTime() - start;
 		

@@ -91,12 +91,10 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  //share the common parameters
 	  m_osrouteSolver->m_osDecompParam = m_osDecompParam;
 	  m_osrouteSolver->initializeDataStructures();
+	  m_osrouteSolver->getInitialRestrictedMaster( );
 	  
 	  /////
-	  
-	  
-	  
-	  //////
+
 	  
 	  //initialize the bounds
 	  m_zUB = OSDBL_MAX;

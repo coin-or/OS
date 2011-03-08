@@ -1731,8 +1731,6 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		
 		//end temporary
 	
- 
-	
 		//get variable names for checking purposes
 		std::string* varNames;
 		varNames =  osinstance->getVariableNames();
