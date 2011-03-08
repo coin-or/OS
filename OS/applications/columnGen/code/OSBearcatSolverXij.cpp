@@ -1665,11 +1665,8 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 				mit = m_initSolMap.find( 0);
 				for ( mit2 = mit->second.begin() ; mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
 					
-					
-		
 					for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
 						
-								
 						osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
 						std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
 						
@@ -1709,10 +1706,24 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		
 		//kippster -- temporary
 		mit = m_initSolMap.find( 0);
+		double tspObjValue;
+		double demandSum;
 		
 		for ( mit2 = mit->second.begin(); mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
 				
-			getRouteDistance(m_numNodes, m_cost, mit2->second);
+			tspObjValue = getRouteDistance(m_numNodes, mit2->first,  m_cost, mit2->second);
+			demandSum = 0;
+			//get demands
+			for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
+				
+				demandSum += m_demand[ *vit];
+				
+				
+			}
+			
+			//calculate the demand weighted cost 
+			//first total the demand 
+			std::cout << "demand weighted distance = " << demandSum*tspObjValue << std::endl;
 			
 		}
 			
@@ -1926,18 +1937,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			//the variables for this route should be from 2*numHubs + k*(numNodes - 1*)*(numNodes - 1)
 			idx1 = 2*m_numHubs + k*m_numNodes*(m_numNodes - 1);
 			idx2 = idx1 + m_numNodes*(m_numNodes - 1);
-			
-			//for(i = idx1; i < idx2; i++){
-				
-			//	if(  primalValPair[ i]->value > .1 ){
-					//std::cout <<  osinstance->getVariableNames()[  primalValPair[ i]->idx  ] << std::endl;
-					//std::cout <<  m_variableNames[  primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs  ] << std::endl;
-					//m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
-				//}
-				
-			//}
-			
-			
+
 			
 			for(i1 = 0; i1 < m_numNodes; i1++){
 				
@@ -4385,7 +4385,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 
 
 
-double OSBearcatSolverXij::getRouteDistance(int numNodes, 
+double OSBearcatSolverXij::getRouteDistance(int numNodes, int hubIndex, 
 		double* cost, std::vector<int> zk){
 	
 	int i;
@@ -4398,6 +4398,11 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 	std::vector<int>::iterator vit;
 	double* rhsVec;
 	CoinSolver *solver  = NULL;
+	std::map<std::pair<int, int>, int > cutMap;
+	std::map<std::pair<int, int>, int >::iterator mit;
+	
+	//numCuts is the number of cuts of the form Xij + Xji <= 1
+	int numCuts;
 	
 	std::vector<IndexValuePair*> primalValPair;
 	
@@ -4416,21 +4421,39 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 		
 	}
 	
+	//now count and get variables in Xij + Xji <=1 cut
 	
+	kount = zk.size();
+	numCuts = 0;
+	std::pair <int,int> pairIJ;
+	std::pair <int,int> pairJI;
+
+	for(i = 0; i < kount - 1; i++){
+		
+		for(j = i + 1; j < kount; j++){
+			
+			pairIJ = std::make_pair(zk[i], zk[j]);
+			pairJI = std::make_pair(zk[j], zk[i]);
+			
+			cutMap[pairIJ ] = 2*numNodes + numCuts;
+			cutMap[pairJI ] = 2*numNodes + numCuts;
+			numCuts++;
+			
+		}
+	}
+
 	
+	//must also enter and leave the hub, zk is indexing non-hub nodes
+	rhsVec[ hubIndex] = 1;
+	rhsVec[ hubIndex + numNodes] = 1;
 	
 	//
 	//stuff for cut generation
 	//
 	double* xVar;
-
 	xVar = new double[ numVar];
 	//zero this array out
-	for(i = 0; i < numVar; i++){
-		
-		xVar[ i] = 0;
-		
-	}
+	for(i = 0; i < numVar; i++) xVar[ i] = 0;
 	//getRows function call return parameters
 	int numNewRows;
 	int* numRowNonz = NULL;
@@ -4442,17 +4465,12 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 	//
 	//end of cut generation stuff
 	//
-	
-	
-	
+
 	OSInstance *osinstance = new OSInstance();
 	try{
 		
 		osinstance->setInstanceSource("generated from OSBearcatSoleverXij");
 		osinstance->setInstanceDescription("Find the minimum tour for a route");
-		
-
-		
 		osinstance->setVariableNumber( numVar); 
 		
 		for(i = 0; i < numVar; i++){
@@ -4477,7 +4495,7 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 		objcoeff->bDeleteArrays = true;
 		delete objcoeff;
 		
-		osinstance->setConstraintNumber( 2*numNodes); 
+		osinstance->setConstraintNumber( 2*numNodes + numCuts); 
 		//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
 		
 		for(i = 0; i < numNodes; i++){
@@ -4491,15 +4509,25 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 			osinstance->addConstraint(i, makeStringFromInt("leave_node_", i - numNodes) , rhsVec[i], rhsVec[i], 0);
 			
 		}
+		
+		//now the Xij cuts
+		
+		for(i = 0; i < numCuts; i++){
+			
+			osinstance->addConstraint(2*numNodes + i, makeStringFromInt("XijCut_", i) , 0, 	1, 0);
+			
+		}
 		 
 		//now the A matrix
-	
-		numNonz = numVar*numVar - numVar;
+		//note: each Xij + Xji <= 1 has two nonzero elements 
+		numNonz = numVar*numVar - numVar + 2*numCuts;
 	
 	
 		double *values = new double[ numNonz];
 		int *rowIndexes = new int[ numNonz];
 		int *starts = new int[ numVar + 1];  
+		
+	
 		kount = 0;
 		numNonz = 0;
 		starts[ kount++] = 0;
@@ -4515,6 +4543,15 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 				values[ numNonz++] = 1.0;
 				
 				
+				pairIJ = std::make_pair(i, j);
+				mit =  cutMap.find( pairIJ);
+				if(mit != cutMap.end() ){
+					
+					rowIndexes[ numNonz] = mit->second; 
+					values[ numNonz++] = 1.0;
+				}
+				
+		
 				starts[ kount++] = numNonz;
 				
 				
@@ -4530,8 +4567,16 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 				values[ numNonz++] = 1.0;
 				
 				
-				starts[ kount++] = numNonz;
+				pairIJ = std::make_pair(i, j);
+				mit =  cutMap.find( pairIJ);
+				if(mit != cutMap.end() ){
+					
+					rowIndexes[ numNonz] = mit->second; 
+					values[ numNonz++] = 1.0;
+				}
 				
+				
+				starts[ kount++] = numNonz;
 				
 			}
 			
@@ -4541,7 +4586,7 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 		osinstance->setLinearConstraintCoefficients(numNonz, true, values, 0, numNonz - 1, 
 			rowIndexes, 0, numNonz - 1, starts, 0, numVar);
 		
-		std::cout << osinstance->printModel() << std::endl;
+		//std::cout << osinstance->printModel() << std::endl;
 		//now solve as integer program with Cbc
 		
 		
@@ -4561,12 +4606,56 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes,
 		// now get the X values -- use these to get a cut
 		primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
 		
-		for(i = 0; i < numVar; i++){
-			
-			std::cout << "index = " << primalValPair[i]->idx << std::endl;
-			std::cout << "value = " << primalValPair[i]->value << std::endl;
-		}
+
 		
+		//loop over routes again to create master objective coefficients
+		bool isCutAdded;
+		isCutAdded = true;
+		while(isCutAdded == true){
+			
+			isCutAdded = false;
+			
+			for(i = 0; i < numVar; i++) xVar[ primalValPair[ i]->idx  ] = primalValPair[ i]->value;
+
+			numNewRows = 0;
+			getCutsX(xVar, numVar, numNewRows, numRowNonz, 
+					colIdx,rowValues, rowLB, rowUB);
+			
+			if(numNewRows >= 1){
+				isCutAdded  = true;
+				std::cout << "WE HAVE A CUT " << std::endl;
+				std::cout << "EXPRESS CUT IN X(I, J) SPACE" << std::endl;
+				//for(i = 0; i < numRowNonz[ 0]; i++)  std::cout <<  m_variableNames[ colIdx[0][ i] ] << std::endl;
+					
+				for(i = 0; i < numNewRows; i++){
+					
+					std::cout << "CUT UPPER BOUND = " <<  rowUB[ i] << std::endl;
+					si->addRow(numRowNonz[ i], colIdx[ i], rowValues[ i], rowLB[ i], rowUB[ i] ) ;
+				}
+				
+				std::cout << "A CUT WAS ADDED, CALL SOLVE AGAIN" << std::endl;
+				solver->solve();
+				if(solver->osresult->getSolutionStatusType( 0 ) != "optimal" ) throw ErrorClass("Trouble with integer program used to construct initial master");
+				primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
+				std::cout << "New Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
+				std::cout << "Optimal Objective Value = " << solver->osresult->getObjValue(0, 0) << std::endl;
+		
+				// zero out xVar
+				for(i = 0; i < numVar; i++) xVar[ i  ] = 0;
+
+			}//end if on numNewRows >= 1
+			
+		
+			
+		}//end while on isCutAdded
+		
+		objValue = solver->osresult->getObjValue(0, 0) ;
+		// now get the X values -- use these to get a cut
+		primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
+		
+		//for(i = 0; i < numVar; i++)
+		//	if( primalValPair[ i]->value > .5) std::cout << m_variableNames[ primalValPair[ i]->idx ] << std::endl;
+		std::cout << "Objective Function Value = " << objValue  << std::endl;
 		
 		delete osinstance;
 		delete[] rhsVec;

@@ -382,13 +382,15 @@ public:
 	 * a given assignment of nodes to routes
 	 * INPUT:
 	 * int numNodes -- number of cities/nodes in tour
+	 * int hubIndex -- indexes the hub index
 	 * double* cost -- the cost vector, this should have
 	 * numNodes*numNodes - numNodes entries, we are assuming
-	 * zk -- indexes the nodes assigned this route
+	 * zk -- indexes the non-hub nodes assigned this route
 	 * asymmetric
 	 * 
 	 */
-	double getRouteDistance(int numNodes, double* cost, std::vector<int> zk);
+	double getRouteDistance(int numNodes, int hubIndex, 
+			double* cost, std::vector<int> zk);
 		
 	//this method gets called when we are done
 	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
