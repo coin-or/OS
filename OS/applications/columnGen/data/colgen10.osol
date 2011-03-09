@@ -3,7 +3,7 @@
     xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
     <optimization>
 
-        <solverOptions numberOfSolverOptions="46">
+        <solverOptions numberOfSolverOptions="136">
             
             <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"/>
             
@@ -79,8 +79,107 @@
                 category="solution1:route1"  type="integer"/>
             
             
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+         
+            
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+            
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+            
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+            
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+            
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+            
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
             
             
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
+            
+            <solverOption name="cost" value="17" solver="routeSolver" type="double" description="0.1"/>
+            <solverOption name="cost" value="18" solver="routeSolver" type="double" description="0.2"/>
+            <solverOption name="cost" value="11" solver="routeSolver" type="double" description="0.3"/>
+            <solverOption name="cost" value="15" solver="routeSolver" type="double" description="0.4"/>
+            <solverOption name="cost" value="13" solver="routeSolver" type="double" description="0.5"/>
+            <solverOption name="cost" value="20" solver="routeSolver" type="double" description="0.6"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.7"/>
+            <solverOption name="cost" value="12" solver="routeSolver" type="double" description="0.8"/>
+            <solverOption name="cost" value="16" solver="routeSolver" type="double" description="0.9"/>
             
 
         </solverOptions>

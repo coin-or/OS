@@ -91,7 +91,7 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  //share the common parameters
 	  m_osrouteSolver->m_osDecompParam = m_osDecompParam;
 	  m_osrouteSolver->initializeDataStructures();
-	  m_osrouteSolver->getInitialRestrictedMaster( );
+	 
 	  
 	  /////
 
@@ -398,7 +398,7 @@ void OSColGenApp::solve(){
 		
 		//go into branch and bound
 		std::cout << "START BRANCH AND BOUND =  "   << std::endl;
-		//branchAndBound();
+		if(m_zLB + m_osDecompParam.zeroTol <  m_zUB) branchAndBound();
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;	
 		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated);

@@ -1565,18 +1565,8 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	int numVarArt;
 	//numVarArt = 2*m_numNodes;
 	numVarArt = m_numNodes;
-	
-	//numVarArt = 0;
-	
-	// define the classes
-	FileUtil *fileUtil = NULL;
-	OSiLReader *osilreader = NULL;
-	CoinSolver *solver  = NULL;
-	OSInstance *osinstance = NULL;
-	// end classes    
 
 	int i;
-	int j;
 	int k;
 	std::string testFileName;
 	std::string osil;
@@ -1585,11 +1575,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	std::map<int, std::vector<int> >::iterator  mit2;
 	std::vector<int>::iterator  vit;
 	
-	//std::vector< int> indexes;
-	fileUtil = new FileUtil();
-	
 	m_osinstanceMaster = NULL;
-	
 	//add linear constraint coefficients
 	//number of values will nodes.size() the coefficients in the node constraints
 	//plus coefficients in convexity constraints which is the number of varaibles
@@ -1607,134 +1593,15 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	startsIdx = 0;
 	startsIdx++;
 	
+	double tspObjValue;
+	double demandSum;
+	
 	for(i = 0; i < numVarArt; i++){
 		convexityRowIndex[ m_numThetaVar] = -1;
 		m_thetaPnt[ m_numThetaVar++] = 0;
 		
 	}
-
-	std::vector<IndexValuePair*> primalValPair;
-	
-	//
-	//stuff for cut generation
-	//
-	double* xVar;
-	int numXVar;
-	numXVar = m_numNodes*(m_numNodes - 1);
-	xVar = new double[ numXVar];
-	//zero this array out
-	for(i = 0; i < numXVar; i++){
-		
-		xVar[ i] = 0;
-		
-	}
-	//getRows function call return parameters
-	int numNewRows;
-	int* numRowNonz = NULL;
-	int** colIdx = NULL; 
-	double** rowValues = NULL ; 
-	double* rowLB;
-	double* rowUB;
-	//end of getRows function call return parameters	
-	//
-	//end of cut generation stuff
-	//
-	
-
 	try {
-		
-		if(m_initOSiLFile.size() == 0) throw ErrorClass("OSiL file to generate restricted master missing");
-		osil = fileUtil->getFileAsString( m_initOSiLFile.c_str());
-
-		osilreader = new OSiLReader();
-		osinstance = osilreader->readOSiL(osil);
-		
-		
-
-			//turn on or off fixing the variables
-		
-			///*
-			//set kount to the start of the z variables
-			//go past the x variables
-			//here is where we fix the z variables
-			kount  =  2*m_numHubs + m_numHubs*(m_numNodes*m_numNodes - m_numNodes);
-			//if we are using SK's heuristic fix the assignment of nodes to hubs
-			if(m_use1OPTstart == true){
-				osinstance->bVariablesModified = true;
-				//get the first solution
-				mit = m_initSolMap.find( 0);
-				for ( mit2 = mit->second.begin() ; mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
-					
-					for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
-						
-						osinstance->instanceData->variables->var[ kount + mit2->first*m_numNodes + *vit]->lb = 1.0;
-						std::cout << "FIXING LOWER BOUND ON VARIABLE " << osinstance->getVariableNames()[ kount + mit2->first*m_numNodes + *vit ] << std::endl;
-						
-					}
-					
-				}
-			}
-		
-
-		//fill in the cost vector first
-		//the x vector starts at 2*m_numHubs
-		
-		int idx1;
-		int idx2;
-		idx2 = 0;  //zRouteDemand have 0 coefficients in obj
-		//fill in m_cost from the cost coefficient in osil
-		if(m_costSetInOption == false){
-			for(k = 0; k < m_numHubs; k++){
-				
-				idx1 = 0;
-				
-				for(i = 0; i < m_numNodes; i++){
-					
-					for(j = 0; j < i; j++){
-					
-						m_cost[idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
-					}
-					
-					for(j = i + 1; j < m_numNodes; j++){
-						
-						m_cost[idx1++ ] = osinstance->instanceData->objectives->obj[0]->coef[ idx2++ ]->value;
-						
-					}
-				}
-			}
-		}
-		
-		//kippster -- temporary
-		mit = m_initSolMap.find( 0);
-		double tspObjValue;
-		double demandSum;
-		
-		for ( mit2 = mit->second.begin(); mit2 != mit->second.end(); mit2++ ){ //we are looping over routes in solution mit
-				
-			tspObjValue = getRouteDistance(m_numNodes, mit2->first,  m_cost, mit2->second);
-			demandSum = 0;
-			//get demands
-			for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ){	
-				
-				demandSum += m_demand[ *vit];
-				
-				
-			}
-			
-			//calculate the demand weighted cost 
-			//first total the demand 
-			std::cout << "demand weighted distance = " << demandSum*tspObjValue << std::endl;
-			
-		}
-			
-		exit( 1);
-		
-		//end temporary
-	
-		//get variable names for checking purposes
-		std::string* varNames;
-		varNames =  osinstance->getVariableNames();
-
 		
 		//start building the restricted master here
 		m_osinstanceMaster = new OSInstance();
@@ -1749,11 +1616,8 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		//add m_numNodes artificial variables
 		SparseVector *objcoeff = new SparseVector( m_numberOfSolutions*m_numHubs + numVarArt);   
 
-		
 		// now the constraints
 		m_osinstanceMaster->setConstraintNumber( m_numNodes); 	
-		
-		
 		
 		//add the artificial variables -- they must be first in the model
 		
@@ -1764,232 +1628,44 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		
 		for(i = 0; i < m_numNodes; i++){
 			
-			
 			objcoeff->indexes[ varNumber ] = varNumber ;
 			//if obj too large we get the following error
 			//Assertion failed: (fabs(obj[i]) < 1.0e25), function createRim, 
 			//file ../../../Clp/src/ClpSimplex.cpp, l
-			
 			//objcoeff->values[ varNumber ] = OSDBL_MAX;
-			
 			//objcoeff->values[ varNumber ] = 1.0e24;
 			objcoeff->values[ varNumber ] = m_osDecompParam.artVarCoeff;
 			
 			m_osinstanceMaster->addVariable(varNumber++, makeStringFromInt("AP", i ) , 
 					0, 1.0, 'C');
 											
-			
-			
 			values[ kountNonz] = 1;
 			indexes[ kountNonz++] = i ;
 			starts[ startsIdx++] = kountNonz;
 			
-			
-			
 		}
 		
-
-
-		
-		solver = new CoinSolver();
-		solver->sSolverName ="cbc"; 
-		solver->osinstance = osinstance;	
-		solver->buildSolverInstance();
-		solver->osoption = m_osoption;	
-		OsiSolverInterface *si = solver->osiSolver;
-
-		solver->solve();
-		
-		
-		//get the solver solution status
-		
-		std::cout << "Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
-		
-		
-		//get the optimal objective function value
-		
-		primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
-
-		//loop over routes again to create master objective coefficients
-		bool isCutAdded;
-		isCutAdded = true;
-		while(isCutAdded == true){
-			
-			isCutAdded = false;
-			
-			for(k = 0; k < m_numHubs; k++){
-				numNewRows = 0;
-				
-				//lets get the x variables
-				//the variables for this route should be from 2*numHubs + k*(numNodes - 1*)*(numNodes - 1)
-				idx1 = 2*m_numHubs + k*m_numNodes*(m_numNodes - 1);
-				idx2 = idx1 + m_numNodes*(m_numNodes - 1);
-				//end of x variables
-			
-				std::cout << "HUB " <<  k  << " VARIABLES" << std::endl;
-				
-				//generate a cut
-				//need to do index mapping
-				
-				
-	
-				for(i = idx1; i < idx2; i++){
-					if(  primalValPair[ i]->value > .01 ){
-						std::cout <<  osinstance->getVariableNames()[  primalValPair[ i]->idx  ]   <<  std::endl;
-						std::cout <<  m_variableNames[  primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs  ] <<   "  " << primalValPair[ i]->value << std::endl;
-						//m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
-						
-						//scatter operation
-						xVar[ primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs   ] = primalValPair[ i]->value;
-						
-						
-					}	
-				}
-				
-				//get a cut
-				
-				
-				getCutsX(xVar, numXVar, numNewRows, numRowNonz, 
-						colIdx,rowValues, rowLB, rowUB);
-				
-				
-				
-				if(numNewRows >= 1){
-					isCutAdded  = true;
-					std::cout << "WE HAVE A CUT " << std::endl;
-					std::cout << "EXPRESS CUT IN X(I, J) SPACE" << std::endl;
-					for(i = 0; i < numRowNonz[ 0]; i++){
-						
-						std::cout <<  m_variableNames[ colIdx[0][ i] ] << std::endl;
-						
-					}
-					
-					
-					for(i = 0; i < numNewRows; i++){
-						
-						//set the variable indexes to the correct values
-						
-						std::cout << "EXPRESS CUT IN X(K, I, J) SPACE" << std::endl;
-						
-						for(j = 0; j < numRowNonz[ i]; j++){
-							
-							colIdx[ i][ j]  = colIdx[ i][ j] + k*(m_numNodes - 1)*m_numNodes + 2*m_numHubs ;
-							
-							std::cout <<  osinstance->getVariableNames()[  colIdx[ i][ j]  ]   <<  std::endl;
-						}
-						
-						std::cout << "CUT UPPER BOUND = " <<  rowUB[ i] << std::endl;
-						
-						
-						si->addRow(numRowNonz[ i], colIdx[ i], rowValues[ i], rowLB[ i], rowUB[ i] ) ;
-						
-						
-					}
-					
-					
-					
-				}
-
-				//zero out the vector again
-				for(i = idx1; i < idx2; i++){
-					if(  primalValPair[ i]->value > .01 ){
-						xVar[ primalValPair[ i]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs   ] = 0;
-					}
-						
-				}
-				
-				
-				//std::cout <<  osinstance->getVariableNames()[ k ] << std::endl;
-				//std::cout <<  osinstance->getVariableNames()[ k + m_numHubs ] << std::endl;
-				std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
-				
-				
-	
-			}//end for on k -- hubs
-			
-			
-			std::cout << std::endl << std::endl;
-			if( isCutAdded == true) {
-				
-				std::cout << "A CUT WAS ADDED, CALL SOLVE AGAIN" << std::endl;
-				solver->solve();
-				primalValPair = solver->osresult->getOptimalPrimalVariableValues( 0);
-				std::cout << "New Solution Status =  " << solver->osresult->getSolutionStatusType( 0 ) << std::endl;
-				std::cout << "Optimal Objective Value = " << solver->osresult->getObjValue(0, 0) << std::endl;
-			}
-
-			
-		}//end while -- we have an integer solution with no subtours
-		
-	
-		
-		
-		int i1;
-		int j1;
-		
 		m_bestIPValue = 0;
+		mit = m_initSolMap.find( 0);
+		if(mit == m_initSolMap.end() ) throw ErrorClass("Problem finding first solution in m_initSolMap");
+
 		
 		for(k = 0; k < m_numHubs; k++){
+			//locate hub k
+			mit2 = mit->second.find( k);
+			if(mit2 == mit->second.end()  ) throw ErrorClass("Problem finding hub k in the solution map");
 			
-			//lets get the x variables
-			//the variables for this route should be from 2*numHubs + k*(numNodes - 1*)*(numNodes - 1)
-			idx1 = 2*m_numHubs + k*m_numNodes*(m_numNodes - 1);
-			idx2 = idx1 + m_numNodes*(m_numNodes - 1);
-
-			
-			for(i1 = 0; i1 < m_numNodes; i1++){
+			tspObjValue = getRouteDistance(m_numNodes, mit2->first,  m_cost, mit2->second);
+			demandSum = 0;
+			//get demands
+			for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ) {
 				
+				demandSum += m_demand[ *vit];
+				values[ kountNonz] = 1;
+				indexes[ kountNonz++] = *vit - m_numHubs ;
 				
-				for(j1 = 0; j1 < i1; j1++){
-					
-					//std::cout <<  osinstance->getVariableNames()[ primalValPair[ idx1 ]->idx]  << " " << primalValPair[ idx1 ]->value  << " " << i1 << " " << j1 << std::endl;
-					
-					if(  primalValPair[ idx1 ]->value > .1 ){
-						
-						m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ idx1]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
-						
-						// a positive variable pointing into node j1
-						if(j1 >= m_numHubs){
-							
-							values[ kountNonz] = 1;
-							indexes[ kountNonz++] = j1 - m_numHubs ;
-						
-							
-						}
-						
-					}
-					
-					idx1++;
-				}//end of for on j1
-				
-				
-				for(j1 = i1 + 1; j1 < m_numNodes; j1++){
-					
-					//std::cout <<  osinstance->getVariableNames()[ primalValPair[ idx1 ]->idx]  << " " << primalValPair[ idx1 ]->value  << " " << i1 << " " << j1 << std::endl;
-					
-					
-					if(  primalValPair[ idx1 ]->value > .1 ){
-						
-						m_thetaIndex[ m_numThetaNonz++ ] = primalValPair[ idx1]->idx  -  k*(m_numNodes - 1)*m_numNodes - 2*m_numHubs;
-						
-						
-						// a positive variable pointing into node j1
-						if(j1 >= m_numHubs){
-							
-							values[ kountNonz] = 1;
-							indexes[ kountNonz++] = j1 - m_numHubs ;
-							
-						}
-					
-					}
-					
-					idx1++;
-					
-				}//end of for on j1
-				
-			}//end of for on i1
-			
-			
+			}
+	
 			//now for convexity row  k
 			
 			values[ kountNonz] = 1;
@@ -1999,7 +1675,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			std::cout << " m_numThetaVar  " << m_numThetaVar  << std::endl;
 			
 			convexityRowIndex[ m_numThetaVar] = k;
-			m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			m_thetaCost[ m_numThetaVar++ ] = demandSum*tspObjValue; 
 			m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 			
 			masterVarName = makeStringFromInt("theta(", k);
@@ -2008,15 +1684,13 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			intVarSet.insert ( std::pair<int,double>(varNumber, 1.0) );
 			m_osinstanceMaster->addVariable(varNumber++, masterVarName, 0, 1, 'C');
 			
-			std::cout << "Optimal Objective Value = " << primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value << std::endl;
+			std::cout << "Optimal Objective Value = " << demandSum*tspObjValue << std::endl;
+
 		
 			objcoeff->indexes[ k + numVarArt ] = k + numVarArt ;
-			objcoeff->values[ k + numVarArt ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			objcoeff->values[ k + numVarArt ] = demandSum*tspObjValue;
 			
-			std::cout << " Demand = " <<  primalValPair[ k]->value << std::endl;
-			std::cout << " Distance = " <<  primalValPair[ k + m_numHubs]->value << std::endl;
-			
-			m_bestIPValue += primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
+			m_bestIPValue += demandSum*tspObjValue;
 			
 			std::cout << "m_bestIPValue = " << m_bestIPValue << std::endl;
 			starts[ startsIdx++] = kountNonz;	
@@ -2045,47 +1719,22 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		//add the linear constraints coefficients
 		m_osinstanceMaster->setLinearConstraintCoefficients(kountNonz , true, 
 				values, 0, kountNonz - 1,  indexes, 0, kountNonz - 1, starts, 0, startsIdx);
-	
 		
-		primalValPair.clear();
-		delete solver;
-		solver = NULL;
 
-		delete objcoeff;
-		objcoeff = NULL;
 		std::cout << m_osinstanceMaster->printModel( ) << std::endl;		
 		std::cout << "NONZ = " << kountNonz << std::endl;
-		
-		//exit( 1);
-		//delete[] values;
-		//values = NULL;
-		//delete[] starts;
-		//starts = NULL;
-		//delete[] indexes;
-		//indexes = NULL;
-		delete osilreader;
-		osilreader = NULL;
-		
 	
-
-		
+		delete objcoeff;
+		objcoeff = NULL;
+  
 
 	} catch (const ErrorClass& eclass) {
 		std::cout << std::endl << std::endl << std::endl;
-		if (osilreader != NULL)
-			delete osilreader;
-		if (solver != NULL)
-			delete solver;
 
 
 		//  Problem with the parser
 		throw ErrorClass(eclass.errormsg);
 	}
-
-	delete fileUtil;
-	fileUtil = NULL;
-	delete[] xVar;
-	xVar = NULL;
 
 	return m_osinstanceMaster;
 }//end generateInitialRestrictedMaster2
