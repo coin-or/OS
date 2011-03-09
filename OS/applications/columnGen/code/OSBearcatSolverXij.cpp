@@ -1565,6 +1565,12 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	int numVarArt;
 	//numVarArt = 2*m_numNodes;
 	numVarArt = m_numNodes;
+	
+	int numXVar;
+	numXVar = m_numNodes*m_numNodes - m_numNodes;
+	
+	double* xVar = NULL;
+	xVar = new double[ numXVar];
 
 	int i;
 	int k;
@@ -1655,7 +1661,8 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			mit2 = mit->second.find( k);
 			if(mit2 == mit->second.end()  ) throw ErrorClass("Problem finding hub k in the solution map");
 			
-			tspObjValue = getRouteDistance(m_numNodes, mit2->first,  m_cost, mit2->second);
+			tspObjValue = getRouteDistance(m_numNodes, mit2->first,  
+					m_cost, mit2->second, xVar);
 			demandSum = 0;
 			//get demands
 			for ( vit = mit2->second.begin() ; vit != mit2->second.end(); vit++ ) {
@@ -1665,14 +1672,25 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 				indexes[ kountNonz++] = *vit - m_numHubs ;
 				
 			}
-	
+			
+			//update theta indexes
+			
+			for(i = 0; i < numXVar; i++){
+				
+				//std::cout << "xVar = " << xVar[ i] << std::endl;
+				if(xVar[ i] > .1) {
+					m_thetaIndex[ m_numThetaNonz++ ] = i;
+					//std::cout << m_variableNames[ i]  << std::endl;
+				}
+			}  
+			//exit( 1);
 			//now for convexity row  k
 			
 			values[ kountNonz] = 1;
 			indexes[ kountNonz++] = m_numNodes - m_numHubs + k ;
 			
 			
-			std::cout << " m_numThetaVar  " << m_numThetaVar  << std::endl;
+			
 			
 			convexityRowIndex[ m_numThetaVar] = k;
 			m_thetaCost[ m_numThetaVar++ ] = demandSum*tspObjValue; 
@@ -1696,7 +1714,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			starts[ startsIdx++] = kountNonz;	
 			
 		}//end of index on k
-	
+		std::cout << " m_numThetaVar  " << m_numThetaVar  << std::endl;
 		//add the constraints
 		//add the row saying we must visit each node
 		
@@ -1724,8 +1742,11 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 		std::cout << m_osinstanceMaster->printModel( ) << std::endl;		
 		std::cout << "NONZ = " << kountNonz << std::endl;
 	
+	
 		delete objcoeff;
 		objcoeff = NULL;
+		delete[] xVar;
+		xVar = NULL;
   
 
 	} catch (const ErrorClass& eclass) {
@@ -4033,7 +4054,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 
 
 double OSBearcatSolverXij::getRouteDistance(int numNodes, int hubIndex, 
-		double* cost, std::vector<int> zk){
+		double* cost, std::vector<int> zk, double* xVar){
 	
 	int i;
 	int j;
@@ -4097,8 +4118,7 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes, int hubIndex,
 	//
 	//stuff for cut generation
 	//
-	double* xVar;
-	xVar = new double[ numVar];
+
 	//zero this array out
 	for(i = 0; i < numVar; i++) xVar[ i] = 0;
 	//getRows function call return parameters
@@ -4288,7 +4308,7 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes, int hubIndex,
 				std::cout << "Optimal Objective Value = " << solver->osresult->getObjValue(0, 0) << std::endl;
 		
 				// zero out xVar
-				for(i = 0; i < numVar; i++) xVar[ i  ] = 0;
+				//for(i = 0; i < numVar; i++) xVar[ i  ] = 0;
 
 			}//end if on numNewRows >= 1
 			
@@ -4306,7 +4326,6 @@ double OSBearcatSolverXij::getRouteDistance(int numNodes, int hubIndex,
 		
 		delete osinstance;
 		delete[] rhsVec;
-		delete[] xVar;
 		delete solver;
 		
 		return objValue;

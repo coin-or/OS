@@ -388,9 +388,12 @@ public:
 	 * zk -- indexes the non-hub nodes assigned this route
 	 * asymmetric
 	 * 
+	 * OUTPUT:
+	 * xVar the optimal solution
+	 * 
 	 */
 	double getRouteDistance(int numNodes, int hubIndex, 
-			double* cost, std::vector<int> zk);
+			double* cost, std::vector<int> zk, double* xVar);
 		
 	//this method gets called when we are done
 	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
