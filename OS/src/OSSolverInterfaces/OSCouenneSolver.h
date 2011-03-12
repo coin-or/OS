@@ -37,7 +37,10 @@
 //#include "BonIpoptSolver.hpp"
 
 //Couenne stuff
-//#define COUENNE_NEW
+#include "CouenneConfig.h"
+#ifdef COUENNE_VERSION_MAJOR
+#define COUENNE_NEW
+#endif
 //#include "CouenneProblem.hpp"
 #ifdef COUENNE_NEW
 namespace Couenne {
