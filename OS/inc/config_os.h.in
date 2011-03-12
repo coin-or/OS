@@ -162,6 +162,15 @@
 /* Version number of project */
 #undef OS_VERSION
 
+/* Major Version number of project */
+#undef OS_VERSION_MAJOR
+
+/* Minor Version number of project */
+#undef OS_VERSION_MINOR
+
+/* Release Version number of project */
+#undef OS_VERSION_RELEASE
+
 /* Name of package */
 #undef PACKAGE
 
