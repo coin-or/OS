@@ -383,7 +383,7 @@ public:
 	 * INPUT:
 	 * int numNodes -- number of cities/nodes in tour
 	 * int hubIndex -- indexes the hub index
-	 * double* cost -- the cost vector, this should have
+	 * CoinSolver* solver -- the coin solver
 	 * numNodes*numNodes - numNodes entries, we are assuming
 	 * zk -- indexes the non-hub nodes assigned this route
 	 * asymmetric
@@ -393,7 +393,22 @@ public:
 	 * 
 	 */
 	double getRouteDistance(int numNodes, int hubIndex, 
-			double* cost, std::vector<int> zk, double* xVar);
+			CoinSolver* solver, std::vector<int> zk, 
+			double* xVar);
+	
+	
+	/** call this method to get a TSP instance
+	 * 
+	 * INPUT:
+	 * int numNodes -- number of cities/nodes in tour
+	 * double* cost -- the cost vector, this should have
+	 * 
+	 * RETURN:
+	 * pointer to a CoinSolver
+	 * 
+	 */
+	CoinSolver* getTSP(int numNodes, double* cost);	
+	
 		
 	//this method gets called when we are done
 	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
