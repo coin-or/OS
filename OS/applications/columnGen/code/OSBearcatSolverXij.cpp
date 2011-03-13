@@ -112,6 +112,8 @@ void OSBearcatSolverXij::initializeDataStructures(){
 
 		//get all the parameter values
 		getOptions( m_osoption);
+		// we need to get cost data from option file
+		if(m_cost == NULL) throw ErrorClass("Option file did not contain cost data");
 	
 		m_maxMasterRows =  m_maxBmatrixCon + m_numNodes;
 		
@@ -173,8 +175,6 @@ void OSBearcatSolverXij::initializeDataStructures(){
 			
 		}
 		
-		
-		if(m_cost == NULL) m_cost = new double[ m_numNodes*m_numNodes - m_numNodes];
 		
 		//outer dynamic programming arrays
 		m_optL = new int[ m_numHubs];
@@ -2040,7 +2040,8 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		//now fill in demand		
 		i = 0;
 		m_demand = new int[ m_numNodes];
-		if(m_numNodes != demand.size( ) ) throw ErrorClass("inconsistent number of demand nodes");
+		if(m_numNodes != demand.size( ) ) 
+			throw ErrorClass("inconsistent number of demand nodes");
 		for (vit2 = demand.begin(); vit2 != demand.end(); vit2++) {
 			
 			*(m_demand + i++) = *vit2;
@@ -2052,6 +2053,8 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		//now fill in costs	
 		m_cost = NULL;
 		m_costSetInOption = false;
+		if(arcCost.size() != (m_numNodes*m_numNodes - m_numNodes) ) 
+			throw ErrorClass("input cost vector not consistent with number of nodes");
 		if(arcCost.size() >= 1){
 			m_costSetInOption = true;
 			i = 0;
