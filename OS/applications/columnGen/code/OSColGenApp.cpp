@@ -259,10 +259,10 @@ void OSColGenApp::solve(){
 	//initialize upper bound
 	m_zUB = m_osrouteSolver->m_bestIPValue;
 	
-	//initialize number of columns generated
+	//initialize number of columns and nodes generated
 	
 	m_numColumnsGenerated = 0;
-	
+	m_numNodesGenerated = 0;
 	std::cout << " m_zUB  " << m_zUB  << std::endl;
 	
 	try{
@@ -778,7 +778,7 @@ bool OSColGenApp::branchAndBound( ){
 	bool rightNodeCreated = false;
 	
 
-	m_numNodesGenerated = 0;
+
 	try{
 		
 		//get the solution

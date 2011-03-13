@@ -16,7 +16,7 @@
             <solverOption name="maxThetaNonz" value="750000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixCon" value="2000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixNonz" value="100000" solver="routeSolver" type="integer"/>
-<solverOption name="totalDemand" value="35" solver="routeSolver" type="integer"/>
+<solverOption name="totalDemand" value="32" solver="routeSolver" type="integer"/>
  <solverOption name="use1OPTstart" value="true" solver="routeSolver" type="bool"/>
  <solverOption name="routeCapacity" value="25" solver="routeSolver"  category="0" type="integer" />
  <solverOption name="routeCapacity" value="25" solver="routeSolver"  category="1" type="integer" />  
@@ -31,9 +31,9 @@
 <solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
-<solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
+<solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="4" solver="routeSolver" type="integer"/>
-<solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
+<solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
@@ -51,7 +51,7 @@
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="2" solver="routeSolver" type="integer"/>
-<solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
+<solverOption name="demand" value="0" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
@@ -94,3 +94,4 @@
  </solverOptions>
  </optimization>
 </osol>
+

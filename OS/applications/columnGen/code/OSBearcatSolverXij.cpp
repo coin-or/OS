@@ -4444,6 +4444,9 @@ CoinSolver* OSBearcatSolverXij::getTSP(int numNodes, double* cost){
 		solver->buildSolverInstance();
 		solver->osoption = m_osoption;	
 		
+		delete[] rhsVec;
+		rhsVec = NULL;
+		
 		return solver;
 	
 	
@@ -4451,6 +4454,11 @@ CoinSolver* OSBearcatSolverXij::getTSP(int numNodes, double* cost){
 	} catch (const ErrorClass& eclass) {
 		
 		std::cout << std::endl << std::endl << std::endl;
+		
+		if(rhsVec != NULL){
+			delete[] rhsVec;
+			rhsVec = NULL;
+		}
 	
 		//  Problem with the parser
 		throw ErrorClass(eclass.errormsg);
