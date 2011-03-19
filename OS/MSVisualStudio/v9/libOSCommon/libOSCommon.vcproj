@@ -47,7 +47,7 @@
 				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;USE_DTOA;WIN_;_LINDO_DLL_;OSROOT_DIR"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=""
@@ -120,7 +120,7 @@
 				AdditionalIncludeDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include&quot;;..\..\..\..\SYMPHONY\include"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;COIN_HAS_SYMPHONY;USE_DTOA;WIN_;_LINDO_DLL_;OSROOT_DIR"
 				StringPooling="true"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
@@ -197,6 +197,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSGeneral.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSParsers\OSgLParserData.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSgLWriter.cpp"
 				>
 			</File>
 			<File
