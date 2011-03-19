@@ -79,7 +79,7 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  m_osrouteSolver = NULL;
 	  
 	  m_osrouteSolver = NULL;
-	  factoryInit  = new OSDecompFactoryInitializer();
+	  m_factoryInit  = new OSDecompFactoryInitializer();
 	  std::cout << "CREATE THE FACTORY " << std::endl;
 	  m_osrouteSolver = OSDecompSolverFactory::factories[ "OSBearcatSolverXij"]->create();
 	  std::cout << "FINISH FACTORY CREATION " << std::endl;
@@ -121,7 +121,7 @@ OSColGenApp::~OSColGenApp(){
 
 	//finally delete the factories
 	
-	delete factoryInit;
+	delete m_factoryInit;
 
 }//end ~OSColGenApp() destructor
 
@@ -238,6 +238,8 @@ void OSColGenApp::getOptions(OSOption *osoption) {
 
 
 void OSColGenApp::solve(){
+	
+	
 
 	int *cbasis = NULL;
 	int *rbasis = NULL;

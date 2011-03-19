@@ -33,7 +33,7 @@
             <solverOption name="demand" value="2" solver="routeSolver" type="integer"/>
             <solverOption name="demand" value="2" solver="routeSolver" type="integer"/>
             <solverOption name="demand" value="3" solver="routeSolver" type="integer"/>
-            <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
+            <solverOption name="demand" value="1" solver="routeSolver" type="integer"/> 
             <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
             <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>
             <solverOption name="demand" value="1" solver="routeSolver" type="integer"/>

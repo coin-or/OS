@@ -40,7 +40,7 @@
 class OSColGenApp {
 public:
 	
-	OSDecompFactoryInitializer *factoryInit;
+	OSDecompFactoryInitializer *m_factoryInit;
 	
 
 	OSDecompSolver *m_osrouteSolver;

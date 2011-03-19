@@ -561,11 +561,11 @@ void OSBearcatSolverXij::getOptL( double** c) {
 				
 				l = d - d1;
 				
-				//std::cout << "L = " << l <<  "  m_upperBoundL[ k  - 1]  "  << m_upperBoundLMax << std::endl;
+				//std::cout << "L = " << l <<  "  m_upperBoundL[ k  - 1]  "  << m_upperBoundL[ k  - 1] << std::endl;
 				//kipp make m_upperBoundL the route capapcity
 				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL[ k  - 1]) && (l >= m_lowerBoundL[ k - 1]) ){
 				
-					
+					//std::cout << "k - 1 = "   <<  k - 1 << "  L = " << l <<  "  m_upperBoundL[ k  - 1]  "  << m_upperBoundL[ k  - 1] << std::endl;
 					// l was the decision at state d1 in stage k-1
 					// l + d1 brings us to state d at stage k
 					// d is the total carried on routes 0 -- k-1
@@ -1558,6 +1558,10 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
+	
+	//implement 1OPT
+	
+	//OneOPT();
 	
 	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster( )" << std::endl;
 	
@@ -2917,17 +2921,20 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 					if(  jvalue  >= ivalue ){
 						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
 						//std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
+						//std::cout << " DEMAND =  = " <<  m_demand[ jvalue + 1]   << std::endl;
 						routeDemand += m_demand[ jvalue + 1];
 
 						
 					}else{
 						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
 						//std::cout << " j NODE NUMBER = " <<  jvalue    << std::endl;
+						//std::cout << " DEMAND =  = " <<  m_demand[ jvalue ]   << std::endl;
 						routeDemand += m_demand[ jvalue ];
 					}
 					
 					
 				}
+				
 				
 				std::cout <<  "route demand = " << routeDemand << std::endl << std::endl;
 				std::cout <<  "distance for this route "  << m_thetaCost[ i ] / routeDemand  << std::endl;
@@ -4471,6 +4478,102 @@ CoinSolver* OSBearcatSolverXij::getTSP(int numNodes, double* cost){
 }//end getTSP
 
 
+bool OSBearcatSolverXij::OneOPT(){
+	
+	int k;
+	
+	double *routeCost = NULL;
+	int *routeDemand = NULL;
+	double *xVar = NULL;
+	int numXVar = m_numNodes*m_numNodes - m_numNodes;
+	
+	
+	routeCost = new double[m_numHubs];
+	routeDemand = new int[m_numHubs];
+	xVar = new double[ numXVar];
+	
+	//get current capacities
+	
+	std::map<int, std::vector<int> > routeMap;
+	std::vector<int>::iterator vit;
+
+	routeMap = m_initSolMap[ 0];
+	CoinSolver *solver = NULL;
+	
+	double totalCost;
+	
+	
+	try{
+		
+		solver = getTSP(m_numNodes, m_cost);
+		totalCost = 0;
+		for(k = 0; k < m_numHubs; k++){
+		
+			routeDemand[ k] = 0;
+			for(vit = routeMap[k].begin(); vit!=routeMap[k].end(); ++vit){
+			
+				std::cout << "node i = " << *vit << " demand " << m_demand[ *vit] << std::endl;
+				routeDemand[ k] +=  m_demand[ *vit];
+			}
+			
+			if(routeDemand[k] <= m_routeCapacity[ k] ){
+				
+				routeCost[ k] = getRouteDistance(m_numNodes, k, solver,
+						routeMap[k], xVar)*routeDemand[ k];
+				
+				
+				std::cout << "rout = " << k << " cost " << routeCost[ k] << std::endl;
+				totalCost += routeCost[ k];
+			}else{
+				std::cout << "rout demand " << routeDemand[k] << " route capacity =  " << m_routeCapacity[ k] << std::endl;
+				throw ErrorClass("initial feasible solution NOT feasible");
+			}
+			
+		
+		}
+		
+		std::cout << "Total Cost  = " << totalCost << std::endl;
+		//garbage collection
+		delete[] routeCost;
+		routeCost = NULL;
+		delete[] routeDemand;
+		routeDemand = NULL;
+		delete[] xVar;
+		xVar = NULL;
+		
+		delete solver->osinstance;
+		delete solver;
+		
+		exit( 1);
+		return true;
+	
+	
+	} catch (const ErrorClass& eclass) {
+	
+	std::cout << std::endl << std::endl << std::endl;
+	
+	if(routeCost != NULL){
+		delete[] routeCost;
+		routeCost = NULL;
+	}
+	
+	if(routeDemand != NULL){
+		delete[] routeDemand;
+		routeDemand = NULL;
+	}
+	
+	if(xVar != NULL){
+		delete[] xVar;
+		xVar = NULL;
+	}
+
+
+
+	//  Problem with the parser
+	throw ErrorClass(eclass.errormsg);
+}
+
+}//1OPT
 
 std::string makeStringFromInt(std::string theString, int theInt){
 	ostringstream outStr;

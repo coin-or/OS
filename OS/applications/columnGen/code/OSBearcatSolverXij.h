@@ -37,9 +37,6 @@ public:
 /***************** Bearcat Specific Solver Parameters ***********************/
 	
 	
-
-	
-	
 	std::string m_initOSiLFile;
 	
 	/** the index on the outer map is on the solution number,
@@ -404,10 +401,18 @@ public:
 	 * double* cost -- the cost vector, this should have
 	 * 
 	 * RETURN:
-	 * pointer to a CoinSolver
+	 * pointer to a CoinSolver with a TSP instance
 	 * 
 	 */
 	CoinSolver* getTSP(int numNodes, double* cost);	
+	
+	
+	/** 
+	 * try and find a feasible solution, return false
+	 * if solution not feasible
+	 * 
+	 */
+	bool OneOPT();	
 	
 		
 	//this method gets called when we are done
