@@ -47,4 +47,7 @@ DISTCLEANFILES = ipopt.out bonmin.out
 test: unitTest$(EXEEXT)
 	./unitTest$(EXEEXT)
 
+alltests: unitTest$(EXEEXT)
+	./unitTest$(EXEEXT) nb
+
 .PHONY: test
