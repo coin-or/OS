@@ -12,7 +12,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.3.3],[coin-os@list.coin-or.org])
+AC_INIT([OS],[2.3],[coin-os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -35,7 +35,7 @@ AC_PREFIX_DEFAULT([`pwd`])
 #############################################################################
 #                         GET THE VERSION NUMBER                            #
 #############################################################################
-AC_COIN_PROJECTDIR_INIT(OS,9:3:3)
+AC_COIN_PROJECTDIR_INIT(OS)
 
 
 
