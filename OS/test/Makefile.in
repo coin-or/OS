@@ -655,6 +655,9 @@ uninstall-am: uninstall-info-am
 test: unitTest$(EXEEXT)
 	./unitTest$(EXEEXT)
 
+alltests: unitTest$(EXEEXT)
+	./unitTest$(EXEEXT) nb
+
 .PHONY: test
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
