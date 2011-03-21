@@ -1561,7 +1561,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	
 	//implement 1OPT
 	
-	//OneOPT();
+	getInitialSolution();
 	
 	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster( )" << std::endl;
 	
@@ -3671,18 +3671,10 @@ void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thet
 void OSBearcatSolverXij::getInitialSolution(){
 	
 	try{	
-		//kipp -- stil not done we depend on SKs solution
-		//let's get the initial assignment of nodes to hubs
-		//this is in m_initSolMap which is calculated when we
-		//call  getOptions( OSOption *osoption);
+
 		
-		if(m_initSolMap.size() == 0) getOptions( m_osoption);
-		
-		//get cost vector
-		
-		//get demand vector
-		
-		//now improve on m_initSolMap
+		if( OneOPT() == false) 
+			throw ErrorClass("no initilal feasilbe solution");
 		
 	}catch (const ErrorClass& eclass) {
 	
@@ -4481,11 +4473,14 @@ CoinSolver* OSBearcatSolverXij::getTSP(int numNodes, double* cost){
 bool OSBearcatSolverXij::OneOPT(){
 	
 	int k;
-	
+	int kprime;
 	double *routeCost = NULL;
 	int *routeDemand = NULL;
 	double *xVar = NULL;
 	int numXVar = m_numNodes*m_numNodes - m_numNodes;
+	double routeCostInf;
+	
+	routeCostInf = OSINT_MAX;
 	
 	
 	routeCost = new double[m_numHubs];
@@ -4495,13 +4490,15 @@ bool OSBearcatSolverXij::OneOPT(){
 	//get current capacities
 	
 	std::map<int, std::vector<int> > routeMap;
+	std::vector<int> tmpVec;
 	std::vector<int>::iterator vit;
+	std::vector<int>::iterator vit2;
 
 	routeMap = m_initSolMap[ 0];
 	CoinSolver *solver = NULL;
 	
 	double totalCost;
-	
+	bool foundMoBetta; //set to true if improved
 	
 	try{
 		
@@ -4526,10 +4523,190 @@ bool OSBearcatSolverXij::OneOPT(){
 				totalCost += routeCost[ k];
 			}else{
 				std::cout << "rout demand " << routeDemand[k] << " route capacity =  " << m_routeCapacity[ k] << std::endl;
-				throw ErrorClass("initial feasible solution NOT feasible");
+				routeCost[ k] = routeCostInf;
+				totalCost += routeCost[ k];
+
 			}
 			
 		
+		}
+		
+		
+		//now loop as long as there is improvement
+		foundMoBetta = true;
+		double improvement;
+
+		double tmpCostk;
+		double tmpCostkPrime;
+		double optCostk;
+		double optCostkPrime;
+		int tmpIdx;
+		std::vector<int>::iterator vitIdx;
+	
+		while(foundMoBetta == true){
+			foundMoBetta = false;
+			
+			for(k = 0; k < m_numHubs; k++){
+				
+				for(kprime = 0; kprime < m_numHubs; kprime++){
+					
+					if(k != kprime){
+						
+						//try to move a node from route k to route kprime
+						improvement = OSDBL_MAX;
+
+						optCostk = routeCostInf;
+						optCostkPrime = routeCostInf;
+						
+						for(vit = routeMap[k].begin(); vit!=routeMap[k].end(); ++vit){
+							
+							
+							if( m_demand[ *vit] + routeDemand[ kprime] <= m_routeCapacity[ kprime] ){
+								
+								tmpCostk = routeCostInf;
+								tmpCostkPrime = routeCostInf;
+								
+								
+								//make a switch
+								//add *vit to route kprime and take away from  k
+								routeMap[ kprime].push_back( *vit);
+								//calculate cost for route kprime
+								tmpCostkPrime = getRouteDistance(m_numNodes, kprime, solver,
+										routeMap[kprime], xVar)*(routeDemand[ kprime] + m_demand[ *vit] );
+								
+								//now switch back
+								routeMap[ kprime].pop_back( );
+								
+
+								//kipp -- handle both infinite and finite
+								if(routeCost[k] == routeCostInf && routeCost[ kprime] < routeCostInf){
+									
+									std::cout << "WE HAVE INFINITY CASE" << std::endl;
+									
+									
+									//don't bother to solve TSP for route k if we are still infinite
+									if(  routeDemand[ k] - m_demand[ *vit] <= m_routeCapacity[ k]) {
+
+										for(vit2 = routeMap[k].begin(); vit2 != routeMap[k].end();  vit2++){
+											
+											if(vit != vit2) tmpVec.push_back( *vit2);
+											
+										}
+										
+										tmpCostk = getRouteDistance(m_numNodes, k, solver,
+												tmpVec, xVar)*(routeDemand[ k] - m_demand[ *vit] );
+										
+										tmpVec.clear();
+										
+									}
+									
+									
+									if(  tmpCostkPrime + tmpCostk < improvement)  {
+										
+										improvement = tmpCostkPrime + tmpCostk;
+										tmpIdx = *vit;
+										vitIdx = vit;
+										optCostk = tmpCostk;
+										optCostkPrime = tmpCostkPrime;
+										
+										
+									}
+									
+									
+								}else{// not infinite cost
+									
+									std::cout << "WE HAVE FINITE CASE" << std::endl;
+									
+									/*
+									for(vit2 = routeMap[k].begin(); vit2 != routeMap[k].end();  vit2++){
+										
+										if(vit != vit2) tmpVec.push_back( *vit2);
+										
+									}
+									
+									tmpCostk = getRouteDistance(m_numNodes, k, solver,
+											tmpVec, xVar)*(routeDemand[ k] - m_demand[ *vit] );
+									
+									tmpVec.clear();
+									
+									
+									if( tmpCostkPrime + tmpCostk < improvement) {
+										
+										improvement = tmpCostkPrime + tmpCostk;
+										tmpIdx = *vit;
+										vitIdx = vit;
+										optCostk = tmpCostk;
+										optCostkPrime = tmpCostkPrime;
+										
+										
+									}
+									*/
+									
+									
+								}
+								
+								
+							}//end if on capacity test
+							
+							
+						}// looping over nodes
+						
+						//do updates here if we found an improvement
+						
+						//make switch on best found
+						if(improvement < OSDBL_MAX) {
+							
+							std::cout << "improvement  = "  << improvement << std::endl;
+							std::cout << "index =  "  <<  tmpIdx << std::endl;
+							//add tmpIdx to route kPrime
+							routeMap[ kprime].push_back( tmpIdx);
+							//adjust route demand
+							routeDemand[ kprime] += m_demand[ tmpIdx];
+							//adjust  route cost
+							routeCost[ kprime] = optCostkPrime;
+							
+							std::cout << "kprime route cost = " << routeCost[ kprime] << std::endl;
+							std::cout << "kprime route demand = " << routeDemand[ kprime] << std::endl;
+							
+							
+							//delete tmpIdx to route kPrime
+							routeMap[ k].erase( vitIdx);
+							//adjust rouet demand
+							routeDemand[ k] -= m_demand[ tmpIdx];
+							//adjust  route cost
+							routeCost[ k] = optCostk;
+							
+							std::cout << "k route cost = " << routeCost[ k] << std::endl;
+							std::cout << "k route demand = " << routeDemand[ k] << std::endl;
+							
+							foundMoBetta = true;
+							
+						}//if on OSDBL_MAX	
+					}//close if on k != kprime
+				}//loop on kprime
+			}//loop on k
+			
+			
+		}//loop on while
+		
+		
+		//summarize
+		totalCost = 0;
+		for(k = 0; k < m_numHubs; k++){
+			
+			std::cout << std::endl << std::endl;
+			
+			std::cout << "ROUTE "  << k << " Total Demand =  " << routeDemand[ k]  << std::endl;
+			std::cout << "ROUTE " << k << " Total Cost =  " << routeCost[ k]  << std::endl;
+			std::cout << "ROUTE "  << k << "  Nodes "  << std::endl;
+			
+			for(vit = routeMap[ k].begin(); vit != routeMap[k].end(); vit++){
+				
+				std::cout << *vit  << std::endl;
+				
+			}
+			
+			totalCost += routeCost[ k];
 		}
 		
 		std::cout << "Total Cost  = " << totalCost << std::endl;
