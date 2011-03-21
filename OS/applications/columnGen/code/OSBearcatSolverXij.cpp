@@ -4535,7 +4535,7 @@ bool OSBearcatSolverXij::OneOPT(){
 		//now loop as long as there is improvement
 		foundMoBetta = true;
 		double improvement;
-
+		double improvementFinite;
 		double tmpCostk;
 		double tmpCostkPrime;
 		double optCostk;
@@ -4550,17 +4550,18 @@ bool OSBearcatSolverXij::OneOPT(){
 				
 				for(kprime = 0; kprime < m_numHubs; kprime++){
 					
-					if(k != kprime){
+					if(k != kprime && routeCost[ kprime] < routeCostInf){
 						
 						//try to move a node from route k to route kprime
 						improvement = OSDBL_MAX;
+						improvementFinite = 0;
 
 						optCostk = routeCostInf;
 						optCostkPrime = routeCostInf;
 						
 						for(vit = routeMap[k].begin(); vit!=routeMap[k].end(); ++vit){
 							
-							
+							//consider making a switch if feasible
 							if( m_demand[ *vit] + routeDemand[ kprime] <= m_routeCapacity[ kprime] ){
 								
 								tmpCostk = routeCostInf;
@@ -4579,7 +4580,7 @@ bool OSBearcatSolverXij::OneOPT(){
 								
 
 								//kipp -- handle both infinite and finite
-								if(routeCost[k] == routeCostInf && routeCost[ kprime] < routeCostInf){
+								if(routeCost[k] == routeCostInf ){
 									
 									std::cout << "WE HAVE INFINITY CASE" << std::endl;
 									
@@ -4600,15 +4601,14 @@ bool OSBearcatSolverXij::OneOPT(){
 										
 									}
 									
-									
+								
 									if(  tmpCostkPrime + tmpCostk < improvement)  {
 										
 										improvement = tmpCostkPrime + tmpCostk;
 										tmpIdx = *vit;
 										vitIdx = vit;
 										optCostk = tmpCostk;
-										optCostkPrime = tmpCostkPrime;
-										
+										optCostkPrime = tmpCostkPrime;	
 										
 									}
 									
@@ -4617,7 +4617,7 @@ bool OSBearcatSolverXij::OneOPT(){
 									
 									std::cout << "WE HAVE FINITE CASE" << std::endl;
 									
-									/*
+									//evaluate cost on route k
 									for(vit2 = routeMap[k].begin(); vit2 != routeMap[k].end();  vit2++){
 										
 										if(vit != vit2) tmpVec.push_back( *vit2);
@@ -4629,23 +4629,23 @@ bool OSBearcatSolverXij::OneOPT(){
 									
 									tmpVec.clear();
 									
+							
+									//if( ( tmpCostkPrime + tmpCostk < routeCost[k] + routeCost[kprime])
+									//		&& (tmpCostkPrime + tmpCostk < improvement) ) {
 									
-									if( tmpCostkPrime + tmpCostk < improvement) {
+									if( ( (routeCost[k] + routeCost[kprime]) -
+											( tmpCostkPrime + tmpCostk ) ) > improvementFinite  ) {
+										
+										improvementFinite = (routeCost[k] + routeCost[kprime]) -
+												( tmpCostkPrime + tmpCostk );
 										
 										improvement = tmpCostkPrime + tmpCostk;
 										tmpIdx = *vit;
 										vitIdx = vit;
 										optCostk = tmpCostk;
 										optCostkPrime = tmpCostkPrime;
-										
-										
 									}
-									*/
-									
-									
 								}
-								
-								
 							}//end if on capacity test
 							
 							
@@ -4656,7 +4656,7 @@ bool OSBearcatSolverXij::OneOPT(){
 						//make switch on best found
 						if(improvement < OSDBL_MAX) {
 							
-							std::cout << "improvement  = "  << improvement << std::endl;
+							
 							std::cout << "index =  "  <<  tmpIdx << std::endl;
 							//add tmpIdx to route kPrime
 							routeMap[ kprime].push_back( tmpIdx);
