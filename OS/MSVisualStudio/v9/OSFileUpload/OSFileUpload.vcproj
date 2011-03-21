@@ -49,7 +49,7 @@
 				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
+				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Debug/Application-fileUpload.pch"
 				AssemblerListingLocation=".\$(ConfigurationName)\"
