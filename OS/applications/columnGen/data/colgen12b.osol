@@ -20,7 +20,7 @@
             <solverOption name="totalDemand" value="21" solver="routeSolver" type="integer"/>   
 
 
-            <solverOption name="routeCapacity" value="7" solver="routeSolver"  category="0" type="integer" />
+            <solverOption name="routeCapacity" value="15" solver="routeSolver"  category="0" type="integer" />
             <solverOption name="routeCapacity" value="15" solver="routeSolver"  category="1" type="integer" /> 
 <solverOption name="maxBmatrixCon" value="2000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixNonz" value="100000" solver="routeSolver" type="integer"/>

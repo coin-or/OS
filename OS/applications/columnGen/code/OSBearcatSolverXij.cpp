@@ -36,6 +36,8 @@
 #include "ClpNetworkMatrix.hpp"
 #include "OsiClpSolverInterface.hpp"
 
+#include <algorithm> 
+
 
 #ifdef HAVE_CMATH
 # include <cmath>
@@ -106,6 +108,7 @@ void OSBearcatSolverXij::initializeDataStructures(){
 	int k;
 	int i;
 	int l;
+	int tmpVal;
 	
 	try{
 		
@@ -120,10 +123,19 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		m_upperBoundL = new int[ m_numHubs];
 		m_lowerBoundL = new int[ m_numHubs];
 		
+		
+	
 		for(k = 0; k < m_numHubs; k++){
 			
+			//adjust routeMinPickup
+			tmpVal = 0;
+			for(i = 0; i < m_numHubs; i++) 
+				if( i != k) tmpVal += m_routeCapacity[ i];
+			
+			m_lowerBoundL[ k] = std::max( m_routeMinPickup[ k], (m_totalDemand - tmpVal) )  ;
+			
 			m_upperBoundL[ k] = m_routeCapacity[ k];
-			m_lowerBoundL[ k] = m_routeMinPickup[ k];
+			
 			//set m_upperBoundL cannot exceed total demand
 			if(m_upperBoundL[ k] > m_totalDemand) m_upperBoundL[ k] = m_totalDemand;
 			if( m_upperBoundL[ k] > m_upperBoundLMax) m_upperBoundLMax = m_upperBoundL[ k];
@@ -153,7 +165,7 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		 * of demand
 		 * 
 		 */
-		
+		 
 		for (i = 0; i < m_numNodes; i++) {
 			
 			//kipp we can use the biggest possible m_upperBoundL
@@ -1864,8 +1876,8 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 								
 								std::istringstream demandBuffer( (*vit)->value);
 								demandBuffer >> tmpVal;
-								if(tmpVal <= 0 && demand.size() > m_numHubs) throw ErrorClass("must have strictly positive demand");
-								if(tmpVal < m_minDemand  && demand.size() > m_numHubs ) m_minDemand = tmpVal;
+								if(tmpVal <= 0 && demand.size() > (unsigned int) m_numHubs) throw ErrorClass("must have strictly positive demand");
+								if(tmpVal < m_minDemand  && demand.size() > (unsigned int) m_numHubs ) m_minDemand = tmpVal;
 								demand.push_back( tmpVal);
 								//std::cout << "demand = " << tmpVal <<  std::endl;
 								
@@ -2016,7 +2028,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		//now fill in route capacities
 		i = 0;
 		m_routeCapacity = new int[ m_numHubs];
-		if(m_numHubs != routeCapacity.size( ) ) throw ErrorClass("inconsistent number of HUBS");
+		if( (unsigned int)m_numHubs != routeCapacity.size( ) ) throw ErrorClass("inconsistent number of HUBS");
 		for (vit2 = routeCapacity.begin(); vit2 != routeCapacity.end(); vit2++) {
 			
 			*(m_routeCapacity + i++) = *vit2;
@@ -2030,7 +2042,11 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		//now fill in route min pickups
 		i = 0;
 		m_routeMinPickup = new int[ m_numHubs];
-		if(m_numHubs != routeMinPickup.size( ) ) throw ErrorClass("inconsistent number of HUBS");
+		if( (unsigned int)m_numHubs != routeMinPickup.size( ) ) throw ErrorClass("inconsistent number of HUBS");
+		//initialize
+		for(int k = 0; k < m_numHubs; k++){
+			m_routeMinPickup[ k] = 1;
+		}
 		for (vit2 = routeMinPickup.begin(); vit2 != routeMinPickup.end(); vit2++) {
 			
 			*(m_routeMinPickup + i++) = *vit2;
@@ -2044,7 +2060,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		//now fill in demand		
 		i = 0;
 		m_demand = new int[ m_numNodes];
-		if(m_numNodes != demand.size( ) ) 
+		if( (unsigned int)m_numNodes != demand.size( ) ) 
 			throw ErrorClass("inconsistent number of demand nodes");
 		for (vit2 = demand.begin(); vit2 != demand.end(); vit2++) {
 			
@@ -2057,7 +2073,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		//now fill in costs	
 		m_cost = NULL;
 		m_costSetInOption = false;
-		if(arcCost.size() != (m_numNodes*m_numNodes - m_numNodes) ) 
+		if(arcCost.size() != (unsigned int)(m_numNodes*m_numNodes - m_numNodes) ) 
 			throw ErrorClass("input cost vector not consistent with number of nodes");
 		if(arcCost.size() >= 1){
 			m_costSetInOption = true;
@@ -2914,7 +2930,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 					std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
 					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " COST = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
 					
-					ivalue = floor( m_thetaIndex[  j] /(m_numNodes - 1) );
+					ivalue = (int)floor( m_thetaIndex[  j] /(m_numNodes - 1) );
 					
 					jvalue = m_thetaIndex[  j] - ivalue*(m_numNodes - 1);
 					
@@ -2931,16 +2947,11 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 						//std::cout << " DEMAND =  = " <<  m_demand[ jvalue ]   << std::endl;
 						routeDemand += m_demand[ jvalue ];
 					}
-					
-					
 				}
-				
 				
 				std::cout <<  "route demand = " << routeDemand << std::endl << std::endl;
 				std::cout <<  "distance for this route "  << m_thetaCost[ i ] / routeDemand  << std::endl;
 				
-			
-			
 		}
 		
 		
@@ -3674,7 +3685,7 @@ void OSBearcatSolverXij::getInitialSolution(){
 
 		
 		if( OneOPT() == false) 
-			throw ErrorClass("no initilal feasilbe solution");
+			throw ErrorClass("no initilal feasible solution");
 		
 	}catch (const ErrorClass& eclass) {
 	
@@ -3944,8 +3955,8 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 	values = new double[ numNonz];
 	indexes = new int[ numNonz];
 	
-	if(numNonz != valuesVec.size() ) throw ErrorClass("dimension problem in reset");
-	if(numNonz != indexesVec.size() ) throw ErrorClass("dimension problem in reset");
+	if( (unsigned int)numNonz != valuesVec.size() ) throw ErrorClass("dimension problem in reset");
+	if( (unsigned int)numNonz != indexesVec.size() ) throw ErrorClass("dimension problem in reset");
 	
 	for(i = 0; i < numNonz; i++){
 		
@@ -4481,7 +4492,7 @@ bool OSBearcatSolverXij::OneOPT(){
 	double routeCostInf;
 	
 	routeCostInf = OSINT_MAX;
-	
+	double feasMult = 10000; //factor by which we multiply feasibility improvement
 	
 	routeCost = new double[m_numHubs];
 	routeDemand = new int[m_numHubs];
@@ -4499,6 +4510,7 @@ bool OSBearcatSolverXij::OneOPT(){
 	
 	double totalCost;
 	bool foundMoBetta; //set to true if improved
+	bool foundLocalImprovement;
 	
 	try{
 		
@@ -4535,11 +4547,12 @@ bool OSBearcatSolverXij::OneOPT(){
 		//now loop as long as there is improvement
 		foundMoBetta = true;
 		double improvement;
-		double improvementFinite;
+		
 		double tmpCostk;
 		double tmpCostkPrime;
 		double optCostk;
 		double optCostkPrime;
+		double tmpVal;
 		int tmpIdx;
 		std::vector<int>::iterator vitIdx;
 	
@@ -4548,14 +4561,14 @@ bool OSBearcatSolverXij::OneOPT(){
 			
 			for(k = 0; k < m_numHubs; k++){
 				
+				foundLocalImprovement = false;
+				
 				for(kprime = 0; kprime < m_numHubs; kprime++){
 					
 					if(k != kprime && routeCost[ kprime] < routeCostInf){
 						
 						//try to move a node from route k to route kprime
-						improvement = OSDBL_MAX;
-						improvementFinite = 0;
-
+						improvement = 0;
 						optCostk = routeCostInf;
 						optCostkPrime = routeCostInf;
 						
@@ -4582,7 +4595,7 @@ bool OSBearcatSolverXij::OneOPT(){
 								//kipp -- handle both infinite and finite
 								if(routeCost[k] == routeCostInf ){
 									
-									std::cout << "WE HAVE INFINITY CASE" << std::endl;
+									//std::cout << "WE HAVE INFINITY CASE" << std::endl;
 									
 									
 									//don't bother to solve TSP for route k if we are still infinite
@@ -4601,10 +4614,12 @@ bool OSBearcatSolverXij::OneOPT(){
 										
 									}
 									
+									tmpVal = std::max(*vit, routeDemand[ k] - m_demand[ *vit])*feasMult 
+											+ ( routeCost[kprime]  - tmpCostkPrime);
 								
-									if(  tmpCostkPrime + tmpCostk < improvement)  {
-										
-										improvement = tmpCostkPrime + tmpCostk;
+									if(  tmpVal > improvement)  {
+										foundLocalImprovement = true;
+										improvement = tmpVal;
 										tmpIdx = *vit;
 										vitIdx = vit;
 										optCostk = tmpCostk;
@@ -4615,7 +4630,7 @@ bool OSBearcatSolverXij::OneOPT(){
 									
 								}else{// not infinite cost
 									
-									std::cout << "WE HAVE FINITE CASE" << std::endl;
+									//std::cout << "WE HAVE FINITE CASE" << std::endl;
 									
 									//evaluate cost on route k
 									for(vit2 = routeMap[k].begin(); vit2 != routeMap[k].end();  vit2++){
@@ -4628,18 +4643,14 @@ bool OSBearcatSolverXij::OneOPT(){
 											tmpVec, xVar)*(routeDemand[ k] - m_demand[ *vit] );
 									
 									tmpVec.clear();
-									
-							
-									//if( ( tmpCostkPrime + tmpCostk < routeCost[k] + routeCost[kprime])
-									//		&& (tmpCostkPrime + tmpCostk < improvement) ) {
-									
+	
 									if( ( (routeCost[k] + routeCost[kprime]) -
-											( tmpCostkPrime + tmpCostk ) ) > improvementFinite  ) {
+											( tmpCostkPrime + tmpCostk ) ) > improvement  ) {
 										
-										improvementFinite = (routeCost[k] + routeCost[kprime]) -
+										improvement = (routeCost[k] + routeCost[kprime]) -
 												( tmpCostkPrime + tmpCostk );
 										
-										improvement = tmpCostkPrime + tmpCostk;
+										foundLocalImprovement = true;
 										tmpIdx = *vit;
 										vitIdx = vit;
 										optCostk = tmpCostk;
@@ -4654,7 +4665,7 @@ bool OSBearcatSolverXij::OneOPT(){
 						//do updates here if we found an improvement
 						
 						//make switch on best found
-						if(improvement < OSDBL_MAX) {
+						if( foundLocalImprovement == true) {
 							
 							
 							std::cout << "index =  "  <<  tmpIdx << std::endl;
@@ -4665,8 +4676,8 @@ bool OSBearcatSolverXij::OneOPT(){
 							//adjust  route cost
 							routeCost[ kprime] = optCostkPrime;
 							
-							std::cout << "kprime route cost = " << routeCost[ kprime] << std::endl;
-							std::cout << "kprime route demand = " << routeDemand[ kprime] << std::endl;
+							//std::cout << "kprime route cost = " << routeCost[ kprime] << std::endl;
+							//std::cout << "kprime route demand = " << routeDemand[ kprime] << std::endl;
 							
 							
 							//delete tmpIdx to route kPrime
@@ -4676,8 +4687,8 @@ bool OSBearcatSolverXij::OneOPT(){
 							//adjust  route cost
 							routeCost[ k] = optCostk;
 							
-							std::cout << "k route cost = " << routeCost[ k] << std::endl;
-							std::cout << "k route demand = " << routeDemand[ k] << std::endl;
+							//std::cout << "k route cost = " << routeCost[ k] << std::endl;
+							//std::cout << "k route demand = " << routeDemand[ k] << std::endl;
 							
 							foundMoBetta = true;
 							
@@ -4700,16 +4711,17 @@ bool OSBearcatSolverXij::OneOPT(){
 			std::cout << "ROUTE " << k << " Total Cost =  " << routeCost[ k]  << std::endl;
 			std::cout << "ROUTE "  << k << "  Nodes "  << std::endl;
 			
-			for(vit = routeMap[ k].begin(); vit != routeMap[k].end(); vit++){
-				
-				std::cout << *vit  << std::endl;
-				
-			}
-			
+			//for(vit = routeMap[ k].begin(); vit != routeMap[k].end(); vit++){
+			//	std::cout << *vit  << std::endl;
+			//}
 			totalCost += routeCost[ k];
 		}
 		
 		std::cout << "Total Cost  = " << totalCost << std::endl;
+		//get the solution
+		m_initSolMap[ 0] = routeMap;
+		
+		
 		//garbage collection
 		delete[] routeCost;
 		routeCost = NULL;
@@ -4717,12 +4729,11 @@ bool OSBearcatSolverXij::OneOPT(){
 		routeDemand = NULL;
 		delete[] xVar;
 		xVar = NULL;
-		
 		delete solver->osinstance;
 		delete solver;
-		
-		exit( 1);
-		return true;
+		//exit( 1);
+		if( totalCost >= routeCostInf )return false;
+		else return true;
 	
 	
 	} catch (const ErrorClass& eclass) {
