@@ -3428,6 +3428,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			pchar++;
 			// better point to a '>'
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
+			pchar++;
 		}
 		else{
 			// pchar better be '>' or there is an error
@@ -3479,6 +3480,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			pchar++;
 			// better point to a '>'
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <source> element"); return false;}
+			pchar++;
 		}
 		else{
 			// pchar better be '>' or there is an error
@@ -3530,6 +3532,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			pchar++;
 			// better point to a '>'
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
+			pchar++;
 		}
 		else{
 			// pchar better be '>' or there is an error
