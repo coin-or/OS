@@ -100,6 +100,9 @@ public:
 	/** m_demand is the vector of node demands */
 	int* m_demand;
 	
+	/** m_nodeName is the vector of node name */
+	string* m_nodeName;
+	
 	/** the distance/cost vectors */
 	double* m_cost;
 

@@ -1802,10 +1802,12 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		std::vector<SolverOption*>::iterator vit;
 		std::vector<int>::iterator vit2;
 		std::vector<int >demand;
+		std::vector<std::string >nodeName;
 		std::vector<int >routeCapacity;
 		std::vector<int >routeMinPickup;
 		std::vector<double >arcCost;
 		std::vector<double >::iterator vit3;
+		std::vector<std::string>::iterator vit4;
 	
 		m_numberOfSolutions = 0;
 		solverOptions = osoption->getSolverOptions("routeSolver");
@@ -1879,6 +1881,7 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 								if(tmpVal <= 0 && demand.size() > (unsigned int) m_numHubs) throw ErrorClass("must have strictly positive demand");
 								if(tmpVal < m_minDemand  && demand.size() > (unsigned int) m_numHubs ) m_minDemand = tmpVal;
 								demand.push_back( tmpVal);
+								nodeName.push_back( (*vit)->description);
 								//std::cout << "demand = " << tmpVal <<  std::endl;
 								
 							}else{
@@ -2055,8 +2058,6 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		routeMinPickup.clear();
 		
 		
-
-		
 		//now fill in demand		
 		i = 0;
 		m_demand = new int[ m_numNodes];
@@ -2068,6 +2069,18 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 			
 		}
 		demand.clear();
+		
+		//now fill in node names		
+		i = 0;
+		m_nodeName = new std::string[ m_numNodes];
+
+		for (vit4 = nodeName.begin(); vit4 != nodeName.end(); vit4++) {
+			
+			*(m_nodeName + i++) = *vit4;
+			
+		}
+		nodeName.clear();	
+		
 		
 		
 		//now fill in costs	
@@ -2811,9 +2824,11 @@ void OSBearcatSolverXij::createVariableNames( ){
 		//if we have (i, j) where j is hub then do not subtract off phi[ j]
 		for(j = 0; j < i; j++){
 			
-			m_variableNames[ kount] = makeStringFromInt("x(" , i);
-			m_variableNames[ kount] += makeStringFromInt( "," , j);
-			m_variableNames[ kount] +=  ")";
+			if(m_nodeName[ i] == "") m_variableNames[ kount] = makeStringFromInt("x(" , i);
+				else m_variableNames[ kount] = "x("  +  m_nodeName[ i];
+			if(m_nodeName[ i] == "") m_variableNames[ kount] += makeStringFromInt( "," , j);
+				else m_variableNames[ kount] += "," +   m_nodeName[ j];
+			m_variableNames[ kount] +=  ")"; 
 			//std::cout << "GAIL VARIABLE NAME " << m_variableNames[ kount] << std::endl;
 			
 			kount++;
@@ -2822,8 +2837,10 @@ void OSBearcatSolverXij::createVariableNames( ){
 		
 		for(j = i + 1; j < m_numNodes; j++){
 			
-			m_variableNames[ kount] = makeStringFromInt("x(" , i);
-			m_variableNames[ kount] += makeStringFromInt( "," , j);
+			if(m_nodeName[ i] == "") m_variableNames[ kount] = makeStringFromInt("x(" , i);
+				else m_variableNames[ kount] = "x("  +  m_nodeName[ i];
+			if(m_nodeName[ i] == "") m_variableNames[ kount] += makeStringFromInt( "," , j);
+				else m_variableNames[ kount] += "," +   m_nodeName[ j];
 			m_variableNames[ kount] +=  ")";
 			
 			//std::cout << "GAIL VARIABLE NAME " << m_variableNames[ kount] << std::endl;
@@ -2927,8 +2944,8 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 				for(j = m_thetaPnt[ i];  j < m_thetaPnt[ i + 1] ;  j++){
 				
 					
-					std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
-					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " COST = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
+					//std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
+					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " DISTANCE = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
 					
 					ivalue = (int)floor( m_thetaIndex[  j] /(m_numNodes - 1) );
 					
