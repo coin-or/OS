@@ -71,6 +71,7 @@ inline void osgl_empty_vectors( OSgLParserData* osglData)
 {
 	if (osglData->osglIntArray != NULL)
 		delete[] osglData->osglIntArray;
+	osglData->osglIntArray = NULL;
 }//end osgl_empty_vectors
 
 

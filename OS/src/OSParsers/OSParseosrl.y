@@ -3571,7 +3571,7 @@ numberOfVariablesAttribute: NUMBEROFVARIABLESATT quote INTEGER quote
 osglIntArrayData: 
 	osglIntVectorElArray 
 	{
-	 	if (osglData->osglCounter + osglData->osglMult < osglData->osglNumberOfEl)
+	 	if (osglData->osglCounter < osglData->osglNumberOfEl)
 		osrlerror(NULL, NULL, parserData, osglData, "fewer data elements than specified");
 	}
  | osglIntVectorBase64;

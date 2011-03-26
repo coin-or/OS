@@ -28,9 +28,9 @@
 					<el>5</el>
 				</basic>
 				<atLower numberOfEl="2">
-					<el>1</el>
+					<el mult="2" incr="1">1</el>
 				</atLower>
-				<unknown numberOfEl="2">
+				<unknown numberOfEl="1">
 					<el>3</el>
 				</unknown>
 			</initialBasisStatus>

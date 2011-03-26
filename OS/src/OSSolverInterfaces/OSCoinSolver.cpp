@@ -950,7 +950,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		osresult->setGeneralStatusType("normal");
 		osresult->setTime(cpuTime);
 		osresult->setServiceName( getVersionInfo() );
-		 osresult->setSolverInvoked( "COIN-OR " + sSolverName );
+		osresult->setSolverInvoked( "COIN-OR " + sSolverName );
 		if (solver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
 			if( (sSolverName.find( "vol") == std::string::npos) &&

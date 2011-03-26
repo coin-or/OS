@@ -6200,21 +6200,24 @@ bool OSOption::setServiceURI( std::string serviceURI)
 }//setServiceURI
 
 bool OSOption::setServiceName( std::string serviceName)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	this->general->serviceName = serviceName;
 	return true;
 }//setServiceName
 
 bool OSOption::setInstanceName( std::string instanceName)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	this->general->instanceName = instanceName;
 	return true;
 }//setInstanceName
 
 bool OSOption::setInstanceLocation( std::string instanceLocation)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->instanceLocation == NULL) 
 		this->general->instanceLocation = new InstanceLocationOption();
@@ -6237,7 +6240,8 @@ bool OSOption::setInstanceLocation( std::string instanceLocation, std::string lo
 }//setInstanceLocation
 
 bool OSOption::setInstanceLocationType( std::string locationType)
-{	try
+{
+	try
 	{	if (this->general == NULL) 
 			this->general = new GeneralOption();
 		if (this->general->instanceLocation == NULL) 
@@ -6256,42 +6260,48 @@ bool OSOption::setInstanceLocationType( std::string locationType)
 }//setLocationType
 
 bool OSOption::setJobID( std::string jobID)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	this->general->jobID = jobID;
 	return true;
 }//setJobID
 
 bool OSOption::setSolverToInvoke( std::string solverToInvoke)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	this->general->solverToInvoke = solverToInvoke;
 	return true;
 }//setSolverToInvoke
 
 bool OSOption::setLicense( std::string license)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	this->general->license = license;
 	return true;
 }//setLicense
 
 bool OSOption::setUserName( std::string userName)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	this->general->userName = userName;
 	return true;
 }//setUserName
 
 bool OSOption::setPassword( std::string password)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	this->general->password = password;
 	return true;
 }//setPassword
 
 bool OSOption::setContact( std::string contact)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->contact == NULL) 
 		this->general->contact = new ContactOption();
@@ -6314,7 +6324,8 @@ bool OSOption::setContact(std::string contact,std::string transportType)
 }//setContact
 
 bool OSOption::setContactTransportType( std::string transportType)
-{	try
+{
+	try
 	{	if (this->general == NULL) 
 			this->general = new GeneralOption();
 		if (this->general->contact == NULL) 
@@ -6333,7 +6344,8 @@ bool OSOption::setContactTransportType( std::string transportType)
 }//setContactTransportType
 
 bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();
@@ -6348,7 +6360,8 @@ bool OSOption::setOtherGeneralOptions(int numberOfOptions, OtherOption** other)
 }//setOtherGeneralOptions
 
 bool OSOption::setAnOtherGeneralOption(std::string name, std::string value, std::string description)
-{	if (this->general == NULL) 
+{
+	if (this->general == NULL) 
 		this->general = new GeneralOption();
 	if (this->general->otherOptions == NULL) 
 		this->general->otherOptions = new OtherOptions();

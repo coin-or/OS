@@ -4228,8 +4228,8 @@ otherEnumerationBody:  osglIntArrayData;
 osglIntArrayData: 
 	osglIntVectorElArray 
 	{
-	 	if (osglData->osglCounter + osglData->osglMult < osglData->osglNumberOfEl)
-		osolerror(NULL, NULL, parserData, osglData, "fewer data elements than specified");
+	 	if (osglData->osglCounter < osglData->osglNumberOfEl)
+			osolerror(NULL, NULL, parserData, osglData, "fewer data elements than specified");
 	}
  | osglIntVectorBase64;
 
@@ -4289,7 +4289,8 @@ Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 	{
 		osglData->osglIntArray[i] = *(intvec++);
 	}
-	delete[] b64string;
+	//delete[] b64string;
+	free($2);
 };
 
 
@@ -4337,10 +4338,14 @@ xmlWhiteSpaceChar: ' '
 
 void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
 {
+std::cout << "empty osol vectors in osolerror" << std::endl;
 	osol_empty_vectors( parserData);
+std::cout << "empty osgl vectors in osolerror" << std::endl;
 	osgl_empty_vectors( osglData);
+std::cout << "emptied all vectors in osolerror" << std::endl;
 	std::ostringstream outStr;
 	std::string error = errormsg;
+std::cout << "error defined and assigned" << std::endl;
 	error = "OSoL input is either not valid or well formed: "  + error;
 	outStr << error << std::endl;
 	outStr << "Error occurred when reading: " << osolget_text ( scanner ) << std::endl; 
@@ -4349,6 +4354,9 @@ void osolerror(YYLTYPE* mytype, OSOption *osoption, OSoLParserData* parserData, 
 	//printf("THIS DID NOT GET DESTROYED:   %s\n", parserData->errorText);
 	//if( (parserData->errorText != NULL) &&  (strlen(parserData->errorText) > 0) ) free(  parserData->errorText);
 	//osollex_destroy( scanner);
+std::cout << "error: " << error << std::endl;
+std::cout << "throw error" << std::endl;
+
 	throw ErrorClass( error);
 } //end osolerror
 

@@ -1046,12 +1046,12 @@ OSResult::OSResult():
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OSResult Constructor" << endl;
 	#endif
-	this->resultHeader = new GeneralFileHeader();
-	this->general = new GeneralResult();
-	this->system = new SystemResult();
-	this->service = new ServiceResult();
-	this->job = new JobResult();
-	this->optimization = new OptimizationResult();
+	resultHeader = NULL;
+	general = NULL;
+	system = NULL;
+	service = NULL;
+	job = NULL;
+	optimization = NULL;
 }// end OSResult constructor  
 
 OSResult::~OSResult(){
@@ -3113,28 +3113,37 @@ bool OSResult::setResultHeader(std::string name, std::string source,
 	return this->resultHeader->setHeader(name, source, fileCreator, description, licence);
 }// end of OSResult::setResultHeader
 
-bool OSResult::setGeneralStatus(GeneralStatus *status){
+bool OSResult::setGeneralStatus(GeneralStatus *status)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus = status;
 	return true;
 }//setGeneralStatus
 
-bool OSResult::setGeneralStatusType(string type){
+bool OSResult::setGeneralStatusType(string type)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (verifyGeneralResultStatus(type) == 0) return false;
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->type = type;
 	return true;
 }//setGeneralStatusType
 
-bool OSResult::setGeneralStatusDescription(string description){
+bool OSResult::setGeneralStatusDescription(string description)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->description = description;
 	return true;
 }//setGeneralStatusDescription
 
-bool OSResult::setNumberOfGeneralSubstatuses(int num){
-	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
+bool OSResult::setNumberOfGeneralSubstatuses(int num)
+{
 	if (num < 0) return false;
+
+	if (general == NULL) general = new GeneralResult();
+	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	if (general->generalStatus->substatus != NULL) return false;
 	general->generalStatus->numberOfSubstatuses = num;
 	if (num > 0)
@@ -3145,56 +3154,76 @@ bool OSResult::setNumberOfGeneralSubstatuses(int num){
 	return true;
 }//setNumberOfGeneralSubstatuses
 
-bool OSResult::setGeneralSubstatusName(int idx, string name){
+bool OSResult::setGeneralSubstatusName(int idx, string name)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) return false;
 	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
 	general->generalStatus->substatus[idx]->name = name;
 	return true;
 }//setGeneralSubstatusName
 
-bool OSResult::setGeneralSubstatusDescription(int idx, string description){
+bool OSResult::setGeneralSubstatusDescription(int idx, string description)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) return false;
 	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
 	general->generalStatus->substatus[idx]->description = description;
 	return true;
 }//setGeneralSubstatusDescription
 
-bool OSResult::setGeneralMessage(string message){
+bool OSResult::setGeneralMessage(string message)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->message = message;
 	return true;
 }//setGeneralMessage
 
-bool OSResult::setServiceName(string serviceName){
+bool OSResult::setServiceName(string serviceName)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->serviceName = serviceName;
 	return true;
 }//setServiceName
 
-bool OSResult::setServiceURI(string serviceURI){
+bool OSResult::setServiceURI(string serviceURI)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->serviceURI = serviceURI;
 	return true;
 }//setServiceURI
 
-bool OSResult::setInstanceName(string instanceName){
+bool OSResult::setInstanceName(string instanceName)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->instanceName = instanceName;
 	return true;
 }//setInstanceName
 
-bool OSResult::setJobID(string jobID){
+bool OSResult::setJobID(string jobID)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->jobID = jobID;
 	return true;
 }//setJobID
 
-bool OSResult::setSolverInvoked(string solverInvoked){
+bool OSResult::setSolverInvoked(string solverInvoked)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->solverInvoked = solverInvoked;
 	return true;
 }//setSolverInvoked
 		
-bool OSResult::setTimeStamp(string timeStamp){
+bool OSResult::setTimeStamp(string timeStamp)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->timeStamp = timeStamp;
 	return true;
 }//setTimeStamp
 
-bool OSResult::setNumberOfOtherGeneralResults(int num){
+bool OSResult::setNumberOfOtherGeneralResults(int num)
+{
+	if (general == NULL) general = new GeneralResult();
 	if(general->otherResults == NULL) general->otherResults = new OtherResults();
 	if (num < 0) return false;
 	if (general->otherResults->other != NULL) return false;
@@ -3208,7 +3237,9 @@ bool OSResult::setNumberOfOtherGeneralResults(int num){
 }//setNumberOfOtherGeneralResults
 
 
-bool OSResult::setOtherGeneralResultName(int idx, string name){
+bool OSResult::setOtherGeneralResultName(int idx, string name)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return false;
@@ -3216,7 +3247,9 @@ bool OSResult::setOtherGeneralResultName(int idx, string name){
 	return true;
 }//setOtherGeneralResultName
 
-bool OSResult::setOtherGeneralResultValue(int idx, string value){
+bool OSResult::setOtherGeneralResultValue(int idx, string value)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return false;
@@ -3224,7 +3257,9 @@ bool OSResult::setOtherGeneralResultValue(int idx, string value){
 	return true;
 }//setOtherGeneralResultValue
 
-bool OSResult::setOtherGeneralResultDescription(int idx, string description){
+bool OSResult::setOtherGeneralResultDescription(int idx, string description)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return false;
@@ -3232,14 +3267,16 @@ bool OSResult::setOtherGeneralResultDescription(int idx, string description){
 	return true;
 }//setOtherGeneralResultDescription
 
-bool OSResult::setSystemInformation(string systemInformation){
+bool OSResult::setSystemInformation(string systemInformation)
+{
+	if (system == NULL) system = new SystemResult();
 	system->systemInformation = systemInformation;
 	return true;
 }//setServiceName
 
 bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
 {
-	if (system == NULL) return false;
+	if (system == NULL) system = new SystemResult();
 	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	if (verifyStorageUnit(unit) == false) return false;
 	system->availableDiskSpace->unit = unit;
@@ -3247,20 +3284,24 @@ bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
 }//setAvailableDiskSpaceUnit
 
 bool OSResult::setAvailableDiskSpaceDescription(std::string description)
-{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	system->availableDiskSpace->description = description;
 	return true;
 }//setAvailableDiskSpaceDescription
 
 bool OSResult::setAvailableDiskSpaceValue(double value)
-{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	system->availableDiskSpace->value = value;
 	return true;
 }//setAvailableDiskSpaceValue
 
 bool OSResult::setAvailableMemoryUnit(std::string unit)
 {
-	if (system == NULL) return false;
+	if (system == NULL) system = new SystemResult();
 	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	if (verifyStorageUnit(unit) == false) return false;
 	system->availableMemory->unit = unit;
@@ -3268,13 +3309,17 @@ bool OSResult::setAvailableMemoryUnit(std::string unit)
 }//setAvailableMemoryUnit
 
 bool OSResult::setAvailableMemoryDescription(std::string description)
-{	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	system->availableMemory->description = description;
 	return true;
 }//setAvailableMemoryDescription
 
 bool OSResult::setAvailableMemoryValue(double value)
-{	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	system->availableMemory->value = value;
 	return true;
 }//setAvailableMemoryValue
@@ -3289,30 +3334,40 @@ bool OSResult::setAvailableCPUSpeedUnit(std::string unit)
 }//setAvailableCPUSpeedUnit
 
 bool OSResult::setAvailableCPUSpeedDescription(std::string description)
-{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
 	system->availableCPUSpeed->description = description;
 	return true;
 }//setAvailableCPUSpeedDescription
 
 bool OSResult::setAvailableCPUSpeedValue(double value)
-{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
 	system->availableCPUSpeed->value = value;
 	return true;
 }//setAvailableCPUSpeedValue
 
 bool OSResult::setAvailableCPUNumberDescription(std::string description)
-{	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
 	system->availableCPUNumber->description = description;
 	return true;
 }//setAvailableCPUNumberDescription
 
 bool OSResult::setAvailableCPUNumberValue(int value)
-{	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
 	system->availableCPUNumber->value = value;
 	return true;
 }//setAvailableCPUNumberValue
 
-bool OSResult::setNumberOfOtherSystemResults(int num){
+bool OSResult::setNumberOfOtherSystemResults(int num)
+{
+	if (system == NULL) system = new SystemResult();
 	if(system->otherResults == NULL) system->otherResults = new OtherResults();
 	if (num < 0) return false;
 	if (system->otherResults->other != NULL) return false;
@@ -3326,7 +3381,9 @@ bool OSResult::setNumberOfOtherSystemResults(int num){
 }//setNumberOfOtherSystemResults
 
 
-bool OSResult::setOtherSystemResultName(int idx, string name){
+bool OSResult::setOtherSystemResultName(int idx, string name)
+{
+	if (system == NULL) system = new SystemResult();
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return false;
@@ -3334,7 +3391,9 @@ bool OSResult::setOtherSystemResultName(int idx, string name){
 	return true;
 }//setOtherSystemResultName
 
-bool OSResult::setOtherSystemResultValue(int idx, string value){
+bool OSResult::setOtherSystemResultValue(int idx, string value)
+{
+	if (system == NULL) system = new SystemResult();
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return false;
@@ -3342,7 +3401,9 @@ bool OSResult::setOtherSystemResultValue(int idx, string value){
 	return true;
 }//setOtherSystemResultValue
 
-bool OSResult::setOtherSystemResultDescription(int idx, string description){
+bool OSResult::setOtherSystemResultDescription(int idx, string description)
+{
+	if (system == NULL) system = new SystemResult();
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return false;
@@ -3350,35 +3411,49 @@ bool OSResult::setOtherSystemResultDescription(int idx, string description){
 	return true;
 }//setOtherSystemResultDescription
 
-bool OSResult::setCurrentState(std::string currentState){
+bool OSResult::setCurrentState(std::string currentState)
+{
 	if(verifySystemCurrentState(currentState) == 0) return false;
+
+	if (service == NULL) service = new ServiceResult();
 	service->currentState = currentState;
 	return true;
 }//setCurrentState
 
-bool OSResult::setCurrentJobCount(int jobCount){
+bool OSResult::setCurrentJobCount(int jobCount)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->currentJobCount = jobCount;
 	return true;
 }//setCurrentJobCount
 
-bool OSResult::setTotalJobsSoFar(int number){
+bool OSResult::setTotalJobsSoFar(int number)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->totalJobsSoFar = number;
 	return true;
 }//setTotalJobsSoFar
 
-bool OSResult::setTimeServiceStarted(std::string startTime){
+bool OSResult::setTimeServiceStarted(std::string startTime)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->timeServiceStarted = startTime;
 	return true;
 }//setTimeServiceStarted
 
-bool OSResult::setServiceUtilization(double value){
+bool OSResult::setServiceUtilization(double value)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->serviceUtilization = value;
 	return true;
 }//setServiceUtilization
 
-bool OSResult::setNumberOfOtherServiceResults(int num){
-	if(service->otherResults == NULL) service->otherResults = new OtherResults();
+bool OSResult::setNumberOfOtherServiceResults(int num)
+{
 	if (num < 0) return false;
+
+	if (service == NULL) service = new ServiceResult();
+	if(service->otherResults == NULL) service->otherResults = new OtherResults();
 	if (service->otherResults->other != NULL) return false;
 	service->otherResults->numberOfOtherResults = num;
 	if (num > 0)
@@ -3389,7 +3464,9 @@ bool OSResult::setNumberOfOtherServiceResults(int num){
 	return true;
 }//setNumberOfOtherServiceResults
 
-bool OSResult::setOtherServiceResultName(int idx, string name){
+bool OSResult::setOtherServiceResultName(int idx, string name)
+{
+	if (service == NULL) service = new ServiceResult();
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return false;
@@ -3397,7 +3474,9 @@ bool OSResult::setOtherServiceResultName(int idx, string name){
 	return true;
 }//setOtherServiceResultName
 
-bool OSResult::setOtherServiceResultValue(int idx, string value){
+bool OSResult::setOtherServiceResultValue(int idx, string value)
+{
+	if (service == NULL) service = new ServiceResult();
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return false;
@@ -3405,7 +3484,9 @@ bool OSResult::setOtherServiceResultValue(int idx, string value){
 	return true;
 }//setOtherServiceResultValue
 
-bool OSResult::setOtherServiceResultDescription(int idx, string description){
+bool OSResult::setOtherServiceResultDescription(int idx, string description)
+{
+	if (service == NULL) service = new ServiceResult();
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return false;
@@ -3413,39 +3494,50 @@ bool OSResult::setOtherServiceResultDescription(int idx, string description){
 	return true;
 }//setOtherServiceResultDescription
 
-bool OSResult::setJobStatus(std::string status){
-	if (verifyJobStatus(status) == 0)
-		return false;
+bool OSResult::setJobStatus(std::string status)
+{
+	if (verifyJobStatus(status) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
 	job->status = status;
 	return true;
 }//setJobStatus
 	
-bool OSResult::setJobSubmitTime(std::string submitTime){
+bool OSResult::setJobSubmitTime(std::string submitTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->submitTime = submitTime;
 	return true;
 }//setJobSubmitTime
 	
-bool OSResult::setScheduledStartTime(std::string scheduledStartTime){
+bool OSResult::setScheduledStartTime(std::string scheduledStartTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->scheduledStartTime = scheduledStartTime;
 	return true;
 }//setScheduledStartTime
 	
-bool OSResult::setActualStartTime(std::string actualStartTime){
+bool OSResult::setActualStartTime(std::string actualStartTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->actualStartTime = actualStartTime;
 	return true;
 }//setActualStartTime
 	
-bool OSResult::setJobEndTime(std::string endTime){
+bool OSResult::setJobEndTime(std::string endTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->endTime = endTime;
 	return true;
 }//setJobEndTime
 
-bool OSResult::setTime(double time){
+bool OSResult::setTime(double time)
+{
 	return addTimingInformation("elapsedTime", "total", "second", "", time);
 }//setTime
 
-bool OSResult::addTimingInformation(std::string type, std::string category,
-									std::string unit, std::string description, double value)
+bool OSResult::addTimingInformation(std::string type, std::string category, std::string unit, std::string description, double value)
+
 {	int nt; int i;
 	if (verifyTimeUnit(unit) != true)
 		throw ErrorClass("Invalid unit of time in addTimingInformation()");
@@ -3478,14 +3570,14 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 bool OSResult::setTimingInformation(int idx, std::string type, std::string category,
 									std::string unit, std::string description, double value)
 {	
-	if (job == NULL) return false;
-	if (job->timingInformation == NULL) return false;
-	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
-		return false;
-
 	if (verifyTimeUnit(unit) == 0) return false;
 	if (verifyTimeType(type) == 0) return false;
 	if (verifyTimeCategory(category) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->timingInformation == NULL) return false;
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return false;
 
 	job->timingInformation->time[idx]->type = type;
 	job->timingInformation->time[idx]->category = category;
@@ -3498,10 +3590,11 @@ bool OSResult::setTimingInformation(int idx, std::string type, std::string categ
 
 
 bool OSResult::setNumberOfTimes(int numberOfTimes)
-{	if (job == NULL) 
-		return false;
+{
+	if (numberOfTimes < 0) return false;
+
+	if (job == NULL) job = new JobResult();
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
-	if (numberOfTimes <= 0) return false;
 	job->timingInformation->numberOfTimes = numberOfTimes;
 	if (numberOfTimes > 0)
 	{	job->timingInformation->time = new TimeMeasurement*[numberOfTimes];
@@ -3511,108 +3604,113 @@ bool OSResult::setNumberOfTimes(int numberOfTimes)
 	return true;
 }//setNumberOfTimes
 
-bool OSResult::setTimeNumber(int timeNumber)
-{	if (job == NULL) 
-		return false;
+bool OSResult::setTimeNumber(int numberOfTimes)
+{
+	if (numberOfTimes < 0) return false;
+
+	if (job == NULL) job = new JobResult();
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
-	if (timeNumber <= 0) return false;
-	job->timingInformation->numberOfTimes = timeNumber;
+	job->timingInformation->numberOfTimes = numberOfTimes;
 	return true;
 }//setTimeNumber
 
 bool OSResult::setUsedDiskSpaceUnit(std::string unit)
-{	if (job == NULL) 
-		return false;
-	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
+{
 	if (verifyStorageUnit(unit) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->unit = unit;
 	return true;
 }//setUsedDiskSpaceUnit
 
 bool OSResult::setUsedDiskSpaceDescription(std::string description)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->description = description;
 	return true;
 }//setUsedDiskSpaceDescription
 
 bool OSResult::setUsedDiskSpaceValue(double value)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->value = value;
 	return true;
 }//setUsedDiskSpaceValue
 
 bool OSResult::setUsedMemoryUnit(std::string unit)
-{	if (job == NULL) 
-		return false;
-	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
+{
 	if (verifyStorageUnit(unit) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->unit = unit;
 	return true;
 }//setUsedMemoryUnit
 
 bool OSResult::setUsedMemoryDescription(std::string description)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->description = description;
 	return true;
 }//setUsedMemoryDescription
 
 bool OSResult::setUsedMemoryValue(double value)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->value = value;
 	return true;
 }//setUsedMemoryValue
 
 bool OSResult::setUsedCPUSpeedUnit(std::string unit)
-{	if (job == NULL) 
-		return false;
-	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+{
 	if ( verifyCPUSpeedUnit(unit) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->unit = unit;
 	return true;
 }//setUsedCPUSpeedUnit
 
 bool OSResult::setUsedCPUSpeedDescription(std::string description)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->description = description;
 	return true;
 }//setUsedCPUSpeedDescription
 
 bool OSResult::setUsedCPUSpeedValue(double value)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->value = value;
 	return true;
 }//setUsedCPUSpeedValue
 
 bool OSResult::setUsedCPUNumberDescription(std::string description)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->description = description;
 	return true;
 }//setUsedCPUNumberDescription
 
 bool OSResult::setUsedCPUNumberValue(int value)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->value = value;
 	return true;
 }//setUsedCPUNumberValue
 
-bool OSResult::setNumberOfOtherJobResults(int num){
-	if (job == NULL) return false;
+bool OSResult::setNumberOfOtherJobResults(int num)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) job->otherResults = new OtherResults();
 	if (num < 0) return false;
 	if (job->otherResults->other != NULL) return false;
@@ -3626,9 +3724,9 @@ bool OSResult::setNumberOfOtherJobResults(int num){
 }//setNumberOfOtherJobResults
 
 
-bool OSResult::setOtherJobResultName(int idx, string name){
-	if (job == NULL) 
-		return false;
+bool OSResult::setOtherJobResultName(int idx, string name)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return false;
@@ -3636,9 +3734,9 @@ bool OSResult::setOtherJobResultName(int idx, string name){
 	return true;
 }//setOtherJobResultName
 
-bool OSResult::setOtherJobResultValue(int idx, string value){
-	if (job == NULL) 
-		return false;
+bool OSResult::setOtherJobResultValue(int idx, string value)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return false;
@@ -3646,9 +3744,9 @@ bool OSResult::setOtherJobResultValue(int idx, string value){
 	return true;
 }//setOtherJobResultValue
 
-bool OSResult::setOtherJobResultDescription(int idx, string description){
-	if (job == NULL) 
-		return false;
+bool OSResult::setOtherJobResultDescription(int idx, string description)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return false;
