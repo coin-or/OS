@@ -11,7 +11,7 @@
 					<var idx="1" value="20."/>
 			</initialVariableValues>
 		</variables>	
-		<solverOptions numberOfSolverOptions="16">
+		<solverOptions numberOfSolverOptions="15">
 			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"/>
 			<solverOption name="print_level" solver="ipopt" type="integer" value="5"/>
 			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/>
@@ -31,7 +31,7 @@
 		
 			<solverOption name="maxN" solver="cbc" value="100" />
 			<solverOption name="cuts" solver="cbc" value="off" />
-			<solverOption name="solve" solver="cbc"  />
+			
 			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
 
 		</solverOptions>
