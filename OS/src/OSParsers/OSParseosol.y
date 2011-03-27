@@ -230,6 +230,7 @@ fileNameEmpty: FILENAMESTARTANDEND | FILENAMEEMPTY;
 fileNameLaden: FILENAMESTART ITEMTEXT FILENAMEEND
 {
 	osglData->fileName = $2;
+	free($2);
 };
 
 fileSource: | fileSourceContent;
@@ -241,6 +242,7 @@ fileSourceEmpty: FILESOURCESTARTANDEND | FILESOURCEEMPTY;
 fileSourceLaden: FILESOURCESTART ITEMTEXT FILESOURCEEND
 {
 	osglData->source = $2;
+	free($2);
 };
 
 fileDescription: | fileDescriptionContent;
@@ -252,6 +254,7 @@ fileDescriptionEmpty: FILEDESCRIPTIONSTARTANDEND | FILEDESCRIPTIONEMPTY;
 fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
 {
 	osglData->description = $2;
+	free($2);
 };
 
 fileCreator: | fileCreatorContent;
@@ -263,6 +266,7 @@ fileCreatorEmpty: FILECREATORSTARTANDEND | FILECREATOREMPTY;
 fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
 {
 	osglData->fileCreator = $2;
+	free($2);
 };
 
 fileLicence: | fileLicenceContent;
@@ -274,6 +278,7 @@ fileLicenceEmpty: FILELICENCESTARTANDEND | FILELICENCEEMPTY;
 fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
 {
 	osglData->licence = $2;
+	free($2);
 };
 
 /**
@@ -344,7 +349,7 @@ serviceURIBody:  ELEMENTTEXT
 	{
 		if (osoption->setServiceURI($1) == false)
 			osolerror( NULL, osoption, parserData, osglData, "setServiceURI failed");
-			//free($1); 
+			free($1); 
 		parserData->errorText = NULL;
 	};
 
@@ -367,7 +372,7 @@ serviceNameLaden: GREATERTHAN serviceNameBody SERVICENAMEEND;
 serviceNameBody:  ELEMENTTEXT  
 		{
 			osoption->setServiceName($1); 
-			//free($1); 
+			free($1); 
 			parserData->errorText = NULL;
 		};
 
@@ -391,7 +396,7 @@ instanceNameBody:  ELEMENTTEXT
 	{
 		if (osoption->setInstanceName($1) == false) 
 			osolerror( NULL, osoption, parserData, osglData, "setInstanceName failed");
-		//free($1); 
+		free($1); 
 		parserData->errorText = NULL;
 	};
 
@@ -435,7 +440,7 @@ instanceLocationLaden: GREATERTHAN instanceLocationBody INSTANCELOCATIONEND;
 instanceLocationBody:  ELEMENTTEXT  
 	{	
 		parserData->tempStr = $1;
-		//free($1); 
+		free($1); 
 	};
 
 
@@ -458,7 +463,7 @@ jobIDBody:  ELEMENTTEXT
 	{
 		if (osoption->setJobID($1) == false)
 			osolerror( NULL, osoption, parserData, osglData, "setJobID failed");
-		//free($1); 
+		free($1); 
 		parserData->errorText = NULL;
 	};
 
@@ -482,7 +487,7 @@ solverToInvokeBody:  ELEMENTTEXT
 	{
 		if (osoption->setSolverToInvoke($1) == false)
 			osolerror( NULL, osoption, parserData, osglData, "setSolverToInvoke failed");
-		//free($1); 
+		free($1); 
 		parserData->errorText = NULL;
 	};
 
@@ -507,7 +512,7 @@ licensebody: ELEMENTTEXT
 	{
 		if (osoption->setLicense($1) == false)
 			osolerror( NULL, osoption, parserData, osglData, "setLicense failed");
-		//free($1);
+		free($1);
 		parserData->errorText = NULL;
 	};
 
@@ -531,7 +536,7 @@ usernamebody: ELEMENTTEXT
 	{
 		if (osoption->setUserName($1) == false)
 			osolerror( NULL, osoption, parserData, osglData, "setUsername failed");
-		//free($1); 
+		free($1); 
 		parserData->errorText = NULL;
 	};
 
@@ -555,7 +560,7 @@ passwordbody: ELEMENTTEXT
 	{
 		if (osoption->setPassword($1) == false)
 			osolerror( NULL, osoption, parserData, osglData, "setPassword failed");
-		//free($1); 
+		free($1); 
 		parserData->errorText = NULL;
 	};
 
@@ -600,6 +605,7 @@ contactContentLaden: GREATERTHAN contactBody CONTACTEND;
 contactBody: ELEMENTTEXT
 	{
 		parserData->tempStr = $1;
+		free($1);
 	};
 
 
@@ -957,7 +963,7 @@ serviceTypeLaden: GREATERTHAN serviceTypeBody SERVICETYPEEND;
 serviceTypeBody:  ELEMENTTEXT  
     {
        parserData->tempStr = $1; 
-		//free($1);
+		free($1);
 		if (osoption->setServiceType(parserData->tempStr) == false)
 			osolerror(NULL, NULL, parserData, osglData, "setServiceType failed; current system state not recognized");
 		parserData->errorText = NULL;
@@ -1147,7 +1153,7 @@ requestedStartTimeBody:  ELEMENTTEXT
 	{
 		if (osoption->setRequestedStartTime($1) == false)
 			osolerror(NULL, NULL, parserData, osglData, "setRequestedStartTime failed");	
-		//free($1); 
+		free($1); 
 		parserData->errorText = NULL;
 		};
 
@@ -1187,7 +1193,7 @@ dependencyJobID: JOBIDSTART GREATERTHAN ELEMENTTEXT JOBIDEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many job IDs in <dependencies> element");
 	parserData->jobDependencies[parserData->kounter] = $3;
-	//free($3); 
+	free($3); 
 	parserData->kounter++;
 };
 
@@ -1226,7 +1232,7 @@ requiredDirectory: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many paths in <requiredDirectories> element");
 	parserData->paths[parserData->kounter] = $3;
-	//free($3); 
+	free($3); 
 	parserData->kounter++;
 };
 
@@ -1265,7 +1271,7 @@ requiredFile: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many paths in <requiredFiles> element");
 	parserData->paths[parserData->kounter] = $3;
-	//free($3);
+	free($3);
 	parserData->kounter++;
 };
 
@@ -1303,7 +1309,7 @@ directoryToMake: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many paths in <directoriesToMake> element");
 	parserData->paths[parserData->kounter] = $3;
-	//free($3); 
+	free($3); 
 	parserData->kounter++;
 };
 
@@ -1341,7 +1347,7 @@ fileToMake: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many paths in <filesToMake> element");
 	parserData->paths[parserData->kounter] = $3;
-	//free($3); 
+	free($3); 
 	parserData->kounter++;
 };
 
@@ -1528,7 +1534,7 @@ fileToDelete: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many paths in <filesToDelete> element");
 	parserData->paths[parserData->kounter] = $3;
-	//free($3); 
+	free($3); 
 	parserData->kounter++;
 };
 
@@ -1567,7 +1573,7 @@ directoryToDelete: PATHSTART GREATERTHAN ELEMENTTEXT PATHEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many paths in <directoriesToDelete> element");
 	parserData->paths[parserData->kounter] = $3;
-	//free($3); 
+	free($3); 
 	parserData->kounter++;
 };
 
@@ -1607,7 +1613,7 @@ processID: PROCESSSTART GREATERTHAN ELEMENTTEXT PROCESSEND
 	if (parserData->kounter >= parserData->numberOf)
 		osolerror (NULL, osoption, parserData, osglData, "too many process IDs in <processesToKill> element");
 	parserData->processesToKill[parserData->kounter] = $3;
-	//free($3); 
+	free($3); 
 	parserData->kounter++;
 };
 
@@ -3668,6 +3674,7 @@ solverOptionItemBody:  ITEMTEXT
 	if (parserData->kounter >= parserData->numberOfItems)
 		osolerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
 	parserData->itemContent = $1; 
+	free($1);
 };
 
 
@@ -3711,6 +3718,7 @@ PathPairFromATT: FROMATT ATTRIBUTETEXT QUOTE
 		osolerror( NULL, osoption, parserData, osglData, "only one \"from\" attribute allowed");
 	parserData->pathPairFromPresent = true;
 	parserData->fromPaths[parserData->kounter] = $2;
+	free($2);
 };
 
 PathPairToATT: TOATT ATTRIBUTETEXT QUOTE
@@ -3719,6 +3727,7 @@ PathPairToATT: TOATT ATTRIBUTETEXT QUOTE
 		osolerror( NULL, osoption, parserData, osglData, "only one \"to\" attribute allowed");
 	parserData->pathPairToPresent = true;
 	parserData->toPaths[parserData->kounter] = $2;
+	free($2);
 };
 
 PathPairMakeCopyATT: MAKECOPYATT ATTRIBUTETEXT QUOTE
@@ -3727,6 +3736,7 @@ PathPairMakeCopyATT: MAKECOPYATT ATTRIBUTETEXT QUOTE
 		osolerror( NULL, osoption, parserData, osglData, "only one \"makeCopy\" attribute allowed");
 	parserData->pathPairMakeCopyPresent = true;
 	parserData->pathPairMakeCopy = (strcmp($2,"true") == 0);
+	free($2);
 };
 
 PathPairEnd: GREATERTHAN PATHPAIREND | ENDOFELEMENT;

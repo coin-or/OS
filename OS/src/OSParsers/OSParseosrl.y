@@ -259,6 +259,7 @@ fileNameEmpty: FILENAMESTARTANDEND | FILENAMEEMPTY;
 fileNameLaden: FILENAMESTART ITEMTEXT FILENAMEEND
 {
 	osglData->fileName = $2;
+	free($2);
 };
 
 fileSource: | fileSourceContent;
@@ -270,6 +271,7 @@ fileSourceEmpty: FILESOURCESTARTANDEND | FILESOURCEEMPTY;
 fileSourceLaden: FILESOURCESTART ITEMTEXT FILESOURCEEND
 {
 	osglData->source = $2;
+	free($2);
 };
 
 fileDescription: | fileDescriptionContent;
@@ -281,6 +283,7 @@ fileDescriptionEmpty: FILEDESCRIPTIONSTARTANDEND | FILEDESCRIPTIONEMPTY;
 fileDescriptionLaden: FILEDESCRIPTIONSTART ITEMTEXT FILEDESCRIPTIONEND
 {
 	osglData->description = $2;
+	free($2);
 };
 
 fileCreator: | fileCreatorContent;
@@ -292,6 +295,7 @@ fileCreatorEmpty: FILECREATORSTARTANDEND | FILECREATOREMPTY;
 fileCreatorLaden: FILECREATORSTART ITEMTEXT FILECREATOREND
 {
 	osglData->fileCreator = $2;
+	free($2);
 };
 
 fileLicence: | fileLicenceContent;
@@ -303,6 +307,7 @@ fileLicenceEmpty: FILELICENCESTARTANDEND | FILELICENCEEMPTY;
 fileLicenceLaden: FILELICENCESTART ITEMTEXT FILELICENCEEND
 {
 	osglData->licence = $2;
+	free($2);
 };
 
 /**
