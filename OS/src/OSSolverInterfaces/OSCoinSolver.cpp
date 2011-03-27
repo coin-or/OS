@@ -924,11 +924,13 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 	
 	if( (solver->getNumCols() > 0)  && (sSolverName.find( "vol") == std::string::npos)
 			&& (sSolverName.find( "symphony") == std::string::npos) && 
+			(sSolverName.find( "dylp") == std::string::npos) &&
 				(sSolverName.find( "glpk") == std::string::npos) ) 
 			cbasis = new int[solver->getNumCols() ];
 	
 	if( (osinstance->getConstraintNumber() > 0) && (sSolverName.find( "vol") == std::string::npos)
 			&& (sSolverName.find( "symphony") == std::string::npos)  && 
+			(sSolverName.find( "dylp") == std::string::npos) &&
 			(sSolverName.find( "glpk") == std::string::npos) ) 
 			rbasis = new int[solver->getNumRows() ];
 	
@@ -955,7 +957,8 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
 			if( (sSolverName.find( "vol") == std::string::npos) &&
 					(sSolverName.find( "symphony") == std::string::npos) &&
-					(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony and glpk do not support this
+					(sSolverName.find( "dylp") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ){//vol, symphony and glpk do not support this -- DyLP causues memory leak
 				solver->getBasisStatus( cbasis, rbasis);
 			}
 
@@ -971,6 +974,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 						osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
 					if( (sSolverName.find( "vol") == std::string::npos) &&
 							(sSolverName.find( "symphony") == std::string::npos) &&
+							(sSolverName.find( "dylp") == std::string::npos) &&
 							(sSolverName.find( "glpk") == std::string::npos) ){//vol glpk, and symphony do not support this
 						solver->getBasisStatus( cbasis, rbasis);
 					}
@@ -980,6 +984,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 							osresult->setSolutionStatus(solIdx, "other", "dual objective limit reached");
 							if( (sSolverName.find( "vol") == std::string::npos) &&
 									(sSolverName.find( "symphony") == std::string::npos) &&
+									(sSolverName.find( "dylp") == std::string::npos) &&
 									(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony do not support this
 								solver->getBasisStatus( cbasis, rbasis);
 							}
@@ -989,6 +994,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 								osresult->setSolutionStatus(solIdx, "other", "iteration limit reached");
 								if( (sSolverName.find( "vol") == std::string::npos) &&
 										(sSolverName.find( "symphony") == std::string::npos) &&
+										(sSolverName.find( "dylp") == std::string::npos) &&
 										(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony do not support this
 									solver->getBasisStatus( cbasis, rbasis);
 								}
