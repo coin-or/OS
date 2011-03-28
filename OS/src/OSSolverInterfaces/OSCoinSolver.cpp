@@ -420,9 +420,19 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			// treat Cbc separately to take advantage of CbcMain1()
 			
 			if( sSolverName.find( "cbc") != std::string::npos) {	
+				
+				
 				// get Cbc options	
 				if(optionsVector.size() > 0) optionsVector.clear();	
 				optionsVector = osoption->getSolverOptions( "cbc");
+				//what a pain, delete the solve option
+				std::vector<SolverOption*>::iterator optit;
+				for(optit = optionsVector.begin();  optit != optionsVector.end(); optit++){
+					
+					if( (*optit)->name == "solve" ) optionsVector.erase( optit);
+				}
+				
+				
 				int num_cbc_options = optionsVector.size();	
 				char *cstr;
 				std::string cbc_option;
@@ -441,17 +451,17 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
 #endif
-					//if( optionsVector[ i]->name != "solve"){
-						if(optionsVector[ i]->value.length() > 0 ){
-							cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
-						}
-						else{
-							cbc_option = "-" + optionsVector[ i]->name ;
-						}
-						cstr = new char [cbc_option.size() + 1];
-						strcpy (cstr, cbc_option.c_str());
-						cbc_argv[i +  1] = cstr;	
-					//}
+
+					if(optionsVector[ i]->value.length() > 0 ){
+						cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+					}
+					else{
+						cbc_option = "-" + optionsVector[ i]->name ;
+					}
+					cstr = new char [cbc_option.size() + 1];
+					strcpy (cstr, cbc_option.c_str());
+					cbc_argv[i +  1] = cstr;	
+
 				}
 				
 				// the solve option
