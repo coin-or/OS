@@ -426,11 +426,11 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				if(optionsVector.size() > 0) optionsVector.clear();	
 				optionsVector = osoption->getSolverOptions( "cbc");
 				//what a pain, delete the solve option
-				std::vector<SolverOption*>::iterator optit;
-				for(optit = optionsVector.begin();  optit != optionsVector.end(); optit++){
+				//std::vector<SolverOption*>::iterator optit;
+				//for(optit = optionsVector.begin();  optit != optionsVector.end(); optit++){
 					
-					if( (*optit)->name == "solve" ) optionsVector.erase( optit);
-				}
+				//	if( (*optit)->name == "solve" ) optionsVector.erase( optit);
+				//}
 				
 				
 				int num_cbc_options = optionsVector.size();	
