@@ -441,15 +441,17 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
 #endif
-					if(optionsVector[ i]->value.length() > 0){
-						cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+					if( optionsVector[ i]->name != "solve"){
+						if(optionsVector[ i]->value.length() > 0 ){
+							cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
+						}
+						else{
+							cbc_option = "-" + optionsVector[ i]->name ;
+						}
+						cstr = new char [cbc_option.size() + 1];
+						strcpy (cstr, cbc_option.c_str());
+						cbc_argv[i +  1] = cstr;	
 					}
-					else{
-						cbc_option = "-" + optionsVector[ i]->name ;
-					}
-					cstr = new char [cbc_option.size() + 1];
-					strcpy (cstr, cbc_option.c_str());
-					cbc_argv[i +  1] = cstr;		
 				}
 				
 				// the solve option
