@@ -14,90 +14,109 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  * 
- * This is the OS unitTest. It currently runs the following tests.
+ * This is the OS unitTest. It runs a large number of tests of most aspects of the 
+ * Optimization Services suite. The tests fall into different categories and can be 
+ * switched on and off selectively by setting appropriate boolean variables
+ * from the command line interface.
+ *
+ *   BASIC_TESTS;  // minimal functionality tests
+ *   SOLVER_TESTS; // at least one problem for each solver
+ *   THOROUGH;     // multiple problems for some solvers
+ *   PARSER_TESTS; // test parser logic
+ *   OTHER_TESTS;  // other input formats, automatic differentiation, etc.
+ *
+ * Specifically, the following tests are run
+ *
+ * Basic tests (if BASIC_TESTS == TRUE)
+ *   File handling: open and read a file
+ *   Lossless I/O: read/write several floating point numbers and check for equality
+ *   nonlinear operators and automatic differentiation
  * 
- * Solvers:
+ * Parser tests (if PARSER_TESTS == TRUE)
+ *   Parse an osil, osol and osrl file
+ *   Test convenience methods, reader and writer routines
+ *
+ * Solver tests (if SOLVER_TESTS == TRUE)
  *  
- * COIN-Clp tested on parincLinearByRow.osil
+ *   COIN-Clp tested on parincLinearByRow.osil
  * 
- * COIN-Cbc tested on p0033.osil
+ *   COIN-Cbc tested on:
+ *   <ol>
+ *   <li> p0033.osil  </li>
+ *   <li> p0033MULT.osil  </li>
+ *   <li> p0033.osil with a node limit set (solver option) </li>
+ *   <li> p0201.osil  </li>
+ *   <li> parincInteger.osil  </li>
  * 
- * COIN-Ipopt tested on:
- * <ol>
- * <li> avion2.osil  </li>
- * <li> HS071_NLP.osil </li>
- * <li> rosenbrockmod.osil </li>
- * <li> parincQuadratic.osil </li>
- * <li> parincLinear.osil  </li>
- * <li> callBackTest.osil </li>
- * <li> callBackTestRowMajor.osil </li>
- * </ol>
+ *   COIN-SYMPHONY tested on p0033.osil
+ * 
+ *   COIN-DyLP tested on parincLinear.osil
+ * 
+ *   COIN-Vol tested on volumeTest.osil
+ * 
+ *   GLPK tested on p0033.osil
+ * 
+ *   Cplex tested on p0033.osil
+ * 
+ *   COIN-Ipopt tested on:
+ *   <ol>
+ *   <li> avion2.osil  </li>
+ *   <li> HS071_NLPMod.osil </li>
+ *   <li> rosenbrockmod.osil </li>
+ *   <li> parincQuadratic.osil </li>
+ *   <li> parincLinear.osil  </li>
+ *   <li> callBackTest.osil </li>
+ *   <li> callBackTestRowMajor.osil </li>
+ *   <li> rosenbrockorig.osil </li>
+ *   <li> HS071_feas.osil </li>
+ *   </ol>
  *
- * COIN-SYMPHONY tested on p0033.osil
- * COIN-BONMIN tested on bonminEx1.osil and wayneQuadratic
- * 
- * COIN-DyLP tested onparincLinear.osil
- * 
- * COIN-Vol tested on volumeTest.osil
- * 
- * GLPK tested on p0033.osil
- * 
- * Cplex tested on p0033.osil
- * 
- * Lindo tested on:
- * <ol>
- * <li> lindoapiaddins.osil </li>
- * <li> rosenbrockmode.osil </li>
- * <li> parincquadratic.osil </li>
- * <li> wayneQuadratic.osil  </li>
- * </ol>
- * 
- * We test the mps to osil converter
- * program OSmps2osil on parincLinear.mps. Solve with
- * Cbc.
- * 
- * We test the AMPL nl file format to osil converter
- * program OSnl2osil on hs71.nl. Solve with Lindo.
- * 
- * We test the base 64 format on problem parincLinear.  
- * We first read in the parinc.mps file into an
- * osil string and then set m_bWriteBase64 = true. We then
- * write a new instance in base 64 format and solve it.
- * 
- * In addition there are a number of tests concerning the logic of many
- * of the components of the OS project. These tests have little in common
- * with the installation and functionality tests, but they are useful for
- * debugging and to give a thorough workout to the program logic.
- * These tests can be added selectively using several conditional variables:
- * <ol>
- * <li> INSTALLATION_TEST. This turns the installation and solver tests on and off </li>
- * <li> THOROUGH.          To test more than one test problem for each solver </li>
- * <li> COMPONENT_DEBUG.   This turns the tests of the program logic an and off </li>
- * </ol>
+ *   COIN-BONMIN tested on 
+ *   <ol>
+ *   <li> bonminEx1.osil  </li>
+ *   <li> wayneQuadratic.osil (two different option settings) </li>
+ *   <li> rosenbrockorig.osil </li>
+ *   <li> rosenbrockorigInt.osil </li>
  *
- * The first logic test concerns the prefix and postfix routines. For the
- * test problem rosenbrockmod.osil create an <b>OSExpressionTree</b>
- * from the objective function. Then invoke the <b>getPostfix()</b> method
- * and get a postfix vector representation of the expression tree. Then
- * use  <b>createExpressionTreeFromPostfix</b> to create an expression tree back.
- * Then use <b>getPrefix()</b> to get a prefix vector from this expression tree.
- * Then use createExpressionTreeFromPrefix to create and expression. Then
- * use <b>getPostfix()</b> to get the postfix vector back and compare with the very
- * first postfix vector and make sure they are the same. 
- * 
- * Next test all of the nonlinear operators. The file testOperators.osil uses
- * every nonlinear operator currently defined. Parse this file to make sure
- * the parser works on every operator and then use 
- * <b>expTree->m_treeRoot->calculateFunction</b> to make sure the operators are 
- * evaluated correctly.
- * 
- * Next test CppAD. Read in CppADTestLag.osil and make sure gradient
- * and Hessian calculations are working correctly.
+ *   COIN-COUENNE tested on 
+ *   <ol>
+ *   <li> bonminEx1.osil  </li>
+ *   <li> bonminEx1_Nonlinear.osil  </li>
+ *   <li> nonconvex.osil </li>
+ *   <li> rosenbrockorig.osil </li>
+ *   <li> wayneQuadratic.osil (two different option settings) </li>
  *
- * We next test the parsers. We test parsing the osil file
- * parincLinear.osil, finplan1.osil, the osrl file parincLinear.osrl
- * and the osol file osolTest.osol.
- * We test the get() and set() methods for osinstance.
+ *   Lindo tested on:
+ *   <ol>
+ *   <li> lindoapiaddins.osil </li>
+ *   <li> rosenbrockmod.osil </li>
+ *   <li> parincquadratic.osil </li>
+ *   <li> wayneQuadratic.osil  </li>
+ *   </ol>
+ * 
+ * Additional tests (if OTHER_TESTS == TRUE)
+ *
+ *   We test the mps to osil converter program
+ *   OSmps2osil on parincLinear.mps and solve with Cbc.
+ * 
+ *   We test the AMPL nl file format to osil converter
+ *   program OSnl2osil on parinc.nl and solve with Cbc.
+ * 
+ *   We test the base 64 format on problem parincLinear.  
+ *   We first read in the parinc.mps file into an
+ *   osil string and then set m_bWriteBase64 = true. We then
+ *   write a new instance in base 64 format and solve it with Cbc.
+ * 
+ *   Finally we test the prefix and postfix routines. For the test problem
+ *   rosenbrockmod.osil we create an <b>OSExpressionTree</b> from
+ *   the objective function. Then we invoke the <b>getPostfix()</b> method
+ *   and get a postfix vector representation of the expression tree. 
+ *   We use <b>createExpressionTreeFromPostfix</b> to create another expression tree,
+ *   then use <b>getPrefix()</b> to get a prefix vector from this expression tree.
+ *   Then we use <b>createExpressionTreeFromPrefix</b> to create an expression. 
+ *   We use <b>getPostfix()</b> to get the postfix vector back and compare with the 
+ *   very first postfix vector and make sure they are the same. 
+ * 
  */ 
 
 #define DEBUG
@@ -223,7 +242,7 @@ int main(int argC, char* argV[])
 	bool SOLVER_TESTS; // at least one problem for each solver
 	bool THOROUGH;     // multiple problems for some solvers
 	bool PARSER_TESTS; // test parser logic
-	bool OTHER_TESTS;  // other input formats, automatic differentiation, etc.
+	bool OTHER_TESTS;  // other input formats, b64 conversion, etc.
 	
 	//set level of testing
       
@@ -310,18 +329,17 @@ int main(int argC, char* argV[])
 	OSiLReader *osilreader = NULL;
 	OSiLWriter *osilwriter = NULL;
 	OSoLReader *osolreader = NULL;
-	OSoLReader *osolreader2;
+	OSoLReader *osolreader2 = NULL;
 	OSrLReader *osrlreader = NULL;
 	OSrLWriter *osrlwriter = NULL;
-	OSrLWriter *tmp_writer = NULL;
-	OSInstance *osinstance;
+	OSInstance *osinstance = NULL;
 	OSOption *osoption = NULL;
-	OSOption *osoption2;
+	OSOption *osoption2 = NULL;
 	OSOption *osoption3 = NULL;
 
 	//common arrays
-	std::string *nodeNames1;
-	std::string *nodeNames2;
+	std::string *nodeNames1 = NULL;
+	std::string *nodeNames2 = NULL;
 	double *x = NULL;
 
 	//other common variables
@@ -487,7 +505,7 @@ if(BASIC_TESTS == true){
 		x = new double[2];
 		x[0] = 1;
 		x[1] = 2;
-		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
+//		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
 //		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
 		check = 11;
 		//ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
@@ -601,10 +619,6 @@ if(BASIC_TESTS == true){
 		delete osilreader;
 		osilreader = NULL;
 	}
-
-
-
-
 } // end of if (BASIC_TESTS)
 
 
@@ -1913,7 +1927,6 @@ if (PARSER_TESTS){
 		osolreader2 = new OSoLReader();
 		cout << "Read the string back" << endl;
 
-		OSOption *osoption3 = NULL;
 		osoption3 = osolreader2->readOSoL( tmpOSoL);
 
 		ok = osoption->IsEqual(osoption3);
@@ -6961,7 +6974,7 @@ if( THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
@@ -7021,7 +7034,7 @@ if( THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
@@ -7081,7 +7094,7 @@ if( THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
@@ -7143,7 +7156,7 @@ if( THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
@@ -7155,6 +7168,7 @@ if( THOROUGH == true){
 		osolreader = NULL;
 	}	
 
+	OSrLWriter *tmp_writer = NULL;
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on wayneQuadratic.osil" << endl << endl;
 //		OSiLReader *osilreader = NULL;
@@ -7205,7 +7219,7 @@ if( THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
@@ -7309,7 +7323,7 @@ if (THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Lindo Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
@@ -7354,7 +7368,7 @@ if (THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the LINDO Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
@@ -7403,7 +7417,7 @@ if (THOROUGH == true){
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
-		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Bonmin Solver:"  + eclass.errormsg << endl;
+		unitTestResultFailure  << "Sorry Unit Test Failed Testing the LINDO Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
