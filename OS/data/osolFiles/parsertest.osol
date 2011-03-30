@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
-	<general> 
+  <optionHeader>
+    <name>parserTest.osol</name>
+    <source></source>
+    <description>
+      This file is intended to test the OSoL parser.
+      All elements are listed, but the content may not be meaningful.
+    </description>
+    <fileCreator>
+      Horand Gassmann, Jun Ma and Kipp Martin
+    </fileCreator>
+    <licence>
+      This file is licensed under the Eclipse Public License.
+      Please see the accompanying LICENSE file in root directory for terms.
+    </licence>
+  </optionHeader>
+  <general> 
 		<solverToInvoke/>
 		<serviceURI>http://www.w3.org/2001/XMLSchema-instance</serviceURI> 
 		<license></license>
@@ -19,15 +34,17 @@
 		<jobID>X12345-6789</jobID>
 	</general>
 	<system>
-		<minDiskSpace unit="megabyte"> 0 </minDiskSpace>
+		<minDiskSpace unit="megabyte" description="diskless machine"> 0 </minDiskSpace>
 		<minMemorySize>1.0</minMemorySize>
 		<minCPUNumber>0</minCPUNumber>
-		<otherOptions numberOfOtherOptions="1">
-			<other name="test" value="5"></other>
+		<otherOptions numberOfOtherOptions="2">
+			<other name="test" value="5" description="some description"></other>
+			<other name="another"></other>
 		</otherOptions>
 		<minCPUSpeed unit="teraflops">1.0</minCPUSpeed>
 	</system>
 	<service>
+		<type>agent</type> 
 		<otherOptions numberOfOtherOptions="4">
 			<other name="test" value="5"></other>
 			<other value="0" name="other"></other>
@@ -82,37 +99,40 @@
 			<other name="job-option-test" value="0"/>
 		</otherOptions>
 	</job>	
-        <optimization>
-		<variables numberOfOtherVariableOptions="2">
-			<initialVariableValues numberOfVar="3">
+	<optimization numberOfConstraints="8" numberOfVariables="10" numberOfObjectives="2" >
+		<variables numberOfOtherVariableOptions="4">
+			<initialVariableValues numberOfVar="5">
 					<var idx="0" value="1"/>
-					<var value="4.742999643577776e-2" idx="1"/>
+					<var value="4.742999643577776e-2" idx="1"></var>
 					<var idx="3" value="1.379408293215363"/>
+					<var idx="2"/>
+					<var value="NaN" idx="5" />
 			</initialVariableValues>
-			<initialVariableValuesString numberOfVar="1">
+			<initialVariableValuesString numberOfVar="3">
 				<var idx="1" value="blue"></var>
+				<var idx="4" value="red"></var>
+				<var idx="5"></var>
 			</initialVariableValuesString>
-<!-- Hide this element until the parser gets updated... 	
 			<initialBasisStatus>
-				<basic numberOfEl="2">
-					<el>0</el>
-					<el>5</el>
+				<basic numberOfEl="3">
+					<el mult="2" incr="5">0</el>
+					<el>6</el>
 				</basic>
 				<atLower numberOfEl="1">
 					<el>1</el>
 				</atLower>
 				<unknown numberOfEl="1">
-					<el>3</el>
+					<el incr="7">3</el>
 				</unknown>
 			</initialBasisStatus>
--->			
-			<integerVariableBranchingWeights numberOfVar="2">
+			<integerVariableBranchingWeights numberOfVar="3">
 				<var idx="2" value="1"></var>
+				<var idx="3" ></var>
 				<var value="2.5" idx="4"/>
 			</integerVariableBranchingWeights>
 			<sosVariableBranchingWeights numberOfSOS="2">
 				<sos sosIdx="0" numberOfVar="2">
-					<var idx="0" value="1"></var>
+					<var idx="0" />
 					<var idx="1" value="2"></var>
 				</sos>
 				<sos sosIdx="1" numberOfVar="0" groupWeight="0.3"/>
@@ -120,25 +140,45 @@
 			<other name="priority" numberOfVar="3" solver="Ipopt">
 				<var idx="0" value="1"/>
 				<var value="2" idx="1"/>
-				<var idx="2" value="3"/>
+				<var idx="2" ></var>
 			</other>
 			<other name="test" solver="hypothetical" numberOfVar="1" value="inverted">
 				<var idx="1"></var>
 			</other>
+			<other name="enumTest" numberOfEnumerations="2" >
+				<enumeration value="zero" numberOfEl="2">
+					<el incr="1" mult="2">0</el>
+				</enumeration>
+				<enumeration value="ONE" numberOfEl="0"/>
+			</other>
+			<other name="minimus"/>
 		</variables>	
-		<objectives>
-			<initialObjectiveValues numberOfObj="1">
-				<obj value="0.0" idx="-1"></obj>
+		<objectives numberOfOtherObjectiveOptions="1">
+			<initialObjectiveValues numberOfObj="2">
+				<obj value="0.0" idx="-2"></obj>
+				<obj/>
 			</initialObjectiveValues>
-			<initialObjectiveBounds numberOfObj="1">
-				<obj idx="-1" lbValue="-INF" ubValue="INF"></obj>
+			<initialObjectiveBounds numberOfObj="2">
+				<obj/>
+				<obj idx="-2" lbValue="-1000000000000" ubValue="1000000000000"></obj>
 			</initialObjectiveBounds>
+			<initialBasisStatus>
+				<basic numberOfEl="1">
+					<el>-1</el>
+				</basic>
+			</initialBasisStatus>
+			<other name="otherObjOption" type="numeric" solver="generic" category="global" numberOfObj="0" numberOfEnumerations="0" value="none" description="just testing all possibilities" >
+			</other>
 		</objectives>
-		<constraints>
-			<initialConstraintValues numberOfCon="1">
+		<constraints numberOfOtherConstraintOptions="2">
+			<initialConstraintValues numberOfCon="2">
 				<con idx="0" value="5.0"></con>
+				<con idx="1"></con>
 			</initialConstraintValues>
-<!-- Hide this element until the parser gets updated... 	
+			<initialDualValues numberOfCon="2">
+				<con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
+				<con idx="3"/>
+			</initialDualValues>
 			<initialBasisStatus>
 				<atUpper numberOfEl="1">
 					<el>1</el>
@@ -147,12 +187,18 @@
 					<el>2</el>
 				</unknown>
 			</initialBasisStatus>
--->
-			<initialDualValues numberOfCon="1">
-				<con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
-			</initialDualValues>
+			<other name="otherConOption" numberOfCon="2">
+				<con idx="0" lbValue="2.718" ubValue="3.1415"></con>
+				<con idx="1" value="seventeen"></con>
+			</other>
+			<other name="AnotherConOption" numberOfEnumerations="1">
+				<enumeration value="One" numberOfEl="3">
+					<el mult="2" incr="2">0</el>
+					<el mult="1">1</el>
+				</enumeration>
+			</other>
 		</constraints>
-		<solverOptions numberOfSolverOptions="16">
+		<solverOptions numberOfSolverOptions="17">
 			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"/>
 			<solverOption name="print_level" solver="ipopt" type="integer" value="5"/>
 			<solverOption name="max_iter" solver="ipopt" type="integer" value="2000" description="abc"/>
@@ -174,7 +220,10 @@
 			<solverOption name="cuts" solver="cbc" value="off" />
 			<solverOption name="log" solver="cbc"  value="0"/>
 			<solverOption name="verbosity" solver="symphony"  value="-2" />
-
+			<solverOption name="itemTest" solver="dip" numberOfItems="2">
+				<item>0</item>
+				<item>1</item>
+			</solverOption>
 		</solverOptions>
 	</optimization>
 </osol>

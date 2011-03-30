@@ -16,11 +16,17 @@
 					<var idx="6" value="1000"/>
 					<var idx="7" value="1000"/>
 			</initialVariableValues>
-			<initialBasisStatus numberOfVar="4">
-				<var idx="0" value="basic"></var>
-				<var idx="1" value="atLower"/>
-				<var idx="3" value="unknown"></var>
-				<var idx="5" value="basic"></var>
+			<initialBasisStatus>
+				<basic numberOfEl="2">
+					<el>0</el>
+					<el>5</el>
+				</basic>
+				<atLower numberOfEl="2">
+					<el mult="2" incr="1">1</el>
+				</atLower>
+				<unknown numberOfEl="1">
+					<el>3</el>
+				</unknown>
 			</initialBasisStatus>
 		</variables>	
 		<solverOptions numberOfSolverOptions="16">

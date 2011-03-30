@@ -22,11 +22,17 @@
 					<var value="4.742999643577776" idx="1"/>
 					<var idx="3" value="1.379408293215363"/>
 			</initialVariableValues>
-			<initialBasisStatus numberOfVar="4">
-				<var idx="0" value="basic"></var>
-				<var idx="1" value="atLower"/>
-				<var idx="3" value="unknown"></var>
-				<var idx="5" value="basic"></var>
+			<initialBasisStatus>
+				<basic numberOfEl="2">
+					<el>0</el>
+					<el>5</el>
+				</basic>
+				<atLower numberOfEl="2">
+					<el mult="2" incr="1">1</el>
+				</atLower>
+				<unknown numberOfEl="1">
+					<el>3</el>
+				</unknown>
 			</initialBasisStatus>
 			<sosVariableBranchingWeights numberOfSOS="2">
 				<sos sosIdx="0" numberOfVar="2">
@@ -35,7 +41,7 @@
 				</sos>
 				<sos sosIdx="1" numberOfVar="0" groupWeight="0.3"/>
 			</sosVariableBranchingWeights>
-		</variables>	
+		</variables>
 		<objectives>
 			<initialObjectiveValues numberOfObj="1">
 				<obj value="0.0" idx="-1"></obj>
