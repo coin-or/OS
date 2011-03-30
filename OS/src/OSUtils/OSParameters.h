@@ -2,15 +2,13 @@
 /** @file OSParameters.h
  * 
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
@@ -103,16 +101,6 @@ using std::ostringstream;
 #define	OS_ALLDIF  7016
 
 
-
-//#include <limits.h>
-//#ifdef INFINITY //This is the definition in the ISO C99 standard.
-//	#define OSINFINITY INFINITY
-//#else
-//	#define OSINFINITY 1e20
-//#endif
-
-//#define OSINFINITY 1e30
-
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
 
@@ -148,6 +136,30 @@ inline double nanKludge(){
 
 
 
+inline bool OSIsnan(double x) {
+	//this is taken directly from COINUTILS
+#ifdef MY_C_ISNAN
+	
+    return MY_C_ISNAN( x)!=0;
+#else
+    return false;
+#endif
+	
+} 
+
+
+
+
+
+//#include <limits.h>
+//#ifdef INFINITY //This is the definition in the ISO C99 standard.
+//	#define OSINFINITY INFINITY
+//#else
+//	#define OSINFINITY 1e20
+//#endif
+
+//#define OSINFINITY 1e30
+
 
 
 #ifdef DBL_MAX
@@ -156,7 +168,7 @@ inline double nanKludge(){
 	//#define OSDBL_MAX OSINFINITY
 	#define OSDBL_MAX HUGE_VAL
 #else
-	#define OSDBL_MAX 1e30
+	#define OSDBL_MAX 1e37 // guaranteed to be representable as a double by ANSI standard
 #endif
 
 
@@ -181,7 +193,7 @@ inline std::string	getVersionInfo(){
 		versionInfo << std::endl;	
 		versionInfo << "Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin";
 		versionInfo << std::endl;
-		versionInfo << "Distributed under the Common Public License 1.0" ;
+		versionInfo << "Distributed under the Eclipse Public License" ;
 		versionInfo << std::endl;
 		versionInfo << "OS Version: ";
 		versionInfo << OS_VERSION;

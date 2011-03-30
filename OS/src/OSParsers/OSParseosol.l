@@ -1,24 +1,22 @@
 /* $Id$ */
 /** @file parseosol.l
  * 
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.1, 10/07/2008
- * @since   OS1.1
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
 %{
 
-#include <iostream>
-#include "OSDataStructures.h"
-#include "OSMathUtil.h"
 #include "OSConfig.h"
+
+#include <iostream>
+#include <sstream>  
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -50,15 +48,10 @@
 # endif
 #endif
  
-#include <sstream>  
-#include "OSoLParserData.h"
-#include "OSErrorClass.h"
-#include "OSParseosol.tab.hpp"
-#include "OSOption.h"
 
-
-//#define PARSERDEBUG
+#define PARSERDEBUG
 #ifdef PARSERDEBUG
+
 	#define YY_PRINT  printf("%s", yytext);
 #else     
 	#define YY_PRINT  ;
@@ -73,6 +66,13 @@
      #include<sys/unistd.h>  
   #endif
 #endif
+
+#include "OSErrorClass.h"
+#include "OSMathUtil.h"
+#include "OSGeneral.h"
+#include "OSParseosol.tab.hpp"
+#include "OSOption.h"
+#include "OSoLParserData.h"
 
 using std::cout;
 using std::endl;
@@ -93,6 +93,7 @@ using std::ostringstream;
 %x singlequoteattributetext
 %x startelement
 %x elementtext
+%x itemtext
 %x comment
 %x xmldeclaration
   
@@ -104,11 +105,11 @@ using std::ostringstream;
  
 xmlwhitespace ([ \t\n\r])
 equality ([ \t\n\r])*=([ \t\n\r])*
-quote [\" | \']  
+quote [\"|\']  
 twoquotes (\"\"|\'\')
 greater_than (>)
 aninteger (-?[0-9]+)
-adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
+adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF)|NaN)
 %%
 
  
@@ -121,9 +122,10 @@ adouble (-?((([0-9]+)|([0-9]*\.[0-9]*))([eE][-+]?[0-9]+)?|INF))
 ({xmlwhitespace}*{greater_than}{xmlwhitespace}*) {YY_PRINT; return(GREATERTHAN);}
 ({xmlwhitespace}*{aninteger}{xmlwhitespace}*)  {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 
-{adouble} {YY_PRINT; 
+({xmlwhitespace}*{adouble}{xmlwhitespace}*) {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
+/*
 	if( (unsigned)(yytextEnd - yytext) != strlen( yytext)){
 		std::ostringstream outStr;
 		outStr << "encountered a spurious character in the lexer" << endl;
@@ -133,13 +135,17 @@ yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
 		outStr << "See line number: " << yylineno << endl;  
 		throw ErrorClass( outStr.str());
 	}
+	*/
 return(DOUBLE);}
 
 ({xmlwhitespace}*\/>) {YY_PRINT;  return(ENDOFELEMENT);}
 
 ({xmlwhitespace}+numberOfOtherOptions{equality}) {YY_PRINT; return(NUMBEROFOTHEROPTIONSATT);}
 ({xmlwhitespace}+numberOfJobIDs{equality}) {YY_PRINT; return(NUMBEROFJOBIDSATT);}
+({xmlwhitespace}+numberOfEl{equality}) {YY_PRINT;  return(NUMBEROFELATT);}
+({xmlwhitespace}+numberOfEnumerations{equality}) {YY_PRINT;  return(NUMBEROFENUMERATIONSATT);}
 ({xmlwhitespace}+numberOfPaths{equality}) {YY_PRINT; return(NUMBEROFPATHSATT);}
+({xmlwhitespace}+numberOfItems{equality}) {YY_PRINT; return(NUMBEROFITEMSATT);}
 ({xmlwhitespace}+numberOfPathPairs{equality}) {YY_PRINT; return(NUMBEROFPATHPAIRSATT);}
 ({xmlwhitespace}+numberOfProcesses{equality}) {YY_PRINT; return(NUMBEROFPROCESSESATT);}
 ({xmlwhitespace}+numberOfVariables{equality}) {YY_PRINT; return(NUMBEROFVARIABLESATT);}
@@ -156,56 +162,89 @@ return(DOUBLE);}
 ({xmlwhitespace}+idx{equality}) {YY_PRINT; return(IDXATT);}
 ({xmlwhitespace}+sosIdx{equality}) {YY_PRINT; return(SOSIDXATT);}
 ({xmlwhitespace}+groupWeight{equality}) {YY_PRINT; return(GROUPWEIGHTATT);}
+({xmlwhitespace}+lbDualValue{equality}) {YY_PRINT; return(LBDUALVALUEATT);}
+({xmlwhitespace}+ubDualValue{equality}) {YY_PRINT; return(UBDUALVALUEATT);}
 
-({xmlwhitespace}+locationType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(LOCATIONTYPEATT);}
-({xmlwhitespace}+locationType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LOCATIONTYPEATT);}
-({xmlwhitespace}+transportType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TRANSPORTTYPEATT);}
-({xmlwhitespace}+transportType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TRANSPORTTYPEATT);}
-({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
-({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
-({xmlwhitespace}+value{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
-({xmlwhitespace}+value{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
+ /* attributes returning strings (that are potentially empty)*/
+
+({xmlwhitespace}+category{equality}\"\") {YY_PRINT; return(EMPTYCATEGORYATT);}
+({xmlwhitespace}+category{equality}\'\') {YY_PRINT; return(EMPTYCATEGORYATT);}
+({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+category{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
+({xmlwhitespace}+description{equality}\"\") {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
+({xmlwhitespace}+description{equality}\'\') {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
 ({xmlwhitespace}+description{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
 ({xmlwhitespace}+description{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
+({xmlwhitespace}+lbValue{equality}\"\") {YY_PRINT; return(EMPTYLBVALUEATT);}
+({xmlwhitespace}+lbValue{equality}\'\') {YY_PRINT; return(EMPTYLBVALUEATT);}
+({xmlwhitespace}+lbValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(LBVALUEATT);}
+({xmlwhitespace}+lbValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LBVALUEATT);}
+({xmlwhitespace}+locationType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LOCATIONTYPEATT);}
+({xmlwhitespace}+locationType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(LOCATIONTYPEATT);}
+({xmlwhitespace}+name{equality}\"\") {YY_PRINT; return(EMPTYNAMEATT);}
+({xmlwhitespace}+name{equality}\'\') {YY_PRINT; return(EMPTYNAMEATT);}
+({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
+({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
+({xmlwhitespace}+solver{equality}\"\") {YY_PRINT; return(EMPTYSOLVERATT);}
+({xmlwhitespace}+solver{equality}\'\') {YY_PRINT; return(EMPTYSOLVERATT);}
+({xmlwhitespace}+solver{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SOLVERATT);}
+({xmlwhitespace}+solver{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SOLVERATT);}
+({xmlwhitespace}+type{equality}\"\") {YY_PRINT; return(EMPTYTYPEATT);}
+({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
+({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
+({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
+({xmlwhitespace}+transportType{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TRANSPORTTYPEATT);}
+({xmlwhitespace}+transportType{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TRANSPORTTYPEATT);}
+({xmlwhitespace}+ubValue{equality}\"\") {YY_PRINT; return(EMPTYUBVALUEATT);}
+({xmlwhitespace}+ubValue{equality}\'\') {YY_PRINT; return(EMPTYUBVALUEATT);}
+({xmlwhitespace}+ubValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UBVALUEATT);}
+({xmlwhitespace}+ubValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UBVALUEATT);}
+({xmlwhitespace}+unit{equality}\"\") {YY_PRINT; return(EMPTYUNITATT);}
+({xmlwhitespace}+unit{equality}\'\') {YY_PRINT; return(EMPTYUNITATT);}
 ({xmlwhitespace}+unit{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
 ({xmlwhitespace}+unit{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
+({xmlwhitespace}+value{equality}\"\") {YY_PRINT; return(EMPTYVALUEATT);}
+({xmlwhitespace}+value{equality}\'\') {YY_PRINT; return(EMPTYVALUEATT);}
+({xmlwhitespace}+value{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
+({xmlwhitespace}+value{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
+({xmlwhitespace}+weight{equality}\"\") {YY_PRINT; return(EMPTYWEIGHTATT);}
+({xmlwhitespace}+weight{equality}\'\') {YY_PRINT; return(EMPTYWEIGHTATT);}
+({xmlwhitespace}+weight{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(WEIGHTATT);}
+({xmlwhitespace}+weight{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(WEIGHTATT);}
+
 ({xmlwhitespace}+from{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(FROMATT);}
 ({xmlwhitespace}+from{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(FROMATT);}
 ({xmlwhitespace}+to{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TOATT);}
 ({xmlwhitespace}+to{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TOATT);}
 ({xmlwhitespace}+makeCopy{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(MAKECOPYATT);}
 ({xmlwhitespace}+makeCopy{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(MAKECOPYATT);}
-({xmlwhitespace}+solver{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(SOLVERATT);}
-({xmlwhitespace}+solver{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(SOLVERATT);}
-({xmlwhitespace}+category{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
-({xmlwhitespace}+category{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
-({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
-({xmlwhitespace}+type{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
-({xmlwhitespace}+lbValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(LBVALUEATT);}
-({xmlwhitespace}+lbValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LBVALUEATT);}
-({xmlwhitespace}+ubValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UBVALUEATT);}
-({xmlwhitespace}+ubValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UBVALUEATT);}
 
-({xmlwhitespace}+lbDualValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(LBDUALVALUEATT);}
-({xmlwhitespace}+lbDualValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(LBDUALVALUEATT);}
-({xmlwhitespace}+ubDualValue{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(UBDUALVALUEATT);}
-({xmlwhitespace}+ubDualValue{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(UBDUALVALUEATT);}
-
+({xmlwhitespace}+incr{equality}) {YY_PRINT; return(INCRATT);}
+({xmlwhitespace}+mult{equality}) {YY_PRINT; return(MULTATT);}
+({xmlwhitespace}+sizeOf{equality}) {YY_PRINT; return(SIZEOFATT);}
 
 {xmlwhitespace}*\<osol{xmlwhitespace}*\> {return(OSOLSTARTEMPTY);}
 {xmlwhitespace}*\<osol{xmlwhitespace}+ {YY_PRINT; BEGIN osolattributetext;  return(OSOLSTART);}
-
 {xmlwhitespace}*\<\/osol{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OSOLEND);}
+
+{xmlwhitespace}*\<optionHeader {YY_PRINT; return(HEADERSTART);}
+{xmlwhitespace}*\<\/optionHeader{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(HEADEREND);}
+
 {xmlwhitespace}*\<general {YY_PRINT; return(GENERALSTART);}
 {xmlwhitespace}*\<\/general{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(GENERALEND);}
+
 {xmlwhitespace}*\<system {YY_PRINT; return(SYSTEMSTART);}
 {xmlwhitespace}*\<\/system{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SYSTEMEND);}
+
 {xmlwhitespace}*\<service {YY_PRINT; return(SERVICESTART);}
 {xmlwhitespace}*\<\/service{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SERVICEEND);}
+
 {xmlwhitespace}*\<job {YY_PRINT; return(JOBSTART);}
 {xmlwhitespace}*\<\/job{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(JOBEND);}
+
 {xmlwhitespace}*\<optimization {YY_PRINT; return(OPTIMIZATIONSTART);}
 {xmlwhitespace}*\<\/optimization{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(OPTIMIZATIONEND);}
+
 
 {xmlwhitespace}*\<serviceURI {YY_PRINT; return(SERVICEURISTART);}
 {xmlwhitespace}*\<\/serviceURI{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SERVICEURIEND);}
@@ -234,12 +273,16 @@ return(DOUBLE);}
 
 {xmlwhitespace}*\<minDiskSpace {YY_PRINT; return(MINDISKSPACESTART);}
 {xmlwhitespace}*\<\/minDiskSpace{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MINDISKSPACEEND);}
-{xmlwhitespace}*\<minMemorySize {YY_PRINT; return(MINMEMORYSIZESTART);}
-{xmlwhitespace}*\<\/minMemorySize{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MINMEMORYSIZEEND);}
+{xmlwhitespace}*\<minMemorySize {YY_PRINT; return(MINMEMORYSTART);}
+{xmlwhitespace}*\<\/minMemorySize{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MINMEMORYEND);}
 {xmlwhitespace}*\<minCPUSpeed {YY_PRINT; return(MINCPUSPEEDSTART);}
 {xmlwhitespace}*\<\/minCPUSpeed{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MINCPUSPEEDEND);}
 {xmlwhitespace}*\<minCPUNumber {YY_PRINT; return(MINCPUNUMBERSTART);}
 {xmlwhitespace}*\<\/minCPUNumber{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(MINCPUNUMBEREND);}
+{xmlwhitespace}*\<base64BinaryData {YY_PRINT; return(BASE64START);}
+{xmlwhitespace}*\<\/base64BinaryData{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASE64END);}
+{xmlwhitespace}*\<el {YY_PRINT;  return(ELSTART);}
+{xmlwhitespace}*\<\/el{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ELEND);}
 
 {xmlwhitespace}*\<type {YY_PRINT; return(SERVICETYPESTART);}
 {xmlwhitespace}*\<\/type{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SERVICETYPEEND);}
@@ -288,6 +331,18 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/initialVariableValuesString{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALVARIABLEVALUESSTRINGEND);}
 {xmlwhitespace}*\<initialBasisStatus {YY_PRINT; return(INITIALBASISSTATUSSTART);}
 {xmlwhitespace}*\<\/initialBasisStatus{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INITIALBASISSTATUSEND);}
+{xmlwhitespace}*\<basic {YY_PRINT; return(BASICSTART);}
+{xmlwhitespace}*\<\/basic{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(BASICEND);}
+{xmlwhitespace}*\<atLower {YY_PRINT; return(ATLOWERSTART);}
+{xmlwhitespace}*\<\/atLower{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATLOWEREND);}
+{xmlwhitespace}*\<atUpper {YY_PRINT; return(ATUPPERSTART);}
+{xmlwhitespace}*\<\/atUpper{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATUPPEREND);}
+{xmlwhitespace}*\<isFree {YY_PRINT; return(ISFREESTART);}
+{xmlwhitespace}*\<\/isFree{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ISFREEEND);}
+{xmlwhitespace}*\<superbasic {YY_PRINT; return(SUPERBASICSTART);}
+{xmlwhitespace}*\<\/superbasic{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SUPERBASICEND);}
+{xmlwhitespace}*\<unknown {YY_PRINT; return(UNKNOWNSTART);}
+{xmlwhitespace}*\<\/unknown{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(UNKNOWNEND);}
 {xmlwhitespace}*\<integerVariableBranchingWeights {YY_PRINT; return(INTEGERVARIABLEBRANCHINGWEIGHTSSTART);}
 {xmlwhitespace}*\<\/integerVariableBranchingWeights{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(INTEGERVARIABLEBRANCHINGWEIGHTSEND);}
 {xmlwhitespace}*\<sosVariableBranchingWeights {YY_PRINT; return(SOSVARIABLEBRANCHINGWEIGHTSSTART);}
@@ -316,9 +371,47 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/solverOptions{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SOLVEROPTIONSEND);}
 {xmlwhitespace}*\<solverOption {YY_PRINT; return(SOLVEROPTIONSTART);}
 {xmlwhitespace}*\<\/solverOption{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(SOLVEROPTIONEND);}
+{xmlwhitespace}*\<enumeration {YY_PRINT;  return(ENUMERATIONSTART);}
+{xmlwhitespace}*\<\/enumeration{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ENUMERATIONEND);}
 
 
-[a-zA-Z0-9.:_*#$@\- \n\t\r\/\\]+ { YY_PRINT; /*yylval->sval = strdup( yytext);*/   yylval->sval = yytext; yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
+ /* The <item> element and the children of the option header are treated specially because they may legitimately contain special characters */
+
+{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}*\<\/item{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(ITEMEMPTY);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
+{xmlwhitespace}*\<\/item{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(ITEMEND);}
+{xmlwhitespace}*\<item{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(ITEMSTARTANDEND);}
+
+{xmlwhitespace}*\<name{xmlwhitespace}*\>{xmlwhitespace}*\<\/name{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILENAMEEMPTY);}
+{xmlwhitespace}*\<name{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILENAMESTART);}
+{xmlwhitespace}*\<\/name{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILENAMEEND);}
+{xmlwhitespace}*\<name{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILENAMESTARTANDEND);}
+
+{xmlwhitespace}*\<source{xmlwhitespace}*\>{xmlwhitespace}*\<\/source{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILESOURCEEMPTY);}
+{xmlwhitespace}*\<source{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILESOURCESTART);}
+{xmlwhitespace}*\<\/source{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILESOURCEEND);}
+{xmlwhitespace}*\<source{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILESOURCESTARTANDEND);}
+
+{xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}*\<\/description{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILEDESCRIPTIONEMPTY);}
+{xmlwhitespace}*\<description{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILEDESCRIPTIONSTART);}
+{xmlwhitespace}*\<\/description{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONEND);}
+{xmlwhitespace}*\<description{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILEDESCRIPTIONSTARTANDEND);}
+
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILECREATOREMPTY);}
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILECREATORSTART);}
+{xmlwhitespace}*\<\/fileCreator{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILECREATOREND);}
+{xmlwhitespace}*\<fileCreator{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILECREATORSTARTANDEND);}
+
+{xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}*\<\/licence{xmlwhitespace}*\>{xmlwhitespace}* {  YY_PRINT;  return(FILELICENCEEMPTY);}
+{xmlwhitespace}*\<licence{xmlwhitespace}*\>{xmlwhitespace}* { YY_PRINT; BEGIN itemtext; return(FILELICENCESTART);}
+{xmlwhitespace}*\<\/licence{xmlwhitespace}*>{xmlwhitespace}* { YY_PRINT; return(FILELICENCEEND);}
+{xmlwhitespace}*\<licence{xmlwhitespace}*\/>{xmlwhitespace}* { YY_PRINT; return(FILELICENCESTARTANDEND);}
+
+
+ /* environments and comments */
+
+[a-zA-Z0-9.:_*#$@\- \n\t\r\/\\]+ { YY_PRINT; yylval->sval = strdup( yytext); /*  yylval->sval = yytext;*/ yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
+<itemtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 
  "<!--" BEGIN comment;
  <comment>. |
@@ -331,13 +424,13 @@ return(DOUBLE);}
  <xmldeclaration>"?>" BEGIN 0;
  
 
-<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext; return(ATTRIBUTETEXT);}
-<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;  return(ATTRIBUTETEXT);}
+<doublequoteattributetext>[^\"]* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
+<singlequoteattributetext>[^\']* {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);   /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 <osolattributetext>([^>])* {YY_PRINT;  BEGIN 0;  /*yylval->sval = strdup(yytext);*/   yylval->sval = yytext;   return(OSOLATTRIBUTETEXT);}
 
+ /* error trap */
 
 .|\n {  
-
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;

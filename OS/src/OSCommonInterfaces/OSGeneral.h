@@ -2,15 +2,13 @@
 /** @file OSGeneral.h
  * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 19/07/2010
- * @since   OS2.2
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin 
  *
  * \remarks
- * Copyright (C) 2005-2010, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma,  Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -28,10 +26,134 @@
 #endif
 
 #include "OSConfig.h"
+#include "OSParameters.h" 
 
 #include <string>
 #include <vector>
 
+/*! \class GeneralFileHeader
+ * \brief a data structure that holds general information about files
+ * that conform to one of the OSxL schemas
+ */
+class GeneralFileHeader {
+	public:
+	
+	/**
+	 * used to give a name to the file or the problem contained within it
+	 */
+	std::string name;
+	
+	/**
+	 * used when the file or problem appeared in the literature
+	 * (could be in BiBTeX format or similar) 
+	 */
+	std::string source;
+
+	/**
+	 * further information about the file or the problem contained within it
+	 */
+	std::string description;
+
+	/**
+	 * name(s) of author(s) who created this file
+	 */
+	std::string fileCreator;
+
+	/**
+	 * licensing information if applicable
+	 */
+	std::string licence;
+	
+	
+	/**
+	 * Constructor.
+	 * 
+	 */
+	GeneralFileHeader(); 
+
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~GeneralFileHeader(); 
+	
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(GeneralFileHeader *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant);
+
+	/**
+	 *
+	 * A function to populate an instance of this class
+	 * @param name: the name of this file or instance
+	 * @param source: the source (e.g., in BiBTeX format)
+	 * @param description: further description about this file and/or its contents
+	 * @param fileCreator: the creator of this file
+	 * @param licence: licence information if applicable
+	 */
+	bool setHeader(std::string name, std::string source, std::string description, 
+		           std::string fileCreator, std::string licence);
+
+}; //GeneralFileHeader
+
+
+/*! \class SparseVector
+ * \brief a sparse vector data structure
+ */
+class SparseVector{
+	public:
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param number holds the size of the vector.
+	 */
+	SparseVector(int number);
+	
+	/**
+	 *
+	 * Default Constructor. 
+	 */	
+	SparseVector();
+	
+	/**
+	 *
+	 * Default destructor. 
+	 */	
+	~SparseVector();
+
+	/**
+	 * bDeleteArrays is true if we delete the arrays in garbage collection
+	 * set to true by default
+	 */
+	bool bDeleteArrays;
+	
+	/**
+	 * number is the number of elements in the indexes and values arrays.
+	 */
+	int number;
+	
+	/**
+	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
+	 */
+	int* indexes;
+
+	/**
+	 * values holds a double array of nonzero values.
+	 */
+	double* values;
+
+}; //SparseVector
 
 
 /*! \class SparseMatrix
@@ -109,55 +231,6 @@ class SparseMatrix {
 	bool display(int secondaryDim);
 
 }; //SparseMatrix
-
-
-/*! \class SparseVector
- * \brief a sparse vector data structure
- */
-class SparseVector{
-	public:
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param number holds the size of the vector.
-	 */
-	SparseVector(int number);
-	
-	/**
-	 *
-	 * Default Constructor. 
-	 */	
-	SparseVector();
-	
-	/**
-	 *
-	 * Default destructor. 
-	 */	
-	~SparseVector();
-
-	/**
-	 * bDeleteArrays is true if we delete the arrays in garbage collection
-	 * set to true by default
-	 */
-	bool bDeleteArrays;
-	
-	/**
-	 * number is the number of elements in the indexes and values arrays.
-	 */
-	int number;
-	
-	/**
-	 * indexes holds an integer array of indexes, which corresponding values are nonzero.
-	 */
-	int* indexes;
-
-	/**
-	 * values holds a double array of nonzero values.
-	 */
-	double* values;
-
-}; //SparseVector
 
 
 /*! \class SparseJacobianMatrix
@@ -348,7 +421,55 @@ public:
 	int numberOfEl;
 	int *el;
 
+	/**
+	 *  A method to compare two invectors
+	 */	  
 	bool IsEqual(IntVector *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 * @param iMin: lowest value (inclusive) that an entry in this vector can take
+	 * @param iMax: greatest value (inclusive) that an entry in this vector can take
+	 */
+	bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+	/**
+	 *  set values into an IntVector
+	 *  @param ni contains the dimension of the IntVector
+	 *  @param i contains the array of values
+	 */
+ 	bool setIntVector(int *i, int ni);
+
+	/**
+	 *  append a value to an IntVector
+	 *  @param i contains the value to be appended 
+	 */
+ 	bool extendIntVector(int i);
+
+	/**
+	 *  get the dimension of an IntVector
+	 */
+	int getNumberOfEl();
+
+	/**
+	 *  get an entry in the data array of an IntVector
+	 *  @param j is the index of the entry that is to be retrieved
+	 */
+	int getEl(int j);
+
+
+	/**
+	 *  Get the integer data array of an IntVector
+	 *  @param i is the location where the user wants to store the array
+	 *  @return the value
+	 *
+	 *  @note it is the user's responsibility to reserve sufficient memory to hold the vector being returned.
+	 */
+	bool getEl(int *i);
 };//class IntVector
 
 
@@ -368,16 +489,43 @@ public:
 	// alternate constructor
 	OtherOptionEnumeration(int n);
 
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
 	bool IsEqual(OtherOptionEnumeration *that);
 
 	/**
-	 *  Set the indices for a particular value in an enumeration
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 * @param iMin: lowest value (inclusive) that an entry in this vector can take
+	 * @param iMax: greatest value (inclusive) that an entry in this vector can take
+	 */
+	bool setRandom(double density, bool conformant, int iMin, int iMax);
+
+	/**
+	 *  Set the indices for a particular level in an enumeration
 	 *  @param value represents the value of this enumeration member
 	 *  @param description holds additional information about this value
 	 *  @param i contains the array of indices
 	 *  @param ni contains the number of elements in i
 	 */
 	bool setOtherOptionEnumeration(std::string value, std::string description, int *i, int ni);
+
+
+	/**
+	 *  Get the value for a particular level in an enumeration
+	 */
+	std::string getValue();
+
+	/**
+	 *  Get the description for a particular level in an enumeration
+	 */
+	std::string getDescription();
+
 };//class OtherOptionEnumeration
 
 
@@ -422,28 +570,272 @@ struct IndexValuePair{
  */
 class BasisStatus{
 public:
-	BasisStatus();
-	~BasisStatus();
-
 	IntVector* basic;
 	IntVector* atLower;
 	IntVector* atUpper;
 	IntVector* isFree;
 	IntVector* superbasic;
 	IntVector* unknown;
+
+	BasisStatus();
+	~BasisStatus();
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
 	bool IsEqual(BasisStatus *that);
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 * @param iMin: lowest index value (inclusive) that an entry in this basis can take
+	 * @param iMax: greatest index value (inclusive) that an entry in this basis can take
+	 */
+	bool setRandom(double density, bool conformant, int iMin, int iMax);
 
 /**
  *  Set the indices for a particular status
  *  @param status is a string representing the allowed statuses 
- *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *		(as defined in enumeration ENUM_BASIS_STATUS - see below)
  *  @param i contains the array of indices
  *  @param ni contains the number of elements in i
  */
-	bool setBasisStatusIntVector(int status, int *i, int ni);
+	bool setIntVector(int status, int *i, int ni);
 
+/**
+ *  Add one index to a particular status
+ *  @param status is a string representing the allowed statuses 
+ *		(as defined in enumeration ENUM_BASIS_STATUS - see below)
+ *  @param idx contains the value of the index
+ */
+	bool addIdx(int status, int idx);
+
+/**
+ *  Get the number of indices for a particular status
+ *  @param status is a string representing the allowed statuses 
+ *  (at present "basic", "atLower", "atUpper", "isFree", "superbasic", "unknown")
+ *  @return the number of indices or -1 if the object does not exist
+ */
+	int getNumberOfEl(int status);
+
+
+/**
+ *  Get one entry in the array of indices for a particular status
+ *  @param status is an integer representing the allowed statuses 
+ *  (as governed by enumeration ENUM_BASIS_STATUS --- see below)
+ *  @param j is the (zero-based) position of the entry within the array
+ *  @return the value
+ */
+	int getEl(int status, int j);
+
+/**
+ *  Get the entire array of indices for a particular status
+ *  @param status is a string representing the allowed statuses 
+ *  (as governed by enumeration ENUM_BASIS_STATUS --- see below)
+ *  @param i is the location where the user wants to store the array
+ *  @return the value
+ *
+ *  @note it is the user's responsibility to reserve sufficient memory to hold the vector being returned.
+ */
+	bool getIntVector(int status, int *i);
 };//class BasisStatus 
-	
+
+/*! \class StorageCapacity
+ *  \brief the StorageCapacity class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class StorageCapacity {
+
+public:
+	/** the unit in which storage capacity is measured */
+	std::string unit;
+
+	/** additional description about the storage */
+	std::string description;
+
+	/** the number of units of storage capacity */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	StorageCapacity(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~StorageCapacity(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(StorageCapacity *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //StorageCapacity
+
+/*! \class CPUSpeed
+ *  \brief the CPUSpeed class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class CPUSpeed {
+
+public:
+	/** the unit in which CPU speed is measured */
+	std::string unit;
+
+	/** additional description about the CPU speed */
+	std::string description;
+
+	/** the CPU speed (expressed in multiples of unit) */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	CPUSpeed(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~CPUSpeed(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(CPUSpeed *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //CPUSpeed
+
+/*! \class CPUNumber
+ *  \brief the CPUNumber class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @version 1.0, 21/07/2008
+ * @since OS 1.1
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class CPUNumber {
+
+public:
+	/** additional description about the CPU */
+	std::string description;
+
+	/** the number of CPUs */
+	int value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	CPUNumber(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~CPUNumber(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(CPUNumber *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //CPUNumber
+
+/*! \class TimeSpan
+ *  \brief the TimeSpan class.
+ * 
+ * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * 
+ * \remarks
+ * A data structure class that corresponds to an xml element in 
+ * the OSgL schema.  
+ */
+class TimeSpan {
+
+public:
+	/** the unit in which time is measured */
+	std::string unit;
+
+	/** the number of units */
+	double value;
+
+	/**
+	 *
+	 * Default constructor. 
+	 */
+	TimeSpan(); 
+	/**
+	 *
+	 * Class destructor. 
+	 */
+	~TimeSpan(); 
+
+	/**
+	 *
+	 * A function to check for the equality of two objects
+	 */
+	bool IsEqual(TimeSpan *that); 
+
+	/**
+	 *
+	 * A function to make a random instance of this class
+	 * @param density: corresponds to the probability that a particular child element is created
+	 * @param conformant: if true enforces side constraints not enforceable in the schema
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
+	 */
+	bool setRandom(double density, bool conformant); 
+}; //TimeSpan
+
+
+
 class OSGeneral{
 
 };
@@ -827,6 +1219,13 @@ inline bool verifySolutionSubstatusType(std::string type)
 	return (returnSolutionSubstatusType(type) > 0);
 }//verifySolutionSubstatusType
 
+enum ENUM_PROBLEM_COMPONENT
+{
+	ENUM_PROBLEM_COMPONENT_variables = 1,
+	ENUM_PROBLEM_COMPONENT_objectives,
+	ENUM_PROBLEM_COMPONENT_constraints
+};
+
 enum ENUM_VARTYPE 
 {
 	ENUM_VARTYPE_CONTINUOUS = 1,
@@ -852,5 +1251,38 @@ inline bool verifyVarType(char vt)
 {
 	return (returnVarType(vt) > 0);
 }//verifyVarType
+
+
+enum ENUM_PATHPAIR 
+{
+
+	ENUM_PATHPAIR_input_dir = 1,
+	ENUM_PATHPAIR_input_file,
+	ENUM_PATHPAIR_output_file,
+	ENUM_PATHPAIR_output_dir
+};
+
+/*************************************************
+ *
+ * A function to test equality of two doubles
+ * This is needed to check equality of objects 
+ * when members can have NaN as a possible value
+ *
+*************************************************/
+inline bool isEqual(double x, double y)
+{
+	if (OSIsnan(x)) 
+	{
+		if (OSIsnan(y)) return true;
+		else            return false;
+	}
+	else
+	{
+		if (x == y)     return true;
+		else            return false;
+	}
+	return true;
+}
+
 
 #endif

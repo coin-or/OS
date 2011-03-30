@@ -5,14 +5,12 @@
  * \detail Read an OSInstance object and convert to Ipopt data structures
  *
  * @author  Horand Gassmann,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -101,7 +99,12 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 			throw;  
 		}
 		//std::cout << "Done calling sparse jacobian" << std::endl;
-		nnz_jac_g = sparseJacobian->valueSize;
+		if (sparseJacobian != NULL){
+			nnz_jac_g = sparseJacobian->valueSize;
+		}else{
+			nnz_jac_g = 0;
+		}
+		
 	#ifdef DEBUG
 		cout << "nnz_jac_g  !!!!!!!!!!!!!!!!!!!!!!!!!!!" << nnz_jac_g << endl;	
 	#endif
@@ -117,7 +120,11 @@ bool IpoptProblem::get_nlp_info(Index& n, Index& m, Index& nnz_jac_g,
 			//std::cout << "Get Lagrangain Hessian Sparsity Pattern " << std::endl;
 			SparseHessianMatrix *sparseHessian = osinstance->getLagrangianHessianSparsityPattern();
 			//std::cout << "Done Getting Lagrangain Hessian Sparsity Pattern " << std::endl;
-			nnz_h_lag = sparseHessian->hessDimension;
+			if(sparseHessian != NULL){
+				nnz_h_lag = sparseHessian->hessDimension;
+			}else{
+				nnz_h_lag = 0;
+			}
 		}
 	#ifdef DEBUG
 		cout << "print nnz_h_lag (OSIpoptSolver.cpp)" << endl;	
@@ -773,9 +780,6 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		}
 	}
 	catch(const ErrorClass& eclass){
-#ifdef DEBUG
-		cout << "error in OSIpoptSolver, line 695:\n" << eclass.errormsg << endl;
-#endif
 		std::cout << "THERE IS AN ERROR" << std::endl;
 		osresult->setGeneralMessage( eclass.errormsg);
 		osresult->setGeneralStatusType( "error");

@@ -174,6 +174,7 @@
  */
 #include "OSConfig.h"
 #include "OSdtoa.h"
+#include "OSParameters.h"
 
 
 
@@ -1737,8 +1738,9 @@ os_strtod
 					--s;
 					if (!match(&s,"inity"))
 						++s;
-					word0(rv) = 0x7ff00000;
-					word1(rv) = 0;
+//					word0(rv) = 0x7ff00000;
+//					word1(rv) = 0;
+					rv = OSDBL_MAX;
 					goto ret;
 					}
 				break;

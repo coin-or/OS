@@ -286,4 +286,32 @@ inline int getMult(double* a, int size)
 	return mult;
 }	
 
+
+/**
+ * OSRand()
+ *
+ * @return a uniformly distributed random number between 0 and 1 (inclusive)
+ * @notes The random number generator used, rand(), is not very good
+ * and should be replaced by a serious random number generator for serious work.
+ */
+inline double OSRand()
+{
+	int i;
+
+	i = rand();
+
+	return (double) i/RAND_MAX;
+}	
+
+
+/** * OSiRand(int iMin, int iMax) * * @return a uniformly distributed random integer between iMin and iMax (inclusive)
+ * @notes The random number generator used, rand(), is not very good
+ * and should be replaced by a serious random number generator for serious work.
+ */
+inline double OSiRand(int iMin, int iMax)
+{
+	return iMin + rand()%(iMax - iMin + 1);
+}	
+
+
 #endif

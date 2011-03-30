@@ -1,15 +1,13 @@
 //Id: OSSolverService.cpp 3561 2010-06-24 19:27:07Z kmartin $
 /** @file OSSolverService.cpp
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005  
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  * 
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  *  
  * <b>INPUTS:</b>
@@ -198,29 +196,6 @@ int main(int argC, const char* argV[]) {
 	// initialize the OS options structure
 
 	osoptions = new osOptionsStruc();
-	/*
-	osoptions->configFile = "";
-	osoptions->osilFile = "";
-	osoptions->osil = "";
-	osoptions->osolFile = "";
-	osoptions->osol = "";
-	osoptions->osrlFile = "";
-	osoptions->osrl = "";
-	//osoptions->insListFile = ""; 
-	osoptions->insList = "";
-	osoptions->serviceLocation = "";
-	osoptions->serviceMethod = "";
-	osoptions->osplInputFile = "";
-	osoptions->osplOutputFile = "";
-	osoptions->mpsFile = "";
-	osoptions->nlFile = "";
-	osoptions->gamsControlFile = "";
-	osoptions->solverName = "";
-	osoptions->browser = "";
-	osoptions->invokeHelp = false;
-	osoptions->writeVersion = false;
-	osoptions->quit = false;
-	*/
 	reset_options();
 	bool scannerActive = false;
 
@@ -1107,14 +1082,21 @@ void solve() {
 
 	}//end try
 	catch (const ErrorClass& eclass) {
-
+		std::string osrl = "";
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage(eclass.errormsg);
-		osresult->setGeneralStatusType("error");
-		std::string osrl = osrlwriter->writeOSrL(osresult);
+		//first check to see if we already have OSrL,
+		//if so don't create a new osresult object
+		string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+		if(pos1 == std::string::npos){
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage(eclass.errormsg);
+			osresult->setGeneralStatusType("error");
+			osrl = osrlwriter->writeOSrL(osresult);
+		}else{
+			osrl = eclass.errormsg;
+		}
 		if (osoptions->osrlFile != "") {
 			//fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
 			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
@@ -1129,10 +1111,14 @@ void solve() {
 			std::cout << osrl << std::endl;
 		}
 		//catch garbage collection
-		delete osresult;
-		osresult = NULL;
-		delete osrlwriter;
-		osrlwriter = NULL;
+		if(osresult != NULL){
+			delete osresult;
+			osresult = NULL;
+		}
+		if(osrlwriter != NULL){
+			delete osrlwriter;
+			osrlwriter = NULL;
+		}
 
 		//regular garbage collection
 		if (osilreader != NULL)
@@ -1172,21 +1158,36 @@ void getJobID() {
 	} catch (const ErrorClass& eclass) {
 		FileUtil *fileUtil = NULL;
 		fileUtil = new FileUtil();
-		OSResult *osresult = NULL;
+		
+		
+		std::string osrl = "";
+        OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage(eclass.errormsg);
-		osresult->setGeneralStatusType("error");
-		std::string osrl = osrlwriter->writeOSrL(osresult);
-		if (osoptions->osrlFile != "")
-			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else
-			cout << osrl << endl;
-		delete osresult;
-		osresult = NULL;
-		delete osrlwriter;
-		osrlwriter = NULL;
+		//first check to see if we already have OSrL,
+		//if so don't create a new osresult object
+		string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+		if(pos1 == std::string::npos){
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage(eclass.errormsg);
+			osresult->setGeneralStatusType("error");
+			osrl = osrlwriter->writeOSrL(osresult);
+		}else{
+			osrl = eclass.errormsg;
+		}
+		
+		
+		//catch garbage collection
+		if(osresult != NULL){
+			delete osresult;
+			osresult = NULL;
+		}
+		if(osrlwriter != NULL){
+			delete osrlwriter;
+			osrlwriter = NULL;
+		}
+		
+		
 		delete fileUtil;
 		fileUtil = NULL;
 	}
@@ -1234,21 +1235,31 @@ void knock() {
 		delete fileUtil;
 		fileUtil = NULL;
 	} catch (const ErrorClass& eclass) {
-		OSResult *osresult = NULL;
+		std::string osrl = "";
+        OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage(eclass.errormsg);
-		osresult->setGeneralStatusType("error");
-		std::string osrl = osrlwriter->writeOSrL(osresult);
-		if (osoptions->osrlFile != "")
-			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else
-			cout << osrl << endl;
-		delete osresult;
-		osresult = NULL;
-		delete osrlwriter;
-		osrlwriter = NULL;
+		//first check to see if we already have OSrL,
+		//if so don't create a new osresult object
+		string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+		if(pos1 == std::string::npos){
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage(eclass.errormsg);
+			osresult->setGeneralStatusType("error");
+			std::string osrl = osrlwriter->writeOSrL(osresult);
+		}else{
+			osrl = eclass.errormsg;
+		}
+
+		if(osresult != NULL){
+			delete osresult;
+			osresult = NULL;
+		}
+		if(osrlwriter != NULL){
+			delete osrlwriter;
+			osrlwriter = NULL;
+		}		
+		
 		delete fileUtil;
 		fileUtil = NULL;
 	}
@@ -1301,23 +1312,38 @@ void send() {
 			throw ErrorClass("please specify service location (url)");
 		}
 	} catch (const ErrorClass& eclass) {
+		std::string osrl = "";
 		FileUtil *fileUtil = NULL;
 		fileUtil = new FileUtil();
 		OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage(eclass.errormsg);
-		osresult->setGeneralStatusType("error");
-		std::string osrl = osrlwriter->writeOSrL(osresult);
+		//first check to see if we already have OSrL,
+		//if so don't create a new osresult object
+		string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+		if(pos1 == std::string::npos){
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage(eclass.errormsg);
+			osresult->setGeneralStatusType("error");
+			osrl = osrlwriter->writeOSrL(osresult);
+		}else{
+			osrl = eclass.errormsg;
+		}
+		
+		
 		if (osoptions->osrlFile != "")
 			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
 		else
 			cout << osrl << endl;
-		delete osresult;
-		osresult = NULL;
-		delete osrlwriter;
-		osrlwriter = NULL;
+		
+		if(osresult != NULL){
+			delete osresult;
+			osresult = NULL;
+		}
+		if(osrlwriter != NULL){
+			delete osrlwriter;
+			osrlwriter = NULL;
+		}
 		delete fileUtil;
 		fileUtil = NULL;
 	}
@@ -1373,21 +1399,33 @@ void retrieve() {
 		delete fileUtil;
 		fileUtil = NULL;
 	} catch (const ErrorClass& eclass) {
-		OSResult *osresult = NULL;
+
+		std::string osrl = "";
+        OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage(eclass.errormsg);
-		osresult->setGeneralStatusType("error");
-		std::string osrl = osrlwriter->writeOSrL(osresult);
-		if (osoptions->osrlFile != "")
-			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else
-			cout << osrl << endl;
-		delete osresult;
-		osresult = NULL;
-		delete osrlwriter;
-		osrlwriter = NULL;
+		//first check to see if we already have OSrL,
+		//if so don't create a new osresult object
+		string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+		if(pos1 == std::string::npos){
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage(eclass.errormsg);
+			osresult->setGeneralStatusType("error");
+			osrl = osrlwriter->writeOSrL(osresult);
+		}else{
+			osrl = eclass.errormsg;
+		}
+
+		if(osresult != NULL){
+			delete osresult;
+			osresult = NULL;
+		}
+		if(osrlwriter != NULL){
+			delete osrlwriter;
+			osrlwriter = NULL;
+		}
+		
+		
 		delete fileUtil;
 		fileUtil = NULL;
 	}
@@ -1438,21 +1476,33 @@ void kill() {
 		delete fileUtil;
 		fileUtil = NULL;
 	} catch (const ErrorClass& eclass) {
-		OSResult *osresult = NULL;
+		std::string osrl = "";
+        OSResult *osresult = NULL;
 		OSrLWriter *osrlwriter = NULL;
-		osrlwriter = new OSrLWriter();
-		osresult = new OSResult();
-		osresult->setGeneralMessage(eclass.errormsg);
-		osresult->setGeneralStatusType("error");
-		std::string osrl = osrlwriter->writeOSrL(osresult);
-		if (osoptions->osrlFile != "")
-			fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-		else
-			cout << osrl << endl;
-		delete osresult;
-		osresult = NULL;
-		delete osrlwriter;
-		osrlwriter = NULL;
+		//first check to see if we already have OSrL,
+		//if so don't create a new osresult object
+		string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+		if(pos1 == std::string::npos){
+			osrlwriter = new OSrLWriter();
+			osresult = new OSResult();
+			osresult->setGeneralMessage(eclass.errormsg);
+			osresult->setGeneralStatusType("error");
+			osrl = osrlwriter->writeOSrL(osresult);
+		}else{
+			osrl = eclass.errormsg;
+		}
+		
+		
+		if(osresult != NULL){
+			delete osresult;
+			osresult = NULL;
+		}
+		if(osrlwriter != NULL){
+			delete osrlwriter;
+			osrlwriter = NULL;
+		}
+		
+		
 		delete fileUtil;
 		fileUtil = NULL;
 	}

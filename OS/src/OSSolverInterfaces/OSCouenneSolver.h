@@ -37,9 +37,19 @@
 //#include "BonIpoptSolver.hpp"
 
 //Couenne stuff
+#include "CouenneConfig.h"
+#ifdef COUENNE_VERSION_MAJOR
+#define COUENNE_NEW
+#endif
 //#include "CouenneProblem.hpp"
+#ifdef COUENNE_NEW
+namespace Couenne {
+#endif
 class CouenneProblem;
 class expression;
+#ifdef COUENNE_NEW
+}
+#endif
 #include "BonCbc.hpp"
 #include "BonCouenneSetup.hpp"
 
@@ -135,7 +145,11 @@ public:
 	 */		
 	OSoLReader *m_osolreader;
 		
+#ifdef COUENNE_NEW
+	Couenne::CouenneProblem *couenne;
+#else
 	CouenneProblem *couenne;
+#endif
 		
 	//Ipopt::SmartPtr<TMINLP> tminlp;
 	SmartPtr<BonminProblem> tminlp;
@@ -149,18 +163,29 @@ public:
 	
 	TMINLP::SolverReturn status;
 	
+#ifdef COUENNE_NEW
+	Couenne::expression *con_body;	
+	Couenne::expression *obj_body;
+#else
 	expression *con_body;	
 	expression *obj_body;
-
+#endif
 
 private:
 	OSrLWriter  *osrlwriter;
 	
+#ifdef COUENNE_NEW
+	Couenne::CouenneSetup couenneSetup;
+#else
 	CouenneSetup couenneSetup;
-
+#endif
 	std::string couenneErrorMsg;
 
+#ifdef COUENNE_NEW
+	Couenne::expression* createCouenneExpression(OSnLNode* node);
+#else
 	expression* createCouenneExpression(OSnLNode* node);
+#endif
 };
 
 

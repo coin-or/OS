@@ -2,15 +2,13 @@
 /** @file OSResult.cpp
  * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 19/07/2009
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2009, Robert Fourer, Jun Ma, Horand Gassmann, Kipp Martin,
- * Northwestern University, Dalhousie University and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -26,10 +24,9 @@
 #include<sstream>
 
 //#define DEBUG_OSRESULT
-//#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
+#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
 //#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
 //#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
-//#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
 
@@ -147,87 +144,16 @@ GeneralResult::~GeneralResult(){
 	cout << "GeneralResult Destructor Called" << endl;
 	#endif
 	if (generalStatus != NULL)
-	{	delete generalStatus;
+	{	
+		delete generalStatus;
 		generalStatus = NULL;
 	}
 	if (otherResults != NULL)
-	{	delete otherResults;
+	{	
+		delete otherResults;
 		otherResults = NULL;
 	}
 }// end GeneralResult destructor
-
-
-DiskSpace::DiskSpace():
-	unit( "byte"),
-	description( ""),
-	value( 0.0)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the DiskSpace Constructor" << endl;
-	#endif
-}// end DiskSpace constructor
-
-DiskSpace::~DiskSpace()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the DiskSpace Destructor" << endl;
-	#endif
-}// end DiskSpace destructor
-
-
-
-MemorySize::MemorySize():
-	unit( "byte"),
-	description( ""),
-	value( 0.0)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the MemorySize Constructor" << endl;
-	#endif
-}// end MemorySize constructor
-
-MemorySize::~MemorySize()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the MemorySize Destructor" << endl;
-	#endif
-}// end MemorySize destructor
-
-
-CPUSpeed::CPUSpeed():
-	unit( "hertz"),
-	description( ""),
-	value( 0.0)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUSpeed Constructor" << endl;
-	#endif
-}// end CPUSpeed constructor
-
-CPUSpeed::~CPUSpeed()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUSpeed Destructor" << endl;
-	#endif
-}// end CPUSpeed destructor
-
-
-CPUNumber::CPUNumber():
-	description( ""),
-	value( 1)
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUNumber Constructor" << endl;
-	#endif
-}// end CPUNumber constructor
-
-CPUNumber::~CPUNumber()
-{
-	#ifdef DEBUG_OSRESULT
-	cout << "Inside the CPUNumber Destructor" << endl;
-	#endif
-}// end CPUNumber destructor
-
 
 SystemResult::SystemResult():
 	systemInformation(""),
@@ -294,7 +220,7 @@ ServiceResult::~ServiceResult(){
 	}
 }// end ServiceResult destructor
 
-
+#if 0
 Time::Time():
 	type("elapsedTime"),
 	category("total"),
@@ -314,7 +240,26 @@ Time::~Time(){
 	#endif
 
 }// end Time destructor
+#endif
 
+TimeMeasurement::TimeMeasurement():
+	TimeSpan(),
+	type("elapsedTime"),
+	category("total"),
+	description("")
+{ 
+	#ifdef DEBUG_OSRESULT
+	cout << "Inside the TimeMeasurement Constructor" << endl;
+	#endif
+}//end TimeMeasurement constructor
+
+
+TimeMeasurement::~TimeMeasurement(){
+	#ifdef DEBUG_OSRESULT  
+	cout << "Inside the TimeMeasurement Destructor" << endl;
+	#endif
+
+}// end TimeMeasurement destructor
 
 TimingInformation::TimingInformation():
 	numberOfTimes(0),
@@ -714,6 +659,14 @@ OtherObjectiveResult::~OtherObjectiveResult(){
 		delete[] obj; 
 		obj = NULL;
 	}
+	if (enumeration != NULL)
+	{	for(int i = 0; i < numberOfEnumerations; i++){
+			delete enumeration[i];
+			enumeration[i] = NULL;
+		}
+		delete[] enumeration;
+		enumeration = NULL;
+	}
 }// end OtherObjectiveResult destructor
 
 
@@ -841,6 +794,14 @@ OtherConstraintResult::~OtherConstraintResult(){
 		}
 		delete[] con;
 		con = NULL;
+	}
+	if (enumeration != NULL)
+	{	for(int i = 0; i < numberOfEnumerations; i++){
+			delete enumeration[i];
+			enumeration[i] = NULL;
+		}
+		delete[] enumeration;
+		enumeration = NULL;
 	}
 }// end OtherConstraintResult destructor
 
@@ -1038,7 +999,7 @@ OtherSolverOutput::~OtherSolverOutput(){
 
 
 OptimizationResult::OptimizationResult():
-	numberOfSolutions( -1),
+	numberOfSolutions(0),
 	numberOfVariables( -1),
 	numberOfObjectives( -1),
 	numberOfConstraints(-1),
@@ -1085,11 +1046,12 @@ OSResult::OSResult():
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the OSResult Constructor" << endl;
 	#endif
-	this->general = new GeneralResult();
-	this->system = new SystemResult();
-	this->service = new ServiceResult();
-	this->job = new JobResult();
-	this->optimization = new OptimizationResult();
+	resultHeader = NULL;
+	general = NULL;
+	system = NULL;
+	service = NULL;
+	job = NULL;
+	optimization = NULL;
 }// end OSResult constructor  
 
 OSResult::~OSResult(){
@@ -1097,40 +1059,63 @@ OSResult::~OSResult(){
 	cout << "OSResult Destructor Called" << endl;
 	#endif
 	// delete the children of OSResult
+	// delete resultHeader object
+	if (resultHeader != NULL) 
+	{
+		delete resultHeader;
+		resultHeader = NULL;
+	}
 	// delete general object
-	if(general != NULL) delete general;
-	general = NULL;
+	if (general != NULL) 
+	{
+		delete general;
+		general = NULL;
+	}
 	//delete system object
-	if(system != NULL)  delete system;
-	system = NULL;
+	if (system != NULL)  
+	{
+		delete system;
+		system = NULL;
+	}
 	//delete service object
-	if(service != NULL)  delete service;
-	service = NULL;
+	if (service != NULL)  
+	{
+		delete service;
+		service = NULL;
+	}
 	//delete job object
-	if(job != NULL)  delete job;
-	job = NULL;
+	if (job != NULL)  
+	{
+		delete job;
+		job = NULL;
+	}
 	//delete optimization object
-	if(optimization != NULL)  delete optimization;
-	optimization = NULL;
+	if (optimization != NULL)  
+	{
+		delete optimization;
+		optimization = NULL;
+	}
 	
 	int k;
 
-	if(m_mdPrimalValues != NULL) delete[] m_mdPrimalValues;
+	if (m_mdPrimalValues != NULL) delete[] m_mdPrimalValues;
 	m_mdPrimalValues = 0;
-	if(m_mdDualValues != NULL) delete[] m_mdDualValues;
+
+	if (m_mdDualValues != NULL) delete[] m_mdDualValues;
 	m_mdDualValues = 0;
 	
 	int numPrimalVals =  this->primalVals.size();
-  	for(k = 0; k < numPrimalVals; k++){	
-  		if( this->primalVals[ k]  != NULL  ) 
+  	for (k = 0; k < numPrimalVals; k++)
+	{
+  		if (this->primalVals[ k]  != NULL  ) 
 			delete this->primalVals[ k];
   	}
   	this->primalVals.clear();
 	
-	
 	int numDualVals =  this->dualVals.size();
-  	for(k = 0; k < numDualVals; k++){
-  		if( this->dualVals[ k]  != NULL  ) 
+  	for (k = 0; k < numDualVals; k++)
+	{
+  		if (this->dualVals[ k]  != NULL  ) 
 			delete this->dualVals[ k];
   	}
   	this->dualVals.clear();
@@ -1831,6 +1816,79 @@ std::string OSResult::getVarValueString(int solIdx, int varIdx){
 	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->value;
 }//getVarValueString
 
+int OSResult::getBasisStatusNumberOfEl(int solIdx, int object, int status)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getBasisStatusNumberOfEl()");
+	if (optimization->solution[solIdx] == NULL) return -1;
+
+	switch (object)
+	{
+		case ENUM_PROBLEM_COMPONENT_variables:
+		{
+			if (optimization->solution[solIdx]->variables == NULL) return -1;
+			if (optimization->solution[solIdx]->variables->basisStatus == NULL) return -1;
+			return optimization->solution[solIdx]->variables->basisStatus->getNumberOfEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_objectives:
+		{
+			if (optimization->solution[solIdx]->objectives == NULL) return -1;
+			if (optimization->solution[solIdx]->objectives->basisStatus == NULL) return -1;
+			return optimization->solution[solIdx]->objectives->basisStatus->getNumberOfEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_constraints:
+		{
+			if (optimization->solution[solIdx]->constraints == NULL) return -1;
+			if (optimization->solution[solIdx]->constraints->basisStatus == NULL) return -1;
+			return optimization->solution[solIdx]->constraints->basisStatus->getNumberOfEl(status);
+		}
+		default: 
+			throw ErrorClass("target object not implemented in getBasisStatusNumberOfEl");
+	}
+}//getBasisStatusNumberOfEl
+
+int OSResult::getBasisStatusEl(int solIdx, int object, int status, int j)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getBasisStatusEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getBasisStatusEl()");
+
+	switch (object)
+	{
+		case ENUM_PROBLEM_COMPONENT_variables:
+		{
+			if (optimization->solution[solIdx]->variables == NULL) 
+				throw ErrorClass("variables result never defined in routine getBasisStatusEl()");
+			if (optimization->solution[solIdx]->variables->basisStatus == NULL)
+				throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
+			return optimization->solution[solIdx]->variables->basisStatus->getEl(status, j);
+		}
+		case ENUM_PROBLEM_COMPONENT_objectives:
+		{
+			if (optimization->solution[solIdx]->objectives == NULL) 
+				throw ErrorClass("objectives result never defined in routine getBasisStatusEl()");
+			if (optimization->solution[solIdx]->objectives->basisStatus == NULL) 
+				throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
+			return optimization->solution[solIdx]->objectives->basisStatus->getEl(status, j);
+		}
+		case ENUM_PROBLEM_COMPONENT_constraints:
+		{
+			if (optimization->solution[solIdx]->constraints == NULL)
+				throw ErrorClass("constraints result never defined in routine getBasisStatusEl()");
+			if (optimization->solution[solIdx]->constraints->basisStatus == NULL) 
+				throw ErrorClass("basis status never defined in routine getBasisStatusEl()");
+			return optimization->solution[solIdx]->constraints->basisStatus->getEl(status, j);
+		}
+		default: 
+			throw ErrorClass("target object not implemented in getBasisStatusEl");
+	}
+}//getBasisStatusEl
+
 /*
 int OSResult::getNumberOfBasisVar(int solIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
@@ -1993,6 +2051,320 @@ string OSResult::getOtherVariableResultVar(int solIdx, int otherIdx, int varIdx)
 		throw ErrorClass("varIdx is outside of range in routine getOtherVariableResultVar()");
 	return optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->value;
 }//getOtherVariableResultVar
+
+
+int OSResult::getOtherVariableResultNumberOfEnumerations(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultNumberOfEnumerations()");
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->variables == NULL) return -1;
+	if (optimization->solution[solIdx]->variables->other == NULL) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultNumberOfEnumerations()");
+	if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return -1;
+	return optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfEnumerations;
+}//getOtherVariableResultNumberOfEnumerations
+
+
+std::string OSResult::getOtherVariableResultEnumerationValue(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultEnumerationValue()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherVariableResultEnumerationValue()");
+
+	if (optimization->solution[solIdx]->variables == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherVariableResultEnumerationValue()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultEnumerationValue()");
+	if (optimization->solution[solIdx]->variables->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherVariableResultEnumerationValue()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherVariableResultEnumerationValue()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherVariableResultEnumerationValue()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->variables->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherVariableResultEnumerationValue()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherVariableResultEnumerationValue()");
+
+	return optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx]->value;
+}//getOtherVariableResultEnumerationValue
+
+std::string OSResult::getOtherVariableResultEnumerationDescription(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultEnumerationDescription()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherVariableResultEnumerationDescription()");
+
+	if (optimization->solution[solIdx]->variables == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherVariableResultEnumerationDescription()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->variables->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherVariableResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherVariableResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherVariableResultEnumerationDescription()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->variables->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherVariableResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherVariableResultEnumerationDescription()");
+
+	return optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx]->description;
+}//getOtherVariableResultEnumerationDescription
+
+int OSResult::getOtherVariableResultEnumerationNumberOfEl(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherVariableResultEnumerationNumberOfEl()");
+
+	if (optimization->solution[solIdx]->variables == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherVariableResultEnumerationNumberOfEl()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->variables->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherVariableResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherVariableResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherVariableResultEnumerationNumberOfEl()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->variables->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherVariableResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherVariableResultEnumerationNumberOfEl()");
+
+	return optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx]->numberOfEl;
+}//getOtherVariableResultEnumerationNumberOfEl
+
+int OSResult::getOtherVariableResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultEnumerationEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherVariableResultEnumerationEl()");
+
+	if (optimization->solution[solIdx]->variables == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherVariableResultEnumerationEl()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultEnumerationEl()");
+	if (optimization->solution[solIdx]->variables->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherVariableResultEnumerationEl()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherVariableResultEnumerationEl()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherVariableResultEnumerationEl()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->variables->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherVariableResultEnumerationEl()");
+	if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherVariableResultEnumerationEl()");
+
+	return optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx]->getEl(j);
+}//getOtherVariableResultEnumerationEl
+
+/*
+int* OSResult::getOtherOptionResultName(int solIdx, int otherIdx, char object, int status)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherOptionResultEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherOptionResultEl()");
+
+	switch (object)
+	{
+		case ENUM_PROBLEM_COMPONENT_variables:
+		{
+			if (optimization->solution[solIdx]->variables == NULL) 
+				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->variables->other == NULL)
+				throw ErrorClass("other variable array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_objectives:
+		{
+			if (optimization->solution[solIdx]->objectives == NULL) 
+				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->objectives->other == NULL) 
+				throw ErrorClass("other objective array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_constraints:
+		{
+			if (optimization->solution[solIdx]->constraints == NULL)
+				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->constraints->other == NULL) 
+				throw ErrorClass("other constraint array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->constraints->other[otherIdx]->getEl(status);
+		}
+		default: 
+			throw ErrorClass("target object not implemented in getOtherOptionResultEl");
+	}
+}//getOtherOptionResultEl
+
+
+int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int status)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherOptionResultEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherOptionResultEl()");
+
+	switch (object)
+	{
+		case ENUM_PROBLEM_COMPONENT_variables:
+		{
+			if (optimization->solution[solIdx]->variables == NULL) 
+				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->variables->other == NULL)
+				throw ErrorClass("other variable array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_objectives:
+		{
+			if (optimization->solution[solIdx]->objectives == NULL) 
+				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->objectives->other == NULL) 
+				throw ErrorClass("other objective array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_constraints:
+		{
+			if (optimization->solution[solIdx]->constraints == NULL)
+				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->constraints->other == NULL) 
+				throw ErrorClass("other constraint array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->constraints->other[otherIdx]->getEl(status);
+		}
+		default: 
+			throw ErrorClass("target object not implemented in getOtherOptionResultEl");
+	}
+}//getOtherOptionResultEl
+
+
+int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int status)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherOptionResultEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherOptionResultEl()");
+
+	switch (object)
+	{
+		case ENUM_PROBLEM_COMPONENT_variables:
+		{
+			if (optimization->solution[solIdx]->variables == NULL) 
+				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->variables->other == NULL)
+				throw ErrorClass("other variable array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_objectives:
+		{
+			if (optimization->solution[solIdx]->objectives == NULL) 
+				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->objectives->other == NULL) 
+				throw ErrorClass("other objective array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_constraints:
+		{
+			if (optimization->solution[solIdx]->constraints == NULL)
+				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->constraints->other == NULL) 
+				throw ErrorClass("other constraint array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->constraints->other[otherIdx]->getEl(status);
+		}
+		default: 
+			throw ErrorClass("target object not implemented in getOtherOptionResultEl");
+	}
+}//getOtherOptionResultEl
+
+
+int* OSResult::getOtherOptionResultEl(int solIdx, int otherIdx, char object, int status)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherOptionResultEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherOptionResultEl()");
+
+	switch (object)
+	{
+		case ENUM_PROBLEM_COMPONENT_variables:
+		{
+			if (optimization->solution[solIdx]->variables == NULL) 
+				throw ErrorClass("variables result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->variables->other == NULL)
+				throw ErrorClass("other variable array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->variables->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_objectives:
+		{
+			if (optimization->solution[solIdx]->objectives == NULL) 
+				throw ErrorClass("objectives result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->objectives->other == NULL) 
+				throw ErrorClass("other objective array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->objectives->other[otherIdx]->getEl(status);
+		}
+		case ENUM_PROBLEM_COMPONENT_constraints:
+		{
+			if (optimization->solution[solIdx]->constraints == NULL)
+				throw ErrorClass("constraints result never defined in routine getOtherOptionResultEl()");
+			if (optimization->solution[solIdx]->constraints->other == NULL) 
+				throw ErrorClass("other constraint array never defined in routine getOtherOptionResultEl()");
+			if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+				throw ErrorClass("otherIdx is outside of range in routine getOtherOptionResultEl()");
+			return optimization->solution[solIdx]->constraints->other[otherIdx]->getEl(status);
+		}
+		default: 
+			throw ErrorClass("target object not implemented in getOtherOptionResultEl");
+	}
+}//getOtherOptionResultEl
+*/
 
 int OSResult::getNumberOfObjValues(int solIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
@@ -2160,6 +2532,136 @@ string OSResult::getOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx
 		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultObj()");
 	return optimization->solution[solIdx]->objectives->other[otherIdx]->obj[objIdx]->value;
 }//getOtherObjectiveResultObj
+
+
+int OSResult::getOtherObjectiveResultNumberOfEnumerations(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultNumberOfEnumerations()");
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->objectives == NULL) return -1;
+	if (optimization->solution[solIdx]->objectives->other == NULL) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultNumberOfEnumerations()");
+	if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return -1;
+	return optimization->solution[solIdx]->objectives->other[ otherIdx]->numberOfEnumerations;
+}//getOtherObjectiveResultNumberOfEnumerations
+
+
+std::string OSResult::getOtherObjectiveResultEnumerationValue(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultEnumerationValue()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherObjectiveResultEnumerationValue()");
+
+	if (optimization->solution[solIdx]->objectives == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherObjectiveResultEnumerationValue()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultEnumerationValue()");
+	if (optimization->solution[solIdx]->objectives->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherObjectiveResultEnumerationValue()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherObjectiveResultEnumerationValue()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherObjectiveResultEnumerationValue()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->objectives->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherObjectiveResultEnumerationValue()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherObjectiveResultEnumerationValue()");
+
+	return optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx]->value;
+}//getOtherObjectiveResultEnumerationValue
+
+
+std::string OSResult::getOtherObjectiveResultEnumerationDescription(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultEnumerationDescription()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherObjectiveResultEnumerationDescription()");
+
+	if (optimization->solution[solIdx]->objectives == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherObjectiveResultEnumerationDescription()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->objectives->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherObjectiveResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherObjectiveResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherObjectiveResultEnumerationDescription()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->objectives->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherObjectiveResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherObjectiveResultEnumerationDescription()");
+
+	return optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx]->description;
+}//getOtherObjectiveResultEnumerationDescription
+
+
+int OSResult::getOtherObjectiveResultEnumerationNumberOfEl(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+
+	if (optimization->solution[solIdx]->objectives == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->objectives->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->objectives->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherObjectiveResultEnumerationNumberOfEl()");
+
+	return optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx]->numberOfEl;
+}//getOtherObjectiveResultEnumerationNumberOfEl
+
+
+int OSResult::getOtherObjectiveResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultEnumerationEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherObjectiveResultEnumerationEl()");
+
+	if (optimization->solution[solIdx]->objectives == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherObjectiveResultEnumerationEl()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultEnumerationEl()");
+	if (optimization->solution[solIdx]->objectives->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherObjectiveResultEnumerationEl()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherObjectiveResultEnumerationEl()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherObjectiveResultEnumerationEl()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->objectives->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherObjectiveResultEnumerationEl()");
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherObjectiveResultEnumerationEl()");
+
+	return optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[enumIdx]->getEl(j);
+}//getOtherObjectiveResultEnumerationEl
+
+
 
 int OSResult::getNumberOfDualValues(int solIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
@@ -2336,6 +2838,134 @@ string OSResult::getOtherConstraintResultCon(int solIdx, int otherIdx, int conId
 	return optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->value;
 }//getOtherConstraintResultCon
 
+
+int OSResult::getOtherConstraintResultNumberOfEnumerations(int solIdx, int otherIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultNumberOfEnumerations()");
+	if (optimization->solution[solIdx] == NULL) return -1;
+	if (optimization->solution[solIdx]->constraints == NULL) return -1;
+	if (optimization->solution[solIdx]->constraints->other == NULL) return -1;
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultNumberOfEnumerations()");
+	if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return -1;
+	return optimization->solution[solIdx]->constraints->other[ otherIdx]->numberOfEnumerations;
+}//getOtherConstraintResultNumberOfEnumerations
+
+
+std::string OSResult::getOtherConstraintResultEnumerationValue(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultEnumerationValue()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationValue()");
+
+	if (optimization->solution[solIdx]->constraints == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationValue()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationValue()");
+	if (optimization->solution[solIdx]->constraints->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationValue()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationValue()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationValue()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherConstraintResultEnumerationValue()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherConstraintResultEnumerationValue()");
+
+	return optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx]->value;
+}//getOtherConstraintResultEnumerationValue
+
+
+std::string OSResult::getOtherConstraintResultEnumerationDescription(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultEnumerationDescription()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationDescription()");
+
+	if (optimization->solution[solIdx]->constraints == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationDescription()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->constraints->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationDescription()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherConstraintResultEnumerationDescription()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherConstraintResultEnumerationDescription()");
+
+	return optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx]->description;
+}//getOtherConstraintResultEnumerationDescription
+
+int OSResult::getOtherConstraintResultEnumerationNumberOfEl(int solIdx,int otherIdx, int enumIdx)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+
+	if (optimization->solution[solIdx]->constraints == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->constraints->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherConstraintResultEnumerationNumberOfEl()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+
+	return optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx]->numberOfEl;
+}//getOtherConstraintResultEnumerationNumberOfEl
+
+int OSResult::getOtherConstraintResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j)
+{
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultEnumerationEl()");
+	if (optimization->solution[solIdx] == NULL) 
+		throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationEl()");
+
+	if (optimization->solution[solIdx]->constraints == NULL) 
+		throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationEl()");
+	if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+		throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationEl()");
+	if (optimization->solution[solIdx]->constraints->other == NULL)
+		throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationEl()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
+		throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationEl()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
+		throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationEl()");
+	if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
+		throw ErrorClass("enumIdx is outside of range in routine getOtherConstraintResultEnumerationEl()");
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx] == NULL)
+		throw ErrorClass("enumeration never defined in routine getOtherConstraintResultEnumerationEl()");
+
+	return optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx]->getEl(j);
+}//getOtherConstraintResultEnumerationEl
+
+
+
 int OSResult::getNumberOfOtherSolutionResults(int solIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
 		throw ErrorClass("No solution defined");
@@ -2475,28 +3105,45 @@ string OSResult::getSolverOutputItem(int otherIdx, int itemIdx){
 //==================================================================
 // set methods
 
-bool OSResult::setGeneralStatus(GeneralStatus *status){
+bool OSResult::setResultHeader(std::string name, std::string source, 
+		           std::string fileCreator, std::string description, std::string licence)
+{
+	if (this->resultHeader == NULL) 
+		this->resultHeader = new GeneralFileHeader();
+	return this->resultHeader->setHeader(name, source, fileCreator, description, licence);
+}// end of OSResult::setResultHeader
+
+bool OSResult::setGeneralStatus(GeneralStatus *status)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus = status;
 	return true;
 }//setGeneralStatus
 
-bool OSResult::setGeneralStatusType(string type){
+bool OSResult::setGeneralStatusType(string type)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (verifyGeneralResultStatus(type) == 0) return false;
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->type = type;
 	return true;
 }//setGeneralStatusType
 
-bool OSResult::setGeneralStatusDescription(string description){
+bool OSResult::setGeneralStatusDescription(string description)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	general->generalStatus->description = description;
 	return true;
 }//setGeneralStatusDescription
 
-bool OSResult::setNumberOfGeneralSubstatuses(int num){
-	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
+bool OSResult::setNumberOfGeneralSubstatuses(int num)
+{
 	if (num < 0) return false;
+
+	if (general == NULL) general = new GeneralResult();
+	if (general->generalStatus == NULL) general->generalStatus = new GeneralStatus();
 	if (general->generalStatus->substatus != NULL) return false;
 	general->generalStatus->numberOfSubstatuses = num;
 	if (num > 0)
@@ -2507,56 +3154,76 @@ bool OSResult::setNumberOfGeneralSubstatuses(int num){
 	return true;
 }//setNumberOfGeneralSubstatuses
 
-bool OSResult::setGeneralSubstatusName(int idx, string name){
+bool OSResult::setGeneralSubstatusName(int idx, string name)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) return false;
 	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
 	general->generalStatus->substatus[idx]->name = name;
 	return true;
 }//setGeneralSubstatusName
 
-bool OSResult::setGeneralSubstatusDescription(int idx, string description){
+bool OSResult::setGeneralSubstatusDescription(int idx, string description)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->generalStatus == NULL) return false;
 	if (idx < 0 || idx >= general->generalStatus->numberOfSubstatuses) return false;
 	general->generalStatus->substatus[idx]->description = description;
 	return true;
 }//setGeneralSubstatusDescription
 
-bool OSResult::setGeneralMessage(string message){
+bool OSResult::setGeneralMessage(string message)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->message = message;
 	return true;
 }//setGeneralMessage
 
-bool OSResult::setServiceName(string serviceName){
+bool OSResult::setServiceName(string serviceName)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->serviceName = serviceName;
 	return true;
 }//setServiceName
 
-bool OSResult::setServiceURI(string serviceURI){
+bool OSResult::setServiceURI(string serviceURI)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->serviceURI = serviceURI;
 	return true;
 }//setServiceURI
 
-bool OSResult::setInstanceName(string instanceName){
+bool OSResult::setInstanceName(string instanceName)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->instanceName = instanceName;
 	return true;
 }//setInstanceName
 
-bool OSResult::setJobID(string jobID){
+bool OSResult::setJobID(string jobID)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->jobID = jobID;
 	return true;
 }//setJobID
 
-bool OSResult::setSolverInvoked(string solverInvoked){
+bool OSResult::setSolverInvoked(string solverInvoked)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->solverInvoked = solverInvoked;
 	return true;
 }//setSolverInvoked
 		
-bool OSResult::setTimeStamp(string timeStamp){
+bool OSResult::setTimeStamp(string timeStamp)
+{
+	if (general == NULL) general = new GeneralResult();
 	general->timeStamp = timeStamp;
 	return true;
 }//setTimeStamp
 
-bool OSResult::setNumberOfOtherGeneralResults(int num){
+bool OSResult::setNumberOfOtherGeneralResults(int num)
+{
+	if (general == NULL) general = new GeneralResult();
 	if(general->otherResults == NULL) general->otherResults = new OtherResults();
 	if (num < 0) return false;
 	if (general->otherResults->other != NULL) return false;
@@ -2570,7 +3237,9 @@ bool OSResult::setNumberOfOtherGeneralResults(int num){
 }//setNumberOfOtherGeneralResults
 
 
-bool OSResult::setOtherGeneralResultName(int idx, string name){
+bool OSResult::setOtherGeneralResultName(int idx, string name)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return false;
@@ -2578,7 +3247,9 @@ bool OSResult::setOtherGeneralResultName(int idx, string name){
 	return true;
 }//setOtherGeneralResultName
 
-bool OSResult::setOtherGeneralResultValue(int idx, string value){
+bool OSResult::setOtherGeneralResultValue(int idx, string value)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return false;
@@ -2586,7 +3257,9 @@ bool OSResult::setOtherGeneralResultValue(int idx, string value){
 	return true;
 }//setOtherGeneralResultValue
 
-bool OSResult::setOtherGeneralResultDescription(int idx, string description){
+bool OSResult::setOtherGeneralResultDescription(int idx, string description)
+{
+	if (general == NULL) general = new GeneralResult();
 	if (general->otherResults == NULL) return false;
 	if (idx < 0 || idx >= general->otherResults->numberOfOtherResults) 
 		return false;
@@ -2594,49 +3267,59 @@ bool OSResult::setOtherGeneralResultDescription(int idx, string description){
 	return true;
 }//setOtherGeneralResultDescription
 
-bool OSResult::setSystemInformation(string systemInformation){
+bool OSResult::setSystemInformation(string systemInformation)
+{
+	if (system == NULL) system = new SystemResult();
 	system->systemInformation = systemInformation;
 	return true;
 }//setServiceName
 
 bool OSResult::setAvailableDiskSpaceUnit(std::string unit)
 {
-	if (system == NULL) return false;
-	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+	if (system == NULL) system = new SystemResult();
+	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	if (verifyStorageUnit(unit) == false) return false;
 	system->availableDiskSpace->unit = unit;
 	return true;
 }//setAvailableDiskSpaceUnit
 
 bool OSResult::setAvailableDiskSpaceDescription(std::string description)
-{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	system->availableDiskSpace->description = description;
 	return true;
 }//setAvailableDiskSpaceDescription
 
 bool OSResult::setAvailableDiskSpaceValue(double value)
-{	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new DiskSpace();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableDiskSpace == NULL) system->availableDiskSpace = new StorageCapacity();
 	system->availableDiskSpace->value = value;
 	return true;
 }//setAvailableDiskSpaceValue
 
 bool OSResult::setAvailableMemoryUnit(std::string unit)
 {
-	if (system == NULL) return false;
-	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+	if (system == NULL) system = new SystemResult();
+	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	if (verifyStorageUnit(unit) == false) return false;
 	system->availableMemory->unit = unit;
 	return true;
 }//setAvailableMemoryUnit
 
 bool OSResult::setAvailableMemoryDescription(std::string description)
-{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	system->availableMemory->description = description;
 	return true;
 }//setAvailableMemoryDescription
 
 bool OSResult::setAvailableMemoryValue(double value)
-{	if (system->availableMemory == NULL) system->availableMemory = new MemorySize();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableMemory == NULL) system->availableMemory = new StorageCapacity();
 	system->availableMemory->value = value;
 	return true;
 }//setAvailableMemoryValue
@@ -2651,30 +3334,40 @@ bool OSResult::setAvailableCPUSpeedUnit(std::string unit)
 }//setAvailableCPUSpeedUnit
 
 bool OSResult::setAvailableCPUSpeedDescription(std::string description)
-{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
 	system->availableCPUSpeed->description = description;
 	return true;
 }//setAvailableCPUSpeedDescription
 
 bool OSResult::setAvailableCPUSpeedValue(double value)
-{	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUSpeed == NULL) system->availableCPUSpeed = new CPUSpeed();
 	system->availableCPUSpeed->value = value;
 	return true;
 }//setAvailableCPUSpeedValue
 
 bool OSResult::setAvailableCPUNumberDescription(std::string description)
-{	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
 	system->availableCPUNumber->description = description;
 	return true;
 }//setAvailableCPUNumberDescription
 
 bool OSResult::setAvailableCPUNumberValue(int value)
-{	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
+{
+	if (system == NULL) system = new SystemResult();
+	if (system->availableCPUNumber == NULL) system->availableCPUNumber = new CPUNumber();
 	system->availableCPUNumber->value = value;
 	return true;
 }//setAvailableCPUNumberValue
 
-bool OSResult::setNumberOfOtherSystemResults(int num){
+bool OSResult::setNumberOfOtherSystemResults(int num)
+{
+	if (system == NULL) system = new SystemResult();
 	if(system->otherResults == NULL) system->otherResults = new OtherResults();
 	if (num < 0) return false;
 	if (system->otherResults->other != NULL) return false;
@@ -2688,7 +3381,9 @@ bool OSResult::setNumberOfOtherSystemResults(int num){
 }//setNumberOfOtherSystemResults
 
 
-bool OSResult::setOtherSystemResultName(int idx, string name){
+bool OSResult::setOtherSystemResultName(int idx, string name)
+{
+	if (system == NULL) system = new SystemResult();
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return false;
@@ -2696,7 +3391,9 @@ bool OSResult::setOtherSystemResultName(int idx, string name){
 	return true;
 }//setOtherSystemResultName
 
-bool OSResult::setOtherSystemResultValue(int idx, string value){
+bool OSResult::setOtherSystemResultValue(int idx, string value)
+{
+	if (system == NULL) system = new SystemResult();
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return false;
@@ -2704,7 +3401,9 @@ bool OSResult::setOtherSystemResultValue(int idx, string value){
 	return true;
 }//setOtherSystemResultValue
 
-bool OSResult::setOtherSystemResultDescription(int idx, string description){
+bool OSResult::setOtherSystemResultDescription(int idx, string description)
+{
+	if (system == NULL) system = new SystemResult();
 	if (system->otherResults == NULL) return false;
 	if (idx < 0 || idx >= system->otherResults->numberOfOtherResults) 
 		return false;
@@ -2712,35 +3411,49 @@ bool OSResult::setOtherSystemResultDescription(int idx, string description){
 	return true;
 }//setOtherSystemResultDescription
 
-bool OSResult::setCurrentState(std::string currentState){
+bool OSResult::setCurrentState(std::string currentState)
+{
 	if(verifySystemCurrentState(currentState) == 0) return false;
+
+	if (service == NULL) service = new ServiceResult();
 	service->currentState = currentState;
 	return true;
 }//setCurrentState
 
-bool OSResult::setCurrentJobCount(int jobCount){
+bool OSResult::setCurrentJobCount(int jobCount)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->currentJobCount = jobCount;
 	return true;
 }//setCurrentJobCount
 
-bool OSResult::setTotalJobsSoFar(int number){
+bool OSResult::setTotalJobsSoFar(int number)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->totalJobsSoFar = number;
 	return true;
 }//setTotalJobsSoFar
 
-bool OSResult::setTimeServiceStarted(std::string startTime){
+bool OSResult::setTimeServiceStarted(std::string startTime)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->timeServiceStarted = startTime;
 	return true;
 }//setTimeServiceStarted
 
-bool OSResult::setServiceUtilization(double value){
+bool OSResult::setServiceUtilization(double value)
+{
+	if (service == NULL) service = new ServiceResult();
 	service->serviceUtilization = value;
 	return true;
 }//setServiceUtilization
 
-bool OSResult::setNumberOfOtherServiceResults(int num){
-	if(service->otherResults == NULL) service->otherResults = new OtherResults();
+bool OSResult::setNumberOfOtherServiceResults(int num)
+{
 	if (num < 0) return false;
+
+	if (service == NULL) service = new ServiceResult();
+	if(service->otherResults == NULL) service->otherResults = new OtherResults();
 	if (service->otherResults->other != NULL) return false;
 	service->otherResults->numberOfOtherResults = num;
 	if (num > 0)
@@ -2751,7 +3464,9 @@ bool OSResult::setNumberOfOtherServiceResults(int num){
 	return true;
 }//setNumberOfOtherServiceResults
 
-bool OSResult::setOtherServiceResultName(int idx, string name){
+bool OSResult::setOtherServiceResultName(int idx, string name)
+{
+	if (service == NULL) service = new ServiceResult();
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return false;
@@ -2759,7 +3474,9 @@ bool OSResult::setOtherServiceResultName(int idx, string name){
 	return true;
 }//setOtherServiceResultName
 
-bool OSResult::setOtherServiceResultValue(int idx, string value){
+bool OSResult::setOtherServiceResultValue(int idx, string value)
+{
+	if (service == NULL) service = new ServiceResult();
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return false;
@@ -2767,7 +3484,9 @@ bool OSResult::setOtherServiceResultValue(int idx, string value){
 	return true;
 }//setOtherServiceResultValue
 
-bool OSResult::setOtherServiceResultDescription(int idx, string description){
+bool OSResult::setOtherServiceResultDescription(int idx, string description)
+{
+	if (service == NULL) service = new ServiceResult();
 	if (service->otherResults == NULL) return false;
 	if (idx < 0 || idx >= service->otherResults->numberOfOtherResults) 
 		return false;
@@ -2775,40 +3494,50 @@ bool OSResult::setOtherServiceResultDescription(int idx, string description){
 	return true;
 }//setOtherServiceResultDescription
 
-bool OSResult::setJobStatus(std::string status){
-	if (verifyJobStatus(status) == 0)
-		return false;
+bool OSResult::setJobStatus(std::string status)
+{
+	if (verifyJobStatus(status) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
 	job->status = status;
 	return true;
 }//setJobStatus
 	
-bool OSResult::setJobSubmitTime(std::string submitTime){
+bool OSResult::setJobSubmitTime(std::string submitTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->submitTime = submitTime;
 	return true;
 }//setJobSubmitTime
 	
-bool OSResult::setScheduledStartTime(std::string scheduledStartTime){
+bool OSResult::setScheduledStartTime(std::string scheduledStartTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->scheduledStartTime = scheduledStartTime;
 	return true;
 }//setScheduledStartTime
 	
-bool OSResult::setActualStartTime(std::string actualStartTime){
+bool OSResult::setActualStartTime(std::string actualStartTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->actualStartTime = actualStartTime;
 	return true;
 }//setActualStartTime
 	
-bool OSResult::setJobEndTime(std::string endTime){
+bool OSResult::setJobEndTime(std::string endTime)
+{
+	if (job == NULL) job = new JobResult();
 	job->endTime = endTime;
 	return true;
 }//setJobEndTime
 
-bool OSResult::setTime(double time){
-//	general->time = os_dtoa_format( time);
+bool OSResult::setTime(double time)
+{
 	return addTimingInformation("elapsedTime", "total", "second", "", time);
 }//setTime
 
-bool OSResult::addTimingInformation(std::string type, std::string category,
-									std::string unit, std::string description, double value)
+bool OSResult::addTimingInformation(std::string type, std::string category, std::string unit, std::string description, double value)
+
 {	int nt; int i;
 	if (verifyTimeUnit(unit) != true)
 		throw ErrorClass("Invalid unit of time in addTimingInformation()");
@@ -2816,14 +3545,14 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
 
 	nt = job->timingInformation->numberOfTimes;
-	Time** temp = new Time*[nt+1];  //Allocate the new pointers
+	TimeMeasurement** temp = new TimeMeasurement*[nt+1];  //Allocate the new pointers
 	for (i = 0; i < nt; i++)
 		temp[i] = job->timingInformation->time[i];  //copy the pointers
 
 	delete[] job->timingInformation->time; //delete old pointers
 	
 //	add in the new element
-	temp[ nt] = new Time();
+	temp[ nt] = new TimeMeasurement();
 
 	temp[ nt]->type = type;
 	temp[ nt]->category = category;
@@ -2841,14 +3570,14 @@ bool OSResult::addTimingInformation(std::string type, std::string category,
 bool OSResult::setTimingInformation(int idx, std::string type, std::string category,
 									std::string unit, std::string description, double value)
 {	
-	if (job == NULL) return false;
-	if (job->timingInformation == NULL) return false;
-	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
-		return false;
-
 	if (verifyTimeUnit(unit) == 0) return false;
 	if (verifyTimeType(type) == 0) return false;
 	if (verifyTimeCategory(category) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->timingInformation == NULL) return false;
+	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
+		return false;
 
 	job->timingInformation->time[idx]->type = type;
 	job->timingInformation->time[idx]->category = category;
@@ -2861,121 +3590,127 @@ bool OSResult::setTimingInformation(int idx, std::string type, std::string categ
 
 
 bool OSResult::setNumberOfTimes(int numberOfTimes)
-{	if (job == NULL) 
-		return false;
+{
+	if (numberOfTimes < 0) return false;
+
+	if (job == NULL) job = new JobResult();
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
-	if (numberOfTimes <= 0) return false;
 	job->timingInformation->numberOfTimes = numberOfTimes;
 	if (numberOfTimes > 0)
-	{	job->timingInformation->time = new Time*[numberOfTimes];
+	{	job->timingInformation->time = new TimeMeasurement*[numberOfTimes];
 		for(int i = 0; i < numberOfTimes; i++) 	
-			job->timingInformation->time[i] = new Time();
+			job->timingInformation->time[i] = new TimeMeasurement();
 	}
 	return true;
 }//setNumberOfTimes
 
-bool OSResult::setTimeNumber(int timeNumber)
-{	if (job == NULL) 
-		return false;
+bool OSResult::setTimeNumber(int numberOfTimes)
+{
+	if (numberOfTimes < 0) return false;
+
+	if (job == NULL) job = new JobResult();
 	if (job->timingInformation == NULL) job->timingInformation = new TimingInformation();
-	if (timeNumber <= 0) return false;
-	job->timingInformation->numberOfTimes = timeNumber;
+	job->timingInformation->numberOfTimes = numberOfTimes;
 	return true;
 }//setTimeNumber
 
 bool OSResult::setUsedDiskSpaceUnit(std::string unit)
-{	if (job == NULL) 
-		return false;
-	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+{
 	if (verifyStorageUnit(unit) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->unit = unit;
 	return true;
 }//setUsedDiskSpaceUnit
 
 bool OSResult::setUsedDiskSpaceDescription(std::string description)
-{	if (job == NULL) 
-		return false;
-	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+{
+	if (job == NULL) job = new JobResult();
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->description = description;
 	return true;
 }//setUsedDiskSpaceDescription
 
 bool OSResult::setUsedDiskSpaceValue(double value)
-{	if (job == NULL) 
-		return false;
-	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new DiskSpace();
+{
+	if (job == NULL) job = new JobResult();
+	if (job->usedDiskSpace == NULL) job->usedDiskSpace = new StorageCapacity();
 	job->usedDiskSpace->value = value;
 	return true;
 }//setUsedDiskSpaceValue
 
 bool OSResult::setUsedMemoryUnit(std::string unit)
-{	if (job == NULL) 
-		return false;
-	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+{
 	if (verifyStorageUnit(unit) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->unit = unit;
 	return true;
 }//setUsedMemoryUnit
 
 bool OSResult::setUsedMemoryDescription(std::string description)
-{	if (job == NULL) 
-		return false;
-	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+{
+	if (job == NULL) job = new JobResult();
+	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->description = description;
 	return true;
 }//setUsedMemoryDescription
 
 bool OSResult::setUsedMemoryValue(double value)
-{	if (job == NULL) 
-		return false;
-	if (job->usedMemory == NULL) job->usedMemory = new MemorySize();
+{
+	if (job == NULL) job = new JobResult();
+	if (job->usedMemory == NULL) job->usedMemory = new StorageCapacity();
 	job->usedMemory->value = value;
 	return true;
 }//setUsedMemoryValue
 
 bool OSResult::setUsedCPUSpeedUnit(std::string unit)
-{	if (job == NULL) 
-		return false;
-	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
+{
 	if ( verifyCPUSpeedUnit(unit) == 0) return false;
+
+	if (job == NULL) job = new JobResult();
+	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->unit = unit;
 	return true;
 }//setUsedCPUSpeedUnit
 
 bool OSResult::setUsedCPUSpeedDescription(std::string description)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->description = description;
 	return true;
 }//setUsedCPUSpeedDescription
 
 bool OSResult::setUsedCPUSpeedValue(double value)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUSpeed == NULL) job->usedCPUSpeed = new CPUSpeed();
 	job->usedCPUSpeed->value = value;
 	return true;
 }//setUsedCPUSpeedValue
 
 bool OSResult::setUsedCPUNumberDescription(std::string description)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->description = description;
 	return true;
 }//setUsedCPUNumberDescription
 
 bool OSResult::setUsedCPUNumberValue(int value)
-{	if (job == NULL) 
-		return false;
+{
+	if (job == NULL) job = new JobResult();
 	if (job->usedCPUNumber == NULL) job->usedCPUNumber = new CPUNumber();
 	job->usedCPUNumber->value = value;
 	return true;
 }//setUsedCPUNumberValue
 
-bool OSResult::setNumberOfOtherJobResults(int num){
-	if (job == NULL) return false;
+bool OSResult::setNumberOfOtherJobResults(int num)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) job->otherResults = new OtherResults();
 	if (num < 0) return false;
 	if (job->otherResults->other != NULL) return false;
@@ -2989,9 +3724,9 @@ bool OSResult::setNumberOfOtherJobResults(int num){
 }//setNumberOfOtherJobResults
 
 
-bool OSResult::setOtherJobResultName(int idx, string name){
-	if (job == NULL) 
-		return false;
+bool OSResult::setOtherJobResultName(int idx, string name)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return false;
@@ -2999,9 +3734,9 @@ bool OSResult::setOtherJobResultName(int idx, string name){
 	return true;
 }//setOtherJobResultName
 
-bool OSResult::setOtherJobResultValue(int idx, string value){
-	if (job == NULL) 
-		return false;
+bool OSResult::setOtherJobResultValue(int idx, string value)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return false;
@@ -3009,9 +3744,9 @@ bool OSResult::setOtherJobResultValue(int idx, string value){
 	return true;
 }//setOtherJobResultValue
 
-bool OSResult::setOtherJobResultDescription(int idx, string description){
-	if (job == NULL) 
-		return false;
+bool OSResult::setOtherJobResultDescription(int idx, string description)
+{
+	if (job == NULL) job = new JobResult();
 	if (job->otherResults == NULL) return false;
 	if (idx < 0 || idx >= job->otherResults->numberOfOtherResults) 
 		return false;
@@ -3418,7 +4153,7 @@ bool OSResult::setVarValueString(int solIdx, int number, int idx, std::string st
 	return true;
 }//setVarValueString
 
-bool OSResult::setBasisStatus(int solIdx, char object, int status, int *i, int ni)
+bool OSResult::setBasisStatus(int solIdx, int object, int status, int *i, int ni)
 {
 	if (optimization == NULL || optimization->solution == NULL)
 		return false;
@@ -3430,32 +4165,32 @@ bool OSResult::setBasisStatus(int solIdx, char object, int status, int *i, int n
 
 	switch (object) 
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL)
 				optimization->solution[solIdx]->variables = new VariableSolution();
 			if (optimization->solution[solIdx]->variables->basisStatus == NULL)
 				optimization->solution[solIdx]->variables->basisStatus = new BasisStatus();
 			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-			return optimization->solution[solIdx]->variables->basisStatus->setBasisStatusIntVector(status, i, ni);
+			return optimization->solution[solIdx]->variables->basisStatus->setIntVector(status, i, ni);
 		}
-		case 'o':	
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL)
 				optimization->solution[solIdx]->objectives = new ObjectiveSolution();
 			if (optimization->solution[solIdx]->objectives->basisStatus == NULL)
 				optimization->solution[solIdx]->objectives->basisStatus = new BasisStatus();
 			for (int j=0; j<ni; j++) if (i[j] >= 0) return false;
-			return optimization->solution[solIdx]->objectives->basisStatus->setBasisStatusIntVector(status, i, ni);
+			return optimization->solution[solIdx]->objectives->basisStatus->setIntVector(status, i, ni);
 		}
-		case 'c':	
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL)
 				optimization->solution[solIdx]->constraints = new ConstraintSolution();
 			if (optimization->solution[solIdx]->constraints->basisStatus == NULL)
 				optimization->solution[solIdx]->constraints->basisStatus = new BasisStatus();
 			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
-			return optimization->solution[solIdx]->constraints->basisStatus->setBasisStatusIntVector(status, i, ni);
+			return optimization->solution[solIdx]->constraints->basisStatus->setIntVector(status, i, ni);
 		}
 		default: 
 			throw ErrorClass("target object not implemented in setBasisStatus");
@@ -3666,7 +4401,7 @@ bool OSResult::setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, s
 	return true;		
 }//setOtherVariableResultVar
 
-bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, int enumIdx, std::string value, std::string description, int *i, int ni)
+bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, int object, int enumIdx, std::string value, std::string description, int *i, int ni)
 {
 	if (optimization == NULL || optimization->solution == NULL)
 		return false;
@@ -3677,10 +4412,12 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, 
 
 	switch (object) 
 	{
-		case 'v':
+		case ENUM_PROBLEM_COMPONENT_variables:
 		{
 			if (optimization->solution[solIdx]->variables == NULL) return false;
 			if (optimization->solution[solIdx]->variables->other == NULL) return false;
+			int n_other = optimization->solution[solIdx]->variables->numberOfOtherVariableResults;
+			if (otherIdx < 0 || otherIdx >= n_other) return false; 
 			if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
 			if (optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration == NULL) return false;
 			int n_enum = optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfEnumerations;
@@ -3690,7 +4427,7 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, 
 			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
 			return optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
 		}
-		case 'o':
+		case ENUM_PROBLEM_COMPONENT_objectives:
 		{
 			if (optimization->solution[solIdx]->objectives == NULL) return false;
 			if (optimization->solution[solIdx]->objectives->other == NULL) return false;
@@ -3700,10 +4437,10 @@ bool OSResult::setOtherOptionEnumeration(int solIdx, int otherIdx, char object, 
 			if (enumIdx < 0 || enumIdx >= n_enum) return false;
 			if (optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx] == NULL) 
 				optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx] = new OtherOptionEnumeration();
-			for (int j=0; j<ni; j++) if (i[j] < 0) return false;
+			for (int j=0; j<ni; j++) if (i[j] >= 0) return false;
 			return optimization->solution[solIdx]->objectives->other[ otherIdx]->enumeration[enumIdx]->setOtherOptionEnumeration(value, description, i, ni);
 		}
-		case 'c':
+		case ENUM_PROBLEM_COMPONENT_constraints:
 		{
 			if (optimization->solution[solIdx]->constraints == NULL) return false;
 			if (optimization->solution[solIdx]->constraints->other == NULL) return false;
@@ -4546,13 +5283,14 @@ bool OSResult::setSolverOutputItem(int otherIdx, int itemIdx, std::string item){
 }//setSolverOutputItem
 
 
+
 /***************************************************
  * methods to test whether two OSResult objects 
  * or their components are equal to each other
  ***************************************************/
 bool OSResult::IsEqual(OSResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OSResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4560,7 +5298,8 @@ bool OSResult::IsEqual(OSResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OSResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4569,7 +5308,8 @@ bool OSResult::IsEqual(OSResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OSResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4594,7 +5334,7 @@ bool OSResult::IsEqual(OSResult *that)
 
 bool GeneralResult::IsEqual(GeneralResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in GeneralResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4602,7 +5342,8 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4611,7 +5352,8 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4626,7 +5368,8 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 				this->solverInvoked != that->solverInvoked || 
 				this->timeStamp     != that->timeStamp ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralResult" << endl;
 				cout << "message:       " << this->message       << " vs. " << that->message       << endl;
 				cout << "serviceURI:    " << this->serviceURI    << " vs. " << that->serviceURI    << endl;
 				cout << "serviceName:   " << this->serviceName   << " vs. " << that->serviceName   << endl;
@@ -4650,7 +5393,7 @@ bool GeneralResult::IsEqual(GeneralResult *that)
 
 bool GeneralStatus::IsEqual(GeneralStatus *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in GeneralStatus" << endl;
 	#endif
 	if (this == NULL)
@@ -4658,7 +5401,8 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralStatus" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4667,7 +5411,8 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralStatus" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4678,7 +5423,8 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 				this->type                != that->type                || 
 				this->description         != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralStatus" << endl;
 				cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
 				cout << "type:                " << this->type                << " vs. " << that->type                << endl;
 				cout << "description:         " << this->description         << " vs. " << that->description         << endl;
@@ -4696,7 +5442,7 @@ bool GeneralStatus::IsEqual(GeneralStatus *that)
 
 bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in GeneralSubstatus" << endl;
 	#endif
 	if (this == NULL)
@@ -4704,7 +5450,8 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralSubstatus" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4713,7 +5460,8 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralSubstatus" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4723,7 +5471,8 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 			if (this->name        != that->name          || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in GeneralSubstatus" << endl;
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 #endif	
@@ -4737,7 +5486,7 @@ bool GeneralSubstatus::IsEqual(GeneralSubstatus *that)
 
 bool OtherResults::IsEqual(OtherResults *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherResults" << endl;
 	#endif
 	if (this == NULL)
@@ -4745,7 +5494,8 @@ bool OtherResults::IsEqual(OtherResults *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResults" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4754,7 +5504,8 @@ bool OtherResults::IsEqual(OtherResults *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResults" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4763,7 +5514,8 @@ bool OtherResults::IsEqual(OtherResults *that)
 		{
 			if (this->numberOfOtherResults != that->numberOfOtherResults)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResults" << endl;
 				cout << "numberOfOtherResults: " << this->numberOfOtherResults << " vs. " << that->numberOfOtherResults << endl;
 #endif	
 
@@ -4781,7 +5533,7 @@ bool OtherResults::IsEqual(OtherResults *that)
 
 bool OtherResult::IsEqual(OtherResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4789,7 +5541,8 @@ bool OtherResult::IsEqual(OtherResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4798,7 +5551,8 @@ bool OtherResult::IsEqual(OtherResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4809,7 +5563,8 @@ bool OtherResult::IsEqual(OtherResult *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherResult" << endl;
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -4824,7 +5579,7 @@ bool OtherResult::IsEqual(OtherResult *that)
 
 bool SystemResult::IsEqual(SystemResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in SystemResult" << endl;
 	#endif
 	if (this == NULL)
@@ -4832,7 +5587,8 @@ bool SystemResult::IsEqual(SystemResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SystemResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -4841,7 +5597,8 @@ bool SystemResult::IsEqual(SystemResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SystemResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -4850,7 +5607,8 @@ bool SystemResult::IsEqual(SystemResult *that)
 		{
 			if (this->systemInformation != that->systemInformation) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SystemResult" << endl;
 				cout << "systemInformation: " << this->systemInformation << " vs. " << that->systemInformation << endl;
 #endif	
 				return false;
@@ -4873,176 +5631,10 @@ bool SystemResult::IsEqual(SystemResult *that)
 }//SystemResult::IsEqual
 
 
-bool DiskSpace::IsEqual(DiskSpace *that)
-{
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in DiskSpace" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->unit        != that->unit          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//DiskSpace::IsEqual
-
-bool MemorySize::IsEqual(MemorySize *that)
-{
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in MemorySize" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->unit        != that->unit          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//MemorySize::IsEqual
-
-bool CPUSpeed::IsEqual(CPUSpeed *that)
-{
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in CPUSpeed" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->unit        != that->unit          || 
-				this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//CPUSpeed::IsEqual
-
-bool CPUNumber::IsEqual(CPUNumber *that)
-{
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in CPUNumber" << endl;
-	#endif
-	if (this == NULL)
-	{	if (that == NULL)
-			return true;
-		else
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "First object is NULL, second is not" << endl;
-			#endif
-			return false;
-		}
-	}
-	else 
-	{	if (that == NULL)
-		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "Second object is NULL, first is not" << endl;
-			#endif
-			return false;
-		}
-		else	
-		{
-			if (this->value       != that->value         || 
-				this->description != that->description  ) 
-			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
-				cout << "description: " << this->description << " vs. " << that->description << endl;
-#endif	
-				return false;
-			}
-			return true;
-		}
-	}
-}//CPUNumber::IsEqual
-
 
 bool ServiceResult::IsEqual(ServiceResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in ServiceResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5050,7 +5642,8 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ServiceResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5059,7 +5652,8 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ServiceResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5070,9 +5664,10 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 				this->currentJobCount    != that->currentJobCount ||
 				this->totalJobsSoFar     != that->totalJobsSoFar  ||
 				this->timeServiceStarted != that->timeServiceStarted ||
-				this->serviceUtilization != that->serviceUtilization )
+				!isEqual(this->serviceUtilization, that->serviceUtilization) )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ServiceResult" << endl;
 				cout << "currentState:       " << this->currentState       << " vs. " << that->currentState       << endl;
 				cout << "currentJobCount:    " << this->currentJobCount    << " vs. " << that->currentJobCount    << endl;
 				cout << "totalJobsSoFar:     " << this->totalJobsSoFar     << " vs. " << that->totalJobsSoFar     << endl;
@@ -5092,7 +5687,7 @@ bool ServiceResult::IsEqual(ServiceResult *that)
 
 bool JobResult::IsEqual(JobResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in JobResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5100,7 +5695,8 @@ bool JobResult::IsEqual(JobResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in JobResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5109,7 +5705,8 @@ bool JobResult::IsEqual(JobResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in JobResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5122,7 +5719,8 @@ bool JobResult::IsEqual(JobResult *that)
 				this->actualStartTime    != that->actualStartTime    ||
 				this->endTime            != that->endTime          )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in JobResult" << endl;
 				cout << "status:             " << this->status             << " vs. " << that->status             << endl;
 				cout << "submitTime:         " << this->submitTime         << " vs. " << that->submitTime         << endl;
 				cout << "scheduledStartTime: " << this->scheduledStartTime << " vs. " << that->scheduledStartTime << endl;
@@ -5153,7 +5751,7 @@ bool JobResult::IsEqual(JobResult *that)
 
 bool TimingInformation::IsEqual(TimingInformation *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in TimingInformation" << endl;
 	#endif
 	if (this == NULL)
@@ -5161,7 +5759,8 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimingInformation" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5170,7 +5769,8 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimingInformation" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5179,7 +5779,8 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 		{
 			if (this->numberOfTimes != that->numberOfTimes)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimingInformation" << endl;
 				cout << "numberOfTimes: " << this->numberOfTimes << " vs. " << that->numberOfTimes << endl;
 #endif	
 
@@ -5194,10 +5795,10 @@ bool TimingInformation::IsEqual(TimingInformation *that)
 	}
 }//TimingInformation::IsEqual
 
-
+#if 0
 bool Time::IsEqual(Time *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in Time" << endl;
 	#endif
 	if (this == NULL)
@@ -5205,7 +5806,8 @@ bool Time::IsEqual(Time *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5214,20 +5816,22 @@ bool Time::IsEqual(Time *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
 		}
 		else	
 		{
-			if (this->unit        != that->unit          || 
-				this->type        != that->type          || 
-				this->value       != that->value         || 
-				this->category    != that->category      || 
-				this->description != that->description  ) 
+			if (!isEqual(this->value,         that->value)    || 
+						 this->unit        != that->unit      || 
+						 this->type        != that->type      || 
+						 this->category    != that->category  || 
+						 this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
 				cout << "unit:        " << this->unit        << " vs. " << that->unit        << endl;
 				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
@@ -5240,18 +5844,22 @@ bool Time::IsEqual(Time *that)
 		}
 	}
 }//Time::IsEqual
+#endif
 
-bool OptimizationResult::IsEqual(OptimizationResult *that)
+
+
+bool TimeMeasurement::IsEqual(TimeMeasurement *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in OptimizationResult" << endl;
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in TimeMeasurement" << endl;
 	#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5260,7 +5868,54 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in Time" << endl;
+				cout << "Second object is NULL, first is not" << endl;
+			#endif
+			return false;
+		}
+		else	
+		{
+			if (this->type        != that->type      || 
+				this->category    != that->category  || 
+				this->description != that->description  ) 
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in TimeMeasurement" << endl;
+				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
+				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
+				cout << "description: " << this->description << " vs. " << that->description << endl;
+#endif	
+				return false;
+			}
+			return this->TimeSpan::IsEqual(that);
+		}
+	}
+}//TimeMeasurement::IsEqual
+
+
+bool OptimizationResult::IsEqual(OptimizationResult *that)
+{
+	#if DEBUG_ISEQUAL_ROUTINES == 2
+		cout << "Start comparing in OptimizationResult" << endl;
+	#endif
+	if (this == NULL)
+	{	if (that == NULL)
+			return true;
+		else
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationResult" << endl;
+				cout << "First object is NULL, second is not" << endl;
+			#endif
+			return false;
+		}
+	}
+	else 
+	{	if (that == NULL)
+		{
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5272,7 +5927,8 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 				this->numberOfObjectives  != that->numberOfObjectives  || 
 				this->numberOfConstraints != that->numberOfConstraints  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationResult" << endl;
 				cout << "numberOfSolutions:   " << this->numberOfSolutions   << " vs. " << that->numberOfSolutions   << endl;
 				cout << "numberOfVariables:   " << this->numberOfVariables   << " vs. " << that->numberOfVariables   << endl;
 				cout << "numberOfObjectives:  " << this->numberOfObjectives  << " vs. " << that->numberOfObjectives  << endl;
@@ -5296,7 +5952,7 @@ bool OptimizationResult::IsEqual(OptimizationResult *that)
 
 bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OptimizationSolution " << endl;
 	#endif
 	if (this == NULL)
@@ -5304,7 +5960,8 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5313,7 +5970,8 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5322,7 +5980,8 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 		{
 			if (this->targetObjectiveIdx != that->targetObjectiveIdx)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
 				cout << "targetObjectiveIdx: " << this->targetObjectiveIdx << " vs. " << that->targetObjectiveIdx << endl;
 #endif	
 				return false;
@@ -5330,7 +5989,8 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 
 			if (this->weightedObjectives != that->weightedObjectives)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
 				cout << "weightedObjectives: " << this->weightedObjectives << " vs. " << that->weightedObjectives << endl;
 #endif	
 				return false;
@@ -5338,7 +5998,8 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 
 			if (this->message != that->message) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
 				cout << "message: \'" << this->message << "\' vs. \'" << that->message << "\'" << endl;
 #endif	
 				return false;
@@ -5363,7 +6024,7 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 
 bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OptimizationSolutionStatus" << endl;
 	#endif
 	if (this == NULL)
@@ -5371,7 +6032,8 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5380,7 +6042,8 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5390,7 +6053,8 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 			if (this->type        != that->type          || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
 				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 #endif	
@@ -5399,7 +6063,8 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 
 			if (this->numberOfSubstatuses != that->numberOfSubstatuses)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionStatus" << endl;
 				cout << "numberOfSubstatuses: " << this->numberOfSubstatuses << " vs. " << that->numberOfSubstatuses << endl;
 #endif	
 
@@ -5418,7 +6083,7 @@ bool OptimizationSolutionStatus::IsEqual(OptimizationSolutionStatus *that)
 
 bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OptimizationSolutionSubstatus" << endl;
 	#endif
 	if (this == NULL)
@@ -5426,7 +6091,8 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionSubstatus" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5435,7 +6101,8 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionSubstatus" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5445,7 +6112,8 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 			if (this->type        != that->type          || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolutionSubstatus" << endl;
 				cout << "type:        " << this->type        << " vs. " << that->type        << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
 #endif	
@@ -5460,7 +6128,7 @@ bool OptimizationSolutionSubstatus::IsEqual(OptimizationSolutionSubstatus *that)
 
 bool VariableSolution::IsEqual(VariableSolution *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in VariableSolution" << endl;
 	#endif
 	if (this == NULL)
@@ -5468,7 +6136,8 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableSolution" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5477,7 +6146,8 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableSolution" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5486,7 +6156,8 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 		{
 			if (this->numberOfOtherVariableResults != that->numberOfOtherVariableResults)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableSolution" << endl;
 				cout << "numberOfOtherVariableResults: " << this->numberOfOtherVariableResults << " vs. " << that->numberOfOtherVariableResults << endl;
 #endif	
 
@@ -5511,7 +6182,7 @@ bool VariableSolution::IsEqual(VariableSolution *that)
 
 bool VariableValues::IsEqual(VariableValues *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in VariableValues" << endl;
 	#endif
 	if (this == NULL)
@@ -5519,7 +6190,8 @@ bool VariableValues::IsEqual(VariableValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValues" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5528,7 +6200,8 @@ bool VariableValues::IsEqual(VariableValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValues" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5537,7 +6210,8 @@ bool VariableValues::IsEqual(VariableValues *that)
 		{
 			if (this->numberOfVar != that->numberOfVar)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValues" << endl;
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 
@@ -5556,7 +6230,7 @@ bool VariableValues::IsEqual(VariableValues *that)
 
 bool VarValue::IsEqual(VarValue *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in VarValue" << endl;
 	#endif
 	if (this == NULL)
@@ -5564,7 +6238,8 @@ bool VarValue::IsEqual(VarValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValue" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5573,17 +6248,18 @@ bool VarValue::IsEqual(VarValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValue" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
+			if (this->idx != that->idx || !isEqual(this->value, that->value) )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValue" << endl;
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5598,7 +6274,7 @@ bool VarValue::IsEqual(VarValue *that)
 
 bool VariableValuesString::IsEqual(VariableValuesString *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in VariableValuesString" << endl;
 	#endif
 	if (this == NULL)
@@ -5606,7 +6282,8 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValuesString" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5615,7 +6292,8 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValuesString" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5624,7 +6302,8 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 		{
 			if (this->numberOfVar != that->numberOfVar)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VariableValuesString" << endl;
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 
@@ -5643,7 +6322,7 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 
 bool VarValueString::IsEqual(VarValueString *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in VarValueString" << endl;
 	#endif
 	if (this == NULL)
@@ -5651,7 +6330,8 @@ bool VarValueString::IsEqual(VarValueString *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValueString" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5660,7 +6340,8 @@ bool VarValueString::IsEqual(VarValueString *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValueString" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5670,7 +6351,8 @@ bool VarValueString::IsEqual(VarValueString *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in VarValueString" << endl;
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5685,7 +6367,7 @@ bool VarValueString::IsEqual(VarValueString *that)
 
 bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherVariableResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5693,7 +6375,8 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5702,7 +6385,8 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5713,7 +6397,8 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -5723,7 +6408,7 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
 			if (this->numberOfVar != that->numberOfVar)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES == 2
 				cout << "numberOfVar: " << this->numberOfVar << " vs. " << that->numberOfVar << endl;
 #endif	
 
@@ -5736,7 +6421,8 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
 			if (this->numberOfEnumerations != that->numberOfEnumerations)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVariableResult" << endl;
 				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
 #endif	
 
@@ -5755,7 +6441,7 @@ bool OtherVariableResult::IsEqual(OtherVariableResult *that)
 
 bool OtherVarResult::IsEqual(OtherVarResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherVarResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5763,7 +6449,8 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVarResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5772,7 +6459,8 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVarResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5782,7 +6470,8 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherVarResult" << endl;
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5797,7 +6486,7 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 
 bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in ObjectiveSolution" << endl;
 	#endif
 	if (this == NULL)
@@ -5805,7 +6494,8 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveSolution" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5814,7 +6504,8 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveSolution" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5823,7 +6514,9 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 		{
 			if (this->numberOfOtherObjectiveResults != that->numberOfOtherObjectiveResults)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveSolution" << endl;
+
 				cout << "numberOfOtherObjectiveResults: " << this->numberOfOtherObjectiveResults << " vs. " << that->numberOfOtherObjectiveResults << endl;
 #endif	
 
@@ -5847,7 +6540,7 @@ bool ObjectiveSolution::IsEqual(ObjectiveSolution *that)
 
 bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in ObjectiveValues" << endl;
 	#endif
 	if (this == NULL)
@@ -5855,7 +6548,8 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveValues" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5864,7 +6558,8 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveValues" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5873,7 +6568,8 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 		{
 			if (this->numberOfObj != that->numberOfObj)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjectiveValues" << endl;
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
 #endif	
 
@@ -5892,7 +6588,7 @@ bool ObjectiveValues::IsEqual(ObjectiveValues *that)
 
 bool ObjValue::IsEqual(ObjValue *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in ObjValue" << endl;
 	#endif
 	if (this == NULL)
@@ -5900,7 +6596,8 @@ bool ObjValue::IsEqual(ObjValue *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjValue" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5909,7 +6606,8 @@ bool ObjValue::IsEqual(ObjValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjValue" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -5919,7 +6617,8 @@ bool ObjValue::IsEqual(ObjValue *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ObjValue" << endl;
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -5934,7 +6633,7 @@ bool ObjValue::IsEqual(ObjValue *that)
 
 bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherObjectiveResult" << endl;
 	#endif
 	if (this == NULL)
@@ -5942,7 +6641,8 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -5951,18 +6651,20 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
 		}
 		else	
 		{
-			if (this->name        != that->name          || 
-				this->value       != that->value         || 
+			if (this->value       != that->value   || 
+				this->name        != that->name    || 				
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -5972,7 +6674,8 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 
 			if (this->numberOfObj != that->numberOfObj)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
 				cout << "numberOfObj: " << this->numberOfObj << " vs. " << that->numberOfObj << endl;
 #endif	
 
@@ -5985,7 +6688,8 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 
 			if (this->numberOfEnumerations != that->numberOfEnumerations)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjectiveResult" << endl;
 				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
 #endif	
 
@@ -6004,7 +6708,7 @@ bool OtherObjectiveResult::IsEqual(OtherObjectiveResult *that)
 
 bool OtherObjResult::IsEqual(OtherObjResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherObjResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6012,7 +6716,8 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6021,7 +6726,8 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6031,7 +6737,8 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherObjResult" << endl;
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6046,7 +6753,7 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 
 bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in ConstraintSolution" << endl;
 	#endif
 	if (this == NULL)
@@ -6054,7 +6761,8 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ConstraintSolution" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6063,7 +6771,8 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ConstraintSolution" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6072,7 +6781,8 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 		{
 			if (this->numberOfOtherConstraintResults != that->numberOfOtherConstraintResults)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in ConstraintSolution" << endl;
 				cout << "numberOfOtherConstraintResults: " << this->numberOfOtherConstraintResults << " vs. " << that->numberOfOtherConstraintResults << endl;
 #endif	
 
@@ -6096,15 +6806,16 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
 	
 bool DualVariableValues::IsEqual(DualVariableValues *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in DualVariableValues" << endl;
-	#endif
+#if DEBUG_ISEQUAL_ROUTINES == 2
+	cout << "Start comparing in DualVariableValues" << endl;
+#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVariableValues" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6113,7 +6824,8 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVariableValues" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6122,7 +6834,8 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 		{
 			if (this->numberOfCon != that->numberOfCon)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVariableValues" << endl;
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
 #endif	
 
@@ -6140,15 +6853,16 @@ bool DualVariableValues::IsEqual(DualVariableValues *that)
 
 bool DualVarValue::IsEqual(DualVarValue *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
-		cout << "Start comparing in DualVarValue" << endl;
-	#endif
+#if DEBUG_ISEQUAL_ROUTINES == 2
+	cout << "Start comparing in DualVarValue" << endl;
+#endif
 	if (this == NULL)
 	{	if (that == NULL)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVarValue" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6157,17 +6871,18 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVarValue" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
-				this->value != that->value )
+			if (this->idx != that->idx || !isEqual(this->value, that->value) )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in DualVarValue" << endl;
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6181,7 +6896,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 
 bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherConstraintResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6189,7 +6904,8 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6198,7 +6914,8 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6209,7 +6926,8 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 				this->value       != that->value         || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "value:       " << this->value       << " vs. " << that->value       << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6219,7 +6937,8 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
 			if (this->numberOfCon != that->numberOfCon)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
 				cout << "numberOfCon: " << this->numberOfCon << " vs. " << that->numberOfCon << endl;
 #endif	
 
@@ -6232,7 +6951,8 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
 			if (this->numberOfEnumerations != that->numberOfEnumerations)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConstraintResult" << endl;
 				cout << "numberOfEnumerations: " << this->numberOfEnumerations << " vs. " << that->numberOfEnumerations << endl;
 #endif	
 
@@ -6251,7 +6971,7 @@ bool OtherConstraintResult::IsEqual(OtherConstraintResult *that)
 
 bool OtherConResult::IsEqual(OtherConResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherConResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6259,7 +6979,8 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6268,7 +6989,8 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6278,7 +7000,8 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 			if (this->idx   != that->idx  || 
 				this->value != that->value )
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherConResult" << endl;
 				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
 				cout << "value: " << this->value << " vs. " << that->value << endl;
 #endif	
@@ -6293,7 +7016,7 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 
 bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherSolutionResults" << endl;
 	#endif
 	if (this == NULL)
@@ -6301,7 +7024,8 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResults" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6310,7 +7034,8 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResults" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6319,7 +7044,8 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 		{
 			if (this->numberOfOtherSolutionResults != that->numberOfOtherSolutionResults)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResults" << endl;
 				cout << "numberOfOtherSolutionResults: " << this->numberOfOtherSolutionResults << " vs. " << that->numberOfOtherSolutionResults << endl;
 #endif	
 
@@ -6337,7 +7063,7 @@ bool OtherSolutionResults::IsEqual(OtherSolutionResults *that)
 
 bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherSolutionResult" << endl;
 	#endif
 	if (this == NULL)
@@ -6345,7 +7071,8 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6354,7 +7081,8 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6366,7 +7094,8 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 				this->category    != that->category      || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6376,7 +7105,8 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 
 			if (this->numberOfItems != that->numberOfItems)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
 				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
 #endif	
 
@@ -6386,7 +7116,8 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 			for (int i = 0; i < numberOfItems; i++)
 				if (this->item[i] != that->item[i])
 				{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolutionResult" << endl;
 				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
 #endif	
 					return false;
@@ -6400,7 +7131,7 @@ bool OtherSolutionResult::IsEqual(OtherSolutionResult *that)
 
 bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in OtherSolverOutput" << endl;
 	#endif
 	if (this == NULL)
@@ -6408,7 +7139,8 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolverOutput" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6417,7 +7149,8 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolverOutput" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6426,7 +7159,8 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 		{
 			if (this->numberOfSolverOutputs != that->numberOfSolverOutputs)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OtherSolverOutput" << endl;
 				cout << "numberOfSolverOutputs: " << this->numberOfSolverOutputs << " vs. " << that->numberOfSolverOutputs << endl;
 #endif	
 
@@ -6445,7 +7179,7 @@ bool OtherSolverOutput::IsEqual(OtherSolverOutput *that)
 
 bool SolverOutput::IsEqual(SolverOutput *that)
 {
-	#ifdef DEBUG_ISEQUAL_ROUTINES
+	#if DEBUG_ISEQUAL_ROUTINES == 2
 		cout << "Start comparing in SolverOutput" << endl;
 	#endif
 	if (this == NULL)
@@ -6453,7 +7187,8 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 			return true;
 		else
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
 				cout << "First object is NULL, second is not" << endl;
 			#endif
 			return false;
@@ -6462,7 +7197,8 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 	else 
 	{	if (that == NULL)
 		{
-			#ifdef DEBUG_ISEQUAL_ROUTINES
+			#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
 				cout << "Second object is NULL, first is not" << endl;
 			#endif
 			return false;
@@ -6473,7 +7209,8 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 				this->category    != that->category      || 
 				this->description != that->description  ) 
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
 				cout << "name:        " << this->name        << " vs. " << that->name        << endl;
 				cout << "category:    " << this->category    << " vs. " << that->category    << endl;
 				cout << "description: " << this->description << " vs. " << that->description << endl;
@@ -6483,7 +7220,8 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 
 			if (this->numberOfItems != that->numberOfItems)
 			{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
 				cout << "numberOfItems: " << this->numberOfItems << " vs. " << that->numberOfItems << endl;
 #endif	
 
@@ -6493,7 +7231,8 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 			for (int i = 0; i < numberOfItems; i++)
 				if (this->item[i] != that->item[i])
 				{
-#ifdef DEBUG_ISEQUAL_ROUTINES
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in SolverOutput" << endl;
 				cout << "item: " << this->item[i] << " vs. " << that->item[i] << endl;
 #endif	
 					return false;
@@ -6504,3 +7243,1087 @@ bool SolverOutput::IsEqual(SolverOutput *that)
 	}
 }//SolverOutput::IsEqual
 
+
+/******************************************************
+ * methods to set random objects and their components
+ ******************************************************/
+bool OSResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OSResult" << endl;
+#endif
+	if (OSRand() <= density)
+	{
+		resultHeader = new GeneralFileHeader();
+		resultHeader->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)
+	{
+		general = new GeneralResult();
+		general->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)       
+	{
+		system = new SystemResult();
+		system->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)      
+	{
+		service = new ServiceResult();
+		service->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)          
+	{
+		job = new JobResult();
+		job->setRandom(density, conformant);
+	}
+	if (OSRand() <= density) 
+	{
+		optimization = new OptimizationResult();
+		optimization->setRandom(density, conformant);
+	}
+	return true;
+}//OSResult::setRandom
+
+
+bool GeneralResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random GeneralResult" << endl;
+#endif
+	if (OSRand() <= density) this->message        = "random string";
+	if (OSRand() <= density) this->serviceURI     = "random string";
+	if (OSRand() <= density) this->serviceName    = "random string";
+	if (OSRand() <= density) this->instanceName   = "random string";
+	if (OSRand() <= density) this->jobID          = "random string";
+	if (OSRand() <= density) this->solverInvoked  = "random string";
+	if (OSRand() <= density) this->timeStamp      = "random string";
+
+	if (OSRand() <= density)
+	{
+		generalStatus = new GeneralStatus(); 
+		generalStatus->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
+	}
+	return true;
+}//GeneralResult::setRandom
+
+
+bool GeneralStatus::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random GeneralStatus" << endl;
+#endif
+	int n;
+
+	if (OSRand() <= density) numberOfSubstatuses = (int)(1+4*OSRand());    
+	if (OSRand() <= density) type = "normal"; else type = "error";
+ 	if (OSRand() <= density) description = "random string";
+
+	if (conformant)	n = this->numberOfSubstatuses;
+	else            n = (int)(1+4*OSRand());
+	 
+	substatus = new GeneralSubstatus*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		substatus[i] = new GeneralSubstatus();
+		substatus[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//GeneralStatus::setRandom
+
+bool GeneralSubstatus::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random GeneralSubstatus" << endl;
+#endif
+	name = "substatus name";
+ 	if (OSRand() <= density) description = "random string";
+	return true;
+}//GeneralSubstatus::setRandom
+
+
+bool OtherResults::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherResults" << endl;
+#endif
+	int n;
+
+	this->numberOfOtherResults = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfOtherResults;
+	else            n = (int)(1+4*OSRand());
+
+	other = new OtherResult*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		other[i] = new OtherResult();
+		other[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//OtherResults::setRandom
+
+
+bool OtherResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherResult" << endl;
+#endif
+	name        = "other result";
+	value       = "random string";
+	description = "random string";
+	return true;
+}//OtherResult::setRandom
+
+
+bool SystemResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random SystemResult" << endl;
+#endif
+	if (OSRand() <= density) systemInformation = "random string"; 
+
+	if (OSRand() <= density)
+	{
+		availableDiskSpace = new StorageCapacity(); 
+		availableDiskSpace->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		availableMemory = new StorageCapacity(); 
+		availableMemory->setRandom(density, conformant);
+	}
+	if (OSRand() <= density)
+	{
+		availableCPUSpeed = new CPUSpeed(); 
+		availableCPUSpeed->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		availableCPUNumber = new CPUNumber(); 
+		availableCPUNumber->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
+	}
+	return true;
+}//SystemResult::setRandom
+
+bool ServiceResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ServiceResult" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->currentState = "unknown";
+		else if (temp <= 0.50) this->currentState = "busy";
+		else if (temp <= 0.75) this->currentState = "";
+		else                   this->currentState = "known";
+	} 
+
+	if (OSRand() <= density) currentJobCount = (int) (-1+4*OSRand());
+	if (OSRand() <= density) totalJobsSoFar  = (int) (-1+4*OSRand());
+	if (OSRand() <= density) timeServiceStarted  = "2010-07-12T01:23:45-03:00";	
+	
+	if (OSRand() <= density) 	
+	{
+		double temp = OSRand();
+
+		if      (temp <= 0.25) this->serviceUtilization = OSRand();
+		else if (temp <= 0.50) this->serviceUtilization = -1.0;
+		else if (temp <= 0.75) this->serviceUtilization = OSDBL_MAX;
+		else                   this->serviceUtilization = OSNAN;
+	} 
+
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
+	}
+	return true;
+}//ServiceResult::setRandom
+
+
+bool JobResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random SystemResult" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->status = "finished";
+		else if (temp <= 0.50) this->status = "running";
+		else if (temp <= 0.75) this->status = "";
+		else                   this->status = "walking";
+	} 
+
+	if (OSRand() <= density) submitTime         = "1970-01-01T00:00:00-00:00";
+	if (OSRand() <= density) scheduledStartTime = "1970-01-01T00:00:00-00:00";
+	if (OSRand() <= density) actualStartTime    = "1970-01-01T00:00:00-00:00";
+	if (OSRand() <= density) endTime            = "1970-01-01T00:00:00-00:00";
+
+	if (OSRand() <= density)     
+	{
+		timingInformation = new TimingInformation(); 
+		timingInformation->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		usedDiskSpace = new StorageCapacity(); 
+		usedDiskSpace->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		usedMemory = new StorageCapacity(); 
+		usedMemory->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		usedCPUSpeed = new CPUSpeed(); 
+		usedCPUSpeed->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)     
+	{
+		usedCPUNumber = new CPUNumber(); 
+		usedCPUNumber->setRandom(density, conformant);
+	}
+				
+	if (OSRand() <= density)     
+	{
+		otherResults = new OtherResults(); 
+		otherResults->setRandom(density, conformant);
+	}
+	return true;
+}//JobResult::setRandom
+
+
+bool TimingInformation::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random TimingInformation" << endl;
+#endif
+	int n;
+
+	this->numberOfTimes = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfTimes;
+	else            n = (int)(1+4*OSRand());
+
+	time = new TimeMeasurement*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		time[i] = new TimeMeasurement();
+		time[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//TimingInformation::setRandom
+
+#if 0
+bool Time::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random TimingInformation" << endl;
+#endif
+	if (OSRand() <= density) 
+		this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->type = "elapsedTime";
+		else if (temp <= 0.50) this->type = "cpuTime";
+		else if (temp <= 0.75) this->type = "";
+		else                   this->type = "dinnerTime";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->category = "total";
+		else if (temp <= 0.50) this->category = "input";
+		else if (temp <= 0.75) this->category = "";
+		else                   this->category = "putin";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->unit = "second";
+		else if (temp <= 0.50) this->unit = "tick";
+		else if (temp <= 0.75) this->unit = "";
+		else                   this->unit = "flea";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5) this->value = 3.14156;
+		else                 this->value = 2.71828;
+	}
+	return true;
+}//Time::setRandom
+#endif
+
+
+bool TimeMeasurement::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random TimeMeasurement" << endl;
+#endif
+	if (OSRand() <= density) 
+		this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->type = "elapsedTime";
+		else if (temp <= 0.50) this->type = "cpuTime";
+		else if (temp <= 0.75) this->type = "";
+		else                   this->type = "dinnerTime";
+	} 
+
+	if (OSRand() <= density) 
+	{
+		double temp = OSRand();
+		if (conformant) temp = 0.5*temp;
+
+		if      (temp <= 0.25) this->category = "total";
+		else if (temp <= 0.50) this->category = "input";
+		else if (temp <= 0.75) this->category = "";
+		else                   this->category = "putin";
+	} 
+
+	if (OSRand() <= density) this->TimeSpan::setRandom(density,conformant);
+
+	return true;
+}//TimeMeasurement::setRandom
+
+bool OptimizationResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationResult" << endl;
+#endif
+	numberOfSolutions = (int)(1+4*OSRand());
+
+	numberOfVariables   = 10; 
+	numberOfObjectives  = 2;
+	numberOfConstraints = 5;
+
+	int n;
+
+	if (conformant)	n = this->numberOfSolutions;
+	else            n = (int)(1+4*OSRand());
+
+	solution = new OptimizationSolution*[n];
+	
+	for (int i = 0; i < n; i++)
+	{
+		solution[i] = new OptimizationSolution();
+		solution[i]->setRandom(density,conformant);
+	}
+
+	return true;
+}//OptimizationResult::setRandom
+
+bool OptimizationSolution::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationSolution" << endl;
+#endif
+	if (OSRand() <= density)
+	{
+		if (OSRand() <= density) targetObjectiveIdx = -1;
+		else					 targetObjectiveIdx = -2;
+	}
+
+	if (OSRand() <= density) weightedObjectives = (OSRand() < 0.5);
+
+	if (OSRand() <= density) message = "random string";
+
+	status = new OptimizationSolutionStatus();
+	status->setRandom(density, conformant);
+
+	if (OSRand() <= density)
+	{
+		variables = new VariableSolution();
+		variables->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		objectives = new ObjectiveSolution();
+		objectives->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		constraints = new ConstraintSolution();
+		constraints->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density)
+	{
+		otherSolutionResults = new OtherSolutionResults();
+		otherSolutionResults->setRandom(density, conformant);
+	}
+
+	return true;
+}//OptimizationSolution::setRandom
+
+
+bool OptimizationSolutionStatus::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationSolutionStatus" << endl;
+#endif
+	double temp = OSRand();
+	if (conformant) temp = 0.5*temp;
+
+	if      (temp <= 0.25) this->type = "optimal";
+	else if (temp <= 0.50) this->type = "unsure";
+	else if (temp <= 0.75) this->type = "";
+	else                   this->type = "sure";
+
+	if (OSRand() <= density) this->description = "random string";
+
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfSubstatuses = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfSubstatuses;
+		else            n = (int)(1+4*OSRand());
+
+		substatus = new OptimizationSolutionSubstatus*[n];
+
+		for (int i = 0; i < n; i++)
+		{
+			substatus[i] = new OptimizationSolutionSubstatus();
+			substatus[i]->setRandom(density, conformant);
+		}
+	}
+
+	return true;
+}//OptimizationSolutionStatus::setRandom
+
+
+bool OptimizationSolutionSubstatus::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OptimizationSolutionSubstatus" << endl;
+#endif
+	double temp = OSRand();
+	if (conformant) temp = 0.5*temp;
+
+	if      (temp <= 0.25) this->type = "stoppedByLimit";
+	else if (temp <= 0.50) this->type = "stoppedByBounds";
+	else if (temp <= 0.75) this->type = "";
+	else                   this->type = "stoppedByPolice";
+
+	if (OSRand() <= density) this->description = "random string";
+
+	return true;
+}//OptimizationSolutionSubstatus::setRandom
+
+
+bool VariableSolution::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VariableSolution" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfOtherVariableResults = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfOtherVariableResults;
+		else            n = (int)(1+4*OSRand());
+
+		other = new OtherVariableResult*[n];
+	
+		for (int i = 0; i < n; i++)
+		{
+			other[i] = new OtherVariableResult();
+			other[i]->setRandom(density, conformant);
+		}
+	}
+
+	if (OSRand() <= density) 
+	{
+		values = new VariableValues();
+		values->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density) 
+	{
+		valuesString = new VariableValuesString();
+		valuesString->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density) 
+	{
+		basisStatus = new BasisStatus();
+		basisStatus->setRandom(density, conformant, 0, 9);
+	}
+
+	return true;
+}//VariableSolution::setRandom
+
+bool VariableValues::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VariableValues" << endl;
+#endif
+	int n;
+
+	this->numberOfVar = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfVar;
+	else            n = (int)(1+4*OSRand());
+
+	var = new VarValue*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		var[i] = new VarValue();
+		var[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//VariableValues::setRandom
+
+
+bool VarValue::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VarValue" << endl;
+#endif
+	this->idx = (10*OSRand());
+	if (OSRand() <= 0.5) this->value = 3.14156;
+	else                 this->value = 2.71828;
+
+	return true;
+}//VarValue::setRandom
+
+
+bool VariableValuesString::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VariableValuesString" << endl;
+#endif
+	int n;
+
+	this->numberOfVar = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfVar;
+	else            n = (int)(1+4*OSRand());
+
+	var = new VarValueString*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		var[i] = new VarValueString();
+		var[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//VariableValuesString::setRandom
+
+
+bool VarValueString::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random VarValueString" << endl;
+#endif
+	this->idx = (10*OSRand());
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
+
+	return true;
+}//VarValueString::setRandom
+
+
+bool OtherVariableResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherVariableResult" << endl;
+#endif
+	this->name = "random string";
+	if (OSRand() <= density) this->value       = "random string"; 
+	if (OSRand() <= density) this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5)
+		{
+			int n;
+
+			this->numberOfVar = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfVar;
+			else            n = (int)(1+4*OSRand());
+
+			var = new OtherVarResult*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				var[i] = new OtherVarResult();
+				var[i]->setRandom(density, conformant);
+			}
+		}
+		else
+		{
+			int n;
+
+			this->numberOfEnumerations = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfEnumerations;
+			else            n = (int)(1+4*OSRand());
+
+			enumeration = new OtherOptionEnumeration*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				enumeration[i] = new OtherOptionEnumeration();
+				enumeration[i]->setRandom(density, conformant, 0, 9);
+			}
+		}
+	}
+	
+	return true;
+}//OtherVariableResult::setRandom
+
+
+bool OtherVarResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherVarResult" << endl;
+#endif
+	this->idx = (10*OSRand());
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
+
+	return true;
+}//OtherVarResult::setRandom
+
+
+bool ObjectiveSolution::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ObjectiveSolution" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfOtherObjectiveResults = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfOtherObjectiveResults;
+		else            n = (int)(1+4*OSRand());
+
+		other = new OtherObjectiveResult*[n];
+	
+		for (int i = 0; i < n; i++)
+		{
+			other[i] = new OtherObjectiveResult();
+			other[i]->setRandom(density, conformant);
+		}
+	}
+
+
+	if (OSRand() <= density) 
+	{
+		values = new ObjectiveValues();
+		values->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density) 
+	{
+		basisStatus = new BasisStatus();
+		basisStatus->setRandom(density, conformant, -2, -1);
+	}
+
+	return true;
+}//ObjectiveSolution::setRandom
+
+
+bool ObjectiveValues::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ObjectiveValues" << endl;
+#endif
+	int n;
+
+	this->numberOfObj = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfObj;
+	else            n = (int)(1+4*OSRand());
+
+	obj = new ObjValue*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		obj[i] = new ObjValue();
+		obj[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//ObjectiveValues::setRandom
+
+
+bool ObjValue::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ObjValue" << endl;
+#endif
+	if (OSRand() <= 0.5) this->idx = -1;
+	else                 this->idx = -2;
+
+	if (OSRand() <= 0.5) this->value = 3.14156;
+	else                 this->value = 2.71828;
+
+	return true;
+}//ObjValue::setRandom
+
+
+bool OtherObjectiveResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherObjectiveResult" << endl;
+#endif
+	this->name = "random string";
+	if (OSRand() <= density) this->value       = "random string"; 
+	if (OSRand() <= density) this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5)
+		{
+			int n;
+
+			this->numberOfObj = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfObj;
+			else            n = (int)(1+4*OSRand());
+
+			obj = new OtherObjResult*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				obj[i] = new OtherObjResult();
+				obj[i]->setRandom(density, conformant);
+			}
+		}
+		else
+		{
+			int n;
+
+			this->numberOfEnumerations = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfEnumerations;
+			else            n = (int)(1+4*OSRand());
+
+			enumeration = new OtherOptionEnumeration*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				enumeration[i] = new OtherOptionEnumeration();
+				enumeration[i]->setRandom(density, conformant, -2, -1);
+			}
+		}
+	}
+	
+	return true;
+}//OtherObjectiveResult::setRandom
+
+
+bool OtherObjResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherObjResult" << endl;
+#endif
+	if (OSRand() <= 0.5) this->idx = -1;
+	else                 this->idx = -2;
+
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
+
+	return true;
+}//OtherObjResult::setRandom
+
+
+bool ConstraintSolution::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random ConstraintSolution" << endl;
+#endif
+	if (OSRand() <= density) 
+	{
+		int n;
+
+		this->numberOfOtherConstraintResults = (int)(1+4*OSRand());
+
+		if (conformant)	n = this->numberOfOtherConstraintResults;
+		else            n = (int)(1+4*OSRand());
+
+		other = new OtherConstraintResult*[n];
+	
+		for (int i = 0; i < n; i++)
+		{
+			other[i] = new OtherConstraintResult();
+			other[i]->setRandom(density, conformant);
+		}
+	}
+
+	if (OSRand() <= density) 
+	{
+		dualValues = new DualVariableValues();
+		dualValues->setRandom(density, conformant);
+	}
+
+	if (OSRand() <= density) 
+	{
+		basisStatus = new BasisStatus();
+		basisStatus->setRandom(density, conformant, 0 ,4);
+	}
+
+	return true;
+}//ConstraintSolution::setRandom
+
+	
+bool DualVariableValues::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random DualVariableValues" << endl;
+#endif
+	int n;
+
+	this->numberOfCon = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfCon;
+	else            n = (int)(1+4*OSRand());
+
+	con = new DualVarValue*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		con[i] = new DualVarValue();
+		con[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//DualVariableValues::setRandom
+
+bool DualVarValue::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random DualVarValue" << endl;
+#endif
+	this->idx = (5*OSRand());
+	if (OSRand() <= 0.5) this->value = 3.14156;
+	else                 this->value = 2.71828;
+
+	return true;
+}//DualVarValue::setRandom
+
+bool OtherConstraintResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherConstraintResult" << endl;
+#endif
+	this->name = "random string";
+	if (OSRand() <= density) this->value       = "random string"; 
+	if (OSRand() <= density) this->description = "random string"; 
+
+	if (OSRand() <= density) 
+	{
+		if (OSRand() <= 0.5)
+		{
+			int n;
+
+			this->numberOfCon = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfCon;
+			else            n = (int)(1+4*OSRand());
+
+			con = new OtherConResult*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				con[i] = new OtherConResult();
+				con[i]->setRandom(density, conformant);
+			}
+		}
+		else
+		{
+			int n;
+
+			this->numberOfEnumerations = (int)(1+4*OSRand());
+
+			if (conformant)	n = this->numberOfEnumerations;
+			else            n = (int)(1+4*OSRand());
+
+			enumeration = new OtherOptionEnumeration*[n];
+
+			for (int i = 0; i < n; i++)
+			{
+				enumeration[i] = new OtherOptionEnumeration();
+				enumeration[i]->setRandom(density, conformant, 0, 4);
+			}
+		}
+	}
+	
+	return true;
+}//OtherConstraintResult::setRandom
+
+
+bool OtherConResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherConResult" << endl;
+#endif
+	this->idx = (5*OSRand());
+	if (OSRand() <= 0.5) this->value = "random string";
+	else                 this->value = "";
+
+	return true;
+}//OtherConResult::setRandom
+
+
+bool OtherSolutionResults::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherSolutionResults" << endl;
+#endif
+	numberOfOtherSolutionResults = (int)(4*OSRand());
+
+	int n;
+
+	if (conformant)	n = this->numberOfOtherSolutionResults;
+	else            n = (int)(4*OSRand());
+
+	otherSolutionResult = new OtherSolutionResult*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		otherSolutionResult[i] = new OtherSolutionResult();
+		otherSolutionResult[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//OtherSolutionResults::setRandom
+
+bool OtherSolutionResult::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherSolutionResult" << endl;
+#endif
+	name = "random string";
+	numberOfItems = (int) (4*OSRand());
+
+	if (OSRand() <= density) category    = "random string";
+	if (OSRand() <= density) description = "random string";
+
+	int n;
+
+	if (conformant)	n = this->numberOfItems;
+	else            n = (int)(1+4*OSRand());
+
+	if (n > 0 || OSRand() <= density)
+	{
+		item = new std::string[n];
+
+		for (int i = 0; i < n; i++)
+			item[i] = "random string";
+	}
+
+	return true;
+}//OtherSolutionResult::setRandom
+
+
+bool OtherSolverOutput::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random OtherSolverOutput" << endl;
+#endif
+	int n;
+
+	this->numberOfSolverOutputs = (int)(1+4*OSRand());
+
+	if (conformant)	n = this->numberOfSolverOutputs;
+	else            n = (int)(1+4*OSRand());
+
+	solverOutput = new SolverOutput*[n];
+
+	for (int i = 0; i < n; i++)
+	{
+		solverOutput[i] = new SolverOutput();
+		solverOutput[i]->setRandom(density, conformant);
+	}
+
+	return true;
+}//OtherSolverOutput::setRandom
+
+
+bool SolverOutput::setRandom(double density, bool conformant)
+{
+#ifdef DEBUG_OSRESULT
+	cout << "Set random SolverOutput" << endl;
+#endif
+	name = "random string";
+	numberOfItems = (int) (4*OSRand());
+
+	if (OSRand() <= density) category    = "random string";
+	if (OSRand() <= density) description = "random string";
+
+	int n;
+
+	if (conformant)	n = this->numberOfItems;
+	else            n = (int)(1+4*OSRand());
+
+	if (n > 0 || OSRand() <= density)
+	{
+		item = new std::string[n];
+
+		for (int i = 0; i < n; i++)
+			item[i] = "random string";
+	}
+
+	return true;
+}//SolverOutput::setRandom

@@ -1,13 +1,11 @@
 /* $Id$ */
 /** @file OSParseosil.y
  * 
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.2, 12/Oct/2010
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005-2010, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -224,13 +222,17 @@ void osilerror(YYLTYPE* type, OSInstance *osintance,  OSiLParserData *parserData
 
 
 
-osildoc: quadraticcoefficients nonlinearExpressions timeDomain theInstanceEnd  OSILEND;
+osildoc: quadraticCoefficients nonlinearExpressions timeDomain theInstanceEnd osilEnd;
 
 
 theInstanceEnd:  INSTANCEDATASTARTEND
 	| INSTANCEDATAEND ;
+	
+osilEnd: OSILEND
+	| {	osilerror( NULL, osinstance, parserData, "unexpected end of file, expecting </osil>");};
 
-quadraticcoefficients: 
+
+quadraticCoefficients: 
 	|  QUADRATICCOEFFICIENTSSTART  quadnumberatt qTermlist  QUADRATICCOEFFICIENTSEND 
 	{if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms > parserData->qtermcount ) 
 	osilerror( NULL, osinstance, parserData, "actual number of qterms less than numberOfQuadraticTerms");};
@@ -246,17 +248,25 @@ for(int i = 0; i < $3; i++) osinstance->instanceData->quadraticCoefficients->qTe
 qTermlist:  qterm
 		| qTermlist qterm ;
 		   
-qterm: {if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
- osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");} 
-QTERMSTART  anotherqTermATT  qtermend {parserData->qtermcount++; 
-if(!parserData->qtermidxattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idx is required"); 
-if(!parserData->qtermidxOneattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxOne is required"); 
-if(!parserData->qtermidxTwoattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxTwo is required"); 
-parserData->qtermidattON = false; 
-parserData->qtermidxattON = false; 
-parserData->qtermidxOneattON = false; 
-parserData->qtermidxTwoattON = false;
-parserData->qtermcoefattON = false;} ;
+qterm: qtermStart anotherqTermATT  qtermend 
+{
+	parserData->qtermcount++; 
+	if(!parserData->qtermidxattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idx is required"); 
+	if(!parserData->qtermidxOneattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxOne is required"); 
+	if(!parserData->qtermidxTwoattON)  osilerror( NULL, osinstance, parserData, "the qTerm attribute idxTwo is required"); 
+	parserData->qtermidattON = false; 
+	parserData->qtermidxattON = false; 
+	parserData->qtermidxOneattON = false; 
+	parserData->qtermidxTwoattON = false;
+	parserData->qtermcoefattON = false;
+} ;
+
+qtermStart: QTERMSTART
+{
+	if(osinstance->instanceData->quadraticCoefficients->numberOfQuadraticTerms <= parserData->qtermcount )
+ 	osilerror( NULL, osinstance, parserData, "too many QuadraticTerms");
+} 
+  
 				
 qtermend:  ENDOFELEMENT
 		| GREATERTHAN  QTERMEND;
@@ -320,7 +330,7 @@ for(int i = 0; i < osinstance->instanceData->nonlinearExpressions->numberOfNonli
 };
 				
 nlnodes: 
-		| nlnodes NLSTART 
+		| nlnodes nlstart  
 		nlIdxATT  GREATERTHAN nlnode {
 	// IMPORTANT -- HERE IS WHERE WE CREATE THE EXPRESSION TREE
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->m_treeRoot = 
@@ -328,11 +338,15 @@ nlnodes:
 	parserData->nlnodecount++;
 }  NLEND ;
 
+nlstart: NLSTART
+{
+	if(parserData->nlnodecount >= parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
+};
+
 nlIdxATT:  IDXATT QUOTE INTEGER QUOTE { if ( *$2 != *$4 ) osilerror( NULL, osinstance, parserData, "start and end quotes are not the same");
 //osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount] = new Nl();
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->idx = $3;
 osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree = new OSExpressionTree();
-if(parserData->nlnodecount > parserData->tmpnlcount) osilerror( NULL, osinstance, parserData, "actual number of nl terms greater than number attribute");
 // clear the vectors of pointers
 parserData->nlNodeVec.clear();
 parserData->sumVec.clear();
@@ -1028,6 +1042,27 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	//
 	*osillineno = 1;
 	const char *pchar = *p;
+	
+		
+	//first check of osil start
+	const char *startOSiL = "<osil";
+	const char *pOSiLStart = strstr(pchar, startOSiL);
+	if(pOSiLStart == NULL){
+	  osilerror_wrapper( pchar,osillineno,"<osil> element missing"); 
+	  return false;
+	}else{
+		//look for osil end
+			const char *pOSiLEnd = strstr(pOSiLStart, ">");
+		if(pOSiLEnd == NULL) {  osilerror_wrapper( pchar,osillineno,"end of <osil> element missing"); return false;
+			} else {
+			pchar = pOSiLEnd;
+			pchar++;
+		}
+	}
+	
+	
+	
+	
 	// create a char array that holds the instance header information
 	const char *startInstanceHeader = "<instanceHeader";
 	const char *endInstanceHeader = "</instanceHeader";
@@ -1037,11 +1072,20 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 	const char *endSource = "</source";
 	const char *startDescription = "<description";
 	const char *endDescription = "</description";
+	const char *startFileCreator = "<fileCreator";
+	const char *endFileCreator = "</fileCreator";
+	const char *startLicence = "<licence";
+	const char *endLicence = "</licence";
 	const char *pinstanceHeadStart = strstr(pchar, startInstanceHeader);
 	char *pelementText = NULL;
 	const char *ptemp = NULL;
 	int elementSize;
-	if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
+	if(pinstanceHeadStart == NULL ) {
+		const char *startInstanceData = "<instanceData";
+		*p = strstr(pchar, startInstanceData);
+		return true;
+	}
+	//if(pinstanceHeadStart == NULL) {  osilerror_wrapper( pchar,osillineno,"<instanceHeader> element missing"); return false;}
 	// increment the line number counter if there are any newlines between the start of
 	// the osil string and pinstanceHeadStart
 	int	kount = pinstanceHeadStart - pchar;
@@ -1099,7 +1143,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// pchar better be '>' or there is an error
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <name> element"); return false;}
 			pchar++;
-			// proces <name> element text
+			// process <name> element text
 			// there better be a </name
 			ptemp = strstr( pchar, endName);
 			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </name> element"); return false;}
@@ -1151,7 +1195,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// pchar better be '>' or there is an error
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <source> element"); return false;}
 			pchar++;
-			// proces <source> element text
+			// process <source> element text
 			// there better be a </source
 			ptemp = strstr( pchar, endSource);
 			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </source> element"); return false;}
@@ -1203,7 +1247,7 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 			// pchar better be '>' or there is an error
 			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <description> element"); return false;}
 			pchar++;
-			// proces <source> element text
+			// process <description> element text
 			// there better be a </description
 			ptemp = strstr( pchar, endDescription);
 			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </description> element"); return false;}
@@ -1228,6 +1272,113 @@ bool parseInstanceHeader( const char **p, OSInstance *osinstance, int* osillinen
 		}
 	}// end of else after discovering a description element
 	//done processing <description> element
+
+	//
+	//
+	//process the <fileCreator> element
+	//
+	// first burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+	// if, present we should be pointing to <fileCreator element if there -- it is not required
+	*p = pchar;
+	while(*startFileCreator++  == *pchar) pchar++;
+	if( (pchar - *p) != 12) {
+		//reset pchar
+		pchar = *p;
+	}
+	else{
+	// we have a fileCreator element, process the text
+	// burn the whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+		if( *pchar == '/'){
+			pchar++;
+			// better point to a '>'
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <fileCreator> element"); return false;}
+			pchar++;
+		}
+		else{
+			// pchar better be '>' or there is an error
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <fileCreator> element"); return false;}
+			pchar++;
+			// process <fileCreator> element text
+			// there better be a </fileCreator
+			ptemp = strstr( pchar, endFileCreator);
+			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </fileCreator> element"); return false;}
+			elementSize = ptemp - pchar;
+			pelementText = new char[ elementSize + 1];
+			strncpy(pelementText, pchar, elementSize);
+			pelementText[ elementSize] = '\0';
+			osinstance->instanceHeader->fileCreator = pelementText;
+			//garbage collection
+			delete [] pelementText;
+			// move pchar up to the end of </description
+			while(elementSize-- > 0){
+				if(*pchar++ == '\n') (*osillineno)++;
+			}
+			// pchar should now be pointing to the start of </fileCreator
+			// move to first char after </fileCreator
+			pchar += 13;
+			// get rid of the whitespace
+			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+			// we better have the '>' for the end of </fileCreator>
+			if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </fileCreator> element"); return false;}
+		}
+	}// end of else after discovering a fileCreator element
+	//done processing <fileCreator> element
+	//
+	//
+	//process the <licence> element
+	//
+	// first burn any whitespace
+	for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;
+	// if, present we should be pointing to <licence element if there -- it is not required
+	*p = pchar;
+	while(*startLicence++  == *pchar) pchar++;
+	if( (pchar - *p) != 8) {
+		//reset pchar
+		pchar = *p;
+	}
+	else{
+	// we have a licence element, process the text
+	// burn the whitespace
+		for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+		if( *pchar == '/'){
+			pchar++;
+			// better point to a '>'
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <licence> element"); return false;}
+			pchar++;
+		}
+		else{
+			// pchar better be '>' or there is an error
+			if(*pchar != '>') {  osilerror_wrapper( pchar,osillineno,"improperly formed <licence> element"); return false;}
+			pchar++;
+			// process <licence> element text
+			// there better be a </licence
+			ptemp = strstr( pchar, endLicence);
+			if( ptemp == NULL) {  osilerror_wrapper( pchar,osillineno,"improperly formed </licence> element"); return false;}
+			elementSize = ptemp - pchar;
+			pelementText = new char[ elementSize + 1];
+			strncpy(pelementText, pchar, elementSize);
+			pelementText[ elementSize] = '\0';
+			osinstance->instanceHeader->licence = pelementText;
+			//garbage collection
+			delete [] pelementText;
+			// move pchar up to the end of </licence
+			while(elementSize-- > 0){
+				if(*pchar++ == '\n') (*osillineno)++;
+			}
+			// pchar should now be pointing to the start of </licence
+			// move to first char after </licence
+			pchar += 9;
+			// get rid of the whitespace
+			for( ; ISWHITESPACE( *pchar) || isnewline( *pchar, osillineno); pchar++ ) ;	
+			// we better have the '>' for the end of </description>
+			if(*pchar++ != '>'){  osilerror_wrapper( pchar,osillineno,"improperly formed </licence> element"); return false;}
+		}
+	}// end of else after discovering a licence element
+	//done processing <licence> element
+
+
 	//
 	// if we are here there must be an </instanceHeader > element
 	// burn the whitespace
@@ -1358,7 +1509,7 @@ bool parseVariables( const char **p,  OSInstance *osinstance, int* osillineno){
 		ch++;
 		// get rid of white space
 		for( ; ISWHITESPACE( *ch) || isnewline( *ch, osillineno); ch++ ) ;
-		// now loop over the var element when there we numberOfVariables is strictly positive
+		// now loop over the var element when the numberOfVariables is strictly positive
 		*p = ch;
 		while(*startVar++  == *ch) ch++;
 		if( (ch - *p) ==  4) foundVar = true;
@@ -1616,7 +1767,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 	char *attText = NULL;
 	const char *constant = "constant";
 	const char *maxOrMin = "maxOrMin";
-	const char *numberOfObjCoef = "numberOfObjCoeff";
+	const char *numberOfObjCoef = "numberOfObjCoef";
 	const char *weight = "weight";
 	const char *name = "name";
 	const char *mult = "mult";
@@ -1710,7 +1861,7 @@ bool parseObjectives( const char **p, OSInstance *osinstance, int* osillineno){
 					numberOfObjCoef -= 16;
 					if( ( (ch - *p) != 15)  ) {  osilerror_wrapper( ch,osillineno,"error in objective numberOfObjCoef attribute"); return false;}
 					else{
-						if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj numberOfObjCoefatt attributes"); return false;}
+						if(objnumberOfObjCoefattON == true) {  osilerror_wrapper( ch,osillineno,"too many obj numberOfObjCoef attributes"); return false;}
 						objnumberOfObjCoefattON = true;
 						GETATTRIBUTETEXT;
 						//printf("ATTRIBUTE = %s\n", attText);
@@ -2354,7 +2505,7 @@ bool parseStart(const char **p, OSInstance *osinstance, int* osillineno){
 		int *intvec = NULL;
 		osinstance->instanceData->linearConstraintCoefficients->start->el = new int[(base64decodeddatalength/dataSize) ];
 		intvec = (int*)&base64decodeddata[0];
-		for (int i = 0; i < (base64decodeddatalength/dataSize); i++){
+		for (i = 0; i < (base64decodeddatalength/dataSize); i++){
 			osinstance->instanceData->linearConstraintCoefficients->start->el[ i] = *(intvec++);
 		}
 		delete [] b64string;
@@ -3226,9 +3377,6 @@ char *parseBase64(const char **p, int *dataSize, int* osillineno ){
 
 
 double atofmod1(int* osillineno, const char *number, const char *numberend){
-	//check for INF
-	std::string strINF ("INF");
-	if(strINF.compare(0, 3,  number, numberend - number)  == 0) return OSDBL_MAX;
 	double val;
    	char *pEnd;
 	val = os_strtod_wrap(number, &pEnd);

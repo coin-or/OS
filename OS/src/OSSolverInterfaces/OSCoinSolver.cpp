@@ -4,15 +4,13 @@
  * \brief This file defines the CoinSolver class.
  * \detail Read an OSInstance object and convert to COIN data structures
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -422,9 +420,19 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			// treat Cbc separately to take advantage of CbcMain1()
 			
 			if( sSolverName.find( "cbc") != std::string::npos) {	
+				
+				
 				// get Cbc options	
 				if(optionsVector.size() > 0) optionsVector.clear();	
 				optionsVector = osoption->getSolverOptions( "cbc");
+				//what a pain, delete the solve option
+				//std::vector<SolverOption*>::iterator optit;
+				//for(optit = optionsVector.begin();  optit != optionsVector.end(); optit++){
+					
+				//	if( (*optit)->name == "solve" ) optionsVector.erase( optit);
+				//}
+				
+				
 				int num_cbc_options = optionsVector.size();	
 				char *cstr;
 				std::string cbc_option;
@@ -443,7 +451,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					std::cout << "cbc solver option  "  << optionsVector[ i]->name << std::endl;
 					std::cout << "cbc solver value  "  << optionsVector[ i]->value << std::endl;
 #endif
-					if(optionsVector[ i]->value.length() > 0){
+
+					if(optionsVector[ i]->value.length() > 0 ){
 						cbc_option = "-" + optionsVector[ i]->name +"="+optionsVector[ i]->value;
 					}
 					else{
@@ -451,7 +460,8 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 					}
 					cstr = new char [cbc_option.size() + 1];
 					strcpy (cstr, cbc_option.c_str());
-					cbc_argv[i +  1] = cstr;		
+					cbc_argv[i +  1] = cstr;	
+
 				}
 				
 				// the solve option
@@ -767,7 +777,7 @@ void CoinSolver::solve() throw (ErrorClass) {
 				std::cout << "CURRENT SOURCE =  "  << generalMessageHandler->currentSource() << std::endl;
 				std::cout << "MESSAGE BUFFER =  "  << generalMessageHandler->messageBuffer() << std::endl;
 				std::cout << "NUMBER OF STRING FIELDS  =  "  << generalMessageHandler->numberStringFields() << std::endl;
-				exit( 1);
+				
 				*/
 				//do the garbage collection on cbc_argv
 				for(i = 0; i < num_cbc_argv; i++){
@@ -897,102 +907,501 @@ void CoinSolver::dataEchoCheck(){
 
 
 void CoinSolver::writeResult(OsiSolverInterface *solver){
+
 	double *x = NULL;
 	double *y = NULL;
 	double *z = NULL;
+	int *cbasis = NULL;  //column basis information
+	int *rbasis = NULL;  //row basis information
 	int *idx = NULL;
+	int kount;
+	
+
+	//vectors to hold the basis information
+	std::vector<int> freeVars;
+	std::vector<int> basicVars;
+	std::vector<int> nonBasicLower;
+	std::vector<int> nonBasicUpper;
+	std::vector<int>::iterator vit;
+	int **basisIdx;
+	basisIdx = new int*[ 4];
+	//end of vectors
+	
 	int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
 	std::string *rcost = NULL;
-	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
-	if( osinstance->getConstraintNumber() > 0 ) y = new double[osinstance->getConstraintNumber() ];
-	if( osinstance->getVariableNumber() > 0 ) idx = new int[ osinstance->getVariableNumber() ];
+	if( solver->getNumCols() > 0 ) x = new double[solver->getNumCols() ];
+	
+	
+	
+	
+	if( (solver->getNumCols() > 0)  && (sSolverName.find( "vol") == std::string::npos)
+			&& (sSolverName.find( "symphony") == std::string::npos) && 
+			(sSolverName.find( "dylp") == std::string::npos) &&
+				(sSolverName.find( "glpk") == std::string::npos) ) 
+			cbasis = new int[solver->getNumCols() ];
+	
+	if( (osinstance->getConstraintNumber() > 0) && (sSolverName.find( "vol") == std::string::npos)
+			&& (sSolverName.find( "symphony") == std::string::npos)  && 
+			(sSolverName.find( "dylp") == std::string::npos) &&
+			(sSolverName.find( "glpk") == std::string::npos) ) 
+			rbasis = new int[solver->getNumRows() ];
+	
+
+	if( solver->getNumRows() > 0 ) y = new double[solver->getNumRows() ];
+	if( solver->getNumCols() > 0 ) idx = new int[ solver->getNumCols() ];
 	z = new double[1];
-	if( osinstance->getVariableNumber() > 0 ) rcost = new std::string[ osinstance->getVariableNumber()];
-	int numberOfVar =  osinstance->getVariableNumber();
+	if( solver->getNumCols() > 0 ) rcost = new std::string[ solver->getNumCols()];
+	int numberOfVar = solver->getNumCols();
+	int numberOfCon = solver->getNumRows();
 	int solIdx = 0;
 	int i = 0;
 	int numberOfOtherVariableResults = 1;
 	int otherIdx = 0;
 	std::string description = "";
-	osresult->setGeneralStatusType("normal");
-	osresult->setTime(cpuTime);
-    osresult->setServiceName( getVersionInfo() );
-     osresult->setSolverInvoked( "COIN-OR " + sSolverName );
-	if (solver->isProvenOptimal() == true){
-		osresult->setSolutionStatus(solIdx, "optimal", description);					
-	}
-	else{ 
-		if(solver->isProvenPrimalInfeasible() == true) 
-			osresult->setSolutionStatus(solIdx, "infeasible", "the problem is primal infeasible");
-		else{
-			if(solver->isProvenDualInfeasible() == true) 
-				osresult->setSolutionStatus(solIdx, "unbounded", "the problem is unbounded");
+	
+	try{
+		
+		osresult->setGeneralStatusType("normal");
+		osresult->setTime(cpuTime);
+		osresult->setServiceName( getVersionInfo() );
+		osresult->setSolverInvoked( "COIN-OR " + sSolverName );
+		if (solver->isProvenOptimal() == true){
+			osresult->setSolutionStatus(solIdx, "optimal", description);
+			if( (sSolverName.find( "vol") == std::string::npos) &&
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "dylp") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ){//vol, symphony and glpk do not support this -- DyLP causues memory leak
+				solver->getBasisStatus( cbasis, rbasis);
+			}
+
+		}//end if on proven optimal
+		else{ 
+			if(solver->isProvenPrimalInfeasible() == true) 
+				osresult->setSolutionStatus(solIdx, "infeasible", "the problem is primal infeasible");
 			else{
-				if(solver->isPrimalObjectiveLimitReached() == true) 
-					osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
+				if(solver->isProvenDualInfeasible() == true) 
+					osresult->setSolutionStatus(solIdx, "unbounded", "the problem is unbounded");
 				else{
-					if(solver->isDualObjectiveLimitReached() == true) 
-						osresult->setSolutionStatus(solIdx, "other", "dual objective limit reached");
+					if(solver->isPrimalObjectiveLimitReached() == true) {
+						osresult->setSolutionStatus(solIdx, "other", "primal objective limit reached");
+					if( (sSolverName.find( "vol") == std::string::npos) &&
+							(sSolverName.find( "symphony") == std::string::npos) &&
+							(sSolverName.find( "dylp") == std::string::npos) &&
+							(sSolverName.find( "glpk") == std::string::npos) ){//vol glpk, and symphony do not support this
+						solver->getBasisStatus( cbasis, rbasis);
+					}
+					}
 					else{
-						if(solver->isIterationLimitReached() == true) 
-							osresult->setSolutionStatus(solIdx, "other", "iteration limit reached");
+						if(solver->isDualObjectiveLimitReached() == true) {
+							osresult->setSolutionStatus(solIdx, "other", "dual objective limit reached");
+							if( (sSolverName.find( "vol") == std::string::npos) &&
+									(sSolverName.find( "symphony") == std::string::npos) &&
+									(sSolverName.find( "dylp") == std::string::npos) &&
+									(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony do not support this
+								solver->getBasisStatus( cbasis, rbasis);
+							}
+						}
 						else{
-							if(solver->isAbandoned() == true) 
-								osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
-								if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
-							else
-								osresult->setSolutionStatus(solIdx, "other", description);
+							if(solver->isIterationLimitReached() == true) {
+								osresult->setSolutionStatus(solIdx, "other", "iteration limit reached");
+								if( (sSolverName.find( "vol") == std::string::npos) &&
+										(sSolverName.find( "symphony") == std::string::npos) &&
+										(sSolverName.find( "dylp") == std::string::npos) &&
+										(sSolverName.find( "glpk") == std::string::npos) ){//vol and symphony do not support this
+									solver->getBasisStatus( cbasis, rbasis);
+								}
+							}
+							else{
+								if(solver->isAbandoned() == true)
+									osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
+									if( solver->getNumCols() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
+								else
+									osresult->setSolutionStatus(solIdx, "other", description);
+							}
 						}
 					}
 				}
 			}
 		}
+		
+		
+		
+		/* Retrieve the solution */
+		//
+		*(z + 0)  =  solver->getObjValue();
+	
+		osresult->setObjectiveValuesDense(solIdx, z); 
+		
+		
+		
+		for(i=0; i < numberOfVar; i++){
+			
+			*(x + i) = solver->getColSolution()[i];
+			*(idx + i) = i;
+			
+			// get basis information
+			if(cbasis != NULL){
+
+				
+				switch (cbasis[ i] ) 
+				{
+					case 0:
+					{
+						//a free variable 
+						freeVars.push_back( i);
+						break;
+					}
+					
+					case 1:
+					{
+						//a basic variable	
+						basicVars.push_back( i);					
+						break;
+					}
+					
+					case 2:
+					{
+						//nonbasic at upper bound
+						nonBasicUpper.push_back( i );
+						break;
+					}
+					
+					case 3:
+					{
+						//nonbasic at lower bound
+						nonBasicLower.push_back( i) ;
+						break;	
+					}
+					default: 
+						throw ErrorClass("unknown result from Osi getBasisStatus when getting variable basis status");
+						
+				}//end switch
+				
+			} //end if on cbasis == NULL
+			
+		}// end for on number of variables
+		
+		//now set basis information for varialbes
+		if(freeVars.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 0] = new int[ freeVars.size()];
+			
+			for(vit = freeVars.begin(); vit < freeVars.end(); vit++){
+				
+				basisIdx[0][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
+			delete[] basisIdx[ 0];
+			freeVars.clear();
+
+		}
+		
+		
+				
+		if(basicVars.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 1] = new int[ basicVars.size()];
+			
+			for(vit = basicVars.begin(); vit < basicVars.end(); vit++){
+				
+				basisIdx[1][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
+			delete[] basisIdx[ 1];
+			basicVars.clear();
+
+		}
+		
+		
+		
+		if(nonBasicUpper.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 2] = new int[ nonBasicUpper.size()];
+			
+			for(vit = nonBasicUpper.begin(); vit < nonBasicUpper.end(); vit++){
+				
+				basisIdx[2][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
+			delete[] basisIdx[ 2];
+			nonBasicUpper.clear();
+
+		}
+		
+		
+		if(nonBasicLower.size()  > 0){
+			
+			kount = 0;
+			
+			basisIdx[ 3] = new int[ nonBasicLower.size()];
+			
+			for(vit = nonBasicLower.begin(); vit < nonBasicLower.end(); vit++){
+				
+				basisIdx[3][ kount++] = *vit;
+				
+				
+			}
+			
+			osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
+			delete[] basisIdx[ 3];
+			nonBasicLower.clear();
+
+		}
+		//end get basis information for variables 
+		
+		osresult->setPrimalVariableValuesDense(solIdx, x); 
+		// Symphony does not get dual prices
+		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
+			//assert(solver->getNumRows() >= solver->getNumRows());
+			//assert(solver->getRowPrice() != NULL);
+			
+			
+			
+			for(i = 0; i <  numberOfCon; i++){
+				
+				*(y + i) = solver->getRowPrice()[ i];
+				
+				//std::cout << "------ ROW BASIS STATUS ----- " << rbasis[ i]  << std::endl;
+				
+				// get basis information
+				if(rbasis != NULL){
+					switch (rbasis[ i] ) 
+					{
+						case 0:
+						{
+							//a free variable 
+							freeVars.push_back( i);
+							break;
+						}
+						
+						case 1:
+						{
+							//a basic variable	
+							basicVars.push_back( i);					
+							break;
+						}
+						
+						case 2:
+						{
+							//nonbasic at upper bound
+							nonBasicUpper.push_back( i );
+							break;
+						}
+						
+						case 3:
+						{
+							//nonbasic at lower bound
+							nonBasicLower.push_back( i) ;
+							break;	
+						}
+						default: 
+							throw ErrorClass("unknown result from Osi getBasisStatus when getting row basis status");
+							
+					}//end switch
+					
+				} //end if on rbasis == NULL
+				
+				
+			}// end for of loop on constraints
+			
+			osresult->setDualVariableValuesDense(solIdx, y); 
+			
+			
+			
+			
+			//now set basis information for varialbes
+			if(freeVars.size()  > 0){
+				
+				kount = 0;
+				
+				basisIdx[ 0] = new int[ freeVars.size()];
+				
+				for(vit = freeVars.begin(); vit < freeVars.end(); vit++){
+					
+					basisIdx[0][ kount++] = *vit;
+					
+					
+				}
+				
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_isFree, basisIdx[ 0], kount);
+				delete[] basisIdx[ 0];
+				freeVars.clear();
+
+			}
+			
+			
+					
+			if(basicVars.size()  > 0){
+				
+				kount = 0;
+				
+				basisIdx[ 1] = new int[ basicVars.size()];
+				
+				for(vit = basicVars.begin(); vit < basicVars.end(); vit++){
+					
+					basisIdx[1][ kount++] = *vit;
+					
+					
+				}
+				
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_basic, basisIdx[ 1], kount);
+				delete[] basisIdx[ 1];
+				basicVars.clear();
+
+			}
+			
+			
+			
+			if(nonBasicUpper.size()  > 0){
+				
+				kount = 0;
+				
+				basisIdx[ 2] = new int[ nonBasicUpper.size()];
+				
+				for(vit = nonBasicUpper.begin(); vit < nonBasicUpper.end(); vit++){
+					
+					basisIdx[2][ kount++] = *vit;
+					
+					
+				}
+				
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atUpper, basisIdx[ 2], kount);
+				delete[] basisIdx[ 2];
+				nonBasicUpper.clear();
+
+			}
+			
+			
+			if(nonBasicLower.size()  > 0){
+				
+				kount = 0;
+				
+				basisIdx[ 3] = new int[ nonBasicLower.size()];
+				
+				for(vit = nonBasicLower.begin(); vit < nonBasicLower.end(); vit++){
+					
+					basisIdx[3][ kount++] = *vit;
+					
+					
+				}
+				
+				osresult->setBasisStatus(0, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atLower, basisIdx[ 3], kount);
+				delete[] basisIdx[ 3];
+				nonBasicLower.clear();
+
+			}
+			//end get basis information for variables 			
+			
+			
+		}// end of if on integer variables
+		
+		
+		// now put the reduced costs into the osrl
+		// Symphony does not get reduced costs
+		if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
+			// first set the number of Other Variable Results
+			if(numOfIntVars <= 0){
+				osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
+				for(i=0; i < numberOfVar; i++){
+					rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
+				}
+				osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, solver->getNumCols());			
+				// end of setting reduced costs
+			}
+		}
+		
+		
+		osrl = osrlwriter->writeOSrL( osresult);
+	
+	
+		if(solver->getNumRows() > 0) {
+			
+			delete[] y;
+			y = NULL;
+			if( (sSolverName.find( "vol") == std::string::npos) &&
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
+			rbasis = NULL;
+			
+			
+			
+		}
+		
+		delete[] z;	
+		z = NULL;
+		
+		delete[] basisIdx;
+		basisIdx = NULL;
+		
+		if(solver->getNumCols() > 0){
+			
+			if( (sSolverName.find( "vol") == std::string::npos) &&
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] cbasis;
+			cbasis = NULL;
+			
+			delete[] x;
+			x = NULL;
+			delete[] rcost;
+			rcost = NULL;
+			delete[] idx;
+			idx = NULL;
+		}
+	
 	}
 	
-	/* Retrieve the solution */
-	//
-	*(z + 0)  =  solver->getObjValue();
-
-	osresult->setObjectiveValuesDense(solIdx, z); 
-	for(i=0; i < osinstance->getVariableNumber(); i++){
-		*(x + i) = solver->getColSolution()[i];
-		*(idx + i) = i;
-	}
-	osresult->setPrimalVariableValuesDense(solIdx, x); 
-	// Symphony does not get dual prices
-	if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0) {
-		assert(solver->getNumRows() >= osinstance->getConstraintNumber());
-		assert(solver->getRowPrice() != NULL);
-		for(i=0; i <  osinstance->getConstraintNumber(); i++){
-			*(y + i) = solver->getRowPrice()[ i];
+	catch(const ErrorClass& eclass){
+		
+		
+		if(solver->getNumRows() > 0) {
+			
+			delete[] y;
+			y = NULL;
+			if( (sSolverName.find( "vol") == std::string::npos) &&
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] rbasis;
+			rbasis = NULL;
+			
+			
+			
 		}
-		if(numOfIntVars <= 0) osresult->setDualVariableValuesDense(solIdx, y); 
-	}
-	// now put the reduced costs into the osrl
-	// Symphony does not get reduced costs
-	if( sSolverName.find( "symphony") == std::string::npos && osinstance->getNumberOfIntegerVariables() == 0 && osinstance->getNumberOfBinaryVariables() == 0){
-		// first set the number of Other Variable Results
-		if(numOfIntVars <= 0){
-			osresult->setNumberOfOtherVariableResults(solIdx, numberOfOtherVariableResults);
-			for(i=0; i < numberOfVar; i++){
-				rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
-			}
-			osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());			
-			// end of setting reduced costs
-		}
-	}
-	osrl = osrlwriter->writeOSrL( osresult);
-	if(osinstance->getVariableNumber() > 0) delete[] x;
-	x = NULL;
-	if(osinstance->getConstraintNumber() > 0) delete[] y;
-	y = NULL;
-	delete[] z;	
-	z = NULL;
-	if(osinstance->getVariableNumber() > 0){
-		delete[] rcost;
-		rcost = NULL;
-		delete[] idx;
-		idx = NULL;
+		
+		delete[] z;	
+		z = NULL;
+		
+		if(solver->getNumCols() > 0){
+			if( (sSolverName.find( "vol") == std::string::npos) &&
+					(sSolverName.find( "symphony") == std::string::npos) &&
+					(sSolverName.find( "glpk") == std::string::npos) ) delete[] cbasis;
+			cbasis = NULL;
+			
+			delete[] x;
+			x = NULL;
+			delete[] rcost;
+			rcost = NULL;
+			delete[] idx;
+			idx = NULL;
+		}		
+		
+		osresult->setGeneralMessage( eclass.errormsg);
+		osresult->setGeneralStatusType( "error");
+		osrl = osrlwriter->writeOSrL( osresult);
+		throw ErrorClass( osrl) ;
 	}
 }//writeResult(OsiSolverInterface)
 
@@ -1003,15 +1412,16 @@ void CoinSolver::writeResult(CbcModel *model){
 	double *z = NULL;
 	int *idx = NULL;
 	std::string *rcost = NULL;
-	if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
-	if( osinstance->getConstraintNumber() > 0 ) y = new double[osinstance->getConstraintNumber() ];
-	if( osinstance->getVariableNumber() > 0 ) idx = new int[ osinstance->getVariableNumber() ];
+	//if( osinstance->getVariableNumber() > 0 ) x = new double[osinstance->getVariableNumber() ];
+	if( model->getNumCols() > 0 ) x = new double[model->getNumCols() ];
+	if( model->getNumRows() > 0 ) y = new double[model->getNumRows() ];
+	if( model->getNumCols() > 0 ) idx = new int[ model->getNumCols() ];
 	z = new double[1];
-	if( osinstance->getVariableNumber() > 0 ) rcost = new std::string[ osinstance->getVariableNumber()];
+	if( model->getNumCols() > 0 ) rcost = new std::string[ model->getNumCols()];
 
 	int numberOfOtherVariableResults = 1;
 	int otherIdx = 0;	
-	int numberOfVar =  osinstance->getVariableNumber();
+	int numberOfVar =  model->getNumCols();
 	int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
 	int i = 0;
 	int solIdx = 0;
@@ -1057,12 +1467,12 @@ void CoinSolver::writeResult(CbcModel *model){
 	/* Retrieve the solution -- of course it may not be optimal */
 	if(numOfIntVars > 0) *(z + 0)  =  model->getObjValue();
 	osresult->setObjectiveValuesDense(solIdx, z); 
-	for(i=0; i < osinstance->getVariableNumber(); i++){
+	for(i=0; i < model->getNumCols(); i++){
 		*(x + i) = model->getColSolution()[i];
 		*(idx + i) = i;
 	}
 	osresult->setPrimalVariableValuesDense(solIdx, x); 
-	for(i=0; i <  osinstance->getConstraintNumber(); i++){
+	for(i=0; i <  model->getNumRows(); i++){
 		*(y + i) = model->getRowPrice()[ i];
 	}
 	if(numOfIntVars <= 0) osresult->setDualVariableValuesDense(solIdx, y); 
@@ -1073,18 +1483,18 @@ void CoinSolver::writeResult(CbcModel *model){
 		for(i=0; i < numberOfVar; i++){
 			rcost[ i] = os_dtoa_format( model->getReducedCost()[ i]);
 		}
-		osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, osinstance->getVariableNumber());	
+		osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, model->getNumCols());	
 	}
 	// end of setting reduced costs	
 	osrl = osrlwriter->writeOSrL( osresult);
 	//garbage collection
-	if(osinstance->getVariableNumber() > 0) delete[] x;
+	if(model->getNumCols() > 0) delete[] x;
 	x = NULL;
-	if(osinstance->getConstraintNumber() > 0) delete[] y;
+	if(model->getNumRows() > 0) delete[] y;
 	y = NULL;
 	delete[] z;	
 	z = NULL;
-	if(osinstance->getVariableNumber() > 0){
+	if(model->getNumCols() > 0){
 		delete[] rcost;
 		rcost = NULL;
 		delete[] idx;
