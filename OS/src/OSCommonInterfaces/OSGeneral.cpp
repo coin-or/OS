@@ -469,7 +469,7 @@ bool IntVector::setRandom(double density, bool conformant, int iMin, int iMax)
 
 	el = new int[n];	
 	for (int i = 0; i < n; i++)
-		el[i] = OSiRand(iMin, iMax);
+		el[i] = (int)OSiRand(iMin, iMax);
 	return true;
 }//IntVector::setRandom
 
@@ -1022,7 +1022,7 @@ bool StorageCapacity::IsEqual(StorageCapacity *that)
 			return false;
 		}
 		else	
-		{	if ((this->unit        != that->unit)        || 
+		{	if ( (this->unit        != that->unit)        || 
 				(this->description != that->description) || 
 				!isEqual(this->value, that->value))
 			{
@@ -1098,7 +1098,6 @@ bool CPUSpeed::IsEqual(CPUSpeed *that)
 		else	
 		{	if ((this->unit        != that->unit)        || 
 				(this->description != that->description) || 
-//				(this->value       != that->value))
 				!isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSGENERAL
@@ -1227,7 +1226,8 @@ bool TimeSpan::IsEqual(TimeSpan *that)
 			return false;
 		}
 		else	
-		{	if (!isEqual(this->value,  that->value) ||
+		{
+			if (!isEqual(this->value,  that->value) ||
 						 this->unit != that->unit )  
 				
 			{

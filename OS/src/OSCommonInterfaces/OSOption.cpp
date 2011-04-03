@@ -13,7 +13,7 @@
  * 
  */
 
-//#define DEBUG
+#define DEBUG
 
 //#ifdef  DEBUG
 //#define DEBUG_OSOPTION
@@ -8582,7 +8582,6 @@ bool MinMemorySize::IsEqual(MinMemorySize *that)
 		}
 		else	
 		{	if ((this->unit        != that->unit)  || 
-//				(this->value       != that->value) ||
 				!isEqual(this->value, that->value) ||
 				(this->description != that->description) ) 
 			{
@@ -8623,7 +8622,6 @@ bool MinCPUSpeed::IsEqual(MinCPUSpeed *that)
 		}
 		else	
 		{	if ((this->unit        != that->unit)  || 
-//				(this->value       != that->value) ||
 				!isEqual(this->value, that->value) ||
 				(this->description != that->description) ) 
 			{
@@ -9025,6 +9023,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 		}
 		else	
 		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
+
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9682,7 +9681,8 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx     != that->idx)    || !isEqual(this->lbValue,that->lbValue) || 
+		{	if ((this->idx     != that->idx)    || 
+				!isEqual(this->lbValue, that->lbValue) || 
 				!isEqual(this->ubValue, that->ubValue) )
 			{
 #ifdef DEBUG_OSOPTION
@@ -9992,8 +9992,9 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || !isEqual(this->lbDualValue, that->lbDualValue) ||
-			                                !isEqual(this->ubDualValue, that->ubDualValue))
+		{	if ((this->idx != that->idx) || 
+				!isEqual(this->lbDualValue, that->lbDualValue) ||
+	                        !isEqual(this->ubDualValue, that->ubDualValue))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "         << this->idx         << " vs. " << that->idx         << endl;

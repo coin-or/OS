@@ -24,8 +24,8 @@
 #include<sstream>
 
 //#define DEBUG_OSRESULT
-#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
-//#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
+//#define DEBUG_ISEQUAL_ROUTINES 0 // No output 
+#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
 //#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
 
 using namespace std;
@@ -6256,7 +6256,8 @@ bool VarValue::IsEqual(VarValue *that)
 		}
 		else	
 		{
-			if (this->idx != that->idx || !isEqual(this->value, that->value) )
+			if (this->idx != that->idx ||
+				 !isEqual(this->value, that->value) )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in VarValue" << endl;
@@ -6879,7 +6880,8 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 		}
 		else	
 		{
-			if (this->idx != that->idx || !isEqual(this->value, that->value) )
+			if (this->idx != that->idx || 
+				!isEqual(this->value, that->value) )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in DualVarValue" << endl;

@@ -1797,6 +1797,7 @@ initialVariableValuesAttributes: numberOfVarAttribute
 	parserData->kounter = 0;
 	parserData->idxArray = new    int[parserData->numberOfVar];
 	parserData->valArray = new double[parserData->numberOfVar];
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 }; 
 
 initialVariableValuesContent: 
@@ -2165,6 +2166,7 @@ integerVariableBranchingWeightsAttributes: numberOfVarAttribute
 	parserData->kounter = 0;
 	parserData->idxArray = new    int[parserData->numberOfVar];
 	parserData->valArray = new double[parserData->numberOfVar];
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 }; 
 
 integerVariableBranchingWeightsContent:
@@ -2304,6 +2306,7 @@ sosWeightGroupAtt:
 		parserData->kounter = 0;
 		parserData->idxArray = new    int[parserData->numberOfVar];
 		parserData->valArray = new double[parserData->numberOfVar];
+		for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 		parserData->numberOfVarAttributePresent = true;
 	}
   | groupWeightAttribute
@@ -2502,6 +2505,7 @@ initialObjectiveValuesAttributes: numberOfObjAttribute
 	parserData->kounter = 0;
 	parserData->idxArray = new    int[parserData->numberOfObj];
 	parserData->valArray = new double[parserData->numberOfObj];
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 }; 
 
 initialObjectiveValuesContent: 
@@ -3057,6 +3061,7 @@ initialConstraintValuesAttributes: numberOfConAttribute
 	parserData->kounter = 0;
 	parserData->idxArray = new    int[parserData->numberOfCon];
 	parserData->valArray = new double[parserData->numberOfCon];
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 }; 
 
 initialConstraintValuesContent:

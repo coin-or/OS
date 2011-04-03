@@ -142,7 +142,7 @@ inline bool OSIsnan(double x) {
 	
     return MY_C_ISNAN( x)!=0;
 #else
-    return false;
+    return (x != x);
 #endif
 	
 } 

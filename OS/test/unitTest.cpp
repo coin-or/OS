@@ -1,7 +1,7 @@
 /* $Id$ */
 /** @file unitTest.cpp
  * 
- * \brief This file runs the OS unitTest.
+ * \brief This file runs the OS unit test.
   
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
@@ -14,7 +14,7 @@
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  * 
- * This is the OS unitTest. It runs a large number of tests of most aspects of the 
+ * This is the OS unit test. It runs a large number of tests of most aspects of the 
  * Optimization Services suite. The tests fall into different categories and can be 
  * switched on and off selectively by setting appropriate boolean variables
  * from the command line interface.
@@ -236,7 +236,7 @@ int main(int argC, char* argV[])
 	//using CppAD::NearEqual;
 	bool ok;
 	double check;
-	
+
 	
 	bool BASIC_TESTS;  // minimal functionality tests
 	bool SOLVER_TESTS; // at least one problem for each solver
@@ -628,6 +628,7 @@ if (PARSER_TESTS){
 
 //#if 0   //!!!  OSrL parser development
 	try{ 
+		cout << endl << "TEST " << ++nOfTest << ": Test parsing an OSiL file (parincLinear.osil)" << endl << endl;
 		clock_t start, finish;
 		double duration;
 		osilwriter = new OSiLWriter();

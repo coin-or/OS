@@ -269,12 +269,12 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			outStr << "<availableDiskSpace";
 			if(m_OSResult->system->availableDiskSpace->unit.length() > 0){
 				outStr << " unit=\"";
-				outStr << m_OSResult->system->availableDiskSpace->unit ;
+				outStr << m_OSResult->system->availableDiskSpace->unit;
 				outStr << "\"";
 			}
 			if(m_OSResult->system->availableDiskSpace->description.length() > 0){
 				outStr << " description=\"";
-				outStr << m_OSResult->system->availableDiskSpace->description ;
+				outStr << m_OSResult->system->availableDiskSpace->description;
 				outStr << "\"";
 			}
 			outStr << ">";
@@ -291,7 +291,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			outStr << "<availableMemory";
 			if(m_OSResult->system->availableMemory->unit.length() > 0){
 				outStr << " unit=\"";
-				outStr << m_OSResult->system->availableMemory->unit ;
+				outStr << m_OSResult->system->availableMemory->unit;
 				outStr << "\"";
 			}
 			if(m_OSResult->system->availableMemory->description.length() > 0){
