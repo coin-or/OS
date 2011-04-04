@@ -336,6 +336,10 @@ void OSColGenApp::solve(){
 		}
 		
 		m_zLB =  m_si->getObjValue();
+		
+		//print LP value at node
+		std::cout <<  "optimal LP value at root node = "  <<  m_zLB << std::endl;
+		exit( 1);
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
