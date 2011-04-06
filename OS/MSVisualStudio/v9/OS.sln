@@ -65,8 +65,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSFileUpload", "OSFileUploa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSymphony", "..\..\..\SYMPHONY\MSVisualStudio\v9\libSymphony.vcproj", "{BB170874-0B55-4DF6-B0FE-5398CC668B28}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiSym", "..\..\..\Osi\MSVisualStudio\v9\libOsiSym\libOsiSym.vcproj", "{AC0F178A-9719-44F3-9891-9138B126DC78}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOSSolvers", "libOSSolvers\libOSSolvers.vcproj", "{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSParsingTest", "OSTest\OSParsingTest.vcproj", "{C6D17043-0174-458F-B81C-0C8CF9B40135}"
@@ -76,6 +74,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OSParsingTest", "OSTest\OSP
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libCbcSolver", "..\..\..\Cbc\MSVisualStudio\v9\libCbcSolver\libCbcSolver.vcproj", "{71DA4595-E8A7-4B21-A00A-D96D29D11E3E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiSym", "..\..\..\SYMPHONY\MSVisualStudio\v9\libOsiSym.vcproj", "{AC0F178A-9719-44F3-9891-9138B126DC78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -197,14 +197,6 @@ Global
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Release|Win32.Build.0 = Release|Win32
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Release|x64.ActiveCfg = Release|x64
 		{BB170874-0B55-4DF6-B0FE-5398CC668B28}.Release|x64.Build.0 = Release|x64
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|Win32.Build.0 = Debug|Win32
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|x64.ActiveCfg = Debug|x64
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|x64.Build.0 = Debug|x64
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|Win32.ActiveCfg = Release|Win32
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|Win32.Build.0 = Release|Win32
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|x64.ActiveCfg = Release|x64
-		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|x64.Build.0 = Release|x64
 		{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}.Debug|Win32.Build.0 = Debug|Win32
 		{9B5C2549-3D21-497E-A9CB-83D9DEB594BB}.Debug|x64.ActiveCfg = Debug|x64
@@ -229,6 +221,14 @@ Global
 		{71DA4595-E8A7-4B21-A00A-D96D29D11E3E}.Release|Win32.Build.0 = Release|Win32
 		{71DA4595-E8A7-4B21-A00A-D96D29D11E3E}.Release|x64.ActiveCfg = Release|x64
 		{71DA4595-E8A7-4B21-A00A-D96D29D11E3E}.Release|x64.Build.0 = Release|x64
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|Win32.Build.0 = Debug|Win32
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|x64.ActiveCfg = Debug|x64
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Debug|x64.Build.0 = Debug|x64
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|Win32.ActiveCfg = Release|Win32
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|Win32.Build.0 = Release|Win32
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|x64.ActiveCfg = Release|x64
+		{AC0F178A-9719-44F3-9891-9138B126DC78}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

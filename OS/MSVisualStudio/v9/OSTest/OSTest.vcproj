@@ -77,7 +77,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
-				GenerateManifest="false"
+				GenerateManifest="true"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\$(ConfigurationName)\OSTest.pdb"
 				SubSystem="1"
