@@ -1573,6 +1573,10 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	
 	//implement 1OPT
 	
+	getMultiCommodInstance( 1);
+	
+	exit( 1);
+	
 	getInitialSolution();
 	
 	std::cout << "Executing OSBearcatSolverXij::getInitialRestrictedMaster( )" << std::endl;
@@ -4779,6 +4783,281 @@ bool OSBearcatSolverXij::OneOPT(){
 }
 
 }//1OPT
+
+
+
+
+
+CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
+	
+
+	int i;
+	int j;
+	int numVar;
+	int numNonHubs;
+	numNonHubs = m_numNodes - m_numHubs;
+	//first the w varibles 
+	numVar = numNonHubs; 
+	//u(i, j) varibles with i = hubIndex
+	numVar +=  numNonHubs; 
+	//u(i, j) variable where i, j are not hubs
+	numVar +=  numNonHubs*numNonHubs - numNonHubs;
+	int numNonz;
+	int kount;
+	int numCon;
+	CoinSolver *solver  = NULL;
+	SparseVector *objcoeff = NULL;
+	
+	numCon = numNonHubs + (numNonHubs*numNonHubs - numNonHubs) + 1;
+
+
+
+	OSInstance *osinstance = new OSInstance();
+	try{
+		
+		osinstance->setInstanceSource("generated from OSBearcatSoleverXij");
+		osinstance->setInstanceDescription("Instance for finding a multicommodity cut");
+		osinstance->setVariableNumber( numVar); 
+		
+		numVar = 0;
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			if(m_nodeName[ i] != "")
+				osinstance->addVariable(numVar++, "w[" +  m_nodeName[ i]  +"]", 0, 1, 'C');
+			else
+				osinstance->addVariable(numVar++, makeStringFromInt("w[", i)  +"]", 0, 1, 'C');
+			
+		}
+		
+
+			
+		for(j = m_numHubs; j < m_numNodes; j++){
+			
+			if(m_nodeName[ hubIndex ] != "" && m_nodeName[ j] != "")
+				osinstance->addVariable(numVar++, "u[" +  m_nodeName[ hubIndex] + "," + m_nodeName[ j] +"]", 0, 1, 'C');
+			else
+				osinstance->addVariable(numVar++, makeStringFromInt("u[", hubIndex)  + makeStringFromInt(",", j)  +"]", 0, 1, 'C');
+			
+			
+		}
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			
+			for(j = m_numHubs; j < i; j++){
+				
+				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
+					osinstance->addVariable(numVar++, "u[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", 0, 1, 'C');
+				else
+					osinstance->addVariable(numVar++, makeStringFromInt("u[", i)  + makeStringFromInt(",", j)  +"]", 0, 1, 'C');
+				
+				
+			}
+			
+			for(j = i + 1; j < m_numNodes; j++){
+				
+				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
+					osinstance->addVariable(numVar++, "u[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", 0, 1, 'C');
+				else
+					osinstance->addVariable(numVar++, makeStringFromInt("u[", i)  + makeStringFromInt(",", j)  +"]", 0, 1, 'C');
+				
+				
+			}
+			
+		}
+		
+		
+		// now add the objective function
+		osinstance->setObjectiveNumber( 1);
+		
+		// now the coefficient
+
+		objcoeff = new SparseVector( numVar); 
+		
+		for(i = 0; i < numVar; i++){
+			
+			objcoeff->indexes[ i] = i;
+			objcoeff->values[ i] = 0;
+			
+		}
+	
+		osinstance->addObjective(-1, "cutViolation", "max", 0.0, 1.0, objcoeff);
+		objcoeff->bDeleteArrays = true;
+		delete objcoeff;
+		
+		osinstance->setConstraintNumber( numCon ); 
+		//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
+		numCon = 0;
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			if(m_nodeName[ hubIndex] != "" && m_nodeName[ j] != "")
+				osinstance->addConstraint(numCon++, "dualCon[" + m_nodeName[ hubIndex] + "," +   m_nodeName[ i] + "]", -OSDBL_MAX, 0,  0);
+			else
+				osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", hubIndex)  + makeStringFromInt(",", i)  +"]", -OSDBL_MAX, 0,  0);
+		}
+		
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			
+			for(j = m_numHubs; j < i; j++){
+				
+				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
+					osinstance->addConstraint(numCon++, "dualCon[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", -OSDBL_MAX, 0, 0);
+				else
+					osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", i)  + makeStringFromInt(",", j)  +"]", -OSDBL_MAX, 0, 0);
+				
+				
+			}
+			
+			for(j = i + 1; j < m_numNodes; j++){
+				
+				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
+					osinstance->addConstraint(numCon++, "dualCon[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", -OSDBL_MAX, 0, 0);
+				else
+					osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", i)  + makeStringFromInt(",", j)  +"]", -OSDBL_MAX, 0, 0);
+				
+				
+			}
+			
+		}
+		
+		double upperBound;
+		upperBound = numVar - numNonHubs ;
+		osinstance->addConstraint(numCon++, "boundConstraint", 0, upperBound, 0);
+		
+		//now the A matrix
+		numCon = numNonHubs + (numNonHubs*numNonHubs - numNonHubs) + 1;
+		numNonz = 2*numNonHubs;
+		numNonz += 3*(numNonHubs*numNonHubs - numNonHubs);
+		numNonz += (numNonHubs*numNonHubs - numNonHubs) + numNonHubs;
+	
+	
+		double *values = new double[ numNonz];
+		int *columnIndexes = new int[ numNonz];
+		//store by row major
+		int *starts = new int[ numCon + 1];  
+		
+	
+		kount = 0;
+		numNonz = 0;
+		starts[ kount++] = 0;
+		
+		
+		//////////////////////////////////
+		
+		
+		int uijKount;
+		uijKount = numNonHubs;
+		
+		for(j = m_numHubs; j < m_numNodes; j++){
+			
+			//-u(k, j) + w(j)  =l=  0;
+			//variable w(j)
+			columnIndexes[ numNonz] = j - m_numHubs ; 
+			values[ numNonz++] = 1.0;
+			
+			//variable -u(k, j)
+			columnIndexes[ numNonz] = uijKount ; 
+			values[ numNonz++] = -1.0;
+			
+			starts[ kount++] = numNonz;
+			uijKount++;
+		}
+		
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			
+			for(j = m_numHubs; j < i; j++){
+				
+				//-u(i, j) - w(i) + w(j) =l=  0;
+				//variable w(i)
+				columnIndexes[ numNonz] = i - m_numHubs ; 
+				values[ numNonz++] = -1.0;
+				
+				//variable w(j)
+				columnIndexes[ numNonz] = j - m_numHubs ; 
+				values[ numNonz++] = 1.0;
+				
+				//variable -u(i, j)
+				columnIndexes[ numNonz] = uijKount ; 
+				values[ numNonz++] = -1.0;
+				
+				
+				starts[ kount++] = numNonz;
+				uijKount++;
+				
+				
+			}
+			
+			for(j = i + 1; j < m_numNodes; j++){
+				
+				//-u(i, j) - w(i) + w(j) =l=  0;
+				//variable w(i)
+				columnIndexes[ numNonz] = i - m_numHubs ; 
+				values[ numNonz++] = -1.0;
+				
+				//variable w(j)
+				columnIndexes[ numNonz] = j - m_numHubs ; 
+				values[ numNonz++] = 1.0;
+				
+				//variable -u(i, j)
+				columnIndexes[ numNonz] = uijKount ; 
+				values[ numNonz++] = -1.0;
+				
+				
+				starts[ kount++] = numNonz;
+				uijKount++;
+
+				
+			}
+			
+		}		
+		
+		//the last row
+		for(i = numNonHubs; i < numVar; i++ ){
+			
+			//variable u(i, j)
+			columnIndexes[ numNonz] = i ; 
+			values[ numNonz++] = 1.0;
+			
+		}
+	
+		starts[ kount++] = numNonz;
+		osinstance->setLinearConstraintCoefficients(numNonz, false, values, 0, numNonz - 1, 
+			columnIndexes, 0, numNonz - 1, starts, 0, numVar);
+		
+		std::cout << osinstance->printModel() << std::endl;
+		
+	
+		
+		solver = new CoinSolver();
+		solver->sSolverName ="clp"; 
+		solver->osinstance = osinstance;	
+		solver->buildSolverInstance();
+		solver->osoption = m_osoption;	
+		
+		
+		return solver;
+	
+	
+		
+	} catch (const ErrorClass& eclass) {
+		
+		if( objcoeff != NULL ){
+			delete objcoeff;
+			objcoeff = NULL;
+		}
+		//  Problem with the parser
+		throw ErrorClass(eclass.errormsg);
+	}
+		
+	
+}//end getMultiCommodInstance
+
+
 
 std::string makeStringFromInt(std::string theString, int theInt){
 	ostringstream outStr;

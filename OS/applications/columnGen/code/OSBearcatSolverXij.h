@@ -100,7 +100,7 @@ public:
 	/** m_demand is the vector of node demands */
 	int* m_demand;
 	
-	/** m_nodeName is the vector of node name */
+	/** m_nodeName is the vector of node names */
 	string* m_nodeName;
 	
 	/** the distance/cost vectors */
@@ -408,6 +408,20 @@ public:
 	 * 
 	 */
 	CoinSolver* getTSP(int numNodes, double* cost);	
+	
+	
+	
+	/** call this method to get an instance that is
+	 * used to generate a multicommodity cut
+	 * 
+	 * INPUT:
+	 * 	hubIndex is the index associated with the hub for which
+	 * we are looking for a cut
+	 * RETURN:
+	 * pointer to a CoinSolver with a cut generator instance
+	 * 
+	 */
+	CoinSolver* getMultiCommodInstance(int hubIndex);	
 	
 	
 	/** 
