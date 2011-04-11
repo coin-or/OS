@@ -18,7 +18,7 @@
 <solverOption name="maxThetaNonz" value="750000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixCon" value="2000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixNonz" value="100000" solver="routeSolver" type="integer"/>
-<solverOption name="totalDemand" value="35" solver="routeSolver" type="integer"/>
+<solverOption name="totalDemand" value="42" solver="routeSolver" type="integer"/>
 <solverOption name="use1OPTstart" value="true" solver="routeSolver" type="bool"/>
 
 <solverOption name="routeCapacity" value="25" solver="routeSolver" category="0" type="integer"/>
@@ -33,21 +33,21 @@
 <solverOption name="demand" value="0" solver="routeSolver" type="integer" description="H02"/>
 <solverOption name="demand" value="0" solver="routeSolver" type="integer" description="H03"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="E01"/>
-<solverOption name="demand" value="4" solver="routeSolver" type="integer" description="E02"/>
+<solverOption name="demand" value="6" solver="routeSolver" type="integer" description="E02"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="E03"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="E04"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="E05"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="E06"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="N01"/>
-<solverOption name="demand" value="1" solver="routeSolver" type="integer" description="N02"/>
+<solverOption name="demand" value="2" solver="routeSolver" type="integer" description="N02"/>
 <solverOption name="demand" value="3" solver="routeSolver" type="integer" description="N03"/>
-<solverOption name="demand" value="1" solver="routeSolver" type="integer" description="N04"/>
+<solverOption name="demand" value="2" solver="routeSolver" type="integer" description="N04"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="N05"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="N06"/>
 <solverOption name="demand" value="2" solver="routeSolver" type="integer" description="N07"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="N08"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="N09"/>
-<solverOption name="demand" value="2" solver="routeSolver" type="integer" description="N10"/>
+<solverOption name="demand" value="3" solver="routeSolver" type="integer" description="N10"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S01"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S02"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S03"/>
@@ -55,8 +55,8 @@
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S05"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S06"/>
 <solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S07"/>
-<solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S08"/>
-<solverOption name="demand" value="1" solver="routeSolver" type="integer" description="S09"/>
+<solverOption name="demand" value="2" solver="routeSolver" type="integer" description="S08"/>
+<solverOption name="demand" value="2" solver="routeSolver" type="integer" description="S09"/>
 <solverOption name="demand" value="2" solver="routeSolver" type="integer" description="S10"/>
 
 <solverOption name="restrictedMasterSolution" value="12" solver="routeSolver" category="solution0:route0" type="integer" description="N04"/>
