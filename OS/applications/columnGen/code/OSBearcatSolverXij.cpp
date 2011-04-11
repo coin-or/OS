@@ -2511,7 +2511,10 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 		
 		//get a cut for each hub
 		
-		
+		for(k = 0; k < m_numHubs; k++){
+			
+			
+		}
 		
 		
 	
