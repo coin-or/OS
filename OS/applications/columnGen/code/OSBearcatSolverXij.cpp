@@ -2495,10 +2495,34 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 }//end getCutsTheta
 
 
+void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numTheta,
+		int &numNewRows, int*  &numNonz, int** &colIdx,
+		double** &values, double* &rowLB, double* &rowUB) {
+	//critical -- the variables that come in the theta variables
+	//not the x variables, we must convert to x, find a cut in x-space
+	//and then convert back to theta
+	
+	
+	//convexityRowIndex
+	
+	int k;
+	
+	try{
+		
+		//get a cut for each hub
+		
+		
+		
+		
+	
+	} catch (const ErrorClass& eclass) {
 
+		throw ErrorClass(eclass.errormsg);
 
+	}		
 
-
+	
+}//end getCutsMultiCommod
 
 void OSBearcatSolverXij::getCutsX(const  double* x, const int numX,
 		int &numNewRows, int*  &numNonz, int** &colIdx,
@@ -4824,9 +4848,9 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		for(i = m_numHubs; i < m_numNodes; i++){
 			
 			if(m_nodeName[ i] != "")
-				osinstance->addVariable(numVar++, "w[" +  m_nodeName[ i]  +"]", 0, 1, 'C');
+				osinstance->addVariable(numVar++, "w[" +  m_nodeName[ i]  +"]", -OSDBL_MAX, OSDBL_MAX, 'C');
 			else
-				osinstance->addVariable(numVar++, makeStringFromInt("w[", i)  +"]", 0, 1, 'C');
+				osinstance->addVariable(numVar++, makeStringFromInt("w[", i)  +"]", -OSDBL_MAX, OSDBL_MAX, 'C');
 			
 		}
 		
@@ -4835,9 +4859,9 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		for(j = m_numHubs; j < m_numNodes; j++){
 			
 			if(m_nodeName[ hubIndex ] != "" && m_nodeName[ j] != "")
-				osinstance->addVariable(numVar++, "u[" +  m_nodeName[ hubIndex] + "," + m_nodeName[ j] +"]", 0, 1, 'C');
+				osinstance->addVariable(numVar++, "u[" +  m_nodeName[ hubIndex] + "," + m_nodeName[ j] +"]", 0, OSDBL_MAX, 'C');
 			else
-				osinstance->addVariable(numVar++, makeStringFromInt("u[", hubIndex)  + makeStringFromInt(",", j)  +"]", 0, 1, 'C');
+				osinstance->addVariable(numVar++, makeStringFromInt("u[", hubIndex)  + makeStringFromInt(",", j)  +"]", 0, OSDBL_MAX, 'C');
 			
 			
 		}
@@ -4848,9 +4872,9 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 			for(j = m_numHubs; j < i; j++){
 				
 				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
-					osinstance->addVariable(numVar++, "u[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", 0, 1, 'C');
+					osinstance->addVariable(numVar++, "u[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", 0, OSDBL_MAX, 'C');
 				else
-					osinstance->addVariable(numVar++, makeStringFromInt("u[", i)  + makeStringFromInt(",", j)  +"]", 0, 1, 'C');
+					osinstance->addVariable(numVar++, makeStringFromInt("u[", i)  + makeStringFromInt(",", j)  +"]", 0, OSDBL_MAX, 'C');
 				
 				
 			}
@@ -4858,9 +4882,9 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 			for(j = i + 1; j < m_numNodes; j++){
 				
 				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
-					osinstance->addVariable(numVar++, "u[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", 0, 1, 'C');
+					osinstance->addVariable(numVar++, "u[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", 0, OSDBL_MAX, 'C');
 				else
-					osinstance->addVariable(numVar++, makeStringFromInt("u[", i)  + makeStringFromInt(",", j)  +"]", 0, 1, 'C');
+					osinstance->addVariable(numVar++, makeStringFromInt("u[", i)  + makeStringFromInt(",", j)  +"]", 0, OSDBL_MAX, 'C');
 				
 				
 			}
