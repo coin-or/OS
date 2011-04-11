@@ -781,17 +781,17 @@ AC_COIN_VPATH_LINK(data/matlabFiles/OSCallMatlabSolver.m)
 ###
 ## columnGen Application files
 ##
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen5.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen5.osil)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osil)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osil)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osil)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osol)
 
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4.osil)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile5.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile6.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile7.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/colgenmean.osol)
+
+
 
 ### Python Code
 AC_COIN_VPATH_LINK(applications/parsingTest/parsingTest.py)

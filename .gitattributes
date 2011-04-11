@@ -60,7 +60,6 @@ OS/applications/columnGen/code/OSNode.h -text
 OS/applications/columnGen/data/colgen10.osol -text
 OS/applications/columnGen/data/colgen12.osol -text
 OS/applications/columnGen/data/colgen12b.osol -text
-OS/applications/columnGen/data/colgen5.osol -text
 OS/applications/columnGen/data/colgenmean.osol -text
 OS/applications/columnGen/data/colgenpercentile4.osil -text
 OS/applications/columnGen/data/colgenpercentile4.osol -text
