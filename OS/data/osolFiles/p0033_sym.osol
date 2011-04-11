@@ -26,7 +26,7 @@
 			<solverOption name="maxN" solver="cbc" value="100" />
 			<solverOption name="cuts" solver="cbc" value="off" />
 			<solverOption name="solve" solver="cbc"  />
-			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
+			<solverOption name="verbosity" solver="symphony"  value="3" />
 
 		</solverOptions>
 	</optimization>
