@@ -117,6 +117,9 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		getOptions( m_osoption);
 		// we need to get cost data from option file
 		if(m_cost == NULL) throw ErrorClass("Option file did not contain cost data");
+		
+		
+		
 	
 		m_maxMasterRows =  m_maxBmatrixCon + m_numNodes;
 		
@@ -312,6 +315,12 @@ void OSBearcatSolverXij::initializeDataStructures(){
 
 		//kipp -- move this later
 		getSeparationInstance();
+		for(k = 0; k < m_numHubs; k++){
+			
+			m_multCommodCutSolvers.push_back( getMultiCommodInstance( k) );
+			
+		}
+		
 	} catch (const ErrorClass& eclass) {
 
 		throw ErrorClass(eclass.errormsg);
@@ -509,6 +518,12 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	
 	delete m_osinstanceSeparation;
 	m_osinstanceSeparation = NULL;
+	
+	std::vector<CoinSolver*>::iterator vit;
+	for(vit = m_multCommodCutSolvers.begin(); vit < m_multCommodCutSolvers.end(); vit++){
+		
+		delete *vit;
+	}
 
 }//end ~OSBearcatSolverXij
 
@@ -1573,9 +1588,6 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	
 	//implement 1OPT
 	
-	getMultiCommodInstance( 1);
-	
-	exit( 1);
 	
 	getInitialSolution();
 	
@@ -2504,21 +2516,136 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	
 	
 	//convexityRowIndex
-	
+	int i;
+	int j;
 	int k;
+	int ivalue;
+	int jvalue;
+	int inodenum;
+	int jnodenum;
+	int testindex;
+	int ckijIndex;
+	int numNonHubs;
+	numNonHubs = m_numNodes - m_numHubs;
+	
+	double *wcoeff = NULL;
+	wcoeff = new double[ numNonHubs];
+	CoinSolver *solver;
+	
+	std::cout <<  std::endl << std::endl;
+	std::cout << "INSIDE getCutsMultiCommod "  << std::endl;
+	std::cout <<  std::endl << std::endl;
+	
+	std::map<int, std::vector<std::pair<int,double> > > xVarMap;
+	std::map<int, std::vector<std::pair<int,double> > >::iterator mit;
+	std::vector<std::pair<int,double> >::iterator vit;
+	
+	//intVarSet.insert ( std::pair<int,double>(mit->second, 1.0) );
 	
 	try{
+		
+		for(i = 0; i < numTheta; i++){
+			xVarMap[ convexityRowIndex[ i] ] ; 
+			//get a postive theta
+			if(theta[ i] > m_osDecompParam.zeroTol){
+				
+				//get the xij indexes associated with this variable
+				for(j = m_thetaPnt[ i ]; j <  m_thetaPnt[ i + 1 ]; j++ ){
+					
+					mit = xVarMap.find( convexityRowIndex[ i]) ;  
+					
+					if(mit != xVarMap.end() ){
+						
+						mit->second.push_back( std::pair<int, double>( m_thetaIndex[  j],  theta[ i])  );
+						 
+					}
+				}
+			}
+		}
 		
 		//get a cut for each hub
 		
 		for(k = 0; k < m_numHubs; k++){
+			mit = xVarMap.find( k) ;
 			
+			for(i = 0; i < numNonHubs; i++)  wcoeff[ i ] = 0;
+		
+			if(mit != xVarMap.end() ){
+				
+				std::cout <<  "CONVEXITY ROW "  << " = "  <<  mit->first  << std::endl;
+				
+				for(vit = mit->second.begin();  vit < mit->second.end(); vit++){
+					
+					std::cout <<  m_variableNames[ vit->first ]  << " = "  <<  vit->second  << std::endl;
+					
+					
+					
+					ivalue = (int)floor( vit->first /(m_numNodes - 1) );
+					
+					jvalue = vit->first - ivalue*(m_numNodes - 1);
+					
+					if(  jvalue  >= ivalue ){
+						std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
+						std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
+						inodenum = ivalue;
+						jnodenum = jvalue + 1;
+						
+						
+					}else{
+						std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
+						std::cout << " j NODE NUMBER = " <<  jvalue    << std::endl;
+						inodenum = ivalue;
+						jnodenum = jvalue;
+						
+					}
+					
+					if(jnodenum != k){
+						
+						//calculate index
+						if( jnodenum > inodenum) testindex = inodenum*(m_numNodes - 1) + jnodenum - 1;
+							else testindex = inodenum*(m_numNodes - 1) + jnodenum;
+						if(testindex != vit->first) throw ErrorClass(" INDEX PROBLEM");
+						
+						if(inodenum == k) inodenum = 0 ;
+							else inodenum -=  (m_numHubs - 1);
+						jnodenum -= (m_numHubs - 1);
+						
+						if( jnodenum > 0 ) wcoeff[ jnodenum - 1] += vit->second;
+						if( jnodenum > numNonHubs ) throw ErrorClass("index problem with jnodenum") ;
+						std::cout << "jnodenum = " << jnodenum << std::endl;
+
+						if( jnodenum > inodenum) ckijIndex = inodenum*numNonHubs + jnodenum - 1;
+							else ckijIndex = inodenum*numNonHubs + jnodenum;
+						
+						//increment past the w variables
+						//there are numNonHubs of these varaibles
+						ckijIndex += numNonHubs;
+						//change solver of u(inodenum, jnodenum) here
+						
+					}
+					
+				}//looping over xkij
+				 
+			}//end if on mit
 			
-		}
+			for(i = 0; i < numNonHubs; i++){
+				
+				if(wcoeff[ i ] > 0 ) std::cout << m_nodeName[ i + m_numHubs] <<  "  " <<  wcoeff[ i ]   << std::endl;
+			}
+			
+			std::cout <<  std::endl << std::endl;
+			
+			//set shat coefficient
+			
+			//loop over s to get a cut
+		}//end loop over k
 		
-		
+		delete[] wcoeff;
+		wcoeff = NULL;
 	
 	} catch (const ErrorClass& eclass) {
+		if(wcoeff != NULL) delete[] wcoeff;
+		wcoeff = NULL;
 
 		throw ErrorClass(eclass.errormsg);
 
@@ -3017,9 +3144,6 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 		std::cout << "        PAU!!!" << std::endl;
 		
 		std::cout << std::endl <<  std::endl;
-		
-		
-
 	
 		std::cout << std::endl <<  std::endl;
 	}catch (const ErrorClass& eclass) {
@@ -5056,7 +5180,7 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		osinstance->setLinearConstraintCoefficients(numNonz, false, values, 0, numNonz - 1, 
 			columnIndexes, 0, numNonz - 1, starts, 0, numVar);
 		
-		std::cout << osinstance->printModel() << std::endl;
+		//std::cout << osinstance->printModel() << std::endl;
 		
 	
 		

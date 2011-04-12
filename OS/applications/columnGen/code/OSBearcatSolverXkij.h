@@ -378,6 +378,27 @@ public:
 	
 	
 	/**
+	 * This is the routine that generates the multi-item cuts.
+	 * 
+	 * RETURN VALUES: 
+	 * int numNewRows -- number of new rows generated
+	 * int* numNonz -- number of nonzeros in each row
+	 * int** colIdx -- vectors column indexes of new rows
+	 * double** values -- vectors of matrix coefficient values of new rows
+	 * double* rowLB -- vector of row lower bounds
+	 * double* rowUB -- vector of row upper bounds
+	 * 
+	 * INPUT:
+	 * double* thetaVar -- the vector of primal master values
+	 * int numThetaVar -- size of master primal vector
+	 */
+	void getCutsMultiCommod(const  double* thetaVar, const int numThetaVar,
+			int &numNewRows, int*  &numNonz, int** &colIdx,
+			double** &values, double* &rowLB, double* &rowUB) ;	
+	
+	
+	
+	/**
 	 *
 	 * Default Constructor. 
 	 */	

@@ -141,6 +141,13 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
+	if(numNewRows == 0 ) m_osrouteSolver->getCutsMultiCommod( thetaVar, numThetaVar,
+			numNewRows, numNonz, colIdx, values, rowLB, rowUB);	
+	
+	
+	
+
+	
 }//end getCuts
 
 

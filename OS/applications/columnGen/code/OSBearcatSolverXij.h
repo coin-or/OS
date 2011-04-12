@@ -45,9 +45,11 @@ public:
 	 */
 	std::map<int, std::map<int, std::vector<int> > > m_initSolMap;
 	
-	
-	
-
+	/** m_multCommodCutSolvers is a vector of solvers, one
+	 * solver for each hub, used to find multicommodity flow
+	 * cuts for the given hub
+	 */
+	std::vector<CoinSolver*> m_multCommodCutSolvers;
 	
 	/** if m_use1OPTstart is true we use the option file to
 	 * fix the nodes to hubs found by SK's 1OPT heuristic
