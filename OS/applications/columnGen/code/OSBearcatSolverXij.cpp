@@ -2528,6 +2528,10 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	int numNonHubs;
 	numNonHubs = m_numNodes - m_numHubs;
 	
+	int numVar;
+	
+	double tmpCoeff;
+	
 	double *wcoeff = NULL;
 	wcoeff = new double[ numNonHubs];
 	CoinSolver *solver;
@@ -2567,6 +2571,8 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 		
 		for(k = 0; k < m_numHubs; k++){
 			mit = xVarMap.find( k) ;
+			
+			solver = m_multCommodCutSolvers[ k];
 			
 			for(i = 0; i < numNonHubs; i++)  wcoeff[ i ] = 0;
 		
@@ -2621,23 +2627,45 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 						//there are numNonHubs of these varaibles
 						ckijIndex += numNonHubs;
 						//change solver of u(inodenum, jnodenum) here
+						//alter the objective function coefficients
+						
+						tmpCoeff = solver->osiSolver->getObjCoefficients()[ ckijIndex] ;
+						tmpCoeff += vit->second;
+						solver->osiSolver->setObjCoeff( ckijIndex,  tmpCoeff );
+						
 						
 					}
 					
-				}//looping over xkij
+				}//end looping over xkij
 				 
 			}//end if on mit
 			
-			for(i = 0; i < numNonHubs; i++){
-				
-				if(wcoeff[ i ] > 0 ) std::cout << m_nodeName[ i + m_numHubs] <<  "  " <<  wcoeff[ i ]   << std::endl;
-			}
+			for(i = 0; i < numNonHubs; i++)  if(wcoeff[ i ] > 0 ) std::cout << m_nodeName[ i + m_numHubs] <<  "  " <<  wcoeff[ i ]   << std::endl;
 			
 			std::cout <<  std::endl << std::endl;
 			
 			//set shat coefficient
 			
 			//loop over s to get a cut
+			for(i = 0; i < numNonHubs; i++){
+				
+				solver->osiSolver->setObjCoeff( i,  wcoeff[ i ]  );
+				
+				//solve the LP
+				
+				solver->osiSolver->initialSolve();
+				
+				solver->osiSolver->setObjCoeff( i,  0 );
+				
+				
+			}
+			
+			
+			//reset the coefficients
+			numVar  = solver->osiSolver->getNumCols();
+			for(i = 0; i < numVar; i++ ) solver->osiSolver->setObjCoeff( i,  0 );
+			
+			
 		}//end loop over k
 		
 		delete[] wcoeff;
@@ -5042,7 +5070,7 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		numCon = 0;
 		for(i = m_numHubs; i < m_numNodes; i++){
 			
-			if(m_nodeName[ hubIndex] != "" && m_nodeName[ j] != "")
+			if(m_nodeName[ hubIndex] != "" && m_nodeName[ i] != "")
 				osinstance->addConstraint(numCon++, "dualCon[" + m_nodeName[ hubIndex] + "," +   m_nodeName[ i] + "]", -OSDBL_MAX, 0,  0);
 			else
 				osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", hubIndex)  + makeStringFromInt(",", i)  +"]", -OSDBL_MAX, 0,  0);
