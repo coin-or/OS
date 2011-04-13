@@ -3,7 +3,7 @@
     <optimization>
 
         <solverOptions numberOfSolverOptions="183">
-            <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="false"/>
+            <solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"/>
             
             <solverOption name="columnLimit" value="20000" solver="OSDecompSolver" type="integer"/>
             <solverOption name="artVarCoeff" value="1000000" solver="OSDecompSolver" type="double"/>

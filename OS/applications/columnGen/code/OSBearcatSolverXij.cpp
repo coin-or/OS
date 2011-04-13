@@ -36,6 +36,8 @@
 #include "ClpNetworkMatrix.hpp"
 #include "OsiClpSolverInterface.hpp"
 
+#include <iostream>
+
 #include <algorithm> 
 
 
@@ -59,7 +61,7 @@
 # endif
 #endif 
 
-
+using std::ostringstream;
 
 std::string makeStringFromInt(std::string theString, int theInt);
 
@@ -2523,7 +2525,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	int jvalue;
 	int inodenum;
 	int jnodenum;
-	int testindex;
+	int j1;
+	int j2;
+	int kount;
+	double wVal;
+	double uVal;
+
 	int ckijIndex;
 	int numNonHubs;
 	numNonHubs = m_numNodes - m_numHubs;
@@ -2543,6 +2550,9 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	std::map<int, std::vector<std::pair<int,double> > > xVarMap;
 	std::map<int, std::vector<std::pair<int,double> > >::iterator mit;
 	std::vector<std::pair<int,double> >::iterator vit;
+	
+	ostringstream cutString;
+
 	
 	//intVarSet.insert ( std::pair<int,double>(mit->second, 1.0) );
 	
@@ -2582,7 +2592,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 				
 				for(vit = mit->second.begin();  vit < mit->second.end(); vit++){
 					
-					std::cout <<  m_variableNames[ vit->first ]  << " = "  <<  vit->second  << std::endl;
+					//std::cout <<  m_variableNames[ vit->first ]  << " = "  <<  vit->second  << std::endl;
 					
 					
 					
@@ -2591,75 +2601,143 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 					jvalue = vit->first - ivalue*(m_numNodes - 1);
 					
 					if(  jvalue  >= ivalue ){
-						std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
-						std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
+						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
+						//std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
 						inodenum = ivalue;
 						jnodenum = jvalue + 1;
 						
 						
 					}else{
-						std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
-						std::cout << " j NODE NUMBER = " <<  jvalue    << std::endl;
+						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
+						//std::cout << " j NODE NUMBER = " <<  jvalue    << std::endl;
+
 						inodenum = ivalue;
 						jnodenum = jvalue;
-						
 					}
 					
 					if(jnodenum != k){
 						
-						//calculate index
-						if( jnodenum > inodenum) testindex = inodenum*(m_numNodes - 1) + jnodenum - 1;
-							else testindex = inodenum*(m_numNodes - 1) + jnodenum;
-						if(testindex != vit->first) throw ErrorClass(" INDEX PROBLEM");
 						
-						if(inodenum == k) inodenum = 0 ;
-							else inodenum -=  (m_numHubs - 1);
-						jnodenum -= (m_numHubs - 1);
+						wcoeff[ jnodenum - m_numHubs ] += vit->second;
 						
-						if( jnodenum > 0 ) wcoeff[ jnodenum - 1] += vit->second;
-						if( jnodenum > numNonHubs ) throw ErrorClass("index problem with jnodenum") ;
-						std::cout << "jnodenum = " << jnodenum << std::endl;
-
-						if( jnodenum > inodenum) ckijIndex = inodenum*numNonHubs + jnodenum - 1;
-							else ckijIndex = inodenum*numNonHubs + jnodenum;
+						if( inodenum == k ){
+							ckijIndex = jnodenum - m_numHubs;
+						} else{
+							//inodenum and jnodenum NOT hub nodes
+							inodenum -=  m_numHubs;
+							jnodenum -=  m_numHubs;
+							
+							
+							if( jnodenum > inodenum) ckijIndex = inodenum*(numNonHubs - 1) + jnodenum - 1 ;
+								else ckijIndex = inodenum*(numNonHubs - 1) + jnodenum  ;
+							
+							//increment by the number (k, i) variables --- there are numNonHUbs
+							ckijIndex += numNonHubs ;
+							
+						}
 						
-						//increment past the w variables
-						//there are numNonHubs of these varaibles
-						ckijIndex += numNonHubs;
-						//change solver of u(inodenum, jnodenum) here
-						//alter the objective function coefficients
-						
+						ckijIndex += numNonHubs;	
 						tmpCoeff = solver->osiSolver->getObjCoefficients()[ ckijIndex] ;
-						tmpCoeff += vit->second;
+						tmpCoeff -= vit->second;
 						solver->osiSolver->setObjCoeff( ckijIndex,  tmpCoeff );
-						
-						
 					}
 					
 				}//end looping over xkij
 				 
 			}//end if on mit
 			
-			for(i = 0; i < numNonHubs; i++)  if(wcoeff[ i ] > 0 ) std::cout << m_nodeName[ i + m_numHubs] <<  "  " <<  wcoeff[ i ]   << std::endl;
-			
-			std::cout <<  std::endl << std::endl;
-			
-			//set shat coefficient
-			
 			//loop over s to get a cut
 			for(i = 0; i < numNonHubs; i++){
-				
+				//set s^{\hat} coefficient
 				solver->osiSolver->setObjCoeff( i,  wcoeff[ i ]  );
 				
 				//solve the LP
+				solver->solve();
 				
-				solver->osiSolver->initialSolve();
+				if(solver->osiSolver->getObjValue() > .001){
+					std::cout << "Separation Obj Value = " <<  
+						solver->osiSolver->getObjValue() << "  Node " << m_nodeName[i + m_numHubs] << std::endl;
+				//get the solution, let's see what the cut is in x(i, j) variables
+					
+					cutString << "";
+					//first get the coefficients on x(i, shat)
+					// this is the sum of w(shat) and the u(i, shat)
+					kount = numNonHubs;
+					
+					wVal = solver->osiSolver->getColSolution()[ i];
+					
+					//get the u(k,j2) variables
+					//j1 = k
+					for(j2 = m_numHubs; j2 < m_numNodes; j2++){
+						
+						uVal = solver->osiSolver->getColSolution()[ kount];
+						
+						
+						
+						if (j2 == (i + m_numHubs) ){
+							//variable (wVal - uVal)*x(k, shat)
+							cutString << wVal - uVal;
+							cutString << "*x(" ;
+							cutString << k ;
+							cutString << "," ;
+							cutString << i ;
+							cutString << ")" ;
+							
+						}else{
+							
+							//variable -uVal*x(k, j2)
+							
+						}
+						
+						kount++;
+					}
+					
+					//get the u(j1, j2) variables for j1 not a hub		
+					for(j1 = m_numHubs; j1 < m_numNodes; j1++){ //<= since we include hub
+						
+						//j1 = 0 corresponds to the hub
+						
+						for(j2 = j1 + 1; j2 < m_numNodes; j2++){
+							
+							uVal = solver->osiSolver->getColSolution()[ kount];
+							
+							if (j2 == (i + m_numHubs) ){
+								//variable (wVal - uVal)*x(j1, shat)
+								
+							}else{
+								
+								//variable -uVal*x(j1, j2)
+							}
+							kount++;
+						}
+						
+						
+						for(j2 = m_numHubs; j2 < j1; j2++){
+							
+							uVal = solver->osiSolver->getColSolution()[ kount];
+							
+							if (j2 == (i + m_numHubs) ){
+								//variable (wVal - uVal)*x(j1, shat)
+								
+							}else{
+								
+								//variable -uVal*x(j1, j2)
+							}
+							
+							
+							
+							kount++;
+						}
+					}
+					
+					std::cout << cutString.str() << std::endl; 
+					
+					if(i == 19 ) exit( 1);
 				
+				}
 				solver->osiSolver->setObjCoeff( i,  0 );
-				
-				
 			}
-			
+			std::cout <<  std::endl << std::endl;
 			
 			//reset the coefficients
 			numVar  = solver->osiSolver->getNumCols();
@@ -5104,6 +5182,7 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		
 		double upperBound;
 		upperBound = numVar - numNonHubs ;
+		upperBound = 100;
 		osinstance->addConstraint(numCon++, "boundConstraint", 0, upperBound, 0);
 		
 		//now the A matrix
@@ -5217,7 +5296,7 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		solver->osinstance = osinstance;	
 		solver->buildSolverInstance();
 		solver->osoption = m_osoption;	
-		
+
 		
 		return solver;
 	
