@@ -2584,6 +2584,9 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 			
 			solver = m_multCommodCutSolvers[ k];
 			
+			numVar  = solver->osiSolver->getNumCols();
+			for(i = 0; i < numVar; i++ ) solver->osiSolver->setObjCoeff( i,  0 );
+			
 			for(i = 0; i < numNonHubs; i++)  wcoeff[ i ] = 0;
 		
 			if(mit != xVarMap.end() ){
@@ -2638,7 +2641,11 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 						
 						ckijIndex += numNonHubs;	
 						tmpCoeff = solver->osiSolver->getObjCoefficients()[ ckijIndex] ;
-						tmpCoeff -= vit->second;
+						//std::cout << "cijkIndex = " <<  ckijIndex  << " tmp Coeff Before = " << tmpCoeff << " vit->second = "<< vit->second << std::endl;
+						//it looks like the sign of coefficients get reversed
+						tmpCoeff  = -tmpCoeff - vit->second;
+						if( ckijIndex > numVar - 1) throw ErrorClass( "problem with ckijIndex calculation");
+						//std::cout << "cijkIndex = " <<  ckijIndex  << " tmp Coeff After = " << tmpCoeff << " vit->second = "<< vit->second << std::endl;
 						solver->osiSolver->setObjCoeff( ckijIndex,  tmpCoeff );
 					}
 					
@@ -2657,14 +2664,17 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 				if(solver->osiSolver->getObjValue() > .001){
 					std::cout << "Separation Obj Value = " <<  
 						solver->osiSolver->getObjValue() << "  Node " << m_nodeName[i + m_numHubs] << std::endl;
-				//get the solution, let's see what the cut is in x(i, j) variables
 					
+				//get the solution, let's see what the cut is in x(i, j) variables
+					//empty the buffer
+					cutString.str("");
 					cutString << "";
 					//first get the coefficients on x(i, shat)
 					// this is the sum of w(shat) and the u(i, shat)
 					kount = numNonHubs;
 					
 					wVal = solver->osiSolver->getColSolution()[ i];
+					std::cout << "w[shat] =  " << wVal << std::endl;
 					
 					//get the u(k,j2) variables
 					//j1 = k
@@ -2675,17 +2685,30 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 						
 						
 						if (j2 == (i + m_numHubs) ){
-							//variable (wVal - uVal)*x(k, shat)
-							cutString << wVal - uVal;
-							cutString << "*x(" ;
-							cutString << k ;
-							cutString << "," ;
-							cutString << i ;
-							cutString << ")" ;
+							
+							if( (wVal - uVal) > .0001 || (uVal - wVal)  > .0001 ){
+								//variable (wVal - uVal)*x(k, shat)
+								cutString << " =";
+								cutString << (wVal - uVal);
+								cutString << "*x(" ;
+								cutString << m_nodeName[ k] ;
+								cutString << "," ;
+								cutString << m_nodeName[ i + m_numHubs] ;
+								cutString << ")  " ;
+							}
 							
 						}else{
 							
-							//variable -uVal*x(k, j2)
+							if(  (-uVal > .0001) || (uVal  > .0001)  ){
+								//variable -uVal*x(j1, j2)
+								cutString << " ";
+								cutString << - uVal;
+								cutString << "*x(" ;
+								cutString << m_nodeName[ k ];
+								cutString << "," ;
+								cutString << m_nodeName[ j2 ];
+								cutString << ")  " ;
+							}
 							
 						}
 						
@@ -2701,12 +2724,31 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 							
 							uVal = solver->osiSolver->getColSolution()[ kount];
 							
-							if (j2 == (i + m_numHubs) ){
-								//variable (wVal - uVal)*x(j1, shat)
+							if (j2 == (i + m_numHubs)  ){
+								
+								if( (wVal - uVal) > .0001 || (uVal - wVal)  > .0001 ){
+									//variable (wVal - uVal)*x(j1, shat)
+									cutString << " +";
+									cutString << (wVal - uVal) ;
+									cutString << "*x(" ;
+									cutString << m_nodeName[ j1] ;
+									cutString << "," ;
+									cutString << m_nodeName[ i + m_numHubs];
+									cutString << ")  " ;
+								}
 								
 							}else{
 								
-								//variable -uVal*x(j1, j2)
+								if(  (-uVal > .0001) || (uVal  > .0001)  ){
+									//variable -uVal*x(j1, j2)
+									cutString << " ";
+									cutString << - uVal;
+									cutString << "*x(" ;
+									cutString << m_nodeName[ j1 ];
+									cutString << "," ;
+									cutString << m_nodeName[ j2 ];
+									cutString << ")  " ;
+								}
 							}
 							kount++;
 						}
@@ -2717,30 +2759,49 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 							uVal = solver->osiSolver->getColSolution()[ kount];
 							
 							if (j2 == (i + m_numHubs) ){
-								//variable (wVal - uVal)*x(j1, shat)
+								
+								if( (wVal - uVal) > .0001 || (uVal - wVal)  > .0001 ){
+									//variable (wVal - uVal)*x(j1, shat)
+									cutString << " +";
+									cutString << (wVal - uVal);
+									cutString << "*x(" ;
+									cutString << m_nodeName[ j1 ];
+									cutString << "," ;
+									cutString << m_nodeName[ i+ m_numHubs] ;
+									cutString << ")  " ;
+								}
 								
 							}else{
 								
-								//variable -uVal*x(j1, j2)
-							}
-							
-							
-							
+								if(  (-uVal > .0001) || (uVal  > .0001)  ){
+									//variable -uVal*x(j1, j2)
+									cutString << " ";
+									cutString << - uVal;
+									cutString << "*x(" ;
+									cutString << m_nodeName[ j1 ];
+									cutString << "," ;
+									cutString << m_nodeName[ j2] ;
+									cutString << ")  " ;
+								}
+							}	
 							kount++;
 						}
-					}
-					
+					}//end loop on j1
+					cutString << std::endl;
 					std::cout << cutString.str() << std::endl; 
 					
-					if(i == 19 ) exit( 1);
+					if(i == 19 ) {
+						solver->osiSolver->writeLp( "gailTest" );
+						exit( 1);
+					}
 				
-				}
+				}//end iff on positive obj value
 				solver->osiSolver->setObjCoeff( i,  0 );
-			}
+			}//end loop over s
 			std::cout <<  std::endl << std::endl;
 			
 			//reset the coefficients
-			numVar  = solver->osiSolver->getNumCols();
+			
 			for(i = 0; i < numVar; i++ ) solver->osiSolver->setObjCoeff( i,  0 );
 			
 			
@@ -5183,7 +5244,7 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		double upperBound;
 		upperBound = numVar - numNonHubs ;
 		upperBound = 100;
-		osinstance->addConstraint(numCon++, "boundConstraint", 0, upperBound, 0);
+		osinstance->addConstraint(numCon++, "boundConstraint", -OSDBL_MAX, upperBound, 0);
 		
 		//now the A matrix
 		numCon = numNonHubs + (numNonHubs*numNonHubs - numNonHubs) + 1;
@@ -5292,7 +5353,7 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 	
 		
 		solver = new CoinSolver();
-		solver->sSolverName ="clp"; 
+		solver->sSolverName ="dylp"; 
 		solver->osinstance = osinstance;	
 		solver->buildSolverInstance();
 		solver->osoption = m_osoption;	
