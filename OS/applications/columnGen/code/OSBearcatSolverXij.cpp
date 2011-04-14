@@ -2226,8 +2226,11 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 							//std::cout << "j = " << j1 << std::endl;
 							//okay generate a cut that says
 							// x(i1,j1) + x(j1, i1) << 1
+							m_BmatrixVal[   m_numBmatrixNonz ] = 1 ;
 							//get index for i1,j1
 							m_BmatrixIdx[   m_numBmatrixNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
+							
+							m_BmatrixVal[   m_numBmatrixNonz ] = 1 ;
 							//get index for j1,i1
 							m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + i1 ;
 							m_numBmatrixCon++;
@@ -2376,7 +2379,8 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 						if( i > j ){
 						
 							index = i*(m_numNodes -1) + j;
-							std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;						
+							std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;	
+							m_BmatrixVal[   m_numBmatrixNonz ] = 1 ;
 							m_BmatrixIdx[   m_numBmatrixNonz++ ] = index ;
 							
 						}else{
@@ -2384,7 +2388,8 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 							if( i < j ){
 								
 								index = i*(m_numNodes -1) + j - 1;
-								std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;							
+								std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;
+								m_BmatrixVal[   m_numBmatrixNonz ] = 1 ;
 								m_BmatrixIdx[   m_numBmatrixNonz++ ] = index  ;
 								
 							}
@@ -3154,7 +3159,7 @@ void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
 					//startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					
-					m_rc[ k][ startPnt + m_BmatrixIdx[ j] ]  -=  yB[ i];
+					m_rc[ k][ startPnt + m_BmatrixIdx[ j] ]  -=  yB[ i]*m_BmatrixVal[ j];
 					
 				}
 				
@@ -3933,6 +3938,7 @@ void OSBearcatSolverXij::getBranchingCut(const double* thetaVar, const int numTh
 			
 			
 			//add varIdx cut to B matrix
+			m_BmatrixVal[ m_numBmatrixNonz] = 1;
 			m_BmatrixIdx[ m_numBmatrixNonz++] = varIdx;
 			m_numBmatrixCon++;
 			m_pntBmatrix[ m_numBmatrixCon] = m_numBmatrixNonz;
@@ -4018,6 +4024,7 @@ void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thet
 			
 			
 			//add varIdx cut to B matrix
+			m_BmatrixVal[ m_numBmatrixNonz] = 1.0;
 			m_BmatrixIdx[ m_numBmatrixNonz++] = varIdx;
 			m_numBmatrixCon++;
 			m_pntBmatrix[ m_numBmatrixCon] = m_numBmatrixNonz;
