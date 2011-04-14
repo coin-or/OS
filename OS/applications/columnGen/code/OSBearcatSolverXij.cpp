@@ -2604,7 +2604,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 			solver = m_multCommodCutSolvers[ k];
 			
 			numVar  = solver->osiSolver->getNumCols();
-			for(i = numNonHubs; i < numVar; i++ ) solver->osiSolver->setObjCoeff( i, 0 );
+			for(i = numNonHubs; i < numVar; i++ ) solver->osiSolver->setObjCoeff( i, 0);
 			
 			for(i = 0; i < numNonHubs; i++)  wcoeff[ i ] = 0;
 		
@@ -5428,8 +5428,39 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 			columnIndexes, 0, numNonz - 1, starts, 0, numVar);
 		
 		//std::cout << osinstance->printModel() << std::endl;
+		//temp stuff
+		//
+		ClpSimplex *clpModel;  
 		
-	
+	    CoinPackedMatrix* matrix;
+	    bool columnMajor = true;
+	    double maxGap = 0;
+		matrix = new CoinPackedMatrix(
+		columnMajor, //Column or Row Major
+		columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
+		columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
+		osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
+		columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->values : osinstance->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
+		columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes : osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
+		columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
+		0,   0, maxGap ); 
+		
+		clpModel = new ClpSimplex( );
+		
+		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
+		clpModel->setOptimizationDirection( 1);
+		clpModel->loadProblem( *matrix, osinstance->getVariableLowerBounds(), 
+				osinstance->getVariableUpperBounds(),  
+				osinstance->getDenseObjectiveCoefficients()[0], 
+				osinstance->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
+		);
+		
+		
+		
+		delete matrix;
+		
+		//
+		//
 		
 		solver = new CoinSolver();
 		solver->sSolverName ="clp"; 
