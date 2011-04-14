@@ -162,8 +162,7 @@ public:
 					  int &numNewRows, int*  &numNonz, int** &colIdx,
 					  double** &values, double* &rowLB, double* &rowUB) = 0 ;	
 	
-	
-	
+
 	/**
 	 * This is the routine that generates the multi-item cuts.
 	 * 

@@ -141,8 +141,8 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-	if(numNewRows == 0 ) m_osrouteSolver->getCutsMultiCommod( thetaVar, numThetaVar,
-			numNewRows, numNonz, colIdx, values, rowLB, rowUB);	
+	//if(numNewRows == 0 ) m_osrouteSolver->getCutsMultiCommod( thetaVar, numThetaVar,
+	//		numNewRows, numNonz, colIdx, values, rowLB, rowUB);	
 	
 	
 	
@@ -347,7 +347,7 @@ void OSColGenApp::solve(){
 		//print LP value at node
 		std::cout <<  "optimal LP value at root node = "  <<  m_zLB << std::endl;
 		
-		exit( 1);
+		//exit( 1);
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
