@@ -66,7 +66,11 @@ public:
 	//constraints
 	//
 	int* m_pntBmatrix;
-	int* m_Bmatrix;   
+	//m_Bmatrix is the matrix of Xij indexes
+	int* m_BmatrixIdx;  
+	//m_Bmatrix is the matrix of Xij coefficients
+	double* m_BmatrixVal;  
+	
 	
 	/** intVarSet holds and std::pair where the first
 	 * element is the index of an integer variable and 

@@ -296,7 +296,12 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		// branching variable constraints = m_numNodes*(m_numNodes - 1)
 		m_pntBmatrix = new int[ m_maxBmatrixCon];
 		// number of nonzeros in the Bmatrix
-		m_Bmatrix = new int[ m_maxBmatrixNonz];
+		m_BmatrixIdx = new int[ m_maxBmatrixNonz];
+		
+		// number of nonzeros in the Bmatrix
+		m_BmatrixVal = new double[ m_maxBmatrixNonz];
+		
+		
 		m_numBmatrixCon = 0;
 		m_numBmatrixNonz = 0;
 		m_pntBmatrix[ m_numBmatrixCon] = 0;
@@ -506,8 +511,11 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	delete[] m_pntBmatrix ;
 	m_pntBmatrix = NULL;
 	
-	delete[]  m_Bmatrix ;
-	m_Bmatrix = NULL;
+	delete[]  m_BmatrixIdx ;
+	m_BmatrixIdx = NULL;
+	
+	delete[]  m_BmatrixVal ;
+	m_BmatrixVal = NULL;
 	
 		
 
@@ -1168,10 +1176,10 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 				
 				for(j = m_pntBmatrix[ i]; j < m_pntBmatrix[ i + 1]; j++){
 					
-					//m_Bmatrix[ j] is a variable index -- this logic works
+					//m_BmatrixIdx[ j] is a variable index -- this logic works
 					//since the Bmatrix coefficient is 1 -- we don't need a value
 					//it indexes variable that points into the node
-					rowCount += m_tmpScatterArray[  m_Bmatrix[ j] ];
+					rowCount += m_tmpScatterArray[  m_BmatrixIdx[ j] ];
 					
 
 				}
@@ -2219,9 +2227,9 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 							//okay generate a cut that says
 							// x(i1,j1) + x(j1, i1) << 1
 							//get index for i1,j1
-							m_Bmatrix[   m_numBmatrixNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
+							m_BmatrixIdx[   m_numBmatrixNonz++ ] = i1*(m_numNodes - 1) + j1 - 1 ;
 							//get index for j1,i1
-							m_Bmatrix[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + i1 ;
+							m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + i1 ;
 							m_numBmatrixCon++;
 							m_pntBmatrix[ m_numBmatrixCon ] =  m_numBmatrixNonz;
 
@@ -2238,9 +2246,9 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 									j <  m_pntBmatrix[ m_numBmatrixCon  ] ; j++){
 								
 								
-								std::cout << " m_Bmatrix[ j] "  << m_Bmatrix[ j] <<  std::endl ;
+								std::cout << " m_BmatrixIdx[ j] "  << m_BmatrixIdx[ j] <<  std::endl ;
 								
-								m_tmpScatterArray[ m_Bmatrix[ j] ] = 1;
+								m_tmpScatterArray[ m_BmatrixIdx[ j] ] = 1;
 								
 							}	
 							
@@ -2286,7 +2294,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 							for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
 									j < m_pntBmatrix[  m_numBmatrixCon  ] ; j++){
 								
-								m_tmpScatterArray[ m_Bmatrix[ j] ] = 0;
+								m_tmpScatterArray[ m_BmatrixIdx[ j] ] = 0;
 								
 							}	
 						
@@ -2369,7 +2377,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 						
 							index = i*(m_numNodes -1) + j;
 							std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;						
-							m_Bmatrix[   m_numBmatrixNonz++ ] = index ;
+							m_BmatrixIdx[   m_numBmatrixNonz++ ] = index ;
 							
 						}else{
 							
@@ -2377,7 +2385,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 								
 								index = i*(m_numNodes -1) + j - 1;
 								std::cout << "CUT VARIABLE = " << m_variableNames[ index  ] <<std::endl;							
-								m_Bmatrix[   m_numBmatrixNonz++ ] = index  ;
+								m_BmatrixIdx[   m_numBmatrixNonz++ ] = index  ;
 								
 							}
 						}
@@ -2390,7 +2398,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 				m_pntBmatrix[ m_numBmatrixCon ] =  m_numBmatrixNonz;
 	
 				// multiply the transformation matrix times this cut to get the cut in theta space
-				// do the usual trick and scatter m_Bmatrix into a dense vector
+				// do the usual trick and scatter m_BmatrixIdx into a dense vector
 
 				//reset
 				// don't adjust the kludge row
@@ -2418,7 +2426,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 				for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
 						j <  m_pntBmatrix[ m_numBmatrixCon  ] ; j++){
 					
-					m_tmpScatterArray[ m_Bmatrix[ j] ] = 1;
+					m_tmpScatterArray[ m_BmatrixIdx[ j] ] = 1;
 					
 				}	
 				
@@ -2457,7 +2465,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 				for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
 						j < m_pntBmatrix[  m_numBmatrixCon  ] ; j++){
 					
-					m_tmpScatterArray[ m_Bmatrix[ j] ] = 0;
+					m_tmpScatterArray[ m_BmatrixIdx[ j] ] = 0;
 					
 				}		
 						
@@ -2825,9 +2833,6 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 		values =  m_newRowColumnValue;
 		rowUB =  m_newRowUB;
 		rowLB =  m_newRowLB;
-		
-
-		
 		//we found a row, add the corresponding artificial variables
 		//to the transformation matrix
 		m_numThetaVar++;
@@ -3149,7 +3154,7 @@ void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
 					//startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					
-					m_rc[ k][ startPnt + m_Bmatrix[ j] ]  -=  yB[ i];
+					m_rc[ k][ startPnt + m_BmatrixIdx[ j] ]  -=  yB[ i];
 					
 				}
 				
@@ -3928,7 +3933,7 @@ void OSBearcatSolverXij::getBranchingCut(const double* thetaVar, const int numTh
 			
 			
 			//add varIdx cut to B matrix
-			m_Bmatrix[ m_numBmatrixNonz++] = varIdx;
+			m_BmatrixIdx[ m_numBmatrixNonz++] = varIdx;
 			m_numBmatrixCon++;
 			m_pntBmatrix[ m_numBmatrixCon] = m_numBmatrixNonz;
 			
@@ -4013,7 +4018,7 @@ void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thet
 			
 			
 			//add varIdx cut to B matrix
-			m_Bmatrix[ m_numBmatrixNonz++] = varIdx;
+			m_BmatrixIdx[ m_numBmatrixNonz++] = varIdx;
 			m_numBmatrixCon++;
 			m_pntBmatrix[ m_numBmatrixCon] = m_numBmatrixNonz;
 			
@@ -4286,7 +4291,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 				//m_Amatrix[ j] is a variable index -- this logic works
 				//since the Amatrix coefficient is 1 -- we don't need a value
 				//it indexes variable that points into the node
-				rowCount += m_tmpScatterArray[  m_Bmatrix[ j] ];
+				rowCount += m_tmpScatterArray[  m_BmatrixIdx[ j] ];
 				
 
 			}
