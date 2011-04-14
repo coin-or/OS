@@ -36,6 +36,8 @@ public:
 
 /***************** Bearcat Specific Solver Parameters ***********************/
 	
+	std::map<int, std::string> m_tmpVarMap;
+	
 	
 	std::string m_initOSiLFile;
 	
