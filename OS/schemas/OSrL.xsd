@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSrL.xsd: version 2.0 (The entire schema except for osrl->optimization->osal)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:include schemaLocation="OSaL.xsd"/>
@@ -129,9 +129,9 @@
 		<xs:sequence>
 			<xs:element name="time" minOccurs="0" maxOccurs="unbounded">
 				<xs:complexType>
-					<xs:complexContent>
+					<xs:simpleContent>
 						<xs:extension base="TimeMeasurement"/>
-					</xs:complexContent>
+					</xs:simpleContent>
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
@@ -321,6 +321,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -367,6 +368,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -389,6 +391,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -402,6 +405,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -440,6 +444,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -455,6 +460,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:double">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -501,6 +507,7 @@
 		<xs:simpleContent>
 			<xs:extension base="xs:string">
 				<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+				<xs:attribute name="name" type="xs:string" use="optional"/>
 			</xs:extension>
 		</xs:simpleContent>
 	</xs:complexType>

@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: version 2.0 (The entire schema)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osol" type="OSoL">
@@ -253,14 +253,17 @@
 	</xs:complexType>
 	<xs:complexType name="InitVarValue">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitVarValueString">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitBasStatus">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" use="optional" default="unknown">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -301,6 +304,7 @@
 	</xs:complexType>
 	<xs:complexType name="BranchingWeight">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVariableOption">
@@ -327,6 +331,7 @@
 	</xs:complexType>
 	<xs:complexType name="OtherVarOption">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
@@ -348,6 +353,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitObjValue">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitObjectiveBounds">
@@ -358,6 +364,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitObjBound">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:double" use="optional" default="-INF"/>
 		<xs:attribute name="ubValue" type="xs:double" use="optional" default="INF"/>
 	</xs:complexType>
@@ -385,6 +392,7 @@
 	</xs:complexType>
 	<xs:complexType name="OtherObjOption">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
@@ -406,10 +414,12 @@
 	</xs:complexType>
 	<xs:complexType name="InitConValue">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:double" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="InitConStatus">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" use="optional" default="unknown">
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
@@ -430,6 +440,7 @@
 	</xs:complexType>
 	<xs:complexType name="InitDualVarValue">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="lbDualValue" use="optional" default="0.0">
 			<xs:simpleType>
 				<xs:restriction base="xs:double"/>
@@ -465,6 +476,7 @@
 	</xs:complexType>
 	<xs:complexType name="OtherConOption">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
+		<xs:attribute name="name" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="lbValue" type="xs:string" use="optional"/>
 		<xs:attribute name="ubValue" type="xs:string" use="optional"/>
