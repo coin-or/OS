@@ -1271,17 +1271,9 @@ enum ENUM_PATHPAIR
 *************************************************/
 inline bool isEqual(double x, double y)
 {
-	if (OSIsnan(x)) 
-	{
-		if (OSIsnan(y)) return true;
-		else            return false;
-	}
-	else
-	{
-		if (x == y)     return true;
-		else            return false;
-	}
-	return true;
+	if (OSIsnan(x) && OSIsnan(y)) return true; 
+	if (x == y) return true;
+	return false;
 }
 
 

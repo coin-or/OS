@@ -516,6 +516,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{
 					outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->idx << "\"";
+					if (m_OSOption->optimization->variables->initialVariableValues->var[i]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->variables->initialVariableValues->var[i]->name << "\"";
 					if (!OSIsnan(m_OSOption->optimization->variables->initialVariableValues->var[i]->value))
 					{
 						outStr << " value=\"";
@@ -535,6 +537,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->variables->initialVariableValuesString->numberOfVar; i++)
 				{	outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->idx << "\"";
+					if (m_OSOption->optimization->variables->initialVariableValuesString->var[i]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->name << "\"";
 					outStr << " value=\"" << m_OSOption->optimization->variables->initialVariableValuesString->var[i]->value << "\"";
 					outStr << "/>" << endl;
 				}
@@ -562,6 +566,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{
 					outStr << "<var";
 					outStr << " idx=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->idx << "\"";
+					if (m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->name << "\"";
 					if (!OSIsnan(m_OSOption->optimization->variables->integerVariableBranchingWeights->var[i]->value))
 					{
 						outStr << " value=\"";
@@ -603,6 +609,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 						cout << "idx" << endl;
 #endif
 						outStr << " idx=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->idx << "\"";
+					if (m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->name << "\"";
 						if (!OSIsnan(m_OSOption->optimization->variables->sosVariableBranchingWeights->sos[i]->var[j]->value))
 						{
 							outStr << " value=\"";
@@ -638,7 +646,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << ">" << endl;
 //					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
 						for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfVar; j++)
-						{	outStr << "<var idx=\"" << m_OSOption->optimization->variables->other[i]->var[j]->idx << "\"";
+						{
+							outStr << "<var idx=\"" << m_OSOption->optimization->variables->other[i]->var[j]->idx << "\"";
+							if (m_OSOption->optimization->variables->other[i]->var[j]->name != "")
+								outStr << " name=\"" << m_OSOption->optimization->variables->other[i]->var[j]->name << "\"";
 							if (m_OSOption->optimization->variables->other[i]->var[j]->value != "")
 								outStr << " value=\"" << m_OSOption->optimization->variables->other[i]->var[j]->value << "\"";
 							if (m_OSOption->optimization->variables->other[i]->var[j]->lbValue != "")
@@ -671,6 +682,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{
 					outStr << "<obj";
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->idx << "\"";
+					if (m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->name << "\"";
 					if (!OSIsnan(m_OSOption->optimization->objectives->initialObjectiveValues->obj[i]->value))
 					{
 						outStr << " value=\"";
@@ -687,6 +700,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->objectives->initialObjectiveBounds->numberOfObj; i++)
 				{	outStr << "<obj";
 					outStr << " idx=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->idx << "\"";
+					if (m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->name << "\"";
 					if (!OSIsnan(m_OSOption->optimization->objectives->initialObjectiveBounds->obj[i]->lbValue))
 					{
 						outStr << " lbValue=\"";
@@ -738,7 +753,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << ">" << endl;
 //					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
 						for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfObj; j++)
-						{	outStr << "<var idx=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->idx << "\"";
+						{
+							outStr << "<var idx=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->idx << "\"";
+							if (m_OSOption->optimization->objectives->other[i]->obj[j]->name != "")
+								outStr << " name=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->name << "\"";
 							if (m_OSOption->optimization->objectives->other[i]->obj[j]->value != "")
 								outStr << " value=\"" << m_OSOption->optimization->objectives->other[i]->obj[j]->value << "\"";
 							outStr << "/>" << endl;
@@ -768,6 +786,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				{
 					outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->idx << "\"";
+					if (m_OSOption->optimization->constraints->initialConstraintValues->con[i]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->constraints->initialConstraintValues->con[i]->name << "\"";
 					if (!OSIsnan(m_OSOption->optimization->constraints->initialConstraintValues->con[i]->value))
 					{
 						outStr << " value=\"";
@@ -785,6 +805,8 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 				for (int i=0; i < m_OSOption->optimization->constraints->initialDualValues->numberOfCon; i++)
 				{	outStr << "<con";
 					outStr << " idx=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->idx << "\"";
+					if (m_OSOption->optimization->constraints->initialDualValues->con[i]->name != "")
+						outStr << " name=\"" << m_OSOption->optimization->constraints->initialDualValues->con[i]->name << "\"";
 					if (!OSIsnan(m_OSOption->optimization->constraints->initialDualValues->con[i]->lbDualValue))
 					{
 						outStr << " lbDualValue=\"";
@@ -836,7 +858,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
 					outStr << ">" << endl;
 //					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
 						for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfCon; j++)
-						{	outStr << "<con idx=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->idx << "\"";
+						{
+							outStr << "<con idx=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->idx << "\"";
+							if (m_OSOption->optimization->constraints->other[i]->con[j]->name != "")
+								outStr << " name=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->name << "\"";
 							if (m_OSOption->optimization->constraints->other[i]->con[j]->value != "")
 								outStr << " value=\"" << m_OSOption->optimization->constraints->other[i]->con[j]->value << "\"";
 							if (m_OSOption->optimization->constraints->other[i]->con[j]->lbValue != "")

@@ -835,6 +835,9 @@ public:
 	/** idx is the index on variable in the solution */
 	int idx;
 	
+	/** optional name */
+	std::string name;
+
 	/* value is the value of the variable indexed by idx
 	 * in the solution
 	 */	
@@ -939,6 +942,9 @@ public:
 	/** idx is the index on variable in the solution */
 	int idx;
 	
+	/** optional name */
+	std::string name;
+
 	/* value is the value of the variable indexed by idx
 	 * in the solution
 	 */	
@@ -1043,6 +1049,9 @@ public:
 	/** the index of a variable in the solution */
 	int idx;
 	
+	/** optional name */
+	std::string name;
+
 	/** value holds a general value associated with a variable,
 	 *  for example, rather than the value of a variable
 	 *  we may wish to store the variable name associated
@@ -1238,6 +1247,9 @@ public:
 	/** idx is the index on an objective function */
 	int idx;
 	
+	/** optional name */
+	std::string name;
+
 	/** the value of the objective indexed by idx */
 	double value;
 	
@@ -1339,6 +1351,8 @@ public:
 	/** idx is the index on a objective function */
 	int idx;
 	
+	/** optional name */
+	std::string name;
 	
 	/** value is a value associated with an objective function
 	 *  indexed by idx
@@ -1530,6 +1544,9 @@ public:
 	/** idx is the index on a constraint */
 	int idx;
 
+	/** optional name */
+	std::string name;
+
 	/** value of dual variable on
 	 * the constraint indexed by idx 
 	 */
@@ -1636,6 +1653,9 @@ public:
 	/** idx is the index on the constraint */
 	int idx;
 	
+	/** optional name */
+	std::string name;
+
 	/** value is a value associated with the constraint
 	 * indexed by idx, for example value might be the 
 	 * value of a dual variable or it might be the name

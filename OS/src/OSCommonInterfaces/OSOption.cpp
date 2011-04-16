@@ -431,6 +431,7 @@ JobOption::~JobOption()
 
 InitVarValue::InitVarValue(): 
 	idx (-1),
+	name (""),
 	value (OSNAN)
 {    
 	#ifdef DEBUG_OSOPTION
@@ -474,6 +475,7 @@ InitVariableValues::~InitVariableValues()
 
 InitVarValueString::InitVarValueString(): 
 	idx (-1),
+	name (""),
 	value ("")
 {    
 	#ifdef DEBUG_OSOPTION
@@ -558,6 +560,7 @@ InitialBasisStatus::~InitialBasisStatus()
 
 BranchingWeight::BranchingWeight(): 
 	idx (-1),
+	name (""),
 	value (0.0)
 {    
 	#ifdef DEBUG_OSOPTION
@@ -652,6 +655,7 @@ SOSVariableBranchingWeights::~SOSVariableBranchingWeights()
 
 OtherVarOption::OtherVarOption(): 
 	idx (0),
+	name (""),
 	value (""),
 	lbValue (""),
 	ubValue ("")
@@ -758,6 +762,7 @@ VariableOption::~VariableOption()
 
 InitObjValue::InitObjValue(): 
 	idx (-1),
+	name (""),
 	value (OSNAN)
 {    
 	#ifdef DEBUG_OSOPTION
@@ -801,6 +806,7 @@ InitObjectiveValues::~InitObjectiveValues()
 
 InitObjBound::InitObjBound(): 
 	idx (-1),
+	name (""),
 	lbValue (-OSDBL_MAX),
 	ubValue ( OSDBL_MAX)
 {    
@@ -845,6 +851,7 @@ InitObjectiveBounds::~InitObjectiveBounds()
 
 OtherObjOption::OtherObjOption(): 
 	idx (-1),
+	name (""),
 	value (""),
 	lbValue (""),
 	ubValue ("")
@@ -943,6 +950,7 @@ ObjectiveOption::~ObjectiveOption()
 
 InitConValue::InitConValue(): 
 	idx (0),
+	name (""),
 	value (OSNAN)
 {    
 	#ifdef DEBUG_OSOPTION
@@ -986,6 +994,7 @@ InitConstraintValues::~InitConstraintValues()
 
 InitDualVarValue::InitDualVarValue(): 
 	idx (0),
+	name (""),
 	lbDualValue (0.0),
 	ubDualValue (0.0)
 {    
@@ -1030,6 +1039,7 @@ InitDualVariableValues::~InitDualVariableValues()
 
 OtherConOption::OtherConOption(): 
 	idx (0),
+	name (""),
 	value (""),
 	lbValue (""),
 	ubValue ("")
@@ -9037,7 +9047,7 @@ bool InitVarValue::IsEqual(InitVarValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
+		{	if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
 
 			{
 #ifdef DEBUG_OSOPTION
@@ -9118,7 +9128,7 @@ bool InitVarValueString::IsEqual(InitVarValueString *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || (this->value != that->value))
+		{	if ((this->idx != that->idx) || this->name != that->name || (this->value != that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9377,7 +9387,7 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
+		{	if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9485,7 +9495,7 @@ bool OtherVarOption::IsEqual(OtherVarOption *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
+		{	if ((this->idx     != that->idx)     ||  this->name != that->name   || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
 			{
 #ifdef DEBUG_OSOPTION
@@ -9617,7 +9627,7 @@ bool InitObjValue::IsEqual(InitObjValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
+		{	if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -9696,7 +9706,8 @@ bool InitObjBound::IsEqual(InitObjBound *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx     != that->idx)    || 
+		{	if ((this->idx  != that->idx) || 
+				 this->name != that->name ||
 				!isEqual(this->lbValue, that->lbValue) || 
 				!isEqual(this->ubValue, that->ubValue) )
 			{
@@ -9796,7 +9807,7 @@ bool OtherObjOption::IsEqual(OtherObjOption *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
+		{	if ((this->idx     != that->idx)     || this->name != that->name  || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
 			{
 #ifdef DEBUG_OSOPTION
@@ -9928,7 +9939,7 @@ bool InitConValue::IsEqual(InitConValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || !isEqual(this->value, that->value))
+		{	if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
 				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
@@ -10007,7 +10018,7 @@ bool InitDualVarValue::IsEqual(InitDualVarValue *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx != that->idx) || 
+		{	if ((this->idx != that->idx) || this->name != that->name || 
 				!isEqual(this->lbDualValue, that->lbDualValue) ||
 	                        !isEqual(this->ubDualValue, that->ubDualValue))
 			{
@@ -10107,7 +10118,7 @@ bool OtherConOption::IsEqual(OtherConOption *that)
 			return false;
 		}
 		else	
-		{	if ((this->idx     != that->idx)     || (this->value   != that->value) ||
+		{	if ((this->idx     != that->idx)     || this->name != that->name || (this->value   != that->value) ||
 				(this->lbValue != that->lbValue) || (this->ubValue != that->ubValue))
 			{
 #ifdef DEBUG_OSOPTION
@@ -10713,6 +10724,9 @@ bool InitVarValue::setRandom( double density, bool conformant )
 	this->idx = (int)(4*OSRand());
 
 	if (OSRand() <= density) 
+		this->name = "random string";
+
+	if (OSRand() <= density) 
 	{
 		if (OSRand() <= 0.5) this->value = 3.14156;
 		else                 this->value = 2.71828;
@@ -10749,6 +10763,7 @@ bool InitVarValueString::setRandom( double density, bool conformant )
 #endif
 	this->idx = (int)(4*OSRand());
 
+	if (OSRand() <= density) this->name  = "random string";
 	if (OSRand() <= density) this->value = "random string";
 
 	return true;
@@ -10831,6 +10846,8 @@ bool BranchingWeight::setRandom( double density, bool conformant )
 #endif
 	this->idx = (int)(4*OSRand());
 
+	if (OSRand() <= density) this->name  = "random string";
+
 	if (OSRand() <= density) 
 		this->value = OSRand();
 	return true;
@@ -10893,7 +10910,8 @@ bool OtherVarOption::setRandom( double density, bool conformant )
 	cout << "Set random OtherVarOption" << endl;
 #endif
 	this->idx = (int)(4*OSRand());
-	if (OSRand() <= density) this->value =   "random string";
+	if (OSRand() <= density) this->name    = "random string";
+	if (OSRand() <= density) this->value   = "random string";
 	if (OSRand() <= density) this->lbValue = "random string";
 	if (OSRand() <= density) this->ubValue = "random string";
 	return true;
@@ -10969,6 +10987,8 @@ bool InitObjValue::setRandom( double density, bool conformant )
 	if (OSRand() <= 0.5) idx = -1;
 	else                 idx = -2;
 
+	if (OSRand() <= density) this->name  = "random string";
+
 	if (OSRand() <= density) 
 	{
 		if (OSRand() <= 0.5) this->value = 3.14156;
@@ -11005,6 +11025,8 @@ bool InitObjBound::setRandom( double density, bool conformant )
 #endif
 	if (OSRand() <= 0.5) idx = -1;
 	else                 idx = -2;
+
+	if (OSRand() <= density) this->name  = "random string";
 
 	if (OSRand() <= density) 
 	{
@@ -11074,7 +11096,8 @@ bool OtherObjOption::setRandom( double density, bool conformant )
 #endif
 	if (OSRand() <= 0.5) this->idx = -1;
 	else                 this->idx = -2;
-	if (OSRand() <= density) this->value =   "random string";
+	if (OSRand() <= density) this->name    = "random string";
+	if (OSRand() <= density) this->value   = "random string";
 	if (OSRand() <= density) this->lbValue = "random string";
 	if (OSRand() <= density) this->ubValue = "random string";
 	return true;
@@ -11149,6 +11172,8 @@ bool InitConValue::setRandom( double density, bool conformant )
 #endif
 	this->idx = (int)(4*OSRand());
 
+	if (OSRand() <= density) this->name  = "random string";
+
 	if (OSRand() <= density) 
 	{
 		if (OSRand() <= 0.5) this->value = 3.14156;
@@ -11184,6 +11209,8 @@ bool InitDualVarValue::setRandom( double density, bool conformant )
 	cout << "Set random InitDualVarValue" << endl;
 #endif
 	this->idx = (int)(4*OSRand());
+
+	if (OSRand() <= density) this->name  = "random string";
 
 	if (OSRand() <= density) 
 	{
@@ -11252,7 +11279,8 @@ bool OtherConOption::setRandom( double density, bool conformant )
 	cout << "Set random OtherConOption" << endl;
 #endif
 	this->idx = (int)(4*OSRand());
-	if (OSRand() <= density) this->value =   "random string";
+	if (OSRand() <= density) this->name    = "random string";
+	if (OSRand() <= density) this->value   = "random string";
 	if (OSRand() <= density) this->lbValue = "random string";
 	if (OSRand() <= density) this->ubValue = "random string";
 	return true;

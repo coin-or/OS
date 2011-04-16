@@ -1052,6 +1052,9 @@ public:
 	/** variable index */
 	int idx;
 
+	/** optional variable name */
+	std::string name;
+
 	/** initial value */
 	double value;
 
@@ -1172,6 +1175,9 @@ class InitVarValueString {
 public:
 	/** variable index */
 	int idx;
+
+	/** optional variable name */
+	std::string name;
 
 	/** initial value */
 	std::string value;
@@ -1406,6 +1412,9 @@ class BranchingWeight {
 public:
 	/** index of the variable */
 	int idx;
+
+	/** optional variable name */
+	std::string name;
 
 	/** branching weight */
 	double value;
@@ -1664,6 +1673,9 @@ public:
 	/** variable index*/
 	int idx;
 
+	/** optional variable name */
+	std::string name;
+
 	/** value of the option */
 	std::string value;
 
@@ -1886,6 +1898,9 @@ public:
 	/** objective index */
 	int idx;
 
+	/** optional variable name */
+	std::string name;
+
 	/** initial value */
 	double value;
 
@@ -2006,6 +2021,9 @@ class InitObjBound {
 public:
 	/** objective index */
 	int idx;
+
+	/** optional variable name */
+	std::string name;
 
 	/** initial lower bound */
 	double lbValue;
@@ -2132,6 +2150,9 @@ class OtherObjOption {
 public:
 	/** variable index*/
 	int idx;
+
+	/** optional variable name */
+	std::string name;
 
 	/** value of the option */
 	std::string value;
@@ -2352,6 +2373,9 @@ public:
 	/** constraint index */
 	int idx;
 
+	/** optional variable name */
+	std::string name;
+
 	/** initial value */
 	double value;
 
@@ -2472,6 +2496,9 @@ class InitDualVarValue {
 public:
 	/** objective index */
 	int idx;
+
+	/** optional variable name */
+	std::string name;
 
 	/** initial lower bound */
 	double lbDualValue;
@@ -2599,6 +2626,9 @@ class OtherConOption {
 public:
 	/** variable index*/
 	int idx;
+
+	/** optional variable name */
+	std::string name;
 
 	/** value of the option */
 	std::string value;

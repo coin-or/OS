@@ -384,6 +384,7 @@ OptimizationSolutionStatus::~OptimizationSolutionStatus(){
 
 VarValue::VarValue():
 	idx( -1),
+	name(""),
 	value( 0)
 { 
 	#ifdef DEBUG_OSRESULT
@@ -428,6 +429,7 @@ VariableValues::~VariableValues(){
 
 VarValueString::VarValueString():
 	idx( -1),
+	name(""),
 	value( "")
 { 
 	#ifdef DEBUG_OSRESULT
@@ -472,6 +474,7 @@ VariableValuesString::~VariableValuesString(){
 
 OtherVarResult::OtherVarResult():
 	idx( -1),
+	name(""),
 	value( "")
 { 
 	#ifdef DEBUG_OSRESULT
@@ -573,6 +576,7 @@ VariableSolution::~VariableSolution(){
 
 ObjValue::ObjValue():
 	idx( -1),
+	name(""),
 	value(0.0)
 //	value( OSNAN)
 { 
@@ -617,6 +621,7 @@ ObjectiveValues::~ObjectiveValues(){
 
 OtherObjResult::OtherObjResult():
 	idx(-1),
+	name(""),
 	value( "")
 { 
 	#ifdef DEBUG_OSRESULT
@@ -707,6 +712,7 @@ ObjectiveSolution::~ObjectiveSolution(){
 
 DualVarValue::DualVarValue():
 	idx( -1),
+	name(""),
 	//lbValue( 0),
 	//ubValue( 0),
 	value( 0)
@@ -752,6 +758,7 @@ DualVariableValues::~DualVariableValues(){
 
 OtherConResult::OtherConResult():
 	idx( -1),
+	name(""),
 	value( "")
 { 
 	#ifdef DEBUG_OSRESULT
@@ -6256,7 +6263,7 @@ bool VarValue::IsEqual(VarValue *that)
 		}
 		else	
 		{
-			if (this->idx != that->idx ||
+			if (this->idx != that->idx || this->name != that->name ||
 				 !isEqual(this->value, that->value) )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -6349,7 +6356,7 @@ bool VarValueString::IsEqual(VarValueString *that)
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
+			if (this->idx   != that->idx  || this->name != that->name || 
 				this->value != that->value )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -6468,7 +6475,7 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
+			if (this->idx   != that->idx  || this->name != that->name || 
 				this->value != that->value ) 
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -6615,7 +6622,7 @@ bool ObjValue::IsEqual(ObjValue *that)
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
+			if (this->idx   != that->idx  || this->name != that->name || 
 				this->value != that->value )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -6735,7 +6742,7 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
+			if (this->idx   != that->idx  || this->name != that->name || 
 				this->value != that->value )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -6880,7 +6887,7 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 		}
 		else	
 		{
-			if (this->idx != that->idx || 
+			if (this->idx != that->idx  || this->name != that->name || 
 				!isEqual(this->value, that->value) )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -6999,7 +7006,7 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 		}
 		else	
 		{
-			if (this->idx   != that->idx  || 
+			if (this->idx   != that->idx  || this->name != that->name || 
 				this->value != that->value )
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -7840,6 +7847,8 @@ bool VarValue::setRandom(double density, bool conformant)
 	if (OSRand() <= 0.5) this->value = 3.14156;
 	else                 this->value = 2.71828;
 
+	if (OSRand() <= density) this->name = "random string";
+
 	return true;
 }//VarValue::setRandom
 
@@ -7876,6 +7885,8 @@ bool VarValueString::setRandom(double density, bool conformant)
 	this->idx = (10*OSRand());
 	if (OSRand() <= 0.5) this->value = "random string";
 	else                 this->value = "";
+
+	if (OSRand() <= density) this->name = "random string";
 
 	return true;
 }//VarValueString::setRandom
@@ -7940,6 +7951,8 @@ bool OtherVarResult::setRandom(double density, bool conformant)
 	this->idx = (10*OSRand());
 	if (OSRand() <= 0.5) this->value = "random string";
 	else                 this->value = "";
+
+	if (OSRand() <= density) this->name = "random string";
 
 	return true;
 }//OtherVarResult::setRandom
@@ -8020,6 +8033,8 @@ bool ObjValue::setRandom(double density, bool conformant)
 	if (OSRand() <= 0.5) this->value = 3.14156;
 	else                 this->value = 2.71828;
 
+	if (OSRand() <= density) this->name = "random string";
+
 	return true;
 }//ObjValue::setRandom
 
@@ -8085,6 +8100,8 @@ bool OtherObjResult::setRandom(double density, bool conformant)
 
 	if (OSRand() <= 0.5) this->value = "random string";
 	else                 this->value = "";
+
+	if (OSRand() <= density) this->name = "random string";
 
 	return true;
 }//OtherObjResult::setRandom
@@ -8161,6 +8178,8 @@ bool DualVarValue::setRandom(double density, bool conformant)
 	if (OSRand() <= 0.5) this->value = 3.14156;
 	else                 this->value = 2.71828;
 
+	if (OSRand() <= density) this->name = "random string";
+
 	return true;
 }//DualVarValue::setRandom
 
@@ -8223,6 +8242,8 @@ bool OtherConResult::setRandom(double density, bool conformant)
 	this->idx = (5*OSRand());
 	if (OSRand() <= 0.5) this->value = "random string";
 	else                 this->value = "";
+
+	if (OSRand() <= density) this->name = "random string";
 
 	return true;
 }//OtherConResult::setRandom
