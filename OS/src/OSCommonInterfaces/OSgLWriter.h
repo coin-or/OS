@@ -25,7 +25,6 @@
 #include "OSParameters.h" 
 #include "OSBase64.h"
 #include "OSMathUtil.h"
-#include "CoinFinite.hpp"
 
 #include <string>
 #include <sstream>  
