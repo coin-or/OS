@@ -153,10 +153,7 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 		//double lhs;
 		//for(int i = 0; i < numNewRows; i++){
 		//	lhs = 0;
-			
-			
 			//for(int j = 0; j < numNonz[ i]; j++){	
-
 					
 			//	lhs += m_si->getColSolution()[ colIdx[i][j] ]*values[i][j];
 			//	std::cout << " cut coefficient = " << values[i][j] << " theta value =  " << m_si->getColSolution()[ colIdx[i][j] ] << std::endl;
@@ -166,7 +163,6 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 			//std::cout << "LHS = " << lhs << std::endl;
 			
 		//}// loop over number of new  rows
-		
 		
 		//exit( 1);
 	}//end on if
