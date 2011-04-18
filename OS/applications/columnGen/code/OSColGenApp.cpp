@@ -141,13 +141,38 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-	if(numNewRows == 0 ) {
+
+
+	if(numNewRows == 0 && m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
 		m_osrouteSolver->getCutsMultiCommod( thetaVar, numThetaVar,
 				numNewRows, numNonz, colIdx, values, rowLB, rowUB);	
-		numNewRows = 0;
-	}
+		
+		
+		m_osrouteSolver->m_numMultCuts += numNewRows;
+		
+		//double lhs;
+		//for(int i = 0; i < numNewRows; i++){
+		//	lhs = 0;
+			
+			
+			//for(int j = 0; j < numNonz[ i]; j++){	
+
+					
+			//	lhs += m_si->getColSolution()[ colIdx[i][j] ]*values[i][j];
+			//	std::cout << " cut coefficient = " << values[i][j] << " theta value =  " << m_si->getColSolution()[ colIdx[i][j] ] << std::endl;
+				
+			//}
+			
+			//std::cout << "LHS = " << lhs << std::endl;
+			
+		//}// loop over number of new  rows
+		
+		
+		//exit( 1);
+	}//end on if
 	
 	
+
 	
 	
 
@@ -351,7 +376,7 @@ void OSColGenApp::solve(){
 		//print LP value at node
 		std::cout <<  "optimal LP value at root node = "  <<  m_zLB << std::endl;
 		
-		exit( 1);
+		//exit( 1);
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
@@ -362,8 +387,9 @@ void OSColGenApp::solve(){
 		
 		CbcModel model(  *m_si);
 		OsiSolverInterface *ipSolver = model.solver();
-
+		std::cout <<  "start solving master as integer program  "   << std::endl;
 		ipSolver->branchAndBound();
+		std::cout <<  "done solving master as integer program  "   << std::endl;
 		//CbcMain0(  model);	
 		//CbcMain1( 0, 0, model);
 		//kipp -- put in check to make sure we get an integer solution

@@ -103,6 +103,10 @@ OSBearcatSolverXij::OSBearcatSolverXij(OSOption *osoption) {
 	
 	m_osoption = osoption;
 	
+	m_multiCommodCutLimit = 50;
+	m_numMultCuts = 0;
+	
+
 }//end OSBearcatSolverXijDestructor
 
 void OSBearcatSolverXij::initializeDataStructures(){
@@ -258,15 +262,24 @@ void OSBearcatSolverXij::initializeDataStructures(){
 
 		
 		//New row arrays
-		m_newRowNonz = new int[ m_numHubs] ; //at most one cut per Hub
-		m_newRowColumnIdx = new int*[ m_numHubs] ; //at most one cut per Hub
-		m_newRowColumnValue = new double*[ m_numHubs] ; //at most one cut per Hub
-		m_newRowUB = new double[ m_numHubs]; //at most one cut per Hub
-		m_newRowLB = new double[ m_numHubs]; //at most one cut per Hub
+		//m_newRowNonz = new int[ m_numHubs] ; //at most one cut per Hub
+		//m_newRowColumnIdx = new int*[ m_numHubs] ; //at most one cut per Hub
+		//m_newRowColumnValue = new double*[ m_numHubs] ; //at most one cut per Hub
+		//m_newRowUB = new double[ m_numHubs]; //at most one cut per Hub
+		//m_newRowLB = new double[ m_numHubs]; //at most one cut per Hub
+		
+		
+		m_newRowNonz = new int[ 100] ; //at most one cut per Hub
+		m_newRowColumnIdx = new int*[ 100] ; //at most one cut per Hub
+		m_newRowColumnValue = new double*[ 100] ; //at most one cut per Hub
+		m_newRowUB = new double[ 100]; //at most one cut per Hub
+		m_newRowLB = new double[ 100]; //at most one cut per Hub
 		
 
 		//for now, the number of columns will be m_maxMasterColumns 	
-		for (k = 0; k < m_numHubs; k++) {
+		//for (k = 0; k < m_numHubs; k++) {
+		for (k = 0; k < 100; k++) {
+			
 			
 			m_newRowColumnValue[ k] = new double[ m_maxMasterColumns];
 			m_newRowColumnIdx[ k] = new int[ m_maxMasterColumns];
@@ -274,7 +287,7 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		}
 		
 		//new array for keeping track of convexity rows
-		convexityRowIndex = new int[ m_maxMasterColumns];
+		m_convexityRowIndex = new int[ m_maxMasterColumns];
 		//new arrays for branches
 		
 		branchCutIndexes = new int[ m_maxMasterColumns];
@@ -297,6 +310,8 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		m_pntBmatrix = new int[ m_maxBmatrixCon];
 		// number of nonzeros in the Bmatrix
 		m_BmatrixIdx = new int[ m_maxBmatrixNonz];
+		m_BmatrixRowIndex = new int[ m_maxBmatrixNonz];
+		for(i = 0; i <  m_maxBmatrixNonz; i++) m_BmatrixRowIndex[ i] = -1;
 		
 		// number of nonzeros in the Bmatrix
 		m_BmatrixVal = new double[ m_maxBmatrixNonz];
@@ -461,8 +476,8 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	m_newColumnRowValue = NULL;
 	
 	
-	delete[] convexityRowIndex;
-	convexityRowIndex = NULL;
+	delete[] m_convexityRowIndex;
+	m_convexityRowIndex = NULL;
 	
 	
 	//getCut arrays
@@ -516,6 +531,9 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	
 	delete[]  m_BmatrixVal ;
 	m_BmatrixVal = NULL;
+	
+	delete[]  m_BmatrixRowIndex ;
+	m_BmatrixRowIndex = NULL;
 	
 		
 
@@ -1172,26 +1190,30 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 			
 			for(i = 0; i < m_numBmatrixCon; i++){
 				
-				//rowCount = 0;
-				rowValue = 0;
+				if(m_BmatrixRowIndex[ i] == -1 || m_BmatrixRowIndex[ i] == k ){
 				
-				for(j = m_pntBmatrix[ i]; j < m_pntBmatrix[ i + 1]; j++){
+					//rowCount = 0;
+					rowValue = 0;
 					
-					//m_BmatrixIdx[ j] is a variable index -- this logic works
-					//since the Bmatrix coefficient is 1 -- we don't need a value
-					//it indexes variable that points into the node
-					//rowCount += m_tmpScatterArray[  m_BmatrixIdx[ j] ];
-					//now assume coefficients not necessarily 1
-
-					rowValue += m_tmpScatterArray[  m_BmatrixIdx[ j] ]*m_BmatrixVal[ j];
-
-				}
-				
-				if(rowValue > 0){
-					
-					
-					m_newColumnRowIdx[ k][ numNonz] = i + m_numNodes;
-					m_newColumnRowValue[ k][ numNonz++] = rowValue;
+					for(j = m_pntBmatrix[ i]; j < m_pntBmatrix[ i + 1]; j++){
+						
+						//m_BmatrixIdx[ j] is a variable index -- this logic works
+						//since the Bmatrix coefficient is 1 -- we don't need a value
+						//it indexes variable that points into the node
+						//rowCount += m_tmpScatterArray[  m_BmatrixIdx[ j] ];
+						//now assume coefficients not necessarily 1
+	
+						rowValue += m_tmpScatterArray[  m_BmatrixIdx[ j] ]*m_BmatrixVal[ j];
+	
+					}
+					//use epsilon instead of 0
+					if( rowValue > m_osDecompParam.zeroTol || rowValue < -m_osDecompParam.zeroTol){
+						
+						
+						m_newColumnRowIdx[ k][ numNonz] = i + m_numNodes;
+						m_newColumnRowValue[ k][ numNonz++] = rowValue;
+						
+					}
 					
 				}
 				
@@ -1215,7 +1237,7 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 			
 
 			intVarSet.insert ( std::pair<int,double>( m_numThetaVar, 1.0) );
-			convexityRowIndex[ m_numThetaVar] = k;
+			m_convexityRowIndex[ m_numThetaVar] = k;
 			m_costVec[ k] =  m_optL[ k]*m_costVec[ k];
 			m_thetaCost[ m_numThetaVar++ ] = m_costVec[ k];
 			m_thetaPnt[ m_numThetaVar ]  = m_numThetaNonz;
@@ -1508,7 +1530,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 					}
 					
 				}
-				convexityRowIndex[ m_numThetaVar] = k;
+				m_convexityRowIndex[ m_numThetaVar] = k;
 				m_thetaCost[ m_numThetaVar++ ] = primalValPair[ k]->value*primalValPair[ k + m_numHubs]->value;
 				m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 				
@@ -1650,7 +1672,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 	SparseVector *objcoeff = NULL;
 	
 	for(i = 0; i < numVarArt; i++){
-		convexityRowIndex[ m_numThetaVar] = -1;
+		m_convexityRowIndex[ m_numThetaVar] = -1;
 		m_thetaPnt[ m_numThetaVar++] = 0;
 		
 	}
@@ -1742,7 +1764,7 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 			
 			
 			
-			convexityRowIndex[ m_numThetaVar] = k;
+			m_convexityRowIndex[ m_numThetaVar] = k;
 			m_thetaCost[ m_numThetaVar++ ] = demandSum*tspObjValue; 
 			m_thetaPnt[ m_numThetaVar ] = m_numThetaNonz;
 			
@@ -2316,7 +2338,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 							//we found a row, add the corresponding artificial variables
 							//to the transformation matrix
 							m_numThetaVar++;
-							convexityRowIndex[ m_numThetaVar] = -1;
+							m_convexityRowIndex[ m_numThetaVar] = -1;
 							m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 							//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz;
 							//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
@@ -2485,7 +2507,7 @@ void OSBearcatSolverXij::getCutsTheta(const  double* theta, const int numTheta,
 				rowUB =  m_newRowUB;
 				rowLB =  m_newRowLB;
 				m_numThetaVar++;
-				convexityRowIndex[ m_numThetaVar] = -1;
+				m_convexityRowIndex[ m_numThetaVar] = -1;
 				m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 				//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz; //first artificial variable
 				//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz; //second artificial varaible
@@ -2535,12 +2557,13 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	numNewRows = 0;
 	
 	
-	//convexityRowIndex
+	//m_convexityRowIndex
 	int i;
 	int j;
 	int k;
 	int ivalue;
 	int jvalue;
+	int thetaIdx;
 	int inodenum;
 	int jnodenum;
 	int j1;
@@ -2549,12 +2572,19 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	double wVal;
 	double uVal;
 	bool foundCut;
+	double  objVal;
 
 	int ckijIndex;
 	int numNonHubs;
 	numNonHubs = m_numNodes - m_numHubs;
 	
 	int numVar;
+	double rowValue;
+	
+	double* scatterValues;
+	int numXijVar = m_numNodes*m_numNodes - m_numNodes;
+	scatterValues = new double[ numXijVar ];
+	for(i = 0; i < numXijVar; i++ )scatterValues[ i] = 0;
 	
 	double tmpCoeff;
 	
@@ -2570,7 +2600,40 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	std::map<int, std::vector<std::pair<int,double> > >::iterator mit;
 	std::vector<std::pair<int,double> >::iterator vit;
 	
+	std::map<std::pair<int, int>,int>xVarIndexMap;
+	std::pair<int,int> indexPair;
 	ostringstream cutString;
+	
+	
+	
+	
+	
+
+	//construct index map
+	kount = 0;
+	for(i = 0; i < m_numNodes; i++){
+		
+		for(j = 0; j < i; j++){  //j < i
+		
+		
+			
+			indexPair.first = i;
+			indexPair.second = j;
+			xVarIndexMap[ indexPair] = kount;
+			kount++;
+		}
+		
+		for(j = i+1; j < m_numNodes; j++){ // i < j
+			
+			indexPair.first = i;
+			indexPair.second = j;
+			xVarIndexMap[ indexPair] = kount;
+			kount++;
+		}
+	}
+	//end construct map
+
+	
 
 	
 	//intVarSet.insert ( std::pair<int,double>(mit->second, 1.0) );
@@ -2578,14 +2641,14 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	try{
 		
 		for(i = 0; i < numTheta; i++){
-			xVarMap[ convexityRowIndex[ i] ] ; 
+			xVarMap[ m_convexityRowIndex[ i] ] ; 
 			//get a postive theta
 			if(theta[ i] > m_osDecompParam.zeroTol){
 				
 				//get the xij indexes associated with this variable
 				for(j = m_thetaPnt[ i ]; j <  m_thetaPnt[ i + 1 ]; j++ ){
 					
-					mit = xVarMap.find( convexityRowIndex[ i]) ;  
+					mit = xVarMap.find( m_convexityRowIndex[ i]) ;  
 					
 					if(mit != xVarMap.end() ){
 						
@@ -2596,15 +2659,18 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 			}
 		}
 		
-		//get a cut for each hub
+
 		
+		//get a cut for each hub
 		for(k = 0; k < m_numHubs; k++){
+			
+			
 			mit = xVarMap.find( k) ;
 			
 			solver = m_multCommodCutSolvers[ k];
 			
 			numVar  = solver->osiSolver->getNumCols();
-			for(i = numNonHubs; i < numVar; i++ ) solver->osiSolver->setObjCoeff( i, 0);
+			for(i = 0; i < numVar; i++ ) solver->osiSolver->setObjCoeff( i, 0);
 			
 			for(i = 0; i < numNonHubs; i++)  wcoeff[ i ] = 0;
 		
@@ -2615,9 +2681,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 				for(vit = mit->second.begin();  vit < mit->second.end(); vit++){
 					
 					//std::cout <<  m_variableNames[ vit->first ]  << " = "  <<  vit->second  << std::endl;
-					
-					
-					
+						
 					ivalue = (int)floor( vit->first /(m_numNodes - 1) );
 					
 					jvalue = vit->first - ivalue*(m_numNodes - 1);
@@ -2639,7 +2703,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 					
 					if(jnodenum != k){
 						
-						
+						//std::cout << "GAIL " << m_nodeName[ inodenum] << "  " <<  m_nodeName[ jnodenum]  << std::endl;
 						wcoeff[ jnodenum - m_numHubs ] += vit->second;
 						
 						if( inodenum == k ){
@@ -2658,10 +2722,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 							
 						}
 						
+						
 						ckijIndex += numNonHubs;	
+						
 						tmpCoeff = solver->osiSolver->getObjCoefficients()[ ckijIndex] ;
-						//std::cout << "cijkIndex = " <<  ckijIndex  << " tmp Coeff Before = " << tmpCoeff << " vit->second = "<< vit->second << std::endl;
-						//it looks like the sign of coefficients get reversed
+						//std::cout <<  " HONDA "  << "cijkIndex = " <<  ckijIndex << std::endl;
+						
 						tmpCoeff  = tmpCoeff - vit->second;
 						if( ckijIndex > numVar - 1) throw ErrorClass( "problem with ckijIndex calculation");
 						//std::cout << "cijkIndex = " <<  ckijIndex  << " tmp Coeff After = " << tmpCoeff << " vit->second = "<< vit->second << std::endl;
@@ -2674,6 +2740,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 			foundCut = false;
 			//loop over s to get a cut
 			for(i = 0; i < numNonHubs; i++){
+
 				//set s^{\hat} coefficient
 				solver->osiSolver->setObjCoeff( i,  wcoeff[ i ]  );
 				
@@ -2683,11 +2750,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 				//kipp -- change the hard coding
 				//we have a cut
 				if(solver->osiSolver->getObjValue() > .1){
+					objVal = 0;
 					std::cout << "Separation Obj Value = " <<  
 						solver->osiSolver->getObjValue() << "  Node " << m_nodeName[i + m_numHubs] << std::endl;
-					//solver->osiSolver->writeLp( "tmpLP");
+					//if(k == 1)solver->osiSolver->writeLp( "tmpLP--April17");
 					foundCut = true;
-					 m_newRowNonz[ numNewRows] = 0;
+					m_newRowNonz[ numNewRows ] = 0;
 				//get the solution, let's see what the cut is in x(i, j) variables
 					//empty the buffer
 					cutString.str("");
@@ -2697,56 +2765,71 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 					kount = numNonHubs;
 					
 					wVal = solver->osiSolver->getColSolution()[ i];
-					int tmpKount = 0;
-					for(int jj = numNonHubs; jj < numVar; jj++){
-						
-						if(solver->osiSolver->getColSolution()[ jj] > .1){
-							
-							std::cout << "index " <<  jj <<   m_tmpVarMap[ jj] << " Value = " << solver->osiSolver->getColSolution()[ jj] << std::endl;
-							tmpKount ++;
-							
-						}
-						
-					}
-					std::cout << "tmpKount  " <<  tmpKount  << std::endl;
-					std::cout << "w[shat] =  " << wVal << std::endl;
-					if(wVal < .0001  )throw ErrorClass("problem with wVal in generating a multicommodity cut");
+					objVal += wVal*solver->osiSolver->getObjCoefficients()[ i];
+
+					if(wVal < m_osDecompParam.zeroTol  )throw ErrorClass("problem with wVal in generating a multicommodity cut");
 					//get the u(k,j2) variables
 					//j1 = k
-					for(j2 = m_numHubs; j2 < m_numNodes; j2++){
+					for(j2 = m_numHubs; j2 < m_numNodes; j2++){ //j1 = k
+						
+						indexPair.first = k;
+						indexPair.second = j2;
 						
 						uVal = solver->osiSolver->getColSolution()[ kount];
+						objVal += uVal*solver->osiSolver->getObjCoefficients()[ kount];
 						
-						
+						//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001 ) std::cout << m_variableNames[ xVarIndexMap[ indexPair] ]<< " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
+													
 						
 						if (j2 == (i + m_numHubs) ){
 							
-							if( (wVal - uVal) > .0001 || (uVal - wVal)  > .0001 ){
+							if( (wVal - uVal) > m_osDecompParam.zeroTol || (uVal - wVal)  > m_osDecompParam.zeroTol ){
 								//variable (wVal - uVal)*x(k, shat)
 								cutString << " =";
 								cutString << (wVal - uVal);
-								cutString << "*x(" ;
-								cutString << m_nodeName[ k] ;
-								cutString << "," ;
-								cutString << m_nodeName[ i + m_numHubs] ;
-								cutString << ")  " ;
+								cutString << "*" ;
+								//cutString << m_nodeName[ k] ;
+								//cutString << "," ;
+								//cutString << m_nodeName[ i + m_numHubs] ; //i is indexing a non-hub
+								//cutString << ")  " ;
 								
-								m_newRowColumnValue[ numNewRows][ m_newRowNonz[ numNewRows ]++ ] = (wVal - uVal)/wVal;
+								m_BmatrixVal[   m_numBmatrixNonz ] = (wVal - uVal)/wVal ;
+								//get index for k, j2
+								//m_BmatrixIdx[   m_numBmatrixNonz++ ] = k*(m_numNodes - 1) + j2 - 1   ;
+								if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+									std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
+									throw ErrorClass( "index mapping problem in generating multicommodity cut");
+								}else{
+									m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
+									cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+								}
 								
 							}
 							
 						}else{
 							
-							if(  (-uVal > .0001) || (uVal  > .0001)  ){
+							if(  (-uVal > m_osDecompParam.zeroTol) || (uVal  > m_osDecompParam.zeroTol)  ){
 								//variable -uVal*x(j1, j2)
 								cutString << " ";
 								cutString << - uVal;
-								cutString << "*x(" ;
-								cutString << m_nodeName[ k ];
-								cutString << "," ;
-								cutString << m_nodeName[ j2 ];
-								cutString << ")  " ;
-								m_newRowColumnValue[ numNewRows][ m_newRowNonz[ numNewRows]++ ] = -uVal/wVal;
+								cutString << "*" ;
+								//cutString << m_nodeName[ k ];
+								//cutString << "," ;
+								//cutString << m_nodeName[ j2 ];
+								//cutString << ")  " ;
+								
+								
+								m_BmatrixVal[   m_numBmatrixNonz ] = -uVal/wVal ;
+								//get index for k, j2
+								//m_BmatrixIdx[   m_numBmatrixNonz++ ] = k*(m_numNodes - 1) + j2 - 1   ;
+								
+								if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+									std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
+									throw ErrorClass( "index mapping problem in generating multicommodity cut");
+								}else{
+									m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
+									cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+								}
 							}
 							
 						}
@@ -2759,97 +2842,222 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 						
 						//j1 = 0 corresponds to the hub
 						
-						for(j2 = j1 + 1; j2 < m_numNodes; j2++){
+						//for(j2 = j1 + 1; j2 < m_numNodes; j2++){
+						for(j2 = m_numHubs; j2 < j1; j2++){
+							
+							indexPair.first = j1;
+							indexPair.second = j2;
 							
 							uVal = solver->osiSolver->getColSolution()[ kount];
+							objVal += uVal*solver->osiSolver->getObjCoefficients()[ kount];
+							
+							//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001 ) std::cout << m_variableNames[ xVarIndexMap[ indexPair] ] << " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
 							
 							if (j2 == (i + m_numHubs)  ){
 							
 								
-								if( (wVal - uVal) > .0001 || (uVal - wVal)  > .0001 ){
+								if( (wVal - uVal) > m_osDecompParam.zeroTol || (uVal - wVal)  > m_osDecompParam.zeroTol ){
 									//variable (wVal - uVal)*x(j1, shat)
 									cutString << " +";
 									cutString << (wVal - uVal) ;
-									cutString << "*x(" ;
-									cutString << m_nodeName[ j1] ;
-									cutString << "," ;
-									cutString << m_nodeName[ i + m_numHubs];
-									cutString << ")  " ;
-									m_newRowColumnValue[ numNewRows][ m_newRowNonz[ numNewRows ]++ ] = (wVal - uVal)/wVal;
+									cutString << "*" ;
+									//cutString << m_nodeName[ j1] ;
+									//cutString << "," ;
+									//cutString << m_nodeName[ i + m_numHubs];
+									//cutString << ")  " ;
+									m_BmatrixVal[   m_numBmatrixNonz ] = (wVal - uVal)/wVal ;
+									//get index for j1, j2 with  j1  < j2
+									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2 - 1   ;
+									
+									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
+										throw ErrorClass( "index mapping problem in generating multicommodity cut");
+									}else{
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+									}
+									
 								}
 								
 							}else{
 								
-								if(  (-uVal > .0001) || (uVal  > .0001)  ){
+								if(  (-uVal > m_osDecompParam.zeroTol) || (uVal  > m_osDecompParam.zeroTol)  ){
 									//variable -uVal*x(j1, j2)
 									cutString << " ";
 									cutString << - uVal;
-									cutString << "*x(" ;
-									cutString << m_nodeName[ j1 ];
-									cutString << "," ;
-									cutString << m_nodeName[ j2 ];
-									cutString << ")  " ;
-									m_newRowColumnValue[ numNewRows][ m_newRowNonz[ numNewRows]++ ] = -uVal/wVal;
+									cutString << "*" ;
+									//cutString << m_nodeName[ j1 ];
+									//cutString << "," ;
+									//cutString << m_nodeName[ j2 ];
+									//cutString << ")  " ;
+									
+									m_BmatrixVal[   m_numBmatrixNonz ] = -uVal/wVal ;
+									//get index for j1, j2 with  j1  < j2
+									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2 - 1   ;
+									
+									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
+										throw ErrorClass( "index mapping problem in generating multicommodity cut");
+									}else{
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+									}
 								}
 							}
 							kount++;
 						}
 						
-						for(j2 = m_numHubs; j2 < j1; j2++){
+						//for(j2 = m_numHubs; j2 < j1; j2++){
+						for(j2 = j1 + 1; j2 < m_numNodes; j2++){
+							
+							indexPair.first = j1;
+							indexPair.second = j2;
 							
 							uVal = solver->osiSolver->getColSolution()[ kount];
+							objVal += uVal*solver->osiSolver->getObjCoefficients()[ kount];
+							
+							//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001) std::cout << m_variableNames[ xVarIndexMap[ indexPair] ] << " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
 							
 							if (j2 == (i + m_numHubs) ){
 								
-								if( (wVal - uVal) > .0001 || (uVal - wVal)  > .0001 ){
+								if( (wVal - uVal) > m_osDecompParam.zeroTol || (uVal - wVal)  > m_osDecompParam.zeroTol ){
 									//variable (wVal - uVal)*x(j1, shat)
 									cutString << " +";
 									cutString << (wVal - uVal);
-									cutString << "*x(" ;
-									cutString << m_nodeName[ j1 ];
-									cutString << "," ;
-									cutString << m_nodeName[ i+ m_numHubs] ;
-									cutString << ")  " ;
-									m_newRowColumnValue[ numNewRows][ m_newRowNonz[ numNewRows ]++ ] = (wVal - uVal)/wVal;
+									cutString << "*" ;
+									//cutString << m_nodeName[ j1 ];
+									//cutString << "," ;
+									//cutString << m_nodeName[ i+ m_numHubs] ;
+									//cutString << ")  " ;
+									m_BmatrixVal[   m_numBmatrixNonz ] = (wVal - uVal)/wVal ;
+									//get index for j1, j2 with  j1  > j2
+									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2    ;
+									
+									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
+										throw ErrorClass( "index mapping problem in generating multicommodity cut");
+									}else{
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+									}
 								}
 								
 							}else{
 								
-								if(  (-uVal > .0001) || (uVal  > .0001)  ){
+								if(  (-uVal > m_osDecompParam.zeroTol) || (uVal  > m_osDecompParam.zeroTol)  ){
 									//variable -uVal*x(j1, j2)
 									cutString << " ";
 									cutString << - uVal;
-									cutString << "*x(" ;
-									cutString << m_nodeName[ j1 ];
-									cutString << "," ;
-									cutString << m_nodeName[ j2] ;
-									cutString << ")  " ;
-									m_newRowColumnValue[ numNewRows][ m_newRowNonz[ numNewRows]++ ] = -uVal/wVal;
+									cutString << "*" ;
+									//cutString << m_nodeName[ j1 ];
+									//cutString << "," ;
+									//cutString << m_nodeName[ j2] ;
+									//cutString << ")  " ;
+									m_BmatrixVal[   m_numBmatrixNonz ] = -uVal/wVal ;
+									//get index for j1, j2 with  j1  > j2
+									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2   ;
+									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
+										throw ErrorClass( "index mapping problem in generating multicommodity cut");
+									}else{
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+									}
 								}
 							}	
 							kount++;
 						}
 					}//end loop on j1
 					cutString << std::endl;
-					std::cout << cutString.str() << std::endl; 
+					std::cout << cutString.str() <<  " kount =  " << kount << std::endl; 
+					std::cout << "OPTIMAL OBJECTIVE FUNCTION VALUE = " <<  objVal << std::endl;
+					std::cout << "OPTIMAL W VALUE = " <<  wVal << std::endl;
 					
 					//now add the cut
+					//
+					m_numBmatrixCon++;
+					m_pntBmatrix[ m_numBmatrixCon ] =  m_numBmatrixNonz;
+					//we have taken care of the B-matrix -- the Xij space
+					//now take care the theta indexes and values
+					
+					//scatter the constraint in the x - variables, we
+					//are scattering the B matrix constraint just found
+
+					for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
+					        j <  m_pntBmatrix[ m_numBmatrixCon  ] ; j++){
+						
+						m_tmpScatterArray[ m_BmatrixIdx[ j] ] = 1;
+						scatterValues[ m_BmatrixIdx[ j] ]  = m_BmatrixVal[ j];
+						std::cout  << m_variableNames[ m_BmatrixIdx[ j] ] << " xkij cut coeff =  " << m_BmatrixVal[ j] << std::endl;
+						
+					}
+
+					//done with scatter operation
+					
+			
+					
+					if(numTheta != m_numThetaVar)throw 
+							ErrorClass( "Inconsistent Number of theta variables in multicommondity cut separation problem" );
+					
+		
+					for(thetaIdx = 0; thetaIdx < m_numThetaVar ; thetaIdx++){
+						//make sure we only consider thetaIdx in convexity row k
+						
+						if(m_convexityRowIndex[ thetaIdx] == k){
+							
+							
+							rowValue = 0;
+							for(j = m_thetaPnt[ thetaIdx]; j < m_thetaPnt[ thetaIdx + 1] ;  j++){
+								
+								//std::cout << "row value  = " << rowValue << " m_tmpScatterArray[  j ]  " << m_tmpScatterArray[  j ] << std::endl;
+								
+								rowValue +=  m_tmpScatterArray[  m_thetaIndex[ j] ]*scatterValues[ m_thetaIndex[ j] ];
+								//std::cout << "theta index " << thetaIdx << "  " << m_variableNames[ m_thetaIndex[ j]  ] << " = " << m_BmatrixVal[ j] << "   row value = " <<  rowValue << std::endl;
+							}
+							
+							if(rowValue > m_osDecompParam.zeroTol || -rowValue > m_osDecompParam.zeroTol){
+								//std::cout << "numNewRows  = " <<    numNewRows << "  m_newRowNonz[ numNewRows ]  " <<  m_newRowNonz[ numNewRows ] <<  std::endl;
+								m_newRowColumnIdx[ numNewRows][ m_newRowNonz[ numNewRows ] ] = thetaIdx ;
+								m_newRowColumnValue[ numNewRows][ m_newRowNonz[ numNewRows]++ ] = rowValue;
+							}
+							
+						
+						}//end of if on convexity row
+						
+
+					}//end loop on thetaIdx
+					
 					m_newRowLB[ numNewRows] = -OSDBL_MAX;
 					m_newRowUB[ numNewRows] = 0;
-					
-				
-				
-					
 					numNewRows++;
+					
+					
+					//zero out the scatter array again
+					for(j = m_pntBmatrix[  m_numBmatrixCon  - 1] ; 
+					        j < m_pntBmatrix[  m_numBmatrixCon  ] ; j++){
+
+					    m_tmpScatterArray[ m_BmatrixIdx[ j] ] = 0;
+					    scatterValues[ m_BmatrixIdx[ j] ]  = 0;
+
+					}
+					//
 					//done adding cut
+					
+					//kipp -- don't forget to increment the artificial variable since a cut is added
+					//
+					
+
+					
+					m_BmatrixRowIndex[ m_numBmatrixCon] = k;
+					///
 					
 				}//end iff on positive obj value
 				//set objcoefficient back to 0
 				solver->osiSolver->setObjCoeff( i,  0 );
 				
 				//we have a cut so break from the loop
-				if(foundCut == true) break;
-			}//end loop over s
+				//if(foundCut == true) break;
+			}//end loop over i
 			std::cout <<  std::endl << std::endl;
 			
 			//reset the coefficients
@@ -2862,26 +3070,40 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 		delete[] wcoeff;
 		wcoeff = NULL;
 		
-		
-		
+		delete[] scatterValues;
+		scatterValues = NULL;
 		
 		numNonz = m_newRowNonz;
 		colIdx =  m_newRowColumnIdx;
 		values =  m_newRowColumnValue;
 		rowUB =  m_newRowUB;
 		rowLB =  m_newRowLB;
-		//we found a row, add the corresponding artificial variables
-		//to the transformation matrix
-		m_numThetaVar++;
-		convexityRowIndex[ m_numThetaVar] = -1;
-		m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 		
+		for(i = 0; i < numNewRows; i++){
+			
+			//we found a row, add the corresponding artificial variables
+			//to the transformation matrix
+			m_numThetaVar++;
+			m_convexityRowIndex[ m_numThetaVar] = -1;
+			m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
+		}
+
 		return;
 		
 	
 	} catch (const ErrorClass& eclass) {
-		if(wcoeff != NULL) delete[] wcoeff;
-		wcoeff = NULL;
+		if(wcoeff != NULL){
+			delete[] wcoeff;
+			wcoeff = NULL;
+		}
+		
+		
+		
+		if(scatterValues != NULL) {
+			delete[] scatterValues;
+			scatterValues = NULL;
+		}
+		
 
 		throw ErrorClass(eclass.errormsg);
 
@@ -3191,7 +3413,7 @@ void OSBearcatSolverXij::calcReducedCost( const double* yA, const double* yB){
 					//startPnt = k*m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes) + (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					startPnt = (l - 1)*(m_numNodes*m_numNodes - m_numNodes);
 					
-					m_rc[ k][ startPnt + m_BmatrixIdx[ j] ]  -=  yB[ i]*m_BmatrixVal[ j];
+					if(m_BmatrixRowIndex[ i] == -1 || m_BmatrixRowIndex[ i] == k ) m_rc[ k][ startPnt + m_BmatrixIdx[ j] ]  -=  yB[ i]*m_BmatrixVal[ j];
 					
 				}
 				
@@ -3329,7 +3551,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 		for(vit = m_zOptIndexes.begin() ; vit != m_zOptIndexes.end(); vit++){
 			
 				i = *vit;
-				std::cout <<  "x variables for column "  << i  << " CONVEXITY ROW = "<< convexityRowIndex[ i]  <<   std::endl;
+				std::cout <<  "x variables for column "  << i  << " CONVEXITY ROW = "<< m_convexityRowIndex[ i]  <<   std::endl;
 				
 				
 				//cost += m_thetaCost[ i ];
@@ -3979,7 +4201,7 @@ void OSBearcatSolverXij::getBranchingCut(const double* thetaVar, const int numTh
 			//of course they have no nonzero elements in 
 			//the transformation matrix
 			m_numThetaVar++;
-			convexityRowIndex[ m_numThetaVar] = -1;
+			m_convexityRowIndex[ m_numThetaVar] = -1;
 			m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 			//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz; //first artificial variable
 			//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz; //second artificial variable
@@ -4065,7 +4287,7 @@ void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thet
 			//of course they have no nonzero elements in 
 			//the transformation matrix
 			m_numThetaVar++;
-			convexityRowIndex[ m_numThetaVar] = -1;
+			m_convexityRowIndex[ m_numThetaVar] = -1;
 			m_thetaPnt[ m_numThetaVar] = m_numThetaNonz;
 			//m_thetaPnt[ m_numThetaVar++] = m_numThetaNonz; //first artificial variable
 			//m_thetaPnt[ m_numThetaVar] = m_numThetaNonz; // second artificial variable
@@ -4160,7 +4382,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 		
 		
 		//std::cout << "VARIABLE INDEX =  " <<  mit->first  << " OBJ COEF = " <<  si->getObjCoefficients()[ mit->first ] << std::endl;
-		if( convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
+		if( m_convexityRowIndex[ mit->first] == -1) throw ErrorClass( "we have an artificial variable in reset master");
 		
 		
 	}
@@ -4199,8 +4421,8 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 	
 
 	
-	//copy old values of convexityRowIndex
-	for(i = 0; i < m_numThetaVar; i++) tmpConvexity[ i] = convexityRowIndex[ i];
+	//copy old values of m_convexityRowIndex
+	for(i = 0; i < m_numThetaVar; i++) tmpConvexity[ i] = m_convexityRowIndex[ i];
 	
 	//reset the theta pointers
 	//first the artificial variables
@@ -4208,7 +4430,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 	m_numThetaNonz = 0;
 	for(i = 0; i < numVarArt; i++){
 		
-		convexityRowIndex[ m_numThetaVar] = -1;
+		m_convexityRowIndex[ m_numThetaVar] = -1;
 		m_thetaPnt[ m_numThetaVar++] = 0;
 		
 		
@@ -4224,7 +4446,7 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 		//std::cout << " m_numThetaVar =  "  << m_numThetaVar << "  m_numThetaNonz =  " <<  m_numThetaNonz  << std::endl;
 		//std::cout << "Variable number " << mit->first << "  OBJ coefficient = " <<   si->getObjCoefficients()[  mit->first] << std::endl;
 		
-		convexityRowIndex[ m_numThetaVar] = tmpConvexity[ mit->first];
+		m_convexityRowIndex[ m_numThetaVar] = tmpConvexity[ mit->first];
 		
 		m_thetaPnt[ m_numThetaVar++ ] = m_numThetaNonz;
 		
@@ -4274,9 +4496,9 @@ void OSBearcatSolverXij::resetMaster( std::map<int, int> &inVars, OsiSolverInter
 	
 	for(mit = inVars.begin();  mit != inVars.end(); mit++){
 		
-		//std::cout << "CONVEXITY ROW = " << convexityRowIndex[ mit->second]  << std::endl;
+		//std::cout << "CONVEXITY ROW = " << m_convexityRowIndex[ mit->second]  << std::endl;
 		valuesVec.push_back( 1.0);
-		indexesVec.push_back( numAmatrixRows + convexityRowIndex[ mit->second] );
+		indexesVec.push_back( numAmatrixRows + m_convexityRowIndex[ mit->second] );
 		//increment numNonz by 1 for the convexity row
 		numNonz++;
 		
@@ -5239,6 +5461,8 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 			
 			
 			for(j = m_numHubs; j < i; j++){
+			
+			
 				
 				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
 					osinstance->addVariable(numVar++, "u[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", 0, OSDBL_MAX, 'C');

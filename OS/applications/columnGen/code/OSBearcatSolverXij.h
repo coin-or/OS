@@ -178,11 +178,19 @@ public:
 	// artificial variables -- it is 
 	double* m_thetaCost;
 	
-	/** conconvexityRowIndex holds the index of the convexity row
+	/** m_convexityRowIndex holds the index of the convexity row
 	 * that the theta columns are in. If the theta is an artificial
 	 * variable this value is -1
 	 */
-	int* convexityRowIndex;
+	int* m_convexityRowIndex;
+	
+	
+	/** m_BmatrixRowIndex holds the index of the convexity row
+	 * that the constraint corresponds to, this is for the
+	 * multicommodity constraints --  if the constraint applies
+	 * to theta regardless of k, then the value is -1
+	 */
+	int* m_BmatrixRowIndex;
 	
 
 	 /** m_separationIndexMap maps the variable index into the

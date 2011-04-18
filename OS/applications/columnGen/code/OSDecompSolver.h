@@ -43,6 +43,9 @@ public:
 
 	OSInstance *m_osinstanceMaster;
 	
+	int m_multiCommodCutLimit;
+	int m_numMultCuts;
+	
 	
 	/** share the parameters with the 
 	 * decomposition solver
@@ -312,9 +315,7 @@ public:
 	 */	
 	virtual ~OSDecompSolver() = 0;	
 	
-	
 
-	
 	
 	//
 };//end class OSDecompSolver
