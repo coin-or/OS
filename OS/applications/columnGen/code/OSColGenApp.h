@@ -54,7 +54,16 @@ public:
 	OSOption *m_osoption;
 	OSResult *m_osresult;
 	
-
+	/** this variable is true if we have called
+	 * the branchAndBound() method
+	 */
+	
+	bool m_calledBranchAndBound;
+	
+	/** if this is infinity then we have a truly
+	 * infeasible node and can fathom
+	 */
+	double m_lowerBound;
 	
 	//the OS solver wrapper
 	CoinSolver *m_solver;

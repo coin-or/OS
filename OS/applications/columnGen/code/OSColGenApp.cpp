@@ -63,6 +63,10 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  //get parameters-options
 	  //set default values:
 	  
+	  m_calledBranchAndBound = false;
+	  
+	  m_lowerBound = -OSDBL_MAX;
+	  
 	  m_osDecompParam.nodeLimit = 1000;
 	  m_osDecompParam.columnLimit = 20000;
 	  m_osDecompParam.masterColumnResetValue = 5000;
@@ -143,12 +147,15 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	
 
 
-	if(numNewRows == 0 && m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
+	if(numNewRows == 0 && m_calledBranchAndBound == false
+			&& m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
 		m_osrouteSolver->getCutsMultiCommod( thetaVar, numThetaVar,
 				numNewRows, numNonz, colIdx, values, rowLB, rowUB);	
 		
 		
 		m_osrouteSolver->m_numMultCuts += numNewRows;
+		
+		
 		
 		//double lhs;
 		//for(int i = 0; i < numNewRows; i++){
@@ -787,6 +794,8 @@ void OSColGenApp::printDebugInfo( ){
 
 
 bool OSColGenApp::branchAndBound( ){
+	
+	m_calledBranchAndBound = true;
 	
 	/** varConMap is a map that maps the index
 	 * of an x_{ij} variable to the corresponding
