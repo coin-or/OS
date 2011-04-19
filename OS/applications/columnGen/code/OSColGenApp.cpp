@@ -65,7 +65,7 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  
 	  m_calledBranchAndBound = false;
 	  
-	  m_lowerBound = -OSDBL_MAX;
+	
 	  
 	  m_osDecompParam.nodeLimit = 1000;
 	  m_osDecompParam.columnLimit = 20000;
@@ -379,7 +379,7 @@ void OSColGenApp::solve(){
 		//print LP value at node
 		std::cout <<  "optimal LP value at root node = "  <<  m_zLB << std::endl;
 		
-		//exit( 1);
+		exit( 1);
 
 		for ( sit = m_osrouteSolver->intVarSet.begin() ; 
 				sit != m_osrouteSolver->intVarSet.end(); sit++ ){
@@ -842,7 +842,7 @@ bool OSColGenApp::branchAndBound( ){
 		
 		//create a branching cut 
 		createBranchingCut(m_theta, numCols, varConMap, rowIdx);
-		
+	
 
 		//// start left node ////
 			
@@ -935,10 +935,15 @@ bool OSColGenApp::branchAndBound( ){
 			
 			if( osnode->lpValue < (1 - m_osDecompParam.optTolPerCent)*m_zUB - m_osDecompParam.zeroTol){
 			
-				
+			
 				//create a branching cut 
 				createBranchingCut(osnode->thetaIdx, osnode->theta, osnode->thetaNumNonz, 
 						varConMap, rowIdx);
+				
+				
+				std::cout << "BEST NODE ID " << bestNodeID << std::endl;
+				std::cout << "NODE LP VALUE =  " << osnode->lpValue << std::endl;
+	
 				
 				// create children
 				//create the left node
@@ -1197,7 +1202,9 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 		std::cout << "MESSAGE: START CREATION OF A CHILD NODE" << std::endl;
 		std::cout << "LB " << rowLB  <<  " UB = " << rowUB << std::endl;
 		std::cout << "MESSAGE: LP RELAXATION VALUE OF POTENTIAL CHILD NODE  " << m_si->getObjValue() << std::endl;
-		if( m_si->getObjValue() < (1 - m_osDecompParam.optTolPerCent)*m_zUB - m_osDecompParam.zeroTol) {
+		std::cout << "MESSAGE: OPTIMALITY STATUS OF NODE  " << m_si->isProvenOptimal() << std::endl;
+		
+		if( m_si->getObjValue() < (1 - m_osDecompParam.optTolPerCent)*m_zUB - m_osDecompParam.zeroTol && m_si->isProvenOptimal() == 1) {
 			// okay cannot fathom based on bound try integrality
 			std::cout << "MESSAGE: WE CANNOT FATHOM THE CHILD BASED ON UPPER BOUND " << std::endl;
 			numCols = m_si->getNumCols();
@@ -1330,7 +1337,12 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	double* values;	
 	
 
-	
+	//for(int i = 0; i < numThetaVar; i++){
+	//	std::cout <<  "x variables for column "  << thetaIdx[i]  << std::endl;
+	//	for(int j = m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] ];  j < m_osrouteSolver->m_thetaPnt[ thetaIdx[ i] + 1] ;  j++){
+	//		std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ i]  << std::endl;
+	//	}	
+	//}
 	
 	//kipp -- I would like to use OSDBL_MAX but Clp likes this better
 	//double bigM  = 1.0e24;
@@ -1354,17 +1366,14 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 	//std::cout << "numNonz1 = " << numNonz << std::endl;	
 	
 	
-	//for(int i = 0; i < numNonz; i++){
-	//	std::cout <<  "x variables for column "  << indexes[i]  << std::endl;
-	//	for(int j = m_osrouteSolver->m_thetaPnt[ indexes[ i] ];  j < m_osrouteSolver->m_thetaPnt[ indexes[ i] + 1] ;  j++){
-	//		std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ thetaNumNonz]  << std::endl;
-	//	}	
-	//}
+
 
 	//if numNonz is greater than zero:
 	// 1) add add new variable to map -- at this point varConMap is empty
 	// 2) add constraint then add to the formulation
 	// 3) add  variables
+	
+
 	
 	if( numNonz >0){
 
@@ -1437,7 +1446,7 @@ void OSColGenApp::createBranchingCut(const double* theta,
 	//for(int i = 0; i < numNonz; i++){
 	//	std::cout <<  "x variables for column "  << indexes[i]  << std::endl;
 	//	for(int j = m_osrouteSolver->m_thetaPnt[ indexes[ i] ];  j < m_osrouteSolver->m_thetaPnt[ indexes[ i] + 1] ;  j++){
-	//		std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ thetaNumNonz]  << std::endl;
+	///		std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  << theta[ thetaNumNonz]  << std::endl;
 	//	}	
 	//}
 
@@ -1447,7 +1456,6 @@ void OSColGenApp::createBranchingCut(const double* theta,
 	// 3) add artificial variables
 	
 	if( numNonz >0){
-
 		
 		//add the row
 		//make upper and lower bound 0 and 1 first 

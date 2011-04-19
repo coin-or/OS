@@ -310,8 +310,8 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		m_pntBmatrix = new int[ m_maxBmatrixCon];
 		// number of nonzeros in the Bmatrix
 		m_BmatrixIdx = new int[ m_maxBmatrixNonz];
-		m_BmatrixRowIndex = new int[ m_maxBmatrixNonz];
-		for(i = 0; i <  m_maxBmatrixNonz; i++) m_BmatrixRowIndex[ i] = -1;
+		m_BmatrixRowIndex = new int[ m_maxBmatrixCon];
+		for(i = 0; i <  m_maxBmatrixCon; i++) m_BmatrixRowIndex[ i] = -1;
 		
 		// number of nonzeros in the Bmatrix
 		m_BmatrixVal = new double[ m_maxBmatrixNonz];
@@ -1145,6 +1145,7 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 				//the same variable can appear more than once in m_varIdx
 				m_tmpScatterArray[ m_varIdx[ j] - startPntInc  ] += 1;
 				
+				
 				// is variable m_varIdx[ j] - startPntInc in this row	
 				
 				m_costVec[ k] += m_cost[  m_varIdx[ j] - startPntInc  ];
@@ -1189,8 +1190,8 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 			//now multiply the sparse array by each B-matrix constraint
 			
 			for(i = 0; i < m_numBmatrixCon; i++){
-				
-				if(m_BmatrixRowIndex[ i] == -1 || m_BmatrixRowIndex[ i] == k ){
+				//if the row corresponds to a multi-commodity row then m_BmatrixRowIndex[ i] = k
+				if(m_BmatrixRowIndex[ i] == -1 || m_BmatrixRowIndex[ i] == k ){ 
 				
 					//rowCount = 0;
 					rowValue = 0;
@@ -1203,10 +1204,12 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 						//rowCount += m_tmpScatterArray[  m_BmatrixIdx[ j] ];
 						//now assume coefficients not necessarily 1
 	
+						
 						rowValue += m_tmpScatterArray[  m_BmatrixIdx[ j] ]*m_BmatrixVal[ j];
+						
 	
 					}
-					//use epsilon instead of 0
+					
 					if( rowValue > m_osDecompParam.zeroTol || rowValue < -m_osDecompParam.zeroTol){
 						
 						
@@ -3048,7 +3051,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 					
 
 					
-					m_BmatrixRowIndex[ m_numBmatrixCon] = k;
+					m_BmatrixRowIndex[ m_numBmatrixCon - 1] = k;
 					///
 					
 				}//end iff on positive obj value
