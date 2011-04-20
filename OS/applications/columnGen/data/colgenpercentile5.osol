@@ -8,13 +8,13 @@
 <solverOption name="columnLimit" value="20000" solver="OSDecompSolver" type="integer"/>
 <solverOption name="artVarCoeff" value="1000000" solver="OSDecompSolver" type="double"/>
 <solverOption name="zeroTol" value=".0001" solver="OSDecompSolver" type="double"/>
-<solverOption name="nodeLimit" value="1000" solver="OSDecompSolver" type="int"/>
-<solverOption name="masterColumnResetValue" value="15000" solver="OSDecompSolver" type="int"/>
+<solverOption name="nodeLimit" value="50" solver="OSDecompSolver" type="int"/>
+<solverOption name="masterColumnResetValue" value="25000" solver="OSDecompSolver" type="int"/>
 <solverOption name="optTolPerCent" value="0" solver="OSDecompSolver" type="double"/>
 
 <solverOption name="numHubs" value="3" solver="routeSolver" type="integer"/>
 <solverOption name="numNodes" value="29" solver="routeSolver" type="integer"/>
-<solverOption name="maxMasterColumns" value="15000" solver="routeSolver" type="integer"/>
+<solverOption name="maxMasterColumns" value="25000" solver="routeSolver" type="integer"/>
 <solverOption name="maxThetaNonz" value="750000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixCon" value="2000" solver="routeSolver" type="integer"/>
 <solverOption name="maxBmatrixNonz" value="100000" solver="routeSolver" type="integer"/>
