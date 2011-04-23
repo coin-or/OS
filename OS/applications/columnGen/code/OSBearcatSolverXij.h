@@ -455,7 +455,20 @@ public:
 	 * pointer to a CoinSolver with a cut generator instance
 	 * 
 	 */
-	CoinSolver* getMultiCommodInstance(int hubIndex);	
+	CoinSolver* getMultiCommodInstance(int hubIndex);
+	
+	
+	/** call this method to get generate an instance
+	 * of the generalized assignment problem and find
+	 * a feasible solution to the problem
+	 * 
+	 * INPUT:
+	 * 
+	 * RETURN:
+	 * void
+	 * 
+	 */
+	void getFeasibleSolution();
 	
 	
 	/** 

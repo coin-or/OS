@@ -5655,39 +5655,7 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 			columnIndexes, 0, numNonz - 1, starts, 0, numVar);
 		
 		//std::cout << osinstance->printModel() << std::endl;
-		//temp stuff
-		//
-		ClpSimplex *clpModel;  
-		
-	    CoinPackedMatrix* matrix;
-	    bool columnMajor = true;
-	    double maxGap = 0;
-		matrix = new CoinPackedMatrix(
-		columnMajor, //Column or Row Major
-		columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
-		columnMajor? osinstance->getVariableNumber() : osinstance->getConstraintNumber(), //Major Dimension
-		osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
-		columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->values : osinstance->getLinearConstraintCoefficientsInRowMajor()->values, //Pointer to matrix nonzeroes
-		columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->indexes : osinstance->getLinearConstraintCoefficientsInRowMajor()->indexes, //Pointer to start of minor dimension indexes -- change to allow for row storage
-		columnMajor? osinstance->getLinearConstraintCoefficientsInColumnMajor()->starts : osinstance->getLinearConstraintCoefficientsInRowMajor()->starts, //Pointers to start of columns.
-		0,   0, maxGap ); 
-		
-		clpModel = new ClpSimplex( );
-		
-		//if( m_osinstanceSeparation->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
-		clpModel->setOptimizationDirection( 1);
-		clpModel->loadProblem( *matrix, osinstance->getVariableLowerBounds(), 
-				osinstance->getVariableUpperBounds(),  
-				osinstance->getDenseObjectiveCoefficients()[0], 
-				osinstance->getConstraintLowerBounds(), m_osinstanceSeparation->getConstraintUpperBounds()
-		);
-		
-		
-		
-		delete matrix;
-		
-		//
-		//
+
 		
 		solver = new CoinSolver();
 		solver->sSolverName ="clp"; 
@@ -5712,6 +5680,247 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 		
 	
 }//end getMultiCommodInstance
+
+
+
+void OSBearcatSolverXij::getFeasibleSolution(){
+	
+	int hubIndex;
+	int i;
+	int j;
+	int k;
+	int numVar;
+	int numNonHubs;
+	numNonHubs = m_numNodes - m_numHubs;
+	//the xki varibles 
+	numVar = numNonHubs*m_numNodes; 
+
+	int numNonz;
+	int kount;
+	int numCon;
+	CoinSolver *solver  = NULL;
+	SparseVector *objcoeff = NULL;
+	
+	numCon = numNonHubs + m_numHubs;
+
+
+
+	OSInstance *osinstance = new OSInstance();
+	try{
+		
+		osinstance->setInstanceSource("generated from OSBearcatSoleverXij");
+		osinstance->setInstanceDescription("Generalized Assignment Instance for finding a feasible solution");
+		osinstance->setVariableNumber( numVar); 
+		
+		numVar = 0;
+		// xki = 1 if hub k serves node i
+		for(k = 0; k < m_numHubs; k++){
+			
+			for(i = 0; i < numNonHubs; i++){
+			
+			if( m_nodeName[ k] != "" &&  m_nodeName[ i] != "")
+				osinstance->addVariable(numVar++, "x(" +  m_nodeName[ k] + "," + m_nodeName[ i]  +")", 0, 1, 'B');
+			else
+				osinstance->addVariable(numVar++, makeStringFromInt("x(" ,k) +   makeStringFromInt(",", i)    +")", 0, 1, 'B');
+
+			}
+			
+		}
+		
+		// now add the objective function
+		osinstance->setObjectiveNumber( 1);
+		
+		// now the coefficient
+
+		objcoeff = new SparseVector( numVar); 
+		
+		kount = 0;
+		for(k = 0; k < m_numHubs; k++){
+			
+			for(i = 0; i < numNonHubs; i++){
+			
+				objcoeff->indexes[ i] = i;
+				//objcoeff->values[ i] = kippster;
+			
+			}
+			
+		}
+	
+		osinstance->addObjective(-1, "cutViolation", "max", 0.0, 1.0, objcoeff);
+		objcoeff->bDeleteArrays = true;
+		delete objcoeff;
+		
+		osinstance->setConstraintNumber( numCon ); 
+		//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
+		numCon = 0;
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			if(m_nodeName[ hubIndex] != "" && m_nodeName[ i] != "")
+				osinstance->addConstraint(numCon++, "dualCon[" + m_nodeName[ hubIndex] + "," +   m_nodeName[ i] + "]", -OSDBL_MAX, 0,  0);
+			else
+				osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", hubIndex)  + makeStringFromInt(",", i)  +"]", -OSDBL_MAX, 0,  0);
+		}
+		
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			
+			for(j = m_numHubs; j < i; j++){
+				
+				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
+					osinstance->addConstraint(numCon++, "dualCon[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", -OSDBL_MAX, 0, 0);
+				else
+					osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", i)  + makeStringFromInt(",", j)  +"]", -OSDBL_MAX, 0, 0);
+				
+				
+			}
+			
+			for(j = i + 1; j < m_numNodes; j++){
+				
+				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
+					osinstance->addConstraint(numCon++, "dualCon[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", -OSDBL_MAX, 0, 0);
+				else
+					osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", i)  + makeStringFromInt(",", j)  +"]", -OSDBL_MAX, 0, 0);
+				
+				
+			}
+			
+		}
+		
+		double upperBound;
+		upperBound = numVar - numNonHubs ;
+		upperBound = 100;
+		osinstance->addConstraint(numCon++, "boundConstraint", -OSDBL_MAX, upperBound, 0);
+		
+		//now the A matrix
+		numCon = numNonHubs + (numNonHubs*numNonHubs - numNonHubs) + 1;
+		numNonz = 2*numNonHubs;
+		numNonz += 3*(numNonHubs*numNonHubs - numNonHubs);
+		numNonz += (numNonHubs*numNonHubs - numNonHubs) + numNonHubs;
+	
+	
+		double *values = new double[ numNonz];
+		int *columnIndexes = new int[ numNonz];
+		//store by row major
+		int *starts = new int[ numCon + 1];  
+		
+	
+		kount = 0;
+		numNonz = 0;
+		starts[ kount++] = 0;
+		
+		
+		//////////////////////////////////
+		
+		
+		int uijKount;
+		uijKount = numNonHubs;
+		
+		for(j = m_numHubs; j < m_numNodes; j++){
+			
+			//-u(k, j) + w(j)  =l=  0;
+			//variable w(j)
+			columnIndexes[ numNonz] = j - m_numHubs ; 
+			values[ numNonz++] = 1.0;
+			
+			//variable -u(k, j)
+			columnIndexes[ numNonz] = uijKount ; 
+			values[ numNonz++] = -1.0;
+			
+			starts[ kount++] = numNonz;
+			uijKount++;
+		}
+		
+		
+		for(i = m_numHubs; i < m_numNodes; i++){
+			
+			
+			for(j = m_numHubs; j < i; j++){
+				
+				//-u(i, j) - w(i) + w(j) =l=  0;
+				//variable w(i)
+				columnIndexes[ numNonz] = i - m_numHubs ; 
+				values[ numNonz++] = -1.0;
+				
+				//variable w(j)
+				columnIndexes[ numNonz] = j - m_numHubs ; 
+				values[ numNonz++] = 1.0;
+				
+				//variable -u(i, j)
+				columnIndexes[ numNonz] = uijKount ; 
+				values[ numNonz++] = -1.0;
+				
+				
+				starts[ kount++] = numNonz;
+				uijKount++;
+				
+				
+			}
+			
+			for(j = i + 1; j < m_numNodes; j++){
+				
+				//-u(i, j) - w(i) + w(j) =l=  0;
+				//variable w(i)
+				columnIndexes[ numNonz] = i - m_numHubs ; 
+				values[ numNonz++] = -1.0;
+				
+				//variable w(j)
+				columnIndexes[ numNonz] = j - m_numHubs ; 
+				values[ numNonz++] = 1.0;
+				
+				//variable -u(i, j)
+				columnIndexes[ numNonz] = uijKount ; 
+				values[ numNonz++] = -1.0;
+				
+				
+				starts[ kount++] = numNonz;
+				uijKount++;
+
+				
+			}
+			
+		}		
+		
+		//the last row
+		for(i = numNonHubs; i < numVar; i++ ){
+			
+			//variable u(i, j)
+			columnIndexes[ numNonz] = i ; 
+			values[ numNonz++] = 1.0;
+			
+		}
+	
+		starts[ kount++] = numNonz;
+		osinstance->setLinearConstraintCoefficients(numNonz, false, values, 0, numNonz - 1, 
+			columnIndexes, 0, numNonz - 1, starts, 0, numVar);
+		
+		//std::cout << osinstance->printModel() << std::endl;
+		//
+		
+		solver = new CoinSolver();
+		solver->sSolverName ="clp"; 
+		solver->osinstance = osinstance;	
+		solver->buildSolverInstance();
+		solver->osoption = m_osoption;	
+
+		
+		
+	
+	
+		
+	} catch (const ErrorClass& eclass) {
+		
+		if( objcoeff != NULL ){
+			delete objcoeff;
+			objcoeff = NULL;
+		}
+		//  Problem with the parser
+		throw ErrorClass(eclass.errormsg);
+	}
+		
+	
+}//end getFeasibleSolution
+
 
 
 
