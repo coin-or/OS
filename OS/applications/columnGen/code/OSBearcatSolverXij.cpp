@@ -123,7 +123,8 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		getOptions( m_osoption);
 		// we need to get cost data from option file
 		if(m_cost == NULL) throw ErrorClass("Option file did not contain cost data");
-		
+		//now get the variable index map
+		getVariableIndexMap();
 		
 		
 	
@@ -5701,6 +5702,9 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 	CoinSolver *solver  = NULL;
 	SparseVector *objcoeff = NULL;
 	
+	std::pair<int,int> indexPair1;
+	std::pair<int,int> indexPair2;
+	
 	numCon = numNonHubs + m_numHubs;
 
 
@@ -5737,16 +5741,27 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 		kount = 0;
 		for(k = 0; k < m_numHubs; k++){
 			
-			for(i = 0; i < numNonHubs; i++){
+			indexPair1.first = k;
+			indexPair2.second = k;
 			
-				objcoeff->indexes[ i] = i;
-				//objcoeff->values[ i] = kippster;
+			for(i = m_numHubs; i < m_numNodes; i++){
+				
+				indexPair1.second = i;
+				indexPair2.first = i;
+				objcoeff->indexes[ kount] = kount;
+				
+				if( (m_xVarIndexMap.find( indexPair1) == m_xVarIndexMap.end() ) ||
+						(m_xVarIndexMap.find( indexPair2) == m_xVarIndexMap.end() ) ){
+					throw ErrorClass("Index problem in generalized assignment problem to find feasible solution");
+				}
+				objcoeff->values[ kount++] = m_cost[  m_xVarIndexMap[ indexPair1] ] + 
+						m_cost[ m_xVarIndexMap[ indexPair2] ];
 			
 			}
 			
 		}
 	
-		osinstance->addObjective(-1, "cutViolation", "max", 0.0, 1.0, objcoeff);
+		osinstance->addObjective(-1, "feasibililtyObj", "min", 0.0, 1.0, objcoeff);
 		objcoeff->bDeleteArrays = true;
 		delete objcoeff;
 		
@@ -5921,7 +5936,36 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 	
 }//end getFeasibleSolution
 
-
+void OSBearcatSolverXij::getVariableIndexMap(){
+	
+	int i;
+	int j;
+	int kount;
+	std::pair<int,int> indexPair;
+	//construct index map
+	kount = 0;
+	for(i = 0; i < m_numNodes; i++){
+		
+		for(j = 0; j < i; j++){  //j < i
+		
+			indexPair.first = i;
+			indexPair.second = j;
+			m_xVarIndexMap[ indexPair] = kount;
+			kount++;
+		}
+		
+		for(j = i + 1; j < m_numNodes; j++){ // i < j
+			
+			indexPair.first = i;
+			indexPair.second = j;
+			m_xVarIndexMap[ indexPair] = kount;
+			kount++;
+		}
+	}
+	//end construct map
+	
+	
+}//end getVariableIndexMap
 
 
 std::string makeStringFromInt(std::string theString, int theInt){

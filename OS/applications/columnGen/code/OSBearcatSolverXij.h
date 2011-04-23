@@ -35,8 +35,13 @@ public:
 
 
 /***************** Bearcat Specific Solver Parameters ***********************/
-	
+	//kipp move to the method
 	std::map<int, std::string> m_tmpVarMap;
+	
+	/** m_xVarIndexMap takes a variable indexed by (i,j)
+	 * and returns the index of the variable in one dimension
+	 */
+	std::map<std::pair<int, int>,int>m_xVarIndexMap;
 	
 	
 	std::string m_initOSiLFile;
@@ -379,6 +384,13 @@ public:
 	
 	
 	void getOptions( OSOption *osoption);
+	
+	/** this method will populate: 
+	 * std::map<std::pair<int, int>,int>m_xVarIndexMap
+	 * this gives us
+	 * 
+	 */
+	void getVariableIndexMap();
 	
 	
 	//some utility methods are below
