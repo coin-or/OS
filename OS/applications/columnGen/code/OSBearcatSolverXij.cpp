@@ -1623,10 +1623,6 @@ OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
 
 
 OSInstance* OSBearcatSolverXij::getInitialRestrictedMaster( ){
-
-	
-	//implement 1OPT
-	
 	
 	getInitialSolution();
 	
@@ -4317,13 +4313,52 @@ void OSBearcatSolverXij::getBranchingCut(const int* thetaIdx, const double* thet
 
 void OSBearcatSolverXij::getInitialSolution(){
 	
-	try{	
+	int k;
+	double *routeDemand;
+	routeDemand = NULL;
+	routeDemand = new double[ m_numHubs];
+	std::map<int, std::vector<int> > routeMap;
+	std::vector<int>::iterator vit;
+	bool isFeasible;
 
+	
+	isFeasible = true;
+	try{	
+		//see if we have a feasible solution
+		routeMap = m_initSolMap[ 0];
 		
-		if( OneOPT() == false) 
-			throw ErrorClass("no initilal feasible solution");
+		for(k = 0; k < m_numHubs; k++){
+		
+			routeDemand[ k] = 0;
+			for(vit = routeMap[k].begin(); vit!=routeMap[k].end(); ++vit){
+			
+
+				routeDemand[ k] +=  m_demand[ *vit];
+			}
+			
+			if(routeDemand[k] > m_routeCapacity[ k] ){
+				
+				isFeasible = false;
+				break;
+				
+			}
+		}
+		
+		delete[] routeDemand;
+		routeDemand = NULL;
+		
+		if(isFeasible == false) getFeasibleSolution();
+		//call the OneOPT heuristic;
+		OneOPT();
+			
 		
 	}catch (const ErrorClass& eclass) {
+		
+		if(routeDemand == NULL){
+			
+			delete[] routeDemand;
+			routeDemand = NULL;
+		}
 	
 		throw ErrorClass(eclass.errormsg);
 	
@@ -5089,7 +5124,8 @@ CoinSolver* OSBearcatSolverXij::getTSP(int numNodes, double* cost){
 		
 		solver = new CoinSolver();
 		solver->sSolverName ="cbc"; 
-		solver->osinstance = osinstance;	
+		solver->osinstance = osinstance;
+		solver->osoption = m_osoption;	
 		solver->buildSolverInstance();
 		solver->osoption = m_osoption;	
 		
@@ -5149,8 +5185,9 @@ bool OSBearcatSolverXij::OneOPT(){
 	bool foundLocalImprovement;
 	
 	try{
-		
+			
 		solver = getTSP(m_numNodes, m_cost);
+		
 		totalCost = 0;
 		for(k = 0; k < m_numHubs; k++){
 		
@@ -5179,7 +5216,6 @@ bool OSBearcatSolverXij::OneOPT(){
 		
 		}
 		
-		
 		//now loop as long as there is improvement
 		foundMoBetta = true;
 		double improvement;
@@ -5201,14 +5237,16 @@ bool OSBearcatSolverXij::OneOPT(){
 				
 				for(kprime = 0; kprime < m_numHubs; kprime++){
 					
-					if(k != kprime && routeCost[ kprime] < routeCostInf){
+					if(kprime != k && routeCost[ kprime] < routeCostInf){
 						
 						//try to move a node from route k to route kprime
 						improvement = 0;
 						optCostk = routeCostInf;
 						optCostkPrime = routeCostInf;
 						
-						for(vit = routeMap[k].begin(); vit!=routeMap[k].end(); ++vit){
+						for(vit = routeMap[k].begin(); vit!=routeMap[k].end(); ++vit){//looping over nodes
+							
+							foundLocalImprovement = false;
 							
 							//consider making a switch if feasible
 							if( m_demand[ *vit] + routeDemand[ kprime] <= m_routeCapacity[ kprime] ){
@@ -5291,12 +5329,15 @@ bool OSBearcatSolverXij::OneOPT(){
 										vitIdx = vit;
 										optCostk = tmpCostk;
 										optCostkPrime = tmpCostkPrime;
+										
+														
+										
 									}
 								}
 							}//end if on capacity test
 							
-							
-						}// looping over nodes
+							if(foundLocalImprovement == true)break;
+						}// looping over nodes in route k
 						
 						//do updates here if we found an improvement
 						
@@ -5317,6 +5358,8 @@ bool OSBearcatSolverXij::OneOPT(){
 							
 							
 							//delete tmpIdx to route kPrime
+							std::cout << "tmpIdx = " << tmpIdx << std::endl;
+							std::cout << "vitIdx = " << *vitIdx << std::endl;
 							routeMap[ k].erase( vitIdx);
 							//adjust rouet demand
 							routeDemand[ k] -= m_demand[ tmpIdx];
@@ -5325,6 +5368,8 @@ bool OSBearcatSolverXij::OneOPT(){
 							
 							//std::cout << "k route cost = " << routeCost[ k] << std::endl;
 							//std::cout << "k route demand = " << routeDemand[ k] << std::endl;
+							 
+							 
 							
 							foundMoBetta = true;
 							
@@ -5356,7 +5401,7 @@ bool OSBearcatSolverXij::OneOPT(){
 		std::cout << "Total Cost  = " << totalCost << std::endl;
 		//get the solution
 		m_initSolMap[ 0] = routeMap;
-		
+
 		
 		//garbage collection
 		delete[] routeCost;
@@ -5686,29 +5731,25 @@ CoinSolver* OSBearcatSolverXij::getMultiCommodInstance(int hubIndex){
 
 void OSBearcatSolverXij::getFeasibleSolution(){
 	
-	int hubIndex;
 	int i;
-	int j;
 	int k;
 	int numVar;
 	int numNonHubs;
 	numNonHubs = m_numNodes - m_numHubs;
 	//the xki varibles 
-	numVar = numNonHubs*m_numNodes; 
+	numVar = m_numHubs*numNonHubs; 
 
 	int numNonz;
 	int kount;
-	int numCon;
+
 	CoinSolver *solver  = NULL;
 	SparseVector *objcoeff = NULL;
 	
 	std::pair<int,int> indexPair1;
 	std::pair<int,int> indexPair2;
 	
-	numCon = numNonHubs + m_numHubs;
-
-
-
+	std::map<int, std::vector<int> > routeMap;
+	
 	OSInstance *osinstance = new OSInstance();
 	try{
 		
@@ -5720,7 +5761,7 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 		// xki = 1 if hub k serves node i
 		for(k = 0; k < m_numHubs; k++){
 			
-			for(i = 0; i < numNonHubs; i++){
+			for(i = m_numHubs; i < m_numNodes; i++){
 			
 			if( m_nodeName[ k] != "" &&  m_nodeName[ i] != "")
 				osinstance->addVariable(numVar++, "x(" +  m_nodeName[ k] + "," + m_nodeName[ i]  +")", 0, 1, 'B');
@@ -5754,8 +5795,9 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 						(m_xVarIndexMap.find( indexPair2) == m_xVarIndexMap.end() ) ){
 					throw ErrorClass("Index problem in generalized assignment problem to find feasible solution");
 				}
-				objcoeff->values[ kount++] = m_cost[  m_xVarIndexMap[ indexPair1] ] + 
-						m_cost[ m_xVarIndexMap[ indexPair2] ];
+				
+				objcoeff->values[ kount++] = (m_cost[  m_xVarIndexMap[ indexPair1] ] + 
+						m_cost[ m_xVarIndexMap[ indexPair2] ])*m_demand[i] ;
 			
 			}
 			
@@ -5764,60 +5806,38 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 		osinstance->addObjective(-1, "feasibililtyObj", "min", 0.0, 1.0, objcoeff);
 		objcoeff->bDeleteArrays = true;
 		delete objcoeff;
+		objcoeff = NULL;
 		
-		osinstance->setConstraintNumber( numCon ); 
+		osinstance->setConstraintNumber( m_numNodes ); 
 		//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
-		numCon = 0;
-		for(i = m_numHubs; i < m_numNodes; i++){
+
+		for(k = 0; k < m_numHubs; k++){
 			
-			if(m_nodeName[ hubIndex] != "" && m_nodeName[ i] != "")
-				osinstance->addConstraint(numCon++, "dualCon[" + m_nodeName[ hubIndex] + "," +   m_nodeName[ i] + "]", -OSDBL_MAX, 0,  0);
+			if(m_nodeName[ k] != "" )
+				osinstance->addConstraint(k, "capacityCon[" + m_nodeName[ k]  + "]", 0,  m_routeCapacity[ k],  0);
 			else
-				osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", hubIndex)  + makeStringFromInt(",", i)  +"]", -OSDBL_MAX, 0,  0);
+				osinstance->addConstraint(k, makeStringFromInt("dualCon[", k)  +"]", 0, m_routeCapacity[ k],  0);
 		}
 		
 		
 		for(i = m_numHubs; i < m_numNodes; i++){
-			
-			
-			for(j = m_numHubs; j < i; j++){
 				
-				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
-					osinstance->addConstraint(numCon++, "dualCon[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", -OSDBL_MAX, 0, 0);
-				else
-					osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", i)  + makeStringFromInt(",", j)  +"]", -OSDBL_MAX, 0, 0);
-				
-				
-			}
-			
-			for(j = i + 1; j < m_numNodes; j++){
-				
-				if(m_nodeName[ i] != "" && m_nodeName[ j] != "")
-					osinstance->addConstraint(numCon++, "dualCon[" +  m_nodeName[ i] + "," + m_nodeName[ j] +"]", -OSDBL_MAX, 0, 0);
-				else
-					osinstance->addConstraint(numCon++, makeStringFromInt("dualCon[", i)  + makeStringFromInt(",", j)  +"]", -OSDBL_MAX, 0, 0);
-				
-				
-			}
-			
+			if(m_nodeName[ i] != "" )
+				osinstance->addConstraint(i, "assingCon[" +  m_nodeName[ i] +"]", 1, 1, 0);
+			else
+				osinstance->addConstraint(i, makeStringFromInt("assignCon[", i)  +"]", 1, 1, 0);
+
 		}
 		
-		double upperBound;
-		upperBound = numVar - numNonHubs ;
-		upperBound = 100;
-		osinstance->addConstraint(numCon++, "boundConstraint", -OSDBL_MAX, upperBound, 0);
-		
+
 		//now the A matrix
-		numCon = numNonHubs + (numNonHubs*numNonHubs - numNonHubs) + 1;
-		numNonz = 2*numNonHubs;
-		numNonz += 3*(numNonHubs*numNonHubs - numNonHubs);
-		numNonz += (numNonHubs*numNonHubs - numNonHubs) + numNonHubs;
 	
-	
+		numNonz = 2*numVar;
+
+		//store by column major
 		double *values = new double[ numNonz];
-		int *columnIndexes = new int[ numNonz];
-		//store by row major
-		int *starts = new int[ numCon + 1];  
+		int *rowIndexes = new int[ numNonz];
+		int *starts = new int[ numVar + 1];  
 		
 	
 		kount = 0;
@@ -5826,102 +5846,88 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 		
 		
 		//////////////////////////////////
+	
 		
-		
-		int uijKount;
-		uijKount = numNonHubs;
-		
-		for(j = m_numHubs; j < m_numNodes; j++){
-			
-			//-u(k, j) + w(j)  =l=  0;
-			//variable w(j)
-			columnIndexes[ numNonz] = j - m_numHubs ; 
-			values[ numNonz++] = 1.0;
-			
-			//variable -u(k, j)
-			columnIndexes[ numNonz] = uijKount ; 
-			values[ numNonz++] = -1.0;
-			
-			starts[ kount++] = numNonz;
-			uijKount++;
-		}
-		
-		
-		for(i = m_numHubs; i < m_numNodes; i++){
+		for(k = 0; k < m_numHubs; k++){
 			
 			
-			for(j = m_numHubs; j < i; j++){
+			for(i = m_numHubs; i < m_numNodes; i++){
 				
-				//-u(i, j) - w(i) + w(j) =l=  0;
-				//variable w(i)
-				columnIndexes[ numNonz] = i - m_numHubs ; 
-				values[ numNonz++] = -1.0;
+		
+				rowIndexes[ numNonz] = k ; 
+				values[ numNonz++] = m_demand[ i];
 				
-				//variable w(j)
-				columnIndexes[ numNonz] = j - m_numHubs ; 
+				rowIndexes[ numNonz] = i ; 
 				values[ numNonz++] = 1.0;
 				
-				//variable -u(i, j)
-				columnIndexes[ numNonz] = uijKount ; 
-				values[ numNonz++] = -1.0;
-				
-				
 				starts[ kount++] = numNonz;
-				uijKount++;
-				
 				
 			}
-			
-			for(j = i + 1; j < m_numNodes; j++){
-				
-				//-u(i, j) - w(i) + w(j) =l=  0;
-				//variable w(i)
-				columnIndexes[ numNonz] = i - m_numHubs ; 
-				values[ numNonz++] = -1.0;
-				
-				//variable w(j)
-				columnIndexes[ numNonz] = j - m_numHubs ; 
-				values[ numNonz++] = 1.0;
-				
-				//variable -u(i, j)
-				columnIndexes[ numNonz] = uijKount ; 
-				values[ numNonz++] = -1.0;
-				
-				
-				starts[ kount++] = numNonz;
-				uijKount++;
-
-				
-			}
-			
 		}		
 		
-		//the last row
-		for(i = numNonHubs; i < numVar; i++ ){
-			
-			//variable u(i, j)
-			columnIndexes[ numNonz] = i ; 
-			values[ numNonz++] = 1.0;
-			
-		}
-	
-		starts[ kount++] = numNonz;
-		osinstance->setLinearConstraintCoefficients(numNonz, false, values, 0, numNonz - 1, 
-			columnIndexes, 0, numNonz - 1, starts, 0, numVar);
+
+		osinstance->setLinearConstraintCoefficients(numNonz, true, values, 0, numNonz - 1, 
+			rowIndexes, 0, numNonz - 1, starts, 0, numVar);
 		
 		//std::cout << osinstance->printModel() << std::endl;
+		
 		//
 		
 		solver = new CoinSolver();
-		solver->sSolverName ="clp"; 
+		solver->sSolverName ="cbc"; 
 		solver->osinstance = osinstance;	
 		solver->buildSolverInstance();
 		solver->osoption = m_osoption;	
-
+		solver->solve();
+		//now lets get the solution
+		//first make sure we are optimal
+		OSResult *osresult;
+		osresult = solver->osresult;
+		std::string solStatus;
+		std::vector<IndexValuePair*> primalValPair;
+		int vecSize;
+		double optSolValue;
+		// the argument is the solution index
+		solStatus = osresult->getSolutionStatusType( 0 );
+		// if solStatus is optimal get the optimal solution value
+		if( solStatus.find("ptimal") != string::npos ){
+		//first index is objIdx, second is solution index
+			optSolValue = osresult->getOptimalObjValue( -1, 0);
+			std::cout << "OPTIMAL SOLUTION VALUE  " <<  optSolValue << std::endl;
+		}else{
+			throw ErrorClass("There is no feasible solution to this problem!");
+		}
 		
+		primalValPair = osresult->getOptimalPrimalVariableValues( 0);
+		vecSize = primalValPair.size();
 		
-	
-	
+		std::cout << " NUMBER OF SOLUTION VALUES = " << vecSize << std::endl;
+		kount = 0;
+		for(k = 0; k < m_numHubs; k++){
+			
+			indexPair1.first = k;
+			
+			for(i = m_numHubs; i < m_numNodes; i++){
+				
+				indexPair1.second = i;
+				if(primalValPair[ kount ]->value > m_osDecompParam.zeroTol)  {   
+					
+					std::cout << "Variable = " <<   m_variableNames[ m_xVarIndexMap[ indexPair1] ]    
+					<<  "    value = " <<   primalValPair[ kount ]->value << std::endl;
+					
+					routeMap[k].push_back( i);
+				}
+				
+				kount++;
+			}
+			
+			
+		}
+		
+		m_initSolMap[ 0] = routeMap;
+		delete solver;
+		solver = NULL;
+		
 		
 	} catch (const ErrorClass& eclass) {
 		
