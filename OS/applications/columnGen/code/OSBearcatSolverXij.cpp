@@ -586,18 +586,19 @@ void OSBearcatSolverXij::getOptL( double** c) {
 	
 	kountVar = 0;
 	//startPntInc = m_upperBoundL*(m_numNodes*m_numNodes - m_numNodes);
+	//m_hubPoint[k] is the pointer
 	
-	m_vv[ 0][ 0] = 0;
+	m_vv[  m_hubPoint[0] ][ 0] = 0;
 	for(d = 1; d <=  m_totalDemand; d++){
 		
-		m_vv[ 0][ d] = OSDBL_MAX;
+		m_vv[ m_hubPoint[0] ][ d] = OSDBL_MAX;
 		
 	}
 	//initialize up to last hub
 	for(k = 1; k < m_numHubs - 1; k++){
 		for(d = 0; d <=  m_totalDemand; d++){
 			
-			m_vv[ k][ d] = OSDBL_MAX;
+			m_vv[ k ][ d] = OSDBL_MAX;
 			
 		}
 	}
@@ -610,12 +611,12 @@ void OSBearcatSolverXij::getOptL( double** c) {
 	
 	for(k = 1; k < m_numHubs; k++){
 		
-		dlower += m_lowerBoundL[ k - 1];
+		dlower += m_lowerBoundL[ m_hubPoint[k - 1] ];
 		
 		//kipp make d the min demand for the previous routes
 		for(d = dlower; d <= m_totalDemand; d++){
 			
-			m_vv[ k][ d] = OSDBL_MAX;
+			m_vv[ m_hubPoint[ k] ][ d] = OSDBL_MAX;
 			
 			//d1 is the state variable at stage k -1
 			//for(d1 = 0; d1 <= m_totalDemand; d1++){
@@ -625,23 +626,23 @@ void OSBearcatSolverXij::getOptL( double** c) {
 				
 				//std::cout << "L = " << l <<  "  m_upperBoundL[ k  - 1]  "  << m_upperBoundL[ k  - 1] << std::endl;
 				//kipp make m_upperBoundL the route capapcity
-				if( (m_vv[ k - 1][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL[ k  - 1]) && (l >= m_lowerBoundL[ k - 1]) ){
+				if( (m_vv[ m_hubPoint[ k - 1] ][ d1] < OSDBL_MAX) &&  (l <= m_upperBoundL[ m_hubPoint[ k  - 1] ]) && (l >= m_lowerBoundL[  m_hubPoint[k - 1] ]) ){
 				
 					//std::cout << "k - 1 = "   <<  k - 1 << "  L = " << l <<  "  m_upperBoundL[ k  - 1]  "  << m_upperBoundL[ k  - 1] << std::endl;
 					// l was the decision at state d1 in stage k-1
 					// l + d1 brings us to state d at stage k
 					// d is the total carried on routes 0 -- k-1
 				
-					testVal = qrouteCost(k - 1,  l,  c[ k - 1],  &kountVar);
+					testVal = qrouteCost( m_hubPoint[ k - 1],  l,  c[  m_hubPoint[ k - 1] ],  &kountVar);
 					
 					//std::cout << "L = " << l << std::endl;
 					//std::cout << "testVal " << testVal << std::endl;
 					
-					if( m_vv[ k-1][ d1]  +  testVal < m_vv[  k][ d] ){
+					if( m_vv[ m_hubPoint[ k-1]  ][ d1]  +  testVal < m_vv[  m_hubPoint[ k]  ][ d] ){
 						
-						m_vv[ k][ d] =  m_vv[ k-1][ d1]  +  testVal;
+						m_vv[ m_hubPoint[ k] ][ d] =  m_vv[ m_hubPoint[ k-1] ][ d1]  +  testVal;
 						//now point to the best way to get to d
-						m_vvpnt[ k][ d]  = d1;
+						m_vvpnt[ m_hubPoint[ k] ][ d]  = d1;
 						
 					}
 					
@@ -670,7 +671,7 @@ void OSBearcatSolverXij::getOptL( double** c) {
 		//std::cout << "m_vv[ m_numHubs - 1 ][ d]  " << m_vv[ m_numHubs - 1 ][ d]  << std::endl;
 		l = m_totalDemand - d;
 		
-		if(m_vv[ m_numHubs - 1 ][ d]  < OSDBL_MAX  && l <= m_upperBoundL[ m_numHubs - 1] && l >= m_lowerBoundL[ m_numHubs - 1]){
+		if(m_vv[ m_hubPoint[ m_numHubs - 1]  ][ d]  < OSDBL_MAX  && l <= m_upperBoundL[ m_hubPoint[ m_numHubs - 1] ] && l >= m_lowerBoundL[ m_hubPoint[ m_numHubs - 1] ]){
 		
 			//must execute this loop at least once
 			
@@ -679,16 +680,16 @@ void OSBearcatSolverXij::getOptL( double** c) {
 			isFeasible = true;
 			
 			
-			testVal = qrouteCost(m_numHubs -1 ,  l,  c[ m_numHubs -1],  &kountVar);
+			testVal = qrouteCost(m_hubPoint[m_numHubs -1] ,  l,  c[ m_hubPoint[ m_numHubs -1] ],  &kountVar);
 			
-			//std::cout << "l = " << l << std::endl;
-			//std::cout << "testVal = " << testVal << std::endl;
+			std::cout << "l = " << l << std::endl;
+			std::cout << "testVal = " << testVal << std::endl;
 			
-			if(m_vv[ m_numHubs - 1][ d] + testVal < trueMin){
+			if(m_vv[ m_hubPoint[ m_numHubs - 1] ][ d] + testVal < trueMin){
 				
-				trueMin = m_vv[ m_numHubs -1][ d] + testVal;
-				m_optD[  m_numHubs -1 ] = d;
-				m_optL[  m_numHubs -1 ] = l;
+				trueMin = m_vv[ m_hubPoint[ m_numHubs -1] ][ d] + testVal;
+				m_optD[ m_hubPoint[  m_numHubs -1]  ] = d;
+				m_optL[  m_hubPoint[ m_numHubs -1]  ] = l;
 				
 			}
 			
@@ -701,23 +702,19 @@ void OSBearcatSolverXij::getOptL( double** c) {
 	if( isFeasible == false){
 		
 		std::cout << "NOT ENOUGH CAPACITY " << std::endl;
+		for(k = 0; k < m_numHubs; k++) std::cout << " k perm = " <<  m_hubPoint[ k ]<<  std::endl;
 		throw ErrorClass( "NOT ENOUGH CAPACITY ");
 	}
 
-	k = m_numHubs -1;
+	k = m_numHubs - 1;
 	
 	while( k - 1 >= 0) {
 		
-		m_optD[  k - 1 ] = m_vvpnt[ k][ m_optD[  k  ] ];
+		m_optD[  m_hubPoint[ k - 1]  ] = m_vvpnt[ m_hubPoint[ k] ][ m_optD[  m_hubPoint[ k]  ] ];
 		
-		m_optL[ k - 1 ] =  m_optD[  k  ] - m_optD[  k - 1 ] ;
-		
-		//std::cout << "k = " <<  k << std::endl;
-		//std::cout << "m_optD[  k  ]  = " <<  m_optD[  k  ] << std::endl;
-		//std::cout << "m_optD[  k -1 ] " << m_optD[  k - 1 ]  << std::endl;
+		m_optL[ m_hubPoint[ k - 1] ] =  m_optD[  m_hubPoint[ k ] ] - m_optD[  m_hubPoint[ k - 1] ] ;
 		
 		k--;
-		
 		
 	}
 	
@@ -5977,20 +5974,50 @@ void OSBearcatSolverXij::getVariableIndexMap(){
 	}
 	//end construct map
 	
-	
 }//end getVariableIndexMap
 
 
 void OSBearcatSolverXij::permuteHubs(){
 	
-	int k;
-	for(k = 0; k < m_numHubs; k++){
+	int k1;
+	int k2;
+
+	double tmpVal;
+	double *tmpCap;
+	
+	tmpCap = new double[ m_numHubs];
+	
+	for(k1 = 0; k1 < m_numHubs; k1++) tmpCap[ k1] = m_routeCapacity[ k1]; //initialize capacities
+	for(k1 = 0; k1 < m_numHubs; k1++) m_hubPoint[ k1] = k1; //initialize capacities
+	
+	for(k1 = 0; k1 < m_numHubs - 1; k1++){
 		
-		m_hubPoint[ k] = k;
-	}
+		m_hubPoint[ k1] = k1;
+		
+		for(k2 = k1 + 1; k2 < m_numHubs; k2++){
+			
+			if( tmpCap[ k2 ] <  tmpCap[ k1  ] ){  //make switch
+				
+				
+				tmpVal = tmpCap[ k1 ];
+				tmpCap[ k1 ] = tmpCap[  k2 ];
+				tmpCap[  k2 ] = tmpVal;
+		
+				m_hubPoint[ k1] = m_hubPoint[ k2];
+				m_hubPoint[ k2] = k1;
+				
+			}
+			
+		}// end k2 loop 
+	}// end k1 loop
 	
-	
-	
+	//for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "m_hubPoint =  " <<  m_hubPoint[ k1] << std::endl;
+	//for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "tmp Cap =  " <<  tmpCap[ k1] << std::endl;
+	//for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "hub capacity =  " << m_routeCapacity[ m_hubPoint[ k1]  ]<< std::endl;
+
+	delete[] tmpCap;
+	tmpCap = NULL;
+
 }
 
 
