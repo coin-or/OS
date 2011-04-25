@@ -126,8 +126,7 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		if(m_cost == NULL) throw ErrorClass("Option file did not contain cost data");
 		//now get the variable index map
 		getVariableIndexMap();
-		
-		
+
 	
 		m_maxMasterRows =  m_maxBmatrixCon + m_numNodes;
 		
@@ -135,7 +134,8 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		m_lowerBoundL = new int[ m_numHubs];
 		
 		m_hubPoint = new int[  m_numHubs];
-		
+		//get the permutation of the hubs
+		permuteHubs();
 		
 	
 		for(k = 0; k < m_numHubs; k++){
@@ -5817,7 +5817,7 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 		
 		osinstance->setConstraintNumber( m_numNodes ); 
 		//bool addConstraint(int index, string name, double lowerBound, double upperBound, double constant);
-
+		//
 		for(k = 0; k < m_numHubs; k++){
 			
 			if(m_nodeName[ k] != "" )
@@ -5908,12 +5908,12 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 		primalValPair = osresult->getOptimalPrimalVariableValues( 0);
 		vecSize = primalValPair.size();
 		
-		std::cout << " NUMBER OF SOLUTION VALUES = " << vecSize << std::endl;
+		
 		kount = 0;
 		for(k = 0; k < m_numHubs; k++){
 			
 			indexPair1.first = k;
-			
+			std::cout << std::endl << std::endl;
 			for(i = m_numHubs; i < m_numNodes; i++){
 				
 				indexPair1.second = i;
@@ -5930,7 +5930,7 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 			
 			
 		}
-		
+		//exit( 1);
 		m_initSolMap[ 0] = routeMap;
 		delete solver;
 		solver = NULL;
@@ -5979,6 +5979,19 @@ void OSBearcatSolverXij::getVariableIndexMap(){
 	
 	
 }//end getVariableIndexMap
+
+
+void OSBearcatSolverXij::permuteHubs(){
+	
+	int k;
+	for(k = 0; k < m_numHubs; k++){
+		
+		m_hubPoint[ k] = k;
+	}
+	
+	
+	
+}
 
 
 std::string makeStringFromInt(std::string theString, int theInt){

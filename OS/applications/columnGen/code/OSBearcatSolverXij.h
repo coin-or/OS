@@ -387,8 +387,6 @@ public:
 	
 	
 
-	
-	
 	void getOptions( OSOption *osoption);
 	
 	/** this method will populate: 
