@@ -73,6 +73,7 @@ OSBearcatSolverXij::OSBearcatSolverXij() {
 OSBearcatSolverXij::OSBearcatSolverXij(OSOption *osoption) {
 	std::cout << "INSIDE OSBearcatSolverXij CONSTRUCTOR with OSOption argument" << std::endl;
 	
+	m_hubPoint = NULL;
 	
 	m_bestIPValue = OSDBL_MAX;
 	m_bestLPValue = -OSDBL_MAX;
@@ -132,6 +133,8 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		
 		m_upperBoundL = new int[ m_numHubs];
 		m_lowerBoundL = new int[ m_numHubs];
+		
+		m_hubPoint = new int[  m_numHubs];
 		
 		
 	
@@ -238,7 +241,8 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		createAmatrix();
 		
 		//this has size of the number of x variables
-		int numVar = m_numNodes*m_numNodes - m_numHubs ;
+		//int numVar = m_numNodes*m_numNodes - m_numHubs ;
+		int numVar = m_numNodes*m_numNodes - m_numNodes ;
 		m_tmpScatterArray = new int[ numVar ];
 		for(i = 0; i < numVar; i++){
 			
@@ -443,6 +447,8 @@ OSBearcatSolverXij::~OSBearcatSolverXij(){
 	delete[] m_lowerBoundL;	
 	m_lowerBoundL = NULL;
 	
+	delete[] m_hubPoint;	
+	m_hubPoint = NULL;
 	
 	delete[] m_optValHub;
 	m_optValHub = NULL;
@@ -3591,6 +3597,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 		//std::cout <<  "cost = " << cost << std::endl << std::endl;
 		
 		std::cout << std::endl <<  std::endl;
+		std::cout << "LINEAR PROGRAMMING RELAXATION VALUE = " << m_rootLPValue << std::endl;
 		std::cout << "LOWER BOUND VALUE = " << m_bestLPValue << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
 		std::cout << "NUMBER OF COLUMNS IN FINAL MASTER = " << m_numThetaVar << std::endl;

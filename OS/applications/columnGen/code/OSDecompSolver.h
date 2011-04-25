@@ -54,6 +54,7 @@ public:
 	
 	double m_bestIPValue;
 	double m_bestLPValue;
+	double m_rootLPValue;
 	
 	
 	//the transformation matrix

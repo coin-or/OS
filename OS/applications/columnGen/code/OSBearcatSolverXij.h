@@ -43,6 +43,12 @@ public:
 	 */
 	std::map<std::pair<int, int>,int>m_xVarIndexMap;
 	
+	/**  
+	 * m_hubPoint[ k] points to the the k'th hub that we
+	 * use in getOptL
+	 */
+	int *m_hubPoint;
+	
 	
 	std::string m_initOSiLFile;
 	
@@ -391,6 +397,14 @@ public:
 	 * 
 	 */
 	void getVariableIndexMap();
+	
+	
+	/** this method will calculate a permuation
+	 * of the hubs so that they are in ascending 
+	 * order, this will make the dynamic program
+	 * in the v variables faster
+	 */
+	void permuteHubs();
 	
 	
 	//some utility methods are below

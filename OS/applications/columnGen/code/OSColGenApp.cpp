@@ -145,7 +145,7 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-
+	//m_calledBranchAndBound == false;
 
 	if(numNewRows == 0 && m_calledBranchAndBound == false
 			&& m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
@@ -293,9 +293,6 @@ void OSColGenApp::solve(){
 	int numCols;
 	int numRows;
 	int i;
-	int j;
-	
-	
 
 	//initialize upper bound
 	m_zUB = m_osrouteSolver->m_bestIPValue;
@@ -357,25 +354,22 @@ void OSColGenApp::solve(){
 			if(cbasis[ i] == 1) m_zOptRootLP.push_back( i);
 			//get the LP relaxation
 			*(m_theta + i) = m_si->getColSolution()[i];	
+			
+			/*
 			///optionally print out the corresponding x columns
+			int j;
 			if( *(m_theta + i) > m_osDecompParam.zeroTol){
-				
-				
 				std::cout <<  "x variables for column "  << i  << std::endl;
-				
-					
-				for(j = m_osrouteSolver->m_thetaPnt[ i];  j < m_osrouteSolver->m_thetaPnt[ i + 1] ;  j++){
-					
-						
-					std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  <<  *(m_theta + i)  << std::endl;
-						
+				for(j = m_osrouteSolver->m_thetaPnt[ i];  j < m_osrouteSolver->m_thetaPnt[ i + 1] ;  j++){	
+					std::cout <<  m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[  j] ]  << " = "  <<  *(m_theta + i)  << std::endl;	
 				}	
 			}			
 			///end of optionally print out
+			*/
+			
 		}
-		
 		m_zLB =  m_si->getObjValue();
-		
+		m_zRootLP = m_si->getObjValue();
 		//print LP value at node
 		std::cout <<  "optimal LP value at root node = "  <<  m_zLB << std::endl;
 		
@@ -448,6 +442,7 @@ void OSColGenApp::solve(){
 		if(m_zLB + m_osDecompParam.zeroTol <  m_zUB) branchAndBound();
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;	
+		m_osrouteSolver->m_rootLPValue = m_zRootLP;
 		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated);
 		
 		

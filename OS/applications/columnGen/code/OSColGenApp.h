@@ -88,6 +88,12 @@ public:
 	/** m_zUB is the upper bound */
 	double m_zUB;
 	
+	/** m_zLB is the lower bound */
+	double m_zLB;
+	
+	/** m_zRootLP is the value of the root LP relaxation */
+	double m_zRootLP;
+	
 	/** nodeMap is the map of nodes in the
 	 * branch and bound tree
 	 */
@@ -109,8 +115,7 @@ public:
 	
 	std::map<int, int> inVars;
 	
-	/** m_zLB is the lower bound */
-	double m_zLB;
+
 	
 	
 	/** m_yA is the dual values for the initial restricted constraints */
