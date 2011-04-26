@@ -84,6 +84,8 @@ public:
 	
 	int m_numColumnsOld;
 	
+	/** m_message is the message to the pauHana routine*/
+	std::string m_message;
 	
 	/** m_zUB is the upper bound */
 	double m_zUB;
@@ -148,6 +150,11 @@ public:
 	bool branchAndBound();
 	
 	void solve();
+	
+	/***  
+	 * print the information about the current tree
+	 */
+	void printTreeInfo();
 	
 	
 	void getInitialRestrictedMaster( );

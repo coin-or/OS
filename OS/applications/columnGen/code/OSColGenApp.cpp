@@ -145,7 +145,7 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-	//m_calledBranchAndBound == false;
+	m_calledBranchAndBound = false;
 
 	if(numNewRows == 0 && m_calledBranchAndBound == false
 			&& m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
@@ -154,8 +154,6 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 		
 		
 		m_osrouteSolver->m_numMultCuts += numNewRows;
-		
-		
 		
 		//double lhs;
 		//for(int i = 0; i < numNewRows; i++){
@@ -436,14 +434,18 @@ void OSColGenApp::solve(){
 		//end reset
 		/////////////////////////
 		
+		m_osrouteSolver->m_rootLPValue = m_zRootLP;
 		
 		//go into branch and bound
+		m_message = "";
 		std::cout << "START BRANCH AND BOUND =  "   << std::endl;
 		if(m_zLB + m_osDecompParam.zeroTol <  m_zUB) branchAndBound();
+		std::cout << "FINISH BRANCH AND BOUND =  "   << std::endl;
+		printTreeInfo();
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;	
-		m_osrouteSolver->m_rootLPValue = m_zRootLP;
-		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated);
+		if(m_message == "") m_message = "********  WE ARE OPTIMAL  *******";
+		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated, m_message);
 		
 		
 		delete m_solver;
@@ -628,7 +630,15 @@ void OSColGenApp::solveRestrictedMasterRelaxation( ){
 				numCols = m_si->getNumCols();
 				
 				if( numCols != m_osrouteSolver->m_numThetaVar ) throw ErrorClass("number variables in solver not consistent with master");
-				if( numCols + m_osrouteSolver->m_numHubs >= m_maxCols) throw ErrorClass("we ran out of columns");
+				if( numCols + m_osrouteSolver->m_numHubs >= m_maxCols) {
+
+					m_message = " *****  COLUMN LIMIT EXCEEDED -- INSIDE solveRestrictedMasterRelaxation ****";
+					printTreeInfo();
+					m_osrouteSolver->m_bestLPValue = m_zLB;
+					m_osrouteSolver->m_bestIPValue = m_zUB;	
+					m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated, m_message);
+					throw ErrorClass("we ran out of columns");
+				}
 				
 				for(i = 0; i <  numARows; i++){
 					
@@ -814,7 +824,6 @@ bool OSColGenApp::branchAndBound( ){
 	bool bandbWorked;
 	bandbWorked = true;
 	int numCols;
-	int i;
 	int rowIdx;
 	rowIdx = 0;
 	
@@ -876,7 +885,18 @@ bool OSColGenApp::branchAndBound( ){
 		std::cout << "ENTERING THE WHILE IN BRANCH AND BOUND" << std::endl;
 		std::cout << "m_numNodesGenerated = " <<  m_numNodesGenerated  << std::endl;
 		//while( (nodeVec.size() > 0) && (m_numNodesGenerated <= nodeLimit) ){
-		while( (m_nodeMap.size() > 0) && (m_numNodesGenerated <= m_osDecompParam.nodeLimit) ){
+		while( m_nodeMap.size() > 0 ){
+			
+			if(m_numNodesGenerated > m_osDecompParam.nodeLimit ){
+				m_message = "******* NODE LIMIT EXCEEDED *******";
+				return false;
+			}
+			
+			
+			if( m_si->getNumCols() > m_maxCols ){
+				m_message = "******* COLUMN LIMIT EXCEEDED *******";
+				return false;
+			}
 			
 			//kipp -- experimental
 			//m_osDecompParam.masterColumnResetValue = 3000;
@@ -1003,52 +1023,6 @@ bool OSColGenApp::branchAndBound( ){
 			m_zLB = m_zUB;
 		}
 		
-		std::cout <<  std::endl << std::endl;
-		
-		std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << m_nodeMap.size() << std::endl;
-		
-		/*
-		for ( vit = nodeVec.begin() ; 
-				vit != nodeVec.end(); vit++ ){
-			
-			std::cout << "NODE ID VALUE = " << (*vit)->nodeID << " " ;
-			std::cout << "  NODE LP VALUE = " << (*vit)->lpValue << std::endl;
-			
-			for(i = 0; i < (*vit)->rowIdxNumNonz; i++){
-				
-				std::cout << "CONSTRAINT =  " <<(*vit)->rowIdx[ i]  ;
-				std::cout << "  CONSTRAINT LB = " << (*vit)->rowLB[ i]  ;
-				std::cout << "  CONSTRAINT UB = " << (*vit)->rowUB[ i]  << std::endl;
-			}
-				
-			if( (*vit)->lpValue < m_zLB) m_zLB = (*vit)->lpValue;
-			delete *vit;
-			
-		}
-		nodeVec.clear();
-		*/
-		
-		
-		
-		
-		for ( mit = m_nodeMap.begin() ; 
-				mit != m_nodeMap.end(); mit++ ){
-			
-			std::cout << "NODE ID VALUE = " << mit->second->nodeID << " " ;
-			std::cout << "  NODE LP VALUE = " << mit->second->lpValue << std::endl;
-			
-			for(i = 0; i < mit->second->rowIdxNumNonz; i++){
-				
-				std::cout << "CONSTRAINT =  " << mit->second->rowIdx[ i]  ;
-				std::cout << "  CONSTRAINT LB = " <<  mit->second->rowLB[ i]  ;
-				std::cout << "  CONSTRAINT UB = " <<  mit->second->rowUB[ i]  << std::endl;
-			}
-				
-			if(  mit->second->lpValue < m_zLB) m_zLB =  mit->second->lpValue;
-	
-			
-		}
-		m_nodeMap.clear();
 		
 		//exit( 1);
 	
@@ -1717,6 +1691,37 @@ void  OSColGenApp::resetMaster(){
 	
 }//end resetMaster
 
+void OSColGenApp::printTreeInfo(){
+	
+	std::map<int, OSNode*>::iterator mit;
+	int i;
+	
+	std::cout <<  std::endl << std::endl;
+	
+	std::cout << "NUMBER OF REMAINING DANGLING NODES  = " << m_nodeMap.size() << std::endl;
 
+	if( m_nodeMap.size() > 0)  m_zLB = OSDBL_MAX; //find best LP value over dangling nodes
+	
+	for ( mit = m_nodeMap.begin() ; 
+			mit != m_nodeMap.end(); mit++ ){
+		
+		std::cout << "NODE ID VALUE = " << mit->second->nodeID << " " ;
+		std::cout << "  NODE LP VALUE = " << mit->second->lpValue << std::endl;
+		
+		for(i = 0; i < mit->second->rowIdxNumNonz; i++){
+			
+			std::cout << "CONSTRAINT =  " << mit->second->rowIdx[ i]  ;
+			std::cout << "  CONSTRAINT LB = " <<  mit->second->rowLB[ i]  ;
+			std::cout << "  CONSTRAINT UB = " <<  mit->second->rowUB[ i]  << std::endl;
+		}
+			
+		if(  mit->second->lpValue < m_zLB) m_zLB =  mit->second->lpValue;
+
+		
+	}
+	m_nodeMap.clear();
+	
+	
+}//end printTreeInfo
 
 

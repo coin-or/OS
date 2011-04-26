@@ -273,7 +273,7 @@ public:
 	
 	//this method gets called when we are done
 	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
-				 int numColsGen) = 0;
+				 int numColsGen, std::string message) = 0;
 	
 	
 

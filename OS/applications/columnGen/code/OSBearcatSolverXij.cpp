@@ -104,7 +104,7 @@ OSBearcatSolverXij::OSBearcatSolverXij(OSOption *osoption) {
 	
 	m_osoption = osoption;
 	
-	m_multiCommodCutLimit = 50;
+	m_multiCommodCutLimit = 250;
 	m_numMultCuts = 0;
 	
 
@@ -598,7 +598,7 @@ void OSBearcatSolverXij::getOptL( double** c) {
 	for(k = 1; k < m_numHubs - 1; k++){
 		for(d = 0; d <=  m_totalDemand; d++){
 			
-			m_vv[ k ][ d] = OSDBL_MAX;
+			m_vv[ m_hubPoint[ k] ][ d] = OSDBL_MAX;
 			
 		}
 	}
@@ -682,8 +682,8 @@ void OSBearcatSolverXij::getOptL( double** c) {
 			
 			testVal = qrouteCost(m_hubPoint[m_numHubs -1] ,  l,  c[ m_hubPoint[ m_numHubs -1] ],  &kountVar);
 			
-			std::cout << "l = " << l << std::endl;
-			std::cout << "testVal = " << testVal << std::endl;
+			//std::cout << "l = " << l << std::endl;
+			//std::cout << "testVal = " << testVal << std::endl;
 			
 			if(m_vv[ m_hubPoint[ m_numHubs - 1] ][ d] + testVal < trueMin){
 				
@@ -1230,17 +1230,22 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 			m_newColumnNonz[ k] = numNonz;
 			
 			
+           // std::cout << std::endl << std::endl;
+           // std::cout << "HERE IS COLUMN " << m_numThetaVar << std::endl;
 			
 			//zero out the scatter vector and store the generated column
 			for(j = 0; j < kountVar; j++){
 				
-				
+				//std::cout <<  m_variableNames[  m_varIdx[ j] - startPntInc]  <<  std::endl;
+                
 				m_thetaIndex[ m_numThetaNonz++ ] =  m_varIdx[ j] - startPntInc ;
 				m_tmpScatterArray[ m_varIdx[ j] - startPntInc  ]  = 0;
 				
 				// is variable m_varIdx[ j] - startPntInc in this row	
 				
 			}
+            
+            //std::cout << std::endl << std::endl;
 			
 
 			intVarSet.insert ( std::pair<int,double>( m_numThetaVar, 1.0) );
@@ -1249,7 +1254,7 @@ void OSBearcatSolverXij::getColumns(const  double* yA, const int numARows,
 			m_thetaCost[ m_numThetaVar++ ] = m_costVec[ k];
 			m_thetaPnt[ m_numThetaVar ]  = m_numThetaNonz;
 			
-
+            
 	
 
 			
@@ -2972,9 +2977,9 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 						}
 					}//end loop on j1
 					cutString << std::endl;
-					std::cout << cutString.str() <<  " kount =  " << kount << std::endl; 
-					std::cout << "OPTIMAL OBJECTIVE FUNCTION VALUE = " <<  objVal << std::endl;
-					std::cout << "OPTIMAL W VALUE = " <<  wVal << std::endl;
+					//std::cout << cutString.str() <<  " kount =  " << kount << std::endl; 
+					//std::cout << "OPTIMAL OBJECTIVE FUNCTION VALUE = " <<  objVal << std::endl;
+					//std::cout << "OPTIMAL W VALUE = " <<  wVal << std::endl;
 					
 					//now add the cut
 					//
@@ -2991,7 +2996,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 						
 						m_tmpScatterArray[ m_BmatrixIdx[ j] ] = 1;
 						scatterValues[ m_BmatrixIdx[ j] ]  = m_BmatrixVal[ j];
-						std::cout  << m_variableNames[ m_BmatrixIdx[ j] ] << " xkij cut coeff =  " << m_BmatrixVal[ j] << std::endl;
+						//std::cout  << m_variableNames[ m_BmatrixIdx[ j] ] << " xkij cut coeff =  " << m_BmatrixVal[ j] << std::endl;
 						
 					}
 
@@ -3520,10 +3525,12 @@ void OSBearcatSolverXij::createAmatrix(){
 	
 }//end createAmatrix
 
-void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, int numColsGen){
+void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, 
+		int numColsGen, std::string message){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
+	
 	double cost;
 	cost = 0;
 	std::vector<int>::iterator vit;
@@ -3594,6 +3601,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 		//std::cout <<  "cost = " << cost << std::endl << std::endl;
 		
 		std::cout << std::endl <<  std::endl;
+		std::cout <<  message << std::endl;
 		std::cout << "LINEAR PROGRAMMING RELAXATION VALUE = " << m_rootLPValue << std::endl;
 		std::cout << "LOWER BOUND VALUE = " << m_bestLPValue << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
@@ -5984,7 +5992,7 @@ void OSBearcatSolverXij::permuteHubs(){
 
 	double tmpVal;
 	double *tmpCap;
-	
+	int tmpIdx;
 	tmpCap = new double[ m_numHubs];
 	
 	for(k1 = 0; k1 < m_numHubs; k1++) tmpCap[ k1] = m_routeCapacity[ k1]; //initialize capacities
@@ -5992,7 +6000,6 @@ void OSBearcatSolverXij::permuteHubs(){
 	
 	for(k1 = 0; k1 < m_numHubs - 1; k1++){
 		
-		m_hubPoint[ k1] = k1;
 		
 		for(k2 = k1 + 1; k2 < m_numHubs; k2++){
 			
@@ -6003,18 +6010,19 @@ void OSBearcatSolverXij::permuteHubs(){
 				tmpCap[ k1 ] = tmpCap[  k2 ];
 				tmpCap[  k2 ] = tmpVal;
 		
+				tmpIdx = m_hubPoint[ k1];
 				m_hubPoint[ k1] = m_hubPoint[ k2];
-				m_hubPoint[ k2] = k1;
+				m_hubPoint[ k2] = tmpIdx;
 				
 			}
 			
 		}// end k2 loop 
 	}// end k1 loop
 	
-	//for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "m_hubPoint =  " <<  m_hubPoint[ k1] << std::endl;
-	//for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "tmp Cap =  " <<  tmpCap[ k1] << std::endl;
-	//for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "hub capacity =  " << m_routeCapacity[ m_hubPoint[ k1]  ]<< std::endl;
-
+	for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "m_hubPoint =  " <<  m_hubPoint[ k1] << std::endl;
+	for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "tmp Cap =  " <<  tmpCap[ k1] << std::endl;
+	for(k1 = 0; k1 < m_numHubs; k1++) std::cout << "hub capacity =  " << m_routeCapacity[ m_hubPoint[ k1]  ]<< std::endl;
+	//exit( 1);
 	delete[] tmpCap;
 	tmpCap = NULL;
 
