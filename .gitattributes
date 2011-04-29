@@ -105,6 +105,8 @@ OS/data/amplFiles/muerdata10.dat -text
 OS/data/amplFiles/parinc.dat -text
 OS/data/amplFiles/parinc.mod -text
 OS/data/amplFiles/parinc.nl -text
+OS/data/amplFiles/parincQuadratic.mod -text
+OS/data/amplFiles/parincQuadratic.nl -text
 OS/data/amplFiles/rbrockmod.mod -text
 OS/data/amplFiles/testAmpl.run -text
 OS/data/amplFiles/volumeTest.mod -text
