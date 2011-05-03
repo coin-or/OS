@@ -16,7 +16,7 @@
 #define DEBUG
 
 //#ifdef  DEBUG
-//#define DEBUG_OSOPTION
+#define DEBUG_OSOPTION
 //#endif
 
 #include "OSOption.h"
@@ -4522,8 +4522,9 @@ bool InitVariableValues::setVar(int numberOfVar, InitVarValue **var)
  * @param numberOfVar: number of <var> elements to be set
  * @param idx: the array of indices for the elements that are to be set
  * @param value: the array of the corresponding values
+ * @param name: the array of the corresponding names
  */
-bool InitVariableValues::setVar(int numberOfVar, int *idx, double *value)
+bool InitVariableValues::setVar(int numberOfVar, int *idx, double *value, std::string *name)
 {	
 	if (this->var != NULL)
 		return false;
@@ -4542,6 +4543,7 @@ bool InitVariableValues::setVar(int numberOfVar, int *idx, double *value)
 	{
 		this->var[i] = new InitVarValue();
 		this->var[i]->idx = idx[i];
+		this->var[i]->name = name[i];
 		this->var[i]->value = value[i];
 	}
 	return true;
@@ -4628,8 +4630,9 @@ bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var)
  * @param numberOfVar: number of <var> elements to be set
  * @param idx: the array of indices for the elements that are to be set
  * @param value: the array of the corresponding values
+ * @param name: the array of the corresponding names
  */
-bool InitVariableValuesString::setVar(int numberOfVar, int *idx, std::string *value)
+bool InitVariableValuesString::setVar(int numberOfVar, int *idx, std::string *value, std::string *name)
 {	
 	if (this->var != NULL)
 		return false;
@@ -4648,6 +4651,7 @@ bool InitVariableValuesString::setVar(int numberOfVar, int *idx, std::string *va
 	{
 		this->var[i] = new InitVarValueString();
 		this->var[i]->idx = idx[i];
+		this->var[i]->name = name[i];
 		this->var[i]->value = value[i];
 	}
 	return true;
@@ -4809,8 +4813,9 @@ bool IntegerVariableBranchingWeights::setVar(int numberOfVar, BranchingWeight **
  * @param numberOfVar: number of <var> elements to be set
  * @param idx: the array of indices for the elements that are to be set
  * @param value: the array of the corresponding values
+ * @param name: the array of the corresponding names
  */
-bool IntegerVariableBranchingWeights::setVar(int numberOfVar, int *idx, double *value)
+bool IntegerVariableBranchingWeights::setVar(int numberOfVar, int *idx, double *value, std::string *name)
 {	
 	if (this->var != NULL)
 		return false;
@@ -4829,6 +4834,7 @@ bool IntegerVariableBranchingWeights::setVar(int numberOfVar, int *idx, double *
 	{
 		this->var[i] = new BranchingWeight();
 		this->var[i]->idx = idx[i];
+		this->var[i]->name = name[i];
 		this->var[i]->value = value[i];
 	}
 	return true;
@@ -5001,7 +5007,7 @@ bool SOSVariableBranchingWeights::setSOS(int numberOfSOS, SOSWeights **sos)
  * A function to add an <sos> element
  * @param sos: the content of the <sos> element that is to be added 
  */
-bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, int* idx, double* value)
+bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, int* idx, double* value, std::string* name)
 {	try
 	{	int nopt; int i;
 		if (sosIdx < 0)
@@ -5030,6 +5036,7 @@ bool SOSVariableBranchingWeights::addSOS(int sosIdx, int nvar, double weight, in
 		for (i = 0; i < nvar; i++)
 		{	temp[nopt]->var[i] = new BranchingWeight();
 			temp[nopt]->var[i]->idx   = idx[i];
+			temp[nopt]->var[i]->name  = name[i];
 			temp[nopt]->var[i]->value = value[i];
 		}
 
@@ -5289,7 +5296,7 @@ bool InitObjectiveValues::setObj(int numberOfObj, InitObjValue **obj)
 	}
 }//setObj
 
-bool InitObjectiveValues::setObj(int numberOfObj, int *idx, double *value)
+bool InitObjectiveValues::setObj(int numberOfObj, int *idx, double *value, std::string *name)
 {	
 	if (this->obj != NULL) return false;
 		
@@ -5305,6 +5312,7 @@ bool InitObjectiveValues::setObj(int numberOfObj, int *idx, double *value)
 	{
 		this->obj[i] = new InitObjValue();
 		this->obj[i]->idx = idx[i];
+		this->obj[i]->name = name[i];
 		this->obj[i]->value = value[i];
 	}
 	return true;
@@ -5384,7 +5392,7 @@ bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj)
 	}
 }//setObj
 
-bool InitObjectiveBounds::setObj(int numberOfObj, int *idx, double *lbValue, double *ubValue)
+bool InitObjectiveBounds::setObj(int numberOfObj, int *idx, double *lbValue, double *ubValue, std::string *name)
 {	
 	if (this->obj != NULL)
 		return false;
@@ -5403,6 +5411,7 @@ bool InitObjectiveBounds::setObj(int numberOfObj, int *idx, double *lbValue, dou
 	{
 		this->obj[i] = new InitObjBound();
 		this->obj[i]->idx = idx[i];
+		this->obj[i]->name = name[i];
 		this->obj[i]->lbValue = lbValue[i];
 		this->obj[i]->ubValue = ubValue[i];
 	}
@@ -5701,7 +5710,7 @@ bool InitConstraintValues::setCon(int numberOfCon, InitConValue **con)
 	}
 }//setCon
 
-bool InitConstraintValues::setCon(int numberOfCon, int *idx, double *value)
+bool InitConstraintValues::setCon(int numberOfCon, int *idx, double *value, std::string *name)
 {	
 	if (this->con != NULL)
 		return false;
@@ -5720,6 +5729,7 @@ bool InitConstraintValues::setCon(int numberOfCon, int *idx, double *value)
 	{
 		this->con[i] = new InitConValue();
 		this->con[i]->idx = idx[i];
+		this->con[i]->name = name[i];
 		this->con[i]->value = value[i];
 	}
 	return true;
@@ -5800,7 +5810,7 @@ bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con)
 	}
 }//setCon
 
-bool InitDualVariableValues::setCon(int numberOfCon, int *idx, double *lbValue, double *ubValue)
+bool InitDualVariableValues::setCon(int numberOfCon, int *idx, double *lbValue, double *ubValue, std::string *name)
 {	
 	if (this->con != NULL)
 		return false;
@@ -5819,6 +5829,7 @@ bool InitDualVariableValues::setCon(int numberOfCon, int *idx, double *lbValue, 
 	{
 		this->con[i] = new InitDualVarValue();
 		this->con[i]->idx = idx[i];
+		this->con[i]->name = name[i];
 		this->con[i]->lbDualValue = lbValue[i];
 		this->con[i]->ubDualValue = ubValue[i];
 	}
@@ -6981,7 +6992,7 @@ bool OSOption::setNumberOfConstraints(int numberOfConstraints)
 }//setNumberOfConstraints
 
 
-bool OSOption::setInitVarValues(int numberOfVar, int* idx, double* value)
+bool OSOption::setInitVarValues(int numberOfVar, int* idx, double* value, std::string* name)
 {
 	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -6992,7 +7003,7 @@ bool OSOption::setInitVarValues(int numberOfVar, int* idx, double* value)
 
 	this->optimization->variables->initialVariableValues = new InitVariableValues();
 
-	return this->optimization->variables->initialVariableValues->setVar(numberOfVar, idx, value);
+	return this->optimization->variables->initialVariableValues->setVar(numberOfVar, idx, value, name);
 }//setInitVarValues
 
 
@@ -7045,7 +7056,7 @@ bool OSOption::setAnotherInitVarValue(int idx, double value)
 	return this->optimization->variables->initialVariableValues->addVar(idx, value);
 }//setAnotherInitVarValue
 
-bool OSOption::setInitVarValuesString(int numberOfVar, int* idx, std::string* value)
+bool OSOption::setInitVarValuesString(int numberOfVar, int* idx, std::string* value, std::string* name)
 {
 	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -7056,7 +7067,7 @@ bool OSOption::setInitVarValuesString(int numberOfVar, int* idx, std::string* va
 
 	this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
 
-	return this->optimization->variables->initialVariableValuesString->setVar(numberOfVar, idx, value);
+	return this->optimization->variables->initialVariableValuesString->setVar(numberOfVar, idx, value, name);
 }//setInitVarValuesString
 
 bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var)
@@ -7197,7 +7208,7 @@ bool OSOption::setAnotherInitBasisStatus(int object, int idx, int status)
 	}
 }//setAnotherInitBasisStatus
 
-bool OSOption::setIntegerVariableBranchingWeights(int numberOfVar, int* idx, double* value)
+bool OSOption::setIntegerVariableBranchingWeights(int numberOfVar, int* idx, double* value, std::string* name)
 {
 	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -7208,7 +7219,7 @@ bool OSOption::setIntegerVariableBranchingWeights(int numberOfVar, int* idx, dou
 
 	this->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
 
-	return this->optimization->variables->integerVariableBranchingWeights->setVar(numberOfVar, idx, value);
+	return this->optimization->variables->integerVariableBranchingWeights->setVar(numberOfVar, idx, value, name);
 }//setIntegerVariableBranchingWeights
 
 bool OSOption::setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var)
@@ -7277,14 +7288,14 @@ bool OSOption::setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos)
 	return this->optimization->variables->sosVariableBranchingWeights->setSOS(numberOfSOS, sos);
 }//setSOSVariableBranchingWeights
 
-bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value)
+bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value, std::string* name)
 {	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
 	if (this->optimization->variables == NULL) 
 		this->optimization->variables = new VariableOption();
 	if (this->optimization->variables->sosVariableBranchingWeights == NULL) 
 		this->optimization->variables->sosVariableBranchingWeights = new SOSVariableBranchingWeights();
-	return this->optimization->variables->sosVariableBranchingWeights->addSOS(sosIdx, nvar, weight, idx, value);
+	return this->optimization->variables->sosVariableBranchingWeights->addSOS(sosIdx, nvar, weight, idx, value, name);
 }//setAnotherSOSVariableBranchingWeight
 
 bool OSOption::setNumberOfOtherVariableOptions(int numberOfOther)
@@ -7403,7 +7414,7 @@ bool OSOption::setOtherOptionEnumeration(int object, int otherOptionNumber, int 
 }//setOtherOptionEnumeration
 
 bool OSOption::setOtherVariableOptionVar(int otherOptionNumber, int varNumber,
-			int idx, std::string value, std::string lbValue, std::string ubValue)
+			int idx, std::string name, std::string value, std::string lbValue, std::string ubValue)
 {
 	if (optimization == NULL) return false;
 
@@ -7418,6 +7429,7 @@ bool OSOption::setOtherVariableOptionVar(int otherOptionNumber, int varNumber,
 	if (optimization->variables->other[otherOptionNumber]->var[varNumber] == NULL) return false; 
 
 	optimization->variables->other[otherOptionNumber]->var[varNumber]->idx = idx;
+	optimization->variables->other[otherOptionNumber]->var[varNumber]->name = name;
 	optimization->variables->other[otherOptionNumber]->var[varNumber]->value = value;
 	optimization->variables->other[otherOptionNumber]->var[varNumber]->lbValue = lbValue;
 	optimization->variables->other[otherOptionNumber]->var[varNumber]->ubValue = ubValue;
@@ -7448,7 +7460,7 @@ bool OSOption::setAnOtherVariableOption(OtherVariableOption* optionValue)
 	return this->optimization->variables->addOther(optionValue);
 }//setAnOtherVariableOption
 
-bool OSOption::setInitObjValues(int numberOfObj, int* idx, double* value)
+bool OSOption::setInitObjValues(int numberOfObj, int* idx, double* value, std::string* name)
 {
 	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -7459,7 +7471,7 @@ bool OSOption::setInitObjValues(int numberOfObj, int* idx, double* value)
 
 	this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
 
-	return this->optimization->objectives->initialObjectiveValues->setObj(numberOfObj, idx, value);
+	return this->optimization->objectives->initialObjectiveValues->setObj(numberOfObj, idx, value, name);
 }//setInitObjValues
 
 bool OSOption::setInitObjValuesSparse(int numberOfObj, InitObjValue** obj)
@@ -7510,7 +7522,7 @@ bool OSOption::setAnotherInitObjValue(int idx, double value)
 	return this->optimization->objectives->initialObjectiveValues->addObj(idx, value);
 }//setAnotherInitObjValue
 
-bool OSOption::setInitObjBounds(int numberOfObj, int* idx, double* lbValue, double* ubValue)
+bool OSOption::setInitObjBounds(int numberOfObj, int* idx, double* lbValue, double* ubValue, std::string* name)
 {
 	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -7521,7 +7533,7 @@ bool OSOption::setInitObjBounds(int numberOfObj, int* idx, double* lbValue, doub
 
 	this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
 
-	return this->optimization->objectives->initialObjectiveBounds->setObj(numberOfObj, idx, lbValue, ubValue);
+	return this->optimization->objectives->initialObjectiveBounds->setObj(numberOfObj, idx, lbValue, ubValue, name);
 }//setInitObjBounds
 
 bool OSOption::setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj)
@@ -7571,7 +7583,7 @@ bool OSOption::setAnotherInitObjBound(int idx, double lb, double ub)
 }//setAnotherInitObjBound
 
 bool OSOption::setOtherObjectiveOptionObj(int otherOptionNumber, int objNumber,
-			int idx, std::string value, std::string lbValue, std::string ubValue)
+			int idx, std::string name, std::string value, std::string lbValue, std::string ubValue)
 {
 	if (optimization == NULL) return false;
 
@@ -7586,6 +7598,7 @@ bool OSOption::setOtherObjectiveOptionObj(int otherOptionNumber, int objNumber,
 	if (optimization->objectives->other[otherOptionNumber]->obj[objNumber] == NULL) return false; 
 
 	optimization->objectives->other[otherOptionNumber]->obj[objNumber]->idx = idx;
+	optimization->objectives->other[otherOptionNumber]->obj[objNumber]->name = name;
 	optimization->objectives->other[otherOptionNumber]->obj[objNumber]->value = value;
 	optimization->objectives->other[otherOptionNumber]->obj[objNumber]->lbValue = lbValue;
 	optimization->objectives->other[otherOptionNumber]->obj[objNumber]->ubValue = ubValue;
@@ -7673,7 +7686,7 @@ bool OSOption::setAnOtherObjectiveOption(OtherObjectiveOption* optionValue)
 }//setAnOtherVariableOption
 
 
-bool OSOption::setInitConValues(int numberOfCon, int* idx, double* value)
+bool OSOption::setInitConValues(int numberOfCon, int* idx, double* value, std::string* name)
 {
 	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -7684,7 +7697,7 @@ bool OSOption::setInitConValues(int numberOfCon, int* idx, double* value)
 
 	this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
 
-	return this->optimization->constraints->initialConstraintValues->setCon(numberOfCon, idx, value);
+	return this->optimization->constraints->initialConstraintValues->setCon(numberOfCon, idx, value, name);
 }//setInitConValues
 
 
@@ -7736,7 +7749,7 @@ bool OSOption::setAnotherInitConValue(int idx, double value)
 	return this->optimization->constraints->initialConstraintValues->addCon(idx, value);
 }//setAnotherInitConValue
 
-bool OSOption::setInitDualValues(int numberOfCon, int* idx, double* lbValue, double* ubValue)
+bool OSOption::setInitDualValues(int numberOfCon, int* idx, double* lbValue, double* ubValue, std::string* name)
 {
 	if (this->optimization == NULL) 
 		this->optimization = new OptimizationOption();
@@ -7747,7 +7760,7 @@ bool OSOption::setInitDualValues(int numberOfCon, int* idx, double* lbValue, dou
 
 	this->optimization->constraints->initialDualValues = new InitDualVariableValues();
 
-	return this->optimization->constraints->initialDualValues->setCon(numberOfCon, idx, lbValue, ubValue);
+	return this->optimization->constraints->initialDualValues->setCon(numberOfCon, idx, lbValue, ubValue, name);
 }//setInitDualValues
 
 
@@ -7856,7 +7869,7 @@ bool OSOption::setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
 
 
 bool OSOption::setOtherConstraintOptionCon(int otherOptionNumber, int conNumber,
-			int idx, std::string value, std::string lbValue, std::string ubValue)
+			int idx, std::string name, std::string value, std::string lbValue, std::string ubValue)
 {
 	if (optimization == NULL) return false;
 
@@ -7871,6 +7884,7 @@ bool OSOption::setOtherConstraintOptionCon(int otherOptionNumber, int conNumber,
 	if (optimization->constraints->other[otherOptionNumber]->con[conNumber] == NULL) return false; 
 
 	optimization->constraints->other[otherOptionNumber]->con[conNumber]->idx = idx;
+	optimization->constraints->other[otherOptionNumber]->con[conNumber]->name = name;
 	optimization->constraints->other[otherOptionNumber]->con[conNumber]->value = value;
 	optimization->constraints->other[otherOptionNumber]->con[conNumber]->lbValue = lbValue;
 	optimization->constraints->other[otherOptionNumber]->con[conNumber]->ubValue = ubValue;
@@ -9390,8 +9404,9 @@ bool BranchingWeight::IsEqual(BranchingWeight *that)
 		{	if ((this->idx != that->idx) || this->name != that->name || !isEqual(this->value, that->value))
 			{
 #ifdef DEBUG_OSOPTION
-				cout << "idx: "   << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx: "   << this->idx   <<  " vs. "  << that->idx   << endl;
+				cout << "value: " << this->value <<  " vs. "  << that->value << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
 #endif	
 				return false;
 			}

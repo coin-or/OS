@@ -79,7 +79,7 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 			<message>Hello world</message>
 			<variables numberOfOtherVariableResults="4" >
 				<values numberOfVar="2">
-					<var idx="0" >
+					<var idx="0" name="x0">
 						.8724300006558884E0
 					</var >
 					<var idx="1" >
@@ -87,7 +87,7 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 					</var >
 				</values>
 				<valuesString numberOfVar="1">
-					<var idx="2">zero</var>
+					<var idx="2" name="x2">zero</var>
 				</valuesString>
 				<basisStatus>
 					<basic numberOfEl="6">
@@ -100,13 +100,13 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 					</unknown>
 				</basisStatus>
 				<other numberOfVar="2" numberOfEnumerations="0" name="varL" description="Lagrange Multiplier on the Variable Lower Bound">
-					<var idx="0">2.532850081993274e-9</var>
-					<var idx="1">3.3380536229320414e-9</var>
+					<var idx="0" name="x0">2.532850081993274e-9</var>
+					<var name="x1" idx="1">3.3380536229320414e-9</var>
 				</other>
 				<other numberOfVar="3" numberOfEnumerations="0" name="varU" description="Lagrange Multiplier on the Variable Upper Bound">
-					<var idx="0">0</var>
+					<var idx="0" name="x0">0</var>
 					<var idx="1">0</var>
-					<var idx="2">0</var>
+					<var idx="2" name="">0</var>
 				</other>
 				<other name="test" value="3" numberOfVar="2" numberOfEnumerations="0" >
 					<var idx="0">2</var>
@@ -123,8 +123,8 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 			</variables>
 			<objectives numberOfOtherObjectiveResults="1" >
 				<values numberOfObj="2">
-					<obj idx="-1">6.727903962147923</obj>
-					<obj idx="-2">INF</obj>
+					<obj idx="-1" name="obj">6.727903962147923</obj>
+					<obj name="a.n.other" idx="-2">INF</obj>
 				</values>
 				<basisStatus>
 					<isFree numberOfEl="1">
@@ -137,7 +137,7 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 			</objectives>
 			<constraints numberOfOtherConstraintResults="1" >
 				<dualValues numberOfCon="2" >
-					<con idx="0">-1.5884608261704753e-10</con>
+					<con idx="0" name="c0">-1.5884608261704753e-10</con>
 					<con idx="1">-.7662938652578929</con>
 				</dualValues>
 				<basisStatus>
@@ -170,7 +170,8 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 				</other>
 			</variables>
 			<objectives>
-				<values numberOfObj="1">
+				<values numberOfObj="2">
+					<obj>0.8</obj>
 					<obj idx="-2">3.14</obj>
 				</values>
 			</objectives>

@@ -102,15 +102,15 @@
 	<optimization numberOfConstraints="8" numberOfVariables="10" numberOfObjectives="2" >
 		<variables numberOfOtherVariableOptions="4">
 			<initialVariableValues numberOfVar="5">
-					<var idx="0" value="1"/>
-					<var value="4.742999643577776e-2" idx="1"></var>
-					<var idx="3" value="1.379408293215363"/>
+					<var idx="0" value="1" name="x0"/>
+					<var name="x1" value="4.742999643577776e-2" idx="1"></var>
+					<var idx="3" name="" value="1.379408293215363"/>
 					<var idx="2"/>
-					<var value="NaN" idx="5" />
+					<var value="NaN" idx="5" name=" "/>
 			</initialVariableValues>
 			<initialVariableValuesString numberOfVar="3">
-				<var idx="1" value="blue"></var>
-				<var idx="4" value="red"></var>
+				<var idx="1" value="blue" name="BLUE"></var>
+				<var name="RED" idx="4" value="red"></var>
 				<var idx="5"></var>
 			</initialVariableValuesString>
 			<initialBasisStatus>
@@ -126,13 +126,13 @@
 				</unknown>
 			</initialBasisStatus>
 			<integerVariableBranchingWeights numberOfVar="3">
-				<var idx="2" value="1"></var>
+				<var idx="2" name="x2" value="1"></var>
 				<var idx="3" ></var>
-				<var value="2.5" idx="4"/>
+				<var value="2.5" name="four" idx="4"/>
 			</integerVariableBranchingWeights>
 			<sosVariableBranchingWeights numberOfSOS="2">
 				<sos sosIdx="0" numberOfVar="2">
-					<var idx="0" />
+					<var idx="0" name="x0"/>
 					<var idx="1" value="2"></var>
 				</sos>
 				<sos sosIdx="1" numberOfVar="0" groupWeight="0.3"/>
@@ -143,7 +143,7 @@
 				<var idx="2" ></var>
 			</other>
 			<other name="test" solver="hypothetical" numberOfVar="1" value="inverted">
-				<var idx="1"></var>
+				<var idx="1" name="x1"></var>
 			</other>
 			<other name="enumTest" numberOfEnumerations="2" >
 				<enumeration value="zero" numberOfEl="2">
@@ -155,7 +155,7 @@
 		</variables>	
 		<objectives numberOfOtherObjectiveOptions="1">
 			<initialObjectiveValues numberOfObj="2">
-				<obj value="0.0" idx="-2"></obj>
+				<obj value="0.0" idx="-2" name="other-obj"></obj>
 				<obj/>
 			</initialObjectiveValues>
 			<initialObjectiveBounds numberOfObj="2">
@@ -172,11 +172,11 @@
 		</objectives>
 		<constraints numberOfOtherConstraintOptions="2">
 			<initialConstraintValues numberOfCon="2">
-				<con idx="0" value="5.0"></con>
+				<con idx="0" name="c0" value="5.0"></con>
 				<con idx="1"></con>
 			</initialConstraintValues>
 			<initialDualValues numberOfCon="2">
-				<con idx="1" lbDualValue="-10.0" ubDualValue="100."></con>
+				<con idx="1" lbDualValue="-10.0" ubDualValue="100." name="c1"></con>
 				<con idx="3"/>
 			</initialDualValues>
 			<initialBasisStatus>
@@ -188,7 +188,7 @@
 				</unknown>
 			</initialBasisStatus>
 			<other name="otherConOption" numberOfCon="2">
-				<con idx="0" lbValue="2.718" ubValue="3.1415"></con>
+				<con idx="0" lbValue="2.718" name="gus's folly" ubValue="3.1415"></con>
 				<con idx="1" value="seventeen"></con>
 			</other>
 			<other name="AnotherConOption" numberOfEnumerations="1">

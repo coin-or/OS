@@ -198,6 +198,8 @@
 	lbValArray(NULL),
 	ubValArray(NULL),
 
+	namArray(NULL),
+
 	tempInt(0),
 	numberOf(0),
 	kounter(0),

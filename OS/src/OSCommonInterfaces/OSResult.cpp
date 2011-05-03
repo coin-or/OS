@@ -1746,6 +1746,19 @@ int OSResult::getVarValueIdx(int solIdx, int varIdx){
 	return optimization->solution[solIdx]->variables->values->var[varIdx]->idx;
 }//getVarValueIdx
 
+std::string OSResult::getVarValueName(int solIdx, int varIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getVarValueIdx()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->variables == NULL) return "";
+	if (optimization->solution[solIdx]->variables->values == NULL) return "";
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->values->numberOfVar)
+		throw ErrorClass("varIdx is outside of range in routine getVarValueIdx()");
+	return optimization->solution[solIdx]->variables->values->var[varIdx]->name;
+}//getVarValueName
+
 double OSResult::getVarValue(int solIdx, int varIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
 		throw ErrorClass("No solution defined");
@@ -1809,6 +1822,19 @@ int OSResult::getVarValueStringIdx(int solIdx, int varIdx){
 		throw ErrorClass("varIdx is outside of range in routine getVarValueStringIdx()");
 	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->idx;
 }//getVarValueStringIdx
+
+std::string OSResult::getVarValueStringName(int solIdx, int varIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getVarValueStringIdx()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->variables == NULL) return "";
+	if (optimization->solution[solIdx]->variables->valuesString == NULL) return "";
+	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->valuesString->numberOfVar)
+		throw ErrorClass("varIdx is outside of range in routine getVarValueStringIdx()");
+	return optimization->solution[solIdx]->variables->valuesString->var[varIdx]->name;
+}//getVarValueStringName
 
 std::string OSResult::getVarValueString(int solIdx, int varIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
@@ -2399,6 +2425,20 @@ int OSResult::getObjValueIdx(int solIdx, int objIdx){
 	return optimization->solution[solIdx]->objectives->values->obj[objIdx]->idx;
 }//getObjValueIdx
 
+std::string OSResult::getObjValueName(int solIdx, int objIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getObjValueIdx()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->objectives == NULL) return "";
+	if (optimization->solution[solIdx]->objectives->values == NULL) return "";
+	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->values->numberOfObj)
+		throw ErrorClass("objIdx is outside of range in routine getObjValueIdx()");
+	return optimization->solution[solIdx]->objectives->values->obj[objIdx]->name;
+}//getObjValueName
+
 double OSResult::getObjValue(int solIdx, int objIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
 		throw ErrorClass("No solution defined");
@@ -2695,6 +2735,20 @@ int OSResult::getDualValueIdx(int solIdx, int conIdx){
 		throw ErrorClass("conIdx is outside of range in routine getDualValueIdx()");
 	return optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->idx;
 }//getDualValueIdx
+
+std::string OSResult::getDualValueName(int solIdx, int conIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	int iSolutions = this->getSolutionNumber();
+	if (solIdx < 0 || solIdx >= iSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getDualValueIdx()");
+	if (optimization->solution[solIdx] == NULL) return "";
+	if (optimization->solution[solIdx]->constraints == NULL) return "";
+	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return "";
+	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->dualValues->numberOfCon)
+		throw ErrorClass("conIdx is outside of range in routine getDualValueIdx()");
+	return optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->name;
+}//getDualValueName
 
 double OSResult::getDualValue(int solIdx, int conIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
@@ -4058,7 +4112,8 @@ bool OSResult::setNumberOfVarValues(int solIdx, int numberOfVar){
 	return true;
 }//setNumberOfVarValues
 
-bool OSResult::setVarValue(int solIdx, int number, int idx, double val){
+bool OSResult::setVarValue(int solIdx, int number, int idx, std::string name, double val)
+{
 	if (optimization == NULL || optimization->solution == NULL)
 	{//	throw ErrorClass("No optimization or solution object defined");  
 		return false;
@@ -4090,6 +4145,7 @@ bool OSResult::setVarValue(int solIdx, int number, int idx, double val){
 		return false;
 	}
 	optimization->solution[solIdx]->variables->values->var[number]->idx   = idx;
+	optimization->solution[solIdx]->variables->values->var[number]->name  = name;
 	optimization->solution[solIdx]->variables->values->var[number]->value = val;
 	return true;
 }//setVarValue
@@ -4124,7 +4180,8 @@ bool OSResult::setNumberOfVarValuesString(int solIdx, int numberOfVar){
 	return true;
 }//setNumberOfVarValuesString
 
-bool OSResult::setVarValueString(int solIdx, int number, int idx, std::string str){
+bool OSResult::setVarValueString(int solIdx, int number, int idx, std::string name, std::string str)
+{
 	if (optimization == NULL || optimization->solution == NULL)
 	{//	throw ErrorClass("No optimization or solution object defined");  
 		return false;
@@ -4156,6 +4213,7 @@ bool OSResult::setVarValueString(int solIdx, int number, int idx, std::string st
 		return false;
 	}
 	optimization->solution[solIdx]->variables->valuesString->var[number]->idx   = idx;
+	optimization->solution[solIdx]->variables->valuesString->var[number]->name  = name;
 	optimization->solution[solIdx]->variables->valuesString->var[number]->value = str;
 	return true;
 }//setVarValueString
@@ -4390,9 +4448,25 @@ bool OSResult::setOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx
 	if(optimization->solution[solIdx]->variables == NULL) return false;
 	if(optimization->solution[solIdx]->variables->other[otherIdx] == NULL) return false;
 	if(optimization->solution[solIdx]->variables->other[otherIdx]->var == NULL) return false;
+	if (idx < 0) return false;
 	optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->idx = idx;
 	return true;
 }//setOtherVariableResultVarIdx
+
+bool OSResult::setOtherVariableResultVarName(int solIdx, int otherIdx, int varIdx, std::string name)
+{
+	int nSols = this->getSolutionNumber();
+	if(nSols <= 0) return false;
+	if(optimization == NULL) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL) return false;
+	if(optimization->solution[solIdx]->variables == NULL) return false;
+	if(optimization->solution[solIdx]->variables->other[otherIdx] == NULL) return false;
+	if(optimization->solution[solIdx]->variables->other[otherIdx]->var == NULL) return false;
+	optimization->solution[solIdx]->variables->other[otherIdx]->var[varIdx]->name = name;
+	return true;
+}//setOtherVariableResultVarName
 
 bool OSResult::setOtherVariableResultVar(int solIdx, int otherIdx, int varIdx, std::string value){
 	int nSols = this->getSolutionNumber();
@@ -4617,7 +4691,7 @@ bool OSResult::setObjectiveValuesDense(int solIdx, double *objectiveValues){
 
 
 
-bool OSResult::setObjValue(int solIdx, int number, int idx, double val){
+bool OSResult::setObjValue(int solIdx, int number, int idx, std::string name, double val){
 	if (optimization == NULL || optimization->solution == NULL)
 	{//	throw ErrorClass("No optimization or solution object defined");  
 		return false;
@@ -4649,6 +4723,7 @@ bool OSResult::setObjValue(int solIdx, int number, int idx, double val){
 		return false;
 	}
 	optimization->solution[solIdx]->objectives->values->obj[number]->idx   = idx;
+	optimization->solution[solIdx]->objectives->values->obj[number]->name  = name;
 	optimization->solution[solIdx]->objectives->values->obj[number]->value = val;
 	return true;
 }//setObjValue
@@ -4765,6 +4840,21 @@ bool OSResult::setOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objId
 	optimization->solution[solIdx]->objectives->other[otherIdx]->obj[objIdx]->idx = idx;
 	return true;
 }//setOtherObjectiveResultObjIdx
+
+bool OSResult::setOtherObjectiveResultObjName(int solIdx, int otherIdx, int objIdx, std::string name)
+{
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->objectives == NULL) return false;
+	if (optimization->solution[solIdx]->objectives->other[otherIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->objectives->other[otherIdx]->obj == NULL) return false;
+	optimization->solution[solIdx]->objectives->other[otherIdx]->obj[objIdx]->name = name;
+	return true;
+}//setOtherObjectiveResultObjName
 
 bool OSResult::setOtherObjectiveResultObj(int solIdx, int otherIdx, int objIdx, std::string value){
 	int nSols = this->getSolutionNumber();
@@ -4968,7 +5058,7 @@ bool OSResult::setConstraintValuesDense(int solIdx, double *dualVarValues){
 	return true;
 }//setConstraintValuesDense
 
-bool OSResult::setDualValue(int solIdx, int number, int idx, double val){
+bool OSResult::setDualValue(int solIdx, int number, int idx, std::string name, double val){
 	if (optimization == NULL || optimization->solution == NULL)
 	{//	throw ErrorClass("No optimization or solution object defined");  
 		return false;
@@ -5000,6 +5090,7 @@ bool OSResult::setDualValue(int solIdx, int number, int idx, double val){
 		return false;
 	}
 	optimization->solution[solIdx]->constraints->dualValues->con[number]->idx   = idx;
+	optimization->solution[solIdx]->constraints->dualValues->con[number]->name  = name;
 	optimization->solution[solIdx]->constraints->dualValues->con[number]->value = val;
 	return true;
 }//setDualValue
@@ -5110,7 +5201,22 @@ bool OSResult::setOtherConstraintResultConIdx(int solIdx, int otherIdx, int conI
 	if (optimization->solution[solIdx]->constraints == NULL) return false;
 	if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL) return false;
 	if (optimization->solution[solIdx]->constraints->other[otherIdx]->con == NULL) return false;
+	if (idx < 0) return false;
 	optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->idx = idx;
+	return true;
+}//setOtherConstraintResultConIdx
+
+bool OSResult::setOtherConstraintResultConName(int solIdx, int otherIdx, int conIdx, std::string name){
+	int nSols = this->getSolutionNumber();
+	if (nSols <= 0) return false;
+	if (optimization == NULL) return false;
+	if (optimization->solution == NULL || 
+		solIdx < 0 || solIdx >=  nSols) return false;
+	if (optimization->solution[solIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->constraints == NULL) return false;
+	if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL) return false;
+	if (optimization->solution[solIdx]->constraints->other[otherIdx]->con == NULL) return false;
+	optimization->solution[solIdx]->constraints->other[otherIdx]->con[conIdx]->name = name;
 	return true;
 }//setOtherConstraintResultConIdx
 
@@ -6268,8 +6374,9 @@ bool VarValue::IsEqual(VarValue *that)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in VarValue" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx:   " << this->idx   <<  " vs.  " << that->idx   << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+				cout << "value: " << this->value <<  " vs.  " << that->value << endl;
 #endif	
 				return false;
 			}
@@ -6361,8 +6468,9 @@ bool VarValueString::IsEqual(VarValueString *that)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in VarValueString" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+				cout << "value: " << this->value <<  " vs. "  << that->value << endl;
 #endif	
 				return false;
 			}
@@ -6480,8 +6588,9 @@ bool OtherVarResult::IsEqual(OtherVarResult *that)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in OtherVarResult" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+				cout << "value: " << this->value <<  " vs. "  << that->value << endl;
 #endif	
 				return false;
 			}
@@ -6627,8 +6736,9 @@ bool ObjValue::IsEqual(ObjValue *that)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in ObjValue" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+				cout << "value: " << this->value <<  " vs. "  << that->value << endl;
 #endif	
 				return false;
 			}
@@ -6747,8 +6857,9 @@ bool OtherObjResult::IsEqual(OtherObjResult *that)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in OtherObjResult" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+				cout << "value: " << this->value <<  " vs. "  << that->value << endl;
 #endif	
 				return false;
 			}
@@ -6892,8 +7003,9 @@ bool DualVarValue::IsEqual(DualVarValue *that)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in DualVarValue" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+				cout << "value: " << this->value <<  " vs. "  << that->value << endl;
 #endif	
 				return false;
 			}
@@ -7011,8 +7123,9 @@ bool OtherConResult::IsEqual(OtherConResult *that)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
 				cout << "Differences in OtherConResult" << endl;
-				cout << "idx:   " << this->idx   << " vs. " << that->idx   << endl;
-				cout << "value: " << this->value << " vs. " << that->value << endl;
+				cout << "idx:   " << this->idx   <<  " vs. "  << that->idx   << endl;
+				cout << "name: -" << this->name  << "- vs. -" << that->name  << "-" << endl;
+				cout << "value: " << this->value <<  " vs. "  << that->value << endl;
 #endif	
 				return false;
 			}

@@ -2,7 +2,6 @@
 /** @file unitTest.cpp
  * 
  * \brief This file runs the OS unit test.
-  
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
@@ -1161,18 +1160,23 @@ if (PARSER_TESTS){
 
 		int SOS3idx[2];
 		double SOS3val[2];
+		std::string SOS3nam[2];
 		SOS3idx[0] = 3;
 		SOS3idx[1] = 6;
 		SOS3val[0] = 1.0;
 		SOS3val[1] = 2.0;
+		SOS3nam[0] = "a name";
+		SOS3nam[1] = "another";
 		int tnvar;
 		tnvar = osoption->getNumberOfSOS(); 
-		ok = osoption->setAnotherSOSVariableBranchingWeight(3,2,1.0,SOS3idx,SOS3val) && ok;
+		ok = osoption->setAnotherSOSVariableBranchingWeight(3,2,1.0,SOS3idx,SOS3val,SOS3nam) && ok;
 		assert (osoption->getNumberOfSOS() == (tnvar + 1));
 		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[0]->idx == 3);
 		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[1]->idx == 6);
 		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[0]->value == 1.0);
 		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[1]->value == 2.0);
+		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[0]->name == "a name");
+		assert (osoption->optimization->variables->sosVariableBranchingWeights->sos[tnvar]->var[1]->name == "another");
 #ifdef DEBUG
 		cout << endl << "another SOS has been added" << endl << endl;
 #endif
@@ -3107,13 +3111,13 @@ if (PARSER_TESTS){
 
 			for (int j=0; j < 3; ++j)
 			{
-				ok &= osresult1->setVarValue(i,j,j,3.14);
+				ok &= osresult1->setVarValue(i,j,j,"varname",3.14);
 				if (!ok) 
 					throw ErrorClass("Error during setVarValue!");
 				ok &= (!osresult1->IsEqual(osresult2));
 				if (!ok) 
 					throw ErrorClass("setVarValue: osresult objects falsely compare equal!");
-				ok &= osresult2->setVarValue(i,j,j,3.14);
+				ok &= osresult2->setVarValue(i,j,j,"varname",3.14);
 				if (!ok) 
 					throw ErrorClass("Error during setVarValue!");
 				ok &= (osresult1->IsEqual(osresult2));
@@ -3136,13 +3140,13 @@ if (PARSER_TESTS){
 
 			for (int j=0; j < 3; ++j)
 			{
-				ok &= osresult1->setVarValueString(i,j,j,"one");
+				ok &= osresult1->setVarValueString(i,j,j,"varname","one");
 				if (!ok) 
 					throw ErrorClass("Error during setVarValueString!");
 				ok &= (!osresult1->IsEqual(osresult2));
 				if (!ok) 
 					throw ErrorClass("setVarValueString: osresult objects falsely compare equal!");
-				ok &= osresult2->setVarValueString(i,j,j,"one");
+				ok &= osresult2->setVarValueString(i,j,j,"varname","one");
 				if (!ok) 
 					throw ErrorClass("Error during setVarValueString!");
 				ok &= (osresult1->IsEqual(osresult2));
@@ -3444,13 +3448,13 @@ if (PARSER_TESTS){
 
 			for (int j=0; j < 2; ++j)
 			{
-				ok &= osresult1->setObjValue(i,j,-2,3.14);
+				ok &= osresult1->setObjValue(i,j,-2,"objname",3.14);
 				if (!ok) 
 					throw ErrorClass("Error during setObjValue!");
 				ok &= (!osresult1->IsEqual(osresult2));
 				if (!ok) 
 					throw ErrorClass("setObjValue: osresult objects falsely compare equal!");
-				ok &= osresult2->setObjValue(i,j,-2,3.14);
+				ok &= osresult2->setObjValue(i,j,-2,"objname",3.14);
 				if (!ok) 
 					throw ErrorClass("Error during setObjValue!");
 				ok &= (osresult1->IsEqual(osresult2));
@@ -3754,13 +3758,13 @@ if (PARSER_TESTS){
 
 			for (int j=0; j < 3; ++j)
 			{
-				ok &= osresult1->setDualValue(i,j,j,3.14);
+				ok &= osresult1->setDualValue(i,j,j,"conname",3.14);
 				if (!ok) 
 					throw ErrorClass("Error during setDualValue!");
 				ok &= (!osresult1->IsEqual(osresult2));
 				if (!ok) 
 					throw ErrorClass("setDualValue: osresult objects falsely compare equal!");
-				ok &= osresult2->setDualValue(i,j,j,3.14);
+				ok &= osresult2->setDualValue(i,j,j,"conname",3.14);
 				if (!ok) 
 					throw ErrorClass("Error during setDualValue!");
 				ok &= (osresult1->IsEqual(osresult2));
@@ -4619,11 +4623,13 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfVarValues!");
 			nVar = tempInt;
+
 			for (int j=0; j < nVar; ++j)
 			{
 				tempInt = osresult1->getVarValueIdx(i,j);
+				tempStr = osresult1->getVarValueName(i,j);
 				tempDbl = osresult1->getVarValue(i,j);
-				ok &= osresult2->setVarValue(i,j,tempInt,tempDbl);
+				ok &= osresult2->setVarValue(i,j,tempInt,tempStr,tempDbl);
 				if (!ok) 
 					throw ErrorClass("Error during setVarValue!");
 			}
@@ -4633,11 +4639,15 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfVarValuesString!");
 			nVar = tempInt;
+
+			std::string tempStr1, tempStr2;
+
 			for (int j=0; j < nVar; ++j)
 			{
-				tempInt = osresult1->getVarValueStringIdx(i,j);
-				tempStr = osresult1->getVarValueString(i,j);
-				ok &= osresult2->setVarValueString(i,j,tempInt,tempStr);
+				tempInt  = osresult1->getVarValueStringIdx(i,j);
+				tempStr1 = osresult1->getVarValueStringName(i,j);
+				tempStr2 = osresult1->getVarValueString(i,j);
+				ok &= osresult2->setVarValueString(i,j,tempInt,tempStr1,tempStr2);
 				if (!ok) 
 					throw ErrorClass("Error during setVarValueString!");
 			}
@@ -4729,8 +4739,6 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("Error during setOtherVariableResultNumberOfEnumerations!");
 
-				std::string tempStr1, tempStr2;
-
 				for (int k=0; k < nEnum; ++k)
 				{
 //	                if (tempArray != NULL) delete[] tempArray;
@@ -4753,8 +4761,9 @@ if (PARSER_TESTS){
 			for (int j=0; j < nObj; ++j)
 			{
 				tempInt = osresult1->getObjValueIdx(i,j);
+				tempStr = osresult1->getObjValueName(i,j);
 				tempDbl = osresult1->getObjValue(i,j);
-				ok &= osresult2->setObjValue(i,j,tempInt,tempDbl);
+				ok &= osresult2->setObjValue(i,j,tempInt,tempStr,tempDbl);
 				if (!ok) 
 					throw ErrorClass("Error during setObjValue!");
 			}
@@ -4871,8 +4880,9 @@ if (PARSER_TESTS){
 			for (int j=0; j < nCon; ++j)
 			{
 				tempInt = osresult1->getDualValueIdx(i,j);
+				tempStr = osresult1->getDualValueName(i,j);
 				tempDbl = osresult1->getDualValue(i,j);
-				ok &= osresult2->setDualValue(i,j,tempInt,tempDbl);
+				ok &= osresult2->setDualValue(i,j,tempInt,tempStr,tempDbl);
 				if (!ok) 
 					throw ErrorClass("Error during setDualValue!");
 			}

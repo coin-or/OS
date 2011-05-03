@@ -1146,8 +1146,9 @@ public:
 	 * @param numberOfVar: number of <var> elements to be set
 	 * @param idx: the array of indices 
 	 * @param value: the array of corresponding values
+	 * @param name: the array of corresponding names
 	 */
-	bool setVar(int numberOfVar, int *idx, double *value);
+	bool setVar(int numberOfVar, int *idx, double *value, std::string *name);
 
 	/**
 	 *
@@ -1270,8 +1271,9 @@ public:
 	 * @param numberOfVar: number of <var> elements to be set
 	 * @param idx: the array of indices 
 	 * @param value: the array of corresponding values
+	 * @param name: the array of corresponding names
 	 */
-	bool setVar(int numberOfVar, int *idx, std::string *value);
+	bool setVar(int numberOfVar, int *idx, std::string *value, std::string* name);
 
 	/**
 	 *
@@ -1508,8 +1510,9 @@ public:
 	 * @param numberOfVar: number of <var> elements to be set
 	 * @param idx: the array of indices 
 	 * @param value: the array of corresponding values
+	 * @param name: the array of corresponding names
 	 */
-	bool setVar(int numberOfVar, int *idx, double *value);
+	bool setVar(int numberOfVar, int *idx, double *value, std::string* name);
 
 	/**
 	 *
@@ -1653,7 +1656,7 @@ public:
 	 * @param idx: an array of variable indices
 	 * @param value: the array of corresponding selection weights
 	 */
-	bool addSOS(int sosIdx, int nvar, double weight, int* idx, double* value);
+	bool addSOS(int sosIdx, int nvar, double weight, int* idx, double* value, std::string* name);
 }; //SOSVariableBranchingWeights
 
 /*! \class OtherVarOption
@@ -1898,7 +1901,7 @@ public:
 	/** objective index */
 	int idx;
 
-	/** optional variable name */
+	/** optional objective name */
 	std::string name;
 
 	/** initial value */
@@ -1974,7 +1977,7 @@ public:
 	 * A function to make a random instance of this class
 	 * @param density: corresponds to the probability that a particular child element is created
 	 * @param conformant: if true enforces side constraints not enforceable in the schema
-	 *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+	 *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
 	 */
 	bool setRandom(double density, bool conformant);
 
@@ -1992,14 +1995,15 @@ public:
 	 * @param numberOfObj: number of <obj> elements to be set
 	 * @param idx: the array of indices 
 	 * @param value: the array of corresponding values
+	 * @param name: the array of objective names 
 	 */
-	bool setObj(int numberOfObj, int *idx, double *value);
+	bool setObj(int numberOfObj, int *idx, double *value, std::string *name);
 
 	/**
 	 *
 	 * A function to add a <obj> element
 	 * @param idx: the index of the objective to be given an initial value
-	 * @param value: the inital value to be added 
+	 * @param value: the initial value to be added 
 	 */
 	bool addObj(int idx, double value);
 }; //InitObjectiveValues
@@ -2120,8 +2124,9 @@ public:
 	 * @param idx: the array of indices 
 	 * @param lbValue: the array of corresponding lower bounds
 	 * @param ubValue: the array of corresponding upper bounds
+	 * @param name: the array of objective names 
 	 */
-	bool setObj(int numberOfObj, int *idx, double *lbValue, double *ubValue);
+	bool setObj(int numberOfObj, int *idx, double *lbValue, double *ubValue, std::string *name);
 
 	/**
 	 *
@@ -2467,13 +2472,14 @@ public:
 	 * @param numberOfCon: number of <con> elements to be set
 	 * @param idx: the array of indices 
 	 * @param value: the array of corresponding values
+	 * @param name: the array of constraint names
 	 */
-	bool setCon(int numberOfCon, int *idx, double *value);
+	bool setCon(int numberOfCon, int *idx, double *value, std::string *name);
 
 	/**
 	 *
 	 * A function to add a <con> element
-	 * @param idx: the index of the constraint to be given an inital value 
+	 * @param idx: the index of the constraint to be given an initial value 
 	 * @param value: the initial value to be added 
 	 */
 	bool addCon(int idx, double value);
@@ -2596,8 +2602,9 @@ public:
 	 * @param idx: the array of indices 
 	 * @param lbValue: the array of dual values for the lower bound
 	 * @param ubValue: the array of dual values for the upper bound
+	 * @param name: the array of constraint names 
 	 */
-	bool setCon(int numberOfCon, int *idx, double *lbValue, double *ubValue);
+	bool setCon(int numberOfCon, int *idx, double *lbValue, double *ubValue, std::string *name);
 
 	/**
 	 *
@@ -3696,7 +3703,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of pointers to InitVarValue objects that 
-	 * hold inital values for (some of) the variables
+	 * hold initial values for (some of) the variables
 	 */
 	InitVarValue** getInitVarValuesSparse();
 
@@ -3724,7 +3731,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of pointers to InitVarValueString objects that 
-	 * hold inital value strings for (some of) the variables
+	 * hold initial value strings for (some of) the variables
 	 */
 	InitVarValueString** getInitVarValuesStringSparse();
 
@@ -3752,7 +3759,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of pointers to InitBasStatus objects that 
-	 * hold inital basis status for (some of) the variables
+	 * hold initial basis status for (some of) the variables
 	 */
 	InitBasStatus** getInitBasisStatusSparse();
 
@@ -3860,7 +3867,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of pointers to InitObjValue objects that 
-	 * hold inital values for (some of) the objectives
+	 * hold initial values for (some of) the objectives
 	 */
 	InitObjValue** getInitObjValuesSparse();
 
@@ -3888,7 +3895,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of pointers to InitObjBound objects that 
-	 * hold inital bounds for (some of) the objectives
+	 * hold initial bounds for (some of) the objectives
 	 */
 	InitObjBound** getInitObjBoundsSparse();
 
@@ -3962,7 +3969,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of pointers to InitConValue objects that 
-	 * hold inital values for (some of) the constraints
+	 * hold initial values for (some of) the constraints
 	 */
 	InitConValue** getInitConValuesSparse();
 
@@ -3990,7 +3997,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of pointers to InitDualVarValue objects that 
-	 * hold inital bounds for (some of) the dual variables
+	 * hold initial bounds for (some of) the dual variables
 	 */
 	InitDualVarValue** getInitDualVarValuesSparse();
 
@@ -4272,12 +4279,12 @@ public:
 
 	bool setNumberOfConstraints(int numberOfConstraints);
 
-	bool setInitVarValues(int numberOfVar, int* idx, double* value);
+	bool setInitVarValues(int numberOfVar, int* idx, double* value, std::string* name);
 	bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var);
 	bool setInitVarValuesDense(int numberOfVar, double *value);
 	bool setAnotherInitVarValue(int idx, double value);
 
-	bool setInitVarValuesString(int numberOfVar, int* idx, std::string* value);
+	bool setInitVarValuesString(int numberOfVar, int* idx, std::string* value, std::string* name);
 	bool setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var);
 	bool setInitVarValuesStringDense(int numberOfVar, std::string *value);
 	bool setAnotherInitVarValueString(int idx, std::string value);
@@ -4296,13 +4303,13 @@ public:
 	 */
 	bool setAnotherInitBasisStatus(int type, int idx, int status);
 
-	bool setIntegerVariableBranchingWeights(int numberOfVar, int* idx, double* value);
+	bool setIntegerVariableBranchingWeights(int numberOfVar, int* idx, double* value, std::string* name);
 	bool setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var);
 	bool setIntegerVariableBranchingWeightsDense(int numberOfVar, double *value);
 	bool setAnotherIntegerVariableBranchingWeight(int idx, double value);
 
 	bool setSOSVariableBranchingWeights(int numberOfSOS, SOSWeights** sos);
-	bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value);
+	bool setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double weight, int* idx, double* value, std::string* name);
  
 	bool setNumberOfOtherVariableOptions(int numberOfOther);
 	bool setOtherVariableOptions(int numberOfVar, OtherVariableOption** var);
@@ -4354,14 +4361,14 @@ public:
 	 *	@param ubValue: value associated with the upper bound of the variable (as a string)
 	 */
 	bool setOtherVariableOptionVar(int otherOptionNumber, int varNumber,
-			int idx, std::string value, std::string lbValue, std::string ubValue);
+			int idx, std::string name, std::string value, std::string lbValue, std::string ubValue);
 
-	bool setInitObjValues(int numberOfObj, int* idx, double* value);
+	bool setInitObjValues(int numberOfObj, int* idx, double* value, std::string* name);
 	bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
 	bool setInitObjValuesDense(int numberOfObj, double *value);
 	bool setAnotherInitObjValue(int idx, double value);
 
-	bool setInitObjBounds(int numberOfObj, int* idx, double* lbValue, double* ubValue);
+	bool setInitObjBounds(int numberOfObj, int* idx, double* lbValue, double* ubValue, std::string* name);
 	bool setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj);
 	bool setInitObjBoundsDense(int numberOfObj, double *lb, double *ub);
 	bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
@@ -4396,19 +4403,20 @@ public:
 	 *  @param otherOptionNumber: number of the <other> option in the list of <other> options (zero-based)
 	 *  @param objNumber: number of the <obj> in the array (zero-based)
 	 *	@param idx: index of the objective to which this value belongs
+	 *	@param name: name of the objective
 	 *	@param value: value of the option (as a string)
 	 *	@param lbValue: value associated with the lower bound of the objective (as a string)
 	 *	@param ubValue: value associated with the upper bound of the objective (as a string)
 	 */
 	bool setOtherObjectiveOptionObj(int otherOptionNumber, int objNumber,
-			int idx, std::string value, std::string lbValue, std::string ubValue);
+			int idx, std::string name, std::string value, std::string lbValue, std::string ubValue);
 
-	bool setInitConValues(int numberOfCon, int* idx, double* value);
+	bool setInitConValues(int numberOfCon, int* idx, double* value, std::string* name);
 	bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
 	bool setInitConValuesDense(int numberOfCon, double *value);
 	bool setAnotherInitConValue(int idx, double value);
 
-	bool setInitDualValues(int numberOfCon, int* idx, double* lbValue, double* ubValue);
+	bool setInitDualValues(int numberOfCon, int* idx, double* lbValue, double* ubValue, std::string* name);
 	bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
 	bool setInitDualVarValuesDense(int numberOfCon, double *lb, double *ub);
 	bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
@@ -4443,12 +4451,13 @@ public:
 	 *  @param otherOptionNumber: number of the <other> option in the list of <other> options (zero-based)
 	 *  @param conNumber: number of the <obj> in the array (zero-based)
 	 *	@param idx: index of the constraint to which this value belongs
+	 *	@param name: name of the constraint
 	 *	@param value: value of the option (as a string)
 	 *	@param lbValue: value associated with the lower bound of the constraint (as a string)
 	 *	@param ubValue: value associated with the upper bound of the constraint (as a string)
 	 */
 	bool setOtherConstraintOptionCon(int otherOptionNumber, int conNumber,
-			int idx, std::string value, std::string lbValue, std::string ubValue);
+			int idx, std::string name, std::string value, std::string lbValue, std::string ubValue);
 
 	bool setNumberOfSolverOptions(int numberOfOptions);
 

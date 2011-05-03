@@ -346,10 +346,6 @@
 				RelativePath="..\..\..\src\OSAgent\OSWSUtil.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\..\Cbc\src\unitTestClp.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

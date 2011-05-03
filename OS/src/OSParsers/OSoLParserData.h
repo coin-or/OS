@@ -251,6 +251,7 @@ public:
 	double* lbValArray;
 	double* ubValArray;
 
+	std::string* namArray;
 
 	/** some temporary items to facilitate code sharing */
 	int tempInt;

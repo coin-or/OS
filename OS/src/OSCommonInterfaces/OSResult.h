@@ -2613,6 +2613,7 @@ public:
 /* */	int getNumberOfPrimalVariableValues(int solIdx);
 /* */	int getNumberOfVarValues(int solIdx);
 /* */	int getVarValueIdx(int solIdx, int varIdx);
+/* */	std::string getVarValueName(int solIdx, int varIdx);
 /* */	double getVarValue(int solIdx, int varIdx);
 
 	/**
@@ -2625,6 +2626,7 @@ public:
 
 /* */	int getNumberOfVarValuesString(int solIdx);
 /* */	int getVarValueStringIdx(int solIdx, int varIdx);
+/* */	std::string getVarValueStringName(int solIdx, int varIdx);
 /* */	std::string getVarValueString(int solIdx, int varIdx);
 
 	/**
@@ -2709,6 +2711,7 @@ public:
 
 /* */	int getNumberOfObjValues(int solIdx);
 /* */	int getObjValueIdx(int solIdx, int objIdx);
+/* */	std::string getObjValueName(int solIdx, int objIdx);
 /* */	double getObjValue(int solIdx, int objIdx);
 
 	/**
@@ -2769,6 +2772,7 @@ public:
 
 /* */	int getNumberOfDualValues(int solIdx);
 /* */	int getDualValueIdx(int solIdx, int conIdx);
+/* */	std::string getDualValueName(int solIdx, int objIdx);
 /* */	double getDualValue(int solIdx, int conIdx);
 
 	/**
@@ -3601,12 +3605,13 @@ public:
 	 * @param solIdx holds the solution index to set the primal variable values. 
 	 * @param number holds the location within the sparse array var that is to be used
 	 * @param idx holds the index of the primal variable that is to be set
+	 * @param name holds the variable name (or an empty string).
 	 * @param val holds the variable value to set.
 	 * 
 	 * @return whether primal variable value was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setVarValue(int solIdx, int number, int idx, double val);
+	bool setVarValue(int solIdx, int number, int idx, std::string name, double val);
 
 	/**
 	 * Set the number of string-valued primal variables to be given a value.
@@ -3625,12 +3630,13 @@ public:
 	 * @param solIdx holds the solution index to set the primal variable values. 
 	 * @param number holds the location within the sparse array var that is to be used
 	 * @param idx holds the index of the primal variable that is to be set
+	 * @param name holds the variable name (or an empty string).
 	 * @param str holds the variable value to set.
 	 * 
 	 * @return whether primal variable value was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setVarValueString(int solIdx, int number, int idx, std::string str);
+	bool setVarValueString(int solIdx, int number, int idx, std::string name, std::string str);
 
 
 	/**
@@ -3787,12 +3793,28 @@ public:
 	 * @param varIdx holds the index of the location to which the information is stored
 	 * @param idx holds the index of the variable to which the information belongs
 	 *
-	 * @return whether the other variable result's value was set successfully or not. 
+	 * @return whether the other variable result's index was set successfully or not. 
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
 	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
 	 * @see #setSolutionNumber(int)
 	 */
  	bool setOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx, int idx);
+
+	/**
+	 * Set the name of another (non-standard/solver specific) variable-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherVariableResult object
+	 * @param varIdx holds the index of the location to which the information is stored
+	 * @param name holds the name of the variable to which the information belongs
+	 *
+	 * @return whether the other variable result's name was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+	 * @see #setSolutionNumber(int)
+	 */
+ 	bool setOtherVariableResultVarName(int solIdx, int otherIdx, int varIdx, std::string name);
 
 	/**
 	 * Set the value of another (non-standard/solver specific) variable-related result, 
@@ -3911,12 +3933,13 @@ public:
 	 * @param solIdx holds the solution index to set the objective values. 
 	 * @param number holds the location within the sparse array obj that is to be used
 	 * @param idx holds the index of the objective that is to be set
+	 * @param name holds the objective name (or an empty string).
 	 * @param val holds the objective value to set.
 	 * 
 	 * @return whether primal variable value was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setObjValue(int solIdx, int number, int idx, double val);
+	bool setObjValue(int solIdx, int number, int idx, std::string name, double val);
 
 	/**
 	 * Set the number of <obj> children of another (non-standard/solver specific) 
@@ -4008,6 +4031,22 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
  	bool setOtherObjectiveResultObjIdx(int solIdx, int otherIdx, int objIdx, int idx);
+
+	/**
+	 * Set the name of another (non-standard/solver specific) objective-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherObjectiveResult object
+	 * @param objIdx holds the index of the location to which the information is stored
+	 * @param name holds the name of the objective to which the information belongs
+	 *
+	 * @return whether the other variable result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherObjectiveResultObjName(int solIdx, int otherIdx, int objIdx, std::string name);
 
 	/**
 	 * Set the value of another (non-standard/solver specific) objective-related result, 
@@ -4109,12 +4148,13 @@ public:
 	 * @param solIdx holds the solution index to set the constraint values. 
 	 * @param number holds the location within the sparse array con that is to be used
 	 * @param idx holds the index of the constraint that is to be set
+	 * @param name holds the constraint name (or an empty string).
 	 * @param val holds the constraint value to set.
 	 * 
 	 * @return whether dual variable value was set successfully or not. 
 	 * @see #setSolutionNumber(int)
 	 */
-	bool setDualValue(int solIdx, int number, int idx, double val);
+	bool setDualValue(int solIdx, int number, int idx, std::string name, double val);
 
 	/**
 	 * Set the number of <con> children of another (non-standard/solver specific) 
@@ -4206,6 +4246,22 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
  	bool setOtherConstraintResultConIdx(int solIdx, int otherIdx, int conIdx, int idx);
+
+	/**
+	 * Set the name of another (non-standard/solver specific) constraint-related result, 
+	 * for the [i]th solution, where i equals the given solution index.   
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * @param solIdx holds the solution index  
+	 * @param otherIdx holds the index of the OtherConstraintResult object
+	 * @param conIdx holds the index of the location to which the information is stored
+	 * @param name holds the name of the constraint to which the information belongs
+	 *
+	 * @return whether the other variable result's value was set successfully or not. 
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+	 * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setOtherConstraintResultConName(int solIdx, int otherIdx, int conIdx, std::string name);
 
 	/**
 	 * Set the value of another (non-standard/solver specific) constraint-related result, 

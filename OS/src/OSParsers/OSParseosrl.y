@@ -1802,9 +1802,13 @@ variableValuesBody:   varValueArray;
 
 varValueArray: varValue | varValueArray varValue;
 
-varValue: varValueStart  varIdxATT varValueContent
-{	if (osresult->setVarValue(parserData->solutionIdx, parserData->kounter, 
-							  parserData->idx,         parserData->tempVal) == false)
+varValue: varValueStart varValueAttList varValueContent
+{
+	if (!parserData->idxAttributePresent)
+			osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
+	if (osresult->setVarValue(parserData->solutionIdx, parserData->kounter, 
+							  parserData->idx,         parserData->nameAttribute,
+							  parserData->tempVal                           ) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setVarValue failed");
 	parserData->kounter++;
 }; 
@@ -1813,9 +1817,17 @@ varValueStart: VARSTART
 {	
 	if (parserData->kounter >= parserData->numberOfVar)
 		osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
+	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
+	parserData->name = ""	
 };
 
-varIdxATT: IDXATT quote INTEGER quote {	parserData->idx = $3; };
+varValueAttList: | varValueAttList varValueAtt;
+
+varValueAtt:
+	idxAttribute
+  | nameAttribute
+  ;
 
 varValueContent: GREATERTHAN aNumber VAREND;
   
@@ -1849,10 +1861,13 @@ variableValuesStringBody:  varValueStringArray;
 
 varValueStringArray: varValueString | varValueStringArray varValueString;
 
-varValueString: varValueStringStart varStrIdxATT varValueStringContent
+varValueString: varValueStringStart varValueStringAttList varValueStringContent
 {
+	if (!parserData->idxAttributePresent)
+			osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
 	if (osresult->setVarValueString(parserData->solutionIdx, parserData->kounter, 
-					 				parserData->idx,         parserData->tempStr) == false)
+					 				parserData->idx,         parserData->nameAttribute,
+									parserData->tempStr                           ) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setVarValueString failed");
 	parserData->kounter++;
 }; 
@@ -1861,9 +1876,17 @@ varValueStringStart: VARSTART
 {	
 	if (parserData->kounter >= parserData->numberOfVar)
 		osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
+	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
+	parserData->name = "";	
 };
 
-varStrIdxATT: IDXATT quote INTEGER quote { parserData->idx = $3; };
+varValueStringAttList: | varValueStringAttList varValueStringAtt;
+
+varValueStringAtt:
+	idxAttribute
+  | nameAttribute
+  ;
   
 varValueStringContent: 
 	varValueStringEmpty {parserData->tempStr = "";};
@@ -2133,19 +2156,38 @@ otherVariableResultBody:  otherVarList | otherVarEnumerationList;
 
 otherVarList: otherVar | otherVarList otherVar;
 
-otherVar: otherVarStart otherVarIdxATT otherVarContent 
+otherVar: otherVarStart otherVarAttList otherVarContent 
 { 	
+	if (!parserData->idxAttributePresent)
+			osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
 	parserData->kounter++;
 };
 
-otherVarStart: VARSTART; 
-
-otherVarIdxATT: IDXATT quote INTEGER quote 
+otherVarStart: VARSTART
 {	
- 	if (osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, 
- 											   parserData->kounter, $3) == false)
-			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarIdx failed");
+	if (parserData->kounter >= parserData->numberOfVar)
+		osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
+	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
+	parserData->name = ""	
 };
+
+otherVarAttList: | otherVarAttList otherVarAtt;
+
+otherVarAtt:
+	idxAttribute
+	{	
+ 		if (osresult->setOtherVariableResultVarIdx(parserData->solutionIdx, parserData->iOther, 
+ 												   parserData->kounter, parserData->idx) == false)
+				osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarIdx failed");
+	}
+  | nameAttribute
+	{	
+ 		if (osresult->setOtherVariableResultVarName(parserData->solutionIdx, parserData->iOther, 
+ 												   parserData->kounter, parserData->nameAttribute) == false)
+				osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarName failed");
+	}
+  ;
 
 otherVarContent: otherVarEmpty | otherVarLaden;
 
@@ -2281,9 +2323,10 @@ objectiveValuesBody:   objValueArray;
 
 objValueArray: objValue | objValueArray objValue;
 
-objValue: objValueStart objIdxATT objValueContent
+objValue: objValueStart objValueAttList objValueContent
 {	if (osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
-							  parserData->idx,         parserData->tempVal) == false)
+							  parserData->idx,         parserData->nameAttribute,
+							  parserData->tempVal                           ) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setObjValue failed");
 	parserData->kounter++;
 }; 
@@ -2292,16 +2335,20 @@ objValueStart: OBJSTART
 {	
 	if (parserData->kounter >= parserData->numberOfObj)
 		osrlerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
+	parserData->idxAttributePresent = false;
 	parserData->idx = -1;
+	parserData->nameAttributePresent = false;
+	parserData->name = ""	
 };
 
-objIdxATT: | IDXATT quote INTEGER quote { parserData->idx = $3; };
+objValueAttList: | objValueAttList objValueAtt;
 
-objValueContent: GREATERTHAN objVal OBJEND;
+objValueAtt:
+	idxAttribute
+  | nameAttribute
+  ;
 
-objVal:
-   INTEGER {parserData->tempVal = $1; }
- | DOUBLE  {parserData->tempVal = $1; };
+objValueContent: GREATERTHAN aNumber OBJEND;
 
 
 objectiveBasisStatus: | objectiveBasisStatusStart objectiveBasisStatusContent;
@@ -2564,17 +2611,36 @@ otherObjectiveResultBody:  otherObjList | otherObjEnumerationList;
 
 otherObjList: otherObj | otherObjList otherObj;
 
-otherObj: otherObjStart otherObjIdxATT  otherObjContent 
+otherObj: otherObjStart otherObjAttList otherObjContent 
 {  
 	parserData->kounter++;
 };
 
-otherObjStart: OBJSTART; 
-
-otherObjIdxATT: IDXATT quote INTEGER quote 
-{	if (osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3) == false)
-		osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjIdx failed");
+otherObjStart: OBJSTART
+{	
+	if (parserData->kounter >= parserData->numberOfObj)
+		osrlerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
+	parserData->idxAttributePresent = false;
+	parserData->idx = -1;	
+	parserData->nameAttributePresent = false;
+	parserData->name = ""	
 };
+
+otherObjAttList: | otherObjAttList otherObjAtt;
+
+otherObjAtt:
+	idxAttribute
+	{
+		if (osresult->setOtherObjectiveResultObjIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->idx) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjIdx failed");
+	}
+  | nameAttribute
+	{	
+ 		if (osresult->setOtherObjectiveResultObjName(parserData->solutionIdx, parserData->iOther, 
+ 												   parserData->kounter, parserData->nameAttribute) == false)
+				osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjName failed");
+	}
+  ;
 
 otherObjContent: otherObjEmpty | otherObjLaden;
 
@@ -2705,9 +2771,10 @@ dualValuesBody:  dualValueArray;
 
 dualValueArray: dualValue | dualValueArray dualValue;
 
-dualValue: dualValueStart conIdxATT dualValueContent 
+dualValue: dualValueStart dualValueAttList dualValueContent 
 {	if (osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
-							   parserData->idx,         parserData->tempVal) == false)
+							   parserData->idx,         parserData->nameAttribute,
+							   parserData->tempVal                           ) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setDualValue failed");
 	parserData->kounter++;
 }; 
@@ -2716,9 +2783,17 @@ dualValueStart: CONSTART
 {	
 	if (parserData->kounter >= parserData->numberOfCon)
 		osrlerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
+	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
+	parserData->name = "";	
 };
 
-conIdxATT: IDXATT quote INTEGER quote { parserData->idx = $3; };
+dualValueAttList: | dualValueAttList dualValueAtt;
+
+dualValueAtt:
+	idxAttribute
+  | nameAttribute
+  ;
 
 dualValueContent: GREATERTHAN aNumber CONEND;
 
@@ -2979,18 +3054,38 @@ otherConstraintResultBody:  otherConList | otherConEnumerationList;
 
 otherConList: otherCon | otherConList otherCon;
 
-otherCon: otherConStart otherConIdxATT  otherConContent 
+otherCon: otherConStart otherConAttList otherConContent 
 { 	
+	if (!parserData->idxAttributePresent)
+			osrlerror(NULL, NULL, parserData, osglData, "idx attribute not set");
 	parserData->kounter++;
 };
   
-otherConStart: CONSTART;
-
-otherConIdxATT: IDXATT quote INTEGER quote
+otherConStart: CONSTART
 {	
- 	if (osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, $3) == false)
-		osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConIdx failed");
+	if (parserData->kounter >= parserData->numberOfCon)
+		osrlerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
+	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
+	parserData->name = ""	
 };
+
+otherConAttList: | otherConAttList otherConAtt;
+
+
+otherConAtt:
+	idxAttribute
+	{	
+ 		if (osresult->setOtherConstraintResultConIdx(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->idx) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConIdx failed");
+	}
+  | nameAttribute
+	{	
+ 		if (osresult->setOtherConstraintResultConName(parserData->solutionIdx, parserData->iOther, 
+ 												   parserData->kounter, parserData->nameAttribute) == false)
+				osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConName failed");
+	}
+  ;
 
 otherConContent: otherConEmpty | otherConLaden;
 
@@ -3352,12 +3447,19 @@ descriptionAttEmpty: EMPTYDESCRIPTIONATT
 descriptionAttContent: DESCRIPTIONATT ATTRIBUTETEXT quote 
 { parserData->descriptionAttribute = $2; free($2);};
 
+idxAttribute: IDXATT quote INTEGER quote 
+	{	
+		if (parserData->idxAttributePresent)
+			osrlerror(NULL, NULL, parserData, osglData, "idx attribute was previously set");
+		parserData->idxAttributePresent = true;
+		parserData->idx = $3; 
+	};
 
 nameAttribute: nameAtt
-		{   if (parserData->nameAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, osglData, "only one name attribute allowed for this element");
-			parserData->nameAttributePresent = true;
-		};
+	{   if (parserData->nameAttributePresent ) 
+			osrlerror(NULL, NULL, parserData, osglData, "only one name attribute allowed for this element");
+		parserData->nameAttributePresent = true;
+	};
 
 nameAtt: nameAttEmpty | nameAttContent;
 

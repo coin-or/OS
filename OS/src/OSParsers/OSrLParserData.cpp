@@ -52,6 +52,7 @@
 	tempVal(0.0),
 	tempInt(0),
 	tempStr(""),
+	name(""),
 	outStr(""),
 	numberOfOtherVariableResults( 0),
 	numberOfOtherObjectiveResults( 0),

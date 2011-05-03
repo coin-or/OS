@@ -182,6 +182,9 @@ public:
 	/** a temporary variable to hold a string */
 	std::string tempStr;
 	
+	/** a temporary variable to hold a variable, objective or constraint name */
+	std::string name;
+
 	/** a temporary variable to hold an output stream value */
 	std::ostringstream outStr;
 	

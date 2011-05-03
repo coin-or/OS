@@ -1779,12 +1779,14 @@ variablesBody:  initialVariableValues initialVariableValuesString variableInitia
 /* -------------------------------------------- */
 initialVariableValues: | initialVariableValuesStart initialVariableValuesAttributes initialVariableValuesContent
 {
-		if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
-			osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
-		delete[] parserData->idxArray;
-		delete[] parserData->valArray;
-		parserData->idxArray = NULL;
-		parserData->valArray = NULL;
+	if (osoption->setInitVarValues(parserData->numberOfVar, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
+		osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
+	delete[] parserData->idxArray;
+	delete[] parserData->namArray;
+	delete[] parserData->valArray;
+	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
+	parserData->valArray = NULL;
 };
 
 initialVariableValuesStart: INITIALVARIABLEVALUESSTART
@@ -1795,8 +1797,10 @@ initialVariableValuesStart: INITIALVARIABLEVALUESSTART
 initialVariableValuesAttributes: numberOfVarAttribute 
 {
 	parserData->kounter = 0;
-	parserData->idxArray = new    int[parserData->numberOfVar];
-	parserData->valArray = new double[parserData->numberOfVar];
+	parserData->idxArray = new         int[parserData->numberOfVar];
+	parserData->namArray = new std::string[parserData->numberOfVar];
+	parserData->valArray = new      double[parserData->numberOfVar];
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->namArray[i] = "";
 	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 }; 
 
@@ -1804,12 +1808,12 @@ initialVariableValuesContent:
 	initialVariableValuesEmpty 
 	{
 		if (parserData->numberOfVar > 0)
-			osolerror(NULL, NULL, parserData, osglData, "expected at least one <var> element");
+			osolerror(NULL, NULL, parserData, osglData, "<initialVariableValues>: expected at least one <var> element");
 	}
   | initialVariableValuesLaden
 	{
 		if (parserData->kounter > parserData->numberOfVar)
-			osolerror (NULL, osoption, parserData, osglData, "too few initial values in <initialVariableValues> element");
+			osolerror (NULL, osoption, parserData, osglData, "<initialVariableValues>: fewer <var> elements than specified");
 	};
 
 initialVariableValuesEmpty: GREATERTHAN INITIALVARIABLEVALUESEND | ENDOFELEMENT;
@@ -1821,7 +1825,7 @@ initialVariableValuesBody:  initVarValueArray;
 initVarValueArray: initVarValue | initVarValueArray initVarValue;
 
 /* -------------------------------------------- */
-initVarValue: initVarValueStart  initVarValueAttList initVarValueContent
+initVarValue: initVarValueStart  initVarValueAttributes initVarValueContent
 {
 	parserData->kounter++;
 }; 
@@ -1831,7 +1835,14 @@ initVarValueStart: VARSTART
 	if (parserData->kounter >= parserData->numberOfVar)
 		osolerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
 	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
+};
+
+initVarValueAttributes: initVarValueAttList
+{
+	if (parserData->idxAttributePresent == false)
+		osolerror(NULL, NULL, parserData, osglData, "<var> element must have idx attribute");
 };
 
 initVarValueAttList: | initVarValueAttList initVarValueAtt;
@@ -1848,6 +1859,10 @@ initVarValueAtt:
 		};
 		parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
 	}
+  | nameAttribute
+	{
+		parserData->namArray[parserData->kounter] = parserData->nameAttribute;
+	}
   | valueAttribute
 	{
 		if (parserData->valueAttribute == "")
@@ -1861,11 +1876,13 @@ initVarValueContent: GREATERTHAN VAREND | ENDOFELEMENT;
 /* -------------------------------------------- */
 initialVariableValuesString: | initialVariableValuesStringStart initialVariableValuesStringAttributes initialVariableValuesStringContent
 {
-	if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString) == false)
+	if (osoption->setInitVarValuesString(parserData->numberOfVar, parserData->idxArray, parserData->valueString, parserData->namArray) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
 	delete[] parserData->idxArray;
-	delete[] parserData->valueString;
+	delete[] parserData->namArray;
+	delete[] parserData->valArray;
 	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
 	parserData->valueString = NULL;
 };
 
@@ -1877,8 +1894,11 @@ initialVariableValuesStringStart: INITIALVARIABLEVALUESSTRINGSTART
 initialVariableValuesStringAttributes: numberOfVarAttribute 
 {
 	parserData->kounter = 0;
-	parserData->idxArray = new int[parserData->numberOfVar];
+	parserData->idxArray    = new         int[parserData->numberOfVar];
+	parserData->namArray    = new std::string[parserData->numberOfVar];
 	parserData->valueString = new std::string[parserData->numberOfVar];
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->namArray[i] = "";
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valueString[i] = "";
 }; 
 
 initialVariableValuesStringContent: 
@@ -1890,7 +1910,7 @@ initialVariableValuesStringContent:
   | initialVariableValuesStringLaden
 	{
 		if (parserData->kounter != parserData->numberOfVar)
-			osolerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
+			osolerror(NULL, NULL, parserData, osglData, "too few initial values in <initialVariableValuesString> element");
 	};
 
 initialVariableValuesStringEmpty: GREATERTHAN INITIALVARIABLEVALUESSTRINGEND | ENDOFELEMENT;
@@ -1912,14 +1932,15 @@ initVarValueStringStart: VARSTART
 	if (parserData->kounter >= parserData->numberOfVar)
 		osolerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
 	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
 	parserData->valueAttribute = "48r 87e WY EUV e7 df"; //random string...
 };
 
 initVarValueStringAttributes: initVarValueStringAttList
 {
-	parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
-	parserData->valueString[parserData->kounter] = parserData->valueAttribute;
+	if (parserData->idxAttributePresent == false)
+		osolerror(NULL, NULL, parserData, osglData, "<var> element must have idx attribute");
 };
 
 initVarValueStringAttList: | initVarValueStringAttList initVarValueStringAtt;
@@ -1934,10 +1955,17 @@ initVarValueStringAtt:
 			if (parserData->idxAttribute >= osoption->optimization->numberOfVariables)
 				osolerror (NULL, osoption, parserData, osglData, "variable index exceeds upper limit");
 		};
-	};
+		parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
+	}
+  | nameAttribute
+	{
+		parserData->namArray[parserData->kounter] = parserData->nameAttribute;
+	}
   | valueAttribute
-  ;
-
+	{
+		parserData->valueString[parserData->kounter] = parserData->valueAttribute;
+	}
+	
 initVarValueStringContent: GREATERTHAN VAREND | ENDOFELEMENT;
 
 
@@ -2148,11 +2176,13 @@ variablesUnknownBody:  osglIntArrayData;
 integerVariableBranchingWeights: | integerVariableBranchingWeightsStart
 	integerVariableBranchingWeightsAttributes integerVariableBranchingWeightsContent
 {
-	if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray) == false)
+	if (osoption->setIntegerVariableBranchingWeights(parserData->numberOfVar, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <initialVariableValues> failed");
 	delete[] parserData->idxArray;
+	delete[] parserData->namArray;
 	delete[] parserData->valArray;
 	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
 	parserData->valArray = NULL;
 };
 
@@ -2164,8 +2194,10 @@ integerVariableBranchingWeightsStart: INTEGERVARIABLEBRANCHINGWEIGHTSSTART
 integerVariableBranchingWeightsAttributes: numberOfVarAttribute 
 {
 	parserData->kounter = 0;
-	parserData->idxArray = new    int[parserData->numberOfVar];
-	parserData->valArray = new double[parserData->numberOfVar];
+	parserData->idxArray = new         int[parserData->numberOfVar];
+	parserData->namArray = new std::string[parserData->numberOfVar];
+	parserData->valArray = new      double[parserData->numberOfVar];
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->namArray[i] = "";
 	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 }; 
 
@@ -2188,7 +2220,9 @@ integerVariableBranchingWeightsLaden: GREATERTHAN integerVariableBranchingWeight
 integerVariableBranchingWeightsBody: branchingWeightsArray;
 
 
-/* This code can be used in both <integerVariableBranchingWeights> and <sosBranchingWeights> <sos> */
+/* This code can be used in both <integerVariableBranchingWeights> and <sosBranchingWeights> <sos> 
+   ------------------------------------------------------------------------------------------------*/
+   
 branchingWeightsArray: branchingWeight | branchingWeightsArray branchingWeight;
 
 branchingWeight: branchingWeightStart branchingWeightAttributes branchingWeightContent
@@ -2201,14 +2235,19 @@ branchingWeightStart: VARSTART
 	if (parserData->kounter >= parserData->numberOfVar)
 		osolerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
 	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
+	parserData->nameAttribute = "";
 	parserData->valueAttributePresent = false;
 	parserData->valueAttribute = "1.0";
 };
 
 branchingWeightAttributes: branchingWeightAttList
 {
-	parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
-	parserData->valArray[parserData->kounter] = os_strtod((parserData->valueAttribute).c_str(), NULL);
+	if (parserData->idxAttributePresent == false)
+		osolerror(NULL, NULL, parserData, osglData, "<var> element must have idx attribute");
+//	parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
+//	parserData->namArray[parserData->kounter] = parserData->nameAttribute;
+//	parserData->valArray[parserData->kounter] = os_strtod((parserData->valueAttribute).c_str(), NULL);
 };
 
 branchingWeightAttList: | branchingWeightAttList branchingWeightAtt;
@@ -2223,11 +2262,17 @@ branchingWeightAtt:
 			if (parserData->idxAttribute >= osoption->optimization->numberOfVariables)
 				osolerror (NULL, osoption, parserData, osglData, "variable index exceeds upper limit");
 		};
+		parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
+	}
+  | nameAttribute
+	{
+		parserData->namArray[parserData->kounter] = parserData->nameAttribute;
 	}
   | valueAttribute
 	{
 		if (parserData->valueAttribute == "")
 			osolerror (NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+		parserData->valArray[parserData->kounter] = os_strtod((parserData->valueAttribute).c_str(), NULL);
 	};
 
 branchingWeightContent: GREATERTHAN VAREND | ENDOFELEMENT;
@@ -2269,11 +2314,13 @@ sosWeightGroup: sosWeightGroupStart sosWeightGroupAttributes sosWeightGroupConte
 {
 	if (!osoption->setAnotherSOSVariableBranchingWeight(parserData->sosIdx, 
 				parserData->numberOfVar, parserData->groupWeight,
-				parserData->idxArray,	 parserData->valArray) )
+				parserData->idxArray,	 parserData->valArray, parserData->namArray) )
 		osolerror (NULL, osoption, parserData, osglData, "error processing SOS branching weights");
 	delete[] parserData->idxArray;
+	delete[] parserData->namArray;
 	delete[] parserData->valArray;
 	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
 	parserData->valArray = NULL;
 	parserData->currentSOS++;
 };
@@ -2304,8 +2351,9 @@ sosWeightGroupAtt:
   | numberOfVarAttribute
 	{
 		parserData->kounter = 0;
-		parserData->idxArray = new    int[parserData->numberOfVar];
-		parserData->valArray = new double[parserData->numberOfVar];
+		parserData->idxArray = new         int[parserData->numberOfVar];
+		parserData->namArray = new std::string[parserData->numberOfVar];
+		parserData->valArray = new      double[parserData->numberOfVar];
 		for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
 		parserData->numberOfVarAttributePresent = true;
 	}
@@ -2403,6 +2451,7 @@ otherVar: otherVarStart otherVarAttributes otherVarContent
 				parserData->iOther, 
 				parserData->kounter,
 				parserData->idxAttribute, 
+				parserData->nameAttribute,
 				parserData->valueAttribute,
 				parserData->lbValueAttribute, 
 				parserData->ubValueAttribute) )
@@ -2415,6 +2464,8 @@ otherVarStart: VARSTART
 	if (parserData->kounter >= parserData->numberOfVar)
 		osolerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
 	parserData->idxAttributePresent = false;	
+	parserData->nameAttributePresent = false;	
+	parserData->nameAttribute = "";
 	parserData->valueAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->lbValueAttributePresent = false;	
@@ -2438,6 +2489,7 @@ otherVarAtt:
 				osolerror (NULL, osoption, parserData, osglData, "variable index exceeds upper limit");
 		};
 	}
+  | nameAttribute
   | valueAttribute
   | lbValueAttribute
   | ubValueAttribute
@@ -2485,11 +2537,13 @@ objectivesBody:  initialObjectiveValues initialObjectiveBounds objectiveInitialB
 /* -------------------------------------------- */
 initialObjectiveValues: | initialObjectiveValuesStart initialObjectiveValuesAttributes initialObjectiveValuesContent
 {
-	if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray) == false)
+	if (osoption->setInitObjValues(parserData->numberOfObj, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveValues> failed");
 	delete[] parserData->idxArray;
+	delete[] parserData->namArray;
 	delete[] parserData->valArray;
 	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
 	parserData->valArray = NULL;
 };
 
@@ -2503,21 +2557,24 @@ initialObjectiveValuesStart: INITIALOBJECTIVEVALUESSTART
 initialObjectiveValuesAttributes: numberOfObjAttribute 
 {
 	parserData->kounter = 0;
-	parserData->idxArray = new    int[parserData->numberOfObj];
-	parserData->valArray = new double[parserData->numberOfObj];
-	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+	parserData->idxArray = new         int[parserData->numberOfObj];
+	parserData->namArray = new std::string[parserData->numberOfObj];
+	parserData->valArray = new      double[parserData->numberOfObj];
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->idxArray[i] = -1;
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->namArray[i] = "";
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->valArray[i] = OSNAN;
 }; 
 
 initialObjectiveValuesContent: 
 	initialObjectiveValuesEmpty 
 	{	
 		if (parserData->numberOfObj > 0)
-			osolerror(NULL, NULL, parserData, osglData, "expected at least one <obj> element");
+			osolerror(NULL, NULL, parserData, osglData, "<initialObjectiveValues>: expected at least one <obj> element");
 	}
   | initialObjectiveValuesLaden
 	{
 		if (parserData->kounter != parserData->numberOfObj)
-			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
+			osolerror(NULL, NULL, parserData, osglData, "<initialObjectiveValues>: fewer <obj> elements than specified");
 	};
 
 initialObjectiveValuesEmpty: GREATERTHAN INITIALOBJECTIVEVALUESEND | ENDOFELEMENT;
@@ -2539,15 +2596,12 @@ initObjValueStart: OBJSTART
 	if (parserData->kounter >= parserData->numberOfObj)
 		osolerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
 	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
 	parserData->idxAttribute = -1;
 };
 
-initObjValueAttributes: initObjValueAttList
-{	
-	parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
-};
-
+initObjValueAttributes: initObjValueAttList;
 
 initObjValueAttList: | initObjValueAttList initObjValueAtt;
 
@@ -2561,6 +2615,11 @@ initObjValueAtt:
 			if (parserData->idxAttribute < -osoption->optimization->numberOfObjectives)
 				osolerror (NULL, osoption, parserData, osglData, "objective index exceeds limit");
 		};
+		parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
+	}
+  | nameAttribute
+	{
+		parserData->namArray[parserData->kounter] = parserData->nameAttribute;
 	}
   | valueAttribute
 	{
@@ -2574,12 +2633,14 @@ initObjValueContent: GREATERTHAN OBJEND | ENDOFELEMENT;
 /* -------------------------------------------- */
 initialObjectiveBounds: | initialObjectiveBoundsStart numberOfObjATT initialObjectiveBoundsContent
 {
-	if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
+	if (osoption->setInitObjBounds(parserData->numberOfObj, parserData->idxArray, parserData->lbValArray, parserData->ubValArray, parserData->namArray) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <initialObjectiveBounds> failed");
 	delete[] parserData->idxArray;
+	delete[] parserData->namArray;
 	delete[] parserData->lbValArray;
 	delete[] parserData->ubValArray;
 	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
 	parserData->lbValArray = NULL;
 	parserData->ubValArray = NULL;
 };
@@ -2593,21 +2654,26 @@ initialObjectiveBoundsStart: INITIALOBJECTIVEBOUNDSSTART
 numberOfObjATT: numberOfObjAttribute 
 {
 	parserData->kounter = 0;
-	parserData->idxArray   = new    int[parserData->numberOfObj];
-	parserData->lbValArray = new double[parserData->numberOfObj];
-	parserData->ubValArray = new double[parserData->numberOfObj];
+	parserData->idxArray   = new         int[parserData->numberOfObj];
+	parserData->lbValArray = new      double[parserData->numberOfObj];
+	parserData->ubValArray = new      double[parserData->numberOfObj];
+	parserData->namArray   = new std::string[parserData->numberOfObj];
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->idxArray[i] = -1;
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->namArray[i] = "";
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->lbValArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->ubValArray[i] = OSNAN;
 }; 
 
 initialObjectiveBoundsContent: 
 	initialObjectiveBoundsEmpty 
 	{
 		if (parserData->numberOfObj > 0)
-			osolerror(NULL, NULL, parserData, osglData, "expected at least one <obj> element");
+			osolerror(NULL, NULL, parserData, osglData, "<initialObjectiveBounds>: expected at least one <obj> element");
 	}
   | initialObjectiveBoundsLaden
 	{
 		if (parserData->kounter != parserData->numberOfObj)
-			osolerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
+			osolerror(NULL, NULL, parserData, osglData, "<initialObjectiveBounds>: fewer <obj> elements than specified");
 	};
 
 initialObjectiveBoundsEmpty: GREATERTHAN INITIALOBJECTIVEBOUNDSEND | ENDOFELEMENT;
@@ -2629,6 +2695,7 @@ initObjBoundStart: OBJSTART
 	if (parserData->kounter >= parserData->numberOfObj)
 		osolerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
 	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
 	parserData->lbValueAttributePresent = false;
 	parserData->ubValueAttributePresent = false;
 	parserData->idxAttribute = -1;
@@ -2636,12 +2703,7 @@ initObjBoundStart: OBJSTART
 	parserData->ubValueAttribute = "INF";
 };
 
-initObjBoundAttributes: initObjBoundAttList
-{	
-	parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
-	parserData->lbValArray[parserData->kounter] = os_strtod((parserData->lbValueAttribute).c_str(), NULL);
-	parserData->ubValArray[parserData->kounter] = os_strtod((parserData->ubValueAttribute).c_str(), NULL);
-};
+initObjBoundAttributes: initObjBoundAttList;
 
 initObjBoundAttList: | initObjBoundAttList initObjBoundAtt;
 
@@ -2655,16 +2717,23 @@ initObjBoundAtt:
 			if (parserData->idxAttribute < -osoption->optimization->numberOfVariables)
 				osolerror (NULL, osoption, parserData, osglData, "objective index exceeds limit");
 		};
+		parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
+	}
+  | nameAttribute
+	{
+		parserData->namArray[parserData->kounter] = parserData->nameAttribute;
 	}
   | lbValueAttribute
 	{
 		if (parserData->lbValueAttribute == "")
 			osolerror (NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+		parserData->lbValArray[parserData->kounter] = os_strtod((parserData->lbValueAttribute).c_str(), NULL);
 	}
   | ubValueAttribute
 	{
 		if (parserData->ubValueAttribute == "")
 			osolerror (NULL, osoption, parserData, osglData, "expected an integer or floating point value");
+		parserData->ubValArray[parserData->kounter] = os_strtod((parserData->ubValueAttribute).c_str(), NULL);
 	};
 
 initObjBoundContent: GREATERTHAN OBJEND | ENDOFELEMENT;
@@ -2901,7 +2970,8 @@ otherObjectiveOptionStart: OTHERSTART
 }; 
 
 otherObjectiveOptionAttributes: otherObjectiveOptionAttList
-	{	if(!parserData->nameAttributePresent) 
+	{
+		if (!parserData->nameAttributePresent) 
 			osolerror(NULL, NULL, parserData, osglData, "<other> element requires name attribute"); 
 		if (!osoption->setOtherObjectiveOptionAttributes(
 					parserData->iOther,
@@ -2953,6 +3023,7 @@ otherObj: otherObjStart otherObjAttributes  otherObjContent
 				parserData->iOther, 
 				parserData->kounter,
 				parserData->idxAttribute, 
+				parserData->nameAttribute,
 				parserData->valueAttribute,
 				parserData->lbValueAttribute, 
 				parserData->ubValueAttribute) )
@@ -2966,6 +3037,8 @@ otherObjStart: OBJSTART
 		osolerror(NULL, NULL, parserData, osglData, "more <obj> elements than specified");
 	parserData->idxAttributePresent = false;	
 	parserData->idxAttribute = -1;
+	parserData->nameAttributePresent = false;	
+	parserData->nameAttribute = "";
 	parserData->valueAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->lbValueAttributePresent = false;	
@@ -2977,6 +3050,7 @@ otherObjStart: OBJSTART
 otherObjAttributes: otherObjAttList
 {	
 	parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
+	parserData->namArray[parserData->kounter] = parserData->nameAttribute;
 	parserData->valueString[parserData->kounter] = parserData->valueAttribute;
 	parserData->lbValueString[parserData->kounter] = parserData->lbValueAttribute;
 	parserData->ubValueString[parserData->kounter] = parserData->ubValueAttribute;
@@ -2995,6 +3069,7 @@ otherObjAtt:
 				osolerror (NULL, osoption, parserData, osglData, "objective index exceeds limit");
 		};
 	}
+  | nameAttribute
   | valueAttribute
   | lbValueAttribute
   | ubValueAttribute
@@ -3042,11 +3117,13 @@ constraintsBody:  initialConstraintValues initialDualValues slacksInitialBasis o
 /* -------------------------------------------- */
 initialConstraintValues: | initialConstraintValuesStart initialConstraintValuesAttributes initialConstraintValuesContent
 {
-	if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray) == false)
+	if (osoption->setInitConValues(parserData->numberOfCon, parserData->idxArray, parserData->valArray, parserData->namArray) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
 	delete[] parserData->idxArray;
+	delete[] parserData->namArray;
 	delete[] parserData->valArray;
 	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
 	parserData->valArray = NULL;
 };
 
@@ -3059,21 +3136,23 @@ initialConstraintValuesStart:  INITIALCONSTRAINTVALUESSTART
 initialConstraintValuesAttributes: numberOfConAttribute 
 {
 	parserData->kounter = 0;
-	parserData->idxArray = new    int[parserData->numberOfCon];
-	parserData->valArray = new double[parserData->numberOfCon];
-	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+	parserData->idxArray = new         int[parserData->numberOfCon];
+	parserData->namArray = new std::string[parserData->numberOfCon];
+	parserData->valArray = new      double[parserData->numberOfCon];
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->namArray[i] = "";
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->valArray[i] = OSNAN;
 }; 
 
 initialConstraintValuesContent:
 	initialConstraintValuesEmpty 
 	{
 		if (parserData->numberOfCon > 0)
-			osolerror(NULL, NULL, parserData, osglData, "expected at least one <con element");
+			osolerror(NULL, NULL, parserData, osglData, "<initialConstraintValues>: expected at least one <con element");
 	}
   | initialConstraintValuesLaden
 	{
 		if (parserData->kounter > parserData->numberOfCon)
-			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
+			osolerror(NULL, NULL, parserData, osglData, "<initialConstraintValues>: fewer <con> elements than specified");
 	};
 
 initialConstraintValuesEmpty: GREATERTHAN INITIALCONSTRAINTVALUESEND | ENDOFELEMENT;
@@ -3085,7 +3164,7 @@ initialConstraintValuesBody:  initConValueArray;
 initConValueArray: initConValue | initConValueArray initConValue;
 
 /* -------------------------------------------- */
-initConValue: initConValueStart initConValueAttList initConValueContent
+initConValue: initConValueStart initConValueAttributes initConValueContent
 {
 	parserData->kounter++;
 }; 
@@ -3095,7 +3174,15 @@ initConValueStart: CONSTART
 	if (parserData->kounter >= parserData->numberOfCon)
 		osolerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
 	parserData->idxAttributePresent = false;
+	parserData->nameAttribute = "";
+	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
+};
+
+initConValueAttributes: initConValueAttList
+{
+	if (parserData->idxAttributePresent == false)
+		osolerror(NULL, NULL, parserData, osglData, "<con> element must have idx attribute");
 };
 
 initConValueAttList: | initConValueAttList initConValueAtt;
@@ -3112,6 +3199,10 @@ initConValueAtt:
 		};
 		parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
 	}
+  | nameAttribute
+	{
+		parserData->namArray[parserData->kounter] = parserData->nameAttribute;
+	}
   | valueAttribute
 	{
 		if (parserData->valueAttribute == "")
@@ -3123,14 +3214,16 @@ initConValueContent: GREATERTHAN CONEND | ENDOFELEMENT;
 
 
 /* -------------------------------------------- */
-initialDualValues: | initialDualValuesStart numberOfConATT initialDualValuesContent
+initialDualValues: | initialDualValuesStart initialDualValuesAttributes initialDualValuesContent
 {
-	if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray) == false)
+	if (osoption->setInitDualValues(parserData->numberOfCon, parserData->idxArray, parserData->lbValArray, parserData->ubValArray, parserData->namArray) == false)
 		osolerror (NULL, osoption, parserData, osglData, "set <initialConstraintValues> failed");
 	delete[] parserData->idxArray;
+	delete[] parserData->namArray;
 	delete[] parserData->lbValArray;
 	delete[] parserData->ubValArray;
 	parserData->idxArray = NULL;
+	parserData->namArray = NULL;
 	parserData->lbValArray = NULL;
 	parserData->ubValArray = NULL;
 };
@@ -3141,24 +3234,28 @@ initialDualValuesStart: INITIALDUALVALUESSTART
 	parserData->numberOfConAttributePresent = false;
 };
 
-numberOfConATT: numberOfConAttribute 
+initialDualValuesAttributes: numberOfConAttribute 
 {
 	parserData->kounter = 0;
-	parserData->idxArray   = new    int[parserData->numberOfCon];
-	parserData->lbValArray = new double[parserData->numberOfCon];
-	parserData->ubValArray = new double[parserData->numberOfCon];
+	parserData->idxArray   = new         int[parserData->numberOfCon];
+	parserData->namArray   = new std::string[parserData->numberOfCon];
+	parserData->lbValArray = new      double[parserData->numberOfCon];
+	parserData->ubValArray = new      double[parserData->numberOfCon];
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->namArray[i] = "";
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->lbValArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->ubValArray[i] = OSNAN;
 }; 
 
 initialDualValuesContent: 
 	initialDualValuesEmpty 
 	{
 		if (parserData->numberOfCon > 0)
-			osolerror(NULL, NULL, parserData, osglData, "expected at least one <con> element");
+			osolerror(NULL, NULL, parserData, osglData, "<initialDualValues>: expected at least one <con> element");
 	}
   | initialDualValuesLaden
 	{
 		if (parserData->kounter != parserData->numberOfCon)
-			osolerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
+			osolerror(NULL, NULL, parserData, osglData, "<initialDualValues>: fewer <con> elements than specified");
 	};
 
 initialDualValuesEmpty: GREATERTHAN INITIALDUALVALUESEND | ENDOFELEMENT;
@@ -3180,16 +3277,18 @@ initDualValueStart: CONSTART
 	if (parserData->kounter >= parserData->numberOfCon)
 		osolerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
 	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
+	parserData->nameAttribute = "";
 	parserData->lbValueAttributePresent = false;
 	parserData->ubValueAttributePresent = false;
-	parserData->lbDualValue = 0;
-	parserData->ubDualValue = 0;
+	parserData->lbDualValue = OSNAN;
+	parserData->ubDualValue = OSNAN;
 };
 
 initDualValueAttributes: initDualValueAttList
 {
-	parserData->lbValArray[parserData->kounter] = parserData->lbDualValue;
-	parserData->ubValArray[parserData->kounter] = parserData->ubDualValue;
+	if (parserData->idxAttributePresent == false)
+		osolerror(NULL, NULL, parserData, osglData, "<con> element must have idx attribute");
 };
 
 initDualValueAttList: | initDualValueAttList initDualValueAtt;
@@ -3206,8 +3305,18 @@ initDualValueAtt:
 		};
 		parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
 	}
+  | nameAttribute
+	{
+		parserData->namArray[parserData->kounter] = parserData->nameAttribute;
+	}
   | lbDualValueAttribute
+	{
+		parserData->lbValArray[parserData->kounter] = parserData->lbDualValue;
+	}
   | ubDualValueAttribute
+	{
+		parserData->ubValArray[parserData->kounter] = parserData->ubDualValue;
+	}
   ;
 
 initDualValueContent: GREATERTHAN CONEND | ENDOFELEMENT;
@@ -3498,6 +3607,7 @@ otherCon: otherConStart otherConAttributes  otherConContent
 				parserData->iOther, 
 				parserData->kounter,
 				parserData->idxAttribute, 
+				parserData->nameAttribute,
 				parserData->valueAttribute,
 				parserData->lbValueAttribute, 
 				parserData->ubValueAttribute) )
@@ -3510,6 +3620,8 @@ otherConStart: CONSTART
 	if (parserData->kounter >= parserData->numberOfCon)
 		osolerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
 	parserData->idxAttributePresent = false;	
+	parserData->nameAttributePresent = false;	
+	parserData->nameAttribute = "";
 	parserData->valueAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->lbValueAttributePresent = false;	
@@ -3533,6 +3645,7 @@ otherConAtt:
 				osolerror (NULL, osoption, parserData, osglData, "constraint index exceeds upper limit");
 		};
 	}
+  | nameAttribute
   | valueAttribute
   | lbValueAttribute
   | ubValueAttribute
