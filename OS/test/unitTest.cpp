@@ -3002,6 +3002,19 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setSolutionTargetObjectiveIdx: osresult objects falsely compare unequal!");
 
+			ok &= osresult1->setSolutionTargetObjectiveName(i,"a.n.other");
+			if (!ok) 
+				throw ErrorClass("Error during setSolutionTargetObjectiveName!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setSolutionTargetObjectiveName: osresult objects falsely compare equal!");
+			ok &= osresult2->setSolutionTargetObjectiveName(i,"a.n.other");
+			if (!ok) 
+				throw ErrorClass("Error during setSolutionTargetObjectiveName!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setSolutionTargetObjectiveName: osresult objects falsely compare unequal!");
+
 			ok &= osresult1->setSolutionWeightedObjectives(i,"true");
 			if (!ok) 
 				throw ErrorClass("Error during setSolutionWeightedObjectives!");
@@ -4583,6 +4596,10 @@ if (PARSER_TESTS){
 			ok &= osresult2->setSolutionTargetObjectiveIdx(i,tempInt);
 			if (!ok) 
 				throw ErrorClass("Error during setSolutionTargetObjectiveIdx!");
+			tempStr = osresult1->getSolutionTargetObjectiveName(i);
+			ok &= osresult2->setSolutionTargetObjectiveName(i,tempStr);
+			if (!ok) 
+				throw ErrorClass("Error during getSolutionTargetObjectiveName!");
 			bool tempLog = osresult1->getSolutionWeightedObjectives(i);
 			ok &= osresult2->setSolutionWeightedObjectives(i,tempLog);
 			if (!ok) 

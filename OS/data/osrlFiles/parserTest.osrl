@@ -72,7 +72,7 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 		</otherResults>
 	</job>
 	<optimization numberOfSolutions="2" numberOfVariables="2" numberOfObjectives="1" numberOfConstraints="1" >
-		<solution targetObjectiveIdx="-1" weightedObjectives="false">
+		<solution targetObjectiveIdx="-1" weightedObjectives="false" targetObjectiveName="obj">
 			<status type="locallyOptimal" description="SUCCESS[IPOPT]: Algorithm terminated normally at a locally optimal point, satisfying the convergence tolerances." numberOfSubstatuses="1">
 				<substatus type="other" description="just for testing"></substatus>
 			</status>

@@ -907,6 +907,7 @@ OtherSolutionResults::~OtherSolutionResults(){
 
 OptimizationSolution::OptimizationSolution():
 	targetObjectiveIdx( -1),
+	targetObjectiveName(""),
 	weightedObjectives(false),
 	status(NULL),
 	message( ""),
@@ -1693,6 +1694,15 @@ int OSResult::getSolutionTargetObjectiveIdx(int solIdx){
 	if (optimization->solution[solIdx] == NULL) return 0;
 	return optimization->solution[solIdx]->targetObjectiveIdx;		
 }//getSolutionTargetObjectiveIdx
+
+std::string OSResult::getSolutionTargetObjectiveName(int solIdx){
+	if (optimization == NULL || optimization->solution == NULL) 
+		throw ErrorClass("No solution defined");
+	if (solIdx < 0 || solIdx >=  optimization->numberOfSolutions)
+		throw ErrorClass("solIdx is outside of range in routine getSolutionTargetObjectiveName()");
+	if (optimization->solution[solIdx] == NULL) return 0;
+	return optimization->solution[solIdx]->targetObjectiveName;		
+}//getSolutionTargetObjectiveName
 
 bool OSResult::getSolutionWeightedObjectives(int solIdx){
 	if (optimization == NULL || optimization->solution == NULL) 
@@ -3971,6 +3981,20 @@ bool OSResult::setSolutionTargetObjectiveIdx(int solIdx, int objectiveIdx){
 	return true;		
 }//setSolutionTargetObjectiveIdx
 
+bool OSResult::setSolutionTargetObjectiveName(int solIdx, std::string objectiveName){
+	int nSols = this->getSolutionNumber();
+	if(optimization == NULL) return false;
+	if(nSols <= 0) return false;
+	if(optimization == NULL) return false;
+	if(optimization->solution == NULL || 
+	   solIdx < 0 || solIdx >=  nSols) return false;
+	if(optimization->solution[solIdx] == NULL){
+		optimization->solution[solIdx] = new OptimizationSolution();
+	}
+	optimization->solution[solIdx]->targetObjectiveName = objectiveName;
+	return true;		
+}//setSolutionTargetObjectiveName
+
 bool OSResult::setSolutionWeightedObjectives(int solIdx, bool weightedObjectives){
 	int nSols = this->getSolutionNumber();
 	if (optimization == NULL) return false;
@@ -6100,6 +6124,15 @@ bool OptimizationSolution::IsEqual(OptimizationSolution  *that)
 				return false;
 			}
 
+			if (this->targetObjectiveName != that->targetObjectiveName)
+			{
+#if DEBUG_ISEQUAL_ROUTINES > 0
+				cout << "Differences in OptimizationSolution" << endl;
+				cout << "targetObjectiveName: " << this->targetObjectiveName << " vs. " << that->targetObjectiveName << endl;
+#endif	
+				return false;
+			}
+
 			if (this->weightedObjectives != that->weightedObjectives)
 			{
 #if DEBUG_ISEQUAL_ROUTINES > 0
@@ -7792,6 +7825,7 @@ bool OptimizationSolution::setRandom(double density, bool conformant)
 		else					 targetObjectiveIdx = -2;
 	}
 
+	if (OSRand() <= density) targetObjectiveName = "random string";
 	if (OSRand() <= density) weightedObjectives = (OSRand() < 0.5);
 
 	if (OSRand() <= density) message = "random string";

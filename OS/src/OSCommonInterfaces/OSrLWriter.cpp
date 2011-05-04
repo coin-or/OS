@@ -676,6 +676,11 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << " targetObjectiveIdx=\"";
 				outStr << m_OSResult->optimization->solution[i]->targetObjectiveIdx ;
 				outStr << "\"" ;
+				if (m_OSResult->optimization->solution[i]->targetObjectiveName.length() > 0)
+				{
+					outStr << " targetObjectiveName=";
+					outStr <<  writeStringData(m_OSResult->optimization->solution[i]->targetObjectiveName);
+				}					
 				if (m_OSResult->optimization->solution[i]->weightedObjectives)
 					outStr << " weightedObjectives=\"true\"";
 				outStr << ">" << endl;

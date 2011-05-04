@@ -103,6 +103,7 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 %token NAMEATT EMPTYNAMEATT TYPEATT EMPTYTYPEATT 
 %token UNITATT EMPTYUNITATT VALUEATT EMPTYVALUEATT
 %token WEIGHTEDOBJECTIVESATT EMPTYWEIGHTEDOBJECTIVESATT
+%token TARGETOBJECTIVENAMEATT EMPTYTARGETOBJECTIVENAMEATT
 
 %token HEADERSTART HEADEREND
 %token GENERALSTART GENERALEND 
@@ -1599,6 +1600,7 @@ solutionStart: SOLUTIONSTART
 	if (parserData->solutionIdx >= parserData->numberOfSolutions) 
         osrlerror(NULL, NULL, parserData, osglData, "too many solutions"); 
 	parserData->idxAttributePresent = false;
+	parserData->nameAttributePresent = false;
 	parserData->weightedObjAttributePresent = false;
 };
 
@@ -1606,7 +1608,7 @@ solutionAttributes: solutionAttList;
 
 solutionAttList: | solutionAttList solutionATT;
 
-solutionATT: targetObjectiveIdxATT | weightedObjectivesATT;
+solutionATT: targetObjectiveIdxATT | targetObjectiveNameATT | weightedObjectivesATT;
 
 targetObjectiveIdxATT: TARGETOBJECTIVEIDXATT quote INTEGER quote
 {	if (parserData->idxAttributePresent)
@@ -1617,9 +1619,18 @@ targetObjectiveIdxATT: TARGETOBJECTIVEIDXATT quote INTEGER quote
 		osrlerror(NULL, NULL, parserData, osglData, "setSolutionTargetObjectiveIdx failed");
  };
 
+targetObjectiveNameATT: TARGETOBJECTIVENAMEATT ATTRIBUTETEXT quote
+{	if (parserData->nameAttributePresent)
+		osrlerror(NULL, NULL, parserData, osglData, "target objective name previously set");
+	parserData->nameAttributePresent = true;
+	parserData->tempStr = $2; free($2);
+  	if (osresult->setSolutionTargetObjectiveName(parserData->solutionIdx, parserData->tempStr) == false)
+		osrlerror(NULL, NULL, parserData, osglData, "setSolutionTargetObjectiveName failed");
+ };
+
 weightedObjectivesATT: WEIGHTEDOBJECTIVESATT ATTRIBUTETEXT quote
 {	if (parserData->weightedObjAttributePresent)
-		osrlerror(NULL, NULL, parserData, osglData, "target objective idx previously set");
+		osrlerror(NULL, NULL, parserData, osglData, "weighted objective attribute previously set");
 	parserData->weightedObjAttributePresent = true;
 	parserData->tempStr = $2; free($2);
 	if (parserData->tempStr == "true")

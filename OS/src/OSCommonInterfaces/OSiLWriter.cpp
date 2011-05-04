@@ -2,15 +2,13 @@
 /** @file OSiLWriter.cpp
  * 
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -121,9 +119,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					outStr << "<var" ;
 					if (m_OSInstance->instanceData->variables->var[i]->name.length() > 0){
-						outStr << " name=\"" ;
-						outStr << m_OSInstance->instanceData->variables->var[i]->name ;
-						outStr <<  "\"";
+						outStr << " name=" ;
+						outStr << writeStringData(m_OSInstance->instanceData->variables->var[i]->name);
 					}
 					if( m_OSInstance->instanceData->variables->var[i]->type != 'C'){
 						outStr << " type=\"" ;
@@ -143,19 +140,6 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					if (mult > 1)
 						outStr << " mult=\"" << mult <<  "\"";
-					/* we no longer do init
-					if(CoinIsnan(m_OSInstance->instanceData->variables->var[i]->init) == false){
-						outStr << " init=\"" ;
-						outStr << os_dtoa_format(m_OSInstance->instanceData->variables->var[i]->init) ;
-						outStr <<  "\"";
-					}
-					
-					if(m_OSInstance->instanceData->variables->var[i]->initString != ""){
-						outStr << " initString=\"" ;
-						outStr << m_OSInstance->instanceData->variables->var[i]->initString ;
-						outStr <<  "\"";
-					}
-					*/
 					outStr << "/>" ;
 					if( m_bWhiteSpace == true) outStr << endl;
 				}
@@ -218,9 +202,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						outStr <<  "\"";
 					}
 					if(m_OSInstance->instanceData->objectives->obj[j]->name.length() > 0){
-						outStr << " name=\"" ;
-						outStr <<  m_OSInstance->instanceData->objectives->obj[j]->name  ;
-						outStr <<  "\"";
+						outStr << " name=" ;
+						outStr <<  writeStringData(m_OSInstance->instanceData->objectives->obj[j]->name);
 					}
 					outStr << " numberOfObjCoef=\"" ;
 					outStr <<  m_OSInstance->instanceData->objectives->obj[j]->numberOfObjCoef  ;
@@ -284,9 +267,8 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 					}
 					outStr << "<con" ; 
 					if(m_OSInstance->instanceData->constraints->con[i]->name.length()){
-						outStr << " name=\"" ;
-						outStr << m_OSInstance->instanceData->constraints->con[i]->name ;
-						outStr <<  "\"";
+						outStr << " name=" ;
+						outStr << writeStringData(m_OSInstance->instanceData->constraints->con[i]->name);
 					}
 					if(m_OSInstance->instanceData->constraints->con[i]->constant != 0){
 						outStr << " constant=\"" ;

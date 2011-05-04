@@ -61,7 +61,7 @@
 			</xs:element>
 			<xs:element name="quadraticCoefficients" type="QuadraticCoefficients" minOccurs="0">
 				<xs:annotation>
-					<xs:documentation>since version 1.0</xs:documentation>
+					<xs:documentation>since version 1.0 - Does not use matrices. So, e.g. the expression 2x + 3y + x^2 + 2xy + 3y^2 has three quadratic coefficients: 1, 2, 3</xs:documentation>
 				</xs:annotation>
 			</xs:element>
 			<xs:element name="nonlinearExpressions" type="NonlinearExpressions" minOccurs="0">

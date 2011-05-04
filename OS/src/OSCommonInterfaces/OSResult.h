@@ -1967,9 +1967,14 @@ class OptimizationSolution{
 public:
 
 	/** the index of the objective function for which we are 
-	 * reporting solution information 
+	 *  reporting solution information 
 	 */
 	int targetObjectiveIdx;
+
+	/** an optional name of the objective function for which we are 
+	 *  reporting solution information 
+	 */
+	std::string targetObjectiveName;
 
 	/** a marker to track whether the objectives are weighted */
 	bool weightedObjectives;
@@ -2593,6 +2598,7 @@ public:
 /* */	std::string getSolutionSubstatusType(int solIdx, int substatusIdx);
 /* */	std::string getSolutionSubstatusDescription(int solIdx, int substatusIdx);
 /* */	int getSolutionTargetObjectiveIdx(int solIdx);
+/* */	std::string getSolutionTargetObjectiveName(int solIdx);
 
 	/**
 	 * Get the [i]th optimization solution form of the objective
@@ -3529,6 +3535,19 @@ public:
 	 * @see #setSolutionNumber(int)
 	 */
 	bool setSolutionTargetObjectiveIdx(int solIdx, int objectiveIdx);
+	
+	/**
+	 * Set the [i]th optimization solution's objective name, where i equals the given solution index.   
+	 * The first objective's index should be -1, the second -2, and so on.  
+	 * Before this method is called, the setSolutionNumber(int) method has to be called first. 
+	 * 
+	 * @param solIdx holds the solution index to set the objective index.
+	 * @param objectiveName holds the objective indexname to set.  
+	 * 
+	 * @return whether the optimization objective name is set successfully or not. 
+	 * @see #setSolutionNumber(int)
+	 */
+	bool setSolutionTargetObjectiveName(int solIdx, std::string objectiveName);
 	
 	/**
 	 * Record whether the [i]th optimization solution uses weighted objectives, 

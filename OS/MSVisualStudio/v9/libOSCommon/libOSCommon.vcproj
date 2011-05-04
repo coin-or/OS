@@ -443,6 +443,10 @@
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLWriter.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSxLWriter.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -559,6 +563,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\OSCommonInterfaces\OSrLWriter.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\OSCommonInterfaces\OSxLWriter.h"
 				>
 			</File>
 		</Filter>

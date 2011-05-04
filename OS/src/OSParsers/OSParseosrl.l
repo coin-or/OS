@@ -183,6 +183,10 @@ return(DOUBLE);}
 ({xmlwhitespace}+name{equality}\'\') {YY_PRINT; return(EMPTYNAMEATT);}
 ({xmlwhitespace}+name{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 ({xmlwhitespace}+name{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
+({xmlwhitespace}+targetObjectiveName{equality}\"\") {YY_PRINT; return(EMPTYTARGETOBJECTIVENAMEATT);}
+({xmlwhitespace}+targetObjectiveName{equality}\'\') {YY_PRINT; return(EMPTYTARGETOBJECTIVENAMEATT);}
+({xmlwhitespace}+targetObjectiveName{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TARGETOBJECTIVENAMEATT);}
+({xmlwhitespace}+targetObjectiveName{equality}\') {YY_PRINT; BEGIN singlequoteattributetext; return(TARGETOBJECTIVENAMEATT);}
 ({xmlwhitespace}+type{equality}\"\") {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\'\') {YY_PRINT; return(EMPTYTYPEATT);}
 ({xmlwhitespace}+type{equality}\") {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
