@@ -2,21 +2,20 @@
 /** @file OSgLWriter.cpp
  * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
 
 
 #include "OSgLWriter.h"
+#include "OSxLWriter.h"
 #include "OSGeneral.h"
 #include "OSParameters.h" 
 #include "OSBase64.h"
@@ -28,6 +27,8 @@
 using std::cout;
 using std::endl;
 using std::ostringstream; 
+
+
 
 /*! \brief Take an IntVector object and write
  * a string that validates against the OSgL schema.

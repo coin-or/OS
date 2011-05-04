@@ -19,6 +19,7 @@
 #include "OSResult.h"
 #include "OSgLWriter.h"
 #include "OSGeneral.h"
+#include "OSxLWriter.h"
 #include "OSParameters.h" 
 #include "OSConfig.h"
 #include "OSBase64.h"
@@ -123,9 +124,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			if(m_OSResult->general->generalStatus->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->general->generalStatus->description ;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->general->generalStatus->description);
 			}
 			if (m_OSResult->general->generalStatus->numberOfSubstatuses > 0)
 			{
@@ -222,19 +222,16 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				for (int i=0; i < m_OSResult->general->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->general->otherResults->other[i]->name.length() > 0)
-					{	outStr << " name=\"";
-						outStr << m_OSResult->general->otherResults->other[i]->name;
-						outStr << "\"";
+					{	outStr << " name=";
+						outStr << writeStringData(m_OSResult->general->otherResults->other[i]->name);
 					}
 					if (m_OSResult->general->otherResults->other[i]->value.length() > 0)
-					{	outStr << " value=\"";
-						outStr << m_OSResult->general->otherResults->other[i]->value;
-						outStr << "\"";
+					{	outStr << " value=";
+						outStr << writeStringData(m_OSResult->general->otherResults->other[i]->value);
 					}
 					if (m_OSResult->general->otherResults->other[i]->description.length() > 0)
-					{	outStr << " description=\"";
-						outStr << m_OSResult->general->otherResults->other[i]->description;
-						outStr << "\"";
+					{	outStr << " description=";
+						outStr << writeStringData(m_OSResult->general->otherResults->other[i]->description);
 					}
 					outStr << " />" << endl;
 				}
@@ -273,9 +270,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			if(m_OSResult->system->availableDiskSpace->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->system->availableDiskSpace->description;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->system->availableDiskSpace->description);
 			}
 			outStr << ">";
 			outStr << os_dtoa_format(m_OSResult->system->availableDiskSpace->value);
@@ -295,9 +291,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			if(m_OSResult->system->availableMemory->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->system->availableMemory->description ;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->system->availableMemory->description);
 			}
 			outStr << ">";
 			outStr << os_dtoa_format(m_OSResult->system->availableMemory->value);
@@ -317,9 +312,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			if(m_OSResult->system->availableCPUSpeed->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->system->availableCPUSpeed->description ;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->system->availableCPUSpeed->description);
 			}
 			outStr << ">";
 			outStr << os_dtoa_format(m_OSResult->system->availableCPUSpeed->value);
@@ -334,9 +328,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << "<availableCPUNumber";
 			if(m_OSResult->system->availableCPUNumber->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->system->availableCPUNumber->description ;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->system->availableCPUNumber->description);
 			}
 			outStr << ">";
 			outStr << m_OSResult->system->availableCPUNumber->value;
@@ -357,19 +350,16 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				for (int i=0; i < m_OSResult->system->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->system->otherResults->other[i]->name.length() > 0)
-					{	outStr << " name=\"";
-						outStr << m_OSResult->system->otherResults->other[i]->name;
-						outStr << "\"";
+					{	outStr << " name=";
+						outStr << writeStringData(m_OSResult->system->otherResults->other[i]->name);
 					}
 					if (m_OSResult->system->otherResults->other[i]->value.length() > 0)
-					{	outStr << " value=\"";
-						outStr << m_OSResult->system->otherResults->other[i]->value;
-						outStr << "\"";
+					{	outStr << " value=";
+						outStr << writeStringData(m_OSResult->system->otherResults->other[i]->value);
 					}
 					if (m_OSResult->system->otherResults->other[i]->description.length() > 0)
-					{	outStr << " description=\"";
-						outStr << m_OSResult->system->otherResults->other[i]->description;
-						outStr << "\"";
+					{	outStr << " description=";
+						outStr << writeStringData(m_OSResult->system->otherResults->other[i]->description);
 					}
 					outStr << " />" << endl;
 				}
@@ -441,19 +431,16 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				for (int i=0; i < m_OSResult->service->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->service->otherResults->other[i]->name.length() > 0)
-					{	outStr << " name=\"";
-						outStr << m_OSResult->service->otherResults->other[i]->name;
-						outStr << "\"";
+					{	outStr << " name=";
+						outStr << writeStringData(m_OSResult->service->otherResults->other[i]->name);
 					}
 					if (m_OSResult->service->otherResults->other[i]->value.length() > 0)
-					{	outStr << " value=\"";
-						outStr << m_OSResult->service->otherResults->other[i]->value;
-						outStr << "\"";
+					{	outStr << " value=";
+						outStr << writeStringData(m_OSResult->service->otherResults->other[i]->value);
 					}
 					if (m_OSResult->service->otherResults->other[i]->description.length() > 0)
-					{	outStr << " description=\"";
-						outStr << m_OSResult->service->otherResults->other[i]->description;
-						outStr << "\"";
+					{	outStr << " description=";
+						outStr << writeStringData(m_OSResult->service->otherResults->other[i]->description);
 					}
 					outStr << " />" << endl;
 				}
@@ -523,15 +510,15 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			outStr << m_OSResult->job->timingInformation->numberOfTimes << "\">" << endl;
 			for (i=0; i<m_OSResult->job->timingInformation->numberOfTimes; i++)
 			{
-				outStr << "<time ";
+				outStr << "<time";
 				if (m_OSResult->job->timingInformation->time[i]->type != "")
-					outStr << "type=\"" << m_OSResult->job->timingInformation->time[i]->type << "\" ";
+					outStr << " type=\"" << m_OSResult->job->timingInformation->time[i]->type << "\"";
 				if (m_OSResult->job->timingInformation->time[i]->unit != "")
-					outStr << "unit=\"" << m_OSResult->job->timingInformation->time[i]->unit << "\" ";
+					outStr << " unit=\"" << m_OSResult->job->timingInformation->time[i]->unit << "\"";
 				if (m_OSResult->job->timingInformation->time[i]->category != "")
-					outStr << "category=\"" << m_OSResult->job->timingInformation->time[i]->category << "\" ";
+					outStr << " category=\"" << m_OSResult->job->timingInformation->time[i]->category << "\"";
 				if (m_OSResult->job->timingInformation->time[i]->description != "")
-					outStr << "description=\"" << m_OSResult->job->timingInformation->time[i]->description << "\" ";
+					outStr << " description=" << writeStringData(m_OSResult->job->timingInformation->time[i]->description);
 				outStr << ">" << endl;
 				outStr << os_dtoa_format(m_OSResult->job->timingInformation->time[i]->value);
 				outStr << "</time>" << endl; 
@@ -552,9 +539,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			if(m_OSResult->job->usedDiskSpace->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->job->usedDiskSpace->description ;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->job->usedDiskSpace->description);
 			}
 			outStr << ">";
 			outStr << os_dtoa_format(m_OSResult->job->usedDiskSpace->value);
@@ -574,9 +560,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			if(m_OSResult->job->usedMemory->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->job->usedMemory->description ;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->job->usedMemory->description);
 			}
 			outStr << ">";
 			outStr << os_dtoa_format(m_OSResult->job->usedMemory->value);
@@ -596,9 +581,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				outStr << "\"";
 			}
 			if(m_OSResult->job->usedCPUSpeed->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->job->usedCPUSpeed->description;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->job->usedCPUSpeed->description);
 			}
 			outStr << ">";
 			outStr << os_dtoa_format(m_OSResult->job->usedCPUSpeed->value);
@@ -613,9 +597,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 			}
 			outStr << "<usedCPUNumber";
 			if(m_OSResult->job->usedCPUNumber->description.length() > 0){
-				outStr << " description=\"";
-				outStr << m_OSResult->job->usedCPUNumber->description;
-				outStr << "\"";
+				outStr << " description=";
+				outStr << writeStringData(m_OSResult->job->usedCPUNumber->description);
 			}
 			outStr << ">";
 			outStr << m_OSResult->job->usedCPUNumber->value;
@@ -636,19 +619,16 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 				for (int i=0; i < m_OSResult->job->otherResults->numberOfOtherResults; i++)
 				{	outStr << "<other";
 					if (m_OSResult->job->otherResults->other[i]->name.length() > 0)
-					{	outStr << " name=\"";
-						outStr << m_OSResult->job->otherResults->other[i]->name;
-						outStr << "\"";
+					{	outStr << " name=";
+						outStr << writeStringData(m_OSResult->job->otherResults->other[i]->name);
 					}
 					if (m_OSResult->job->otherResults->other[i]->value.length() > 0)
-					{	outStr << " value=\"";
-						outStr << m_OSResult->job->otherResults->other[i]->value;
-						outStr << "\"";
+					{	outStr << " value=";
+						outStr << writeStringData(m_OSResult->job->otherResults->other[i]->value);
 					}
 					if (m_OSResult->job->otherResults->other[i]->description.length() > 0)
-					{	outStr << " description=\"";
-						outStr << m_OSResult->job->otherResults->other[i]->description;
-						outStr << "\"";
+					{	outStr << " description=";
+						outStr << writeStringData(m_OSResult->job->otherResults->other[i]->description);
 					}
 					outStr << " />" << endl;
 				}
@@ -713,9 +693,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 						outStr <<  "\"";
 					}
 					if(m_OSResult->optimization->solution[i]->status->description.length() > 0){
-						outStr << " description=\"";
-						outStr <<  m_OSResult->optimization->solution[i]->status->description;
-						outStr << "\"" ;
+						outStr << " description=";
+						outStr <<  writeStringData(m_OSResult->optimization->solution[i]->status->description);
 					}
 					outStr << ">" << endl;
 					for (int j=0; j < m_OSResult->optimization->solution[i]->status->numberOfSubstatuses; j++)
@@ -726,9 +705,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 							outStr <<  "\"";
 						}
 						if(m_OSResult->optimization->solution[i]->status->substatus[j]->description.length() > 0){
-							outStr << " description=\"";
-							outStr <<  m_OSResult->optimization->solution[i]->status->substatus[j]->description;
-							outStr << "\"" ;
+							outStr << " description=";
+							outStr <<  writeStringData(m_OSResult->optimization->solution[i]->status->substatus[j]->description);
 						}
 						outStr << "/>" << endl;
 					}
@@ -757,7 +735,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << m_OSResult->optimization->solution[i]->variables->values->var[j]->idx;
 								outStr <<  "\"";
 								if (m_OSResult->optimization->solution[i]->variables->values->var[j]->name != "")
-									outStr << " name=\"" << m_OSResult->optimization->solution[i]->variables->values->var[j]->name << "\"";
+									outStr << " name=" << writeStringData(m_OSResult->optimization->solution[i]->variables->values->var[j]->name);
 								outStr <<  ">";
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->variables->values->var[j]->value );
 								outStr << "</var>" << endl;
@@ -778,7 +756,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->idx;
 								outStr <<  "\"";
 								if (m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->name != "")
-									outStr << " name=\"" << m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->name << "\"";
+									outStr << " name=" << writeStringData(m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->name);
 								outStr <<  ">";
 								outStr <<  m_OSResult->optimization->solution[i]->variables->valuesString->var[j]->value;
 								outStr << "</var>" << endl;
@@ -817,9 +795,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->numberOfEnumerations;
 									outStr << "\"" ;
 								}
-								outStr << " name=\"";
-								outStr << m_OSResult->optimization->solution[i]->variables->other[k]->name;
-								outStr << "\"" ;
+								outStr << " name=";
+								outStr << writeStringData(m_OSResult->optimization->solution[i]->variables->other[k]->name);
 								if (m_OSResult->optimization->solution[i]->variables->other[k]->value != "")
 								{
 									outStr << " value=\"";
@@ -828,9 +805,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								}
 								if (m_OSResult->optimization->solution[i]->variables->other[k]->description != "")
 								{
-									outStr << " description=\"";
-									outStr << m_OSResult->optimization->solution[i]->variables->other[k]->description;
-									outStr << "\"" ;
+									outStr << " description=";
+									outStr << writeStringData(m_OSResult->optimization->solution[i]->variables->other[k]->description);
 								}
 								outStr << ">" << endl;
 								if(m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar > 0)
@@ -842,7 +818,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 										outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->idx ;
 										outStr <<  "\"";
 										if (m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->name != "")
-											outStr << " name=\"" << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->name << "\"";
+											outStr << " name=" << writeStringData(m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->name);
 										outStr <<  ">";
 										outStr << m_OSResult->optimization->solution[i]->variables->other[k]->var[j]->value;
 										outStr << "</var>" << endl;
@@ -879,7 +855,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr << m_OSResult->optimization->solution[i]->objectives->values->obj[j]->idx; //-(1 + j) ;
 								outStr <<  "\"";
 								if (m_OSResult->optimization->solution[i]->objectives->values->obj[j]->name != "")
-									outStr << " name=\"" << m_OSResult->optimization->solution[i]->objectives->values->obj[j]->name << "\"";
+									outStr << " name=" << writeStringData(m_OSResult->optimization->solution[i]->objectives->values->obj[j]->name);
 								outStr <<  ">";
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->objectives->values->obj[j]->value);
 								outStr << "</obj>" << endl;
@@ -920,9 +896,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								}
 								if (m_OSResult->optimization->solution[i]->objectives->other[k]->name != "")
 								{
-									outStr << " name=\"";\
-									outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->name;
-									outStr << "\"" ;
+									outStr << " name=";\
+									outStr << writeStringData(m_OSResult->optimization->solution[i]->objectives->other[k]->name);
 								};
 								if (m_OSResult->optimization->solution[i]->objectives->other[k]->value != "")
 								{
@@ -932,9 +907,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								};
 								if (m_OSResult->optimization->solution[i]->objectives->other[k]->description != "")
 								{
-									outStr << " description=\"";
-									outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->description;
-									outStr << "\"" ;
+									outStr << " description=";
+									outStr << writeStringData(m_OSResult->optimization->solution[i]->objectives->other[k]->description);
 								};
 								outStr <<  ">" << endl;
 								if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj > 0)
@@ -946,7 +920,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 										outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->idx;
 										outStr <<  "\"";
 										if (m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->name != "")
-											outStr << " name=\"" << m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->name << "\"";
+											outStr << " name=" << writeStringData(m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->name);
 										outStr <<  ">";
 										outStr <<   m_OSResult->optimization->solution[i]->objectives->other[k]->obj[j]->value;
 										outStr << "</obj>" << endl;
@@ -983,7 +957,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								outStr <<  m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->idx;
 								outStr <<  "\"";
 								if (m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->name != "")
-									outStr << " name=\"" << m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->name << "\"";
+									outStr << " name=" << writeStringData(m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->name);
 								outStr <<  ">";
 								outStr <<  os_dtoa_format( m_OSResult->optimization->solution[i]->constraints->dualValues->con[j]->value);
 								outStr << "</con>" << endl;
@@ -1020,9 +994,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfEnumerations;
 									outStr << "\"" ;
 								}
-								outStr << " name=\"";\
-								outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->name;
-								outStr << "\"" ;
+								outStr << " name=";\
+								outStr << writeStringData(m_OSResult->optimization->solution[i]->constraints->other[k]->name);
 								if (m_OSResult->optimization->solution[i]->constraints->other[k]->value != "")
 								{
 									outStr << " value=\"";\
@@ -1031,9 +1004,8 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 								};
 								if (m_OSResult->optimization->solution[i]->constraints->other[k]->description != "")
 								{
-									outStr << " description=\"";
-									outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->description;
-									outStr << "\"" ;
+									outStr << " description=";
+									outStr << writeStringData(m_OSResult->optimization->solution[i]->constraints->other[k]->description);
 								};
 								outStr <<  ">" << endl;
 								if(m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0)
@@ -1044,7 +1016,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 										outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->idx;
 										outStr <<  "\"";
 										if (m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->name != "")
-											outStr << " name=\"" << m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->name << "\"";
+											outStr << " name=" << writeStringData(m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->name);
 										outStr <<  ">";
 										outStr <<  m_OSResult->optimization->solution[i]->constraints->other[k]->con[j]->value;
 										outStr << "</con>" << endl;
@@ -1077,16 +1049,15 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					for(int k = 0; k < m_OSResult->optimization->solution[i]->otherSolutionResults->numberOfOtherSolutionResults; k++)
 					{
 						outStr << "<otherSolutionResult";
-						outStr << " name=\"";
-						outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->name;
-						outStr << "\"";
+						outStr << " name=";
+						outStr << writeStringData(m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->name);
 						outStr << " numberOfItems=\"";
 						outStr << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; 
 						outStr << "\"";
 						if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category != "")
 							outStr << " category=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->category << "\"";
 						if (m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description != "")
-							outStr << " description=\"" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description << "\"";
+							outStr << " description=" << writeStringData(m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->description);
 						outStr << ">" << std::endl;
 						for(int j = 0; j < m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->numberOfItems; j++)
 							outStr << "<item>" << m_OSResult->optimization->solution[i]->otherSolutionResults->otherSolutionResult[k]->item[j] << "</item>" << std::endl;
@@ -1119,7 +1090,7 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult){
 					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->category != "")
 						outStr << " category=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->category << "\"";
 					if (m_OSResult->optimization->otherSolverOutput->solverOutput[k]->description != "")
-						outStr << " description=\"" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->description << "\"";
+						outStr << " description=" << writeStringData(m_OSResult->optimization->otherSolverOutput->solverOutput[k]->description);
 					outStr << ">" << std::endl;
 					for(int j = 0; j < m_OSResult->optimization->otherSolverOutput->solverOutput[k]->numberOfItems; j++){
 						outStr << "<item>" << m_OSResult->optimization->otherSolverOutput->solverOutput[k]->item[j] << "</item>" << std::endl;

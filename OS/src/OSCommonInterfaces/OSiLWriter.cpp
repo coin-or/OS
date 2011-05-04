@@ -16,6 +16,7 @@
  */
 
 #include "OSiLWriter.h"
+#include "OSxLWriter.h"
 #include "OSInstance.h"
 #include "OSParameters.h" 
 #include "OSBase64.h"

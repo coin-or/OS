@@ -435,6 +435,8 @@ OS/src/OSCommonInterfaces/OSrLReader.cpp -text
 OS/src/OSCommonInterfaces/OSrLReader.h -text
 OS/src/OSCommonInterfaces/OSrLWriter.cpp -text
 OS/src/OSCommonInterfaces/OSrLWriter.h -text
+OS/src/OSCommonInterfaces/OSxLWriter.cpp -text
+OS/src/OSCommonInterfaces/OSxLWriter.h -text
 OS/src/OSConfig.h -text
 OS/src/OSModelInterfaces/Makefile.am -text
 OS/src/OSModelInterfaces/Makefile.in -text
