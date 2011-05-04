@@ -2618,6 +2618,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 	
 
 	//construct index map
+	/**
 	kount = 0;
 	for(i = 0; i < m_numNodes; i++){
 		
@@ -2640,7 +2641,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 		}
 	}
 	//end construct map
-
+*/
 	
 
 	
@@ -2786,7 +2787,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 						uVal = solver->osiSolver->getColSolution()[ kount];
 						objVal += uVal*solver->osiSolver->getObjCoefficients()[ kount];
 						
-						//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001 ) std::cout << m_variableNames[ xVarIndexMap[ indexPair] ]<< " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
+						//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001 ) std::cout << m_variableNames[ m_xVarIndexMap[ indexPair] ]<< " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
 													
 						
 						if (j2 == (i + m_numHubs) ){
@@ -2804,12 +2805,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 								m_BmatrixVal[   m_numBmatrixNonz ] = (wVal - uVal)/wVal ;
 								//get index for k, j2
 								//m_BmatrixIdx[   m_numBmatrixNonz++ ] = k*(m_numNodes - 1) + j2 - 1   ;
-								if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+								if(m_xVarIndexMap.find( indexPair) == m_xVarIndexMap.end()  ){
 									std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
 									throw ErrorClass( "index mapping problem in generating multicommodity cut");
 								}else{
-									m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
-									cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+									m_BmatrixIdx[   m_numBmatrixNonz++ ] = m_xVarIndexMap[ indexPair];
+									cutString << m_variableNames[ m_xVarIndexMap[ indexPair] ]; 
 								}
 								
 							}
@@ -2831,12 +2832,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 								//get index for k, j2
 								//m_BmatrixIdx[   m_numBmatrixNonz++ ] = k*(m_numNodes - 1) + j2 - 1   ;
 								
-								if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+								if(m_xVarIndexMap.find( indexPair) == m_xVarIndexMap.end()  ){
 									std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
 									throw ErrorClass( "index mapping problem in generating multicommodity cut");
 								}else{
-									m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
-									cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+									m_BmatrixIdx[   m_numBmatrixNonz++ ] = m_xVarIndexMap[ indexPair];
+									cutString << m_variableNames[ m_xVarIndexMap[ indexPair] ]; 
 								}
 							}
 							
@@ -2859,7 +2860,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 							uVal = solver->osiSolver->getColSolution()[ kount];
 							objVal += uVal*solver->osiSolver->getObjCoefficients()[ kount];
 							
-							//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001 ) std::cout << m_variableNames[ xVarIndexMap[ indexPair] ] << " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
+							//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001 ) std::cout << m_variableNames[ m_xVarIndexMap[ indexPair] ] << " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
 							
 							if (j2 == (i + m_numHubs)  ){
 							
@@ -2877,12 +2878,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 									//get index for j1, j2 with  j1  < j2
 									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2 - 1   ;
 									
-									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+									if(m_xVarIndexMap.find( indexPair) == m_xVarIndexMap.end()  ){
 										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
 										throw ErrorClass( "index mapping problem in generating multicommodity cut");
 									}else{
-										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
-										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = m_xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ m_xVarIndexMap[ indexPair] ]; 
 									}
 									
 								}
@@ -2903,12 +2904,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 									//get index for j1, j2 with  j1  < j2
 									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2 - 1   ;
 									
-									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+									if(m_xVarIndexMap.find( indexPair) == m_xVarIndexMap.end()  ){
 										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
 										throw ErrorClass( "index mapping problem in generating multicommodity cut");
 									}else{
-										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
-										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = m_xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ m_xVarIndexMap[ indexPair] ]; 
 									}
 								}
 							}
@@ -2924,7 +2925,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 							uVal = solver->osiSolver->getColSolution()[ kount];
 							objVal += uVal*solver->osiSolver->getObjCoefficients()[ kount];
 							
-							//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001) std::cout << m_variableNames[ xVarIndexMap[ indexPair] ] << " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
+							//if(solver->osiSolver->getObjCoefficients()[ kount] < -0.001) std::cout << m_variableNames[ m_xVarIndexMap[ indexPair] ] << " valueeeee  = " << uVal << " coeff " << solver->osiSolver->getObjCoefficients()[ kount] << " kount " << kount << std::endl;
 							
 							if (j2 == (i + m_numHubs) ){
 								
@@ -2941,12 +2942,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 									//get index for j1, j2 with  j1  > j2
 									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2    ;
 									
-									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+									if(m_xVarIndexMap.find( indexPair) == m_xVarIndexMap.end()  ){
 										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
 										throw ErrorClass( "index mapping problem in generating multicommodity cut");
 									}else{
-										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
-										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = m_xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ m_xVarIndexMap[ indexPair] ]; 
 									}
 								}
 								
@@ -2964,12 +2965,12 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 									m_BmatrixVal[   m_numBmatrixNonz ] = -uVal/wVal ;
 									//get index for j1, j2 with  j1  > j2
 									//m_BmatrixIdx[   m_numBmatrixNonz++ ] = j1*(m_numNodes - 1) + j2   ;
-									if(xVarIndexMap.find( indexPair) == xVarIndexMap.end()  ){
+									if(m_xVarIndexMap.find( indexPair) == m_xVarIndexMap.end()  ){
 										std::cout << " Getting ready to call ErrorClass: kount = " << kount << std::endl;
 										throw ErrorClass( "index mapping problem in generating multicommodity cut");
 									}else{
-										m_BmatrixIdx[   m_numBmatrixNonz++ ] = xVarIndexMap[ indexPair];
-										cutString << m_variableNames[ xVarIndexMap[ indexPair] ]; 
+										m_BmatrixIdx[   m_numBmatrixNonz++ ] = m_xVarIndexMap[ indexPair];
+										cutString << m_variableNames[ m_xVarIndexMap[ indexPair] ]; 
 									}
 								}
 							}	
