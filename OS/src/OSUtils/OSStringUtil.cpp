@@ -1,5 +1,5 @@
-/* $Id: OSxLWriter.cpp 3729 2010-10-18 12:25:22Z Gassmann $ */
-/** @file OSxLWriter.cpp
+/* $Id: OSStringUtil.cpp 3729 2010-10-18 12:25:22Z Gassmann $ */
+/** @file OSStringUtil.cpp
  * 
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
@@ -14,17 +14,17 @@
  */
 
 
-#include "OSxLWriter.h"
+#include "OSStringUtil.h"
 #include "OSParameters.h" 
 #include "OSBase64.h"
 #include "OSMathUtil.h"
-#include "CoinFinite.hpp"
+
 
 #include <sstream>  
 
 //using std::cout;
 //using std::endl;
-//using std::ostringstream; 
+using std::ostringstream; 
 
 
 /**
@@ -51,4 +51,13 @@ std::string writeStringData(std::string str)
 
 	outStr << quote << str << quote;
 	return outStr.str();
-};
+}
+
+
+
+std::string makeStringFromInt(std::string theString, int theInt){
+	ostringstream outStr;
+	outStr << theString;
+	outStr << theInt;
+	return outStr.str();
+}//end makeStringFromInt

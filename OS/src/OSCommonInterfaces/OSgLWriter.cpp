@@ -15,7 +15,7 @@
 
 
 #include "OSgLWriter.h"
-#include "OSxLWriter.h"
+#include "OSStringUtil.h"
 #include "OSGeneral.h"
 #include "OSParameters.h" 
 #include "OSBase64.h"

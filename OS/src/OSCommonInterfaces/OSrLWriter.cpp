@@ -19,7 +19,7 @@
 #include "OSResult.h"
 #include "OSgLWriter.h"
 #include "OSGeneral.h"
-#include "OSxLWriter.h"
+#include "OSStringUtil.h"
 #include "OSParameters.h" 
 #include "OSConfig.h"
 #include "OSBase64.h"

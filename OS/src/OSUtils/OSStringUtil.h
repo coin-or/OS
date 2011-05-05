@@ -1,5 +1,5 @@
-/* $Id: OSxLWriter.h 2698 2009-06-09 04:14:07Z kmartin $ */
-/** @file OSxLWriter.h
+/* $Id: OSStringUtil.h 2698 2009-06-09 04:14:07Z kmartin $ */
+/** @file OSStringUtil.h
  * 
  *
  * @author Horand Gassmann, Jun Ma, Kipp Martin, 

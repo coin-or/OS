@@ -69,6 +69,7 @@ OS/applications/fileUpload/Makefile.am -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
 OS/applications/fileUpload/OSFileUpload.java -text
+OS/applications/matlab/OSMatlabSolverMex.cpp -text
 OS/applications/parsingTest/Makefile.am -text
 OS/applications/parsingTest/Makefile.in -text
 OS/applications/parsingTest/parsingTest.cpp -text
@@ -435,8 +436,6 @@ OS/src/OSCommonInterfaces/OSrLReader.cpp -text
 OS/src/OSCommonInterfaces/OSrLReader.h -text
 OS/src/OSCommonInterfaces/OSrLWriter.cpp -text
 OS/src/OSCommonInterfaces/OSrLWriter.h -text
-OS/src/OSCommonInterfaces/OSxLWriter.cpp -text
-OS/src/OSCommonInterfaces/OSxLWriter.h -text
 OS/src/OSConfig.h -text
 OS/src/OSModelInterfaces/Makefile.am -text
 OS/src/OSModelInterfaces/Makefile.in -text
@@ -501,6 +500,8 @@ OS/src/OSUtils/OSFileUtil.h -text
 OS/src/OSUtils/OSMathUtil.cpp -text
 OS/src/OSUtils/OSMathUtil.h -text
 OS/src/OSUtils/OSParameters.h -text
+OS/src/OSUtils/OSStringUtil.cpp -text
+OS/src/OSUtils/OSStringUtil.h -text
 OS/src/OSUtils/OSdtoa.cpp -text
 OS/src/OSUtils/OSdtoa.h -text
 OS/stylesheets/OSrL.css -text

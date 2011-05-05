@@ -24,6 +24,8 @@ libOSUtils_la_SOURCES = \
 		OSErrorClass.h \
 		OSFileUtil.cpp \
 		OSFileUtil.h \
+                OSStringUtil.h\
+                OSStringUtil.cpp\
 		OSMathUtil.cpp \
 		OSMathUtil.h \
 		OSDataStructures.h \
@@ -61,6 +63,7 @@ includecoin_HEADERS = \
 	OSBase64.h \
 	OSErrorClass.h \
 	OSFileUtil.h \
+        OSStringUtil.h\
 	OSMathUtil.h \
 	OSDataStructures.h \
 	OSParameters.h \
