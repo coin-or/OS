@@ -1,0 +1,58 @@
+#----------------------------------------------------------------------------
+            ;;
+        maci64)
+#----------------------------------------------------------------------------
+            # StorageVersion: 1.0
+            # CkeyName: GNU C
+            # CkeyManufacturer: GNU
+            # CkeyLanguage: C
+            # CkeyVersion:
+            #CC='gcc-4.0'
+			#CC='gcc'
+			CC='g++'
+            SDKROOT='/Developer/SDKs/MacOSX10.5.sdk'
+            MACOSX_DEPLOYMENT_TARGET='10.5'
+            ARCHS='x86_64'
+            CFLAGS="-fno-common -no-cpp-precomp -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+            CFLAGS="$CFLAGS  -fexceptions"
+            CLIBS="$MLIBS"
+            COPTIMFLAGS='-O2 -DNDEBUG'
+            CDEBUGFLAGS='-g'
+#
+            CLIBS="$CLIBS -lstdc++"
+			#CLIBS="$CLIBS -L/usr/local/lib/ -lstdc++"
+            # C++keyName: GNU C++
+            # C++keyManufacturer: GNU
+            # C++keyLanguage: C++
+            # C++keyVersion: 
+            #CXX=g++-4.0
+			CXX=g++
+            CXXFLAGS="-DHAVE_CONFIG_H -fno-common -no-cpp-precomp -fexceptions -arch $ARCHS -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET  -I/Users/kmartin/coin/os-trunk/vpath/include/   -I/Users/kmartin/coin/os-trunk/vpath/include/coin"  
+            #CXXLIBS="$MLIBS -lstdc++   -L/Users/kmartin/coin/os-trunk/vpath/lib -lOS -lbonmin -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lCbc -lCgl -lOsi -lClp  -lSym -lCoinUtils -lm "
+			CXXLIBS="$MLIBS   -L/Users/kmartin/coin/os-trunk/vpath/lib -lOS -lbonmin -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lOsiVol -lOsiDylp -lCbc -lCgl -lOsi -lClp  -lSym -lVol -lDylp -lCoinUtils -lCbcSolver  -lcoinmumps -ldl -lpthread /usr/local/lib/libgfortran.dylib -lgcc_s.10.5 -lgcc_ext.10.5 -lSystem -lm "
+            CXXOPTIMFLAGS='-O2 -DNDEBUG'
+            CXXDEBUGFLAGS='-g'
+#
+            # FortrankeyName: GNU Fortran
+            # FortrankeyManufacturer: GNU
+            # FortrankeyLanguage: Fortran
+            # FortrankeyVersion: 
+            FC='gfortran'
+          
+            FFLAGS='-fexceptions -m64 -fbackslash'
+            FC_LIBDIR=`$FC -print-file-name=libgfortran.dylib 2>&1 | sed -n '1s/\/*libgfortran\.dylib//p'`
+            FC_LIBDIR2=`$FC -print-file-name=libgfortranbegin.a 2>&1 | sed -n '1s/\/*libgfortranbegin\.a//p'`
+            FLIBS="$MLIBS -L$FC_LIBDIR -lgfortran -L$FC_LIBDIR2 -lgfortranbegin"
+            FOPTIMFLAGS='-O'
+            FDEBUGFLAGS='-g'
+#
+            LD="$CC"
+            LDEXTENSION='.mexmaci64'
+            #LDFLAGS="-bind_at_load  -flat_namespace -undefined suppress -Wl,-twolevel_namespace -undefined error -arch $ARCHS -Wl,-syslibroot,$SDKROOT -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+			LDFLAGS="-bind_at_load  -flat_namespace -undefined suppress -Wl,-twolevel_namespace -undefined error  -arch $ARCHS -framework vecLib  -Wl -mmacosx-version-min=$MACOSX_DEPLOYMENT_TARGET"
+            LDFLAGS="$LDFLAGS -bundle -Wl,-exported_symbols_list,$TMW_ROOT/extern/lib/$Arch/$MAPFILE"
+            LDOPTIMFLAGS='-O'
+            LDDEBUGFLAGS='-g'
+#
+            POSTLINK_CMDS=':'
+#----------------------------------------------------------------------------

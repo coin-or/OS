@@ -59,8 +59,9 @@ OSMatlab::~OSMatlab() {
 
 std::string OSMatlab::solve() {
 	ostringstream outStr;
-	std::string osol = "<osol> <optimization>  <other name=\"os_solver\">" + 
-	sSolverName + "</other> </optimization></osol>";
+	//std::string osol = "<osol> <optimization>  <other name=\"os_solver\">" + 
+	//sSolverName + "</other> </optimization></osol>";
+	std::string osol = "";
 	osil = "";
 //
 //

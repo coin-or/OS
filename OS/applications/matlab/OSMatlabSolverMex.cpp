@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "mex.h"
+#include "matrix.h"
 
 
 
@@ -32,6 +33,8 @@ using std::endl;
 
 
 void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[] ) {
+    
+   
 
    /**
     * The parameters are:
@@ -203,16 +206,17 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      //
      // create the OSInstance
      mexPrintf("CREATE THE INSTANCE \n");
+     
      matlabModel->createOSInstance();
      mexPrintf("CALL THE REMOTE SERVER \n");
      sTest = matlabModel->solve();
      std::string osil = matlabModel->osil;
-     char *ch = &osil[0];
+    char *ch = &osil[0];
     printf("HERE IS THE INSTANCE %s\n", ch);
     mexPrintf("DONE WITH THE REMOTE CALL \n");
      mexPrintf("HERE IS THE SOLUTION \n");
      mexPrintf(&sTest[0] );
-    //char *str[100];
+    // *str[100];
      //plhs[0]= mxCreateCharMatrixFromStrings(  1,    (const char **)str); 
      //plhs = 'DOES THIS WORK';
      // garbage collection
@@ -220,17 +224,19 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
       //str[ 0] = mxArrayToString( prhs[ 9]);
       str[ 0] = &sTest[0] ;
       plhs[0]= mxCreateCharMatrixFromStrings( 1, (const char **)str); 
-     delete matlabModel;
+     //delete matlabModel;
      return  ;
 }
 SparseMatrix* getConstraintMatrix( const mxArray *prhs){
      SparseMatrix *sparseMat = NULL;
+     
      sparseMat = new SparseMatrix();
     /* Declare variable */
      mxArray *plhs;
      //mwSize m,n;
      // mwSize nzmax;
      //mwIndex *irs, *jcs, j, k;
+     //size_t *irs, *jcs, j, k;
      int m,n;
      int nzmax;
      int *irs, *jcs, j, k;
@@ -246,8 +252,8 @@ SparseMatrix* getConstraintMatrix( const mxArray *prhs){
      plhs = mxCreateSparse(m, n, nzmax, (mxComplexity)cmplx);
      sr  = mxGetPr( plhs);
      si  = mxGetPi( plhs);
-     irs = mxGetIr( plhs);
-     jcs = mxGetJc( plhs);
+     irs = (int*)mxGetIr( plhs);
+     jcs = (int*)mxGetJc( plhs);
     /* Copy nonzeros */
      k = 0;
      for (j=0; (j<n); j++) {
@@ -280,8 +286,8 @@ SparseMatrix* getConstraintMatrix( const mxArray *prhs){
      sparseMat->isColumnMajor = true;
      sparseMat->startSize = n + 1;
      sparseMat->valueSize = jcs[ n];
-     sparseMat->starts = jcs;
-     sparseMat->indexes = irs;
+     sparseMat->starts =  jcs;
+     sparseMat->indexes =   irs;
      sparseMat->values = sr;
      return sparseMat;
 }

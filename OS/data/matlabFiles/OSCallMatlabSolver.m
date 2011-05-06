@@ -1,7 +1,7 @@
 function callMatlabSolver(numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, Q, prob_name, password, solverName, serviceAddress)
 % callMatLabSolver invokes the Matlab mex routine to solve a MATLAB
 % formulated problem using optimization services.
-os_result = OSMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, Q, prob_name, password, solverName, serviceAddress);
+os_result = OSMatlabSolverMex( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, Q, prob_name, password, solverName, serviceAddress)
 if size(os_result) > 0
      fid = fopen('osrl.xml', 'w');
      fprintf(fid, '%s' ,os_result);

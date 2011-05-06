@@ -22,7 +22,8 @@ password = 'chicagoesmuyFRIO';
 solverName = 'clp';
 %the remote service service address
 %if left empty we solve locally
-serviceAddress='http://gsbkip.chicagogsb.edu/os/OSSolverService.jws';
+serviceAddress='';
 % now solve
 OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ... 
     VarType, Q, prob_name, password, solverName, serviceAddress)
+

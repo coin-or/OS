@@ -70,6 +70,7 @@ OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
 OS/applications/fileUpload/OSFileUpload.java -text
 OS/applications/matlab/OSMatlabSolverMex.cpp -text
+OS/applications/matlab/macOSXscript.txt -text
 OS/applications/parsingTest/Makefile.am -text
 OS/applications/parsingTest/Makefile.in -text
 OS/applications/parsingTest/parsingTest.cpp -text
