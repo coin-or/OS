@@ -193,8 +193,8 @@ void mexFunction( int  nlhs, mxArray   *plhs[], int  nrhs, const mxArray *prhs[]
      }
      //
      buf = mxArrayToString( prhs[ 12]);
-     const char *password = "chicagoesmuyFRIO";
-     if( strcmp(buf,  password) != 0) mexErrMsgTxt(" Incorrect Password\n");
+     //const char *password = "";
+     //if( strcmp(buf,  password) != 0) mexErrMsgTxt(" Incorrect Password\n");
      //
      // get the name of the solver
       matlabModel->sSolverName = mxArrayToString( prhs[ 13]);    

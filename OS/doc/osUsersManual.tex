@@ -4405,59 +4405,45 @@ for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt r
 \subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:usingmatlab}
 
 \index{MATLAB|(}
-MATLAB has powerful matrix generation and manipulation routines. This section is for users who wish to use MATLAB to generate the matrix coefficients for linear or quadratic programming and use the OS library to call a solver and get the result back. Using MATLAB with OS requires the user 
-
-This example differs from the other examples in that makefiles are not used.
-Indeed, if the user has done a VPATH\index{VPATH} build, the relevant {\tt cpp} file remains
-in the original OS download directory under {\tt OS/examples/matlab},
-not in the VPATH directory.
+MATLAB has powerful matrix generation and manipulation routines. This section is for users who wish to use MATLAB to generate the matrix coefficients for linear or quadratic programs and use the OS library to call a solver and get the result back. Using MATLAB with OS requires the user compile a file {\tt OSMatlabSolverMex.cpp} into a MATLAB executable file (these files will have a {\tt .mex} extension) after compilation. This executable file is linked to the OS library and works through the MATLAB API to communicate with the OS library. 
 
 
 
-
-Linear, integer, and quadratic problems can be formulated in MATLAB and then optimized
-either locally or over the network using the OS Library. The {\tt OSMatlab} class functions much like
-{\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} and {\tt OSmps2osil}\index{OSmps2osil@{\tt OSmps2osil}}
-and takes MATLAB arrays to create an OSiL instance.  This class is part of the OS library.
-In order to use the {\tt OSMatlab} class it is necessary to  compile
-{\tt OSmatlabSolver.cpp}  into  a MATLAB Executable ({\tt mex}) file.
-The {\tt OSmatlabSolver.cpp} file is in the {\tt  OS/examples/matlab} directory.
-We  assume the user has already done a {\tt make install}\ref{section:unixbuilds} and that in the OS root directory
+The OS MATLAB application differs from the other applications in the {\tt OS/applications} folder in that makefiles are not used.  The file 
 \begin{verbatim}
-/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS
+OS/applications/matlab/OSMatlabSolverMex.cpp
 \end{verbatim}
-there is an {\tt include} directory as well as a {\tt lib} directory resulting from the {\tt make install}.
-The following steps should be followed.
+must be compiled inside the MATLAB command window.  Building the OS MATLAB application requires the following steps. 
 
 
 \begin{enumerate}[{\bf Step 1:}]
 
 
 
-\item{} Edit the MATLAB file {\tt mexopts.sh} (UNIX) or {\tt mexopts.bat}  (Windows) so that the {\tt CXXFLAGS} option includes the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\item{}   The MATLAB installation contains a file {\tt mexopts.sh} (UNIX) or {\tt mexopts.bat}  (Windows) that must be edited.   This file typically resides  in the {\tt bin} directory of the MATLAB application.    This file  contains compile and link options that must be properly set.   Appropriate paths to header files and libraries must be set.  This discussion is based on the assumption that the user has either done a  {\tt make install} for the OS project or has downloaded a binary archive of the OS project. In either case there will be an {\tt include} directory with the necessary header files and a {\tt lib} directory with the necessary libraries for linking. 
+
+First edit   the {\tt CXXFLAGS} option  to point to  the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
 \begin{verbatim}
 CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
     -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/
     -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/include'
 \end{verbatim}
 
-Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like:
+Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like the following on a MacIntosh:
 
 \begin{verbatim}
-CXXLIBS="$MLIBS -lstdc++
-    -L/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/lib
-    -lOS  -lbonmin -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lCbc -lCgl -lOsi -lClp
-    -lSym -lCoinUtils  -lm"
+CXXLIBS="$MLIBS -lstdc++ -L/Users/kmartin/coin/os-trunk/vpath/lib 
+-lOS -lbonmin -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lOsiVol
+-lOsiDylp -lCbc -lCgl -lOsi -lClp  -lSym -lVol -lDylp 
+-lCoinUtils -lCbcSolver  -lcoinmumps -ldl -lpthread 
+/usr/local/lib/libgfortran.dylib -lgcc_s.10.5 -lgcc_ext.10.5 -lSystem -lm 
 \end{verbatim}
 
-For a UNIX system the {\tt mexopts.sh} file  is typically  found in a directory with the release name in 
-{\tt  $\tt\sim$/.matlab}. For example, {\tt $\tt\sim$/.matlab/R14SP3}.  It may also be in the {\tt bin} directory 
-in the MATLAB application root folder.
-
-
-On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory with the release name in 
-{\tt C:$\backslash$Documents and Settings$\backslash$Username$\backslash$Application Data$\backslash$Mathworks$\backslash$MATLAB}
-
+{\bf Important:} It has been the authors' experience that setting the necessary MATLAB compiler and linker options to build the {\tt mex} can be tricky.  We include in
+\begin{verbatim}
+OS/applications/matlab/macOSXscript.txt
+\end{verbatim}
+the exact options that work on a 64 bit Mac with MATLAB release R2009b.
 
 \item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file {\tt OSmatlabSolver.cpp}.    Execute the command:
 
@@ -4465,9 +4451,18 @@ On a Windows system, the {\tt  mexopts.bat} file will usually be in a directory 
 mex -v OSMatlabSolver.cpp
 \end{verbatim}
 
-On an Intel MAC OS X the resulting executable will be named {\tt OSmatlabSolver.mexmaci}. On the Windows system the file is named {\tt OSmatlabSolver.mexw32}.
+On a 64 bit machine the command should be
 
-\item{}  Set the MATLAB path to include the directory with the {\tt OSmatlabSolver} executable.
+\begin{verbatim}
+mex -v -largeArrayDims OSMatlabSolver.cpp
+\end{verbatim}
+
+
+On an Intel MAC OS X 64 bit chip the resulting executable will be named {\tt OSmatlabSolver.mexmaci64}. On the Windows system the file is named {\tt OSmatlabSolver.mexw32}.  
+
+
+
+\item{}  Set the MATLAB path to include the directory {\tt  OS/applications/matlab}  (or more generally, the directory with the {\tt mex} executable).
 
 
 \item{}   In the MATLAB command window, connect to the directory {\tt OS/data/matlabFiles}. Run either of the MATLAB
@@ -4507,14 +4502,14 @@ ObjType = 1;
 % leave Q empty if there are no quadratic terms
 Q = [];
 prob_name = 'ParInc Example'
-password = 'chicagoesmuyFRIO';
+password = '';
 %
 %
 %the solver
-solverName = 'lindo';
+solverName = 'ipopt';
 %the remote service address
-%if left empty we solve locally
-serviceAddress='http://kipp.chicagobooth.edu/os/OSSolverService.jws';
+%if left empty we solve locally -- must solve locally for now
+serviceAddress='';
 % now solve
 callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ...
     VarType, Q, prob_name, password, solverName, serviceAddress)
@@ -4685,13 +4680,13 @@ Finally, name the problem, specify the solver (in this case {\tt ipopt}), the se
 \begin{verbatim}
 % replace Template with the name of your  problem
 prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin';
-password = 'chicagoesmuyFRIO';
+password = '';
 %
 %the solver
 solverName = 'ipopt';
 %the remote service service address
-%if left empty we solve locally
-serviceAddress='http://kipp.chicagobooth.edu/os/OSSolverService.jws';
+%if left empty we solve locally -- must solve locally for now
+serviceAddress='';
 % now solve
 OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
      Q, prob_name, password, solverName, serviceAddress)

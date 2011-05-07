@@ -54,7 +54,7 @@ Q = [ -1 -1 -1 -1 -1 -1;
  .425349654  .445784443   0.231430983   .370437388  .27862509 .27763384];
 % replace Template with the name of your  problem
 prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin';
-password = 'chicagoesmuyFRIO';
+password = ' ';
 %
 %the solver
 solverName = 'ipopt';

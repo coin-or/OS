@@ -15,7 +15,7 @@ ObjType = 1;
 % leave Q empty if there are no quadratic terms
 Q = [];
 prob_name = 'ParInc Example';
-password = 'chicagoesmuyFRIO';
+password = '';
 %
 %
 %the solver
