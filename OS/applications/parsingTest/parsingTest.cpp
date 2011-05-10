@@ -111,13 +111,11 @@ int main(int argC, char* argV[])
 //	ostringstream outputString;
 	std::string outputString;
 
-	bool ok;
 	bool doOutput = false;
 	bool compress = true;
 	bool addWhiteSpace = true;
 	bool verifyObjects = true;
 	bool useRandomObjects = true;
-	double check;
 
 	int nrep = 1;
 	unsigned int seed;
@@ -190,9 +188,8 @@ int main(int argC, char* argV[])
 		if (argC == 7)
 			verifyObjects = (strcmp(argV[6],"verifyobjects") == 0); 
  */	
-		size_t ipos, epos;
+		size_t epos;
 		std::string argument, option, value;
-		char* p;
 		for (int i=1; i<argC; i++)
 		{
 			if (argV[i][0] != '-') 
@@ -734,7 +731,6 @@ void printHelp()
 std::string getUserInput(bool defaultPresent)
 {
 	std::string lineText;
-	bool validName;
 
 	std::string wordSep = " ";
 	std::string optionName = "";
