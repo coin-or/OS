@@ -46,7 +46,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src\OsiClp;..\..\..\..\DyLP\src\OsiDylp;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdLib"
+				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdLib;..\..\..\..\DyLP\src\OsiDylp;..\..\..\..\SYMPHONY\Include;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src;..\..\..\..\Vol\src\OsiVol"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -73,7 +73,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
-				OutputFile="..\..\..\test\parsingTest.exe"
+				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
@@ -81,7 +81,7 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\$(ConfigurationName)\OSParsingTest.pdb"
 				SubSystem="1"
-				TargetMachine="1"
+				TargetMachine="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -133,7 +133,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\src;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Osi\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src\OsiClp;..\..\..\..\DyLP\src\OsiDylp;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdLib"
+				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdLib;..\..\..\..\DyLP\src\OsiDylp;..\..\..\..\SYMPHONY\Include;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src;..\..\..\..\Vol\src\OsiVol"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -168,7 +168,7 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\$(ConfigurationName)\OSParsingTest.pdb"
 				SubSystem="1"
-				TargetMachine="17"
+				TargetMachine="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -219,7 +219,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;..\..\..\..\SYMPHONY\Include;..\..\..\..\Osi\src\OsiSym"
+				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdLib;..\..\..\..\DyLP\src\OsiDylp;..\..\..\..\SYMPHONY\Include;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src;..\..\..\..\Vol\src\OsiVol"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;COIN_HAS_SYMPHONY"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -255,7 +255,7 @@
 				SubSystem="1"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
-				TargetMachine="1"
+				TargetMachine="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -307,7 +307,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\..\Ipopt\src\Common;..\..\..\..\Ipopt\src\Interfaces;..\..\..\..\Ipopt\src\LinAlg;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src;..\..\..\..;..\..\..\..\CppAD\local;..\..\..\..\CppAD;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src;..\..\..\..\Osi\src\OsiClp;..\..\..\..\CoinUtils\src;..\..\..\..\BuildTools\headers;..\..\..\..\Osi\src\OsiVol;..\..\..\..\Vol\src;..\..\..\..\Clp\src;..\..\..\..\Cbc\src;..\..\..\..\SYMPHONY\Include;..\..\..\..\Osi\src\OsiSym"
+				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\OS\src\ThirdPartyASL;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdLib;..\..\..\..\DyLP\src\OsiDylp;..\..\..\..\SYMPHONY\Include;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src;..\..\..\..\Vol\src\OsiVol"
 				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;COIN_HAS_SYMPHONY"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -343,7 +343,7 @@
 				SubSystem="1"
 				OptimizeReferences="0"
 				EnableCOMDATFolding="0"
-				TargetMachine="17"
+				TargetMachine="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
