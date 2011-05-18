@@ -176,7 +176,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass) {
 								else{
 									// default solver is Clp in continuous case, 
 									// Cbc for an integer program
-									if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0) sSolverName = "cbc";
+									if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ||
+											sSolverName.find( "cbc") != std::string::npos	) sSolverName = "cbc";
 										else sSolverName = "clp";
 									solverIsDefined = true;
 									osiSolver = new OsiClpSolverInterface();

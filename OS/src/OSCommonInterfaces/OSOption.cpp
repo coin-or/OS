@@ -13,11 +13,11 @@
  * 
  */
 
-#define DEBUG
+//#define DEBUG
 
-//#ifdef  DEBUG
+#ifdef  DEBUG
 #define DEBUG_OSOPTION
-//#endif
+#endif
 
 #include "OSOption.h"
 #include "OSParameters.h"

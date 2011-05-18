@@ -1830,7 +1830,7 @@ varValueStart: VARSTART
 		osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
 	parserData->idxAttributePresent = false;
 	parserData->nameAttributePresent = false;
-	parserData->name = ""	
+	parserData->name = "";	
 };
 
 varValueAttList: | varValueAttList varValueAtt;
@@ -2180,7 +2180,7 @@ otherVarStart: VARSTART
 		osrlerror(NULL, NULL, parserData, osglData, "more <var> elements than specified");
 	parserData->idxAttributePresent = false;
 	parserData->nameAttributePresent = false;
-	parserData->name = ""	
+	parserData->name = ""	;
 };
 
 otherVarAttList: | otherVarAttList otherVarAtt;
@@ -2349,7 +2349,7 @@ objValueStart: OBJSTART
 	parserData->idxAttributePresent = false;
 	parserData->idx = -1;
 	parserData->nameAttributePresent = false;
-	parserData->name = ""	
+	parserData->name = ""	;
 };
 
 objValueAttList: | objValueAttList objValueAtt;
@@ -2634,7 +2634,7 @@ otherObjStart: OBJSTART
 	parserData->idxAttributePresent = false;
 	parserData->idx = -1;	
 	parserData->nameAttributePresent = false;
-	parserData->name = ""	
+	parserData->name = ""	;
 };
 
 otherObjAttList: | otherObjAttList otherObjAtt;
@@ -3078,7 +3078,7 @@ otherConStart: CONSTART
 		osrlerror(NULL, NULL, parserData, osglData, "more <con> elements than specified");
 	parserData->idxAttributePresent = false;
 	parserData->nameAttributePresent = false;
-	parserData->name = ""	
+	parserData->name = ""	;
 };
 
 otherConAttList: | otherConAttList otherConAtt;
