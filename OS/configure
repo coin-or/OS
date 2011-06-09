@@ -2907,7 +2907,7 @@ if test x"$CFLAGS" = x; then
       *)
         coin_opt_cflags="-O3"
         coin_add_cflags="-pipe"
-        coin_dbg_cflags="-g"
+        coin_dbg_cflags="-g -O0"
         coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas -Wno-long-long"
         case $build in
           *-darwin*)
@@ -3839,7 +3839,7 @@ if test x"$CXXFLAGS" = x; then
 # ToDo decide about unroll-loops
         coin_opt_cxxflags="-O3"
         coin_add_cxxflags="-pipe"
-        coin_dbg_cxxflags="-g"
+        coin_dbg_cxxflags="-g -O0"
         coin_warn_cxxflags="-Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas -Wno-long-long"
         case $build in
           *-darwin*)
@@ -22378,6 +22378,10 @@ fi
 COINUTILS_LIBS=
 COINUTILS_CFLAGS=
 COINUTILS_DATA=
+COINUTILS_DEPENDENCIES=
+COINUTILS_PCLIBS=
+COINUTILS_PCREQUIRES=
+COINUTILS_DATA=
 
 
 
@@ -22406,6 +22410,7 @@ if test "${with_coinutils_lib+set}" = set; then
      else
        coin_has_coinutils=yes
        COINUTILS_LIBS="$withval"
+       COINUTILS_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -22496,6 +22501,7 @@ echo "${ECHO_T}yes: $COINUTILS_VERSIONS" >&6
         then
           COINUTILS_LIBS=`echo " $COINUTILS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        COINUTILS_PCREQUIRES="coinutils"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -22539,8 +22545,10 @@ COINUTILS_CFLAGS=
 COINUTILS_CFLAGS_INSTALLED=
 COINUTILS_DATA=
 COINUTILS_DATA_INSTALLED=
+COINUTILS_PCLIBS=
+COINUTILS_PCREQUIRES=
 
-# initial list of dependencies is "coinutils", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinutils", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinutils"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -22736,6 +22744,7 @@ _ACEOF
     COINUTILS_LIBS_INSTALLED=`echo " $COINUTILS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  COINUTILS_PCREQUIRES="coinutils"
 
     OSLIB_PCREQUIRES="coinutils $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$COINUTILS_CFLAGS $OSLIB_CFLAGS"
@@ -22811,9 +22820,13 @@ echo "$as_me: CoinUtils DEPENDENCIES are $COINUTILS_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: CoinUtils DATA   is  $COINUTILS_DATA" >&5
 echo "$as_me: CoinUtils DATA   is  $COINUTILS_DATA" >&6;}
     fi
-    if test -n "$COINUTILS_CFLAGS" ; then
-      { echo "$as_me:$LINENO: CoinUtils CFLAGS are $COINUTILS_CFLAGS" >&5
-echo "$as_me: CoinUtils CFLAGS are $COINUTILS_CFLAGS" >&6;}
+    if test -n "$COINUTILS_PCLIBS" ; then
+      { echo "$as_me:$LINENO: CoinUtils PCLIBS are $COINUTILS_PCLIBS" >&5
+echo "$as_me: CoinUtils PCLIBS are $COINUTILS_PCLIBS" >&6;}
+    fi
+    if test -n "$COINUTILS_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: CoinUtils PCREQUIRES are $COINUTILS_PCREQUIRES" >&5
+echo "$as_me: CoinUtils PCREQUIRES are $COINUTILS_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -22875,6 +22888,10 @@ fi
 IPOPT_LIBS=
 IPOPT_CFLAGS=
 IPOPT_DATA=
+IPOPT_DEPENDENCIES=
+IPOPT_PCLIBS=
+IPOPT_PCREQUIRES=
+IPOPT_DATA=
 
 
 
@@ -22903,6 +22920,7 @@ if test "${with_ipopt_lib+set}" = set; then
      else
        coin_has_ipopt=yes
        IPOPT_LIBS="$withval"
+       IPOPT_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -22993,6 +23011,7 @@ echo "${ECHO_T}yes: $IPOPT_VERSIONS" >&6
         then
           IPOPT_LIBS=`echo " $IPOPT_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        IPOPT_PCREQUIRES="ipopt"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -23036,8 +23055,10 @@ IPOPT_CFLAGS=
 IPOPT_CFLAGS_INSTALLED=
 IPOPT_DATA=
 IPOPT_DATA_INSTALLED=
+IPOPT_PCLIBS=
+IPOPT_PCREQUIRES=
 
-# initial list of dependencies is "ipopt", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "ipopt", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="ipopt"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -23233,6 +23254,7 @@ _ACEOF
     IPOPT_LIBS_INSTALLED=`echo " $IPOPT_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  IPOPT_PCREQUIRES="ipopt"
 
     OSLIB_PCREQUIRES="ipopt $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$IPOPT_CFLAGS $OSLIB_CFLAGS"
@@ -23308,9 +23330,13 @@ echo "$as_me: Ipopt DEPENDENCIES are $IPOPT_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Ipopt DATA   is  $IPOPT_DATA" >&5
 echo "$as_me: Ipopt DATA   is  $IPOPT_DATA" >&6;}
     fi
-    if test -n "$IPOPT_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Ipopt CFLAGS are $IPOPT_CFLAGS" >&5
-echo "$as_me: Ipopt CFLAGS are $IPOPT_CFLAGS" >&6;}
+    if test -n "$IPOPT_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Ipopt PCLIBS are $IPOPT_PCLIBS" >&5
+echo "$as_me: Ipopt PCLIBS are $IPOPT_PCLIBS" >&6;}
+    fi
+    if test -n "$IPOPT_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Ipopt PCREQUIRES are $IPOPT_PCREQUIRES" >&5
+echo "$as_me: Ipopt PCREQUIRES are $IPOPT_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -23367,6 +23393,10 @@ fi
 CLP_LIBS=
 CLP_CFLAGS=
 CLP_DATA=
+CLP_DEPENDENCIES=
+CLP_PCLIBS=
+CLP_PCREQUIRES=
+CLP_DATA=
 
 
 
@@ -23395,6 +23425,7 @@ if test "${with_clp_lib+set}" = set; then
      else
        coin_has_clp=yes
        CLP_LIBS="$withval"
+       CLP_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -23485,6 +23516,7 @@ echo "${ECHO_T}yes: $CLP_VERSIONS" >&6
         then
           CLP_LIBS=`echo " $CLP_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        CLP_PCREQUIRES="osi-clp"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -23528,8 +23560,10 @@ CLP_CFLAGS=
 CLP_CFLAGS_INSTALLED=
 CLP_DATA=
 CLP_DATA_INSTALLED=
+CLP_PCLIBS=
+CLP_PCREQUIRES=
 
-# initial list of dependencies is "osi-clp", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-clp", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-clp"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -23725,6 +23759,7 @@ _ACEOF
     CLP_LIBS_INSTALLED=`echo " $CLP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  CLP_PCREQUIRES="osi-clp"
 
     OSLIB_PCREQUIRES="osi-clp $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$CLP_CFLAGS $OSLIB_CFLAGS"
@@ -23800,9 +23835,13 @@ echo "$as_me: Clp DEPENDENCIES are $CLP_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Clp DATA   is  $CLP_DATA" >&5
 echo "$as_me: Clp DATA   is  $CLP_DATA" >&6;}
     fi
-    if test -n "$CLP_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Clp CFLAGS are $CLP_CFLAGS" >&5
-echo "$as_me: Clp CFLAGS are $CLP_CFLAGS" >&6;}
+    if test -n "$CLP_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Clp PCLIBS are $CLP_PCLIBS" >&5
+echo "$as_me: Clp PCLIBS are $CLP_PCLIBS" >&6;}
+    fi
+    if test -n "$CLP_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Clp PCREQUIRES are $CLP_PCREQUIRES" >&5
+echo "$as_me: Clp PCREQUIRES are $CLP_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -23859,6 +23898,10 @@ fi
 DYLP_LIBS=
 DYLP_CFLAGS=
 DYLP_DATA=
+DYLP_DEPENDENCIES=
+DYLP_PCLIBS=
+DYLP_PCREQUIRES=
+DYLP_DATA=
 
 
 
@@ -23887,6 +23930,7 @@ if test "${with_dylp_lib+set}" = set; then
      else
        coin_has_dylp=yes
        DYLP_LIBS="$withval"
+       DYLP_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -23977,6 +24021,7 @@ echo "${ECHO_T}yes: $DYLP_VERSIONS" >&6
         then
           DYLP_LIBS=`echo " $DYLP_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        DYLP_PCREQUIRES="osi-dylp"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -24020,8 +24065,10 @@ DYLP_CFLAGS=
 DYLP_CFLAGS_INSTALLED=
 DYLP_DATA=
 DYLP_DATA_INSTALLED=
+DYLP_PCLIBS=
+DYLP_PCREQUIRES=
 
-# initial list of dependencies is "osi-dylp", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-dylp", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-dylp"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -24217,6 +24264,7 @@ _ACEOF
     DYLP_LIBS_INSTALLED=`echo " $DYLP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  DYLP_PCREQUIRES="osi-dylp"
 
     OSLIB_PCREQUIRES="osi-dylp $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$DYLP_CFLAGS $OSLIB_CFLAGS"
@@ -24292,9 +24340,13 @@ echo "$as_me: DyLP DEPENDENCIES are $DYLP_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: DyLP DATA   is  $DYLP_DATA" >&5
 echo "$as_me: DyLP DATA   is  $DYLP_DATA" >&6;}
     fi
-    if test -n "$DYLP_CFLAGS" ; then
-      { echo "$as_me:$LINENO: DyLP CFLAGS are $DYLP_CFLAGS" >&5
-echo "$as_me: DyLP CFLAGS are $DYLP_CFLAGS" >&6;}
+    if test -n "$DYLP_PCLIBS" ; then
+      { echo "$as_me:$LINENO: DyLP PCLIBS are $DYLP_PCLIBS" >&5
+echo "$as_me: DyLP PCLIBS are $DYLP_PCLIBS" >&6;}
+    fi
+    if test -n "$DYLP_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: DyLP PCREQUIRES are $DYLP_PCREQUIRES" >&5
+echo "$as_me: DyLP PCREQUIRES are $DYLP_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -24351,6 +24403,10 @@ fi
 VOL_LIBS=
 VOL_CFLAGS=
 VOL_DATA=
+VOL_DEPENDENCIES=
+VOL_PCLIBS=
+VOL_PCREQUIRES=
+VOL_DATA=
 
 
 
@@ -24379,6 +24435,7 @@ if test "${with_vol_lib+set}" = set; then
      else
        coin_has_vol=yes
        VOL_LIBS="$withval"
+       VOL_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -24469,6 +24526,7 @@ echo "${ECHO_T}yes: $VOL_VERSIONS" >&6
         then
           VOL_LIBS=`echo " $VOL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        VOL_PCREQUIRES="osi-vol"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -24512,8 +24570,10 @@ VOL_CFLAGS=
 VOL_CFLAGS_INSTALLED=
 VOL_DATA=
 VOL_DATA_INSTALLED=
+VOL_PCLIBS=
+VOL_PCREQUIRES=
 
-# initial list of dependencies is "osi-vol", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-vol", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-vol"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -24709,6 +24769,7 @@ _ACEOF
     VOL_LIBS_INSTALLED=`echo " $VOL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  VOL_PCREQUIRES="osi-vol"
 
     OSLIB_PCREQUIRES="osi-vol $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$VOL_CFLAGS $OSLIB_CFLAGS"
@@ -24784,9 +24845,13 @@ echo "$as_me: Vol DEPENDENCIES are $VOL_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Vol DATA   is  $VOL_DATA" >&5
 echo "$as_me: Vol DATA   is  $VOL_DATA" >&6;}
     fi
-    if test -n "$VOL_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Vol CFLAGS are $VOL_CFLAGS" >&5
-echo "$as_me: Vol CFLAGS are $VOL_CFLAGS" >&6;}
+    if test -n "$VOL_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Vol PCLIBS are $VOL_PCLIBS" >&5
+echo "$as_me: Vol PCLIBS are $VOL_PCLIBS" >&6;}
+    fi
+    if test -n "$VOL_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Vol PCREQUIRES are $VOL_PCREQUIRES" >&5
+echo "$as_me: Vol PCREQUIRES are $VOL_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -24843,6 +24908,10 @@ fi
 SYMPHONY_LIBS=
 SYMPHONY_CFLAGS=
 SYMPHONY_DATA=
+SYMPHONY_DEPENDENCIES=
+SYMPHONY_PCLIBS=
+SYMPHONY_PCREQUIRES=
+SYMPHONY_DATA=
 
 
 
@@ -24871,6 +24940,7 @@ if test "${with_symphony_lib+set}" = set; then
      else
        coin_has_symphony=yes
        SYMPHONY_LIBS="$withval"
+       SYMPHONY_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -24961,6 +25031,7 @@ echo "${ECHO_T}yes: $SYMPHONY_VERSIONS" >&6
         then
           SYMPHONY_LIBS=`echo " $SYMPHONY_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        SYMPHONY_PCREQUIRES="osi-sym"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -25004,8 +25075,10 @@ SYMPHONY_CFLAGS=
 SYMPHONY_CFLAGS_INSTALLED=
 SYMPHONY_DATA=
 SYMPHONY_DATA_INSTALLED=
+SYMPHONY_PCLIBS=
+SYMPHONY_PCREQUIRES=
 
-# initial list of dependencies is "osi-sym", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-sym", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-sym"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -25201,6 +25274,7 @@ _ACEOF
     SYMPHONY_LIBS_INSTALLED=`echo " $SYMPHONY_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  SYMPHONY_PCREQUIRES="osi-sym"
 
     OSLIB_PCREQUIRES="osi-sym $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$SYMPHONY_CFLAGS $OSLIB_CFLAGS"
@@ -25276,9 +25350,13 @@ echo "$as_me: SYMPHONY DEPENDENCIES are $SYMPHONY_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: SYMPHONY DATA   is  $SYMPHONY_DATA" >&5
 echo "$as_me: SYMPHONY DATA   is  $SYMPHONY_DATA" >&6;}
     fi
-    if test -n "$SYMPHONY_CFLAGS" ; then
-      { echo "$as_me:$LINENO: SYMPHONY CFLAGS are $SYMPHONY_CFLAGS" >&5
-echo "$as_me: SYMPHONY CFLAGS are $SYMPHONY_CFLAGS" >&6;}
+    if test -n "$SYMPHONY_PCLIBS" ; then
+      { echo "$as_me:$LINENO: SYMPHONY PCLIBS are $SYMPHONY_PCLIBS" >&5
+echo "$as_me: SYMPHONY PCLIBS are $SYMPHONY_PCLIBS" >&6;}
+    fi
+    if test -n "$SYMPHONY_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: SYMPHONY PCREQUIRES are $SYMPHONY_PCREQUIRES" >&5
+echo "$as_me: SYMPHONY PCREQUIRES are $SYMPHONY_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -25335,6 +25413,10 @@ fi
 CPX_LIBS=
 CPX_CFLAGS=
 CPX_DATA=
+CPX_DEPENDENCIES=
+CPX_PCLIBS=
+CPX_PCREQUIRES=
+CPX_DATA=
 
 
 
@@ -25363,6 +25445,7 @@ if test "${with_cpx_lib+set}" = set; then
      else
        coin_has_cpx=yes
        CPX_LIBS="$withval"
+       CPX_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -25453,6 +25536,7 @@ echo "${ECHO_T}yes: $CPX_VERSIONS" >&6
         then
           CPX_LIBS=`echo " $CPX_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        CPX_PCREQUIRES="osi-cplex"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -25496,8 +25580,10 @@ CPX_CFLAGS=
 CPX_CFLAGS_INSTALLED=
 CPX_DATA=
 CPX_DATA_INSTALLED=
+CPX_PCLIBS=
+CPX_PCREQUIRES=
 
-# initial list of dependencies is "osi-cplex", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-cplex", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-cplex"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -25693,6 +25779,7 @@ _ACEOF
     CPX_LIBS_INSTALLED=`echo " $CPX_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  CPX_PCREQUIRES="osi-cplex"
 
     OSLIB_PCREQUIRES="osi-cplex $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$CPX_CFLAGS $OSLIB_CFLAGS"
@@ -25768,9 +25855,13 @@ echo "$as_me: Cpx DEPENDENCIES are $CPX_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Cpx DATA   is  $CPX_DATA" >&5
 echo "$as_me: Cpx DATA   is  $CPX_DATA" >&6;}
     fi
-    if test -n "$CPX_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Cpx CFLAGS are $CPX_CFLAGS" >&5
-echo "$as_me: Cpx CFLAGS are $CPX_CFLAGS" >&6;}
+    if test -n "$CPX_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Cpx PCLIBS are $CPX_PCLIBS" >&5
+echo "$as_me: Cpx PCLIBS are $CPX_PCLIBS" >&6;}
+    fi
+    if test -n "$CPX_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Cpx PCREQUIRES are $CPX_PCREQUIRES" >&5
+echo "$as_me: Cpx PCREQUIRES are $CPX_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -25827,6 +25918,10 @@ fi
 GLPK_LIBS=
 GLPK_CFLAGS=
 GLPK_DATA=
+GLPK_DEPENDENCIES=
+GLPK_PCLIBS=
+GLPK_PCREQUIRES=
+GLPK_DATA=
 
 
 
@@ -25855,6 +25950,7 @@ if test "${with_glpk_lib+set}" = set; then
      else
        coin_has_glpk=yes
        GLPK_LIBS="$withval"
+       GLPK_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -25945,6 +26041,7 @@ echo "${ECHO_T}yes: $GLPK_VERSIONS" >&6
         then
           GLPK_LIBS=`echo " $GLPK_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        GLPK_PCREQUIRES="osi-glpk"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -25988,8 +26085,10 @@ GLPK_CFLAGS=
 GLPK_CFLAGS_INSTALLED=
 GLPK_DATA=
 GLPK_DATA_INSTALLED=
+GLPK_PCLIBS=
+GLPK_PCREQUIRES=
 
-# initial list of dependencies is "osi-glpk", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-glpk", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-glpk"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -26185,6 +26284,7 @@ _ACEOF
     GLPK_LIBS_INSTALLED=`echo " $GLPK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  GLPK_PCREQUIRES="osi-glpk"
 
     OSLIB_PCREQUIRES="osi-glpk $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$GLPK_CFLAGS $OSLIB_CFLAGS"
@@ -26260,9 +26360,13 @@ echo "$as_me: Glpk DEPENDENCIES are $GLPK_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Glpk DATA   is  $GLPK_DATA" >&5
 echo "$as_me: Glpk DATA   is  $GLPK_DATA" >&6;}
     fi
-    if test -n "$GLPK_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Glpk CFLAGS are $GLPK_CFLAGS" >&5
-echo "$as_me: Glpk CFLAGS are $GLPK_CFLAGS" >&6;}
+    if test -n "$GLPK_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Glpk PCLIBS are $GLPK_PCLIBS" >&5
+echo "$as_me: Glpk PCLIBS are $GLPK_PCLIBS" >&6;}
+    fi
+    if test -n "$GLPK_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Glpk PCREQUIRES are $GLPK_PCREQUIRES" >&5
+echo "$as_me: Glpk PCREQUIRES are $GLPK_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -26319,6 +26423,10 @@ fi
 CBC_LIBS=
 CBC_CFLAGS=
 CBC_DATA=
+CBC_DEPENDENCIES=
+CBC_PCLIBS=
+CBC_PCREQUIRES=
+CBC_DATA=
 
 
 
@@ -26347,6 +26455,7 @@ if test "${with_cbc_lib+set}" = set; then
      else
        coin_has_cbc=yes
        CBC_LIBS="$withval"
+       CBC_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -26437,6 +26546,7 @@ echo "${ECHO_T}yes: $CBC_VERSIONS" >&6
         then
           CBC_LIBS=`echo " $CBC_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        CBC_PCREQUIRES="osi-cbc"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -26480,8 +26590,10 @@ CBC_CFLAGS=
 CBC_CFLAGS_INSTALLED=
 CBC_DATA=
 CBC_DATA_INSTALLED=
+CBC_PCLIBS=
+CBC_PCREQUIRES=
 
-# initial list of dependencies is "osi-cbc", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-cbc", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-cbc"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -26677,6 +26789,7 @@ _ACEOF
     CBC_LIBS_INSTALLED=`echo " $CBC_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  CBC_PCREQUIRES="osi-cbc"
 
     OSLIB_PCREQUIRES="osi-cbc $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$CBC_CFLAGS $OSLIB_CFLAGS"
@@ -26752,9 +26865,13 @@ echo "$as_me: Cbc DEPENDENCIES are $CBC_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Cbc DATA   is  $CBC_DATA" >&5
 echo "$as_me: Cbc DATA   is  $CBC_DATA" >&6;}
     fi
-    if test -n "$CBC_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Cbc CFLAGS are $CBC_CFLAGS" >&5
-echo "$as_me: Cbc CFLAGS are $CBC_CFLAGS" >&6;}
+    if test -n "$CBC_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Cbc PCLIBS are $CBC_PCLIBS" >&5
+echo "$as_me: Cbc PCLIBS are $CBC_PCLIBS" >&6;}
+    fi
+    if test -n "$CBC_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Cbc PCREQUIRES are $CBC_PCREQUIRES" >&5
+echo "$as_me: Cbc PCREQUIRES are $CBC_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -26811,6 +26928,10 @@ fi
 BONMIN_LIBS=
 BONMIN_CFLAGS=
 BONMIN_DATA=
+BONMIN_DEPENDENCIES=
+BONMIN_PCLIBS=
+BONMIN_PCREQUIRES=
+BONMIN_DATA=
 
 
 
@@ -26839,6 +26960,7 @@ if test "${with_bonmin_lib+set}" = set; then
      else
        coin_has_bonmin=yes
        BONMIN_LIBS="$withval"
+       BONMIN_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -26929,6 +27051,7 @@ echo "${ECHO_T}yes: $BONMIN_VERSIONS" >&6
         then
           BONMIN_LIBS=`echo " $BONMIN_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        BONMIN_PCREQUIRES="bonmin"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -26972,8 +27095,10 @@ BONMIN_CFLAGS=
 BONMIN_CFLAGS_INSTALLED=
 BONMIN_DATA=
 BONMIN_DATA_INSTALLED=
+BONMIN_PCLIBS=
+BONMIN_PCREQUIRES=
 
-# initial list of dependencies is "bonmin", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "bonmin", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="bonmin"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -27169,6 +27294,7 @@ _ACEOF
     BONMIN_LIBS_INSTALLED=`echo " $BONMIN_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  BONMIN_PCREQUIRES="bonmin"
 
     OSLIB_PCREQUIRES="bonmin $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$BONMIN_CFLAGS $OSLIB_CFLAGS"
@@ -27244,9 +27370,13 @@ echo "$as_me: Bonmin DEPENDENCIES are $BONMIN_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Bonmin DATA   is  $BONMIN_DATA" >&5
 echo "$as_me: Bonmin DATA   is  $BONMIN_DATA" >&6;}
     fi
-    if test -n "$BONMIN_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Bonmin CFLAGS are $BONMIN_CFLAGS" >&5
-echo "$as_me: Bonmin CFLAGS are $BONMIN_CFLAGS" >&6;}
+    if test -n "$BONMIN_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Bonmin PCLIBS are $BONMIN_PCLIBS" >&5
+echo "$as_me: Bonmin PCLIBS are $BONMIN_PCLIBS" >&6;}
+    fi
+    if test -n "$BONMIN_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Bonmin PCREQUIRES are $BONMIN_PCREQUIRES" >&5
+echo "$as_me: Bonmin PCREQUIRES are $BONMIN_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -27303,6 +27433,10 @@ fi
 COUENNE_LIBS=
 COUENNE_CFLAGS=
 COUENNE_DATA=
+COUENNE_DEPENDENCIES=
+COUENNE_PCLIBS=
+COUENNE_PCREQUIRES=
+COUENNE_DATA=
 
 
 
@@ -27331,6 +27465,7 @@ if test "${with_couenne_lib+set}" = set; then
      else
        coin_has_couenne=yes
        COUENNE_LIBS="$withval"
+       COUENNE_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -27421,6 +27556,7 @@ echo "${ECHO_T}yes: $COUENNE_VERSIONS" >&6
         then
           COUENNE_LIBS=`echo " $COUENNE_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        COUENNE_PCREQUIRES="couenne"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -27464,8 +27600,10 @@ COUENNE_CFLAGS=
 COUENNE_CFLAGS_INSTALLED=
 COUENNE_DATA=
 COUENNE_DATA_INSTALLED=
+COUENNE_PCLIBS=
+COUENNE_PCREQUIRES=
 
-# initial list of dependencies is "couenne", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "couenne", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="couenne"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -27661,6 +27799,7 @@ _ACEOF
     COUENNE_LIBS_INSTALLED=`echo " $COUENNE_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  COUENNE_PCREQUIRES="couenne"
 
     OSLIB_PCREQUIRES="couenne $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$COUENNE_CFLAGS $OSLIB_CFLAGS"
@@ -27736,9 +27875,13 @@ echo "$as_me: Couenne DEPENDENCIES are $COUENNE_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Couenne DATA   is  $COUENNE_DATA" >&5
 echo "$as_me: Couenne DATA   is  $COUENNE_DATA" >&6;}
     fi
-    if test -n "$COUENNE_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Couenne CFLAGS are $COUENNE_CFLAGS" >&5
-echo "$as_me: Couenne CFLAGS are $COUENNE_CFLAGS" >&6;}
+    if test -n "$COUENNE_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Couenne PCLIBS are $COUENNE_PCLIBS" >&5
+echo "$as_me: Couenne PCLIBS are $COUENNE_PCLIBS" >&6;}
+    fi
+    if test -n "$COUENNE_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Couenne PCREQUIRES are $COUENNE_PCREQUIRES" >&5
+echo "$as_me: Couenne PCREQUIRES are $COUENNE_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -27795,6 +27938,10 @@ fi
 BCP_LIBS=
 BCP_CFLAGS=
 BCP_DATA=
+BCP_DEPENDENCIES=
+BCP_PCLIBS=
+BCP_PCREQUIRES=
+BCP_DATA=
 
 
 
@@ -27823,6 +27970,7 @@ if test "${with_bcp_lib+set}" = set; then
      else
        coin_has_bcp=yes
        BCP_LIBS="$withval"
+       BCP_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -27913,6 +28061,7 @@ echo "${ECHO_T}yes: $BCP_VERSIONS" >&6
         then
           BCP_LIBS=`echo " $BCP_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        BCP_PCREQUIRES="bcp"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -27956,8 +28105,10 @@ BCP_CFLAGS=
 BCP_CFLAGS_INSTALLED=
 BCP_DATA=
 BCP_DATA_INSTALLED=
+BCP_PCLIBS=
+BCP_PCREQUIRES=
 
-# initial list of dependencies is "bcp", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "bcp", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="bcp"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -28153,6 +28304,7 @@ _ACEOF
     BCP_LIBS_INSTALLED=`echo " $BCP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  BCP_PCREQUIRES="bcp"
 
     OSLIB_PCREQUIRES="bcp $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$BCP_CFLAGS $OSLIB_CFLAGS"
@@ -28228,9 +28380,13 @@ echo "$as_me: Bcp DEPENDENCIES are $BCP_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: Bcp DATA   is  $BCP_DATA" >&5
 echo "$as_me: Bcp DATA   is  $BCP_DATA" >&6;}
     fi
-    if test -n "$BCP_CFLAGS" ; then
-      { echo "$as_me:$LINENO: Bcp CFLAGS are $BCP_CFLAGS" >&5
-echo "$as_me: Bcp CFLAGS are $BCP_CFLAGS" >&6;}
+    if test -n "$BCP_PCLIBS" ; then
+      { echo "$as_me:$LINENO: Bcp PCLIBS are $BCP_PCLIBS" >&5
+echo "$as_me: Bcp PCLIBS are $BCP_PCLIBS" >&6;}
+    fi
+    if test -n "$BCP_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: Bcp PCREQUIRES are $BCP_PCREQUIRES" >&5
+echo "$as_me: Bcp PCREQUIRES are $BCP_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -28287,6 +28443,10 @@ fi
 ASL_LIBS=
 ASL_CFLAGS=
 ASL_DATA=
+ASL_DEPENDENCIES=
+ASL_PCLIBS=
+ASL_PCREQUIRES=
+ASL_DATA=
 
 
 
@@ -28315,6 +28475,7 @@ if test "${with_asl_lib+set}" = set; then
      else
        coin_has_asl=yes
        ASL_LIBS="$withval"
+       ASL_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -28405,6 +28566,7 @@ echo "${ECHO_T}yes: $ASL_VERSIONS" >&6
         then
           ASL_LIBS=`echo " $ASL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        ASL_PCREQUIRES="coinasl"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -28448,8 +28610,10 @@ ASL_CFLAGS=
 ASL_CFLAGS_INSTALLED=
 ASL_DATA=
 ASL_DATA_INSTALLED=
+ASL_PCLIBS=
+ASL_PCREQUIRES=
 
-# initial list of dependencies is "coinasl", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinasl", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinasl"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -28645,6 +28809,7 @@ _ACEOF
     ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  ASL_PCREQUIRES="coinasl"
 
     OSLIB_PCREQUIRES="coinasl $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$ASL_CFLAGS $OSLIB_CFLAGS"
@@ -28720,9 +28885,13 @@ echo "$as_me: ASL DEPENDENCIES are $ASL_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: ASL DATA   is  $ASL_DATA" >&5
 echo "$as_me: ASL DATA   is  $ASL_DATA" >&6;}
     fi
-    if test -n "$ASL_CFLAGS" ; then
-      { echo "$as_me:$LINENO: ASL CFLAGS are $ASL_CFLAGS" >&5
-echo "$as_me: ASL CFLAGS are $ASL_CFLAGS" >&6;}
+    if test -n "$ASL_PCLIBS" ; then
+      { echo "$as_me:$LINENO: ASL PCLIBS are $ASL_PCLIBS" >&5
+echo "$as_me: ASL PCLIBS are $ASL_PCLIBS" >&6;}
+    fi
+    if test -n "$ASL_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: ASL PCREQUIRES are $ASL_PCREQUIRES" >&5
+echo "$as_me: ASL PCREQUIRES are $ASL_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
@@ -28779,6 +28948,10 @@ fi
 CPPAD_LIBS=
 CPPAD_CFLAGS=
 CPPAD_DATA=
+CPPAD_DEPENDENCIES=
+CPPAD_PCLIBS=
+CPPAD_PCREQUIRES=
+CPPAD_DATA=
 
 
 
@@ -28807,6 +28980,7 @@ if test "${with_cppad_lib+set}" = set; then
      else
        coin_has_cppad=yes
        CPPAD_LIBS="$withval"
+       CPPAD_PCLIBS="$withval"
 
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
@@ -28897,6 +29071,7 @@ echo "${ECHO_T}yes: $CPPAD_VERSIONS" >&6
         then
           CPPAD_LIBS=`echo " $CPPAD_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
+        CPPAD_PCREQUIRES="cppad"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
@@ -28940,8 +29115,10 @@ CPPAD_CFLAGS=
 CPPAD_CFLAGS_INSTALLED=
 CPPAD_DATA=
 CPPAD_DATA_INSTALLED=
+CPPAD_PCLIBS=
+CPPAD_PCREQUIRES=
 
-# initial list of dependencies is "cppad", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "cppad", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="cppad"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -29137,6 +29314,7 @@ _ACEOF
     CPPAD_LIBS_INSTALLED=`echo " $CPPAD_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
   fi
 
+  CPPAD_PCREQUIRES="cppad"
 
     OSLIB_PCREQUIRES="cppad $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$CPPAD_CFLAGS $OSLIB_CFLAGS"
@@ -29212,9 +29390,13 @@ echo "$as_me: cppad DEPENDENCIES are $CPPAD_DEPENDENCIES" >&6;}
       { echo "$as_me:$LINENO: cppad DATA   is  $CPPAD_DATA" >&5
 echo "$as_me: cppad DATA   is  $CPPAD_DATA" >&6;}
     fi
-    if test -n "$CPPAD_CFLAGS" ; then
-      { echo "$as_me:$LINENO: cppad CFLAGS are $CPPAD_CFLAGS" >&5
-echo "$as_me: cppad CFLAGS are $CPPAD_CFLAGS" >&6;}
+    if test -n "$CPPAD_PCLIBS" ; then
+      { echo "$as_me:$LINENO: cppad PCLIBS are $CPPAD_PCLIBS" >&5
+echo "$as_me: cppad PCLIBS are $CPPAD_PCLIBS" >&6;}
+    fi
+    if test -n "$CPPAD_PCREQUIRES" ; then
+      { echo "$as_me:$LINENO: cppad PCREQUIRES are $CPPAD_PCREQUIRES" >&5
+echo "$as_me: cppad PCREQUIRES are $CPPAD_PCREQUIRES" >&6;}
     fi
 
       { echo "$as_me:$LINENO: OSLib CFLAGS are $OSLIB_CFLAGS" >&5
