@@ -386,11 +386,6 @@ OSColGenMain_SOURCES = OSColGenMain.cpp OSColGenApp.cpp OSColGenApp.h \
 OSColGenMain_LDADD = ../../../src/libOS.la $(OSLIB_LIBS)
 OSColGenMain_DEPENDENCIES = ../../../src/libOS.la $(OSLIB_DEPENDENCIES)
 
-# The -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
-OSColGenMain_LDFLAGS = -rpath $(libdir)
-
 # Now add the include paths for compilation
 
 # Here list all include flags, relative to this "srcdir" directory.  This

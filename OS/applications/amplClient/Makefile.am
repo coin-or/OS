@@ -25,11 +25,6 @@ OSAmplClient_SOURCES = OSAmplClient.cpp
 OSAmplClient_LDADD =  ../../src/libOS.la $(OSLIB_LIBS)
 OSAmplClient_DEPENDENCIES = ../../src/libOS.la $(OSLIB_DEPENDENCIES)
 
-# The -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
-OSAmplClient_LDFLAGS = -rpath $(libdir)
-
 # Now add the include paths for compilation
 
 # Here list all include flags, relative to this "srcdir" directory.  This

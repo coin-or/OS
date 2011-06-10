@@ -66,13 +66,6 @@ OSSolverService_DEPENDENCIES = libOS.la $(OSLIB_DEPENDENCIES)
 #endif
 
 
-# The -rpath flag is used by libtool to make sure that the shared
-# library is found (in the lib install directory) when we are using dynamic
-# libraries.
-OSSolverService_LDFLAGS = -rpath $(libdir)
-
-
-
 ########################################################################
 #                            Additional flags                          #
 ########################################################################
