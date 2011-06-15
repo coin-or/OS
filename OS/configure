@@ -472,7 +472,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion OS_SVN_REV build build_cpu build_vendor build_os _SVN_REV COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX EGREP INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED COINUTILS_LIBS COINUTILS_CFLAGS COINUTILS_DATA COINUTILS_DEPENDENCIES COINUTILS_LIBS_INSTALLED COINUTILS_CFLAGS_INSTALLED COINUTILS_DATA_INSTALLED OSLIB_CFLAGS OSLIB_LIBS OSLIB_PCLIBS OSLIB_PCREQUIRES OSLIB_DEPENDENCIES OSLIB_CFLAGS_INSTALLED OSLIB_LIBS_INSTALLED COIN_HAS_COINUTILS_TRUE COIN_HAS_COINUTILS_FALSE IPOPT_LIBS IPOPT_CFLAGS IPOPT_DATA IPOPT_DEPENDENCIES IPOPT_LIBS_INSTALLED IPOPT_CFLAGS_INSTALLED IPOPT_DATA_INSTALLED COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE CLP_LIBS CLP_CFLAGS CLP_DATA CLP_DEPENDENCIES CLP_LIBS_INSTALLED CLP_CFLAGS_INSTALLED CLP_DATA_INSTALLED COIN_HAS_CLP_TRUE COIN_HAS_CLP_FALSE DYLP_LIBS DYLP_CFLAGS DYLP_DATA DYLP_DEPENDENCIES DYLP_LIBS_INSTALLED DYLP_CFLAGS_INSTALLED DYLP_DATA_INSTALLED COIN_HAS_DYLP_TRUE COIN_HAS_DYLP_FALSE VOL_LIBS VOL_CFLAGS VOL_DATA VOL_DEPENDENCIES VOL_LIBS_INSTALLED VOL_CFLAGS_INSTALLED VOL_DATA_INSTALLED COIN_HAS_VOL_TRUE COIN_HAS_VOL_FALSE SYMPHONY_LIBS SYMPHONY_CFLAGS SYMPHONY_DATA SYMPHONY_DEPENDENCIES SYMPHONY_LIBS_INSTALLED SYMPHONY_CFLAGS_INSTALLED SYMPHONY_DATA_INSTALLED COIN_HAS_SYMPHONY_TRUE COIN_HAS_SYMPHONY_FALSE CPX_LIBS CPX_CFLAGS CPX_DATA CPX_DEPENDENCIES CPX_LIBS_INSTALLED CPX_CFLAGS_INSTALLED CPX_DATA_INSTALLED COIN_HAS_CPX_TRUE COIN_HAS_CPX_FALSE GLPK_LIBS GLPK_CFLAGS GLPK_DATA GLPK_DEPENDENCIES GLPK_LIBS_INSTALLED GLPK_CFLAGS_INSTALLED GLPK_DATA_INSTALLED COIN_HAS_GLPK_TRUE COIN_HAS_GLPK_FALSE CBC_LIBS CBC_CFLAGS CBC_DATA CBC_DEPENDENCIES CBC_LIBS_INSTALLED CBC_CFLAGS_INSTALLED CBC_DATA_INSTALLED COIN_HAS_CBC_TRUE COIN_HAS_CBC_FALSE BONMIN_LIBS BONMIN_CFLAGS BONMIN_DATA BONMIN_DEPENDENCIES BONMIN_LIBS_INSTALLED BONMIN_CFLAGS_INSTALLED BONMIN_DATA_INSTALLED COIN_HAS_BONMIN_TRUE COIN_HAS_BONMIN_FALSE COUENNE_LIBS COUENNE_CFLAGS COUENNE_DATA COUENNE_DEPENDENCIES COUENNE_LIBS_INSTALLED COUENNE_CFLAGS_INSTALLED COUENNE_DATA_INSTALLED COIN_HAS_COUENNE_TRUE COIN_HAS_COUENNE_FALSE BCP_LIBS BCP_CFLAGS BCP_DATA BCP_DEPENDENCIES BCP_LIBS_INSTALLED BCP_CFLAGS_INSTALLED BCP_DATA_INSTALLED COIN_HAS_BCP_TRUE COIN_HAS_BCP_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE CPPADSRCDIR CPPADOBJDIR CPPADDOCDIR COIN_HAS_CPPAD_TRUE COIN_HAS_CPPAD_FALSE MSCL__TRUE MSCL__FALSE LINDOINCDIR LINDOLIB COIN_HAS_LINDO_TRUE COIN_HAS_LINDO_FALSE KNITROINCDIR KNITROLIB COIN_HAS_KNITRO_TRUE COIN_HAS_KNITRO_FALSE OPENMP_TRUE OPENMP_FALSE USEMULTIPLYDEFINED_TRUE USEMULTIPLYDEFINED_FALSE YACC OSROOT_DIR oslib USE_ASL_LIB LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS ADDLIBS PCADDLIBS FADDLIBS ALWAYS_FALSE_TRUE ALWAYS_FALSE_FALSE have_svnversion OS_SVN_REV build build_cpu build_vendor build_os _SVN_REV CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX EGREP LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS PKG_CONFIG ac_pt_PKG_CONFIG COIN_HAS_PKGCONFIG_TRUE COIN_HAS_PKGCONFIG_FALSE COIN_PKG_CONFIG_PATH COIN_PKG_CONFIG_PATH_UNINSTALLED COINUTILS_LIBS COINUTILS_CFLAGS COINUTILS_DATA COINUTILS_DEPENDENCIES COINUTILS_LIBS_INSTALLED COINUTILS_CFLAGS_INSTALLED COINUTILS_DATA_INSTALLED OSLIB_CFLAGS OSLIB_LIBS OSLIB_PCLIBS OSLIB_PCREQUIRES OSLIB_DEPENDENCIES OSLIB_CFLAGS_INSTALLED OSLIB_LIBS_INSTALLED COIN_HAS_COINUTILS_TRUE COIN_HAS_COINUTILS_FALSE IPOPT_LIBS IPOPT_CFLAGS IPOPT_DATA IPOPT_DEPENDENCIES IPOPT_LIBS_INSTALLED IPOPT_CFLAGS_INSTALLED IPOPT_DATA_INSTALLED COIN_HAS_IPOPT_TRUE COIN_HAS_IPOPT_FALSE CLP_LIBS CLP_CFLAGS CLP_DATA CLP_DEPENDENCIES CLP_LIBS_INSTALLED CLP_CFLAGS_INSTALLED CLP_DATA_INSTALLED COIN_HAS_CLP_TRUE COIN_HAS_CLP_FALSE DYLP_LIBS DYLP_CFLAGS DYLP_DATA DYLP_DEPENDENCIES DYLP_LIBS_INSTALLED DYLP_CFLAGS_INSTALLED DYLP_DATA_INSTALLED COIN_HAS_DYLP_TRUE COIN_HAS_DYLP_FALSE VOL_LIBS VOL_CFLAGS VOL_DATA VOL_DEPENDENCIES VOL_LIBS_INSTALLED VOL_CFLAGS_INSTALLED VOL_DATA_INSTALLED COIN_HAS_VOL_TRUE COIN_HAS_VOL_FALSE SYMPHONY_LIBS SYMPHONY_CFLAGS SYMPHONY_DATA SYMPHONY_DEPENDENCIES SYMPHONY_LIBS_INSTALLED SYMPHONY_CFLAGS_INSTALLED SYMPHONY_DATA_INSTALLED COIN_HAS_SYMPHONY_TRUE COIN_HAS_SYMPHONY_FALSE CPX_LIBS CPX_CFLAGS CPX_DATA CPX_DEPENDENCIES CPX_LIBS_INSTALLED CPX_CFLAGS_INSTALLED CPX_DATA_INSTALLED COIN_HAS_CPX_TRUE COIN_HAS_CPX_FALSE GLPK_LIBS GLPK_CFLAGS GLPK_DATA GLPK_DEPENDENCIES GLPK_LIBS_INSTALLED GLPK_CFLAGS_INSTALLED GLPK_DATA_INSTALLED COIN_HAS_GLPK_TRUE COIN_HAS_GLPK_FALSE CBC_LIBS CBC_CFLAGS CBC_DATA CBC_DEPENDENCIES CBC_LIBS_INSTALLED CBC_CFLAGS_INSTALLED CBC_DATA_INSTALLED COIN_HAS_CBC_TRUE COIN_HAS_CBC_FALSE BONMIN_LIBS BONMIN_CFLAGS BONMIN_DATA BONMIN_DEPENDENCIES BONMIN_LIBS_INSTALLED BONMIN_CFLAGS_INSTALLED BONMIN_DATA_INSTALLED COIN_HAS_BONMIN_TRUE COIN_HAS_BONMIN_FALSE COUENNE_LIBS COUENNE_CFLAGS COUENNE_DATA COUENNE_DEPENDENCIES COUENNE_LIBS_INSTALLED COUENNE_CFLAGS_INSTALLED COUENNE_DATA_INSTALLED COIN_HAS_COUENNE_TRUE COIN_HAS_COUENNE_FALSE BCP_LIBS BCP_CFLAGS BCP_DATA BCP_DEPENDENCIES BCP_LIBS_INSTALLED BCP_CFLAGS_INSTALLED BCP_DATA_INSTALLED COIN_HAS_BCP_TRUE COIN_HAS_BCP_FALSE ASL_LIBS ASL_CFLAGS ASL_DATA ASL_DEPENDENCIES ASL_LIBS_INSTALLED ASL_CFLAGS_INSTALLED ASL_DATA_INSTALLED COIN_HAS_ASL_TRUE COIN_HAS_ASL_FALSE CPPADSRCDIR CPPADOBJDIR CPPADDOCDIR COIN_HAS_CPPAD_TRUE COIN_HAS_CPPAD_FALSE MSCL__TRUE MSCL__FALSE LINDOINCDIR LINDOLIB COIN_HAS_LINDO_TRUE COIN_HAS_LINDO_FALSE KNITROINCDIR KNITROLIB COIN_HAS_KNITRO_TRUE COIN_HAS_KNITRO_FALSE OPENMP_TRUE OPENMP_FALSE USEMULTIPLYDEFINED_TRUE USEMULTIPLYDEFINED_FALSE YACC OSROOT_DIR oslib USE_ASL_LIB LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1755,9 +1755,9 @@ fi
 
 if test "x$have_svnversion" = xyes && test "xOS" != x; then
 
-  svn_rev_tmp=`cd $srcdir/$coin_has_os ; svnversion`
-  OS_SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
-  if test $OS_SVN_REV != exported; then
+  svn_rev_tmp=`LANG=en_EN svnversion $srcdir 2>/dev/null`
+  if test "x$svn_rev_tmp" != xexported -a "x$svn_rev_tmp" != x; then
+    OS_SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
 
 cat >>confdefs.h <<_ACEOF
 #define OS_SVN_REV $OS_SVN_REV
@@ -1920,9 +1920,9 @@ fi
 
 if test "x$have_svnversion" = xyes && test "x" != x; then
 
-  svn_rev_tmp=`cd $srcdir/$coin_has_ ; svnversion`
-  _SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
-  if test $_SVN_REV != exported; then
+  svn_rev_tmp=`LANG=en_EN svnversion $srcdir 2>/dev/null`
+  if test "x$svn_rev_tmp" != xexported -a "x$svn_rev_tmp" != x; then
+    _SVN_REV=`echo $svn_rev_tmp | sed -n -e 's/^[0-9]*://' -e 's/\([0-9]\)[^0-9]*$/\1/p'`
 
 cat >>confdefs.h <<_ACEOF
 #define _SVN_REV $_SVN_REV
@@ -2108,26 +2108,6 @@ echo "$as_me: WARNING: C++ compiler name provided as $CXX, but CC is unset. Sett
       ;;
   esac
 fi
-
-# add automake conditional so we can recognize cl compiler in makefile
-coin_cc_is_cl=false
-if test x"$CXX" != x; then
-  case "$CXX" in
-    cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
-      coin_cc_is_cl=true
-      ;;
-  esac
-fi
-
-
-if test $coin_cc_is_cl = true; then
-  COIN_CC_IS_CL_TRUE=
-  COIN_CC_IS_CL_FALSE='#'
-else
-  COIN_CC_IS_CL_TRUE='#'
-  COIN_CC_IS_CL_FALSE=
-fi
-
 
 
 
@@ -2947,6 +2927,24 @@ echo "$as_me: Overruling autoconf; cl does not recognise -g." >&6;}
 esac
 CFLAGS="$save_cflags"
 
+# add automake conditional so we can recognize cl compiler in makefile
+coin_cc_is_cl=false
+case "$CC" in
+  cl* | */cl* | CL* | */CL* | icl* | */icl* | ICL* | */ICL*)
+    coin_cc_is_cl=true
+    ;;
+esac
+
+
+if test $coin_cc_is_cl = true; then
+  COIN_CC_IS_CL_TRUE=
+  COIN_CC_IS_CL_FALSE='#'
+else
+  COIN_CC_IS_CL_TRUE='#'
+  COIN_CC_IS_CL_FALSE=
+fi
+
+
 # Check if a project specific CFLAGS variable has been set
 if test x$COIN_PRJCT != x; then
   eval coin_tmp=\${${COIN_PRJCT}_CFLAGS+set}
@@ -2969,7 +2967,7 @@ if test x"$CFLAGS" = x; then
       *)
         coin_opt_cflags="-O3"
         coin_add_cflags="-pipe"
-        coin_dbg_cflags="-g"
+        coin_dbg_cflags="-g -O0"
         coin_warn_cflags="-Wimplicit -Wparentheses -Wsequence-point -Wreturn-type -Wcast-qual -Wall -Wno-unknown-pragmas"
         case $build in
           *-darwin*)
@@ -3897,8 +3895,8 @@ if test x"$CXXFLAGS" = x; then
 # ToDo decide about unroll-loops
         coin_opt_cxxflags="-O3"
         coin_add_cxxflags="-pipe"
-        coin_dbg_cxxflags="-g"
-        coin_warn_cxxflags="-Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas"
+        coin_dbg_cxxflags="-g -O0"
+        coin_warn_cxxflags="-Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion -Wno-unknown-pragmas"
         case $build in
           *-darwin*)
             ;;
@@ -4415,6 +4413,17 @@ echo "${ECHO_T}$ac_cv_prog_egrep" >&6
  EGREP=$ac_cv_prog_egrep
 
 
+echo "$as_me:$LINENO: checking whether ln -s works" >&5
+echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+else
+  echo "$as_me:$LINENO: result: no, using $LN_S" >&5
+echo "${ECHO_T}no, using $LN_S" >&6
+fi
+
 am__api_version="1.9"
 # Find a good install program.  We prefer a C program (faster),
 # so one script is as good as another.  But avoid the broken or
@@ -4739,6 +4748,7 @@ else
   AMDEP_TRUE='#'
   AMDEP_FALSE=
 fi
+
 
 
 
@@ -5386,8 +5396,8 @@ echo "$as_me: error: I cannot find the libtool.m4 file." >&2;}
 fi
 
 
-  # Check if we have an Externals file
-  if test -r $srcdir/Externals; then
+  # Check if we have an Dependencies file
+  if test -r $srcdir/Dependencies; then
     coin_have_externals=yes
   fi
   # Check if subversion is installed and understands https
@@ -5460,11 +5470,16 @@ echo "${ECHO_T}$ac_cv_svn_understands_https" >&6
       else
         { { echo "$as_me:$LINENO: error: Cannot find the BuildTools directory" >&5
 echo "$as_me: error: Cannot find the BuildTools directory" >&2;}
-   { (exit 1); exit 1; }; }
+   { (exit better disable maintainer mode.); exit better disable maintainer mode.; }; }
       fi
     fi
   fi
 
+
+  # for running automake by make, we need to have Makemain.inc available at the place where it usually can be found during run_autotools
+  if test "$BUILDTOOLSDIR" != "$srcdir/BuildTools" ; then
+    $LN_S `cd $BUILDTOOLSDIR; pwd` "$srcdir/BuildTools"
+  fi
 
   # The following variable is set to the name of the directory where
   # the autotool scripts are located
@@ -5832,17 +5847,6 @@ echo "$as_me:$LINENO: result: $lt_cv_path_NM" >&5
 echo "${ECHO_T}$lt_cv_path_NM" >&6
 NM="$lt_cv_path_NM"
 
-echo "$as_me:$LINENO: checking whether ln -s works" >&5
-echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
-LN_S=$as_ln_s
-if test "$LN_S" = "ln -s"; then
-  echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-  echo "$as_me:$LINENO: result: no, using $LN_S" >&5
-echo "${ECHO_T}no, using $LN_S" >&6
-fi
-
 echo "$as_me:$LINENO: checking how to recognise dependent libraries" >&5
 echo $ECHO_N "checking how to recognise dependent libraries... $ECHO_C" >&6
 if test "${lt_cv_deplibs_check_method+set}" = set; then
@@ -6068,7 +6072,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6071 "configure"' > conftest.$ac_ext
+  echo '#line 6075 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7202,7 +7206,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:7205:" \
+echo "$as_me:7209:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -8269,11 +8273,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8272: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8276: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8276: \$? = $ac_status" >&5
+   echo "$as_me:8280: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8537,11 +8541,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8540: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8544: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8544: \$? = $ac_status" >&5
+   echo "$as_me:8548: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8641,11 +8645,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8644: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8648: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8648: \$? = $ac_status" >&5
+   echo "$as_me:8652: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10986,7 +10990,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10989 "configure"
+#line 10993 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11086,7 +11090,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11089 "configure"
+#line 11093 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13430,11 +13434,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13433: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13437: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13437: \$? = $ac_status" >&5
+   echo "$as_me:13441: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13534,11 +13538,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13537: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13541: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13541: \$? = $ac_status" >&5
+   echo "$as_me:13545: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15104,11 +15108,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15107: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15111: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15111: \$? = $ac_status" >&5
+   echo "$as_me:15115: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15208,11 +15212,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15211: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15215: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15215: \$? = $ac_status" >&5
+   echo "$as_me:15219: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17415,11 +17419,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17418: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17422: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17422: \$? = $ac_status" >&5
+   echo "$as_me:17426: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17683,11 +17687,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17686: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17690: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17690: \$? = $ac_status" >&5
+   echo "$as_me:17694: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17787,11 +17791,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17790: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17794: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17794: \$? = $ac_status" >&5
+   echo "$as_me:17798: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -22431,6 +22435,11 @@ if test "${with_coinutils_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COINUTILS_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -22441,6 +22450,12 @@ if test "${with_coinutils_incdir+set}" = set; then
   coin_has_coinutils=yes
      COINUTILS_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       COINUTILS_CFLAGS_INSTALLED="$COINUTILS_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$COINUTILS_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -22451,6 +22466,11 @@ if test "${with_coinutils_datadir+set}" = set; then
   withval="$with_coinutils_datadir"
   coin_has_coinutils=yes
      COINUTILS_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       COINUTILS_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -22534,7 +22554,7 @@ COINUTILS_CFLAGS_INSTALLED=
 COINUTILS_DATA=
 COINUTILS_DATA_INSTALLED=
 
-# initial list of dependencies is "coinutils", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinutils", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinutils"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -22573,7 +22593,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$COINUTILS_DATA" = x ; then
@@ -22641,12 +22661,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -22686,12 +22709,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -22722,12 +22748,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     COINUTILS_LIBS=`echo " $COINUTILS_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    COINUTILS_LIBS_INSTALLED=`echo " $COINUTILS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    COINUTILS_LIBS_INSTALLED=`echo " $COINUTILS_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -22887,6 +22913,11 @@ if test "${with_ipopt_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         IPOPT_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -22897,6 +22928,12 @@ if test "${with_ipopt_incdir+set}" = set; then
   coin_has_ipopt=yes
      IPOPT_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       IPOPT_CFLAGS_INSTALLED="$IPOPT_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$IPOPT_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -22907,6 +22944,11 @@ if test "${with_ipopt_datadir+set}" = set; then
   withval="$with_ipopt_datadir"
   coin_has_ipopt=yes
      IPOPT_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       IPOPT_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -22990,7 +23032,7 @@ IPOPT_CFLAGS_INSTALLED=
 IPOPT_DATA=
 IPOPT_DATA_INSTALLED=
 
-# initial list of dependencies is "ipopt", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "ipopt", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="ipopt"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -23029,7 +23071,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$IPOPT_DATA" = x ; then
@@ -23097,12 +23139,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -23142,12 +23187,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -23178,12 +23226,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     IPOPT_LIBS=`echo " $IPOPT_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    IPOPT_LIBS_INSTALLED=`echo " $IPOPT_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    IPOPT_LIBS_INSTALLED=`echo " $IPOPT_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -23338,6 +23386,11 @@ if test "${with_clp_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CLP_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -23348,6 +23401,12 @@ if test "${with_clp_incdir+set}" = set; then
   coin_has_clp=yes
      CLP_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       CLP_CFLAGS_INSTALLED="$CLP_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$CLP_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -23358,6 +23417,11 @@ if test "${with_clp_datadir+set}" = set; then
   withval="$with_clp_datadir"
   coin_has_clp=yes
      CLP_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       CLP_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -23441,7 +23505,7 @@ CLP_CFLAGS_INSTALLED=
 CLP_DATA=
 CLP_DATA_INSTALLED=
 
-# initial list of dependencies is "osi-clp", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-clp", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-clp"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -23480,7 +23544,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$CLP_DATA" = x ; then
@@ -23548,12 +23612,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -23593,12 +23660,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -23629,12 +23699,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     CLP_LIBS=`echo " $CLP_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    CLP_LIBS_INSTALLED=`echo " $CLP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    CLP_LIBS_INSTALLED=`echo " $CLP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -23789,6 +23859,11 @@ if test "${with_dylp_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         DYLP_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -23799,6 +23874,12 @@ if test "${with_dylp_incdir+set}" = set; then
   coin_has_dylp=yes
      DYLP_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       DYLP_CFLAGS_INSTALLED="$DYLP_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$DYLP_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -23809,6 +23890,11 @@ if test "${with_dylp_datadir+set}" = set; then
   withval="$with_dylp_datadir"
   coin_has_dylp=yes
      DYLP_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       DYLP_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -23892,7 +23978,7 @@ DYLP_CFLAGS_INSTALLED=
 DYLP_DATA=
 DYLP_DATA_INSTALLED=
 
-# initial list of dependencies is "osi-dylp", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-dylp", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-dylp"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -23931,7 +24017,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$DYLP_DATA" = x ; then
@@ -23999,12 +24085,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -24044,12 +24133,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -24080,12 +24172,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     DYLP_LIBS=`echo " $DYLP_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    DYLP_LIBS_INSTALLED=`echo " $DYLP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    DYLP_LIBS_INSTALLED=`echo " $DYLP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -24240,6 +24332,11 @@ if test "${with_vol_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         VOL_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -24250,6 +24347,12 @@ if test "${with_vol_incdir+set}" = set; then
   coin_has_vol=yes
      VOL_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       VOL_CFLAGS_INSTALLED="$VOL_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$VOL_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -24260,6 +24363,11 @@ if test "${with_vol_datadir+set}" = set; then
   withval="$with_vol_datadir"
   coin_has_vol=yes
      VOL_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       VOL_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -24343,7 +24451,7 @@ VOL_CFLAGS_INSTALLED=
 VOL_DATA=
 VOL_DATA_INSTALLED=
 
-# initial list of dependencies is "osi-vol", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-vol", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-vol"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -24382,7 +24490,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$VOL_DATA" = x ; then
@@ -24450,12 +24558,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -24495,12 +24606,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -24531,12 +24645,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     VOL_LIBS=`echo " $VOL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    VOL_LIBS_INSTALLED=`echo " $VOL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    VOL_LIBS_INSTALLED=`echo " $VOL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -24691,6 +24805,11 @@ if test "${with_symphony_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         SYMPHONY_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -24701,6 +24820,12 @@ if test "${with_symphony_incdir+set}" = set; then
   coin_has_symphony=yes
      SYMPHONY_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       SYMPHONY_CFLAGS_INSTALLED="$SYMPHONY_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$SYMPHONY_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -24711,6 +24836,11 @@ if test "${with_symphony_datadir+set}" = set; then
   withval="$with_symphony_datadir"
   coin_has_symphony=yes
      SYMPHONY_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       SYMPHONY_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -24794,7 +24924,7 @@ SYMPHONY_CFLAGS_INSTALLED=
 SYMPHONY_DATA=
 SYMPHONY_DATA_INSTALLED=
 
-# initial list of dependencies is "osi-sym", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-sym", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-sym"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -24833,7 +24963,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$SYMPHONY_DATA" = x ; then
@@ -24901,12 +25031,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -24946,12 +25079,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -24982,12 +25118,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     SYMPHONY_LIBS=`echo " $SYMPHONY_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    SYMPHONY_LIBS_INSTALLED=`echo " $SYMPHONY_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    SYMPHONY_LIBS_INSTALLED=`echo " $SYMPHONY_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -25142,6 +25278,11 @@ if test "${with_cpx_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CPX_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -25152,6 +25293,12 @@ if test "${with_cpx_incdir+set}" = set; then
   coin_has_cpx=yes
      CPX_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       CPX_CFLAGS_INSTALLED="$CPX_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$CPX_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -25162,6 +25309,11 @@ if test "${with_cpx_datadir+set}" = set; then
   withval="$with_cpx_datadir"
   coin_has_cpx=yes
      CPX_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       CPX_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -25245,7 +25397,7 @@ CPX_CFLAGS_INSTALLED=
 CPX_DATA=
 CPX_DATA_INSTALLED=
 
-# initial list of dependencies is "osi-cplex", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-cplex", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-cplex"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -25284,7 +25436,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$CPX_DATA" = x ; then
@@ -25352,12 +25504,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -25397,12 +25552,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -25433,12 +25591,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     CPX_LIBS=`echo " $CPX_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    CPX_LIBS_INSTALLED=`echo " $CPX_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    CPX_LIBS_INSTALLED=`echo " $CPX_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -25593,6 +25751,11 @@ if test "${with_glpk_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         GLPK_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -25603,6 +25766,12 @@ if test "${with_glpk_incdir+set}" = set; then
   coin_has_glpk=yes
      GLPK_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       GLPK_CFLAGS_INSTALLED="$GLPK_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$GLPK_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -25613,6 +25782,11 @@ if test "${with_glpk_datadir+set}" = set; then
   withval="$with_glpk_datadir"
   coin_has_glpk=yes
      GLPK_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       GLPK_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -25696,7 +25870,7 @@ GLPK_CFLAGS_INSTALLED=
 GLPK_DATA=
 GLPK_DATA_INSTALLED=
 
-# initial list of dependencies is "osi-glpk", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-glpk", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-glpk"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -25735,7 +25909,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$GLPK_DATA" = x ; then
@@ -25803,12 +25977,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -25848,12 +26025,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -25884,12 +26064,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     GLPK_LIBS=`echo " $GLPK_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    GLPK_LIBS_INSTALLED=`echo " $GLPK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    GLPK_LIBS_INSTALLED=`echo " $GLPK_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -26044,6 +26224,11 @@ if test "${with_cbc_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         CBC_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -26054,6 +26239,12 @@ if test "${with_cbc_incdir+set}" = set; then
   coin_has_cbc=yes
      CBC_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       CBC_CFLAGS_INSTALLED="$CBC_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$CBC_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -26064,6 +26255,11 @@ if test "${with_cbc_datadir+set}" = set; then
   withval="$with_cbc_datadir"
   coin_has_cbc=yes
      CBC_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       CBC_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -26147,7 +26343,7 @@ CBC_CFLAGS_INSTALLED=
 CBC_DATA=
 CBC_DATA_INSTALLED=
 
-# initial list of dependencies is "osi-cbc", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "osi-cbc", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="osi-cbc"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -26186,7 +26382,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$CBC_DATA" = x ; then
@@ -26254,12 +26450,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -26299,12 +26498,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -26335,12 +26537,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     CBC_LIBS=`echo " $CBC_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    CBC_LIBS_INSTALLED=`echo " $CBC_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    CBC_LIBS_INSTALLED=`echo " $CBC_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -26495,6 +26697,11 @@ if test "${with_bonmin_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BONMIN_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -26505,6 +26712,12 @@ if test "${with_bonmin_incdir+set}" = set; then
   coin_has_bonmin=yes
      BONMIN_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       BONMIN_CFLAGS_INSTALLED="$BONMIN_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$BONMIN_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -26515,6 +26728,11 @@ if test "${with_bonmin_datadir+set}" = set; then
   withval="$with_bonmin_datadir"
   coin_has_bonmin=yes
      BONMIN_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       BONMIN_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -26598,7 +26816,7 @@ BONMIN_CFLAGS_INSTALLED=
 BONMIN_DATA=
 BONMIN_DATA_INSTALLED=
 
-# initial list of dependencies is "bonmin", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "bonmin", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="bonmin"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -26637,7 +26855,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$BONMIN_DATA" = x ; then
@@ -26705,12 +26923,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -26750,12 +26971,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -26786,12 +27010,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     BONMIN_LIBS=`echo " $BONMIN_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    BONMIN_LIBS_INSTALLED=`echo " $BONMIN_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    BONMIN_LIBS_INSTALLED=`echo " $BONMIN_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -26946,6 +27170,11 @@ if test "${with_couenne_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         COUENNE_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -26956,6 +27185,12 @@ if test "${with_couenne_incdir+set}" = set; then
   coin_has_couenne=yes
      COUENNE_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       COUENNE_CFLAGS_INSTALLED="$COUENNE_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$COUENNE_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -26966,6 +27201,11 @@ if test "${with_couenne_datadir+set}" = set; then
   withval="$with_couenne_datadir"
   coin_has_couenne=yes
      COUENNE_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       COUENNE_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -27049,7 +27289,7 @@ COUENNE_CFLAGS_INSTALLED=
 COUENNE_DATA=
 COUENNE_DATA_INSTALLED=
 
-# initial list of dependencies is "couenne", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "couenne", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="couenne"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -27088,7 +27328,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$COUENNE_DATA" = x ; then
@@ -27156,12 +27396,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -27201,12 +27444,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -27237,12 +27483,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     COUENNE_LIBS=`echo " $COUENNE_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    COUENNE_LIBS_INSTALLED=`echo " $COUENNE_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    COUENNE_LIBS_INSTALLED=`echo " $COUENNE_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -27397,6 +27643,11 @@ if test "${with_bcp_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         BCP_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -27407,6 +27658,12 @@ if test "${with_bcp_incdir+set}" = set; then
   coin_has_bcp=yes
      BCP_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       BCP_CFLAGS_INSTALLED="$BCP_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$BCP_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -27417,6 +27674,11 @@ if test "${with_bcp_datadir+set}" = set; then
   withval="$with_bcp_datadir"
   coin_has_bcp=yes
      BCP_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       BCP_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -27500,7 +27762,7 @@ BCP_CFLAGS_INSTALLED=
 BCP_DATA=
 BCP_DATA_INSTALLED=
 
-# initial list of dependencies is "bcp", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "bcp", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="bcp"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -27539,7 +27801,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$BCP_DATA" = x ; then
@@ -27607,12 +27869,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -27652,12 +27917,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -27688,12 +27956,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     BCP_LIBS=`echo " $BCP_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    BCP_LIBS_INSTALLED=`echo " $BCP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    BCP_LIBS_INSTALLED=`echo " $BCP_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -27848,6 +28116,11 @@ if test "${with_asl_lib+set}" = set; then
          OSLIB_PCLIBS="$withval $OSLIB_PCLIBS"
          OSLIB_LIBS="$withval $OSLIB_LIBS"
 
+       # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+       if test -z "$PKG_CONFIG" ; then
+         ASL_LIBS_INSTALLED="$withval"
+         OSLIB_LIBS_INSTALLED="$withval $OSLIB_LIBS_INSTALLED"
+       fi
 
 fi;
 
@@ -27858,6 +28131,12 @@ if test "${with_asl_incdir+set}" = set; then
   coin_has_asl=yes
      ASL_CFLAGS="-I`${CYGPATH_W} $withval`"
      OSLIB_CFLAGS="$withval $OSLIB_CFLAGS"
+     OSLIB_CFLAGS="-I`${CYGPATH_W} $withval` $OSLIB_CFLAGS"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       ASL_CFLAGS_INSTALLED="$ASL_CFLAGS"
+       OSLIB_CFLAGS_INSTALLED="$ASL_CFLAGS $OSLIB_CFLAGS_INSTALLED"
+     fi
 
 
 fi;
@@ -27868,6 +28147,11 @@ if test "${with_asl_datadir+set}" = set; then
   withval="$with_asl_datadir"
   coin_has_asl=yes
      ASL_DATA="$withval"
+     # if project flags are given by user and we build without pkg-config, then we need to setup the _INSTALLED variables
+     if test -z "$PKG_CONFIG" ; then
+       ASL_DATA_INSTALLED="$withval"
+     fi
+
 fi;
 fi
 
@@ -27951,7 +28235,7 @@ ASL_CFLAGS_INSTALLED=
 ASL_DATA=
 ASL_DATA_INSTALLED=
 
-# initial list of dependencies is "coinasl", but we need to filter out version number specifications (= x, <= x, >= x)
+# initial list of dependencies is "coinasl", but we need to filter out version number specifications (= x, <= x, >= x, != x)
 projtoprocess="coinasl"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
@@ -27990,7 +28274,7 @@ echo "$as_me: WARNING: Found $pcfile, but $dir/${proj}.pc is not available. This
 
       # add projrequires to the front of the list of projects that have to be processed next
       # at the same time, remove $proj from this list
-      projtoprocess=${projtoprocess/$proj/$projrequires}
+      projtoprocess=`echo $projtoprocess | sed -e "s/$proj/$projrequires/"`
 
       # read DATA from $pcfile, if _DATA is still empty
       if test "x$ASL_DATA" = x ; then
@@ -28058,12 +28342,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -28103,12 +28390,15 @@ if test "$allproj" != fail ; then
     #   replace "Libs:" by "echo projlibs="
     #   replace "Cflags:" by "echo projcflags="
     #   remove every line starting with <some word>:
-    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/[a-zA-Z]:/d' $pcfile`
+    pcfilemod=`sed -e 's/Libs:\(.*\)$/echo projlibs=\\\\"\1\\\\"/g' -e 's/Cflags:\(.*\)/echo projcflags=\\\\"\1\\\\"/g' -e '/^[a-zA-Z]*:/d' $pcfile`
 
     # set projcflags and projlibs variables by running $pcfilemod
+    # under mingw, the current IFS seem to make the : in the paths of the gfortran libs go away, so we temporarily set IFS back to its default
     projcflags=
     projlibs=
+    IFS="$save_IFS"
     eval `sh -c "$pcfilemod"`
+    IFS=":"
 
     # add CYGPATH_W cludge into include flags and set CFLAGS variable
     if test "${CYGPATH_W}" != "echo"; then
@@ -28139,12 +28429,12 @@ _ACEOF
   # adjust linker flags for (i)cl compiler
   # for the LIBS, we replace everything of the form "/somepath/name.lib" by "`$(CYGPATH_W) /somepath/`name.lib | sed -e s|\|/|g" (where we have to use excessive many \ to get the \ into the command line for cl),
   # for the LIBS_INSTALLED, we replace everything of the form "/somepath/" by "`$(CYGPATH_W) /somepath/`",
-  #    everything of the form "-Lpath" by "/libpath:`$(CYGPATH_W) path`, and
-  #    everything of the form "-lname" by "libname.lib"
+  #    everything of the form "-lname" by "libname.lib", and
+  #    everything of the form "-Lpath" by "-libpath:`$(CYGPATH_W) path`
   if test x$coin_cxx_is_cl = xtrue || test x$coin_cc_is_cl = xtrue ;
   then
     ASL_LIBS=`echo " $ASL_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
-    ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -L\([^ ]*\)/ \/libpath:\`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g'`
+    ASL_LIBS_INSTALLED=`echo " $ASL_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
 
@@ -36255,8 +36545,6 @@ s,@build_cpu@,$build_cpu,;t t
 s,@build_vendor@,$build_vendor,;t t
 s,@build_os@,$build_os,;t t
 s,@_SVN_REV@,$_SVN_REV,;t t
-s,@COIN_CC_IS_CL_TRUE@,$COIN_CC_IS_CL_TRUE,;t t
-s,@COIN_CC_IS_CL_FALSE@,$COIN_CC_IS_CL_FALSE,;t t
 s,@CDEFS@,$CDEFS,;t t
 s,@ADD_CFLAGS@,$ADD_CFLAGS,;t t
 s,@DBG_CFLAGS@,$DBG_CFLAGS,;t t
@@ -36269,6 +36557,8 @@ s,@CPPFLAGS@,$CPPFLAGS,;t t
 s,@ac_ct_CC@,$ac_ct_CC,;t t
 s,@EXEEXT@,$EXEEXT,;t t
 s,@OBJEXT@,$OBJEXT,;t t
+s,@COIN_CC_IS_CL_TRUE@,$COIN_CC_IS_CL_TRUE,;t t
+s,@COIN_CC_IS_CL_FALSE@,$COIN_CC_IS_CL_FALSE,;t t
 s,@MPICC@,$MPICC,;t t
 s,@CXXDEFS@,$CXXDEFS,;t t
 s,@ADD_CXXFLAGS@,$ADD_CXXFLAGS,;t t
@@ -36281,6 +36571,7 @@ s,@COIN_CXX_IS_CL_TRUE@,$COIN_CXX_IS_CL_TRUE,;t t
 s,@COIN_CXX_IS_CL_FALSE@,$COIN_CXX_IS_CL_FALSE,;t t
 s,@MPICXX@,$MPICXX,;t t
 s,@EGREP@,$EGREP,;t t
+s,@LN_S@,$LN_S,;t t
 s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
 s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
 s,@INSTALL_DATA@,$INSTALL_DATA,;t t
@@ -36334,7 +36625,6 @@ s,@host@,$host,;t t
 s,@host_cpu@,$host_cpu,;t t
 s,@host_vendor@,$host_vendor,;t t
 s,@host_os@,$host_os,;t t
-s,@LN_S@,$LN_S,;t t
 s,@ECHO@,$ECHO,;t t
 s,@AR@,$AR,;t t
 s,@ac_ct_AR@,$ac_ct_AR,;t t
@@ -37278,6 +37568,8 @@ echo "$as_me: error: cannot create directory $dir" >&2;}
     done
   fi
 
+  { echo "$as_me:$LINENO: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&5
+echo "$as_me: In case of trouble, first consult the troubleshooting page at https://projects.coin-or.org/BuildTools/wiki/user-troubleshooting" >&6;}
   if test x$coin_projectdir = xyes; then
     { echo "$as_me:$LINENO: Configuration of $PACKAGE_NAME successful" >&5
 echo "$as_me: Configuration of $PACKAGE_NAME successful" >&6;}
