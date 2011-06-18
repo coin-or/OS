@@ -485,7 +485,7 @@ bool LindoSolver::optimize(){
 	// resultHeader infomration
     if(osresult->setSolverInvoked( "LINDO Systems, Inc. Lindo API") != true)
 			throw ErrorClass("OSResult error: setSolverInvoked");
-    if(osresult->setServiceName( getVersionInfo()) != true)
+    if(osresult->setServiceName( OSgetVersionInfo()) != true)
 			throw ErrorClass("OSResult error: setServiceName");
 
 	if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)

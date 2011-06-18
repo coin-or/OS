@@ -13,67 +13,16 @@
  * 
  */ 
  
-// CoinFinite includes <cmath> (I think) which causes a problem 
-//#include<CoinFinite.hpp>
-
 //kipp fix up the infinity issue
 //kipp define OSINFINITY to COIN_DBL_MAX
-
-
 
 #ifndef OSPARAMETERS
 #define OSPARAMETERS
 
 #include "OSConfig.h"
 
-
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif
-
-#ifdef HAVE_CSTRING
-# include <cstring>
-#else
-# ifdef HAVE_STRING_H
-#  include <string.h>
-# else
-#  error "don't have header file for string"
-# endif
-#endif
-
-
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-
 #include <string>
-#include <sstream>  
-using std::string;
-using std::ostringstream;
+#include <limits>
 
 #define OS_PLUS 1001
 #define	OS_SUM  1002
@@ -100,13 +49,10 @@ using std::ostringstream;
 #define	OS_IF  7001
 #define	OS_ALLDIF  7016
 
-
 #define OS_E_VALUE exp(1.0)
 #define OS_PI_VALUE 2*asin(1.0)
 
 #define OS_SCHEMA_VERSION "2.0"
-
-
 
 /**
  * we use OS_NEAR_EQUAL in unitTest to see if we 
@@ -116,103 +62,14 @@ using std::ostringstream;
 
 #define OS_EPS 1e-12
 
-inline double nanKludge(){
-	double zero = 0.0;
-	return 0.0/zero;
-}
+const double OSDBL_MAX = std::numeric_limits<double>::max();
+const int    OSINT_MAX = std::numeric_limits<int>::max();
 
-#ifdef NAN 
-#define OSNAN NAN
-#elif defined NaN
-#define OSNAN NaN
-#elif defined nan
-#define OSNAN nan
-#elif defined (_MSC_VER)
-#include <ymath.h>
-#define OSNAN _Nan._Double
-#else
-#define OSNAN nanKludge() // wow, what a last resort, I don't like this!
-#endif
+/** checks whether a given double is NaN */
+bool OSIsnan(double x);
+/** returns the value for NaN used in OS */
+double OSNaN();
 
-
-
-inline bool OSIsnan(double x) {
-	//this is taken directly from COINUTILS
-#ifdef COIN_C_ISNAN
-	
-    return COIN_C_ISNAN( x)!=0;
-#else
-    return (x != x);
-#endif
-	
-} 
-
-
-
-
-
-//#include <limits.h>
-//#ifdef INFINITY //This is the definition in the ISO C99 standard.
-//	#define OSINFINITY INFINITY
-//#else
-//	#define OSINFINITY 1e20
-//#endif
-
-//#define OSINFINITY 1e30
-
-
-
-#ifdef DBL_MAX
-	#define OSDBL_MAX DBL_MAX
-#elif defined HUGE_VAL
-	//#define OSDBL_MAX OSINFINITY
-	#define OSDBL_MAX HUGE_VAL
-#else
-	#define OSDBL_MAX 1e37 // guaranteed to be representable as a double by ANSI standard
-#endif
-
-
-#ifdef INT_MAX
-#define OSINT_MAX INT_MAX
-#else
-#define OSINT_MAX 2147483647
-#endif
-
-#ifndef XSLT_LOCATION
-#define XSLT_LOCATION  OSSRCDIR;
-#endif
-
-
-
-
-
-inline std::string	getVersionInfo(){
-	ostringstream versionInfo;
-		versionInfo << std::endl << std::endl;
-		versionInfo << "Optimization Services Solver";
-		versionInfo << std::endl;	
-		versionInfo << "Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin";
-		versionInfo << std::endl;
-		versionInfo << "Distributed under the Eclipse Public License" ;
-		versionInfo << std::endl;
-		versionInfo << "OS Version: ";
-		versionInfo << OS_VERSION;
-		versionInfo << std::endl;	
-		versionInfo << "Build Date: ";
-		versionInfo << __DATE__;
-		versionInfo << std::endl;	
-	
-		#ifdef OS_SVN_REV
-			versionInfo << "SVN Version: "; 
-			versionInfo << OS_SVN_REV;
-		#endif
-			
-		versionInfo << std::endl << std::endl;
-	return versionInfo.str() ;
-} 
-
+std::string OSgetVersionInfo();
 
 #endif
-
-
-

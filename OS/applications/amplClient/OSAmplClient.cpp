@@ -402,7 +402,7 @@ int main(int argc, char **argv)
 		fileUtil->writeFileFromString(sResultFileName, osrl);
 		delete fileUtil;
 		//cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
-		string::size_type pos1 = osrl.find( "error");
+		std::string::size_type pos1 = osrl.find( "error");
 		if(pos1 == std::string::npos){
 			std::string sReport = "model was solved";
 			std::cout << sReport << std::endl;

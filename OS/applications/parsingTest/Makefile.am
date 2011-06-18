@@ -21,9 +21,9 @@ parsingTest_SOURCES = parsingTest.cpp
 
 # List all additionally required COIN libraries
 
-parsingTest_LDADD =  \
-	../../src/libOS.la $(OSLIB_LIBS)
-	
+parsingTest_LDADD = ../../src/libOS.la $(OSLIB_LIBS)
+
+parsingTest_DEPENDENCIES = ../../src/libOS.la $(OSLIB_DEPENDENCIES)
 
 # Now add the include paths for compilation
 
@@ -48,6 +48,5 @@ endif
 #                            Additional flags                          #
 ########################################################################
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src

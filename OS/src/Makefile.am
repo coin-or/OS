@@ -8,13 +8,21 @@
 
 AUTOMAKE_OPTIONS = foreign
 
+# Now we check into which directories to recurse, and which subdirectory
+# libraries to include
+SUBDIRS =
+  SUBDIRS += OSUtils
+  SUBDIRS += OSAgent
+  SUBDIRS += OSCommonInterfaces
+  SUBDIRS += OSModelInterfaces
+  SUBDIRS += OSParsers
+  SUBDIRS += OSSolverInterfaces
 
 ########################################################################
 #                           libOS  -- Optimization Services Library    #
 ########################################################################
 
-# Name of the library compiled in this directory.  We want it to be installed
-# in $libdir
+# Name of the library compiled in this directory.
 lib_LTLIBRARIES = libOS.la
 
 # List all source files for this library, including headers
@@ -31,20 +39,6 @@ libOS_la_LIBADD = ./OSUtils/libOSUtils.la \
 		./OSParsers/libOSParsers.la \
 		./OSSolverInterfaces/libOSSolverInterfaces.la 
 		
-# Since automake is not doing this on its own, we need to declare the
-# dependencies to the subdirectory libraries here
-libOS_la_DEPENDENCIES = $(libOS_la_LIBADD)
-
-# Now we check into which directories to recurse, and which subdirectory
-# libraries to include
-SUBDIRS =
-  SUBDIRS += OSUtils
-  SUBDIRS += OSAgent
-  SUBDIRS += OSCommonInterfaces
-  SUBDIRS += OSModelInterfaces
-  SUBDIRS += OSParsers
-  SUBDIRS += OSSolverInterfaces
-
 ########################################################################
 #                    OSSolverService program                           #
 ########################################################################
@@ -58,13 +52,9 @@ OSSolverService_SOURCES = OSSolverService.cpp
 
 OSSolverService_LDADD = libOS.la $(OSLIB_LIBS)
 
+# Since automake is not doing this on its own, we need to declare the
+# dependencies to the subdirectory libraries here
 OSSolverService_DEPENDENCIES = libOS.la $(OSLIB_DEPENDENCIES)
-
-# TODO? the following will not work with the new buildsystem anymore
-#if COIN_HAS_COUENNE
-#     OSSolverService_SOURCES += $(COUENNESRCDIR)/src/main/BonCouenneInfo.cpp $(COUENNESRCDIR)/src/main/BonCouenneInfo.hpp
-#endif
-
 
 ########################################################################
 #                            Additional flags                          #
@@ -82,9 +72,8 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(srcdir)/OSCommonInterfaces` \
 	-I`$(CYGPATH_W) $(CPPADSRCDIR)`
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`
 
 
 ########################################################################
@@ -94,30 +83,9 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
-includecoin_HEADERS = \
-	OSConfig.h \
-	../inc/config_os.h 
-
-if COIN_CXX_IS_CL
-   includecoin_HEADERS += $(abs_source_dir)/../BuildTools/headers/configall_system.h
-   includecoin_HEADERS += $(abs_source_dir)/../BuildTools/headers/configall_system_msc.h
-endif
-
-
-#############################################################################
-# Create the Config.h file that always defines HAVE_CONFIG_H and install it #
-#############################################################################
-
-# You only need to adapt the following line
-ConfigHeader = OSConfig.h
 
 install-exec-local:
-	echo "#ifndef HAVE_CONFIG_H" >bla
-	echo "#define HAVE_CONFIG_H" >>bla
-	echo "#endif" >> bla
-	cat $(srcdir)/$(ConfigHeader) >> bla
-	$(install_sh_DATA) bla $(DESTDIR)$(includecoindir)/$(ConfigHeader)
-	rm -f bla
+	$(install_sh_DATA) config_os.h $(DESTDIR)$(includecoindir)/OSConfig.h
 
 uninstall-local:
-	rm -f $(DESTDIR)$(includecoindir)/$(ConfigHeader)
+	rm -f $(DESTDIR)$(includecoindir)/OSConfig.h

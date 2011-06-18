@@ -29472,6 +29472,18 @@ echo "$as_me: error: Ipopt is present, but not the necessary CppAD." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
+# The COIN_HAS_CPPAD symbol should not go into the public configuration
+# header file (config_os.h).
+# However, we need to distinguish in OS' public headers files whether
+# CppAD is available or not, so we define an additional symbol.
+if test $coin_has_cppad = yes ; then
+
+cat >>confdefs.h <<\_ACEOF
+#define OS_HAS_CPPAD 1
+_ACEOF
+
+fi
+
 #############################################################################
 #                             Third party solvers                           #
 #############################################################################
@@ -37187,7 +37199,7 @@ fi
 
 
 # Here put the location and name of the configuration header file
-          ac_config_headers="$ac_config_headers inc/config_os.h"
+                    ac_config_headers="$ac_config_headers src/config.h src/config_os.h"
 
 
 # Finally, we let configure write all the output...
@@ -38096,7 +38108,8 @@ do
   "os.pc" ) CONFIG_FILES="$CONFIG_FILES os.pc" ;;
   "os-uninstalled.pc" ) CONFIG_FILES="$CONFIG_FILES os-uninstalled.pc" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
-  "inc/config_os.h" ) CONFIG_HEADERS="$CONFIG_HEADERS inc/config_os.h" ;;
+  "src/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/config.h" ;;
+  "src/config_os.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/config_os.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;

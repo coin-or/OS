@@ -22,8 +22,9 @@ OSFileUpload_SOURCES = OSFileUpload.cpp
 
 # List all additionally required COIN libraries
 
-OSFileUpload_LDADD =  \
-	../../src/libOS.la $(OSLIB_LIBS)
+OSFileUpload_LDADD = ../../src/libOS.la $(OSLIB_LIBS)
+
+OSFileUpload_DEPENDENCIES = ../../src/libOS.la $(OSLIB_DEPENDENCIES)
 
 # Now add the include paths for compilation
 
@@ -43,19 +44,5 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 #                            Additional flags                          #
 ########################################################################
 
-# Here list all the header files that are required by a user of the library,
-# and that therefore should be installed in 'include/coin'
-includecoindir = $(includedir)/coin
-includecoin_HEADERS =
-#	OSConfig.h \
-#	../inc/config_os.h 
-
-if COIN_CXX_IS_CL
-   includecoin_HEADERS += $(top_srcdir)/../BuildTools/headers/configall_system.h
-   includecoin_HEADERS += $(top_srcdir)/../BuildTools/headers/configall_system_msc.h
-endif
-
-
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src

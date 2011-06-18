@@ -964,7 +964,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 		
 		osresult->setGeneralStatusType("normal");
 		osresult->setTime(cpuTime);
-		osresult->setServiceName( getVersionInfo() );
+		osresult->setServiceName( OSgetVersionInfo() );
 		osresult->setSolverInvoked( "COIN-OR " + sSolverName );
 		if (solver->isProvenOptimal() == true){
 			osresult->setSolutionStatus(solIdx, "optimal", description);
@@ -1429,7 +1429,7 @@ void CoinSolver::writeResult(CbcModel *model){
 	std::string description = "";
 	osresult->setGeneralStatusType("normal");
 	osresult->setTime(cpuTime);
-    osresult->setServiceName( getVersionInfo() );
+    osresult->setServiceName( OSgetVersionInfo() );
 	
 	if (model->isProvenOptimal() == true  ){
 		osresult->setSolutionStatus(solIdx, "optimal", description);			

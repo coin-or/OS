@@ -116,7 +116,7 @@ public:
 	int* m_demand;
 	
 	/** m_nodeName is the vector of node names */
-	string* m_nodeName;
+	std::string* m_nodeName;
 	
 	/** the distance/cost vectors */
 	double* m_cost;

@@ -33,6 +33,7 @@
 
 #ifndef OSINSTANCE_H
 #define OSINSTANCE_H
+#include "OSConfig.h"
 #include "OSParameters.h"
 #include "OSGeneral.h"
 #include "OSnLNode.h"
@@ -2469,7 +2470,7 @@ bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
 	 */	 
 	void duplicateExpressionTreesMap();
 	
-#ifdef COIN_HAS_CPPAD  	 
+#ifdef OS_HAS_CPPAD  	 
 	 /**
 	  * F is a CppAD function the range space is the objective +
 	  * constraints functions, x is the domeain space

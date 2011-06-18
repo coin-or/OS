@@ -72,7 +72,8 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ac_coin_socket_libs.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/inc/config_os.h
+CONFIG_HEADER = $(top_builddir)/src/config.h \
+	$(top_builddir)/src/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSSolverInterfaces_la_LIBADD =
@@ -112,9 +113,9 @@ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 SOURCES = $(libOSSolverInterfaces_la_SOURCES)
 DIST_SOURCES = $(am__libOSSolverInterfaces_la_SOURCES_DIST)
-am__includecoin_HEADERS_DIST = ../../inc/config_os.h OSCoinSolver.h \
-	OSMatlabSolver.h OSLindoSolver.h OSKnitroSolver.h \
-	OSIpoptSolver.h OSBonminSolver.h OSCouenneSolver.h
+am__includecoin_HEADERS_DIST = OSCoinSolver.h OSMatlabSolver.h \
+	OSLindoSolver.h OSKnitroSolver.h OSIpoptSolver.h \
+	OSBonminSolver.h OSCouenneSolver.h
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
     $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
@@ -453,9 +454,8 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 #  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(KNITROINCDIR)` 
 #endif
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 
 ########################################################################
 #                Headers that need to be installed                     #
@@ -464,9 +464,9 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # Here list all the header files that are required by a user of the library,
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
-includecoin_HEADERS = ../../inc/config_os.h OSCoinSolver.h \
-	OSMatlabSolver.h $(am__append_6) $(am__append_7) \
-	$(am__append_8) $(am__append_9) $(am__append_10)
+includecoin_HEADERS = OSCoinSolver.h OSMatlabSolver.h $(am__append_6) \
+	$(am__append_7) $(am__append_8) $(am__append_9) \
+	$(am__append_10)
 all: all-am
 
 .SUFFIXES:
@@ -623,7 +623,6 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/../../inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

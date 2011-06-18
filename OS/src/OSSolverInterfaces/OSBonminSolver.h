@@ -37,38 +37,15 @@
 #include "OSInstance.h"
 #include "OSOption.h"
 
-# include <cstddef>
-# include <cstdlib>
-# include <cctype>
-# include <cassert>
-# include <stack>
+#include <cstddef>
+#include <cstdlib>
+#include <cctype>
+#include <cassert>
+#include <stack>
 #include <string>
-#include<iostream>
-
-#ifdef HAVE_CTIME
-# include <ctime>
-#else
-# ifdef HAVE_TIME_H
-#  include <time.h>
-# else
-#  error "don't have header file for time"
-# endif
-#endif 
-
- 
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# else
-#  error "don't have header file for math"
-# endif
-#endif
-#include<vector>
+#include <iostream>
+#include <vector>
 #include <map>  
-
-
 
 #include "BonCbc.hpp"
 #include "BonTMINLP.hpp"

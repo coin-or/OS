@@ -27,7 +27,7 @@
 
 std::map<std::string, OSDecompSolverFactory*> OSDecompSolverFactory::factories;
 
-OSDecompSolver* OSDecompSolverFactory::createOSDecompSolver(const string &solverName) throw(ErrorClass){
+OSDecompSolver* OSDecompSolverFactory::createOSDecompSolver(const std::string &solverName) throw(ErrorClass){
 	
 	
 	if( factories.find(solverName) != factories.end() ){

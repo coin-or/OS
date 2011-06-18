@@ -191,7 +191,7 @@ int main(int argC, const char* argV[]) {
 	std::string configFileName = "";
 	int i;
 
-	std::cout << getVersionInfo();
+	std::cout << OSgetVersionInfo();
 
 	// initialize the OS options structure
 
@@ -207,7 +207,7 @@ int main(int argC, const char* argV[]) {
 			//		"There must be at least one command line argument\n  Try -h or --help");
 			//delete osoptions;
 			//return 1;
-			getVersionInfo();
+			//OSgetVersionInfo();
 			//this is the interactive shell
 			scannerActive = true;
 			ossslex_init(&scanner);

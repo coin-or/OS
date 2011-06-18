@@ -550,7 +550,8 @@
 
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
+#include <cstring>
+#include <cstdio>
 
 //#define DEBUG
 
@@ -5263,7 +5264,7 @@ yydebug = 1;
 	parserData->namArray = new std::string[parserData->numberOfVar];
 	parserData->valArray = new      double[parserData->numberOfVar];
 	for (int i=0; i < parserData->numberOfVar; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNaN();
 }
     break;
 
@@ -5641,7 +5642,7 @@ yydebug = 1;
 	parserData->namArray = new std::string[parserData->numberOfVar];
 	parserData->valArray = new      double[parserData->numberOfVar];
 	for (int i=0; i < parserData->numberOfVar; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNaN();
 }
     break;
 
@@ -5799,7 +5800,7 @@ yydebug = 1;
 		parserData->idxArray = new         int[parserData->numberOfVar];
 		parserData->namArray = new std::string[parserData->numberOfVar];
 		parserData->valArray = new      double[parserData->numberOfVar];
-		for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+		for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNaN();
 		parserData->numberOfVarAttributePresent = true;
 	}
     break;
@@ -5968,7 +5969,7 @@ yydebug = 1;
 	parserData->valArray = new      double[parserData->numberOfObj];
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->idxArray[i] = -1;
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfObj; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->valArray[i] = OSNaN();
 }
     break;
 
@@ -6070,8 +6071,8 @@ yydebug = 1;
 	parserData->namArray   = new std::string[parserData->numberOfObj];
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->idxArray[i] = -1;
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfObj; i++) parserData->lbValArray[i] = OSNAN;
-	for (int i=0; i < parserData->numberOfObj; i++) parserData->ubValArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->lbValArray[i] = OSNaN();
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->ubValArray[i] = OSNaN();
 }
     break;
 
@@ -6496,7 +6497,7 @@ yydebug = 1;
 	parserData->namArray = new std::string[parserData->numberOfCon];
 	parserData->valArray = new      double[parserData->numberOfCon];
 	for (int i=0; i < parserData->numberOfCon; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfCon; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->valArray[i] = OSNaN();
 }
     break;
 
@@ -6605,8 +6606,8 @@ yydebug = 1;
 	parserData->lbValArray = new      double[parserData->numberOfCon];
 	parserData->ubValArray = new      double[parserData->numberOfCon];
 	for (int i=0; i < parserData->numberOfCon; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfCon; i++) parserData->lbValArray[i] = OSNAN;
-	for (int i=0; i < parserData->numberOfCon; i++) parserData->ubValArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->lbValArray[i] = OSNaN();
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->ubValArray[i] = OSNaN();
 }
     break;
 
@@ -6643,8 +6644,8 @@ yydebug = 1;
 	parserData->nameAttribute = "";
 	parserData->lbValueAttributePresent = false;
 	parserData->ubValueAttributePresent = false;
-	parserData->lbDualValue = OSNAN;
-	parserData->ubDualValue = OSNAN;
+	parserData->lbDualValue = OSNaN();
+	parserData->ubDualValue = OSNaN();
 }
     break;
 

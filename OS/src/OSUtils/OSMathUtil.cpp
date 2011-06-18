@@ -15,14 +15,33 @@
  * Optimization Services (OS) framework. </p>
  *
  */
- 
+
+#include "OSConfig.h"
 #include "OSMathUtil.h"
 #include "OSGeneral.h" 
 
+#ifdef HAVE_CSTDLIB
+# include <cstdlib>
+#else
+# ifdef HAVE_STDLIB_H
+#  include <stdlib.h>
+# endif
+#endif
 
+#ifdef HAVE_CSTRING
+# include <cstring>
+#else
+# ifdef HAVE_STRING_H
+#  include <string.h>
+# else
+#  error "don't have header file for string"
+# endif
+#endif
 
 #include <iostream>
+#include <sstream>  
 
+using std::ostringstream;
 
 
 MathUtil::MathUtil(){
@@ -173,3 +192,31 @@ std::string os_dtoa_format(double  x){
 }// end os_dtoa_format
 
 
+/**
+ * OSRand()
+ *
+ * @return a uniformly distributed random number between 0 and 1 (inclusive)
+ * @notes The random number generator used, rand(), is not very good
+ * and should be replaced by a serious random number generator for serious work.
+ */
+double OSRand()
+{
+	int i;
+
+	i = rand();
+
+	return (double) i/RAND_MAX;
+}	
+
+
+/**
+ * OSiRand(int iMin, int iMax)
+ *
+ * @return a uniformly distributed random integer between iMin and iMax (inclusive)
+ * @notes The random number generator used, rand(), is not very good
+ * and should be replaced by a serious random number generator for serious work.
+ */
+double OSiRand(int iMin, int iMax)
+{
+	return iMin + rand()%(iMax - iMin + 1);
+}	

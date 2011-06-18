@@ -29,6 +29,7 @@ libOSUtils_la_SOURCES = \
 		OSMathUtil.cpp \
 		OSMathUtil.h \
 		OSDataStructures.h \
+		OSParameters.cpp \
 		OSParameters.h \
 		OSdtoa.h \
 		OSdtoa.cpp
@@ -47,9 +48,8 @@ AM_CPPFLAGS = $(ASL_CFLAGS) \
 #AM_CPPFLAGS += -DUSE_DTOA=1
 #endif
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 
 ########################################################################
 #                Headers that need to be installed                     #
@@ -59,7 +59,6 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	../../inc/config_os.h \
 	OSBase64.h \
 	OSErrorClass.h \
 	OSFileUtil.h \

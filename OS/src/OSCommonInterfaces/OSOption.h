@@ -3712,7 +3712,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * holds initial values (or OSNAN) for all of the variables
+	 * holds initial values (or OSNaN()) for all of the variables
 	 */
 	double* getInitVarValuesDense();
 
@@ -3722,7 +3722,7 @@ public:
 	 * 
 	 * @param numberOfVariables holds the dimension of the vector
 	 * @return a vector of double that 
-	 * holds initial values (or OSNAN) for all of the variables
+	 * holds initial values (or OSNaN()) for all of the variables
 	 */
 	double* getInitVarValuesDense(int numberOfVariables);
 
@@ -3821,7 +3821,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * holds branching weights (or OSNAN) for all the variables
+	 * holds branching weights (or OSNaN()) for all the variables
 	 */
 	double* getIntegerVariableBranchingWeightsDense();
 
@@ -3831,7 +3831,7 @@ public:
 	 * 
 	 * @param numberOfVariables holds the dimension of the vector
 	 * @return a vector of double that 
-	 * holds branching weights (or OSNAN) for all the variables
+	 * holds branching weights (or OSNaN()) for all the variables
 	 */
 	double* getIntegerVariableBranchingWeightsDense(int numberOfVariables);
 
@@ -3876,7 +3876,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold initial values (or OSNAN) for all of the objectives
+	 * hold initial values (or OSNaN()) for all of the objectives
 	 */
 	double *getInitObjValuesDense();
 
@@ -3886,7 +3886,7 @@ public:
 	 * 
 	 * @param numberOfObjectives holds the dimension of the vector
 	 * @return a vector of double that 
-	 * hold initial values (or OSNAN) for all of the objectives
+	 * hold initial values (or OSNaN()) for all of the objectives
 	 */
 	double *getInitObjValuesDense(int numberOfObjectives);
 
@@ -3904,7 +3904,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold initial lower bounds (or OSNAN) for all of the objectives
+	 * hold initial lower bounds (or OSNaN()) for all of the objectives
 	 */
 	double *getInitObjLowerBoundsDense();
 
@@ -3914,7 +3914,7 @@ public:
 	 * 
 	 * @param numberOfObjectives holds the dimension of the vector
 	 * @return a vector of double that 
-	 * hold initial lower bounds (or OSNAN) for all of the objectives
+	 * hold initial lower bounds (or OSNaN()) for all of the objectives
 	 */
 	double *getInitObjLowerBoundsDense(int numberOfObjectives);
 
@@ -3923,7 +3923,7 @@ public:
 	 * <p>
 	 * 
 	 * @return a vector of double that 
-	 * hold initial upper bounds (or OSNAN) for all of the objectives
+	 * hold initial upper bounds (or OSNaN()) for all of the objectives
 	 */
 	double *getInitObjUpperBoundsDense();
 
@@ -3933,7 +3933,7 @@ public:
 	 * 
 	 * @param numberOfObjectives holds the dimension of the vector
 	 * @return a vector of double that 
-	 * hold initial upper bounds (or OSNAN) for all of the objectives
+	 * hold initial upper bounds (or OSNaN()) for all of the objectives
 	 */
 	double *getInitObjUpperBoundsDense(int numberOfObjectives);
 

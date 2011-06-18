@@ -410,7 +410,7 @@ InstanceHeader::~InstanceHeader(){
 Variable::Variable():
 	lb(0.0),
 	ub(OSDBL_MAX),
-	//init(OSNAN),  deprecated
+	//init(OSNaN()),  deprecated
 	type('C'), 
 	name("")
 	//initString("") deprecated
@@ -472,7 +472,7 @@ Objective::Objective():
 	name("") ,
 	maxOrMin("min"),
 	constant(0.0),
-	weight(OSNAN),
+	weight(OSNaN()),
 	numberOfObjCoef(0),
 	coef(NULL)
 { 
@@ -2539,7 +2539,7 @@ bool OSInstance::addVariable(int index, string name, double lowerBound, double u
 	instanceData->variables->var[index]->lb = lowerBound;
 	instanceData->variables->var[index]->ub = upperBound;
 	instanceData->variables->var[index]->type = type;
-	//if(init != OSNAN) instanceData->variables->var[index]->init = init;
+	//if(init != OSNaN()) instanceData->variables->var[index]->init = init;
 	//instanceData->variables->var[index]->initString = initString;
 	return true;
 }//addVariable

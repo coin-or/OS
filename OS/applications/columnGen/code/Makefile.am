@@ -36,14 +36,6 @@ OSColGenMain_DEPENDENCIES = ../../../src/libOS.la $(OSLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-
-########################################################################
-#                            Additional flags                          #
-########################################################################
-
-
-# Here list all include flags, relative to this "srcdir" directory.  This
-# "cygpath" stuff is necessary to compile with native compilers on Windows
 AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(top_srcdir)/src` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSAgent` \
@@ -54,6 +46,5 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces`
 	
 
-
-# This line is necessary to allow VPATH compilation with MS compilers on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src

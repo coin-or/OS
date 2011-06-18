@@ -5765,7 +5765,7 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 		case 'N':
 			i++;
 			if(number[ i-2] != '+' &&  number[ i-2] != '-' && number[ i++] == 'a' && number[i++] == 'N'){
-				val = OSNAN;
+				val = OSNaN();
 				break;
 			}
 			else{
@@ -5805,7 +5805,7 @@ double atofmod1(int* osillineno, const char *number, const char *numberend){
 	if(number[i] == *numberend){
 		return sign*val;
 	}
-	else {  osilerror_wrapper( number,osillineno,"error in parsing an XSD:double"); 	return OSNAN;}
+	else {  osilerror_wrapper( number,osillineno,"error in parsing an XSD:double"); 	return OSNaN();}
 	*/
 }//end atofmod
 

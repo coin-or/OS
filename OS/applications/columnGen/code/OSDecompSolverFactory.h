@@ -43,7 +43,7 @@ public:
 	
 	virtual  OSDecompSolver* create() = 0;
 	static  std::map<std::string, OSDecompSolverFactory*> factories;
-	static 	OSDecompSolver* createOSDecompSolver(const string &solverName) throw(ErrorClass);
+	static 	OSDecompSolver* createOSDecompSolver(const std::string &solverName) throw(ErrorClass);
 
 	/**
 	 *

@@ -301,7 +301,6 @@ OS/doc/osUsersManual.tex -text
 OS/doc/usersManualAdditions.txt -text
 OS/doc/visualstudio.pdf -text
 OS/doc/visualstudio.tex -text
-OS/inc/config_os.h.in -text
 OS/install-sh -text
 OS/ltmain.sh -text
 OS/m4/ac_coin_socket_libs.m4 -text
@@ -500,11 +499,16 @@ OS/src/OSUtils/OSFileUtil.cpp -text
 OS/src/OSUtils/OSFileUtil.h -text
 OS/src/OSUtils/OSMathUtil.cpp -text
 OS/src/OSUtils/OSMathUtil.h -text
+OS/src/OSUtils/OSParameters.cpp -text
 OS/src/OSUtils/OSParameters.h -text
 OS/src/OSUtils/OSStringUtil.cpp -text
 OS/src/OSUtils/OSStringUtil.h -text
 OS/src/OSUtils/OSdtoa.cpp -text
 OS/src/OSUtils/OSdtoa.h -text
+OS/src/config.h.in -text
+OS/src/config_default.h -text
+OS/src/config_os.h.in -text
+OS/src/config_os_default.h -text
 OS/stylesheets/OSrL.css -text
 OS/stylesheets/OSrL.xslt -text
 OS/test/Makefile.am -text

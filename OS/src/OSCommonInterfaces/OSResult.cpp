@@ -578,7 +578,7 @@ ObjValue::ObjValue():
 	idx( -1),
 	name(""),
 	value(0.0)
-//	value( OSNAN)
+//	value( OSNaN())
 { 
 	#ifdef DEBUG_OSRESULT
 	cout << "Inside the ObjValue Constructor" << endl;
@@ -1471,11 +1471,11 @@ string OSResult::getTimingInfoDescription(int idx){
 }//getTimingInfoDescription
 
 double OSResult::getTimingInfoValue(int idx){
-	if (job == NULL) return OSNAN;
-	if (job->timingInformation == NULL) return OSNAN; 
+	if (job == NULL) return OSNaN();
+	if (job->timingInformation == NULL) return OSNaN(); 
 	if (idx < 0 || idx >= job->timingInformation->numberOfTimes) 
 		throw ErrorClass("idx is outside of range in routine getTimingInfoValue()");
-	if (job->timingInformation->time[idx] == NULL) return OSNAN;
+	if (job->timingInformation->time[idx] == NULL) return OSNaN();
 	return job->timingInformation->time[idx]->value;
 }//getTimingInfoValue
 
@@ -1774,9 +1774,9 @@ double OSResult::getVarValue(int solIdx, int varIdx){
 		throw ErrorClass("No solution defined");
 	if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
 		throw ErrorClass("solIdx is outside of range in routine getVarValue()");
-	if (optimization->solution[solIdx] == NULL) return OSNAN;
-	if (optimization->solution[solIdx]->variables == NULL) return OSNAN;
-	if (optimization->solution[solIdx]->variables->values == NULL) return OSNAN;
+	if (optimization->solution[solIdx] == NULL) return OSNaN();
+	if (optimization->solution[solIdx]->variables == NULL) return OSNaN();
+	if (optimization->solution[solIdx]->variables->values == NULL) return OSNaN();
 	if (varIdx < 0 || varIdx >= optimization->solution[solIdx]->variables->values->numberOfVar)
 		throw ErrorClass("varIdx is outside of range in routine getVarValue()");
 	return optimization->solution[solIdx]->variables->values->var[varIdx]->value;
@@ -2455,9 +2455,9 @@ double OSResult::getObjValue(int solIdx, int objIdx){
 	int iSolutions = this->getSolutionNumber();  
 	if (solIdx < 0 || solIdx >= iSolutions)
 		throw ErrorClass("solIdx is outside of range in routine getObjValue()");
-	if (optimization->solution[solIdx] == NULL) return OSNAN;
-	if (optimization->solution[solIdx]->objectives == NULL) return OSNAN;
-	if (optimization->solution[solIdx]->objectives->values == NULL) return OSNAN;
+	if (optimization->solution[solIdx] == NULL) return OSNaN();
+	if (optimization->solution[solIdx]->objectives == NULL) return OSNaN();
+	if (optimization->solution[solIdx]->objectives->values == NULL) return OSNaN();
 	if (objIdx < 0 || objIdx >= optimization->solution[solIdx]->objectives->values->numberOfObj)
 		throw ErrorClass("objIdx is outside of range in routine getObjValue()");
 	return optimization->solution[solIdx]->objectives->values->obj[objIdx]->value;
@@ -2473,7 +2473,7 @@ double OSResult::getOptimalObjValue(int objIdx, int solIdx)
 		if(this->optimization->solution[i]->targetObjectiveIdx != objIdx) continue;  
 		if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||  
 				this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0){   
-			return  this->optimization->solution[i]->objectives->values->obj[ abs( objIdx)  -1 ]->value;  
+			return  this->optimization->solution[i]->objectives->values->obj[ (objIdx >= 0 ? objIdx : -objIdx)  -1 ]->value;  
 		}
 		else{  
 			throw ErrorClass("There is no optimal solution");  
@@ -2766,9 +2766,9 @@ double OSResult::getDualValue(int solIdx, int conIdx){
 	int iSolutions = this->getSolutionNumber();
 	if (solIdx < 0 || solIdx >= iSolutions)
 		throw ErrorClass("solIdx is outside of range in routine getDualValue()");
-	if (optimization->solution[solIdx] == NULL) return OSNAN;
-	if (optimization->solution[solIdx]->constraints == NULL) return OSNAN;
-	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return OSNAN;
+	if (optimization->solution[solIdx] == NULL) return OSNaN();
+	if (optimization->solution[solIdx]->constraints == NULL) return OSNaN();
+	if (optimization->solution[solIdx]->constraints->dualValues == NULL) return OSNaN();
 	if (conIdx < 0 || conIdx >= optimization->solution[solIdx]->constraints->dualValues->numberOfCon)
 		throw ErrorClass("conIdx is outside of range in routine getDualValue()");
 	return optimization->solution[solIdx]->constraints->dualValues->con[conIdx]->value;
@@ -7605,7 +7605,7 @@ bool ServiceResult::setRandom(double density, bool conformant)
 		if      (temp <= 0.25) this->serviceUtilization = OSRand();
 		else if (temp <= 0.50) this->serviceUtilization = -1.0;
 		else if (temp <= 0.75) this->serviceUtilization = OSDBL_MAX;
-		else                   this->serviceUtilization = OSNAN;
+		else                   this->serviceUtilization = OSNaN();
 	} 
 
 	if (OSRand() <= density)     

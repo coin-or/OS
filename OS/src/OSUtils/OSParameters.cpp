@@ -1,0 +1,75 @@
+
+#include "OSConfig.h"
+#include "OSParameters.h"
+
+#ifdef HAVE_CMATH
+# include <cmath>
+#else
+# ifdef HAVE_MATH_H
+#  include <math.h>
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+#ifdef HAVE_CFLOAT
+# include <cfloat>
+#else
+# ifdef HAVE_FLOAT_H
+#  include <float.h>
+# endif
+#endif
+#ifdef HAVE_CIEEEFP
+# include <cieeefp>
+#else
+# ifdef HAVE_IEEEFP_H
+#  include <ieeefp.h>
+# endif
+#endif
+
+#include <sstream>
+
+using std::ostringstream;
+
+// this is taken directly from COINUTILS
+bool OSIsnan(double x) {
+#ifdef COIN_C_ISNAN
+    return COIN_C_ISNAN( x)!=0;
+#else
+    return (x != x);
+#endif
+}
+
+double OSNaN() { 
+#ifdef OSNAN
+  return OSNAN;
+#else
+  // wow, what a last resort, I don't like this!
+  double zero = 0.0;
+  return 0.0/zero;
+#endif
+}
+
+std::string OSgetVersionInfo() {
+	ostringstream versionInfo;
+		versionInfo << std::endl << std::endl;
+		versionInfo << "Optimization Services Solver";
+		versionInfo << std::endl;	
+		versionInfo << "Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin";
+		versionInfo << std::endl;
+		versionInfo << "Distributed under the Eclipse Public License" ;
+		versionInfo << std::endl;
+		versionInfo << "OS Version: ";
+		versionInfo << OS_VERSION;
+		versionInfo << std::endl;	
+		versionInfo << "Build Date: ";
+		versionInfo << __DATE__;
+		versionInfo << std::endl;	
+	
+		#ifdef OS_SVN_REV
+			versionInfo << "SVN Version: "; 
+			versionInfo << OS_SVN_REV;
+		#endif
+			
+		versionInfo << std::endl << std::endl;
+	return versionInfo.str() ;
+} 

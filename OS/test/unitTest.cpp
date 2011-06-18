@@ -221,7 +221,8 @@
 
 using std::cout;   
 using std::endl;
-using std::ostringstream; 
+using std::ostringstream;
+using std::string;
 
 
 int main(int argC, char* argV[])
@@ -7783,11 +7784,11 @@ double getObjVal( std::string osrl){
 				// return dObjVal = strtod(sObjVal.c_str(), NULL);
 				return dObjVal = os_strtod(sObjVal.c_str(), NULL); 
 			}
-			else return OSNAN;
+			else return OSNaN();
 		}
-		else return OSNAN;
+		else return OSNaN();
 	}
-	else return OSNAN;
+	else return OSNaN();
 }
 
 

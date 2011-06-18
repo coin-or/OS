@@ -18,7 +18,6 @@
 #define OSSOLVERAGENT_H
 
 #include "OShL.h"
-using std::string;
 
 /*! \class OSSolverAgent OSSolverAgent.h "OSSolverAgent.h"
  *  \brief Used by a client to invoke a remote solver.
@@ -47,7 +46,7 @@ public:
 	 * Default constructor. 
 	 * @param solverURI is the location of remote solver or scheduler
 	 */
-	OSSolverAgent(string solverURI) ;
+	OSSolverAgent(std::string solverURI) ;
 	
 	/**
 	 * Class destructor. 
@@ -63,7 +62,7 @@ public:
    	 * @return osrl which is a string with the result.
 	 * </p> 
    	 */	
-	string solve(string osil, string osol);
+	std::string solve(std::string osil, std::string osol);
 	
    	/**
    	 * implement the getJobID() method which is a virtual function in OShL
@@ -73,7 +72,7 @@ public:
    	 * @return a string which is the jobID
 	 * </p> 
    	 */	
-	string getJobID(string osol);
+	std::string getJobID(std::string osol);
 	
    	/**
    	 * implement the send() method which is a virtual function in OShL
@@ -84,7 +83,7 @@ public:
    	 * @return a bool which is true if the job is successfuly submitted
 	 * </p> 
    	 */	
-	bool send(string osil, string osol);
+	bool send(std::string osil, std::string osol);
 	
    	/**
    	 * implement the kill() method which is a virtual function in OShL
@@ -94,7 +93,7 @@ public:
    	 * @return a string which is in OSpL format
 	 * </p> 
    	 */	
-	string kill(string osol);
+	std::string kill(std::string osol);
 	
    	/**
    	 * implement the retrieve() method which is a virtual function in OShL
@@ -104,7 +103,7 @@ public:
    	 * @return a string which is in the result of the optimization is OSrL fomrat
 	 * </p> 
    	 */	
-	string retrieve(string osol);
+	std::string retrieve(std::string osol);
 	
    	/**
    	 * implement the knock() method which is a virtual function in OShL
@@ -115,7 +114,7 @@ public:
    	 * @return a string which is the knock result in OSpL format.
 	 * </p> 
    	 */	
-	string knock(string ospl, string osol);
+	std::string knock(std::string ospl, std::string osol);
 	
    	/**
    	 * implement the fileUpload() method which is a virtual function in OShL
@@ -126,12 +125,12 @@ public:
    	 * @param osil is a string with the OSiL problem instance
 	 * </p> 
    	 */	
-	string fileUpload(string osilFileName, string osil);
+	std::string fileUpload(std::string osilFileName, std::string osil);
 	
 private:
 	
 	/** solverAddress is the URI for the solver*/
-	string solverAddress;
+	std::string solverAddress;
 	
 	/** solverPortNumber is the port number for the sovler */
 	unsigned short solverPortNumber;
@@ -139,7 +138,7 @@ private:
 	/** postURI is the path to the solver that follows the first
 	 * / in the solverAddress
 	 */
-	string postURI;
+	std::string postURI;
 	
 }; //class OSSolverAgent
 

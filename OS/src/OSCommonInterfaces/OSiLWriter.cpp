@@ -133,7 +133,7 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance){
 						outStr <<  "\"";  
 					}
 					if( m_OSInstance->instanceData->variables->var[i]->ub != OSDBL_MAX
-						&& m_OSInstance->instanceData->variables->var[i]->ub != OSNAN ) {
+						&& m_OSInstance->instanceData->variables->var[i]->ub != OSNaN() ) {
 						outStr << " ub=\"" ;
 						outStr << os_dtoa_format( m_OSInstance->instanceData->variables->var[i]->ub) ;
 						outStr <<  "\"";

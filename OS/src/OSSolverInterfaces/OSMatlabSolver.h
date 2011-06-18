@@ -28,16 +28,6 @@
 #include "OSSolverAgent.h" 
 #include "OSErrorClass.h" 
 
-#ifdef COIN_HAS_LINDO    
-#include "OSLindoSolver.h"
-#endif  
-
-#ifdef COIN_HAS_IPOPT    
-#include "OSIpoptSolver.h"
-#endif 
-
-
-
 //end OS headers
 
 #include <string>

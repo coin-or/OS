@@ -16,15 +16,6 @@
 #ifndef OSGENERAL_H
 #define OSGENERAL_H
 
-
-#ifdef HAVE_CSTDLIB
-# include <cstdlib>
-#else
-# ifdef HAVE_STDLIB_H
-#  include <stdlib.h>
-# endif
-#endif
-
 #include "OSConfig.h"
 #include "OSParameters.h" 
 

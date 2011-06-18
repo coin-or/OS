@@ -432,7 +432,7 @@ JobOption::~JobOption()
 InitVarValue::InitVarValue(): 
 	idx (-1),
 	name (""),
-	value (OSNAN)
+	value (OSNaN())
 {    
 	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitVarValue Constructor" << endl;
@@ -763,7 +763,7 @@ VariableOption::~VariableOption()
 InitObjValue::InitObjValue(): 
 	idx (-1),
 	name (""),
-	value (OSNAN)
+	value (OSNaN())
 {    
 	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitObjValue Constructor" << endl;
@@ -951,7 +951,7 @@ ObjectiveOption::~ObjectiveOption()
 InitConValue::InitConValue(): 
 	idx (0),
 	name (""),
-	value (OSNAN)
+	value (OSNaN())
 {    
 	#ifdef DEBUG_OSOPTION
 	cout << "Inside InitConValue Constructor" << endl;
@@ -2578,7 +2578,7 @@ InitVarValue**  OSOption::getInitVarValuesSparse()
 /**
  * get the list of initial variable values in dense form
  * @return an array of values
- * @note return OSNAN for variables that are not initialed
+ * @note return OSNaN() for variables that are not initialed
  */
 double* OSOption::getInitVarValuesDense()
 {	try
@@ -2597,7 +2597,7 @@ double* OSOption::getInitVarValuesDense()
 					if (m_mdInitVarValuesDense != NULL)
 						delete [] m_mdInitVarValuesDense;
 					m_mdInitVarValuesDense = new double[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesDense[k] = OSNAN;
+					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesDense[k] = OSNaN();
 
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
@@ -2622,7 +2622,7 @@ double* OSOption::getInitVarValuesDense()
  * get the list of initial variable values in dense form
  * @param numberOfVariables is the dimension of the array
  * @return an array of values
- * @note return OSNAN for variables that are not initialed
+ * @note return OSNaN() for variables that are not initialed
  */
 double* OSOption::getInitVarValuesDense(int numberOfVariables)
 {	try
@@ -2639,7 +2639,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
 					if (m_mdInitVarValuesDense != NULL)
 						delete [] m_mdInitVarValuesDense;
 					m_mdInitVarValuesDense = new double[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesDense[k] = OSNAN;
+					for (k = 0; k < numberOfVariables; k++) m_mdInitVarValuesDense[k] = OSNaN();
 
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->initialVariableValues->var[i]->idx;
@@ -2979,7 +2979,7 @@ BranchingWeight**  OSOption::getIntegerVariableBranchingWeightsSparse()
 /**
  * get a list of branching weights for integer variables in dense form
  * @return an array of values
- * @note return OSNAN for variables that are not initialed
+ * @note return OSNaN() for variables that are not initialed
  */
 double* OSOption::getIntegerVariableBranchingWeightsDense()
 {	try
@@ -2998,7 +2998,7 @@ double* OSOption::getIntegerVariableBranchingWeightsDense()
 					if (m_mdIntegerVariableBranchingWeightsDense != NULL)
 						delete [] m_mdIntegerVariableBranchingWeightsDense;
 					m_mdIntegerVariableBranchingWeightsDense = new double[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) m_mdIntegerVariableBranchingWeightsDense[k] = OSNAN;
+					for (k = 0; k < numberOfVariables; k++) m_mdIntegerVariableBranchingWeightsDense[k] = OSNaN();
 
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->integerVariableBranchingWeights->var[i]->idx;
@@ -3023,7 +3023,7 @@ double* OSOption::getIntegerVariableBranchingWeightsDense()
  * get a list of branching weights for integer variables in dense form
  * @param numberOfVariables is the dimension of the array
  * @return an array of values
- * @note return OSNAN for variables that are not initialed
+ * @note return OSNaN() for variables that are not initialed
  */
 double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
 {	try
@@ -3040,7 +3040,7 @@ double* OSOption::getIntegerVariableBranchingWeightsDense(int numberOfVariables)
 					if (m_mdIntegerVariableBranchingWeightsDense != NULL)
 						delete [] m_mdIntegerVariableBranchingWeightsDense;
 					m_mdIntegerVariableBranchingWeightsDense = new double[numberOfVariables];
-					for (k = 0; k < numberOfVariables; k++) m_mdIntegerVariableBranchingWeightsDense[k] = OSNAN;
+					for (k = 0; k < numberOfVariables; k++) m_mdIntegerVariableBranchingWeightsDense[k] = OSNaN();
 
 					for (i = 0; i < num_var; i++)
 					{	j = this->optimization->variables->integerVariableBranchingWeights->var[i]->idx;
@@ -3149,7 +3149,7 @@ InitObjValue**  OSOption::getInitObjValuesSparse()
 /**
  * get the list of initial objective values in dense form
  * @return an array of values
- * @note return OSNAN for objectives that are not initialed
+ * @note return OSNaN() for objectives that are not initialed
  */
 double* OSOption::getInitObjValuesDense()
 {	try
@@ -3168,7 +3168,7 @@ double* OSOption::getInitObjValuesDense()
 					if (m_mdInitObjValuesDense != NULL)
 						delete [] m_mdInitObjValuesDense;
 					m_mdInitObjValuesDense = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjValuesDense[k] = OSNAN;
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjValuesDense[k] = OSNaN();
 	
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
@@ -3195,7 +3195,7 @@ double* OSOption::getInitObjValuesDense()
  * get the list of initial objective values in dense form
  * @param numberOfObjectives is the dimension of the array
  * @return an array of values
- * @note return OSNAN for objectives that are not initialed
+ * @note return OSNaN() for objectives that are not initialed
  */
 double* OSOption::getInitObjValuesDense(int numberOfObjectives)
 {	try
@@ -3212,7 +3212,7 @@ double* OSOption::getInitObjValuesDense(int numberOfObjectives)
 					if (m_mdInitObjValuesDense != NULL)
 						delete [] m_mdInitObjValuesDense;
 					m_mdInitObjValuesDense = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjValuesDense[k] = OSNAN;
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjValuesDense[k] = OSNaN();
 	
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveValues->obj[i]->idx;
@@ -3259,7 +3259,7 @@ InitObjBound**  OSOption::getInitObjBoundsSparse()
 /**
  * get the list of initial objective lower bounds in dense form
  * @return an array of values
- * @note return OSNAN for objectives that are not initialed
+ * @note return OSNaN() for objectives that are not initialed
  */
 double* OSOption::getInitObjLowerBoundsDense()
 {	try
@@ -3278,7 +3278,7 @@ double* OSOption::getInitObjLowerBoundsDense()
 					if (m_mdInitObjLowerBoundsDense != NULL)
 						delete [] m_mdInitObjLowerBoundsDense;
 					m_mdInitObjLowerBoundsDense = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjLowerBoundsDense[k] = OSNAN;
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjLowerBoundsDense[k] = OSNaN();
 
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
@@ -3305,7 +3305,7 @@ double* OSOption::getInitObjLowerBoundsDense()
  * get the list of initial objective lower bounds in dense form
  * @param numberOfObjectives is the dimension of the array
  * @return an array of values
- * @note return OSNAN for objectives that are not initialed
+ * @note return OSNaN() for objectives that are not initialed
  */
 double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
 {	try
@@ -3322,7 +3322,7 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
 					if (m_mdInitObjLowerBoundsDense != NULL)
 						delete [] m_mdInitObjLowerBoundsDense;
 					m_mdInitObjLowerBoundsDense = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjLowerBoundsDense[k] = OSNAN;
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjLowerBoundsDense[k] = OSNaN();
 
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
@@ -3348,7 +3348,7 @@ double* OSOption::getInitObjLowerBoundsDense(int numberOfObjectives)
 /**
  * get the list of initial objective upper bounds in dense form
  * @return an array of values
- * @note return OSNAN for objectives that are not initialed
+ * @note return OSNaN() for objectives that are not initialed
  */
 double* OSOption::getInitObjUpperBoundsDense()
 {	try
@@ -3367,7 +3367,7 @@ double* OSOption::getInitObjUpperBoundsDense()
 					if (m_mdInitObjUpperBoundsDense != NULL)
 						delete [] m_mdInitObjUpperBoundsDense;
 					m_mdInitObjUpperBoundsDense = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjUpperBoundsDense[k] = OSNAN;
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjUpperBoundsDense[k] = OSNaN();
 					
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
@@ -3394,7 +3394,7 @@ double* OSOption::getInitObjUpperBoundsDense()
  * get the list of initial objective upper bounds in dense form
  * @param numberOfObjectives is the dimension of the array
  * @return an array of values
- * @note return OSNAN for objectives that are not initialed
+ * @note return OSNaN() for objectives that are not initialed
  */
 double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
 {	try
@@ -3411,7 +3411,7 @@ double* OSOption::getInitObjUpperBoundsDense(int numberOfObjectives)
 					if (m_mdInitObjUpperBoundsDense != NULL)
 						delete [] m_mdInitObjUpperBoundsDense;
 					m_mdInitObjUpperBoundsDense = new double[numberOfObjectives];
-					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjUpperBoundsDense[k] = OSNAN;
+					for (k = 0; k < numberOfObjectives; k++) m_mdInitObjUpperBoundsDense[k] = OSNaN();
 					
 					for (i = 0; i < num_obj; i++)
 					{	j = this->optimization->objectives->initialObjectiveBounds->obj[i]->idx;
@@ -3645,7 +3645,7 @@ InitConValue**  OSOption::getInitConValuesSparse()
 /**
  * get the list of initial constraint values in dense form
  * @return an array of values
- * @note return OSNAN for constraints that are not initialed
+ * @note return OSNaN() for constraints that are not initialed
  */
 double* OSOption::getInitConValuesDense()
 {	try
@@ -3664,7 +3664,7 @@ double* OSOption::getInitConValuesDense()
 					if (m_mdInitConValuesDense != NULL)
 						delete [] m_mdInitConValuesDense;
 					m_mdInitConValuesDense = new double[numberOfConstraints];
-					for (k = 0; k < numberOfConstraints; k++) m_mdInitConValuesDense[k] = OSNAN;
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitConValuesDense[k] = OSNaN();
 
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
@@ -3689,7 +3689,7 @@ double* OSOption::getInitConValuesDense()
  * get the list of initial constraint values in dense form
  * @param numberOfConstraints is the dimension of the array
  * @return an array of values
- * @note return OSNAN for constraints that are not initialed
+ * @note return OSNaN() for constraints that are not initialed
  */
 double* OSOption::getInitConValuesDense(int numberOfConstraints)
 {	try
@@ -3706,7 +3706,7 @@ double* OSOption::getInitConValuesDense(int numberOfConstraints)
 					if (m_mdInitConValuesDense != NULL)
 						delete [] m_mdInitConValuesDense;
 					m_mdInitConValuesDense = new double[numberOfConstraints];
-					for (k = 0; k < numberOfConstraints; k++) m_mdInitConValuesDense[k] = OSNAN;
+					for (k = 0; k < numberOfConstraints; k++) m_mdInitConValuesDense[k] = OSNaN();
 
 					for (i = 0; i < num_con; i++)
 					{	j = this->optimization->constraints->initialConstraintValues->con[i]->idx;
@@ -3751,7 +3751,7 @@ InitDualVarValue**  OSOption::getInitDualVarValuesSparse()
 /**
  * get the list of initial dual variables associated with the lower bounds in dense form
  * @return an array of values
- * @note return OSNAN for dual variables that are not initialed
+ * @note return OSNaN() for dual variables that are not initialed
  */
 double* OSOption::getInitDualVarLowerBoundsDense()
 {	try
@@ -3795,7 +3795,7 @@ double* OSOption::getInitDualVarLowerBoundsDense()
  * get the list of initial dual variables associated with the lower bounds in dense form
  * @param numberOfConstraints is the dimension of the array
  * @return an array of values
- * @note return OSNAN for dual variables that are not initialed
+ * @note return OSNaN() for dual variables that are not initialed
  */
 double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
 {	try
@@ -3836,7 +3836,7 @@ double* OSOption::getInitDualVarLowerBoundsDense(int numberOfConstraints)
 /**
  * get the list of initial dual variables associated with the upper bounds in dense form
  * @return an array of values
- * @note return OSNAN for dual variables that are not initialed
+ * @note return OSNaN() for dual variables that are not initialed
  */
 double* OSOption::getInitDualVarUpperBoundsDense()
 {	try
@@ -3881,7 +3881,7 @@ double* OSOption::getInitDualVarUpperBoundsDense()
  * get the list of initial dual variables associated with the upper bounds in dense form
  * @param numberOfConstraints is the dimension of the array
  * @return an array of values
- * @note return OSNAN for dual variables that are not initialed
+ * @note return OSNaN() for dual variables that are not initialed
  */
 double* OSOption::getInitDualVarUpperBoundsDense(int numberOfConstraints)
 {	try

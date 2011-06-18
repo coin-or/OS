@@ -225,7 +225,7 @@ void OSBearcatSolverXij::initializeDataStructures(){
 		
 		m_optValHub = new double[ m_numHubs];
 		
-		m_variableNames = new string[ m_numNodes*(m_numNodes - 1)];
+		m_variableNames = new std::string[ m_numNodes*(m_numNodes - 1)];
 		
 		createVariableNames();
 		
@@ -1879,9 +1879,9 @@ void OSBearcatSolverXij::getOptions(OSOption *osoption) {
 		
 		std::string routeString; //variable for parsing a category option
 		std::string solutionString; //variable for parsing a category option
-		string::size_type pos1; //variable for parsing a category option
-		string::size_type pos2; //variable for parsing a category option
-		string::size_type pos3; //variable for parsing a category option
+		std::string::size_type pos1; //variable for parsing a category option
+		std::string::size_type pos2; //variable for parsing a category option
+		std::string::size_type pos3; //variable for parsing a category option
 		
 		
 		std::map<int, std::map<int, std::vector<int> > >::iterator  mit;
@@ -5903,7 +5903,7 @@ void OSBearcatSolverXij::getFeasibleSolution(){
 		// the argument is the solution index
 		solStatus = osresult->getSolutionStatusType( 0 );
 		// if solStatus is optimal get the optimal solution value
-		if( solStatus.find("ptimal") != string::npos ){
+		if( solStatus.find("ptimal") != std::string::npos ){
 		//first index is objIdx, second is solution index
 			optSolValue = osresult->getOptimalObjValue( -1, 0);
 			std::cout << "OPTIMAL SOLUTION VALUE  " <<  optSolValue << std::endl;

@@ -7,5 +7,5 @@ Description: Optimization Services Interfaces Package
 URL: https://projects.coin-or.org/OS
 Version: @PACKAGE_VERSION@
 Libs: ${libdir}/libOS.la @OSLIB_PCLIBS@
-Cflags: -I${includedir} -I@ABSBUILDDIR@/inc  -I@abs_source_dir@/src/OSAgent -I@abs_source_dir@/src/OSCommonInterfaces -I@abs_source_dir@/src/OSModelInterfaces -I@abs_source_dir@/src/OSParsers -I@abs_source_dir@/src/OSSolverInterfaces -I@abs_source_dir@/src/OSUtils
+Cflags: -I${includedir} -I@ABSBUILDDIR@/src  -I@abs_source_dir@/src/OSAgent -I@abs_source_dir@/src/OSCommonInterfaces -I@abs_source_dir@/src/OSModelInterfaces -I@abs_source_dir@/src/OSParsers -I@abs_source_dir@/src/OSSolverInterfaces -I@abs_source_dir@/src/OSUtils
 Requires: @OSLIB_PCREQUIRES@

@@ -100,6 +100,14 @@ if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
   AC_MSG_ERROR([Ipopt is present, but not the necessary CppAD.])
 fi
 
+# The COIN_HAS_CPPAD symbol should not go into the public configuration
+# header file (config_os.h).
+# However, we need to distinguish in OS' public headers files whether
+# CppAD is available or not, so we define an additional symbol.
+if test $coin_has_cppad = yes ; then
+  AC_DEFINE(OS_HAS_CPPAD, [1], [Define to 1 if OS uses CppAD])
+fi
+
 #############################################################################
 #                             Third party solvers                           #
 #############################################################################
@@ -521,7 +529,7 @@ AC_CONFIG_FILES([Makefile
 	  os-uninstalled.pc])
 
 # Here put the location and name of the configuration header file
-AC_CONFIG_HEADER([inc/config_os.h])
+AC_CONFIG_HEADER([src/config.h src/config_os.h])
 
 # Finally, we let configure write all the output...
 AC_COIN_FINALIZE

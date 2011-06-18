@@ -52,12 +52,13 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/ac_coin_socket_libs.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
-CONFIG_HEADER = $(top_builddir)/inc/config_os.h
+CONFIG_HEADER = $(top_builddir)/src/config.h \
+	$(top_builddir)/src/config_os.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libOSUtils_la_LIBADD =
 am_libOSUtils_la_OBJECTS = OSBase64.lo OSErrorClass.lo OSFileUtil.lo \
-	OSStringUtil.lo OSMathUtil.lo OSdtoa.lo
+	OSStringUtil.lo OSMathUtil.lo OSParameters.lo OSdtoa.lo
 libOSUtils_la_OBJECTS = $(am_libOSUtils_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -405,6 +406,7 @@ libOSUtils_la_SOURCES = \
 		OSMathUtil.cpp \
 		OSMathUtil.h \
 		OSDataStructures.h \
+		OSParameters.cpp \
 		OSParameters.h \
 		OSdtoa.h \
 		OSdtoa.cpp
@@ -424,9 +426,8 @@ AM_CPPFLAGS = $(ASL_CFLAGS) \
 #AM_CPPFLAGS += -DUSE_DTOA=1
 #endif
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 
 ########################################################################
 #                Headers that need to be installed                     #
@@ -436,7 +437,6 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	../../inc/config_os.h \
 	OSBase64.h \
 	OSErrorClass.h \
 	OSFileUtil.h \
@@ -501,6 +501,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSErrorClass.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSFileUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSMathUtil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSParameters.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSStringUtil.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSdtoa.Plo@am__quote@
 
@@ -601,7 +602,6 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH tags
 
 distdir: $(DISTFILES)
-	$(mkdir_p) $(distdir)/../../inc
 	@srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`; \
 	topsrcdirstrip=`echo "$(top_srcdir)" | sed 's|.|.|g'`; \
 	list='$(DISTFILES)'; for file in $$list; do \

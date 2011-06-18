@@ -38,9 +38,8 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces`
 
-# This line is necessary to allow VPATH compilation with MS compilers
-# on Cygwin
-DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/inc
+# This line is necessary to allow VPATH compilation
+DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src
 
 DISTCLEANFILES = ipopt.out bonmin.out
 

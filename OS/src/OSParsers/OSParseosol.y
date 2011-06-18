@@ -27,7 +27,8 @@
 
 #include <iostream>
 #include <sstream>
-#include <stdio.h>
+#include <cstdio>
+#include <cstring>
 
 //#define DEBUG
 
@@ -1801,7 +1802,7 @@ initialVariableValuesAttributes: numberOfVarAttribute
 	parserData->namArray = new std::string[parserData->numberOfVar];
 	parserData->valArray = new      double[parserData->numberOfVar];
 	for (int i=0; i < parserData->numberOfVar; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNaN();
 }; 
 
 initialVariableValuesContent: 
@@ -2198,7 +2199,7 @@ integerVariableBranchingWeightsAttributes: numberOfVarAttribute
 	parserData->namArray = new std::string[parserData->numberOfVar];
 	parserData->valArray = new      double[parserData->numberOfVar];
 	for (int i=0; i < parserData->numberOfVar; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNaN();
 }; 
 
 integerVariableBranchingWeightsContent:
@@ -2354,7 +2355,7 @@ sosWeightGroupAtt:
 		parserData->idxArray = new         int[parserData->numberOfVar];
 		parserData->namArray = new std::string[parserData->numberOfVar];
 		parserData->valArray = new      double[parserData->numberOfVar];
-		for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNAN;
+		for (int i=0; i < parserData->numberOfVar; i++) parserData->valArray[i] = OSNaN();
 		parserData->numberOfVarAttributePresent = true;
 	}
   | groupWeightAttribute
@@ -2562,7 +2563,7 @@ initialObjectiveValuesAttributes: numberOfObjAttribute
 	parserData->valArray = new      double[parserData->numberOfObj];
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->idxArray[i] = -1;
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfObj; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->valArray[i] = OSNaN();
 }; 
 
 initialObjectiveValuesContent: 
@@ -2660,8 +2661,8 @@ numberOfObjATT: numberOfObjAttribute
 	parserData->namArray   = new std::string[parserData->numberOfObj];
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->idxArray[i] = -1;
 	for (int i=0; i < parserData->numberOfObj; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfObj; i++) parserData->lbValArray[i] = OSNAN;
-	for (int i=0; i < parserData->numberOfObj; i++) parserData->ubValArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->lbValArray[i] = OSNaN();
+	for (int i=0; i < parserData->numberOfObj; i++) parserData->ubValArray[i] = OSNaN();
 }; 
 
 initialObjectiveBoundsContent: 
@@ -3140,7 +3141,7 @@ initialConstraintValuesAttributes: numberOfConAttribute
 	parserData->namArray = new std::string[parserData->numberOfCon];
 	parserData->valArray = new      double[parserData->numberOfCon];
 	for (int i=0; i < parserData->numberOfCon; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfCon; i++) parserData->valArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->valArray[i] = OSNaN();
 }; 
 
 initialConstraintValuesContent:
@@ -3242,8 +3243,8 @@ initialDualValuesAttributes: numberOfConAttribute
 	parserData->lbValArray = new      double[parserData->numberOfCon];
 	parserData->ubValArray = new      double[parserData->numberOfCon];
 	for (int i=0; i < parserData->numberOfCon; i++) parserData->namArray[i] = "";
-	for (int i=0; i < parserData->numberOfCon; i++) parserData->lbValArray[i] = OSNAN;
-	for (int i=0; i < parserData->numberOfCon; i++) parserData->ubValArray[i] = OSNAN;
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->lbValArray[i] = OSNaN();
+	for (int i=0; i < parserData->numberOfCon; i++) parserData->ubValArray[i] = OSNaN();
 }; 
 
 initialDualValuesContent: 
@@ -3281,8 +3282,8 @@ initDualValueStart: CONSTART
 	parserData->nameAttribute = "";
 	parserData->lbValueAttributePresent = false;
 	parserData->ubValueAttributePresent = false;
-	parserData->lbDualValue = OSNAN;
-	parserData->ubDualValue = OSNAN;
+	parserData->lbDualValue = OSNaN();
+	parserData->ubDualValue = OSNaN();
 };
 
 initDualValueAttributes: initDualValueAttList

@@ -197,7 +197,7 @@ int main(int argC, char* argV[])
 			argument = std::string(argV[i]);
 			epos = argument.find('=');
 			option = argument.substr(0,epos);
-			if (epos < string::npos)
+			if (epos < std::string::npos)
 				value = argument.substr(epos+1);
 			else
 				value = "";
@@ -743,7 +743,7 @@ std::string getUserInput(bool defaultPresent)
 		getline(std::cin, lineText);
 		lineText = " " + lineText + " ";
 		indexStart = lineText.find_first_not_of(wordSep);
-		if (indexStart != string::npos) 
+		if (indexStart != std::string::npos) 
 		{
 			indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
 			return lineText.substr(indexStart, indexEnd - indexStart);

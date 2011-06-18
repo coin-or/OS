@@ -1,0 +1,21 @@
+/* src/config_os.h.in. */
+
+#ifndef __CONFIG_OS_H__
+#define __CONFIG_OS_H__
+
+/* Version number of project */
+#undef OS_VERSION
+
+/* Major Version number of project */
+#undef OS_VERSION_MAJOR
+
+/* Minor Version number of project */
+#undef OS_VERSION_MINOR
+
+/* Release Version number of project */
+#undef OS_VERSION_RELEASE
+
+/* Define to 1 if OS uses CppAD */
+#undef OS_HAS_CPPAD
+
+#endif /* __CONFIG_OS_H__ */
