@@ -2691,7 +2691,7 @@ void OSBearcatSolverXij::getCutsMultiCommod(const  double* theta, const int numT
 					
 					//std::cout <<  m_variableNames[ vit->first ]  << " = "  <<  vit->second  << std::endl;
 						
-					ivalue = (int)floor( vit->first /(m_numNodes - 1) );
+					ivalue = vit->first /(m_numNodes - 1);
 					
 					jvalue = vit->first - ivalue*(m_numNodes - 1);
 					
@@ -3574,7 +3574,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 					//std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
 					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " DISTANCE = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
 					
-					ivalue = (int)floor( m_thetaIndex[  j] /(m_numNodes - 1) );
+					ivalue = m_thetaIndex[  j] /(m_numNodes - 1);
 					
 					jvalue = m_thetaIndex[  j] - ivalue*(m_numNodes - 1);
 					
