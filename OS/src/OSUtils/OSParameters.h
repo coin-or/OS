@@ -66,9 +66,9 @@ const double OSDBL_MAX = std::numeric_limits<double>::max();
 const int    OSINT_MAX = std::numeric_limits<int>::max();
 
 /** checks whether a given double is NaN */
-bool OSIsnan(double x);
+extern "C" bool OSIsnan(double x);
 /** returns the value for NaN used in OS */
-double OSNaN();
+extern "C" double OSNaN();
 
 std::string OSgetVersionInfo();
 
