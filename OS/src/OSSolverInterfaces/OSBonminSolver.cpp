@@ -32,6 +32,7 @@
 #include "BonTMINLP.hpp"
 
 using namespace Bonmin;
+using namespace Ipopt;
 
 using std::cout; 
 using std::endl; 
