@@ -1080,7 +1080,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-debug          compile all projects with debug options tests
                           (implies --disable-shared)
-  --enable-debug-os compile this project (OS) with debug compiler flags
+  --enable-debug-os compile project OS with debug compiler flags
   --enable-doscompile     Under Cygwin, compile so that executables run under
                           DOS. Set to mingw to use gcc/g++/ld with
                           -mno-cygwin. Set to msvc to use cl/link (or
@@ -1097,15 +1097,14 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
-  --enable-pkg-config     use pkg-config if available (default is yes)
-  --enable-interpackage-dependencies
-                          whether to deduce Makefile dependencies from package
-                          linker flags (default: yes)
-  --enable-lindo-libcheck use disable-lindo-libcheck to skip the
-                          link check at configuration time
-  --enable-knitro-libcheck
-                          use disable-knitro-libcheck to skip the
-                          link check at configuration time
+  --disable-pkg-config    disable use of pkg-config (if available)
+  --disable-interpackage-dependencies
+                          disables deduction of Makefile dependencies from
+                          package linker flags
+  --disable-lindo-libcheck
+                          skip the link check at configuration time
+  --disable-knitro-libcheck
+                          skip the link check at configuration time
   --enable-openmp         compile in OpenMP features
   --enable-nodtoa         do not use dtoa use the C and C++ for string to
                           decimal and back
@@ -6022,7 +6021,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6025 "configure"' > conftest.$ac_ext
+  echo '#line 6024 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -7156,7 +7155,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:7159:" \
+echo "$as_me:7158:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -8223,11 +8222,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8226: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8225: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8230: \$? = $ac_status" >&5
+   echo "$as_me:8229: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8491,11 +8490,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8494: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8493: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8498: \$? = $ac_status" >&5
+   echo "$as_me:8497: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8595,11 +8594,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8598: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8597: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8602: \$? = $ac_status" >&5
+   echo "$as_me:8601: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -10940,7 +10939,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 10943 "configure"
+#line 10942 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11040,7 +11039,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11043 "configure"
+#line 11042 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13384,11 +13383,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13387: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13386: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13391: \$? = $ac_status" >&5
+   echo "$as_me:13390: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13488,11 +13487,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13491: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13490: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13495: \$? = $ac_status" >&5
+   echo "$as_me:13494: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15058,11 +15057,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15061: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15060: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15065: \$? = $ac_status" >&5
+   echo "$as_me:15064: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15162,11 +15161,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15165: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15164: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15169: \$? = $ac_status" >&5
+   echo "$as_me:15168: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17369,11 +17368,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17372: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17371: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17376: \$? = $ac_status" >&5
+   echo "$as_me:17375: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17637,11 +17636,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17640: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17639: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17644: \$? = $ac_status" >&5
+   echo "$as_me:17643: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -17741,11 +17740,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17744: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17743: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:17748: \$? = $ac_status" >&5
+   echo "$as_me:17747: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -22479,7 +22478,7 @@ if test $coin_has_coinutils = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinutils"; then
-    COINUTILS_VERSIONS="`$PKG_CONFIG --modversion "coinutils" 2>/dev/null | tr '\n' ' '`"
+    COINUTILS_VERSIONS="`$PKG_CONFIG --modversion "coinutils" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "coinutils" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -22995,7 +22994,7 @@ if test $coin_has_ipopt = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "ipopt"; then
-    IPOPT_VERSIONS="`$PKG_CONFIG --modversion "ipopt" 2>/dev/null | tr '\n' ' '`"
+    IPOPT_VERSIONS="`$PKG_CONFIG --modversion "ipopt" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "ipopt" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -23506,7 +23505,7 @@ if test $coin_has_clp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-clp"; then
-    CLP_VERSIONS="`$PKG_CONFIG --modversion "osi-clp" 2>/dev/null | tr '\n' ' '`"
+    CLP_VERSIONS="`$PKG_CONFIG --modversion "osi-clp" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "osi-clp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -24017,7 +24016,7 @@ if test $coin_has_dylp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-dylp"; then
-    DYLP_VERSIONS="`$PKG_CONFIG --modversion "osi-dylp" 2>/dev/null | tr '\n' ' '`"
+    DYLP_VERSIONS="`$PKG_CONFIG --modversion "osi-dylp" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "osi-dylp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -24528,7 +24527,7 @@ if test $coin_has_vol = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-vol"; then
-    VOL_VERSIONS="`$PKG_CONFIG --modversion "osi-vol" 2>/dev/null | tr '\n' ' '`"
+    VOL_VERSIONS="`$PKG_CONFIG --modversion "osi-vol" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "osi-vol" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -25039,7 +25038,7 @@ if test $coin_has_symphony = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-sym"; then
-    SYMPHONY_VERSIONS="`$PKG_CONFIG --modversion "osi-sym" 2>/dev/null | tr '\n' ' '`"
+    SYMPHONY_VERSIONS="`$PKG_CONFIG --modversion "osi-sym" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "osi-sym" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -25550,7 +25549,7 @@ if test $coin_has_cpx = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-cplex"; then
-    CPX_VERSIONS="`$PKG_CONFIG --modversion "osi-cplex" 2>/dev/null | tr '\n' ' '`"
+    CPX_VERSIONS="`$PKG_CONFIG --modversion "osi-cplex" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "osi-cplex" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -26061,7 +26060,7 @@ if test $coin_has_glpk = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-glpk"; then
-    GLPK_VERSIONS="`$PKG_CONFIG --modversion "osi-glpk" 2>/dev/null | tr '\n' ' '`"
+    GLPK_VERSIONS="`$PKG_CONFIG --modversion "osi-glpk" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "osi-glpk" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -26572,7 +26571,7 @@ if test $coin_has_cbc = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-cbc"; then
-    CBC_VERSIONS="`$PKG_CONFIG --modversion "osi-cbc" 2>/dev/null | tr '\n' ' '`"
+    CBC_VERSIONS="`$PKG_CONFIG --modversion "osi-cbc" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "osi-cbc" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -27083,7 +27082,7 @@ if test $coin_has_bonmin = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "bonmin"; then
-    BONMIN_VERSIONS="`$PKG_CONFIG --modversion "bonmin" 2>/dev/null | tr '\n' ' '`"
+    BONMIN_VERSIONS="`$PKG_CONFIG --modversion "bonmin" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "bonmin" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -27594,7 +27593,7 @@ if test $coin_has_couenne = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "couenne"; then
-    COUENNE_VERSIONS="`$PKG_CONFIG --modversion "couenne" 2>/dev/null | tr '\n' ' '`"
+    COUENNE_VERSIONS="`$PKG_CONFIG --modversion "couenne" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "couenne" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28105,7 +28104,7 @@ if test $coin_has_bcp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "bcp"; then
-    BCP_VERSIONS="`$PKG_CONFIG --modversion "bcp" 2>/dev/null | tr '\n' ' '`"
+    BCP_VERSIONS="`$PKG_CONFIG --modversion "bcp" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "bcp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28616,7 +28615,7 @@ if test $coin_has_asl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinasl"; then
-    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`"
+    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29127,7 +29126,7 @@ if test $coin_has_cppad = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "cppad"; then
-    CPPAD_VERSIONS="`$PKG_CONFIG --modversion "cppad" 2>/dev/null | tr '\n' ' '`"
+    CPPAD_VERSIONS="`$PKG_CONFIG --modversion "cppad" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
      cflags=`$PKG_CONFIG --cflags "cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -36470,6 +36469,10 @@ if test x$coin_skip_ac_output != xyes; then
 
   fi
 
+  # On AIX, the default sed cannot deal with somewhat long sed commands executed by config.status.
+  # So we reduce the hardcoded number of commands given to sed from 48 to 5 in config.status, hoping this will suffice.
+
+
   cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -38356,6 +38359,16 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 _ACEOF
 chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
+
+
+    case $build in
+      *-aix*)
+        { echo "$as_me:$LINENO: patching config.status to reduce ac_max_sed_lines to 5" >&5
+echo "$as_me: patching config.status to reduce ac_max_sed_lines to 5" >&6;}
+        sed -e 's/ac_max_sed_lines=48/ac_max_sed_lines=5/g' config.status > config.status.tmp
+        mv config.status.tmp config.status
+      ;;
+    esac
 
 
 # configure is writing to config.log, and then calls config.status.
