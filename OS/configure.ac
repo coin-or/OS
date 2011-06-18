@@ -66,14 +66,13 @@ AC_C_BIGENDIAN
 
 AC_LANG_PUSH( C++)
 
-
-
 # the following does not work for cached variables
 #AC_CHECK_SIZEOF( long long)
 AC_CHECK_SIZEOF( int)
 AC_CHECK_SIZEOF( double)
 AC_CHECK_SIZEOF( long)
 
+AC_LANG_POP( C++)
 
 #############################################################################
 #                           COIN-OR components                              #
@@ -205,12 +204,11 @@ fi
 ############################################################################
 ############################################################################
 
-AC_LANG_PUSH(C++)
-
 ################
 # Header Files #
 ################
 
+AC_LANG_PUSH(C++)
 
 AC_COIN_CHECK_CXX_CHEADER(math)
 AC_COIN_CHECK_CXX_CHEADER(ctype)
@@ -226,119 +224,17 @@ AC_COIN_CHECK_HEADER(stdint.h)
 
 #AC_CHECK_HEADERS([windows.h])
 
+AC_LANG_POP(C++)
 
 ###################
-# Function isnan  #  -- this is copied directly from CoinUtils
+# Function isnan  #
 ###################
-MY_C_ISNAN=
-AC_CHECK_DECL([isnan],[MY_C_ISNAN=isnan],,[
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif])
 
-# It appears that for some systems (e.g., Mac OSX), cmath will provide only
-# std::isnan, and bare isnan will be unavailable. Typically we need a parameter
-# in the test to allow C++ to do overload resolution.
+AC_COIN_CHECK_ISNAN
 
-if test -z "$MY_C_ISNAN"; then
-  AC_CHECK_DECL([std::isnan(42.42)],[MY_C_ISNAN=std::isnan],,[
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif])
-fi
-
-if test -z "$MY_C_ISNAN"; then
-  AC_CHECK_DECL([_isnan],[MY_C_ISNAN=_isnan],,[
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif])
-fi
-if test -z "$MY_C_ISNAN"; then
-  AC_CHECK_DECL([isnand],[MY_C_ISNAN=isnand],,[
-#ifdef HAVE_CMATH
-# include <cmath>
-#else
-# ifdef HAVE_MATH_H
-#  include <math.h>
-# endif
-#endif
-#ifdef HAVE_CFLOAT
-# include <cfloat>
-#else
-# ifdef HAVE_FLOAT_H
-#  include <float.h>
-# endif
-#endif
-#ifdef HAVE_CIEEEFP
-# include <cieeefp>
-#else
-# ifdef HAVE_IEEEFP_H
-#  include <ieeefp.h>
-# endif
-#endif])
-fi
-if test -z "$MY_C_ISNAN"; then
-  AC_MSG_WARN(Cannot find C-function for checking NaN. Check will return false)
-else
-  AC_DEFINE_UNQUOTED([MY_C_ISNAN],[$MY_C_ISNAN],
-                     [Define to be the name of C-function for NaN check])
-fi
-
-
+###################
+# Sockets library #
+###################
 
 # Check for the sockets library. Check for the presence of
 # header files, then see what we need in the way of libraries.

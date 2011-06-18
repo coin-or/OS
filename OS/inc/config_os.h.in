@@ -1,5 +1,8 @@
 /* inc/config_os.h.in.  Generated from configure.ac by autoheader.  */
 
+/* Define to be the name of C-function for NaN check */
+#undef COIN_C_ISNAN
+
 /* Define to 1 if the ASL package is available */
 #undef COIN_HAS_ASL
 
@@ -146,9 +149,6 @@
 
 /* use if OS is MACOSX */
 #undef MACOSX_
-
-/* Define to be the name of C-function for NaN check */
-#undef MY_C_ISNAN
 
 /* use if OS is Cygwin */
 #undef NOMINMAX

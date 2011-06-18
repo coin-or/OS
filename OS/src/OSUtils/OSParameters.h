@@ -138,9 +138,9 @@ inline double nanKludge(){
 
 inline bool OSIsnan(double x) {
 	//this is taken directly from COINUTILS
-#ifdef MY_C_ISNAN
+#ifdef COIN_C_ISNAN
 	
-    return MY_C_ISNAN( x)!=0;
+    return COIN_C_ISNAN( x)!=0;
 #else
     return (x != x);
 #endif
