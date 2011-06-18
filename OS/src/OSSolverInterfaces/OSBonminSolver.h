@@ -51,15 +51,8 @@
 #include "BonTMINLP.hpp"
 #include "BonBonminSetup.hpp"
 
-
-using namespace  Ipopt;
-using namespace Bonmin;
-
-
-
-
 // for Stefan
-class BonminProblem : public TMINLP{  
+class BonminProblem : public Bonmin::TMINLP{  
 
 
 	
@@ -75,7 +68,7 @@ public:
 
 	OSOption *osoption;
 
-	TMINLP::SolverReturn status;
+	Bonmin::TMINLP::SolverReturn status;
 
 
 	/** now for some pure Bonmin methods */
@@ -87,16 +80,16 @@ public:
 	     \param n size of var_types (has to be equal to the number of variables in the problem)
 	  \param var_types types of the variables (has to be filled by function).
 	  */
-	  virtual bool get_variables_types(Index n, VariableType* var_types);
+	  virtual bool get_variables_types(Ipopt::Index n, VariableType* var_types);
 	 
 	  /** Pass info about linear and nonlinear variables.*/
-	  virtual bool get_variables_linearity(Index n, Ipopt::TNLP::LinearityType* var_types);
+	  virtual bool get_variables_linearity(Ipopt::Index n, Ipopt::TNLP::LinearityType* var_types);
 
 	  /** Pass the type of the constraints (LINEAR, NON_LINEAR) to the optimizer.
 	  \param m size of const_types (has to be equal to the number of constraints in the problem)
 	  \param const_types types of the constraints (has to be filled by function).
 	  */
-	  virtual bool get_constraints_linearity(Index m, Ipopt::TNLP::LinearityType* const_types);
+	  virtual bool get_constraints_linearity(Ipopt::Index m, Ipopt::TNLP::LinearityType* const_types);
 	//@}  
 	    
 	  /** \name Overloaded functions defining a TNLP.
@@ -111,8 +104,8 @@ public:
 	        \param index_style indicate wether arrays are numbered from 0 (C-style) or
 	        from 1 (Fortran).
 	        \return true in case of success.*/
-	  virtual bool get_nlp_info(Index& n, Index&m, Index& nnz_jac_g,
-	                            Index& nnz_h_lag, TNLP::IndexStyleEnum& index_style);	
+	  virtual bool get_nlp_info(Ipopt::Index& n, Ipopt::Index&m, Ipopt::Index& nnz_jac_g,
+	                            Ipopt::Index& nnz_h_lag, Ipopt::TNLP::IndexStyleEnum& index_style);	
 	
 
 	
@@ -121,54 +114,54 @@ public:
      //                       Index& nnz_h_lag, IndexStyleEnum& index_style);
 
 	/** Method to return the bounds for my problem */
-	virtual bool get_bounds_info(Index n, Number* x_l, Number* x_u,
-								Index m, Number* g_l, Number* g_u);
+	virtual bool get_bounds_info(Ipopt::Index n, Ipopt::Number* x_l, Ipopt::Number* x_u,
+								Ipopt::Index m, Ipopt::Number* g_l, Ipopt::Number* g_u);
 
 	/** Method to return the starting point for the algorithm */
-	virtual bool get_starting_point(Index n, bool init_x, Number* x,
-									bool init_z, Number* z_L, Number* z_U,
-									Index m, bool init_lambda,
-									Number* lambda);
+	virtual bool get_starting_point(Ipopt::Index n, bool init_x, Ipopt::Number* x,
+									bool init_z, Ipopt::Number* z_L, Ipopt::Number* z_U,
+									Ipopt::Index m, bool init_lambda,
+									Ipopt::Number* lambda);
 
 	/** Method to return the objective value */
-	virtual bool eval_f(Index n, const Number* x, bool new_x, Number& obj_value);
+	virtual bool eval_f(Ipopt::Index n, const Ipopt::Number* x, bool new_x, Ipopt::Number& obj_value);
 
 	/** Method to return the gradient of the objective */
-	virtual bool eval_grad_f(Index n, const Number* x, bool new_x, Number* grad_f);
+	virtual bool eval_grad_f(Ipopt::Index n, const Ipopt::Number* x, bool new_x, Ipopt::Number* grad_f);
 
 	/** Method to return the constraint residuals */
-	virtual bool eval_g(Index n, const Number* x, bool new_x, Index m, Number* g);
+	virtual bool eval_g(Ipopt::Index n, const Ipopt::Number* x, bool new_x, Ipopt::Index m, Ipopt::Number* g);
 
 	/** Method to return:
 	*   1) The structure of the jacobian (if "values" is NULL)
 	*   2) The values of the jacobian (if "values" is not NULL)
 	*/
-	virtual bool eval_jac_g(Index n, const Number* x, bool new_x,
-							Index m, Index nele_jac, Index* iRow, Index *jCol,
-							Number* values);
+	virtual bool eval_jac_g(Ipopt::Index n, const Ipopt::Number* x, bool new_x,
+							Ipopt::Index m, Ipopt::Index nele_jac, Ipopt::Index* iRow, Ipopt::Index *jCol,
+							Ipopt::Number* values);
 
 	/** Method to return:
 	*   1) The structure of the hessian of the lagrangian (if "values" is NULL)
 	*   2) The values of the hessian of the lagrangian (if "values" is not NULL)
 	*/
-	virtual bool eval_h(Index n, const Number* x, bool new_x,
-						Number obj_factor, Index m, const Number* lambda,
-						bool new_lambda, Index nele_hess, Index* iRow,
-						Index* jCol, Number* values);
+	virtual bool eval_h(Ipopt::Index n, const Ipopt::Number* x, bool new_x,
+						Ipopt::Number obj_factor, Ipopt::Index m, const Ipopt::Number* lambda,
+						bool new_lambda, Ipopt::Index nele_hess, Ipopt::Index* iRow,
+						Ipopt::Index* jCol, Ipopt::Number* values);
 
 	//@}
 	
 	
-	virtual bool get_scaling_parameters(Number& obj_scaling,
-                                    bool& use_x_scaling, Index n,
-                                    Number* x_scaling,
-                                    bool& use_g_scaling, Index m,
-                                    Number* g_scaling);
+	virtual bool get_scaling_parameters(Ipopt::Number& obj_scaling,
+                                    bool& use_x_scaling, Ipopt::Index n,
+                                    Ipopt::Number* x_scaling,
+                                    bool& use_g_scaling, Ipopt::Index m,
+                                    Ipopt::Number* g_scaling);
 
 	/** @name Solution Methods */
 	  /** Method called by Ipopt at the end of optimization.*/  
-	  virtual void finalize_solution(TMINLP::SolverReturn status_,
-	                                 Index n, const Number* x, Number obj_value);
+	  virtual void finalize_solution(Bonmin::TMINLP::SolverReturn status_,
+	                                 Ipopt::Index n, const Ipopt::Number* x, Ipopt::Number obj_value);
 	//@}
 
 	  virtual const SosInfo * sosConstraints() const{return NULL;}
@@ -235,12 +228,12 @@ public:
 	
 	
 	
-	SmartPtr<BonminProblem> tminlp;
+	Ipopt::SmartPtr<BonminProblem> tminlp;
 		
 	// this is a Bonmin BonCbc object;
-	Bab bb;
+	Bonmin::Bab bb;
 	
-	TMINLP::SolverReturn status;
+	Bonmin::TMINLP::SolverReturn status;
 	
 	//SmartPtr<IpoptApplication> app;
 	
@@ -292,7 +285,7 @@ public:
 private:
 	OSrLWriter  *osrlwriter;
 
-	BonminSetup bonminSetup;
+	Bonmin::BonminSetup bonminSetup;
 
 	std::string bonminErrorMsg;
 };

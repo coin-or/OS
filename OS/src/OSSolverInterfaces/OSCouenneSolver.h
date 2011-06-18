@@ -71,7 +71,6 @@ class expression;
  * 
  */
 
-using namespace Bonmin;
 class CouenneSolver : public DefaultSolver{ 	
 public:
 
@@ -128,17 +127,16 @@ public:
 	CouenneProblem *couenne;
 #endif
 		
-	//Ipopt::SmartPtr<TMINLP> tminlp;
-	SmartPtr<BonminProblem> tminlp;
+	Ipopt::SmartPtr<BonminProblem> tminlp;
 	
-	Ipopt::SmartPtr<TNLPSolver> app_ ;
+	Ipopt::SmartPtr<Bonmin::TNLPSolver> app_ ;
 	
 	//SmartPtr<Bonmin::IpoptSolver> app_ ;
 	
 	// this is a Bonmin BonCbc object;
-	Bab bb;
+	Bonmin::Bab bb;
 	
-	TMINLP::SolverReturn status;
+	Bonmin::TMINLP::SolverReturn status;
 	
 #ifdef COUENNE_NEW
 	Couenne::expression *con_body;	

@@ -4707,7 +4707,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX){
 		size_t n = vdX.size();
 #ifdef COIN_HAS_CPPAD
 		// declare a CppAD vector and fill it in
-		CppAD::vector< AD<double> > vdaX( n );
+		CppAD::vector< CppAD::AD<double> > vdaX( n );
 		for(i = 0; i < n; i++){
 			vdaX[ i] = vdX[ i];
 			//std::cout << "vdX =  " << vdX[ i] << std::endl;
@@ -4719,7 +4719,7 @@ bool OSInstance::createOSADFun(std::vector<double> vdX){
 		 *  the range vector m_vFG and it is a vector of CppAD 
 		 * objective and constraint functions.
 		 */
-		CppAD::vector< AD<double> > m_vFG;	  
+		CppAD::vector< CppAD::AD<double> > m_vFG;	  
 		int kount = 0;
 		for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree){	
 			m_vFG.push_back( (posMapExpTree->second)->m_treeRoot->constructADTape(&m_mapAllNonlinearVariablesIndex, &vdaX) );

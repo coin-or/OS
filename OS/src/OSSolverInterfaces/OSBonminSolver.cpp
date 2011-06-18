@@ -27,11 +27,11 @@
 #include "OSParameters.h" 
 #include "OSMathUtil.h"
 #include "CoinFinite.hpp"
+#include "CoinTime.hpp"
 #include "BonOsiTMINLPInterface.hpp"
 #include "BonTMINLP.hpp"
 
-
-#include "CoinTime.hpp"
+using namespace Bonmin;
 
 using std::cout; 
 using std::endl; 

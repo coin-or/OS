@@ -27,8 +27,7 @@
 
 #ifdef OS_HAS_CPPAD  
 #include<cppad/cppad.hpp>
-using CppAD::AD;
-typedef AD<double>  ADdouble;
+typedef CppAD::AD<double>  ADdouble;
 typedef CppAD::vector<ADdouble> ADvector;
 #else
 typedef double  ADdouble;

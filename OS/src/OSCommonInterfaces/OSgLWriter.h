@@ -29,10 +29,6 @@
 #include <string>
 #include <sstream>  
 
-using std::cout;
-using std::endl;
-using std::ostringstream; 
-
 /*! \brief Take an IntVector object and write
  * a string that validates against the OSgL schema.
  *
