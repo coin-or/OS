@@ -30,16 +30,19 @@
 
 #include <string>
 
+#ifdef __cplusplus
+extern std::string os_dtoa_format(double  x);
+#endif
 
 #ifdef __cplusplus
-extern "C" std::string os_dtoa_format(double  x);
-extern "C" double os_strtod_wrap(const char *str,   char **strEnd);
-#else
-#ifdef __STDC__
-std::string os_dtoa_format(double  x);
-double os_strtod_wrap(const char *str,  char **strEnd);
+extern "C" {
 #endif
-#endif 
+
+double os_strtod_wrap(const char *str,   char **strEnd);
+
+#ifdef __cplusplus
+}
+#endif
 
 /*!  \class MathUtil
  *  \brief this class has routines for linear algebra.
