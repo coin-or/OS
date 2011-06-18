@@ -2,9 +2,7 @@
 # All Rights Reserved.
 # This file is distributed under the Common Public License.
 
-## $Id: configure.ac 786 2006-06-01 04:10:46Z andreasw $
-
-# Author:  Andreas Waechter            IBM    2006-04-13
+## $Id$
 
 #############################################################################
 #                       Names and other basic things                        #
@@ -12,7 +10,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[trunk],[coin-os@list.coin-or.org])
+AC_INIT([OS],[trunk],[os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -22,7 +20,7 @@ under the Common Public License.])
 
 # List one file in the package so that the configure script can test
 # whether the package is actually there
-AC_CONFIG_SRCDIR(src/OSUtils/OSErrorClass.cpp)
+AC_CONFIG_SRCDIR(src/OSConfig.h)
 
 # Where should everything be installed by default?  Here, we want it
 # to be installed directly in 'bin', 'lib', 'include' subdirectories
@@ -30,39 +28,21 @@ AC_CONFIG_SRCDIR(src/OSUtils/OSErrorClass.cpp)
 # /usr/local.
 AC_PREFIX_DEFAULT([`pwd`])
 
-
-
-#############################################################################
-#                         GET THE VERSION NUMBER                            #
-#############################################################################
-AC_COIN_PROJECTDIR_INIT(OS)
-
-
-
-#############################################################################
+############################################################################
 #                         Standard build tool stuff                         #
 #############################################################################
+
 # Get the system type
 AC_CANONICAL_BUILD
 
 # Initialise projectdir
-AC_COIN_PROJECTDIR_INIT
+AC_COIN_PROJECTDIR_INIT(OS)
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(OS)
 
 # Get the name of the C++ compiler and appropriate compiler options
-coin_opt_cxxflags="-O3"
 AC_COIN_PROG_CXX
-
-# Check if we have a Fortran compiler; if we do, acquire the appropriate
-# options. This has to be done before we call AC_COIN_INIT_AUTO_TOOLS, else
-# it will helpfully set FFLAGS to an incorrect value.
-#AC_COIN_FIND_F77
-#if test "$F77" != unavailable ; then
-#  AC_COIN_PROG_F77
-#  AC_COIN_F77_WRAPPERS
-#fi
 
 # Initialize automake and libtool
 AC_COIN_INIT_AUTO_TOOLS
@@ -96,7 +76,7 @@ AC_CHECK_SIZEOF( long)
 
 
 #############################################################################
-#                              COIN components                              #
+#                           COIN-OR components                              #
 #############################################################################
 
 AC_COIN_CHECK_PACKAGE(CoinUtils,[coinutils],[OSLib])
@@ -117,196 +97,9 @@ AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],      [OSLib])
 AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],  [OSLib])
 AC_COIN_CHECK_PACKAGE(cppad,    [cppad],    [OSLib])
 
-
 if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
   AC_MSG_ERROR([Ipopt is present, but not the necessary CppAD.])
 fi
-
-#if test $coin_has_coinutils != unavailable &&
-#   test $coin_has_coinutils != skipping; then
-#  case $CXX in
-#    cl*)
-#       coinutilslib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCoinUtils.lib';;
-#     *)
-#       coinutilslib="-L\$(INSTALLIBDIR) -lCoinUtils";;
-#  esac
-#  AC_SUBST(coinutilslib) 
-#  else
-#    AC_MSG_ERROR([cannot find CoinUtils which is necessary to build OS])   
-#fi
-#
-#if test $coin_has_clp != unavailable &&
-#   test $coin_has_clp != skipping; then
-#  case $CXX in
-#    cl*)
-#       clplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libClp.lib'
-#       osiclplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiClp.lib';;
-#     *)
-#       clplib="-L\$(INSTALLIBDIR) -lClp"
-#       osiclplib="-L\$(INSTALLIBDIR) -lOsiClp";;
-#  esac
-#  AC_SUBST(clplib)
-#  AC_SUBST(osiclplib) 
-#  else
-#    AC_MSG_ERROR([cannot find Clp which is necessary to build OS])   
-#fi
-#
-#if test $coin_has_cbc != unavailable &&
-#   test $coin_has_cbc != skipping; then
-# case $CXX in
-#    cl*)
-#       cbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbcSolver.lib    `$(CYGPATH_W) $(INSTALLIBDIR)`\\libCbc.lib'
-#       osicbclib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiCbc.lib';;
-#     *)
-#       cbclib="-L\$(INSTALLIBDIR) -lCbcSolver -lCbc"
-#       osicbclib="-L\$(INSTALLIBDIR) -lOsiCbc";;
-#  esac
-#  AC_SUBST(cbclib) 
-#  AC_SUBST(osicbclib)
-#  else
-#    AC_MSG_ERROR([cannot find Cbc which is necessary to build OS])   
-#fi 
-
-
-#if test $coin_has_cgl != unavailable &&
-#   test $coin_has_cgl != skipping; then
-#  case $CXX in
-#    cl*)
-#       cgllib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libCgl.lib';;
-#     *)
-#       cgllib="-L\$(INSTALLIBDIR) -lCgl";;
-#  esac
-#  AC_SUBST(cgllib) 
-#  else
-#    AC_MSG_ERROR([cannot find Cgl which is necessary to build OS])   
-#fi
-
-
-#if test $coin_has_osi != unavailable &&
-#   test $coin_has_osi != skipping; then
-#  case $CXX in
-#    cl*)
-#       osilib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsi.lib';;
-#     *)
-#       osilib="-L\$(INSTALLIBDIR) -lOsi";;
-#  esac
-#  AC_SUBST(osilib) 
-#  else
-#    AC_MSG_ERROR([cannot find Osi which is necessary to build OS])   
-#fi
-
-
-#if test $coin_has_dylp != unavailable &&
-#   test $coin_has_dylp != skipping; then
-#  case $CXX in
-#    cl*)
-#       osiglpklib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiGlpk.lib';;
-#     *)
-#       osiglpklib="-L\$(INSTALLIBDIR) -lOsiGlpk";;
-#  esac
-#  AC_SUBST(osiglpklib) 
-#fi
-
-
-
-
-
-#if test $coin_has_dylp != unavailable &&
-#   test $coin_has_dylp != skipping; then
-#  case $CXX in
-#    cl*)
-#       dylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libDylp.lib'
-#       osidylplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiDylp.lib';;
-#     *)
-#       dylplib="-L\$(INSTALLIBDIR) -lDylp"
-#       osidylplib="-L\$(INSTALLIBDIR) -lOsiDylp";;
-#  esac
-#  AC_SUBST(dylplib) 
-#  AC_SUBST(osidylplib) 
-#fi
-
-
-#if test $coin_has_vol != unavailable &&
-#   test $coin_has_vol != skipping; then
-#  case $CXX in
-#    cl*)
-#       vollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libVol.lib'
-#       osivollib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiVol.lib';;
-#     *)
-#       vollib="-L\$(INSTALLIBDIR) -lVol"
-#       osivollib="-L\$(INSTALLIBDIR) -lOsiVol";;
-#  esac
-#  AC_SUBST(vollib) 
-#  AC_SUBST(osivollib) 
-#fi
-
-
-#if test $coin_has_bcp != unavailable &&
-#   test $coin_has_bcp != skipping; then
-#  case $CXX in
-#    cl*)
-#       bcplib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbcp.lib';;
-#     *)
-#       bcplib="-L\$(INSTALLIBDIR) -lBcp";;
-#  esac
-#  AC_SUBST(bcplib)
-#fi
-
-
-
-
-#if test $coin_has_symphony != unavailable &&
-#   test $coin_has_symphony != skipping; then
-#  case $CXX in
-#    cl*)
-#       symphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libSym.lib'
-#       osisymphonylib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libOsiSym.lib';;
-#     *)
-#       symphonylib="-L\$(INSTALLIBDIR) -lSym"
-#       osisymphonylib="-L\$(INSTALLIBDIR) -lOsiSym";;
-#  esac
-#  AC_SUBST(symphonylib) 
-#  AC_SUBST(osisymphonylib)  
-#fi
-
-#if test $coin_has_ipopt != unavailable &&
-#   test $coin_has_ipopt != skipping; then
-#  case $CXX in
-#    cl*)
-#       ipoptlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libipopt.lib';;
-#    xl*)
-#       AC_DEFINE([XLC_],[1],[use if XLC is the compiler]);;
-#     *)
-#       ipoptlib="-L\$(INSTALLIBDIR) -lipopt";;
-#  esac
-#  AC_SUBST(ipoptlib)  
-#fi
-
-
-#if test $coin_has_couenne != unavailable &&
-#   test $coin_has_couenne != skipping; then
-#  case $CXX in
-#    cl*)
-#       couennelib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libboncouenne.lib  `$(CYGPATH_W) $(INSTALLIBDIR)`\\libcouennereadnl.lib   `
-#(CYGPATH_W) $(INSTALLIBDIR)`\\libcouenne.lib        ';;
-#     *)
-#       couennelib="-L\$(INSTALLIBDIR) -lBonCouenne -lCouenneReadnl -lCouenne ";;
-#  esac
-#  AC_SUBST(couennelib)  
-#fi
-
-
-#if test $coin_has_bonmin != unavailable &&
-#   test $coin_has_bonmin != skipping; then
-#  case $CXX in
-#    cl*)
-#       bonminlib='`$(CYGPATH_W) $(INSTALLIBDIR)`\\libbonmin.lib';;
-#     *)
-#       bonminlib="-L\$(INSTALLIBDIR) -lbonminampl -lbonmin";;
-#  esac
-#  AC_SUBST(bonminlib)  
-#fi
-
 
 #############################################################################
 #                             Third party solvers                           #
@@ -435,7 +228,7 @@ AC_COIN_CHECK_HEADER(stdint.h)
 
 
 ###################
-# Function isnan #  -- this is copied directly from CoinUtils
+# Function isnan  #  -- this is copied directly from CoinUtils
 ###################
 MY_C_ISNAN=
 AC_CHECK_DECL([isnan],[MY_C_ISNAN=isnan],,[
@@ -557,13 +350,13 @@ fi
 AM_CONDITIONAL(USEMULTIPLYDEFINED, test x$mac_osx = xyes)
  
 #############################################################################
-#                     Parser stuff                         #
+#                                 Parser stuff                              #
 #############################################################################
 
 AC_PROG_YACC
 
 #############################################################################
-# Define the root of the OS project###
+# Define the root of the OS project                                         #
 #############################################################################
 
 AC_SUBST(OSROOT_DIR)
@@ -587,7 +380,7 @@ esac
 AC_SUBST(oslib)
 
 #############################################################################
-#  See if we are disabling shared libs###
+#  See if we are disabling shared libs                                      #
 #############################################################################
 
 ##
@@ -827,11 +620,9 @@ AC_CONFIG_FILES([Makefile
           applications/amplClient/Makefile
           applications/fileUpload/Makefile
           applications/columnGen/code/Makefile
-
           applications/parsingTest/Makefile
           os.pc
 	  os-uninstalled.pc])
-          
 
 # Here put the location and name of the configuration header file
 AC_CONFIG_HEADER([inc/config_os.h])
