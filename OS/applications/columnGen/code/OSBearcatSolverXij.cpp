@@ -29,6 +29,7 @@
 #include "OSrLWriter.h"      
 #include "OSInstance.h"  
 #include "OSFileUtil.h"  
+#include "OSStringUtil.h"
 
 #include "CoinTime.hpp"
 
@@ -62,8 +63,6 @@
 #endif 
 
 using std::ostringstream;
-
-std::string makeStringFromInt(std::string theString, int theInt);
 
 
 OSBearcatSolverXij::OSBearcatSolverXij() {
@@ -6030,12 +6029,6 @@ void OSBearcatSolverXij::permuteHubs(){
 }
 
 
-std::string makeStringFromInt(std::string theString, int theInt){
-	ostringstream outStr;
-	outStr << theString;
-	outStr << theInt;
-	return outStr.str();
-}//end makeStringFromInt
 
 
 

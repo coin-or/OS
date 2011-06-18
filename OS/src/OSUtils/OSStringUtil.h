@@ -33,5 +33,5 @@
  */
 std::string writeStringData(std::string str);
 
-
+std::string makeStringFromInt(std::string theString, int theInt);
 
