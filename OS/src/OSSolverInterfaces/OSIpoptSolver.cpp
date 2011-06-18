@@ -821,14 +821,14 @@ void IpoptSolver::solve() throw (ErrorClass) {
 	if( this->bCallbuildSolverInstance == false) buildSolverInstance();
 	if( this->bSetSolverOptions == false) setSolverOptions();
 	try{
-		clock_t start, finish;
-		double duration;
-		start = clock();
+		//clock_t start, finish;
+		//double duration;
+		//start = clock();
 		//OSiLWriter osilwriter;
 		//cout << osilwriter.writeOSiL( osinstance) << endl;
 		//if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Ipopt requires decision variables");
-		finish = clock();
-		duration = (double) (finish - start) / CLOCKS_PER_SEC;
+		//finish = clock();
+		//duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		//cout << "Parsing took (seconds): " << duration << endl; 
 		//dataEchoCheck();
 		/***************now the ipopt invokation*********************/
