@@ -17,6 +17,8 @@
 
 //#define DEBUG 
 #include "OSConfig.h"
+// need to include OSParameters.h before the windos stuff, since it seem to define a macro named "max"!!
+#include "OSParameters.h"
 #ifdef WIN_
 	#ifndef _SYS_UNISTD_H
 		#define _SYS_UNISTD_H
