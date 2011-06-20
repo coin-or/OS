@@ -311,7 +311,7 @@ void OSColGenApp::solve(){
 		
 		//kipp -- later have clp be an option
 		//I guess for now it must be an Osi solver
-		m_solver->sSolverName ="cbc";
+		m_solver->sSolverName ="clp";
 		//std::cout << m_osinstanceMaster->printModel(  ) << std::endl;
 		m_solver->osinstance = m_osinstanceMaster;
 		
