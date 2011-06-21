@@ -17,8 +17,8 @@
 
 	OSNode::OSNode(){
 		
-		
-		
+		rowIdxNumNonz = 0;
+		nodeID = -99999;
 		
 	}//end default constructor
 	

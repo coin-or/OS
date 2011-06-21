@@ -589,7 +589,7 @@ void OSColGenApp::solveRestrictedMasterRelaxation( ){
 			
 			lowerBound = -1;
 			int loopKount = 0;
-			
+			////////////////////
 			//////////////////////
 			while(lowerBound < -m_osDecompParam.zeroTol && loopKount < m_osDecompParam.columnLimit){
 				loopKount++;
@@ -847,9 +847,7 @@ bool OSColGenApp::branchAndBound( ){
 		//create a branching cut 
 		createBranchingCut(m_theta, numCols, varConMap, rowIdx);
 	
-		//make sure we are not adding a cut/branch that is already there
-		
-		checkNodeConsistency( rowIdx, osnode);
+
 
 		//// start left node ////
 			
@@ -961,11 +959,11 @@ bool OSColGenApp::branchAndBound( ){
 				
 				std::cout << "BEST NODE ID " << bestNodeID << std::endl;
 				std::cout << "NODE LP VALUE =  " << osnode->lpValue << std::endl;
-	
-				
+				//check for node consistency
+				checkNodeConsistency( rowIdx, osnode);
 				// create children
 				//create the left node
-				//kippster
+				
 				osnodeLeftChild = createChild(osnode, varConMap, rowIdx, 1, 1);
 				if(osnodeLeftChild != NULL){
 					//finally set the nodeID
@@ -1131,7 +1129,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 					//		osnodeParent->colBasisStatus[k].second;
 			//}
 			
-			m_si->setBasisStatus(tmpColParent, tmpRowParent);
+			//m_si->setBasisStatus(tmpColParent, tmpRowParent);
 			solveRestrictedMasterRelaxation( );
 			
 			delete[] tmpColParent;
@@ -1175,7 +1173,7 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 		std::cout << "MESSAGE: START CREATION OF A CHILD NODE" << std::endl;
 		std::cout << "LB " << rowLB  <<  " UB = " << rowUB << std::endl;
 		std::cout << "MESSAGE: LP RELAXATION VALUE OF POTENTIAL CHILD NODE  " << m_si->getObjValue() << std::endl;
-		std::cout << "MESSAGE: OPTIMALITY STATUS OF NODE  " << m_si->isProvenOptimal() << std::endl;
+		std::cout << "MESSAGE: OPTIMALITY STATUS OF NODE IS " << m_si->isProvenOptimal() << std::endl;
 		
 		if( m_si->getObjValue() < (1 - m_osDecompParam.optTolPerCent)*m_zUB - m_osDecompParam.zeroTol && m_si->isProvenOptimal() == 1) {
 			// okay cannot fathom based on bound try integrality
@@ -1731,9 +1729,8 @@ void OSColGenApp::printTreeInfo(){
 
 void OSColGenApp::checkNodeConsistency( const int rowIdx, const OSNode *osnode){
 	try{
-		
+		if( osnode == NULL) return;
 		//we are going to throw an exception if we try to add a constraint to a node that is already there
-		return;
 		std::set<int> indexSet;
 		int i;
 		int rowIdxNumNonz = 0;
@@ -1742,6 +1739,7 @@ void OSColGenApp::checkNodeConsistency( const int rowIdx, const OSNode *osnode){
 		std::cout << "MESSAGE: CHECKING FOR NODE CONSISTENCY CONSTRAINT" << std::endl;
 
 		for(i = 0; i < rowIdxNumNonz; i++){
+			
 			
 			if(indexSet.find( osnode->rowIdx[ i] ) == indexSet.end() ){
 				
