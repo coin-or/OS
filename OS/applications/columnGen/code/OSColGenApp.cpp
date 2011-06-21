@@ -145,8 +145,8 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-	///m_calledBranchAndBound = false;
-
+	m_calledBranchAndBound = false;
+	//for now let's always get these cuts, hence the default false
 	if(numNewRows == 0 && m_calledBranchAndBound == false
 			&& m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
 		m_osrouteSolver->getCutsMultiCommod( thetaVar, numThetaVar,
@@ -847,6 +847,9 @@ bool OSColGenApp::branchAndBound( ){
 		//create a branching cut 
 		createBranchingCut(m_theta, numCols, varConMap, rowIdx);
 	
+		//make sure we are not adding a cut/branch that is already there
+		
+		checkNodeConsistency( rowIdx, osnode);
 
 		//// start left node ////
 			
@@ -962,6 +965,7 @@ bool OSColGenApp::branchAndBound( ){
 				
 				// create children
 				//create the left node
+				//kippster
 				osnodeLeftChild = createChild(osnode, varConMap, rowIdx, 1, 1);
 				if(osnodeLeftChild != NULL){
 					//finally set the nodeID
@@ -1725,3 +1729,36 @@ void OSColGenApp::printTreeInfo(){
 }//end printTreeInfo
 
 
+void OSColGenApp::checkNodeConsistency( const int rowIdx, const OSNode *osnode){
+	try{
+		
+		//we are going to throw an exception if we try to add a constraint to a node that is already there
+		return;
+		std::set<int> indexSet;
+		int i;
+		int rowIdxNumNonz = 0;
+		rowIdxNumNonz = osnode->rowIdxNumNonz;
+		
+		std::cout << "MESSAGE: CHECKING FOR NODE CONSISTENCY CONSTRAINT" << std::endl;
+
+		for(i = 0; i < rowIdxNumNonz; i++){
+			
+			if(indexSet.find( osnode->rowIdx[ i] ) == indexSet.end() ){
+				
+				indexSet.insert(  osnode->rowIdx[ i] );
+				
+			}else{
+				
+				throw ErrorClass( "We are trying to add an existing constraint to a node" );
+			}
+			
+			
+		
+		}
+
+	} catch (const ErrorClass& eclass) {
+
+	throw ErrorClass(eclass.errormsg);
+
+	}	
+}//end checkNodeConsistency

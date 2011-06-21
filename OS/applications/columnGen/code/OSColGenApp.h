@@ -174,6 +174,9 @@ public:
 
 	void printDebugInfo( );
 	
+	
+	void checkNodeConsistency( const int rowIdx, const OSNode *osnode);
+	
 	/**
 	 * RETURN VALUES: 
 	 * int numNewRows -- number of new rows generated
