@@ -145,7 +145,7 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-	m_calledBranchAndBound = false;
+	//m_calledBranchAndBound = false;
 	//for now let's always get these cuts, hence the default false
 	if(numNewRows == 0 && m_calledBranchAndBound == false
 			&& m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
@@ -953,9 +953,23 @@ bool OSColGenApp::branchAndBound( ){
 			
 			
 				//create a branching cut 
+				std::cout << "CREATE A BRANCHING CUT " << std::endl;
 				createBranchingCut(osnode->thetaIdx, osnode->theta, osnode->thetaNumNonz, 
 						varConMap, rowIdx);
 				
+				////kippster temp error checking -- delete
+				/*
+				std::map<int, int>::iterator tmpit;
+				for (tmpit = varConMap.begin() ; tmpit != varConMap.end(); tmpit++ ){
+					
+					std::cout << std::endl;
+					std::cout << "LOOPING OVER VARIABLE " << m_osrouteSolver->m_variableNames[ tmpit->first ] << std::endl;
+					std::cout << "ROW UB  = " << osnode->rowUB[  tmpit->second] << std::endl;
+					std::cout << "ROW LB  = " << osnode->rowLB[  tmpit->second] << std::endl;
+				
+				}
+				*/
+				/// end temp error checking
 				
 				std::cout << "BEST NODE ID " << bestNodeID << std::endl;
 				std::cout << "NODE LP VALUE =  " << osnode->lpValue << std::endl;
@@ -1129,8 +1143,34 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 					//		osnodeParent->colBasisStatus[k].second;
 			//}
 			
-			//m_si->setBasisStatus(tmpColParent, tmpRowParent);
+			m_si->setBasisStatus(tmpColParent, tmpRowParent);
 			solveRestrictedMasterRelaxation( );
+			
+			//kippster extra error checking
+			//kippster check on upper and lower bound
+			//we are in rowIdx and the theta here should correspond to the same xijk
+			//getRowActivity()
+			
+			/*
+			m_si->initialSolve();
+			if(m_si->getRowActivity()[ rowIdx] > rowLB ||
+					m_si->getRowActivity()[ rowIdx] < rowUB	) {
+					
+					std::cout << "Row lower bound = " << rowLB << std::endl;
+					std::cout << "Row upper bound = " << rowUB << std::endl;
+					std::cout << "Row activity  = " << m_si->getRowActivity()[ rowIdx] << std::endl;
+					throw ErrorClass( "Violating a branching cut UB and LB");
+				
+			}
+			*/		
+			
+			//first get the column index nonzero elements in row rowIdx
+			
+			
+			
+			///
+			///
+			///
 			
 			delete[] tmpColParent;
 			tmpColParent = NULL;
@@ -1241,8 +1281,13 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 				//now set bound arrays 
 				if(osnodeParent == NULL){
 					osnodeChild->rowIdx[ 0] = rowIdx;
-					osnodeChild->rowLB[ 0] = rowLB;
-					osnodeChild->rowUB[ 0] = rowUB;
+					if(rowLB <=  m_osDecompParam.zeroTol) osnodeChild->rowLB[ 0] = 0;
+						else osnodeChild->rowLB[ 0] = 1;
+					
+					if(rowUB <=  m_osDecompParam.zeroTol) osnodeChild->rowUB[ 0] = 0;
+						else osnodeChild->rowUB[ 0] = 1;
+					
+					
 				}else{
 					//set old values
 					for(i = 0; i < osnodeParent->rowIdxNumNonz; i++){
@@ -1255,8 +1300,15 @@ OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> 
 					//set new value
 					
 					osnodeChild->rowIdx[ childRowIdxNumNonz - 1] = rowIdx;
-					osnodeChild->rowLB[ childRowIdxNumNonz - 1 ] = rowLB;
-					osnodeChild->rowUB[ childRowIdxNumNonz - 1 ] = rowUB;	
+					
+					
+					
+					if(rowLB <=  m_osDecompParam.zeroTol) osnodeChild->rowLB[ childRowIdxNumNonz - 1 ] = 0;
+						else osnodeChild->rowLB[ childRowIdxNumNonz - 1 ] = 1;
+										
+					if(rowUB <=  m_osDecompParam.zeroTol) osnodeChild->rowUB[ childRowIdxNumNonz - 1 ] = 0;
+						else osnodeChild->rowUB[ childRowIdxNumNonz - 1 ] = 1;
+										
 					
 					
 				}
@@ -1733,7 +1785,9 @@ void OSColGenApp::checkNodeConsistency( const int rowIdx, const OSNode *osnode){
 		//we are going to throw an exception if we try to add a constraint to a node that is already there
 		std::set<int> indexSet;
 		int i;
+		int j;
 		int rowIdxNumNonz = 0;
+		int thetaNumNonz = 0;
 		rowIdxNumNonz = osnode->rowIdxNumNonz;
 		
 		std::cout << "MESSAGE: CHECKING FOR NODE CONSISTENCY CONSTRAINT" << std::endl;
@@ -1746,6 +1800,7 @@ void OSColGenApp::checkNodeConsistency( const int rowIdx, const OSNode *osnode){
 				indexSet.insert(  osnode->rowIdx[ i] );
 				
 			}else{
+				
 				
 				throw ErrorClass( "We are trying to add an existing constraint to a node" );
 			}
