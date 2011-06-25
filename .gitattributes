@@ -65,6 +65,17 @@ OS/applications/columnGen/data/colgenpercentile4.osol -text
 OS/applications/columnGen/data/colgenpercentile5.osol -text
 OS/applications/columnGen/data/colgenpercentile6.osol -text
 OS/applications/columnGen/data/colgenpercentile7.osol -text
+OS/applications/columnGen/data/percentile75-40-40-40G.osol -text
+OS/applications/columnGen/data/percentile80-40-40-40G.osol -text
+OS/applications/columnGen/data/percentile85-40-40-40G.osol -text
+OS/applications/columnGen/data/percentile90-40-40-40G.osol -text
+OS/applications/columnGen/data/percentile90-40-40-60G.osol -text
+OS/applications/columnGen/data/percentile90-40-60-40G.osol -text
+OS/applications/columnGen/data/percentile90-60-40-40G.osol -text
+OS/applications/columnGen/data/percentile92-40-40-60G.osol -text
+OS/applications/columnGen/data/percentile92-40-60-40G.osol -text
+OS/applications/columnGen/data/percentile92-60-40-40G.osol -text
+OS/applications/columnGen/data/percentile95-60-60-60G.osol -text
 OS/applications/fileUpload/Makefile.am -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
