@@ -57,8 +57,12 @@ public:
 	/** this variable is true if we have called
 	 * the branchAndBound() method
 	 */
-	
 	bool m_calledBranchAndBound;
+	
+	/** map the variable generated at a node
+	 * with a variable
+	 */
+	std::map<int, int> m_rowIdxVarMap;
 
 	
 	//the OS solver wrapper

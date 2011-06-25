@@ -145,7 +145,7 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 	m_osrouteSolver->getCutsTheta( thetaVar, numThetaVar,
 			numNewRows, numNonz, colIdx, values, rowLB, rowUB);
 	
-	//m_calledBranchAndBound = false;
+	m_calledBranchAndBound = false;
 	//for now let's always get these cuts, hence the default false
 	if(numNewRows == 0 && m_calledBranchAndBound == false
 			&& m_osrouteSolver->m_numMultCuts <= m_osrouteSolver->m_multiCommodCutLimit) {
@@ -552,7 +552,6 @@ void OSColGenApp::solveRestrictedMasterRelaxation( ){
 			isCutAdded = false;
 			//start out loop on if cuts found
 			std::cout << "CALL Solve  " << " Number of columns =  " <<  m_si->getNumCols() <<  std::endl;
-			//kippster -- key problem
 			//we are going through OS here, m_solver is a CoinSolver object
 			//now solve
 			m_solver->solve();
@@ -966,7 +965,7 @@ bool OSColGenApp::branchAndBound( ){
 					std::cout << "LOOPING OVER VARIABLE " << m_osrouteSolver->m_variableNames[ tmpit->first ] << std::endl;
 					std::cout << "ROW UB  = " << osnode->rowUB[  tmpit->second] << std::endl;
 					std::cout << "ROW LB  = " << osnode->rowLB[  tmpit->second] << std::endl;
-				
+				kippster
 				}
 				*/
 				/// end temp error checking
@@ -1419,8 +1418,9 @@ void OSColGenApp::createBranchingCut(const int* thetaIdx, const double* theta,
 		m_numColumnsGenerated++;
 		
 		//insert into map -- this is the first variable
-		varConMap.insert ( std::pair<int, int>(varIdx , rowIdx) );
+		varConMap.insert( std::pair<int, int>(varIdx , rowIdx) );
 		
+		m_rowIdxVarMap.insert( std::pair<int, int>(rowIdx , varIdx) );
 		
 		
 		
@@ -1500,7 +1500,7 @@ void OSColGenApp::createBranchingCut(const double* theta,
 		
 		//insert into map -- this is the first variable
 		varConMap.insert ( std::pair<int,int>(varIdx , rowIdx) );
-		
+		m_rowIdxVarMap.insert( std::pair<int, int>(rowIdx , varIdx) );
 		
 		
 		
@@ -1789,12 +1789,48 @@ void OSColGenApp::checkNodeConsistency( const int rowIdx, const OSNode *osnode){
 		int rowIdxNumNonz = 0;
 		int thetaNumNonz = 0;
 		rowIdxNumNonz = osnode->rowIdxNumNonz;
+		thetaNumNonz = osnode->thetaNumNonz;
+		std::map<int, double> varSumMap;
 		
 		std::cout << "MESSAGE: CHECKING FOR NODE CONSISTENCY CONSTRAINT" << std::endl;
+		
+		for(i = 0; i < thetaNumNonz; i++){
+			
+			
+			//loop over theta variables
+			std::cout << "theta idx " << osnode->thetaIdx[ i] << " theta value " << osnode->theta[ i] << std::endl;
+			
+			for(j = m_osrouteSolver->m_thetaPnt[ osnode->thetaIdx[ i]  ]; j <  m_osrouteSolver->m_thetaPnt[ osnode->thetaIdx[ i] + 1 ]; j++ ){
+				
+				if( varSumMap.find( m_osrouteSolver->m_thetaIndex[ j] )  == varSumMap.end() ){
+					
+					varSumMap[ m_osrouteSolver->m_thetaIndex[ j] ] = osnode->theta[ i];
+					
+				}else{
+					
+					varSumMap[ m_osrouteSolver->m_thetaIndex[ j] ] += osnode->theta[ i];
+				}
+				
+				std::cout << "xijk idx " << m_osrouteSolver->m_thetaIndex[ j] << " variable name =  " <<  
+						m_osrouteSolver->m_variableNames[ m_osrouteSolver->m_thetaIndex[ j] ] << std::endl;
+				
+			}
+		
+		}
+		
+		
 
 		for(i = 0; i < rowIdxNumNonz; i++){
 			
+			std::cout << " row number " << osnode->rowIdx[ i] << " LB = " << osnode->rowLB[ i] << " UB = " 
+					<< osnode->rowUB[ i] ;
 			
+			std::cout << " variable index = " << m_rowIdxVarMap[ osnode->rowIdx[ i] ] ;
+			
+			std::cout << " variable name = " << m_osrouteSolver->m_variableNames[ m_rowIdxVarMap[ osnode->rowIdx[ i] ] ] ;
+			
+			std::cout << " variable sum = " <<  varSumMap[ m_rowIdxVarMap[ osnode->rowIdx[ i] ]]    << std::endl ;
+				
 			if(indexSet.find( osnode->rowIdx[ i] ) == indexSet.end() ){
 				
 				indexSet.insert(  osnode->rowIdx[ i] );
