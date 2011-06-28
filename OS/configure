@@ -22437,7 +22437,7 @@ if test $coin_has_coinutils = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinutils"; then
-    COINUTILS_VERSIONS="`$PKG_CONFIG --modversion "coinutils" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    COINUTILS_VERSIONS=`$PKG_CONFIG --modversion "coinutils" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "coinutils" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -22952,9 +22952,9 @@ if test $coin_has_ipopt = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "ipopt"; then
-    IPOPT_VERSIONS="`$PKG_CONFIG --modversion "ipopt" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
-     cflags=`$PKG_CONFIG --cflags "ipopt" 2>/dev/null`
+  if $PKG_CONFIG --exists "ipopt cppad"; then
+    IPOPT_VERSIONS=`$PKG_CONFIG --modversion "ipopt cppad" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "ipopt cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -22963,8 +22963,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     IPOPT_CFLAGS="$cflags"
-    IPOPT_LIBS=`$PKG_CONFIG --libs "ipopt" 2>/dev/null`
-    IPOPT_DATA=`$PKG_CONFIG --variable=datadir "ipopt" 2>/dev/null`
+    IPOPT_LIBS=`$PKG_CONFIG --libs "ipopt cppad" 2>/dev/null`
+    IPOPT_DATA=`$PKG_CONFIG --variable=datadir "ipopt cppad" 2>/dev/null`
      coin_has_ipopt=yes
         echo "$as_me:$LINENO: result: yes: $IPOPT_VERSIONS" >&5
 echo "${ECHO_T}yes: $IPOPT_VERSIONS" >&6
@@ -22975,18 +22975,18 @@ echo "${ECHO_T}yes: $IPOPT_VERSIONS" >&6
         then
           IPOPT_LIBS=`echo " $IPOPT_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
-        IPOPT_PCREQUIRES="ipopt"
+        IPOPT_PCREQUIRES="ipopt cppad"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
-          OSLIB_PCREQUIRES="ipopt $OSLIB_PCREQUIRES"
+          OSLIB_PCREQUIRES="ipopt cppad $OSLIB_PCREQUIRES"
           OSLIB_CFLAGS="$IPOPT_CFLAGS $OSLIB_CFLAGS"
           OSLIB_LIBS="$IPOPT_LIBS $OSLIB_LIBS"
 
 
 
   else
-    IPOPT_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "ipopt"`
+    IPOPT_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "ipopt cppad"`
       coin_has_ipopt=notGiven
         echo "$as_me:$LINENO: result: not given: $IPOPT_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $IPOPT_PKG_ERRORS" >&6
@@ -23022,8 +23022,8 @@ IPOPT_DATA_INSTALLED=
 IPOPT_PCLIBS=
 IPOPT_PCREQUIRES=
 
-# initial list of dependencies is "ipopt", but we need to filter out version number specifications (= x, <= x, >= x, != x)
-projtoprocess="ipopt"
+# initial list of dependencies is "ipopt cppad", but we need to filter out version number specifications (= x, <= x, >= x, != x)
+projtoprocess="ipopt cppad"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
 # further, we collect the list of corresponding .pc files, but do this in reverse order, because we need this order afterwards
@@ -23224,9 +23224,9 @@ _ACEOF
     IPOPT_LIBS_INSTALLED=`echo " $IPOPT_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
-  IPOPT_PCREQUIRES="ipopt"
+  IPOPT_PCREQUIRES="ipopt cppad"
 
-    OSLIB_PCREQUIRES="ipopt $OSLIB_PCREQUIRES"
+    OSLIB_PCREQUIRES="ipopt cppad $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$IPOPT_CFLAGS $OSLIB_CFLAGS"
     OSLIB_LIBS="$IPOPT_LIBS $OSLIB_LIBS"
     OSLIB_CFLAGS_INSTALLED="$IPOPT_CFLAGS_INSTALLED $OSLIB_CFLAGS_INSTALLED"
@@ -23464,7 +23464,7 @@ if test $coin_has_clp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-clp"; then
-    CLP_VERSIONS="`$PKG_CONFIG --modversion "osi-clp" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    CLP_VERSIONS=`$PKG_CONFIG --modversion "osi-clp" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "osi-clp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -23975,7 +23975,7 @@ if test $coin_has_dylp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-dylp"; then
-    DYLP_VERSIONS="`$PKG_CONFIG --modversion "osi-dylp" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    DYLP_VERSIONS=`$PKG_CONFIG --modversion "osi-dylp" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "osi-dylp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -24486,7 +24486,7 @@ if test $coin_has_vol = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-vol"; then
-    VOL_VERSIONS="`$PKG_CONFIG --modversion "osi-vol" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    VOL_VERSIONS=`$PKG_CONFIG --modversion "osi-vol" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "osi-vol" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -24997,7 +24997,7 @@ if test $coin_has_symphony = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-sym"; then
-    SYMPHONY_VERSIONS="`$PKG_CONFIG --modversion "osi-sym" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    SYMPHONY_VERSIONS=`$PKG_CONFIG --modversion "osi-sym" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "osi-sym" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -25508,7 +25508,7 @@ if test $coin_has_cpx = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-cplex"; then
-    CPX_VERSIONS="`$PKG_CONFIG --modversion "osi-cplex" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    CPX_VERSIONS=`$PKG_CONFIG --modversion "osi-cplex" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "osi-cplex" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -26019,7 +26019,7 @@ if test $coin_has_glpk = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-glpk"; then
-    GLPK_VERSIONS="`$PKG_CONFIG --modversion "osi-glpk" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    GLPK_VERSIONS=`$PKG_CONFIG --modversion "osi-glpk" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "osi-glpk" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -26530,7 +26530,7 @@ if test $coin_has_cbc = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "osi-cbc"; then
-    CBC_VERSIONS="`$PKG_CONFIG --modversion "osi-cbc" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    CBC_VERSIONS=`$PKG_CONFIG --modversion "osi-cbc" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "osi-cbc" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -27040,9 +27040,9 @@ if test $coin_has_bonmin = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "bonmin"; then
-    BONMIN_VERSIONS="`$PKG_CONFIG --modversion "bonmin" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
-     cflags=`$PKG_CONFIG --cflags "bonmin" 2>/dev/null`
+  if $PKG_CONFIG --exists "bonmin cppad"; then
+    BONMIN_VERSIONS=`$PKG_CONFIG --modversion "bonmin cppad" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "bonmin cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -27051,8 +27051,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     BONMIN_CFLAGS="$cflags"
-    BONMIN_LIBS=`$PKG_CONFIG --libs "bonmin" 2>/dev/null`
-    BONMIN_DATA=`$PKG_CONFIG --variable=datadir "bonmin" 2>/dev/null`
+    BONMIN_LIBS=`$PKG_CONFIG --libs "bonmin cppad" 2>/dev/null`
+    BONMIN_DATA=`$PKG_CONFIG --variable=datadir "bonmin cppad" 2>/dev/null`
      coin_has_bonmin=yes
         echo "$as_me:$LINENO: result: yes: $BONMIN_VERSIONS" >&5
 echo "${ECHO_T}yes: $BONMIN_VERSIONS" >&6
@@ -27063,18 +27063,18 @@ echo "${ECHO_T}yes: $BONMIN_VERSIONS" >&6
         then
           BONMIN_LIBS=`echo " $BONMIN_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
-        BONMIN_PCREQUIRES="bonmin"
+        BONMIN_PCREQUIRES="bonmin cppad"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
-          OSLIB_PCREQUIRES="bonmin $OSLIB_PCREQUIRES"
+          OSLIB_PCREQUIRES="bonmin cppad $OSLIB_PCREQUIRES"
           OSLIB_CFLAGS="$BONMIN_CFLAGS $OSLIB_CFLAGS"
           OSLIB_LIBS="$BONMIN_LIBS $OSLIB_LIBS"
 
 
 
   else
-    BONMIN_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "bonmin"`
+    BONMIN_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "bonmin cppad"`
       coin_has_bonmin=notGiven
         echo "$as_me:$LINENO: result: not given: $BONMIN_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $BONMIN_PKG_ERRORS" >&6
@@ -27110,8 +27110,8 @@ BONMIN_DATA_INSTALLED=
 BONMIN_PCLIBS=
 BONMIN_PCREQUIRES=
 
-# initial list of dependencies is "bonmin", but we need to filter out version number specifications (= x, <= x, >= x, != x)
-projtoprocess="bonmin"
+# initial list of dependencies is "bonmin cppad", but we need to filter out version number specifications (= x, <= x, >= x, != x)
+projtoprocess="bonmin cppad"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
 # further, we collect the list of corresponding .pc files, but do this in reverse order, because we need this order afterwards
@@ -27312,9 +27312,9 @@ _ACEOF
     BONMIN_LIBS_INSTALLED=`echo " $BONMIN_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
-  BONMIN_PCREQUIRES="bonmin"
+  BONMIN_PCREQUIRES="bonmin cppad"
 
-    OSLIB_PCREQUIRES="bonmin $OSLIB_PCREQUIRES"
+    OSLIB_PCREQUIRES="bonmin cppad $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$BONMIN_CFLAGS $OSLIB_CFLAGS"
     OSLIB_LIBS="$BONMIN_LIBS $OSLIB_LIBS"
     OSLIB_CFLAGS_INSTALLED="$BONMIN_CFLAGS_INSTALLED $OSLIB_CFLAGS_INSTALLED"
@@ -27551,9 +27551,9 @@ if test $coin_has_couenne = notGiven; then
 
 
 if test -n "$PKG_CONFIG" ; then
-  if $PKG_CONFIG --exists "couenne"; then
-    COUENNE_VERSIONS="`$PKG_CONFIG --modversion "couenne" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
-     cflags=`$PKG_CONFIG --cflags "couenne" 2>/dev/null`
+  if $PKG_CONFIG --exists "couenne cppad"; then
+    COUENNE_VERSIONS=`$PKG_CONFIG --modversion "couenne cppad" 2>/dev/null | tr '\n' ' '`
+     cflags=`$PKG_CONFIG --cflags "couenne cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
 	# but only do this if is not trivial
@@ -27562,8 +27562,8 @@ if test -n "$PKG_CONFIG" ; then
       cflags=`echo $cflags | sed -e 's/-I\([^ ]*\)/-I\`${CYGPATH_W} \1\`/g'`
     fi
     COUENNE_CFLAGS="$cflags"
-    COUENNE_LIBS=`$PKG_CONFIG --libs "couenne" 2>/dev/null`
-    COUENNE_DATA=`$PKG_CONFIG --variable=datadir "couenne" 2>/dev/null`
+    COUENNE_LIBS=`$PKG_CONFIG --libs "couenne cppad" 2>/dev/null`
+    COUENNE_DATA=`$PKG_CONFIG --variable=datadir "couenne cppad" 2>/dev/null`
      coin_has_couenne=yes
         echo "$as_me:$LINENO: result: yes: $COUENNE_VERSIONS" >&5
 echo "${ECHO_T}yes: $COUENNE_VERSIONS" >&6
@@ -27574,18 +27574,18 @@ echo "${ECHO_T}yes: $COUENNE_VERSIONS" >&6
         then
           COUENNE_LIBS=`echo " $COUENNE_LIBS " | sed -e 's/ \(\/[^ ]*\/\)\([^ ]*\)\.lib / \`$(CYGPATH_W) \1 | sed -e "s|\\\\\\\\\\\\\\\\\\\\|\/|g"\`\2.lib /g'`
         fi
-        COUENNE_PCREQUIRES="couenne"
+        COUENNE_PCREQUIRES="couenne cppad"
 
         # augment X_PCREQUIRES, X_CFLAGS, and X_LIBS for each build target X in OSLib
 
-          OSLIB_PCREQUIRES="couenne $OSLIB_PCREQUIRES"
+          OSLIB_PCREQUIRES="couenne cppad $OSLIB_PCREQUIRES"
           OSLIB_CFLAGS="$COUENNE_CFLAGS $OSLIB_CFLAGS"
           OSLIB_LIBS="$COUENNE_LIBS $OSLIB_LIBS"
 
 
 
   else
-    COUENNE_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "couenne"`
+    COUENNE_PKG_ERRORS=`$PKG_CONFIG $pkg_short_errors --errors-to-stdout --print-errors "couenne cppad"`
       coin_has_couenne=notGiven
         echo "$as_me:$LINENO: result: not given: $COUENNE_PKG_ERRORS" >&5
 echo "${ECHO_T}not given: $COUENNE_PKG_ERRORS" >&6
@@ -27621,8 +27621,8 @@ COUENNE_DATA_INSTALLED=
 COUENNE_PCLIBS=
 COUENNE_PCREQUIRES=
 
-# initial list of dependencies is "couenne", but we need to filter out version number specifications (= x, <= x, >= x, != x)
-projtoprocess="couenne"
+# initial list of dependencies is "couenne cppad", but we need to filter out version number specifications (= x, <= x, >= x, != x)
+projtoprocess="couenne cppad"
 
 # we first expand the list of projects to process by adding all dependencies just behind the project which depends on it
 # further, we collect the list of corresponding .pc files, but do this in reverse order, because we need this order afterwards
@@ -27823,9 +27823,9 @@ _ACEOF
     COUENNE_LIBS_INSTALLED=`echo " $COUENNE_LIBS_INSTALLED" | sed -e 's/ \(\/[^ ]*\/\)/ \`$(CYGPATH_W) \1\`/g' -e 's/ -l\([^ ]*\)/ lib\1.lib/g' -e 's/ -L\([^ ]*\)/ -libpath:\`$(CYGPATH_W) \1\`/g'`
   fi
 
-  COUENNE_PCREQUIRES="couenne"
+  COUENNE_PCREQUIRES="couenne cppad"
 
-    OSLIB_PCREQUIRES="couenne $OSLIB_PCREQUIRES"
+    OSLIB_PCREQUIRES="couenne cppad $OSLIB_PCREQUIRES"
     OSLIB_CFLAGS="$COUENNE_CFLAGS $OSLIB_CFLAGS"
     OSLIB_LIBS="$COUENNE_LIBS $OSLIB_LIBS"
     OSLIB_CFLAGS_INSTALLED="$COUENNE_CFLAGS_INSTALLED $OSLIB_CFLAGS_INSTALLED"
@@ -28063,7 +28063,7 @@ if test $coin_has_bcp = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "bcp"; then
-    BCP_VERSIONS="`$PKG_CONFIG --modversion "bcp" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    BCP_VERSIONS=`$PKG_CONFIG --modversion "bcp" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "bcp" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -28574,7 +28574,7 @@ if test $coin_has_asl = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "coinasl"; then
-    ASL_VERSIONS="`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    ASL_VERSIONS=`$PKG_CONFIG --modversion "coinasl" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "coinasl" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29085,7 +29085,7 @@ if test $coin_has_cppad = notGiven; then
 
 if test -n "$PKG_CONFIG" ; then
   if $PKG_CONFIG --exists "cppad"; then
-    CPPAD_VERSIONS="`$PKG_CONFIG --modversion "cppad" 2>/dev/null | sed -n -e "1h;2,\\$H;\\${g;s/\n/ /g;p}"`"
+    CPPAD_VERSIONS=`$PKG_CONFIG --modversion "cppad" 2>/dev/null | tr '\n' ' '`
      cflags=`$PKG_CONFIG --cflags "cppad" 2>/dev/null`
     # pkg-config cannot handle spaces, so CYGPATH_W cannot be put into .pc files
 	# thus, we modify the cflags extracted from pkg-config by putting CYGPATH_W behind -I's
@@ -29465,12 +29465,6 @@ fi
 
 
 
-
-if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
-  { { echo "$as_me:$LINENO: error: Ipopt is present, but not the necessary CppAD." >&5
-echo "$as_me: error: Ipopt is present, but not the necessary CppAD." >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 # The COIN_HAS_CPPAD symbol should not go into the public configuration
 # header file (config_os.h).
@@ -37265,10 +37259,6 @@ if test x$coin_skip_ac_output != xyes; then
 
   fi
 
-  # On AIX, the default sed cannot deal with somewhat long sed commands executed by config.status.
-  # So we reduce the hardcoded number of commands given to sed from 48 to 5 in config.status, hoping this will suffice.
-
-
   cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -39149,16 +39139,6 @@ cat >>$CONFIG_STATUS <<\_ACEOF
 _ACEOF
 chmod +x $CONFIG_STATUS
 ac_clean_files=$ac_clean_files_save
-
-
-    case $build in
-      *-aix*)
-        { echo "$as_me:$LINENO: patching config.status to reduce ac_max_sed_lines to 5" >&5
-echo "$as_me: patching config.status to reduce ac_max_sed_lines to 5" >&6;}
-        sed -e 's/ac_max_sed_lines=48/ac_max_sed_lines=5/g' config.status > config.status.tmp
-        mv config.status.tmp config.status
-      ;;
-    esac
 
 
 # configure is writing to config.log, and then calls config.status.

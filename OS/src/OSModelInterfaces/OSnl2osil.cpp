@@ -38,6 +38,7 @@
 # endif
 #endif
 
+#include <sstream>
 
 
 #define R_OPS  ((ASL_fg*)asl)->I.r_ops_

@@ -82,7 +82,7 @@ AC_COIN_CHECK_PACKAGE(CoinUtils,[coinutils],[OSLib])
 if test $coin_has_coinutils != yes ; then
   AC_MSG_ERROR([Required package CoinUtils not available.])
 fi
-AC_COIN_CHECK_PACKAGE(Ipopt,    [ipopt],    [OSLib])
+AC_COIN_CHECK_PACKAGE(Ipopt,    [ipopt cppad], [OSLib])
 AC_COIN_CHECK_PACKAGE(Clp,      [osi-clp],  [OSLib])
 AC_COIN_CHECK_PACKAGE(DyLP,     [osi-dylp], [OSLib])
 AC_COIN_CHECK_PACKAGE(Vol,      [osi-vol],  [OSLib])
@@ -90,15 +90,11 @@ AC_COIN_CHECK_PACKAGE(SYMPHONY, [osi-sym],  [OSLib])
 AC_COIN_CHECK_PACKAGE(Cpx,      [osi-cplex],[OSLib])
 AC_COIN_CHECK_PACKAGE(Glpk,     [osi-glpk], [OSLib])
 AC_COIN_CHECK_PACKAGE(Cbc,      [osi-cbc],  [OSLib])
-AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin],   [OSLib])
-AC_COIN_CHECK_PACKAGE(Couenne,  [couenne],  [OSLib])
+AC_COIN_CHECK_PACKAGE(Bonmin,   [bonmin cppad], [OSLib])
+AC_COIN_CHECK_PACKAGE(Couenne,  [couenne cppad],[OSLib])
 AC_COIN_CHECK_PACKAGE(Bcp,      [bcp],      [OSLib])
 AC_COIN_CHECK_PACKAGE(ASL,      [coinasl],  [OSLib])
 AC_COIN_CHECK_PACKAGE(cppad,    [cppad],    [OSLib])
-
-if test $coin_has_cppad != yes && test $coin_has_ipopt = yes ; then
-  AC_MSG_ERROR([Ipopt is present, but not the necessary CppAD.])
-fi
 
 # The COIN_HAS_CPPAD symbol should not go into the public configuration
 # header file (config_os.h).

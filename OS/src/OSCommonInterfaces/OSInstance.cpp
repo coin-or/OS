@@ -24,6 +24,7 @@
 #include "OSErrorClass.h"
 #include "OSParameters.h"
 
+#include<cstdlib>
 #include<stack>
 #include<iostream>  
 #include<sstream>

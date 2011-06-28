@@ -22,6 +22,7 @@
 #include "OSMathUtil.h"
 
 #include <string>
+#include <cstdlib>
 
 #ifdef HAVE_CMATH
 # include <cmath>

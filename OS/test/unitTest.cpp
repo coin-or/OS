@@ -121,10 +121,12 @@
 #define DEBUG
 //#define GUS_DEBUG
 
+#include "OSConfig.h"
+#ifdef OS_HAS_CPPAD
 #include <cppad/cppad.hpp> 
+#endif
 //#include "CoinUtilsConfig.h"
 #include "OSCoinSolver.h"
-#include "OSConfig.h"
 #include "OSmps2osil.h" 
 #include "OSResult.h" 
 #include "OSOption.h"
