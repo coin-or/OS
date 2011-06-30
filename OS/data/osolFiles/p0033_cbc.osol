@@ -6,10 +6,11 @@
 	<job>
 	</job>	
 	<optimization>
-		<solverOptions numberOfSolverOptions="4">
+		<solverOptions numberOfSolverOptions="5">
 
 			<solverOption name="reslim" solver="cbc" type="numeric" value="1"/>
-			<solverOption name="maxN" solver="cbc" value="5" />
+			<solverOption name="maxN" solver="cbc" value="1" />
+			<solverOption name="sec" solver="cbc" value="1" />
 			<solverOption name="cuts" solver="cbc" value="off" />
 			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
 

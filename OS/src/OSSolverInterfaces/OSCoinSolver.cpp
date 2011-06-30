@@ -1430,6 +1430,20 @@ void CoinSolver::writeResult(CbcModel *model){
 	osresult->setGeneralStatusType("normal");
 	osresult->setTime(cpuTime);
     osresult->setServiceName( OSgetVersionInfo() );
+    
+    //first determine if we are feasible
+    int numberIntegerInfeasibilities = 0;
+    int numberObjectInfeasibilities = 0;
+    bool isFeasible = false;
+    isFeasible = model->feasibleSolution( numberIntegerInfeasibilities,
+    		numberObjectInfeasibilities);
+    std::string statusMsg;
+    if(isFeasible == true){
+    	statusMsg = "feasible";
+    }else{
+    	statusMsg = "infeasible";
+    }
+    
 	
 	if (model->isProvenOptimal() == true  ){
 		osresult->setSolutionStatus(solIdx, "optimal", description);			
@@ -1442,21 +1456,21 @@ void CoinSolver::writeResult(CbcModel *model){
 				osresult->setSolutionStatus(solIdx, "infeasible", "the continuous relaxation is dual infeasible");
 			else{
 				if(model->isContinuousUnbounded() == true) 
-					osresult->setSolutionStatus(solIdx, "other", "the continuous relaxation is unbounded");
+					osresult->setSolutionStatus(solIdx, statusMsg, "the continuous relaxation is unbounded");
 				else{
 					if(model->isNodeLimitReached() == true) 
-						osresult->setSolutionStatus(solIdx, "other", "node limit reached");
+						osresult->setSolutionStatus(solIdx, statusMsg, "node limit reached");
 					else{
 						if(model->isSecondsLimitReached() == true) 
-							osresult->setSolutionStatus(solIdx, "other", "time limit reached");
+							osresult->setSolutionStatus(solIdx, statusMsg, "time limit reached");
 						else{
 							if(model->isSolutionLimitReached() == true) 
-								osresult->setSolutionStatus(solIdx, "other", "solution limit reached");
+								osresult->setSolutionStatus(solIdx, statusMsg, "solution limit reached");
 							else{
 								if(model->isAbandoned() == true) 
-									osresult->setSolutionStatus(solIdx, "other", "there are numerical difficulties");
+									osresult->setSolutionStatus(solIdx, statusMsg, "there are numerical difficulties");
 								else
-									osresult->setSolutionStatus(solIdx, "other","unknown");
+									osresult->setSolutionStatus(solIdx, statusMsg,"unknown");
 							}
 						}
 					}
