@@ -17,8 +17,6 @@
 
 //#define DEBUG 
 #include "OSConfig.h"
-// need to include OSParameters.h before the windos stuff, since it seem to define a macro named "max"!!
-
 #ifdef WIN_
 	#ifndef _SYS_UNISTD_H
 		#define _SYS_UNISTD_H
@@ -31,6 +29,8 @@
 	#include <netdb.h>  
 #endif
 
+// need to include OSParameters.h after winsock.h, because it may include unistd.h, which need to know that winsock.h has already be included
+// unfortunately, the windos stuff defines a macro named "max", and maybe also "min"? so undefine these first
 #ifdef min
 #undef min
 #endif
