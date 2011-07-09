@@ -353,7 +353,7 @@ void OSColGenApp::solve(){
 			//get the LP relaxation
 			*(m_theta + i) = m_si->getColSolution()[i];	
 			
-			/*
+			
 			///optionally print out the corresponding x columns
 			int j;
 			if( *(m_theta + i) > m_osDecompParam.zeroTol){
@@ -363,7 +363,7 @@ void OSColGenApp::solve(){
 				}	
 			}			
 			///end of optionally print out
-			*/
+			
 			
 		}
 		m_zLB =  m_si->getObjValue();
@@ -854,7 +854,7 @@ bool OSColGenApp::branchAndBound( ){
 		if(osnodeLeftChild != NULL){
 			//finally set the nodeID
 			//and record parent ID
-			m_numNodesGenerated++;
+			//m_numNodesGenerated++;
 			osnodeLeftChild->nodeID = m_numNodesGenerated;
 			osnodeLeftChild->parentID = 0;
 			//nodeVec.push_back( osnodeLeftChild);
@@ -870,7 +870,7 @@ bool OSColGenApp::branchAndBound( ){
 		if(osnodeRightChild != NULL){
 			//finally set the nodeID
 			//and record parent ID
-			m_numNodesGenerated++;
+			//m_numNodesGenerated++;
 			osnodeRightChild->nodeID = m_numNodesGenerated;
 			osnodeRightChild->parentID = 0;
 			//nodeVec.push_back( osnodeRightChild);
@@ -981,7 +981,7 @@ bool OSColGenApp::branchAndBound( ){
 				if(osnodeLeftChild != NULL){
 					//finally set the nodeID
 					//and record parent ID
-					m_numNodesGenerated++;
+					//m_numNodesGenerated++;
 					osnodeLeftChild->nodeID = m_numNodesGenerated;
 					osnodeLeftChild->parentID = osnode->nodeID;
 					leftNodeCreated = true;
@@ -992,7 +992,7 @@ bool OSColGenApp::branchAndBound( ){
 				if(osnodeRightChild != NULL){
 					//finally set the nodeID
 					//and record parent ID
-					m_numNodesGenerated++;
+					//m_numNodesGenerated++;
 					osnodeRightChild->nodeID = m_numNodesGenerated;
 					osnodeRightChild->parentID = osnode->nodeID;
 					rightNodeCreated = true;
@@ -1053,6 +1053,8 @@ bool OSColGenApp::branchAndBound( ){
 
 OSNode* OSColGenApp::createChild(const OSNode *osnodeParent, std::map<int, int> &varConMap,
 		const int rowIdx, const double rowLB, const double rowUB){
+	
+	m_numNodesGenerated++;
 	
 	OSNode *osnodeChild;
 	osnodeChild = NULL;

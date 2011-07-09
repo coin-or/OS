@@ -26,10 +26,10 @@
 <solverOption name="routeCapacity" value="20" solver="routeSolver" category="2" type="integer"/>
 <solverOption name="routeCapacity" value="40" solver="routeSolver" category="3" type="integer"/>
 
-<solverOption name="routeMinPickup" value="2" solver="routeSolver" category="0" type="integer"/>
-<solverOption name="routeMinPickup" value="2" solver="routeSolver" category="1" type="integer"/>
-<solverOption name="routeMinPickup" value="2" solver="routeSolver" category="2" type="integer"/>
-<solverOption name="routeMinPickup" value="2" solver="routeSolver" category="3" type="integer"/>
+<solverOption name="routeMinPickup" value="1" solver="routeSolver" category="0" type="integer"/>
+<solverOption name="routeMinPickup" value="1" solver="routeSolver" category="1" type="integer"/>
+<solverOption name="routeMinPickup" value="1" solver="routeSolver" category="2" type="integer"/>
+<solverOption name="routeMinPickup" value="1" solver="routeSolver" category="3" type="integer"/>
 
 <solverOption name="demand" value="0" solver="routeSolver" type="integer" description="H01a"/>
 <solverOption name="demand" value="0" solver="routeSolver" type="integer" description="H02a"/>

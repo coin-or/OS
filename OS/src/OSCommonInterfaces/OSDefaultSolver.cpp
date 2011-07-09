@@ -29,7 +29,6 @@ DefaultSolver::DefaultSolver():
 	osinstance( NULL),
 	osresult( NULL),
 	osoption( NULL),
-	insList(""),
 	sSolverName(""),
 	bCallbuildSolverInstance( false),
 	bSetSolverOptions( false)

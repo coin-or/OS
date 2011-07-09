@@ -63,11 +63,6 @@ public:
 	/** osoption holds the solver options in-memory as an OSOption object */
 	OSOption  *osoption;
 	
-	/** osinsList holds the solution or result of the model */
-	std::string insList;
-	
-
-	
 	/** 
 	 * sSolverName is the name of the Coin solver used, e.g. glpk, or clp 	 
 	 */
