@@ -37226,7 +37226,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="applications/columnGen/data/y2010p90-40-40-40.osol"
+  cvl_tmp="applications/columnGen/data/y2010p90-60-20-20-40.osol"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done

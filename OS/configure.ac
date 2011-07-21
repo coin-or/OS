@@ -495,7 +495,7 @@ AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-40-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-40-60.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-60-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-60-40-40.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-40-40.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-60-20-20-40.osol)
 
 
 
