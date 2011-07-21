@@ -83,6 +83,7 @@ OS/applications/columnGen/data/y2010p90-60-40-40.osol -text
 OS/applications/columnGen/data/y2010p92-40-40-60.osol -text
 OS/applications/columnGen/data/y2010p92-40-60-40.osol -text
 OS/applications/columnGen/data/y2010p92-60-40-40.osol -text
+OS/applications/columnGen/data/y2010p95-150-150-150.osol -text
 OS/applications/fileUpload/Makefile.am -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text
