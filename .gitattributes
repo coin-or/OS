@@ -65,6 +65,12 @@ OS/applications/columnGen/data/colgenpercentile4.osol -text
 OS/applications/columnGen/data/colgenpercentile5.osol -text
 OS/applications/columnGen/data/colgenpercentile6.osol -text
 OS/applications/columnGen/data/colgenpercentile7.osol -text
+OS/applications/columnGen/data/y2009mean-25-25-25.osol -text
+OS/applications/columnGen/data/y2009p40-25-25-25.osol -text
+OS/applications/columnGen/data/y2009p50-25-25-25.osol -text
+OS/applications/columnGen/data/y2009p60-25-25-25.osol -text
+OS/applications/columnGen/data/y2009p70-25-25-25.osol -text
+OS/applications/columnGen/data/y2009p95-140-140-140.osol -text
 OS/applications/columnGen/data/y2010p75-40-40-40.osol -text
 OS/applications/columnGen/data/y2010p80-40-40-40.osol -text
 OS/applications/columnGen/data/y2010p85-40-40-40.osol -text
@@ -77,7 +83,6 @@ OS/applications/columnGen/data/y2010p90-60-40-40.osol -text
 OS/applications/columnGen/data/y2010p92-40-40-60.osol -text
 OS/applications/columnGen/data/y2010p92-40-60-40.osol -text
 OS/applications/columnGen/data/y2010p92-60-40-40.osol -text
-OS/applications/columnGen/data/y2010p95-60-60-60.osol -text
 OS/applications/fileUpload/Makefile.am -text
 OS/applications/fileUpload/Makefile.in -text
 OS/applications/fileUpload/OSFileUpload.cpp -text

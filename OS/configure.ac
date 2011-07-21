@@ -478,12 +478,35 @@ AC_COIN_VPATH_LINK(data/matlabFiles/OSCallMatlabSolver.m)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile4.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile5.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile6.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgenpercentile7.osol)
-AC_COIN_VPATH_LINK(applications/columnGen/data/colgenmean.osol)
 
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p40-25-25-25.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p50-25-25-25.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p60-25-25-25.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p70-25-25-25.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p95-140-140-140.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2009mean-25-25-25.osol.osol)
+
+
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p75-40-40-40.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p80-40-40-40.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p85-40-40-40.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-40-40.osol)
+
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-40-60.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-60-40.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p60-40-40-40.osol)
+
+
+
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-40-40-60.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-40-60-40.osol)
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p62-40-40-40.osol)
+
+
+
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-120-120-120.osol)
+
+AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p95-150-150-150.osol)
 
 
 ### Python Code
