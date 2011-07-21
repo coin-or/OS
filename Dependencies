@@ -8,7 +8,7 @@ Osi          https://projects.coin-or.org/svn/Osi/stable/0.105/Osi
 Vol          https://projects.coin-or.org/svn/Vol/stable/1.3/Vol
 DyLP         https://projects.coin-or.org/svn/DyLP/stable/1.8/DyLP
 SYMPHONY     https://projects.coin-or.org/svn/SYMPHONY/stable/5.4/SYMPHONY
-#Bcp          https://projects.coin-or.org/svn/Bcp/stable/1.3/Bcp
+Bcp          https://projects.coin-or.org/svn/Bcp/stable/1.3/Bcp
 ThirdParty/ASL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/stable/1.2
 ThirdParty/Blas   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/stable/1.2
 ThirdParty/Glpk   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/stable/1.8
