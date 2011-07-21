@@ -37143,7 +37143,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="applications/columnGen/data/y2009mean-25-25-25.osol.osol"
+  cvl_tmp="applications/columnGen/data/y2009mean-25-25-25.osol"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -37216,7 +37216,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="applications/columnGen/data/y2010p60-40-40-40.osol"
+  cvl_tmp="applications/columnGen/data/y2010p90-40-40-40.osol"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -37249,7 +37249,7 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="applications/columnGen/data/y2010p62-40-40-40.osol"
+  cvl_tmp="applications/columnGen/data/y2010p92-40-40-40.osol"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
