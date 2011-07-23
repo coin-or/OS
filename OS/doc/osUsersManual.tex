@@ -4853,7 +4853,7 @@ public:\\[\Sb]
 </xs:complexType>                                                                  \}; // class Variable\\[\Sb]
  \\[\Sb]
  \\[\Sb]
-\textsf{\textbf{OSiL elements          \hspace{1.87in}  In-memory objects}}\\[\Sa]
+\textsf{\textbf{OSiL elements          \hspace{1.83in}  In-memory objects}}\\[\Sa]
 <variables numberOfVariables="2">                   OSInstance *osinstance;\\[\Sb]
    <var lb="0" name="x0" type="C"/>                 osinstance->instanceData->variables->numberOfVariables=2;\\[\Sb]
    <var lb="0" name="x1" type="C"/>                 osinstance->instanceData->variables->var=new Variable*[2];\\[\Sb]
@@ -4872,13 +4872,15 @@ Figure~\ref{figure:osinstancevariables} uses the {\tt Variables} class to provid
 at the correspondence between schema and class. On the right, the {\tt Variables} class contains 
 the data member {\tt numberOfVariables} and a pointer to the object {\tt var} of class {\tt Variable}. 
 The {\tt Variable} class has  data members {\tt lb} (double), {\tt ub} (double), {\tt name} (string), 
-and {\tt type} (char). On the left the corresponding XML complexTypes are shown, with arrows indicating 
+and {\tt type} (char). On the left the corresponding XML {\tt complexType}s are shown, with arrows indicating 
 the correspondences. The following rules describe the mapping between the OSiL schema and the 
-{\tt OSInstance} class.
+{\tt OSInstance} class. 
+(In order to facilitate the mapping, we insist in the schema construction that every {\tt complexType} be named, 
+even though this is not strictly necessary in XML.)
 %
 \begin{itemize}
 
-\item  Each {\tt complexType} in an OSiL schema corresponds to a class in {\tt OSInstance.}
+\item  Each {\tt complexType} in an OSiL schema corresponds to a class in {\tt OSInstance}.
 Thus the OSiL schema's {\tt complexType} {\tt Variables} corresponds to {\tt OSInstance}'s class {\tt Variables}.
 Elements in an actual XML file then correspond to objects in {\tt OSInstance};
 for example, the {\tt <variables>} element that is of type {\tt Variables} in an OSiL file
