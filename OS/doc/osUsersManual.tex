@@ -4827,7 +4827,7 @@ public:\\[\Sb]
   <xs:sequence>                                                                      Variables();\\[\Sb]
     <xs:element name="var" type="Variable" maxOccurs="unbounded"/>  <----------->    Variable *var;\\[\Sb]
   </xs:sequence>                                                                   \\[\Sb]
-  <xs:attribute name="numberOfVariables" type="xs:positiveInteger"                 \\[\Sb]
+  <xs:attribute name="numberOfVariables" type="xs:nonnegativeInteger"                 \\[\Sb]
                 use="required"/>  <--------------------------------------------->    int numberOfVariables;\\[\Sb]
 </xs:complexType>                                                                  \}; // class Variables\\[\Sb]
  \\[\Sb]
@@ -4843,6 +4843,8 @@ public:\\[\Sb]
         <xs:enumeration value="B"/>\\[\Sb]
         <xs:enumeration value="I"/>\\[\Sb]
         <xs:enumeration value="S"/>\\[\Sb]
+        <xs:enumeration value="D"/>\\[\Sb]
+        <xs:enumeration value="J"/>\\[\Sb]
       </xs:restriction>\\[\Sb]
     </xs:simpleType>\\[\Sb]
   </xs:attribute>\\[\Sb]
@@ -4851,13 +4853,13 @@ public:\\[\Sb]
 </xs:complexType>                                                                  \}; // class Variable\\[\Sb]
  \\[\Sb]
  \\[\Sb]
-\textsf{\textbf{OSiL elements          \hspace{1.97in}  In-memory objects}}\\[\Sa]
+\textsf{\textbf{OSiL elements          \hspace{1.87in}  In-memory objects}}\\[\Sa]
 <variables numberOfVariables="2">                   OSInstance *osinstance;\\[\Sb]
    <var lb="0" name="x0" type="C"/>                 osinstance->instanceData->variables->numberOfVariables=2;\\[\Sb]
    <var lb="0" name="x1" type="C"/>                 osinstance->instanceData->variables->var=new Variable*[2];\\[\Sb]
-</variables>                                        osinstance.instanceData->variables->var[0]->lb=0;\\[\Sb]
-                                                    osinstance->instanceData->variables->var[0]->name=x0;\\[\Sb]
-                                                    osinstance->instanceData->variables->var[0]->type={\rm `C'};\\[\Sb]
+</variables>                                        osinstance->instanceData->variables->var[0]->lb=0;\\[\Sb]
+                                                    osinstance->instanceData->variables->var[0]->name="x0";\\[\Sb]
+                                                    osinstance->instanceData->variables->var[0]->type={\rm 'C'};\\[\Sb]
                                                     osinstance->instanceData->variables->var[1]->lb=0;\\[\Sb]
                                                     osinstance->instanceData->variables->var[1]->name="x1";\\[\Sb]
                                                     osinstance->instanceData->variables->var[1]->type={\rm 'C'};
@@ -4868,21 +4870,23 @@ public:\\[\Sb]
 
 Figure~\ref{figure:osinstancevariables} uses the {\tt Variables} class to provide a closer look 
 at the correspondence between schema and class. On the right, the {\tt Variables} class contains 
-the data member {\tt numberOfVariables} and a sequence of {\tt var} objects of class {\tt Variable}. 
-The {\tt Variable} class has {\tt lb} (double), {\tt ub} (double), {\tt name} (string), and {\tt type} 
-(char) data members. On the left the corresponding XML complexTypes are shown, with arrows indicating 
+the data member {\tt numberOfVariables} and a pointer to the object {\tt var} of class {\tt Variable}. 
+The {\tt Variable} class has  data members {\tt lb} (double), {\tt ub} (double), {\tt name} (string), 
+and {\tt type} (char). On the left the corresponding XML complexTypes are shown, with arrows indicating 
 the correspondences. The following rules describe the mapping between the OSiL schema and the 
 {\tt OSInstance} class.
 %
 \begin{itemize}
 
-\Titem  Each complexType in an OSiL schema corresponds to a class in {\tt OSInstance.}
-Thus the OSiL schema's complexType {\tt Variables} corresponds to {\tt OSInstance}'s class {\tt Variables}.
+\item  Each {\tt complexType} in an OSiL schema corresponds to a class in {\tt OSInstance.}
+Thus the OSiL schema's {\tt complexType} {\tt Variables} corresponds to {\tt OSInstance}'s class {\tt Variables}.
 Elements in an actual XML file then correspond to objects in {\tt OSInstance};
 for example, the {\tt <variables>} element that is of type {\tt Variables} in an OSiL file
-corresponds to a {\tt variables} object in class {\tt Variables} of {\tt OSInstance}.
+corresponds to a {\tt variables} object in {\tt OSInstance}. 
+%(Since {\tt <variables>} is an element of the
+%element {\tt <instanceData>} in OSiL, the {\tt variables} object is contained in class {\tt instanceData}.)
 
-\Titem An attribute or element used in the definition of a {\tt complexType} is a member of the 
+\item An attribute or element used in the definition of a {\tt complexType} is a member of the 
 corresponding {\tt OSInstance} class, and the type of the attribute or element matches the type 
 of the member.  In Figure~\ref{figure:osinstancevariables}, for example, {\tt lb} is an attribute 
 of the OSiL {\tt complexType} named {\tt Variable}, and {\tt lb} is a member of the {\tt OSInstance} 
@@ -4891,8 +4895,15 @@ of the OSiL {\tt complexType} named {\tt Variables}, and {\tt var} is a member o
 class {\tt Variables}; the {\tt <var>} element has type {\tt Variable} and the {\tt var} member is a 
 {\tt Variable} object.
 
-\Titem A schema sequence corresponds to an array. For example, in Figure~\ref{figure:osinstancevariables} the complexType {\tt Variables} has a sequence of {\tt <var>} elements that are of type {\tt Variable}, and the corresponding {\tt Variables} class has a member that is an array of type {\tt Variable}.
+\item A schema sequence corresponds to an array. For example, in Figure~\ref{figure:osinstancevariables} the complexType {\tt Variables} has a sequence of {\tt <var>} elements that are of type {\tt Variable}, and the corresponding {\tt Variables} class has a member that is an array of type {\tt Variable}.
 
+\item
+XML allows a wide range of data subtypes, which do not always have counterparts in the {\tt OSInstance} object.
+For instance, the attribute {\tt type} in the {\tt <var>} element forms an enumeration, while the corresponding
+member of the {\tt Variable} class is declared as {\tt char}. 
+
+\item
+XML allows default values for optional attributes; these default values can be set inside of the constructor of the corresponding data member. 
 \end{itemize}
 %
 General nonlinear terms are stored in the data structure as {\tt OSExpressionTree} objects, which are the subject of the next section.

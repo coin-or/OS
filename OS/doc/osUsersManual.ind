@@ -1,8 +1,8 @@
 \begin{theindex}
 
-  \item Algorithmic differentiation, 7, 82--83, 89--90
+  \item Algorithmic differentiation, 7, 82--83, 90--91
   \item AMPL, 6, 7, 29, 55--57
-  \item AMPL nl format, 1, 6, 7, 36, 37, 44, 74
+  \item AMPL nl format, 1, 6, 7, 36, 37, 44, 74--75
   \item AMPL Solver Library , \see{Third-party software, ASL}{1}
   \item {\tt amplFiles}, 55
   \item Apache Axis, 6, 40
@@ -11,7 +11,7 @@
 
   \indexspace
 
-  \item {\it Bell, Bradley M.}, 89
+  \item {\it Bell, Bradley M.}, 90
   \item {\tt bison}, 10, 21, 75
   \item Blas, \see{Third-party software, Blas}{1}
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
@@ -34,9 +34,9 @@
     \subitem {\tt Clp}, 13, 15, 24, 29, 37, 38, 84
     \subitem {\tt CoinUtils}, 13, 24, 29, 74
     \subitem {\tt Couenne}, 15, 19, 22--24, 29
-    \subitem {\tt CppAD}, 6, 7, 24, 29, 89--90
+    \subitem {\tt CppAD}, 6, 7, 24, 29, 90--91
     \subitem {\tt DyLP}, 24, 29
-    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--24, 29, 39, 44, 76, 77, 96
+    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--24, 29, 39, 44, 76, 78, 96
     \subitem {\tt Osi}, 13, 24, 29, 37
     \subitem {\tt SYMPHONY}, 15, 24, 29, 55--56
     \subitem {\tt Vol}, 24, 29
@@ -63,7 +63,7 @@
       \subsubitem Windows, 12
     \subitem tarball, 12
     \subitem zip file, 12
-  \item Doxygen, 10, 27, 68
+  \item Doxygen, 10, 27, 69
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
@@ -84,7 +84,7 @@
   \item {\tt getJobID}, 36, 38, 46, 49
   \item {\tt GLPK}, 7
   \item GNU General Public Licence (GPL), 25
-  \item {\it Griewank, A.}, 89
+  \item {\it Griewank, A.}, 90
 
   \indexspace
 
@@ -97,7 +97,7 @@
 
   \indexspace
 
-  \item Java, 1, 8, 12, 88--89
+  \item Java, 1, 8, 12, 89
   \item {\tt JobID}, 44--46, 49
 
   \indexspace
@@ -120,9 +120,9 @@
   \item {\tt make}, 14, 15, 21, 100
   \item {\tt make distclean}, 21, 22
   \item {\tt make install}, 14, 15, 29, 81
-  \item {\tt make run\_parsers}, 75
+  \item {\tt make run\_parsers}, 76
   \item {\tt make test}, 14, 15, 21
-  \item makefile, 9, 20--22, 24, 25, 81--82, 89
+  \item makefile, 9, 20--22, 24, 25, 82, 89
   \item MATLAB, 7, 26, 64--68
   \item Microsoft Visual Studio, 8, 16--17, 25, 31, 100
     \subitem {\tt Debug} configuration, 17
@@ -148,22 +148,22 @@
     \subitem unit test, 14
   \item {\tt OS.sln}, 17, 82
   \item {\tt OSAgent}, 6, 68, 100
-  \item {\tt OSAmplClient}, 6, 8, 25, 29, 55--57, 74
+  \item {\tt OSAmplClient}, 6, 8, 25, 29, 55--57, 75
   \item {\tt OSCommon}, 7, 13
-  \item {\tt OSExpressionTree}, 70
+  \item {\tt OSExpressionTree}, 72
   \item {\tt OSFileUpload}, 100--101
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 6--8, 31--33, 35--37, 39, 41, 44, 48, 69, 70, 74--76, 
+  \item OSiL, 1, 6--8, 31--33, 35--37, 39, 41, 44, 48, 69, 72, 74--76, 
 		100, 103--106
-  \item {\tt OSInstance}, 6, 69--75, 77, 82, 92
-  \item {\tt OSLibrary}, 39, 68--77
-  \item {\tt OSmps2osil}, 64, 74
+  \item {\tt OSInstance}, 6, 69--75, 78, 82, 83, 92
+  \item {\tt OSLibrary}, 39, 68--78
+  \item {\tt OSmps2osil}, 74--75
   \item OSnL, 35
-  \item {\tt OSnl2osil}, 25, 64, 74
+  \item {\tt OSnl2osil}, 25, 74
   \item OSoL, 6, 8, 35, 39, 41, 44, 46, 48, 49, 75
-  \item {\tt OSOption}, 73, 75
+  \item {\tt OSOption}, 74--75
   \item OSpL, 35, 47--49
-  \item {\tt OSResult}, 73, 75
+  \item {\tt OSResult}, 74--75
   \item OSrL, 6, 8, 33--34, 37, 39, 48, 49, 75
   \item {\tt OSSolverAgent}, 68
   \item {\tt OSSolverService}, 1, 6, 8, 13, 15, 29, 36--49
@@ -216,12 +216,12 @@
   \indexspace
 
   \item {\tt Vol}, \see{COIN-OR projects, {\tt Vol}}{1}
-  \item VPATH, 21--22, 25, 64, 81
+  \item VPATH, 21--22, 25, 82
 
   \indexspace
 
   \item {\tt wget}, 9, 16, 20
-  \item Windows Platform SDK, 16, 18, 20, 88
+  \item Windows Platform SDK, 16, 18, 20, 89
   \item {\tt WSUtil}, 68
 
   \indexspace
