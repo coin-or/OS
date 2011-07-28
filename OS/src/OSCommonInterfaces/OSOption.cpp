@@ -4087,6 +4087,33 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name)
 	return optionsVector;
 }//getSolverOptions
 
+
+/**
+ * get the array of solver options associated with a particular solver and
+ * the solver options not associated with any solver (if desired)
+ * @param solver_name is the name of the solver
+ * @param getFreeOptions is a boolean controlling whether unassociated (free)
+ *        options should be returned or not
+ * @return an array of solver options associated with this solver
+ */
+std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name, bool getFreeOptions)
+{	std::vector<SolverOption*> optionsVector;
+	if (this->optimization != NULL) 
+	{	if (this->optimization->solverOptions != NULL) 
+		{	int i;
+			int num_options;
+			num_options = this->getNumberOfSolverOptions();
+			for(i = 0; i < num_options; i++)
+				if (solver_name == this->optimization->solverOptions->solverOption[ i]->solver || (solver_name == "" && getFreeOptions))
+					optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
+		}					
+		else
+			throw ErrorClass("<solverOptions> object must be defined before getting the data");
+	}
+	else
+		throw ErrorClass("<optimization> object must be defined before getting the data");
+	return optionsVector;
+}//getSolverOptions
 /**
  * get the array of all solver options
  * @return an array of other constraint options associated with this solver
@@ -8107,6 +8134,7 @@ bool OSOption::IsEqual(OSOption *that)
 			if (!this->general->IsEqual(that->general))
 				return false;
 			if (!this->system->IsEqual(that->system))
+
 				return false;
 			if (!this->service->IsEqual(that->service))
 				return false;
@@ -10380,6 +10408,7 @@ bool ServiceOption::setRandom( double density, bool conformant )
 		otherOptions = new OtherOptions(); 
 		otherOptions->setRandom(density, conformant);
 	}
+
 	return true;
 }//ServiceOption::setRandom
 

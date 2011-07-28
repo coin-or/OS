@@ -4078,6 +4078,20 @@ public:
 	 */
 	std::vector<SolverOption*> getSolverOptions( std::string solver_name);
 
+
+	/**
+	 * Get the options associated with a given solver AND options
+	 * not associated with any solver (if desired)
+	 * <p>
+	 * 
+	 * @param solver_name is the name of the solver whose options we want
+	 * @param getFreeOptions is a boolean set to true if the free
+	 *        options (not associated with a solver name) should be returned
+	 * @return a vector of pointers to SolverOption objects that 
+	 * correspond to the solver named. 
+	 */
+	std::vector<SolverOption*> getSolverOptions( std::string solver_name, bool getFreeOptions);
+
 	/**
 	 * Get all solver options
 	 * <p>
