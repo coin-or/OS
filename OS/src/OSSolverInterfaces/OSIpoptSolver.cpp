@@ -758,7 +758,7 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass) {
 		if( osoption != NULL  &&  osoption->getNumberOfSolverOptions() > 0 ){
 //			std::cout << "number of solver options "  <<  osoption->getNumberOfSolverOptions() << std::endl;
 			std::vector<SolverOption*> optionsVector;
-			optionsVector = osoption->getSolverOptions( "ipopt");
+			optionsVector = osoption->getSolverOptions( "ipopt",true);
 			char *pEnd;
 			int i;
 			int num_ipopt_options = optionsVector.size();

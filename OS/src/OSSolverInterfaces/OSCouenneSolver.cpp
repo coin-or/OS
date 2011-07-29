@@ -448,7 +448,7 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass) {
 			
 			int i;
 			std::vector<SolverOption*> optionsVector;
-			optionsVector = osoption->getSolverOptions( "couenne");
+			optionsVector = osoption->getSolverOptions( "couenne",true);
 			int num_bonmin_options = optionsVector.size();
 			for(i = 0; i < num_bonmin_options; i++){
 				if(optionsVector[ i]->type == "numeric" ){

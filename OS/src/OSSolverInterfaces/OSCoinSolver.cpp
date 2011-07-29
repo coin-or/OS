@@ -357,7 +357,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			//this->bSetSolverOptions = true;
 			std::vector<SolverOption*> optionsVector;
 			//get the osi options
-			optionsVector = osoption->getSolverOptions( "osi");
+			optionsVector = osoption->getSolverOptions( "osi",true);
 			int num_osi_options = optionsVector.size();
 			int i;
 			char *pEnd;
@@ -425,7 +425,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 				
 				// get Cbc options	
 				if(optionsVector.size() > 0) optionsVector.clear();	
-				optionsVector = osoption->getSolverOptions( "cbc");
+				optionsVector = osoption->getSolverOptions( "cbc",true);
 				//what a pain, delete the solve option
 				//std::vector<SolverOption*>::iterator optit;
 				//for(optit = optionsVector.begin();  optit != optionsVector.end(); optit++){
@@ -489,7 +489,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass) {
 			if( sSolverName.find( "symphony") != std::string::npos) {
 				OsiSymSolverInterface * si =
 				dynamic_cast<OsiSymSolverInterface *>(osiSolver) ;
-				optionsVector = osoption->getSolverOptions( "symphony");
+				optionsVector = osoption->getSolverOptions( "symphony",true);
 				int num_sym_options = optionsVector.size();
 				for(i = 0; i < num_sym_options; i++){
 #ifdef DEBUG
@@ -1191,6 +1191,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver){
 						}
 						
 						case 1:
+
 						{
 							//a basic variable	
 							basicVars.push_back( i);					
