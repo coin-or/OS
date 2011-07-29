@@ -3483,6 +3483,7 @@ std::string *OSOption::getInitVarValuesStringDense(int numberOfVariables)
  * @note returns ENUM_BASIS_STATUS_unknown for objectives that are not initialed
  * @param numberOfObjectives is the dimension of the array
  */
+
 int* OSOption::getObjectiveInitialBasisStatusDense(int numberOfObjectives)
 {	try
 	{	if (numberOfObjectives < 0)
@@ -4103,9 +4104,12 @@ std::vector<SolverOption*>  OSOption::getSolverOptions( std::string solver_name,
 		{	int i;
 			int num_options;
 			num_options = this->getNumberOfSolverOptions();
-			for(i = 0; i < num_options; i++)
-				if (solver_name == this->optimization->solverOptions->solverOption[ i]->solver || (solver_name == "" && getFreeOptions))
-					optionsVector.push_back( this->optimization->solverOptions->solverOption[ i]);
+			for (i = 0; i < num_options; i++)
+			{
+				if (this->optimization->solverOptions->solverOption[i]->solver == solver_name || 
+                                   (this->optimization->solverOptions->solverOption[i]->solver == "" && getFreeOptions))
+					optionsVector.push_back( this->optimization->solverOptions->solverOption[i]);
+			}
 		}					
 		else
 			throw ErrorClass("<solverOptions> object must be defined before getting the data");
@@ -7356,6 +7360,7 @@ bool OSOption::setOtherVariableOptionAttributes(int iOther, int numberOfVar,
 	if (optimization->variables->other == NULL) return false;
 
 	if (iOther < 0 || iOther >= optimization->variables->numberOfOtherVariableOptions) return false;
+
 		
 	optimization->variables->other[iOther]->numberOfVar          = numberOfVar;
 	optimization->variables->other[iOther]->numberOfEnumerations = numberOfEnumerations;
