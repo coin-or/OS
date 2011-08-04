@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <osol xmlns="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
  	<general>         
- 		<jobID>qa785March1aa</jobID>  
+ 		<jobID>AUTOJOBID_kmartin-maclt2.local__10.0.1.2_172.16.38.1_192.168.242.1_fe80.0.0.0.226.b0ff.fef0.442.4_0.0.0.0.226.b0ff.fef0.442__2011-08-04T18.51.28.338-04.00440605413</jobID>  
 	</general>
 </osol>

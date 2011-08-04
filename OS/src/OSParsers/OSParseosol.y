@@ -1119,7 +1119,8 @@ maxTimeStart: MAXTIMESTART
 	parserData->maxTimeValue = OSDBL_MAX;
 };
 
-maxTimeAttributes: unitAttribute; 
+maxTimeAttributes: |
+           unitAttribute; 
 
 maxTimeContent: maxTimeEmpty | maxTimeLaden;
 
