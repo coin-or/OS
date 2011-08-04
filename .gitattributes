@@ -129,6 +129,14 @@ OS/data/amplFiles/parinc.nl -text
 OS/data/amplFiles/parincQuadratic.mod -text
 OS/data/amplFiles/parincQuadratic.nl -text
 OS/data/amplFiles/rbrockmod.mod -text
+OS/data/amplFiles/rbrockmod_basisStatus.mod -text
+OS/data/amplFiles/rbrockmod_basisStatus.nl -text
+OS/data/amplFiles/rbrockmod_initialPrimalAndDualVars.mod -text
+OS/data/amplFiles/rbrockmod_initialPrimalAndDualVars.nl -text
+OS/data/amplFiles/rbrockmod_initialPrimalVars.mod -text
+OS/data/amplFiles/rbrockmod_initialPrimalVars.nl -text
+OS/data/amplFiles/rbrockmod_userSuffix.mod -text
+OS/data/amplFiles/rbrockmod_userSuffix.nl -text
 OS/data/amplFiles/testAmpl.run -text
 OS/data/amplFiles/volumeTest.mod -text
 OS/data/amplFiles/volumeTest.nl -text
