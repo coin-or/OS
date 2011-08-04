@@ -129,7 +129,6 @@ OS/data/amplFiles/parinc.nl -text
 OS/data/amplFiles/parincQuadratic.mod -text
 OS/data/amplFiles/parincQuadratic.nl -text
 OS/data/amplFiles/rbrockmod.mod -text
-OS/data/amplFiles/rbrockmod_basisInfo.nl -text
 OS/data/amplFiles/rbrockmod_basisStatus.mod -text
 OS/data/amplFiles/rbrockmod_basisStatus.nl -text
 OS/data/amplFiles/rbrockmod_initialPrimalAndDualVars.mod -text
