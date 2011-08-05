@@ -207,6 +207,7 @@
 \index{CoinUtils@{\tt CoinUtils}|see{COIN-OR projects, {\tt CoinUtils}}}
 %\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
 \index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
+\index{GLPK@{\tt GLPK}|see{Third-party software, {\tt GLPK}}}
 \index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
 \index{nl files|see{AMPL nl format}}
 \index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
@@ -336,7 +337,7 @@ or MPS format\index{MPS format} and call a solver locally or remotely -- see Sec
 
 \item Use AMPL\index{AMPL} to solve problems either locally or remotely
 with a COIN-OR solver, Cplex\index{cplex@{\tt cplex}},
-GLPK\index{GLPK@{\tt GLPK}}, \ifknitro Knitro\index{knitro}, \fi
+GLPK\index{Third-party software, {\tt GLPK}}, \ifknitro Knitro\index{knitro}, \fi
 or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
 
 \item Use GAMS\index{GAMS} to solve problems either locally or remotely -- see Section~\ref{section:gamslinks}.
@@ -770,7 +771,7 @@ by remembering and reusing the results of tests already performed.
 {\tt Cgl}\index{COIN-OR projects!Cgl@{\tt Cgl}}, 
 {\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}}, 
 %{\tt CppAD}\index{COIN-OR projects!CppAD@{\tt CppAD}}, 
-or {\tt Osi}\index{COIN-OR projects!Osi@{\tt Osi}}.
+or {\tt Osi}\index{COIN-OR projects, {\tt Osi}}.
 These projects must be present.
 \end{itemize}
 
@@ -2252,7 +2253,8 @@ The directories in the OS directory are outlined in Figure~\ref{figure:osdirecto
 \begin{itemize}
 
 
-\item {\tt applications} - is a directory that holds  the {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}
+\item {\tt applications} - is a directory that holds  the 
+{\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}
 and {\tt OSFileUpload}  applications in subdirectories called, respectively, {\tt amplClient} and {\tt fileUpload}.
 See Section \ref{section:amplclient} and~\ref{section:fileupload}.
 
@@ -2596,9 +2598,13 @@ The {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}|(} is a co
 to pass problem instances in either  OSiL\index{OSiL}, AMPL nl\index{AMPL nl format}, or MPS format\index{MPS format}
 to solvers and get the optimization result back to be displayed either to standard output or a specified browser.
 The {\tt OSSolverService} can be used to invoke a solver locally or on a remote server. It can work either synchronously
-or asynchronously. At present six service methods are implemented, {\tt solve}\index{solve@{\tt solve}},
-{\tt send}\index{send@{\tt send}}, {\tt retrieve}\index{retrieve@{\tt retrieve}},
-{\tt getJobID}\index{getJobID@{\tt getJobID}}, {\tt knock}\index{knock@{\tt knock}} and {\tt kill}\index{kill@{\tt kill}}.
+or asynchronously. At present six service methods are implemented, 
+{\tt solve}\index{solve@{\tt solve}},
+{\tt send}\index{send@{\tt send}}, 
+{\tt retrieve}\index{retrieve@{\tt retrieve}},
+{\tt getJobID}\index{getJobID@{\tt getJobID}}, 
+{\tt knock}\index{knock@{\tt knock}} and 
+{\tt kill}\index{kill@{\tt kill}}.
 These methods are explained in more detail in Section~\ref{section:servicemethods}.
 
 There are two ways  to use the {\tt OSSolverService} executable. The first way
@@ -2610,7 +2616,7 @@ intuitive and we do not discuss in detail. The second way to use the {\tt
 OSSolverService} executable is to provide arguments at the command line. This is
 discussed next. The command line arguments are valid for the interactive shell. 
 
-\subsection{OSSolverService Input Parameters}
+\subsection{OSSolverService Input Parameters}\label{OSSolverServiceInputParameters}
 
 At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
 Not all the parameters are required. 
@@ -2648,9 +2654,13 @@ It is not required, and if not specified it is assumed that the problem
 is solved locally.
 
 \item[] {\bf serviceMethod  methodName}\ \ This is  the method on the solver service to be invoked.
-The options are {\tt solve}\index{solve@{\tt solve}|(}, {\tt send}\index{send@{\tt send}},
-{\tt kill}\index{kill@{\tt kill}}, {\tt knock}\index{knock@{\tt knock}},
-{\tt getJobID}\index{getJobID@{\tt getJobID}}, and {\tt retrieve}\index{retrieve@{\tt retrieve}}.
+The options are 
+{\tt solve}\index{solve@{\tt solve}|(}, 
+{\tt send}\index{send@{\tt send}},
+{\tt kill}\index{kill@{\tt kill}}, 
+{\tt knock}\index{knock@{\tt knock}},
+{\tt getJobID}\index{getJobID@{\tt getJobID}}, and 
+{\tt retrieve}\index{retrieve@{\tt retrieve}}.
 The use of these options is illustrated in the examples below. This option is not required, and the default
 value is {\tt solve}\index{solve@{\tt solve}|)}.
 
@@ -2668,8 +2678,8 @@ is in AMPL nl format\index{AMPL nl format}. It is assumed that this file is avai
 Possible values of this parameter depend on the installation. The default configurations can be read off from
 Table~\ref{table:configurations}.
 Other solvers supported (if the necessary libraries are present) are 
-{\tt cplex} (Cplex through COIN-OR Osi)\index{cplex@{\tt cplex}},
-{\tt glpk} (GLPK\index{Third-party software!GLPK} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}})
+{\tt cplex} (Cplex through COIN-OR Osi)\index{cplex@{\tt cplex}}\index{COIN-OR projects!Osi@{\tt Osi}|(},
+{\tt glpk} (GLPK\index{Third-party software, {\tt GLPK}} through COIN-OR Osi\index{COIN-OR projects!Osi@{\tt Osi}|)})
 %, {\tt ipopt} (COIN-OR Ipopt)
 \ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}}\fi
 and {\tt lindo} (LINDO)\index{LINDO}.
@@ -2982,7 +2992,8 @@ serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
 
 No solver is specified and by default the  {\tt Clp} solver  is used by the {\tt OSSolverService}, 
 since the problem is a continuous linar program.
-If, for example, the user wished to solve the problem with the {\tt SYMPHONY} solver then this is accomplished
+If, for example, the user wished to solve the problem with the 
+{\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(} solver then this is accomplished
 either by using the  {\tt solver} option on the command line
 \begin{verbatim}
 ./OSSolverService config ../data/configFiles/testremote.config solver symphony
@@ -2992,6 +3003,7 @@ or by  adding  the line
  solver symphony
 \end{verbatim}
 to the  {\tt testremote.config} file\index{testremote.config@{\tt testremote.config}|)}.
+\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
 
 \index{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing
@@ -3473,12 +3485,28 @@ six attributes, all of which except one are optional. These attributes are:
 
 \item {\bf value:}  the value of the option.
 
-\item {\bf solver:} the name of the solver associated with the option.
+\item {\bf solver:} the name of the solver associated with the option. 
+At present the values recognized by this attribute are 
+{\tt "ipopt"}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}, 
+{\tt "bonmin"}\index{COIN-OR projects!Bonmin@{\tt Bonmin}}, 
+{\tt "couenne"}\index{COIN-OR projects!Couenne@{\tt Couenne}}, 
+{\tt "cbc"}\index{COIN-OR projects!Cbc@{\tt Cbc}}, 
+and {\tt "osi"}\index{COIN-OR projects!Osi@{\tt Osi}|(}. 
+The last option is used for all solvers that are accessed through the 
+Osi interface, which are 
+{\tt clp}\index{COIN-OR projects!Clp@{\tt Clp}},
+ {\tt DyLP}\index{COIN-OR projects!DyLP@{\tt DyLP}}, 
+{\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}} and 
+{\tt Vol}\index{COIN-OR projects!Vol@{\tt Vol}}, in addition to 
+{\tt Glpk}\index{Third-party software, {\tt GLPK}} and 
+{\tt Cplex}\index{cplex@{\tt cplex}}, 
+if the latter are included in the particular build of OSSolverService.
+{\tt "osi"}\index{COIN-OR projects!Osi@{\tt Osi}|)}
 
 \item {\bf type:} this will usually be a data type (such as integer, string, double, etc.) but this is not necessary.
 
-\item {\bf category:} the same solver option may apply to multiple categories so it may be necessary to specify a 
-category for solver. For example, in LINDO an option can apply to a specific model or to every model in an environment. 
+\item {\bf category:} the same solver option may apply in more than one context (and with different meaning) so it may be necessary
+to specify a category to remove ambiguities. For example, in LINDO an option can apply to a specific model or to every model in an environment. 
 Hence we might have
 
 \begin{verbatim}
@@ -3846,7 +3874,7 @@ If no options are specified, the default solver is used, depending on the proble
 %For mixed-integer nonlinear models  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} is used.  
 If you wish to specify a specific solver, use the {\tt solver} option.   For example,  
 since the test problem {\tt eastborne.mod} is a linear integer program, {\tt Cbc} is used by default. 
-If you want to instead use {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(},
+If instead you want to  use {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(},
 then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver as follows.%
 \index{eastborne.mod@{\tt eastborne.mod}|)}
 
@@ -3854,9 +3882,11 @@ then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver a
 # now tell OSAmplClient to use SYMPHONY instead of Cbc
 option OSAmplClient_options "solver symphony";
 \end{verbatim}
+\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
 
-Valid values for the {\tt solver} option are {\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, 
-{\tt dylp}, {\tt symphony}, and {\tt vol}.   The solver name in the {\tt solver} option is case insensitive.  
+Valid values for the {\tt solver} option are installation-dependent 
+%{\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, {\tt dylp}, {\tt symphony}, and {\tt vol}.   
+The solver name in the {\tt solver} option is case insensitive.  
 
 
 \subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
@@ -3910,7 +3940,7 @@ serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
 osol solveroptions.osol
 \end{verbatim}
 This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
-and one for {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}.
+and one for {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}.
 You can have any number of options. Note the format for specifying an option:
 \begin{verbatim}
 <solverOption name="maxN" solver="cbc" value="5" />
@@ -5211,7 +5241,8 @@ and the pure virtual function
 \begin{verbatim}
 virtual void solve() = 0 ;
 \end{verbatim}
-In order to use a solver through the COIN-OR {\tt Osi} interface it is
+In order to use a solver through the COIN-OR {\tt Osi}\index{COIN-OR projects, {\tt Osi}} 
+interface it is
 necessary to create an object in the {\tt CoinSolver} class which inherits
 from the {\tt DefaultSolver} class and implements the appropriate
 {\tt solve()} function.  We illustrate with the {\tt Clp} solver.
@@ -5251,13 +5282,15 @@ Similarly for Knitro and Ipopt. In the case of  Knitro, the {\tt KnitroSolver} c
 on the Knitro solver C++ implementation and the {\tt NlpProblemDef} class.  Similarly, for Ipopt 
 \else
 
-Commercial solvers like LINDO\index{LINDO} do not have a COIN-OR {\tt Osi} interface, but it is possible to
-write wrappers so that they can be used in exactly the same manner as a COIN-OR solver. For example, to invoke the
-LINDO\index{LINDO} solver we do the following.
+Some commercial solvers, e.g., LINDO\index{LINDO|(}, do not have a COIN-OR {\tt Osi} interface, 
+but it is possible to write wrappers so that they can be used in exactly the same manner 
+as a COIN-OR solver. For example, to invoke the
+LINDO solver we do the following.
 
 \begin{verbatim}
 solver = new LindoSolver();
 \end{verbatim}
+\index{LINDO|)}
 
 A similar call is used for {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}}. In this case, 
 \fi         %--------------------------------------------------------------------------
