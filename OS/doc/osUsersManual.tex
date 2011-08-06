@@ -2616,7 +2616,7 @@ intuitive and we do not discuss in detail. The second way to use the {\tt
 OSSolverService} executable is to provide arguments at the command line. This is
 discussed next. The command line arguments are valid for the interactive shell. 
 
-\subsection{OSSolverService Input Parameters}\label{OSSolverServiceInputParameters}
+\subsection{OSSolverService Input Parameters}\label{section:OSSolverServiceInputParameters}
 
 At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
 Not all the parameters are required. 
@@ -3891,7 +3891,7 @@ The solver name in the {\tt solver} option is case insensitive.
 
 \subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
 
-Next, assume that you have a large problem you want to solve on the remote solver. It is necessary 
+Next, assume that you have a large problem you want to solve on a remote solver. It is necessary 
 to specify the location of the server solver as an option to OSAmplClient. 
 The {\tt serviceLocation} option is used to specify the location of a solver server. 
 In this case, the string of options for {\tt OSAmplClient\_options} is:
@@ -3975,36 +3975,33 @@ then in our reference implementation the remote solver service will parse the fi
 option solver OSAmplClient;
 \end{verbatim}
 
-\item Specify options to the OSAmplclient solver by using the AMPL command {\tt OSAmplClient\_options}.
+\item Specify options to the OSAmplClient solver by using the AMPL command {\tt OSAmplClient\_options}.
 
 \item There are three possible options to specify:
 
 \begin{itemize}
-
-\item the name of the solver using the  {\tt solver} option; valid values for this option  are {\tt clp}, 
-{\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  and  {\tt symphony}, (the {\tt solver} option only has an affect with a local solve, if the user wants to specify a specific solver with a remote solver then this must be done in the OSoL file using the {\tt <solverToInvoke>} element);
-
+\item the location of the options file using  the {\tt osol} option;
 
 \item the location of the remote server using   the {\tt serviceLocation} option;
 
-\item the location of the options file using  the {\tt osol} option.
+\item the name of the solver using the  {\tt solver} option; valid values for this option  are 
+%{\tt clp}, {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  and  {\tt symphony}
+installation-dependent. 
+For details, see Table~\ref{table:configurations} on page~\pageref{table:configurations} 
+and the discussion in Section~\ref{section:OSSolverServiceInputParameters}. 
 
 \end{itemize}
 
 These three options behave {\it exactly like} the {\tt solver}, {\tt serviceLocation}, and {\tt osol} options used by the {\tt OSSolverService} described in  Section \ref{section:commandlineparser}.
+Note that the {\tt solver} option only has an affect with a local solve; 
+if the user wants to invoke a specific solver with a remote solve, then this must be done in the OSoL file using the {\tt <solverToInvoke>} element.
 
+\item  The options given to {\tt OSAmplClient\_options}  can be given in any order.
 
 \item If no options are specified using {\tt OSAmplClient\_options},  the default solver is used.
 (For details see Table~\ref{table:defaultsolvers}).\index{default solver}
-%
-% by default, for continuous
-%inear models  {\tt clp} is used. For continuous nonlinear models {\tt ipopt} is used. 
-%For mixed-integer linear models (MIP),   {\tt cbc} is used. For mixed-integer nonlinear models  
-%\tt bonmin} is used.  
-%
 All solvers are invoked locally. 
 
-\item  The options given to {\tt OSAmplClient\_options}  can be given in any order.
 
 \item A remote solver is called if and only if the {\tt serviceLocation} option is specified.
 
