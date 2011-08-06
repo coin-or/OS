@@ -3884,7 +3884,7 @@ option OSAmplClient_options "solver symphony";
 \end{verbatim}
 \index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
 
-Valid values for the {\tt solver} option are installation-dependent 
+Valid values for the {\tt solver} option are installation-dependent.
 %{\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, {\tt dylp}, {\tt symphony}, and {\tt vol}.   
 The solver name in the {\tt solver} option is case insensitive.  
 
@@ -3905,9 +3905,7 @@ We will omit the other parts (i.e., the AMPL instruction
 \begin{verbatim}
 option OSAmplClient_options
 \end{verbatim}
-the double quotes and the trailing semicolon) in this and the remaining examples.
- 
-This option will send the problem to the solver server at location {\tt http://webdss.ise.ufl.edu}.   
+the double quotes and the trailing semicolon) in this and the remaining examples.  The {\tt serviceLocation} option will send the problem to the solver server at location {\tt http://webdss.ise.ufl.edu}.   
 
 
 \medskip
@@ -3918,9 +3916,7 @@ Each call
 option OSAmplClient_options
 \end{verbatim}
 is memoryless. That is, the options set in the last call will overwrite any options set in previous calls
-and cause them to be discarded.
-
-For instance, the sequence of option calls
+and cause them to be discarded.  For instance, the sequence of option calls
 \begin{verbatim}
 option OSAmplClient_options "solver symphony";
 option OSAmplClient_options "serviceLocation  
@@ -3986,7 +3982,7 @@ option solver OSAmplClient;
 \begin{itemize}
 
 \item the name of the solver using the  {\tt solver} option; valid values for this option  are {\tt clp}, 
-{\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol};
+{\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  and  {\tt symphony}, (the {\tt solver} option only has an affect with a local solve, if the user wants to specify a specific solver with a remote solver then this must be done in the OSoL file using the {\tt <solverToInvoke>} element);
 
 
 \item the location of the remote server using   the {\tt serviceLocation} option;
