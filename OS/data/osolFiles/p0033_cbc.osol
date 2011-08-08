@@ -3,6 +3,12 @@
 	<general>
 		<solverToInvoke>cbc</solverToInvoke>
 	</general>
+	<system>
+		<minDiskSpace>0.0</minDiskSpace>
+		<minMemorySize>0.0</minMemorySize>
+		<minCPUSpeed>77.777</minCPUSpeed>
+		<minCPUNumber>0</minCPUNumber>
+	</system>
 	<job>
 	</job>	
 	<optimization>
