@@ -14,7 +14,7 @@
 		<solverOptions numberOfSolverOptions="16">
 			<solverOption name="tol" solver="ipopt" type="numeric" value="1.e-9"/>
 			<solverOption name="print_level" solver="ipopt" type="integer" value="5"/>
-			<solverOption name="max_iter" solver="ipopt"  type="integer" value="2"/>
+			<solverOption name="max_iter" solver="ipopt"  type="integer" value="2000"/>
 			<solverOption name="pivot" solver="clp" category="tol:model" value="1.e-5"/>
 			<solverOption name="mu_strategy" solver="ipopt" type="string" value="adaptive"/>
 			<solverOption name="output_file" solver="ipopt" type="string" value="ipopt.out"/>
