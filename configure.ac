@@ -12,12 +12,12 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[trunk],[coin-os@lists.coin-or.org])
+AC_INIT([OS],[2.4],[os@lists.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
-This file is part of the open source package Coin which is distributed
+This file is part of the open source package OS which is distributed
 under the Common Public License.])
 
 AC_REVISION(0.9)
