@@ -88,6 +88,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libDylpStd", "..\..\..\DyLP\MSVisualStudio\v9\libDylpStdLib\libDylpStdLib.vcproj", "{11A895E6-021D-4F8C-ACF7-860D695AC1C9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libOsiDylp", "..\..\..\DyLP\MSVisualStudio\v9\libOsiDylp\libOsiDylp.vcproj", "{4B701E10-C331-454F-A76F-2EC8D2260535}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7D98E2CB-876E-4F75-9F71-77D3FE87E149} = {7D98E2CB-876E-4F75-9F71-77D3FE87E149}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
