@@ -1,15 +1,13 @@
 /* $Id$ */
 /** @file Base64.h
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -28,7 +26,7 @@
  * @since OS 1.0
  * 
  * \remarks
- * it possible to save memory by eliminating the need for all the <el>
+ * it is possible to save space by eliminating the need for all the <el>
  * tabs by writing a long string of numbers in b64 format
  * 
  */
@@ -36,7 +34,7 @@ class Base64{
 public:
 	
 	
-	/** Base64 class constructior */
+	/** Base64 class constructor */
 	Base64();
 	
 	/** Base64 class destructor */
@@ -52,7 +50,7 @@ public:
 	static std::string encodeb64(char* bytes, int size);
 	
    	/**
-   	 * dencode the data in base 64 
+   	 * decode the data in base 64 
    	 * 
    	 * @param b64bytes is the input to be decoded
    	 * @return a string that is decoded. 

@@ -1,15 +1,13 @@
 /* $Id$ */
 /** @file CoinSolver.h
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. #include "CoinSolver.h"
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
@@ -41,7 +39,7 @@ class CoinSolver : public DefaultSolver{
 public:
 
 	/*! \fn  CoinSolver::CoinSolver() 
-	 *  \brief The class contructor.
+	 *  \brief The class constructor.
 	 */ 
 	CoinSolver();
 	
@@ -51,19 +49,19 @@ public:
 	~CoinSolver();
 	
 	/*! \fn void CoinSolver::solve() 
-	 *  \brief The implementation of the virtual functions. 
+	 *  \brief The implementation of the corresponding virtual function. 
 	 *  \return void.
 	 */	
 	virtual void  solve() throw(ErrorClass);
 	
 	/*! \fn void CoinSolver::buildSolverInstance() 
-	 *  \brief The implementation of the virtual functions. 
+	 *  \brief The implementation of the corresponding virtual function. 
 	 *  \return void.
 	 */	
 	virtual void  buildSolverInstance() throw(ErrorClass);
 	
 	/*! \fn void setSolverOptions() 
-	 *  \brief The implementation of the virtual functions. 
+	 *  \brief The implementation of the corresponding virtual function. 
 	 *  \return void.
 	 */	
 	virtual void  setSolverOptions() throw(ErrorClass);
@@ -89,7 +87,7 @@ public:
 	void dataEchoCheck();
 	
 	/** 
-	 * ossiSolver is the osi solver object -- in this case clp, glpk, cbc, or cplex	 
+	 * osiSolver is the osi solver object -- in this case clp, glpk, cbc, cplex, symphony or dylp	 
 	 */	
  	OsiSolverInterface *osiSolver;
  	
@@ -126,7 +124,7 @@ private:
 	 */
 	CoinPackedMatrix *m_CoinPackedMatrix ;
 	
-	/** osrlwriter object used to write osrl from and OSResult object */
+	/** osrlwriter object used to write osrl from an OSResult object */
 	OSrLWriter  *osrlwriter;
 	
 	/** when Cbc is the solver, these are the arguments sent to

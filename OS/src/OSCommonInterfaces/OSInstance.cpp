@@ -2,16 +2,13 @@
 /** @file OSInstance.cpp
  * \brief This file defines the OSInstance class along with its supporting classes..
  *
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 12/21/2007
- * @since   OS1.0
- *initializeNonLinearStructures
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Gus Gassmann Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  *

@@ -2,15 +2,13 @@
 /** @file OSInstance.h
  * \brief This file defines the OSInstance class along with its supporting classes.
  *
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.0, 12/21/2007 
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005-2007, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  * 
@@ -23,7 +21,7 @@
 
 <p><b>Exceptions:</b> </p>
 <ol>
-<li> anything specific to XML such as base64, multi, incr do not go into classes </li>
+<li> anything specific to XML such as base64, multi, incr does not go into classes </li>
 <li> The root OSnLNode of each <nl> element is called ExpressionTree </li>
 <li> Root is not called osil; it is called osinstance </li>
 </ol>

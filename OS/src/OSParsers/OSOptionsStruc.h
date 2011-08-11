@@ -1,15 +1,13 @@
 /* $Id$ */
 /** @file osssparservariables.h
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -54,7 +52,7 @@ struct osOptionsStruc{
 	std::string osolFile;
 	
 	/** osil is the flag that tells OSSolverService that the next
-	 * input is a file with  solver options
+	 * input is a file with solver options
 	 * e.g. -osol ../data/osolFiles/demo.osol
 	 */
 	std::string osol;
@@ -65,7 +63,7 @@ struct osOptionsStruc{
 	std::string osrlFile;
 	
 	/** osrl is the flag that tells OSSolverService that the next
-	 * input is the file name wher the solver should write the result
+	 * input is the file name where the solver should write the result
 	 * e.g. -osrl ../data/osrlFiles/test.osrl
 	 */	
 	std::string  osrl;
@@ -76,13 +74,13 @@ struct osOptionsStruc{
 	std::string insListFile;
 	
 	/** osrl is the flag that tells OSSolverService that the next
-	 * input is the file name wher the instance is a LINDO instruction
+	 * input is the file name where the instance is a LINDO instruction
 	 * list -- this is not implemented 
 	 */		
 	std::string insList;
 	
 	/** serviceLocation is the URL of the remote solver when
-	 * a local solver is not use
+	 * a local solver is not used
 	 */
 	std::string serviceLocation;
 	
