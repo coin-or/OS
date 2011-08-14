@@ -60,12 +60,13 @@ libOSSolverInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = $(OSLIB_CFLAGS) \
+AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` 
+	-I`$(CYGPATH_W) $(srcdir)/../OSAgent` \
+	$(OSLIB_CFLAGS)
 	
 if COIN_HAS_LINDO
 #  AM_CPPFLAGS += 	-I`$(CYGPATH_W) $(LINDOINCDIR)` 

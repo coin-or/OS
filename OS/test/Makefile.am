@@ -29,14 +29,15 @@ unitTest_DEPENDENCIES =  ../src/libOS.la $(OSLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = $(OSLIB_CFLAGS) \
+AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/../src` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSAgent` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSParsers` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/../src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces`
+	-I`$(CYGPATH_W) $(srcdir)/../src/OSCommonInterfaces` \
+	$(OSLIB_CFLAGS)
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I$(top_builddir)/src

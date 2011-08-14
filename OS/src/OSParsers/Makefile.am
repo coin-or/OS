@@ -44,11 +44,12 @@ libOSParsers_la_LDFLAGS = $(LT_LDFLAGS)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = $(OSLIB_CFLAGS) \
+AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` 
+	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
+	$(OSLIB_CFLAGS)
 
 #if USE_DTOA
 #AM_CPPFLAGS += -DUSE_DTOA=1
