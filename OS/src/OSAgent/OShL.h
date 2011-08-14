@@ -2,15 +2,13 @@
 /** @file OShL.h
  * 
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
@@ -23,7 +21,7 @@
 
 
 /*! \class OShL OShL.h "OShL.h"
- *  \brief An interface that specified virtual methods to be implemented by agents..
+ *  \brief An interface that specified virtual methods to be implemented by agents.
  *
  * \remarks 
 <p> This is a virtual class that lists all of the methods a client 
@@ -58,7 +56,7 @@ public:
 	virtual std::string solve(std::string osil, std::string osol) = 0;
 	
    	/**
-   	 * get a jobID for use in the send methos
+   	 * get a jobID for use in the send method
 	 *
    	 * <p>
    	 * @param osol is the string with the options in OSoL format
@@ -73,7 +71,7 @@ public:
    	 * <p>
    	 * @param osil is the string with the instance in OSiL format
    	 * @param osol is the string with the options in OSoL format
-   	 * @return a bool which is true if the job is successfuly submitted
+   	 * @return a bool which is true if the job is successfully submitted
 	 * </p> 
    	 */	
 	virtual bool send(std::string osil, std::string osol) = 0;
@@ -89,7 +87,7 @@ public:
 	virtual std::string kill(std::string osol) = 0;
 	
    	/**
-   	 *retrieve an instance result that is ran in asynchronous mode
+   	 * retrieve an instance result that ran in asynchronous mode
 	 *
    	 * <p>
    	 * @param osol is the string with the options in OSoL format

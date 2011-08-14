@@ -30,7 +30,7 @@ OSFileUpload_DEPENDENCIES = ../../src/libOS.la $(OSLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = $(OSLIB_CFLAGS) \
+AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSAgent` \
@@ -38,7 +38,8 @@ AM_CPPFLAGS = $(OSLIB_CFLAGS) \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSUtils` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(top_srcdir)/src/OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces` 
+	-I`$(CYGPATH_W) $(top_srcdir)/src/OSCommonInterfaces` \
+	$(OSLIB_CFLAGS)
 
 ########################################################################
 #                            Additional flags                          #

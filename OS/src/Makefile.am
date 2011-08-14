@@ -63,14 +63,14 @@ OSSolverService_DEPENDENCIES = libOS.la $(OSLIB_DEPENDENCIES)
 
 # Here list all include flags, relative to this "srcdir" directory.  This
 # "cygpath" stuff is necessary to compile with native compilers on Windows
-AM_CPPFLAGS = $(OSLIB_CFLAGS) \
+AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/OSAgent` \
 	-I`$(CYGPATH_W) $(srcdir)/OSParsers` \
 	-I`$(CYGPATH_W) $(srcdir)/OSUtils` \
 	-I`$(CYGPATH_W) $(srcdir)/OSSolverInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/OSModelInterfaces` \
 	-I`$(CYGPATH_W) $(srcdir)/OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(CPPADSRCDIR)`
+	$(OSLIB_CFLAGS)
 
 # This line is necessary to allow VPATH compilation
 DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)`

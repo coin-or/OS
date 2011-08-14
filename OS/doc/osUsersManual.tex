@@ -3889,7 +3889,7 @@ Valid values for the {\tt solver} option are installation-dependent.
 The solver name in the {\tt solver} option is case insensitive.  
 
 
-\subsubsection{Using OSAmplClient to Invoke the COIN-OR Solver Server}\label{section:remoteampl}
+\subsubsection{Using OSAmplClient to Invoke an OS Solver Server}\label{section:remoteampl}
 
 Next, assume that you have a large problem you want to solve on a remote solver. It is necessary 
 to specify the location of the server solver as an option to OSAmplClient. 
@@ -3897,15 +3897,14 @@ The {\tt serviceLocation} option is used to specify the location of a solver ser
 In this case, the string of options for {\tt OSAmplClient\_options} is:
 
 \begin{verbatim}
-serviceLocation  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+serviceLocation  http://xxxx/OSServer/services/OSSolverService
 \end{verbatim}
-
-This string is used to replace the string `{\tt solver symphony}' in the previous example. 
+where {\tt xxx} is the URL for the server.  This string is used to replace the string `{\tt solver symphony}' in the previous example. 
 We will omit the other parts (i.e., the AMPL instruction
 \begin{verbatim}
 option OSAmplClient_options
 \end{verbatim}
-the double quotes and the trailing semicolon) in this and the remaining examples.  The {\tt serviceLocation} option will send the problem to the solver server at location {\tt http://webdss.ise.ufl.edu}.   
+the double quotes and the trailing semicolon) in this and the remaining examples.  The {\tt serviceLocation} option will send the problem to the solver server at location {\tt http://xxx}.   
 
 
 \medskip
@@ -3920,7 +3919,7 @@ and cause them to be discarded.  For instance, the sequence of option calls
 \begin{verbatim}
 option OSAmplClient_options "solver symphony";
 option OSAmplClient_options "serviceLocation  
-    http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService";
+    http://xxx/OSServer/services/OSSolverService";
 solve;
 \end{verbatim}
 will result in the default solver being called. 
@@ -3932,7 +3931,7 @@ A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt so
 provided with this distribution.  The name of the options file is the value of the {\tt osol} option.
 The string of options to {\tt OSAmplClient\_options} is now
 \begin{verbatim}
-serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+serviceLocation http://xxx/OSServer/services/OSSolverService
 osol solveroptions.osol
 \end{verbatim}
 This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
@@ -3961,7 +3960,7 @@ If you examine the file {\tt solveroptions.osol} you will see that there is an X
 This has no effect on a local solve. However, if this option file is paired with 
 
 \begin{verbatim}
-serviceLocation http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+serviceLocation http://xxx/OSServer/services/OSSolverService
 osol solveroptions.osol
 \end{verbatim}
 then in our reference implementation the remote solver service will parse the file {\tt solveroptions.osol}, find the {\tt <solverToInvoke>} tag and then pass the {\tt symphony} solver option to the {\tt OSSolverService} on the remote server.

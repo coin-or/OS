@@ -1,15 +1,13 @@
 /* $Id$ */
 /** @file DefaultSolver.h
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -27,7 +25,7 @@
 #include <string>
 
 /*! \class DefaultSolver DefaultSolver.h "DefaultSolver.h"
- *  \brief The Defalut Solver Class.
+ *  \brief The Default Solver Class.
  *
  * @author  Robert Fourer, Jun Ma, Kipp Martin, 
  * @version 1.0, 10/05/2005
@@ -54,14 +52,14 @@ public:
 	/** osinstance holds the problem instance in-memory as an OSInstance object */
 	OSInstance *osinstance;
 	
+	
+	/** osoption holds the solver options in-memory as an OSOption object */
+	OSOption  *osoption;
 
 	/** osresult holds the solution or result of the model in-memory as an OSResult object */
 	OSResult  *osresult;
 	
 
-	
-	/** osoption holds the solver options in-memory as an OSOption object */
-	OSOption  *osoption;
 	
 	/** 
 	 * sSolverName is the name of the Coin solver used, e.g. glpk, or clp 	 
@@ -89,14 +87,14 @@ public:
 	virtual void solve() = 0 ;	
 	
 	/** buildSolverInstance is a virtual function -- the actual solvers will
-	 * implement their own solve method  -- the solver instance is the instance
-	 * the individual solver sees in its api
+	 * implement their own buildSolverInstance method  -- the solver instance is the instance
+	 * the individual solver sees in its API
 	 */ 
 	virtual void buildSolverInstance() = 0 ;	
 	
 	/** setSolverOptions is a virtual function -- the actual solvers will
-	 * implement their own setSolverOptions method  -- the solver instance is the instance
-	 * the individual solver sees in its api
+	 * implement their own setSolverOptions method  -- the solver options are the options
+	 * the individual solver sees in its API
 	 */ 
 	virtual void setSolverOptions() = 0 ;
 	

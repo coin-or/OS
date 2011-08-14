@@ -4,15 +4,13 @@
  * \brief This file defines the BonminSolver class.
  * \detail Read an OSInstance object and convert in Ipopt data structures
  *
- * @author  Jun Ma, Horand Gassmann, Kipp Martin, 
- * @version 1.1, 11/04/2008
- * @since   OS1.0
+ * @author  Jun Ma, Horand Gassmann, Kipp Martin 
  *
  * \remarks
- * Copyright (C) 2008, Jun Ma, Horand Gassmann, Kipp Martin,
+ * Copyright (C) 2008-2011, Jun Ma, Horand Gassmann, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */

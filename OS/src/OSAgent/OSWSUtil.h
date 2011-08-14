@@ -2,16 +2,15 @@
 /** @file WSUtil.h
  * 
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
+
  * 
  */ 
  
@@ -34,7 +33,7 @@
 <ol>
 <li> Open a TCP socket and send a message </li>
 <li> Modify XML to use in a SOAP message </li>
-<li> Modify the result of a SAOP message to be valid XML </li>
+<li> Modify the result of a SOAP message to be valid XML </li>
 <li> Extract an OSxL from the SOAP </li>
 </ol>
  *
@@ -87,8 +86,8 @@ public:
    	 * replace &lt; with < replace &gt; with > replace &quot with ";
 	 *
    	 * <p>
-   	 * @param theXmlString is the string from the SAOP envelop to modify
-	 * @param useCDATA is true if just encase the XML in a CDATA statement
+   	 * @param theXmlString is the string from the SOAP envelop to modify
+	 * @param useCDATA is true if just encasing the XML in a CDATA statement
    	 * @return the resulting XML string.
 	 * </p> 
    	 */
@@ -105,9 +104,9 @@ public:
 	 * @param smethod is the method invoked, e.g. solve, kill, send, etc.
 	 * @param msInputs is string pointer to an array of strings are the OSxL protocols
 	 * protocols that go into the message, e.g. osil, osol
-	 * @param msInputNames is string pointer to an array of string names of the OSxL protocols
+	 * @param msInputNames is a string pointer to an array of string names of the OSxL protocols
 	 * @param sSoapAction is the name of the solver service plus the method, e.g. OSSolverService#solve
-   	 * @return the resulting XML string that is the SAOP message.
+   	 * @return the resulting XML string that is the SOAP message.
 	 * </p> 
    	 */	
 	static std::string createSOAPMessage(int numInputs, std::string solverAddress, 
@@ -115,7 +114,7 @@ public:
 		std::string* msInputNames, std::string sSoapAction);
 		
    	/**
-   	 * create the SOAP message that is send to the solver Web Service
+   	 * create the SOAP message that is sent to the solver Web Service
 	 *
    	 * <p>
    	 * @param numInputs is the number of OSxL protocols (e.g. osil, osol) in the SOAP message
@@ -127,7 +126,7 @@ public:
 	 * protocols that go into the message, e.g. osil, osol
 	 * @param msInputNames is string pointer to an array of string names of the OSxL protocols
 	 * @param sSoapAction is the name of the solver service plus the method, e.g. OSSolverService#solve
-   	 * @return the resulting XML string that is the SAOP message.
+   	 * @return the resulting XML string that is the SOAP message.
 	 * </p> 
    	 */	
 	static std::string createFormDataUpload(std::string solverAddress, std::string postURI, 

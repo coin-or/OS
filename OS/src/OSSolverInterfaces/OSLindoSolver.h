@@ -1,15 +1,13 @@
 /* $Id$ */
 /** @file LindoSolver.h
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin, Huanyuan Sheng
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -58,8 +56,8 @@ public:
 	/** the LindoSolver class destructor */
 	~LindoSolver();
 	
-	/** solve results in an instance being read into the Knitro
-	 * data structrues and optimized */ 
+	/** solve results in an instance being read into the Lindo
+	 * data structures and optimized */ 
 	virtual void  solve() ;
 	
 	/*! \fn void CoinSolver::buildSolverInstance() 
@@ -149,7 +147,7 @@ private:
    /** m_iErrorCode is a variable for LINDO error codes */
     int m_iLindoErrorCode;
 	
-   /** because LINDO API does not take row ranges we need some extra suff 
+   /** because LINDO API does not take row ranges we need some extra stuff 
    * m_miSlackIdx indexes the rows that get additional slack variable*/
     int *m_miSlackIdx;
 	
@@ -211,7 +209,7 @@ private:
 	 */
 	 double m_mdObjConstant; // change to array later
 
-	/** osrlwriter object used to write osrl from and OSResult object */
+	/** osrlwriter object used to write osrl from an OSResult object */
 	OSrLWriter  *osrlwriter;
 	
 	double cpuTime;

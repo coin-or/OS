@@ -2,15 +2,13 @@
 /** @file WSUtil.cpp
  * 
  *
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */ 
@@ -29,8 +27,8 @@
 	#include <netdb.h>  
 #endif
 
-// need to include OSParameters.h after winsock.h, because it may include unistd.h, which need to know that winsock.h has already be included
-// unfortunately, the windos stuff defines a macro named "max", and maybe also "min"? so undefine these first
+// need to include OSParameters.h after winsock.h, because it may include unistd.h, which needs to know that winsock.h has already been included
+// unfortunately, the windows stuff defines a macro named "max", and maybe also "min"? so undefine these first
 #ifdef min
 #undef min
 #endif

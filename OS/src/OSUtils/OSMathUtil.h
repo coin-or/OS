@@ -2,14 +2,12 @@
 /** @file MathUtil.h
  * 
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 2.2, 13/Oct/2010
- * @since   OS1.0
  *
  * \remarks
- * Copyright (C) 20052010, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  *
  * <p>The <code>MathUtil</code> class contains methods for performing
