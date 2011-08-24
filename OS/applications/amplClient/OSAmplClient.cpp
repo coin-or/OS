@@ -329,7 +329,7 @@ int main(int argc, char **argv)
 													#ifdef COIN_HAS_COUENNE
 														bCouenneIsPresent = true;
 														solverType = new CouenneSolver();
-														solverType->sSolverName = "counenne";
+														solverType->sSolverName = "couenne";
 													#endif
 													if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");	
 												}
