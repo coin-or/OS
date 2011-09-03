@@ -64,7 +64,7 @@ AC_C_BIGENDIAN
 #AC_DEFINE([SIZEOF_LONG_LONG],[0],[in C++ make sure SIZEOF_LONG_LONG is less than 8])
 #KIPP deal with the above
 
-AC_LANG_PUSH( C++)
+AC_LANG_PUSH(C)
 
 # the following does not work for cached variables
 #AC_CHECK_SIZEOF( long long)
@@ -72,7 +72,7 @@ AC_CHECK_SIZEOF( int)
 AC_CHECK_SIZEOF( double)
 AC_CHECK_SIZEOF( long)
 
-AC_LANG_POP( C++)
+AC_LANG_POP(C)
 
 #############################################################################
 #                           COIN-OR components                              #
