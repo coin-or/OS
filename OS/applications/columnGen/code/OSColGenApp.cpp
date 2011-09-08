@@ -368,6 +368,7 @@ void OSColGenApp::solve(){
 		}
 		m_zLB =  m_si->getObjValue();
 		m_zRootLP = m_si->getObjValue();
+		m_osrouteSolver->m_rootLPxvalue = m_theta;
 		//print LP value at node
 		std::cout <<  "optimal LP value at root node = "  <<  m_zLB << std::endl;
 		
@@ -440,6 +441,10 @@ void OSColGenApp::solve(){
 		m_message = "";
 		std::cout << "START BRANCH AND BOUND =  "   << std::endl;
 		if(m_zLB + m_osDecompParam.zeroTol <  m_zUB) branchAndBound();
+		
+		//demand values
+		//m_osrouteSolver->m_demand;
+		
 		std::cout << "FINISH BRANCH AND BOUND =  "   << std::endl;
 		printTreeInfo();
 		m_osrouteSolver->m_bestLPValue = m_zLB;

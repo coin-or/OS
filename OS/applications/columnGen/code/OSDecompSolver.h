@@ -56,6 +56,10 @@ public:
 	double m_bestLPValue;
 	double m_rootLPValue;
 	
+	/** m_zRootLPxval is a pointer to the root 
+	 * root LP relaxation solution vector */
+	double*  m_rootLPxvalue;
+	
 	
 	//the transformation matrix
 	int* m_thetaPnt;
