@@ -1,14 +1,12 @@
-/** @file amplClient.cpp
+/** @file OSAmplClient.cpp
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in OS root directory for terms.
  * 
  * This executable is designed to act as a "solver" for AMPL. It can be
@@ -31,7 +29,7 @@
  * 
  * x2 = 4.743
  * 
- * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient\_options
+ * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient_options
  * as another example, if you wanted to solve hs71.mod on a remote server you would do:
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
@@ -56,7 +54,7 @@
  * linear models  clp is used. For continuous nonlinear models ipopt is used. 
  * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models 
  * bonmin is used.  All solvers are invoked locally. See the Users Manual in the doc folder
- * form more information
+ * for more information
  * 
  */
 
@@ -153,6 +151,10 @@ int main(int argc, char **argv)
 	// create an osinstance object
 	OSInstance *osinstance;
 	std::cout << " call nl2osil" << std::endl;
+
+/*	Parse the .nl file to create an in-memory representation
+	in form of an OSInstance object
+ */
 	try{
 		nl2osil->createOSInstance() ;
 	}
@@ -163,42 +165,34 @@ int main(int argc, char **argv)
 	std::cout << " return from  nl2osil" << std::endl;
 	osinstance = nl2osil->osinstance;
 	std::cout << " osinstance created" << std::endl;
-	// turn the osinstance into osil 
-	// not needed for a local solve
-	// send an osinstance object in memory
-	/**  amplclient_option: 
-	 *   1. solver:
-	 *		possible values - clp, glpk, cplex, cplex, lindo
-	 *   2. location:
-	 *      possible values - NULL (empty) or url of the solver service
-	 *      
-	 */
+
+/*	Parse the options (passed through ASL as the string OSAmplClient_options)
+ *
+ *	There are three possible options:
+ *	1. solver:
+ *		possible values - name of a supported solver (installation-dependent)
+ *   	2. serviceLocation:
+ *		possible values - NULL (empty) or URL of the solver service
+ *	3. optionFile:
+ *		specify the location of the OSoL file (on the local system)
+ *      
+ */
 	char *amplclient_options = NULL;
-	//char *agent_address = NULL;
 	char *solver_option = NULL;
-	// set solver type default to clp
 	DefaultSolver *solverType  = NULL;	
-	OSrLReader *osrlreader = NULL;
-	OSrLWriter *osrlwriter;
-	osrlwriter = new OSrLWriter();
-	OSResult *osresult = NULL;
-	std::string osrl = "";
 	std::string sSolverName = "";
 	std::string osolFileName = "";
-    std::string osol ="";
+	std::string osol ="";
 	std::string serviceLocation = "";
-	//char *URL = NULL;
-	//char delims[] = " ";
 
-	
-	
-	// get the solver set by AMPL
 	amplclient_options = getenv("OSAmplClient_options");
 	if( amplclient_options != NULL){
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
 		getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
 	}
 
+/* If an OSoL file was given, read it into a string (don't parse)
+ */
     if(osolFileName.size() > 0){
         FileUtil *fileUtil;
 		fileUtil = new FileUtil();
@@ -216,6 +210,13 @@ int main(int argc, char **argv)
     }
 
 	
+	OSrLReader *osrlreader = NULL;
+	OSrLWriter *osrlwriter;
+	osrlwriter = new OSrLWriter();
+	OSResult *osresult = NULL;
+	std::string osrl = "";
+
+
 	try{
 		if(serviceLocation.size() == 0 ){
 			//determine the solver
@@ -360,6 +361,8 @@ int main(int argc, char **argv)
 			osrl = solverType->osrl ;
 				//std::cout << osrl << std::endl;
 		}// end if serviceLocation.size() == 0
+
+/* ------------------------------------------------------- */
 		else{// do a remote solve
 			OSSolverAgent* osagent = NULL;
 			OSiLWriter *osilwriter = NULL;
