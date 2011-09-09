@@ -1,8 +1,8 @@
 /* $Id: OSglWriter.h 2698 2009-06-09 04:14:07Z kmartin $ */
 /** @file OSgLWriter.h
- * 
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * @version 1.0, 22/Oct/2010
  * @since   OS2.2
  *
@@ -10,9 +10,9 @@
  * Copyright (C) 2005-2010, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Eclipse Public License. 
+ * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- * 
+ *
  */
 
 #ifndef OSgLWRITER_H
@@ -22,20 +22,20 @@
 #include "OSiLWriter.h"
 #include "OSInstance.h"
 #include "OSGeneral.h"
-#include "OSParameters.h" 
+#include "OSParameters.h"
 #include "OSBase64.h"
 #include "OSMathUtil.h"
 
 #include <string>
-#include <sstream>  
+#include <sstream>
 
 /*! \brief Take an IntVector object and write
  * a string that validates against the OSgL schema.
  *
  * @param v is the IntVector to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
- * @param writeBase64 controls whether the IntVector is to be output in base64 format 
- *        or as a sequence of <el> (including mult and incr attributes) 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the IntVector is to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
  */
 /*
 std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase64)
@@ -78,9 +78,9 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
  * a string that validates against the OSgL schema.
  *
  * @param v is the DoubleVector to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
- * @param writeBase64 controls whether the IntVector is to be output in base64 format 
- *        or as a sequence of <el> (including mult and incr attributes) 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the IntVector is to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
  */
 /*
 std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBase64)
@@ -97,7 +97,7 @@ std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBa
 				mult = getMult(&(v->el[i]), (v->numberOfEl) - i);
 				if (mult == 1)
 					outStr << "<el>" ;
-				else 
+				else
 					outStr << "<el mult=\"" << mult << "\">";
 				outStr << os_dtoa_format(v->el[i] );
 				outStr << "</el>" ;
@@ -121,15 +121,15 @@ std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBa
  * a string that validates against the OSgL schema.
  *
  * @param bs is the basisStatus object to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
- * @param writeBase64 controls whether the IntVectors contained in the enumerations are to be output in base64 format 
- *        or as a sequence of <el> (including mult and incr attributes) 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the IntVectors contained in the enumerations are to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
  */
 /*
 std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase64)
 {
 	ostringstream outStr;
-	
+
 	if (bs->basic != NULL && bs->basic->numberOfEl > 0)
 	{
 		outStr << "<basic numberOfEl=\"" << bs->basic->numberOfEl << "\">";
@@ -138,7 +138,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		outStr << "</basic>";
 		if(addWhiteSpace == true) outStr << endl;
 	}
-	
+
 	if (bs->atLower != NULL && bs->atLower->numberOfEl > 0)
 	{
 		outStr << "<basic numberOfEl=\"" << bs->basic->numberOfEl << "\">";
@@ -147,7 +147,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		outStr << "</unknown>";
 		if(addWhiteSpace == true) outStr << endl;
 	}
-	
+
 	if (bs->atUpper != NULL && bs->atUpper->numberOfEl > 0)
 	{
 		outStr << "<basic numberOfEl=\"" << bs->basic->numberOfEl << "\">";
@@ -156,7 +156,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		outStr << "</unknown>";
 		if(addWhiteSpace == true) outStr << endl;
 	}
-	
+
 	if (bs->free != NULL && bs->free->numberOfEl > 0)
 	{
 		outStr << "<basic numberOfEl=\"" << bs->basic->numberOfEl << "\">";
@@ -165,7 +165,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		outStr << "</unknown>";
 		if(addWhiteSpace == true) outStr << endl;
 	}
-	
+
 	if (bs->superbasic != NULL && bs->superbasic->numberOfEl > 0)
 	{
 		outStr << "<superbasic numberOfEl=\"" << bs->basic->numberOfEl << "\">";
@@ -183,7 +183,7 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
 		outStr << "</unknown>";
 		if(addWhiteSpace == true) outStr << endl;
 	}
-	
+
 	return outStr.str();
 }// end writeDblVectorData
 */
@@ -192,9 +192,9 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
  * a string that validates against the OSgL schema.
  *
  * @param v is the IntVector to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
- * @param writeBase64 controls whether the IntVector is to be output in base64 format 
- *        or as a sequence of <el> (including mult and incr attributes) 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the IntVector is to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
  */
 std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase64);
 
@@ -203,7 +203,7 @@ std::string writeIntVectorData(IntVector *v, bool addWhiteSpace, bool writeBase6
  * a string that validates against the OSgL schema.
  *
  * @param v is the header to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
  */
 std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace);
 
@@ -211,9 +211,9 @@ std::string writeGeneralFileHeader(GeneralFileHeader *v, bool addWhiteSpace);
  * a string that validates against the OSgL schema.
  *
  * @param e is the OtherOptionEnumeration to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
- * @param writeBase64 controls whether the embedded integer array is to be output in base64 format 
- *        or as a sequence of <el> (including mult and incr attributes) 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the embedded integer array is to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
  */
 std::string writeOtherOptionEnumeration(OtherOptionEnumeration *e, bool addWhiteSpace, bool writeBase64);
 
@@ -222,9 +222,9 @@ std::string writeOtherOptionEnumeration(OtherOptionEnumeration *e, bool addWhite
  * a string that validates against the OSgL schema.
  *
  * @param v is the DoubleVector to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
- * @param writeBase64 controls whether the IntVector is to be output in base64 format 
- *        or as a sequence of <el> (including mult and incr attributes) 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the IntVector is to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
  */
 std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBase64);
 
@@ -233,9 +233,9 @@ std::string writeDblVectorData(DoubleVector *v, bool addWhiteSpace, bool writeBa
  * a string that validates against the OSgL schema.
  *
  * @param bs is the basisStatus object to be output
- * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added 
- * @param writeBase64 controls whether the IntVectors contained in the enumerations are to be output in base64 format 
- *        or as a sequence of <el> (including mult and incr attributes) 
+ * @param addWhiteSpace controls whether whitespace (i.e., line feed) is to be added
+ * @param writeBase64 controls whether the IntVectors contained in the enumerations are to be output in base64 format
+ *        or as a sequence of <el> (including mult and incr attributes)
  */
 std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase64);
 

@@ -19,39 +19,43 @@ struct gevRec;
 
 /** Creating a OSInstance from a GAMS model given as GAMS Modeling Object (GMO).
  */
-class OSgams2osil {
+class OSgams2osil
+{
 private:
-	struct gevRec* gev;
-	struct gmoRec* gmo;
+    struct gevRec* gev;
+    struct gmoRec* gmo;
 
-	OSnLNode* parseGamsInstructions(int codelen, int* opcodes, int* fields, int constantlen, double* constants);
+    OSnLNode* parseGamsInstructions(int codelen, int* opcodes, int* fields, int constantlen, double* constants);
 
 
 public:
-	OSInstance *osinstance;
+    OSInstance *osinstance;
 
-	OSgams2osil(struct gmoRec* gmo_ = NULL);
-	
-	OSgams2osil( std::string gamsControlFile);
+    OSgams2osil(struct gmoRec* gmo_ = NULL);
 
-	~OSgams2osil();
+    OSgams2osil( std::string gamsControlFile);
 
-	bool initGMO(const char* datfile);
-	
- 	/** Creates an OSInstance from the GAMS smag instance representation
- 	 * @return whether the instance is created successfully. 
- 	 */
-	bool createOSInstance();
-	
-	/** Gives OSInstance and ownership to calling function.
-	 * This object forgets about the created instance.
-	 */
-	OSInstance* takeOverOSInstance();
+    ~OSgams2osil();
 
-	/** Gives OSInstances but keeps ownership.
-	 * Destruction will destruct OSInstance.
-	 */
-	OSInstance* getOSInstance() { return osinstance; }
+    bool initGMO(const char* datfile);
+
+    /** Creates an OSInstance from the GAMS smag instance representation
+     * @return whether the instance is created successfully.
+     */
+    bool createOSInstance();
+
+    /** Gives OSInstance and ownership to calling function.
+     * This object forgets about the created instance.
+     */
+    OSInstance* takeOverOSInstance();
+
+    /** Gives OSInstances but keeps ownership.
+     * Destruction will destruct OSInstance.
+     */
+    OSInstance* getOSInstance()
+    {
+        return osinstance;
+    }
 };
 
 

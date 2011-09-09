@@ -17,30 +17,31 @@ struct gevRec;
 
 /** Reads an optimization result and stores result and solution in a Gams Modeling Object.
  */
-class OSrL2Gams {
+class OSrL2Gams
+{
 private:
-	struct gmoRec* gmo;
-	struct gevRec* gev;
+    struct gmoRec* gmo;
+    struct gevRec* gev;
 
 public:
-	/** Constructor.
-	 * @param gmo_ GMO handler.
-	 */
-	OSrL2Gams(struct gmoRec* gmo_);
+    /** Constructor.
+     * @param gmo_ GMO handler.
+     */
+    OSrL2Gams(struct gmoRec* gmo_);
 
-	/** Destructor.
-	 */
-	~OSrL2Gams() {}
-	
-	/** Writes a solution into a GMO with the result given as OSResult object.
-	 * @param osresult Optimization result as object.
-	 */ 
-	void writeSolution(OSResult& osresult);
+    /** Destructor.
+     */
+    ~OSrL2Gams() {}
 
-	/** Writes a solution into a GMO with the result given as osrl string.
-	 * @param osrl Optimization result as string.
-	 */ 
-	void writeSolution(std::string& osrl);
+    /** Writes a solution into a GMO with the result given as OSResult object.
+     * @param osresult Optimization result as object.
+     */
+    void writeSolution(OSResult& osresult);
+
+    /** Writes a solution into a GMO with the result given as osrl string.
+     * @param osrl Optimization result as string.
+     */
+    void writeSolution(std::string& osrl);
 };
 
 #endif /*OSRL2GAMS_HPP_*/
