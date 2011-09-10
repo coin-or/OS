@@ -56,9 +56,6 @@ public:
 	double m_bestLPValue;
 	double m_rootLPValue;
 	
-	/** m_zRootLPxval is a pointer to the root 
-	 * root LP relaxation solution vector */
-	double*  m_rootLPxvalue;
 	
 	
 	//the transformation matrix
@@ -276,8 +273,9 @@ public:
 	
 	
 	//this method gets called when we are done
-	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
-				 int numColsGen, std::string message) = 0;
+	virtual void pauHana(std::vector<int> &m_zOptIndexes, 
+			std::vector<double> &m_zRootLPx_vals,
+			int numNodes, int numColsGen, std::string message) = 0;
 	
 	
 

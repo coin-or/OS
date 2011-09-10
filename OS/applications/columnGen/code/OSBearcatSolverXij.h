@@ -504,8 +504,9 @@ public:
 	
 		
 	//this method gets called when we are done
-	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
-			int numColsGen, std::string message);
+	virtual void pauHana(std::vector<int> &m_zOptIndexes, 
+			std::vector<double> &m_zRootLPx_vals,
+			int numNodes, int numColsGen, std::string message);
 	
 	
 	/**

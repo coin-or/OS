@@ -97,9 +97,6 @@ OSColGenApp::OSColGenApp(   OSOption *osoption) {
 	  m_osrouteSolver->initializeDataStructures();
 	 
 	  
-	  /////
-
-	  
 	  //initialize the bounds
 	  m_zUB = OSDBL_MAX;
 	  m_zLB = -OSDBL_MAX;
@@ -126,7 +123,7 @@ OSColGenApp::~OSColGenApp(){
 	//finally delete the factories
 	
 	delete m_factoryInit;
-
+	
 }//end ~OSColGenApp() destructor
 
 
@@ -172,11 +169,6 @@ void OSColGenApp::getCuts(const  double* thetaVar, const int numThetaVar,
 		//exit( 1);
 	}//end on if
 	
-	
-
-	
-	
-
 	
 }//end getCuts
 
@@ -353,6 +345,7 @@ void OSColGenApp::solve(){
 			//get the LP relaxation
 			*(m_theta + i) = m_si->getColSolution()[i];	
 			
+			m_zRootLPx_vals.push_back( *(m_theta + i) );
 			
 			///optionally print out the corresponding x columns
 			int j;
@@ -368,9 +361,10 @@ void OSColGenApp::solve(){
 		}
 		m_zLB =  m_si->getObjValue();
 		m_zRootLP = m_si->getObjValue();
-		m_osrouteSolver->m_rootLPxvalue = m_theta;
 		//print LP value at node
 		std::cout <<  "optimal LP value at root node = "  <<  m_zLB << std::endl;
+		//get the optimal LP root solution
+		
 		
 		//exit( 1);
 
@@ -450,7 +444,8 @@ void OSColGenApp::solve(){
 		m_osrouteSolver->m_bestLPValue = m_zLB;
 		m_osrouteSolver->m_bestIPValue = m_zUB;	
 		if(m_message == "") m_message = "********  WE ARE OPTIMAL  *******";
-		m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated, m_message);
+		m_osrouteSolver->pauHana( m_zOptIndexes, m_zRootLPx_vals, 
+				m_numNodesGenerated, m_numColumnsGenerated, m_message);
 		
 		
 		delete m_solver;
@@ -640,7 +635,8 @@ void OSColGenApp::solveRestrictedMasterRelaxation( ){
 					printTreeInfo();
 					m_osrouteSolver->m_bestLPValue = m_zLB;
 					m_osrouteSolver->m_bestIPValue = m_zUB;	
-					m_osrouteSolver->pauHana( m_zOptIndexes, m_numNodesGenerated, m_numColumnsGenerated, m_message);
+					m_osrouteSolver->pauHana( m_zOptIndexes, m_zRootLPx_vals,
+							m_numNodesGenerated, m_numColumnsGenerated, m_message);
 					throw ErrorClass("we ran out of columns");
 				}
 				

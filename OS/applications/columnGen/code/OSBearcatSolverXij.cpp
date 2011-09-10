@@ -3525,8 +3525,9 @@ void OSBearcatSolverXij::createAmatrix(){
 	
 }//end createAmatrix
 
-void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes, 
-		int numColsGen, std::string message){
+void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, 
+		std::vector<double> &m_zRootLPx_vals,
+		int numNodes, int numColsGen, std::string message){
 	
 	std::cout <<  std::endl;
 	std::cout << "     PAU HANA TIME! " << std::endl;
@@ -3612,6 +3613,23 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes, int numNodes,
 		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon  << std::endl;
 		std::cout << "NUMBER OF NODES  = " <<  numNodes  << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
+		
+		std::vector<double>::iterator dvit;
+		int index = 0;
+		for (dvit = m_zRootLPx_vals.begin(); dvit < m_zRootLPx_vals.end(); dvit++ ){
+		
+			
+			if(*dvit  > m_osDecompParam.zeroTol){
+				std::cout << "LP VALUE = " << *dvit << std::endl;
+				std::cout <<  "x variables for column "  << index  << " CONVEXITY ROW = "<< m_convexityRowIndex[ index]  <<   std::endl;
+			}
+			
+			//get x values
+			
+			index++;
+			
+		}
+		
 		
 		std::cout << std::endl <<  std::endl;
 	

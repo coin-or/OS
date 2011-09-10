@@ -54,6 +54,19 @@ public:
 	OSOption *m_osoption;
 	OSResult *m_osresult;
 	
+	/**  m_zRootLPx_vals holds root node optimal
+	 * LP solution nonzero values
+	 */
+	std::vector<double> m_zRootLPx_vals;
+	
+	
+	/**  m_zRootLPx_idxs holds root node optimal
+	 * LP solution nonzero indexes
+	 */
+	std::vector<int> m_zRootLPx_idx;
+	
+
+	
 	/** this variable is true if we have called
 	 * the branchAndBound() method
 	 */
