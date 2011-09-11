@@ -508,6 +508,11 @@ public:
 			std::vector<double> &m_zRootLPx_vals,
 			int numNodes, int numColsGen, std::string message);
 	
+	/** calculate the nonlinear relaxation value for an LP
+	 * solution
+	 */
+	double calcNonlinearRelax( std::vector<double> &m_zRootLPx_vals);
+	
 	
 	/**
 	 *

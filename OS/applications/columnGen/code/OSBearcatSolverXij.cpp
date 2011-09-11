@@ -3604,6 +3604,7 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes,
 		std::cout << std::endl <<  std::endl;
 		std::cout <<  message << std::endl;
 		std::cout << "LINEAR PROGRAMMING RELAXATION VALUE = " << m_rootLPValue << std::endl;
+		std::cout << "NONLINEAR RELAXATION VALUE = " << calcNonlinearRelax( m_zRootLPx_vals) << std::endl;
 		std::cout << "LOWER BOUND VALUE = " << m_bestLPValue << std::endl;
 		std::cout << "FINAL BEST IP SOLUTION VALUE = " << m_bestIPValue << std::endl;
 		std::cout << "NUMBER OF COLUMNS IN FINAL MASTER = " << m_numThetaVar << std::endl;
@@ -3613,23 +3614,6 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes,
 		std::cout << "NUMBER OF GENERATED CUTS  = " << m_numBmatrixCon  << std::endl;
 		std::cout << "NUMBER OF NODES  = " <<  numNodes  << std::endl;
 		std::cout << "        PAU!!!" << std::endl;
-		
-		std::vector<double>::iterator dvit;
-		int index = 0;
-		for (dvit = m_zRootLPx_vals.begin(); dvit < m_zRootLPx_vals.end(); dvit++ ){
-		
-			
-			if(*dvit  > m_osDecompParam.zeroTol){
-				std::cout << "LP VALUE = " << *dvit << std::endl;
-				std::cout <<  "x variables for column "  << index  << " CONVEXITY ROW = "<< m_convexityRowIndex[ index]  <<   std::endl;
-			}
-			
-			//get x values
-			
-			index++;
-			
-		}
-		
 		
 		std::cout << std::endl <<  std::endl;
 	
@@ -3641,6 +3625,151 @@ void OSBearcatSolverXij::pauHana( std::vector<int> &m_zOptIndexes,
 	}	
 		
 }//end pauHana -- no pun intended
+
+double OSBearcatSolverXij::calcNonlinearRelax( std::vector<double> &m_zRootLPx_vals){
+	
+	
+	std::vector<double>::iterator dvit;
+	std::vector<double>::iterator dvit2;
+	int index = 0;
+	int i;
+	int j;
+	int ivalue;
+	int jvalue;
+	double *hubDemand = NULL;
+	double *hubCost = NULL;
+	hubDemand = new double[m_numHubs ];
+	hubCost = new double[ m_numHubs];
+	
+	double objVal = 0.0;
+	double objValAux = 0.0;
+	
+	std::map<int, std::vector<double> > extPointDemands;
+	std::map<int, std::vector<double> > extPointCosts;
+	std::map<int, std::vector<double> > extPointValues;
+	
+	std::map<int, std::vector<double> >::iterator mit;
+	
+	double tmpDemand;
+	double tmpCost;
+
+	for(i = 0; i < m_numHubs; i++){
+		hubDemand[ i] = 0;
+		hubCost[ i] = 0;
+		
+	}
+	
+	try{
+		for (dvit = m_zRootLPx_vals.begin(); dvit < m_zRootLPx_vals.end(); dvit++ ){
+		
+			if(*dvit  > m_osDecompParam.zeroTol){
+				std::cout  << std::endl;
+				std::cout << "LP VALUE = " << *dvit << std::endl;
+				std::cout <<  "x variables for column "  << index  << " CONVEXITY ROW = "<< m_convexityRowIndex[ index]  <<   std::endl;
+				
+				tmpDemand = 0;
+				tmpCost = 0;
+				
+				for(j = m_thetaPnt[ index];  j < m_thetaPnt[ index + 1] ;  j++){
+				
+					
+					//std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
+					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " DISTANCE = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
+					hubCost[  m_hubPoint[ m_convexityRowIndex[ index]  ] ] += m_cost[ m_thetaIndex[  j] ]*( *dvit);
+					tmpCost += m_cost[ m_thetaIndex[  j] ];
+					
+					ivalue = m_thetaIndex[  j] /(m_numNodes - 1);
+					jvalue = m_thetaIndex[  j] - ivalue*(m_numNodes - 1);
+					
+					if(  jvalue  >= ivalue ){
+						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
+						//std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
+						std::cout << " DEMAND =  = " <<  m_demand[ jvalue + 1]   << std::endl;
+						hubDemand[  m_hubPoint[ m_convexityRowIndex[ index]  ] ] +=  m_demand[ jvalue + 1]*( *dvit);       
+						tmpDemand += m_demand[ jvalue + 1];
+					
+
+						
+					}else{
+						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
+						//std::cout << " j NODE NUMBER = " <<  jvalue    << std::endl;
+						std::cout << " DEMAND =  = " <<  m_demand[ jvalue ]   << std::endl;
+						hubDemand[  m_hubPoint[ m_convexityRowIndex[ index]  ] ] +=  m_demand[ jvalue ]*( *dvit);
+						tmpDemand  += m_demand[ jvalue];
+						
+					}
+				}
+				
+				std::cout << "TOTAL DEMAND =  = " <<  tmpDemand << " TOTAL COST = " << tmpCost  << std::endl;
+				extPointDemands[ m_convexityRowIndex[ index] ].push_back( tmpDemand);
+				extPointCosts[ m_convexityRowIndex[ index] ].push_back( tmpCost);
+				extPointValues[ m_convexityRowIndex[ index] ].push_back(*dvit);
+				
+			}//end if
+			
+			//get x values
+			
+			index++;
+			
+		}
+		
+		int mapSize;
+		objValAux = 0;
+		for (i = 0; i < m_numHubs; i++){
+			std::cout << "HUB DEMAND  " << hubDemand[  m_hubPoint[ i]] << std::endl;
+			std::cout << "HUB COST " << hubCost[  m_hubPoint[ i]] << std::endl;
+			objVal += hubDemand[ m_hubPoint[ i] ]*hubCost[  m_hubPoint[ i]];
+			tmpDemand = 0;
+			tmpCost = 0;
+			
+			mapSize  = extPointDemands[ m_hubPoint[ i] ].size();
+			std::cout  << std::endl;
+			//std::cout << " HUB NUBMER = " <<  m_hubPoint[ i] << std::endl;
+			
+			for (j = 0; j < mapSize; j++){
+			
+					tmpDemand += extPointDemands[ m_hubPoint[ i] ][j]*extPointValues[ m_hubPoint[ i] ][j];
+					tmpCost += extPointCosts[ m_hubPoint[ i] ][j]*extPointValues[ m_hubPoint[ i] ][j];
+					
+					std::cout << " DEMAND = " << extPointDemands[ m_hubPoint[ i] ][j] << 
+							" COST " << extPointCosts[ m_hubPoint[ i] ][j] << std::endl;
+					objValAux += 
+							extPointCosts[ m_hubPoint[ i] ][j]*extPointDemands[ m_hubPoint[ i] ][j]*extPointValues[ m_hubPoint[ i] ][j];
+				
+			}
+			
+			//std::cout  << std::endl;
+			//std::cout << "HUB DEMAND 2 " << tmpDemand << std::endl;
+			//std::cout << "HUB COST 2 " << tmpCost << std::endl;
+			
+		}
+		
+		std::cout << "AUXILIARY VALUE COST = " <<  objValAux << std::endl;
+		
+		//garbage collection
+		delete[] hubDemand;
+		hubDemand  = NULL;
+		delete[] hubCost;
+		hubCost = NULL;
+
+		
+		return objVal;
+	
+	}catch (const ErrorClass& eclass) {
+		
+		//garbage collection
+		delete[] hubDemand;
+		hubDemand  = NULL;
+		delete[] hubCost;
+		hubCost = NULL;
+		
+
+		throw ErrorClass(eclass.errormsg);
+
+	}	
+		
+	
+}// end calcNonlinearRelax
 
 
 OSInstance* OSBearcatSolverXij::getSeparationInstance(){
