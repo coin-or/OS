@@ -21,7 +21,8 @@ libOSSolverInterfaces_la_SOURCES = \
 	OSCoinSolver.cpp \
 	OSCoinSolver.h  \
 	OSMatlabSolver.cpp \
-	OSMatlabSolver.h 
+	OSMatlabSolver.h \
+	OSGetSolver.h 
 
 
 if COIN_HAS_LINDO
@@ -88,7 +89,8 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSCoinSolver.h \
-	OSMatlabSolver.h
+	OSMatlabSolver.h \
+	OSGetSolver.h 
 
 if COIN_HAS_LINDO
 includecoin_HEADERS += OSLindoSolver.h

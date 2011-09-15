@@ -510,6 +510,7 @@ OS/src/OSSolverInterfaces/OSCoinSolver.cpp -text
 OS/src/OSSolverInterfaces/OSCoinSolver.h -text
 OS/src/OSSolverInterfaces/OSCouenneSolver.cpp -text
 OS/src/OSSolverInterfaces/OSCouenneSolver.h -text
+OS/src/OSSolverInterfaces/OSGetSolver.h -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.cpp -text
 OS/src/OSSolverInterfaces/OSIpoptSolver.h -text
 OS/src/OSSolverInterfaces/OSKnitroSolver.cpp -text
