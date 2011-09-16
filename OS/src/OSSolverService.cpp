@@ -85,6 +85,7 @@
 #include "OSErrorClass.h"
 #include "OSmps2osil.h"
 #include "OSBase64.h"
+#include "OSRunSolver.h"
 
 #ifdef COIN_HAS_KNITRO
 #include "OSKnitroSolver.h"
@@ -165,8 +166,8 @@ void knock();
 void getOSiLFromNl();
 void getOSiLFromMps();
 void getOSiLFromGams();
-std::string buildSolver(std::string solverName, std::string osol,
-                        OSInstance *osinstance);
+//std::string buildSolver(std::string solverName, std::string osol,
+//                        OSInstance *osinstance);
 void listOptions(osOptionsStruc *osoptions);
 
 //std::string getServiceURI( std::string osol);
@@ -1101,7 +1102,12 @@ void solve()
             if (osoptions->osil != "")
             {
                 osilreader = new OSiLReader();
-                osrl = buildSolver(osoptions->solverName, osoptions->osol,
+                
+               
+                //osrl = buildSolver(osoptions->solverName, osoptions->osol,
+                //                   osilreader->readOSiL(osoptions->osil));
+                
+                osrl = runSolver(osoptions->solverName, osoptions->osol,
                                    osilreader->readOSiL(osoptions->osil));
             }
             else
@@ -1112,7 +1118,7 @@ void solve()
 #ifdef COIN_HAS_ASL
                     nl2osil = new OSnl2osil( osoptions->nlFile);
                     nl2osil->createOSInstance();
-                    osrl = buildSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
+                    osrl = runSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
 #else
                     throw ErrorClass(
                         "nl file specified locally but ASL not present");
@@ -1124,7 +1130,7 @@ void solve()
                     {
                         mps2osil = new OSmps2osil(osoptions->mpsFile);
                         mps2osil->createOSInstance();
-                        osrl = buildSolver(osoptions->solverName,
+                        osrl = runSolver(osoptions->solverName,
                                            osoptions->osol, mps2osil->osinstance);
                     }
                     else
@@ -1134,7 +1140,7 @@ void solve()
 #ifdef COIN_HAS_GAMSUTILS
                             gams2osil = new OSgams2osil( osoptions->gamsControlFile);
                             gams2osil->createOSInstance();
-                            osrl = buildSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
+                            osrl = runSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
 #else
                             throw ErrorClass(
                                 "a Gams Control specified locally but GAMSIP not present");
@@ -2103,7 +2109,7 @@ std::string get_version()
     return versionMsg.str();
 }// get version
 
-
+/*
 std::string buildSolver(std::string solverName, std::string osol,
                         OSInstance *osinstance)
 {
@@ -2342,7 +2348,7 @@ std::string buildSolver(std::string solverName, std::string osol,
     }
 
 }//buildSolver
-
+*/
 
 void reset_options()
 {
