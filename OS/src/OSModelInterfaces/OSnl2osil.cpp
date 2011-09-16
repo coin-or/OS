@@ -85,7 +85,7 @@ OSnl2osil::OSnl2osil(std::string nlfilename)
 #ifdef AMPLDEBUG
     cout << "Start f_read()" << endl;
 #endif
-    X0 = (real *)Malloc( n_var*sizeof(real));
+    //X0 = (real *)Malloc( n_var*sizeof(real));
     if(N_OPS > 0)
     {
         for(int i = 0; i < N_OPS; i++)
@@ -108,7 +108,7 @@ OSnl2osil::~OSnl2osil()
     osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
     delete osinstance;
     osinstance = NULL;
-    free( X0);
+ //   free( X0);
     free( A_vals);
     ASL_free(&asl);
 
@@ -424,20 +424,6 @@ bool OSnl2osil::createOSInstance()
     std::string colName;
     char vartype = 'C';
     osinstance->setVariableNumber( n_var);
-
-    /*
-    int firstBinaryVar = n_var - nbv - niv;
-    int firstIntegerVar = n_var - niv;
-    for(i = 0; i < n_var; i++){
-    	if(i >= firstBinaryVar) vartype = 'B';
-    	if(i >= firstIntegerVar) vartype = 'I';
-    	//if(X0 != NULL) init = X0[ i];
-    	osinstance->addVariable(i, var_name(i),
-    		LUv[2*i] > -OSDBL_MAX  ? LUv[2*i] : -OSDBL_MAX,
-    		LUv[2*i+1] < OSDBL_MAX ? LUv[2*i+1] : OSDBL_MAX,
-    		vartype);
-    }
-    */
 
 
 
