@@ -22,7 +22,7 @@ libOSSolverInterfaces_la_SOURCES = \
 	OSCoinSolver.h  \
 	OSMatlabSolver.cpp \
 	OSMatlabSolver.h \
-	OSGetSolver.h 
+	OSRunSolver.h 
 
 
 if COIN_HAS_LINDO
@@ -90,7 +90,7 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSCoinSolver.h \
 	OSMatlabSolver.h \
-	OSGetSolver.h 
+	OSRunSolver.h 
 
 if COIN_HAS_LINDO
 includecoin_HEADERS += OSLindoSolver.h

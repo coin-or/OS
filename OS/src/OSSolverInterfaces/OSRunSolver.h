@@ -12,8 +12,8 @@
  *
  */
 
-#ifndef OSGETSOLVER_H
-#define OSGETSOLVER_H
+#ifndef OSRUNSOLVER_H
+#define OSRUNSOLVER_H
 
 
 #include "OSCoinSolver.h"
@@ -86,7 +86,7 @@ using std::string;
 using std::map;
 
 
-DefaultSolver* buildSolver(std::string solverName, std::string osol,
+std::string runSolver(std::string solverName, std::string osol,
                         OSInstance *osinstance)
 {
     DefaultSolver *solverType = NULL;
@@ -307,7 +307,7 @@ DefaultSolver* buildSolver(std::string solverName, std::string osol,
 
         //std::cout << "SET SOLVER INSTANCE " << std::endl;
         
-        /**
+        
         solverType->osinstance = osinstance;
         solverType->osol = osol;
         solverType->buildSolverInstance();
@@ -319,9 +319,6 @@ DefaultSolver* buildSolver(std::string solverName, std::string osol,
         solverType = NULL;
         return resultString;
         
-        **/
-        
-        return solverType;
 
     }
     catch (const ErrorClass& eclass)
@@ -329,9 +326,6 @@ DefaultSolver* buildSolver(std::string solverName, std::string osol,
         throw eclass;
     }
 
-}//buildSolver
-
-
-
+}//runSolver
 
 #endif
