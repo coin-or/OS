@@ -3663,9 +3663,9 @@ double OSBearcatSolverXij::calcNonlinearRelax( std::vector<double> &m_zRootLPx_v
 		for (dvit = m_zRootLPx_vals.begin(); dvit < m_zRootLPx_vals.end(); dvit++ ){
 		
 			if(*dvit  > m_osDecompParam.zeroTol){
-				std::cout  << std::endl;
-				std::cout << "LP VALUE = " << *dvit << std::endl;
-				std::cout <<  "x variables for column "  << index  << " CONVEXITY ROW = "<< m_convexityRowIndex[ index]  <<   std::endl;
+				//std::cout  << std::endl;
+				//std::cout << "LP VALUE = " << *dvit << std::endl;
+				//std::cout <<  "x variables for column "  << index  << " CONVEXITY ROW = "<< m_convexityRowIndex[ index]  <<   std::endl;
 				
 				tmpDemand = 0;
 				tmpCost = 0;
@@ -3674,7 +3674,7 @@ double OSBearcatSolverXij::calcNonlinearRelax( std::vector<double> &m_zRootLPx_v
 				
 					
 					//std::cout <<  "INDEX = "    <<  m_thetaIndex[  j]  << std::endl;
-					std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " DISTANCE = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
+					//std::cout <<  m_variableNames[ m_thetaIndex[  j] ]  << " = "  <<  1  << " DISTANCE = " <<  m_cost[ m_thetaIndex[  j] ]  << std::endl;
 					hubCost[  m_hubPoint[ m_convexityRowIndex[ index]  ] ] += m_cost[ m_thetaIndex[  j] ]*( *dvit);
 					tmpCost += m_cost[ m_thetaIndex[  j] ];
 					
@@ -3684,7 +3684,7 @@ double OSBearcatSolverXij::calcNonlinearRelax( std::vector<double> &m_zRootLPx_v
 					if(  jvalue  >= ivalue ){
 						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
 						//std::cout << " j NODE NUMBER = " <<  jvalue + 1   << std::endl;
-						std::cout << " DEMAND =  = " <<  m_demand[ jvalue + 1]   << std::endl;
+						//std::cout << " DEMAND =  = " <<  m_demand[ jvalue + 1]   << std::endl;
 						hubDemand[  m_hubPoint[ m_convexityRowIndex[ index]  ] ] +=  m_demand[ jvalue + 1]*( *dvit);       
 						tmpDemand += m_demand[ jvalue + 1];
 					
@@ -3693,14 +3693,14 @@ double OSBearcatSolverXij::calcNonlinearRelax( std::vector<double> &m_zRootLPx_v
 					}else{
 						//std::cout << " i NODE NUMBER = " <<  ivalue   << std::endl;
 						//std::cout << " j NODE NUMBER = " <<  jvalue    << std::endl;
-						std::cout << " DEMAND =  = " <<  m_demand[ jvalue ]   << std::endl;
+						//std::cout << " DEMAND =  = " <<  m_demand[ jvalue ]   << std::endl;
 						hubDemand[  m_hubPoint[ m_convexityRowIndex[ index]  ] ] +=  m_demand[ jvalue ]*( *dvit);
 						tmpDemand  += m_demand[ jvalue];
 						
 					}
 				}
 				
-				std::cout << "TOTAL DEMAND =  = " <<  tmpDemand << " TOTAL COST = " << tmpCost  << std::endl;
+				//std::cout << "TOTAL DEMAND =  = " <<  tmpDemand << " TOTAL COST = " << tmpCost  << std::endl;
 				extPointDemands[ m_convexityRowIndex[ index] ].push_back( tmpDemand);
 				extPointCosts[ m_convexityRowIndex[ index] ].push_back( tmpCost);
 				extPointValues[ m_convexityRowIndex[ index] ].push_back(*dvit);
@@ -3716,14 +3716,14 @@ double OSBearcatSolverXij::calcNonlinearRelax( std::vector<double> &m_zRootLPx_v
 		int mapSize;
 		objValAux = 0;
 		for (i = 0; i < m_numHubs; i++){
-			std::cout << "HUB DEMAND  " << hubDemand[  m_hubPoint[ i]] << std::endl;
-			std::cout << "HUB COST " << hubCost[  m_hubPoint[ i]] << std::endl;
+			//std::cout << "HUB DEMAND  " << hubDemand[  m_hubPoint[ i]] << std::endl;
+			//std::cout << "HUB COST " << hubCost[  m_hubPoint[ i]] << std::endl;
 			objVal += hubDemand[ m_hubPoint[ i] ]*hubCost[  m_hubPoint[ i]];
 			tmpDemand = 0;
 			tmpCost = 0;
 			
 			mapSize  = extPointDemands[ m_hubPoint[ i] ].size();
-			std::cout  << std::endl;
+			//std::cout  << std::endl;
 			//std::cout << " HUB NUBMER = " <<  m_hubPoint[ i] << std::endl;
 			
 			for (j = 0; j < mapSize; j++){
@@ -3731,8 +3731,8 @@ double OSBearcatSolverXij::calcNonlinearRelax( std::vector<double> &m_zRootLPx_v
 					tmpDemand += extPointDemands[ m_hubPoint[ i] ][j]*extPointValues[ m_hubPoint[ i] ][j];
 					tmpCost += extPointCosts[ m_hubPoint[ i] ][j]*extPointValues[ m_hubPoint[ i] ][j];
 					
-					std::cout << " DEMAND = " << extPointDemands[ m_hubPoint[ i] ][j] << 
-							" COST " << extPointCosts[ m_hubPoint[ i] ][j] << std::endl;
+					//std::cout << " DEMAND = " << extPointDemands[ m_hubPoint[ i] ][j] << 
+					//		" COST " << extPointCosts[ m_hubPoint[ i] ][j] << std::endl;
 					objValAux += 
 							extPointCosts[ m_hubPoint[ i] ][j]*extPointDemands[ m_hubPoint[ i] ][j]*extPointValues[ m_hubPoint[ i] ][j];
 				

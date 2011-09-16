@@ -434,7 +434,7 @@ void OSColGenApp::solve(){
 		//go into branch and bound
 		m_message = "";
 		std::cout << "START BRANCH AND BOUND =  "   << std::endl;
-		//if(m_zLB + m_osDecompParam.zeroTol <  m_zUB) branchAndBound();
+		if(m_zLB + m_osDecompParam.zeroTol <  m_zUB) branchAndBound();
 		
 		//demand values
 		//m_osrouteSolver->m_demand;
