@@ -136,6 +136,7 @@ std::string runSolver(std::string solverName, std::string osol,
 
 #ifdef COIN_HAS_IPOPT
             solverType = new IpoptSolver();
+            solverType->sSolverName = "ipopt";
 #else
             throw ErrorClass("the Ipopt solver requested is not present");
 #endif                
@@ -147,6 +148,7 @@ std::string runSolver(std::string solverName, std::string osol,
                 // we are requesting the Lindo solver
 #ifdef COIN_HAS_LINDO
                 solverType = new LindoSolver();
+                solverType->sSolverName = "lindo";
 #else
                 throw ErrorClass( "the Lindo solver requested is not present");
 #endif
@@ -211,9 +213,10 @@ std::string runSolver(std::string solverName, std::string osol,
                                             != std::string::npos)
                                     {
 #ifdef COIN_HAS_KNITRO
-                                        std::cout << "calling the KNITRO Solver " << std::endl;
+                    
                                         solverType = new KnitroSolver();
-                                        std::cout << "DONE calling the KNITRO Solver " << std::endl;
+                                        solverType->sSolverName = "knitro";
+                                     
 #else
                                         throw ErrorClass( "the Knitro solver requested is not present");
 #endif
@@ -239,6 +242,7 @@ std::string runSolver(std::string solverName, std::string osol,
 #ifdef COIN_HAS_BONMIN
 
                                                 solverType = new BonminSolver();
+                                                solverType->sSolverName = "bonmin";
 #else
                                                     throw ErrorClass( "the Bonmin solver requested is not present");
 #endif
@@ -251,15 +255,26 @@ std::string runSolver(std::string solverName, std::string osol,
                                                     // we are requesting the Couenne solver
 #ifdef COIN_HAS_COUENNE
                                                     solverType = new CouenneSolver();
+                                                    solverType->sSolverName = "couenne";
 #else
                                                         throw ErrorClass( "the Couenne solver requested is not present");
 #endif
                                                 }
-                                                else     //cbc is the default
+                                                else     
                                                 {
-                                                    solverType
-                                                        = new CoinSolver();
-                                                    solverType->sSolverName = "cbc";
+                                                	if(solverName.find("cbc") != std::string::npos)
+                                                	{
+                                                        solverType = new CoinSolver();
+                                                        solverType->sSolverName = "cbc";
+                                                	}
+                                                	else
+                                                	{
+                                                		std::string errorMessage;
+                                                		errorMessage = "solver type " + solverName + " is not supported";
+                                                		throw ErrorClass( errorMessage );
+
+                                                		
+                                                	}
                                                 }
                                             }
                                         }

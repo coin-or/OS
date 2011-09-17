@@ -2157,7 +2157,7 @@ std::string buildSolver(std::string solverName, std::string osol,
         if (solverName.find("ipopt") != std::string::npos)
         {
             // we are requesting the Ipopt solver
-            bool bIpoptIsPresent = false;
+            bool bIpoptIsPresent = false; 
 #ifdef COIN_HAS_IPOPT
             bIpoptIsPresent = true;
             solverType = new IpoptSolver();
