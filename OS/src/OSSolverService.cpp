@@ -663,7 +663,7 @@ int main(int argC, const char* argV[])
 
                                     case 7: //solver
 
-                                        //make solver name lower case
+                                        //make solver name lower case 
                                         for (k = 0; k
                                                 < osoptions->solverName.length(); k++)
                                         {
