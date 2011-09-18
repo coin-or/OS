@@ -294,7 +294,7 @@ int main(int argc, char **argv)
 			primalValPair = osresult->getOptimalPrimalVariableValues( 0);
 			
 			for(i = 0; i < numVars; i++){
-				x[ 0] = 0.0;
+				x[ i] = 0.0;
 			}
 			vecSize = primalValPair.size();
 			for(i = 0; i < vecSize; i++){
@@ -305,7 +305,7 @@ int main(int argc, char **argv)
 			
 			
 			for(i = 0; i < numCons; i++){
-				y[ 0] = 0.0;
+				y[ i] = 0.0;
 			}
 			vecSize = dualValPair.size();
 			for(i = 0; i < vecSize; i++){
