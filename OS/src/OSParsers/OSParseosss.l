@@ -130,6 +130,21 @@ browserState (on|off)
 }
 
 
+
+(config{xmlwhitespace}+{optionValue}) {
+	YY_PRINT  
+	//char *ch = strdup(yytext);
+	char *ch = yytext;
+	// move past -config
+	ch+=6;
+	for(; isspace(*ch); ch++);
+	std::string str(  ch);
+	yyextra->configFile = str;
+
+}
+
+
+
 (--help) {
 	YY_PRINT  
 	yyextra->invokeHelp = true;
