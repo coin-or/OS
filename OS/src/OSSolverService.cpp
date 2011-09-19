@@ -706,7 +706,7 @@ int main(int argC, const char* argV[])
             osoptions = NULL;
             delete fileUtil;
             fileUtil = NULL;
-dfdfd
+
             return 0;
 
         }// end of if (argC < 2)
