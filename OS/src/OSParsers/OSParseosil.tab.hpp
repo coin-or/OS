@@ -36,113 +36,112 @@
 /* Tokens.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-/* Put the tokens into the symbol table, so that GDB and other debuggers
-   know about them.  */
-enum yytokentype
-{
-    QUOTE = 258,
-    ATTRIBUTETEXT = 259,
-    INTEGER = 260,
-    DOUBLE = 261,
-    OSILEND = 262,
-    INSTANCEDATAEND = 263,
-    INSTANCEDATASTARTEND = 264,
-    VALUEATT = 265,
-    NUMBEROFNONLINEAREXPRESSIONS = 266,
-    IDXONEATT = 267,
-    IDXTWOATT = 268,
-    COEFATT = 269,
-    IDATT = 270,
-    TIMESSTART = 271,
-    TIMESEND = 272,
-    NUMBERSTART = 273,
-    NUMBEREND = 274,
-    NUMBEROFQTERMSATT = 275,
-    IDXATT = 276,
-    TYPEATT = 277,
-    QTERMSTART = 278,
-    QTERMEND = 279,
-    QUADRATICCOEFFICIENTSSTART = 280,
-    QUADRATICCOEFFICIENTSEND = 281,
-    NONLINEAREXPRESSIONSSTART = 282,
-    NONLINEAREXPRESSIONSEND = 283,
-    NLSTART = 284,
-    NLEND = 285,
-    POWERSTART = 286,
-    POWEREND = 287,
-    PLUSSTART = 288,
-    PLUSEND = 289,
-    MINUSSTART = 290,
-    MINUSEND = 291,
-    DIVIDESTART = 292,
-    DIVIDEEND = 293,
-    LNSTART = 294,
-    LNEND = 295,
-    SQRTSTART = 296,
-    SQRTEND = 297,
-    SUMSTART = 298,
-    SUMEND = 299,
-    PRODUCTSTART = 300,
-    PRODUCTEND = 301,
-    ENDOFELEMENT = 302,
-    EXPSTART = 303,
-    EXPEND = 304,
-    NEGATESTART = 305,
-    NEGATEEND = 306,
-    IFSTART = 307,
-    IFEND = 308,
-    SQUARESTART = 309,
-    SQUAREEND = 310,
-    COSSTART = 311,
-    COSEND = 312,
-    SINSTART = 313,
-    SINEND = 314,
-    GREATERTHAN = 315,
-    VARIABLESTART = 316,
-    VARIABLEEND = 317,
-    ABSSTART = 318,
-    ABSEND = 319,
-    ERFSTART = 320,
-    ERFEND = 321,
-    MAXSTART = 322,
-    MAXEND = 323,
-    ALLDIFFSTART = 324,
-    ALLDIFFEND = 325,
-    MINSTART = 326,
-    MINEND = 327,
-    ESTART = 328,
-    EEND = 329,
-    PISTART = 330,
-    PIEND = 331,
-    TIMEDOMAINSTART = 332,
-    TIMEDOMAINEND = 333,
-    STAGESSTART = 334,
-    STAGESEND = 335,
-    STAGESTART = 336,
-    STAGEEND = 337,
-    NAMEATT = 338,
-    NUMBEROFSTAGESATT = 339,
-    HORIZONATT = 340,
-    STARTATT = 341,
-    VARIABLESSTART = 342,
-    CONSTRAINTSSTART = 343,
-    OBJECTIVESSTART = 344,
-    VARIABLESEND = 345,
-    CONSTRAINTSEND = 346,
-    OBJECTIVESEND = 347,
-    NUMBEROFVARIABLESATT = 348,
-    NUMBEROFCONSTRAINTSATT = 349,
-    NUMBEROFOBJECTIVESATT = 350,
-    STARTIDXATT = 351,
-    VARSTART = 352,
-    VAREND = 353,
-    CONSTART = 354,
-    CONEND = 355,
-    OBJSTART = 356,
-    OBJEND = 357,
-    INTERVALSTART = 358,
-    INTERVALEND = 359
-};
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     QUOTE = 258,
+     ATTRIBUTETEXT = 259,
+     INTEGER = 260,
+     DOUBLE = 261,
+     OSILEND = 262,
+     INSTANCEDATAEND = 263,
+     INSTANCEDATASTARTEND = 264,
+     VALUEATT = 265,
+     NUMBEROFNONLINEAREXPRESSIONS = 266,
+     IDXONEATT = 267,
+     IDXTWOATT = 268,
+     COEFATT = 269,
+     IDATT = 270,
+     TIMESSTART = 271,
+     TIMESEND = 272,
+     NUMBERSTART = 273,
+     NUMBEREND = 274,
+     NUMBEROFQTERMSATT = 275,
+     IDXATT = 276,
+     TYPEATT = 277,
+     QTERMSTART = 278,
+     QTERMEND = 279,
+     QUADRATICCOEFFICIENTSSTART = 280,
+     QUADRATICCOEFFICIENTSEND = 281,
+     NONLINEAREXPRESSIONSSTART = 282,
+     NONLINEAREXPRESSIONSEND = 283,
+     NLSTART = 284,
+     NLEND = 285,
+     POWERSTART = 286,
+     POWEREND = 287,
+     PLUSSTART = 288,
+     PLUSEND = 289,
+     MINUSSTART = 290,
+     MINUSEND = 291,
+     DIVIDESTART = 292,
+     DIVIDEEND = 293,
+     LNSTART = 294,
+     LNEND = 295,
+     SQRTSTART = 296,
+     SQRTEND = 297,
+     SUMSTART = 298,
+     SUMEND = 299,
+     PRODUCTSTART = 300,
+     PRODUCTEND = 301,
+     ENDOFELEMENT = 302,
+     EXPSTART = 303,
+     EXPEND = 304,
+     NEGATESTART = 305,
+     NEGATEEND = 306,
+     IFSTART = 307,
+     IFEND = 308,
+     SQUARESTART = 309,
+     SQUAREEND = 310,
+     COSSTART = 311,
+     COSEND = 312,
+     SINSTART = 313,
+     SINEND = 314,
+     GREATERTHAN = 315,
+     VARIABLESTART = 316,
+     VARIABLEEND = 317,
+     ABSSTART = 318,
+     ABSEND = 319,
+     ERFSTART = 320,
+     ERFEND = 321,
+     MAXSTART = 322,
+     MAXEND = 323,
+     ALLDIFFSTART = 324,
+     ALLDIFFEND = 325,
+     MINSTART = 326,
+     MINEND = 327,
+     ESTART = 328,
+     EEND = 329,
+     PISTART = 330,
+     PIEND = 331,
+     TIMEDOMAINSTART = 332,
+     TIMEDOMAINEND = 333,
+     STAGESSTART = 334,
+     STAGESEND = 335,
+     STAGESTART = 336,
+     STAGEEND = 337,
+     NAMEATT = 338,
+     NUMBEROFSTAGESATT = 339,
+     HORIZONATT = 340,
+     STARTATT = 341,
+     VARIABLESSTART = 342,
+     CONSTRAINTSSTART = 343,
+     OBJECTIVESSTART = 344,
+     VARIABLESEND = 345,
+     CONSTRAINTSEND = 346,
+     OBJECTIVESEND = 347,
+     NUMBEROFVARIABLESATT = 348,
+     NUMBEROFCONSTRAINTSATT = 349,
+     NUMBEROFOBJECTIVESATT = 350,
+     STARTIDXATT = 351,
+     VARSTART = 352,
+     VAREND = 353,
+     CONSTART = 354,
+     CONEND = 355,
+     OBJSTART = 356,
+     OBJEND = 357,
+     INTERVALSTART = 358,
+     INTERVALEND = 359
+   };
 #endif
 /* Tokens.  */
 #define QUOTE 258
@@ -255,14 +254,14 @@ enum yytokentype
 typedef union YYSTYPE
 
 {
-    double dval;
-    int ival;
-    char* sval;
-
+	double dval;
+	int ival;
+	char* sval;
+	
 }
 /* Line 1529 of yacc.c.  */
 
-YYSTYPE;
+	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 # define YYSTYPE_IS_TRIVIAL 1
@@ -273,10 +272,10 @@ YYSTYPE;
 #if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
 typedef struct YYLTYPE
 {
-    int first_line;
-    int first_column;
-    int last_line;
-    int last_column;
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
 } YYLTYPE;
 # define yyltype YYLTYPE /* obsolescent; will be withdrawn */
 # define YYLTYPE_IS_DECLARED 1

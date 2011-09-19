@@ -136,7 +136,7 @@ using std::ostringstream;
 using std::string;
 using std::map;
 
-//#define DEBUG_CL_INTERFACE
+#define DEBUG_CL_INTERFACE
 
 
 #define MAXCHARS 5000
@@ -760,6 +760,29 @@ int main(int argC, const char* argV[])
             ossslex(scanner);
             ossslex_destroy(scanner);
             scannerActive = false;
+            
+            
+            /** new -- added on September 19, 2011
+             * if we are then the command line had a configure file, but
+             * commnad line options should override the confige file so go
+             * back and get these options again
+             */
+            
+            scannerActive = true;
+            ossslex_init(&scanner);
+            //std::cout << "Call Text Extra" << std::endl;
+            setyyextra(osoptions, scanner);
+            //std::cout << "Call scan string " << std::endl;
+            osss_scan_string(osss, scanner);
+    #ifdef DEBUG_CL_INTERFACE
+            std::cout << "call ossslex" << std::endl;
+    #endif
+            ossslex(scanner);
+            ossslex_destroy(scanner);
+            scannerActive = false;           
+            
+            
+            /** end of new code added on September 19, 2011 */
         }
     }
     catch (const ErrorClass& eclass)

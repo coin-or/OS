@@ -705,6 +705,8 @@ browserState (on|off)
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;
+	outStr << "Please make sure your options are spelled correctly" << endl;
+	outStr << "Type OSSolverService -h or OSSolverService --help for valid commands" << endl;
 	outStr << "The first character is: ";
 	outStr <<  yytext;
 	outStr << endl;
