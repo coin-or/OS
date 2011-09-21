@@ -24,7 +24,7 @@ import org.optimizationservices.ossolver.util.OSParameterFile;
  * @since OS 1.0
  */
 public class OSSolverService implements OShL{
-        
+     
 	/**
 	 * m_osServiceUtil holds a default implementation of the solver service.
 	 */
