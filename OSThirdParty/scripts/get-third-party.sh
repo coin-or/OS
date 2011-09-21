@@ -42,8 +42,8 @@ fi
 
 ## Xerces
 URL=http://xerces.apache.org/xerces2-j/install.html
-DOWNLOAD=Xerces-J-bin.2.10.0
-VERSION=xerces-2_10_0
+DOWNLOAD=Xerces-J-bin.2.11.0
+VERSION=xerces-2_11_0
 JAR=xercesImpl
 DEPENDENTJAR=xml-apis
 DEST=lib/xerces
@@ -60,8 +60,8 @@ fi
 
 ## Apache Commons Codec
 URL=http://commons.apache.org/codec/
-DOWNLOAD=commons-codec-1.4-bin
-JAR=commons-codec-1.4
+DOWNLOAD=commons-codec-1.5-bin
+JAR=commons-codec-1.5
 DEST=lib/commons-codec
 MIRROR=http://apache.deathculture.net/commons/codec/binaries/${DOWNLOAD}.zip
 if [ ! -r ${DEST}/${JAR}.jar ] ; then
@@ -76,8 +76,8 @@ fi
 
 ## Apache Commons Fileupload
 URL=http://commons.apache.org/fileupload/
-DOWNLOAD=commons-fileupload-1.2.1-bin
-JAR=commons-fileupload-1.2.1
+DOWNLOAD=commons-fileupload-1.2.2-bin
+JAR=commons-fileupload-1.2.2
 DEST=lib/commons-fileupload
 MIRROR=http://www.fightrice.com/mirrors/apache/commons/fileupload/binaries/${DOWNLOAD}.zip
 if [ ! -r ${DEST}/${JAR}.jar ] ; then
@@ -140,11 +140,11 @@ fi
 
 ## Apache log4j
 URL=http://logging.apache.org/log4j/1.2/
-VERSION=1.2.15
+VERSION=1.2.16
 DOWNLOAD=apache-log4j-${VERSION}
 JAR=log4j-${VERSION}
 DEST=lib/log4j
-MIRROR=http://mirror.cloudera.com/apache/logging/log4j/${VERSION}/${DOWNLOAD}.zip
+MIRROR=http://ftp.halifax.rwth-aachen.de/apache//logging/log4j/${VERSION}/${DOWNLOAD}.zip
 if [ ! -r ${DEST}/${JAR}.jar ] ; then
   if [ ! -r download/${DOWNLOAD}.zip ] ; then
     echo "Downloading ${JAR} from  ${URL}"
