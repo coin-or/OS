@@ -1,15 +1,15 @@
 /* $Id$ */
 /** @file OSmps2osil.h
- * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Eclipse Public License. 
+ * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- * 
+ *
  */
 
 
@@ -26,41 +26,41 @@
 
 /*! \class OSmps2osil
  *  \brief The OSmps2osil  Class.
- * 
+ *
  * @author Robert Fourer, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
- * 
+ *
  * \remarks
  * the OSmps2osil class is used for reading an instance
  * in MPS format and creating an OSInstance object in OSiL format
- * 
+ *
  */
 class OSmps2osil
 {
 public:
-	/** the OSmps2osil class constructor */
-	OSmps2osil( std::string mpsfilename);
-	
-	/** the OSmps2osil class destructor */
-	~OSmps2osil();
+    /** the OSmps2osil class constructor */
+    OSmps2osil( std::string mpsfilename);
 
-   	/**
-   	 * create an OSInstance from the MPS instance representation
-   	 * 
-   	 * @return whether the instance is created successfully. 
-   	 */
-	bool createOSInstance();
-	
-	/** osinstance is a pointer to the OSInstance object that gets
-	 * created from the instance represented in MPS format
-	 */
-	OSInstance *osinstance;
+    /** the OSmps2osil class destructor */
+    ~OSmps2osil();
+
+    /**
+     * create an OSInstance from the MPS instance representation
+     *
+     * @return whether the instance is created successfully.
+     */
+    bool createOSInstance();
+
+    /** osinstance is a pointer to the OSInstance object that gets
+     * created from the instance represented in MPS format
+     */
+    OSInstance *osinstance;
 private:
-	/** m_MpsData is a pointer to a CoinMpsIO object */
-	CoinMpsIO *m_MpsData;
-	/**  m_CoinPackedMatrix is a pointer to a CoinPackedMatrix object */
-	CoinPackedMatrix *m_CoinPackedMatrix;
+    /** m_MpsData is a pointer to a CoinMpsIO object */
+    CoinMpsIO *m_MpsData;
+    /**  m_CoinPackedMatrix is a pointer to a CoinPackedMatrix object */
+    CoinPackedMatrix *m_CoinPackedMatrix;
 };
 #endif
 

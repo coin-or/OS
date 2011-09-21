@@ -130,6 +130,21 @@ browserState (on|off)
 }
 
 
+
+(config{xmlwhitespace}+{optionValue}) {
+	YY_PRINT  
+	//char *ch = strdup(yytext);
+	char *ch = yytext;
+	// move past -config
+	ch+=6;
+	for(; isspace(*ch); ch++);
+	std::string str(  ch);
+	yyextra->configFile = str;
+
+}
+
+
+
 (--help) {
 	YY_PRINT  
 	yyextra->invokeHelp = true;
@@ -705,6 +720,8 @@ browserState (on|off)
 	std::string error;
 	std::ostringstream outStr;
 	outStr << "encountered a spurious character in the lexer" << endl;
+	outStr << "Please make sure your options are spelled correctly" << endl;
+	outStr << "Type OSSolverService -h or OSSolverService --help for valid commands" << endl;
 	outStr << "The first character is: ";
 	outStr <<  yytext;
 	outStr << endl;

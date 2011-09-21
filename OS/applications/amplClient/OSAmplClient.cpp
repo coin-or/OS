@@ -1,14 +1,12 @@
-/** @file amplClient.cpp
+/** @file OSAmplClient.cpp
  * 
- * @author  Robert Fourer,  Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin 
  *
  * \remarks
- * Copyright (C) 2005, Robert Fourer, Jun Ma, Kipp Martin,
- * Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in OS root directory for terms.
  * 
  * This executable is designed to act as a "solver" for AMPL. It can be
@@ -31,7 +29,7 @@
  * 
  * x2 = 4.743
  * 
- * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient\_options
+ * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient_options
  * as another example, if you wanted to solve hs71.mod on a remote server you would do:
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
@@ -56,7 +54,7 @@
  * linear models  clp is used. For continuous nonlinear models ipopt is used. 
  * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models 
  * bonmin is used.  All solvers are invoked locally. See the Users Manual in the doc folder
- * form more information
+ * for more information
  * 
  */
 
@@ -91,7 +89,8 @@
 #include "OSErrorClass.h"
 #include "CoinError.hpp"
 #include "OSOption.h"
-#include "OSOptionsStruc.h"  
+#include "OSOptionsStruc.h" 
+#include "OSRunSolver.h"
 #include <sstream>
 
 #ifdef HAVE_CSTRING
@@ -153,6 +152,10 @@ int main(int argc, char **argv)
 	// create an osinstance object
 	OSInstance *osinstance;
 	std::cout << " call nl2osil" << std::endl;
+
+/*	Parse the .nl file to create an in-memory representation
+	in form of an OSInstance object
+ */
 	try{
 		nl2osil->createOSInstance() ;
 	}
@@ -163,42 +166,33 @@ int main(int argc, char **argv)
 	std::cout << " return from  nl2osil" << std::endl;
 	osinstance = nl2osil->osinstance;
 	std::cout << " osinstance created" << std::endl;
-	// turn the osinstance into osil 
-	// not needed for a local solve
-	// send an osinstance object in memory
-	/**  amplclient_option: 
-	 *   1. solver:
-	 *		possible values - clp, glpk, cplex, cplex, lindo
-	 *   2. location:
-	 *      possible values - NULL (empty) or url of the solver service
-	 *      
-	 */
+
+/*	Parse the options (passed through ASL as the string OSAmplClient_options)
+ *
+ *	There are three possible options:
+ *	1. solver:
+ *		possible values - name of a supported solver (installation-dependent)
+ *   	2. serviceLocation:
+ *		possible values - NULL (empty) or URL of the solver service
+ *	3. optionFile:
+ *		specify the location of the OSoL file (on the local system)
+ *      
+ */
 	char *amplclient_options = NULL;
-	//char *agent_address = NULL;
-	char *solver_option = NULL;
-	// set solver type default to clp
 	DefaultSolver *solverType  = NULL;	
-	OSrLReader *osrlreader = NULL;
-	OSrLWriter *osrlwriter;
-	osrlwriter = new OSrLWriter();
-	OSResult *osresult = NULL;
-	std::string osrl = "";
 	std::string sSolverName = "";
 	std::string osolFileName = "";
-    std::string osol ="";
+	std::string osol ="";
 	std::string serviceLocation = "";
-	//char *URL = NULL;
-	//char delims[] = " ";
 
-	
-	
-	// get the solver set by AMPL
 	amplclient_options = getenv("OSAmplClient_options");
 	if( amplclient_options != NULL){
 		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
 		getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
 	}
 
+/* If an OSoL file was given, read it into a string (don't parse)
+ */
     if(osolFileName.size() > 0){
         FileUtil *fileUtil;
 		fileUtil = new FileUtil();
@@ -216,150 +210,20 @@ int main(int argc, char **argv)
     }
 
 	
+	OSrLReader *osrlreader = NULL;
+	OSrLWriter *osrlwriter;
+	osrlwriter = new OSrLWriter();
+	OSResult *osresult = NULL;
+	std::string osrl = "";
+
+
 	try{
 		if(serviceLocation.size() == 0 ){
 			//determine the solver
-			
-			
-			if(sSolverName.size() == 0){// determine the default solver
-				if(osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0){//we have an integer program
-					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-					   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and integer
-						sSolverName = "bonmin";
-					}else{//we are linear integer 
-						sSolverName = "cbc";
-					}
-				}else{// we have a continuous problem
-					if( (osinstance->getNumberOfNonlinearExpressions() > 0)
-					   || (osinstance->getNumberOfQuadraticTerms() > 0) ){ // we are nonlinear and continuous
-						sSolverName = "ipopt";
-					}else{//we have linear program 
-						sSolverName = "clp";
-					}
-				}
-			}
-			
-			
-			if( sSolverName == "lindo") {
-				// we are requesting the Lindo solver
-				bool bLindoIsPresent = false;
-				#ifdef COIN_HAS_LINDO
-				bLindoIsPresent = true;
-				solverType = new LindoSolver();
-				solverType->sSolverName = "lindo";
-				#endif
-				if(bLindoIsPresent == false) throw ErrorClass( "the Lindo solver requested is not present");
-			}
-			else{ 
-				if( sSolverName == "clp" ){
-					if( solver_option != NULL) cout << "HERE ARE THE Clp SOLVER OPTIONS " <<   solver_option << endl;
-					solverType = new CoinSolver();
-					solverType->sSolverName = "clp";
-				}
-				else{
-					if( sSolverName == "cbc"){
-
-						solverType = new CoinSolver();
-						solverType->sSolverName = "cbc";
-					}
-					else{
-						if( sSolverName == "cplex"){
-							bool bCplexIsPresent = false;
-							#ifdef COIN_HAS_CPX
-								bCplexIsPresent = true;
-								solverType = new CoinSolver();
-								solverType->sSolverName = "cplex";
-							#endif
-								if(bCplexIsPresent == false) throw ErrorClass( "the Cplex solver requested is not present");
-						}
-						else{
-							if( sSolverName == "glpk"){
-								bool bGlpkIsPresent = false;
-								#ifdef COIN_HAS_GLPK
-									bGlpkIsPresent = true;
-									solverType = new CoinSolver();
-									solverType = new CoinSolver();
-									solverType->sSolverName = "glpk";
-								#endif
-								if(bGlpkIsPresent == false) throw ErrorClass( "the Glpk solver requested is not present");
-							}
-							else{
-								if( sSolverName == "ipopt"){
-									bool bIpoptIsPresent = false;
-									#ifdef COIN_HAS_IPOPT
-										bIpoptIsPresent = true;
-										solverType = new IpoptSolver();
-										solverType->sSolverName = "ipopt";
-									#endif
-									if(bIpoptIsPresent == false) throw ErrorClass( "the Ipopt solver requested is not present");
-								}
-								else{
-									if( sSolverName == "symphony" ){
-										bool bSymIsPresent = false;
-										#ifdef COIN_HAS_SYMPHONY
-											bSymIsPresent = true; 
-											solverType = new CoinSolver();
-											solverType->sSolverName = "symphony";
-										#endif
-										if(bSymIsPresent == false) throw ErrorClass( "the SYMPHONY solver requested is not present");
-									}
-									else{
-										if( sSolverName == "dylp"){
-											bool bDyLPIsPresent = false;
-											#ifdef COIN_HAS_DYLP
-												bDyLPIsPresent = true;
-												solverType = new CoinSolver();
-												solverType->sSolverName = "dylp";
-											#endif
-											if(bDyLPIsPresent == false) throw ErrorClass( "the DyLP solver requested is not present");
-										}						
-										else{
-											if( sSolverName == "bonmin" ){
-												bool bBonminIsPresent = false;
-												#ifdef COIN_HAS_BONMIN
-													bBonminIsPresent = true;
-													solverType = new BonminSolver();
-													solverType->sSolverName = "bonmin";
-												#endif
-												if(bBonminIsPresent == false) throw ErrorClass( "the Bonmin solver requested is not present");												
-											}
-											else{
-												if( sSolverName == "couenne"){
-													bool bCouenneIsPresent = false;
-													#ifdef COIN_HAS_COUENNE
-														bCouenneIsPresent = true;
-														solverType = new CouenneSolver();
-														solverType->sSolverName = "couenne";
-													#endif
-													if(bCouenneIsPresent == false) throw ErrorClass( "the Couenne solver requested is not present");	
-												}
-												else{
-													throw ErrorClass( "a supported solver has not been selected");
-												}
-											}
-										}
-									}	
-								} 
-							}
-						}
-					} 
-				}
-			}
-			
-			// now do a local solve
-			solverType->osol = osol;
-			//std::cout << osol << std::endl;
-			OSiLWriter osilwriter;
-			//std::cout << "WRITE THE INSTANCE" << std::endl;
-			//std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
-			//std::cout << "DONE WRITE THE INSTANCE" << std::endl;
-			
-			solverType->osinstance = osinstance;
-			solverType->buildSolverInstance();
-			solverType->solve();
-			osrl = solverType->osrl ;
-				//std::cout << osrl << std::endl;
+			osrl = runSolver(sSolverName, osol, osinstance);
 		}// end if serviceLocation.size() == 0
+
+/* ------------------------------------------------------- */
 		else{// do a remote solve
 			OSSolverAgent* osagent = NULL;
 			OSiLWriter *osilwriter = NULL;
@@ -430,7 +294,7 @@ int main(int argc, char **argv)
 			primalValPair = osresult->getOptimalPrimalVariableValues( 0);
 			
 			for(i = 0; i < numVars; i++){
-				x[ 0] = 0.0;
+				x[ i] = 0.0;
 			}
 			vecSize = primalValPair.size();
 			for(i = 0; i < vecSize; i++){
@@ -441,7 +305,7 @@ int main(int argc, char **argv)
 			
 			
 			for(i = 0; i < numCons; i++){
-				y[ 0] = 0.0;
+				y[ i] = 0.0;
 			}
 			vecSize = dualValPair.size();
 			for(i = 0; i < vecSize; i++){

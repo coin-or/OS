@@ -1,6 +1,6 @@
 /* $Id: OSParameters.cpp 4234 2011-07-29 12:45:13Z Gassmann $ */
 /** @file OSParameters.cpp
- * 
+ *
  *
  * @author Horand Gassmann, Jun Ma, Kipp Martin
  *
@@ -8,9 +8,9 @@
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Eclipse Public License. 
+ * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- * 
+ *
  */
 
 
@@ -48,7 +48,8 @@
 using std::ostringstream;
 
 // this is taken directly from COINUTILS
-bool OSIsnan(double x) {
+bool OSIsnan(double x)
+{
 #ifdef COIN_C_ISNAN
     return COIN_C_ISNAN( x)!=0;
 #else
@@ -56,37 +57,39 @@ bool OSIsnan(double x) {
 #endif
 }
 
-double OSNaN() { 
+double OSNaN()
+{
 #ifdef OSNAN
-  return OSNAN;
+    return OSNAN;
 #else
-  // wow, what a last resort, I don't like this!
-  double zero = 0.0;
-  return 0.0/zero;
+    // wow, what a last resort, I don't like this!
+    double zero = 0.0;
+    return 0.0/zero;
 #endif
 }
 
-std::string OSgetVersionInfo() {
-	ostringstream versionInfo;
-		versionInfo << std::endl << std::endl;
-		versionInfo << "Optimization Services Solver";
-		versionInfo << std::endl;	
-		versionInfo << "Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin";
-		versionInfo << std::endl;
-		versionInfo << "Distributed under the Eclipse Public License" ;
-		versionInfo << std::endl;
-		versionInfo << "OS Version: ";
-		versionInfo << OS_VERSION;
-		versionInfo << std::endl;	
-		versionInfo << "Build Date: ";
-		versionInfo << __DATE__;
-		versionInfo << std::endl;	
-	
-		#ifdef OS_SVN_REV
-			versionInfo << "SVN Version: "; 
-			versionInfo << OS_SVN_REV;
-		#endif
-			
-		versionInfo << std::endl << std::endl;
-	return versionInfo.str() ;
-} 
+std::string OSgetVersionInfo()
+{
+    ostringstream versionInfo;
+    versionInfo << std::endl << std::endl;
+    versionInfo << "Optimization Services Solver";
+    versionInfo << std::endl;
+    versionInfo << "Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin";
+    versionInfo << std::endl;
+    versionInfo << "Distributed under the Eclipse Public License" ;
+    versionInfo << std::endl;
+    versionInfo << "OS Version: ";
+    versionInfo << OS_VERSION;
+    versionInfo << std::endl;
+    versionInfo << "Build Date: ";
+    versionInfo << __DATE__;
+    versionInfo << std::endl;
+
+#ifdef OS_SVN_REV
+    versionInfo << "SVN Version: ";
+    versionInfo << OS_SVN_REV;
+#endif
+
+    versionInfo << std::endl << std::endl;
+    return versionInfo.str() ;
+}

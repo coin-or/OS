@@ -2,10 +2,10 @@
 /** @file OSDecompSolver.h
  * 
  * \remarks
- * Copyright (C) 2005-2008, Gus Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2008, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University,  Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -55,6 +55,7 @@ public:
 	double m_bestIPValue;
 	double m_bestLPValue;
 	double m_rootLPValue;
+	
 	
 	
 	//the transformation matrix
@@ -272,8 +273,9 @@ public:
 	
 	
 	//this method gets called when we are done
-	virtual void pauHana(std::vector<int> &m_zOptIndexes , int numNodes,
-				 int numColsGen, std::string message) = 0;
+	virtual void pauHana(std::vector<int> &m_zOptIndexes, 
+			std::vector<double> &m_zRootLPx_vals,
+			int numNodes, int numColsGen, std::string message) = 0;
 	
 	
 

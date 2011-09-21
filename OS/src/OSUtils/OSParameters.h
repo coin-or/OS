@@ -1,18 +1,18 @@
 /* $Id$ */
 /** @file OSParameters.h
- * 
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin, 
+ *
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
  * Copyright (C) 2005, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Eclipse Public License. 
+ * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
- * 
- */ 
- 
+ *
+ */
+
 //kipp fix up the infinity issue
 //kipp define OSINFINITY to COIN_DBL_MAX
 
@@ -55,7 +55,7 @@
 #define OS_SCHEMA_VERSION "2.0"
 
 /**
- * we use OS_NEAR_EQUAL in unitTest to see if we 
+ * we use OS_NEAR_EQUAL in unitTest to see if we
  * are close to the optimal obj value
  */
 #define OS_NEAR_EQUAL 1e-2

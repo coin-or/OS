@@ -5,7 +5,7 @@
  * Copyright (C) 2005-2008, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University,  Northwestern University, and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Common Public License. 
+ * This software is licensed under the Eclipse Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
@@ -53,6 +53,19 @@ public:
 	OSInstance *m_osinstanceMaster;
 	OSOption *m_osoption;
 	OSResult *m_osresult;
+	
+	/**  m_zRootLPx_vals holds root node optimal
+	 * LP solution nonzero values
+	 */
+	std::vector<double> m_zRootLPx_vals;
+	
+	
+	/**  m_zRootLPx_idxs holds root node optimal
+	 * LP solution nonzero indexes
+	 */
+	std::vector<int> m_zRootLPx_idx;
+	
+
 	
 	/** this variable is true if we have called
 	 * the branchAndBound() method
