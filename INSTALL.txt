@@ -116,6 +116,8 @@ inside Tomcat skip to the section  "Install with a Web Server):
    * Select "Next" and then save the WAR file in the webapps directory in the Tomcat root directory
    * Copy the OSSolverService executable to webapps/OSServer/WEB-INF/classes
    * start the server
+   * IMPORTANT -- if your Java virtual machine is 1.5 you may have to add the saaj.jar file that is in
+   * OSjava/OSThirdParty/lib/axis to webapps/OSServer/WEB-INF/lib
    * in OSServer/test run `bash test.sh` or `test.cmd` for Windows. (Note: you may get an error like Permission Denied. If so 
 	it is necessary to make the OSSolverService installed by Tomcat executable. This file will have a path like:
 
