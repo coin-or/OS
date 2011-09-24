@@ -73,7 +73,7 @@ inside Tomcat skip to the section  "Install with a Web Server):
 		http://www.coin-or.org/download/binary/OS/OSSolverService/
     * Alternatively, if you wish to build your own OSSolverService, in OSThirdParty run `bash scripts/build-coin-os.sh`
 
- * Install a local version of Tomcat
+ * Install a local version of Tomcat -- these install notes are based upon Tomcat version 6
     * Download and install Apache Tomcat (see http://tomcat.apache.org/). If you wish to use a script to install on Ubuntu see
 	the next bullet point. 
     * for Ubuntu, in OSThirdParty run `bash scripts/tomcat6-user.sh`
@@ -108,6 +108,9 @@ inside Tomcat skip to the section  "Install with a Web Server):
 
  * Test server inside Tomcat
    * in OSServer/test run `bash test.sh` or `test.cmd` for Windows.
+   * IMPORTANT if your Java virtual machine is 1.5 you may have to add the saaj.jar file that is in
+   * OSjava/OSThirdParty/lib/axis to .metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/OSServer/WEB-INF/classes
+   * where .metadata is in the Eclipse project root.
 
 
  * Deploy to the server outside of Tomcat 
