@@ -43,14 +43,14 @@
  * \item the name of the solver using the  {\bf -solver} option, valid values for this option  are {\tt clp},
  * {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.   
  *
- *
+ * 
  * \item the location of the remote server using the {\bf -serviceLocation} option
  *
  * \item the location of the option file using  the {\bf -osol} option
  *
  * \end{itemize}
  *
- * if no options are specified using {\bf OSAmplClient\_options},   by default, for continuous
+ * if no options are specified using {\bf OSAmplClient\_options},   by default,for continuous
  * linear models  clp is used. For continuous nonlinear models ipopt is used. 
  * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models 
  * bonmin is used.  All solvers are invoked locally. See the Users Manual in the doc folder
@@ -290,12 +290,12 @@ int main(int argc, char **argv)
 			
 			std::vector<IndexValuePair*> primalValPair;
 			std::vector<IndexValuePair*> dualValPair;
-			dualValPair = osresult->getOptimalDualVariableValues( 0);
+			dualValPair = osresult->getOptimalDualVariableValues( 0);  
 			primalValPair = osresult->getOptimalPrimalVariableValues( 0);
 			
 			for(i = 0; i < numVars; i++){
 				x[ i] = 0.0;
-			}
+			}  
 			vecSize = primalValPair.size();
 			for(i = 0; i < vecSize; i++){
 				x[ primalValPair[i]->idx ] = primalValPair[i]->value;
