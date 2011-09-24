@@ -936,7 +936,7 @@ int main(int argC, const char* argV[])
         {
             //this takes precedence over what is in the OSoL file
             osoptions->osil = fileUtil->getFileAsString(
-                                  (osoptions->osilFile).c_str());fdfd
+                                  (osoptions->osilFile).c_str());
         }
         /*
          else{// we were not given an osil file
