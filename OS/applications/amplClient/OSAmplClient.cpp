@@ -1,19 +1,19 @@
 /** @file OSAmplClient.cpp
- * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin 
+ *
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
- * This software is licensed under the Eclipse Public License. 
+ * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in OS root directory for terms.
- * 
+ *
  * This executable is designed to act as a "solver" for AMPL. It can be
  * used to solve problems locally or on a remote server.  For example,
  * to solve a problem locally, start AMPL. We assume that the model is
  * hs71.mod. Execute the following sequence of commands:
- * 
+ *
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
  * option OSAmplClient_options "-solver bonmin"; <br />
@@ -21,14 +21,14 @@
  * solve; <br />
  * display x1; <br />
  * you should get:
- * 
+ *
  * x1 = 1
- * 
+ *
  * display x2;  <br />
  * you should get:
- * 
+ *
  * x2 = 4.743
- * 
+ *
  * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient_options
  * as another example, if you wanted to solve hs71.mod on a remote server you would do:
  * model hs71.mod;  <br />
@@ -41,9 +41,9 @@
  * \begin{itemize}
  *
  * \item the name of the solver using the  {\bf -solver} option, valid values for this option  are {\tt clp},
- * {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.   
+ * {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.
  *
- * 
+ *
  * \item the location of the remote server using the {\bf -serviceLocation} option
  *
  * \item the location of the option file using  the {\bf -osol} option
@@ -51,11 +51,11 @@
  * \end{itemize}
  *
  * if no options are specified using {\bf OSAmplClient\_options},   by default,for continuous
- * linear models  clp is used. For continuous nonlinear models ipopt is used. 
- * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models 
+ * linear models  clp is used. For continuous nonlinear models ipopt is used.
+ * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models
  * bonmin is used.  All solvers are invoked locally. See the Users Manual in the doc folder
  * for more information
- * 
+ *
  */
 
 #include "OSCoinSolver.h"
@@ -70,16 +70,16 @@
 #include "OSOption.h"
 #include "OSoLReader.h"
 #include "OSoLWriter.h"
-#ifdef COIN_HAS_LINDO    
+#ifdef COIN_HAS_LINDO
 #include "OSLindoSolver.h"
-#endif 
-#ifdef COIN_HAS_IPOPT    
+#endif
+#ifdef COIN_HAS_IPOPT
 #include "OSIpoptSolver.h"
-#endif  
-#ifdef COIN_HAS_BONMIN    
+#endif
+#ifdef COIN_HAS_BONMIN
 #include "OSBonminSolver.h"
-#endif 
-#ifdef COIN_HAS_COUENNE    
+#endif
+#ifdef COIN_HAS_COUENNE
 #include "OSCouenneSolver.h"
 #endif
 #include "OSFileUtil.h"
@@ -89,7 +89,7 @@
 #include "OSErrorClass.h"
 #include "CoinError.hpp"
 #include "OSOption.h"
-#include "OSOptionsStruc.h" 
+#include "OSOptionsStruc.h"
 #include "OSRunSolver.h"
 #include <sstream>
 
@@ -114,10 +114,10 @@
 
 
 
-#define MAXCHARS 5000 
+#define MAXCHARS 5000
 
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
-YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner ); 
+YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner );
 //void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
 void setyyextra(osOptionsStruc *osoptions, void* scanner);
 int ossslex(void* scanner );
@@ -130,8 +130,8 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-void getAmplClientOptions(char *options, std::string *solverName, 
-   std::string *optionFile, std::string *serviceLocation);
+void getAmplClientOptions(char *options, std::string *solverName,
+                          std::string *optionFile, std::string *serviceLocation);
 
 
 
@@ -139,228 +139,247 @@ void getAmplClientOptions(char *options, std::string *solverName,
 
 int main(int argc, char **argv)
 {
-	WindowsErrorPopupBlocker();
-	char *stub;
-	// set AMPL structures
-	ASL *asl;
-	asl = ASL_alloc(ASL_read_fg);
+    WindowsErrorPopupBlocker();
+    char *stub;
+    // set AMPL structures
+    ASL *asl;
+    asl = ASL_alloc(ASL_read_fg);
     stub = argv[1];
-	jac0dim((char*)stub, (fint)strlen(stub));
-	OSnl2osil *nl2osil = NULL;
-	//initialize object with stub -- the nl file
-	nl2osil = new OSnl2osil( stub);
-	// create an osinstance object
-	OSInstance *osinstance;
-	std::cout << " call nl2osil" << std::endl;
+    jac0dim((char*)stub, (fint)strlen(stub));
+    OSnl2osil *nl2osil = NULL;
+    //initialize object with stub -- the nl file
+    nl2osil = new OSnl2osil( stub);
+    // create an osinstance object
+    OSInstance *osinstance;
+    std::cout << " call nl2osil" << std::endl;
 
-/*	Parse the .nl file to create an in-memory representation
-	in form of an OSInstance object
- */
-	try{
-		nl2osil->createOSInstance() ;
-	}
-	catch(const ErrorClass& eclass){
-		std::cout << eclass.errormsg << std::endl;
-		return 0;
-	}
-	std::cout << " return from  nl2osil" << std::endl;
-	osinstance = nl2osil->osinstance;
-	std::cout << " osinstance created" << std::endl;
+    /*	Parse the .nl file to create an in-memory representation
+    	in form of an OSInstance object
+     */
+    try
+    {
+        nl2osil->createOSInstance() ;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        std::cout << eclass.errormsg << std::endl;
+        return 0;
+    }
+    std::cout << " return from  nl2osil" << std::endl;
+    osinstance = nl2osil->osinstance;
+    std::cout << " osinstance created" << std::endl;
 
-/*	Parse the options (passed through ASL as the string OSAmplClient_options)
- *
- *	There are three possible options:
- *	1. solver:
- *		possible values - name of a supported solver (installation-dependent)
- *   	2. serviceLocation:
- *		possible values - NULL (empty) or URL of the solver service
- *	3. optionFile:
- *		specify the location of the OSoL file (on the local system)
- *      
- */
-	char *amplclient_options = NULL;
-	DefaultSolver *solverType  = NULL;	
-	std::string sSolverName = "";
-	std::string osolFileName = "";
-	std::string osol ="";
-	std::string serviceLocation = "";
+    /*	Parse the options (passed through ASL as the string OSAmplClient_options)
+     *
+     *	There are three possible options:
+     *	1. solver:
+     *		possible values - name of a supported solver (installation-dependent)
+     *   	2. serviceLocation:
+     *		possible values - NULL (empty) or URL of the solver service
+     *	3. optionFile:
+     *		specify the location of the OSoL file (on the local system)
+     *
+     */
+    char *amplclient_options = NULL;
+    DefaultSolver *solverType  = NULL;
+    std::string sSolverName = "";
+    std::string osolFileName = "";
+    std::string osol ="";
+    std::string serviceLocation = "";
 
-	amplclient_options = getenv("OSAmplClient_options");
-	if( amplclient_options != NULL){
-		cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
-		getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
-	}
+    amplclient_options = getenv("OSAmplClient_options");
+    if( amplclient_options != NULL)
+    {
+        cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
+        getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
+    }
 
-/* If an OSoL file was given, read it into a string (don't parse)
- */
-    if(osolFileName.size() > 0){
+    /* If an OSoL file was given, read it into a string (don't parse)
+     */
+    if(osolFileName.size() > 0)
+    {
         FileUtil *fileUtil;
-		fileUtil = new FileUtil();
-        osol = fileUtil->getFileAsString( osolFileName.c_str() ); 
+        fileUtil = new FileUtil();
+        osol = fileUtil->getFileAsString( osolFileName.c_str() );
         delete fileUtil;
     }
-	//std::cout << " solver Name = " << sSolverName << std::endl;
-	//std::cout << " solver Options = " << osol << std::endl;
-    
+    //std::cout << " solver Name = " << sSolverName << std::endl;
+    //std::cout << " solver Options = " << osol << std::endl;
+
     //convert solver name to lower case for testing purposes
-    
+
     unsigned int k;
-    for(k = 0; k < sSolverName.length(); k++){
+    for(k = 0; k < sSolverName.length(); k++)
+    {
         sSolverName[ k] = tolower( sSolverName[ k]);
     }
 
-	
-	OSrLReader *osrlreader = NULL;
-	OSrLWriter *osrlwriter;
-	osrlwriter = new OSrLWriter();
-	OSResult *osresult = NULL;
-	std::string osrl = "";
+
+    OSrLReader *osrlreader = NULL;
+    OSrLWriter *osrlwriter;
+    osrlwriter = new OSrLWriter();
+    OSResult *osresult = NULL;
+    std::string osrl = "";
 
 
-	try{
-		if(serviceLocation.size() == 0 ){
-			//determine the solver
-			osrl = runSolver(sSolverName, osol, osinstance);
-		}// end if serviceLocation.size() == 0
+    try
+    {
+        if(serviceLocation.size() == 0 )
+        {
+            //determine the solver
+            osrl = runSolver(sSolverName, osol, osinstance);
+        }// end if serviceLocation.size() == 0
 
-/* ------------------------------------------------------- */
-		else{// do a remote solve
-			OSSolverAgent* osagent = NULL;
-			OSiLWriter *osilwriter = NULL;
-			osilwriter = new OSiLWriter();
-			std::string  osil = osilwriter->writeOSiL( osinstance);
-			////
-			
-			//agent_address = strstr(solver_option, "service");
-			//agent_address += 7;
-			//URL = strtok( agent_address, delims );
-			//std::string sURL = URL;
-			///
-			// we should be pointing to the start of the address
-			osagent = new OSSolverAgent( serviceLocation);
-			cout << "Place remote synchronous call: " + serviceLocation << endl << endl << endl;
-			//cout << osol << endl;
-			osrl = osagent->solve(osil, osol);
-			if (osrl.size() == 0) throw ErrorClass("Nothing was returned from the server, please check service address");
-			delete osilwriter;
-			delete osagent; 
-		}
-	}//end try
-	catch(const ErrorClass& eclass){
-		osresult = new OSResult();	
-		osresult->setGeneralMessage( eclass.errormsg);
-		osresult->setGeneralStatusType( "error");
-		osrl = osrlwriter->writeOSrL( osresult);
-		std::cout  << osrl << std::endl;
-		osrl = " ";
-		write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
-		delete osresult;
-		return 0;
-	}
+        /* ------------------------------------------------------- */
+        else // do a remote solve
+        {
+            OSSolverAgent* osagent = NULL;
+            OSiLWriter *osilwriter = NULL;
+            osilwriter = new OSiLWriter();
+            std::string  osil = osilwriter->writeOSiL( osinstance);
+            ////
 
-	try{ // now put solution back to ampl
-		//need_nl = 0;
-		std::string sResultFileName = "solutionResult.osrl";
-		FileUtil *fileUtil;
-		fileUtil = new FileUtil();
-		fileUtil->writeFileFromString(sResultFileName, osrl);
-		delete fileUtil;
-		//cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
-		std::string::size_type pos1 = osrl.find( "error");
-		if(pos1 == std::string::npos){
-			std::string sReport = "model was solved";
-			std::cout << sReport << std::endl;
-			//std::cout << osrl << std::endl;
-			osrlreader = new OSrLReader();
-			osresult = osrlreader->readOSrL( osrl);
-			// do the following so output is not written twice
-			// see page 23 of hooking solver to AMPL
-			//need_nl = printf( sReport.c_str());
+            //agent_address = strstr(solver_option, "service");
+            //agent_address += 7;
+            //URL = strtok( agent_address, delims );
+            //std::string sURL = URL;
+            ///
+            // we should be pointing to the start of the address
+            osagent = new OSSolverAgent( serviceLocation);
+            cout << "Place remote synchronous call: " + serviceLocation << endl << endl << endl;
+            //cout << osol << endl;
+            osrl = osagent->solve(osil, osol);
+            if (osrl.size() == 0) throw ErrorClass("Nothing was returned from the server, please check service address");
+            delete osilwriter;
+            delete osagent;
+        }
+    }//end try
+    catch(const ErrorClass& eclass)
+    {
+        osresult = new OSResult();
+        osresult->setGeneralMessage( eclass.errormsg);
+        osresult->setGeneralStatusType( "error");
+        osrl = osrlwriter->writeOSrL( osresult);
+        std::cout  << osrl << std::endl;
+        osrl = " ";
+        write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+        delete osresult;
+        return 0;
+    }
 
-			//
-			sReport = " ";
-			int i;
-			int vecSize;
-			double *x;
-			double *y;
-			int numVars = osresult->getVariableNumber();
-			int numCons = osresult->getConstraintNumber();
-			x = new double[ numVars];
-			y = new double[ numCons];
-			
-			std::vector<IndexValuePair*> primalValPair;
-			std::vector<IndexValuePair*> dualValPair;
-			dualValPair = osresult->getOptimalDualVariableValues( 0);  
-			primalValPair = osresult->getOptimalPrimalVariableValues( 0);
-			
-			for(i = 0; i < numVars; i++){
-				x[ i] = 0.0;
-			}  
-			vecSize = primalValPair.size();
-			for(i = 0; i < vecSize; i++){
-				x[ primalValPair[i]->idx ] = primalValPair[i]->value;
-				//std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
-				//std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
-			}
-			
-			
-			for(i = 0; i < numCons; i++){
-				y[ i] = 0.0;
-			}
-			vecSize = dualValPair.size();
-			for(i = 0; i < vecSize; i++){
-				y[ dualValPair[i]->idx ] = dualValPair[i]->value;  
-				//std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
-				//std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
-			}
-			
+    try  // now put solution back to ampl
+    {
+        //need_nl = 0;
+        std::string sResultFileName = "solutionResult.osrl";
+        FileUtil *fileUtil;
+        fileUtil = new FileUtil();
+        fileUtil->writeFileFromString(sResultFileName, osrl);
+        delete fileUtil;
+        //cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
+        std::string::size_type pos1 = osrl.find( "error");
+        if(pos1 == std::string::npos)
+        {
+            std::string sReport = "model was solved";
+            std::cout << sReport << std::endl;
+            //std::cout << osrl << std::endl;
+            osrlreader = new OSrLReader();
+            osresult = osrlreader->readOSrL( osrl);
+            // do the following so output is not written twice
+            // see page 23 of hooking solver to AMPL
+            //need_nl = printf( sReport.c_str());
 
-			
-			write_sol(  const_cast<char*>(sReport.c_str()),  x, y , NULL);
-			
-			delete osrlreader;
-			osrlreader = NULL;
-			//delete[] x;
-			//x = NULL;
-			//delete y;
-			//y = NULL;
-		}else{
-			// do the following so output is not written twice
-			// see page 23 of hooking solver to AMPL
-			std::cout  << osrl << std::endl;
-			osrl = " ";
-			//
-			write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
-			need_nl = 0;
-		}
-		//cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
-	}
-	catch(const ErrorClass& eclass){
-		cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
-	}
-	if(  solverType != NULL ){
-		//cout << "TRY TO DELETE solverType" <<endl;
-		delete solverType;
-		//cout << "solverType JUST DELETED" <<endl;
-		solverType = NULL;
-	}
-	delete osrlwriter;
-	//cout << "osrlwriter JUST DELETED" <<endl;
-	osrlwriter = NULL;
-	delete nl2osil;
-	//cout << "nl2osil JUST DELETED" <<endl;
-	nl2osil = NULL;
-	ASL_free(&asl);
-	return 0; 
+            //
+            sReport = " ";
+            int i;
+            int vecSize;
+            double *x;
+            double *y;
+            int numVars = osresult->getVariableNumber();
+            int numCons = osresult->getConstraintNumber();
+            x = new double[ numVars];
+            y = new double[ numCons];
+
+            std::vector<IndexValuePair*> primalValPair;
+            std::vector<IndexValuePair*> dualValPair;
+            dualValPair = osresult->getOptimalDualVariableValues( 0);
+            primalValPair = osresult->getOptimalPrimalVariableValues( 0);
+
+            for(i = 0; i < numVars; i++)
+            {
+                x[ i] = 0.0;
+            }
+            vecSize = primalValPair.size();
+            for(i = 0; i < vecSize; i++)
+            {
+                x[ primalValPair[i]->idx ] = primalValPair[i]->value;
+                //std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
+                //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
+            }
+
+
+            for(i = 0; i < numCons; i++)
+            {
+                y[ i] = 0.0;
+            }
+            vecSize = dualValPair.size();
+            for(i = 0; i < vecSize; i++)
+            {
+                y[ dualValPair[i]->idx ] = dualValPair[i]->value;
+                //std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
+                //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
+            }
+
+
+
+            write_sol(  const_cast<char*>(sReport.c_str()),  x, y , NULL);
+
+            delete osrlreader;
+            osrlreader = NULL;
+            //delete[] x;
+            //x = NULL;
+            //delete y;
+            //y = NULL;
+        }
+        else
+        {
+            // do the following so output is not written twice
+            // see page 23 of hooking solver to AMPL
+            std::cout  << osrl << std::endl;
+            osrl = " ";
+            //
+            write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+            need_nl = 0;
+        }
+        //cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
+    }
+    if(  solverType != NULL )
+    {
+        //cout << "TRY TO DELETE solverType" <<endl;
+        delete solverType;
+        //cout << "solverType JUST DELETED" <<endl;
+        solverType = NULL;
+    }
+    delete osrlwriter;
+    //cout << "osrlwriter JUST DELETED" <<endl;
+    osrlwriter = NULL;
+    delete nl2osil;
+    //cout << "nl2osil JUST DELETED" <<endl;
+    nl2osil = NULL;
+    ASL_free(&asl);
+    return 0;
 } // end main
 
 
-//void getAmplClientOptions(char *amplclient_options, std::string *solverName, 
+//void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 //	std::string *solverOptions, std::string *serviceLocation){
 //
-//	
+//
 //	std::string amplOptions = "";
-//	std::ostringstream outStr; 
+//	std::ostringstream outStr;
 //	std::string::size_type  pos1;
 //	std::string::size_type  pos2;
 //	std::string osolFileName = "";
@@ -387,8 +406,8 @@ int main(int argc, char **argv)
 //		//end with a comma
 //		outStr << ',';
 //		amplOptions = outStr.str();
-//		
-//		
+//
+//
 //		// see if a solver has been specified
 //		pos1 = amplOptions.find( "solver");
 //		if(pos1 != std::string::npos){
@@ -401,11 +420,11 @@ int main(int argc, char **argv)
 //			if(pos2 != std::string::npos){
 //				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
 //				*solverName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-//				
+//
 //			}
 //		}
-//		
-//		
+//
+//
 //		// see if an option file has been specified
 //		pos1 = amplOptions.find( "optionFile");
 //		if(pos1 != std::string::npos){
@@ -420,9 +439,9 @@ int main(int argc, char **argv)
 //				osolFileName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
 //			}
 //		}
-//		
+//
 //		//now go ahead and read the OSoL file if specified
-//		
+//
 //		if( osolFileName.size() > 0 ){
 //			fileUtil = new FileUtil();
 //			*solverOptions  = fileUtil->getFileAsString( osolFileName.c_str());
@@ -431,7 +450,7 @@ int main(int argc, char **argv)
 //		}else{ // go ahead and create the osol string
 //			*solverOptions = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"></osol>";
 //		}
-//		
+//
 //		// see if a serviceLocation has been specified
 //		pos1 = amplOptions.find( "serviceLocation");
 //		if(pos1 != std::string::npos){
@@ -444,63 +463,65 @@ int main(int argc, char **argv)
 //			if(pos2 != std::string::npos){
 //				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
 //				*serviceLocation = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-//				
+//
 //			}
 //		}
-//		
+//
 //
 //	}//end try
 //	catch(const ErrorClass& eclass){
 //		cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
 //		throw ErrorClass( eclass.errormsg) ;
-//	}	
+//	}
 //}//getAmplClientOptions
 
 
 
 
 
-void getAmplClientOptions(char *amplclient_options, std::string *solverName, 
-						  std::string *solverOptions, std::string *serviceLocation){
-	
-	osOptionsStruc *osoptions; 
-	
-	void* scanner;
-	// initialize the OS options structure
-	
-	osoptions = new osOptionsStruc();
-	osoptions->configFile = ""; 
-	osoptions->osilFile = ""; 
-	osoptions->osil = ""; 
-	osoptions->osolFile = ""; 
-	osoptions->osol = "";  
-	osoptions->osrlFile = ""; 
-	osoptions->osrl = ""; 
-	//osoptions->insListFile = ""; 
-	osoptions->insList = ""; 
-	osoptions->serviceLocation = "";
-	osoptions->serviceMethod = ""; 
-	osoptions->osplInputFile = ""; 
-	osoptions->osplOutputFile = ""; 
-	osoptions->mpsFile = ""; 
-	osoptions->nlFile = ""; 
-	osoptions->gamsControlFile = "";
-	osoptions->solverName = ""; 
-	osoptions->browser = ""; 
-	osoptions->invokeHelp = false;
-	osoptions->writeVersion = false;
-	try{	
-		//cout << "Input String = "  << amplclient_options << endl;
-		ossslex_init( &scanner);
-		//std::cout << "Call Text Extra" << std::endl;
-		setyyextra( osoptions, scanner);
-		//std::cout << "Call scan string " << std::endl;
-		osss_scan_string( amplclient_options, scanner); 
-		//std::cout << "call ossslex" << std::endl;
-		ossslex( scanner);
-		ossslex_destroy( scanner);
-		//std::cout << "done with call to ossslex" << std::endl;
-//		
+void getAmplClientOptions(char *amplclient_options, std::string *solverName,
+                          std::string *solverOptions, std::string *serviceLocation)
+{
+
+    osOptionsStruc *osoptions;
+
+    void* scanner;
+    // initialize the OS options structure
+
+    osoptions = new osOptionsStruc();
+    osoptions->configFile = "";
+    osoptions->osilFile = "";
+    osoptions->osil = "";
+    osoptions->osolFile = "";
+    osoptions->osol = "";
+    osoptions->osrlFile = "";
+    osoptions->osrl = "";
+    //osoptions->insListFile = "";
+    osoptions->insList = "";
+    osoptions->serviceLocation = "";
+    osoptions->serviceMethod = "";
+    osoptions->osplInputFile = "";
+    osoptions->osplOutputFile = "";
+    osoptions->mpsFile = "";
+    osoptions->nlFile = "";
+    osoptions->gamsControlFile = "";
+    osoptions->solverName = "";
+    osoptions->browser = "";
+    osoptions->invokeHelp = false;
+    osoptions->writeVersion = false;
+    try
+    {
+        //cout << "Input String = "  << amplclient_options << endl;
+        ossslex_init( &scanner);
+        //std::cout << "Call Text Extra" << std::endl;
+        setyyextra( osoptions, scanner);
+        //std::cout << "Call scan string " << std::endl;
+        osss_scan_string( amplclient_options, scanner);
+        //std::cout << "call ossslex" << std::endl;
+        ossslex( scanner);
+        ossslex_destroy( scanner);
+        //std::cout << "done with call to ossslex" << std::endl;
+//
 //		cout << "HERE ARE THE OPTION VALUES:" << endl;
 //		if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
 //		if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
@@ -515,16 +536,17 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 //		if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
 //		if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
 //		if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
-//		
-		
-		*solverName = osoptions->solverName;
-		*solverOptions = osoptions->osolFile;
-        
-		*serviceLocation = osoptions->serviceLocation;
-		
-	}//end try
-	catch(const ErrorClass& eclass){
-		cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
-		throw ErrorClass( eclass.errormsg) ;
-	}	
+//
+
+        *solverName = osoptions->solverName;
+        *solverOptions = osoptions->osolFile;
+
+        *serviceLocation = osoptions->serviceLocation;
+
+    }//end try
+    catch(const ErrorClass& eclass)
+    {
+        cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
+        throw ErrorClass( eclass.errormsg) ;
+    }
 }//getAmplClientOptions
