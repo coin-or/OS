@@ -410,7 +410,7 @@ return(DOUBLE);}
 
  /* environments and comments */
 
-[a-zA-Z0-9.:_*#$@\- \n\t\r\/\\]+ { YY_PRINT; yylval->sval = strdup( yytext); /*  yylval->sval = yytext;*/ yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
+[a-zA-Z0-9.:_*#$+@\- \n\t\r\/\\]+ { YY_PRINT; yylval->sval = strdup( yytext); /*  yylval->sval = yytext;*/ yyextra->errorText = yylval->sval;  return (ELEMENTTEXT); }
 <itemtext>[^\<]+ { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 
  "<!--" BEGIN comment;
