@@ -129,7 +129,8 @@ public class StandardOSSolver extends DefaultSolver{
 			catch (Exception e) {
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 				osrlWriter.setGeneralStatusType("error");
-				osrlWriter.setGeneralStatusDescription(e.getMessage());
+				//osrlWriter.setGeneralStatusDescription(e.getMessage());
+				osrlWriter.setGeneralStatusDescription("Error involking "+ OSParameter.SOLVER_EXECUTABLE);
 				super.osrl = osrlWriter.writeToString();
 			}
 		}
@@ -167,7 +168,8 @@ public class StandardOSSolver extends DefaultSolver{
 			catch(Exception e){
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 				osrlWriter.setGeneralStatusType("error");
-				osrlWriter.setGeneralStatusDescription(e.getMessage());
+				//osrlWriter.setGeneralStatusDescription(e.getMessage());
+				osrlWriter.setGeneralStatusDescription("Error involking "+ OSParameter.SOLVER_EXECUTABLE);
 				super.osrl = osrlWriter.writeToString();
 			}
 		}
