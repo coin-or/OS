@@ -31,7 +31,7 @@
 			<other description="'should be blank'" value="NaN" name="four"/>
 		</otherOptions>
 		<instanceName>My test</instanceName>
-		<jobID>X12345-6789</jobID>
+		<jobID>X12345-6789+SpecialCharacters:_*#&$@=,/\.</jobID>
 	</general>
 	<system>
 		<minDiskSpace unit="megabyte" description="diskless machine"> 0 </minDiskSpace>
