@@ -9,6 +9,13 @@
 OS/AUTHORS -text
 OS/ChangeLog -text
 OS/LICENSE -text
+OS/MSVisualStudio/v10/OS.sln -text
+OS/MSVisualStudio/v10/OSFileUpload/OSFileUpload.vcxproj -text
+OS/MSVisualStudio/v10/OSSolverService/OSSolverService.vcxproj -text
+OS/MSVisualStudio/v10/OSTest/OSParsingTest.vcxproj -text
+OS/MSVisualStudio/v10/OSTest/OSTest.vcxproj -text
+OS/MSVisualStudio/v10/libOSCommon/libOSCommon.vcxproj -text
+OS/MSVisualStudio/v10/libOSSolvers/libOSSolvers.vcxproj -text
 OS/MSVisualStudio/v8/OS.sln -text
 OS/MSVisualStudio/v8/OSFileUpload/OSFileUpload.vcproj -text
 OS/MSVisualStudio/v8/OSSolverService/OSSolverService.vcproj -text
