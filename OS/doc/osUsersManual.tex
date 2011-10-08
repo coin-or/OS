@@ -3670,7 +3670,7 @@ solver->solve();
 This section explains how to download and use the Java implementation of the
 remote solver service described in Section~\ref{section:servicemethods}.
 The server side of the Java distribution is based on the Tomcat~6.0
-implementation. In order to build an OS Solver Service, the user should do an
+implementation (we have tested releases tomcat-6.0.26 or tomcat-6.0.33).   In order to build an OS Solver Service, the user should do an
 svn checkout:
 
 \begin{verbatim}
@@ -3687,8 +3687,8 @@ Installing the OS Web Server based on the instructions in {\tt INSTALL.txt}
 assumes that the user has installed:
 
 \begin{itemize}
-  \item Eclipse IDE.  See  \url{http://www.eclipse.org/downloads/}. At this
-  link we recommend that the user get {\tt Eclipse Classic}.  
+  \item Eclipse IDE.  See  \url{http://www.eclipse.org/downloads/}.  The instructions in
+  INSTALL.txt were tested using {\tt Eclipse Galileo}.  
   
   \item An {\tt OSSolverService} that is compatible  with the server platform.  
   The {\tt OSSolverService} executable for several different platforms is
@@ -3697,6 +3697,8 @@ assumes that the user has installed:
   Section \ref{section:build}.
   
   \item Tomcat 6.0. See \url{http://tomcat.apache.org/}.
+  
+  \item We assume the Java virtual machine 1.6, but this procedure has also been tested, and does work with JVM 1.5.
 \end{itemize}
 
 After the final installation is complete on the server we recommend testing  by
@@ -3803,6 +3805,30 @@ tomcat/bin
 contains executables and scripts to start and shut down the Tomcat server.
 \end{itemize}
 \index{Apache Tomcat|)}
+
+Before trying to call the OSSolverService, make sure you have the following libraries installed in
+webapps/OSServer/WEB-INF/lib.  Not having all of these libraries is one of the most common errors. 
+
+\begin{verbatim}
+OSCommon.jar
+OSThirdParty.jar
+axis.jar
+commons-codec-1.5.jar
+commons-discovery-0.4.jar
+commons-email-1.2.jar
+commons-fileupload-1.2.2.jar
+commons-logging-1.1.1.jar
+fastutil-5.1.5.jar
+jaxrpc.jar
+log4j-1.2.16.jar
+saxon9-xpath.jar
+saxon9.jar
+wsdl4j-1.5.1.jar
+xercesImpl.jar
+xml-apis.jar
+\end{verbatim}
+Also,  if you are running the 1.5 JVM instead of 1.6 you need
+the {\tt saaj.jar}. 
 
 
 
