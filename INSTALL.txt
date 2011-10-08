@@ -55,6 +55,8 @@ inside Tomcat skip to the section  "Install with a Web Server):
 
 == Install An OS Web Server==
 
+The following instructions are based on Eclipse version Galileo and either Tomcat tomcat-6.0.26 or tomcat-6.0.33.
+
  * Use an Eclipse with WTP (Web Tools Platform)
    * if you are in Unix platform run sudo eclipse, on Windows simply start Eclipse
    * select help > install new software
@@ -106,7 +108,7 @@ inside Tomcat skip to the section  "Install with a Web Server):
    * Right click server and select start.
    * Errors will be directed to the `console` view
 
- * Test server inside Tomcat
+ * Test server inside Tomcat[this step is not necessary]
    * in OSServer/test run `bash test.sh` or `test.cmd` for Windows.
    * IMPORTANT if your Java virtual machine is 1.5 you may have to add the saaj.jar file that is in
    * OSjava/OSThirdParty/lib/axis to .metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/OSServer/WEB-INF/classes
@@ -128,6 +130,33 @@ inside Tomcat skip to the section  "Install with a Web Server):
 
 	Try chmod u+x on the file OSSolverService. If this does not work see the next bullet point.
    * (if necessary) add grant tomcat6 policies in OSServer/doc/tomcat6-policy.txt
+
+
+=======================================================
+Trouble Shooting:
+
+Before trying to call the OSSolverService, make sure you have the following libraries installed in
+webapps/OSServer/WEB-INF/lib
+
+OSCommon.jar
+OSThirdParty.jar
+axis.jar
+commons-codec-1.5.jar
+commons-discovery-0.4.jar
+commons-email-1.2.jar
+commons-fileupload-1.2.2.jar
+commons-logging-1.1.1.jar
+fastutil-5.1.5.jar
+jaxrpc.jar
+log4j-1.2.16.jar
+saxon9-xpath.jar
+saxon9.jar
+wsdl4j-1.5.1.jar
+xercesImpl.jar
+xml-apis.jar
+
+Again, if you are running the 1.5 JVM instead of 1.6 you need
+the saaj.jar. 
 
 
 =======================================================
