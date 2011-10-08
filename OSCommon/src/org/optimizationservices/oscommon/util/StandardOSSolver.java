@@ -130,7 +130,7 @@ public class StandardOSSolver extends DefaultSolver{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 				osrlWriter.setGeneralStatusType("error");
 				//osrlWriter.setGeneralStatusDescription(e.getMessage());
-				osrlWriter.setGeneralStatusDescription("Error involking "+ OSParameter.SOLVER_EXECUTABLE);
+				osrlWriter.setGeneralStatusDescription("Error: the executable "+ OSParameter.SOLVER_EXECUTABLE + " is missing -- please see INSTALL file");
 				super.osrl = osrlWriter.writeToString();
 			}
 		}
@@ -169,7 +169,7 @@ public class StandardOSSolver extends DefaultSolver{
 				IOUtil.log(IOUtil.exceptionStackToString(e), null);
 				osrlWriter.setGeneralStatusType("error");
 				//osrlWriter.setGeneralStatusDescription(e.getMessage());
-				osrlWriter.setGeneralStatusDescription("Error involking "+ OSParameter.SOLVER_EXECUTABLE);
+				osrlWriter.setGeneralStatusDescription("Error: the executable "+ OSParameter.SOLVER_EXECUTABLE + " is missing -- please see INSTALL file");
 				super.osrl = osrlWriter.writeToString();
 			}
 		}
