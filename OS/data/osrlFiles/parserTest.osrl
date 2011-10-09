@@ -24,7 +24,11 @@ xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.
 		<serviceName>Ipopt solver service</serviceName>
 		<instanceName>Modified Rosenbrock</instanceName>
 		<message>Ipopt solver finishes to the end.</message>
+<<<<<<< .mine
+		<jobID>X12345-6789+special_characters:*#$@(), /\-+=&%.</jobID>
+=======
 		<jobID>X12345-6789+SpecialCharacters:_*#&$@=,/\.</jobID>
+>>>>>>> .r4323
 		<solverInvoked>Ipopt</solverInvoked>
 		<timeStamp>2009-09-28T15:37:30.68Z</timeStamp>
 		<otherResults numberOfOtherResults="2">
