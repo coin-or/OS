@@ -31,11 +31,7 @@
 			<other description="'should be blank'" value="NaN" name="four"/>
 		</otherOptions>
 		<instanceName>My test</instanceName>
-<<<<<<< .mine
-		<jobID>X12345-6789+special_characters:*#$@(), /\-+=&%.</jobID>
-=======
-		<jobID>X12345-6789+SpecialCharacters:_*#&$@=,/\.</jobID>
->>>>>>> .r4323
+		<jobID>X12345-6789+SpecialCharacters:_=*#&$%@(),/\.</jobID>
 	</general>
 	<system>
 		<minDiskSpace unit="megabyte" description="diskless machine"> 0 </minDiskSpace>
@@ -83,7 +79,7 @@
 		</directoriesToDelete>
 		<outputFilesToMove numberOfPathPairs="1">
 			<pathPair from="C:\datafiles\research\mslip\data\diet.result" 
-			            to="C:\datafiles\research\OS\OS-trunk-test\OS\test\temp\output.tmp"></pathPair>
+							to="C:\datafiles\research\OS\OS-trunk-test\OS\test\temp\output.tmp"></pathPair>
 		</outputFilesToMove>
 		<maxTime unit="second">INF</maxTime>
 		<requiredDirectories numberOfPaths="1">
@@ -106,11 +102,11 @@
 	<optimization numberOfConstraints="8" numberOfVariables="10" numberOfObjectives="2" >
 		<variables numberOfOtherVariableOptions="4">
 			<initialVariableValues numberOfVar="5">
-				<var idx="0" value="1" name="x0"/>
-				<var name="x1" value="4.742999643577776e-2" idx="1"></var>
-				<var idx="3" name="" value="1.379408293215363"/>
-				<var idx="2"/>
-				<var value="NaN" idx="5" name=" "/>
+					<var idx="0" value="1" name="x0"/>
+					<var name="x1" value="4.742999643577776e-2" idx="1"></var>
+					<var idx="3" name="" value="1.379408293215363"/>
+					<var idx="2"/>
+					<var value="NaN" idx="5" name=" "/>
 			</initialVariableValues>
 			<initialVariableValuesString numberOfVar="3">
 				<var idx="1" value="blue" name="BLUE"></var>
