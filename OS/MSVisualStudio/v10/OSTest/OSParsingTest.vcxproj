@@ -97,10 +97,10 @@
       <UndefinePreprocessorDefinitions>HAVE_CONFIG_H;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;libCoinUtils.lib;libOSCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\$(Configuration)\OSParsingTest.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -130,10 +130,10 @@
       <UndefinePreprocessorDefinitions>HAVE_CONFIG_H;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;libCoinUtils.lib;libOSCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\..\test\parsingTestD64.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\$(Configuration)\OSParsingTest.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -162,9 +162,9 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;libCoinUtils.lib;libOSCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\..\applications\parsingTest\parsingTest.exe</OutputFile>
-      <AdditionalLibraryDirectories>..\..\lib;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>.\$(Configuration)\OSParsingTest.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -200,9 +200,9 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>wsock32.lib;winmm.lib;advapi32.lib;libCoinUtils.lib;libOSCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\..\..\applications\parsingTest\parsingTest.exe</OutputFile>
-      <AdditionalLibraryDirectories>..\..\lib;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <ProgramDatabaseFile>
       </ProgramDatabaseFile>
@@ -216,14 +216,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\applications\parsingTest\parsingTest.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CoinUtils\MSVisualStudio\v10\libCoinUtils\libCoinUtils.vcxproj">
-      <Project>{c4867f15-438d-4ff8-8388-62fbaaa9786c}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\libOSCommon\libOSCommon.vcxproj">
-      <Project>{9b52f86f-d29f-4eb4-b2ab-35a894a98fbd}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
