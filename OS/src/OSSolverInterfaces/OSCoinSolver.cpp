@@ -903,10 +903,21 @@ void CoinSolver::solve() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        osresult->setGeneralMessage( eclass.errormsg);
-        osresult->setGeneralStatusType( "error");
-        osrl = osrlwriter->writeOSrL( osresult);
-        throw ErrorClass( osrl) ;
+        std::string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+        if(pos1 == std::string::npos)
+        {
+            osresult->setGeneralMessage(eclass.errormsg);
+            osresult->setGeneralStatusType("error");
+            osrl = osrlwriter->writeOSrL(osresult);
+        }
+        else
+        {
+            osrl = eclass.errormsg;
+        }
+
+
+
+        throw ErrorClass( osrl);
     }
 } // end solve
 
@@ -1067,13 +1078,13 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             if( (sSolverName.find( "vol") == std::string::npos) &&
                     (sSolverName.find( "symphony") == std::string::npos) &&
                     (sSolverName.find( "dylp") == std::string::npos) &&
-                    (sSolverName.find( "glpk") == std::string::npos) ) //vol, symphony and glpk do not support this -- DyLP causues memory leak
+                    (sSolverName.find( "glpk") == std::string::npos) ) //vol, symphony and glpk do not support this -- DyLP causes memory leak
             {
                 solver->getBasisStatus( cbasis, rbasis);
             }
 
-        }//end if on proven optimal
-        else
+        }//end if proven optimal
+        else // some other terminating condition
         {
             if(solver->isProvenPrimalInfeasible() == true)
                 osresult->setSolutionStatus(solIdx, "infeasible", "the problem is primal infeasible");
@@ -1193,7 +1204,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
         }// end for on number of variables
 
-        //now set basis information for varialbes
+        //now set basis information for variables
         if(freeVars.size()  > 0)
         {
 
@@ -1348,7 +1359,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
 
 
-            //now set basis information for varialbes
+            //now set basis information for variables
             if(freeVars.size()  > 0)
             {
 

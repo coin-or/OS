@@ -1227,7 +1227,7 @@ void solve()
         OSrLWriter *osrlwriter = NULL;
         //first check to see if we already have OSrL,
         //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+        std::string::size_type  pos1 = eclass.errormsg.find( "<osrl");
         if(pos1 == std::string::npos)
         {
             osrlwriter = new OSrLWriter();
