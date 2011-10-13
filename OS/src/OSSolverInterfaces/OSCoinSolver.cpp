@@ -635,6 +635,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
         std::cout << "solver options set" << std::endl;
 #endif
     }//end of try
+
     catch(const ErrorClass& eclass)
     {
         std::cout << "THERE IS AN ERROR" << std::endl;
@@ -1143,7 +1144,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             *(idx + i) = i;
 
             // get basis information
-            if(cbasis != NULL)
+            if( (cbasis != NULL) && (solver->isProvenOptimal() == true) )
             {
 
 
@@ -1293,7 +1294,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                 //std::cout << "------ ROW BASIS STATUS ----- " << rbasis[ i]  << std::endl;
 
                 // get basis information
-                if(rbasis != NULL)
+                if((rbasis != NULL) && (solver->isProvenOptimal() == true) )
                 {
                     switch (rbasis[ i] )
                     {

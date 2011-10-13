@@ -23,7 +23,7 @@
 			<con name="cutanddye" lb = "10" ub="630" />
 			<con name="sewing"  ub="600"/>
 			<con name="finishing"  ub="708"/>
-			<con  ub="135"/>
+			<con  ub="0"/>
 		</constraints>
 		<linearConstraintCoefficients numberOfValues="8">
 			<start>

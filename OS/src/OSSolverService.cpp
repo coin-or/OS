@@ -136,7 +136,7 @@ using std::ostringstream;
 using std::string;
 using std::map;
 
-#define DEBUG_CL_INTERFACE
+//#define DEBUG_CL_INTERFACE
 
 
 #define MAXCHARS 5000
