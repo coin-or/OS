@@ -50,7 +50,7 @@ public final class OSParameterFile {
 	 */
 	public static String setParameterFile(HttpServletRequest httpRequest){
 		OSParameter.SERVICE_FOLDER = httpRequest.getRealPath("/");
-		NAME = OSParameter.SERVICE_FOLDER + "/WEB-INF/code/OSConfig/OSParameter.xml";
+		NAME = OSParameter.SERVICE_FOLDER + ((OSParameter.SERVICE_FOLDER.endsWith("/")||OSParameter.SERVICE_FOLDER.endsWith("\\")?"":"/")) +"WEB-INF/code/OSConfig/OSParameter.xml";
 		return NAME;
 		
 	}//setParameterFile

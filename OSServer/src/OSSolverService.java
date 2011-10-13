@@ -58,7 +58,7 @@ public class OSSolverService implements OShL{
 	 * @return the optimization result in a string which format follows the Optimization
 	 * Services result Language (OSrL) schema.
 	 * @see org.optimizationservices.ossolver.api.OShL#solve
-	 */
+	 */ 
 	public String solve(String osil, String osol){
 		return m_osServiceUtil.solve(osil, osol);
 	}//solve
@@ -71,6 +71,7 @@ public class OSSolverService implements OShL{
 	 * @return a jobID string. 
 	 */
 	public String getJobID(String osol){
+		IOUtil.writeStringToFile(IOUtil.getCurrentDir()+":"+OSParameterFile.NAME+":"+OSParameter.LOG_FILE+":"+OSParameter.SOLVER_CLASS_NAME+":"+OSParameter.SOLVER_EXECUTABLE, "/Users/majxuh/Desktop/log.txt");
 		String jobid=m_osServiceUtil.getJobID(osol);
 		OSLog.log.info(jobid);
 		return jobid;
