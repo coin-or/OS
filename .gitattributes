@@ -525,6 +525,7 @@ OS/src/OSSolverInterfaces/OSKnitroSolver.cpp -text
 OS/src/OSSolverInterfaces/OSKnitroSolver.h -text
 OS/src/OSSolverInterfaces/OSLindoSolver.cpp -text
 OS/src/OSSolverInterfaces/OSLindoSolver.h -text
+OS/src/OSSolverInterfaces/OSRunSolver.cpp -text
 OS/src/OSSolverInterfaces/OSRunSolver.h -text
 OS/src/OSSolverService.cpp -text
 OS/src/OSUtils/Makefile.am -text
