@@ -85,11 +85,10 @@
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>
       </PrecompiledHeaderOutputFile>
-      <AssemblerOutput>
-      </AssemblerOutput>
-      <AssemblerListingLocation>.\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>.\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>.\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
@@ -116,11 +115,10 @@
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>
       </PrecompiledHeaderOutputFile>
-      <AssemblerOutput>
-      </AssemblerOutput>
-      <AssemblerListingLocation>.\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>.\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>.\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
@@ -142,14 +140,15 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <AssemblerListingLocation>.\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>.\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>.\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AssemblerOutput>NoListing</AssemblerOutput>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -171,15 +170,15 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <AssemblerListingLocation>
-      </AssemblerListingLocation>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc90.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4244;4267;4288;4290;4805;4930;4018;4065;4003;4101;4006;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AssemblerOutput>NoListing</AssemblerOutput>
     </ClCompile>
     <Lib>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>

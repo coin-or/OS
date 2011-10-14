@@ -86,9 +86,9 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>.\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>.\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <UndefinePreprocessorDefinitions>HAVE_CONFIG_H;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
@@ -120,9 +120,9 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Debug/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>.\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>.\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <UndefinePreprocessorDefinitions>HAVE_CONFIG_H;%(UndefinePreprocessorDefinitions)</UndefinePreprocessorDefinitions>
@@ -151,9 +151,9 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>.\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>.\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -189,9 +189,9 @@
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderOutputFile>.\Release/Application-fileUpload.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\$(Configuration)\</AssemblerListingLocation>
-      <ObjectFileName>.\$(Configuration)\</ObjectFileName>
-      <ProgramDataBaseFileName>.\$(Configuration)\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>
       </DebugInformationFormat>
