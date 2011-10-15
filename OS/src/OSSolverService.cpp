@@ -169,6 +169,8 @@ void getOSiLFromGams();
 //std::string buildSolver(std::string solverName, std::string osol,
 //                        OSInstance *osinstance);
 void listOptions(osOptionsStruc *osoptions);
+void doPrintModel(osOptionsStruc *osoptions);
+void doPrintRow(osOptionsStruc *osoptions);
 
 //std::string getServiceURI( std::string osol);
 //std::string getInstanceLocation( std::string osol);
@@ -227,13 +229,13 @@ int main(int argC, const char* argV[])
             unsigned int k;
 
 
-            std::string commandArray[12] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
-                                             "quit", "exit",  "reset", "list", "?", "help"
+            std::string commandArray[13] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
+                                             "quit", "exit",  "reset", "list", "?", "help", "printModel"
                                            };
 
 
-            std::string optionArray[10] = { "osil", "osrl", "osol", "mps", "nl", "dat",
-                                            "serviceLocation", "solver", "osplInput",  "osplOutput"
+            std::string optionArray[11] = { "osil", "osrl", "osol", "mps", "nl", "dat",
+                                            "serviceLocation", "solver", "osplInput",  "osplOutput", "printRow"
                                           };
 
 
@@ -522,6 +524,12 @@ int main(int argC, const char* argV[])
                                     break;
 
 
+                                case 12: // printModel
+
+                                    doPrintModel(osoptions);
+                                    break;
+
+
                                 default:
                                     throw ErrorClass("we don't have a valid  command");
 
@@ -593,6 +601,12 @@ int main(int argC, const char* argV[])
                                         case 9: //osplOutput
                                             std::cout
                                                     << "Please enter the name of an osplOutput file: ";
+                                            break;
+
+
+                                        case 10: //printRow
+                                            std::cout
+                                                    << "Please enter the number of a constraint (>=0) or objective (<0): ";
                                             break;
 
 
@@ -681,6 +695,11 @@ int main(int argC, const char* argV[])
 
                                     case 9: //osplOutput
 
+                                        break;
+
+                                    case 10: //printRow
+
+					doPrintRow(osoptions);
                                         break;
 
 
@@ -1005,10 +1024,22 @@ int main(int argC, const char* argV[])
     // now call the correct serviceMethod
     // solve is the default
     if (osoptions->serviceMethod == "")
+    {
+        if (osoptions->printModel == true)
+            doPrintModel(osoptions);
+        else if (osoptions->printRowNumberAsString != "")
+            doPrintRow(osoptions);
         solve();
+     }
     if ((osoptions->serviceMethod[0] == 's') && (osoptions->serviceMethod[1]
             == 'o'))
+    {
+        if (osoptions->printModel == true)
+            doPrintModel(osoptions);
+        else if (osoptions->printRowNumberAsString != "")
+            doPrintRow(osoptions);
         solve();
+     }
     else
     {
         switch (osoptions->serviceMethod[0])
@@ -1020,6 +1051,10 @@ int main(int argC, const char* argV[])
             retrieve();
             break;
         case 's':
+            if (osoptions->printModel == true)
+                doPrintModel(osoptions);
+            else if (osoptions->printRowNumberAsString != "")
+                doPrintRow(osoptions);
             send();
             break;
         case 'k':
@@ -1087,8 +1122,13 @@ void solve()
                     }
                 }
             }
-            // place a remote call
 
+	    if (osoptions->printModel)
+		doPrintModel(osoptions);
+	    else if (osoptions->printRowNumberAsString != "")
+                doPrintRow(osoptions);
+
+            // place a remote call
             osagent = new OSSolverAgent(osoptions->serviceLocation);
 
             if (osoptions->osol == "")  // we have no osol string
@@ -1129,6 +1169,11 @@ void solve()
                
                 //osrl = buildSolver(osoptions->solverName, osoptions->osol,
                 //                   osilreader->readOSiL(osoptions->osil));
+
+		if (osoptions->printModel)
+		    doPrintModel(osoptions);
+		else if (osoptions->printRowNumberAsString != "")
+	            doPrintRow(osoptions);
                 
                 osrl = runSolver(osoptions->solverName, osoptions->osol,
                                    osilreader->readOSiL(osoptions->osil));
@@ -1141,6 +1186,20 @@ void solve()
 #ifdef COIN_HAS_ASL
                     nl2osil = new OSnl2osil( osoptions->nlFile);
                     nl2osil->createOSInstance();
+
+                    if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
+                    {
+                        OSiLWriter *osilwriter = NULL;
+                        osilwriter = new OSiLWriter();
+                        osoptions->osil = osilwriter->writeOSiL(nl2osil->osinstance);
+			if (osoptions->printModel)
+		            doPrintModel(osoptions);
+		        else
+	                    doPrintRow(osoptions);
+                        delete osilwriter;
+                        osilwriter = NULL;
+                    }
+
                     osrl = runSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
 #else
                     throw ErrorClass(
@@ -1153,6 +1212,20 @@ void solve()
                     {
                         mps2osil = new OSmps2osil(osoptions->mpsFile);
                         mps2osil->createOSInstance();
+
+                        if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
+                        {
+                            OSiLWriter *osilwriter = NULL;
+                            osilwriter = new OSiLWriter();
+                            osoptions->osil = osilwriter->writeOSiL(mps2osil->osinstance);
+			    if (osoptions->printModel)
+		                doPrintModel(osoptions);
+		            else
+	                        doPrintRow(osoptions);
+                            delete osilwriter;
+                            osilwriter = NULL;
+                        }
+
                         osrl = runSolver(osoptions->solverName,
                                            osoptions->osol, mps2osil->osinstance);
                     }
@@ -1163,6 +1236,20 @@ void solve()
 #ifdef COIN_HAS_GAMSUTILS
                             gams2osil = new OSgams2osil( osoptions->gamsControlFile);
                             gams2osil->createOSInstance();
+
+                            if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
+                            {
+                                OSiLWriter *osilwriter = NULL;
+                                osilwriter = new OSiLWriter();
+                                osoptions->osil = osilwriter->writeOSiL(gams2osil->osinstance);
+			        if (osoptions->printModel)
+		                    doPrintModel(osoptions);
+		                else
+ 	                            doPrintRow(osoptions);
+                                delete osilwriter;
+                                osilwriter = NULL;
+                            }
+
                             osrl = runSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
 #else
                             throw ErrorClass(
@@ -2400,6 +2487,8 @@ void reset_options()
     osoptions->jobID = "";
     osoptions->invokeHelp = false;
     osoptions->writeVersion = false;
+    osoptions->printModel = false;
+    osoptions->printRowNumberAsString = "";
     osoptions->quit = false;
     osoptions->exit = false;
 
@@ -2465,7 +2554,6 @@ std::string get_options()
     optionMsg
             << "nl -- the location of the model instance in AMPL nl format"
             << endl;
-
     optionMsg
             << "osol -- the location of the solver option file in OSoL format"
             << endl;
@@ -2478,23 +2566,32 @@ std::string get_options()
     optionMsg
             << "osplOutput --  the name of an output file in the OSpL format"
             << endl	;
-
     optionMsg
             << "serviceLocation -- the  URL of a remote solver service"
             << endl;
-
-
     optionMsg
             << "solver -- specify the solver to invoke"
             << endl <<endl;
-
-
     optionMsg
             << "See  http://www.coin-or.org/OS/"
             << endl;
     optionMsg
             << "for more detail on how to use the OS project."
+            << endl << endl;
+
+	optionMsg
+            << "PRINT OPTIONS:"
             << endl;
+	optionMsg
+            << "printModel -- print the currently defined model"
+            << endl;
+	optionMsg
+            << "printRow nnn -- print row n of the currently defined model"
+            << endl;
+	optionMsg
+            << "   if nnn >= 0, prints a constraint, otherwise prints an objective row "
+            << endl << endl;
+
     optionMsg
             << "*****************************************************************"
             << endl << endl;
@@ -2568,4 +2665,103 @@ void listOptions(osOptionsStruc *osoptions)
              << osoptions->jobID
              << endl;
 }// listOptions
+
+void doPrintModel(osOptionsStruc *osoptions)
+{
+	if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+	{
+		std::cout
+			<< "no instance defined; print command ignored" << std::endl;
+	}
+	else
+	{
+		if (osoptions->osil != "")
+		{
+			OSiLReader *osilreader;
+			osilreader = new OSiLReader();
+			std::cout << osilreader->readOSiL(osoptions->osil)->printModel() << std::endl;
+			delete osilreader;
+			osilreader = NULL;
+		}
+		else if (osoptions->nl != "")
+		{
+#ifdef COIN_HAS_ASL
+			OSnl2osil *nl2osil;	
+			nl2osil = new OSnl2osil( osoptions->nlFile);
+			nl2osil->createOSInstance();
+			std::cout << nl2osil->osinstance->printModel() << std::endl;
+			delete nl2osil;
+			nl2osil = NULL;
+#else
+			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
+#endif
+		}
+		else if (osoptions->mps != "")
+		{
+			OSmps2osil *mps2osil;
+			mps2osil = new OSmps2osil(osoptions->mpsFile);
+			mps2osil->createOSInstance();
+			std::cout << mps2osil->osinstance->printModel() << std::endl;
+			delete mps2osil;
+			mps2osil = NULL;
+		}
+	}
+}// doPrintModel
+
+void doPrintRow(osOptionsStruc *osoptions)
+{
+	int rownumber;
+	if (osoptions->printRowNumberAsString == "")
+		std::cout << "no line number given; print command ignored" << std::endl;
+	else
+	{
+		try
+		{
+			rownumber = atoi((osoptions->printRowNumberAsString).c_str());
+		}
+		catch  (const ErrorClass& eclass)
+		{
+	                std::cout << "invalid row number; print command ignored" << std::endl;
+		}
+
+		if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+                {
+                        std::cout
+	                        << "no instance defined; print command ignored" << std::endl;
+		}
+		else
+		{
+			if (osoptions->osil != "")
+			{
+				OSiLReader *osilreader;
+				osilreader = new OSiLReader();
+		    		std::cout << osilreader->readOSiL(osoptions->osil)->printModel(rownumber) << std::endl;
+				delete osilreader;
+				osilreader = NULL;
+			}
+			else if (osoptions->nl != "")
+			{
+#ifdef COIN_HAS_ASL
+				OSnl2osil *nl2osil;	
+				nl2osil = new OSnl2osil( osoptions->nlFile);
+				nl2osil->createOSInstance();
+				std::cout << nl2osil->osinstance->printModel(rownumber) << std::endl;
+				delete nl2osil;
+				nl2osil = NULL;
+#else
+				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
+#endif
+			}
+			else if (osoptions->mps != "")
+			{
+				OSmps2osil *mps2osil;
+				mps2osil = new OSmps2osil(osoptions->mpsFile);
+				mps2osil->createOSInstance();
+				std::cout << mps2osil->osinstance->printModel(rownumber) << std::endl;
+				delete mps2osil;
+				mps2osil = NULL;
+			}
+		}
+	}
+}// doPrintRow
 

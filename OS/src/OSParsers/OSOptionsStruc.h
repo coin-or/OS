@@ -159,8 +159,21 @@ struct osOptionsStruc
      * of the OS project
      */
     bool writeVersion;
+	
+    /** if this parameter is true we print the current instance
+     *  as read from an osil, nl or mps file
+     */
+    bool printModel;
 
-    /** if this parameter is true we quit/exit	 */
+	/** this parameter contains a string representation (!) of 
+	 *  the row number if only a single row (constraint or objective)
+	 *  of the current instance is to be printed
+	 *  String representations are easier to parse in OSParseosss.l and
+	 *  are easier to recognize as being present or absent
+	 */
+	std::string printRowNumberAsString;
+
+	/** if this parameter is true we quit/exit	 */
     bool quit;
 
     /** if this parameter is true we quit/exit	 */

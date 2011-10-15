@@ -331,7 +331,6 @@ void osilfree (void * ,yyscan_t yyscanner );
             osil_create_buffer(yyin,YY_BUF_SIZE ,yyscanner); \
 	} \
 	YY_CURRENT_BUFFER_LVALUE->yy_is_interactive = is_interactive; \
-	}
 
 #define yy_set_bol(at_bol) \
 	{ \
