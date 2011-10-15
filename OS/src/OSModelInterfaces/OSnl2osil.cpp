@@ -811,6 +811,6 @@ bool OSnl2osil::createOSInstance()
     std::cout << osinstance->printModel() << std::endl;
 
 #endif
-
+    std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
     return true;
 }
