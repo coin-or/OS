@@ -16,13 +16,6 @@ OS/MSVisualStudio/v10/OSTest/OSParsingTest.vcxproj -text
 OS/MSVisualStudio/v10/OSTest/OSTest.vcxproj -text
 OS/MSVisualStudio/v10/libOSCommon/libOSCommon.vcxproj -text
 OS/MSVisualStudio/v10/libOSSolvers/libOSSolvers.vcxproj -text
-OS/MSVisualStudio/v8/OS.sln -text
-OS/MSVisualStudio/v8/OSFileUpload/OSFileUpload.vcproj -text
-OS/MSVisualStudio/v8/OSSolverService/OSSolverService.vcproj -text
-OS/MSVisualStudio/v8/OSTest/OSParsingTest.vcproj -text
-OS/MSVisualStudio/v8/OSTest/OSTest.vcproj -text
-OS/MSVisualStudio/v8/libOSCommon/libOSCommon.vcproj -text
-OS/MSVisualStudio/v8/libOSSolvers/libOSSolvers.vcproj -text
 OS/MSVisualStudio/v9/OS.sln -text
 OS/MSVisualStudio/v9/OSFileUpload/OSFileUpload.vcproj -text
 OS/MSVisualStudio/v9/OSSolverService/OSSolverService.vcproj -text
