@@ -60,7 +60,7 @@ using std::endl;
 
 
 
-#define AMPLDEBUG
+//#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename)
 {
@@ -811,6 +811,6 @@ bool OSnl2osil::createOSInstance()
     std::cout << osinstance->printModel() << std::endl;
 
 #endif
-    std::cout << osilwriter.writeOSiL( osinstance) << std::endl;
+   
     return true;
 }

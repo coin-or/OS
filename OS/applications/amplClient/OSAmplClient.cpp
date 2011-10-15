@@ -168,6 +168,20 @@ int main(int argc, char **argv)
     std::cout << " return from  nl2osil" << std::endl;
     osinstance = nl2osil->osinstance;
     std::cout << " osinstance created" << std::endl;
+    //write out the instance
+    //kippster
+    OSiLWriter *osilwriter = NULL;
+    osilwriter = new OSiLWriter();
+    osilwriter->m_bWhiteSpace = true;
+    std::string sModeInstanceName = "modelInstance.osil";
+    FileUtil *fileUtil;
+    fileUtil = new FileUtil();
+    fileUtil->writeFileFromString(sModeInstanceName,  osilwriter->writeOSiL( osinstance) );
+    delete fileUtil;
+    fileUtil = NULL;
+    delete  osilwriter;
+    osilwriter = NULL;
+    //
 
     /*	Parse the options (passed through ASL as the string OSAmplClient_options)
      *
