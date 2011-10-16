@@ -531,7 +531,7 @@ int main(int argC, const char* argV[])
 
 
                                 default:
-                                    throw ErrorClass("we don't have a valid  command");
+                                    throw ErrorClass("we don't have a valid command");
 
 
                                 } //end switch
@@ -699,7 +699,7 @@ int main(int argC, const char* argV[])
 
                                     case 10: //printRow
 
-					doPrintRow(osoptions);
+					                    doPrintRow(osoptions);
                                         break;
 
 
@@ -782,8 +782,8 @@ int main(int argC, const char* argV[])
             
             
             /** new -- added on September 19, 2011
-             * if we are then the command line had a configure file, but
-             * commnad line options should override the confige file so go
+             * if we are here, then the command line had a configure file, but
+             * command line options should override the config file so go
              * back and get these options again
              */
             
@@ -929,6 +929,9 @@ int main(int argC, const char* argV[])
     if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
     if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
     if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
+    if(osoptions->printModel) cout << "print model prior to solve/send" << endl;
+    if(osoptions->printRowNumberAsString != "") cout << "print model row " << osoptions->printRowNumberAsString << " prior to solve/send" << endl;
+
 #endif
 
     //convert to lower case so there is no solver name ambiguity
@@ -1740,7 +1743,6 @@ void kill()
         {
             osagent = new OSSolverAgent(osoptions->serviceLocation);
 
-
             if (osoptions->osol == "")
             {
                 // we need to construct the OSoL
@@ -2209,7 +2211,6 @@ std::string get_help()
 
 std::string get_version()
 {
-
     std::ostringstream versionMsg;
     versionMsg << "In order to find the version of this project " << endl;
     versionMsg << "connect to the directory where you downloaded " << endl;
@@ -2491,16 +2492,13 @@ void reset_options()
     osoptions->printRowNumberAsString = "";
     osoptions->quit = false;
     osoptions->exit = false;
-
 }//reset_options
 
 
 
 std::string get_options()
 {
-
     std::ostringstream optionMsg;
-
 
     optionMsg << endl;
 
@@ -2589,7 +2587,7 @@ std::string get_options()
             << "printRow nnn -- print row n of the currently defined model"
             << endl;
 	optionMsg
-            << "   if nnn >= 0, prints a constraint, otherwise prints an objective row "
+            << "   if nnn >= 0, prints a constraint, otherwise prints an objective row"
             << endl << endl;
 
     optionMsg
@@ -2731,6 +2729,7 @@ void doPrintRow(osOptionsStruc *osoptions)
 		}
 		else
 		{
+			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
 			if (osoptions->osil != "")
 			{
 				OSiLReader *osilreader;
