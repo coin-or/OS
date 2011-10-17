@@ -1,9 +1,7 @@
 /* $Id$ */
-/** @file parseosssl.l
+/** @file OSParseosss.l
  * 
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
- * @version 1.0, 10/05/2005
- * @since   OS1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -191,19 +189,20 @@ browserState (on|off)
  }
 
 			 
+ (version) {
+	YY_PRINT  
+	yyextra->writeVersion = true;
+}
 
 
 (--version) {
 	YY_PRINT  
 	yyextra->writeVersion = true;
-	
 }
 
 (-v) {
 	YY_PRINT 
 	yyextra->writeVersion = true;
-	
-	
 }
 			 
 			 
