@@ -261,7 +261,7 @@ int main(int argC, const char* argV[])
 #ifdef DEBUG_CL_INTERFACE
             cout << "configFileName = " << configFileName << endl;
 #endif
-            std::string osolfileOptions = fileUtil->getFileAsString(
+            std::string configFileOptions = fileUtil->getFileAsString(
                                               configFileName.c_str());
 #ifdef DEBUG_CL_INTERFACE
             std::cout << "Call Text Extra" << std::endl;
@@ -270,7 +270,7 @@ int main(int argC, const char* argV[])
 #ifdef DEBUG_CL_INTERFACE
             std::cout << "Done with call Text Extra" << std::endl;
 #endif
-            osss_scan_string(osolfileOptions.c_str(), scanner);
+            osss_scan_string(configFileOptions.c_str(), scanner);
             ossslex(scanner);
             ossslex_destroy(scanner);
             scannerActive = false;
@@ -346,9 +346,6 @@ int main(int argC, const char* argV[])
     {
         if (osoptions->invokeHelp == true)
         {
-//            std::string helpTxt = get_help();
-//          std::cout << std::endl << std::endl;
-//            std::cout << helpTxt << std::endl;
 			std::cout << std::endl << std::endl << get_help() << std::endl;
             delete osoptions;
             osoptions = NULL;
@@ -356,9 +353,6 @@ int main(int argC, const char* argV[])
         }
         if (osoptions->writeVersion == true)
         {
-//            std::string writeTxt = get_version();
-//            std::cout << std::endl << std::endl;
-//            std::cout << writeTxt << std::endl;
 			std::cout << std::endl << std::endl << OSgetVersionInfo() << std::endl;
             delete osoptions;
             osoptions = NULL;
