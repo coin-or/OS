@@ -19,7 +19,8 @@ ThirdParty/Metis  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis/s
 Ipopt        https://projects.coin-or.org/svn/Ipopt/stable/3.10/Ipopt
 #cppad        https://projects.coin-or.org/svn/CppAD/stable/20110101
 #cppad        https://projects.coin-or.org/svn/CppAD/releases/20110101.2
-cppad        https://projects.coin-or.org/svn/CppAD/releases/20110101.4
+#cppad        https://projects.coin-or.org/svn/CppAD/releases/20110101.4
+cppad        https://projects.coin-or.org/svn/CppAD/releases/20110101.5
 Bonmin       https://projects.coin-or.org/svn/Bonmin/stable/1.5/Bonmin
 Couenne      https://projects.coin-or.org/svn/Couenne/stable/0.4/Couenne  
 ApplicationTemplates https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/stable/1.1
