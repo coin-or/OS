@@ -189,7 +189,7 @@ inline void getServiceLocation()
     std::cout
             << "Please type the URL of the remote service: ";
     getline(std::cin, osoptions->serviceLocation);
-};
+}
   
 int main(int argC, const char* argV[])
 {
@@ -1881,7 +1881,7 @@ void interactiveShell()
             osoptions = NULL;
             delete fileUtil;
             fileUtil = NULL;
-};
+}
 
 std::string get_help()
 {
