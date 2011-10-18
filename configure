@@ -495,7 +495,7 @@ ac_subdirs_all="$ac_subdirs_all Bonmin"
 ac_subdirs_all="$ac_subdirs_all Couenne"
 ac_subdirs_all="$ac_subdirs_all Bcp"
 ac_subdirs_all="$ac_subdirs_all GamsUtils"
-ac_subdirs_all="$ac_subdirs_all ApplicationTemplates"
+ac_subdirs_all="$ac_subdirs_all examples"
 ac_subdirs_all="$ac_subdirs_all OS"
 ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os CDEFS ADD_CFLAGS DBG_CFLAGS OPT_CFLAGS sol_cc_compiler CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COIN_CC_IS_CL_TRUE COIN_CC_IS_CL_FALSE MPICC CXXDEFS ADD_CXXFLAGS DBG_CXXFLAGS OPT_CXXFLAGS CXX CXXFLAGS ac_ct_CXX COIN_CXX_IS_CL_TRUE COIN_CXX_IS_CL_FALSE MPICXX ADD_FFLAGS DBG_FFLAGS OPT_FFLAGS F77 ac_ct_F77 FFLAGS MPIF77 EGREP LN_S INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT LIBTOOLM4 have_autoconf have_automake have_svn BUILDTOOLSDIR AUX_DIR abs_source_dir abs_lib_dir abs_include_dir abs_bin_dir HAVE_EXTERNALS_TRUE HAVE_EXTERNALS_FALSE host host_cpu host_vendor host_os ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP LIBTOOL ac_c_preproc_warn_flag ac_cxx_preproc_warn_flag RPATH_FLAGS LT_LDFLAGS COIN_SKIP_PROJECTS subdirs LIBEXT VPATH_DISTCLEANFILES ABSBUILDDIR LIBOBJS LTLIBOBJS'
 ac_subst_files=''
@@ -1228,14 +1228,10 @@ Optional Packages:
   --with-gamsutils-datadir
                           directory with data files for using project
                           GamsUtils
-  --with-applicationtemplates-lib
-                          linker flags for using project ApplicationTemplates
-  --with-applicationtemplates-incdir
-                          directory with header files for using project
-                          ApplicationTemplates
-  --with-applicationtemplates-datadir
-                          directory with data files for using project
-                          ApplicationTemplates
+  --with-examples-lib linker flags for using project examples
+  --with-examples-incdir directory with header files for using project
+                          examples
+  --with-examples-datadir directory with data files for using project examples
   --with-os-lib linker flags for using project OS
   --with-os-incdir directory with header files for using project OS
   --with-os-datadir directory with data files for using project OS
@@ -4367,7 +4363,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:4370:" \
+echo "$as_me:4366:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6633,7 +6629,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 6636 "configure"' > conftest.$ac_ext
+  echo '#line 6632 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8597,11 +8593,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8600: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8596: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8604: \$? = $ac_status" >&5
+   echo "$as_me:8600: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8865,11 +8861,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8868: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8864: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:8872: \$? = $ac_status" >&5
+   echo "$as_me:8868: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -8969,11 +8965,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:8972: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:8968: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:8976: \$? = $ac_status" >&5
+   echo "$as_me:8972: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11314,7 +11310,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11317 "configure"
+#line 11313 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11414,7 +11410,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 11417 "configure"
+#line 11413 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13758,11 +13754,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13761: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13757: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13765: \$? = $ac_status" >&5
+   echo "$as_me:13761: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -13862,11 +13858,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13865: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13861: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13869: \$? = $ac_status" >&5
+   echo "$as_me:13865: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -15432,11 +15428,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15435: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15431: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15439: \$? = $ac_status" >&5
+   echo "$as_me:15435: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -15536,11 +15532,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15539: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15535: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:15543: \$? = $ac_status" >&5
+   echo "$as_me:15539: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17743,11 +17739,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:17746: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:17742: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:17750: \$? = $ac_status" >&5
+   echo "$as_me:17746: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18011,11 +18007,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18014: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18010: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:18018: \$? = $ac_status" >&5
+   echo "$as_me:18014: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings other than the usual output.
@@ -18115,11 +18111,11 @@ else
    -e 's:.*FLAGS}\{0,1\} :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:18118: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:18114: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:18122: \$? = $ac_status" >&5
+   echo "$as_me:18118: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -23609,78 +23605,78 @@ subdirs="$subdirs GamsUtils"
 fi
 
 
-echo "$as_me:$LINENO: checking whether source of project ApplicationTemplates is available and should be compiled" >&5
-echo $ECHO_N "checking whether source of project ApplicationTemplates is available and should be compiled... $ECHO_C" >&6
+echo "$as_me:$LINENO: checking whether source of project examples is available and should be compiled" >&5
+echo $ECHO_N "checking whether source of project examples is available and should be compiled... $ECHO_C" >&6
 
-coin_has_applicationtemplates=notGiven
+coin_has_examples=notGiven
 coin_reason=
 
 # check if user wants to skip project in any case
 
 if test x"$COIN_SKIP_PROJECTS" != x; then
   for dir in $COIN_SKIP_PROJECTS; do
-    if test $dir = "ApplicationTemplates"; then
-      coin_has_applicationtemplates="no"
-      coin_reason="ApplicationTemplates has been specified in COIN_SKIP_PROJECTS"
+    if test $dir = "examples"; then
+      coin_has_examples="no"
+      coin_reason="examples has been specified in COIN_SKIP_PROJECTS"
     fi
 
   done
 fi
 
-if test "$coin_has_applicationtemplates" != no; then
+if test "$coin_has_examples" != no; then
 
-# Check whether --with-m4_tolower(ApplicationTemplates) or --without-m4_tolower(ApplicationTemplates) was given.
-if test "${with_applicationtemplates+set}" = set; then
-  withval="$with_applicationtemplates"
+# Check whether --with-m4_tolower(examples) or --without-m4_tolower(examples) was given.
+if test "${with_examples+set}" = set; then
+  withval="$with_examples"
   if test "$withval" = no ; then
-       coin_has_applicationtemplates="no"
-       coin_reason="--without-applicationtemplates has been specified"
+       coin_has_examples="no"
+       coin_reason="--without-examples has been specified"
      fi
 
 fi;
 fi
 
-if test "$coin_has_applicationtemplates" != no; then
+if test "$coin_has_examples" != no; then
 
-# Check whether --with-m4_tolower(ApplicationTemplates)-lib or --without-m4_tolower(ApplicationTemplates)-lib was given.
-if test "${with_applicationtemplates_lib+set}" = set; then
-  withval="$with_applicationtemplates_lib"
+# Check whether --with-m4_tolower(examples)-lib or --without-m4_tolower(examples)-lib was given.
+if test "${with_examples_lib+set}" = set; then
+  withval="$with_examples_lib"
   if test "$withval" = no ; then
-       coin_has_applicationtemplates="no"
-       coin_reason="--without-applicationtemplates-lib has been specified"
+       coin_has_examples="no"
+       coin_reason="--without-examples-lib has been specified"
      else
-       coin_has_applicationtemplates="no"
-       coin_reason="--with-applicationtemplates-lib has been specified"
+       coin_has_examples="no"
+       coin_reason="--with-examples-lib has been specified"
      fi
 fi;
 fi
 
-if test "$coin_has_applicationtemplates" != no; then
+if test "$coin_has_examples" != no; then
 
-# Check whether --with-m4_tolower(ApplicationTemplates)-incdir or --without-m4_tolower(ApplicationTemplates)-incdir was given.
-if test "${with_applicationtemplates_incdir+set}" = set; then
-  withval="$with_applicationtemplates_incdir"
+# Check whether --with-m4_tolower(examples)-incdir or --without-m4_tolower(examples)-incdir was given.
+if test "${with_examples_incdir+set}" = set; then
+  withval="$with_examples_incdir"
   if test "$withval" = no ; then
-       coin_has_applicationtemplates="no"
-       coin_reason="--without-applicationtemplates-incdir has been specified"
+       coin_has_examples="no"
+       coin_reason="--without-examples-incdir has been specified"
      else
-       coin_has_applicationtemplates="no"
-       coin_reason="--with-applicationtemplates-incdir has been specified"
+       coin_has_examples="no"
+       coin_reason="--with-examples-incdir has been specified"
      fi
 fi;
 fi
 
-if test "$coin_has_applicationtemplates" != no; then
+if test "$coin_has_examples" != no; then
 
-# Check whether --with-m4_tolower(ApplicationTemplates)-datadir or --without-m4_tolower(ApplicationTemplates)-datadir was given.
-if test "${with_applicationtemplates_datadir+set}" = set; then
-  withval="$with_applicationtemplates_datadir"
+# Check whether --with-m4_tolower(examples)-datadir or --without-m4_tolower(examples)-datadir was given.
+if test "${with_examples_datadir+set}" = set; then
+  withval="$with_examples_datadir"
   if test "$withval" = no ; then
-       coin_has_applicationtemplates="no"
-       coin_reason="--without-applicationtemplates-datadir has been specified"
+       coin_has_examples="no"
+       coin_reason="--without-examples-datadir has been specified"
      else
-       coin_has_applicationtemplates="no"
-       coin_reason="--with-applicationtemplates-datadir has been specified"
+       coin_has_examples="no"
+       coin_reason="--with-examples-datadir has been specified"
      fi
 fi;
 fi
@@ -23690,32 +23686,32 @@ fi
 
 
 # check if project is available in present directory
-if test "$coin_has_applicationtemplates" = notGiven; then
-  coin_has_applicationtemplates=no
-  if test -d $srcdir/ApplicationTemplates; then
-    coin_reason="source in ApplicationTemplates"
+if test "$coin_has_examples" = notGiven; then
+  coin_has_examples=no
+  if test -d $srcdir/examples; then
+    coin_reason="source in examples"
     # If a third argument is given, then we have to check if one one the files given in that third argument is present.
     # If none of the files in the third argument is available, then we consider the project directory as non-existing.
     # However, if no third argument is given, then this means that there should be no check, and existence of the directory is sufficient.
-     coin_has_applicationtemplates="yes"
+     coin_has_examples="yes"
 
   fi
 fi
 
 if test -z "$coin_reason" ; then
-  echo "$as_me:$LINENO: result: $coin_has_applicationtemplates" >&5
-echo "${ECHO_T}$coin_has_applicationtemplates" >&6
+  echo "$as_me:$LINENO: result: $coin_has_examples" >&5
+echo "${ECHO_T}$coin_has_examples" >&6
 else
-  echo "$as_me:$LINENO: result: $coin_has_applicationtemplates, $coin_reason" >&5
-echo "${ECHO_T}$coin_has_applicationtemplates, $coin_reason" >&6
+  echo "$as_me:$LINENO: result: $coin_has_examples, $coin_reason" >&5
+echo "${ECHO_T}$coin_has_examples, $coin_reason" >&6
 fi
 
-if test "$coin_has_applicationtemplates" = yes ; then
-  if test -r $srcdir/ApplicationTemplates/configure; then
-    coin_subdirs="$coin_subdirs ApplicationTemplates"
+if test "$coin_has_examples" = yes ; then
+  if test -r $srcdir/examples/configure; then
+    coin_subdirs="$coin_subdirs examples"
 
 
-subdirs="$subdirs ApplicationTemplates"
+subdirs="$subdirs examples"
 
   fi
 fi
