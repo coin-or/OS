@@ -654,7 +654,7 @@ bool CoinSolver::setCoinPackedMatrix()
     try
     {
         double maxGap = 0;
-        if(osinstance->getVariableNumber() > 0)
+        if(osinstance->getLinearConstraintCoefficientNumber() > 0)
         {
             m_CoinPackedMatrix = new CoinPackedMatrix(
                 columnMajor, //Column or Row Major
@@ -668,7 +668,9 @@ bool CoinSolver::setCoinPackedMatrix()
         }
         else
         {
-            int start = 0;
+            int* start = new int[osinstance->getVariableNumber()+1];
+            for (int i=0; i <= osinstance->getVariableNumber(); i++)
+                start[i] = 0;
             m_CoinPackedMatrix = new CoinPackedMatrix(
                 columnMajor, //Column or Row Major
                 columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
@@ -676,7 +678,7 @@ bool CoinSolver::setCoinPackedMatrix()
                 osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
                 NULL, //Pointer to matrix nonzeroes
                 NULL, //Pointer to start of minor dimension indexes -- change to allow for row storage
-                &start, //Pointers to start of columns.
+                start, //Pointers to start of columns.
                 NULL,   0.0, maxGap );
         }
 
