@@ -1400,12 +1400,9 @@ void interactiveShell()
 {
     void* scanner;
     FileUtil *fileUtil = NULL;
-    FileUtil *inputFileUtil = NULL;
-    char osss[MAXCHARS] = " ";
-    const char *space = " ";
     //char *config = "-config";
     std::string configFileName = "";
-    int i;
+
 
     osoptions = new osOptionsStruc();
     reset_options();

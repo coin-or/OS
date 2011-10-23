@@ -459,7 +459,7 @@ bool OSnLNode::IsEqual(OSnLNode *that)
             if (this->inodeType != that->inodeType)
                 return false;
 
-            for (int i=0; i<this->inumberOfChildren; i++)
+            for (unsigned int i = 0; i < this->inumberOfChildren; i++)
                 if (!this->m_mChildren[i]->IsEqual(that->m_mChildren[i]))
                     return false;
 
