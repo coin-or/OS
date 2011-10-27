@@ -329,6 +329,7 @@ OS/doc/osUsersManual.bbl -text
 OS/doc/osUsersManual.ind -text
 OS/doc/osUsersManual.pdf -text
 OS/doc/osUsersManual.tex -text
+OS/doc/own.sty -text
 OS/doc/usersManualAdditions.txt -text
 OS/doc/visualstudio.pdf -text
 OS/doc/visualstudio.tex -text
