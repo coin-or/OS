@@ -403,7 +403,7 @@ After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are a
 \item[] {\bf bin --} this directory has the executables {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}} 
 and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}.
 
-\item[]  {\bf include --} the header files that are necessary necessary  in order to link against the OS library.
+\item[]  {\bf include --} the header files that are necessary in order to link against the OS library.
 
 \item[] {\bf lib --} the libraries that are necessary for creating applications that use the OS library.
 
@@ -2598,15 +2598,16 @@ method is in the OSpL format. See the example given in Section~\ref{section:knoc
 The {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}|(} is a command line executable designed
 to pass problem instances in either  OSiL\index{OSiL}, AMPL nl\index{AMPL nl format}, or MPS format\index{MPS format}
 to solvers and get the optimization result back to be displayed either to standard output or a specified browser.
-The {\tt OSSolverService} can be used to invoke a solver locally or on a remote server. It can work either synchronously
-or asynchronously. At present six service methods are implemented, 
+The {\tt OSSolverService} can be used to invoke a solver locally or on a remote server. It can communicate with a remote solver both synchronously and asynchronously.
+%It can work either synchronously or asynchronously. 
+At present six service methods are implemented, 
 {\tt solve}\index{solve@{\tt solve}},
 {\tt send}\index{send@{\tt send}}, 
 {\tt retrieve}\index{retrieve@{\tt retrieve}},
 {\tt getJobID}\index{getJobID@{\tt getJobID}}, 
 {\tt knock}\index{knock@{\tt knock}} and 
 {\tt kill}\index{kill@{\tt kill}}.
-These methods are explained in more detail in Section~\ref{section:servicemethods}.
+These methods are explained in more detail in Section~\ref{section:servicemethods}. Only the {\tt solve} method is available locally. 
 
 There are two ways  to use the {\tt OSSolverService} executable. The first way
 is to use the interactive shell. The interactive shell is invoked by either 
@@ -2615,7 +2616,7 @@ window, connecting to the directory holding the executable, and then typing in
 {\tt OSSolverService} with no arguments. Using the interactive shell is fairly
 intuitive and we do not discuss in detail. The second way to use the {\tt
 OSSolverService} executable is to provide arguments at the command line. This is
-discussed next. The command line arguments are valid for the interactive shell. 
+discussed next. The command line arguments are also valid for the interactive shell. 
 
 \subsection{OSSolverService Input Parameters}\label{section:OSSolverServiceInputParameters}
 
@@ -2800,13 +2801,16 @@ Some things to note:
 \item{}  The default {\tt serviceMethod} is {\tt solve} if another service method is not specified.
 The service method cannot be specified in the OSoL options file.
 
+\item{} The command line parameters are intended to only influence the behavior of the local {\tt OSSolverService}. 
+In particular, only the service method is transmitted to a remote location. Any communication with a remote solver other than setting the service method {\bf must} take place through an OSoL options file.
+   
+\item{}  Only the {\tt solve()} method is available for local calls
+to {\tt OSSolverService}.
+
 \item{}  If the options {\tt send}\index{send@{\tt send}}, {\tt kill}\index{kill@{\tt kill}},
 {\tt knock}\index{knock@{\tt knock}},  {\tt getJobID}\index{getJobID@{\tt getJobID}},
 or {\tt retrieve}\index{retrieve@{\tt retrieve}} are specified,
 a  {\tt serviceLocation}\index{serviceLocation@{\tt serviceLocation}} must be specified.
-
-\item{}  Only the {\tt solve()} method is available for local calls
-to {\tt OSSolverService}.
 
 \item{}  When using the {\tt send()}\index{send@{\tt send}} or  {\tt solve()}\index{solve@{\tt solve}} methods
 a problem instance must be specified.
@@ -9176,9 +9180,7 @@ But our modular extensible schema standard element design allows us to have such
 
 Jun
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Stefan on how to merge trunk into the current stable
 
 
 

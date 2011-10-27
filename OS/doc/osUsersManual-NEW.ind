@@ -1,0 +1,233 @@
+\begin{theindex}
+
+  \item Algorithmic differentiation, 4, 45--46, 66--67
+  \item AMPL, 3, 4, 23--26, 96, 99
+  \item AMPL nl format, 1, 3, 4, 6, 7, 14, 59
+  \item AMPL Solver Library , \see{Third-party software, ASL}{1}
+  \item {\tt amplFiles}, 23
+  \item Apache Axis, 3, 11
+  \item Apache Tomcat, 1, 3--5, 11, 79, 101--103
+  \item ASL, \see{Third-party software, ASL}{1}
+
+  \indexspace
+
+  \item {\it Bell, Bradley M.}, 66
+  \item {\tt bison}, 60, 77, 88
+  \item Blas, \see{Third-party software, Blas}{1}
+  \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
+  \item Bug reporting, 93
+  \item {\tt BuildTools}, \see{COIN-OR projects, {\tt BuildTools}}{1}
+
+  \indexspace
+
+  \item C++ compiler, 76, 83
+  \item {\tt Cbc}, \see{COIN-OR projects, {\tt Cbc}}{1}
+  \item {\tt Cgl}, \see{COIN-OR projects, {\tt Cgl}}{1}
+  \item {\tt cl} compiler, 76, 87
+  \item {\tt Clp}, \see{COIN-OR projects, {\tt Clp}}{1}
+  \item COIN-OR, 1, 80
+  \item COIN-OR projects
+    \subitem {\tt Bonmin}, 20, 80, 82, 86, 89--91, 94, 98
+    \subitem {\tt BuildTools}, 96, 98
+    \subitem {\tt Cbc}, 20, 80, 82, 91, 96, 98
+    \subitem {\tt Cgl}, 51, 80, 91, 96, 98
+    \subitem {\tt Clp}, 8, 20, 47, 80, 82, 91, 96, 98
+    \subitem {\tt CoinUtils}, 59, 80, 91, 96, 98
+    \subitem {\tt Couenne}, 20, 82, 86, 89--91, 96, 98
+    \subitem {\tt CppAD}, 3, 4, 66--67, 91, 96, 98
+    \subitem {\tt DyLP}, 20, 91, 96, 98
+    \subitem {\tt Ipopt}, 9, 14, 20, 61, 62, 72, 76, 80, 82, 86, 89--91, 
+		96, 99
+    \subitem {\tt Osi}, 7, 20, 91, 96, 99
+    \subitem {\tt SYMPHONY}, 11--12, 20, 24--25, 82, 91, 96, 99
+    \subitem {\tt Vol}, 20, 91, 96, 99
+  \item COIN-OR projects, {\tt Osi}, 61, 80
+  \item {\tt COIN\_HAS\_XXXXX}, 91--92
+  \item {\tt COIN\_SKIP\_PROJECTS}, 80, 82, 86, 89, 91
+  \item {\tt CoinUtils}, \see{COIN-OR projects, {\tt CoinUtils}}{1}
+  \item Common Public License (CPL), 4, 90, 92
+  \item configure, 80, 82, 88--92
+    \subitem cache file, 80
+    \subitem scripts, 76
+  \item {\tt Couenne}, \see{COIN-OR projects, {\tt Couenne}}{1}
+  \item {\tt cplex}, 4, 7, 20, 92--93
+  \item {\tt CppAD}, \see{COIN-OR projects, {\tt CppAD}}{1}
+  \item Cygwin, 76, 85--87, 94
+
+  \indexspace
+
+  \item debug version, MSYS, 88
+  \item default solver, 7, 9, 15, 24, 26
+  \item Downloading
+    \subitem binaries, 5
+    \subitem subversion
+      \subsubitem unix, 77
+      \subsubitem Windows, 79
+    \subitem tarball, 79
+    \subitem zip file, 79
+  \item Doxygen, 53, 77, 94
+  \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
+
+  \indexspace
+
+  \item {\tt eastborne.mod}, 23--24
+
+  \indexspace
+
+  \item {\tt f2c}, 77, 86, 90
+  \item file naming conventions, 5, 84
+  \item {\tt flex}, 60, 77, 88
+  \item Fortran, 76, 80, 86, 89--91
+
+  \indexspace
+
+  \item GAMS, 4, 23, 26--32
+  \item gcc, 76
+  \item {\tt getJobID}, 6, 8, 16, 19
+  \item {\tt GLPK}, \see{Third-party software, {\tt GLPK}}{1}
+  \item GNU General Public Licence (GPL), 92
+  \item {\it Griewank, A.}, 66
+
+  \indexspace
+
+  \item Harwell Subroutine Library, \see{Third-party software, HSL}{1}
+  \item HSL, \see{Third-party software, HSL}{1}
+
+  \indexspace
+
+  \item {\tt Ipopt}, \see{COIN-OR projects, {\tt Ipopt}}{1}
+
+  \indexspace
+
+  \item Java, 1, 5, 52, 79
+  \item {\tt JobID}, 14--16, 19
+
+  \indexspace
+
+  \item {\tt kill}, 6, 8, 18--19
+  \item {\tt knock}, 6, 8, 15--19
+
+  \indexspace
+
+  \item Lapack, \see{Third-party software, Lapack}{1}
+  \item {\tt LibOS}, 82
+  \item {\tt libOSCommon.vcproj}, 84
+  \item {\tt libOSSolvers.vcproj}, 84
+  \item LINDO, 4, 7, 8, 61--62, 81, 93
+  \item Linux, 94
+
+  \indexspace
+
+  \item Mac OS X, 94
+  \item {\tt make}, 81, 82, 88, 104
+  \item {\tt make distclean}, 88, 89
+  \item {\tt make install}, 44, 81, 82, 96, 99
+  \item {\tt make run\_parsers}, 60
+  \item {\tt make test}, 81, 82, 88
+  \item makefile, 44--45, 52, 76, 87--89, 91, 92
+  \item MATLAB, 4, 32--36, 93
+  \item Microsoft Visual Studio, 5, 83--84, 92, 98, 99, 104
+    \subitem {\tt Debug} configuration, 84
+    \subitem {\tt Release} configuration, 84
+  \item Microsoft Windows, 79, 80
+  \item MinGW, 76, 86, 87, 94
+  \item MPS format, 1, 3, 4, 6, 58--59
+  \item MSYS, 76, 87--88, 94
+  \item Mumps, \see{Third-party software, Mumps}{1}
+
+  \indexspace
+
+  \item nl files, \see{AMPL nl format}{1}
+
+  \indexspace
+
+  \item Optimization Services, 3
+  \item OS project
+    \subitem root directory, 77
+    \subitem source code, 76, 83
+    \subitem stable release, 3, 5
+    \subitem trunk version, 21, 23, 89
+    \subitem unit test, 81
+  \item {\tt OS.sln}, 45, 84
+  \item {\tt OSAgent}, 3, 52--53, 103
+  \item {\tt OSAmplClient}, 3, 5, 23--26, 59, 92, 96, 99
+  \item {\tt OSCommon}, 4, 80
+  \item {\tt OSExpressionTree}, 56
+  \item {\tt OSFileUpload}, 103--104
+  \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
+  \item OSiL, 1, 3--7, 9, 11, 14, 19, 37--38, 40, 53, 56, 58--61, 103
+  \item {\tt OSInstance}, 3, 45, 53--59, 62, 68
+  \item {\tt OSLibrary}, 9, 52--62
+  \item {\tt OSmps2osil}, 58--59
+  \item OSnL, 40--41
+  \item {\tt OSnl2osil}, 59, 92
+  \item OSoL, 3, 5, 9--11, 14--16, 19, 40, 59
+  \item {\tt OSOption}, 58--59
+  \item OSpL, 17--19, 41
+  \item {\tt OSResult}, 58--59
+  \item OSrL, 3, 5, 7, 9, 10, 19, 38--40, 59
+  \item {\tt OSSolverAgent}, 52
+  \item {\tt OSSolverService}, 1, 3, 5--19, 80, 82, 96, 99
+  \item {\tt OSSolverService.jws}, 11
+  \item {\tt OSSolverService.vcproj}, 84
+  \item {\tt OSTest.vcproj}, 84
+
+  \indexspace
+
+  \item {\tt parincLinear.osil}, 8
+  \item {\tt \$PATH}, 76, 86
+
+  \indexspace
+
+  \item {\tt remoteSolve1.osol}, 12
+  \item {\tt retrieve}, 6, 8, 15--16, 19
+  \item {\it Rosenbrock, H.H.}, 37
+
+  \indexspace
+
+  \item {\tt send}, 6--8, 14--16, 103
+  \item {\tt serviceLocation}, 8
+  \item SOAP protocol, 3, 5, 11, 14, 103
+  \item {\tt solve}, 6--9, 11--13, 19, 103
+  \item {\tt solveroptions.osol}, 25
+  \item Subversion, 76
+  \item supported solvers, 7
+  \item SVN, 79, 80, 84
+  \item {\tt SYMPHONY}, \see{COIN-OR projects, {\tt SYMPHONY}}{1}
+
+  \indexspace
+
+  \item {\tt testlocal.config}, 9
+  \item {\tt testremote.config}, 11--12
+  \item Third-party software, 83, 90--92
+    \subitem ASL, 83, 92
+    \subitem Blas, 77, 80, 89
+    \subitem GLPK, 92
+    \subitem HSL, 77, 86, 90
+    \subitem Lapack, 77
+    \subitem Mumps, 77, 80, 90
+  \item Third-party software, {\tt GLPK}, 4, 7, 20
+  \item TortoiseSVN, 79, 83, 87
+  \item Trac system, 1, 3, 93
+
+  \indexspace
+
+  \item {\tt unitTest}, 81, 84, 96, 99
+  \item Unix, 76, 77, 80, 92, 94
+
+  \indexspace
+
+  \item {\tt Vol}, \see{COIN-OR projects, {\tt Vol}}{1}
+  \item VPATH, 44, 88--89, 92
+
+  \indexspace
+
+  \item {\tt wget}, 76, 83, 87
+  \item Windows Platform SDK, 51, 83, 85, 87
+  \item {\tt WSUtil}, 52
+
+  \indexspace
+
+  \item XML, 3
+
+\end{theindex}

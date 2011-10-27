@@ -1,17 +1,17 @@
 \begin{theindex}
 
-  \item Algorithmic differentiation, 7, 83--84, 103--104
+  \item Algorithmic differentiation, 7, 83--84, 90--91
   \item AMPL, 6, 7, 29, 55--58
-  \item AMPL nl format, 1, 6, 7, 36, 37, 44, 75--76
+  \item AMPL nl format, 1, 6, 7, 36, 37, 44, 75
   \item AMPL Solver Library , \see{Third-party software, ASL}{1}
-  \item {\tt amplFiles}, 56
+  \item {\tt amplFiles}, 55
   \item Apache Axis, 6, 41
-  \item Apache Tomcat, 1, 6--8, 12, 41, 53--55, 113
+  \item Apache Tomcat, 1, 6--8, 12, 41, 53--55, 100
   \item ASL, \see{Third-party software, ASL}{1}
 
   \indexspace
 
-  \item {\it Bell, Bradley M.}, 103
+  \item {\it Bell, Bradley M.}, 90
   \item {\tt bison}, 10, 21, 76
   \item Blas, \see{Third-party software, Blas}{1}
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
@@ -30,18 +30,18 @@
     \subitem {\tt Bonmin}, 13, 15, 19, 22--24, 27, 50
     \subitem {\tt BuildTools}, 29
     \subitem {\tt Cbc}, 13, 15, 24, 29, 50
-    \subitem {\tt Cgl}, 13, 24, 29, 89
-    \subitem {\tt Clp}, 13, 15, 24, 29, 38, 50, 85
+    \subitem {\tt Cgl}, 13, 24, 29, 88
+    \subitem {\tt Clp}, 13, 15, 24, 29, 38, 50, 84
     \subitem {\tt CoinUtils}, 13, 24, 29, 75
     \subitem {\tt Couenne}, 15, 19, 22--24, 29, 50
-    \subitem {\tt CppAD}, 6, 7, 24, 29, 103--104
+    \subitem {\tt CppAD}, 6, 7, 24, 29, 90--91
     \subitem {\tt DyLP}, 24, 29, 50
-    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--24, 29, 39, 44, 50, 77, 79, 
-		109
+    \subitem {\tt Ipopt}, 9, 13, 15, 19, 22--24, 29, 39, 44, 50, 76, 78, 
+		96
     \subitem {\tt Osi}, 24, 29, 37, 50
     \subitem {\tt SYMPHONY}, 15, 24, 29, 41--42, 50, 56--57
     \subitem {\tt Vol}, 24, 29, 50
-  \item COIN-OR projects, {\tt Osi}, 13, 78
+  \item COIN-OR projects, {\tt Osi}, 13, 77
   \item {\tt COIN\_HAS\_XXXXX}, 24--25
   \item {\tt COIN\_SKIP\_PROJECTS}, 13, 15, 19, 22, 24
   \item {\tt CoinUtils}, \see{COIN-OR projects, {\tt CoinUtils}}{1}
@@ -65,12 +65,12 @@
       \subsubitem Windows, 12
     \subitem tarball, 12
     \subitem zip file, 12
-  \item Doxygen, 10, 27, 70
+  \item Doxygen, 10, 27, 69
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
 
-  \item {\tt eastborne.mod}, 56
+  \item {\tt eastborne.mod}, 55--56
 
   \indexspace
 
@@ -86,7 +86,7 @@
   \item {\tt getJobID}, 36, 38, 46, 49
   \item {\tt GLPK}, \see{Third-party software, {\tt GLPK}}{1}
   \item GNU General Public Licence (GPL), 25
-  \item {\it Griewank, A.}, 103
+  \item {\it Griewank, A.}, 90
 
   \indexspace
 
@@ -99,7 +99,7 @@
 
   \indexspace
 
-  \item Java, 1, 8, 12, 90
+  \item Java, 1, 8, 12, 89
   \item {\tt JobID}, 44--46, 49
 
   \indexspace
@@ -113,25 +113,25 @@
   \item {\tt LibOS}, 15
   \item {\tt libOSCommon.vcproj}, 17
   \item {\tt libOSSolvers.vcproj}, 17
-  \item LINDO, 7, 14, 26, 37, 38, 77--79
+  \item LINDO, 7, 14, 26, 37, 38, 77--78
   \item Linux, 27
 
   \indexspace
 
   \item Mac OS X, 27
-  \item {\tt make}, 14, 15, 21, 113
+  \item {\tt make}, 14, 15, 21, 100
   \item {\tt make distclean}, 21, 22
-  \item {\tt make install}, 14, 15, 29, 82
-  \item {\tt make run\_parsers}, 77
+  \item {\tt make install}, 14, 15, 29, 81
+  \item {\tt make run\_parsers}, 76
   \item {\tt make test}, 14, 15, 21
-  \item makefile, 9, 20--22, 24, 25, 83, 103
-  \item MATLAB, 7, 26, 65--69
-  \item Microsoft Visual Studio, 8, 16--17, 25, 31, 113
+  \item makefile, 9, 20--22, 24, 25, 82, 89
+  \item MATLAB, 7, 26, 64--68
+  \item Microsoft Visual Studio, 8, 16--17, 25, 31, 100
     \subitem {\tt Debug} configuration, 17
     \subitem {\tt Release} configuration, 17
   \item Microsoft Windows, 12, 13
   \item MinGW, 9, 19, 20, 27
-  \item MPS format, 1, 6, 7, 36, 75
+  \item MPS format, 1, 6, 7, 36, 74--75
   \item MSYS, 9, 20--21, 27
   \item Mumps, \see{Third-party software, Mumps}{1}
 
@@ -148,26 +148,26 @@
     \subitem stable release, 6, 8
     \subitem trunk version, 22, 51, 53
     \subitem unit test, 14
-  \item {\tt OS.sln}, 17, 83
-  \item {\tt OSAgent}, 6, 69, 113
-  \item {\tt OSAmplClient}, 6, 8, 25, 29, 56--58, 76
+  \item {\tt OS.sln}, 17, 82
+  \item {\tt OSAgent}, 6, 68--69, 100
+  \item {\tt OSAmplClient}, 6, 8, 25, 29, 55--58, 75
   \item {\tt OSCommon}, 7, 13
-  \item {\tt OSExpressionTree}, 73
-  \item {\tt OSFileUpload}, 113--114
+  \item {\tt OSExpressionTree}, 72
+  \item {\tt OSFileUpload}, 100--101
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 6--8, 31--33, 35--37, 39, 41, 44, 49, 70, 73, 75--77, 
-		113, 116--119
-  \item {\tt OSInstance}, 6, 70--76, 79, 83, 84, 105
-  \item {\tt OSLibrary}, 39, 69--79
-  \item {\tt OSmps2osil}, 75--76
+  \item OSiL, 1, 6--8, 31--33, 35--37, 39, 41, 44, 49, 69, 72, 74--76, 
+		100, 103--106
+  \item {\tt OSInstance}, 6, 69--75, 78, 83, 92
+  \item {\tt OSLibrary}, 39, 68--78
+  \item {\tt OSmps2osil}, 74--75
   \item OSnL, 35
   \item {\tt OSnl2osil}, 25, 75
-  \item OSoL, 6, 8, 35, 39--41, 44--46, 49, 76
-  \item {\tt OSOption}, 75--76
+  \item OSoL, 6, 8, 35, 39--41, 44--46, 49, 75
+  \item {\tt OSOption}, 74--75
   \item OSpL, 35, 47--49
-  \item {\tt OSResult}, 75--76
-  \item OSrL, 6, 8, 33--34, 37, 39, 40, 49, 76
-  \item {\tt OSSolverAgent}, 69
+  \item {\tt OSResult}, 74--75
+  \item OSrL, 6, 8, 33--34, 37, 39, 40, 49, 75
+  \item {\tt OSSolverAgent}, 68
   \item {\tt OSSolverService}, 1, 6, 8, 13, 15, 29, 36--49
   \item {\tt OSSolverService.jws}, 41
   \item {\tt OSSolverService.vcproj}, 17
@@ -186,11 +186,11 @@
 
   \indexspace
 
-  \item {\tt send}, 36--38, 44--46, 113
+  \item {\tt send}, 36--38, 44--46, 100
   \item {\tt serviceLocation}, 38
-  \item SOAP protocol, 6, 8, 41, 44, 113
-  \item {\tt solve}, 36--39, 41--43, 49, 113
-  \item {\tt solveroptions.osol}, 57
+  \item SOAP protocol, 6, 8, 41, 44, 100
+  \item {\tt solve}, 36--39, 41--43, 49, 100
+  \item {\tt solveroptions.osol}, 56
   \item Subversion, 9
   \item supported solvers, 37
   \item SVN, 12, 13, 17
@@ -219,13 +219,13 @@
   \indexspace
 
   \item {\tt Vol}, \see{COIN-OR projects, {\tt Vol}}{1}
-  \item VPATH, 21--22, 25, 83
+  \item VPATH, 21--22, 25, 82
 
   \indexspace
 
   \item {\tt wget}, 9, 16, 20
-  \item Windows Platform SDK, 16, 18, 20, 90
-  \item {\tt WSUtil}, 69
+  \item Windows Platform SDK, 16, 18, 20, 89
+  \item {\tt WSUtil}, 68
 
   \indexspace
 

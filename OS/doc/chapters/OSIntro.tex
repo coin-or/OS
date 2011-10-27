@@ -1,0 +1,68 @@
+
+\section{The Optimization Services (OS) Project}
+
+The objective of Optimization Services (OS) is to provide a general framework consisting of a set of standards
+for representing optimization instances, results, solver options, and communication between clients and solvers
+in a distributed environment using Web Services. This COIN-OR project provides source code for libraries and
+executable programs that implement OS standards.  See the COIN-OR Trac page {\tt\UrlTrac}\index{Trac system}
+or the Optimization Services Home Page {\tt\UrlOs}\index{Optimization Services} for more information.
+
+Like other COIN-OR projects, OS has a versioning system that ensures end users some degree of stability 
+and a stable upgrade path as project development continues. The current stable version of OS is \OSstable, 
+and the current stable release is \OSrelease\index{OS project!stable release}, based on trunk version~\OStrunk.
+
+The OS project provides the following:
+
+\begin{enumerate}
+\item{}  A set of XML\index{XML} based standards for representing optimization instances (OSiL)\index{OSiL}, 
+optimization results (OSrL)\index{OSrL}, and optimization solver options (OSoL)\index{OSoL}. 
+There are other standards, but these are the main ones. 
+The schemas for these standards are described in Section~\ref{section:schemadescriptions}.
+
+
+\item{}  Open source libraries  that support and implement many of the standards.
+
+\item{}  A robust solver and modeling language interface (API) for linear and nonlinear optimization problems.
+Corresponding to the OSiL problem instance representation there is an in-memory object,
+{\tt OSInstance}\index{OSInstance@{\tt OSInstance}},
+along with a collection of  {\tt get()},   {\tt set()}, and {\tt calculate()} methods for accessing and creating
+problem instances. This is a very general API for linear, integer, and nonlinear programs.
+Extensions for other major types of optimization problems are also in the works. Any modeling language that can
+produce OSiL can easily communicate with any solver that uses the OSInstance API.   
+The {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} object
+is described in more detail in Section~\ref{section:osinstanceAPI}. The nonlinear part of the API is based on the
+COIN-OR project CppAD\index{COIN-OR projects!CppAD@{\tt CppAD}} by Brad Bell ({\tt\UrlCppad}) but is written 
+in a very general manner and could be used with other algorithmic differentiation packages. More detail on 
+algorithmic differentiation is provided in Section~\ref{section:ad}.
+
+
+\item{}  A  command line executable {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}  for reading
+problem instances (OSiL format\index{OSiL}, AMPL  nl format\index{AMPL nl format},  
+MPS format\index{MPS format}) and calling a solver either locally or on a remote server.
+This is described in Section~\ref{section:ossolverservice}.
+
+
+\item{} Utilities that convert AMPL nl files  and MPS files into the OSiL XML format.
+This is described in Section~\ref{section:osmodelinterfaces}.
+
+
+\item{}  Standards that facilitate the communication between clients and optimization solvers using Web Services.
+In  Section~\ref{section:osagent} we describe the {\tt OSAgent}\index{OSAgent@{\tt OSAgent}} part of the OS library
+that is used to create Web Services SOAP\index{SOAP protocol} packages with OSiL instances and contact a server for 
+solution.
+
+\item{}  An executable program {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}} that is designed to work with 
+the AMPL\index{AMPL} modeling language. The {\tt OSAmplClient} appears as a ``solver'' to AMPL and, based on options 
+given in AMPL, contacts solvers either remotely or locally to solve instances created in AMPL. This is described in
+Section~\ref{section:amplclient}.
+
+\item{}  Server software that works with Apache Tomcat\index{Apache Tomcat} and Apache Axis\index{Apache Axis}.
+This software uses Web Services technology and acts as middleware between the client that creates the instance
+and the  solver on the server that optimizes the instance and returns the result. This is illustrated in
+Section~\ref{section:tomcat}.
+
+\item{}  A lightweight version of the project, {\tt OSCommon},\index{OSCommon@{\tt OSCommon}} for modeling language and 
+solver developers who want to use OS API, readers and writers, without the overhead of other COIN-OR projects or any 
+third-party software. For information on how to download {\tt OSCommon} see Section~\ref{section:oslite}.
+\end{enumerate}
+
