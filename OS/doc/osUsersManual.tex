@@ -8301,4 +8301,29 @@ That should merge everything from trunk that is not in 2.4 yet.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+From Stefan on how to set visual studio options at the command line
+
+not exactly sure, what the question for me is, but usually I build 32bit
+libraries on Windows with cl/ifort via the configure options
+CC="cl -nologo"
+CXX="cl -nologo"
+F77="ifort -nologo -arch:ia32"
+
+And 64bit libraries with icl/ifort via the options
+CC="icl -nologo"
+CXX="icl -nologo"
+F77="ifort -nologo"
+RANLIB=echo
+
+This is on a system with 32bit MS C/C++ compiler and 64bit Intel
+C/C++/Fortran compilers and MinGW. The RANLIB=echo is, because the 32bit
+ranlib corrupts the 64bit libraries on that system.
+
+To create debug libraries, --enable-debug should do the job. 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
