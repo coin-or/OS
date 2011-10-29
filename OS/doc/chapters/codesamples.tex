@@ -1356,35 +1356,3 @@ If there is an integer solution at the root node, it may be the case that we are
 For an example of using this see, \url{https://projects.coin-or.org/Dip/browser/trunk/Dip/examples/TSP/TSP_DecompApp.cpp}.
 
 \end{verbatim}
-
-
-
-\section{Setting Options}
-
-Kipp -- put in information on how to set options for the {\tt AlpsDecompModel}
-
-
-Some options to get output
-
-\begin{verbatim}
-Turn up the log levels to see when that happens:
-[DECOMP]
-LogDebugLevel    = 3
-LogLevel         = 3
-LogDumpModel     = 2
-LogLpLevel       = 1
-\end{verbatim}
-
-
-\begin{verbatim}
-Yes - it is also used to solve the master problem as an IP. That is, it periodically changes the variables in the master problem (lambda) to integers and solves the master as an integer program. This is a heuristic to try and get incumbent solutions for the entire problem. This, in my thesis, is called Price-and-Branch.
-\end{verbatim}
-
-
-\subsection{template }\label{section:exampleTemplate} The code {\tt template.cpp} is in the {\tt template} 
-directory.  This is an empty example that comes with a {\tt Makefile}\index{makefile}  that links to all of the necessary 
-header files and libraries. For Windows users there is also a solution file configured to link with all
-of the libraries in the {\tt lib} directory and pointing to all of the header files in the {\tt include} directory.
-The user can write his or her own code here.
-
- 

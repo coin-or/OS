@@ -10,6 +10,7 @@
 %\usepackage{moreverb}
 \usepackage{enumerate}
 \usepackage{makeidx}
+\usepackage{own}
 \bibliographystyle{plain}
 \makeindex
 
@@ -88,7 +89,12 @@ more information.
 
 \input{chapters/roadmap.tex}
 
+
+
 % Part 1 for folks who just want to run the executables
+\newpage
+
+\noindent{\LARGE \bf Part I. Running the OS executables}
 
 \input{chapters/downloadbinaries.tex}
 
@@ -98,10 +104,11 @@ more information.
 
 \input{chapters/schemadescriptions.tex}
 
-\input{chapters/OSInstanceAPI.tex}
-
 
 % Part 2 for folks who want to use the libraries to develop their own applications
+\newpage
+
+\noindent{\LARGE \bf Part II. Using the OS libraries and API}
 
 \input{chapters/codesamples.tex}
 
@@ -113,6 +120,9 @@ more information.
 
 
 % Part 3 for folks who want to build the code
+\newpage
+
+\noindent{\LARGE \bf Part III. Building OS from source}
 
 \input{chapters/downloadsource.tex}
 
