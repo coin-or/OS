@@ -70,18 +70,23 @@
 #include "OSOption.h"
 #include "OSoLReader.h"
 #include "OSoLWriter.h"
+
 #ifdef COIN_HAS_LINDO
-#include "OSLindoSolver.h"
+# include "OSLindoSolver.h"
 #endif
+
 #ifdef COIN_HAS_IPOPT
-#include "OSIpoptSolver.h"
+# include "OSIpoptSolver.h"
 #endif
+
 #ifdef COIN_HAS_BONMIN
-#include "OSBonminSolver.h"
+# include "OSBonminSolver.h"
 #endif
+
 #ifdef COIN_HAS_COUENNE
-#include "OSCouenneSolver.h"
+# include "OSCouenneSolver.h"
 #endif
+
 #include "OSFileUtil.h"
 #include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
@@ -188,7 +193,7 @@ int main(int argc, char **argv)
      *	There are three possible options:
      *	1. solver:
      *		possible values - name of a supported solver (installation-dependent)
-     *   	2. serviceLocation:
+     *  2. serviceLocation:
      *		possible values - NULL (empty) or URL of the solver service
      *	3. optionFile:
      *		specify the location of the OSoL file (on the local system)
@@ -386,109 +391,6 @@ int main(int argc, char **argv)
     ASL_free(&asl);
     return 0;
 } // end main
-
-
-//void getAmplClientOptions(char *amplclient_options, std::string *solverName,
-//	std::string *solverOptions, std::string *serviceLocation){
-//
-//
-//	std::string amplOptions = "";
-//	std::ostringstream outStr;
-//	std::string::size_type  pos1;
-//	std::string::size_type  pos2;
-//	std::string osolFileName = "";
-//	FileUtil *fileUtil = NULL;
-//
-//	size_t i = 0;
-//	size_t n = strlen( amplclient_options);
-//	try{
-//		while( i < n){
-//			//std::cout << amplclient_options[ i] << std::endl;
-//			if( amplclient_options[ i]  == ' '){
-//				outStr << ',';
-//				i++;
-//				while( amplclient_options[ i] == ' '  ){
-//					i++;
-//				}
-//			}
-//			else{
-//				outStr << amplclient_options[ i];
-//				i++;
-//			}
-//
-//		}
-//		//end with a comma
-//		outStr << ',';
-//		amplOptions = outStr.str();
-//
-//
-//		// see if a solver has been specified
-//		pos1 = amplOptions.find( "solver");
-//		if(pos1 != std::string::npos){
-//			//we have a solver specified
-//			pos1 += 6;
-//			//std::cout << "position 1 = " << pos1 << std::endl;
-//			// we are at at the comma after solver
-//			pos2 = amplOptions.find( ",", pos1 + 1);
-//			//std::cout << "position 2 = " << pos2 << std::endl;
-//			if(pos2 != std::string::npos){
-//				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
-//				*solverName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-//
-//			}
-//		}
-//
-//
-//		// see if an option file has been specified
-//		pos1 = amplOptions.find( "optionFile");
-//		if(pos1 != std::string::npos){
-//			//we have a option file specified  specified
-//			pos1 += 10;
-//			//std::cout << "position 1 = " << pos1 << std::endl;
-//			// we are at at the comma after optionfile
-//			pos2 = amplOptions.find( ",", pos1 + 1);
-//			//std::cout << "position 2 = " << pos2 << std::endl;
-//			if(pos2 != std::string::npos){
-//				//std::cout << "optionFile Name = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
-//				osolFileName = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-//			}
-//		}
-//
-//		//now go ahead and read the OSoL file if specified
-//
-//		if( osolFileName.size() > 0 ){
-//			fileUtil = new FileUtil();
-//			*solverOptions  = fileUtil->getFileAsString( osolFileName.c_str());
-//			delete fileUtil;
-//			fileUtil = NULL;
-//		}else{ // go ahead and create the osol string
-//			*solverOptions = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd\"></osol>";
-//		}
-//
-//		// see if a serviceLocation has been specified
-//		pos1 = amplOptions.find( "serviceLocation");
-//		if(pos1 != std::string::npos){
-//			//we have a serviceLocation specified
-//			pos1 += 15;
-//			//std::cout << "position 1 = " << pos1 << std::endl;
-//			// we are at at the comma after solver
-//			pos2 = amplOptions.find( ",", pos1 + 1);
-//			//std::cout << "position 2 = " << pos2 << std::endl;
-//			if(pos2 != std::string::npos){
-//				//std::cout << "solverName = " <<  amplOptions.substr(pos1 + 1, pos2-pos1 - 1) << std::endl;
-//				*serviceLocation = amplOptions.substr(pos1 + 1, pos2-pos1 - 1);
-//
-//			}
-//		}
-//
-//
-//	}//end try
-//	catch(const ErrorClass& eclass){
-//		cout << "There was an error processing OSAmplClient options: " << endl << eclass.errormsg << endl << endl;
-//		throw ErrorClass( eclass.errormsg) ;
-//	}
-//}//getAmplClientOptions
-
 
 
 
