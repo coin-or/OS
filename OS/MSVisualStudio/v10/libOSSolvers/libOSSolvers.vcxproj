@@ -184,7 +184,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\OSParsers\OSOptionsStruc.cpp" />
     <ClCompile Include="..\..\..\src\OSSolverInterfaces\OSCoinSolver.cpp" />
     <ClCompile Include="..\..\..\src\OSAgent\OShL.cpp" />
     <ClCompile Include="..\..\..\src\OSModelInterfaces\OSmps2osil.cpp" />
