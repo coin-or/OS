@@ -1,0 +1,845 @@
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.10.19)  3 NOV 2011 13:48
+entering extended mode
+ \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**osUsersManual-OLD.tex
+(./osUsersManual-OLD.tex
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman-x-2011-07-01, ngerman-x-2011-07-01, afrikaans, ancientgreek, ibycus, arabi
+c, armenian, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danis
+h, dutch, ukenglish, usenglishmax, esperanto, estonian, ethiopic, farsi, finnis
+h, french, galician, german, ngerman, swissgerman, monogreek, greek, hungarian,
+ icelandic, assamese, bengali, gujarati, hindi, kannada, malayalam, marathi, or
+iya, panjabi, tamil, telugu, indonesian, interlingua, irish, italian, kurmanji,
+ lao, latin, latvian, lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, pol
+ish, portuguese, romanian, russian, sanskrit, serbian, serbianc, slovak, sloven
+ian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, welsh, loaded
+.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/message (HO)
+)
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/04/18 v1.20 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count87
+))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/boxedminipage/boxedminipage.sty)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip43
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks15
+\ex@=\dimen105
+))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen106
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count88
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count89
+\leftroot@=\count90
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count91
+\DOTSCASE@=\count92
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen107
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count93
+\c@MaxMatrixCols=\count94
+\dotsspace@=\muskip10
+\c@parentequation=\count95
+\dspbrk@lvl=\count96
+\tag@help=\toks16
+\row@=\count97
+\column@=\count98
+\maxfields@=\count99
+\andhelp@=\toks17
+\eqnshift@=\dimen108
+\alignsep@=\dimen109
+\tagshift@=\dimen110
+\tagwidth@=\dimen111
+\totwidth@=\dimen112
+\lineht@=\dimen113
+\@envbody=\toks18
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2009/06/22 v3.00 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 96.
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip11
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2003/08/22 v1.5q LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks20
+\verbatim@line=\toks21
+\verbatim@in@stream=\read1
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tools/enumerate.sty
+Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
+\@enLab=\toks22
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/makeidx.sty
+Package: makeidx 2000/03/29 v1.0m Standard LaTeX package
+) (./own.sty)
+\@indexfile=\write3
+\openout3 = `osUsersManual-OLD.idx'.
+
+
+Writing index file osUsersManual-OLD.idx
+\c@theorem=\count100
+\c@Fig=\count101
+\extopskip=\skip46
+\exbottomskip=\skip47
+(./osUsersManual-OLD.aux
+
+LaTeX Warning: Label `section:build' multiply defined.
+
+)
+\openout1 = `osUsersManual-OLD.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 189.
+LaTeX Font Info:    ... okay on input line 189.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 189.
+LaTeX Font Info:    ... okay on input line 189.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 189.
+LaTeX Font Info:    ... okay on input line 189.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 189.
+LaTeX Font Info:    ... okay on input line 189.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 189.
+LaTeX Font Info:    ... okay on input line 189.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 189.
+LaTeX Font Info:    ... okay on input line 189.
+ (/usr/local/texlive/2011/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count102
+\scratchdimen=\dimen114
+\scratchbox=\box28
+\nofMPsegments=\count103
+\nofMParguments=\count104
+\everyMPshowfont=\toks23
+\MPscratchCnt=\count105
+\MPscratchDim=\dimen115
+\MPnumerator=\count106
+\makeMPintoPDFobject=\count107
+\everyMPtoPDFconversion=\toks24
+) (/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/04/22 v0.16 Utilities of pdfTeX for LuaTeX (HO)
+
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Managing graphics extensions (HO)
+
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Defining keys (HO)
+))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2010/12/23 v3.10 Keyval support for LaTeX options (HO)
+
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2011/04/07 v1.13 Key value parser (HO)
+
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Prefix for e-TeX command names (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.ps,.jpg,.pdf,.png,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    Try loading font information for U+msa on input line 223.
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 223.
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+) [1
+
+{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+(./osUsersManual-OLD.toc [2] [3] [4])
+\tf@toc=\write4
+\openout4 = `osUsersManual-OLD.toc'.
+
+ (./osUsersManual-OLD.lof)
+\tf@lof=\write5
+\openout5 = `osUsersManual-OLD.lof'.
+
+
+(./osUsersManual-OLD.lot)
+\tf@lot=\write6
+\openout6 = `osUsersManual-OLD.lot'.
+
+ [5] [6]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 326.
+
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 326.
+
+Overfull \hbox (0.88145pt too wide) in paragraph at lines 360--369
+\OT1/cmr/m/n/10.95 The OS project is an open-source project with source code un
+-der the Com-mon Pub-lic Li-cense (CPL)[].
+ []
+
+[7] [8] [9]
+<./figures/OSProjectRootDirectory.png, id=38, 368.37625pt x 794.97pt>
+File: ./figures/OSProjectRootDirectory.png Graphic file (type png)
+
+<use ./figures/OSProjectRootDirectory.png>
+Package pdftex.def Info: ./figures/OSProjectRootDirectory.png used on input lin
+e 564.
+(pdftex.def)             Requested size: 257.8616pt x 556.4752pt.
+
+Overfull \hbox (7.3861pt too wide) in paragraph at lines 590--590
+[] \OT1/cmtt/m/n/10.95 - Issuer: 07969287, http://certificates.godaddy.com/repo
+sitory, GoDaddy.com, Inc.,[] 
+ []
+
+
+Overfull \hbox (4.67908pt too wide) in paragraph at lines 603--605
+\OT1/cmtt/m/n/10.95 http://projects.coin-or.org/BuildTools/wiki/user-download#D
+ownloadingtheSourceCode\OT1/cmr/m/n/10.95 .
+ []
+
+[10] [11 <./figures/OSProjectRootDirectory.png>] [12] [13]
+Overfull \hbox (31.11775pt too wide) in paragraph at lines 871--871
+ []\OT1/cmtt/m/n/10 Successful test of prefix and postfix conversion routines o
+n problem rosenbrockmod.osil[] 
+ []
+
+
+Overfull \hbox (15.36789pt too wide) in paragraph at lines 873--873
+ []\OT1/cmtt/m/n/10 Successful test of AD gradient and Hessian calculations on 
+problem CppADTestLag.osil[] 
+ []
+
+[14] [15]
+Overfull \hbox (31.37675pt too wide) in paragraph at lines 1017--1020
+\OT1/cmr/m/n/10.95 crosoft's web site. Ver-sion 9 is at \OT1/cmtt/m/n/10.95 htt
+p://www.microsoft.com/express/download/#webInstall\OT1/cmr/m/n/10.95 .
+ []
+
+
+Overfull \hbox (31.22665pt too wide) in paragraph at lines 1027--1029
+\OT1/cmtt/m/n/8 http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3
+DF-A74F-4207-8586-711EBE331CDC&displaylang=en\OT1/cmr/m/n/10.95 .
+ []
+
+[16] [17]
+Overfull \hbox (38.96147pt too wide) in paragraph at lines 1186--1192
+\OT1/cmr/m/n/10.95 ver-sion 3.81-1, you must ob-tain a fixed 3.81 ver-sion from
+ \OT1/cmtt/m/n/10.95 http://www.cmake.org/files/cygwin/make.exe\OT1/cmr/m/n/10.
+95 .
+ []
+
+
+Overfull \hbox (28.18498pt too wide) in paragraph at lines 1214--1215
+[]\OT1/cmtt/m/n/8 http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1
+C3DF-A74F-4207-8586-711EBE331CDC&displaylang=en 
+ []
+
+[18]
+Overfull \hbox (48.02495pt too wide) in paragraph at lines 1252--1252
+ []\OT1/cmtt/m/n/8 :/cygdrive/c/Program Files/QuickTime/QTSystem/:/cygdrive/c/P
+rogram Files/Microsoft SQL Server/90/Tools/bin/[] 
+ []
+
+
+Overfull \hbox (17.57603pt too wide) in paragraph at lines 1285--1285
+ []\OT1/cmtt/m/n/10.95 ./configure COIN_SKIP_PROJECTS="Ipopt Bonmin Couenne" --
+enable-doscompile=msvc[] 
+ []
+
+
+Overfull \hbox (6.32503pt too wide) in paragraph at lines 1295--1298
+[]\OT1/cmr/m/n/10.95 Obtain one of the Har-well Sub-rou-tine Li-brary (HSL)[] r
+ou-tines \OT1/cmtt/m/n/10.95 ma27ad.f \OT1/cmr/m/n/10.95 or \OT1/cmtt/m/n/10.95
+ MA57ad.f\OT1/cmr/m/n/10.95 .
+ []
+
+[19]
+Overfull \hbox (20.67445pt too wide) in paragraph at lines 1379--1380
+\OT1/cmtt/m/n/10 http://downloads.sourceforge.net/mingw/MSYS-1.0.11.exe?modtime
+=1079444447&big_mirror=1 
+ []
+
+
+Overfull \hbox (28.18498pt too wide) in paragraph at lines 1393--1394
+\OT1/cmtt/m/n/8 http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3
+DF-A74F-4207-8586-711EBE331CDC&displaylang=en 
+ []
+
+[20]
+Overfull \hbox (0.9101pt too wide) in paragraph at lines 1419--1421
+[]\OT1/cmr/m/n/10.95 In the MSYS com-mand win-dow con-nect to the root of the O
+S project and run the \OT1/cmtt/m/n/10.95 configure
+ []
+
+
+Overfull \hbox (7.46446pt too wide) in paragraph at lines 1437--1438
+\OT1/cmtt/m/n/9 http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.t
+ar.bz2?modtime=1195140582&big_mirror=1 
+ []
+
+[21]
+Overfull \hbox (3.78177pt too wide) in paragraph at lines 1536--1545
+\OT1/cmr/m/n/10.95 Ipopt, Bon-min and Couenne are COIN-OR projects ($\OT1/cmtt/
+m/n/10.95 http : / / projects . coin-[]or . org / Ipopt$\OT1/cmr/m/n/10.95 , $\
+OT1/cmtt/m/n/10.95 http :
+ []
+
+[22]
+Overfull \hbox (29.77466pt too wide) in paragraph at lines 1588--1592
+\OT1/cmr/m/n/10.95 (such as \OT1/cmtt/m/n/10.95 gfortran \OT1/cmr/m/n/10.95 ---
+ see \OT1/cmtt/m/n/10.95 http://gcc.gnu.org/fortran/ \OT1/cmr/m/n/10.95 or \OT1
+/cmtt/m/n/10.95 g95 \OT1/cmr/m/n/10.95 --- see \OT1/cmtt/m/n/10.95 http://www.g
+95.org\OT1/cmr/m/n/10.95 ),
+ []
+
+[23]
+Overfull \hbox (24.63216pt too wide) in paragraph at lines 1797--1797
+[]\OT1/cmtt/m/n/10.95 configure COIN_SKIP_PROJECTS="Ipopt Bonmin Couenne ThirdP
+arty/Blas ThirdParty/Lapack \[] 
+ []
+
+[24]
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 1852--1854
+\OT1/cmtt/m/n/10 http://projects.coin-or.org/BuildTools/wiki/user-configure#Com
+mandLineArgumentsforconfigure
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1852--1854
+
+ []
+
+
+Overfull \hbox (7.3861pt too wide) in paragraph at lines 1985--1985
+[]\OT1/cmtt/m/n/10.95 configure --with-cplex-lib="-L$(CPLEXDIR)/lib/$(SYSTEM)/$
+(LIBFORMAT) $(CPLEX_LIBS)"[] 
+ []
+
+[25] [26] [27] [28]
+<./figures/OSDirectory.png, id=103, 376.40625pt x 769.87625pt>
+File: ./figures/OSDirectory.png Graphic file (type png)
+
+<use ./figures/OSDirectory.png>
+Package pdftex.def Info: ./figures/OSDirectory.png used on input line 2247.
+(pdftex.def)             Requested size: 301.1254pt x 615.90184pt.
+ [29] [30 <./figures/OSDirectory.png>]
+
+LaTeX Warning: Citation `junma2005' on page 31 undefined on input line 2308.
+
+
+LaTeX Warning: Citation `rosenbrock1960' on page 31 undefined on input line 231
+9.
+
+[31]
+
+LaTeX Warning: Citation `fourer2005a' on page 32 undefined on input line 2428.
+
+[32]
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 2523--2523
+[]  \OT1/cmtt/m/n/10 href = "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN
+-OSX/OS/stylesheets/OSrL.xslt"?>[] 
+ []
+
+[33]
+Overfull \hbox (60.49039pt too wide) in paragraph at lines 2542--2542
+[]                \OT1/cmtt/m/n/10 <other numberOfVar="2" name="reduced costs" 
+description="the variable reduced costs">[] 
+ []
+
+[34] [35] [36] [37] [38] <./figures/Figure9.png, id=139, 722.7pt x 542.025pt>
+File: ./figures/Figure9.png Graphic file (type png)
+
+<use ./figures/Figure9.png>
+Package pdftex.def Info: ./figures/Figure9.png used on input line 2876.
+(pdftex.def)             Requested size: 361.3491pt x 271.01183pt.
+
+Overfull \hbox (16.93608pt too wide) in paragraph at lines 2896--2905
+[]\OT1/cmr/m/n/10.95 The first line of \OT1/cmtt/m/n/10.95 testlocal.config[] \
+OT1/cmr/m/n/10.95 gives the lo-cal lo-ca-tion of the OSiL file, \OT1/cmtt/m/n/1
+0.95 parincQuadratic.osil\OT1/cmr/m/n/10.95 ,
+ []
+
+[39] [40 <./figures/Figure9.png>]
+<./figures/Figure10.png, id=148, 864.98157pt x 542.025pt>
+File: ./figures/Figure10.png Graphic file (type png)
+
+<use ./figures/Figure10.png>
+Package pdftex.def Info: ./figures/Figure10.png used on input line 2981.
+(pdftex.def)             Requested size: 432.48973pt x 271.01183pt.
+ [41]
+Overfull \hbox (24.63216pt too wide) in paragraph at lines 3033--3033
+[]        \OT1/cmtt/m/n/10.95 <instanceLocation locationType="local">c:\parincL
+inear.osil</instanceLocation>[] 
+ []
+
+[42 <./figures/Figure10.png>]
+<./figures/Figure11.png, id=156, 864.98157pt x 542.025pt>
+File: ./figures/Figure11.png Graphic file (type png)
+
+<use ./figures/Figure11.png>
+Package pdftex.def Info: ./figures/Figure11.png used on input line 3068.
+(pdftex.def)             Requested size: 432.48973pt x 271.01183pt.
+ [43 <./figures/Figure11.png>]
+Overfull \hbox (16.38968pt too wide) in paragraph at lines 3126--3129
+[]\OT1/cmr/m/n/10.95 The \OT1/cmtt/m/n/10.95 JobID \OT1/cmr/m/n/10.95 is one th
+at is ran-domly gen-er-ated by the server and passed back to the \OT1/cmtt/m/n/
+10.95 OSSolverService\OT1/cmr/m/n/10.95 .
+ []
+
+[44] [45] [46]
+Overfull \hbox (1.6374pt too wide) in paragraph at lines 3304--3304
+[]    \OT1/cmtt/m/n/10.95 <serviceURI>http://localhost:8080/os/ossolver/CGSolve
+rService.jws</serviceURI>[] 
+ []
+
+
+Overfull \hbox (1.6374pt too wide) in paragraph at lines 3315--3315
+[]        \OT1/cmtt/m/n/10.95 <timeServiceStarted>2006-05-10T10:49:24.9700000-0
+5:00</timeServiceStarted>[] 
+ []
+
+
+Overfull \hbox (70.62166pt too wide) in paragraph at lines 3320--3320
+[]            \OT1/cmtt/m/n/10.95 <serviceURI>http://kipp.chicagobooth.edu/ipop
+t/IPOPTSolverService.jws</serviceURI>[] 
+ []
+
+[47] [48]
+<./figures/osCommunicationMethods.pdf, id=177, 617.30624pt x 606.265pt>
+File: ./figures/osCommunicationMethods.pdf Graphic file (type pdf)
+
+<use ./figures/osCommunicationMethods.pdf>
+Package pdftex.def Info: ./figures/osCommunicationMethods.pdf used on input lin
+e 3473.
+(pdftex.def)             Requested size: 308.65236pt x 303.13176pt.
+ [49]
+Overfull \hbox (21.32983pt too wide) in paragraph at lines 3488--3491
+\OT1/cmtt/m/n/10.95 <solverOption> \OT1/cmr/m/n/10.95 chil-dren. (See the file 
+\OT1/cmtt/m/n/10.95 parsertest.osol \OT1/cmr/m/n/10.95 in OS/data/osolFiles.) E
+ach \OT1/cmtt/m/n/10.95 <solverOption>
+ []
+
+[50 <./figures/osCommunicationMethods.pdf>] [51]
+Overfull \hbox (7.99084pt too wide) in paragraph at lines 3621--3621
+[]  \OT1/cmtt/m/n/10 DivingS(ome)  DivingC(oefficient)  DivingF(ractional)  Div
+ingG(uided)  DivingL(ineSearch)[] 
+ []
+
+
+Overfull \hbox (13.2408pt too wide) in paragraph at lines 3622--3622
+[]  \OT1/cmtt/m/n/10 DivingP(seudoCost)  DivingV(ectorLength)  feas(ibilityPump
+)  flow(CoverCuts)  gomory(Cuts)[] 
+ []
+
+
+Overfull \hbox (28.99066pt too wide) in paragraph at lines 3623--3623
+[]  \OT1/cmtt/m/n/10 greedy(Heuristic)  heur(isticsOnOff)  knapsack(Cuts)  lift
+(AndProjectCuts)  local(TreeSearch)[] 
+ []
+
+[52] [53] [54] [55] [56]
+Overfull \hbox (20.91614pt too wide) in paragraph at lines 3943--3944
+\OT1/cmr/m/n/10.95 the dou-ble quotes and the trail-ing semi-colon) in this and
+ the re-main-ing ex-am-ples. The \OT1/cmtt/m/n/10.95 serviceLocation
+ []
+
+[57]
+Overfull \hbox (10.37144pt too wide) in paragraph at lines 4002--4003
+\OT1/cmr/m/n/10.95 then in our ref-er-ence im-ple-men-ta-tion the re-mote solve
+r ser-vice will parse the file \OT1/cmtt/m/n/10.95 solveroptions.osol\OT1/cmr/m
+/n/10.95 ,
+ []
+
+
+Overfull \hbox (24.4227pt too wide) in paragraph at lines 4013--4014
+[]\OT1/cmr/m/n/10.95 Specify op-tions to the OS-Am-plClient solver by us-ing th
+e AMPL com-mand \OT1/cmtt/m/n/10.95 OSAmplClient_options\OT1/cmr/m/n/10.95 . 
+ []
+
+
+Overfull \hbox (3.90375pt too wide) in paragraph at lines 4022--4027
+[]\OT1/cmr/m/n/10.95 the name of the solver us-ing the \OT1/cmtt/m/n/10.95 solv
+er \OT1/cmr/m/n/10.95 op-tion; valid val-ues for this op-tion are installation-
+
+ []
+
+[58] [59] [60] [61] [62]
+Overfull \hbox (1.3643pt too wide) in paragraph at lines 4392--4392
+ []\OT1/cmtt/m/n/10.95 service  http://webdss.ise.ufl.edu:2646/OSServer/service
+s/OSSolverService 
+ []
+
+[63] [64]
+Overfull \hbox (28.42978pt too wide) in paragraph at lines 4506--4507
+\OT1/cmr/m/n/10.95 dow con-nect to the di-rec-tory \OT1/cmtt/m/n/10.95 OS/examp
+les/matlab \OT1/cmr/m/n/10.95 which con-tains the file \OT1/cmtt/m/n/10.95 OSma
+tlabSolver.cpp\OT1/cmr/m/n/10.95 .
+ []
+
+[65]
+Overfull \hbox (59.48248pt too wide) in paragraph at lines 4519--4520
+[]\OT1/cmr/m/n/10.95 On an In-tel MAC OS X 64 bit chip the re-sult-ing ex-e-cut
+able will be named \OT1/cmtt/m/n/10.95 OSmatlabSolver.mexmaci64\OT1/cmr/m/n/10.
+95 .
+ []
+
+[66] [67] [68] [69]
+Overfull \hbox (10.30637pt too wide) in paragraph at lines 4836--4841
+\OT1/cmtt/m/n/10.95 variables\OT1/cmr/m/n/10.95 , \OT1/cmtt/m/n/10.95 objective
+s\OT1/cmr/m/n/10.95 , \OT1/cmtt/m/n/10.95 constraints\OT1/cmr/m/n/10.95 , \OT1/
+cmtt/m/n/10.95 linearConstraintCoefficients\OT1/cmr/m/n/10.95 , \OT1/cmtt/m/n/1
+0.95 quadraticCoefficients\OT1/cmr/m/n/10.95 ,
+ []
+
+
+Overfull \hbox (21.60178pt too wide) in paragraph at lines 4924--4924
+ [][] 
+ []
+
+[70] [71] [72] <./figures/expressiontree.png, id=262, 723.6636pt x 502.9992pt>
+File: ./figures/expressiontree.png Graphic file (type png)
+
+<use ./figures/expressiontree.png>
+Package pdftex.def Info: ./figures/expressiontree.png used on input line 4990.
+(pdftex.def)             Requested size: 274.99503pt x 191.14168pt.
+ [73 <./figures/expressiontree.png (PNG copy)>] [74] [75]
+Overfull \hbox (51.91725pt too wide) in paragraph at lines 5172--5185
+\OT1/cmr/m/n/10.95 scale ap-pli-ca-tions the \OT1/cmtt/m/n/10.95 <variables>, <
+objectives>\OT1/cmr/m/n/10.95 , \OT1/cmtt/m/n/10.95 <constraints>\OT1/cmr/m/n/1
+0.95 , and \OT1/cmtt/m/n/10.95 <linearConstraintCoefficients>
+ []
+
+
+Overfull \hbox (22.31323pt too wide) in paragraph at lines 5172--5185
+\OT1/cmr/m/n/10.95 and \OT1/cmtt/m/n/10.95 <nonlinearExpressions> \OT1/cmr/m/n/
+10.95 is done us-ing code gen-er-ated by \OT1/cmtt/m/n/10.95 flex[] \OT1/cmr/m/
+n/10.95 and \OT1/cmtt/m/n/10.95 bison[]\OT1/cmr/m/n/10.95 . The file \OT1/cmtt/
+m/n/10.95 OSParseosil.l
+ []
+
+[76]
+Overfull \hbox (4.36447pt too wide) in paragraph at lines 5211--5216
+[]\OT1/cmr/m/n/10.95 The OSoL parser fol-lows the same lay-out and rules. The f
+iles \OT1/cmtt/m/n/10.95 OSParseosol.l \OT1/cmr/m/n/10.95 and \OT1/cmtt/m/n/10.
+95 OSParseosol.y
+ []
+
+[77]
+Overfull \hbox (84.12682pt too wide) in paragraph at lines 5328--5330
+\OT1/cmr/m/n/10.95 small\OT1/cmtt/m/n/10.95 https://projects.coin-or.org/Ipopt/
+browser/stable/3.5/Ipopt/doc/documentation.pdf?format=raw
+ []
+
+[78]
+Overfull \hbox (51.75725pt too wide) in paragraph at lines 5387--5390
+\OT1/cmr/m/n/10.95 for the con-straints. There are nu-mer-ous \OT1/cmtt/m/n/10.
+95 get() \OT1/cmr/m/n/10.95 meth-ods for the data in the \OT1/cmtt/m/n/10.95 <l
+inearConstraintCoefficients>
+ []
+
+
+Overfull \hbox (1.30376pt too wide) in paragraph at lines 5391--5394
+[]\OT1/cmr/m/n/10.95 When an \OT1/cmtt/m/n/10.95 osinstance \OT1/cmr/m/n/10.95 
+ob-ject is cre-ated, it is stored as an ex-pres-sion tree in an \OT1/cmtt/m/n/1
+0.95 OSExpressionTree
+ []
+
+[79] [80] [81] [82]
+Overfull \hbox (13.13478pt too wide) in paragraph at lines 5603--5603
+[]\OT1/cmtt/m/n/10.95 SRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/CO
+IN-OS/OS/examples/osModDemo[] 
+ []
+
+
+Overfull \hbox (7.3861pt too wide) in paragraph at lines 5604--5604
+[]\OT1/cmtt/m/n/10.95 VPATH = /Users/kmartin/Documents/files/code/cpp/OScpp/COI
+N-OS/OS/examples/osModDemo[] 
+ []
+
+[83]
+Overfull \hbox (18.88347pt too wide) in paragraph at lines 5650--5650
+[]\OT1/cmtt/m/n/10.95 addVariable(int index, string name, double lowerBound, do
+uble upperBound, char type); 
+ []
+
+
+Overfull \hbox (24.63216pt too wide) in paragraph at lines 5682--5682
+[]\OT1/cmtt/m/n/10.95 osinstance->instanceData->nonlinearExpressions->nl[ 1]->o
+sExpressionTree->m_treeRoot =[] 
+ []
+
+[84] [85] [86] [87]
+Overfull \hbox (57.7559pt too wide) in paragraph at lines 5938--5938
+ []\OT1/cmtt/m/n/10.95 LIMIT_EXCEEDED[BONMIN]: A resource limit was exceeded, w
+e provide the current solution. 
+ []
+
+[88]
+Overfull \hbox (1.6374pt too wide) in paragraph at lines 5960--5960
+[]\OT1/cmtt/m/n/10.95 osoption->setAnotherSolverOption("max_iter","100","couenn
+e","ipopt","integer",""); 
+ []
+
+
+Overfull \hbox (59.12428pt too wide) in paragraph at lines 5966--5966
+[]\OT1/cmtt/m/n/10.95 osoption->setAnotherSolverOption("num_resolve_at_node","3
+","couenne","bonmin","integer",""); 
+ []
+
+[89]
+Overfull \hbox (12.57106pt too wide) in paragraph at lines 6000--6003
+\OT1/cmtt/m/n/8 http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3
+DF-A74F-4207-8586-711EBE331CDC&displaylang=en\OT1/cmr/m/n/10.95 . See
+ []
+
+
+Overfull \hbox (2.46007pt too wide) in paragraph at lines 6024--6032
+[]\OT1/cmr/m/n/10.95 These in-struc-tions as-sume that the user has in-stalled 
+the Eclipse IDE. See $\OT1/cmtt/m/n/10.95 http : / / www . eclipse .
+ []
+
+[90]
+Overfull \hbox (3.4933pt too wide) in paragraph at lines 6111--6123
+[]\OT1/cmr/m/n/10.95 In par-tic-u-lar, the im-ple-men-ta-tion of the OS Dip sol
+ver pro-vides a vir-tual class \OT1/cmtt/m/n/10.95 OSDipBlockSolver
+ []
+
+[91] [92] [93] [94] [95] [96] [97] [98] [99] [100] [101]
+Overfull \hbox (1105.38545pt too wide) in paragraph at lines 6878--6878
+[]\OT1/cmtt/m/n/10.95 Kipp - the example you sent finds the optimal solution af
+ter a few passes of pricing and therefore never calls the cut generator. By def
+ault, the PC solver, in the root node starts with pricing, and does not stop un
+til it prices out (or finds optimal, or within gap limits). 
+ []
+
+
+Overfull \hbox (30.38084pt too wide) in paragraph at lines 6889--6889
+[]\OT1/cmtt/m/n/10.95 This is the number of Price/Cut iterations to take before
+ switching off (i.e., MAXINT).[] 
+ []
+
+
+Overfull \hbox (162.60066pt too wide) in paragraph at lines 6891--6891
+[]\OT1/cmtt/m/n/10.95 To force it to cut before pricing out, change this parame
+ter in the parm file. For example, if you change to :[] 
+ []
+
+
+Overfull \hbox (1134.12889pt too wide) in paragraph at lines 6901--6901
+[]\OT1/cmtt/m/n/10.95 If there is an integer solution at the root node, it may 
+be the case that we are still not optimal. A perfect example is where you want 
+to add tour-breaking constraints. There could be an integer solution, but you s
+till violate a tour-breaking constraint. Here is what Matt says:[] 
+ []
+
+
+Overfull \hbox (2214.88219pt too wide) in paragraph at lines 6902--6902
+[]\OT1/cmtt/m/n/10.95 ``By default, DIP assumes, that if problem is LP feasible
+ to the linear system and IP feasible, then it is feasible. In the case where t
+he user knows something that DIP does not (e.g., that the linear system does no
+t define the entire valid constraint system, as in TSP), then they must provide
+ a derivation of this function APPisUserFeasible. Then, DIP will check LP feasi
+ble, IP feasible and lastly, APPisUserFeasible before declaring a point a feasi
+ble solution.''[] 
+ []
+
+
+Overfull \hbox (231.58492pt too wide) in paragraph at lines 6904--6904
+[]\OT1/cmtt/m/n/10.95 For an example of using this see, \url{https://projects.c
+oin-or.org/Dip/browser/trunk/Dip/examples/TSP/TSP_DecompApp.cpp}.[] 
+ []
+
+
+Overfull \hbox (1375.57378pt too wide) in paragraph at lines 6928--6928
+[]\OT1/cmtt/m/n/10.95 Yes - it is also used to solve the master problem as an I
+P. That is, it periodically changes the variables in the master problem (lambda
+) to integers and solves the master as an integer program. This is a heuristic 
+to try and get incumbent solutions for the entire problem. This, in my thesis, 
+is called Price-and-Branch. 
+ []
+
+[102]
+
+LaTeX Warning: Citation `griewank2000' on page 103 undefined on input line 6959
+.
+
+
+LaTeX Warning: Citation `bell2007' on page 103 undefined on input line 6962.
+
+
+LaTeX Warning: Citation `bell2007' on page 103 undefined on input line 6998.
+
+[103] [104]
+Overfull \hbox (9.02266pt too wide) in paragraph at lines 7141--7144
+\OT1/cmr/m/n/10.95 The vari-able in-dices listed are 0, 1, and 3. Vari-able 2 d
+oes not ap-pear in the \OT1/cmtt/m/n/10.95 <nonlinearExpressions>
+ []
+
+[105] [106] [107] [108] [109] [110] [111]
+Overfull \hbox (1.6374pt too wide) in paragraph at lines 7514--7514
+[]\OT1/cmtt/m/n/10.95 calculateAllConstraintFunctionValues(x, objLambda,  conLa
+mbda, true, highestOrder) 
+ []
+
+
+Overfull \hbox (53.3756pt too wide) in paragraph at lines 7523--7523
+[]\OT1/cmtt/m/n/10.95 SparseJacobianMatrix *calculateAllConstraintFunctionGradi
+ents(double* x, double *objLambda, 
+ []
+
+
+Overfull \hbox (1.6374pt too wide) in paragraph at lines 7548--7548
+[]    \OT1/cmtt/m/n/10.95 double *objLambda, double *conLambda,  int idx, bool 
+new_x, int highestOrder);[] 
+ []
+
+[112]
+Overfull \hbox (59.12428pt too wide) in paragraph at lines 7625--7625
+[]\OT1/cmtt/m/n/10.95 osagent = new OSSolverAgent("http://kipp.chicagobooth.edu
+/fileupload/servlet/OSFileUpload");[] 
+ []
+
+[113] (./Future_work.tex [114] [115]) [116] [117] [118]
+No file osUsersManual-OLD.bbl.
+No file osUsersManual-OLD.ind.
+[119] [120] (./osUsersManual-OLD.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 2672 strings out of 493629
+ 37486 string characters out of 3143322
+ 107033 words of memory out of 3000000
+ 5897 multiletter control sequences out of 15000+200000
+ 15606 words of font info for 62 fonts, out of 3000000 for 9000
+ 833 hyphenation exceptions out of 8191
+ 38i,13n,23p,732b,344s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
+/usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
+usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></us
+r/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/
+local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/lo
+cal/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/loca
+l/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/t
+exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texl
+ive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/local/tex
+live/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texl
+ive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texliv
+e/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive
+/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/
+2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/local/texlive/2
+011/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/local/texlive/201
+1/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2011/
+texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on osUsersManual-OLD.pdf (120 pages, 1310950 bytes).
+PDF statistics:
+ 485 PDF objects out of 1000 (max. 8388607)
+ 328 compressed objects within 4 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+
