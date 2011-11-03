@@ -1,6 +1,6 @@
-#line 2 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.cpp"
+#line 2 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.cpp"
 
-#line 4 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.cpp"
+#line 4 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -1912,7 +1912,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[239] =
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 1 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 /* $Id$ */
 /** @file parseosrl.l
  * 
@@ -1926,7 +1926,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[239] =
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#line 15 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 15 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 
 #include "OSConfig.h"
 
@@ -2001,9 +2001,9 @@ using std::ostringstream;
 
 
 
-#line 103 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 103 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 #define YY_EXTRA_TYPE OSrLParserData*
-#line 2007 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.cpp"
+#line 2007 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.cpp"
 
 #define INITIAL 0
 #define osrlattributetext 1
@@ -2255,11 +2255,11 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 113 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 113 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 
 
 
-#line 2263 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.cpp"
+#line 2263 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.cpp"
 
     yylval = yylval_param;
 
@@ -2361,36 +2361,36 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 116 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 116 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 
 	YY_BREAK
 /* General patterns matched in more than one element */
 case 2:
 YY_RULE_SETUP
-#line 120 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 120 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  yylval->sval = yytext; return(QUOTE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 121 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 121 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  yylval->sval = yytext; return(TWOQUOTES);}
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 122 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 122 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT;     return(GREATERTHAN);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 123 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 123 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; yylval->ival = atoi(yytext); return(INTEGER);}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 125 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 125 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; 
 char *yytextEnd;
 yylval->dval = os_strtod_wrap( yytext, &yytextEnd);
@@ -2410,1382 +2410,1382 @@ return(DOUBLE);}
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 141 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 141 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENDOFELEMENT);}
 	YY_BREAK
 /* attributes returning numeric values*/
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 145 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 145 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFCONATT);}
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 146 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 146 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFCONSTRAINTSATT);}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 147 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 147 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NUMBEROFELATT);}
 	YY_BREAK
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 148 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 148 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NUMBEROFENUMERATIONSATT);}
 	YY_BREAK
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 149 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 149 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NUMBEROFIDXATT);}
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 150 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 150 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(NUMBEROFITEMSATT);}
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 151 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 151 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOBJATT);}
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 152 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 152 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOBJECTIVESATT);}
 	YY_BREAK
 case 16:
 /* rule 16 can match eol */
 YY_RULE_SETUP
-#line 153 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 153 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERCONSTRAINTRESULTSATT);}
 	YY_BREAK
 case 17:
 /* rule 17 can match eol */
 YY_RULE_SETUP
-#line 154 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 154 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHEROBJECTIVERESULTSATT);}
 	YY_BREAK
 case 18:
 /* rule 18 can match eol */
 YY_RULE_SETUP
-#line 155 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 155 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERRESULTSATT);}
 	YY_BREAK
 case 19:
 /* rule 19 can match eol */
 YY_RULE_SETUP
-#line 156 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 156 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERSOLUTIONRESULTSATT);}
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 157 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 157 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFOTHERVARIABLERESULTSATT);}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 158 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 158 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFSOLUTIONSATT);}
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 159 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 159 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFSOLVEROUTPUTSATT);}
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 160 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 160 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFSUBSTATUSESATT);}
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 161 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 161 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFTIMESATT);}
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 162 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 162 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFVARATT);}
 	YY_BREAK
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 163 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 163 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFVARIABLESATT);}
 	YY_BREAK
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 164 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 164 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(NUMBEROFVARIDXATT);}
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 166 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 166 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IDXATT);}
 	YY_BREAK
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 167 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 167 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(INCRATT);}
 	YY_BREAK
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 168 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 168 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(MULTATT);}
 	YY_BREAK
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 169 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 169 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SIZEOFATT);}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 170 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 170 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TARGETOBJECTIVEIDXATT);}
 	YY_BREAK
 /* attributes returning strings (that are potentially empty)*/
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 174 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 174 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYCATEGORYATT);}
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 175 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 175 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYCATEGORYATT);}
 	YY_BREAK
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 176 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 176 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(CATEGORYATT);}
 	YY_BREAK
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 177 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 177 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(CATEGORYATT);}
 	YY_BREAK
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 178 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 178 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 179 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 179 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYDESCRIPTIONATT);}
 	YY_BREAK
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 180 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 180 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(DESCRIPTIONATT);}
 	YY_BREAK
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 181 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 181 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(DESCRIPTIONATT);}
 	YY_BREAK
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 182 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 182 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYNAMEATT);}
 	YY_BREAK
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 183 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 183 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYNAMEATT);}
 	YY_BREAK
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 184 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 184 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(NAMEATT);}
 	YY_BREAK
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 185 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 185 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(NAMEATT);}
 	YY_BREAK
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 186 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 186 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 187 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 187 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 188 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 188 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 189 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 189 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TARGETOBJECTIVENAMEATT);}
 	YY_BREAK
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 190 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 190 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTYPEATT);}
 	YY_BREAK
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 191 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 191 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYTYPEATT);}
 	YY_BREAK
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 192 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 192 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(TYPEATT);}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 193 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 193 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(TYPEATT);}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 194 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 194 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYUNITATT);}
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 195 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 195 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYUNITATT);}
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 196 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 196 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(UNITATT);}
 	YY_BREAK
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 197 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 197 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(UNITATT);}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 198 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 198 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVALUEATT);}
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 199 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 199 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYVALUEATT);}
 	YY_BREAK
 case 59:
 /* rule 59 can match eol */
 YY_RULE_SETUP
-#line 200 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 200 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(VALUEATT);}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 201 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 201 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(VALUEATT);}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 202 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 202 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYWEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 case 62:
 /* rule 62 can match eol */
 YY_RULE_SETUP
-#line 203 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 203 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(EMPTYWEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 case 63:
 /* rule 63 can match eol */
 YY_RULE_SETUP
-#line 204 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 204 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN doublequoteattributetext; return(WEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 205 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 205 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN singlequoteattributetext; return(WEIGHTEDOBJECTIVESATT);}
 	YY_BREAK
 /* top level elements */
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 209 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 209 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {return(OSRLSTARTEMPTY);}
 	YY_BREAK
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 210 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 210 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; BEGIN osrlattributetext;  return(OSRLSTART);}
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 211 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 211 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OSRLEND);}
 	YY_BREAK
 case 68:
 /* rule 68 can match eol */
 YY_RULE_SETUP
-#line 213 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 213 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(HEADERSTART);}
 	YY_BREAK
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 214 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 214 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(HEADEREND);}
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 216 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 216 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALSTART);}
 	YY_BREAK
 case 71:
 /* rule 71 can match eol */
 YY_RULE_SETUP
-#line 217 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 217 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALEND);}
 	YY_BREAK
 case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
-#line 219 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 219 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SYSTEMSTART);}
 	YY_BREAK
 case 73:
 /* rule 73 can match eol */
 YY_RULE_SETUP
-#line 220 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 220 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SYSTEMEND);}
 	YY_BREAK
 case 74:
 /* rule 74 can match eol */
 YY_RULE_SETUP
-#line 222 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 222 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SERVICESTART);}
 	YY_BREAK
 case 75:
 /* rule 75 can match eol */
 YY_RULE_SETUP
-#line 223 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 223 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SERVICEEND);}
 	YY_BREAK
 case 76:
 /* rule 76 can match eol */
 YY_RULE_SETUP
-#line 225 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 225 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(JOBSTART);}
 	YY_BREAK
 case 77:
 /* rule 77 can match eol */
 YY_RULE_SETUP
-#line 226 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 226 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(JOBEND);}
 	YY_BREAK
 case 78:
 /* rule 78 can match eol */
 YY_RULE_SETUP
-#line 228 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 228 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OPTIMIZATIONSTART);}
 	YY_BREAK
 case 79:
 /* rule 79 can match eol */
 YY_RULE_SETUP
-#line 229 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 229 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OPTIMIZATIONEND);}
 	YY_BREAK
 /* Remaining elements, sorted alpabetically. */
 case 80:
 /* rule 80 can match eol */
 YY_RULE_SETUP
-#line 234 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 234 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ACTUALSTARTTIMESTART);}
 	YY_BREAK
 case 81:
 /* rule 81 can match eol */
 YY_RULE_SETUP
-#line 235 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 235 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ACTUALSTARTTIMEEND);}
 	YY_BREAK
 case 82:
 /* rule 82 can match eol */
 YY_RULE_SETUP
-#line 236 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 236 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATLOWERSTART);}
 	YY_BREAK
 case 83:
 /* rule 83 can match eol */
 YY_RULE_SETUP
-#line 237 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 237 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATLOWEREND);}
 	YY_BREAK
 case 84:
 /* rule 84 can match eol */
 YY_RULE_SETUP
-#line 238 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 238 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATUPPERSTART);}
 	YY_BREAK
 case 85:
 /* rule 85 can match eol */
 YY_RULE_SETUP
-#line 239 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 239 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ATUPPEREND);}
 	YY_BREAK
 case 86:
 /* rule 86 can match eol */
 YY_RULE_SETUP
-#line 240 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 240 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLECPUNUMBERSTART);}
 	YY_BREAK
 case 87:
 /* rule 87 can match eol */
 YY_RULE_SETUP
-#line 241 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 241 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLECPUNUMBEREND);}
 	YY_BREAK
 case 88:
 /* rule 88 can match eol */
 YY_RULE_SETUP
-#line 242 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 242 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLECPUSPEEDSTART);}
 	YY_BREAK
 case 89:
 /* rule 89 can match eol */
 YY_RULE_SETUP
-#line 243 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 243 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLECPUSPEEDEND);}
 	YY_BREAK
 case 90:
 /* rule 90 can match eol */
 YY_RULE_SETUP
-#line 244 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 244 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLEDISKSPACESTART);}
 	YY_BREAK
 case 91:
 /* rule 91 can match eol */
 YY_RULE_SETUP
-#line 245 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 245 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLEDISKSPACEEND);}
 	YY_BREAK
 case 92:
 /* rule 92 can match eol */
 YY_RULE_SETUP
-#line 246 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 246 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(AVAILABLEMEMORYSTART);}
 	YY_BREAK
 case 93:
 /* rule 93 can match eol */
 YY_RULE_SETUP
-#line 247 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 247 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(AVAILABLEMEMORYEND);}
 	YY_BREAK
 case 94:
 /* rule 94 can match eol */
 YY_RULE_SETUP
-#line 248 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 248 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASE64START);}
 	YY_BREAK
 case 95:
 /* rule 95 can match eol */
 YY_RULE_SETUP
-#line 249 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 249 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASE64END);}
 	YY_BREAK
 case 96:
 /* rule 96 can match eol */
 YY_RULE_SETUP
-#line 250 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 250 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASICSTART);}
 	YY_BREAK
 case 97:
 /* rule 97 can match eol */
 YY_RULE_SETUP
-#line 251 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 251 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASICEND);}
 	YY_BREAK
 case 98:
 /* rule 98 can match eol */
 YY_RULE_SETUP
-#line 252 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 252 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BASISSTATUSSTART);}
 	YY_BREAK
 case 99:
 /* rule 99 can match eol */
 YY_RULE_SETUP
-#line 253 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 253 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASISSTATUSEND);}
 	YY_BREAK
 case 100:
 /* rule 100 can match eol */
 YY_RULE_SETUP
-#line 254 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 254 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(BASSTATUSSTART);}
 	YY_BREAK
 case 101:
 /* rule 101 can match eol */
 YY_RULE_SETUP
-#line 255 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 255 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(BASSTATUSEND);}
 	YY_BREAK
 case 102:
 /* rule 102 can match eol */
 YY_RULE_SETUP
-#line 256 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 256 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONSTART);}
 	YY_BREAK
 case 103:
 /* rule 103 can match eol */
 YY_RULE_SETUP
-#line 257 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 257 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONEND);}
 	YY_BREAK
 case 104:
 /* rule 104 can match eol */
 YY_RULE_SETUP
-#line 258 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 258 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONSTRAINTSSTART);}
 	YY_BREAK
 case 105:
 /* rule 105 can match eol */
 YY_RULE_SETUP
-#line 259 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 259 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(CONSTRAINTSEND);}
 	YY_BREAK
 case 106:
 /* rule 106 can match eol */
 YY_RULE_SETUP
-#line 260 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 260 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTJOBCOUNTSTART);}
 	YY_BREAK
 case 107:
 /* rule 107 can match eol */
 YY_RULE_SETUP
-#line 261 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 261 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTJOBCOUNTEND);}
 	YY_BREAK
 case 108:
 /* rule 108 can match eol */
 YY_RULE_SETUP
-#line 262 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 262 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTSTATESTART);}
 	YY_BREAK
 case 109:
 /* rule 109 can match eol */
 YY_RULE_SETUP
-#line 263 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 263 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(CURRENTSTATEEND);}
 	YY_BREAK
 case 110:
 /* rule 110 can match eol */
 YY_RULE_SETUP
-#line 264 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 264 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(DUALVALUESSTART);}
 	YY_BREAK
 case 111:
 /* rule 111 can match eol */
 YY_RULE_SETUP
-#line 265 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 265 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(DUALVALUESEND);}
 	YY_BREAK
 case 112:
 /* rule 112 can match eol */
 YY_RULE_SETUP
-#line 266 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 266 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ELSTART);}
 	YY_BREAK
 case 113:
 /* rule 113 can match eol */
 YY_RULE_SETUP
-#line 267 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 267 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ELEND);}
 	YY_BREAK
 case 114:
 /* rule 114 can match eol */
 YY_RULE_SETUP
-#line 268 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 268 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENDTIMESTART);}
 	YY_BREAK
 case 115:
 /* rule 115 can match eol */
 YY_RULE_SETUP
-#line 269 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 269 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENDTIMEEND);}
 	YY_BREAK
 case 116:
 /* rule 116 can match eol */
 YY_RULE_SETUP
-#line 270 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 270 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENUMERATIONSTART);}
 	YY_BREAK
 case 117:
 /* rule 117 can match eol */
 YY_RULE_SETUP
-#line 271 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 271 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(ENUMERATIONEND);}
 	YY_BREAK
 case 118:
 /* rule 118 can match eol */
 YY_RULE_SETUP
-#line 272 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 272 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALSTATUSSTART);}
 	YY_BREAK
 case 119:
 /* rule 119 can match eol */
 YY_RULE_SETUP
-#line 273 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 273 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(GENERALSTATUSEND);}
 	YY_BREAK
 case 120:
 /* rule 120 can match eol */
 YY_RULE_SETUP
-#line 274 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 274 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INSTANCENAMESTART);}
 	YY_BREAK
 case 121:
 /* rule 121 can match eol */
 YY_RULE_SETUP
-#line 275 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 275 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(INSTANCENAMEEND);}
 	YY_BREAK
 case 122:
 /* rule 122 can match eol */
 YY_RULE_SETUP
-#line 276 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 276 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IDXSTART);}
 	YY_BREAK
 case 123:
 /* rule 123 can match eol */
 YY_RULE_SETUP
-#line 277 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 277 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(IDXEND);}
 	YY_BREAK
 case 124:
 /* rule 124 can match eol */
 YY_RULE_SETUP
-#line 278 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 278 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ISFREESTART);}
 	YY_BREAK
 case 125:
 /* rule 125 can match eol */
 YY_RULE_SETUP
-#line 279 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 279 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(ISFREEEND);}
 	YY_BREAK
 case 126:
 /* rule 126 can match eol */
 YY_RULE_SETUP
-#line 280 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 280 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(JOBIDSTART);}
 	YY_BREAK
 case 127:
 /* rule 127 can match eol */
 YY_RULE_SETUP
-#line 281 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 281 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(JOBIDEND);}
 	YY_BREAK
 case 128:
 /* rule 128 can match eol */
 YY_RULE_SETUP
-#line 282 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 282 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MESSAGESTART);}
 	YY_BREAK
 case 129:
 /* rule 129 can match eol */
 YY_RULE_SETUP
-#line 283 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 283 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(MESSAGEEND);}
 	YY_BREAK
 case 130:
 /* rule 130 can match eol */
 YY_RULE_SETUP
-#line 284 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 284 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJSTART);}
 	YY_BREAK
 case 131:
 /* rule 131 can match eol */
 YY_RULE_SETUP
-#line 285 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 285 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJEND);}
 	YY_BREAK
 case 132:
 /* rule 132 can match eol */
 YY_RULE_SETUP
-#line 286 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 286 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJECTIVESSTART);}
 	YY_BREAK
 case 133:
 /* rule 133 can match eol */
 YY_RULE_SETUP
-#line 287 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 287 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OBJECTIVESEND);}
 	YY_BREAK
 case 134:
 /* rule 134 can match eol */
 YY_RULE_SETUP
-#line 288 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 288 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OPTIMIZATIONSOLUTIONSTATUSSTART);}
 	YY_BREAK
 case 135:
 /* rule 135 can match eol */
 YY_RULE_SETUP
-#line 289 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 289 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OPTIMIZATIONSOLUTIONSTATUSEND);}
 	YY_BREAK
 case 136:
 /* rule 136 can match eol */
 YY_RULE_SETUP
-#line 290 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 290 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSTART);}
 	YY_BREAK
 case 137:
 /* rule 137 can match eol */
 YY_RULE_SETUP
-#line 291 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 291 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHEREND);}
 	YY_BREAK
 case 138:
 /* rule 138 can match eol */
 YY_RULE_SETUP
-#line 292 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 292 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERRESULTSSTART);}
 	YY_BREAK
 case 139:
 /* rule 139 can match eol */
 YY_RULE_SETUP
-#line 293 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 293 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERRESULTSEND);}
 	YY_BREAK
 case 140:
 /* rule 140 can match eol */
 YY_RULE_SETUP
-#line 294 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 294 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSOLUTIONRESULTSTART);}
 	YY_BREAK
 case 141:
 /* rule 141 can match eol */
 YY_RULE_SETUP
-#line 295 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 295 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERSOLUTIONRESULTEND);}
 	YY_BREAK
 case 142:
 /* rule 142 can match eol */
 YY_RULE_SETUP
-#line 296 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 296 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSOLUTIONRESULTSSTART);}
 	YY_BREAK
 case 143:
 /* rule 143 can match eol */
 YY_RULE_SETUP
-#line 297 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 297 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(OTHERSOLUTIONRESULTSEND);}
 	YY_BREAK
 case 144:
 /* rule 144 can match eol */
 YY_RULE_SETUP
-#line 298 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 298 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERSOLVEROUTPUTSTART);}
 	YY_BREAK
 case 145:
 /* rule 145 can match eol */
 YY_RULE_SETUP
-#line 299 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 299 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(OTHERSOLVEROUTPUTEND);}
 	YY_BREAK
 case 146:
 /* rule 146 can match eol */
 YY_RULE_SETUP
-#line 300 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 300 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SCHEDULEDSTARTTIMESTART);}
 	YY_BREAK
 case 147:
 /* rule 147 can match eol */
 YY_RULE_SETUP
-#line 301 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 301 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SCHEDULEDSTARTTIMEEND);}
 	YY_BREAK
 case 148:
 /* rule 148 can match eol */
 YY_RULE_SETUP
-#line 302 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 302 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICENAMESTART);}
 	YY_BREAK
 case 149:
 /* rule 149 can match eol */
 YY_RULE_SETUP
-#line 303 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 303 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICENAMEEND);}
 	YY_BREAK
 case 150:
 /* rule 150 can match eol */
 YY_RULE_SETUP
-#line 304 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 304 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEURISTART);}
 	YY_BREAK
 case 151:
 /* rule 151 can match eol */
 YY_RULE_SETUP
-#line 305 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 305 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEURIEND);}
 	YY_BREAK
 case 152:
 /* rule 152 can match eol */
 YY_RULE_SETUP
-#line 306 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 306 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEUTILIZATIONSTART);}
 	YY_BREAK
 case 153:
 /* rule 153 can match eol */
 YY_RULE_SETUP
-#line 307 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 307 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SERVICEUTILIZATIONEND);}
 	YY_BREAK
 case 154:
 /* rule 154 can match eol */
 YY_RULE_SETUP
-#line 308 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 308 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SOLUTIONSTART);}
 	YY_BREAK
 case 155:
 /* rule 155 can match eol */
 YY_RULE_SETUP
-#line 309 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 309 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SOLUTIONEND);}
 	YY_BREAK
 case 156:
 /* rule 156 can match eol */
 YY_RULE_SETUP
-#line 310 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 310 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVERINVOKEDSTART);}
 	YY_BREAK
 case 157:
 /* rule 157 can match eol */
 YY_RULE_SETUP
-#line 311 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 311 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVERINVOKEDEND);}
 	YY_BREAK
 case 158:
 /* rule 158 can match eol */
 YY_RULE_SETUP
-#line 312 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 312 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVEROUTPUTSTART);}
 	YY_BREAK
 case 159:
 /* rule 159 can match eol */
 YY_RULE_SETUP
-#line 313 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 313 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SOLVEROUTPUTEND);}
 	YY_BREAK
 case 160:
 /* rule 160 can match eol */
 YY_RULE_SETUP
-#line 314 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 314 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(STATUSSTART);}
 	YY_BREAK
 case 161:
 /* rule 161 can match eol */
 YY_RULE_SETUP
-#line 315 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 315 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(STATUSEND);}
 	YY_BREAK
 case 162:
 /* rule 162 can match eol */
 YY_RULE_SETUP
-#line 316 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 316 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBMITTIMESTART);}
 	YY_BREAK
 case 163:
 /* rule 163 can match eol */
 YY_RULE_SETUP
-#line 317 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 317 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBMITTIMEEND);}
 	YY_BREAK
 case 164:
 /* rule 164 can match eol */
 YY_RULE_SETUP
-#line 318 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 318 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBSTATUSSTART);}
 	YY_BREAK
 case 165:
 /* rule 165 can match eol */
 YY_RULE_SETUP
-#line 319 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 319 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SUBSTATUSEND);}
 	YY_BREAK
 case 166:
 /* rule 166 can match eol */
 YY_RULE_SETUP
-#line 320 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 320 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SUPERBASICSTART);}
 	YY_BREAK
 case 167:
 /* rule 167 can match eol */
 YY_RULE_SETUP
-#line 321 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 321 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(SUPERBASICEND);}
 	YY_BREAK
 case 168:
 /* rule 168 can match eol */
 YY_RULE_SETUP
-#line 322 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 322 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SYSTEMINFORMATIONSTART);}
 	YY_BREAK
 case 169:
 /* rule 169 can match eol */
 YY_RULE_SETUP
-#line 323 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 323 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(SYSTEMINFORMATIONEND);}
 	YY_BREAK
 case 170:
 /* rule 170 can match eol */
 YY_RULE_SETUP
-#line 324 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 324 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESTART);}
 	YY_BREAK
 case 171:
 /* rule 171 can match eol */
 YY_RULE_SETUP
-#line 325 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 325 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMEEND);}
 	YY_BREAK
 case 172:
 /* rule 172 can match eol */
 YY_RULE_SETUP
-#line 326 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 326 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESERVICESTARTEDSTART);}
 	YY_BREAK
 case 173:
 /* rule 173 can match eol */
 YY_RULE_SETUP
-#line 327 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 327 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESERVICESTARTEDEND);}
 	YY_BREAK
 case 174:
 /* rule 174 can match eol */
 YY_RULE_SETUP
-#line 328 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 328 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESTAMPSTART);}
 	YY_BREAK
 case 175:
 /* rule 175 can match eol */
 YY_RULE_SETUP
-#line 329 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 329 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMESTAMPEND);}
 	YY_BREAK
 case 176:
 /* rule 176 can match eol */
 YY_RULE_SETUP
-#line 330 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 330 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(TIMINGINFORMATIONSTART);}
 	YY_BREAK
 case 177:
 /* rule 177 can match eol */
 YY_RULE_SETUP
-#line 331 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 331 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TIMINGINFORMATIONEND);}
 	YY_BREAK
 case 178:
 /* rule 178 can match eol */
 YY_RULE_SETUP
-#line 332 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 332 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TOTALJOBSSOFARSTART);}
 	YY_BREAK
 case 179:
 /* rule 179 can match eol */
 YY_RULE_SETUP
-#line 333 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 333 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(TOTALJOBSSOFAREND);}
 	YY_BREAK
 case 180:
 /* rule 180 can match eol */
 YY_RULE_SETUP
-#line 334 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 334 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(UNKNOWNSTART);}
 	YY_BREAK
 case 181:
 /* rule 181 can match eol */
 YY_RULE_SETUP
-#line 335 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 335 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(UNKNOWNEND);}
 	YY_BREAK
 case 182:
 /* rule 182 can match eol */
 YY_RULE_SETUP
-#line 336 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 336 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUNUMBERSTART);}
 	YY_BREAK
 case 183:
 /* rule 183 can match eol */
 YY_RULE_SETUP
-#line 337 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 337 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUNUMBEREND);}
 	YY_BREAK
 case 184:
 /* rule 184 can match eol */
 YY_RULE_SETUP
-#line 338 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 338 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUSPEEDSTART);}
 	YY_BREAK
 case 185:
 /* rule 185 can match eol */
 YY_RULE_SETUP
-#line 339 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 339 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDCPUSPEEDEND);} 
 	YY_BREAK
 case 186:
 /* rule 186 can match eol */
 YY_RULE_SETUP
-#line 340 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 340 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDDISKSPACESTART);}
 	YY_BREAK
 case 187:
 /* rule 187 can match eol */
 YY_RULE_SETUP
-#line 341 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 341 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDDISKSPACEEND);}
 	YY_BREAK
 case 188:
 /* rule 188 can match eol */
 YY_RULE_SETUP
-#line 342 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 342 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDMEMORYSTART);}
 	YY_BREAK
 case 189:
 /* rule 189 can match eol */
 YY_RULE_SETUP
-#line 343 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 343 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(USEDMEMORYEND);}
 	YY_BREAK
 case 190:
 /* rule 190 can match eol */
 YY_RULE_SETUP
-#line 344 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 344 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VALUESSTART);}
 	YY_BREAK
 case 191:
 /* rule 191 can match eol */
 YY_RULE_SETUP
-#line 345 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 345 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VALUESEND);}
 	YY_BREAK
 case 192:
 /* rule 192 can match eol */
 YY_RULE_SETUP
-#line 346 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 346 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUESSTRINGSTART);}
 	YY_BREAK
 case 193:
 /* rule 193 can match eol */
 YY_RULE_SETUP
-#line 347 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 347 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  return(VALUESSTRINGEND);}
 	YY_BREAK
 case 194:
 /* rule 194 can match eol */
 YY_RULE_SETUP
-#line 348 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 348 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARSTART);}
 	YY_BREAK
 case 195:
 /* rule 195 can match eol */
 YY_RULE_SETUP
-#line 349 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 349 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VAREND);}
 	YY_BREAK
 case 196:
 /* rule 196 can match eol */
 YY_RULE_SETUP
-#line 350 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 350 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARIABLESSTART);}
 	YY_BREAK
 case 197:
 /* rule 197 can match eol */
 YY_RULE_SETUP
-#line 351 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 351 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARIABLESEND);}
 	YY_BREAK
 case 198:
 /* rule 198 can match eol */
 YY_RULE_SETUP
-#line 352 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 352 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARIDXSTART);}
 	YY_BREAK
 case 199:
 /* rule 199 can match eol */
 YY_RULE_SETUP
-#line 353 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 353 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT; return(VARIDXEND);}
 	YY_BREAK
 /* The <item> element and the children of the option header are treated specially because they may legitimately contain special characters */
 case 200:
 /* rule 200 can match eol */
 YY_RULE_SETUP
-#line 358 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 358 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(ITEMEMPTY);}
 	YY_BREAK
 case 201:
 /* rule 201 can match eol */
 YY_RULE_SETUP
-#line 359 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 359 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(ITEMSTART);}
 	YY_BREAK
 case 202:
 /* rule 202 can match eol */
 YY_RULE_SETUP
-#line 360 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 360 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(ITEMEND);}
 	YY_BREAK
 case 203:
 /* rule 203 can match eol */
 YY_RULE_SETUP
-#line 361 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 361 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(ITEMSTARTANDEND);}
 	YY_BREAK
 case 204:
 /* rule 204 can match eol */
 YY_RULE_SETUP
-#line 363 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 363 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILENAMEEMPTY);}
 	YY_BREAK
 case 205:
 /* rule 205 can match eol */
 YY_RULE_SETUP
-#line 364 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 364 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILENAMESTART);}
 	YY_BREAK
 case 206:
 /* rule 206 can match eol */
 YY_RULE_SETUP
-#line 365 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 365 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILENAMEEND);}
 	YY_BREAK
 case 207:
 /* rule 207 can match eol */
 YY_RULE_SETUP
-#line 366 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 366 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILENAMESTARTANDEND);}
 	YY_BREAK
 case 208:
 /* rule 208 can match eol */
 YY_RULE_SETUP
-#line 368 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 368 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILESOURCEEMPTY);}
 	YY_BREAK
 case 209:
 /* rule 209 can match eol */
 YY_RULE_SETUP
-#line 369 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 369 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILESOURCESTART);}
 	YY_BREAK
 case 210:
 /* rule 210 can match eol */
 YY_RULE_SETUP
-#line 370 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 370 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILESOURCEEND);}
 	YY_BREAK
 case 211:
 /* rule 211 can match eol */
 YY_RULE_SETUP
-#line 371 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 371 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILESOURCESTARTANDEND);}
 	YY_BREAK
 case 212:
 /* rule 212 can match eol */
 YY_RULE_SETUP
-#line 373 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 373 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILEDESCRIPTIONEMPTY);}
 	YY_BREAK
 case 213:
 /* rule 213 can match eol */
 YY_RULE_SETUP
-#line 374 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 374 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILEDESCRIPTIONSTART);}
 	YY_BREAK
 case 214:
 /* rule 214 can match eol */
 YY_RULE_SETUP
-#line 375 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 375 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILEDESCRIPTIONEND);}
 	YY_BREAK
 case 215:
 /* rule 215 can match eol */
 YY_RULE_SETUP
-#line 376 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 376 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILEDESCRIPTIONSTARTANDEND);}
 	YY_BREAK
 case 216:
 /* rule 216 can match eol */
 YY_RULE_SETUP
-#line 378 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 378 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILECREATOREMPTY);}
 	YY_BREAK
 case 217:
 /* rule 217 can match eol */
 YY_RULE_SETUP
-#line 379 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 379 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILECREATORSTART);}
 	YY_BREAK
 case 218:
 /* rule 218 can match eol */
 YY_RULE_SETUP
-#line 380 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 380 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILECREATOREND);}
 	YY_BREAK
 case 219:
 /* rule 219 can match eol */
 YY_RULE_SETUP
-#line 381 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 381 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILECREATORSTARTANDEND);}
 	YY_BREAK
 case 220:
 /* rule 220 can match eol */
 YY_RULE_SETUP
-#line 383 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 383 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {  YY_PRINT;  return(FILELICENCEEMPTY);}
 	YY_BREAK
 case 221:
 /* rule 221 can match eol */
 YY_RULE_SETUP
-#line 384 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 384 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; BEGIN itemtext; return(FILELICENCESTART);}
 	YY_BREAK
 case 222:
 /* rule 222 can match eol */
 YY_RULE_SETUP
-#line 385 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 385 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILELICENCEEND);}
 	YY_BREAK
 case 223:
 /* rule 223 can match eol */
 YY_RULE_SETUP
-#line 386 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 386 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; return(FILELICENCESTARTANDEND);}
 	YY_BREAK
 /* environments and comments */
 case 224:
 /* rule 224 can match eol */
 YY_RULE_SETUP
-#line 390 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 390 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT; yylval->sval = strdup( yytext);  yyextra->errorText = yylval->sval;  /*  yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 	YY_BREAK
 case 225:
 /* rule 225 can match eol */
 YY_RULE_SETUP
-#line 391 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 391 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { YY_PRINT;  yylval->sval = strdup( yytext); BEGIN 0;  yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ITEMTEXT); }
 	YY_BREAK
 case 226:
 YY_RULE_SETUP
-#line 393 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 393 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 BEGIN comment;
 	YY_BREAK
 case 227:
-#line 395 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 395 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 case 228:
 /* rule 228 can match eol */
 YY_RULE_SETUP
-#line 395 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 395 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 ;
 	YY_BREAK
 case 229:
 YY_RULE_SETUP
-#line 396 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 396 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 BEGIN 0;
 	YY_BREAK
 case 230:
 YY_RULE_SETUP
-#line 398 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 398 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 BEGIN xmldeclaration;
 	YY_BREAK
 case 231:
-#line 400 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 400 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 case 232:
 /* rule 232 can match eol */
 YY_RULE_SETUP
-#line 400 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 400 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 ;
 	YY_BREAK
 case 233:
 YY_RULE_SETUP
-#line 401 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 401 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 BEGIN 0;
 	YY_BREAK
 case 234:
 /* rule 234 can match eol */
 YY_RULE_SETUP
-#line 404 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 404 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 235:
 /* rule 235 can match eol */
 YY_RULE_SETUP
-#line 405 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 405 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  BEGIN 0; yylval->sval = strdup(yytext);  /*yylval->sval = yytext;*/ return(ATTRIBUTETEXT);}
 	YY_BREAK
 case 236:
 /* rule 236 can match eol */
 YY_RULE_SETUP
-#line 406 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 406 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 {YY_PRINT;  BEGIN 0; /*yylval->sval = strdup(yytext);*/  yylval->sval = yytext; return(OSRLATTRIBUTETEXT);}
 	YY_BREAK
 /* error trap */
 case 237:
 /* rule 237 can match eol */
 YY_RULE_SETUP
-#line 410 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 410 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 { 
 	std::string error;
 	std::ostringstream outStr;
@@ -3800,10 +3800,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 238:
 YY_RULE_SETUP
-#line 422 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 422 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 ECHO;
 	YY_BREAK
-#line 3807 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.cpp"
+#line 3807 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(osrlattributetext):
 case YY_STATE_EOF(doublequoteattributetext):
@@ -4959,7 +4959,7 @@ void osrlfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 422 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosrl.l"
+#line 422 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
 
 
 
