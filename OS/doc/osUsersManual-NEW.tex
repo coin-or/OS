@@ -21,6 +21,11 @@
 
 \begin{document}
 
+\runcodefalse   % we do not build a manual for folks who only want to run the executables
+\uselibsfalse   % we do not build a manual for folks who want to build against the libraries
+\developtrue   % we build a manual for folks who want to actively develop code
+
+
 %Some cross-referencing index entries (to be expanded as needed)
 \index{AMPL Solver Library |see{Third-party software, ASL}}
 \index{ASL|see{Third-party software, ASL}}
@@ -92,9 +97,9 @@ more information.
 
 
 % Part 1 for folks who just want to run the executables
-\newpage
 
-\noindent{\LARGE \bf Part I. Running the OS executables}
+\newpage
+\part{Running the OS executables}
 
 \input{chapters/downloadbinaries.tex}
 
@@ -106,11 +111,13 @@ more information.
 
 
 % Part 2 for folks who want to use the libraries to develop their own applications
-\newpage
 
-\noindent{\LARGE \bf Part II. Using the OS libraries and API}
+\newpage
+\part{Using the OS libraries and API}
 
 \input{chapters/codesamples.tex}
+
+%\input{chapters/OSDip.tex}
 
 \input{chapters/oslibrary.tex}
 
@@ -121,8 +128,7 @@ more information.
 
 % Part 3 for folks who want to build the code
 \newpage
-
-\noindent{\LARGE \bf Part III. Building OS from source}
+\part{Building OS from source}
 
 \input{chapters/downloadsource.tex}
 
@@ -136,7 +142,6 @@ more information.
 
 
 % Part 4: end items: future plans, bibliography, etc.
-
 \input{chapters/wishlist.tex}
 
 
