@@ -2600,6 +2600,7 @@ std::string* OSInstance::getTimeDomainStageNames()
     return m_msTimeDomainStageNames;
 }// getTimeDomainStageNames
 
+
 int* OSInstance::getTimeDomainStageNumberOfVariables()
 {
     if (instanceData->timeDomain == NULL)
@@ -3779,6 +3780,7 @@ double *OSInstance::calculateObjectiveFunctionGradient(double* x, double *objLam
 }//calculateObjectiveFunctionGradient
 
 
+
 double *OSInstance::calculateObjectiveFunctionGradient(double* x, int objIdx, bool new_x)
 {
     try
@@ -4370,7 +4372,7 @@ SparseHessianMatrix* OSInstance::getLagrangianHessianSparsityPattern( )
     std::vector<bool> e( m);
     //Vector s(m);
     for(i = 0; i < m; i++) e[i] = true;
-    std::cout << "Computing Sparse Hessian" << std::endl;
+    //std::cout << "Computing Sparse Hessian" << std::endl;
     //m_vbLagHessNonz holds the sparsity pattern Lagrangian of the Hessian
     m_vbLagHessNonz = (*Fad).RevSparseHes(m_iNumberOfNonlinearVariables, e);
     for(i = 0; i < m_iNumberOfNonlinearVariables; i++){

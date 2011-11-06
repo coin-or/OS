@@ -24,8 +24,8 @@
 #include<sstream>
 
 //#define DEBUG_OSRESULT
-//#define DEBUG_ISEQUAL_ROUTINES 0 // No output
-#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
+#define DEBUG_ISEQUAL_ROUTINES 0 // No output
+//#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
 //#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
 
 using namespace std;
@@ -7975,6 +7975,7 @@ bool GeneralResult::setRandom(double density, bool conformant)
     if (OSRand() <= density)
     {
         generalStatus = new GeneralStatus();
+
 
         generalStatus->setRandom(density, conformant);
     }
