@@ -1409,7 +1409,9 @@ But our modular extensible schema standard element design allows us to have such
 Jun
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%
 
+From Stefan on how to merge changes into an OS stable
 
 
 to merge, go to a checkout of OS 2.4 and do
@@ -1443,6 +1445,13 @@ To create debug libraries, --enable-debug should do the job.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 
+
+From Stefan on how to build without package configuration
+
+--disable-pkg-config is for disabling the use of pkg-config when checking for dependencies.
+With --without-pkg (better had been --without-prjct) I meant flags like --without-glpk or --without-os (ha!) to disable the build of certain projects. It works analog to COIN_SKIP_PROJECTS, but is more common in the autotools world. 
+
+%%%%%%%%%%%%%%%%%%%%%%
 
 
 
