@@ -2,7 +2,7 @@
 \begin{thebibliography}{1}
 
 \bibitem{bell2007}
-Bradley Bell.
+B.~Bell.
 \newblock {CppAD Documentation}, 2007.
 \newblock \url{http://www.coin-or.org/CppAD/Doc/cppad.xml}.
 
@@ -12,7 +12,7 @@ R.~Fourer, L.~Lopes, and K.~Martin.
 \newblock {\em {INFORMS} Journal on Computing}, 17:139--158, 2005.
 
 \bibitem{griewank2000}
-Andreas Griewank.
+A.~Griewank.
 \newblock {\em Evaluating Derivatives:\ Principles and Techniques of
   Algorithmic Differentiation}.
 \newblock SIAM, Philadelphia, PA, 2000.
@@ -25,10 +25,10 @@ J.~Ma.
   Management Sciences, Northwestern University, Evanston, IL.
 
 \bibitem{rosenbrock1960}
-H.H. Rosenbrock.
+H.H.~Rosenbrock.
 \newblock An automatic method for finding the greatest or least value of a
   function.
-\newblock {\em Comp. J.}, 3:175--184, 1960.
+\newblock {\em Computer Journal}, 3:175--184, 1960.
 
 \end{thebibliography}
 

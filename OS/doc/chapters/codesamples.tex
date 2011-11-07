@@ -1,7 +1,14 @@
 \section{Code samples to illustrate the OS Project}\label{section:examples}
 
-These example executable files are not built by running {\tt configure} and {\tt make}.  In order to build the examples
-in a unix environment the user must first run
+\ifdevelop
+These example executable files are not built by running {\tt configure} and {\tt make}. 
+Windows users are advised to download a binary distribution and use the solution file {\tt examples.sln} provided there in the 
+\begin{verbatim}
+examples\MSVisualStudio
+\end{verbatim}
+directory.
+
+In order to build the examples in a {\bf unix environment}\index{unix} the user must first run
 %
 \index{make install@{\tt make install}}
 \begin{verbatim}
@@ -16,11 +23,16 @@ and all of the libraries required by the examples in the directory
 \begin{verbatim}
 COIN-OS/lib
 \end{verbatim}
-The source code for the examples is in the directory {\tt COIN-OS/OS/examples}.  For instance, the {\tt osModDemo}
-example is in the directory
+In addition the folder {\tt pkgconfig} is placed in the {\tt lib} directory as well. Unix must then be informed of the location of this folder as follows:
+\begin{verbatim}
+export PKG_CONFIG_PATH=<path to pkgconfig directory>
+\end{verbatim}
+The source code for the examples is in the {\tt COIN-OS/OS/examples} hierarchy.  For instance, the {\tt osModDemo}
+example of section~\ref{section:exampleOSModDemo} is in the directory
 \begin{verbatim}
 COIN-OS/OS/examples/osModDemo
 \end{verbatim}
+
 Next, the user should connect to the appropriate example directory and run {\tt make}.
 If the user has done a VPATH\index{VPATH} build, the makefiles\index{makefile|(} will be in each respective example directory under
 \begin{verbatim}
@@ -30,6 +42,20 @@ otherwise, the makefiles will be in each respective example directory under
 \begin{verbatim}
 COIN-OS/OS/examples
 \end{verbatim}
+\else
+The binary distribution contains makefiles for unix users, respectively MS Visual Studio project files 
+for Windows users that can be used as follows.
+
+Under unix, connect to the appropriate directory for the desired project and run {\tt make}. 
+For instance, the code and makefile for the {\tt osModDemo}
+example of section~\ref{section:exampleOSModDemo} is in the directory
+\begin{verbatim}
+examples/osModDemo
+\end{verbatim}
+
+Under Windows, connect to the {\tt MSVisualStudio} directory and open {\tt examples.sln} in Visual Studio.
+ 
+\fi
 
 The {\tt Makefile} in each example directory is fairly simple and is designed to be easily modified by the user
 if necessary.  The part of the Makefile to be adjusted, if necessary, is
@@ -50,8 +76,8 @@ ADDLIBS =
 # CHANGEME: Additional flags for compilation (e.g., include flags)
 ADDINCFLAGS =  -I${prefix}/include
 # CHANGEME: SRCDIR is the path to the source code; VPATH is the path to
-# the executable. It is assumed # that the lib directory is in prefix/lib
-# and the header files are inprefix/include
+# the executable. It is assumed that the lib directory is in prefix/lib
+# and the header files are in prefix/include
 SRCDIR = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osModDemo
 VPATH = /Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/OS/examples/osModDemo
 prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
@@ -61,14 +87,14 @@ prefix = /Users/kmartin/Documents/files/code/cpp/OScpp/vpath
 Developers can use the Makefiles as a starting point for building applications that use the 
 OS project libraries\index{makefile|)}.
 
-\medskip
-Users of Microsoft Visual Studio can obtain the executables by opening the solution file 
-{\tt OS.sln}\index{OS sln@{\tt OS.sln}} in
-Visual Studio (or by double-clicking on the file in Windows Explorer). Once the file is opened, 
-select the Configuration Manager from the Build menu and select the projects you desire to be built. 
-Then select Build Solution from the Build menu (or press F7). 
-
-The executables are also part of the binary distribution described in Section~\ref{section:vsexamples}.
+%\medskip
+%Users of Microsoft Visual Studio can obtain the executables by opening the solution file 
+%{\tt examples.sln}\index{examples.sln@{\tt examples.sln}} in
+%Visual Studio (or by double-clicking on the file in Windows Explorer). Once the file is opened, 
+%select the Configuration Manager from the Build menu and select the projects you desire to be built. 
+%Then select Build Solution from the Build menu (or press F7). 
+%
+%The executables are also part of the binary distribution described in Section~\ref{section:vsexamples}.
 
 
 \subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
