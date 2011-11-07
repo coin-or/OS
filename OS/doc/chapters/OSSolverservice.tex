@@ -267,7 +267,7 @@ method. The {\tt solve} method is invoked synchronously and waits for the solver
 This is illustrated in Figure~\ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} 
 reads a file on the hard drive with the optimization instance, usually in OSiL\index{OSiL} format. 
 The optimization instance is parsed into a string which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} 
-(see~\ref{section:oslibrary}), which is linked with various solvers. 
+(see Section~\ref{section:oslibrary}), which is linked with various solvers. 
 Similarly an option file in OSoL\index{OSoL} format is parsed into a string and passed to the {\tt OSLibrary}. 
 {\it No interpretation of the options is done at this stage}, so that any {\tt <solverToInvoke>} or
 {\tt <instanceLocation>} directives in the OSoL file will be ignored for local solves.
