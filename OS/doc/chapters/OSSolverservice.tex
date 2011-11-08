@@ -37,18 +37,18 @@ Not all the parameters are required.
 \item[] {\bf osil xxx.osil}\ \ This is the path information and name of
 the file that contains the optimization instance in OSiL\index{OSiL} format.
 It is assumed that this file is available on the machine that is running
-{\tt OSSolverService}. This option can be omitted, as there are other ways
+{\tt OSSolverService}. This parameter can be omitted, as there are other ways
 to specify an optimization instance.
 %If this option is not specified then the instance location must be specified in the OSoL\index{OSoL} solver options file.
 
 \item[] {\bf osol xxx.osol}\ \ This is the path information and name of the file that contains the solver 
 options. It is assumed that this file is available on the machine that is running {\tt OSSolverService}. 
-It is not necessary to specify this option.
+It is not necessary to specify this parameter.
 
-\item[] {\bf osrl xxx.osrl}\ \ This is the path information and name of the file that contains the solver 
-solution. A valid file path must be given on the machine that is running {\tt OSSolverService}. 
-It is not necessary to specify this option.
-If this option is not specified then the solver solution is displayed to the screen.
+\item[] {\bf osrl xxx.osrl}\ \ This is the path information and name of the file to which the solver 
+solution will be written upon return. A valid file path must be given on the machine that is running {\tt OSSolverService}. 
+It is not necessary to specify this parameter.
+If this parameter is not specified then the solver solution is displayed to the screen.
 
 
 \item[] {\bf osplInput xxx.ospl}\ \  The name of an input file in the  OS Process Language (OSpL); 
@@ -69,8 +69,8 @@ The options are
 {\tt knock}\index{knock@{\tt knock}},
 {\tt getJobID}\index{getJobID@{\tt getJobID}}, and 
 {\tt retrieve}\index{retrieve@{\tt retrieve}}.
-The use of these options is illustrated in the examples below. This option is not required, and the default
-value is {\tt solve}\index{solve@{\tt solve}|)}.
+The use of these options is illustrated in the examples below. This parameter is not required, 
+and the default value is {\tt solve}\index{solve@{\tt solve}|)}.
 
 \item[] {\bf mps  xxx.mps}\ \ This is the path information and name of the MPS file if the problem instance 
 is in MPS format\index{MPS format}. It is assumed that this file is available on the machine that is running 
@@ -91,7 +91,7 @@ Other solvers supported (if the necessary libraries are present) are
 %, {\tt ipopt} (COIN-OR Ipopt)
 \ifknitro, {\tt knitro} (Knitro)\index{Knitro@{\tt Knitro}}\fi
 and {\tt lindo} (LINDO)\index{LINDO}.
-If no value is specified for this parameter, then a default value is used 
+If no value is specified for this parameter, then a default solver is used 
 %then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter 
 for the {\tt solve}\index{solve@{\tt solve}} or {\tt send}\index{send@{\tt send}} service method.
 The default solver depends on the problem type and can be read off from 
@@ -240,7 +240,7 @@ then it is the instance specified in the nl file. If there is no nl file, it is 
 instance in the mps file. If no OSiL, nl or mps file is specified, an error is thrown. 
 
 The OSoL file is simply passed on to the OSLibrary; it is not parsed at this point. 
-The OSoL file elements {\tt <solverToInvoke>} and {\tt instanceLocation} cannot be used for local calls.
+The OSoL file elements {\tt <solverToInvoke>} and {\tt <instanceLocation>} cannot be used for local calls.
 One can specify which solver to use in the OSLibrary through the {\tt solver} option. If this 
 option is empty, a default solver is selected (see Table~\ref{table:defaultsolvers}\index{default solver}).
 
@@ -250,8 +250,8 @@ If the {\tt serviceLocation} parameter is used, a call is placed to the remote s
 specified in the {\tt serviceLocation} parameter. 
 Two strings are passed to the remote solver service: a string which is the OSoL file 
 if one has been specified, or the empty string otherwise, and a string containing an 
-instance if one has been specified. The instance can be specified using the {\tt osil}, {\tt -nl}, or 
-{\tt -mps} option. If an OSiL file is specified in the {\tt osil} option, it is used. If there is no 
+instance if one has been specified. The instance can be specified using the {\tt osil}, {\tt nl}, or 
+{\tt mps} option. If an OSiL file is specified in the {\tt osil} option, it is used. If there is no 
 OSiL file, then the instance specified in the nl file is used. If there is no nl file,  
 the mps file is used. If no file is given, an empty string is sent.
 
@@ -310,27 +310,27 @@ The fifth parameter is  {\tt osrl}. The value of this parameter, {\tt /Users/kma
 specifies the location on the local machine where the OSrL\index{OSrL} result file will get written.
 
 
-Parameters may also be contained in an XML-file in OSoL\index{OSoL} format. In the configuration file
-{\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
-\begin{verbatim}
-osol ../data/osolFiles/demo.osol
-solver clp
-\end{verbatim}
-The file {\tt demo.osol} is
-
-\begin{verbatim}
-<?xml version="1.0" encoding="UTF-8"?>
-<osol xmlns="os.optimizationservices.org"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="os.optimizationservices.org
-      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
-    <general>
-        <instanceLocation locationType="local">
-            ../data/osilFiles/parincLinear.osil
-        </instanceLocation>
-    </general>
-</osol>
-\end{verbatim}
+%Parameters may also be contained in an XML-file in OSoL\index{OSoL} format. In the configuration %file
+%{\tt testlocalosol.config} we illustrate specifying the instance location in an OSoL file.
+%\begin{verbatim}
+%osol ../data/osolFiles/demo.osol
+%solver clp
+%\end{verbatim}
+%The file {\tt demo.osol} is
+%
+%\begin{verbatim}
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osol xmlns="os.optimizationservices.org"
+%      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+%      xsi:schemaLocation="os.optimizationservices.org
+%      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+%    <general>
+%        <instanceLocation locationType="local">
+%            ../data/osilFiles/parincLinear.osil
+%        </instanceLocation>
+%    </general>
+%</osol>
+%\end{verbatim}
 
 
 \subsection{Solving Problems Remotely with Web Services}\label{section:servicemethods}
@@ -361,7 +361,7 @@ problem must be solved. The Java solver service solves the optimization instance
 by  calling the  {\tt OSSolverService} on the server. So there is an {\tt OSSolverService}
 on the client that calls the Web Service {\tt  OSSolverService.jws} that in turn
 calls  the executable {\tt OSSolverService} on the server.
-The Java solver service passes options to the local {\tt OSSolverService}
+The Java solver service passes options to the server's {\tt OSSolverService}
 %such as where the OSiL file is located and where to write the solution result.
 in form of two strings, an osil string representing the instance and an osol string
 representing the options (if any). 
@@ -374,7 +374,8 @@ OSiL files specified in the {\tt <instanceLocation>} element must be converted t
 by the solver service.
 If two instance files
 are specified in this way --- one through the local command interface, the other in an options file --- 
-the solver service is free to pick which one to choose.
+the information on the command line takes precedent.
+%the solver service is free to pick which one to choose.
 
 
 
@@ -407,7 +408,7 @@ serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
 \end{verbatim}
 
 No solver is specified and by default the  {\tt Clp} solver  is used by the {\tt OSSolverService}, 
-since the problem is a continuous linar program.
+since the problem is a continuous linear program.
 If, for example, the user wished to solve the problem with the 
 {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(} solver then this is accomplished
 either by using the  {\tt solver} option on the command line
@@ -420,6 +421,7 @@ or by  adding  the line
 \end{verbatim}
 to the  {\tt testremote.config} file\index{testremote.config@{\tt testremote.config}|)}.
 \index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
+When solver information is given both on the command line and in the config file, the command line information supercedes the config file.
 
 \index{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing
@@ -448,7 +450,7 @@ If we were to change the {\tt locationType} attribute in the {\tt <instanceLocat
 could specify the instance location on yet another machine. This is illustrated below  for {\tt remoteSolve2.osol}.
 The scenario is depicted in Figure~\ref{figure:ossolverservice2}.  The OSiL string passed from the client to the solver
 service is empty.  However, the OSoL element {\tt <instanceLocation>}  has an attribute {\tt locationType} equal to
-{\tt http}.  In this case, the text of the {\tt <instanceLoction>} element contains the URL of a third machine which
+{\tt http}.  In this case, the text of the {\tt <instanceLocation>} element contains the URL of a third machine which
 has the problem instance {\tt parincLinear.osil}.  The solver service will contact the machine with URL
 {\tt\UrlParinclinear} and download this test problem. So the {\tt OSSolverService} is
 running on the server {\tt kipp.chicagobooth.edu} which contacts the server {\tt www.coin-or.org} for the model instance.
@@ -576,7 +578,7 @@ knowing when a job is complete is to use the {\tt knock}\index{knock@{\tt knock}
 
 Note that in all of these examples we provided a value for the {\tt <solverToInvoke>} element.
 %The remote solver service will use {\tt Cbc} if another solver is not specified.%
-A default solver is used (see Table~\ref{table:defaultsolvers}\index{default solver} if another solver is not specified.%
+A default solver is used (see Table~\ref{table:defaultsolvers}\index{default solver}) if another solver is not specified.%
 \index{send@{\tt send}|)}
 
 

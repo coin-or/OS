@@ -1,10 +1,11 @@
 \section{Downloading the OS Binaries}\label{section:downloadbinaries}
 
-The OS project is an open-source project  with source code under the Common Public License~(CPL)%
-\index{Common Public License (CPL)}.
-See~{\tt\UrlCpl}.  This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin.
+The OS project is an open-source project  with source code under the Eclipse Public License~(EPL)%
+\index{Eclipse Public License (EPL)}.
+See~{\tt\UrlEpl}.  This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin.
 The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    
 Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.
+
 %Below we describe different methods for obtaining the binaries and C++ source code.
 Most users will only be interested in obtaining the binaries, which we describe  next.
 %in Section~\ref{section:obtainingbinaries}. The remaining sections of this chapter deal with obtaining %the source code for the project, which will be of interest mostly to developers.
@@ -26,7 +27,7 @@ The repository is at {\tt\UrlOsBinaries}\index{Downloading!binaries}. Unlike the
 in Section~\ref{section:downloadwithsvn}, the binary files are not subject to version control and can be
 downloaded using an ordinary browser. If binaries are not provided for a particular operating system,
 it may be possible to build them from the source code. Since the source is under version control, 
-this requires svn. (See Sections \ref{section:svn}, \ref{section:downloadwithsvn} and~\ref{section:build}.
+this requires svn. (See Sections \ref{section:svn}, \ref{section:downloadwithsvn} and~\ref{section:build}.)
 
 The binary distribution for the OS library and executables follows the following naming convention:
 
@@ -76,15 +77,17 @@ OS-server-2.0.0.tgz
 There is no platform information given since the server and related binaries were written in Java\index{Java}.
 The details and use of this distribution are described in Section~\ref{section:tomcat}.
 
-Finally for Windows users we provide Visual Studio \index{Microsoft Visual Studio} project files (and supporting
-libraries and header files) for building projects based on the OS library and libraries used by the OS project.
-The binary for this is named
+
+
+Finally for Windows users we provide Visual Studio \index{Microsoft Visual Studio} project files 
+(and supporting libraries and header files) for building projects based on the OS library and libraries 
+used by the OS project. The binary for this is named
 \begin{verbatim}
 OS-version_number-VisualStudio.zip
 \end{verbatim}
-For example, the necessary files associated with  OS  stable\index{OS project!stable release} \OSstable\ are in the binary 
-distribution
+For example, the necessary files associated with  OS  stable\index{OS project!stable release} 2.4 
+are in the binary distribution
 \begin{verbatim}
-OS-2.1-VisualStudio.zip
+OS-2.4-VisualStudio.zip
 \end{verbatim}
 The binaries provided are based on Visual Studio Express 2008.  See Section \ref{section:vsexamples} for more detail.
