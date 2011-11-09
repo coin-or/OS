@@ -10,12 +10,12 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.4],[os@list.coin-or.org])
+AC_INIT([OS],[2.4.1],[os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
-This file is part of the open source package OS which is distributed
+This file is part of the open source package Coin which is distributed
 under the Eclipse Public License.])
 
 # List one file in the package so that the configure script can test
@@ -102,6 +102,47 @@ AC_COIN_CHECK_PACKAGE(cppad,    [cppad],    [OSLib])
 # CppAD is available or not, so we define an additional symbol.
 if test $coin_has_cppad = yes ; then
   AC_DEFINE(OS_HAS_CPPAD, [1], [Define to 1 if OS uses CppAD])
+fi
+
+# Ipopt is available or not, so we define an additional symbol.
+if test $coin_has_ipopt = yes ; then
+  AC_DEFINE(OS_HAS_IPOPT, [1], [Define to 1 if OS uses Ipopt])
+fi
+
+
+# Bonmin is available or not, so we define an additional symbol.
+if test $coin_has_bonmin = yes ; then
+  AC_DEFINE(OS_HAS_BONMIN, [1], [Define to 1 if OS uses Bonmin])
+fi
+
+# Couenne is available or not, so we define an additional symbol.
+if test $coin_has_couenne = yes ; then
+  AC_DEFINE(OS_HAS_COUENNE, [1], [Define to 1 if OS uses Couenne])
+fi
+
+# SYMPHONY is available or not, so we define an additional symbol.
+if test $coin_has_couenne = yes ; then
+  AC_DEFINE(OS_HAS_SYMPHONY, [1], [Define to 1 if OS uses SYMPHONY])
+fi
+
+# Vol is available or not, so we define an additional symbol.
+if test $coin_has_vol = yes ; then
+  AC_DEFINE(OS_HAS_VOL, [1], [Define to 1 if OS uses Vol])
+fi
+
+# Glpk is available or not, so we define an additional symbol.
+if test $coin_has_glpk = yes ; then
+  AC_DEFINE(OS_HAS_GLPK, [1], [Define to 1 if OS uses Glpk])
+fi
+
+#Dylp is available or not, so we define an additional symbol.
+if test $coin_has_dylp = yes ; then
+  AC_DEFINE(OS_HAS_DYLP, [1], [Define to 1 if OS uses DyLP])
+fi
+
+# ASL is available or not, so we define an additional symbol.
+if test $coin_has_asl = yes ; then
+  AC_DEFINE(OS_HAS_ASL, [1], [Define to 1 if OS uses ASL])
 fi
 
 #############################################################################

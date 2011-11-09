@@ -24,8 +24,8 @@
 #include<sstream>
 
 //#define DEBUG_OSRESULT
-//#define DEBUG_ISEQUAL_ROUTINES 0 // No output
-#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
+#define DEBUG_ISEQUAL_ROUTINES 0 // No output
+//#define DEBUG_ISEQUAL_ROUTINES 1 // Unequal components only 
 //#define DEBUG_ISEQUAL_ROUTINES 2 // Full tracing
 
 using namespace std;
@@ -7975,6 +7975,8 @@ bool GeneralResult::setRandom(double density, bool conformant)
     if (OSRand() <= density)
     {
         generalStatus = new GeneralStatus();
+
+
         generalStatus->setRandom(density, conformant);
     }
     if (OSRand() <= density)
@@ -8509,7 +8511,7 @@ bool VarValue::setRandom(double density, bool conformant)
 #ifdef DEBUG_OSRESULT
     cout << "Set random VarValue" << endl;
 #endif
-    this->idx = (10*OSRand());
+    this->idx = (int)(10*OSRand());
     if (OSRand() <= 0.5) this->value = 3.14156;
     else                 this->value = 2.71828;
 
@@ -8548,7 +8550,7 @@ bool VarValueString::setRandom(double density, bool conformant)
 #ifdef DEBUG_OSRESULT
     cout << "Set random VarValueString" << endl;
 #endif
-    this->idx = (10*OSRand());
+    this->idx = (int)(10*OSRand());
     if (OSRand() <= 0.5) this->value = "random string";
     else                 this->value = "";
 
@@ -8614,7 +8616,7 @@ bool OtherVarResult::setRandom(double density, bool conformant)
 #ifdef DEBUG_OSRESULT
     cout << "Set random OtherVarResult" << endl;
 #endif
-    this->idx = (10*OSRand());
+    this->idx = (int)(10*OSRand());
     if (OSRand() <= 0.5) this->value = "random string";
     else                 this->value = "";
 
@@ -8840,7 +8842,7 @@ bool DualVarValue::setRandom(double density, bool conformant)
 #ifdef DEBUG_OSRESULT
     cout << "Set random DualVarValue" << endl;
 #endif
-    this->idx = (5*OSRand());
+    this->idx = (int)(5*OSRand());
     if (OSRand() <= 0.5) this->value = 3.14156;
     else                 this->value = 2.71828;
 
@@ -8896,6 +8898,7 @@ bool OtherConstraintResult::setRandom(double density, bool conformant)
         }
     }
 
+
     return true;
 }//OtherConstraintResult::setRandom
 
@@ -8905,7 +8908,7 @@ bool OtherConResult::setRandom(double density, bool conformant)
 #ifdef DEBUG_OSRESULT
     cout << "Set random OtherConResult" << endl;
 #endif
-    this->idx = (5*OSRand());
+    this->idx = (int)(5*OSRand());
     if (OSRand() <= 0.5) this->value = "random string";
     else                 this->value = "";
 

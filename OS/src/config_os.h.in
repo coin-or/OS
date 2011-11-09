@@ -18,4 +18,28 @@
 /* Define to 1 if OS uses CppAD */
 #undef OS_HAS_CPPAD
 
+/* Define to 1 if OS uses Ipopt */
+#undef OS_HAS_IPOPT
+
+/* Define to 1 if OS uses Bonmin */
+#undef OS_HAS_BONMIN
+
+/* Define to 1 if OS uses Couenne */
+#undef OS_HAS_COUENNE
+
+/* Define to 1 if OS uses SYMPHONY */
+#undef OS_HAS_SYMPHONY
+
+/* Define to 1 if OS uses VOL */
+#undef OS_HAS_VOL
+
+/* Define to 1 if OS uses ASL */
+#undef OS_HAS_ASL
+
+/* Define to 1 if OS uses DyLP */
+#undef OS_HAS_DYLP
+
+/* Define to 1 if OS uses Glpk */
+#undef OS_HAS_GLPK
+
 #endif /* __CONFIG_OS_H__ */

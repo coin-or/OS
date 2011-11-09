@@ -1,0 +1,917 @@
+
+
+
+\section{OS Support for Modeling Languages, Spreadsheets and Numerical Computing Software}\label{section:modellang}
+
+Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
+We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt CoinOS} for GAMS\index{GAMS} (version 23.3 and above).
+
+
+\subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
+
+\index{OSAmplClient@{\tt OSAmplClient}|(}
+\index{AMPL|(}
+
+
+
+
+%This section is based on the assumption that the user has installed  AMPL  on his or her machine.   
+It is possible to call all of the COIN-OR solvers listed in %Section~\ref{section:overview} 
+Table~\ref{table:configurations}~(p.\pageref{table:configurations})
+directly from the  AMPL (see {\tt http://www.ampl.com}) modeling language.  In this discussion we assume 
+the user has already obtained and installed AMPL.  
+Both the binary download described in Section~\ref{section:obtainingbinaries}
+and the unix and Windows builds (Section \ref{section:unixbuilds}
+and~\ref{section:windowsinstall}, respectively) contain
+%In  the download described in Section~\ref{section:binary} there is 
+an executable, {\tt OSAmplClient.exe},
+that is linked to all of the COIN-OR solvers  listed in Table~\ref{table:configurations}. %Section~\ref{section:overview}.   
+From the  perspective of AMPL, the   {\tt OSAmplClient} acts like an AMPL ``solver''.    
+The {\tt OSAmplClient.exe}   can be used to solve problems either locally or remotely.   
+
+
+\subsubsection{Using OSAmplClient for a Local Solver}\label{section:localampl}
+
+In the following discussion we assume that the AMPL executable {\tt ampl.exe}, the {\tt OSAmplClient},  
+and the test problem {\tt  eastborne.mod}\index{eastborne.mod@{\tt eastborne.mod}|(}
+ are all in the same directory.  
+
+The  problem instance {\tt eastborne.mod} is an AMPL model file included in the OS distribution 
+in the {\tt amplFiles}\index{amplFiles@{\tt amplFiles}} directory.  To solve this problem locally 
+by calling {\tt OSAmplClient.exe} from AMPL, first start AMPL and then open the {\tt eastborne.mod} file 
+inside AMPL.  The test model {\tt eastborne.mod} is a linear integer program. 
+
+\begin{verbatim}
+# take in sample integer linear problem
+# assume the problem is in the AMPL directory
+model eastborne.mod;
+\end{verbatim}
+
+The next step is to tell AMPL that the solver it is going to use is {\tt OSAmplClient.exe}. 
+Do this by issuing the following command inside AMPL.
+
+\begin{verbatim}
+# tell AMPL that the solver is OSAmplClient
+option solver OSAmplClient;
+\end{verbatim}
+
+It is not necessary to provide the  {\tt OSAmplclient.exe} solver with any options. 
+You can just issue the {\tt solve} command in AMPL as illustrated below.  
+
+\begin{verbatim}
+# solve the problem
+solve;
+\end{verbatim}
+
+Of the six methods described in Section~\ref{section:ossolverservice} only the {\tt solve} method 
+has been implemented to date.
+
+If no options are specified, the default solver is used, depending on the problem characteristics 
+(see Table~\ref{table:defaultsolvers}).\index{default solver}
+%is to use {\tt Clp}\index{Clp@{\tt Clp}} for linear programs. 
+%For continuous nonlinear models {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} is used. 
+%For mixed-integer linear models, {\tt Cbc}\index{Cbc@{\tt Cbc}} is used. 
+%For mixed-integer nonlinear models  {\tt Bonmin}\index{Bonmin@{\tt Bonmin}} is used.  
+If you wish to specify a specific solver, use the {\tt solver} option.   For example,  
+since the test problem {\tt eastborne.mod} is a linear integer program, {\tt Cbc} is used by default. 
+If instead you want to  use {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(},
+then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver as follows.%
+\index{eastborne.mod@{\tt eastborne.mod}|)}
+
+\begin{verbatim}
+# now tell OSAmplClient to use SYMPHONY instead of Cbc
+option OSAmplClient_options "solver symphony";
+\end{verbatim}
+\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
+
+Valid values for the {\tt solver} option are installation-dependent.
+%{\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, {\tt dylp}, {\tt symphony}, and {\tt vol}.   
+The solver name in the {\tt solver} option is case insensitive.  
+
+
+\subsubsection{Using OSAmplClient to Invoke an OS Solver Server}\label{section:remoteampl}
+
+Next, assume that you have a large problem you want to solve on a remote solver. It is necessary 
+to specify the location of the server solver as an option to OSAmplClient. 
+The {\tt serviceLocation} option is used to specify the location of a solver server. 
+In this case, the string of options for {\tt OSAmplClient\_options} is:
+
+\begin{verbatim}
+serviceLocation  http://xxxx/OSServer/services/OSSolverService
+\end{verbatim}
+where {\tt xxx} is the URL for the server.  This string is used to replace the string `{\tt solver symphony}' in the previous example. 
+We will omit the other parts (i.e., the AMPL instruction
+\begin{verbatim}
+option OSAmplClient_options
+\end{verbatim}
+the double quotes and the trailing semicolon) in this and the remaining examples.  The {\tt serviceLocation} option will send the problem to the solver server at location {\tt http://xxx}.   
+
+
+\medskip
+
+
+Each call 
+\begin{verbatim}
+option OSAmplClient_options
+\end{verbatim}
+is memoryless. That is, the options set in the last call will overwrite any options set in previous calls
+and cause them to be discarded.  For instance, the sequence of option calls
+\begin{verbatim}
+option OSAmplClient_options "solver symphony";
+option OSAmplClient_options "serviceLocation  
+    http://xxx/OSServer/services/OSSolverService";
+solve;
+\end{verbatim}
+will result in the default solver being called. 
+
+\medskip
+
+Finally, the user may wish to pass options to the individual solver. This is done by providing an options file.
+A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
+provided with this distribution.  The name of the options file is the value of the {\tt osol} option.
+The string of options to {\tt OSAmplClient\_options} is now
+\begin{verbatim}
+serviceLocation http://xxx/OSServer/services/OSSolverService
+osol solveroptions.osol
+\end{verbatim}
+This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt}, 
+and one for {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}.
+You can have any number of options. Note the format for specifying an option:
+\begin{verbatim}
+<solverOption name="maxN" solver="cbc" value="5" />
+\end{verbatim}
+The attribute {\tt name} specifies that the option name is {\tt maxN} which is the maximum number of nodes 
+allowed in the branch-and-bound tree, the {\tt solver} attribute specifies the name of the solver that the 
+option should be applied to, and the {\tt value} attribute specifies the value of the option. 
+As a second example, consider the specification
+\begin{verbatim}
+<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/> 
+\end{verbatim}
+In this example we are specifying an iteration limit for {\tt Ipopt}.  Note the additional attribute 
+{\tt type} that has value  {\tt integer}. The Ipopt solver requires specifying the data type 
+(string, integer, or numeric) for its options.   Different solvers have different options, 
+and we recommend that the user look at the documentation for the solver of interest in order to see 
+which options are available.  
+A good summary of options for COIN-OR solvers is \url{http://www.coin-or.org/GAMSlinks/gamscoin.pdf}.
+
+
+If you examine the file {\tt solveroptions.osol} you will see that there is an XML tag  with the name
+{\tt <solverToInvoke>} and that the solver given is {\tt symphony}.   
+This has no effect on a local solve. However, if this option file is paired with 
+
+\begin{verbatim}
+serviceLocation http://xxx/OSServer/services/OSSolverService
+osol solveroptions.osol
+\end{verbatim}
+then in our reference implementation the remote solver service will parse the file {\tt solveroptions.osol}, find the {\tt <solverToInvoke>} tag and then pass the {\tt symphony} solver option to the {\tt OSSolverService} on the remote server.
+
+\subsubsection{AMPL Summary}
+
+\begin{enumerate}
+\item Tell  AMPL to use the OSAmplClient as the solver:
+
+\begin{verbatim}
+option solver OSAmplClient;
+\end{verbatim}
+
+\item Specify options to the OSAmplClient solver by using the AMPL command {\tt OSAmplClient\_options}.
+
+\item There are three possible options to specify:
+
+\begin{itemize}
+\item the location of the options file using  the {\tt osol} option;
+
+\item the location of the remote server using   the {\tt serviceLocation} option;
+
+\item the name of the solver using the  {\tt solver} option; valid values for this option  are 
+%{\tt clp}, {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  and  {\tt symphony}
+installation-dependent. 
+For details, see Table~\ref{table:configurations} on page~\pageref{table:configurations} 
+and the discussion in Section~\ref{section:OSSolverServiceInputParameters}. 
+
+\end{itemize}
+
+These three options behave {\it exactly like} the {\tt solver}, {\tt serviceLocation}, and {\tt osol} options used by the {\tt OSSolverService} described in  Section \ref{section:commandlineparser}.
+Note that the {\tt solver} option only has an affect with a local solve; 
+if the user wants to invoke a specific solver with a remote solve, then this must be done in the OSoL file using the {\tt <solverToInvoke>} element.
+
+\item  The options given to {\tt OSAmplClient\_options}  can be given in any order.
+
+\item If no options are specified using {\tt OSAmplClient\_options},  the default solver is used.
+(For details see Table~\ref{table:defaultsolvers}).\index{default solver}
+All solvers are invoked locally. 
+
+
+\item A remote solver is called if and only if the {\tt serviceLocation} option is specified.
+
+\end{enumerate}
+
+\index{OSAmplClient@{\tt OSAmplClient}|)}
+\index{AMPL|)}
+
+
+
+\subsection{GAMS and Optimization Services}\label{section:gamslinks}
+
+\index{GAMS|(}
+
+This section pertains to GAMS version 23.3 (and above) that now includes support for OS.  
+Here we describe the GAMS  implementation of Optimization Services.  We assume that the user has installed GAMS.
+
+There are two ways to access an OS Solver Service from GAMS, on the local machine or on a remote server.
+The difference between the two approaches is explained in the next two sections.
+
+\subsubsection{Using GAMS to Invoke the Local OS Solver Service \tt CoinOS}\label{section:gamslocal}
+
+   
+In GAMS,  OS is implemented through the {\tt CoinOS} solver that is packaged with GAMS.      
+The GAMS {\tt CoinOS} solver is really a {\it solver interface} and is linked through the OS library to the 
+following COIN-OR solvers: {\tt Bonmin}, {\tt Cbc}, {\tt Clp},  {\tt Glpk}, and {\tt Ipopt}. 
+Think of {\tt CoinOS} as a {\it metasolver}.    As an example (we assume a Windows operating system 
+and use the .exe extension), consider:
+
+\begin{verbatim}
+gams.exe eastborne.gms MIP=CoinOS
+\end{verbatim}
+The solver name {\tt CoinOS} is not case sensitive and 
+\begin{verbatim}
+gams.exe eastborne.gms MIP=coinos
+\end{verbatim}
+will also work.  In addition, if
+\begin{verbatim}
+Option MIP = CoinOS ;
+\end{verbatim}
+is present in the GAMS file, then writing {\tt MIP=CoinOS} on the command line is unnecessary.
+Since {\tt Option MIP = CoinOS;} is present in the GAMS model file {\tt eastborne.gms}, 
+we will not specify it explicitly on the command line in the ensuing discussion. To summarize,
+\begin{verbatim}
+gams.exe eastborne.gms 
+\end{verbatim}
+is equivalent to the two versions of the command given previously.  Executing any of the commands will 
+result in the model being solved on the local machine using the COIN-OR solver {\tt Cbc}, the default solver 
+for 
+%continuous linear models (LP and RMIP), {\tt CoinOS} chooses {\tt Clp}. For continuous nonlinear 
+%models (NLP, DNLP, RMINLP, QCP, RMIQCP), {\tt Ipopt} is the default solver. For 
+mixed-integer linear models (MIP).
+%,  {\tt Cbc} is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), 
+%{\tt Bonmin} is the default solver.
+
+It is possible to control which solver is selected by {\tt CoinOS}.    This is done by providing an {\it options file}  to  GAMS.   
+Since the solver is named {\tt  CoinOS}, the options file should  be named {\tt CoinOS.opt}  (the file name is not case sensitive)
+and the command line call is 
+\begin{verbatim}
+gams.exe eastborne.gms optfile 1
+\end{verbatim}
+Calling multiple GAMS options files uses the convention
+\begin{verbatim}
+optfile=1 corresponds to CoinOS.opt
+optfile=2 corresponds to CoinOS.op2
+...
+optfile=99 corresponds to CoinOS.o99
+\end{verbatim}
+
+We now explain the valid options that can go into a GAMS option file when using the {\tt CoinOS} solver.  They are:
+
+\vskip 8pt
+\noindent {\tt solver  (string)}:   Specifies the solver that is used to solve an instance. 
+Valid values are {\tt clp},  {\tt cbc}, {\tt glpk}, {\tt ipopt},  and {\tt bonmin}.  
+If a solver name is specified that is not recognized, the default solver for the problem type is used.  
+The value for the solver option is case insensitive. 
+For example, if the file {\tt CoinOS.opt} contains a single line
+\begin{verbatim}
+solver glpk
+\end{verbatim}
+then executing
+\begin{verbatim}
+gams.exe eastborne.gms optfile 1
+\end{verbatim}
+will result in  using {\tt Glpk}  to solve the problem.   
+
+
+\vskip 8pt
+\noindent {\tt writeosil  (string)}:  If this option is used, GAMS will write the optimization instance 
+to file {\tt (string)} in    OSiL   format.
+\vskip 8pt
+
+\vskip 8pt
+\noindent {\tt writeosrl  (string)}:  If this option is used, GAMS will write the result of the optimization 
+to file {\tt (string)} in OSrL  format.
+\vskip 8pt
+
+The options just described are options for the GAMS modeling language.  
+It is also possible to pass options directly to the COIN-OR solvers by using the {\tt OS} interface.
+This is done by passing the name of an options file that conforms to the  OSoL  standard.  
+%See \url{http://projects.coin-or.org/OS}  for information on Optimization Services.  
+The option
+
+\vskip 8pt
+\noindent {\tt readosol  (string)}  specifies the name of an OS option  file in OSoL format that is 
+given to the solver.  Note: The file  {\tt CoinOS.opt} is an option  file for GAMS but the GAMS option 
+{\tt readosol} in the GAMS options file  is specifying the name of an OS options file. 
+\vskip 8pt
+The file {\tt solveroptions.osol} is contained in the OS distribution in the {\tt osolFiles} directory   
+in the {\tt data} directory. This file contains four solver options; two for {\tt Cbc}, one for {\tt Ipopt},
+and one for {\tt SYMPHONY} (which is available for remote server calls, but not locally).  
+You can have any number of options. Note the format for specifying an option:
+\begin{verbatim}
+<solverOption name="maxN" solver="cbc" value="5" />
+\end{verbatim}
+The attribute {\tt name} specifies that the option name is {\tt maxN} which is the maximum number of nodes 
+allowed in the branch-and-bound tree, the {\tt solver} attribute specifies the name of the solver to which
+the option should be applied, and the {\tt value} attribute specifies the value of the option. 
+
+As a second example, consider the specification
+\begin{verbatim}
+<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/> 
+\end{verbatim}
+In this example we are specifying an iteration limit for {\tt Ipopt}.  Note the additional attribute 
+{\tt type} that has value  {\tt integer}. The Ipopt solver requires specifying the data type 
+(string, integer, or numeric) for its options.   For a list of options that solvers take, 
+see the file
+\begin{verbatim}
+docs/solvers/coin.pdf
+\end{verbatim}
+inside the GAMS directory. 
+An up-to-date online version of this list is available at \url{http://www.coin-or.org/GAMSlinks/gamscoin.pdf}.
+
+
+
+\subsubsection{Using GAMS  to Invoke a Remote OS Solver Service}\label{section:gamsremote}
+
+We now describe how to call  a remote OS   solver service using the GAMS {\tt CoinOS}.  Before proceeding, 
+it is important to emphasize that when calling a remote OS solver service, the remote service may be a 
+different implementation of OS than the GAMS implementation in {\tt CoinOS}. For example, the remote 
+implementation may also provide access to solvers such as {\tt SYMPHONY}, {\tt Couenne}, and {\tt DyLP}.  
+There are several reason why you might wish to use a remote OS solver service. 
+
+\begin{itemize}
+\item Have access to a faster machine.
+
+\item  Be able to  submit jobs to run in asynchronous mode -- submit your job,  turn off your laptop,  
+and check later to see if the job ran.
+
+\item Call several additional solvers ({\tt SYMPHONY}, {\tt Couenne} and {\tt DyLP}).
+
+\end{itemize}
+
+In order to use  the COIN-OR solver service it is necessary to specify the service URL. 
+This is done using the {\tt service} option.
+
+\vskip 8pt
+\noindent{\tt service (string)}: Specifes the URL of  the COIN-OR solver service
+\vskip 8pt
+Use the following value for this option.
+\begin{verbatim}
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+\end{verbatim}
+
+%For linear models (LP and RMIP),  {\tt Clp} is the default solver. For continuous nonlinear models 
+%(NLP, DNLP, RMINLP, QCP, RMIQCP), {\tt Ipopt} is the default solver. For mixed-integer linear models (MIP),
+%{\tt  Cbc} is the default solver. For mixed-integer nonlinear models (MIQCP, MINLP), {\tt Bonmin} is 
+%the default solver.  
+Default solver values are present, depending on the problem for characteristics. For more details, consult 
+Table~\ref{table:defaultsolvers} (p.\pageref{table:defaultsolvers}).
+In order to control the solver used, it is necessary to specify the name of the solver
+inside the XML tag {\tt <solverToInvoke>}. The example  {\tt solveroptions.osol} file contains the XML tag
+\begin{verbatim}
+<solverToInvoke>symphony</solverToInvoke>
+\end{verbatim}
+If, for example,  the {\tt CoinOS.opt} file is
+\begin{verbatim}
+solver ipopt
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+readosol  solveroptions.osol
+writeosrl temp.osrl
+\end{verbatim}
+then {\tt Ipopt} is ignored as a solver option and the remote server uses the {\tt  SYMPHONY} solver.  
+Valid values for the remote solver service specified in the {\tt <solverToInvoke>} tag are {\tt clp},  
+{\tt cbc},  {\tt dylp}, {\tt glpk}, {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and 
+{\tt vol}.  If the problem is solved using a remote solver service the value specified by the GAMS {\tt solver} option is irrelevant and ignored. 
+
+The GAMS {\tt CoinOS} solver behaves differently from other implementiations of OS
+%the {\tt OSAmplClient} 
+in the following way.  
+Although it is  possible to put the address of the remote server in the OS options file, it is not read 
+by the GAMS {\tt CoinOS} solver. The only way to specify a remote solver is through the GAMS  
+{\tt service} option.
+
+
+
+By default, the call to the server is a {\it synchronous} call. The GAMS process will wait for the result 
+and then display the result. This may not be desirable when solving large optimization models.  
+The user may wish to submit a job, turn off his or her computer,  and then check at a later date to see 
+if the job is finished.  In order to use the remote solver service in this fashion, i.e., 
+{\it asynchronously}, it  is necessary to use the  {\tt service\_method} option.
+
+\vskip 8pt
+\noindent {\tt service\_method (string)} specifies the method to execute on a server.  
+Valid values for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt retrieve}, 
+and {\tt kill}. We explain how to use each of these.
+\vskip 8pt
+The default value of {\tt service\_method} is {\tt solve.} A {\tt solve} invokes the remote service 
+in synchronous mode. When using the {\tt solve} method you can optionally specify a set of solver options 
+in an OSoL file  by using the {\tt readosol} option. The  remaining values for the {\tt service\_method} 
+option are used for an asynchronous call.  We illustrate them in the order in which they would most 
+logically be executed. 
+
+\vskip 8pt
+\noindent {\tt service\_method getJobID}: When working in asynchronous mode, the server needs to 
+uniquely identify each job. The {\tt getJobID} service method will result in the server returning 
+a unique job id. For example if the following {\tt CoinOS.opt} file is used
+\vskip 8pt
+\begin{verbatim}
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+service_method getJobID
+\end{verbatim}
+with the command
+\begin{verbatim}
+gams.exe eastborne.gms optfile=1
+\end{verbatim}
+the user will see a rather long job id returned to the screen as output. Assume that the job id returned 
+is {\tt coinor12345xyz}. This job id is used to submit a job to the server with the {\tt send} method.
+Any job id can be sent to the server as long as it has not been used before.  
+
+\vskip 8pt
+\noindent {\tt service\_method send}: When working in asynchronous mode, use the {\tt send} service method 
+to submit a job. When using  the {\tt send} service method option an option is required and the options file
+must specify a  job id that has not been used before.  Assume that in the  {\tt CoinOS.opt}  we specify 
+the options:
+\vskip 8pt
+\begin{verbatim}
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+service_method send
+readosol sendWithJobID.osol
+\end{verbatim}
+The {\tt sendWithJobID.osol} options file is identical to the {\tt solveroptions.osol} options file except 
+that it has an additional XML tag:
+\begin{verbatim}
+<jobID>coinor12345xyz</jobID> 
+\end{verbatim}
+We then execute
+\vskip 8pt
+\begin{verbatim}
+gams.exe eastborne.gms optfile=1
+\end{verbatim}
+If all goes well, the response to the above command should  be: ``Problem instance successfully sent to 
+OS service''. At this point the server will schedule the job and work on it. It is possible to turn off 
+the user computer at this point. At some point the user will want to know if the job is finished. 
+This is accomplished using the {\tt knock} service method.
+\vskip 8pt
+\noindent {\tt service\_method knock}: When working in asynchronous mode, this is used to check the status 
+of a job.  Consider the following {\tt CoinOS.opt} file:
+\vskip 8pt
+\begin{verbatim}
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+service_method knock
+readosol sendWithJobID.osol 
+readospl knock.ospl
+writeospl knockResult.ospl
+\end{verbatim}
+The {\tt knock} service method requires two  inputs. The first input is the name of an options file, 
+in this case {\tt sendWithJobID.osol}, specified through the {\tt readosol} option. In addition, a file 
+in OSpL format is required. You can use the {\tt knock.opsl} file provided in the binary distribution. 
+This file name is specified using the {\tt readospl} option. If no job id is specified in the OSoL file 
+then the status of all jobs on the server will be returned in the file specified by the {\tt writeospl} 
+option. If a job id is specified in the OSoL file, then only information on the specified job id is 
+returned in the file specified by the {\tt writeospl} option.  In this case the file name is 
+{\tt knockResult.ospl}. We then execute
+\vskip 8pt
+\begin{verbatim}
+gams.exe eastborne.gms optfile=1
+\end{verbatim}
+The file {\tt knockResult.ospl} will contain the information
+\begin{verbatim}
+<job jobID="coinor12345xyz">
+<state>finished</state>
+<serviceURI>http://192.168.0.219:8443/os/OSSolverService.jws</serviceURI>
+<submitTime>2009-11-10T02:13:11.245-06:00</submitTime>
+<startTime>2009-11-10T02:13:11.245-06:00</startTime>
+<endTime>2009-11-10T02:13:12.605-06:00</endTime>
+<duration>1.36</duration>
+ </job>
+\end{verbatim}
+Note that the job is complete as indicated in the {\tt <state>} tag. It is now time to actually retrieve 
+the job solution.  This is done with the {\tt retrieve} method.
+\vskip 8pt
+\noindent {\tt service\_method retrieve}: When working in asynchronous mode, this method is used 
+to retrieve the job solution. It is necessary when using {\tt retrieve} %{\tt knock} ???
+to specify an options file and in that options file specify a job id.   
+Consider the following {\tt CoinOS.opt} file:
+\vskip 8pt
+\begin{verbatim}
+service http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+service_method retrieve
+readosol sendWithJobID.osol
+writeosrl answer.osrl
+\end{verbatim}
+When we then execute
+\vskip 8pt
+\begin{verbatim}
+gams.exe eastborne.gms optfile=1
+\end{verbatim}
+the result is written to the file {\tt answer.osrl}. 
+
+Finally there is a {\tt kill} service method which is used to kill a job that was submitted by mistake 
+or is running too long on the server. 
+\vskip 8pt
+\noindent {\tt service\_method kill:} When working in asynchronous mode, this method is used to terminate 
+a job. You should specify an OSoL  file containing the JobID by using the {\tt readosol} option.
+\vskip 8pt
+
+
+\subsubsection{GAMS Summary:}\label{section:gamssummary}
+
+
+\begin{enumerate}
+
+\item[1.]   In order to use OS with GAMS you can either specify {\tt CoinOS} as an option to GAMS 
+at the command line,
+\begin{verbatim}
+gams eastborne.gms MIP=CoinOS
+\end{verbatim}
+or you can  place the statement {\tt Option ProblemType = CoinOS;} somewhere in the model {\it before} 
+the {\tt Solve} statement in the GAMS file.
+
+
+\item[2.]   If no options are given, then the model will be solved locally using the default solver 
+(see Table~\ref{table:defaultsolvers} on p.\pageref{table:defaultsolvers}).
+%and {\tt Clp} will be used for 
+%linear programs, {\tt Cbc} for integer linear programs, {\tt Ipopt} for continuous nonlinear programs, 
+%and {\tt Bonmin} for nonlinear integer programs.
+
+\item[3.] In order to control behavior (for example, whether a local or remote solver is used)  an options
+ file,  {\tt CoinOS.opt}, must be used as follows
+
+\begin{verbatim}
+gams.exe  eastborne.gms optfile=1
+\end{verbatim}
+
+\item[4.]  The  {\tt CoinOS.opt} file is used to specify {\it eight potential options}:
+
+
+\begin{itemize}
+\item {\tt service (string)}: using the COIN-OR solver server; this is done by giving the option
+
+\begin{verbatim}
+service  http://webdss.ise.ufl.edu:2646/OSServer/services/OSSolverService
+\end{verbatim}
+
+
+\item  {\tt readosol (string)}: whether or not to send the solver an options file; this is done by 
+giving the option
+\begin{verbatim}
+readosol  solveroptions.osol
+\end{verbatim}
+
+
+\item   {\tt solver (string)}: if a local solve is being done,  a specific solver is specified by 
+the option
+\begin{verbatim}
+solver solver_name
+\end{verbatim}
+
+Valid values are {\tt clp},  {\tt cbc}, {\tt glpk}, {\tt ipopt} and {\tt bonmin}. %  and {\tt couenne}.  
+When the COIN-OR solver service is being used, the only way to specify the solver to use is through 
+the {\tt <solverToInvoke>} tag in an OSoL file. In this case the valid values for the solver are  
+{\tt clp}, {\tt cbc}, {\tt dylp}, {\tt glpk}, {\tt ipopt}, {\tt bonmin}, {\tt couenne}, {\tt symphony}
+and {\tt vol}.
+
+
+
+\item  {\tt writeosrl (string)}:  the solution result can be put into an OSrL file by specifying the option
+
+\begin{verbatim}
+writeosrl  osrl_file_name
+\end{verbatim}
+
+
+
+\item    {\tt writeosil (string)}:   the optimization instance  can be put into an OSiL file by specifying 
+the option
+
+
+
+\begin{verbatim}
+writeosil  osil_file_name
+\end{verbatim}
+
+
+\item {\tt writeospl (string):} Specifies the name of an OSpL  file in which the answer from the 
+{\tt knock} or {\tt kill} method is written, e.g.,
+
+\begin{verbatim}
+writeospl  write_ospl_file_name
+\end{verbatim}
+
+
+\item {\tt readospl (string):} Specifies the name of an OSpL  file that the {\tt knock} method 
+sends to  the server
+
+\begin{verbatim}
+readospl  read_ospl_file_name
+\end{verbatim}
+
+\item {\tt service\_method (string)}: Specifies the method to execute on a server.  Valid values 
+for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt retrieve}, and {\tt kill}.
+
+\end{itemize}
+
+\item[5.]  If an OS options file is passed to the GAMS {\tt CoinOS} solver using the GAMS  {\tt CoinOS} option      {\tt readosol}, then GAMS does not interpret  or act on any options in this file. The options in the OS options file are passed directly to either: i) the default local solver, ii) the local solver specified by the  GAMS {\tt CoinOS}  option {\tt solver}, or iii)  to the remote OS solver service if one is specified by the GAMS  {\tt CoinOS} option {\tt service.}
+
+\end{enumerate}
+
+\index{GAMS|)}
+
+
+
+\subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:usingmatlab}
+
+\index{MATLAB|(}
+MATLAB has powerful matrix generation and manipulation routines. This section is for users who wish to use MATLAB to generate the matrix coefficients for linear or quadratic programs and use the OS library to call a solver and get the result back. Using MATLAB with OS requires the user compile a file {\tt OSMatlabSolverMex.cpp} into a MATLAB executable file (these files will have a {\tt .mex} extension) after compilation. This executable file is linked to the OS library and works through the MATLAB API to communicate with the OS library. 
+
+
+
+The OS MATLAB application differs from the other applications in the {\tt OS/applications} folder in that makefiles are not used.  The file 
+\begin{verbatim}
+OS/applications/matlab/OSMatlabSolverMex.cpp
+\end{verbatim}
+must be compiled inside the MATLAB command window.  Building the OS MATLAB application requires the following steps. 
+
+
+\begin{enumerate}[{\bf Step 1:}]
+
+
+
+\item{}   The MATLAB installation contains a file {\tt mexopts.sh} (UNIX) or {\tt mexopts.bat}  (Windows) that must be edited.   This file typically resides  in the {\tt bin} directory of the MATLAB application.    This file  contains compile and link options that must be properly set.   Appropriate paths to header files and libraries must be set.  This discussion is based on the assumption that the user has either done a  {\tt make install} for the OS project or has downloaded a binary archive of the OS project. In either case there will be an {\tt include} directory with the necessary header files and a {\tt lib} directory with the necessary libraries for linking. 
+
+First edit   the {\tt CXXFLAGS} option  to point to  the header files in the {\tt cppad} directory and the {\tt include} directory in the project root. For example, it  should look like:
+\begin{verbatim}
+CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/
+    -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/include'
+\end{verbatim}
+
+Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like the following on a MacIntosh:
+
+\begin{verbatim}
+CXXLIBS="$MLIBS -lstdc++ -L/Users/kmartin/coin/os-trunk/vpath/lib 
+-lOS -lbonmin -lIpopt -lOsiCbc -lOsiClp -lOsiSym -lOsiVol
+-lOsiDylp -lCbc -lCgl -lOsi -lClp  -lSym -lVol -lDylp 
+-lCoinUtils -lCbcSolver  -lcoinmumps -ldl -lpthread 
+/usr/local/lib/libgfortran.dylib -lgcc_s.10.5 -lgcc_ext.10.5 -lSystem -lm 
+\end{verbatim}
+
+{\bf Important:} It has been the authors' experience that setting the necessary MATLAB compiler and linker options to build the {\tt mex} can be tricky.  We include in
+\begin{verbatim}
+OS/applications/matlab/macOSXscript.txt
+\end{verbatim}
+the exact options that work on a 64 bit Mac with MATLAB release R2009b.
+
+\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file {\tt OSmatlabSolver.cpp}.    Execute the command:
+
+\begin{verbatim}
+mex -v OSMatlabSolver.cpp
+\end{verbatim}
+
+On a 64 bit machine the command should be
+
+\begin{verbatim}
+mex -v -largeArrayDims OSMatlabSolver.cpp
+\end{verbatim}
+
+
+On an Intel MAC OS X 64 bit chip the resulting executable will be named {\tt OSmatlabSolver.mexmaci64}. On the Windows system the file is named {\tt OSmatlabSolver.mexw32}.  
+
+
+
+\item{}  Set the MATLAB path to include the directory {\tt  OS/applications/matlab}  (or more generally, the directory with the {\tt mex} executable).
+
+
+\item{}   In the MATLAB command window, connect to the directory {\tt OS/data/matlabFiles}. Run either of the MATLAB
+files {\tt markowitz.m} or {\tt parincLinear.m}.  The result should be displayed in the MATLAB browser window.
+
+\end{enumerate}
+
+
+To use the {\tt OSmatlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.   We illustrate for the linear program:
+
+\begin{alignat}{2}
+& \mbox{Minimize} & \quad
+10 x_{1} + 9 x_{2}\label{eq:parinobj}\\
+& \mbox{Subject to} & \quad .7x_{1} + x_{2}  &\le 630  \label{eq:parinccon1}\\
+& & .5x_{1} + (5/6) x_{2} &\le 600 \label{eq:parinccon2}\\
+& &  x_{1} + (2/3) x_{2} &\le 708 \label{eq:parinccon3}\\
+& & .1x_{1} + .25 x_{2} &\le 135 \label{eq:parinccon4}\\
+& & x_{1}, x_{2} &\ge 0 \label{eq:parincnonneg}
+\end{alignat}
+
+The MATLAB representation of this problem in MATLAB arrays is
+\begin{verbatim}
+% the number of constraints
+numCon = 4;
+% the number of variables
+numVar = 2;
+% variable types
+VarType='CC';
+% constraint types
+A = [.7  1; .5  5/6; 1   2/3  ; .1   .25];
+BU = [630 600  708  135];
+BL = [];
+OBJ = [10  9];
+VL = [-inf -inf];
+VU = [];
+ObjType = 1;
+% leave Q empty if there are no quadratic terms
+Q = [];
+prob_name = 'ParInc Example'
+password = '';
+%
+%
+%the solver
+solverName = 'ipopt';
+%the remote service address
+%if left empty we solve locally -- must solve locally for now
+serviceAddress='';
+% now solve
+callMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, ...
+    VarType, Q, prob_name, password, solverName, serviceAddress)
+\end{verbatim}
+This example m-file is in the {\tt data} directory and is file {\tt parincLinear.m}. Note that in addition to the problem formulation
+we can specify which solver to use through the {\tt solverName} variable.  If solution with a remote solver is desired
+this can be specified with the {\tt serviceAddress} variable.  If the {\tt serviceAddress} is left empty, i.e.,
+\begin{verbatim}
+serviceAddress='';
+\end{verbatim}
+then a local solver is used. In this case  it is crucial that the appropriate solver is linked in with the {\tt matlabSolver}
+executable using the {\tt CXXLIBS} option.
+
+
+The data directory  also contains the m-file  {\tt template.m} which contains extensive comments about how to formulate
+the problems in MATLAB.   The user can edit {\tt template.m} as necessary and create a new instance.
+
+
+
+
+ A second example which is a quadratic problem is given in Section~\ref{section:usingmatlab}.
+The appropriate MATLAB m-file is {\tt markowitz.m} in the {data/matlabFiles} directory.
+The problem consists in investing  in a number of stocks. The expected returns and risks
+(covariances) of the stocks are known. Assume that the decision variables $x_i$
+represent the fraction of wealth invested in stock~$i$ and that no stock can have
+more than 75\% of the total wealth. The problem then is to minimize the total risk
+subject to a budget constraint and a lower bound on the expected portfolio return.
+
+Assume that there are three stocks (variables) and two constraints (not counting the upper limit  %investment
+of .75 on the investment variables).
+
+
+\begin{verbatim}
+% the number of constraints
+numCon = 2;
+% the number of variables
+numVar = 3;
+\end{verbatim}
+
+
+
+All the variables are continuous:
+
+
+\begin{verbatim}
+VarType='CCC';
+\end{verbatim}
+
+
+Next define the constraint upper and lower bounds. There are two constraints, an equality  constraint (an $=$) and a lower bound on portfolio return of .15 (a $\ge$). These two constraints are expressed as
+
+
+
+\begin{verbatim}
+BL = [1   .15];
+BU = [1  inf];
+\end{verbatim}
+
+
+
+The variables are nonnegative and have upper limits of .75 (no stock can comprise more than 75\% of the portfolio).  This is written as
+
+
+
+
+\begin{verbatim}
+VL = [];
+VU = [.75 .75 .75];
+\end{verbatim}
+
+
+
+There are no nonzero linear coefficients in the objective function, but the objective function vector must always be defined and the number of components of this vector is the number of variables.
+
+
+
+\begin{verbatim}
+OBJ = [0 0 0 ]
+\end{verbatim}
+
+
+ Now the linear constraints.   In the model the two linear constraints are
+ \begin{eqnarray*}
+ x_{1} + x_{2} + x_{3} &=& 1 \\
+ 0.3221 x_{1} +   0.0963x_{2} +    0.1187x_{3}  &\ge& .15
+ \end{eqnarray*}
+
+
+
+ These are expressed as
+
+
+
+ \begin{verbatim}
+ A = [ 1 1 1  ;
+  0.3221   0.0963   0.1187 ];
+ \end{verbatim}
+
+
+Now for the quadratic terms. The only quadratic terms are in the objective function. The objective function is
+
+
+\begin{eqnarray*}
+\min  0.425349694 x_{1}^{2} +  0.445784443 x_{2}^{2} + 0.231430983 x_{3}^{2} + 2 \times 0.185218694 x_{1} x_{2} \\
++ 2 \times 0.139312545 x_{1} x_{3} + 2 \times 0.13881692 x_{2} x_{3}
+\end{eqnarray*}
+
+
+To represent quadratic terms MATLAB uses an array, here denoted $Q$, which has four rows, and a column for each quadratic term. 
+In this example there are six quadratic terms. The first row of $Q$ is the row index where the terms appear. By convention, 
+the objective function has index -1, and constraints are counted starting at 0.  The first row of $Q$ is
+
+
+ \begin{verbatim}
+ -1 -1 -1 -1 -1 -1
+ \end{verbatim}
+
+The second row of $Q$ is the index of the first variable in the quadratic term. We use zero based counting.  
+Variable $x_{1}$ has index 0, variable  $x_{2}$ has index 1, and variable $x_{3}$ has index 2.  
+Therefore, the second row of $Q$ is
+
+
+
+\begin{verbatim}
+0 1 2 0 0 1
+\end{verbatim}
+
+
+
+The third row of $Q$ is the index of the second variable in the quadratic term.   Therefore, the third row of $Q$ is
+
+
+
+\begin{verbatim}
+0 1 2 1 2 2
+\end{verbatim}
+
+Note that terms such as $x_1^2$ are treated as $x_1*x_1$ and that mixed terms such as $x_2x_3$ could be given in either order.
+
+The last (fourth) row is the coefficient. Therefore, the fourth row reads
+
+
+
+
+
+\begin{verbatim}
+.425349654  .445784443  .231430983   .370437388  .27862509   .27763384
+\end{verbatim}
+
+
+The full array is
+
+
+
+\begin{verbatim}
+Q = [ -1 -1 -1 -1 -1 -1;
+      0 1 2 0 0 1 ;
+      0 1 2 1 2 2;
+      .425349654  .445784443  .231430983   .370437388  .27862509   .27763384
+    ];
+\end{verbatim}
+
+
+Finally, name the problem, specify the solver (in this case {\tt ipopt}), the service address (and password if required by the service), and call the solver.
+
+
+
+\begin{verbatim}
+% replace Template with the name of your  problem
+prob_name = 'Markowitz Example from Anderson, Sweeney, Williams, and Martin';
+password = '';
+%
+%the solver
+solverName = 'ipopt';
+%the remote service service address
+%if left empty we solve locally -- must solve locally for now
+serviceAddress='';
+% now solve
+OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ...
+     Q, prob_name, password, solverName, serviceAddress)
+\end{verbatim}
+\index{MATLAB|)}
+

@@ -30,7 +30,11 @@
 		</constraints>
 		<linearConstraintCoefficients numberOfValues="5">
 			<start>
-				<el>0</el><el>1</el><el>3</el><el>4</el><el>5</el>
+				<el>0</el>
+				<el>1</el>
+				<el>3</el>
+				<el>4</el>
+				<el>5</el>
 			</start>
 			<rowIdx>
 				<el>1</el>
@@ -40,9 +44,7 @@
 				<el>2</el>
 			</rowIdx>
 			<value>
-				<el>1.0  
-
-</el>
+				<el>1.0</el>
 				<el>-1.0</el>
 				<el>1.0</el>
 				<el>1.0</el>

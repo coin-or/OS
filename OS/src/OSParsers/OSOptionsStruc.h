@@ -1,5 +1,5 @@
 /* $Id$ */
-/** @file osssparservariables.h
+/** @file OSOptionsStruc.h
  *
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  *
@@ -116,26 +116,23 @@ struct osOptionsStruc
      */
     std::string osplOutput;
 
-    /** the name of the mpsFile that holds an instance in mps format */
+    /** the name of the file that holds an instance in MPS format */
     std::string mpsFile;
 
-    /** the name of the mps string that holds an instance in mps format */
+    /** the name of the string that holds an instance in MPS format */
     std::string mps;
 
-    /** the name of the nlFile that holds an instance in AMPL nl format */
+    /** the name of the file that holds an instance in AMPL nl format */
     std::string nlFile;
 
-    /** the name of the nl string that holds an instance in mps format */
+    /** the name of the string that holds an instance in AMPL nl format */
     std::string nl;
 
-
-    /** the name of the nlFile that holds an instance in GAMS dat format */
+    /** the name of the file that holds an instance in GAMS dat format */
     std::string datFile;
 
-    /** the name of the nl string that holds an instance in mps format */
+    /** the name of the string that holds an instance in GAMS dat format */
     std::string dat;
-
-
 
     /** the name of the .dat that holds the GAMS control file */
     std::string gamsControlFile;
@@ -145,11 +142,11 @@ struct osOptionsStruc
      */
     std::string solverName;
 
-    /** this paramater is a path to the browser on the local machine.
-     * If this optional parameter is specified then the solver result
-     * in OSrL format is transformed using XSLT into HTML and displayed
-     * in the browser, e.g.
-     * -browser /Applications/Firefox.app/Contents/MacOS/firefox
+    /** this parameter is a path to the browser on the local machine.
+     *  If this optional parameter is specified then the solver result
+     *  in OSrL format is transformed using XSLT into HTML and displayed
+     *  in the browser, e.g.
+     *    -browser /Applications/Firefox.app/Contents/MacOS/firefox
      */
     std::string browser;
 
@@ -162,8 +159,21 @@ struct osOptionsStruc
      * of the OS project
      */
     bool writeVersion;
+	
+    /** if this parameter is true we print the current instance
+     *  as read from an osil, nl or mps file
+     */
+    bool printModel;
 
-    /** if this parameter is true we quit/exit	 */
+	/** this parameter contains a string representation (!) of 
+	 *  the row number if only a single row (constraint or objective)
+	 *  of the current instance is to be printed
+	 *  String representations are easier to parse in OSParseosss.l and
+	 *  are easier to recognize as being present or absent
+	 */
+	std::string printRowNumberAsString;
+
+	/** if this parameter is true we quit/exit	 */
     bool quit;
 
     /** if this parameter is true we quit/exit	 */

@@ -1316,112 +1316,112 @@ static const yytype_uint16 yyrline[] =
      296,   302,   302,   304,   304,   306,   306,   308,   319,   319,
      321,   335,   335,   337,   337,   339,   341,   343,   343,   346,
      347,   348,   349,   350,   351,   352,   353,   354,   357,   359,
-     373,   379,   379,   382,   387,   391,   399,   403,   408,   408,
-     410,   412,   414,   414,   416,   420,   429,   434,   434,   437,
-     442,   448,   448,   451,   453,   459,   459,   461,   461,   463,
-     465,   468,   470,   476,   476,   478,   478,   480,   482,   485,
-     487,   493,   493,   495,   495,   497,   499,   502,   504,   510,
-     510,   512,   512,   514,   516,   519,   521,   527,   527,   529,
-     529,   531,   533,   536,   538,   544,   544,   546,   546,   548,
-     550,   553,   555,   561,   561,   563,   563,   565,   567,   570,
-     572,   578,   588,   592,   597,   597,   599,   601,   603,   603,
-     605,   609,   620,   625,   625,   628,   634,   639,   646,   646,
-     650,   650,   652,   663,   663,   665,   665,   667,   669,   671,
-     671,   674,   675,   676,   677,   678,   679,   682,   684,   690,
-     690,   692,   692,   694,   696,   702,   704,   714,   716,   716,
-     719,   725,   730,   732,   737,   739,   749,   751,   751,   754,
-     760,   765,   767,   773,   775,   785,   787,   787,   790,   796,
-     801,   803,   809,   811,   819,   820,   825,   827,   831,   833,
-     839,   849,   853,   858,   858,   860,   862,   864,   864,   866,
-     870,   881,   886,   886,   889,   895,   900,   907,   907,   911,
-     911,   913,   924,   924,   926,   926,   928,   930,   932,   932,
-     935,   936,   937,   938,   939,   940,   943,   945,   951,   951,
-     953,   953,   955,   957,   964,   966,   972,   972,   974,   974,
-     976,   978,   981,   983,   989,   989,   991,   991,   993,   995,
-     998,  1000,  1006,  1006,  1008,  1008,  1010,  1012,  1015,  1017,
-    1023,  1023,  1025,  1025,  1027,  1029,  1035,  1037,  1043,  1053,
-    1057,  1062,  1062,  1064,  1066,  1068,  1068,  1070,  1074,  1085,
-    1090,  1090,  1093,  1099,  1104,  1111,  1111,  1114,  1114,  1116,
-    1132,  1132,  1134,  1134,  1136,  1138,  1140,  1140,  1143,  1144,
-    1145,  1146,  1147,  1148,  1149,  1150,  1151,  1152,  1153,  1156,
-    1158,  1164,  1164,  1166,  1166,  1168,  1170,  1177,  1179,  1185,
-    1185,  1187,  1187,  1189,  1191,  1194,  1196,  1202,  1202,  1204,
-    1204,  1206,  1208,  1211,  1213,  1219,  1219,  1221,  1221,  1223,
-    1225,  1228,  1230,  1236,  1236,  1238,  1238,  1240,  1242,  1245,
-    1247,  1253,  1262,  1266,  1271,  1271,  1273,  1275,  1277,  1277,
-    1279,  1281,  1294,  1294,  1297,  1297,  1297,  1297,  1300,  1300,
-    1302,  1302,  1304,  1306,  1319,  1320,  1323,  1325,  1335,  1337,
-    1337,  1340,  1346,  1351,  1353,  1359,  1361,  1371,  1373,  1373,
-    1376,  1382,  1387,  1389,  1395,  1397,  1407,  1409,  1409,  1412,
-    1418,  1423,  1425,  1431,  1433,  1442,  1443,  1448,  1450,  1455,
-    1457,  1463,  1473,  1477,  1482,  1482,  1484,  1486,  1488,  1488,
-    1490,  1494,  1505,  1510,  1510,  1513,  1519,  1524,  1531,  1531,
-    1534,  1534,  1536,  1544,  1549,  1549,  1552,  1559,  1565,  1571,
-    1579,  1583,  1588,  1588,  1590,  1592,  1594,  1594,  1596,  1598,
-    1607,  1609,  1609,  1611,  1611,  1611,  1613,  1622,  1631,  1648,
-    1654,  1656,  1666,  1671,  1671,  1674,  1679,  1683,  1692,  1696,
-    1702,  1702,  1704,  1706,  1708,  1708,  1710,  1713,  1722,  1727,
-    1727,  1730,  1736,  1743,  1743,  1746,  1746,  1748,  1750,  1750,
-    1752,  1752,  1754,  1756,  1763,  1763,  1765,  1771,  1771,  1779,
-    1779,  1781,  1783,  1785,  1787,  1787,  1789,  1791,  1799,  1803,
-    1808,  1808,  1810,  1812,  1814,  1814,  1816,  1827,  1836,  1836,
-    1839,  1840,  1843,  1846,  1846,  1848,  1850,  1858,  1862,  1867,
-    1867,  1869,  1871,  1873,  1873,  1875,  1886,  1895,  1895,  1898,
-    1899,  1903,  1904,  1906,  1906,  1908,  1910,  1913,  1913,  1915,
-    1920,  1920,  1922,  1924,  1926,  1928,  1928,  1937,  1939,  1946,
-    1946,  1948,  1950,  1952,  1955,  1955,  1965,  1967,  1974,  1974,
-    1976,  1978,  1980,  1983,  1983,  1992,  1994,  2001,  2001,  2003,
-    2005,  2007,  2010,  2010,  2019,  2021,  2028,  2028,  2030,  2032,
-    2034,  2037,  2037,  2046,  2048,  2055,  2055,  2057,  2059,  2061,
-    2064,  2064,  2073,  2075,  2082,  2082,  2084,  2086,  2088,  2091,
-    2091,  2093,  2098,  2111,  2118,  2118,  2121,  2131,  2141,  2147,
-    2153,  2160,  2160,  2162,  2162,  2164,  2166,  2166,  2168,  2168,
-    2170,  2177,  2186,  2186,  2189,  2195,  2203,  2203,  2205,  2205,
-    2207,  2209,  2218,  2218,  2220,  2231,  2240,  2247,  2247,  2250,
-    2256,  2262,  2270,  2270,  2272,  2274,  2277,  2281,  2281,  2283,
-    2291,  2291,  2299,  2299,  2301,  2303,  2305,  2307,  2307,  2309,
-    2311,  2319,  2323,  2328,  2328,  2330,  2332,  2335,  2335,  2337,
-    2345,  2355,  2355,  2358,  2359,  2362,  2365,  2365,  2367,  2372,
-    2372,  2375,  2377,  2379,  2381,  2381,  2390,  2392,  2399,  2399,
-    2401,  2403,  2405,  2407,  2407,  2416,  2418,  2425,  2425,  2427,
-    2429,  2431,  2434,  2434,  2443,  2445,  2452,  2452,  2454,  2456,
-    2458,  2461,  2461,  2470,  2472,  2479,  2479,  2481,  2483,  2485,
-    2488,  2488,  2497,  2499,  2506,  2506,  2508,  2510,  2512,  2515,
-    2515,  2524,  2526,  2533,  2533,  2535,  2537,  2539,  2542,  2542,
-    2544,  2550,  2563,  2571,  2571,  2574,  2584,  2594,  2600,  2606,
-    2615,  2615,  2617,  2617,  2619,  2621,  2621,  2623,  2623,  2625,
-    2630,  2640,  2640,  2643,  2648,  2656,  2656,  2658,  2658,  2660,
-    2662,  2668,  2668,  2670,  2681,  2690,  2697,  2697,  2700,  2706,
-    2712,  2720,  2720,  2722,  2724,  2727,  2730,  2730,  2732,  2739,
-    2739,  2747,  2747,  2749,  2751,  2753,  2755,  2755,  2757,  2760,
-    2768,  2772,  2777,  2777,  2779,  2781,  2783,  2783,  2785,  2793,
-    2802,  2802,  2805,  2806,  2809,  2812,  2812,  2814,  2819,  2819,
-    2821,  2823,  2825,  2827,  2827,  2836,  2838,  2845,  2845,  2847,
-    2849,  2851,  2853,  2853,  2862,  2864,  2871,  2871,  2873,  2875,
-    2877,  2880,  2880,  2889,  2891,  2898,  2898,  2900,  2902,  2904,
-    2907,  2907,  2916,  2918,  2925,  2925,  2927,  2929,  2931,  2934,
-    2934,  2943,  2945,  2952,  2952,  2954,  2956,  2958,  2961,  2961,
-    2970,  2972,  2979,  2979,  2981,  2983,  2985,  2988,  2988,  2990,
-    2996,  3009,  3016,  3016,  3019,  3029,  3039,  3045,  3051,  3058,
-    3058,  3060,  3060,  3062,  3064,  3064,  3066,  3066,  3068,  3075,
-    3084,  3084,  3088,  3093,  3101,  3101,  3103,  3103,  3105,  3107,
-    3114,  3114,  3116,  3127,  3136,  3143,  3143,  3146,  3152,  3158,
-    3166,  3166,  3168,  3170,  3172,  3176,  3176,  3178,  3183,  3192,
-    3196,  3201,  3201,  3203,  3205,  3207,  3207,  3209,  3213,  3224,
-    3231,  3231,  3234,  3240,  3246,  3254,  3264,  3268,  3273,  3273,
-    3275,  3277,  3279,  3279,  3281,  3286,  3290,  3292,  3292,  3294,
-    3296,  3307,  3307,  3309,  3314,  3323,  3327,  3332,  3332,  3334,
-    3336,  3338,  3338,  3340,  3344,  3355,  3362,  3362,  3365,  3370,
-    3376,  3382,  3391,  3395,  3400,  3400,  3402,  3404,  3406,  3406,
-    3408,  3413,  3417,  3419,  3419,  3421,  3423,  3433,  3439,  3439,
-    3441,  3444,  3447,  3453,  3453,  3455,  3458,  3461,  3469,  3475,
-    3475,  3477,  3480,  3483,  3489,  3489,  3491,  3494,  3497,  3503,
-    3503,  3505,  3508,  3511,  3517,  3517,  3519,  3522,  3545,  3551,
-    3559,  3565,  3578,  3587,  3593,  3601,  3607,  3613,  3619,  3625,
-    3631,  3639,  3645,  3653,  3658,  3664,  3690,  3695,  3697,  3697,
-    3699,  3701,  3710,  3712,  3712,  3714,  3714,  3716,  3724,  3726,
-    3731,  3731,  3733,  3733,  3735,  3758,  3766,  3780,  3781,  3785,
-    3786,  3787,  3789,  3791,  3791,  3793,  3794,  3795,  3796
+     374,   381,   381,   384,   389,   393,   402,   406,   411,   411,
+     413,   415,   417,   417,   419,   424,   434,   440,   440,   443,
+     448,   454,   454,   457,   459,   466,   466,   468,   468,   470,
+     472,   475,   477,   484,   484,   486,   486,   488,   490,   495,
+     497,   504,   504,   506,   506,   508,   510,   515,   517,   524,
+     524,   526,   526,   528,   530,   535,   537,   544,   544,   546,
+     546,   548,   550,   555,   557,   564,   564,   566,   566,   568,
+     570,   575,   577,   584,   584,   586,   586,   588,   590,   595,
+     597,   604,   614,   619,   625,   625,   627,   629,   631,   631,
+     633,   638,   650,   656,   656,   659,   666,   671,   678,   678,
+     682,   682,   684,   695,   695,   697,   697,   699,   701,   703,
+     703,   706,   707,   708,   709,   710,   711,   714,   716,   723,
+     723,   725,   725,   727,   729,   736,   738,   749,   751,   751,
+     754,   760,   766,   768,   774,   776,   787,   789,   789,   792,
+     798,   804,   806,   813,   815,   826,   828,   828,   831,   837,
+     843,   845,   852,   854,   863,   864,   870,   872,   878,   880,
+     887,   897,   902,   908,   908,   910,   912,   914,   914,   916,
+     921,   933,   939,   939,   942,   949,   954,   960,   960,   964,
+     964,   966,   977,   977,   979,   979,   981,   983,   985,   985,
+     988,   989,   990,   991,   992,   993,   996,   998,  1005,  1005,
+    1007,  1007,  1009,  1011,  1019,  1021,  1028,  1028,  1030,  1030,
+    1032,  1034,  1039,  1041,  1048,  1048,  1050,  1050,  1052,  1054,
+    1059,  1061,  1068,  1068,  1070,  1070,  1072,  1074,  1079,  1081,
+    1088,  1088,  1090,  1090,  1092,  1094,  1101,  1103,  1110,  1120,
+    1125,  1131,  1131,  1133,  1135,  1137,  1137,  1139,  1144,  1156,
+    1162,  1162,  1165,  1172,  1177,  1184,  1184,  1187,  1187,  1189,
+    1205,  1205,  1207,  1207,  1209,  1211,  1213,  1213,  1216,  1217,
+    1218,  1219,  1220,  1221,  1222,  1223,  1224,  1225,  1226,  1229,
+    1231,  1238,  1238,  1240,  1240,  1242,  1244,  1252,  1254,  1261,
+    1261,  1263,  1263,  1265,  1267,  1272,  1274,  1281,  1281,  1283,
+    1283,  1285,  1287,  1292,  1294,  1301,  1301,  1303,  1303,  1305,
+    1307,  1312,  1314,  1321,  1321,  1323,  1323,  1325,  1327,  1332,
+    1334,  1341,  1351,  1356,  1362,  1362,  1364,  1366,  1368,  1368,
+    1370,  1372,  1386,  1386,  1389,  1389,  1389,  1389,  1392,  1392,
+    1394,  1394,  1396,  1398,  1407,  1408,  1411,  1413,  1424,  1426,
+    1426,  1429,  1435,  1441,  1443,  1450,  1452,  1463,  1465,  1465,
+    1468,  1474,  1480,  1482,  1489,  1491,  1502,  1504,  1504,  1507,
+    1513,  1519,  1521,  1528,  1530,  1540,  1541,  1547,  1549,  1556,
+    1558,  1565,  1575,  1580,  1586,  1586,  1588,  1590,  1592,  1592,
+    1594,  1599,  1611,  1617,  1617,  1620,  1627,  1632,  1639,  1639,
+    1642,  1642,  1644,  1652,  1658,  1658,  1661,  1668,  1674,  1680,
+    1688,  1693,  1699,  1699,  1701,  1703,  1705,  1705,  1707,  1709,
+    1718,  1720,  1720,  1722,  1722,  1722,  1724,  1734,  1744,  1764,
+    1770,  1772,  1782,  1788,  1788,  1791,  1796,  1801,  1811,  1816,
+    1822,  1822,  1824,  1826,  1828,  1828,  1830,  1835,  1845,  1851,
+    1851,  1854,  1860,  1867,  1867,  1870,  1870,  1872,  1874,  1874,
+    1876,  1876,  1878,  1880,  1888,  1888,  1890,  1896,  1896,  1904,
+    1904,  1906,  1908,  1910,  1912,  1912,  1914,  1916,  1924,  1929,
+    1935,  1935,  1937,  1939,  1941,  1941,  1943,  1954,  1963,  1963,
+    1966,  1967,  1970,  1973,  1973,  1975,  1977,  1985,  1990,  1996,
+    1996,  1998,  2000,  2002,  2002,  2004,  2015,  2024,  2024,  2027,
+    2028,  2032,  2033,  2035,  2035,  2037,  2039,  2044,  2044,  2046,
+    2051,  2051,  2053,  2055,  2057,  2059,  2059,  2068,  2070,  2077,
+    2077,  2079,  2081,  2083,  2086,  2086,  2096,  2098,  2105,  2105,
+    2107,  2109,  2111,  2114,  2114,  2123,  2125,  2132,  2132,  2134,
+    2136,  2138,  2141,  2141,  2150,  2152,  2159,  2159,  2161,  2163,
+    2165,  2168,  2168,  2177,  2179,  2186,  2186,  2188,  2190,  2192,
+    2195,  2195,  2204,  2206,  2213,  2213,  2215,  2217,  2219,  2222,
+    2222,  2224,  2229,  2242,  2248,  2248,  2251,  2262,  2273,  2279,
+    2285,  2292,  2292,  2294,  2294,  2296,  2298,  2298,  2300,  2300,
+    2302,  2309,  2318,  2318,  2321,  2327,  2334,  2334,  2336,  2336,
+    2338,  2340,  2349,  2349,  2351,  2362,  2370,  2376,  2376,  2379,
+    2385,  2386,  2390,  2390,  2392,  2394,  2397,  2401,  2401,  2403,
+    2411,  2411,  2419,  2419,  2421,  2423,  2425,  2427,  2427,  2429,
+    2431,  2439,  2444,  2450,  2450,  2452,  2454,  2457,  2457,  2459,
+    2468,  2478,  2478,  2481,  2482,  2485,  2488,  2488,  2490,  2495,
+    2495,  2498,  2500,  2502,  2504,  2504,  2513,  2515,  2522,  2522,
+    2524,  2526,  2528,  2530,  2530,  2539,  2541,  2548,  2548,  2550,
+    2552,  2554,  2557,  2557,  2566,  2568,  2575,  2575,  2577,  2579,
+    2581,  2584,  2584,  2593,  2595,  2602,  2602,  2604,  2606,  2608,
+    2611,  2611,  2620,  2622,  2629,  2629,  2631,  2633,  2635,  2638,
+    2638,  2647,  2649,  2656,  2656,  2658,  2660,  2662,  2665,  2665,
+    2667,  2673,  2686,  2693,  2693,  2696,  2707,  2718,  2724,  2730,
+    2739,  2739,  2741,  2741,  2743,  2745,  2745,  2747,  2747,  2749,
+    2754,  2764,  2764,  2767,  2772,  2779,  2779,  2781,  2781,  2783,
+    2785,  2792,  2792,  2794,  2805,  2813,  2819,  2819,  2822,  2828,
+    2829,  2833,  2833,  2835,  2837,  2840,  2843,  2843,  2845,  2852,
+    2852,  2860,  2860,  2862,  2864,  2866,  2868,  2868,  2870,  2873,
+    2881,  2886,  2892,  2892,  2894,  2896,  2898,  2898,  2900,  2909,
+    2918,  2918,  2921,  2922,  2925,  2928,  2928,  2930,  2935,  2935,
+    2937,  2939,  2941,  2943,  2943,  2952,  2954,  2961,  2961,  2963,
+    2965,  2967,  2969,  2969,  2978,  2980,  2987,  2987,  2989,  2991,
+    2993,  2996,  2996,  3005,  3007,  3014,  3014,  3016,  3018,  3020,
+    3023,  3023,  3032,  3034,  3041,  3041,  3043,  3045,  3047,  3050,
+    3050,  3059,  3061,  3068,  3068,  3070,  3072,  3074,  3077,  3077,
+    3086,  3088,  3095,  3095,  3097,  3099,  3101,  3104,  3104,  3106,
+    3112,  3125,  3131,  3131,  3134,  3145,  3156,  3162,  3168,  3175,
+    3175,  3177,  3177,  3179,  3181,  3181,  3183,  3183,  3185,  3192,
+    3201,  3201,  3205,  3210,  3218,  3218,  3220,  3220,  3222,  3224,
+    3231,  3231,  3233,  3244,  3252,  3258,  3258,  3261,  3267,  3268,
+    3272,  3272,  3274,  3276,  3278,  3282,  3282,  3284,  3289,  3298,
+    3303,  3309,  3309,  3311,  3313,  3315,  3315,  3317,  3322,  3334,
+    3342,  3342,  3345,  3351,  3357,  3365,  3375,  3380,  3386,  3386,
+    3388,  3390,  3392,  3392,  3394,  3400,  3405,  3407,  3407,  3409,
+    3411,  3423,  3423,  3425,  3430,  3439,  3444,  3450,  3450,  3452,
+    3454,  3456,  3456,  3458,  3463,  3475,  3483,  3483,  3486,  3491,
+    3497,  3503,  3512,  3517,  3523,  3523,  3525,  3527,  3529,  3529,
+    3531,  3537,  3542,  3544,  3544,  3546,  3548,  3559,  3566,  3566,
+    3568,  3573,  3578,  3585,  3585,  3587,  3592,  3597,  3605,  3612,
+    3612,  3614,  3619,  3624,  3631,  3631,  3633,  3638,  3643,  3650,
+    3650,  3652,  3657,  3662,  3669,  3669,  3671,  3676,  3682,  3688,
+    3697,  3703,  3717,  3726,  3732,  3741,  3747,  3753,  3759,  3765,
+    3771,  3780,  3786,  3795,  3800,  3806,  3833,  3838,  3840,  3840,
+    3842,  3844,  3853,  3855,  3855,  3857,  3857,  3859,  3867,  3869,
+    3874,  3874,  3876,  3876,  3878,  3901,  3909,  3923,  3924,  3928,
+    3929,  3930,  3932,  3934,  3934,  3936,  3937,  3938,  3939
 };
 #endif
 
@@ -3848,7 +3848,7 @@ yyreduce:
 
     {
 #ifdef DEBUG
-yydebug = 1;
+	yydebug = 1;
 #endif
 }
     break;
@@ -3857,7 +3857,7 @@ yydebug = 1;
 
     {
 #ifdef DEBUG
-yydebug = 1;
+	yydebug = 1;
 #endif
 }
     break;
@@ -3945,7 +3945,8 @@ yydebug = 1;
 
   case 79:
 
-    {	if (parserData->generalStatusPresent)
+    {
+		if (parserData->generalStatusPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one generalStatus element allowed");	
 		if (osresult->general->generalStatus != NULL) 
 			osrlerror(NULL, NULL, parserData, osglData, "generalStatus previously allocated");
@@ -3961,7 +3962,8 @@ yydebug = 1;
 
   case 80:
 
-    {	if (!parserData->typeAttributePresent)
+    {
+		if (!parserData->typeAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "type attribute must be present for generalStatus element");
 		parserData->kounter = 0;
 	}
@@ -3984,7 +3986,8 @@ yydebug = 1;
 
   case 85:
 
-    {   if (osresult->setNumberOfGeneralSubstatuses(parserData->tempInt) == false)
+    {
+	   if (osresult->setNumberOfGeneralSubstatuses(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "Attempting to reallocate substatus array. Potential loss of data.");
 		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
@@ -4007,13 +4010,15 @@ yydebug = 1;
 
   case 94:
 
-    {	parserData->kounter++;
+    {
+	parserData->kounter++;
 }
     break;
 
   case 95:
 
-    {	if (parserData->kounter >= parserData->numberOf)
+    {
+	if (parserData->kounter >= parserData->numberOf)
 		osrlerror( NULL, NULL, parserData, osglData, "more <substatus> elements than specified");
 	parserData->nameAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
@@ -4024,7 +4029,8 @@ yydebug = 1;
 
   case 96:
 
-    {	if (!parserData->nameAttributePresent)
+    {
+	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<substatus> must have name attribute");
 }
     break;
@@ -4047,7 +4053,8 @@ yydebug = 1;
 
   case 104:
 
-    {	if (parserData->generalMessagePresent)
+    {
+		if (parserData->generalMessagePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one message element allowed");
 		parserData->generalMessagePresent = true;
 	}
@@ -4060,7 +4067,8 @@ yydebug = 1;
 
   case 112:
 
-    {	if (parserData->generalServiceURIPresent)
+    {
+		if (parserData->generalServiceURIPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one serviceURI element allowed");
 		parserData->generalServiceURIPresent = true;
 	}
@@ -4068,12 +4076,15 @@ yydebug = 1;
 
   case 118:
 
-    {osresult->setServiceURI((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setServiceURI((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 120:
 
-    {	if (parserData->generalServiceNamePresent)
+    {
+		if (parserData->generalServiceNamePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one serviceName element allowed");
 		parserData->generalServiceNamePresent = true;
 	}
@@ -4081,12 +4092,15 @@ yydebug = 1;
 
   case 126:
 
-    {osresult->setServiceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setServiceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 128:
 
-    {	if (parserData->generalInstanceNamePresent)
+    {
+		if (parserData->generalInstanceNamePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one instanceName element allowed");
 		parserData->generalInstanceNamePresent = true;
 	}
@@ -4094,12 +4108,15 @@ yydebug = 1;
 
   case 134:
 
-    {osresult->setInstanceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setInstanceName((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 136:
 
-    {	if (parserData->generalJobIDPresent)
+    {
+		if (parserData->generalJobIDPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one jobID element allowed");
 		parserData->generalJobIDPresent = true;
 	}
@@ -4107,12 +4124,15 @@ yydebug = 1;
 
   case 142:
 
-    {osresult->setJobID((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setJobID((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 144:
 
-    {	if (parserData->generalSolverInvokedPresent)
+    {
+		if (parserData->generalSolverInvokedPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one solverInvoked element allowed");
 		parserData->generalSolverInvokedPresent = true;
 	}
@@ -4120,12 +4140,15 @@ yydebug = 1;
 
   case 150:
 
-    {osresult->setSolverInvoked((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setSolverInvoked((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 152:
 
-    {	if (parserData->generalTimeStampPresent)
+    {
+		if (parserData->generalTimeStampPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one timeStamp element allowed");
 		parserData->generalTimeStampPresent = true;
 	}
@@ -4133,12 +4156,15 @@ yydebug = 1;
 
   case 158:
 
-    {osresult->setTimeStamp((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setTimeStamp((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 160:
 
-    {	if (parserData->otherGeneralResultsPresent)
+    {
+		if (parserData->otherGeneralResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one general other results element allowed");
 		parserData->otherGeneralResultsPresent = true;
 	}
@@ -4157,27 +4183,31 @@ yydebug = 1;
 
   case 162:
 
-    {	if (parserData->numberOf > 0)
+    {
+		if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
 	}
     break;
 
   case 163:
 
-    {	if (parserData->kounter < parserData->numberOf - 1)
+    {
+		if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
 	}
     break;
 
   case 170:
 
-    {	parserData->kounter++;
+    {
+	parserData->kounter++;
 }
     break;
 
   case 171:
 
-    {	if (parserData->kounter >= parserData->numberOf)
+    {
+	if (parserData->kounter >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
 	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
@@ -4190,14 +4220,16 @@ yydebug = 1;
 
   case 172:
 
-    {	if (!parserData->nameAttributePresent)
+    {
+	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
 }
     break;
 
   case 175:
 
-    {	if (parserData->nameAttribute.length() == 0)
+    {
+		if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherGeneralResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setGeneralOtherResultName failed");
@@ -4235,7 +4267,8 @@ yydebug = 1;
 
   case 198:
 
-    {	if (parserData->systemInformationPresent)
+    {
+		if (parserData->systemInformationPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one systemInformation element allowed");
 		parserData->systemInformationPresent = true;
 	}
@@ -4243,7 +4276,8 @@ yydebug = 1;
 
   case 204:
 
-    {	osresult->setSystemInformation((yyvsp[(1) - (1)].sval)); 
+    {
+		osresult->setSystemInformation((yyvsp[(1) - (1)].sval)); 
 		free((yyvsp[(1) - (1)].sval)); 
 		parserData->errorText = NULL;
 	}
@@ -4251,7 +4285,8 @@ yydebug = 1;
 
   case 206:
 
-    {	if (parserData->systemAvailableDiskSpacePresent)
+    {
+		if (parserData->systemAvailableDiskSpacePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one availableDiskSpace element allowed");
 		parserData->systemAvailableDiskSpacePresent = true;	
 		parserData->unitAttributePresent = false;	
@@ -4272,21 +4307,24 @@ yydebug = 1;
 
   case 211:
 
-    {	osresult->setAvailableDiskSpaceDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setAvailableDiskSpaceDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 213:
 
-    {	osresult->setAvailableDiskSpaceValue(parserData->tempVal);  
+    {
+	osresult->setAvailableDiskSpaceValue(parserData->tempVal);  
 	parserData->errorText = NULL;
 }
     break;
 
   case 215:
 
-    {	if (parserData->systemAvailableMemoryPresent)
+    {
+		if (parserData->systemAvailableMemoryPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one availableMemory element allowed");
 		parserData->systemAvailableMemoryPresent = true;
 		parserData->unitAttributePresent = false;	
@@ -4307,21 +4345,24 @@ yydebug = 1;
 
   case 220:
 
-    {	osresult->setAvailableMemoryDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setAvailableMemoryDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 222:
 
-    {	osresult->setAvailableMemoryValue(parserData->tempVal);  
-    parserData->errorText = NULL;
+    {
+	osresult->setAvailableMemoryValue(parserData->tempVal);  
+	parserData->errorText = NULL;
 }
     break;
 
   case 224:
 
-    {	if (parserData->systemAvailableCPUSpeedPresent)
+    {
+		if (parserData->systemAvailableCPUSpeedPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one availableCPUSpeed element allowed");
 		parserData->systemAvailableCPUSpeedPresent = true;
 		parserData->unitAttributePresent = false;	
@@ -4342,21 +4383,24 @@ yydebug = 1;
 
   case 229:
 
-    {	osresult->setAvailableCPUSpeedDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setAvailableCPUSpeedDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 231:
 
-    {	osresult->setAvailableCPUSpeedValue(parserData->tempVal);  
-    parserData->errorText = NULL;
+    {
+	osresult->setAvailableCPUSpeedValue(parserData->tempVal);  
+	parserData->errorText = NULL;
 }
     break;
 
   case 233:
 
-    {	if (parserData->systemAvailableCPUNumberPresent)
+    {
+		if (parserData->systemAvailableCPUNumberPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one availableCPUNumber element allowed");
 		parserData->systemAvailableCPUNumberPresent = true;
 		parserData->descriptionAttributePresent = false;	
@@ -4366,19 +4410,23 @@ yydebug = 1;
 
   case 235:
 
-    {	osresult->setAvailableCPUNumberDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setAvailableCPUNumberDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 237:
 
-    {	osresult->setAvailableCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL; }
+    {
+	osresult->setAvailableCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL;
+}
     break;
 
   case 239:
 
-    {	if (parserData->otherSystemResultsPresent)
+    {
+		if (parserData->otherSystemResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one system other results element allowed");
 		parserData->otherSystemResultsPresent = true;
 	}
@@ -4397,27 +4445,31 @@ yydebug = 1;
 
   case 241:
 
-    {	if (parserData->numberOf > 0)
+    {
+		if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
 	}
     break;
 
   case 242:
 
-    {	if (parserData->kounter < parserData->numberOf - 1)
+    {
+		if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
 	}
     break;
 
   case 249:
 
-    {	parserData->kounter++;
+    {
+	parserData->kounter++;
 }
     break;
 
   case 250:
 
-    {	if (parserData->kounter >= parserData->numberOf)
+    {
+	if (parserData->kounter >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
 	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
@@ -4430,14 +4482,16 @@ yydebug = 1;
 
   case 251:
 
-    {	if (!parserData->nameAttributePresent)
+    {
+	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
 }
     break;
 
   case 254:
 
-    {	if (parserData->nameAttribute.length() == 0)
+    {
+		if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherSystemResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSystemOtherResultName failed");
@@ -4475,7 +4529,8 @@ yydebug = 1;
 
   case 277:
 
-    {	if (parserData->serviceCurrentStatePresent)
+    {
+		if (parserData->serviceCurrentStatePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one currentState element allowed");
 		parserData->serviceCurrentStatePresent = true;
 	}
@@ -4483,7 +4538,8 @@ yydebug = 1;
 
   case 283:
 
-    {   parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
+    {
+	   parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
 		if (osresult->setCurrentState(parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setCurrentState failed; current system state not recognized");
 		parserData->errorText = NULL;
@@ -4492,7 +4548,8 @@ yydebug = 1;
 
   case 285:
 
-    {	if (parserData->serviceCurrentJobCountPresent)
+    {
+		if (parserData->serviceCurrentJobCountPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one currentJobCount element allowed");
 		parserData->serviceCurrentJobCountPresent = true;
 	}
@@ -4500,12 +4557,15 @@ yydebug = 1;
 
   case 291:
 
-    { osresult->setCurrentJobCount((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL; }
+    {
+		osresult->setCurrentJobCount((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL;
+	}
     break;
 
   case 293:
 
-    {	if (parserData->serviceTotalJobsSoFarPresent)
+    {
+		if (parserData->serviceTotalJobsSoFarPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one totalJobsSoFar element allowed");
 		parserData->serviceTotalJobsSoFarPresent = true;
 	}
@@ -4513,12 +4573,15 @@ yydebug = 1;
 
   case 299:
 
-    { osresult->setTotalJobsSoFar((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL; }
+    {
+		osresult->setTotalJobsSoFar((yyvsp[(1) - (1)].ival)); parserData->errorText = NULL; 
+	}
     break;
 
   case 301:
 
-    {	if (parserData->timeServiceStartedPresent)
+    {
+		if (parserData->timeServiceStartedPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one timeServiceStarted element allowed");
 		parserData->timeServiceStartedPresent = true;
 	}
@@ -4526,12 +4589,15 @@ yydebug = 1;
 
   case 307:
 
-    {osresult->setTimeServiceStarted((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setTimeServiceStarted((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 309:
 
-    {	if (parserData->serviceUtilizationPresent)
+    {
+		if (parserData->serviceUtilizationPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one serviceUtilization element allowed");
 		parserData->serviceUtilizationPresent = true;
 	}
@@ -4539,7 +4605,8 @@ yydebug = 1;
 
   case 315:
 
-    {	if (osresult->setServiceUtilization( parserData->tempVal) == false)
+    {
+	if (osresult->setServiceUtilization( parserData->tempVal) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setServiceUtilization failed");
 	parserData->errorText = NULL;
 }
@@ -4547,7 +4614,8 @@ yydebug = 1;
 
   case 317:
 
-    {	if (parserData->otherServiceResultsPresent)
+    {
+		if (parserData->otherServiceResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one service other results element allowed");
 		parserData->otherServiceResultsPresent = true;
 	}
@@ -4566,27 +4634,31 @@ yydebug = 1;
 
   case 319:
 
-    {	if (parserData->numberOf > 0)
+    {
+		if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
 	}
     break;
 
   case 320:
 
-    {	if (parserData->kounter < parserData->numberOf - 1)
+    {
+		if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
 	}
     break;
 
   case 327:
 
-    {	parserData->kounter++;
+    {
+	parserData->kounter++;
 }
     break;
 
   case 328:
 
-    {	if (parserData->kounter >= parserData->numberOf)
+    {
+	if (parserData->kounter >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
 	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
@@ -4599,14 +4671,16 @@ yydebug = 1;
 
   case 329:
 
-    {	if (!parserData->nameAttributePresent)
+    {
+	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
 }
     break;
 
   case 332:
 
-    {	if (parserData->nameAttribute.length() == 0)
+    {
+		if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherServiceResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setServiceOtherResultName failed");
@@ -4649,7 +4723,8 @@ yydebug = 1;
 
   case 360:
 
-    {	if (parserData->jobStatusPresent)
+    {
+		if (parserData->jobStatusPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one job status element allowed");
 		parserData->jobStatusPresent = true;
 	}
@@ -4657,7 +4732,8 @@ yydebug = 1;
 
   case 366:
 
-    {	parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
+    {
+		parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
 		if (osresult->setJobStatus(parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setJobStatus failed");
 		parserData->errorText = NULL;
@@ -4666,7 +4742,8 @@ yydebug = 1;
 
   case 368:
 
-    {	if (parserData->jobSubmitTimePresent)
+    {
+		if (parserData->jobSubmitTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one submitTime element allowed");
 		parserData->jobSubmitTimePresent = true;
 	}
@@ -4674,12 +4751,15 @@ yydebug = 1;
 
   case 374:
 
-    {osresult->setJobSubmitTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setJobSubmitTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 376:
 
-    {	if (parserData->scheduledStartTimePresent)
+    {
+		if (parserData->scheduledStartTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one scheduledStartTime element allowed");
 		parserData->scheduledStartTimePresent = true;
 	}
@@ -4687,12 +4767,15 @@ yydebug = 1;
 
   case 382:
 
-    {osresult->setScheduledStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;}
+    {
+		osresult->setScheduledStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval)); parserData->errorText = NULL;
+	}
     break;
 
   case 384:
 
-    {	if (parserData->actualStartTimePresent)
+    {
+		if (parserData->actualStartTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one actualStartTime element allowed");
 		parserData->actualStartTimePresent = true;
 	}
@@ -4700,12 +4783,15 @@ yydebug = 1;
 
   case 390:
 
-    {osresult->setActualStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;}
+    {
+		osresult->setActualStartTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;
+	}
     break;
 
   case 392:
 
-    {	if (parserData->jobEndTimePresent)
+    {
+		if (parserData->jobEndTimePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one job endTime element allowed");
 		parserData->jobEndTimePresent = true;
 	}
@@ -4713,12 +4799,15 @@ yydebug = 1;
 
   case 398:
 
-    {osresult->setJobEndTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;}
+    {
+		osresult->setJobEndTime((yyvsp[(1) - (1)].sval)); free((yyvsp[(1) - (1)].sval));  parserData->errorText = NULL;
+	}
     break;
 
   case 400:
 
-    {	if (parserData->jobTimingInformationPresent)
+    {
+		if (parserData->jobTimingInformationPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one timingInformation element allowed");
 		parserData->jobTimingInformationPresent = true;
 	}
@@ -4726,7 +4815,8 @@ yydebug = 1;
 
   case 401:
 
-    {	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, "number of time measurements cannot be negative");
+    {
+	if (parserData->tempInt < 0) osrlerror(NULL, NULL, parserData, osglData, "number of time measurements cannot be negative");
 	if (osresult->setNumberOfTimes(parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setNumberOfTimes failed");
 	parserData->numberOfTimes = parserData->tempInt;
@@ -4736,21 +4826,24 @@ yydebug = 1;
 
   case 402:
 
-    {	if (parserData->numberOfTimes > 0)
+    {
+		if (parserData->numberOfTimes > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <time> element");
 	}
     break;
 
   case 403:
 
-    {	if (parserData->ivar != parserData->numberOfTimes)
+    {
+		if (parserData->ivar != parserData->numberOfTimes)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <time> elements than specified");
 	}
     break;
 
   case 411:
 
-    {	if (parserData->ivar >= parserData->numberOfTimes)
+    {
+	if (parserData->ivar >= parserData->numberOfTimes)
 		osrlerror(NULL, NULL, parserData, osglData, "more <time> elements than specified");
 	parserData->unitAttributePresent = false;
 	parserData->typeAttributePresent = false;
@@ -4770,10 +4863,6 @@ yydebug = 1;
 		parserData->unitAttribute, parserData->descriptionAttribute, parserData->timeValue) == false)       
 			osrlerror(NULL, NULL, parserData, osglData, "timing information could not be stored");
 	parserData->ivar++;
-//	parserData->timeType = "elapsedTime";
-//	parserData->timeCategory = "total";
-//	parserData->timeUnit = "unit";
-//	parserData->timeDescription = "";      
 }
     break;
 
@@ -4789,7 +4878,8 @@ yydebug = 1;
 
   case 427:
 
-    {	if (parserData->jobUsedDiskSpacePresent)
+    {
+		if (parserData->jobUsedDiskSpacePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one usedDiskSpace element allowed");
 		parserData->jobUsedDiskSpacePresent = true;		
 		parserData->unitAttributePresent = false;	
@@ -4810,21 +4900,24 @@ yydebug = 1;
 
   case 432:
 
-    {	osresult->setUsedDiskSpaceDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setUsedDiskSpaceDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 434:
 
-    {	osresult->setUsedDiskSpaceValue(parserData->tempVal);  
+    {
+	osresult->setUsedDiskSpaceValue(parserData->tempVal);  
 	parserData->errorText = NULL;
 }
     break;
 
   case 436:
 
-    {	if (parserData->jobUsedMemoryPresent)
+    {
+		if (parserData->jobUsedMemoryPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one usedMemory element allowed");
 		parserData->jobUsedMemoryPresent = true;
 		parserData->unitAttributePresent = false;	
@@ -4845,21 +4938,24 @@ yydebug = 1;
 
   case 441:
 
-    {	osresult->setUsedMemoryDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setUsedMemoryDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 443:
 
-    {	osresult->setUsedMemoryValue(parserData->tempVal);  
+    {
+	osresult->setUsedMemoryValue(parserData->tempVal);  
 	parserData->errorText = NULL;
 }
     break;
 
   case 445:
 
-    {	if (parserData->jobUsedCPUSpeedPresent)
+    {
+		if (parserData->jobUsedCPUSpeedPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one usedCPUSpeed element allowed");
 		parserData->jobUsedCPUSpeedPresent = true;
 		parserData->unitAttributePresent = false;	
@@ -4880,21 +4976,24 @@ yydebug = 1;
 
   case 450:
 
-    {	osresult->setUsedCPUSpeedDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setUsedCPUSpeedDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 452:
 
-    {	osresult->setUsedCPUSpeedValue(parserData->tempVal);  
+    {
+	osresult->setUsedCPUSpeedValue(parserData->tempVal);  
 	parserData->errorText = NULL;
 }
     break;
 
   case 454:
 
-    {	if (parserData->jobUsedCPUNumberPresent)
+    {
+		if (parserData->jobUsedCPUNumberPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one usedCPUNumber element allowed");
 		parserData->jobUsedCPUNumberPresent = true;
 		parserData->descriptionAttributePresent = false;	
@@ -4904,19 +5003,23 @@ yydebug = 1;
 
   case 456:
 
-    {	osresult->setUsedCPUNumberDescription( parserData->descriptionAttribute); 
+    {
+		osresult->setUsedCPUNumberDescription( parserData->descriptionAttribute); 
 		parserData->errorText = NULL;
 	}
     break;
 
   case 458:
 
-    { osresult->setUsedCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL; }
+    { 
+	osresult->setUsedCPUNumberValue( (yyvsp[(1) - (1)].ival));  parserData->errorText = NULL; 
+}
     break;
 
   case 460:
 
-    {	if (parserData->otherJobResultsPresent)
+    {
+		if (parserData->otherJobResultsPresent)
 			osrlerror(NULL, NULL, parserData, osglData, "only one job other results element allowed");
 		parserData->otherJobResultsPresent = true;
 	}
@@ -4935,27 +5038,31 @@ yydebug = 1;
 
   case 462:
 
-    {	if (parserData->numberOf > 0)
+    {
+		if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <other> element");
 	}
     break;
 
   case 463:
 
-    {	if (parserData->kounter < parserData->numberOf - 1)
+    {
+		if (parserData->kounter < parserData->numberOf - 1)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <other> elements than specified");
 	}
     break;
 
   case 470:
 
-    {	parserData->kounter++;
+    {
+	parserData->kounter++;
 }
     break;
 
   case 471:
 
-    {	if (parserData->kounter >= parserData->numberOf)
+    {
+	if (parserData->kounter >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, osglData, "more <other> elements than specified");
 	parserData->nameAttributePresent = false;
 	parserData->valueAttributePresent = false;
@@ -4968,14 +5075,16 @@ yydebug = 1;
 
   case 472:
 
-    {	if (!parserData->nameAttributePresent)
+    {
+	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<other> must have name attribute");
 }
     break;
 
   case 475:
 
-    {	if (parserData->nameAttribute.length() == 0)
+    {
+		if (parserData->nameAttribute.length() == 0)
 			osrlerror(NULL, NULL, parserData, osglData, "otherResult name cannot be empty");
 		if (osresult->setOtherJobResultName(parserData->kounter, parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setJobOtherResultName failed");
@@ -5010,7 +5119,8 @@ yydebug = 1;
 
   case 483:
 
-    {	if (!parserData->numberAttributePresent)
+    {
+	if (!parserData->numberAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "numberOfSolutions was never set");
 }
     break;
@@ -5054,14 +5164,16 @@ yydebug = 1;
 
   case 490:
 
-    {	if (parserData->numberOfSolutions > 0)
+    {
+		if (parserData->numberOfSolutions > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <solution> element");
 	}
     break;
 
   case 491:
 
-    {	if (parserData->solutionIdx != parserData->numberOfSolutions)
+    {
+		if (parserData->solutionIdx != parserData->numberOfSolutions)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <solution> elements than specified");
 	}
     break;
@@ -5079,7 +5191,8 @@ yydebug = 1;
 
   case 506:
 
-    {	if (parserData->idxAttributePresent)
+    {
+	if (parserData->idxAttributePresent)
 		osrlerror(NULL, NULL, parserData, osglData, "target objective idx previously set");
 	parserData->idxAttributePresent = true;
 	if((yyvsp[(3) - (4)].ival) >= 0) osrlerror(NULL, NULL, parserData, osglData, "target objective index must be negative");
@@ -5090,7 +5203,8 @@ yydebug = 1;
 
   case 507:
 
-    {	if (parserData->nameAttributePresent)
+    {
+	if (parserData->nameAttributePresent)
 		osrlerror(NULL, NULL, parserData, osglData, "target objective name previously set");
 	parserData->nameAttributePresent = true;
 	parserData->tempStr = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
@@ -5101,16 +5215,19 @@ yydebug = 1;
 
   case 508:
 
-    {	if (parserData->weightedObjAttributePresent)
+    {
+	if (parserData->weightedObjAttributePresent)
 		osrlerror(NULL, NULL, parserData, osglData, "weighted objective attribute previously set");
 	parserData->weightedObjAttributePresent = true;
 	parserData->tempStr = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
 	if (parserData->tempStr == "true")
-	{  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
+	{
+	  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, true) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionWeightedObjectives failed");
 	}
 	else if (parserData->tempStr == "false")
-	{  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, false) == false)
+	{
+	  	if (osresult->setSolutionWeightedObjectives(parserData->solutionIdx, false) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionWeightedObjectives failed");
 	}
 	else
@@ -5139,7 +5256,8 @@ yydebug = 1;
 
   case 512:
 
-    {	if (!parserData->typeAttributePresent)
+    {
+		if (!parserData->typeAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "type attribute must be present for solution status element");
 	}
     break;
@@ -5154,14 +5272,16 @@ yydebug = 1;
 
   case 516:
 
-    {   if (osresult->setSolutionStatusDescription(parserData->solutionIdx, parserData->descriptionAttribute) == false)
+    {
+	   if (osresult->setSolutionStatusDescription(parserData->solutionIdx, parserData->descriptionAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setSolutionStatusDescription failed");
 	}
     break;
 
   case 517:
 
-    {	if (osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, parserData->tempInt) == false)
+    {
+		if (osresult->setNumberOfSolutionSubstatuses(parserData->solutionIdx, parserData->tempInt) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setNumberOfSolutionSubstatuses failed");
 		parserData->numberOf = parserData->tempInt;
 		parserData->kounter = 0;
@@ -5170,26 +5290,31 @@ yydebug = 1;
 
   case 518:
 
-    {	if (parserData->numberOf > 0)
+    {
+		if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <substatus> element");
 	}
     break;
 
   case 519:
 
-    {	if (parserData->kounter != parserData->numberOf)
+    {
+		if (parserData->kounter != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <substatus> elements than specified");
 	}
     break;
 
   case 526:
 
-    {	parserData->kounter++; }
+    {
+	parserData->kounter++; 
+}
     break;
 
   case 527:
 
-    {	if (parserData->kounter >= parserData->numberOf)
+    {
+	if (parserData->kounter >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, osglData, "more <substatus> elements than specified");
 	parserData->typeAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
@@ -5200,7 +5325,8 @@ yydebug = 1;
 
   case 528:
 
-    {	if (!parserData->typeAttributePresent)
+    {
+	if (!parserData->typeAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<substatus> must have type attribute");
 }
     break;
@@ -5225,8 +5351,9 @@ yydebug = 1;
 
   case 543:
 
-    {	parserData->tempStr = (yyvsp[(1) - (1)].sval);
-        free((yyvsp[(1) - (1)].sval));
+    {
+		parserData->tempStr = (yyvsp[(1) - (1)].sval);
+		free((yyvsp[(1) - (1)].sval));
 		osresult->setSolutionMessage(parserData->solutionIdx, parserData->tempStr);
 		parserData->errorText = NULL;
 	}
@@ -5261,14 +5388,16 @@ yydebug = 1;
 
   case 558:
 
-    {	if (parserData->numberOfVar > 0)
+    {
+		if (parserData->numberOfVar > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <var> element");
 	}
     break;
 
   case 559:
 
-    {	if (parserData->kounter != parserData->numberOfVar)
+    {
+		if (parserData->kounter != parserData->numberOfVar)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
 	}
     break;
@@ -5308,14 +5437,16 @@ yydebug = 1;
 
   case 577:
 
-    {	if (parserData->numberOfVar > 0)
+    {
+		if (parserData->numberOfVar > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <var> element");
 	}
     break;
 
   case 578:
 
-    {	if (parserData->kounter != parserData->numberOfVar)
+    {
+		if (parserData->kounter != parserData->numberOfVar)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <var> elements than specified");
 	}
     break;
@@ -5351,7 +5482,9 @@ yydebug = 1;
 
   case 596:
 
-    {parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));}
+    {
+		parserData->tempStr = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
+	}
     break;
 
   case 599:
@@ -5505,16 +5638,16 @@ yydebug = 1;
 
   case 663:
 
-    {	if(!parserData->nameAttributePresent) 
+    {
+		if(!parserData->nameAttributePresent) 
 			osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
-//		if(!parserData->numberAttributePresent) 
-//			osrlerror(NULL, NULL, parserData, osglData, "other element requires numberOfVar attribute"); 
 	}
     break;
 
   case 666:
 
-    {	if (parserData->numberOfVarAttributePresent)
+    {
+		if (parserData->numberOfVarAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "numberOfVar attribute previously set");
 		parserData->numberOfVarAttributePresent = true;
 	 	if (osresult->setOtherVariableResultNumberOfVar(parserData->solutionIdx, 
@@ -5527,7 +5660,8 @@ yydebug = 1;
 
   case 667:
 
-    {	if (parserData->numberOfEnumerationsAttributePresent)
+    {
+		if (parserData->numberOfEnumerationsAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "numberOfEnumerations attribute previously set");
 		parserData->numberOfEnumerationsAttributePresent = true;
 	 	if (osresult->setOtherVariableResultNumberOfEnumerations(parserData->solutionIdx, 
@@ -5629,7 +5763,6 @@ yydebug = 1;
   case 695:
 
     {
-//	parserData->numberOfElAttributePresent = false;
 	parserData->valueAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
 	parserData->valueAttribute = "";
@@ -5639,10 +5772,9 @@ yydebug = 1;
 
   case 696:
 
-    {	if(!parserData->nameAttributePresent) 
+    {
+		if(!parserData->nameAttributePresent) 
 			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
-//		if(!parserData->numberOfVarIdxAttributePresent) 
-//			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires numberOfVarIdx attribute"); 
 	}
     break;
 
@@ -5653,24 +5785,6 @@ yydebug = 1;
 		osglData->osglNumberOfEl = parserData->numberOf;
 		osglData->osglIntArray = new int[parserData->numberOf];
 	}
-    break;
-
-  case 700:
-
-    {	
-//	 	if (osresult->setOtherVariableResultValue(parserData->solutionIdx, parserData->iOther, 
-//												  parserData->valueAttribute) == false)
-//			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultValue failed");
-    }
-    break;
-
-  case 701:
-
-    {	
-//	 	if (osresult->setOtherVariableResultDescription(parserData->solutionIdx, parserData->iOther, 
-// 														parserData->descriptionAttribute) == false)
-//			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultDescription failed");
-    }
     break;
 
   case 709:
@@ -5703,21 +5817,24 @@ yydebug = 1;
 
   case 721:
 
-    {	if (parserData->numberOfObj > 0)
+    {
+		if (parserData->numberOfObj > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <obj> element");
 	}
     break;
 
   case 722:
 
-    {	if (parserData->kounter != parserData->numberOfObj)
+    {
+		if (parserData->kounter != parserData->numberOfObj)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <obj> elements than specified");
 	}
     break;
 
   case 729:
 
-    {	if (osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
+    {
+	if (osresult->setObjValue(parserData->solutionIdx, parserData->kounter, 
 							  parserData->idx,         parserData->nameAttribute,
 							  parserData->tempVal                           ) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setObjValue failed");
@@ -5888,16 +6005,16 @@ yydebug = 1;
 
   case 802:
 
-    {	if(!parserData->nameAttributePresent) 
+    {
+		if(!parserData->nameAttributePresent) 
 			osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
-//		if(!parserData->numberAttributePresent) 
-//			osrlerror(NULL, NULL, parserData, osglData, "other element requires numberOfObj attribute"); 
 	}
     break;
 
   case 805:
 
-    {	if (parserData->numberOfObjAttributePresent)
+    {
+		if (parserData->numberOfObjAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "numberOfObj attribute previously set");
 		parserData->numberOfObjAttributePresent = true;
  		if (osresult->setOtherObjectiveResultNumberOfObj(parserData->solutionIdx, 
@@ -5910,7 +6027,8 @@ yydebug = 1;
 
   case 806:
 
-    {	if (parserData->numberOfEnumerationsAttributePresent)
+    {
+		if (parserData->numberOfEnumerationsAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "numberOfEnumerations attribute previously set");
 		parserData->numberOfEnumerationsAttributePresent = true;
 	 	if (osresult->setOtherObjectiveResultNumberOfEnumerations(parserData->solutionIdx, 
@@ -5988,7 +6106,8 @@ yydebug = 1;
 
   case 830:
 
-    {	if (osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr) == false)
+    {
+		if (osresult->setOtherObjectiveResultObj(parserData->solutionIdx, parserData->iOther, parserData->kounter, parserData->tempStr) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObj failed");
 	}
     break;
@@ -6009,7 +6128,6 @@ yydebug = 1;
   case 834:
 
     {
-//	parserData->numberOfElAttributePresent = false;
 	parserData->valueAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
 	parserData->valueAttribute = "";
@@ -6019,10 +6137,9 @@ yydebug = 1;
 
   case 835:
 
-    {	if(!parserData->nameAttributePresent) 
+    {
+		if(!parserData->nameAttributePresent) 
 			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
-//		if(!parserData->numberOfObjIdxAttributePresent) 
-//			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires numberOfObjIdx attribute"); 
 	}
     break;
 
@@ -6033,24 +6150,6 @@ yydebug = 1;
 		osglData->osglNumberOfEl = parserData->numberOf;
 		osglData->osglIntArray = new int[parserData->numberOf];
 	}
-    break;
-
-  case 839:
-
-    {	
-//	 	if (osresult->setOtherObjectiveResultValue(parserData->solutionIdx, parserData->iOther, 
-//												  parserData->valueAttribute) == false)
-//			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultValue failed");
-    }
-    break;
-
-  case 840:
-
-    {	
-//	 	if (osresult->setOtherObjectiveResultDescription(parserData->solutionIdx, parserData->iOther, 
-// 														parserData->descriptionAttribute) == false)
-//			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultDescription failed");
-    }
     break;
 
   case 848:
@@ -6088,21 +6187,24 @@ yydebug = 1;
 
   case 860:
 
-    {	if (parserData->numberOfCon > 0)
+    {
+		if (parserData->numberOfCon > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <con> element");
 	}
     break;
 
   case 861:
 
-    {	if (parserData->kounter != parserData->numberOfCon)
+    {
+		if (parserData->kounter != parserData->numberOfCon)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <con> elements than specified");
 	}
     break;
 
   case 868:
 
-    {	if (osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
+    {
+	if (osresult->setDualValue(parserData->solutionIdx, parserData->kounter, 
 							   parserData->idx,         parserData->nameAttribute,
 							   parserData->tempVal                           ) == false)
 		osrlerror(NULL, NULL, parserData, osglData, "setDualValue failed");
@@ -6272,16 +6374,16 @@ yydebug = 1;
 
   case 941:
 
-    {	if(!parserData->nameAttributePresent) 
+    {
+		if (!parserData->nameAttributePresent) 
 			osrlerror(NULL, NULL, parserData, osglData, "other element requires name attribute"); 
-//		if(!parserData->numberAttributePresent) 
-//			osrlerror(NULL, NULL, parserData, osglData, "other element requires numberOfCon attribute"); 
 	}
     break;
 
   case 944:
 
-    {	if (parserData->numberOfConAttributePresent)
+    {
+		if (parserData->numberOfConAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "numberOfCon attribute previously set");
 		parserData->numberOfConAttributePresent = true;
  		if (osresult->setOtherConstraintResultNumberOfCon(parserData->solutionIdx, 
@@ -6294,7 +6396,8 @@ yydebug = 1;
 
   case 945:
 
-    {	if (parserData->numberOfEnumerationsAttributePresent)
+    {
+		if (parserData->numberOfEnumerationsAttributePresent)
 			osrlerror(NULL, NULL, parserData, osglData, "numberOfEnumerations attribute previously set");
 		parserData->numberOfEnumerationsAttributePresent = true;
 	 	if (osresult->setOtherConstraintResultNumberOfEnumerations(parserData->solutionIdx, 
@@ -6393,7 +6496,6 @@ yydebug = 1;
   case 973:
 
     {
-//	parserData->numberOfElAttributePresent = false;
 	parserData->valueAttributePresent = false;
 	parserData->descriptionAttributePresent = false;
 	parserData->valueAttribute = "";
@@ -6403,10 +6505,9 @@ yydebug = 1;
 
   case 974:
 
-    {	if(!parserData->nameAttributePresent) 
+    {
+		if(!parserData->nameAttributePresent) 
 			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires name attribute"); 
-//		if(!parserData->numberOfConIdxAttributePresent) 
-//			osrlerror(NULL, NULL, parserData, osglData, "other element enumeration requires numberOfConIdx attribute"); 
 	}
     break;
 
@@ -6417,24 +6518,6 @@ yydebug = 1;
 		osglData->osglNumberOfEl = parserData->numberOf;
 		osglData->osglIntArray = new int[parserData->numberOf];
 	}
-    break;
-
-  case 978:
-
-    {	
-//	 	if (osresult->setOtherConstraintResultValue(parserData->solutionIdx, parserData->iOther, 
-//												  parserData->valueAttribute) == false)
-//			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultValue failed");
-    }
-    break;
-
-  case 979:
-
-    {	
-//	 	if (osresult->setOtherConstraintResultDescription(parserData->solutionIdx, parserData->iOther, 
-// 														parserData->descriptionAttribute) == false)
-//			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultDescription failed");
-    }
     break;
 
   case 987:
@@ -6456,27 +6539,31 @@ yydebug = 1;
 
   case 989:
 
-    {	if (parserData->numberOf > 0)
+    {
+		if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <otherSolutionResult> element");
 	}
     break;
 
   case 990:
 
-    {	if (parserData->iOther != parserData->numberOf)
+    {
+		if (parserData->iOther != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <otherSolutionResult> elements than specified");
 	}
     break;
 
   case 997:
 
-    {	parserData->iOther++;
+    {
+	parserData->iOther++;
 }
     break;
 
   case 998:
 
-    {	if (parserData->iOther >= parserData->numberOf)
+    {
+	if (parserData->iOther >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, osglData, "more <otherSolutionResult> elements than specified");
 	parserData->numberOfItemsPresent = false; 
 	parserData->nameAttributePresent = false;
@@ -6489,7 +6576,8 @@ yydebug = 1;
 
   case 999:
 
-    {	if (!parserData->nameAttributePresent)
+    {
+	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have name attribute");
 	if (!parserData->numberOfItemsPresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<otherSolutionResult> element must have numberOfItems attribute");
@@ -6538,40 +6626,45 @@ yydebug = 1;
 
   case 1006:
 
-    {	if (parserData->numberOfItems > 0)
+    {
+		if (parserData->numberOfItems > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <item> element");
 	}
     break;
 
   case 1007:
 
-    {	if (parserData->kounter != parserData->numberOfItems)
+    {
+		if (parserData->kounter != parserData->numberOfItems)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <item> elements than specified");
 	}
     break;
 
   case 1014:
 
-    {	parserData->kounter++;
+    {
+	parserData->kounter++;
 }
     break;
 
   case 1015:
 
-    {	if (parserData->kounter >= parserData->numberOfItems)
-		osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
-}
+    {
+		if (parserData->kounter >= parserData->numberOfItems)
+			osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
+	}
     break;
 
   case 1020:
 
-    {	if (parserData->kounter >= parserData->numberOfItems)
+    {
+	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
 	parserData->itemContent = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
 	if (osresult->setOtherSolutionResultItem(parserData->solutionIdx, parserData->iOther, 
 											 parserData->kounter, parserData->itemContent) 
 											     == false)
-			osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultItem failed");
+		osrlerror(NULL, NULL, parserData, osglData, "setOtherSolutionResultItem failed");
 }
     break;
 
@@ -6594,27 +6687,31 @@ yydebug = 1;
 
   case 1025:
 
-    {	if (parserData->numberOf > 0)
+    {
+		if (parserData->numberOf > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <solverOutput> element");
 	}
     break;
 
   case 1026:
 
-    {	if (parserData->iOther != parserData->numberOf)
+    {
+		if (parserData->iOther != parserData->numberOf)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <solverOutput> elements than specified");
 	}
     break;
 
   case 1033:
 
-    {	parserData->iOther++;
+    {
+	parserData->iOther++;
 }
     break;
 
   case 1034:
 
-    {	if (parserData->iOther >= parserData->numberOf)
+    {
+	if (parserData->iOther >= parserData->numberOf)
 		osrlerror(NULL, NULL, parserData, osglData, "more <solverOutput> elements than specified");
 	parserData->numberOfItemsPresent = false; 
 	parserData->nameAttributePresent = false;
@@ -6627,7 +6724,8 @@ yydebug = 1;
 
   case 1035:
 
-    {	if (!parserData->nameAttributePresent)
+    {
+	if (!parserData->nameAttributePresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<solverOutput> element must have name attribute");
 	if (!parserData->numberOfItemsPresent)
 		osrlerror (NULL, NULL, parserData, osglData, "<solverOutput> element must have numberOfItems attribute");
@@ -6672,34 +6770,39 @@ yydebug = 1;
 
   case 1042:
 
-    {	if (parserData->numberOfItems > 0)
+    {
+		if (parserData->numberOfItems > 0)
 			osrlerror(NULL, NULL, parserData, osglData, "expected at least one <item> element");
 	}
     break;
 
   case 1043:
 
-    {	if (parserData->kounter != parserData->numberOfItems)
+    {
+		if (parserData->kounter != parserData->numberOfItems)
 			osrlerror(NULL, NULL, parserData, osglData, "fewer <item> elements than specified");
 	}
     break;
 
   case 1050:
 
-    {	parserData->kounter++;
+    {
+	parserData->kounter++;
 }
     break;
 
   case 1051:
 
-    {	if (parserData->kounter >= parserData->numberOfItems)
-		osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
-}
+    {
+		if (parserData->kounter >= parserData->numberOfItems)
+			osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
+	}
     break;
 
   case 1056:
 
-    {	if (parserData->kounter >= parserData->numberOfItems)
+    {
+	if (parserData->kounter >= parserData->numberOfItems)
 		osrlerror(NULL, NULL, parserData, osglData, "more <item> elements than specified");
 	parserData->itemContent = (yyvsp[(1) - (1)].sval); free((yyvsp[(1) - (1)].sval));
 	if (osresult->setSolverOutputItem(parserData->iOther, parserData->kounter, 
@@ -6710,38 +6813,48 @@ yydebug = 1;
 
   case 1057:
 
-    {   if (parserData->categoryAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, osglData, "only one category attribute allowed for this element");
-			parserData->categoryAttributePresent = true;
-		}
+    {
+		if (parserData->categoryAttributePresent ) 
+			osrlerror(NULL, NULL, parserData, osglData, "only one category attribute allowed for this element");
+		parserData->categoryAttributePresent = true;
+	}
     break;
 
   case 1060:
 
-    { parserData->categoryAttribute = ""; }
+    { 
+	parserData->categoryAttribute = ""; 
+}
     break;
 
   case 1061:
 
-    { parserData->categoryAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval)); }
+    { 
+	parserData->categoryAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval)); 
+}
     break;
 
   case 1062:
 
-    {   if (parserData->descriptionAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, osglData, "only one description attribute allowed for this element");
-			parserData->descriptionAttributePresent = true;
-		}
+    {
+		if (parserData->descriptionAttributePresent ) 
+			osrlerror(NULL, NULL, parserData, osglData, "only one description attribute allowed for this element");
+		parserData->descriptionAttributePresent = true;
+	}
     break;
 
   case 1065:
 
-    { parserData->descriptionAttribute = ""; }
+    { 
+	parserData->descriptionAttribute = ""; 
+}
     break;
 
   case 1066:
 
-    { parserData->descriptionAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
+    { 
+	parserData->descriptionAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
+}
     break;
 
   case 1067:
@@ -6756,7 +6869,8 @@ yydebug = 1;
 
   case 1068:
 
-    {   if (parserData->nameAttributePresent ) 
+    {
+	   if (parserData->nameAttributePresent ) 
 			osrlerror(NULL, NULL, parserData, osglData, "only one name attribute allowed for this element");
 		parserData->nameAttributePresent = true;
 	}
@@ -6764,66 +6878,85 @@ yydebug = 1;
 
   case 1071:
 
-    { parserData->nameAttribute = ""; }
+    { 
+	parserData->nameAttribute = ""; 
+}
     break;
 
   case 1072:
 
-    { parserData->nameAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
+    { 
+	parserData->nameAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
+}
     break;
 
   case 1073:
 
-    {   if (parserData->typeAttributePresent ) 
+    {
+		if (parserData->typeAttributePresent ) 
 				osrlerror(NULL, NULL, parserData, osglData, "only one type attribute allowed for this element");
-			parserData->typeAttributePresent = true;
-		}
+		parserData->typeAttributePresent = true;
+	}
     break;
 
   case 1076:
 
-    { parserData->typeAttribute = ""; }
+    { 
+	parserData->typeAttribute = ""; 
+}
     break;
 
   case 1077:
 
-    { parserData->typeAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
+    { 
+	parserData->typeAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
+}
     break;
 
   case 1078:
 
-    {   if (parserData->unitAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, osglData, "only one unit attribute allowed for this element");
-			parserData->unitAttributePresent = true;
-		}
+    {
+		if (parserData->unitAttributePresent ) 
+			osrlerror(NULL, NULL, parserData, osglData, "only one unit attribute allowed for this element");
+		parserData->unitAttributePresent = true;
+	}
     break;
 
   case 1081:
 
-    { parserData->unitAttribute = ""; }
+    { 
+	parserData->unitAttribute = ""; 
+}
     break;
 
   case 1082:
 
-    { parserData->unitAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
+    { 
+	parserData->unitAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
+}
     break;
 
   case 1083:
 
-    {   if (parserData->valueAttributePresent ) 
-				osrlerror(NULL, NULL, parserData, osglData, "only one value attribute allowed for this element");
-			parserData->valueAttributePresent = true;
-		}
+    {
+		if (parserData->valueAttributePresent ) 
+			osrlerror(NULL, NULL, parserData, osglData, "only one value attribute allowed for this element");
+		parserData->valueAttributePresent = true;
+	}
     break;
 
   case 1086:
 
-    { parserData->valueAttribute = ""; }
+    { 
+	parserData->valueAttribute = ""; 
+}
     break;
 
   case 1087:
 
-    { parserData->valueAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));}
+    { 
+	parserData->valueAttribute = (yyvsp[(2) - (3)].sval); free((yyvsp[(2) - (3)].sval));
+}
     break;
 
   case 1088:
@@ -6836,7 +6969,8 @@ yydebug = 1;
 
   case 1089:
 
-    {	if (parserData->nConPresent)
+    {
+	if (parserData->nConPresent)
 		osrlerror(NULL, NULL, parserData, osglData, "numberOfConstraints attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of constraints cannot be negative");
 	parserData->nConPresent = true;		
@@ -6881,7 +7015,8 @@ yydebug = 1;
 
   case 1094:
 
-    {	if (parserData->nObjPresent)
+    {
+	if (parserData->nObjPresent)
 		osrlerror(NULL, NULL, parserData, osglData, "numberOfObjectives attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of objectives cannot be negative");
 	parserData->nObjPresent = true;
@@ -6931,7 +7066,8 @@ yydebug = 1;
 
   case 1100:
 
-    {	if (parserData->numberAttributePresent)
+    {
+	if (parserData->numberAttributePresent)
 		osrlerror(NULL, NULL, parserData, osglData, "numberOfSolutions attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of solutions cannot be negative");
 	parserData->numberAttributePresent = true;
@@ -6949,7 +7085,8 @@ yydebug = 1;
 
   case 1102:
 
-    {   if (parserData->numberAttributePresent ) 
+    {
+   if (parserData->numberAttributePresent ) 
         osrlerror(NULL, NULL, parserData, osglData, "only one numberOfSubstatuses attribute allowed");
     parserData->numberAttributePresent = true;
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of <substatus> elements cannot be negative");
@@ -6974,7 +7111,8 @@ yydebug = 1;
 
   case 1105:
 
-    {	if (parserData->nVarPresent)
+    {
+	if (parserData->nVarPresent)
 		osrlerror(NULL, NULL, parserData, osglData, "numberOfVariables attribute previously set");
 	if ((yyvsp[(3) - (4)].ival) < 0) osrlerror(NULL, NULL, parserData, osglData, "number of variables cannot be negative");
 	parserData->nVarPresent = true;	
@@ -7021,7 +7159,7 @@ yydebug = 1;
 
     {
 	char* b64string = (yyvsp[(2) - (3)].sval);
-	if( b64string == NULL) 
+	if (b64string == NULL) 
 		osrlerror(NULL, NULL, parserData, osglData, "base 64 data expected"); 
 	if (osglData->osglSize != sizeof(int))
 		osrlerror(NULL, NULL, parserData, osglData, "base 64 encoded with a size of int different than on this machine"); 
@@ -7032,7 +7170,7 @@ yydebug = 1;
 	if ( parserData->numberOf != (base64decodeddatalength/osglData->osglSize) )
 		osrlerror(NULL, NULL, parserData, osglData, "base 64 data length does not match numberOfEl"); 
 	intvec = (int*)&base64decodeddata[0];
-	for(int i = 0; i < (base64decodeddatalength/osglData->osglSize); i++)
+	for (int i = 0; i < (base64decodeddatalength/osglData->osglSize); i++)
 	{
 		osglData->osglIntArray[i] = *(intvec++);
 	}
@@ -7314,8 +7452,8 @@ yyreturn:
 
 void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, OSgLParserData* osglData, const char* errormsg )
 {
-	osrl_empty_vectors( parserData);
-	osgl_empty_vectors(	osglData);
+	osrl_empty_vectors( parserData );
+	osgl_empty_vectors(   osglData );
 	std::ostringstream outStr;
 	std::string error = errormsg;
 	error = "OSrL input is either not valid or well formed: "  + error;
@@ -7329,8 +7467,10 @@ void osrlerror(YYLTYPE* mytype, OSResult *osresult, OSrLParserData* parserData, 
 	throw ErrorClass( error);
 } //end osrlerror
 
-void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass){
-	try{
+void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData *parserData, OSgLParserData *osglData) throw(ErrorClass)
+{
+	try
+	{
 		osrl_scan_string( parsestring, scanner);
 		osrlset_lineno (1 , scanner );
 		//
@@ -7341,53 +7481,54 @@ void  yygetOSResult(const char *parsestring, OSResult *osresult, OSrLParserData 
 		  	throw ErrorClass(  "Error parsing the OSrL file");
 		 }
 	}
-	catch(const ErrorClass& eclass){
+	catch(const ErrorClass& eclass)
+	{
 		throw ErrorClass(  eclass.errormsg); 
 	}
 } //end yygetOSResult
 
 
-void osrl_empty_vectors( OSrLParserData* parserData){
-
-    int k;
-    int numOtherVarVec = parserData->otherVarVec.size();
+void osrl_empty_vectors( OSrLParserData* parserData)
+{
+	int k;
+	int numOtherVarVec = parserData->otherVarVec.size();
    
-    for( k = 0; k < numOtherVarVec; k++){
-    	if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarText != NULL) ) 
-			delete[] parserData->otherVarVec[ k]->otherVarText;
-		if( (parserData->otherVarVec[ k]  != NULL) && (parserData->otherVarVec[ k]->otherVarIndex != NULL) ) 
-			delete[] parserData->otherVarVec[ k]->otherVarIndex;
+	for (k = 0; k < numOtherVarVec; k++)
+	{
+		if ( (parserData->otherVarVec[k] != NULL) && (parserData->otherVarVec[k]->otherVarText  != NULL) ) 
+			delete[] parserData->otherVarVec[k]->otherVarText;
+		if ( (parserData->otherVarVec[k] != NULL) && (parserData->otherVarVec[k]->otherVarIndex != NULL) ) 
+			delete[] parserData->otherVarVec[k]->otherVarIndex;
 			
-		if( parserData->otherVarVec[ k]  != NULL) delete parserData->otherVarVec[ k];
-    }
+		if (  parserData->otherVarVec[k] != NULL) delete parserData->otherVarVec[k];
+    	}
   	parserData->otherVarVec.clear(); 
   	
   	int numDualVals =  parserData->dualVals.size();
-  	for(k = 0; k < numDualVals; k++){
-  		if( parserData->dualVals[ k]  != NULL  ) 
-			delete parserData->dualVals[ k];
+  	for (k = 0; k < numDualVals; k++)
+	{
+  		if (parserData->dualVals[k]  != NULL  ) 
+			delete parserData->dualVals[k];
   	}
   	parserData->dualVals.clear();
   	
   	
    	int numObjVals =  parserData->objVals.size();
-  	for(k = 0; k < numObjVals; k++){
-  		if( parserData->objVals[ k]  != NULL  ) 
+  	for (k = 0; k < numObjVals; k++)
+	{
+  		if (parserData->objVals[ k]  != NULL  ) 
 			delete parserData->objVals[ k];
   	}
   	parserData->objVals.clear();
   	
   	
    	int numPrimalVals =  parserData->primalVals.size();
-  	for(k = 0; k < numPrimalVals; k++){	
-  		if( parserData->primalVals[ k]  != NULL  ) 
+  	for (k = 0; k < numPrimalVals; k++)
+	{	
+  		if (parserData->primalVals[ k]  != NULL  ) 
 			delete parserData->primalVals[ k];
   	}
   	parserData->primalVals.clear();
 }//end osrl_empty_vectors
 
-//void osgl_empty_vectors( OSgLParserData* osglData){
-//	if (osglData->osglIntArray != NULL)
-//		delete[] osglData->osglIntArray;
-//}//end osgl_empty_vectors
 

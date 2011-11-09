@@ -12,12 +12,12 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.4],[os@lists.coin-or.org])
+AC_INIT([OS],[2.4.1],[coin-os@lists.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
 All Rights Reserved.
-This file is part of the open source package OS which is distributed
+This file is part of the open source package Coin which is distributed
 under the Common Public License.])
 
 AC_REVISION(0.9)
@@ -69,7 +69,7 @@ AC_COIN_MAIN_PACKAGEDIR(Bonmin)
 AC_COIN_MAIN_PACKAGEDIR(Couenne)
 AC_COIN_MAIN_PACKAGEDIR(Bcp)
 AC_COIN_MAIN_PACKAGEDIR(GamsUtils)
-AC_COIN_MAIN_PACKAGEDIR(ApplicationTemplates)
+AC_COIN_MAIN_PACKAGEDIR(examples)
 AC_COIN_MAIN_PACKAGEDIR(OS)
 
 

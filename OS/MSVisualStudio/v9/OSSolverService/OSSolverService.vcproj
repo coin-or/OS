@@ -47,7 +47,7 @@
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src\Osi;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\SYMPHONY\include;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src;..\..\..\..\Vol\src\OsiVol"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_;COIN_HAS_SYMPHONY;COIN_HAS_DYLP"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD"
 				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -72,11 +72,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib"
+				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib libCbc.lib libCbcSolver.lib libCgl.lib libClp.lib libCoinUtils.lib libDylp.lib libDylpStd.lib libOSCommon.lib libOsi.lib libOsiCbc.lib libOsiClp.lib libOsiDylp.lib libOsiSym.lib libOsiVol.lib libOSSolvers.lib libSymphony.lib libVol.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
+				AdditionalLibraryDirectories="$(OutDir);&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\$(ConfigurationName)\$(ProjectName).pdb"
 				SubSystem="1"
@@ -132,7 +132,7 @@
 				AdditionalOptions="-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Osi\src\Osi;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\SYMPHONY\include;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\Vol\src;..\..\..\..\Vol\src\OsiVol"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_LINDO_DLL_;COIN_HAS_SYMPHONY;COIN_HAS_DYLP"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_LINDO_DLL_;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -159,7 +159,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="wsock32.lib"
+				AdditionalDependencies="wsock32.lib winmm.lib advapi32.lib libCbc.lib libCbcSolver.lib libCgl.lib libClp.lib libCoinUtils.lib libDylp.lib libDylpStd.lib libOSCommonlib libOsi.lib libOsiCbc.lib libOsiClp.lib libOsiDylp.lib libOsiSym.lib libOsiVol.lib libOSSolvers.lib libSymphony.lib libVol.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;;&quot;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Lib&quot;"

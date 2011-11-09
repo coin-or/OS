@@ -22,6 +22,7 @@ libOSSolverInterfaces_la_SOURCES = \
 	OSCoinSolver.h  \
 	OSMatlabSolver.cpp \
 	OSMatlabSolver.h \
+	OSRunSolver.cpp \
 	OSRunSolver.h 
 
 

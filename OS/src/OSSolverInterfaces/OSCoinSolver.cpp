@@ -139,74 +139,58 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         finish = clock();
         duration = (double) (finish - start) / CLOCKS_PER_SEC;
         // get the type of solver requested from OSoL string
-        bool solverIsDefined = false;
-        if( sSolverName.find("clp") != std::string::npos)
-        {
-            solverIsDefined = true;
-            osiSolver = new OsiClpSolverInterface();
-        }
-        else
-        {
-            if( sSolverName.find("vol") != std::string::npos)
-            {
-#ifdef COIN_HAS_VOL
-                solverIsDefined = true;
-                osiSolver = new OsiVolSolverInterface();
-#endif
-            }
-            else
-            {
-                if( sSolverName.find( "cplex") != std::string::npos)
-                {
-#ifdef COIN_HAS_CPX
-                    solverIsDefined = true;
-                    osiSolver = new OsiCpxSolverInterface();
-#endif
-                }
-                else
-                {
-                    if(sSolverName.find( "glpk") != std::string::npos)
-                    {
-#ifdef COIN_HAS_GLPK
-                        solverIsDefined = true;
-                        osiSolver = new OsiGlpkSolverInterface();
-#endif
-                    }
-                    else
-                    {
-                        if(sSolverName.find( "dylp") != std::string::npos)
-                        {
-#ifdef COIN_HAS_DYLP
-                            solverIsDefined = true;
-                            osiSolver = new OsiDylpSolverInterface();
-#endif
-                        }
-                        else
-                        {
-                            if( sSolverName.find( "symphony") != std::string::npos)
-                            {
-#ifdef COIN_HAS_SYMPHONY
-                                solverIsDefined = true;
-                                osiSolver = new OsiSymSolverInterface();
-#endif
-                            }
-                            else
-                            {
-                                // default solver is Clp in continuous case,
-                                // Cbc for an integer program
-                                if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ||
-                                        sSolverName.find( "cbc") != std::string::npos	) sSolverName = "cbc";
-                                else sSolverName = "clp";
-                                solverIsDefined = true;
-                                osiSolver = new OsiClpSolverInterface();
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
-        if(solverIsDefined == false) throw ErrorClass("a supported solver was not defined");
+		if (sSolverName == "clp")
+            osiSolver = new OsiClpSolverInterface();
+
+        else if (sSolverName == "cbc")
+            osiSolver = new OsiClpSolverInterface();
+
+        else if (sSolverName == "vol")
+			#ifdef COIN_HAS_VOL
+                osiSolver = new OsiVolSolverInterface();
+            #else
+			    throw ErrorClass("This OSSolverService was built without solver vol");
+            #endif
+
+		else if (sSolverName == "cplex")
+            #ifdef COIN_HAS_CPX
+                osiSolver = new OsiCpxSolverInterface();
+            #else
+    			throw ErrorClass("This OSSolverService was built without solver cplex");
+            #endif
+
+		else if (sSolverName == "glpk")
+            #ifdef COIN_HAS_GLPK
+                osiSolver = new OsiGlpkSolverInterface();
+            #else
+			    throw ErrorClass("This OSSolverService was built without solver glpk");
+            #endif
+
+		else if (sSolverName == "dylp")
+            #ifdef COIN_HAS_DYLP
+                osiSolver = new OsiDylpSolverInterface();
+            #else
+			    throw ErrorClass("This OSSolverService was built without solver dylp");
+            #endif
+
+		else if (sSolverName == "symphony")
+            #ifdef COIN_HAS_SYMPHONY
+                osiSolver = new OsiSymSolverInterface();
+            #else
+			    throw ErrorClass("This OSSolverService was built without solver symphony");
+            #endif
+
+		else if (sSolverName == "")
+        {       // default solver is Clp in continuous case,
+                // Cbc for an integer program
+                if( osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables() > 0 ||
+                                      sSolverName.find( "cbc") != std::string::npos	) sSolverName = "cbc";
+                else sSolverName = "clp";
+                osiSolver = new OsiClpSolverInterface();
+		}
+		else
+                  throw ErrorClass("Solver selected is not supported by this version of OSSolverService");
 
         // first check the various solvers and see if they are of the proper problem type
         if( (osinstance->getNumberOfNonlinearExpressions() > 0)
@@ -234,9 +218,9 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         // check other trivial solver limitations
         //if(osinstance->getConstraintNumber() <= 0)throw ErrorClass("Coin solver:" + sSolverName +" cannot handle unconstrained problems");
         //if(osinstance->getVariableNumber() <= 0)throw ErrorClass("Coin solver requires decision variables");
-        if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver:" + sSolverName + " needs an objective function");
-        if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver:" + sSolverName + " can only handle numeric variables");
-        if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony") throw ErrorClass("Coin solver:" + sSolverName +   " needs a positive number of variables");
+        if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Coin solver: " + sSolverName + " needs an objective function");
+        if(osinstance->getNumberOfStringVariables() > 0) throw ErrorClass("Coin solver: " + sSolverName + " can only handle numeric variables");
+        if(osinstance->getLinearConstraintCoefficientNumber() <= 0 && sSolverName == "symphony") throw ErrorClass("Coin solver: " + sSolverName +   " needs a positive number of constraints");
 
         if(!setCoinPackedMatrix() ) throw ErrorClass("Problem generating coin packed matrix");
         osiSolver->loadProblem(*m_CoinPackedMatrix, osinstance->getVariableLowerBounds(),
@@ -245,17 +229,16 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                                osinstance->getConstraintLowerBounds(), osinstance->getConstraintUpperBounds()
                               );
         //dataEchoCheck();
-//			if(osinstance->getObjectiveNumber() == 0) throw ErrorClass("there is no objective function");
         if( osinstance->getObjectiveMaxOrMins()[0] == "min") osiSolver->setObjSense(1.0);
         else osiSolver->setObjSense(-1.0);
         // set the integer variables
-        int *intIndex = NULL;
-        int i = 0;
-        int k = 0;
-        char *varType;
         int numOfIntVars = osinstance->getNumberOfIntegerVariables() + osinstance->getNumberOfBinaryVariables();
         if(numOfIntVars > 0)
         {
+            int *intIndex = NULL;
+            int i = 0;
+            int k = 0;
+            char *varType;
             intIndex = new int[ numOfIntVars];
             varType = osinstance->getVariableTypes();
             for(i = 0; i < osinstance->getVariableNumber(); i++)
@@ -266,10 +249,8 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
                 }
             }
             osiSolver->setInteger( intIndex,  numOfIntVars);
-        }
-        if(numOfIntVars > 0)
-        {
-            delete[] intIndex;
+
+			delete[] intIndex;
             intIndex = NULL;
         }
         bCallbuildSolverInstance = true;
@@ -654,6 +635,7 @@ void CoinSolver::setSolverOptions() throw (ErrorClass)
         std::cout << "solver options set" << std::endl;
 #endif
     }//end of try
+
     catch(const ErrorClass& eclass)
     {
         std::cout << "THERE IS AN ERROR" << std::endl;
@@ -672,7 +654,7 @@ bool CoinSolver::setCoinPackedMatrix()
     try
     {
         double maxGap = 0;
-        if(osinstance->getVariableNumber() > 0)
+        if(osinstance->getLinearConstraintCoefficientNumber() > 0)
         {
             m_CoinPackedMatrix = new CoinPackedMatrix(
                 columnMajor, //Column or Row Major
@@ -686,7 +668,9 @@ bool CoinSolver::setCoinPackedMatrix()
         }
         else
         {
-            int start = 0;
+            int* start = new int[osinstance->getVariableNumber()+1];
+            for (int i=0; i <= osinstance->getVariableNumber(); i++)
+                start[i] = 0;
             m_CoinPackedMatrix = new CoinPackedMatrix(
                 columnMajor, //Column or Row Major
                 columnMajor? osinstance->getConstraintNumber() : osinstance->getVariableNumber(), //Minor Dimension
@@ -694,7 +678,7 @@ bool CoinSolver::setCoinPackedMatrix()
                 osinstance->getLinearConstraintCoefficientNumber(), //Number of nonzeroes
                 NULL, //Pointer to matrix nonzeroes
                 NULL, //Pointer to start of minor dimension indexes -- change to allow for row storage
-                &start, //Pointers to start of columns.
+                start, //Pointers to start of columns.
                 NULL,   0.0, maxGap );
         }
 
@@ -903,10 +887,21 @@ void CoinSolver::solve() throw (ErrorClass)
     }
     catch(const ErrorClass& eclass)
     {
-        osresult->setGeneralMessage( eclass.errormsg);
-        osresult->setGeneralStatusType( "error");
-        osrl = osrlwriter->writeOSrL( osresult);
-        throw ErrorClass( osrl) ;
+        std::string::size_type  pos1 = eclass.errormsg.find( "<osrl");
+        if(pos1 == std::string::npos)
+        {
+            osresult->setGeneralMessage(eclass.errormsg);
+            osresult->setGeneralStatusType("error");
+            osrl = osrlwriter->writeOSrL(osresult);
+        }
+        else
+        {
+            osrl = eclass.errormsg;
+        }
+
+
+
+        throw ErrorClass( osrl);
     }
 } // end solve
 
@@ -1067,13 +1062,13 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             if( (sSolverName.find( "vol") == std::string::npos) &&
                     (sSolverName.find( "symphony") == std::string::npos) &&
                     (sSolverName.find( "dylp") == std::string::npos) &&
-                    (sSolverName.find( "glpk") == std::string::npos) ) //vol, symphony and glpk do not support this -- DyLP causues memory leak
+                    (sSolverName.find( "glpk") == std::string::npos) ) //vol, symphony and glpk do not support this -- DyLP causes memory leak
             {
                 solver->getBasisStatus( cbasis, rbasis);
             }
 
-        }//end if on proven optimal
-        else
+        }//end if proven optimal
+        else // some other terminating condition
         {
             if(solver->isProvenPrimalInfeasible() == true)
                 osresult->setSolutionStatus(solIdx, "infeasible", "the problem is primal infeasible");
@@ -1151,7 +1146,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
             *(idx + i) = i;
 
             // get basis information
-            if(cbasis != NULL)
+            if( (cbasis != NULL) && (solver->isProvenOptimal() == true) )
             {
 
 
@@ -1193,7 +1188,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
         }// end for on number of variables
 
-        //now set basis information for varialbes
+        //now set basis information for variables
         if(freeVars.size()  > 0)
         {
 
@@ -1301,7 +1296,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                 //std::cout << "------ ROW BASIS STATUS ----- " << rbasis[ i]  << std::endl;
 
                 // get basis information
-                if(rbasis != NULL)
+                if((rbasis != NULL) && (solver->isProvenOptimal() == true) )
                 {
                     switch (rbasis[ i] )
                     {
@@ -1348,7 +1343,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
 
 
 
-            //now set basis information for varialbes
+            //now set basis information for variables
             if(freeVars.size()  > 0)
             {
 

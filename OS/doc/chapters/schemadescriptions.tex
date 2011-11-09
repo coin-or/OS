@@ -1,0 +1,294 @@
+
+\section{OS Protocols}\label{section:schemadescriptions}
+
+The objective of OS is to provide a set of standards for representing optimization instances, results, solver options,
+and communication between clients and solvers in a distributed environment using Web Services.  These standards are
+specified by W3C XSD schemas. The schemas for the OS project are contained in the {\tt schemas} folder under the
+{\tt OS} root. There are numerous schemas in this directory that are part of the OS standard.
+For a full description of all the schemas see  Ma \cite{junma2005}.  We briefly discuss the standards most relevant
+to the current version of the OS project.
+
+
+\subsection{OSiL (Optimization Services instance Language)} \label{section:osilschema}
+OSiL\index{OSiL|(} is
+an XML-based language for representing instances of large-scale
+optimization problems including linear programs, mixed-integer programs,
+quadratic programs, and very general nonlinear programs.
+
+OSiL stores optimization problem instances as XML files.  Consider the following problem instance, which is a
+modification of an example of Rosenbrock\index{Rosenbrock, H.H.@{\it Rosenbrock, H.H.}}~\cite{rosenbrock1960}:
+%
+\begin{alignat}{2}
+& \mbox{Minimize} & \quad (1 - x_{0})^{2} + 100(x_{1} - x_{0}^{2})^{2} + 9x_{1} \label{eq:roobj}\\
+& \mbox{s.t.} & \quad x_{0} + 10.5 x_{0}^{2} + 11.7 x_{1}^{2} + 3x_{0}x_{1}  &\le 25  \label{eq:ro1}\\
+& & \ln(x_{0} x_{1}) + 7.5 x_{0} + 5.25 x_{1} &\ge 10 \label{eq:ro2}\\
+& & x_{0}, x_{1} &\ge 0 \label{eq:ro3}
+\end{alignat}
+
+
+There are two continuous variables, $x_{0}$ and $x_{1}$, in this instance, each with a lower bound of 0.
+Figure~\ref{figure:variableselement} shows how we represent this information in an XML-based OSiL file.
+Like all XML files, this is a text file that contains both {\it markup} and {\it data}. In this case there
+are two types of markup, {\it elements} (or {\it tags}\/) and {\it attributes} that describe the elements.
+Specifically, there are a {\tt <variables>} element and two {\tt <var>} elements. Each {\tt <var>}
+element has attributes {\tt lb}, {\tt name}, and {\tt type} that
+describe properties of a decision variable: its lower bound, ``name'', and
+domain type (continuous, binary, general integer).
+
+
+\begin{figure}[b]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+<variables numberOfVariables="2">\\[\Sb]
+    <var lb="0" name="x0" type="C"/>\\[\Sb]
+    <var lb="0" name="x1" type="C"/>\\[\Sb]
+</variables>\\[\Sb]
+\end{tabular} }} \medskip
+\caption{The {\tt <variables>} element for the example (1)--(4).}\label{figure:variableselement}
+\end{figure}
+
+
+     To be useful for communication between solvers and modeling
+languages, OSiL instance files must conform to a standard.
+An XML-based representation standard is imposed
+through the use of a {\em W3C XML Schema.} The W3C, or World Wide
+Web Consortium (\url{www.w3.org}), promotes standards for
+the evolution of the web and for interoperability between web
+products.  XML Schema (\url{www.w3.org/XML/Schema}) is one
+such standard.  A schema specifies the elements and attributes that
+define a specific XML vocabulary. The W3C XML Schema is thus a schema
+for schemas; it specifies the elements and attributes for a schema
+that in turn specifies elements and attributes for an XML
+vocabulary such as OSiL. An XML file that conforms to a
+schema is called {\it valid} for that schema.
+
+     By analogy to object-oriented programming, a schema is akin to a header file in C++ that defines the members and methods in a class.  Just as a class in C++ very explicitly describes member and method names and properties, a
+schema explicitly describes element and attribute names and properties.
+
+{\small
+\begin{figure}[b]
+   \small {\obeyspaces\let =\
+\makebox[0in][t]{\fbox{\tt\begin{tabular}{@{}l@{}}
+<xs:complexType name="Variables">\\[\Sb]
+    <xs:sequence>\\[\Sb]
+        <xs:element name="var" type="Variable" maxOccurs="unbounded"/>\\[\Sb]
+    </xs:sequence>\\[\Sb]
+    <xs:attribute name="numberOfVariables"\\[\Sb]
+            type="xs:positiveInteger" use="required"/>\\[\Sb]
+</xs:complexType>\\[\Sb]
+\end{tabular} }}} \medskip
+\caption{The {\tt  Variables} complexType  in the OSiL
+schema.}\label{figure:osilvariables}
+\end{figure}
+}%end small
+
+
+{\small
+\begin{figure}[b]
+   \small {\obeyspaces\let =\
+\makebox[0in][t]{\fbox{\tt\begin{tabular}{@{}l@{}}
+<xs:complexType name="Variable">\\[\Sb]
+    <xs:attribute name="name" type="xs:string" use="optional"/>\\[\Sb]
+    <xs:attribute name="init" type="xs:string" use="optional"/>\\[\Sb]
+    <xs:attribute name="type" use="optional" default="C">\\[\Sb]
+        <xs:simpleType>\\[\Sb]
+            <xs:restriction base="xs:string">\\[\Sb]
+                <xs:enumeration value="C"/>\\[\Sb]
+                <xs:enumeration value="B"/>\\[\Sb]
+                <xs:enumeration value="I"/>\\[\Sb]
+                <xs:enumeration value="S"/>\\[\Sb]
+            </xs:restriction>\\[\Sb]
+        </xs:simpleType>\\[\Sb]
+    </xs:attribute>\\[\Sb]
+    <xs:attribute name="lb" type="xs:double" use="optional" default="0"/>\\[\Sb]
+    <xs:attribute name="ub" type="xs:double" use="optional" default="INF"/>\\[\Sb]
+</xs:complexType>\\[\Sb]
+\end{tabular} }}} \medskip
+\caption{The {\tt  Variable} complexType in the OSiL
+schema.}\label{figure:osilvar}
+\end{figure}
+} %end small
+
+
+
+Figure~\ref{figure:osilvariables} is a piece of our schema for OSiL. In W3C XML Schema jargon, it defines a {\it complexType,}  whose purpose is to specify elements and attributes that are allowed to appear in a valid XML instance file such as the one excerpted in Figure~\ref{figure:variableselement}. In particular, Figure~\ref{figure:osilvariables} defines the complexType named {\tt Variables}, which
+comprises an element named {\tt <var>} and an attribute named {\tt
+numberOfVariables}. The {\tt numberOfVariables} attribute is of a
+standard type {\tt positiveInteger}, whereas the {\tt <var>} element is
+a user-defined complexType named {\tt Variable}. Thus the complexType {\tt
+Variables} contains a sequence of {\tt <var>} elements that
+are of complexType {\tt Variable}. OSiL's schema must also provide a
+specification for the {\tt Variable} complexType, which is shown in
+Figure~\ref{figure:osilvar}.
+
+In OSiL the linear part of the problem is stored in the  {\tt
+<linearConstraintCoefficients>} element, which stores the coefficient
+matrix using three arrays as proposed in the earlier LPFML schema
+\cite{fourer2005a}.  There is a child element of {\tt <linearConstraintCoefficients>} 
+to represent each array: {\tt <value>} for an array of nonzero coefficients, 
+{\tt <rowIdx>} or {\tt <colIdx>} for a corresponding array of row indices or column indices, 
+and {\tt <start>} for an array that indicates where each row or column begins in the previous two arrays.
+This is shown in Figure~\ref{figure:rowlistMatrix}.
+
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+<linearConstraintCoefficients numberOfValues="3">\\[\Sb]
+    <start>\\[\Sb]
+        <el>0</el><el>2</el><el>3</el>\\[\Sb]
+    </start>\\[\Sb]
+    <rowIdx>\\[\Sb]
+        <el>0</el><el>1</el><el>1</el>\\[\Sb]
+    </rowIdx>\\[\Sb]
+    <value>\\[\Sb]
+        <el>1.</el><el>7.5</el><el>5.25</el>\\[\Sb]
+    </value>\\[\Sb]
+</linearConstraintCoefficients>\\[\Sb]
+\end{tabular} }} \medskip\\[\Sb]
+\caption{The {\tt <linearConstraintCoefficients>} element for constraints
+(\ref{eq:ro1}) and (\ref{eq:ro2}).}\label{figure:rowlistMatrix}
+\end{figure}
+
+The quadratic part of the problem is represented  in Figure~\ref{figure:qterms}.
+
+\begin{figure}[ht]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+<quadraticCoefficients numberOfQuadraticTerms="3">\\[\Sb]
+     <qTerm idx="0" idxOne="0" idxTwo="0" coef="10.5"/>\\[\Sb]
+     <qTerm idx="0" idxOne="1" idxTwo="1" coef="11.7"/>\\[\Sb]
+     <qTerm idx="0" idxOne="0" idxTwo="1" coef="3."/>\\[\Sb]
+</quadraticCoefficients>\\[\Sb]
+\end{tabular} }} \medskip
+\caption{The {\tt <quadraticCoefficients>} element for constraint (\ref{eq:ro1}).}
+\label{figure:qterms}
+\end{figure}
+
+The nonlinear part of the problem is given in Figure~\ref{figure:roobjnlnode}.
+
+
+
+{\small
+\begin{figure}[t]
+\centering
+   \small {\obeyspaces\let =\
+\fbox{\tt\begin{tabular}{@{}l@{}}
+<nl idx="-1">\\[\Sb]
+     <plus>\\[\Sb]
+          <power>\\[\Sb]
+               <minus>\\[\Sb]
+                    <number value="1.0"/>\\[\Sb]
+                    <variable coef="1.0" idx="0"/>\\[\Sb]
+               </minus>\\[\Sb]
+               <number value="2.0"/>\\[\Sb]
+          </power>\\[\Sb]
+          <times>\\[\Sb]
+               <power>\\[\Sb]
+                    <minus>\\[\Sb]
+                         <variable coef="1.0" idx="0"/>\\[\Sb]
+                         <power>\\[\Sb]
+                              <variable coef="1.0" idx="1"/>\\[\Sb]
+                              <number value="2.0"/>\\[\Sb]
+                         </power>\\[\Sb]
+                    </minus>\\[\Sb]
+                    <number value="2.0"/>\\[\Sb]
+               </power>\\[\Sb]
+               <number value="100"/>\\[\Sb]
+          </times>\\[\Sb]
+     </plus>\\[\Sb]
+</nl>\\[\Sb]
+\end{tabular} }} \medskip\\[\Sb]
+\caption{The {\tt <nl>} element for the nonlinear part of the objective (\ref{eq:roobj}).}\label{figure:roobjnlnode}
+\end{figure}
+}
+
+The complete OSiL representation can be found in the Appendix (Section~\ref{section:rosenbrockXML}).%
+\index{OSiL|)}
+
+
+\subsection{OSrL (Optimization Services result Language)} \label{section:osrlschema}
+OSrL\index{OSrL|(} is an XML-based language for representing the solution of large-scale
+optimization problems including linear programs, mixed-integer programs,
+quadratic programs, and very general nonlinear programs.  An example solution (for the problem given in
+ (\ref{eq:roobj})--(\ref{eq:ro3}) ) in OSrL format is given below.
+
+{\small
+\begin{verbatim}
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type = "text/xsl"
+  href = "/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OSX/OS/stylesheets/OSrL.xslt"?>
+<osrl xmlns="os.optimizationservices.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="os.optimizationservices.org
+      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+    <general>
+        <generalStatus type="normal"/>
+        <serviceName>Solved using a LINDO service</serviceName>
+        <instanceName>Modified Rosenbrock</instanceName>
+    </general>
+    <optimization numberOfSolutions="1" numberOfVariables="2" numberOfConstraints="2"
+        numberOfObjectives="1">
+        <solution targetObjectiveIdx="-1">
+            <status type="optimal"/>
+            <variables>
+                <values numberOfVar="2">
+                    <var idx="0">0.87243</var>
+                    <var idx="1">0.741417</var>
+                </values>
+                <other numberOfVar="2" name="reduced costs" description="the variable reduced costs">
+                    <var idx="0">-4.06909e-08</var>
+                    <var idx="1">0</var>
+                </other>
+            </variables>
+            <objectives>
+                <values numberOfObj="1">
+                    <obj idx="-1">6.7279</obj>
+                </values>
+            </objectives>
+            <constraints>
+                <dualValues numberOfCon="2">
+                    <con idx="0">0</con>
+                    <con idx="1">0.766294</con>
+                </dualValues>
+            </constraints>
+        </solution>
+    </optimization>
+\end{verbatim}
+}
+% Hide this stuff for now...
+% The OSrL schema is also used to return timer and system statistics that are sometimes 
+% gathered by the solvers themselves or generated as a result of using the {\tt knock} 
+% method. (See the example given in Section~\ref{section:knock}.)
+\index{OSrL|)}
+
+
+
+\subsection{OSoL (Optimization Services option Language)} \label{section:osolschema}
+OSoL\index{OSoL|(} is
+an XML-based language for representing options that get passed to an optimization solver or a hosted optimization
+solver Web service. It contains both standard options for generic services and extendable option tags for
+solver-specific directives.
+Several examples of files in OSoL format are presented in Section~\ref{section:servicemethods}.%
+\index{OSoL|)}
+
+\subsection{OSnL (Optimization Services nonlinear Language)} \label{section:osnlschema}
+The OSnL\index{OSnL|(} schema is imported by the OSiL\index{OSiL} schema and is used 
+to represent the nonlinear part of an optimization instance. 
+This is explained in greater detail in Section~\ref{section:osexpressiontreeclass}. Also refer to
+Figure~\ref{figure:roobjnlnode} for an illustration of elements from the OSnL standard. This figure represents
+the nonlinear part of the objective in equation~(\ref{eq:roobj}), that is,
+%
+$$
+(1-x_0)^2 + 100 (x_1-x_0^2)^2.
+$$
+\index{OSnL|)}
+
+\subsection{OSpL (Optimization Services process Language)} \label{section:osplschema}
+\index{OSpL|(}This is a standard used to enquire about dynamic process information that 
+is kept by the Optimization Services registry. The string passed to the {\tt knock} 
+method is in the OSpL format. See the example given in Section~\ref{section:knock}.\index{OSpL|)}
+

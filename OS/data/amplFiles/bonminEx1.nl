@@ -1,4 +1,4 @@
-g3 2 1 0	# problem bonminEx1
+g3 2 1 0	# problem bonminEx1-2
  4 3 1 0 0	# vars, constraints, objectives, ranges, eqns
  1 0	# nonlinear constraints, objectives
  0 0	# network constraints: nonlinear, linear
@@ -36,8 +36,8 @@ b
 0 0 1
 0 0 2
 k3
-2
-4
+3
+5
 6
 J0 2
 0 0
@@ -46,10 +46,10 @@ J1 2
 0 -1
 2 1
 J2 3
+0 1
 1 1
-2 1
 3 1
 G0 3
-0 -1
-1 -1
-2 -1
+0 -10
+1 -10
+2 10

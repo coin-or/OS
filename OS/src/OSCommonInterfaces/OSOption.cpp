@@ -2802,6 +2802,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
                 if (this->optimization->variables->initialVariableValues != NULL)
                 {
                     int i,j,k;
+
                     int num_var;
                     num_var = this->getNumberOfInitVarValues();
 
@@ -7749,26 +7750,15 @@ bool OSOption::setInitBasisStatus(int object, int status, int *i, int ni)
     {
     case ENUM_PROBLEM_COMPONENT_variables:
     {
-        std::cout << "setInitBasisStatus: at line 7094" << std::endl;
         if (optimization->variables == NULL)
             optimization->variables = new VariableOption();
-        std::cout << "setInitBasisStatus: at line 7097" << std::endl;
-        std::cout << "optimization->variables->initialBasisStatus == NULL?" << std::endl;
-        std::cout << (optimization->variables->initialBasisStatus == NULL)  << std::endl;
         if (optimization->variables->initialBasisStatus == NULL)
             optimization->variables->initialBasisStatus = new BasisStatus();
-        std::cout << "setInitBasisStatus: at line 7102" << std::endl;
 
         for (int j=0; j<ni; j++)
         {
-            std::cout << "component " << j;
-            std::cout << ": " << i[j] << std::endl;
             if (i[j] < 0) return false;
         }
-        std::cout << "setInitBasisStatus: at line 7105" << std::endl;
-        std::cout << "parameter 1: " << status << std::endl;
-        std::cout << "parameter 2: " << i      << std::endl;
-        std::cout << "parameter 3: " << ni     << std::endl;
         return optimization->variables->initialBasisStatus->setIntVector(status, i, ni);
     }
     case ENUM_PROBLEM_COMPONENT_objectives:
@@ -8734,6 +8724,7 @@ bool OSOption::setOptionDbl(std::string optionName, double value)
         return this->setMinMemorySize(value);
 
     if (optionName == "minCPUSpeedValue")
+
         return this->setMinCPUSpeed(value);
 
     if (optionName == "maxTime")

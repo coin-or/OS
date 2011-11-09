@@ -1,0 +1,197 @@
+
+\section{The  OSInstance API}\label{section:osinstanceAPI}
+
+The OSInstance API can be used to:
+
+\begin{itemize}
+
+\item  get information about model parameters, or convert the {\tt OSExpressionTree} into a prefix or postfix
+representation through a collection  of {\tt get()} methods,
+
+\item modify, or even create an instance from scratch, using a number of {\tt set()} methods,
+
+\item provide information to solvers that require function evaluations, Jacobian and Hessian sparsity patters,  
+function gradient evaluations, and Hessian evaluations.
+
+\end{itemize}
+
+
+
+\subsection{Get Methods}
+
+The {\tt get()} methods are used by other classes to access data in an existing {\tt OSInstance} object or get 
+an expression tree representation of an instance in postfix or prefix format.   Assume {\tt osinstance} is an 
+object in the {\tt OSInstance} class created as illustrated in Figure~\ref{figure:creatingosinstanceobject}. 
+Then, for example,
+\begin{verbatim}
+osinstance->getVariableNumber();
+\end{verbatim}
+will return an integer which is the number of variables in the problem,
+\begin{verbatim}
+osinstance->getVariableTypes();
+\end{verbatim}
+will return a {\tt char} pointer to the variable types ({\tt C} for continuous, {\tt B} for binary, 
+and {\tt I} for general integer),
+\begin{verbatim}
+getVariableLowerBounds();
+\end{verbatim}
+will  return a {\tt double} pointer to the lower bound on each variable. There are similar {\tt get()} methods 
+for the constraints. There are numerous {\tt get()} methods for the data in the {\tt <linearConstraintCoefficients>} 
+ element, the {\tt <quadraticCoefficients>} element, and the {\tt <nonlinearExpressions>} element.
+
+When an {\tt osinstance} object is created, it is stored as an expression tree in an {\tt OSExpressionTree} object. 
+However, some solver APIs (e.g., LINDO) may take the data in a different format such as postfix and prefix. 
+There are methods to return the data in either postfix or prefix format.
+
+First define a {\tt vector} of pointers to {\tt OSnLNode} objects.
+\begin{verbatim}
+std::vector<OSnLNode*> postfixVec;
+\end{verbatim}
+then get the expression tree for the objective function (index = -1) as a postfix vector of nodes.
+\begin{verbatim}
+postfixVec = osinstance->getNonlinearExpressionTreeInPostfix( -1);
+\end{verbatim}
+If, for example, the {\tt osinstance} object was the in-memory representation of   the instance illustrated 
+in  Section~\ref{section:rosenbrockXML} and Figure~\ref{figure:expressiontree} then the code
+\begin{verbatim}
+for (i = 0 ; i < n; i++){
+    cout << postfixVec[i]->snodeName << endl;
+}
+\end{verbatim}
+will produce
+\begin{verbatim}
+number
+variable
+minus
+number
+power
+number
+variable
+variable
+number
+power
+minus
+number
+power
+times
+plus
+\end{verbatim}
+
+This postfix traversal of the expression tree in Figure~\ref{figure:expressiontree} lists all the nodes
+by recursively processing all subtrees, followed by the root node.
+The method {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class in the {\tt OSSolverInterfaces} 
+library component illustrates the use of a postfix vector of {\tt OSnLNode} objects to build a Lindo model instance.
+
+
+\subsection{Set Methods}
+
+The {\tt set()} methods can be used to build an in-memory {\tt OSInstance}
+ object. A code example of how to do this is in Section~\ref{section:exampleOSInstanceGeneration}.
+
+\subsection{Calculate Methods}
+
+The {\tt calculate()} methods are described in Section~\ref{section:ad}.
+
+
+\subsection{Modifying an   {\tt OSInstance} Object}\label{section:osinstanceMod}
+
+The OSInstance API is designed to be used to either build an in-memory {\tt OSInstance} object 
+or provide information about the in-memory object (e.g., the number of variables).   
+This interface is not designed for problem modification.  We plan on later providing an {\tt OSModification} 
+object for this task. However, by directly accessing an {\tt OSInstance} object it is possible 
+to modify parameters in the following classes:
+
+\begin{itemize}
+\item {\tt Variables}
+
+\item {\tt Objectives}
+
+\item {\tt Constraints}
+
+\item {\tt LinearConstraintCoefficients}
+\end{itemize}
+
+For example, to modify the first nonzero objective function coefficient of the first objective  function to 10.7 the user would write,
+
+\begin{verbatim}
+osinstance->instanceData->objectives->obj[0]->coef[0]->value = 10.7;
+\end{verbatim}
+If the user wanted to modify the actual number of nonzero coefficients as declared by 
+\begin{verbatim}
+osinstance->instanceData->objectives->obj[0]->numberOfObjCoef;
+\end{verbatim}
+then the only safe course of action would be to delete the current {\tt OSInstance} object 
+and build a new one  with the modified coefficients. It is strongly recommend that no changes 
+are made involving allocated memory -- i.e., any kind of {\tt numberOf***}.  
+Modifying an objective function coefficient is illustrated in the OSModDemo example. 
+See Section \ref{section:exampleOSModDemo}.
+
+After modifying an {\tt OSInstance} object, it is necessary to set certain boolean variables 
+to true in order for these changes to get reflected in the OS solver interfaces.
+
+\begin{itemize}
+\item {\tt Variables} -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bVariablesModified = true;
+\end{verbatim}
+
+\item {\tt Objectives} -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bObjectivesModified = true;
+\end{verbatim}
+
+\item {\tt Constraints} -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bConstraintsModified = true;
+\end{verbatim}
+
+\item {\tt LinearConstraintCoefficients} -- if any changes are made to a parameter in this class set
+
+\begin{verbatim}
+osinstance->bAMatrixModified = true;
+\end{verbatim}
+\end{itemize}
+
+At this point, if the user desires to modify an {\tt OSInstance} object that contains nonlinear terms, 
+the only safe strategy is to delete the object and build a new object that contains the modifications. 
+
+
+
+\subsection{Printing a Model for Debugging}\label{section:printModel}
+
+The OSiL representation for the test problem {\tt rosenbrockmod.osil} is given in 
+Appendix~\ref{section:rosenbrockXML}.  Many users will not find the OSiL representation 
+useful for model debugging purposes.  For users who wish to see a model in a standard infix 
+representation we provide a method {\tt printModel()}.  Assume that we have an {\tt osinstance} 
+object in the {\tt OSInstance} class that represents the model of interest.  The call
+\begin{verbatim}
+osinstance->printModel( -1)
+\end{verbatim}
+will result in printing the (first) objective function indexed by -1.  In order to print 
+constraint~$k$ use
+\begin{verbatim}
+osinstance->printModel( k)
+\end{verbatim}
+In order to print the entire model use
+\begin{verbatim}
+osinstance->printModel( )
+\end{verbatim}
+
+ 
+Below we give the result of {\tt osintance->printModel( )} for the problem {\tt rosenbrockmod.osil}.
+\begin{verbatim}
+Objectives:
+min 9*x_1 + (((1 - x_0) ^ 2) + (100*((x_1 - (x_0 ^ 2)) ^ 2)))
+
+Constraints:
+(((((10.5*x_0)*x_0) + ((11.7*x_1)*x_1)) + ((3*x_0)*x_1)) + x_0) <= 25  
+10 <= ((ln( (x_0*x_1)) + (7.5*x_0)) + (5.25*x_1))
+
+Variables:
+x_0 Type = C  Lower Bound =  0  Upper Bound =  1.7976931348623157e308
+x_1 Type = C  Lower Bound =  0  Upper Bound =  1.7976931348623157e308
+\end{verbatim}
+ 

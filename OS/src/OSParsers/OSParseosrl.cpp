@@ -595,13 +595,13 @@ static yyconst flex_int32_t yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    4,    5,    6,    6,    1,    1,    7,    1,
-        1,    6,    8,    6,    9,   10,   11,   12,   12,   12,
+        1,    2,    4,    5,    6,    6,    6,    6,    7,    6,
+        6,    6,    8,    6,    9,   10,   11,   12,   12,   12,
        12,   13,   12,   14,   12,   12,   12,    6,    1,   15,
        16,   17,   18,    6,    6,   19,   20,   21,   22,   23,
         6,   24,   25,   26,    6,   27,   28,   29,   30,   31,
         6,   32,   33,   34,   35,   36,    6,    6,    6,    6,
-        1,    1,    1,    1,    6,    1,   37,   38,   39,   40,
+        1,    6,    1,    1,    6,    1,   37,   38,   39,   40,
 
        41,   42,   43,   44,   45,   46,   47,   48,   49,   50,
        51,   52,    6,   53,   54,   55,   56,   57,   58,   59,
@@ -3719,7 +3719,7 @@ case 224:
 /* rule 224 can match eol */
 YY_RULE_SETUP
 #line 390 "/Users/kmartin/coin/os-trunk/OS/src/OSParsers/OSParseosrl.l"
-{ YY_PRINT;  yylval->sval = strdup( yytext);   yyextra->errorText = yylval->sval;    /*yylval->sval = yytext;*/  return (ELEMENTTEXT); }
+{ YY_PRINT; yylval->sval = strdup( yytext);  yyextra->errorText = yylval->sval;  /*  yylval->sval = yytext;*/  return (ELEMENTTEXT); }
 	YY_BREAK
 case 225:
 /* rule 225 can match eol */

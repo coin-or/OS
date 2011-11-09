@@ -1,8 +1,15 @@
 /* $Id$ */
-/**
- * @(#)nl2osil 1.0 10/05/2005
+/** @file OSnl2osil.cpp
  *
- * Copyright (c) 2005
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
+ *
+ * \remarks
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Dalhousie University, Northwestern University, and the University of Chicago.
+ * All Rights Reserved.
+ * This software is licensed under the Eclipse Public License.
+ * Please see the accompanying LICENSE file in root directory for terms.
+ *
  */
 
 /**
@@ -10,10 +17,6 @@
  * <p>The <code>OSnl2osil</code> used to convert an instance in AMPL nl format
  * to OSiL </p>
  *
- *
- * @author  Robert Fourer, Jun Ma, Kipp Martin,
- * @version 1.0, 10/05/2005
- * @since   OS1.0
  */
 
 #include <iostream>
@@ -60,7 +63,7 @@ using std::endl;
 
 
 
-#define AMPLDEBUG
+//#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename)
 {
@@ -811,6 +814,6 @@ bool OSnl2osil::createOSInstance()
     std::cout << osinstance->printModel() << std::endl;
 
 #endif
-
+   
     return true;
 }

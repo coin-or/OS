@@ -1,0 +1,175 @@
+%%%%%
+% some other macros
+\newcommand{\figurepath}{./figures}
+\newcommand{\bibpath}{/Users/kmartin/Documents/files/misc}
+\newcommand{\figfiletype}{pdf}
+
+%Brad Bell Macros
+
+% Latex macros defined for all the CppAD documentation:
+\newcommand{\T}{ {\rm T} }
+\newcommand{\R}{ {\bf R} }
+\newcommand{\C}{ {\bf C} }
+\newcommand{\D}[2]{ \frac{\partial #1}{\partial #2} }
+\newcommand{\DD}[3]{ \frac{\partial^2 #1}{\partial #2 \partial #3} }
+\newcommand{\Dpow}[2]{ \frac{\partial^{#1}}{\partial  {#2}^{#1}} }
+\newcommand{\dpow}[2]{ \frac{ {\rm d}^{#1}}{{\rm d}\, {#2}^{#1}} }
+
+% Define the hangref environment used for the References list:
+\newenvironment{hangref}
+  {\begin{list}{}{\setlength{\itemsep}{4pt}
+  \setlength{\parsep}{0pt}\setlength{\leftmargin}{+\parindent}
+  \setlength{\itemindent}{-\parindent}}}{\end{list}}
+
+% Set the page margins to 1 inch all around:
+\marginparwidth 0pt\marginparsep 0pt \topskip 0pt\headsep
+0pt\headheight 0pt \oddsidemargin 0pt\evensidemargin 0pt
+\textwidth 6.5in \topmargin 0pt\textheight 9.0in
+\newtheorem{theorem}{Theorem}
+
+   
+%%%%Added by Leo%%%%
+\newcounter{Fig}
+\renewcommand{\theFig}{\arabic{Fig}}
+\newcommand{\Fig}[2]{\refstepcounter{Fig} \label{#1}
+                     {\small\bf Figure \theFig.} {\small\sl #2 \par}}
+
+\setcounter{topnumber}{3}
+\renewcommand{\topfraction}{.9}
+\setcounter{bottomnumber}{3}
+\renewcommand{\bottomfraction}{.9}
+\setcounter{totalnumber}{4}
+\renewcommand{\textfraction}{.1}
+\setlength{\floatsep}{.25in}
+\setlength{\intextsep}{.25in}
+
+\setlength{\fboxrule}{2\fboxrule} \setlength{\fboxsep}{3\fboxsep}
+
+\newcommand{\Sa}{8pt}
+\newcommand{\Sb}{0pt}
+
+\renewcommand{\_}{{\char"5F}}
+\renewcommand{\{}{{\char"7B}}
+\renewcommand{\}}{{\char"7D}}
+\renewcommand{\^}{{\char"0D}}
+
+\let\accute= \'
+\renewcommand{\'}{{\char"0D}}
+
+\newcommand{\bfit}{\bfseries\itshape}
+
+\newlength{\extopskip} \newlength{\exbottomskip}
+\setlength{\exbottomskip}{1\baselineskip}
+\addtolength{\exbottomskip}{-5.0pt}
+\setlength{\extopskip}{1\exbottomskip}
+\addtolength{\extopskip}{-1\parskip}
+
+\newenvironment{Example}{\vspace{1\extopskip}\noindent\hspace*{2em}
+                         \frenchspacing\small
+                         \tt\begin{tabular}{@{}l@{}}}{
+                         \end{tabular}\\[1\exbottomskip]}
+
+\newcommand{\Titem}{\item[$\triangleright$]}
+\newcommand{\Ditem}{\item[$\diamond$]}
+
+\newenvironment{Itemize}{\begin{quote}\normalsize
+   \baselineskip 20pt plus .3pt minus .1pt \begin{itemize}}
+   {\end{itemize}\end{quote}}
+   % Set path to folder containing figures
+\newcommand{\FigureFolder}{figures}
+
+\newif\ifknitro \knitrofalse    % change to \knitrotrue once we get knitro connected again
+\newif\ifipopt  \ipopttrue      % change to \ipopttrue  once we get the build problems sorted out
+
+
+% We use a number of URLs that point to software downloads. These locations are forever changing,
+% and maintaining them is a nightmare. All the URLs are gathered here, so that we can at least
+% get away with making changes only once...
+\newcommand{\UrlAmpl}{http://www.ampl.com}
+\newcommand{\UrlAmplSandia}{http://netlib.sandia.gov/ampl/}
+\newcommand{\UrlAmplSolvers}{http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/ampl/solvers}
+\newcommand{\UrlApacheFileupload}{http://jakarta.apache.org/commons/fileupload/}
+\newcommand{\UrlBlas}{ftp://www.netlib.org/blas/blas.tgz}
+\newcommand{\UrlBonmin}{http://projects.coin-or.org/Bonmin}
+\newcommand{\UrlBuildtools}{http://projects.coin-or.org/BuildTools}
+\newcommand{\UrlCbc}{http://projects.coin-or.org/Cbc}
+\newcommand{\UrlCgl}{http://projects.coin-or.org/Cgl}
+\newcommand{\UrlCl}{http://www.microsoft.com/express/download/\#webInstall}
+\newcommand{\UrlClp}{http://projects.coin-or.org/Clp}
+\newcommand{\UrlCoinConfig}{https://projects.coin-or.org/BuildTools/wiki/user-configure\#PreparingtheCompilation}
+\newcommand{\UrlCoinConfigure}{http://projects.coin-or.org/BuildTools/wiki/user-configure\#CommandLineArgumentsforconfigure}
+\newcommand{\UrlCoinCygwin}{http://projects.coin-or.org/BuildTools/wiki/current-issues}
+\newcommand{\UrlCoinDownload}{http://projects.coin-or.org/BuildTools/wiki/user-download\#DownloadingtheSourceCode}
+\newcommand{\UrlCoinNames}{https://projects.coin-or.org/CoinBinary/wiki/ArchiveNamingConventions}
+\newcommand{\UrlCoinProjects}{http://www.coin-or.org/projects/}
+\newcommand{\UrlCoinUtils}{http://projects.coin-or.org/CoinUtils}
+\newcommand{\UrlCouenne}{http://projects.coin-or.org/Couenne}
+\newcommand{\UrlCplex}{http://www.ilog.com/products/cplex/}
+\newcommand{\UrlCppad}{http://projects.coin-or.org/CppAD}
+\newcommand{\UrlCygwinMake}{http://www.cmake.org/files/cygwin/make.exe}
+\newcommand{\UrlCygwinSetup}{http://www.cygwin.com/setup.exe}
+\newcommand{\UrlDoxygen}{http://www.doxygen.org}
+\newcommand{\UrlDylp}{http://projects.coin-or.org/DyLP}
+\newcommand{\UrlEpl}{http://www.eclipse.org/legal/epl-v10.html}
+\newcommand{\UrlFToC}{http://www.netlib.org/f2c}
+\newcommand{\UrlFToCBin}{http://www.netlib.org/f2c/mswin/}
+\newcommand{\UrlFToCZip}{http://www.netlib.org/f2c/libf2c.zip}
+\newcommand{\UrlGgs}{http://www.g95.org}
+\newcommand{\UrlGamslinks}{https://projects.coin-or.org/svn/GAMSlinks/trunk}
+\newcommand{\UrlGcc}{http://gcc.gnu.org}
+\newcommand{\UrlGfortran}{http://gcc.gnu.org/fortran/}
+\newcommand{\UrlGlpk}{http://www.gnu.org/software/glpk/}
+\newcommand{\UrlGlpkDownload}{ftp://ftp.gnu.org/gnu/glpk/glpk-4.42.tar.gz}
+\newcommand{\UrlHsl}{http://www.cse.scitech.ac.uk/nag/hsl/}
+\newcommand{\UrlIpopt}{http://projects.coin-or.org/Ipopt}
+\newcommand{\UrlIpoptDoc}{https://projects.coin-or.org/Ipopt/browser/stable/3.5/Ipopt/doc/documentation.pdf?format=raw}
+\newcommand{\UrlIpoptDocxiii}{http://www.coin-or.org/Ipopt/documentation/node13.html}
+\newcommand{\UrlKippFileupload}{http://gsbkip.chicagogsb.edu/os/fileupload.html}
+\newcommand{\UrlKnitro}{http://www.ziena.com/}
+\newcommand{\UrlKnitroMan}{http://www.ziena.com/docs/knitroman.pdf}
+\newcommand{\UrlLapack}{ftp://www.netlib.org/lapack/lapack-lite-3.1.0.tgz}
+\newcommand{\UrlMingw}{http://downloads.sourceforge.net/mingw/MSYS-1.0.11.exe?modtime=1079444447\&big\_mirror=1}
+\newcommand{\UrlMsys}{http://sourceforge.net/project/showfiles.php?group\_id=2435}
+\newcommand{\UrlMsysBinary}{http://downloads.sourceforge.net/mingw/bash-3.1-MSYS-1.0.11-1.tar.bz2?modtime=1195140582\&big\_mirror=1}
+\newcommand{\UrlMsysAddIns}{http://sourceforge.net/project/showfiles.php?group\_id=2435\&package\_id=67879}
+\newcommand{\UrlMsysBison}{bison-2.3-MSYS-1.0.11-1.tar.bz2}
+\newcommand{\UrlMsysFlex}{flex-2.5.33-MSYS-1.0.11-1.tar.bz2}
+\newcommand{\UrlMsysRegex}{regex-0.12-MSYS-1.0.11-1.tar.bz2}
+\newcommand{\UrlNewticket}{http://projects.coin-or.org/OS/newticket}
+\newcommand{\UrlNightlyBuild}{https://projects.coin-or.org/TestTools/wiki/NightlyBuildInAction}
+\newcommand{\UrlOs}{http://www.optimizationservices.org}
+\newcommand{\UrlOsBinaries}{http://www.coin-or.org/download/binary/OS/}
+\newcommand{\UrlOsCommon}{https://projects.coin-or.org/svn/OS/branches/OScpp/OSCommon}
+\newcommand{\UrlOsDoxygen}{http://www.coin-or.org/OS/doxydoc/html/index.html}
+\newcommand{\UrlOsi}{http://projects.coin-or.org/Osi}
+\newcommand{\UrlOsJava}{https://projects.coin-or.org/svn/OS/branches/OSjava}
+\newcommand{\UrlOsRelease}{https://projects.coin-or.org/svn/OS/releases/2.3.0}
+\newcommand{\UrlOsStable}{https://projects.coin-or.org/svn/OS/stable/2.3}
+\newcommand{\UrlOsTarball}{http://www.coin-or.org/download/source/OS/}
+\newcommand{\UrlOsWiki}{http://projects.coin-or.org/OS/}
+\newcommand{\UrlOsWin}{https://projects.coin-or.org/CoinBinary/browser/binary/OS}
+\newcommand{\UrlParinclinear}{http://www.coin-or.org/OS/parincLinear.osil}
+\newcommand{\UrlSdk}{http://www.microsoft.com/downloads/details.aspx?FamilyID=E6E1C3DF-A74F-4207-8586-711EBE331CDC\&displaylang=en}
+\newcommand{\UrlSvn}{http://subversion.tigris.org}
+\newcommand{\UrlSymphony}{http://projects.coin-or.org/SYMPHONY}
+\newcommand{\UrlTomcat}{http://tomcat.apache.org/}
+\newcommand{\UrlTortoiseSvn}{http://tortoisesvn.tigris.org}
+\newcommand{\UrlTrac}{http://projects.coin-or.org/OS}
+\newcommand{\UrlUsingTrac}{http://www.coin-or.org/usingTrac.html}
+\newcommand{\UrlVol}{http://projects.coin-or.org/Vol}
+\newcommand{\UrlWget}{http://www.christopherlewis.com/WGet/WGetFiles.htm}
+\newcommand{\UrlWgetBinary}{http://www.christopherlewis.com/WGet/wget-1.11.4b.zip}
+
+% Current software versions
+\newcommand{\GlpkVer}{4.42}
+\newcommand{\OSstable}{2.4}
+\newcommand{\OSrelease}{2.4.1}
+\newcommand{\OStrunk}{4340}
+\newcommand{\MsysVer}{1.0.11}
+\newcommand{\MsysFile}{bash-3.1-MSYS-1.0.11}
+
+% Three logicals for allowing the build of three different configurations of the material with slightly different content  
+\newif\ifruncode   % to build a manual for folks who only want to run the executables
+\newif\ifuselibs   % to build a manual for folks who want to build against the libraries
+\newif\ifdevelop   % to build a manual for folks who want to actively develop code
+
