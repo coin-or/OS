@@ -23,4 +23,4 @@ Ipopt        https://projects.coin-or.org/svn/Ipopt/stable/3.10/Ipopt
 cppad        https://projects.coin-or.org/svn/CppAD/releases/20110101.5
 Bonmin       https://projects.coin-or.org/svn/Bonmin/stable/1.5/Bonmin
 Couenne      https://projects.coin-or.org/svn/Couenne/stable/0.4/Couenne  
-examples https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/trunk
+examples https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/releases/1.2.0
