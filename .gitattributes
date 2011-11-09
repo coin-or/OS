@@ -313,6 +313,7 @@ OS/doc/UsingOS.pdf -text
 OS/doc/UsingOS.tex -text
 OS/doc/buildSystemInfo.txt -text
 OS/doc/chapters/CppAD.tex -text
+OS/doc/chapters/OSDip.tex -text
 OS/doc/chapters/OSInstanceAPI.tex -text
 OS/doc/chapters/OSIntro.tex -text
 OS/doc/chapters/OSSolverservice.tex -text
