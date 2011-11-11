@@ -165,7 +165,7 @@
   \item {\tt OSOption}, 71--72
   \item OSpL, 20--22, 44
   \item {\tt OSResult}, 71--72
-  \item OSrL, 6, 8, 11, 13, 22, 41--43, 72
+  \item OSrL, 6, 8, 10, 13, 22, 41--43, 72
   \item {\tt OSSolverAgent}, 65
   \item {\tt OSSolverService}, 1, 6, 8--22, 93, 95, 109
   \item {\tt OSSolverService.jws}, 14

@@ -10,11 +10,11 @@
 %\usepackage{moreverb}
 \usepackage{enumerate}
 \usepackage{makeidx}
+\usepackage{own}
 \bibliographystyle{plain}
 \makeindex
 
-   
-\input{chapters/frontmatter.tex} 
+\input{chapters/frontmatter.tex}   
 
 
 \begin{document}
@@ -48,13 +48,15 @@
 \index{SYMPHONY@{\tt SYMPHONY}|see{COIN-OR projects, {\tt SYMPHONY}}}
 \index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
 
-\title{Optimization Services \OSstable\ User's Manual }
+\title{Using the CoinAll Software}
 \vskip 2in
-\author{Horand Gassmann, Jun Ma,  Kipp Martin, and Wayne Sheng}
+\author{Horand Gassmann, Jun Ma,  Kipp Martin}
 \maketitle
 
 \begin{abstract}
-This is the User's Manual for the Optimization Services (OS) project.  The objective of OS is to provide a
+This is the User's Manual for the CoinAll project.  The objective of CoinAll is to $\ldots$
+\iffalse
+provide a
 general framework consisting of a set of standards for representing optimization instances, results,
 solver options, and communication between clients and solvers in a distributed environment using Web Services.
 This COIN-OR\index{COIN-OR} project provides C++ and Java source code for libraries and executable programs that 
@@ -66,6 +68,7 @@ calling a solver either locally or on a remote server.  Finally,  both Java\inde
 file are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
 See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page\index{Trac system} {\tt\UrlTrac} for 
 more information.
+\fi
 \end{abstract}
 
 
@@ -76,8 +79,8 @@ more information.
 \hyphenation{com-plex-Type}
 \hyphenation{GAMS-links}
 
-\runcodetrue   % we build a manual for folks who only want to run the executables
-\uselibsfalse   % we do not build a manual for folks who want to build against the libraries
+\runcodefalse   % we do not build a manual for folks who only want to run the executables
+\uselibstrue   % we build a manual for folks who want to build against the libraries
 \developfalse   % we do not build a manual for folks who want to actively develop code
 
 
@@ -97,6 +100,17 @@ more information.
 \input{chapters/schemadescriptions.tex}
 
 \input{chapters/OSInstanceAPI.tex}
+
+\input{chapters/codesamples.tex}
+
+\input{chapters/OSDip.tex}
+
+\input{chapters/oslibrary.tex}
+
+\input{chapters/OSInstanceAPI.tex}
+
+\input{chapters/CppAD.tex}
+
 
 
 \addcontentsline{toc}{section}{Bibliography}
