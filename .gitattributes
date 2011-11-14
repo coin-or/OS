@@ -317,6 +317,7 @@ OS/doc/chapters/appendix.tex -text
 OS/doc/chapters/build.tex -text
 OS/doc/chapters/codesamples.tex -text
 OS/doc/chapters/downloadbinaries.tex -text
+OS/doc/chapters/downloadbinariesCoinAll.tex -text
 OS/doc/chapters/downloadsource.tex -text
 OS/doc/chapters/fileupload.tex -text
 OS/doc/chapters/frontmatter.tex -text

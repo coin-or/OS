@@ -53,8 +53,7 @@
 \indexentry{Algorithmic differentiation}{6}
 \indexentry{COIN-OR projects!CppAD@{\tt CppAD}}{6}
 \indexentry{Apache Tomcat}{6}
-\indexentry{Eclipse Public License (EPL)}{6}
-\indexentry{Downloading!binaries}{7}
+\indexentry{Downloading!binaries}{6}
 \indexentry{OSSolverService@{\tt OSSolverService}}{7}
 \indexentry{OSAmplClient@{\tt OSAmplClient}}{7}
 \indexentry{Apache Tomcat}{7}
@@ -67,167 +66,167 @@
 \indexentry{Java}{7}
 \indexentry{Microsoft Visual Studio}{7}
 \indexentry{OS project!stable release}{7}
-\indexentry{OSSolverService@{\tt OSSolverService}|(}{8}
-\indexentry{OSiL}{8}
-\indexentry{AMPL nl format}{8}
-\indexentry{MPS format}{8}
-\indexentry{solve@{\tt solve}}{8}
-\indexentry{send@{\tt send}}{8}
-\indexentry{retrieve@{\tt retrieve}}{8}
-\indexentry{getJobID@{\tt getJobID}}{8}
-\indexentry{knock@{\tt knock}}{8}
-\indexentry{kill@{\tt kill}}{8}
-\indexentry{OSiL}{8}
-\indexentry{solve@{\tt solve}|(}{8}
-\indexentry{send@{\tt send}}{8}
-\indexentry{kill@{\tt kill}}{8}
-\indexentry{knock@{\tt knock}}{8}
-\indexentry{getJobID@{\tt getJobID}}{8}
-\indexentry{retrieve@{\tt retrieve}}{8}
-\indexentry{solve@{\tt solve}|)}{8}
-\indexentry{default solver}{9}
-\indexentry{MPS format}{9}
-\indexentry{OSiL}{9}
-\indexentry{AMPL nl format}{9}
-\indexentry{OSiL}{9}
-\indexentry{cplex@{\tt cplex}}{9}
-\indexentry{COIN-OR projects!Osi@{\tt Osi}|(}{9}
-\indexentry{Third-party software, {\tt GLPK}}{9}
-\indexentry{COIN-OR projects!Osi@{\tt Osi}|)}{9}
-\indexentry{LINDO}{9}
-\indexentry{solve@{\tt solve}}{9}
-\indexentry{send@{\tt send}}{9}
-\indexentry{default solver}{9}
-\indexentry{supported solvers}{9}
-\indexentry{OSrL}{9}
-\indexentry{COIN-OR projects!Clp@{\tt Clp}}{10}
-\indexentry{parincLinear.osil@{\tt parincLinear.osil}|(}{10}
-\indexentry{parincLinear.osil@{\tt parincLinear.osil}|)}{10}
-\indexentry{LINDO}{10}
-\indexentry{COIN-OR projects!Clp@{\tt Clp}}{10}
-\indexentry{send@{\tt send}}{10}
-\indexentry{kill@{\tt kill}}{10}
-\indexentry{knock@{\tt knock}}{10}
-\indexentry{getJobID@{\tt getJobID}}{10}
-\indexentry{retrieve@{\tt retrieve}}{10}
-\indexentry{serviceLocation@{\tt serviceLocation}}{10}
-\indexentry{send@{\tt send}}{10}
-\indexentry{solve@{\tt solve}}{10}
-\indexentry{default solver}{11}
-\indexentry{solve@{\tt solve}}{11}
-\indexentry{OSiL}{11}
-\indexentry{OSLibrary@{\tt OSLibrary}}{11}
-\indexentry{OSoL}{11}
-\indexentry{OSrL}{11}
-\indexentry{testlocal.config@{\tt testlocal.config}|(}{11}
-\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{11}
-\indexentry{solve@{\tt solve}}{11}
-\indexentry{testlocal.config@{\tt testlocal.config}|)}{11}
-\indexentry{OSrL}{12}
-\indexentry{Apache Tomcat}{12}
-\indexentry{Apache Axis}{12}
-\indexentry{OSSolverService.jws@{\tt OSSolverService.jws}}{12}
-\indexentry{solve@{\tt solve}}{12}
-\indexentry{OSiL}{12}
-\indexentry{OSoL}{12}
-\indexentry{SOAP protocol}{12}
-\indexentry{OSoL}{13}
-\indexentry{solve@{\tt solve}|(}{13}
-\indexentry{testremote.config@{\tt testremote.config}|(}{13}
-\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(}{13}
-\indexentry{testremote.config@{\tt testremote.config}|)}{14}
-\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}{14}
-\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}{14}
-\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|)}{14}
-\indexentry{solve@{\tt solve}|)}{14}
-\indexentry{send@{\tt send}|(}{15}
-\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{15}
-\indexentry{AMPL nl format|(}{15}
-\indexentry{AMPL nl format|)}{15}
-\indexentry{OSiL}{15}
-\indexentry{SOAP protocol}{15}
-\indexentry{JobID@{\tt JobID}|(}{15}
-\indexentry{OSoL|(}{15}
-\indexentry{JobID@{\tt JobID}|)}{16}
-\indexentry{OSoL|)}{16}
-\indexentry{knock@{\tt knock}}{17}
-\indexentry{default solver}{17}
-\indexentry{send@{\tt send}|)}{17}
-\indexentry{retrieve@{\tt retrieve}|(}{17}
-\indexentry{JobID@{\tt JobID}}{17}
-\indexentry{retrieve@{\tt retrieve}|)}{17}
-\indexentry{getJobID@{\tt getJobID}|(}{17}
-\indexentry{send@{\tt send}}{17}
-\indexentry{JobID@{\tt JobID}}{17}
-\indexentry{OSoL}{17}
-\indexentry{send@{\tt send}}{17}
-\indexentry{getJobID@{\tt getJobID}|)}{17}
-\indexentry{knock@{\tt knock}|(}{18}
-\indexentry{send@{\tt send}}{18}
-\indexentry{JobID@{\tt JobID}}{18}
-\indexentry{OSpL|(}{18}
-\indexentry{OSpL|)}{19}
-\indexentry{knock@{\tt knock}|)}{19}
-\indexentry{kill@{\tt kill}|(}{19}
-\indexentry{kill@{\tt kill}|)}{20}
-\indexentry{solve@{\tt solve}}{20}
-\indexentry{OSiL}{20}
-\indexentry{OSoL}{20}
-\indexentry{OSrL}{20}
-\indexentry{solve@{\tt solve}}{20}
-\indexentry{OSiL}{20}
-\indexentry{OSoL}{20}
-\indexentry{JobID@{\tt JobID}}{20}
-\indexentry{getJobID@{\tt getJobID}}{20}
-\indexentry{OSoL}{20}
-\indexentry{knock@{\tt knock}}{20}
-\indexentry{OSpL}{20}
-\indexentry{OSoL}{20}
+\indexentry{AMPL}{8}
+\indexentry{GAMS}{8}
+\indexentry{OSAmplClient@{\tt OSAmplClient}|(}{8}
+\indexentry{AMPL|(}{8}
+\indexentry{eastborne.mod@{\tt eastborne.mod}|(}{8}
+\indexentry{amplFiles@{\tt amplFiles}}{8}
+\indexentry{default solver}{8}
+\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(}{8}
+\indexentry{eastborne.mod@{\tt eastborne.mod}|)}{8}
+\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}{9}
+\indexentry{solveroptions.osol@{\tt solveroptions.osol}}{9}
+\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}{9}
+\indexentry{default solver}{10}
+\indexentry{OSAmplClient@{\tt OSAmplClient}|)}{10}
+\indexentry{AMPL|)}{10}
+\indexentry{GAMS|(}{10}
+\indexentry{GAMS|)}{16}
+\indexentry{MATLAB|(}{17}
+\indexentry{MATLAB|)}{21}
+\indexentry{OSSolverService@{\tt OSSolverService}|(}{21}
+\indexentry{OSiL}{21}
+\indexentry{AMPL nl format}{21}
+\indexentry{MPS format}{21}
+\indexentry{solve@{\tt solve}}{21}
+\indexentry{send@{\tt send}}{21}
 \indexentry{retrieve@{\tt retrieve}}{21}
-\indexentry{OSoL}{21}
-\indexentry{OSrL}{21}
-\indexentry{JobID@{\tt JobID}}{21}
+\indexentry{getJobID@{\tt getJobID}}{21}
+\indexentry{knock@{\tt knock}}{21}
 \indexentry{kill@{\tt kill}}{21}
-\indexentry{OSoL}{21}
-\indexentry{OSpL}{21}
-\indexentry{OSSolverService@{\tt OSSolverService}|)}{21}
-\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{22}
-\indexentry{COIN-OR projects!Bonmin@{\tt Bonmin}}{22}
-\indexentry{COIN-OR projects!Couenne@{\tt Couenne}}{22}
-\indexentry{COIN-OR projects!Cbc@{\tt Cbc}}{22}
-\indexentry{COIN-OR projects!Osi@{\tt Osi}|(}{22}
-\indexentry{COIN-OR projects!Clp@{\tt Clp}}{22}
-\indexentry{COIN-OR projects!DyLP@{\tt DyLP}}{22}
-\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}{22}
-\indexentry{COIN-OR projects!Vol@{\tt Vol}}{22}
-\indexentry{Third-party software, {\tt GLPK}}{22}
+\indexentry{OSiL}{21}
+\indexentry{solve@{\tt solve}|(}{22}
+\indexentry{send@{\tt send}}{22}
+\indexentry{kill@{\tt kill}}{22}
+\indexentry{knock@{\tt knock}}{22}
+\indexentry{getJobID@{\tt getJobID}}{22}
+\indexentry{retrieve@{\tt retrieve}}{22}
+\indexentry{solve@{\tt solve}|)}{22}
+\indexentry{MPS format}{22}
+\indexentry{OSiL}{22}
+\indexentry{AMPL nl format}{22}
+\indexentry{OSiL}{22}
 \indexentry{cplex@{\tt cplex}}{22}
+\indexentry{COIN-OR projects!Osi@{\tt Osi}|(}{22}
+\indexentry{Third-party software, {\tt GLPK}}{22}
 \indexentry{COIN-OR projects!Osi@{\tt Osi}|)}{22}
-\indexentry{OS project!trunk version}{22}
-\indexentry{OS project!trunk version}{24}
-\indexentry{AMPL}{24}
-\indexentry{GAMS}{24}
-\indexentry{OSAmplClient@{\tt OSAmplClient}|(}{24}
-\indexentry{AMPL|(}{24}
-\indexentry{eastborne.mod@{\tt eastborne.mod}|(}{25}
-\indexentry{amplFiles@{\tt amplFiles}}{25}
-\indexentry{default solver}{25}
-\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(}{25}
-\indexentry{eastborne.mod@{\tt eastborne.mod}|)}{25}
-\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}{25}
-\indexentry{solveroptions.osol@{\tt solveroptions.osol}}{26}
-\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}{26}
-\indexentry{default solver}{27}
-\indexentry{OSAmplClient@{\tt OSAmplClient}|)}{27}
-\indexentry{AMPL|)}{27}
-\indexentry{GAMS|(}{27}
-\indexentry{GAMS|)}{33}
-\indexentry{MATLAB|(}{33}
-\indexentry{MATLAB|)}{37}
+\indexentry{LINDO}{22}
+\indexentry{solve@{\tt solve}}{22}
+\indexentry{send@{\tt send}}{22}
+\indexentry{default solver}{22}
+\indexentry{supported solvers}{22}
+\indexentry{OSrL}{22}
+\indexentry{default solver}{23}
+\indexentry{COIN-OR projects!Clp@{\tt Clp}}{23}
+\indexentry{parincLinear.osil@{\tt parincLinear.osil}|(}{23}
+\indexentry{parincLinear.osil@{\tt parincLinear.osil}|)}{23}
+\indexentry{LINDO}{24}
+\indexentry{COIN-OR projects!Clp@{\tt Clp}}{24}
+\indexentry{send@{\tt send}}{24}
+\indexentry{kill@{\tt kill}}{24}
+\indexentry{knock@{\tt knock}}{24}
+\indexentry{getJobID@{\tt getJobID}}{24}
+\indexentry{retrieve@{\tt retrieve}}{24}
+\indexentry{serviceLocation@{\tt serviceLocation}}{24}
+\indexentry{send@{\tt send}}{24}
+\indexentry{solve@{\tt solve}}{24}
+\indexentry{default solver}{24}
+\indexentry{solve@{\tt solve}}{25}
+\indexentry{OSiL}{25}
+\indexentry{OSLibrary@{\tt OSLibrary}}{25}
+\indexentry{OSoL}{25}
+\indexentry{OSrL}{25}
+\indexentry{testlocal.config@{\tt testlocal.config}|(}{25}
+\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{25}
+\indexentry{solve@{\tt solve}}{25}
+\indexentry{testlocal.config@{\tt testlocal.config}|)}{25}
+\indexentry{OSrL}{26}
+\indexentry{Apache Tomcat}{26}
+\indexentry{Apache Axis}{26}
+\indexentry{OSSolverService.jws@{\tt OSSolverService.jws}}{26}
+\indexentry{solve@{\tt solve}}{26}
+\indexentry{OSiL}{26}
+\indexentry{OSoL}{26}
+\indexentry{SOAP protocol}{26}
+\indexentry{OSoL}{26}
+\indexentry{solve@{\tt solve}|(}{26}
+\indexentry{testremote.config@{\tt testremote.config}|(}{26}
+\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(}{26}
+\indexentry{testremote.config@{\tt testremote.config}|)}{27}
+\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}{27}
+\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}{27}
+\indexentry{remoteSolve1.osol@{\tt remoteSolve1.osol}|)}{27}
+\indexentry{solve@{\tt solve}|)}{28}
+\indexentry{send@{\tt send}|(}{29}
+\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{29}
+\indexentry{AMPL nl format|(}{29}
+\indexentry{AMPL nl format|)}{29}
+\indexentry{OSiL}{29}
+\indexentry{SOAP protocol}{29}
+\indexentry{JobID@{\tt JobID}|(}{29}
+\indexentry{OSoL|(}{29}
+\indexentry{JobID@{\tt JobID}|)}{30}
+\indexentry{OSoL|)}{30}
+\indexentry{knock@{\tt knock}}{30}
+\indexentry{default solver}{30}
+\indexentry{send@{\tt send}|)}{30}
+\indexentry{retrieve@{\tt retrieve}|(}{30}
+\indexentry{JobID@{\tt JobID}}{31}
+\indexentry{retrieve@{\tt retrieve}|)}{31}
+\indexentry{getJobID@{\tt getJobID}|(}{31}
+\indexentry{send@{\tt send}}{31}
+\indexentry{JobID@{\tt JobID}}{31}
+\indexentry{OSoL}{31}
+\indexentry{send@{\tt send}}{31}
+\indexentry{getJobID@{\tt getJobID}|)}{31}
+\indexentry{knock@{\tt knock}|(}{31}
+\indexentry{send@{\tt send}}{31}
+\indexentry{JobID@{\tt JobID}}{31}
+\indexentry{OSpL|(}{32}
+\indexentry{OSpL|)}{33}
+\indexentry{knock@{\tt knock}|)}{33}
+\indexentry{kill@{\tt kill}|(}{33}
+\indexentry{kill@{\tt kill}|)}{33}
+\indexentry{solve@{\tt solve}}{34}
+\indexentry{OSiL}{34}
+\indexentry{OSoL}{34}
+\indexentry{OSrL}{34}
+\indexentry{solve@{\tt solve}}{34}
+\indexentry{OSiL}{34}
+\indexentry{OSoL}{34}
+\indexentry{JobID@{\tt JobID}}{34}
+\indexentry{getJobID@{\tt getJobID}}{34}
+\indexentry{OSoL}{34}
+\indexentry{knock@{\tt knock}}{34}
+\indexentry{OSpL}{34}
+\indexentry{OSoL}{34}
+\indexentry{retrieve@{\tt retrieve}}{34}
+\indexentry{OSoL}{34}
+\indexentry{OSrL}{34}
+\indexentry{JobID@{\tt JobID}}{34}
+\indexentry{kill@{\tt kill}}{34}
+\indexentry{OSoL}{34}
+\indexentry{OSpL}{34}
+\indexentry{OSSolverService@{\tt OSSolverService}|)}{34}
+\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{35}
+\indexentry{COIN-OR projects!Bonmin@{\tt Bonmin}}{35}
+\indexentry{COIN-OR projects!Couenne@{\tt Couenne}}{35}
+\indexentry{COIN-OR projects!Cbc@{\tt Cbc}}{35}
+\indexentry{COIN-OR projects!Osi@{\tt Osi}|(}{35}
+\indexentry{COIN-OR projects!Clp@{\tt Clp}}{35}
+\indexentry{COIN-OR projects!DyLP@{\tt DyLP}}{35}
+\indexentry{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}{35}
+\indexentry{COIN-OR projects!Vol@{\tt Vol}}{35}
+\indexentry{Third-party software, {\tt GLPK}}{35}
+\indexentry{cplex@{\tt cplex}}{35}
+\indexentry{COIN-OR projects!Osi@{\tt Osi}|)}{35}
+\indexentry{OS project!trunk version}{36}
+\indexentry{OS project!trunk version}{38}
 \indexentry{OSiL|(}{38}
 \indexentry{Rosenbrock, H.H.@{\it Rosenbrock, H.H.}}{38}
 \indexentry{OSiL|)}{39}
-\indexentry{OSrL|(}{39}
+\indexentry{OSrL|(}{40}
 \indexentry{OSrL|)}{41}
 \indexentry{OSoL|(}{41}
 \indexentry{OSoL|)}{41}
@@ -241,10 +240,10 @@
 \indexentry{OSInstance@{\tt OSInstance}}{46}
 \indexentry{OSInstance@{\tt OSInstance}}{46}
 \indexentry{Algorithmic differentiation|)}{47}
-\indexentry{COIN-OR projects!Clp@{\tt Clp}}{47}
+\indexentry{COIN-OR projects!Clp@{\tt Clp}}{48}
 \indexentry{COIN-OR projects!Cgl@{\tt Cgl}}{52}
-\indexentry{Windows Platform SDK}{52}
-\indexentry{Java|(}{52}
+\indexentry{Windows Platform SDK}{53}
+\indexentry{Java|(}{53}
 \indexentry{Java|)}{53}
 \indexentry{OSLibrary@{\tt OSLibrary}|(}{65}
 \indexentry{OSAgent@{\tt OSAgent}|(}{65}
@@ -254,52 +253,52 @@
 \indexentry{Doxygen}{66}
 \indexentry{OSInstance@{\tt OSInstance}|(}{66}
 \indexentry{OSiL}{66}
-\indexentry{OSExpressionTree@{\tt OSExpressionTree}}{69}
+\indexentry{OSExpressionTree@{\tt OSExpressionTree}}{67}
+\indexentry{OSiL}{67}
+\indexentry{OSInstance@{\tt OSInstance}|)}{69}
+\indexentry{OSOption@{\tt OSOption}|(}{69}
+\indexentry{OSOption@{\tt OSOption}|)}{69}
+\indexentry{OSResult@{\tt OSResult}|(}{69}
+\indexentry{OSResult@{\tt OSResult}|)}{69}
+\indexentry{MPS format|(}{69}
+\indexentry{OSmps2osil@{\tt OSmps2osil}|(}{69}
 \indexentry{OSiL}{69}
-\indexentry{OSInstance@{\tt OSInstance}|)}{70}
-\indexentry{OSOption@{\tt OSOption}|(}{71}
-\indexentry{OSOption@{\tt OSOption}|)}{71}
-\indexentry{OSResult@{\tt OSResult}|(}{71}
-\indexentry{OSResult@{\tt OSResult}|)}{71}
-\indexentry{MPS format|(}{71}
-\indexentry{OSmps2osil@{\tt OSmps2osil}|(}{71}
+\indexentry{COIN-OR projects!CoinUtils@{\tt CoinUtils}}{70}
+\indexentry{OSmps2osil@{\tt OSmps2osil}|)}{70}
+\indexentry{MPS format|)}{70}
+\indexentry{AMPL nl format|(}{70}
+\indexentry{OSnl2osil@{\tt OSnl2osil}}{70}
+\indexentry{OSInstance@{\tt OSInstance}}{70}
+\indexentry{OSmps2osil@{\tt OSmps2osil}}{70}
+\indexentry{OSAmplClient@{\tt OSAmplClient}}{70}
+\indexentry{OSiL}{70}
+\indexentry{AMPL nl format|)}{70}
+\indexentry{OSiL|(}{70}
+\indexentry{OSoL}{70}
+\indexentry{OSrL}{70}
+\indexentry{OSInstance@{\tt OSInstance}}{70}
+\indexentry{OSOption@{\tt OSOption}}{70}
+\indexentry{OSResult@{\tt OSResult}}{70}
+\indexentry{OSiL|)}{71}
+\indexentry{flex@{\tt flex}}{71}
+\indexentry{bison@{\tt bison}}{71}
+\indexentry{flex@{\tt flex}}{71}
+\indexentry{bison@{\tt bison}}{71}
+\indexentry{make run_parsers@{\tt make run\_parsers}}{71}
 \indexentry{OSiL}{71}
-\indexentry{COIN-OR projects!CoinUtils@{\tt CoinUtils}}{71}
-\indexentry{OSmps2osil@{\tt OSmps2osil}|)}{71}
-\indexentry{MPS format|)}{71}
-\indexentry{AMPL nl format|(}{71}
-\indexentry{OSnl2osil@{\tt OSnl2osil}}{71}
-\indexentry{OSInstance@{\tt OSInstance}}{71}
-\indexentry{OSmps2osil@{\tt OSmps2osil}}{72}
-\indexentry{OSAmplClient@{\tt OSAmplClient}}{72}
-\indexentry{OSiL}{72}
-\indexentry{AMPL nl format|)}{72}
-\indexentry{OSiL|(}{72}
-\indexentry{OSoL}{72}
-\indexentry{OSrL}{72}
-\indexentry{OSInstance@{\tt OSInstance}}{72}
-\indexentry{OSOption@{\tt OSOption}}{72}
-\indexentry{OSResult@{\tt OSResult}}{72}
-\indexentry{OSiL|)}{72}
-\indexentry{flex@{\tt flex}}{72}
-\indexentry{bison@{\tt bison}}{72}
-\indexentry{flex@{\tt flex}}{72}
-\indexentry{bison@{\tt bison}}{72}
-\indexentry{make run_parsers@{\tt make run\_parsers}}{73}
-\indexentry{OSiL}{73}
+\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{71}
+\indexentry{LINDO}{72}
+\indexentry{COIN-OR projects, {\tt Osi}}{72}
+\indexentry{LINDO|(}{73}
+\indexentry{LINDO|)}{73}
 \indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{73}
-\indexentry{LINDO}{73}
-\indexentry{COIN-OR projects, {\tt Osi}}{74}
-\indexentry{LINDO|(}{74}
-\indexentry{LINDO|)}{75}
-\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{75}
-\indexentry{OSInstance@{\tt OSInstance}}{75}
-\indexentry{OSLibrary@{\tt OSLibrary}|)}{75}
-\indexentry{Algorithmic differentiation|(}{78}
-\indexentry{Griewank, A.@{\it Griewank, A.}}{78}
-\indexentry{COIN-OR projects!CppAD@{\tt CppAD}|(}{78}
-\indexentry{Bell, Bradley M.@{\it Bell, Bradley M.}}{78}
-\indexentry{Algorithmic differentiation|)}{79}
-\indexentry{COIN-OR projects!CppAD@{\tt CppAD}|)}{79}
-\indexentry{OSInstance@{\tt OSInstance}}{81}
-\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{85}
+\indexentry{OSInstance@{\tt OSInstance}}{73}
+\indexentry{OSLibrary@{\tt OSLibrary}|)}{73}
+\indexentry{Algorithmic differentiation|(}{77}
+\indexentry{Griewank, A.@{\it Griewank, A.}}{77}
+\indexentry{COIN-OR projects!CppAD@{\tt CppAD}|(}{77}
+\indexentry{Bell, Bradley M.@{\it Bell, Bradley M.}}{77}
+\indexentry{Algorithmic differentiation|)}{78}
+\indexentry{COIN-OR projects!CppAD@{\tt CppAD}|)}{78}
+\indexentry{OSInstance@{\tt OSInstance}}{79}
+\indexentry{COIN-OR projects!Ipopt@{\tt Ipopt}}{83}
