@@ -354,6 +354,7 @@ OS/doc/osUsersManual-OLD.idx -text
 OS/doc/osUsersManual-OLD.pdf -text
 OS/doc/osUsersManual-OLD.tex -text
 OS/doc/osUsersManual.bbl -text
+OS/doc/osUsersManual.bib -text
 OS/doc/osUsersManual.ind -text
 OS/doc/osUsersManual.pdf -text
 OS/doc/osUsersManual.tex -text
