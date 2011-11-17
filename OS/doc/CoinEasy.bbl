@@ -1,3 +1,4 @@
+
 \begin{thebibliography}{1}
 
 \bibitem{bell2007}
@@ -23,12 +24,6 @@ J.~Ma.
 \newblock Ph.D. Dissertation, Department of Industrial Engineering \&
   Management Sciences, Northwestern University, Evanston, IL.
 
-\bibitem{ralphsgalatiMP}
-T.K. Ralphs and M.V. Galati.
-\newblock Decomposition and dynamic cut generation in integer linear
-  programming.
-\newblock {\em Mathematical Programming}, 106:261--285, 2005.
-
 \bibitem{rosenbrock1960}
 H.H. Rosenbrock.
 \newblock An automatic method for finding the greatest or least value of a
@@ -36,3 +31,5 @@ H.H. Rosenbrock.
 \newblock {\em Comp. J.}, 3:175--184, 1960.
 
 \end{thebibliography}
+
+

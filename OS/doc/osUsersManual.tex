@@ -149,8 +149,8 @@ more information.
 
 \addcontentsline{toc}{section}{Bibliography}
 % \addcontentsline{toc}{section}{Bibliography}% alternative for article class
-%\bibliography{\bibpath/kippbib}
-\bibliographystyle{amsplain}
+\bibliography{osUsersManual}
+%\bibliographystyle{amsplain}
 %\bibliography{kippbib}
  
 \printindex
@@ -1447,7 +1447,43 @@ ranlib corrupts the 64bit libraries on that system.
 To create debug libraries, --enable-debug should do the job. 
 
 %%%%%%%%%%%%%%%%%%%%%%%
+From Stefan:
+
+How to disable pkg_config
+
+--disable-pkg-config is for disabling the use of pkg-config when
+checking for dependencies.
+With --without-pkg (better had been --without-prjct) I meant flags like
+--without-glpk or --without-os (ha!) to disable the build of certain
+projects. It works analog to COIN_SKIP_PROJECTS, but is more common in
+the autotools world.
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%
+From Stefan:
+
+How to make configure faster
+
+
+maybe you should check the search path for header files of your
+compiler, but I'm not sure which variable this is.
+You may trick configure by setting ac_cv_header_winsock_h=yes in a
+config.cache file and run configure with -C (this is a good idea anyway). 
+
+
+Here is what I use now:
+
+ac_cv_header_winsock_h=yes 
+ac_cv_header_windows_h=yes 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+From Stefan:  configure options
+
+10 Nov 13:20:18:   sh -c '../releases-1.6.0/configure -C CC=cl CXX=cl F77="ifort -arch:ia32" COIN_SKIP_PROJECTS="ThirdParty/FilterSQP ThirdParty/Glpk ThirdParty/HSL ThirdParty/Metis ThirdParty/SCIP ThirdParty/SoPlex"'
+10 Nov 13:44:08:   make -j4
+10 Nov 15:18:38:   cd /home/svigerske/nbBuildDir\CoinAll\releases-1.6.0-default\
+10 Nov 15:18:38:   make -j4 test
+10 Nov 15:54:38:   cd /home/svigerske/nbBuildDir\CoinAll\releases-1.6.0-default\Clp\src
 
