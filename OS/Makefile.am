@@ -10,15 +10,15 @@ AUTOMAKE_OPTIONS = foreign
 
 ###########
 
+# ????????????????????????????
 CXXFLAGS = -O3  -pipe -DNDEBUG -pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion
 
 ########################################################################
 #                          Subdirectories                              #
 ########################################################################
 
-SUBDIRS = src
+SUBDIRS = src applications
 #  SUBDIRS += test
-  SUBDIRS += applications/amplClient
 
 # We don't want to compile the test subdirectory, unless the test target is
 # specified.  But we need to list it as subdirectory to make sure that it is
