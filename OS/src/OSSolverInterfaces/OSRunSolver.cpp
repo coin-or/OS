@@ -239,7 +239,6 @@ std::string runSolver(std::string solverName, std::string osol,
                                             {
                                                 // we are requesting the Bonmin solver
 #ifdef COIN_HAS_BONMIN
-
                                                 solverType = new BonminSolver();
                                                 solverType->sSolverName = "bonmin";
 #else
@@ -304,6 +303,9 @@ std::string runSolver(std::string solverName, std::string osol,
     }
     catch (const ErrorClass& eclass)
     {
+        if (solverType != NULL)
+            delete solverType;
+        solverType = NULL;
         throw eclass;
     }
 
