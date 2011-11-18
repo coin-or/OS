@@ -1,16 +1,18 @@
 # Copyright (C) 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
 ## $Id: Makefile.am 505 2006-06-01 18:46:31Z andreasw $
 
-# Author:  Andreas Waechter           IBM    2006-04-13
+# Original Author:  Andreas Waechter           IBM    2006-04-13
+
+# Modifications by Horand Gassmann, Jun Ma and Kipp Martin
 
 AUTOMAKE_OPTIONS = foreign
 
 ###########
 
-# ????????????????????????????
+
 CXXFLAGS = -O3  -pipe -DNDEBUG -pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion
 
 ########################################################################
