@@ -36,7 +36,7 @@ AC_PREFIX_DEFAULT([`pwd`])
 AC_CANONICAL_BUILD
 
 # Initialise projectdir
-AC_COIN_PROJECTDIR_INIT(OS)
+AC_COIN_PROJECTDIR_INIT(OS,10:2:4)
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(OS)
