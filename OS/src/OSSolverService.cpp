@@ -530,15 +530,6 @@ int main(int argC, const char* argV[])
         else
             solve();
     }
-//    if ((osoptions->serviceMethod[0] == 's') && (osoptions->serviceMethod[1]
-//            == 'o'))
-//    {
-//        if (osoptions->printModel == true)
-//            doPrintModel(osoptions);
-//        else if (osoptions->printRowNumberAsString != "")
-//            doPrintRow(osoptions);
-//        solve();
-     }
     else
     {
         switch (osoptions->serviceMethod[0])
@@ -549,13 +540,6 @@ int main(int argC, const char* argV[])
         case 'r':
             retrieve();
             break;
-//        case 's':
-//            if (osoptions->printModel == true)
-//                doPrintModel(osoptions);
-//            else if (osoptions->printRowNumberAsString != "")
-//                doPrintRow(osoptions);
-//            send();
-//            break;
         case 'k':
             if (osoptions->serviceMethod[1] == 'i')
                 kill();
