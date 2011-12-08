@@ -13,9 +13,12 @@
  */
 
 
-
 #ifndef OSOPTIONSSTRUC_H
 #define OSOPTIONSSTRUC_H
+
+
+#include <string>
+
 
 /*! \struct osOptionsStruc
  *  \brief This structure is used to store options for the
@@ -42,19 +45,16 @@ struct osOptionsStruc
      */
     std::string osilFile;
 
-    /** osil is the flag that tells OSSolverService that the next
-     * input is the instance in OSiL format
-     * e.g. -osil ../data/osilFiles/wayneQuadratic.osil
+    /** osil is the content of the osilFile 
      */
     std::string osil;
 
     /** osolFile is the name of the file that holds the solver options
+     *  in OSoL format
      */
     std::string osolFile;
 
-    /** osil is the flag that tells OSSolverService that the next
-     * input is a file with solver options
-     * e.g. -osol ../data/osolFiles/demo.osol
+    /** osol is the content of the osolFile
      */
     std::string osol;
 
@@ -63,20 +63,16 @@ struct osOptionsStruc
      */
     std::string osrlFile;
 
-    /** osrl is the flag that tells OSSolverService that the next
-     * input is the file name where the solver should write the result
-     * e.g. -osrl ../data/osrlFiles/test.osrl
+    /** osrl is the content of the osrlFile
      */
-    std::string  osrl;
+    std::string osrl;
 
-    /** name of the file where the instance is in a LINDO instruction
+    /** name of the file containing the instance in LINDO instruction
      * list format
      */
     std::string insListFile;
 
-    /** osrl is the flag that tells OSSolverService that the next
-     * input is the file name where the instance is a LINDO instruction
-     * list -- this is not implemented
+    /** insList is the content of the insListFile -- this is not implemented
      */
     std::string insList;
 
@@ -85,7 +81,7 @@ struct osOptionsStruc
      */
     std::string serviceLocation;
 
-    /** the service method the OSSolverService should execute, e.g
+    /** the service method the OSSolverService should execute, i.e.
      * solve, send, getJobID, kill, knock, or retrieve
      */
     std::string serviceMethod;
@@ -96,42 +92,36 @@ struct osOptionsStruc
      */
     std::string osplInputFile;
 
+    /** osplInput is the content of the osplInputFile
+     */
+    std::string osplInput;
+
     /** name of an output file where the solver should write the result of a
      * knock or kill service request
      *
      */
     std::string osplOutputFile;
 
-    /** osplInput is the flag that tells OSSolverService that the next
-     * input is the file name of the file holding the OSpL that
-     * the OSSolverService sends to the solver
-     * e.g. -osplInput ../data/osplFiles/demo.ospl
-     */
-    std::string osplInput;
-
-    /** osplOutput is the flag that tells OSSolverService that the next
-     * input is the file name of the file holding the OSpL that
-     * the solver should write to
-     * e.g. -osplOutput ../data/osplFiles/test.ospl
+    /** osplOutput is the content of the osplOutputFile
      */
     std::string osplOutput;
 
     /** the name of the file that holds an instance in MPS format */
     std::string mpsFile;
 
-    /** the name of the string that holds an instance in MPS format */
+    /** the string that holds an instance in MPS format */
     std::string mps;
 
     /** the name of the file that holds an instance in AMPL nl format */
     std::string nlFile;
 
-    /** the name of the string that holds an instance in AMPL nl format */
+    /** the string that holds an instance in AMPL nl format */
     std::string nl;
 
     /** the name of the file that holds an instance in GAMS dat format */
     std::string datFile;
 
-    /** the name of the string that holds an instance in GAMS dat format */
+    /** the string that holds an instance in GAMS dat format */
     std::string dat;
 
     /** the name of the .dat that holds the GAMS control file */
@@ -150,6 +140,9 @@ struct osOptionsStruc
      */
     std::string browser;
 
+    /** the JobID */
+    std::string jobID;
+
     /** if this parameter is true we print the contents of the file
      * help.txt and return
      */
@@ -165,23 +158,34 @@ struct osOptionsStruc
      */
     bool printModel;
 
-	/** this parameter contains a string representation (!) of 
-	 *  the row number if only a single row (constraint or objective)
-	 *  of the current instance is to be printed
-	 *  String representations are easier to parse in OSParseosss.l and
-	 *  are easier to recognize as being present or absent
-	 */
-	std::string printRowNumberAsString;
+    /** this parameter contains a string representation (!) of 
+     *  the row number if only a single row (constraint or objective)
+     *  of the current instance is to be printed
+     *  String representations are easier to parse in OSParseosss.l and
+     *  are easier to recognize as being present or absent
+     */
+    std::string printRowNumberAsString;
 
-	/** if this parameter is true we quit/exit	 */
+    /** if this parameter is true we quit/exit
+     *  - only used in the interactive shell
+     */
     bool quit;
 
-    /** if this parameter is true we quit/exit	 */
+    /** if this parameter is true we quit/exit
+     *  - only used in the interactive shell
+     */
     bool exit;
 
-    /** the JobID */
-    std::string jobID;
+    /** constructor method */
+    osOptionsStruc();
+    
+    /** destructor method */
+    ~osOptionsStruc();
 
+    /** alternate constructor
+     *  osss is a string containing the options on a command line
+     */
+    osOptionsStruc(char* osss);
 };
 
 

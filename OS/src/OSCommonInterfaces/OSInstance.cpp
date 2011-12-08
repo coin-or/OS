@@ -3586,7 +3586,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, double *objL
         throw ErrorClass( eclass.errormsg);
     }
     return m_mdObjectiveFunctionValues;
-}//calculateAllConstraintFunctionValues
+}//calculateAllObjectiveFunctionValues
 
 
 double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool new_x)
@@ -3598,7 +3598,7 @@ double *OSInstance::calculateAllObjectiveFunctionValues( double* x, bool new_x)
         if( new_x == false) return m_mdObjectiveFunctionValues;
         int idx, numObjectives;
         numObjectives = getObjectiveNumber();
-        // loop over all constraints
+        // loop over all objectives
         for(idx = 0; idx < numObjectives; idx++)
         {
             m_mdObjectiveFunctionValues[ idx]  = calculateFunctionValue(-idx -1, x, new_x);

@@ -38,6 +38,7 @@ OSExpressionTree::~OSExpressionTree()
     if( bDestroyNlNodes == true)
     {
         if(m_treeRoot != NULL) delete m_treeRoot;
+        m_treeRoot = NULL;
     }
     if(mapVarIdx != NULL)
     {

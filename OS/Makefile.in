@@ -16,9 +16,11 @@
 
 # Copyright (C) 2006 International Business Machines and others.
 # All Rights Reserved.
-# This file is distributed under the Common Public License.
+# This file is distributed under the Eclipse Public License.
 
-# Author:  Andreas Waechter           IBM    2006-04-13
+# Original Author:  Andreas Waechter           IBM    2006-04-13
+
+# Modifications by Horand Gassmann, Jun Ma and Kipp Martin
 
 # Copyright (C) 2006, 2007 International Business Machines and others.
 # All Rights Reserved.
@@ -239,8 +241,6 @@ CXXDEFS = @CXXDEFS@
 CXXDEPMODE = @CXXDEPMODE@
 
 ###########
-
-# ????????????????????????????
 CXXFLAGS = -O3  -pipe -DNDEBUG -pedantic-errors -Wimplicit -Wparentheses -Wreturn-type -Wcast-qual -Wall -Wpointer-arith -Wwrite-strings -Wconversion
 CYGPATH_W = @CYGPATH_W@
 DBG_CFLAGS = @DBG_CFLAGS@

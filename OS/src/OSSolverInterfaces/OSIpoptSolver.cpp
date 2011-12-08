@@ -606,7 +606,7 @@ void IpoptProblem::finalize_solution(SolverReturn status,
 
     try
     {
-        // resultHeader infomration
+        // resultHeader information
         if(osresult->setSolverInvoked( "COIN-OR Ipopt") != true)
             throw ErrorClass("OSResult error: setSolverInvoked");
         if(osresult->setServiceName( OSgetVersionInfo()) != true)

@@ -202,9 +202,6 @@ int main(int argC, const char* argV[])
             return 0;
         }
 
-        // make sure we do not exceed max allowed characters in command line
-
-		
 	void* scanner;
     FileUtil *fileUtil = NULL;
     FileUtil *inputFileUtil = NULL;
@@ -218,13 +215,13 @@ int main(int argC, const char* argV[])
     // initialize the OS options structure
 
     osoptions = new osOptionsStruc();
-    reset_options();
+    //reset_options();
     bool scannerActive = false;
-
 		
     try
     {
 		
+    // make sure we do not exceed max allowed characters in command line
 		i = 1;
         while (i < argC)
         {
@@ -234,6 +231,7 @@ int main(int argC, const char* argV[])
             strcat(osss, space);
             i++;
         }
+
 #ifdef DEBUG_CL_INTERFACE
         cout << "Input String = " << osss << endl;
 #endif
@@ -429,7 +427,7 @@ int main(int argC, const char* argV[])
     unsigned int k;
     for (k = 0; k < osoptions->solverName.length(); k++)
     {
-        osoptions->solverName[k] = tolower(osoptions->solverName[k]);
+        osoptions->solverName[k] = (char)tolower(osoptions->solverName[k]);
     }
 
     // get the data from the files
@@ -1405,7 +1403,7 @@ void interactiveShell()
 
 
     osoptions = new osOptionsStruc();
-    reset_options();
+    //reset_options();
     bool scannerActive = false;
 
             //this is the interactive shell
@@ -1834,8 +1832,8 @@ void interactiveShell()
                                         for (k = 0; k
                                                 < osoptions->solverName.length(); k++)
                                         {
-                                            osoptions->solverName[k] = tolower(
-                                                                           osoptions->solverName[k]);
+                                            osoptions->solverName[k] = 
+                                                (char)tolower(osoptions->solverName[k]);
                                         }
                                         break;
 
@@ -2095,13 +2093,13 @@ void reset_options()
     osoptions->osol = "";
     osoptions->osrlFile = "";
     osoptions->osrl = "";
-    //osoptions->insListFile = "";
+    osoptions->insListFile = "";
     osoptions->insList = "";
     osoptions->serviceLocation = "";
     osoptions->serviceMethod = "";
     osoptions->osplInputFile = "";
-    osoptions->osplOutputFile = "";
     osoptions->osplInput = "";
+    osoptions->osplOutputFile = "";
     osoptions->osplOutput = "";
     osoptions->mpsFile = "";
     osoptions->mps = "";
