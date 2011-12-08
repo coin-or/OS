@@ -214,9 +214,9 @@ int main(int argC, const char* argV[])
 
     // initialize the OS options structure
 
-    osoptions = new osOptionsStruc();
+    //osoptions = new osOptionsStruc();
     //reset_options();
-    bool scannerActive = false;
+    //bool scannerActive = false;
 		
     try
     {
@@ -235,6 +235,8 @@ int main(int argC, const char* argV[])
 #ifdef DEBUG_CL_INTERFACE
         cout << "Input String = " << osss << endl;
 #endif
+
+#if 0 //---------------------------------------------------------------------------------- 
         scannerActive = true;
         ossslex_init(&scanner);
         //std::cout << "Call Text Extra" << std::endl;
@@ -296,6 +298,8 @@ int main(int argC, const char* argV[])
             
             /** end of new code added on September 19, 2011 */
         }
+#endif //#if 0 -----------------------------------------------------------
+        osoptions = new osOptionsStruc(osss);
     }
     catch (const ErrorClass& eclass)
     {
@@ -334,8 +338,8 @@ int main(int argC, const char* argV[])
         osrlwriter = NULL;
         // end new stuff
 
-        if (scannerActive == true)
-            ossslex_destroy(scanner);
+//        if (scannerActive == true)
+//            ossslex_destroy(scanner);
         delete fileUtil;
         delete osoptions;
         return 1;
@@ -515,22 +519,25 @@ int main(int argC, const char* argV[])
     }
     // now call the correct serviceMethod
     // solve is the default
-    if (osoptions->serviceMethod == "")
+    if ((osoptions->serviceMethod == "") || (osoptions->serviceMethod[0] == 's'))
     {
         if (osoptions->printModel == true)
             doPrintModel(osoptions);
         else if (osoptions->printRowNumberAsString != "")
             doPrintRow(osoptions);
-        solve();
-     }
-    if ((osoptions->serviceMethod[0] == 's') && (osoptions->serviceMethod[1]
-            == 'o'))
-    {
-        if (osoptions->printModel == true)
-            doPrintModel(osoptions);
-        else if (osoptions->printRowNumberAsString != "")
-            doPrintRow(osoptions);
-        solve();
+        if (osoptions->serviceMethod[1] == 'e')
+            send();
+        else
+            solve();
+    }
+//    if ((osoptions->serviceMethod[0] == 's') && (osoptions->serviceMethod[1]
+//            == 'o'))
+//    {
+//        if (osoptions->printModel == true)
+//            doPrintModel(osoptions);
+//        else if (osoptions->printRowNumberAsString != "")
+//            doPrintRow(osoptions);
+//        solve();
      }
     else
     {
@@ -542,13 +549,13 @@ int main(int argC, const char* argV[])
         case 'r':
             retrieve();
             break;
-        case 's':
-            if (osoptions->printModel == true)
-                doPrintModel(osoptions);
-            else if (osoptions->printRowNumberAsString != "")
-                doPrintRow(osoptions);
-            send();
-            break;
+//        case 's':
+//            if (osoptions->printModel == true)
+//                doPrintModel(osoptions);
+//            else if (osoptions->printRowNumberAsString != "")
+//                doPrintRow(osoptions);
+//            send();
+//            break;
         case 'k':
             if (osoptions->serviceMethod[1] == 'i')
                 kill();
