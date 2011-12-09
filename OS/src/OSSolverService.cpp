@@ -19,7 +19,7 @@
  * </li>
  * <li>
  * <b>-osol</b> xxx.osol (file name on local machine of solver options,
- *       default default value is NULL)
+ *       default value is NULL)
  * </li>
  * <li>
  * <b>-osrl</b> xxx.osrl (file name on local machine where the optimization
@@ -172,7 +172,9 @@ void getOSiLFromGams();
 //                        OSInstance *osinstance);
 void listOptions(osOptionsStruc *osoptions);
 void doPrintModel(osOptionsStruc *osoptions);
+void doPrintModel(OSInstance *osinstance);
 void doPrintRow(osOptionsStruc *osoptions);
+void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 
                            
 //options structure
@@ -222,7 +224,7 @@ int main(int argC, const char* argV[])
     {
 		
     // make sure we do not exceed max allowed characters in command line
-		i = 1;
+        i = 1;
         while (i < argC)
         {
             if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
@@ -467,9 +469,9 @@ int main(int argC, const char* argV[])
             osoptions->osplInput = fileUtil->getFileAsString(
                                        (osoptions->osplInputFile).c_str());
         //if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
-        if (osoptions->osplOutputFile != "")
-            osoptions->osplOutput = fileUtil->getFileAsString(
-                                        (osoptions->osplOutputFile).c_str());
+//        if (osoptions->osplOutputFile != "")
+//            osoptions->osplOutput = fileUtil->getFileAsString(
+//                                        (osoptions->osplOutputFile).c_str());
     }
     catch (const ErrorClass& eclass)
     {
@@ -645,21 +647,11 @@ void solve()
         }
         else    // solve locally
         {
+            OSInstance *osinstance;
             if (osoptions->osil != "")
             {
-                osilreader = new OSiLReader();
-                
-               
-                //osrl = buildSolver(osoptions->solverName, osoptions->osol,
-                //                   osilreader->readOSiL(osoptions->osil));
-
-		if (osoptions->printModel)
-		    doPrintModel(osoptions);
-		else if (osoptions->printRowNumberAsString != "")
-	            doPrintRow(osoptions);
-                
-                osrl = runSolver(osoptions->solverName, osoptions->osol,
-                                   osilreader->readOSiL(osoptions->osil));
+                osilreader = new OSiLReader();                
+                osinstance = osilreader->readOSiL(osoptions->osil);
             }
             else
             {
@@ -669,21 +661,7 @@ void solve()
 #ifdef COIN_HAS_ASL
                     nl2osil = new OSnl2osil( osoptions->nlFile);
                     nl2osil->createOSInstance();
-
-                    if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
-                    {
-                        OSiLWriter *osilwriter = NULL;
-                        osilwriter = new OSiLWriter();
-                        osoptions->osil = osilwriter->writeOSiL(nl2osil->osinstance);
-			if (osoptions->printModel)
-		            doPrintModel(osoptions);
-		        else
-	                    doPrintRow(osoptions);
-                        delete osilwriter;
-                        osilwriter = NULL;
-                    }
-
-                    osrl = runSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
+                    osinstance = nl2osil->osinstance;
 #else
                     throw ErrorClass(
                         "nl file specified locally but ASL not present");
@@ -695,22 +673,7 @@ void solve()
                     {
                         mps2osil = new OSmps2osil(osoptions->mpsFile);
                         mps2osil->createOSInstance();
-
-                        if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
-                        {
-                            OSiLWriter *osilwriter = NULL;
-                            osilwriter = new OSiLWriter();
-                            osoptions->osil = osilwriter->writeOSiL(mps2osil->osinstance);
-			    if (osoptions->printModel)
-		                doPrintModel(osoptions);
-		            else
-	                        doPrintRow(osoptions);
-                            delete osilwriter;
-                            osilwriter = NULL;
-                        }
-
-                        osrl = runSolver(osoptions->solverName,
-                                           osoptions->osol, mps2osil->osinstance);
+                        osinstance = mps2osil->osinstance;
                     }
                     else
                     {
@@ -719,21 +682,7 @@ void solve()
 #ifdef COIN_HAS_GAMSUTILS
                             gams2osil = new OSgams2osil( osoptions->gamsControlFile);
                             gams2osil->createOSInstance();
-
-                            if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
-                            {
-                                OSiLWriter *osilwriter = NULL;
-                                osilwriter = new OSiLWriter();
-                                osoptions->osil = osilwriter->writeOSiL(gams2osil->osinstance);
-			        if (osoptions->printModel)
-		                    doPrintModel(osoptions);
-		                else
- 	                            doPrintRow(osoptions);
-                                delete osilwriter;
-                                osilwriter = NULL;
-                            }
-
-                            osrl = runSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
+                            osinstance = gams2osil->osinstance;
 #else
                             throw ErrorClass(
                                 "a Gams Control specified locally but GAMSIP not present");
@@ -750,7 +699,15 @@ void solve()
                     }
                 }
             }
-            //delete fileUtil;
+	    if (osoptions->printModel)
+                    doPrintModel(osinstance);
+	    else if (osoptions->printRowNumberAsString != "")
+	            doPrintRow(osinstance, osoptions->printRowNumberAsString);
+                
+            osrl = runSolver(osoptions->solverName, osoptions->osol, osinstance);
+            
+
+	    //delete fileUtil;
             if (osoptions->osrlFile != "")
             {
 
@@ -2318,7 +2275,20 @@ void doPrintModel(osOptionsStruc *osoptions)
 			mps2osil = NULL;
 		}
 	}
-}// doPrintModel
+}// doPrintModel(osOptionsStruc *osoptions)
+
+void doPrintModel(OSInstance *osinstance)
+{
+	if (osinstance == NULL)
+	{
+		std::cout
+			<< "no instance defined; print command ignored" << std::endl;
+	}
+	else
+	{
+		std::cout << osinstance->printModel() << std::endl;
+	}
+}// doPrintModel(osOptionsStruc *osoptions)
 
 void doPrintRow(osOptionsStruc *osoptions)
 {
@@ -2376,5 +2346,34 @@ void doPrintRow(osOptionsStruc *osoptions)
 			}
 		}
 	}
-}// doPrintRow
+}// doPrintRow(osOptionsStruc *osoptions)
+
+void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
+{
+	int rownumber;
+	if (rownumberstring == "")
+		std::cout << "no line number given; print command ignored" << std::endl;
+	else
+	{
+		try
+		{
+			rownumber = atoi((rownumberstring).c_str());
+		}
+		catch  (const ErrorClass& eclass)
+		{
+	                std::cout << "invalid row number; print command ignored" << std::endl;
+		}
+
+		if (osinstance == NULL)
+                {
+                        std::cout
+	                        << "no instance defined; print command ignored" << std::endl;
+		}
+		else
+		{
+			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
+	    		std::cout << osinstance->printModel(rownumber) << std::endl;
+		}
+	}
+}// doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 

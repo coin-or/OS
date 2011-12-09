@@ -205,12 +205,14 @@ int main(int argc, char **argv)
     std::string osolFileName = "";
     std::string osol ="";
     std::string serviceLocation = "";
+    osOptionsStruc *osoptions;
 
     amplclient_options = getenv("OSAmplClient_options");
     if( amplclient_options != NULL)
     {
         cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
-        getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
+        //getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
+        osoptions = new osOptionsStruc(amplclient_options);
     }
 
     /* If an OSoL file was given, read it into a string (don't parse)
