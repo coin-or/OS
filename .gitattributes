@@ -101,6 +101,8 @@ OS/configure.ac -text
 OS/data/OSSolverTests.xls -text
 OS/data/amplFiles/IP_infeasible.mod -text
 OS/data/amplFiles/IP_infeasible.nl -text
+OS/data/amplFiles/IP_noconstraint.mod -text
+OS/data/amplFiles/IP_noconstraint.nl -text
 OS/data/amplFiles/IP_unbounded.mod -text
 OS/data/amplFiles/IP_unbounded.nl -text
 OS/data/amplFiles/LP_infeasible.mod -text
@@ -184,7 +186,9 @@ OS/data/matlabFiles/OSCallMatlabSolver.m -text
 OS/data/matlabFiles/markowitz.m -text
 OS/data/matlabFiles/parincLinear.m -text
 OS/data/matlabFiles/template.m -text
+OS/data/mpsFiles/IP_noconstraint.mps -text
 OS/data/mpsFiles/IP_unbounded.mps -text
+OS/data/mpsFiles/LP_noconstraint.mps -text
 OS/data/mpsFiles/parinc.mps -text
 OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
