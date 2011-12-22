@@ -85,7 +85,7 @@ using std::ostringstream;
 #define MY_DEBUG
 
 bool interactiveShell(std::string *schema, std::string *testFileName, std::string *outFileName,
-					  bool *compress, bool *addWhiteSpace, bool *verifyObjects, 
+					  bool *compress, bool *addWhiteSpace, bool *verifyObjects, bool *useRandomObjects,
 					  unsigned int *seed, int *nrep, double *density, bool *conformant);
 void printHelp();
 std::string getUserInput(bool defaultPresent);
@@ -115,7 +115,7 @@ int main(int argC, char* argV[])
 	bool compress = true;
 	bool addWhiteSpace = true;
 	bool verifyObjects = true;
-	bool useRandomObjects = true;
+	bool useRandomObjects = false;
 
 	int nrep = 1;
 	unsigned int seed;
@@ -129,7 +129,7 @@ int main(int argC, char* argV[])
 	if (argC == 1)
 	{
 		if (interactiveShell(&schema, &testFileName, &outFileName, &compress, &addWhiteSpace, &verifyObjects,
-			&seed, &nrep, &density, &conformant) != true) return 0;
+			&useRandomObjects, &seed, &nrep, &density, &conformant) != true) return 0;
 
 #ifdef MY_DEBUG
 			std::cout << "User dialog completed " << std::endl;
@@ -193,7 +193,7 @@ int main(int argC, char* argV[])
 		for (int i=1; i<argC; i++)
 		{
 			if (argV[i][0] != '-') 
-				throw ErrorClass(" Error while writing compressed file");
+				throw ErrorClass("usage: -<option>=<value>; try -help for more");
 			argument = std::string(argV[i]);
 			epos = argument.find('=');
 			option = argument.substr(0,epos);
@@ -615,7 +615,7 @@ std::cout << osxl << std::endl;
 }//end main
 
 bool interactiveShell(std::string *schema, std::string *testFileName, std::string *outFileName,
-					  bool *compress, bool *addWhiteSpace, bool *verifyObjects, 
+					  bool *compress, bool *addWhiteSpace, bool *verifyObjects, bool *useRandomObjects,
 					  unsigned int *seed, int *nrep, double *density, bool *conformant)
 {
 	std::string userInput;
@@ -641,6 +641,7 @@ bool interactiveShell(std::string *schema, std::string *testFileName, std::strin
 	if (*testFileName == "")
 	{
 		std::cout << std::endl << "Random problem generation selected." << std::endl;
+		*useRandomObjects = true;
 
 		std::cout << std::endl << "Do you want to input a random number seed? [y|N] > ";
 		std::string temp;
