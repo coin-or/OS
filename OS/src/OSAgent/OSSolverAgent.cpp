@@ -38,7 +38,7 @@ using std::endl;
 
 OSSolverAgent::OSSolverAgent(string solverURI) : OShL()
 {
-    int nstart = 0;
+    string::size_type nstart = 0;
     string::size_type posSlash;
     // parse the solverURI
     // get rid of http:// if it is there
@@ -56,7 +56,7 @@ OSSolverAgent::OSSolverAgent(string solverURI) : OShL()
     }
     else
     {
-        solverPortNumber = atoi( &solverURI.substr(colonlocation + 1, nstart - colonlocation - 1)[0] ) ;
+        solverPortNumber = (unsigned short) atoi( &solverURI.substr(colonlocation + 1, nstart - colonlocation - 1)[0] ) ;
         solverAddress = solverURI.substr(0, colonlocation);
     }
 }
@@ -82,7 +82,7 @@ string OSSolverAgent::solve(string osil, string osol)
     string msInputNames[2] = {"osil", "osol"};
     string sSoapAction = "OSSolverService#solve";
     // create the soap
-    double cpuTime =0;
+    double cpuTime;
     double startTime = 0;
     startTime = CoinCpuTime();
     theSOAP = WSUtil::createSOAPMessage(numInputs, solverAddress, postURI,

@@ -132,11 +132,11 @@ private:
     /** solverAddress is the URI for the solver*/
     std::string solverAddress;
 
-    /** solverPortNumber is the port number for the sovler */
+    /** solverPortNumber is the port number for the solver */
     unsigned short solverPortNumber;
 
-    /** postURI is the path to the solver that follows the first
-     * / in the solverAddress
+    /** postURI is the path to the solver that follows 
+     * the first '/' in the solverAddress
      */
     std::string postURI;
 
