@@ -18,7 +18,6 @@ noinst_LTLIBRARIES = libOSParsers.la
 
 # List all source files for this library, including headers
 libOSParsers_la_SOURCES = \
-		OSOptionsStruc.cpp \
 		OSOptionsStruc.h \
 		OSParseosil.cpp \
 		OSParseosil.tab.cpp \
