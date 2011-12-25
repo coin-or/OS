@@ -175,17 +175,6 @@ struct osOptionsStruc
      *  - only used in the interactive shell
      */
     bool exit;
-
-    /** constructor method */
-    osOptionsStruc();
-    
-    /** destructor method */
-    ~osOptionsStruc();
-
-    /** alternate constructor
-     *  osss is a string containing the options on a command line
-     */
-    osOptionsStruc(char* osss);
 };
 
 

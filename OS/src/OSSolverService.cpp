@@ -216,9 +216,9 @@ int main(int argC, const char* argV[])
 
     // initialize the OS options structure
 
-    //osoptions = new osOptionsStruc();
-    //reset_options();
-    //bool scannerActive = false;
+    osoptions = new osOptionsStruc();
+    reset_options();
+    bool scannerActive = false;
 		
     try
     {
@@ -238,7 +238,6 @@ int main(int argC, const char* argV[])
         cout << "Input String = " << osss << endl;
 #endif
 
-#if 0 //---------------------------------------------------------------------------------- 
         scannerActive = true;
         ossslex_init(&scanner);
         //std::cout << "Call Text Extra" << std::endl;
@@ -300,8 +299,6 @@ int main(int argC, const char* argV[])
             
             /** end of new code added on September 19, 2011 */
         }
-#endif //#if 0 -----------------------------------------------------------
-        osoptions = new osOptionsStruc(osss);
     }
     catch (const ErrorClass& eclass)
     {
