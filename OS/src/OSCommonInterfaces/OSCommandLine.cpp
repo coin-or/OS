@@ -29,8 +29,15 @@
 
 void OSCommandLine::reset_options()
 {
+	if (osinstance != NULL) delete osinstance;
+	osinstance = NULL;
+	if (osoption != NULL) delete osoption;
+	osoption = NULL;
 	osinstance = NULL;
 	osoption = NULL;
+    serviceLocation = "";
+    serviceMethod = "";
+    solverName = "";
     configFile = "";
     osilFile = "";
     osilOutputFile = "";
@@ -38,15 +45,11 @@ void OSCommandLine::reset_options()
     osolFile = "";
     osol = "";
     osrlFile = "";
-    osrl = "";
     insListFile = "";
     insList = "";
-    serviceLocation = "";
-    serviceMethod = "";
     osplInputFile = "";
     osplInput = "";
     osplOutputFile = "";
-    osplOutput = "";
     mpsFile = "";
     mps = "";
     nlFile = "";
@@ -54,57 +57,24 @@ void OSCommandLine::reset_options()
     datFile = "";
     dat = "";
 	gamsControlFile = "";
-    solverName = "";
     browser = "";
-    jobID = "";
+	resultString = "";
     invokeHelp = false;
+    listOptions = false;
     writeVersion = false;
     printModel = false;
     printRowNumberAsString = "";
     quit = false;
-    exit = false;
 }// reset_options
 
-OSCommandLine::OSCommandLine()
+OSCommandLine::OSCommandLine():
+	osinstance(NULL),
+	osoption(NULL)
 {
 #ifdef DEBUG_COMMANDLINE
 	std::cout << "Inside command line constructor" << std::endl;
 #endif
-//	reset_options();
-	osinstance = NULL;
-	osoption = NULL;
-    configFile = "";
-    osilFile = "";
-    osilOutputFile = "";
-    osil = "";
-    osolFile = "";
-    osol = "";
-    osrlFile = "";
-    osrl = "";
-    insListFile = "";
-    insList = "";
-    serviceLocation = "";
-    serviceMethod = "";
-    osplInputFile = "";
-    osplInput = "";
-    osplOutputFile = "";
-    osplOutput = "";
-    mpsFile = "";
-    mps = "";
-    nlFile = "";
-    nl = "";
-    datFile = "";
-    dat = "";
-	gamsControlFile = "";
-    solverName = "";
-    browser = "";
-    jobID = "";
-    invokeHelp = false;
-    writeVersion = false;
-    printModel = false;
-    printRowNumberAsString = "";
-    quit = false;
-    exit = false;
+	reset_options();
 }
 
 OSCommandLine::~OSCommandLine()
@@ -112,4 +82,109 @@ OSCommandLine::~OSCommandLine()
 #ifdef DEBUG_COMMANDLINE
 	std::cout << "Inside command line destructor" << std::endl;
 #endif
+	if (osinstance != NULL) delete osinstance;
+	osinstance = NULL;
+	if (osoption != NULL) delete osoption;
+	osoption = NULL;
 }
+
+void OSCommandLine::convertSolverNametoLowerCase()
+{
+    unsigned int k;
+    for (k = 0; k < solverName.length(); k++)
+    {
+        solverName[k] = (char)tolower(solverName[k]);
+    }
+}
+
+void OSCommandLine::convertSolverNametoUpperCase()
+{
+    unsigned int k;
+    for (k = 0; k < solverName.length(); k++)
+    {
+        solverName[k] = (char)toupper(solverName[k]);
+    }
+}
+
+std::string OSCommandLine::list_options()
+{
+	std::ostringstream outStr;
+    outStr
+            << "The following command line options and values have been read:"
+            << std::endl;
+    if (serviceLocation != "")
+        outStr << "Service Location = "
+             << serviceLocation
+             << std::endl;
+    if (serviceMethod != "")
+        outStr << "Service Method = "
+             << serviceMethod
+             << std::endl;
+    if ( solverName != "")
+        outStr << "Selected Solver = "
+             << solverName
+             << std::endl;
+
+    if (configFile != "")
+        outStr << "Config file = "
+             << configFile
+             << std::endl;
+    if (osilFile != "")
+        outStr << "OSiL file = "
+             << osilFile
+             << std::endl;
+    if (osilOutputFile != "")
+        outStr << "OSiL output file = "
+             << osilOutputFile
+             << std::endl;
+    if (osolFile != "")
+        outStr << "OSoL file = "
+             << osolFile
+             << std::endl;
+    if (osrlFile != "")
+        outStr << "OSrL file = "
+             << osrlFile
+             << std::endl;
+	if (insListFile != "") 
+		outStr << "Instruction List file = " 
+		     << insListFile 
+		     << std::endl;
+    if (osplInputFile != "")
+        outStr << "OSpL Input file = "
+             << osplInputFile
+             << std::endl;
+    if (osplOutputFile != "")
+        outStr << "OSpL Output file = "
+             << osplOutputFile
+             << std::endl;
+    if (mpsFile != "")
+        outStr << "MPS File Name = "
+             << mpsFile
+             << std::endl;
+    if (nlFile != "")
+        outStr << "NL File Name = "
+             << nlFile
+             << std::endl;
+    if (datFile != "")
+        outStr << "GAMS dat file = "
+             << mpsFile
+             << std::endl;
+    if (gamsControlFile != "")
+        outStr << "GAMS control file = "
+             << gamsControlFile
+             << std::endl;
+
+    if (browser != "")
+        outStr << "Result browser = "
+             << browser
+             << std::endl;
+
+	if (printModel)
+        outStr << "Print model = true"
+             << std::endl;
+	if (printRowNumberAsString != "")
+        outStr << "Print row "
+             << printRowNumberAsString
+             << std::endl;
+	return outStr.str();
+}// list_options

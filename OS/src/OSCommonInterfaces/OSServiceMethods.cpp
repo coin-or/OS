@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2011-2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -12,10 +12,6 @@
  *
  */
 
- /**
-  *  This file implements wrappers around the service methods of OS
-  *
-  */
 
 #include "OSConfig.h"
 #include "OSCommandLine.h"
@@ -42,932 +38,334 @@
 
 #include <stdio.h>
 
-std::string executeServiceMethod(OSCommandLine *oscommandline)
+
+OSServiceMethods::OSServiceMethods()
 {
-	return "";
+#ifdef DEBUG_OSSERVICEMETHODS
+    cout << "Inside the OSServiceMethods Constructor" << endl;
+#endif
+}//end default OSServiceMethods constructor
+
+
+OSServiceMethods::~OSServiceMethods()
+{
+#ifdef DEBUG_OSSERVICEMETHODS
+    cout << "Inside the OSServiceMethods Destructor" << endl;
+#endif
+}// end OSServiceMethods destructor
+
+
+OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline)
+{
+#ifdef DEBUG_OSSERVICEMETHODS
+    cout << "Inside the OSServiceMethods Constructor" << endl;
+#endif
+
+    FileUtil   *fileUtil   = NULL;
+	OSiLReader *osilreader = NULL;
+	OSoLReader *osolreader = NULL;
+	OSiLWriter *osilwriter = NULL;
+	OSoLWriter *osolwriter = NULL;
+	OSmps2osil *mps2osil   = NULL;
+
+#ifdef COIN_HAS_ASL
+    OSnl2os *nl2os = NULL;
+#endif
+
+#ifdef COIN_HAS_GAMSUTILS
+    OSgams2os *gams2os = NULL;
+#endif
+
+    try
+	{
+	    fileUtil = new FileUtil();
+
+		/** Prepare the OSInstance and OSOption objects if needed.
+		 *  The objects are needed if
+		 *  1. any output is based on the instance ((i.e, printModel, 
+		 *     printRow or osilOutputFile is specified) OR
+		 *  2. a solve/send command is based on input other than OSiL format
+		 */
+		if ( (oscommandline->printModel || oscommandline->printRowNumberAsString != "" || oscommandline->osilOutputFile != "") ||
+			((oscommandline->serviceMethod[0] = 's') && (oscommandline->osilFile == "")))
+		{
+		/** Search for an instance in the following order
+		 *  1. osil file
+		 *  2. non-proprietary formats (only MPS for now)
+		 *  3. proprietary formats (AMPL nl, GAMS dat, etc.)
+		 */
+			if (oscommandline->osilFile != "") 
+			{
+				osilreader = new OSiLReader();			
+	            oscommandline->osil = fileUtil->getFileAsString(
+                                  (oscommandline->osilFile).c_str());
+				oscommandline->osinstance = osilreader->readOSiL(oscommandline->osil);
+				if (oscommandline->osolFile != "") 
+				{
+		            oscommandline->osol = fileUtil->getFileAsString(
+			                      (oscommandline->osolFile).c_str());
+					osolreader = new OSoLReader();			
+					oscommandline->osoption = osolreader->readOSoL(oscommandline->osol);
+				}
+			}
+		    else if (oscommandline->mpsFile != "") 
+			{
+                mps2osil = new OSmps2osil(oscommandline->mpsFile);
+                mps2osil->createOSInstance();
+                oscommandline->osinstance = mps2osil->osinstance;
+				if (oscommandline->osolFile != "") 
+				{
+		            oscommandline->osol = fileUtil->getFileAsString(
+			                      (oscommandline->osolFile).c_str());
+					osolreader = new OSoLReader();			
+					oscommandline->osoption = osolreader->readOSoL(oscommandline->osol);
+				}
+			}
+		    else if (oscommandline->nlFile != "")
+			{
+#ifdef COIN_HAS_ASL
+                nl2os = new OSnl2os(oscommandline);
+                nl2os->createOSObjects();
+                osinstance = nl2os->osinstance;
+                osoption   = nl2os->osoption;
+#else
+                throw ErrorClass(
+                    "nl file specified locally but ASL not present");
+#endif
+			}
+		    else if (oscommandline->gamsControlFile != "")
+			{
+#ifdef COIN_HAS_GAMSUTILS
+                gams2os = new OSgams2os(oscommandline);
+                gams2os->createOSObjects();
+                osinstance = gams2os->osinstance;
+                osoption   = gams2os->osoption;
+#else
+                throw ErrorClass(
+                    "a Gams Control specified locally but GAMSIP not present");
+#endif
+			}
+			else
+			{
+				if (oscommandline->osolFile != "" && oscommandline->serviceLocation != "") 
+				{
+		            oscommandline->osol = fileUtil->getFileAsString(
+                                  (oscommandline->osolFile).c_str());
+					osolreader = new OSoLReader();			
+					oscommandline->osoption = osolreader->readOSoL(oscommandline->osol);
+					if (oscommandline->solverName != "")
+						oscommandline->osoption->setSolverToInvoke(oscommandline->solverName);
+				}
+                if (oscommandline->osol.find( "<instanceLocation") == std::string::npos)
+                    throw ErrorClass(
+                        "Error: no optimization instance found");
+			}
+
+			// Make sure the solver name is recorded properly
+			if (oscommandline->solverName != "") 
+			{	
+				if (oscommandline->osol == "" && oscommandline->osolFile != "") 
+		            oscommandline->osol = fileUtil->getFileAsString(
+                                  (oscommandline->osolFile).c_str());
+				oscommandline->osoption->setSolverToInvoke(oscommandline->solverName);
+			}	
+
+			// convert OS objects to strings if necessary
+			if (oscommandline->serviceLocation != "" && oscommandline->osil == "") 
+			{	
+				osilwriter= new OSiLWriter();
+				oscommandline->osil = osilwriter->writeOSiL(oscommandline->osinstance);
+			}	
+			if (oscommandline->serviceLocation != "" && oscommandline->osoption != NULL) 
+			{	
+				osolwriter= new OSoLWriter();
+				oscommandline->osol = osolwriter->writeOSoL(oscommandline->osoption);
+			}	
+		}
+
+		// cleanup
+	    if (fileUtil != NULL) delete fileUtil;
+		fileUtil = NULL;
+	    if (osilreader != NULL) delete osilreader;
+		osilreader = NULL;
+	    if (osolreader != NULL) delete osolreader;
+		osolreader = NULL;
+	    if (osilwriter != NULL) delete osilwriter;
+		osilwriter = NULL;
+	    if (osolwriter != NULL) delete osolwriter;
+		osolwriter = NULL;
+	    if (mps2osil != NULL) delete mps2osil;
+		mps2osil = NULL;
+
+#ifdef COIN_HAS_ASL
+	    if (nl2os != NULL) delete nl2os;
+	    nl2os = NULL;
+#endif
+
+#ifdef COIN_HAS_GAMSUTILS
+	    if (gams2os != NULL) delete gams2os;
+		gams2os = NULL;
+#endif
+	}
+	catch(const ErrorClass& eclass)
+	{
+	    if (fileUtil != NULL) delete fileUtil;
+		fileUtil = NULL;
+	    if (osilreader != NULL) delete osilreader;
+		osilreader = NULL;
+	    if (osolreader != NULL) delete osolreader;
+		osolreader = NULL;
+	    if (osilwriter != NULL) delete osilwriter;
+		osilwriter = NULL;
+	    if (osolwriter != NULL) delete osolwriter;
+		osolwriter = NULL;
+	    if (mps2osil != NULL) delete mps2osil;
+		mps2osil = NULL;
+
+#ifdef COIN_HAS_ASL
+	    if (nl2os != NULL) delete nl2os;
+	    nl2os = NULL;
+#endif
+
+#ifdef COIN_HAS_GAMSUTILS
+	    if (gams2os != NULL) delete gams2os;
+		gams2os = NULL;
+#endif
+
+		throw ErrorClass(eclass.errormsg);
+	}
+}//end nonstandard OSServiceMethods constructor
+
+bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
+{
+    OSSolverAgent* osagent = NULL;
+	/**
+	 *  The required file conversions are all assumed 
+	 *  to have been taken care of in the nonstandard constructor,
+	 *  so this wrapper merely directs traffic
+	 */
+    try
+    {
+		/** the only local service method is solve() */
+		if	(oscommandline->serviceLocation == "")
+			if (oscommandline->serviceMethod == "solve")
+				oscommandline->resultString = runSolver(oscommandline->solverName, oscommandline->osoption, oscommandline->osinstance);
+			else
+				throw ErrorClass("No service location (URL) specified. Only \"solve\" is available locally");
+
+		/** Here we have a remote call --- reuse as much code as possible */
+		else
+		{
+            osagent = new OSSolverAgent(oscommandline->serviceLocation);
+//solve
+			if (oscommandline->serviceMethod == "solve")
+	            oscommandline->resultString = osagent->solve(oscommandline->osil, oscommandline->osol);
+//send --- first check that there is a jobID. If not, get one
+			else if (oscommandline->serviceMethod == "send")
+			{
+                if (oscommandline->osol.find( "<jobID") == std::string::npos)
+				{
+	                OSoLReader *osolreader = NULL;
+		            osolreader = new OSoLReader();
+	                OSoLWriter *osolwriter = NULL;
+		            osolwriter = new OSoLWriter();
+					try
+					{
+
+						if (oscommandline->osol != "")
+							oscommandline->osoption = osolreader->readOSoL(oscommandline->osol);
+			            oscommandline->osoption->setJobID(osagent->getJobID(""));
+
+						// now write the osOption object into a string
+				        oscommandline->osol = osolwriter->writeOSoL(oscommandline->osoption);
+
+		                delete osolreader;
+			            osolreader = NULL;
+		                delete osolwriter;
+			            osolwriter = NULL;
+					}
+					catch (const ErrorClass& eclass)
+					{
+						delete osolreader;
+			            osolreader = NULL;
+		                delete osolwriter;
+			            osolwriter = NULL;
+						throw ErrorClass(eclass.errormsg);
+					}
+				}
+				oscommandline->resultString = osagent->send(oscommandline->osil, oscommandline->osol);
+            }
+//retrieve
+			else if (oscommandline->serviceMethod == "retrieve")
+			{
+	            if (oscommandline->osol.find( "<jobID") == std::string::npos)
+		            throw ErrorClass("there is no JobID to retrieve");
+			    oscommandline->resultString = osagent->retrieve(oscommandline->osol);
+			}
+//getJobID
+			else if (oscommandline->serviceMethod == "getJobID")
+	            oscommandline->resultString = osagent->getJobID(oscommandline->osol);
+//knock
+			else if (oscommandline->serviceMethod == "knock")
+	            oscommandline->resultString = osagent->knock(oscommandline->osplInput, oscommandline->osol);
+//kill
+			else if (oscommandline->serviceMethod == "kill")
+			{
+	            if (oscommandline->osol.find( "<jobID") == std::string::npos)
+		            throw ErrorClass("there is no JobID to kill");
+			    oscommandline->resultString = osagent->kill(oscommandline->osol);
+			}
+			else
+		            throw ErrorClass("serviceMethod not recognized");
+
+			delete osagent;
+            osagent = NULL;
+		}
+		return true;
+    }
+    catch (const ErrorClass& eclass)
+    {
+        OSResult *osresult = NULL;
+        OSrLWriter *osrlwriter = NULL;
+        osrlwriter = new OSrLWriter();
+        osresult = new OSResult();
+        osresult->setGeneralMessage(eclass.errormsg);
+        osresult->setGeneralStatusType("error");
+        oscommandline->resultString = osrlwriter->writeOSrL(osresult);
+        //catch garbage collection
+        delete osresult;
+        osresult = NULL;
+        delete osrlwriter;
+        osrlwriter = NULL;
+
+		if (osagent != NULL) delete osagent;
+            osagent = NULL;
+        return false;
+    }
 }//executeServiceMethod
 
-    try
-    {
-        if (oscommandline->invokeHelp == true)
-        {
-			std::cout << std::endl << std::endl << get_help() << std::endl;
-            delete osoptions;
-            osoptions = NULL;
-            return 0;
-        }
-        if (oscommandline->writeVersion == true)
-        {
-			std::cout << std::endl << std::endl << OSgetVersionInfo() << std::endl;
-            delete osoptions;
-            osoptions = NULL;
-            return 0;
-        }
-    }
-    catch (const ErrorClass& eclass)
-    {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "try -h or --help" <<  endl;
 
-
-        //new stuff on April 17, 2010
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        osrlwriter = new OSrLWriter();
-        osresult = new OSResult();
-        osresult->setGeneralMessage(eclass.errormsg);
-        osresult->setGeneralStatusType("error");
-        std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (oscommandline->osrlFile != "")
-        {
-            //fileUtil->writeFileFromString(oscommandline->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
-            if (oscommandline->browser != "")
-            {
-                std::string str = oscommandline->browser + "  "
-                                  + oscommandline->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        delete osresult;
-        osresult = NULL;
-        delete osrlwriter;
-        osrlwriter = NULL;
-        // end new stuff
-
-
-        delete osoptions;
-        osoptions = NULL;
-        delete inputFileUtil;
-        inputFileUtil = NULL;
-        return 1;
-    }
-
-#ifdef DEBUG_CL_INTERFACE
-    cout << "HERE ARE THE OPTION VALUES:" << endl;
-    if(oscommandline->configFile != "") cout << "Config file = " << oscommandline->configFile << endl;
-    if(oscommandline->osilFile != "") cout << "OSiL file = " << oscommandline->osilFile << endl;
-    if(oscommandline->osolFile != "") cout << "OSoL file = " << oscommandline->osolFile << endl;
-    if(oscommandline->osrlFile != "") cout << "OSrL file = " << oscommandline->osrlFile << endl;
-    //if(oscommandline->insListFile != "") cout << "Instruction List file = " << oscommandline->insListFile << endl;
-    if(oscommandline->osplInputFile != "") cout << "OSpL Input file = " << oscommandline->osplInputFile << endl;
-    if(oscommandline->serviceMethod != "") cout << "Service Method = " << oscommandline->serviceMethod << endl;
-    if(oscommandline->mpsFile != "") cout << "MPS File Name = " << oscommandline->mpsFile << endl;
-    if(oscommandline->nlFile != "") cout << "NL File Name = " << oscommandline->nlFile << endl;
-    if(oscommandline->gamsControlFile != "") cout << "gams Control File Name = " << oscommandline->gamsControlFile << endl;
-    if(oscommandline->browser != "") cout << "Browser Value = " << oscommandline->browser << endl;
-    if(oscommandline->solverName != "") cout << "Selected Solver = " << oscommandline->solverName << endl;
-    if(oscommandline->serviceLocation != "") cout << "Service Location = " << oscommandline->serviceLocation << endl;
-    if(oscommandline->printModel) cout << "print model prior to solve/send" << endl;
-    if(oscommandline->printRowNumberAsString != "") cout << "print model row " << oscommandline->printRowNumberAsString << " prior to solve/send" << endl;
-
-#endif
-
-
-    // get the data from the files
-    fileUtil = new FileUtil();
-    try
-    {
-        //if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
-        if (osoptions->osolFile != "")
-        {
-
-            osoptions->osol = fileUtil->getFileAsString(
-                                  (osoptions->osolFile).c_str());
-
-        }
-
-        if (osoptions->osilFile != "")
-        {
-            //this takes precedence over what is in the OSoL file
-            osoptions->osil = fileUtil->getFileAsString(
-                                  (osoptions->osilFile).c_str());
-        }
-        /*
-         else{// we were not given an osil file
-         // make sure we don't have a service URI in the file or are using mps or nl
-         // if we have nl or mps assume a local solve
-         if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->gamsControlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") )
-         osoptions->osil = fileUtil->getFileAsString( getInstanceLocation( osoptions->osol).c_str()  );
-         }
-         */
-
-        //if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
-        if (osoptions->osplInputFile != "")
-            osoptions->osplInput = fileUtil->getFileAsString(
-                                       (osoptions->osplInputFile).c_str());
-        //if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
-//        if (osoptions->osplOutputFile != "")
-//            osoptions->osplOutput = fileUtil->getFileAsString(
-//                                        (osoptions->osplOutputFile).c_str());
-    }
-    catch (const ErrorClass& eclass)
-    {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "could not open file properly" << endl;
-        //cout << "try -h or --help" <<  endl;
-
-
-        //new stuff on April 17, 2010
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        osrlwriter = new OSrLWriter();
-        osresult = new OSResult();
-        osresult->setGeneralMessage(eclass.errormsg);
-        osresult->setGeneralStatusType("error");
-        std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (osoptions->osrlFile != "")
-        {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
-            {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        delete osresult;
-        osresult = NULL;
-        delete osrlwriter;
-        osrlwriter = NULL;
-        // end new stuff
-
-
-        delete osoptions;
-        osoptions = NULL;
-        delete fileUtil;
-        fileUtil = NULL;
-        return 1;
-    }
-    // now call the correct serviceMethod
-    // solve is the default
-    if ((osoptions->serviceMethod == "") || (osoptions->serviceMethod[0] == 's'))
-    {
-        if (osoptions->printModel == true)
-            doPrintModel(osoptions);
-        else if (osoptions->printRowNumberAsString != "")
-            doPrintRow(osoptions);
-        if (osoptions->serviceMethod[1] == 'e')
-            send();
-        else
-            solve();
-    }
-    else
-    {
-        switch (osoptions->serviceMethod[0])
-        {
-        case 'g':
-            getJobID();
-            break;
-        case 'r':
-            retrieve();
-            break;
-        case 'k':
-            if (osoptions->serviceMethod[1] == 'i')
-                kill();
-            else
-                knock();
-            break;
-        default:
-
-            break;
-        }
-    }
-    delete osoptions;
-    osoptions = NULL;
-    delete fileUtil;
-    fileUtil = NULL;
-    return 0;
-}
-
-void solve()
-{
-    std::string osrl = "";
-    OSiLReader *osilreader = NULL;
-    OSmps2osil *mps2osil = NULL;
-#ifdef COIN_HAS_ASL
-    OSnl2osil *nl2osil = NULL;
-#endif
-#ifdef COIN_HAS_GAMSUTILS
-    OSgams2osil *gams2osil = NULL;
-#endif
-    OSSolverAgent* osagent = NULL;
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    // now solve either remotely or locally
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            // call a method here to get OSiL if we have an nl or mps file
-            if (osoptions->osil == "")
-            {
-                //we better have an nl file present or mps file or osol file
-                if (osoptions->nlFile != "")
-                {
-                    getOSiLFromNl();
-                }
-                else
-                {
-                    if (osoptions->mpsFile != "")
-                    {
-                        getOSiLFromMps();
-                    }
-                    else
-                    {
-                        if (osoptions->gamsControlFile != "")
-                        {
-
-                            getOSiLFromGams();
-                        }
-                        else    // send an empty osil string
-                        {
-                            osoptions->osil = "";
-                        }
-                    }
-                }
-            }
-
-	    if (osoptions->printModel)
-		doPrintModel(osoptions);
-	    else if (osoptions->printRowNumberAsString != "")
-                doPrintRow(osoptions);
-
-            // place a remote call
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-            if (osoptions->osol == "")  // we have no osol string
-            {
-
-                std::ostringstream outStr;
-                outStr
-                        << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
-                outStr << OS_SCHEMA_VERSION;
-                outStr << "/OSoL.xsd\"></osol>";
-                osoptions->osol = outStr.str();
-            }
-            osrl = osagent->solve(osoptions->osil, osoptions->osol);
-            if (osoptions->osrlFile != "")
-            {
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-                //const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-                if (osoptions->browser != "")
-                {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
-                    const char *ch = &str[0];
-                    std::system(ch);
-                }
-            }
-            else
-                cout << osrl << endl;
-            delete osagent;
-            osagent = NULL;
-
-        }
-        else    // solve locally
-        {
-            OSInstance *osinstance;
-            if (osoptions->osil != "")
-            {
-                osilreader = new OSiLReader();                
-                osinstance = osilreader->readOSiL(osoptions->osil);
-            }
-            else
-            {
-                //we better have an nl file present or mps file or osol file
-                if (osoptions->nlFile != "")
-                {
-#ifdef COIN_HAS_ASL
-                    nl2osil = new OSnl2osil( osoptions->nlFile);
-                    nl2osil->createOSInstance();
-                    osinstance = nl2osil->osinstance;
-#else
-                    throw ErrorClass(
-                        "nl file specified locally but ASL not present");
-#endif
-                }
-                else
-                {
-                    if (osoptions->mpsFile != "")
-                    {
-                        mps2osil = new OSmps2osil(osoptions->mpsFile);
-                        mps2osil->createOSInstance();
-                        osinstance = mps2osil->osinstance;
-                    }
-                    else
-                    {
-                        if (osoptions->gamsControlFile != "")
-                        {
-#ifdef COIN_HAS_GAMSUTILS
-                            gams2osil = new OSgams2osil( osoptions->gamsControlFile);
-                            gams2osil->createOSInstance();
-                            osinstance = gams2osil->osinstance;
-#else
-                            throw ErrorClass(
-                                "a Gams Control specified locally but GAMSIP not present");
-#endif
-
-                        }
-                        else    // need an osol file with an instanceLocation specified
-                        {
-                            //if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-                            throw ErrorClass(
-                                "Error: no osil, GAMS dat, AMPL nl, or mps file given for a local solve --- \n information in the osol file is ignored for local solves.");
-                            //}
-                        }
-                    }
-                }
-            }
-	    if (osoptions->printModel)
-                    doPrintModel(osinstance);
-	    else if (osoptions->printRowNumberAsString != "")
-	            doPrintRow(osinstance, osoptions->printRowNumberAsString);
-                
-            osrl = runSolver(osoptions->solverName, osoptions->osol, osinstance);
-            
-
-	    //delete fileUtil;
-            if (osoptions->osrlFile != "")
-            {
-
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-
-                //const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-                if (osoptions->browser != "")
-                {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
-                    const char *ch = &str[0];
-                    std::system(ch);
-                }
-            }
-            else
-                cout << osrl << endl;
-
-        }//end of local solve
-
-
-        //garbage collection
-        if (osilreader != NULL)
-            delete osilreader;
-        osilreader = NULL;
-        if (mps2osil != NULL)
-            delete mps2osil;
-        mps2osil = NULL;
-#ifdef COIN_HAS_ASL
-        if(nl2osil != NULL) delete nl2osil;
-        nl2osil = NULL;
-#endif
-#ifdef COIN_HAS_GAMSUTILS
-        if(gams2osil != NULL) delete gams2osil;
-        gams2osil = NULL;
-#endif
-        delete fileUtil;
-        fileUtil = NULL;
-
-    }//end try
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        std::string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-        if (osoptions->osrlFile != "")
-        {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
-            {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-        //regular garbage collection
-        if (osilreader != NULL)
-            delete osilreader;
-        osilreader = NULL;
-        if (mps2osil != NULL)
-            delete mps2osil;
-        mps2osil = NULL;
-#ifdef COIN_HAS_ASL
-        if(nl2osil != NULL) delete nl2osil;
-        nl2osil = NULL;
-#endif
-#ifdef COIN_HAS_GAMSUTILS
-        if(gams2osil != NULL) delete gams2osil;
-        gams2osil = NULL;
-#endif
-        delete fileUtil;
-        fileUtil = NULL;
-    }//end local catch
-
-}//end solve
-
-void getJobID()
-{
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-            osoptions->jobID = osagent->getJobID(osoptions->osol);
-            cout << osoptions->jobID << endl;
-            delete osagent;
-            osagent = NULL;
-        }
-        else
-        {
-            delete osagent;
-            osagent = NULL;
-            throw ErrorClass("please specify service location (url)");
-        }
-    }
-    catch (const ErrorClass& eclass)
-    {
-        FileUtil *fileUtil = NULL;
-        fileUtil = new FileUtil();
-
-
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-
-        //catch garbage collection
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end getJobID
-
-
-void knock()
-{
-    std::string osplOutput = "";
-    OSSolverAgent* osagent = NULL;
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                //set the jobID if there is one
-                if(osoptions->jobID == "") osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-
-
-            osplOutput = osagent->knock(osoptions->osplInput, osoptions->osol);
-            if (osoptions->osplOutputFile != "")
-                fileUtil->writeFileFromString(osoptions->osplOutputFile,
-                                              osplOutput);
-            else
-                cout << osplOutput << endl;
-            delete osagent;
-        }
-        else
-        {
-            delete osagent;
-            throw ErrorClass("please specify service location (url)");
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            std::string osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end knock
-
-
-void send()
-{
-    bool bSend = false;
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        // call a method here to get OSiL if we have an nl or mps file
-        if (osoptions->osil == "")
-        {
-            //we better have an nl file present or mps file
-            if (osoptions->nlFile != "")
-            {
-                getOSiLFromNl();
-            }
-            else
-            {
-                if (osoptions->mpsFile != "")
-                {
-                    getOSiLFromMps();
-                }
-                else    // send an empty osil string
-                {
-                    osoptions->osil = "";
-                }
-            }
-        }
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-            // check to see if there is an osol
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(osoptions->jobID == "") osoptions->jobID = osagent->getJobID("");
-                //set the jobID
-
-                osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-            bSend = osagent->send(osoptions->osil, osoptions->osol);
-            std::cout << "Result of send: " << bSend << std::endl;
-            delete osagent;
-        }
-        else
-        {
-            delete osagent;
-            throw ErrorClass("please specify service location (url)");
-        }
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        FileUtil *fileUtil = NULL;
-        fileUtil = new FileUtil();
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-
-        if (osoptions->osrlFile != "")
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-        else
-            cout << osrl << endl;
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end send
-
-void retrieve()
-{
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    std::string osrl = "";
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
-                //set the jobID
-                osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-
-            osrl = osagent->retrieve(osoptions->osol);
-
-            if (osoptions->osrlFile != "")
-            {
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-                if (osoptions->browser != "")
-                {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
-                    const char *ch = &str[0];
-                    std::system(ch);
-                }
-            }
-            else
-                cout << osrl << endl;
-            delete osagent;
-            osagent = NULL;
-        }
-        else
-        {
-            delete osagent;
-            osagent = NULL;
-            throw ErrorClass("please specify service location (url)");
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end retrieve
-
-void kill()
-{
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    std::string osplOutput = "";
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
-                //set the jobID
-                osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-
-            osplOutput = osagent->kill(osoptions->osol);
-
-            if (osoptions->osplOutputFile != "")
-                fileUtil->writeFileFromString(osoptions->osplOutputFile,
-                                              osplOutput);
-            else
-                cout << osplOutput << endl;
-            delete osagent;
-            osagent = NULL;
-        }
-        else
-        {
-            delete osagent;
-            osagent = NULL;
-            throw ErrorClass("please specify service location (url)");
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end kill
-
-
-void getOSiLFromNl()
+void getOSiLFromNl(OSCommandLine *oscommandline)
 {
     try
     {
 #ifdef COIN_HAS_ASL
-        OSnl2osil *nl2osil = NULL;
-        nl2osil = new OSnl2osil( osoptions->nlFile);
-        nl2osil->createOSInstance();
+        OSnl2os *nl2os = NULL;
+        nl2os = new OSnl2os(oscommandline);
+        nl2os->createOSObjects();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL( nl2osil->osinstance);
-        osoptions->osil = osil;
-        delete nl2osil;
-        nl2osil = NULL;
+        oscommandline->osil = osilwriter->writeOSiL(nl2os->osinstance);
+		if (nl2os->osoption != NULL)
+		{
+	        OSoLWriter *osolwriter = NULL;
+		    osolwriter = new OSoLWriter();
+			oscommandline->osol = osolwriter->writeOSoL(nl2os->osoption);
+	        delete osolwriter;
+		    osolwriter = NULL;
+		}
+        delete nl2os;
+        nl2os = NULL;
         delete osilwriter;
         osilwriter = NULL;
 #else
@@ -983,21 +381,27 @@ void getOSiLFromNl()
 }//getOSiLFromNl
 
 
-void getOSiLFromGams()
+void getOSiLFromGams(OSCommandLine *oscommandline)
 {
     try
     {
 #ifdef COIN_HAS_GAMSIO
-        OSgams2osil *gams2osil = NULL;
-        gams2osil = new OSgams2osil( osoptions->gamsControlFile);
-        gams2osil->createOSInstance();
+        OSgams2os *gams2os = NULL;
+        gams2os = new OSgams2os(oscommandline);
+        gams2os->createOSObjects();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL( gams2osil->osinstance);
-        osoptions->osil = osil;
-        delete gams2osil;
-        gams2osil = NULL;
+        oscommandline->osil = osilwriter->writeOSiL(gams2os->osinstance);
+		if (gams2os->osoption != NULL)
+		{
+	        OSoLWriter *osolwriter = NULL;
+		    osolwriter = new OSoLWriter();
+			oscommandline->osol = osolwriter->writeOSoL(gams2os->osoption);
+	        delete osolwriter;
+		    osolwriter = NULL;
+		}
+        delete gams2os;
+        gams2os = NULL;
         delete osilwriter;
         osilwriter = NULL;
 #else
@@ -1013,18 +417,16 @@ void getOSiLFromGams()
 }//getOSiLFromGams
 
 
-void getOSiLFromMps()
+void getOSiLFromMps(OSCommandLine *oscommandline)
 {
     try
     {
         OSmps2osil *mps2osil = NULL;
-        mps2osil = new OSmps2osil(osoptions->mpsFile);
+        mps2osil = new OSmps2osil(oscommandline->mpsFile);
         mps2osil->createOSInstance();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL(mps2osil->osinstance);
-        osoptions->osil = osil;
+        oscommandline->osil = osilwriter->writeOSiL(mps2osil->osinstance);
         delete mps2osil;
         mps2osil = NULL;
         delete osilwriter;
@@ -1037,3 +439,5 @@ void getOSiLFromMps()
     }
 
 }//getOSiLFromMps
+
+

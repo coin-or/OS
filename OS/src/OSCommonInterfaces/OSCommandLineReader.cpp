@@ -86,12 +86,6 @@ OSCommandLine* OSCommandLineReader::readCommandLine(const std::string& osss) thr
             scannerActive = false;           
         }
 
-		//convert solver name to lower case so there is no ambiguity
-		unsigned int k;
-	    for (k = 0; k < m_oscommandline->solverName.length(); k++)
-		{
-			m_oscommandline->solverName[k] = (char)tolower(m_oscommandline->solverName[k]);
-		}
 
         return m_oscommandline;
 }

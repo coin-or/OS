@@ -32,11 +32,34 @@
 class OSServiceMethods
 {
 public:
-    /**  configFile is the name of the file that holds the configuration options
-     * if the OSSolverService reads its options from a file rather than command
-     * line inputs
-     */
-    std::string executeServiceMethod(OSCommandLine *oscommandline);
+
+	/** default constructor
+	 */
+	OSServiceMethods();
+
+	/** default destructor
+	 */
+	~OSServiceMethods();
+
+	/** nonstandard constructor
+	 *  This version can be used to process the information contained in
+	 *  the command line (reading of files, preparation of instance, etc.)
+	 *  @param oscommandline holds the command line information
+	 *  and location of the instance, options, etc.
+	 */
+	OSServiceMethods(OSCommandLine *oscommandline);
+
+    /** executeServiceMethod is a wrapper around the six service methods 
+	 *  implemented in OS: solve, send, retrieve, knock, kill, getJobID
+	 *  @param oscommandline holds the command line information
+	 *  and location of the instance, options, etc.
+	 */
+    bool executeServiceMethod(OSCommandLine *oscommandline);
+
+	/**
+	 *  print help
+	 */
+	std::string get_help();
 };
  #endif
 
