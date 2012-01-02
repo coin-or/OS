@@ -561,6 +561,7 @@ OS/src/OSSolverInterfaces/OSLindoSolver.h -text
 OS/src/OSSolverInterfaces/OSRunSolver.cpp -text
 OS/src/OSSolverInterfaces/OSRunSolver.h -text
 OS/src/OSSolverService.cpp -text
+OS/src/OSSolverService2.cpp -text
 OS/src/OSUtils/Makefile.am -text
 OS/src/OSUtils/Makefile.in -text
 OS/src/OSUtils/OSBase64.cpp -text
