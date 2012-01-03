@@ -80,7 +80,9 @@ is in MPS format\index{MPS format}. It is assumed that this file is available on
 is in AMPL nl format\index{AMPL nl format}. It is assumed that this file is available on the machine that is running
 {\tt OSSolverService}. The default file format is OSiL\index{OSiL} so this option is not required.
 
-\item[] {\bf solver  solverName}\ \
+\item[] {\bf solver  solverName}\ \ {\bf Note that this option only has effect for local calls.} 
+For a remote solve or send, put the solver name into the field {\tt <solverToInvoke>} in an
+OSoL file and specify this file with {\tt osol ...}.
 %Possible values for default OS installation are {\tt clp} (COIN-OR Clp),
 %{\tt cbc} (COIN-OR Cbc), {\tt dylp} (COIN-OR DyLP), and {\tt symphony} (COIN-OR SYMPHONY).
 Possible values of this parameter depend on the installation. The default configurations can be read off from
@@ -548,8 +550,8 @@ be specified in a configuration file or on the command line.
 </osol>
 \end{verbatim}
 
-The same {\tt JobID} cannot be used twice, so if {\tt 123456abcd} was used earlier, the result of {\tt send} will be
-{\tt false}\index{JobID@{\tt JobID}|)}.
+The same {\tt JobID} cannot be used twice, so if {\tt 123456abcd} was used earlier, 
+the result of {\tt send} will be an error condition\index{JobID@{\tt JobID}|)}.
 
 In order to be of any use, it is necessary to get the result of the optimization. This is described in
 Section~\ref{section:retrieve}. Before proceeding to this section, we describe two ways for knowing when
@@ -811,7 +813,8 @@ in OSoL\index{OSoL} format
 \item Inputs: a string with the instance in OSiL\index{OSiL} format and a string with the solver options
 in OSoL\index{OSoL} format (same as in {\tt solve})
 
-\item Returns:  a boolean, true if the problem was successfully submitted, false otherwise
+\item Returns:  %a boolean, true if the problem was successfully submitted, false otherwise
+a string with the status of the send (indicating either success or some error condition).
 
 \item Has the same signature as {\tt solve}
 
