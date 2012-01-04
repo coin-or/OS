@@ -1714,21 +1714,21 @@ void interactiveShell()
 
                                 } // end if on whether or not option value is null
 
-                                lineText = optionName + " "
-                                           + optionValue + " ";
-                                osss_scan_string(lineText.c_str(),
-                                                 scanner);
-                                ossslex(scanner);
-                                listOptions( osoptions);
+             //                   lineText = optionName + " "
+             //                              + optionValue + " ";
+             //                   osss_scan_string(lineText.c_str(),
+             //                                    scanner);
+             //                   ossslex(scanner);
+             //                   listOptions( osoptions);
 
                                 if(optionMap.find(optionName) != optionMap.end() )
                                 {
 
-									switch (optionMap[ optionName] )
+ 				    switch (optionMap[ optionName] )
                                     {
 
                                     case 0: //osil
-
+                                        osoptions->osilFile = optionValue;
                                         osoptions->osil
                                             = fileUtil->getFileAsString(
                                                   (osoptions->osilFile).c_str());
@@ -1736,32 +1736,32 @@ void interactiveShell()
 
 
                                     case 1: //osrl
-
+                                        osoptions->osrlFile = optionValue;
                                         break;
 
                                     case 2: //osol
-
+                                        osoptions->osolFile = optionValue;
                                         osoptions->osol
                                             = fileUtil->getFileAsString(
                                                   (osoptions->osolFile).c_str());
                                         break;
 
                                     case 3: //mps
-
+                                        osoptions->mpsFile = optionValue;
                                         osoptions->mps
                                             = fileUtil->getFileAsString(
                                                   (osoptions->mpsFile).c_str());
                                         break;
 
                                     case 4: //nl
-
+                                        osoptions->nlFile = optionValue;
                                         osoptions->nl
                                             = fileUtil->getFileAsString(
                                                   (osoptions->nlFile).c_str());
                                         break;
 
                                     case 5: //dat
-
+                                        osoptions->datFile = optionValue;
                                         osoptions->dat
                                             = fileUtil->getFileAsString(
                                                   (osoptions->datFile).c_str());
@@ -1783,24 +1783,25 @@ void interactiveShell()
                                         break;
 
                                     case 8: //osplInput
-
+                                        osoptions->osplInputFile = optionValue;
                                         osoptions->osplInput
                                             = fileUtil->getFileAsString(
                                                   (osoptions->osplInputFile).c_str());
                                         break;
 
                                     case 9: //osplOutput
-
+                                        osoptions->osplOutputFile = optionValue;
                                         break;
 
                                     case 10: //printRow
 
-					                    doPrintRow(osoptions);
+					doPrintRow(osoptions);
                                         break;
 
 
 
                                     }// end switch
+                                    listOptions( osoptions);
 
                                 }// end if on finding an element in the optionMap
 
