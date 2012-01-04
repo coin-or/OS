@@ -32,6 +32,11 @@
 class OSServiceMethods
 {
 public:
+	/** the string containing the output generated 
+	 *  by the service method called via executeServiceMethod()
+	 *
+	 */
+	std::string resultString;
 
 	/** default constructor
 	 */

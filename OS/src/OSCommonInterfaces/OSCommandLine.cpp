@@ -58,7 +58,6 @@ void OSCommandLine::reset_options()
     dat = "";
 	gamsControlFile = "";
     browser = "";
-	resultString = "";
     invokeHelp = false;
     listOptions = false;
     writeVersion = false;

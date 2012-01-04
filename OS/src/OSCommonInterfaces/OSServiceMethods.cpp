@@ -39,7 +39,7 @@
 #include <stdio.h>
 
 
-OSServiceMethods::OSServiceMethods()
+OSServiceMethods::OSServiceMethods(): resultString("")
 {
 #ifdef DEBUG_OSSERVICEMETHODS
     cout << "Inside the OSServiceMethods Constructor" << endl;
@@ -55,7 +55,7 @@ OSServiceMethods::~OSServiceMethods()
 }// end OSServiceMethods destructor
 
 
-OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline)
+OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline): resultString("") 
 {
 #ifdef DEBUG_OSSERVICEMETHODS
     cout << "Inside the OSServiceMethods Constructor" << endl;
@@ -249,7 +249,7 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
 		/** the only local service method is solve() */
 		if	(oscommandline->serviceLocation == "")
 			if (oscommandline->serviceMethod == "solve")
-				oscommandline->resultString = runSolver(oscommandline->solverName, oscommandline->osoption, oscommandline->osinstance);
+				resultString = runSolver(oscommandline->solverName, oscommandline->osoption, oscommandline->osinstance);
 			else
 				throw ErrorClass("No service location (URL) specified. Only \"solve\" is available locally");
 
@@ -259,7 +259,7 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
             osagent = new OSSolverAgent(oscommandline->serviceLocation);
 //solve
 			if (oscommandline->serviceMethod == "solve")
-	            oscommandline->resultString = osagent->solve(oscommandline->osil, oscommandline->osol);
+	            resultString = osagent->solve(oscommandline->osil, oscommandline->osol);
 //send --- first check that there is a jobID. If not, get one
 			else if (oscommandline->serviceMethod == "send")
 			{
@@ -293,27 +293,30 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
 						throw ErrorClass(eclass.errormsg);
 					}
 				}
-				oscommandline->resultString = osagent->send(oscommandline->osil, oscommandline->osol);
+				bool sendResult;
+				sendResult = osagent->send(oscommandline->osil, oscommandline->osol);
+				if (sendResult == false)
+					throw ErrorClass("send() method failed");
             }
 //retrieve
 			else if (oscommandline->serviceMethod == "retrieve")
 			{
 	            if (oscommandline->osol.find( "<jobID") == std::string::npos)
 		            throw ErrorClass("there is no JobID to retrieve");
-			    oscommandline->resultString = osagent->retrieve(oscommandline->osol);
+			    resultString = osagent->retrieve(oscommandline->osol);
 			}
 //getJobID
 			else if (oscommandline->serviceMethod == "getJobID")
-	            oscommandline->resultString = osagent->getJobID(oscommandline->osol);
+	            resultString = osagent->getJobID(oscommandline->osol);
 //knock
 			else if (oscommandline->serviceMethod == "knock")
-	            oscommandline->resultString = osagent->knock(oscommandline->osplInput, oscommandline->osol);
+	            resultString = osagent->knock(oscommandline->osplInput, oscommandline->osol);
 //kill
 			else if (oscommandline->serviceMethod == "kill")
 			{
 	            if (oscommandline->osol.find( "<jobID") == std::string::npos)
 		            throw ErrorClass("there is no JobID to kill");
-			    oscommandline->resultString = osagent->kill(oscommandline->osol);
+			    resultString = osagent->kill(oscommandline->osol);
 			}
 			else
 		            throw ErrorClass("serviceMethod not recognized");
@@ -331,7 +334,7 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
         osresult = new OSResult();
         osresult->setGeneralMessage(eclass.errormsg);
         osresult->setGeneralStatusType("error");
-        oscommandline->resultString = osrlwriter->writeOSrL(osresult);
+        resultString = osrlwriter->writeOSrL(osresult);
         //catch garbage collection
         delete osresult;
         osresult = NULL;
