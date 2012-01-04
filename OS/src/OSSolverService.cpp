@@ -1768,7 +1768,7 @@ void interactiveShell()
                                         break;
 
                                     case 6: //service location
-
+                                        osoptions->serviceLocation = optionValue;
                                         break;
 
                                     case 7: //solver
@@ -1780,6 +1780,7 @@ void interactiveShell()
                                             osoptions->solverName[k] = 
                                                 (char)tolower(osoptions->solverName[k]);
                                         }
+                                        osoptions->solverName = optionValue;
                                         break;
 
                                     case 8: //osplInput
