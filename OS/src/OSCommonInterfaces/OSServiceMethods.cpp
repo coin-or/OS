@@ -297,6 +297,8 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
 				sendResult = osagent->send(oscommandline->osil, oscommandline->osol);
 				if (sendResult == false)
 					throw ErrorClass("send() method failed");
+				else 
+					resultString = "send() method successful. When job terminates, retrieve output using jobID \n%s,oscommandline->osoption->general->jobID";
             }
 //retrieve
 			else if (oscommandline->serviceMethod == "retrieve")
