@@ -474,7 +474,13 @@ void interactiveShell()
                                 break;
 									
 							case 8: // printRow
-                                doPrintModel(oscommandline);
+								if (optionValue == "")
+								{
+                                    std::cout
+                                              << "Please enter a row number (>=0) or objective number (<0): ";
+                                    getline(std::cin, optionValue);
+								}
+                                doPrintRow(oscommandline);
                                 break;
 
                             default:
@@ -1117,7 +1123,7 @@ void doPrintModel(OSCommandLine *oscommandline)
 	}
 #endif
 
-}// doPrintModel(osOptionsStruc *osoptions)
+}// doPrintModel(OSCommandLine *oscommandline)
 
 void doPrintModel(OSInstance *osinstance)
 {
@@ -1130,25 +1136,25 @@ void doPrintModel(OSInstance *osinstance)
 	{
 		std::cout << osinstance->printModel() << std::endl;
 	}
-}// doPrintModel(osOptionsStruc *osoptions)
+}// doPrintModel(OSInstance *osinstance)
 
-void doPrintRow(osOptionsStruc *osoptions)
+void doPrintRow(OSCommandLine *oscommandline)
 {
 	int rownumber;
-	if (osoptions->printRowNumberAsString == "")
+	if (oscommandline->printRowNumberAsString == "")
 		std::cout << "no line number given; print command ignored" << std::endl;
 	else
 	{
 		try
 		{
-			rownumber = atoi((osoptions->printRowNumberAsString).c_str());
+			rownumber = atoi((oscommandline->printRowNumberAsString).c_str());
 		}
 		catch  (const ErrorClass& eclass)
 		{
 	                std::cout << "invalid row number; print command ignored" << std::endl;
 		}
 
-		if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+		if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
                 {
                         std::cout
 	                        << "no instance defined; print command ignored" << std::endl;
@@ -1156,39 +1162,39 @@ void doPrintRow(osOptionsStruc *osoptions)
 		else
 		{
 			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
-			if (osoptions->osil != "")
+			if (oscommandline->osil != "")
 			{
 				OSiLReader *osilreader;
 				osilreader = new OSiLReader();
-		    		std::cout << osilreader->readOSiL(osoptions->osil)->printModel(rownumber) << std::endl;
+		    		std::cout << osilreader->readOSiL(oscommandline->osil)->printModel(rownumber) << std::endl;
 				delete osilreader;
 				osilreader = NULL;
 			}
-			else if (osoptions->nl != "")
-			{
-#ifdef COIN_HAS_ASL
-				OSnl2osil *nl2osil;	
-				nl2osil = new OSnl2osil( osoptions->nlFile);
-				nl2osil->createOSInstance();
-				std::cout << nl2osil->osinstance->printModel(rownumber) << std::endl;
-				delete nl2osil;
-				nl2osil = NULL;
-#else
-				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
-#endif
-			}
-			else if (osoptions->mps != "")
+			else if (oscommandline->mps != "")
 			{
 				OSmps2osil *mps2osil;
-				mps2osil = new OSmps2osil(osoptions->mpsFile);
+				mps2osil = new OSmps2osil(oscommandline->mpsFile);
 				mps2osil->createOSInstance();
 				std::cout << mps2osil->osinstance->printModel(rownumber) << std::endl;
 				delete mps2osil;
 				mps2osil = NULL;
 			}
+			else if (oscommandline->nl != "")
+			{
+#ifdef COIN_HAS_ASL
+				OSnl2os *nl2os;	
+				nl2os = new OSnl2os( osoptions->nlFile);
+				nl2os->createOSInstance();
+				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
+				delete nl2os;
+				nl2os = NULL;
+#else
+				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
+#endif
+			}
 		}
 	}
-}// doPrintRow(osOptionsStruc *osoptions)
+}// doPrintRow(OSCommandLine *oscommandline)
 
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 {
