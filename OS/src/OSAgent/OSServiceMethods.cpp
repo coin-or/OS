@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
  * \remarks
- * Copyright (C) 2011-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -297,8 +297,6 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
 				sendResult = osagent->send(oscommandline->osil, oscommandline->osol);
 				if (sendResult == false)
 					throw ErrorClass("send() method failed");
-				else 
-					resultString = "send() method successful. When job terminates, retrieve output using jobID \n%s,oscommandline->osoption->general->jobID";
             }
 //retrieve
 			else if (oscommandline->serviceMethod == "retrieve")
