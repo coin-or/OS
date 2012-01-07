@@ -45,7 +45,12 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLWriter.cpp \
 	OSrLWriter.h \
 	OSDefaultSolver.cpp \
-	OSDefaultSolver.h 
+	OSDefaultSolver.h \
+	OSCommandLine.cpp \
+	OSCommandLine.h \
+	OSCommandLineReader.cpp \
+	OSCommandLineReader.h \
+	OSConfig.h
 
 # This is for libtool (on Windows)
 libOSCommonInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -90,4 +95,8 @@ includecoin_HEADERS = \
 	OSDefaultSolver.h \
         OSoLWriter.h \
         OSoLReader.h \
-        OSOption.h 
+        OSOption.h \
+	OSCommandLine.h \
+	OSCommandLineReader.h \
+	OSConfig.h \
+	OSFileUtil.h

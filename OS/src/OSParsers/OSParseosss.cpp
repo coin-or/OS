@@ -1,6 +1,6 @@
-#line 2 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
+#line 2 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
-#line 4 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
+#line 4 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -770,7 +770,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[61] =
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 1 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 /* $Id$ */
 /** @file OSParseosss.l
  * 
@@ -784,7 +784,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[61] =
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#line 16 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 16 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 
 #include <iostream>
@@ -812,7 +812,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[61] =
 #endif
 #include "OSErrorClass.h"
 #include <sstream>   
-#include "OSOptionsStruc.h" 
+#include "OSCommandLine.h" 
 
 
 using std::cout;
@@ -837,9 +837,9 @@ using std::ostringstream;
 #endif
 
 
-#define YY_EXTRA_TYPE struct osOptionsStruc*
+#define YY_EXTRA_TYPE class OSCommandLine*
 
-void setyyextra( osOptionsStruc *osoptions, void* scanner);
+void setyyextra( OSCommandLine *oscommandline, void* scanner);
 
  /**
  * INPUTS:
@@ -868,7 +868,7 @@ void setyyextra( osOptionsStruc *osoptions, void* scanner);
  */
 
 
-#line 872 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
+#line 872 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
 #define INITIAL 0
 
@@ -1092,10 +1092,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 112 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 112 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 
-#line 1099 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
+#line 1099 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -1193,13 +1193,13 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 114 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 114 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 118 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 118 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	//char *ch = strdup(yytext);
@@ -1214,7 +1214,7 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 129 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 129 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	//char *ch = strdup(yytext);
@@ -1229,7 +1229,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 140 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 140 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	//char *ch = strdup(yytext);
@@ -1243,7 +1243,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 152 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 152 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	yyextra->invokeHelp = true;
@@ -1251,7 +1251,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 157 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 157 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
     YY_PRINT  
     yyextra->invokeHelp = true;
@@ -1259,7 +1259,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 162 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 162 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT
 	yyextra->invokeHelp = true;
@@ -1267,7 +1267,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 167 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 167 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT
 	yyextra->invokeHelp = true;
@@ -1275,7 +1275,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 172 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 172 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT
 	yyextra->invokeHelp = true;
@@ -1283,7 +1283,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 178 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 178 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
     YY_PRINT  
     yyextra->printModel = true;
@@ -1291,7 +1291,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 184 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 184 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
     YY_PRINT  
     yyextra->printModel = true;
@@ -1300,7 +1300,7 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 189 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 189 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->printRow == ""){
 		YY_PRINT 
@@ -1319,7 +1319,7 @@ YY_RULE_SETUP
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 204 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 204 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->printRow == ""){
 		YY_PRINT 
@@ -1338,7 +1338,7 @@ YY_RULE_SETUP
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 219 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 219 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->printRow == ""){
 		YY_PRINT 
@@ -1356,7 +1356,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 235 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 235 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	yyextra->writeVersion = true;
@@ -1364,7 +1364,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 240 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 240 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	yyextra->writeVersion = true;
@@ -1372,7 +1372,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 245 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 245 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT 
 	yyextra->writeVersion = true;
@@ -1380,7 +1380,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 251 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 251 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
    YY_PRINT  
    yyextra->quit = true;
@@ -1388,7 +1388,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 256 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 256 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
    YY_PRINT  
    yyextra->quit = true;
@@ -1397,7 +1397,7 @@ YY_RULE_SETUP
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 262 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 262 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osilFile == ""){
 		YY_PRINT  
@@ -1414,7 +1414,7 @@ YY_RULE_SETUP
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 275 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 275 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	// if(yyextra->osilFile == ""){
 		 YY_PRINT  
@@ -1431,7 +1431,7 @@ YY_RULE_SETUP
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 288 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 288 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	// if(yyextra->osilFile == ""){
 		 YY_PRINT  
@@ -1482,7 +1482,7 @@ YY_RULE_SETUP
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 336 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 336 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osrlFile == ""){
 		YY_PRINT 
@@ -1499,7 +1499,7 @@ YY_RULE_SETUP
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 349 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 349 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	 //if(yyextra->osrlFile == ""){
 		 YY_PRINT 
@@ -1516,7 +1516,7 @@ YY_RULE_SETUP
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 362 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 362 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	// if(yyextra->osrlFile == ""){
 		 YY_PRINT 
@@ -1533,7 +1533,7 @@ YY_RULE_SETUP
 case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
-#line 375 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 375 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osolFile == ""){
 		YY_PRINT 
@@ -1550,7 +1550,7 @@ YY_RULE_SETUP
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 388 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 388 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osolFile == ""){
 		 YY_PRINT 
@@ -1567,7 +1567,7 @@ YY_RULE_SETUP
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 401 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 401 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	 //if(yyextra->osolFile == ""){
 		 YY_PRINT 
@@ -1584,7 +1584,7 @@ YY_RULE_SETUP
 case 29:
 /* rule 29 can match eol */
 YY_RULE_SETUP
-#line 414 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 414 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osplInputFile == ""){
 		YY_PRINT 
@@ -1601,7 +1601,7 @@ YY_RULE_SETUP
 case 30:
 /* rule 30 can match eol */
 YY_RULE_SETUP
-#line 427 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 427 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1616,7 +1616,7 @@ YY_RULE_SETUP
 case 31:
 /* rule 31 can match eol */
 YY_RULE_SETUP
-#line 438 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 438 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1631,7 +1631,7 @@ YY_RULE_SETUP
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 449 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 449 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -1646,7 +1646,7 @@ YY_RULE_SETUP
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 460 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 460 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1661,7 +1661,7 @@ YY_RULE_SETUP
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 471 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 471 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1676,7 +1676,7 @@ YY_RULE_SETUP
 case 35:
 /* rule 35 can match eol */
 YY_RULE_SETUP
-#line 483 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 483 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1691,7 +1691,7 @@ YY_RULE_SETUP
 case 36:
 /* rule 36 can match eol */
 YY_RULE_SETUP
-#line 494 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 494 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1706,7 +1706,7 @@ YY_RULE_SETUP
 case 37:
 /* rule 37 can match eol */
 YY_RULE_SETUP
-#line 505 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 505 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1721,7 +1721,7 @@ YY_RULE_SETUP
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 516 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 516 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -1736,7 +1736,7 @@ YY_RULE_SETUP
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 527 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 527 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1751,7 +1751,7 @@ YY_RULE_SETUP
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 538 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 538 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1766,7 +1766,7 @@ YY_RULE_SETUP
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 549 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 549 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1781,7 +1781,7 @@ YY_RULE_SETUP
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 560 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 560 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1796,7 +1796,7 @@ YY_RULE_SETUP
 case 43:
 /* rule 43 can match eol */
 YY_RULE_SETUP
-#line 571 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 571 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1811,7 +1811,7 @@ YY_RULE_SETUP
 case 44:
 /* rule 44 can match eol */
 YY_RULE_SETUP
-#line 582 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 582 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1826,7 +1826,7 @@ YY_RULE_SETUP
 case 45:
 /* rule 45 can match eol */
 YY_RULE_SETUP
-#line 593 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 593 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1841,7 +1841,7 @@ YY_RULE_SETUP
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 604 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 604 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1856,7 +1856,7 @@ YY_RULE_SETUP
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 616 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 616 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1871,7 +1871,7 @@ YY_RULE_SETUP
 case 48:
 /* rule 48 can match eol */
 YY_RULE_SETUP
-#line 627 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 627 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1886,7 +1886,7 @@ YY_RULE_SETUP
 case 49:
 /* rule 49 can match eol */
 YY_RULE_SETUP
-#line 638 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 638 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT
 		 //char *ch = strdup(yytext);
@@ -1901,7 +1901,7 @@ YY_RULE_SETUP
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 649 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 649 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//yyextra->serviceLocation = strdup(yytext);
@@ -1918,7 +1918,7 @@ YY_RULE_SETUP
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 662 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 662 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //yyextra->serviceLocation = strdup(yytext);
@@ -1935,7 +1935,7 @@ YY_RULE_SETUP
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 675 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 675 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //yyextra->serviceLocation = strdup(yytext);
@@ -1952,7 +1952,7 @@ YY_RULE_SETUP
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 688 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 688 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -1967,7 +1967,7 @@ YY_RULE_SETUP
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 699 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 699 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1982,7 +1982,7 @@ YY_RULE_SETUP
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 710 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 710 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT 
 		 //char *ch = strdup(yytext);
@@ -1997,7 +1997,7 @@ YY_RULE_SETUP
 case 56:
 /* rule 56 can match eol */
 YY_RULE_SETUP
-#line 721 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 721 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT  
 		//char *ch = strdup(yytext);
@@ -2012,7 +2012,7 @@ YY_RULE_SETUP
 case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
-#line 732 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 732 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT  
 		 //char *ch = strdup(yytext);
@@ -2027,7 +2027,7 @@ YY_RULE_SETUP
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 743 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 743 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 		 YY_PRINT  
 		 //char *ch = strdup(yytext);
@@ -2041,7 +2041,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 754 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 754 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 {
 	std::string error;
 	std::ostringstream outStr;
@@ -2058,10 +2058,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 767 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 767 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 ECHO;
 	YY_BREAK
-#line 2065 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
+#line 2065 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -3185,11 +3185,11 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 767 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+#line 767 "/home/gus/research/OS/trunk-work/OS/src/OSParsers/OSParseosss.l"
 
 
 
-void setyyextra(osOptionsStruc *osoptions, void* scanner){
+void setyyextra( OSCommandLine *oscommandline, void* scanner){
 	osssset_extra(osoptions, scanner);
 }
 

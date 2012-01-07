@@ -36,8 +36,52 @@
 #include "OSBase64.h"
 #include "OSRunSolver.h"
 
-#include <stdio.h>
+#ifdef COIN_HAS_ASL
+#include "OSnl2osil.h"
+#endif
 
+#ifdef COIN_HAS_GAMSUTILS
+#include "OSgams2osil.hpp"
+#endif
+
+#ifdef COIN_HAS_IPOPT
+# ifndef COIN_HAS_ASL
+#  include "OSIpoptSolver.h"
+#  undef COIN_HAS_ASL
+# else
+#  include "OSIpoptSolver.h"
+# endif
+#endif
+
+#ifdef COIN_HAS_BONMIN
+#include "OSBonminSolver.h"
+#endif
+
+#ifdef COIN_HAS_COUENNE
+#include "OSCouenneSolver.h"
+#endif
+
+#ifdef COIN_HAS_LINDO
+#include "OSLindoSolver.h"
+#endif
+
+#ifdef COIN_HAS_KNITRO
+#include "OSKnitroSolver.h"
+#endif
+
+#include "OSOptionsStruc.h"
+
+#include<stdio.h>
+#include <map>
+
+
+using std::cout;
+using std::endl;
+using std::ostringstream;
+using std::string;
+using std::map;
+
+#define DEBUG_CL_INTERFACE
 
 OSServiceMethods::OSServiceMethods(): resultString("")
 {
@@ -69,7 +113,8 @@ OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline): resultString("
 	OSmps2osil *mps2osil   = NULL;
 
 #ifdef COIN_HAS_ASL
-    OSnl2os *nl2os = NULL;
+//    OSnl2os *nl2os = NULL;
+    OSnl2osil *nl2osil = NULL;
 #endif
 
 #ifdef COIN_HAS_GAMSUTILS
@@ -124,10 +169,13 @@ OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline): resultString("
 		    else if (oscommandline->nlFile != "")
 			{
 #ifdef COIN_HAS_ASL
-                nl2os = new OSnl2os(oscommandline);
-                nl2os->createOSObjects();
-                osinstance = nl2os->osinstance;
-                osoption   = nl2os->osoption;
+//                nl2os = new OSnl2os(oscommandline);
+//                nl2os->createOSObjects();
+//                osinstance = nl2os->osinstance;
+//                osoption   = nl2os->osoption;
+                nl2osil = new OSnl2osil(oscommandline->nlFile);
+                nl2osil->createOSInstance();
+                oscommandline->osinstance = nl2osil->osinstance;
 #else
                 throw ErrorClass(
                     "nl file specified locally but ASL not present");
@@ -198,8 +246,10 @@ OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline): resultString("
 		mps2osil = NULL;
 
 #ifdef COIN_HAS_ASL
-	    if (nl2os != NULL) delete nl2os;
-	    nl2os = NULL;
+//	    if (nl2os != NULL) delete nl2os;
+//	    nl2os = NULL;
+	    if (nl2osil != NULL) delete nl2osil;
+	    nl2osil = NULL;
 #endif
 
 #ifdef COIN_HAS_GAMSUTILS
@@ -223,8 +273,8 @@ OSServiceMethods::OSServiceMethods(OSCommandLine *oscommandline): resultString("
 		mps2osil = NULL;
 
 #ifdef COIN_HAS_ASL
-	    if (nl2os != NULL) delete nl2os;
-	    nl2os = NULL;
+	    if (nl2osil != NULL) delete nl2osil;
+	    nl2osil = NULL;
 #endif
 
 #ifdef COIN_HAS_GAMSUTILS
@@ -350,6 +400,7 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
 
 void getOSiLFromNl(OSCommandLine *oscommandline)
 {
+#if 0
     try
     {
 #ifdef COIN_HAS_ASL
@@ -381,6 +432,7 @@ void getOSiLFromNl(OSCommandLine *oscommandline)
         std::cout << eclass.errormsg << std::endl;
         throw ErrorClass(eclass.errormsg);
     }
+#endif
 }//getOSiLFromNl
 
 

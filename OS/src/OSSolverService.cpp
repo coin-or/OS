@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -86,6 +86,9 @@
 #include "OSmps2osil.h"
 #include "OSBase64.h"
 #include "OSRunSolver.h"
+#include "OSCommandLine.h"
+#include "OSCommandLineReader.h"
+#include "OSServiceMethods.h"
 
 #ifdef COIN_HAS_KNITRO
 #include "OSKnitroSolver.h"
@@ -124,7 +127,7 @@
 #include "OSCouenneSolver.h"
 #endif
 
-#include "OSOptionsStruc.h"
+//#include "OSOptionsStruc.h"
 
 #include<stdio.h>
 #include <map>
@@ -138,196 +141,83 @@ using std::map;
 
 //#define DEBUG_CL_INTERFACE
 
-
-#define MAXCHARS 5000
-
-typedef struct yy_buffer_state *YY_BUFFER_STATE;
-YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner);
-//void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
-void setyyextra(osOptionsStruc *osoptions, void* scanner);
-int ossslex(void* scanner);
-int ossslex_init(void** ptr);
-int ossslex_destroy(void* scanner);
-
 void interactiveShell();
 
 std::string get_help();
 std::string get_version();
 std::string get_options();
-void reset_options();
+//void reset_options();
 
-// the serviceMethods
-void solve();
-void getJobID();
-void send();
-void kill();
-void retrieve();
-void knock();
+bool callServiceMethod(OSCommandLine* oscommandline);
 
-// additional methods
-void getOSiLFromNl();
-void getOSiLFromMps();
-void getOSiLFromGams();
-//std::string buildSolver(std::string solverName, std::string osol,
-//                        OSInstance *osinstance);
-void listOptions(osOptionsStruc *osoptions);
-void doPrintModel(osOptionsStruc *osoptions);
+
+void doPrintModel(OSCommandLine* oscommandline);
 void doPrintModel(OSInstance *osinstance);
-void doPrintRow(osOptionsStruc *osoptions);
+void doPrintRow(OSCommandLine* oscommandline);
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 
-                           
-//options structure
-// this is the only global variable but
-// this is not a problem since this is a main routine
-osOptionsStruc *osoptions;
-
-inline void getServiceLocation()
-{
-    std::cout
-            << std::endl
-            << "A service location is required"
-            << std::endl;
-    std::cout
-            << "Please type the URL of the remote service: ";
-    getline(std::cin, osoptions->serviceLocation);
-}
   
 int main(int argC, const char* argV[])
 {
     WindowsErrorPopupBlocker();
-    std::cout << OSgetVersionInfo();
+	
+	std::cout << OSgetVersionInfo();
+	std::string osss;
 
-        if (argC < 2)
-        {
-            interactiveShell();
-            return 0;
-        }
-
-	void* scanner;
-    FileUtil *fileUtil = NULL;
-    FileUtil *inputFileUtil = NULL;
-    char osss[MAXCHARS] = " ";
-    const char *space = " ";
-    //char *config = "-config";
-    std::string configFileName = "";
-    int i;
-
-
-    // initialize the OS options structure
-
-    osoptions = new osOptionsStruc();
-    reset_options();
-    bool scannerActive = false;
-		
-    try
+    if (argC < 2)
     {
-		
-    // make sure we do not exceed max allowed characters in command line
-        i = 1;
-        while (i < argC)
-        {
-            if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
-                throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
-            strcat(osss, argV[i]);
-            strcat(osss, space);
-            i++;
-        }
-
-#ifdef DEBUG_CL_INTERFACE
-        cout << "Input String = " << osss << endl;
-#endif
-
-        scannerActive = true;
-        ossslex_init(&scanner);
-        //std::cout << "Call Text Extra" << std::endl;
-        setyyextra(osoptions, scanner);
-        //std::cout << "Call scan string " << std::endl;
-        osss_scan_string(osss, scanner);
-#ifdef DEBUG_CL_INTERFACE
-        std::cout << "call ossslex" << std::endl;
-#endif
-        ossslex(scanner);
-        ossslex_destroy(scanner);
-        scannerActive = false;
-#ifdef DEBUG_CL_INTERFACE
-        std::cout << "done with call to ossslex" << std::endl;
-#endif
-        // if there is a config file, get those options
-        if (osoptions->configFile != "")
-        {
-            scannerActive = true;
-            ossslex_init(&scanner);
-            configFileName = osoptions->configFile;
-#ifdef DEBUG_CL_INTERFACE
-            cout << "configFileName = " << configFileName << endl;
-#endif
-            std::string configFileOptions = fileUtil->getFileAsString(
-                                              configFileName.c_str());
-#ifdef DEBUG_CL_INTERFACE
-            std::cout << "Call Text Extra" << std::endl;
-#endif
-            setyyextra(osoptions, scanner);
-#ifdef DEBUG_CL_INTERFACE
-            std::cout << "Done with call Text Extra" << std::endl;
-#endif
-            osss_scan_string(configFileOptions.c_str(), scanner);
-            ossslex(scanner);
-            ossslex_destroy(scanner);
-            scannerActive = false;
-            
-            
-            /** new -- added on September 19, 2011
-             * if we are here, then the command line had a configure file, but
-             * command line options should override the config file so go
-             * back and get these options again
-             */
-            
-            scannerActive = true;
-            ossslex_init(&scanner);
-            //std::cout << "Call Text Extra" << std::endl;
-            setyyextra(osoptions, scanner);
-            //std::cout << "Call scan string " << std::endl;
-            osss_scan_string(osss, scanner);
-    #ifdef DEBUG_CL_INTERFACE
-            std::cout << "call ossslex" << std::endl;
-    #endif
-            ossslex(scanner);
-            ossslex_destroy(scanner);
-            scannerActive = false;           
-            
-            
-            /** end of new code added on September 19, 2011 */
-        }
+        interactiveShell();
+        return 0;
     }
+
+	// store the command line items into a single string
+	ostringstream outStr;
+	outStr << argV[1];
+	for (int i=2; i < argC; i++)
+		outStr << " " << argV[i];
+	osss = outStr.str();
+
+#ifdef DEBUG_CL_INTERFACE
+    std::cout << "Input String = " << osss << std::endl;
+#endif
+
+	FileUtil *fileUtil = NULL;
+	OSCommandLine *oscommandline;
+	oscommandline = new OSCommandLine();
+	OSCommandLineReader *clreader;
+	clreader = new OSCommandLineReader();
+
+	//parse the command line items into a CommandLine object
+    try
+    {		
+		oscommandline = clreader->readCommandLine(osss);
+		if (oscommandline->serviceMethod == "")
+			oscommandline->serviceMethod = "solve";
+		oscommandline->convertSolverNametoLowerCase();
+
+	}
     catch (const ErrorClass& eclass)
     {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "try -h or --help for more information" <<  endl;
-
-        //new stuff on April 17, 2010
         OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        osrlwriter = new OSrLWriter();
         osresult = new OSResult();
         osresult->setGeneralMessage(eclass.errormsg);
         osresult->setGeneralStatusType("error");
+        OSrLWriter *osrlwriter = NULL;
+        osrlwriter = new OSrLWriter();
         std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (osoptions->osrlFile != "")
+        if (oscommandline->osrlFile != "")
         {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
+            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+            if (oscommandline->browser != "")
             {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
+                std::string str = oscommandline->browser + "  "
+                                  + oscommandline->osrlFile;
                 const char *ch = &str[0];
                 std::system(ch);
             }
         }
         else
         {
-            //std::cout <<  eclass.errormsg << std::endl;
             std::cout << osrl << std::endl;
         }
         //catch garbage collection
@@ -335,1474 +225,429 @@ int main(int argC, const char* argV[])
         osresult = NULL;
         delete osrlwriter;
         osrlwriter = NULL;
-        // end new stuff
-
-//        if (scannerActive == true)
-//            ossslex_destroy(scanner);
-        delete fileUtil;
-        delete osoptions;
-        return 1;
-    }
-    try
-    {
-        if (osoptions->invokeHelp == true)
-        {
-			std::cout << std::endl << std::endl << get_help() << std::endl;
-            delete osoptions;
-            osoptions = NULL;
-            return 0;
-        }
-        if (osoptions->writeVersion == true)
-        {
-			std::cout << std::endl << std::endl << OSgetVersionInfo() << std::endl;
-            delete osoptions;
-            osoptions = NULL;
-            return 0;
-        }
-    }
-    catch (const ErrorClass& eclass)
-    {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "try -h or --help" <<  endl;
-
-
-        //new stuff on April 17, 2010
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        osrlwriter = new OSrLWriter();
-        osresult = new OSResult();
-        osresult->setGeneralMessage(eclass.errormsg);
-        osresult->setGeneralStatusType("error");
-        std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (osoptions->osrlFile != "")
-        {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
-            {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        delete osresult;
-        osresult = NULL;
-        delete osrlwriter;
-        osrlwriter = NULL;
-        // end new stuff
-
-
-        delete osoptions;
-        osoptions = NULL;
-        delete inputFileUtil;
-        inputFileUtil = NULL;
-        return 1;
-    }
-
-#ifdef DEBUG_CL_INTERFACE
-    cout << "HERE ARE THE OPTION VALUES:" << endl;
-    if(osoptions->configFile != "") cout << "Config file = " << osoptions->configFile << endl;
-    if(osoptions->osilFile != "") cout << "OSiL file = " << osoptions->osilFile << endl;
-    if(osoptions->osolFile != "") cout << "OSoL file = " << osoptions->osolFile << endl;
-    if(osoptions->osrlFile != "") cout << "OSrL file = " << osoptions->osrlFile << endl;
-    //if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-    if(osoptions->osplInputFile != "") cout << "OSpL Input file = " << osoptions->osplInputFile << endl;
-    if(osoptions->serviceMethod != "") cout << "Service Method = " << osoptions->serviceMethod << endl;
-    if(osoptions->mpsFile != "") cout << "MPS File Name = " << osoptions->mpsFile << endl;
-    if(osoptions->nlFile != "") cout << "NL File Name = " << osoptions->nlFile << endl;
-    if(osoptions->gamsControlFile != "") cout << "gams Control File Name = " << osoptions->gamsControlFile << endl;
-    if(osoptions->browser != "") cout << "Browser Value = " << osoptions->browser << endl;
-    if(osoptions->solverName != "") cout << "Selected Solver = " << osoptions->solverName << endl;
-    if(osoptions->serviceLocation != "") cout << "Service Location = " << osoptions->serviceLocation << endl;
-    if(osoptions->printModel) cout << "print model prior to solve/send" << endl;
-    if(osoptions->printRowNumberAsString != "") cout << "print model row " << osoptions->printRowNumberAsString << " prior to solve/send" << endl;
-
-#endif
-
-    //convert to lower case so there is no solver name ambiguity
-    unsigned int k;
-    for (k = 0; k < osoptions->solverName.length(); k++)
-    {
-        osoptions->solverName[k] = (char)tolower(osoptions->solverName[k]);
-    }
-
-    // get the data from the files
-    fileUtil = new FileUtil();
-    try
-    {
-        //if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
-        if (osoptions->osolFile != "")
-        {
-
-            osoptions->osol = fileUtil->getFileAsString(
-                                  (osoptions->osolFile).c_str());
-
-        }
-
-        if (osoptions->osilFile != "")
-        {
-            //this takes precedence over what is in the OSoL file
-            osoptions->osil = fileUtil->getFileAsString(
-                                  (osoptions->osilFile).c_str());
-        }
-        /*
-         else{// we were not given an osil file
-         // make sure we don't have a service URI in the file or are using mps or nl
-         // if we have nl or mps assume a local solve
-         if( (osoptions->osol != "") && (osoptions->nlFile == "") && (osoptions->gamsControlFile == "") && (osoptions->mpsFile == "") && (osoptions->serviceLocation == "")  &&  (getServiceURI( osoptions->osol) == "") )
-         osoptions->osil = fileUtil->getFileAsString( getInstanceLocation( osoptions->osol).c_str()  );
-         }
-         */
-
-        //if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
-        if (osoptions->osplInputFile != "")
-            osoptions->osplInput = fileUtil->getFileAsString(
-                                       (osoptions->osplInputFile).c_str());
-        //if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
-//        if (osoptions->osplOutputFile != "")
-//            osoptions->osplOutput = fileUtil->getFileAsString(
-//                                        (osoptions->osplOutputFile).c_str());
-    }
-    catch (const ErrorClass& eclass)
-    {
-        //cout << eclass.errormsg <<  endl;
-        //cout << "could not open file properly" << endl;
-        //cout << "try -h or --help" <<  endl;
-
-
-        //new stuff on April 17, 2010
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        osrlwriter = new OSrLWriter();
-        osresult = new OSResult();
-        osresult->setGeneralMessage(eclass.errormsg);
-        osresult->setGeneralStatusType("error");
-        std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (osoptions->osrlFile != "")
-        {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
-            {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        delete osresult;
-        osresult = NULL;
-        delete osrlwriter;
-        osrlwriter = NULL;
-        // end new stuff
-
-
-        delete osoptions;
-        osoptions = NULL;
         delete fileUtil;
         fileUtil = NULL;
+        delete oscommandline;
+        oscommandline = NULL;
+        delete clreader;
+        clreader = NULL;
         return 1;
     }
-    // now call the correct serviceMethod
-    // solve is the default
-    if ((osoptions->serviceMethod == "") || (osoptions->serviceMethod[0] == 's'))
-    {
-        if (osoptions->printModel == true)
-            doPrintModel(osoptions);
-        else if (osoptions->printRowNumberAsString != "")
-            doPrintRow(osoptions);
-        if (osoptions->serviceMethod[1] == 'e')
-            send();
-        else
-            solve();
-    }
-    else
-    {
-        switch (osoptions->serviceMethod[0])
-        {
-        case 'g':
-            getJobID();
-            break;
-        case 'r':
-            retrieve();
-            break;
-        case 'k':
-            if (osoptions->serviceMethod[1] == 'i')
-                kill();
-            else
-                knock();
-            break;
-        default:
 
-            break;
-        }
-    }
-    delete osoptions;
-    osoptions = NULL;
-    delete fileUtil;
-    fileUtil = NULL;
-    return 0;
+#ifdef DEBUG_CL_INTERFACE
+	std::cout << oscommandline->list_options() << std::endl;
+#endif
+
+	// deal with "action items": help, quit, listOptions, etc.
+	if (oscommandline->quit || oscommandline->invokeHelp || oscommandline->writeVersion || oscommandline->listOptions)
+	{
+		if (oscommandline->invokeHelp) 
+			std::cout << std::endl << std::endl << get_help() << std::endl;
+		if (oscommandline->listOptions) 
+			std::cout << std::endl << std::endl << oscommandline->list_options() << std::endl;
+        delete oscommandline;
+        oscommandline = NULL;
+        return 0;
+	}
+
+	// call service method
+	bool result = callServiceMethod(oscommandline);
+	if (result == true)
+		return 0;
+	else
+		return 1;
 }
 
-void solve()
-{
-    std::string osrl = "";
-    OSiLReader *osilreader = NULL;
-    OSmps2osil *mps2osil = NULL;
-#ifdef COIN_HAS_ASL
-    OSnl2osil *nl2osil = NULL;
-#endif
-#ifdef COIN_HAS_GAMSUTILS
-    OSgams2osil *gams2osil = NULL;
-#endif
-    OSSolverAgent* osagent = NULL;
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    // now solve either remotely or locally
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            // call a method here to get OSiL if we have an nl or mps file
-            if (osoptions->osil == "")
-            {
-                //we better have an nl file present or mps file or osol file
-                if (osoptions->nlFile != "")
-                {
-                    getOSiLFromNl();
-                }
-                else
-                {
-                    if (osoptions->mpsFile != "")
-                    {
-                        getOSiLFromMps();
-                    }
-                    else
-                    {
-                        if (osoptions->gamsControlFile != "")
-                        {
-
-                            getOSiLFromGams();
-                        }
-                        else    // send an empty osil string
-                        {
-                            osoptions->osil = "";
-                        }
-                    }
-                }
-            }
-
-	    if (osoptions->printModel)
-		doPrintModel(osoptions);
-	    else if (osoptions->printRowNumberAsString != "")
-                doPrintRow(osoptions);
-
-            // place a remote call
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-            if (osoptions->osol == "")  // we have no osol string
-            {
-
-                std::ostringstream outStr;
-                outStr
-                        << "<?xml version=\"1.0\" encoding=\"UTF-8\"?> <osol xmlns=\"os.optimizationservices.org\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"os.optimizationservices.org http://www.optimizationservices.org/schemas/";
-                outStr << OS_SCHEMA_VERSION;
-                outStr << "/OSoL.xsd\"></osol>";
-                osoptions->osol = outStr.str();
-            }
-            osrl = osagent->solve(osoptions->osil, osoptions->osol);
-            if (osoptions->osrlFile != "")
-            {
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-                //const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-                if (osoptions->browser != "")
-                {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
-                    const char *ch = &str[0];
-                    std::system(ch);
-                }
-            }
-            else
-                cout << osrl << endl;
-            delete osagent;
-            osagent = NULL;
-
-        }
-        else    // solve locally
-        {
-            OSInstance *osinstance;
-            if (osoptions->osil != "")
-            {
-                osilreader = new OSiLReader();                
-                osinstance = osilreader->readOSiL(osoptions->osil);
-            }
-            else
-            {
-                //we better have an nl file present or mps file or osol file
-                if (osoptions->nlFile != "")
-                {
-#ifdef COIN_HAS_ASL
-                    nl2osil = new OSnl2osil( osoptions->nlFile);
-                    nl2osil->createOSInstance();
-                    osinstance = nl2osil->osinstance;
-#else
-                    throw ErrorClass(
-                        "nl file specified locally but ASL not present");
-#endif
-                }
-                else
-                {
-                    if (osoptions->mpsFile != "")
-                    {
-                        mps2osil = new OSmps2osil(osoptions->mpsFile);
-                        mps2osil->createOSInstance();
-                        osinstance = mps2osil->osinstance;
-                    }
-                    else
-                    {
-                        if (osoptions->gamsControlFile != "")
-                        {
-#ifdef COIN_HAS_GAMSUTILS
-                            gams2osil = new OSgams2osil( osoptions->gamsControlFile);
-                            gams2osil->createOSInstance();
-                            osinstance = gams2osil->osinstance;
-#else
-                            throw ErrorClass(
-                                "a Gams Control specified locally but GAMSIP not present");
-#endif
-
-                        }
-                        else    // need an osol file with an instanceLocation specified
-                        {
-                            //if( osoptions->osol.find( "<instanceLocation") == std::string::npos){
-                            throw ErrorClass(
-                                "Error: no osil, GAMS dat, AMPL nl, or mps file given for a local solve --- \n information in the osol file is ignored for local solves.");
-                            //}
-                        }
-                    }
-                }
-            }
-	    if (osoptions->printModel)
-                    doPrintModel(osinstance);
-	    else if (osoptions->printRowNumberAsString != "")
-	            doPrintRow(osinstance, osoptions->printRowNumberAsString);
-                
-            osrl = runSolver(osoptions->solverName, osoptions->osol, osinstance);
-            
-
-	    //delete fileUtil;
-            if (osoptions->osrlFile != "")
-            {
-
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-
-                //const char *ch1 = "/Applications/Firefox.app/Contents/MacOS/firefox  ";
-                if (osoptions->browser != "")
-                {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
-                    const char *ch = &str[0];
-                    std::system(ch);
-                }
-            }
-            else
-                cout << osrl << endl;
-
-        }//end of local solve
-
-
-        //garbage collection
-        if (osilreader != NULL)
-            delete osilreader;
-        osilreader = NULL;
-        if (mps2osil != NULL)
-            delete mps2osil;
-        mps2osil = NULL;
-#ifdef COIN_HAS_ASL
-        if(nl2osil != NULL) delete nl2osil;
-        nl2osil = NULL;
-#endif
-#ifdef COIN_HAS_GAMSUTILS
-        if(gams2osil != NULL) delete gams2osil;
-        gams2osil = NULL;
-#endif
-        delete fileUtil;
-        fileUtil = NULL;
-
-    }//end try
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        std::string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-        if (osoptions->osrlFile != "")
-        {
-            //fileUtil->writeFileFromString(osoptions->osrlFile,  eclass.errormsg);
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-            if (osoptions->browser != "")
-            {
-                std::string str = osoptions->browser + "  "
-                                  + osoptions->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            //std::cout <<  eclass.errormsg << std::endl;
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-        //regular garbage collection
-        if (osilreader != NULL)
-            delete osilreader;
-        osilreader = NULL;
-        if (mps2osil != NULL)
-            delete mps2osil;
-        mps2osil = NULL;
-#ifdef COIN_HAS_ASL
-        if(nl2osil != NULL) delete nl2osil;
-        nl2osil = NULL;
-#endif
-#ifdef COIN_HAS_GAMSUTILS
-        if(gams2osil != NULL) delete gams2osil;
-        gams2osil = NULL;
-#endif
-        delete fileUtil;
-        fileUtil = NULL;
-    }//end local catch
-
-}//end solve
-
-void getJobID()
-{
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-            osoptions->jobID = osagent->getJobID(osoptions->osol);
-            cout << osoptions->jobID << endl;
-            delete osagent;
-            osagent = NULL;
-        }
-        else
-        {
-            delete osagent;
-            osagent = NULL;
-            throw ErrorClass("please specify service location (url)");
-        }
-    }
-    catch (const ErrorClass& eclass)
-    {
-        FileUtil *fileUtil = NULL;
-        fileUtil = new FileUtil();
-
-
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-
-        //catch garbage collection
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end getJobID
-
-
-void knock()
-{
-    std::string osplOutput = "";
-    OSSolverAgent* osagent = NULL;
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                //set the jobID if there is one
-                if(osoptions->jobID == "") osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-
-
-            osplOutput = osagent->knock(osoptions->osplInput, osoptions->osol);
-            if (osoptions->osplOutputFile != "")
-                fileUtil->writeFileFromString(osoptions->osplOutputFile,
-                                              osplOutput);
-            else
-                cout << osplOutput << endl;
-            delete osagent;
-        }
-        else
-        {
-            delete osagent;
-            throw ErrorClass("please specify service location (url)");
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            std::string osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end knock
-
-
-void send()
-{
-    bool bSend = false;
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        // call a method here to get OSiL if we have an nl or mps file
-        if (osoptions->osil == "")
-        {
-            //we better have an nl file present or mps file
-            if (osoptions->nlFile != "")
-            {
-                getOSiLFromNl();
-            }
-            else
-            {
-                if (osoptions->mpsFile != "")
-                {
-                    getOSiLFromMps();
-                }
-                else    // send an empty osil string
-                {
-                    osoptions->osil = "";
-                }
-            }
-        }
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-            // check to see if there is an osol
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(osoptions->jobID == "") osoptions->jobID = osagent->getJobID("");
-                //set the jobID
-
-                osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-            bSend = osagent->send(osoptions->osil, osoptions->osol);
-            std::cout << "Result of send: " << bSend << std::endl;
-            delete osagent;
-        }
-        else
-        {
-            delete osagent;
-            throw ErrorClass("please specify service location (url)");
-        }
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        FileUtil *fileUtil = NULL;
-        fileUtil = new FileUtil();
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-
-        if (osoptions->osrlFile != "")
-            fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-        else
-            cout << osrl << endl;
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end send
-
-void retrieve()
-{
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    std::string osrl = "";
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
-                //set the jobID
-                osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-
-            osrl = osagent->retrieve(osoptions->osol);
-
-            if (osoptions->osrlFile != "")
-            {
-                fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
-                if (osoptions->browser != "")
-                {
-                    std::string str = osoptions->browser + "  "
-                                      + osoptions->osrlFile;
-                    const char *ch = &str[0];
-                    std::system(ch);
-                }
-            }
-            else
-                cout << osrl << endl;
-            delete osagent;
-            osagent = NULL;
-        }
-        else
-        {
-            delete osagent;
-            osagent = NULL;
-            throw ErrorClass("please specify service location (url)");
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end retrieve
-
-void kill()
-{
-    FileUtil *fileUtil = NULL;
-    fileUtil = new FileUtil();
-    std::string osplOutput = "";
-    OSSolverAgent* osagent = NULL;
-    try
-    {
-        if (osoptions->serviceLocation != "")
-        {
-            osagent = new OSSolverAgent(osoptions->serviceLocation);
-
-            if (osoptions->osol == "")
-            {
-                // we need to construct the OSoL
-                OSOption *osOption = NULL;
-                osOption = new OSOption();
-                // get a jobId if necessary
-                if(osoptions->jobID == "")throw ErrorClass("there is no JobID");
-                //set the jobID
-                osOption->setJobID( osoptions->jobID);
-                // now read the osOption object into a string
-                OSoLWriter *osolWriter = NULL;
-                osolWriter = new OSoLWriter();
-                osoptions->osol = osolWriter->writeOSoL( osOption);
-                delete osOption;
-                osOption = NULL;
-                delete osolWriter;
-                osolWriter = NULL;
-            }
-
-            osplOutput = osagent->kill(osoptions->osol);
-
-            if (osoptions->osplOutputFile != "")
-                fileUtil->writeFileFromString(osoptions->osplOutputFile,
-                                              osplOutput);
-            else
-                cout << osplOutput << endl;
-            delete osagent;
-            osagent = NULL;
-        }
-        else
-        {
-            delete osagent;
-            osagent = NULL;
-            throw ErrorClass("please specify service location (url)");
-        }
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::string osrl = "";
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        //first check to see if we already have OSrL,
-        //if so don't create a new osresult object
-        string::size_type  pos1 = eclass.errormsg.find( "<osrl");
-        if(pos1 == std::string::npos)
-        {
-            osrlwriter = new OSrLWriter();
-            osresult = new OSResult();
-            osresult->setGeneralMessage(eclass.errormsg);
-            osresult->setGeneralStatusType("error");
-            osrl = osrlwriter->writeOSrL(osresult);
-        }
-        else
-        {
-            osrl = eclass.errormsg;
-        }
-
-
-        if(osresult != NULL)
-        {
-            delete osresult;
-            osresult = NULL;
-        }
-        if(osrlwriter != NULL)
-        {
-            delete osrlwriter;
-            osrlwriter = NULL;
-        }
-
-
-        delete fileUtil;
-        fileUtil = NULL;
-    }
-}//end kill
-
-void getOSiLFromNl()
-{
-    try
-    {
-#ifdef COIN_HAS_ASL
-        OSnl2osil *nl2osil = NULL;
-        nl2osil = new OSnl2osil( osoptions->nlFile);
-        nl2osil->createOSInstance();
-        OSiLWriter *osilwriter = NULL;
-        osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL( nl2osil->osinstance);
-        osoptions->osil = osil;
-        delete nl2osil;
-        nl2osil = NULL;
-        delete osilwriter;
-        osilwriter = NULL;
-#else
-        throw ErrorClass(
-            "trying to convert nl to osil without AMPL ASL configured");
-#endif
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::cout << eclass.errormsg << std::endl;
-        throw ErrorClass(eclass.errormsg);
-    }
-}//getOSiLFromNl
-
-
-void getOSiLFromGams()
-{
-    try
-    {
-#ifdef COIN_HAS_GAMSIO
-        OSgams2osil *gams2osil = NULL;
-        gams2osil = new OSgams2osil( osoptions->gamsControlFile);
-        gams2osil->createOSInstance();
-        OSiLWriter *osilwriter = NULL;
-        osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL( gams2osil->osinstance);
-        osoptions->osil = osil;
-        delete gams2osil;
-        gams2osil = NULL;
-        delete osilwriter;
-        osilwriter = NULL;
-#else
-        throw ErrorClass(
-            "trying to convert Gams control file to osil without GAMSUTILS configured");
-#endif
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::cout << eclass.errormsg << std::endl;
-        throw ErrorClass(eclass.errormsg);
-    }
-}//getOSiLFromGams
-
-
-void getOSiLFromMps()
-{
-    try
-    {
-        OSmps2osil *mps2osil = NULL;
-        mps2osil = new OSmps2osil(osoptions->mpsFile);
-        mps2osil->createOSInstance();
-        OSiLWriter *osilwriter = NULL;
-        osilwriter = new OSiLWriter();
-        std::string osil;
-        osil = osilwriter->writeOSiL(mps2osil->osinstance);
-        osoptions->osil = osil;
-        delete mps2osil;
-        mps2osil = NULL;
-        delete osilwriter;
-        osilwriter = NULL;
-    }
-    catch (const ErrorClass& eclass)
-    {
-        std::cout << eclass.errormsg << std::endl;
-        throw ErrorClass(eclass.errormsg);
-    }
-
-}//getOSiLFromMps
+//==========================================================================
 
 void interactiveShell()
 {
-    void* scanner;
+//    void* scanner;
     FileUtil *fileUtil = NULL;
-    //char *config = "-config";
     std::string configFileName = "";
 
+	OSCommandLine *oscommandline  = new OSCommandLine();
+	OSCommandLineReader *clreader = new OSCommandLineReader();
+	OSServiceMethods *osservicemethods;
+	osservicemethods = new OSServiceMethods();
 
-    osoptions = new osOptionsStruc();
-    //reset_options();
-    bool scannerActive = false;
+//	bool scannerActive = false;
 
-            //this is the interactive shell
-            scannerActive = true;
-            ossslex_init(&scanner);
-            setyyextra(osoptions, scanner);
-            std::string lineText;
-            //use a blank to separate words
-            std::string wordSep = " ";
-            std::string optionName = "";
-            std::string optionValue = "";
-            std::string::size_type indexStart;
-            std::string::size_type indexEnd;
-            unsigned int k;
-
-
-            std::string commandArray[14] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
-                                             "quit", "exit",  "reset", "list", "?", "help", "version", 
-											 "printModel"
-                                           };
+    //this is the interactive shell
+//    scannerActive = true;
+//    ossslex_init(&scanner);
+//    setyyextra(osoptions, scanner);
+    std::string lineText;
+    //use a blank to separate words
+    std::string wordSep = " ";
+    std::string optionName = "";
+    std::string optionValue = "";
+    std::string::size_type indexStart;
+    std::string::size_type indexEnd;
+    unsigned int k;
 
 
-            std::string optionArray[11] = { "osil", "osrl", "osol", "mps", "nl", "dat",
-                                            "serviceLocation", "solver", "osplInput",  "osplOutput", 
-											"printRow"
-                                          };
+	std::string commandArray[6] = { "solve", "send", "getJobID", "retrieve", "kill", "knock"};
+
+    std::string   actionItem[9] = { "quit", "exit",  "reset", "list", "?", "help", "version", 
+					  			    "printModel", "printRow"
+                                  };
+
+    std::string optionArray[11] = { "osil", "osrl", "osol", "mps", "nl", "dat", "osilOutput",
+                                    "serviceLocation", "solver", "osplInput",  "osplOutput"
+                                  };
 
 
-            size_t size_of_commandArray = (sizeof commandArray)
-                                          / (sizeof commandArray[0]);
+    size_t size_of_commandArray = (sizeof commandArray)
+                                  / (sizeof commandArray[0]);
 
-            size_t size_of_optionArray = (sizeof optionArray)
-                                         / (sizeof optionArray[0]);
+    size_t size_of_actionItem = (sizeof actionItem)
+                                  / (sizeof actionItem[0]);
+
+    size_t size_of_optionArray = (sizeof optionArray)
+                                 / (sizeof optionArray[0]);
 
 
-            //fill in the command array into a map
+    //fill the command array into a map
+	std::map<string, int> commandMap;
 
-            std::map<string, int> commandMap;
-            //std::map<string, int>::const_iterator iter;
+    for (k = 0; k < size_of_commandArray; k++)
+    {
+        commandMap[ commandArray[ k] ] = k;
+    }
 
-            for(k = 0; k < size_of_commandArray; k++)
+    //fill the action items into a map
+    std::map<string, int> actionItemMap;
+
+    for (k = 0; k < size_of_actionItem; k++)
+    {
+        actionItemMap[ actionItem[ k] ] = k;
+    }
+
+    //fill the option array into a map
+	std::map<string, int> optionMap;
+
+    for (k = 0; k < size_of_optionArray; k++)
+    {
+        optionMap[ optionArray[ k] ] = k;
+    }
+
+    std::cout << "At the prompt enter a valid command or option value pair.\n";
+    std::cout << "Enter the \"solve\" command to optimize.\n";
+    std::cout << "Type \"quit\" or \"exit\" to leave the application. \n";
+    std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
+
+    while (oscommandline->quit != true)
+    {
+        std::cout <<  "Please enter a command, or an option followed by an option value: ";
+        getline(std::cin, lineText);
+        lineText = " " + lineText + " ";
+        //get the name of the option
+        indexStart = lineText.find_first_not_of(wordSep);
+        if (indexStart == string::npos)
+        {
+            std::cout << std::endl;
+            std::cout << "You did not enter a valid option."
+                      << std::endl;
+        }
+        else
+        {
+            indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
+            optionName = lineText.substr(indexStart, indexEnd
+                                         - indexStart);
+
+            if ( (commandMap.find(optionName) == commandMap.end() ) &&
+                    (actionItemMap.find(optionName) == actionItemMap.end() )&&
+                    (optionMap.find(optionName) == optionMap.end() ) )
             {
-                commandMap[ commandArray[ k] ] = k;
+                std::cout << std::endl;
+                std::cout << "You did not enter a valid option."
+                          << std::endl;
             }
-
-            //fill in the option array into a map
-
-            std::map<string, int> optionMap;
-
-
-            for(k = 0; k < size_of_optionArray; k++)
+            else
             {
-                optionMap[ optionArray[ k] ] = k;
-            }
-
-            //for (iter=optionMap.begin(); iter != optionMap.end(); ++iter) {
-            //    cout << iter->second << " " << iter->first << endl;
-            //}
-
-            std::cout << "At the prompt enter a valid command or option value pair.\n";
-            std::cout << "Enter the \"solve\" command to optimize.\n";
-            std::cout << "Type \"quit\" or \"exit\" to leave the application. \n";
-            std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
-
-            //std::cout << "Number of Options = " <<  size_of_array << std::endl;
-            while (osoptions->quit != true && osoptions->exit != true)
-            {
-                /*				std::cout << "At the prompt enter a valid command or option value pair.\n";
-                				std::cout << "Enter the \"solve\" command to optimize.\n";
-                				std::cout << "Type \"quit/exit\" to leave the application. \n";
-                				std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
-                */
-                std::cout <<  "Please enter a command, or an option followed by an option value: ";
-                getline(std::cin, lineText);
-                lineText = " " + lineText + " ";
-                //get the name of the option
-                indexStart = lineText.find_first_not_of(wordSep);
-                if (indexStart == string::npos)
+			// get the option value
+                indexStart = lineText.find_first_not_of(wordSep,indexEnd + 1);
+                indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
+                if (indexStart != std::string::npos && indexEnd != std::string::npos)
                 {
-                    std::cout << std::endl;
-                    std::cout << "You did not enter a valid option."
-                              << std::endl;
+                    optionValue = lineText.substr(indexStart, indexEnd - indexStart);
                 }
                 else
                 {
-                    indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
-                    optionName = lineText.substr(indexStart, indexEnd
-                                                 - indexStart);
-                    //std::cout << "Option Name = " << optionName << std::endl;
+                    optionValue = "";
+                }
 
-                    if( (commandMap.find(optionName) == commandMap.end() ) &&
-                            (optionMap.find(optionName) == optionMap.end() ) )
+#ifdef DEBUG_CL_INTERFACE
+                std::cout << "Option name  = " << optionName  << std::endl;
+                std::cout << "Option Value = " << optionValue << std::endl;
+#endif
+
+                try
+                {
+                    //first we process the commands
+                    if (commandMap.find(optionName) != commandMap.end()  )
                     {
-                        std::cout << std::endl;
-                        std::cout << "You did not enter a valid option."
-                                  << std::endl;
-                    }
-                    else
-                    {
-
-                        // get the option value
-                        indexStart = lineText.find_first_not_of(wordSep,
-                                                                indexEnd + 1);
-                        indexEnd = lineText.find_first_of(wordSep, indexStart
-                                                          + 1);
-                        if (indexStart != std::string::npos && indexEnd
-                                != std::string::npos)
-                        {
-                            optionValue = lineText.substr(indexStart, indexEnd
-                                                          - indexStart);
-                        }
-                        else
-                        {
-                            optionValue = "";
-                        }
-
-                        //std::cout << "Option Value = " << optionValue << std::endl;
-
-                        try
-                        {
-                            //first we process the commands
-                            if( commandMap.find(optionName) != commandMap.end()  )
+						oscommandline->serviceMethod = optionName;
+						if (optionName == "solve")
+						{
+                            if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
                             {
-                                switch (commandMap[ optionName] )
-                                {
-
-                                case 0: // solve command
-
-                                    if(osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
-                                    {
-                                        std::cout
-                                                << std::endl
-                                                << "You did not specify an optimization instance!!!\n"
-                                                << "Please enter file format option (osil, nl, or mps) \n"
-                                                << "followed by the option value which is the file location. \n"
-                                                << std::endl;
-                                        //std::cout
-                                        //	<< "Please enter the path and optimization instance file name: ";
-                                        //getline(std::cin, osoptions->osilFile);
-                                        //osoptions->osil
-                                        //	= fileUtil->getFileAsString(
-                                        //			(osoptions->osilFile).c_str());
-                                    }
-                                    else
-                                    {
-                                        solve();
-                                        if (osoptions->osrlFile != "")
-                                            std::cout <<  "\nSolve command executed. Please see " << osoptions->osrlFile  << " for results." << std::endl;
-                                    }
-                                    break;
-
-                                case 1: // send command
-
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
-                                    send();
-                                    break;
-
-
-                                case 2: // getJobID command
-
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
-                                    getJobID();
-                                    break;
-
-
-                                case 3: // retrieve command
-
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
-
-                                    if( (osoptions->osolFile == "") && (osoptions->jobID == "") )
-                                    {
-                                        std::cout
-                                                << std::endl
-                                                << "Cannot retrieve: no JobID and no OSoL file"
-                                                << std::endl;
-                                    }
-                                    else
-                                    {
-                                        retrieve();
-                                    }
-
-                                    break;
-
-                                case 4: // kill command
-
-
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
-
-									if( (osoptions->osolFile == "") && (osoptions->jobID == "") )
-                                    {
-                                        std::cout
-                                                << std::endl
-                                                << "Cannot kill: no JobID and no OSoL file"
-                                                << std::endl;
-                                    }
-                                    else
-                                    {
-                                        kill();
-                                    }
-
-
-                                    break;
-
-
-                                case 5: // knock command
-
-                                    //note -- can have empty OSoL for knock
-                                    //however we do need an OSpL file
-
-                                    if(osoptions->serviceLocation == "")
-                                        getServiceLocation();
-
-                                    if( osoptions->osplInputFile == "")
-                                    {
-                                        std::cout
-                                                << std::endl
-                                                << "Cannot knock -- no OSplInputFile specificed"
-                                                << std::endl;
-                                    }
-                                    else
-                                    {
-                                        knock();
-                                    }
-
-                                    break;
-
-
-                                case 6: // quit command
-
-                                    return;
-
-
-
-                                case 7: // exit command
-
-                                    return;
-
-
-
-                                case 8: // reset command
-
-                                    reset_options();
-                                    std::cout << "\nAll options reset.\n";
-                                    break;
-
-
-
-                                case 9: // list command
-
-                                    listOptions( osoptions);
-                                    break;
-
-
-                                case 10: // ? command
-
-                                    std::cout << get_options() << std::endl;
-                                    break;
-
-
-                                case 11: // help command
-
-                                    std::cout << get_options() << std::endl;
-                                    break;
-
-
-                                case 12: // version command
-
-                                    std::cout << OSgetVersionInfo() << std::endl;
-                                    break;
-
-									
-								case 13: // printModel
-
-                                    doPrintModel(osoptions);
-                                    break;
-
-
-                                default:
-                                    throw ErrorClass("we don't have a valid command");
-
-
-                                } //end switch
-
+                                std::cout
+                                        << std::endl
+                                        << "You did not specify an optimization instance!!!\n"
+                                        << "Please enter file format option (osil, nl, or mps) \n"
+                                        << "followed by the option value which is the file location. \n"
+                                        << std::endl;
                             }
-                            else     // now in the case where we require option values
+						}
+						else
+						{
+                            if (oscommandline->serviceLocation == "")
+							{
+							    std::cout
+            							<< std::endl
+            							<< "A service location is required"
+            							<< std::endl;
+    							std::cout
+            							<< "Please type the URL of the remote service: ";
+    							getline(std::cin, oscommandline->serviceLocation);
+							}
+                           if (oscommandline->osolFile == "") //&& (oscommandline->jobID == "") )
+                            {
+                                std::cout
+                                        << std::endl
+                                        << "Cannot execute command: no JobID and no OSoL file"
+                                        << std::endl;
+                            }
+							if (optionName == "knock")
+							{
+                                if (oscommandline->osplInputFile == "")
+                                {
+                                    std::cout
+                                            << std::endl
+                                            << "Cannot knock -- no OSplInputFile specified"
+                                            << std::endl;
+                                }
+							}
+ 						}
+
+						bool result = callServiceMethod(oscommandline);
+					}
+
+					else if (actionItemMap.find(optionName) != actionItemMap.end()  )
+					{
+                        switch (actionItemMap[ optionName] )
+						{
+                            case 0: // quit command
+                                return;
+
+                            case 1: // exit command
+                                return;
+
+                            case 2: // reset command
+                                oscommandline->reset_options();
+                                std::cout << "\nAll options reset.\n";
+                                break;
+
+                            case 3: // list command
+                                oscommandline->list_options();
+                                break;
+
+                            case 4: // ? command
+                                std::cout << get_options() << std::endl;
+                                break;
+
+                            case 5: // help command
+                                std::cout << get_options() << std::endl;
+                                break;
+
+                            case 6: // version command
+                                std::cout << OSgetVersionInfo() << std::endl;
+                                break;
+									
+							case 7: // printModel
+                                doPrintModel(oscommandline);
+                                break;
+									
+							case 8: // printRow
+								if (optionValue == "")
+								{
+                                    std::cout
+                                              << "Please enter a row number (>=0) or objective number (<0): ";
+                                    getline(std::cin, optionValue);
+								}
+                                doPrintRow(oscommandline);
+                                break;
+
+                            default:
+                                throw ErrorClass("we don't have a valid command");
+
+
+                        } //end switch
+
+                    }
+                    
+            		else     // now in the case where we require option values
+                    {
+                        if (optionValue == "")
+                        {
+
+                            if(optionMap.find(optionName) != optionMap.end() )
                             {
 
-                                if (optionValue == "")
+                                switch (optionMap[ optionName] )
                                 {
-
-                                    if(optionMap.find(optionName) != optionMap.end() )
-                                    {
-
-                                        switch (optionMap[ optionName] )
-                                        {
-
-                                        case 0: //osil
-                                            std::cout
-                                                    << "Please enter the name of an osil file: ";
-                                            break;
-
-
-                                        case 1: //osrl
-                                            std::cout
-                                                    << "Please enter the name of an osrl file: ";
-                                            break;
-
-                                        case 2: //osol
-                                            std::cout
-                                                    << "Please enter the name of an osol file: ";
-                                            break;
-
-                                        case 3: //mps
-                                            std::cout
-                                                    << "Please enter the name of an mps file: ";
-                                            break;
-
-                                        case 4: //nl
-                                            std::cout
-                                                    << "Please enter the name of an AMPL nl file: ";
-                                            break;
-
-                                        case 5: //dat
-                                            std::cout
-                                                    << "Please enter the name of a dat file: ";
-                                            break;
-
-                                        case 6: //service location
-                                            std::cout
-                                                    << "Please enter the serviceLocation: ";
-                                            break;
-
-                                        case 7: //solver
-                                            std::cout
-                                                    << "Please enter the name of the solver: ";
-                                            break;
-
-                                        case 8: //osplInput
-                                            std::cout
-                                                    << "Please enter the name of an osplInput file: ";
-                                            break;
-
-                                        case 9: //osplOutput
-                                            std::cout
-                                                    << "Please enter the name of an osplOutput file: ";
-                                            break;
-
-
-                                        case 10: //printRow
-                                            std::cout
-                                                    << "Please enter the number of a constraint (>=0) or objective (<0): ";
-                                            break;
-
-
-                                        }// end switch
-                                        // now get the option value
-                                        getline(std::cin, optionValue);
-                                    }// end if on finding an element in the optionMap
-
-                                } // end if on whether or not option value is null
-
-             //                   lineText = optionName + " "
-             //                              + optionValue + " ";
-             //                   osss_scan_string(lineText.c_str(),
-             //                                    scanner);
-             //                   ossslex(scanner);
-             //                   listOptions( osoptions);
-
-                                if(optionMap.find(optionName) != optionMap.end() )
-                                {
-
- 				    switch (optionMap[ optionName] )
-                                    {
 
                                     case 0: //osil
-                                        osoptions->osilFile = optionValue;
-                                        osoptions->osil
-                                            = fileUtil->getFileAsString(
-                                                  (osoptions->osilFile).c_str());
+                                        std::cout
+                                                << "Please enter the name of an osil file: ";
                                         break;
 
 
                                     case 1: //osrl
-                                        osoptions->osrlFile = optionValue;
+                                        std::cout
+                                                << "Please enter the name of an osrl file: ";
                                         break;
 
                                     case 2: //osol
-                                        osoptions->osolFile = optionValue;
-                                        osoptions->osol
-                                            = fileUtil->getFileAsString(
-                                                  (osoptions->osolFile).c_str());
+                                        std::cout
+                                                << "Please enter the name of an osol file: ";
                                         break;
 
                                     case 3: //mps
-                                        osoptions->mpsFile = optionValue;
-                                        osoptions->mps
-                                            = fileUtil->getFileAsString(
-                                                  (osoptions->mpsFile).c_str());
+                                        std::cout
+                                                << "Please enter the name of an mps file: ";
                                         break;
 
                                     case 4: //nl
-                                        osoptions->nlFile = optionValue;
-                                        osoptions->nl
-                                            = fileUtil->getFileAsString(
-                                                  (osoptions->nlFile).c_str());
+                                        std::cout
+                                                << "Please enter the name of an AMPL nl file: ";
                                         break;
 
                                     case 5: //dat
-                                        osoptions->datFile = optionValue;
-                                        osoptions->dat
-                                            = fileUtil->getFileAsString(
-                                                  (osoptions->datFile).c_str());
+                                        std::cout
+                                                << "Please enter the name of a dat file: ";
                                         break;
 
                                     case 6: //service location
-                                        osoptions->serviceLocation = optionValue;
+                                        std::cout
+                                                << "Please enter the serviceLocation: ";
                                         break;
 
                                     case 7: //solver
-
-                                        //make solver name lower case 
-                                        for (k = 0; k
-                                                < osoptions->solverName.length(); k++)
-                                        {
-                                            osoptions->solverName[k] = 
-                                                (char)tolower(osoptions->solverName[k]);
-                                        }
-                                        osoptions->solverName = optionValue;
+                                        std::cout
+                                                << "Please enter the name of the solver: ";
                                         break;
 
                                     case 8: //osplInput
-                                        osoptions->osplInputFile = optionValue;
-                                        osoptions->osplInput
-                                            = fileUtil->getFileAsString(
-                                                  (osoptions->osplInputFile).c_str());
+                                        std::cout
+                                                << "Please enter the name of an osplInput file: ";
                                         break;
 
                                     case 9: //osplOutput
-                                        osoptions->osplOutputFile = optionValue;
+                                        std::cout
+                                                << "Please enter the name of an osplOutput file: ";
                                         break;
+
 
                                     case 10: //printRow
-
-					doPrintRow(osoptions);
+                                        std::cout
+                                                << "Please enter the number of a constraint (>=0) or objective (<0): ";
                                         break;
+
+
+                                }// end switch
+
+								// now get the option value
+                                getline(std::cin, optionValue);
+                            }// end if on finding an element in the optionMap
+
+                        } // end if on whether or not option value is null
+
+                        lineText = optionName + " " + optionValue + " ";
+
+                        if(optionMap.find(optionName) != optionMap.end() )
+                        {
+
+							switch (optionMap[ optionName] )
+                            {
+
+                                case 0: //osil
+									oscommandline->osilFile = optionValue;
+                                    oscommandline->osil
+                                        = fileUtil->getFileAsString(
+                                              (oscommandline->osilFile).c_str());
+                                    break;
+
+
+                                case 1: //osrl
+									oscommandline->osrlFile = optionValue;
+                                    break;
+
+                                case 2: //osol
+									oscommandline->osolFile = optionValue;
+                                    oscommandline->osol
+                                            = fileUtil->getFileAsString(
+                                                  (oscommandline->osolFile).c_str());
+                                    break;
+
+                                case 3: //mps
+									oscommandline->mpsFile = optionValue;
+                                    oscommandline->mps
+                                            = fileUtil->getFileAsString(
+                                                  (oscommandline->mpsFile).c_str());
+                                    break;
+
+                                case 4: //nl
+									oscommandline->nlFile = optionValue;
+                                    oscommandline->nl
+                                            = fileUtil->getFileAsString(
+                                                  (oscommandline->nlFile).c_str());
+                                    break;
+
+                                case 5: //dat
+									oscommandline->datFile = optionValue;
+                                    oscommandline->dat
+                                            = fileUtil->getFileAsString(
+                                                  (oscommandline->datFile).c_str());
+                                    break;
+
+                                case 6: //service location
+									oscommandline->serviceLocation = optionValue;
+                                    break;
+
+                                case 7: //solver
+
+                                    //make solver name lower case 
+                                    for (k = 0; k < oscommandline->solverName.length(); k++)
+                                    {
+                                        oscommandline->solverName[k] = 
+                                            (char)tolower(oscommandline->solverName[k]);
+                                    }
+									oscommandline->solverName = optionValue;
+                                    break;
+
+                                case 8: //osplInput
+									oscommandline->osplInputFile = optionValue;
+                                    oscommandline->osplInput
+                                            = fileUtil->getFileAsString(
+                                                  (oscommandline->osplInputFile).c_str());
+                                    break;
+
+                                case 9: //osplOutput
+									oscommandline->osplOutputFile = optionValue;
+                                    break;
+
+//                                    case 10: //printRow
+//
+//					                    doPrintRow(oscommandline);
+//                                        break;
 
 
 
                                     }// end switch
-                                    listOptions( osoptions);
+                                oscommandline->list_options();
 
                                 }// end if on finding an element in the optionMap
 
@@ -1817,10 +662,8 @@ void interactiveShell()
                     }
                 }
             }//end while loop
-            ossslex_destroy(scanner);
-            scannerActive = false;
-            delete osoptions;
-            osoptions = NULL;
+            delete oscommandline;
+            oscommandline = NULL;
             delete fileUtil;
             fileUtil = NULL;
 }
@@ -2030,7 +873,7 @@ std::string get_version()
     return versionMsg.str();
 }// get version
 
-
+#if 0
 void reset_options()
 {
     osoptions->configFile = "";
@@ -2063,7 +906,7 @@ void reset_options()
     osoptions->quit = false;
     osoptions->exit = false;
 }//reset_options
-
+#endif
 
 
 std::string get_options()
@@ -2154,7 +997,7 @@ std::string get_options()
             << "printModel -- print the currently defined model"
             << endl;
 	optionMsg
-            << "printRow nnn -- print row n of the currently defined model"
+            << "printRow nnn -- print row nnn of the currently defined model"
             << endl;
 	optionMsg
             << "   if nnn >= 0, prints a constraint, otherwise prints an objective row"
@@ -2181,100 +1024,49 @@ std::string get_options()
 }// get_options
 
 
-void listOptions(osOptionsStruc *osoptions)
-{
-    cout
-            << "HERE ARE THE OPTION VALUES SO FAR:"
-            << endl;
-    if (osoptions->configFile != "")
-        cout << "Config file = "
-             << osoptions->configFile
-             << endl;
-    if (osoptions->osilFile != "")
-        cout << "OSiL file = "
-             << osoptions->osilFile
-             << endl;
-    if (osoptions->osolFile != "")
-        cout << "OSoL file = "
-             << osoptions->osolFile
-             << endl;
-    if (osoptions->osrlFile != "")
-        cout << "OSrL file = "
-             << osoptions->osrlFile
-             << endl;
-//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-    if (osoptions->osplInputFile != "")
-        cout << "OSpL Input file = "
-             << osoptions->osplInputFile
-             << endl;
-    if (osoptions->serviceMethod != "")
-        cout << "Service Method = "
-             << osoptions->serviceMethod
-             << endl;
-    if (osoptions->mpsFile != "")
-        cout << "MPS File Name = "
-             << osoptions->mpsFile
-             << endl;
-    if (osoptions->nlFile != "")
-        cout << "NL File Name = "
-             << osoptions->nlFile
-             << endl;
-    if (osoptions->solverName != "")
-        cout << "Selected Solver = "
-             << osoptions->solverName
-             << endl;
-    if (osoptions->serviceLocation != "")
-        cout << "Service Location = "
-             << osoptions->serviceLocation
-             << endl;
 
-    if (osoptions->jobID != "")
-        cout << "Job ID = "
-             << osoptions->jobID
-             << endl;
-}// listOptions
-
-void doPrintModel(osOptionsStruc *osoptions)
+void doPrintModel(OSCommandLine *oscommandline)
 {
-	if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+	if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
 	{
 		std::cout
 			<< "no instance defined; print command ignored" << std::endl;
 	}
 	else
 	{
-		if (osoptions->osil != "")
+		if (oscommandline->osil != "")
 		{
 			OSiLReader *osilreader;
 			osilreader = new OSiLReader();
-			std::cout << osilreader->readOSiL(osoptions->osil)->printModel() << std::endl;
+			std::cout << osilreader->readOSiL(oscommandline->osil)->printModel() << std::endl;
 			delete osilreader;
 			osilreader = NULL;
 		}
-		else if (osoptions->nl != "")
-		{
-#ifdef COIN_HAS_ASL
-			OSnl2osil *nl2osil;	
-			nl2osil = new OSnl2osil( osoptions->nlFile);
-			nl2osil->createOSInstance();
-			std::cout << nl2osil->osinstance->printModel() << std::endl;
-			delete nl2osil;
-			nl2osil = NULL;
-#else
-			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
-#endif
-		}
-		else if (osoptions->mps != "")
+		else if (oscommandline->mps != "")
 		{
 			OSmps2osil *mps2osil;
-			mps2osil = new OSmps2osil(osoptions->mpsFile);
+			mps2osil = new OSmps2osil(oscommandline->mpsFile);
 			mps2osil->createOSInstance();
 			std::cout << mps2osil->osinstance->printModel() << std::endl;
 			delete mps2osil;
 			mps2osil = NULL;
 		}
+		else if (oscommandline->nl != "")
+		{
+#ifdef COIN_HAS_ASL
+			OSnl2os *nl2os;	
+			nl2os = new OSnl2os( oscommandline->nlFile);
+			nl2os->createOSInstance();
+			std::cout << nl2os->osinstance->printModel() << std::endl;
+			delete nl2os;
+			nl2os = NULL;
+#else
+			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
+#endif
+		}
 	}
-}// doPrintModel(osOptionsStruc *osoptions)
+}// doPrintModel(OSCommandLine *oscommandline)
+
 
 void doPrintModel(OSInstance *osinstance)
 {
@@ -2287,25 +1079,25 @@ void doPrintModel(OSInstance *osinstance)
 	{
 		std::cout << osinstance->printModel() << std::endl;
 	}
-}// doPrintModel(osOptionsStruc *osoptions)
+}// doPrintModel(OSInstance *osinstance)
 
-void doPrintRow(osOptionsStruc *osoptions)
+void doPrintRow(OSCommandLine *oscommandline)
 {
 	int rownumber;
-	if (osoptions->printRowNumberAsString == "")
+	if (oscommandline->printRowNumberAsString == "")
 		std::cout << "no line number given; print command ignored" << std::endl;
 	else
 	{
 		try
 		{
-			rownumber = atoi((osoptions->printRowNumberAsString).c_str());
+			rownumber = atoi((oscommandline->printRowNumberAsString).c_str());
 		}
 		catch  (const ErrorClass& eclass)
 		{
 	                std::cout << "invalid row number; print command ignored" << std::endl;
 		}
 
-		if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+		if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
                 {
                         std::cout
 	                        << "no instance defined; print command ignored" << std::endl;
@@ -2313,39 +1105,39 @@ void doPrintRow(osOptionsStruc *osoptions)
 		else
 		{
 			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
-			if (osoptions->osil != "")
+			if (oscommandline->osil != "")
 			{
 				OSiLReader *osilreader;
 				osilreader = new OSiLReader();
-		    		std::cout << osilreader->readOSiL(osoptions->osil)->printModel(rownumber) << std::endl;
+		    		std::cout << osilreader->readOSiL(oscommandline->osil)->printModel(rownumber) << std::endl;
 				delete osilreader;
 				osilreader = NULL;
 			}
-			else if (osoptions->nl != "")
-			{
-#ifdef COIN_HAS_ASL
-				OSnl2osil *nl2osil;	
-				nl2osil = new OSnl2osil( osoptions->nlFile);
-				nl2osil->createOSInstance();
-				std::cout << nl2osil->osinstance->printModel(rownumber) << std::endl;
-				delete nl2osil;
-				nl2osil = NULL;
-#else
-				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
-#endif
-			}
-			else if (osoptions->mps != "")
+			else if (oscommandline->mps != "")
 			{
 				OSmps2osil *mps2osil;
-				mps2osil = new OSmps2osil(osoptions->mpsFile);
+				mps2osil = new OSmps2osil(oscommandline->mpsFile);
 				mps2osil->createOSInstance();
 				std::cout << mps2osil->osinstance->printModel(rownumber) << std::endl;
 				delete mps2osil;
 				mps2osil = NULL;
 			}
+			else if (oscommandline->nl != "")
+			{
+#ifdef COIN_HAS_ASL
+				OSnl2os *nl2os;	
+				nl2os = new OSnl2os( osoptions->nlFile);
+				nl2os->createOSInstance();
+				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
+				delete nl2os;
+				nl2os = NULL;
+#else
+				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
+#endif
+			}
 		}
 	}
-}// doPrintRow(osOptionsStruc *osoptions)
+}// doPrintRow(OSCommandLine *oscommandline)
 
 void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 {
@@ -2376,3 +1168,101 @@ void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 	}
 }// doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 
+bool callServiceMethod(OSCommandLine* oscommandline)
+{
+	FileUtil *fileUtil = new FileUtil();
+	try
+    {
+		bool result;
+		OSServiceMethods *osservicemethods;
+		osservicemethods = new OSServiceMethods(oscommandline);
+
+		if (oscommandline->printModel) 
+			oscommandline->osinstance->printModel();
+		if (oscommandline->printRowNumberAsString != "")
+			oscommandline->osinstance->printModel(atoi((oscommandline->printRowNumberAsString).c_str()));
+
+		result = osservicemethods->executeServiceMethod(oscommandline);
+
+		// deal with the output
+		if (result == false) 
+			throw ErrorClass(osservicemethods->resultString);
+		else
+		{
+			if (oscommandline->serviceMethod == "getJobID")
+			{
+				std::cout << "The job ID generated by the system is:" << std::endl << std::endl;
+				std::cout << osservicemethods->resultString << std::endl << std::endl;
+				std::cout << "Be sure to make a record of this job ID for later." << std::endl;
+				std::cout << "You will need it to retrieve the job or inquire into its status." << std::endl;
+			}
+			else if (oscommandline->serviceMethod == "solve" || oscommandline->serviceMethod == "retrieve")
+			{
+		        if (oscommandline->osrlFile != "")
+				{
+		            fileUtil->writeFileFromString(oscommandline->osrlFile, osservicemethods->resultString);
+					if (oscommandline->browser != "")
+					{
+			            std::string str = oscommandline->browser + "  "
+					                      + oscommandline->osrlFile;
+		                const char *ch = &str[0];
+				        std::system(ch);
+		            }
+                    std::cout <<  "\nSolve command executed. Please see " << oscommandline->osrlFile  << " for results." << std::endl;
+				}
+		        else
+				{
+		            std::cout << osservicemethods->resultString << std::endl;
+				}
+			}
+			else if (oscommandline->serviceMethod == "kill" || oscommandline->serviceMethod == "knock")
+			{
+		        if (oscommandline->osplOutputFile != "")
+				{
+		            fileUtil->writeFileFromString(oscommandline->osplOutputFile, osservicemethods->resultString);
+				}
+		        else
+				{
+		            std::cout << osservicemethods->resultString << std::endl;
+				}
+			}
+		}
+		return 0;
+    }
+    catch (const ErrorClass& eclass)
+    {
+        OSResult *osresult = NULL;
+        OSrLWriter *osrlwriter = NULL;
+        osrlwriter = new OSrLWriter();
+        osresult = new OSResult();
+        osresult->setGeneralMessage(eclass.errormsg);
+        osresult->setGeneralStatusType("error");
+        std::string osrl = osrlwriter->writeOSrL(osresult);
+        if (oscommandline->osrlFile != "")
+        {
+            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
+            if (oscommandline->browser != "")
+            {
+                std::string str = oscommandline->browser + "  "
+                                  + oscommandline->osrlFile;
+                const char *ch = &str[0];
+                std::system(ch);
+            }
+        }
+        else
+        {
+            std::cout << osrl << std::endl;
+        }
+        //catch garbage collection
+        delete osresult;
+        osresult = NULL;
+        delete osrlwriter;
+        osrlwriter = NULL;
+
+        delete oscommandline;
+        oscommandline = NULL;
+        delete fileUtil;
+        fileUtil = NULL;
+        return 1;
+    }
+}

@@ -40,7 +40,7 @@
 #endif
 #include "OSErrorClass.h"
 #include <sstream>   
-#include "OSOptionsStruc.h" 
+#include "OSCommandLine.h" 
 
 
 using std::cout;
@@ -65,9 +65,9 @@ using std::ostringstream;
 #endif
 
 
-#define YY_EXTRA_TYPE struct osOptionsStruc*
+#define YY_EXTRA_TYPE class OSCommandLine*
 
-void setyyextra( osOptionsStruc *osoptions, void* scanner);
+void setyyextra( OSCommandLine *oscommandline, void* scanner);
 
  /**
  * INPUTS:
@@ -766,6 +766,6 @@ browserState (on|off)
 }
 %%
 
-void setyyextra(osOptionsStruc *osoptions, void* scanner){
+void setyyextra( OSCommandLine *oscommandline, void* scanner){
 	osssset_extra(osoptions, scanner);
 }

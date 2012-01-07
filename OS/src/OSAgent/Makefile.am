@@ -17,8 +17,44 @@ noinst_LTLIBRARIES = libOSAgent.la
 
 # List all source files for this library, including headers
 libOSAgent_la_SOURCES = \
-	OShL.cpp OShL.h OSSolverAgent.cpp \
-	OSSolverAgent.h OSWSUtil.cpp OSWSUtil.h
+	OShL.cpp \
+	OSSolverAgent.cpp \
+	OSWSUtil.cpp \
+	OSServiceMethods.cpp \
+	OShL.h \
+	OSSolverAgent.h \
+	OSWSUtil.h \
+	OSServiceMethods.h \
+	OSConfig.h \
+	OSCommandLine.h \
+	OSCommandLineReader.h \
+	OSServiceMethods.h \
+	OSResult.h \
+	OSiLReader.h \
+	OSiLWriter.h \
+	OSoLReader.h \
+	OSrLReader.h \
+	OSrLWriter.h \
+	OSInstance.h \
+	OSOption.h \
+	OSoLWriter.h \
+	OSFileUtil.h \
+	OSDefaultSolver.h \
+	OSWSUtil.h \
+	OSSolverAgent.h \
+	OShL.h \
+	OSErrorClass.h \
+	OSmps2osil.h \
+	OSBase64.h \
+	OSRunSolver.h \
+	OSnl2osil.h \
+	OSgams2osil.hpp \
+	OSIpoptSolver.h \
+	OSBonminSolver.h \
+	OSCouenneSolver.h \
+	OSLindoSolver.h \
+	OSKnitroSolver.h \
+	OSOptionsStruc.h
 
 # This is for libtool (on Windows)
 libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
@@ -28,6 +64,9 @@ libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSModelInterfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces` \
+	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
 	$(OSLIB_CFLAGS)
 
@@ -42,4 +81,38 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	OShL.h OSSolverAgent.h OSWSUtil.h
+	OShL.h \
+	OSSolverAgent.h \
+	OSWSUtil.h \
+	OSServiceMethods.h \
+	OSConfig.h \
+	OSCommandLine.h \
+	OSCommandLineReader.h \
+	OSServiceMethods.h \
+	OSResult.h \
+	OSiLReader.h \
+	OSiLWriter.h \
+	OSoLReader.h \
+	OSrLReader.h \
+	OSrLWriter.h \
+	OSInstance.h \
+	OSOption.h \
+	OSoLWriter.h \
+	OSFileUtil.h \
+	OSDefaultSolver.h \
+	OSWSUtil.h \
+	OSSolverAgent.h \
+	OShL.h \
+	OSErrorClass.h \
+	OSmps2osil.h \
+	OSBase64.h \
+	OSRunSolver.h \
+	OSnl2osil.h \
+	OSgams2osil.hpp \
+	OSIpoptSolver.h \
+	OSBonminSolver.h \
+	OSCouenneSolver.h \
+	OSLindoSolver.h \
+	OSKnitroSolver.h \
+	OSOptionsStruc.h
+

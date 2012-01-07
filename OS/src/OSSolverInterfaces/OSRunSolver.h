@@ -1,5 +1,5 @@
-/* $Id: OSGetSolver.h 4263 2011-09-09 20:19:26Z Martin $ */
-/** @file CoinSolver.h
+/* $Id: OSRunSolver.h 4263 2011-09-09 20:19:26Z Martin $ */
+/** @file OSRunSolver.h
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
@@ -16,7 +16,7 @@
 #define OSRUNSOLVER_H
 
 std::string runSolver(std::string solverName, 
-		std::string osol, OSInstance *osinstance);
+		OSOption *osoption, OSInstance *osinstance);
 
 
 #endif
