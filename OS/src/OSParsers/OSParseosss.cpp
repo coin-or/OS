@@ -3190,6 +3190,6 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 
 void setyyextra( OSCommandLine *oscommandline, void* scanner){
-	osssset_extra(osoptions, scanner);
+	osssset_extra(oscommandline, scanner);
 }
 

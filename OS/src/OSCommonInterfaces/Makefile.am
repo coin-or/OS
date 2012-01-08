@@ -49,8 +49,7 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSCommandLine.cpp \
 	OSCommandLine.h \
 	OSCommandLineReader.cpp \
-	OSCommandLineReader.h \
-	OSConfig.h
+	OSCommandLineReader.h
 
 # This is for libtool (on Windows)
 libOSCommonInterfaces_la_LDFLAGS = $(LT_LDFLAGS)
@@ -97,6 +96,4 @@ includecoin_HEADERS = \
         OSoLReader.h \
         OSOption.h \
 	OSCommandLine.h \
-	OSCommandLineReader.h \
-	OSConfig.h \
-	OSFileUtil.h
+	OSCommandLineReader.h

@@ -24,37 +24,7 @@ libOSAgent_la_SOURCES = \
 	OShL.h \
 	OSSolverAgent.h \
 	OSWSUtil.h \
-	OSServiceMethods.h \
-	OSConfig.h \
-	OSCommandLine.h \
-	OSCommandLineReader.h \
-	OSServiceMethods.h \
-	OSResult.h \
-	OSiLReader.h \
-	OSiLWriter.h \
-	OSoLReader.h \
-	OSrLReader.h \
-	OSrLWriter.h \
-	OSInstance.h \
-	OSOption.h \
-	OSoLWriter.h \
-	OSFileUtil.h \
-	OSDefaultSolver.h \
-	OSWSUtil.h \
-	OSSolverAgent.h \
-	OShL.h \
-	OSErrorClass.h \
-	OSmps2osil.h \
-	OSBase64.h \
-	OSRunSolver.h \
-	OSnl2osil.h \
-	OSgams2osil.hpp \
-	OSIpoptSolver.h \
-	OSBonminSolver.h \
-	OSCouenneSolver.h \
-	OSLindoSolver.h \
-	OSKnitroSolver.h \
-	OSOptionsStruc.h
+	OSServiceMethods.h
 
 # This is for libtool (on Windows)
 libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
@@ -84,35 +54,5 @@ includecoin_HEADERS = \
 	OShL.h \
 	OSSolverAgent.h \
 	OSWSUtil.h \
-	OSServiceMethods.h \
-	OSConfig.h \
-	OSCommandLine.h \
-	OSCommandLineReader.h \
-	OSServiceMethods.h \
-	OSResult.h \
-	OSiLReader.h \
-	OSiLWriter.h \
-	OSoLReader.h \
-	OSrLReader.h \
-	OSrLWriter.h \
-	OSInstance.h \
-	OSOption.h \
-	OSoLWriter.h \
-	OSFileUtil.h \
-	OSDefaultSolver.h \
-	OSWSUtil.h \
-	OSSolverAgent.h \
-	OShL.h \
-	OSErrorClass.h \
-	OSmps2osil.h \
-	OSBase64.h \
-	OSRunSolver.h \
-	OSnl2osil.h \
-	OSgams2osil.hpp \
-	OSIpoptSolver.h \
-	OSBonminSolver.h \
-	OSCouenneSolver.h \
-	OSLindoSolver.h \
-	OSKnitroSolver.h \
-	OSOptionsStruc.h
+	OSServiceMethods.h
 

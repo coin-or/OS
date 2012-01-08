@@ -1054,12 +1054,18 @@ void doPrintModel(OSCommandLine *oscommandline)
 		else if (oscommandline->nl != "")
 		{
 #ifdef COIN_HAS_ASL
-			OSnl2os *nl2os;	
-			nl2os = new OSnl2os( oscommandline->nlFile);
-			nl2os->createOSInstance();
-			std::cout << nl2os->osinstance->printModel() << std::endl;
-			delete nl2os;
-			nl2os = NULL;
+//			OSnl2os *nl2os;	
+//			nl2os = new OSnl2os( oscommandline->nlFile);
+//			nl2os->createOSObjects();
+//			std::cout << nl2os->osinstance->printModel() << std::endl;
+//			delete nl2os;
+//			nl2os = NULL;
+			OSnl2osil *nl2osil;	
+			nl2osil = new OSnl2osil( oscommandline->nlFile);
+			nl2osil->createOSInstance();
+			std::cout << nl2osil->osinstance->printModel() << std::endl;
+			delete nl2osil;
+			nl2osil = NULL;
 #else
 			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
@@ -1125,12 +1131,18 @@ void doPrintRow(OSCommandLine *oscommandline)
 			else if (oscommandline->nl != "")
 			{
 #ifdef COIN_HAS_ASL
-				OSnl2os *nl2os;	
-				nl2os = new OSnl2os( osoptions->nlFile);
-				nl2os->createOSInstance();
-				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
-				delete nl2os;
-				nl2os = NULL;
+//				OSnl2os *nl2os;	
+//				nl2os = new OSnl2os( oscommandline->nlFile);
+//				nl2os->createOSObjects();
+//				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
+//				delete nl2os;
+//				nl2os = NULL;
+				OSnl2osil *nl2osil;	
+				nl2osil = new OSnl2osil( oscommandline->nlFile);
+				nl2osil->createOSInstance();
+				std::cout << nl2osil->osinstance->printModel(rownumber) << std::endl;
+				delete nl2osil;
+				nl2osil = NULL;
 #else
 				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
