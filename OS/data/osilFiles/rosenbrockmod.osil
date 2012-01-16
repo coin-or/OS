@@ -5,12 +5,13 @@
 		<name>Modified Rosenbrock</name>
 		<source>Computing Journal 3:175-184, 1960</source>
 		<description>Rosenbrock problem with constraints. 
-			 local optimum at x0 = 0.87243, x1 = 0.741417, with objective
-			value 6.72791 </description>
+			 local optimum at x0 = 0.87243, x1 = 0.741417, with objective value 6.72791 
+		</description>
+
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var lb="0" name="x0" type="C"/>
+			<var lb="0" name="x0" type="C" ub=3"/>
 			<var lb="0" name="x1" type="C"/>
 		</variables>
 		<objectives numberOfObjectives=" 1">
