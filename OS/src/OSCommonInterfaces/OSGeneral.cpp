@@ -102,6 +102,15 @@ bool GeneralFileHeader::setRandom(double density, bool conformant)
     return true;
 }// end of GeneralFileHeader::setRandom
 
+std::string GeneralFileHeader::getHeaderItem(std::string item)
+{
+	if (item == "name")        return name;
+	if (item == "source")      return source;
+	if (item == "description") return description;
+	if (item == "fileCreator") return fileCreator;
+	if (item == "licence")     return licence;
+}//end of GeneralFileHeader::getHeaderItem
+
 bool GeneralFileHeader::setHeader(std::string name, std::string source,
                                   std::string description, std::string fileCreator, std::string licence)
 {

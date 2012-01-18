@@ -1,11 +1,11 @@
 /* $Id$ */
 /** @file OSInstance.cpp
- * \brief This file defines the OSInstance class along with its supporting classes..
+ * \brief This file defines the OSInstance class along with its supporting classes.
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -41,6 +41,8 @@ OSInstance::OSInstance():
     m_sInstanceName(""),
     m_sInstanceSource(""),
     m_sInstanceDescription(""),
+    m_sInstanceCreator(""),
+    m_sInstanceLicence(""),
     m_bProcessVariables(false),
     m_iVariableNumber(-1),
     m_iNumberOfIntegerVariables( 0),
@@ -420,24 +422,6 @@ OSInstance::~OSInstance()
     instanceData = NULL;
 }//OSInstance Destructor
 
-InstanceHeader::InstanceHeader():
-    description(""),
-    name(""),
-    source("")
-
-{
-#ifdef DEBUG
-    cout << "Inside the InstanceHeader Constructor" << endl;
-#endif
-}
-
-
-InstanceHeader::~InstanceHeader()
-{
-#ifdef DEBUG
-    cout << "Inside the InstanceHeader Destructor" << endl;
-#endif
-}
 
 Variable::Variable():
     lb(0.0),
@@ -1101,6 +1085,28 @@ string OSInstance::getInstanceDescription()
     }
     return m_sInstanceDescription;
 }//getInstanceDescription
+
+string OSInstance::getInstanceCreator()
+{
+    if (m_sInstanceCreator.length() <= 0)
+    {
+        if (instanceHeader == NULL)
+            throw ErrorClass("instanceHeader object undefined in method getInstanceCreator()");
+        m_sInstanceCreator = instanceHeader->fileCreator;
+    }
+    return m_sInstanceCreator;
+}//getInstanceCreator
+
+string OSInstance::getInstanceLicence()
+{
+    if (m_sInstanceLicence.length() <= 0)
+    {
+        if (instanceHeader == NULL)
+            throw ErrorClass("instanceHeader object undefined in method getInstanceLicence()");
+        m_sInstanceLicence = instanceHeader->licence;
+    }
+    return m_sInstanceLicence;
+}//getInstanceLicence
 
 int OSInstance::getVariableNumber()
 {
@@ -1912,15 +1918,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                     //std::cout << postfixVec[ i]->snodeName << std::endl;
                 }
 
-#if 0
-                std::cout << std::endl << std::endl << std::endl << std::endl;
-                n = opStack.size();
-                for(i = 0; i < n; i++)
-                {
-                    std::cout  << opStack.top()->getTokenName()  << std::endl;
-                }
-
-#endif
                 n = opStack.size();
                 for(i = 0; i < n; i++)
                 {
@@ -1967,7 +1964,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_PLUS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing plus operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing plus operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmp2 = tmpStack.top();
@@ -1976,7 +1973,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_SUM :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sum operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sum operator");
                         //std::cout << "INSIDE SUM NODE " << std::endl;
                         nlnodeSum = (OSnLNodeSum*)nlnode;
                         outStr.str("");
@@ -1998,7 +1995,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_MINUS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing minus operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing minus operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmp2 = tmpStack.top();
@@ -2007,14 +2004,14 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_NEGATE :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing negate operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- -- Problem writing negate operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "-"+ tmp1 );
                         break;
 
                     case OS_TIMES :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing times operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing times operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmp2 = tmpStack.top();
@@ -2023,7 +2020,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_DIVIDE :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing divide operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing divide operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmp2 = tmpStack.top();
@@ -2032,7 +2029,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_POWER :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing power operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing power operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmp2 = tmpStack.top();
@@ -2041,14 +2038,14 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_ABS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing abs operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing abs operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "abs( "+ tmp1  + ")");
                         break;
 
                     case OS_ERF :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing erf operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing erf operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "erf( "+ tmp1  + ")");
@@ -2056,49 +2053,49 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
 
 
                     case OS_SQUARE :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing square operater ");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing square operator ");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "("+ tmp1  + ")^2");
                         break;
 
                     case OS_LN :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing ln operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing ln operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "ln( "+ tmp1  + ")");
                         break;
 
                     case OS_EXP :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing exp operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing exp operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "exp( "+ tmp1  + ")");
                         break;
 
                     case OS_SIN :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sin operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sin operator");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "sin( "+ tmp1  + ")");
                         break;
 
                     case OS_COS :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing cos operater ");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing cos operator ");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "cos( "+ tmp1  + ")");
                         break;
 
                     case OS_SQRT :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing cos operater ");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing sqrt operator ");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
                         tmpStack.push( "sqrt( "+ tmp1  + ")");
                         break;
 
                     case OS_MIN :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing min operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing min operator");
                         //std::cout << "INSIDE Min NODE " << std::endl;
                         nlnodeMin = (OSnLNodeMin*)nlnode;
                         outStr.str("");
@@ -2119,7 +2116,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_MAX :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing max operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing max operator");
                         //std::cout << "INSIDE Max NODE " << std::endl;
                         nlnodeMax = (OSnLNodeMax*)nlnode;
                         outStr.str("");
@@ -2141,7 +2138,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
 
                     case OS_IF :
 
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing if operater ");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing if operator ");
                         if(nlnode->inumberOfChildren != 3)throw  ErrorClass("The if node must have three children");
                         tmp1 = tmpStack.top();
                         tmpStack.pop();
@@ -2153,7 +2150,7 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
                         break;
 
                     case OS_PRODUCT :
-                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing product operater");
+                        if( tmpStack.size() < nlnode->inumberOfChildren) throw  ErrorClass("There is an error in the OSExpression Tree -- Problem writing product operator");
                         //std::cout << "INSIDE Product NODE " << std::endl;
                         nlnodeProduct = (OSnLNodeProduct*)nlnode;
                         outStr.str("");
@@ -2794,6 +2791,13 @@ double OSInstance::getTimeDomainIntervalHorizon()
 
 // the set() methods
 
+
+bool OSInstance::setInstanceName(string name)
+{
+    instanceHeader->name = name;
+    return true;
+}//setInstanceName
+
 bool OSInstance::setInstanceSource(string source)
 {
     instanceHeader->source = source;
@@ -2806,12 +2810,18 @@ bool OSInstance::setInstanceDescription(string description)
     return true;
 }//setInstanceDescription
 
-
-bool OSInstance::setInstanceName(string name)
+bool OSInstance::setInstanceCreator(string fileCreator)
 {
-    instanceHeader->name = name;
+    instanceHeader->fileCreator = fileCreator;
     return true;
-}//setInstanceName
+}//setInstanceSource
+
+bool OSInstance::setInstanceLicence(string licence)
+{
+    instanceHeader->licence = licence;
+    return true;
+}//setInstanceDescription
+
 
 
 bool OSInstance::setVariableNumber(int number)
@@ -5570,46 +5580,6 @@ bool OSInstance::IsEqual(OSInstance *that)
     }
 }//OSInstance::IsEqual
 
-/*------------------------------------------*/
-bool InstanceHeader::IsEqual(InstanceHeader *that)
-{
-#ifdef DEBUG_ISEQUAL_ROUTINES
-    cout << "Start comparing in InstanceHeader" << endl;
-#endif
-    if (this == NULL)
-    {
-        if (that == NULL)
-            return true;
-        else
-        {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "First object is NULL, second is not" << endl;
-#endif
-            return false;
-        }
-    }
-    else
-    {
-        if (that == NULL)
-        {
-#ifdef DEBUG_ISEQUAL_ROUTINES
-            cout << "Second object is NULL, first is not" << endl;
-#endif
-            return false;
-        }
-        else
-        {
-            if (this->description != that->description)
-                return false;
-            if (this->name != that->name)
-                return false;
-            if (this->source != that->source)
-                return false;
-
-            return true;
-        }
-    }
-}//InstanceHeader::IsEqual
 
 bool InstanceData::IsEqual(InstanceData *that)
 {

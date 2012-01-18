@@ -2,10 +2,10 @@
 /** @file OSInstance.h
  * \brief This file defines the OSInstance class along with its supporting classes.
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -38,36 +38,6 @@
 #include "OSExpressionTree.h"
 #include <string>
 #include <map>
-
-
-/*! \class InstanceHeader
- * \brief The in-memory representation of the
- * <b><instanceHeader></b> element.
- */
-class InstanceHeader
-{
-public:
-
-    /** The InstanceHeader class constructor */
-    InstanceHeader();
-
-    /** The InstanceHeader class destructor */
-    ~InstanceHeader();
-
-    /** the problem instance description */
-    std::string description;
-
-    /** the name of the problem instance */
-    std::string name;
-
-    /** the source of the problem instance */
-    std::string source;
-
-    /**
-     * A function to check for the equality of two objects
-     */
-    bool IsEqual(InstanceHeader *that);
-};//class InstanceHeader
 
 
 
@@ -819,8 +789,9 @@ public:
  * <li> Root is not called osil it is called osinstance </li>
  * </ol>
  *
- * The OSInstance class is composed of two objects: an InstanceHeader object
- * and and InstanceData object
+ * The OSInstance class is composed of two objects: 
+ * the header object instanceHeader 
+ * and the data object instanceData
  *
  *
  */
@@ -880,6 +851,14 @@ private:
      * m_sInstanceDescription holds the instance description.
      */
     std::string m_sInstanceDescription;
+    /**
+     * m_sInstanceSource holds the instance source.
+     */
+    std::string m_sInstanceCreator;
+    /**
+     * m_sInstanceDescription holds the instance fileCreator info.
+     */
+    std::string m_sInstanceLicence;
 
     /**
      * m_bProcessVariables holds whether the variables are processed.
@@ -1497,13 +1476,11 @@ public:
      */
     std::string getInstanceName();
 
-
     /**
      * Get instance source.
      * @return instance source. Null or empty std::string ("") if there is no instance source.
      */
     std::string getInstanceSource();
-
 
     /**
      * Get instance description.
@@ -1513,6 +1490,20 @@ public:
     std::string getInstanceDescription();
 
     /**
+     * Get instance fileCreator.
+     * @return instance fileCreator. Null or empty std::string ("") if there is no instance file creator.
+     */
+    std::string getInstanceCreator();
+
+    /**
+     * Get instance licence.
+     *
+     * @return instance licence. Null or empty std::string ("") if there is no instance licence.
+     */
+    std::string getInstanceLicence();
+
+
+	/**
      * Get variable number.
      *
      * @return variable number.
@@ -1658,9 +1649,9 @@ public:
      * Get objective coefficients. One set of objective coefficients for each objective.
      *
      * @see org.optimizationservices.oscommon.datastructure.SparseVector
-     * @return an array of objective coefficients, null if objective coefficients.
-     * Each member of the array is of type
-     * ObjectiveCoefficients. The ObjectiveCoefficients class contains two arrays:
+     * @return an array of objective coefficients, null if no objectives.
+     * Each member of the array is of type ObjectiveCoefficients.
+     * The ObjectiveCoefficients class contains two arrays:
      * variableIndexes is an integer array and values is a double array of coefficient values.
      * @throws Exception if the elements in objectives are logically inconsistent.
      */
@@ -1700,7 +1691,7 @@ public:
     /**
      * Get constraint upper bounds.
      *
-     * @return a double array of constraint upper bounds, null if constraints.
+     * @return a double array of constraint upper bounds, null if no constraints.
      * @throws Exception if the elements in constraints are logically inconsistent.
      */
     double *getConstraintUpperBounds();
@@ -1711,10 +1702,10 @@ public:
      * <li>R for range constraint lb <= constraint <= ub </li>
      * <li>L for less than constraint  -INF <= con <= ub or con <= ub</li>
      * <li>G for greater than constraint lb <= con <= INF or con >= lb </li>
-     * <li>E for equal to constraint  lb <= con <= ub where lb = ub  or con = lb/ub </li>
+     * <li>E for equal to constraint  lb <= con <= ub where lb = ub  or con = lb (or con = ub) </li>
      * <li>U for unconstrained constraint -INF <= con <= INF</li>
      * </ul>
-     * @return a char array of constraint types, null if constraints.
+     * @return a char array of constraint types, null if no constraints.
      * @throws Exception if the elements in constraints are logically inconsistent.
      */
     char* getConstraintTypes();
@@ -2007,6 +1998,14 @@ public:
 
 
     /**
+     * set the instance name.
+     *
+     * @param name holds the instance name.
+     * @return whether the instance name is set successfully.
+     */
+    bool setInstanceName(std::string name);
+
+    /**
      * set the instance source.
      *
      * @param source holds the instance source.
@@ -2022,14 +2021,22 @@ public:
      */
     bool setInstanceDescription(std::string description);
 
+    /**
+     * set the instance creator.
+     *
+     * @param fileCreator holds the instance creator.
+     * @return whether the instance creator is set successfully.
+     */
+    bool setInstanceCreator(std::string fileCreator);
 
     /**
-     * set the instance name.
+     * set the instance licence.
      *
-     * @param name holds the instance name.
-     * @return whether the instance name is set successfully.
+     * @param licence holds the instance licence.
+     * @return whether the instance licence is set successfully.
      */
-    bool setInstanceName(std::string name);
+    bool setInstanceLicence(std::string licence);
+
 
     /**
      * set the variable number.

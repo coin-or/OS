@@ -86,6 +86,13 @@ public:
 
     /**
      *
+     * A function to retrieve a data item contained in this class
+     * @param item: the type of information sought (name, source, description, fileCreator, licence)
+     */
+    std::string getHeaderItem(std::string item);
+
+    /**
+     *
      * A function to populate an instance of this class
      * @param name: the name of this file or instance
      * @param source: the source (e.g., in BiBTeX format)

@@ -475,7 +475,6 @@ if(BASIC_TESTS == true){
 		osilwriter = NULL;
 	}	
 
-
 	// now test the nonlinear operators	
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": nonlinear operators" << endl << endl;
@@ -673,6 +672,52 @@ if (PARSER_TESTS){
 			delete osilwriter;
 		osilwriter = NULL;
 	}	
+
+	// now test the get() and set() methods in OSInstance
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": OSInstance get() and set() methods" << endl << endl;
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
+		osilreader = new OSiLReader(); 
+		osinstance = osilreader->readOSiL( osil);
+
+		// now create a second object
+		OSInstance *osinstance2 = new OSInstance();
+		std::string name, source, description, fileCreator, licence;
+
+		name        = osinstance->getInstanceName();
+		source      = osinstance->getInstanceSource();
+		description = osinstance->getInstanceDescription();
+		fileCreator = osinstance->getInstanceCreator();
+		licence     = osinstance->getInstanceLicence();
+
+		if (!osinstance->setInstanceName(name));
+		if (!osinstance->setInstanceSource(source));
+		if (!osinstance->setInstanceDescription(description));
+		if (!osinstance->setInstanceCreator(fileCreator));
+		if (!osinstance->setInstanceLicence(licence));
+
+		// now compare the two instances
+		if (!osinstance2->IsEqual(osinstance)) throw ErrorClass("Loss of data during duplication");
+
+		unitTestResult << "TEST " << nOfTest << ": Passed OSInstance get() and set() methods" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		delete osilreader;
+		osilreader = NULL;
+		delete osilwriter;
+		osilwriter = NULL;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Unit Test Failed OSInstance get() and set() methods: "  + eclass.errormsg<< endl; 
+		if (osilreader != NULL)
+			delete osilreader;
+		osilreader = NULL;
+		if (osilwriter != NULL)
+			delete osilwriter;
+		osilwriter = NULL;
+	}	
+
 
 #if 0
 	//

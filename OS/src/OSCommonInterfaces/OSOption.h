@@ -68,7 +68,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InstanceLocationOption
@@ -117,7 +117,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //ContactOption
@@ -169,7 +169,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //OtherOption
@@ -218,7 +218,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -312,7 +312,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 };//GeneralOption
@@ -547,7 +547,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //SystemOption
@@ -596,7 +596,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //ServiceOption
@@ -688,7 +688,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -752,7 +752,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -819,7 +819,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //PathPair
@@ -868,7 +868,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -944,7 +944,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1047,7 +1047,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //JobOption
@@ -1099,7 +1099,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InitVarValue
@@ -1148,7 +1148,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1226,7 +1226,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InitVarValueString
@@ -1275,7 +1275,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1350,7 +1350,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InitBasStatus
@@ -1401,7 +1401,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1468,7 +1468,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //BranchingWeight
@@ -1518,7 +1518,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1598,7 +1598,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1663,7 +1663,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1739,7 +1739,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //OtherVarOption
@@ -1812,7 +1812,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1894,7 +1894,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -1961,7 +1961,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InitObjValue
@@ -2091,7 +2091,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InitObjBound
@@ -2140,7 +2140,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -2226,7 +2226,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //OtherObjOption
@@ -2302,7 +2302,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -2378,7 +2378,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -2445,7 +2445,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InitConValue
@@ -2494,7 +2494,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -2576,7 +2576,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //InitDualVarValue
@@ -2625,7 +2625,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -2711,7 +2711,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //OtherConOption
@@ -2787,7 +2787,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -2863,7 +2863,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -2945,7 +2945,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //SolverOption
@@ -2994,7 +2994,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 
@@ -3078,7 +3078,7 @@ public:
      * A function to make a random instance of this class
      * @param density: corresponds to the probability that a particular child element is created
      * @param conformant: if true enforces side constraints not enforceable in the schema
-     *     (e.g., agreement of "numberOfXXX" atrbutes and <XXX> children)
+     *     (e.g., agreement of "numberOfXXX" attributes and <XXX> children)
      */
     bool setRandom(double density, bool conformant);
 }; //OptimizationOption
