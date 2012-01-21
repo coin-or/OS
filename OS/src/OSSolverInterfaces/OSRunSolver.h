@@ -15,8 +15,11 @@
 #ifndef OSRUNSOLVER_H
 #define OSRUNSOLVER_H
 
+//std::string runSolver(std::string solverName, 
+//		OSOption *osoption, OSInstance *osinstance);
+
 std::string runSolver(std::string solverName, 
-		OSOption *osoption, OSInstance *osinstance);
+		std::string osol, OSInstance *osinstance);
 
 
 #endif

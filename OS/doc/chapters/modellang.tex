@@ -667,16 +667,16 @@ OS/applications/matlab/macOSXscript.txt
 \end{verbatim}
 the exact options that work on a 64 bit Mac with MATLAB release R2009b.
 
-\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file {\tt OSmatlabSolver.cpp}.    Execute the command:
+\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file {\tt OSmatlabSolverMex.cpp}.    Execute the command:
 
 \begin{verbatim}
-mex -v OSMatlabSolver.cpp
+mex -v OSMatlabSolverMex.cpp
 \end{verbatim}
 
 On a 64 bit machine the command should be
 
 \begin{verbatim}
-mex -v -largeArrayDims OSMatlabSolver.cpp
+mex -v -largeArrayDims OSMatlabSolverMex.cpp
 \end{verbatim}
 
 

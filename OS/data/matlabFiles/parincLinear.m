@@ -19,7 +19,7 @@ password = '';
 %
 %
 %the solver
-solverName = 'clp';
+solverName = 'symphony';
 %the remote service service address
 %if left empty we solve locally
 serviceAddress='';
