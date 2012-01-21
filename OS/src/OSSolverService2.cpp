@@ -127,7 +127,7 @@
 #include "OSCouenneSolver.h"
 #endif
 
-#include "OSOptionsStruc.h"
+//#include "OSOptionsStruc.h"
 
 #include<stdio.h>
 #include <map>
@@ -151,7 +151,6 @@ std::string get_options();
 bool callServiceMethod(OSCommandLine* oscommandline);
 
 
-//void listOptions(osOptionsStruc *osoptions);
 void doPrintModel(OSCommandLine* oscommandline);
 void doPrintModel(OSInstance *osinstance);
 void doPrintRow(OSCommandLine* oscommandline);
@@ -161,8 +160,6 @@ void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 int main(int argC, const char* argV[])
 {
     WindowsErrorPopupBlocker();
-
-	
 	
 	std::cout << OSgetVersionInfo();
 	std::string osss;
@@ -181,7 +178,7 @@ int main(int argC, const char* argV[])
 	osss = outStr.str();
 
 #ifdef DEBUG_CL_INTERFACE
-    cout << "Input String = " << outStr << endl;
+    std::cout << "Input String = " << osss << std::endl;
 #endif
 
 	FileUtil *fileUtil = NULL;
@@ -1000,7 +997,7 @@ std::string get_options()
             << "printModel -- print the currently defined model"
             << endl;
 	optionMsg
-            << "printRow nnn -- print row n of the currently defined model"
+            << "printRow nnn -- print row nnn of the currently defined model"
             << endl;
 	optionMsg
             << "   if nnn >= 0, prints a constraint, otherwise prints an objective row"
@@ -1027,82 +1024,44 @@ std::string get_options()
 }// get_options
 
 
-void listOptions(osOptionsStruc *osoptions)
-{
-    cout
-            << "HERE ARE THE OPTION VALUES SO FAR:"
-            << endl;
-    if (osoptions->configFile != "")
-        cout << "Config file = "
-             << osoptions->configFile
-             << endl;
-    if (osoptions->osilFile != "")
-        cout << "OSiL file = "
-             << osoptions->osilFile
-             << endl;
-    if (osoptions->osolFile != "")
-        cout << "OSoL file = "
-             << osoptions->osolFile
-             << endl;
-    if (osoptions->osrlFile != "")
-        cout << "OSrL file = "
-             << osoptions->osrlFile
-             << endl;
-//if(osoptions->insListFile != "") cout << "Instruction List file = " << osoptions->insListFile << endl;
-    if (osoptions->osplInputFile != "")
-        cout << "OSpL Input file = "
-             << osoptions->osplInputFile
-             << endl;
-    if (osoptions->serviceMethod != "")
-        cout << "Service Method = "
-             << osoptions->serviceMethod
-             << endl;
-    if (osoptions->mpsFile != "")
-        cout << "MPS File Name = "
-             << osoptions->mpsFile
-             << endl;
-    if (osoptions->nlFile != "")
-        cout << "NL File Name = "
-             << osoptions->nlFile
-             << endl;
-    if (osoptions->solverName != "")
-        cout << "Selected Solver = "
-             << osoptions->solverName
-             << endl;
-    if (osoptions->serviceLocation != "")
-        cout << "Service Location = "
-             << osoptions->serviceLocation
-             << endl;
-
-    if (osoptions->jobID != "")
-        cout << "Job ID = "
-             << osoptions->jobID
-             << endl;
-}// listOptions
 
 void doPrintModel(OSCommandLine *oscommandline)
 {
-#if 0
-	if (osoptions->osil == "" && osoptions->mps == "" &&  osoptions->nl == "")
+	if (oscommandline->osil == "" && oscommandline->mps == "" &&  oscommandline->nl == "")
 	{
 		std::cout
 			<< "no instance defined; print command ignored" << std::endl;
 	}
 	else
 	{
-		if (osoptions->osil != "")
+		if (oscommandline->osil != "")
 		{
 			OSiLReader *osilreader;
 			osilreader = new OSiLReader();
-			std::cout << osilreader->readOSiL(osoptions->osil)->printModel() << std::endl;
+			std::cout << osilreader->readOSiL(oscommandline->osil)->printModel() << std::endl;
 			delete osilreader;
 			osilreader = NULL;
 		}
-		else if (osoptions->nl != "")
+		else if (oscommandline->mps != "")
+		{
+			OSmps2osil *mps2osil;
+			mps2osil = new OSmps2osil(oscommandline->mpsFile);
+			mps2osil->createOSInstance();
+			std::cout << mps2osil->osinstance->printModel() << std::endl;
+			delete mps2osil;
+			mps2osil = NULL;
+		}
+		else if (oscommandline->nl != "")
 		{
 #ifdef COIN_HAS_ASL
+//			OSnl2os *nl2os;	
+//			nl2os = new OSnl2os( oscommandline->nlFile);
+//			nl2os->createOSObjects();
+//			std::cout << nl2os->osinstance->printModel() << std::endl;
+//			delete nl2os;
+//			nl2os = NULL;
 			OSnl2osil *nl2osil;	
-			nl2osil = new OSnl2osil( osoptions->nlFile);
+			nl2osil = new OSnl2osil( oscommandline->nlFile);
 			nl2osil->createOSInstance();
 			std::cout << nl2osil->osinstance->printModel() << std::endl;
 			delete nl2osil;
@@ -1111,19 +1070,9 @@ void doPrintModel(OSCommandLine *oscommandline)
 			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
 		}
-		else if (osoptions->mps != "")
-		{
-			OSmps2osil *mps2osil;
-			mps2osil = new OSmps2osil(osoptions->mpsFile);
-			mps2osil->createOSInstance();
-			std::cout << mps2osil->osinstance->printModel() << std::endl;
-			delete mps2osil;
-			mps2osil = NULL;
-		}
 	}
-#endif
-
 }// doPrintModel(OSCommandLine *oscommandline)
+
 
 void doPrintModel(OSInstance *osinstance)
 {
@@ -1182,12 +1131,18 @@ void doPrintRow(OSCommandLine *oscommandline)
 			else if (oscommandline->nl != "")
 			{
 #ifdef COIN_HAS_ASL
-				OSnl2os *nl2os;	
-				nl2os = new OSnl2os( osoptions->nlFile);
-				nl2os->createOSInstance();
-				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
-				delete nl2os;
-				nl2os = NULL;
+//				OSnl2os *nl2os;	
+//				nl2os = new OSnl2os( oscommandline->nlFile);
+//				nl2os->createOSObjects();
+//				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
+//				delete nl2os;
+//				nl2os = NULL;
+				OSnl2osil *nl2osil;	
+				nl2osil = new OSnl2osil( oscommandline->nlFile);
+				nl2osil->createOSInstance();
+				std::cout << nl2osil->osinstance->printModel(rownumber) << std::endl;
+				delete nl2osil;
+				nl2osil = NULL;
 #else
 				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
