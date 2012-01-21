@@ -35,6 +35,7 @@ OS/applications/Makefile.in -text
 OS/applications/amplClient/Makefile.am -text
 OS/applications/amplClient/Makefile.in -text
 OS/applications/amplClient/OSAmplClient.cpp -text
+OS/applications/amplClient/OSAmplClient2.cpp -text
 OS/applications/amplClient/hs71.mod -text
 OS/applications/amplClient/nltrans.dat -text
 OS/applications/amplClient/nltrans.mod -text

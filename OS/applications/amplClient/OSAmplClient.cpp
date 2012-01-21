@@ -3,7 +3,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -14,51 +14,47 @@
  * to solve a problem locally, start AMPL. We assume that the model is
  * hs71.mod. Execute the following sequence of commands:
  *
- * model hs71.mod; 
- * option solver OSAmplClient; 
- * option OSAmplClient_options "-solver bonmin"; 
- * write gtestfile; 
- * solve; 
- * display x1; 
- *
+ * model hs71.mod;  <br />
+ * option solver OSAmplClient; <br />
+ * option OSAmplClient_options "-solver bonmin"; <br />
+ * write gtestfile; <br />
+ * solve; <br />
+ * display x1; <br />
  * you should get:
  *
  * x1 = 1
  *
- * display x2;  
- *
+ * display x2;  <br />
  * you should get:
  *
  * x2 = 4.743
  *
- * in general, specify options to the OSAmplclient solver
- * by using the AMPL command OSAmplClient_options
- * 
- * as another example, if you wanted to solve hs71.mod
- * on a remote server you would do:
- * 
- * model hs71.mod;
- * option solver OSAmplClient;
- * option OSAmplClient_options "-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws";
+ * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient_options
+ * as another example, if you wanted to solve hs71.mod on a remote server you would do:
+ * model hs71.mod;  <br />
+ * option solver OSAmplClient; <br />
+ * option OSAmplClient_options "-serviceLocation http://gsbkip.chicagogsb.edu/os/OSSolverService.jws"; <br />
  *
  *
- * there are three possible options to specify:
+ * \item there are three possible options to specify:
  *
- *    the name of the solver using the  -solver option, 
- *       valid values for this option normally include
- *       clp, cbc, dylp, ipopt, bonmin, couenne, symphony, and vol.
+ * \begin{itemize}
  *
- *    the location of the remote server using the -serviceLocation option
+ * \item the name of the solver using the  {\bf -solver} option, valid values for this option  are {\tt clp},
+ * {\tt cbc},  {\tt dylp},  {\tt ipopt}, {\tt bonmin},   {\tt couenne},  {\tt symphony}, and {\tt vol}.
  *
- *    the location of the option file using  the -osol option
  *
- * if no options are specified using OSAmplClient_options,   
- * the default for continuous linear models is clp;
- * for continuous nonlinear models ipopt is used;
- * for mixed-integer linear models (MIP), cbc is used;
- * for mixed-integer nonlinear models bonmin is used.  
- * All solvers are invoked locally. 
- * See the Users Manual in the doc folder for more information
+ * \item the location of the remote server using the {\bf -serviceLocation} option
+ *
+ * \item the location of the option file using  the {\bf -osol} option
+ *
+ * \end{itemize}
+ *
+ * if no options are specified using {\bf OSAmplClient\_options},   by default,for continuous
+ * linear models  clp is used. For continuous nonlinear models ipopt is used.
+ * For mixed-integer linear models (MIP), cbc is used. For mixed-integer nonlinear models
+ * bonmin is used.  All solvers are invoked locally. See the Users Manual in the doc folder
+ * for more information
  *
  */
 
@@ -74,9 +70,6 @@
 #include "OSOption.h"
 #include "OSoLReader.h"
 #include "OSoLWriter.h"
-#include "OSCommandLine.h"
-#include "OSCommandLineReader.h"
-#include "OSServiceMethods.h"
 
 #ifdef COIN_HAS_LINDO
 # include "OSLindoSolver.h"
@@ -101,7 +94,7 @@
 #include "OSErrorClass.h"
 #include "CoinError.hpp"
 #include "OSOption.h"
-//#include "OSOptionsStruc.h"
+#include "OSOptionsStruc.h"
 #include "OSRunSolver.h"
 #include <sstream>
 
@@ -120,12 +113,21 @@
 
 
 #include <iostream>
-
 //AMPL includes must be last.
 #include <asl.h>
 
 
-//#define DEBUG_AMPL_CLIENT
+
+
+#define MAXCHARS 5000
+
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
+YY_BUFFER_STATE osss_scan_string(const char* osss, void* scanner );
+//void osssset_extra (YY_EXTRA_TYPE user_defined ,yyscan_t yyscanner );
+void setyyextra(osOptionsStruc *osoptions, void* scanner);
+int ossslex(void* scanner );
+int ossslex_init(void** ptr);
+int ossslex_destroy (void* scanner );
 
 
 using std::cerr;
@@ -133,9 +135,12 @@ using std::cout;
 using std::endl;
 using std::ostringstream;
 
-std::string OSAmplClientVersionInfo();
-std::string get_AmplClient_help();
-bool callServiceMethod(OSCommandLine* oscommandline);
+void getAmplClientOptions(char *options, std::string *solverName,
+                          std::string *optionFile, std::string *serviceLocation);
+
+
+
+
 
 int main(int argc, char **argv)
 {
@@ -147,400 +152,6 @@ int main(int argc, char **argv)
     stub = argv[1];
     jac0dim((char*)stub, (fint)strlen(stub));
     OSnl2osil *nl2osil = NULL;
-
-    std::ostringstream outStr;
-	std::cout << OSAmplClientVersionInfo();
-	std::string osss;
-
-	outStr << stub << " " << getenv("OSAmplClient_options");
-    osss = outStr.str();
-
-#ifdef DEBUG_AMPL_CLIENT
-    std::cout << "Input String = " << osss << std::endl;
-#endif
-
-	FileUtil *fileUtil = NULL;
-	OSCommandLine *oscommandline;
-	oscommandline = new OSCommandLine();
-	OSCommandLineReader *clreader;
-	clreader = new OSCommandLineReader();
-
-	//parse the command line items into a CommandLine object
-    try
-    {		
-		oscommandline = clreader->readCommandLine(osss);
-		if (oscommandline->serviceMethod == "")
-			oscommandline->serviceMethod = "solve";
-		oscommandline->convertSolverNametoLowerCase();
-
-	}
-    catch (const ErrorClass& eclass)
-    {
-        OSResult *osresult = NULL;
-        osresult = new OSResult();
-        osresult->setGeneralMessage(eclass.errormsg);
-        osresult->setGeneralStatusType("error");
-        OSrLWriter *osrlwriter = NULL;
-        osrlwriter = new OSrLWriter();
-        std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (oscommandline->osrlFile != "")
-        {
-            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
-            if (oscommandline->browser != "")
-            {
-                std::string str = oscommandline->browser + "  "
-                                  + oscommandline->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        delete osresult;
-        osresult = NULL;
-        delete osrlwriter;
-        osrlwriter = NULL;
-        delete fileUtil;
-        fileUtil = NULL;
-        delete oscommandline;
-        oscommandline = NULL;
-        delete clreader;
-        clreader = NULL;
-        return 1;
-    }
-
-#ifdef DEBUG_AMPL_CLIENT
-	std::cout << oscommandline->list_options() << std::endl;
-#endif
-
-	// deal with "action items": help, quit, listOptions
-	if (oscommandline->quit || oscommandline->invokeHelp || oscommandline->writeVersion || oscommandline->listOptions)
-	{
-		if (oscommandline->invokeHelp) 
-			std::cout << std::endl << std::endl << get_AmplClient_help() << std::endl;
-		if (oscommandline->listOptions) 
-			std::cout << std::endl << std::endl << oscommandline->list_options() << std::endl;
-        delete oscommandline;
-        oscommandline = NULL;
-        return 0;
-	}
-
-	// call service method
-	bool result = callServiceMethod(oscommandline);
-	if (result == true)
-		return 0;
-	else
-		return 1;
-}
-
-bool callServiceMethod(OSCommandLine* oscommandline)
-{
-	FileUtil *fileUtil = new FileUtil();
-	try
-    {
-		bool result;
-		OSServiceMethods *osservicemethods;
-		osservicemethods = new OSServiceMethods(oscommandline);
-
-		if (oscommandline->printModel) 
-			oscommandline->osinstance->printModel();
-		if (oscommandline->printRowNumberAsString != "")
-			oscommandline->osinstance->printModel(atoi((oscommandline->printRowNumberAsString).c_str()));
-
-		result = osservicemethods->executeServiceMethod(oscommandline);
-
-		// deal with the output
-		if (result == false) 
-			throw ErrorClass(osservicemethods->resultString);
-		else
-		{
-			if (oscommandline->serviceMethod == "getJobID")
-			{
-				std::cout << "The job ID generated by the system is:" << std::endl << std::endl;
-				std::cout << osservicemethods->resultString << std::endl << std::endl;
-				std::cout << "Be sure to make a record of this job ID for later." << std::endl;
-				std::cout << "You will need it to retrieve the job or inquire into its status." << std::endl;
-			}
-			else if (oscommandline->serviceMethod == "solve" || oscommandline->serviceMethod == "retrieve")
-			{
-		        if (oscommandline->osrlFile != "")
-				{
-		            fileUtil->writeFileFromString(oscommandline->osrlFile, osservicemethods->resultString);
-					if (oscommandline->browser != "")
-					{
-			            std::string str = oscommandline->browser + "  "
-					                      + oscommandline->osrlFile;
-		                const char *ch = &str[0];
-				        std::system(ch);
-		            }
-                    std::cout <<  "\nSolve command executed. Please see " << oscommandline->osrlFile  << " for results." << std::endl;
-				}
-		        else
-				{
-		            std::cout << osservicemethods->resultString << std::endl;
-				}
-			}
-			else if (oscommandline->serviceMethod == "kill" || oscommandline->serviceMethod == "knock")
-			{
-		        if (oscommandline->osplOutputFile != "")
-				{
-		            fileUtil->writeFileFromString(oscommandline->osplOutputFile, osservicemethods->resultString);
-				}
-		        else
-				{
-		            std::cout << osservicemethods->resultString << std::endl;
-				}
-			}
-		}
-		return 0;
-    }
-    catch (const ErrorClass& eclass)
-    {
-        OSResult *osresult = NULL;
-        OSrLWriter *osrlwriter = NULL;
-        osrlwriter = new OSrLWriter();
-        osresult = new OSResult();
-        osresult->setGeneralMessage(eclass.errormsg);
-        osresult->setGeneralStatusType("error");
-        std::string osrl = osrlwriter->writeOSrL(osresult);
-        if (oscommandline->osrlFile != "")
-        {
-            fileUtil->writeFileFromString(oscommandline->osrlFile, osrl);
-            if (oscommandline->browser != "")
-            {
-                std::string str = oscommandline->browser + "  "
-                                  + oscommandline->osrlFile;
-                const char *ch = &str[0];
-                std::system(ch);
-            }
-        }
-        else
-        {
-            std::cout << osrl << std::endl;
-        }
-        //catch garbage collection
-        delete osresult;
-        osresult = NULL;
-        delete osrlwriter;
-        osrlwriter = NULL;
-
-        delete oscommandline;
-        oscommandline = NULL;
-        delete fileUtil;
-        fileUtil = NULL;
-        return 1;
-    }
-}
-
-std::string get_AmplClient_help()
-{
-
-    std::ostringstream helpMsg;
-
-    helpMsg << "************************* HELP *************************"
-            << endl << endl;
-    helpMsg
-            << "In this HELP file we assume that the solve service method is used and "
-            << endl;
-    helpMsg
-            << "that we are solving problems locally, that is the solver is on the "
-            << endl;
-    helpMsg
-            << "machine running this OSSolverService.  See Section 10.3 of the User\'s  "
-            << endl;
-    helpMsg
-            << "Manual for other service methods or calling a server remotely. "
-            << endl;
-    helpMsg << "The OSSolverService takes the parameters listed below.  "
-            << endl;
-    helpMsg
-            << "The order of the parameters is irrelevant.  Not all the parameters  "
-            << endl;
-    helpMsg << "are required.  However, the location of an instance file is  "
-            << endl;
-    helpMsg
-            << "required when using the solve service method. The location of the "
-            << endl;
-    helpMsg << "instance file is specified using the osil option. " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-osil xxx.osil this is the name of the file that contains the  "
-            << endl;
-    helpMsg << "optimization instance in OSiL format.  This option may be  "
-            << endl;
-    helpMsg << "specified in the OSoL solver options file. " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-osol xxx.osol  this is the name of the file that contains the solver options.   "
-            << endl;
-    helpMsg << "It is not necessary to specify this option. " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-osrl xxx.osrl  this is the name of the file to which the solver solution is written.  "
-            << endl;
-    helpMsg
-            << "It is not necessary to specify this option. If this option is not specified,  "
-            << endl;
-    helpMsg << "the result will be printed to standard out.  " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-osplInput xxx.ospl  this is the name of an input file in the OS Process"
-            << endl;
-    helpMsg << " Language (OSpL), this is used as input  to the knock method."
-            << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-osplOutput xxx.ospl this is the name of an output file in the  OS Process"
-            << endl;
-    helpMsg
-            << "Language (OSpL), this the output string from the knock and kill methods."
-            << endl;
-
-    helpMsg << endl;
-
-    helpMsg << "-serviceLocation url is the URL of the solver service.  "
-            << endl;
-    helpMsg
-            << "This is not required, and if not specified it is assumed that   "
-            << endl;
-    helpMsg << "the problem is solved locally.  " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-serviceMethod  methodName this is the method on the solver service to be invoked.  "
-            << endl;
-    helpMsg
-            << "The options are  solve,  send,  kill,  knock,  getJobID, and retrieve.   "
-            << endl;
-    helpMsg
-            << "This option is not required, and the default value is  solve.  "
-            << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-mps  xxx.mps  this is the name of the mps file if the problem instance  "
-            << endl;
-    helpMsg
-            << "is in mps format. The default file format is OSiL so this option is not required.  "
-            << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-nl  xxx.nl  this is the name of the AMPL nl file if the problem  "
-            << endl;
-    helpMsg
-            << "instance is in AMPL nl  format. The default file format is OSiL  "
-            << endl;
-    helpMsg << "so this option is not required.  " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-solver  solverName  Possible values for default OS installation  "
-            << endl;
-    helpMsg
-            << "are  bonmin(COIN-OR Bonmin), couenne (COIN-OR Couenne), clp (COIN-OR Clp),"
-            << endl;
-    helpMsg << "cbc (COIN-OR Cbc), dylp (COIN-OR DyLP), ipopt (COIN-OR Ipopt),"
-            << endl;
-    helpMsg << "and symphony (COIN-OR SYMPHONY). Other solvers supported"
-            << endl;
-    helpMsg
-            << "(if the necessary libraries are present) are cplex (Cplex through COIN-OR Osi),"
-            << endl;
-    helpMsg
-            << "glpk (glpk through COIN-OR Osi), knitro (Knitro), and lindo (LINDO)."
-            << endl;
-    helpMsg << "If no value is specified for this parameter," << endl;
-    helpMsg << "then cbc is the default value of this parameter." << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-browser  browserName this paramater is a path to the browser on the  "
-            << endl;
-    helpMsg
-            << "local machine. If this optional parameter is specified then the  "
-            << endl;
-    helpMsg << "solver result in OSrL format is transformed using XSLT into  "
-            << endl;
-    helpMsg << "HTML and displayed in the browser.  " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "-config pathToConfigureFile this parameter specifies a path on  "
-            << endl;
-    helpMsg
-            << "the local machine to a text file containing values for the input parameters.  "
-            << endl;
-    helpMsg
-            << "This is convenient for the user not wishing to constantly retype parameter values.  "
-            << endl;
-    helpMsg
-            << "This configure file can contain values for all of the other parameters. "
-            << endl;
-
-    helpMsg << endl;
-
-    helpMsg << "--version or -v get the current version of this executable  "
-            << endl;
-
-    helpMsg << endl;
-
-    helpMsg << "--help or -h  to get this help file " << endl;
-
-    helpMsg << endl;
-
-    helpMsg
-            << "Note: If you specify a configure file by using the -config option, you can  "
-            << endl;
-    helpMsg
-            << "override the values of the options in the configure file by putting them in   "
-            << endl;
-    helpMsg << "at the command line. " << endl << endl;
-
-    helpMsg
-            << "See the OS User\' Manual: http://www.coin-or.org/OS/doc/osUsersManual.pdf"
-            << endl;
-    helpMsg << "for more detail on how to use the OS project. " << endl;
-
-    helpMsg << endl;
-    helpMsg << "********************************************************"
-            << endl << endl;
-
-    return helpMsg.str();
-}// get help
-
-
-std::string OSAmplClientVersionInfo()
-{
-    std::ostringstream versionMsg;
-    versionMsg << "In order to find the version of this project " << endl;
-    versionMsg << "connect to the directory where you downloaded " << endl;
-    versionMsg << "and do: " << endl;
-    versionMsg << "svn info " << endl;
-
-    return versionMsg.str();
-}// get OSAmplClientVersionInfo
-
-#if 0
     //initialize object with stub -- the nl file
     nl2osil = new OSnl2osil( stub);
     // create an osinstance object
@@ -594,14 +205,12 @@ std::string OSAmplClientVersionInfo()
     std::string osolFileName = "";
     std::string osol ="";
     std::string serviceLocation = "";
-    osOptionsStruc *osoptions;
 
     amplclient_options = getenv("OSAmplClient_options");
     if( amplclient_options != NULL)
     {
         cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
-        //getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
-        osoptions = new osOptionsStruc(amplclient_options);
+        getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
     }
 
     /* If an OSoL file was given, read it into a string (don't parse)
@@ -857,4 +466,3 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
         throw ErrorClass( eclass.errormsg) ;
     }
 }//getAmplClientOptions
-#endif
