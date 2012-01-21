@@ -651,7 +651,7 @@ CXXFLAGS='-fno-common -no-cpp-precomp -fexceptions
     -I/Users/kmartin/Documents/files/code/cpp/OScpp/COIN-OS/include'
 \end{verbatim}
 
-Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like the following on a MacIntosh:
+Next edit the {\tt CXXLIBS} flag so that the OS and supporting libraries are included. For example, it should look like the following\footnote{The libraries to include in CXXLIBS depends upon which projects were compiled with OS.} on a MacIntosh:
 
 \begin{verbatim}
 CXXLIBS="$MLIBS -lstdc++ -L/Users/kmartin/coin/os-trunk/vpath/lib 
