@@ -296,10 +296,13 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
 	 */
     try
     {
+    	
+    	
 		/** the only local service method is solve() */
 		if	(oscommandline->serviceLocation == "")
 			if (oscommandline->serviceMethod == "solve")
-				resultString = runSolver(oscommandline->solverName, oscommandline->osoption, oscommandline->osinstance);
+				//resultString = runSolver(oscommandline->solverName, oscommandline->osoption, oscommandline->osinstance);
+				int junk;
 			else
 				throw ErrorClass("No service location (URL) specified. Only \"solve\" is available locally");
 
@@ -395,6 +398,8 @@ bool OSServiceMethods::executeServiceMethod(OSCommandLine *oscommandline)
             osagent = NULL;
         return false;
     }
+    
+ 
 }//executeServiceMethod
 
 
