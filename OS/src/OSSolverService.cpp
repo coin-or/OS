@@ -19,7 +19,7 @@
  * </li>
  * <li>
  * <b>-osol</b> xxx.osol (file name on local machine of solver options,
- *       default default value is NULL)
+ *       default value is NULL)
  * </li>
  * <li>
  * <b>-osrl</b> xxx.osrl (file name on local machine where the optimization
@@ -172,7 +172,9 @@ void getOSiLFromGams();
 //                        OSInstance *osinstance);
 void listOptions(osOptionsStruc *osoptions);
 void doPrintModel(osOptionsStruc *osoptions);
+void doPrintModel(OSInstance *osinstance);
 void doPrintRow(osOptionsStruc *osoptions);
+void doPrintRow(OSInstance *osinstance, std::string rownumberstring);
 
                            
 //options structure
@@ -202,9 +204,6 @@ int main(int argC, const char* argV[])
             return 0;
         }
 
-        // make sure we do not exceed max allowed characters in command line
-
-		
 	void* scanner;
     FileUtil *fileUtil = NULL;
     FileUtil *inputFileUtil = NULL;
@@ -220,12 +219,12 @@ int main(int argC, const char* argV[])
     osoptions = new osOptionsStruc();
     reset_options();
     bool scannerActive = false;
-
 		
     try
     {
 		
-		i = 1;
+    // make sure we do not exceed max allowed characters in command line
+        i = 1;
         while (i < argC)
         {
             if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
@@ -234,9 +233,11 @@ int main(int argC, const char* argV[])
             strcat(osss, space);
             i++;
         }
+
 #ifdef DEBUG_CL_INTERFACE
         cout << "Input String = " << osss << endl;
 #endif
+
         scannerActive = true;
         ossslex_init(&scanner);
         //std::cout << "Call Text Extra" << std::endl;
@@ -336,8 +337,8 @@ int main(int argC, const char* argV[])
         osrlwriter = NULL;
         // end new stuff
 
-        if (scannerActive == true)
-            ossslex_destroy(scanner);
+//        if (scannerActive == true)
+//            ossslex_destroy(scanner);
         delete fileUtil;
         delete osoptions;
         return 1;
@@ -429,7 +430,7 @@ int main(int argC, const char* argV[])
     unsigned int k;
     for (k = 0; k < osoptions->solverName.length(); k++)
     {
-        osoptions->solverName[k] = tolower(osoptions->solverName[k]);
+        osoptions->solverName[k] = (char)tolower(osoptions->solverName[k]);
     }
 
     // get the data from the files
@@ -465,9 +466,9 @@ int main(int argC, const char* argV[])
             osoptions->osplInput = fileUtil->getFileAsString(
                                        (osoptions->osplInputFile).c_str());
         //if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
-        if (osoptions->osplOutputFile != "")
-            osoptions->osplOutput = fileUtil->getFileAsString(
-                                        (osoptions->osplOutputFile).c_str());
+//        if (osoptions->osplOutputFile != "")
+//            osoptions->osplOutput = fileUtil->getFileAsString(
+//                                        (osoptions->osplOutputFile).c_str());
     }
     catch (const ErrorClass& eclass)
     {
@@ -517,23 +518,17 @@ int main(int argC, const char* argV[])
     }
     // now call the correct serviceMethod
     // solve is the default
-    if (osoptions->serviceMethod == "")
+    if ((osoptions->serviceMethod == "") || (osoptions->serviceMethod[0] == 's'))
     {
         if (osoptions->printModel == true)
             doPrintModel(osoptions);
         else if (osoptions->printRowNumberAsString != "")
             doPrintRow(osoptions);
-        solve();
-     }
-    if ((osoptions->serviceMethod[0] == 's') && (osoptions->serviceMethod[1]
-            == 'o'))
-    {
-        if (osoptions->printModel == true)
-            doPrintModel(osoptions);
-        else if (osoptions->printRowNumberAsString != "")
-            doPrintRow(osoptions);
-        solve();
-     }
+        if (osoptions->serviceMethod[1] == 'e')
+            send();
+        else
+            solve();
+    }
     else
     {
         switch (osoptions->serviceMethod[0])
@@ -543,13 +538,6 @@ int main(int argC, const char* argV[])
             break;
         case 'r':
             retrieve();
-            break;
-        case 's':
-            if (osoptions->printModel == true)
-                doPrintModel(osoptions);
-            else if (osoptions->printRowNumberAsString != "")
-                doPrintRow(osoptions);
-            send();
             break;
         case 'k':
             if (osoptions->serviceMethod[1] == 'i')
@@ -656,21 +644,11 @@ void solve()
         }
         else    // solve locally
         {
+            OSInstance *osinstance;
             if (osoptions->osil != "")
             {
-                osilreader = new OSiLReader();
-                
-               
-                //osrl = buildSolver(osoptions->solverName, osoptions->osol,
-                //                   osilreader->readOSiL(osoptions->osil));
-
-		if (osoptions->printModel)
-		    doPrintModel(osoptions);
-		else if (osoptions->printRowNumberAsString != "")
-	            doPrintRow(osoptions);
-                
-                osrl = runSolver(osoptions->solverName, osoptions->osol,
-                                   osilreader->readOSiL(osoptions->osil));
+                osilreader = new OSiLReader();                
+                osinstance = osilreader->readOSiL(osoptions->osil);
             }
             else
             {
@@ -680,21 +658,7 @@ void solve()
 #ifdef COIN_HAS_ASL
                     nl2osil = new OSnl2osil( osoptions->nlFile);
                     nl2osil->createOSInstance();
-
-                    if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
-                    {
-                        OSiLWriter *osilwriter = NULL;
-                        osilwriter = new OSiLWriter();
-                        osoptions->osil = osilwriter->writeOSiL(nl2osil->osinstance);
-			if (osoptions->printModel)
-		            doPrintModel(osoptions);
-		        else
-	                    doPrintRow(osoptions);
-                        delete osilwriter;
-                        osilwriter = NULL;
-                    }
-
-                    osrl = runSolver(osoptions->solverName, osoptions->osol, nl2osil->osinstance);
+                    osinstance = nl2osil->osinstance;
 #else
                     throw ErrorClass(
                         "nl file specified locally but ASL not present");
@@ -706,22 +670,7 @@ void solve()
                     {
                         mps2osil = new OSmps2osil(osoptions->mpsFile);
                         mps2osil->createOSInstance();
-
-                        if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
-                        {
-                            OSiLWriter *osilwriter = NULL;
-                            osilwriter = new OSiLWriter();
-                            osoptions->osil = osilwriter->writeOSiL(mps2osil->osinstance);
-			    if (osoptions->printModel)
-		                doPrintModel(osoptions);
-		            else
-	                        doPrintRow(osoptions);
-                            delete osilwriter;
-                            osilwriter = NULL;
-                        }
-
-                        osrl = runSolver(osoptions->solverName,
-                                           osoptions->osol, mps2osil->osinstance);
+                        osinstance = mps2osil->osinstance;
                     }
                     else
                     {
@@ -730,21 +679,7 @@ void solve()
 #ifdef COIN_HAS_GAMSUTILS
                             gams2osil = new OSgams2osil( osoptions->gamsControlFile);
                             gams2osil->createOSInstance();
-
-                            if (osoptions->printModel == true || osoptions->printRowNumberAsString != "")
-                            {
-                                OSiLWriter *osilwriter = NULL;
-                                osilwriter = new OSiLWriter();
-                                osoptions->osil = osilwriter->writeOSiL(gams2osil->osinstance);
-			        if (osoptions->printModel)
-		                    doPrintModel(osoptions);
-		                else
- 	                            doPrintRow(osoptions);
-                                delete osilwriter;
-                                osilwriter = NULL;
-                            }
-
-                            osrl = runSolver(osoptions->solverName, osoptions->osol, gams2osil->osinstance);
+                            osinstance = gams2osil->osinstance;
 #else
                             throw ErrorClass(
                                 "a Gams Control specified locally but GAMSIP not present");
@@ -761,7 +696,15 @@ void solve()
                     }
                 }
             }
-            //delete fileUtil;
+	    if (osoptions->printModel)
+                    doPrintModel(osinstance);
+	    else if (osoptions->printRowNumberAsString != "")
+	            doPrintRow(osinstance, osoptions->printRowNumberAsString);
+                
+            osrl = runSolver(osoptions->solverName, osoptions->osol, osinstance);
+            
+
+	    //delete fileUtil;
             if (osoptions->osrlFile != "")
             {
 
@@ -1405,7 +1348,7 @@ void interactiveShell()
 
 
     osoptions = new osOptionsStruc();
-    reset_options();
+    //reset_options();
     bool scannerActive = false;
 
             //this is the interactive shell
@@ -1771,21 +1714,21 @@ void interactiveShell()
 
                                 } // end if on whether or not option value is null
 
-                                lineText = optionName + " "
-                                           + optionValue + " ";
-                                osss_scan_string(lineText.c_str(),
-                                                 scanner);
-                                ossslex(scanner);
-                                listOptions( osoptions);
+             //                   lineText = optionName + " "
+             //                              + optionValue + " ";
+             //                   osss_scan_string(lineText.c_str(),
+             //                                    scanner);
+             //                   ossslex(scanner);
+             //                   listOptions( osoptions);
 
                                 if(optionMap.find(optionName) != optionMap.end() )
                                 {
 
-									switch (optionMap[ optionName] )
+ 				    switch (optionMap[ optionName] )
                                     {
 
                                     case 0: //osil
-
+                                        osoptions->osilFile = optionValue;
                                         osoptions->osil
                                             = fileUtil->getFileAsString(
                                                   (osoptions->osilFile).c_str());
@@ -1793,39 +1736,39 @@ void interactiveShell()
 
 
                                     case 1: //osrl
-
+                                        osoptions->osrlFile = optionValue;
                                         break;
 
                                     case 2: //osol
-
+                                        osoptions->osolFile = optionValue;
                                         osoptions->osol
                                             = fileUtil->getFileAsString(
                                                   (osoptions->osolFile).c_str());
                                         break;
 
                                     case 3: //mps
-
+                                        osoptions->mpsFile = optionValue;
                                         osoptions->mps
                                             = fileUtil->getFileAsString(
                                                   (osoptions->mpsFile).c_str());
                                         break;
 
                                     case 4: //nl
-
+                                        osoptions->nlFile = optionValue;
                                         osoptions->nl
                                             = fileUtil->getFileAsString(
                                                   (osoptions->nlFile).c_str());
                                         break;
 
                                     case 5: //dat
-
+                                        osoptions->datFile = optionValue;
                                         osoptions->dat
                                             = fileUtil->getFileAsString(
                                                   (osoptions->datFile).c_str());
                                         break;
 
                                     case 6: //service location
-
+                                        osoptions->serviceLocation = optionValue;
                                         break;
 
                                     case 7: //solver
@@ -1834,30 +1777,32 @@ void interactiveShell()
                                         for (k = 0; k
                                                 < osoptions->solverName.length(); k++)
                                         {
-                                            osoptions->solverName[k] = tolower(
-                                                                           osoptions->solverName[k]);
+                                            osoptions->solverName[k] = 
+                                                (char)tolower(osoptions->solverName[k]);
                                         }
+                                        osoptions->solverName = optionValue;
                                         break;
 
                                     case 8: //osplInput
-
+                                        osoptions->osplInputFile = optionValue;
                                         osoptions->osplInput
                                             = fileUtil->getFileAsString(
                                                   (osoptions->osplInputFile).c_str());
                                         break;
 
                                     case 9: //osplOutput
-
+                                        osoptions->osplOutputFile = optionValue;
                                         break;
 
                                     case 10: //printRow
 
-					                    doPrintRow(osoptions);
+					doPrintRow(osoptions);
                                         break;
 
 
 
                                     }// end switch
+                                    listOptions( osoptions);
 
                                 }// end if on finding an element in the optionMap
 
@@ -2095,13 +2040,13 @@ void reset_options()
     osoptions->osol = "";
     osoptions->osrlFile = "";
     osoptions->osrl = "";
-    //osoptions->insListFile = "";
+    osoptions->insListFile = "";
     osoptions->insList = "";
     osoptions->serviceLocation = "";
     osoptions->serviceMethod = "";
     osoptions->osplInputFile = "";
-    osoptions->osplOutputFile = "";
     osoptions->osplInput = "";
+    osoptions->osplOutputFile = "";
     osoptions->osplOutput = "";
     osoptions->mpsFile = "";
     osoptions->mps = "";
@@ -2329,7 +2274,20 @@ void doPrintModel(osOptionsStruc *osoptions)
 			mps2osil = NULL;
 		}
 	}
-}// doPrintModel
+}// doPrintModel(osOptionsStruc *osoptions)
+
+void doPrintModel(OSInstance *osinstance)
+{
+	if (osinstance == NULL)
+	{
+		std::cout
+			<< "no instance defined; print command ignored" << std::endl;
+	}
+	else
+	{
+		std::cout << osinstance->printModel() << std::endl;
+	}
+}// doPrintModel(osOptionsStruc *osoptions)
 
 void doPrintRow(osOptionsStruc *osoptions)
 {
@@ -2387,5 +2345,34 @@ void doPrintRow(osOptionsStruc *osoptions)
 			}
 		}
 	}
-}// doPrintRow
+}// doPrintRow(osOptionsStruc *osoptions)
+
+void doPrintRow(OSInstance *osinstance, std::string rownumberstring)
+{
+	int rownumber;
+	if (rownumberstring == "")
+		std::cout << "no line number given; print command ignored" << std::endl;
+	else
+	{
+		try
+		{
+			rownumber = atoi((rownumberstring).c_str());
+		}
+		catch  (const ErrorClass& eclass)
+		{
+	                std::cout << "invalid row number; print command ignored" << std::endl;
+		}
+
+		if (osinstance == NULL)
+                {
+                        std::cout
+	                        << "no instance defined; print command ignored" << std::endl;
+		}
+		else
+		{
+			std::cout << std::endl << "Row " << rownumber << ":" << std::endl << std::endl;
+	    		std::cout << osinstance->printModel(rownumber) << std::endl;
+		}
+	}
+}// doPrintRow(OSInstance *osinstance, std::string rownumberstring)
 

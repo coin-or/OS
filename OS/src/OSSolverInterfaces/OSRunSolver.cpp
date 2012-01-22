@@ -1,5 +1,5 @@
-/* $Id: OSRunSolver.cpp 4263 2011-09-09 20:19:26Z Martin $ */
-/** @file OSRunSolver.cpp
+/* $Id: OSGetSolver.h 4263 2011-09-09 20:19:26Z Martin $ */
+/** @file CoinSolver.h
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
@@ -85,15 +85,14 @@ using std::string;
 using std::map;
 
 
-std::string runSolver(std::string solverName, OSOption *osoption,
+std::string runSolver(std::string solverName, std::string osol,
                         OSInstance *osinstance)
 {
     DefaultSolver *solverType = NULL;
     //std::cout << "SOLVER NAME = " << solverName << std::endl;
     try
     {
-		// if no solver was given, must determine the default solver
-        if (solverName == "")  
+        if (solverName == "")  // must determine the default solver
         {
             if (osinstance == NULL)
                 throw ErrorClass(
@@ -290,7 +289,7 @@ std::string runSolver(std::string solverName, OSOption *osoption,
         
         
         solverType->osinstance = osinstance;
-        solverType->osoption = osoption;
+        solverType->osol = osol;
         solverType->buildSolverInstance();
         solverType->setSolverOptions();
         solverType->solve();

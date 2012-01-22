@@ -11,7 +11,7 @@
 	</instanceHeader>
 	<instanceData>
 		<variables numberOfVariables="2">
-			<var lb="0" name="x0" type="C" ub=3"/>
+			<var lb="0" name="x0" type="C" ub="3"/>
 			<var lb="0" name="x1" type="C"/>
 		</variables>
 		<objectives numberOfObjectives=" 1">

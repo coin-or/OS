@@ -60,8 +60,7 @@ libOSCommonInterfaces_la_LIBADD =
 am_libOSCommonInterfaces_la_OBJECTS = OSExpressionTree.lo OSGeneral.lo \
 	OSInstance.lo OSResult.lo OSgLWriter.lo OSiLReader.lo \
 	OSiLWriter.lo OSoLWriter.lo OSoLReader.lo OSOption.lo \
-	OSnLNode.lo OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo \
-	OSCommandLine.lo OSCommandLineReader.lo
+	OSnLNode.lo OSrLReader.lo OSrLWriter.lo OSDefaultSolver.lo
 libOSCommonInterfaces_la_OBJECTS =  \
 	$(am_libOSCommonInterfaces_la_OBJECTS)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -426,11 +425,7 @@ libOSCommonInterfaces_la_SOURCES = \
 	OSrLWriter.cpp \
 	OSrLWriter.h \
 	OSDefaultSolver.cpp \
-	OSDefaultSolver.h \
-	OSCommandLine.cpp \
-	OSCommandLine.h \
-	OSCommandLineReader.cpp \
-	OSCommandLineReader.h
+	OSDefaultSolver.h 
 
 
 # This is for libtool (on Windows)
@@ -471,9 +466,7 @@ includecoin_HEADERS = \
 	OSDefaultSolver.h \
         OSoLWriter.h \
         OSoLReader.h \
-        OSOption.h \
-	OSCommandLine.h \
-	OSCommandLineReader.h
+        OSOption.h 
 
 all: all-am
 
@@ -526,8 +519,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCommandLine.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSCommandLineReader.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSDefaultSolver.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSExpressionTree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OSGeneral.Plo@am__quote@

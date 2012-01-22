@@ -17,14 +17,8 @@ noinst_LTLIBRARIES = libOSAgent.la
 
 # List all source files for this library, including headers
 libOSAgent_la_SOURCES = \
-	OShL.cpp \
-	OSSolverAgent.cpp \
-	OSWSUtil.cpp \
-	OSServiceMethods.cpp \
-	OShL.h \
-	OSSolverAgent.h \
-	OSWSUtil.h \
-	OSServiceMethods.h
+	OShL.cpp OShL.h OSSolverAgent.cpp \
+	OSSolverAgent.h OSWSUtil.cpp OSWSUtil.h
 
 # This is for libtool (on Windows)
 libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
@@ -34,9 +28,6 @@ libOSAgent_la_LDFLAGS = $(LT_LDFLAGS)
 AM_CPPFLAGS = \
 	-I`$(CYGPATH_W) $(srcdir)/..` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSCommonInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSModelInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSSolverInterfaces` \
-	-I`$(CYGPATH_W) $(srcdir)/../OSParsers` \
 	-I`$(CYGPATH_W) $(srcdir)/../OSUtils` \
 	$(OSLIB_CFLAGS)
 
@@ -51,8 +42,4 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	OShL.h \
-	OSSolverAgent.h \
-	OSWSUtil.h \
-	OSServiceMethods.h
-
+	OShL.h OSSolverAgent.h OSWSUtil.h
