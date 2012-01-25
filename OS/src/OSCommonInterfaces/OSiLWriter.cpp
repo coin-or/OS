@@ -2,10 +2,10 @@
 /** @file OSiLWriter.cpp
  *
  *
- * @author  Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -95,9 +95,9 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
     }
     outStr << "</instanceHeader>" ;
     if( m_bWhiteSpace == true) outStr << endl;
+    outStr << "<instanceData>" ;
     if(m_OSInstance->instanceData != NULL)
     {
-        outStr << "<instanceData>" ;
         if( m_bWhiteSpace == true) outStr << endl;
         if(m_OSInstance->instanceData->variables != NULL && m_OSInstance->instanceData->variables->numberOfVariables > 0)
         {
@@ -573,9 +573,9 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
             outStr << "</nonlinearExpressions>";
             if( m_bWhiteSpace == true) outStr << endl;
         }
-        outStr << "</instanceData>"  ;
         if( m_bWhiteSpace == true) outStr << endl;
     } // end instanceData if
+    outStr << "</instanceData>"  ;
     outStr << "</osil>" ;
     if( m_bWhiteSpace == true) outStr << endl;
     outStr << endl;

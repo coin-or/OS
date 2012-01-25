@@ -270,7 +270,7 @@ public:
     int* conVals;
 
     /**
-     * indexes holds an integer array of variable indicies.
+     * indexes holds an integer array of variable indices.
      */
     int* indexes;
 
@@ -331,12 +331,12 @@ public:
     int hessDimension;
 
     /**
-     * hessRowIdx is an integer array of row indicies in the range 0, ..., n - 1.
+     * hessRowIdx is an integer array of row indices in the range 0, ..., n - 1.
      */
     int* hessRowIdx;
 
     /**
-     * hessColIdx is an integer array of column indicies in the range 0, ..., n - 1.
+     * hessColIdx is an integer array of column indices in the range 0, ..., n - 1.
      */
     int* hessColIdx;
 

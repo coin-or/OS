@@ -423,7 +423,7 @@ anothersumnlnode SUMEND {
 	parserData->sumVec.pop_back();
 };
 
-anothersumnlnode: nlnode {	parserData->sumVec.back()->inumberOfChildren++; }
+anothersumnlnode: 
 			| anothersumnlnode nlnode {	parserData->sumVec.back()->inumberOfChildren++; };
 			
 			
@@ -441,7 +441,7 @@ anotherallDiffnlnode ALLDIFFEND {
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
-anotherallDiffnlnode: nlnode {	parserData->allDiffVec.back()->inumberOfChildren++; }
+anotherallDiffnlnode: 
 			| anotherallDiffnlnode nlnode {	parserData->allDiffVec.back()->inumberOfChildren++; };
 			
 			
@@ -456,7 +456,7 @@ anothermaxnlnode MAXEND {
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
-anothermaxnlnode: nlnode {	parserData->maxVec.back()->inumberOfChildren++; }
+anothermaxnlnode: 
 			| anothermaxnlnode nlnode {	parserData->maxVec.back()->inumberOfChildren++; };
 			
 min: MINSTART {
@@ -470,7 +470,7 @@ anotherminnlnode MINEND {
 	osinstance->instanceData->nonlinearExpressions->nl[ parserData->nlnodecount]->osExpressionTree->bADMustReTape = true;
 };
 
-anotherminnlnode: nlnode {	parserData->minVec.back()->inumberOfChildren++; }
+anotherminnlnode: 
 			| anotherminnlnode nlnode {	parserData->minVec.back()->inumberOfChildren++; };
 			
 			
@@ -484,7 +484,7 @@ anotherproductnlnode PRODUCTEND {
 	parserData->productVec.pop_back();
 };
 
-anotherproductnlnode: nlnode {	parserData->productVec.back()->inumberOfChildren++; }
+anotherproductnlnode: 
 			| anotherproductnlnode nlnode {	parserData->productVec.back()->inumberOfChildren++; };
 
 

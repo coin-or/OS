@@ -465,8 +465,7 @@ public:
      */
     int numberOfNonlinearExpressions;
 
-    /** nl is pointer to an array of Nl
-     * object pointers */
+    /** nl is pointer to an array of Nl object pointers */
     Nl **nl;
 
     /**
@@ -1697,7 +1696,16 @@ public:
     double *getConstraintUpperBounds();
 
     /**
-     * Get constraint types.
+     * Get constraint constants.
+     *
+     * @return a double array of constraint constants, null if no constraints.
+     * @throws Exception if the elements in constraints are logically inconsistent.
+     */
+    double *getConstraintConstants();
+
+    /**
+     * Get constraint types. The contraint types are not part of the OSiL schema,
+	 * but they are used in solver interfaces such as OSLindoSolver.cpp.
      * <ul>
      * <li>R for range constraint lb <= constraint <= ub </li>
      * <li>L for less than constraint  -INF <= con <= ub or con <= ub</li>
@@ -1729,7 +1737,7 @@ public:
 
     /**
      * Get linear constraint coefficients in column major.
-     * @return a sparse matrix reprsentation of linear constraint coefficients in column major, null if no linear constraint coefficients.
+     * @return a sparse matrix representation of linear constraint coefficients in column major, null if no linear constraint coefficients.
      * @throws Exception if the elements in linear constraint coefficients are logically inconsistent.
      * @see org.optimizationservices.oscommon.datastructure.SparseMatrix
      */
@@ -1737,7 +1745,7 @@ public:
 
     /**
      * Get linear constraint coefficients in row major.
-     * @return a sparse matrix reprsentation of linear constraint coefficients in row major, null if no linear constraint coefficients.
+     * @return a sparse matrix representation of linear constraint coefficients in row major, null if no linear constraint coefficients.
      * @throws Exception if the elements in linear constraint coefficients are logically inconsistent.
      * @see org.optimizationservices.oscommon.datastructure.SparseMatrix
      */
@@ -1783,6 +1791,12 @@ public:
      */
     int getNumberOfNonlinearExpressions();
 
+    /**
+     * Get the pointers to the roots of all expression trees
+     *
+     * @return an array of pointers to Nl objects
+     */
+    Nl** getNonlinearExpressions();
 
     /**
      * Get the expression tree for a given row index
@@ -1835,22 +1849,6 @@ public:
 
 
     /**
-     * Print the infix representation of the problem.
-     * @return a string with the infix representation
-     */
-    std::string printModel( );
-
-
-    /**
-     * Print the infix representation of the row (which could be an
-     * an objective function row) indexed by rowIdx.
-     *
-     * @param rowIdx is the index of the row we want to express in infix.
-     * @return a string with the infix representation
-     */
-    std::string printModel( int rowIdx);
-
-    /**
      * Get the prefix tokens for a given row index for the modified
      * Expression Tree (quadratic terms added).
      *
@@ -1890,7 +1888,7 @@ public:
 
 
     /**
-    * Get the number of unique Nonlinear expression tree indexes.
+    * Get the number of unique nonlinear expression tree indexes.
     *
     * @return the number of unique nonlinear expression tree indexes.
     */
@@ -1898,7 +1896,7 @@ public:
 
 
     /**
-    * Get all the nonlinear expression tree indexes, i.e. indexes of rows (objetives or constraints) that contain nonlinear expressions
+    * Get all the nonlinear expression tree indexes, i.e., indexes of rows (objectives or constraints) that contain nonlinear expressions
     * after modifying the expression tree to contain quadratic terms.
     *
     * @return a pointer to an integer array of nonlinear expression tree indexes (including quadratic terms).
@@ -1907,7 +1905,7 @@ public:
 
 
     /**
-    * Get the number of unique Nonlinear expression tree indexes after
+    * Get the number of unique nonlinear expression tree indexes after
     * modifying the expression tree to contain quadratic terms.
     *
     * @return the number of unique nonlinear expression tree indexes (including quadratic terms).
@@ -2224,6 +2222,35 @@ public:
     bool setQuadraticTermsInNonlinearExpressions(int number,
             int* rowIndexes, int* varOneIndexes, int* varTwoIndexes, double* coefficients);
 
+    /**
+     * set nonlinear expressions
+     *
+     * <p>
+     *
+     * @param nexpr holds the number of nonlinear expressions.
+     * @param root holds a pointer array to the root nodes of all the nonlinear expressions.
+     * @return whether the nonlinear expressions are set successfully.
+     */
+    bool setNonlinearExpressions(int nexpr, Nl** root);
+
+	// methods to print the current model or parts of it
+
+    /**
+     * Print the infix representation of the problem.
+     * @return a string with the infix representation
+     */
+    std::string printModel( );
+
+
+    /**
+     * Print the infix representation of the row (which could be an
+     * an objective function row) indexed by rowIdx.
+     *
+     * @param rowIdx is the index of the row we want to express in infix.
+     * @return a string with the infix representation
+     */
+    std::string printModel( int rowIdx);
+
 
 
     // nonlinear API methods
@@ -2485,8 +2512,16 @@ public:
     /**
      *
      * @return true if successful in adding the qTerms to the ExpressionTree.
+	 * \remark due to the typo in the name of the method, this has been flagged as obsolescent
+	 * and is being replaced by addQTermsToExpressionTree() -- see below
      */
     bool addQTermsToExressionTree();
+
+    /**
+     *
+     * @return true if successful in adding the qTerms to the ExpressionTree.
+     */
+    bool addQTermsToExpressionTree();
 
     /**
      *

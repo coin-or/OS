@@ -57,7 +57,7 @@ public:
 
     /**
      * Calculate the expression tree function value given the current variable
-     * values using the calculateFunciton method of OSnLNode.
+     * values using the calculateFunction method of OSnLNode.
      * If the function has been calculated, the
      * method will retrieve it.
      *
@@ -107,10 +107,23 @@ public:
      * </p>
      *
      * @return a map of the variables in the current expression tree.
+	 * \remark This method is obsolescent due to the typo in the name 
+	 * and has been replaced by getVariableIndicesMap(); 
      */
     std::map<int, int> *getVariableIndiciesMap();
-    /**
-     * m_bIndexMapGenerated is set to true if getVariableIndiciesMap() has been called
+
+	/**
+     * Retrieve a map of the indices of the variables
+     * that are in the expression tree
+     *
+     * </p>
+     *
+     * @return a map of the variables in the current expression tree.
+     */
+    std::map<int, int> *getVariableIndicesMap();
+
+	/**
+     * m_bIndexMapGenerated is set to true if getVariableIndicesMap() has been called
      */
     bool  m_bIndexMapGenerated;
 

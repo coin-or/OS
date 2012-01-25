@@ -49,17 +49,14 @@ typedef std::vector<ADdouble> ADvector;
 
 class OSnLNode
 {
-
 public:
 
-
-
-    /**  numberOfChildren is the number of OSnLNode child elements
+    /**  inumberOfChildren is the number of OSnLNode child elements
      * set to -1 if the number is not fixed, e.g., for a sum node
      */
     unsigned int inumberOfChildren;
 
-    /**  ssymbolInt is the unique integer assigned to the OSnLNode*/
+    /**  inodeInt is the unique integer assigned to the OSnLNode*/
     int inodeInt;
 
     /** inodeType is the number of children the node has, it is set
@@ -68,7 +65,7 @@ public:
     int inodeType;
 
     /**
-     * m_mChildren holds all the operands, that is, nodes that the current node operate on.
+     * m_mChildren holds all the operands, that is, nodes that the current node operates on.
      */
     OSnLNode **m_mChildren;
 
@@ -77,20 +74,17 @@ public:
      */
     double m_dFunctionValue;
 
-
     /**
-     * m_ADTape stores the espression tree for the this OSnLNode as an ADdouble.
+     * m_ADTape stores the expression tree for the this OSnLNode as an ADdouble.
      */
     ADdouble m_ADTape;
 
     /**
-     *
      * @return the value of inodeInt
      */
     virtual std::string getTokenNumber();
 
     /**
-     *
      * @return the value of operator name
      */
     virtual std::string getTokenName() = 0;
@@ -108,26 +102,26 @@ public:
 
     /**
      * <p>
-     * Take a vector of OSnLNodes in postfix format and create
-     * an create an OSExpressionTree root node
+     * Take a vector of OSnLNodes in postfix format 
+     * and create an OSExpressionTree root node
      * </p>
      * @param nlNodeVec holds a vector of pointers to OSnLNodes
      * in postfix format
      * @return a pointer to an OSnLNode which is the root of
-     * and OSExpressionTree.
+     * an OSExpressionTree.
      */
     OSnLNode* createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec);
 
 
     /**
      * <p>
-     * Take a vector of OSnLNodes in prefix format and create
-     * an create an OSExpressionTree root node
+     * Take a vector of OSnLNodes in prefix format
+     * and create an OSExpressionTree root node
      * </p>
      * @param nlNodeVec holds a vector of pointers to OSnLNodes
      * in prefix format
      * @return a pointer to an OSnLNode which is the root of
-     * and OSExpressionTree.
+     * an OSExpressionTree.
      */
     OSnLNode* createExpressionTreeFromPrefix(std::vector<OSnLNode*> nlNodeVec);
 
@@ -207,7 +201,15 @@ public:
      *
      * @return the expression tree.
      */
-    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0 ;
+    virtual ADdouble constructADTape(std::map<int, int> *ADIdx, ADvector *XAD) = 0;
+
+	/**
+	 *
+	 * make a copy of this node and all its descendants
+	 * @return a pointer to the duplicate node
+	 */
+	OSnLNode* copyNodeAndDescendants();
+
     /**
      * <p>
      * Create or clone a node of this type.

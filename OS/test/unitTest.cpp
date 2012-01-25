@@ -475,7 +475,6 @@ if(BASIC_TESTS == true){
 		osilwriter = NULL;
 	}	
 
-
 	// now test the nonlinear operators	
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": nonlinear operators" << endl << endl;
@@ -510,15 +509,17 @@ if(BASIC_TESTS == true){
 //		double parserTestVal = expTree->m_treeRoot->calculateFunction( x);
 //		std::cout << "ParserTest Val = " << parserTestVal << std::endl;
 		check = 11;
-		//ok &= NearEqual(expTree->m_treeRoot->calculateFunction( x) , check,  1e-10 , 1e-10);
 		ok = ( fabs(check -  expTree->m_treeRoot->calculateFunction( x))/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		delete[] x;
+		x = NULL;
 		delete[] nodeNames1;
+		nodeNames1 = NULL;
 		delete osilreader;
 		osilreader = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
-		osinstance = NULL;
+		//if (osinstance != NULL) delete osinstance;
+		//osinstance = NULL;
 
 		if (ok == false) throw ErrorClass(" Problem evaluating expression tree");
 		unitTestResult << "TEST " << nOfTest << ": Successful test of nonlinear operators using file testOperators.osil" << std::endl;
@@ -673,6 +674,160 @@ if (PARSER_TESTS){
 			delete osilwriter;
 		osilwriter = NULL;
 	}	
+
+	// now test the get() and set() methods in OSInstance
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": OSInstance get() and set() methods" << endl << endl;
+		osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
+		osil = fileUtil->getFileAsString( osilFileName.c_str() );
+		osilreader = new OSiLReader(); 
+		osinstance = osilreader->readOSiL( osil);
+
+		// use get() and set() methods to create a second OSInstance object
+		OSInstance *osinstance2 = new OSInstance();
+
+		// first copy header information
+		std::string name, source, description, fileCreator, licence;
+
+		name        = osinstance->getInstanceName();
+		source      = osinstance->getInstanceSource();
+		description = osinstance->getInstanceDescription();
+		fileCreator = osinstance->getInstanceCreator();
+		licence     = osinstance->getInstanceLicence();
+
+		if (!osinstance2->setInstanceName(name)) throw ErrorClass("Error duplicating header information");
+		if (!osinstance2->setInstanceSource(source)) throw ErrorClass("Error duplicating header information");
+		if (!osinstance2->setInstanceDescription(description)) throw ErrorClass("Error duplicating header information");
+		if (!osinstance2->setInstanceCreator(fileCreator)) throw ErrorClass("Error duplicating header information");
+		if (!osinstance2->setInstanceLicence(licence)) throw ErrorClass("Error duplicating header information");
+
+		// copy variables
+		if (osinstance->instanceData->variables != NULL)
+		{
+			int nvar = osinstance->getVariableNumber();
+	
+			std::string *varname = osinstance->getVariableNames();
+			char *vartype = osinstance->getVariableTypes();
+			double *varlb = osinstance->getVariableLowerBounds();
+			double *varub = osinstance->getVariableUpperBounds();
+
+			osinstance2->instanceData->variables = new Variables();
+			osinstance2->instanceData->variables->numberOfVariables = nvar;
+			osinstance2->instanceData->variables->var = new Variable*[nvar];
+
+			if (!osinstance2->setVariables(nvar, varname, varlb, varub, vartype)) throw ErrorClass("Error duplicating variable information");
+		}
+
+		// copy objectives
+		if (osinstance->instanceData->objectives != NULL)
+		{
+			int nobj = osinstance->getObjectiveNumber();
+
+			std::string *objname    = osinstance->getObjectiveNames();
+			std::string *objdir     = osinstance->getObjectiveMaxOrMins();
+			double *objconst        = osinstance->getObjectiveConstants();
+			double *objweight       = osinstance->getObjectiveWeights();
+			SparseVector **objcoeff = osinstance->getObjectiveCoefficients();
+
+			osinstance2->instanceData->objectives = new Objectives();
+			osinstance2->instanceData->objectives->numberOfObjectives = nobj;
+			osinstance2->instanceData->objectives->obj = new Objective*[nobj];
+
+			if (!osinstance2->setObjectives(nobj, objname, objdir, objconst, objweight, objcoeff)) throw ErrorClass("Error duplicating objective information");
+		}
+
+		// copy constraints
+		if (osinstance->instanceData->constraints != NULL)
+		{
+			int ncon = osinstance->getConstraintNumber();
+
+			std::string *conname = osinstance->getConstraintNames();
+			double *conlb = osinstance->getConstraintLowerBounds();
+			double *conub = osinstance->getConstraintUpperBounds();
+			double *con_c = osinstance->getConstraintConstants();
+
+			osinstance2->instanceData->constraints = new Constraints();
+			osinstance2->instanceData->constraints->numberOfConstraints = ncon;
+			osinstance2->instanceData->constraints->con = new Constraint*[ncon];
+
+			if (!osinstance2->setConstraints(ncon, conname, conlb, conub, con_c)) throw ErrorClass("Error duplicating constraint information");
+		}
+
+		// copy linear constraint coefficient matrix
+		if (osinstance->instanceData->linearConstraintCoefficients != NULL)
+		{
+			int ncoef = osinstance->getLinearConstraintCoefficientNumber();
+			bool isColMajor = osinstance->getLinearConstraintCoefficientMajor();
+			int nstart;
+			SparseMatrix* coeff;
+
+			if (isColMajor)
+			{
+				nstart = osinstance->getVariableNumber();
+				coeff = osinstance->getLinearConstraintCoefficientsInColumnMajor();
+			}
+			else
+			{
+				nstart = osinstance->getConstraintNumber();
+				coeff = osinstance->getLinearConstraintCoefficientsInRowMajor();
+			}
+
+			if (!osinstance2->setLinearConstraintCoefficients(ncoef, isColMajor,
+                                coeff->values,  0, ncoef-1,
+                                coeff->indexes, 0, ncoef-1,
+                                coeff->starts,  0, nstart)) 
+                            throw ErrorClass("Error duplicating linear constraint coefficients");
+		}
+
+		// copy quadratic terms
+		if (osinstance->instanceData->quadraticCoefficients != NULL)
+		{
+			int nquad = osinstance->getNumberOfQuadraticTerms();
+			QuadraticTerms* qcoef = osinstance->getQuadraticTerms();
+		
+			if (!osinstance2->setQuadraticTerms(nquad,
+                                   qcoef->rowIndexes, qcoef->varOneIndexes, 
+                                   qcoef->varTwoIndexes, qcoef->coefficients,
+                                   0, nquad-1)) 
+				throw ErrorClass("Error duplicating quadratic coefficients");
+		}
+
+		// copy nonlinear expressions
+		if (osinstance->instanceData->nonlinearExpressions != NULL)
+		{
+			int nexpr = osinstance->getNumberOfNonlinearExpressions();
+			Nl** root = osinstance->getNonlinearExpressions();
+
+			if (!osinstance2->setNonlinearExpressions(nexpr, root))
+				throw ErrorClass("Error duplicating nonlinear expressions");
+		}
+
+		// remaining elements have not yet been finalized, so ignore
+
+		// now compare the two instances
+		//if (!osinstance2->IsEqual(osinstance)) throw ErrorClass("Loss of data during duplication");
+
+                //delete osinstance2;
+                //osinstance2 = NULL;
+
+		unitTestResult << "TEST " << nOfTest << ": Passed OSInstance get() and set() methods" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+
+		delete osilreader;
+		osilreader = NULL;
+		delete osilwriter;
+		osilwriter = NULL;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Unit Test Failed OSInstance get() and set() methods: "  + eclass.errormsg<< endl; 
+		if (osilreader != NULL)
+			delete osilreader;
+		osilreader = NULL;
+		if (osilwriter != NULL)
+			delete osilwriter;
+		osilwriter = NULL;
+	}	
+
 
 #if 0
 	//
@@ -1608,6 +1763,7 @@ if (PARSER_TESTS){
 		if (nvar > 0)
 		{
 			IBS = new int[nvar];
+
 			ok = osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower,IBS);
 			ok = osoption2->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower, IBS, nvar) && ok;
 			delete[] IBS;
@@ -6971,6 +7127,7 @@ if( THOROUGH == true){
 		solver = new CouenneSolver();
 		solver->osil = osil;
 		solver->osol = osol; 
+
 //		solver->osinstance = osilreader->readOSiL( osil);
 //		solver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the COIN - Couenne Solver for bonminEx1_Nonlinear" << endl;

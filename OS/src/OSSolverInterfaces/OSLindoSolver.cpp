@@ -801,7 +801,7 @@ bool LindoSolver::processNonlinearExpressions()
 
     cout <<  "PROCESS NONLINEAR TERMS" << endl;
     osinstance->initializeNonLinearStructures( );
-    //osinstance->addQTermsToExressionTree();
+    //osinstance->addQTermsToExpressionTree();
     cout << "The number of objectives with nonlinear terms is:  " << osinstance->getNumberOfNonlinearObjectives() << endl;
     cout << "The number of constraints with nonlinear terms is:  " << osinstance->getNumberOfNonlinearConstraints() << endl << endl << endl;
     // first convert OS numbering of operators to Lindo numbering of operators.

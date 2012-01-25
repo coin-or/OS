@@ -75,7 +75,12 @@ double OSExpressionTree::calculateFunction( double *x, bool new_x)
     }
 }//calculateFunction
 
-std::map<int, int> *OSExpressionTree::getVariableIndiciesMap()
+std::map<int, int> *OSExpressionTree::getVariableIndiciesMap()     //obsolescent --- 
+{
+	return getVariableIndicesMap();
+}
+
+std::map<int, int> *OSExpressionTree::getVariableIndicesMap()
 {
     if( m_bIndexMapGenerated == true) return mapVarIdx;
     mapVarIdx = new std::map<int, int>();
@@ -89,7 +94,7 @@ std::map<int, int> *OSExpressionTree::getVariableIndiciesMap()
     //}
     m_bIndexMapGenerated = true;
     return mapVarIdx;
-}//getVariableIndicies
+}//getVariableIndices
 
 bool OSExpressionTree::IsEqual(OSExpressionTree *that)
 {

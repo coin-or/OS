@@ -167,6 +167,24 @@ OSnLNode::~OSnLNode()
 #endif
 }//end ~OSnLNode
 
+OSnLNode* OSnLNode::copyNodeAndDescendants()
+{
+	OSnLNode* ndcopy = cloneOSnLNode();
+	ndcopy->inumberOfChildren = inumberOfChildren;
+	ndcopy->inodeInt = inodeInt;
+	ndcopy->inodeType = inodeType;
+	
+	if (inumberOfChildren > 0)
+	{
+		ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+		for (int i=0; i < inumberOfChildren; i++)
+		{
+			ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();
+		}
+	}
+
+	return ndcopy;
+}// end copyNodeAndDescendants
 
 OSnLNode* OSnLNode::createExpressionTreeFromPostfix(std::vector<OSnLNode*> nlNodeVec)
 {
@@ -252,7 +270,7 @@ std::string OSnLNode::getTokenNumber()
 {
     ostringstream outStr;
     outStr << inodeInt;
-    // when I creat an OSnLNode from a token number, I need to know how many children there are
+    // when I create an OSnLNode from a token number, I need to know how many children there are
 //	if(inodeType == -1){
     outStr << "[";
     outStr << inumberOfChildren ;
@@ -623,7 +641,7 @@ std::string OSnLNodeAllDiff::getTokenName()
 double OSnLNodeAllDiff::calculateFunction(double *x)
 {
     m_dFunctionValue = 1;
-    // return a false if not all all different
+    // return false if not all different
     unsigned int i, k;
     if(inumberOfChildren > 1)
     {
@@ -693,15 +711,13 @@ OSnLNodeMax::~OSnLNodeMax()
 
 double OSnLNodeMax::calculateFunction(double *x)
 {
-    m_dFunctionValue = m_mChildren[0]->calculateFunction(x);
-    if(inumberOfChildren > 1)
+	m_dFunctionValue = -OSDBL_MAX;
+
+	for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
-        for(unsigned int i = 1; i < inumberOfChildren; i++)
+        if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
         {
-            if(m_mChildren[i]->calculateFunction(x) > m_dFunctionValue)
-            {
-                m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
-            }
+            m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -772,15 +788,13 @@ std::string OSnLNodeMin::getTokenName()
 
 double OSnLNodeMin::calculateFunction(double *x)
 {
-    m_dFunctionValue = m_mChildren[0]->calculateFunction(x);
-    if(inumberOfChildren > 1)
+	m_dFunctionValue = OSDBL_MAX;
+
+    for(unsigned int i = 0; i < inumberOfChildren; i++)
     {
-        for(unsigned int i = 1; i < inumberOfChildren; i++)
+        if(m_mChildren[i]->calculateFunction(x) < m_dFunctionValue)
         {
-            if(m_mChildren[i]->calculateFunction(x) < m_dFunctionValue)
-            {
-                m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
-            }
+            m_dFunctionValue = 	m_mChildren[i]->calculateFunction(x);
         }
     }
     return m_dFunctionValue;
@@ -1111,7 +1125,7 @@ OSnLNode* OSnLNodePower::cloneOSnLNode()
 
 
 //
-// OSnLNodePower Methods
+// OSnLNodeProduct Methods
 OSnLNodeProduct::OSnLNodeProduct()
 {
     inumberOfChildren = 0;

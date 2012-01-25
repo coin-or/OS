@@ -45,7 +45,7 @@ ObjType = 1;
 % use zero based counting for the row number
 % the second row is the index of the first variable
 % the thrid row is the index of the second variable
-% use zero based counting for the variable indicies
+% use zero based counting for the variable indices
 % the last (fourth) row is the coefficient of the quadratic term
 Q = [];
 % replace Template with the name of your  problem

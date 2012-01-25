@@ -9,7 +9,7 @@
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
- * Please see the accompanying LICENSE file in root directory for terms.
+ * Please see the accompanying LICENSE file in the root directory for terms.
  *
  *
  */
@@ -1491,23 +1491,29 @@ string* OSInstance::getConstraintNames()
 }//getConstraintNames
 
 
-double* OSInstance::getConstraintLowerBounds()
-{
-    processConstraints();
-    return m_mdConstraintLowerBounds;
-}//getConstraintLowerBounds
-
 char* OSInstance::getConstraintTypes()
 {
     processConstraints();
     return m_mcConstraintTypes;
 }//getConstraintTypes
 
+double* OSInstance::getConstraintLowerBounds()
+{
+    processConstraints();
+    return m_mdConstraintLowerBounds;
+}//getConstraintLowerBounds
+
 double* OSInstance::getConstraintUpperBounds()
 {
     processConstraints();
     return m_mdConstraintUpperBounds;
 }//getConstraintUpperBounds
+
+double* OSInstance::getConstraintConstants()
+{
+    processConstraints();
+    return m_mdConstraintConstants;
+}//getConstraintConstants
 
 
 int OSInstance::getLinearConstraintCoefficientNumber()
@@ -1730,6 +1736,17 @@ int OSInstance::getNumberOfNonlinearExpressions()
     }
     return m_iNonlinearExpressionNumber;
 }//getNumberOfNonlinearExpressions
+
+Nl** OSInstance::getNonlinearExpressions()
+{
+	Nl** root = new Nl*[getNumberOfNonlinearExpressions()];
+	for (int i=0; i < getNumberOfNonlinearExpressions(); i++)
+	{
+		root[i] = instanceData->nonlinearExpressions->nl[i];
+	}
+	return root;
+}//getNonlinearExpressions
+
 
 int OSInstance::getNumberOfNonlinearExpressionTreeIndexes()
 {
@@ -2202,203 +2219,6 @@ std::string OSInstance::getNonlinearExpressionTreeInInfix( int rowIdx_)
         throw ErrorClass( eclass.errormsg);
     }
 }//getNonlinearExpressionTreeInInfix
-
-
-std::string OSInstance::printModel( )
-{
-    std::string resultString = "";
-    ostringstream outStr;
-    outStr << "";
-    int numCon;
-    int numObj;
-    int numVar;
-    int i;
-    numCon = this->getConstraintNumber();
-    numObj = this->getObjectiveNumber();
-    numVar = this->getVariableNumber();
-    this->initForAlgDiff( );
-    outStr << std::endl;
-    outStr << "Objectives:" << std::endl;
-    for(i = 0; i < numObj; i++)
-    {
-        if( this->getObjectiveMaxOrMins()[0] == "min")
-        {
-            outStr << "min ";
-        }
-        else
-        {
-            outStr << "max ";
-        }
-        outStr << this->printModel( i - numObj);
-    }
-    outStr << std::endl;
-    outStr << "Constraints:" << std::endl;
-    for(i = 0; i < numCon; i++)
-    {
-        outStr << this->printModel( i);
-    }
-
-    outStr << std::endl;
-    outStr << "Variables:" << std::endl;
-    if(m_bProcessVariables != true  || bVariablesModified == true ) this->processVariables();
-    for(i = 0; i < numVar; i++)
-    {
-
-
-        if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  i ]->name.size() > 0)
-        {
-            outStr << this->instanceData->variables->var[  i ]->name;
-        }
-        else
-        {
-            outStr << "x_";
-            outStr << i;
-        }
-
-
-        //outStr << "x_";
-        //outStr << i;
-        outStr << " Type = " ;
-        outStr <<  m_mcVariableTypes[i];
-        outStr << "  Lower Bound =  ";
-        outStr << os_dtoa_format( m_mdVariableLowerBounds[i])  ;
-        outStr << "  Upper Bound =  ";
-        outStr << os_dtoa_format( m_mdVariableUpperBounds[i])  ;
-        outStr << std::endl;
-    }
-
-    // if model was originally in column matrix form we need to delete the new
-    // matrix stored by row
-
-    //if( this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
-    //	if(m_bColumnMajor == true){// we now have a duplication
-    //		delete m_linearConstraintCoefficientsInRowMajor;
-    //	}
-    //}
-    return outStr.str() ;
-}//printModel( )
-
-
-std::string OSInstance::printModel(int rowIdx )
-{
-    std::string resultString = "";
-    ostringstream outStr;
-    outStr << "";
-    //loop over the constraints first;
-    int j;
-    int row_nonz = 0;
-    int obj_nonz = 0;
-    int varIdx = 0;
-    bool addedLinearTerm = false;
-
-    // initialize all of the necessary nonlinear stuff
-    this->initForAlgDiff( );
-
-    if( rowIdx >= 0)
-    {
-        if (rowIdx < this->getConstraintNumber())
-        {
-            if( m_bProcessConstraints != true || bConstraintsModified == true) this->processConstraints() ;
-            if( m_mdConstraintLowerBounds[ rowIdx] >  -OSDBL_MAX)
-            {
-                if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx])
-                {
-                    outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
-                    outStr << " <= ";
-                }
-            }
-        //
-            if(this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
-            {
-                if(m_linearConstraintCoefficientsInRowMajor == NULL)
-                    m_linearConstraintCoefficientsInRowMajor = this->getLinearConstraintCoefficientsInRowMajor();
-                row_nonz = m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx + 1] - m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx];
-
-                for(j = 0; j < row_nonz; j++)
-                {
-                    varIdx =  m_linearConstraintCoefficientsInRowMajor->indexes[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j];
-
-                    if(m_bSparseJacobianCalculated == false  ||  (m_mapExpressionTreesMod.find( rowIdx) == m_mapExpressionTreesMod.end() ) ||
-                        ( (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).find( varIdx) == (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).end()) )
-                    {
-                        outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
-                        outStr << "*";
-
-                        if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  varIdx ]->name.size() > 0)
-                        {
-                            outStr << this->instanceData->variables->var[  varIdx ]->name;
-                        }
-                        else
-                        {
-                            outStr << "x_";
-                            outStr << varIdx;
-                        }
-
-
-                        if( j < row_nonz - 1) outStr << " + ";
-                        addedLinearTerm = true;
-                    }
-                }
-            }
-        }
-        else
-            return "row index not found; print command ignored\n";
-    }
-    else  // process an objective function
-    {
-        if(m_bProcessObjectives != true || bObjectivesModified == true)  this->processObjectives() ;
-        int obj_idx =  -rowIdx - 1;
-        if (obj_idx < this->getObjectiveNumber())
-        {
-            obj_nonz = m_miNumberOfObjCoef[ obj_idx];
-            for(j = 0; j < obj_nonz; j++)
-            {
-                outStr << os_dtoa_format( m_mObjectiveCoefficients[obj_idx]->values[j] );
-                outStr << "*";
-                if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0)
-                {
-                    outStr << this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name;
-                }
-                else
-                {
-                    outStr << "x_";
-                    outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
-                }
-                if( j < obj_nonz - 1) outStr << " + ";
-            }
-        }
-        else
-            return "row index not found; print command ignored\n";
-    }
-    if( this->getNonlinearExpressionTree( rowIdx) != NULL)
-    {
-        if( (addedLinearTerm == true)  || (obj_nonz > 0) ) outStr << " + " ;
-        outStr << getNonlinearExpressionTreeInInfix( rowIdx);
-        //outStr << ")";
-    }
-
-    if( rowIdx >= 0)
-    {
-        if( m_bProcessConstraints != true ) this->processConstraints() ;
-        if( m_mdConstraintUpperBounds[ rowIdx] <  OSDBL_MAX)
-        {
-            if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx])
-            {
-                outStr << " <= ";
-            }
-            else
-            {
-                outStr << " = ";
-            }
-            outStr << os_dtoa_format( m_mdConstraintUpperBounds[ rowIdx] );
-            outStr << "  ";
-            outStr << this->getConstraintNames()[ rowIdx] ;
-        }
-    }
-    outStr << std::endl;
-    resultString = outStr.str();
-    return resultString;
-}//printModel( rowIdx )
 
 
 std::vector<OSnLNode*> OSInstance::getNonlinearExpressionTreeModInPostfix( int rowIdx)
@@ -3282,6 +3102,31 @@ bool OSInstance::setQuadraticTermsInNonlinearExpressions(int numQPTerms, int* ro
     return true;
 }//setQuadraticTermsInNonlinearExpressions
 
+bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
+{
+    if(nexpr < 0) return false;
+
+    if(nexpr == 0)
+    {
+        instanceData->nonlinearExpressions = 0;
+        return true;
+    }
+
+	instanceData->nonlinearExpressions = new NonlinearExpressions(); 
+	instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nexpr;
+	instanceData->nonlinearExpressions->nl = new Nl*[nexpr];
+
+	for (int i=0; i < nexpr; i++)
+	{
+		instanceData->nonlinearExpressions->nl[i] = new Nl();
+		instanceData->nonlinearExpressions->nl[i]->idx = root[i]->idx;
+		instanceData->nonlinearExpressions->nl[i]->osExpressionTree = new OSExpressionTree();
+		instanceData->nonlinearExpressions->nl[i]->osExpressionTree->m_treeRoot	= root[i]->osExpressionTree->m_treeRoot->copyNodeAndDescendants();
+	}
+    return true;
+}//setQuadraticTerms
+
+
 bool OSInstance::initializeNonLinearStructures( )
 {
     std::map<int, OSExpressionTree*>::iterator posMapExpTree;
@@ -3299,10 +3144,10 @@ bool OSInstance::initializeNonLinearStructures( )
     // now create all of the variable maps for each expression tree
     for(posMapExpTree = m_mapExpressionTreesMod.begin(); posMapExpTree != m_mapExpressionTreesMod.end(); ++posMapExpTree)
     {
-        (posMapExpTree->second)->getVariableIndiciesMap() ;
+        (posMapExpTree->second)->getVariableIndicesMap() ;
     }
     // add the quadratic terms if necessary
-    if(getNumberOfQuadraticTerms() > 0) addQTermsToExressionTree();
+    if(getNumberOfQuadraticTerms() > 0) addQTermsToExpressionTree();
     // now get the map of all nonlinear variables
     getAllNonlinearVariablesIndexMap( );
     getDenseObjectiveCoefficients();
@@ -3359,9 +3204,14 @@ SparseJacobianMatrix *OSInstance::getJacobianSparsityPattern( )
     m_sparseJacMatrix->values = m_mdJacValue;
     m_bSparseJacobianCalculated = true;
     return m_sparseJacMatrix;
-}//getJacobianSparsityPatter
+}//getJacobianSparsityPattern
 
-bool OSInstance::addQTermsToExressionTree()
+bool OSInstance::addQTermsToExressionTree() // obsolescent --- replaced by addQTermsToExpressionTree
+{
+	return addQTermsToExpressionTree();
+}
+
+bool OSInstance::addQTermsToExpressionTree()
 {
     int i, k, idx;
     // get the number of qTerms
@@ -3389,14 +3239,14 @@ bool OSInstance::addQTermsToExressionTree()
             // see if the variable indexed by nlNodeVariableOne->idx is in the expression tree for row idx
             // if not, add to mapVarIdx
             expTree = m_mapExpressionTreesMod[ idx];
-            if(  expTree->m_bIndexMapGenerated == false) expTree->getVariableIndiciesMap();
+            if(  expTree->m_bIndexMapGenerated == false) expTree->getVariableIndicesMap();
             if( (*expTree->mapVarIdx).find( nlNodeVariableOne->idx) == (*expTree->mapVarIdx).end()  )
             {
                 // add to map
                 k = (*expTree->mapVarIdx).size();
                 (*expTree->mapVarIdx)[ nlNodeVariableOne->idx] =  k + 1;
 #ifdef DEBUG
-                std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableOne->idx << std::endl;
+                std::cout << "ADDED THE FOLLOWING VARIABLE TO THE MAP" <<  nlNodeVariableOne->idx << std::endl;
 #endif
             }
             nlNodeVariableOne->coef = m_quadraticTerms->coefficients[ i];
@@ -3410,7 +3260,7 @@ bool OSInstance::addQTermsToExressionTree()
                 k = (*expTree->mapVarIdx).size();
                 (*expTree->mapVarIdx)[ nlNodeVariableTwo->idx] =  k + 1;
 #ifdef DEBUG
-                std::cout << "ADDED THE FOLLOWING VAIRABLE TO THE MAP" <<  nlNodeVariableTwo->idx << std::endl;
+                std::cout << "ADDED THE FOLLOWING VARIABLE TO THE MAP" <<  nlNodeVariableTwo->idx << std::endl;
 #endif
             }
             nlNodeVariableTwo->coef = 1.;
@@ -3451,7 +3301,7 @@ bool OSInstance::addQTermsToExressionTree()
             // create a new expression tree corresponding to row idx.
             expTree = new OSExpressionTree();
             expTree->m_treeRoot = nlNodeTimes ;
-            expTree->mapVarIdx = expTree->getVariableIndiciesMap();
+            expTree->mapVarIdx = expTree->getVariableIndicesMap();
             m_mapExpressionTreesMod[ idx ]  = expTree;
             if(idx < 0)
             {
@@ -3475,11 +3325,208 @@ bool OSInstance::addQTermsToExressionTree()
     return true;
 }
 
+
+std::string OSInstance::printModel( )
+{
+    std::string resultString = "";
+    ostringstream outStr;
+    outStr << "";
+    int numCon;
+    int numObj;
+    int numVar;
+    int i;
+    numCon = this->getConstraintNumber();
+    numObj = this->getObjectiveNumber();
+    numVar = this->getVariableNumber();
+    this->initForAlgDiff( );
+    outStr << std::endl;
+    outStr << "Objectives:" << std::endl;
+    for(i = 0; i < numObj; i++)
+    {
+        if( this->getObjectiveMaxOrMins()[0] == "min")
+        {
+            outStr << "min ";
+        }
+        else
+        {
+            outStr << "max ";
+        }
+        outStr << this->printModel( i - numObj);
+    }
+    outStr << std::endl;
+    outStr << "Constraints:" << std::endl;
+    for(i = 0; i < numCon; i++)
+    {
+        outStr << this->printModel( i);
+    }
+
+    outStr << std::endl;
+    outStr << "Variables:" << std::endl;
+    if(m_bProcessVariables != true  || bVariablesModified == true ) this->processVariables();
+    for(i = 0; i < numVar; i++)
+    {
+
+
+        if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  i ]->name.size() > 0)
+        {
+            outStr << this->instanceData->variables->var[  i ]->name;
+        }
+        else
+        {
+            outStr << "x_";
+            outStr << i;
+        }
+
+
+        //outStr << "x_";
+        //outStr << i;
+        outStr << " Type = " ;
+        outStr <<  m_mcVariableTypes[i];
+        outStr << "  Lower Bound =  ";
+        outStr << os_dtoa_format( m_mdVariableLowerBounds[i])  ;
+        outStr << "  Upper Bound =  ";
+        outStr << os_dtoa_format( m_mdVariableUpperBounds[i])  ;
+        outStr << std::endl;
+    }
+
+    // if model was originally in column matrix form we need to delete the new
+    // matrix stored by row
+
+    //if( this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0){
+    //	if(m_bColumnMajor == true){// we now have a duplication
+    //		delete m_linearConstraintCoefficientsInRowMajor;
+    //	}
+    //}
+    return outStr.str() ;
+}//printModel( )
+
+
+std::string OSInstance::printModel(int rowIdx )
+{
+    std::string resultString = "";
+    ostringstream outStr;
+    outStr << "";
+    //loop over the constraints first;
+    int j;
+    int row_nonz = 0;
+    int obj_nonz = 0;
+    int varIdx = 0;
+    bool addedLinearTerm = false;
+
+    // initialize all of the necessary nonlinear stuff
+    this->initForAlgDiff( );
+
+    if( rowIdx >= 0)
+    {
+        if (rowIdx < this->getConstraintNumber())
+        {
+            if( m_bProcessConstraints != true || bConstraintsModified == true) this->processConstraints() ;
+            if( m_mdConstraintLowerBounds[ rowIdx] >  -OSDBL_MAX)
+            {
+                if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx])
+                {
+                    outStr << os_dtoa_format( m_mdConstraintLowerBounds[ rowIdx] );
+                    outStr << " <= ";
+                }
+            }
+        //
+            if(this->instanceData->linearConstraintCoefficients != NULL && this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
+            {
+                if(m_linearConstraintCoefficientsInRowMajor == NULL)
+                    m_linearConstraintCoefficientsInRowMajor = this->getLinearConstraintCoefficientsInRowMajor();
+                row_nonz = m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx + 1] - m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx];
+
+                for(j = 0; j < row_nonz; j++)
+                {
+                    varIdx =  m_linearConstraintCoefficientsInRowMajor->indexes[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j];
+
+                    if(m_bSparseJacobianCalculated == false  ||  (m_mapExpressionTreesMod.find( rowIdx) == m_mapExpressionTreesMod.end() ) ||
+                        ( (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).find( varIdx) == (*m_mapExpressionTreesMod[ rowIdx]->mapVarIdx).end()) )
+                    {
+                        outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
+                        outStr << "*";
+
+                        if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  varIdx ]->name.size() > 0)
+                        {
+                            outStr << this->instanceData->variables->var[  varIdx ]->name;
+                        }
+                        else
+                        {
+                            outStr << "x_";
+                            outStr << varIdx;
+                        }
+
+
+                        if( j < row_nonz - 1) outStr << " + ";
+                        addedLinearTerm = true;
+                    }
+                }
+            }
+        }
+        else
+            return "row index not found; print command ignored\n";
+    }
+    else  // process an objective function
+    {
+        if(m_bProcessObjectives != true || bObjectivesModified == true)  this->processObjectives() ;
+        int obj_idx =  -rowIdx - 1;
+        if (obj_idx < this->getObjectiveNumber())
+        {
+            obj_nonz = m_miNumberOfObjCoef[ obj_idx];
+            for(j = 0; j < obj_nonz; j++)
+            {
+                outStr << os_dtoa_format( m_mObjectiveCoefficients[obj_idx]->values[j] );
+                outStr << "*";
+                if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0)
+                {
+                    outStr << this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name;
+                }
+                else
+                {
+                    outStr << "x_";
+                    outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
+                }
+                if( j < obj_nonz - 1) outStr << " + ";
+            }
+        }
+        else
+            return "row index not found; print command ignored\n";
+    }
+    if( this->getNonlinearExpressionTree( rowIdx) != NULL)
+    {
+        if( (addedLinearTerm == true)  || (obj_nonz > 0) ) outStr << " + " ;
+        outStr << getNonlinearExpressionTreeInInfix( rowIdx);
+        //outStr << ")";
+    }
+
+    if( rowIdx >= 0)
+    {
+        if( m_bProcessConstraints != true ) this->processConstraints() ;
+        if( m_mdConstraintUpperBounds[ rowIdx] <  OSDBL_MAX)
+        {
+            if(m_mdConstraintLowerBounds[ rowIdx] < m_mdConstraintUpperBounds[ rowIdx])
+            {
+                outStr << " <= ";
+            }
+            else
+            {
+                outStr << " = ";
+            }
+            outStr << os_dtoa_format( m_mdConstraintUpperBounds[ rowIdx] );
+            outStr << "  ";
+            outStr << this->getConstraintNames()[ rowIdx] ;
+        }
+    }
+    outStr << std::endl;
+    resultString = outStr.str();
+    return resultString;
+}//printModel( rowIdx )
+
+
 double OSInstance::calculateFunctionValue(int idx, double *x, bool new_x)
 {
     try
     {
-
         int i, j;
         double dvalue = 0;
         if( m_binitForAlgDiff == false) initForAlgDiff();
@@ -3688,8 +3735,8 @@ SparseVector *OSInstance::calculateConstraintFunctionGradient(double* x, int idx
         sp->indexes = new int[ sp->number];
         for(i = 0; i < sp->number; i++)
         {
-            sp->values[ i] = m_mdJacValue[ m_miJacStart[ idx] +  i];
-            sp->indexes[ i] = m_miJacIndex[ m_miJacStart[ idx] + i];
+            sp->values[ i] = m_mdJacValue[ m_miJacStart[ idx] + i];
+            sp->indexes[i] = m_miJacIndex[ m_miJacStart[ idx] + i];
         }
         return sp;
     }
@@ -3940,7 +3987,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() )
         {
             // the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
-            m_mapExpressionTreesMod[ i]->getVariableIndiciesMap();
+            m_mapExpressionTreesMod[ i]->getVariableIndicesMap();
 
         }
     }
@@ -3990,7 +4037,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         }
     }
     // at this point, m_miJacStart[ i] holds the number of columns with a linear/constant nonzero in row i - 1
-    // we are not done with the start indicies, if we are here, and we
+    // we are not done with the start indices, if we are here, and we
     // knew the correct starting point of row i -1, the correct starting point
     // for row i is m_miJacStart[i] + m_miJacStart [i - 1]
     m_miJacStart[0] = 0;
@@ -4059,7 +4106,7 @@ bool OSInstance::getSparseJacobianFromColumnMajor( )
         std::cout <<  m_miJacStart[ i] << "  ";
     }
     std::cout << std::endl << std::endl;
-    std::cout << "HERE ARE VARIABLE INDICIES:" << std::endl;
+    std::cout << "HERE ARE VARIABLE INDICES:" << std::endl;
     for (i = 0; i < m_miJacStart[ iNumRowStarts - 1]; i++ )
     {
         std::cout <<  m_miJacIndex[ i] << "  ";
@@ -4113,7 +4160,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
         if( m_mapExpressionTreesMod.find( i) != m_mapExpressionTreesMod.end() )
         {
             // the following is equivalent to  m_treeRoot->getVariableIndexMap( i);
-            m_mapExpressionTreesMod[ i]->getVariableIndiciesMap();
+            m_mapExpressionTreesMod[ i]->getVariableIndicesMap();
 
         }
     }
@@ -4178,7 +4225,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
     m_iJacValueSize = 	m_miJacStart[ iNumJacRowStarts - 1];
     m_miJacIndex = new int[  m_iJacValueSize];
     m_mdJacValue = new double[ m_iJacValueSize ];
-    // now loop again and put in values and indicies
+    // now loop again and put in values and indices
     // first put in the constant terms
     if(this->instanceData->linearConstraintCoefficients->numberOfValues > 0)
     {
@@ -4220,7 +4267,7 @@ bool OSInstance::getSparseJacobianFromRowMajor( )
         std::cout <<  m_miJacStart[ i] << "  ";
     }
     std::cout << std::endl << std::endl;
-    std::cout << "HERE ARE VARIABLE INDICIES:" << std::endl;
+    std::cout << "HERE ARE VARIABLE INDICES:" << std::endl;
     for (i = 0; i < m_miJacStart[ iNumJacRowStarts - 1]; i++ )
     {
         std::cout <<  m_miJacIndex[ i] << "  ";
@@ -4290,7 +4337,7 @@ OSExpressionTree* OSInstance::getLagrangianExpTree( )
         numChildren++;
     }
     // get a variable index map for the expression tree
-    m_LagrangianExpTree->getVariableIndiciesMap();
+    m_LagrangianExpTree->getVariableIndicesMap();
     // print out the XML for this puppy
     //std::cout << "Here comes the Lagrangian Tree" << std::endl;
     //std::cout << m_LagrangianExpTree->m_treeRoot->getNonlinearExpressionInXML() << std::endl;
@@ -4311,7 +4358,7 @@ std::map<int, int> OSInstance::getAllNonlinearVariablesIndexMap( )
     {
         // get the index map for the expression tree
         expTree = posMapExpTree->second;
-        if(expTree->m_bIndexMapGenerated == false)expTree->getVariableIndiciesMap();
+        if(expTree->m_bIndexMapGenerated == false)expTree->getVariableIndicesMap();
         for(posVarIdx = (*expTree->mapVarIdx).begin(); posVarIdx != (*expTree->mapVarIdx).end(); ++posVarIdx)
         {
             if( m_mapAllNonlinearVariablesIndex.find( posVarIdx->first) == m_mapAllNonlinearVariablesIndex.end() )
@@ -4627,7 +4674,7 @@ bool OSInstance::getFirstOrderResults(double *x, double *objLambda, double *conM
                 if(idx >= 0)
                 {
                     m_vdRangeUnitVec[ domainIdx] = 1.;
-                    m_mapExpressionTreesMod[ idx]->getVariableIndiciesMap();
+                    m_mapExpressionTreesMod[ idx]->getVariableIndicesMap();
                     m_vdYjacval = this->reverseAD(1, m_vdRangeUnitVec);
                     // check size
                     jstart = m_miJacStart[ idx] + m_miJacNumConTerms[ idx];
