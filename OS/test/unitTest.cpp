@@ -805,10 +805,10 @@ if (PARSER_TESTS){
 		// remaining elements have not yet been finalized, so ignore
 
 		// now compare the two instances
-		//if (!osinstance2->IsEqual(osinstance)) throw ErrorClass("Loss of data during duplication");
+		if (!osinstance2->IsEqual(osinstance)) throw ErrorClass("Loss of data during duplication");
 
-                //delete osinstance2;
-                //osinstance2 = NULL;
+                delete osinstance2;
+                osinstance2 = NULL;
 
 		unitTestResult << "TEST " << nOfTest << ": Passed OSInstance get() and set() methods" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;

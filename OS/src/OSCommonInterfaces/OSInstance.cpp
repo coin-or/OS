@@ -513,6 +513,7 @@ Objective::~Objective()
     if(numberOfObjCoef > 0 && coef != NULL)
     {
         for(i = 0; i < numberOfObjCoef; i++)
+
         {
             delete coef[i];
             coef[i] = NULL;
@@ -2959,74 +2960,54 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
             (startsBegin < 0  || startsBegin >= startsEnd)) return false;
     instanceData->linearConstraintCoefficients->numberOfValues = numberOfValues;
     int i = 0;
+
     //starts
     if(instanceData->linearConstraintCoefficients->start == NULL) instanceData->linearConstraintCoefficients->start = new IntVector();
-    if(startsBegin == 0 )
+    instanceData->linearConstraintCoefficients->start->el = new int[startsEnd - startsBegin + 1];
+    int k = 0;
+    for(i = startsBegin; i <= startsEnd; i++)
     {
-        instanceData->linearConstraintCoefficients->start->el = starts;
+        instanceData->linearConstraintCoefficients->start->el[k] = starts[i];
+        k++;
     }
-    else
-    {
-        instanceData->linearConstraintCoefficients->start->el = new int[startsEnd - startsBegin + 1];
-        int k = 0;
-        for(i = startsBegin; i <= startsEnd; i++)
-        {
-            instanceData->linearConstraintCoefficients->start->el[k] = starts[i];
-            k++;
-        }
-    }
+    instanceData->linearConstraintCoefficients->start->numberOfEl = k;
+
     //values
     if(instanceData->linearConstraintCoefficients->value == NULL) instanceData->linearConstraintCoefficients->value = new DoubleVector();
     if(valuesBegin == 0 )
+    instanceData->linearConstraintCoefficients->value->el = new double[numberOfValues];
+    k = 0;
+    for(i = valuesBegin; i <= valuesEnd; i++)
     {
-        instanceData->linearConstraintCoefficients->value->el = values;
+        instanceData->linearConstraintCoefficients->value->el[k] = values[i];
+        k++;
     }
-    else
-    {
-        instanceData->linearConstraintCoefficients->value->el = new double[numberOfValues];
-        int k = 0;
-        for(i = valuesBegin; i <= valuesEnd; i++)
-        {
-            instanceData->linearConstraintCoefficients->value->el[k] = values[i];
-            k++;
-        }
-    }
+    instanceData->linearConstraintCoefficients->value->numberOfEl = k;
+
     //indexes
-    if(instanceData->linearConstraintCoefficients->rowIdx == NULL) instanceData->linearConstraintCoefficients->rowIdx = new IntVector();
-    if(instanceData->linearConstraintCoefficients->colIdx == NULL) instanceData->linearConstraintCoefficients->colIdx = new IntVector();
     if(isColumnMajor)
     {
-        if(indexesBegin == 0 )
+        if(instanceData->linearConstraintCoefficients->rowIdx == NULL) instanceData->linearConstraintCoefficients->rowIdx = new IntVector();
+        instanceData->linearConstraintCoefficients->rowIdx->el = new int[numberOfValues];
+        k = 0;
+        for(i = indexesBegin; i <= indexesEnd; i++)
         {
-            instanceData->linearConstraintCoefficients->rowIdx->el = indexes;
+            instanceData->linearConstraintCoefficients->rowIdx->el[k] = indexes[i];
+            k++;
         }
-        else
-        {
-            instanceData->linearConstraintCoefficients->rowIdx->el = new int[numberOfValues];
-            int k = 0;
-            for(i = indexesBegin; i <= indexesEnd; i++)
-            {
-                instanceData->linearConstraintCoefficients->rowIdx->el[k] = indexes[i];
-                k++;
-            }
-        }
+        instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = k;
     }
     else
     {
-        if(indexesBegin == 0 )
+        if(instanceData->linearConstraintCoefficients->colIdx == NULL) instanceData->linearConstraintCoefficients->colIdx = new IntVector();
+        instanceData->linearConstraintCoefficients->colIdx->el = new int[numberOfValues];
+        k = 0;
+        for(i = indexesBegin; i <= indexesEnd; i++)
         {
-            instanceData->linearConstraintCoefficients->colIdx->el = indexes;
+            instanceData->linearConstraintCoefficients->colIdx->el[k] = indexes[i];
+            k++;
         }
-        else
-        {
-            instanceData->linearConstraintCoefficients->colIdx->el = new int[numberOfValues];
-            int k = 0;
-            for(i = indexesBegin; i <= indexesEnd; i++)
-            {
-                instanceData->linearConstraintCoefficients->colIdx->el[k] = indexes[i];
-                k++;
-            }
-        }
+        instanceData->linearConstraintCoefficients->colIdx->numberOfEl = k;
     }
     return true;
 }//setLinearConstraintCoefficients
@@ -5828,7 +5809,7 @@ bool Objective::IsEqual(Objective *that)
                 return false;
             if (this->constant != that->constant)
                 return false;
-            if (this->weight != that->weight)
+            if (!isEqual(this->weight, that->weight))
                 return false;
             if (this->numberOfObjCoef != that->numberOfObjCoef)
                 return false;
