@@ -35,7 +35,7 @@
  *   Parse an osil, osol and osrl file
  *   Test convenience methods, reader and writer routines
  *
- * Solver tests (if SOLVER_TESTS == TRUE)
+ * Solver tests (if SOLVER_TESTS == TRUE and the solver in question is available)
  *  
  *   COIN-Clp tested on parincLinearByRow.osil
  * 
@@ -101,8 +101,8 @@
  *   We test the AMPL nl file format to osil converter
  *   program OSnl2osil on parinc.nl and solve with Cbc.
  * 
- *   We test the base 64 format on problem parincLinear.  
- *   We first read in the parinc.mps file into an
+ *   We test the base 64 format on problem parinc.  
+ *   We first read the parinc.mps file into an
  *   osil string and then set m_bWriteBase64 = true. We then
  *   write a new instance in base 64 format and solve it with Cbc.
  * 
@@ -151,8 +151,6 @@
 
 #include <CoinMpsIO.hpp>
 #include <CoinPackedMatrix.hpp>
-
-
 #include "CoinError.hpp"
 #include "CoinHelperFunctions.hpp"
 
@@ -196,7 +194,6 @@
 # endif
 #endif
 
-
 #ifdef HAVE_CMATH
 # include <cmath>
 #else
@@ -204,8 +201,6 @@
 #  include <cmath.h>
 # endif
 #endif
-
-
 
 #ifdef HAVE_CSTDIO
 # include <cstdio>
@@ -324,9 +319,9 @@ int main(int argC, char* argV[])
 
 	/**
 	 *  define commonly used objects and arrays
-	 *  Unless explicitly stated otherwise, each test
-	 *  is responsible for its own memory management 
-	 *  (i.e., new and delete)
+	 *  Unless explicitly stated otherwise,
+	 *  each test is responsible for its own 
+	 *  memory management (i.e., new and delete)
 	 */
 	FileUtil *fileUtil = NULL;  
 #ifdef COIN_HAS_ASL
@@ -2844,6 +2839,7 @@ if (PARSER_TESTS){
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setOtherServiceResultValue: osresult objects falsely compare unequal!");
+
 
 			ok &= osresult1->setOtherServiceResultDescription(i,"ABC 123");
 			if (!ok) 
@@ -5431,6 +5427,7 @@ if (PARSER_TESTS){
 		//errorExample.osrl -- check to see if we read an error message correctly;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest2.osrl"; 
 		osrl = fileUtil->getFileAsString( osrlFileName.c_str() );
+
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
@@ -7980,7 +7977,8 @@ if (OTHER_TESTS){
 	try{
 		std::cout  << "Working with GAMSIO " << std::endl;
 
-		std::string gmsControlFile = "/home/kmartin/bin/gams/23.2/225a/gamscntr.dat";
+		//std::string gmsControlFile = "/home/kmartin/bin/gams/23.2/225a/gamscntr.dat";
+		std::string gmsControlFile = dataDir + "gamsFiles" + dirsep + "gamscntr.dat";
 		gams2osil = new OSgams2osil( gmsControlFile);
  	
 		gams2osil->createOSInstance();
