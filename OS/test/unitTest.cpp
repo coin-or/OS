@@ -321,7 +321,13 @@ int main(int argC, char* argV[])
 	
 	cout << "START UNIT TEST" << endl;
 	int nOfTest = 0;
-	// define the classes
+
+	/**
+	 *  define commonly used objects and arrays
+	 *  Unless explicitly stated otherwise, each test
+	 *  is responsible for its own memory management 
+	 *  (i.e., new and delete)
+	 */
 	FileUtil *fileUtil = NULL;  
 #ifdef COIN_HAS_ASL
 	OSnl2osil *nl2osil = NULL;
@@ -332,12 +338,18 @@ int main(int argC, char* argV[])
 	OSiLWriter *osilwriter = NULL;
 	OSoLReader *osolreader = NULL;
 	OSoLReader *osolreader2 = NULL;
+	OSoLWriter *osolwriter = NULL;
 	OSrLReader *osrlreader = NULL;
 	OSrLWriter *osrlwriter = NULL;
 	OSInstance *osinstance = NULL;
 	OSOption *osoption = NULL;
 	OSOption *osoption2 = NULL;
 	OSOption *osoption3 = NULL;
+	OSResult *osresult = NULL;
+	OSResult *osresult1 = NULL;
+	OSResult *osresult2 = NULL;
+	OSResult *osresult3 = NULL;
+
 
 	//common arrays
 	std::string *nodeNames1 = NULL;
@@ -364,7 +376,6 @@ int main(int argC, char* argV[])
 	dataDir = "C:\\datafiles\\research\\OS\\OS-trunk-work\\OS\\data\\";
 #endif
 
-	fileUtil = new FileUtil();
 
 
 if(BASIC_TESTS == true){
@@ -372,20 +383,26 @@ if(BASIC_TESTS == true){
 	//first make sure we can read files
 	try{
 		std::cout << endl << "TEST " << ++nOfTest << ": Try to read a sample file" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osilwriter = new OSiLWriter();
+
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinearByRow.osil";
 		//osilFileName =  dataDir  + "osilFiles" + dirsep +  "parincLinear.osil";
 		std::cout << "The file is: " ;
 		std::cout <<  osilFileName << std::endl;
 		osil = fileUtil->getFileAsString( osilFileName.c_str() );
 		std::cout << "Done reading the test file" << std::endl;
-		osilreader = new OSiLReader(); 
 		osinstance = osilreader->readOSiL( osil);
 		//osinstance->initForAlgDiff();
 		unitTestResult << "TEST " << nOfTest << ": Reading files successfully" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-		osilwriter = new OSiLWriter();
 		osilwriter->m_bWhiteSpace = true;
 		std::cout << osilwriter->writeOSiL( osinstance) << std::endl;
+
+		delete fileUtil;
+		fileUtil = NULL;
 		delete osilreader;
 		osilreader = NULL;
 		delete osilwriter;
@@ -397,6 +414,11 @@ if(BASIC_TESTS == true){
 		unitTestResultFailure << "Since we can't read files we are terminating"  << endl; 
 		cout << unitTestResultFailure.str() << endl << endl;
 		cout << "Conclusion: FAILURE" << endl;
+		if (fileUtil != NULL)
+		{
+			delete fileUtil;
+			fileUtil = NULL;
+		}
 		if (osilreader != NULL)
 		{
 			delete osilreader;
@@ -413,11 +435,14 @@ if(BASIC_TESTS == true){
 // Make sure we can read and write without loss of precision
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Lossless I/O" << endl << endl;
+
 		osilwriter = new OSiLWriter();
 		osilreader = new OSiLReader();
+
 		//mpsFileName =  dataDir + "mpsFiles" + dirsep + "testfile2.mps";
 		mpsFileName =  dataDir + "mpsFiles" + dirsep + "parinc.mps";
 		mps2osil = new OSmps2osil( mpsFileName);
+
 		// create the first in-memory OSInstance
 		mps2osil->createOSInstance() ;
 		// write the instance to a string
@@ -426,7 +451,7 @@ if(BASIC_TESTS == true){
 #ifdef DEBUG
 		cout << sOSiL << endl;
 #endif
-		///fileUtil->writeFileFromString("p0201.osil", sOSiL);
+
 		// now create a second object
 		OSInstance *osinstance2 = osilreader->readOSiL( sOSiL);
 		// now compare the elements in the A matrix for the two instances
@@ -478,15 +503,14 @@ if(BASIC_TESTS == true){
 	// now test the nonlinear operators	
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": nonlinear operators" << endl << endl;
+
+		osilreader = new OSiLReader();
+		osilwriter = new OSiLWriter();
+    	fileUtil = new FileUtil();
+
 		ok = true;
 		std::string operatorTest =  dataDir  + "osilFiles" + dirsep + "testOperators.osil";
 		osil = fileUtil->getFileAsString( operatorTest.c_str() );
-		OSInstance *osinstance = NULL;
-		//osinstance = new OSInstance();
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();
-		OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
 //		cout << "Read testOperators.osil...";
 		osinstance = osilreader->readOSiL( osil);
 		
@@ -518,8 +542,8 @@ if(BASIC_TESTS == true){
 		osilreader = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
-		//if (osinstance != NULL) delete osinstance;
-		//osinstance = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 
 		if (ok == false) throw ErrorClass(" Problem evaluating expression tree");
 		unitTestResult << "TEST " << nOfTest << ": Successful test of nonlinear operators using file testOperators.osil" << std::endl;
@@ -530,22 +554,29 @@ if(BASIC_TESTS == true){
 		unitTestResultFailure << eclass.errormsg << endl;
 		if (x != NULL)
 			delete[] x;
+        x = NULL;
 		if (nodeNames1 != NULL)
 			delete[] nodeNames1;
+        nodeNames1 = NULL;
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
 		if (osilwriter != NULL)
 			delete osilwriter;
 		osilwriter = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	
 	// Automatic differentiation
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Automatic differentiation" << endl << endl;
-//		std::cout << std::endl << std::endl;
-//		std::cout << "Testing AD Features " << std::endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader();
+
 		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "CppADTestLag.osil";
 		/*
 		min x0^2 + 9*x1   -- w[0]
@@ -556,10 +587,9 @@ if(BASIC_TESTS == true){
 		is part of the nl node
 		*/
 		osil = fileUtil->getFileAsString( expTreeTest.c_str() );
-		OSInstance *osinstance = NULL;
+		//OSInstance *osinstance = NULL;
 		//osinstance = new OSInstance();
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();
+		//OSiLReader *osilreader = NULL;
 		//create an osinstance
 		osinstance = osilreader->readOSiL( osil);
 		double *x;
@@ -607,9 +637,12 @@ if(BASIC_TESTS == true){
 		//ok &= NearEqual( sh->hessValues[ 2], 0., 1e-10, 1e-10);
 		ok = ( fabs(0. - sh->hessValues[2] )/(0. + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 		if(ok == false) throw ErrorClass(" Fail testing Hessian calculation");
-		delete[] x;
+		delete[] x; 
+		x = NULL;
 		delete osilreader;
 		osilreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Successful test of AD gradient and Hessian calculations" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
@@ -618,9 +651,13 @@ if(BASIC_TESTS == true){
 		unitTestResultFailure << eclass.errormsg << endl;
 		if (x != NULL)
 			delete[] x;
+        x = NULL;
 		if (osilreader != NULL)
-		delete osilreader;
+			delete osilreader;
 		osilreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 } // end of if (BASIC_TESTS)
 
@@ -632,12 +669,13 @@ if (PARSER_TESTS){
 //#if 0   //!!!  OSrL parser development
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": Test parsing an OSiL file (parincLinear.osil)" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osilwriter = new OSiLWriter();
+
 		clock_t start, finish;
 		double duration;
-		osilwriter = new OSiLWriter();
-		//delete fileUtil;
-		//fileUtil = NULL;
-		//fileUtil = new FileUtil();
 		cout << "Test parsing a model" << endl;
 		cout << "First read the file into a string" << endl;
 		start = clock();
@@ -646,16 +684,18 @@ if (PARSER_TESTS){
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader(); 
 		start = clock();
 		cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
 		osilreader->readOSiL( osil);
 		//cout << osilwriter->writeOSiL( osilreader->readOSiL( osil)) << endl;
+
 		delete osilreader;
 		osilreader = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
+
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
@@ -673,18 +713,25 @@ if (PARSER_TESTS){
 		if (osilwriter != NULL)
 			delete osilwriter;
 		osilwriter = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	// now test the get() and set() methods in OSInstance
+	// use get() and set() methods to create a second OSInstance object
+	OSInstance *osinstance2 = new OSInstance();
+
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": OSInstance get() and set() methods" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+
 		osilFileName =  dataDir  + "osilFiles" + dirsep +  "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str() );
-		osilreader = new OSiLReader(); 
 		osinstance = osilreader->readOSiL( osil);
 
-		// use get() and set() methods to create a second OSInstance object
-		OSInstance *osinstance2 = new OSInstance();
 
 		// first copy header information
 		std::string name, source, description, fileCreator, licence;
@@ -807,8 +854,8 @@ if (PARSER_TESTS){
 		// now compare the two instances
 		if (!osinstance2->IsEqual(osinstance)) throw ErrorClass("Loss of data during duplication");
 
-                delete osinstance2;
-                osinstance2 = NULL;
+        delete osinstance2;
+        osinstance2 = NULL;
 
 		unitTestResult << "TEST " << nOfTest << ": Passed OSInstance get() and set() methods" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -817,15 +864,23 @@ if (PARSER_TESTS){
 		osilreader = NULL;
 		delete osilwriter;
 		osilwriter = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Unit Test Failed OSInstance get() and set() methods: "  + eclass.errormsg<< endl; 
+		if (osinstance2 != NULL)
+	        delete osinstance2;
+        osinstance2 = NULL;
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
 		if (osilwriter != NULL)
 			delete osilwriter;
 		osilwriter = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 
@@ -854,13 +909,12 @@ if (PARSER_TESTS){
 
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": Stochastic extensions to OSiL" << endl << endl;
+
+		osilreader = new OSiLReader(); 
+		fileUtil = new FileUtil();
+
 		clock_t start, finish;
 		double duration;
-		OSiLWriter *osilwriter = NULL;
-		osilwriter = new OSiLWriter();
-		//delete fileUtil;
-		//fileUtil = NULL;
-		//fileUtil = new FileUtil();
 		cout << "\nTest parsing a stochastic model" << endl;
 		cout << "First read the file into a string" << endl;
 		start = clock();
@@ -869,21 +923,18 @@ if (PARSER_TESTS){
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Reading the file into a string took (seconds): "<< duration << endl;
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader(); 
 		start = clock();
 		cout << "PARSE THE OSIL STRING INTO AN OSINSTANCE OBJECT" << endl;
 		osilreader->readOSiL( osil);
-		//cout << osilwriter->writeOSiL( osilreader->readOSiL( &osil)) << endl;
-		delete osilreader;
-		osilreader = NULL;
-		delete osilwriter;
-		osilwriter = NULL;
 		finish = clock();
 		duration = (double) (finish - start) / CLOCKS_PER_SEC;
 		cout << "Parsing took (seconds): "<< duration << endl;
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSiL parser on problem finplan1.osil" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+		delete osilreader;
+		osilreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 	}	
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -893,19 +944,18 @@ if (PARSER_TESTS){
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
-		if (osilwriter != NULL)
-			delete osilwriter;
-		osilwriter = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 /** --------------------------------
  *  Test the get() and set() methods
  *  --------------------------------**/
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": GET() AND SET() METHODS FOR TimeDomain OBJECT" << endl << endl;
-		OSInstance *osinstance = NULL;
-		//osinstance = new OSInstance();
-		//OSiLReader *osilreader = NULL;
+
 		osilreader = new OSiLReader();
+
 		//create an osinstance
 		osinstance = osilreader->readOSiL( osil);
 		std::string f = osinstance->getTimeDomainFormat();
@@ -1250,10 +1300,6 @@ if (PARSER_TESTS){
 
 	//
 	// Now test the OSoL parser
-	OSoLWriter *osolwriter = NULL;
-//	OSoLReader *osolreader = NULL;
-	//osolwriter = new OSoLWriter();
-	//osolreader = new OSoLReader();
 
 	try{ 
 		/**
@@ -1270,12 +1316,14 @@ if (PARSER_TESTS){
 		 *10) read two more OSoL strings from different files
 		 */
 		cout << endl << "TEST " << ++nOfTest << ": OSoL parser" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osolwriter = new OSoLWriter();
+		osolreader = new OSoLReader();
+
 		std::string tmpOSoL;
 		clock_t start, finish;
 		double duration;
-		osolwriter = new OSoLWriter();
-		osolreader = new OSoLReader();
-		//osoption = new OSOption(); 
 		cout << "Test parsing an OSoL file" << endl;
 		cout << "First read the OSoL file into a string" << endl;
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest.osol"; 
@@ -2097,21 +2145,17 @@ if (PARSER_TESTS){
 		if (!ok)
 			throw ErrorClass(" Loss of information in OSoL write/read");
 
-		cout << "delete osoption2" << endl;
-
 		delete osoption2;
 		osoption2 = NULL;
-
-		cout << "delete osolreader2" << endl;
 		delete osolreader2;
 		osolreader2 = NULL;
-
-		cout << "delete osolwriter" << endl;
 		delete osolwriter;
 		osolwriter = NULL;
-		cout << "delete osolreader" << endl;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
+
 		unitTestResult << 
 		     "TEST " << nOfTest << ": Successful test of OSoL set() and get() methods" 
 		      << std::endl;
@@ -2137,17 +2181,24 @@ if (PARSER_TESTS){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	// a few more smaller examples
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": Parse another .osol file" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osolwriter = new OSoLWriter();
+		osolreader = new OSoLReader();
+
 		std::string tmpOSoL;
 		clock_t start, finish;
 		double duration;
 
-		osolwriter = new OSoLWriter();
-		osolreader = new OSoLReader();
 		start = clock();
 
 		cout << "First read the OSoL file into a string" << endl;
@@ -2163,7 +2214,6 @@ if (PARSER_TESTS){
 		std::cout << "string read; now write again" << std::endl;
 		tmpOSoL = osolwriter->writeOSoL( osoption) ;
 
-
 		std::cout << "object written; delete osolreader" << std::endl;
 
 		delete osolreader;
@@ -2174,11 +2224,16 @@ if (PARSER_TESTS){
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 
 		// a third example
 		cout << "Test parsing another OSoL file" << endl;
+
 		osolwriter = new OSoLWriter();
 		osolreader = new OSoLReader();
+    	fileUtil = new FileUtil();
+
 		cout << "First read the OSoL file into a string" << endl;
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertest3.osol"; 
 		osol = fileUtil->getFileAsString( osolFileName.c_str() );
@@ -2196,31 +2251,38 @@ if (PARSER_TESTS){
 		osolwriter = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 
 
 		// a trivial string
 		cout << "Test parsing a trivial string" << endl;
+
 		osolreader = new OSoLReader();
+
 		osol = "<osol></osol>";
 		cout << "Parse the OSoL string into an OSOption object" << endl;
 		osoption = osolreader->readOSoL( osol);
 		delete osolreader;
 		osolreader = NULL;
 
-
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSoL parser" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
 	
 	catch(const ErrorClass& eclass){
-		cout << endl << endl << endl;
-		if(osolwriter != NULL) delete osolwriter;
-		osolwriter = NULL;
-		if(osolreader != NULL) delete osolreader;
-		osolreader = NULL;
-		// " Problem with the test reading OSoL data";
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
+
+		if(osolwriter != NULL) 
+			delete osolwriter;
+		osolwriter = NULL;
+		if(osolreader != NULL) 
+			delete osolreader;
+		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 //#endif //!!!  end of #if 0: OSrL parser development
@@ -2234,18 +2296,15 @@ if (PARSER_TESTS){
  *  after the second object has been updated in the same way, the objects should 
  *  again be equal.
  */
-	OSResult *osresult;
-	OSResult *osresult1 = new OSResult();
-	OSResult *osresult2 = new OSResult();
-	OSResult *osresult3 = NULL;
-
 	int* intArray;
 	intArray = new int[3];
 	int* tempArray = new int[3];
 
-//#ifdef TEMP   //---------------------------for the time being----------------------------------
 	try{ 
 		cout << endl << "TEST " << ++nOfTest << ": OSrL set() tools" << endl << endl;
+
+		osresult1 = new OSResult();
+		osresult2 = new OSResult();
 
 		ok = true;
 		ok &= (osresult1->IsEqual(osresult2));
@@ -3537,6 +3596,7 @@ if (PARSER_TESTS){
 			ok &= osresult2->setOtherVariableResultName(i,2,"other");
 			if (!ok) 
 				throw ErrorClass("Error during setOtherVariableResultName!");
+
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setOtherVariableResultName: osresult objects falsely compare unequal!");
@@ -3602,9 +3662,6 @@ if (PARSER_TESTS){
 			}
 
 
-//==========================================================================================
-
-
 			ok &= osresult1->setNumberOfObjValues(i,2);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfObjValues!");
@@ -3637,7 +3694,6 @@ if (PARSER_TESTS){
 			intArray[1] = -1000*i - 1200 - 10 - 2;
 			intArray[2] = -1000*i - 1200 - 10 - 3;
 
-//===============================================
 			ok &= osresult1->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_basic, intArray, 3);
 			if (!ok) 
 				throw ErrorClass("Error during setBasisStatus (objectives basic)!");
@@ -3739,8 +3795,6 @@ if (PARSER_TESTS){
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setBasisStatus (objectives unknown): osresult objects falsely compare unequal!");
-
-//===============================================
 
 			ok &= osresult1->setNumberOfOtherObjectiveResults(i,3);
 			if (!ok) 
@@ -3914,7 +3968,6 @@ if (PARSER_TESTS){
 			}
 
 
-//==========================================================================================
 			ok &= osresult1->setNumberOfDualValues(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfDualValues!");
@@ -3943,8 +3996,6 @@ if (PARSER_TESTS){
 				if (!ok) 
 					throw ErrorClass("setDualValue: osresult objects falsely compare unequal!");
 			}
-//==============================
-
 
 			intArray[0] = 1000*i + 1300 + 10 + 1;
 			intArray[1] = 1000*i + 1300 + 10 + 2;
@@ -4051,7 +4102,7 @@ if (PARSER_TESTS){
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setBasisStatus (constraints unknown): osresult objects falsely compare unequal!");
-//=================================
+
 			ok &= osresult1->setNumberOfOtherConstraintResults(i,3);
 			if (!ok) 
 				throw ErrorClass("Error during setNumberOfOtherConstraintResults!");
@@ -4224,8 +4275,6 @@ if (PARSER_TESTS){
 					throw ErrorClass("setOtherOptionEnumeration: osresult objects falsely compare unequal!");
 			}
 
-
-//==========================================================================================
 
 			ok &= osresult1->setNumberOfOtherSolutionResults(i,3);
 			if (!ok) 
@@ -5156,7 +5205,6 @@ if (PARSER_TESTS){
 
 				for (int k=0; k < nEnum; ++k)
 				{
-//	                if (tempArray != NULL) delete[] tempArray;
 					tempStr1  = osresult1->getOtherConstraintResultEnumerationValue(i,j,k);
 					tempStr2  = osresult1->getOtherConstraintResultEnumerationDescription(i,j,k);
 					tempInt   = osresult1->getOtherConstraintResultEnumerationNumberOfEl(i,j,k);
@@ -5253,7 +5301,6 @@ if (PARSER_TESTS){
 //		osresult = NULL;
 		if (tempArray  != NULL) delete[] tempArray;
 		tempArray = NULL;
-//#endif    //#ifdef TEMP   //---------------------------for the time being----------------------------------
 
 		unitTestResult << "TEST " << nOfTest << ": Successful test of OSrL tools" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -5277,7 +5324,6 @@ if (PARSER_TESTS){
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test of OSrL get() methods" << endl;
 	}
-//#endif    //#ifdef TEMP   //---------------------------for the time being----------------------------------
 
 	// Now test the OSrL parser
 	try{ 
@@ -5292,12 +5338,15 @@ if (PARSER_TESTS){
 		 * to make sure empty elements are handled properly. 
 		 */
 		cout << endl << "TEST " << ++nOfTest << ": OSrL parser" << endl << endl;
+
+		osrlwriter = new OSrLWriter();
+		osrlreader = new OSrLReader();
+		fileUtil   = new FileUtil();
+
 		std::string tmpOSrL;
 		clock_t start, finish;
 		double duration;
 		std::string osrl;
-		osrlwriter = new OSrLWriter();
-		osrlreader = new OSrLReader();
 		cout << "Test parsing an OSrL file" << endl;
 		cout << "First read the OSrL file into a string" << endl;
 		osrlFileName = dataDir  + "osrlFiles" + dirsep + "parserTest.osrl"; 
@@ -5326,6 +5375,8 @@ if (PARSER_TESTS){
 		osrlwriter = NULL;
 		delete osrlreader;
 		osrlreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 
 
 /*		// now a second example
@@ -5595,16 +5646,18 @@ if (PARSER_TESTS){
 		      << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}	
-	catch(const ErrorClass& eclass){
+	catch(const ErrorClass& eclass)
+	{
+		unitTestResultFailure << eclass.errormsg << endl;
+		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
 
-		cout << endl << endl << endl;
 		if(osrlwriter != NULL) delete osrlwriter;
 		osrlwriter = NULL;
 		if(osrlreader != NULL) delete osrlreader;
 		osrlreader = NULL;
-		// " Problem with the test reading OSrL data";
-		unitTestResultFailure << eclass.errormsg << endl;
-		unitTestResultFailure << "There was a failure in the test for reading OSrL" << endl;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	if (intArray !=NULL) 
@@ -5619,6 +5672,14 @@ if (PARSER_TESTS){
 if (SOLVER_TESTS){
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Clp solver on parincLinearByRow.osil" << endl << endl;
+
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+		osilwriter = new OSiLWriter();
+		osrlreader =  new OSrLReader();
+    	fileUtil = new FileUtil();
+
 		ok = true; 
 		std::cout << "create a new COIN Clp for OSiL string solution" << std::endl;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinearByRow.osil";
@@ -5626,16 +5687,10 @@ if (SOLVER_TESTS){
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 
-		std::cout << "create a new Solver object" << std::endl;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName = "clp";
 		solver->osinstance = osilreader->readOSiL( osil);
 		std::cout << " Done reading the OSiL" << std::endl;
 		// now write it again as a string
-		OSiLWriter *osilwriter;
-		osilwriter = new OSiLWriter();
 		osilwriter->m_bWhiteSpace = true;
 		std::cout << " Write the OSiL" << std::endl;
 		osil = osilwriter->writeOSiL( solver->osinstance) ;
@@ -5662,7 +5717,6 @@ if (SOLVER_TESTS){
 		}
 		if(ok == false) throw ErrorClass(" Fail unit test with clp on parincLinearByRow.osil");
 		// parse the osrl file
-		osrlreader =  new OSrLReader();
 #ifdef DEBUG
 		cout << "\nThe osrl file:\n" << solver->osrl << endl;
 		cout << "Start parsing the file" << endl;
@@ -5696,6 +5750,9 @@ if (SOLVER_TESTS){
 #ifdef DEBUG
 		cout << "osrlreader successfully deleted" << endl;
 #endif		
+		delete fileUtil;
+		fileUtil = NULL;
+
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinearByRow.osil with Clp" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -5717,11 +5774,20 @@ if (SOLVER_TESTS){
 		if (osrlreader != NULL)
 			delete osrlreader;
 		osrlreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	// now solve another problem -- try an integer program
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+
 		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
@@ -5729,9 +5795,6 @@ if (SOLVER_TESTS){
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		//osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osol = "";
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName ="cbc";
 		solver->osil = osil;
 		solver->osol = osol;  
@@ -5760,6 +5823,8 @@ if (SOLVER_TESTS){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -5774,6 +5839,9 @@ if (SOLVER_TESTS){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 if( THOROUGH == true){
@@ -5781,6 +5849,12 @@ if( THOROUGH == true){
 	// now solve the same problem with a different instance representation --- using mult and incr
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033MULT.osil" << endl << endl;
+
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+    	fileUtil = new FileUtil();
+
 		std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033MULT.osil";
@@ -5788,9 +5862,6 @@ if( THOROUGH == true){
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		//osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osol = "";
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName ="cbc";
 		solver->osil = osil;
 		solver->osol = osol;  
@@ -5819,6 +5890,8 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033MULT.osil with Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -5833,21 +5906,26 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 
 	// now test p0201.osil
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0033.osil - node limit set" << endl << endl;
-		//std::cout << "create a new COIN Cbc for OSiL string solution" << std::endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cbc.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName ="cbc";
 		solver->osil = osil;
 		solver->osol = osol;  
@@ -5869,6 +5947,8 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with Cbc node limit" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -5883,21 +5963,27 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on p0201.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0201.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "p0201_cbc.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver = new CoinSolver();
 		solver->sSolverName ="cbc";
 		solver->osil = osil;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		solver->osol = osol;  
 		solver->osinstance = NULL; 
 		solver->osoption   = NULL;
@@ -5920,6 +6006,8 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem p0201.osil with Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -5934,19 +6022,24 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver on parincInteger.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincInteger.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parincInteger_cbc.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-
-		solver = new CoinSolver();
 		solver->sSolverName ="cbc";
 		cout << "parse OSiL file" << endl;
 		solver->osinstance = osilreader->readOSiL( osil);
@@ -5974,6 +6067,8 @@ if( THOROUGH == true){
 		osolreader = NULL;	
 		delete solver;
 		solver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincInteger.osil with Cbc" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -5988,19 +6083,25 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 }	// end of if(THOROUGH)
 
 #ifdef COIN_HAS_SYMPHONY
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": SYMPHONY solver on p0033.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_sym.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName = "symphony";
 		solver->osil = osil;
 		solver->osinstance = NULL; 
@@ -6028,6 +6129,8 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osolreader;
 		osolreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with SYMPHONY" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6039,6 +6142,9 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 #endif
 	
@@ -6047,13 +6153,16 @@ if( THOROUGH == true){
 #ifdef COIN_HAS_DYLP
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": DyLP solver on parincLinear.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		solver = new CoinSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parincLinear_dylp.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName = "dylp";
 		solver->osol = osol;   
 		solver->osinstance = osilreader->readOSiL( osil);
@@ -6079,6 +6188,8 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osilreader;
 		osilreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with DyLP" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6092,6 +6203,9 @@ if( THOROUGH == true){
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 #endif
 	
@@ -6099,13 +6213,16 @@ if( THOROUGH == true){
 #ifdef COIN_HAS_VOL
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Vol solver on volumeTest.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "volumeTest.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "volumeTest_vol.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName = "vol";
 		solver->osil = osil;
 		solver->osinstance = NULL; 
@@ -6132,6 +6249,8 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osolreader;
 		osolreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem volumeTest.osil with Vol" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6145,20 +6264,26 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 #endif
 	
 #ifdef COIN_HAS_GLPK
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": GLPK solver on p0033.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new CoinSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_glpk.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new CoinSolver();
 		solver->sSolverName = "glpk";
 		solver->osinstance = osilreader->readOSiL( osil);
 		solver->osoption   = osolreader->readOSoL( osol);
@@ -6186,6 +6311,8 @@ if( THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with GLPK" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6202,6 +6329,9 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 #endif
 	
@@ -6210,12 +6340,15 @@ if( THOROUGH == true){
 #ifdef COIN_HAS_CPX
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cplex solver on p0033.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		solver = new CoinSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "p0033.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "p0033_cpx.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver = new CoinSolver();
 		solver->sSolverName = "cplex";
 		solver->osil = osil;
 		solver->osol = osol;  
@@ -6240,6 +6373,8 @@ if( THOROUGH == true){
 		if(ok == false) throw ErrorClass(" Fail unit test with CPLEX on p0033.osil");
 		delete solver;
 		solver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem p0033.osil with CPLEX" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6250,6 +6385,9 @@ if( THOROUGH == true){
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 #endif
 	
@@ -6259,7 +6397,12 @@ if( THOROUGH == true){
 	IpoptSolver *ipoptSolver  =  NULL;	
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with avion2.osil" << endl << endl;
-	    ipoptSolver  = new IpoptSolver();
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ipoptSolver  = new IpoptSolver();
+
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
 		ok = true;
 		// avion does not work with Mumps on AIX xlC compiler
@@ -6270,8 +6413,6 @@ if( THOROUGH == true){
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 		ipoptSolver->osol = osol;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		ipoptSolver->osol = osol;
 		cout << "call the IPOPT Solver" << endl;	
@@ -6298,6 +6439,8 @@ if( THOROUGH == true){
 		osolreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem avion2.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 #endif
@@ -6313,6 +6456,9 @@ if( THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 if(THOROUGH == true){
@@ -6320,16 +6466,19 @@ if(THOROUGH == true){
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver with HS071_NLPMod.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver  = new IpoptSolver();
-		// a problem with all nonlinear terms no linear terms
+
+		// a problem with all nonlinear terms, no linear terms
 		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_NLPMod.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_NLPMod_ipopt.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
 //		osol = "<osol></osol>";
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		ipoptSolver->osol = osol;
@@ -6356,6 +6505,8 @@ if(THOROUGH == true){
 		osolreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_NLP.osil");
 		unitTestResult << "TEST " << nOfTest << ": Solved problem HS071.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -6371,21 +6522,27 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	try{
-		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockmod.osil" << endl << endl;
-		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
-		ipoptSolver  = new IpoptSolver();
 		// solve another problem
 		// a problem with both quadratic terms and general nonlinear terms
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockmod.osil" << endl << endl;
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ipoptSolver  = new IpoptSolver();
+
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockmod_ipopt.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		ipoptSolver->osil     = osil;
 		ipoptSolver->osoption = osolreader->readOSoL( osol);
 		cout << "call the IPOPT Solver" << endl;
@@ -6413,6 +6570,8 @@ if(THOROUGH == true){
 		osolreader = NULL;
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockmod.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 		//return 0;
@@ -6428,21 +6587,27 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	try{
-		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincQuadratic.osil" << endl << endl;
-		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
-		ipoptSolver  = new IpoptSolver();
 		// solve another problem
 		// a problem that is a pure quadratic
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincQuadratic.osil" << endl << endl;
+		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		ipoptSolver  = new IpoptSolver();
+
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parincQuadratic_ipopt.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		ipoptSolver->osil = osil;
 		ipoptSolver->osol = osol;
@@ -6470,6 +6635,8 @@ if(THOROUGH == true){
 		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6484,21 +6651,27 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
+	// solve another problem
+	// try a pure linear program
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on parincLinear.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver  = new IpoptSolver();
-		// solve another problem
-		// try a pure linear program
+
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincLinear.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parincLinear_ipopt.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		ipoptSolver->osoption   = NULL;
 		ipoptSolver->osol = ""; 
@@ -6526,6 +6699,8 @@ if(THOROUGH == true){
 		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincLinear.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6540,21 +6715,27 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
+		// solve another problem
+		// callBackTest.osil
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on callBackTest.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver  = new IpoptSolver();
-		// solve another problem
-		// callBackTest.osil
+
 		osilFileName = dataDir  + "osilFiles" + dirsep + "callBackTest.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "callBackTest_ipopt.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = osilreader->readOSiL( osil);
 		ipoptSolver->osoption   = osolreader->readOSoL( osol);
 		ipoptSolver->osol = osol;
@@ -6582,6 +6763,8 @@ if(THOROUGH == true){
 		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem callBackTest.osil with Ipopt" << std::endl;	
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6596,21 +6779,27 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
+	// solve another problem
+	// callBackTest.osil
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on callBackTestRowMajor.osil" << endl << endl;
 		cout << "create a new IPOPT Solver for OSiL string solution" << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
 		ipoptSolver  = new IpoptSolver();
-		// solve another problem
-		// callBackTest.osil
+
 		osilFileName =  dataDir  + "osilFiles" + dirsep + "callBackTestRowMajor.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "callBackTestRowMajor_ipopt.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		cout << "IPOPT Solver created for OSiL string solution" << endl;
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
 		ipoptSolver->osinstance = NULL;
 		ipoptSolver->osoption   = NULL;
 		ipoptSolver->osil = osil;
@@ -6639,6 +6828,8 @@ if(THOROUGH == true){
 		osolreader = NULL;	
 		delete ipoptSolver;
 		ipoptSolver = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem callBackRowMajor.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6653,20 +6844,25 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on rosenbrockorig.osil" << endl << endl;
-//		OSiLReader *osilreader = NULL;
+
+    	fileUtil = new FileUtil();
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
+		ipoptSolver = new IpoptSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
 //		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockorig_Ipopt.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 //		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osol = "";
-		ipoptSolver = new IpoptSolver();
 		ipoptSolver->sSolverName = "ipopt";
 		ipoptSolver->osil = osil;
 		ipoptSolver->osol = osol; 
@@ -6702,6 +6898,8 @@ if(THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6716,20 +6914,24 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
 		try {
-			//osilreader = new OSiLReader(); 
-			//osolreader = new OSoLReader(); 
+
+	    	fileUtil = new FileUtil();
+			ipoptSolver = new IpoptSolver();
+
 			ok = true; 
 			osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_feas.osil";
 //			osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_feas_Ipopt.osol";
 			osil = fileUtil->getFileAsString( osilFileName.c_str());
 //			osol = fileUtil->getFileAsString( osolFileName.c_str());
 			osol = "";
-			ipoptSolver = new IpoptSolver();
 			ipoptSolver->sSolverName = "ipopt";
 			ipoptSolver->osil = osil;
 			ipoptSolver->osol = osol; 
@@ -6754,10 +6956,8 @@ if(THOROUGH == true){
 	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
-		//delete osilreader;
-		osilreader = NULL;
-		//delete osolreader;
-		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 
 		unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed problem HS071_feas with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
@@ -6773,6 +6973,9 @@ if(THOROUGH == true){
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 } // end of if( THOROUGH)
 #endif // end of #ifdef COIN_HAS_IPOPT
@@ -6781,15 +6984,17 @@ if(THOROUGH == true){
 #ifdef COIN_HAS_BONMIN
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on bonminEx1.osil" << endl << endl;
-//		OSiLReader *osilreader = NULL;
+
+    	fileUtil = new FileUtil();
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
+		solver = new BonminSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Bonmin.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver = new BonminSolver();
 		//solver->sSolverName = "bonmin";
 //		solver->osinstance = osilreader->readOSiL( osil);
 		solver->osil = osil;
@@ -6818,6 +7023,8 @@ if(THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6832,18 +7039,24 @@ if(THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 if (THOROUGH == true){
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on wayneQuadratic.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		solver = new BonminSolver();	
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "wayneQuadratic_Bonmin1.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		solver = new BonminSolver();	
 		solver->osol = osol;
 		solver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the Bonmin Solver for wayneQuadratic" << endl;
@@ -6869,6 +7082,8 @@ if (THOROUGH == true){
 		solver = NULL;
 		delete osilreader;
 		osilreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6880,18 +7095,24 @@ if (THOROUGH == true){
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on wayneQuadratic.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		osolreader = new OSoLReader(); 
+		solver = new BonminSolver();	
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "wayneQuadratic_Bonmin2.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
-		solver = new BonminSolver();	
 		solver->osol = osol;
 		solver->osinstance = osilreader->readOSiL( osil);
 		solver->osoption   = osolreader->readOSoL( osol);
@@ -6920,6 +7141,8 @@ if (THOROUGH == true){
 		osilreader = NULL;	
 		delete osolreader;
 		osolreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6934,20 +7157,23 @@ if (THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorig.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		solver = new BonminSolver();	
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
-//		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
-//		osolreader = new OSoLReader(); 
-		solver = new BonminSolver();	
 		solver->osol = "";
 		solver->osinstance = osilreader->readOSiL( osil);
-//		solver->osoption   = osolreader->readOSoL( osol);
 		cout << "build solver instance" << endl;
 		solver->buildSolverInstance();
 		cout << "call the Bonmin Solver for rosenbrockorig" << endl;
@@ -6972,8 +7198,8 @@ if (THOROUGH == true){
 		solver = NULL;
 		delete osilreader;
 		osilreader = NULL;	
-		delete osolreader;
-		osolreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -6985,24 +7211,25 @@ if (THOROUGH == true){
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
-		if (osolreader != NULL)
-			delete osolreader;
-		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Bonmin solver on rosenbrockorigInt.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		solver = new BonminSolver();	
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorigInt.osil";
-//		osolFileName = dataDir  + "osolFiles" + dirsep + "wayneQuadratic_Bonmin2.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
-//		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osilreader = new OSiLReader(); 
-//		osolreader = new OSoLReader(); 
 		solver = new BonminSolver();	
 		solver->osol = "";
 		solver->osinstance = osilreader->readOSiL( osil);
-//		solver->osoption   = osolreader->readOSoL( osol);
 		cout << "call the Bonmin Solver for rosenbrockinteger" << endl;
 		solver->buildSolverInstance();
 		solver->solve();
@@ -7024,8 +7251,8 @@ if (THOROUGH == true){
 		solver = NULL;
 		delete osilreader;
 		osilreader = NULL;	
-		delete osolreader;
-		osolreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorigInt.osil with Bonmin" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7037,9 +7264,9 @@ if (THOROUGH == true){
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
-		if (osolreader != NULL)
-			delete osolreader;
-		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 }   // end of if( THOROUGH )
 #endif   // end of #ifdef COIN_HAS_BONMIN
@@ -7047,20 +7274,21 @@ if (THOROUGH == true){
 
 
 #ifdef COIN_HAS_COUENNE
+	CouenneSolver *solver = NULL;
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1.osil" << endl << endl;
-		CouenneSolver *solver = NULL;
 
-//		OSiLReader *osilreader = NULL;
+    	fileUtil = new FileUtil();
+		solver = new CouenneSolver();
 		osilreader = new OSiLReader(); 
-		osolreader = new OSoLReader(); 
+		osolreader = new OSoLReader();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver = new CouenneSolver();
-		solver->sSolverName = "bonmin";
+		solver->sSolverName = "couenne";
 		solver->osil = osil;
 		solver->osol = osol; 
 //		solver->osinstance = osilreader->readOSiL( osil);
@@ -7093,6 +7321,8 @@ if (THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1.osil with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7102,7 +7332,6 @@ if (THOROUGH == true){
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the Couenne Solver:"  + eclass.errormsg << endl;
 		if (solver != NULL)
 			delete solver;
-
 		solver = NULL;
 		if (osilreader != NULL)
 			delete osilreader;
@@ -7110,21 +7339,26 @@ if (THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 	
 if( THOROUGH == true){
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on bonminEx1_Nonlinear.osil" << endl << endl;
-//		OSiLReader *osilreader = NULL;
+
+    	fileUtil = new FileUtil();
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
+		solver = new CouenneSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "bonminEx1_Nonlinear.osil";
 //		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 //		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osol = "";
-		solver = new CouenneSolver();
 		solver->osil = osil;
 		solver->osol = osol; 
 
@@ -7158,6 +7392,8 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem bonminEx1_Nonlinear with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7172,20 +7408,25 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on nonconvex.osil" << endl << endl;
-//		OSiLReader *osilreader = NULL;
+
+    	fileUtil = new FileUtil();
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
+		solver = new CouenneSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "nonconvex.osil";
 //		osolFileName = dataDir  + "osolFiles" + dirsep + "bonminEx1_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 //		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osol = "";
-		solver = new CouenneSolver();
 		solver->osil = osil;
 		solver->osol = osol; 
 //		solver->osinstance = osilreader->readOSiL( osil);
@@ -7218,6 +7459,8 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem nonconvex.osil with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7232,20 +7475,25 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on rosenbrockorig.osil" << endl << endl;
-//		OSiLReader *osilreader = NULL;
+
+    	fileUtil = new FileUtil();
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
+		solver = new CouenneSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorig.osil";
 //		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockorig_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 //		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osol = "";
-		solver = new CouenneSolver();
 		solver->osil = osil;
 		solver->osol = osol; 
 //		solver->osinstance = osilreader->readOSiL( osil);
@@ -7278,6 +7526,8 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockorig.osil with Couenne" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7292,13 +7542,19 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on wayneQuadratic.osil" << endl << endl;
-//		OSiLReader *osilreader = NULL;
+
+    	fileUtil = new FileUtil();
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
+		solver = new CouenneSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		
@@ -7306,7 +7562,6 @@ if( THOROUGH == true){
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 //		osol = fileUtil->getFileAsString( osolFileName.c_str());
 		osol = "";
-		solver = new CouenneSolver();
 		solver->osinstance = NULL;
 		solver->osil = osil;
 		solver->osol = osol; 
@@ -7332,7 +7587,7 @@ if( THOROUGH == true){
 		{	cout << "Couenne solver solution for wayneQuadratic in error:" << endl;
 			cout << solver->osrl << endl;
 		}
-		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on rosenbrockinteger.osil");
+		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on wayneQuadratic.osil");
 
 		delete solver;
 		solver = NULL;
@@ -7340,7 +7595,9 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
-		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Couenne" << std::endl;
+		delete fileUtil;
+		fileUtil = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic.osil with Couenne (default settings)" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -7354,20 +7611,25 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	OSrLWriter *tmp_writer = NULL;
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on wayneQuadratic.osil" << endl << endl;
-//		OSiLReader *osilreader = NULL;
+
+    	fileUtil = new FileUtil();
 		osilreader = new OSiLReader(); 
 		osolreader = new OSoLReader(); 
+		solver = new CouenneSolver();
+
 		ok = true; 
 		osilFileName = dataDir  + "osilFiles" + dirsep + "wayneQuadratic.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "wayneQuadratic_Couenne.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver = new CouenneSolver();
 		solver->osil = osil;
 		solver->osol = osol; 
 		cout << "call the COIN - Couenne Solver for wayneQuadratic.osil" << endl;
@@ -7378,7 +7640,6 @@ if( THOROUGH == true){
 	
 		cout << "Here is the Couenne solver solution for wayneQuadratic" << endl;
 
-//		OSrLWriter *tmp_writer;
 		tmp_writer = new OSrLWriter();
 		solver->osrl = tmp_writer->writeOSrL(solver->osresult);
 		delete tmp_writer;
@@ -7389,7 +7650,7 @@ if( THOROUGH == true){
 		if(pos == std::string::npos)  
 		{
 			cout << solver->osrl << endl << endl;
-			throw ErrorClass(" Error with wayneQuadratic running on Couenne");
+			throw ErrorClass(" Error with wayneQuadratic.osil running on Couenne (incorrect diagnostics)");
 		}
 #ifdef DEBUG
 		else
@@ -7403,7 +7664,9 @@ if( THOROUGH == true){
 		osilreader = NULL;
 		delete osolreader;
 		osolreader = NULL;
-		unitTestResult << "TEST " << nOfTest << ": Solved problem wayneQuadratic with Couenne" << std::endl;
+		delete fileUtil;
+		fileUtil = NULL;
+		unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed wayneQuadratic.osil with Couenne (limit exceeded)" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -7417,6 +7680,9 @@ if( THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 } //end of if (THOROUGH)
 #endif // end of #ifdef COIN_HAS_COUENNE
@@ -7426,14 +7692,17 @@ if( THOROUGH == true){
 #ifdef COIN_HAS_LINDO
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on lindoapiaddins.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader(); 
+		solver = new LindoSolver();	
+
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "lindoapiaddins.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "lindoapiaddins_lindo.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osilreader = new OSiLReader(); 
 		cout << "create a new LINDO Solver for OSiL string solution" << endl;
-		solver = new LindoSolver();	
 		solver->osinstance = osilreader->readOSiL( osil);
 		solver->osol = osol;
 		cout << "call the LINDO Solver" << endl;
@@ -7459,6 +7728,8 @@ if( THOROUGH == true){
 		solver = NULL;
 		delete osilreader;
 		osilreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem lindoapiaddins.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7472,17 +7743,23 @@ if( THOROUGH == true){
 		if (osilreader != NULL)
 			delete osilreader;
 		osilreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 if (THOROUGH == true){
 	try{
 		// now solve the rosenbrock problem from the OSiL paper
 		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on rosenbrockmod.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		solver = new LindoSolver();	
+
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "rosenbrockmod_lindo.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		solver = new LindoSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
 		solver->osinstance = NULL;
@@ -7507,6 +7784,8 @@ if (THOROUGH == true){
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem rosenbrockmod.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7515,17 +7794,23 @@ if (THOROUGH == true){
 		if (solver != NULL)
 			delete solver;
 		solver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
 		// now solve a pure quadratic
 		cout << endl << "TEST " << ++nOfTest << ": Lindo solver on parincQuadratic.osil" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osolreader = new OSoLReader(); 
+		solver = new LindoSolver();	
+
 		osilFileName = dataDir  + "osilFiles" + dirsep + "parincQuadratic.osil";
 		osolFileName = dataDir  + "osolFiles" + dirsep + "parincQuadratic_lindo.osol";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
 		osol = fileUtil->getFileAsString( osolFileName.c_str());
-		osolreader = new OSoLReader(); 
-		solver = new LindoSolver();	
 		solver->osil = osil;
 		solver->osol = osol;
 		solver->osinstance = NULL;
@@ -7552,6 +7837,8 @@ if (THOROUGH == true){
 		solver = NULL;
 		delete osolreader;
 		osolreader = NULL;	
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Solved problem parincQuadratic.osil with Lindo" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
@@ -7563,6 +7850,9 @@ if (THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}	
 
 	try{
@@ -7627,14 +7917,16 @@ if (THOROUGH == true){
 if (OTHER_TESTS){
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Cbc solver using MPS file" << endl << endl;
+
+		mpsFileName = dataDir +  "mpsFiles" + dirsep + "parinc.mps";
+		mps2osil = new OSmps2osil( mpsFileName);
+		solver = new CoinSolver();
+
 		ok = true;
 //		cout << endl;
 //		cout << "Start testing MPS file conversion" << endl << endl;
 		cout << "create a COIN Solver for MPS - OSInstance solution" << endl;
-		solver = new CoinSolver();
 		solver->sSolverName = "cbc";
-		mpsFileName = dataDir +  "mpsFiles" + dirsep + "parinc.mps";
-		mps2osil = new OSmps2osil( mpsFileName);
 		mps2osil->createOSInstance() ;
 		solver->osinstance = mps2osil->osinstance;
 		osol = "<osol></osol>";
@@ -7684,14 +7976,13 @@ if (OTHER_TESTS){
 
 #if  0
 #ifdef COIN_HAS_GAMSUTILS
+	OSgams2osil *gams2osil;
 	try{
 		std::cout  << "Working with GAMSIO " << std::endl;
 
 		std::string gmsControlFile = "/home/kmartin/bin/gams/23.2/225a/gamscntr.dat";
-
-  	
-		OSgams2osil *gams2osil;
 		gams2osil = new OSgams2osil( gmsControlFile);
+ 	
 		gams2osil->createOSInstance();
 		std::cout << gams2osil->osinstance->printModel() << std::endl;
 		std::cout  << "Done Working with GAMSIO " << std::endl;
@@ -7711,12 +8002,14 @@ if (OTHER_TESTS){
 #ifdef COIN_HAS_ASL
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": AMPL solver interface" << endl << endl;
-		ok = true;
-		cout << "create a cbc Solver for AMPL nl - OSInstance solution" << endl;
-		solver = new CoinSolver();
-		solver->sSolverName = "cbc";
+
 		nlFileName  = dataDir + "amplFiles" + dirsep + "parinc.nl";
 		nl2osil = new OSnl2osil( nlFileName); 
+		solver = new CoinSolver();
+
+		ok = true;
+		cout << "create a cbc Solver for AMPL nl - OSInstance solution" << endl;
+		solver->sSolverName = "cbc";
 		nl2osil->createOSInstance() ;
 		solver->osinstance = nl2osil->osinstance;	
 
@@ -7747,7 +8040,6 @@ if (OTHER_TESTS){
 		solver->osinstance = NULL;
 		delete solver;
 		solver = NULL;
-		//cout << "call delete nl2osil" << endl;
 		delete nl2osil;
 		nl2osil = NULL;	
 		unitTestResult << "TEST " << nOfTest << ": Test the AMPL nl -> OSiL converter on parinc.nl using Cbc" << std::endl; 
@@ -7772,18 +8064,20 @@ if (OTHER_TESTS){
 	//
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": b64 operations" << endl << endl;
+
+		mpsFileName = dataDir +  "mpsFiles" + dirsep + "parinc.mps";
+		mps2osil = new OSmps2osil( mpsFileName);
+		solver = new CoinSolver();
+
 		ok = true;
 		OSiLWriter osilwriter;
 		osilwriter.m_bWriteBase64 = true;
-		solver = new CoinSolver();
 		solver->sSolverName = "cbc";
-		mpsFileName = dataDir +  "mpsFiles" + dirsep + "parinc.mps";
-		mps2osil = new OSmps2osil( mpsFileName);
 		solver->osinstance = NULL;
 		osol = "<osol></osol>";
 		solver->osol = osol;
-		mps2osil->createOSInstance() ;
-		solver->osil = osilwriter.writeOSiL( mps2osil->osinstance) ;
+		mps2osil->createOSInstance();
+		solver->osil = osilwriter.writeOSiL( mps2osil->osinstance);
 		//std::cout << solver->osil << std::endl;
 		solver->buildSolverInstance();
 		solver->solve();
@@ -7829,12 +8123,12 @@ if (OTHER_TESTS){
 	// now test postfix and prefix routines
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": postfix and prefix routines" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osilreader = new OSiLReader();
+
 		std::string expTreeTest =  dataDir  + "osilFiles" + dirsep + "rosenbrockmod.osil";
 		osil = fileUtil->getFileAsString( expTreeTest.c_str() ) ;
-		OSInstance *osinstance = NULL;
-		//osinstance = new OSInstance();
-		OSiLReader *osilreader = NULL;
-		osilreader = new OSiLReader();
 		//create an osinstance
 		osinstance = osilreader->readOSiL( osil);
 		OSExpressionTree* expTree = osinstance->getNonlinearExpressionTree( -1);
@@ -7874,18 +8168,16 @@ if (OTHER_TESTS){
 			if( nodeNames1[i] != nodeNames2[ i]) throw ErrorClass(" Problem with creating expression trees");
 		}	
 		
-		//delete osinstance;
 		delete[] nodeNames1;
 		nodeNames1 = NULL;
 		delete[] nodeNames2; 
 		nodeNames2 = NULL;
-
 		delete osilreader;
 		osilreader = NULL;
-		osinstance = NULL;		
+		delete fileUtil;
+		fileUtil = NULL;
 		unitTestResult << "TEST " << nOfTest << ": Successful test of prefix and postfix conversion routines" << std::endl;
-		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
-		
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;		
 	}
 	catch(const ErrorClass& eclass){
 		cout << endl << endl << endl;
@@ -7899,13 +8191,14 @@ if (OTHER_TESTS){
 		if (nodeNames2 != NULL)
 			delete[] nodeNames2; 
 		nodeNames2 = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
 	}
 
 } //end of if (OTHER_TESTS)
 
-	delete fileUtil;
-	fileUtil = NULL;
-	    
+    
 	if(unitTestResultFailure.str().length() > 0){
 		cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
 		cout << unitTestResult.str() << endl << endl;
@@ -7943,11 +8236,9 @@ double getObjVal( std::string osrl){
 				// return dObjVal = strtod(sObjVal.c_str(), NULL);
 				return dObjVal = os_strtod(sObjVal.c_str(), NULL); 
 			}
-			else return OSNaN();
 		}
-		else return OSNaN();
 	}
-	else return OSNaN();
+	return OSNaN();
 }
 
 
