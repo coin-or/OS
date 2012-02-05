@@ -29,6 +29,7 @@
 
 // Couenne stuff
 
+#include "CouenneConfig.h"
 #include "CouenneTypes.hpp"
 #include "CouenneJournalist.hpp"
 #include "CouenneExprClone.hpp"
@@ -579,9 +580,9 @@ void CouenneSolver::solve() throw (ErrorClass)
         //couenne->print();
 
         char **argv = NULL;
-
+#if COUENNE_VERSION_MAJOR == 0 && COUENNE_VERSION_MINOR <= 4
         bb.setUsingCouenne (true);
-
+#endif
         //using namespace Ipopt;
 
         if(osoption == NULL  && osol.length() > 0)
