@@ -75,19 +75,20 @@ using namespace Couenne;
 #include "CbcCutGenerator.hpp"
 #include "CouenneProblem.hpp"
 #include "CouenneCutGenerator.hpp"
+#include "CouenneBab.hpp"
 
-
-# include <cstddef>
-# include <cstdlib>
-# include <cctype>
-# include <cassert>
-# include <stack>
+#include <cstddef>
+#include <cstdlib>
+#include <cctype>
+#include <cassert>
+#include <stack>
 #include <string>
-#include<iostream>
+#include <iostream>
 
 
 
 using namespace Bonmin;
+using namespace Couenne;
 using std::cout;
 using std::endl;
 using std::ostringstream;
@@ -581,8 +582,11 @@ void CouenneSolver::solve() throw (ErrorClass)
 
         char **argv = NULL;
 #if COUENNE_VERSION_MAJOR == 0 && COUENNE_VERSION_MINOR <= 4
-        bb.setUsingCouenne (true);
+        //bb.setUsingCouenne (true);
 #endif
+
+	bb.setProblem(couenne); // HIG: According to Pietro this is needed to eliminate a segfault
+
         //using namespace Ipopt;
 
         if(osoption == NULL  && osol.length() > 0)

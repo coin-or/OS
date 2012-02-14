@@ -39,6 +39,7 @@ class expression;
 }
 #include "BonCbc.hpp"
 #include "BonCouenneSetup.hpp"
+#include "CouenneBab.hpp"
 
 #include <vector>
 #include <map>
@@ -118,7 +119,7 @@ public:
     //SmartPtr<Bonmin::IpoptSolver> app_ ;
 
     // this is a Bonmin BonCbc object;
-    Bonmin::Bab bb;
+    Couenne::CouenneBab bb;
 
     Bonmin::TMINLP::SolverReturn status;
 
