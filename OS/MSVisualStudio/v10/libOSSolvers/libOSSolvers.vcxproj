@@ -190,6 +190,7 @@
     <ClCompile Include="..\..\..\src\OSModelInterfaces\OSmps2osil.cpp" />
     <ClCompile Include="..\..\..\src\OSAgent\OSSolverAgent.cpp" />
     <ClCompile Include="..\..\..\src\OSAgent\OSWSUtil.cpp" />
+    <ClCompile Include="..\..\..\src\OSSolverInterfaces\OSRunSolver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\OSSolverInterfaces\OSBonminSolver.h" />
