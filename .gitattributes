@@ -110,6 +110,7 @@ OS/data/amplFiles/LP_infeasible.mod -text
 OS/data/amplFiles/LP_infeasible.nl -text
 OS/data/amplFiles/LP_unbounded.mod -text
 OS/data/amplFiles/LP_unbounded.nl -text
+OS/data/amplFiles/Pietros-test.nl -text
 OS/data/amplFiles/blpmpec.dat -text
 OS/data/amplFiles/blpmpec.mod -text
 OS/data/amplFiles/blpmpec.nl.zip -text
