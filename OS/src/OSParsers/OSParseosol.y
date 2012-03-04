@@ -1894,7 +1894,7 @@ initialVariableValuesString: | initialVariableValuesStringStart initialVariableV
 		osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "set <initialVariableValuesString> failed");
 	delete[] parserData->idxArray;
 	delete[] parserData->namArray;
-	delete[] parserData->valArray;
+	delete[] parserData->valueString;
 	parserData->idxArray = NULL;
 	parserData->namArray = NULL;
 	parserData->valueString = NULL;
