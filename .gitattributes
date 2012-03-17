@@ -196,6 +196,7 @@ OS/data/osilFiles/CppADTestLag.osil -text
 OS/data/osilFiles/HS071_NLP.osil -text
 OS/data/osilFiles/HS071_NLPMod.osil -text
 OS/data/osilFiles/HS071_feas.osil -text
+OS/data/osilFiles/HS071_no-obj.osil -text
 OS/data/osilFiles/IP_infeasible.osil -text
 OS/data/osilFiles/IP_noconstraint.osil -text
 OS/data/osilFiles/IP_unbounded.osil -text

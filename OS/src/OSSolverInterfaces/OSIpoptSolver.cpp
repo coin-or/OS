@@ -804,7 +804,8 @@ void IpoptSolver::setSolverOptions() throw (ErrorClass)
 {
     try
     {
-        //if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION");
+        if(osinstance->getObjectiveNumber() <= 0) 
+            throw ErrorClass("Ipopt NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
         this->bSetSolverOptions = true;
         /* set the default options */
         //app->Options()->SetNumericValue("tol", 1e-9);

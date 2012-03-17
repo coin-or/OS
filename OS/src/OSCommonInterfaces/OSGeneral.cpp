@@ -21,6 +21,7 @@
 #include <iostream>
 #include <sstream>
 
+#define DEBUG
 //#define DEBUG_OSGENERAL
 //#define DEBUG_ISEQUAL_ROUTINES
 
@@ -971,6 +972,7 @@ bool BasisStatus::IsEqual(BasisStatus *that)
     {
         if (that == NULL)
         {
+
 #ifdef DEBUG_ISEQUAL_ROUTINES
             cout << "Second object is NULL, first is not" << endl;
 #endif

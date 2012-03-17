@@ -176,7 +176,7 @@ OSnLNode* OSnLNode::copyNodeAndDescendants()
 	
 	if (inumberOfChildren > 0)
 	{
-		ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
+		//ndcopy->m_mChildren = new OSnLNode*[inumberOfChildren];
 		for (int i=0; i < inumberOfChildren; i++)
 		{
 			ndcopy->m_mChildren[i] = m_mChildren[i]->copyNodeAndDescendants();

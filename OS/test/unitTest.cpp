@@ -714,7 +714,7 @@ if (PARSER_TESTS){
 	}	
 
 	// now test the get() and set() methods in OSInstance
-	// use get() and set() methods to create a second OSInstance object
+	// use get() and set() methods to create a second OSInstance object (deep copy)
 	OSInstance *osinstance2 = new OSInstance();
 
 	try{
@@ -803,6 +803,7 @@ if (PARSER_TESTS){
 			int nstart;
 			SparseMatrix* coeff;
 
+// note: get a pointer to a sparse matrix structure
 			if (isColMajor)
 			{
 				nstart = osinstance->getVariableNumber();
@@ -814,7 +815,8 @@ if (PARSER_TESTS){
 				coeff = osinstance->getLinearConstraintCoefficientsInRowMajor();
 			}
 
-			if (!osinstance2->setLinearConstraintCoefficients(ncoef, isColMajor,
+//coeff->values, etc are pointers to arrays
+			if (!osinstance2->copyLinearConstraintCoefficients(ncoef, isColMajor,
                                 coeff->values,  0, ncoef-1,
                                 coeff->indexes, 0, ncoef-1,
                                 coeff->starts,  0, nstart)) 
@@ -1521,6 +1523,11 @@ if (PARSER_TESTS){
 		ok = osoption2->setInstanceLocationType(optionstring) && ok;
 #ifdef DEBUG
 		if (!ok)
+
+
+
+
+
 			throw ErrorClass(" error in get/set InstanceLocationType");
 #endif
 
@@ -1779,6 +1786,7 @@ if (PARSER_TESTS){
 #endif
 
 		nopt = osoption->getNumberOfInitVarValuesString();
+
 		InitVarValueString** IVV2;
 		IVV2 = osoption->getInitVarValuesStringSparse();
 		ok = osoption2->setInitVarValuesStringSparse(nopt, IVV2) && ok;		
@@ -2254,6 +2262,8 @@ if (PARSER_TESTS){
 		cout << "Test parsing a trivial string" << endl;
 
 		osolreader = new OSoLReader();
+
+
 
 		osol = "<osol></osol>";
 		cout << "Parse the OSoL string into an OSOption object" << endl;
@@ -3417,6 +3427,7 @@ if (PARSER_TESTS){
 				throw ErrorClass("setBasisStatus (variables atLower): osresult objects falsely compare unequal!");
 			intArray[0] = intArray[0] + 10;
 			intArray[1] = intArray[1] + 10;
+
 			intArray[2] = intArray[2] + 10;
 
 
@@ -3770,6 +3781,7 @@ if (PARSER_TESTS){
 			ok &= osresult2->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_superbasic, intArray, 3);
 			if (!ok) 
 				throw ErrorClass("Error during setBasisStatus (objectives superbasic)!");
+
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setBasisStatus (objectives superbasic): osresult objects falsely compare unequal!");
@@ -5207,6 +5219,7 @@ if (PARSER_TESTS){
 					for (int l=0; l<tempInt; ++l)
 						tempArray[l] = osresult1->getOtherConstraintResultEnumerationEl(i,j,k,l);
 					ok &= osresult2->setOtherOptionEnumeration(i,j,ENUM_PROBLEM_COMPONENT_constraints,k,tempStr1,tempStr2,tempArray,tempInt);
+
 					if (!ok) 
 						throw ErrorClass("Error during setOtherConstraintResultEnumeration!");
 				}
@@ -6916,6 +6929,7 @@ if(THOROUGH == true){
 		fileUtil = NULL;
 	}
 
+#if 0
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
 		try {
@@ -6941,7 +6955,8 @@ if(THOROUGH == true){
 		}
 		catch(const ErrorClass& eclass)
 		{
-			ok = (ipoptSolver->osresult->getGeneralMessage() == "Ipopt NEEDS AN OBJECTIVE FUNCTION");
+			ok = (ipoptSolver->osresult->getGeneralMessage() == 
+				"Ipopt FAILED TO SOLVE THE PROBLEM: Ipopt NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
 			if(ok == false) 
 			{	cout << "Ipopt solver returns:" << endl;
 				cout << ipoptSolver->osrl << endl;
@@ -6974,6 +6989,67 @@ if(THOROUGH == true){
 			delete fileUtil;
 		fileUtil = NULL;
 	}
+#endif
+
+	try{
+		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_no-obj.osil" << endl << endl;
+		try {
+
+	    	fileUtil = new FileUtil();
+			ipoptSolver = new IpoptSolver();
+
+			ok = true; 
+			osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_no-obj.osil";
+			osil = fileUtil->getFileAsString( osilFileName.c_str());
+			osol = "";
+			ipoptSolver->sSolverName = "ipopt";
+			ipoptSolver->osil = osil;
+			ipoptSolver->osol = osol; 
+//			ipoptSolver->osinstance = osilreader->readOSiL( osil);
+//			ipoptSolver->osoption   = osolreader->readOSoL( osol);
+			ipoptSolver->buildSolverInstance();
+	
+			cout << "call the COIN - Ipopt Solver for HS071_no-obj.osil" << endl;
+			ipoptSolver->solve();
+		}
+		catch(const ErrorClass& eclass)
+		{
+			ok = (ipoptSolver->osresult->getGeneralMessage() == 
+				"Ipopt NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
+			if(ok == false) 
+			{	cout << "Ipopt solver returns:" << endl;
+				cout << ipoptSolver->osrl << endl;
+				throw ErrorClass(" Fail unit test with Ipopt on HS071_no-obj.osil");
+			}
+		}
+	
+		cout << "Received error message from Ipopt: \"Ipopt NEEDS AN OBJECTIVE FUNCTION\"" << endl;
+	
+		delete ipoptSolver;
+		ipoptSolver = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
+
+		unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed problem HS071_no-obj with Ipopt" << std::endl;
+		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+	}
+	catch(const ErrorClass& eclass){
+		unitTestResultFailure << "Sorry Unit Test Failed Testing the Ipopt Solver:"  + eclass.errormsg<< endl; 
+		if (osilreader != NULL)
+			delete osilreader;
+		osilreader = NULL;
+		if (osolreader != NULL)
+			delete osolreader;
+		osolreader = NULL;
+		if (ipoptSolver != NULL)
+			delete ipoptSolver;
+		ipoptSolver = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
+	}
+
+
 } // end of if( THOROUGH)
 #endif // end of #ifdef COIN_HAS_IPOPT
 
@@ -7269,7 +7345,7 @@ if (THOROUGH == true){
 #endif   // end of #ifdef COIN_HAS_BONMIN
 
 
-
+//#if 0 //for the time being --- Couenne stable 0.4 creates a segfault
 #ifdef COIN_HAS_COUENNE
 	CouenneSolver *solver = NULL;
 	try{
@@ -7513,6 +7589,7 @@ if( THOROUGH == true){
 		}
 		else
 		{	cout << "Couenne solver solution for rosenbrockorig in error:" << endl;
+
 			cout << solver->osrl << endl;
 		}
 		if(ok == false) throw ErrorClass(" Fail unit test with Couenne on rosenbrockorig.osil");
@@ -7683,6 +7760,7 @@ if( THOROUGH == true){
 	}	
 } //end of if (THOROUGH)
 #endif // end of #ifdef COIN_HAS_COUENNE
+//#endif // #if 0 //for the time being --- Couenne stable 0.4 creates a segfault
 
 
 	
@@ -7978,7 +8056,7 @@ if (OTHER_TESTS){
 		std::cout  << "Working with GAMSIO " << std::endl;
 
 		//std::string gmsControlFile = "/home/kmartin/bin/gams/23.2/225a/gamscntr.dat";
-		std::string gmsControlFile = dataDir + "gamsFiles" + dirsep + "gamscntr.dat";
+		std::string gmsControlFile = dataDir + "gamsFiles" + dirsep + "225a" + dirsep + "gamscntr.dat";
 		gams2osil = new OSgams2osil( gmsControlFile);
  	
 		gams2osil->createOSInstance();
@@ -7989,6 +8067,7 @@ if (OTHER_TESTS){
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure  << "Sorry Unit Test Failed Testing the GAMS interface:"  + eclass.errormsg << endl;
+
 		if (gams2osil != NULL)
 			delete gams2osil;
 		gams2osil = NULL;
@@ -8226,6 +8305,7 @@ double getObjVal( std::string osrl){
 		pos1 = osrl.find(">", pos1 + 1);
 		if(pos1 != std::string::npos){
 			// get the start of obj end tag
+
 			pos2 = osrl.find( "</obj", pos1 + 1);
 			if( pos2 != std::string::npos){
 				// get the substring

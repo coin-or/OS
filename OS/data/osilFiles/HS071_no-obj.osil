@@ -4,7 +4,7 @@
     <instanceHeader>
         <description>
 			This modification of HS071_NLP is a pure feasibility problem;
-			the objective function has been replaced by the zero function.
+			the objective function has been removed.
         </description>
     </instanceHeader>
     <instanceData>
@@ -14,9 +14,6 @@
             <var name="_svar[3]" lb="1" ub="5" />
             <var name="_svar[4]" lb="1" ub="5" />
         </variables>
-        <objectives numberOfObjectives="1">
-            <obj/>
-        </objectives>
         <constraints numberOfConstraints="2">
             <con name="_scon[1]" lb="25"/>
             <con name="_scon[2]" lb="40" ub="40"/>

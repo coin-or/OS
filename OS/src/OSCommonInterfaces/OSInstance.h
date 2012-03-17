@@ -2173,16 +2173,40 @@ public:
      * @param isColumnMajor holds whether the coefficient matrix is stored in column major (true) or row major (false).
      * @param values holds a double array coefficient values in the matrix.
      * @param valuesBegin holds the begin index of the values array to copy from (usually 0).
-     * @param valuesEnd holds the end index of the values array to copy till (usually values.lenght - 1).
+     * @param valuesEnd holds the end index of the values array to copy till (usually values.length - 1).
      * @param indexes holds an integer array column/row indexes for each value in the values array.
      * @param indexesBegin holds the begin index of the indexes array to copy from (usually 0).
-     * @param indexesEnd holds the end index of the indexes array to copy till (usually indexes.lenght - 1).
+     * @param indexesEnd holds the end index of the indexes array to copy till (usually indexes.length - 1).
      * @param starts holds an integer array start indexes in the matrix; the first value of starts should always be 0.
      * @param startsBegin holds the begin index of the starts array to copy from (usually 0).
-     * @param startsEnd holds the end index of the starts array to copy till (usually starts.lenght - 1).
+     * @param startsEnd holds the end index of the starts array to copy till (usually starts.length - 1).
      * @return whether the linear constraint coefficients are set successfully.
      */
     bool setLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
+                                         double* values, int valuesBegin, int valuesEnd,
+                                         int* indexes, int indexesBegin, int indexesEnd,
+                                         int* starts, int startsBegin, int startsEnd);
+
+    /**
+
+     * copy linear constraint coefficients: perform a deep copy of the sparse matrix
+     *
+     * <p>
+     *
+     * @param numberOfValues holds the number of specified coefficient values (usually nonzero) in the coefficient matrix.
+     * @param isColumnMajor holds whether the coefficient matrix is stored in column major (true) or row major (false).
+     * @param values holds a double array coefficient values in the matrix.
+     * @param valuesBegin holds the begin index of the values array to copy from (usually 0).
+     * @param valuesEnd holds the end index of the values array to copy till (usually values.length - 1).
+     * @param indexes holds an integer array column/row indexes for each value in the values array.
+     * @param indexesBegin holds the begin index of the indexes array to copy from (usually 0).
+     * @param indexesEnd holds the end index of the indexes array to copy till (usually indexes.length - 1).
+     * @param starts holds an integer array start indexes in the matrix; the first value of starts should always be 0.
+     * @param startsBegin holds the begin index of the starts array to copy from (usually 0).
+     * @param startsEnd holds the end index of the starts array to copy till (usually starts.length - 1).
+     * @return whether the linear constraint coefficients are copied successfully.
+     */
+    bool copyLinearConstraintCoefficients(int numberOfValues, bool isColumnMajor,
                                          double* values, int valuesBegin, int valuesEnd,
                                          int* indexes, int indexesBegin, int indexesEnd,
                                          int* starts, int startsBegin, int startsEnd);
