@@ -5627,6 +5627,7 @@ if (PARSER_TESTS){
 		osrlreader = NULL;
 
 
+
 		// ... last file...
 		cout << endl << "parserTest10.osrl" << endl;
 		osrlwriter = new OSrLWriter();
@@ -6929,49 +6930,62 @@ if(THOROUGH == true){
 		fileUtil = NULL;
 	}
 
-#if 0
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_feas.osil" << endl << endl;
-		try {
 
-	    	fileUtil = new FileUtil();
-			ipoptSolver = new IpoptSolver();
+    	fileUtil = new FileUtil();
+		ipoptSolver = new IpoptSolver();
 
-			ok = true; 
-			osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_feas.osil";
-//			osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_feas_Ipopt.osol";
-			osil = fileUtil->getFileAsString( osilFileName.c_str());
-//			osol = fileUtil->getFileAsString( osolFileName.c_str());
-			osol = "";
-			ipoptSolver->sSolverName = "ipopt";
-			ipoptSolver->osil = osil;
-			ipoptSolver->osol = osol; 
-//			ipoptSolver->osinstance = osilreader->readOSiL( osil);
-//			ipoptSolver->osoption   = osolreader->readOSoL( osol);
-			ipoptSolver->buildSolverInstance();
+		ok = true; 
+		osilFileName = dataDir  + "osilFiles" + dirsep + "HS071_feas.osil";
+//		osolFileName = dataDir  + "osolFiles" + dirsep + "HS071_feas_Ipopt.osol";
+		osil = fileUtil->getFileAsString( osilFileName.c_str());
+//		osol = fileUtil->getFileAsString( osolFileName.c_str());
+		osol = "";
+		ipoptSolver->sSolverName = "ipopt";
+		ipoptSolver->osil = osil;
+		ipoptSolver->osol = osol; 
+//		ipoptSolver->osinstance = osilreader->readOSiL( osil);
+//		ipoptSolver->osoption   = osolreader->readOSoL( osol);
+		ipoptSolver->buildSolverInstance();
 	
-			cout << "call the COIN - Ipopt Solver for HS071_feas.osil" << endl;
-			ipoptSolver->solve();
-		}
-		catch(const ErrorClass& eclass)
-		{
-			ok = (ipoptSolver->osresult->getGeneralMessage() == 
-				"Ipopt FAILED TO SOLVE THE PROBLEM: Ipopt NEEDS AN OBJECTIVE FUNCTION\n(For pure feasibility problems, use zero function.)");
-			if(ok == false) 
-			{	cout << "Ipopt solver returns:" << endl;
-				cout << ipoptSolver->osrl << endl;
-				throw ErrorClass(" Fail unit test with Ipopt on HS071_feas.osil");
-			}
-		}
+		cout << "call the COIN - Ipopt Solver for HS071_feas.osil" << endl;
+		ipoptSolver->solve();
+
+        osresult = new OSResult();
+        osrlreader = new OSrLReader();
+        osresult = osrlreader->readOSrL(ipoptSolver->osrl);
+
+		check = 3.162277659974328;
+		ok  = ( fabs(check - osresult->getVarValue(0,0) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		check = 3.1622776613181367;
+		ok &= ( fabs(check - osresult->getVarValue(0,0) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		check = 3.1622776594067235;
+		ok &= ( fabs(check - osresult->getVarValue(0,0) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
+		check = 3.162277659974329;
+		ok &= ( fabs(check - osresult->getVarValue(0,0) )/(fabs( check) + OS_NEAR_EQUAL) <= OS_NEAR_EQUAL) ? true : false;
 	
-		cout << "Received error message from Ipopt: \"Ipopt NEEDS AN OBJECTIVE FUNCTION\"" << endl;
+		if (ok)
+		{	
+#ifdef DEBUG
+			cout << ipoptSolver->osrl << endl;
+#endif
+			cout << "Ipopt feasible point for HS071_feas checks." << endl;
+		}
+		else
+		{	cout << "Ipopt feasible point for HS071_feas in error:" << endl;
+			cout << ipoptSolver->osrl << endl;
+		}
+		if(ok == false) throw ErrorClass(" Fail unit test with Ipopt on HS071_feas.osil");
 	
 		delete ipoptSolver;
 		ipoptSolver = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
+        delete osrlreader;
+        osrlreader = NULL;
 
-		unitTestResult << "TEST " << nOfTest << ": Correctly diagnosed problem HS071_feas with Ipopt" << std::endl;
+		unitTestResult << "TEST " << nOfTest << ": Correctly solved problem HS071_feas with Ipopt" << std::endl;
 		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
 	}
 	catch(const ErrorClass& eclass){
@@ -6982,6 +6996,9 @@ if(THOROUGH == true){
 		if (osolreader != NULL)
 			delete osolreader;
 		osolreader = NULL;
+		if (osrlreader != NULL)
+			delete osrlreader;
+		osrlreader = NULL;
 		if (ipoptSolver != NULL)
 			delete ipoptSolver;
 		ipoptSolver = NULL;
@@ -6989,7 +7006,6 @@ if(THOROUGH == true){
 			delete fileUtil;
 		fileUtil = NULL;
 	}
-#endif
 
 	try{
 		cout << endl << "TEST " << ++nOfTest << ": Ipopt solver on HS071_no-obj.osil" << endl << endl;
