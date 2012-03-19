@@ -9,17 +9,21 @@
 #DyLP         https://projects.coin-or.org/svn/DyLP/stable/1.8/DyLP
 #SYMPHONY     https://projects.coin-or.org/svn/SYMPHONY/stable/5.4/SYMPHONY
 #Bcp          https://projects.coin-or.org/svn/Bcp/stable/1.3/Bcp
-#ThirdParty/ASL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/stable/1.2
-#ThirdParty/Blas   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/stable/1.2
-#ThirdParty/Glpk   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/stable/1.8
-#ThirdParty/HSL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/stable/1.3
-#ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/stable/1.3
-#ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/stable/1.4
-#ThirdParty/Metis  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis/stable/1.2
+
+#ThirdParty/ASL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/trunk
+#ThirdParty/Blas   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/trunk
+#ThirdParty/Glpk   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/trunk
+#ThirdParty/HSL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/trunk
+#ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/trunk
+#ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/trunk
+#ThirdParty/Metis  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis/trunk
+
 #Ipopt        https://projects.coin-or.org/svn/Ipopt/stable/3.10/Ipopt
 #cppad        https://projects.coin-or.org/svn/CppAD/releases/20110101.5
 #Bonmin       https://projects.coin-or.org/svn/Bonmin/stable/1.5/Bonmin
 #Couenne      https://projects.coin-or.org/svn/Couenne/stable/0.4/Couenne  
+
+
 
 
 
@@ -34,19 +38,15 @@ Vol          https://projects.coin-or.org/svn/Vol/trunk/Vol
 DyLP         https://projects.coin-or.org/svn/DyLP/trunk/DyLP
 SYMPHONY     https://projects.coin-or.org/svn/SYMPHONY/trunk/SYMPHONY
 Bcp          https://projects.coin-or.org/svn/Bcp/trunk/Bcp
-ThirdParty/ASL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/trunk
-ThirdParty/Blas   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/trunk
-ThirdParty/Glpk   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/trunk
-ThirdParty/HSL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/trunk
-ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/trunk
-ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/trunk
-ThirdParty/Metis  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis/trunk
+ThirdParty/ASL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/ASL/stable/1.2
+ThirdParty/Blas   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Blas/stable/1.2
+ThirdParty/Glpk   https://projects.coin-or.org/svn/BuildTools/ThirdParty/Glpk/stable/1.8
+ThirdParty/HSL    https://projects.coin-or.org/svn/BuildTools/ThirdParty/HSL/stable/1.3
+ThirdParty/Lapack https://projects.coin-or.org/svn/BuildTools/ThirdParty/Lapack/stable/1.3
+ThirdParty/Mumps  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Mumps/stable/1.4
+ThirdParty/Metis  https://projects.coin-or.org/svn/BuildTools/ThirdParty/Metis/stable/1.2
 Ipopt        https://projects.coin-or.org/svn/Ipopt/trunk/Ipopt
 cppad 	     https://projects.coin-or.org/svn/CppAD/stable/20110101
 Bonmin       https://projects.coin-or.org/svn/Bonmin/trunk/Bonmin
 Couenne      https://projects.coin-or.org/svn/Couenne/trunk/Couenne  
-
-
-
-
 examples https://projects.coin-or.org/svn/CoinBazaar/projects/ApplicationTemplates/trunk
