@@ -520,6 +520,7 @@ Objective::~Objective()
 
 
 
+
         {
             delete coef[i];
             coef[i] = NULL;
@@ -2974,6 +2975,9 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
     //starts
     if (instanceData->linearConstraintCoefficients->start == NULL) 
         instanceData->linearConstraintCoefficients->start = new IntVector();
+	else
+		if (instanceData->linearConstraintCoefficients->start->el != NULL)
+			delete [] instanceData->linearConstraintCoefficients->start->el;
 
 /*
     if (startsBegin == 0)
@@ -2999,10 +3003,11 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
     //values
     if (instanceData->linearConstraintCoefficients->value == NULL) 
         instanceData->linearConstraintCoefficients->value = new DoubleVector();
-//    else
-//        if (instanceData->linearConstraintCoefficients->value->el != NULL)
-//            delete[] instanceData->linearConstraintCoefficients->value->el;
+    else
+        if (instanceData->linearConstraintCoefficients->value->el != NULL)
+            delete[] instanceData->linearConstraintCoefficients->value->el;
 
+/*
     if (valuesBegin == 0)
     {
         instanceData->linearConstraintCoefficients->value->el = values;
@@ -3019,8 +3024,10 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
         }
     }
     instanceData->linearConstraintCoefficients->value->numberOfEl = numberOfValues;
-//    instanceData->linearConstraintCoefficients->value->el = (values+valuesBegin);
-//    instanceData->linearConstraintCoefficients->value->numberOfEl = numberOfValues;
+*/
+
+    instanceData->linearConstraintCoefficients->value->el = (values+valuesBegin);
+    instanceData->linearConstraintCoefficients->value->numberOfEl = numberOfValues;
 
     //indexes
     if(isColumnMajor)
@@ -3031,6 +3038,7 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
             if (instanceData->linearConstraintCoefficients->rowIdx->el != NULL)
                 delete[] instanceData->linearConstraintCoefficients->rowIdx->el;
 
+/*
         instanceData->linearConstraintCoefficients->rowIdx->el = new int[numberOfValues];
         k = 0;
         for(i = indexesBegin; i <= indexesEnd; i++)
@@ -3039,6 +3047,9 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
             k++;
         }
         instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = k;
+*/
+	    instanceData->linearConstraintCoefficients->rowIdx->el = (indexes+indexesBegin);
+	    instanceData->linearConstraintCoefficients->rowIdx->numberOfEl = numberOfValues;
     }
     else
     {
@@ -3048,6 +3059,7 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
             if (instanceData->linearConstraintCoefficients->colIdx->el != NULL)
                 delete[] instanceData->linearConstraintCoefficients->colIdx->el;
 
+/*
         instanceData->linearConstraintCoefficients->colIdx->el = new int[numberOfValues];
         k = 0;
         for(i = indexesBegin; i <= indexesEnd; i++)
@@ -3056,6 +3068,9 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
             k++;
         }
         instanceData->linearConstraintCoefficients->colIdx->numberOfEl = k;
+*/
+	    instanceData->linearConstraintCoefficients->colIdx->el = (indexes+indexesBegin);
+	    instanceData->linearConstraintCoefficients->colIdx->numberOfEl = numberOfValues;
     }
     return true;
 }//setLinearConstraintCoefficients

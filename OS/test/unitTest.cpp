@@ -6967,7 +6967,7 @@ if(THOROUGH == true){
 		cout << "call the COIN - Ipopt Solver for HS071_feas.osil" << endl;
 		ipoptSolver->solve();
 
-        osresult = new OSResult();
+//        osresult = new OSResult();
         osrlreader = new OSrLReader();
         osresult = osrlreader->readOSrL(ipoptSolver->osrl);
 
