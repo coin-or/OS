@@ -519,6 +519,7 @@ Objective::~Objective()
 
 
 
+
         {
             delete coef[i];
             coef[i] = NULL;
@@ -3009,6 +3010,7 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
     else
     {
         instanceData->linearConstraintCoefficients->value->el = new double[numberOfValues];
+
         k = 0;
         for(i = valuesBegin; i <= valuesEnd; i++)
         {
@@ -3081,6 +3083,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     //starts
     if (instanceData->linearConstraintCoefficients->start == NULL) 
         instanceData->linearConstraintCoefficients->start = new IntVector();
+	else 
+		delete [] instanceData->linearConstraintCoefficients->start->el;
 
     instanceData->linearConstraintCoefficients->start->el = new int[startsEnd - startsBegin + 1];
     k = 0;
@@ -3095,6 +3099,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     //values
     if (instanceData->linearConstraintCoefficients->value == NULL) 
         instanceData->linearConstraintCoefficients->value = new DoubleVector();
+	else 
+		delete [] instanceData->linearConstraintCoefficients->value->el;
 
     instanceData->linearConstraintCoefficients->value->el = new double[numberOfValues];
     k = 0;
@@ -3110,6 +3116,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     {
         if (instanceData->linearConstraintCoefficients->rowIdx == NULL) 
             instanceData->linearConstraintCoefficients->rowIdx = new IntVector();
+		else 
+			delete [] instanceData->linearConstraintCoefficients->rowIdx->el;
 
         instanceData->linearConstraintCoefficients->rowIdx->el = new int[numberOfValues];
         k = 0;
@@ -3124,6 +3132,8 @@ bool OSInstance::copyLinearConstraintCoefficients(int numberOfValues, bool isCol
     {
         if (instanceData->linearConstraintCoefficients->colIdx == NULL) 
             instanceData->linearConstraintCoefficients->colIdx = new IntVector();
+		else 
+			delete [] instanceData->linearConstraintCoefficients->colIdx->el;
 
         instanceData->linearConstraintCoefficients->colIdx->el = new int[numberOfValues];
         k = 0;
@@ -3156,9 +3166,15 @@ bool OSInstance::setQuadraticTerms(int number,
             (varOneIndexes == 0) ||
             (varTwoIndexes == 0) ||
             (coefficients == 0) ) return false;
-    instanceData->quadraticCoefficients = new QuadraticCoefficients();
-    instanceData->quadraticCoefficients->numberOfQuadraticTerms = number;
+	if (instanceData->quadraticCoefficients == NULL)
+	    instanceData->quadraticCoefficients = new QuadraticCoefficients();
+
+	instanceData->quadraticCoefficients->numberOfQuadraticTerms = number;
     int i = 0;
+
+	if (instanceData->quadraticCoefficients->qTerm != NULL)
+		delete [] instanceData->quadraticCoefficients->qTerm;
+
     instanceData->quadraticCoefficients->qTerm = new QuadraticTerm*[number];
     for(i = 0; i < number; i++) instanceData->quadraticCoefficients->qTerm[i] = new QuadraticTerm();
     int k = 0;
@@ -3221,7 +3237,7 @@ bool OSInstance::setNonlinearExpressions(int nexpr, Nl** root)
         return true;
     }
 
-	instanceData->nonlinearExpressions = new NonlinearExpressions(); 
+//	instanceData->nonlinearExpressions = new NonlinearExpressions(); 
 	instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nexpr;
 	instanceData->nonlinearExpressions->nl = new Nl*[nexpr];
 

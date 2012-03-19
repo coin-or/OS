@@ -753,7 +753,7 @@ if (PARSER_TESTS){
 			double *varlb = osinstance->getVariableLowerBounds();
 			double *varub = osinstance->getVariableUpperBounds();
 
-			osinstance2->instanceData->variables = new Variables();
+//			osinstance2->instanceData->variables = new Variables();
 			osinstance2->instanceData->variables->numberOfVariables = nvar;
 			osinstance2->instanceData->variables->var = new Variable*[nvar];
 
@@ -771,7 +771,7 @@ if (PARSER_TESTS){
 			double *objweight       = osinstance->getObjectiveWeights();
 			SparseVector **objcoeff = osinstance->getObjectiveCoefficients();
 
-			osinstance2->instanceData->objectives = new Objectives();
+//			osinstance2->instanceData->objectives = new Objectives();
 			osinstance2->instanceData->objectives->numberOfObjectives = nobj;
 			osinstance2->instanceData->objectives->obj = new Objective*[nobj];
 
@@ -788,7 +788,7 @@ if (PARSER_TESTS){
 			double *conub = osinstance->getConstraintUpperBounds();
 			double *con_c = osinstance->getConstraintConstants();
 
-			osinstance2->instanceData->constraints = new Constraints();
+//			osinstance2->instanceData->constraints = new Constraints();
 			osinstance2->instanceData->constraints->numberOfConstraints = ncon;
 			osinstance2->instanceData->constraints->con = new Constraint*[ncon];
 
@@ -803,7 +803,7 @@ if (PARSER_TESTS){
 			int nstart;
 			SparseMatrix* coeff;
 
-// note: get a pointer to a sparse matrix structure
+        // getLinearConstraintCoefficients returns a pointer to a sparse matrix structure
 			if (isColMajor)
 			{
 				nstart = osinstance->getVariableNumber();
@@ -815,7 +815,6 @@ if (PARSER_TESTS){
 				coeff = osinstance->getLinearConstraintCoefficientsInRowMajor();
 			}
 
-//coeff->values, etc are pointers to arrays
 			if (!osinstance2->copyLinearConstraintCoefficients(ncoef, isColMajor,
                                 coeff->values,  0, ncoef-1,
                                 coeff->indexes, 0, ncoef-1,
@@ -837,10 +836,17 @@ if (PARSER_TESTS){
 		}
 
 		// copy nonlinear expressions
+        Nl** root = NULL;
+
 		if (osinstance->instanceData->nonlinearExpressions != NULL)
 		{
 			int nexpr = osinstance->getNumberOfNonlinearExpressions();
-			Nl** root = osinstance->getNonlinearExpressions();
+//			root = osinstance->getNonlinearExpressions();
+	        root = new Nl*[osinstance->getNumberOfNonlinearExpressions()];
+	        for (int i=0; i < osinstance->getNumberOfNonlinearExpressions(); i++)
+	        {
+	        	root[i] = osinstance->instanceData->nonlinearExpressions->nl[i];
+	        }
 
 			if (!osinstance2->setNonlinearExpressions(nexpr, root))
 				throw ErrorClass("Error duplicating nonlinear expressions");
@@ -863,6 +869,14 @@ if (PARSER_TESTS){
 		osilwriter = NULL;
 		delete fileUtil;
 		fileUtil = NULL;
+
+        if (root != NULL)
+        {
+//            for (int i=0; i < osinstance->getNumberOfNonlinearExpressions(); i++)
+//                if (root[i] != NULL) delete root[i];
+            delete [] root;
+            root = NULL;
+        }
 	}
 	catch(const ErrorClass& eclass){
 		unitTestResultFailure << "Unit Test Failed OSInstance get() and set() methods: "  + eclass.errormsg<< endl; 
@@ -5628,6 +5642,7 @@ if (PARSER_TESTS){
 
 
 
+
 		// ... last file...
 		cout << endl << "parserTest10.osrl" << endl;
 		osrlwriter = new OSrLWriter();
@@ -7315,8 +7330,6 @@ if (THOROUGH == true){
 		ok = true;
 		osilFileName = dataDir  + "osilFiles" + dirsep + "rosenbrockorigInt.osil";
 		osil = fileUtil->getFileAsString( osilFileName.c_str());
-		osilreader = new OSiLReader(); 
-		solver = new BonminSolver();	
 		solver->osol = "";
 		solver->osinstance = osilreader->readOSiL( osil);
 		cout << "call the Bonmin Solver for rosenbrockinteger" << endl;
