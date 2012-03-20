@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSnL: version - 2.0.0-->
 	<!--Generic base scalar definitions since version 1.0.0: all functions that return a scalar value  -->
 	<xs:element name="osnl">
@@ -57,7 +58,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -193,7 +194,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1150,7 +1151,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -1167,7 +1168,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
@@ -3622,7 +3623,7 @@
 		</xs:annotation>
 		<xs:complexContent>
 			<xs:extension base="OSnLNode">
-				<xs:sequence maxOccurs="unbounded">
+				<xs:sequence minOccurs="0" maxOccurs="unbounded">
 					<xs:element ref="OSnLNode"/>
 				</xs:sequence>
 			</xs:extension>
