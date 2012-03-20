@@ -49,6 +49,11 @@ public:
     std::string description;
     std::string fileCreator;
     std::string licence;
+    bool fileNamePresent;
+    bool sourcePresent;
+    bool descriptionPresent;
+    bool fileCreatorPresent;
+    bool licencePresent;
 
     /** the OSgLParserData class constructor */
     OSgLParserData( );

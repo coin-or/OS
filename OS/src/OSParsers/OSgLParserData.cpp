@@ -38,7 +38,12 @@ OSgLParserData::OSgLParserData() :
     source(""),
     description(""),
     fileCreator(""),
-    licence("")
+    licence(""),
+    fileNamePresent(false),
+    sourcePresent(false),
+    descriptionPresent(false),
+    fileCreatorPresent(false),
+    licencePresent(false)
 
 {
 
