@@ -108,6 +108,9 @@ public:
     bool filesToMakePresent;
     int  numberOfFilesToMake;
 
+	std::string pathPairFrom;
+	std::string pathPairTo;
+
     bool pathPairFromPresent;
     bool pathPairToPresent;
     bool pathPairMakeCopyPresent;

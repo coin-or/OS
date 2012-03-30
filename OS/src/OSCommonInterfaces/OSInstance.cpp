@@ -27,7 +27,7 @@
 #include<sstream>
 
 //#define DEBUG
-#define DEBUG_ISEQUAL_ROUTINES
+//#define DEBUG_ISEQUAL_ROUTINES
 
 using namespace std;
 using std::ostringstream;
@@ -513,6 +513,7 @@ Objective::~Objective()
     if(numberOfObjCoef > 0 && coef != NULL)
     {
         for(i = 0; i < numberOfObjCoef; i++)
+
 
 
 

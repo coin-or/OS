@@ -3009,6 +3009,7 @@ int* OSOption::getVariableInitialBasisStatusDense(int numberOfVariables)
         if (this->optimization->variables->initialBasisStatus->atUpper != NULL)
         {
             num_var = this->optimization->variables->initialBasisStatus->atUpper->numberOfEl;
+
             for (i = 0; i < num_var; i++)
             {
                 j = this->optimization->variables->initialBasisStatus->atUpper->el[i];
@@ -3094,7 +3095,7 @@ int OSOption::getNumberOfInitialBasisElements(int type, int status)
         return this->optimization->constraints->initialBasisStatus->getNumberOfEl(status);
     }
     default:
-        throw ErrorClass("target object not implemented in setPathPairs");
+        throw ErrorClass("target object not implemented in getNumberOfInitialBasisElements");
     }
 }//getNumberOfInitialBasisElements
 
@@ -3136,7 +3137,7 @@ bool OSOption::getInitialBasisElements(int type, int status, int* elem)
         return this->optimization->constraints->initialBasisStatus->getIntVector(status, elem);
     }
     default:
-        throw ErrorClass("target object not implemented in setPathPairs");
+        throw ErrorClass("target object not implemented in getInitialBasisElements");
     }
 }//getInitialBasisElements
 
@@ -4071,6 +4072,7 @@ double* OSOption::getInitDualVarLowerBoundsDense()
                 if (this->optimization->constraints->initialDualValues != NULL)
                 {
                     int i,j,k;
+
                     int num_con;
                     num_con = this->getNumberOfInitDualVarValues();
 
@@ -4584,10 +4586,12 @@ bool JobDependencies::setJobID(int numberOfJobIDs, std::string *jobID)
     try
     {
         if (this->jobID != NULL)
-            throw ErrorClass( "jobID array previously used.");
+        //    throw ErrorClass( "jobID array previously used.");
+            return false;
 
         if (numberOfJobIDs < 0)
-            throw ErrorClass( "length of jobID array cannot be negative.");
+        //    throw ErrorClass( "length of jobID array cannot be negative.");
+            return false;
 
         this->numberOfJobIDs = numberOfJobIDs;
         if (numberOfJobIDs == 0)
@@ -4618,7 +4622,8 @@ bool JobDependencies::addJobID(std::string jobID)
     {
         int nopt;
         if (jobID.empty() )
-            throw ErrorClass( "the name of a jobID cannot be empty." );
+        //    throw ErrorClass( "the name of a jobID cannot be empty." );
+            return false;
 
         if (this->jobID == NULL)
             nopt = 0;
@@ -4656,10 +4661,12 @@ bool DirectoriesAndFiles::setPath(int numberOfPaths, std::string *path)
     try
     {
         if (this->path != NULL)
-            throw ErrorClass( "path array previously used.");
+        //    throw ErrorClass( "path array previously used.");
+            return false;
 
         if (numberOfPaths < 0)
-            throw ErrorClass( "length of path array cannot be negative.");
+        //    throw ErrorClass( "length of path array cannot be negative.");
+            return false;
 
         this->numberOfPaths = numberOfPaths;
         if (numberOfPaths == 0)
@@ -4690,7 +4697,8 @@ bool DirectoriesAndFiles::addPath(std::string path)
     {
         int nopt;
         if (path.empty() )
-            throw ErrorClass( "the path cannot be empty." );
+        //    throw ErrorClass( "the path cannot be empty." );
+            return false;
 
         if (this->path == NULL)
             nopt = 0;
@@ -4728,10 +4736,12 @@ bool PathPairs::setPathPair(int numberOfPathPairs, PathPair **pathPair)
     try
     {
         if (this->pathPair != NULL)
-            throw ErrorClass( "pathPair array previously used.");
+        //    throw ErrorClass( "pathPair array previously used.");
+            return false;
 
         if (numberOfPathPairs < 0)
-            throw ErrorClass( "length of pathPair array cannot be negative.");
+        //    throw ErrorClass( "length of pathPair array cannot be negative.");
+            return false;
 
         this->numberOfPathPairs = numberOfPathPairs;
         if (numberOfPathPairs == 0)
@@ -4742,7 +4752,7 @@ bool PathPairs::setPathPair(int numberOfPathPairs, PathPair **pathPair)
         int  i;
         for (i = 0; i < numberOfPathPairs; i++)
         {
-            this->pathPair[i] = new PathPair();
+             this->pathPair[i] = new PathPair();
             *this->pathPair[i] = *pathPair[i];
         }
         return true;
@@ -4791,9 +4801,11 @@ bool PathPairs::addPathPair(std::string fromPath, std::string toPath, bool makeC
         int nopt;
         int i;
         if (fromPath.empty() )
-            throw ErrorClass( "the \"from\" path cannot be empty." );
+        //    throw ErrorClass( "the \"from\" path cannot be empty." );
+            return false;
         if (toPath.empty() )
-            throw ErrorClass( "the \"to\" path cannot be empty." );
+        //    throw ErrorClass( "the \"to\" path cannot be empty." );
+            return false;
 
         if (this->pathPair == NULL)
             nopt = 0;
@@ -4836,10 +4848,12 @@ bool Processes::setProcess(int numberOfProcesses, std::string *process)
     try
     {
         if (this->process != NULL)
-            throw ErrorClass( "process array previously used.");
+        //    throw ErrorClass( "process array previously used.");
+            return false;
 
         if (numberOfProcesses < 0)
-            throw ErrorClass( "length of process array cannot be negative.");
+        //    throw ErrorClass( "length of process array cannot be negative.");
+            return false;
 
         this->numberOfProcesses= numberOfProcesses;
         if (numberOfProcesses == 0)
@@ -7757,7 +7771,8 @@ bool OSOption::setInitBasisStatus(int object, int status, int *i, int ni)
 
         for (int j=0; j<ni; j++)
         {
-            if (i[j] < 0) return false;
+            if (i[j] < 0)
+				return false;
         }
         return optimization->variables->initialBasisStatus->setIntVector(status, i, ni);
     }
@@ -7767,7 +7782,11 @@ bool OSOption::setInitBasisStatus(int object, int status, int *i, int ni)
             optimization->objectives = new ObjectiveOption();
         if (optimization->objectives->initialBasisStatus == NULL)
             optimization->objectives->initialBasisStatus = new BasisStatus();
-        for (int j=0; j<ni; j++) if (i[j] >= 0) return false;
+        for (int j=0; j<ni; j++) 
+		{
+			if (i[j] >= 0) 
+				return false;
+		}
         return optimization->objectives->initialBasisStatus->setIntVector(status, i, ni);
     }
     case ENUM_PROBLEM_COMPONENT_constraints:
@@ -7776,7 +7795,11 @@ bool OSOption::setInitBasisStatus(int object, int status, int *i, int ni)
             optimization->constraints = new ConstraintOption();
         if (optimization->constraints->initialBasisStatus == NULL)
             optimization->constraints->initialBasisStatus = new BasisStatus();
-        for (int j=0; j<ni; j++) if (i[j] < 0) return false;
+        for (int j=0; j<ni; j++) 
+		{
+			if (i[j] < 0) 
+				return false;
+		}
         return optimization->constraints->initialBasisStatus->setIntVector(status, i, ni);
     }
     default:

@@ -21,7 +21,7 @@
 #include <iostream>
 #include <sstream>
 
-#define DEBUG
+//#define DEBUG
 //#define DEBUG_OSGENERAL
 //#define DEBUG_ISEQUAL_ROUTINES
 

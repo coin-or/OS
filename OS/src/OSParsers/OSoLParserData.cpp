@@ -71,6 +71,8 @@ OSoLParserData::OSoLParserData() :
     numberOfDirectoriesToMake(0),
     filesToMakePresent(false),
     numberOfFilesToMake(0),
+    pathPairFrom(""),
+    pathPairTo(""),
     pathPairFromPresent(false),
     pathPairToPresent(false),
     pathPairMakeCopyPresent(false),

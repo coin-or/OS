@@ -118,7 +118,7 @@
  * 
  */ 
 
-#define DEBUG
+//#define DEBUG
 //#define GUS_DEBUG
 
 #include "OSConfig.h"
@@ -2277,8 +2277,6 @@ if (PARSER_TESTS){
 
 		osolreader = new OSoLReader();
 
-
-
 		osol = "<osol></osol>";
 		cout << "Parse the OSoL string into an OSOption object" << endl;
 		osoption = osolreader->readOSoL( osol);
@@ -2290,6 +2288,11 @@ if (PARSER_TESTS){
 	}	
 	
 	catch(const ErrorClass& eclass){
+
+		std::cout << "Content of error msg:" << std::endl << "-------------------------------" << std::endl;
+        std::cout << eclass.errormsg << endl;
+        std::cout << "-------------------------------" << std::endl;
+
 		unitTestResultFailure << eclass.errormsg << endl;
 		unitTestResultFailure << "There was a failure in the test for reading OSoL" << endl;
 
@@ -2303,6 +2306,108 @@ if (PARSER_TESTS){
 			delete fileUtil;
 		fileUtil = NULL;
 	}
+
+
+	// Finally a .osol file that has a number of semantic errors (not catchable by the schema)
+	try{ 
+		cout << endl << "TEST " << ++nOfTest << ": Parse faulty .osol file" << endl << endl;
+
+    	fileUtil = new FileUtil();
+		osolwriter = new OSoLWriter();
+		osolreader = new OSoLReader();
+
+		std::string tmpOSoL;
+
+		cout << "First read the OSoL file into a string" << endl;
+		osolFileName = dataDir  + "osolFiles" + dirsep + "parsertestWithErrors.osol"; 
+		osol = fileUtil->getFileAsString( osolFileName.c_str() );
+
+		cout << "Parse the OSoL string into an OSOption object" << endl;
+		osoption = osolreader->readOSoL( osol);
+
+
+		delete osolreader;
+		osolreader = NULL;
+		osolreader = new OSoLReader();
+		osolreader->readOSoL( tmpOSoL);
+		delete osolwriter;
+		osolwriter = NULL;
+		delete osolreader;
+		osolreader = NULL;
+		delete fileUtil;
+		fileUtil = NULL;
+
+		unitTestResultFailure << "OSoL parser cannot find errors in faulty OSoL file" << endl;
+	}	
+	
+	catch(const ErrorClass& eclass)
+    {
+        std::string resultFileName, resultFileContent;
+		resultFileName    = dataDir  + "osolFiles" + dirsep + "parsertestWithErrors.result"; 
+		resultFileContent = fileUtil->getFileAsString( resultFileName.c_str() );
+
+  std::cout << std::endl << std::endl << "error message should be:" << resultFileContent << std::endl;      
+  std::cout << std::endl << std::endl << "error message now reads:" << eclass.errormsg   << std::endl;
+
+        if (resultFileContent == eclass.errormsg)
+        {
+    		unitTestResult << "TEST " << nOfTest << ": Successful error handling of faulty OSoL input" << std::endl;
+    		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+        }
+        else
+        {
+            int i,j,ni,nj;
+            i = 0;
+            j = 0;
+			ni = resultFileContent.size() - 1;
+			nj =   eclass.errormsg.size() - 1;
+            ok = true;
+            for (;;)
+            {
+                if (i >= ni || j >= nj) break;
+                for (;;) 
+                {               
+                    if (resultFileContent[i] != '\n' && resultFileContent[i] != '\r' &&
+                        resultFileContent[i] != '\t' && resultFileContent[i] != ' ' ) break;
+                    if (i >= ni) break;
+                    i++;
+                }
+                for (;;) 
+                {               
+                    if (eclass.errormsg[j] != '\n' && eclass.errormsg[j] != '\r' &&
+                        eclass.errormsg[j] != '\t' && eclass.errormsg[j] != ' ' ) break;
+                    if (j >= nj) break;
+                    j++;
+                }
+
+                ok &= (resultFileContent[i] == eclass.errormsg[j]);
+                if (!ok) break;
+                i++;
+                j++;
+            }
+
+            if (ok)
+            {
+        		unitTestResult << "TEST " << nOfTest << ": Successful error handling of faulty OSoL input" << std::endl;
+        		cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
+            }
+            else
+    	    	unitTestResultFailure << "There was a failure in the error handling of the OSoL parser" << endl;
+        }
+
+		if(osolwriter != NULL) 
+			delete osolwriter;
+		osolwriter = NULL;
+		if(osolreader != NULL) 
+			delete osolreader;
+		osolreader = NULL;
+		if (fileUtil != NULL)
+			delete fileUtil;
+		fileUtil = NULL;
+	}
+
+
+
 
 //#endif //!!!  end of #if 0: OSrL parser development
 
@@ -7721,6 +7826,7 @@ if( THOROUGH == true){
 
 	OSrLWriter *tmp_writer = NULL;
 	try{
+
 		cout << endl << "TEST " << ++nOfTest << ": Couenne solver on wayneQuadratic.osil" << endl << endl;
 
     	fileUtil = new FileUtil();

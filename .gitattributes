@@ -275,6 +275,8 @@ OS/data/osolFiles/parincQuadratic_lindo.osol -text
 OS/data/osolFiles/parsertest.osol -text
 OS/data/osolFiles/parsertest2.osol -text
 OS/data/osolFiles/parsertest3.osol -text
+OS/data/osolFiles/parsertestWithErrors.osol -text
+OS/data/osolFiles/parsertestWithErrors.result -text
 OS/data/osolFiles/remoteSolve1.osol -text
 OS/data/osolFiles/remoteSolve2.osol -text
 OS/data/osolFiles/remotegsbkip.osol -text

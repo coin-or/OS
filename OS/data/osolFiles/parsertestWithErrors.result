@@ -1,0 +1,256 @@
+At line number 18: </name>
+		
+Repeated header information: file name
+At line number 19: </source>
+		
+Repeated header information: source
+At line number 20: <description/>
+		
+Repeated header information: description
+At line number 21: </fileCreator>
+		
+Repeated header information: file creator
+At line number 22: </licence>
+	
+Repeated header information: licence
+At line number 35: <other
+more <other> elements than specified
+At line number 41: <solverToInvoke
+Repeated element: <solverToInvoke>
+At line number 42: <serviceURI
+Repeated element: <serviceURI>
+At line number 43: <license
+Repeated element: <license>
+At line number 44: 
+		<userName
+Repeated element: <username>
+At line number 45: <password
+Repeated element: <password>
+At line number 46: <contact
+Repeated element: <contact>
+At line number 46: "
+transport type not recognized
+At line number 47: </contact>
+		
+setContact failed
+At line number 47: <serviceName
+Repeated element: <serviceName>
+At line number 48: <instanceLocation
+Repeated element: <instanceLocation>
+At line number 48: "
+instance location type not recognized
+At line number 49: </instanceLocation>
+		
+setInstanceLocation failed
+At line number 49: <otherOptions
+Repeated element: <general> <otherOptions>
+At line number 53: />
+<other> must have name attribute
+At line number 55: <instanceName
+Repeated element: <instanceName>
+At line number 56: <jobID
+Repeated element: <jobID>
+At line number 68: <minDiskSpace
+only one minDiskSpace element allowed
+At line number 68: -1 
+setMinDiskSpace failed
+At line number 69: <minMemorySize
+only one minMemory element allowed
+At line number 69: -1.0
+setMinMemorySize failed
+At line number 70: <minCPUNumber
+only one minCPUNumber element allowed
+At line number 71: <minCPUSpeed
+only one minCPUSpeed element allowed
+At line number 71: -1.0
+setMinCPUSpeed failed
+At line number 72: <otherOptions
+Repeated element: <system> <otherOptions>
+At line number 74: <other
+more <other> elements than specified
+At line number 78: spy
+setServiceType failed; current system state not recognized
+At line number 85: <type
+only one currentState element allowed
+At line number 85: duplicate_type.error
+setServiceType failed; current system state not recognized
+At line number 86: <otherOptions
+Repeated element: <service> <otherOptions>
+At line number 90: 
+			<other
+more <other> elements than specified
+At line number 98: </dependencies>
+		
+too few job IDs in <dependencies> element
+At line number 101: </directoriesToMake>
+		
+too few paths in <directoriesToMake> element
+At line number 104: </filesToDelete>
+		
+too few paths in <filesToDelete> element
+At line number 108: </inputDirectoriesToMove>
+		
+too few path pairs in <inputDirectoriesToMove> element
+At line number 112: 
+		</inputFilesToMove>
+		
+too few path pairs in <inputFilesToMove> element
+At line number 115: </filesToMake>
+		
+too few paths in <filesToMake> element
+At line number 118: </directoriesToDelete>
+		
+too few paths in <directoriesToDelete> element
+At line number 122: </outputFilesToMove>
+		
+too few path pairs in <outputFilesToMake> element
+At line number 123: </maxTime>
+		
+max time request could not be honored
+At line number 126: </requiredDirectories>
+		
+too few paths in <requiredDirectories> element
+At line number 129: </processesToKill>
+        
+too few process IDs in <processesToKill> element
+At line number 133: </requiredFiles>
+		
+too few paths in <requiredFiles> element
+At line number 135: </pathPair>
+		
+"from" attribute must be present
+At line number 136: </outputDirectoriesToMove>
+		
+too few path pairs in <outputDirectoriesToMake> element
+At line number 139: <dependencies
+only one <dependencies> element allowed
+At line number 142: </jobID>
+        
+too many job IDs in <dependencies> element
+At line number 143: <directoriesToMake
+only one <directoriesToMake> element allowed
+At line number 145: </path>
+        
+too many paths in <requiredDirectories> element
+At line number 146: <filesToDelete
+only one <filesToDelete> element allowed
+At line number 148: </path>
+            
+too many paths in <requiredDirectories> element
+At line number 151: <inputDirectoriesToMove
+only one <inputDirectoriesToMove> element allowed
+At line number 153: "
+only one "to" attribute allowed
+At line number 154: </pathPair>
+        
+too many path pairs
+At line number 155: <inputFilesToMove
+only one <inputFilesToMove> element allowed
+At line number 157: />
+too many path pairs
+At line number 159: <filesToMake
+only one <filesToMake> element allowed
+At line number 161: </path>
+        
+too many paths in <requiredDirectories> element
+At line number 162: <directoriesToDelete
+only one <directoriesToDelete> element allowed
+At line number 164: </path>
+        
+too many paths in <requiredDirectories> element
+At line number 165: <outputFilesToMove
+only one <outputFilesToMove> element allowed
+At line number 167: />
+too many path pairs
+At line number 169: <maxTime
+only one <maxTime> element allowed
+At line number 170: <requiredDirectories
+only one <requiredDirectories> element allowed
+At line number 172: </path>
+        
+too many paths in <requiredDirectories> element
+At line number 173: <processesToKill
+only one <processesToKill> element allowed
+At line number 175: </process>
+        
+too many process IDs in <processesToKill> element
+At line number 176: <requestedStartTime
+only one requestedStartTime element allowed
+At line number 177: <requiredFiles
+only one <requiredFiles> element allowed
+At line number 179: </path>
+        
+too many paths in <requiredDirectories> element
+At line number 180: <outputDirectoriesToMove
+only one <outputDirectoriesToMove> element allowed
+At line number 182: </pathPair>
+        
+too many path pairs
+At line number 183: <otherOptions
+Repeated element: <job> <otherOptions>
+At line number 184: <other
+more <other> elements than specified
+At line number 191: "
+variable index must be nonnegative
+At line number 196: 
+			</initialVariableValues>
+            
+<initialVariableValues>: fewer <var> elements than specified
+At line number 201: </initialVariableValuesString>
+            
+too few initial values in <initialVariableValuesString> element
+At line number 206: </basic>
+                
+fewer data elements than specified
+At line number 209: </atLower>
+				
+set variables atLower failed
+At line number 214: >
+<var> element must have idx attribute
+At line number 218: 
+			</integerVariableBranchingWeights>
+            
+fewer <var> elements than specified
+At line number 220: "
+variable index must be nonnegative
+At line number 225: 
+			</sosVariableBranchingWeights>
+            
+fewer <sos> elements than specified
+At line number 226: "
+variable index must be nonnegative
+At line number 226: />
+set other variable option <var> element failed
+At line number 240: "
+objective index must be negative
+At line number 243: 
+			</initialObjectiveValues>
+            
+<initialObjectiveValues>: fewer <obj> elements than specified
+At line number 247: </initialObjectiveBounds>
+            
+<initialObjectiveBounds>: fewer <obj> elements than specified
+At line number 251: </basic>
+			
+fewer data elements than specified
+At line number 253: "
+number of <obj> cannot be negative
+At line number 258: "
+constraint index must be nonnegative
+At line number 261: </initialConstraintValues>
+			
+<initialConstraintValues>: fewer <con> elements than specified
+At line number 263: "
+constraint index must be nonnegative
+At line number 265: 
+			</initialDualValues>
+            
+<initialDualValues>: fewer <con> elements than specified
+At line number 269: </unknown>
+			
+fewer data elements than specified
+At line number 273: <con
+more <con> elements than specified
+
+OSoL input is either not valid or well formed.
+

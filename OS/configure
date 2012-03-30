@@ -36144,36 +36144,6 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
-  cvl_tmp="data/osolFiles/parsertest.osol"
-  for file in $cvl_tmp ; do
-    coin_vpath_link_files="$coin_vpath_link_files $file"
-  done
-fi
-
-
-
-# Allow for newlines in the parameter
-if test $coin_vpath_config = yes; then
-  cvl_tmp="data/osolFiles/parsertest2.osol"
-  for file in $cvl_tmp ; do
-    coin_vpath_link_files="$coin_vpath_link_files $file"
-  done
-fi
-
-
-
-# Allow for newlines in the parameter
-if test $coin_vpath_config = yes; then
-  cvl_tmp="data/osolFiles/parsertest3.osol"
-  for file in $cvl_tmp ; do
-    coin_vpath_link_files="$coin_vpath_link_files $file"
-  done
-fi
-
-
-
-# Allow for newlines in the parameter
-if test $coin_vpath_config = yes; then
   cvl_tmp="data/osolFiles/demopasswordjobID.osol"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
@@ -36525,6 +36495,56 @@ fi
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
   cvl_tmp="data/osolFiles/wayneQuadratic_lindo.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osolFiles/parsertest.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osolFiles/parsertest2.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osolFiles/parsertest3.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osolFiles/parsertestWithErrors.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osolFiles/parsertestWithErrors.result"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
