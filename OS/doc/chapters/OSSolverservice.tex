@@ -40,6 +40,9 @@ It is assumed that this file is available on the machine that is running
 {\tt OSSolverService}. This parameter can be omitted, as there are other ways
 to specify an optimization instance.
 %If this option is not specified then the instance location must be specified in the OSoL\index{OSoL} solver options file.
+Although we endorse the convention that OSiL schema files have the extension {\tt .osil},
+OSoL files have the extension {\tt .osol}, etc., it is not required. Any other path and file name could be
+substituted for {\tt xxx.osil}
 
 \item[] {\bf osol xxx.osol}\ \ This is the path information and name of the file that contains the solver 
 options. It is assumed that this file is available on the machine that is running {\tt OSSolverService}. 
@@ -52,16 +55,16 @@ If this parameter is not specified then the solver solution is displayed to the 
 
 
 \item[] {\bf osplInput xxx.ospl}\ \  The name of an input file in the  OS Process Language (OSpL); 
-this is used as input  to the {\tt knock} method.
+this is used as input  to the {\tt knock} method. If {\tt serviceMethod knock} is specified, this parameter is also needed.
 
 \item[] {\bf osplOutput xxx.ospl}\ \  The name of an output file in the  OS Process Language (OSpL); 
-this is the  output  string from the {\tt knock}  and {\tt kill} method.
+this is the  output  string from the {\tt knock}  and {\tt kill} method. If not present, the ouput is displayed to the terminal screen.
 
 \item[] {\bf serviceLocation url}\ \ This is the URL of the solver service.
 It is not required, and if not specified it is assumed that the problem
 is solved locally.
 
-\item[] {\bf serviceMethod  methodName}\ \ This is  the method on the solver service to be invoked.
+\item[] {\bf serviceMethod  methodName}\ \ This is  the service method to be invoked.
 The options are 
 {\tt solve}\index{solve@{\tt solve}|(}, 
 {\tt send}\index{send@{\tt send}},
@@ -95,7 +98,8 @@ Other solvers supported (if the necessary libraries are present) are
 and {\tt lindo} (LINDO)\index{LINDO}.
 If no value is specified for this parameter, then a default solver is used 
 %then {\tt cbc}\index{COIN-OR projects!Cbc@{\tt Cbc}} is the default value of this parameter 
-for the {\tt solve}\index{solve@{\tt solve}} or {\tt send}\index{send@{\tt send}} service method.
+for the (local) {\tt solve}\index{solve@{\tt solve}} %or {\tt send}\index{send@{\tt send}} service
+method.
 The default solver depends on the problem type and can be read off from 
 table~\ref{table:defaultsolvers}.\index{default solver}
 
@@ -108,8 +112,8 @@ table~\ref{table:defaultsolvers}.\index{default solver}
  \begin{tabular}{l|c|c|c|}
  & {binaries} & {UNIX build} & {MSVS build} \\
  & (Section~\ref{section:obtainingbinaries})
- & (Section~\ref{section:unixbuilds})
- & (Section~\ref{section:windowsinstall})\\ \hline
+ & (\ifdevelop Section~\ref{section:unixbuilds}\else See OS User's Manual\fi)
+ & (\ifdevelop Section~\ref{section:windowsinstall}\else See OS User's Manual\fi)\\ \hline
 Bonmin   & x & x$^1$ & x$^{1,2}$ \\
 Cbc      & x & x     & x \\
 Clp      & x & x     & x \\
@@ -123,7 +127,7 @@ Vol      & x & x     & x \\ \hline
 \begin{tabular}{l}
 Explanations:\\
 $\qquad{}^1$Requires third-party software to be downloaded\\
-$\qquad{}^2$Requires Fortran compiler (see Section~\ref{section:ipopt})
+$\qquad{}^2$Requires Fortran compiler \ifdevelop(see Section~\ref{section:ipopt})\fi
 \end{tabular}
 \end{table}\index{supported solvers}
 
@@ -146,7 +150,7 @@ Nonlinear, integer   & Bonmin \\ \hline
 If this optional parameter is specified then the solver result in OSrL\index{OSrL} format is transformed 
 using XSLT into HTML and displayed in the browser.
 
-\item[] {\bf config pathToConfigureFile}\ \ This optional parameter specifies a path on the local machine 
+\item[] {\bf config xxx.config}\ \ This optional parameter specifies a path on the local machine 
 to a text file containing values for the input parameters. This is convenient for the user not wishing 
 to constantly retype parameter values.
 
@@ -677,18 +681,19 @@ the {\tt demo.ospl} file is
     <processData/>
 </ospl>
 \end{verbatim}
-and the {\tt retrieve.osol} file is
-\begin{verbatim}
-<?xml version="1.0" encoding="UTF-8"?>
-<osol xmlns="os.optimizationservices.org"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="os.optimizationservices.org
-      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
-    <general>
-        <jobID>123456abcd</jobID>
-    </general>
-</osol>
-\end{verbatim}
+and the {\tt retrieve.osol} file is 
+as in Section~\ref{section:retrieve}.
+%\begin{verbatim}
+%<?xml version="1.0" encoding="UTF-8"?>
+%<osol xmlns="os.optimizationservices.org"
+%      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+%      xsi:schemaLocation="os.optimizationservices.org
+%      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+%    <general>
+%        <jobID>123456abcd</jobID>
+%    </general>
+%</osol>
+%\end{verbatim}
 
 The result of this request is a string in OSpL\index{OSpL|(} format, with the data contained in its
 {\tt processData} section.  The result is displayed on the screen; if the user desires it

@@ -19,10 +19,15 @@ We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt
 It is possible to call all of the COIN-OR solvers listed in %Section~\ref{section:overview} 
 Table~\ref{table:configurations}~(p.\pageref{table:configurations})
 directly from the  AMPL (see {\tt http://www.ampl.com}) modeling language.  In this discussion we assume 
-the user has already obtained and installed AMPL.  
+the user has already obtained and installed AMPL.
+\ifdevelop  
 Both the binary download described in Section~\ref{section:obtainingbinaries}
 and the unix and Windows builds (Section \ref{section:unixbuilds}
 and~\ref{section:windowsinstall}, respectively) contain
+\else
+The binary download described in Section~\ref{section:obtainingbinaries}
+contains
+\fi
 %In  the download described in Section~\ref{section:binary} there is 
 an executable, {\tt OSAmplClient.exe},
 that is linked to all of the COIN-OR solvers  listed in Table~\ref{table:configurations}. %Section~\ref{section:overview}.   
@@ -41,25 +46,29 @@ in the {\tt amplFiles}\index{amplFiles@{\tt amplFiles}} directory.  To solve thi
 by calling {\tt OSAmplClient.exe} from AMPL, first start AMPL and then open the {\tt eastborne.mod} file 
 inside AMPL.  The test model {\tt eastborne.mod} is a linear integer program. 
 
+
+%\begin{verbatim}
+%# take in sample integer linear problem
+%# assume the problem is in the AMPL directory
 \begin{verbatim}
-# take in sample integer linear problem
-# assume the problem is in the AMPL directory
 model eastborne.mod;
 \end{verbatim}
 
 The next step is to tell AMPL that the solver it is going to use is {\tt OSAmplClient.exe}. 
 Do this by issuing the following command inside AMPL.
 
+%\begin{verbatim}
+%# tell AMPL that the solver is OSAmplClient
 \begin{verbatim}
-# tell AMPL that the solver is OSAmplClient
 option solver OSAmplClient;
 \end{verbatim}
 
 It is not necessary to provide the  {\tt OSAmplclient.exe} solver with any options. 
 You can just issue the {\tt solve} command in AMPL as illustrated below.  
 
+%\begin{verbatim}
+%# solve the problem
 \begin{verbatim}
-# solve the problem
 solve;
 \end{verbatim}
 
@@ -67,7 +76,7 @@ Of the six methods described in Section~\ref{section:ossolverservice} only the {
 has been implemented to date.
 
 If no options are specified, the default solver is used, depending on the problem characteristics 
-(see Table~\ref{table:defaultsolvers}).\index{default solver}
+(see Table~\ref{table:defaultsolvers} on p.\pageref{table:defaultsolvers}).\index{default solver}
 %is to use {\tt Clp}\index{Clp@{\tt Clp}} for linear programs. 
 %For continuous nonlinear models {\tt Ipopt}\index{Ipopt@{\tt Ipopt}} is used. 
 %For mixed-integer linear models, {\tt Cbc}\index{Cbc@{\tt Cbc}} is used. 
@@ -78,8 +87,9 @@ If instead you want to  use {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt 
 then you would pass a {\tt solver} option to the {\tt OSAmplclient.exe} solver as follows.%
 \index{eastborne.mod@{\tt eastborne.mod}|)}
 
+%\begin{verbatim}
+%# tell OSAmplClient to use SYMPHONY instead of Cbc
 \begin{verbatim}
-# now tell OSAmplClient to use SYMPHONY instead of Cbc
 option OSAmplClient_options "solver symphony";
 \end{verbatim}
 \index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|)}
@@ -97,20 +107,18 @@ The {\tt serviceLocation} option is used to specify the location of a solver ser
 In this case, the string of options for {\tt OSAmplClient\_options} is:
 
 \begin{verbatim}
-serviceLocation  http://xxxx/OSServer/services/OSSolverService
+serviceLocation  http://xxx/OSServer/services/OSSolverService
 \end{verbatim}
 where {\tt xxx} is the URL for the server.  This string is used to replace the string `{\tt solver symphony}' in the previous example. 
-We will omit the other parts (i.e., the AMPL instruction
-\begin{verbatim}
-option OSAmplClient_options
-\end{verbatim}
-the double quotes and the trailing semicolon) in this and the remaining examples.  The {\tt serviceLocation} option will send the problem to the solver server at location {\tt http://xxx}.   
+The {\tt serviceLocation} option will send the problem to the %solver server at 
+location {\tt http://xxx} and, assuming the remote executable is indeed found 
+in the indicated folder, will start the executable.  
 
 
 \medskip
 
 
-Each call 
+However, each call 
 \begin{verbatim}
 option OSAmplClient_options
 \end{verbatim}
@@ -124,11 +132,27 @@ solve;
 \end{verbatim}
 will result in the default solver being called. 
 
+If the intent is to use the SYMPHONY solver at the remote location, the option must be declared
+as follows:
+
+\begin{verbatim}
+option OSAmplClient_options "solver symphony 
+    serviceLocation http://xxx/OSServer/services/OSSolverService";
+solve;
+\end{verbatim}
+
+
+For brevity we will omit the AMPL instruction
+\begin{verbatim}
+option OSAmplClient_options
+\end{verbatim}
+the double quotes and the trailing semicolon in the remaining examples.  
+
 \medskip
 
-Finally, the user may wish to pass options to the individual solver. This is done by providing an options file.
-A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
-provided with this distribution.  The name of the options file is the value of the {\tt osol} option.
+Finally, the user may wish to pass options to the individual solver. This is done by specifying an options file.
+(A sample options file, {\tt solveroptions.osol}\index{solveroptions.osol@{\tt solveroptions.osol}} is 
+provided with this distribution).  The name of the options file is the value of the {\tt osol} option.
 The string of options to {\tt OSAmplClient\_options} is now
 \begin{verbatim}
 serviceLocation http://xxx/OSServer/services/OSSolverService
@@ -138,14 +162,14 @@ This   {\tt solveroptions.osol}  file contains four solver options; two for {\tt
 and one for {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}}.
 You can have any number of options. Note the format for specifying an option:
 \begin{verbatim}
-<solverOption name="maxN" solver="cbc" value="5" />
+    <solverOption name="maxN" solver="cbc" value="5" />
 \end{verbatim}
 The attribute {\tt name} specifies that the option name is {\tt maxN} which is the maximum number of nodes 
 allowed in the branch-and-bound tree, the {\tt solver} attribute specifies the name of the solver that the 
 option should be applied to, and the {\tt value} attribute specifies the value of the option. 
 As a second example, consider the specification
 \begin{verbatim}
-<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/> 
+    <solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/> 
 \end{verbatim}
 In this example we are specifying an iteration limit for {\tt Ipopt}.  Note the additional attribute 
 {\tt type} that has value  {\tt integer}. The Ipopt solver requires specifying the data type 
@@ -157,7 +181,7 @@ A good summary of options for COIN-OR solvers is \url{http://www.coin-or.org/GAM
 
 If you examine the file {\tt solveroptions.osol} you will see that there is an XML tag  with the name
 {\tt <solverToInvoke>} and that the solver given is {\tt symphony}.   
-This has no effect on a local solve. However, if this option file is paired with 
+{\bf This has no effect on a local solve!} However, if this option file is paired with 
 
 \begin{verbatim}
 serviceLocation http://xxx/OSServer/services/OSSolverService
@@ -174,7 +198,11 @@ then in our reference implementation the remote solver service will parse the fi
 option solver OSAmplClient;
 \end{verbatim}
 
-\item Specify options to the OSAmplClient solver by using the AMPL command {\tt OSAmplClient\_options}.
+\item Specify options to the OSAmplClient solver by using the AMPL command 
+
+\begin{verbatim}
+option OSAmplClient\_options "(option string)";
+\end{verbatim}
 
 \item There are three possible options to specify:
 
@@ -192,15 +220,13 @@ and the discussion in Section~\ref{section:OSSolverServiceInputParameters}.
 \end{itemize}
 
 These three options behave {\it exactly like} the {\tt solver}, {\tt serviceLocation}, and {\tt osol} options used by the {\tt OSSolverService} described in  Section \ref{section:commandlineparser}.
-Note that the {\tt solver} option only has an affect with a local solve; 
+Note that the {\tt solver} option only has an effect with a local solve; 
 if the user wants to invoke a specific solver with a remote solve, then this must be done in the OSoL file using the {\tt <solverToInvoke>} element.
 
 \item  The options given to {\tt OSAmplClient\_options}  can be given in any order.
 
-\item If no options are specified using {\tt OSAmplClient\_options},  the default solver is used.
+\item If no solver is specified using {\tt OSAmplClient\_options},  the default solver is used.
 (For details see Table~\ref{table:defaultsolvers}).\index{default solver}
-All solvers are invoked locally. 
-
 
 \item A remote solver is called if and only if the {\tt serviceLocation} option is specified.
 
@@ -314,7 +340,7 @@ in the {\tt data} directory. This file contains four solver options; two for {\t
 and one for {\tt SYMPHONY} (which is available for remote server calls, but not locally).  
 You can have any number of options. Note the format for specifying an option:
 \begin{verbatim}
-<solverOption name="maxN" solver="cbc" value="5" />
+    <solverOption name="maxN" solver="cbc" value="5" />
 \end{verbatim}
 The attribute {\tt name} specifies that the option name is {\tt maxN} which is the maximum number of nodes 
 allowed in the branch-and-bound tree, the {\tt solver} attribute specifies the name of the solver to which
@@ -322,7 +348,7 @@ the option should be applied, and the {\tt value} attribute specifies the value 
 
 As a second example, consider the specification
 \begin{verbatim}
-<solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/> 
+    <solverOption name="max_iter" solver="ipopt" type="integer" value="2000"/> 
 \end{verbatim}
 In this example we are specifying an iteration limit for {\tt Ipopt}.  Note the additional attribute 
 {\tt type} that has value  {\tt integer}. The Ipopt solver requires specifying the data type 
@@ -374,7 +400,7 @@ Table~\ref{table:defaultsolvers} (p.\pageref{table:defaultsolvers}).
 In order to control the solver used, it is necessary to specify the name of the solver
 inside the XML tag {\tt <solverToInvoke>}. The example  {\tt solveroptions.osol} file contains the XML tag
 \begin{verbatim}
-<solverToInvoke>symphony</solverToInvoke>
+    <solverToInvoke>symphony</solverToInvoke>
 \end{verbatim}
 If, for example,  the {\tt CoinOS.opt} file is
 \begin{verbatim}
@@ -433,8 +459,8 @@ Any job id can be sent to the server as long as it has not been used before.
 
 \vskip 8pt
 \noindent {\tt service\_method send}: When working in asynchronous mode, use the {\tt send} service method 
-to submit a job. When using  the {\tt send} service method option an option is required and the options file
-must specify a  job id that has not been used before.  Assume that in the  {\tt CoinOS.opt}  we specify 
+to submit a job. When using  the {\tt send} service method a job id is required. An options file
+must be present and must specify a  job id that has not been used before.  Assume that in the file {\tt CoinOS.opt}  we specify 
 the options:
 \vskip 8pt
 \begin{verbatim}
@@ -445,7 +471,7 @@ readosol sendWithJobID.osol
 The {\tt sendWithJobID.osol} options file is identical to the {\tt solveroptions.osol} options file except 
 that it has an additional XML tag:
 \begin{verbatim}
-<jobID>coinor12345xyz</jobID> 
+    <jobID>coinor12345xyz</jobID> 
 \end{verbatim}
 We then execute
 \vskip 8pt
@@ -479,16 +505,16 @@ returned in the file specified by the {\tt writeospl} option.  In this case the 
 \begin{verbatim}
 gams.exe eastborne.gms optfile=1
 \end{verbatim}
-The file {\tt knockResult.ospl} will contain the information
+The file {\tt knockResult.ospl} will contain information similar to the following:
 \begin{verbatim}
-<job jobID="coinor12345xyz">
-<state>finished</state>
-<serviceURI>http://192.168.0.219:8443/os/OSSolverService.jws</serviceURI>
-<submitTime>2009-11-10T02:13:11.245-06:00</submitTime>
-<startTime>2009-11-10T02:13:11.245-06:00</startTime>
-<endTime>2009-11-10T02:13:12.605-06:00</endTime>
-<duration>1.36</duration>
- </job>
+    <job jobID="coinor12345xyz">
+        <state>finished</state>
+        <serviceURI>http://192.168.0.219:8443/os/OSSolverService.jws</serviceURI>
+        <submitTime>2009-11-10T02:13:11.245-06:00</submitTime>
+        <startTime>2009-11-10T02:13:11.245-06:00</startTime>
+        <endTime>2009-11-10T02:13:12.605-06:00</endTime>
+        <duration>1.36</duration>
+    </job>
 \end{verbatim}
 Note that the job is complete as indicated in the {\tt <state>} tag. It is now time to actually retrieve 
 the job solution.  This is done with the {\tt retrieve} method.
@@ -622,12 +648,12 @@ for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt r
 
 \index{GAMS|)}
 
-
+\ifruncode\else    % the matlab interface requires the user to compile stuff
 
 \subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:usingmatlab}
 
 \index{MATLAB|(}
-MATLAB has powerful matrix generation and manipulation routines. This section is for users who wish to use MATLAB to generate the matrix coefficients for linear or quadratic programs and use the OS library to call a solver and get the result back. Using MATLAB with OS requires the user compile a file {\tt OSMatlabSolverMex.cpp} into a MATLAB executable file (these files will have a {\tt .mex} extension) after compilation. This executable file is linked to the OS library and works through the MATLAB API to communicate with the OS library. 
+MATLAB has powerful matrix generation and manipulation routines. This section is for users who wish to use MATLAB to generate the matrix coefficients for linear or quadratic programs and use the OS library to call a solver and get the result back. Using MATLAB with OS requires the user to compile a file {\tt OSMatlabSolverMex.cpp} into a MATLAB executable file (these files will have a {\tt .mex} extension) after compilation. This executable file is linked to the OS library and works through the MATLAB API to communicate with the OS library. 
 
 
 
@@ -667,7 +693,13 @@ OS/applications/matlab/macOSXscript.txt
 \end{verbatim}
 the exact options that work on a 64 bit Mac with MATLAB release R2009b.
 
-\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file {\tt OSmatlabSolverMex.cpp}.    Execute the command:
+\item{}  Build the MATLAB executable file. Start MATLAB and in the MATLAB command window connect to the directory {\tt OS/examples/matlab} which  contains the file 
+
+\begin{verbatim}
+OSMatlabSolverMex.cpp
+\end{verbatim}
+
+\item{} Execute the command:
 
 \begin{verbatim}
 mex -v OSMatlabSolverMex.cpp
@@ -679,8 +711,9 @@ On a 64 bit machine the command should be
 mex -v -largeArrayDims OSMatlabSolverMex.cpp
 \end{verbatim}
 
-
-On an Intel MAC OS X 64 bit chip the resulting executable will be named {\tt OSmatlabSolver.mexmaci64}. On the Windows system the file is named {\tt OSmatlabSolver.mexw32}.  
+The name of the resulting executable is system dependent. 
+On an Intel MAC OS X 64 bit chip the name will be  {\tt OSMatlabSolver.mexmaci64}, 
+on a Windows system it is {\tt OSMatlabSolver.mexw32}.  
 
 
 
@@ -693,7 +726,7 @@ files {\tt markowitz.m} or {\tt parincLinear.m}.  The result should be displayed
 \end{enumerate}
 
 
-To use the {\tt OSmatlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.   We illustrate for the linear program:
+To use the {\tt OSMatlabSolver} it is necessary to put the coefficients  from a linear, integer, or quadratic problem into MATLAB arrays.   We illustrate for the linear program:
 
 \begin{alignat}{2}
 & \mbox{Minimize} & \quad
@@ -914,4 +947,6 @@ OSCallMatlabSolver( numVar, numCon, A, BL, BU, OBJ, VL, VU, ObjType, VarType, ..
      Q, prob_name, password, solverName, serviceAddress)
 \end{verbatim}
 \index{MATLAB|)}
+
+\fi
 

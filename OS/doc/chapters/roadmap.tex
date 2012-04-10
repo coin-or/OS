@@ -5,9 +5,12 @@ If you want to:
 \begin{itemize}
 \item Download the OS binaries  (executables and libraries) -- see Section~\ref{section:downloadbinaries}.
 
+\ifruncode\else
+
 \item Download the OS source code -- see Section~\ref{section:downloadsource}.
 
 \item Download just the OS API, readers and writers -- see Section~\ref{section:oslite}.
+\fi
 
 \item Use the OSSolverService to read files in nl\index{AMPL nl format}, OSiL\index{OSiL}, 
 or MPS format\index{MPS format} and call a solver locally or remotely -- see Section~\ref{section:ossolverservice}.
@@ -24,6 +27,7 @@ or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
 \item Use MATLAB\index{MATLAB} to generate problem instances in OSiL format and call a solver either remotely or locally
  -- see Section~\ref{section:usingmatlab}.
 
+\ifruncode\else
 \item Create your own applications by linking against the binaries -- see Sections \ref{section:examples} and~\ref{section:OSDip}.
 
 \item Use the OS library to build model instances or use solver APIs -- see Sections \ref{section:osmodelinterfaces},
@@ -35,5 +39,6 @@ COIN-OR CppAD)\index{COIN-OR projects!CppAD@{\tt CppAD}} -- see Section~\ref{sec
 \item Build the OS project from the source code -- see Section~\ref{section:build}.
 
 \item Build a remote solver service using Apache Tomcat\index{Apache Tomcat} -- see Section~\ref{section:tomcat}.
+\fi
 \end{itemize}
 

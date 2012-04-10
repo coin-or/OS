@@ -316,6 +316,8 @@ OS/doc/UsingCoinAll.bbl -text
 OS/doc/UsingCoinAll.idx -text
 OS/doc/UsingCoinAll.pdf -text
 OS/doc/UsingCoinAll.tex -text
+OS/doc/UsingCoinEasy.pdf -text
+OS/doc/UsingCoinEasy.tex -text
 OS/doc/buildSystemInfo.txt -text
 OS/doc/chapters/CppAD.tex -text
 OS/doc/chapters/OSDip.tex -text
