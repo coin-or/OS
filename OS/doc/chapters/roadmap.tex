@@ -1,0 +1,44 @@
+\section{Quick Roadmap}\label{section:roadmap}
+
+If you want to:
+
+\begin{itemize}
+\item Download the OS binaries  (executables and libraries) -- see Section~\ref{section:downloadbinaries}.
+
+\ifruncode\else
+
+\item Download the OS source code -- see Section~\ref{section:downloadsource}.
+
+\item Download just the OS API, readers and writers -- see Section~\ref{section:oslite}.
+\fi
+
+\item Use the OSSolverService to read files in nl\index{AMPL nl format}, OSiL\index{OSiL}, 
+or MPS format\index{MPS format} and call a solver locally or remotely -- see Section~\ref{section:ossolverservice}.
+
+\item Use modeling languages to generate model instances in OSiL format -- see Section \ref{section:modellang}.
+
+\item Use AMPL\index{AMPL} to solve problems either locally or remotely
+with a COIN-OR solver, Cplex\index{cplex@{\tt cplex}},
+GLPK\index{Third-party software, {\tt GLPK}}, \ifknitro Knitro\index{knitro}, \fi
+or LINDO\index{LINDO} -- see Section~\ref{section:amplclient}.
+
+\item Use GAMS\index{GAMS} to solve problems either locally or remotely -- see Section~\ref{section:gamslinks}.
+
+\item Use MATLAB\index{MATLAB} to generate problem instances in OSiL format and call a solver either remotely or locally
+ -- see Section~\ref{section:usingmatlab}.
+
+\ifruncode\else
+\item Create your own applications by linking against the binaries -- see Sections \ref{section:examples} and~\ref{section:OSDip}.
+
+\item Use the OS library to build model instances or use solver APIs -- see Sections \ref{section:osmodelinterfaces},
+\ref{section:ossolverinterfaces} and~\ref{section:osinstanceAPI}.
+
+\item Use the OS library for algorithmic differentiation\index{Algorithmic differentiation} (in conjunction with 
+COIN-OR CppAD)\index{COIN-OR projects!CppAD@{\tt CppAD}} -- see Section~\ref{section:ad}.
+
+\item Build the OS project from the source code -- see Section~\ref{section:build}.
+
+\item Build a remote solver service using Apache Tomcat\index{Apache Tomcat} -- see Section~\ref{section:tomcat}.
+\fi
+\end{itemize}
+

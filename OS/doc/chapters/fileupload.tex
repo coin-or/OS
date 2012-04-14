@@ -1,0 +1,105 @@
+
+
+\section{File Upload:  Using a File Upload Package}\label{section:fileupload}
+
+\index{OSFileUpload@{\tt OSFileUpload}|(}
+When the {\tt OSAgent}\index{OSAgent@{\tt OSAgent}}  class methods {\tt solve}\index{solve@{\tt solve}} and
+{\tt send}\index{send@{\tt send}} are used, the problem instance in OSiL\index{OSiL} format is packaged into
+a SOAP\index{SOAP protocol} envelope and communication with the server is done using Web Services (for example Tomcat
+Axis)\index{Apache Tomcat}. However, packing an XML file into a SOAP envelope may add considerably to the
+size of the file (e.g., each {\tt $<$} is replaced with {\tt \&lt;}  and each {\tt $>$} is replaced with {\tt \&gt;}).
+Also, communicating with a Web Services servlet can further slow down the communication process.
+This could be a problem for large instances. An alternative approach is to use the {\tt OSFileUpload}
+executable on the client end and the Java servlet {\tt OSFileUpload} on the server end.  The {\tt OSFileUpload}
+client executable is contained in the {\tt fileUpload}  directory inside the {\tt applications} directory.
+
+This servlet is based upon the Apache Commons FileUpload. See 
+
+\medskip
+\noindent{\tt\UrlApacheFileupload}
+\medskip
+
+The {\tt OSFileUpload} Java class, {\tt OSFileUpload.class} is in the directory
+\begin{verbatim}
+webapps\os\WEB-INF\classes\org\optimizationservices\oscommon\util
+\end{verbatim}
+relative to the Web server root.  The source code {\tt OSFileUpload.class} is in the directory
+\begin{verbatim}
+COIN-OS/OS/applications/fileUpload
+\end{verbatim}
+
+Before you can use {\tt OSFileUpload}, you must give a valid URL for the location of the server.
+This information must be provided in line 82 of the source code {\tt OSFileUpload.cpp} before 
+issuing the {\tt make}\index{make@{\tt make}} command (in a unix environment) or the build (under MS VisualStudio)\index{Microsoft Visual Studio}.
+
+The {\tt OSFileUpload} client executable (see {\tt OS/applications/fileUpload}) takes one argument on the command line,
+which is the location of the file on the local directory to upload to the server. For example,
+\begin{verbatim}
+OSFileUpload ../../data/osilFiles/parincQuadratic.osil
+\end{verbatim}
+The {\tt OSFileUpload} executable first creates an {\tt OSAgent} object.
+\begin{verbatim}
+OSSolverAgent* osagent = NULL;
+osagent = new OSSolverAgent("http://kipp.chicagobooth.edu/fileupload/servlet/OSFileUpload");
+\end{verbatim}
+The {\tt OSAgent}  has a method {\tt OSFileUpload} with the signature
+\begin{verbatim}
+std::string OSFileUpload(std::string osilFileName, std::string osil);
+\end{verbatim}
+where {\tt osilFileName} is  the name of the OSiL problem instance to be written on the server and {\tt osil}
+is the string with the actual instance. Then
+\begin{verbatim}
+osagent->OSFileUpload(osilFileName, osil);
+\end{verbatim}
+will place a call to the server, upload the problem instance in the {\tt osil} string, and cause the server
+to write on its hard drive a file named {\tt osilFileName}. In our implementation, the uploaded file
+({\tt parincQuadratic.osil}) is saved to the {\tt/home/kmartin/temp/parincQuadratic.osil} on the server hard drive.
+This location is used in the {\tt osol} file as shown below.
+
+Once the file is on the server, invoke the local {\tt OSSolverService} by
+\begin{verbatim}
+./OSSolverService config ../data/configFiles/testremote.config
+\end{verbatim}
+where the {\tt config} file is as follows. Notice there is no {\tt osil}  option as the OSiL file has already
+been uploaded and its instance location (``local'' to the server) is specified in the {\tt osol} file.
+\begin{verbatim}
+osol ../data/osolFiles/remoteSolve2.osol
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceMethod solve
+\end{verbatim}
+and the {\tt osol} file is
+\begin{verbatim}
+<osol xmlns="os.optimizationservices.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="os.optimizationservices.org
+      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+    <general>
+         <instanceLocation locationType="local">
+             /home/kmartin/temp/parincQuadratic.osil
+         </instanceLocation>
+        <solverToInvoke>ipopt</solverToInvoke>      
+    </general>
+</osol>
+\end{verbatim}
+
+\iffalse   %this needs more work...
+As an alternative to using the command line executable {\tt OSFileUpload}, there is also an html form
+{\tt fileupload.html} that can be used to upload files. For example, the URL
+%\begin{verbatim}
+%http://gsbkip.chicagogsb.edu/os/fileupload.html
+%\end{verbatim}
+
+\medskip
+\noindent{\tt\UrlKippFileupload}
+\medskip
+
+\noindent will bring up the necessary form that allows the user to browse a directory and select the file to upload.
+This URL is based on the assumption that the {\tt OSJava} classes were deployed as described in
+Section~\ref{section:tomcat}. The file {\tt fileupload.html} is in the directory {\tt WebApps/os}.
+In our html form implementation, after you upload the OSiL\index{OSiL} file, it shows you the path of the
+uploaded file that is saved on the server, so that you can put it in the corresponding {\tt osol} file.
+\fi
+\index{OSFileUpload@{\tt OSFileUpload}|)}
+
+
+%\iffalse %------------------------------------------------------

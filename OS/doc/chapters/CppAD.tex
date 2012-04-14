@@ -1,0 +1,633 @@
+
+
+\section{The OS Algorithmic Differentiation Implementation}\label{section:ad}
+
+The OS library provides a set of {\tt calculate} methods for calculating  function values, gradients, and Hessians.
+The {\tt calculate} methods are part of the {\tt OSInstance} class and are designed to work with solver APIs.
+For instance, {\tt Ipopt} requires derivatives but does not provide its own differentiation routines, 
+expecting the user to make them available through callbacks.
+
+
+\subsection{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
+
+First and second derivative calculations are made using 
+{\it algorithmic differentiation}\index{Algorithmic differentiation|(}.
+Here we provide a brief review of this topic.  An excellent reference on algorithmic differentiation
+is Griewank\index{Griewank, A.@{\it Griewank, A.}}~\cite{griewank2000}.  The OS package uses the COIN-OR project 
+CppAD\index{COIN-OR projects!CppAD@{\tt CppAD}|(} ({\tt\UrlCppad}), which  is also an excellent resource with extensive  
+documentation and information about algorithmic differentiation.
+See the documentation written by  Brad Bell\index{Bell, Bradley M.@{\it Bell, Bradley M.}}~\cite{bell2007}.    
+The development here is from the CppAD documentation.  
+Consider the function $f:X \rightarrow Y$ from $ \mathbb{R}^{n}$ to $ \mathbb{R}^{m}$.
+(That is, $Y = f(X).$) Assume that $f$ is twice continuously differentiable, so that in particular the second order 
+partials
+\begin{eqnarray}
+\DD{f_{k}}{x_{i}}{x_{j}}\ \ \  \mbox{and}\ \ \     \DD{f_{k}}{x_{j}}{x_{i}} \label{eq:mixedPartials}
+\end{eqnarray}
+exist and are equal to each other for all $k=1,\ldots,m$ and $i,j=1,\ldots,n$. The task is to compute the derivatives 
+of~$f$.
+ 
+First express the input vector as a function of~$t$ by
+\begin{eqnarray}
+X(t) = x^{(0)} +  x^{(1)} t +  x^{(2)} t^{2}
+\end{eqnarray}
+where $ x^{(0)},$ $x^{(1)},$ and $x^{(2)}$ are vectors in $ \mathbb{R}^{n}$  and $t$ is a scalar.  By judiciously choosing $x^{(0)}, x^{(1)},$ and $x^{(2)}$ we will be able to derive many different expressions of interest.  Note first that
+\begin{eqnarray*}
+X(0) &=& x^{(0)}, \\
+X^{\prime}(0) &=& x^{(1)}, \\
+X^{\prime \prime }(0) &=& 2 x^{(2)}.
+\end{eqnarray*}
+In general,  $x^{(k)}$ corresponds to the $k^{\rm th}$ order Taylor coefficient, i.e.,
+\begin{eqnarray}
+x^{(k)} = \frac{1}{k!}X^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:xTaylorCoeff}
+\end{eqnarray}
+Then $Y(t) = f(X(t))$ is a function from $ \mathbb{R}^{1}$ to $ \mathbb{R}^{m}$ and is expressed in terms of its Taylor series expansion as
+\begin{eqnarray}
+Y(t)  = y^{(0)} +  y^{(1)} t +  y^{(2)} t^{2} + o(t^{3}),
+\end{eqnarray}
+where
+\begin{eqnarray}
+y^{(k)} = \frac{1}{k!} Y^{(k)}(0), \quad k = 0, 1, 2.  \label{eq:yTaylorCoeff}
+\end{eqnarray}
+
+
+
+The following are shown in Bell~\cite{bell2007}.
+\begin{eqnarray}
+y^{(0)} = f(x^{(0)}). \label{eq:forward0Result}
+\end{eqnarray}
+Let $e^{(i)}$ denote the $i^{\rm th}$ unit vector.  If $x^{(1)} = e^{(i)}$ then $y^{(1)}$ is equal to the
+$i^{\rm th}$ column of the Jacobian matrix of $f(x)$ evaluated at $x^{(0)}.$ That is
+\begin{eqnarray}
+y^{(1)} = \D{f}{x_{i}}(x^{(0)}).  \label{eq:forward1Result}
+\end{eqnarray}
+
+In addition, if $x^{(1)} = e^{(i)}$ and $x^{(2)} = 0$ then for function $f_{k}(x),$ (the $k^{\rm th}$ 
+component of~$f$)
+\begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2} \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}.  \label{eq:forward2Resulta}
+\end{eqnarray}
+
+In order to evaluate the mixed partial derivatives, one can instead set $x^{(1)} = e^{(i)} + e^{(j)}$ and $x^{(2)} = 0.$    This gives for function $f_{k}(x),$
+\begin{eqnarray}
+y^{(2)}_{k} =  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  +   \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}} 
++  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{i}} +  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right), \label{eq:forward2Resultb}
+\end{eqnarray}
+or, expressed in terms of the mixed partials,
+\begin{eqnarray}
+  \DD{f_{k}(x^{(0)})}{x_{i}}{x_{j}}  = y_{k}^{(2)}  -  \frac{1}{2} \left( \DD{f_{k}(x^{(0)})}{x_{i}}{x_{i}}  
++  \DD{f_{k}(x^{(0)})}{x_{j}}{x_{j}}  \right). \label{eq:forward2Resultc}
+\end{eqnarray}
+\index{Algorithmic differentiation|)}\index{COIN-OR projects!CppAD@{\tt CppAD}|)}
+
+
+
+
+\subsection{Using OSInstance Methods: Low Level Calls}\label{section:lowlevelADcalls}
+
+  The code snippets used in this section  are from the example code {\tt algorithmicDiffTest.cpp} in the
+{\tt algorithmicDiffTest} folder in the {\tt examples} folder.  The  code is based on the following example.
+
+\begin{alignat}{2}
+& \mbox{Minimize} & \quad  x_{0}^{2} + 9x_{1} \label{eq:adobj}\\
+& \mbox{s.t.} & 33 - 105 + 1.37 x_{1} + 2x_{3} + 5 x_{1} &\le 10  \label{eq:adeq0}\\
+& & \ln(x_{0} x_{3}) + 7x_{2} &\ge 10 \label{eq:adeq1} \\
+& & x_{0}, x_{1}, x_{2}, x_{3} &\ge 0 \label{eq:adeq2}
+\end{alignat}
+
+The OSiL representation of the instance  (\ref{eq:adobj})--(\ref{eq:adeq2}) is given in Appendix~\ref{section:adexample}.
+This example is designed to illustrate several features of OSiL. Note that in constraint  (\ref{eq:adeq0}) the
+constant~33 appears in the {\tt <con>} element corresponding to this constraint
+and the constant~105 appears as a {\tt <number>} OSnL node in the {\tt <nonlinearExpressions>} section.
+This distinction is important, as it will lead to different treatment by the code as documented below.
+%There are no nonlinear terms in the instance that involve variable $x_{1}.$
+Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms.
+The terms $5x_{1}$ in  (\ref{eq:adeq0}) and $7 x_{2}$ in (\ref{eq:adeq1}) are expressed in the
+{\tt <objectives>} and {\tt <linearConstraintCoefficients>} sections, respectively, and will again
+receive special treatment by the code. However, the term $1.37x_1$ in (\ref{eq:adeq0}),
+along with the term $2x_3$, is expressed in the {\tt <nonlinearExpressions>} section,
+%Variables $x_{1}$ and $x_{2}$  do not appear in any nonlinear terms.
+%However, in the OSInstance API, variable $x_{1}$  appears in the   {\tt <nonlinearExpressions>} section;
+hence $x_1$  is treated as a nonlinear variable for purposes of algorithmic differentiation.
+Variable $x_{2}$ never appears in the  {\tt <nonlinearExpressions>} section and is therefore treated as a linear variable and not used  in any algorithmic differentiation calculations.
+Variables that do not appear in the {\tt <nonlinearExpressions>} are never part of the algorithmic differentiation calculations.
+
+Ignoring the nonnegativity constraints, instance (\ref{eq:adobj})--(\ref{eq:adeq2})  defines a mapping  
+from $ \mathbb{R}^{4}$ to~$\mathbb{R}^{3}$:
+
+
+
+
+\begin{eqnarray}
+    \left[
+        \begin{array}{r}
+            x_0^2+9x_1 \\
+            33 - 105 + 1.37x_1 + 2x_3 + 5x_1 \\
+            \ln (x_0x_3) + 7x_2
+        \end{array}
+    \right]
+&=&
+    \left[
+        \begin{array}{r}
+            9x_1 \\
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[
+        \begin{array}{r}
+            x_0^2 \\
+            - 105 + 1.37x_1 + 2x_3  \\
+            \ln (x_0x_3)
+        \end{array}
+    \right]
+  \nonumber  \\
+  &=&  \left[
+        \begin{array}{r}
+            9x_1 \\
+            33 + 5x_1 \\
+            7x_2
+        \end{array}
+    \right]
++
+    \left[
+        \begin{array}{r}
+            f_1(x) \\
+            f_2(x) \\
+            f_3(x)
+        \end{array}  \label{eq:definef1}
+    \right],
+\end{eqnarray}
+
+\begin{eqnarray}
+\hbox{\rm where}\ f(x) :=
+%
+    \left[
+        \begin{array}{r}
+            f_1(x) \\
+            f_2(x) \\
+            f_3(x)
+        \end{array}   \label{eq:definef}
+    \right].
+\end{eqnarray}
+
+
+The OSiL representation for the instance  in  (\ref{eq:adobj})--(\ref{eq:adeq2})  is read into an in-memory
+OSInstance object as follows (we assume that {\tt osil} is a {\tt string} containing the OSiL instance)
+\begin{verbatim}
+osilreader = new OSiLReader();
+osinstance = osilreader->readOSiL( &osil);
+\end{verbatim}
+There is a method in the {\tt OSInstance} class, {\tt initForAlgDiff()} that is used to initialize the nonlinear data structures.  A call to this method
+\begin{verbatim}
+osinstance->initForAlgDiff( );
+\end{verbatim}
+will generate a map of the indices of the nonlinear variables. This is critical because the algorithmic 
+differentiation only operates on variables that appear in the {\tt <nonlinearExpressions>} section.  
+An example of this map follows.
+\begin{verbatim}
+std::map<int, int> varIndexMap;
+std::map<int, int>::iterator posVarIndexMap;
+varIndexMap = osinstance->getAllNonlinearVariablesIndexMap( );
+for(posVarIndexMap = varIndexMap.begin(); posVarIndexMap
+    != varIndexMap.end(); ++posVarIndexMap){
+    std::cout <<  "Variable Index = "   << posVarIndexMap->first  << std::endl ;
+}
+\end{verbatim}
+The variable indices listed are 0, 1, and~3. Variable~2 does not appear in the {\tt <nonlinearExpressions>} section and
+is not included in {\tt varIndexMap}. That is, the function $f$ in~(\ref{eq:definef}) will be considered as a map from 
+$\mathbb{R}^{3}$ to~$\mathbb{R}^{3}$.
+
+Once the nonlinear structures are initialized it is possible to take derivatives using algorithmic differentiation.
+Algorithmic differentiation is done using either a forward or reverse sweep through an expression tree (or operation
+sequence) representation of~$f$.  The two key {\tt public} algorithmic differentiation  methods in the {\tt OSInstance}%
+\index{OSInstance@{\tt OSInstance}} class are {\tt forwardAD} and {\tt reverseAD}.
+These are actually  generic ``wrappers'' around the corresponding CppAD methods with the same signature.
+This keeps the OS API  public methods independent of any underlying algorithmic differentiation package.
+
+The {\tt forwardAD} signature is
+\begin{verbatim}
+std::vector<double> forwardAD(int k, std::vector<double> vdX);
+\end{verbatim}
+where {\tt k} is the highest order Taylor coefficient of $f$ to be returned,  $\tt vdX$ is a vector of doubles in 
+$ \mathbb{R}^{n},$ and the function return is a vector of doubles in~$\mathbb{R}^{m}.$  Thus, {\tt k} corresponds 
+to the $k$ in Equations  (\ref{eq:xTaylorCoeff}) and (\ref{eq:yTaylorCoeff}),  where {\tt vdX} corresponds to the $x^{(k)}$ in Equation (\ref{eq:xTaylorCoeff}), and the $y^{(k)}$ in Equation (\ref{eq:yTaylorCoeff}) is the vector in range space returned by the call to {\tt  forwardAD}.    For example, by  Equation (\ref{eq:forward0Result}) the following call will evaluate each component function defined in (\ref{eq:definef}) corresponding only to the nonlinear part of (\ref{eq:definef1}) -- the part denoted by $f(x)$.
+\begin{verbatim}
+funVals = osinstance->forwardAD(0, x0);
+\end{verbatim}
+Since there are three components in the vector defined by  (\ref{eq:definef}), the return value  {\tt funVals} will have three components. For an input vector,
+\begin{verbatim}
+x0[0] = 1; // the value for variable x0 in function f
+x0[1] = 5; // the value for variable x1 in function f
+x0[2] = 5; // the value for variable x3 in function f
+\end{verbatim}
+the values returned by {\tt osinstance->forwardAD(0, x0)}  are 1, -63.15, and 1.6094, respectively.
+The Jacobian of the example in (\ref{eq:definef}) is
+
+\begin{eqnarray}
+J =
+\left[
+\begin{array}{rrrr}
+2x_{0} &9.00&0.00&0.00   \\
+0.00&6.37&0.00&2.00 \\
+1/x_{0}&0.00&7.00&1/x_{3}
+\end{array}
+\right] \label{eq:jac}
+\end{eqnarray}
+and the Jacobian $J_f$ of the nonlinear part is
+%
+\begin{equation}
+    J_f = \left[
+        \begin{array}{ccc}
+            2x_0 & 0.00 & 0.00 \\
+            0.00  & 1.37 & 2.00 \\
+            1/x_0 & 0.00 & 1/x_3
+        \end{array}
+    \right].  \label{eq:jac2}
+\end{equation}
+When $x_{0} = 1,$ $x_{1} = 5,$ $x_{2} = 10,$ and $x_{3} = 5$ the Jacobian $J_f$ is
+\begin{eqnarray}
+    J_f = \left[
+        \begin{array}{ccc}
+            2.00 & 0.00 & 0.00 \\
+            0.00 & 1.37 & 2.00 \\
+            1.00 & 0.00 & 0.20
+        \end{array}
+    \right]. \label{eq:jac3}
+\end{eqnarray}
+A forward sweep with $k = 1$ will calculate the Jacobian column-wise.  See~(\ref{eq:forward1Result}).  
+The following code will return column 3 of the Jacobian (\ref{eq:jac3}) which corresponds to the nonlinear variable~$x_{3}$.
+\begin{verbatim}
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+\end{verbatim}
+
+Now calculate second derivatives.  To illustrate we use the results in (\ref{eq:forward2Resulta})-(\ref{eq:forward2Resultc}) and calculate
+\begin{eqnarray*}
+\DD{f_{k}(x^{(0)})}{x_{0}}{x_{3}} \quad k = 1, 2, 3.
+\end{eqnarray*}
+Variables $x_{0}$ and $x_{3}$ are the first and third nonlinear variables so by  (\ref{eq:forward2Resultb}) the $x^{(1)}$ should be the sum of the $e^{(1)}$ and $e^{(3)}$ unit vectors and used in the  first-order forward sweep calculation.
+\begin{verbatim}
+x1[0] = 1;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+\end{verbatim}
+Next set $x^{(2)} = 0$ and do a second-order forward sweep.
+\begin{verbatim}
+std::vector<double> x2( n);
+x2[0] = 0;
+x2[1] = 0;
+x2[2] = 0;
+osinstance->forwardAD(2, x2);
+\end{verbatim}
+This call returns the vector of  values
+\begin{eqnarray*}
+y_{1}^{(2)}  = 1, \quad y_{2}^{(2)}  = 0, \quad y_{3}^{(2)} = -0.52.
+\end{eqnarray*}
+By inspection of (\ref{eq:definef1}) (or by appropriate calls to {\tt osinstance->forwardAD} --- not shown here),
+$$
+\begin{array}{rclcrcl}
+\displaystyle{\DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}}} &=&  2, & \qquad & 
+\displaystyle{\DD{f_{1}(x^{(0)})}{x_{3}}{x_{3}}} &=&  0, \\ [12pt]
+\displaystyle{\DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}}} &=&  0, & \qquad & 
+\displaystyle{\DD{f_{2}(x^{(0)})}{x_{3}}{x_{3}}} &=&  0, \\ [12pt]
+\displaystyle{\DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}}} &=& -1, & \qquad & 
+\displaystyle{\DD{f_{3}(x^{(0)})}{x_{3}}{x_{3}}} &=& -0.04.
+\end{array}
+$$
+Then by (\ref{eq:forward2Resultc}),
+\begin{eqnarray*}
+\DD{f_{1}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{1}^{(2)}  -  \frac{1}{2} \left( \DD{f_{1}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = 1   -    \frac{1}{2}(2 +  0) = 0, \\
+\DD{f_{2}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{2}^{(2)}  -  \frac{1}{2} \left( \DD{f_{2}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = 0   -    \frac{1}{2}(0 +  0) = 0, \\
+\DD{f_{3}(x^{(0)})}{x_{0}}{x_{3}} &=&  y_{3}^{(2)}  -  \frac{1}{2} \left( \DD{f_{3}(x^{(0)})}{x_{0}}{x_{0}}  +  \DD{f_{k}(x^{(0)})}{x_{3}}{x_{3}}  \right) = -0.52 -  \frac{1}{2}(-1 - 0.04) = 0.
+\end{eqnarray*}
+Making all of the first and second derivative calculations using forward sweeps is most effective when the number of rows exceeds the number of variables.
+
+
+The {\tt reverseAD} signature is
+\begin{verbatim}
+std::vector<double> reverseAD(int k, std::vector<double> vdlambda);
+\end{verbatim}
+where {\tt vdlambda} is a vector of Lagrange multipliers.  This method returns a vector in the range space. If a reverse sweep of order $k$ is called, a forward sweep of all orders  through  $k -1$ must have been made prior to the call.
+
+\subsubsection{First Derivative Reverse Sweep Calculations}
+
+In order to calculate first derivatives execute the following sequence of calls.
+\begin{verbatim}
+x0[0] = 1;
+x0[1] = 5;
+x0[2] = 5;
+std::vector<double> vlambda(3);
+vlambda[0] = 0;
+vlambda[1] = 0;
+vlambda[2] = 1;
+osinstance->forwardAD(0, x0);
+osinstance->reverseAD(1, vlambda);
+\end{verbatim}
+Since {\tt vlambda} only includes
+the third function $f_3$, this sequence of calls will produce the third row of the
+Jacobian $J_f$, i.e.,
+$$
+\D{f_{3}(x^{(0)})}{x_{0}}  = 1,  \quad \D{f_{3}(x^{(0)})}{x_{1}}  = 0, \quad  \D{f_{3}(x^{(0)})}{x_{3}}  = 0.2.
+$$
+
+\subsubsection{Second Derivative Reverse Sweep Calculations}
+
+In order to calculate second derivatives using {\tt reverseAD} forward sweeps of order 0 and 1 must have been 
+completed.  The call to {\tt reverseAD(2, vlambda)} will return a vector of dimension $2n$ where~$n$ is the 
+number of variables.  If the zero-order forward sweep is {\tt forwardAD(0,x0)} and the first-order forward 
+sweep is {\tt forwardAD(1, x1)} where {\tt x1} $= e^{(i)},$ then the return vector 
+{\tt z = reverseAD(2,  vlambda)} is
+\begin{eqnarray}
+z[2j - 2]  = \D{L (x^{(0)}, \lambda^{(0)})}{x_{j}}, \quad j = 1, \ldots, n
+\end{eqnarray}
+\begin{eqnarray}
+z[2j - 1]  = \DD{L(x^{(0)}, \lambda^{(0)})}{x_{i}}{x_{j}}, \quad j = 1, \ldots, n
+\end{eqnarray}
+where
+\begin{eqnarray}
+L (x, \lambda) = \sum_{k = 1}^{m} \lambda_{k} f_{k}(x).
+\end{eqnarray}
+
+
+
+For example, the  following calls will calculate the third row (column) of the Hessian of the Lagrangian.
+\begin{verbatim}
+x0[0] = 1;
+x0[1] = 5;
+x0[2] = 5;
+osinstance->forwardAD(0, x0);
+x1[0] = 0;
+x1[1] = 0;
+x1[2] = 1;
+osinstance->forwardAD(1, x1);
+vlambda[0] = 1;
+vlambda[1] = 2;
+vlambda[2] = 1;
+osinstance->reverseAD(2, vlambda);
+\end{verbatim}
+This returns
+\begin{eqnarray*}
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{0}} = 3, \quad  
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2.74, \quad  
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{3}} = 4.2,
+\end{eqnarray*}
+\begin{eqnarray*}
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} =0, \quad  
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{0}} = 0, \quad   
+\DD{L(x^{(0)}, \lambda^{(0)})}{x_{3}}{x_{3}} =  -.04.
+\end{eqnarray*}
+The reason why
+$$
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 2 \times 1.37 = 2.74
+$$
+and not
+$$
+\D{L (x^{(0)}, \lambda^{(0)})}{x_{1}} = 1 \times  9 + 2 \times 6.37 = 9 + 12.74 = 21.74
+$$
+is that the terms $9x_1$ in the objective and $5x_1$ in the first constraint
+are captured in the linear section of the OSiL input and therefore do not appear as nonlinear terms
+in {\tt  <nonlinearExpressions>}. As noted before, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms
+in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
+
+\subsection{Using OSInstance Methods: High Level Calls}
+
+The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not designed to work directly with solver APIs. The {\tt OSInstance} API has other methods that most users will want to invoke when linking with solver APIs.  We describe these now.
+
+
+\subsubsection{Sparsity Methods}
+
+Many solvers such as {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) 
+\ifknitro or Knitro\index{Knitro} (\url{www.ziena.com}) \fi
+require the sparsity pattern of the Jacobian of the constraint matrix and the Hessian of the Lagrangian function.
+Note well that the constraint matrix of the example in Section~\ref{section:lowlevelADcalls}
+constitutes only the last two rows of (\ref{eq:definef}) but does include the linear terms.
+The following code illustrates how to get the sparsity pattern of the constraint Jacobian matrix
+
+\begin{verbatim}
+SparseJacobianMatrix *sparseJac;
+sparseJac = osinstance->getJacobianSparsityPattern();
+for(idx = 0; idx < sparseJac->startSize; idx++){
+    std::cout << "number constant terms in constraint "   <<  idx << " is "
+    << *(sparseJac->conVals + idx)  << std::endl;
+    for(k = *(sparseJac->starts + idx); k < *(sparseJac->starts + idx + 1); k++){
+        std::cout << "row idx = " << idx <<  "
+        col idx = "<< *(sparseJac->indexes + k) << std::endl;
+    }
+}
+\end{verbatim}
+
+For the example problem this will produce
+
+\begin{verbatim}
+JACOBIAN SPARSITY PATTERN
+number constant terms in constraint 0 is 0
+row idx = 0  col idx = 1
+row idx = 0  col idx = 3
+number constant terms in constraint 1 is 1
+row idx = 1  col idx = 2
+row idx = 1  col idx = 0
+row idx = 1  col idx = 3
+\end{verbatim}
+
+The   constant term in constraint 1 corresponds to the linear term $7x_2$,
+which is added after the algorithmic differentiation has taken place.
+However, the linear  term $5x_1$ in constraint 0 does not
+contribute a nonzero in the Jacobian, as it is combined with the
+term $1.37x_1$ that is treated as a nonlinear term and
+therefore accounted for explicitly.
+The {\tt SparseJacobianMatrix} object has a data member {\tt starts}
+which is the index of the start of each constraint row.
+The {\tt int} data member {\tt indexes}  gives  the variable index
+of every potentially nonzero derivative. There is also a {\tt double} data member
+{\tt values} that gives the value of the partial derivative of the corresponding
+index at each iteration. Finally, there is an {\tt int} data member
+{\tt conVals} that is the number of constant terms in each gradient.
+A constant term is a partial derivative that cannot change at an iteration.
+A variable is considered to have a constant derivative
+if it appears in the {\tt <linearConstraintCoefficients>} section
+but not in the {\tt <nonlinearExpressions>}.  For a row indexed by {\tt idx}
+the variable indices are in the  {\tt indexes} array between the elements
+{\tt sparseJac->starts + idx} and {\tt sparseJac->starts + idx + 1}.
+The first  {\tt sparseJac->conVals + idx} variables listed are indices
+of  variables with constant derivatives. In this example, when {\tt idx} is 1,
+there is one  variable with a constant derivative and it is variable $x_{2}$.
+(Actually variable $x_{1}$ has a constant derivative but the code does not check
+to see if variables that appear in the {\tt <nonlinearExpressions>} section
+have constant derivative.) The  variables with constant derivatives
+never appear in the AD evaluation.
+
+The following code illustrates how to get the sparsity pattern of the Hessian of the Lagrangian.
+\begin{verbatim}
+SparseHessianMatrix *sparseHessian;
+sparseHessian = osinstance->getLagrangianHessianSparsityPattern( );
+for(idx = 0; idx < sparseHessian->hessDimension; idx++){
+    std::cout <<  "Row Index = " << *(sparseHessian->hessRowIdx + idx) ;
+    std::cout <<  "  Column Index = " << *(sparseHessian->hessColIdx + idx);
+}
+\end{verbatim}
+The {\tt SparseHessianMatrix} class has the {\tt int} data members {\tt hessRowIdx} and {\tt hessColIdx} 
+for indexing  potential nonzero elements in the Hessian matrix. The {\tt double} data member {\tt hessValues} 
+holds the value of the respective second derivative at each iteration.   
+The data member {\tt hessDimension} is the number of nonzero elements in the Hessian.
+
+
+\subsubsection{Function Evaluation Methods}
+
+There are several overloaded methods for calculating objective and constraint values.  The method
+\begin{verbatim}
+double *calculateAllConstraintFunctionValues(double* x, bool new_x)
+\end{verbatim}
+will return a {\tt double} pointer to an array of constraint function values evaluated at {\tt x.}  
+If the value of {\tt x} has not changed since the last function call, then {\tt new\_x} should be set 
+to {\tt false} and the most recent function values are returned.  When using this method, with this signature,  
+all function values are calculated in {\tt double} using an {\tt OSExpressionTree} object.
+
+A second signature for the {\tt calculateAllConstraintFunctionValues} is
+\begin{verbatim}
+double *calculateAllConstraintFunctionValues(double* x, double *objLambda,
+    double *conLambda, bool new_x, int highestOrder)
+\end{verbatim}
+In this  signature, {\tt x} is a pointer to the current primal values, {\tt objLambda} is a vector of dual multipliers, 
+{\tt conLambda} is a vector of dual multipliers on the constraints,  {\tt new\_x} is true if any components of {\tt x} 
+have changed since the last evaluation, and {\tt highestOrder} is the highest order of derivative to be calculated 
+at this iteration. The following code snippet illustrates defining a set of variable values for the example we are 
+using and then the function call.
+\begin{verbatim}
+double* x = new double[4]; //primal variables
+double* z = new double[2]; //Lagrange multipliers on constraints
+double* w = new double[1]; //Lagrange multiplier on objective
+x[ 0] = 1;    // primal variable 0
+x[ 1] = 5;    // primal variable 1
+x[ 2] = 10;   // primal variable 2
+x[ 3] = 5;    // primal variable 3
+z[ 0] = 2;    // Lagrange multiplier on constraint 0
+z[ 1] = 1;    // Lagrange multiplier on constraint 1
+w[ 0] = 1;    // Lagrange multiplier on the objective function
+calculateAllConstraintFunctionValues(x, w, z,  true, 0);
+\end{verbatim}
+When making all high level calls for function, gradient, and Hessian evaluations we pass all the 
+primal variables in the {\tt x} argument, not just the nonlinear variables. Underneath the call, 
+the nonlinear variables are identified and used in AD function calls.
+
+The use of the parameters  {\tt new\_x} and {\tt highestOrder}  is important and requires further explanation.    
+The parameter  {\tt highestOrder}  is an integer variable that will take on the value 0, 1, or 2 (actually 
+higher values if we want third derivatives etc.).  The value of this variable is the highest order derivative 
+that is required of the current iterate. For example, if  a callback requires a function evaluation and 
+{\tt highestOrder = 0} then only the function is evaluated at the current iterate.  However,  
+if {\tt highestOrder = 2} then the function call
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, w, z, true, 2)
+\end{verbatim}
+will trigger  first and second derivative evaluations in addition to the function evaluations.
+
+In the {\tt OSInstance} class code,  every time a forward ({\tt forwardAD}) or reverse sweep ({\tt reverseAD}) 
+is executed a private  member, {\tt m\_iHighestOrderEvaluated}  is  set to the order of the sweep. For example, 
+{\tt forwardAD(1, x)} will result in {\tt  m\_iHighestOrderEvaluated = 1}.  Just knowing the value  of 
+ {\tt new\_x} alone is not sufficient. It is also necessary  to know {\tt highestOrder} and compare it with 
+{\tt m\_iHighestOrderEvaluated.}  For example, if  {\tt new\_x}  is  false,  but {\tt m\_iHighestOrderEvaluated = 0},  
+and   the callback requires a Hessian calculation, then it is necessary to calculate the first and second derivatives 
+at the current iterate.
+
+There are {\it  exactly two} conditions that  require a new function or derivative evaluation.   
+A new evaluation is required if and only if
+
+\begin{enumerate}
+\item{}   The value of {\tt new\_x} is  true
+
+\begin{center}
+ --OR--
+\end{center}
+
+
+\item{} For the callback function the value of the input parameter {\tt highestOrder} is strictly greater 
+than the current value  of    {\tt m\_iHhighestOrderEvaluated.}
+\end{enumerate}
+
+For an efficient implementation of AD it is important to be able to get the Lagrange multipliers and highest order 
+derivative that is required from inside {\it any} callback -- not just the Hessian evaluation callback. 
+For example, in {\tt Ipopt,} if  {\tt eval\_g}  or {\tt eval\_f} are called, and  for the current iterate, 
+{\tt eval\_jac} and {\tt eval\_hess} are also going to be called, then  a more efficient AD implementation 
+is possible if the Lagrange multipliers are available for {\tt eval\_g} and {\tt eval\_f}.
+
+Currently, whenever {\tt new\_x = true} in the underlying AD implementation we do not retape 
+(record into the CppAD data structure)  the function. This is because we currently throw an exception 
+if there are any logical operators involved in the AD calculations. This may change in a future implementation.
+
+
+There are also similar methods for objective function evaluations.  The method
+\begin{verbatim}
+double calculateFunctionValue(int idx, double* x, bool new_x);
+\end{verbatim}
+ will return the value of any constraint or objective function indexed by {\tt idx}. 
+This method works strictly with {\tt double} data using an {\tt OSExpressionTree} object.
+
+There is also a public variable, {\tt bUseExpTreeForFunEval} that, if set to {\tt true}, will cause the method
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, objLambda,  conLambda, true, highestOrder)
+\end{verbatim}
+to also use the OS expression tree for function evaluations when {\tt highestOrder = 0} rather than use 
+the operator overloading in the CppAD tape.
+
+\subsubsection{Gradient Evaluation Methods}
+
+One {\tt OSInstance} method for gradient calculations is
+\begin{verbatim}
+SparseJacobianMatrix *calculateAllConstraintFunctionGradients(double* x, double *objLambda,
+     double *conLambda, bool new_x, int highestOrder)
+\end{verbatim}
+If a call has been placed to {\tt calculateAllConstraintFunctionValues} with {\tt highestOrder = 0}, then the appropriate call to get gradient evaluations is
+\begin{verbatim}
+calculateAllConstraintFunctionGradients( x, NULL, NULL,  false, 1);
+\end{verbatim}
+Note that in this function call {\tt new\_x = false}. This prevents a call to {\tt forwardAD()} with order 0 to get the function values.
+
+
+If, at the current iterate, the Hessian of the Lagrangian function is also desired then an appropriate call is
+\begin{verbatim}
+calculateAllConstraintFunctionGradients(x, objLambda, conLambda, false, 2);
+\end{verbatim}
+In this case, if there was a prior call
+\begin{verbatim}
+calculateAllConstraintFunctionValues(x, w, z,  true, 0);
+\end{verbatim}
+then only first and second derivatives are calculated, not function values.
+
+When calculating the gradients, if the number of nonlinear variables exceeds or is equal  to the number of rows,  a {\tt forwardAD(0, x)} sweep is used to get the function values,  and   a {\tt reverseAD(1, $e^{k}$)}  sweep for each unit vector  $e^{k}$ in the row space  is used to get the vector of first order partials for each row in the constraint Jacobian.  If the number of nonlinear variables is less then the number of rows then a {\tt forwardAD(0, x)} sweep  is used to get the function values and a {\tt forwardAD(1,  $e^{i}$)}  sweep for each unit vector  $e^{i}$ in the column space is used to get the vector of first order partials for each column in the constraint Jacobian.
+
+Two other gradient methods are
+\begin{verbatim}
+SparseVector *calculateConstraintFunctionGradient(double* x,
+    double *objLambda, double *conLambda,  int idx, bool new_x, int highestOrder);
+\end{verbatim}
+and
+\begin{verbatim}
+SparseVector *calculateConstraintFunctionGradient(double* x, int idx,
+    bool new_x );
+\end{verbatim}
+
+Similar methods are available for the objective function; however, the objective function gradient methods treat the gradient of each objective function as a dense vector.
+
+
+\subsubsection{Hessian Evaluation Methods}
+
+There are two methods for Hessian calculations.  The first method has the signature
+\begin{verbatim}
+SparseHessianMatrix *calculateLagrangianHessian( double* x,
+    double *objLambda, double *conLambda, bool new_x, int highestOrder);
+\end{verbatim}
+so if either function or first derivatives have been calculated an appropriate call is
+\begin{verbatim}
+calculateLagrangianHessian( x, w, z, false, 2);
+\end{verbatim}
+If the Hessian of a single row or objective function is desired the following method is available
+\begin{verbatim}
+SparseHessianMatrix *calculateHessian( double* x, int idx, bool new_x);
+\end{verbatim}
+
+
+

@@ -1,0 +1,99 @@
+\section{Downloading the \ifdevelop OS\else CoinAll\fi  Binaries}\label{section:obtainingbinaries}
+
+\ifdevelop
+The OS project is an open-source project  with source code under the Eclipse Public License~(EPL)%
+\index{Eclipse Public License (EPL)}.
+See~{\tt\UrlEpl}.  This project was initially created by Robert Fourer, Jun Ma, and Kipp Martin.
+The code has been written primarily by  Horand Gassmann,   Jun Ma,  and Kipp Martin.    
+Horand Gassmann,  Jun Ma,  and Kipp Martin are the COIN-OR project leaders and active developers for the OS project.
+\else
+The CoinAll project is actually a meta-project consisting of most of the COIN-OR solvers and supporting utility projects.  We describe how to download this project. 
+\fi
+
+%Below we describe different methods for obtaining the binaries and C++ source code.
+Most users will only be interested in obtaining the binaries, which we describe  next.
+%in Section~\ref{section:obtainingbinaries}. The remaining sections of this chapter deal with obtaining %the source code for the project, which will be of interest mostly to developers.
+It is also possible to obtain the source code for the project, which will be of interest mostly to developers. 
+\ifdevelop
+Details can be found in  Section~\ref{section:downloadsource}.
+\else
+If binaries are not provided for a particular operating system, it may be possible to build them from the source.
+For details it is best to start reading the OS web page at~{\tt\UrlOsWiki}.
+\fi
+
+
+
+%If the user does not wish to compile source code, the OS library, OSSolverService executable
+%and Tomcat server software configuration are available in binary format for some operating systems.     
+The repositoryof the binaries is at {\tt\UrlOsBinaries}\index{Downloading!binaries}.
+%
+\ifdevelop
+ Unlike the source code described in Section~\ref{section:downloadwithsvn}, the binary files 
+are not subject to version control and can be downloaded using an ordinary browser. 
+%If binaries are not provided for a particular operating system,
+%it may be possible to build them from the source code. Since the source is under version control, 
+%this requires svn. (See Sections \ref{section:svn}, \ref{section:downloadwithsvn} and~\ref{section:build}.)
+\fi
+
+The binary distribution for the OS library and executables follows the following naming convention:
+
+
+\begin{verbatim}
+OS-version_number-platform-compiler-build_options.tgz (zip)
+\end{verbatim}
+For example, OS  Release 2.1.0 compiled with the Intel 9.1 compiler on an Intel 32-bit Linux system is:
+\begin{verbatim}
+OS-2.1.0-linux-x86-icc9.1.tgz
+\end{verbatim}
+
+For more detail on the naming convention and examples see:
+
+\medskip
+\noindent{\tt\UrlCoinNames}
+\medskip
+
+After unpacking the {\tt tgz} or {\tt zip} archives, the following folders are available.
+\begin{itemize}
+
+\item[] {\bf bin --} this directory has the executables {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}} 
+and {\tt OSAmplClient}\index{OSAmplClient@{\tt OSAmplClient}}.
+
+\item[]  {\bf include --} the header files that are necessary in order to link against the OS library.
+
+\item[] {\bf lib --} the libraries that are necessary for creating applications that use the OS library.
+
+\item[] {\bf  share --} license and author information for all the projects used by the OS project.
+\end{itemize}
+
+
+
+Files are also provided for an Apache Tomcat\index{Apache Tomcat} Web server along with the associated Web service
+that can
+read SOAP \index{SOAP protocol} envelopes with model instances in OSiL\index{OSiL} format and/or options in 
+OSoL\index{OSoL} format, call the {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}},
+and return the optimization result in OSrL\index{OSrL} format.
+The naming convention\index{file naming conventions} for the server binary is
+\begin{verbatim}
+OS-server-version_number.tgz (.zip)
+\end{verbatim}
+For example, the files associated with  OS server release 2.0.0 are in the binary distribution
+\begin{verbatim}
+OS-server-2.0.0.tgz
+\end{verbatim}
+There is no platform information given since the server and related binaries were written in Java\index{Java}.
+The details and use of this distribution are described in Section~\ref{section:tomcat}.
+
+
+
+Finally for Windows users we provide Visual Studio \index{Microsoft Visual Studio} project files 
+(and supporting libraries and header files) for building projects based on the OS library and libraries 
+used by the OS project. The binary for this is named
+\begin{verbatim}
+OS-version_number-VisualStudio.zip
+\end{verbatim}
+For example, the necessary files associated with  OS  stable\index{OS project!stable release} 2.4 
+are in the binary distribution
+\begin{verbatim}
+OS-2.4-VisualStudio.zip
+\end{verbatim}
+The binaries provided are based on Visual Studio Express 2008.  See Section \ref{section:vsexamples} for more detail.

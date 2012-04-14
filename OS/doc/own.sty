@@ -1,0 +1,76 @@
+
+
+
+\def\eqalignno#1{\displ@y \tabskip=\@centering
+    \halign to\displaywidth{\hfil$\@lign\displaystyle{##}$
+    \tabskip=0pt 
+&$\@lign\displaystyle{{}##}$\hfil\tabskip=\@centering
+&\llap{$\@lign##$}\tabskip=0pt\crcr#1\crcr}}
+
+\newcommand{\eq}[1]{\refstepcounter{equation} \label{#1}(\theequation)}
+
+\def\proj{{\rm proj}}
+\def\conv{{\rm conv}}
+\def\cone{{\rm cone}}
+\def\aff{{\rm aff}}
+\def\det{{\rm det}}
+\def\adj{{\rm adj}}     
+
+\def\eqnarrayz#1{\displ@y
+\tabskip=0pt \halign to \displaywidth{\hfil$\@lign\displaystyle{##{}}$
+\tabskip=\@centering &$\@lign\displaystyle{##{}}$
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ 
+\tabskip=0pt &$\@lign\displaystyle{##{}}$  
+\tabskip=0pt &\hfil$\@lign\displaystyle{{}##}$ 
+\tabskip=0pt &\hfil$\@lign\displaystyle{##}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=\@centering &\llap{$\@lign##$}\tabskip=0pt\crcr#1\crcr}}
+
+
+\def\eqnarrayx#1{\displ@y
+\tabskip=0pt \halign to \displaywidth{\hfil$\@lign\displaystyle{##{}}$
+\tabskip=\@centering &$\@lign\displaystyle{##{}}$
+\tabskip=0pt &\hfil$\@lign\displaystyle{{}##}$ 
+\tabskip=0pt &\hfil$\@lign\displaystyle{##}$ \hfil 
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=\@centering &\llap{$\@lign##$}\tabskip=0pt\crcr#1\crcr}}
+
+
+\def\eqnarrayzb#1{\displ@y
+\tabskip=0pt \halign to \displaywidth{\hfil$\@lign\displaystyle{##{}}$
+\tabskip=\@centering &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil 
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=\@centering &\llap{$\@lign##$}\tabskip=0pt\crcr#1\crcr}}
+
+\def\eqnarrayzc#1{\displ@y
+\tabskip=0pt \halign to \displaywidth{\hfil$\@lign\displaystyle{{}##}$
+\tabskip=\@centering &$\@lign\displaystyle{{}##}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil 
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=0pt &$\@lign\displaystyle{##{}}$ \hfil
+\tabskip=\@centering &\llap{$\@lign##$}\tabskip=0pt\crcr#1\crcr}}
+
+
+\def\gcd{{\rm gcd \,}}
+\def\bfx{{\bf x}}
+
+
+
+
+
