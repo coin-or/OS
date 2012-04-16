@@ -409,6 +409,7 @@ OS/doc/osUsersManual.bbl -text
 OS/doc/osUsersManual.bib -text
 OS/doc/osUsersManual.ind -text
 OS/doc/osUsersManual.pdf -text
+OS/doc/osUsersManual.tex -text
 OS/doc/own.sty -text
 OS/install-sh -text
 OS/ltmain.sh -text
