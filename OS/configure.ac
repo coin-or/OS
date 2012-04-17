@@ -437,7 +437,9 @@ AC_COIN_VPATH_LINK(data/osolFiles/parsertestWithErrors.result)
 ##
 ## ospl test files
 ##
+AC_COIN_VPATH_LINK(data/osplFiles/demo.ospl)
 AC_COIN_VPATH_LINK(data/osplFiles/knock.ospl)
+AC_COIN_VPATH_LINK(data/osplFiles/result.ospl)
 ##
 ## osrl test files
 ##
