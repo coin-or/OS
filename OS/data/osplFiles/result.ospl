@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ospl xmlns="os.optimizationservices.org"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="os.optimizationservices.org
+       http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+  <processHeader>
+    <serviceURI>http://localhost:8080/os/ossolver/CGSolverService.jws</serviceURI>
+    <serviceName>CGSolverService</serviceName>
+    <time>2006-05-10T15:49:26.7509413-05:00</time>
+  <processHeader>
+  <processData>
+     <statistics>
+        <currentState>idle</currentState>
+        <availableDiskSpace>23440343040</availableDiskSpace>
+        <availableMemory>70128</availableMemory>
+        <currentJobCount>0</currentJobCount>
+        <totalJobsSoFar>1</totalJobsSoFar>
+        <timeServiceStarted>2006-05-10T10:49:24.9700000-05:00</timeServiceStarted>
+        <serviceUtilization>0.1</serviceUtilization>
+        <jobs>
+        <job jobID="123456abcd">
+            <state>finished</state>
+            <serviceURI>http://kipp.chicagobooth.edu/ipopt/IPOPTSolverService.jws</serviceURI>
+            <submitTime>2007-06-16T14:57:36.678-05:00</submitTime>
+            <startTime>2007-06-16T14:57:36.678-05:00</startTime>
+            <endTime>2007-06-16T14:57:39.404-05:00</endTime>
+            <duration>2.726</duration>
+          </job>
+        </jobs>
+     </statistics>
+  </processData>
+</ospl>

@@ -298,7 +298,9 @@ OS/data/osolFiles/wayneQuadratic_Bonmin1.osol -text
 OS/data/osolFiles/wayneQuadratic_Bonmin2.osol -text
 OS/data/osolFiles/wayneQuadratic_Couenne.osol -text
 OS/data/osolFiles/wayneQuadratic_lindo.osol -text
+OS/data/osplFiles/demo.ospl -text
 OS/data/osplFiles/knock.ospl -text
+OS/data/osplFiles/result.ospl -text
 OS/data/osrlFiles/errorExample.osrl -text
 OS/data/osrlFiles/ipoptResult.osrl -text
 OS/data/osrlFiles/parincLinear.osrl -text
