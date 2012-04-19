@@ -398,6 +398,7 @@ public class OSrLReader extends OSgLReader{
 	 */
 	public String getSystemInformation(){
 		Element eSystem = (Element)XMLUtil.findChildNode(m_eRoot, "system");
+		if(eSystem == null) return null;
 		String sSystemInformation = XMLUtil.getElementValueByName(eSystem, "systemInformation");
 		if(sSystemInformation == null) sSystemInformation = "";
 		return sSystemInformation;	
