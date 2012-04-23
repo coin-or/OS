@@ -81,8 +81,9 @@ For example, the files associated with  OS server release 2.0.0 are in the binar
 OS-server-2.0.0.tgz
 \end{verbatim}
 There is no platform information given since the server and related binaries were written in Java\index{Java}.
+\ifdevelop
 The details and use of this distribution are described in Section~\ref{section:tomcat}.
-
+\fi
 
 
 Finally for Windows users we provide Visual Studio \index{Microsoft Visual Studio} project files 
@@ -96,4 +97,5 @@ are in the binary distribution
 \begin{verbatim}
 OS-2.4-VisualStudio.zip
 \end{verbatim}
-The binaries provided are based on Visual Studio Express 2008.  See Section \ref{section:vsexamples} for more detail.
+The binaries provided are based on Visual Studio Express 2008.  
+\ifruncode\else See Section \ref{section:vsexamples} for more detail.\fi

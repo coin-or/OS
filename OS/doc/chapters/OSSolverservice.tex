@@ -273,7 +273,8 @@ method. The {\tt solve} method is invoked synchronously and waits for the solver
 This is illustrated in Figure~\ref{figure:ossolverservicelocal}. As illustrated, the {\tt OSSolverService} 
 reads a file on the hard drive with the optimization instance, usually in OSiL\index{OSiL} format. 
 The optimization instance is parsed into a string which is passed to the {\tt OSLibrary}\index{OSLibrary@{\tt OSLibrary}} 
-(see Section~\ref{section:oslibrary}), which is linked with various solvers. 
+(see \ifdevelop Section~\ref{section:oslibrary}\else the OS User's Manual\fi), 
+which is linked with various solvers. 
 Similarly an option file in OSoL\index{OSoL} format is parsed into a string and passed to the {\tt OSLibrary}. 
 {\it No interpretation of the options is done at this stage}, so that any {\tt <solverToInvoke>} or
 {\tt <instanceLocation>} directives in the OSoL file will be ignored for local solves.
@@ -347,8 +348,8 @@ facilitate optimization in a distributed environment.   We now provide examples 
 {\tt OSSolverService} executable to call a remote solver service.   By remote solver service we mean a
 solver service that is called using Web Services.  The OS implementation  of the solver service
 uses Apache Tomcat\index{Apache Tomcat}. See \url{tomcat.apache.org}. The Web Service running on the server
-is a Java program based on Apache Axis\index{Apache Axis}. See \url{ws.apache.org/axis}. This is described
-in greater detail in Section~\ref{section:tomcat}.
+is a Java program based on Apache Axis\index{Apache Axis}. See \url{ws.apache.org/axis}. 
+This is described in greater detail in \ifdevelop Section~\ref{section:tomcat}\else the OS User's Manual\fi.
 This Web Service is called {\tt OSSolverService.jws}\index{OSSolverService.jws@{\tt OSSolverService.jws}}.
 It is not necessary to use the Tomcat/Axis combination.
 
@@ -787,7 +788,7 @@ The result is returned in  OSpL format.
 \index{kill@{\tt kill}|)}
 
 
-
+\ifruncode\else
 \subsubsection{Summary and description of the API}
 
 The six service methods just described are also available as callable routines.
@@ -880,6 +881,9 @@ may be empty because no options are required to get the JobID)
 \end{itemize}
 
 \end{itemize}
+
+\fi %end of API description
+
 \index{OSSolverService@{\tt OSSolverService}|)}
 
 
