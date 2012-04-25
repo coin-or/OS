@@ -1014,7 +1014,12 @@ void send()
                 osolWriter = NULL;
             }
             bSend = osagent->send(osoptions->osil, osoptions->osol);
-            std::cout << "Result of send: " << bSend << std::endl;
+            if(bSend == true){
+            	 std::cout << "Successful send " << std::endl;
+            }else{
+            	 std::cout << "Send failed, check to make sure you sent a jobID not on the system.  " << std::endl;
+            }
+           
             delete osagent;
         }
         else
@@ -1104,6 +1109,7 @@ void retrieve()
             if (osoptions->osrlFile != "")
             {
                 fileUtil->writeFileFromString(osoptions->osrlFile, osrl);
+                cout << "Solver Result Written to File: " << osoptions->osrlFile << endl;
                 if (osoptions->browser != "")
                 {
                     std::string str = osoptions->browser + "  "
