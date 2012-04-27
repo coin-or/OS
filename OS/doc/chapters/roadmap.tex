@@ -5,8 +5,7 @@ If you want to:
 \begin{itemize}
 \item Download the OS binaries  (executables and libraries) -- see Section~\ref{section:obtainingbinaries}.
 
-\ifruncode\else
-
+\ifdevelop
 \item Download the OS source code -- see Section~\ref{section:downloadsource}.
 
 \item Download just the OS API, readers and writers -- see Section~\ref{section:oslite}.
@@ -37,7 +36,9 @@ and call a solver either remotely or locally -- see Section~\ref{section:usingma
 COIN-OR CppAD)\index{COIN-OR projects!CppAD@{\tt CppAD}} -- see Section~\ref{section:ad}.
 
 \item Build the OS project from the source code -- see Section~\ref{section:build}.
+\fi
 
+\ifdevelop
 \item Build a remote solver service using Apache Tomcat\index{Apache Tomcat} -- see Section~\ref{section:tomcat}.
 \fi
 \end{itemize}

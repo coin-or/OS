@@ -37,9 +37,10 @@ It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload
 The classes in the OSCommonInterfaces component of the OS library are used to read and write files and strings
 in the OSiL and OSrL protocols. See Section~\ref{section:schemadescriptions} for more detail on OSiL, OSrL,
 and other OS protocols. For a complete listing of all of the files in {\tt OSCommonInterfaces} see the 
-Doxygen\index{Doxygen} documentation we deposited at {\tt\UrlDoxygen}. Users who have Doxygen installed on their system
-can also create their own version of the documentation (see Section~\ref{section:documentation}). Below we highlight 
-some key classes.
+Doxygen\index{Doxygen} documentation we deposited at {\tt\UrlDoxygen}. Users who have 
+Doxygen installed on their system can also create their own version of the documentation 
+(see \ifdevelop Section~\ref{section:documentation}\else the OS Users' Manual\fi). 
+Below we highlight some key classes.
 
 
 
@@ -421,7 +422,9 @@ In most large-scale applications the {\tt <variables>,} {\tt <objectives>}, {\tt
 will comprise the bulk of the instance memory.  Because of this, we have ``hard-coded'' the OSiL parser
 to read these specific elements very efficiently.
 The parsing of the {\tt <quadraticCoefficients>} and {\tt <nonlinearExpressions>} is done using code generated
-by {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}. The file  
+by {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}. 
+\ifdevelop
+The file  
 {\tt OSParseosil.l} is used by {\tt flex}\index{flex@{\tt flex}} to generate {\tt OSParseosil.cpp} and the file 
 {\tt OSParseosil.y} is used by {\tt bison}\index{bison@{\tt bison}} to generate {\tt OSParseosil.tab.cpp}.
 In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil.y} we use the
@@ -430,8 +433,10 @@ In {\tt OSParseosil.l} we use the {\tt reentrant} option and in {\tt OSParseosil
 {\tt <nonlinearExpressions>} sections.
 We are currently using GNU {\tt bison} version 3.2 and {\tt flex} 2.5.33.
 
+\fi
 The typical OS user will have no need to edit either {\tt OSParseosil.l} or {\tt OSParseosil.y} 
-and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers. 
+and therefore will not have to worry about running either {\tt flex} or {\tt bison} to generate the parsers.
+\ifdevelop 
 The generated parser code from {\tt flex} and {\tt bison} is distributed with the project and works on all 
 of the platforms listed in Table~\ref{table:testedplatforms}.  If the user does edit either {\tt parseosil.l} 
 or {\tt parseosil.y} then {\tt parseosil.cpp} and {\tt parseosil.tab.cpp} need to be regenerated with 
@@ -443,10 +448,12 @@ make  run_parsers
 \end{verbatim}
 %
 (This requires Unix or a unix-like environment (Cygwin, MinGW, MSYS, etc.) under Windows.)
+\fi
 
-The files {\tt OSParseosrl.l} and {\tt OSParseosrl.y} are used by {\tt flex} and {\tt bison} to  generate the code 
-{\tt OSParseosrl.cpp} and {\tt OSParseosrl.tab.cpp} for parsing strings in OSrL format. The comments made above about the 
-OSiL parser apply to the OSrL parser. The OSrL parser, like the OSiL parser, is invoked using an {\tt OSrL} reading object.
+The files {\tt OSParseosrl.l} and {\tt OSParseosrl.y} are used by {\tt flex} and {\tt bison} to  
+generate the code {\tt OSParseosrl.cpp} and {\tt OSParseosrl.tab.cpp} for parsing strings in OSrL format. The comments made above about the OSiL parser apply to the OSrL parser. 
+\ifdevelop 
+The OSrL parser, like the OSiL parser, is invoked using an {\tt OSrL} reading object.
 This is illustrated below ({\tt osrl} is a string in OSrL format).
 \begin{verbatim}
 OSrLReader *osrlreader = NULL;
@@ -455,9 +462,12 @@ OSResult *osresult = NULL;
 osresult = osrlreader->readOSrL( osrl);
 \end{verbatim}
 
+\fi
 The OSoL parser follows the same layout and rules.
 The files {\tt OSParseosol.l} and {\tt OSParseosol.y} are used by {\tt flex} and {\tt bison} to  generate the code 
-{\tt OSParseosol.cpp} and {\tt OSParseosol.tab.cpp} for parsing strings in OSoL format. The OSoL parser
+{\tt OSParseosol.cpp} and {\tt OSParseosol.tab.cpp} for parsing strings in OSoL format. 
+\ifdevelop
+The OSoL parser
 is invoked using an {\tt OSoL} reading object.
 This is illustrated below ({\tt osol} is a string in OSoL format).
 \begin{verbatim}
@@ -467,10 +477,9 @@ OSOption *osoption = NULL;
 osoption = osolreader->readOSoL( osol);
 \end{verbatim}
 
-
 There is also a lexer {\tt OSParseosss.l} for tokenizing the command line for the OSSolverService executable 
 described in Section~\ref{section:ossolverservice}.
-
+\fi
 
 
 \subsection{OSSolverInterfaces}\label{section:ossolverinterfaces}

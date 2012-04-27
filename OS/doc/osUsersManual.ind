@@ -155,18 +155,18 @@
   \item {\tt OSExpressionTree}, 69
   \item {\tt OSFileUpload}, 114--115
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 1, 6--10, 13, 14, 17, 21, 22, 40--41, 43, 66, 69, 71--73, 
-		114
+  \item OSiL, 1, 6--10, 13, 14, 17, 21, 22, 40--41, 66, 69, 71--73, 114, 
+		117--120
   \item {\tt OSInstance}, 6, 46, 66--72, 75, 81
   \item {\tt OSLibrary}, 13, 65--75
   \item {\tt OSmps2osil}, 71--72
-  \item OSnL, 43--44
+  \item OSnL, 41--42
   \item {\tt OSnl2osil}, 71, 105
-  \item OSoL, 6, 8, 13, 14, 17--19, 21, 22, 43, 72
+  \item OSoL, 6, 8, 13, 14, 17--19, 21, 22, 44, 72
   \item {\tt OSOption}, 71--72
   \item OSpL, 20--22, 44
   \item {\tt OSResult}, 71--72
-  \item OSrL, 6, 8, 11, 13, 14, 21, 22, 41--43, 72
+  \item OSrL, 6, 8, 11, 13, 14, 21, 22, 42--43, 72
   \item {\tt OSSolverAgent}, 65
   \item {\tt OSSolverService}, 1, 6, 8--22, 93, 95, 109
   \item {\tt OSSolverService.jws}, 14
