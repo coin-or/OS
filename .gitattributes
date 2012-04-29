@@ -362,6 +362,7 @@ OS/doc/figures/osbinDistribution.png -text
 OS/doc/figures/xmlResult.png -text
 OS/doc/misc/OSSolverServiceRules.txt -text
 OS/doc/misc/buildSystemInfo.txt -text
+OS/doc/misc/cout-listings-ticket14.txt -text
 OS/doc/misc/genericParser.pdf -text
 OS/doc/misc/genericParser.tex -text
 OS/doc/misc/genericParser.txt -text
