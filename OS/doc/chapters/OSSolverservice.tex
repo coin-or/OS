@@ -162,48 +162,106 @@ Synonyms for {\tt --help} are {\tt -h} and {\tt -?}.
 \end{itemize}
 
 
-
 The input parameters to the {\tt OSSolverService} may be given entirely in the command line or in a configuration file.
 We first illustrate giving all the  parameters in the command line. The following command will invoke the
 {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} solver on the local machine to solve the problem instance
 {\tt parincLinear.osil}\index{parincLinear.osil@{\tt parincLinear.osil}|(}.
+
+\vskip 8pt
+\noindent{\bf Remark.}
 When invoking the commands below involving {\tt OSSolverService} we assume that
-1) the user is connected to the directory where the {\tt OSSolverService} executable is located, and
-2) that {\tt ../data/osilFiles} is a valid path to {\tt COIN-OS/data/osilFiles}.  If the OS project was built successfully,
-then there is a copy of  {\tt OSSolverService} in {\tt COIN-OS/OS/src}. The user may wish to execute {\tt OSSolverService}
-from this {\tt src} directory so that all that follows is correct in terms of path definitions.
+the user is connected to the directory where the {\tt OSSolverService} executable is located.
+%
+\ifdevelop
+The location of the executable, and of the data directory relative to the executable depends on the
+manner in which the executable was obtained and can best be read off from the information 
+contained in table~\ref{table:fileLocations}. In the following we will not distinguish between these possibilities and instead denote the path to the data directory by {\tt .../data}.  
 
 
+\begin{table}
+\caption{File locations}
+\centering
+\label{table:fileLocations}
+\vskip 8pt
+ \begin{tabular}{l|c|c|}
+  {source of binaries} & {location of executable} & {location of data folders} \\ \hline
+binary download & {\tt .../bin} & {\tt .../examples/data} \\ \hline
+standard {\tt make} & {\tt COIN-OS/OS/src} & {\tt COIN-OS/OS/data} \\ \hline
+standard {\tt make install} & {\tt COIN-OS/bin} & {\tt COIN-OS/OS/data} \\ \hline
+{\tt VPATH} {\tt make} & {\tt VPATH/OS/src} & {\tt VPATH/OS/data} \\ \hline
+{\tt VPATH} {\tt make install} & {\tt VPATH/bin} & {\tt VPATH/OS/data} \\ \hline
+
+ \hline
+\end{tabular}
+\end{table}\index{file locations}
+%
+\else
+If the binary download was successful, the {\tt OSSolverService} is in the {\tt bin} directory, and the relative path to the data directory is {\tt ../examples/data}. There are several subdirectories corresponding to different file types used and illustrated in the following examples. The user may wish
+to execute {\tt OSSolverService} from the {\tt bin} directory so that all that follows is correct in terms of path definitions.
+\fi 
+
+\ifdevelop
 \begin{verbatim}
-./OSSolverService solver clp osil ../data/osilFiles/parincLinear.osil
+./OSSolverService solver clp osil .../data/osilFiles/parincLinear.osil
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService solver clp osil ../examples/data/osilFiles/parincLinear.osil
+\end{verbatim}
+\fi
 
 Alternatively, these parameters can be put into a configuration file.
 Assume that the configuration file of interest is {\tt testlocalclp.config}.
 It would contain the two lines of information
+%
+\ifdevelop
 \begin{verbatim}
-osil ../data/osilFiles/parincLinear.osil
+osil .../data/osilFiles/parincLinear.osil
 solver clp
 \end{verbatim}
-\index{parincLinear.osil@{\tt parincLinear.osil}|)}
-Then the command line is
+\else
 \begin{verbatim}
-./OSSolverService config ../data/configFiles/testlocalclp.config
+osil ../examples/data/osilFiles/parincLinear.osil
+solver clp
 \end{verbatim}
-
+\fi
+\index{parincLinear.osil@{\tt parincLinear.osil}|)}
+%
+Then the command line is
+\ifdevelop
+\begin{verbatim}
+./OSSolverService config .../data/configFiles/testlocalclp.config
+\end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testlocalclp.config
+\end{verbatim}
+\fi
 {\bf Windows users} should {\bf note} that the folder separator is always 
 the forward slash (`/') instead of the customary backslash (`$\backslash$').
 
 
 Parameters specified in the configure file are overridden by parameters specified at the command line.
 This is convenient if a user has a base configure file and wishes to override only a few options. For example,
+%
+\ifdevelop
 \begin{verbatim}
-./OSSolverService config ../data/configFiles/testlocalclp.config solver lindo
+./OSSolverService config .../data/configFiles/testlocalclp.config solver lindo
 \end{verbatim}
 or
 \begin{verbatim}
-./OSSolverService solver lindo config ../data/configFiles/testlocalclp.config
+./OSSolverService solver lindo config .../data/configFiles/testlocalclp.config
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testlocalclp.config solver lindo
+\end{verbatim}
+or
+\begin{verbatim}
+./OSSolverService solver lindo config ../examples/data/configFiles/testlocalclp.config
+\end{verbatim}
+\fi
+%
 will result in the LINDO\index{LINDO} solver being used even though {\tt Clp}\index{COIN-OR projects!Clp@{\tt Clp}} is specified in the
 {\tt testlocalclp} configure file.
 
@@ -296,14 +354,23 @@ The result of the optimization is passed back to the {\tt OSSolverService} as a 
 Here is an example of using a configure file,  {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|(},
 to invoke {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} locally using the {\tt solve}\index{solve@{\tt solve}} command.
 
+\ifdevelop
 \begin{verbatim}
-osil ../data/osilFiles/parincQuadratic.osil
+osil .../data/osilFiles/parincQuadratic.osil
 solver ipopt
 serviceMethod solve
 browser /Applications/Firefox.app/Contents/MacOS/firefox
 osrl /Users/kmartin/temp/test.osrl
 \end{verbatim}
-
+\else
+\begin{verbatim}
+osil ../examples/data/osilFiles/parincQuadratic.osil
+solver ipopt
+serviceMethod solve
+browser /Applications/Firefox.app/Contents/MacOS/firefox
+osrl /Users/kmartin/temp/test.osrl
+\end{verbatim}
+\fi
 
 
 The first line of {\tt testlocal.config}\index{testlocal.config@{\tt testlocal.config}|)} gives the local location
@@ -405,23 +472,41 @@ In the following sections we illustrate each of the six service methods.
 \index{solve@{\tt solve}|(}
 First we illustrate a simple call to  {\tt OSSolverService.jws}.  The call on the client machine is
 \index{testremote.config@{\tt testremote.config}|(}
+%
+\ifdevelop
 \begin{verbatim}
-./OSSolverService config ../data/configFiles/testremote.config
+./OSSolverService config .../data/configFiles/testremote.config
 \end{verbatim}
 where the {\tt testremote.config} file is
 \begin{verbatim}
-osil ../data/osilFiles/parincLinear.osil
+osil .../data/osilFiles/parincLinear.osil
 serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testremote.config
+\end{verbatim}
+where the {\tt testremote.config} file is
+\begin{verbatim}
+osil ../examples/data/osilFiles/parincLinear.osil
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+\end{verbatim}
+\fi
 
 No solver is specified and by default the  {\tt Clp} solver  is used by the {\tt OSSolverService}, 
 since the problem is a continuous linear program.
 If, for example, the user wished to solve the problem with the 
 {\tt SYMPHONY}\index{COIN-OR projects!SYMPHONY@{\tt SYMPHONY}|(} solver then this is accomplished
 either by using the  {\tt solver} option on the command line
+\ifdevelop
 \begin{verbatim}
-./OSSolverService config ../data/configFiles/testremote.config solver symphony
+./OSSolverService config .../data/configFiles/testremote.config solver symphony
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testremote.config solver symphony
+\end{verbatim}
+\fi
 or by  adding  the line
 \begin{verbatim}
  solver symphony
@@ -433,10 +518,18 @@ When solver information is given both on the command line and in the config file
 \index{remoteSolve1.osol@{\tt remoteSolve1.osol}|(}
 Next we illustrate a call to the remote SolverService and specify an OSiL instance that is actually residing
 on the remote machine that is hosting the {\tt OSSolverService} and not on the client machine.
+\ifdevelop
 \begin{verbatim}
-./OSSolverService osol ../data/osolFiles/remoteSolve1.osol
+./OSSolverService osol .../data/osolFiles/remoteSolve1.osol
      serviceLocation  http://kipp.chicagobooth.edu/os/OSSolverService.jws
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService osol ../examples/data/osolFiles/remoteSolve1.osol
+     serviceLocation  http://kipp.chicagobooth.edu/os/OSSolverService.jws
+\end{verbatim}
+\fi
+%
 where the {\tt remoteSolve1.osol} file is
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>
@@ -500,15 +593,29 @@ finish execution until the solution is returned from the remote solver service.
  When the {\tt send}
 method is used, the instance is communicated to the remote service and the
 {\tt OSSolverService} terminates after submission. An example of this is
+%
+\ifdevelop
 \begin{verbatim}
-./OSSolverService config ../data/configFiles/testremoteSend.config
+./OSSolverService config .../data/configFiles/testremoteSend.config
 \end{verbatim}
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
--nl ../data/amplFiles/hs71.nl
+-nl .../data/amplFiles/hs71.nl
 serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
 serviceMethod send
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testremoteSend.config
+\end{verbatim}
+where the {\tt testremoteSend.config} file is
+\begin{verbatim}
+-nl ../examples/data/amplFiles/hs71.nl
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceMethod send
+\end{verbatim}
+\fi
+%
 In this example the COIN-OR {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} solver is specified. The input file {\tt hs71.nl}
 is in AMPL nl format\index{AMPL nl format|(}.
 Before sending this to the remote solver service the {\tt OSSolverService} executable converts  
@@ -594,16 +701,30 @@ A default solver is used (see Table~\ref{table:defaultsolvers}\index{default sol
 
 \index{retrieve@{\tt retrieve}|(}
 The {\tt retrieve} method is used to get information about the instance solution.  This method has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
+%
+\ifdevelop
 \begin{verbatim}
-./OSSolverService config ../data/configFiles/testremoteRetrieve.config
+./OSSolverService config .../data/configFiles/testremoteRetrieve.config
 \end{verbatim}
 The {\tt testremoteRetrieve.config} file is
 \begin{verbatim}
 serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
-osol ../data/osolFiles/retrieve.osol
+osol .../data/osolFiles/retrieve.osol
 serviceMethod retrieve
 osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testremoteRetrieve.config
+\end{verbatim}
+The {\tt testremoteRetrieve.config} file is
+\begin{verbatim}
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+osol ../examples/data/osolFiles/retrieve.osol
+serviceMethod retrieve
+osrl /home/kmartin/temp/test.osrl
+\end{verbatim}
+\fi
 and the {\tt retrieve.osol} file is
 
 \begin{verbatim}
@@ -655,16 +776,29 @@ address in the  {\tt <contact>}  element with the attribute {\tt transportType} 
 This was illustrated in Section~\ref{section:solve}.  A second way to check on the status of a job is
 to use the {\tt knock} service method.  For example, assume a user   wants to know if  the job
 with {\tt JobID 123456abcd}\index{JobID@{\tt JobID}}  is complete. A user would make the request
+\ifdevelop
 \begin{verbatim}
-./OSSolverService config ../data/configFiles/testRemoteKnock.config
+./OSSolverService config .../data/configFiles/testRemoteKnock.config
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
 serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
-osplInput ../data/osolFiles/demo.ospl
-osol ../data/osolFiles/retrieve.osol
+osplInput .../data/osolFiles/demo.ospl
+osol .../data/osolFiles/retrieve.osol
 serviceMethod knock
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config ../examples/data/configFiles/testRemoteKnock.config
+\end{verbatim}
+where the {\tt testRemoteKnock.config} file is
+\begin{verbatim}
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+osplInput ../examples/data/osolFiles/demo.ospl
+osol ../examples/data/osolFiles/retrieve.osol
+serviceMethod knock
+\end{verbatim}
+\fi
 the {\tt demo.ospl} file is
 
 % header to be temporarily hidden...
@@ -762,15 +896,28 @@ to check if the remote solver service is up and running. For details, check the 
 \index{kill@{\tt kill}|(}
 If the user submits a job that is taking too long or is a mistake, it is possible to kill the job on the remote server using the {\tt kill} service method.
 For example, to kill job {\tt 123456abcd}, at the command line type
+\ifdevelop
 \begin{verbatim}
-./OSSolverService config  ../data/configFiles/kill.config
+./OSSolverService config  .../data/configFiles/kill.config
 \end{verbatim}
 where the configure file {\tt kill.config} is
 \begin{verbatim}
-osol ../data/osolFiles/kill.osol
+osol .../data/osolFiles/kill.osol
 serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
 serviceMethod kill
 \end{verbatim}
+\else
+\begin{verbatim}
+./OSSolverService config  ../examples/data/configFiles/kill.config
+\end{verbatim}
+where the configure file {\tt kill.config} is
+\begin{verbatim}
+osol ../examples/data/osolFiles/kill.osol
+serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceMethod kill
+\end{verbatim}
+\fi
+%
 and the {\tt kill.osol} file is
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8"?>

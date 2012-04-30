@@ -1,8 +1,8 @@
 \begin{theindex}
 
-  \item Algorithmic differentiation, 6, 48--49, 77--78
+  \item Algorithmic differentiation, 6, 48--49, 80--81
   \item AMPL, 5, 6, 24--27
-  \item AMPL nl format, 5--8, 15, 71
+  \item AMPL nl format, 5--8, 15, 73--74
   \item AMPL Solver Library , \see{Third-party software, ASL}{1}
   \item {\tt amplFiles}, 24
   \item Apache Axis, 12
@@ -11,8 +11,8 @@
 
   \indexspace
 
-  \item {\it Bell, Bradley M.}, 77
-  \item {\tt bison}, 72
+  \item {\it Bell, Bradley M.}, 80
+  \item {\tt bison}, 74
   \item Blas, \see{Third-party software, Blas}{1}
   \item {\tt Bonmin}, \see{COIN-OR projects, {\tt Bonmin}}{1}
   \item {\tt BuildTools}, \see{COIN-OR projects, {\tt BuildTools}}{1}
@@ -27,15 +27,15 @@
     \subitem {\tt Cbc}, 21
     \subitem {\tt Cgl}, 54
     \subitem {\tt Clp}, 9, 10, 21, 49
-    \subitem {\tt CoinUtils}, 71
+    \subitem {\tt CoinUtils}, 73
     \subitem {\tt Couenne}, 21
-    \subitem {\tt CppAD}, 5, 6, 77--78
+    \subitem {\tt CppAD}, 5, 6, 80--81
     \subitem {\tt DyLP}, 21
-    \subitem {\tt Ipopt}, 11, 15, 21, 72, 73, 83
+    \subitem {\tt Ipopt}, 11, 15, 21, 75, 76, 86
     \subitem {\tt Osi}, 8, 21
     \subitem {\tt SYMPHONY}, 13, 21, 25--26
     \subitem {\tt Vol}, 21
-  \item COIN-OR projects, {\tt Osi}, 73
+  \item COIN-OR projects, {\tt Osi}, 75
   \item {\tt CoinUtils}, \see{COIN-OR projects, {\tt CoinUtils}}{1}
   \item {\tt Couenne}, \see{COIN-OR projects, {\tt Couenne}}{1}
   \item {\tt cplex}, 6, 8, 21
@@ -46,7 +46,7 @@
   \item default solver, 8, 9, 11, 16, 25, 27
   \item Downloading
     \subitem binaries, 6
-  \item Doxygen, 67
+  \item Doxygen, 68
   \item {\tt DyLP}, \see{COIN-OR projects, {\tt DyLP}}{1}
 
   \indexspace
@@ -56,14 +56,14 @@
   \indexspace
 
   \item file naming conventions, 7
-  \item {\tt flex}, 72
+  \item {\tt flex}, 74
 
   \indexspace
 
   \item GAMS, 6, 24, 27--33
   \item {\tt getJobID}, 7, 8, 10, 17, 20
   \item {\tt GLPK}, \see{Third-party software, {\tt GLPK}}{1}
-  \item {\it Griewank, A.}, 77
+  \item {\it Griewank, A.}, 80
 
   \indexspace
 
@@ -76,7 +76,7 @@
 
   \indexspace
 
-  \item Java, 7, 54
+  \item Java, 7, 54--55
   \item {\tt JobID}, 15--17, 20
 
   \indexspace
@@ -87,7 +87,7 @@
   \indexspace
 
   \item Lapack, \see{Third-party software, Lapack}{1}
-  \item LINDO, 6, 8, 10, 72--73
+  \item LINDO, 6, 8, 10, 75--76
 
   \indexspace
 
@@ -95,7 +95,7 @@
   \item makefile, 48
   \item MATLAB, 6, 33--38
   \item Microsoft Visual Studio, 7, 38
-  \item MPS format, 5--8, 70--71
+  \item MPS format, 5--8, 73
   \item Mumps, \see{Third-party software, Mumps}{1}
 
   \indexspace
@@ -108,23 +108,23 @@
   \item OS project
     \subitem stable release, 5, 7
     \subitem trunk version, 22, 24
-  \item {\tt OSAgent}, 5, 38, 66--67
-  \item {\tt OSAmplClient}, 5, 6, 24--27, 71
-  \item {\tt OSExpressionTree}, 68
+  \item {\tt OSAgent}, 5, 38, 67--68
+  \item {\tt OSAmplClient}, 5, 6, 24--27, 74
+  \item {\tt OSExpressionTree}, 71
   \item {\tt OSFileUpload}, 38--39
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 5--8, 11, 12, 15, 20, 38--41, 67, 68, 70--72, 87--90
-  \item {\tt OSInstance}, 5, 48, 67--71, 73, 79
-  \item {\tt OSLibrary}, 11, 66--73
-  \item {\tt OSmps2osil}, 70--71
+  \item OSiL, 5--8, 11, 12, 15, 20, 38--41, 68, 71, 73--75, 90--93
+  \item {\tt OSInstance}, 5, 48, 68--74, 76, 82
+  \item {\tt OSLibrary}, 11, 67--76
+  \item {\tt OSmps2osil}, 73--74
   \item OSnL, 41
-  \item {\tt OSnl2osil}, 71
-  \item OSoL, 5, 7, 11, 12, 15--17, 20, 43--44, 71
-  \item {\tt OSOption}, 70--71
+  \item {\tt OSnl2osil}, 73
+  \item OSoL, 5, 7, 11, 12, 15--17, 20, 43--44, 74
+  \item {\tt OSOption}, 73--74
   \item OSpL, 18--20, 44
-  \item {\tt OSResult}, 70--71
-  \item OSrL, 5, 7, 8, 11, 12, 20, 42--43, 71
-  \item {\tt OSSolverAgent}, 66
+  \item {\tt OSResult}, 73--74
+  \item OSrL, 5, 7, 8, 11, 20, 42--43, 74
+  \item {\tt OSSolverAgent}, 67
   \item {\tt OSSolverService}, 5--20
   \item {\tt OSSolverService.jws}, 12
 
@@ -150,7 +150,7 @@
 
   \indexspace
 
-  \item {\tt testlocal.config}, 11--12
+  \item {\tt testlocal.config}, 11
   \item {\tt testremote.config}, 12--13
   \item Third-party software, {\tt GLPK}, 6, 8, 21
   \item Trac system, 5
@@ -162,7 +162,7 @@
   \indexspace
 
   \item Windows Platform SDK, 54
-  \item {\tt WSUtil}, 66
+  \item {\tt WSUtil}, 67
 
   \indexspace
 
