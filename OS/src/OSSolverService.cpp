@@ -209,6 +209,7 @@ int main(int argC, const char* argV[])
     FileUtil *inputFileUtil = NULL;
     char osss[MAXCHARS] = " ";
     const char *space = " ";
+    const char *quote = "\"";
     //char *config = "-config";
     std::string configFileName = "";
     int i;
@@ -225,12 +226,35 @@ int main(int argC, const char* argV[])
 		
     // make sure we do not exceed max allowed characters in command line
         i = 1;
+        bool addQuotes;
         while (i < argC)
         {
-            if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
-                throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
-            strcat(osss, argV[i]);
-            strcat(osss, space);
+            addQuotes = false;
+            if (argV[i][0] != '\"')
+                for (int k=0; k<strlen(argV[i]); k++)
+                {
+                    if (argV[i][k] == ' ')
+                    {
+                        addQuotes = true;
+                        break;
+                    }
+                }
+            if (addQuotes)
+            {
+                if (strlen(osss) + strlen(argV[i]) + 3 > MAXCHARS)
+                    throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
+                strcat(osss, quote);
+                strcat(osss, argV[i]);
+                strcat(osss, quote);
+                strcat(osss, space);
+            }
+            else
+            {
+                if (strlen(osss) + strlen(argV[i]) + 1 > MAXCHARS)
+                    throw ErrorClass("The command line exceeds allocated storage. Increase parameter MAXCHARS.");
+                strcat(osss, argV[i]);
+                strcat(osss, space);
+            }
             i++;
         }
 
@@ -1364,6 +1388,7 @@ void interactiveShell()
             std::string lineText;
             //use a blank to separate words
             std::string wordSep = " ";
+            std::string dblQuote = "\"";
             std::string optionName = "";
             std::string optionValue = "";
             std::string::size_type indexStart;
@@ -1435,7 +1460,8 @@ void interactiveShell()
                 if (indexStart == string::npos)
                 {
                     std::cout << std::endl;
-                    std::cout << "You did not enter a valid option."
+                    std::cout << "You did not enter a valid option. "
+                              << "Type \"help\" or \"?\" for a list of valid options."
                               << std::endl;
                 }
                 else
@@ -1449,22 +1475,32 @@ void interactiveShell()
                             (optionMap.find(optionName) == optionMap.end() ) )
                     {
                         std::cout << std::endl;
-                        std::cout << "You did not enter a valid option."
+                        std::cout << "You did not enter a valid option. "
+                                  << "Type \"help\" or \"?\" for a list of valid options."
                                   << std::endl;
                     }
                     else
                     {
-
+                        int skipChars;
                         // get the option value
+                        
                         indexStart = lineText.find_first_not_of(wordSep,
                                                                 indexEnd + 1);
-                        indexEnd = lineText.find_first_of(wordSep, indexStart
-                                                          + 1);
+                        if (lineText[indexStart] == '\"')
+                        {
+                            indexEnd = lineText.find_first_of(dblQuote, indexStart + 1);
+                            skipChars = 1;
+                        }
+                        else
+                        {
+                            indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
+                            skipChars = 0;
+                        }
                         if (indexStart != std::string::npos && indexEnd
                                 != std::string::npos)
                         {
-                            optionValue = lineText.substr(indexStart, indexEnd
-                                                          - indexStart);
+                            optionValue = lineText.substr(indexStart + skipChars, 
+                                                          indexEnd - indexStart - skipChars);
                         }
                         else
                         {
@@ -1715,7 +1751,39 @@ void interactiveShell()
 
                                         }// end switch
                                         // now get the option value
-                                        getline(std::cin, optionValue);
+//                                        getline(std::cin, optionValue);
+
+                                        getline(std::cin, lineText);
+
+
+                                        int skipChars;
+                                        // get the option value
+                        
+                                        indexStart = lineText.find_first_not_of(wordSep, 0);
+                                        if (lineText[indexStart] == '\"')
+                                        {
+                                            indexEnd = lineText.find_first_of(dblQuote, indexStart + 1);
+                                            skipChars = 1;
+                                        }
+                                        else
+                                        {
+                                            indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
+                                            skipChars = 0;
+                                        }
+                                        if (indexStart != std::string::npos && indexEnd
+                                                != std::string::npos)
+                                        {
+                                            optionValue = lineText.substr(indexStart + skipChars, 
+                                                                          indexEnd - indexStart - skipChars);
+                                        }
+                                        else
+                                        {
+                                            optionValue = "";
+                                        }
+
+                                        std::cout << "optionValue = --->" << optionValue << "<---" << std::endl;
+
+
                                     }// end if on finding an element in the optionMap
 
                                 } // end if on whether or not option value is null
@@ -1801,8 +1869,8 @@ void interactiveShell()
                                         break;
 
                                     case 10: //printRow
-
-					doPrintRow(osoptions);
+                                        osoptions->printRowNumberAsString = optionValue;
+                    					doPrintRow(osoptions);
                                         break;
 
 
@@ -1829,7 +1897,7 @@ void interactiveShell()
             osoptions = NULL;
             delete fileUtil;
             fileUtil = NULL;
-}
+} // end of interactiveShell
 
 std::string get_help()
 {

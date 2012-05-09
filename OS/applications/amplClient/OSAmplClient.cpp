@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     DefaultSolver *solverType  = NULL;
     std::string sSolverName = "";
     std::string osolFileName = "";
-    std::string osol ="";
+    std::string osol = "";
     std::string serviceLocation = "";
 
     amplclient_options = getenv("OSAmplClient_options");

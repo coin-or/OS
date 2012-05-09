@@ -1,6 +1,6 @@
-#line 2 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.cpp"
+#line 2 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
 
-#line 4 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.cpp"
+#line 4 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -371,8 +371,8 @@ static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 60
-#define YY_END_OF_BUFFER 61
+#define YY_NUM_RULES 46
+#define YY_END_OF_BUFFER 47
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -382,51 +382,51 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[422] =
     {   0,
-        1,    1,   61,   59,    1,    1,   59,    9,   59,   59,
-       59,   59,   59,   59,   59,   59,   59,   59,   59,   59,
-       59,    1,    0,    8,    0,    0,    0,    7,    0,    0,
-        0,    0,    0,    0,   17,    0,    0,    0,    0,    0,
+        1,    1,   47,   45,    1,    1,   45,    8,   45,   45,
+       45,   45,   45,   45,   45,   45,   45,   45,   45,   45,
+       45,    1,    0,    7,    0,    0,    0,    6,    0,    0,
+        0,    0,    0,    0,   16,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,   43,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,   46,   19,    6,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,   18,    5,
 
-        0,   40,   42,    0,    0,    0,    0,    0,    0,   18,
+        0,    0,   34,    0,    0,    0,    0,    0,    0,   17,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,   41,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,   45,    0,    0,   39,    0,    0,   42,   22,
-       28,    0,    0,   25,    0,    0,    0,    0,    5,    0,
-        0,    0,    0,   44,    0,    0,   38,    0,    0,   41,
+        0,   33,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,   36,    0,    0,   32,    0,    0,   34,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    4,    0,
+        0,    0,    0,   35,    0,    0,   31,    0,    0,   33,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,   45,    0,    0,   39,   21,    0,   27,    0,    0,
-        0,   24,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,   44,    0,    0,   38,   20,    0,   26,
+        0,   36,    0,    0,   32,   20,    0,   24,    0,    0,
+        0,   22,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,   35,    0,    0,   31,   19,    0,   23,
 
-        0,    0,    0,   23,    0,    0,    0,    0,    0,    4,
-        0,    0,   21,    0,   27,    0,    0,    0,   24,    0,
-        0,    0,   55,   16,    0,    0,    0,    0,    0,    0,
-       20,    0,   26,    0,    0,    0,   23,    0,    0,    0,
-       58,    3,    0,   37,    0,    0,    0,    0,    0,    0,
-       54,    0,    0,   15,    0,    2,    0,    0,    0,    0,
-        0,    0,    0,   53,    0,   57,    0,    0,    3,   36,
-        0,    0,    0,    0,   14,    0,    0,    0,   54,    0,
-       56,    0,    0,    2,   35,    0,    0,    0,    0,    0,
-        0,    0,   53,    0,   57,    0,   36,   31,    0,   11,
+        0,    0,    0,   21,    0,    0,    0,    0,    0,    0,
+        0,    0,   20,    0,   24,    0,    0,    0,   22,    0,
+        0,    0,    0,   15,    0,    0,    0,    0,    0,    0,
+       19,    0,   23,    0,    0,    0,   21,    0,    0,    0,
+        0,    3,    0,    0,    0,    0,    0,    0,    0,    0,
+       42,    0,    0,   14,    0,    2,    0,    0,    0,    0,
+        0,    0,    0,   41,    0,   44,    0,    0,    3,   30,
+        0,    0,    0,    0,   13,    0,    0,    0,   42,    0,
+       43,    0,    0,    2,   29,    0,    0,    0,    0,    0,
+        0,    0,   41,    0,   44,    0,   30,    0,    0,   10,
 
-       13,    0,    0,    0,    0,    0,   56,    0,   35,    0,
-        0,   12,    0,    0,    0,   30,    0,   34,    0,   13,
-        0,    0,   10,   29,    0,    0,    0,   12,    0,    0,
-        0,   30,   33,    0,    0,    0,    0,   29,   32,    0,
-        0,    0,    0,   33,    0,    0,    0,   32,    0,    0,
-        0,   49,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,   52,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,   51,    0,
-        0,    0,    0,    0,    0,    0,   50,    0,    0,    0,
-        0,    0,    0,    0,    0,   51,    0,   48,    0,    0,
+       12,    0,    0,    0,    0,    0,   43,    0,   29,    0,
+        0,   11,    0,    0,    0,   26,    0,    0,    0,   12,
+        0,    0,    9,   25,    0,    0,    0,   11,    0,    0,
+        0,   26,   28,    0,    0,    0,    0,   25,   27,    0,
+        0,    0,    0,   28,    0,    0,    0,   27,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,   40,    0,
+        0,    0,    0,    0,    0,    0,   39,    0,    0,    0,
+        0,    0,    0,    0,    0,   40,    0,   38,    0,    0,
 
-        0,    0,   50,    0,   47,    0,    0,    0,    0,    0,
+        0,    0,   39,    0,   37,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0
     } ;
@@ -756,12 +756,11 @@ static yyconst flex_int16_t yy_chk[749] =
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static yyconst flex_int32_t yy_rule_can_match_eol[61] =
+static yyconst flex_int32_t yy_rule_can_match_eol[47] =
     {   0,
-1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 
+1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 
-    0,     };
+    1, 1, 1, 1, 1, 0, 0,     };
 
 /* The intent behind this definition is that it'll catch
  * any uses of REJECT which flex missed.
@@ -770,7 +769,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[61] =
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
-#line 1 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 1 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 /* $Id$ */
 /** @file OSParseosss.l
  * 
@@ -784,7 +783,7 @@ static yyconst flex_int32_t yy_rule_can_match_eol[61] =
  * Please see the accompanying LICENSE file in root directory for terms.
  * 
  */
-#line 16 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 16 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 
 
 #include <iostream>
@@ -868,7 +867,7 @@ void setyyextra( osOptionsStruc *osoptions, void* scanner);
  */
 
 
-#line 872 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.cpp"
+#line 871 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
 
 #define INITIAL 0
 
@@ -1092,10 +1091,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 112 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 112 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 
 
-#line 1099 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.cpp"
+#line 1098 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
 
 	if ( !yyg->yy_init )
 		{
@@ -1193,13 +1192,13 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 114 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 114 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 118 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 118 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	//char *ch = strdup(yytext);
@@ -1208,13 +1207,16 @@ YY_RULE_SETUP
 	ch+=7;
 	for(; isspace(*ch); ch++);
 	std::string str(  ch);
-	yyextra->configFile = str;
+	if (str[0] == '\"')
+		yyextra->configFile = str.substr(1,str.length()-2);
+	else
+		yyextra->configFile = str;
 }
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 129 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 132 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	//char *ch = strdup(yytext);
@@ -1223,43 +1225,51 @@ YY_RULE_SETUP
 	ch+=6;
 	for(; isspace(*ch); ch++);
 	std::string str(  ch);
-	yyextra->configFile = str;
+	if (str[0] == '\"')
+		yyextra->configFile = str.substr(1,str.length()-2);
+	else
+		yyextra->configFile = str;
 }
 	YY_BREAK
-case 4:
-/* rule 4 can match eol */
-YY_RULE_SETUP
-#line 140 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
+/*
+(config{xmlwhitespace}+) {
 	YY_PRINT  
 	//char *ch = strdup(yytext);
 	char *ch = yytext;
 	// move past config
 	ch+=6;
-	for(; isspace(*ch); ch++);
-	std::string str(  ch);
-	yyextra->configFile = str;
+//	for(; isspace(*ch); ch++);
+//	std::string str(  ch);
+//	yyextra->configFile = str;
 }
-	YY_BREAK
-case 5:
+ */
+case 4:
 YY_RULE_SETUP
-#line 152 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 159 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	yyextra->invokeHelp = true;
 }
 	YY_BREAK
-case 6:
+case 5:
 YY_RULE_SETUP
-#line 157 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 164 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
     YY_PRINT  
     yyextra->invokeHelp = true;
  }
 	YY_BREAK
+case 6:
+YY_RULE_SETUP
+#line 169 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+{
+	YY_PRINT
+	yyextra->invokeHelp = true;
+}
+	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 162 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 174 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT
 	yyextra->invokeHelp = true;
@@ -1267,7 +1277,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 167 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 179 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT
 	yyextra->invokeHelp = true;
@@ -1275,32 +1285,24 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 172 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 185 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-	YY_PRINT
-	yyextra->invokeHelp = true;
-}
+    YY_PRINT  
+    yyextra->printModel = true;
+ }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 178 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 191 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
     YY_PRINT  
     yyextra->printModel = true;
  }
 	YY_BREAK
 case 11:
+/* rule 11 can match eol */
 YY_RULE_SETUP
-#line 184 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-    YY_PRINT  
-    yyextra->printModel = true;
- }
-	YY_BREAK
-case 12:
-/* rule 12 can match eol */
-YY_RULE_SETUP
-#line 189 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 196 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->printRow == ""){
 		YY_PRINT 
@@ -1316,10 +1318,29 @@ YY_RULE_SETUP
 	//}
 }
 	YY_BREAK
+case 12:
+/* rule 12 can match eol */
+YY_RULE_SETUP
+#line 211 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+{
+	//if(yyextra->printRow == ""){
+		YY_PRINT 
+		//yyextra->printRowNumberAsString = strdup(yytext);
+		yyextra->printRowNumberAsString =  yytext;
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past printRow
+		ch+=8;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		yyextra->printRowNumberAsString = str; 
+	//}
+}
+	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 204 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 226 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->printRow == ""){
 		YY_PRINT 
@@ -1336,27 +1357,16 @@ YY_RULE_SETUP
 }
 	YY_BREAK
 case 14:
-/* rule 14 can match eol */
 YY_RULE_SETUP
-#line 219 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 242 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-	//if(yyextra->printRow == ""){
-		YY_PRINT 
-		//yyextra->printRowNumberAsString = strdup(yytext);
-		yyextra->printRowNumberAsString =  yytext;
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past printRow
-		ch+=8;
-		for(; isspace(*ch); ch++);
-		std::string str(  ch);
-		yyextra->printRowNumberAsString = str; 
-	//}
+	YY_PRINT  
+	yyextra->writeVersion = true;
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 235 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 247 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT  
 	yyextra->writeVersion = true;
@@ -1364,40 +1374,32 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 240 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-	YY_PRINT  
-	yyextra->writeVersion = true;
-}
-	YY_BREAK
-case 17:
-YY_RULE_SETUP
-#line 245 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 252 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	YY_PRINT 
 	yyextra->writeVersion = true;
 }
 	YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 258 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+{
+   YY_PRINT  
+   yyextra->quit = true;
+}
+	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 251 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 263 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
    YY_PRINT  
    yyextra->quit = true;
 }
 	YY_BREAK
 case 19:
+/* rule 19 can match eol */
 YY_RULE_SETUP
-#line 256 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-   YY_PRINT  
-   yyextra->quit = true;
-}
-	YY_BREAK
-case 20:
-/* rule 20 can match eol */
-YY_RULE_SETUP
-#line 262 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 269 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osilFile == ""){
 		YY_PRINT  
@@ -1407,44 +1409,47 @@ YY_RULE_SETUP
 		ch+=5;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->osilFile = str;
+		if (str[0] == '\"')
+			yyextra->osilFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osilFile = str;
 	//} 
 }
 	YY_BREAK
-case 21:
-/* rule 21 can match eol */
+case 20:
+/* rule 20 can match eol */
 YY_RULE_SETUP
-#line 275 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 285 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	// if(yyextra->osilFile == ""){
-		 YY_PRINT  
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osil
-		 ch+=4;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osilFile = str;
+		YY_PRINT  
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osil
+		ch+=4;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->osilFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osilFile = str;
 	// } 
  }
 	YY_BREAK
-case 22:
-/* rule 22 can match eol */
-YY_RULE_SETUP
-#line 288 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
+/*
+ (osil{xmlwhitespace}+) {
 	// if(yyextra->osilFile == ""){
-		 YY_PRINT  
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osil
-		 ch+=4;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osilFile = str;
+		YY_PRINT  
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osil
+		ch+=4;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->osilFile = str;
 	// } 
  }
-	YY_BREAK
+ */
 /*
 (-osilOutput{xmlwhitespace}+{optionValue}) {
 		YY_PRINT 
@@ -1479,10 +1484,10 @@ YY_RULE_SETUP
 		 yyextra->osilOutputFile = str;  
 }
  */
-case 23:
-/* rule 23 can match eol */
+case 21:
+/* rule 21 can match eol */
 YY_RULE_SETUP
-#line 336 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 351 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osrlFile == ""){
 		YY_PRINT 
@@ -1492,48 +1497,51 @@ YY_RULE_SETUP
 		ch+=5;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->osrlFile = str;
+		if (str[0] == '\"')
+			yyextra->osrlFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osrlFile = str;
 	//}  
 }  
 	YY_BREAK
-case 24:
-/* rule 24 can match eol */
+case 22:
+/* rule 22 can match eol */
 YY_RULE_SETUP
-#line 349 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 367 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	 //if(yyextra->osrlFile == ""){
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osrl
-		 ch+=4;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osrlFile = str;
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osrl
+		ch+=4;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->osrlFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osrlFile = str;
 	 //}  
  } 			 
 	YY_BREAK
-case 25:
-/* rule 25 can match eol */
-YY_RULE_SETUP
-#line 362 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
+/*
+ (osrl{xmlwhitespace}+) {
 	// if(yyextra->osrlFile == ""){
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osrl
-		 ch+=4;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osrlFile = str;
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osrl
+		ch+=4;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->osrlFile = str;
 	// }  
  }			 
-	YY_BREAK
-case 26:
-/* rule 26 can match eol */
+ */
+case 23:
+/* rule 23 can match eol */
 YY_RULE_SETUP
-#line 375 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 398 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osolFile == ""){
 		YY_PRINT 
@@ -1543,48 +1551,51 @@ YY_RULE_SETUP
 		ch+=5;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->osolFile = str;  
+		if (str[0] == '\"')
+			yyextra->osolFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osolFile = str;
 	//}
 }
 	YY_BREAK
-case 27:
-/* rule 27 can match eol */
+case 24:
+/* rule 24 can match eol */
 YY_RULE_SETUP
-#line 388 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 414 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osolFile == ""){
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osol
-		 ch+=4;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osolFile = str;  
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osol
+		ch+=4;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->osolFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osolFile = str;
 	//}
 }
 	YY_BREAK
-case 28:
-/* rule 28 can match eol */
-YY_RULE_SETUP
-#line 401 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
+/*
+ (osol{xmlwhitespace}+) {
 	 //if(yyextra->osolFile == ""){
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osol
-		 ch+=4;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osolFile = str;  
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osol
+		ch+=4;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->osolFile = str;  
 	// }
  }
-	YY_BREAK
-case 29:
-/* rule 29 can match eol */
+ */
+case 25:
+/* rule 25 can match eol */
 YY_RULE_SETUP
-#line 414 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 445 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	//if(yyextra->osplInputFile == ""){
 		YY_PRINT 
@@ -1594,44 +1605,47 @@ YY_RULE_SETUP
 		ch+=10;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->osplInputFile = str;  
+		if (str[0] == '\"')
+			yyextra->osplInputFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osplInputFile = str;
 	//}
 }
 	YY_BREAK
-case 30:
-/* rule 30 can match eol */
+case 26:
+/* rule 26 can match eol */
 YY_RULE_SETUP
-#line 427 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 461 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osplInput
-		 ch+=9;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osplInputFile = str;  
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osplInput
+		ch+=9;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->osplInputFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osplInputFile = str;
 }
 	YY_BREAK
-case 31:
-/* rule 31 can match eol */
-YY_RULE_SETUP
-#line 438 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past -osplInput
-		 ch+=9;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osplInputFile = str;  
+/*
+ (osplInput{xmlwhitespace}+) {
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past -osplInput
+		ch+=9;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->osplInputFile = str;  
 }
-	YY_BREAK
-case 32:
-/* rule 32 can match eol */
+ */
+case 27:
+/* rule 27 can match eol */
 YY_RULE_SETUP
-#line 449 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 488 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -1640,43 +1654,46 @@ YY_RULE_SETUP
 		ch+=11;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->osplOutputFile = str;  
+		if (str[0] == '\"')
+			yyextra->osplOutputFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osplOutputFile = str;
 }
 	YY_BREAK
-case 33:
-/* rule 33 can match eol */
+case 28:
+/* rule 28 can match eol */
 YY_RULE_SETUP
-#line 460 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 502 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osplOutput
-		 ch+=10;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osplOutputFile = str;  
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osplOutput
+		ch+=10;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->osplOutputFile = str.substr(1,str.length()-2);
+		else
+			yyextra->osplOutputFile = str;
 }
 	YY_BREAK
-case 34:
-/* rule 34 can match eol */
-YY_RULE_SETUP
-#line 471 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past osplOutput
-		 ch+=10;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->osplOutputFile = str;  
+/*
+ (osplOutput{xmlwhitespace}+) {
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past osplOutput
+		ch+=10;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->osplOutputFile = str;  
 }
-	YY_BREAK
-case 35:
-/* rule 35 can match eol */
+*/
+case 29:
+/* rule 29 can match eol */
 YY_RULE_SETUP
-#line 483 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 530 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1685,43 +1702,47 @@ YY_RULE_SETUP
 		ch+=8;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->insListFile = str;
+		if (str[0] == '\"')
+			yyextra->insListFile = str.substr(1,str.length()-2);
+		else
+			yyextra->insListFile = str;
 }  
 	YY_BREAK
-case 36:
-/* rule 36 can match eol */
+case 30:
+/* rule 30 can match eol */
 YY_RULE_SETUP
-#line 494 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 544 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past insList
-		 ch+=7;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->insListFile = str;
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past insList
+		ch+=7;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		yyextra->insListFile = str;
+		if (str[0] == '\"')
+			yyextra->insListFile = str.substr(1,str.length()-2);
+		else
+			yyextra->insListFile = str;
  }
 	YY_BREAK
-case 37:
-/* rule 37 can match eol */
-YY_RULE_SETUP
-#line 505 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past insList
-		 ch+=7;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->insListFile = str;
+/*
+ (insList{xmlwhitespace}+) {
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past insList
+		ch+=7;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->insListFile = str;
  }
-	YY_BREAK
-case 38:
-/* rule 38 can match eol */
+*/
+case 31:
+/* rule 31 can match eol */
 YY_RULE_SETUP
-#line 516 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 572 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -1730,43 +1751,46 @@ YY_RULE_SETUP
 		ch+=4;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->mpsFile = str; 
+		if (str[0] == '\"')
+			yyextra->mpsFile = str.substr(1,str.length()-2);
+		else
+			yyextra->mpsFile = str;
 }
 	YY_BREAK
-case 39:
-/* rule 39 can match eol */
+case 32:
+/* rule 32 can match eol */
 YY_RULE_SETUP
-#line 527 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 586 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past mps
-		 ch+=3;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->mpsFile = str; 
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past mps
+		ch+=3;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->mpsFile = str.substr(1,str.length()-2);
+		else
+			yyextra->mpsFile = str;
 }
 	YY_BREAK
-case 40:
-/* rule 40 can match eol */
-YY_RULE_SETUP
-#line 538 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past mps
-		 ch+=3;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->mpsFile = str; 
+/*
+ (mps{xmlwhitespace}+) {
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past mps
+		ch+=3;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->mpsFile = str; 
 }
-	YY_BREAK
-case 41:
-/* rule 41 can match eol */
+*/
+case 33:
+/* rule 33 can match eol */
 YY_RULE_SETUP
-#line 549 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 613 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1775,43 +1799,46 @@ YY_RULE_SETUP
 		ch+=3;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->nlFile = str; 
+		if (str[0] == '\"')
+			yyextra->nlFile = str.substr(1,str.length()-2);
+		else
+			yyextra->nlFile = str;
 }
 	YY_BREAK
-case 42:
-/* rule 42 can match eol */
+case 34:
+/* rule 34 can match eol */
 YY_RULE_SETUP
-#line 560 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 627 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past nl
-		 ch+=2;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->nlFile = str; 
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past nl
+		ch+=2;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->nlFile = str.substr(1,str.length()-2);
+		else
+			yyextra->nlFile = str;
 }
 	YY_BREAK
-case 43:
-/* rule 43 can match eol */
-YY_RULE_SETUP
-#line 571 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past nl
-		 ch+=2;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->nlFile = str; 
+/*
+ (nl{xmlwhitespace}+) {
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past nl
+		ch+=2;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->nlFile = str; 
 }
-	YY_BREAK
-case 44:
-/* rule 44 can match eol */
+*/
+case 35:
+/* rule 35 can match eol */
 YY_RULE_SETUP
-#line 582 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 654 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1820,43 +1847,46 @@ YY_RULE_SETUP
 		ch+=4;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->gamsControlFile = str;
+		if (str[0] == '\"')
+			yyextra->gamsControlFile = str.substr(1,str.length()-2);
+		else
+			yyextra->gamsControlFile = str;
 }
 	YY_BREAK
-case 45:
-/* rule 45 can match eol */
+case 36:
+/* rule 36 can match eol */
 YY_RULE_SETUP
-#line 593 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 668 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past dat
-		 ch+=3;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->gamsControlFile = str;
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past dat
+		ch+=3;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->gamsControlFile = str.substr(1,str.length()-2);
+		else
+			yyextra->gamsControlFile = str;
 }
 	YY_BREAK
-case 46:
-/* rule 46 can match eol */
-YY_RULE_SETUP
-#line 604 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past dat
-		 ch+=3;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->gamsControlFile = str;
+/*
+ (dat{xmlwhitespace}+) {
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past dat
+		ch+=3;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->gamsControlFile = str;
 }
-	YY_BREAK
-case 47:
-/* rule 47 can match eol */
+*/
+case 37:
+/* rule 37 can match eol */
 YY_RULE_SETUP
-#line 616 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 696 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -1865,43 +1895,47 @@ YY_RULE_SETUP
 		ch+=14;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->serviceMethod = str.substr(1,str.length()-2);
+		else
+			yyextra->serviceMethod = str;
+}
+	YY_BREAK
+case 38:
+/* rule 38 can match eol */
+YY_RULE_SETUP
+#line 710 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
+{
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past serviceMethod
+		ch+=13;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
 		yyextra->serviceMethod = str; 
+		if (str[0] == '\"')
+			yyextra->serviceMethod = str.substr(1,str.length()-2);
+		else
+			yyextra->serviceMethod = str;
 }
 	YY_BREAK
-case 48:
-/* rule 48 can match eol */
-YY_RULE_SETUP
-#line 627 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past serviceMethod
-		 ch+=13;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->serviceMethod = str; 
+/*
+ (serviceMethod{xmlwhitespace}+) {
+		YY_PRINT
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past serviceMethod
+		ch+=13;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->serviceMethod = str; 
 }
-	YY_BREAK
-case 49:
-/* rule 49 can match eol */
+*/
+case 39:
+/* rule 39 can match eol */
 YY_RULE_SETUP
-#line 638 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past serviceMethod
-		 ch+=13;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->serviceMethod = str; 
-}
-	YY_BREAK
-case 50:
-/* rule 50 can match eol */
-YY_RULE_SETUP
-#line 649 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 738 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//yyextra->serviceLocation = strdup(yytext);
@@ -1912,47 +1946,50 @@ YY_RULE_SETUP
 		ch+=16;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->serviceLocation = str; 
+		if (str[0] == '\"')
+			yyextra->serviceLocation = str.substr(1,str.length()-2);
+		else
+			yyextra->serviceLocation = str;
 }
 	YY_BREAK
-case 51:
-/* rule 51 can match eol */
+case 40:
+/* rule 40 can match eol */
 YY_RULE_SETUP
-#line 662 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 754 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT 
-		 //yyextra->serviceLocation = strdup(yytext);
-		 yyextra->serviceLocation =  yytext;
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past serviceLocation
-		 ch+=15;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->serviceLocation = str; 
+		YY_PRINT 
+		//yyextra->serviceLocation = strdup(yytext);
+		yyextra->serviceLocation =  yytext;
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past serviceLocation
+		ch+=15;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->serviceLocation = str.substr(1,str.length()-2);
+		else
+			yyextra->serviceLocation = str;
 }
 	YY_BREAK
-case 52:
-/* rule 52 can match eol */
-YY_RULE_SETUP
-#line 675 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT 
-		 //yyextra->serviceLocation = strdup(yytext);
-		 yyextra->serviceLocation =  yytext;
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past serviceLocation
-		 ch+=15;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->serviceLocation = str; 
+/*
+ (serviceLocation{xmlwhitespace}+) {
+		YY_PRINT 
+		//yyextra->serviceLocation = strdup(yytext);
+		yyextra->serviceLocation =  yytext;
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past serviceLocation
+		ch+=15;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->serviceLocation = str; 
 }
-	YY_BREAK
-case 53:
-/* rule 53 can match eol */
+*/
+case 41:
+/* rule 41 can match eol */
 YY_RULE_SETUP
-#line 688 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 785 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -1961,43 +1998,46 @@ YY_RULE_SETUP
 		ch+=7;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->solverName = str;
+		if (str[0] == '\"')
+			yyextra->solverName = str.substr(1,str.length()-2);
+		else
+			yyextra->solverName = str;
 }
 	YY_BREAK
-case 54:
-/* rule 54 can match eol */
+case 42:
+/* rule 42 can match eol */
 YY_RULE_SETUP
-#line 699 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 799 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past solver
-		 ch+=6;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->solverName = str;
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past solver
+		ch+=6;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->solverName = str.substr(1,str.length()-2);
+		else
+			yyextra->solverName = str;
 }
 	YY_BREAK
-case 55:
-/* rule 55 can match eol */
-YY_RULE_SETUP
-#line 710 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT 
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past solver
-		 ch+=6;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->solverName = str;
+/*
+ (solver{xmlwhitespace}+) {
+		YY_PRINT 
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past solver
+		ch+=6;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->solverName = str;
 }
-	YY_BREAK
-case 56:
-/* rule 56 can match eol */
+*/
+case 43:
+/* rule 43 can match eol */
 YY_RULE_SETUP
-#line 721 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 826 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 		YY_PRINT  
 		//char *ch = strdup(yytext);
@@ -2006,42 +2046,45 @@ YY_RULE_SETUP
 		ch+=8;
 		for(; isspace(*ch); ch++);
 		std::string str(  ch);
-		yyextra->browser = str; 
+		if (str[0] == '\"')
+			yyextra->browser = str.substr(1,str.length()-2);
+		else
+			yyextra->browser = str;
 }
 	YY_BREAK
-case 57:
-/* rule 57 can match eol */
+case 44:
+/* rule 44 can match eol */
 YY_RULE_SETUP
-#line 732 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 840 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
-		 YY_PRINT  
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past browser
-		 ch+=7;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->browser = str; 
+		YY_PRINT  
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past browser
+		ch+=7;
+		for(; isspace(*ch); ch++);
+		std::string str(  ch);
+		if (str[0] == '\"')
+			yyextra->browser = str.substr(1,str.length()-2);
+		else
+			yyextra->browser = str;
 }
 	YY_BREAK
-case 58:
-/* rule 58 can match eol */
-YY_RULE_SETUP
-#line 743 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
-{
-		 YY_PRINT  
-		 //char *ch = strdup(yytext);
-		 char *ch = yytext;
-		 // move past browser
-		 ch+=7;
-		 for(; isspace(*ch); ch++);
-		 std::string str(  ch);
-		 yyextra->browser = str; 
+/*
+ (browser{xmlwhitespace}+) {
+		YY_PRINT  
+		//char *ch = strdup(yytext);
+		char *ch = yytext;
+		// move past browser
+		ch+=7;
+//		for(; isspace(*ch); ch++);
+//		std::string str(  ch);
+//		yyextra->browser = str; 
 }
-	YY_BREAK
-case 59:
+*/
+case 45:
 YY_RULE_SETUP
-#line 754 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 867 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 {
 	std::string error;
 	std::ostringstream outStr;
@@ -2056,12 +2099,12 @@ YY_RULE_SETUP
 	throw ErrorClass( error);  
 }
 	YY_BREAK
-case 60:
+case 46:
 YY_RULE_SETUP
-#line 767 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 880 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 ECHO;
 	YY_BREAK
-#line 2065 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.cpp"
+#line 2108 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -3185,7 +3228,7 @@ void osssfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 767 "/home/gus/research/OS/trunk-4462-add-osolparser/OS/src/OSParsers/OSParseosss.l"
+#line 880 "/home/gus/research/OS/trunk-temp/OS/src/OSParsers/OSParseosss.l"
 
 
 
