@@ -14,7 +14,7 @@
  * <ul>
  * <li>
  * <b>-osil</b> xxx.osil (file name on local machine of optimization instance,
- *       this is NULL by default, however if this remains NULL a problem
+ *       this is NULL by default; however, if this remains NULL a problem
  * 		 instance must be specified in the osol file)
  * </li>
  * <li>
@@ -26,8 +26,8 @@
  *       result is put, default is NULL)
  * </li>
  * <li>
- * <b>-serviceLocation</b> location URL (the URL  of the server that is called
- *       remotely if the problem not solved locally, default is NULL)
+ * <b>-serviceLocation</b> location URL (the URL of the server that is called
+ *       remotely if the problem is not solved locally, default is NULL)
  * </li>
  * <li>
  * <b>-serviceMethod</b>  (send, solve, kill, knock, getJobID, retrieve,
@@ -1447,11 +1447,6 @@ void interactiveShell()
             //std::cout << "Number of Options = " <<  size_of_array << std::endl;
             while (osoptions->quit != true && osoptions->exit != true)
             {
-                /*				std::cout << "At the prompt enter a valid command or option value pair.\n";
-                				std::cout << "Enter the \"solve\" command to optimize.\n";
-                				std::cout << "Type \"quit/exit\" to leave the application. \n";
-                				std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
-                */
                 std::cout <<  "Please enter a command, or an option followed by an option value: ";
                 getline(std::cin, lineText);
                 lineText = " " + lineText + " ";
@@ -1511,7 +1506,7 @@ void interactiveShell()
 
                         try
                         {
-                            //first we process the commands
+                            // first we process the commands
                             if( commandMap.find(optionName) != commandMap.end()  )
                             {
                                 switch (commandMap[ optionName] )
@@ -1527,12 +1522,6 @@ void interactiveShell()
                                                 << "Please enter file format option (osil, nl, or mps) \n"
                                                 << "followed by the option value which is the file location. \n"
                                                 << std::endl;
-                                        //std::cout
-                                        //	<< "Please enter the path and optimization instance file name: ";
-                                        //getline(std::cin, osoptions->osilFile);
-                                        //osoptions->osil
-                                        //	= fileUtil->getFileAsString(
-                                        //			(osoptions->osilFile).c_str());
                                     }
                                     else
                                     {
@@ -1781,19 +1770,11 @@ void interactiveShell()
                                             optionValue = "";
                                         }
 
-                                        std::cout << "optionValue = --->" << optionValue << "<---" << std::endl;
-
 
                                     }// end if on finding an element in the optionMap
 
                                 } // end if on whether or not option value is null
 
-             //                   lineText = optionName + " "
-             //                              + optionValue + " ";
-             //                   osss_scan_string(lineText.c_str(),
-             //                                    scanner);
-             //                   ossslex(scanner);
-             //                   listOptions( osoptions);
 
                                 if(optionMap.find(optionName) != optionMap.end() )
                                 {

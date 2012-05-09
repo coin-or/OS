@@ -143,19 +143,6 @@ browserState (on|off)
 		yyextra->configFile = str;
 }
 
- /*
-(config{xmlwhitespace}+) {
-	YY_PRINT  
-	//char *ch = strdup(yytext);
-	char *ch = yytext;
-	// move past config
-	ch+=6;
-//	for(; isspace(*ch); ch++);
-//	std::string str(  ch);
-//	yyextra->configFile = str;
-}
- */
-
 (--help) {
 	YY_PRINT  
 	yyextra->invokeHelp = true;
@@ -299,21 +286,6 @@ browserState (on|off)
  }
 	 
  /*
- (osil{xmlwhitespace}+) {
-	// if(yyextra->osilFile == ""){
-		YY_PRINT  
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past osil
-		ch+=4;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->osilFile = str;
-	// } 
- }
- */
-
- /*
 (-osilOutput{xmlwhitespace}+{optionValue}) {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -380,21 +352,6 @@ browserState (on|off)
 	 //}  
  } 			 
 			 
- /*
- (osrl{xmlwhitespace}+) {
-	// if(yyextra->osrlFile == ""){
-		YY_PRINT 
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past osrl
-		ch+=4;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->osrlFile = str;
-	// }  
- }			 
- */
-			 
 (-osol{xmlwhitespace}+{optionValue}) {
 	//if(yyextra->osolFile == ""){
 		YY_PRINT 
@@ -427,21 +384,6 @@ browserState (on|off)
 	//}
 }
 
- /*
- (osol{xmlwhitespace}+) {
-	 //if(yyextra->osolFile == ""){
-		YY_PRINT 
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past osol
-		ch+=4;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->osolFile = str;  
-	// }
- }
- */
-
 (-osplInput{xmlwhitespace}+{optionValue}) {
 	//if(yyextra->osplInputFile == ""){
 		YY_PRINT 
@@ -472,19 +414,6 @@ browserState (on|off)
 			yyextra->osplInputFile = str;
 }
 			 
- /*
- (osplInput{xmlwhitespace}+) {
-		YY_PRINT 
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past -osplInput
-		ch+=9;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->osplInputFile = str;  
-}
- */
-
 (-osplOutput{xmlwhitespace}+{optionValue}) {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -513,20 +442,6 @@ browserState (on|off)
 			yyextra->osplOutputFile = str;
 }
 			 
- /*
- (osplOutput{xmlwhitespace}+) {
-		YY_PRINT 
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past osplOutput
-		ch+=10;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->osplOutputFile = str;  
-}
-*/
-
-
 (-insList{xmlwhitespace}+{optionValue}) {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -556,19 +471,6 @@ browserState (on|off)
 			yyextra->insListFile = str;
  }
 			 
- /*
- (insList{xmlwhitespace}+) {
-		YY_PRINT
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past insList
-		ch+=7;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->insListFile = str;
- }
-*/
-
 (-mps{xmlwhitespace}+{optionValue}) {
 		YY_PRINT 
 		//char *ch = strdup(yytext);
@@ -597,19 +499,6 @@ browserState (on|off)
 			yyextra->mpsFile = str;
 }
 			 
- /*
- (mps{xmlwhitespace}+) {
-		YY_PRINT 
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past mps
-		ch+=3;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->mpsFile = str; 
-}
-*/
-
 (-nl{xmlwhitespace}+{optionValue}) {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -637,19 +526,6 @@ browserState (on|off)
 		else
 			yyextra->nlFile = str;
 }
-			 
- /*
- (nl{xmlwhitespace}+) {
-		YY_PRINT
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past nl
-		ch+=2;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->nlFile = str; 
-}
-*/
 			 
 (-dat{xmlwhitespace}+{optionValue}) {
 		YY_PRINT
@@ -679,20 +555,6 @@ browserState (on|off)
 			yyextra->gamsControlFile = str;
 }
 			 
- /*
- (dat{xmlwhitespace}+) {
-		YY_PRINT
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past dat
-		ch+=3;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->gamsControlFile = str;
-}
-*/
-			 
-
 (-serviceMethod{xmlwhitespace}+{serviceMethod}) {
 		YY_PRINT
 		//char *ch = strdup(yytext);
@@ -721,19 +583,6 @@ browserState (on|off)
 		else
 			yyextra->serviceMethod = str;
 }
-			 
- /*
- (serviceMethod{xmlwhitespace}+) {
-		YY_PRINT
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past serviceMethod
-		ch+=13;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->serviceMethod = str; 
-}
-*/
 
 (-serviceLocation{xmlwhitespace}+{optionValue}) {
 		YY_PRINT 
@@ -766,21 +615,6 @@ browserState (on|off)
 		else
 			yyextra->serviceLocation = str;
 }
-			 
- /*
- (serviceLocation{xmlwhitespace}+) {
-		YY_PRINT 
-		//yyextra->serviceLocation = strdup(yytext);
-		yyextra->serviceLocation =  yytext;
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past serviceLocation
-		ch+=15;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->serviceLocation = str; 
-}
-*/
 
 (-solver{xmlwhitespace}+{optionValue}) {
 		YY_PRINT 
@@ -810,19 +644,6 @@ browserState (on|off)
 			yyextra->solverName = str;
 }
 			 
- /*
- (solver{xmlwhitespace}+) {
-		YY_PRINT 
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past solver
-		ch+=6;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->solverName = str;
-}
-*/
- 
 (-browser{xmlwhitespace}+{optionValue}) {
 		YY_PRINT  
 		//char *ch = strdup(yytext);
@@ -850,19 +671,6 @@ browserState (on|off)
 		else
 			yyextra->browser = str;
 }
-			 
- /*
- (browser{xmlwhitespace}+) {
-		YY_PRINT  
-		//char *ch = strdup(yytext);
-		char *ch = yytext;
-		// move past browser
-		ch+=7;
-//		for(; isspace(*ch); ch++);
-//		std::string str(  ch);
-//		yyextra->browser = str; 
-}
-*/
 
 . {
 	std::string error;

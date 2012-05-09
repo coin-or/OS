@@ -359,7 +359,7 @@ int main(int argc, char **argv)
             //delete y;
             //y = NULL;
         }
-        else
+        else // there was an error
         {
             // do the following so output is not written twice
             // see page 23 of hooking solver to AMPL
