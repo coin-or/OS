@@ -136,7 +136,7 @@ using std::ostringstream;
 using std::string;
 using std::map;
 
-//#define DEBUG_CL_INTERFACE
+#define DEBUG_CL_INTERFACE
 
 
 #define MAXCHARS 5000
@@ -542,7 +542,8 @@ int main(int argC, const char* argV[])
     }
     // now call the correct serviceMethod
     // solve is the default
-    if ((osoptions->serviceMethod == "") || (osoptions->serviceMethod[0] == 's'))
+    if (osoptions->serviceMethod == "") osoptions->serviceMethod = "solve";
+	if (osoptions->serviceMethod[0] == 's')
     {
         if (osoptions->printModel == true)
             doPrintModel(osoptions);
@@ -1481,7 +1482,7 @@ void interactiveShell()
                         
                         indexStart = lineText.find_first_not_of(wordSep,
                                                                 indexEnd + 1);
-                        if (lineText[indexStart] == '\"')
+                        if (indexStart != std::string::npos && lineText[indexStart] == '\"')
                         {
                             indexEnd = lineText.find_first_of(dblQuote, indexStart + 1);
                             skipChars = 1;
