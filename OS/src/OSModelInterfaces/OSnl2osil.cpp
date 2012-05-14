@@ -49,7 +49,6 @@
 #define VAR_E  ((ASL_fg*)asl)->I.var_e_
 #define CON_DE ((ASL_fg*)asl)->I.con_de_
 
-efunc *r_ops_int[N_OPS];
 
 #include <asl.h>
 
@@ -66,16 +65,20 @@ using std::endl;
 //#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename)
+    : osinstance(0), stub(nlfilename)
 {
+    efunc *r_ops_int[N_OPS];
+    FILE *nl;
+
     //Initialize the AMPL library
-    asl = ASL_alloc( ASL_read_fg);
-    stub = &nlfilename[ 0];
-    //cout << "READING FILE " << stub << endl;
+    asl = cw = ASL_alloc( ASL_read_fg);
+
     //Initialize the nl file reading
-    nl = jac0dim(stub, (fint)strlen(stub));
+    nl = jac0dim(const_cast<char*>(stub.c_str()), (fint)stub.length());
+
     //Prepare *columnwise* parsing of nl file
     A_vals = (real *)Malloc(nzc*sizeof(real));
-    //read nl file as a linear program
+
 #ifdef AMPLDEBUG
     cout << "number of nonzeros =   " << nzc << endl;
     cout << "number of variable =   " << n_var << endl;
@@ -85,36 +88,36 @@ OSnl2osil::OSnl2osil(std::string nlfilename)
     cout << "number of equations =   " << n_eqn << endl;
     //cout << "objective function type" << *objtype << endl;
 #endif
-#ifdef AMPLDEBUG
-    cout << "Start f_read()" << endl;
-#endif
-    //X0 = (real *)Malloc( n_var*sizeof(real));
     if(N_OPS > 0)
     {
         for(int i = 0; i < N_OPS; i++)
         {
             r_ops_int[i] = (efunc*)(unsigned long)i;
-
         }
         R_OPS = r_ops_int;
         want_derivs = 0;
         fg_read(nl, 0);
         R_OPS = 0;
     }
+
+    // Now create row-wise version
+    asl = rw = ASL_alloc( ASL_read_fg);
+    nl = jac0dim((char*)stub.c_str(), (fint)stub.length());
+    want_derivs = 0;
+    qp_read(nl, 0);
+
+    asl = cw;
     numkount = 0;
 }
 
 OSnl2osil::~OSnl2osil()
 {
-    osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
-    osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
-    osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
     delete osinstance;
     osinstance = NULL;
- //   free( X0);
-    free( A_vals);
-    ASL_free(&asl);
 
+    free( A_vals);
+    ASL_free(&cw);
+    ASL_free(&rw);
 }
 
 OSnLNode* OSnl2osil::walkTree (expr *e)
@@ -411,11 +414,18 @@ OSnLNode* OSnl2osil::walkTree (expr *e)
     }
 }//walkTree
 
+static inline char integerOrBinary(real upper, real lower)
+{
+    if (lower > -1.0 + OS_EPS && upper < 2.0 - OS_EPS)
+        return 'B';
+    return 'I';
+}
 
 bool OSnl2osil::createOSInstance()
 {
     osinstance = new OSInstance();
     int i, j;
+
     // put in instanceHeader information
     //
     osinstance->setInstanceDescription("Generated from AMPL nl file");
@@ -460,7 +470,7 @@ bool OSnl2osil::createOSInstance()
 #endif
     for(i = lower; i < upper; i++)  //integer in an objective and in a constraint
     {
-        vartype = 'I';
+        vartype = integerOrBinary(LUv[2*i], LUv[2*i+1]); // AMPL doesn't make the distinction for nonlinear variables
         osinstance->addVariable(i, var_name(i),
                                 LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
                                 LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
@@ -493,7 +503,7 @@ bool OSnl2osil::createOSInstance()
 #endif
     for(i = lower; i < upper; i++)  //integer just in constraints
     {
-        vartype = 'I';
+        vartype =  integerOrBinary(LUv[2*i], LUv[2*i+1]); // AMPL doesn't make the distinction for nonlinear variables
         osinstance->addVariable(i, var_name(i),
                                 LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
                                 LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
@@ -525,7 +535,7 @@ bool OSnl2osil::createOSInstance()
 #endif
     for(i = lower; i < upper; i++)  //integer just in objectives
     {
-        vartype = 'I';
+        vartype = integerOrBinary(LUv[2*i], LUv[2*i+1]); // AMPL doesn't make the distinction for nonlinear variables
         osinstance->addVariable(i, var_name(i),
                                 LUv[2*i]   > -OSDBL_MAX ? LUv[2*i]   : -OSDBL_MAX,
                                 LUv[2*i+1] <  OSDBL_MAX ? LUv[2*i+1] :  OSDBL_MAX,
@@ -605,20 +615,11 @@ bool OSnl2osil::createOSInstance()
 
     // end of variables -- thank goodness!!!
 
-
-
-
-    //
-    //
-    //(expr_v *)e;
-    //
-    //
     // now create the objective function
     // in the nl file, this is stored in dense form; convert to sparse.
     //
     double objWeight = 1.0;
     //	char	*objtype;	/* object type array: 0 == min, 1 == max */
-    std::string objName="";
     SparseVector* objectiveCoefficients = NULL;
 
     osinstance->setObjectiveNumber( n_obj) ;
@@ -640,7 +641,7 @@ bool OSnl2osil::createOSInstance()
                 objectiveCoefficients->indexes[i_obj_coef] = og->varno;
             }
         }
-        osinstance->addObjective(-n_obj + i, objName,
+        osinstance->addObjective(-i-1, obj_name(i),
                                  (objtype[i] == 1)?"max":"min",
                                  objconst( i),  objWeight, objectiveCoefficients) ;
         delete objectiveCoefficients; // delete the temporary sparse vector
@@ -729,6 +730,9 @@ bool OSnl2osil::createOSInstance()
                 A_vals,   0,  A_colstarts[n_var] - 1,
                 A_rownos, 0,  A_colstarts[n_var] - 1,
                 A_colstarts,  0,  n_var);
+        osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
+        osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
+        osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
     }
     /*	int valuesBegin = 0;
     	int valuesEnd = A_colstarts[ n_var] - 1;
@@ -751,54 +755,73 @@ bool OSnl2osil::createOSInstance()
     	}
     */
 
-    // Kipp: can AMPL identify QPs???
-    //osinstance->setQuadraticTerms(numberOfQPTerms, VarOneIdx, VarTwoIdx, Coeff, begin, end);
     //loop over each row with a nonlinear term
     //
-    if((nlc + nlo) > 0)
+    std::vector<int> fidxs, v1idxs, v2idxs;
+    std::vector<double> coeffs;
+    std::vector<Nl> nlExprs;
+    real* delsqp;
+    fint* colqp;
+    fint* rowqp;
+    int osNLIdx; // OS n.l. function index
+    int aNLIdx; // AMPL n.l. function index
+    //Switch to row-wise format, this is the format the ASL assumes is set when calling qpcheck.
+    //it is not documented but necessary it will segfault otherwise.
+    asl = rw;
+
+    // Iterate from -nlo to nlc-1 so that the qterms are sorted by idx
+    for (osNLIdx = -nlo, aNLIdx = nlo-1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
     {
-        OSnLNode* m_treeRoot;
-        //cout << nlc << endl;
-        //cout << nlo << endl;
-        osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlc + nlo;
-        osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ nlc + nlo ];
-        int iNLidx = 0;
-        std::cout << "WALK THE TREE FOR NONLINEAR CONSTRAINT TERMS:  " << nlc << std::endl;
-
-
-        if(nlc > 0)
+        if (nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp) > 0) // quadratic
         {
-            while (iNLidx < nlc)
+            for (int v1 = 0; v1 < n_var; v1++)
             {
-                m_treeRoot = walkTree ((CON_DE + iNLidx)->e);
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx] = new Nl();
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->idx = iNLidx;
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree->m_treeRoot = m_treeRoot;
-                iNLidx++;
-                //std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+                for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
+                {
+                    if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
+                    {
+                        fidxs.push_back(osNLIdx);
+                        v1idxs.push_back(v1);
+                        v2idxs.push_back(*psV2);
+                        coeffs.push_back(0.5 * *delsqp);
+                    }
+                }
             }
         }
-
-        std::cout << "WALK THE TREE FOR NONLINEAR OBJECTIVE TERMS  " << nlo  << std::endl;
-        if(nlo > 0)
+        else // Nonlinear or error in nqpcheck
         {
-            while ( iNLidx < nlc + nlo)
-            {
-                m_treeRoot = walkTree ((OBJ_DE + iNLidx - nlc)->e);
-                //std::cout << "CREATING A NEW NONLINEAR TERM IN THE OBJECTIVE" << std::endl;
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx] = new Nl();
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->idx = -1 - (iNLidx - nlc);
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();
-                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree->m_treeRoot = m_treeRoot;
-                iNLidx++;
-                //std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
-            }
+            Nl nl;
+            expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
+            nl.idx = osNLIdx;
+            nl.osExpressionTree = new OSExpressionTree();
+            nl.osExpressionTree->m_treeRoot = walkTree (e);
+            nl.m_bDeleteExpressionTree = false;
+            /*
+             * Note: If the copy operation of the Nl class is changed from shallow
+             * to deep, we will want to manage memory differently here.
+             */
+            nlExprs.push_back(nl);
         }
-        //std::cout << "DONE WALKING THE TREE FOR NONLINEAR OBJECTIVE TERMS" << std::endl;
-
-
     }
+
+    if (nlExprs.size())
+    {
+        Nl** ppsNl = new Nl*[ nlExprs.size() ];
+        for (i = 0; i < nlExprs.size(); i++)
+        {
+            ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
+            ppsNl[i]->m_bDeleteExpressionTree = true;
+        }
+        osinstance->instanceData->nonlinearExpressions->nl = ppsNl;
+    }
+    osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
+    if (fidxs.size())
+    {
+        osinstance->setQuadraticTerms((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
+    }
+    // Note: if we intended to call objval, conval etc with asl == rw later we must call qp_opify here.
+    asl = cw;
+
 //	delete objectiveCoefficients;
 //	objectiveCoefficients = NULL;
     //

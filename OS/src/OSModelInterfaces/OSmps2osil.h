@@ -53,7 +53,7 @@ public:
     bool createOSInstance();
 
     /** osinstance is a pointer to the OSInstance object that gets
-     * created from the instance represented in MPS format
+     * created from the instance represented in NL format
      */
     OSInstance *osinstance;
 private:

@@ -2368,13 +2368,15 @@ std::map<int, OSExpressionTree*> OSInstance::getAllNonlinearExpressionTrees()
     // count the number of constraints and objective functions with nonlinear terms.
     for(pos = foundIdx.begin(); pos != foundIdx.end(); ++pos)
     {
-        if(pos->first == -1)
+        if(pos->first < 0)
         {
             m_iObjectiveNumberNonlinear++;
         }
-        else m_iConstraintNumberNonlinear++;
+        else
+        {
+            m_iConstraintNumberNonlinear++;
+        }
     }
-    foundIdx.clear();
     m_bProcessExpressionTrees = true;
     return m_mapExpressionTrees;
 }// getAllNonlinearExpressionTrees
@@ -3000,6 +3002,7 @@ bool OSInstance::setLinearConstraintCoefficients(int numberOfValues, bool isColu
     instanceData->linearConstraintCoefficients->start->el = (starts+startsBegin);
 
     instanceData->linearConstraintCoefficients->start->numberOfEl = startsEnd - startsBegin + 1;
+    instanceData->linearConstraintCoefficients->iNumberOfStartElements = startsEnd - startsBegin + 1;
 
     //values
     if (instanceData->linearConstraintCoefficients->value == NULL) 
@@ -3484,15 +3487,15 @@ std::string OSInstance::printModel( )
     outStr << "Objectives:" << std::endl;
     for(i = 0; i < numObj; i++)
     {
-        if( this->getObjectiveMaxOrMins()[0] == "min")
+        if (getObjectiveMaxOrMins()) // should not be null with nonzero numObj
         {
-            outStr << "min ";
+            outStr << getObjectiveMaxOrMins()[i] << ' ';
         }
         else
         {
             outStr << "max ";
         }
-        outStr << this->printModel( i - numObj);
+        outStr << this->printModel(-i-1);
     }
     outStr << std::endl;
     outStr << "Constraints:" << std::endl;
