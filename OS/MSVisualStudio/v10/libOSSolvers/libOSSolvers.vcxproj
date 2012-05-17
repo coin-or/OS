@@ -27,18 +27,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v90</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v100</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -46,40 +50,38 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Common.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Common.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Common.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Release.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Common.props" />
+    <Import Project="..\..\..\..\BuildTools\MSVisualStudio\v10\Debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalOptions>-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H %(AdditionalOptions)</AdditionalOptions>
-      <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdlib;..\..\..\..\Dylp\src\OsiDylp;..\..\..\..\Osi\src;..\..\..\..\Osi\src\Osi;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Vol\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -104,12 +106,10 @@
     </Midl>
     <ClCompile>
       <AdditionalOptions>-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H %(AdditionalOptions)</AdditionalOptions>
-      <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdlib;..\..\..\..\Dylp\src\OsiDylp;..\..\..\..\Osi\src;..\..\..\..\Osi\src\Osi;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Vol\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -131,11 +131,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalOptions>-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H %(AdditionalOptions)</AdditionalOptions>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdlib;..\..\..\..\Dylp\src\OsiDylp;..\..\..\..\Osi\src;..\..\..\..\Osi\src\Osi;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Vol\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
@@ -160,11 +158,10 @@
     </Midl>
     <ClCompile>
       <AdditionalOptions>-DWIN_ -D_WIN32 -DMSVISUALSTUDIO -DHAVE_MATH_H -DHAVE_STRING_H -DHAVE_STDIO_H -DHAVE_TIME_H %(AdditionalOptions)</AdditionalOptions>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>C:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;D:\Program Files\Microsoft Platform SDK for Windows Server 2003 R2\Include;..\..\..\..;..\..\..\..\OS\src;..\..\..\..\OS\src\OSAgent;..\..\..\..\OS\src\OSCommonInterfaces;..\..\..\..\OS\src\OSModelInterfaces;..\..\..\..\OS\src\OSParsers;..\..\..\..\OS\src\OSSolverInterfaces;..\..\..\..\OS\src\OSUtils;..\..\..\..\BuildTools\headers;..\..\..\..\CoinUtils\inc;..\..\..\..\CoinUtils\src;..\..\..\..\Cbc\src;..\..\..\..\Cbc\src\OsiCbc;..\..\..\..\Cgl\src;..\..\..\..\Cgl\src\CglClique;..\..\..\..\Cgl\src\CglDuplicateRow;..\..\..\..\Cgl\src\CglFlowCover;..\..\..\..\Cgl\src\CglGomory;..\..\..\..\Cgl\src\CglKnapsackCover;..\..\..\..\Cgl\src\CglLandP;..\..\..\..\Cgl\src\CglMixedIntegerRounding2;..\..\..\..\Cgl\src\CglPreProcess;..\..\..\..\Cgl\src\CglProbing;..\..\..\..\Cgl\src\CglRedSplit;..\..\..\..\Cgl\src\CglResidualCapacity;..\..\..\..\Cgl\src\CglSimpleRounding;..\..\..\..\Cgl\src\CglTwomir;..\..\..\..\Clp\src;..\..\..\..\Clp\src\OsiClp;..\..\..\..\CppAD;..\..\..\..\CppAD\local;..\..\..\..\Dylp\src\Dylp;..\..\..\..\Dylp\src\DylpStdlib;..\..\..\..\Dylp\src\OsiDylp;..\..\..\..\Osi\src;..\..\..\..\Osi\src\Osi;..\..\..\..\Osi\src\OsiCbc;..\..\..\..\Osi\src\OsiClp;..\..\..\..\Osi\src\OsiSym;..\..\..\..\Osi\src\OsiVol;..\..\..\..\SYMPHONY\src\OsiSym;..\..\..\..\SYMPHONY\Include;..\..\..\..\Vol\src\OsiVol;..\..\..\..\Vol\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;USE_CBCCONFIG;COIN_NO_CLP_MESSAGE;WIN_;_LINDO_DLL_;OSROOT_DIR;USE_DTOA;COIN_HAS_SYMPHONY;COIN_HAS_DYLP;OS_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
