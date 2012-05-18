@@ -2575,6 +2575,7 @@ int** OSInstance::getTimeDomainStageObjList()
     if (m_mmiTimeDomainStageObjList != NULL)
     {
         for (int i = 0; i < m_iNumberOfTimeStages; i ++)
+
             delete[] m_mmiTimeDomainStageObjList[i];
         delete[] m_mmiTimeDomainStageObjList;
         m_mmiTimeDomainStageObjList = NULL;
@@ -3484,17 +3485,11 @@ std::string OSInstance::printModel( )
     numVar = this->getVariableNumber();
     this->initForAlgDiff( );
     outStr << std::endl;
+    std::string *objMaxOrMin = getObjectiveMaxOrMins();    
     outStr << "Objectives:" << std::endl;
     for(i = 0; i < numObj; i++)
     {
-        if (getObjectiveMaxOrMins()) // should not be null with nonzero numObj
-        {
-            outStr << getObjectiveMaxOrMins()[i] << ' ';
-        }
-        else
-        {
-            outStr << "max ";
-        }
+        outStr << objMaxOrMin[i] << ' ';
         outStr << this->printModel(-i-1);
     }
     outStr << std::endl;
