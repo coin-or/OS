@@ -755,73 +755,54 @@ bool OSnl2osil::createOSInstance()
     	}
     */
 
+    // Kipp: can AMPL identify QPs???
+    //osinstance->setQuadraticTerms(numberOfQPTerms, VarOneIdx, VarTwoIdx, Coeff, begin, end);
     //loop over each row with a nonlinear term
     //
-    std::vector<int> fidxs, v1idxs, v2idxs;
-    std::vector<double> coeffs;
-    std::vector<Nl> nlExprs;
-    real* delsqp;
-    fint* colqp;
-    fint* rowqp;
-    int osNLIdx; // OS n.l. function index
-    int aNLIdx; // AMPL n.l. function index
-    //Switch to row-wise format, this is the format the ASL assumes is set when calling qpcheck.
-    //it is not documented but necessary it will segfault otherwise.
-    asl = rw;
-
-    // Iterate from -nlo to nlc-1 so that the qterms are sorted by idx
-    for (osNLIdx = -nlo, aNLIdx = nlo-1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
+    if((nlc + nlo) > 0)
     {
-        if (nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp) > 0) // quadratic
+        OSnLNode* m_treeRoot;
+        //cout << nlc << endl;
+        //cout << nlo << endl;
+        osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlc + nlo;
+        osinstance->instanceData->nonlinearExpressions->nl = new Nl*[ nlc + nlo ];
+        int iNLidx = 0;
+        std::cout << "WALK THE TREE FOR NONLINEAR CONSTRAINT TERMS:  " << nlc << std::endl;
+
+
+        if(nlc > 0)
         {
-            for (int v1 = 0; v1 < n_var; v1++)
+            while (iNLidx < nlc)
             {
-                for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
-                {
-                    if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
-                    {
-                        fidxs.push_back(osNLIdx);
-                        v1idxs.push_back(v1);
-                        v2idxs.push_back(*psV2);
-                        coeffs.push_back(0.5 * *delsqp);
-                    }
-                }
+                m_treeRoot = walkTree ((CON_DE + iNLidx)->e);
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx] = new Nl();
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->idx = iNLidx;
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree->m_treeRoot = m_treeRoot;
+                iNLidx++;
+                //std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
             }
         }
-        else // Nonlinear or error in nqpcheck
-        {
-            Nl nl;
-            expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
-            nl.idx = osNLIdx;
-            nl.osExpressionTree = new OSExpressionTree();
-            nl.osExpressionTree->m_treeRoot = walkTree (e);
-            nl.m_bDeleteExpressionTree = false;
-            /*
-             * Note: If the copy operation of the Nl class is changed from shallow
-             * to deep, we will want to manage memory differently here.
-             */
-            nlExprs.push_back(nl);
-        }
-    }
 
-    if (nlExprs.size())
-    {
-        Nl** ppsNl = new Nl*[ nlExprs.size() ];
-        for (i = 0; i < nlExprs.size(); i++)
+        std::cout << "WALK THE TREE FOR NONLINEAR OBJECTIVE TERMS  " << nlo  << std::endl;
+        if(nlo > 0)
         {
-            ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
-            ppsNl[i]->m_bDeleteExpressionTree = true;
+            while ( iNLidx < nlc + nlo)
+            {
+                m_treeRoot = walkTree ((OBJ_DE + iNLidx - nlc)->e);
+                //std::cout << "CREATING A NEW NONLINEAR TERM IN THE OBJECTIVE" << std::endl;
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx] = new Nl();
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->idx = -1 - (iNLidx - nlc);
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree = new OSExpressionTree();
+                osinstance->instanceData->nonlinearExpressions->nl[ iNLidx]->osExpressionTree->m_treeRoot = m_treeRoot;
+                iNLidx++;
+                //std::cout << m_treeRoot->getNonlinearExpressionInXML() << std::endl;
+            }
         }
-        osinstance->instanceData->nonlinearExpressions->nl = ppsNl;
-    }
-    osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
-    if (fidxs.size())
-    {
-        osinstance->setQuadraticTerms((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
-    }
-    // Note: if we intended to call objval, conval etc with asl == rw later we must call qp_opify here.
-    asl = cw;
+        //std::cout << "DONE WALKING THE TREE FOR NONLINEAR OBJECTIVE TERMS" << std::endl;
 
+
+    }
 //	delete objectiveCoefficients;
 //	objectiveCoefficients = NULL;
     //
