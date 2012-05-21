@@ -98,7 +98,6 @@ OS/applications/parsingTest/parsingTest.py -text
 OS/config.guess -text
 OS/config.sub -text
 OS/configure -text
-OS/configure.ac -text
 OS/data/OSSolverTests.xls -text
 OS/data/amplFiles/IP_infeasible.mod -text
 OS/data/amplFiles/IP_infeasible.nl -text
