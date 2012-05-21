@@ -10,7 +10,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.5],[os@list.coin-or.org])
+AC_INIT([OS],[2.4.1],[os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
