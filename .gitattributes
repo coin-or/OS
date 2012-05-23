@@ -312,6 +312,8 @@ OS/doc/OS-Constitution/OSConstitution.tex -text
 OS/doc/OS-Constitution/OSSolverServiceRules.txt -text
 OS/doc/ReleaseProcedures/OSReleaseProcedure.pdf -text
 OS/doc/ReleaseProcedures/OSReleaseProcedure.tex -text
+OS/doc/URLsAndVersions/cited_URLs.tex -text
+OS/doc/URLsAndVersions/currentVersions.tex -text
 OS/doc/UsingCoinBinary.bbl -text
 OS/doc/UsingCoinBinary.ind -text
 OS/doc/UsingCoinBinary.pdf -text
@@ -322,12 +324,18 @@ OS/doc/UsingCoinlibs.pdf -text
 OS/doc/UsingCoinlibs.tex -text
 OS/doc/chapters/CppAD.tex -text
 OS/doc/chapters/Future_Work.tex -text
+OS/doc/chapters/GenericParser.tex -text
+OS/doc/chapters/Jun_interpretation.tex -text
+OS/doc/chapters/Kipps_collected_wisdom.tex -text
 OS/doc/chapters/OSDip.tex -text
 OS/doc/chapters/OSInstanceAPI.tex -text
 OS/doc/chapters/OSIntro.tex -text
+OS/doc/chapters/OSReleaseProcedures.tex -text
+OS/doc/chapters/OSSolverServiceRules.tex -text
 OS/doc/chapters/OSSolverservice.tex -text
 OS/doc/chapters/appendix.tex -text
 OS/doc/chapters/build.tex -text
+OS/doc/chapters/buildSystemInfo.tex -text
 OS/doc/chapters/codesamples.tex -text
 OS/doc/chapters/downloadbinaries.tex -text
 OS/doc/chapters/downloadbinariesCoinAll.tex -text
@@ -335,6 +343,8 @@ OS/doc/chapters/downloadsource.tex -text
 OS/doc/chapters/fileupload.tex -text
 OS/doc/chapters/frontmatter.tex -text
 OS/doc/chapters/modellang.tex -text
+OS/doc/chapters/modifyingFiles.tex -text
+OS/doc/chapters/osConstitutionArticles.tex -text
 OS/doc/chapters/oslibrary.tex -text
 OS/doc/chapters/projectcomponents.tex -text
 OS/doc/chapters/roadmap.tex -text
@@ -407,6 +417,7 @@ OS/doc/old-docs/osUsersManual.tex -text
 OS/doc/old-docs/own.sty -text
 OS/doc/old-docs/visualstudio.pdf -text
 OS/doc/old-docs/visualstudio.tex -text
+OS/doc/osDevelopersBible.tex -text
 OS/doc/osUsersManual.bbl -text
 OS/doc/osUsersManual.bib -text
 OS/doc/osUsersManual.ind -text

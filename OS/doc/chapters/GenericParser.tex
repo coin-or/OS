@@ -1,0 +1,100 @@
+\subsubsection{Generic parser rules}\label{section:ParserRules}
+
+In this section we describe some recommendations concerning elements, rules, names, 
+content and structure of bison rule files for parsing documents used within the OS framework. 
+The emphasis is on uniformity; computational efficiency is secondary. It is expected that the compiler will be able to optimize most if not all of the redundancies away.
+
+\begin{enumerate}
+
+\item    
+For ease of development, trouble shooting and maintenance it is useful to have treatment of the 
+different elements that is as uniform as possible. Computational efficiency is secondary; it is expected 
+that the compiler will be able to deal with such issues. 
+
+\item \label{enum:element}
+	Every $<${\it element}$>$ is parsed using three production rules: {\it  elementStart\/}, {\it elementAttributes\/} 
+and {\it elementContent\/}. 
+
+\item
+	{\it elementStart\/} matches the opening tag (``$<${\it element\/}''); its code section can be used 
+to verify that the element was indeed expected at this spot, particularly in cases where this is hard 
+to infer from the Schema. There are two instances when such checks need to be made:
+
+\begin{enumerate}
+\item	If the elements do not have to appear in any particular order, 
+it is necessary to verify that there was no prior occurrence of this $<${\it element}$>$ within the scope 
+of its parent.
+\item If the element is contained in a repeat group, we must make sure that there are not 
+more occurrences than specified in the {\it numberOf}$\ldots$ attribute of its parent.
+\end{enumerate}
+In addition the code can be used to initial the attribute list. The occurrence of attributes is tracked 
+with indicators {\it xxxAttPresent}, which can be set to {\tt false} in this section. If an element 
+has an optional {\it numberOf}$\ldots$ attribute, the variable holding the number of these items 
+should be set to zero here to provide a default when the {\it numberOf}$\ldots$ attribute is missing.
+
+\item	{\it elementAttributes\/} is included as a separate rule so that checks can be made after 
+the entire list of attributes has been processed. It is necessary to check that all mandatory attributes 
+have indeed been provided, and there may be other checks as needed. The production rule is
+
+{\it elementAttributes: elementAttList}
+
+where {\it elementAttList\/} is a standard list rule, which expands into
+
+{\it elementAttList:} $\vert$ {\it elementAttList elementAtt\/}.
+
+\item	{\it elementAtt\/} matches any of a list of attributes allowed under the current element, as in
+
+{\it elementAtt: elementxxxAtt\/} $\vert$ {\it elementyyyAtt} $\vert$ {\it elementzzzAtt} $\ldots$
+
+\item	Each {\it elementxxxAtt\/} is used to perform specific data checks, such as 
+membership in an enumerative list, nonnegativity, etc., and to store the attribute value into 
+the internal data structure. Moreover, attribute names, unlike element names, tend to be reused frequently. 
+Thus {\it elementxxxAtt\/} may be a generic rule shared among many elements. 
+
+\item	{\it elementxxxAtt\/} is also used to verify that the attribute has not been seen previously 
+within the scope of the current element, to change its status from not present to present, 
+and to assign the attribute value to a temporary variable.
+
+\item	If an element allows only a single attribute, the above can be streamlined, 
+the rule {\it elementxxxAtt\/} replacing the rule {\it elementAttributes\/}.
+
+\item	If an element has no attributes, this rule is simply omitted.
+
+\item	An element attribute may be used to record the number of child elements that are given in an array list. 
+The parser records the number of child elements actually encountered and compares against the declared number. 
+Any discrepancy is recorded. Such {\it numberOf}$\ldots$ attributes also allocate the storage space 
+for the child elements and set the counter to~0. 
+
+\item	{\it elementContent\/} can be empty or nonempty. This is normally expressed by the rule
+
+{\it elementContent: elementEmpty} $\vert$ {\it elementBody}
+
+In some rare cases modifications from this rule are needed in order to avoid reduce/reduce conflicts 
+when an element has several optional children that must occur in a particular sequence, for instance
+
+{\it variables: variableValues variableValuesString basisStatus otherVariableResultsArray}
+
+where each of the child elements may be omitted --- or indeed all of them together.
+
+\item	The code section in the {\it elementContent\/} rule can be used for consistency checks, 
+storage of information into the data structure and, most importantly, to increment counters. 
+
+\item	Empty element content is typically either ``$><$/{\it element\/}$>$'' or simply ``/$>$''. 
+Code may be needed to detect empty element content and throw an appropriate error.
+
+\item	{\it elementBody\/} expands into a variety of different patterns, as needed. There could be
+\begin{enumerate}
+\item	an array of $<${\it child\/}$>$ elements, which is distinguished from an element list 
+by using the rule name {\it childArray\/}, which expands into 
+
+{\it childArray:} $\vert$ {\it childArray childElement}
+\item	several children in arbitrary order ({\it childList}) with a similar expansion
+\item      a sequence of children, which are listed in order:
+
+{\it childElement1  childElement2  childElement3 $\ldots$}
+
+\item	other constructs as appropriate.
+\end{enumerate}
+\item	Each $<${\it childElement\/}$>$ would then be treated again as under point~\ref{enum:element}.
+
+\end{enumerate}

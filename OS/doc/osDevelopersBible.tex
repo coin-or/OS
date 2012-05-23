@@ -1,0 +1,215 @@
+\documentclass[11pt]{article}
+\usepackage{graphics,graphicx}
+%\usepackage[dvips]{graphics,graphicx}
+\DeclareGraphicsExtensions{.ps,.jpg,.eps,.pdf,.png}
+\usepackage{boxedminipage,amsmath,amsfonts}
+\usepackage{url}
+%\usepackage{secdot}
+%\usepackage{natbib}
+\usepackage{verbatim}
+%\usepackage{moreverb}
+\usepackage{enumerate}
+\usepackage{makeidx}
+\usepackage{own}
+\bibliographystyle{plain}
+\makeindex
+
+   
+
+\input{chapters/frontmatter.tex} 
+
+\begin{document}
+
+\runcodefalse   % we do not build a manual for folks who only want to run the executables
+\uselibsfalse   % we do not build a manual for folks who want to build against the libraries
+\developtrue   % we build a manual for folks who want to actively develop code
+\bibletrue     % in addition we include stuff that should only be of interest to project managers
+
+%Some cross-referencing index entries (to be expanded as needed)
+\index{AMPL Solver Library |see{Third-party software, ASL}}
+\index{ASL|see{Third-party software, ASL}}
+\index{Blas|see{Third-party software, Blas}}
+\index{Harwell Subroutine Library|see{Third-party software, HSL}}
+\index{HSL|see{Third-party software, HSL}}
+\index{Lapack|see{Third-party software, Lapack}}
+\index{Mumps|see{Third-party software, Mumps}}
+
+\index{Bonmin@{\tt Bonmin}|see{COIN-OR projects, {\tt Bonmin}}}
+\index{BuildTools@{\tt BuildTools}|see{COIN-OR projects, {\tt BuildTools}}}
+\index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
+\index{Cgl@{\tt Cgl}|see{COIN-OR projects, {\tt Cgl}}}
+\index{Clp@{\tt Clp}|see{COIN-OR projects, {\tt Clp}}}
+%\index{Configuration Manager|see{Microsoft Visual Studio, Configuration Manager}}
+\index{Couenne@{\tt Couenne}|see{COIN-OR projects, {\tt Couenne}}}
+\index{CppAD@{\tt CppAD}|see{COIN-OR projects, {\tt CppAD}}}
+\index{CoinUtils@{\tt CoinUtils}|see{COIN-OR projects, {\tt CoinUtils}}}
+%\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
+\index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
+\index{GLPK@{\tt GLPK}|see{Third-party software, {\tt GLPK}}}
+\index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
+\index{nl files|see{AMPL nl format}}
+\index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
+%\index{Release configuration|see{Microsoft Visual Studio, {\tt Release} configuration}}
+%\index{Release-plus configuration|see{Microsoft Visual Studio, {\tt Release-plus} configuration}}
+\index{SYMPHONY@{\tt SYMPHONY}|see{COIN-OR projects, {\tt SYMPHONY}}}
+\index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
+
+
+
+
+\title{Optimization Services \OSstable\ User's Manual (Insider edition)}
+\vskip 2in
+\author{Horand Gassmann, Jun Ma,  Kipp Martin, and Wayne Sheng}
+\maketitle
+
+\begin{abstract}
+This is the extended User's Manual for the Optimization Services (OS) project.  The objective of OS is to provide a
+general framework consisting of a set of standards for representing optimization instances, results,
+solver options, and communication between clients and solvers in a distributed environment using Web Services.
+This COIN-OR\index{COIN-OR} project provides C++ and Java source code for libraries and executable programs that 
+implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear,
+nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line
+executable {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}  for reading problem instances 
+(OSiL format\index{OSiL}, nl format\index{AMPL nl format}, MPS format\index{MPS format}) and
+calling a solver either locally or on a remote server.  Finally,  both Java\index{Java} source code and a Java {\tt war} 
+file are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
+See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page\index{Trac system} {\tt\UrlTrac} for 
+more information.
+\end{abstract}
+
+
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
+\hyphenation{com-plex-Type}
+\hyphenation{GAMS-links}
+
+
+%\noindent\hrulefill
+\newpage
+\part{Overview}
+
+\input{chapters/OSConstitutionArticles.tex}
+
+\newpage
+
+\input{chapters/Jun_interpretation.tex}
+
+\newpage
+
+\input{chapters/OSIntro.tex}
+
+\newpage
+
+\input{chapters/roadmap.tex}
+
+
+
+% Part 1 for folks who just want to run the executables
+
+\newpage
+\part{Running the OS executables}
+
+\input{chapters/downloadbinaries.tex}
+
+\newpage
+
+\input{chapters/ossolverservice.tex}
+
+\newpage
+
+\input{chapters/OSSolverServiceRules.tex}
+
+\newpage
+
+\input{chapters/modellang.tex}
+
+\newpage
+
+\input{chapters/schemadescriptions.tex}
+
+
+% Part 2 for folks who want to use the libraries to develop their own applications
+
+\newpage
+\part{Using the OS libraries and API}
+
+\newpage
+
+\input{chapters/codesamples.tex}
+
+\newpage
+
+\input{chapters/OSDip.tex}
+
+\newpage
+
+\input{chapters/oslibrary.tex}
+
+\newpage
+
+\input{chapters/OSInstanceAPI.tex}
+
+\newpage
+
+\input{chapters/CppAD.tex}
+
+
+% Part 3 for folks who want to build the code
+\newpage
+\part{Building OS from source}
+
+\input{chapters/downloadsource.tex}
+
+\newpage
+
+\input{chapters/build.tex}
+
+\newpage
+
+\input{chapters/projectcomponents.tex}
+
+\newpage
+
+\input{chapters/modifyingFiles.tex}
+
+\newpage
+
+\input{chapters/tomcat.tex}
+
+\newpage
+
+\input{chapters/fileupload.tex}
+
+
+% Part 4: end items: future plans, bibliography, etc.
+\newpage
+
+\input{chapters/OSReleaseProcedures.tex}
+
+\newpage
+
+\input{chapters/wishlist.tex}
+
+\newpage
+
+\input{chapters/appendix.tex}
+
+
+\addcontentsline{toc}{section}{Bibliography}
+% \addcontentsline{toc}{section}{Bibliography}% alternative for article class
+\bibliography{osUsersManual}
+%\bibliographystyle{amsplain}
+%\bibliography{kippbib}
+ 
+\printindex
+  
+\newpage
+
+\input{chapters/Kipps_collected_wisdom.tex}
+
+\newpage
+
+\input{chapters/buildSystemInfo.tex}
+\end{document}

@@ -1,0 +1,1336 @@
+%===========================================================================================================
+%
+%  This is the end of the document. Below are some private things we like to keep for future reference...
+%
+%===========================================================================================================
+
+\section{Gallimaufry}\label{section:Gallimaufry}
+
+Here we have a number of items Kipp collected, old email messages and other miscellaneous stuff.
+
+\begin{verbatim}
+Here is where you get winsock.h
+ 
+ 
+ftp://sunsite.unc.edu/pub/micro/pc-stuff/ms-windows/winsock/winsock-1.1/winsock.h
+
+see also
+
+ftp://sunsite.unc.edu/pub/micro/pc-stuff/ms-windows/winsock/winsock-1.1/
+
+
+For the SDK (windows.h)
+
+http://www.microsoft.com/downloads/details.aspx?FamilyId=A55B6B43-E24F-4EA3-A93E-40C0EC4F68E5&displaylang=en#Instructions
+
+   
+Important comments from Lou:
+
+	Using Coin-All as of late afternoon (up-to-date, according to svn
+update), and after installing the SDK as per Andreas' email, I have a `minimal
+Msys' build using cl, with ASL, and OS, but it's definitely not clean. Here are
+the issues, and the workarounds I used.
+
+	Cbc.exe doesn't link with ampl in the mix, and I put the blame on
+amplsolv.lib. MS link reports a conflict, apparently libcmt.lib and libcmtd.lib
+(normal and debugging malloc, respectively) are both pulled in. There's a fix:
+The link message says `use NODEFAULTLIB', and sure enough, if I edit the
+Makefile to read
+
+ $(CXXLINK) $(cbc_LDFLAGS) $(cbc_OBJECTS) $(cbc_LDADD) $(LIBS) \
+   "-link -NODEFAULTLIB:libcmt.lib"
+
+then cbc.exe will link. The quotes are necessary because the cl mechanism for
+passing things to the linker is `everything on the line after -link', and
+without the quotes libtool rearranges things. I don't know enough about MSVS
+defaults to say whether libcmtd is the default on a debug build, or libcmt. JP
+might have some insight. I have no immediate ideas on how to work this hack
+through autotools from a Makefile.am. Might be easier to fix amplsolv.lib.
+
+	The same hack is necessary to link OSSolverService.exe, the OS
+unitTest.exe, and the OS OSAmplClient.exe.
+
+	When building OSAgent, the -I/include and -I/mingw/include have to go.
+The cl include order is `current directory, -I options, INCLUDE environment
+variable.' When either of /include or /mingw/include are specified with -I,
+MinGW include files are selected first, and they're not compatible with MS
+include files.
+
+	I didn't run into the problem Ted describes, but that's probably
+because I'm doing static links and the function (CbcOrClpReadCommand) is never
+used anywhere except in cbc.exe. Link is bright enough to know it doesn't need
+it.
+
+	The Alps unit test crashes. Which is odd because the Bcps and Blis unit
+tests run just fine.
+
+	The OS unit test runs until it gets to the Ampl testing section,
+and dies because it can't find parinc.nl. I'm not an Ampl user --- is a .nl
+file Ampl output? If so, the result makes sense, because I don't have Ampl on
+this machine.
+
+	While we're here, the -rpath <path> going into libtool seems to
+translate into an attempt to pass -L<path> to cl, which it ignores with a
+warning about an invalid option.  Whatever libtool is hoping to achieve, it's
+failing. And not necessary, apparently, at least for a static build.
+
+%%%%
+
+Important comments from Andreas:
+
+
+
+This is a well-known problem with the free cl compiler.  I had the same problem and search the web.
+
+This is what I believe I did:
+
+Download and install the (free) SDK, which has the missing header files:
+
+http://www.microsoft.com/downloads/details.aspx?FamilyId=0BAF2B35-C656-4969-ACE8-E4C0C0716ADB&displaylang=en
+
+or so.
+
+After that, there was still something wrong with the PATH setup for cl.  I edited my
+
+/media/win/c/Program Files/Microsoft Visual Studio 8/Common7/Tools/vsvars32.bat
+
+file so that the INCLUDE variable includes the correct path to the SDK include files, something like:
+
+@set PATH=C:\Program Files\Microsoft Visual Studio 8\Common7\IDE;C:\Program Files\Microsoft Visual Studio 8\VC\BIN;C:\Program Files\Microsoft Visual Studio 8\Common7\Tools;C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\bin;C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;C:\Program Files\Microsoft Visual Studio 8\VC\VCPackages;C:\Program Files\Microsoft Platform SDK\Bin;%PATH%
+@set INCLUDE=C:\Program Files\Microsoft Visual Studio 8\VC\INCLUDE;C:\Program Files\Microsoft Platform SDK\Include;%INCLUDE%
+@set LIB=C:\Program Files\Microsoft Visual Studio 8\VC\LIB;C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\lib;C:\Program Files\Microsoft Platform SDK\Lib%LIB%
+@set LIBPATH=C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727
+
+There are a number of discussions about this on the web, e.g.,
+
+http://www.gamedev.net/community/forums/topic.asp?topic_id=440340
+
+I hope this helps,
+
+%%%%%%
+
+Andreas bug report:
+
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+ <title>#3 (Problem compiling on AIX (CppAD trouble?)) - Optimization Services - Trac</title><link rel="start" href="/OS/wiki" /><link rel="search" href="/OS/search" /><link rel="help" href="/OS/wiki/TracGuide" /><link rel="stylesheet" href="/OS/chrome/common/css/trac.css" type="text/css" /><link rel="stylesheet" href="/OS/chrome/common/css/ticket.css" type="text/css" /><link rel="icon" href="/OS/chrome/common/trac.ico" type="image/x-icon" /><link rel="shortcut icon" href="/OS/chrome/common/trac.ico" type="image/x-icon" /><link rel="alternate" href="/OS/ticket/3?format=rss" title="RSS Feed" type="trac.ticket.Ticket" /><link rel="alternate" href="/OS/ticket/3?format=tab" title="Tab-delimited Text" type="trac.ticket.Ticket" /><link rel="alternate" href="/OS/ticket/3?format=csv" title="Comma-delimited Text" type="trac.ticket.Ticket" /><style type="text/css">
+</style>
+ <script type="text/javascript" src="/OS/chrome/common/js/trac.js"></script>
+</head>
+<body>
+
+
+<div id="banner">
+
+<div id="header"><a id="logo" href="http://www.coin-or.org/"><img src="/OS/chrome/common/coin_banner.jpg" width="80" height="80" alt="" /></a><hr /></div>
+
+<form id="search" action="/OS/search" method="get">
+ <div>
+  <label for="proj-search">Search:</label>
+  <input type="text" id="proj-search" name="q" size="10" accesskey="f" value="" />
+  <input type="submit" value="Search" />
+  <input type="hidden" name="wiki" value="on" />
+  <input type="hidden" name="changeset" value="on" />
+  <input type="hidden" name="ticket" value="on" />
+
+ </div>
+</form>
+
+
+
+<div id="metanav" class="nav"><ul><li class="first"><a href="/OS/login">Login</a></li><li><a href="/OS/settings">Settings</a></li><li><a accesskey="6" href="/OS/wiki/TracGuide">Help/Guide</a></li><li><a href="/OS/about">About Trac</a></li><li class="last"><a href="/OS/register">Register</a></li></ul></div>
+</div>
+
+<div id="mainnav" class="nav"><ul><li class="first"><a accesskey="1" href="/OS/wiki">Wiki</a></li><li><a accesskey="2" href="/OS/timeline">Timeline</a></li><li><a accesskey="3" href="/OS/roadmap">Roadmap</a></li><li><a href="/OS/browser">Browse Source</a></li><li class="active"><a href="/OS/report">View Tickets</a></li><li class="last"><a accesskey="4" href="/OS/search">Search</a></li></ul></div>
+
+<div id="main">
+
+
+
+
+<div id="ctxtnav" class="nav">
+ <h2>Ticket Navigation</h2>
+</div>
+
+<div id="content" class="ticket">
+
+ <h1>Ticket #3 <span class="status">(new defect)</span></h1>
+
+<div id="searchable">
+<div id="ticket">
+ <div class="date">
+  <p title="08/10/07 12:53:44">Opened 1 week ago</p>
+ </div>
+ <h2 class="summary">Problem compiling on AIX (CppAD trouble?)</h2>
+ <table class="properties">
+  <tr>
+
+   <th id="h_reporter">Reported by:</th>
+   <td headers="h_reporter">andreasw</td>
+   <th id="h_owner">Assigned to:</th>
+   <td headers="h_owner">somebody</td>
+  </tr><tr>
+    <th id="h_priority">Priority:</th>
+
+    <td headers="h_priority">major</td>
+    <th id="h_milestone">Milestone:</th>
+    <td headers="h_milestone"></td></tr><tr>
+    <th id="h_component">Component:</th>
+    <td headers="h_component">component1</td>
+    <th id="h_version">Version:</th>
+
+    <td headers="h_version"></td></tr><tr>
+    <th id="h_keywords">Keywords:</th>
+    <td headers="h_keywords"></td>
+    <th id="h_cc">Cc:</th>
+    <td headers="h_cc"></td></tr><tr></tr>
+ </table>
+  <form method="get" action="/OS/ticket/3#comment" class="printableform">
+   <div class="description">
+
+    <h3 id="comment:description">
+     Description
+    </h3>
+    <p>
+I'm trying to compile on AIX (IBM's xlC compiler).
+</p>
+<p>
+The first set of problems comes in because CppAD is using the identifiers "isfinite" and "isnan", 
+which on AIX is the name of preprocessor macros, defined in /usr/include/math.h.  I got around this 
+problem buy renaming "isfinite" and "isnan" in CppAD's near_equal.hpp and nan.hpp.  But maybe the 
+issue is related that you use &lt;math.h&gt; in C++ code, whereas the C++ standard says you should 
+use &lt;cmath&gt;.  In Ipopt, I check for each C header if the C++ version is there, and if not, 
+if the C version is there, and include the files accordingly.  There is macro for testing in coin.m4.  
+In Ipopt's configure.ac I use:
+</p>
+
+<pre class="wiki">AC_COIN_CHECK_CXX_CHEADER(math)
+</pre><p>
+and then the source code has:
+</p>
+<pre class="wiki">#ifdef HAVE_CMATH
+# include &lt;cmath&gt;
+#else
+# ifdef HAVE_MATH_H
+#  include &lt;math.h&gt;
+# else
+#  error "don't have header file for math"
+# endif
+#endif
+</pre><p>
+Once I'm able to get through that point, I get tons of error messages like the following:
+</p>
+<pre class="wiki">"/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0215 (S) The wrong number of arguments have been specified for "CppAD::AD&lt;double&gt;::cos() const".
+"/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0700 (I) The previous message was produced while processing "CppAD::AD&lt;double&gt;::cos() const".
+"/u/andreasw/home4/COIN-svn/CoinAll/branches/all-trunk/cppad/../cppad/local/std_math_unary.hpp", line 322.9: 1540-0700 (I) The previous message was produced while processing "CppAD::cos&lt;double&gt;(const AD&lt;double&gt; &amp;)".
+"../../../../../../../CoinAll/branches/all-trunk/OS/src/OSCommonInterfaces/OSnLNode.cpp", line 1157.23: 1540-0700 (I) The previous message was produced while processing "OSnLNodeCos::constructCppADTape(std::map&lt;int,int,std::less&lt;int&gt;,std::allocator&lt;std::pair&lt;const int,int&gt; &gt; &gt; *, CppAD::vector&lt;CppAD::AD&lt;double&gt; &gt; *)".
+
+</pre>
+   </div>
+  </form>
+</div>
+
+
+
+
+
+
+
+
+
+ </div>
+
+ <script type="text/javascript">
+  addHeadingLinks(document.getElementById("searchable"), "Permalink to $id");
+ </script>
+</div>
+<script type="text/javascript">searchHighlight()</script>
+<div id="altlinks"><h3>Download in other formats:</h3><ul><li class="first"><a href="/OS/ticket/3?format=rss">RSS Feed</a></li><li><a href="/OS/ticket/3?format=tab">Tab-delimited Text</a></li><li class="last"><a href="/OS/ticket/3?format=csv">Comma-delimited Text</a></li></ul></div>
+
+</div>
+
+<div id="footer">
+ <hr />
+
+ <a id="tracpowered" href="http://trac.edgewall.org/"><img src="/OS/chrome/common/trac_logo_mini.png" height="30" width="107"
+   alt="Trac Powered"/></a>
+ <p class="left">
+  Powered by <a href="/OS/about"><strong>Trac 0.10.4</strong></a><br />
+  By <a href="http://www.edgewall.org/">Edgewall Software</a>.
+ </p>
+ <p class="right">
+  Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a>
+
+ </p>
+</div>
+
+
+
+ </body>
+</html>
+
+for wget see Christopher G.  Lewis Windows wget
+
+%%%%%%%%%%%%%%%%%%%
+
+What we need for Ipopt
+
+Hi JP,
+
+Actually, I just saw now that you sent me also the output of configure.
+And that one fails because you don't have a Fortran compiler, which at the
+moment I assume is present for Ipopt, since it is required for almost all
+possible configurations.
+
+I could take the dependency out for a Fortran compiler, but that doesn't
+solve the problem, since essentially any of the sparse linear solvers need
+at least the Fortran runtime libraries.  For Ipopt's configure script to
+work you definitely need:
+
+1.  BLAS (either you have it installed already on your system (e.g.,
+libblas on Linux) or you have the source code)
+2. one of: ma27, MA57, Pardiso, WSMP, MUMPS (only for MUMPS there is a
+get.Mumps script)
+
+What are you guys trying to accomplish?  Some automated procedure to see if
+trunk builds?  If so, why wouldn't you want to provide all dependencies
+(also ASL and LAPACK) to make sure that more configurations of the code
+work?
+
+Thanks
+
+%%%%%%%%%%%%%%
+
+
+
+lindo
+
+
+
+
+I have the Mac Intel Lindo API working. A bit of a kludge, but I created a directory on my machine
+
+/opt/intel/cc/9.1.037/lib
+
+Then I copied libimf.dylib and libirc.dylib into this directory.  
+I built the OS project using the GNU build tools with
+
+
+
+%%%%%%%%%%%%%%
+
+Ted:
+
+Kipp Martin wrote:
+> Hi Ted:
+>
+>>
+>> By the way, I would suggest you make sure that configuration fails for OS whenever cppad is not present, 
+> since it appears that OS will not build without it (right?). I tried to configure it without cppad and it
+>
+> The more I think about the above, the less I understand it. True, OS will not build without CppAD but CppAD 
+> is in the Externals file. Same is true for CoinUtils. OS will not build without CoinUtils, but it is in the 
+> Externals file so I don't check for it.  Why should I treat CppAD different than any other COIN-OR project?
+
+Actually, I'm pretty sure that none of the projects are actually doing this 100% right. 
+What I think should happen is that for required external projects, the configure script 
+should check for their existence and fail if they are not present. For optional projects, 
+your code should use the symbols defined for you by autoconf to make sure that the code 
+compiles properly when the optional module is not present, i.e., there should be blocks like
+
+#ifdef COIN_HAS_XXX
+
+#endif
+
+that are skipped whenever XXX is not present. In your configure.ac, the line
+
+AC_COIN_MAIN_SUBDIRS(CoinUtils)
+
+does actually check for the existence of other COIN projects, but it is up to you to figure out what to do 
+if something is not present. Take a look at the configure.ac for Ipopt to see how this works.
+
+Ideally, your code would never fail to compile because something is not present. Either the configuration 
+should fail or the code should be able to deal with the lack of presence of some module. So you actually 
+*do* check for the presence of other COIN projects. However, as far as I know, there is no implemented test for cppad, 
+presumably since it does not use the autotools like the other projects. Currently, if you add
+
+AC_COIN_MAIN_SUBDIRS(CoinUtils)
+
+it doesn't correctly detect its presence. You have this line in your configure.ac, but if you check the logs, 
+it probably says that cppad is not present. I think this is probably because it does not have its own configure script. 
+In that sense, it probably needs to be treated like third-party source code.
+
+The reason for making sure that your configuration fails when something is not present, even though it is in 
+your externals, is because your externals aren't used when other projects pull in your project (as I am doing 
+with CoinAll). I don't really have any way of knowing which things  in your externals are required for me to build 
+your project with the default options. Hence, I didn't include cppad at first. When I could not get Ipopt to build, 
+I actually tried to build CoinAll without Ipopt and again, OS configured just fine, but failed to build because Ipopt 
+was not present. By the way, is it really true that you need Ipopt to use OS? What if I am only interested in using 
+Clp through OS and don't care about Ipopt? Shouldn't I be able to build it without Ipopt? I'm guessing that this is 
+possible, but it doesn't happen automatically whenever Ipopt is not present, as it should.
+
+So the bottom line is that all the COIN projects *should* actually be treated that same way as I've described cppad 
+should be treated. However, it's easier to do this for the projects that use autoconf.
+
+I hope this makes sense. Andreas can correct me if I've misspoken anywhere :) .
+
+Cheers,
+
+Ted
+--
+Dr. Ted Ralphs
+Associate Professor
+Industrial and Systems Engineering
+Lehigh University
+(610)758-4784
+ted at lehigh dot edu
+www.lehigh.edu/~tkr2
+
+
+
+%%%%%%%%%
+
+JP
+
+
+
+
+For OS the command looks like:
+   vcbuild /u F:\nbBuildDir\OS\trunk\OS\MSVisualStudio\v8\OS.sln $ALL
+Before running vcbuild a few environement variables need to set.
+This is how I do that:
+    "E:\Microsoft Visual Studio 8\Common7\Tools\vsvars32.bat"
+    set LIB=E:\Microsoft Platform SDK for Windows Server 2003 R2\Lib
+    set LIB=E:\Microsoft Visual Studio 8\VC\lib;%LIB%
+    set INCLUDE=E:\Microsoft Platform SDK for Windows Server 2003 R2
+\Include;%INCLUDE%
+
+
+
+%%%%%%%%%
+
+
+
+AC_COIN_HAS_PROJECT(cppad)
+case $coin_has_cppad in
+  unavailable | skipping)
+    AC_MSG_ERROR([cannot find CppAD])
+esac
+
+Sorry, I didn't read your message well.
+
+You are right, AC_COIN_MAIN_SUBDIRS(cppad) tells us that the cppad project is not available, since there is no 
+configure script - and therefore the base directory configure script can't and shouldn't recurse into the cppad 
+subdirectory.  There is actually no need for "AC_COIN_MAIN_SUBDIRS(cppad)" to appear in the configure.ac of OS' 
+base directory.
+
+However, the AC_COIN_HAS_PROJECT(cppad) test is independent from that, and that seems to do that right thing 
+in OS (that was what I meant in my other messages).
+
+Sorry for the confusion.
+
+Andreas
+
+%%%%%%
+%%%%%%
+
+Just a follow-up to one of Stefan's comments:
+
+> > From: Stefan Vigerske [mailto:stefan@math.hu-berlin.de]
+> > Sent: Wednesday, November 21, 2007 4:57 AM
+> > To: Steven Dirkse
+> > Cc: Kipp Martin; Jun Ma @ NWU; Robert Fourer; huanyuan sheng
+> > Subject: Re: GAMS and OS
+> >
+> > - have the possiblity to link the GAMS I/O libs directly to an
+> > OSiL-compatible solver by giving it an OSInstance object instead of
+> > pointing it to an OSiL file. Not only that additional rounding errors by
+> > writing an ASCII-representation and reading it again are avoided, also
+> > it might be easier to implement advanced features like support for GAMS
+> > BCH and for GAMS external functions (provided this is supported by OS).
+
+If writing an ASCII representation and reading it again are done properly,
+then there need not be any rounding errors.  The binary representation after
+reading the ASCII can be guaranteed to be identical to the binary
+representation before writing the ASCII.  This guarantee cannot be achieved
+if the ASCII representation is limited to 12 characters, however, as in the
+classical version of MPS form.
+
+For more on this subject see Dave Gay's discussion at
+www.ampl.com/REFS/rounding.pdf.  There also is a distribution of the
+rounding routines that is open source -- see the initial comments to
+www.netlib.org/ampl/solvers/dtoa.c -- but I don't know how this fits with
+other licenses such as the CPL and GPL.
+
+
+%%%%%%%%%%%%%%%%%%%
+
+Gus and msys
+
+> Bob -- I am ccing you on all this discussion about parsers since when you implement the David Gay stuff the 
+reading of the numbers into text is done in parseosil.y and many of Gus' questions are relevant.  
+I think he also has msys and through a fair amount of pain has installed flex and bison so perhaps you can 
+leverage off of him.
+
+Hi Bob,
+
+msys _is_ fairly easy to install, but you have to know what you need,
+and the website is very unhelpful. If you want flex and bison, you are
+going to have to download from
+
+http://sourceforge.net/project/showfiles.php?group_id=2345
+
+the following files:
+
+MSYS-1.0.11-20071204
+bash-3.1-MSYS-1.0.11
+bison-2.3-MSYS-1.0.11
+flex-2.5.33-MSYS-1.0.11
+regex-0.12-MSYS-1.0.11
+
+The last one contains an important DLL, msys-regex-0.dll, without which flex
+will not start. Unfortunately there is no documentation anywhere, and I was
+banging my head against a wall for at least two days on this point.
+
+You might want to get other files, such as
+
+coreutils-5.97-MSYS-1.0.11
+make-3.81-MSYS-1.0.11
+
+but I don't think they are essential.
+
+I still have not figured out the path thing, but I figure, I can write a batch
+file that copies the files back and forth.
+
+
+%%%%%%%%%%%%%%%%%
+
+This is good. You might want to mention in the MSVS section that the flex and
+bison available for windows do not allow the options to build a reentrant
+parser (which we have to have for (at least) the <nonlinearExpressionTree>).
+You could then point anyone interested in modifying the parsers to the entry in
+section 4.2.4. (These six lines actually deserve their own number, but I don't
+know where you stand on the nesting level. My suggestion would be to call it
+"4.2.5 flex and bison".)
+
+I also noticed another typo in the top third of page 39: The bison version
+number should be 2.3, not 3.2.
+
+
+%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%
+
+
+Bob --
+
+Right -- I am planning on using the functions strtod and dtoa described in
+www.ampl.com/REFS/abstracts.html#rounding and available from netlib.
+
+ #ifdef KR_headers
+02644     (d, mode, ndigits, decpt, sign, rve)
+02645     double d; int mode, ndigits, *decpt, *sign; char **rve;
+02646 #else
+02647     (double d, int mode, int ndigits, int *decpt, int *sign, char **rve)
+02648 #endif
+02649 
+02650  /* Arguments ndigits, decpt, sign are similar to those
+02651     of ecvt and fcvt; trailing zeros are suppressed from
+02652     the returned string.  If not null, *rve is set to point
+02653     to the end of the return value.  If d is +-Infinity or NaN,
+02654     then *decpt is set to 9999.
+02655
+02656     mode:
+02657         0 ==> shortest string that yields d when read in
+02658             and rounded to nearest.
+02659         1 ==> like 0, but with Steele & White stopping rule;
+02660             e.g. with IEEE P754 arithmetic , mode 0 gives
+02661             1e23 whereas mode 1 gives 9.999999999999999e22.
+02662         2 ==> max(1,ndigits) significant digits.  This gives a
+02663             return value similar to that of ecvt, except
+02664             that trailing zeros are suppressed.
+02665         3 ==> through ndigits past the decimal point.  This
+02666             gives a return value similar to that from fcvt,
+02667             except that trailing zeros are suppressed, and
+02668             ndigits can be negative.
+02669         4,5 ==> similar to 2 and 3, respectively, but (in
+02670             round-nearest mode) with the tests of mode 0 to
+02671             possibly return a shorter string that rounds to d.
+02672             With IEEE arithmetic and compilation with
+02673             -DHonor_FLT_ROUNDS, modes 4 and 5 behave the same
+02674             as modes 2 and 3 when FLT_ROUNDS != 1.
+02675         6-9 ==> Debugging modes similar to mode - 4:  don't try
+02676             fast floating-point estimate (if applicable).
+02677
+02678         Values of mode other than 0-9 are treated as mode 0.
+02679
+02680         Sufficient space is allocated to the return value
+02681         to hold the suppressed trailing zeros.
+02682     */
+
+
+
+sample code
+
+static UString integer_part_noexp(double d)
+{
+    int decimalPoint;
+    int sign;
+    char *result = kjs_dtoa(d, 0, 0, &decimalPoint, &sign, NULL);
+    int length = strlen(result);
+
+    UString str = sign ? "-" : "";
+    if (decimalPoint == 9999) {
+        str += UString(result);
+    } else if (decimalPoint <= 0) {
+        str += UString("0");
+    } else {
+        char *buf;
+
+        if (length <= decimalPoint) {
+            buf = (char*)malloc(decimalPoint+1);
+            strcpy(buf,result);
+            memset(buf+length,'0',decimalPoint-length);
+        } else {
+            buf = (char*)malloc(decimalPoint+1);
+            strncpy(buf,result,decimalPoint);
+        }
+
+        buf[decimalPoint] = '\0';
+        str += UString(buf);
+        free(buf);
+    }
+
+    kjs_freedtoa(result);
+
+    return str;
+}
+
+See:
+
+1) http://www.krugle.org/examples/p-UkvJ53OlMMjGJ0QO/number_object.cpp
+
+2) http://www.krugle.org/examples/p-UkvJ53OlMMjGJ0QO/dtoa.h
+
+
+
+I got a reply from Dave Gay about the lossless conversion issues.  All of the
+relevant routines are in www.netlib.org/fp -- it's not necessary to search
+through the ASL routines for them.  In particular, to get the shortest decimal
+string that correctly represents a binary value, we can use
+
+     g_fmt(register char *b, double x)
+
+which is in www.netlib.org/fp/g_fmt.c.  This routine calls dtoa and converts
+the return value and arguments to the appropriate string.  In the process it
+inserts a sign, decimal point, and exponent if appropriate.
+
+As you suspected, dtoa.c contains its own strtod routine because, at the time
+Dave wrote dtoa, many strtod routines in other libraries did not do the
+conversion in a lossless way.  Dave considers it likely that many stdlib
+implementations get this right by now, but I guess there is still no easy way
+to be sure that they all get it right.
+
+A look at the change log suggests that some people are actively using these
+routines independently of ASL.
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+cygwin gfortran
+
+GMP
+libgmp3  GMP librarry
+
+MPFR
+
+libmpfr1
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+The patch for mumps
+
+
+Hi Kipp and Andreas,
+
+To try and bring a conclusion to the saga of building Ipopt with Mumps in Msys, 
+here is a patch file for the changes I had to make to Mumps to get it to compile 
+with gfortran 4.2 in Msys. I've included a version of the get.Mumps script that 
+will automatically download the source and apply the necessary patch. Andreas, 
+it seems this is the easiest of the solutions we discussed and it seems to work fine. 
+Do you think we can just check in the patch and the new version of the script?
+
+Kipp, if you want to apply the patch to already downloaded code, please execute
+
+patch -p0 < mumps.gcc.patch
+
+in the ThirdParty/Mumps directory. I'm a little confused as to why you seem to be 
+having different compilation issues than I did, but try this patch and see if it works.
+
+Cheers,
+
+Ted -- email of 12/10/2007
+
+%%%%%%
+Using SYMPHONY remotely.
+
+http://calvin.ie.lehigh.edu/os/OSSolverService.jws
+
+
+
+serviceLocation http://calvin.ie.lehigh.edu/os/OSSolverService.jws
+osil ../data/osilFiles/p0201.osil
+solver symphony
+osol ../data/osolFiles/symphony.osol
+osrl ./test.osrl
+browser /Applications/Firefox.app/Contents/MacOS/firefox
+
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="os.optimizationservices.org
+      http://www.optimizationservices.org/schemas/2.0/OSiL.xsd">
+  <general>
+
+  </general>
+    <optimization>
+    	<other name="num_proc">4</other>
+    </optimization>
+</osol>
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+I can reproduce what you say on a Mac that should be similar to yours.
+
+The problem might be that the use of atof triggers some SL routines
+that ask for _Stderr.
+However, Stderr gets defined in stderr.c of the ASL library:
+FILE *Stderr;
+
+Also "nm amplsolver.a | grep Stderr" produces
+00000010 C _Stderr
+
+Maybe the "C" (=common) does not count as symbol definition? I do not
+really understand what "man nm" tells me about this.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+I've run Ipopt's configure from the vpath-directory.
+To be more elaborate:
+I've two directories:
+Ipopt-trunk is where I have checked out Ipopt/trunk.
+Ipopt-shared is the vpath-directory where I build Ipopt (using shared libs).
+What to do is to:
+1. Put the HSL source into Ipopt-trunk/ThirdParty/HSL
+2. In Ipopt-shared, call
+      ../Ipopt-trunk/configure --enable-loadable-library
+3. Patch Ipopt-shared/libtool
+4. In Ipopt-shared (or in its ThirdParty/HSL subdir) call make.
+
+Now the gfortran call that builds the libhsl.dylib should next to the -dynamiclib 
+argument also have a -single_module argument. If that is not sufficient, 
+then one need to add also ADD_FFLAGS="-fno-common" to the configure call in step 2. 
+I have not figures this out.
+
+It should also be possible to run only the configure in ThirdParty/HSL, but then one 
+need to give a lot of options for prefix or subdir... (see beginning of ThirdParty/HSL/config.log).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Code for user defined variables.
+
+See:
+
+http://www.gerad.ca/~orban/drampl/def-vars.html
+
+
+
+ k = (expr_v *)e - VAR_E;
+ if( k >= n_var ) {
+
+     // This is a common expression. Find pointer to its root.
+
+     j = k - n_var;
+     if( j < ncom0 )
+         com_expr = CEXPS;
+     else
+         com_expr = CEXPS1 - ncom0;
+
+     Printf( "    Nonlinear part:\n" );
+     display_expr( (com_expr + j)->e, asl );
+
+     nlin = (com_expr + j)->nlin; // Number of linear terms
+     if( nlin > 0 ) {
+         Printf( "\n    Linear terms:\n" );
+         L = (com_expr + j)->L;
+         for( i = 0; i < nlin; i++ ) {
+             vp = (expr_v *)((char *)L->v.rp - ((char *)&ev.v - (char *)&ev));
+             Printf( " %-g x[%-d]", L->fac, (int)(vp - VAR_E) );
+             L++;
+         }
+     }
+ }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+> > >
+> > > These are often called "defined variables" in descriptions of AMPL.  An nl
+> file
+> > > gives statistics for the number of defined variables appearing
+> > >
+> > >      b   in both the objective and constraints
+> > >      c   in two or more constraints but not any objectives
+> > >      o   in two or more objectives but not any constraints
+> > >      c1  in only one constraint and no objectives
+> > >      o1  in only one objective and no constraints
+>
+> I am curious, where would the user find the above information? What is
+> particularly confusing is that three lines above
+>
+>   0 0 0 3 0	# common exprs: b,c,o,c1,o1
+>
+> is the line
+>
+> 0 0 0 0 0	# discrete variables: binary, integer, nonlinear (b,c,o)
+>
+>
+> so the triple (b, c, o) has two distinct meanings.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Yes.>
+I believe this is possible.
+
+> >is it possible to tell vcbuild to skip certain configurations
+> >rather than running them all?
+
+NBbuildConfig.py has the line:
+    vcbuild='vcbuild /u ' + slnFileName + ' $ALL'
+
+I'm pretty sure that the $ALL means build all configurations.
+It could be changed to be the name of the configuration to be built.
+
+Here is some documentation I just found:
+http://msdn2.microsoft.com/en-us/library/kdxzbw9t.aspx
+
+JP Fasano
+STSM, Watson Math Department
+jpfasano@us.ibm.com
+(914)945-1324  (tie line 862-1324)
+
+
+%%%%%%%%%%%%%%%%%%%
+Gus and Visual Studio
+
+Quoting Kipp Martin <Kipp.Martin@ChicagoGSB.edu>:
+
+> Hi Gus:
+>>
+>> Any thoughts?
+>
+> That seems to have worked in terms of VS recognizing that the project is there. 
+> However, when I now open OS.sln in v9 inside Visual Studio it says: "the solution or 
+> project you are opening was created in a different version of Visual Studio ..." 
+> Then it wants to go through a conversion process.  So something is now wrong with the solution file in  v9.
+
+I don't have v9 running on this machine, but the conversion process is trivial.
+If you do not want to let MSVS do the conversion for you, just edit the file
+(it's XML) and change the version number to 10.00 and the package title to
+Visual Studio 2008. I go in the opposite direction, changing the version to
+9.00 and the title year to 2005.
+
+> Was the osRemoteTest project you committed created in v8? Are you able to open 
+> OS.sln in v9 from Visual Studio without it asking to convert?
+>
+> Also, how do you turn on/off a project so that is is/is not built from vcbuild?  
+> I don't see how to do that so I can't test the Windows Popup blocker issue.  
+> I am pretty stumped, especially since the WindowsErrorPopupBlocker(); code is in 
+> unitTest and unitTest works from vcbuild.
+
+Again there are two ways to do it. In MSVS you select the configuration you
+want, and then select Configuration Manager from the build menu. Just click on
+the projects you want to build. You have to do this separately in each
+configuration. (Just be careful _not_ to change the configuration in the
+configuration manager. It's an easy tab, so it is very tempting, but it's done
+funny things to my setup.)
+
+You can also select projects in an editor. If you open OS.sln you will see at
+the end of the file a bunch of lines that have project numbers and blah blah
+blah Activecfg = ...
+These lines tell MSVS which projects are included in which configurations. There
+are also lines with ...Build.0 = ... These lines tell MSVS which projects
+should be built by default. If you want to change that, you can simply add or
+delete the appropriate entries.
+
+Hope that helps
+
+gus
+
+
+> Hi Gus:
+>
+> Okay, for v9 I went into Configuration Manager (the debug tab was selected) 
+> and I turned on fileupload and all of the examples including your new osRemoteTest. 
+> Then I saved the OS.sln file. Then went to the command line and ran vcbuild OS.sln. 
+> All of the projects built with no problem!
+>
+> I think you said not to change the tab in the Configuration Manager so how do 
+> I turn these guys on in both release and debug mode?
+
+You should have a list box on the tool bar that shows the currently active
+configuration. If you select Release from there and then go back into the
+Configuration Manager, everything is fine. The problem comes about when you
+change the configuration inside the Configuration Manager, as MSVS then assumes
+that in addition to the selections you make, you would like the project in the
+configuration you change to be built using the active configuration. (This
+sounds very confusing,  so I'll give an example.)
+
+Suppose you have Debug as your active configuration and open the Configuration
+Manager. If you then click Release inside the Configuration Manager and turn
+on, say, osTest, you tell MSVS to build Release with the Debug information
+turned on, that is, osTest --- and possibly all the other projects, can't
+remember for sure --- will have entries in the .sln files changed from
+
+{project number}.Release.ActiveCfg = Release|Win32 (or something close to that)
+
+to
+
+{project number}.Release.ActiveCfg = Debug|Win32 (which presumably you didn't
+want)
+
+But if you close the Configuration Manager before you change the configuration,
+everything is fine.
+
+Hope this helps
+
+gus
+
+
+%%%%%%%%%%%%%%%
+
+New improvement from stefan
+
+Hi,
+
+I just managed to build the CoinAll system (from BSP) on a Windows system 
+with cl, f2c, no fortran 90 compiler, and user given mumps libraries without 
+having to patch the Ipopt configure scripts.
+I have put all files that I used at
+
+http://www.gams.com/~svigerske/mumps/
+
+(Kipp, this are essentially the same as you used before for the same thing, 
+just reduced to the essential ones.)
+
+The readme.txt just says that i used the following site script:
+
+with_mumps_lib="c:/cygwin/home/stefan/mumps/libcoinmumps.lib \
+c:/cygwin/home/stefan/mumps/blas_ifort.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libmmt.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libirc.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/svml_disp.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/ifconsol.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libifcoremt.lib \
+c:/cygwin/home/stefan/mumps/intel-libs/libifport.lib"
+
+with_mumps_incdir="c:/cygwin/home/stefan/mumps/inc"
+
+It's not nice yet, but an improvement I think ;-) .
+
+Stefan
+
+--
+
+
+
+Ted:
+
+Mac OS X issues
+
+I did some more digging and for those who are interested, I seem to have
+gotten to the bottom of how to successfully build CoinAll on OSX 10.5
+(Leopard). As I had suspected, the problem is essentially a
+name-mangling issue. The bottom line is that between 10.4 and 10.5,
+Apple changed the implementation of a lot of the system routines in
+order to gain UNIX certification (who knew there still was such a
+thing?). In order to maintain backwards compatibility, however, the
+symbols associated with the new versions of system calls have $UNIX2003
+appended to the symbol name in libraries compiled under 10.5. For more
+details, see here:
+
+http://developer.apple.com/releasenotes/Darwin/SymbolVariantsRelNotes/index.html
+
+The problem arises because ASL itself reimplements one of the Unix
+system calls that was also reimplemented by OSX (strtod). Presumably to
+avoid name conflicts with the original system call, the line
+
+#define strtod strtod_ASL
+
+was inserted into the file dtoa1.c, so that the system call would be
+replaced with the ASL reimplementation everywhere. The compiler then
+apparently gets a little confused and thinks that the symbol strtod_ASL
+refers to an OSX system call and helpfully appends $UNIX2003 to its
+symbol name strtod_ASL in the amplsolver.a library. The linker, however,
+does not then seem to properly link calls to strtod_ASL in other object
+files to this new definition. Got that? It's a little confusing and I
+think it's actually a bug in the compiler.
+
+There are a number of possible fixes, however. The easiest one seems to
+be to use a compiler option that forces the use of the old system calls
+in order to allow building of codes on 10.5 that run on older variants:
+
+?mmacosx-version-min=10.4
+
+This is also the same as defining "MAC_OSX_DEPLOYMENT_TARGET=10.4".
+Since we probably want our binaries to be compatible with older versions
+of OSX anyway and this will allow ASL to build properly, I would suggest
+that we add that compiler option automatically for OSX in coin.m4. I'm
+not sure whether older compilers will understand it, so if not, we'll
+need to detect whether we are working version 10.5 or an earlier one.
+Alternatively, we could simply modify the compile_unix_ASL script or
+patch ASL itself. Thoughts?
+
+
+%%%%%%%%%%%%%%%
+
+How Osi works
+
+
+Folks,
+
+	The way it works for Osi is this:  The code for all OsiXXX solver
+interface layers is always included in the Osi distribution.  If solver XXX is
+not available, OsiXXX is not configured, built, or tested.  The configure script
+sorts this out.
+
+	For Osi/stable and Osi/releases, the default Externals specifies clp,
+dylp, vol, and ThirdParty/Glpk (but unless the user downloads glpk, OsiGlpk will
+not be enabled).
+
+	For Osi/trunk, the default Externals adds Cbc and SYMPHONY, plus Cgl as
+a dependency.  OsiCbc and OsiSym will be enabled.  There's a configure hook to
+specify the underlying OsiXXX that's used by OsiCbc.  OsiClp is generally safe
+and is the default.  OsiDylp may work, or may be broken due to incompatibilities
+in libCbc.  Other solvers haven't been tested, to my knowledge.
+
+	There's ongoing debate over the appropriateness of this set of
+Externals, and ongoing debate over the viability (design-wise) of OsiCbc.
+
+	Commercial solvers always require the user to specify the location of
+the libraries and includes.  If the user gives a location for XXX, the
+corresponding OsiXXX is configured and built.
+
+%%%%%%%%%%%%%%
+
+For GAMSlinks this may be necessary:
+
+
+Seem to be the same thing we had a month ago.
+Can you try if adding the following to GamsOS.cpp helps again?
+
+extern "C" {
+  double slvminf = 1;
+  unsigned char G2DMATHNEW_exceptmsg[256] = "hack";
+}
+
+
+I've committed these lines into the repository now too, but you have to activate 
+them by adding a -DUSE_UNUSED_SYMBOLS (I know, I'm very bad in naming) to the 
+CXXFLAGS, see https://projects.coin-or.org/GAMSlinks/changeset/540
+I am not convinced yet that this is not some bug in the compiler you use.
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+From Laci
+
+OK, I have reverted the changes. Go ahead and create the releases.
+
+--Laci
+
+PS: btw, the way to revert the changes is really simple:
+  svn checkout https://projects.coin-or.org/svn/OS/stable/1.1
+  cd 1.1
+  svn merge -r2088:2087 https://projects.coin-or.org/svn/OS/stable/1.1
+  svn commit
+Once you know it it's really logical.
+
+
+%%%%%%%%%%%%%%
+
+From Ted Ralphs 
+
+
+You shouldn't need to do all this manually. Compilers pretty much all
+define their own symbols automatically to allow you to detect when
+they are being used and I believe the autotools or our own m4 scripts
+define symbols to detect the OS. All did for the unistd.h problem in
+other places (this reference was added by a developer who was unaware
+of the proper fix) was add this:
+
+#if !defined (_MSC_VER)
+#include <unistd.h>            /* this defines sleep() */
+#endif
+
+That symbol is automatically defined when cl is the compiler. I'm not
+sure of all the symbols off the top of my head, but __DARWIN is
+defined is OS X, for example, and __MNO_CYGWIN is defined if a MINGW
+compiler is used. Here's another line from one of my header files:
+
+#if !defined (_MSC_VER) && !defined (__DARWIN) && !defined (__MNO_CYGWIN)
+#include <sys/resource.h>
+#endif
+
+In general, almost anything you want to detect should already have a
+symbol automatically defined, as it's doubtfl you are the first to
+want this functionality  :) . So I think you can delete all that fancy
+stuff from your configure.ac and just use the built-in symbols  :) 
+
+%%%%%%%%%%%%%
+
+%%%%%%%%%
+
+Pietro -- OSOptions
+
+> First question -- you
+> mention LaTeX documentation on the Couenne Wiki but we cannot find the
+> LaTeX documentation anywhere. Do you have a Couenne User's manual?
+
+No, that's still in the works. The only documentation available is the 
+doxygen one (that's what I mean in the wiki page), which becomes 
+available with make doxygen. I hope to complete the manual after the 
+end of this semester.
+
+> In your src/main/BonCouenne.cpp we see you set, for example,
+>
+> bonmin.setDoubleParameter (...)
+>
+> were bonmin is a CouenneSetup object. Are you setting a Bonmin or a
+> Couenne option here?
+
+That's a Bonmin option.
+
+> Are there separate Bonmin and Couenne options?
+
+Yes. There are Couenne-specific options, defined in the 
+registerOptions() methods of CouenneCutGenerator, CouenneProblem, and 
+others, and that you can set using the Couenne option file or the 
+CouenneSetup. The branch&bound general options (strong branching, max 
+time, and others) are inherited from Bonmin. I believe you can also 
+set the latter ones within a CouenneSetup.
+
+> In our OSCouenneSolver we define
+>
+> Ipopt::SmartPtr<TMINLP> tminlp_;
+>
+> and then
+>
+> tminlp_ = new BonminProblem( osinstance, osoption, osresult);
+>
+> where our BonminProblem inherits from class TMINLP.
+>
+> Should we be setting the Bonmin options in one of the TMNLP methods? Or
+> should we set all options (Couenne and Bonmin) through a CouenneSetup
+> object?
+
+A CouenneSetup object inherits from the analogous BonBabSetupBase 
+object, therefore you can set all options through the CouenneSetup 
+object. I hope Pierre can confirm or further clarify on that -- he 
+wrote most of the BonCouenne*.?pp code.
+
+%%%%%%%%%%%%%%%%%
+Using the gnu debugger
+
+When I want to debug a program p, then I do
+$ gdb p
+and in gdb I say "run".
+
+For example:
+
+$ gdb unitTest
+GNU gdb 6.6.50.20070726-cvs
+Copyright (C) 2007 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain
+conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i586-suse-linux"...
+break Using host libthread_db library "/lib/libthread_db.so.1".
+(gdb) break unitTest.cpp:263
+Breakpoint 1 at 0x804e037: file
+../../../GAMSlinks-trunk/OS/test/unitTest.cpp, line 263.
+(gdb) run
+Starting program: /home/stefan/work/coin/GAMSlinks-debug/OS/test/unitTest
+[Thread debugging using libthread_db enabled]
+[New Thread 0xb7bdbb70 (LWP 16655)]
+START UNIT TEST
+[Switching to Thread 0xb7bdbb70 (LWP 16655)]
+
+Breakpoint 1, main (argC=1, argV=0xbff15f04) at
+../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263
+263             int nOfTest = 0;
+(gdb) bt
+#0  main (argC=1, argV=0xbff15f04) at
+../../../GAMSlinks-trunk/OS/test/unitTest.cpp:263
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Jun oc Schema versioning
+
+
+
+>> The strategy is quite clear. In general
+>> 1. The version of the schema decides the version of our code.
+>> If the version of our schema is 2.0, all the code is developed against 2.0 and upgrade with this major version. We change only the minor version.
+>
+> Here is the problem or confusion on my part.  When you say "minor version" above. it looks like you are referring to the second digit in the schema number. Is this correct? However, "minor version" for the C++ code is the third digit.
+>> 2. If the schema either changes extremely significantly or becomes backward incompatible, we will discuss moving to the next major version.
+>> In my opinion, it has to be REALLY significant to justify a change of our current 2.0 to 3.0.
+>> Adding of the matrix/cone programming doesn't justify moving to 3.0. In fact adding of any extension only justifies to move the minor version, e.g. 2.0 to 2.1.
+Sorry, should have been more clear on this. In my convention or in general software engineering practice:
+a.b.c -> a is the major version, b is the minor version and c is the build version
+I am saying "a" should be stable. "b" should be our milestone release.
+From time to time, we have bug fixes and builds. That should be going to "c".
+For the schema standard it probably should just be remaining at a.0.
+
+> Right, once again your minor version does not mean the same thing as in the COIN-OR sense. So here is the issue:
+>
+> The latest release of OS on SVN is 2.0.1 where the .1 is the minor version. The minor version gets incremented when bug fixes are made to stable 2.0. So if we made another bug fix we would be up to 2.0.2. However, this next release of OS represents s LOT MORE than just bug fixes. But the API does not change. So we do not move to release 3.0 exactly as you say. I agree totally. But since we are do so much more than bug fixes, as per COIN-OR policy, we should not call this 2.0.2, we should call this 2.1.0.
+Agreed.
+
+> So now users will see OS release 2.1.0 but the schema version is only 2.0. I am worried that this will confuse users.
+I am not that worried. Anybody can implement their code or a piece of code against our schema; not just us.
+Even for us, we will implement java, and .net, possibly all versioned differently,but all against the same schema.
+We just happen to have our convention to go line up our version with schema version.
+It's the same thing as all other technologies:
+Web Service (SOAP), xml, http, html, css hardly ever move a version. But all the implementation constantly upgrade.
+Another example is Java specification,  right now we say Java 5 or Java 6 (we don't say Java 5.1 or 6.0.1)
+While all the java sdk or run time implementation (e.g. sun jre) has all the minor versions.
+
+I think users are fine with it. Even if they are a bit confused, they should be safe and cannot do anything wrong with it anyway.
+
+>>
+>> By our strategy,
+>> 1. We shouldn't release code against 3.0, because there is no 3.0 schema.
+>> 2. We probably shouldn't change the schema version, or at the most a minor version upgrade.
+>> The matrix/cone stuff are not ready to be versioned. So there is nothing significant in our schema are to be versioned with our new code version.
+>
+> So you are saying use 2.0 for the schema and 2.1.0 for the C++  code. Is this the correct interpretation of your email?
+Yes. as long as our schema extensions are backward compatible.
+Moreover, in our current schema version, we have the safe mechanism of annotations on staging.
+For example, an experimental element is in a 2.0 schema.
+The fact the element is in a stage before versioned means we are free to change without being responsible to the users.
+When they are versioned, they will be versioned with 2.0. So the staging is more like a buffer strategy to a stable versioning strategy.
+We should always be responsible only to the existing users of versioned elements.
+But as argued, they are safe by our strategy: we don't easily change versioned elements.
+When an element is designed, we think of everything thing certain and uncertain (providing extension points) and prepared to extend them in a backward compatible way.
+
+Maybe it helps to think in this way:
+A simple and common versioning strategy is 2.0 alpha -> 2.0 beta -> 2.0 final on the entire software (coarse-grained).
+but our schema versioning is more fine-grained (think of "tiered", "parallel at different pace", "structurally rich" etc.)
+We have 2.0, final on element 1, beta on element 2, alpha on element 3, NOT on the entire schema!
+We release 2.0 final, so that the common element 1 can be used by many users eagerly waiting there. (90% of the market).
+We don't have the luxury of making element 2 and 3 final yet; that will take 2 more years,
+but 90% of users will use only element 1 and don't care about element 2 and 3.
+
+Now during the mean time element 2 will be worked on and we will try to move it from beta to 2.0 final as well.
+Alpha and beta correspond to our many stages, only we have more.
+The reason is that we are promoting a standard, not just a software.
+A standard has to be stable.
+You don't see xml being versioned from 1.0->2->2.5->3->4. If w3c does that, it will only destroy the adoption or market position of xml.
+Of course, this requires an extremely well-thought design and process in the beginning so that we HAVE to think of EVERYTHING upfront.
+SOAP is 1.2 (the only public release), and even though later they found some weakness, and even design flaw, they don't upgrade the version.
+Changing a design drawbacks is far less important then maintaining the stability of a standard.
+SOAP has many extension points, and the extension points start to be versioned separately, sometime even in a different standardization body.
+For example, if we ever find some weakness in OS core later, our default action is to probably just to eat it or live with it, instead of changing it.
+
+Our process of using fine-grained multi-tier "structured stages" versioning strategy should put as in a safer place.
+Usually people (including us) do not have this luxury to the code versioning, it practically too much hassle. So we version the entire distribution instead of on each .cpp file.
+But our modular extensible schema standard element design allows us to have such a luxury.
+
+Jun
+
+
+
+
+
+to merge, go to a checkout of OS 2.4 and do
+  svn merge https://projects.coin-or.org/svn/OS/trunk
+
+That should merge everything from trunk that is not in 2.4 yet.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+From Stefan on how to set visual studio options at the command line
+
+not exactly sure, what the question for me is, but usually I build 32bit
+libraries on Windows with cl/ifort via the configure options
+CC="cl -nologo"
+CXX="cl -nologo"
+F77="ifort -nologo -arch:ia32"
+
+And 64bit libraries with icl/ifort via the options
+CC="icl -nologo"
+CXX="icl -nologo"
+F77="ifort -nologo"
+RANLIB=echo
+
+This is on a system with 32bit MS C/C++ compiler and 64bit Intel
+C/C++/Fortran compilers and MinGW. The RANLIB=echo is, because the 32bit
+ranlib corrupts the 64bit libraries on that system.
+
+To create debug libraries, --enable-debug should do the job. 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+From Stefan:
+
+How to disable pkg_config
+
+--disable-pkg-config is for disabling the use of pkg-config when
+checking for dependencies.
+With --without-pkg (better had been --without-prjct) I meant flags like
+--without-glpk or --without-os (ha!) to disable the build of certain
+projects. It works analog to COIN_SKIP_PROJECTS, but is more common in
+the autotools world.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+From Stefan:
+
+How to make configure faster
+
+
+maybe you should check the search path for header files of your
+compiler, but I'm not sure which variable this is.
+You may trick configure by setting ac_cv_header_winsock_h=yes in a
+config.cache file and run configure with -C (this is a good idea anyway). 
+
+
+Here is what I use now:
+
+ac_cv_header_winsock_h=yes 
+ac_cv_header_windows_h=yes 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+From Stefan:  configure options
+
+10 Nov 13:20:18:   sh -c '../releases-1.6.0/configure -C CC=cl CXX=cl F77="ifort -arch:ia32" COIN_SKIP_PROJECTS="ThirdParty/FilterSQP ThirdParty/Glpk ThirdParty/HSL ThirdParty/Metis ThirdParty/SCIP ThirdParty/SoPlex"'
+10 Nov 13:44:08:   make -j4
+10 Nov 15:18:38:   cd /home/svigerske/nbBuildDir\CoinAll\releases-1.6.0-default\
+10 Nov 15:18:38:   make -j4 test
+10 Nov 15:54:38:   cd /home/svigerske/nbBuildDir\CoinAll\releases-1.6.0-default\Clp\src
+
+\end{verbatim}

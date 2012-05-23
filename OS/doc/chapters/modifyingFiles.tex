@@ -1,0 +1,68 @@
+\section{Modifying the project}\label{section:ModifyingProject} 
+
+There are several caveats about modifications to the code. This section collects together the different situations that may arise and how to deal with them properly.
+
+\begin{enumerate}
+
+\item Simple edits to code or data.
+
+Commit such changes only after the project builds correctly and passes the complete unit test 
+({\tt ./unitTest nb}) on both unix and Windows. It is a good idea to do an update just prior to a commit. This keeps conflicts local in case there have been changes by other folks and allows consolidation before a disaster occurs. 
+
+\item Adding source files or data.
+
+In addition to running the unit test it is necessary to update the configure and make files. 
+If source files are involved, this requires changing the {\tt Makefile.am} file in the subdirectory 
+containing the code. (Make sure to list header files in two separate places.) Data files must be listed in 
+{\tt configure.ac} in order to be copied correctly when executing a vpath build. 
+
+
+{\bf Note:} After any changes to the file structure it is necessary to create new configure and make files by running {\tt BuildTools}:
+\begin{verbatim}
+BuildTools/run_autotools OS
+\end{verbatim}
+
+Make sure you have the correct version of {\tt BuildTools} installed. (You may have to download proper versions from the internet.) See {\tt https://projects.coin-or.org/BuildTools/wiki/pm-main}.
+
+Modify the {\tt configure.ac} file in unix only, because Windows uses diffrent line endings that the 
+{\tt BuildTools} software cannot handle properly. 
+
+
+After you have run {\tt BuildTools} you should do a completely new {\tt configure} and {\tt make}, followed by a unit test. Commit only after the unit test succeeds. (Don't forget to commit both changed code/data files and the modified config and make files.)
+
+\item Changing the documentation.
+
+This is easier, but make sure that pdflatex works and do not forget to commit both the source and pdf file. 
+
+\end{enumerate}
+
+\subsection{Legally Significant Changes}\label{section:significantChanges}
+
+If a person contributes more than around 15 lines of code and/or text that is legally significant for copyright purposes, we need copyright papers for that contribution, as described above.
+ 
+A change of just a few lines (less than 15 or so) is not legally significant for copyright. A regular series of repeated changes, such as renaming a symbol, is not legally significant even if the symbol has to be renamed in many places. Keep in mind, however, that a series of minor changes by the same person can add up to a significant contribution. What counts is the total contribution of the person; it is irrelevant which parts of it were contributed when.
+ 
+Copyright does not cover ideas. If someone contributes ideas but no text, these ideas may be morally significant as contributions, and worth giving credit for, but they are not significant for copyright purposes. Likewise, bug reports do not count for copyright purposes.
+ 
+When giving credit to people whose contributions are not legally significant for copyright purposes, be careful to make that fact clear. The credit should clearly say they did not contribute significant code or text.
+ 
+When people’s contributions are not legally significant because they did not write code, do this by stating clearly what their contribution was. For instance, you could write this:
+ 
+\begin{verbatim}
+/*
+ * Ideas by:
+ *   Richard Mlynarik <mly@adoc.xerox.com> (1997)
+ *   Masatake Yamato <masata-y@is.aist-nara.ac.jp> (1999)
+ */
+\end{verbatim}
+
+{\tt Ideas by:} makes it clear that Mlynarik and Yamato here contributed only ideas, not code. 
+Without the {\tt Ideas by:} note, several years from now we would find it hard to be sure whether they had contributed code, and we might have to track them down and ask them.
+ 
+When you record a small patch in a change log file, first search for previous changes by the same person, and see if per past contributions, plus the new one, add up to something legally significant. If so, you should get copyright papers for all per changes before you install the new change.
+ 
+If that is not so, you can install the small patch. Write ‘(tiny change)’ after the patch author’s name, like this:
+ 
+\begin{verbatim}
+2002-11-04  Robert Fenk  <Robert.Fenk@gmx.de>  (tiny change)
+\end{verbatim}
