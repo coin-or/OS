@@ -1,5 +1,6 @@
 writeosrl result.xml
-readosol solveroptions.osol
+writeosil eastborne.osil
+service http://74.94.100.129:8080/OSServer/services/OSSolverService
  
 
 
