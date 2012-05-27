@@ -97,12 +97,12 @@
     \subitem trunk version, 19, 21
   \item {\tt OSAmplClient}, 4, 5, 22--24
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
-  \item OSiL, 4--7, 9, 10, 14, 31--33, 35--37
+  \item OSiL, 4--7, 9, 10, 14, 30--32, 34--36
   \item {\tt OSLibrary}, 9
-  \item OSnL, 33
-  \item OSoL, 4, 5, 9--11, 14, 16, 35
-  \item OSpL, 16--17, 35
-  \item OSrL, 4, 5, 7, 9, 10, 33--35
+  \item OSnL, 32
+  \item OSoL, 4, 5, 9--11, 14, 16, 34
+  \item OSpL, 16--17, 34
+  \item OSrL, 4, 5, 7, 9, 10, 33--34
   \item {\tt OSSolverService}, 4--18
   \item {\tt OSSolverService.jws}, 10
 
@@ -114,7 +114,7 @@
 
   \item {\tt remoteSolve1.osol}, 12
   \item {\tt retrieve}, 6, 9, 15
-  \item {\it Rosenbrock, H.H.}, 31
+  \item {\it Rosenbrock, H.H.}, 30
 
   \indexspace
 

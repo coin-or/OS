@@ -24,9 +24,11 @@ BuildTools/run_autotools OS
 
 Make sure you have the correct version of {\tt BuildTools} installed. (You may have to download proper versions from the internet.) See {\tt https://projects.coin-or.org/BuildTools/wiki/pm-main}.
 
-Modify the {\tt configure.ac} file in unix only, because Windows uses diffrent line endings that the 
+Modify the {\tt configure.ac} file in unix only, because Windows uses different line endings that the 
 {\tt BuildTools} software cannot handle properly. 
 
+
+\medskip
 
 After you have run {\tt BuildTools} you should do a completely new {\tt configure} and {\tt make}, followed by a unit test. Commit only after the unit test succeeds. (Don't forget to commit both changed code/data files and the modified config and make files.)
 
@@ -36,7 +38,10 @@ This is easier, but make sure that pdflatex works and do not forget to commit bo
 
 \end{enumerate}
 
-\subsection{Legally Significant Changes}\label{section:significantChanges}
+\subsection{Third-party contributions}\label{section:significantChanges}
+
+Simple bug fixes are not an issue, but when a third party contributes significant portions of code, the issue of copyright arises and must be dealt with. The following are FSF guidelines taken from 
+{\tt http://www.gnu.org/prep/maintain/html\_node/Legally-Significant.html}.
 
 If a person contributes more than around 15 lines of code and/or text that is legally significant for copyright purposes, we need copyright papers for that contribution, as described above.
  
@@ -65,4 +70,12 @@ If that is not so, you can install the small patch. Write ‘(tiny change)’ af
  
 \begin{verbatim}
 2002-11-04  Robert Fenk  <Robert.Fenk@gmx.de>  (tiny change)
+\end{verbatim}
+
+\medskip
+
+Some further ideas as well as a copy of the Contributor's Statement of Respect for Ownership (CSRO)
+can be found at %{\tt http://www.coin-or.org/contributions.html#contributions}.
+\begin{verbatim}
+\tt http://www.coin-or.org/contributions.html#contributions
 \end{verbatim}
