@@ -185,17 +185,17 @@ std::string OSiLWriter::writeOSiL( const OSInstance *theosinstance)
                         tmpnum    = m_OSInstance->instanceData->objectives->obj[j]->numberOfObjCoef;
                         for (k=j+1; k < m_OSInstance->instanceData->objectives->numberOfObjectives; k++)
                         {
-                            if (tmpname   != m_OSInstance->instanceData->objectives->obj[j]->name) break;
-                            if (tmpsense  != m_OSInstance->instanceData->objectives->obj[j]->maxOrMin) break;
-                            if (tmpconst  != m_OSInstance->instanceData->objectives->obj[j]->constant) break;
-                            if (tmpweight != m_OSInstance->instanceData->objectives->obj[j]->weight) break;
-                            if (tmpnum    != m_OSInstance->instanceData->objectives->obj[j]->numberOfObjCoef) break;
+                            if (tmpname   != m_OSInstance->instanceData->objectives->obj[k]->name) break;
+                            if (tmpsense  != m_OSInstance->instanceData->objectives->obj[k]->maxOrMin) break;
+                            if (tmpconst  != m_OSInstance->instanceData->objectives->obj[k]->constant) break;
+                            if (tmpweight != m_OSInstance->instanceData->objectives->obj[k]->weight) break;
+                            if (tmpnum    != m_OSInstance->instanceData->objectives->obj[k]->numberOfObjCoef) break;
                             for (kk=0; kk < tmpnum; kk++)
                             {
-                                if (m_OSInstance->instanceData->objectives->obj[j]->coef[j]->idx !=
-                                        m_OSInstance->instanceData->objectives->obj[j]->coef[j]->idx) break;
-                                if (m_OSInstance->instanceData->objectives->obj[j]->coef[j]->value !=
-                                        m_OSInstance->instanceData->objectives->obj[j]->coef[j]->value) break;
+                                if (m_OSInstance->instanceData->objectives->obj[k]->coef[kk]->idx !=
+                                        m_OSInstance->instanceData->objectives->obj[j]->coef[kk]->idx) break;
+                                if (m_OSInstance->instanceData->objectives->obj[k]->coef[kk]->value !=
+                                        m_OSInstance->instanceData->objectives->obj[j]->coef[kk]->value) break;
                             }
                             if ( kk < tmpnum) break;
                             mult++;

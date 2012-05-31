@@ -62,7 +62,7 @@ using std::endl;
 
 
 
-//#define AMPLDEBUG
+#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename)
     : osinstance(0), stub(nlfilename)
@@ -80,13 +80,12 @@ OSnl2osil::OSnl2osil(std::string nlfilename)
     A_vals = (real *)Malloc(nzc*sizeof(real));
 
 #ifdef AMPLDEBUG
-    cout << "number of nonzeros =   " << nzc << endl;
-    cout << "number of variable =   " << n_var << endl;
-    cout << "number of constraints =   " << n_con << endl;
-    cout << "number of objs =   " << n_obj << endl;
-    cout << "number of ranges =   " << nranges << endl;
-    cout << "number of equations =   " << n_eqn << endl;
-    //cout << "objective function type" << *objtype << endl;
+    cout << "number of nonzeros    = " << nzc     << endl;
+    cout << "number of variables   = " << n_var   << endl;
+    cout << "number of constraints = " << n_con   << endl;
+    cout << "number of objectives  = " << n_obj   << endl;
+    cout << "number of ranges      = " << nranges << endl;
+    cout << "number of equations   = " << n_eqn   << endl;
 #endif
     if(N_OPS > 0)
     {
