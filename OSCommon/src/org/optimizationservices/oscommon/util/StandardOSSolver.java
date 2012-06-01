@@ -11,22 +11,25 @@ import java.io.InputStreamReader;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.optimizationservices.oscommon.datastructure.osoption.OtherOption;
 import org.optimizationservices.oscommon.localinterface.DefaultSolver;
 import org.optimizationservices.oscommon.localinterface.OSOption;
+import org.optimizationservices.oscommon.localinterface.OSResult;
+import org.optimizationservices.oscommon.representationparser.OSrLReader;
 import org.optimizationservices.oscommon.representationparser.OSrLWriter;
 import org.optimizationservices.oscommon.util.IOUtil;
 import org.optimizationservices.oscommon.util.OSParameter;
 import org.optimizationservices.oscommon.util.OSServiceUtil;
 import org.optimizationservices.oscommon.util.ProcessUtil;
 /**
-*
-* <P>The <code>StandardOSSolver</code>class is the standard solver engine. 
-*
-* </p>
-* @author Robert Fourer, Jun Ma, Kipp Martin
-* @version 1.0, 03/14/2004
-* @since OS 1.0
-*/
+ *
+ * <P>The <code>StandardOSSolver</code>class is the standard solver engine. 
+ *
+ * </p>
+ * @author Robert Fourer, Jun Ma, Kipp Martin
+ * @version 1.0, 03/14/2004
+ * @since OS 1.0
+ */
 public class StandardOSSolver extends DefaultSolver{
 	/**
 	 * default constructor.
@@ -41,12 +44,13 @@ public class StandardOSSolver extends DefaultSolver{
 		String sOS = System.getProperty("os.name");
 		String sArch = System.getProperty("os.arch");
 		String sJobID = osOption.getJobID();
-//		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
+
+		//		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
 		String sOSSolver = osOption.getSolverToInvoke();
-//		if(sOSSolver == null || sOSSolver.length() <= 0) sOSSolver = osOption.getOtherOptionValueByName("os_solver");
+		//		if(sOSSolver == null || sOSSolver.length() <= 0) sOSSolver = osOption.getOtherOptionValueByName("os_solver");
 		if(sOSSolver == null || sOSSolver.length() <= 0) sOSSolver = osOption.getSolverToInvoke();
 		if(sOSSolver == null || sOSSolver.length() <= 0) sOSSolver = OSParameter.OS_SOLVER;
-		
+
 		String sInstanceFile = OSParameter.TEMP_FILE_FOLDER+sJobID+".osil";
 		if(IOUtil.existsFileOrDir(sInstanceFile)){
 			IOUtil.writeStringToFile(osil, sInstanceFile);
@@ -60,6 +64,25 @@ public class StandardOSSolver extends DefaultSolver{
 		osrlWriter.setServiceURI(OSParameter.SERVICE_URI);
 		osrlWriter.setServiceName(OSParameter.SERVICE_NAME);
 		osrlWriter.setResultTimeStamp(new GregorianCalendar());
+
+		//process get_stdout
+		String sGetStdout = "false";
+		OtherOption[] otherJobOptions = osOption.getOtherJobOptions();
+		if(otherJobOptions != null){
+			int nJobOptions = otherJobOptions.length;
+			for(int i = 0; i < nJobOptions; i++){
+				if(otherJobOptions[i].name != null && otherJobOptions[i].name.equals("get_stdout")){
+					if(otherJobOptions[i].value != null && otherJobOptions[i].value.equals("true")){
+						sGetStdout = "true";
+					}
+					break;
+				}
+			}
+		}
+		String sStdOutFile = null;
+		if(sGetStdout != null && sGetStdout.equals("true")){
+			sStdOutFile = OSParameter.TEMP_FILE_FOLDER+sJobID+".stdout";
+		}
 
 		//change starts
 		String sSolverPath = "";
@@ -97,7 +120,7 @@ public class StandardOSSolver extends DefaultSolver{
 			" -osol " + sOptionFile +
 			" -osrl " + sResultFile + 
 			((sOSSolver==null || sOSSolver.trim().length()<=0)?" ":(" -solver " + sOSSolver)); 
-		
+
 		String[] msCommandLine = {
 				sSolverPath, 
 				"-osil", sInstanceFile, 
@@ -112,7 +135,7 @@ public class StandardOSSolver extends DefaultSolver{
 					"-osrl", sResultFile};
 			msCommandLine = msCommandLineAlt;
 		}
-			
+
 		//no need to change below
 		boolean bUseSimple = false;
 		if(OSParameter.SERVICE_URI == null || OSParameter.SERVICE_URI.length() <= 0){
@@ -123,7 +146,11 @@ public class StandardOSSolver extends DefaultSolver{
 		}
 		if(bUseSimple){//simple version - not registering process 
 			try {
-				ProcessUtil.launchAndWaitForFinish(sSolverPath + " " + sArguments);
+				String sCommand = sSolverPath + " " + sArguments;
+				if(sStdOutFile != null && sStdOutFile.length() > 0){
+					sCommand = sCommand + " > \""+sStdOutFile+"\"";
+				}
+				ProcessUtil.launchAndWaitForFinish(sCommand);
 				super.osrl = IOUtil.readStringFromFile(sResultFile);				
 			} 
 			catch (Exception e) {
@@ -152,6 +179,7 @@ public class StandardOSSolver extends DefaultSolver{
 					sTemp = br.readLine(); 
 					if(sTemp != null){
 						sProcessOutput += sTemp;							
+						sProcessOutput += "\n";							
 					}
 					else{
 						bCont = false;
@@ -163,6 +191,10 @@ public class StandardOSSolver extends DefaultSolver{
 					OSServiceUtil.processsHashTable.remove(sJobID);
 				}
 				br.close();	
+
+				if(sStdOutFile != null && sStdOutFile.length() > 0){
+					IOUtil.writeStringToFile(sProcessOutput, sStdOutFile);
+				}
 				super.osrl = IOUtil.readStringFromFile(sResultFile);
 			}
 			catch(Exception e){
@@ -173,6 +205,24 @@ public class StandardOSSolver extends DefaultSolver{
 				super.osrl = osrlWriter.writeToString();
 			}
 		}
+		if(sStdOutFile != null && sStdOutFile.length() > 0){
+			try {
+				OSrLReader osrlReader = new OSrLReader();
+				boolean bRead = osrlReader.readString(super.osrl);
+				if(bRead){
+					OSResult osResult = osrlReader.getOSResult();
+					osrlWriter.setOSResult(osResult);
+					String sStdOut = IOUtil.readStringFromFile(sStdOutFile);
+					osrlWriter.addOtherJobResult("stdout_capture", sStdOut, "standard out capture");
+					super.osrl = osrlWriter.writeToString();
+
+				}
+			} 
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
 		if(OSParameter.SERVICE_URI == null || OSParameter.SERVICE_URI.length() <= 0){
 			IOUtil.deleteFile(sInstanceFile);
 			IOUtil.deleteFile(sOptionFile);
@@ -181,7 +231,7 @@ public class StandardOSSolver extends DefaultSolver{
 		return;
 
 	}//solve
-	
+
 	/**
 	 * main for test purposes.
 	 *
@@ -192,14 +242,95 @@ public class StandardOSSolver extends DefaultSolver{
 	public static void main(String[] argv){
 		OSOption osOption = new OSOption();
 		try {
-			osOption = osOption.readOSoL("c:/remoteSolve1.osol", true, false);
+			osOption = osOption.readOSoL("c:/temp.osol", true, false);
+
+			//		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
+			String sOSSolver = osOption.getSolverToInvoke();
+			System.out.println(sOSSolver);
+
+
+
+			//process get_stdout
+			String sJobID = "1";
+			String sSolverPath = "D:\\code\\temp\\OSSolverService.exe";
+			String sArgument1 = " -osil a ";
+			String sArgument2 = "-osrl d:\\code\\temp\\test.osrl";
+			String[] msCommandLine = {sSolverPath, "-osil", "a", "-osrl", "d:\\code\\temp\\test.osrl"};
+
+
+			String sGetStdout = "true";
+			OtherOption[] otherJobOptions = osOption.getOtherJobOptions();
+			if(otherJobOptions != null){
+				int nJobOptions = otherJobOptions.length;
+				for(int i = 0; i < nJobOptions; i++){
+					if(otherJobOptions[i].name != null && otherJobOptions[i].name.equals("get_stdout")){
+						if(otherJobOptions[i].value != null && otherJobOptions[i].value.equals("true")){
+							sGetStdout = "true";
+						}
+						break;
+					}
+				}
+			}
+			String sStdOutFile = null;
+			if(sGetStdout != null && sGetStdout.equals("true")){
+				sStdOutFile = OSParameter.TEMP_FILE_FOLDER+sJobID+".stdout";
+			}
+
+			System.out.println(sStdOutFile);
+			boolean bUseSimple = false;
+			if(OSParameter.SERVICE_URI == null || OSParameter.SERVICE_URI.length() <= 0){
+				bUseSimple = true;
+			}
+			else{
+				bUseSimple = false;
+			}
+			bUseSimple = false;
+			if(bUseSimple){//simple version - not registering process 
+				try {
+					String sCommand = sSolverPath + " " + sArgument1+ " " + sArgument2;
+					if(sStdOutFile != null && sStdOutFile.length() > 0){
+						sCommand = sCommand + " > \""+sStdOutFile+"\"";
+					}
+					System.out.println(sCommand);
+					ProcessUtil.launchAndWaitForFinish(sCommand);
+				} 
+				catch (Exception e) {
+				}
+			}
+			else{ //complex version - registering process
+				try{
+					Process process = null;		
+					process = Runtime.getRuntime().exec(msCommandLine);		
+					BufferedReader br = new BufferedReader (new InputStreamReader(process.getInputStream ()));
+					boolean bCont = true;
+					String sProcessOutput = "";
+					String sTemp;
+					while (bCont){
+						sTemp = br.readLine(); 
+						if(sTemp != null){
+							sProcessOutput += sTemp;							
+							sProcessOutput += "\n";							
+						}
+						else{
+							bCont = false;
+						}
+					}
+					process.waitFor();
+					br.close();	
+					System.out.println(sProcessOutput);
+					if(sStdOutFile != null && sStdOutFile.length() > 0){
+						IOUtil.writeStringToFile(sProcessOutput, sStdOutFile);
+					}
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		String sOSSolver = osOption.getOtherOptimizationOptionValueByName("os_solver");
-		String sOSSolver = osOption.getSolverToInvoke();
-		System.out.println(sOSSolver);
 	}//main
 
 }//StandardOSSolver
