@@ -227,6 +227,7 @@ public class StandardOSSolver extends DefaultSolver{
 			IOUtil.deleteFile(sInstanceFile);
 			IOUtil.deleteFile(sOptionFile);
 			IOUtil.deleteFile(sResultFile);
+			IOUtil.deleteFile(sStdOutFile);
 		}
 		return;
 
