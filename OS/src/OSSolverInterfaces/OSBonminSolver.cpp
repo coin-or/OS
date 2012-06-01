@@ -43,7 +43,6 @@ BonminSolver::BonminSolver()
     m_osilreader = NULL;
     m_osolreader = NULL;
     bonminErrorMsg = "";
-
 }
 
 BonminSolver::~BonminSolver()
@@ -68,9 +67,6 @@ BonminSolver::~BonminSolver()
     cout << "leaving BonminSolver destructor" << endl;
 #endif
 }
-
-
-
 
 
 
@@ -108,11 +104,9 @@ bool BonminProblem::get_variables_types(Index n, VariableType* var_types)
     return true;
 }
 
+
 bool BonminProblem::get_variables_linearity(Index n, Ipopt::TNLP::LinearityType* var_types)
 {
-
-
-
     std::cout << "Initialize Nonlinear Structures" << std::endl;
     try
     {
@@ -668,6 +662,11 @@ void BonminSolver::buildSolverInstance() throw (ErrorClass)
             m_osilreader = new OSiLReader();
             osinstance = m_osilreader->readOSiL( osil);
         }
+
+	// Can't handle multiobjective problems properly --- especially nonlinear ones
+	if (osinstance->getObjectiveNumber() > 1)
+    		throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
+
         // Create a new instance of your nlp
         tminlp = new BonminProblem( osinstance, osoption);
         this->bCallbuildSolverInstance = true;
@@ -914,6 +913,7 @@ void BonminSolver::solve() throw (ErrorClass)
                 throw ErrorClass("OSResult error: setGeneralMessage");
             solutionDescription = "The problem is infeasible";
             osresult->setSolutionStatus(solIdx,  "error", solutionDescription);
+
             osresult->setGeneralStatusType("normal");
             if( osinstance->getVariableNumber() == 0) osresult->setSolutionMessage(solIdx, "Warning: this problem has zero decision variables!");
             osrl = osrlwriter->writeOSrL( osresult);

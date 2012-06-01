@@ -138,8 +138,12 @@ void CoinSolver::buildSolverInstance() throw (ErrorClass)
         }
         finish = clock();
         duration = (double) (finish - start) / CLOCKS_PER_SEC;
-        // get the type of solver requested from OSoL string
 
+	// Can't handle multiobjective problems properly --- especially nonlinear ones
+	if (osinstance->getObjectiveNumber() > 1)
+    		throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
+
+       // get the type of solver requested from OSoL string
 		if (sSolverName == "clp")
             osiSolver = new OsiClpSolverInterface();
 

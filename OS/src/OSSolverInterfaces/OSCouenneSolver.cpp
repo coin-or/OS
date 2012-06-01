@@ -220,6 +220,11 @@ void CouenneSolver::buildSolverInstance() throw (ErrorClass)
 
         if(osinstance->getObjectiveNumber() <= 0) throw ErrorClass("Couenne NEEDS AN OBJECTIVE FUNCTION");
 
+	// Can't handle multiobjective problems properly --- especially nonlinear ones
+	if (osinstance->getObjectiveNumber() > 1)
+    		throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
+
+
 
         //if(n_allvars > 0){
         SparseVector* sv = osinstance->getObjectiveCoefficients()[ 0];

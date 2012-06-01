@@ -888,6 +888,11 @@ void IpoptSolver::buildSolverInstance() throw (ErrorClass)
             m_osilreader = new OSiLReader();
             osinstance = m_osilreader->readOSiL( osil);
         }
+
+	// Can't handle multiobjective problems properly --- especially nonlinear ones
+	if (osinstance->getObjectiveNumber() > 1)
+    		throw ErrorClass("Solver cannot handle multiple objectives --- please delete all but one");
+
         // Create a new instance of your nlp
         nlp = new IpoptProblem( osinstance, osoption, osresult, ipoptErrorMsg);
         app = new IpoptApplication();
