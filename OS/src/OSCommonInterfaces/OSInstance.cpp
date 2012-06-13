@@ -2576,6 +2576,7 @@ int** OSInstance::getTimeDomainStageObjList()
     {
         for (int i = 0; i < m_iNumberOfTimeStages; i ++)
 
+
             delete[] m_mmiTimeDomainStageObjList[i];
         delete[] m_mmiTimeDomainStageObjList;
         m_mmiTimeDomainStageObjList = NULL;
@@ -3504,13 +3505,11 @@ std::string OSInstance::printModel( )
     if(m_bProcessVariables != true  || bVariablesModified == true ) this->processVariables();
     for(i = 0; i < numVar; i++)
     {
-
-
         if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  i ]->name.size() > 0)
         {
-            outStr << this->instanceData->variables->var[  i ]->name;
+            outStr << this->instanceData->variables->var[  i ]->name << ": ";
         }
-        else
+//        else
         {
             outStr << "x_";
             outStr << i;
@@ -3519,7 +3518,7 @@ std::string OSInstance::printModel( )
 
         //outStr << "x_";
         //outStr << i;
-        outStr << " Type = " ;
+        outStr << "  Type = " ;
         outStr <<  m_mcVariableTypes[i];
         outStr << "  Lower Bound =  ";
         outStr << os_dtoa_format( m_mdVariableLowerBounds[i])  ;
@@ -3559,6 +3558,8 @@ std::string OSInstance::printModel(int rowIdx )
     {
         if (rowIdx < this->getConstraintNumber())
         {
+            outStr << this->getConstraintNames()[ rowIdx] ;
+            outStr << "  ";
             if( m_bProcessConstraints != true || bConstraintsModified == true) this->processConstraints() ;
             if( m_mdConstraintLowerBounds[ rowIdx] >  -OSDBL_MAX)
             {
@@ -3585,11 +3586,11 @@ std::string OSInstance::printModel(int rowIdx )
                         outStr << os_dtoa_format( m_linearConstraintCoefficientsInRowMajor->values[ m_linearConstraintCoefficientsInRowMajor->starts[ rowIdx]  + j] );
                         outStr << "*";
 
-                        if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  varIdx ]->name.size() > 0)
-                        {
-                            outStr << this->instanceData->variables->var[  varIdx ]->name;
-                        }
-                        else
+//                        if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[  varIdx ]->name.size() > 0)
+//                        {
+//                            outStr << this->instanceData->variables->var[  varIdx ]->name;
+//                        }
+//                        else
                         {
                             outStr << "x_";
                             outStr << varIdx;
@@ -3616,11 +3617,11 @@ std::string OSInstance::printModel(int rowIdx )
             {
                 outStr << os_dtoa_format( m_mObjectiveCoefficients[obj_idx]->values[j] );
                 outStr << "*";
-                if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0)
-                {
-                    outStr << this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name;
-                }
-                else
+//                if(this->instanceData->variables->numberOfVariables > 0 && this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name.size() > 0)
+//                {
+//                    outStr << this->instanceData->variables->var[ m_mObjectiveCoefficients[obj_idx]->indexes[j] ]->name;
+//                }
+//                else
                 {
                     outStr << "x_";
                     outStr << m_mObjectiveCoefficients[obj_idx]->indexes[j] ;
@@ -3652,8 +3653,6 @@ std::string OSInstance::printModel(int rowIdx )
                 outStr << " = ";
             }
             outStr << os_dtoa_format( m_mdConstraintUpperBounds[ rowIdx] );
-            outStr << "  ";
-            outStr << this->getConstraintNames()[ rowIdx] ;
         }
     }
     outStr << std::endl;
