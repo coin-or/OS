@@ -60,9 +60,9 @@ using std::endl;
 #include <stdint.h>
 #endif
 
+struct cgrad;
 
-
-#define AMPLDEBUG
+//#define AMPLDEBUG
 
 OSnl2osil::OSnl2osil(std::string nlfilename)
     : osinstance(0), stub(nlfilename)
@@ -422,6 +422,9 @@ static inline char integerOrBinary(real upper, real lower)
 
 bool OSnl2osil::createOSInstance()
 {
+    int *A_rowstarts = NULL;
+    int *A_colptr = NULL;
+    double *A_nzelem = NULL;
     osinstance = new OSInstance();
     int i, j;
 
@@ -436,9 +439,6 @@ bool OSnl2osil::createOSInstance()
     std::string colName;
     char vartype = 'C';
     osinstance->setVariableNumber( n_var);
-
-
-
 
     //first the nonlinear variables
     //welcome to the world of the ASL API
@@ -561,7 +561,7 @@ bool OSnl2osil::createOSInstance()
 
 
     lower = CoinMax(nlvc, nlvo) + nwv;
-    upper =  CoinMax(nlvc, nlvo) + nwv + (n_var - (CoinMax(nlvc, nlvo) + niv + nbv + nwv) );
+    upper = CoinMax(nlvc, nlvo) + nwv + (n_var - (CoinMax(nlvc, nlvo) + niv + nbv + nwv) );
     upper = n_var -  niv - nbv;
 #ifdef AMPLDEBUG
     std::cout << "LOWER = " << lower << std::endl;
@@ -614,6 +614,153 @@ bool OSnl2osil::createOSInstance()
 
     // end of variables -- thank goodness!!!
 
+
+/** Before we can process the rows, we check for QP
+ *  This needs to be done here because of the possibility of expressions like (1 - x[0])^2
+ *  which may modify the A matrix as well as the right-hand sides
+ *  In particular, there may be fill-in in the A-matrix, 
+ *  in which case the column-wise representation of the A-matrix
+ *  is out of date and needs to rebuilt from the row-wise form. 
+ */ 
+    std::vector<int> fidxs, v1idxs, v2idxs;
+    std::vector<double> coeffs;
+    std::vector<Nl> nlExprs;
+    real* delsqp;
+    fint* colqp;
+    fint* rowqp;
+    int osNLIdx; // OS n.l. function index
+    int aNLIdx; // AMPL n.l. function index
+
+    //Switch to row-wise format.
+    asl = rw;
+
+    // Iterate from -nlo to nlc-1 so that the qterms are sorted by idx
+
+    // Process the objectives first, for which fill-in does not matter 
+    for (osNLIdx = -nlo, aNLIdx = nlo-1; osNLIdx < 0; osNLIdx++, aNLIdx--)
+    {
+        if (nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp) > 0) // quadratic
+        {
+            for (int v1 = 0; v1 < n_var; v1++)
+            {
+                for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
+                {
+                    if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
+                    {
+                        fidxs.push_back(osNLIdx);
+                        v1idxs.push_back(v1);
+                        v2idxs.push_back(*psV2);
+                        coeffs.push_back(0.5 * *delsqp);
+                    }
+                }
+            }
+        }
+        else // Nonlinear or error in nqpcheck
+        {
+            Nl nl;
+            expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
+            nl.idx = osNLIdx;
+            nl.osExpressionTree = new OSExpressionTree();
+            nl.osExpressionTree->m_treeRoot = walkTree (e);
+            nl.m_bDeleteExpressionTree = false;
+            /*
+             * Note: If the copy operation of the Nl class is changed from shallow
+             * to deep, we will want to manage memory differently here.
+             */
+            nlExprs.push_back(nl);
+        }
+    }
+
+    bool isQP = true;
+    bool fill_in = false;
+    int nqpchk;
+    cgrad *cg;
+    int n_prev_A_coef, n_curr_A_coef;
+
+
+    for (osNLIdx = 0, aNLIdx = -1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
+    {
+        if (isQP)  // No need to identify quadratic terms once we have found a non-quadratic term
+        {
+            // count the nonzeroes before and after to check for fillin
+            if (!fill_in) // once we know there will be fill-in we can stop counting
+            {
+                n_prev_A_coef = 0;
+                for(cg = Cgrad[osNLIdx]; cg; cg = cg->next)
+                {
+                    if (cg->coef != 0) n_prev_A_coef++;
+                }
+            }
+
+            nqpchk = nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp);
+            if (nqpchk > 0) // quadratic
+            {
+                for (int v1 = 0; v1 < n_var; v1++)
+                {
+                    for (int* psV2 = &rowqp[colqp[v1]]; psV2 < &rowqp[colqp[v1+1]]; psV2++, delsqp++)
+                    {
+                        if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
+                        {
+                            fidxs.push_back(osNLIdx);
+                            v1idxs.push_back(v1);
+                            v2idxs.push_back(*psV2);
+                            coeffs.push_back(0.5 * *delsqp);
+                        }
+                    }
+                }
+                if (!fill_in) // once we know there will be fill-in we can stop counting
+                {
+                    n_curr_A_coef = 0;
+                    for(cg = Cgrad[osNLIdx]; cg; cg = cg->next)
+                    {
+                        if (cg->coef != 0) n_curr_A_coef++;
+                    }
+                    if (n_prev_A_coef != n_curr_A_coef) fill_in = true;
+                }
+                continue;
+            }
+            if (nqpchk < 0) isQP = false;
+        }
+
+// Nonlinear or error in nqpcheck
+        {
+            Nl nl;
+            expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
+            nl.idx = osNLIdx;
+            nl.osExpressionTree = new OSExpressionTree();
+            nl.osExpressionTree->m_treeRoot = walkTree (e);
+            nl.m_bDeleteExpressionTree = false;
+            /*
+             * Note: If the copy operation of the Nl class is changed from shallow
+             * to deep, we will want to manage memory differently here.
+             */
+            nlExprs.push_back(nl);
+        }
+    }
+
+    if (nlExprs.size())
+    {
+        Nl** ppsNl = new Nl*[ nlExprs.size() ];
+        for (i = 0; i < nlExprs.size(); i++)
+        {
+            ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
+            ppsNl[i]->m_bDeleteExpressionTree = true;
+        }
+        osinstance->instanceData->nonlinearExpressions->nl = ppsNl;
+    }
+    osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
+    if (fidxs.size())
+    {
+        osinstance->setQuadraticTerms((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
+    }
+    // Note: if we intended to call objval, conval etc with asl == rw later we must call qp_opify here.
+
+    //
+    // end loop of nonlinear rows
+    //
+
+
+
     // now create the objective function
     // in the nl file, this is stored in dense form; convert to sparse.
     //
@@ -646,6 +793,8 @@ bool OSnl2osil::createOSInstance()
         delete objectiveCoefficients; // delete the temporary sparse vector
         objectiveCoefficients = NULL;
     }
+
+
     //
     // now fill in row information
     //
@@ -662,170 +811,140 @@ bool OSnl2osil::createOSInstance()
     }
     //
     // Now the A-matrix
+    // The treatment depends on whether there was fill-in during the QP check or not
     //
-    int colStart, colEnd, nCoefSqueezed;
-    nCoefSqueezed = 0;
-
-#ifdef AMPLDEBUG
-    cout << "A-matrix elements: ";
-    for (i = 0; i < A_colstarts[ n_var]; i++)
-        cout << A_vals[i] << " ";
-    cout << endl;
-    cout << "A-matrix rowinfo: ";
-    for (i = 0; i < A_colstarts[ n_var]; i++)
-        cout << A_rownos[i] << " ";
-    cout << endl;
-    cout << "A-matrix colstart: ";
-    for (i = 0; i <= n_var; i++)
-        cout << A_colstarts[i] << " ";
-    cout << endl;
-#endif
-
-    colEnd = 0;
-    for (i = 0; i < n_var; i++)
+    if (fill_in) // store the matrix rowwise
     {
-        colStart = colEnd;
-        colEnd   = A_colstarts[i+1];
-#ifdef AMPLDEBUG
-        cout << "col " << i << " from " << colStart << " to " << colEnd - 1 << endl;
-#endif
-        for (j = colStart; j < colEnd; j++)
+        int row_len;
+        A_rowstarts = new int[n_con+1];
+        A_rowstarts[0] = 0;
+        for (int i=0; i < n_con; i++)
         {
-            if (fabs(A_vals[ j]) > OS_EPS)
+            row_len = 0;
+            for(cg = Cgrad[i]; cg; cg = cg->next)
             {
-                A_vals[ j-nCoefSqueezed] = A_vals[ j];
-                A_rownos[ j-nCoefSqueezed] = A_rownos[j];
+                if (cg->coef != 0) row_len++;
             }
-            else
-            {
-#ifdef AMPLDEBUG
-                cout << "squeeze out element " << j << endl;
-#endif
-                nCoefSqueezed++;
-            }
+            A_rowstarts[i+1] = A_rowstarts[i] + row_len;
         }
-        A_colstarts[i+1] = A_colstarts[i+1] - nCoefSqueezed;
-    }
-
-#ifdef AMPLDEBUG
-    cout << "A-matrix elements: ";
-    for (i = 0; i < A_colstarts[ n_var]; i++)
-        cout << A_vals[i] << " ";
-    cout << endl;
-    cout << "A-matrix rowinfo: ";
-    for (i = 0; i < A_colstarts[ n_var]; i++)
-        cout << A_rownos[i] << " ";
-    cout << endl;
-    cout << "A-matrix colstart: ";
-    for (i = 0; i <= n_var; i++)
-        cout << A_colstarts[i] << " ";
-    cout << endl;
-    cout << "A-matrix nonzeroes: " << A_colstarts[ n_var] << "; nsqueezed: " << nCoefSqueezed << endl;
-#endif
-
-    if(A_colstarts[ n_var] > 0)
-    {
-        osinstance->setLinearConstraintCoefficients(A_colstarts[ n_var],  true,
-                A_vals,   0,  A_colstarts[n_var] - 1,
-                A_rownos, 0,  A_colstarts[n_var] - 1,
-                A_colstarts,  0,  n_var);
-        osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
-        osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
-        osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
-    }
-    /*	int valuesBegin = 0;
-    	int valuesEnd = A_colstarts[ n_var] - 1;
-    	int startsBegin = 0;
-    	int indexesBegin = 0;
-    	int indexesEnd = A_colstarts[n_var] - 1;
-
-    	// if A_vals has only zeros don't generate a linearConstraints section
-    	bool bNumAvalsIsPositive = false;
-    	i = valuesBegin;
-    	while( (i < valuesEnd) && (bNumAvalsIsPositive == false) ){
-    		if(A_vals[ i] != 0) bNumAvalsIsPositive = true;
-    		i++;
-    	}
-    	if(bNumAvalsIsPositive == true){
-    		osinstance->setLinearConstraintCoefficients(nzc,  true,
-    			A_vals, valuesBegin,  valuesEnd,
-    			A_rownos,  indexesBegin,  indexesEnd,
-    			A_colstarts,  startsBegin,  n_var);
-    	}
-    */
-
-    //loop over each row with a nonlinear term
-    //
-    std::vector<int> fidxs, v1idxs, v2idxs;
-    std::vector<double> coeffs;
-    std::vector<Nl> nlExprs;
-    real* delsqp;
-    fint* colqp;
-    fint* rowqp;
-    int osNLIdx; // OS n.l. function index
-    int aNLIdx; // AMPL n.l. function index
-    //Switch to row-wise format, this is the format the ASL assumes is set when calling qpcheck.
-    //it is not documented but necessary it will segfault otherwise.
-    asl = rw;
-
-    // Iterate from -nlo to nlc-1 so that the qterms are sorted by idx
-    for (osNLIdx = -nlo, aNLIdx = nlo-1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
-    {
-        if (nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp) > 0) // quadratic
+        A_colptr = new    int[A_rowstarts[n_con]];
+        A_nzelem = new double[A_rowstarts[n_con]];
+        for (int i=0; i < n_con; i++)
         {
-            for (int v1 = 0; v1 < n_var; v1++)
+            row_len = 0;
+            for(cg = Cgrad[i]; cg; cg = cg->next)
             {
-                for (int* psV2 = reinterpret_cast<int*>(&rowqp[colqp[v1]]); psV2 < reinterpret_cast<int*>(&rowqp[colqp[v1+1]]); psV2++, delsqp++)
+                if (cg->coef != 0) 
                 {
-                    if (std::abs(*delsqp) > OS_EPS) // Try to exclude terms introduced by rounding
-                    {
-                        fidxs.push_back(osNLIdx);
-                        v1idxs.push_back(v1);
-                        v2idxs.push_back(*psV2);
-                        coeffs.push_back(0.5 * *delsqp);
-                    }
+                    A_colptr[A_rowstarts[i]+row_len] = cg->varno;
+                    A_nzelem[A_rowstarts[i]+row_len] = cg->coef; 
+                    row_len++;
                 }
             }
         }
-        else // Nonlinear or error in nqpcheck
+    
+        if(A_rowstarts[ n_con] > 0)
         {
-            Nl nl;
-            expr* e = aNLIdx < 0 ? CON_DE[osNLIdx].e : OBJ_DE[aNLIdx].e; // because osNLIdx = -aNLIdx-1
-            nl.idx = osNLIdx;
-            nl.osExpressionTree = new OSExpressionTree();
-            nl.osExpressionTree->m_treeRoot = walkTree (e);
-            nl.m_bDeleteExpressionTree = false;
-            /*
-             * Note: If the copy operation of the Nl class is changed from shallow
-             * to deep, we will want to manage memory differently here.
-             */
-            nlExprs.push_back(nl);
+            osinstance->setLinearConstraintCoefficients(A_rowstarts[ n_con],  false,
+                A_nzelem, 0,  A_rowstarts[n_con] - 1,
+                A_colptr, 0,  A_rowstarts[n_con] - 1,
+                A_rowstarts,  0,  n_con);
+            osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
+            osinstance->instanceData->linearConstraintCoefficients->colIdx->bDeleteArrays = false;
+            osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
+        }
+
+#ifdef AMPLDEBUG
+        cout << "A-matrix elements: ";
+        for (i = 0; i < A_rowstarts[ n_con]; i++)
+            cout << A_nzelem[i] << " ";
+        cout << endl;
+        cout << "A-matrix col index: ";
+        for (i = 0; i < A_rowstarts[ n_con]; i++)
+            cout << A_colptr[i] << " ";
+        cout << endl;
+        cout << "A-matrix rowstart: ";
+        for (i = 0; i <= n_con; i++)
+            cout << A_rowstarts[i] << " ";
+        cout << endl;
+#endif
+    }
+
+    else
+    {
+        asl=cw;
+        int colStart, colEnd, nCoefSqueezed;
+        nCoefSqueezed = 0;
+    
+#ifdef AMPLDEBUG
+        cout << "A-matrix elements: ";
+        for (i = 0; i < A_colstarts[ n_var]; i++)
+            cout << A_vals[i] << " ";
+        cout << endl;
+        cout << "A-matrix rowinfo: ";
+        for (i = 0; i < A_colstarts[ n_var]; i++)
+            cout << A_rownos[i] << " ";
+        cout << endl;
+        cout << "A-matrix colstart: ";
+        for (i = 0; i <= n_var; i++)
+            cout << A_colstarts[i] << " ";
+        cout << endl;
+#endif
+
+        colEnd = 0;
+        for (i = 0; i < n_var; i++)
+        {
+            colStart = colEnd;
+            colEnd   = A_colstarts[i+1];
+#ifdef AMPLDEBUG
+            cout << "col " << i << " from " << colStart << " to " << colEnd - 1 << endl;
+#endif
+            for (j = colStart; j < colEnd; j++)
+            {
+                if (fabs(A_vals[ j]) > OS_EPS)
+                {
+                    A_vals[ j-nCoefSqueezed] = A_vals[ j];
+                    A_rownos[ j-nCoefSqueezed] = A_rownos[j];
+                }
+                else
+                {
+#ifdef AMPLDEBUG
+                    cout << "squeeze out element " << j << endl;
+#endif
+                    nCoefSqueezed++;
+                }
+            }
+            A_colstarts[i+1] = A_colstarts[i+1] - nCoefSqueezed;
+        }
+
+#ifdef AMPLDEBUG
+        cout << "A-matrix elements: ";
+        for (i = 0; i < A_colstarts[ n_var]; i++)
+            cout << A_vals[i] << " ";
+        cout << endl;
+        cout << "A-matrix rowinfo: ";
+        for (i = 0; i < A_colstarts[ n_var]; i++)
+            cout << A_rownos[i] << " ";
+        cout << endl;
+        cout << "A-matrix colstart: ";
+        for (i = 0; i <= n_var; i++)
+            cout << A_colstarts[i] << " ";
+        cout << endl;
+        cout << "A-matrix nonzeroes: " << A_colstarts[ n_var] << "; nsqueezed: " << nCoefSqueezed << endl;
+#endif
+
+        if(A_colstarts[ n_var] > 0)
+        {
+            osinstance->setLinearConstraintCoefficients(A_colstarts[ n_var],  true,
+                A_vals,   0,  A_colstarts[n_var] - 1,
+                A_rownos, 0,  A_colstarts[n_var] - 1,
+                A_colstarts,  0,  n_var);
+            osinstance->instanceData->linearConstraintCoefficients->start->bDeleteArrays = false;
+            osinstance->instanceData->linearConstraintCoefficients->rowIdx->bDeleteArrays = false;
+            osinstance->instanceData->linearConstraintCoefficients->value->bDeleteArrays = false;
         }
     }
 
-    if (nlExprs.size())
-    {
-        Nl** ppsNl = new Nl*[ nlExprs.size() ];
-        for (i = 0; i < nlExprs.size(); i++)
-        {
-            ppsNl[i] = new Nl(nlExprs[i]); // See above note about shallow copy
-            ppsNl[i]->m_bDeleteExpressionTree = true;
-        }
-        osinstance->instanceData->nonlinearExpressions->nl = ppsNl;
-    }
-    osinstance->instanceData->nonlinearExpressions->numberOfNonlinearExpressions = nlExprs.size();
-    if (fidxs.size())
-    {
-        osinstance->setQuadraticTerms((int)fidxs.size(), &fidxs[0], &v1idxs[0], &v2idxs[0], &coeffs[0], 0, (int)fidxs.size()-1);
-    }
-    // Note: if we intended to call objval, conval etc with asl == rw later we must call qp_opify here.
-    asl = cw;
-
-//	delete objectiveCoefficients;
-//	objectiveCoefficients = NULL;
-    //
-    // end loop of nonlinear rows
-    //
 #ifdef AMPLDEBUG
     OSiLWriter osilwriter;
     std::cout << "WRITE THE INSTANCE" << std::endl;
