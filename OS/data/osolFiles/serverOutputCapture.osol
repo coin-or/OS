@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+	<general>
+		<solverToInvoke>cbc</solverToInvoke>
+	</general>
+	<system>
+		<minDiskSpace>0.0</minDiskSpace>
+		<minMemorySize>0.0</minMemorySize>
+		<minCPUSpeed>77.777</minCPUSpeed>
+		<minCPUNumber>0</minCPUNumber>
+	</system>
+	<job>
+		<otherOptions numberOfOtherOptions="1">
+			<other name="get_stdout" value="true"/>
+		</otherOptions>
+	</job>	
+</osol>
+
+	</job>	
+	<optimization>
+		<solverOptions numberOfSolverOptions="7">
+
+			<solverOption name="reslim" solver="cbc" type="numeric" value="1"/>
+			<solverOption name="maxN" solver="cbc" value="1" />
+			<solverOption name="sec" solver="cbc" value="3600" />
+			<solverOption name="cuts" solver="cbc" value="off" />
+			<solverOption name="max_active_nodes" solver="symphony"  value="2" />
+			<solverOption name="OsiDoReducePrint" solver="osi" type="OsiHintParam"  value="true"/>
+			<solverOption name="OsiHintIgnore" solver="osi" type="OsiHintStrength"   />
+
+		</solverOptions>
+	</optimization>
+</osol>

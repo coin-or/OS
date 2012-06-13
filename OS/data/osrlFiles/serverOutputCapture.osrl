@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="http://www.coin-or.org/OS/stylesheets/OSrL.xslt"?>
+<osrl xmlns="os.optimizationservices.org"   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSrL.xsd" >
+<general>
+<generalStatus type="normal">
+</generalStatus>
+<serviceName>
+
+Optimization Services Solver
+Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin
+Distributed under the Eclipse Public License
+OS Version: 2.4.1
+Build Date: Jun  1 2012
+SVN Version: 4502
+
+</serviceName>
+<instanceName>P0033</instanceName>
+<solverInvoked>COIN-OR cbc</solverInvoked>
+</general>
+<job>
+<timingInformation numberOfTimes="1">
+<time type="elapsedTime" unit="second" category="total">
+4.9999999999999996e-2</time>
+</timingInformation>
+<otherResults numberOfOtherResults="1">
+<other name="stdout_capture">
+
+
+Optimization Services Solver
+Main Authors: Horand Gassmann, Jun Ma, and Kipp Martin
+Distributed under the Eclipse Public License
+OS Version: 2.4.1
+Build Date: Jun  1 2012
+SVN Version: 4502
+
+Input String =  osil OS/data/osilFiles/p0033.osil osol OS/data/osolFiles/p0033_cbc.osol osrl temp.osrl 
+call ossslex
+done with call to ossslex
+HERE ARE THE OPTION VALUES:
+OSiL file = OS/data/osilFiles/p0033.osil
+OSoL file = OS/data/osolFiles/p0033_cbc.osol
+OSrL file = temp.osrl
+CALLING THE CBC SOLVER CBCMAIN1()
+Cbc Option: OS
+Cbc Option: -reslim=1
+Cbc Option: -maxN=1
+Cbc Option: -sec=3600
+Cbc Option: -cuts=off
+Cbc Option: -solve
+Cbc Option: -quit
+Welcome to the CBC MILP Solver 
+Version: Trunk (unstable) 
+Build Date: Jun  1 2012 
+Revision Number: 1782 
+
+command line - OS -reslim=1 -maxN=1 -sec=3600 -cuts=off -solve -quit (default strategy 1)
+No match for reslim - ? for list of commands
+maxNodes was changed from 2147483647 to 1
+seconds was changed from 1e+100 to 3600
+Option for cutsOnOff changed from on to off
+Continuous objective value is 2520.57 - 0.00 seconds
+Cgl0004I processed model has 15 rows, 32 columns (32 integer) and 97 elements
+Objective coefficients multiple of 1
+Cutoff increment increased from 1e-05 to 0.999
+Cbc0038I Pass   1: suminf.    0.93926 (3) obj. 2896.64 iterations 6
+Cbc0038I Pass   2: suminf.    0.90000 (2) obj. 3132.2 iterations 5
+Cbc0038I Pass   3: suminf.    0.78000 (2) obj. 3094.04 iterations 1
+Cbc0038I Pass   4: suminf.    0.68000 (2) obj. 3132.2 iterations 1
+Cbc0038I Pass   5: suminf.    0.68000 (2) obj. 3132.2 iterations 1
+Cbc0038I Pass   6: suminf.    0.00667 (2) obj. 3824 iterations 9
+Cbc0038I Pass   7: suminf.    0.00667 (2) obj. 3824 iterations 2
+Cbc0038I Solution found of 3824
+Cbc0038I Before mini branch and bound, 19 integers at bound fixed and 0 continuous
+Cbc0038I Full problem 15 rows 32 columns, reduced to 8 rows 9 columns
+Cbc0038I Mini branch and bound improved solution from 3824 to 3506 (0.01 seconds)
+Cbc0038I Round again with cutoff of 3436
+Cbc0038I Pass   8: suminf.    0.93926 (3) obj. 2896.64 iterations 0
+Cbc0038I Pass   9: suminf.    0.90000 (2) obj. 3132.2 iterations 5
+Cbc0038I Pass  10: suminf.    0.78000 (2) obj. 3094.04 iterations 1
+Cbc0038I Pass  11: suminf.    0.68000 (2) obj. 3132.2 iterations 1
+Cbc0038I Pass  12: suminf.    0.68000 (2) obj. 3132.2 iterations 1
+Cbc0038I Pass  13: suminf.    1.23665 (5) obj. 2858.48 iterations 7
+Cbc0038I Pass  14: suminf.    0.93926 (3) obj. 2896.64 iterations 6
+Cbc0038I Pass  15: suminf.    0.90000 (2) obj. 3132.2 iterations 4
+Cbc0038I Pass  16: suminf.    0.78000 (2) obj. 3094.04 iterations 1
+Cbc0038I Pass  17: suminf.    0.68000 (2) obj. 3132.2 iterations 1
+Cbc0038I Pass  18: suminf.    0.68000 (2) obj. 3132.2 iterations 1
+Cbc0038I Pass  19: suminf.    1.00000 (3) obj. 3096 iterations 8
+Cbc0038I Pass  20: suminf.    0.54000 (2) obj. 3142.22 iterations 5
+Cbc0038I Pass  21: suminf.    0.63240 (2) obj. 3436 iterations 2
+Cbc0038I Pass  22: suminf.    0.45244 (2) obj. 3436 iterations 1
+Cbc0038I Pass  23: suminf.    0.65000 (2) obj. 3177.2 iterations 2
+Cbc0038I Pass  24: suminf.    0.83161 (3) obj. 3436 iterations 9
+Cbc0038I Pass  25: suminf.    0.29000 (1) obj. 3188.22 iterations 8
+Cbc0038I Pass  26: suminf.    0.40000 (1) obj. 3223.2 iterations 1
+Cbc0038I Pass  27: suminf.    0.95978 (4) obj. 3436 iterations 11
+Cbc0038I Pass  28: suminf.    0.00702 (2) obj. 3324 iterations 5
+Cbc0038I Pass  29: suminf.    0.40000 (1) obj. 3132.2 iterations 4
+Cbc0038I Pass  30: suminf.    0.29000 (1) obj. 3097.22 iterations 1
+Cbc0038I Pass  31: suminf.    0.92926 (3) obj. 3169.83 iterations 13
+Cbc0038I Pass  32: suminf.    0.92926 (3) obj. 3169.83 iterations 0
+Cbc0038I Pass  33: suminf.    0.36667 (2) obj. 3347 iterations 4
+Cbc0038I Pass  34: suminf.    0.13750 (1) obj. 3303.28 iterations 6
+Cbc0038I Pass  35: suminf.    0.24750 (1) obj. 3268.3 iterations 1
+Cbc0038I Pass  36: suminf.    0.58291 (2) obj. 3436 iterations 3
+Cbc0038I Pass  37: suminf.    0.13750 (1) obj. 3303.28 iterations 3
+Cbc0038I No solution found this major pass
+Cbc0038I Before mini branch and bound, 10 integers at bound fixed and 0 continuous
+Cbc0038I Full problem 15 rows 32 columns, reduced to 10 rows 17 columns
+Cbc0038I Mini branch and bound did not improve solution (0.03 seconds)
+Cbc0038I After 0.03 seconds - Feasibility pump exiting with objective of 3506 - took 0.03 seconds
+Cbc0012I Integer solution of 3506 found by feasibility pump after 0 iterations and 0 nodes (0.03 seconds)
+Cbc0038I Full problem 15 rows 32 columns, reduced to 0 rows 0 columns
+Cbc0012I Integer solution of 3347 found by combine solutions after 0 iterations and 0 nodes (0.03 seconds)
+Cbc0010I After 0 nodes, 1 on tree, 3347 best solution, best possible 2819.3574 (0.03 seconds)
+Cbc0003I Exiting on maximum nodes
+Cbc0005I Partial search - best objective 3347 (best possible 2819.3574), took 1 iterations and 1 nodes (0.03 seconds)
+Cbc0032I Strong branching done 24 times (48 iterations), fathomed 0 nodes and fixed 0 variables
+Cbc0035I Maximum depth 1, 0 variables fixed on reduced cost
+Cuts at root node changed objective from 2819.36 to 2819.36
+
+Result - Stopped on node limit
+
+Objective value:                3347.00000000
+Lower bound:                    2819.357
+Gap:                            0.19
+Enumerated nodes:               1
+Total iterations:               1
+Time (CPU seconds):             0.04
+Time (Wallclock seconds):       0.05
+
+Total time (CPU seconds):       0.04   (Wallclock seconds):       0.05
+</other>
+</job>
+<optimization numberOfSolutions="1" numberOfVariables="33" numberOfConstraints="16" numberOfObjectives="1">
+<solution targetObjectiveIdx="-1">
+<status type="feasible" description="node limit reached">
+</status>
+<variables >
+<values numberOfVar="33">
+<var idx="0">1</var>
+<var idx="1">0</var>
+<var idx="2">0</var>
+<var idx="3">0</var>
+<var idx="4">0</var>
+<var idx="5">0</var>
+<var idx="6">1</var>
+<var idx="7">0</var>
+<var idx="8">1</var>
+<var idx="9">0</var>
+<var idx="10">1</var>
+<var idx="11">0</var>
+<var idx="12">0</var>
+<var idx="13">1</var>
+<var idx="14">0</var>
+<var idx="15">1</var>
+<var idx="16">0</var>
+<var idx="17">1</var>
+<var idx="18">0</var>
+<var idx="19">0</var>
+<var idx="20">1</var>
+<var idx="21">0</var>
+<var idx="22">1</var>
+<var idx="23">0</var>
+<var idx="24">1</var>
+<var idx="25">1</var>
+<var idx="26">1</var>
+<var idx="27">1</var>
+<var idx="28">1</var>
+<var idx="29">1</var>
+<var idx="30">0</var>
+<var idx="31">0</var>
+<var idx="32">0</var>
+</values>
+</variables>
+<objectives >
+<values numberOfObj="1">
+<obj idx="-1">3347</obj>
+</values>
+</objectives>
+</solution>
+</optimization>
+</osrl>

@@ -286,6 +286,7 @@ OS/data/osolFiles/rosenbrockmod_knitro.osol -text
 OS/data/osolFiles/rosenbrockmod_lindo.osol -text
 OS/data/osolFiles/send.osol -text
 OS/data/osolFiles/sendWithJobID.osol -text
+OS/data/osolFiles/serverOutputCapture.osol -text
 OS/data/osolFiles/smallIPBook.osol -text
 OS/data/osolFiles/solveroptions.osol -text
 OS/data/osolFiles/spl1-b.osol -text
@@ -306,6 +307,7 @@ OS/data/osrlFiles/parincLinear.osrl -text
 OS/data/osrlFiles/parserTest.osrl -text
 OS/data/osrlFiles/reducedcost.osrl -text
 OS/data/osrlFiles/rosenbrockmod.osrl -text
+OS/data/osrlFiles/serverOutputCapture.osrl -text
 OS/depcomp -text
 OS/doc/OS-Constitution/OSConstitution.pdf -text
 OS/doc/OS-Constitution/OSConstitution.tex -text
