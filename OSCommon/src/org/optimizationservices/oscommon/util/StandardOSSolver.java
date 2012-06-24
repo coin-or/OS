@@ -38,7 +38,7 @@ public class StandardOSSolver extends DefaultSolver{
 	}//constructor
 
 	/**
-	 * run the standard solve method. 
+	 * run the standard solve method. ***
 	 */
 	public void solve(){
 		String sOS = System.getProperty("os.name");
