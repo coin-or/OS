@@ -14,9 +14,6 @@
 			<other name="get_stdout" value="true"/>
 		</otherOptions>
 	</job>	
-</osol>
-
-	</job>	
 	<optimization>
 		<solverOptions numberOfSolverOptions="7">
 
