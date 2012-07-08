@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org C:\DataFiles\RESEARCH\OS\OS-trunk-work\OS\schemas\OSoL.xsd">
+<optionHeader>
+	<name>suffixTest.osol</name>
+	<fileCreator>Horand Gassmann, Jun Ma and Kipp Martin</fileCreator>
+	<description>
+		This file contains some array-valued options on variables, constraints and objectives
+		to be used in conjunction with suffixTest.mod/.nl for testing the OSnl2OS converter
+	</description>
+	<licence>
+		Copyright (C) 2012, Horand Gassmann, Jun Ma, Kipp Martin,
+		Northwestern University, Dalhousie University and the University of Chicago.
+		All Rights Reserved.
+		This file is licensed under the Eclipse Public License.
+		Please see the accompanying LICENSE file in root directory for terms.
+	</licence>
+</optionHeader>
+<optimization>
+<variables numberOfOtherVariableOptions="2">
+	<initialVariableValues numberOfVar="1">
+		<var idx="0" value="0.73"></var>
+	</initialVariableValues>
+	<initialBasisStatus>
+		<basic numberOfEl="1">
+			<el>2</el>
+		</basic>
+		<unknown numberOfEl="1">
+			<el>3</el>
+		</unknown>
+	</initialBasisStatus>
+	<other name="fromOsolFile" type="integer" description="meaningless option used to verify that OSoL file is processed correctly" numberOfVar="4"  >
+		<var idx="0" value="5"></var>
+		<var idx="1" value="6"></var>
+		<var idx="2" value="7"></var>
+		<var idx="3" value="8"></var>
+	</other>
+	<other name="somevarnumeric" type="real" description="this option also occurs in the .nl file" numberOfVar="3" >
+		<var idx="1" value="3.14"></var>
+		<var idx="2" value="6.28"></var>
+		<var idx="3" value="6.28"></var>
+	</other>
+</variables>
+<objectives numberOfOtherObjectiveOptions="2">
+	<other name="fromOsolFile" type="numeric" description="meaningless option used to verify that OSoL file is processed correctly" numberOfObj="1"  >
+		<obj idx="-1" lbValue="-1.0" ></obj>
+	</other>
+	<other name="someobjinteger" type="integer" description="this option also occurs in the .nl file" numberOfObj="1" >
+		<obj idx="-2" value="6.28"></obj>
+	</other>
+</objectives>
+<constraints numberOfOtherConstraintOptions="2">
+	<other name="fromOsolFile" type="numeric" description="meaningless option used to verify that OSoL file is processed correctly" numberOfCon="1"  >
+		<con idx="0" value="1234.56789" ></con>
+	</other>
+	<other name="someconinteger" type="integer" description="this option also occurs in the .nl file" numberOfCon="1" >
+		<con idx="1" value="23"></con>
+	</other>
+</constraints>
+</optimization>
+</osol>

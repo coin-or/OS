@@ -3,7 +3,7 @@
  * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
  * Northwestern University, Dalhousie University and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -11,7 +11,7 @@
  *
  * This executable is designed to act as a "solver" for AMPL. It can be
  * used to solve problems locally or on a remote server.  For example,
- * to solve a problem locally, start AMPL. We assume that the model is
+ * to solve a problem locally, start AMPL. Let's assume that the model is
  * hs71.mod. Execute the following sequence of commands:
  *
  * model hs71.mod;  <br />
@@ -29,7 +29,7 @@
  *
  * x2 = 4.743
  *
- * in general, specify options to the OSAmplclient solver by using the AMPL command OSAmplClient_options
+ * in general, specify options to the OSAmplClient solver by using the AMPL command OSAmplClient_options
  * as another example, if you wanted to solve hs71.mod on a remote server you would do:
  * model hs71.mod;  <br />
  * option solver OSAmplClient; <br />
@@ -60,7 +60,7 @@
 
 #include "OSCoinSolver.h"
 #include "OSConfig.h"
-#include "OSnl2osil.h"
+#include "OSnl2OS.h"
 #include "OSiLReader.h"
 #include "OSrLReader.h"
 #include "OSiLWriter.h"
@@ -146,47 +146,12 @@ int main(int argc, char **argv)
 {
     WindowsErrorPopupBlocker();
     char *stub;
+
     // set AMPL structures
     ASL *asl;
     asl = ASL_alloc(ASL_read_fg);
     stub = argv[1];
     jac0dim((char*)stub, (fint)strlen(stub));
-    OSnl2osil *nl2osil = NULL;
-    //initialize object with stub -- the nl file
-    nl2osil = new OSnl2osil( stub);
-    // create an osinstance object
-    OSInstance *osinstance;
-    std::cout << " call nl2osil" << std::endl;
-
-    /*	Parse the .nl file to create an in-memory representation
-    	in form of an OSInstance object
-     */
-    try
-    {
-        nl2osil->createOSInstance() ;
-    }
-    catch(const ErrorClass& eclass)
-    {
-        std::cout << eclass.errormsg << std::endl;
-        return 0;
-    }
-    std::cout << " return from  nl2osil" << std::endl;
-    osinstance = nl2osil->osinstance;
-    std::cout << " osinstance created" << std::endl;
-    //write out the instance
-    //kippster
-    OSiLWriter *osilwriter = NULL;
-    osilwriter = new OSiLWriter();
-    osilwriter->m_bWhiteSpace = true;
-    std::string sModeInstanceName = "modelInstance.osil";
-    FileUtil *fileUtil;
-    fileUtil = new FileUtil();
-    fileUtil->writeFileFromString(sModeInstanceName,  osilwriter->writeOSiL( osinstance) );
-    delete fileUtil;
-    fileUtil = NULL;
-    delete  osilwriter;
-    osilwriter = NULL;
-    //
 
     /*	Parse the options (passed through ASL as the string OSAmplClient_options)
      *
@@ -213,6 +178,17 @@ int main(int argc, char **argv)
         getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
     }
 
+
+    //convert solver name to lower case for testing purposes
+
+    unsigned int k;
+    for(k = 0; k < sSolverName.length(); k++)
+    {
+        sSolverName[ k] = tolower( sSolverName[ k]);
+    }
+
+
+
     /* If an OSoL file was given, read it into a string (don't parse)
      */
     if(osolFileName.size() > 0)
@@ -225,14 +201,64 @@ int main(int argc, char **argv)
     //std::cout << " solver Name = " << sSolverName << std::endl;
     //std::cout << " solver Options = " << osol << std::endl;
 
-    //convert solver name to lower case for testing purposes
 
-    unsigned int k;
-    for(k = 0; k < sSolverName.length(); k++)
+    OSnl2OS *nl2OS = NULL;
+    //initialize object with stub -- the nl file --- and the OSoL file --- if any
+    nl2OS = new OSnl2OS( stub, osol);
+    std::cout << " call nl2osil" << std::endl;
+
+    /*	Parse the .nl file to create an in-memory representation
+
+    	in form of an OSInstance object
+
+     */
+    try
     {
-        sSolverName[ k] = tolower( sSolverName[ k]);
+        nl2OS->createOSObjects() ;
     }
+    catch(const ErrorClass& eclass)
+    {
+        std::cout << eclass.errormsg << std::endl;
+        return 0;
+    }
+    std::cout << " return from  nl2osil" << std::endl;
 
+    // create OS objects
+    OSInstance *osinstance;
+    OSOption   *osoption;
+
+    osinstance = nl2OS->osinstance;
+    std::cout << " osinstance created" << std::endl;
+
+    //write out the instance
+    OSiLWriter *osilwriter = NULL;
+    osilwriter = new OSiLWriter();
+    osilwriter->m_bWhiteSpace = true;
+    std::string sModelInstanceName = "modelInstance.osil";
+    FileUtil *fileUtil;
+    fileUtil = new FileUtil();
+    fileUtil->writeFileFromString(sModelInstanceName,  osilwriter->writeOSiL( osinstance) );
+    delete fileUtil;
+    fileUtil = NULL;
+    delete  osilwriter;
+    osilwriter = NULL;
+    //
+
+    if (nl2OS->osoption != NULL)
+    {
+        osoption   = nl2OS->osoption;
+        //write out the options
+        OSoLWriter *osolwriter = NULL;
+        osolwriter = new OSoLWriter();
+        //osolwriter->m_bWhiteSpace = true;
+        std::string sModelOptionName = "modelOptions.osol";
+        fileUtil = new FileUtil();
+        fileUtil->writeFileFromString(sModelOptionName,  osolwriter->writeOSoL( osoption) );
+        delete fileUtil;
+        fileUtil = NULL;
+        delete  osolwriter;
+        osolwriter = NULL;
+    }
 
     OSrLReader *osrlreader = NULL;
     OSrLWriter *osrlwriter;
@@ -385,9 +411,9 @@ int main(int argc, char **argv)
     delete osrlwriter;
     //cout << "osrlwriter JUST DELETED" <<endl;
     osrlwriter = NULL;
-    delete nl2osil;
+    delete nl2OS;
     //cout << "nl2osil JUST DELETED" <<endl;
-    nl2osil = NULL;
+    nl2OS = NULL;
     ASL_free(&asl);
     return 0;
 } // end main

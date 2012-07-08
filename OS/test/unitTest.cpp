@@ -165,7 +165,7 @@
 #endif
 
 #ifdef COIN_HAS_ASL
-#include "OSnl2osil.h"
+#include "OSnl2OS.h"
 #endif
 
 #ifdef COIN_HAS_LINDO    
@@ -325,7 +325,7 @@ int main(int argC, char* argV[])
 	 */
 	FileUtil *fileUtil = NULL;  
 #ifdef COIN_HAS_ASL
-	OSnl2osil *nl2osil = NULL;
+	OSnl2OS *nl2osil = NULL;
 #endif 
 	OSmps2osil *mps2osil = NULL;
 	DefaultSolver *solver  = NULL;
@@ -5443,6 +5443,7 @@ if (PARSER_TESTS){
 		if (osresult1  != NULL) delete osresult1;
 		osresult1 = NULL;
 		if (osresult2  != NULL) delete osresult2;
+
 		osresult2 = NULL;
 //		if (osresult   != NULL) delete osresult;
 //		osresult = NULL;
@@ -8216,13 +8217,13 @@ if (OTHER_TESTS){
 		cout << endl << "TEST " << ++nOfTest << ": AMPL solver interface" << endl << endl;
 
 		nlFileName  = dataDir + "amplFiles" + dirsep + "parinc.nl";
-		nl2osil = new OSnl2osil( nlFileName); 
+		nl2osil = new OSnl2OS( nlFileName, ""); 
 		solver = new CoinSolver();
 
 		ok = true;
 		cout << "create a cbc Solver for AMPL nl - OSInstance solution" << endl;
 		solver->sSolverName = "cbc";
-		nl2osil->createOSInstance() ;
+		nl2osil->createOSObjects() ;
 		solver->osinstance = nl2osil->osinstance;	
 
 		OSiLWriter tmp_osil_writer;

@@ -423,6 +423,7 @@ AC_COIN_VPATH_LINK(data/osolFiles/spl1.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/spl1-b.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/spl2.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/spl2-b.osol)
+AC_COIN_VPATH_LINK(data/osolFiles/suffixTest.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/volumeTest_vol.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin1.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/wayneQuadratic_Bonmin2.osol)
@@ -433,7 +434,6 @@ AC_COIN_VPATH_LINK(data/osolFiles/parsertest2.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/parsertest3.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/parsertestWithErrors.osol)
 AC_COIN_VPATH_LINK(data/osolFiles/parsertestWithErrors.result)
-
 ##
 ## ospl test files
 ##
@@ -469,9 +469,9 @@ AC_COIN_VPATH_LINK(data/configFiles/testRemoteNL.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteBIG.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteRetrieve.config)
 AC_COIN_VPATH_LINK(data/configFiles/testRemoteSend.config)
-
 ##
 ## ampl test files
+##
 AC_COIN_VPATH_LINK(data/amplFiles/testAmpl.run)
 AC_COIN_VPATH_LINK(data/amplFiles/bonminEx1.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/bonminEx1.nl)
@@ -483,6 +483,8 @@ AC_COIN_VPATH_LINK(data/amplFiles/muer.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.dat)
 AC_COIN_VPATH_LINK(data/amplFiles/parinc.nl)
+AC_COIN_VPATH_LINK(data/amplFiles/suffixTest.mod)
+AC_COIN_VPATH_LINK(data/amplFiles/suffixTest.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/LP_infeasible.mod)
@@ -496,8 +498,8 @@ AC_COIN_VPATH_LINK(data/amplFiles/IP_unbounded.nl)
 AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.mod)
 AC_COIN_VPATH_LINK(data/amplFiles/volumeTest.nl)
 ##
-##
 ## GAMS test files
+##
 AC_COIN_VPATH_LINK(data/gamsFiles/parincLinear.gms)
 AC_COIN_VPATH_LINK(data/gamsFiles/rbrockmod.gms)
 AC_COIN_VPATH_LINK(data/gamsFiles/rbrockorig.gms)
@@ -520,43 +522,31 @@ AC_COIN_VPATH_LINK(data/matlabFiles/OSCallMatlabSolver.m)
 ###
 ## columnGen Application files
 ##
-
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen10.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/colgen12b.osol)
-
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p40-25-25-25.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p50-25-25-25.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p60-25-25-25.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p70-25-25-25.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2009p95-140-140-140.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2009mean-25-25-25.osol)
-
-
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p75-40-40-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p80-40-40-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p85-40-40-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-40-40.osol)
-
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-40-60.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-40-60-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-60-40-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-60-20-20-40.osol)
-
-
-
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-40-40-60.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-40-60-40.osol)
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p92-60-40-40.osol)
-
-
-
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p90-120-120-120.osol)
-
 AC_COIN_VPATH_LINK(applications/columnGen/data/y2010p95-150-150-150.osol)
-
-
+##
 ### Python Code
+##
 AC_COIN_VPATH_LINK(applications/parsingTest/parsingTest.py)
 ##
 ## XSLT FILE

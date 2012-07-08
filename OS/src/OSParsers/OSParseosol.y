@@ -3428,14 +3428,7 @@ otherObjStart: OBJSTART
 	parserData->ubValueAttribute = "";
 }; 
 
-otherObjAttributes: otherObjAttList
-{	
-	parserData->idxArray[parserData->kounter] = parserData->idxAttribute;
-	parserData->namArray[parserData->kounter] = parserData->nameAttribute;
-	parserData->valueString[parserData->kounter] = parserData->valueAttribute;
-	parserData->lbValueString[parserData->kounter] = parserData->lbValueAttribute;
-	parserData->ubValueString[parserData->kounter] = parserData->ubValueAttribute;
-};
+otherObjAttributes: otherObjAttList;
 
 otherObjAttList: | otherObjAttList otherObjAtt;
 

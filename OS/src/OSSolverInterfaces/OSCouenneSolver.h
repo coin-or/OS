@@ -5,7 +5,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -49,7 +49,7 @@ class expression;
 /*! \class CouenneSolver
  *  \brief The CouenneSolver class solves problems using Ipopt.
  *
- * @author Jun Ma, Guss Gassmann, Kipp Martin
+ * @author Jun Ma, Horand Gassmann, Kipp Martin
  * @version 1.0, 07/05/2008
  * @since OS 1.0
  *

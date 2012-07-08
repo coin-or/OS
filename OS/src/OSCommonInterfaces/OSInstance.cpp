@@ -513,15 +513,6 @@ Objective::~Objective()
     if(numberOfObjCoef > 0 && coef != NULL)
     {
         for(i = 0; i < numberOfObjCoef; i++)
-
-
-
-
-
-
-
-
-
         {
             delete coef[i];
             coef[i] = NULL;

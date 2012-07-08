@@ -341,6 +341,8 @@ public:
     int* hessColIdx;
 
     /**
+
+
      * hessValues is a double array of the Hessian values.
      */
     double* hessValues;
@@ -656,7 +658,7 @@ public:
 /*! \class StorageCapacity
  *  \brief the StorageCapacity class.
  *
- * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * A data structure class that corresponds to an xml element in
@@ -705,7 +707,7 @@ public:
 /*! \class CPUSpeed
  *  \brief the CPUSpeed class.
  *
- * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -756,7 +758,7 @@ public:
 /*! \class CPUNumber
  *  \brief the CPUNumber class.
  *
- * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -804,7 +806,7 @@ public:
 /*! \class TimeSpan
  *  \brief the TimeSpan class.
  *
- * @author Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * A data structure class that corresponds to an xml element in
@@ -1290,5 +1292,15 @@ inline bool isEqual(double x, double y)
     return false;
 }
 
+/**
+ * An enum to streamline set() methods of vectors
+ */
+enum ENUM_COMBINE_ARRAYS
+{
+    ENUM_COMBINE_ARRAYS_replace, //silently replace previous data (if any)
+	ENUM_COMBINE_ARRAYS_merge,	 //merge two vectors into one
+    ENUM_COMBINE_ARRAYS_ignore,  //silently ignore current vector if previous data exist
+	ENUM_COMBINE_ARRAYS_throw    //throw an error if previous data detected
+};
 
 #endif

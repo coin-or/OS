@@ -1,13 +1,13 @@
 /* $Id$ */
 /** @file parseospl.l
  * 
- * @author  Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin, 
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin, 
  * @version 1.0, 12/07/2008
  * @since   OS1.1
  *
  * \remarks
- * Copyright (C) 2005-2008, Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Copyright (C) 2005-2008, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Common Public License. 
  * Please see the accompanying LICENSE file in root directory for terms.

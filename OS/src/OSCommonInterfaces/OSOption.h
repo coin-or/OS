@@ -27,7 +27,7 @@
 /*! \class InstanceLocationOption
  *  \brief the InstanceLocationOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -77,7 +77,7 @@ public:
 /*! \class ContactOption
  *  \brief the ContactOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -126,7 +126,7 @@ public:
 /*! \class OtherOption
  *  \brief the OtherOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -178,7 +178,7 @@ public:
 /*! \class OtherOptions
  *  \brief the OtherOptions class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -244,7 +244,7 @@ public:
 /*! \class GeneralOption
  *  \brief The GeneralOption Class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -320,7 +320,7 @@ public:
 /*! \class MinDiskSpace
  *  \brief the MinDiskSpace class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -365,7 +365,7 @@ public:
 /*! \class MinMemorySize
  *  \brief the MinMemorySize class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -410,7 +410,7 @@ public:
 /*! \class MinCPUSpeed
  *  \brief the MinCPUSpeed class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -455,7 +455,7 @@ public:
 /*! \class MinCPUNumber
  *  \brief the MinCPUNumber class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -498,7 +498,7 @@ public:
 /*! \class SystemOption
  *  \brief the SystemOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -556,7 +556,7 @@ public:
 /*! \class ServiceOption
  *  \brief the ServiceOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -605,7 +605,7 @@ public:
 /*! \class MaxTime
  *  \brief the MaxTime class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -648,7 +648,7 @@ public:
 /*! \class JobDependencies
  *  \brief the JobDependencies class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -712,7 +712,7 @@ public:
 /*! \class DirectoriesAndFiles
  *  \brief the DirectoriesAndFiles class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -776,7 +776,7 @@ public:
 /*! \class PathPair
  *  \brief the PathPair class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -828,7 +828,7 @@ public:
 /*! \class PathPairs
  *  \brief the PathPairs class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -904,7 +904,7 @@ public:
 /*! \class Processes
  *  \brief the Processes class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -968,7 +968,7 @@ public:
 /*! \class JobOption
  *  \brief the JobOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1056,7 +1056,7 @@ public:
 /*! \class InitVarValue
  *  \brief the InitVarValue class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1108,7 +1108,7 @@ public:
 /*! \class InitVariableValues
  *  \brief the InitVariableValues class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1164,6 +1164,16 @@ public:
      *
      * Alternative signature for this function
      * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setVar(int numberOfVar, InitVarValue **var, ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     *
+     * Another alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
      * @param idx: the array of indices
      * @param value: the array of corresponding values
      * @param name: the array of corresponding names
@@ -1177,13 +1187,23 @@ public:
      * @param value: the initial variable value to be added
      */
     bool addVar(int idx, double value);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <var> elements simultaneously
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool addVar(int numberOfVar, InitVarValue **var);
 }; //InitVariableValues
 
 
 /*! \class InitVarValueString
  *  \brief the InitVarValueString class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1235,7 +1255,7 @@ public:
 /*! \class InitVariableValuesString
  *  \brief the InitVariableValuesString class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1291,6 +1311,16 @@ public:
      *
      * Alternative signature for this function
      * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setVar(int numberOfVar, InitVarValueString **var, ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     *
+     * Another alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
      * @param idx: the array of indices
      * @param value: the array of corresponding values
      * @param name: the array of corresponding names
@@ -1304,12 +1334,22 @@ public:
      * @param value: the initial string value to be added
      */
     bool addVar(int idx, std::string value);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <var> elements simultaneously
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool addVar(int numberOfVar, InitVarValueString **var);
 }; //InitVariableValuesString
 
 /*! \class InitBasStatus
  *  \brief the InitBasStatus class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1331,6 +1371,7 @@ public:
     /**
      *
      * Default constructor.
+
      */
     InitBasStatus();
     /**
@@ -1359,7 +1400,7 @@ public:
 /*! \class InitialBasisStatus
  *  \brief the InitialBasisStatus class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1425,7 +1466,7 @@ public:
 /*! \class BranchingWeight
  *  \brief the BranchingWeight class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/11/2008
  * @since OS 1.1
  *
@@ -1478,7 +1519,7 @@ public:
 /*! \class IntegerVariableBranchingWeights
  *  \brief the IntegerVariableBranchingWeights class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/11/2008
  * @since OS 1.1
  *
@@ -1534,6 +1575,15 @@ public:
      *
      * Alternative signature for this function
      * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setVar(int numberOfVar, BranchingWeight **var, ENUM_COMBINE_ARRAYS disp);
+
+    /**
+     *
+     * Another alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
      * @param idx: the array of indices
      * @param value: the array of corresponding values
      * @param name: the array of corresponding names
@@ -1547,16 +1597,27 @@ public:
      * @param value: the branching weight to be added
      */
     bool addVar(int idx, double value);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <var> elements simultaneously
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     */
+    bool addVar(int numberOfVar, BranchingWeight **var);
 }; //IntegerVariableBranchingWeights
 
 /*! \class SOSWeights
  *  \brief the SOSWeights class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/11/2008
  * @since OS 1.1
  *
  * \remarks
+
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
@@ -1623,7 +1684,7 @@ public:
 /*! \class SOSVariableBranchingWeights
  *  \brief the SOSVariableBranchingWeights class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/11/2008
  * @since OS 1.1
  *
@@ -1690,7 +1751,7 @@ public:
 /*! \class OtherVarOption
  *  \brief the OtherVarOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1839,7 +1900,7 @@ public:
 /*! \class VariableOption
  *  \brief the VariableOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1918,7 +1979,7 @@ public:
 /*! \class InitObjValue
  *  \brief the InitObjValue class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -1970,7 +2031,7 @@ public:
 /*! \class InitObjectiveValues
  *  \brief the InitObjectiveValues class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2025,7 +2086,17 @@ public:
     /**
      *
      * Alternative signature for this function
-     * @param numberOfObj: number of <obj> elements to be set
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setObj(int numberOfObj, InitObjValue **obj, ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     *
+     * Another alternative signature for this function
+	 * @param numberOfObj: number of <obj> elements to be set
      * @param idx: the array of indices
      * @param value: the array of corresponding values
      * @param name: the array of objective names
@@ -2039,13 +2110,23 @@ public:
      * @param value: the initial value to be added
      */
     bool addObj(int idx, double value);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <obj> elements simultaneously
+     * @param numberOfObj: number of <obj> elements to be set
+     * @param obj: the array of <obj> elements that are to be set
+     */
+    bool addObj(int numberOfObj, InitObjValue **obj);
 }; //InitObjectiveValues
 
 
 /*! \class InitObjBound
  *  \brief the InitObjBound class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2100,7 +2181,7 @@ public:
 /*! \class InitObjectiveBounds
  *  \brief the InitObjectiveBounds class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2155,6 +2236,16 @@ public:
     /**
      *
      * Alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setObj(int numberOfObj, InitObjBound **obj, ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     *
+     * Another alternative signature for this function
      * @param numberOfObj: number of <obj> elements to be set
      * @param idx: the array of indices
      * @param lbValue: the array of corresponding lower bounds
@@ -2171,13 +2262,23 @@ public:
      * @param ubValue: the initial upper bound for the objective
      */
     bool addObj(int idx, double lbValue, double ubValue);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <obj> elements simultaneously
+     * @param numberOfObj: number of <obj> elements to be set
+     * @param obj: the array of <obj> elements that are to be set
+     */
+    bool addObj(int numberOfObj, InitObjBound **obj);
 }; //InitObjectiveBounds
 
 
 /*! \class OtherObjOption
  *  \brief the OtherObjOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2235,7 +2336,7 @@ public:
 /*! \class OtherObjectiveOption
  *  \brief the OtherObjectiveOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2329,7 +2430,7 @@ public:
 /*! \class ObjectiveOption
  *  \brief the ObjectiveOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2402,7 +2503,7 @@ public:
 /*! \class InitConValue
  *  \brief the InitConValue class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2454,7 +2555,7 @@ public:
 /*! \class InitConstraintValues
  *  \brief the InitConstraintValues class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2509,6 +2610,16 @@ public:
     /**
      *
      * Alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setCon(int numberOfCon, InitConValue **con, ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     *
+     * Another alternative signature for this function
      * @param numberOfCon: number of <con> elements to be set
      * @param idx: the array of indices
      * @param value: the array of corresponding values
@@ -2523,13 +2634,23 @@ public:
      * @param value: the initial value to be added
      */
     bool addCon(int idx, double value);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <con> elements simultaneously
+     * @param numberOfCon: number of <con> elements to be set
+     * @param obj: the array of <con> elements that are to be set
+     */
+    bool addCon(int numberOfCon, InitConValue **con);
 }; //InitConstraintValues
 
 
 /*! \class InitDualVarValue
  *  \brief the InitDualVarValue class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2541,7 +2662,7 @@ class InitDualVarValue
 {
 
 public:
-    /** objective index */
+    /** constraint index */
     int idx;
 
     /** optional variable name */
@@ -2585,7 +2706,7 @@ public:
 /*! \class InitDualVariableValues
  *  \brief the InitDualVariableValues class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2640,6 +2761,16 @@ public:
     /**
      *
      * Alternative signature for this function
+     * @param numberOfVar: number of <var> elements to be set
+     * @param var: the array of <var> elements that are to be set
+     * @param disp: method of disposition if previous data exist
+     */
+    bool setCon(int numberOfCon, InitDualVarValue **con, ENUM_COMBINE_ARRAYS disp);
+
+
+    /**
+     *
+     * Another alternative signature for this function
      * @param numberOfCon: number of <con> elements to be set
      * @param idx: the array of indices
      * @param lbValue: the array of dual values for the lower bound
@@ -2656,13 +2787,23 @@ public:
      * @param ubDualValue: an initial value for the dual variable associated with the upper bound
      */
     bool addCon(int idx, double lbDualValue, double ubDualValue);
+
+    /**
+     *
+     * Alternative signature for this function
+     *
+     * A function to add an array of <con> elements simultaneously
+     * @param numberOfCon: number of <con> elements to be set
+     * @param obj: the array of <con> elements that are to be set
+     */
+    bool addCon(int numberOfCon, InitDualVarValue **con);
 }; //InitDualVariableValues
 
 
 /*! \class OtherConOption
  *  \brief the OtherConOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2720,7 +2861,7 @@ public:
 /*! \class OtherConstraintOption
  *  \brief the OtherConstraintOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2814,7 +2955,7 @@ public:
 /*! \class ConstraintOption
  *  \brief the ConstraintOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2887,7 +3028,7 @@ public:
 /*! \class SolverOption
  *  \brief the SolverOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -2954,7 +3095,7 @@ public:
 /*! \class SolverOptions
  *  \brief the SolverOptions class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -3024,7 +3165,7 @@ public:
 /*! \class OptimizationOption
  *  \brief the OptimizationOption class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -3087,7 +3228,7 @@ public:
 /*! \class OSOption
  *  \brief The Option Class.
  *
- * @author Robert Fourer, Gus Gassmann, Jun Ma, Kipp Martin
+ * @author Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 21/07/2008
  * @since OS 1.1
  *
@@ -3904,6 +4045,15 @@ public:
     std::vector<OtherVariableOption*> getOtherVariableOptions(std::string solver_name);
 
     /**
+     * Get one particular <other> variable option from the array of options
+     * <p>
+     *
+     * @param optionNumber is the index of the option in the array
+     * @return a pointer to one OtherVariableOption object
+     */
+    OtherVariableOption* getOtherVariableOption(int optionNumber);
+
+    /**
      * Get all <other> variable options
      * <p>
      *
@@ -4004,6 +4154,15 @@ public:
      * @return a vector of pointers to OtherConstraintOption objects
      */
     std::vector<OtherObjectiveOption*> getOtherObjectiveOptions(std::string solver_name);
+
+    /**
+     * Get one particular <other> objective option from the array of options
+     * <p>
+     *
+     * @param optionNumber is the index of the option in the array
+     * @return a pointer to one OtherObjectiveOption object
+     */
+    OtherObjectiveOption* getOtherObjectiveOption(int optionNumber);
 
     /**
      * Get all <other> objective options
@@ -4108,6 +4267,14 @@ public:
      */
     std::vector<OtherConstraintOption*> getOtherConstraintOptions(std::string solver_name);
 
+    /**
+     * Get one particular <other> constraint option from the array of options
+     * <p>
+     *
+     * @param optionNumber is the index of the option in the array
+     * @return a pointer to one OtherConstraintOption object
+     */
+    OtherConstraintOption* getOtherConstraintOption(int optionNumber);
 
     /**
      * Get all <other> constraint options
@@ -4227,34 +4394,74 @@ public:
 
     /**
      * Set the other general options as an entire array
+	 * @param numberOfOptions contains the number of other options to be set
+	 * @param other is a pointer to an array of OtherOption objects
      */
     bool setOtherGeneralOptions(int numberOfOptions, OtherOption** other);
 
     /**
-     * Add another general option to the general <other> option array
+     * Add another general option to the <other> option array
+	 * @param name - the identifying anme of the option. This string cannot be empty
+	 * @param value - optional value associated with this option
+	 * @param description - further information (can be used for documentation)
      */
     bool setAnOtherGeneralOption(std::string name, std::string value, std::string description);
 
+	/**
+	 * Set the minimum disk space required for the current job
+	 * @param unit - select the unit (Kb, Mb, etc.)
+	 * @param description - further description (can be used for documentation)
+	 * @param value - number of units of disk space required
+	 */
     bool setMinDiskSpace(std::string unit, std::string description, double value);
 
+	/**
+	 * Alternate signature to set only the number of units
+	 */
     bool setMinDiskSpace(double value);
 
     bool setMinDiskSpaceUnit(std::string unit);
 
+	/**
+	 * Set the minimum memory size required for the current job
+	 * @param unit - select the unit (Kb, Mb, etc.)
+	 * @param description - further description (can be used for documentation)
+	 * @param value - number of units of memory size required
+	 */
     bool setMinMemorySize(std::string unit, std::string description, double value);
 
+	/**
+	 * Alternate signature to set only the number of units
+	 */
     bool setMinMemorySize(double value);
 
     bool setMinMemoryUnit(std::string unit);
 
+	/**
+	 * Set the minimum CPU speed required for the current job
+	 * @param unit - select the unit (MHz, GHz, TFlops etc.)
+	 * @param description - further description (can be used for documentation)
+	 * @param value - number of units of CPU speed required
+	 */
     bool setMinCPUSpeed(std::string unit, std::string description, double value);
 
+	/**
+	 * Alternate signature to set only the number of units
+	 */
     bool setMinCPUSpeed(double value);
 
     bool setMinCPUSpeedUnit(std::string unit);
 
+	/**
+	 * Set the minimum number of CPU cores required for the current job
+	 * @param number - number of CPU cores required
+	 * @param description - further description (can be used for documentation)
+	 */
     bool setMinCPUNumber( int number, std::string description);
 
+	/**
+	 * Alternate signature to set only the number of cores
+	 */
     bool setMinCPUNumber( int number);
 
     bool setOtherSystemOptions(int numberOfOptions, OtherOption** other);
@@ -4344,16 +4551,19 @@ public:
 
     bool setInitVarValues(int numberOfVar, int* idx, double* value, std::string* name);
     bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var);
+    bool setInitVarValuesSparse(int numberOfVar, InitVarValue** var, ENUM_COMBINE_ARRAYS disp);
     bool setInitVarValuesDense(int numberOfVar, double *value);
     bool setAnotherInitVarValue(int idx, double value);
 
     bool setInitVarValuesString(int numberOfVar, int* idx, std::string* value, std::string* name);
     bool setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var);
+    bool setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var, ENUM_COMBINE_ARRAYS disp);
     bool setInitVarValuesStringDense(int numberOfVar, std::string *value);
     bool setAnotherInitVarValueString(int idx, std::string value);
 
     bool setInitBasisStatus(int object, int status, int *i, int ni);
     bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var);
+    bool setInitBasisStatusSparse(int numberOfVar, InitBasStatus** var, ENUM_COMBINE_ARRAYS disp);
     bool setInitBasisStatusDense(int numberOfVar, std::string *var);
 
     /**
@@ -4368,6 +4578,7 @@ public:
 
     bool setIntegerVariableBranchingWeights(int numberOfVar, int* idx, double* value, std::string* name);
     bool setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var);
+    bool setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var, ENUM_COMBINE_ARRAYS disp);
     bool setIntegerVariableBranchingWeightsDense(int numberOfVar, double *value);
     bool setAnotherIntegerVariableBranchingWeight(int idx, double value);
 
@@ -4428,16 +4639,19 @@ public:
 
     bool setInitObjValues(int numberOfObj, int* idx, double* value, std::string* name);
     bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj);
+    bool setInitObjValuesSparse(int numberOfObj, InitObjValue** obj, ENUM_COMBINE_ARRAYS disp);
     bool setInitObjValuesDense(int numberOfObj, double *value);
     bool setAnotherInitObjValue(int idx, double value);
 
     bool setInitObjBounds(int numberOfObj, int* idx, double* lbValue, double* ubValue, std::string* name);
     bool setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj);
+    bool setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj, ENUM_COMBINE_ARRAYS disp);
     bool setInitObjBoundsDense(int numberOfObj, double *lb, double *ub);
     bool setAnotherInitObjBound(int idx, double lbValue, double ubValue);
 
     bool setNumberOfOtherObjectiveOptions(int numberOfOther);
     bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj);
+    //bool setOtherObjectiveOptions(int numberOfObj, OtherObjectiveOption** obj, ENUM_COMBINE_ARRAYS disp);
     bool setAnOtherObjectiveOption(OtherObjectiveOption* objOption);
 
     /**
@@ -4476,16 +4690,19 @@ public:
 
     bool setInitConValues(int numberOfCon, int* idx, double* value, std::string* name);
     bool setInitConValuesSparse(int numberOfCon, InitConValue** con);
+    bool setInitConValuesSparse(int numberOfCon, InitConValue** con, ENUM_COMBINE_ARRAYS disp);
     bool setInitConValuesDense(int numberOfCon, double *value);
     bool setAnotherInitConValue(int idx, double value);
 
     bool setInitDualValues(int numberOfCon, int* idx, double* lbValue, double* ubValue, std::string* name);
     bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con);
+    bool setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con, ENUM_COMBINE_ARRAYS disp);
     bool setInitDualVarValuesDense(int numberOfCon, double *lb, double *ub);
     bool setAnotherInitDualVarValue(int idx, double lbValue, double ubValue);
 
     bool setNumberOfOtherConstraintOptions(int numberOfOther);
     bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other);
+    //bool setOtherConstraintOptions(int numberOfOptions, OtherConstraintOption** other, ENUM_COMBINE_ARRAYS disp);
     bool setAnOtherConstraintOption(OtherConstraintOption* optionValue);
 
     /**

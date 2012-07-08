@@ -4,7 +4,7 @@
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
  * Dalhousie University, Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
@@ -96,7 +96,7 @@
 #endif
 
 #ifdef COIN_HAS_ASL
-#include "OSnl2osil.h"
+#include "OSnl2OS.h"
 #endif
 
 #ifdef COIN_HAS_GAMSUTILS
@@ -198,11 +198,11 @@ int main(int argC, const char* argV[])
     WindowsErrorPopupBlocker();
     std::cout << OSgetVersionInfo();
 
-        if (argC < 2)
-        {
-            interactiveShell();
-            return 0;
-        }
+    if (argC < 2)
+    {
+        interactiveShell();
+        return 0;
+    }
 
 	void* scanner;
     FileUtil *fileUtil = NULL;
@@ -214,8 +214,9 @@ int main(int argC, const char* argV[])
     std::string configFileName = "";
     int i;
 
-
-    // initialize the OS options structure
+    /** Parse the command line **/
+     
+    // initialize the command line (osOptions) structure 
 
     osoptions = new osOptionsStruc();
     reset_options();
@@ -302,8 +303,8 @@ int main(int argC, const char* argV[])
             
             
             /** new -- added on September 19, 2011
-             * if we are here, then the command line had a configure file, but
-             * command line options should override the config file so go
+             * If we are here, then the command line had a configure file.
+             * Command line options should override the config file so go
              * back and get these options again
              */
             
@@ -367,6 +368,9 @@ int main(int argC, const char* argV[])
         delete osoptions;
         return 1;
     }
+
+    /** Deal with action items: --help, --version **/
+
     try
     {
         if (osoptions->invokeHelp == true)
@@ -450,7 +454,7 @@ int main(int argC, const char* argV[])
 
 #endif
 
-    //convert to lower case so there is no solver name ambiguity
+    //convert solver name to lower case so there is no ambiguity
     unsigned int k;
     for (k = 0; k < osoptions->solverName.length(); k++)
     {
@@ -461,7 +465,6 @@ int main(int argC, const char* argV[])
     fileUtil = new FileUtil();
     try
     {
-        //if(osoptions->insListFile != "") osoptions->insList = fileUtil->getFileAsChar( (osoptions->insListFile).c_str() );
         if (osoptions->osolFile != "")
         {
 
@@ -485,14 +488,9 @@ int main(int argC, const char* argV[])
          }
          */
 
-        //if(osoptions->osplInputFile != "") osoptions->osplInput = fileUtil->getFileAsChar( (osoptions->osplInputFile).c_str()  );
         if (osoptions->osplInputFile != "")
             osoptions->osplInput = fileUtil->getFileAsString(
                                        (osoptions->osplInputFile).c_str());
-        //if(osoptions->osplOutputFile != "") osoptions->osplOutput = fileUtil->getFileAsChar( (osoptions->osplOutputFile).c_str() );
-//        if (osoptions->osplOutputFile != "")
-//            osoptions->osplOutput = fileUtil->getFileAsString(
-//                                        (osoptions->osplOutputFile).c_str());
     }
     catch (const ErrorClass& eclass)
     {
@@ -580,7 +578,12 @@ int main(int argC, const char* argV[])
     delete fileUtil;
     fileUtil = NULL;
     return 0;
-}
+}// end of main()
+
+
+/** Next we have implementations of the six service methods
+ *  solve, send, retrieve, knock, kill, getJobID
+ */
 
 void solve()
 {
@@ -588,7 +591,7 @@ void solve()
     OSiLReader *osilreader = NULL;
     OSmps2osil *mps2osil = NULL;
 #ifdef COIN_HAS_ASL
-    OSnl2osil *nl2osil = NULL;
+    OSnl2OS *nl2os = NULL;
 #endif
 #ifdef COIN_HAS_GAMSUTILS
     OSgams2osil *gams2osil = NULL;
@@ -670,6 +673,7 @@ void solve()
         else    // solve locally
         {
             OSInstance *osinstance;
+            OSOption   *osoption = NULL;
             if (osoptions->osil != "")
             {
                 osilreader = new OSiLReader();                
@@ -681,9 +685,25 @@ void solve()
                 if (osoptions->nlFile != "")
                 {
 #ifdef COIN_HAS_ASL
-                    nl2osil = new OSnl2osil( osoptions->nlFile);
-                    nl2osil->createOSInstance();
-                    osinstance = nl2osil->osinstance;
+                    nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+                    nl2os->createOSObjects();
+                    osinstance = nl2os->osinstance;
+                    if (nl2os->osoption != NULL)
+                    {
+                        osoption   = nl2os->osoption;
+                        //write out the options
+                        OSoLWriter *osolwriter = NULL;
+                        osolwriter = new OSoLWriter();
+                        //osolwriter->m_bWhiteSpace = true;
+                        std::string sModelOptionName = "modelOptions.osol";
+                        if (fileUtil == NULL) fileUtil = new FileUtil();
+                        fileUtil->writeFileFromString(sModelOptionName,  osolwriter->writeOSoL( osoption) );
+                        delete fileUtil;
+                        fileUtil = NULL;
+                        delete  osolwriter;
+                        osolwriter = NULL;
+                    }
+
 #else
                     throw ErrorClass(
                         "nl file specified locally but ASL not present");
@@ -758,8 +778,8 @@ void solve()
             delete mps2osil;
         mps2osil = NULL;
 #ifdef COIN_HAS_ASL
-        if(nl2osil != NULL) delete nl2osil;
-        nl2osil = NULL;
+        if(nl2os != NULL) delete nl2os;
+        nl2os = NULL;
 #endif
 #ifdef COIN_HAS_GAMSUTILS
         if(gams2osil != NULL) delete gams2osil;
@@ -826,8 +846,8 @@ void solve()
             delete mps2osil;
         mps2osil = NULL;
 #ifdef COIN_HAS_ASL
-        if(nl2osil != NULL) delete nl2osil;
-        nl2osil = NULL;
+        if(nl2os != NULL) delete nl2os;
+        nl2os = NULL;
 #endif
 #ifdef COIN_HAS_GAMSUTILS
         if(gams2osil != NULL) delete gams2osil;
@@ -837,7 +857,7 @@ void solve()
         fileUtil = NULL;
     }//end local catch
 
-}//end solve
+}//end solve 
 
 void getJobID()
 {
@@ -992,6 +1012,8 @@ void knock()
 void send()
 {
     bool bSend = false;
+
+
     OSSolverAgent* osagent = NULL;
     try
     {
@@ -1248,6 +1270,7 @@ void kill()
     }
     catch (const ErrorClass& eclass)
     {
+
         std::string osrl = "";
         OSResult *osresult = NULL;
         OSrLWriter *osrlwriter = NULL;
@@ -1285,21 +1308,25 @@ void kill()
     }
 }//end kill
 
+/** Some wrappers around routines that allow getting problem instances in other formats:
+ *  .nl (from AMPL), GAMS, MPS format
+ */
+
 void getOSiLFromNl()
 {
     try
     {
 #ifdef COIN_HAS_ASL
-        OSnl2osil *nl2osil = NULL;
-        nl2osil = new OSnl2osil( osoptions->nlFile);
-        nl2osil->createOSInstance();
+        OSnl2OS *nl2os = NULL;
+        nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+        nl2os->createOSObjects();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
         std::string osil;
-        osil = osilwriter->writeOSiL( nl2osil->osinstance);
+        osil = osilwriter->writeOSiL( nl2os->osinstance);
         osoptions->osil = osil;
-        delete nl2osil;
-        nl2osil = NULL;
+        delete nl2os;
+        nl2os = NULL;
         delete osilwriter;
         osilwriter = NULL;
 #else
@@ -1369,6 +1396,8 @@ void getOSiLFromMps()
     }
 
 }//getOSiLFromMps
+
+/** Interactive shell **/
 
 void interactiveShell()
 {
@@ -2310,12 +2339,12 @@ void doPrintModel(osOptionsStruc *osoptions)
 		else if (osoptions->nl != "")
 		{
 #ifdef COIN_HAS_ASL
-			OSnl2osil *nl2osil;	
-			nl2osil = new OSnl2osil( osoptions->nlFile);
-			nl2osil->createOSInstance();
-			std::cout << nl2osil->osinstance->printModel() << std::endl;
-			delete nl2osil;
-			nl2osil = NULL;
+			OSnl2OS *nl2os;	
+			nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+			nl2os->createOSObjects();
+			std::cout << nl2os->osinstance->printModel() << std::endl;
+			delete nl2os;
+			nl2os = NULL;
 #else
 			std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif
@@ -2380,12 +2409,12 @@ void doPrintRow(osOptionsStruc *osoptions)
 			else if (osoptions->nl != "")
 			{
 #ifdef COIN_HAS_ASL
-				OSnl2osil *nl2osil;	
-				nl2osil = new OSnl2osil( osoptions->nlFile);
-				nl2osil->createOSInstance();
-				std::cout << nl2osil->osinstance->printModel(rownumber) << std::endl;
-				delete nl2osil;
-				nl2osil = NULL;
+				OSnl2OS *nl2os;	
+				nl2os = new OSnl2OS(osoptions->nlFile, osoptions->osol);
+				nl2os->createOSObjects();
+				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
+				delete nl2os;
+				nl2os = NULL;
 #else
 				std::cout << "no ASL present to read nl file; print command ignored" << std::endl; 
 #endif

@@ -2803,6 +2803,9 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
                 {
                     int i,j,k;
 
+
+
+
                     int num_var;
                     num_var = this->getNumberOfInitVarValues();
 
@@ -3009,6 +3012,8 @@ int* OSOption::getVariableInitialBasisStatusDense(int numberOfVariables)
         if (this->optimization->variables->initialBasisStatus->atUpper != NULL)
         {
             num_var = this->optimization->variables->initialBasisStatus->atUpper->numberOfEl;
+
+
 
             for (i = 0; i < num_var; i++)
             {
@@ -3320,7 +3325,6 @@ std::vector<OtherVariableOption*>  OSOption::getOtherVariableOptions( std::strin
     return optionsVector;
 }//getOtherVariableOptions
 
-
 /**
  * get the array of all other variable options
  * @return an array of other variable options associated with this solver
@@ -3339,6 +3343,32 @@ OtherVariableOption** OSOption::getAllOtherVariableOptions()
         throw ErrorClass("<optimization> object must be defined before getting the data");
     return optionsVector;
 }//getAllOtherVariableOptions
+
+/**
+ * Get one particular <other> variable option from the array of options
+ * <p>
+ *
+ * @param optionNumber is the index of the option in the array
+ * @return a pointer to one OtherVariableOption object
+ */
+OtherVariableOption* OSOption::getOtherVariableOption(int optionNumber)
+{
+    if (this->optimization != NULL)
+    {
+        if (this->optimization->variables != NULL)
+        {
+            int num_options;
+            num_options = this->getNumberOfOtherVariableOptions();
+            if (optionNumber < 0 || optionNumber >= num_options)
+                throw ErrorClass("optionNumber not in legal range");
+            return this->optimization->variables->other[optionNumber];
+        }
+        else
+            throw ErrorClass("<variables> object must be defined before getting the data");
+    }
+    else
+        throw ErrorClass("<optimization> object must be defined before getting the data");
+}//getOtherVariableOptions
 
 /**
  * get the list of initial objective values in sparse form
@@ -3850,6 +3880,7 @@ int* OSOption::getObjectiveInitialBasisStatusDense(int numberOfObjectives)
     catch(const ErrorClass& eclass)
     {
         throw ErrorClass(eclass.errormsg);
+
     }
     return NULL;
 }//getVariableInitialBasisStatusDense
@@ -3883,6 +3914,32 @@ std::vector<OtherObjectiveOption*>  OSOption::getOtherObjectiveOptions( std::str
         throw ErrorClass("<optimization> object must be defined before getting the data");
     return optionsVector;
 }//getOtherObjectiveOptions
+
+/**
+ * Get one particular <other> objective option from the array of options
+ * <p>
+ *
+ * @param optionNumber is the index of the option in the array
+ * @return a pointer to one OtherObjectiveOption object
+ */
+OtherObjectiveOption* OSOption::getOtherObjectiveOption(int optionNumber)
+{
+    if (this->optimization != NULL)
+    {
+        if (this->optimization->objectives != NULL)
+        {
+            int num_options;
+            num_options = this->getNumberOfOtherObjectiveOptions();
+            if (optionNumber < 0 || optionNumber >= num_options)
+                throw ErrorClass("optionNumber not in legal range");
+            return this->optimization->objectives->other[optionNumber];
+        }
+        else
+            throw ErrorClass("<objectives> object must be defined before getting the data");
+    }
+    else
+        throw ErrorClass("<optimization> object must be defined before getting the data");
+}//getOtherObjectiveOption
 
 /**
  * get the array of all other objective options
@@ -4071,6 +4128,7 @@ double* OSOption::getInitDualVarLowerBoundsDense()
             {
                 if (this->optimization->constraints->initialDualValues != NULL)
                 {
+
                     int i,j,k;
 
                     int num_con;
@@ -4405,6 +4463,32 @@ OtherConstraintOption** OSOption::getAllOtherConstraintOptions()
         throw ErrorClass("<optimization> object must be defined before getting the data");
     return optionsVector;
 }//getAllOtherConstraintOptions
+
+/**
+ * Get one particular <other> constraint option from the array of options
+ * <p>
+ *
+ * @param optionNumber is the index of the option in the array
+ * @return a pointer to one OtherConstraintOption object
+ */
+OtherConstraintOption* OSOption::getOtherConstraintOption(int optionNumber)
+{
+    if (this->optimization != NULL)
+    {
+        if (this->optimization->constraints != NULL)
+        {
+            int num_options;
+            num_options = this->getNumberOfOtherConstraintOptions();
+            if (optionNumber < 0 || optionNumber >= num_options)
+                throw ErrorClass("optionNumber not in legal range");
+            return this->optimization->constraints->other[optionNumber];
+        }
+        else
+            throw ErrorClass("<constraints> object must be defined before getting the data");
+    }
+    else
+        throw ErrorClass("<optimization> object must be defined before getting the data");
+}//getOtherConstraintOption
 
 
 /**
@@ -4952,6 +5036,58 @@ bool InitVariableValues::setVar(int numberOfVar, InitVarValue **var)
  *
  * A function to set an array of <var> elements
  * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements that are to be set
+ * @param disp: method of disposition if previous data exist
+ */
+bool InitVariableValues::setVar(int numberOfVar, InitVarValue **var, ENUM_COMBINE_ARRAYS disp)
+{
+    try
+    {
+        if (this->var != NULL)
+        {
+            if (disp == ENUM_COMBINE_ARRAYS_throw)
+                throw ErrorClass( "InitVarValue array previously used.");
+            if (disp == ENUM_COMBINE_ARRAYS_ignore)
+                return true;
+            if (disp == ENUM_COMBINE_ARRAYS_merge)
+                return this->addVar(numberOfVar, var);
+
+            //here we replace the old data
+            for (int i = 0; i < this->numberOfVar; i++)
+                delete this->var[i];
+            delete [] this->var;
+            this->var = NULL;
+        }
+
+        if (numberOfVar < 0)
+            throw ErrorClass( "length of var array cannot be negative.");
+
+        this->numberOfVar = numberOfVar;
+        if (numberOfVar == 0)
+            return true;
+
+        this->var = new InitVarValue*[numberOfVar];
+
+        int  i;
+        for (i = 0; i < numberOfVar; i++)
+        {
+            this->var[i] = new InitVarValue();
+           *this->var[i] = *var[i];
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//setVar
+
+
+/**
+ *
+ * A function to set an array of <var> elements
+ * @param numberOfVar: number of <var> elements to be set
  * @param idx: the array of indices for the elements that are to be set
  * @param value: the array of the corresponding values
  * @param name: the array of the corresponding names
@@ -4980,7 +5116,6 @@ bool InitVariableValues::setVar(int numberOfVar, int *idx, double *value, std::s
     }
     return true;
 }//setVar
-
 
 /**
  *
@@ -5016,6 +5151,45 @@ bool InitVariableValues::addVar(int idx, double value)
 
         this->var = temp;   //hook the new pointers into the data structure
         this->numberOfVar = ++nopt;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//addVar
+
+/**
+ * A function to add several <var> elements
+ * @param numberOfVar: number of <var> elements to be added
+ * @param var: the array of <var> elements that are to be added
+ */
+bool InitVariableValues::addVar(int numberOfVar, InitVarValue **var)
+{
+    try
+    {
+        if (numberOfVar < 0)
+            throw ErrorClass( "length of var array cannot be negative.");
+
+        if (numberOfVar == 0)
+            return true;
+
+	int nprev = this->numberOfVar;
+
+        InitVarValue** temp = new InitVarValue*[nprev+numberOfVar];  //Allocate the new pointers
+        for (int i = 0; i < nprev; i++)
+            temp[i] = this->var[i];  //copy the pointers
+
+        delete[] this->var; //delete old pointers
+
+//	add in the new elements
+	for (int i=0; i < numberOfVar; i++)
+	        temp[ nprev+i] = var[i];
+
+        this->var = temp;   //hook the new pointers into the data structure
+       	this->numberOfVar = nprev + numberOfVar;
 
         return true;
     }
@@ -5063,6 +5237,55 @@ bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var)
     }
 }//setVar
 
+/**
+ *
+ * A function to set an array of <var> elements
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements that are to be set
+ */
+bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var, ENUM_COMBINE_ARRAYS disp)
+{
+    try
+    {
+        if (this->var != NULL)
+        {
+            if (disp == ENUM_COMBINE_ARRAYS_throw)
+                throw ErrorClass( "InitVarValueString array previously used.");
+            if (disp == ENUM_COMBINE_ARRAYS_ignore)
+                return true;
+            if (disp == ENUM_COMBINE_ARRAYS_merge)
+                return this->addVar(numberOfVar, var);
+
+            //here we replace the old data
+            for (int i = 0; i < this->numberOfVar; i++)
+                delete this->var[i];
+            delete [] this->var;
+            this->var = NULL;
+		}			
+			
+        if (numberOfVar < 0)
+            throw ErrorClass( "length of var array cannot be negative.");
+
+        this->numberOfVar = numberOfVar;
+        if (numberOfVar == 0)
+            return true;
+
+        this->var = new InitVarValueString*[numberOfVar];
+
+        int  i;
+        for (i = 0; i < numberOfVar; i++)
+        {
+            this->var[i] = new InitVarValueString();
+            *this->var[i] = *var[i];
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//setVar
 
 /**
  *
@@ -5076,6 +5299,7 @@ bool InitVariableValuesString::setVar(int numberOfVar, int *idx, std::string *va
 {
     if (this->var != NULL)
         return false;
+
 
     if (numberOfVar < 0)
         return false;
@@ -5131,6 +5355,46 @@ bool InitVariableValuesString::addVar(int idx, std::string value)
 
         this->var = temp;   //hook the new pointers into the data structure
         this->numberOfVar = ++nopt;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//addVar
+
+/**
+ *
+ * A function to add several <var> elements
+ * @param numberOfVar: number of <var> elements to be added
+ * @param var: the array of <var> elements that are to be added
+ */
+bool InitVariableValuesString::addVar(int numberOfVar, InitVarValueString **var)
+{
+    try
+    {
+        if (numberOfVar < 0)
+            throw ErrorClass( "length of var array cannot be negative.");
+
+        if (numberOfVar == 0)
+            return true;
+
+	int nprev = this->numberOfVar;
+
+        InitVarValueString** temp = new InitVarValueString*[nprev+numberOfVar];  //Allocate the new pointers
+        for (int i = 0; i < nprev; i++)
+            temp[i] = this->var[i];  //copy the pointers
+
+        delete[] this->var; //delete old pointers
+
+//	add in the new elements
+	for (int i=0; i < numberOfVar; i++)
+	        temp[ nprev+i] = var[i];
+
+        this->var = temp;   //hook the new pointers into the data structure
+       	this->numberOfVar = nprev + numberOfVar;
 
         return true;
     }
@@ -5262,6 +5526,55 @@ bool IntegerVariableBranchingWeights::setVar(int numberOfVar, BranchingWeight **
     }
 }//setVar
 
+/**
+ *
+ * A function to set an array of <var> elements
+ * @param numberOfVar: number of <var> elements to be set
+ * @param var: the array of <var> elements to be that are to be set
+ */
+bool IntegerVariableBranchingWeights::setVar(int numberOfVar, BranchingWeight **var, ENUM_COMBINE_ARRAYS disp)
+{
+    try
+    {
+        if (this->var != NULL)
+        {
+            if (disp == ENUM_COMBINE_ARRAYS_throw)
+                throw ErrorClass( "BranchingWeight array previously used.");
+            if (disp == ENUM_COMBINE_ARRAYS_ignore)
+                return true;
+            if (disp == ENUM_COMBINE_ARRAYS_merge)
+                return this->addVar(numberOfVar, var);
+
+            //here we replace the old data
+            for (int i = 0; i < this->numberOfVar; i++)
+                delete this->var[i];
+            delete [] this->var;
+            this->var = NULL;
+        }
+
+        if (numberOfVar < 0)
+            throw ErrorClass( "length of var array cannot be negative.");
+
+        this->numberOfVar = numberOfVar;
+        if (numberOfVar == 0)
+            return true;
+
+        this->var = new BranchingWeight*[numberOfVar];
+
+        int  i;
+        for (i = 0; i < numberOfVar; i++)
+        {
+            this->var[i] = new BranchingWeight();
+           *this->var[i] = *var[i];
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//setVar
 
 /**
  *
@@ -5333,6 +5646,45 @@ bool IntegerVariableBranchingWeights::addVar(int idx, double value)
 
         this->var = temp;   //hook the new pointers into the data structure
         this->numberOfVar = ++nopt;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//addVar
+
+/**
+ * A function to add several <var> elements
+ * @param numberOfVar: number of <var> elements to be added
+ * @param var: the array of <var> elements that are to be added
+ */
+bool IntegerVariableBranchingWeights::addVar(int numberOfVar, BranchingWeight **var)
+{
+    try
+    {
+        if (numberOfVar < 0)
+            throw ErrorClass( "length of var array cannot be negative.");
+
+        if (numberOfVar == 0)
+            return true;
+
+	int nprev = this->numberOfVar;
+
+        BranchingWeight** temp = new BranchingWeight*[nprev+numberOfVar];  //Allocate the new pointers
+        for (int i = 0; i < nprev; i++)
+            temp[i] = this->var[i];  //copy the pointers
+
+        delete[] this->var; //delete old pointers
+
+//	add in the new elements
+	for (int i=0; i < numberOfVar; i++)
+	        temp[ nprev+i] = var[i];
+
+        this->var = temp;   //hook the new pointers into the data structure
+       	this->numberOfVar = nprev + numberOfVar;
 
         return true;
     }
@@ -5796,6 +6148,57 @@ bool InitObjectiveValues::setObj(int numberOfObj, InitObjValue **obj)
     }
 }//setObj
 
+/**
+ *
+ * A function to set an array of <obj> elements
+ * @param numberOfObj: number of <obj> elements to be set
+ * @param obj: the array of <obj> elements that are to be set
+ * @param disp: method of disposition if previous data exist
+ */
+bool InitObjectiveValues::setObj(int numberOfObj, InitObjValue **obj, ENUM_COMBINE_ARRAYS disp)
+{
+    try
+    {
+        if (this->obj != NULL)
+        {
+            if (disp == ENUM_COMBINE_ARRAYS_throw)
+                throw ErrorClass( "InitObjValue array previously used.");
+            if (disp == ENUM_COMBINE_ARRAYS_ignore)
+                return true;
+            if (disp == ENUM_COMBINE_ARRAYS_merge)
+                return this->addObj(numberOfObj, obj);
+
+            //here we replace the old data
+            for (int i = 0; i < this->numberOfObj; i++)
+                delete this->obj[i];
+            delete [] this->obj;
+            this->obj = NULL;
+        }
+
+        if (numberOfObj < 0)
+            throw ErrorClass( "length of obj array cannot be negative.");
+
+        this->numberOfObj = numberOfObj;
+        if (numberOfObj == 0)
+            return true;
+
+        this->obj = new InitObjValue*[numberOfObj];
+
+        int  i;
+        for (i = 0; i < numberOfObj; i++)
+        {
+            this->obj[i] = new InitObjValue();
+           *this->obj[i] = *obj[i];
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//setObj
+
 bool InitObjectiveValues::setObj(int numberOfObj, int *idx, double *value, std::string *name)
 {
     if (this->obj != NULL) return false;
@@ -5864,6 +6267,45 @@ bool InitObjectiveValues::addObj(int idx, double value)
 }//addObj
 
 /**
+ * A function to add several <obj> elements
+ * @param numberOfVar: number of <obj> elements to be added
+ * @param obj: the array of <obj> elements that are to be added
+ */
+bool InitObjectiveValues::addObj(int numberOfObj, InitObjValue **obj)
+{
+    try
+    {
+        if (numberOfObj < 0)
+            throw ErrorClass( "length of obj array cannot be negative.");
+
+        if (numberOfObj == 0)
+            return true;
+
+	int nprev = this->numberOfObj;
+
+        InitObjValue** temp = new InitObjValue*[nprev+numberOfObj];  //Allocate the new pointers
+        for (int i = 0; i < nprev; i++)
+            temp[i] = this->obj[i];  //copy the pointers
+
+        delete[] this->obj; //delete old pointers
+
+//	add in the new elements
+	for (int i=0; i < numberOfObj; i++)
+	        temp[ nprev+i] = obj[i];
+
+        this->obj = temp;   //hook the new pointers into the data structure
+       	this->numberOfObj = nprev + numberOfObj;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//addObj
+
+/**
  *
  * A function to set an array of <obj> elements
  * @param numberOfObj: number of <obj> elements to be set
@@ -5890,6 +6332,57 @@ bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj)
         {
             this->obj[i] = new InitObjBound();
             *this->obj[i] = *obj[i];
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//setObj
+
+/**
+ *
+ * A function to set an array of <obj> elements
+ * @param numberOfObj: number of <obj> elements to be set
+ * @param obj: the array of <obj> elements that are to be set
+ * @param disp: method of disposition if previous data exist
+*/
+bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj, ENUM_COMBINE_ARRAYS disp)
+{
+    try
+    {
+        if (this->obj != NULL)
+        {
+            if (disp == ENUM_COMBINE_ARRAYS_throw)
+                throw ErrorClass( "InitObjBound array previously used.");
+            if (disp == ENUM_COMBINE_ARRAYS_ignore)
+                return true;
+            if (disp == ENUM_COMBINE_ARRAYS_merge)
+                return this->addObj(numberOfObj, obj);
+
+            //here we replace the old data
+            for (int i = 0; i < this->numberOfObj; i++)
+                delete this->obj[i];
+            delete [] this->obj;
+            this->obj = NULL;
+        }
+
+        if (numberOfObj < 0)
+            throw ErrorClass( "length of obj array cannot be negative.");
+
+        this->numberOfObj = numberOfObj;
+        if (numberOfObj == 0)
+            return true;
+
+        this->obj = new InitObjBound*[numberOfObj];
+
+        int  i;
+        for (i = 0; i < numberOfObj; i++)
+        {
+            this->obj[i] = new InitObjBound();
+           *this->obj[i] = *obj[i];
         }
         return true;
     }
@@ -5963,6 +6456,45 @@ bool InitObjectiveBounds::addObj(int idx, double lbValue, double ubValue)
 
         this->obj = temp;   //hook the new pointers into the data structure
         this->numberOfObj = ++nopt;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//addObj
+
+/**
+ * A function to add several <obj> elements
+ * @param numberOfVar: number of <obj> elements to be added
+ * @param obj: the array of <obj> elements that are to be added
+ */
+bool InitObjectiveBounds::addObj(int numberOfObj, InitObjBound **obj)
+{
+    try
+    {
+        if (numberOfObj < 0)
+            throw ErrorClass( "length of obj array cannot be negative.");
+
+        if (numberOfObj == 0)
+            return true;
+
+	int nprev = this->numberOfObj;
+
+        InitObjBound** temp = new InitObjBound*[nprev+numberOfObj];  //Allocate the new pointers
+        for (int i = 0; i < nprev; i++)
+            temp[i] = this->obj[i];  //copy the pointers
+
+        delete[] this->obj; //delete old pointers
+
+//	add in the new elements
+	for (int i=0; i < numberOfObj; i++)
+	        temp[ nprev+i] = obj[i];
+
+        this->obj = temp;   //hook the new pointers into the data structure
+       	this->numberOfObj = nprev + numberOfObj;
 
         return true;
     }
@@ -6243,6 +6775,58 @@ bool InitConstraintValues::setCon(int numberOfCon, InitConValue **con)
     }
 }//setCon
 
+/**
+ *
+ * A function to set an array of <con> elements
+ * @param numberOfCon: number of <con> elements to be set
+ * @param con: the array of <con> elements that are to be set
+ * @param disp: method of disposition if previous data exist
+ */
+bool InitConstraintValues::setCon(int numberOfCon, InitConValue **con, ENUM_COMBINE_ARRAYS disp)
+{
+    try
+    {
+        if (this->con != NULL)
+        {
+            if (disp == ENUM_COMBINE_ARRAYS_throw)
+                throw ErrorClass( "InitConValue array previously used.");
+            if (disp == ENUM_COMBINE_ARRAYS_ignore)
+                return true;
+            if (disp == ENUM_COMBINE_ARRAYS_merge)
+                return this->addCon(numberOfCon, con);
+
+            //here we replace the old data
+            for (int i = 0; i < this->numberOfCon; i++)
+                delete this->con[i];
+            delete [] this->con;
+            this->con = NULL;
+        }
+
+        if (numberOfCon < 0)
+            throw ErrorClass( "length of con array cannot be negative.");
+
+        this->numberOfCon = numberOfCon;
+        if (numberOfCon == 0)
+            return true;
+
+        this->con = new InitConValue*[numberOfCon];
+
+        int  i;
+        for (i = 0; i < numberOfCon; i++)
+        {
+            this->con[i] = new InitConValue();
+           *this->con[i] = *con[i];
+        }
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//setCon
+
 bool InitConstraintValues::setCon(int numberOfCon, int *idx, double *value, std::string *name)
 {
     if (this->con != NULL)
@@ -6315,6 +6899,46 @@ bool InitConstraintValues::addCon(int idx, double value)
 }//addCon
 
 /**
+ * A function to add several <con> elements
+ * @param numberOfVar: number of <con> elements to be added
+ * @param con: the array of <con> elements that are to be added
+ */
+bool InitConstraintValues::addCon(int numberOfCon, InitConValue **con)
+{
+    try
+    {
+        if (numberOfCon < 0)
+            throw ErrorClass( "length of con array cannot be negative.");
+
+        if (numberOfCon == 0)
+            return true;
+
+	int nprev = this->numberOfCon;
+
+        InitConValue** temp = new InitConValue*[nprev+numberOfCon];  //Allocate the new pointers
+        for (int i = 0; i < nprev; i++)
+            temp[i] = this->con[i];  //copy the pointers
+
+        delete[] this->con; //delete old pointers
+
+//	add in the new elements
+	for (int i=0; i < numberOfCon; i++)
+	        temp[ nprev+i] = con[i];
+
+        this->con = temp;   //hook the new pointers into the data structure
+       	this->numberOfCon = nprev + numberOfCon;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//addCon
+
+
+/**
  *
  * A function to set an array of <con> elements
  * @param numberOfCon: number of <con> elements to be set
@@ -6341,6 +6965,56 @@ bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con)
         {
             this->con[i] = new InitDualVarValue();
             *this->con[i] = *con[i];
+        }
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//setCon
+/**
+ *
+ * A function to set an array of <con> elements
+ * @param numberOfCon: number of <con> elements to be set
+ * @param con: the array of <con> elements that are to be set
+ * @param disp: method of disposition if previous data exist
+ */
+bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con, ENUM_COMBINE_ARRAYS disp)
+{
+    try
+    {
+        if (this->con != NULL)
+        {
+            if (disp == ENUM_COMBINE_ARRAYS_throw)
+                throw ErrorClass( "InitDualVarValue array previously used.");
+            if (disp == ENUM_COMBINE_ARRAYS_ignore)
+                return true;
+            if (disp == ENUM_COMBINE_ARRAYS_merge)
+                return this->addCon(numberOfCon, con);
+
+            //here we replace the old data
+            for (int i = 0; i < this->numberOfCon; i++)
+                delete this->con[i];
+            delete [] this->con;
+            this->con = NULL;
+        }
+
+        if (numberOfCon < 0)
+            throw ErrorClass( "length of con array cannot be negative.");
+
+        this->numberOfCon = numberOfCon;
+        if (numberOfCon == 0)
+            return true;
+
+        this->con = new InitDualVarValue*[numberOfCon];
+
+        int  i;
+        for (i = 0; i < numberOfCon; i++)
+        {
+            this->con[i] = new InitDualVarValue();
+           *this->con[i] = *con[i];
         }
         return true;
     }
@@ -6414,6 +7088,45 @@ bool InitDualVariableValues::addCon(int idx, double lbDualValue, double ubDualVa
 
         this->con = temp;   //hook the new pointers into the data structure
         this->numberOfCon = ++nopt;
+
+        return true;
+    }
+    catch(const ErrorClass& eclass)
+    {
+        cout << eclass.errormsg << endl;
+        return false;
+    }
+}//addCon
+
+/**
+ * A function to add several <con> elements
+ * @param numberOfVar: number of <con> elements to be added
+ * @param con: the array of <con> elements that are to be added
+ */
+bool InitDualVariableValues::addCon(int numberOfCon, InitDualVarValue **con)
+{
+    try
+    {
+        if (numberOfCon < 0)
+            throw ErrorClass( "length of con array cannot be negative.");
+
+        if (numberOfCon == 0)
+            return true;
+
+	int nprev = this->numberOfCon;
+
+        InitDualVarValue** temp = new InitDualVarValue*[nprev+numberOfCon];  //Allocate the new pointers
+        for (int i = 0; i < nprev; i++)
+            temp[i] = this->con[i];  //copy the pointers
+
+        delete[] this->con; //delete old pointers
+
+//	add in the new elements
+	for (int i=0; i < numberOfCon; i++)
+	        temp[ nprev+i] = con[i];
+
+        this->con = temp;   //hook the new pointers into the data structure
+       	this->numberOfCon = nprev + numberOfCon;
 
         return true;
     }
@@ -6708,6 +7421,7 @@ bool SolverOptions::setSolverOptions(int numberOfOptions, SolverOption **solverO
         return false;
     }
 }//setSolverOption
+
 
 /**
  *
@@ -7228,6 +7942,7 @@ bool OSOption::setMaxTime(double value, std::string unit)
 
     if (this->job == NULL)
         this->job = new JobOption();
+
     if (this->job->maxTime == NULL)
         this->job->maxTime = new TimeSpan();
     this->job->maxTime->value = value;
@@ -7634,7 +8349,6 @@ bool OSOption::setInitVarValues(int numberOfVar, int* idx, double* value, std::s
     return this->optimization->variables->initialVariableValues->setVar(numberOfVar, idx, value, name);
 }//setInitVarValues
 
-
 bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
 {
     if (this->optimization == NULL)
@@ -7652,6 +8366,17 @@ bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var)
         this->optimization->variables->initialVariableValues->var = NULL;
     }
     return this->optimization->variables->initialVariableValues->setVar(numberOfVar, var);
+}//setInitVarValuesSparse
+
+bool OSOption::setInitVarValuesSparse(int numberOfVar, InitVarValue** var, ENUM_COMBINE_ARRAYS disp)
+{
+    if (this->optimization == NULL)
+        this->optimization = new OptimizationOption();
+    if (this->optimization->variables == NULL)
+        this->optimization->variables = new VariableOption();
+    if (this->optimization->variables->initialVariableValues == NULL)
+        this->optimization->variables->initialVariableValues = new InitVariableValues();
+    return this->optimization->variables->initialVariableValues->setVar(numberOfVar, var, disp);
 }//setInitVarValuesSparse
 
 bool OSOption::setInitVarValuesDense(int numberOfVar, double *value)
@@ -7720,6 +8445,17 @@ bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString*
         this->optimization->variables->initialVariableValuesString->var = NULL;
     }
     return this->optimization->variables->initialVariableValuesString->setVar(numberOfVar, var);
+}//setInitVarValuesStringSparse
+
+bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString** var, ENUM_COMBINE_ARRAYS disp)
+{
+    if (this->optimization == NULL)
+        this->optimization = new OptimizationOption();
+    if (this->optimization->variables == NULL)
+        this->optimization->variables = new VariableOption();
+    if (this->optimization->variables->initialVariableValuesString == NULL)
+        this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
+    return this->optimization->variables->initialVariableValuesString->setVar(numberOfVar, var, disp);
 }//setInitVarValuesStringSparse
 
 bool OSOption::setInitVarValuesStringDense(int numberOfVar, std::string *value)
@@ -7878,6 +8614,17 @@ bool OSOption::setIntegerVariableBranchingWeightsSparse(int numberOfVar, Branchi
     return this->optimization->variables->integerVariableBranchingWeights->setVar(numberOfVar, var);
 }//setIntegerVariableBranchingWeightsSparse
 
+bool OSOption::setIntegerVariableBranchingWeightsSparse(int numberOfVar, BranchingWeight** var, ENUM_COMBINE_ARRAYS disp)
+{
+    if (this->optimization == NULL)
+        this->optimization = new OptimizationOption();
+    if (this->optimization->variables == NULL)
+        this->optimization->variables = new VariableOption();
+    if (this->optimization->variables->integerVariableBranchingWeights == NULL)
+        this->optimization->variables->integerVariableBranchingWeights = new IntegerVariableBranchingWeights();
+    return this->optimization->variables->integerVariableBranchingWeights->setVar(numberOfVar, var, disp);
+}//setIntegerVariableBranchingWeightsSparse
+
 bool OSOption::setIntegerVariableBranchingWeightsDense(int numberOfVar, double *value)
 {
     if (this->optimization == NULL)
@@ -7945,7 +8692,8 @@ bool OSOption::setAnotherSOSVariableBranchingWeight(int sosIdx, int nvar, double
 
 bool OSOption::setNumberOfOtherVariableOptions(int numberOfOther)
 {
-    if (optimization == NULL) return false;
+    if (optimization == NULL) 
+	optimization = new OptimizationOption();
     if (optimization->variables == NULL)
         optimization->variables = new VariableOption();
     if(optimization->variables->numberOfOtherVariableOptions < 0) return false;
@@ -8142,6 +8890,17 @@ bool OSOption::setInitObjValuesSparse(int numberOfObj, InitObjValue** obj)
     return this->optimization->objectives->initialObjectiveValues->setObj(numberOfObj, obj);
 }//setInitObjValuesSparse
 
+bool OSOption::setInitObjValuesSparse(int numberOfObj, InitObjValue** obj, ENUM_COMBINE_ARRAYS disp)
+{
+    if (this->optimization == NULL)
+        this->optimization = new OptimizationOption();
+    if (this->optimization->objectives == NULL)
+        this->optimization->objectives = new ObjectiveOption();
+    if (this->optimization->objectives->initialObjectiveValues == NULL)
+        this->optimization->objectives->initialObjectiveValues = new InitObjectiveValues();
+    return this->optimization->objectives->initialObjectiveValues->setObj(numberOfObj, obj, disp);
+}//setInitObjValuesSparse
+
 bool OSOption::setInitObjValuesDense(int numberOfObj, double *value)
 {
     if (this->optimization == NULL)
@@ -8207,6 +8966,17 @@ bool OSOption::setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj)
         this->optimization->objectives->initialObjectiveBounds->obj = NULL;
     }
     return this->optimization->objectives->initialObjectiveBounds->setObj(numberOfObj, obj);
+}//setInitObjBoundsSparse
+
+bool OSOption::setInitObjBoundsSparse(int numberOfObj, InitObjBound** obj, ENUM_COMBINE_ARRAYS disp)
+{
+    if (this->optimization == NULL)
+        this->optimization = new OptimizationOption();
+    if (this->optimization->objectives == NULL)
+        this->optimization->objectives = new ObjectiveOption();
+    if (this->optimization->objectives->initialObjectiveBounds == NULL)
+        this->optimization->objectives->initialObjectiveBounds = new InitObjectiveBounds();
+    return this->optimization->objectives->initialObjectiveBounds->setObj(numberOfObj, obj, disp);
 }//setInitObjBoundsSparse
 
 bool OSOption::setInitObjBoundsDense(int numberOfObj, double* lb, double* ub)
@@ -8383,6 +9153,17 @@ bool OSOption::setInitConValuesSparse(int numberOfCon, InitConValue** con)
     return this->optimization->constraints->initialConstraintValues->setCon(numberOfCon, con);
 }//setInitConValuesSparse
 
+bool OSOption::setInitConValuesSparse(int numberOfCon, InitConValue** con, ENUM_COMBINE_ARRAYS disp)
+{
+    if (this->optimization == NULL)
+        this->optimization = new OptimizationOption();
+    if (this->optimization->constraints == NULL)
+        this->optimization->constraints = new ConstraintOption();
+    if (this->optimization->constraints->initialConstraintValues == NULL)
+        this->optimization->constraints->initialConstraintValues = new InitConstraintValues();
+    return this->optimization->constraints->initialConstraintValues->setCon(numberOfCon, con, disp);
+}//setInitConValuesSparse
+
 bool OSOption::setInitConValuesDense(int numberOfCon, double *value)
 {
     if (this->optimization == NULL)
@@ -8431,7 +9212,6 @@ bool OSOption::setInitDualValues(int numberOfCon, int* idx, double* lbValue, dou
     return this->optimization->constraints->initialDualValues->setCon(numberOfCon, idx, lbValue, ubValue, name);
 }//setInitDualValues
 
-
 bool OSOption::setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con)
 {
     if (this->optimization == NULL)
@@ -8449,6 +9229,17 @@ bool OSOption::setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** co
         this->optimization->constraints->initialDualValues->con = NULL;
     }
     return this->optimization->constraints->initialDualValues->setCon(numberOfCon, con);
+}//setInitDualVarValuesSparse
+
+bool OSOption::setInitDualVarValuesSparse(int numberOfCon, InitDualVarValue** con, ENUM_COMBINE_ARRAYS disp)
+{
+    if (this->optimization == NULL)
+        this->optimization = new OptimizationOption();
+    if (this->optimization->constraints == NULL)
+        this->optimization->constraints = new ConstraintOption();
+    if (this->optimization->constraints->initialDualValues == NULL)
+        this->optimization->constraints->initialDualValues = new InitDualVariableValues();
+    return this->optimization->constraints->initialDualValues->setCon(numberOfCon, con, disp);
 }//setInitDualVarValuesSparse
 
 bool OSOption::setInitDualVarValuesDense(int numberOfCon, double* lb, double* ub)

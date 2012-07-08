@@ -26,8 +26,11 @@ libOSModelInterfaces_la_SOURCES = \
 	OSmps2osil.h 
 
 if COIN_HAS_ASL
-libOSModelInterfaces_la_SOURCES += OSnl2osil.cpp \
-	OSnl2osil.h
+libOSModelInterfaces_la_SOURCES += \
+	OSnl2osil.cpp \
+	OSnl2osil.h \
+	OSnl2OS.cpp \
+	OSnl2OS.h
 endif
 
 # should be another if
@@ -67,5 +70,6 @@ DEFAULT_INCLUDES = -I. -I`$(CYGPATH_W) $(srcdir)` -I..
 # and that therefore should be installed in 'include/coin'
 includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
-	 OSmps2osil.h \
-	 OSnl2osil.h
+	OSmps2osil.h \
+	OSnl2osil.h \
+	OSnl2OS.h
