@@ -10,7 +10,7 @@
 
 AC_PREREQ(2.59)
 
-AC_INIT([OS],[2.6.0],[os@list.coin-or.org])
+AC_INIT([OS],[2.6],[os@list.coin-or.org])
 
 AC_COPYRIGHT([
 Copyright 2006 International Business Machines and others.
@@ -36,7 +36,7 @@ AC_PREFIX_DEFAULT([`pwd`])
 AC_CANONICAL_BUILD
 
 # Initialise projectdir
-AC_COIN_PROJECTDIR_INIT(OS,12:0:6)
+AC_COIN_PROJECTDIR_INIT(OS)
 
 # Check if user wants to produce debugging code
 AC_COIN_DEBUG_COMPILE(OS)
