@@ -1,5 +1,5 @@
 
-\section{OS Protocols}\label{section:schemadescriptions}
+\division{OS Protocols}\label{section:schemadescriptions}
 
 The objective of OS is to provide a set of standards for representing optimization instances, results, solver options,
 and communication between clients and solvers in a distributed environment using Web Services.  These standards are
@@ -9,7 +9,7 @@ For a full description of all the schemas see  Ma \cite{junma2005}.  We briefly 
 to the current version of the OS project.
 
 
-\subsection{OSiL (Optimization Services instance Language)} \label{section:osilschema}
+\subdivision{OSiL (Optimization Services instance Language)} \label{section:osilschema}
 OSiL\index{OSiL|(} is
 an XML-based language for representing instances of large-scale
 optimization problems including linear programs, mixed-integer programs,
@@ -209,7 +209,7 @@ The nonlinear part of the problem is given in Figure~\ref{figure:roobjnlnode}.
 The complete OSiL representation can be found in the Appendix (Section~\ref{section:rosenbrockXML}).%
 \index{OSiL|)}
 
-\subsection{OSnL (Optimization Services nonlinear Language)} \label{section:osnlschema}
+\subdivision{OSnL (Optimization Services nonlinear Language)} \label{section:osnlschema}
 The OSnL\index{OSnL|(} schema is imported by the OSiL\index{OSiL} schema and is used 
 to represent the nonlinear part of an optimization instance. 
 This is explained in greater detail in \ifruncode the OS User's Manual\else Section~\ref{section:osexpressiontreeclass}\fi. Also refer to
@@ -222,7 +222,7 @@ $$
 \index{OSnL|)}
 
 
-\subsection{OSrL (Optimization Services result Language)} \label{section:osrlschema}
+\subdivision{OSrL (Optimization Services result Language)} \label{section:osrlschema}
 OSrL\index{OSrL|(} is an XML-based language for representing the solution of large-scale
 optimization problems including linear programs, mixed-integer programs,
 quadratic programs, and very general nonlinear programs.  An example solution (for the problem given in
@@ -279,7 +279,7 @@ quadratic programs, and very general nonlinear programs.  An example solution (f
 
 
 
-\subsection{OSoL (Optimization Services option Language)} \label{section:osolschema}
+\subdivision{OSoL (Optimization Services option Language)} \label{section:osolschema}
 OSoL\index{OSoL|(} is
 an XML-based language for representing options that get passed to an optimization solver or a hosted optimization
 solver Web service. It contains both standard options for generic services and extendable option tags for
@@ -287,7 +287,7 @@ solver-specific directives.
 Several examples of files in OSoL format are presented in Section~\ref{section:servicemethods}.%
 \index{OSoL|)}
 
-\subsection{OSpL (Optimization Services process Language)} \label{section:osplschema}
+\subdivision{OSpL (Optimization Services process Language)} \label{section:osplschema}
 \index{OSpL|(}This is a standard used to enquire about dynamic process information that 
 is kept by the Optimization Services registry. The string passed to the {\tt knock} 
 method is in the OSpL format. See the example given in Section~\ref{section:knock}.\index{OSpL|)}

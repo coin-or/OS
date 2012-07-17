@@ -1,4 +1,4 @@
-\section{Code samples to illustrate the OS Project}\label{section:examples}
+\division{Code samples to illustrate the OS Project}\label{section:examples}
 
 \ifdevelop
 These example executable files are not built by running {\tt configure} and {\tt make}. 
@@ -101,7 +101,7 @@ OS project libraries\index{makefile|)}.
 
 
 
-\subsection{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
+\subdivision{Algorithmic Differentiation:  Using the OS Algorithmic Differentiation Methods}\label{section:cppad}
 
 \index{Algorithmic differentiation|(}
 In the {\tt OS/examples/algorithmicDiff} folder is test code {\tt OSAlgorithmicDiffTest.cpp}. This code
@@ -110,7 +110,7 @@ algorithmic differentiation.   These methods are described in Section~\ref{secti
 
 
 
-\subsection{Instance Generator: Using the OSInstance API to Generate Instances}\label{section:exampleOSInstanceGeneration}
+\subdivision{Instance Generator: Using the OSInstance API to Generate Instances}\label{section:exampleOSInstanceGeneration}
 
 This example is found in the {\tt instanceGenerator} folder in the {\tt examples} folder. This example illustrates
 how to build a complete in-memory model instance using the {\tt OSInstance}\index{OSInstance@{\tt OSInstance}} API.
@@ -166,11 +166,11 @@ nlNodeVec[ 0]->createExpressionTreeFromPostfix( nlNodeVec);
 \end{verbatim}
 \index{Algorithmic differentiation|)}
 
-%\subsection{Excel:  Using VBA To Generate OSiL}\label{section:exampleExcel}
+%\subdivision{Excel:  Using VBA To Generate OSiL}\label{section:exampleExcel}
 
-%\subsection{Matlab:  Using  MATLAB To Generate OSiL}\label{section:exampleMatlab}
+%\subdivision{Matlab:  Using  MATLAB To Generate OSiL}\label{section:exampleMatlab}
 
-\subsection{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
+\subdivision{branchCutPrice:  Using Bcp}\label{section:examplebranchCutPrice}
 
 This example illustrates the use of the COIN-OR Bcp (Branch-cut-and-price) project.  
 This project offers the user with the ability to have control over each node in the branch and process. 
@@ -179,7 +179,7 @@ a call is made to the method {\tt process\_lp\_result()}. In the example problem
 2) a user-defined cut, and 3) a user-defined variable. 
 
 
-\subsection{OSModificationDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
+\subdivision{OSModificationDemo: Modifying an In-Memory {\tt OSInstance} Object}\label{section:exampleOSModDemo}
 
 The {\tt osModificationDemo} folder holds the file {\tt OSModificationDemo.cpp}.
 This is similar to the {\tt instanceGenerator} example. In this case, a simple
@@ -206,7 +206,7 @@ A better API for problem modification will come with a later release of OS.
 
 
 
-\subsection{OSSolverDemo: Building In-Memory Solver and Option Objects}\label{section:exampleOSSolverDemo}
+\subdivision{OSSolverDemo: Building In-Memory Solver and Option Objects}\label{section:exampleOSSolverDemo}
 
 The code in the  example file {\tt OSSolverDemo.cpp} in the folder {\tt osSolverDemo}  illustrates  how to build solver interfaces and  an in-memory {\tt OSOption} object. In this example we  illustrate building a solver interface and corresponding {\tt OSOption} object for the solvers {\tt Clp}, {\tt Cbc}, {\tt SYMPHONY}, {\tt Ipopt},   {\tt Bonmin}, and {\tt Couenne}.   Each solver class inherits from a virtual {\tt OSDefaultSolver} class. Each solver class has the string data members
 
@@ -452,12 +452,12 @@ interface to tell the Bonmin solver to try three starting points at each node.
 
  
 
-\subsection{OSResultDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
+\subdivision{OSResultDemo: Building In-Memory Result Object to Display Solver Result}\label{section:exampleOSResultDemo}
 
 The OS protocol for representing an optimization result is {\tt OSrL}. Like the {\tt OSiL} and {\tt OSoL} protocol, this protocol has an associated in-memory {\tt OSResult} class with corresponding API.  The use of the API is demonstrated in the code {\tt OSResultDemo.cpp} in the folder {\tt OS/examples/OSResultDemo}.  In the code we solve a linear program with the {\tt Clp} solver.  The OS solver interface builds an {\tt OSrL} string that we read into the {\tt OSrLReader} class and create and {\tt OSResult} object. We then use the {\tt OSResult} API to get the optimal primal and dual solution. We also use the API to get the reduced cost values. 
 
 
-\subsection{OSCglCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
+\subdivision{OSCglCuts: Using the OSInstance API to Generate Cutting Planes}\label{section:exampleOSAddCuts}
 
 In this example, we show how to add cuts to tighten an LP using COIN-OR
 {\tt Cgl} (Cut Generation Library)\index{COIN-OR projects!Cgl@{\tt Cgl}}.
@@ -465,7 +465,7 @@ A file ({\tt p0033.osil}) in OSiL format is used to create an OSInstance object.
 is solved. Then, Gomory, simple rounding, and knapsack cuts are added using {\tt Cgl}.  The model is then optimized
 using {\tt Cbc}.
 
-\subsection{OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
+\subdivision{OSRemoteTest:  Calling a Remote Server}\label{section:exampleOSRemoteTest}
 
 This example illustrates the API for the six service methods described in Section~\ref{section:servicemethods}.
 The file {\tt osRemoteTest.cpp} in folder {\tt osRemoteTest} first builds a small linear
@@ -488,7 +488,7 @@ to also download and install the Windows Platform SDK\index{Windows Platform SDK
 \noindent Further information is provided in the OS User's Manual.
 \fi
 
-\subsection{OSJavaInstanceDemo:  Building an OSiL Instance in
+\subdivision{OSJavaInstanceDemo:  Building an OSiL Instance in
 Java}\label{section:exampleOSJavaDemo}
 \index{Java|(}
 

@@ -1,5 +1,6 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{book}
 \usepackage{graphics,graphicx}
+\usepackage[auto]{chappg}
 %\usepackage[dvips]{graphics,graphicx}
 \DeclareGraphicsExtensions{.ps,.jpg,.eps,.pdf,.png}
 \usepackage{boxedminipage,amsmath,amsfonts}
@@ -17,6 +18,8 @@
    
 
 \input{chapters/frontmatter.tex} 
+\topmargin 0pt \headheight 14pt \headsep 8pt \textheight 8.6in
+
 
 \begin{document}
 
@@ -24,6 +27,14 @@
 \uselibsfalse   % we do not build a manual for folks who want to build against the libraries
 \developtrue   % we build a manual for folks who want to actively develop code
 \bibletrue     % in addition we include stuff that should only be of interest to project managers
+
+% we can print this bible in regular format (with each chapter starting on a right-hand page)
+% or in condensed format, two pages side-by-side on a landscape sheet
+\newif\iftwoup
+\twoupfalse % regular format --- each chapter starts on a right-hand page 
+%\twouptrue % two pages side-by-side in landscape format (paper-conserving) 
+
+\newcommand{\throwpage}{\iftwoup\cleardoublepage\else\clearpage\fi}
 
 %Some cross-referencing index entries (to be expanded as needed)
 \index{AMPL Solver Library |see{Third-party software, ASL}}
@@ -55,14 +66,16 @@
 \index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
 
 
-
+\pagenumbering{roman}
 
 \title{Optimization Services \OSstable\ User's Manual (Insider edition)}
 \vskip 2in
 \author{Horand Gassmann, Jun Ma,  Kipp Martin, and Wayne Sheng}
 \maketitle
 
-\begin{abstract}
+\chapter*{\centering \begin{normalsize}Abstract\end{normalsize}}
+\begin{quotation}
+\noindent
 This is the extended User's Manual for the Optimization Services (OS) project.  The objective of OS is to provide a
 general framework consisting of a set of standards for representing optimization instances, results,
 solver options, and communication between clients and solvers in a distributed environment using Web Services.
@@ -75,10 +88,10 @@ calling a solver either locally or on a remote server.  Finally,  both Java\inde
 file are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
 See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page\index{Trac system} {\tt\UrlTrac} for 
 more information.
-\end{abstract}
+\end{quotation}
+\clearpage
 
 
-\newpage
 \tableofcontents
 \listoffigures
 \listoftables
@@ -87,20 +100,23 @@ more information.
 
 
 %\noindent\hrulefill
-\newpage
+\throwpage
+
+\pagenumbering{gobble}
+
 \part{Overview}
+
+\pagenumbering{bychapter}
 
 \input{chapters/OSConstitutionArticles.tex}
 
-\newpage
-
 \input{chapters/Jun_interpretation.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/OSIntro.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/roadmap.tex}
 
@@ -108,91 +124,108 @@ more information.
 
 % Part 1 for folks who just want to run the executables
 
-\newpage
+\throwpage
+
+\pagenumbering{gobble}
+
 \part{Running the OS executables}
+
+\pagenumbering{bychapter}
 
 \input{chapters/downloadbinaries.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/ossolverservice.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/OSSolverServiceRules.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/modellang.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/schemadescriptions.tex}
 
 
 % Part 2 for folks who want to use the libraries to develop their own applications
 
-\newpage
+\throwpage
+
+\pagenumbering{gobble}
+
 \part{Using the OS libraries and API}
 
-\newpage
+\pagenumbering{bychapter}
+
+\input{chapters/downloadbinaries.tex}
+
+\throwpage
 
 \input{chapters/codesamples.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/OSDip.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/oslibrary.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/OSInstanceAPI.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/CppAD.tex}
 
 
 % Part 3 for folks who want to build the code
-\newpage
+\throwpage
+
+\pagenumbering{gobble}
+
 \part{Building OS from source}
+
+\pagenumbering{bychapter}
 
 \input{chapters/downloadsource.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/build.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/projectcomponents.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/modifyingFiles.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/tomcat.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/fileupload.tex}
 
 
 % Part 4: end items: future plans, bibliography, etc.
-\newpage
+\throwpage
 
 \input{chapters/OSReleaseProcedures.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/wishlist.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/appendix.tex}
 
@@ -205,11 +238,11 @@ more information.
  
 \printindex
   
-\newpage
+\throwpage
 
 \input{chapters/Kipps_collected_wisdom.tex}
 
-\newpage
+\throwpage
 
 \input{chapters/buildSystemInfo.tex}
 \end{document}

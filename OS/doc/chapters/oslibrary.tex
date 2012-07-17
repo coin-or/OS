@@ -1,8 +1,6 @@
+\division{The OS Library Components}\label{section:oslibrary}\index{OSLibrary@{\tt OSLibrary}|(} 
 
-
-\section{The OS Library Components}\label{section:oslibrary}\index{OSLibrary@{\tt OSLibrary}|(} 
-
-\subsection{OSAgent}\label{section:osagent}
+\subdivision{OSAgent}\label{section:osagent}
 
 The {\tt OSAgent}\index{OSAgent@{\tt OSAgent}|(}  part of the library is used to facilitate communication
 with remote solvers. It is not used if the solver is invoked locally (i.e., on the same machine).
@@ -32,7 +30,7 @@ It is very fast and does not involve SOAP or Web Services. The {\tt OSFileUpload
 {\tt OSFileUpload.cpp} described in Section~\ref{section:fileupload}.
 \index{OSAgent@{\tt OSAgent}|)}
 
-\subsection{OSCommonInterfaces}
+\subdivision{OSCommonInterfaces}
 
 The classes in the OSCommonInterfaces component of the OS library are used to read and write files and strings
 in the OSiL and OSrL protocols. See Section~\ref{section:schemadescriptions} for more detail on OSiL, OSrL,
@@ -46,7 +44,7 @@ Below we highlight some key classes.
 
 
 
-\subsubsection{The OSInstance Class}\label{section:osinstanceclass}
+\subsubdivision{The OSInstance Class}\label{section:osinstanceclass}
 
 The OSInstance\index{OSInstance@{\tt OSInstance}|(} class is the in-memory representation of an optimization instance and is a key
 class for users of the OS project. This class has an API defined by a collection of {\tt get()} methods for
@@ -56,7 +54,7 @@ methods for function, gradient, and Hessian evaluations.  See Section~\ref{secti
 We now describe how to create an {\tt OSInstance} object and the close relationship between the OSiL\index{OSiL} schema
 and the {\tt OSInstance} class.
 
-\subsubsection{Creating an {\tt OSInstance} Object}
+\subsubdivision{Creating an {\tt OSInstance} Object}
 
 The OSCommonInterfaces component contains an {\tt OSiLReader}  class for reading an instance in an OSiL string and
 creating an in-memory {\tt OSInstance} object.  Assume that {\tt sOSiL} is a string that will hold the instance in OSiL format. Creating an {\tt OSInstance} object is illustrated in Figure~\ref{figure:creatingosinstanceobject}.
@@ -73,7 +71,7 @@ osinstance = osilreader->readOSiL( sOSiL);\\[\Sb]
 \caption{Creating an {\tt OSInstance} Object} \label{figure:creatingosinstanceobject}
 \end{figure}
 
-\subsubsection{Mapping Rules}\label{section:mappingrules}
+\subsubdivision{Mapping Rules}\label{section:mappingrules}
 
 The {\tt OSInstance} class has two members, {\tt instanceHeader} and {\tt instanceData}.  
 These correspond to the XML elements {\tt <instanceHeader>} and {\tt <instanceData>}.
@@ -222,7 +220,7 @@ that act as an API for the optimization instance and are described in Section~\r
 
 
 
-\subsubsection{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
+\subsubdivision{The OSExpressionTree OSnLNode Classes}\label{section:osexpressiontreeclass}
 
 The {\tt OSExpressionTree}\index{OSExpressionTree@{\tt OSExpressionTree}} class provides the in-memory representation
 of the nonlinear terms.  Our design goal is  to allow for efficient parsing of OSiL\index{OSiL} instances,
@@ -311,7 +309,7 @@ Although in the OSnL schema, there are 200+ nonlinear operators, only the follow
 
 
 
-\subsubsection{The OSOption Class}\label{section:osoptionclass}
+\subsubdivision{The OSOption Class}\label{section:osoptionclass}
 
 The {\tt OSOption}\index{OSOption@{\tt OSOption}|(} class is the in-memory representation of the options 
 associated with a particular optimization task. It is another key
@@ -322,7 +320,7 @@ in-memory classes and objects on one hand and complexTypes and elements of the O
 laid out in Section~\ref{section:mappingrules}.
 \index{OSOption@{\tt OSOption}|)}
 
-\subsubsection{The OSResult Class}\label{section:osresultclass}
+\subsubdivision{The OSResult Class}\label{section:osresultclass}
 
 Similarly the {\tt OSResult}\index{OSResult@{\tt OSResult}|(} class is the in-memory representation of the 
 results returned by the solver and other information associated with a particular optimization task. 
@@ -336,11 +334,11 @@ mapping rules laid out in Section~\ref{section:mappingrules}.
 
 
 
-\subsection{OSModelInterfaces}\label{section:osmodelinterfaces}
+\subdivision{OSModelInterfaces}\label{section:osmodelinterfaces}
 
 This part of the OS library is designed to help integrate the OS standards with other standards and modeling systems.
 
-\subsubsection{Converting MPS Files}
+\subsubdivision{Converting MPS Files}
 
 The MPS standard\index{MPS format|(} is still a popular format for representing linear and integer programming problems.
 In {\tt OSModelInterfaces,} there is a class {\tt OSmps2osil}\index{OSmps2osil@{\tt OSmps2osil}|(} that can be used
@@ -362,7 +360,7 @@ file name of the instance in MPS format. The constructor then uses the
 {\tt CoinUtils}\index{COIN-OR projects!CoinUtils@{\tt CoinUtils}} library to read and parse the MPS file.  The class method {\tt createOSInstance} then builds  an in-memory {\tt osinstance} object  that can be used by a solver.
 \index{OSmps2osil@{\tt OSmps2osil}|)}\index{MPS format|)}
 
-\subsubsection{Converting AMPL nl Files}\label{section:nl2osil}
+\subsubdivision{Converting AMPL nl Files}\label{section:nl2osil}
 
 AMPL is a popular modeling language that saves  model instances in the AMPL nl format\index{AMPL nl format|(}.
 The {\tt OSModelInterfaces} library provides a class, {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}},
@@ -389,7 +387,7 @@ the instance in nl format to OSiL\index{OSiL} format before calling a solver eit
 \index{AMPL nl format|)}
 
 
-\subsection{OSParsers}\label{section:osparsers}
+\subdivision{OSParsers}\label{section:osparsers}
 
 The OSParsers component of the OS library contains reentrant parsers that  read OSiL\index{OSiL|(},
 OSoL\index{OSoL} and OSrL\index{OSrL} strings and build, respectively, in-memory 
@@ -485,7 +483,7 @@ described in Section~\ref{section:ossolverservice}.
 \input{chapters/GenericParser.tex}
 \fi
 
-\subsection{OSSolverInterfaces}\label{section:ossolverinterfaces}
+\subdivision{OSSolverInterfaces}\label{section:ossolverinterfaces}
 
 
 The {\tt OSSolverInterfaces} library is designed to facilitate linking the OS library with various solver APIs.
@@ -598,7 +596,7 @@ from {\tt DefaultSolver}. The class member to use is {\tt osinstance.} This is i
 given in Section~\ref{section:exampleOSInstanceGeneration}.
 
 
-\subsection{OSUtils}
+\subdivision{OSUtils}
 
 The OSUtils component of the OS library contains utility codes. For example, the {\tt FileUtil} class contains
 useful methods for reading files into {\tt string} or {\tt char*} and writing files from {\tt string} and {\tt char*}.

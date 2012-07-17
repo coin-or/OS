@@ -1,5 +1,5 @@
 
-\section{The OSSolverService}\label{section:ossolverservice}
+\division{The OSSolverService}\label{section:ossolverservice}
 
 The {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}|(} is a command line executable designed
 to pass problem instances in either  OSiL\index{OSiL}, AMPL nl\index{AMPL nl format}, or MPS format\index{MPS format}
@@ -24,7 +24,7 @@ intuitive and we do not discuss in detail. The second way to use the {\tt
 OSSolverService} executable is to provide arguments at the command line. This is
 discussed next. The command line arguments are also valid for the interactive shell. 
 
-\subsection{OSSolverService Input Parameters}\label{section:OSSolverServiceInputParameters}
+\subdivision{OSSolverService Input Parameters}\label{section:OSSolverServiceInputParameters}
 
 At present, the {\tt OSSolverService} takes the following parameters. The order of the parameters is irrelevant.
 Not all the parameters are required. 
@@ -288,7 +288,7 @@ a problem instance must be specified.
 \end{enumerate}
 
 
-\subsection{The Command Line Parser}\label{section:commandlineparser}
+\subdivision{The Command Line Parser}\label{section:commandlineparser}
 
 The top layer of the local OSSolverService is a command line parser that parses the command line and
 the config file (if one is specified) and passes the information on to a local solver or a remote solver service,
@@ -324,7 +324,7 @@ the {\tt solver} option has no effect.
 
 
 
-\subsection{Solving Problems Locally}
+\subdivision{Solving Problems Locally}
 
 Generally, when solving a problem locally the user will use the {\tt solve}\index{solve@{\tt solve}} service 
 method. The {\tt solve} method is invoked synchronously and waits for the solver to return the result.  
@@ -407,7 +407,7 @@ specifies the location on the local machine where the OSrL\index{OSrL} result fi
 %\end{verbatim}
 
 
-\subsection{Solving Problems Remotely with Web Services}\label{section:servicemethods}
+\subdivision{Solving Problems Remotely with Web Services}\label{section:servicemethods}
 
 In many cases the client machine may be a ``weak client'' and  using a more powerful machine to solve a
 hard optimization instance is required. Indeed, one of the major purposes of Optimization Services is to
@@ -467,7 +467,7 @@ the information on the command line takes precedent.
 
 In the following sections we illustrate each of the six service methods.
 
-\subsubsection{The  {\tt solve} Service Method}\label{section:solve}
+\subsubdivision{The  {\tt solve} Service Method}\label{section:solve}
 
 \index{solve@{\tt solve}|(}
 First we illustrate a simple call to  {\tt OSSolverService.jws}.  The call on the client machine is
@@ -585,7 +585,7 @@ for the solver to enter an infinite loop. The {\tt send} service
 method should be used when asynchronous communication is desired.\index{solve@{\tt solve}|)}
 
 
-\subsubsection{The  {\tt send} Service Method}\label{section:send}
+\subsubdivision{The  {\tt send} Service Method}\label{section:send}
 
 \index{send@{\tt send}|(}
 When the {\tt solve} service method is used, then the {\tt OSSolverService} does not
@@ -697,7 +697,7 @@ A default solver is used (see Table~\ref{table:defaultsolvers}\index{default sol
 
 
 
-\subsubsection{The  {\tt retrieve} Service Method}\label{section:retrieve}
+\subsubdivision{The  {\tt retrieve} Service Method}\label{section:retrieve}
 
 \index{retrieve@{\tt retrieve}|(}
 The {\tt retrieve} method is used to get information about the instance solution.  This method has a single string argument which is an OSoL instance. Here is an example of using the {\tt retrieve} method with {\tt OSSolverService}.
@@ -752,7 +752,7 @@ in which case the result will be displayed on the screen instead of being saved 
 file indicated in the {\tt osrl} option.)\index{retrieve@{\tt retrieve}|)}
 
 
-\subsubsection{The  {\tt getJobID} Service Method}\label{section:getjobid}
+\subsubdivision{The  {\tt getJobID} Service Method}\label{section:getjobid}
 
 \index{getJobID@{\tt getJobID}|(}
 Before  submitting a job with the {\tt send}\index{send@{\tt send}} method a {\tt JobID}\index{JobID@{\tt JobID}}
@@ -767,7 +767,7 @@ OSoL string that would be used by the {\tt send}\index{send@{\tt send}} method.
 \index{getJobID@{\tt getJobID}|)}
 
 
-\subsubsection{The  {\tt knock} Service Method}\label{section:knock}
+\subsubdivision{The  {\tt knock} Service Method}\label{section:knock}
 
 \index{knock@{\tt knock}|(}
 The OSSolverService terminates after executing the {\tt send}\index{send@{\tt send}} method. Therefore,
@@ -891,7 +891,7 @@ to check if the remote solver service is up and running. For details, check the 
 \index{knock@{\tt knock}|)}
 
 
-\subsubsection{The  {\tt kill}   Service Method}
+\subsubdivision{The  {\tt kill}   Service Method}
 
 \index{kill@{\tt kill}|(}
 If the user submits a job that is taking too long or is a mistake, it is possible to kill the job on the remote server using the {\tt kill} service method.
@@ -936,7 +936,7 @@ The result is returned in  OSpL format.
 
 
 \ifruncode\else
-\subsubsection{Summary and description of the API}
+\subsubdivision{Summary and description of the API}
 
 The six service methods just described are also available as callable routines.
 Below is a summary of the inputs and outputs of the six methods. See also Figure~\ref{figure:osCommunicationMethods}.
@@ -1043,7 +1043,7 @@ may be empty because no options are required to get the JobID)
 \end{figure}
 
 
-\subsection{Passing Options to Solvers}
+\subdivision{Passing Options to Solvers}
 
 The OSoL (Optimization Services option Language) protocol is used to pass options to solvers.   
 When using the {\tt OSSolverService} executable this will typically be done through an OSoL XML file 

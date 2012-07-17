@@ -1,4 +1,4 @@
-\section{Using Dip (Decomposition In Integer Programming)}\label{section:OSDip}
+\division{Using Dip (Decomposition In Integer Programming)}\label{section:OSDip}
 
 {\bf Important Note:}  This example uses COIN-OR projects that are not part of the OS distribution and
 assumes you have downloaded the {\tt CoinAll }binary.
@@ -79,7 +79,7 @@ solver takes no advantage of special structure and simply calls the COIN-OR solv
 Cbc}.
  
 
-\subsection{Building and Testing the OS-Dip Example}\label{section:build}
+\subdivision{Building and Testing the OS-Dip Example}\label{section:build}
 
 Currently, the Decomposition in Integer Programming ({\bf Dip}) package is not a
 dependency of the Optimization Services ({\bf OS}) package -- {\bf Dip} is not
@@ -153,7 +153,7 @@ The file
 explained in Section \ref{section:parameterfile}.
 
 
-\subsection{The OS Dip Solver -- Code Description and
+\subdivision{The OS Dip Solver -- Code Description and
 Key Classes}\label{section:osdipsolver}
 
 The OS Dip Solver uses {\bf Dip} to implement a Dantzig-Wofe decomposition
@@ -267,7 +267,7 @@ decomposition algorithm and then an {\tt Alps} solver for which the {\tt solve()
 method is called. 
 
 
-\subsection{User Requirements}\label{section:userreq}
+\subdivision{User Requirements}\label{section:userreq}
 
 
 The {\bf OSDipBlockCoinSolver} class provides a solve method for optimizing a
@@ -301,7 +301,7 @@ OSDipBlockSolverFactory} and implements the {\tt create()} method,
  solvers} directory for all of the solvers that inherit from {\bf
  OSDipBlockSolver}.
  
- \subsection{Simple Plant/Lockbox Location Example}
+ \subdivision{Simple Plant/Lockbox Location Example}
 
 
  The problem is to minimize
@@ -491,7 +491,7 @@ constraints}
 
 
 
-\subsection{Generalized Assignment Problem Example}\label{section:genass}
+\subdivision{Generalized Assignment Problem Example}\label{section:genass}
 
 A problem that plays a prominent role in
 vehicle routing is the {\it generalized assignment problem.}    The problem is to assign each of $n$
@@ -544,7 +544,7 @@ x_{41} + x_{42} &=&    1 \\
 \end{eqnarray*}
  
 
-\subsection{Defining the Problem Instance and Blocks}\label{section:defineinstance}
+\subdivision{Defining the Problem Instance and Blocks}\label{section:defineinstance}
 
 Here we describe how to use the OSOption and OSInstance formats.  We illustrate
 with a simple plant location problem. Refer back to the example in Table
@@ -704,7 +704,7 @@ Dip} because the attribute {\tt solver} always had value {\tt Dip}. It is
 critical to set this attribute in all of the option tags. 
 
 
-\subsection{The Dip Parameter File}\label{section:parameterfile}
+\subdivision{The Dip Parameter File}\label{section:parameterfile}
 
 The {\bf Dip} solver has a utility class {\bf UtilParameters},  for parsing
 a parameter file. The {\bf UtilParameters} class constructor takes a parameter
@@ -801,7 +801,7 @@ string to be {\tt OSDipBlockCoinSolver}.
    
 
 
-\subsection{Issues to Fix}
+\subdivision{Issues to Fix}
 
 \begin{itemize}
   \item Enhance solveRelaxed to allow parallel processing of blocks. See ticket
@@ -820,7 +820,7 @@ string to be {\tt OSDipBlockCoinSolver}.
 
 
 
-\subsection{Miscellaneous Issues}
+\subdivision{Miscellaneous Issues}
  
  If you want to terminate at the root node and just get the dual value under the {\tt ALPS } option put:
  

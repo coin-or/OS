@@ -1,10 +1,10 @@
 % this is a chapter of the user's manual
 % it does not compile by itself
 
-\section{Downloading the OS Project}\label{section:downloadsource}
+\division{Downloading the OS Project}\label{section:downloadsource}
 
 
-\subsection{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
+\subdivision{Auxiliary Software for Working with the OS Project} \label{section:auxiliarydownloads}
 
 Compiling and modifying the OS project source\index{OS project!source code} code can be a daunting task,
 made somewhat easier by the inclusion of configure scripts\index{configure!scripts} and makefiles\index{makefile}
@@ -13,7 +13,7 @@ sometimes needed or convenient, especially on Windows.
 We collect in this section a number of recommended packages that we ourselves use in the development
 and maintenance of the code.
 
-\subsubsection{Subversion (SVN)}\label{section:svn}
+\subsubdivision{Subversion (SVN)}\label{section:svn}
 
 The Subversion\index{Subversion} version control package is used to obtain the C++ source code\index{OS project!source code}.
 Users with Unix operating systems will most likely have a command line svn client.  If an svn client is not present,
@@ -21,7 +21,7 @@ see~{\tt\UrlSvn} to download an svn client.   For Windows users we recommend the
 svn client  TortoiseSVN.  (See~{\tt\UrlTortoiseSvn}.) Upon installation the TortoiseSVN client is integrated within the
 Windows  Explorer.
 
-\subsubsection{wget}\label{section:wget}
+\subsubdivision{wget}\label{section:wget}
 Certain third-party software (see Section~\ref{section:otherthirdparty}) is available in source form but is not
 contained in the OS project distribution. Scripts are included to download this code using the
 {\tt wget}\index{wget@{\tt wget}} executable.
@@ -53,13 +53,13 @@ A Windows version of {\tt wget} is available at
 
 There is no need to rebuild the code locally, which relies on several levels of other software.
 
-\subsubsection{Windows development platform}\label{section:windowsdevelopment}
+\subsubdivision{Windows development platform}\label{section:windowsdevelopment}
 A development platform is essential for users on Windows. OS Project provides support for Microsoft Visual Studio
 (see Section~\ref{section:msvs}) and several unix emulators, including Cygwin (Section~\ref{section:cygwin}),
 MinGW (Section~\ref{section:mingw}) and MSYS (Section~\ref{section:msys}). Download instructions for all of these
 packages are included in the sections indicated.
 
-\subsubsection{C++ compiler}\label{section:cpp}
+\subsubdivision{C++ compiler}\label{section:cpp}
 A C++ compiler\index{C++ compiler} is needed to compile the OS source\index{OS project!source code}. This should be present 
 under all unix\index{Unix} installations. If no C++ compiler is available on the system, the free {\tt gcc}\index{gcc} 
 compiler can be downloaded from {\tt\UrlGcc}.
@@ -73,7 +73,7 @@ in order not to confuse the header files.
 In our experience, best results are achieved with the minimal unix-like installation, MSYS, and the 
 Microsoft {\tt cl} compiler.
 
-\subsubsection{Fortran Compiler}\label{section:fortran}
+\subsubdivision{Fortran Compiler}\label{section:fortran}
 The COIN-OR project Ipopt\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (see Section~\ref{section:ipopt}) and several of 
 the third-party software described in Section~\ref{section:otherthirdparty} include Fortran\index{Fortran} subroutines, 
 which must be compiled with a Fortran compiler if the user wants to include these projects in the build. A free 
@@ -85,7 +85,7 @@ which turns Fortran~77 code into code that can subsequently be fed into a C comp
 The {\tt f2c} translator and the {\tt f2c} runtime library can be downloaded from {\tt\UrlFToC}.
 Further details are available in the file {\tt BuildTools/compile\_f2c/INSTALL}, which is part of the OS distribution.
 
-\subsubsection{{\tt flex} and {\tt bison} }\label{section:flex}
+\subsubdivision{{\tt flex} and {\tt bison} }\label{section:flex}
 Users who want to edit the source code in the parsers described in
 Section~\ref{section:osparsers} will need the additional  tools
 {\tt flex}\index{flex@{\tt flex}} and {\tt bison}\index{bison@{\tt bison}}.  These can be downloaded from
@@ -107,12 +107,12 @@ regex-0.12-MSYS-1.0.11-1
 \end{verbatim}
 The last file contains an important DLL, msys-regex-0.dll, without which {\tt flex} will not start.
 
-\subsubsection{doxygen }\label{section:doxygen}
+\subsubdivision{doxygen }\label{section:doxygen}
 Doxygen\index{Doxygen}  ({\tt\UrlDoxygen}) is a document production system that can be used to prepare documentation
 for the OS project and related software. For details, see Section~\ref{section:documentation}.
 
  
-\subsection{Obtaining OS Source Code Using Subversion (SVN)}\label{section:downloadwithsvn}
+\subdivision{Obtaining OS Source Code Using Subversion (SVN)}\label{section:downloadwithsvn}
 
 For the rest of this documentation, we assume that  the name of the root directory
 of the OS project\index{OS project!root directory} distribution is {\tt COIN-OS}.  
@@ -202,7 +202,7 @@ For more detail on running a Tomcat solver service  see  Section~\ref{section:to
 
 
 
-\subsection{Obtaining the OS Source Code From a Tarball or Zip File}\label{section:getTarBalls}
+\subdivision{Obtaining the OS Source Code From a Tarball or Zip File}\label{section:getTarBalls}
 
 The OS source code can also be obtained from either a  tarball\index{Downloading!tarball} or
 zip\index{Downloading!zip file} file.  This may be preferred for users who are not managing other
@@ -252,7 +252,7 @@ Now build the project as described in  Section~\ref{section:build}.
 
 
 
-\subsection{Obtaining source for the OS Project API} \label{section:oslite}
+\subdivision{Obtaining source for the OS Project API} \label{section:oslite}
 The OS project is very extensive and relies on many other COIN-OR projects\index{COIN-OR}.
 This may not be desirable for modeling language and solver developers who just wish to use the OS API
 in conjunction with their modeling language or solver.  Hence there is also an ``OS lite'' download

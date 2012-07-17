@@ -1,6 +1,4 @@
-
-
-\section{The OS Algorithmic Differentiation Implementation}\label{section:ad}
+\division{The OS Algorithmic Differentiation Implementation}\label{section:ad}
 
 The OS library provides a set of {\tt calculate} methods for calculating  function values, gradients, and Hessians.
 The {\tt calculate} methods are part of the {\tt OSInstance} class and are designed to work with solver APIs.
@@ -8,7 +6,7 @@ For instance, {\tt Ipopt} requires derivatives but does not provide its own diff
 expecting the user to make them available through callbacks.
 
 
-\subsection{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
+\subdivision{Algorithmic Differentiation:  Brief Review}\label{section:adtheory}
 
 First and second derivative calculations are made using 
 {\it algorithmic differentiation}\index{Algorithmic differentiation|(}.
@@ -83,7 +81,7 @@ or, expressed in terms of the mixed partials,
 
 
 
-\subsection{Using OSInstance Methods: Low Level Calls}\label{section:lowlevelADcalls}
+\subdivision{Using OSInstance Methods: Low Level Calls}\label{section:lowlevelADcalls}
 
   The code snippets used in this section  are from the example code {\tt algorithmicDiffTest.cpp} in the
 {\tt algorithmicDiffTest} folder in the {\tt examples} folder.  The  code is based on the following example.
@@ -314,7 +312,7 @@ std::vector<double> reverseAD(int k, std::vector<double> vdlambda);
 \end{verbatim}
 where {\tt vdlambda} is a vector of Lagrange multipliers.  This method returns a vector in the range space. If a reverse sweep of order $k$ is called, a forward sweep of all orders  through  $k -1$ must have been made prior to the call.
 
-\subsubsection{First Derivative Reverse Sweep Calculations}
+\subsubdivision{First Derivative Reverse Sweep Calculations}
 
 In order to calculate first derivatives execute the following sequence of calls.
 \begin{verbatim}
@@ -335,7 +333,7 @@ $$
 \D{f_{3}(x^{(0)})}{x_{0}}  = 1,  \quad \D{f_{3}(x^{(0)})}{x_{1}}  = 0, \quad  \D{f_{3}(x^{(0)})}{x_{3}}  = 0.2.
 $$
 
-\subsubsection{Second Derivative Reverse Sweep Calculations}
+\subsubdivision{Second Derivative Reverse Sweep Calculations}
 
 In order to calculate second derivatives using {\tt reverseAD} forward sweeps of order 0 and 1 must have been 
 completed.  The call to {\tt reverseAD(2, vlambda)} will return a vector of dimension $2n$ where~$n$ is the 
@@ -394,12 +392,12 @@ are captured in the linear section of the OSiL input and therefore do not appear
 in {\tt  <nonlinearExpressions>}. As noted before, {\tt forwardAD} and {\tt reverseAD} only operate on variables and terms
 in either the {\tt <quadraticCoefficients>} or {\tt <nonlinearExpressions>} sections.
 
-\subsection{Using OSInstance Methods: High Level Calls}
+\subdivision{Using OSInstance Methods: High Level Calls}
 
 The methods {\tt forwardAD} and {\tt reverseAD} are low-level calls and are not designed to work directly with solver APIs. The {\tt OSInstance} API has other methods that most users will want to invoke when linking with solver APIs.  We describe these now.
 
 
-\subsubsection{Sparsity Methods}
+\subsubdivision{Sparsity Methods}
 
 Many solvers such as {\tt Ipopt}\index{COIN-OR projects!Ipopt@{\tt Ipopt}} (\url{projects.coin-or.org/Ipopt}) 
 \ifknitro or Knitro\index{Knitro} (\url{www.ziena.com}) \fi
@@ -476,7 +474,7 @@ holds the value of the respective second derivative at each iteration.
 The data member {\tt hessDimension} is the number of nonzero elements in the Hessian.
 
 
-\subsubsection{Function Evaluation Methods}
+\subsubdivision{Function Evaluation Methods}
 
 There are several overloaded methods for calculating objective and constraint values.  The method
 \begin{verbatim}
@@ -573,7 +571,7 @@ calculateAllConstraintFunctionValues(x, objLambda,  conLambda, true, highestOrde
 to also use the OS expression tree for function evaluations when {\tt highestOrder = 0} rather than use 
 the operator overloading in the CppAD tape.
 
-\subsubsection{Gradient Evaluation Methods}
+\subsubdivision{Gradient Evaluation Methods}
 
 One {\tt OSInstance} method for gradient calculations is
 \begin{verbatim}
@@ -613,7 +611,7 @@ SparseVector *calculateConstraintFunctionGradient(double* x, int idx,
 Similar methods are available for the objective function; however, the objective function gradient methods treat the gradient of each objective function as a dense vector.
 
 
-\subsubsection{Hessian Evaluation Methods}
+\subsubdivision{Hessian Evaluation Methods}
 
 There are two methods for Hessian calculations.  The first method has the signature
 \begin{verbatim}

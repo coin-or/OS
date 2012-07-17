@@ -1,13 +1,10 @@
-
-
-
-\section{OS Support for Modeling Languages, Spreadsheets and Numerical Computing Software}\label{section:modellang}
+\division{OS Support for Modeling Languages, Spreadsheets and Numerical Computing Software}\label{section:modellang}
 
 Algebraic modeling languages can be used to generate model instances as input to an OS compliant solver.
 We describe two such hook-ups, {\tt OSAmplClient} for AMPL\index{AMPL}, and {\tt CoinOS} for GAMS\index{GAMS} (version 23.8 and above).
 
 
-\subsection{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
+\subdivision{AMPL Client:  Hooking AMPL to Solvers}\label{section:amplclient}
 
 \index{OSAmplClient@{\tt OSAmplClient}|(}
 \index{AMPL|(}
@@ -35,7 +32,7 @@ From the  perspective of AMPL, the   {\tt OSAmplClient} acts like an AMPL ``solv
 The {\tt OSAmplClient.exe}   can be used to solve problems either locally or remotely.   
 
 
-\subsubsection{Using OSAmplClient for a Local Solver}\label{section:localampl}
+\subsubdivision{Using OSAmplClient for a Local Solver}\label{section:localampl}
 
 In the following discussion we assume that the AMPL executable {\tt ampl.exe}, the {\tt OSAmplClient},  
 and the test problem {\tt  eastborne.mod}\index{eastborne.mod@{\tt eastborne.mod}|(}
@@ -99,7 +96,7 @@ Valid values for the {\tt solver} option are installation-dependent.
 The solver name in the {\tt solver} option is case insensitive.  
 
 
-\subsubsection{Using OSAmplClient to Invoke an OS Solver Server}\label{section:remoteampl}
+\subsubdivision{Using OSAmplClient to Invoke an OS Solver Server}\label{section:remoteampl}
 
 Next, assume that you have a large problem you want to solve on a remote solver. It is necessary 
 to specify the location of the server solver as an option to OSAmplClient. 
@@ -190,7 +187,7 @@ osol solveroptions.osol
 \end{verbatim}
 then in our reference implementation the remote solver service will parse the file {\tt solveroptions.osol}, find the {\tt <solverToInvoke>} tag and then pass the {\tt symphony} solver option to the {\tt OSSolverService} on the remote server.
 
-\subsubsection{AMPL Summary}
+\subsubdivision{AMPL Summary}
 
 \begin{enumerate}
 \item Tell  AMPL to use the OSAmplClient as the solver:
@@ -238,7 +235,7 @@ if the user wants to invoke a specific solver with a remote solve, then this mus
 
 
 
-\subsection{GAMS and Optimization Services}\label{section:gamslinks}
+\subdivision{GAMS and Optimization Services}\label{section:gamslinks}
 
 \index{GAMS|(}
 
@@ -252,7 +249,7 @@ remote calls to an {\tt OSSolverService} executable on a remote server. How this
 
 
 
-\subsubsection{Using GAMS  to Invoke a Remote OS Solver Service}\label{section:gamsremote}
+\subsubdivision{Using GAMS  to Invoke a Remote OS Solver Service}\label{section:gamsremote}
 
 We now describe how to call  a remote OS   solver service using the GAMS {\tt CoinOS}.  Before proceeding, 
 it is important to emphasize that when calling a remote OS solver service, different sets of solvers may be supported, even for the same version of the OS solver service. 
@@ -517,7 +514,7 @@ a job. You should specify an OSoL  file containing the job ID by using the {\tt 
 \vskip 8pt
 
 \iffalse
-\subsubsection{Using GAMS to Invoke the Local OS Solver Service \tt CoinOS}\label{section:gamslocal}
+\subsubdivision{Using GAMS to Invoke the Local OS Solver Service \tt CoinOS}\label{section:gamslocal}
 
    
 The GAMS  {\tt CoinOS} solver is really a {\it solver interface} and is linked through the OS library to the 
@@ -631,7 +628,7 @@ An up-to-date online version of this list is available at \url{http://www.coin-o
 
 \fi
 
-\subsubsection{GAMS Summary:}\label{section:gamssummary}
+\subsubdivision{GAMS Summary:}\label{section:gamssummary}
 
 
 \begin{enumerate}
@@ -736,7 +733,7 @@ for this option are {\tt solve}, {\tt getJobID}, {\tt send}, {\tt knock}, {\tt r
 
 \ifruncode\else    % the matlab interface requires the user to compile stuff
 
-\subsection{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:usingmatlab}
+\subdivision{MATLAB:  Using MATLAB to Build and Run OSiL Model Instances}\label{section:usingmatlab}
 
 \index{MATLAB|(}
 MATLAB has powerful matrix generation and manipulation routines. This section is for users who wish to use MATLAB to generate the matrix coefficients for linear or quadratic programs and use the OS library to call a solver and get the result back. Using MATLAB with OS requires the user to compile a file {\tt OSMatlabSolverMex.cpp} into a MATLAB executable file (these files will have a {\tt .mex} extension) after compilation. This executable file is linked to the OS library and works through the MATLAB API to communicate with the OS library. 

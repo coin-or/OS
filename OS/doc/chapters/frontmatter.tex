@@ -93,3 +93,8 @@
 
 \runcodefalse \uselibsfalse \developfalse \biblefalse
 
+%different configurations use different document classes with different text divisions
+\newcommand{\division}[1]{\ifbible\chapter{#1}\else\section{#1}\fi}
+\newcommand{\subdivision}[1]{\ifbible\section{#1}\else\subsection{#1}\fi}
+\newcommand{\subsubdivision}[1]{\ifbible\subsection{#1}\else\subsubsection{#1}\fi}
+

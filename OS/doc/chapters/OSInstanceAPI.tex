@@ -1,5 +1,4 @@
-
-\section{The  OSInstance API}\label{section:osinstanceAPI}
+\division{The  OSInstance API}\label{section:osinstanceAPI}
 
 The OSInstance API can be used to:
 
@@ -17,7 +16,7 @@ function gradient evaluations, and Hessian evaluations.
 
 
 
-\subsection{Get Methods}
+\subdivision{Get Methods}
 
 The {\tt get()} methods are used by other classes to access data in an existing {\tt OSInstance} object or get 
 an expression tree representation of an instance in postfix or prefix format.   Assume {\tt osinstance} is an 
@@ -83,17 +82,17 @@ The method {\tt processNonlinearExpressions()} in the {\tt LindoSolver} class in
 library component illustrates the use of a postfix vector of {\tt OSnLNode} objects to build a Lindo model instance.
 
 
-\subsection{Set Methods}
+\subdivision{Set Methods}
 
 The {\tt set()} methods can be used to build an in-memory {\tt OSInstance}
  object. A code example of how to do this is in Section~\ref{section:exampleOSInstanceGeneration}.
 
-\subsection{Calculate Methods}
+\subdivision{Calculate Methods}
 
 The {\tt calculate()} methods are described in Section~\ref{section:ad}.
 
 
-\subsection{Modifying an   {\tt OSInstance} Object}\label{section:osinstanceMod}
+\subdivision{Modifying an   {\tt OSInstance} Object}\label{section:osinstanceMod}
 
 The OSInstance API is designed to be used to either build an in-memory {\tt OSInstance} object 
 or provide information about the in-memory object (e.g., the number of variables).   
@@ -160,7 +159,7 @@ the only safe strategy is to delete the object and build a new object that conta
 
 
 
-\subsection{Printing a Model for Debugging}\label{section:printModel}
+\subdivision{Printing a Model for Debugging}\label{section:printModel}
 
 The OSiL representation for the test problem {\tt rosenbrockmod.osil} is given in 
 Appendix~\ref{section:rosenbrockXML}.  Many users will not find the OSiL representation 

@@ -1,5 +1,4 @@
-
-\section{Building and Testing the OS Project}\label{section:build}
+\division{Building and Testing the OS Project}\label{section:build}
 
 
 Once the OS source code is obtained, the OS libraries, {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}} 
@@ -7,7 +6,7 @@ executable, and test examples can be built.
 We describe how to do this on Unix/Linux\index{Unix} systems (see Section~\ref{section:unixbuilds})
 and on Windows\index{Microsoft Windows} (see Section~\ref{section:windowsinstall}).
 
-\subsection{Building the OS Project on Unix/Linux Systems}\label{section:unixbuilds}
+\subdivision{Building the OS Project on Unix/Linux Systems}\label{section:unixbuilds}
 
 In order to build the OS project on Unix/Linux systems do the following.
 
@@ -233,7 +232,7 @@ to run the key executable, {\tt OSSolverService}\index{OSSolverService@{\tt OSSo
 
 
 
-\subsubsection{Building the OS Project on Mac OS X}\label{section:unixmacbuilds}
+\subsubdivision{Building the OS Project on Mac OS X}\label{section:unixmacbuilds}
 
 When building OS on Mac OS X 10.5.x (Leopard)   it may be necessary  to add the following to the configure line
 
@@ -272,7 +271,7 @@ We have also successfully used the fink project, see
 to download and build gcc/g++/gfortran compilers from source code. 
 
 
-\subsection{Building the OS Project on Windows}\label{section:windowsinstall}
+\subdivision{Building the OS Project on Windows}\label{section:windowsinstall}
 
 There are a number of options open to Windows users.   First, if you wish to work with source code\index{OS project!source code}
 we recommend downloading  the svn client, TortoiseSVN\index{TortoiseSVN}.  (See Section~\ref{section:svn}.)  
@@ -290,7 +289,7 @@ Also, if you plan to build any of the projects contained in {\tt ThirdParty}\ind
 (See Section~\ref{section:wget}.)
 
 
-\subsubsection{Microsoft Visual Studio (MSVS)} \label{section:msvs}
+\subsubdivision{Microsoft Visual Studio (MSVS)} \label{section:msvs}
 
 \index{Microsoft Visual Studio|(}%
 Microsoft Visual Studio solution and project files are provided for users of Windows and the Microsoft Visual Studio IDE.
@@ -365,7 +364,7 @@ both of which are configured without {\tt Ipopt}.
 \index{Microsoft Visual Studio|)}%
 
 
-\subsubsection{Visual Studio Examples Distribution}\label{section:vsexamples}
+\subsubdivision{Visual Studio Examples Distribution}\label{section:vsexamples}
 
 Many users will not be interested in actually building the OS project from source code.   At the link
 {\tt\UrlOsWin} are  binaries for using the OS project.
@@ -467,7 +466,7 @@ The user can simply replace what is currently in {\tt demoCode.cpp} with his or 
 
 
 
-\subsubsection{Cygwin}\label{section:cygwin}
+\subsubdivision{Cygwin}\label{section:cygwin}
 
 {\tt Cygwin} provides a Unix emulation environment for Windows. It comes with numerous tools and libraries including the {\tt gcc} compilers. See {\tt www.cygwin.com}.   Cygwin can be used with the Gnu Compiler Collection ({\tt gcc}) or with the Microsoft {\tt cl} compiler.
 
@@ -612,7 +611,7 @@ BuildTools/compile_f2c
 
 
 
-\subsubsection{MinGW} \label{section:mingw}
+\subsubdivision{MinGW} \label{section:mingw}
 
 
 MinGW\index{MinGW} (Minimalist GNU for Windows) is a set of runtime headers to be used with the GNU {\tt gcc} compilers for Windows.
@@ -632,7 +631,7 @@ missing library  ``pthreadsGC2.dll'' when running the OS {\tt unitTest.}  This u
 and reported that the problem then went away.
 
 
-\subsubsection{MSYS} \label{section:msys}
+\subsubdivision{MSYS} \label{section:msys}
 
 \index{MSYS|(}%
 MSYS (Minimal SYStem) provides an easy way to use the COIN-OS build system with compilers/linkers of your own choice,
@@ -734,7 +733,7 @@ as described in Section~\ref{section:flex}\index{MSYS|)}.
 
 
 
-\subsection{VPATH Installations} \label{section:vpath}
+\subdivision{VPATH Installations} \label{section:vpath}
 
 \index{VPATH|(}%
 It is possible to build the OS project in a directory that is different from
@@ -818,7 +817,7 @@ or the help file available at the homepage of the {\tt BuildTools} project ({\Ur
 \index{configure|)}
 
 
-\subsection{COIN-OR Projects Requiring Fortran}\label{section:ipopt}
+\subdivision{COIN-OR Projects Requiring Fortran}\label{section:ipopt}
 
 \index{COIN-OR projects!Ipopt@{\tt Ipopt}|(}%
 \index{COIN-OR projects!Bonmin@{\tt Bonmin}|(}%
@@ -841,7 +840,7 @@ COIN_SKIP_PROJECTS="Ipopt Bonmin Couenne"
 to the {\tt configure} script.
 
 \ifipopt
-\subsubsection{Building Ipopt, Bonmin and Couenne in Unix or a Unix-like environment} \label{section:ipopt-unix}
+\subsubdivision{Building Ipopt, Bonmin and Couenne in Unix or a Unix-like environment} \label{section:ipopt-unix}
 If you are working in Unix or one of the Unix-like environments described in
 section~\ref{section:windowsinstall}, you can proceed as follows.
 \else
@@ -928,7 +927,7 @@ CFLAGS = -MTd -DUSE_CLOCK -DMSDOS -DNO_ONEXIT
 \vskip 8pt
 
 \ifipopt
-\subsubsection{Ipopt and Microsoft Visual Studio} \label{section:ipopt-msvs}
+\subsubdivision{Ipopt and Microsoft Visual Studio} \label{section:ipopt-msvs}
 
 We regret that at present we cannot distribute a solution file
 that can detect and reliably process the necessary third-party software to
@@ -1060,7 +1059,7 @@ and~\ref{section:examples} are included in the build, as well.
 \fi     % end of \ifipopt
 
 
-\subsection{Other Third-Party Software} \label{section:otherthirdparty}
+\subdivision{Other Third-Party Software} \label{section:otherthirdparty}
 
 \index{Third-party software|(}%
 This section deals with other third-party software not available for download at \url{www.coin-or.org}.
@@ -1146,7 +1145,7 @@ You may also wish to view
 \index{Third-party software|)}
 
 
-\subsubsection{AMPL Solver Library (ASL)} \label{section:ASL}
+\subsubdivision{AMPL Solver Library (ASL)} \label{section:ASL}
 
 \index{Third-party software!ASL|(}%
 The OS library contains a class, {\tt OSnl2osil}\index{OSnl2osil@{\tt OSnl2osil}} (see Section~\ref{section:nl2osil}),
@@ -1235,7 +1234,7 @@ Activate these projects in the Configuration Manager\index{Microsoft Visual Stud
 \fi
 \index{Third-party software!ASL|)}
 
-\subsubsection{GLPK}
+\subsubdivision{GLPK}
 
 \index{Third-party software!GLPK|(}%
 {\tt GLPK} is a an open-source linear and integer-programming solver from the GNU organization. See {\tt\UrlGlpk}. 
@@ -1263,7 +1262,7 @@ At the time of this writing, the most up-to-date version is \GlpkVer, which can 
 
 \noindent{\tt\UrlGlpkDownload}
 
-\subsubsection{Cplex}
+\subsubdivision{Cplex}
 
 \index{cplex@{\tt cplex}|(}%
 Cplex is a linear, integer, and quadratic solver. See {\tt\UrlCplex}.
@@ -1292,7 +1291,7 @@ CLASSPATH=:/usr/local/ilog/cplex81/bin/i86_linux2_glibc2.3_gcc3.2:
 \index{cplex@{\tt cplex}|)}
 
 \ifknitro
-\subsubsection{Knitro}
+\subsubdivision{Knitro}
 
 \index{Knitro|(}%
 Knitro is a nonlinear solver. See {\tt\UrlKnitro}.  Ziena does not provide source code for Knitro.  You must download platform dependent binaries.   In order to use Knitro with the OS project, perform the following steps.
@@ -1325,7 +1324,7 @@ configure --with-knitro-lib="-L/home/kmartin/files/code/knitro/linux/lib -lknitr
 \index{Knitro|)}
 \fi
 
-\subsubsection{LINDO}
+\subsubdivision{LINDO}
 
 \index{LINDO|(}%
 LINDO is a commercial linear, integer, and nonlinear solver. See \url{http://www.lindo.com}.
@@ -1339,7 +1338,7 @@ configure --with-lindo-incdir=/home/kmartin/files/code/lindo/linux/include
 \end{verbatim}
 \index{LINDO|)}
 
-\subsubsection{MATLAB}
+\subsubdivision{MATLAB}
 
 \index{MATLAB|(}%
 MATLAB is a commercial programing environment especially suited for the development and testing of 
@@ -1347,14 +1346,14 @@ computationally intensive tasks. (See \url{http://www.mathworks.com/products/mat
 Install MATLAB on the client machine and follow the instruction in Section~\ref{section:usingmatlab}.%
 \index{MATLAB|)}
 
-\subsubsection{Library Paths}
+\subsubdivision{Library Paths}
 
 After running {\tt configure} as described above,  on Unix systems, it will be necessary to set the
 environment variables {\tt LD\_LIBRARY\_PATH} or {\tt DYLD\_LIBRARY\_PATH} (on Mac OS X) to point to the
 location of the installed third-party libraries in the case that the libraries are dynamic and not static libraries.
 
 
-\subsection{Bug Reporting}
+\subdivision{Bug Reporting}
 
 Bug reporting\index{Bug reporting} is done through the project Trac\index{Trac system} page. This is at
 %\begin{verbatim}
@@ -1384,7 +1383,7 @@ After registering, log in and then file a trouble ticket by going to
 \medskip
 
 
-\subsection{Documentation}\label{section:documentation}
+\subdivision{Documentation}\label{section:documentation}
 
 \index{Doxygen|(}%
 If you have Doxygen  (\url{http://www.doxygen.org}) available (the executable {\tt doxygen} should be in the {\tt path} command) 
@@ -1427,7 +1426,7 @@ This file can be edited, and any project for which documentation is desired, can
 
 
 
-\subsection{Platforms}
+\subdivision{Platforms}
 
 The build process described in Section~\ref{section:unixbuilds} has been tested on Linux\index{Linux}\index{Unix},
 Mac OS X\index{Mac OS X}, and on Windows using  MinGW/MSYS\index{MinGW}\index{MSYS} and Cygwin\index{Cygwin}.
