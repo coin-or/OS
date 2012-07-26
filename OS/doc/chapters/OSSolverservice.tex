@@ -470,7 +470,7 @@ In the following sections we illustrate each of the six service methods.
 \subsubdivision{The  {\tt solve} Service Method}\label{section:solve}
 
 \index{solve@{\tt solve}|(}
-First we illustrate a simple call to  {\tt OSSolverService.jws}.  The call on the client machine is
+First we illustrate a simple call to  {\tt OSSolverService}.  The call on the client machine is
 \index{testremote.config@{\tt testremote.config}|(}
 %
 \ifdevelop
@@ -480,7 +480,7 @@ First we illustrate a simple call to  {\tt OSSolverService.jws}.  The call on th
 where the {\tt testremote.config} file is
 \begin{verbatim}
 osil .../data/osilFiles/parincLinear.osil
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \else
 \begin{verbatim}
@@ -489,7 +489,7 @@ serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
 where the {\tt testremote.config} file is
 \begin{verbatim}
 osil ../examples/data/osilFiles/parincLinear.osil
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \fi
 
@@ -521,12 +521,12 @@ on the remote machine that is hosting the {\tt OSSolverService} and not on the c
 \ifdevelop
 \begin{verbatim}
 ./OSSolverService osol .../data/osolFiles/remoteSolve1.osol
-     serviceLocation  http://kipp.chicagobooth.edu/os/OSSolverService.jws
+     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \else
 \begin{verbatim}
 ./OSSolverService osol ../examples/data/osolFiles/remoteSolve1.osol
-     serviceLocation  http://kipp.chicagobooth.edu/os/OSSolverService.jws
+     serviceLocation  http://74.94.100.129:8080/OSServer/services/OSSolverService
 \end{verbatim}
 \fi
 %
@@ -601,7 +601,7 @@ method is used, the instance is communicated to the remote service and the
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 -nl .../data/amplFiles/hs71.nl
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod send
 \end{verbatim}
 \else
@@ -611,7 +611,7 @@ serviceMethod send
 where the {\tt testremoteSend.config} file is
 \begin{verbatim}
 -nl ../examples/data/amplFiles/hs71.nl
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod send
 \end{verbatim}
 \fi
@@ -708,7 +708,7 @@ The {\tt retrieve} method is used to get information about the instance solution
 \end{verbatim}
 The {\tt testremoteRetrieve.config} file is
 \begin{verbatim}
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 osol .../data/osolFiles/retrieve.osol
 serviceMethod retrieve
 osrl /home/kmartin/temp/test.osrl
@@ -719,7 +719,7 @@ osrl /home/kmartin/temp/test.osrl
 \end{verbatim}
 The {\tt testremoteRetrieve.config} file is
 \begin{verbatim}
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 osol ../examples/data/osolFiles/retrieve.osol
 serviceMethod retrieve
 osrl /home/kmartin/temp/test.osrl
@@ -758,7 +758,7 @@ file indicated in the {\tt osrl} option.)\index{retrieve@{\tt retrieve}|)}
 Before  submitting a job with the {\tt send}\index{send@{\tt send}} method a {\tt JobID}\index{JobID@{\tt JobID}}
 is required. The {\tt OSSolverService} can get a {\tt JobID} with the following options.
 \begin{verbatim}
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod getJobID
 \end{verbatim}
 Note that no OSoL\index{OSoL} input file is specified. In this case, the {\tt OSSolverService} sends an empty string.
@@ -782,7 +782,7 @@ with {\tt JobID 123456abcd}\index{JobID@{\tt JobID}}  is complete. A user would 
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 osplInput .../data/osolFiles/demo.ospl
 osol .../data/osolFiles/retrieve.osol
 serviceMethod knock
@@ -793,7 +793,7 @@ serviceMethod knock
 \end{verbatim}
 where the {\tt testRemoteKnock.config} file is
 \begin{verbatim}
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 osplInput ../examples/data/osolFiles/demo.ospl
 osol ../examples/data/osolFiles/retrieve.osol
 serviceMethod knock
@@ -903,7 +903,7 @@ For example, to kill job {\tt 123456abcd}, at the command line type
 where the configure file {\tt kill.config} is
 \begin{verbatim}
 osol .../data/osolFiles/kill.osol
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod kill
 \end{verbatim}
 \else
@@ -913,7 +913,7 @@ serviceMethod kill
 where the configure file {\tt kill.config} is
 \begin{verbatim}
 osol ../examples/data/osolFiles/kill.osol
-serviceLocation http://kipp.chicagobooth.edu/os/OSSolverService.jws
+serviceLocation http://74.94.100.129:8080/OSServer/services/OSSolverService
 serviceMethod kill
 \end{verbatim}
 \fi

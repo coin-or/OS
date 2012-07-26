@@ -1,12 +1,17 @@
 \division{Code samples to illustrate the OS Project}\label{section:examples}
 
+This chapter describes some sample applications distributed with the OS project. These applications 
+are stand-alone developments, but they can be linked against the OS libraries and are intended to show
+the sophisticated user how to harness the OS API to build their own interfaces with the OSxL schemas, their private solvers, front ends, or other projects.
+
 \ifdevelop
-These example executable files are not built by running {\tt configure} and {\tt make}. 
+The example executable files described in this chapter are not built by running {\tt configure} and {\tt make}. 
+
 Windows users are advised to download a binary distribution and use the solution file {\tt examples.sln} provided there in the 
 \begin{verbatim}
 examples\MSVisualStudio
 \end{verbatim}
-directory.
+directory to buld the examples under MS VisualStudio.
 
 In order to build the examples in a {\bf unix environment}\index{unix} the user must first run
 %
@@ -14,8 +19,8 @@ In order to build the examples in a {\bf unix environment}\index{unix} the user 
 \begin{verbatim}
 make install
 \end{verbatim}
-in the COIN-OS project root directory (the discussion in this section assumes that the project root directory is
-{\tt COIN-OS}).  Running {\tt make install}  will  place all the header files required by the examples in the directory
+in the COIN-OS project root directory. (The discussion in this section assumes that the project root directory is
+{\tt COIN-OS}.)  Running {\tt make install}  will  place all the header files required by the examples in the directory
 \begin{verbatim}
 COIN-OS/include
 \end{verbatim}

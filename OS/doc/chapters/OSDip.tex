@@ -71,7 +71,7 @@ expected to provide a class that inherits from {\tt OSDipBlockSolver} and
 implements the method {\tt solve()}.  The {\tt solve()} method should optimize a
 linear objective function over ${\cal P}.$ More details are provided in Section
 \ref{section:osdipsolver}. The implementation is such  that the user only has to
-provide a class with a solve method. The user does not have to edit or alter 
+provide a class with a {\tt solve()} method. The user does not have to edit or alter 
 any of the OS Dip Solver code.
 By using polymorphic factories the actual solver details are hidden from the OS
 Solver.  A default solver, {\tt OSDipBlockCoinSolver}, is provided. This default
@@ -79,7 +79,7 @@ solver takes no advantage of special structure and simply calls the COIN-OR solv
 Cbc}.
  
 
-\subdivision{Building and Testing the OS-Dip Example}\label{section:build}
+\subdivision{Building and Testing the OS-Dip Example}\label{section:buildDip}
 
 Currently, the Decomposition in Integer Programming ({\bf Dip}) package is not a
 dependency of the Optimization Services ({\bf OS}) package -- {\bf Dip} is not
