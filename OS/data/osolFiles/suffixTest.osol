@@ -49,6 +49,14 @@
 	</other>
 </objectives>
 <constraints numberOfOtherConstraintOptions="2">
+	<initialBasisStatus>
+		<basic numberOfEl="1">
+			<el>2</el>
+		</basic>
+		<atUpper numberOfEl="1">
+			<el>3</el>
+		</atUpper>
+	</initialBasisStatus>
 	<other name="fromOsolFile" type="numeric" description="meaningless option used to verify that OSoL file is processed correctly" numberOfCon="1"  >
 		<con idx="0" value="1234.56789" ></con>
 	</other>

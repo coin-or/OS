@@ -68,7 +68,7 @@ using std::endl;
 #include <stdlib.h>
 #endif
 
-#define AMPLDEBUG
+//#define AMPLDEBUG
 
 
 OSnl2OS::OSnl2OS(std::string nlfilename, std::string osol)
@@ -1161,25 +1161,25 @@ bool OSnl2OS::createOSObjects()
         bool found;
         bool extend;
         int  nOther;
+        int  nIndexes;
         std::string *otherOptionNames = NULL;
 
-        // make a record of all <otherVariableOptions> present in the OSoL file
-        if (osoption != NULL &&
-            osoption->optimization != NULL &&
-            osoption->optimization->variables != NULL &&
-            osoption->optimization->variables->numberOfOtherVariableOptions > 0)
-        {
-            otherOptionNames = new std::string[osoption->optimization->variables->numberOfOtherVariableOptions];
-            nOther = 0;
-            for (int i=0; i < osoption->optimization->variables->numberOfOtherVariableOptions; i++)
-                if (osoption->optimization->variables->other[i]->numberOfVar > 0)
-                    otherOptionNames[nOther++] = osoption->optimization->variables->other[i]->name;
-        }
-
-	    // First the variable-indexed suffixes
+        // First the variable-indexed suffixes
        	suffixType = ASL_Sufkind_var;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
+        // make a record of all <otherVariableOptions> present in the OSoL file
+            if (osoption != NULL &&
+                osoption->optimization != NULL &&
+                osoption->optimization->variables != NULL &&
+                osoption->optimization->variables->numberOfOtherVariableOptions > 0)
+            {
+                otherOptionNames = new std::string[osoption->optimization->variables->numberOfOtherVariableOptions];
+                nOther = 0;
+                for (int i=0; i < osoption->optimization->variables->numberOfOtherVariableOptions; i++)
+                    if (osoption->optimization->variables->other[i]->numberOfVar > 0)
+                        otherOptionNames[nOther++] = osoption->optimization->variables->other[i]->name;
+            }
             OtherVariableOption* varopt;
         	for (d=asl->i.suffixes[suffixType]; d; d=d->next)
         	{
@@ -1187,210 +1187,550 @@ bool OSnl2OS::createOSObjects()
         		std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
 #endif
 
-                // allocate space
-                varopt = new OtherVariableOption();
-
-            	varopt->name = d->sufname;
-		        varopt->numberOfEnumerations = 0;
-        		varopt->var = new OtherVarOption*[n_var];
-
-                // check if the option was present in the OSoL file
-                found = false;
-                int iopt;
-                for (iopt=0; iopt < nOther; iopt++)
+                // Deal with special cases: basis information, special ordered sets (?) and branching weights (?)
+                if (strcmp(d->sufname,"sstatus") == 0) //(d->sufname == "sstatus")
                 {
-                    if (d->sufname == otherOptionNames[iopt])
+                    // allocate space
+                    int* IBS;
+ 
+                    // if OSoL file has a basis, merge values by overwriting .nl file info 
+                    if (osoption->optimization->variables->initialBasisStatus != NULL)
                     {
-                        found = true;
-                        break;
+                        // note that AMPL uses different numeric values for representing basis status:
+                        // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
+                        // 1 = basic                                    = ENUM_BASIS_STATUS_basic
+                        // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
+                        // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
+                        // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
+                        // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
+                        // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 0;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_basic);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_basic,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 1;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_superbasic);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_superbasic,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 2;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 3;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atUpper);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atUpper,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 4;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 5;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 6;
+
+                			delete[] IBS;
+                        }
+
+                        // count the number of entries
+                        int nidx[7];
+                        int kidx[7];
+                        for (i=0; i<7; i++)
+                        {
+                            nidx[i] = 0;
+                            kidx[i] = 0;
+                        }
+
+                        for (int k=0; k < n_var; k++)
+                            nidx[d->u.i[k]]++;
+
+                        // allocate space
+                        int **IBS2;
+                        IBS2 = new int*[7];
+                        for (int i=0; i<7; i++)
+                        {
+                            IBS2[i] = new int[nidx[i]];
+                        }
+
+                        // store basis info into class-oriented arrays
+                        for (int k=0; k < n_var; k++)
+                        {
+                            IBS2[d->u.i[k]][kidx[d->u.i[k]]++] = k;
+                        }
+
+                        // store into <initialBasisStatus> element
+                        // delete osoption->optimization->variables->initialBasisStatus;
+                        if (nidx[0] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_unknown, IBS2[0], nidx[0]);
+                        if (nidx[1] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_basic, IBS2[1], nidx[1]);
+                        if (nidx[2] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_superbasic, IBS2[2], nidx[2]);
+                        if (nidx[3] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower, IBS2[3], nidx[3]);
+                        if (nidx[4] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atUpper, IBS2[4], nidx[4]);
+                        if (nidx[5] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality, IBS2[5], nidx[5]);
+                        if (nidx[6] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree, IBS2[6], nidx[6]);
+
+                        // garbage collection
+                        for (int i=0; i<7; i++)
+                            delete [] IBS2[i];
+                        delete [] IBS2;
                     }
                 }
-
-                // merge values by overwriting .nl file info 
-                if (found)
+                
+                else       // not one of the special cases
                 {
-                    OtherVariableOption* otherOption;
-                    otherOption = osoption->getOtherVariableOption(iopt);
-                    for (int i=0; i < otherOption->numberOfVar; i++)
+                    // allocate space
+                    varopt = new OtherVariableOption();
+
+                	varopt->name = d->sufname;
+    		        varopt->numberOfEnumerations = 0;
+            		varopt->var = new OtherVarOption*[n_var];
+
+                    // check if the option was present in the OSoL file
+                    found = false;
+                    int iopt;
+                    for (iopt=0; iopt < nOther; iopt++)
                     {
-        	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                        if (d->sufname == otherOptionNames[iopt])
                         {
-                            d->u.r[otherOption->var[i]->idx] = os_strtod(otherOption->var[i]->value.c_str(), NULL);
+                            found = true;
+                            break;
                         }
+                    }
+
+                    // merge values by overwriting .nl file info 
+                    if (found)
+                    {
+                        OtherVariableOption* otherOption;
+                        otherOption = osoption->getOtherVariableOption(iopt);
+                        for (int i=0; i < otherOption->numberOfVar; i++)
+                        {
+            	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                            {
+                                d->u.r[otherOption->var[i]->idx] = os_strtod(otherOption->var[i]->value.c_str(), NULL);
+                            }
+                            else
+                                d->u.i[otherOption->var[i]->idx] = (int)os_strtod(otherOption->var[i]->value.c_str(), NULL) + 0.1;
+                        }
+                        if (otherOption->description == "")
+                            varopt->description = "combined from osol and .nl data";
                         else
-                            d->u.i[otherOption->var[i]->idx] = (int)os_strtod(otherOption->var[i]->value.c_str(), NULL) + 0.1;
+                            varopt->description = otherOption->description + "; merged with .nl data";
                     }
-                    if (otherOption->description == "")
-                        varopt->description = "combined from osol and .nl data";
                     else
-                        varopt->description = otherOption->description + "; merged with .nl data";
-                }
-                else
-                    varopt->description = "transferred from .nl file";
+                        varopt->description = "transferred from .nl file";
 
-                // count the number of entries
-	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
-	        	{
-                    varopt->type = "real";
-                    nOtherIdx = 0;
-                    for (int k=0; k < n_var; k++)
-                    {
-                        if (d->u.r[k] != 0)
+                    // count the number of entries
+    	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+    	        	{
+                        varopt->type = "real";
+                        nOtherIdx = 0;
+                        for (int k=0; k < n_var; k++)
                         {
-                            varopt->var[nOtherIdx] = new OtherVarOption();
-                            varopt->var[nOtherIdx]->idx = k;    
-                            varopt->var[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
-                            nOtherIdx++;
+                            if (d->u.r[k] != 0)
+                            {
+                                varopt->var[nOtherIdx] = new OtherVarOption();
+                                varopt->var[nOtherIdx]->idx = k;    
+                                varopt->var[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
+                                nOtherIdx++;
+                            }
                         }
                     }
-                }
-                else             // here the suffix values are integer
-                {
-                    varopt->type = "integer";
-                    nOtherIdx = 0;
-                    for (int k=0; k < n_var; k++)
+                    else             // here the suffix values are integer
                     {
-                        if (d->u.i[k] != 0)
+                        varopt->type = "integer";
+                        nOtherIdx = 0;
+                        for (int k=0; k < n_var; k++)
                         {
-                            varopt->var[nOtherIdx] = new OtherVarOption();
-                            varopt->var[nOtherIdx]->idx = k;    
-                            varopt->var[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
-                            nOtherIdx++;
-                        }    
+                            if (d->u.i[k] != 0)
+                            {
+                                varopt->var[nOtherIdx] = new OtherVarOption();
+                                varopt->var[nOtherIdx]->idx = k;    
+                                varopt->var[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
+                                nOtherIdx++;
+                            }    
+                        }
                     }
-                }
 
-          		varopt->numberOfVar = nOtherIdx;
+              		varopt->numberOfVar = nOtherIdx;
 
-                if (found)
-                {
-                    // here we just replace the <var> element and update the numberOfVar
-                    delete [] osoption->optimization->variables->other[iopt]->var;
-                    osoption->optimization->variables->other[iopt]->var = varopt->var;
-                    osoption->optimization->variables->other[iopt]->numberOfVar = nOtherIdx;
-                    varopt->var = NULL;
-                    osoption->optimization->variables->other[iopt]->description = varopt->description;
-                }
-                else
-                {
-               		if (!osoption->setAnOtherVariableOption(varopt))
-                       throw ErrorClass( "OSnl2OS: Error transfering suffixes on variables" );
-                }
+                    if (found)
+                    {
+                        // here we just replace the <var> element and update the numberOfVar
+                        for (int k=0; k < osoption->optimization->variables->other[iopt]->numberOfVar; k++)
+                            delete osoption->optimization->variables->other[iopt]->var[k];
+                        delete [] osoption->optimization->variables->other[iopt]->var;
+                        osoption->optimization->variables->other[iopt]->var = varopt->var;
+                        osoption->optimization->variables->other[iopt]->numberOfVar = nOtherIdx;
+                        varopt->var = NULL;
+                        osoption->optimization->variables->other[iopt]->description = varopt->description;
+                    }
+                    else
+                    {
+                   		if (!osoption->setAnOtherVariableOption(varopt))
+                           throw ErrorClass( "OSnl2OS: Error transfering suffixes on variables" );
+                    }
 
-           		delete varopt;
-           		varopt = NULL;
+               		delete varopt;
+               		varopt = NULL;
+                }
 	        }
+			delete [] otherOptionNames;
+			otherOptionNames = NULL;
         }
 
     	// suffixes indexed over constraints and objectives work the same way
        	suffixType = ASL_Sufkind_con;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
+        // make a record of all <otherConstraintOptions> present in the OSoL file
+            if (osoption != NULL &&
+                osoption->optimization != NULL &&
+                osoption->optimization->constraints != NULL &&
+                osoption->optimization->constraints->numberOfOtherConstraintOptions > 0)
+            {
+                otherOptionNames = new std::string[osoption->optimization->constraints->numberOfOtherConstraintOptions];
+                nOther = 0;
+                for (int i=0; i < osoption->optimization->constraints->numberOfOtherConstraintOptions; i++)
+                    if (osoption->optimization->constraints->other[i]->numberOfCon > 0)
+                        otherOptionNames[nOther++] = osoption->optimization->constraints->other[i]->name;
+            }
             OtherConstraintOption* conopt;
         	for (d=asl->i.suffixes[suffixType]; d; d=d->next)
         	{
 #ifdef AMPLDEBUG
         		std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
 #endif
-
-                // allocate space
-                conopt = new OtherConstraintOption();
-
-            	conopt->name = d->sufname;
-		        conopt->numberOfEnumerations = 0;
-        		conopt->con = new OtherConOption*[n_con];
-
-                // check if the option was present in the OSoL file
-                found = false;
-                int iopt;
-                for (iopt=0; iopt < nOther; iopt++)
+                // Deal with special cases first: basis information and branching weights
+                if (strcmp(d->sufname,"sstatus") == 0) //(d->sufname == "sstatus")
                 {
-                    if (d->sufname == otherOptionNames[iopt])
+                    // allocate space
+                    int* IBS;
+ 
+                    // if OSoL file has a basis, merge values by overwriting .nl file info 
+                    if (osoption->optimization->constraints->initialBasisStatus != NULL)
                     {
-                        found = true;
-                        break;
+                        // note that AMPL uses different numeric values for representing basis status:
+                        // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
+                        // 1 = basic                                    = ENUM_BASIS_STATUS_basic
+                        // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
+                        // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
+                        // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
+                        // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
+                        // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_unknown);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_unknown,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 0;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 1;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_superbasic);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_superbasic,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 2;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 3;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 4;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 5;
+
+                			delete[] IBS;
+                        }
+
+                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_isFree);
+                		if (nIndexes > 0)
+                		{
+                			IBS = new int[nIndexes];
+                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_isFree,IBS);
+
+                            for (int i=0; i < nIndexes; i++)
+                                d->u.i[IBS[i]] = 6;
+
+                			delete[] IBS;
+                        }
+
+                        // count the number of entries
+                        int nidx[7];
+                        int kidx[7];
+                        for (i=0; i<7; i++)
+                        {
+                            nidx[i] = 0;
+                            kidx[i] = 0;
+                        }
+
+                        for (int k=0; k < n_con; k++)
+                            nidx[d->u.i[k]]++;
+
+                        // allocate space
+                        int **IBS2;
+                        IBS2 = new int*[7];
+                        for (int i=0; i<7; i++)
+                        {
+                            IBS2[i] = new int[nidx[i]];
+                        }
+
+                        // store basis info into class-oriented arrays
+                        for (int k=0; k < n_con; k++)
+                        {
+                            IBS2[d->u.i[k]][kidx[d->u.i[k]]++] = k;
+                        }
+
+                        // store into <initialBasisStatus> element
+                        //delete osoption->optimization->constraints->initialBasisStatus;
+                        if (nidx[0] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_unknown, IBS2[0], nidx[0]);
+                        if (nidx[1] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic, IBS2[1], nidx[1]);
+                        if (nidx[2] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_superbasic, IBS2[2], nidx[2]);
+                        if (nidx[3] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower, IBS2[3], nidx[3]);
+                        if (nidx[4] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper, IBS2[4], nidx[4]);
+                        if (nidx[5] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality, IBS2[5], nidx[5]);
+                        if (nidx[6] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_isFree, IBS2[6], nidx[6]);
+                        // garbage collection
+                        for (int i=0; i<7; i++)
+                            delete [] IBS2[i];
+                        delete [] IBS2;
                     }
                 }
-
-                // merge values by overwriting .nl file info 
-                if (found)
+                
+                else  // not one of the special cases
                 {
-                    OtherConstraintOption* otherOption;
-                    otherOption = osoption->getOtherConstraintOption(iopt);
-                    for (int i=0; i < otherOption->numberOfCon; i++)
+                    // allocate space
+                    conopt = new OtherConstraintOption();
+
+                	conopt->name = d->sufname;
+    		        conopt->numberOfEnumerations = 0;
+            		conopt->con = new OtherConOption*[n_con];
+
+                    // check if the option was present in the OSoL file
+                    found = false;
+                    int iopt;
+                    for (iopt=0; iopt < nOther; iopt++)
                     {
-        	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                        if (d->sufname == otherOptionNames[iopt])
                         {
-                            d->u.r[otherOption->con[i]->idx] = os_strtod(otherOption->con[i]->value.c_str(), NULL);
+                            found = true;
+                            break;
                         }
+                    }
+
+                    // merge values by overwriting .nl file info 
+                    if (found)
+                    {
+                        OtherConstraintOption* otherOption;
+                        otherOption = osoption->getOtherConstraintOption(iopt);
+                        for (int i=0; i < otherOption->numberOfCon; i++)
+                        {
+            	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                            {
+                                d->u.r[otherOption->con[i]->idx] = os_strtod(otherOption->con[i]->value.c_str(), NULL);
+                            }
+                            else
+                                d->u.i[otherOption->con[i]->idx] = (int)os_strtod(otherOption->con[i]->value.c_str(), NULL) + 0.1;
+                        }
+                        if (otherOption->description == "")
+                            conopt->description = "combined from osol and .nl data";
                         else
-                            d->u.i[otherOption->con[i]->idx] = (int)os_strtod(otherOption->con[i]->value.c_str(), NULL) + 0.1;
+                            conopt->description = otherOption->description + "; merged with .nl data";
                     }
-                    if (otherOption->description == "")
-                        conopt->description = "combined from osol and .nl data";
                     else
-                        conopt->description = otherOption->description + "; merged with .nl data";
-                }
-                else
-                    conopt->description = "transferred from .nl file";
+                        conopt->description = "transferred from .nl file";
 
-                // count the number of entries
-	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
-	        	{
-                    conopt->type = "real";
-                    nOtherIdx = 0;
-                    for (int k=0; k < n_con; k++)
-                    {
-                        if (d->u.r[k] != 0)
+                    // count the number of entries
+    	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+    	        	{
+                        conopt->type = "real";
+                        nOtherIdx = 0;
+                        for (int k=0; k < n_con; k++)
                         {
-                            conopt->con[nOtherIdx] = new OtherConOption();
-                            conopt->con[nOtherIdx]->idx = k;    
-                            conopt->con[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
-                            nOtherIdx++;
+                            if (d->u.r[k] != 0)
+                            {
+                                conopt->con[nOtherIdx] = new OtherConOption();
+                                conopt->con[nOtherIdx]->idx = k;    
+                                conopt->con[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
+                                nOtherIdx++;
+                            }
                         }
                     }
-                }
-                else             // here the suffix values are integer
-                {
-                    conopt->type = "integer";
-                    nOtherIdx = 0;
-                    for (int k=0; k < n_con; k++)
+                    else             // here the suffix values are integer
                     {
-                        if (d->u.i[k] != 0)
+                        conopt->type = "integer";
+                        nOtherIdx = 0;
+                        for (int k=0; k < n_con; k++)
                         {
-                            conopt->con[nOtherIdx] = new OtherConOption();
-                            conopt->con[nOtherIdx]->idx = k;    
-                            conopt->con[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
-                            nOtherIdx++;
+                            if (d->u.i[k] != 0)
+                            {
+                                conopt->con[nOtherIdx] = new OtherConOption();
+                                conopt->con[nOtherIdx]->idx = k;    
+                                conopt->con[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
+                                nOtherIdx++;
+                            }
                         }
                     }
-                }
 
-        		conopt->numberOfCon = nOtherIdx;
+            		conopt->numberOfCon = nOtherIdx;
 
-                if (found)
-                {
-                    // here we just replace the <con> element and update the numberOfCon
-                    delete [] osoption->optimization->constraints->other[iopt]->con;
-                    osoption->optimization->constraints->other[iopt]->con = conopt->con;
-                    osoption->optimization->constraints->other[iopt]->numberOfCon = nOtherIdx;
-                    conopt->con = NULL;
-                    osoption->optimization->constraints->other[iopt]->description = conopt->description;
-                }
-                else
-                {
-               		if (!osoption->setAnOtherConstraintOption(conopt))
-                       throw ErrorClass( "OSnl2OS: Error transfering suffixes on constraints" );
-                }
+                    if (found)
+                    {
+                        // here we just replace the <con> element and update the numberOfCon
+                        for (int k=0; k < osoption->optimization->constraints->other[iopt]->numberOfCon; k++)
+                            delete osoption->optimization->constraints->other[iopt]->con[k];
+                        delete []  osoption->optimization->constraints->other[iopt]->con;
+                        osoption->optimization->constraints->other[iopt]->con = conopt->con;
+                        osoption->optimization->constraints->other[iopt]->numberOfCon = nOtherIdx;
+                        conopt->con = NULL;
+                        osoption->optimization->constraints->other[iopt]->description = conopt->description;
+                    }
+                    else
+                    {
+                   		if (!osoption->setAnOtherConstraintOption(conopt))
+                           throw ErrorClass( "OSnl2OS: Error transfering suffixes on constraints" );
+                    }
 
-        		delete conopt;
-        		conopt = NULL;
+            		delete conopt;
+            		conopt = NULL;
+                }
 	        }            
+			delete [] otherOptionNames;
+			otherOptionNames = NULL;
         }
 
        	suffixType = ASL_Sufkind_obj;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
+        // make a record of all <otherObjectiveOptions> present in the OSoL file
+            if (osoption != NULL &&
+                osoption->optimization != NULL &&
+                osoption->optimization->objectives != NULL &&
+                osoption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
+            {
+                otherOptionNames = new std::string[osoption->optimization->objectives->numberOfOtherObjectiveOptions];
+                nOther = 0;
+                for (int i=0; i < osoption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
+                    if (osoption->optimization->objectives->other[i]->numberOfObj > 0)
+                        otherOptionNames[nOther++] = osoption->optimization->objectives->other[i]->name;
+            }
             OtherObjectiveOption* objopt;
         	for (d=asl->i.suffixes[suffixType]; d; d=d->next)
         	{
@@ -1475,7 +1815,9 @@ bool OSnl2OS::createOSObjects()
 
                 if (found)
                 {
-                    // here we just replace the <var> element and update the numberOfVar
+                    // here we just replace the <obj> element and update the numberOfObj
+                    for (int k=0; k < osoption->optimization->objectives->other[iopt]->numberOfObj; k++)
+                        delete osoption->optimization->objectives->other[iopt]->obj[k];
                     delete [] osoption->optimization->objectives->other[iopt]->obj;
                     osoption->optimization->objectives->other[iopt]->obj = objopt->obj;
                     osoption->optimization->objectives->other[iopt]->numberOfObj = nOtherIdx;
@@ -1491,6 +1833,8 @@ bool OSnl2OS::createOSObjects()
         		delete objopt;
         		objopt = NULL;
 	        }
+			delete [] otherOptionNames;
+			otherOptionNames = NULL;
         }
 
 
@@ -1522,15 +1866,7 @@ bool OSnl2OS::createOSObjects()
 	        }
         }
 
-    // process initial primal values
- 
-std::cout << "Initial variable values:"   << std::endl;
-for (int i=0; i < n_var; i++)
-{
-std::cout << X0[i] << "    " << (int)havex0[i] << std::endl;
-}
-
-        // process and merge data contained in OSoL file
+        // process initial primal values and merge with data contained in OSoL file
         // .nl file has data in dense form, but we store in sparse form
         // OSoL data supersede .nl file, so we turn redundant .nl file info OFF
         if (osoption != NULL && 
@@ -1543,11 +1879,6 @@ std::cout << X0[i] << "    " << (int)havex0[i] << std::endl;
             for (int i=0; i < n_prev; i++)
                 havex0[osoption->optimization->variables->initialVariableValues->var[i]->idx] = 0;
         }
-std::cout << "Initial variable values, updated:"   << std::endl;
-for (int i=0; i < n_var; i++)
-{
-std::cout << X0[i] << "    " << (int)havex0[i] << std::endl;
-}
 
         // count the number of values (including those in the OSoL file)
         int n_x0 = 0;
@@ -1583,18 +1914,15 @@ std::cout << X0[i] << "    " << (int)havex0[i] << std::endl;
             // store into osoption
             if (!osoption->setInitVarValuesSparse(n_x0, x_init, ENUM_COMBINE_ARRAYS_merge)) 
                 throw ErrorClass( "OSnl2OS: Error merging initial primal variable values" );
+
+            for (int i=0; i < n_x0; i++)
+                delete x_init[i];
+//                x_init[i] = NULL;
+            delete  [] x_init;
+            x_init = NULL;
         }        
  
-
-        // process initial dual values
- 
-std::cout << "Initial dual variable values:"   << std::endl;
-for (int i=0; i < n_con; i++)
-{
-std::cout << pi0[i] << "    " << (int)havepi0[i] << std::endl;
-}
-
-        // process and merge data contained in OSoL file
+        // process initial dual values and merge with data contained in OSoL file
         // .nl file has data in dense form, but we store in sparse form
         // OSoL data supersede .nl file, so we turn redundant .nl file info OFF
         if (osoption != NULL && 
@@ -1607,12 +1935,6 @@ std::cout << pi0[i] << "    " << (int)havepi0[i] << std::endl;
             for (int i=0; i < n_prev; i++)
                 havepi0[osoption->optimization->constraints->initialDualValues->con[i]->idx] = 0;
         }
-
-std::cout << "Initial dual variable values, updated:"   << std::endl;
-for (int i=0; i < n_con; i++)
-{
-std::cout << pi0[i] << "    " << (int)havepi0[i] << std::endl;
-}
 
         // count the number of values (including those in the OSoL file)
         int n_pi0 = 0;
@@ -1649,6 +1971,12 @@ std::cout << pi0[i] << "    " << (int)havepi0[i] << std::endl;
             // store into osoption
             if (!osoption->setInitDualVarValuesSparse(n_pi0, pi_init, ENUM_COMBINE_ARRAYS_merge)) 
                 throw ErrorClass( "OSnl2OS: Error merging initial dual variable values" );
+
+            for (int i=0; i < n_pi0; i++)
+                delete pi_init[i];
+//                pi_init[i] = NULL;
+            delete  [] pi_init;
+            pi_init = NULL;
         }        
 
     //still to do
@@ -1687,7 +2015,6 @@ std::cout << pi0[i] << "    " << (int)havepi0[i] << std::endl;
  //    osilwriter.m_bWhiteSpace = true;
     std::cout << osolwriter.writeOSoL( osoption) << std::endl;
     std::cout << "DONE WRITE THE OPTIONS" << std::endl;
-
 #endif
    
     return true;

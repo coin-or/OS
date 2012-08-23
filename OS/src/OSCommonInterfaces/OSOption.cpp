@@ -2806,6 +2806,8 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
 
 
 
+
+
                     int num_var;
                     num_var = this->getNumberOfInitVarValues();
 
@@ -3226,6 +3228,7 @@ double* OSOption::getIntegerVariableBranchingWeightsDense()
 
 /**
  * get a list of branching weights for integer variables in dense form
+
  * @param numberOfVariables is the dimension of the array
  * @return an array of values
  * @note return OSNaN() for variables that are not initialed
@@ -5021,7 +5024,7 @@ bool InitVariableValues::setVar(int numberOfVar, InitVarValue **var)
         for (i = 0; i < numberOfVar; i++)
         {
             this->var[i] = new InitVarValue();
-            *this->var[i] = *var[i];
+           *this->var[i] = *var[i];
         }
         return true;
     }
@@ -5049,6 +5052,7 @@ bool InitVariableValues::setVar(int numberOfVar, InitVarValue **var, ENUM_COMBIN
                 throw ErrorClass( "InitVarValue array previously used.");
             if (disp == ENUM_COMBINE_ARRAYS_ignore)
                 return true;
+
             if (disp == ENUM_COMBINE_ARRAYS_merge)
                 return this->addVar(numberOfVar, var);
 
@@ -5176,7 +5180,7 @@ bool InitVariableValues::addVar(int numberOfVar, InitVarValue **var)
         if (numberOfVar == 0)
             return true;
 
-	int nprev = this->numberOfVar;
+        int nprev = this->numberOfVar;
 
         InitVarValue** temp = new InitVarValue*[nprev+numberOfVar];  //Allocate the new pointers
         for (int i = 0; i < nprev; i++)
@@ -5185,8 +5189,11 @@ bool InitVariableValues::addVar(int numberOfVar, InitVarValue **var)
         delete[] this->var; //delete old pointers
 
 //	add in the new elements
-	for (int i=0; i < numberOfVar; i++)
-	        temp[ nprev+i] = var[i];
+        for (int i=0; i < numberOfVar; i++)
+        {
+            temp[nprev+i] = new InitVarValue();
+	       *temp[nprev+i] = *var[i];
+        }
 
         this->var = temp;   //hook the new pointers into the data structure
        	this->numberOfVar = nprev + numberOfVar;
@@ -5226,7 +5233,7 @@ bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var)
         for (i = 0; i < numberOfVar; i++)
         {
             this->var[i] = new InitVarValueString();
-            *this->var[i] = *var[i];
+           *this->var[i] = *var[i];
         }
         return true;
     }
@@ -5276,7 +5283,7 @@ bool InitVariableValuesString::setVar(int numberOfVar, InitVarValueString **var,
         for (i = 0; i < numberOfVar; i++)
         {
             this->var[i] = new InitVarValueString();
-            *this->var[i] = *var[i];
+           *this->var[i] = *var[i];
         }
         return true;
     }
@@ -5381,7 +5388,7 @@ bool InitVariableValuesString::addVar(int numberOfVar, InitVarValueString **var)
         if (numberOfVar == 0)
             return true;
 
-	int nprev = this->numberOfVar;
+        int nprev = this->numberOfVar;
 
         InitVarValueString** temp = new InitVarValueString*[nprev+numberOfVar];  //Allocate the new pointers
         for (int i = 0; i < nprev; i++)
@@ -5390,8 +5397,11 @@ bool InitVariableValuesString::addVar(int numberOfVar, InitVarValueString **var)
         delete[] this->var; //delete old pointers
 
 //	add in the new elements
-	for (int i=0; i < numberOfVar; i++)
-	        temp[ nprev+i] = var[i];
+        for (int i=0; i < numberOfVar; i++)
+        {
+            temp[nprev+i] = new InitVarValueString();
+	       *temp[nprev+i] = *var[i];
+        }
 
         this->var = temp;   //hook the new pointers into the data structure
        	this->numberOfVar = nprev + numberOfVar;
@@ -5431,7 +5441,7 @@ bool InitialBasisStatus::setVar(int numberOfVar, InitBasStatus **var)
         for (i = 0; i < numberOfVar; i++)
         {
             this->var[i] = new InitBasStatus();
-            *this->var[i] = *var[i];
+           *this->var[i] = *var[i];
         }
         return true;
     }
@@ -5515,7 +5525,7 @@ bool IntegerVariableBranchingWeights::setVar(int numberOfVar, BranchingWeight **
         for (i = 0; i < numberOfVar; i++)
         {
             this->var[i] = new BranchingWeight();
-            *this->var[i] = *var[i];
+           *this->var[i] = *var[i];
         }
         return true;
     }
@@ -5671,7 +5681,7 @@ bool IntegerVariableBranchingWeights::addVar(int numberOfVar, BranchingWeight **
         if (numberOfVar == 0)
             return true;
 
-	int nprev = this->numberOfVar;
+        int nprev = this->numberOfVar;
 
         BranchingWeight** temp = new BranchingWeight*[nprev+numberOfVar];  //Allocate the new pointers
         for (int i = 0; i < nprev; i++)
@@ -5680,8 +5690,11 @@ bool IntegerVariableBranchingWeights::addVar(int numberOfVar, BranchingWeight **
         delete[] this->var; //delete old pointers
 
 //	add in the new elements
-	for (int i=0; i < numberOfVar; i++)
-	        temp[ nprev+i] = var[i];
+        for (int i=0; i < numberOfVar; i++)
+        {
+            temp[nprev+i] = new BranchingWeight();
+	       *temp[nprev+i] = *var[i];
+        }
 
         this->var = temp;   //hook the new pointers into the data structure
        	this->numberOfVar = nprev + numberOfVar;
@@ -5721,7 +5734,7 @@ bool SOSWeights::setVar(int numberOfVar, BranchingWeight **var)
         for (i = 0; i < numberOfVar; i++)
         {
             this->var[i] = new BranchingWeight();
-            *this->var[i] = *var[i];
+           *this->var[i] = *var[i];
         }
         return true;
     }
@@ -5815,7 +5828,7 @@ bool SOSVariableBranchingWeights::setSOS(int numberOfSOS, SOSWeights **sos)
                 for (j = 0; j < sos[i]->numberOfVar; j++)
                 {
                     this->sos[i]->var[j] = new BranchingWeight();
-                    *this->sos[i]->var[j] = *sos[i]->var[j];
+                   *this->sos[i]->var[j] = *sos[i]->var[j];
                 }
             }
         }
@@ -5907,7 +5920,7 @@ bool OtherVariableOption::setVar(int numberOfVar, OtherVarOption **var)
         for (i = 0; i < numberOfVar; i++)
         {
             this->var[i] = new OtherVarOption();
-            *this->var[i] = *var[i];
+           *this->var[i] = *var[i];
         }
         return true;
     }
@@ -6077,8 +6090,8 @@ bool VariableOption::addOther(OtherVariableOption *other)
             temp[ nopt]->var = new OtherVarOption*[other->numberOfVar];
             for (j = 0; j < other->numberOfVar; j++)
             {
-                temp[ nopt]->var[j] = new OtherVarOption();
-                *temp[ nopt]->var[j] = *other->var[j];
+                temp[nopt]->var[j] = new OtherVarOption();
+               *temp[nopt]->var[j] = *other->var[j];
             }
         }
 
@@ -6137,7 +6150,7 @@ bool InitObjectiveValues::setObj(int numberOfObj, InitObjValue **obj)
         for (i = 0; i < numberOfObj; i++)
         {
             this->obj[i] = new InitObjValue();
-            *this->obj[i] = *obj[i];
+           *this->obj[i] = *obj[i];
         }
         return true;
     }
@@ -6281,7 +6294,7 @@ bool InitObjectiveValues::addObj(int numberOfObj, InitObjValue **obj)
         if (numberOfObj == 0)
             return true;
 
-	int nprev = this->numberOfObj;
+        int nprev = this->numberOfObj;
 
         InitObjValue** temp = new InitObjValue*[nprev+numberOfObj];  //Allocate the new pointers
         for (int i = 0; i < nprev; i++)
@@ -6290,8 +6303,11 @@ bool InitObjectiveValues::addObj(int numberOfObj, InitObjValue **obj)
         delete[] this->obj; //delete old pointers
 
 //	add in the new elements
-	for (int i=0; i < numberOfObj; i++)
-	        temp[ nprev+i] = obj[i];
+        for (int i=0; i < numberOfObj; i++)
+        {
+            temp[nprev+i] = new InitObjValue();
+	       *temp[nprev+i] = *obj[i];
+        }
 
         this->obj = temp;   //hook the new pointers into the data structure
        	this->numberOfObj = nprev + numberOfObj;
@@ -6331,7 +6347,7 @@ bool InitObjectiveBounds::setObj(int numberOfObj, InitObjBound **obj)
         for (i = 0; i < numberOfObj; i++)
         {
             this->obj[i] = new InitObjBound();
-            *this->obj[i] = *obj[i];
+           *this->obj[i] = *obj[i];
         }
         return true;
     }
@@ -6481,7 +6497,7 @@ bool InitObjectiveBounds::addObj(int numberOfObj, InitObjBound **obj)
         if (numberOfObj == 0)
             return true;
 
-	int nprev = this->numberOfObj;
+        int nprev = this->numberOfObj;
 
         InitObjBound** temp = new InitObjBound*[nprev+numberOfObj];  //Allocate the new pointers
         for (int i = 0; i < nprev; i++)
@@ -6490,8 +6506,11 @@ bool InitObjectiveBounds::addObj(int numberOfObj, InitObjBound **obj)
         delete[] this->obj; //delete old pointers
 
 //	add in the new elements
-	for (int i=0; i < numberOfObj; i++)
-	        temp[ nprev+i] = obj[i];
+        for (int i=0; i < numberOfObj; i++)
+        {
+            temp[nprev+i] = new InitObjBound();
+	       *temp[nprev+i] = *obj[i];
+        }
 
         this->obj = temp;   //hook the new pointers into the data structure
        	this->numberOfObj = nprev + numberOfObj;
@@ -6531,7 +6550,7 @@ bool OtherObjectiveOption::setObj(int numberOfObj, OtherObjOption **obj)
         for (i = 0; i < numberOfObj; i++)
         {
             this->obj[i] = new OtherObjOption();
-            *this->obj[i] = *obj[i];
+           *this->obj[i] = *obj[i];
         }
         return true;
     }
@@ -6701,8 +6720,8 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
             temp[ nopt]->obj = new OtherObjOption*[other->numberOfObj];
             for (j = 0; j < other->numberOfObj; j++)
             {
-                temp[ nopt]->obj[j] = new OtherObjOption();
-                *temp[ nopt]->obj[j] = *other->obj[j];
+                temp[nopt]->obj[j] = new OtherObjOption();
+               *temp[nopt]->obj[j] = *other->obj[j];
             }
         }
 
@@ -6764,7 +6783,7 @@ bool InitConstraintValues::setCon(int numberOfCon, InitConValue **con)
         for (i = 0; i < numberOfCon; i++)
         {
             this->con[i] = new InitConValue();
-            *this->con[i] = *con[i];
+           *this->con[i] = *con[i];
         }
         return true;
     }
@@ -6850,7 +6869,7 @@ bool InitConstraintValues::setCon(int numberOfCon, int *idx, double *value, std:
         this->con[i]->value = value[i];
     }
     return true;
-}//setObj
+}//setCon
 
 
 
@@ -6913,7 +6932,7 @@ bool InitConstraintValues::addCon(int numberOfCon, InitConValue **con)
         if (numberOfCon == 0)
             return true;
 
-	int nprev = this->numberOfCon;
+        int nprev = this->numberOfCon;
 
         InitConValue** temp = new InitConValue*[nprev+numberOfCon];  //Allocate the new pointers
         for (int i = 0; i < nprev; i++)
@@ -6922,8 +6941,11 @@ bool InitConstraintValues::addCon(int numberOfCon, InitConValue **con)
         delete[] this->con; //delete old pointers
 
 //	add in the new elements
-	for (int i=0; i < numberOfCon; i++)
-	        temp[ nprev+i] = con[i];
+        for (int i=0; i < numberOfCon; i++)
+        {
+            temp[nprev+i] = new InitConValue();
+	       *temp[nprev+i] = *con[i];
+        }
 
         this->con = temp;   //hook the new pointers into the data structure
        	this->numberOfCon = nprev + numberOfCon;
@@ -6964,7 +6986,7 @@ bool InitDualVariableValues::setCon(int numberOfCon, InitDualVarValue **con)
         for (i = 0; i < numberOfCon; i++)
         {
             this->con[i] = new InitDualVarValue();
-            *this->con[i] = *con[i];
+           *this->con[i] = *con[i];
         }
         return true;
     }
@@ -7113,7 +7135,7 @@ bool InitDualVariableValues::addCon(int numberOfCon, InitDualVarValue **con)
         if (numberOfCon == 0)
             return true;
 
-	int nprev = this->numberOfCon;
+        int nprev = this->numberOfCon;
 
         InitDualVarValue** temp = new InitDualVarValue*[nprev+numberOfCon];  //Allocate the new pointers
         for (int i = 0; i < nprev; i++)
@@ -7122,8 +7144,11 @@ bool InitDualVariableValues::addCon(int numberOfCon, InitDualVarValue **con)
         delete[] this->con; //delete old pointers
 
 //	add in the new elements
-	for (int i=0; i < numberOfCon; i++)
-	        temp[ nprev+i] = con[i];
+        for (int i=0; i < numberOfCon; i++)
+        {
+            temp[nprev+i] = new InitDualVarValue();
+	       *temp[nprev+i] = *con[i];
+        }
 
         this->con = temp;   //hook the new pointers into the data structure
        	this->numberOfCon = nprev + numberOfCon;
@@ -7266,7 +7291,7 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
                 for (j = 0; j < other[i]->numberOfCon; j++)
                 {
                     this->other[i]->con[j] = new OtherConOption();
-                    *this->other[i]->con[j] = *other[i]->con[j];
+                   *this->other[i]->con[j] = *other[i]->con[j];
                 }
             }
 
@@ -7337,8 +7362,8 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
             temp[ nopt]->con = new OtherConOption*[other->numberOfCon];
             for (j = 0; j < other->numberOfCon; j++)
             {
-                temp[ nopt]->con[j] = new OtherConOption();
-                *temp[ nopt]->con[j] = *other->con[j];
+                temp[nopt]->con[j] = new OtherConOption();
+               *temp[nopt]->con[j] = *other->con[j];
             }
         }
 
@@ -8795,6 +8820,7 @@ bool OSOption::setOtherOptionEnumeration(int object, int otherOptionNumber, int 
         if (optimization->constraints->other[otherOptionNumber] == NULL) return false;
         for (int j=0; j<numberOfEl; j++) if (idxArray[j] < 0) return false;
 
+
         if (optimization->constraints->other[otherOptionNumber]->enumeration == NULL) return false;
         if (enumerationNumber < 0 || enumerationNumber >= optimization->constraints->other[otherOptionNumber]->numberOfEnumerations) return false;
         if (optimization->constraints->other[otherOptionNumber]->enumeration[enumerationNumber] == NULL) return false;
@@ -9116,7 +9142,7 @@ bool OSOption::setAnOtherObjectiveOption(OtherObjectiveOption* optionValue)
     if (this->optimization->objectives == NULL)
         this->optimization->objectives = new ObjectiveOption();
     return this->optimization->objectives->addOther(optionValue);
-}//setAnOtherVariableOption
+}//setAnOtherObjectiveOption
 
 
 bool OSOption::setInitConValues(int numberOfCon, int* idx, double* value, std::string* name)
@@ -12631,6 +12657,7 @@ bool InitObjValue::setRandom( double density, bool conformant )
 
 bool InitObjectiveBounds::setRandom( double density, bool conformant )
 {
+
 #ifdef DEBUG_OSOPTION
     cout << "Set random InitObjectiveBounds" << endl;
 #endif

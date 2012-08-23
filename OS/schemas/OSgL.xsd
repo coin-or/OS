@@ -2651,6 +2651,7 @@
 			<xs:element name="basic" type="IntVector" minOccurs="0"/>
 			<xs:element name="atLower" type="IntVector" minOccurs="0"/>
 			<xs:element name="atUpper" type="IntVector" minOccurs="0"/>
+			<xs:element name="atEquality" type="IntVector" minOccurs="0"/>
 			<xs:element name="isFree" type="IntVector" minOccurs="0"/>
 			<xs:element name="superBasic" type="IntVector" minOccurs="0"/>
 			<xs:element name="unknown" type="IntVector" minOccurs="0"/>

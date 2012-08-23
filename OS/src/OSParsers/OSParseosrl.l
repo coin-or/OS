@@ -233,6 +233,8 @@ return(DOUBLE);}
  
 {xmlwhitespace}*\<actualStartTime {YY_PRINT;  return(ACTUALSTARTTIMESTART);}
 {xmlwhitespace}*\<\/actualStartTime{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT;  return(ACTUALSTARTTIMEEND);}
+{xmlwhitespace}*\<atEquality {YY_PRINT; return(ATEQUALITYSTART);}
+{xmlwhitespace}*\<\/atEquality{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATEQUALITYEND);}
 {xmlwhitespace}*\<atLower {YY_PRINT; return(ATLOWERSTART);}
 {xmlwhitespace}*\<\/atLower{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATLOWEREND);}
 {xmlwhitespace}*\<atUpper {YY_PRINT; return(ATUPPERSTART);}

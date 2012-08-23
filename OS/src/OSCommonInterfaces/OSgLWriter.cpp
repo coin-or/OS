@@ -221,6 +221,15 @@ std::string writeBasisStatus(BasisStatus *bs, bool addWhiteSpace, bool writeBase
         if(addWhiteSpace == true) outStr << endl;
     }
 
+    if (bs->atEquality != NULL)
+    {
+        outStr << "<atEquality numberOfEl=\"" << bs->atEquality->numberOfEl << "\">";
+        if(addWhiteSpace == true) outStr << endl;
+        outStr << writeIntVectorData(bs->atEquality, addWhiteSpace, writeBase64);
+        outStr << "</atEquality>";
+        if(addWhiteSpace == true) outStr << endl;
+    }
+
     if (bs->isFree != NULL)
     {
         outStr << "<isFree numberOfEl=\"" << bs->isFree->numberOfEl << "\">";

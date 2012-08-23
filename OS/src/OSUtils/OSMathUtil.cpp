@@ -167,7 +167,7 @@ std::string os_dtoa_format(double  x)
     strLength = strlen( charResult);
 
 
-    // return charResult if we have nan or infinity  -- if so, return orginal string
+    // return charResult if we have nan or infinity  -- if so, return original string
     if(decimalPointPos == 9999)
     {
         for(k = 0; k < strLength; k++)outStr << charResult[ k];

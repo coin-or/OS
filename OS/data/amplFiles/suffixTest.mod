@@ -118,6 +118,21 @@ suffix moreprobbinary,  binary, IN;      let rbrock2.moreprobbinary  := 1;
 suffix moreprobstring,  symbolic;
 option moreprobstring_table '\
    0    real \
-   1    test ';                          let rbrock2.moreprobstring  := "test";
+   1    test \
+   2    more ';                          let rbrock2.moreprobstring  := "more";
 
+### basis information
+let x[1].sstatus_num := 1;
+let x[2].sstatus := "sup";
+let qpTest[1].sstatus_num := 5;
+let qpTest[2].sstatus := "btw";
 
+# option sstatus_table '\
+# 0	none	no status assigned\
+# 1	bas	basic\
+# 2	sup	superbasic\
+# 3	low	nonbasic <= (normally =) lower bound\
+# 4	upp	nonbasic >= (normally =) upper bound\
+# 5	equ	nonbasic at equal lower and upper bounds\
+# 6	btw	nonbasic between bounds\
+# ';

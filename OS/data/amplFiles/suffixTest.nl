@@ -8,6 +8,9 @@ g3 2 1 0	# problem suffixTest
  8 8	# nonzeros in Jacobian, gradients
  0 0	# max name lengths: constraints, variables
  0 0 0 0 0	# common exprs: b,c,o,c1,o1
+S0 2 sstatus
+1 1
+2 2
 S4 4 allvarnumeric
 0 3.14
 1 3.14
@@ -47,6 +50,9 @@ S0 4 morevarstring
 1 1
 2 1
 3 1
+S1 2 sstatus
+1 5
+2 6
 S5 1 someconnumeric
 4 1.4142
 S1 1 someconinteger
@@ -69,7 +75,7 @@ S2 2 moreobjnumeric
 S3 1 moreprobbinary
 0 1
 S3 1 moreprobstring
-0 1
+0 2
 C0
 o5
 o16

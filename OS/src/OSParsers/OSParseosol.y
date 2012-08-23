@@ -141,7 +141,7 @@ bool ignoreDataAfterErrors;
 %token INITIALVARIABLEVALUESSTART INITIALVARIABLEVALUESEND VARSTART VAREND;
 %token INITIALVARIABLEVALUESSTRINGSTART INITIALVARIABLEVALUESSTRINGEND;
 %token INITIALBASISSTATUSSTART INITIALBASISSTATUSEND;
-%token BASICSTART BASICEND ATUPPERSTART ATUPPEREND ATLOWERSTART ATLOWEREND
+%token BASICSTART BASICEND ATUPPERSTART ATUPPEREND ATLOWERSTART ATLOWEREND ATEQUALITYSTART ATEQUALITYEND
 %token SUPERBASICSTART SUPERBASICEND ISFREESTART ISFREEEND UNKNOWNSTART UNKNOWNEND
 %token INTEGERVARIABLEBRANCHINGWEIGHTSSTART INTEGERVARIABLEBRANCHINGWEIGHTSEND
 %token SOSVARIABLEBRANCHINGWEIGHTSSTART SOSVARIABLEBRANCHINGWEIGHTSEND
@@ -2236,7 +2236,7 @@ variableInitialBasisEmpty: ENDOFELEMENT;
 
 variableInitialBasisLaden: GREATERTHAN variableInitialBasisBody INITIALBASISSTATUSEND;
 
-variableInitialBasisBody:  variablesBasic variablesAtLower variablesAtUpper variablesIsFree variablesSuperbasic variablesUnknown;
+variableInitialBasisBody:  variablesBasic variablesAtLower variablesAtUpper variablesAtEquality variablesIsFree variablesSuperbasic variablesUnknown;
 
 /* -------------------------------------------- */
 variablesBasic: | variablesBasicStart variablesBasicNumberOfElATT variablesBasicContent
@@ -2339,6 +2339,40 @@ variablesAtUpperEmpty: ENDOFELEMENT;
 variablesAtUpperLaden: GREATERTHAN variablesAtUpperBody ATUPPEREND;
 
 variablesAtUpperBody:  osglIntArrayData;
+
+
+/* -------------------------------------------- */
+variablesAtEquality: | variablesAtEqualityStart variablesAtEqualityNumberOfElATT variablesAtEqualityContent
+{
+	if (!ignoreDataAfterErrors)
+		if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+			osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "set variables atEquality failed");	
+	delete[] osglData->osglIntArray;
+	osglData->osglIntArray = NULL;
+    suppressFurtherErrorMessages = false;
+    ignoreDataAfterErrors = false;        
+};
+
+variablesAtEqualityStart: ATEQUALITYSTART
+{
+	osglData->osglNumberOfEl = 0;
+	osglData->osglNumberOfElPresent= false;
+};
+
+variablesAtEqualityNumberOfElATT: numberOfElAttribute
+{
+	osglData->osglCounter = 0; 
+	osglData->osglNumberOfEl = parserData->numberOf;
+	osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+variablesAtEqualityContent: variablesAtEqualityEmpty | variablesAtEqualityLaden;
+
+variablesAtEqualityEmpty: ENDOFELEMENT;
+
+variablesAtEqualityLaden: GREATERTHAN variablesAtEqualityBody ATEQUALITYEND;
+
+variablesAtEqualityBody:  osglIntArrayData;
 
 
 /* -------------------------------------------- */
@@ -3103,7 +3137,7 @@ objectiveInitialBasisEmpty: ENDOFELEMENT;
 
 objectiveInitialBasisLaden: GREATERTHAN objectiveInitialBasisBody INITIALBASISSTATUSEND;
 
-objectiveInitialBasisBody:  objectivesBasic objectivesAtLower objectivesAtUpper objectivesIsFree objectivesSuperbasic objectivesUnknown;
+objectiveInitialBasisBody:  objectivesBasic objectivesAtLower objectivesAtUpper objectivesAtEquality objectivesIsFree objectivesSuperbasic objectivesUnknown;
 
 /* -------------------------------------------- */
 objectivesBasic: | objectivesBasicStart objectivesBasicNumberOfElATT objectivesBasicContent
@@ -3203,6 +3237,39 @@ objectivesAtUpperEmpty: ENDOFELEMENT;
 objectivesAtUpperLaden: GREATERTHAN objectivesAtUpperBody ATUPPEREND;
 
 objectivesAtUpperBody:  osglIntArrayData;
+
+/* -------------------------------------------- */
+objectivesAtEquality: | objectivesAtEqualityStart objectivesAtEqualityNumberOfElATT objectivesAtEqualityContent
+{
+	if (!ignoreDataAfterErrors)
+		if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+			osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "set objectives atEquality failed");	
+	delete[] osglData->osglIntArray;
+	osglData->osglIntArray = NULL;
+    suppressFurtherErrorMessages = false;
+    ignoreDataAfterErrors = false;        
+};
+
+objectivesAtEqualityStart: ATEQUALITYSTART
+{
+	osglData->osglNumberOfEl = 0;
+	osglData->osglNumberOfElPresent= false;
+};
+
+objectivesAtEqualityNumberOfElATT: numberOfElAttribute
+{
+	osglData->osglCounter = 0; 
+	osglData->osglNumberOfEl = parserData->numberOf;
+	osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+objectivesAtEqualityContent: objectivesAtEqualityEmpty | objectivesAtEqualityLaden;
+
+objectivesAtEqualityEmpty: ENDOFELEMENT;
+
+objectivesAtEqualityLaden: GREATERTHAN objectivesAtEqualityBody ATEQUALITYEND;
+
+objectivesAtEqualityBody:  osglIntArrayData;
 
 /* -------------------------------------------- */
 objectivesIsFree: | objectivesIsFreeStart objectivesIsFreeNumberOfElATT objectivesIsFreeContent
@@ -3743,7 +3810,7 @@ slacksInitialBasisEmpty: ENDOFELEMENT;
 
 slacksInitialBasisLaden: GREATERTHAN slacksInitialBasisBody INITIALBASISSTATUSEND;
 
-slacksInitialBasisBody:  slacksBasic slacksAtLower slacksAtUpper slacksIsFree slacksSuperbasic slacksUnknown;
+slacksInitialBasisBody:  slacksBasic slacksAtLower slacksAtUpper slacksAtEquality slacksIsFree slacksSuperbasic slacksUnknown;
 
 /* -------------------------------------------- */
 slacksBasic: | slacksBasicStart slacksBasicNumberOfElATT slacksBasicContent
@@ -3844,6 +3911,40 @@ slacksAtUpperEmpty: ENDOFELEMENT;
 slacksAtUpperLaden: GREATERTHAN slacksAtUpperBody ATUPPEREND;
 
 slacksAtUpperBody:  osglIntArrayData;
+
+
+/* -------------------------------------------- */
+slacksAtEquality: | slacksAtEqualityStart slacksAtEqualityNumberOfElATT slacksAtEqualityContent
+{
+	if (!ignoreDataAfterErrors)
+		if (osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atEquality, osglData->osglIntArray, osglData->osglNumberOfEl) != true)
+			osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "set slacks atEquality failed");	
+	delete[] osglData->osglIntArray;
+	osglData->osglIntArray = NULL;
+    suppressFurtherErrorMessages = false;
+    ignoreDataAfterErrors = false;        
+};
+
+slacksAtEqualityStart: ATEQUALITYSTART
+{
+	osglData->osglNumberOfEl = 0;
+	osglData->osglNumberOfElPresent= false;
+};
+
+slacksAtEqualityNumberOfElATT: numberOfElAttribute
+{
+	osglData->osglCounter = 0; 
+	osglData->osglNumberOfEl = parserData->numberOf;
+	osglData->osglIntArray = new int[parserData->numberOf];
+}; 
+
+slacksAtEqualityContent: slacksAtEqualityEmpty | slacksAtEqualityLaden;
+
+slacksAtEqualityEmpty: ENDOFELEMENT;
+
+slacksAtEqualityLaden: GREATERTHAN slacksAtEqualityBody ATEQUALITYEND;
+
+slacksAtEqualityBody:  osglIntArrayData;
 
 
 /* -------------------------------------------- */

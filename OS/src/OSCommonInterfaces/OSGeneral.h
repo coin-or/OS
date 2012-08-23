@@ -343,6 +343,7 @@ public:
     /**
 
 
+
      * hessValues is a double array of the Hessian values.
      */
     double* hessValues;
@@ -584,6 +585,7 @@ public:
     IntVector* basic;
     IntVector* atLower;
     IntVector* atUpper;
+    IntVector* atEquality;
     IntVector* isFree;
     IntVector* superbasic;
     IntVector* unknown;
@@ -1160,6 +1162,7 @@ enum ENUM_BASIS_STATUS
     ENUM_BASIS_STATUS_basic = 1,
     ENUM_BASIS_STATUS_atLower,
     ENUM_BASIS_STATUS_atUpper,
+    ENUM_BASIS_STATUS_atEquality,
     ENUM_BASIS_STATUS_isFree,
     ENUM_BASIS_STATUS_superbasic,
     ENUM_BASIS_STATUS_unknown
@@ -1170,6 +1173,7 @@ inline int returnBasisStatus(std::string status)
     if (status == "basic"     ) return ENUM_BASIS_STATUS_basic;
     if (status == "atLower"   ) return ENUM_BASIS_STATUS_atLower;
     if (status == "atUpper"   ) return ENUM_BASIS_STATUS_atUpper;
+    if (status == "atEquality") return ENUM_BASIS_STATUS_atEquality;
     if (status == "isFree"    ) return ENUM_BASIS_STATUS_isFree;
     if (status == "superBasic") return ENUM_BASIS_STATUS_superbasic;
     if (status == "unknown"   ) return ENUM_BASIS_STATUS_unknown;

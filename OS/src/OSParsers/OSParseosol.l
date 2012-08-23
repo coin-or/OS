@@ -337,6 +337,8 @@ return(DOUBLE);}
 {xmlwhitespace}*\<\/atLower{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATLOWEREND);}
 {xmlwhitespace}*\<atUpper {YY_PRINT; return(ATUPPERSTART);}
 {xmlwhitespace}*\<\/atUpper{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATUPPEREND);}
+{xmlwhitespace}*\<atEquality {YY_PRINT; return(ATEQUALITYSTART);}
+{xmlwhitespace}*\<\/atEquality{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ATEQUALITYEND);}
 {xmlwhitespace}*\<isFree {YY_PRINT; return(ISFREESTART);}
 {xmlwhitespace}*\<\/isFree{xmlwhitespace}*\>{xmlwhitespace}* {YY_PRINT; return(ISFREEEND);}
 {xmlwhitespace}*\<superbasic {YY_PRINT; return(SUPERBASICSTART);}

@@ -4,8 +4,8 @@
  * @author Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
- * Copyright (C) 2005-2011, Horand Gassmann, Jun Ma, Kipp Martin,
- * Dalhousie University, Northwestern University, and the University of Chicago.
+ * Copyright (C) 2005-2012, Horand Gassmann, Jun Ma, Kipp Martin,
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -693,6 +693,7 @@ BasisStatus::BasisStatus():
     basic(NULL),
     atLower(NULL),
     atUpper(NULL),
+    atEquality(NULL),
     isFree(NULL),
     superbasic(NULL),
     unknown(NULL)
@@ -722,6 +723,11 @@ BasisStatus::~BasisStatus()
     {
         delete atUpper;
         atUpper = NULL;
+    }
+    if (atEquality != NULL)
+    {
+        delete atEquality;
+        atEquality = NULL;
     }
     if (isFree != NULL)
     {
@@ -762,6 +768,12 @@ bool BasisStatus::setIntVector(int status, int *i, int ni)
         if (this->atUpper == NULL) this->atUpper = new IntVector(ni);
 //			else delete[] this->atUpper;
         return this->atUpper->setIntVector(i, ni);
+    }
+    case ENUM_BASIS_STATUS_atEquality:
+    {
+        if (this->atEquality == NULL) this->atEquality = new IntVector(ni);
+//			else delete[] this->atEquality;
+        return this->atEquality->setIntVector(i, ni);
     }
     case ENUM_BASIS_STATUS_isFree:
     {
@@ -805,6 +817,11 @@ bool BasisStatus::addIdx(int status, int idx)
         if (this->atUpper == NULL) this->atUpper = new IntVector();
         return this->atUpper->extendIntVector(idx);
     }
+    case ENUM_BASIS_STATUS_atEquality:
+    {
+        if (this->atEquality == NULL) this->atEquality = new IntVector();
+        return this->atEquality->extendIntVector(idx);
+    }
     case ENUM_BASIS_STATUS_isFree:
     {
         if (this->isFree == NULL) this->isFree = new IntVector();
@@ -845,6 +862,11 @@ bool BasisStatus::getIntVector(int status, int *i)
         if (this->atUpper == NULL) return false;
         return this->atUpper->getEl(i);
     }
+    case ENUM_BASIS_STATUS_atEquality:
+    {
+        if (this->atEquality == NULL) return false;
+        return this->atEquality->getEl(i);
+    }
     case ENUM_BASIS_STATUS_isFree:
     {
         if (this->isFree == NULL) return false;
@@ -884,6 +906,11 @@ int BasisStatus::getNumberOfEl(int status)
     {
         if (this->atUpper == NULL) return -1;
         else return	this->atUpper->numberOfEl;
+    }
+    case ENUM_BASIS_STATUS_atEquality:
+    {
+        if (this->atEquality == NULL) return -1;
+        else return	this->atEquality->numberOfEl;
     }
     case ENUM_BASIS_STATUS_isFree:
     {
@@ -927,6 +954,12 @@ int BasisStatus::getEl(int status, int j)
         if (this->atUpper == NULL)
             throw ErrorClass("\"atUpper\" index array never defined in routine BasisStatus::getEl()");
         else return	this->atUpper->el[j];
+    }
+    case ENUM_BASIS_STATUS_atEquality:
+    {
+        if (this->atEquality == NULL)
+            throw ErrorClass("\"atEquality\" index array never defined in routine BasisStatus::getEl()");
+        else return	this->atEquality->el[j];
     }
     case ENUM_BASIS_STATUS_isFree:
     {
@@ -983,6 +1016,7 @@ bool BasisStatus::IsEqual(BasisStatus *that)
             if (      !this->basic->IsEqual(that->basic)      ) return false;
             if (    !this->atLower->IsEqual(that->atLower)    ) return false;
             if (    !this->atUpper->IsEqual(that->atUpper)    ) return false;
+            if ( !this->atEquality->IsEqual(that->atEquality) ) return false;
             if (     !this->isFree->IsEqual(that->isFree)     ) return false;
             if ( !this->superbasic->IsEqual(that->superbasic) ) return false;
             if (    !this->unknown->IsEqual(that->unknown)    ) return false;
@@ -1011,6 +1045,11 @@ bool BasisStatus::setRandom(double density, bool conformant, int iMin, int iMax)
     {
         this->atUpper = new IntVector();
         this->atUpper->setRandom(density, conformant, iMin, iMax);
+    }
+    if (OSRand() <= density)
+    {
+        this->atEquality = new IntVector();
+        this->atEquality->setRandom(density, conformant, iMin, iMax);
     }
     if (OSRand() <= density)
     {

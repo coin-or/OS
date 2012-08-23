@@ -1851,6 +1851,19 @@ if (PARSER_TESTS){
 #endif
 		}
 
+		nvar = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality);
+		if (nvar > 0)
+		{
+			IBS = new int[nvar];
+			ok = osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality,IBS);
+			ok = osoption2->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality, IBS, nvar) && ok;
+			delete[] IBS;
+#ifdef DEBUG
+			if (!ok)
+				throw ErrorClass(" error in get/set InitBasisStatus");
+#endif
+		}
+
 		nvar = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree);
 		if (nvar > 0)
 		{
@@ -1977,6 +1990,19 @@ if (PARSER_TESTS){
 #endif
 		}
 
+		nvar = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_atEquality);
+		if (nvar > 0)
+		{
+			IBS = new int[nvar];
+			ok = osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_atEquality,IBS);
+			ok = osoption2->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_atEquality, IBS, nvar) && ok;
+			delete[] IBS;
+#ifdef DEBUG
+			if (!ok)
+				throw ErrorClass(" error in get/set InitBasisStatus");
+#endif
+		}
+
 		nvar = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_isFree);
 		if (nvar > 0)
 		{
@@ -2076,6 +2102,19 @@ if (PARSER_TESTS){
 			IBS = new int[nvar];
 			ok = osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper,IBS);
 			ok = osoption2->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper, IBS, nvar) && ok;
+			delete[] IBS;
+#ifdef DEBUG
+			if (!ok)
+				throw ErrorClass(" error in get/set InitBasisStatus");
+#endif
+		}
+
+		nvar = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality);
+		if (nvar > 0)
+		{
+			IBS = new int[nvar];
+			ok = osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality,IBS);
+			ok = osoption2->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality, IBS, nvar) && ok;
 			delete[] IBS;
 #ifdef DEBUG
 			if (!ok)
@@ -3562,6 +3601,24 @@ if (PARSER_TESTS){
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setBasisStatus (variables atUpper): osresult objects falsely compare unequal!");
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+
+			intArray[2] = intArray[2] + 10;
+
+
+			ok &= osresult1->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atEquality, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atEquality)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables atEquality): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_atEquality, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atEquality)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (variables atEquality): osresult objects falsely compare unequal!");
 
 			intArray[0] = intArray[0] + 10;
 			intArray[1] = intArray[1] + 10;
@@ -3868,6 +3925,24 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("setBasisStatus (objectives atUpper): osresult objects falsely compare unequal!");
 
+			intArray[0] = intArray[0] - 10;
+			intArray[1] = intArray[1] - 10;
+			intArray[2] = intArray[2] - 10;
+
+			ok &= osresult1->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atEquality, intArray, 3);
+
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atEquality)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives atEquality): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_objectives, ENUM_BASIS_STATUS_atEquality, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atEquality)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (objectives atEquality): osresult objects falsely compare unequal!");
+
 
 			intArray[0] = intArray[0] - 10;
 			intArray[1] = intArray[1] - 10;
@@ -3983,6 +4058,7 @@ if (PARSER_TESTS){
 				ok &= (!osresult1->IsEqual(osresult2));
 				if (!ok) 
 					throw ErrorClass("setOtherObjectiveResultNumberOfObj: osresult objects falsely compare equal!");
+
 				ok &= osresult2->setOtherObjectiveResultNumberOfObj(i,j,2);
 				if (!ok) 
 					throw ErrorClass("Error during setOtherObjectiveResultNumberOfObj!");
@@ -4175,6 +4251,24 @@ if (PARSER_TESTS){
 			ok &= (osresult1->IsEqual(osresult2));
 			if (!ok) 
 				throw ErrorClass("setBasisStatus (constraints atUpper): osresult objects falsely compare unequal!");
+
+			intArray[0] = intArray[0] + 10;
+			intArray[1] = intArray[1] + 10;
+			intArray[2] = intArray[2] + 10;
+
+
+			ok &= osresult1->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atEquality, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atEquality)!");
+			ok &= (!osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints atEquality): osresult objects falsely compare equal!");
+			ok &= osresult2->setBasisStatus(i, ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_atEquality, intArray, 3);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atEquality)!");
+			ok &= (osresult1->IsEqual(osresult2));
+			if (!ok) 
+				throw ErrorClass("setBasisStatus (constraints atEquality): osresult objects falsely compare unequal!");
 
 
 			intArray[0] = intArray[0] + 10;
@@ -5026,6 +5120,13 @@ if (PARSER_TESTS){
 			if (!ok) 
 				throw ErrorClass("Error during setBasisStatus (variables atUpper)!");
 
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality,j);
+			ok &= osresult2->setBasisStatus(i,ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (variables atEquality)!");
+
 			tempInt = osresult1->getBasisStatusNumberOfEl(i,ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree);
 			for (int j=0; j<tempInt; ++j)
 				tempArray[j] = osresult1->getBasisStatusEl(i,ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree,j);
@@ -5141,6 +5242,13 @@ if (PARSER_TESTS){
 			ok &= osresult2->setBasisStatus(i,ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_atUpper,tempArray,tempInt);
 			if (!ok) 
 				throw ErrorClass("Error during setBasisStatus (objectives atUpper)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_atEquality);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_atEquality,j);
+			ok &= osresult2->setBasisStatus(i,ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_atEquality,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (objectives atEquality)!");
 
 			tempInt = osresult1->getBasisStatusNumberOfEl(i,ENUM_PROBLEM_COMPONENT_objectives,ENUM_BASIS_STATUS_isFree);
 			for (int j=0; j<tempInt; ++j)
@@ -5260,6 +5368,13 @@ if (PARSER_TESTS){
 			ok &= osresult2->setBasisStatus(i,ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper,tempArray,tempInt);
 			if (!ok) 
 				throw ErrorClass("Error during setBasisStatus (constraints atUpper)!");
+
+			tempInt = osresult1->getBasisStatusNumberOfEl(i,ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality);
+			for (int j=0; j<tempInt; ++j)
+				tempArray[j] = osresult1->getBasisStatusEl(i,ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality,j);
+			ok &= osresult2->setBasisStatus(i,ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality,tempArray,tempInt);
+			if (!ok) 
+				throw ErrorClass("Error during setBasisStatus (constraints atEquality)!");
 
 			tempInt = osresult1->getBasisStatusNumberOfEl(i,ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_isFree);
 			for (int j=0; j<tempInt; ++j)
@@ -8474,6 +8589,10 @@ void tempPrintArrays(OSResult* os)
 		std::cout << os->optimization->solution[i]->variables->basisStatus->atUpper->el[0] << "  ";
 		std::cout << os->optimization->solution[i]->variables->basisStatus->atUpper->el[1] << "  ";
 		std::cout << os->optimization->solution[i]->variables->basisStatus->atUpper->el[2] << endl;
+		std::cout << "variables   atEquality ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atEquality->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atEquality->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->variables->basisStatus->atEquality->el[2] << endl;
 		std::cout << "variables   isFree     ";
 		std::cout << os->optimization->solution[i]->variables->basisStatus->isFree->el[0] << "  ";
 		std::cout << os->optimization->solution[i]->variables->basisStatus->isFree->el[1] << "  ";
@@ -8502,6 +8621,10 @@ void tempPrintArrays(OSResult* os)
 		std::cout << os->optimization->solution[i]->objectives->basisStatus->atUpper->el[0] << "  ";
 		std::cout << os->optimization->solution[i]->objectives->basisStatus->atUpper->el[1] << "  ";
 		std::cout << os->optimization->solution[i]->objectives->basisStatus->atUpper->el[2] << endl;
+		std::cout << "objectives  atEquality ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atEquality->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atEquality->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->objectives->basisStatus->atEquality->el[2] << endl;
 		std::cout << "objectives  isFree     ";
 		std::cout << os->optimization->solution[i]->objectives->basisStatus->isFree->el[0] << "  ";
 		std::cout << os->optimization->solution[i]->objectives->basisStatus->isFree->el[1] << "  ";
@@ -8529,6 +8652,10 @@ void tempPrintArrays(OSResult* os)
 		std::cout << os->optimization->solution[i]->constraints->basisStatus->atUpper->el[0] << "  ";
 		std::cout << os->optimization->solution[i]->constraints->basisStatus->atUpper->el[1] << "  ";
 		std::cout << os->optimization->solution[i]->constraints->basisStatus->atUpper->el[2] << endl;
+		std::cout << "constraints atEquality ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atEquality->el[0] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atEquality->el[1] << "  ";
+		std::cout << os->optimization->solution[i]->constraints->basisStatus->atEquality->el[2] << endl;
 		std::cout << "constraints isFree     ";
 		std::cout << os->optimization->solution[i]->constraints->basisStatus->isFree->el[0] << "  ";
 		std::cout << os->optimization->solution[i]->constraints->basisStatus->isFree->el[1] << "  ";
