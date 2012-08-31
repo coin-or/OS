@@ -59,6 +59,14 @@ Do this by issuing the following command inside AMPL.
 \begin{verbatim}
 option solver OSAmplClient;
 \end{verbatim}
+\ifbible
+%
+This form of the command assumes that the {\tt OSAmplClient} executable is on the search path. If this is not the case, an explicit path to the executable can be given instead, for instance
+
+\begin{verbatim}
+option solver "./OSAmplClient";
+\end{verbatim}
+\fi
 
 It is not necessary to provide the  {\tt OSAmplclient.exe} solver with any options. 
 You can just issue the {\tt solve} command in AMPL as illustrated below.  
@@ -94,6 +102,17 @@ option OSAmplClient_options "solver symphony";
 Valid values for the {\tt solver} option are installation-dependent.
 %{\tt bonmin}, {\tt cbc}, {\tt clp}, {\tt couenne}, {\tt dylp}, {\tt symphony}, and {\tt vol}.   
 The solver name in the {\tt solver} option is case insensitive.  
+
+\ifbible
+\medskip
+It is possible to run {\tt OSAmplClient} in stand-alone mode directly from the command line. In this case, the first command line argument should be the name of a file in .nl format, e.g.,
+
+\begin{verbatim}
+OSAmplClient parincQuadratic
+\end{verbatim}
+
+\noindent (note that the file extension ({\tt .nl}) is omitted; this information is added by the ASL interface.)
+\fi
 
 
 \subsubdivision{Using OSAmplClient to Invoke an OS Solver Server}\label{section:remoteampl}
