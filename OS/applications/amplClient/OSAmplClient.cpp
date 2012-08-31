@@ -147,12 +147,6 @@ int main(int argc, char **argv)
     WindowsErrorPopupBlocker();
     char *stub;
 
-    // set AMPL structures
-    ASL *asl;
-    asl = ASL_alloc(ASL_read_fg);
-    stub = argv[1];
-    jac0dim((char*)stub, (fint)strlen(stub));
-
     /*	Parse the options (passed through ASL as the string OSAmplClient_options)
      *
      *	There are three possible options:
@@ -170,6 +164,11 @@ int main(int argc, char **argv)
     std::string osolFileName = "";
     std::string osol = "";
     std::string serviceLocation = "";
+    std::string nlfile = "";
+
+//    cout << "Here is the command line:";
+//    for (int i=0; i<argc; i++) cout << " " << argv[i];
+//    cout << endl;
 
     amplclient_options = getenv("OSAmplClient_options");
     if( amplclient_options != NULL)
@@ -177,6 +176,12 @@ int main(int argc, char **argv)
         cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
         getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
     }
+
+    // set AMPL structures
+    ASL *asl;
+    asl = ASL_alloc(ASL_read_fg);
+    stub = argv[1];
+    jac0dim((char*)stub, (fint)strlen(stub));
 
 
     //convert solver name to lower case for testing purposes
@@ -205,12 +210,10 @@ int main(int argc, char **argv)
     OSnl2OS *nl2OS = NULL;
     //initialize object with stub -- the nl file --- and the OSoL file --- if any
     nl2OS = new OSnl2OS( stub, osol);
-    std::cout << " call nl2osil" << std::endl;
+    std::cout << " call nl2OS" << std::endl;
 
     /*	Parse the .nl file to create an in-memory representation
-
     	in form of an OSInstance object
-
      */
     try
     {
@@ -221,7 +224,7 @@ int main(int argc, char **argv)
         std::cout << eclass.errormsg << std::endl;
         return 0;
     }
-    std::cout << " return from  nl2osil" << std::endl;
+    std::cout << " return from  nl2OS" << std::endl;
 
     // create OS objects
     OSInstance *osinstance;
@@ -374,7 +377,10 @@ int main(int argc, char **argv)
                 //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
             }
 
-
+            // return all solution results that are indexed over variables or constraints as suffixes
+// taken from Ipopt - AmplTNLP.cpp:
+//    Number* z_L_sol_;
+//            suf_rput("ipopt_zL_out", ASL_Sufkind_var,  z_L_sol_);
 
             write_sol(  const_cast<char*>(sReport.c_str()),  x, y , NULL);
 
@@ -482,7 +488,6 @@ void getAmplClientOptions(char *amplclient_options, std::string *solverName,
 
         *solverName = osoptions->solverName;
         *solverOptions = osoptions->osolFile;
-
         *serviceLocation = osoptions->serviceLocation;
 
     }//end try

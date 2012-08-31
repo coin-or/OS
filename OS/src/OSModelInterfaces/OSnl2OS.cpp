@@ -1168,14 +1168,14 @@ bool OSnl2OS::createOSObjects()
        	suffixType = ASL_Sufkind_var;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
-        // make a record of all <otherVariableOptions> present in the OSoL file
+            // make a record of all <otherVariableOptions> present in the OSoL file
+            nOther = 0;
             if (osoption != NULL &&
                 osoption->optimization != NULL &&
                 osoption->optimization->variables != NULL &&
                 osoption->optimization->variables->numberOfOtherVariableOptions > 0)
             {
                 otherOptionNames = new std::string[osoption->optimization->variables->numberOfOtherVariableOptions];
-                nOther = 0;
                 for (int i=0; i < osoption->optimization->variables->numberOfOtherVariableOptions; i++)
                     if (osoption->optimization->variables->other[i]->numberOfVar > 0)
                         otherOptionNames[nOther++] = osoption->optimization->variables->other[i]->name;
@@ -1194,7 +1194,10 @@ bool OSnl2OS::createOSObjects()
                     int* IBS;
  
                     // if OSoL file has a basis, merge values by overwriting .nl file info 
-                    if (osoption->optimization->variables->initialBasisStatus != NULL)
+                    if (osoption != NULL &&
+                        osoption->optimization != NULL &&
+                        osoption->optimization->variables != NULL &&
+                        osoption->optimization->variables->initialBasisStatus != NULL)
                     {
                         // note that AMPL uses different numeric values for representing basis status:
                         // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
@@ -1445,14 +1448,14 @@ bool OSnl2OS::createOSObjects()
        	suffixType = ASL_Sufkind_con;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
-        // make a record of all <otherConstraintOptions> present in the OSoL file
+            // make a record of all <otherConstraintOptions> present in the OSoL file
+            nOther = 0;
             if (osoption != NULL &&
                 osoption->optimization != NULL &&
                 osoption->optimization->constraints != NULL &&
                 osoption->optimization->constraints->numberOfOtherConstraintOptions > 0)
             {
                 otherOptionNames = new std::string[osoption->optimization->constraints->numberOfOtherConstraintOptions];
-                nOther = 0;
                 for (int i=0; i < osoption->optimization->constraints->numberOfOtherConstraintOptions; i++)
                     if (osoption->optimization->constraints->other[i]->numberOfCon > 0)
                         otherOptionNames[nOther++] = osoption->optimization->constraints->other[i]->name;
@@ -1470,7 +1473,10 @@ bool OSnl2OS::createOSObjects()
                     int* IBS;
  
                     // if OSoL file has a basis, merge values by overwriting .nl file info 
-                    if (osoption->optimization->constraints->initialBasisStatus != NULL)
+                    if (osoption != NULL &&
+                        osoption->optimization != NULL &&
+                        osoption->optimization->constraints != NULL &&
+                        osoption->optimization->constraints->initialBasisStatus != NULL)
                     {
                         // note that AMPL uses different numeric values for representing basis status:
                         // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
@@ -1716,17 +1722,18 @@ bool OSnl2OS::createOSObjects()
 			otherOptionNames = NULL;
         }
 
+    	// here we have suffixes indexed over objectives 
        	suffixType = ASL_Sufkind_obj;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
-        // make a record of all <otherObjectiveOptions> present in the OSoL file
+            // make a record of all <otherObjectiveOptions> present in the OSoL file
+            nOther = 0;
             if (osoption != NULL &&
                 osoption->optimization != NULL &&
                 osoption->optimization->objectives != NULL &&
                 osoption->optimization->objectives->numberOfOtherObjectiveOptions > 0)
             {
                 otherOptionNames = new std::string[osoption->optimization->objectives->numberOfOtherObjectiveOptions];
-                nOther = 0;
                 for (int i=0; i < osoption->optimization->objectives->numberOfOtherObjectiveOptions; i++)
                     if (osoption->optimization->objectives->other[i]->numberOfObj > 0)
                         otherOptionNames[nOther++] = osoption->optimization->objectives->other[i]->name;
@@ -1838,7 +1845,7 @@ bool OSnl2OS::createOSObjects()
         }
 
 
-	//problem-indexed suffixes: is there ever more than one value in a .nl file?
+    	//problem-indexed suffixes: Only the currently active problem is put into the .nl file, so this must be scalar
        	suffixType = ASL_Sufkind_prob;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
@@ -1980,16 +1987,6 @@ bool OSnl2OS::createOSObjects()
         }        
 
     //still to do
-    //initial basis status: .sstatus
-/*
-0 - none - unknown
-1 - basic - basic
-2 - superbasic - superbasic
-3 - nonbasic at lower bound - atLower
-4 - nonbasic at upper bound - atUpper
-5 - nonbasic at equality bound - ?
-6 - nonbasic between bounds - isFree?
-*/
     //special ordered sets, branching weights, branching group weights
     //initial objective values: .val
 
