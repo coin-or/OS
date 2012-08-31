@@ -1,5 +1,5 @@
-/* $Id: OSGetSolver.h 4263 2011-09-09 20:19:26Z Martin $ */
-/** @file CoinSolver.h
+/* $Id: OSRunSolver.cpp 4263 2011-09-09 20:19:26Z Martin $ */
+/** @file OSRunSolver.cpp
  *
  * @author  Horand Gassmann, Jun Ma, Kipp Martin,
  *
