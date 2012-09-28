@@ -85,14 +85,10 @@ OSrLReader::~OSrLReader()
 
 OSResult* OSrLReader::readOSrL(const std::string& posrl) throw(ErrorClass)
 {
-    try
+    if (posrl.length() > 0)
     {
         const char *ch = posrl.c_str();
         yygetOSResult( ch, m_osresult, m_parserData, m_osglData);
-        return m_osresult;
     }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
+    return m_osresult;
 }

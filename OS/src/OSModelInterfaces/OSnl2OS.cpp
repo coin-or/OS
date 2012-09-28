@@ -69,202 +69,98 @@ using std::endl;
 #endif
 
 //#define AMPLDEBUG
-
-
-OSnl2OS::OSnl2OS(std::string nlfilename, std::string osol)
-    : osolreader (NULL), osinstance(NULL), osoption(NULL), stub(nlfilename)
+OSnl2OS::OSnl2OS()
+    : osolreader (NULL), osinstance(NULL), osoption(NULL), stub("")
 {
-    efunc *r_ops_int[N_OPS];
-    FILE *nl;
+    cw = ASL_alloc( ASL_read_fg);
+    rw = ASL_alloc( ASL_read_fg);
+    asl = cw;
+}
 
-    //Initialize the AMPL library
-    asl = cw = ASL_alloc( ASL_read_fg);
+OSnl2OS::OSnl2OS(ASL *cw, ASL *rw, ASL *asl)
+    : osolreader (NULL), osinstance(NULL), osoption(NULL), stub("")
+{
+    this->asl = asl;
+    this->cw  = cw; 
+    this->rw  = rw;
+} 
+    
+ASL* OSnl2OS::getASL(std::string name)
+{
+    if (name == "asl")
+        return asl;
+    else if (name == "cw")
+        return cw;
+    else if (name == "rw")
+        return rw;
+    else 
+        return NULL;
+}
 
-    //Initialize the nl file reading
-    nl = jac0dim(const_cast<char*>(stub.c_str()), (fint)stub.length());
+void OSnl2OS::setOsol(std::string osol)
+{
+    this->osol = osol;
+}
 
-    //Prepare *columnwise* parsing of nl file
-    A_vals = (real *)Malloc(nzc*sizeof(real));
+bool OSnl2OS::readNl(std::string stub)
+{
+    try
+    {
+        efunc *r_ops_int[N_OPS];
+        FILE *nl;
 
-    // allocate initial values for primal and dual variables if available
-    want_xpi0 = 3;
+        //Initialize the AMPL library
+        asl = cw = ASL_alloc( ASL_read_fg);
 
-    // allocate space for initial values
-    X0 = new real[n_var];
-    havex0 = new char[n_var];
-    pi0 = new real[n_con];
-    havepi0 = new char[n_con];
+        //Initialize the nl file reading
+        nl = jac0dim(const_cast<char*>(stub.c_str()), (fint)stub.length());
+
+        //Prepare *columnwise* parsing of nl file
+        A_vals = (real *)Malloc(nzc*sizeof(real));
+
+        // allocate initial values for primal and dual variables if available
+        want_xpi0 = 3;
+
+        // allocate space for initial values
+        X0 = new real[n_var];
+        havex0 = new char[n_var];
+        pi0 = new real[n_con];
+        havepi0 = new char[n_con];
 
 #ifdef AMPLDEBUG
-    cout << "number of nonzeros    = " << nzc     << endl;
-    cout << "number of variables   = " << n_var   << endl;
-    cout << "number of constraints = " << n_con   << endl;
-    cout << "number of objectives  = " << n_obj   << endl;
-    cout << "number of ranges      = " << nranges << endl;
-    cout << "number of equations   = " << n_eqn   << endl;
+        cout << "number of nonzeros    = " << nzc     << endl;
+        cout << "number of variables   = " << n_var   << endl;
+        cout << "number of constraints = " << n_con   << endl;
+        cout << "number of objectives  = " << n_obj   << endl;
+        cout << "number of ranges      = " << nranges << endl;
+        cout << "number of equations   = " << n_eqn   << endl;
 #endif
-    if(N_OPS > 0)
-    {
-        for(int i = 0; i < N_OPS; i++)
+        if(N_OPS > 0)
         {
-            r_ops_int[i] = (efunc*)(unsigned long)i;
+            for(int i = 0; i < N_OPS; i++)
+            {
+                r_ops_int[i] = (efunc*)(unsigned long)i;
+            }
+            R_OPS = r_ops_int;
+            want_derivs = 0;
+            fg_read(nl, ASL_keep_all_suffixes);
+            R_OPS = 0;
         }
-        R_OPS = r_ops_int;
+
+        // Now create row-wise version
+        asl = rw = ASL_alloc( ASL_read_fg);
+        nl = jac0dim((char*)stub.c_str(), (fint)stub.length());
         want_derivs = 0;
-        fg_read(nl, ASL_keep_all_suffixes);
-        R_OPS = 0;
+        qp_read(nl, 0);
+
+        asl = cw;
+        numkount = 0;
+        return true;
     }
-
-    // Now create row-wise version
-    asl = rw = ASL_alloc( ASL_read_fg);
-    nl = jac0dim((char*)stub.c_str(), (fint)stub.length());
-    want_derivs = 0;
-    qp_read(nl, 0);
-
-    asl = cw;
-    numkount = 0;
-
-#if 0
-/**
- *  Next populate a table of AMPL suffixes. At present this uses a static set of suffixes;
- *  it is hoped that in time we can set things up dynamically through querying the .nl file.
- */
-
-  static SufDecl suftab [] = {
-
-/* Ipopt */
-
-#ifdef COIN_HAS_IPOPT
-	OS_addAmplSuffix{ "scaling_factor", 0, ASL_Sufkind_var  | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "scaling_factor", 0, ASL_Sufkind_con  | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "scaling_factor", 0, ASL_Sufkind_obj  | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "ipopt_zL_out",   0, ASL_Sufkind_var  | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "ipopt_zU_out",   0, ASL_Sufkind_var  | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "ipopt_zL_in",    0, ASL_Sufkind_var  | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "ipopt_zU_in",    0, ASL_Sufkind_var  | ASL_Sufkind_real },
-#endif
-
-/* Couenne */
-
-#ifdef COIN_HAS_COUENNE
-	OS_addAmplSuffix{const_cast<char*>("newlb"), 0,  ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_output, 0},
-	OS_addAmplSuffix{const_cast<char*>("newub"), 0,  ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_output, 0},
-#endif
-
-/* Cbc */
-
-#ifdef COIN_HAS_CBC
-# ifdef JJF_ZERO
-    OS_addAmplSuffix{ const_cast<char*>("current"), 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-    OS_addAmplSuffix{ const_cast<char*>("current"), 0, ASL_Sufkind_var | ASL_Sufkind_outonly },
-    OS_addAmplSuffix{ const_cast<char*>("direction"), 0, ASL_Sufkind_var },
-    OS_addAmplSuffix{ const_cast<char*>("down"), 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-    OS_addAmplSuffix{ const_cast<char*>("down"), 0, ASL_Sufkind_var | ASL_Sufkind_outonly },
-    OS_addAmplSuffix{ const_cast<char*>("priority"), 0, ASL_Sufkind_var },
-# endif
-    OS_addAmplSuffix{ const_cast<char*>("cut"), 0, ASL_Sufkind_con },
-    OS_addAmplSuffix{ const_cast<char*>("direction"), 0, ASL_Sufkind_var },
-    OS_addAmplSuffix{ const_cast<char*>("downPseudocost"), 0, ASL_Sufkind_var | ASL_Sufkind_real },
-    OS_addAmplSuffix{ const_cast<char*>("priority"), 0, ASL_Sufkind_var },
-    OS_addAmplSuffix{ const_cast<char*>("ref"), 0, ASL_Sufkind_var | ASL_Sufkind_real },
-    OS_addAmplSuffix{ const_cast<char*>("sos"), 0, ASL_Sufkind_var },
-    OS_addAmplSuffix{ const_cast<char*>("sos"), 0, ASL_Sufkind_con },
-    OS_addAmplSuffix{ const_cast<char*>("sosno"), 0, ASL_Sufkind_var | ASL_Sufkind_real },
-    OS_addAmplSuffix{ const_cast<char*>("sosref"), 0, ASL_Sufkind_var | ASL_Sufkind_real },
-    OS_addAmplSuffix{ const_cast<char*>("special"), 0, ASL_Sufkind_var },
-    OS_addAmplSuffix{ const_cast<char*>("special"), 0, ASL_Sufkind_con },
-    OS_addAmplSuffix{ const_cast<char*>("sstatus"), 0, ASL_Sufkind_var, 0 },
-    OS_addAmplSuffix{ const_cast<char*>("sstatus"), 0, ASL_Sufkind_con, 0 },
-    OS_addAmplSuffix{ const_cast<char*>("upPseudocost"), 0, ASL_Sufkind_var | ASL_Sufkind_real }
-# ifdef JJF_ZERO
-    OS_addAmplSuffix{ const_cast<char*>("unbdd"), 0, ASL_Sufkind_var | ASL_Sufkind_outonly},
-    OS_addAmplSuffix{ const_cast<char*>("up"), 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-    OS_addAmplSuffix{ const_cast<char*>("up"), 0, ASL_Sufkind_var | ASL_Sufkind_outonly }
-# endif
-#endif
-
-/* CPLEX */
-
-#ifdef COIN_HAS_CPLEX
-	OS_addAmplSuffix{ "absmipgap", 0, ASL_Sufkind_obj  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "absmipgap", 0, ASL_Sufkind_prob  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "basis_cond", 0, ASL_Sufkind_obj  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "basis_cond", 0, ASL_Sufkind_prob  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "bestbound", 0, ASL_Sufkind_obj  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "bestbound", 0, ASL_Sufkind_prob | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "bestnode", 0, ASL_Sufkind_obj  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "bestnode", 0, ASL_Sufkind_prob | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "current", 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "current", 0, ASL_Sufkind_var | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "direction", 0, ASL_Sufkind_var },
-	OS_addAmplSuffix{ "down", 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "down", 0, ASL_Sufkind_var | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "dunbdd", 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "iis", iis_table, ASL_Sufkind_var | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "iis", 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-# ifdef CPX_PARAM_FEASOPTMODE /* >= 9.2b */
-	OS_addAmplSuffix{ "lazy", 0, ASL_Sufkind_con },
-# endif
-# ifdef CPX_PARAM_POPULATELIM
-	OS_addAmplSuffix{ "npool", 0, ASL_Sufkind_prob | ASL_Sufkind_outonly},
-# endif
-	OS_addAmplSuffix{ "priority", 0, ASL_Sufkind_var },
-	OS_addAmplSuffix{ "ref", 0, ASL_Sufkind_var | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "relmipgap", 0, ASL_Sufkind_obj  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "relmipgap", 0, ASL_Sufkind_prob  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sos", 0, ASL_Sufkind_var },
-	OS_addAmplSuffix{ "sos", 0, ASL_Sufkind_con },
-	OS_addAmplSuffix{ "sosno", 0, ASL_Sufkind_var | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "sosref", 0, ASL_Sufkind_var | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "sstatus", 0, ASL_Sufkind_var, 1 },
-	OS_addAmplSuffix{ "sstatus", 0, ASL_Sufkind_con, 1 },
-	OS_addAmplSuffix{ "unbdd", 0, ASL_Sufkind_var | ASL_Sufkind_outonly},
-	OS_addAmplSuffix{ "up", 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "up", 0, ASL_Sufkind_var | ASL_Sufkind_outonly }
-#endif
-
-/* Gurobi */
-
-#ifdef COIN_HAS_GUROBI
-	OS_addAmplSuffix{ "absmipgap", 0, ASL_Sufkind_obj   | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "absmipgap", 0, ASL_Sufkind_prob  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "bestbound", 0, ASL_Sufkind_obj   | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "bestbound", 0, ASL_Sufkind_prob  | ASL_Sufkind_outonly },
-# if GRB_VERSION_MAJOR >= 4 && GRB_VERSION_MINOR >= 5 /*{*/
-	OS_addAmplSuffix{ "dunbdd", 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-# endif /*}*/
-	OS_addAmplSuffix{ "iis", iis_table, ASL_Sufkind_var | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "iis", 0, ASL_Sufkind_con | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "ref", 0, ASL_Sufkind_var | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "relmipgap", 0, ASL_Sufkind_obj   | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "relmipgap", 0, ASL_Sufkind_prob  | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "senslbhi",  0, ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "senslblo",  0, ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sensobjhi", 0, ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sensobjlo", 0, ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sensrhshi", 0, ASL_Sufkind_con | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sensrhslo", 0, ASL_Sufkind_con | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sensubhi",  0, ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sensublo",  0, ASL_Sufkind_var | ASL_Sufkind_real | ASL_Sufkind_outonly },
-	OS_addAmplSuffix{ "sos", 0, ASL_Sufkind_var },
-	OS_addAmplSuffix{ "sos", 0, ASL_Sufkind_con },
-	OS_addAmplSuffix{ "sosno", 0, ASL_Sufkind_var | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "sosref", 0, ASL_Sufkind_var | ASL_Sufkind_real },
-	OS_addAmplSuffix{ "sstatus", 0, ASL_Sufkind_var, 1 },
-	OS_addAmplSuffix{ "sstatus", 0, ASL_Sufkind_con, 1 }
-# if GRB_VERSION_MAJOR >= 4 && GRB_VERSION_MINOR >= 5 /*{*/
-	,{ "unbdd", 0, ASL_Sufkind_var | ASL_Sufkind_outonly }
-# endif /*}*/
-#endif
-	};
-#endif
-
-
-
-    // store the osol string into the OSnl2OS object
-    this->osol = osol;
-
-
+    catch(const ErrorClass& eclass)
+    {
+        return false;
+    }
 }
 
 
@@ -289,10 +185,12 @@ OSnl2OS::~OSnl2OS()
     if (havex0)  delete [] havex0;  havex0  = NULL;
     if (pi0)     delete [] pi0;     pi0     = NULL;
     if (havepi0) delete [] havepi0; havepi0 = NULL;
-    ASL_free(&cw);
-    ASL_free(&rw);
+    if (cw != NULL) ASL_free(&cw);
+    if (rw != NULL) ASL_free(&rw);
+    cw  = NULL;
+    rw  = NULL;
+    asl = NULL;
 }
-
 
 OSnLNode* OSnl2OS::walkTree (expr *e)
 {
@@ -596,9 +494,6 @@ static inline char integerOrBinary(real upper, real lower)
 }
 
 
-
-
-
 bool OSnl2OS::createOSObjects()
 {
     int *A_rowstarts = NULL;
@@ -641,7 +536,7 @@ bool OSnl2OS::createOSObjects()
 
     lower = nlvb - nlvbi;
     upper = (nlvb - nlvbi) + nlvbi;
-    upper = nlvb; //
+    upper = nlvb;
 #ifdef AMPLDEBUG
     std::cout << "LOWER = " << lower << std::endl;
     std::cout << "UPPER = " << upper << std::endl;
@@ -858,7 +753,7 @@ bool OSnl2OS::createOSObjects()
 
     for (osNLIdx = 0, aNLIdx = -1; osNLIdx < nlc; osNLIdx++, aNLIdx--)
     {
-        if (isQP)  // No need to identify quadratic terms once we have found a non-quadratic term
+        if (isQP)  // No need to continue looking for quadratic terms once we have found a non-quadratic term
         {
             // check the nonzeroes before and after 
             if (!fill_in) // once we know there will be fill-in we can stop counting
@@ -870,7 +765,7 @@ bool OSnl2OS::createOSObjects()
             }
 
             nqpchk = nqpcheck(aNLIdx, &rowqp, &colqp, &delsqp);
-            if (nqpchk > 0) // quadratic
+            if (nqpchk > 0) // there is a quadratic part
             {
                 for (int v1 = 0; v1 < n_var; v1++)
                 {
@@ -1152,10 +1047,10 @@ bool OSnl2OS::createOSObjects()
             (asl->i.suffixes[ASL_Sufkind_obj]  != NULL) ||
             (asl->i.suffixes[ASL_Sufkind_prob] != NULL)  )
         {	
-            if (osol != "")
+//            if (osol != "")
        	        osoption = osolreader->readOSoL(osol);
-            else
-                osoption = new OSOption();
+  //          else
+    //            osoption = new OSOption();
         }
 
         bool found;

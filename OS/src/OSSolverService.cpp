@@ -219,7 +219,6 @@ int main(int argC, const char* argV[])
     // initialize the command line (osOptions) structure 
 
     osoptions = new osOptionsStruc();
-    reset_options();
     bool scannerActive = false;
 		
     try
@@ -685,8 +684,10 @@ void solve()
                 if (osoptions->nlFile != "")
                 {
 #ifdef COIN_HAS_ASL
-                    nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
-                    nl2os->createOSObjects();
+                    //nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+                    nl2os->readNl(osoptions->nlFile);
+                    nl2os->setOsol(osoptions->osol);
+                    nl2os->createOSObjects() ;
                     osinstance = nl2os->osinstance;
                     if (nl2os->osoption != NULL)
                     {
@@ -1318,7 +1319,10 @@ void getOSiLFromNl()
     {
 #ifdef COIN_HAS_ASL
         OSnl2OS *nl2os = NULL;
-        nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+//        nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+        nl2os = new OSnl2OS();
+        nl2os->readNl(osoptions->nlFile);
+        nl2os->setOsol(osoptions->osol);
         nl2os->createOSObjects();
         OSiLWriter *osilwriter = NULL;
         osilwriter = new OSiLWriter();
@@ -1411,136 +1415,123 @@ void interactiveShell()
     //reset_options();
     bool scannerActive = false;
 
-            //this is the interactive shell
-            scannerActive = true;
-            ossslex_init(&scanner);
-            setyyextra(osoptions, scanner);
-            std::string lineText;
-            //use a blank to separate words
-            std::string wordSep = " ";
-            std::string dblQuote = "\"";
-            std::string optionName = "";
-            std::string optionValue = "";
-            std::string::size_type indexStart;
-            std::string::size_type indexEnd;
-            unsigned int k;
+    //this is the interactive shell
+    scannerActive = true;
+    ossslex_init(&scanner);
+    setyyextra(osoptions, scanner);
+    std::string lineText;
+    //use a blank to separate words
+    std::string wordSep = " ";
+    std::string dblQuote = "\"";
+    std::string optionName = "";
+    std::string optionValue = "";
+    std::string::size_type indexStart;
+    std::string::size_type indexEnd;
+    unsigned int k;
 
 
-            std::string commandArray[14] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
-                                             "quit", "exit",  "reset", "list", "?", "help", "version", 
-											 "printModel"
-                                           };
+    std::string commandArray[14] = { "solve", "send", "getJobID", "retrieve", "kill", "knock",
+                                     "quit", "exit",  "reset", "list", "?", "help", "version", 
+                                     "printModel"
+                                   };
 
 
-            std::string optionArray[11] = { "osil", "osrl", "osol", "mps", "nl", "dat",
-                                            "serviceLocation", "solver", "osplInput",  "osplOutput", 
-											"printRow"
-                                          };
+    std::string optionArray[11] = { "osil", "osrl", "osol", "mps", "nl", "dat",
+                                    "serviceLocation", "solver", "osplInput",  "osplOutput", 
+                                    "printRow"
+                                  };
 
 
-            size_t size_of_commandArray = (sizeof commandArray)
-                                          / (sizeof commandArray[0]);
-
-            size_t size_of_optionArray = (sizeof optionArray)
-                                         / (sizeof optionArray[0]);
+    size_t size_of_commandArray = (sizeof commandArray) / (sizeof commandArray[0]);
+    size_t size_of_optionArray  = (sizeof optionArray)  / (sizeof optionArray[0]);
 
 
-            //fill in the command array into a map
+    //fill in the command array into a map
 
-            std::map<string, int> commandMap;
-            //std::map<string, int>::const_iterator iter;
+    std::map<string, int> commandMap;
 
-            for(k = 0; k < size_of_commandArray; k++)
+    for(k = 0; k < size_of_commandArray; k++)
+    {
+        commandMap[ commandArray[ k] ] = k;
+    }
+
+    //fill in the option array into a map
+
+    std::map<string, int> optionMap;
+
+    for(k = 0; k < size_of_optionArray; k++)
+    {
+        optionMap[ optionArray[ k] ] = k;
+    }
+
+    std::cout << "At the prompt enter a valid command or option value pair.\n";
+    std::cout << "Enter the \"solve\" command to optimize.\n";
+    std::cout << "Type \"quit\" or \"exit\" to leave the application. \n";
+    std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
+
+    while (osoptions->quit != true)
+    {
+        std::cout <<  "Please enter a command, or an option followed by an option value: ";
+        getline(std::cin, lineText);
+        lineText = " " + lineText + " ";
+        //get the name of the option
+        indexStart = lineText.find_first_not_of(wordSep);
+        if (indexStart == string::npos)
+        {
+            std::cout << std::endl;
+            std::cout << "You did not enter a valid option. "
+                      << "Type \"help\" or \"?\" for a list of valid options."
+                      << std::endl;
+        }
+        else
+        {
+            indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
+            optionName = lineText.substr(indexStart, indexEnd - indexStart);
+            //std::cout << "Option Name = " << optionName << std::endl;
+
+            if( (commandMap.find(optionName) == commandMap.end() ) &&
+                 (optionMap.find(optionName) == optionMap.end() ) )
             {
-                commandMap[ commandArray[ k] ] = k;
+                std::cout << std::endl;
+                std::cout << "You did not enter a valid option. "
+                          << "Type \"help\" or \"?\" for a list of valid options."
+                          << std::endl;
             }
-
-            //fill in the option array into a map
-
-            std::map<string, int> optionMap;
-
-
-            for(k = 0; k < size_of_optionArray; k++)
+            else
             {
-                optionMap[ optionArray[ k] ] = k;
-            }
-
-            //for (iter=optionMap.begin(); iter != optionMap.end(); ++iter) {
-            //    cout << iter->second << " " << iter->first << endl;
-            //}
-
-            std::cout << "At the prompt enter a valid command or option value pair.\n";
-            std::cout << "Enter the \"solve\" command to optimize.\n";
-            std::cout << "Type \"quit\" or \"exit\" to leave the application. \n";
-            std::cout << "Type \"help\" or \"?\" for a list of valid options.\n\n";
-
-            //std::cout << "Number of Options = " <<  size_of_array << std::endl;
-            while (osoptions->quit != true && osoptions->exit != true)
-            {
-                std::cout <<  "Please enter a command, or an option followed by an option value: ";
-                getline(std::cin, lineText);
-                lineText = " " + lineText + " ";
-                //get the name of the option
-                indexStart = lineText.find_first_not_of(wordSep);
-                if (indexStart == string::npos)
+                int skipChars;
+                // get the option value
+                        
+                indexStart = lineText.find_first_not_of(wordSep, indexEnd + 1);
+                if (indexStart != std::string::npos && lineText[indexStart] == '\"')
                 {
-                    std::cout << std::endl;
-                    std::cout << "You did not enter a valid option. "
-                              << "Type \"help\" or \"?\" for a list of valid options."
-                              << std::endl;
+                    indexEnd = lineText.find_first_of(dblQuote, indexStart + 1);
+                    skipChars = 1;
                 }
                 else
                 {
                     indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
-                    optionName = lineText.substr(indexStart, indexEnd
-                                                 - indexStart);
-                    //std::cout << "Option Name = " << optionName << std::endl;
+                    skipChars = 0;
+                }
+                if (indexStart != std::string::npos && indexEnd != std::string::npos)
+                {
+                    optionValue = lineText.substr(indexStart + skipChars, 
+                                                  indexEnd - indexStart - skipChars);
+                }
+                else
+                {
+                    optionValue = "";
+                }
 
-                    if( (commandMap.find(optionName) == commandMap.end() ) &&
-                            (optionMap.find(optionName) == optionMap.end() ) )
+                //std::cout << "Option Value = " << optionValue << std::endl;
+
+                try
+                {
+                    // first we process the commands
+                    if( commandMap.find(optionName) != commandMap.end()  )
                     {
-                        std::cout << std::endl;
-                        std::cout << "You did not enter a valid option. "
-                                  << "Type \"help\" or \"?\" for a list of valid options."
-                                  << std::endl;
-                    }
-                    else
-                    {
-                        int skipChars;
-                        // get the option value
-                        
-                        indexStart = lineText.find_first_not_of(wordSep,
-                                                                indexEnd + 1);
-                        if (indexStart != std::string::npos && lineText[indexStart] == '\"')
+                        switch (commandMap[ optionName] )
                         {
-                            indexEnd = lineText.find_first_of(dblQuote, indexStart + 1);
-                            skipChars = 1;
-                        }
-                        else
-                        {
-                            indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
-                            skipChars = 0;
-                        }
-                        if (indexStart != std::string::npos && indexEnd
-                                != std::string::npos)
-                        {
-                            optionValue = lineText.substr(indexStart + skipChars, 
-                                                          indexEnd - indexStart - skipChars);
-                        }
-                        else
-                        {
-                            optionValue = "";
-                        }
-
-                        //std::cout << "Option Value = " << optionValue << std::endl;
-
-                        try
-                        {
-                            // first we process the commands
-                            if( commandMap.find(optionName) != commandMap.end()  )
-                            {
-                                switch (commandMap[ optionName] )
-                                {
 
                                 case 0: // solve command
 
@@ -1695,20 +1686,20 @@ void interactiveShell()
                                     throw ErrorClass("we don't have a valid command");
 
 
-                                } //end switch
+                        } //end switch
 
-                            }
-                            else     // now in the case where we require option values
+                    }
+                    else     // now in the case where we require option values
+                    {
+
+                        if (optionValue == "")
+                        {
+
+                            if(optionMap.find(optionName) != optionMap.end() )
                             {
 
-                                if (optionValue == "")
+                                switch (optionMap[ optionName] )
                                 {
-
-                                    if(optionMap.find(optionName) != optionMap.end() )
-                                    {
-
-                                        switch (optionMap[ optionName] )
-                                        {
 
                                         case 0: //osil
                                             std::cout
@@ -1768,49 +1759,44 @@ void interactiveShell()
                                             break;
 
 
-                                        }// end switch
-                                        // now get the option value
-//                                        getline(std::cin, optionValue);
+                                }// end switch
+                                
+                                // now get the option value
+                                getline(std::cin, lineText);
 
-                                        getline(std::cin, lineText);
+                                int skipChars;
 
-
-                                        int skipChars;
-                                        // get the option value
-                        
-                                        indexStart = lineText.find_first_not_of(wordSep, 0);
-                                        if (lineText[indexStart] == '\"')
-                                        {
-                                            indexEnd = lineText.find_first_of(dblQuote, indexStart + 1);
-                                            skipChars = 1;
-                                        }
-                                        else
-                                        {
-                                            indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
-                                            skipChars = 0;
-                                        }
-                                        if (indexStart != std::string::npos && indexEnd
-                                                != std::string::npos)
-                                        {
-                                            optionValue = lineText.substr(indexStart + skipChars, 
-                                                                          indexEnd - indexStart - skipChars);
-                                        }
-                                        else
-                                        {
-                                            optionValue = "";
-                                        }
-
-
-                                    }// end if on finding an element in the optionMap
-
-                                } // end if on whether or not option value is null
-
-
-                                if(optionMap.find(optionName) != optionMap.end() )
+                                indexStart = lineText.find_first_not_of(wordSep, 0);
+                                if (lineText[indexStart] == '\"')
                                 {
+                                    indexEnd = lineText.find_first_of(dblQuote, indexStart + 1);
+                                    skipChars = 1;
+                                }
+                                else
+                                {
+                                    indexEnd = lineText.find_first_of(wordSep, indexStart + 1);
+                                    skipChars = 0;
+                                }
+                                if (indexStart != std::string::npos && indexEnd != std::string::npos)
+                                {
+                                    optionValue = lineText.substr(indexStart + skipChars, 
+                                                                  indexEnd - indexStart - skipChars);
+                                }
+                                else
+                                {
+                                    optionValue = "";
+                                }
 
- 				    switch (optionMap[ optionName] )
-                                    {
+
+                            }// end if on finding an element in the optionMap
+
+                        } // end if on whether or not option value is null
+
+
+                        if(optionMap.find(optionName) != optionMap.end() )
+                        {
+ 				            switch (optionMap[ optionName] )
+                            {
 
                                     case 0: //osil
                                         osoptions->osilFile = optionValue;
@@ -1886,28 +1872,28 @@ void interactiveShell()
 
 
 
-                                    }// end switch
-                                    listOptions( osoptions);
+                            }// end switch
+                            listOptions( osoptions);
 
-                                }// end if on finding an element in the optionMap
+                        }// end if on finding an element in the optionMap
 
-                            } // end if on options that require a value
+                    } // end if on options that require a value
 
-                            std::cout << std::endl;
-                        }//end try
-                        catch (const ErrorClass& eclass)
-                        {
-                            std::cout << eclass.errormsg << std::endl;
-                        }
-                    }
+                    std::cout << std::endl;
+                }//end try
+                catch (const ErrorClass& eclass)
+                {
+                    std::cout << eclass.errormsg << std::endl;
                 }
-            }//end while loop
-            ossslex_destroy(scanner);
-            scannerActive = false;
-            delete osoptions;
-            osoptions = NULL;
-            delete fileUtil;
-            fileUtil = NULL;
+            }
+        }
+    }//end while loop
+    ossslex_destroy(scanner);
+    scannerActive = false;
+    delete osoptions;
+    osoptions = NULL;
+    delete fileUtil;
+    fileUtil = NULL;
 } // end of interactiveShell
 
 std::string get_help()
@@ -2146,7 +2132,6 @@ void reset_options()
     osoptions->printModel = false;
     osoptions->printRowNumberAsString = "";
     osoptions->quit = false;
-    osoptions->exit = false;
 }//reset_options
 
 
@@ -2340,7 +2325,10 @@ void doPrintModel(osOptionsStruc *osoptions)
 		{
 #ifdef COIN_HAS_ASL
 			OSnl2OS *nl2os;	
-			nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+//			nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+			nl2os = new OSnl2OS();
+            nl2os->readNl(osoptions->nlFile);
+            nl2os->setOsol(osoptions->osol);
 			nl2os->createOSObjects();
 			std::cout << nl2os->osinstance->printModel() << std::endl;
 			delete nl2os;
@@ -2410,7 +2398,10 @@ void doPrintRow(osOptionsStruc *osoptions)
 			{
 #ifdef COIN_HAS_ASL
 				OSnl2OS *nl2os;	
-				nl2os = new OSnl2OS(osoptions->nlFile, osoptions->osol);
+//				nl2os = new OSnl2OS(osoptions->nlFile, osoptions->osol);
+				nl2os = new OSnl2OS();
+                nl2os->readNl(osoptions->nlFile);
+                nl2os->setOsol(osoptions->osol);
 				nl2os->createOSObjects();
 				std::cout << nl2os->osinstance->printModel(rownumber) << std::endl;
 				delete nl2os;

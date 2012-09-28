@@ -17,7 +17,7 @@
 #define OSNL2OS_H
 
 
-
+#include "OSoLReader.h"
 #include "OSOption.h"
 #include "OSInstance.h"
 #include "OSnLNode.h"
@@ -47,72 +47,89 @@ struct expr;
 
 enum OS_AMPL_SUFFIX_TYPE
 {
-	OS_AMPL_SUFFIX_TYPE_integer,
-	OS_AMPL_SUFFIX_TYPE_double
+    OS_AMPL_SUFFIX_TYPE_integer,
+    OS_AMPL_SUFFIX_TYPE_double
 };
 
 enum OS_AMPL_SUFFIX_SCOPE
 {
-	OS_AMPL_SUFFIX_SCOPE_variables,
-	OS_AMPL_SUFFIX_SCOPE_constraints,
-	OS_AMPL_SUFFIX_SCOPE_objectives,
-	OS_AMPL_SUFFIX_SCOPE_problems
+    OS_AMPL_SUFFIX_SCOPE_variables,
+    OS_AMPL_SUFFIX_SCOPE_constraints,
+    OS_AMPL_SUFFIX_SCOPE_objectives,
+    OS_AMPL_SUFFIX_SCOPE_problems
 };
 
 enum OS_AMPL_SUFFIX_DIRECTION
 {
-	OS_AMPL_SUFFIX_DIRECTION_toSolver,
-	OS_AMPL_SUFFIX_DIRECTION_toAMPL,
-	OS_AMPL_SUFFIX_DIRECTION_both,
-	OS_AMPL_SUFFIX_DIRECTION_local
+    OS_AMPL_SUFFIX_DIRECTION_toSolver,
+    OS_AMPL_SUFFIX_DIRECTION_toAMPL,
+    OS_AMPL_SUFFIX_DIRECTION_both,
+    OS_AMPL_SUFFIX_DIRECTION_local
 };
 
 struct OS_AMPL_SUFFIX
 {
-	std::string name;
-	OS_AMPL_SUFFIX_TYPE type;
-	OS_AMPL_SUFFIX_SCOPE scope;
-	OS_AMPL_SUFFIX_DIRECTION direction;
+    std::string name;
+    OS_AMPL_SUFFIX_TYPE type;
+    OS_AMPL_SUFFIX_SCOPE scope;
+    OS_AMPL_SUFFIX_DIRECTION direction;
 };
-
-/*
-void OS_addAmplSuffix(std::string name,
-		OS_AMPL_SUFFIX_TYPE type,
-		OS_AMPL_SUFFIX_SCOPE scope,
-		OS_AMPL_SUFFIX_DIRECTION direction)
-{
-	OS_AMPL_SUFFIX temp;
-	temp.name = name;
-	temp.type = type;
-	temp.scope = scope;
-	temp.direction = direction;
-	OS_amplSuffixTable.push_back(temp);
-};
-*/
 
 class OSnl2OS
 {
 public:
-	/** the OSnl2OS class constructor */
-	OSnl2OS( std::string nlfilename, std::string osol);
- 
-	/** the OSnl2OS class destructor */
-	~OSnl2OS();
-	
-   	/**
-   	 * create an OSInstance and OS option representation from the AMPL nl content 
-   	 * Since some of the information in the nl file 
-	 * (such as initial values, basis information, branching priorities)
-	 * cannot be stored into an OSInstance and must be stored in an
-	 * OSOption object instead, all other options must be provided
-	 * to this method as well.
+    /** the OSnl2OS class constructor */
+    //OSnl2OS( std::string nlfilename, std::string osol);
+	OSnl2OS();
+
+	/** alternate constructor which does not allocate the ASL structs 
 	 *
-	 * @param osol is a string containing the option information
-	 * (e.g., as read from an osol file). 
-   	 * @return whether the OSOption object is created successfully. 
-	 * @remark The osol string must be prepared prior to calling createOSObjects!
-   	 */
-	bool createOSObjects(); //(std::string osol); 
+	 *  &param cw  a pointer to a (previously allocated) struct used for column-wise representation 
+	 *  &param rw  a pointer to a (previously allocated) struct used for row-wise representation
+	 *  &param asl an extra pointer that can be used to switch between rw and cw
+	 */
+	OSnl2OS(ASL *cw, ASL *rw, ASL *asl);
+ 
+    /** the OSnl2OS class destructor */
+    ~OSnl2OS();
+    
+    /**
+     * return a pointer to an ASL object
+	 * @param name carries the name of the ASL object
+	 * (there are three of them: asl, rw, cw)
+	 * @return the pointer to the object named
+     */
+    ASL* getASL(std::string name);
+
+	/**
+	 * read the nl file
+	 * @param stub is the (relevant part of the) file name
+	 * @return whether the read was successful
+	 */
+	bool readNl(std::string stub);
+
+	/** set the osol string */
+	void setOsol(std::string osol);
+
+	/**
+	 * set the pointers to the three ASL objects
+	 * @param asl carries a pointer to the object named "asl"
+	 * @param rw  carries a pointer to the object named "rw"
+	 * @param cw  carries a pointer to the object named "cw"
+	 * (asl should point to the same location as either rw or cw)
+	 * @return whether the operation was successful
+	 */
+	bool setASL(ASL *asl, ASL *rw, ASL *cw);
+
+    /**
+     * create an OSInstance and OSOption representation from the AMPL nl content 
+     * (Some of the information in the nl file --- such as initial values, 
+     * basis information, branching priorities, etc. --- cannot be stored 
+     * into an OSInstance and must be stored in an OSOption object instead.)
+     *
+     * @return whether the OS objects were created successfully.
+     */
+    bool createOSObjects(); 
 
     /**
      * we may need to parse an OSoL file if there is suffix information 
@@ -127,39 +144,39 @@ public:
      */
     OSnLNode* walkTree(expr *e);
 
-	/** osinstance is a pointer to the OSInstance object that gets created
-	 *  from the information in the nl file
-	 */
-	OSInstance *osinstance;
-	
-	/** osoption is a pointer to the OSOption object that gets created
-	 *  from the information in the nl file (and the OSoL string if present)
-	 */
-	OSOption *osoption;
+    /** osinstance is a pointer to the OSInstance object that gets created
+     *  from the information in the nl file
+     */
+    OSInstance *osinstance;
+    
+    /** osoption is a pointer to the OSOption object that gets created
+     *  from the information in the nl file (and the OSoL string if present)
+     */
+    OSOption *osoption;
 
-	/** osol is a string containing the content of the OS option file
-	 *  (it may be empty if no option file was provided). 
-	 *  If osoption is NULL, the option information is found in osol.
-	 */
-	std::string osol;
-	
+    /** osol is a string containing the content of the OS option file
+     *  (it may be empty if no option file was provided). 
+     *  If osoption is NULL, the option information is found in osol.
+     */
+    std::string osol;
+    
     std::vector<std::string> op_type;
     std::vector<double> operand;
     int numkount;
 
 private:
-	
+    
     /** og is a pointer to the AMPL data structure holding the
      * objective function coefficients
      */
     ograd *og;
 
     /** Pointers to AMPL data structures.
-	 * cw is loaded in column-wise format.
-	 * rw is loaded in row-wise format.
-	 * asl is for conveniently switching.
+     * cw is loaded in column-wise format.
+     * rw is loaded in row-wise format.
+     * asl is for conveniently switching.
      */
-    ASL *asl, *cw, *rw;
+    ASL *cw, *rw, *asl;
 
     /** stub is the name of the file with the nl instance
      */

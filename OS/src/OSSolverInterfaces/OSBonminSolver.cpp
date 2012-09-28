@@ -867,7 +867,7 @@ void BonminSolver::solve() throw (ErrorClass)
             std::string message = "Success";
             int solIdx = 0;
 
-            if(osresult->setServiceName( "Bonin solver service") != true)
+            if(osresult->setServiceName( "Bonmin solver service") != true)
                 throw ErrorClass("OSResult error: setServiceName");
             if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
                 throw ErrorClass("OSResult error: setInstanceName");
@@ -897,7 +897,7 @@ void BonminSolver::solve() throw (ErrorClass)
             int solIdx = 0;
 
 
-            if(osresult->setServiceName( "Bonin solver service") != true)
+            if(osresult->setServiceName( "Bonmin solver service") != true)
                 throw ErrorClass("OSResult error: setServiceName");
             if(osresult->setInstanceName(  osinstance->getInstanceName()) != true)
                 throw ErrorClass("OSResult error: setInstanceName");

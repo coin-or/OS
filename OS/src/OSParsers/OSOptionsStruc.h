@@ -1,7 +1,7 @@
 /* $Id$ */
 /** @file OSOptionsStruc.h
  *
- * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * Copyright (C) 2005-2011, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
@@ -24,9 +24,7 @@
  *  \brief This structure is used to store options for the
  * OSSolverService executable.
  *
- * @author Robert Fourer, Jun Ma, Kipp Martin
- * @version 1.0, 03/14/2004
- * @since OS 1.0
+ * @author  Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin
  *
  * \remarks
  * the OSSolverService requires numerous options and these
@@ -34,14 +32,14 @@
  */
 struct osOptionsStruc
 {
-    /**  configFile is the name of the file that holds the configuration options
-     * if the OSSolverService reads its options from a file rather than command
-     * line inputs
+    /** configFile is the name of the file that holds the configuration options
+     *  if the OSSolverService reads its options from a file rather than command
+     *  line inputs
      */
     std::string configFile;
 
     /** osilFile is the name of the file that holds the model
-     * instance in OSiL format
+     *  instance in OSiL format
      */
     std::string osilFile;
 
@@ -59,7 +57,7 @@ struct osOptionsStruc
     std::string osol;
 
     /** osrlFile is the name of the file where the solver should write
-     * the result in OSrL format
+     *  the result in OSrL format
      */
     std::string osrlFile;
 
@@ -68,27 +66,27 @@ struct osOptionsStruc
     std::string osrl;
 
     /** name of the file containing the instance in LINDO instruction
-     * list format
+     *  list format
      */
     std::string insListFile;
 
-    /** insList is the content of the insListFile -- this is not implemented
+    /** insList is the content of the insListFile -- THIS IS NOT IMPLEMENTED
      */
     std::string insList;
 
     /** serviceLocation is the URL of the remote solver when
-     * a local solver is not used
+     *  a local solver is not used
      */
     std::string serviceLocation;
 
     /** the service method the OSSolverService should execute, i.e.
-     * solve, send, getJobID, kill, knock, or retrieve
+     *  solve, send, getJobID, kill, knock, or retrieve
      */
     std::string serviceMethod;
 
     /** name of an input file with xml in OS Process language format,
-     * used for example to knock on a server, for example
-     * -osplInput ../data/osplFiles/demo.ospl
+     *  used for example to knock on a server, for example
+     *    -osplInput ../data/osplFiles/demo.ospl
      */
     std::string osplInputFile;
 
@@ -97,8 +95,7 @@ struct osOptionsStruc
     std::string osplInput;
 
     /** name of an output file where the solver should write the result of a
-     * knock or kill service request
-     *
+     *  knock or kill service request
      */
     std::string osplOutputFile;
 
@@ -127,8 +124,8 @@ struct osOptionsStruc
     /** the name of the .dat that holds the GAMS control file */
     std::string gamsControlFile;
 
-    /** the name of the solver to be invoked,
-     * e.g -solver Ipopt
+    /** the name of the solver to be invoked, e.g.
+     *    -solver Ipopt
      */
     std::string solverName;
 
@@ -144,16 +141,16 @@ struct osOptionsStruc
     std::string jobID;
 
     /** if this parameter is true we print the contents of the file
-     * help.txt and return
+     *  help.txt and return
      */
     bool invokeHelp;
 
-    /** if this parameter is true we print the current version
-     * of the OS project
+    /** if this parameter is true, we print the current version
+     *  of the OS project
      */
     bool writeVersion;
 	
-    /** if this parameter is true we print the current instance
+    /** if this parameter is true, we print the current instance
      *  as read from an osil, nl or mps file
      */
     bool printModel;
@@ -166,15 +163,45 @@ struct osOptionsStruc
      */
     std::string printRowNumberAsString;
 
-    /** if this parameter is true we quit/exit
-     *  - only used in the interactive shell
+    /** if this parameter is true, we quit/exit the program
+     *  -- only used in the interactive shell
      */
     bool quit;
 
-    /** if this parameter is true we quit/exit
-     *  - only used in the interactive shell
-     */
-    bool exit;
+    osOptionsStruc(void) :
+    configFile(""),
+    osilFile(""),
+    osil(""),
+    osolFile(""),
+    osol(""),
+    osrlFile(""),
+    osrl(""),
+    insListFile(""),
+    insList(""),
+    serviceLocation(""),
+    serviceMethod(""),
+    osplInputFile(""),
+    osplInput(""),
+    osplOutputFile(""),
+    osplOutput(""),
+    mpsFile(""),
+    mps(""),
+    nlFile(""),
+    nl(""),
+    datFile(""),
+    dat(""),
+    gamsControlFile(""),
+    solverName(""),
+    browser(""),
+    jobID(""),
+    invokeHelp(false),
+    writeVersion(false),
+    printModel(false),
+    printRowNumberAsString(""),
+    quit(false)
+    {
+    }
+
 };
 
 

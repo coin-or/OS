@@ -30,7 +30,9 @@ libOSModelInterfaces_la_SOURCES += \
 	OSnl2osil.cpp \
 	OSnl2osil.h \
 	OSnl2OS.cpp \
-	OSnl2OS.h
+	OSnl2OS.h \
+	OSosrl2ampl.cpp \
+	OSosrl2ampl.h
 endif
 
 # should be another if
@@ -72,4 +74,5 @@ includecoindir = $(includedir)/coin
 includecoin_HEADERS = \
 	OSmps2osil.h \
 	OSnl2osil.h \
-	OSnl2OS.h
+	OSnl2OS.h \
+	OSosrl2ampl.h

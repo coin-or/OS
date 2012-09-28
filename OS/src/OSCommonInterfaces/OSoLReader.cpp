@@ -68,16 +68,12 @@ OSoLReader::~OSoLReader()
 
 OSOption* OSoLReader::readOSoL(const std::string& posol) throw(ErrorClass)
 {
-    try
+    if (posol.length() > 0)
     {
         const char *ch = posol.c_str();
         yygetOSOption( ch, m_osoption, m_parserData, m_osglData);
-        return m_osoption;
     }
-    catch(const ErrorClass& eclass)
-    {
-        throw ErrorClass( eclass.errormsg);
-    }
+    return m_osoption;
 }//end readOSoL
 
 

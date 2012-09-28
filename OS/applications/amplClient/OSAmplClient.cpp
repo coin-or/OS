@@ -58,18 +58,21 @@
  *
  */
 
-#include "OSCoinSolver.h"
 #include "OSConfig.h"
 #include "OSnl2OS.h"
+#include "OSosrl2ampl.h"
 #include "OSiLReader.h"
-#include "OSrLReader.h"
 #include "OSiLWriter.h"
-#include "OSrLWriter.h"
-#include "OSInstance.h"
-#include "OSResult.h"
-#include "OSOption.h"
 #include "OSoLReader.h"
 #include "OSoLWriter.h"
+#include "OSrLReader.h"
+#include "OSrLWriter.h"
+#include "OSInstance.h"
+#include "OSOption.h"
+#include "OSResult.h"
+
+#include "OSDefaultSolver.h"
+#include "OSCoinSolver.h"
 
 #ifdef COIN_HAS_LINDO
 # include "OSLindoSolver.h"
@@ -88,12 +91,10 @@
 #endif
 
 #include "OSFileUtil.h"
-#include "OSDefaultSolver.h"
 #include "OSSolverAgent.h"
 #include "OShL.h"
 #include "OSErrorClass.h"
 #include "CoinError.hpp"
-#include "OSOption.h"
 #include "OSOptionsStruc.h"
 #include "OSRunSolver.h"
 #include <sstream>
@@ -170,19 +171,14 @@ int main(int argc, char **argv)
 //    for (int i=0; i<argc; i++) cout << " " << argv[i];
 //    cout << endl;
 
+    stub = argv[1];
+
     amplclient_options = getenv("OSAmplClient_options");
     if( amplclient_options != NULL)
     {
         cout << "HERE ARE THE AMPLCLIENT OPTIONS " <<   amplclient_options << endl;
         getAmplClientOptions(amplclient_options, &sSolverName, &osolFileName, &serviceLocation);
     }
-
-    // set AMPL structures
-    ASL *asl;
-    asl = ASL_alloc(ASL_read_fg);
-    stub = argv[1];
-    jac0dim((char*)stub, (fint)strlen(stub));
-
 
     //convert solver name to lower case for testing purposes
 
@@ -191,11 +187,9 @@ int main(int argc, char **argv)
     {
         sSolverName[ k] = tolower( sSolverName[ k]);
     }
+    //std::cout << " solver Name = " << sSolverName << std::endl;
 
-
-
-    /* If an OSoL file was given, read it into a string (don't parse)
-     */
+    /* If an OSoL file was given, read it into a string (don't parse)  */
     if(osolFileName.size() > 0)
     {
         FileUtil *fileUtil;
@@ -203,20 +197,28 @@ int main(int argc, char **argv)
         osol = fileUtil->getFileAsString( osolFileName.c_str() );
         delete fileUtil;
     }
-    //std::cout << " solver Name = " << sSolverName << std::endl;
     //std::cout << " solver Options = " << osol << std::endl;
 
+    // set AMPL structures: cw for column-wise representation, rw for row-wise; asl to switch between them
+    ASL *cw, *rw, *asl;
+    cw = ASL_alloc(ASL_read_fg);
+    rw = ASL_alloc(ASL_read_fg);
+    asl = cw;
 
-    OSnl2OS *nl2OS = NULL;
-    //initialize object with stub -- the nl file --- and the OSoL file --- if any
-    nl2OS = new OSnl2OS( stub, osol);
-    std::cout << " call nl2OS" << std::endl;
+    jac0dim((char*)stub, (fint)strlen(stub));
 
-    /*	Parse the .nl file to create an in-memory representation
-    	in form of an OSInstance object
+    OSnl2OS *nl2OS = new OSnl2OS(cw, rw, asl);
+    //std::cout << " call nl2OS" << std::endl;
+
+
+    /** Read and parse the .nl file and the osol string
+     *  to create an in-memory representation
+     *  in form of an OSInstance and am OSOption object
      */
     try
     {
+        nl2OS->readNl(stub);
+        nl2OS->setOsol(osol);
         nl2OS->createOSObjects() ;
     }
     catch(const ErrorClass& eclass)
@@ -224,14 +226,14 @@ int main(int argc, char **argv)
         std::cout << eclass.errormsg << std::endl;
         return 0;
     }
-    std::cout << " return from  nl2OS" << std::endl;
+    //std::cout << " return from  nl2OS" << std::endl;
 
     // create OS objects
     OSInstance *osinstance;
     OSOption   *osoption;
 
     osinstance = nl2OS->osinstance;
-    std::cout << " osinstance created" << std::endl;
+    //std::cout << " osinstance created" << std::endl;
 
     //write out the instance
     OSiLWriter *osilwriter = NULL;
@@ -269,12 +271,14 @@ int main(int argc, char **argv)
     OSResult *osresult = NULL;
     std::string osrl = "";
 
+    bool writeOK;
+    OSosrl2ampl *solWriter = new OSosrl2ampl();
 
     try
     {
         if(serviceLocation.size() == 0 )
         {
-            //determine the solver
+            //determine the solver and do a local solve
             osrl = runSolver(sSolverName, osol, osinstance);
         }// end if serviceLocation.size() == 0
 
@@ -309,9 +313,16 @@ int main(int argc, char **argv)
         osresult->setGeneralStatusType( "error");
         osrl = osrlwriter->writeOSrL( osresult);
         std::cout  << osrl << std::endl;
-        osrl = " ";
-        write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+//        osrl = " ";
+//        write_sol(const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
+
+        writeOK = solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
+
+        delete solWriter;
+        solWriter = NULL;
+
         delete osresult;
+        osresult = NULL;
         return 0;
     }
 
@@ -323,91 +334,31 @@ int main(int argc, char **argv)
         fileUtil = new FileUtil();
         fileUtil->writeFileFromString(sResultFileName, osrl);
         delete fileUtil;
-        //cout << "WRITE THE SOLUTION BACK INTO AMPL" <<endl;
         std::string::size_type pos1 = osrl.find( "error");
         if(pos1 == std::string::npos)
         {
             std::string sReport = "model was solved";
             std::cout << sReport << std::endl;
-            //std::cout << osrl << std::endl;
             osrlreader = new OSrLReader();
             osresult = osrlreader->readOSrL( osrl);
-            // do the following so output is not written twice
-            // see page 23 of hooking solver to AMPL
-            //need_nl = printf( sReport.c_str());
 
-            //
-            sReport = " ";
-            int i;
-            int vecSize;
-            double *x;
-            double *y;
-            int numVars = osresult->getVariableNumber();
-            int numCons = osresult->getConstraintNumber();
-            x = new double[ numVars];
-            y = new double[ numCons];
-
-            std::vector<IndexValuePair*> primalValPair;
-            std::vector<IndexValuePair*> dualValPair;
-            dualValPair = osresult->getOptimalDualVariableValues( 0);
-            primalValPair = osresult->getOptimalPrimalVariableValues( 0);
-
-            for(i = 0; i < numVars; i++)
-            {
-                x[ i] = 0.0;
-            }
-            vecSize = primalValPair.size();
-            for(i = 0; i < vecSize; i++)
-            {
-                x[ primalValPair[i]->idx ] = primalValPair[i]->value;
-                //std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
-                //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
-            }
-
-
-            for(i = 0; i < numCons; i++)
-            {
-                y[ i] = 0.0;
-            }
-            vecSize = dualValPair.size();
-            for(i = 0; i < vecSize; i++)
-            {
-                y[ dualValPair[i]->idx ] = dualValPair[i]->value;
-                //std::cout << "index =  " <<   primalValPair[i]->idx  << std::endl;
-                //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
-            }
-
-            // return all solution results that are indexed over variables or constraints as suffixes
-// taken from Ipopt - AmplTNLP.cpp:
-//    Number* z_L_sol_;
-//            suf_rput("ipopt_zL_out", ASL_Sufkind_var,  z_L_sol_);
-
-            write_sol(  const_cast<char*>(sReport.c_str()),  x, y , NULL);
+            writeOK = solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
 
             delete osrlreader;
             osrlreader = NULL;
-            //delete[] x;
-            //x = NULL;
-            //delete y;
-            //y = NULL;
         }
         else // there was an error
         {
-            // do the following so output is not written twice
-            // see page 23 of hooking solver to AMPL
             std::cout  << osrl << std::endl;
-            osrl = " ";
-            //
-            write_sol(  const_cast<char*>(osrl.c_str()), NULL, NULL, NULL);
-            need_nl = 0;
+            writeOK = solWriter->writeSolFile(osrl, nl2OS->getASL("asl"));
         }
-        //cout << "DONE WRITING THE SOLUTION BACK INTO AMPL" <<endl;
     }
     catch(const ErrorClass& eclass)
     {
-        cout << "There was an error parsing the OSrL" << endl << eclass.errormsg << endl << endl;
+        cout << "There was an error parsing the OSrL string" << endl << eclass.errormsg << endl << endl;
     }
-    if(  solverType != NULL )
+
+    if (solverType != NULL)
     {
         //cout << "TRY TO DELETE solverType" <<endl;
         delete solverType;
@@ -418,9 +369,11 @@ int main(int argc, char **argv)
     //cout << "osrlwriter JUST DELETED" <<endl;
     osrlwriter = NULL;
     delete nl2OS;
-    //cout << "nl2osil JUST DELETED" <<endl;
+    //cout << "nl2OS JUST DELETED" <<endl;
     nl2OS = NULL;
-    ASL_free(&asl);
+//    ASL_free(&asl);
+    if (solWriter != NULL) delete solWriter;
+    solWriter = NULL;
     return 0;
 } // end main
 
@@ -430,33 +383,13 @@ int main(int argc, char **argv)
 void getAmplClientOptions(char *amplclient_options, std::string *solverName,
                           std::string *solverOptions, std::string *serviceLocation)
 {
-
+    // initialize the OS options structure
     osOptionsStruc *osoptions;
 
-    void* scanner;
-    // initialize the OS options structure
-
     osoptions = new osOptionsStruc();
-    osoptions->configFile = "";
-    osoptions->osilFile = "";
-    osoptions->osil = "";
-    osoptions->osolFile = "";
-    osoptions->osol = "";
-    osoptions->osrlFile = "";
-    osoptions->osrl = "";
-    //osoptions->insListFile = "";
-    osoptions->insList = "";
-    osoptions->serviceLocation = "";
-    osoptions->serviceMethod = "";
-    osoptions->osplInputFile = "";
-    osoptions->osplOutputFile = "";
-    osoptions->mpsFile = "";
-    osoptions->nlFile = "";
-    osoptions->gamsControlFile = "";
-    osoptions->solverName = "";
-    osoptions->browser = "";
-    osoptions->invokeHelp = false;
-    osoptions->writeVersion = false;
+
+    void* scanner;
+
     try
     {
         //cout << "Input String = "  << amplclient_options << endl;

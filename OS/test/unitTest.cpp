@@ -6302,6 +6302,7 @@ if( THOROUGH == true){
 			cout << solver->osrl << endl;
 #endif
 			cout << "COIN cbc solver solution for parincInteger checks." << endl;
+
 		}
 		else
 		{	cout << "COIN cbc solver solution for parincInteger in error:" << endl;
@@ -8332,7 +8333,9 @@ if (OTHER_TESTS){
 		cout << endl << "TEST " << ++nOfTest << ": AMPL solver interface" << endl << endl;
 
 		nlFileName  = dataDir + "amplFiles" + dirsep + "parinc.nl";
-		nl2osil = new OSnl2OS( nlFileName, ""); 
+		nl2osil = new OSnl2OS();
+		nl2osil->readNl(nlFileName) ;
+ 
 		solver = new CoinSolver();
 
 		ok = true;
