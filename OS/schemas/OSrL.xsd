@@ -365,6 +365,8 @@
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="objType" type="xs:string" use="optional"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjResult">
 		<xs:simpleContent>
@@ -436,6 +438,8 @@
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="varType" type="xs:string" use="optional"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVarResult">
 		<xs:simpleContent>
@@ -500,6 +504,8 @@
 		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="conType" type="xs:string" use="optional"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherConResult">
 		<xs:simpleContent>

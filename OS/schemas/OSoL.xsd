@@ -2,7 +2,7 @@
 <!-- edited with XMLSpy v2008 (http://www.altova.com) by Gus Gassmann (Dalhousie University) -->
 <!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Jun Ma (Northwestern University) -->
 <!-- schema stage stamping: experiment -> draft -> proposal -> recommendation -> finalization -> version 1.0, 1.1 2.0, ... -->
-<xs:schema targetNamespace="os.optimizationservices.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="os.optimizationservices.org" targetNamespace="os.optimizationservices.org" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<!--OSoL.xsd: version 2.0 (The entire schema)-->
 	<xs:include schemaLocation="OSgL.xsd"/>
 	<xs:element name="osol" type="OSoL">
@@ -324,10 +324,12 @@
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="varType" type="xs:string" use="optional"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherVarOption">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
@@ -385,10 +387,12 @@
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="objType" type="xs:string" use="optional"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherObjOption">
 		<xs:attribute name="idx" type="xs:negativeInteger" use="optional" default="-1"/>
@@ -469,10 +473,12 @@
 		<xs:attribute name="numberOfEnumerations" type="xs:nonNegativeInteger" use="optional" default="0"/>
 		<xs:attribute name="name" type="xs:string" use="required"/>
 		<xs:attribute name="value" type="xs:string" use="optional"/>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="solver" type="xs:string" use="optional"/>
 		<xs:attribute name="category" type="xs:string" use="optional"/>
-		<xs:attribute name="type" type="xs:string" use="optional"/>
 		<xs:attribute name="description" type="xs:string" use="optional"/>
+		<xs:attribute name="conType" type="xs:string" use="optional"/>
+		<xs:attribute name="enumType" type="xs:string" use="optional"/>
 	</xs:complexType>
 	<xs:complexType name="OtherConOption">
 		<xs:attribute name="idx" type="xs:nonNegativeInteger" use="required"/>
