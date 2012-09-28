@@ -154,7 +154,6 @@ void interactiveShell();
 std::string get_help();
 std::string get_version();
 std::string get_options();
-void reset_options();
 
 // the serviceMethods
 void solve();
@@ -685,6 +684,7 @@ void solve()
                 {
 #ifdef COIN_HAS_ASL
                     //nl2os = new OSnl2OS( osoptions->nlFile, osoptions->osol);
+                    nl2os = new OSnl2OS();
                     nl2os->readNl(osoptions->nlFile);
                     nl2os->setOsol(osoptions->osol);
                     nl2os->createOSObjects() ;
@@ -1412,7 +1412,6 @@ void interactiveShell()
 
 
     osoptions = new osOptionsStruc();
-    //reset_options();
     bool scannerActive = false;
 
     //this is the interactive shell
@@ -1646,7 +1645,7 @@ void interactiveShell()
 
                                 case 8: // reset command
 
-                                    reset_options();
+                                    osoptions->resetOptions();
                                     std::cout << "\nAll options reset.\n";
                                     break;
 
@@ -2100,41 +2099,6 @@ std::string get_version()
 
     return versionMsg.str();
 }// get version
-
-
-void reset_options()
-{
-    osoptions->configFile = "";
-    osoptions->osilFile = "";
-    osoptions->osil = "";
-    osoptions->osolFile = "";
-    osoptions->osol = "";
-    osoptions->osrlFile = "";
-    osoptions->osrl = "";
-    osoptions->insListFile = "";
-    osoptions->insList = "";
-    osoptions->serviceLocation = "";
-    osoptions->serviceMethod = "";
-    osoptions->osplInputFile = "";
-    osoptions->osplInput = "";
-    osoptions->osplOutputFile = "";
-    osoptions->osplOutput = "";
-    osoptions->mpsFile = "";
-    osoptions->mps = "";
-    osoptions->nlFile = "";
-    osoptions->nl = "";
-    osoptions->gamsControlFile = "";
-    osoptions->solverName = "";
-    osoptions->browser = "";
-    osoptions->jobID = "";
-    osoptions->invokeHelp = false;
-    osoptions->writeVersion = false;
-    osoptions->printModel = false;
-    osoptions->printRowNumberAsString = "";
-    osoptions->quit = false;
-}//reset_options
-
-
 
 std::string get_options()
 {

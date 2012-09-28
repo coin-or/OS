@@ -168,40 +168,11 @@ struct osOptionsStruc
      */
     bool quit;
 
-    osOptionsStruc(void) :
-    configFile(""),
-    osilFile(""),
-    osil(""),
-    osolFile(""),
-    osol(""),
-    osrlFile(""),
-    osrl(""),
-    insListFile(""),
-    insList(""),
-    serviceLocation(""),
-    serviceMethod(""),
-    osplInputFile(""),
-    osplInput(""),
-    osplOutputFile(""),
-    osplOutput(""),
-    mpsFile(""),
-    mps(""),
-    nlFile(""),
-    nl(""),
-    datFile(""),
-    dat(""),
-    gamsControlFile(""),
-    solverName(""),
-    browser(""),
-    jobID(""),
-    invokeHelp(false),
-    writeVersion(false),
-    printModel(false),
-    printRowNumberAsString(""),
-    quit(false)
-    {
-    }
+	/** constructor */
+    osOptionsStruc();
 
+    /** a method to reset the options to their default values */
+    void resetOptions();
 };
 
 
