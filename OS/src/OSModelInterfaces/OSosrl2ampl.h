@@ -1,5 +1,5 @@
-/* $Id: OSrL2AmplSol.h 4249 2011-08-11 01:08:14Z Gassmann $ */
-/** @file OSrL2AmplSol.h
+/* $Id: OSosrl2ampl.h 4249 2011-08-11 01:08:14Z Gassmann $ */
+/** @file OSosrl2ampl.h
  * 
  * @author  Horand Gassmann, Jun Ma, Kipp Martin
  *
@@ -13,8 +13,8 @@
  */
  
 
-#ifndef OSRL2AMPLSOL_H
-#define OSRL2AMPLSOL_H
+#ifndef OSRL2AMPL_H
+#define OSRL2AMPL_H
 
 
 
@@ -24,13 +24,13 @@
 #include <vector>
 
 
-/*! \class OSrL2AmplSol
- *  \brief The OSrL2AmplSol  Class.
+/*! \class OSosrl2ampl
+ *  \brief The OSosrl2ampl Class.
  * 
  * @author Horand Gassmann, Jun Ma, Kipp Martin
  * 
  * \remarks
- * The OSrL2AmplSol class is used for writing an AMPL sol file, 
+ * The OSosrl2ampl class is used for writing an AMPL sol file, 
  * including any results indexed over variables, constraints, objectives. 
  * 
  */ 
@@ -41,28 +41,23 @@ struct ASL;
 struct expr;
 
 
-class OSrL2AmplSol
+class OSosrl2ampl
 {
 public:
-    /** the OSrL2AmplSol class constructor */
-    OSrL2AmplSol( std::string nlfilename, std::string osol);
+    /** the OSosrl2ampl class constructor */
+    OSosrl2ampl();
  
-    /** the OSrL2AmplSol class destructor */
-    ~OSrL2AmplSol();
+    /** the OSosrl2ampl class destructor */
+    ~OSosrl2ampl();
     
     /**
-     * create an OSInstance and OS option representation from the AMPL nl content 
-     * Since some of the information in the nl file 
-     * (such as initial values, basis information, branching priorities)
-     * cannot be stored into an OSInstance and must be stored in an
-     * OSOption object instead, all other options must be provided
-     * to this method as well.
+     * Convert the solution to AMPL .sol format 
      *
      * @param osrl is a string containing the result information
      * (e.g., as returned from the solver). 
      * @return whether the .sol file was created successfully. 
      */
-    bool writeSolFile(std::string osrl); 
+    bool writeSolFile(std::string osrl, ASL *asl); 
 
 private:
     
@@ -82,6 +77,6 @@ private:
      */
     std::string stub;
 
-};  //end of OSrL2AmplSol
+};  //end of OSosrl2ampl
 
 #endif

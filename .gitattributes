@@ -594,8 +594,8 @@ OS/src/OSModelInterfaces/OSnl2OS.cpp -text
 OS/src/OSModelInterfaces/OSnl2OS.h -text
 OS/src/OSModelInterfaces/OSnl2osil.cpp -text
 OS/src/OSModelInterfaces/OSnl2osil.h -text
-OS/src/OSModelInterfaces/OSrL2AmplSol.cpp -text
-OS/src/OSModelInterfaces/OSrL2AmplSol.h -text
+OS/src/OSModelInterfaces/OSosrl2ampl.cpp -text
+OS/src/OSModelInterfaces/OSosrl2ampl.h -text
 OS/src/OSParsers/Makefile.am -text
 OS/src/OSParsers/Makefile.in -text
 OS/src/OSParsers/OSOptionsStruc.h -text
