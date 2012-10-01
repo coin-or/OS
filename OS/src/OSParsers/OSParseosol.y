@@ -105,6 +105,8 @@ bool ignoreDataAfterErrors;
 %token NUMBEROFOTHERCONSTRAINTOPTIONSATT NUMBEROFITEMSATT;
 %token NUMBEROFVARATT NUMBEROFOBJATT NUMBEROFCONATT NUMBEROFELATT;
 %token NAMEATT IDXATT SOSIDXATT VALUEATT UNITATT DESCRIPTIONATT;
+%token CONTYPEATT EMPTYCONTYPEATT ENUMTYPEATT EMPTYENUMTYPEATT 
+%token OBJTYPEATT EMPTYOBJTYPEATT VARTYPEATT EMPTYVARTYPEATT 
 %token EMPTYTYPEATT EMPTYNAMEATT EMPTYCATEGORYATT EMPTYDESCRIPTIONATT EMPTYUNITATT EMPTYVALUEATT;
 %token EMPTYLBVALUEATT EMPTYUBVALUEATT LBVALUEATT UBVALUEATT
 %token EMPTYLBDUALVALUEATT EMPTYUBDUALVALUEATT LBDUALVALUEATT UBDUALVALUEATT
@@ -2737,6 +2739,10 @@ otherVariableOptionStart: OTHERSTART
 	parserData->categoryAttribute = "";
 	parserData->typeAttributePresent = false;	
 	parserData->typeAttribute = "";
+	parserData->varTypeAttributePresent = false;	
+	parserData->varTypeAttribute = "";
+	parserData->enumTypeAttributePresent = false;	
+	parserData->enumTypeAttribute = "";
 	parserData->descriptionAttributePresent = false;	
 	parserData->descriptionAttribute = "";	
 	parserData->otherOptionType = ENUM_PROBLEM_COMPONENT_variables;
@@ -2756,6 +2762,8 @@ otherVariableOptionAttributes: otherVariableOptionAttList
 					parserData->solverAttribute,
 					parserData->categoryAttribute,
 					parserData->typeAttribute,
+					parserData->varTypeAttribute,
+					parserData->enumTypeAttribute,
 					parserData->descriptionAttribute) )
 				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element could not be initialed"); 
 	};
@@ -2776,6 +2784,8 @@ otherVariableOptionATT:
   | solverAttribute 
   | categoryAttribute 
   | typeAttribute 
+  | varTypeAttribute 
+  | enumTypeAttribute 
   | descriptionAttribute
   ;
   
@@ -3404,6 +3414,10 @@ otherObjectiveOptionStart: OTHERSTART
 	parserData->categoryAttribute = "";
 	parserData->typeAttributePresent = false;	
 	parserData->typeAttribute = "";
+	parserData->objTypeAttributePresent = false;	
+	parserData->objTypeAttribute = "";
+	parserData->enumTypeAttributePresent = false;	
+	parserData->enumTypeAttribute = "";
 	parserData->descriptionAttributePresent = false;	
 	parserData->descriptionAttribute = "";	
 	parserData->otherOptionType = ENUM_PROBLEM_COMPONENT_objectives;
@@ -3423,6 +3437,8 @@ otherObjectiveOptionAttributes: otherObjectiveOptionAttList
 					parserData->solverAttribute,
 					parserData->categoryAttribute,
 					parserData->typeAttribute,
+					parserData->objTypeAttribute,
+					parserData->enumTypeAttribute,
 					parserData->descriptionAttribute) )
 				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element could not be initialed"); 
 	};
@@ -3444,6 +3460,8 @@ otherObjectiveOptionATT:
   | solverAttribute 
   | categoryAttribute 
   | typeAttribute 
+  | objTypeAttribute 
+  | enumTypeAttribute 
   | descriptionAttribute
   ;
     
@@ -4080,6 +4098,10 @@ otherConstraintOptionStart: OTHERSTART
 	parserData->categoryAttribute = "";
 	parserData->typeAttributePresent = false;	
 	parserData->typeAttribute = "";
+	parserData->conTypeAttributePresent = false;	
+	parserData->conTypeAttribute = "";
+	parserData->enumTypeAttributePresent = false;	
+	parserData->enumTypeAttribute = "";
 	parserData->descriptionAttributePresent = false;	
 	parserData->descriptionAttribute = "";	
 	parserData->otherOptionType = ENUM_PROBLEM_COMPONENT_constraints;
@@ -4099,6 +4121,8 @@ otherConstraintOptionAttributes: otherConstraintOptionAttList
 					parserData->solverAttribute,
 					parserData->categoryAttribute,
 					parserData->typeAttribute,
+					parserData->objTypeAttribute,
+					parserData->enumTypeAttribute,
 					parserData->descriptionAttribute) )
 				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element could not be initialed"); 
 	};
@@ -4119,6 +4143,8 @@ otherConstraintOptionATT:
   | solverAttribute 
   | categoryAttribute 
   | typeAttribute 
+  | conTypeAttribute 
+  | enumTypeAttribute 
   | descriptionAttribute
   ;
   
@@ -4485,6 +4511,24 @@ categoryAttContent: CATEGORYATT ATTRIBUTETEXT quote
 };
 
 /* ----------------------------------------------------------------------- */
+conTypeAttribute: conTypeAtt
+		{   if (parserData->conTypeAttributePresent ) 
+				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "only one conType attribute allowed for this element");
+			parserData->conTypeAttributePresent = true;
+		};
+
+conTypeAtt: conTypeAttEmpty | conTypeAttContent;
+
+conTypeAttEmpty: EMPTYCONTYPEATT
+{ parserData->conTypeAttribute = ""; };
+
+conTypeAttContent: CONTYPEATT ATTRIBUTETEXT QUOTE 
+{ 
+	parserData->conTypeAttribute = $2; 
+	free($2);
+};
+
+/* ----------------------------------------------------------------------- */
 descriptionAttribute: descriptionAtt
 {
 	if (parserData->descriptionAttributePresent ) 
@@ -4502,6 +4546,25 @@ descriptionAttContent: DESCRIPTIONATT ATTRIBUTETEXT quote
 	parserData->descriptionAttribute = $2; 
 	free($2);
 };
+
+/* ----------------------------------------------------------------------- */
+enumTypeAttribute: enumTypeAtt
+		{   if (parserData->enumTypeAttributePresent ) 
+				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "only one enumType attribute allowed for this element");
+			parserData->enumTypeAttributePresent = true;
+		};
+
+enumTypeAtt: enumTypeAttEmpty | enumTypeAttContent;
+
+enumTypeAttEmpty: EMPTYENUMTYPEATT
+{ parserData->enumTypeAttribute = ""; };
+
+enumTypeAttContent: ENUMTYPEATT ATTRIBUTETEXT QUOTE 
+{ 
+	parserData->enumTypeAttribute = $2; 
+	free($2);
+};
+
 
 /* ----------------------------------------------------------------------- */
 groupWeightAttribute: groupWeightAtt
@@ -4572,7 +4635,6 @@ lbDualValueAttContent: LBDUALVALUEATT quote aNumber quote
     parserData->lbDualValue = parserData->tempVal;
 };
 
-
 /* ----------------------------------------------------------------------- */
 nameAttribute: nameAtt
 	{
@@ -4593,6 +4655,25 @@ nameAttContent: NAMEATT ATTRIBUTETEXT quote
 	    parserData->nameAttribute = $2; 
     	free($2);
     };
+
+/* ----------------------------------------------------------------------- */
+objTypeAttribute: objTypeAtt
+		{   if (parserData->objTypeAttributePresent ) 
+				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "only one objType attribute allowed for this element");
+			parserData->objTypeAttributePresent = true;
+		};
+
+objTypeAtt: objTypeAttEmpty | objTypeAttContent;
+
+objTypeAttEmpty: EMPTYOBJTYPEATT
+{ parserData->objTypeAttribute = ""; };
+
+objTypeAttContent: OBJTYPEATT ATTRIBUTETEXT QUOTE 
+{ 
+	parserData->objTypeAttribute = $2; 
+	free($2);
+};
+
 
 /* ----------------------------------------------------------------------- */
 solverAttribute: solverAtt
@@ -4718,6 +4799,24 @@ valueAttEmpty: EMPTYVALUEATT
 valueAttContent: VALUEATT ATTRIBUTETEXT QUOTE 
 {
 	parserData->valueAttribute = $2; 
+	free($2);
+};
+
+/* ----------------------------------------------------------------------- */
+varTypeAttribute: varTypeAtt
+		{   if (parserData->varTypeAttributePresent ) 
+				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "only one varType attribute allowed for this element");
+			parserData->varTypeAttributePresent = true;
+		};
+
+varTypeAtt: varTypeAttEmpty | varTypeAttContent;
+
+varTypeAttEmpty: EMPTYVARTYPEATT
+{ parserData->varTypeAttribute = ""; };
+
+varTypeAttContent: VARTYPEATT ATTRIBUTETEXT QUOTE 
+{ 
+	parserData->varTypeAttribute = $2; 
 	free($2);
 };
 
@@ -5032,6 +5131,7 @@ Base64SizeAttribute: SIZEOFATT quote INTEGER quote
 Base64Content: Base64Empty | Base64Laden;
 
 Base64Empty: GREATERTHAN BASE64END | ENDOFELEMENT;
+
 
 Base64Laden: GREATERTHAN ELEMENTTEXT BASE64END
 {

@@ -101,6 +101,8 @@ int osrllex(YYSTYPE* lvalp,  YYLTYPE* llocp, void* scanner);
 
 %token CATEGORYATT EMPTYCATEGORYATT DESCRIPTIONATT EMPTYDESCRIPTIONATT 
 %token NAMEATT EMPTYNAMEATT TYPEATT EMPTYTYPEATT 
+%token CONTYPEATT EMPTYCONTYPEATT ENUMTYPEATT EMPTYENUMTYPEATT 
+%token OBJTYPEATT EMPTYOBJTYPEATT VARTYPEATT EMPTYVARTYPEATT 
 %token UNITATT EMPTYUNITATT VALUEATT EMPTYVALUEATT
 %token WEIGHTEDOBJECTIVESATT EMPTYWEIGHTEDOBJECTIVESATT
 %token TARGETOBJECTIVENAMEATT EMPTYTARGETOBJECTIVENAMEATT
@@ -2264,6 +2266,9 @@ otherVariableResultStart: OTHERSTART
 	parserData->valueAttributePresent = false;	
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
+	parserData->typeAttribute = "";
+	parserData->varTypeAttribute = "";
+	parserData->enumTypeAttribute = "";
 	parserData->descriptionAttribute = "";	
 }; 
 
@@ -2309,6 +2314,24 @@ otherVariableResultATT:
 	 	if (osresult->setOtherVariableResultName(parserData->solutionIdx, parserData->iOther, 
  												 parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultName failed");
+    }
+  | typeAttribute 
+    {	
+	 	if (osresult->setOtherVariableResultType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->typeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultType failed");
+    }
+  | varTypeAttribute 
+    {	
+	 	if (osresult->setOtherVariableResultVarType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->varTypeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultVarType failed");
+    }
+  | enumTypeAttribute 
+    {	
+	 	if (osresult->setOtherVariableResultEnumType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->enumTypeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherVariableResultEnumType failed");
     }
   | descriptionAttribute
     {	
@@ -2732,7 +2755,10 @@ otherObjectiveResultStart: OTHERSTART
 	parserData->nameAttributePresent = false;	
 	parserData->numberOfObjAttributePresent = false;	
 	parserData->numberOfEnumerationsAttributePresent = false;	
-	parserData->valueAttributePresent = false;	
+	parserData->valueAttributePresent = false;
+	parserData->typeAttributePresent = false;
+	parserData->varTypeAttributePresent = false;
+	parserData->enumTypeAttributePresent = false;
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->descriptionAttribute = "";
@@ -2781,6 +2807,24 @@ otherObjectiveResultATT:
 	  	if (osresult->setOtherObjectiveResultName(parserData->solutionIdx, parserData->iOther, 
  												  parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultName failed");
+    }
+  | typeAttribute 
+    {	
+	 	if (osresult->setOtherObjectiveResultType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->typeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultType failed");
+    }
+  | objTypeAttribute 
+    {	
+	 	if (osresult->setOtherObjectiveResultObjType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->objTypeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultObjType failed");
+    }
+  | enumTypeAttribute 
+    {	
+	 	if (osresult->setOtherObjectiveResultEnumType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->enumTypeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherObjectiveResultEnumType failed");
     }
   | descriptionAttribute
     {	
@@ -3201,6 +3245,9 @@ otherConstraintResultStart: OTHERSTART
 	parserData->valueAttributePresent = false;	
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
+	parserData->typeAttribute = "";
+	parserData->conTypeAttribute = "";
+	parserData->enumTypeAttribute = "";
 	parserData->descriptionAttribute = "";
 }; 
 
@@ -3246,6 +3293,24 @@ otherConstraintResultATT:
 	 	if (osresult->setOtherConstraintResultName(parserData->solutionIdx, parserData->iOther, 
  												   parserData->nameAttribute) == false)
 			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultName failed");
+    }
+  | typeAttribute 
+    {	
+	 	if (osresult->setOtherConstraintResultType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->typeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultType failed");
+    }
+  | conTypeAttribute 
+    {	
+	 	if (osresult->setOtherConstraintResultConType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->conTypeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultConType failed");
+    }
+  | enumTypeAttribute 
+    {	
+	 	if (osresult->setOtherConstraintResultEnumType(parserData->solutionIdx, parserData->iOther, 
+ 												 parserData->enumTypeAttribute) == false)
+			osrlerror(NULL, NULL, parserData, osglData, "setOtherConstraintResultEnumType failed");
     }
   | descriptionAttribute
     {	
@@ -3657,6 +3722,25 @@ categoryAttContent: CATEGORYATT ATTRIBUTETEXT quote
 	parserData->categoryAttribute = $2; free($2); 
 };
 
+conTypeAttribute: conTypeAtt
+	{
+		if (parserData->conTypeAttributePresent ) 
+				osrlerror(NULL, NULL, parserData, osglData, "only one conType attribute allowed for this element");
+		parserData->conTypeAttributePresent = true;
+	};
+
+conTypeAtt: conTypeAttEmpty | conTypeAttContent;
+
+conTypeAttEmpty: EMPTYCONTYPEATT
+{ 
+	parserData->conTypeAttribute = ""; 
+};
+
+conTypeAttContent: CONTYPEATT ATTRIBUTETEXT quote 
+{ 
+	parserData->conTypeAttribute = $2; free($2);
+};
+
 descriptionAttribute: descriptionAtt
 	{
 		if (parserData->descriptionAttributePresent ) 
@@ -3674,6 +3758,25 @@ descriptionAttEmpty: EMPTYDESCRIPTIONATT
 descriptionAttContent: DESCRIPTIONATT ATTRIBUTETEXT quote 
 { 
 	parserData->descriptionAttribute = $2; free($2);
+};
+
+enumTypeAttribute: enumTypeAtt
+	{
+		if (parserData->enumTypeAttributePresent ) 
+				osrlerror(NULL, NULL, parserData, osglData, "only one enumType attribute allowed for this element");
+		parserData->enumTypeAttributePresent = true;
+	};
+
+enumTypeAtt: enumTypeAttEmpty | enumTypeAttContent;
+
+enumTypeAttEmpty: EMPTYENUMTYPEATT
+{ 
+	parserData->enumTypeAttribute = ""; 
+};
+
+enumTypeAttContent: ENUMTYPEATT ATTRIBUTETEXT quote 
+{ 
+	parserData->enumTypeAttribute = $2; free($2);
 };
 
 idxAttribute: IDXATT quote INTEGER quote 
@@ -3701,6 +3804,25 @@ nameAttEmpty: EMPTYNAMEATT
 nameAttContent: NAMEATT ATTRIBUTETEXT quote 
 { 
 	parserData->nameAttribute = $2; free($2);
+};
+
+objTypeAttribute: objTypeAtt
+	{
+		if (parserData->objTypeAttributePresent ) 
+				osrlerror(NULL, NULL, parserData, osglData, "only one objType attribute allowed for this element");
+		parserData->objTypeAttributePresent = true;
+	};
+
+objTypeAtt: objTypeAttEmpty | objTypeAttContent;
+
+objTypeAttEmpty: EMPTYOBJTYPEATT
+{ 
+	parserData->objTypeAttribute = ""; 
+};
+
+objTypeAttContent: OBJTYPEATT ATTRIBUTETEXT quote 
+{ 
+	parserData->objTypeAttribute = $2; free($2);
 };
 
 typeAttribute: typeAtt
@@ -3758,6 +3880,25 @@ valueAttEmpty: EMPTYVALUEATT
 valueAttContent: VALUEATT ATTRIBUTETEXT quote 
 { 
 	parserData->valueAttribute = $2; free($2);
+};
+
+varTypeAttribute: varTypeAtt
+	{
+		if (parserData->varTypeAttributePresent ) 
+				osrlerror(NULL, NULL, parserData, osglData, "only one varType attribute allowed for this element");
+		parserData->varTypeAttributePresent = true;
+	};
+
+varTypeAtt: varTypeAttEmpty | varTypeAttContent;
+
+varTypeAttEmpty: EMPTYVARTYPEATT
+{ 
+	parserData->varTypeAttribute = ""; 
+};
+
+varTypeAttContent: VARTYPEATT ATTRIBUTETEXT quote 
+{ 
+	parserData->varTypeAttribute = $2; free($2);
 };
 
 

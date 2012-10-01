@@ -108,8 +108,8 @@ public:
     bool filesToMakePresent;
     int  numberOfFilesToMake;
 
-	std::string pathPairFrom;
-	std::string pathPairTo;
+    std::string pathPairFrom;
+    std::string pathPairTo;
 
     bool pathPairFromPresent;
     bool pathPairToPresent;
@@ -219,6 +219,14 @@ public:
     std::string categoryAttribute;
     bool typeAttributePresent;
     std::string typeAttribute;
+    bool varTypeAttributePresent;
+    std::string varTypeAttribute;
+    bool objTypeAttributePresent;
+    std::string objTypeAttribute;
+    bool conTypeAttributePresent;
+    std::string conTypeAttribute;
+    bool enumTypeAttributePresent;
+    std::string enumTypeAttribute;
     bool nameAttributePresent;
     std::string nameAttribute;
     bool valueAttributePresent;

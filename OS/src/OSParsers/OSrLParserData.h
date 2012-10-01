@@ -235,6 +235,10 @@ public:
     bool numberOfConIdxAttributePresent;
     bool numberOfEnumerationsAttributePresent;
     bool typeAttributePresent;
+    bool varTypeAttributePresent;
+    bool objTypeAttributePresent;
+    bool conTypeAttributePresent;
+    bool enumTypeAttributePresent;
     bool unitAttributePresent;
     bool valueAttributePresent;
     bool weightedObjAttributePresent;
@@ -248,6 +252,10 @@ public:
     std::string descriptionAttribute;
     std::string nameAttribute;
     std::string typeAttribute;
+    std::string varTypeAttribute;
+    std::string objTypeAttribute;
+    std::string conTypeAttribute;
+    std::string enumTypeAttribute;
     std::string unitAttribute;
     std::string valueAttribute;
 
