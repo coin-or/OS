@@ -137,7 +137,7 @@
 				</sos>
 				<sos sosIdx="1" numberOfVar="0" groupWeight="0.3"/>
 			</sosVariableBranchingWeights>
-			<other name="priority" numberOfVar="3" solver="Ipopt">
+			<other name="priority" numberOfVar="3" solver="Ipopt" type="none" varType="integer" enumType="double">
 				<var idx="0" value="1"/>
 				<var value="2" idx="1"/>
 				<var idx="2" ></var>
@@ -145,7 +145,7 @@
 			<other name="test" solver="hypothetical" numberOfVar="1" value="inverted">
 				<var idx="1" name="x1"></var>
 			</other>
-			<other name="enumTest" numberOfEnumerations="2" >
+			<other name="enumTest" numberOfEnumerations="2" enumType="string">
 				<enumeration value="zero" numberOfEl="2">
 					<el incr="1" mult="2">0</el>
 				</enumeration>
@@ -167,7 +167,7 @@
 					<el>-1</el>
 				</basic>
 			</initialBasisStatus>
-			<other name="otherObjOption" type="numeric" solver="generic" category="global" numberOfObj="0" numberOfEnumerations="0" value="none" description="just testing all possibilities" >
+			<other name="otherObjOption" type="numeric" solver="generic" category="global" numberOfObj="0" numberOfEnumerations="0" value="none" description="just testing all possibilities" objType="none" enumType="">
 			</other>
 		</objectives>
 		<constraints numberOfOtherConstraintOptions="2">
@@ -187,7 +187,7 @@
 					<el>2</el>
 				</unknown>
 			</initialBasisStatus>
-			<other name="otherConOption" numberOfCon="2">
+			<other name="otherConOption" numberOfCon="2" conType="real">
 				<con idx="0" lbValue="2.718" name="gus's folly" ubValue="3.1415"></con>
 				<con idx="1" value="seventeen"></con>
 			</other>

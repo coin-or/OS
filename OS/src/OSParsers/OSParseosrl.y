@@ -2264,6 +2264,9 @@ otherVariableResultStart: OTHERSTART
 	parserData->numberOfVarAttributePresent = false;	
 	parserData->numberOfEnumerationsAttributePresent = false;	
 	parserData->valueAttributePresent = false;	
+	parserData->typeAttributePresent = false;
+	parserData->varTypeAttributePresent = false;
+	parserData->enumTypeAttributePresent = false;
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->typeAttribute = "";
@@ -2757,10 +2760,13 @@ otherObjectiveResultStart: OTHERSTART
 	parserData->numberOfEnumerationsAttributePresent = false;	
 	parserData->valueAttributePresent = false;
 	parserData->typeAttributePresent = false;
-	parserData->varTypeAttributePresent = false;
+	parserData->objTypeAttributePresent = false;
 	parserData->enumTypeAttributePresent = false;
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
+	parserData->typeAttribute = "";
+	parserData->objTypeAttribute = "";
+	parserData->enumTypeAttribute = "";
 	parserData->descriptionAttribute = "";
 }; 
 
@@ -3243,6 +3249,9 @@ otherConstraintResultStart: OTHERSTART
 	parserData->numberOfConAttributePresent = false;	
 	parserData->numberOfEnumerationsAttributePresent = false;	
 	parserData->valueAttributePresent = false;	
+	parserData->typeAttributePresent = false;
+	parserData->conTypeAttributePresent = false;
+	parserData->enumTypeAttributePresent = false;
 	parserData->descriptionAttributePresent = false;	
 	parserData->valueAttribute = "";
 	parserData->typeAttribute = "";
