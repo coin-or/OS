@@ -530,9 +530,12 @@ OtherVariableResult::OtherVariableResult():
     numberOfEnumerations(0),
     name(""),
     value(""),
+    type(""),
     description(""),
     var(NULL),
-    enumeration(NULL)
+    varType(""),    
+    enumeration(NULL),
+    enumType("")
 {
 #ifdef DEBUG_OSRESULT
     cout << "Inside the OtherVariableResult Constructor" << endl;
@@ -692,9 +695,12 @@ OtherObjectiveResult::OtherObjectiveResult():
     numberOfEnumerations(0),
     name(""),
     value(""),
+    type(""),
     description(""),
     obj(NULL),
-    enumeration(NULL)
+    objType(""),    
+    enumeration(NULL),
+    enumType("")
 {
 #ifdef DEBUG_OSRESULT
     cout << "Inside the OtherObjectiveResult Constructor" << endl;
@@ -845,9 +851,12 @@ OtherConstraintResult::OtherConstraintResult():
     numberOfEnumerations(0),
     name(""),
     value(""),
+    type(""),
     description(""),
     con(NULL),
-    enumeration(NULL)
+    conType(""),    
+    enumeration(NULL),
+    enumType("")
 {
 #ifdef DEBUG_OSRESULT
     cout << "Inside the OtherConstraintResult Constructor" << endl;
@@ -4757,6 +4766,63 @@ bool OSResult::setOtherVariableResultName(int solIdx, int otherIdx, std::string 
     return true;
 }//setOtherVariableResultName
 
+bool OSResult::setOtherVariableResultType(int solIdx, int otherIdx, std::string type)
+{
+    int numberOfVar = this->getVariableNumber();
+    int iNumberOfVariables = numberOfVar;
+    if (iNumberOfVariables <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->variables == NULL)return false;
+    if (optimization->solution[solIdx]->variables->other == NULL) return false;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->type = type;
+    return true;
+}//setOtherVariableResultType
+
+bool OSResult::setOtherVariableResultVarType(int solIdx, int otherIdx, std::string varType)
+{
+    int numberOfVar = this->getVariableNumber();
+    int iNumberOfVariables = numberOfVar;
+    if (iNumberOfVariables <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->variables == NULL)return false;
+    if (optimization->solution[solIdx]->variables->other == NULL) return false;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->varType = varType;
+    return true;
+}//setOtherVariableResultVarType
+
+bool OSResult::setOtherVariableResultEnumType(int solIdx, int otherIdx, std::string enumType)
+{
+    int numberOfVar = this->getVariableNumber();
+    int iNumberOfVariables = numberOfVar;
+    if (iNumberOfVariables <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->variables == NULL)return false;
+    if (optimization->solution[solIdx]->variables->other == NULL) return false;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->enumType = enumType;
+    return true;
+}//setOtherVariableResultEnumType
+
 bool OSResult::setOtherVariableResultValue(int solIdx, int otherIdx, std::string value)
 {
     int numberOfVar = this->getVariableNumber();
@@ -5185,6 +5251,63 @@ bool OSResult::setOtherObjectiveResultName(int solIdx, int otherIdx, std::string
     return true;
 }//setOtherObjectiveResultName
 
+bool OSResult::setOtherObjectiveResultType(int solIdx, int otherIdx, std::string type)
+{
+    int numberOfObj = this->getObjectiveNumber();
+    int iNumberOfObjectives = numberOfObj;
+    if (iNumberOfObjectives <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->objectives == NULL)return false;
+    if (optimization->solution[solIdx]->objectives->other == NULL) return false;
+    if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->objectives->other[ otherIdx]->type = type;
+    return true;
+}//setOtherObjectiveResultType
+
+bool OSResult::setOtherObjectiveResultObjType(int solIdx, int otherIdx, std::string objType)
+{
+    int numberOfObj = this->getObjectiveNumber();
+    int iNumberOfObjectives = numberOfObj;
+    if (iNumberOfObjectives <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->objectives == NULL)return false;
+    if (optimization->solution[solIdx]->objectives->other == NULL) return false;
+    if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->objectives->other[ otherIdx]->objType = objType;
+    return true;
+}//setOtherObjectiveResultObjType
+
+bool OSResult::setOtherObjectiveResultEnumType(int solIdx, int otherIdx, std::string enumType)
+{
+    int numberOfObj = this->getObjectiveNumber();
+    int iNumberOfObjectives = numberOfObj;
+    if (iNumberOfObjectives <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->objectives == NULL)return false;
+    if (optimization->solution[solIdx]->objectives->other == NULL) return false;
+    if (optimization->solution[solIdx]->objectives->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->objectives->other[ otherIdx]->enumType = enumType;
+    return true;
+}//setOtherObjectiveResultEnumType
+
 bool OSResult::setOtherObjectiveResultValue(int solIdx, int otherIdx, std::string value)
 {
     int numberOfObj = this->getObjectiveNumber();
@@ -5598,6 +5721,63 @@ bool OSResult::setOtherConstraintResultName(int solIdx, int otherIdx, std::strin
     optimization->solution[solIdx]->constraints->other[ otherIdx]->name = name;
     return true;
 }//setOtherConstraintResultName
+
+bool OSResult::setOtherConstraintResultType(int solIdx, int otherIdx, std::string type)
+{
+    int numberOfCon = this->getConstraintNumber();
+    int iNumberOfConstraints = numberOfCon;
+    if (iNumberOfConstraints <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->constraints == NULL)return false;
+    if (optimization->solution[solIdx]->constraints->other == NULL) return false;
+    if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->constraints->other[ otherIdx]->type = type;
+    return true;
+}//setOtherConstraintResultType
+
+bool OSResult::setOtherConstraintResultConType(int solIdx, int otherIdx, std::string conType)
+{
+    int numberOfCon = this->getConstraintNumber();
+    int iNumberOfConstraints = numberOfCon;
+    if (iNumberOfConstraints <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->constraints == NULL)return false;
+    if (optimization->solution[solIdx]->constraints->other == NULL) return false;
+    if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->constraints->other[ otherIdx]->conType = conType;
+    return true;
+}//setOtherConstraintResultConType
+
+bool OSResult::setOtherConstraintResultEnumType(int solIdx, int otherIdx, std::string enumType)
+{
+    int numberOfCon = this->getConstraintNumber();
+    int iNumberOfConstraints = numberOfCon;
+    if (iNumberOfConstraints <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->constraints == NULL)return false;
+    if (optimization->solution[solIdx]->constraints->other == NULL) return false;
+    if (optimization->solution[solIdx]->constraints->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->constraints->other[ otherIdx]->enumType = enumType;
+    return true;
+}//setOtherConstraintResultEnumType
 
 bool OSResult::setOtherConstraintResultValue(int solIdx, int otherIdx, std::string value)
 {
@@ -7975,6 +8155,7 @@ bool GeneralResult::setRandom(double density, bool conformant)
     if (OSRand() <= density)
     {
         generalStatus = new GeneralStatus();
+
 
 
         generalStatus->setRandom(density, conformant);

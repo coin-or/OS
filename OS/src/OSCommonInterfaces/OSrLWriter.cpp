@@ -897,10 +897,28 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                     outStr << m_OSResult->optimization->solution[i]->variables->other[k]->value;
                                     outStr << "\"" ;
                                 }
+                                if (m_OSResult->optimization->solution[i]->variables->other[k]->type != "")
+                                {
+                                    outStr << " type=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->variables->other[k]->type;
+                                    outStr << "\"" ;
+                                }
                                 if (m_OSResult->optimization->solution[i]->variables->other[k]->description != "")
                                 {
                                     outStr << " description=";
                                     outStr << writeStringData(m_OSResult->optimization->solution[i]->variables->other[k]->description);
+                                }
+                                if (m_OSResult->optimization->solution[i]->variables->other[k]->varType != "")
+                                {
+                                    outStr << " varType=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->variables->other[k]->varType;
+                                    outStr << "\"" ;
+                                }
+                                if (m_OSResult->optimization->solution[i]->variables->other[k]->enumType != "")
+                                {
+                                    outStr << " enumType=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->variables->other[k]->enumType;
+                                    outStr << "\"" ;
                                 }
                                 outStr << ">" << endl;
                                 if(m_OSResult->optimization->solution[i]->variables->other[k]->numberOfVar > 0)
@@ -1008,11 +1026,29 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                     outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->value;
                                     outStr << "\"" ;
                                 };
+                                if (m_OSResult->optimization->solution[i]->objectives->other[k]->type != "")
+                                {
+                                    outStr << " type=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->type;
+                                    outStr << "\"" ;
+                                }
                                 if (m_OSResult->optimization->solution[i]->objectives->other[k]->description != "")
                                 {
                                     outStr << " description=";
                                     outStr << writeStringData(m_OSResult->optimization->solution[i]->objectives->other[k]->description);
                                 };
+                                if (m_OSResult->optimization->solution[i]->objectives->other[k]->objType != "")
+                                {
+                                    outStr << " objType=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->objType;
+                                    outStr << "\"" ;
+                                }
+                                if (m_OSResult->optimization->solution[i]->objectives->other[k]->enumType != "")
+                                {
+                                    outStr << " enumType=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->objectives->other[k]->enumType;
+                                    outStr << "\"" ;
+                                }
                                 outStr <<  ">" << endl;
                                 if(m_OSResult->optimization->solution[i]->objectives->other[k]->numberOfObj > 0)
                                 {
@@ -1115,11 +1151,29 @@ std::string OSrLWriter::writeOSrL( OSResult *theosresult)
                                     outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->value;
                                     outStr << "\"" ;
                                 };
+                                if (m_OSResult->optimization->solution[i]->constraints->other[k]->type != "")
+                                {
+                                    outStr << " type=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->type;
+                                    outStr << "\"" ;
+                                }
                                 if (m_OSResult->optimization->solution[i]->constraints->other[k]->description != "")
                                 {
                                     outStr << " description=";
                                     outStr << writeStringData(m_OSResult->optimization->solution[i]->constraints->other[k]->description);
                                 };
+                                if (m_OSResult->optimization->solution[i]->constraints->other[k]->conType != "")
+                                {
+                                    outStr << " conType=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->conType;
+                                    outStr << "\"" ;
+                                }
+                                if (m_OSResult->optimization->solution[i]->constraints->other[k]->enumType != "")
+                                {
+                                    outStr << " enumType=\"";
+                                    outStr << m_OSResult->optimization->solution[i]->constraints->other[k]->enumType;
+                                    outStr << "\"" ;
+                                }
                                 outStr <<  ">" << endl;
                                 if(m_OSResult->optimization->solution[i]->constraints->other[k]->numberOfCon > 0)
                                 {

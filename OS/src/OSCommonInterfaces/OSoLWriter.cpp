@@ -668,6 +668,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                     outStr << " type=\"" << m_OSOption->optimization->variables->other[i]->type << "\"";
                 if (m_OSOption->optimization->variables->other[i]->description != "")
                     outStr << " description=" << writeStringData(m_OSOption->optimization->variables->other[i]->description);
+                if (m_OSOption->optimization->variables->other[i]->varType != "")
+                    outStr << " varType=\"" << m_OSOption->optimization->variables->other[i]->varType << "\"";
+                if (m_OSOption->optimization->variables->other[i]->enumType != "")
+                    outStr << " enumType=\"" << m_OSOption->optimization->variables->other[i]->enumType << "\"";
                 outStr << ">" << endl;
 //					if (m_OSOption->optimization->variables->other[i]->numberOfVar > 0)
                 for (int j=0; j < m_OSOption->optimization->variables->other[i]->numberOfVar; j++)
@@ -777,6 +781,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                     outStr << " type=\"" << m_OSOption->optimization->objectives->other[i]->type << "\"";
                 if (m_OSOption->optimization->objectives->other[i]->description != "")
                     outStr << " description=" << writeStringData(m_OSOption->optimization->objectives->other[i]->description);
+                if (m_OSOption->optimization->objectives->other[i]->objType != "")
+                    outStr << " objType=\"" << m_OSOption->optimization->objectives->other[i]->objType << "\"";
+                if (m_OSOption->optimization->objectives->other[i]->enumType != "")
+                    outStr << " enumType=\"" << m_OSOption->optimization->objectives->other[i]->enumType << "\"";
                 outStr << ">" << endl;
 //					if (m_OSOption->optimization->objectives->other[i]->numberOfObj > 0)
                 for (int j=0; j < m_OSOption->optimization->objectives->other[i]->numberOfObj; j++)
@@ -885,6 +893,10 @@ std::string OSoLWriter::writeOSoL( OSOption *theosoption)
                     outStr << " type=\"" << m_OSOption->optimization->constraints->other[i]->type << "\"";
                 if (m_OSOption->optimization->constraints->other[i]->description != "")
                     outStr << " description=" << writeStringData(m_OSOption->optimization->constraints->other[i]->description);
+                if (m_OSOption->optimization->constraints->other[i]->conType != "")
+                    outStr << " conType=\"" << m_OSOption->optimization->constraints->other[i]->conType << "\"";
+                if (m_OSOption->optimization->constraints->other[i]->enumType != "")
+                    outStr << " enumType=\"" << m_OSOption->optimization->constraints->other[i]->enumType << "\"";
                 outStr << ">" << endl;
 //					if (m_OSOption->optimization->constraints->other[i]->numberOfCon > 0)
                 for (int j=0; j < m_OSOption->optimization->constraints->other[i]->numberOfCon; j++)

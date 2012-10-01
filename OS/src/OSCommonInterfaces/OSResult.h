@@ -1142,6 +1142,9 @@ public:
      */
     std::string value;
 
+    /** type of the result value (integer, double, boolean, string) */
+    std::string type;
+
     /** a brief description of the type of result */
     std::string description;
 
@@ -1151,11 +1154,17 @@ public:
      */
     OtherVarResult** var;
 
+    /** type of the values in the var array */
+    std::string varType;
+
     /* a pointer to OtherOptionEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
     OtherOptionEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
 
     /**
      *
@@ -1446,6 +1455,9 @@ public:
      */
     std::string value;
 
+    /** type of the result value (integer, double, boolean, string) */
+    std::string type;
+
     /** a brief description of the type of result */
     std::string description;
 
@@ -1455,11 +1467,17 @@ public:
      */
     OtherObjResult** obj;
 
+    /** type of the values in the obj array */
+    std::string objType;
+
     /* a pointer to OtherOptionEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
     OtherOptionEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
 
     /**
      *
@@ -1755,6 +1773,9 @@ public:
      */
     std::string value;
 
+    /** type of the result value (integer, double, boolean, string) */
+    std::string type;
+
     /** a brief description of the type of result */
     std::string description;
 
@@ -1765,11 +1786,17 @@ public:
      */
     OtherConResult** con;
 
+    /** type of the values in the con array */
+    std::string conType;
+
     /* a pointer to OtherOptionEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
     OtherOptionEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
 
     /**
      *
@@ -1991,6 +2018,7 @@ public:
  * @author Horand Gassmann, Jun Ma, Kipp Martin
  * @version 1.0, 03/14/2004
  * @since OS 1.0
+
  *
  * \remarks
  * A class for reporting the various components of
@@ -3922,6 +3950,51 @@ public:
     bool setOtherVariableResultName(int solIdx, int otherIdx, std::string name);
 
     /**
+     * Set the type of another (non-standard/solver specific) variable-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherVariableResult object
+     * @param type holds the type of the other element
+     *
+     * @return whether the other variable result's type was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherVariableResultType(int solIdx, int otherIdx, std::string type);
+
+    /**
+     * Set the varType of another (non-standard/solver specific) variable-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherVariableResult object
+     * @param varType holds the data type of the <var> array of the <other> element
+     *
+     * @return whether the other variable result's varType was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherVariableResultVarType(int solIdx, int otherIdx, std::string varType);
+
+    /**
+     * Set the enumType of another (non-standard/solver specific) variable-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherVariableResult object
+     * @param enumType holds the data type of the <enumeration> array of the <other> element
+     *
+     * @return whether the other variable result's enumType was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherVariableResultEnumType(int solIdx, int otherIdx, std::string enumType);
+
+    /**
      * Set the value of another (non-standard/solver specific) variable-related result,
      * for the [i]th solution, where i equals the given solution index.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
@@ -4154,6 +4227,51 @@ public:
     bool setOtherObjectiveResultName(int solIdx, int otherIdx, std::string name);
 
     /**
+     * Set the type of another (non-standard/solver specific) objective-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherObjectiveResult object
+     * @param name holds the type of the <other> element
+     *
+     * @return whether the other objective result's type was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherObjectiveResultType(int solIdx, int otherIdx, std::string type);
+
+    /**
+     * Set the objType of another (non-standard/solver specific) objective-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherObjectiveResult object
+     * @param name holds the data type of the <other> element's <var> array
+     *
+     * @return whether the other objective result's objType was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherObjectiveResultObjType(int solIdx, int otherIdx, std::string objType);
+
+    /**
+     * Set the enumType of another (non-standard/solver specific) objective-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherObjectiveResult object
+     * @param name holds the data type of the <other> element's <enumeration> array
+     *
+     * @return whether the other objective result's enumType was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherObjectiveResultEnumType(int solIdx, int otherIdx, std::string enumType);
+
+    /**
      * Set the value of another (non-standard/solver specific) objective-related result,
      * for the [i]th solution, where i equals the given solution index.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
@@ -4367,6 +4485,51 @@ public:
      * @see #setSolutionNumber(int)
      */
     bool setOtherConstraintResultName(int solIdx, int otherIdx, std::string name);
+
+    /**
+     * Set the type of another (non-standard/solver specific) constraint-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherConstraintResult object
+     * @param name holds the type of the <other> element
+     *
+     * @return whether the other constraint result's type was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherConstraintResultType(int solIdx, int otherIdx, std::string type);
+
+    /**
+     * Set the conType of another (non-standard/solver specific) constraint-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherConstraintResult object
+     * @param name holds the type of the <other> element's <con> array
+     *
+     * @return whether the other constraint result's conType was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherConstraintResultConType(int solIdx, int otherIdx, std::string conType);
+
+    /**
+     * Set the enumType of another (non-standard/solver specific) constraint-related result,
+     * for the [i]th solution, where i equals the given solution index.
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the OtherConstraintResult object
+     * @param name holds the type of the <other> element's <enumeration> array
+     *
+     * @return whether the other constraint result's enumType was set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConstraintResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherConResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setOtherConstraintResultEnumType(int solIdx, int otherIdx, std::string enumType);
 
     /**
      * Set the value of another (non-standard/solver specific) constraint-related result,

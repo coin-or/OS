@@ -1618,6 +1618,8 @@ public:
  *
  * \remarks
 
+
+
  * A data structure class that corresponds to an xml element in
  * the OSoL schema.
  */
@@ -1845,11 +1847,17 @@ public:
     /** array of option values */
     OtherVarOption **var;
 
+    /** type of the values in the var array */
+    std::string varType;
+
     /* a pointer to OtherOptionEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
     OtherOptionEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
 
     /**
      *
@@ -2375,11 +2383,17 @@ public:
     /** array of option values */
     OtherObjOption **obj;
 
+    /** type of the values in the obj array */
+    std::string objType;
+
     /* a pointer to OtherOptionEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
     OtherOptionEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
 
     /**
      *
@@ -2900,11 +2914,17 @@ public:
     /** array of option values */
     OtherConOption **con;
 
+    /** type of the values in the con array */
+    std::string conType;
+
     /* a pointer to OtherOptionEnumeration objects that will
      * give for each distinct value the set of indices for
      * this user defined variable result
      */
     OtherOptionEnumeration** enumeration;
+
+    /** type of the values in the enumeration array */
+    std::string enumType;
 
     /**
      *
@@ -3417,6 +3437,7 @@ public:
 
     /**
      * Get the job ID
+
      */
     std::string  getJobID();
 
@@ -4600,12 +4621,15 @@ public:
      * @param solver: the solver associated with this <other> element
      * @param category: the category of this <other> element
      * @param type: type of this <other> element
+     * @param varType: type of the data in the <var> array
+     * @param enumType: type of the data in the <enumeration> array
      * @param description: further description of this <other> element
      */
     bool setOtherVariableOptionAttributes(int iOther, int numberOfVar,
                                           int numberOfEnumerations, std::string name,
                                           std::string value, std::string solver,
                                           std::string category, std::string type,
+                                          std::string varType, std::string enumType,
                                           std::string description);
 
 
@@ -4665,12 +4689,15 @@ public:
      * @param solver: the solver associated with this <other> element
      * @param category: the category of this <other> element
      * @param type: type of this <other> element
+     * @param objType: type of the data in the <var> array
+     * @param enumType: type of the data in the <enumeration> array
      * @param description: further description of this <other> element
      */
     bool setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
                                            int numberOfEnumerations, std::string name,
                                            std::string value, std::string solver,
                                            std::string category, std::string type,
+                                           std::string objType, std::string enumType,
                                            std::string description);
 
 
@@ -4716,12 +4743,15 @@ public:
      * @param solver: the solver associated with this <other> element
      * @param category: the category of this <other> element
      * @param type: type of this <other> element
+     * @param conType: type of the data in the <var> array
+     * @param enumType: type of the data in the <enumeration> array
      * @param description: further description of this <other> element
      */
     bool setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
                                             int numberOfEnumerations, std::string name,
                                             std::string value, std::string solver,
                                             std::string category, std::string type,
+                                            std::string conType, std::string enumType,
                                             std::string description);
 
 

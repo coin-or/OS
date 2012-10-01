@@ -699,8 +699,10 @@ OtherVariableOption::OtherVariableOption():
     value (""),
     solver(""),
     category (""),
-    type ("string"),
-    description ("")
+    type (""),
+    description (""),
+    varType (""),
+    enumType ("")
 {
 #ifdef DEBUG_OSOPTION
     cout << "Inside OtherVariableOption Constructor" << endl;
@@ -902,8 +904,10 @@ OtherObjectiveOption::OtherObjectiveOption():
     value (""),
     solver(""),
     category (""),
-    type ("string"),
-    description ("")
+    type (""),
+    description (""),
+    objType (""),
+    enumType ("")
 {
 #ifdef DEBUG_OSOPTION
     cout << "Inside OtherObjectiveOption Constructor" << endl;
@@ -1097,8 +1101,10 @@ OtherConstraintOption::OtherConstraintOption():
     value (""),
     solver(""),
     category (""),
-    type ("string"),
-    description ("")
+    type (""),
+    description (""),
+    conType (""),
+    enumType ("")
 {
 #ifdef DEBUG_OSOPTION
     cout << "Inside OtherConstraintOption Constructor" << endl;
@@ -2802,6 +2808,7 @@ double* OSOption::getInitVarValuesDense(int numberOfVariables)
                 if (this->optimization->variables->initialVariableValues != NULL)
                 {
                     int i,j,k;
+
 
 
 
@@ -7291,6 +7298,7 @@ bool ConstraintOption::setOther(int numberOfOptions, OtherConstraintOption  **ot
                 for (j = 0; j < other[i]->numberOfCon; j++)
                 {
                     this->other[i]->con[j] = new OtherConOption();
+
                    *this->other[i]->con[j] = *other[i]->con[j];
                 }
             }
@@ -8462,6 +8470,7 @@ bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString*
     if (this->optimization->variables->initialVariableValuesString == NULL)
         this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
     else
+
     {
         int i;
         for (i = 0; i < this->optimization->variables->initialVariableValuesString->numberOfVar; i++)
@@ -8740,6 +8749,7 @@ bool OSOption::setOtherVariableOptionAttributes(int iOther, int numberOfVar,
         int numberOfEnumerations, std::string name,
         std::string value, std::string solver,
         std::string category, std::string type,
+        std::string varType, std::string enumType,
         std::string description)
 {
     if (optimization == NULL) return false;
@@ -8756,6 +8766,8 @@ bool OSOption::setOtherVariableOptionAttributes(int iOther, int numberOfVar,
     optimization->variables->other[iOther]->solver               = solver;
     optimization->variables->other[iOther]->category             = category;
     optimization->variables->other[iOther]->type                 = type;
+    optimization->variables->other[iOther]->varType              = varType;
+    optimization->variables->other[iOther]->enumType             = enumType;
     optimization->variables->other[iOther]->description          = description;
 
     if (numberOfVar > 0)
@@ -9085,6 +9097,7 @@ bool OSOption::setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
         int numberOfEnumerations, std::string name,
         std::string value, std::string solver,
         std::string category, std::string type,
+        std::string objType, std::string enumType,
         std::string description)
 {
     if (optimization == NULL) return false;
@@ -9100,6 +9113,8 @@ bool OSOption::setOtherObjectiveOptionAttributes(int iOther, int numberOfObj,
     optimization->objectives->other[iOther]->solver               = solver;
     optimization->objectives->other[iOther]->category             = category;
     optimization->objectives->other[iOther]->type                 = type;
+    optimization->objectives->other[iOther]->objType              = objType;
+    optimization->objectives->other[iOther]->enumType             = enumType;
     optimization->objectives->other[iOther]->description          = description;
 
     if (numberOfObj > 0)
@@ -9326,6 +9341,7 @@ bool OSOption::setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
         int numberOfEnumerations, std::string name,
         std::string value, std::string solver,
         std::string category, std::string type,
+        std::string conType, std::string enumType,
         std::string description)
 {
     if (optimization == NULL) return false;
@@ -9340,6 +9356,8 @@ bool OSOption::setOtherConstraintOptionAttributes(int iOther, int numberOfCon,
     optimization->constraints->other[iOther]->solver               = solver;
     optimization->constraints->other[iOther]->category             = category;
     optimization->constraints->other[iOther]->type                 = type;
+    optimization->constraints->other[iOther]->conType              = conType;
+    optimization->constraints->other[iOther]->enumType             = enumType;
     optimization->constraints->other[iOther]->description          = description;
 
     if (numberOfCon > 0)
