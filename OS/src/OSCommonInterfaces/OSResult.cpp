@@ -2436,6 +2436,63 @@ int OSResult::getOtherVariableResultEnumerationEl(int solIdx,int otherIdx, int e
     return optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[enumIdx]->getEl(j);
 }//getOtherVariableResultEnumerationEl
 
+
+int OSResult::getOtherVariableResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim)
+{
+    int i, j;
+    if (optimization == NULL || optimization->solution == NULL)
+        throw ErrorClass("No solution defined");
+    if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+        throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultArrayDense()");
+    if (optimization->solution[solIdx] == NULL)
+        throw ErrorClass("solution never defined in routine getOtherVariableResultArrayDense()");
+    if (optimization->solution[solIdx]->variables == NULL)
+        throw ErrorClass("variables result never defined in routine getOtherVariableResultArrayDense()");
+    if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+        throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultArrayDense()");
+    if (optimization->solution[solIdx]->variables->other == NULL)
+        throw ErrorClass("other variable array never defined in routine getOtherVariableResultArrayDense()");
+    if (optimization->solution[solIdx]->variables->other[otherIdx] == NULL)
+        throw ErrorClass("other variable result never defined in routine getOtherVariableResultArrayDense()");
+
+    if (optimization->solution[solIdx]->variables->other[otherIdx]->enumeration == NULL)
+	{
+        if (optimization->solution[solIdx]->variables->other[otherIdx]->var == NULL)
+            return 0; // neither <var> nor <enumeration>
+        else // there is a <var> array
+        {
+            for (i=0; i<optimization->solution[solIdx]->variables->other[otherIdx]->numberOfVar; i++)
+            {
+                j = optimization->solution[solIdx]->variables->other[otherIdx]->var[i]->idx;
+                if (j >= 0 || j < dim)
+                    resultArray[j] = optimization->solution[solIdx]->variables->other[otherIdx]->var[i]->value;
+                else
+                    throw ErrorClass("variable index out of range in routine getOtherVariableResultArrayDense()");
+            }
+            return dim;
+        }
+    }
+    else // there is an <enumeration> array
+    {
+        std::string val;
+        int n;
+        for (i=0; i<optimization->solution[solIdx]->variables->other[otherIdx]->numberOfEnumerations; i++)
+        {
+            val = optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[i]->value;
+            n   = optimization->solution[solIdx]->variables->other[otherIdx]->enumeration[i]->numberOfEl;
+            for (j=0; j<n; j++)
+            {
+                if (j >= 0 || j < dim)
+                    resultArray[j] = val;
+                else
+                    throw ErrorClass("variable index out of range in routine getOtherVariableResultArrayDense()");
+            }
+        }
+        return dim;
+    }
+    return -1;
+}//getOtherVariableResultArrayDense
+
 /*
 int* OSResult::getOtherOptionResultName(int solIdx, int otherIdx, char object, int status)
 {
@@ -2950,6 +3007,62 @@ int OSResult::getOtherObjectiveResultEnumerationEl(int solIdx,int otherIdx, int 
 }//getOtherObjectiveResultEnumerationEl
 
 
+int OSResult::getOtherObjectiveResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim)
+{
+    int i, j;
+    if (optimization == NULL || optimization->solution == NULL)
+        throw ErrorClass("No solution defined");
+    if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+        throw ErrorClass("solIdx is outside of range in routine getOtherObjectiveResultArrayDense()");
+    if (optimization->solution[solIdx] == NULL)
+        throw ErrorClass("solution never defined in routine getOtherObjectiveResultArrayDense()");
+    if (optimization->solution[solIdx]->objectives == NULL)
+        throw ErrorClass("objectives result never defined in routine getOtherObjectiveResultArrayDense()");
+    if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->objectives->numberOfOtherObjectiveResults)
+        throw ErrorClass("otherIdx is outside of range in routine getOtherObjectiveResultArrayDense()");
+    if (optimization->solution[solIdx]->objectives->other == NULL)
+        throw ErrorClass("other objective array never defined in routine getOtherObjectiveResultArrayDense()");
+    if (optimization->solution[solIdx]->objectives->other[otherIdx] == NULL)
+        throw ErrorClass("other objective result never defined in routine getOtherObjectiveResultArrayDense()");
+
+    if (optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration == NULL)
+	{
+        if (optimization->solution[solIdx]->objectives->other[otherIdx]->obj == NULL)
+            return 0; // neither <obj> nor <enumeration>
+        else // there is a <obj> array
+        {
+            for (i=0; i<optimization->solution[solIdx]->objectives->other[otherIdx]->numberOfObj; i++)
+            {
+                j = -1 - optimization->solution[solIdx]->objectives->other[otherIdx]->obj[i]->idx;
+                if (j >= 0 || j < dim)
+                    resultArray[j] = optimization->solution[solIdx]->objectives->other[otherIdx]->obj[i]->value;
+                else
+                    throw ErrorClass("objective index out of range in routine getOtherObjectiveResultArrayDense()");
+            }
+            return dim;
+        }
+    }
+    else // there is an <enumeration> array
+    {
+        std::string val;
+        int n;
+        for (i=0; i<optimization->solution[solIdx]->objectives->other[otherIdx]->numberOfEnumerations; i++)
+        {
+            val = optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[i]->value;
+            n   = optimization->solution[solIdx]->objectives->other[otherIdx]->enumeration[i]->numberOfEl;
+            for (j=0; j<n; j++)
+            {
+                if (j >= 0 || j < dim)
+                    resultArray[j] = val;
+                else
+                    throw ErrorClass("objective index out of range in routine getOtherObjectiveResultArrayDense()");
+            }
+        }
+        return dim;
+    }
+    return -1;
+}//getOtherObjectiveResultArrayDense
+
 
 int OSResult::getNumberOfDualValues(int solIdx)
 {
@@ -3184,13 +3297,13 @@ std::string OSResult::getOtherConstraintResultEnumerationValue(int solIdx,int ot
         throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationValue()");
 
     if (optimization->solution[solIdx]->constraints == NULL)
-        throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationValue()");
+        throw ErrorClass("constraints result never defined in routine getOtherConstraintResultEnumerationValue()");
     if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
         throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationValue()");
     if (optimization->solution[solIdx]->constraints->other == NULL)
-        throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationValue()");
+        throw ErrorClass("other constraint array never defined in routine getOtherConstraintResultEnumerationValue()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
-        throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationValue()");
+        throw ErrorClass("other constraint result never defined in routine getOtherConstraintResultEnumerationValue()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
         throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationValue()");
     if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
@@ -3212,13 +3325,13 @@ std::string OSResult::getOtherConstraintResultEnumerationDescription(int solIdx,
         throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationDescription()");
 
     if (optimization->solution[solIdx]->constraints == NULL)
-        throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationDescription()");
+        throw ErrorClass("constraints result never defined in routine getOtherConstraintResultEnumerationDescription()");
     if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
         throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationDescription()");
     if (optimization->solution[solIdx]->constraints->other == NULL)
-        throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationDescription()");
+        throw ErrorClass("other constraint array never defined in routine getOtherConstraintResultEnumerationDescription()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
-        throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationDescription()");
+        throw ErrorClass("other constraint result never defined in routine getOtherConstraintResultEnumerationDescription()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
         throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationDescription()");
     if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
@@ -3239,13 +3352,13 @@ int OSResult::getOtherConstraintResultEnumerationNumberOfEl(int solIdx,int other
         throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
 
     if (optimization->solution[solIdx]->constraints == NULL)
-        throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+        throw ErrorClass("constraints result never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
     if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
         throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationNumberOfEl()");
     if (optimization->solution[solIdx]->constraints->other == NULL)
-        throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+        throw ErrorClass("other constraint array never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
-        throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
+        throw ErrorClass("other constraint result never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
         throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationNumberOfEl()");
     if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
@@ -3266,13 +3379,13 @@ int OSResult::getOtherConstraintResultEnumerationEl(int solIdx,int otherIdx, int
         throw ErrorClass("solution never defined in routine getOtherConstraintResultEnumerationEl()");
 
     if (optimization->solution[solIdx]->constraints == NULL)
-        throw ErrorClass("variables result never defined in routine getOtherConstraintResultEnumerationEl()");
+        throw ErrorClass("constraints result never defined in routine getOtherConstraintResultEnumerationEl()");
     if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
         throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultEnumerationEl()");
     if (optimization->solution[solIdx]->constraints->other == NULL)
-        throw ErrorClass("other variable array never defined in routine getOtherConstraintResultEnumerationEl()");
+        throw ErrorClass("other constraint array never defined in routine getOtherConstraintResultEnumerationEl()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
-        throw ErrorClass("other variable result never defined in routine getOtherConstraintResultEnumerationEl()");
+        throw ErrorClass("other constraint result never defined in routine getOtherConstraintResultEnumerationEl()");
     if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
         throw ErrorClass("enumerations array never defined in routine getOtherConstraintResultEnumerationEl()");
     if (enumIdx < 0 || enumIdx >= optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations)
@@ -3282,6 +3395,62 @@ int OSResult::getOtherConstraintResultEnumerationEl(int solIdx,int otherIdx, int
 
     return optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[enumIdx]->getEl(j);
 }//getOtherConstraintResultEnumerationEl
+
+int OSResult::getOtherConstraintResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim)
+{
+    int i, j;
+    if (optimization == NULL || optimization->solution == NULL)
+        throw ErrorClass("No solution defined");
+    if (solIdx < 0 || solIdx >= optimization->numberOfSolutions)
+        throw ErrorClass("solIdx is outside of range in routine getOtherConstraintResultArrayDense()");
+    if (optimization->solution[solIdx] == NULL)
+        throw ErrorClass("solution never defined in routine getOtherConstraintResultArrayDense()");
+    if (optimization->solution[solIdx]->constraints == NULL)
+        throw ErrorClass("constraints result never defined in routine getOtherConstraintResultArrayDense()");
+    if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->constraints->numberOfOtherConstraintResults)
+        throw ErrorClass("otherIdx is outside of range in routine getOtherConstraintResultArrayDense()");
+    if (optimization->solution[solIdx]->constraints->other == NULL)
+        throw ErrorClass("other constraint array never defined in routine getOtherConstraintResultArrayDense()");
+    if (optimization->solution[solIdx]->constraints->other[otherIdx] == NULL)
+        throw ErrorClass("other constraint result never defined in routine getOtherConstraintResultArrayDense()");
+
+    if (optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration == NULL)
+	{
+        if (optimization->solution[solIdx]->constraints->other[otherIdx]->con == NULL)
+            return 0; // neither <con> nor <enumeration>
+        else // there is a <con> array
+        {
+            for (i=0; i<optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfCon; i++)
+            {
+                j = optimization->solution[solIdx]->constraints->other[otherIdx]->con[i]->idx;
+                if (j >= 0 || j < dim)
+                    resultArray[j] = optimization->solution[solIdx]->constraints->other[otherIdx]->con[i]->value;
+                else
+                    throw ErrorClass("constraint index out of range in routine getOtherConstraintResultArrayDense()");
+            }
+            return dim;
+        }
+    }
+    else // there is an <enumeration> array
+    {
+        std::string val;
+        int n;
+        for (i=0; i<optimization->solution[solIdx]->constraints->other[otherIdx]->numberOfEnumerations; i++)
+        {
+            val = optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[i]->value;
+            n   = optimization->solution[solIdx]->constraints->other[otherIdx]->enumeration[i]->numberOfEl;
+            for (j=0; j<n; j++)
+            {
+                if (j >= 0 || j < dim)
+                    resultArray[j] = val;
+                else
+                    throw ErrorClass("constraint index out of range in routine getOtherConstraintResultArrayDense()");
+            }
+        }
+        return dim;
+    }
+    return -1;
+}//getOtherConstraintResultArrayDense
 
 
 

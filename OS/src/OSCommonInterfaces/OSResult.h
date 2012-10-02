@@ -2019,6 +2019,7 @@ public:
  * @version 1.0, 03/14/2004
  * @since OS 1.0
 
+
  *
  * \remarks
  * A class for reporting the various components of
@@ -2837,23 +2838,38 @@ public:
     std::string getOtherVariableResultEnumerationDescription(int solIdx,int otherIdx, int enumIdx);
 
     /** Get the size of an enum associated with an <other> result for some solution
-     * @param solIdx is the solution index
-     * @param otherIndex is the index of the current <other> result
-     * @enumIdx is the index of the current enumeration level
+     *  @param solIdx is the solution index
+     *  @param otherIndex is the index of the current <other> result
+     *  @enumIdx is the index of the current enumeration level
      *
-     * @return the number of indices that assume this level
+     *  @return the number of indices that assume this level
      */
-    int  getOtherVariableResultEnumerationNumberOfEl(int solIdx,int otherIdx, int enumIdx);
+    int  getOtherVariableResultEnumerationNumberOfEl(int solIdx, int otherIdx, int enumIdx);
 
     /** Get one index of an enum associated with an <other> result for some solution
-     * @param solIdx is the solution index
-     * @param otherIndex is the index of the current <other> result
-     * @param enumIdx is the index of the current enumeration level
-     * @param j jis the (zero-based) position of the index within the index array
+     *  @param solIdx is the solution index
+     *  @param otherIndex is the index of the current <other> result
+     *  @param enumIdx is the index of the current enumeration level
+     *  @param j is the (zero-based) position of the index within the index array
      *
-     * @return the array of indices
+     *  @return the array of indices
      */
     int getOtherVariableResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j);
+
+    /** Get the values of a <var> array or an <enumeration> associated with 
+     *  an <other> result for some solution
+     *  @param solIdx is the solution index
+     *  @param otherIndex is the index of the current <other> result
+     *  @param resultArray is the array that returns the content of the <var> or <enumeration> array
+     *  @param dim is the array dimension
+     *
+     *  @return whether the operation was successful: 
+     *     < 0: error condition 
+     *     = 0: no data encountered
+     *     > 0: number of data items set
+     */
+    int getOtherVariableResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim);
+
 
     /* */
     int getNumberOfObjValues(int solIdx);
@@ -2927,6 +2943,20 @@ public:
      */
     int getOtherObjectiveResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j);
 
+    /** Get the values of an <obj> array or an <enumeration> associated with 
+     *  an <other> result for some solution
+     *  @param solIdx is the solution index
+     *  @param otherIndex is the index of the current <other> result
+     *  @param resultArray is the array that returns the content of the <obj> or <enumeration> array
+     *  @param dim is the array dimension
+     *
+     *  @return whether the operation was successful: 
+     *     < 0: error condition 
+     *     = 0: no data encountered
+     *     > 0: number of data items set
+     */
+    int getOtherObjectiveResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim);
+
 
     /* */
     int getNumberOfDualValues(int solIdx);
@@ -2999,6 +3029,20 @@ public:
      * @return the array of indices
      */
     int getOtherConstraintResultEnumerationEl(int solIdx,int otherIdx, int enumIdx, int j);
+
+    /** Get the values of a <con> array or an <enumeration> associated with 
+     *  an <other> result for some solution
+     *  @param solIdx is the solution index
+     *  @param otherIndex is the index of the current <other> result
+     *  @param resultArray is the array that returns the content of the <con> or <enumeration> array
+     *  @param dim is the array dimension
+     *
+     *  @return whether the operation was successful: 
+     *     < 0: error condition 
+     *     = 0: no data encountered
+     *     > 0: number of data items set
+     */
+    int getOtherConstraintResultArrayDense(int solIdx, int otherIdx, std::string* resultArray, int dim);
 
 
 
@@ -3339,6 +3383,7 @@ public:
      * Set the service utilitzation
      *
      * @param value holds the service utilitzation
+
      * @return whether the service information was set successfully or not.
      */
     bool setServiceUtilization(double value);
@@ -4614,6 +4659,7 @@ public:
      * where i equals the given solution index.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
      * This method then allocates the memory for the new OtherSolutionResult objects
+
      * @param solIdx is the solution index
      * @param numberOfOtherSolutionResults holds the number of OtherSolutionResult objects
      * Each other objective result contains the name (required), an optional
