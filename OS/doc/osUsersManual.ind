@@ -31,7 +31,7 @@
     \subitem {\tt BuildTools}, 109
     \subitem {\tt Cbc}, 24, 93, 95, 104, 109
     \subitem {\tt Cgl}, 52, 93, 104, 109
-    \subitem {\tt Clp}, 12, 13, 24, 47, 93, 95, 104, 109
+    \subitem {\tt Clp}, 12, 13, 24, 48, 93, 95, 104, 109
     \subitem {\tt CoinUtils}, 71, 93, 104, 109
     \subitem {\tt Couenne}, 24, 95, 99, 102--104, 109
     \subitem {\tt CppAD}, 7, 8, 78--79, 104, 109
@@ -181,6 +181,8 @@
 
   \indexspace
 
+  \item Remote server
+    \subitem Connection problems, 15
   \item {\tt remoteSolve1.osol}, 16--17
   \item {\tt retrieve}, 10, 11, 13, 19--20, 23
   \item {\it Rosenbrock, H.H.}, 40
