@@ -62,12 +62,10 @@ using std::endl;
 
 OSosrl2ampl::OSosrl2ampl()
 {
-    std::cout << "in OSosrl2ampl constructor" << std::endl;
 }
 
 OSosrl2ampl::~OSosrl2ampl()
 {
-    std::cout << "in OSosrl2ampl destructor" << std::endl;
 }
 
 bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
@@ -79,13 +77,17 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
     if (osrl == "")
     {
         write_sol(  const_cast<char*>(solMsg.c_str()),  NULL, NULL , NULL);
-        std::cout << "osrl is empty (error condition detected)" << std::endl;
         return true;
     }
     else
     {
+        std::cout << std::endl << osrl << std::endl << std::endl << std::endl;
+
         double *x;
         double *y;
+        std::string *otherVar;
+        std::string *otherObj;
+        std::string *otherCon;
         try
         {
             osrlreader = new OSrLReader();
@@ -98,9 +100,13 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
             int i;
             int vecSize;
             int numVars = osresult->getVariableNumber();
+            int numObjs = osresult->getObjectiveNumber();
             int numCons = osresult->getConstraintNumber();
             x = new double[ numVars];
             y = new double[ numCons];
+            otherVar = new std::string[numVars];
+            otherObj = new std::string[numObjs];
+            otherCon = new std::string[numCons];
 
             std::vector<IndexValuePair*> primalValPair;
             std::vector<IndexValuePair*> dualValPair;
@@ -134,12 +140,41 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
 
             // return all solution results that are indexed over variables or constraints as suffixes
 
-            for (int i=0; i < osresult->getNumberOfOtherVariableResults(0); i++)
+            int n;
+            double* rvalues = NULL;
+            int*    ivalues = NULL;
+            for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++)
             {
                 if ( (osresult->optimization->solution[0]->variables->other[i]->var != NULL) || 
                      (osresult->optimization->solution[0]->variables->other[i]->enumeration != NULL) )
                 {
+                    n = osresult->getOtherVariableResultArrayDense(0, i, otherVar, numVars);
+                    if (n < 0) 
+                        throw ErrorClass("unspecified error in routine getOtherVariableResultArrayDense()");
+                    else if (n > 0)
+                    {
+			std::string resultName = osresult->getOtherVariableResultName(0, i);
+			std::cout << "Name of the <other> option: " << resultName << std::endl;
+                        if (osresult->getOtherVariableResultArrayType(0, i) == "double")
+                        {
+                            rvalues = new double[n];
+                            for (int k=0; k<n; k++)
+                                rvalues[k] = os_strtod(otherVar[k].c_str(), NULL);
+//                            suf_rput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, rvalues);
+                            delete[] rvalues; rvalues = NULL;                            
+                        }
+                        else if (osresult->getOtherVariableResultArrayType(0, i) == "int")
+                        {
+                            ivalues = new int[n];
+                            for (int k=0; k<n; k++)
+                                ivalues[k] = atoi(otherVar[k].c_str());
+                            suf_iput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, ivalues);
+                            delete[] ivalues; rvalues = NULL;                            
+                        }
+                        else
+                            throw ErrorClass("otherVariableResult has unsupported type in OSosrl2ampl()");
 
+                    } 
                 }
             }
 // taken from Ipopt - AmplTNLP.cpp:
@@ -147,17 +182,25 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
 //            suf_rput("ipopt_zL_out", ASL_Sufkind_var,  z_L_sol_);
 
             write_sol(const_cast<char*>(solMsg.c_str()),  x, y , NULL);
-            std::cout << "solution file has been written" << std::endl;
             if (osrlreader != NULL) delete osrlreader;
             osrlreader = NULL;
             delete [] x; x = NULL;
             delete [] y; y = NULL;
+            delete [] otherVar; otherVar = NULL;
+            delete [] otherObj; otherObj = NULL;
+            delete [] otherCon; otherCon = NULL;
             return true;
         }
         catch(const ErrorClass& eclass)
         {
+            std::cout << "There was an error: " + eclass.errormsg << std::endl;
             if (x != NULL) delete [] x; x = NULL;
             if (y != NULL) delete [] y; y = NULL;
+            if (otherVar != NULL) delete [] otherVar; otherVar = NULL;
+            if (otherObj != NULL) delete [] otherObj; otherObj = NULL;
+            if (otherCon != NULL) delete [] otherCon; otherCon = NULL;
+            if (osrlreader != NULL) delete osrlreader;
+            osrlreader = NULL;
             return false;
         }
     }

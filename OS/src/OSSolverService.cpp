@@ -126,7 +126,7 @@
 
 #include "OSOptionsStruc.h"
 
-#include<stdio.h>
+#include <stdio.h>
 #include <map>
 
 
@@ -502,6 +502,7 @@ int main(int argC, const char* argV[])
         OSrLWriter *osrlwriter = NULL;
         osrlwriter = new OSrLWriter();
         osresult = new OSResult();
+
         osresult->setGeneralMessage(eclass.errormsg);
         osresult->setGeneralStatusType("error");
         std::string osrl = osrlwriter->writeOSrL(osresult);

@@ -2020,6 +2020,7 @@ public:
  * @since OS 1.0
 
 
+
  *
  * \remarks
  * A class for reporting the various components of
@@ -2358,6 +2359,7 @@ public:
      * A function to populate an instance of the result header element
      * @param name: the name of this file or instance
      * @param source: the source (e.g., in BiBTeX format)
+
      * @param fileCreator: the creator of this file
      * @param description: further description about this file and/or its contents
      * @param licence: licence information if applicable
@@ -2818,6 +2820,15 @@ public:
     int getOtherVariableResultVarIdx(int solIdx, int otherIdx, int varIdx);
     /* */
     std::string getOtherVariableResultVar(int solIdx, int otherIdx, int varIdx);
+
+    /** Get the type of values contained in the <var> or <enumeration> array
+     *  associated with an <other> result for some solution
+     *  @param solIdx is the solution index
+     *  @param otherIndex is the index of the current <other> result
+     *
+     * @return the array type
+     */
+    std::string getOtherVariableResultArrayType(int solIdx,int otherIdx);
 
     /** Get the value of an enum associated with an <other> result for some solution
      * @param solIdx is the solution index
@@ -3935,6 +3946,31 @@ public:
     /**
      * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results,
      * where i equals the given solution index.
+     *
+     * This alternate signature sets the type of the value attribute and the <var> and <enumeration> arrays
+     *
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the new OtherVariableResult object
+     * @param name holds the name of the other element
+     * @param value holds the value of the other element
+     * @param idx holds a pointer to the indexes of the var element
+     * @param s holds a pointer to the array of values of the var element
+     * @param n holds the number of elements of the array
+     * @param type holds the type of the <other> element's value attribute
+     * @param varType holds the type of the <other> element's <var> array
+     * @param enumType holds the type of the <other> element's <enumeration> array
+     *
+     * @return whether the other variable results are set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setAnOtherVariableResultSparse(int solIdx, int otherIdx, std::string name, std::string value, std::string description, int *idx,  std::string *s, int n, std::string type, std::string varType, std::string enumType);
+
+    /**
+     * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results,
+     * where i equals the given solution index.
      * Before this method is called, the setSolutionNumber(int) method has to be called first.
      * @param solIdx holds the solution index
      * @param otherIdx holds the index of the new OtherVariableResult object
@@ -3948,6 +3984,29 @@ public:
      * @see #setSolutionNumber(int)
      */
     bool setAnOtherVariableResultDense(int solIdx, int otherIdx, std::string name, std::string value, std::string description, std::string *s);
+
+    /**
+     * Set the [i]th optimization solution's other (non-standard/solver specific)variable-related results,
+     * where i equals the given solution index.
+     *
+     * This alternate signature sets the type of the value attribute and the <var> and <enumeration> arrays
+     *
+     * Before this method is called, the setSolutionNumber(int) method has to be called first.
+     * @param solIdx holds the solution index
+     * @param otherIdx holds the index of the new OtherVariableResult object
+     * @param name holds the name of the other element
+     * @param value holds the value of the other element
+     * @param s holds a pointer to the array of values of the var element
+     * @param type holds the type of the <other> element's value attribute
+     * @param varType holds the type of the <other> element's <var> array
+     * @param enumType holds the type of the <other> element's <enumeration> array
+     *
+     * @return whether the other variable results are set successfully or not.
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVariableResult
+     * @see org.optimizationservices.oscommon.datastructure.osresult.OtherVarResult
+     * @see #setSolutionNumber(int)
+     */
+    bool setAnOtherVariableResultDense(int solIdx, int otherIdx, std::string name, std::string value, std::string description, std::string *s, std::string type, std::string varType, std::string enumType);
 
     /**
      * Set the number of <var> children of another (non-standard/solver specific)
@@ -4340,6 +4399,7 @@ public:
      * @param description holds the name of the other element
      *
      * @return whether the other objective result's description was set successfully or not.
+
      * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjectiveResult
      * @see org.optimizationservices.oscommon.datastructure.osresult.OtherObjResult
      * @see #setSolutionNumber(int)

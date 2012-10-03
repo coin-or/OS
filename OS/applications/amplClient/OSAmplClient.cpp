@@ -338,7 +338,6 @@ int main(int argc, char **argv)
         if(pos1 == std::string::npos)
         {
             std::string sReport = "model was solved";
-            std::cout << sReport << std::endl;
             osrlreader = new OSrLReader();
             osresult = osrlreader->readOSrL( osrl);
 

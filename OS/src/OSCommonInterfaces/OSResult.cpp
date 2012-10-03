@@ -2327,6 +2327,28 @@ int OSResult::getOtherVariableResultNumberOfEnumerations(int solIdx, int otherId
     return optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfEnumerations;
 }//getOtherVariableResultNumberOfEnumerations
 
+std::string OSResult::getOtherVariableResultArrayType(int solIdx,int otherIdx)
+{
+    if (optimization == NULL || optimization->solution == NULL)
+        throw ErrorClass("No solution defined");
+    int iSolutions = this->getSolutionNumber();
+    if (solIdx < 0 || solIdx >= iSolutions)
+        throw ErrorClass("solIdx is outside of range in routine getOtherVariableResultNumberOfEnumerations()");
+    if (optimization->solution[solIdx] == NULL) return "";
+    if (optimization->solution[solIdx]->variables == NULL) return "";
+    if (optimization->solution[solIdx]->variables->other == NULL) return "";
+    if (otherIdx < 0 || otherIdx >= optimization->solution[solIdx]->variables->numberOfOtherVariableResults)
+        throw ErrorClass("otherIdx is outside of range in routine getOtherVariableResultNumberOfEnumerations()");
+    if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return "";
+
+    if (optimization->solution[solIdx]->variables->other[ otherIdx]->var != NULL) 
+        return optimization->solution[solIdx]->variables->other[ otherIdx]->varType;
+    else if (optimization->solution[solIdx]->variables->other[ otherIdx]->enumeration != NULL) 
+        return optimization->solution[solIdx]->variables->other[ otherIdx]->enumType;
+    else
+        return "";
+}//getOtherVariableResultArrayType
+
 
 std::string OSResult::getOtherVariableResultEnumerationValue(int solIdx,int otherIdx, int enumIdx)
 {
@@ -4274,6 +4296,7 @@ bool OSResult::setVariableNumber(int variableNumber)
 
 bool OSResult::setObjectiveNumber(int objectiveNumber)
 {
+
     if(objectiveNumber < 0)
         return false;
     if(optimization == NULL) optimization = new OptimizationResult();
@@ -4842,7 +4865,71 @@ bool OSResult::setAnOtherVariableResultSparse(int solIdx, int otherIdx, string n
 }//setAnOtherVariableResultSparse
 
 
+bool OSResult::setAnOtherVariableResultSparse(int solIdx, int otherIdx, string name, string value, string description, int  *idx,  string *s, int numberOfVar, std::string type, std::string varType, std::string enumType)
+{
+    int iNumberOfVariables = numberOfVar;
+    if(iNumberOfVariables <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if(optimization == NULL) return false;
+    if(nSols <= 0) return false;
+    if(optimization == NULL) return false;
+    if(optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if(optimization->solution[solIdx] == NULL) return false;
+    if(optimization->solution[solIdx]->variables == NULL)return false;
+    if(optimization->solution[solIdx]->variables->other == NULL) return false;
+    if(optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->name = name;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->type = type;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->varType = varType;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->enumType = enumType;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->value = value;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->description = description;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx]->var != NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->var = new OtherVarResult*[numberOfVar];
+    for(int i = 0; i < numberOfVar; i++)
+    {
+        optimization->solution[solIdx]->variables->other[ otherIdx]->var[i] = new OtherVarResult();
+        optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = idx[i];
+        optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
+    }
+    return true;
+}//setAnOtherVariableResultSparse
+
+
 bool OSResult::setAnOtherVariableResultDense(int solIdx, int otherIdx, string name, string value, string description, string *s)
+{
+    int numberOfVar = this->getVariableNumber();
+    int iNumberOfVariables = numberOfVar;
+    if (iNumberOfVariables <= -1) return false;
+    int nSols = this->getSolutionNumber();
+    if (optimization == NULL) return false;
+    if (nSols <= 0) return false;
+    if (optimization == NULL) return false;
+    if (optimization->solution == NULL ||
+            solIdx < 0 || solIdx >=  nSols) return false;
+    if (optimization->solution[solIdx] == NULL) return false;
+    if (optimization->solution[solIdx]->variables == NULL)return false;
+    if (optimization->solution[solIdx]->variables->other == NULL) return false;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->name = name;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->value = value;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->description = description;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
+    if (optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL)
+        optimization->solution[solIdx]->variables->other[ otherIdx]->var = new OtherVarResult*[numberOfVar];
+    for(int i = 0; i < numberOfVar; i++)
+    {
+        optimization->solution[solIdx]->variables->other[ otherIdx]->var[i] = new OtherVarResult();
+        optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->idx = i;
+        optimization->solution[solIdx]->variables->other[ otherIdx]->var[i]->value = s[i];
+        ;
+    }
+    return true;
+}//setAnOtherVariableResultDense
+
+bool OSResult::setAnOtherVariableResultDense(int solIdx, int otherIdx, string name, string value, string description, string *s, std::string type, std::string varType, std::string enumType)
 {
     int numberOfVar = this->getVariableNumber();
     int iNumberOfVariables = numberOfVar;
@@ -4858,11 +4945,14 @@ bool OSResult::setAnOtherVariableResultDense(int solIdx, int otherIdx, string na
     if(optimization->solution[solIdx]->variables->other == NULL) return false;
     if(optimization->solution[solIdx]->variables->other[ otherIdx] == NULL) return false;
     optimization->solution[solIdx]->variables->other[ otherIdx]->name = name;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->type = type;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->varType = varType;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->enumType = enumType;
     optimization->solution[solIdx]->variables->other[ otherIdx]->value = value;
     optimization->solution[solIdx]->variables->other[ otherIdx]->description = description;
     optimization->solution[solIdx]->variables->other[ otherIdx]->numberOfVar = numberOfVar;
-    if(optimization->solution[solIdx]->variables->other[ otherIdx]->var == NULL)
-        optimization->solution[solIdx]->variables->other[ otherIdx]->var = new OtherVarResult*[numberOfVar];
+    if(optimization->solution[solIdx]->variables->other[ otherIdx]->var != NULL) return false;
+    optimization->solution[solIdx]->variables->other[ otherIdx]->var = new OtherVarResult*[numberOfVar];
     for(int i = 0; i < numberOfVar; i++)
     {
         optimization->solution[solIdx]->variables->other[ otherIdx]->var[i] = new OtherVarResult();

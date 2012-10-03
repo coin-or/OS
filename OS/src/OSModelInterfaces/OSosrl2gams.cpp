@@ -156,7 +156,7 @@ void OSrL2Gams::writeSolution(OSResult& osresult)
     if (sol->variables)
         for (int i=0; i<sol->variables->numberOfOtherVariableResults; ++i)
         {
-            if (sol->variables->other[i]->name=="reduced costs")
+            if (sol->variables->other[i]->name=="reduced_costs")
             {
 //				for (std::vector<OtherVarResult*>::const_iterator it(sol->variables->other[i]->var.begin());
 //				it!=sol->variables->other[i]->var.end(); ++it)

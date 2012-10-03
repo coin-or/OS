@@ -216,6 +216,10 @@
 //#include <windows.h>
 //#endif
 
+#ifdef COIN_HAS_ASL
+#include <asl.h>
+#endif
+
 using std::cout;   
 using std::endl;
 using std::ostringstream;
@@ -5913,7 +5917,7 @@ if (PARSER_TESTS){
 		intArray = NULL;
 	}
 
-}       // PARSER_TESTS
+} // end  #if PARSER_TESTS
 
 
 if (SOLVER_TESTS){
@@ -6302,6 +6306,7 @@ if( THOROUGH == true){
 			cout << solver->osrl << endl;
 #endif
 			cout << "COIN cbc solver solution for parincInteger checks." << endl;
+
 
 		}
 		else
@@ -7303,8 +7308,8 @@ if(THOROUGH == true){
 	}
 
 
-} // end of if( THOROUGH)
-#endif // end of #ifdef COIN_HAS_IPOPT
+} // end  if (THOROUGH)
+#endif // end  #ifdef COIN_HAS_IPOPT
 
 
 #ifdef COIN_HAS_BONMIN
@@ -8333,7 +8338,16 @@ if (OTHER_TESTS){
 		cout << endl << "TEST " << ++nOfTest << ": AMPL solver interface" << endl << endl;
 
 		nlFileName  = dataDir + "amplFiles" + dirsep + "parinc.nl";
-		nl2osil = new OSnl2OS();
+
+        ASL *cw, *rw, *asl;
+        cw = ASL_alloc(ASL_read_fg);
+        rw = ASL_alloc(ASL_read_fg);
+        asl = cw;
+
+        jac0dim((char*)nlFileName.c_str(), (fint)strlen(nlFileName.c_str()));
+
+        OSnl2OS *nl2osil = new OSnl2OS(cw, rw, asl);
+
 		nl2osil->readNl(nlFileName) ;
  
 		solver = new CoinSolver();
@@ -8367,6 +8381,9 @@ if (OTHER_TESTS){
 		{	cout << "COIN cbc solver solution for parinc.nl in error:" << endl;
 			cout << solver->osrl << endl;
 		}
+
+		// modify the solution and write .sol file
+
 		if(ok == false) throw ErrorClass(" Fail unit test with OSnl2osil on problem parinc.nl");
 		solver->osinstance = NULL;
 		delete solver;
@@ -8379,7 +8396,7 @@ if (OTHER_TESTS){
 	catch(const ErrorClass& eclass){
 		cout << "OSrL =  " <<  solver->osrl <<  endl;
 		cout << endl << endl << endl;
-		unitTestResultFailure  <<"Sorry Unit Test Failed Testing AMPL:"  + eclass.errormsg << endl;
+		unitTestResultFailure << "Sorry Unit Test Failed Testing AMPL:" + eclass.errormsg << endl;
 
 		if (solver != NULL)
 			delete solver;

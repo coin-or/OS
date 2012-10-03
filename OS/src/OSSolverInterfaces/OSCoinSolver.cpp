@@ -1454,7 +1454,7 @@ void CoinSolver::writeResult(OsiSolverInterface *solver)
                 {
                     rcost[ i] = os_dtoa_format( solver->getReducedCost()[ i]);
                 }
-                osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, solver->getNumCols());
+                osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced_costs", "", "the variable reduced costs", idx,  rcost, solver->getNumCols(), "", "double", "");
                 // end of setting reduced costs
             }
         }
@@ -1652,7 +1652,7 @@ void CoinSolver::writeResult(CbcModel *model)
         {
             rcost[ i] = os_dtoa_format( model->getReducedCost()[ i]);
         }
-        osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced costs", "", "the variable reduced costs", idx,  rcost, model->getNumCols());
+        osresult->setAnOtherVariableResultSparse(solIdx, otherIdx, "reduced_costs", "", "the variable reduced costs", idx,  rcost, model->getNumCols());
     }
     // end of setting reduced costs
     osrl = osrlwriter->writeOSrL( osresult);
