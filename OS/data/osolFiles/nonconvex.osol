@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osol xmlns="os.optimizationservices.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="os.optimizationservices.org http://www.optimizationservices.org/schemas/2.0/OSoL.xsd">
+	<optionHeader>
+		<name>nonconvex.osol</name>
+		<description>
+		  Some options to test passing of options to Couenne
+		</description>
+		<fileCreator>
+		  Horand Gassmann, Jun Ma and Kipp Martin
+		</fileCreator>
+		<licence>
+		  This file is licensed under the Eclipse Public License.
+		  Please see the accompanying LICENSE file in root directory for terms.
+		</licence>
+	</optionHeader>
+	<optimization>
+		<solverOptions numberOfSolverOptions="0">
+<!--			<solverOption name="problem_print_level" solver="couenne" type="integer" value="7"/>	-->
+<!--			<solverOption name="check_lp" solver="couenne" type="string" value="yes"/>		-->
+ 
+<!--			<solverOption name="bonmin.algorithm" solver="couenne" type="string" value="B-QG"/>		-->
+<!--			<solverOption name="algorithm" solver="couenne" category="bonmin" type="string" value="B-QG"/>		-->
+
+<!--			<solverOption name="ipopt.derivative_test" solver="couenne" type="string" value="first-order"/>		-->
+<!--			<solverOption name="derivative_test" solver="couenne" category="ipopt" type="string" value="first-order"/>		-->
+
+<!--			<solverOption name="ipopt.print_level" solver="couenne" type="integer" value="6"/>	-->
+<!--			<solverOption name="print_level" solver="couenne" type="integer" value="6" category="ipopt" />	-->
+
+<!--			<solverOption name="bonmin.ipopt.derivative_test" solver="couenne" type="string" value="first-order"/>		-->
+<!--			<solverOption name="derivative_test" solver="couenne" category="bonmin:ipopt" type="string" value="first-order"/>		-->
+
+<!--			<solverOption name="rins.algorithm" solver="couenne" type="string" value="B-OA"/>		-->
+<!--			<solverOption name="algorithm" solver="couenne" category="rins" type="string" value="B-OA"/>		-->
+
+<!--			<solverOption name="intentional_error" solver="couenne" type="integer" value="7"/>	-->
+
+<!--			<solverOption name="" solver="couenne" type="integer" value=""/>	-->
+<!--			<solverOption name="" solver="couenne" type="string" value=""/>		-->
+		</solverOptions>
+	</optimization>
+</osol>
