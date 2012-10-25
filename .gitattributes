@@ -376,7 +376,6 @@ OS/doc/chapters/projectcomponents.tex -text
 OS/doc/chapters/roadmap.tex -text
 OS/doc/chapters/schemadescriptions.tex -text
 OS/doc/chapters/tomcat.tex -text
-OS/doc/chapters/wishlist.tex -text
 OS/doc/enumitem.sty -text
 OS/doc/figures/Figure10.png -text
 OS/doc/figures/Figure11.png -text

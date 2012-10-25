@@ -157,7 +157,7 @@
   \item {\tt OSFileUpload}, 114--115
   \item {\tt Osi}, \see{COIN-OR projects, {\tt Osi}}{1}
   \item OSiL, 1, 7--11, 14, 15, 18, 23, 40--42, 66, 69, 71--73, 114, 
-		117--120
+		116--119
   \item {\tt OSInstance}, 7, 46, 66--72, 75, 81
   \item {\tt OSLibrary}, 14, 65--75
   \item {\tt OSmps2osil}, 71--72
