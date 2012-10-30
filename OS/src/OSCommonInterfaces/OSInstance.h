@@ -6,7 +6,7 @@
  *
  * \remarks
  * Copyright (C) 2005-2012, Robert Fourer, Horand Gassmann, Jun Ma, Kipp Martin,
- * Northwestern University, Dalhousie University, and the University of Chicago.
+ * Northwestern University, and the University of Chicago.
  * All Rights Reserved.
  * This software is licensed under the Eclipse Public License.
  * Please see the accompanying LICENSE file in root directory for terms.
@@ -1502,10 +1502,10 @@ public:
     std::string getInstanceLicence();
 
 
-	/**
-     * Get variable number.
+    /**
+     * Get number of variables.
      *
-     * @return variable number.
+     * @return  number of variables.
      */
     int getVariableNumber();
 
@@ -1595,9 +1595,9 @@ public:
     double* getVariableUpperBounds();
 
     /**
-     * Get objective number.
+     * Get number of objectives.
      *
-     * @return objective number.
+     * @return number of objectives.
      */
     int getObjectiveNumber();
 
@@ -1665,9 +1665,9 @@ public:
     double** getDenseObjectiveCoefficients();
 
     /**
-     * Get constraint number.
+     * Get number of constraints.
      *
-     * @return constraint number.
+     * @return number of constraints.
      */
     int getConstraintNumber();
 
@@ -2732,6 +2732,7 @@ public:
     bool setTimeDomainStageVariablesOrdered(int numberOfStages, int *numberOfVariables, int *startIdx);
 
     /**
+
     * This sets the variables associated with each time domain stage in srbitrary order.
     * (I.e., for each stage numberOfVariables gives the number of variables accociated
     * with this stage and varIndex[i] gives the index of each variable in stage[i].)

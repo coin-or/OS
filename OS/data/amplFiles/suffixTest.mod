@@ -3,7 +3,8 @@
 # 1. multiple objectives
 # 2. recognition of QPs, including modifications of the A-matrix
 # 3. primal and dual initial values, with some numbers missing, others equal to zero
-# 4. user-defined suffixes with various characteristics:
+# 4. built-in suffixes: .sstatus
+# 5. user-defined suffixes with various characteristics:
 #    a. integer, binary, string and real
 #    b. IN, OUT, INOUT, LOCAL and default
 #
@@ -16,10 +17,10 @@
 #########################################################################################
 
 param scale = 100.0;
-param lbl = 5.0;
+param lbl = 1.0;
 param ubl = 10.0;
 
-var x{0..3}; let x[0] := 1.73; let x[1] := 1.73; let x[3] := 0.0;
+var x{0..3}; let x[0] := 7.73; let x[1] := 7.73; let x[3] := 0.0;
 
 minimize obj1:     (1-x[0]**2)**2 
      + scale*   (x[0]-x[1]**2)**2 
@@ -105,8 +106,8 @@ option moreconstring_table '\
    1    test ';                       let {i in 0..3} boxU[i].moreconstring_num := 1;
 
 suffix moreobjnumeric, INOUT;         let obj1.moreobjnumeric := 0.001;
-suffix moreobjinteger, integer, OUT;  let obj2.moreobjnumeric := 8;
-suffix moreobjbinary,  binary, IN;    let obj1.moreobjnumeric := 1;
+suffix moreobjinteger, integer, OUT;  let obj2.moreobjinteger := 8;
+suffix moreobjbinary,  binary, IN;    let obj1.moreobjbinary  := 1;
 suffix moreobjstring,  symbolic, LOCAL;
 option moreobjstring_table '\
    0    real \

@@ -69,9 +69,10 @@ S2 1 someobjbinary
 0 1
 S2 1 someobjstring
 0 1
-S2 2 moreobjnumeric
+S6 1 moreobjnumeric
+0 0.001
+S2 1 moreobjbinary
 0 1
-1 8
 S3 1 moreprobbinary
 0 1
 S3 1 moreprobstring
@@ -181,8 +182,8 @@ d2
 4 125
 5 125
 x3
-0 1.73
-1 1.73
+0 7.73
+1 7.73
 3 0
 r
 1 100
@@ -192,10 +193,10 @@ r
 4 25
 4 25
 b
-0 5 10
-0 5 10
-0 5 10
-0 5 10
+0 1 10
+0 1 10
+0 1 10
+0 1 10
 k3
 2
 4

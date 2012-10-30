@@ -14,8 +14,8 @@
 		</licence>
 	</optionHeader>
 	<optimization>
-		<solverOptions numberOfSolverOptions="0">
-<!--			<solverOption name="problem_print_level" solver="couenne" type="integer" value="7"/>	-->
+		<solverOptions numberOfSolverOptions="1">
+			<solverOption name="problem_print_level" solver="couenne" type="integer" value="7"/>
 <!--			<solverOption name="check_lp" solver="couenne" type="string" value="yes"/>		-->
  
 <!--			<solverOption name="bonmin.algorithm" solver="couenne" type="string" value="B-QG"/>		-->

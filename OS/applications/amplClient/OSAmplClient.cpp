@@ -213,7 +213,7 @@ int main(int argc, char **argv)
 
     /** Read and parse the .nl file and the osol string
      *  to create an in-memory representation
-     *  in form of an OSInstance and am OSOption object
+     *  in form of an OSInstance and an OSOption object
      */
     try
     {

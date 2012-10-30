@@ -6085,6 +6085,8 @@ bool VariableOption::addOther(OtherVariableOption *other)
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
+        temp[ nopt]->varType     = other->varType;
+        temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
         if (other->numberOfVar < 0)
@@ -6715,6 +6717,8 @@ bool ObjectiveOption::addOther(OtherObjectiveOption *other)
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
+        temp[ nopt]->objType     = other->objType;
+        temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
         if (other->numberOfObj < 0)
@@ -7357,6 +7361,8 @@ bool ConstraintOption::addOther(OtherConstraintOption *other)
         temp[ nopt]->solver      = other->solver;
         temp[ nopt]->category    = other->category;
         temp[ nopt]->type        = other->type;
+        temp[ nopt]->conType     = other->conType;
+        temp[ nopt]->enumType    = other->enumType;
         temp[ nopt]->description = other->description;
 
         if (other->numberOfCon < 0)
@@ -8470,6 +8476,7 @@ bool OSOption::setInitVarValuesStringSparse(int numberOfVar, InitVarValueString*
     if (this->optimization->variables->initialVariableValuesString == NULL)
         this->optimization->variables->initialVariableValuesString = new InitVariableValuesString();
     else
+
 
     {
         int i;

@@ -68,7 +68,7 @@ using std::endl;
 #include <stdlib.h>
 #endif
 
-//#define AMPLDEBUG
+#define AMPLDEBUG
 OSnl2OS::OSnl2OS()
     : osolreader (NULL), osinstance(NULL), osoption(NULL), stub("")
 {
@@ -110,7 +110,8 @@ bool OSnl2OS::readNl(std::string stub)
         FILE *nl;
 
         //Initialize the AMPL library
-        asl = cw = ASL_alloc( ASL_read_fg);
+//        asl = cw = ASL_alloc( ASL_read_fg);
+        asl = cw;
 
         //Initialize the nl file reading
         nl = jac0dim(const_cast<char*>(stub.c_str()), (fint)stub.length());
@@ -148,7 +149,8 @@ bool OSnl2OS::readNl(std::string stub)
         }
 
         // Now create row-wise version
-        asl = rw = ASL_alloc( ASL_read_fg);
+//        asl = rw = ASL_alloc( ASL_read_fg);
+        asl = rw;
         nl = jac0dim((char*)stub.c_str(), (fint)stub.length());
         want_derivs = 0;
         qp_read(nl, 0);
@@ -841,7 +843,7 @@ bool OSnl2OS::createOSObjects()
     // in the nl file, this is stored in dense form; convert to sparse.
     //
     double objWeight = 1.0;
-    //	char	*objtype;	/* object type array: 0 == min, 1 == max */
+    //    char    *objtype;    /* object type array: 0 == min, 1 == max */
     SparseVector* objectiveCoefficients = NULL;
 
     osinstance->setObjectiveNumber( n_obj) ;
@@ -1025,15 +1027,15 @@ bool OSnl2OS::createOSObjects()
     }
 
 
-	/** 
-	 *  The nl file may contain options that are indexed over model entities:
-	 *  variables, constraints, objectives, problems. An example would be
-	 *  initial primal and dual variables. AMPL stores these as suffixes,
-	 *  which are processed next. The code below is based on ideas expressed by David Gay.
-	 */
+    /** 
+     *  The nl file may contain options that are indexed over model entities:
+     *  variables, constraints, objectives, problems. An example would be
+     *  initial primal and dual variables. AMPL stores these as suffixes,
+     *  which are processed next. The code below is based on ideas expressed by David Gay.
+     */
 
-	SufDesc *d;
-	int suffixType, nOther, nOtherIdx;
+    SufDesc *d;
+    int suffixType, nOther, nOtherIdx;
 
     asl = cw;
 
@@ -1042,15 +1044,33 @@ bool OSnl2OS::createOSObjects()
         osolreader = new OSoLReader();
 
         // check if there are any suffixes to deal with and read options if necessary
+        bool have_primal = false;
+        for (int i=0; i < n_var; i++)
+        {
+            if (havex0[i] != 0) 
+            {
+                have_primal = true;
+                break;
+            }
+        }
+
+        bool have_dual = false;
+        for (int i=0; i < n_con; i++)
+        {
+            if (havepi0[i] != 0) 
+            {
+                have_dual = true;
+                break;
+            }
+        }
+
         if ((asl->i.suffixes[ASL_Sufkind_var]  != NULL) ||
             (asl->i.suffixes[ASL_Sufkind_con]  != NULL) || 
             (asl->i.suffixes[ASL_Sufkind_obj]  != NULL) ||
-            (asl->i.suffixes[ASL_Sufkind_prob] != NULL)  )
-        {	
-//            if (osol != "")
-       	        osoption = osolreader->readOSoL(osol);
-  //          else
-    //            osoption = new OSOption();
+            (asl->i.suffixes[ASL_Sufkind_prob] != NULL) ||
+            ( have_primal ) || ( have_dual ) )               
+        {    
+            osoption = osolreader->readOSoL(osol);
         }
 
         bool found;
@@ -1060,7 +1080,7 @@ bool OSnl2OS::createOSObjects()
         std::string *otherOptionNames = NULL;
 
         // First the variable-indexed suffixes
-       	suffixType = ASL_Sufkind_var;
+        suffixType = ASL_Sufkind_var;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
             // make a record of all <otherVariableOptions> present in the OSoL file
@@ -1076,17 +1096,42 @@ bool OSnl2OS::createOSObjects()
                         otherOptionNames[nOther++] = osoption->optimization->variables->other[i]->name;
             }
             OtherVariableOption* varopt;
-        	for (d=asl->i.suffixes[suffixType]; d; d=d->next)
-        	{
+            for (d=asl->i.suffixes[suffixType]; d; d=d->next)
+            {
 #ifdef AMPLDEBUG
-        		std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
 #endif
 
                 // Deal with special cases: basis information, special ordered sets (?) and branching weights (?)
                 if (strcmp(d->sufname,"sstatus") == 0) //(d->sufname == "sstatus")
                 {
+                    // note that AMPL uses different numeric values for representing basis status:
+                    // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
+                    // 1 = basic                                    = ENUM_BASIS_STATUS_basic
+                    // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
+                    // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
+                    // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
+                    // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
+                    // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
+
+                    int  basCode[ENUM_BASIS_STATUS_NUMBER_OF_STATES] = 
+                    {    ENUM_BASIS_STATUS_unknown,
+                         ENUM_BASIS_STATUS_basic,
+                         ENUM_BASIS_STATUS_superbasic,
+                         ENUM_BASIS_STATUS_atLower,
+                         ENUM_BASIS_STATUS_atUpper,
+                         ENUM_BASIS_STATUS_atEquality,
+                         ENUM_BASIS_STATUS_isFree      
+                    };
                     // allocate space
                     int* IBS;
+
+#ifdef AMPLDEBUG
+                    std::cout << "Original basis (in AMPL codes):";
+                    for (int k=0; k<n_var; k++)
+                        std::cout << "  " << d->u.i[k];
+                    std::cout << std::endl;
+#endif
  
                     // if OSoL file has a basis, merge values by overwriting .nl file info 
                     if (osoption != NULL &&
@@ -1094,147 +1139,69 @@ bool OSnl2OS::createOSObjects()
                         osoption->optimization->variables != NULL &&
                         osoption->optimization->variables->initialBasisStatus != NULL)
                     {
-                        // note that AMPL uses different numeric values for representing basis status:
-                        // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
-                        // 1 = basic                                    = ENUM_BASIS_STATUS_basic
-                        // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
-                        // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
-                        // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
-                        // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
-                        // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, ENUM_BASIS_STATUS_unknown,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 0;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_basic);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_basic,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 1;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_superbasic);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_superbasic,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 2;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 3;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atUpper);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atUpper,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 4;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 5;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 6;
-
-                			delete[] IBS;
-                        }
-
-                        // count the number of entries
-                        int nidx[7];
-                        int kidx[7];
-                        for (i=0; i<7; i++)
+                        // retrieve basis and store into ASL data structure
+                        for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         {
-                            nidx[i] = 0;
-                            kidx[i] = 0;
+                            nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, basCode[i]);
+                            if (nIndexes > 0)
+                            {
+                                IBS = new int[nIndexes];
+                                osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_variables, basCode[i], IBS);
+
+                                for (int k=0; k < nIndexes; k++)
+                                    d->u.i[IBS[k]] = i;
+                                delete[] IBS;
+                            }
+#ifdef AMPLDEBUG
+                            std::cout << "After processing state " << i << ":";
+                            for (int k=0; k<n_var; k++)
+                                std::cout << "  " << d->u.i[k];
+                            std::cout << std::endl;
+#endif
                         }
-
-                        for (int k=0; k < n_var; k++)
-                            nidx[d->u.i[k]]++;
-
-                        // allocate space
-                        int **IBS2;
-                        IBS2 = new int*[7];
-                        for (int i=0; i<7; i++)
-                        {
-                            IBS2[i] = new int[nidx[i]];
-                        }
-
-                        // store basis info into class-oriented arrays
-                        for (int k=0; k < n_var; k++)
-                        {
-                            IBS2[d->u.i[k]][kidx[d->u.i[k]]++] = k;
-                        }
-
-                        // store into <initialBasisStatus> element
-                        // delete osoption->optimization->variables->initialBasisStatus;
-                        if (nidx[0] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_unknown, IBS2[0], nidx[0]);
-                        if (nidx[1] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_basic, IBS2[1], nidx[1]);
-                        if (nidx[2] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_superbasic, IBS2[2], nidx[2]);
-                        if (nidx[3] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atLower, IBS2[3], nidx[3]);
-                        if (nidx[4] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atUpper, IBS2[4], nidx[4]);
-                        if (nidx[5] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_atEquality, IBS2[5], nidx[5]);
-                        if (nidx[6] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables,ENUM_BASIS_STATUS_isFree, IBS2[6], nidx[6]);
-
-                        // garbage collection
-                        for (int i=0; i<7; i++)
-                            delete [] IBS2[i];
-                        delete [] IBS2;
                     }
+#ifdef AMPLDEBUG
+                    std::cout << "Merged basis (in AMPL codes):";
+                    for (int k=0; k<n_var; k++)
+                        std::cout << "  " << d->u.i[k];
+                    std::cout << std::endl;
+#endif
+
+                    // count the number of entries
+                    int nidx[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
+                    int kidx[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
+                    for (i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    {
+                        nidx[i] = 0;
+                        kidx[i] = 0;
+                    }
+
+                    for (int k=0; k < n_var; k++)
+                        nidx[d->u.i[k]]++;
+
+                    // allocate space
+                    int **IBS2;
+                    IBS2 = new int*[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
+                    for (int i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    {
+                        IBS2[i] = new int[nidx[i]];
+                    }
+
+                    // store basis info into class-oriented arrays
+                    for (int k=0; k < n_var; k++)
+                    {
+                        IBS2[d->u.i[k]][kidx[d->u.i[k]]++] = k;
+                    }
+
+                    // store into <initialBasisStatus> element
+                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                        if (nidx[i] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_variables, basCode[i], IBS2[i], nidx[i]);
+
+                    // garbage collection
+                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                        delete [] IBS2[i];
+                    delete [] IBS2;
                 }
                 
                 else       // not one of the special cases
@@ -1242,9 +1209,9 @@ bool OSnl2OS::createOSObjects()
                     // allocate space
                     varopt = new OtherVariableOption();
 
-                	varopt->name = d->sufname;
-    		        varopt->numberOfEnumerations = 0;
-            		varopt->var = new OtherVarOption*[n_var];
+                    varopt->name = d->sufname;
+                    varopt->numberOfEnumerations = 0;
+                    varopt->var = new OtherVarOption*[n_var];
 
                     // check if the option was present in the OSoL file
                     found = false;
@@ -1265,7 +1232,7 @@ bool OSnl2OS::createOSObjects()
                         otherOption = osoption->getOtherVariableOption(iopt);
                         for (int i=0; i < otherOption->numberOfVar; i++)
                         {
-            	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                            if (d->kind & 4) // bit-wise mask to distinguish real from integer
                             {
                                 d->u.r[otherOption->var[i]->idx] = os_strtod(otherOption->var[i]->value.c_str(), NULL);
                             }
@@ -1281,9 +1248,9 @@ bool OSnl2OS::createOSObjects()
                         varopt->description = "transferred from .nl file";
 
                     // count the number of entries
-    	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
-    	        	{
-                        varopt->type = "real";
+                    if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                    {
+                        varopt->varType = "real";
                         nOtherIdx = 0;
                         for (int k=0; k < n_var; k++)
                         {
@@ -1298,7 +1265,7 @@ bool OSnl2OS::createOSObjects()
                     }
                     else             // here the suffix values are integer
                     {
-                        varopt->type = "integer";
+                        varopt->varType = "integer";
                         nOtherIdx = 0;
                         for (int k=0; k < n_var; k++)
                         {
@@ -1312,7 +1279,7 @@ bool OSnl2OS::createOSObjects()
                         }
                     }
 
-              		varopt->numberOfVar = nOtherIdx;
+                    varopt->numberOfVar = nOtherIdx;
 
                     if (found)
                     {
@@ -1327,20 +1294,20 @@ bool OSnl2OS::createOSObjects()
                     }
                     else
                     {
-                   		if (!osoption->setAnOtherVariableOption(varopt))
+                           if (!osoption->setAnOtherVariableOption(varopt))
                            throw ErrorClass( "OSnl2OS: Error transfering suffixes on variables" );
                     }
 
-               		delete varopt;
-               		varopt = NULL;
+                    delete varopt;
+                    varopt = NULL;
                 }
-	        }
-			delete [] otherOptionNames;
-			otherOptionNames = NULL;
+            }
+            delete [] otherOptionNames;
+            otherOptionNames = NULL;
         }
 
-    	// suffixes indexed over constraints and objectives work the same way
-       	suffixType = ASL_Sufkind_con;
+        // suffixes indexed over constraints and objectives work the same way
+           suffixType = ASL_Sufkind_con;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
             // make a record of all <otherConstraintOptions> present in the OSoL file
@@ -1356,163 +1323,112 @@ bool OSnl2OS::createOSObjects()
                         otherOptionNames[nOther++] = osoption->optimization->constraints->other[i]->name;
             }
             OtherConstraintOption* conopt;
-        	for (d=asl->i.suffixes[suffixType]; d; d=d->next)
-        	{
+            for (d=asl->i.suffixes[suffixType]; d; d=d->next)
+            {
 #ifdef AMPLDEBUG
-        		std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
 #endif
                 // Deal with special cases first: basis information and branching weights
                 if (strcmp(d->sufname,"sstatus") == 0) //(d->sufname == "sstatus")
                 {
+                    // note that AMPL uses different numeric values for representing basis status:
+                    // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
+                    // 1 = basic                                    = ENUM_BASIS_STATUS_basic
+                    // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
+                    // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
+                    // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
+                    // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
+                    // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
+
+                    int  basCode[ENUM_BASIS_STATUS_NUMBER_OF_STATES] = 
+                    {    ENUM_BASIS_STATUS_unknown,
+                         ENUM_BASIS_STATUS_basic,
+                         ENUM_BASIS_STATUS_superbasic,
+                         ENUM_BASIS_STATUS_atLower,
+                         ENUM_BASIS_STATUS_atUpper,
+                         ENUM_BASIS_STATUS_atEquality,
+                         ENUM_BASIS_STATUS_isFree      
+                    };
+
                     // allocate space
                     int* IBS;
  
+#ifdef AMPLDEBUG
+                    std::cout << "Original basis (in AMPL codes):";
+                    for (int k=0; k<n_con; k++)
+                        std::cout << "  " << d->u.i[k];
+                    std::cout << std::endl;
+#endif
                     // if OSoL file has a basis, merge values by overwriting .nl file info 
                     if (osoption != NULL &&
                         osoption->optimization != NULL &&
                         osoption->optimization->constraints != NULL &&
                         osoption->optimization->constraints->initialBasisStatus != NULL)
                     {
-                        // note that AMPL uses different numeric values for representing basis status:
-                        // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
-                        // 1 = basic                                    = ENUM_BASIS_STATUS_basic
-                        // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
-                        // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
-                        // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
-                        // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
-                        // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
 
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_unknown);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, ENUM_BASIS_STATUS_unknown,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 0;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 1;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_superbasic);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_superbasic,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 2;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 3;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 4;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 5;
-
-                			delete[] IBS;
-                        }
-
-                		nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_isFree);
-                		if (nIndexes > 0)
-                		{
-                			IBS = new int[nIndexes];
-                			osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_isFree,IBS);
-
-                            for (int i=0; i < nIndexes; i++)
-                                d->u.i[IBS[i]] = 6;
-
-                			delete[] IBS;
-                        }
-
-                        // count the number of entries
-                        int nidx[7];
-                        int kidx[7];
-                        for (i=0; i<7; i++)
+                        // retrieve basis and store into ASL data structure
+                        for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
                         {
-                            nidx[i] = 0;
-                            kidx[i] = 0;
+                            nIndexes = osoption->getNumberOfInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, basCode[i]);
+                            if (nIndexes > 0)
+                            {
+                                IBS = new int[nIndexes];
+                                osoption->getInitialBasisElements(ENUM_PROBLEM_COMPONENT_constraints, basCode[i], IBS);
+
+                                for (int k=0; k < nIndexes; k++)
+                                    d->u.i[IBS[k]] = i;
+                                delete[] IBS;
+                            }
+#ifdef AMPLDEBUG
+                            std::cout << "After processing state " << i << ":";
+                            for (int k=0; k<n_con; k++)
+                                std::cout << "  " << d->u.i[k];
+                            std::cout << std::endl;
+#endif
                         }
-
-                        for (int k=0; k < n_con; k++)
-                            nidx[d->u.i[k]]++;
-
-                        // allocate space
-                        int **IBS2;
-                        IBS2 = new int*[7];
-                        for (int i=0; i<7; i++)
-                        {
-                            IBS2[i] = new int[nidx[i]];
-                        }
-
-                        // store basis info into class-oriented arrays
-                        for (int k=0; k < n_con; k++)
-                        {
-                            IBS2[d->u.i[k]][kidx[d->u.i[k]]++] = k;
-                        }
-
-                        // store into <initialBasisStatus> element
-                        //delete osoption->optimization->constraints->initialBasisStatus;
-                        if (nidx[0] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_unknown, IBS2[0], nidx[0]);
-                        if (nidx[1] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_basic, IBS2[1], nidx[1]);
-                        if (nidx[2] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_superbasic, IBS2[2], nidx[2]);
-                        if (nidx[3] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atLower, IBS2[3], nidx[3]);
-                        if (nidx[4] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atUpper, IBS2[4], nidx[4]);
-                        if (nidx[5] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_atEquality, IBS2[5], nidx[5]);
-                        if (nidx[6] > 0)
-                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints,ENUM_BASIS_STATUS_isFree, IBS2[6], nidx[6]);
-                        // garbage collection
-                        for (int i=0; i<7; i++)
-                            delete [] IBS2[i];
-                        delete [] IBS2;
                     }
+#ifdef AMPLDEBUG
+                    std::cout << "Merged basis (in AMPL codes):";
+                    for (int k=0; k<n_con; k++)
+                        std::cout << "  " << d->u.i[k];
+                    std::cout << std::endl;
+#endif
+
+                    // count the number of entries
+                    int nidx[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
+                    int kidx[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
+                    for (i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    {
+                        nidx[i] = 0;
+                        kidx[i] = 0;
+                    }
+
+                    for (int k=0; k < n_con; k++)
+                        nidx[d->u.i[k]]++;
+
+                    // allocate space
+                    int **IBS2;
+                    IBS2 = new int*[ENUM_BASIS_STATUS_NUMBER_OF_STATES];
+                    for (int i=0; i<ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                    {
+                        IBS2[i] = new int[nidx[i]];
+                    }
+
+                    // store basis info into class-oriented arrays
+                    for (int k=0; k < n_con; k++)
+                    {
+                        IBS2[d->u.i[k]][kidx[d->u.i[k]]++] = k;
+                    }
+
+                    // store into <initialBasisStatus> element
+                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                        if (nidx[i] > 0)
+                            osoption->setInitBasisStatus(ENUM_PROBLEM_COMPONENT_constraints, basCode[i], IBS2[i], nidx[i]);
+
+                    // garbage collection
+                    for (int i=0; i < ENUM_BASIS_STATUS_NUMBER_OF_STATES; i++)
+                        delete [] IBS2[i];
+                    delete [] IBS2;
                 }
                 
                 else  // not one of the special cases
@@ -1520,9 +1436,9 @@ bool OSnl2OS::createOSObjects()
                     // allocate space
                     conopt = new OtherConstraintOption();
 
-                	conopt->name = d->sufname;
-    		        conopt->numberOfEnumerations = 0;
-            		conopt->con = new OtherConOption*[n_con];
+                    conopt->name = d->sufname;
+                    conopt->numberOfEnumerations = 0;
+                    conopt->con = new OtherConOption*[n_con];
 
                     // check if the option was present in the OSoL file
                     found = false;
@@ -1543,7 +1459,7 @@ bool OSnl2OS::createOSObjects()
                         otherOption = osoption->getOtherConstraintOption(iopt);
                         for (int i=0; i < otherOption->numberOfCon; i++)
                         {
-            	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                            if (d->kind & 4) // bit-wise mask to distinguish real from integer
                             {
                                 d->u.r[otherOption->con[i]->idx] = os_strtod(otherOption->con[i]->value.c_str(), NULL);
                             }
@@ -1559,9 +1475,9 @@ bool OSnl2OS::createOSObjects()
                         conopt->description = "transferred from .nl file";
 
                     // count the number of entries
-    	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
-    	        	{
-                        conopt->type = "real";
+                    if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                    {
+                        conopt->conType = "real";
                         nOtherIdx = 0;
                         for (int k=0; k < n_con; k++)
                         {
@@ -1576,7 +1492,7 @@ bool OSnl2OS::createOSObjects()
                     }
                     else             // here the suffix values are integer
                     {
-                        conopt->type = "integer";
+                        conopt->conType = "integer";
                         nOtherIdx = 0;
                         for (int k=0; k < n_con; k++)
                         {
@@ -1590,7 +1506,7 @@ bool OSnl2OS::createOSObjects()
                         }
                     }
 
-            		conopt->numberOfCon = nOtherIdx;
+                    conopt->numberOfCon = nOtherIdx;
 
                     if (found)
                     {
@@ -1605,20 +1521,20 @@ bool OSnl2OS::createOSObjects()
                     }
                     else
                     {
-                   		if (!osoption->setAnOtherConstraintOption(conopt))
+                           if (!osoption->setAnOtherConstraintOption(conopt))
                            throw ErrorClass( "OSnl2OS: Error transfering suffixes on constraints" );
                     }
 
-            		delete conopt;
-            		conopt = NULL;
+                    delete conopt;
+                    conopt = NULL;
                 }
-	        }            
-			delete [] otherOptionNames;
-			otherOptionNames = NULL;
+            }            
+            delete [] otherOptionNames;
+            otherOptionNames = NULL;
         }
 
-    	// here we have suffixes indexed over objectives 
-       	suffixType = ASL_Sufkind_obj;
+        // here we have suffixes indexed over objectives 
+        suffixType = ASL_Sufkind_obj;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
             // make a record of all <otherObjectiveOptions> present in the OSoL file
@@ -1634,18 +1550,18 @@ bool OSnl2OS::createOSObjects()
                         otherOptionNames[nOther++] = osoption->optimization->objectives->other[i]->name;
             }
             OtherObjectiveOption* objopt;
-        	for (d=asl->i.suffixes[suffixType]; d; d=d->next)
-        	{
+            for (d=asl->i.suffixes[suffixType]; d; d=d->next)
+            {
 #ifdef AMPLDEBUG
-        		std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
 #endif
 
                 // allocate space
                 objopt = new OtherObjectiveOption();
 
-            	objopt->name = d->sufname;
-		        objopt->numberOfEnumerations = 0;
-        		objopt->obj = new OtherObjOption*[n_obj];
+                objopt->name = d->sufname;
+                objopt->numberOfEnumerations = 0;
+                objopt->obj = new OtherObjOption*[n_obj];
 
                 // check if the option was present in the OSoL file
                 found = false;
@@ -1664,14 +1580,17 @@ bool OSnl2OS::createOSObjects()
                 {
                     OtherObjectiveOption* otherOption;
                     otherOption = osoption->getOtherObjectiveOption(iopt);
+#ifdef AMPLDEBUG
+                    std::cout << "Merge data " << std::endl;
+#endif
                     for (int i=0; i < otherOption->numberOfObj; i++)
                     {
-        	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                        if (d->kind & 4) // bit-wise mask to distinguish real from integer
                         {
-                            d->u.r[otherOption->obj[i]->idx] = os_strtod(otherOption->obj[i]->value.c_str(), NULL);
+                            d->u.r[-1 - otherOption->obj[i]->idx] = os_strtod(otherOption->obj[i]->value.c_str(), NULL);
                         }
                         else
-                            d->u.i[otherOption->obj[i]->idx] = (int)os_strtod(otherOption->obj[i]->value.c_str(), NULL) + 0.1;
+                            d->u.i[-1 - otherOption->obj[i]->idx] = atoi(otherOption->obj[i]->value.c_str());
                     }
                     if (otherOption->description == "")
                         objopt->description = "combined from osol and .nl data";
@@ -1682,16 +1601,16 @@ bool OSnl2OS::createOSObjects()
                     objopt->description = "transferred from .nl file";
 
                 // count the number of entries
-	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
-	        	{
-                    objopt->type = "real";
+                if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                {
+                    objopt->objType = "real";
                     nOtherIdx = 0;
                     for (int k=0; k < n_obj; k++)
                     {
                         if (d->u.r[k] != 0)
                         {
                             objopt->obj[nOtherIdx] = new OtherObjOption();
-                            objopt->obj[nOtherIdx]->idx = k;    
+                            objopt->obj[nOtherIdx]->idx = -1 - k;    
                             objopt->obj[nOtherIdx]->value = os_dtoa_format(d->u.r[k]);
                             nOtherIdx++;
                         }
@@ -1699,21 +1618,21 @@ bool OSnl2OS::createOSObjects()
                 }
                 else             // here the suffix values are integer
                 {
-                    objopt->type = "integer";
+                    objopt->objType = "integer";
                     nOtherIdx = 0;
                     for (int k=0; k < n_obj; k++)
                     {
                         if (d->u.i[k] != 0)
                         {
                             objopt->obj[nOtherIdx] = new OtherObjOption();
-                            objopt->obj[nOtherIdx]->idx = k;    
+                            objopt->obj[nOtherIdx]->idx = -1 - k;    
                             objopt->obj[nOtherIdx]->value = os_dtoa_format((double)d->u.i[k]);
                             nOtherIdx++;
                         }    
                     }
                 }
 
-        		objopt->numberOfObj = nOtherIdx;
+                objopt->numberOfObj = nOtherIdx;
 
                 if (found)
                 {
@@ -1728,32 +1647,32 @@ bool OSnl2OS::createOSObjects()
                 }
                 else
                 {
-               		if (!osoption->setAnOtherObjectiveOption(objopt))
+                       if (!osoption->setAnOtherObjectiveOption(objopt))
                        throw ErrorClass( "OSnl2OS: Error transfering suffixes on objectives" );
                 }
 
-        		delete objopt;
-        		objopt = NULL;
-	        }
-			delete [] otherOptionNames;
-			otherOptionNames = NULL;
+                delete objopt;
+                objopt = NULL;
+            }
+            delete [] otherOptionNames;
+            otherOptionNames = NULL;
         }
 
 
-    	//problem-indexed suffixes: Only the currently active problem is put into the .nl file, so this must be scalar
-       	suffixType = ASL_Sufkind_prob;
+        //problem-indexed suffixes: Only the currently active problem is put into the .nl file, so this must be scalar
+        suffixType = ASL_Sufkind_prob;
         if ( (asl->i.suffixes[suffixType]  != NULL) )
         {
             std::string opttype, optvalue, optdesc;
             optdesc = "transferred from .nl file";
-        	for (d=asl->i.suffixes[suffixType]; d; d=d->next)
-        	{
+            for (d=asl->i.suffixes[suffixType]; d; d=d->next)
+            {
 #ifdef AMPLDEBUG
-        		std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
+                std::cout << "Detected suffix " << d->sufname << "; kind = " << d->kind << std::endl;
 #endif
 
-	        	if (d->kind & 4) // bit-wise mask to distinguish real from integer
-	        	{
+                if (d->kind & 4) // bit-wise mask to distinguish real from integer
+                {
                     opttype = "real";
                     optvalue = os_dtoa_format(d->u.r[0]);
                 }
@@ -1763,9 +1682,9 @@ bool OSnl2OS::createOSObjects()
                     optvalue = os_dtoa_format((double)d->u.i[0]);
                 }
 
-           		if (!osoption->setAnotherSolverOption(d->sufname,optvalue,"","",opttype,optdesc))
+                   if (!osoption->setAnotherSolverOption(d->sufname,optvalue,"","",opttype,optdesc))
                    throw ErrorClass( "OSnl2OS: Error transfering problem-indexed suffixes" );
-	        }
+            }
         }
 
         // process initial primal values and merge with data contained in OSoL file
@@ -1789,14 +1708,6 @@ bool OSnl2OS::createOSObjects()
 
         if (n_x0 > 0)
         {
-            if (osoption == NULL)
-            {
-                if (osol != "")
-           	        osoption = osolreader->readOSoL(osol);
-                else
-                    osoption = new OSOption();
-            }
-
             // allocate space
             InitVarValue **x_init = new InitVarValue*[n_x0];
     
@@ -1845,14 +1756,6 @@ bool OSnl2OS::createOSObjects()
 
         if (n_pi0 > 0)
         {
-            if (osoption == NULL)
-            {
-                if (osol != "")
-           	        osoption = osolreader->readOSoL(osol);
-                else
-                    osoption = new OSOption();
-            }
-
             // allocate space
             InitDualVarValue **pi_init = new InitDualVarValue*[n_pi0];
     
@@ -1885,7 +1788,9 @@ bool OSnl2OS::createOSObjects()
     //special ordered sets, branching weights, branching group weights
     //initial objective values: .val
 
-
+#ifdef AMPLDEBUG
+    std::cout << "At end of OSnl2OS" << std::endl;
+#endif
     }// end try
 
     catch(const ErrorClass& eclass)

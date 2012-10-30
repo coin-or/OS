@@ -4121,7 +4121,7 @@ otherConstraintOptionAttributes: otherConstraintOptionAttList
 					parserData->solverAttribute,
 					parserData->categoryAttribute,
 					parserData->typeAttribute,
-					parserData->objTypeAttribute,
+					parserData->conTypeAttribute,
 					parserData->enumTypeAttribute,
 					parserData->descriptionAttribute) )
 				osol_errmsg += addErrorMsg( NULL, osoption, parserData, osglData, "<other> element could not be initialed"); 

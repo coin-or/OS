@@ -344,6 +344,7 @@ public:
 
 
 
+
      * hessValues is a double array of the Hessian values.
      */
     double* hessValues;
@@ -650,11 +651,26 @@ public:
      *  @param status is a string representing the allowed statuses
      *  (as governed by enumeration ENUM_BASIS_STATUS --- see below)
      *  @param i is the location where the user wants to store the array
-     *  @return the value
+     *  @return whether the operation was successful
      *
      *  @note it is the user's responsibility to reserve sufficient memory to hold the vector being returned.
      */
     bool getIntVector(int status, int *i);
+
+    /**
+     *  Get the entire array of basis status in dense form
+     *  @param resultArray is the location where the user wants to store the array
+     *  @param dim is the size of the resultArray
+     *  @param flipIdx indicates whether the index values need to be flipped 
+     *   (used for representations of objective rows)
+     *  @return status of the operation:
+     *     < 0: error condition
+     *     = 0: no new data found (i.e., basis information is empty)
+     *     > 0: number of elements found
+     *
+     *  @note it is the user's responsibility to reserve sufficient memory to hold the vector being returned.
+     */
+    int getBasisDense(int *resultArray, int dim, bool flipIdx);
 };//class BasisStatus
 
 /*! \class StorageCapacity
@@ -1156,16 +1172,23 @@ inline bool verifyJobStatus(std::string status)
     return (returnJobStatus(status) > 0);
 }//verifyJobStatus
 
-
+/**
+ *  Enumeration for the different states that can be used in representating a basis
+ *  The last state, ENUM_BASIS_STATUS_NUMBER_OF_STATES, is used *only* to record the
+ *  number of states, which makes it easier to convert between different representations.
+ *  (For instance, AMPL uses a different order, so there may be a need to recode values.
+ *   See OSosrl2ampl.cpp for an application.) 
+ */
 enum ENUM_BASIS_STATUS
 {
-    ENUM_BASIS_STATUS_basic = 1,
+    ENUM_BASIS_STATUS_basic = 0,
     ENUM_BASIS_STATUS_atLower,
     ENUM_BASIS_STATUS_atUpper,
     ENUM_BASIS_STATUS_atEquality,
     ENUM_BASIS_STATUS_isFree,
     ENUM_BASIS_STATUS_superbasic,
-    ENUM_BASIS_STATUS_unknown
+    ENUM_BASIS_STATUS_unknown,
+    ENUM_BASIS_STATUS_NUMBER_OF_STATES
 };
 
 inline int returnBasisStatus(std::string status)

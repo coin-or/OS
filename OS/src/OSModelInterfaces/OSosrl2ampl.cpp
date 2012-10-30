@@ -60,6 +60,8 @@ using std::endl;
 #include <stdlib.h>
 #endif
 
+#define DEBUG_OSRL2AMPL
+
 OSosrl2ampl::OSosrl2ampl()
 {
 }
@@ -138,12 +140,156 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 //std::cout << "value =  " <<   primalValPair[i]->value  << std::endl;
             }
 
-            // return all solution results that are indexed over variables or constraints as suffixes
+            // return all solution results that are indexed over variables, objectives or constraints as suffixes
 
             int n;
             double* rvalues = NULL;
             int*    ivalues = NULL;
-            for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++)
+            int     nSuffixes = 0;
+            bool    have_basic_var = false;
+            bool    have_basic_con = false;
+            SufDecl *suftab = NULL;
+
+            //  First determine the number of suffixes that need to be handled 
+
+            n = osresult->getNumberOfOtherVariableResults(0);
+            if (n > 0) nSuffixes += n;
+            n = osresult->getNumberOfOtherObjectiveResults(0);
+            if (n > 0) nSuffixes += n;
+            n = osresult->getNumberOfOtherConstraintResults(0);
+            if (n > 0) nSuffixes += n;
+
+            if (   (osresult->optimization != NULL)
+                && (osresult->optimization->solution[0] != NULL)
+                && (osresult->optimization->solution[0]->variables != NULL)
+                && (osresult->optimization->solution[0]->variables->basisStatus != NULL) )
+            {
+                have_basic_var = true;
+                nSuffixes++;
+            }
+            if (   (osresult->optimization != NULL)
+                && (osresult->optimization->solution[0] != NULL)
+                && (osresult->optimization->solution[0]->constraints != NULL)
+                && (osresult->optimization->solution[0]->constraints->basisStatus != NULL) )
+            {
+                have_basic_con = true;
+                nSuffixes++;
+            }
+
+            // Create a suffix table
+
+            int k = 0;
+            suftab = new SufDecl[nSuffixes];
+            SufDecl temp;
+            std::string s;
+            char* p;
+
+            for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++, k++)
+            {
+                s = osresult->getOtherVariableResultName(0, i);
+                suftab[k].name = new char[s.size()+1];
+                s.copy(suftab[k].name, s.size(), 0);
+                suftab[k].name[s.size()] = '\0';
+
+#ifdef DEBUG_OSRL2AMPL
+                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#endif
+
+                suftab[k].table  = NULL;
+                suftab[k].kind   = ASL_Sufkind_var;
+                suftab[k].nextra = 1;
+            }
+            for (i=0; i < osresult->getNumberOfOtherObjectiveResults(0); i++, k++)
+            {
+                s = osresult->getOtherObjectiveResultName(0, i);
+                suftab[k].name = new char[s.size()+1];
+                s.copy(suftab[k].name, s.size(), 0);
+                suftab[k].name[s.size()] = '\0';
+
+#ifdef DEBUG_OSRL2AMPL
+                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#endif
+
+                suftab[k].table  = NULL;
+                suftab[k].kind   = ASL_Sufkind_obj;
+                suftab[k].nextra = 1;
+            }
+            for (i=0; i < osresult->getNumberOfOtherConstraintResults(0); i++, k++)
+            {
+                s = osresult->getOtherConstraintResultName(0, i);
+                suftab[k].name = new char[s.size()+1];
+                s.copy(suftab[k].name, s.size(), 0);
+                suftab[k].name[s.size()] = '\0';
+
+#ifdef DEBUG_OSRL2AMPL
+                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#endif
+
+                suftab[k].table  = NULL;
+                suftab[k].kind   = ASL_Sufkind_con;
+                suftab[k].nextra = 1;
+            }
+            if (have_basic_var)
+            {
+                s = "sstatus";
+                suftab[k].name = new char[s.size()+1];
+                s.copy(suftab[k].name, s.size(), 0);
+                suftab[k].name[s.size()] = '\0';
+
+#ifdef DEBUG_OSRL2AMPL
+                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#endif
+
+                suftab[k].table  = NULL;
+                suftab[k].kind   = ASL_Sufkind_var;
+                suftab[k].nextra = 1;
+                k++;
+            }
+            if (have_basic_con)
+            {
+                s = "sstatus";
+                suftab[k].name = new char[s.size()+1];
+                s.copy(suftab[k].name, s.size(), 0);
+                suftab[k].name[s.size()] = '\0';
+
+#ifdef DEBUG_OSRL2AMPL
+                std::cout << s << " has length " << s.size() << " p = " << suftab[k].name << std::endl;
+#endif
+
+                suftab[k].table  = NULL;
+                suftab[k].kind   = ASL_Sufkind_con;
+                suftab[k].nextra = 1;
+            }
+
+#ifdef DEBUG_OSRL2AMPL
+            for (i=0; i < nSuffixes; i++)
+                std::cout << i << ": suffix " << suftab[i].name << " of kind " << suftab[i].kind << std::endl; 
+#endif
+
+            // make sure to inform AMPL of the suffixes you want to send back
+
+            suf_declare(suftab, nSuffixes);
+
+/*          Now go through the suffixes again and prepare the data for writing
+ *
+ *          ASL suf_iput and suf_rput do not actually produce any output; rather
+ *          they store pointers to the material that is to be printed in a later
+ *          call to routine write_sol. For that reason it is necessary to copy
+ *          *all* the array-indexed results. Since ASL only handles real and integer
+ *          values, this is done in two pointer arrays.
+ */
+            double **rData = new double*[nSuffixes];
+            int    **iData = new    int*[nSuffixes];
+
+            for (int i=0; i<nSuffixes; i++)
+            {
+                rData[i] = NULL;
+                iData[i] = NULL;
+            }
+
+            int iSuf = 0;
+
+            for (i=0; i < osresult->getNumberOfOtherVariableResults(0); i++, iSuf++)
             {
                 if ( (osresult->optimization->solution[0]->variables->other[i]->var != NULL) || 
                      (osresult->optimization->solution[0]->variables->other[i]->enumeration != NULL) )
@@ -153,35 +299,206 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                         throw ErrorClass("unspecified error in routine getOtherVariableResultArrayDense()");
                     else if (n > 0)
                     {
-			std::string resultName = osresult->getOtherVariableResultName(0, i);
-			std::cout << "Name of the <other> option: " << resultName << std::endl;
-                        if (osresult->getOtherVariableResultArrayType(0, i) == "double")
+
+#ifdef DEBUG_OSRL2AMPL
+                        std::cout << "found variable suffix " << osresult->getOtherVariableResultName(0, i) 
+                                  << " of type " << osresult->getOtherVariableResultArrayType(0, i) << std::endl;
+#endif
+
+                        if (osresult->getOtherVariableResultArrayType(0, i) == "real")
                         {
-                            rvalues = new double[n];
+                            rData[iSuf] = new double[n];
                             for (int k=0; k<n; k++)
-                                rvalues[k] = os_strtod(otherVar[k].c_str(), NULL);
-//                            suf_rput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, rvalues);
-                            delete[] rvalues; rvalues = NULL;                            
+                                rData[iSuf][k] = os_strtod(otherVar[k].c_str(), NULL);
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "values (real): ";
+                            for (int k=0; k < n; k++)
+                                std::cout << rData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+
+                            suf_rput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, rData[iSuf]);
                         }
-                        else if (osresult->getOtherVariableResultArrayType(0, i) == "int")
+                        else if (osresult->getOtherVariableResultArrayType(0, i) == "integer")
                         {
-                            ivalues = new int[n];
+                            iData[iSuf] = new int[n];
                             for (int k=0; k<n; k++)
-                                ivalues[k] = atoi(otherVar[k].c_str());
-                            suf_iput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, ivalues);
-                            delete[] ivalues; rvalues = NULL;                            
+                                iData[iSuf][k] = atoi(otherVar[k].c_str());
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "values (integer): ";
+                            for (int k=0; k < n; k++)
+                                std::cout << iData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+                            suf_iput((osresult->getOtherVariableResultName(0, i)).c_str(), ASL_Sufkind_var, iData[iSuf]);
+//                            delete[] ivalues; ivalues = NULL;                            
                         }
                         else
                             throw ErrorClass("otherVariableResult has unsupported type in OSosrl2ampl()");
-
                     } 
                 }
             }
-// taken from Ipopt - AmplTNLP.cpp:
-//    Number* z_L_sol
-//            suf_rput("ipopt_zL_out", ASL_Sufkind_var,  z_L_sol_);
+
+            // Suffixes associated with the objectives
+
+            for (i=0; i < osresult->getNumberOfOtherObjectiveResults(0); i++, k++)
+            {
+                if ( (osresult->optimization->solution[0]->objectives->other[i]->obj != NULL) || 
+                     (osresult->optimization->solution[0]->objectives->other[i]->enumeration != NULL) )
+                {
+                    n = osresult->getOtherObjectiveResultArrayDense(0, i, otherObj, numObjs);
+                    if (n < 0) 
+                        throw ErrorClass("unspecified error in routine getOtherObjectiveResultArrayDense()");
+                    else if (n > 0)
+                    {
+#ifdef DEBUG_OSRL2AMPL
+                        std::cout << "found objective suffix " << osresult->getOtherObjectiveResultName(0, i) 
+                                  << " of type " << osresult->getOtherObjectiveResultArrayType(0, i) << std::endl;
+                        std::cout << "retrieved these values:";
+                        for (int k=0; k<n; k++)
+                            std::cout << " " << otherObj[k];
+                        std::cout << std::endl; 
+#endif
+
+                        if (osresult->getOtherObjectiveResultArrayType(0, i) == "real")
+                        {
+                            rData[iSuf] = new double[n];
+                            for (int k=0; k<n; k++)
+                                rData[iSuf][k] = os_strtod(otherObj[k].c_str(), NULL);
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "values (real): ";
+                            for (int k=0; k < n; k++)
+                                std::cout << rData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+                            suf_rput((osresult->getOtherObjectiveResultName(0, i)).c_str(), ASL_Sufkind_obj, rData[iSuf]);
+//                            delete[] rvalues; rvalues = NULL;                            
+                        }
+                        else if (osresult->getOtherObjectiveResultArrayType(0, i) == "integer")
+                        {
+                            iData[iSuf] = new int[n];
+                            for (int k=0; k<n; k++)
+                                iData[iSuf][k] = atoi(otherObj[k].c_str());
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "values (integer): ";
+                            for (int k=0; k < n; k++)
+                                std::cout << iData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+                            suf_iput((osresult->getOtherObjectiveResultName(0, i)).c_str(), ASL_Sufkind_obj, iData[iSuf]);
+//                            delete[] ivalues; ivalues = NULL;                            
+                        }
+                        else
+                            throw ErrorClass("otherObjectiveResult has unsupported type in OSosrl2ampl()");
+                    }
+                }
+            }
+
+            // Suffixes associated with constraints
+
+            for (i=0; i < osresult->getNumberOfOtherConstraintResults(0); i++, k++)
+            {
+                if ( (osresult->optimization->solution[0]->constraints->other[i]->con != NULL) || 
+                     (osresult->optimization->solution[0]->constraints->other[i]->enumeration != NULL) )
+                {
+                    n = osresult->getOtherConstraintResultArrayDense(0, i, otherCon, numCons);
+                    if (n < 0) 
+                        throw ErrorClass("unspecified error in routine getOtherConstraintResultArrayDense()");
+                    else if (n > 0)
+                    {
+#ifdef DEBUG_OSRL2AMPL
+                        std::cout << "found constraint suffix " << osresult->getOtherConstraintResultName(0, i)
+                                  << " of type " << osresult->getOtherConstraintResultArrayType(0, i) << std::endl;
+#endif
+                        if (osresult->getOtherConstraintResultArrayType(0, i) == "real")
+                        {
+                            rData[iSuf] = new double[n];
+                            for (int k=0; k<n; k++)
+                                rData[iSuf][k] = os_strtod(otherCon[k].c_str(), NULL);
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "values (real): ";
+                            for (int k=0; k < n; k++)
+                                std::cout << rData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+                            suf_rput((osresult->getOtherConstraintResultName(0, i)).c_str(), ASL_Sufkind_con, rData[iSuf]);
+//                            delete[] rvalues; rvalues = NULL;                            
+                        }
+                        else if (osresult->getOtherConstraintResultArrayType(0, i) == "integer")
+                        {
+                            iData[iSuf] = new int[n];
+                            for (int k=0; k<n; k++)
+                                iData[iSuf][k] = atoi(otherCon[k].c_str());
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "values (integer): ";
+                            for (int k=0; k < n; k++)
+                                std::cout << iData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+                            suf_iput((osresult->getOtherConstraintResultName(0, i)).c_str(), ASL_Sufkind_con, iData[iSuf]);
+//                            delete[] ivalues; ivalues = NULL;                            
+                        }
+                        else
+                            throw ErrorClass("otherConstraintResult has unsupported type in OSosrl2ampl()");
+                    }
+                }
+            }
+
+            // Basis information associated with the variables
+
+
+            // note that AMPL uses different numeric values for representing basis status:
+            // 1 = basic                                    = ENUM_BASIS_STATUS_basic
+            // 3 = nonbasic <= (normally =) lower bound     = ENUM_BASIS_STATUS_atLower
+            // 4 = nonbasic >= (normally =) upper bound     = ENUM_BASIS_STATUS_atUpper
+            // 5 = nonbasic at equal lower and upper bounds = ENUM_BASIS_STATUS_atEquality
+            // 6 = nonbasic between bounds                  = ENUM_BASIS_STATUS_isFree
+            // 2 = superbasic                               = ENUM_BASIS_STATUS_superbasic
+            // 0 = no status assigned                       = ENUM_BASIS_STATUS_unknown
+
+            int  basCode[ENUM_BASIS_STATUS_NUMBER_OF_STATES] = {1,3,4,5,6,2,0};
+            if (have_basic_var)
+            {
+                iData[iSuf] = new int[numVars];
+                n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_variables, iData[iSuf], numVars);
+                if (n < 0) 
+                    throw ErrorClass("unspecified error in routine getBasisInformationDense()");
+                else if (n > 0)
+                {
+                    for (i=0; i<numVars; i++)
+                        iData[iSuf][i] = basCode[iData[iSuf][i]];
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "primal basic: ";
+                            for (int k=0; k < numVars; k++)
+                                std::cout << iData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+                    suf_iput("sstatus", ASL_Sufkind_var, iData[iSuf]);
+                }
+                iSuf++;
+            }
+            if (have_basic_con)
+            {
+                iData[iSuf] = new int[numCons];
+                n = osresult->getBasisInformationDense(0, ENUM_PROBLEM_COMPONENT_constraints, iData[iSuf], numCons);
+                if (n < 0) 
+                    throw ErrorClass("unspecified error in routine getBasisInformationDense()");
+                else if (n > 0)
+                {
+                    for (i=0; i<numCons; i++)
+                        iData[iSuf][i] = basCode[iData[iSuf][i]];
+#ifdef DEBUG_OSRL2AMPL
+                            std::cout << "dual basic: ";
+                            for (int k=0; k < numCons; k++)
+                                std::cout << iData[iSuf][k] << " ";
+                            std::cout << std::endl << std::endl;
+#endif 
+                    suf_iput("sstatus", ASL_Sufkind_con, iData[iSuf]);
+                }
+            }
 
             write_sol(const_cast<char*>(solMsg.c_str()),  x, y , NULL);
+
             if (osrlreader != NULL) delete osrlreader;
             osrlreader = NULL;
             delete [] x; x = NULL;
@@ -189,6 +506,14 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
             delete [] otherVar; otherVar = NULL;
             delete [] otherObj; otherObj = NULL;
             delete [] otherCon; otherCon = NULL;
+            for (i=0; i<nSuffixes; i++)
+            {
+                if (rData[i] != NULL) delete [] rData[i]; 
+                if (iData[i] != NULL) delete [] iData[i];
+            }
+            delete [] rData; rData = NULL;
+            delete [] iData; iData = NULL;
+
             return true;
         }
         catch(const ErrorClass& eclass)

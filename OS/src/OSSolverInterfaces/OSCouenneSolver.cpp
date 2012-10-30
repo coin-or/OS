@@ -494,65 +494,42 @@ void CouenneSolver::setSolverOptions() throw (ErrorClass)
             std::vector<SolverOption*> optionsVector;
             optionsVector = osoption->getSolverOptions( "couenne",true);
             int num_bonmin_options = optionsVector.size();
+            std::string optionName;
+
             for(i = 0; i < num_bonmin_options; i++)
             {
-                if(optionsVector[ i]->type == "numeric" )
+                if(optionsVector[ i]->category == "ipopt")
                 {
-                    //std::cout << "FOUND A  NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
-                    if(optionsVector[ i]->category == "ipopt")
+                    optionName = optionsVector[ i]->name;
+                }
+                else
+                {
+                    if(optionsVector[ i]->category == "bonmin" )
                     {
-                        couenneSetup.options()->SetNumericValue(optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
+                        optionName = "bonmin."+optionsVector[ i]->name;
                     }
                     else
                     {
-                        if(optionsVector[ i]->category == "bonmin" )
-                        {
-                            couenneSetup.options()->SetNumericValue("bonmin."+optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
-                        }
-                        else
-                        {
-                            couenneSetup.options()->SetNumericValue("couenne."+optionsVector[ i]->name, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
-                        }
+                        optionName = "couenne."+optionsVector[ i]->name;
                     }
+                }
+
+                std::cout << "found option " << optionName << " of type " << optionsVector[ i]->type << std::endl;
+
+                if(optionsVector[ i]->type == "numeric" )
+                {
+                    //std::cout << "FOUND A  NUMERIC OPTION  "  <<  os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) << std::endl;
+                    couenneSetup.options()->SetNumericValue(optionName, os_strtod( optionsVector[ i]->value.c_str(), &pEnd ) );
                 }
                 else if(optionsVector[ i]->type == "integer" )
                 {
                     //std::cout << "FOUND AN INTEGER OPTION  "  <<optionsVector[ i]->name << std::endl;
-                    if(optionsVector[ i]->category == "ipopt")
-                    {
-                        couenneSetup.options()->SetIntegerValue(optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ) );
-                    }
-                    else
-                    {
-                        if(optionsVector[ i]->category == "bonmin" )
-                        {
-                            couenneSetup.options()->SetIntegerValue("bonmin."+optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() ));
-                        }
-                        else
-                        {
-                            couenneSetup.options()->SetIntegerValue("couenne."+optionsVector[ i]->name, atoi( optionsVector[ i]->value.c_str() )  );
-                        }
-                    }
+                    couenneSetup.options()->SetIntegerValue(optionName, atoi( optionsVector[ i]->value.c_str() ) );
                 }
                 else if(optionsVector[ i]->type == "string" )
                 {
                     //std::cout << "FOUND A STRING OPTION  "  <<optionsVector[ i]->name << std::endl;
-                    if(optionsVector[ i]->category == "ipopt")
-                    {
-                        couenneSetup.options()->SetStringValue(optionsVector[ i]->name, optionsVector[ i]->value );
-                    }
-                    else
-                    {
-                        if(optionsVector[ i]->category == "bonmin" )
-                        {
-                            couenneSetup.options()->SetStringValue("bonmin."+optionsVector[ i]->name, optionsVector[ i]->value);
-                        }
-                        else
-                        {
-                            couenneSetup.options()->SetStringValue("couenne."+optionsVector[ i]->name, optionsVector[ i]->value);
-                        }
-                    }
-
+                    couenneSetup.options()->SetStringValue(optionName, optionsVector[ i]->value );
                 }
             }
         }

@@ -110,6 +110,7 @@ std::string GeneralFileHeader::getHeaderItem(std::string item)
 	if (item == "description") return description;
 	if (item == "fileCreator") return fileCreator;
 	if (item == "licence")     return licence;
+    throw ErrorClass("Attempting to access undefined header item in getHeaderItem");
 }//end of GeneralFileHeader::getHeaderItem
 
 bool GeneralFileHeader::setHeader(std::string name, std::string source,
@@ -984,6 +985,128 @@ int BasisStatus::getEl(int status, int j)
     }
 }//getEl
 
+int BasisStatus::getBasisDense(int *resultArray, int dim, bool flipIdx)
+{
+    int  i, n, nCopied;
+    int* statusArray = NULL;
+
+    nCopied = 0;
+
+    if (this->basic != NULL)
+    {
+        n = this->basic->getNumberOfEl();
+        statusArray = new int[n];
+        this->basic->getEl(statusArray);
+        for (i=0; i < n; i++)
+        {
+            if (!flipIdx)
+                resultArray[statusArray[i]] = ENUM_BASIS_STATUS_basic;
+            else
+                resultArray[-1 - statusArray[i]] = ENUM_BASIS_STATUS_basic;
+        }
+        delete [] statusArray;
+        statusArray = NULL;
+        nCopied += n;
+    }
+    
+    if (this->atLower != NULL)
+    {
+        n = this->atLower->getNumberOfEl();
+        statusArray = new int[n];
+        this->atLower->getEl(statusArray);
+        for (i=0; i < n; i++)
+        {
+            if (!flipIdx)
+                resultArray[statusArray[i]] = ENUM_BASIS_STATUS_atLower;
+            else
+                resultArray[-1 - statusArray[i]] = ENUM_BASIS_STATUS_atLower;
+        }
+        delete [] statusArray;
+        nCopied += n;
+    }
+    
+    if (this->atUpper != NULL)
+    {
+        n = this->atUpper->getNumberOfEl();
+        statusArray = new int[n];
+        this->atUpper->getEl(statusArray);
+        for (i=0; i < n; i++)
+        {
+            if (!flipIdx)
+                resultArray[statusArray[i]] = ENUM_BASIS_STATUS_atUpper;
+            else
+                resultArray[-1 - statusArray[i]] = ENUM_BASIS_STATUS_atUpper;
+        }
+        delete [] statusArray;
+        nCopied += n;
+    }
+    
+    if (this->atEquality != NULL)
+    {
+        n = this->atEquality->getNumberOfEl();
+        statusArray = new int[n];
+        this->atEquality->getEl(statusArray);
+        for (i=0; i < n; i++)
+        {
+            if (!flipIdx)
+                resultArray[statusArray[i]] = ENUM_BASIS_STATUS_atEquality;
+            else
+                resultArray[-1 - statusArray[i]] = ENUM_BASIS_STATUS_atEquality;
+        }
+        delete [] statusArray;
+        nCopied += n;
+    }
+    
+    if (this->isFree != NULL)
+    {
+        n = this->isFree->getNumberOfEl();
+        statusArray = new int[n];
+        this->isFree->getEl(statusArray);
+        for (i=0; i < n; i++)
+        {
+            if (!flipIdx)
+                resultArray[statusArray[i]] = ENUM_BASIS_STATUS_isFree;
+            else
+                resultArray[-1 - statusArray[i]] = ENUM_BASIS_STATUS_isFree;
+        }
+        delete [] statusArray;
+        nCopied += n;
+    }
+    
+    if (this->superbasic != NULL)
+    {
+        n = this->superbasic->getNumberOfEl();
+        statusArray = new int[n];
+        this->superbasic->getEl(statusArray);
+        for (i=0; i < n; i++)
+        {
+            if (!flipIdx)
+                resultArray[statusArray[i]] = ENUM_BASIS_STATUS_superbasic;
+            else
+                resultArray[-1 - statusArray[i]] = ENUM_BASIS_STATUS_superbasic;
+        }
+        delete [] statusArray;
+        nCopied += n;
+    }
+    
+    if (this->unknown != NULL)
+    {
+        n = this->unknown->getNumberOfEl();
+        statusArray = new int[n];
+        this->unknown->getEl(statusArray);
+        for (i=0; i < n; i++)
+        {
+            if (!flipIdx)
+                resultArray[statusArray[i]] = ENUM_BASIS_STATUS_unknown;
+            else
+                resultArray[-1 - statusArray[i]] = ENUM_BASIS_STATUS_unknown;
+        }
+        delete [] statusArray;
+        nCopied += n;
+    }
+    return nCopied;
+}//getBasisDense
+
 bool BasisStatus::IsEqual(BasisStatus *that)
 {
 #ifdef DEBUG_ISEQUAL_ROUTINES
@@ -1262,6 +1385,7 @@ bool CPUNumber::IsEqual(CPUNumber *that)
             return false;
         }
         else
+
         {
             if ((this->description != that->description) ||
                     (this->value       != that->value))
