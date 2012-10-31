@@ -75,10 +75,9 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
     OSrLReader *osrlreader = NULL;
     OSResult   *osresult;
 
-    std::string solMsg = " ";
     if (osrl == "")
     {
-        write_sol(  const_cast<char*>(solMsg.c_str()),  NULL, NULL , NULL);
+        write_sol('\0',  NULL, NULL , NULL);
         return true;
     }
     else
@@ -555,6 +554,40 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 default:
                     throw ErrorClass("Unknown solution status detected");
             } //end of switch statement
+
+            // Produce a message to send back to AMPL
+
+            std::string solMsg;
+            std::string tmpStr;
+            tmpStr = osresult->getSolutionMessage(0);
+            if (tmpStr != "") 
+                solMsg = tmpStr;
+            else
+            {
+                std::ostringstream outStr;
+                try
+                {
+                    outStr << "Solution status: " << osresult->getSolutionStatusType(0) << std::endl;
+                    outStr << "Description:     " << osresult->getSolutionStatusDescription(0) << std::endl;
+                }
+                catch (const ErrorClass& eclass)
+                {
+                    outStr << "Solution status: " << "unknown" << std::endl;
+                }
+                try
+                {
+                    int objIdx = osresult->getObjValue(0, objIdx);
+                    if (objIdx = 0) objIdx = -1;
+                    double objVal = osresult-> getObjValue(0, objIdx);
+                    outStr << "Objective value: " << objVal << std::endl;
+                    outStr << "Objective index: " << objIdx << std::endl;
+                }
+                catch (const ErrorClass& eclass)
+                {
+                    outStr << "Objective info:  " << "not available" << std::endl;
+                }
+                solMsg = outStr.str();
+            }
 
             write_sol(const_cast<char*>(solMsg.c_str()),  x, y , NULL);
 

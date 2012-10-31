@@ -8964,11 +8964,12 @@ if (OTHER_TESTS){
             cout << "AMPL .sol file writer creates consistent output" << endl;
         }
         else
-        {    cout << "AMPL .sol file writer creates incorrect output" << endl;
-             cout << osrl1 << endl;
+        {   
+            cout << "AMPL .sol file writer creates incorrect output" << endl;
+            cout << osrl1 << endl;
+            throw ErrorClass(" Fail unit test with AMPL .sol writer");
         } 
 
-        if (ok == false) throw ErrorClass(" Fail unit test with AMPL .sol writer");
         delete nl2osil;
         nl2osil = NULL;
         delete fileUtil;
