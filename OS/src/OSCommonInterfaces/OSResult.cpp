@@ -1815,7 +1815,7 @@ OptimizationSolutionStatus* OSResult::getSolutionStatus( int solIdx)
     return optimization->solution[solIdx]->status;
 }//getSolutionStatus
 
-string OSResult::getSolutionStatusType(int solIdx)
+std::string OSResult::getSolutionStatusType(int solIdx)
 {
     if (optimization == NULL || optimization->solution == NULL)
         throw ErrorClass("No solution defined");
@@ -8059,6 +8059,7 @@ bool ConstraintSolution::IsEqual(ConstraintSolution *that)
                 return false;
             if (!this->basisStatus->IsEqual(that->basisStatus))
                 return false;
+
 
             return true;
         }

@@ -161,6 +161,7 @@ OS/data/amplFiles/rbrockmod_objectiveBounds.mod -text
 OS/data/amplFiles/rbrockmod_objectiveBounds.nl -text
 OS/data/amplFiles/rbrockmod_userSuffix.mod -text
 OS/data/amplFiles/rbrockmod_userSuffix.nl -text
+OS/data/amplFiles/suffixTest.cmp -text
 OS/data/amplFiles/suffixTest.mod -text
 OS/data/amplFiles/suffixTest.nl -text
 OS/data/amplFiles/testAmpl.run -text

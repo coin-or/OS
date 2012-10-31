@@ -35811,6 +35811,16 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osilFiles/nonconvex_D.osil"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
   cvl_tmp="data/osilFiles/parincInteger.osil"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
@@ -36245,6 +36255,16 @@ fi
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
   cvl_tmp="data/osolFiles/lindoapiaddins_lindo.osol"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/osolFiles/nonconvex.osol"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done
@@ -36916,6 +36936,46 @@ fi
 
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
+  cvl_tmp="data/amplFiles/nonconvex.mod"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/amplFiles/nonconvex.nl"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/amplFiles/nonconvex_D.mod"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/amplFiles/nonconvex_D.nl"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
   cvl_tmp="data/amplFiles/parinc.mod"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
@@ -36937,6 +36997,16 @@ fi
 # Allow for newlines in the parameter
 if test $coin_vpath_config = yes; then
   cvl_tmp="data/amplFiles/parinc.nl"
+  for file in $cvl_tmp ; do
+    coin_vpath_link_files="$coin_vpath_link_files $file"
+  done
+fi
+
+
+
+# Allow for newlines in the parameter
+if test $coin_vpath_config = yes; then
+  cvl_tmp="data/amplFiles/suffixTest.cmp"
   for file in $cvl_tmp ; do
     coin_vpath_link_files="$coin_vpath_link_files $file"
   done

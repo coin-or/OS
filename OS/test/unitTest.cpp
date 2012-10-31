@@ -8919,7 +8919,7 @@ if (OTHER_TESTS){
 
         // make sure to add a solution status for schema conformance...
 
-        if (!osresult->setSolutionStatus(0, "unsure", "Just some status ...") )
+        if (!osresult->setSolutionStatus(0, "optimal", "") )
                 throw ErrorClass(" Fail setting solution status in AMPL suffix handler");
 
 
@@ -8945,28 +8945,34 @@ if (OTHER_TESTS){
         delete osresult;
         osresult = NULL;
 
+// compare suffixtest.sol to suffixtest.check
 
         std::cout << std::endl << "compare results" << std::endl << std::endl;
 
+        std::string osrl1FileName = dataDir +  "amplFiles" + dirsep + "suffixTest.sol";
+        std::string osrl2FileName = dataDir +  "amplFiles" + dirsep + "suffixTest.cmp";
 
-// compare suffixtest.sol to suffixtest.check
+        fileUtil = new FileUtil();
+        std::string osrl1 = fileUtil->getFileAsString( osrl1FileName.c_str());
+        std::string osrl2 = fileUtil->getFileAsString( osrl2FileName.c_str());
 
-
-        if (ok)
+        if (osrl1 == osrl2)
         {    
 #ifdef DEBUG
-            cout << solver->osrl << endl;
+            cout << osrl1 << endl;
 #endif
             cout << "AMPL .sol file writer creates consistent output" << endl;
         }
         else
         {    cout << "AMPL .sol file writer creates incorrect output" << endl;
-            cout << solver->osrl << endl;
-        }
+             cout << osrl1 << endl;
+        } 
 
-        if(ok == false) throw ErrorClass(" Fail unit test with AMPL .sol writer");
+        if (ok == false) throw ErrorClass(" Fail unit test with AMPL .sol writer");
         delete nl2osil;
-        nl2osil = NULL;    
+        nl2osil = NULL;
+        delete fileUtil;
+        fileUtil = NULL;    
         unitTestResult << "TEST " << nOfTest << ": Test the AMPL .sol writer" << std::endl; 
         cout << endl << "TEST " << nOfTest << ": Completed successfully" << endl << endl;
     }    

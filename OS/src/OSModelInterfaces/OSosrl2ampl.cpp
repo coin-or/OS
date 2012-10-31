@@ -497,6 +497,65 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 }
             }
 
+            // finally set the solution status 
+            
+            int OS_solve_result = returnSolutionStatus(osresult->getSolutionStatusType(0));
+            switch (OS_solve_result)
+            {
+                case (ENUM_SOLUTION_STATUS_globallyOptimal): 
+                {
+                    solve_result_num = 90;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_locallyOptimal): 
+                {
+                    solve_result_num = 50;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_optimal): 
+                {
+                    solve_result_num = 10;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_bestSoFar): 
+                {
+                    solve_result_num = 110;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_feasible): 
+                {
+                    solve_result_num = 120;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_infeasible): 
+                {
+                    solve_result_num = 200;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_unbounded): 
+                {
+                    solve_result_num = 300;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_error): 
+                {
+                    solve_result_num = 500;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_unsure): 
+                {
+                    solve_result_num = 520;
+                    break;
+                } 
+                case (ENUM_SOLUTION_STATUS_other): 
+                {
+                    solve_result_num = 550;
+                    break;
+                } 
+                default:
+                    throw ErrorClass("Unknown solution status detected");
+            } //end of switch statement
+
             write_sol(const_cast<char*>(solMsg.c_str()),  x, y , NULL);
 
             if (osrlreader != NULL) delete osrlreader;
