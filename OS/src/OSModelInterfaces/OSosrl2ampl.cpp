@@ -304,7 +304,9 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                                   << " of type " << osresult->getOtherVariableResultArrayType(0, i) << std::endl;
 #endif
 
-                        if (osresult->getOtherVariableResultArrayType(0, i) == "real")
+                        if ( (osresult->getOtherVariableResultArrayType(0, i) == "real")    || 
+                             (osresult->getOtherVariableResultArrayType(0, i) == "double")  || 
+                             (osresult->getOtherVariableResultArrayType(0, i) == "numeric") )
                         {
                             rData[iSuf] = new double[n];
                             for (int k=0; k<n; k++)
@@ -359,7 +361,9 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                         std::cout << std::endl; 
 #endif
 
-                        if (osresult->getOtherObjectiveResultArrayType(0, i) == "real")
+                        if ( (osresult->getOtherObjectiveResultArrayType(0, i) == "real")    || 
+                             (osresult->getOtherObjectiveResultArrayType(0, i) == "double")  || 
+                             (osresult->getOtherObjectiveResultArrayType(0, i) == "numeric") )
                         {
                             rData[iSuf] = new double[n];
                             for (int k=0; k<n; k++)
@@ -409,7 +413,9 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                         std::cout << "found constraint suffix " << osresult->getOtherConstraintResultName(0, i)
                                   << " of type " << osresult->getOtherConstraintResultArrayType(0, i) << std::endl;
 #endif
-                        if (osresult->getOtherConstraintResultArrayType(0, i) == "real")
+                        if ( (osresult->getOtherConstraintResultArrayType(0, i) == "real")    || 
+                             (osresult->getOtherConstraintResultArrayType(0, i) == "double")  || 
+                             (osresult->getOtherConstraintResultArrayType(0, i) == "numeric") )
                         {
                             rData[iSuf] = new double[n];
                             for (int k=0; k<n; k++)
@@ -568,7 +574,9 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 try
                 {
                     outStr << "Solution status: " << osresult->getSolutionStatusType(0) << std::endl;
-                    outStr << "Description:     " << osresult->getSolutionStatusDescription(0) << std::endl;
+                    tmpStr = osresult->getSolutionStatusDescription(0);
+                    if (tmpStr != "")
+                        outStr << "Description:     " << tmpStr << std::endl;
                 }
                 catch (const ErrorClass& eclass)
                 {
@@ -584,7 +592,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 }
                 catch (const ErrorClass& eclass)
                 {
-                    outStr << "Objective info:  " << "not available" << std::endl;
+                    outStr << "Objective info:  " << "not returned" << std::endl;
                 }
                 solMsg = outStr.str();
             }
