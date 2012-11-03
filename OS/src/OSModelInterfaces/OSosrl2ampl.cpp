@@ -584,9 +584,9 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 }
                 try
                 {
-                    int objIdx = osresult->getObjValue(0, objIdx);
-                    if (objIdx = 0) objIdx = -1;
-                    double objVal = osresult-> getObjValue(0, objIdx);
+                    int objIdx = osresult->getSolutionTargetObjectiveIdx(0);
+                    if (objIdx == 0) objIdx = -1;
+                    double objVal = osresult-> getOptimalObjValue(objIdx,0);
                     outStr << "Objective value: " << objVal << std::endl;
                     outStr << "Objective index: " << objIdx << std::endl;
                 }
@@ -597,6 +597,7 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 solMsg = outStr.str();
             }
 
+            amplflag = 1;
             write_sol(const_cast<char*>(solMsg.c_str()),  x, y , NULL);
 
             if (osrlreader != NULL) delete osrlreader;

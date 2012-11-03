@@ -2841,7 +2841,14 @@ double OSResult::getOptimalObjValue(int objIdx, int solIdx)
         if((this->optimization->solution[i]->status->type.find("ptimal") != string::npos ) ||
                 this->optimization->solution[i]->status->type.compare("globallyOptimal") == 0)
         {
-            return  this->optimization->solution[i]->objectives->values->obj[ (objIdx >= 0 ? objIdx : -objIdx)  -1 ]->value;
+            if ((this->optimization->solution[i]->objectives != NULL) && 
+                (this->optimization->solution[i]->objectives->values != NULL) && 
+                (this->optimization->solution[i]->objectives->values->obj != NULL) ) 
+                return this->optimization->solution[i]->objectives->values->obj[ (objIdx >= 0 ? objIdx : -objIdx)  -1 ]->value;
+            else
+            {
+                throw ErrorClass("There is no optimal solution");
+            }
         }
         else
         {
@@ -5447,6 +5454,7 @@ bool OSResult::setNumberOfObjValues(int solIdx, int numberOfObj)
     optimization->solution[solIdx]->objectives->values->numberOfObj = numberOfObj;
     if (numberOfObj > 0)
     {
+
         optimization->solution[solIdx]->objectives->values->obj = new ObjValue*[numberOfObj];
         for(int i = 0; i < numberOfObj; i++)
             optimization->solution[solIdx]->objectives->values->obj[i] = new ObjValue();
@@ -7514,6 +7522,7 @@ bool VariableValuesString::IsEqual(VariableValuesString *that)
 {
 #if DEBUG_ISEQUAL_ROUTINES == 2
     cout << "Start comparing in VariableValuesString" << endl;
+
 #endif
     if (this == NULL)
     {
