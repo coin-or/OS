@@ -597,7 +597,19 @@ bool OSosrl2ampl::writeSolFile(std::string osrl, ASL *asl)
                 solMsg = outStr.str();
             }
 
-            amplflag = 1;
+            amplflag = 1; // to suppress a second writing of the solMsg
+
+/* 
+  If we ever want to send back a non-null option info pointer (last argument of write_sol), 
+  we should do this (according to David Gay):
+
+            oi->wantsol = 9;
+
+  after suitably declaring and populating
+
+    Option_Info *oi; 
+ */
+
             write_sol(const_cast<char*>(solMsg.c_str()),  x, y , NULL);
 
             if (osrlreader != NULL) delete osrlreader;

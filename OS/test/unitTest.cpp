@@ -9126,8 +9126,7 @@ if (OTHER_TESTS){
     }
 
 } //end of if (OTHER_TESTS)
-
-    
+  
     if(unitTestResultFailure.str().length() > 0){
         cout << endl << "THE UNIT TEST PASSED THE FOLLOWING:" << endl << endl;
         cout << unitTestResult.str() << endl << endl;
@@ -9145,6 +9144,7 @@ if (OTHER_TESTS){
 #endif
         return 0;
     }
+
 }//end main
 
 double getObjVal( std::string osrl){
