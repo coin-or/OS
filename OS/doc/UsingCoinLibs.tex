@@ -1,0 +1,132 @@
+\documentclass[11pt]{article}
+\usepackage{graphics,graphicx}
+%\usepackage[dvips]{graphics,graphicx}
+\DeclareGraphicsExtensions{.ps,.jpg,.eps,.pdf,.png}
+\usepackage{boxedminipage,amsmath,amsfonts}
+\usepackage{url}
+%\usepackage{secdot}
+%\usepackage{natbib}
+\usepackage{verbatim}
+%\usepackage{moreverb}
+\usepackage{enumerate}
+\usepackage{makeidx}
+\usepackage{own}
+\bibliographystyle{plain}
+\makeindex
+
+\input{chapters/frontmatter.tex}   
+
+
+\begin{document}
+
+%Some cross-referencing index entries (to be expanded as needed)
+\index{AMPL Solver Library |see{Third-party software, ASL}}
+\index{ASL|see{Third-party software, ASL}}
+\index{Blas|see{Third-party software, Blas}}
+\index{Harwell Subroutine Library|see{Third-party software, HSL}}
+\index{HSL|see{Third-party software, HSL}}
+\index{Lapack|see{Third-party software, Lapack}}
+\index{Mumps|see{Third-party software, Mumps}}
+
+\index{Bonmin@{\tt Bonmin}|see{COIN-OR projects, {\tt Bonmin}}}
+\index{BuildTools@{\tt BuildTools}|see{COIN-OR projects, {\tt BuildTools}}}
+\index{Cbc@{\tt Cbc}|see{COIN-OR projects, {\tt Cbc}}}
+\index{Cgl@{\tt Cgl}|see{COIN-OR projects, {\tt Cgl}}}
+\index{Clp@{\tt Clp}|see{COIN-OR projects, {\tt Clp}}}
+%\index{Configuration Manager|see{Microsoft Visual Studio, Configuration Manager}}
+\index{Couenne@{\tt Couenne}|see{COIN-OR projects, {\tt Couenne}}}
+\index{CppAD@{\tt CppAD}|see{COIN-OR projects, {\tt CppAD}}}
+\index{CoinUtils@{\tt CoinUtils}|see{COIN-OR projects, {\tt CoinUtils}}}
+%\index{Debug configuration|see{Microsoft Visual Studio, {\tt Debug} configuration}}
+\index{DyLP@{\tt DyLP}|see{COIN-OR projects, {\tt DyLP}}}
+\index{GLPK@{\tt GLPK}|see{Third-party software, {\tt GLPK}}}
+\index{Ipopt@{\tt Ipopt}|see{COIN-OR projects, {\tt Ipopt}}}
+\index{nl files|see{AMPL nl format}}
+\index{Osi@{\tt Osi}|see{COIN-OR projects, {\tt Osi}}}
+%\index{Release configuration|see{Microsoft Visual Studio, {\tt Release} configuration}}
+%\index{Release-plus configuration|see{Microsoft Visual Studio, {\tt Release-plus} configuration}}
+\index{SYMPHONY@{\tt SYMPHONY}|see{COIN-OR projects, {\tt SYMPHONY}}}
+\index{Vol@{\tt Vol}|see{COIN-OR projects, {\tt Vol}}}
+
+\title{Using the CoinAll Software}
+\vskip 2in
+\author{Horand Gassmann, Jun Ma,  Kipp Martin}
+\maketitle
+
+\begin{abstract}
+This is the User's Manual for the CoinAll project.  It is part of the documentation for the CoinEasy project which is designed to help new users of COIN-OR get up and running.   The CoinAll project is actually a meta-project consisting of most of the COIN-OR solvers and supporting utility projects.   
+We recommend that users download the binary of CoinAll, which includes executables as well as compiled libraries of many COIN-OR projects, which can then be linked against in user code. 
+This manual describes how to use this binary.
+\iffalse
+provide a
+general framework consisting of a set of standards for representing optimization instances, results,
+solver options, and communication between clients and solvers in a distributed environment using Web Services.
+This COIN-OR\index{COIN-OR} project provides C++ and Java source code for libraries and executable programs that 
+implement OS standards.   The OS library includes a robust solver and modeling language interface (API) for linear,
+nonlinear and other types of optimization problems.   Also included is the C++ source code for a  command line
+executable {\tt OSSolverService}\index{OSSolverService@{\tt OSSolverService}}  for reading problem instances 
+(OSiL format\index{OSiL}, nl format\index{AMPL nl format}, MPS format\index{MPS format}) and
+calling a solver either locally or on a remote server.  Finally,  both Java\index{Java} source code and a Java {\tt war} 
+file are provided for users who wish to set up a solver service on a server running Apache Tomcat\index{Apache Tomcat}.
+See the Optimization Services home page {\tt\UrlOs} and the COIN-OR Trac page\index{Trac system} {\tt\UrlTrac} for 
+more information.
+\fi
+\end{abstract}
+
+
+\newpage
+\tableofcontents
+\listoffigures
+\listoftables
+\hyphenation{com-plex-Type}
+\hyphenation{GAMS-links}
+
+\runcodefalse   % we do not build a manual for folks who only want to run the executables
+\uselibstrue   % we build a manual for folks who want to build against the libraries
+\developfalse   % we do not build a manual for folks who want to actively develop code
+
+
+%\noindent\hrulefill
+\newpage
+
+\input{chapters/OSIntro.tex}
+
+\input{chapters/roadmap.tex}
+
+\input{chapters/downloadbinaries.tex}
+
+\input{chapters/ossolverservice.tex}
+
+\input{chapters/modellang.tex}
+
+\input{chapters/fileupload.tex}
+
+
+\input{chapters/schemadescriptions.tex}
+
+\input{chapters/OSInstanceAPI.tex}
+
+\input{chapters/codesamples.tex}
+
+\input{chapters/OSDip.tex}
+
+\input{chapters/oslibrary.tex}
+
+\input{chapters/OSInstanceAPI.tex}
+
+\input{chapters/CppAD.tex}
+
+\input{chapters/appendix.tex}
+
+
+\addcontentsline{toc}{section}{Bibliography}
+% \addcontentsline{toc}{section}{Bibliography}% alternative for article class
+\bibliography{osUsersManual}
+%\bibliographystyle{amsplain}
+%\bibliography{kippbib}
+
+
+\printindex
+  
+\end{document}
+

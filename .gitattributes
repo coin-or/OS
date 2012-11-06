@@ -345,6 +345,10 @@ OS/doc/UsingCoinBinary.bbl -text
 OS/doc/UsingCoinBinary.ind -text
 OS/doc/UsingCoinBinary.pdf -text
 OS/doc/UsingCoinBinary.tex -text
+OS/doc/UsingCoinLibs.bbl -text
+OS/doc/UsingCoinLibs.ind -text
+OS/doc/UsingCoinLibs.pdf -text svneol=unset#unset
+OS/doc/UsingCoinLibs.tex -text
 OS/doc/UsingCoinlibs.bbl -text
 OS/doc/UsingCoinlibs.ind -text
 OS/doc/UsingCoinlibs.pdf -text
