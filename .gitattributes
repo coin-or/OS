@@ -349,10 +349,6 @@ OS/doc/UsingCoinLibs.bbl -text
 OS/doc/UsingCoinLibs.ind -text
 OS/doc/UsingCoinLibs.pdf -text svneol=unset#unset
 OS/doc/UsingCoinLibs.tex -text
-OS/doc/UsingCoinlibs.bbl -text
-OS/doc/UsingCoinlibs.ind -text
-OS/doc/UsingCoinlibs.pdf -text
-OS/doc/UsingCoinlibs.tex -text
 OS/doc/chapters/CppAD.tex -text
 OS/doc/chapters/Future_Work.tex -text
 OS/doc/chapters/GenericParser.tex -text
